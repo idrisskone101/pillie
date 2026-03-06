@@ -1,0 +1,40 @@
+{
+  "source": "/Users/idrisskone/Desktop/Pillie/Pillie/Pillie/Views/Home/StatsRow.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "🔥",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 28
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 32
+        }
+      },
+      {
+        "comment": "",
+        "key": "Day Streak",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 38
+        }
+      },
+      {
+        "comment": "",
+        "key": "🛡️",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 55
+        }
+      }
+    ]
+  },
+  "version": 1
+}

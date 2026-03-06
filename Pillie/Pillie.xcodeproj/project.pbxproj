@@ -1,0 +1,910 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		527C07A32F5A4BB900164A1D /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = RC0001022F456DC00082EF2F /* RevenueCat */; };
+		527C07A42F5A4BB900164A1D /* RevenueCatUI in Frameworks */ = {isa = PBXBuildFile; productRef = RC0001032F456DC00082EF2F /* RevenueCatUI */; };
+		DP0001022F456DC00082EF2F /* PillieDeviceActivityMonitor.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = DA0001012F456DC00082EF2F /* PillieDeviceActivityMonitor.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		DP0001032F456DC00082EF2F /* PillieShieldConfiguration.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = SC0001012F456DC00082EF2F /* PillieShieldConfiguration.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		DP0001042F456DC00082EF2F /* PillieShieldAction.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = SA0001012F456DC00082EF2F /* PillieShieldAction.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		DA0001092F456DC00082EF2F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5259165D2F456DC00082EF2F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DA0001062F456DC00082EF2F;
+			remoteInfo = PillieDeviceActivityMonitor;
+		};
+		SA0001092F456DC00082EF2F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5259165D2F456DC00082EF2F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = SA0001062F456DC00082EF2F;
+			remoteInfo = PillieShieldAction;
+		};
+		SC0001092F456DC00082EF2F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5259165D2F456DC00082EF2F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = SC0001062F456DC00082EF2F;
+			remoteInfo = PillieShieldConfiguration;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		DP0001012F456DC00082EF2F /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				DP0001022F456DC00082EF2F /* PillieDeviceActivityMonitor.appex in Embed Foundation Extensions */,
+				DP0001032F456DC00082EF2F /* PillieShieldConfiguration.appex in Embed Foundation Extensions */,
+				DP0001042F456DC00082EF2F /* PillieShieldAction.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		525916652F456DC00082EF2F /* Pillie.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pillie.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		529E8B232F5764290000F2B9 /* ManagedSettings.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ManagedSettings.framework; path = System/Library/Frameworks/ManagedSettings.framework; sourceTree = SDKROOT; };
+		529E8B372F57645D0000F2B9 /* ManagedSettingsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ManagedSettingsUI.framework; path = Library/Frameworks/ManagedSettingsUI.framework; sourceTree = DEVELOPER_DIR; };
+		529E8B4A2F57648B0000F2B9 /* DeviceActivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DeviceActivity.framework; path = System/Library/Frameworks/DeviceActivity.framework; sourceTree = SDKROOT; };
+		DA0001012F456DC00082EF2F /* PillieDeviceActivityMonitor.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = PillieDeviceActivityMonitor.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		SA0001012F456DC00082EF2F /* PillieShieldAction.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = PillieShieldAction.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		SC0001012F456DC00082EF2F /* PillieShieldConfiguration.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = PillieShieldConfiguration.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		AA00010C2F456DC00082EF2F /* Exceptions for "Pillie" folder in "Pillie" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 525916642F456DC00082EF2F /* Pillie */;
+		};
+		DA00010C2F456DC00082EF2F /* Exceptions for "PillieDeviceActivityMonitor" folder in "PillieDeviceActivityMonitor" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = DA0001062F456DC00082EF2F /* PillieDeviceActivityMonitor */;
+		};
+		SA00010C2F456DC00082EF2F /* Exceptions for "PillieShieldAction" folder in "PillieShieldAction" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = SA0001062F456DC00082EF2F /* PillieShieldAction */;
+		};
+		SC00010C2F456DC00082EF2F /* Exceptions for "PillieShieldConfiguration" folder in "PillieShieldConfiguration" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = SC0001062F456DC00082EF2F /* PillieShieldConfiguration */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		525916672F456DC00082EF2F /* Pillie */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				AA00010C2F456DC00082EF2F /* Exceptions for "Pillie" folder in "Pillie" target */,
+			);
+			path = Pillie;
+			sourceTree = "<group>";
+		};
+		DA0001022F456DC00082EF2F /* PillieDeviceActivityMonitor */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				DA00010C2F456DC00082EF2F /* Exceptions for "PillieDeviceActivityMonitor" folder in "PillieDeviceActivityMonitor" target */,
+			);
+			path = PillieDeviceActivityMonitor;
+			sourceTree = "<group>";
+		};
+		SA0001022F456DC00082EF2F /* PillieShieldAction */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				SA00010C2F456DC00082EF2F /* Exceptions for "PillieShieldAction" folder in "PillieShieldAction" target */,
+			);
+			path = PillieShieldAction;
+			sourceTree = "<group>";
+		};
+		SC0001022F456DC00082EF2F /* PillieShieldConfiguration */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				SC00010C2F456DC00082EF2F /* Exceptions for "PillieShieldConfiguration" folder in "PillieShieldConfiguration" target */,
+			);
+			path = PillieShieldConfiguration;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		525916622F456DC00082EF2F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				527C07A42F5A4BB900164A1D /* RevenueCatUI in Frameworks */,
+				527C07A32F5A4BB900164A1D /* RevenueCat in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DA0001042F456DC00082EF2F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		SA0001042F456DC00082EF2F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		SC0001042F456DC00082EF2F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		5259165C2F456DC00082EF2F = {
+			isa = PBXGroup;
+			children = (
+				525916672F456DC00082EF2F /* Pillie */,
+				DA0001022F456DC00082EF2F /* PillieDeviceActivityMonitor */,
+				SC0001022F456DC00082EF2F /* PillieShieldConfiguration */,
+				SA0001022F456DC00082EF2F /* PillieShieldAction */,
+				529E8B222F5764290000F2B9 /* Frameworks */,
+				525916662F456DC00082EF2F /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		525916662F456DC00082EF2F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				525916652F456DC00082EF2F /* Pillie.app */,
+				DA0001012F456DC00082EF2F /* PillieDeviceActivityMonitor.appex */,
+				SC0001012F456DC00082EF2F /* PillieShieldConfiguration.appex */,
+				SA0001012F456DC00082EF2F /* PillieShieldAction.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		529E8B222F5764290000F2B9 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				529E8B232F5764290000F2B9 /* ManagedSettings.framework */,
+				529E8B372F57645D0000F2B9 /* ManagedSettingsUI.framework */,
+				529E8B4A2F57648B0000F2B9 /* DeviceActivity.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		525916642F456DC00082EF2F /* Pillie */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 525916702F456DC10082EF2F /* Build configuration list for PBXNativeTarget "Pillie" */;
+			buildPhases = (
+				525916612F456DC00082EF2F /* Sources */,
+				525916622F456DC00082EF2F /* Frameworks */,
+				525916632F456DC00082EF2F /* Resources */,
+				DP0001012F456DC00082EF2F /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DA00010A2F456DC00082EF2F /* PBXTargetDependency */,
+				SC00010A2F456DC00082EF2F /* PBXTargetDependency */,
+				SA00010A2F456DC00082EF2F /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				525916672F456DC00082EF2F /* Pillie */,
+			);
+			name = Pillie;
+			packageProductDependencies = (
+				RC0001022F456DC00082EF2F /* RevenueCat */,
+				RC0001032F456DC00082EF2F /* RevenueCatUI */,
+			);
+			productName = Pillie;
+			productReference = 525916652F456DC00082EF2F /* Pillie.app */;
+			productType = "com.apple.product-type.application";
+		};
+		DA0001062F456DC00082EF2F /* PillieDeviceActivityMonitor */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DA0001082F456DC00082EF2F /* Build configuration list for PBXNativeTarget "PillieDeviceActivityMonitor" */;
+			buildPhases = (
+				DA0001032F456DC00082EF2F /* Sources */,
+				DA0001042F456DC00082EF2F /* Frameworks */,
+				DA0001052F456DC00082EF2F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				DA0001022F456DC00082EF2F /* PillieDeviceActivityMonitor */,
+			);
+			name = PillieDeviceActivityMonitor;
+			packageProductDependencies = (
+			);
+			productName = PillieDeviceActivityMonitor;
+			productReference = DA0001012F456DC00082EF2F /* PillieDeviceActivityMonitor.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		SA0001062F456DC00082EF2F /* PillieShieldAction */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = SA0001082F456DC00082EF2F /* Build configuration list for PBXNativeTarget "PillieShieldAction" */;
+			buildPhases = (
+				SA0001032F456DC00082EF2F /* Sources */,
+				SA0001042F456DC00082EF2F /* Frameworks */,
+				SA0001052F456DC00082EF2F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				SA0001022F456DC00082EF2F /* PillieShieldAction */,
+			);
+			name = PillieShieldAction;
+			packageProductDependencies = (
+			);
+			productName = PillieShieldAction;
+			productReference = SA0001012F456DC00082EF2F /* PillieShieldAction.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		SC0001062F456DC00082EF2F /* PillieShieldConfiguration */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = SC0001082F456DC00082EF2F /* Build configuration list for PBXNativeTarget "PillieShieldConfiguration" */;
+			buildPhases = (
+				SC0001032F456DC00082EF2F /* Sources */,
+				SC0001042F456DC00082EF2F /* Frameworks */,
+				SC0001052F456DC00082EF2F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				SC0001022F456DC00082EF2F /* PillieShieldConfiguration */,
+			);
+			name = PillieShieldConfiguration;
+			packageProductDependencies = (
+			);
+			productName = PillieShieldConfiguration;
+			productReference = SC0001012F456DC00082EF2F /* PillieShieldConfiguration.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		5259165D2F456DC00082EF2F /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2630;
+				LastUpgradeCheck = 2620;
+				TargetAttributes = {
+					525916642F456DC00082EF2F = {
+						CreatedOnToolsVersion = 26.2;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+							com.apple.FamilyControls = {
+								enabled = 1;
+							};
+						};
+					};
+					DA0001062F456DC00082EF2F = {
+						CreatedOnToolsVersion = 26.2;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+						};
+					};
+					SA0001062F456DC00082EF2F = {
+						CreatedOnToolsVersion = 26.2;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+						};
+					};
+					SC0001062F456DC00082EF2F = {
+						CreatedOnToolsVersion = 26.2;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+						};
+					};
+				};
+			};
+			buildConfigurationList = 525916602F456DC00082EF2F /* Build configuration list for PBXProject "Pillie" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 5259165C2F456DC00082EF2F;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				RC0001012F456DC00082EF2F /* XCRemoteSwiftPackageReference "purchases-ios" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 525916662F456DC00082EF2F /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				525916642F456DC00082EF2F /* Pillie */,
+				DA0001062F456DC00082EF2F /* PillieDeviceActivityMonitor */,
+				SC0001062F456DC00082EF2F /* PillieShieldConfiguration */,
+				SA0001062F456DC00082EF2F /* PillieShieldAction */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		525916632F456DC00082EF2F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DA0001052F456DC00082EF2F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		SA0001052F456DC00082EF2F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		SC0001052F456DC00082EF2F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		525916612F456DC00082EF2F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DA0001032F456DC00082EF2F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		SA0001032F456DC00082EF2F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		SC0001032F456DC00082EF2F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		DA00010A2F456DC00082EF2F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DA0001062F456DC00082EF2F /* PillieDeviceActivityMonitor */;
+			targetProxy = DA0001092F456DC00082EF2F /* PBXContainerItemProxy */;
+		};
+		SA00010A2F456DC00082EF2F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = SA0001062F456DC00082EF2F /* PillieShieldAction */;
+			targetProxy = SA0001092F456DC00082EF2F /* PBXContainerItemProxy */;
+		};
+		SC00010A2F456DC00082EF2F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = SC0001062F456DC00082EF2F /* PillieShieldConfiguration */;
+			targetProxy = SC0001092F456DC00082EF2F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		5259166E2F456DC10082EF2F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = LA7AZKLT84;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		5259166F2F456DC10082EF2F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_COVERAGE_MAPPING = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_CODE_COVERAGE = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = LA7AZKLT84;
+				ENABLE_CODE_COVERAGE = NO;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-Osize";
+			};
+			name = Release;
+		};
+		525916712F456DC10082EF2F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Pillie/Pillie.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LA7AZKLT84;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Pillie/Info.plist;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.idrisskone.pillie;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = auto;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		525916722F456DC10082EF2F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_COVERAGE_MAPPING = NO;
+				CLANG_ENABLE_CODE_COVERAGE = NO;
+				CODE_SIGN_ENTITLEMENTS = Pillie/Pillie.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LA7AZKLT84;
+				ENABLE_CODE_COVERAGE = NO;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Pillie/Info.plist;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.idrisskone.pillie;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = auto;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		DA0001072F456DC00082EF2F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = PillieDeviceActivityMonitor/PillieDeviceActivityMonitor.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LA7AZKLT84;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = PillieDeviceActivityMonitor/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = PillieDeviceActivityMonitor;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.idrisskone.pillie.DeviceActivityMonitor;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = auto;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		DA00010B2F456DC00082EF2F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = PillieDeviceActivityMonitor/PillieDeviceActivityMonitor.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LA7AZKLT84;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = PillieDeviceActivityMonitor/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = PillieDeviceActivityMonitor;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.idrisskone.pillie.DeviceActivityMonitor;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = auto;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		SA0001072F456DC00082EF2F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = PillieShieldAction/PillieShieldAction.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LA7AZKLT84;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = PillieShieldAction/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = PillieShieldAction;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.idrisskone.pillie.ShieldAction;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = auto;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		SA00010B2F456DC00082EF2F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = PillieShieldAction/PillieShieldAction.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LA7AZKLT84;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = PillieShieldAction/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = PillieShieldAction;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.idrisskone.pillie.ShieldAction;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = auto;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		SC0001072F456DC00082EF2F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = PillieShieldConfiguration/PillieShieldConfiguration.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LA7AZKLT84;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = PillieShieldConfiguration/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = PillieShieldConfiguration;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.idrisskone.pillie.ShieldConfiguration;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = auto;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		SC00010B2F456DC00082EF2F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = PillieShieldConfiguration/PillieShieldConfiguration.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LA7AZKLT84;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = PillieShieldConfiguration/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = PillieShieldConfiguration;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.idrisskone.pillie.ShieldConfiguration;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = auto;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		525916602F456DC00082EF2F /* Build configuration list for PBXProject "Pillie" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5259166E2F456DC10082EF2F /* Debug */,
+				5259166F2F456DC10082EF2F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		525916702F456DC10082EF2F /* Build configuration list for PBXNativeTarget "Pillie" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				525916712F456DC10082EF2F /* Debug */,
+				525916722F456DC10082EF2F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DA0001082F456DC00082EF2F /* Build configuration list for PBXNativeTarget "PillieDeviceActivityMonitor" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DA0001072F456DC00082EF2F /* Debug */,
+				DA00010B2F456DC00082EF2F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		SA0001082F456DC00082EF2F /* Build configuration list for PBXNativeTarget "PillieShieldAction" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				SA0001072F456DC00082EF2F /* Debug */,
+				SA00010B2F456DC00082EF2F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		SC0001082F456DC00082EF2F /* Build configuration list for PBXNativeTarget "PillieShieldConfiguration" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				SC0001072F456DC00082EF2F /* Debug */,
+				SC00010B2F456DC00082EF2F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		RC0001012F456DC00082EF2F /* XCRemoteSwiftPackageReference "purchases-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RevenueCat/purchases-ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.21.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		RC0001022F456DC00082EF2F /* RevenueCat */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = RC0001012F456DC00082EF2F /* XCRemoteSwiftPackageReference "purchases-ios" */;
+			productName = RevenueCat;
+		};
+		RC0001032F456DC00082EF2F /* RevenueCatUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = RC0001012F456DC00082EF2F /* XCRemoteSwiftPackageReference "purchases-ios" */;
+			productName = RevenueCatUI;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 5259165D2F456DC00082EF2F /* Project object */;
+}

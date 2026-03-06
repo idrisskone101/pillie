@@ -1,0 +1,64 @@
+{
+  "source": "/Users/idrisskone/Desktop/Pillie/Pillie/Pillie/Views/Calendar/AdherenceCard.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "%lld check-ins",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 36
+        }
+      },
+      {
+        "comment": "",
+        "key": "check-ins you've logged so far",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 41
+        }
+      },
+      {
+        "comment": "",
+        "key": "Your Monthly Care",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 20
+        }
+      },
+      {
+        "comment": "",
+        "key": "This month",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 26
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld%% on track",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 47
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld/%lld done",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 51
+        }
+      },
+      {
+        "comment": "",
+        "key": "No check-ins due yet",
+        "location": {
+          "startingColumn": 79,
+          "startingLine": 51
+        }
+      }
+    ]
+  },
+  "version": 1
+}

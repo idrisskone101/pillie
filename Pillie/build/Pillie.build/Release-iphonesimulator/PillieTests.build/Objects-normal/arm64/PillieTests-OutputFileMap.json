@@ -1,0 +1,36 @@
+{
+  "" : {
+    "const-values" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/PillieTests.build/Objects-normal/arm64/PillieTests-primary.swiftconstvalues",
+    "dependencies" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/PillieTests.build/Objects-normal/arm64/PillieTests-primary.d",
+    "diagnostics" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/PillieTests.build/Objects-normal/arm64/PillieTests-primary.dia",
+    "emit-module-dependencies" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/PillieTests.build/Objects-normal/arm64/PillieTests-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/PillieTests.build/Objects-normal/arm64/PillieTests-primary-emit-module.dia",
+    "pch" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/PillieTests.build/Objects-normal/arm64/PillieTests-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/PillieTests.build/Objects-normal/arm64/PillieTests-primary.swiftdeps"
+  },
+  "/Users/idrisskone/Desktop/Pillie/Pillie/PillieTests/DoseScheduleEngineTests.swift" : {
+    "index-unit-output-path" : "/Pillie.build/Release-iphonesimulator/PillieTests.build/Objects-normal/arm64/DoseScheduleEngineTests.o",
+    "llvm-bc" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/PillieTests.build/Objects-normal/arm64/DoseScheduleEngineTests.bc",
+    "object" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/PillieTests.build/Objects-normal/arm64/DoseScheduleEngineTests.o"
+  },
+  "/Users/idrisskone/Desktop/Pillie/Pillie/PillieTests/MonthCursorTests.swift" : {
+    "index-unit-output-path" : "/Pillie.build/Release-iphonesimulator/PillieTests.build/Objects-normal/arm64/MonthCursorTests.o",
+    "llvm-bc" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/PillieTests.build/Objects-normal/arm64/MonthCursorTests.bc",
+    "object" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/PillieTests.build/Objects-normal/arm64/MonthCursorTests.o"
+  },
+  "/Users/idrisskone/Desktop/Pillie/Pillie/PillieTests/NotificationManagerDiffTests.swift" : {
+    "index-unit-output-path" : "/Pillie.build/Release-iphonesimulator/PillieTests.build/Objects-normal/arm64/NotificationManagerDiffTests.o",
+    "llvm-bc" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/PillieTests.build/Objects-normal/arm64/NotificationManagerDiffTests.bc",
+    "object" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/PillieTests.build/Objects-normal/arm64/NotificationManagerDiffTests.o"
+  },
+  "/Users/idrisskone/Desktop/Pillie/Pillie/PillieTests/PillStoreReadModelTests.swift" : {
+    "index-unit-output-path" : "/Pillie.build/Release-iphonesimulator/PillieTests.build/Objects-normal/arm64/PillStoreReadModelTests.o",
+    "llvm-bc" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/PillieTests.build/Objects-normal/arm64/PillStoreReadModelTests.bc",
+    "object" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/PillieTests.build/Objects-normal/arm64/PillStoreReadModelTests.o"
+  },
+  "/Users/idrisskone/Desktop/Pillie/Pillie/PillieTests/TestSupport/InMemoryStoreFactory.swift" : {
+    "index-unit-output-path" : "/Pillie.build/Release-iphonesimulator/PillieTests.build/Objects-normal/arm64/InMemoryStoreFactory.o",
+    "llvm-bc" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/PillieTests.build/Objects-normal/arm64/InMemoryStoreFactory.bc",
+    "object" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/PillieTests.build/Objects-normal/arm64/InMemoryStoreFactory.o"
+  }
+}

@@ -1,0 +1,201 @@
+{
+  "" : {
+    "const-values" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/Pillie-primary.swiftconstvalues",
+    "dependencies" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/Pillie-primary.d",
+    "diagnostics" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/Pillie-primary.dia",
+    "emit-module-dependencies" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/Pillie-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/Pillie-primary-emit-module.dia",
+    "pch" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/Pillie-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/Pillie-primary.swiftdeps"
+  },
+  "/Users/idrisskone/Desktop/Pillie/Pillie/Pillie/ContentView.swift" : {
+    "index-unit-output-path" : "/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/ContentView.o",
+    "llvm-bc" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/ContentView.bc",
+    "object" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/ContentView.o"
+  },
+  "/Users/idrisskone/Desktop/Pillie/Pillie/Pillie/Models/BlockableApp.swift" : {
+    "index-unit-output-path" : "/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/BlockableApp.o",
+    "llvm-bc" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/BlockableApp.bc",
+    "object" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/BlockableApp.o"
+  },
+  "/Users/idrisskone/Desktop/Pillie/Pillie/Pillie/Models/ContraceptiveMethod.swift" : {
+    "index-unit-output-path" : "/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/ContraceptiveMethod.o",
+    "llvm-bc" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/ContraceptiveMethod.bc",
+    "object" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/ContraceptiveMethod.o"
+  },
+  "/Users/idrisskone/Desktop/Pillie/Pillie/Pillie/Models/DataMigration.swift" : {
+    "index-unit-output-path" : "/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/DataMigration.o",
+    "llvm-bc" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/DataMigration.bc",
+    "object" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/DataMigration.o"
+  },
+  "/Users/idrisskone/Desktop/Pillie/Pillie/Pillie/Models/PillDay.swift" : {
+    "index-unit-output-path" : "/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/PillDay.o",
+    "llvm-bc" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/PillDay.bc",
+    "object" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/PillDay.o"
+  },
+  "/Users/idrisskone/Desktop/Pillie/Pillie/Pillie/Models/PillPack.swift" : {
+    "index-unit-output-path" : "/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/PillPack.o",
+    "llvm-bc" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/PillPack.bc",
+    "object" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/PillPack.o"
+  },
+  "/Users/idrisskone/Desktop/Pillie/Pillie/Pillie/Models/PillRegimenMetadata.swift" : {
+    "index-unit-output-path" : "/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/PillRegimenMetadata.o",
+    "llvm-bc" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/PillRegimenMetadata.bc",
+    "object" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/PillRegimenMetadata.o"
+  },
+  "/Users/idrisskone/Desktop/Pillie/Pillie/Pillie/Models/PillScheduleSnapshot.swift" : {
+    "index-unit-output-path" : "/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/PillScheduleSnapshot.o",
+    "llvm-bc" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/PillScheduleSnapshot.bc",
+    "object" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/PillScheduleSnapshot.o"
+  },
+  "/Users/idrisskone/Desktop/Pillie/Pillie/Pillie/Models/PillStore.swift" : {
+    "index-unit-output-path" : "/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/PillStore.o",
+    "llvm-bc" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/PillStore.bc",
+    "object" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/PillStore.o"
+  },
+  "/Users/idrisskone/Desktop/Pillie/Pillie/Pillie/PillieApp.swift" : {
+    "index-unit-output-path" : "/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/PillieApp.o",
+    "llvm-bc" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/PillieApp.bc",
+    "object" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/PillieApp.o"
+  },
+  "/Users/idrisskone/Desktop/Pillie/Pillie/Pillie/Services/DoseScheduleEngine.swift" : {
+    "index-unit-output-path" : "/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/DoseScheduleEngine.o",
+    "llvm-bc" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/DoseScheduleEngine.bc",
+    "object" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/DoseScheduleEngine.o"
+  },
+  "/Users/idrisskone/Desktop/Pillie/Pillie/Pillie/Services/NotificationManager.swift" : {
+    "index-unit-output-path" : "/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/NotificationManager.o",
+    "llvm-bc" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/NotificationManager.bc",
+    "object" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/NotificationManager.o"
+  },
+  "/Users/idrisskone/Desktop/Pillie/Pillie/Pillie/Shared/AppGroupConstants.swift" : {
+    "index-unit-output-path" : "/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/AppGroupConstants.o",
+    "llvm-bc" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/AppGroupConstants.bc",
+    "object" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/AppGroupConstants.o"
+  },
+  "/Users/idrisskone/Desktop/Pillie/Pillie/Pillie/Shared/MonthCursor.swift" : {
+    "index-unit-output-path" : "/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/MonthCursor.o",
+    "llvm-bc" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/MonthCursor.bc",
+    "object" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/MonthCursor.o"
+  },
+  "/Users/idrisskone/Desktop/Pillie/Pillie/Pillie/Shared/PillieDateFormatters.swift" : {
+    "index-unit-output-path" : "/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/PillieDateFormatters.o",
+    "llvm-bc" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/PillieDateFormatters.bc",
+    "object" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/PillieDateFormatters.o"
+  },
+  "/Users/idrisskone/Desktop/Pillie/Pillie/Pillie/Shared/ReminderTimeConverter.swift" : {
+    "index-unit-output-path" : "/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/ReminderTimeConverter.o",
+    "llvm-bc" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/ReminderTimeConverter.bc",
+    "object" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/ReminderTimeConverter.o"
+  },
+  "/Users/idrisskone/Desktop/Pillie/Pillie/Pillie/Theme/PillieButtonStyles.swift" : {
+    "index-unit-output-path" : "/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/PillieButtonStyles.o",
+    "llvm-bc" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/PillieButtonStyles.bc",
+    "object" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/PillieButtonStyles.o"
+  },
+  "/Users/idrisskone/Desktop/Pillie/Pillie/Pillie/Theme/PillieFontRegistration.swift" : {
+    "index-unit-output-path" : "/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/PillieFontRegistration.o",
+    "llvm-bc" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/PillieFontRegistration.bc",
+    "object" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/PillieFontRegistration.o"
+  },
+  "/Users/idrisskone/Desktop/Pillie/Pillie/Pillie/Theme/PillieTheme.swift" : {
+    "index-unit-output-path" : "/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/PillieTheme.o",
+    "llvm-bc" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/PillieTheme.bc",
+    "object" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/PillieTheme.o"
+  },
+  "/Users/idrisskone/Desktop/Pillie/Pillie/Pillie/Views/Calendar/AdherenceCard.swift" : {
+    "index-unit-output-path" : "/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/AdherenceCard.o",
+    "llvm-bc" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/AdherenceCard.bc",
+    "object" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/AdherenceCard.o"
+  },
+  "/Users/idrisskone/Desktop/Pillie/Pillie/Pillie/Views/Calendar/CalendarGrid.swift" : {
+    "index-unit-output-path" : "/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/CalendarGrid.o",
+    "llvm-bc" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/CalendarGrid.bc",
+    "object" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/CalendarGrid.o"
+  },
+  "/Users/idrisskone/Desktop/Pillie/Pillie/Pillie/Views/Calendar/HistoryView.swift" : {
+    "index-unit-output-path" : "/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/HistoryView.o",
+    "llvm-bc" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/HistoryView.bc",
+    "object" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/HistoryView.o"
+  },
+  "/Users/idrisskone/Desktop/Pillie/Pillie/Pillie/Views/Components/FadeInUp.swift" : {
+    "index-unit-output-path" : "/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/FadeInUp.o",
+    "llvm-bc" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/FadeInUp.bc",
+    "object" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/FadeInUp.o"
+  },
+  "/Users/idrisskone/Desktop/Pillie/Pillie/Pillie/Views/Components/HomeAvatarLogoBadge.swift" : {
+    "index-unit-output-path" : "/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/HomeAvatarLogoBadge.o",
+    "llvm-bc" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/HomeAvatarLogoBadge.bc",
+    "object" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/HomeAvatarLogoBadge.o"
+  },
+  "/Users/idrisskone/Desktop/Pillie/Pillie/Pillie/Views/Components/OnboardingStepHeader.swift" : {
+    "index-unit-output-path" : "/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/OnboardingStepHeader.o",
+    "llvm-bc" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/OnboardingStepHeader.bc",
+    "object" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/OnboardingStepHeader.o"
+  },
+  "/Users/idrisskone/Desktop/Pillie/Pillie/Pillie/Views/Components/PillieTabBar.swift" : {
+    "index-unit-output-path" : "/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/PillieTabBar.o",
+    "llvm-bc" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/PillieTabBar.bc",
+    "object" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/PillieTabBar.o"
+  },
+  "/Users/idrisskone/Desktop/Pillie/Pillie/Pillie/Views/Home/HomeView.swift" : {
+    "index-unit-output-path" : "/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/HomeView.o",
+    "llvm-bc" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/HomeView.bc",
+    "object" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/HomeView.o"
+  },
+  "/Users/idrisskone/Desktop/Pillie/Pillie/Pillie/Views/Home/PillPackCard.swift" : {
+    "index-unit-output-path" : "/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/PillPackCard.o",
+    "llvm-bc" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/PillPackCard.bc",
+    "object" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/PillPackCard.o"
+  },
+  "/Users/idrisskone/Desktop/Pillie/Pillie/Pillie/Views/Home/StatsRow.swift" : {
+    "index-unit-output-path" : "/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/StatsRow.o",
+    "llvm-bc" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/StatsRow.bc",
+    "object" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/StatsRow.o"
+  },
+  "/Users/idrisskone/Desktop/Pillie/Pillie/Pillie/Views/Home/StatusCard.swift" : {
+    "index-unit-output-path" : "/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/StatusCard.o",
+    "llvm-bc" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/StatusCard.bc",
+    "object" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/StatusCard.o"
+  },
+  "/Users/idrisskone/Desktop/Pillie/Pillie/Pillie/Views/Onboarding/AppBlockingSetupView.swift" : {
+    "index-unit-output-path" : "/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/AppBlockingSetupView.o",
+    "llvm-bc" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/AppBlockingSetupView.bc",
+    "object" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/AppBlockingSetupView.o"
+  },
+  "/Users/idrisskone/Desktop/Pillie/Pillie/Pillie/Views/Onboarding/MethodDetailsView.swift" : {
+    "index-unit-output-path" : "/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/MethodDetailsView.o",
+    "llvm-bc" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/MethodDetailsView.bc",
+    "object" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/MethodDetailsView.o"
+  },
+  "/Users/idrisskone/Desktop/Pillie/Pillie/Pillie/Views/Onboarding/MethodPickerView.swift" : {
+    "index-unit-output-path" : "/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/MethodPickerView.o",
+    "llvm-bc" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/MethodPickerView.bc",
+    "object" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/MethodPickerView.o"
+  },
+  "/Users/idrisskone/Desktop/Pillie/Pillie/Pillie/Views/Onboarding/OnboardingBackground.swift" : {
+    "index-unit-output-path" : "/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/OnboardingBackground.o",
+    "llvm-bc" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/OnboardingBackground.bc",
+    "object" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/OnboardingBackground.o"
+  },
+  "/Users/idrisskone/Desktop/Pillie/Pillie/Pillie/Views/Onboarding/TimeSetupView.swift" : {
+    "index-unit-output-path" : "/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/TimeSetupView.o",
+    "llvm-bc" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/TimeSetupView.bc",
+    "object" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/TimeSetupView.o"
+  },
+  "/Users/idrisskone/Desktop/Pillie/Pillie/Pillie/Views/Onboarding/WelcomeView.swift" : {
+    "index-unit-output-path" : "/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/WelcomeView.o",
+    "llvm-bc" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/WelcomeView.bc",
+    "object" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/WelcomeView.o"
+  },
+  "/Users/idrisskone/Desktop/Pillie/Pillie/Pillie/Views/Settings/SettingsView.swift" : {
+    "index-unit-output-path" : "/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/SettingsView.o",
+    "llvm-bc" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/SettingsView.bc",
+    "object" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/SettingsView.o"
+  },
+  "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/DerivedSources/GeneratedAssetSymbols.swift" : {
+    "index-unit-output-path" : "/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/GeneratedAssetSymbols.o",
+    "llvm-bc" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/GeneratedAssetSymbols.bc",
+    "object" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/x86_64/GeneratedAssetSymbols.o"
+  }
+}

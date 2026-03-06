@@ -1,0 +1,12 @@
+{
+  "/Users/idrisskone/Desktop/Pillie/Pillie/Pillie/Models/BlockableApp.swift" : {
+    "abi-baseline-json" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/arm64/Pillie.abi.json",
+    "const-values" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/arm64/Pillie-primary.swiftconstvalues",
+    "dependencies" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/arm64/Pillie-primary.d",
+    "diagnostics" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/arm64/Pillie-primary.dia",
+    "objc-header" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/arm64/Pillie-Swift.h",
+    "swiftdoc" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/arm64/Pillie.swiftdoc",
+    "swiftmodule" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/arm64/Pillie.swiftmodule",
+    "swiftsourceinfo" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphonesimulator/Pillie.build/Objects-normal/arm64/Pillie.swiftsourceinfo"
+  }
+}

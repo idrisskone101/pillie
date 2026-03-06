@@ -1,0 +1,48 @@
+{
+  "source": "/Users/idrisskone/Desktop/Pillie/Pillie/Pillie/Views/Onboarding/MethodPickerView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "What's your ",
+        "location": {
+          "startingColumn": 19,
+          "startingLine": 73
+        }
+      },
+      {
+        "comment": "",
+        "key": "method?",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 75
+        }
+      },
+      {
+        "comment": "",
+        "key": "We'll customize your schedule.",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 80
+        }
+      },
+      {
+        "comment": "",
+        "key": "popular!",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 122
+        }
+      },
+      {
+        "comment": "",
+        "key": "Continue",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 175
+        }
+      }
+    ]
+  },
+  "version": 1
+}

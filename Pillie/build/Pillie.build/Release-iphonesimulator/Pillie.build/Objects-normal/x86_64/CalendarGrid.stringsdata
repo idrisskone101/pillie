@@ -1,0 +1,16 @@
+{
+  "source": "/Users/idrisskone/Desktop/Pillie/Pillie/Pillie/Views/Calendar/CalendarGrid.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "%lld",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 102
+        }
+      }
+    ]
+  },
+  "version": 1
+}

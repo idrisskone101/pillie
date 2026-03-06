@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "app": {
+    "bundle_id": "com.idrisskone.pillie",
+    "output_dir": "./screenshots/raw"
+  },
+  "defaults": {
+    "post_action_delay_ms": 600
+  },
+  "steps": [
+    { "action": "launch" },
+    { "action": "wait", "duration_ms": 1800 },
+    { "action": "wait_for", "label": "Today", "timeout_ms": 15000, "poll_interval_ms": 400 },
+    { "action": "screenshot", "name": "01_today_overview" },
+
+    { "action": "tap", "label": "Mark Pill as Taken" },
+    { "action": "wait_for", "contains": "Completed (Tap to undo)", "timeout_ms": 10000, "poll_interval_ms": 400 },
+    { "action": "screenshot", "name": "02_today_taken" },
+
+    { "action": "tap", "label": "Calendar" },
+    { "action": "wait_for", "label": "History", "timeout_ms": 10000, "poll_interval_ms": 400 },
+    { "action": "screenshot", "name": "03_calendar_history" },
+
+    { "action": "tap", "label": "Settings" },
+    { "action": "wait_for", "label": "Settings", "timeout_ms": 10000, "poll_interval_ms": 400 },
+    { "action": "screenshot", "name": "04_settings_overview" },
+
+    { "action": "tap", "x": 220, "y": 269 },
+    { "action": "wait", "duration_ms": 350 },
+    { "action": "tap", "x": 220, "y": 269 },
+    { "action": "wait", "duration_ms": 900 },
+    { "action": "screenshot", "name": "05_settings_edit_schedule" }
+  ]
+}

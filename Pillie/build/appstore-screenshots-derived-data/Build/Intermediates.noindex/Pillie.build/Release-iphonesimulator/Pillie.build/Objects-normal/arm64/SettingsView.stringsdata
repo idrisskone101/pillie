@@ -1,0 +1,248 @@
+{
+  "source": "/Users/idrisskone/Desktop/Pillie/Pillie/Pillie/Views/Settings/SettingsView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "you're doing amazing!",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 80
+        }
+      },
+      {
+        "comment": "",
+        "key": "Edit Schedule",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 334
+        }
+      },
+      {
+        "comment": "",
+        "key": "Method",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 228
+        }
+      },
+      {
+        "comment": "",
+        "key": "Pill Regimen",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 241
+        }
+      },
+      {
+        "comment": "",
+        "key": "Method",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 233
+        }
+      },
+      {
+        "comment": "",
+        "key": "Current Cycle Day",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 285
+        }
+      },
+      {
+        "comment": "",
+        "key": "Not set. Select your current day to continue.",
+        "location": {
+          "startingColumn": 65,
+          "startingLine": 291
+        }
+      },
+      {
+        "comment": "",
+        "key": "Day %lld of %lld",
+        "location": {
+          "startingColumn": 115,
+          "startingLine": 291
+        }
+      },
+      {
+        "comment": "",
+        "key": "Adjust current day",
+        "location": {
+          "startingColumn": 42,
+          "startingLine": 306
+        }
+      },
+      {
+        "comment": "",
+        "key": "Use Day 1",
+        "location": {
+          "startingColumn": 42,
+          "startingLine": 317
+        }
+      },
+      {
+        "comment": "",
+        "key": "Cancel",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 338
+        }
+      },
+      {
+        "comment": "",
+        "key": "Save",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 341
+        }
+      },
+      {
+        "comment": "",
+        "key": "0",
+        "location": {
+          "startingColumn": 23,
+          "startingLine": 375
+        }
+      },
+      {
+        "comment": "",
+        "key": "Change Reminder Time",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 439
+        }
+      },
+      {
+        "comment": "",
+        "key": ":",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 453
+        }
+      },
+      {
+        "comment": "",
+        "key": "Hour",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 444
+        }
+      },
+      {
+        "comment": "",
+        "key": "Minute",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 457
+        }
+      },
+      {
+        "comment": "",
+        "key": "Period",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 466
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 446
+        }
+      },
+      {
+        "comment": "",
+        "key": "AM",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 467
+        }
+      },
+      {
+        "comment": "",
+        "key": "PM",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 468
+        }
+      },
+      {
+        "comment": "",
+        "key": "Save",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 479
+        }
+      },
+      {
+        "comment": "",
+        "key": "Auto-Reminder Interval",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 549
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld minutes",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 527
+        }
+      },
+      {
+        "comment": "",
+        "key": "Cancel",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 553
+        }
+      },
+      {
+        "comment": "",
+        "key": "Save",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 556
+        }
+      },
+      {
+        "comment": "",
+        "key": "Refill Reminder",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 609
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld days before end",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 587
+        }
+      },
+      {
+        "comment": "",
+        "key": "Cancel",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 613
+        }
+      },
+      {
+        "comment": "",
+        "key": "Save",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 616
+        }
+      }
+    ]
+  },
+  "version": 1
+}

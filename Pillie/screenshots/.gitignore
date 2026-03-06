@@ -1,0 +1,6 @@
+raw/*
+framed/*
+review/*
+!raw/.gitkeep
+!framed/.gitkeep
+!review/.gitkeep

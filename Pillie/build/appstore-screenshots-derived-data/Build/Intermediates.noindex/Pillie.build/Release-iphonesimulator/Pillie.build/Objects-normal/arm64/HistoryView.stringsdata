@@ -1,0 +1,16 @@
+{
+  "source": "/Users/idrisskone/Desktop/Pillie/Pillie/Pillie/Views/Calendar/HistoryView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Your tracking overview",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 53
+        }
+      }
+    ]
+  },
+  "version": 1
+}

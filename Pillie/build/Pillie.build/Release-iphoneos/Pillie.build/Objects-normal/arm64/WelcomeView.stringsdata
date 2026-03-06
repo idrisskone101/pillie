@@ -1,0 +1,72 @@
+{
+  "source": "/Users/idrisskone/Desktop/Pillie/Pillie/Pillie/Views/Onboarding/WelcomeView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "No more swiping away notifications.\nPillie makes building your habit feel natural and effortless.",
+        "location": {
+          "startingColumn": 14,
+          "startingLine": 193
+        }
+      },
+      {
+        "comment": "",
+        "key": "💊",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 154
+        }
+      },
+      {
+        "comment": "",
+        "key": "your new bestie ->",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 166
+        }
+      },
+      {
+        "comment": "",
+        "key": "8:00 AM",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 143
+        }
+      },
+      {
+        "comment": "",
+        "key": "The alarm clock",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 180
+        }
+      },
+      {
+        "comment": "",
+        "key": "for your pill.",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 183
+        }
+      },
+      {
+        "comment": "",
+        "key": "Get Started",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 206
+        }
+      },
+      {
+        "comment": "",
+        "key": "I already have an account",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 213
+        }
+      }
+    ]
+  },
+  "version": 1
+}

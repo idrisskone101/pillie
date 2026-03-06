@@ -1,0 +1,64 @@
+{
+  "source": "/Users/idrisskone/Desktop/Pillie/Pillie/Pillie/Views/Onboarding/AppBlockingSetupView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Block your ",
+        "location": {
+          "startingColumn": 19,
+          "startingLine": 87
+        }
+      },
+      {
+        "comment": "",
+        "key": "apps",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 89
+        }
+      },
+      {
+        "comment": "",
+        "key": "Lock distracting apps until you've taken your pill.",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 94
+        }
+      },
+      {
+        "comment": "",
+        "key": "App blocking stays on your device. We never see which apps you use.",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 109
+        }
+      },
+      {
+        "comment": "",
+        "key": "Add more apps",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 176
+        }
+      },
+      {
+        "comment": "",
+        "key": "Enable Blocking & Finish",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 200
+        }
+      },
+      {
+        "comment": "",
+        "key": "Skip for now",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 208
+        }
+      }
+    ]
+  },
+  "version": 1
+}

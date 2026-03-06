@@ -1,0 +1,104 @@
+{
+  "source": "/Users/idrisskone/Desktop/Pillie/Pillie/Pillie/Views/Onboarding/MethodDetailsView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Let's set your",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 122
+        }
+      },
+      {
+        "comment": "",
+        "key": "schedule",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 126
+        }
+      },
+      {
+        "comment": "",
+        "key": "Choose your cycle setup so reminders match your method.",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 131
+        }
+      },
+      {
+        "comment": "",
+        "key": "PILL REGIMEN",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 140
+        }
+      },
+      {
+        "comment": "",
+        "key": "0",
+        "location": {
+          "startingColumn": 23,
+          "startingLine": 212
+        }
+      },
+      {
+        "comment": "",
+        "key": "SCHEDULE",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 230
+        }
+      },
+      {
+        "comment": "",
+        "key": "Patch reminders happen on cycle day 1, 8, and 15. Week 4 is off.",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 236
+        }
+      },
+      {
+        "comment": "",
+        "key": "Ring reminders happen on cycle day 1 (insert), 21 (remove), and 28 (reinsert).",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 237
+        }
+      },
+      {
+        "comment": "",
+        "key": "CURRENT CYCLE DAY",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 253
+        }
+      },
+      {
+        "comment": "",
+        "key": "Day %lld of %lld",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 259
+        }
+      },
+      {
+        "comment": "",
+        "key": "Adjust to your current day",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 264
+        }
+      },
+      {
+        "comment": "",
+        "key": "Continue",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 291
+        }
+      }
+    ]
+  },
+  "version": 1
+}

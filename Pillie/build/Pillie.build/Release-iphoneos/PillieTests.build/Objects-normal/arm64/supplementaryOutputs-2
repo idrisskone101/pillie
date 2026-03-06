@@ -1,0 +1,12 @@
+{
+  "/Users/idrisskone/Desktop/Pillie/Pillie/PillieTests/TestSupport/InMemoryStoreFactory.swift" : {
+    "abi-baseline-json" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphoneos/PillieTests.build/Objects-normal/arm64/PillieTests.abi.json",
+    "const-values" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphoneos/PillieTests.build/Objects-normal/arm64/PillieTests-primary.swiftconstvalues",
+    "dependencies" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphoneos/PillieTests.build/Objects-normal/arm64/PillieTests-primary.d",
+    "diagnostics" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphoneos/PillieTests.build/Objects-normal/arm64/PillieTests-primary.dia",
+    "objc-header" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphoneos/PillieTests.build/Objects-normal/arm64/PillieTests-Swift.h",
+    "swiftdoc" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphoneos/PillieTests.build/Objects-normal/arm64/PillieTests.swiftdoc",
+    "swiftmodule" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphoneos/PillieTests.build/Objects-normal/arm64/PillieTests.swiftmodule",
+    "swiftsourceinfo" : "/Users/idrisskone/Desktop/Pillie/Pillie/build/Pillie.build/Release-iphoneos/PillieTests.build/Objects-normal/arm64/PillieTests.swiftsourceinfo"
+  }
+}

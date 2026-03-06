@@ -1,0 +1,32 @@
+{
+  "source": "/Users/idrisskone/Desktop/Pillie/Pillie/Pillie/Views/Home/PillPackCard.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Showing %lld-day window",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 105
+        }
+      },
+      {
+        "comment": "",
+        "key": "Day %lld of %lld",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 113
+        }
+      },
+      {
+        "comment": "",
+        "key": "Pack %lld · %@",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 52
+        }
+      }
+    ]
+  },
+  "version": 1
+}
