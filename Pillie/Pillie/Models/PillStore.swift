@@ -17,7 +17,11 @@ class PillStore {
         if let current = activePack {
             return current
         }
-        return packs.last!
+        guard let last = packs.last else {
+            let fallback = PillPack(startDate: Date(), packNumber: 1)
+            return fallback
+        }
+        return last
     }
 
     var reminderHour: Int {
@@ -84,6 +88,24 @@ class PillStore {
             UserDefaults.standard.set(rawValues, forKey: Self.painPointsKey)
         }
     }
+    var personalGoal: PersonalGoal? {
+        didSet {
+            if let goal = personalGoal {
+                UserDefaults.standard.set(goal.rawValue, forKey: Self.personalGoalKey)
+            } else {
+                UserDefaults.standard.removeObject(forKey: Self.personalGoalKey)
+            }
+        }
+    }
+    var missFrequency: MissFrequency? {
+        didSet {
+            if let freq = missFrequency {
+                UserDefaults.standard.set(freq.rawValue, forKey: Self.missFrequencyKey)
+            } else {
+                UserDefaults.standard.removeObject(forKey: Self.missFrequencyKey)
+            }
+        }
+    }
 
     private let modelContext: ModelContext
     // Retains the container in previews so backing data isn't destroyed
@@ -112,6 +134,8 @@ class PillStore {
     private static let appActivatedDateKey = "pillie_app_activated_date"
     private static let streakResetDateKey = "pillie_streak_reset_date"
     private static let painPointsKey = "pillie_pain_points"
+    private static let personalGoalKey = "personalGoal"
+    private static let missFrequencyKey = "missFrequency"
     private static let minimumSupportedEpoch: TimeInterval = -2_208_988_800 // 1900-01-01
     private static let maximumSupportedEpoch: TimeInterval = 7_258_118_400 // 2200-01-01
     private static let snapshotCacheLimitPerPack = 512
@@ -438,14 +462,7 @@ class PillStore {
         let calendar = Calendar.current
         let reminderToday = calendar.date(bySettingHour: reminderHour, minute: reminderMinute, second: 0, of: now)
         if let reminderToday, now >= reminderToday, !isTodayHandled {
-            let method = pack.method
-            let reason: String
-            switch method {
-            case .pill: reason = "Time to take your pill!"
-            case .patch: reason = "Time for your patch change!"
-            case .ring: reason = "Time for your ring action!"
-            }
-            AppBlockingManager.shared.applyBlocking(reason: reason)
+            AppBlockingManager.shared.applyBlocking(reason: pack.method.blockingReasonText)
         }
         scheduleNotificationResync()
     }
@@ -973,6 +990,17 @@ class PillStore {
             self.painPoints = Set(rawPainPoints.compactMap { PainPoint(rawValue: $0) })
         } else {
             self.painPoints = []
+        }
+
+        if let goalRaw = defaults.string(forKey: Self.personalGoalKey) {
+            self.personalGoal = PersonalGoal(rawValue: goalRaw)
+        } else {
+            self.personalGoal = nil
+        }
+        if let freqRaw = defaults.string(forKey: Self.missFrequencyKey) {
+            self.missFrequency = MissFrequency(rawValue: freqRaw)
+        } else {
+            self.missFrequency = nil
         }
 
         rebuildReadIndexes()

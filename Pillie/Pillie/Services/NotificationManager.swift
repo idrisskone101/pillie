@@ -5,6 +5,7 @@
 
 import Foundation
 import UserNotifications
+import os
 import os.signpost
 
 final class NotificationManager {
@@ -64,7 +65,7 @@ final class NotificationManager {
         guard !isRunningTests else { return }
         center.requestAuthorization(options: [.alert, .sound, .badge]) { _, error in
             if let error {
-                print("Pillie notification auth error: \(error.localizedDescription)")
+                os_log(.error, "Pillie notification auth error: %{public}@", error.localizedDescription)
             }
         }
     }
@@ -105,7 +106,7 @@ final class NotificationManager {
         // Warn if the user has disabled notifications — all scheduled reminders will silently fail
         center.getNotificationSettings { settings in
             if settings.authorizationStatus == .denied {
-                print("Pillie: notifications denied by user — reminders will not fire")
+                os_log(.info, "Pillie: notifications denied by user — reminders will not fire")
             }
         }
 
@@ -552,7 +553,7 @@ final class NotificationManager {
                 guard let request = newRequestByID[id] else { continue }
                 self.center.add(request) { error in
                     if let error {
-                        print("Pillie schedule error: \(error.localizedDescription)")
+                        os_log(.error, "Pillie schedule error: %{public}@", error.localizedDescription)
                     }
                 }
             }

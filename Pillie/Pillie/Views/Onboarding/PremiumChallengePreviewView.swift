@@ -129,8 +129,8 @@ struct PremiumChallengePreviewView: View {
     private var header: some View {
         OnboardingStepHeader(
             appeared: animateIn,
-            progress: 0.375,
-            trailingLabel: "3/4",
+            progress: 0.417,
+            trailingLabel: "5/6",
             onBack: onBack
         )
     }
@@ -294,7 +294,7 @@ struct PremiumChallengePreviewView: View {
 
     private var footer: some View {
         Button {
-            onContinue() // TODO: StoreKit 2
+            onContinue()
         } label: {
             HStack(spacing: 8) {
                 Text("Unlock Full Access")

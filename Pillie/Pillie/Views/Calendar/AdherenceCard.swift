@@ -19,6 +19,12 @@ struct AdherenceCard: View {
         store.monthAdherence(for: displayedMonth)
     }
 
+    private var monthBadgeLabel: String {
+        Calendar.current.isDate(displayedMonth, equalTo: Date(), toGranularity: .month)
+            ? "This month"
+            : PillieDateFormatters.monthYear.string(from: displayedMonth)
+    }
+
     private var monthAnimationKey: String {
         let components = Calendar.current.dateComponents([.year, .month], from: displayedMonth)
         let year = components.year ?? 0
@@ -36,7 +42,7 @@ struct AdherenceCard: View {
 
                 Spacer()
 
-                Text("This month")
+                Text(monthBadgeLabel)
                     .font(.pillieCaptionMedium())
                     .foregroundStyle(PillieTheme.coral)
                     .padding(.horizontal, 12)

@@ -138,7 +138,7 @@ enum DoseScheduleEngine {
                 date: calendar.startOfDay(for: date),
                 type: type,
                 method: .patch,
-                cycleDay: cycleDay,
+                cycleDay: scheduleDay,
                 cycleLength: 28
             )
 

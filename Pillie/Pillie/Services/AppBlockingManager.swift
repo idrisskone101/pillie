@@ -35,6 +35,20 @@ final class AppBlockingManager {
         activitySelection.applicationTokens.count + activitySelection.categoryTokens.count
     }
 
+    /// Whether blocking is effectively on (enabled + apps selected).
+    /// Use this single source of truth across all views.
+    var isEffectivelyOn: Bool {
+        blockingEnabled && hasAppsSelected
+    }
+
+    /// Human-readable summary for display in settings/home.
+    var statusSummary: String {
+        if !blockingEnabled { return "Off" }
+        if !hasAppsSelected { return "No apps" }
+        let count = selectedCount
+        return blockingActive ? "Active · \(count)" : "On · \(count)"
+    }
+
     private let store = ManagedSettingsStore()
     private let center = DeviceActivityCenter()
     private static let activityName = DeviceActivityName("pillie.reminder.block")
@@ -77,7 +91,7 @@ final class AppBlockingManager {
         } catch {
             isAuthorized = false
             authorizationStatus = .denied
-            print("Pillie Screen Time auth error: \(error.localizedDescription)")
+            Self.logger.error("Screen Time auth error: \(error.localizedDescription)")
         }
         #endif
     }
@@ -107,6 +121,7 @@ final class AppBlockingManager {
     // MARK: - Shield Management
 
     func applyBlocking(reason: String) {
+        guard SubscriptionManager.shared.isPlus else { return }
         guard hasAppsSelected else { return }
 
         #if !targetEnvironment(simulator)
@@ -146,6 +161,10 @@ final class AppBlockingManager {
         reminderMinute: Int,
         method: ContraceptiveMethod
     ) {
+        guard SubscriptionManager.shared.isPlus else {
+            if blockingActive { removeBlocking() }
+            return
+        }
         guard hasAppsSelected, blockingEnabled else {
             if !blockingEnabled { removeBlocking() }
             return

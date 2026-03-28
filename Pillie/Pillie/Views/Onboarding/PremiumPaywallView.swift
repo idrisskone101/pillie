@@ -4,6 +4,7 @@
 
 import SwiftUI
 import RevenueCat
+import os
 
 struct PremiumPaywallView: View {
     @State private var animateIn = false
@@ -12,9 +13,13 @@ struct PremiumPaywallView: View {
     @State private var offerings: Offerings?
     @State private var purchaseError: String?
     @State private var isPurchasing = false
+    @State private var isRestoring = false
+    @State private var showNoSubscriptionAlert = false
+    @State private var offeringsError = false
     private let performanceTier = PerformanceTier.current
     private let subscriptionManager = SubscriptionManager.shared
 
+    var isFromOnboarding: Bool = true
     let onBack: () -> Void
     let onContinue: () -> Void
     let onSkip: () -> Void
@@ -97,11 +102,7 @@ struct PremiumPaywallView: View {
             }
         }
         .task {
-            do {
-                offerings = try await subscriptionManager.fetchOfferings()
-            } catch {
-                print("Pillie: failed to fetch offerings: \(error.localizedDescription)")
-            }
+            await loadOfferings()
         }
         .alert("Purchase Error", isPresented: .init(
             get: { purchaseError != nil },
@@ -111,17 +112,37 @@ struct PremiumPaywallView: View {
         } message: {
             Text(purchaseError ?? "")
         }
+        .alert("No Subscription Found", isPresented: $showNoSubscriptionAlert) {
+            Button("OK") { }
+        } message: {
+            Text("No active subscription was found for this account.")
+        }
     }
 
     // MARK: - Header
 
     private var header: some View {
-        OnboardingStepHeader(
-            appeared: animateIn,
-            progress: 0.50,
-            trailingLabel: "4/4",
-            onBack: onBack
-        )
+        Group {
+            if isFromOnboarding {
+                OnboardingStepHeader(
+                    appeared: animateIn,
+                    progress: 0.50,
+                    trailingLabel: "6/6",
+                    onBack: onBack
+                )
+            } else {
+                HStack {
+                    Spacer()
+                    Button(action: onBack) {
+                        Image(systemName: "xmark")
+                            .font(.system(size: 14, weight: .semibold))
+                            .foregroundStyle(PillieTheme.textPrimary)
+                            .frame(width: 32, height: 32)
+                            .background(PillieTheme.sage, in: Circle())
+                    }
+                }
+            }
+        }
     }
 
     // MARK: - Headline
@@ -254,7 +275,7 @@ struct PremiumPaywallView: View {
             VStack(spacing: -12) {
                 HStack {
                     Spacer()
-                    Text("Best Value: 50% OFF")
+                    Text("Best Value")
                         .font(.pillie(10, weight: .bold))
                         .foregroundStyle(.white)
                         .tracking(0.5)
@@ -412,45 +433,67 @@ struct PremiumPaywallView: View {
 
     private var footer: some View {
         VStack(spacing: 8) {
-            Button {
-                guard let package = selectedPackage else { return }
-                isPurchasing = true
-                Task {
-                    do {
-                        try await subscriptionManager.purchase(package)
-                        onContinue()
-                    } catch {
-                        if !error.isCancelledPurchase {
-                            purchaseError = error.localizedDescription
-                        }
-                    }
-                    isPurchasing = false
-                }
-            } label: {
-                VStack(spacing: 1) {
-                    if isPurchasing {
-                        ProgressView()
-                            .tint(.white)
-                    } else {
-                        Text(selectedPlan == .annual
-                             ? "Start Your Free Trial"
-                             : "Subscribe Now")
+            if offeringsError {
+                Button {
+                    Task { await loadOfferings() }
+                } label: {
+                    VStack(spacing: 1) {
+                        Text("Failed to load plans")
                             .font(.pillie(17, weight: .bold))
-                        Text(selectedPlan == .annual
-                             ? "7 days free, then \(annualPriceText)/year"
-                             : "\(monthlyPriceText)/month")
+                        Text("Tap to retry")
                             .font(.pillie(11, weight: .medium))
                             .opacity(0.8)
                     }
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: PillieTheme.ctaHeight)
+                    .background(PillieTheme.textMuted)
+                    .clipShape(Capsule())
                 }
-                .foregroundStyle(.white)
-                .frame(maxWidth: .infinity)
-                .frame(height: PillieTheme.ctaHeight)
-                .background(PillieTheme.dark)
-                .clipShape(Capsule())
-                .shadow(color: PillieTheme.dark.opacity(0.4), radius: 15, y: 8)
+            } else {
+                Button {
+                    guard let package = selectedPackage else { return }
+                    isPurchasing = true
+                    Task {
+                        do {
+                            try await subscriptionManager.purchase(package)
+                            onContinue()
+                        } catch {
+                            if !error.isCancelledPurchase {
+                                purchaseError = error.localizedDescription
+                            }
+                        }
+                        isPurchasing = false
+                    }
+                } label: {
+                    VStack(spacing: 1) {
+                        if isPurchasing {
+                            ProgressView()
+                                .tint(.white)
+                        } else if offerings == nil {
+                            ProgressView()
+                                .tint(.white)
+                        } else {
+                            Text(selectedPlan == .annual
+                                 ? "Start Your Free Trial"
+                                 : "Subscribe Now")
+                                .font(.pillie(17, weight: .bold))
+                            Text(selectedPlan == .annual
+                                 ? "7 days free, then \(annualPriceText)/year"
+                                 : "\(monthlyPriceText)/month")
+                                .font(.pillie(11, weight: .medium))
+                                .opacity(0.8)
+                        }
+                    }
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: PillieTheme.ctaHeight)
+                    .background(PillieTheme.dark)
+                    .clipShape(Capsule())
+                    .shadow(color: PillieTheme.dark.opacity(0.4), radius: 15, y: 8)
+                }
+                .disabled(isPurchasing || offerings == nil)
             }
-            .disabled(isPurchasing)
 
             Button {
                 onSkip()
@@ -463,21 +506,50 @@ struct PremiumPaywallView: View {
             }
 
             Button {
+                isRestoring = true
                 Task {
                     do {
                         try await subscriptionManager.restore()
                         if subscriptionManager.isPlus {
                             onContinue()
+                        } else {
+                            showNoSubscriptionAlert = true
                         }
                     } catch {
                         purchaseError = error.localizedDescription
                     }
+                    isRestoring = false
                 }
             } label: {
-                Text("Restore Purchases")
-                    .font(.pillie(12, weight: .medium))
-                    .foregroundStyle(PillieTheme.textMuted.opacity(0.6))
+                if isRestoring {
+                    ProgressView()
+                        .tint(PillieTheme.textMuted)
+                        .frame(height: 20)
+                } else {
+                    Text("Restore Purchases")
+                        .font(.pillie(12, weight: .medium))
+                        .foregroundStyle(PillieTheme.textMuted.opacity(0.6))
+                }
             }
+            .disabled(isRestoring)
+
+            HStack(spacing: 4) {
+                Link("Terms of Use", destination: URL(string: "https://idrisskone101.github.io/pillie/terms-and-conditions")!)
+                Text("|")
+                Link("Privacy Policy", destination: URL(string: "https://idrisskone101.github.io/pillie/privacy-policy")!)
+            }
+            .font(.pillie(11, weight: .regular))
+            .foregroundStyle(PillieTheme.textMuted.opacity(0.5))
+        }
+    }
+
+    private func loadOfferings() async {
+        offeringsError = false
+        do {
+            offerings = try await subscriptionManager.fetchOfferings()
+        } catch {
+            os_log(.error, "Pillie: failed to fetch offerings: %{public}@", error.localizedDescription)
+            offeringsError = true
         }
     }
 }

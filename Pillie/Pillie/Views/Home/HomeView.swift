@@ -169,7 +169,7 @@ struct HomeView: View {
             } else {
                 Button {
                     #if os(iOS)
-                    if UIAccessibility.isReduceMotionEnabled {
+                    if UIAccessibility.isReduceMotionEnabled || !SubscriptionManager.shared.isPlus {
                         store.markTodayAsTaken()
                         fireMarkTakenHaptic()
                     } else {

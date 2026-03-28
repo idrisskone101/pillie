@@ -1,18 +1,18 @@
 //
-//  PainPointPickerView.swift
+//  GoalPickerView.swift
 //  Pillie
 //
 
 import SwiftUI
 
-struct PainPointPickerView: View {
-    @State private var selected: Set<PainPoint> = []
+struct GoalPickerView: View {
+    @State private var selected: PersonalGoal?
     @State private var animateIn = false
     @State private var blobPhase: CGFloat = 0
     private let performanceTier = PerformanceTier.current
 
     let onBack: () -> Void
-    let onContinue: (Set<PainPoint>) -> Void
+    let onContinue: (PersonalGoal) -> Void
 
     var body: some View {
         ZStack {
@@ -60,8 +60,8 @@ struct PainPointPickerView: View {
     private var header: some View {
         OnboardingStepHeader(
             appeared: animateIn,
-            progress: 0.083,
-            trailingLabel: "1/6",
+            progress: 0.167,
+            trailingLabel: "2/6",
             onBack: onBack
         )
     }
@@ -70,14 +70,14 @@ struct PainPointPickerView: View {
 
     private var titleSection: some View {
         VStack(spacing: 8) {
-            (Text("What's your biggest ")
+            (Text("What's your ")
                 .foregroundStyle(PillieTheme.textPrimary)
-            + Text("hurdle?")
+            + Text("goal?")
                 .foregroundStyle(PillieTheme.coral))
                 .font(.pillieHeadline())
                 .multilineTextAlignment(.center)
 
-            Text("Select all that apply.")
+            Text("This helps us personalize your experience.")
                 .font(.pillieBodyLarge())
                 .foregroundStyle(PillieTheme.textMuted)
         }
@@ -87,27 +87,22 @@ struct PainPointPickerView: View {
 
     private var cardList: some View {
         VStack(spacing: 12) {
-            ForEach(PainPoint.allCases, id: \.self) { painPoint in
-                painPointCard(painPoint)
+            ForEach(PersonalGoal.allCases, id: \.self) { goal in
+                goalCard(goal)
             }
         }
     }
 
-    private func painPointCard(_ painPoint: PainPoint) -> some View {
-        let isSelected = selected.contains(painPoint)
+    private func goalCard(_ goal: PersonalGoal) -> some View {
+        let isSelected = selected == goal
 
         return Button {
             withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
-                if isSelected {
-                    selected.remove(painPoint)
-                } else {
-                    selected.insert(painPoint)
-                }
+                selected = goal
             }
         } label: {
             HStack(spacing: 16) {
-                // Emoji icon
-                Text(painPoint.emoji)
+                Text(goal.emoji)
                     .font(.system(size: 28))
                     .frame(width: 48, height: 48)
                     .background(
@@ -115,32 +110,31 @@ struct PainPointPickerView: View {
                             .fill(PillieTheme.sage.opacity(0.5))
                     )
 
-                // Title + subtitle
                 VStack(alignment: .leading, spacing: 3) {
-                    Text(painPoint.title)
+                    Text(goal.title)
                         .font(.pillieBodyBold())
                         .foregroundStyle(PillieTheme.textPrimary)
 
-                    Text(painPoint.subtitle)
+                    Text(goal.subtitle)
                         .font(.pillieBody())
                         .foregroundStyle(PillieTheme.textMuted)
                 }
 
                 Spacer()
 
-                // Checkbox
-                RoundedRectangle(cornerRadius: 6)
+                // Radio indicator
+                Circle()
                     .stroke(isSelected ? PillieTheme.coral : PillieTheme.sage, lineWidth: 2)
                     .frame(width: 24, height: 24)
                     .background(
-                        RoundedRectangle(cornerRadius: 6)
+                        Circle()
                             .fill(isSelected ? PillieTheme.coral : Color.clear)
                     )
                     .overlay {
                         if isSelected {
-                            Image(systemName: "checkmark")
-                                .font(.system(size: 12, weight: .bold))
-                                .foregroundStyle(.white)
+                            Circle()
+                                .fill(.white)
+                                .frame(width: 8, height: 8)
                                 .transition(.scale.combined(with: .opacity))
                         }
                     }
@@ -168,7 +162,9 @@ struct PainPointPickerView: View {
 
     private var footer: some View {
         Button {
-            onContinue(selected)
+            if let selected {
+                onContinue(selected)
+            }
         } label: {
             HStack(spacing: 8) {
                 Text("Continue")
@@ -176,13 +172,13 @@ struct PainPointPickerView: View {
             }
         }
         .buttonStyle(.pillieDark)
-        .disabled(selected.isEmpty)
-        .opacity(selected.isEmpty ? 0.5 : 1.0)
+        .disabled(selected == nil)
+        .opacity(selected == nil ? 0.5 : 1.0)
     }
 }
 
 #Preview {
-    PainPointPickerView(
+    GoalPickerView(
         onBack: {},
         onContinue: { _ in }
     )

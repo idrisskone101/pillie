@@ -12,6 +12,7 @@ import UserNotifications
 import FamilyControls
 import BackgroundTasks
 import RevenueCat
+import os
 
 class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     static var store: PillStore?
@@ -120,7 +121,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         do {
             try BGTaskScheduler.shared.submit(request)
         } catch {
-            print("Pillie BGTask schedule error: \(error.localizedDescription)")
+            os_log(.error, "Pillie BGTask schedule error: %{public}@", error.localizedDescription)
         }
     }
 }

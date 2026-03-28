@@ -129,79 +129,74 @@ struct CalendarGrid: View {
         let showVisual = !isFutureDay && hasContext
         let isToday = relation == .today
 
-        Button {
-            // tap action placeholder
-        } label: {
-            VStack(spacing: 2) {
-                ZStack {
-                    Circle()
-                        .fill(
-                            isPatchMethod
-                                ? patchBackgroundColor(for: patchStyle)
-                                : (isRingMethod
-                                    ? ringBackgroundColor(for: ringStyle)
-                                    : backgroundColor(for: visualStatus, hasContext: showVisual, isPassive: isPassive))
-                        )
-                        .overlay(
-                            Circle()
-                                .strokeBorder(
-                                    isPatchMethod
-                                        ? patchStrokeColor(for: patchStyle)
-                                        : (isRingMethod
-                                            ? ringStrokeColor(for: ringStyle)
-                                            : strokeColor(for: visualStatus, hasContext: showVisual, isPassive: isPassive)),
-                                    lineWidth: isPatchMethod
-                                        ? patchStrokeWidth(for: patchStyle)
-                                        : (isRingMethod
-                                            ? ringStrokeWidth(for: ringStyle)
-                                            : ((showVisual && (isActionDay || (isPassive && visualStatus == .taken))) ? 1.2 : 0.8))
-                                )
-                        )
-                        .overlay(
-                            Circle()
-                                .strokeBorder(
-                                    todayRingColor(
-                                        actionType: actionType,
-                                        patchStyle: patchStyle,
-                                        ringStyle: ringStyle,
-                                        isPatchMethod: isPatchMethod,
-                                        isRingMethod: isRingMethod
-                                    ),
-                                    lineWidth: 2
-                                )
-                                .opacity(isToday ? 1 : 0)
-                        )
-
-                    Text("\(day)")
-                        .font(.pillie(14, weight: .medium))
-                        .foregroundStyle(
-                            isPatchMethod
-                                ? patchTextColor(for: patchStyle)
-                                : (isRingMethod
-                                    ? ringTextColor(for: ringStyle)
-                                    : textColor(for: visualStatus))
-                        )
-                }
-                .aspectRatio(1, contentMode: .fit)
-
-                // Indicator dot: only prominent on action days, not passive days
+        VStack(spacing: 2) {
+            ZStack {
                 Circle()
                     .fill(
                         isPatchMethod
-                            ? patchIndicatorColor(for: patchStyle)
-                            : (isRingMethod ? ringIndicatorColor(for: ringStyle) : eventIndicatorColor(for: actionType))
-                    )
-                    .frame(width: 6, height: 6)
-                    .opacity(
-                        isPatchMethod
-                            ? patchIndicatorOpacity(for: patchStyle)
+                            ? patchBackgroundColor(for: patchStyle)
                             : (isRingMethod
-                                ? ringIndicatorOpacity(for: ringStyle)
-                                : ((isToday || isActionDay || isBreakDay) ? 1 : 0))
+                                ? ringBackgroundColor(for: ringStyle)
+                                : backgroundColor(for: visualStatus, hasContext: showVisual, isPassive: isPassive))
+                    )
+                    .overlay(
+                        Circle()
+                            .strokeBorder(
+                                isPatchMethod
+                                    ? patchStrokeColor(for: patchStyle)
+                                    : (isRingMethod
+                                        ? ringStrokeColor(for: ringStyle)
+                                        : strokeColor(for: visualStatus, hasContext: showVisual, isPassive: isPassive)),
+                                lineWidth: isPatchMethod
+                                    ? patchStrokeWidth(for: patchStyle)
+                                    : (isRingMethod
+                                        ? ringStrokeWidth(for: ringStyle)
+                                        : ((showVisual && (isActionDay || (isPassive && visualStatus == .taken))) ? 1.2 : 0.8))
+                            )
+                    )
+                    .overlay(
+                        Circle()
+                            .strokeBorder(
+                                todayRingColor(
+                                    actionType: actionType,
+                                    patchStyle: patchStyle,
+                                    ringStyle: ringStyle,
+                                    isPatchMethod: isPatchMethod,
+                                    isRingMethod: isRingMethod
+                                ),
+                                lineWidth: 2
+                            )
+                            .opacity(isToday ? 1 : 0)
+                    )
+
+                Text("\(day)")
+                    .font(.pillie(14, weight: .medium))
+                    .foregroundStyle(
+                        isPatchMethod
+                            ? patchTextColor(for: patchStyle)
+                            : (isRingMethod
+                                ? ringTextColor(for: ringStyle)
+                                : textColor(for: visualStatus))
                     )
             }
+            .aspectRatio(1, contentMode: .fit)
+
+            // Indicator dot
+            Circle()
+                .fill(
+                    isPatchMethod
+                        ? patchIndicatorColor(for: patchStyle)
+                        : (isRingMethod ? ringIndicatorColor(for: ringStyle) : eventIndicatorColor(for: actionType))
+                )
+                .frame(width: 6, height: 6)
+                .opacity(
+                    isPatchMethod
+                        ? patchIndicatorOpacity(for: patchStyle)
+                        : (isRingMethod
+                            ? ringIndicatorOpacity(for: ringStyle)
+                            : ((isToday || isActionDay || isBreakDay) ? (isFutureDay ? 0.4 : 1) : 0))
+                )
         }
-        .buttonStyle(CalendarDayCellStyle())
     }
 
     static func patchSemanticStyle(
@@ -610,16 +605,6 @@ struct CalendarGrid: View {
         case nil:
             return .clear
         }
-    }
-}
-
-// MARK: - Calendar Day Cell Button Style
-
-private struct CalendarDayCellStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .scaleEffect(configuration.isPressed ? 0.9 : 1.0)
-            .animation(.easeInOut(duration: 0.15), value: configuration.isPressed)
     }
 }
 

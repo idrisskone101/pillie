@@ -7,18 +7,20 @@ import SwiftUI
 
 struct StatsRow: View {
     @Environment(PillStore.self) var store
+    @State private var showUpsell = false
     private let valueChangeAnimation = Animation.easeInOut(duration: 0.28)
 
-    private var isBlockingOn: Bool {
-        AppBlockingManager.shared.blockingEnabled && AppBlockingManager.shared.hasAppsSelected
-    }
+    private var isPlus: Bool { SubscriptionManager.shared.isPlus }
 
     private var blockingStatusText: String {
-        isBlockingOn ? "On" : "Off"
+        let mgr = AppBlockingManager.shared
+        if !mgr.blockingEnabled { return "Off" }
+        if !mgr.hasAppsSelected { return "Off" }
+        return mgr.blockingActive ? "Active" : "On"
     }
 
     private var blockingSubtitle: String {
-        isBlockingOn ? "Blocking" : "No Blocks"
+        AppBlockingManager.shared.isEffectivelyOn ? "Blocking" : "No Blocks"
     }
 
     var body: some View {
@@ -52,25 +54,70 @@ struct StatsRow: View {
             )
 
             // Blocking card
-            VStack(spacing: 6) {
-                Text("\u{1F6E1}\u{FE0F}")
-                    .font(.system(size: 24))
-                    .shadow(color: .black.opacity(0.1), radius: 2, y: 1)
-
-                Text(blockingStatusText)
-                    .font(.pillie(24, weight: .bold))
-                    .foregroundStyle(PillieTheme.textPrimary)
-                    .contentTransition(.opacity)
-                    .animation(valueChangeAnimation, value: blockingStatusText)
-
-                Text(blockingSubtitle)
-                    .font(.pillieCaption())
-                    .foregroundStyle(PillieTheme.textMuted)
-                    .textCase(.uppercase)
-                    .tracking(1)
-                    .contentTransition(.opacity)
-                    .animation(valueChangeAnimation, value: blockingSubtitle)
+            if isPlus {
+                blockingCardContent
+                    .modifier(StatsCardStyle())
+            } else {
+                Button {
+                    showUpsell = true
+                } label: {
+                    lockedBlockingCardContent
+                        .modifier(StatsCardStyle())
+                }
+                .buttonStyle(.plain)
             }
+        }
+        .sheet(isPresented: $showUpsell) {
+            PlusUpsellSheet.appBlocking()
+                .presentationDetents([.medium])
+                .presentationDragIndicator(.hidden)
+        }
+    }
+
+    private var blockingCardContent: some View {
+        VStack(spacing: 6) {
+            Text("\u{1F6E1}\u{FE0F}")
+                .font(.system(size: 24))
+                .shadow(color: .black.opacity(0.1), radius: 2, y: 1)
+
+            Text(blockingStatusText)
+                .font(.pillie(24, weight: .bold))
+                .foregroundStyle(PillieTheme.textPrimary)
+                .contentTransition(.opacity)
+                .animation(valueChangeAnimation, value: blockingStatusText)
+
+            Text(blockingSubtitle)
+                .font(.pillieCaption())
+                .foregroundStyle(PillieTheme.textMuted)
+                .textCase(.uppercase)
+                .tracking(1)
+                .contentTransition(.opacity)
+                .animation(valueChangeAnimation, value: blockingSubtitle)
+        }
+    }
+
+    private var lockedBlockingCardContent: some View {
+        VStack(spacing: 6) {
+            Image(systemName: "lock.fill")
+                .font(.system(size: 24))
+                .foregroundStyle(PillieTheme.textMuted)
+
+            Text("Pillie+")
+                .font(.pillie(24, weight: .bold))
+                .foregroundStyle(PillieTheme.textPrimary)
+
+            Text("Blocking")
+                .font(.pillieCaption())
+                .foregroundStyle(PillieTheme.textMuted)
+                .textCase(.uppercase)
+                .tracking(1)
+        }
+    }
+}
+
+private struct StatsCardStyle: ViewModifier {
+    func body(content: Content) -> some View {
+        content
             .padding(20)
             .frame(maxWidth: .infinity)
             .background(PillieTheme.cardWhite)
@@ -80,7 +127,6 @@ struct StatsRow: View {
                     .stroke(PillieTheme.sageHalf, lineWidth: 1)
             )
             .shadow(color: PillieTheme.cardShadow, radius: 8, y: 4)
-        }
     }
 }
 

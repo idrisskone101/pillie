@@ -264,21 +264,14 @@ struct WelcomeView: View {
     // MARK: - Buttons
 
     private var buttonSection: some View {
-        VStack(spacing: 16) {
-            Button(action: onGetStarted) {
-                HStack(spacing: 8) {
-                    Text("Get Started")
-                    Image(systemName: "arrow.right")
-                }
+        Button(action: onGetStarted) {
+            HStack(spacing: 8) {
+                Text("Get Started")
+                Image(systemName: "arrow.right")
             }
-            .buttonStyle(.pillieDark)
-            .shadow(color: PillieTheme.dark.opacity(0.4), radius: 15, y: 15)
-
-            Button(action: {}) {
-                Text("I already have an account")
-            }
-            .buttonStyle(.pillieSecondary)
         }
+        .buttonStyle(.pillieDark)
+        .shadow(color: PillieTheme.dark.opacity(0.4), radius: 15, y: 15)
     }
 }
 

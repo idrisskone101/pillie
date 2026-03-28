@@ -81,24 +81,7 @@ struct ShakeConfirmView: View {
 
                 Spacer()
 
-                // Simulator tap-to-shake fallback
-                #if targetEnvironment(simulator)
-                if !shakeManager.isComplete && !celebrating {
-                    Button {
-                        shakeManager.simulateShake()
-                    } label: {
-                        HStack(spacing: 8) {
-                            Image(systemName: "hand.tap")
-                                .font(.system(size: 16, weight: .semibold))
-                            Text("Tap to Simulate Shake")
-                        }
-                    }
-                    .buttonStyle(.pillieDark)
-                    .padding(.horizontal, 24)
-                }
-                #endif
-
-                if !celebrating {
+if !celebrating {
                     // Tap-to-confirm alternative (accessibility — WCAG 2.5.4)
                     Button {
                         completeShake()

@@ -4,6 +4,7 @@
 //
 
 import SwiftUI
+import StoreKit
 import FamilyControls
 
 struct SettingsView: View {
@@ -16,6 +17,9 @@ struct SettingsView: View {
     @State private var showProtocolEditor = false
     @State private var showCycleDayEditor = false
     @State private var showBlockedAppsEditor = false
+    @State private var showBlockingUpsell = false
+    @State private var showPaywall = false
+    @State private var showManageSubscription = false
 
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
@@ -74,10 +78,22 @@ struct SettingsView: View {
                     .modifier(FadeInUp(appeared: appeared, delay: 0.1))
 
                 settingsCard {
-                    Button { showBlockedAppsEditor = true } label: {
-                        settingsRow("Blocked Apps", value: blockingStatusSummary)
+                    if SubscriptionManager.shared.isPlus {
+                        Button { showBlockedAppsEditor = true } label: {
+                            settingsRow("Blocked Apps", value: blockingStatusSummary)
+                        }
+                        .buttonStyle(.plain)
+                    } else {
+                        Button { showBlockingUpsell = true } label: {
+                            settingsRow("Blocked Apps", value: "Pillie+", valueColor: PillieTheme.coral, showLock: true)
+                        }
+                        .buttonStyle(.plain)
+                        .sheet(isPresented: $showBlockingUpsell) {
+                            PlusUpsellSheet.appBlocking()
+                            .presentationDetents([.medium])
+                            .presentationDragIndicator(.hidden)
+                        }
                     }
-                    .buttonStyle(.plain)
                 }
                 .modifier(FadeInUp(appeared: appeared, delay: 0.2))
 
@@ -86,11 +102,20 @@ struct SettingsView: View {
                     .modifier(FadeInUp(appeared: appeared, delay: 0.2))
 
                 settingsCard {
-                    settingsRow(
-                        "Subscription",
-                        value: SubscriptionManager.shared.isPlus ? "Pillie Plus" : "Free Plan",
-                        valueColor: SubscriptionManager.shared.isPlus ? PillieTheme.sage : PillieTheme.coral
-                    )
+                    Button {
+                        if SubscriptionManager.shared.isPlus {
+                            showManageSubscription = true
+                        } else {
+                            showPaywall = true
+                        }
+                    } label: {
+                        settingsRow(
+                            "Subscription",
+                            value: SubscriptionManager.shared.isPlus ? "Pillie Plus" : "Free Plan",
+                            valueColor: SubscriptionManager.shared.isPlus ? PillieTheme.coral : PillieTheme.textPrimary
+                        )
+                    }
+                    .buttonStyle(.plain)
                 }
                 .modifier(FadeInUp(appeared: appeared, delay: 0.3))
 
@@ -145,6 +170,15 @@ struct SettingsView: View {
                 .presentationDetents([.medium])
                 .presentationDragIndicator(.hidden)
         }
+        .fullScreenCover(isPresented: $showPaywall) {
+            PremiumPaywallView(
+                isFromOnboarding: false,
+                onBack: { showPaywall = false },
+                onContinue: { showPaywall = false },
+                onSkip: { showPaywall = false }
+            )
+        }
+        .manageSubscriptionsSheet(isPresented: $showManageSubscription)
     }
 
     // MARK: - Components
@@ -169,7 +203,7 @@ struct SettingsView: View {
         .shadow(color: PillieTheme.cardShadow, radius: PillieTheme.cardShadowRadius, y: PillieTheme.cardShadowY)
     }
 
-    private func settingsRow(_ label: String, value: String, valueColor: Color = PillieTheme.textMuted) -> some View {
+    private func settingsRow(_ label: String, value: String, valueColor: Color = PillieTheme.textMuted, showChevron: Bool = true, showLock: Bool = false) -> some View {
         HStack {
             Text(label)
                 .font(.pillieSubtitleBold())
@@ -177,16 +211,25 @@ struct SettingsView: View {
 
             Spacer()
 
+            if showLock {
+                Image(systemName: "lock.fill")
+                    .font(.system(size: 11, weight: .semibold))
+                    .foregroundStyle(PillieTheme.coral)
+            }
+
             Text(value)
                 .font(.pillie(15, weight: .regular))
                 .foregroundStyle(valueColor)
 
-            Image(systemName: "chevron.right")
-                .font(.system(size: 13, weight: .semibold))
-                .foregroundStyle(PillieTheme.textMuted.opacity(0.4))
+            if showChevron {
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundStyle(PillieTheme.textMuted.opacity(0.4))
+            }
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 16)
+        .contentShape(Rectangle())
     }
 
     private var divider: some View {
@@ -197,11 +240,7 @@ struct SettingsView: View {
     }
 
     private var blockingStatusSummary: String {
-        let manager = AppBlockingManager.shared
-        if !manager.blockingEnabled { return "Off" }
-        if !manager.hasAppsSelected { return "No apps" }
-        let count = manager.selectedCount
-        return manager.blockingActive ? "Active · \(count)" : "On · \(count)"
+        AppBlockingManager.shared.statusSummary
     }
 
     private var protocolSummary: String {
