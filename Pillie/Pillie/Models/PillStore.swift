@@ -172,7 +172,12 @@ class PillStore {
     }
 
     var isRefillDue: Bool {
-        daysOnCurrentPack >= pack.cycleLength
+        if pack.method == .ring,
+           let action = dueAction(on: today),
+           action.type == .ringReinsert {
+            return false
+        }
+        return daysOnCurrentPack >= pack.cycleLength
     }
 
     var daysOverdue: Int {
@@ -507,8 +512,8 @@ class PillStore {
         invalidateSnapshotCache(forPackID: targetPack.id, epochDay: dayEpoch)
         scheduleStoreCommit()
 
-        // Auto-start new cycle when ring is reinserted (day 28).
-        // The reinsertion IS the insertion for the new cycle.
+        // Auto-start a new cycle when the ring is reinserted after
+        // the 7-day ring-free interval.
         if due.type == .ringReinsert {
             startNewPack()
             // Mark new cycle's day 1 (ringInsert) as taken
@@ -521,7 +526,7 @@ class PillStore {
                 let record = PillDay(
                     date: newDay,
                     status: .taken,
-                    actionType: .ringInsert,
+                    actionType: .ringReinsert,
                     pack: newPack
                 )
                 modelContext.insert(record)
@@ -549,7 +554,7 @@ class PillStore {
         }
 
         // Revert auto-started ring cycle if user undoes the ringInsert on a same-day new pack
-        if existingDay.actionType == .ringInsert,
+        if (existingDay.actionType == .ringInsert || existingDay.actionType == .ringReinsert),
            targetPack.packNumber > 1,
            Calendar.current.isDate(targetPack.startDate, inSameDayAs: day) {
             let previousPackNumber = targetPack.packNumber - 1
@@ -811,10 +816,9 @@ class PillStore {
                 let ringDayInCycle = offset + 1
                 switch ringDayInCycle {
                 case 1:       actionType = .ringInsert
-                case 2...20:  actionType = .ringActive
-                case 21:      actionType = .ringRemove
-                case 22...27: actionType = .ringBreak
-                case 28:      actionType = .ringReinsert
+                case 2...21:  actionType = .ringActive
+                case 22:      actionType = .ringRemove
+                case 23...28: actionType = .ringBreak
                 default:      actionType = .ringActive
                 }
             } else {

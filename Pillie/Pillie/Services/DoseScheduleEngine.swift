@@ -127,9 +127,9 @@ enum DoseScheduleEngine {
             let type: PillDay.ActionType
             if [1, 8, 15].contains(scheduleDay) {
                 type = .patchChange
-            } else if scheduleDay == pack.activeDays {
+            } else if scheduleDay == pack.activeDays + 1 {
                 type = .patchRemove
-            } else if scheduleDay < pack.activeDays {
+            } else if scheduleDay <= pack.activeDays {
                 type = .patchActive
             } else {
                 type = .patchBreak
@@ -155,15 +155,13 @@ enum DoseScheduleEngine {
             let type: PillDay.ActionType
             switch ringDay {
             case 1:
-                type = .ringInsert
-            case 2...20:
+                type = diff > 0 ? .ringReinsert : .ringInsert
+            case 2...21:
                 type = .ringActive
-            case 21:
+            case 22:
                 type = .ringRemove
-            case 22...27:
+            case 23...28:
                 type = .ringBreak
-            case 28:
-                type = .ringReinsert
             default:
                 type = .ringActive
             }

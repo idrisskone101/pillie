@@ -64,12 +64,12 @@ struct HistoryView: View {
                     }
                     if store.pack.method == .patch {
                         HStack(spacing: 16) {
-                            legendItem(color: PillieTheme.patchChangeRose, label: "Change Day")
+                            legendItem(color: PillieTheme.patchChangeRose, label: "Change / Remove")
                         }
                     }
                     if store.pack.method == .ring {
                         HStack(spacing: 16) {
-                            legendItem(color: PillieTheme.ringReinsertCoral, label: "Reinsert")
+                            legendItem(color: PillieTheme.ringReinsertCoral, label: "Reinsert Date")
                         }
                     }
                 }

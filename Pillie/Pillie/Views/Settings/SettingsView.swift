@@ -384,8 +384,8 @@ private struct ProtocolEditor: View {
                             .tracking(2)
 
                         Text(selectedMethod == .patch
-                             ? "Patch reminders happen on cycle day 1, 8, and 15. Week 4 is off."
-                             : "Ring reminders: day 1 insert, days 2-21 ring inserted, days 22-27 ring-free, day 28 reinsert.")
+                             ? "Patch reminders: day 1 apply, days 8 and 15 change, day 22 remove, days 23-28 patch-free."
+                             : "Ring reminders: day 1 insert, days 2-21 ring inserted, day 22 remove, days 23-28 ring-free.")
                             .font(.pillieBody())
                             .foregroundStyle(PillieTheme.textPrimary)
                             .padding(16)

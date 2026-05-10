@@ -38,7 +38,7 @@ enum ContraceptiveMethod: String, CaseIterable, Codable {
         switch self {
         case .pill: return "Daily \u{2022} all common regimens + custom"
         case .patch: return "Change weekly x3, then 1 week off"
-        case .ring: return "Insert day 1, remove day 21, reinsert day 28"
+        case .ring: return "Insert day 1, remove day 22, reinsert after 7 days"
         }
     }
 }
