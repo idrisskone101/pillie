@@ -172,7 +172,7 @@ class PillStore {
     }
 
     var isRefillDue: Bool {
-        daysOnCurrentPack > pack.cycleLength
+        daysOnCurrentPack >= pack.cycleLength
     }
 
     var daysOverdue: Int {
@@ -277,6 +277,7 @@ class PillStore {
     }
 
     var todayDueAction: DoseScheduleAction? {
+        guard !isRefillDue else { return nil }
         guard let action = dueAction(on: today) else { return nil }
         return action.type.requiresUserAction ? action : nil
     }
@@ -307,7 +308,8 @@ class PillStore {
     }
 
     var alarmAction: DoseScheduleAction? {
-        nextUntakenDueAction(from: today)
+        guard !isRefillDue else { return nil }
+        return nextUntakenDueAction(from: today)
     }
 
     var alarmBadge: String {
@@ -515,6 +517,7 @@ class PillStore {
             if let newSnapshot = scheduleSnapshot(for: newDay),
                newSnapshot.dueAction?.type == .ringInsert {
                 let newPack = newSnapshot.pack
+                newPack.ringInsertionDate = newDay
                 let record = PillDay(
                     date: newDay,
                     status: .taken,

@@ -77,8 +77,8 @@ struct PremiumPaywallView: View {
                 footer
                     .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger4))
                     .padding(.horizontal, 28)
-                    .padding(.top, 12)
-                    .padding(.bottom, 34)
+                    .padding(.top, 10)
+                    .padding(.bottom, 28)
                     .background(
                         LinearGradient(
                             colors: [PillieTheme.bg.opacity(0), PillieTheme.bg, PillieTheme.bg],
@@ -302,6 +302,10 @@ struct PremiumPaywallView: View {
                                 .font(.pillie(14, weight: .medium))
                                 .foregroundStyle(PillieTheme.textMuted)
                         }
+
+                        Text("7-day free trial included")
+                            .font(.pillie(13, weight: .semibold))
+                            .foregroundStyle(PillieTheme.coral)
                     }
 
                     Spacer()
@@ -432,21 +436,16 @@ struct PremiumPaywallView: View {
     // MARK: - Footer
 
     private var footer: some View {
-        VStack(spacing: 8) {
+        VStack(spacing: 6) {
             if offeringsError {
                 Button {
                     Task { await loadOfferings() }
                 } label: {
-                    VStack(spacing: 1) {
-                        Text("Failed to load plans")
-                            .font(.pillie(17, weight: .bold))
-                        Text("Tap to retry")
-                            .font(.pillie(11, weight: .medium))
-                            .opacity(0.8)
-                    }
+                    Text("Failed to load plans — Tap to retry")
+                        .font(.pillie(16, weight: .bold))
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
-                    .frame(height: PillieTheme.ctaHeight)
+                    .frame(height: 52)
                     .background(PillieTheme.textMuted)
                     .clipShape(Capsule())
                 }
@@ -466,72 +465,76 @@ struct PremiumPaywallView: View {
                         isPurchasing = false
                     }
                 } label: {
-                    VStack(spacing: 1) {
-                        if isPurchasing {
-                            ProgressView()
-                                .tint(.white)
-                        } else if offerings == nil {
+                    Group {
+                        if isPurchasing || offerings == nil {
                             ProgressView()
                                 .tint(.white)
                         } else {
-                            Text(selectedPlan == .annual
-                                 ? "Start Your Free Trial"
-                                 : "Subscribe Now")
-                                .font(.pillie(17, weight: .bold))
-                            Text(selectedPlan == .annual
-                                 ? "7 days free, then \(annualPriceText)/year"
-                                 : "\(monthlyPriceText)/month")
-                                .font(.pillie(11, weight: .medium))
-                                .opacity(0.8)
+                            HStack(spacing: 6) {
+                                Text(selectedPlan == .annual
+                                     ? "Start Your Free Trial"
+                                     : "Subscribe Now")
+                                    .font(.pillie(16, weight: .bold))
+                                Text("·")
+                                    .font(.pillie(14, weight: .medium))
+                                    .opacity(0.6)
+                                Text(selectedPlan == .annual
+                                     ? "7 days free"
+                                     : "\(monthlyPriceText)/mo")
+                                    .font(.pillie(13, weight: .medium))
+                                    .opacity(0.8)
+                            }
                         }
                     }
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
-                    .frame(height: PillieTheme.ctaHeight)
+                    .frame(height: 52)
                     .background(PillieTheme.dark)
                     .clipShape(Capsule())
-                    .shadow(color: PillieTheme.dark.opacity(0.4), radius: 15, y: 8)
+                    .shadow(color: PillieTheme.dark.opacity(0.4), radius: 12, y: 6)
                 }
                 .disabled(isPurchasing || offerings == nil)
             }
 
-            Button {
-                onSkip()
-            } label: {
-                Text("Continue with Free Plan")
-                    .font(.pillie(14, weight: .medium))
-                    .foregroundStyle(PillieTheme.textMuted)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 40)
-            }
+            HStack {
+                Button {
+                    onSkip()
+                } label: {
+                    Text("Continue for Free")
+                        .font(.pillie(13, weight: .medium))
+                        .foregroundStyle(PillieTheme.textMuted)
+                }
 
-            Button {
-                isRestoring = true
-                Task {
-                    do {
-                        try await subscriptionManager.restore()
-                        if subscriptionManager.isPlus {
-                            onContinue()
-                        } else {
-                            showNoSubscriptionAlert = true
+                Spacer()
+
+                Button {
+                    isRestoring = true
+                    Task {
+                        do {
+                            try await subscriptionManager.restore()
+                            if subscriptionManager.isPlus {
+                                onContinue()
+                            } else {
+                                showNoSubscriptionAlert = true
+                            }
+                        } catch {
+                            purchaseError = error.localizedDescription
                         }
-                    } catch {
-                        purchaseError = error.localizedDescription
+                        isRestoring = false
                     }
-                    isRestoring = false
+                } label: {
+                    if isRestoring {
+                        ProgressView()
+                            .tint(PillieTheme.textMuted)
+                    } else {
+                        Text("Restore Purchases")
+                            .font(.pillie(13, weight: .medium))
+                            .foregroundStyle(PillieTheme.textMuted.opacity(0.6))
+                    }
                 }
-            } label: {
-                if isRestoring {
-                    ProgressView()
-                        .tint(PillieTheme.textMuted)
-                        .frame(height: 20)
-                } else {
-                    Text("Restore Purchases")
-                        .font(.pillie(12, weight: .medium))
-                        .foregroundStyle(PillieTheme.textMuted.opacity(0.6))
-                }
+                .disabled(isRestoring)
             }
-            .disabled(isRestoring)
+            .frame(height: 32)
 
             HStack(spacing: 4) {
                 Link("Terms of Use", destination: URL(string: "https://idrisskone101.github.io/pillie/terms-and-conditions")!)

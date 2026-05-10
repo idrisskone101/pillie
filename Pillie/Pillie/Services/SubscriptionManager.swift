@@ -17,7 +17,7 @@ final class SubscriptionManager: NSObject {
 
     // MARK: - Constants
 
-    static let apiKey = "sk_yhdBqXXVFhFdLSjCKUHcHksMXgxfl"
+    static let apiKey = "appl_jAqXDkTjrIxXrqrDsPQInTuIsdp"
     static let entitlementID = "pillie_plus"
     static let monthlyProductID = "com.idrisskone.pillie.plus.monthly"
     static let annualProductID = "com.idrisskone.pillie.plus.annual"

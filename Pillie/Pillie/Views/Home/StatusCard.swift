@@ -15,12 +15,25 @@ struct StatusCard: View {
     }()
 
     var body: some View {
-        let isTodayTaken = store.isTodayTaken || store.isTodayPassiveOrBreak
+        let isTodayTaken = store.isTodayTaken
+        let isTodayPassiveOrBreak = store.isTodayPassiveOrBreak
         let alarmAction = store.alarmAction
+        let todayAction = store.dueAction(on: store.today)
         let reminderTime = store.nextReminderTime
-        let iconName = iconName(for: alarmAction, isTodayTaken: isTodayTaken)
-        let actionTitle = actionTitle(for: alarmAction, isTodayTaken: isTodayTaken, reminderTime: reminderTime)
-        let badgeText = isTodayTaken ? "TAKEN" : (alarmAction?.badgeLabel ?? "NONE")
+        let iconName = iconName(for: isTodayPassiveOrBreak ? todayAction : alarmAction, isTodayTaken: isTodayTaken)
+        let actionTitle = actionTitle(
+            for: alarmAction,
+            todayAction: todayAction,
+            isTodayTaken: isTodayTaken,
+            isTodayPassiveOrBreak: isTodayPassiveOrBreak,
+            reminderTime: reminderTime
+        )
+        let badgeText = badgeText(
+            alarmAction: alarmAction,
+            todayAction: todayAction,
+            isTodayTaken: isTodayTaken,
+            isTodayPassiveOrBreak: isTodayPassiveOrBreak
+        )
 
         HStack(spacing: 14) {
             // Alarm icon circle
@@ -99,7 +112,17 @@ struct StatusCard: View {
         }
     }
 
-    private func actionTitle(for alarmAction: DoseScheduleAction?, isTodayTaken: Bool, reminderTime: String) -> String {
+    private func actionTitle(
+        for alarmAction: DoseScheduleAction?,
+        todayAction: DoseScheduleAction?,
+        isTodayTaken: Bool,
+        isTodayPassiveOrBreak: Bool,
+        reminderTime: String
+    ) -> String {
+        if isTodayPassiveOrBreak && !isTodayTaken {
+            return todayAction?.actionTitle ?? "No action due"
+        }
+
         guard let alarmAction else { return "No action due" }
         guard isTodayTaken else { return alarmAction.actionTitle }
 
@@ -114,6 +137,21 @@ struct StatusCard: View {
         }
         let dayLabel = Self.alarmDayLabelFormatter.string(from: alarmAction.date)
         return "Taken today. Next \(nextAction) \(dayLabel) at \(reminderTime)."
+    }
+
+    private func badgeText(
+        alarmAction: DoseScheduleAction?,
+        todayAction: DoseScheduleAction?,
+        isTodayTaken: Bool,
+        isTodayPassiveOrBreak: Bool
+    ) -> String {
+        if isTodayTaken {
+            return "TAKEN"
+        }
+        if isTodayPassiveOrBreak {
+            return todayAction?.badgeLabel ?? "NONE"
+        }
+        return alarmAction?.badgeLabel ?? "NONE"
     }
 }
 

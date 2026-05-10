@@ -1,0 +1,4 @@
+interface:
+  display_name: "Pillie iOS"
+  short_description: "Build, run, debug, and visually verify the Pillie iOS app."
+  default_prompt: "Use Pillie iOS workflow"

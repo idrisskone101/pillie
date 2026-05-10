@@ -30,6 +30,15 @@ struct PillPackCard: View {
         }
     }
 
+    private var cycleOrdinalLabel: String {
+        switch store.pack.method {
+        case .pill:
+            return "Pack \(store.pack.packNumber)"
+        case .patch, .ring:
+            return "Cycle \(store.pack.packNumber)"
+        }
+    }
+
     private var displayedIndices: [Int] {
         let maxWindow = 56
         guard cycleLength > maxWindow else {
@@ -55,7 +64,7 @@ struct PillPackCard: View {
                         .font(.pillieBodySemibold())
                         .foregroundStyle(.white)
 
-                    Text("Pack \(store.pack.packNumber) · \(store.pack.regimenLabel)")
+                    Text("\(cycleOrdinalLabel) · \(store.pack.regimenLabel)")
                         .font(.pillieCaption())
                         .foregroundStyle(.white.opacity(0.4))
                         .tracking(1)
