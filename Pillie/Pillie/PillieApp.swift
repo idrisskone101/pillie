@@ -21,14 +21,19 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
     #endif
 
     private static let bgTaskID = "com.idrisskone.pillie.screentime-reconcile"
+    private static var isRunningTests: Bool {
+        ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
+    }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         UNUserNotificationCenter.current().delegate = self
 
         // Register BGAppRefreshTask as fallback for Screen Time reconciliation
-        BGTaskScheduler.shared.register(forTaskWithIdentifier: Self.bgTaskID, using: nil) { task in
-            guard let refreshTask = task as? BGAppRefreshTask else { return }
-            self.handleScreenTimeReconcileTask(refreshTask)
+        if !Self.isRunningTests {
+            BGTaskScheduler.shared.register(forTaskWithIdentifier: Self.bgTaskID, using: nil) { task in
+                guard let refreshTask = task as? BGAppRefreshTask else { return }
+                self.handleScreenTimeReconcileTask(refreshTask)
+            }
         }
 
         #if DEBUG
@@ -116,6 +121,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
     }
 
     static func scheduleScreenTimeReconcileTask() {
+        guard !isRunningTests else { return }
         let request = BGAppRefreshTaskRequest(identifier: bgTaskID)
         request.earliestBeginDate = Date(timeIntervalSinceNow: 15 * 60) // 15 min
         do {
@@ -133,24 +139,36 @@ struct PillieApp: App {
 
     private let container: ModelContainer
     @State private var store: PillStore
+    private static var isRunningTests: Bool {
+        ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
+    }
 
     init() {
         PillieFontRegistration.registerFontsIfNeeded()
 
         let schema = Schema([PillPack.self, PillDay.self])
-        // Default app-support URL for now.
-        // Phase 5: switch to shared App Group container URL.
-        let config = ModelConfiguration(for: PillPack.self, PillDay.self)
+        let config: ModelConfiguration
+        if Self.isRunningTests {
+            config = ModelConfiguration(isStoredInMemoryOnly: true)
+        } else {
+            // Default app-support URL for now.
+            // Phase 5: switch to shared App Group container URL.
+            config = ModelConfiguration(for: PillPack.self, PillDay.self)
+        }
         let container = try! ModelContainer(for: schema, configurations: [config])
         self.container = container
 
-        DataMigration.migrateFromUserDefaultsIfNeeded(context: container.mainContext)
+        if !Self.isRunningTests {
+            DataMigration.migrateFromUserDefaultsIfNeeded(context: container.mainContext)
+        }
 
         let initialStore = PillStore(modelContext: container.mainContext)
         self._store = State(initialValue: initialStore)
         AppDelegate.store = initialStore
 
-        SubscriptionManager.shared.configure()
+        if !Self.isRunningTests {
+            SubscriptionManager.shared.configure()
+        }
     }
 
     var body: some Scene {
@@ -163,6 +181,7 @@ struct PillieApp: App {
                     AppDelegate.store = store
                 }
                 .onChange(of: scenePhase) { _, newPhase in
+                    guard !Self.isRunningTests else { return }
                     if newPhase == .active {
                         reconcileScreenTimeState()
                         NotificationManager.shared.requestReschedule(from: store, reason: "app-became-active")

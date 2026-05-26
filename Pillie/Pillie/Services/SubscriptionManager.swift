@@ -70,6 +70,12 @@ final class SubscriptionManager: NSObject {
         guard let customerInfo = try? await Purchases.shared.customerInfo() else { return }
         isPlus = customerInfo.entitlements[Self.entitlementID]?.isActive == true
     }
+
+    #if DEBUG
+    func setPlusForTesting(_ isPlus: Bool) {
+        self.isPlus = isPlus
+    }
+    #endif
 }
 
 // MARK: - PurchasesDelegate

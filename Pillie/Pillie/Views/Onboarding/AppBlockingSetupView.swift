@@ -8,6 +8,7 @@ import FamilyControls
 
 struct AppBlockingSetupView: View {
     @Environment(PillStore.self) private var store
+    @AppStorage("onboardingSelectedFreePlan") private var onboardingSelectedFreePlan = false
 
     @State private var animateIn = false
     @State private var blobPhase: CGFloat = 0
@@ -20,6 +21,9 @@ struct AppBlockingSetupView: View {
     let onSkip: () -> Void
 
     private var blockingManager: AppBlockingManager { .shared }
+    private var canSetUpBlocking: Bool {
+        SubscriptionManager.shared.isPlus && !onboardingSelectedFreePlan
+    }
 
     var body: some View {
         ZStack {
@@ -39,11 +43,16 @@ struct AppBlockingSetupView: View {
                         infoBox
                             .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger2))
 
-                        authorizationSection
-                            .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger3))
+                        if canSetUpBlocking {
+                            authorizationSection
+                                .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger3))
 
-                        if blockingManager.isAuthorized {
-                            selectionSection
+                            if blockingManager.isAuthorized {
+                                selectionSection
+                                    .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger4))
+                            }
+                        } else {
+                            plusLockedSection
                                 .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger4))
                         }
                     }
@@ -96,7 +105,9 @@ struct AppBlockingSetupView: View {
                 .font(.pillieHeadline())
                 .multilineTextAlignment(.center)
 
-            Text("Lock distracting apps until you've completed your action.")
+            Text(canSetUpBlocking
+                 ? "Lock distracting apps until you've completed your action."
+                 : "App blocking is a Pillie+ tool you can set up after upgrading.")
                 .font(.pillieBodyLarge())
                 .foregroundStyle(PillieTheme.textMuted)
                 .multilineTextAlignment(.center)
@@ -120,6 +131,35 @@ struct AppBlockingSetupView: View {
         .background(
             RoundedRectangle(cornerRadius: 20)
                 .fill(PillieTheme.lavender)
+        )
+    }
+
+    // MARK: - Plus Locked Section
+
+    private var plusLockedSection: some View {
+        VStack(spacing: 16) {
+            Image(systemName: "lock.fill")
+                .font(.system(size: 30, weight: .semibold))
+                .foregroundStyle(PillieTheme.coral)
+
+            Text("Included with Pillie+")
+                .font(.pillieBodyBold())
+                .foregroundStyle(PillieTheme.textPrimary)
+
+            Text("Your free plan still includes daily reminders and cycle tracking. You can upgrade from Settings when you want app blocking.")
+                .font(.pillieBody())
+                .foregroundStyle(PillieTheme.textMuted)
+                .multilineTextAlignment(.center)
+        }
+        .padding(20)
+        .frame(maxWidth: .infinity)
+        .background(
+            RoundedRectangle(cornerRadius: PillieTheme.cardRadius)
+                .fill(PillieTheme.cardWhite)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: PillieTheme.cardRadius)
+                .stroke(PillieTheme.sageHalf, lineWidth: 1)
         )
     }
 
@@ -242,35 +282,44 @@ struct AppBlockingSetupView: View {
 
     private var footer: some View {
         VStack(spacing: 4) {
-            Button {
-                blockingManager.saveSelection()
-                // Schedule DeviceActivity and apply blocking immediately if past reminder time
-                AppBlockingManager.shared.scheduleDeviceActivityBlock(
-                    hour: store.reminderHour,
-                    minute: store.reminderMinute
-                )
-                AppBlockingManager.shared.reconcileBlockingState(
-                    isTodayTaken: store.isTodayHandled,
-                    reminderHour: store.reminderHour,
-                    reminderMinute: store.reminderMinute,
-                    method: store.pack.method
-                )
-                onContinue()
-            } label: {
-                HStack(spacing: 8) {
-                    Image(systemName: "lock.fill")
-                    Text("Enable Blocking & Finish")
+            if canSetUpBlocking {
+                Button {
+                    blockingManager.saveSelection()
+                    // Schedule DeviceActivity and apply blocking immediately if past reminder time
+                    AppBlockingManager.shared.scheduleDeviceActivityBlock(
+                        hour: store.reminderHour,
+                        minute: store.reminderMinute
+                    )
+                    AppBlockingManager.shared.reconcileBlockingState(
+                        isTodayTaken: store.isTodayHandled,
+                        reminderHour: store.reminderHour,
+                        reminderMinute: store.reminderMinute,
+                        method: store.pack.method
+                    )
+                    onContinue()
+                } label: {
+                    HStack(spacing: 8) {
+                        Image(systemName: "lock.fill")
+                        Text("Enable Blocking & Finish")
+                    }
                 }
-            }
-            .buttonStyle(.pillieDark)
-            .disabled(!blockingManager.isAuthorized)
+                .buttonStyle(.pillieDark)
+                .disabled(!blockingManager.isAuthorized)
 
-            Button {
-                onSkip()
-            } label: {
-                Text("Skip for now")
+                Button {
+                    onSkip()
+                } label: {
+                    Text("Skip for now")
+                }
+                .buttonStyle(.pillieSecondary)
+            } else {
+                Button {
+                    onContinue()
+                } label: {
+                    Text("Finish Setup")
+                }
+                .buttonStyle(.pillieDark)
             }
-            .buttonStyle(.pillieSecondary)
         }
     }
 }

@@ -212,6 +212,10 @@ struct TimeSetupView: View {
         Button {
             saveTimeToStore()
             onContinue()
+            DispatchQueue.main.async {
+                NotificationManager.shared.requestAuthorization()
+                NotificationManager.shared.requestReschedule(from: store, reason: "onboarding-reminder-time")
+            }
         } label: {
             HStack(spacing: 8) {
                 Image(systemName: "bell.fill")
@@ -241,9 +245,6 @@ struct TimeSetupView: View {
         )
         store.reminderHour = selection.hour
         store.reminderMinute = selection.minute
-
-        NotificationManager.shared.requestAuthorization()
-        NotificationManager.shared.requestReschedule(from: store, reason: "onboarding-reminder-time")
     }
 }
 

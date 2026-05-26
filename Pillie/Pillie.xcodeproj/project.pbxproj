@@ -36,6 +36,13 @@
 			remoteGlobalIDString = SC0001062F456DC00082EF2F;
 			remoteInfo = PillieShieldConfiguration;
 		};
+		5259170B2F456DC10082EF2F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5259165D2F456DC00082EF2F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 525916642F456DC00082EF2F;
+			remoteInfo = Pillie;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -56,6 +63,7 @@
 
 /* Begin PBXFileReference section */
 		525916652F456DC00082EF2F /* Pillie.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pillie.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		525917042F456DC10082EF2F /* PillieTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PillieTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		529E8B232F5764290000F2B9 /* ManagedSettings.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ManagedSettings.framework; path = System/Library/Frameworks/ManagedSettings.framework; sourceTree = SDKROOT; };
 		529E8B372F57645D0000F2B9 /* ManagedSettingsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ManagedSettingsUI.framework; path = Library/Frameworks/ManagedSettingsUI.framework; sourceTree = DEVELOPER_DIR; };
 		529E8B4A2F57648B0000F2B9 /* DeviceActivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DeviceActivity.framework; path = System/Library/Frameworks/DeviceActivity.framework; sourceTree = SDKROOT; };
@@ -104,6 +112,11 @@
 			path = Pillie;
 			sourceTree = "<group>";
 		};
+		525917072F456DC10082EF2F /* PillieTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = PillieTests;
+			sourceTree = "<group>";
+		};
 		DA0001022F456DC00082EF2F /* PillieDeviceActivityMonitor */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -140,6 +153,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		525917022F456DC10082EF2F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DA0001042F456DC00082EF2F /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -168,6 +188,7 @@
 			isa = PBXGroup;
 			children = (
 				525916672F456DC00082EF2F /* Pillie */,
+				525917072F456DC10082EF2F /* PillieTests */,
 				DA0001022F456DC00082EF2F /* PillieDeviceActivityMonitor */,
 				SC0001022F456DC00082EF2F /* PillieShieldConfiguration */,
 				SA0001022F456DC00082EF2F /* PillieShieldAction */,
@@ -180,6 +201,7 @@
 			isa = PBXGroup;
 			children = (
 				525916652F456DC00082EF2F /* Pillie.app */,
+				525917042F456DC10082EF2F /* PillieTests.xctest */,
 				DA0001012F456DC00082EF2F /* PillieDeviceActivityMonitor.appex */,
 				SC0001012F456DC00082EF2F /* PillieShieldConfiguration.appex */,
 				SA0001012F456DC00082EF2F /* PillieShieldAction.appex */,
@@ -227,6 +249,29 @@
 			productName = Pillie;
 			productReference = 525916652F456DC00082EF2F /* Pillie.app */;
 			productType = "com.apple.product-type.application";
+		};
+		525917062F456DC10082EF2F /* PillieTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5259170A2F456DC10082EF2F /* Build configuration list for PBXNativeTarget "PillieTests" */;
+			buildPhases = (
+				525917012F456DC10082EF2F /* Sources */,
+				525917022F456DC10082EF2F /* Frameworks */,
+				525917032F456DC10082EF2F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5259170C2F456DC10082EF2F /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				525917072F456DC10082EF2F /* PillieTests */,
+			);
+			name = PillieTests;
+			packageProductDependencies = (
+			);
+			productName = PillieTests;
+			productReference = 525917042F456DC10082EF2F /* PillieTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		DA0001062F456DC00082EF2F /* PillieDeviceActivityMonitor */ = {
 			isa = PBXNativeTarget;
@@ -315,6 +360,10 @@
 							};
 						};
 					};
+					525917062F456DC10082EF2F = {
+						CreatedOnToolsVersion = 26.2;
+						TestTargetID = 525916642F456DC00082EF2F;
+					};
 					DA0001062F456DC00082EF2F = {
 						CreatedOnToolsVersion = 26.2;
 						SystemCapabilities = {
@@ -359,6 +408,7 @@
 			projectRoot = "";
 			targets = (
 				525916642F456DC00082EF2F /* Pillie */,
+				525917062F456DC10082EF2F /* PillieTests */,
 				DA0001062F456DC00082EF2F /* PillieDeviceActivityMonitor */,
 				SC0001062F456DC00082EF2F /* PillieShieldConfiguration */,
 				SA0001062F456DC00082EF2F /* PillieShieldAction */,
@@ -368,6 +418,13 @@
 
 /* Begin PBXResourcesBuildPhase section */
 		525916632F456DC00082EF2F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		525917032F456DC10082EF2F /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -399,6 +456,13 @@
 
 /* Begin PBXSourcesBuildPhase section */
 		525916612F456DC00082EF2F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		525917012F456DC10082EF2F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -443,6 +507,11 @@
 			isa = PBXTargetDependency;
 			target = SC0001062F456DC00082EF2F /* PillieShieldConfiguration */;
 			targetProxy = SC0001092F456DC00082EF2F /* PBXContainerItemProxy */;
+		};
+		5259170C2F456DC10082EF2F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 525916642F456DC00082EF2F /* Pillie */;
+			targetProxy = 5259170B2F456DC10082EF2F /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -652,6 +721,65 @@
 			};
 			name = Release;
 		};
+		525917082F456DC10082EF2F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LA7AZKLT84;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.idrisskone.pillie.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Pillie.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Pillie";
+			};
+			name = Debug;
+		};
+		525917092F456DC10082EF2F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LA7AZKLT84;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.idrisskone.pillie.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Pillie.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Pillie";
+			};
+			name = Release;
+		};
 		DA0001072F456DC00082EF2F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -849,6 +977,15 @@
 			buildConfigurations = (
 				525916712F456DC10082EF2F /* Debug */,
 				525916722F456DC10082EF2F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5259170A2F456DC10082EF2F /* Build configuration list for PBXNativeTarget "PillieTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				525917082F456DC10082EF2F /* Debug */,
+				525917092F456DC10082EF2F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

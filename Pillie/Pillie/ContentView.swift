@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     @AppStorage("onboardingStep") private var onboardingStep = 0
+    @AppStorage("onboardingSelectedFreePlan") private var onboardingSelectedFreePlan = false
     @Environment(PillStore.self) private var store
     @State private var isLoading = true
     @State private var iconScale: CGFloat = 0.9
@@ -21,7 +22,7 @@ struct ContentView: View {
             case 0:
                 WelcomeView {
                     withAnimation(.easeInOut(duration: 0.4)) {
-                        onboardingStep = 1
+                        setOnboardingStep(1)
                     }
                 }
                 .transition(.asymmetric(
@@ -33,13 +34,13 @@ struct ContentView: View {
                 PainPointPickerView(
                     onBack: {
                         withAnimation(.easeInOut(duration: 0.4)) {
-                            onboardingStep = 0
+                            setOnboardingStep(0)
                         }
                     },
                     onContinue: { points in
                         store.painPoints = points
                         withAnimation(.easeInOut(duration: 0.4)) {
-                            onboardingStep = 2
+                            setOnboardingStep(2)
                         }
                     }
                 )
@@ -52,13 +53,13 @@ struct ContentView: View {
                 GoalPickerView(
                     onBack: {
                         withAnimation(.easeInOut(duration: 0.4)) {
-                            onboardingStep = 1
+                            setOnboardingStep(1)
                         }
                     },
                     onContinue: { goal in
                         store.personalGoal = goal
                         withAnimation(.easeInOut(duration: 0.4)) {
-                            onboardingStep = 3
+                            setOnboardingStep(3)
                         }
                     }
                 )
@@ -71,13 +72,13 @@ struct ContentView: View {
                 MissFrequencyView(
                     onBack: {
                         withAnimation(.easeInOut(duration: 0.4)) {
-                            onboardingStep = 2
+                            setOnboardingStep(2)
                         }
                     },
                     onContinue: { freq in
                         store.missFrequency = freq
                         withAnimation(.easeInOut(duration: 0.4)) {
-                            onboardingStep = 4
+                            setOnboardingStep(4)
                         }
                     }
                 )
@@ -90,12 +91,12 @@ struct ContentView: View {
                 FreePlanView(
                     onBack: {
                         withAnimation(.easeInOut(duration: 0.4)) {
-                            onboardingStep = 3
+                            setOnboardingStep(3)
                         }
                     },
                     onContinue: {
                         withAnimation(.easeInOut(duration: 0.4)) {
-                            onboardingStep = 5
+                            setOnboardingStep(5)
                         }
                     }
                 )
@@ -108,12 +109,12 @@ struct ContentView: View {
                 PremiumChallengePreviewView(
                     onBack: {
                         withAnimation(.easeInOut(duration: 0.4)) {
-                            onboardingStep = 4
+                            setOnboardingStep(4)
                         }
                     },
                     onContinue: {
                         withAnimation(.easeInOut(duration: 0.4)) {
-                            onboardingStep = 6
+                            setOnboardingStep(6)
                         }
                     }
                 )
@@ -126,17 +127,19 @@ struct ContentView: View {
                 PremiumPaywallView(
                     onBack: {
                         withAnimation(.easeInOut(duration: 0.4)) {
-                            onboardingStep = 5
+                            setOnboardingStep(5)
                         }
                     },
                     onContinue: {
+                        onboardingSelectedFreePlan = false
                         withAnimation(.easeInOut(duration: 0.4)) {
-                            onboardingStep = 7
+                            setOnboardingStep(7)
                         }
                     },
                     onSkip: {
+                        onboardingSelectedFreePlan = true
                         withAnimation(.easeInOut(duration: 0.4)) {
-                            onboardingStep = 7
+                            setOnboardingStep(7)
                         }
                     }
                 )
@@ -149,13 +152,13 @@ struct ContentView: View {
                 MethodPickerView(
                     onBack: {
                         withAnimation(.easeInOut(duration: 0.4)) {
-                            onboardingStep = 6
+                            setOnboardingStep(6)
                         }
                     },
                     onContinue: { method in
                         store.contraceptiveMethod = method
                         withAnimation(.easeInOut(duration: 0.4)) {
-                            onboardingStep = 8
+                            setOnboardingStep(8)
                         }
                     }
                 )
@@ -168,7 +171,7 @@ struct ContentView: View {
                 MethodDetailsView(
                     onBack: {
                         withAnimation(.easeInOut(duration: 0.4)) {
-                            onboardingStep = 7
+                            setOnboardingStep(7)
                         }
                     },
                     onContinue: { regimen, customActive, customBreak, cycleDay in
@@ -184,7 +187,7 @@ struct ContentView: View {
                             store.appActivatedDate = store.today
                         }
                         withAnimation(.easeInOut(duration: 0.4)) {
-                            onboardingStep = 9
+                            setOnboardingStep(9)
                         }
                     }
                 )
@@ -197,12 +200,12 @@ struct ContentView: View {
                 TimeSetupView(
                     onBack: {
                         withAnimation(.easeInOut(duration: 0.4)) {
-                            onboardingStep = 8
+                            setOnboardingStep(8)
                         }
                     },
                     onContinue: {
                         withAnimation(.easeInOut(duration: 0.4)) {
-                            onboardingStep = 10
+                            setOnboardingStep(10)
                         }
                     }
                 )
@@ -215,17 +218,17 @@ struct ContentView: View {
                 AppBlockingSetupView(
                     onBack: {
                         withAnimation(.easeInOut(duration: 0.4)) {
-                            onboardingStep = 9
+                            setOnboardingStep(9)
                         }
                     },
                     onContinue: {
                         withAnimation(.easeInOut(duration: 0.4)) {
-                            onboardingStep = 11
+                            setOnboardingStep(11)
                         }
                     },
                     onSkip: {
                         withAnimation(.easeInOut(duration: 0.4)) {
-                            onboardingStep = 11
+                            setOnboardingStep(11)
                         }
                     }
                 )
@@ -272,6 +275,11 @@ struct ContentView: View {
                 isLoading = false
             }
         }
+    }
+
+    private func setOnboardingStep(_ step: Int) {
+        onboardingStep = step
+        UserDefaults.standard.set(step, forKey: "onboardingStep")
     }
 }
 

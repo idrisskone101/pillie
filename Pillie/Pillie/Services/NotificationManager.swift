@@ -639,10 +639,46 @@ final class NotificationManager {
     }
 
     #if DEBUG
+    struct ReminderRequestDebugSummary: Hashable {
+        let identifier: String
+        let title: String
+        let body: String
+        let categoryIdentifier: String
+        let dueDayEpoch: Int?
+        let actionTypeRaw: String?
+        let requestKind: String?
+        let dateComponents: DateComponents
+
+        var fireDate: Date? {
+            Calendar.current.date(from: dateComponents)
+        }
+    }
+
     func managedRequestIdentifiersForTesting(store: PillStore, now: Date = Date()) -> [String] {
         buildReminderRequests(store: store, now: now, snoozeOverride: nil)
             .map(\.identifier)
             .sorted()
+    }
+
+    func managedRequestSummariesForTesting(store: PillStore, now: Date = Date()) -> [ReminderRequestDebugSummary] {
+        buildReminderRequests(store: store, now: now, snoozeOverride: nil)
+            .compactMap { request in
+                guard let trigger = request.trigger as? UNCalendarNotificationTrigger else {
+                    return nil
+                }
+                let userInfo = request.content.userInfo
+                return ReminderRequestDebugSummary(
+                    identifier: request.identifier,
+                    title: request.content.title,
+                    body: request.content.body,
+                    categoryIdentifier: request.content.categoryIdentifier,
+                    dueDayEpoch: userInfo[PayloadKey.dueDayEpoch] as? Int,
+                    actionTypeRaw: userInfo[PayloadKey.actionTypeRaw] as? String,
+                    requestKind: userInfo[PayloadKey.requestKind] as? String,
+                    dateComponents: trigger.dateComponents
+                )
+            }
+            .sorted { $0.identifier < $1.identifier }
     }
     #endif
 }

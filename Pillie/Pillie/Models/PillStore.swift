@@ -18,7 +18,7 @@ class PillStore {
             return current
         }
         guard let last = packs.last else {
-            let fallback = PillPack(startDate: Date(), packNumber: 1)
+            let fallback = PillPack(startDate: PillieClock.now, packNumber: 1)
             return fallback
         }
         return last
@@ -153,7 +153,7 @@ class PillStore {
     // MARK: - Computed
 
     var today: Date {
-        startOfDaySafe(Date())
+        startOfDaySafe(PillieClock.now)
     }
 
     var activePack: PillPack? {
@@ -934,7 +934,7 @@ class PillStore {
                 packType: .twentyOneSeven,
                 method: .pill,
                 pillRegimen: .twentyOneSeven,
-                startDate: Calendar.current.startOfDay(for: Date()),
+                startDate: PillieClock.today,
                 packNumber: 1,
                 isCurrent: true
             )
@@ -1085,7 +1085,7 @@ class PillStore {
 
     private static func sanitizePersistedDatesIfNeeded(context: ModelContext, packs: [PillPack]) {
         let calendar = Calendar.current
-        let today = calendar.startOfDay(for: Date())
+        let today = PillieClock.today
         var didMutate = false
 
         for pack in packs {
