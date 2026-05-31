@@ -28,6 +28,10 @@ _Avoid_: Every custom value, arbitrary pill schedules
 The destructive schedule-edit behavior where Pillie clears existing tracking history and starts a fresh cycle from the selected method, regimen, and current cycle day. It is the expected launched-app behavior for confirmed method or regimen changes in Settings.
 _Avoid_: Preserve history, silent migration
 
+**Product Analytics Telemetry**:
+First-party app usage signals collected to understand whether Pillie flows are working and where users drop off. It excludes Apple-defined Tracking, advertising identifiers, cross-app or cross-site matching, and routine details such as contraception history, reminder times, app-blocking selections, or dose outcomes unless those details are separately approved.
+_Avoid_: Tracking, surveillance, behavioral ads
+
 **Streak**:
 The count of consecutive completed due actions, not consecutive calendar days. Passive active days and break or off-week days do not require user action and should not inflate or break the streak.
 _Avoid_: Daily streak, calendar-day streak
@@ -89,6 +93,10 @@ Domain Expert: "No. Pill Regimen Coverage means every preset plus custom boundar
 Dev: "If a user changes from Pill to Patch in Settings, should the old pill history remain?"
 
 Domain Expert: "No. Confirmed method or regimen edits use a Tracking Data Reset, while canceling the confirmation keeps the existing schedule and history unchanged."
+
+Dev: "Can we call PostHog event collection tracking?"
+
+Domain Expert: "No. Use Product Analytics Telemetry for first-party app usage signals. Tracking still refers to Pillie's routine history in product language or Apple-defined cross-app and cross-site Tracking in privacy language."
 
 Dev: "Does a ring-free day count toward the streak?"
 

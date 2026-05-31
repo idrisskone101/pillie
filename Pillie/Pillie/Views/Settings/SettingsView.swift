@@ -9,6 +9,7 @@ import FamilyControls
 
 struct SettingsView: View {
     @Environment(PillStore.self) var store
+    @AppStorage(AnalyticsManager.analyticsOptOutKey) private var analyticsOptOut = false
     @State private var appeared = false
     @State private var hasAnimatedIn = false
     @State private var showTimeEditor = false
@@ -37,23 +38,35 @@ struct SettingsView: View {
                     .modifier(FadeInUp(appeared: appeared, delay: 0))
 
                 settingsCard {
-                    Button { showProtocolEditor = true } label: {
+                    Button {
+                        showProtocolEditor = true
+                        AnalyticsManager.shared.track(.settingsSheetOpened, source: .settings, setting: .protocol, isPlus: SubscriptionManager.shared.isPlus)
+                    } label: {
                         settingsRow("Contraceptive Type", value: protocolSummary)
                     }
                     .buttonStyle(.plain)
                     divider
-                    Button { showTimeEditor = true } label: {
+                    Button {
+                        showTimeEditor = true
+                        AnalyticsManager.shared.track(.settingsSheetOpened, source: .settings, setting: .reminderTime, isPlus: SubscriptionManager.shared.isPlus)
+                    } label: {
                         settingsRow("Reminder Time", value: store.nextReminderTime)
                     }
                     .buttonStyle(.plain)
                     divider
-                    Button { showIntervalEditor = true } label: {
+                    Button {
+                        showIntervalEditor = true
+                        AnalyticsManager.shared.track(.settingsSheetOpened, source: .settings, setting: .autoReminderInterval, isPlus: SubscriptionManager.shared.isPlus)
+                    } label: {
                         settingsRow("Auto-Reminder Interval", value: store.autoReminderIntervalDisplay)
                     }
                     .buttonStyle(.plain)
                     if store.pack.method != .ring {
                         divider
-                        Button { showRefillReminderEditor = true } label: {
+                        Button {
+                            showRefillReminderEditor = true
+                            AnalyticsManager.shared.track(.settingsSheetOpened, source: .settings, setting: .supplyReminder, isPlus: SubscriptionManager.shared.isPlus)
+                        } label: {
                             settingsRow(supplyReminderTitle, value: supplyReminderValue)
                         }
                         .buttonStyle(.plain)
@@ -66,7 +79,10 @@ struct SettingsView: View {
                     .modifier(FadeInUp(appeared: appeared, delay: 0.15))
 
                 settingsCard {
-                    Button { showCycleDayEditor = true } label: {
+                    Button {
+                        showCycleDayEditor = true
+                        AnalyticsManager.shared.track(.settingsSheetOpened, source: .settings, setting: .cycleDay, isPlus: SubscriptionManager.shared.isPlus)
+                    } label: {
                         settingsRow("Current Day in Cycle", value: "Day \(store.currentDayIndex + 1) of \(store.pack.cycleLength)")
                     }
                     .buttonStyle(.plain)
@@ -79,12 +95,24 @@ struct SettingsView: View {
 
                 settingsCard {
                     if SubscriptionManager.shared.isPlus {
-                        Button { showBlockedAppsEditor = true } label: {
+                        Button {
+                            showBlockedAppsEditor = true
+                            AnalyticsManager.shared.track(
+                                .settingsSheetOpened,
+                                source: .settings,
+                                setting: .blockedApps,
+                                isPlus: SubscriptionManager.shared.isPlus,
+                                hasBlockingSelection: AppBlockingManager.shared.hasAppsSelected
+                            )
+                        } label: {
                             settingsRow("Blocked Apps", value: blockingStatusSummary)
                         }
                         .buttonStyle(.plain)
                     } else {
-                        Button { showBlockingUpsell = true } label: {
+                        Button {
+                            showBlockingUpsell = true
+                            AnalyticsManager.shared.track(.plusUpsellViewed, source: .settings, isPlus: SubscriptionManager.shared.isPlus)
+                        } label: {
                             settingsRow("Blocked Apps", value: "Pillie+", valueColor: PillieTheme.coral, showLock: true)
                         }
                         .buttonStyle(.plain)
@@ -103,6 +131,7 @@ struct SettingsView: View {
 
                 settingsCard {
                     Button {
+                        AnalyticsManager.shared.track(.settingsSheetOpened, source: .settings, setting: .subscription, isPlus: SubscriptionManager.shared.isPlus)
                         if SubscriptionManager.shared.isPlus {
                             showManageSubscription = true
                         } else {
@@ -116,6 +145,33 @@ struct SettingsView: View {
                         )
                     }
                     .buttonStyle(.plain)
+                }
+                .modifier(FadeInUp(appeared: appeared, delay: 0.3))
+
+                // MARK: - Privacy
+                sectionHeader("PRIVACY")
+                    .modifier(FadeInUp(appeared: appeared, delay: 0.3))
+
+                settingsCard {
+                    Toggle(isOn: Binding(
+                        get: { !analyticsOptOut },
+                        set: { isEnabled in
+                            analyticsOptOut = !isEnabled
+                            AnalyticsManager.shared.setAnalyticsEnabled(isEnabled)
+                        }
+                    )) {
+                        VStack(alignment: .leading, spacing: 3) {
+                            Text("Usage Analytics")
+                                .font(.pillieSubtitleBold())
+                                .foregroundStyle(PillieTheme.textPrimary)
+                            Text("Help improve Pillie with anonymous app-flow data.")
+                                .font(.pillieCaption())
+                                .foregroundStyle(PillieTheme.textMuted)
+                        }
+                    }
+                    .tint(PillieTheme.coral)
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 14)
                 }
                 .modifier(FadeInUp(appeared: appeared, delay: 0.3))
 
@@ -439,6 +495,7 @@ private struct ProtocolEditor: View {
                 .padding(.horizontal, 28)
 
                 Button {
+                    AnalyticsManager.shared.track(.settingsChangeCancelled, source: .settings, setting: .protocol, isPlus: SubscriptionManager.shared.isPlus)
                     dismiss()
                 } label: {
                     Text("Cancel")
@@ -459,6 +516,7 @@ private struct ProtocolEditor: View {
                     customBreakDays: selectedMethod == .pill && selectedRegimen == .custom ? customBreakDays : nil,
                     cycleDay: min(max(1, selectedCycleDay), cycleLength)
                 )
+                AnalyticsManager.shared.track(.settingsChangeSaved, source: .settings, setting: .protocol, isPlus: SubscriptionManager.shared.isPlus)
                 dismiss()
             }
         } message: {
@@ -561,6 +619,7 @@ private struct ReminderTimeEditor: View {
 
             Button {
                 saveAndReschedule()
+                AnalyticsManager.shared.track(.settingsChangeSaved, source: .settings, setting: .reminderTime, isPlus: SubscriptionManager.shared.isPlus)
                 dismiss()
             } label: {
                 Text("Save")
@@ -644,6 +703,7 @@ private struct AutoReminderIntervalEditor: View {
             Button {
                 store.autoReminderIntervalMinutes = selectedInterval
                 NotificationManager.shared.requestReschedule(from: store, reason: "settings-auto-interval")
+                AnalyticsManager.shared.track(.settingsChangeSaved, source: .settings, setting: .autoReminderInterval, isPlus: SubscriptionManager.shared.isPlus)
                 dismiss()
             } label: {
                 Text("Save")
@@ -724,6 +784,7 @@ private struct RefillReminderThresholdEditor: View {
                     store.refillReminderThresholdDays = selectedThreshold
                 }
                 NotificationManager.shared.requestReschedule(from: store, reason: "settings-supply-threshold")
+                AnalyticsManager.shared.track(.settingsChangeSaved, source: .settings, setting: .supplyReminder, isPlus: SubscriptionManager.shared.isPlus)
                 dismiss()
             } label: {
                 Text("Save")
@@ -794,6 +855,7 @@ private struct CycleDayEditor: View {
 
             Button {
                 store.updateCycleDay(selectedCycleDay)
+                AnalyticsManager.shared.track(.settingsChangeSaved, source: .settings, setting: .cycleDay, isPlus: SubscriptionManager.shared.isPlus)
                 dismiss()
             } label: {
                 Text("Save")

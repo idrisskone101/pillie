@@ -138,6 +138,7 @@ struct MainTabView: View {
                 withAnimation(tabTransitionAnimation) {
                     selectedTab = newTab
                 }
+                AnalyticsManager.shared.track(.tabSelected, screen: newTab.analyticsScreen, isPlus: SubscriptionManager.shared.isPlus)
             }
         )
     }
@@ -172,6 +173,17 @@ struct MainTabView: View {
         tabDirection = target.rawValue > selectedTab.rawValue ? .trailing : .leading
         withAnimation(tabTransitionAnimation) {
             selectedTab = target
+        }
+        AnalyticsManager.shared.track(.tabSelected, screen: target.analyticsScreen, isPlus: SubscriptionManager.shared.isPlus)
+    }
+}
+
+private extension PillieTab {
+    var analyticsScreen: AnalyticsScreen {
+        switch self {
+        case .home: return .home
+        case .history: return .calendar
+        case .settings: return .settings
         }
     }
 }

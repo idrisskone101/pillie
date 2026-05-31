@@ -26,6 +26,17 @@ struct PremiumPaywallView: View {
 
     private enum Plan {
         case annual, monthly
+
+        var analyticsPlan: AnalyticsPlan {
+            switch self {
+            case .annual: return .annual
+            case .monthly: return .monthly
+            }
+        }
+    }
+
+    private var analyticsSource: AnalyticsSource {
+        isFromOnboarding ? .onboarding : .settings
     }
 
     private var selectedPackage: Package? {
@@ -92,6 +103,7 @@ struct PremiumPaywallView: View {
             .ignoresSafeArea(.all, edges: .bottom)
         }
         .onAppear {
+            AnalyticsManager.shared.track(.paywallViewed, source: analyticsSource, step: isFromOnboarding ? .paywall : nil, isPlus: subscriptionManager.isPlus)
             animateIn = true
             guard performanceTier == .standard else {
                 blobPhase = 0
@@ -271,6 +283,7 @@ struct PremiumPaywallView: View {
             withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
                 selectedPlan = .annual
             }
+            AnalyticsManager.shared.track(.paywallPlanSelected, source: analyticsSource, plan: .annual, isPlus: subscriptionManager.isPlus)
         } label: {
             VStack(spacing: -12) {
                 HStack {
@@ -332,6 +345,7 @@ struct PremiumPaywallView: View {
             withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
                 selectedPlan = .monthly
             }
+            AnalyticsManager.shared.track(.paywallPlanSelected, source: analyticsSource, plan: .monthly, isPlus: subscriptionManager.isPlus)
         } label: {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
@@ -453,12 +467,17 @@ struct PremiumPaywallView: View {
                 Button {
                     guard let package = selectedPackage else { return }
                     isPurchasing = true
+                    AnalyticsManager.shared.track(.purchaseStarted, source: analyticsSource, plan: selectedPlan.analyticsPlan, isPlus: subscriptionManager.isPlus)
                     Task {
                         do {
                             try await subscriptionManager.purchase(package)
+                            AnalyticsManager.shared.track(.purchaseCompleted, source: analyticsSource, plan: selectedPlan.analyticsPlan, isPlus: subscriptionManager.isPlus)
                             onContinue()
                         } catch {
-                            if !error.isCancelledPurchase {
+                            if error.isCancelledPurchase {
+                                AnalyticsManager.shared.track(.purchaseCancelled, source: analyticsSource, plan: selectedPlan.analyticsPlan, result: .cancelled, isPlus: subscriptionManager.isPlus)
+                            } else {
+                                AnalyticsManager.shared.track(.purchaseFailed, source: analyticsSource, plan: selectedPlan.analyticsPlan, result: .failed, isPlus: subscriptionManager.isPlus)
                                 purchaseError = error.localizedDescription
                             }
                         }
@@ -498,6 +517,7 @@ struct PremiumPaywallView: View {
 
             HStack {
                 Button {
+                    AnalyticsManager.shared.track(.continueFreeSelected, source: analyticsSource, step: isFromOnboarding ? .paywall : nil, isPlus: subscriptionManager.isPlus)
                     onSkip()
                 } label: {
                     Text("Continue for Free")
@@ -509,15 +529,19 @@ struct PremiumPaywallView: View {
 
                 Button {
                     isRestoring = true
+                    AnalyticsManager.shared.track(.restoreStarted, source: analyticsSource, isPlus: subscriptionManager.isPlus)
                     Task {
                         do {
                             try await subscriptionManager.restore()
                             if subscriptionManager.isPlus {
+                                AnalyticsManager.shared.track(.restoreCompleted, source: analyticsSource, result: .completed, isPlus: subscriptionManager.isPlus)
                                 onContinue()
                             } else {
+                                AnalyticsManager.shared.track(.restoreFailed, source: analyticsSource, result: .failed, isPlus: subscriptionManager.isPlus)
                                 showNoSubscriptionAlert = true
                             }
                         } catch {
+                            AnalyticsManager.shared.track(.restoreFailed, source: analyticsSource, result: .failed, isPlus: subscriptionManager.isPlus)
                             purchaseError = error.localizedDescription
                         }
                         isRestoring = false

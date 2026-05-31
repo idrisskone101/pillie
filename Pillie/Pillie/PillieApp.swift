@@ -167,6 +167,8 @@ struct PillieApp: App {
         AppDelegate.store = initialStore
 
         if !Self.isRunningTests {
+            AnalyticsManager.shared.configure()
+            AnalyticsManager.shared.track(.appLaunched, isPlus: SubscriptionManager.shared.isPlus)
             SubscriptionManager.shared.configure()
         }
     }
@@ -183,6 +185,7 @@ struct PillieApp: App {
                 .onChange(of: scenePhase) { _, newPhase in
                     guard !Self.isRunningTests else { return }
                     if newPhase == .active {
+                        AnalyticsManager.shared.track(.appBecameActive, isPlus: SubscriptionManager.shared.isPlus)
                         reconcileScreenTimeState()
                         NotificationManager.shared.requestReschedule(from: store, reason: "app-became-active")
                     } else if newPhase == .background {

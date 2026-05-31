@@ -45,6 +45,7 @@ struct PlusUpsellSheet: View {
 
             VStack(spacing: 12) {
                 Button {
+                    AnalyticsManager.shared.track(.plusUpsellUpgradeTapped, source: .upsell, isPlus: SubscriptionManager.shared.isPlus)
                     showPaywall = true
                 } label: {
                     Text("Upgrade to Pillie+")
@@ -53,6 +54,7 @@ struct PlusUpsellSheet: View {
                 .padding(.horizontal, 28)
 
                 Button {
+                    AnalyticsManager.shared.track(.plusUpsellDismissed, source: .upsell, isPlus: SubscriptionManager.shared.isPlus)
                     dismiss()
                 } label: {
                     Text("Not Now")
@@ -62,15 +64,19 @@ struct PlusUpsellSheet: View {
 
                 Button {
                     isRestoring = true
+                    AnalyticsManager.shared.track(.restoreStarted, source: .upsell, isPlus: SubscriptionManager.shared.isPlus)
                     Task {
                         do {
                             try await SubscriptionManager.shared.restore()
                             if SubscriptionManager.shared.isPlus {
+                                AnalyticsManager.shared.track(.restoreCompleted, source: .upsell, result: .completed, isPlus: SubscriptionManager.shared.isPlus)
                                 dismiss()
                             } else {
+                                AnalyticsManager.shared.track(.restoreFailed, source: .upsell, result: .failed, isPlus: SubscriptionManager.shared.isPlus)
                                 showNoSubscriptionAlert = true
                             }
                         } catch {
+                            AnalyticsManager.shared.track(.restoreFailed, source: .upsell, result: .failed, isPlus: SubscriptionManager.shared.isPlus)
                             restoreError = error.localizedDescription
                         }
                         isRestoring = false
@@ -118,6 +124,9 @@ struct PlusUpsellSheet: View {
                     dismiss()
                 }
             )
+        }
+        .onAppear {
+            AnalyticsManager.shared.track(.plusUpsellViewed, source: .upsell, isPlus: SubscriptionManager.shared.isPlus)
         }
     }
 }

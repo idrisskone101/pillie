@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		PH0001022F6A00000082EF2F /* PostHog in Frameworks */ = {isa = PBXBuildFile; productRef = PH0001022F6A00010082EF2F /* PostHog */; };
 		527C07A32F5A4BB900164A1D /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = RC0001022F456DC00082EF2F /* RevenueCat */; };
 		527C07A42F5A4BB900164A1D /* RevenueCatUI in Frameworks */ = {isa = PBXBuildFile; productRef = RC0001032F456DC00082EF2F /* RevenueCatUI */; };
 		DP0001022F456DC00082EF2F /* PillieDeviceActivityMonitor.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = DA0001012F456DC00082EF2F /* PillieDeviceActivityMonitor.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -148,6 +149,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				PH0001022F6A00000082EF2F /* PostHog in Frameworks */,
 				527C07A42F5A4BB900164A1D /* RevenueCatUI in Frameworks */,
 				527C07A32F5A4BB900164A1D /* RevenueCat in Frameworks */,
 			);
@@ -243,6 +245,7 @@
 			);
 			name = Pillie;
 			packageProductDependencies = (
+				PH0001022F6A00010082EF2F /* PostHog */,
 				RC0001022F456DC00082EF2F /* RevenueCat */,
 				RC0001032F456DC00082EF2F /* RevenueCatUI */,
 			);
@@ -400,6 +403,7 @@
 			mainGroup = 5259165C2F456DC00082EF2F;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
+				PH0001012F6A00000082EF2F /* XCRemoteSwiftPackageReference "posthog-ios" */,
 				RC0001012F456DC00082EF2F /* XCRemoteSwiftPackageReference "purchases-ios" */,
 			);
 			preferredProjectObjectVersion = 77;
@@ -662,6 +666,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				MARKETING_VERSION = 1.11;
+				POSTHOG_HOST = "https://us.i.posthog.com";
+				POSTHOG_PROJECT_TOKEN = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.idrisskone.pillie;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -706,6 +712,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				MARKETING_VERSION = 1.11;
+				POSTHOG_HOST = "https://us.i.posthog.com";
+				POSTHOG_PROJECT_TOKEN = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.idrisskone.pillie;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -1020,6 +1028,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		PH0001012F6A00000082EF2F /* XCRemoteSwiftPackageReference "posthog-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/PostHog/posthog-ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.9.1;
+			};
+		};
 		RC0001012F456DC00082EF2F /* XCRemoteSwiftPackageReference "purchases-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/RevenueCat/purchases-ios.git";
@@ -1031,6 +1047,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		PH0001022F6A00010082EF2F /* PostHog */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = PH0001012F6A00000082EF2F /* XCRemoteSwiftPackageReference "posthog-ios" */;
+			productName = PostHog;
+		};
 		RC0001022F456DC00082EF2F /* RevenueCat */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = RC0001012F456DC00082EF2F /* XCRemoteSwiftPackageReference "purchases-ios" */;
