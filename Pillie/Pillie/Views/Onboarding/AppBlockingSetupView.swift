@@ -200,8 +200,16 @@ struct AppBlockingSetupView: View {
 
                     Button {
                         isRequestingAuth = true
+                        AnalyticsManager.shared.track(.screenTimePermissionRequested, source: .onboarding, step: .appBlocking, isPlus: SubscriptionManager.shared.isPlus)
                         Task {
                             await blockingManager.requestAuthorization()
+                            AnalyticsManager.shared.track(
+                                .screenTimePermissionCompleted,
+                                source: .onboarding,
+                                step: .appBlocking,
+                                result: blockingManager.isAuthorized ? .granted : .denied,
+                                isPlus: SubscriptionManager.shared.isPlus
+                            )
                             isRequestingAuth = false
                         }
                     } label: {
@@ -285,6 +293,14 @@ struct AppBlockingSetupView: View {
             if canSetUpBlocking {
                 Button {
                     blockingManager.saveSelection()
+                    AnalyticsManager.shared.track(
+                        .settingsChangeSaved,
+                        source: .onboarding,
+                        step: .appBlocking,
+                        setting: .blockedApps,
+                        isPlus: SubscriptionManager.shared.isPlus,
+                        hasBlockingSelection: blockingManager.hasAppsSelected
+                    )
                     // Schedule DeviceActivity and apply blocking immediately if past reminder time
                     AppBlockingManager.shared.scheduleDeviceActivityBlock(
                         hour: store.reminderHour,

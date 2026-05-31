@@ -55,6 +55,13 @@ struct BlockedAppsEditor: View {
 
             Button {
                 blockingManager.saveSelection()
+                AnalyticsManager.shared.track(
+                    .settingsChangeSaved,
+                    source: .settings,
+                    setting: .blockedApps,
+                    isPlus: SubscriptionManager.shared.isPlus,
+                    hasBlockingSelection: blockingManager.hasAppsSelected
+                )
                 // Re-schedule and reconcile blocking immediately
                 blockingManager.scheduleDeviceActivityBlock(
                     hour: store.reminderHour,

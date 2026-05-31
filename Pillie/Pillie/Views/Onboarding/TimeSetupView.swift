@@ -213,6 +213,7 @@ struct TimeSetupView: View {
             saveTimeToStore()
             onContinue()
             DispatchQueue.main.async {
+                AnalyticsManager.shared.track(.notificationPermissionRequested, source: .onboarding, step: .reminderTime, isPlus: SubscriptionManager.shared.isPlus)
                 NotificationManager.shared.requestAuthorization()
                 NotificationManager.shared.requestReschedule(from: store, reason: "onboarding-reminder-time")
             }

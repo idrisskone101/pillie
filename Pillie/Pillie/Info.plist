@@ -35,6 +35,10 @@
 	</array>
 	<key>NSMotionUsageDescription</key>
 	<string>Pillie uses motion to detect shakes for the fun dose confirmation mini-game.</string>
+	<key>PostHogHost</key>
+	<string>$(POSTHOG_HOST)</string>
+	<key>PostHogProjectToken</key>
+	<string>$(POSTHOG_PROJECT_TOKEN)</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>UIApplicationSceneManifest</key>

@@ -275,11 +275,39 @@ struct ContentView: View {
                 isLoading = false
             }
         }
+        .onAppear {
+            trackOnboardingStepViewed(onboardingStep)
+        }
+        .onChange(of: onboardingStep) { _, newStep in
+            trackOnboardingStepViewed(newStep)
+        }
     }
 
     private func setOnboardingStep(_ step: Int) {
+        let previousStep = onboardingStep
+        if let previous = AnalyticsStep(onboardingStep: previousStep), previousStep != step {
+            AnalyticsManager.shared.track(
+                step > previousStep ? .onboardingStepCompleted : .onboardingBackTapped,
+                source: .onboarding,
+                step: previous,
+                isPlus: SubscriptionManager.shared.isPlus
+            )
+        }
+
         onboardingStep = step
         UserDefaults.standard.set(step, forKey: "onboardingStep")
+
+        if previousStep <= 10, step > 10 {
+            AnalyticsManager.shared.track(.onboardingCompleted, source: .onboarding, isPlus: SubscriptionManager.shared.isPlus)
+        }
+    }
+
+    private func trackOnboardingStepViewed(_ step: Int) {
+        guard let analyticsStep = AnalyticsStep(onboardingStep: step) else { return }
+        if step == 0 {
+            AnalyticsManager.shared.track(.onboardingStarted, source: .onboarding, step: analyticsStep, isPlus: SubscriptionManager.shared.isPlus)
+        }
+        AnalyticsManager.shared.track(.onboardingStepViewed, source: .onboarding, step: analyticsStep, isPlus: SubscriptionManager.shared.isPlus)
     }
 }
 

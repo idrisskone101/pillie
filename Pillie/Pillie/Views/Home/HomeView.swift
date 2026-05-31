@@ -50,6 +50,7 @@ struct HomeView: View {
                     if store.isRefillDue {
                         RefillBannerCard(onRefill: {
                             showRefillConfirmation = true
+                            AnalyticsManager.shared.track(.newPackOrCyclePrompted, source: .home, isPlus: SubscriptionManager.shared.isPlus)
                         })
                         .modifier(FadeInUp(appeared: appeared, delay: 0.15))
                     }
@@ -94,6 +95,7 @@ struct HomeView: View {
         .alert(store.refillBannerTitle, isPresented: $showRefillConfirmation) {
             Button(store.refillCTALabel) {
                 store.startNewPack()
+                AnalyticsManager.shared.track(.newPackOrCycleStarted, source: .home, isPlus: SubscriptionManager.shared.isPlus)
                 #if os(iOS)
                 markTakenHaptic.impactOccurred()
                 #endif
@@ -108,6 +110,7 @@ struct HomeView: View {
                     action: action,
                     onConfirm: {
                         store.markTodayAsTaken()
+                        AnalyticsManager.shared.track(.todayActionCompleted, source: .home, isPlus: SubscriptionManager.shared.isPlus)
                         fireMarkTakenHaptic()
                         showShakeConfirm = false
                     },
@@ -131,6 +134,7 @@ struct HomeView: View {
             if isRefillDue {
                 Button {
                     showRefillConfirmation = true
+                    AnalyticsManager.shared.track(.newPackOrCyclePrompted, source: .home, isPlus: SubscriptionManager.shared.isPlus)
                 } label: {
                     HStack(spacing: 8) {
                         Image(systemName: "arrow.triangle.2.circlepath")
@@ -143,6 +147,7 @@ struct HomeView: View {
             } else if isTodayTaken {
                 Button {
                     store.unmarkTodayAsTaken()
+                    AnalyticsManager.shared.track(.todayActionUndone, source: .home, isPlus: SubscriptionManager.shared.isPlus)
                     fireUndoHaptic()
                 } label: {
                     HStack(spacing: 8) {
@@ -168,9 +173,11 @@ struct HomeView: View {
                 .transition(.opacity)
             } else {
                 Button {
+                    AnalyticsManager.shared.track(.todayActionStarted, source: .home, isPlus: SubscriptionManager.shared.isPlus)
                     #if os(iOS)
                     if UIAccessibility.isReduceMotionEnabled || !SubscriptionManager.shared.isPlus {
                         store.markTodayAsTaken()
+                        AnalyticsManager.shared.track(.todayActionCompleted, source: .home, isPlus: SubscriptionManager.shared.isPlus)
                         fireMarkTakenHaptic()
                     } else {
                         showShakeConfirm = true
