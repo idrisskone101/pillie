@@ -14,11 +14,45 @@ Use this skill whenever the task touches the Pillie iOS app, Xcode project, simu
 - Scheme: `Pillie`
 - Bundle ID: `com.idrisskone.pillie`
 - Simulator UDID: `124DC75F-0771-4C81-841D-F13655138260` (iPhone 17 Pro, iOS 26.2)
-- DerivedData: `/tmp/PillieDerivedData`
-- Built app: `/tmp/PillieDerivedData/Build/Products/Debug-iphonesimulator/Pillie.app`
+- DerivedData: `/tmp/PillieDerivedData` in the main checkout; `/tmp/PillieDerivedData-<worktree>` in feature worktrees
+- Built app: `<DerivedData>/Build/Products/Debug-iphonesimulator/Pillie.app`
 - Helper script: `Pillie/scripts/build-and-run.sh`
+- Worktree helper: `Pillie/scripts/create-worktree.sh`
+- Codex environment: `.codex/environments/environment.toml` (`Pillie iOS`)
 
-Keep DerivedData in `/tmp/PillieDerivedData`. The project folder can be iCloud-backed, and project-local DerivedData can break codesigning because of Finder xattrs.
+Keep DerivedData in `/tmp`. The project folder can be iCloud-backed, and project-local DerivedData can break codesigning because of Finder xattrs.
+
+## Git Worktrees
+
+Use Git worktrees for parallel feature work. Codex-created feature worktrees should use branch names like `codex/<feature-name>` and sibling paths like `/Users/idrisskone/Developer/Pillie-<feature-name>`.
+
+When starting a new task from the Codex app, use **Create worktree** and select the `Pillie iOS` local environment. The environment setup runs automatically, exposes the Build/Run actions in the thread UI, and lets `build-and-run.sh` choose the right `/tmp/PillieDerivedData-*` path for the Codex-managed worktree.
+
+Default Codex task rule:
+
+- Treat `/Users/idrisskone/Developer/Pillie` as the orchestration checkout.
+- For every new implementation, bug fix, UI change, QA fix, refactor, or build/test task that needs file edits, create or enter a feature worktree before changing app code.
+- Name Codex task branches `codex/<short-task-slug>` unless the user requests a specific branch.
+- Use sibling paths like `/Users/idrisskone/Developer/Pillie-<short-task-slug>`.
+- If the current working directory is the main checkout and no task worktree exists yet, run the helper below first, then continue all edits, builds, simulator installs, screenshots, and commits from that worktree.
+- Only edit the main checkout directly for repo-level workflow files such as `AGENTS.md`, `.agents/skills`, or worktree helper scripts, unless the user explicitly asks to work on `main`.
+
+Create a feature worktree with:
+
+```bash
+cd /Users/idrisskone/Developer/Pillie
+Pillie/scripts/create-worktree.sh codex/<feature-name>
+```
+
+The helper creates or reuses the branch, creates the sibling worktree, and prints the matching `/tmp/PillieDerivedData-<worktree>` build path. Use the helper by default for new Codex worktrees.
+
+The build script auto-selects `/tmp/PillieDerivedData` for the main checkout and `/tmp/PillieDerivedData-<worktree-folder>` for sibling worktrees. Override it explicitly when needed:
+
+```bash
+PILLIE_DERIVED_DATA=/tmp/PillieDerivedData-refill Pillie/scripts/build-and-run.sh
+```
+
+The simulator install is shared by bundle ID (`com.idrisskone.pillie`). Running one worktree replaces the app installed from another worktree unless using different simulators or bundle IDs.
 
 ## Tool Preference
 
@@ -151,7 +185,7 @@ Use 50% instead of 33.33% for 2x simulators. Inspect the resulting 1x image befo
 
 ## Guardrails
 
-- Do not delete `/tmp/PillieDerivedData` unless explicitly asked. Incremental builds matter.
+- Do not delete `/tmp/PillieDerivedData` or `/tmp/PillieDerivedData-*` unless explicitly asked. Incremental builds matter.
 - Do not put DerivedData inside the project folder.
 - Do not revert user changes or unrelated generated Xcode state.
 - Prefer minimal, local changes that keep the app shippable.
