@@ -28,7 +28,9 @@ final class AnalyticsManagerPrivacyTests: XCTestCase {
         let manager = AnalyticsManager(
             defaults: defaults,
             client: client,
-            configurationProvider: { nil }
+            infoDictionary: [
+                "PostHogProjectToken": " "
+            ]
         )
 
         manager.configure()
@@ -36,7 +38,7 @@ final class AnalyticsManagerPrivacyTests: XCTestCase {
 
         XCTAssertTrue(defaults.bool(forKey: AnalyticsManager.analyticsOptOutKey))
         XCTAssertFalse(manager.isAnalyticsEnabled)
-        XCTAssertEqual(client.optOutCallCount, 0)
+        XCTAssertEqual(client.optOutChanges, [])
     }
 
     func testUsageAnalyticsToggleCallsConfiguredOptOutAndOptInPathsAcrossLaunches() {
@@ -44,54 +46,50 @@ final class AnalyticsManagerPrivacyTests: XCTestCase {
         let manager = AnalyticsManager(
             defaults: defaults,
             client: client,
-            configurationProvider: {
-                AnalyticsConfiguration(projectToken: "test-token", host: "https://example.com")
-            }
+            infoDictionary: analyticsInfoDictionary
         )
 
         manager.configure()
         manager.setAnalyticsEnabled(false)
 
         XCTAssertEqual(client.configureOptOutValues, [false])
-        XCTAssertEqual(client.optOutCallCount, 1)
-        XCTAssertEqual(client.optInCallCount, 0)
+        XCTAssertEqual(client.optOutChanges, [true])
         XCTAssertTrue(defaults.bool(forKey: AnalyticsManager.analyticsOptOutKey))
 
         let relaunchClient = AnalyticsClientSpy()
         let relaunchManager = AnalyticsManager(
             defaults: defaults,
             client: relaunchClient,
-            configurationProvider: {
-                AnalyticsConfiguration(projectToken: "test-token", host: "https://example.com")
-            }
+            infoDictionary: analyticsInfoDictionary
         )
 
         relaunchManager.configure()
         relaunchManager.setAnalyticsEnabled(true)
 
         XCTAssertEqual(relaunchClient.configureOptOutValues, [true])
-        XCTAssertEqual(relaunchClient.optInCallCount, 1)
-        XCTAssertEqual(relaunchClient.optOutCallCount, 0)
+        XCTAssertEqual(relaunchClient.optOutChanges, [false])
         XCTAssertFalse(defaults.bool(forKey: AnalyticsManager.analyticsOptOutKey))
+    }
+
+    private var analyticsInfoDictionary: [String: Any] {
+        [
+            "PostHogProjectToken": "test-token",
+            "PostHogHost": "https://example.com"
+        ]
     }
 }
 
-private final class AnalyticsClientSpy: AnalyticsClient {
+private final class AnalyticsClientSpy: ProductAnalyticsClient {
     private(set) var configureOptOutValues: [Bool] = []
-    private(set) var optInCallCount = 0
-    private(set) var optOutCallCount = 0
+    private(set) var optOutChanges: [Bool] = []
 
-    func configure(projectToken: String, host: String, optOut: Bool) {
-        configureOptOutValues.append(optOut)
+    func configure(_ configuration: ProductAnalyticsConfiguration) {
+        configureOptOutValues.append(configuration.isOptedOut)
     }
 
-    func optIn() {
-        optInCallCount += 1
+    func setOptedOut(_ isOptedOut: Bool) {
+        optOutChanges.append(isOptedOut)
     }
 
-    func optOut() {
-        optOutCallCount += 1
-    }
-
-    func capture(_ event: String, properties: [String: Any]) {}
+    func capture(event: String, properties: [String: AnalyticsPropertyValue]) {}
 }
