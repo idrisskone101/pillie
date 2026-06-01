@@ -108,28 +108,38 @@ enum AnalyticsSetting: String {
     case subscription
 }
 
-final class AnalyticsManager {
-    static let shared = AnalyticsManager()
-    static let analyticsOptOutKey = "pillie_analytics_opt_out"
+struct AnalyticsConfiguration {
+    let projectToken: String
+    let host: String
 
-    private var isConfigured = false
-    private let defaults: UserDefaults
-
-    private init(defaults: UserDefaults = .standard) {
-        self.defaults = defaults
-    }
-
-    var isAnalyticsEnabled: Bool {
-        !defaults.bool(forKey: Self.analyticsOptOutKey)
-    }
-
-    func configure() {
-        guard !isConfigured else { return }
+    static func current() -> AnalyticsConfiguration? {
         guard let projectToken = infoDictionaryString("PostHogProjectToken"), !projectToken.isEmpty else {
-            return
+            return nil
         }
 
-        let host = infoDictionaryString("PostHogHost") ?? "https://us.i.posthog.com"
+        return AnalyticsConfiguration(
+            projectToken: projectToken,
+            host: infoDictionaryString("PostHogHost") ?? "https://us.i.posthog.com"
+        )
+    }
+
+    private static func infoDictionaryString(_ key: String) -> String? {
+        guard let raw = Bundle.main.object(forInfoDictionaryKey: key) as? String else { return nil }
+        let value = raw.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !value.isEmpty, !value.hasPrefix("$(") else { return nil }
+        return value
+    }
+}
+
+protocol AnalyticsClient {
+    func configure(projectToken: String, host: String, optOut: Bool)
+    func optIn()
+    func optOut()
+    func capture(_ event: String, properties: [String: Any])
+}
+
+final class PostHogAnalyticsClient: AnalyticsClient {
+    func configure(projectToken: String, host: String, optOut: Bool) {
         let config = PostHogConfig(projectToken: projectToken, host: host)
         config.captureApplicationLifecycleEvents = false
         config.captureScreenViews = false
@@ -137,7 +147,7 @@ final class AnalyticsManager {
         config.sendFeatureFlagEvent = false
         config.preloadFeatureFlags = false
         config.setDefaultPersonProperties = false
-        config.optOut = !isAnalyticsEnabled
+        config.optOut = optOut
 
         #if os(iOS)
         config.captureElementInteractions = false
@@ -148,6 +158,52 @@ final class AnalyticsManager {
         #endif
 
         PostHogSDK.shared.setup(config)
+    }
+
+    func optIn() {
+        PostHogSDK.shared.optIn()
+    }
+
+    func optOut() {
+        PostHogSDK.shared.optOut()
+    }
+
+    func capture(_ event: String, properties: [String: Any]) {
+        PostHogSDK.shared.capture(event, properties: properties)
+    }
+}
+
+final class AnalyticsManager {
+    static let shared = AnalyticsManager()
+    static let analyticsOptOutKey = "pillie_analytics_opt_out"
+
+    private var isConfigured = false
+    private let defaults: UserDefaults
+    private let client: AnalyticsClient
+    private let configurationProvider: () -> AnalyticsConfiguration?
+
+    init(
+        defaults: UserDefaults = .standard,
+        client: AnalyticsClient = PostHogAnalyticsClient(),
+        configurationProvider: @escaping () -> AnalyticsConfiguration? = AnalyticsConfiguration.current
+    ) {
+        self.defaults = defaults
+        self.client = client
+        self.configurationProvider = configurationProvider
+    }
+
+    var isAnalyticsEnabled: Bool {
+        !defaults.bool(forKey: Self.analyticsOptOutKey)
+    }
+
+    func configure() {
+        guard !isConfigured else { return }
+        guard let configuration = configurationProvider() else { return }
+        client.configure(
+            projectToken: configuration.projectToken,
+            host: configuration.host,
+            optOut: !isAnalyticsEnabled
+        )
         isConfigured = true
     }
 
@@ -155,9 +211,9 @@ final class AnalyticsManager {
         defaults.set(!enabled, forKey: Self.analyticsOptOutKey)
         guard isConfigured else { return }
         if enabled {
-            PostHogSDK.shared.optIn()
+            client.optIn()
         } else {
-            PostHogSDK.shared.optOut()
+            client.optOut()
         }
     }
 
@@ -184,13 +240,6 @@ final class AnalyticsManager {
         if let isPlus { properties["is_plus"] = isPlus }
         if let hasBlockingSelection { properties["has_blocking_selection"] = hasBlockingSelection }
 
-        PostHogSDK.shared.capture(event.rawValue, properties: properties)
-    }
-
-    private func infoDictionaryString(_ key: String) -> String? {
-        guard let raw = Bundle.main.object(forInfoDictionaryKey: key) as? String else { return nil }
-        let value = raw.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !value.isEmpty, !value.hasPrefix("$(") else { return nil }
-        return value
+        client.capture(event.rawValue, properties: properties)
     }
 }
