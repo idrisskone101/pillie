@@ -6,6 +6,79 @@
 import Foundation
 import PostHog
 
+enum AnalyticsPropertyValue: Equatable {
+    case string(String)
+    case bool(Bool)
+
+    var postHogValue: Any {
+        switch self {
+        case .string(let value):
+            return value
+        case .bool(let value):
+            return value
+        }
+    }
+}
+
+struct ProductAnalyticsConfiguration: Equatable {
+    let projectToken: String
+    let host: String
+    let captureApplicationLifecycleEvents: Bool
+    let captureScreenViews: Bool
+    let captureElementInteractions: Bool
+    let enableSwizzling: Bool
+    let sendFeatureFlagEvent: Bool
+    let preloadFeatureFlags: Bool
+    let setDefaultPersonProperties: Bool
+    let sessionReplay: Bool
+    let surveys: Bool
+    let isOptedOut: Bool
+}
+
+protocol ProductAnalyticsClient: AnyObject {
+    func configure(_ configuration: ProductAnalyticsConfiguration)
+    func setOptedOut(_ isOptedOut: Bool)
+    func capture(event: String, properties: [String: AnalyticsPropertyValue])
+}
+
+final class PostHogAnalyticsClient: ProductAnalyticsClient {
+    func configure(_ configuration: ProductAnalyticsConfiguration) {
+        let config = PostHogConfig(projectToken: configuration.projectToken, host: configuration.host)
+        config.captureApplicationLifecycleEvents = configuration.captureApplicationLifecycleEvents
+        config.captureScreenViews = configuration.captureScreenViews
+        config.enableSwizzling = configuration.enableSwizzling
+        config.sendFeatureFlagEvent = configuration.sendFeatureFlagEvent
+        config.preloadFeatureFlags = configuration.preloadFeatureFlags
+        config.setDefaultPersonProperties = configuration.setDefaultPersonProperties
+        config.optOut = configuration.isOptedOut
+
+        #if os(iOS)
+        config.captureElementInteractions = configuration.captureElementInteractions
+        config.sessionReplay = configuration.sessionReplay
+        if #available(iOS 15.0, *) {
+            config.surveys = configuration.surveys
+        }
+        #endif
+
+        PostHogSDK.shared.setup(config)
+    }
+
+    func setOptedOut(_ isOptedOut: Bool) {
+        if isOptedOut {
+            PostHogSDK.shared.optOut()
+        } else {
+            PostHogSDK.shared.optIn()
+        }
+    }
+
+    func capture(event: String, properties: [String: AnalyticsPropertyValue]) {
+        PostHogSDK.shared.capture(
+            event,
+            properties: properties.mapValues(\.postHogValue)
+        )
+    }
+}
+
 enum AnalyticsEvent: String {
     case appLaunched = "app_launched"
     case appBecameActive = "app_became_active"
@@ -114,9 +187,17 @@ final class AnalyticsManager {
 
     private var isConfigured = false
     private let defaults: UserDefaults
+    private let client: ProductAnalyticsClient
+    private let infoDictionary: [String: Any]?
 
-    private init(defaults: UserDefaults = .standard) {
+    init(
+        defaults: UserDefaults = .standard,
+        client: ProductAnalyticsClient = PostHogAnalyticsClient(),
+        infoDictionary: [String: Any]? = nil
+    ) {
         self.defaults = defaults
+        self.client = client
+        self.infoDictionary = infoDictionary
     }
 
     var isAnalyticsEnabled: Bool {
@@ -130,35 +211,27 @@ final class AnalyticsManager {
         }
 
         let host = infoDictionaryString("PostHogHost") ?? "https://us.i.posthog.com"
-        let config = PostHogConfig(projectToken: projectToken, host: host)
-        config.captureApplicationLifecycleEvents = false
-        config.captureScreenViews = false
-        config.enableSwizzling = false
-        config.sendFeatureFlagEvent = false
-        config.preloadFeatureFlags = false
-        config.setDefaultPersonProperties = false
-        config.optOut = !isAnalyticsEnabled
-
-        #if os(iOS)
-        config.captureElementInteractions = false
-        config.sessionReplay = false
-        if #available(iOS 15.0, *) {
-            config.surveys = false
-        }
-        #endif
-
-        PostHogSDK.shared.setup(config)
+        client.configure(ProductAnalyticsConfiguration(
+            projectToken: projectToken,
+            host: host,
+            captureApplicationLifecycleEvents: false,
+            captureScreenViews: false,
+            captureElementInteractions: false,
+            enableSwizzling: false,
+            sendFeatureFlagEvent: false,
+            preloadFeatureFlags: false,
+            setDefaultPersonProperties: false,
+            sessionReplay: false,
+            surveys: false,
+            isOptedOut: !isAnalyticsEnabled
+        ))
         isConfigured = true
     }
 
     func setAnalyticsEnabled(_ enabled: Bool) {
         defaults.set(!enabled, forKey: Self.analyticsOptOutKey)
         guard isConfigured else { return }
-        if enabled {
-            PostHogSDK.shared.optIn()
-        } else {
-            PostHogSDK.shared.optOut()
-        }
+        client.setOptedOut(!enabled)
     }
 
     func track(
@@ -174,21 +247,22 @@ final class AnalyticsManager {
     ) {
         guard isConfigured, isAnalyticsEnabled else { return }
 
-        var properties: [String: Any] = [:]
-        if let source { properties["source"] = source.rawValue }
-        if let step { properties["step"] = step.rawValue }
-        if let screen { properties["screen"] = screen.rawValue }
-        if let plan { properties["plan"] = plan.rawValue }
-        if let result { properties["result"] = result.rawValue }
-        if let setting { properties["setting"] = setting.rawValue }
-        if let isPlus { properties["is_plus"] = isPlus }
-        if let hasBlockingSelection { properties["has_blocking_selection"] = hasBlockingSelection }
+        var properties: [String: AnalyticsPropertyValue] = [:]
+        if let source { properties["source"] = .string(source.rawValue) }
+        if let step { properties["step"] = .string(step.rawValue) }
+        if let screen { properties["screen"] = .string(screen.rawValue) }
+        if let plan { properties["plan"] = .string(plan.rawValue) }
+        if let result { properties["result"] = .string(result.rawValue) }
+        if let setting { properties["setting"] = .string(setting.rawValue) }
+        if let isPlus { properties["is_plus"] = .bool(isPlus) }
+        if let hasBlockingSelection { properties["has_blocking_selection"] = .bool(hasBlockingSelection) }
 
-        PostHogSDK.shared.capture(event.rawValue, properties: properties)
+        client.capture(event: event.rawValue, properties: properties)
     }
 
     private func infoDictionaryString(_ key: String) -> String? {
-        guard let raw = Bundle.main.object(forInfoDictionaryKey: key) as? String else { return nil }
+        let rawValue = infoDictionary?[key] ?? Bundle.main.object(forInfoDictionaryKey: key)
+        guard let raw = rawValue as? String else { return nil }
         let value = raw.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !value.isEmpty, !value.hasPrefix("$(") else { return nil }
         return value
