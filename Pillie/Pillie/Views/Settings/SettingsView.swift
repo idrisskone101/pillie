@@ -170,6 +170,7 @@ struct SettingsView: View {
                         }
                     }
                     .tint(PillieTheme.coral)
+                    .accessibilityIdentifier("usageAnalyticsToggle")
                     .padding(.horizontal, 20)
                     .padding(.vertical, 14)
                 }
