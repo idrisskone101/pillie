@@ -15,6 +15,7 @@ struct AppBlockingSetupView: View {
     @State private var showPicker = false
     @State private var isRequestingAuth = false
     private let performanceTier = PerformanceTier.current
+    private let onboardingTelemetry = OnboardingTelemetry()
 
     let onBack: () -> Void
     let onContinue: () -> Void
@@ -200,16 +201,10 @@ struct AppBlockingSetupView: View {
 
                     Button {
                         isRequestingAuth = true
-                        AnalyticsManager.shared.track(.screenTimePermissionRequested, source: .onboarding, step: .appBlocking, isPlus: SubscriptionManager.shared.isPlus)
+                        onboardingTelemetry.screenTimePermissionRequested()
                         Task {
                             await blockingManager.requestAuthorization()
-                            AnalyticsManager.shared.track(
-                                .screenTimePermissionCompleted,
-                                source: .onboarding,
-                                step: .appBlocking,
-                                result: blockingManager.isAuthorized ? .granted : .denied,
-                                isPlus: SubscriptionManager.shared.isPlus
-                            )
+                            onboardingTelemetry.screenTimePermissionCompleted(isAuthorized: blockingManager.isAuthorized)
                             isRequestingAuth = false
                         }
                     } label: {

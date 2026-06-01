@@ -79,6 +79,20 @@ final class PostHogAnalyticsClient: ProductAnalyticsClient {
     }
 }
 
+protocol AnalyticsTracking {
+    func track(
+        _ event: AnalyticsEvent,
+        source: AnalyticsSource?,
+        step: AnalyticsStep?,
+        screen: AnalyticsScreen?,
+        plan: AnalyticsPlan?,
+        result: AnalyticsResult?,
+        setting: AnalyticsSetting?,
+        isPlus: Bool?,
+        hasBlockingSelection: Bool?
+    )
+}
+
 enum AnalyticsEvent: String {
     case appLaunched = "app_launched"
     case appBecameActive = "app_became_active"
@@ -181,7 +195,7 @@ enum AnalyticsSetting: String {
     case subscription
 }
 
-final class AnalyticsManager {
+final class AnalyticsManager: AnalyticsTracking {
     static let shared = AnalyticsManager()
     static let analyticsOptOutKey = "pillie_analytics_opt_out"
 

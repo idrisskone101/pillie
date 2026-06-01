@@ -14,6 +14,7 @@ struct TimeSetupView: View {
     @State private var animateIn = false
     @State private var blobPhase: CGFloat = 0
     private let performanceTier = PerformanceTier.current
+    private let onboardingTelemetry = OnboardingTelemetry()
 
     let onBack: () -> Void
     let onContinue: () -> Void
@@ -213,7 +214,7 @@ struct TimeSetupView: View {
             saveTimeToStore()
             onContinue()
             DispatchQueue.main.async {
-                AnalyticsManager.shared.track(.notificationPermissionRequested, source: .onboarding, step: .reminderTime, isPlus: SubscriptionManager.shared.isPlus)
+                onboardingTelemetry.notificationPermissionRequested()
                 NotificationManager.shared.requestAuthorization()
                 NotificationManager.shared.requestReschedule(from: store, reason: "onboarding-reminder-time")
             }
