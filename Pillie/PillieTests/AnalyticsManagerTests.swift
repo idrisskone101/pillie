@@ -87,6 +87,42 @@ final class AnalyticsManagerTests: XCTestCase {
         ])
     }
 
+    func testOnboardingPermissionTelemetryUsesApprovedCoarsePropertiesOnly() {
+        let client = RecordingAnalyticsClient()
+        let manager = makeManager(client: client, token: "phc_test_token")
+
+        manager.configure()
+        manager.track(.onboardingStepViewed, source: .onboarding, step: .welcome, isPlus: false)
+        manager.track(.onboardingStepCompleted, source: .onboarding, step: .reminderTime, isPlus: false)
+        manager.track(.onboardingBackTapped, source: .onboarding, step: .method, isPlus: false)
+        manager.track(.onboardingCompleted, source: .onboarding, isPlus: false)
+        manager.track(.notificationPermissionRequested, source: .onboarding, step: .reminderTime, isPlus: false)
+        manager.track(.screenTimePermissionRequested, source: .onboarding, step: .appBlocking, isPlus: true)
+        manager.track(.screenTimePermissionCompleted, source: .onboarding, step: .appBlocking, result: .granted, isPlus: true)
+        manager.track(.screenTimePermissionCompleted, source: .onboarding, step: .appBlocking, result: .denied, isPlus: true)
+
+        XCTAssertEqual(client.captures.map(\.event), [
+            "onboarding_step_viewed",
+            "onboarding_step_completed",
+            "onboarding_back_tapped",
+            "onboarding_completed",
+            "notification_permission_requested",
+            "screen_time_permission_requested",
+            "screen_time_permission_completed",
+            "screen_time_permission_completed"
+        ])
+        XCTAssertEqual(client.captures.map(\.properties), [
+            ["source": .string("onboarding"), "step": .string("welcome"), "is_plus": .bool(false)],
+            ["source": .string("onboarding"), "step": .string("reminder_time"), "is_plus": .bool(false)],
+            ["source": .string("onboarding"), "step": .string("method"), "is_plus": .bool(false)],
+            ["source": .string("onboarding"), "is_plus": .bool(false)],
+            ["source": .string("onboarding"), "step": .string("reminder_time"), "is_plus": .bool(false)],
+            ["source": .string("onboarding"), "step": .string("app_blocking"), "is_plus": .bool(true)],
+            ["source": .string("onboarding"), "step": .string("app_blocking"), "result": .string("granted"), "is_plus": .bool(true)],
+            ["source": .string("onboarding"), "step": .string("app_blocking"), "result": .string("denied"), "is_plus": .bool(true)]
+        ])
+    }
+
     func testOptOutStopsFutureCaptureAndCanOptBackIn() {
         let client = RecordingAnalyticsClient()
         let manager = makeManager(client: client, token: "phc_test_token")
