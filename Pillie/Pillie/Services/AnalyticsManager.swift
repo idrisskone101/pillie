@@ -195,6 +195,50 @@ enum AnalyticsSetting: String {
     case subscription
 }
 
+struct AnalyticsPayload {
+    let source: AnalyticsSource?
+    let step: AnalyticsStep?
+    let screen: AnalyticsScreen?
+    let plan: AnalyticsPlan?
+    let result: AnalyticsResult?
+    let setting: AnalyticsSetting?
+    let isPlus: Bool?
+    let hasBlockingSelection: Bool?
+
+    init(
+        source: AnalyticsSource? = nil,
+        step: AnalyticsStep? = nil,
+        screen: AnalyticsScreen? = nil,
+        plan: AnalyticsPlan? = nil,
+        result: AnalyticsResult? = nil,
+        setting: AnalyticsSetting? = nil,
+        isPlus: Bool? = nil,
+        hasBlockingSelection: Bool? = nil
+    ) {
+        self.source = source
+        self.step = step
+        self.screen = screen
+        self.plan = plan
+        self.result = result
+        self.setting = setting
+        self.isPlus = isPlus
+        self.hasBlockingSelection = hasBlockingSelection
+    }
+
+    var properties: [String: AnalyticsPropertyValue] {
+        var properties: [String: AnalyticsPropertyValue] = [:]
+        if let source { properties["source"] = .string(source.rawValue) }
+        if let step { properties["step"] = .string(step.rawValue) }
+        if let screen { properties["screen"] = .string(screen.rawValue) }
+        if let plan { properties["plan"] = .string(plan.rawValue) }
+        if let result { properties["result"] = .string(result.rawValue) }
+        if let setting { properties["setting"] = .string(setting.rawValue) }
+        if let isPlus { properties["is_plus"] = .bool(isPlus) }
+        if let hasBlockingSelection { properties["has_blocking_selection"] = .bool(hasBlockingSelection) }
+        return properties
+    }
+}
+
 final class AnalyticsManager: AnalyticsTracking {
     static let shared = AnalyticsManager()
     static let analyticsOptOutKey = "pillie_analytics_opt_out"
@@ -261,17 +305,17 @@ final class AnalyticsManager: AnalyticsTracking {
     ) {
         guard isConfigured, isAnalyticsEnabled else { return }
 
-        var properties: [String: AnalyticsPropertyValue] = [:]
-        if let source { properties["source"] = .string(source.rawValue) }
-        if let step { properties["step"] = .string(step.rawValue) }
-        if let screen { properties["screen"] = .string(screen.rawValue) }
-        if let plan { properties["plan"] = .string(plan.rawValue) }
-        if let result { properties["result"] = .string(result.rawValue) }
-        if let setting { properties["setting"] = .string(setting.rawValue) }
-        if let isPlus { properties["is_plus"] = .bool(isPlus) }
-        if let hasBlockingSelection { properties["has_blocking_selection"] = .bool(hasBlockingSelection) }
-
-        client.capture(event: event.rawValue, properties: properties)
+        let payload = AnalyticsPayload(
+            source: source,
+            step: step,
+            screen: screen,
+            plan: plan,
+            result: result,
+            setting: setting,
+            isPlus: isPlus,
+            hasBlockingSelection: hasBlockingSelection
+        )
+        client.capture(event: event.rawValue, properties: payload.properties)
     }
 
     private func infoDictionaryString(_ key: String) -> String? {
