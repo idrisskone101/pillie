@@ -23,7 +23,7 @@ final class AnalyticsManagerPrivacyTests: XCTestCase {
         super.tearDown()
     }
 
-    func testDisablingUsageAnalyticsPersistsOptOutWhenAnalyticsIsUnconfigured() {
+    func testDisablingUsageAnalyticsPersistsOptOutWithoutGrantingConsentWhenAnalyticsIsUnconfigured() {
         let client = AnalyticsClientSpy()
         let manager = AnalyticsManager(
             defaults: defaults,
@@ -37,11 +37,12 @@ final class AnalyticsManagerPrivacyTests: XCTestCase {
         manager.setAnalyticsEnabled(false)
 
         XCTAssertTrue(defaults.bool(forKey: AnalyticsManager.analyticsOptOutKey))
+        XCTAssertFalse(defaults.bool(forKey: AnalyticsManager.analyticsConsentGrantedKey))
         XCTAssertFalse(manager.isAnalyticsEnabled)
         XCTAssertEqual(client.optOutChanges, [])
     }
 
-    func testUsageAnalyticsToggleCallsConfiguredOptOutAndOptInPathsAcrossLaunches() {
+    func testUsageAnalyticsToggleGrantsConsentAndCallsConfiguredOptOutAndOptInPathsAcrossLaunches() {
         let client = AnalyticsClientSpy()
         let manager = AnalyticsManager(
             defaults: defaults,
@@ -52,9 +53,10 @@ final class AnalyticsManagerPrivacyTests: XCTestCase {
         manager.configure()
         manager.setAnalyticsEnabled(false)
 
-        XCTAssertEqual(client.configureOptOutValues, [false])
+        XCTAssertEqual(client.configureOptOutValues, [true])
         XCTAssertEqual(client.optOutChanges, [true])
         XCTAssertTrue(defaults.bool(forKey: AnalyticsManager.analyticsOptOutKey))
+        XCTAssertFalse(defaults.bool(forKey: AnalyticsManager.analyticsConsentGrantedKey))
 
         let relaunchClient = AnalyticsClientSpy()
         let relaunchManager = AnalyticsManager(
@@ -69,6 +71,7 @@ final class AnalyticsManagerPrivacyTests: XCTestCase {
         XCTAssertEqual(relaunchClient.configureOptOutValues, [true])
         XCTAssertEqual(relaunchClient.optOutChanges, [false])
         XCTAssertFalse(defaults.bool(forKey: AnalyticsManager.analyticsOptOutKey))
+        XCTAssertTrue(defaults.bool(forKey: AnalyticsManager.analyticsConsentGrantedKey))
     }
 
     private var analyticsInfoDictionary: [String: Any] {
