@@ -142,6 +142,7 @@ enum AnalyticsSource: String {
 
 enum AnalyticsStep: String {
     case welcome
+    case analyticsConsent = "analytics_consent"
     case painPoints = "pain_points"
     case goal
     case missFrequency = "miss_frequency"
@@ -156,16 +157,17 @@ enum AnalyticsStep: String {
     init?(onboardingStep: Int) {
         switch onboardingStep {
         case 0: self = .welcome
-        case 1: self = .painPoints
-        case 2: self = .goal
-        case 3: self = .missFrequency
-        case 4: self = .freePlan
-        case 5: self = .plusPreview
-        case 6: self = .paywall
-        case 7: self = .method
-        case 8: self = .schedule
-        case 9: self = .reminderTime
-        case 10: self = .appBlocking
+        case 1: self = .analyticsConsent
+        case 2: self = .painPoints
+        case 3: self = .goal
+        case 4: self = .missFrequency
+        case 5: self = .freePlan
+        case 6: self = .plusPreview
+        case 7: self = .paywall
+        case 8: self = .method
+        case 9: self = .schedule
+        case 10: self = .reminderTime
+        case 11: self = .appBlocking
         default: return nil
         }
     }
@@ -247,6 +249,7 @@ struct AnalyticsPayload {
 final class AnalyticsManager: AnalyticsTracking {
     static let shared = AnalyticsManager()
     static let analyticsOptOutKey = "pillie_analytics_opt_out"
+    static let analyticsConsentGrantedKey = "pillie_analytics_consent_granted"
 
     private var isConfigured = false
     private let defaults: UserDefaults
@@ -264,7 +267,7 @@ final class AnalyticsManager: AnalyticsTracking {
     }
 
     var isAnalyticsEnabled: Bool {
-        !defaults.bool(forKey: Self.analyticsOptOutKey)
+        defaults.bool(forKey: Self.analyticsConsentGrantedKey) && !defaults.bool(forKey: Self.analyticsOptOutKey)
     }
 
     func configure() {
@@ -292,6 +295,9 @@ final class AnalyticsManager: AnalyticsTracking {
     }
 
     func setAnalyticsEnabled(_ enabled: Bool) {
+        if enabled {
+            defaults.set(true, forKey: Self.analyticsConsentGrantedKey)
+        }
         defaults.set(!enabled, forKey: Self.analyticsOptOutKey)
         guard isConfigured else { return }
         client.setOptedOut(!enabled)

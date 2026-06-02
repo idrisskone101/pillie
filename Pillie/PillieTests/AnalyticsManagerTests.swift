@@ -53,7 +53,26 @@ final class AnalyticsManagerTests: XCTestCase {
         XCTAssertFalse(configuration.setDefaultPersonProperties)
         XCTAssertFalse(configuration.sessionReplay)
         XCTAssertFalse(configuration.surveys)
-        XCTAssertFalse(configuration.isOptedOut)
+        XCTAssertTrue(configuration.isOptedOut)
+    }
+
+    func testFreshInstallDropsPreConsentEventsAndCapturesOnlyAfterExplicitConsent() {
+        let client = RecordingAnalyticsClient()
+        let manager = makeManager(client: client, token: "phc_test_token")
+
+        manager.configure()
+        manager.track(.appLaunched, source: .home, isPlus: false)
+        manager.track(.onboardingStepViewed, source: .onboarding, step: .welcome, isPlus: false)
+        manager.setAnalyticsEnabled(true)
+        manager.track(.onboardingStepViewed, source: .onboarding, step: .painPoints, isPlus: false)
+
+        XCTAssertEqual(client.optOutChanges, [false])
+        XCTAssertEqual(client.captures.map(\.event), ["onboarding_step_viewed"])
+        XCTAssertEqual(client.captures.first?.properties, [
+            "source": .string("onboarding"),
+            "step": .string("pain_points"),
+            "is_plus": .bool(false)
+        ])
     }
 
     func testCaptureUsesTypedAllowedLowCardinalityProperties() throws {
@@ -91,6 +110,7 @@ final class AnalyticsManagerTests: XCTestCase {
         let client = RecordingAnalyticsClient()
         let manager = makeManager(client: client, token: "phc_test_token")
 
+        manager.setAnalyticsEnabled(true)
         manager.configure()
         manager.track(.onboardingStepViewed, source: .onboarding, step: .welcome, isPlus: false)
         manager.track(.onboardingStepCompleted, source: .onboarding, step: .reminderTime, isPlus: false)
@@ -121,6 +141,14 @@ final class AnalyticsManagerTests: XCTestCase {
             ["source": .string("onboarding"), "step": .string("app_blocking"), "result": .string("granted"), "is_plus": .bool(true)],
             ["source": .string("onboarding"), "step": .string("app_blocking"), "result": .string("denied"), "is_plus": .bool(true)]
         ])
+    }
+
+    func testOnboardingStepMappingIncludesConsentBeforePainPoints() throws {
+        XCTAssertEqual(AnalyticsStep(onboardingStep: 0), .welcome)
+        XCTAssertEqual(AnalyticsStep(onboardingStep: 1), .analyticsConsent)
+        XCTAssertEqual(AnalyticsStep(onboardingStep: 2), .painPoints)
+        XCTAssertEqual(AnalyticsStep(onboardingStep: 10), .reminderTime)
+        XCTAssertEqual(AnalyticsStep(onboardingStep: 11), .appBlocking)
     }
 
     func testOptOutStopsFutureCaptureAndCanOptBackIn() {
