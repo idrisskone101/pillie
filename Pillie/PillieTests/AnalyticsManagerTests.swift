@@ -137,6 +137,25 @@ final class AnalyticsManagerTests: XCTestCase {
         XCTAssertEqual(client.captures.map(\.event), ["app_became_active"])
     }
 
+    func testFlushOnlyRunsWhenAnalyticsIsConfiguredAndEnabled() {
+        let configuredClient = RecordingAnalyticsClient()
+        let configuredManager = makeManager(client: configuredClient, token: "phc_test_token")
+
+        configuredManager.configure()
+        configuredManager.flush()
+
+        let unconfiguredClient = RecordingAnalyticsClient()
+        let unconfiguredManager = makeManager(client: unconfiguredClient, token: " ")
+        unconfiguredManager.configure()
+        unconfiguredManager.flush()
+
+        configuredManager.setAnalyticsEnabled(false)
+        configuredManager.flush()
+
+        XCTAssertEqual(configuredClient.flushCount, 1)
+        XCTAssertEqual(unconfiguredClient.flushCount, 0)
+    }
+
     private func makeManager(
         client: RecordingAnalyticsClient,
         token: String,
@@ -157,6 +176,7 @@ private final class RecordingAnalyticsClient: ProductAnalyticsClient {
     private(set) var configurations: [ProductAnalyticsConfiguration] = []
     private(set) var optOutChanges: [Bool] = []
     private(set) var captures: [(event: String, properties: [String: AnalyticsPropertyValue])] = []
+    private(set) var flushCount = 0
 
     func configure(_ configuration: ProductAnalyticsConfiguration) {
         configurations.append(configuration)
@@ -168,5 +188,9 @@ private final class RecordingAnalyticsClient: ProductAnalyticsClient {
 
     func capture(event: String, properties: [String: AnalyticsPropertyValue]) {
         captures.append((event, properties))
+    }
+
+    func flush() {
+        flushCount += 1
     }
 }

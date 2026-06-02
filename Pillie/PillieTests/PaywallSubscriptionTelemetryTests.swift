@@ -115,6 +115,8 @@ private final class ProductAnalyticsSpy: ProductAnalyticsClient {
     func capture(event: String, properties: [String: AnalyticsPropertyValue]) {
         events.append(Event(name: event, properties: properties))
     }
+
+    func flush() {}
 }
 
 private final class AnalyticsRecorder: AnalyticsTracking {

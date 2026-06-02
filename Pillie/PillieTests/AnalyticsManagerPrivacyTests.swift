@@ -92,4 +92,6 @@ private final class AnalyticsClientSpy: ProductAnalyticsClient {
     }
 
     func capture(event: String, properties: [String: AnalyticsPropertyValue]) {}
+
+    func flush() {}
 }

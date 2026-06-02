@@ -182,6 +182,11 @@ struct PillieApp: App {
                 .onAppear {
                     AppDelegate.store = store
                 }
+                #if DEBUG
+                .onOpenURL { url in
+                    handleDebugDeepLink(url)
+                }
+                #endif
                 .onChange(of: scenePhase) { _, newPhase in
                     guard !Self.isRunningTests else { return }
                     if newPhase == .active {
@@ -206,4 +211,17 @@ struct PillieApp: App {
             method: store.pack.method
         )
     }
+
+    #if DEBUG
+    private func handleDebugDeepLink(_ url: URL) {
+        guard url.scheme == "pillie", url.host == "debug", url.path == "/posthog-smoke" else {
+            return
+        }
+
+        AnalyticsManager.shared.track(.appLaunched, source: .home, isPlus: SubscriptionManager.shared.isPlus)
+        AnalyticsManager.shared.track(.onboardingStarted, source: .onboarding, step: .welcome, isPlus: SubscriptionManager.shared.isPlus)
+        AnalyticsManager.shared.track(.onboardingStepViewed, source: .onboarding, step: .welcome, isPlus: SubscriptionManager.shared.isPlus)
+        AnalyticsManager.shared.flush()
+    }
+    #endif
 }

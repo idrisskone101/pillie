@@ -39,6 +39,7 @@ protocol ProductAnalyticsClient: AnyObject {
     func configure(_ configuration: ProductAnalyticsConfiguration)
     func setOptedOut(_ isOptedOut: Bool)
     func capture(event: String, properties: [String: AnalyticsPropertyValue])
+    func flush()
 }
 
 final class PostHogAnalyticsClient: ProductAnalyticsClient {
@@ -76,6 +77,10 @@ final class PostHogAnalyticsClient: ProductAnalyticsClient {
             event,
             properties: properties.mapValues(\.postHogValue)
         )
+    }
+
+    func flush() {
+        PostHogSDK.shared.flush()
     }
 }
 
@@ -316,6 +321,11 @@ final class AnalyticsManager: AnalyticsTracking {
             hasBlockingSelection: hasBlockingSelection
         )
         client.capture(event: event.rawValue, properties: payload.properties)
+    }
+
+    func flush() {
+        guard isConfigured, isAnalyticsEnabled else { return }
+        client.flush()
     }
 
     private func infoDictionaryString(_ key: String) -> String? {
