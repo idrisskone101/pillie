@@ -36,6 +36,9 @@ struct TimeSetupView: View {
 
                         timePickerCard
                             .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger3))
+
+                        settingsNote
+                            .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger4))
                     }
                     .padding(.horizontal, 28)
                     .padding(.top, 32)
@@ -156,25 +159,6 @@ struct TimeSetupView: View {
             }
             .padding(4)
             .background(PillieTheme.sage, in: Capsule())
-
-            HStack(spacing: 12) {
-                Image(systemName: "bolt.fill")
-                    .foregroundStyle(PillieTheme.textMuted)
-                    .frame(width: 34, height: 34)
-                    .background(PillieTheme.sage.opacity(0.7), in: RoundedRectangle(cornerRadius: 12))
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("Smart reminders stay free")
-                        .font(.pillieCaptionMedium())
-                        .foregroundStyle(PillieTheme.textPrimary)
-                    Text("Pillie uses this time for the real due action in your schedule.")
-                        .font(.pillieCaption())
-                        .foregroundStyle(PillieTheme.textMuted)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(14)
-            .background(PillieTheme.sage.opacity(0.35), in: RoundedRectangle(cornerRadius: 22))
         }
         .padding(24)
         .background(
@@ -208,31 +192,32 @@ struct TimeSetupView: View {
         .buttonStyle(.plain)
     }
 
+    private var settingsNote: some View {
+        Text("You can change this anytime in Settings.")
+            .font(.pillieCaptionMedium())
+            .foregroundStyle(PillieTheme.textMuted)
+            .multilineTextAlignment(.center)
+            .frame(maxWidth: .infinity)
+    }
+
     // MARK: - Footer
 
     private var footer: some View {
-        VStack(spacing: 14) {
-            Text("You can change this anytime in Settings.")
-                .font(.pillieCaptionMedium())
-                .foregroundStyle(PillieTheme.textMuted)
-                .multilineTextAlignment(.center)
-
-            Button {
-                saveTimeToStore()
-                onContinue()
-                DispatchQueue.main.async {
-                    onboardingTelemetry.notificationPermissionRequested()
-                    NotificationManager.shared.requestAuthorization()
-                    NotificationManager.shared.requestReschedule(from: store, reason: "onboarding-reminder-time")
-                }
-            } label: {
-                HStack(spacing: 8) {
-                    Image(systemName: "bell.fill")
-                    Text("Set Reminder Time")
-                }
+        Button {
+            saveTimeToStore()
+            onContinue()
+            DispatchQueue.main.async {
+                onboardingTelemetry.notificationPermissionRequested()
+                NotificationManager.shared.requestAuthorization()
+                NotificationManager.shared.requestReschedule(from: store, reason: "onboarding-reminder-time")
             }
-            .buttonStyle(.pillieDark)
+        } label: {
+            HStack(spacing: 8) {
+                Image(systemName: "bell.fill")
+                Text("Set Reminder Time")
+            }
         }
+        .buttonStyle(.pillieDark)
     }
 
     // MARK: - Helpers
