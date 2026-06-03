@@ -82,6 +82,7 @@ struct PaywallSubscriptionTelemetry {
             plan: plan,
             result: result,
             setting: nil,
+            acquisitionSource: nil,
             isPlus: isPlus,
             hasBlockingSelection: nil
         )

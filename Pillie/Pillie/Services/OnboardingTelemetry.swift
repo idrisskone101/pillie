@@ -48,7 +48,7 @@ struct OnboardingTelemetry {
       isPlus: isPlus()
     )
 
-    if previousStep <= 13, nextStep > 13 {
+    if previousStep <= 14, nextStep > 14 {
       track(.onboardingCompleted, source: .onboarding, isPlus: isPlus())
     }
   }
@@ -89,6 +89,7 @@ struct OnboardingTelemetry {
     plan: AnalyticsPlan? = nil,
     result: AnalyticsResult? = nil,
     setting: AnalyticsSetting? = nil,
+    acquisitionSource: AcquisitionSource? = nil,
     isPlus: Bool? = nil,
     hasBlockingSelection: Bool? = nil
   ) {
@@ -100,6 +101,7 @@ struct OnboardingTelemetry {
       plan: plan,
       result: result,
       setting: setting,
+      acquisitionSource: acquisitionSource,
       isPlus: isPlus,
       hasBlockingSelection: hasBlockingSelection
     )

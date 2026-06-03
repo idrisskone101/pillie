@@ -16,7 +16,7 @@ Information stored on your device may include:
 
 We do not require account creation to use Pillie.
 
-We also collect limited product analytics telemetry to understand whether core app flows are working and where users drop off. This may include app launches, onboarding progress, paywall actions, permission prompt outcomes, tab selection, settings area opens or saves, and coarse feature usage events.
+We also collect limited product analytics telemetry to understand whether core app flows are working and where users drop off. This may include app launches, onboarding progress, coarse acquisition source category, paywall actions, permission prompt outcomes, tab selection, settings area opens or saves, and coarse feature usage events.
 
 Product analytics telemetry does not include private routine details, reminder values, app-blocking selections, adherence values, or free text. This means telemetry does not include your contraception method, regimen, cycle day, reminder time, reminder interval, supply threshold, taken or missed history, pain point selections, goal selections, miss-frequency selections, app-blocking app or category names, calendar percentages, advertising identifiers, or account identifiers.
 

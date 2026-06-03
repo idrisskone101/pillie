@@ -106,6 +106,15 @@ class PillStore {
             }
         }
     }
+    var acquisitionSource: AcquisitionSource? {
+        didSet {
+            if let source = acquisitionSource {
+                UserDefaults.standard.set(source.rawValue, forKey: Self.acquisitionSourceKey)
+            } else {
+                UserDefaults.standard.removeObject(forKey: Self.acquisitionSourceKey)
+            }
+        }
+    }
 
     private let modelContext: ModelContext
     // Retains the container in previews so backing data isn't destroyed
@@ -136,6 +145,7 @@ class PillStore {
     private static let painPointsKey = "pillie_pain_points"
     private static let personalGoalKey = "personalGoal"
     private static let missFrequencyKey = "missFrequency"
+    private static let acquisitionSourceKey = "pillie_acquisition_source"
     private static let minimumSupportedEpoch: TimeInterval = -2_208_988_800 // 1900-01-01
     private static let maximumSupportedEpoch: TimeInterval = 7_258_118_400 // 2200-01-01
     private static let snapshotCacheLimitPerPack = 512
@@ -1008,6 +1018,11 @@ class PillStore {
             self.missFrequency = MissFrequency(rawValue: freqRaw)
         } else {
             self.missFrequency = nil
+        }
+        if let sourceRaw = defaults.string(forKey: Self.acquisitionSourceKey) {
+            self.acquisitionSource = AcquisitionSource(rawValue: sourceRaw)
+        } else {
+            self.acquisitionSource = nil
         }
 
         rebuildReadIndexes()

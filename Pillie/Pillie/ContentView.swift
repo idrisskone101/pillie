@@ -142,13 +142,26 @@ struct ContentView: View {
             ))
 
         case 7:
-          FreePlanView(
+          AcquisitionSourceView(
             onBack: {
               withAnimation(.easeInOut(duration: 0.4)) {
                 setOnboardingStep(6)
               }
             },
-            onContinue: {
+            onContinue: { source in
+              store.acquisitionSource = source
+              AnalyticsManager.shared.track(
+                .onboardingStepCompleted,
+                source: .onboarding,
+                step: .acquisitionSource,
+                acquisitionSource: source,
+                isPlus: SubscriptionManager.shared.isPlus
+              )
+              withAnimation(.easeInOut(duration: 0.4)) {
+                setOnboardingStep(8)
+              }
+            },
+            onSkip: {
               withAnimation(.easeInOut(duration: 0.4)) {
                 setOnboardingStep(8)
               }
@@ -161,7 +174,7 @@ struct ContentView: View {
             ))
 
         case 8:
-          PremiumChallengePreviewView(
+          FreePlanView(
             onBack: {
               withAnimation(.easeInOut(duration: 0.4)) {
                 setOnboardingStep(7)
@@ -180,20 +193,13 @@ struct ContentView: View {
             ))
 
         case 9:
-          PremiumPaywallView(
+          PremiumChallengePreviewView(
             onBack: {
               withAnimation(.easeInOut(duration: 0.4)) {
                 setOnboardingStep(8)
               }
             },
             onContinue: {
-              onboardingSelectedFreePlan = false
-              withAnimation(.easeInOut(duration: 0.4)) {
-                setOnboardingStep(10)
-              }
-            },
-            onSkip: {
-              onboardingSelectedFreePlan = true
               withAnimation(.easeInOut(duration: 0.4)) {
                 setOnboardingStep(10)
               }
@@ -206,14 +212,20 @@ struct ContentView: View {
             ))
 
         case 10:
-          MethodPickerView(
+          PremiumPaywallView(
             onBack: {
               withAnimation(.easeInOut(duration: 0.4)) {
                 setOnboardingStep(9)
               }
             },
-            onContinue: { method in
-              store.contraceptiveMethod = method
+            onContinue: {
+              onboardingSelectedFreePlan = false
+              withAnimation(.easeInOut(duration: 0.4)) {
+                setOnboardingStep(11)
+              }
+            },
+            onSkip: {
+              onboardingSelectedFreePlan = true
               withAnimation(.easeInOut(duration: 0.4)) {
                 setOnboardingStep(11)
               }
@@ -226,10 +238,30 @@ struct ContentView: View {
             ))
 
         case 11:
-          MethodDetailsView(
+          MethodPickerView(
             onBack: {
               withAnimation(.easeInOut(duration: 0.4)) {
                 setOnboardingStep(10)
+              }
+            },
+            onContinue: { method in
+              store.contraceptiveMethod = method
+              withAnimation(.easeInOut(duration: 0.4)) {
+                setOnboardingStep(12)
+              }
+            }
+          )
+          .transition(
+            .asymmetric(
+              insertion: .move(edge: .trailing),
+              removal: .move(edge: .trailing)
+            ))
+
+        case 12:
+          MethodDetailsView(
+            onBack: {
+              withAnimation(.easeInOut(duration: 0.4)) {
+                setOnboardingStep(11)
               }
             },
             onContinue: { regimen, customActive, customBreak, cycleDay in
@@ -245,25 +277,6 @@ struct ContentView: View {
                 store.appActivatedDate = store.today
               }
               withAnimation(.easeInOut(duration: 0.4)) {
-                setOnboardingStep(12)
-              }
-            }
-          )
-          .transition(
-            .asymmetric(
-              insertion: .move(edge: .trailing),
-              removal: .move(edge: .trailing)
-            ))
-
-        case 12:
-          TimeSetupView(
-            onBack: {
-              withAnimation(.easeInOut(duration: 0.4)) {
-                setOnboardingStep(11)
-              }
-            },
-            onContinue: {
-              withAnimation(.easeInOut(duration: 0.4)) {
                 setOnboardingStep(13)
               }
             }
@@ -275,7 +288,7 @@ struct ContentView: View {
             ))
 
         case 13:
-          AppBlockingSetupView(
+          TimeSetupView(
             onBack: {
               withAnimation(.easeInOut(duration: 0.4)) {
                 setOnboardingStep(12)
@@ -285,10 +298,29 @@ struct ContentView: View {
               withAnimation(.easeInOut(duration: 0.4)) {
                 setOnboardingStep(14)
               }
+            }
+          )
+          .transition(
+            .asymmetric(
+              insertion: .move(edge: .trailing),
+              removal: .move(edge: .trailing)
+            ))
+
+        case 14:
+          AppBlockingSetupView(
+            onBack: {
+              withAnimation(.easeInOut(duration: 0.4)) {
+                setOnboardingStep(13)
+              }
+            },
+            onContinue: {
+              withAnimation(.easeInOut(duration: 0.4)) {
+                setOnboardingStep(15)
+              }
             },
             onSkip: {
               withAnimation(.easeInOut(duration: 0.4)) {
-                setOnboardingStep(14)
+                setOnboardingStep(15)
               }
             }
           )

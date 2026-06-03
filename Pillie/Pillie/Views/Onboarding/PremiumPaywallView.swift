@@ -140,7 +140,7 @@ struct PremiumPaywallView: View {
                 OnboardingStepHeader(
                     appeared: animateIn,
                     progress: 0.50,
-                    trailingLabel: "6/6",
+                    trailingLabel: "7/7",
                     onBack: onBack
                 )
             } else {

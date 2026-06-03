@@ -121,7 +121,8 @@ enum InMemoryStoreFactory {
             "pillie_streak_reset_date",
             "pillie_pain_points",
             "personalGoal",
-            "missFrequency"
+            "missFrequency",
+            "pillie_acquisition_source"
         ].forEach { defaults.removeObject(forKey: $0) }
     }
 }

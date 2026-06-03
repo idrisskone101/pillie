@@ -155,6 +155,7 @@ private final class AnalyticsRecorder: AnalyticsTracking {
         plan: AnalyticsPlan?,
         result: AnalyticsResult?,
         setting: AnalyticsSetting?,
+        acquisitionSource: AcquisitionSource?,
         isPlus: Bool?,
         hasBlockingSelection: Bool?
     ) {
