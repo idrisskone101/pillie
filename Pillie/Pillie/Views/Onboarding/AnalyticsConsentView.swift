@@ -66,11 +66,12 @@ struct AnalyticsConsentView: View {
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 16)
                     }
-                    .background(Color.white.opacity(0.72), in: RoundedRectangle(cornerRadius: 22))
+                    .background(Color.white.opacity(0.94), in: RoundedRectangle(cornerRadius: 22))
                     .overlay(
                         RoundedRectangle(cornerRadius: 22)
-                            .strokeBorder(Color.white.opacity(0.8), lineWidth: 1)
+                            .strokeBorder(PillieTheme.textMuted.opacity(0.12), lineWidth: 1)
                     )
+                    .shadow(color: PillieTheme.cardShadow, radius: 12, y: 6)
                     .accessibilityIdentifier("declineAnalyticsButton")
                 }
                 .padding(.horizontal, PillieTheme.screenHorizontalPadding)
