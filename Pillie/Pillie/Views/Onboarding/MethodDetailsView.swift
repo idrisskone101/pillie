@@ -124,13 +124,11 @@ struct MethodDetailsView: View {
 
     private var titleSection: some View {
         VStack(spacing: 8) {
-            Text("Routine")
-                .font(.pillieHeadline())
+            (Text("Routine ")
                 .foregroundStyle(PillieTheme.textPrimary)
-                .multilineTextAlignment(.center)
-            Text("setup")
+            + Text("setup")
+                .foregroundStyle(PillieTheme.coral))
                 .font(.pillieHeadline())
-                .foregroundStyle(PillieTheme.coral)
                 .multilineTextAlignment(.center)
 
             Text("Help Pillie understand your regimen so reminders stay synchronized.")
