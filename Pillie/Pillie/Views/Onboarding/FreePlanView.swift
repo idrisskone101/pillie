@@ -20,8 +20,8 @@ struct FreePlanView: View {
             VStack(spacing: 0) {
                 header
                     .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger1))
-                    .padding(.horizontal, 28)
-                    .padding(.top, 16)
+                    .padding(.horizontal, 24)
+                    .padding(.top, 28)
 
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 24) {
@@ -61,10 +61,10 @@ struct FreePlanView: View {
     // MARK: - Header
 
     private var header: some View {
-        OnboardingStepHeader(
+        PersonalizationOnboardingHeader(
             appeared: animateIn,
-            progress: 0.8,
-            trailingLabel: "12/15",
+            progress: PersonalizationOnboardingProgress.fraction(for: 8),
+            badge: PersonalizationOnboardingProgress.badge(for: 8),
             onBack: onBack
         )
     }
@@ -157,7 +157,7 @@ struct FreePlanView: View {
     // MARK: - Footer Caption
 
     private var footerCaption: some View {
-        Text("Step 12 of 15 \u{00B7} You can upgrade any time")
+        Text("Step 8 of 11 \u{00B7} You can upgrade any time")
             .font(.pillie(13, weight: .medium))
             .foregroundStyle(PillieTheme.textMuted.opacity(0.7))
             .multilineTextAlignment(.center)

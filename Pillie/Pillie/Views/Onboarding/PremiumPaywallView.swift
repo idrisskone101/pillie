@@ -61,8 +61,8 @@ struct PremiumPaywallView: View {
             VStack(spacing: 0) {
                 header
                     .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger1))
-                    .padding(.horizontal, 28)
-                    .padding(.top, 16)
+                    .padding(.horizontal, isFromOnboarding ? 24 : 28)
+                    .padding(.top, isFromOnboarding ? 28 : 16)
 
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 24) {
@@ -137,10 +137,10 @@ struct PremiumPaywallView: View {
     private var header: some View {
         Group {
             if isFromOnboarding {
-                OnboardingStepHeader(
+                PersonalizationOnboardingHeader(
                     appeared: animateIn,
-                    progress: 0.933,
-                    trailingLabel: "14/15",
+                    progress: PersonalizationOnboardingProgress.fraction(for: 10),
+                    badge: PersonalizationOnboardingProgress.badge(for: 10),
                     onBack: onBack
                 )
             } else {

@@ -52,8 +52,8 @@ struct MethodDetailsView: View {
             VStack(spacing: 0) {
                 header
                     .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger1))
-                    .padding(.horizontal, 28)
-                    .padding(.top, 16)
+                    .padding(.horizontal, 24)
+                    .padding(.top, 28)
 
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 20) {
@@ -111,10 +111,10 @@ struct MethodDetailsView: View {
     // MARK: - Header
 
     private var header: some View {
-        OnboardingStepHeader(
+        PersonalizationOnboardingHeader(
             appeared: animateIn,
-            progress: 0.667,
-            trailingLabel: "10/15",
+            progress: PersonalizationOnboardingProgress.fraction(for: 6),
+            badge: PersonalizationOnboardingProgress.badge(for: 6),
             onBack: onBack
         )
     }
