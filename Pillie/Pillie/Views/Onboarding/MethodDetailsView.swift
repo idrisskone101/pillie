@@ -74,6 +74,9 @@ struct MethodDetailsView: View {
                             .animation(.none, value: selectedRegimen)
                             .animation(.none, value: customActiveDaysText)
                             .animation(.none, value: customBreakDaysText)
+
+                        scheduleCriticalNote
+                            .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger4))
                     }
                     .padding(.horizontal, 28)
                     .padding(.top, 32)
@@ -354,38 +357,39 @@ struct MethodDetailsView: View {
         .buttonStyle(.plain)
     }
 
+    private var scheduleCriticalNote: some View {
+        HStack(spacing: 10) {
+            Image(systemName: "info.circle.fill")
+                .foregroundStyle(PillieTheme.textMuted)
+            Text("This is a schedule-critical setting for habit tracking, not medical advice.")
+                .font(.pillieCaptionMedium())
+                .foregroundStyle(PillieTheme.textMuted)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .padding(.horizontal, 14)
+        .padding(.vertical, 12)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(PillieTheme.sage.opacity(0.55), in: RoundedRectangle(cornerRadius: 18))
+    }
+
     // MARK: - Footer
 
     private var footer: some View {
-        VStack(spacing: 14) {
-            HStack(spacing: 10) {
-                Image(systemName: "info.circle.fill")
-                    .foregroundStyle(PillieTheme.textMuted)
-                Text("This is a schedule-critical setting for habit tracking, not medical advice.")
-                    .font(.pillieCaptionMedium())
-                    .foregroundStyle(PillieTheme.textMuted)
-                    .fixedSize(horizontal: false, vertical: true)
+        Button {
+            onContinue(
+                selectedRegimen,
+                selectedRegimen == .custom ? customActiveDays : nil,
+                selectedRegimen == .custom ? customBreakDays : nil,
+                min(max(1, cycleDay), cycleLength)
+            )
+        } label: {
+            HStack(spacing: 8) {
+                Text("Continue to Reminders")
+                Image(systemName: "arrow.right")
             }
-            .padding(.horizontal, 14)
-            .padding(.vertical, 12)
-            .background(PillieTheme.sage.opacity(0.55), in: RoundedRectangle(cornerRadius: 18))
-
-            Button {
-                onContinue(
-                    selectedRegimen,
-                    selectedRegimen == .custom ? customActiveDays : nil,
-                    selectedRegimen == .custom ? customBreakDays : nil,
-                    min(max(1, cycleDay), cycleLength)
-                )
-            } label: {
-                HStack(spacing: 8) {
-                    Text("Continue to Reminders")
-                    Image(systemName: "arrow.right")
-                }
-            }
-            .buttonStyle(.pillieDark)
-            .accessibilityIdentifier("onboarding-schedule-continue")
         }
+        .buttonStyle(.pillieDark)
+        .accessibilityIdentifier("onboarding-schedule-continue")
     }
 
     // MARK: - Helpers
