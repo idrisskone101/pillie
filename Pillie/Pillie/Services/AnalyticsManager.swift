@@ -150,12 +150,11 @@ enum AnalyticsStep: String {
   case goal
   case missFrequency = "miss_frequency"
   case acquisitionSource = "acquisition_source"
-  case freePlan = "free_plan"
-  case plusPreview = "plus_preview"
   case paywall
   case method
   case schedule
   case reminderTime = "reminder_time"
+  case reminderPlan = "reminder_plan"
   case appBlocking = "app_blocking"
 
   init?(onboardingStep: Int) {
@@ -171,10 +170,9 @@ enum AnalyticsStep: String {
     case 8: self = .method
     case 9: self = .schedule
     case 10: self = .reminderTime
-    case 11: self = .freePlan
-    case 12: self = .plusPreview
-    case 13: self = .paywall
-    case 14: self = .appBlocking
+    case 11: self = .reminderPlan
+    case 12: self = .paywall
+    case 13: self = .appBlocking
     default: return nil
     }
   }

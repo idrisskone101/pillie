@@ -89,8 +89,8 @@ struct AppBlockingSetupView: View {
     private var header: some View {
         PersonalizationOnboardingHeader(
             appeared: animateIn,
-            progress: PersonalizationOnboardingProgress.fraction(for: 11),
-            badge: PersonalizationOnboardingProgress.badge(for: 11),
+            progress: PersonalizationOnboardingProgress.fraction(for: 10),
+            badge: PersonalizationOnboardingProgress.badge(for: 10),
             onBack: onBack
         )
     }

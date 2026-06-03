@@ -75,4 +75,39 @@ final class PersonalizationOnboardingTests: XCTestCase {
         XCTAssertNil(ringFixture.store.pack.customActiveDays)
         XCTAssertNil(ringFixture.store.pack.customBreakDays)
     }
+
+    func testReminderPlanSummaryReflectsStoredSetupWithNeutralSupportCopy() throws {
+        let today = InMemoryStoreFactory.fixedDate("2026-06-03")
+        let fixture = try InMemoryStoreFactory.makeStore(now: today)
+        fixture.store.personalGoal = .stayProtected
+        fixture.store.missFrequency = .sometimes
+        fixture.store.reminderHour = 21
+        fixture.store.reminderMinute = 30
+        fixture.store.startNewProtocol(
+            method: .pill,
+            regimen: .twentyFourFour,
+            customActiveDays: nil,
+            customBreakDays: nil,
+            cycleDay: 12,
+            preserveHistory: false
+        )
+
+        let summary = ReminderPlanSummary(store: fixture.store)
+
+        XCTAssertEqual(summary.methodValue, "The Pill")
+        XCTAssertEqual(summary.methodDetail, "24 active / 4 break days")
+        XCTAssertEqual(summary.cyclePositionValue, "Day 12 of 28")
+        XCTAssertEqual(summary.cyclePositionDetail, "Current routine position")
+        XCTAssertEqual(summary.reminderTimeValue, "Daily at 9:30 PM")
+        XCTAssertEqual(summary.reminderTimeDetail, "Evening consistency anchor")
+        XCTAssertEqual(summary.supportFocusTitle, "Routine reinforcement")
+        XCTAssertEqual(summary.supportFocusValue, "Weekly check-ins for steadier follow-through")
+
+        let visibleCopy = summary.visibleCopy.joined(separator: " ").lowercased()
+        XCTAssertFalse(visibleCopy.contains("health plan"))
+        XCTAssertFalse(visibleCopy.contains("protection"))
+        XCTAssertFalse(visibleCopy.contains("hormone"))
+        XCTAssertFalse(visibleCopy.contains("medical"))
+        XCTAssertFalse(visibleCopy.contains("risk"))
+    }
 }

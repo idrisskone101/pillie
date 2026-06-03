@@ -76,9 +76,6 @@ struct AnalyticsConsentView: View {
                 }
                 .padding(.horizontal, PillieTheme.screenHorizontalPadding)
                 .padding(.bottom, 34)
-                .offset(y: animateIn ? 0 : 12)
-                .opacity(animateIn ? 1 : 0)
-                .animation(PillieTheme.fadeInUpCurve.delay(PillieTheme.stagger4), value: animateIn)
             }
         }
         .onAppear {
