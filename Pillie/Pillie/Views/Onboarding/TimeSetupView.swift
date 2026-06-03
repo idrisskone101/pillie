@@ -26,8 +26,8 @@ struct TimeSetupView: View {
             VStack(spacing: 0) {
                 header
                     .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger1))
-                    .padding(.horizontal, 28)
-                    .padding(.top, 16)
+                    .padding(.horizontal, 24)
+                    .padding(.top, 28)
 
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 24) {
@@ -37,7 +37,7 @@ struct TimeSetupView: View {
                         timePickerCard
                             .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger3))
 
-                        handwritingNote
+                        settingsNote
                             .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger4))
                     }
                     .padding(.horizontal, 28)
@@ -67,10 +67,10 @@ struct TimeSetupView: View {
     // MARK: - Header
 
     private var header: some View {
-        OnboardingStepHeader(
+        PersonalizationOnboardingHeader(
             appeared: animateIn,
-            progress: 0.875,
-            trailingLabel: nil,
+            progress: PersonalizationOnboardingProgress.fraction(for: 7),
+            badge: PersonalizationOnboardingProgress.badge(for: 7),
             onBack: onBack
         )
     }
@@ -81,12 +81,12 @@ struct TimeSetupView: View {
         VStack(spacing: 8) {
             (Text("When do you ")
                 .foregroundStyle(PillieTheme.textPrimary)
-            + Text("take it?")
+            + Text("want reminders?")
                 .foregroundStyle(PillieTheme.coral))
                 .font(.pillieHeadline())
                 .multilineTextAlignment(.center)
 
-            Text("Consistency is key. We'll help you stick to it.")
+            Text("Pick the time Pillie should use for due-action reminders.")
                 .font(.pillieBodyLarge())
                 .foregroundStyle(PillieTheme.textMuted)
                 .multilineTextAlignment(.center)
@@ -97,7 +97,7 @@ struct TimeSetupView: View {
 
     private var timePickerCard: some View {
         VStack(spacing: 20) {
-            Text("DAILY REMINDER")
+            Text("DUE ACTION REMINDER")
                 .font(.pillieCaptionMedium())
                 .foregroundStyle(PillieTheme.coral)
                 .tracking(2)
@@ -192,19 +192,12 @@ struct TimeSetupView: View {
         .buttonStyle(.plain)
     }
 
-    // MARK: - Handwriting Note
-
-    private var handwritingNote: some View {
-        HStack(spacing: 6) {
-            Image(systemName: "heart.fill")
-                .foregroundStyle(PillieTheme.coral)
-                .font(.system(size: 14))
-
-            Text("Don't worry, you can change this later!")
-                .font(.pillieHandwriting())
-                .foregroundStyle(PillieTheme.textMuted)
-        }
-        .rotationEffect(.degrees(-2))
+    private var settingsNote: some View {
+        Text("You can change this anytime in Settings.")
+            .font(.pillieCaptionMedium())
+            .foregroundStyle(PillieTheme.textMuted)
+            .multilineTextAlignment(.center)
+            .frame(maxWidth: .infinity)
     }
 
     // MARK: - Footer
@@ -221,7 +214,7 @@ struct TimeSetupView: View {
         } label: {
             HStack(spacing: 8) {
                 Image(systemName: "bell.fill")
-                Text("Set Reminder")
+                Text("Set Reminder Time")
             }
         }
         .buttonStyle(.pillieDark)

@@ -33,8 +33,8 @@ struct AppBlockingSetupView: View {
             VStack(spacing: 0) {
                 header
                     .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger1))
-                    .padding(.horizontal, 28)
-                    .padding(.top, 16)
+                    .padding(.horizontal, 24)
+                    .padding(.top, 28)
 
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 24) {
@@ -87,10 +87,10 @@ struct AppBlockingSetupView: View {
     // MARK: - Header
 
     private var header: some View {
-        OnboardingStepHeader(
+        PersonalizationOnboardingHeader(
             appeared: animateIn,
-            progress: 1.0,
-            trailingLabel: "4/5",
+            progress: PersonalizationOnboardingProgress.fraction(for: 11),
+            badge: PersonalizationOnboardingProgress.badge(for: 11),
             onBack: onBack
         )
     }

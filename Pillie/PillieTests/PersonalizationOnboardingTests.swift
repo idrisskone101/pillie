@@ -24,4 +24,55 @@ final class PersonalizationOnboardingTests: XCTestCase {
         let reloadedStore = PillStore(modelContext: fixture.context)
         XCTAssertEqual(reloadedStore.acquisitionSource, .appStoreSearch)
     }
+
+    func testRealSetupPreservesPillPatchAndRingScheduleBehavior() throws {
+        let today = InMemoryStoreFactory.fixedDate("2026-06-03")
+
+        let pillFixture = try InMemoryStoreFactory.makeStore(now: today)
+        pillFixture.store.startNewProtocol(
+            method: .pill,
+            regimen: .twentyFourFour,
+            customActiveDays: nil,
+            customBreakDays: nil,
+            cycleDay: 12,
+            preserveHistory: false
+        )
+        let pillAction = try XCTUnwrap(DoseScheduleEngine.dueAction(on: today, pack: pillFixture.store.pack))
+        XCTAssertEqual(pillAction.method, .pill)
+        XCTAssertEqual(pillAction.type, .pillActive)
+        XCTAssertEqual(pillAction.cycleDay, 12)
+        XCTAssertEqual(pillFixture.store.pack.pillRegimen, .twentyFourFour)
+
+        let patchFixture = try InMemoryStoreFactory.makeStore(now: today)
+        patchFixture.store.startNewProtocol(
+            method: .patch,
+            regimen: .twentyOneSeven,
+            customActiveDays: nil,
+            customBreakDays: nil,
+            cycleDay: 8,
+            preserveHistory: false
+        )
+        let patchAction = try XCTUnwrap(DoseScheduleEngine.dueAction(on: today, pack: patchFixture.store.pack))
+        XCTAssertEqual(patchAction.method, .patch)
+        XCTAssertEqual(patchAction.type, .patchChange)
+        XCTAssertEqual(patchAction.cycleDay, 8)
+        XCTAssertNil(patchFixture.store.pack.customActiveDays)
+        XCTAssertNil(patchFixture.store.pack.customBreakDays)
+
+        let ringFixture = try InMemoryStoreFactory.makeStore(now: today)
+        ringFixture.store.startNewProtocol(
+            method: .ring,
+            regimen: .twentyOneSeven,
+            customActiveDays: nil,
+            customBreakDays: nil,
+            cycleDay: 22,
+            preserveHistory: false
+        )
+        let ringAction = try XCTUnwrap(DoseScheduleEngine.dueAction(on: today, pack: ringFixture.store.pack))
+        XCTAssertEqual(ringAction.method, .ring)
+        XCTAssertEqual(ringAction.type, .ringRemove)
+        XCTAssertEqual(ringAction.cycleDay, 22)
+        XCTAssertNil(ringFixture.store.pack.customActiveDays)
+        XCTAssertNil(ringFixture.store.pack.customBreakDays)
+    }
 }

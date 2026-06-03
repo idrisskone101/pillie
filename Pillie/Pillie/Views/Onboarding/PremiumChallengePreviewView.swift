@@ -26,8 +26,8 @@ struct PremiumChallengePreviewView: View {
             VStack(spacing: 0) {
                 header
                     .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger1))
-                    .padding(.horizontal, 28)
-                    .padding(.top, 16)
+                    .padding(.horizontal, 24)
+                    .padding(.top, 28)
 
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 24) {
@@ -127,10 +127,10 @@ struct PremiumChallengePreviewView: View {
     // MARK: - Header
 
     private var header: some View {
-        OnboardingStepHeader(
+        PersonalizationOnboardingHeader(
             appeared: animateIn,
-            progress: 0.417,
-            trailingLabel: "6/7",
+            progress: PersonalizationOnboardingProgress.fraction(for: 9),
+            badge: PersonalizationOnboardingProgress.badge(for: 9),
             onBack: onBack
         )
     }

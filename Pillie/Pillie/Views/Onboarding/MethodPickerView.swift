@@ -6,6 +6,8 @@
 import SwiftUI
 
 struct MethodPickerView: View {
+    @Environment(PillStore.self) private var store
+
     @State private var selectedMethod: ContraceptiveMethod = .pill
     @State private var animateIn = false
     @State private var blobPhase: CGFloat = 0
@@ -21,8 +23,8 @@ struct MethodPickerView: View {
             VStack(spacing: 0) {
                 header
                     .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger1))
-                    .padding(.horizontal, 28)
-                    .padding(.top, 16)
+                    .padding(.horizontal, 24)
+                    .padding(.top, 28)
 
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 24) {
@@ -44,6 +46,7 @@ struct MethodPickerView: View {
             }
         }
         .onAppear {
+            selectedMethod = store.contraceptiveMethod
             animateIn = true
             guard performanceTier == .standard else {
                 blobPhase = 0
@@ -58,10 +61,10 @@ struct MethodPickerView: View {
     // MARK: - Header
 
     private var header: some View {
-        OnboardingStepHeader(
+        PersonalizationOnboardingHeader(
             appeared: animateIn,
-            progress: 0.625,
-            trailingLabel: nil,
+            progress: PersonalizationOnboardingProgress.fraction(for: 5),
+            badge: PersonalizationOnboardingProgress.badge(for: 5),
             onBack: onBack
         )
     }
@@ -77,9 +80,11 @@ struct MethodPickerView: View {
                 .font(.pillieHeadline())
                 .multilineTextAlignment(.center)
 
-            Text("We'll customize your schedule.")
+            Text("We'll tailor your reminders to match how your contraception works.")
                 .font(.pillieBodyLarge())
                 .foregroundStyle(PillieTheme.textMuted)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
         }
     }
 
@@ -90,6 +95,11 @@ struct MethodPickerView: View {
             ForEach(ContraceptiveMethod.allCases, id: \.self) { method in
                 methodCard(method)
             }
+
+            Text("Other methods coming soon to Pillie")
+                .font(.pillieCaptionMedium())
+                .foregroundStyle(PillieTheme.textMuted.opacity(0.75))
+                .padding(.top, 4)
         }
     }
 
@@ -102,16 +112,15 @@ struct MethodPickerView: View {
             }
         } label: {
             HStack(spacing: 16) {
-                // Emoji icon
-                Text(method.emoji)
-                    .font(.system(size: 28))
-                    .frame(width: 48, height: 48)
+                Image(systemName: methodSymbol(method))
+                    .font(.system(size: 25, weight: .semibold))
+                    .foregroundStyle(isSelected ? PillieTheme.coral : PillieTheme.textMuted)
+                    .frame(width: 58, height: 58)
                     .background(
-                        RoundedRectangle(cornerRadius: 14)
-                            .fill(PillieTheme.sage.opacity(0.5))
+                        RoundedRectangle(cornerRadius: 18)
+                            .fill(isSelected ? PillieTheme.cardWhite : methodIconBackground(method))
                     )
 
-                // Title + subtitle
                 VStack(alignment: .leading, spacing: 3) {
                     HStack(spacing: 8) {
                         Text(method.title)
@@ -133,20 +142,21 @@ struct MethodPickerView: View {
 
                 Spacer()
 
-                // Radio circle
-                Circle()
-                    .stroke(isSelected ? PillieTheme.coral : PillieTheme.sage, lineWidth: 2)
-                    .frame(width: 24, height: 24)
-                    .overlay {
-                        if isSelected {
-                            Circle()
-                                .fill(PillieTheme.coral)
-                                .frame(width: 12, height: 12)
-                                .transition(.scale.combined(with: .opacity))
-                        }
+                ZStack {
+                    Circle()
+                        .stroke(isSelected ? PillieTheme.coral : PillieTheme.sage, lineWidth: 2)
+                        .background(Circle().fill(isSelected ? PillieTheme.coral : Color.clear))
+
+                    if isSelected {
+                        Image(systemName: "checkmark")
+                            .font(.system(size: 11, weight: .bold))
+                            .foregroundStyle(.white)
+                            .transition(.scale.combined(with: .opacity))
                     }
+                }
+                    .frame(width: 24, height: 24)
             }
-            .padding(16)
+            .padding(18)
             .background(
                 RoundedRectangle(cornerRadius: PillieTheme.cardRadius)
                     .fill(isSelected ? PillieTheme.coral.opacity(0.08) : PillieTheme.cardWhite)
@@ -163,6 +173,7 @@ struct MethodPickerView: View {
             .scaleEffect(isSelected ? 1.02 : 1.0)
         }
         .buttonStyle(.plain)
+        .accessibilityIdentifier("onboarding-method-\(method.rawValue)")
     }
 
     // MARK: - Footer
@@ -177,6 +188,29 @@ struct MethodPickerView: View {
             }
         }
         .buttonStyle(.pillieDark)
+        .accessibilityIdentifier("onboarding-method-continue")
+    }
+
+    private func methodSymbol(_ method: ContraceptiveMethod) -> String {
+        switch method {
+        case .pill:
+            return "pills.fill"
+        case .patch:
+            return "square.on.square"
+        case .ring:
+            return "circle"
+        }
+    }
+
+    private func methodIconBackground(_ method: ContraceptiveMethod) -> Color {
+        switch method {
+        case .pill:
+            return PillieTheme.coral.opacity(0.12)
+        case .patch:
+            return PillieTheme.lavender.opacity(0.7)
+        case .ring:
+            return PillieTheme.sage.opacity(0.7)
+        }
     }
 }
 

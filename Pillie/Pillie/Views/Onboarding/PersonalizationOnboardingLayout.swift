@@ -48,7 +48,7 @@ struct PersonalizationOnboardingHeader: View {
 }
 
 enum PersonalizationOnboardingProgress {
-    static let totalSteps: CGFloat = 4
+    static let totalSteps: CGFloat = 11
 
     static func fraction(for step: CGFloat) -> CGFloat {
         step / totalSteps
