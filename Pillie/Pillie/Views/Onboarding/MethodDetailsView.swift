@@ -79,6 +79,7 @@ struct MethodDetailsView: View {
                     .padding(.top, 32)
                     .padding(.bottom, 24)
                 }
+                .scrollDismissesKeyboard(.interactively)
 
                 footer
                     .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger4))
