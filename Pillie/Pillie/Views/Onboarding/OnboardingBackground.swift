@@ -30,12 +30,34 @@ struct OnboardingBackground: View {
             )
 
             Circle()
-                .fill(PillieTheme.coral.opacity(0.16))
+                .fill(
+                    RadialGradient(
+                        colors: [
+                            PillieTheme.coral.opacity(0.22),
+                            PillieTheme.coral.opacity(0.08),
+                            .clear,
+                        ],
+                        center: .center,
+                        startRadius: 24,
+                        endRadius: 140
+                    )
+                )
                 .frame(width: 260, height: 260)
                 .offset(x: -130, y: -260)
 
             Circle()
-                .fill(PillieTheme.sage.opacity(0.14))
+                .fill(
+                    RadialGradient(
+                        colors: [
+                            PillieTheme.sage.opacity(0.2),
+                            PillieTheme.sage.opacity(0.08),
+                            .clear,
+                        ],
+                        center: .center,
+                        startRadius: 28,
+                        endRadius: 160
+                    )
+                )
                 .frame(width: 300, height: 300)
                 .offset(x: 120, y: 280)
         }
