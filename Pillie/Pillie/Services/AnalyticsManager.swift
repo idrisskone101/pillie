@@ -168,12 +168,12 @@ enum AnalyticsStep: String {
     case 5: self = .goal
     case 6: self = .missFrequency
     case 7: self = .acquisitionSource
-    case 8: self = .freePlan
-    case 9: self = .plusPreview
-    case 10: self = .paywall
-    case 11: self = .method
-    case 12: self = .schedule
-    case 13: self = .reminderTime
+    case 8: self = .method
+    case 9: self = .schedule
+    case 10: self = .reminderTime
+    case 11: self = .freePlan
+    case 12: self = .plusPreview
+    case 13: self = .paywall
     case 14: self = .appBlocking
     default: return nil
     }

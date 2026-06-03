@@ -90,7 +90,7 @@ struct AppBlockingSetupView: View {
         OnboardingStepHeader(
             appeared: animateIn,
             progress: 1.0,
-            trailingLabel: "4/5",
+            trailingLabel: "15/15",
             onBack: onBack
         )
     }

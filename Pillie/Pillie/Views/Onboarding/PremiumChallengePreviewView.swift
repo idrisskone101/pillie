@@ -129,8 +129,8 @@ struct PremiumChallengePreviewView: View {
     private var header: some View {
         OnboardingStepHeader(
             appeared: animateIn,
-            progress: 0.417,
-            trailingLabel: "6/7",
+            progress: 0.867,
+            trailingLabel: "13/15",
             onBack: onBack
         )
     }

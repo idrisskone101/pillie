@@ -204,7 +204,7 @@ final class AnalyticsManagerTests: XCTestCase {
       ])
   }
 
-  func testOnboardingStepMappingIncludesConsentBeforePainPoints() throws {
+  func testOnboardingStepMappingPlacesRealSetupBeforePaywall() throws {
     XCTAssertEqual(AnalyticsStep(onboardingStep: 0), .welcome)
     XCTAssertEqual(AnalyticsStep(onboardingStep: 1), .analyticsConsent)
     XCTAssertEqual(AnalyticsStep(onboardingStep: 2), .productDemo)
@@ -213,7 +213,12 @@ final class AnalyticsManagerTests: XCTestCase {
     XCTAssertEqual(AnalyticsStep(onboardingStep: 5), .goal)
     XCTAssertEqual(AnalyticsStep(onboardingStep: 6), .missFrequency)
     XCTAssertEqual(AnalyticsStep(onboardingStep: 7), .acquisitionSource)
-    XCTAssertEqual(AnalyticsStep(onboardingStep: 13), .reminderTime)
+    XCTAssertEqual(AnalyticsStep(onboardingStep: 8), .method)
+    XCTAssertEqual(AnalyticsStep(onboardingStep: 9), .schedule)
+    XCTAssertEqual(AnalyticsStep(onboardingStep: 10), .reminderTime)
+    XCTAssertEqual(AnalyticsStep(onboardingStep: 11), .freePlan)
+    XCTAssertEqual(AnalyticsStep(onboardingStep: 12), .plusPreview)
+    XCTAssertEqual(AnalyticsStep(onboardingStep: 13), .paywall)
     XCTAssertEqual(AnalyticsStep(onboardingStep: 14), .appBlocking)
   }
 
@@ -221,7 +226,7 @@ final class AnalyticsManagerTests: XCTestCase {
     let recorder = RecordingAnalyticsTracker()
     let telemetry = OnboardingTelemetry(analytics: recorder, isPlus: { false })
 
-    telemetry.stepCompleted(from: 12, to: 13)
+    telemetry.stepCompleted(from: 9, to: 10)
     telemetry.stepCompleted(from: 14, to: 15)
 
     XCTAssertEqual(

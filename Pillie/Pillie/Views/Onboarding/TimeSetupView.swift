@@ -36,9 +36,6 @@ struct TimeSetupView: View {
 
                         timePickerCard
                             .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger3))
-
-                        handwritingNote
-                            .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger4))
                     }
                     .padding(.horizontal, 28)
                     .padding(.top, 32)
@@ -69,8 +66,8 @@ struct TimeSetupView: View {
     private var header: some View {
         OnboardingStepHeader(
             appeared: animateIn,
-            progress: 0.875,
-            trailingLabel: nil,
+            progress: 0.733,
+            trailingLabel: "11/15",
             onBack: onBack
         )
     }
@@ -81,12 +78,12 @@ struct TimeSetupView: View {
         VStack(spacing: 8) {
             (Text("When do you ")
                 .foregroundStyle(PillieTheme.textPrimary)
-            + Text("take it?")
+            + Text("want reminders?")
                 .foregroundStyle(PillieTheme.coral))
                 .font(.pillieHeadline())
                 .multilineTextAlignment(.center)
 
-            Text("Consistency is key. We'll help you stick to it.")
+            Text("Pick the time Pillie should use for due-action reminders.")
                 .font(.pillieBodyLarge())
                 .foregroundStyle(PillieTheme.textMuted)
                 .multilineTextAlignment(.center)
@@ -97,7 +94,7 @@ struct TimeSetupView: View {
 
     private var timePickerCard: some View {
         VStack(spacing: 20) {
-            Text("DAILY REMINDER")
+            Text("DUE ACTION REMINDER")
                 .font(.pillieCaptionMedium())
                 .foregroundStyle(PillieTheme.coral)
                 .tracking(2)
@@ -159,6 +156,25 @@ struct TimeSetupView: View {
             }
             .padding(4)
             .background(PillieTheme.sage, in: Capsule())
+
+            HStack(spacing: 12) {
+                Image(systemName: "bolt.fill")
+                    .foregroundStyle(PillieTheme.textMuted)
+                    .frame(width: 34, height: 34)
+                    .background(PillieTheme.sage.opacity(0.7), in: RoundedRectangle(cornerRadius: 12))
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Smart reminders stay free")
+                        .font(.pillieCaptionMedium())
+                        .foregroundStyle(PillieTheme.textPrimary)
+                    Text("Pillie uses this time for the real due action in your schedule.")
+                        .font(.pillieCaption())
+                        .foregroundStyle(PillieTheme.textMuted)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(14)
+            .background(PillieTheme.sage.opacity(0.35), in: RoundedRectangle(cornerRadius: 22))
         }
         .padding(24)
         .background(
@@ -192,39 +208,31 @@ struct TimeSetupView: View {
         .buttonStyle(.plain)
     }
 
-    // MARK: - Handwriting Note
-
-    private var handwritingNote: some View {
-        HStack(spacing: 6) {
-            Image(systemName: "heart.fill")
-                .foregroundStyle(PillieTheme.coral)
-                .font(.system(size: 14))
-
-            Text("Don't worry, you can change this later!")
-                .font(.pillieHandwriting())
-                .foregroundStyle(PillieTheme.textMuted)
-        }
-        .rotationEffect(.degrees(-2))
-    }
-
     // MARK: - Footer
 
     private var footer: some View {
-        Button {
-            saveTimeToStore()
-            onContinue()
-            DispatchQueue.main.async {
-                onboardingTelemetry.notificationPermissionRequested()
-                NotificationManager.shared.requestAuthorization()
-                NotificationManager.shared.requestReschedule(from: store, reason: "onboarding-reminder-time")
+        VStack(spacing: 14) {
+            Text("You can change this anytime in Settings.")
+                .font(.pillieCaptionMedium())
+                .foregroundStyle(PillieTheme.textMuted)
+                .multilineTextAlignment(.center)
+
+            Button {
+                saveTimeToStore()
+                onContinue()
+                DispatchQueue.main.async {
+                    onboardingTelemetry.notificationPermissionRequested()
+                    NotificationManager.shared.requestAuthorization()
+                    NotificationManager.shared.requestReschedule(from: store, reason: "onboarding-reminder-time")
+                }
+            } label: {
+                HStack(spacing: 8) {
+                    Image(systemName: "bell.fill")
+                    Text("Set Reminder Time")
+                }
             }
-        } label: {
-            HStack(spacing: 8) {
-                Image(systemName: "bell.fill")
-                Text("Set Reminder")
-            }
+            .buttonStyle(.pillieDark)
         }
-        .buttonStyle(.pillieDark)
     }
 
     // MARK: - Helpers

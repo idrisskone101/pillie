@@ -139,8 +139,8 @@ struct PremiumPaywallView: View {
             if isFromOnboarding {
                 OnboardingStepHeader(
                     appeared: animateIn,
-                    progress: 0.50,
-                    trailingLabel: "7/7",
+                    progress: 0.933,
+                    trailingLabel: "14/15",
                     onBack: onBack
                 )
             } else {

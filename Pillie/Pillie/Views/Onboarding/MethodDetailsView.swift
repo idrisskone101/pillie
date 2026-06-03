@@ -113,8 +113,8 @@ struct MethodDetailsView: View {
     private var header: some View {
         OnboardingStepHeader(
             appeared: animateIn,
-            progress: 0.75,
-            trailingLabel: "2/5",
+            progress: 0.667,
+            trailingLabel: "10/15",
             onBack: onBack
         )
     }
@@ -123,16 +123,16 @@ struct MethodDetailsView: View {
 
     private var titleSection: some View {
         VStack(spacing: 8) {
-            Text("Let's set your")
+            Text("Routine")
                 .font(.pillieHeadline())
                 .foregroundStyle(PillieTheme.textPrimary)
                 .multilineTextAlignment(.center)
-            Text("schedule")
+            Text("setup")
                 .font(.pillieHeadline())
                 .foregroundStyle(PillieTheme.coral)
                 .multilineTextAlignment(.center)
 
-            Text("Choose your cycle setup so reminders match your method.")
+            Text("Help Pillie understand your regimen so reminders stay synchronized.")
                 .font(.pillieBodyLarge())
                 .foregroundStyle(PillieTheme.textMuted)
                 .multilineTextAlignment(.center)
@@ -236,11 +236,24 @@ struct MethodDetailsView: View {
                 .foregroundStyle(PillieTheme.textMuted)
                 .tracking(2)
 
-            Text(method == .patch
-                 ? "Patch reminders: day 1 apply, days 8 and 15 change, day 22 remove, days 23-28 patch-free."
-                 : "Ring reminders: day 1 insert, days 2-21 ring inserted, day 22 remove, days 23-28 ring-free.")
-                .font(.pillieBody())
-                .foregroundStyle(PillieTheme.textPrimary)
+            VStack(alignment: .leading, spacing: 12) {
+                scheduleRuleRow(
+                    icon: method == .patch ? "square.on.square" : "circle",
+                    text: method == .patch ? "Day 1: apply patch" : "Day 1: insert ring"
+                )
+                scheduleRuleRow(
+                    icon: "calendar",
+                    text: method == .patch ? "Days 8 and 15: change patch" : "Days 2-21: ring stays inserted"
+                )
+                scheduleRuleRow(
+                    icon: "arrow.uturn.backward",
+                    text: method == .patch ? "Day 22: remove patch" : "Day 22: remove ring"
+                )
+                scheduleRuleRow(
+                    icon: "pause.circle",
+                    text: "Days 23-28: \(method == .patch ? "patch" : "ring")-free week"
+                )
+            }
                 .padding(16)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .background(PillieTheme.cardWhite)
@@ -259,16 +272,44 @@ struct MethodDetailsView: View {
                 .foregroundStyle(PillieTheme.textMuted)
                 .tracking(2)
 
-            VStack(alignment: .leading, spacing: 8) {
-                Text("Day \(cycleDay) of \(cycleLength)")
-                    .font(.pillieBodyBold())
-                    .foregroundStyle(PillieTheme.textPrimary)
+            VStack(spacing: 16) {
+                Text("Where are you in your current \(cycleLabel) today?")
+                    .font(.pillieBodySemibold())
+                    .foregroundStyle(PillieTheme.textMuted)
+                    .multilineTextAlignment(.center)
 
-                Stepper(value: $cycleDay, in: 1...max(1, cycleLength)) {
-                    Text("Adjust to your current day")
-                        .font(.pillieBody())
-                        .foregroundStyle(PillieTheme.textMuted)
+                HStack(spacing: 24) {
+                    cycleAdjustButton(systemName: "minus") {
+                        cycleDay = max(1, cycleDay - 1)
+                    }
+
+                    VStack(spacing: 0) {
+                        Text("\(cycleDay)")
+                            .font(.system(size: 48, weight: .heavy, design: .rounded))
+                            .foregroundStyle(PillieTheme.textPrimary)
+                            .monospacedDigit()
+                        Text("DAY")
+                            .font(.pillieCaptionMedium())
+                            .foregroundStyle(PillieTheme.coral)
+                            .tracking(2)
+                    }
+                    .frame(minWidth: 88)
+
+                    cycleAdjustButton(systemName: "plus") {
+                        cycleDay = min(cycleLength, cycleDay + 1)
+                    }
                 }
+
+                ProgressView(value: Double(cycleDay), total: Double(max(1, cycleLength)))
+                    .tint(PillieTheme.coral)
+
+                HStack {
+                    Text("Start")
+                    Spacer()
+                    Text("Day \(cycleLength)")
+                }
+                .font(.pillieCaptionMedium())
+                .foregroundStyle(PillieTheme.textMuted.opacity(0.75))
             }
             .padding(16)
             .background(PillieTheme.cardWhite)
@@ -276,27 +317,76 @@ struct MethodDetailsView: View {
             .overlay(
                 RoundedRectangle(cornerRadius: PillieTheme.cardRadius)
                     .stroke(PillieTheme.sageHalf, lineWidth: 1)
-            )
+                )
         }
+    }
+
+    private var cycleLabel: String {
+        switch method {
+        case .pill:
+            return "pack"
+        case .patch:
+            return "patch cycle"
+        case .ring:
+            return "ring cycle"
+        }
+    }
+
+    private func scheduleRuleRow(icon: String, text: String) -> some View {
+        HStack(spacing: 10) {
+            Image(systemName: icon)
+                .font(.system(size: 14, weight: .semibold))
+                .foregroundStyle(PillieTheme.coral)
+                .frame(width: 24)
+            Text(text)
+                .font(.pillieBody())
+                .foregroundStyle(PillieTheme.textPrimary)
+        }
+    }
+
+    private func cycleAdjustButton(systemName: String, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Image(systemName: systemName)
+                .font(.system(size: 16, weight: .bold))
+                .foregroundStyle(PillieTheme.textMuted)
+                .frame(width: 40, height: 40)
+                .background(PillieTheme.sage.opacity(0.6), in: Circle())
+        }
+        .buttonStyle(.plain)
     }
 
     // MARK: - Footer
 
     private var footer: some View {
-        Button {
-            onContinue(
-                selectedRegimen,
-                selectedRegimen == .custom ? customActiveDays : nil,
-                selectedRegimen == .custom ? customBreakDays : nil,
-                min(max(1, cycleDay), cycleLength)
-            )
-        } label: {
-            HStack(spacing: 8) {
-                Text("Continue")
-                Image(systemName: "arrow.right")
+        VStack(spacing: 14) {
+            HStack(spacing: 10) {
+                Image(systemName: "info.circle.fill")
+                    .foregroundStyle(PillieTheme.textMuted)
+                Text("This is a schedule-critical setting for habit tracking, not medical advice.")
+                    .font(.pillieCaptionMedium())
+                    .foregroundStyle(PillieTheme.textMuted)
+                    .fixedSize(horizontal: false, vertical: true)
             }
+            .padding(.horizontal, 14)
+            .padding(.vertical, 12)
+            .background(PillieTheme.sage.opacity(0.55), in: RoundedRectangle(cornerRadius: 18))
+
+            Button {
+                onContinue(
+                    selectedRegimen,
+                    selectedRegimen == .custom ? customActiveDays : nil,
+                    selectedRegimen == .custom ? customBreakDays : nil,
+                    min(max(1, cycleDay), cycleLength)
+                )
+            } label: {
+                HStack(spacing: 8) {
+                    Text("Continue to Reminders")
+                    Image(systemName: "arrow.right")
+                }
+            }
+            .buttonStyle(.pillieDark)
+            .accessibilityIdentifier("onboarding-schedule-continue")
         }
-        .buttonStyle(.pillieDark)
     }
 
     // MARK: - Helpers

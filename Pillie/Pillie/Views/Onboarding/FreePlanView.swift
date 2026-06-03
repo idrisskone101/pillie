@@ -63,8 +63,8 @@ struct FreePlanView: View {
     private var header: some View {
         OnboardingStepHeader(
             appeared: animateIn,
-            progress: 0.333,
-            trailingLabel: "5/7",
+            progress: 0.8,
+            trailingLabel: "12/15",
             onBack: onBack
         )
     }
@@ -157,7 +157,7 @@ struct FreePlanView: View {
     // MARK: - Footer Caption
 
     private var footerCaption: some View {
-        Text("Step 5 of 7 \u{00B7} You can upgrade any time")
+        Text("Step 12 of 15 \u{00B7} You can upgrade any time")
             .font(.pillie(13, weight: .medium))
             .foregroundStyle(PillieTheme.textMuted.opacity(0.7))
             .multilineTextAlignment(.center)
