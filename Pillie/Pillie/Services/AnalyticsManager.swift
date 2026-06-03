@@ -93,6 +93,7 @@ protocol AnalyticsTracking {
     plan: AnalyticsPlan?,
     result: AnalyticsResult?,
     setting: AnalyticsSetting?,
+    acquisitionSource: AcquisitionSource?,
     isPlus: Bool?,
     hasBlockingSelection: Bool?
   )
@@ -148,6 +149,7 @@ enum AnalyticsStep: String {
   case painPoints = "pain_points"
   case goal
   case missFrequency = "miss_frequency"
+  case acquisitionSource = "acquisition_source"
   case freePlan = "free_plan"
   case plusPreview = "plus_preview"
   case paywall
@@ -165,13 +167,14 @@ enum AnalyticsStep: String {
     case 4: self = .painPoints
     case 5: self = .goal
     case 6: self = .missFrequency
-    case 7: self = .freePlan
-    case 8: self = .plusPreview
-    case 9: self = .paywall
-    case 10: self = .method
-    case 11: self = .schedule
-    case 12: self = .reminderTime
-    case 13: self = .appBlocking
+    case 7: self = .acquisitionSource
+    case 8: self = .freePlan
+    case 9: self = .plusPreview
+    case 10: self = .paywall
+    case 11: self = .method
+    case 12: self = .schedule
+    case 13: self = .reminderTime
+    case 14: self = .appBlocking
     default: return nil
     }
   }
@@ -213,6 +216,7 @@ struct AnalyticsPayload {
   let plan: AnalyticsPlan?
   let result: AnalyticsResult?
   let setting: AnalyticsSetting?
+  let acquisitionSource: AcquisitionSource?
   let isPlus: Bool?
   let hasBlockingSelection: Bool?
 
@@ -223,6 +227,7 @@ struct AnalyticsPayload {
     plan: AnalyticsPlan? = nil,
     result: AnalyticsResult? = nil,
     setting: AnalyticsSetting? = nil,
+    acquisitionSource: AcquisitionSource? = nil,
     isPlus: Bool? = nil,
     hasBlockingSelection: Bool? = nil
   ) {
@@ -232,6 +237,7 @@ struct AnalyticsPayload {
     self.plan = plan
     self.result = result
     self.setting = setting
+    self.acquisitionSource = acquisitionSource
     self.isPlus = isPlus
     self.hasBlockingSelection = hasBlockingSelection
   }
@@ -244,6 +250,9 @@ struct AnalyticsPayload {
     if let plan { properties["plan"] = .string(plan.rawValue) }
     if let result { properties["result"] = .string(result.rawValue) }
     if let setting { properties["setting"] = .string(setting.rawValue) }
+    if let acquisitionSource {
+      properties["acquisition_source"] = .string(acquisitionSource.rawValue)
+    }
     if let isPlus { properties["is_plus"] = .bool(isPlus) }
     if let hasBlockingSelection {
       properties["has_blocking_selection"] = .bool(hasBlockingSelection)
@@ -320,6 +329,7 @@ final class AnalyticsManager: AnalyticsTracking {
     plan: AnalyticsPlan? = nil,
     result: AnalyticsResult? = nil,
     setting: AnalyticsSetting? = nil,
+    acquisitionSource: AcquisitionSource? = nil,
     isPlus: Bool? = nil,
     hasBlockingSelection: Bool? = nil
   ) {
@@ -332,6 +342,7 @@ final class AnalyticsManager: AnalyticsTracking {
       plan: plan,
       result: result,
       setting: setting,
+      acquisitionSource: acquisitionSource,
       isPlus: isPlus,
       hasBlockingSelection: hasBlockingSelection
     )

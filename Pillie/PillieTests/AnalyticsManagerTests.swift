@@ -170,22 +170,59 @@ final class AnalyticsManagerTests: XCTestCase {
       ])
   }
 
+  func testAcquisitionSourceTelemetryUsesApprovedValueAndRequiresConsent() throws {
+    let client = RecordingAnalyticsClient()
+    let manager = makeManager(client: client, token: "phc_test_token")
+
+    manager.configure()
+    manager.track(
+      .onboardingStepCompleted,
+      source: .onboarding,
+      step: .acquisitionSource,
+      acquisitionSource: .reddit,
+      isPlus: false
+    )
+    manager.setAnalyticsEnabled(true)
+    manager.track(
+      .onboardingStepCompleted,
+      source: .onboarding,
+      step: .acquisitionSource,
+      acquisitionSource: .reddit,
+      isPlus: false
+    )
+
+    let capture = try XCTUnwrap(client.captures.first)
+    XCTAssertEqual(client.captures.count, 1)
+    XCTAssertEqual(capture.event, "onboarding_step_completed")
+    XCTAssertEqual(
+      capture.properties,
+      [
+        "source": .string("onboarding"),
+        "step": .string("acquisition_source"),
+        "acquisition_source": .string("reddit"),
+        "is_plus": .bool(false),
+      ])
+  }
+
   func testOnboardingStepMappingIncludesConsentBeforePainPoints() throws {
     XCTAssertEqual(AnalyticsStep(onboardingStep: 0), .welcome)
     XCTAssertEqual(AnalyticsStep(onboardingStep: 1), .analyticsConsent)
     XCTAssertEqual(AnalyticsStep(onboardingStep: 2), .productDemo)
     XCTAssertEqual(AnalyticsStep(onboardingStep: 3), .reviewPrompt)
     XCTAssertEqual(AnalyticsStep(onboardingStep: 4), .painPoints)
-    XCTAssertEqual(AnalyticsStep(onboardingStep: 12), .reminderTime)
-    XCTAssertEqual(AnalyticsStep(onboardingStep: 13), .appBlocking)
+    XCTAssertEqual(AnalyticsStep(onboardingStep: 5), .goal)
+    XCTAssertEqual(AnalyticsStep(onboardingStep: 6), .missFrequency)
+    XCTAssertEqual(AnalyticsStep(onboardingStep: 7), .acquisitionSource)
+    XCTAssertEqual(AnalyticsStep(onboardingStep: 13), .reminderTime)
+    XCTAssertEqual(AnalyticsStep(onboardingStep: 14), .appBlocking)
   }
 
   func testOnboardingCompletedFiresOnlyAfterFinalOnboardingStep() {
     let recorder = RecordingAnalyticsTracker()
     let telemetry = OnboardingTelemetry(analytics: recorder, isPlus: { false })
 
-    telemetry.stepCompleted(from: 11, to: 12)
-    telemetry.stepCompleted(from: 13, to: 14)
+    telemetry.stepCompleted(from: 12, to: 13)
+    telemetry.stepCompleted(from: 14, to: 15)
 
     XCTAssertEqual(
       recorder.events,
@@ -281,6 +318,7 @@ private final class RecordingAnalyticsTracker: AnalyticsTracking {
     plan: AnalyticsPlan?,
     result: AnalyticsResult?,
     setting: AnalyticsSetting?,
+    acquisitionSource: AcquisitionSource?,
     isPlus: Bool?,
     hasBlockingSelection: Bool?
   ) {

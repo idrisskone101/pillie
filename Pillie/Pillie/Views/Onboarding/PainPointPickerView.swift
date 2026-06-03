@@ -20,27 +20,26 @@ struct PainPointPickerView: View {
 
             VStack(spacing: 0) {
                 header
-                    .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger1))
-                    .padding(.horizontal, 28)
-                    .padding(.top, 16)
+                    .padding(.horizontal, 24)
+                    .padding(.top, 28)
 
                 ScrollView(showsIndicators: false) {
-                    VStack(spacing: 24) {
+                    VStack(alignment: .leading, spacing: 24) {
                         titleSection
                             .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger2))
 
                         cardList
                             .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger3))
                     }
-                    .padding(.horizontal, 28)
-                    .padding(.top, 32)
-                    .padding(.bottom, 24)
+                    .padding(.horizontal, 24)
+                    .padding(.top, 38)
+                    .padding(.bottom, 14)
                 }
 
                 footer
                     .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger4))
-                    .padding(.horizontal, 28)
-                    .padding(.bottom, 34)
+                    .padding(.horizontal, 24)
+                    .padding(.bottom, 20)
             }
         }
         .onAppear {
@@ -58,10 +57,10 @@ struct PainPointPickerView: View {
     // MARK: - Header
 
     private var header: some View {
-        OnboardingStepHeader(
+        PersonalizationOnboardingHeader(
             appeared: animateIn,
-            progress: 0.083,
-            trailingLabel: "1/6",
+            progress: PersonalizationOnboardingProgress.fraction(for: 1),
+            badge: PersonalizationOnboardingProgress.badge(for: 1),
             onBack: onBack
         )
     }
@@ -69,24 +68,27 @@ struct PainPointPickerView: View {
     // MARK: - Title
 
     private var titleSection: some View {
-        VStack(spacing: 8) {
+        VStack(alignment: .leading, spacing: 16) {
             (Text("What's your biggest ")
                 .foregroundStyle(PillieTheme.textPrimary)
             + Text("hurdle?")
                 .foregroundStyle(PillieTheme.coral))
-                .font(.pillieHeadline())
-                .multilineTextAlignment(.center)
+                .font(.pillie(38, weight: .black))
+                .multilineTextAlignment(.leading)
+                .lineSpacing(2)
 
             Text("Select all that apply.")
-                .font(.pillieBodyLarge())
+                .font(.pillie(19, weight: .regular))
                 .foregroundStyle(PillieTheme.textMuted)
+                .lineSpacing(7)
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     // MARK: - Card List
 
     private var cardList: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: 10) {
             ForEach(PainPoint.allCases, id: \.self) { painPoint in
                 painPointCard(painPoint)
             }
@@ -96,88 +98,51 @@ struct PainPointPickerView: View {
     private func painPointCard(_ painPoint: PainPoint) -> some View {
         let isSelected = selected.contains(painPoint)
 
-        return Button {
-            withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
+        return PersonalizationOptionRow(
+            title: painPoint.title,
+            subtitle: nil,
+            symbolName: iconName(for: painPoint),
+            symbolTint: iconTint(for: painPoint),
+            isSelected: isSelected,
+            selectionStyle: .checkbox
+        ) {
+            withAnimation(.spring(response: 0.35, dampingFraction: 0.78)) {
                 if isSelected {
                     selected.remove(painPoint)
                 } else {
                     selected.insert(painPoint)
                 }
             }
-        } label: {
-            HStack(spacing: 16) {
-                // Emoji icon
-                Text(painPoint.emoji)
-                    .font(.system(size: 28))
-                    .frame(width: 48, height: 48)
-                    .background(
-                        RoundedRectangle(cornerRadius: 14)
-                            .fill(PillieTheme.sage.opacity(0.5))
-                    )
-
-                // Title + subtitle
-                VStack(alignment: .leading, spacing: 3) {
-                    Text(painPoint.title)
-                        .font(.pillieBodyBold())
-                        .foregroundStyle(PillieTheme.textPrimary)
-
-                    Text(painPoint.subtitle)
-                        .font(.pillieBody())
-                        .foregroundStyle(PillieTheme.textMuted)
-                }
-
-                Spacer()
-
-                // Checkbox
-                RoundedRectangle(cornerRadius: 6)
-                    .stroke(isSelected ? PillieTheme.coral : PillieTheme.sage, lineWidth: 2)
-                    .frame(width: 24, height: 24)
-                    .background(
-                        RoundedRectangle(cornerRadius: 6)
-                            .fill(isSelected ? PillieTheme.coral : Color.clear)
-                    )
-                    .overlay {
-                        if isSelected {
-                            Image(systemName: "checkmark")
-                                .font(.system(size: 12, weight: .bold))
-                                .foregroundStyle(.white)
-                                .transition(.scale.combined(with: .opacity))
-                        }
-                    }
-            }
-            .padding(16)
-            .background(
-                RoundedRectangle(cornerRadius: PillieTheme.cardRadius)
-                    .fill(isSelected ? PillieTheme.coral.opacity(0.05) : PillieTheme.cardWhite)
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: PillieTheme.cardRadius)
-                    .stroke(isSelected ? PillieTheme.coral : Color.clear, lineWidth: 2)
-            )
-            .shadow(
-                color: isSelected ? PillieTheme.coral.opacity(0.15) : PillieTheme.cardShadow,
-                radius: isSelected ? 12 : PillieTheme.cardShadowRadius,
-                y: isSelected ? 4 : PillieTheme.cardShadowY
-            )
-            .scaleEffect(isSelected ? 1.02 : 1.0)
         }
-        .buttonStyle(.plain)
     }
 
     // MARK: - Footer
 
     private var footer: some View {
-        Button {
+        PersonalizationFooter(
+            isEnabled: !selected.isEmpty,
+            helperText: "Select at least one to continue"
+        ) {
             onContinue(selected)
-        } label: {
-            HStack(spacing: 8) {
-                Text("Continue")
-                Image(systemName: "arrow.right")
-            }
         }
-        .buttonStyle(.pillieDark)
-        .disabled(selected.isEmpty)
-        .opacity(selected.isEmpty ? 0.5 : 1.0)
+    }
+
+    private func iconName(for painPoint: PainPoint) -> String {
+        switch painPoint {
+        case .forgetful: return "brain.head.profile"
+        case .chaoticSchedule: return "calendar"
+        case .phoneDistractions: return "iphone"
+        case .noRoutine: return "arrow.triangle.2.circlepath"
+        }
+    }
+
+    private func iconTint(for painPoint: PainPoint) -> Color {
+        switch painPoint {
+        case .forgetful: return PillieTheme.coral
+        case .chaoticSchedule: return Color(hex: "9AAE9D")
+        case .phoneDistractions: return Color(hex: "AAA5D6")
+        case .noRoutine: return PillieTheme.textMuted
+        }
     }
 }
 

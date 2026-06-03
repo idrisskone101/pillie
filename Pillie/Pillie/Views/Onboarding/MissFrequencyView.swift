@@ -20,27 +20,26 @@ struct MissFrequencyView: View {
 
             VStack(spacing: 0) {
                 header
-                    .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger1))
-                    .padding(.horizontal, 28)
-                    .padding(.top, 16)
+                    .padding(.horizontal, 24)
+                    .padding(.top, 28)
 
                 ScrollView(showsIndicators: false) {
-                    VStack(spacing: 24) {
+                    VStack(alignment: .leading, spacing: 22) {
                         titleSection
                             .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger2))
 
                         cardList
                             .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger3))
                     }
-                    .padding(.horizontal, 28)
+                    .padding(.horizontal, 24)
                     .padding(.top, 32)
-                    .padding(.bottom, 24)
+                    .padding(.bottom, 12)
                 }
 
                 footer
                     .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger4))
-                    .padding(.horizontal, 28)
-                    .padding(.bottom, 34)
+                    .padding(.horizontal, 24)
+                    .padding(.bottom, 20)
             }
         }
         .onAppear {
@@ -58,10 +57,10 @@ struct MissFrequencyView: View {
     // MARK: - Header
 
     private var header: some View {
-        OnboardingStepHeader(
+        PersonalizationOnboardingHeader(
             appeared: animateIn,
-            progress: 0.25,
-            trailingLabel: "3/6",
+            progress: PersonalizationOnboardingProgress.fraction(for: 3),
+            badge: PersonalizationOnboardingProgress.badge(for: 3),
             onBack: onBack
         )
     }
@@ -69,24 +68,27 @@ struct MissFrequencyView: View {
     // MARK: - Title
 
     private var titleSection: some View {
-        VStack(spacing: 8) {
+        VStack(alignment: .leading, spacing: 16) {
             (Text("How often do you ")
                 .foregroundStyle(PillieTheme.textPrimary)
             + Text("miss?")
                 .foregroundStyle(PillieTheme.coral))
-                .font(.pillieHeadline())
-                .multilineTextAlignment(.center)
+                .font(.pillie(36, weight: .black))
+                .multilineTextAlignment(.leading)
+                .lineSpacing(2)
 
             Text("No judgment — we're here to help.")
-                .font(.pillieBodyLarge())
+                .font(.pillie(19, weight: .regular))
                 .foregroundStyle(PillieTheme.textMuted)
+                .lineSpacing(7)
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     // MARK: - Card List
 
     private var cardList: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: 10) {
             ForEach(MissFrequency.allCases, id: \.self) { frequency in
                 frequencyCard(frequency)
             }
@@ -96,84 +98,33 @@ struct MissFrequencyView: View {
     private func frequencyCard(_ frequency: MissFrequency) -> some View {
         let isSelected = selected == frequency
 
-        return Button {
-            withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
+        return PersonalizationOptionRow(
+            title: frequency.title,
+            subtitle: frequency.subtitle,
+            symbolName: "",
+            symbolTint: .clear,
+            isSelected: isSelected,
+            selectionStyle: .radio,
+            minHeight: 70,
+            verticalPadding: 9
+        ) {
+            withAnimation(.spring(response: 0.35, dampingFraction: 0.78)) {
                 selected = frequency
             }
-        } label: {
-            HStack(spacing: 16) {
-                Text(frequency.emoji)
-                    .font(.system(size: 28))
-                    .frame(width: 48, height: 48)
-                    .background(
-                        RoundedRectangle(cornerRadius: 14)
-                            .fill(PillieTheme.sage.opacity(0.5))
-                    )
-
-                VStack(alignment: .leading, spacing: 3) {
-                    Text(frequency.title)
-                        .font(.pillieBodyBold())
-                        .foregroundStyle(PillieTheme.textPrimary)
-
-                    Text(frequency.subtitle)
-                        .font(.pillieBody())
-                        .foregroundStyle(PillieTheme.textMuted)
-                }
-
-                Spacer()
-
-                // Radio indicator
-                Circle()
-                    .stroke(isSelected ? PillieTheme.coral : PillieTheme.sage, lineWidth: 2)
-                    .frame(width: 24, height: 24)
-                    .background(
-                        Circle()
-                            .fill(isSelected ? PillieTheme.coral : Color.clear)
-                    )
-                    .overlay {
-                        if isSelected {
-                            Circle()
-                                .fill(.white)
-                                .frame(width: 8, height: 8)
-                                .transition(.scale.combined(with: .opacity))
-                        }
-                    }
-            }
-            .padding(16)
-            .background(
-                RoundedRectangle(cornerRadius: PillieTheme.cardRadius)
-                    .fill(isSelected ? PillieTheme.coral.opacity(0.05) : PillieTheme.cardWhite)
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: PillieTheme.cardRadius)
-                    .stroke(isSelected ? PillieTheme.coral : Color.clear, lineWidth: 2)
-            )
-            .shadow(
-                color: isSelected ? PillieTheme.coral.opacity(0.15) : PillieTheme.cardShadow,
-                radius: isSelected ? 12 : PillieTheme.cardShadowRadius,
-                y: isSelected ? 4 : PillieTheme.cardShadowY
-            )
-            .scaleEffect(isSelected ? 1.02 : 1.0)
         }
-        .buttonStyle(.plain)
     }
 
     // MARK: - Footer
 
     private var footer: some View {
-        Button {
+        PersonalizationFooter(
+            isEnabled: selected != nil,
+            helperText: "No shame here. We'll shape reminders around real life."
+        ) {
             if let selected {
                 onContinue(selected)
             }
-        } label: {
-            HStack(spacing: 8) {
-                Text("Continue")
-                Image(systemName: "arrow.right")
-            }
         }
-        .buttonStyle(.pillieDark)
-        .disabled(selected == nil)
-        .opacity(selected == nil ? 0.5 : 1.0)
     }
 }
 

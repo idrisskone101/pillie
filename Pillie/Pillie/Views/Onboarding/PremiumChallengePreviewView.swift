@@ -130,7 +130,7 @@ struct PremiumChallengePreviewView: View {
         OnboardingStepHeader(
             appeared: animateIn,
             progress: 0.417,
-            trailingLabel: "5/6",
+            trailingLabel: "6/7",
             onBack: onBack
         )
     }
