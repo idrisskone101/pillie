@@ -425,8 +425,13 @@ final class NotificationManager {
         calendar: Calendar
     ) -> UNNotificationRequest {
         let content = UNMutableNotificationContent()
-        content.title = due.reminderTitle
-        content.body = due.reminderBody
+        if kind == .retry {
+            content.title = "Still here when you're ready"
+            content.body = "Take a tiny moment for your Pillie check-in."
+        } else {
+            content.title = due.reminderTitle
+            content.body = due.reminderBody
+        }
         content.sound = .default
         content.categoryIdentifier = categoryID
         content.userInfo = [
@@ -455,14 +460,13 @@ final class NotificationManager {
         let content = UNMutableNotificationContent()
         switch method {
         case .pill:
-            content.title = "Refill Reminder"
-            content.body = "You have \(supplyUnitsLeft) pills left. Time to call in your refill!"
+            content.title = "Refill check-in"
+            content.body = "Looks like you're getting low. A refill soon could save future stress."
         case .patch:
-            let label = supplyUnitsLeft == 1 ? "patch" : "patches"
-            content.title = "Restock Reminder"
-            content.body = "You have \(supplyUnitsLeft) \(label) left. Time to restock your patches."
+            content.title = "Patch restock check-in"
+            content.body = "Looks like you're getting low. A restock soon could save future stress."
         case .ring:
-            content.title = "Refill Reminder"
+            content.title = "Supply check-in"
             content.body = "Time to check your contraception supply."
         }
         content.sound = .default
