@@ -216,7 +216,7 @@ struct PillieApp: App {
     }
 
     private static var isOnboardingActive: Bool {
-        UserDefaults.standard.integer(forKey: "onboardingStep") < 14
+        UserDefaults.standard.integer(forKey: "onboardingStep") < 15
     }
 
     #if DEBUG

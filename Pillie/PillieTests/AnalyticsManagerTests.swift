@@ -208,18 +208,19 @@ final class AnalyticsManagerTests: XCTestCase {
     XCTAssertEqual(AnalyticsStep(onboardingStep: 0), .welcome)
     XCTAssertEqual(AnalyticsStep(onboardingStep: 1), .analyticsConsent)
     XCTAssertEqual(AnalyticsStep(onboardingStep: 2), .productDemo)
-    XCTAssertEqual(AnalyticsStep(onboardingStep: 3), .reviewPrompt)
-    XCTAssertEqual(AnalyticsStep(onboardingStep: 4), .painPoints)
-    XCTAssertEqual(AnalyticsStep(onboardingStep: 5), .goal)
-    XCTAssertEqual(AnalyticsStep(onboardingStep: 6), .missFrequency)
-    XCTAssertEqual(AnalyticsStep(onboardingStep: 7), .acquisitionSource)
-    XCTAssertEqual(AnalyticsStep(onboardingStep: 8), .method)
-    XCTAssertEqual(AnalyticsStep(onboardingStep: 9), .schedule)
-    XCTAssertEqual(AnalyticsStep(onboardingStep: 10), .reminderTime)
-    XCTAssertEqual(AnalyticsStep(onboardingStep: 11), .reminderPlan)
-    XCTAssertEqual(AnalyticsStep(onboardingStep: 12), .paywall)
-    XCTAssertEqual(AnalyticsStep(onboardingStep: 13), .freePlanConfirmation)
-    XCTAssertEqual(AnalyticsStep(onboardingStep: 14), .appBlocking)
+    XCTAssertEqual(AnalyticsStep(onboardingStep: 3), .plusBlockingDemo)
+    XCTAssertEqual(AnalyticsStep(onboardingStep: 4), .reviewPrompt)
+    XCTAssertEqual(AnalyticsStep(onboardingStep: 5), .painPoints)
+    XCTAssertEqual(AnalyticsStep(onboardingStep: 6), .goal)
+    XCTAssertEqual(AnalyticsStep(onboardingStep: 7), .missFrequency)
+    XCTAssertEqual(AnalyticsStep(onboardingStep: 8), .acquisitionSource)
+    XCTAssertEqual(AnalyticsStep(onboardingStep: 9), .method)
+    XCTAssertEqual(AnalyticsStep(onboardingStep: 10), .schedule)
+    XCTAssertEqual(AnalyticsStep(onboardingStep: 11), .reminderTime)
+    XCTAssertEqual(AnalyticsStep(onboardingStep: 12), .reminderPlan)
+    XCTAssertEqual(AnalyticsStep(onboardingStep: 13), .paywall)
+    XCTAssertEqual(AnalyticsStep(onboardingStep: 14), .freePlanConfirmation)
+    XCTAssertEqual(AnalyticsStep(onboardingStep: 15), .appBlocking)
   }
 
   func testOnboardingCompletedFiresOnlyAfterFinalOnboardingStep() {
@@ -227,7 +228,7 @@ final class AnalyticsManagerTests: XCTestCase {
     let telemetry = OnboardingTelemetry(analytics: recorder, isPlus: { false })
 
     telemetry.stepCompleted(from: 9, to: 10)
-    telemetry.stepCompleted(from: 13, to: 15)
+    telemetry.stepCompleted(from: 14, to: 16)
 
     XCTAssertEqual(
       recorder.events,

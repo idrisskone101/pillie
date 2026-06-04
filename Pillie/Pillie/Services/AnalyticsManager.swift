@@ -145,6 +145,7 @@ enum AnalyticsStep: String {
   case welcome
   case analyticsConsent = "analytics_consent"
   case productDemo = "product_demo"
+  case plusBlockingDemo = "plus_blocking_demo"
   case reviewPrompt = "review_prompt"
   case painPoints = "pain_points"
   case goal
@@ -163,18 +164,19 @@ enum AnalyticsStep: String {
     case 0: self = .welcome
     case 1: self = .analyticsConsent
     case 2: self = .productDemo
-    case 3: self = .reviewPrompt
-    case 4: self = .painPoints
-    case 5: self = .goal
-    case 6: self = .missFrequency
-    case 7: self = .acquisitionSource
-    case 8: self = .method
-    case 9: self = .schedule
-    case 10: self = .reminderTime
-    case 11: self = .reminderPlan
-    case 12: self = .paywall
-    case 13: self = .freePlanConfirmation
-    case 14: self = .appBlocking
+    case 3: self = .plusBlockingDemo
+    case 4: self = .reviewPrompt
+    case 5: self = .painPoints
+    case 6: self = .goal
+    case 7: self = .missFrequency
+    case 8: self = .acquisitionSource
+    case 9: self = .method
+    case 10: self = .schedule
+    case 11: self = .reminderTime
+    case 12: self = .reminderPlan
+    case 13: self = .paywall
+    case 14: self = .freePlanConfirmation
+    case 15: self = .appBlocking
     default: return nil
     }
   }

@@ -1,6 +1,6 @@
 enum OnboardingPaywallRoute {
-    static let freePlanConfirmationStep = 13
-    static let appBlockingSetupStep = 14
+    static let freePlanConfirmationStep = 14
+    static let appBlockingSetupStep = 15
 
     static func nextStepAfterPaywall(isPlus: Bool, selectedFreePlan: Bool) -> Int {
         if selectedFreePlan || !isPlus {
