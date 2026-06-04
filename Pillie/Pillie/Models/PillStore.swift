@@ -40,6 +40,16 @@ class PillStore {
             UserDefaults.standard.set(normalized, forKey: Self.autoReminderIntervalKey)
         }
     }
+    var autoReminderRetryLimit: Int {
+        didSet {
+            let normalized = Self.normalizedAutoReminderRetryLimit(autoReminderRetryLimit)
+            if normalized != autoReminderRetryLimit {
+                autoReminderRetryLimit = normalized
+                return
+            }
+            UserDefaults.standard.set(normalized, forKey: Self.autoReminderRetryLimitKey)
+        }
+    }
     var refillReminderThresholdDays: Int {
         didSet {
             let normalized = Self.normalizedRefillReminderThreshold(refillReminderThresholdDays)
@@ -137,6 +147,7 @@ class PillStore {
     private static let reminderHourKey = "pillie_reminder_hour"
     private static let reminderMinuteKey = "pillie_reminder_minute"
     private static let autoReminderIntervalKey = "pillie_auto_reminder_interval_minutes"
+    private static let autoReminderRetryLimitKey = "pillie_auto_reminder_retry_limit"
     private static let refillReminderThresholdDaysKey = "pillie_refill_reminder_threshold_days"
     private static let patchRestockReminderThresholdPatchesKey = "pillie_patch_restock_threshold_patches"
     private static let contraceptiveMethodKey = "pillie_contraceptive_method"
@@ -152,6 +163,7 @@ class PillStore {
     private static let perfLog = OSLog(subsystem: Bundle.main.bundleIdentifier ?? "com.idrisskone.pillie", category: "PillStorePerf")
 
     static let autoReminderIntervalOptions: [Int] = [5, 10, 15, 30]
+    static let autoReminderRetryLimitOptions: [Int] = [0, 1, 2, 3, 5]
     static let refillReminderThresholdOptions: [Int] = [3, 5, 7]
     static let patchRestockReminderThresholdOptions: [Int] = [1, 2]
     private static let alarmDayLabelFormatter: DateFormatter = {
@@ -266,6 +278,17 @@ class PillStore {
 
     var autoReminderIntervalDisplay: String {
         "\(autoReminderIntervalMinutes) min"
+    }
+
+    var autoReminderRetryLimitDisplay: String {
+        switch autoReminderRetryLimit {
+        case 0:
+            return "Off"
+        case 1:
+            return "1 retry"
+        default:
+            return "\(autoReminderRetryLimit) retries"
+        }
     }
 
     var refillReminderThresholdDisplay: String {
@@ -970,6 +993,9 @@ class PillStore {
         self.autoReminderIntervalMinutes = Self.normalizedAutoReminderInterval(
             defaults.object(forKey: Self.autoReminderIntervalKey) as? Int ?? 10
         )
+        self.autoReminderRetryLimit = Self.normalizedAutoReminderRetryLimit(
+            defaults.object(forKey: Self.autoReminderRetryLimitKey) as? Int ?? 3
+        )
         self.refillReminderThresholdDays = Self.normalizedRefillReminderThreshold(
             defaults.object(forKey: Self.refillReminderThresholdDaysKey) as? Int ?? 5
         )
@@ -1377,6 +1403,10 @@ class PillStore {
 
     private static func normalizedAutoReminderInterval(_ value: Int) -> Int {
         autoReminderIntervalOptions.contains(value) ? value : 10
+    }
+
+    private static func normalizedAutoReminderRetryLimit(_ value: Int) -> Int {
+        autoReminderRetryLimitOptions.contains(value) ? value : 3
     }
 
     private static func normalizedRefillReminderThreshold(_ value: Int) -> Int {

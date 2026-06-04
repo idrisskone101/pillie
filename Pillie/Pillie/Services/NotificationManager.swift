@@ -261,6 +261,7 @@ final class NotificationManager {
                 firstReminderByEpoch: firstReminderByEpoch,
                 now: now,
                 intervalMinutes: store.autoReminderIntervalMinutes,
+                retryLimit: store.autoReminderRetryLimit,
                 budget: remainingBudget,
                 reminderHour: store.reminderHour,
                 reminderMinute: store.reminderMinute,
@@ -283,13 +284,15 @@ final class NotificationManager {
         firstReminderByEpoch: [Int: Date],
         now: Date,
         intervalMinutes: Int,
+        retryLimit: Int,
         budget: Int,
         reminderHour: Int,
         reminderMinute: Int,
         snoozeOverride: SnoozeOverride?,
         calendar: Calendar
     ) -> [UNNotificationRequest] {
-        guard budget > 0 else { return [] }
+        let cappedBudget = min(budget, retryLimit)
+        guard cappedBudget > 0 else { return [] }
 
         let dueDay = calendar.startOfDay(for: due.date)
         let dueEpoch = Int(dueDay.timeIntervalSince1970)
@@ -310,7 +313,7 @@ final class NotificationManager {
         var nextFire = firstReminderDate.addingTimeInterval(interval)
 
         var requests: [UNNotificationRequest] = []
-        while requests.count < budget && nextFire < dayEnd {
+        while requests.count < cappedBudget && nextFire < dayEnd {
             requests.append(
                 makeRequest(
                     for: due,
@@ -661,24 +664,44 @@ final class NotificationManager {
     }
 
     func managedRequestSummariesForTesting(store: PillStore, now: Date = Date()) -> [ReminderRequestDebugSummary] {
-        buildReminderRequests(store: store, now: now, snoozeOverride: nil)
-            .compactMap { request in
-                guard let trigger = request.trigger as? UNCalendarNotificationTrigger else {
-                    return nil
-                }
-                let userInfo = request.content.userInfo
-                return ReminderRequestDebugSummary(
-                    identifier: request.identifier,
-                    title: request.content.title,
-                    body: request.content.body,
-                    categoryIdentifier: request.content.categoryIdentifier,
-                    dueDayEpoch: userInfo[PayloadKey.dueDayEpoch] as? Int,
-                    actionTypeRaw: userInfo[PayloadKey.actionTypeRaw] as? String,
-                    requestKind: userInfo[PayloadKey.requestKind] as? String,
-                    dateComponents: trigger.dateComponents
-                )
+        reminderRequestSummaries(
+            from: buildReminderRequests(store: store, now: now, snoozeOverride: nil)
+        )
+    }
+
+    func managedRequestSummariesForTesting(
+        store: PillStore,
+        now: Date,
+        snoozeFirstFireDate: Date
+    ) -> [ReminderRequestDebugSummary] {
+        let dueDayEpoch = Int(Calendar.current.startOfDay(for: now).timeIntervalSince1970)
+        return reminderRequestSummaries(
+            from: buildReminderRequests(
+                store: store,
+                now: now,
+                snoozeOverride: SnoozeOverride(dueDayEpoch: dueDayEpoch, firstFireDate: snoozeFirstFireDate)
+            )
+        )
+    }
+
+    private func reminderRequestSummaries(from requests: [UNNotificationRequest]) -> [ReminderRequestDebugSummary] {
+        requests.compactMap { request in
+            guard let trigger = request.trigger as? UNCalendarNotificationTrigger else {
+                return nil
             }
-            .sorted { $0.identifier < $1.identifier }
+            let userInfo = request.content.userInfo
+            return ReminderRequestDebugSummary(
+                identifier: request.identifier,
+                title: request.content.title,
+                body: request.content.body,
+                categoryIdentifier: request.content.categoryIdentifier,
+                dueDayEpoch: userInfo[PayloadKey.dueDayEpoch] as? Int,
+                actionTypeRaw: userInfo[PayloadKey.actionTypeRaw] as? String,
+                requestKind: userInfo[PayloadKey.requestKind] as? String,
+                dateComponents: trigger.dateComponents
+            )
+        }
+        .sorted { $0.identifier < $1.identifier }
     }
     #endif
 }

@@ -82,4 +82,78 @@ final class NotificationEdgeCaseTests: XCTestCase {
             $0.dueDayEpoch == todayEpoch && $0.actionTypeRaw == PillDay.ActionType.pillActive.rawValue
         })
     }
+
+    func testAutoReminderRetryLimitDefaultsPersistsAndNormalizes() throws {
+        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let fixture = try InMemoryStoreFactory.makeStore(now: now)
+
+        XCTAssertEqual(PillStore.autoReminderRetryLimitOptions, [0, 1, 2, 3, 5])
+        XCTAssertEqual(fixture.store.autoReminderRetryLimit, 3)
+
+        fixture.store.autoReminderRetryLimit = 5
+        let reloadedStore = PillStore(modelContext: fixture.context)
+        XCTAssertEqual(reloadedStore.autoReminderRetryLimit, 5)
+
+        fixture.store.autoReminderRetryLimit = 4
+        XCTAssertEqual(fixture.store.autoReminderRetryLimit, 3)
+    }
+
+    func testZeroAutoReminderRetryLimitKeepsPrimaryReminderWithoutRetries() throws {
+        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
+        fixture.store.autoReminderRetryLimit = 0
+
+        let summaries = NotificationManager.shared.managedRequestSummariesForTesting(
+            store: fixture.store,
+            now: now
+        )
+        let todayEpoch = Int(Calendar.current.startOfDay(for: now).timeIntervalSince1970)
+        let todayDueReminders = summaries.filter { $0.dueDayEpoch == todayEpoch }
+
+        XCTAssertEqual(todayDueReminders.filter { $0.requestKind == "base" }.count, 1)
+        XCTAssertEqual(todayDueReminders.filter { $0.requestKind == "retry" }.count, 0)
+    }
+
+    func testAutoReminderRetryLimitCapsSameDayRetries() throws {
+        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let retryLimits = [1, 3, 5]
+
+        for retryLimit in retryLimits {
+            let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
+            fixture.store.autoReminderRetryLimit = retryLimit
+
+            let summaries = NotificationManager.shared.managedRequestSummariesForTesting(
+                store: fixture.store,
+                now: now
+            )
+            let todayEpoch = Int(Calendar.current.startOfDay(for: now).timeIntervalSince1970)
+            let todayDueReminders = summaries.filter { $0.dueDayEpoch == todayEpoch }
+
+            XCTAssertEqual(todayDueReminders.filter { $0.requestKind == "base" }.count, 1)
+            XCTAssertEqual(
+                todayDueReminders.filter { $0.requestKind == "retry" }.count,
+                retryLimit,
+                "Expected \(retryLimit) automatic retries for limit \(retryLimit)."
+            )
+        }
+    }
+
+    func testSnoozeRequestIsSeparateFromAutomaticRetryLimit() throws {
+        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
+        fixture.store.autoReminderRetryLimit = 1
+        let snoozeFireDate = now.addingTimeInterval(10 * 60)
+
+        let summaries = NotificationManager.shared.managedRequestSummariesForTesting(
+            store: fixture.store,
+            now: now,
+            snoozeFirstFireDate: snoozeFireDate
+        )
+        let todayEpoch = Int(Calendar.current.startOfDay(for: now).timeIntervalSince1970)
+        let todayDueReminders = summaries.filter { $0.dueDayEpoch == todayEpoch }
+
+        XCTAssertEqual(todayDueReminders.filter { $0.requestKind == "snooze" }.count, 1)
+        XCTAssertEqual(todayDueReminders.filter { $0.requestKind == "retry" }.count, 1)
+        XCTAssertEqual(todayDueReminders.filter { $0.requestKind == "base" }.count, 0)
+    }
 }
