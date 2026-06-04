@@ -69,11 +69,9 @@ struct MethodDetailsView: View {
                         }
 
                         cycleDaySection
-                            .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger4))
-                            .animation(.none, value: cycleDay)
-                            .animation(.none, value: selectedRegimen)
-                            .animation(.none, value: customActiveDaysText)
-                            .animation(.none, value: customBreakDaysText)
+                            .transaction { transaction in
+                                transaction.animation = nil
+                            }
 
                         scheduleCriticalNote
                             .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger4))
@@ -164,7 +162,9 @@ struct MethodDetailsView: View {
     private func regimenCard(_ regimen: PillPack.PillRegimenPreset) -> some View {
         let isSelected = selectedRegimen == regimen
         return Button {
-            withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
+            var transaction = Transaction()
+            transaction.animation = nil
+            withTransaction(transaction) {
                 selectedRegimen = regimen
             }
         } label: {
@@ -282,7 +282,7 @@ struct MethodDetailsView: View {
 
                 HStack(spacing: 24) {
                     cycleAdjustButton(systemName: "minus") {
-                        cycleDay = max(1, cycleDay - 1)
+                        setCycleDay(max(1, cycleDay - 1))
                     }
 
                     VStack(spacing: 0) {
@@ -290,6 +290,7 @@ struct MethodDetailsView: View {
                             .font(.system(size: 48, weight: .heavy, design: .rounded))
                             .foregroundStyle(PillieTheme.textPrimary)
                             .monospacedDigit()
+                            .accessibilityIdentifier("cycleDayValue")
                         Text("DAY")
                             .font(.pillieCaptionMedium())
                             .foregroundStyle(PillieTheme.coral)
@@ -298,7 +299,7 @@ struct MethodDetailsView: View {
                     .frame(minWidth: 88)
 
                     cycleAdjustButton(systemName: "plus") {
-                        cycleDay = min(cycleLength, cycleDay + 1)
+                        setCycleDay(min(cycleLength, cycleDay + 1))
                     }
                 }
 
@@ -355,6 +356,7 @@ struct MethodDetailsView: View {
                 .background(PillieTheme.sage.opacity(0.6), in: Circle())
         }
         .buttonStyle(.plain)
+        .accessibilityIdentifier(systemName == "plus" ? "cycleDayPlusButton" : "cycleDayMinusButton")
     }
 
     private var scheduleCriticalNote: some View {
@@ -416,8 +418,18 @@ struct MethodDetailsView: View {
     }
 
     private func clampCycleDay() {
-        withAnimation(.none) {
+        var transaction = Transaction()
+        transaction.animation = nil
+        withTransaction(transaction) {
             cycleDay = min(max(1, cycleDay), max(1, cycleLength))
+        }
+    }
+
+    private func setCycleDay(_ value: Int) {
+        var transaction = Transaction()
+        transaction.animation = nil
+        withTransaction(transaction) {
+            cycleDay = min(max(1, value), max(1, cycleLength))
         }
     }
 }

@@ -243,7 +243,7 @@ struct ContentView: View {
             ))
 
         case 11:
-          FreePlanView(
+          ReminderPlanView(
             onBack: {
               withAnimation(.easeInOut(duration: 0.4)) {
                 setOnboardingStep(10)
@@ -262,13 +262,20 @@ struct ContentView: View {
             ))
 
         case 12:
-          PremiumChallengePreviewView(
+          PremiumPaywallView(
             onBack: {
               withAnimation(.easeInOut(duration: 0.4)) {
                 setOnboardingStep(11)
               }
             },
             onContinue: {
+              onboardingSelectedFreePlan = false
+              withAnimation(.easeInOut(duration: 0.4)) {
+                setOnboardingStep(13)
+              }
+            },
+            onSkip: {
+              onboardingSelectedFreePlan = true
               withAnimation(.easeInOut(duration: 0.4)) {
                 setOnboardingStep(13)
               }
@@ -281,46 +288,20 @@ struct ContentView: View {
             ))
 
         case 13:
-          PremiumPaywallView(
+          AppBlockingSetupView(
             onBack: {
               withAnimation(.easeInOut(duration: 0.4)) {
                 setOnboardingStep(12)
               }
             },
             onContinue: {
-              onboardingSelectedFreePlan = false
               withAnimation(.easeInOut(duration: 0.4)) {
                 setOnboardingStep(14)
               }
             },
             onSkip: {
-              onboardingSelectedFreePlan = true
               withAnimation(.easeInOut(duration: 0.4)) {
                 setOnboardingStep(14)
-              }
-            }
-          )
-          .transition(
-            .asymmetric(
-              insertion: .move(edge: .trailing),
-              removal: .move(edge: .trailing)
-            ))
-
-        case 14:
-          AppBlockingSetupView(
-            onBack: {
-              withAnimation(.easeInOut(duration: 0.4)) {
-                setOnboardingStep(13)
-              }
-            },
-            onContinue: {
-              withAnimation(.easeInOut(duration: 0.4)) {
-                setOnboardingStep(15)
-              }
-            },
-            onSkip: {
-              withAnimation(.easeInOut(duration: 0.4)) {
-                setOnboardingStep(15)
               }
             }
           )
@@ -357,6 +338,7 @@ struct ContentView: View {
         }
         .transition(.opacity)
         .zIndex(1)
+        .allowsHitTesting(false)
       }
     }
     .task {

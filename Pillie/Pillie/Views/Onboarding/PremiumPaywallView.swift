@@ -115,6 +115,7 @@ struct PremiumPaywallView: View {
             }
         }
         .task {
+            subscriptionManager.configure()
             await loadOfferings()
         }
         .alert("Purchase Error", isPresented: .init(
@@ -139,8 +140,8 @@ struct PremiumPaywallView: View {
             if isFromOnboarding {
                 PersonalizationOnboardingHeader(
                     appeared: animateIn,
-                    progress: PersonalizationOnboardingProgress.fraction(for: 10),
-                    badge: PersonalizationOnboardingProgress.badge(for: 10),
+                    progress: PersonalizationOnboardingProgress.fraction(for: 9),
+                    badge: PersonalizationOnboardingProgress.badge(for: 9),
                     onBack: onBack
                 )
             } else {

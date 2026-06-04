@@ -169,7 +169,9 @@ struct PillieApp: App {
         if !Self.isRunningTests {
             AnalyticsManager.shared.configure()
             AnalyticsManager.shared.track(.appLaunched, isPlus: SubscriptionManager.shared.isPlus)
-            SubscriptionManager.shared.configure()
+            if !Self.isOnboardingActive {
+                SubscriptionManager.shared.configure()
+            }
         }
     }
 
@@ -191,6 +193,7 @@ struct PillieApp: App {
                     guard !Self.isRunningTests else { return }
                     if newPhase == .active {
                         AnalyticsManager.shared.track(.appBecameActive, isPlus: SubscriptionManager.shared.isPlus)
+                        guard !Self.isOnboardingActive else { return }
                         reconcileScreenTimeState()
                         NotificationManager.shared.requestReschedule(from: store, reason: "app-became-active")
                     } else if newPhase == .background {
@@ -210,6 +213,10 @@ struct PillieApp: App {
             reminderMinute: store.reminderMinute,
             method: store.pack.method
         )
+    }
+
+    private static var isOnboardingActive: Bool {
+        UserDefaults.standard.integer(forKey: "onboardingStep") < 14
     }
 
     #if DEBUG

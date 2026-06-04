@@ -21,6 +21,7 @@ final class SubscriptionManager: NSObject {
     static let entitlementID = "pillie_plus"
     static let monthlyProductID = "com.idrisskone.pillie.plus.monthly"
     static let annualProductID = "com.idrisskone.pillie.plus.annual"
+    private var isConfigured = false
 
     private override init() {
         super.init()
@@ -29,8 +30,10 @@ final class SubscriptionManager: NSObject {
     // MARK: - Configure (call once at app launch)
 
     func configure() {
+        guard !isConfigured else { return }
         Purchases.logLevel = .warn
         Purchases.configure(withAPIKey: Self.apiKey)
+        isConfigured = true
 
         // Listen for subscription changes
         Purchases.shared.delegate = self
