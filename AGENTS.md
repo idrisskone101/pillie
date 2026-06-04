@@ -91,6 +91,14 @@ Build, install, and launch:
 cd /Users/idrisskone/Developer/Pillie && Pillie/scripts/build-and-run.sh
 ```
 
+Run focused tests only:
+
+```bash
+cd /Users/idrisskone/Developer/Pillie && Pillie/scripts/test-focused.sh SoftPaywallContentTests
+```
+
+Pass one or more explicit XCTest classes or methods. The focused test helper uses the same simulator and `/tmp` DerivedData conventions as the build script, and refuses to run without an explicit test target so local verification does not accidentally become a full-suite run.
+
 Manual install and launch:
 
 ```bash

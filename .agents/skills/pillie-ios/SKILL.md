@@ -81,6 +81,14 @@ Build, install, and launch in one step:
 cd /Users/idrisskone/Developer/Pillie && Pillie/scripts/build-and-run.sh
 ```
 
+Run focused tests only:
+
+```bash
+cd /Users/idrisskone/Developer/Pillie && Pillie/scripts/test-focused.sh SoftPaywallContentTests
+```
+
+Pass one or more explicit XCTest classes or methods. The helper uses the same simulator and `/tmp` DerivedData selection as `build-and-run.sh`, and intentionally requires at least one test target to avoid accidental full-suite local runs.
+
 Manual install and launch:
 
 ```bash
