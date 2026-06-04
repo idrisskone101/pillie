@@ -12,6 +12,7 @@ final class SettingsTelemetryTests: XCTestCase {
         let settings: [AnalyticsSetting] = [
             .reminderTime,
             .autoReminderInterval,
+            .autoReminderRetryLimit,
             .supplyReminder,
             .protocol,
             .cycleDay,
@@ -22,6 +23,7 @@ final class SettingsTelemetryTests: XCTestCase {
         XCTAssertEqual(settings.map(\.rawValue), [
             "reminder_time",
             "auto_reminder_interval",
+            "auto_reminder_retry_limit",
             "supply_reminder",
             "protocol",
             "cycle_day",

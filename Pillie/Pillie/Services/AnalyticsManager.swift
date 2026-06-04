@@ -204,6 +204,7 @@ enum AnalyticsResult: String {
 enum AnalyticsSetting: String {
   case reminderTime = "reminder_time"
   case autoReminderInterval = "auto_reminder_interval"
+  case autoReminderRetryLimit = "auto_reminder_retry_limit"
   case supplyReminder = "supply_reminder"
   case `protocol`
   case cycleDay = "cycle_day"

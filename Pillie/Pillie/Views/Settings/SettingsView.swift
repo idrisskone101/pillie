@@ -14,6 +14,7 @@ struct SettingsView: View {
     @State private var hasAnimatedIn = false
     @State private var showTimeEditor = false
     @State private var showIntervalEditor = false
+    @State private var showRetryLimitEditor = false
     @State private var showRefillReminderEditor = false
     @State private var showProtocolEditor = false
     @State private var showCycleDayEditor = false
@@ -59,6 +60,14 @@ struct SettingsView: View {
                         AnalyticsManager.shared.track(.settingsSheetOpened, source: .settings, setting: .autoReminderInterval, isPlus: SubscriptionManager.shared.isPlus)
                     } label: {
                         settingsRow("Auto-Reminder Interval", value: store.autoReminderIntervalDisplay)
+                    }
+                    .buttonStyle(.plain)
+                    divider
+                    Button {
+                        showRetryLimitEditor = true
+                        AnalyticsManager.shared.track(.settingsSheetOpened, source: .settings, setting: .autoReminderRetryLimit, isPlus: SubscriptionManager.shared.isPlus)
+                    } label: {
+                        settingsRow("Auto-Reminder Retry Limit", value: store.autoReminderRetryLimitDisplay)
                     }
                     .buttonStyle(.plain)
                     if store.pack.method != .ring {
@@ -204,6 +213,11 @@ struct SettingsView: View {
         }
         .sheet(isPresented: $showIntervalEditor) {
             AutoReminderIntervalEditor(store: store)
+                .presentationDetents([.medium])
+                .presentationDragIndicator(.hidden)
+        }
+        .sheet(isPresented: $showRetryLimitEditor) {
+            AutoReminderRetryLimitEditor(store: store)
                 .presentationDetents([.medium])
                 .presentationDragIndicator(.hidden)
         }
@@ -717,6 +731,82 @@ private struct AutoReminderIntervalEditor: View {
         .background(PillieTheme.bg.ignoresSafeArea())
         .onAppear {
             selectedInterval = store.autoReminderIntervalMinutes
+        }
+    }
+}
+
+// MARK: - Auto Reminder Retry Limit Editor
+
+private struct AutoReminderRetryLimitEditor: View {
+    @Bindable var store: PillStore
+    @Environment(\.dismiss) private var dismiss
+
+    @State private var selectedLimit: Int = 3
+
+    var body: some View {
+        VStack(spacing: 24) {
+            Capsule()
+                .fill(PillieTheme.sage)
+                .frame(width: 36, height: 5)
+                .padding(.top, 12)
+
+            Text("Auto-Reminder Retry Limit")
+                .font(.pillieSubtitleBold())
+                .foregroundStyle(PillieTheme.textPrimary)
+
+            VStack(spacing: 16) {
+                ForEach(PillStore.autoReminderRetryLimitOptions, id: \.self) { option in
+                    Button {
+                        selectedLimit = option
+                    } label: {
+                        HStack {
+                            Text(optionLabel(for: option))
+                                .font(.pillieBodyBold())
+                                .foregroundStyle(PillieTheme.textPrimary)
+                            Spacer()
+                            Image(systemName: selectedLimit == option ? "checkmark.circle.fill" : "circle")
+                                .foregroundStyle(selectedLimit == option ? PillieTheme.coral : PillieTheme.textMuted)
+                        }
+                        .padding(14)
+                        .background(PillieTheme.cardWhite)
+                        .clipShape(RoundedRectangle(cornerRadius: 14))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 14)
+                                .stroke(PillieTheme.sageHalf, lineWidth: 1)
+                        )
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+            .padding(.horizontal, 20)
+
+            Button {
+                store.autoReminderRetryLimit = selectedLimit
+                NotificationManager.shared.requestReschedule(from: store, reason: "settings-auto-retry-limit")
+                AnalyticsManager.shared.track(.settingsChangeSaved, source: .settings, setting: .autoReminderRetryLimit, isPlus: SubscriptionManager.shared.isPlus)
+                dismiss()
+            } label: {
+                Text("Save")
+            }
+            .buttonStyle(.pillieDark)
+            .padding(.horizontal, 28)
+
+            Spacer()
+        }
+        .background(PillieTheme.bg.ignoresSafeArea())
+        .onAppear {
+            selectedLimit = store.autoReminderRetryLimit
+        }
+    }
+
+    private func optionLabel(for option: Int) -> String {
+        switch option {
+        case 0:
+            return "Off"
+        case 1:
+            return "1 retry"
+        default:
+            return "\(option) retries"
         }
     }
 }
