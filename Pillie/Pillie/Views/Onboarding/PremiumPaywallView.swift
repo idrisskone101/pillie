@@ -58,7 +58,7 @@ struct SoftPaywallContent {
         reassurance: "No long-term commitment. Cancel anytime in the App Store.",
         primaryCTA: "Try Pillie Plus for free",
         monthlyCTA: "Start Pillie Plus monthly",
-        freeCTA: "Continue for Free"
+        freeCTA: "Continue with free plan"
     )
 }
 
@@ -132,8 +132,6 @@ struct PremiumPaywallView: View {
                         pricingCards
                             .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger3))
 
-                        restoreSection
-                            .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger3))
                     }
                     .padding(.horizontal, 28)
                     .padding(.top, 14)
@@ -448,34 +446,6 @@ struct PremiumPaywallView: View {
             }
     }
 
-    // MARK: - Supporting Actions
-
-    private var restoreSection: some View {
-        Button {
-            restorePurchases()
-        } label: {
-            HStack(spacing: 6) {
-                Text("Already subscribed?")
-                    .font(.pillie(12, weight: .regular))
-                    .foregroundStyle(PillieTheme.textMuted.opacity(0.68))
-
-                if isRestoring {
-                    ProgressView()
-                        .tint(PillieTheme.textMuted)
-                        .scaleEffect(0.74)
-                } else {
-                    Text("Restore Purchases")
-                        .font(.pillie(12, weight: .bold))
-                        .foregroundStyle(PillieTheme.textPrimary.opacity(0.7))
-                }
-            }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 4)
-        }
-        .buttonStyle(.plain)
-        .disabled(isRestoring)
-    }
-
     // MARK: - Footer
 
     private var footer: some View {
@@ -555,6 +525,26 @@ struct PremiumPaywallView: View {
                     .frame(height: 34)
             }
             .buttonStyle(.plain)
+
+            Button {
+                restorePurchases()
+            } label: {
+                Group {
+                    if isRestoring {
+                        ProgressView()
+                            .tint(PillieTheme.textMuted)
+                            .scaleEffect(0.72)
+                    } else {
+                        Text("Restore Purchases")
+                            .font(.pillie(12, weight: .bold))
+                            .foregroundStyle(PillieTheme.textMuted.opacity(0.7))
+                    }
+                }
+                .frame(maxWidth: .infinity)
+                .frame(height: 18)
+            }
+            .buttonStyle(.plain)
+            .disabled(isRestoring)
 
             HStack(spacing: 4) {
                 Link("Terms of Use", destination: URL(string: "https://idrisskone101.github.io/pillie/terms-and-conditions")!)

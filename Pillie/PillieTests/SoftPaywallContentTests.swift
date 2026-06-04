@@ -22,7 +22,7 @@ final class SoftPaywallContentTests: XCTestCase {
         XCTAssertEqual(content.benefits.last?.subtitle, "New Pillie Plus tools are included as they launch.")
         XCTAssertEqual(content.primaryCTA, "Try Pillie Plus for free")
         XCTAssertEqual(content.monthlyCTA, "Start Pillie Plus monthly")
-        XCTAssertEqual(content.freeCTA, "Continue for Free")
+        XCTAssertEqual(content.freeCTA, "Continue with free plan")
 
         let visibleCopy = content.visibleCopy.joined(separator: " ").lowercased()
         XCTAssertFalse(visibleCopy.contains("limited offer"))
