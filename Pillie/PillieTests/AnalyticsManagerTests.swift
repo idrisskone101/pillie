@@ -218,7 +218,8 @@ final class AnalyticsManagerTests: XCTestCase {
     XCTAssertEqual(AnalyticsStep(onboardingStep: 10), .reminderTime)
     XCTAssertEqual(AnalyticsStep(onboardingStep: 11), .reminderPlan)
     XCTAssertEqual(AnalyticsStep(onboardingStep: 12), .paywall)
-    XCTAssertEqual(AnalyticsStep(onboardingStep: 13), .appBlocking)
+    XCTAssertEqual(AnalyticsStep(onboardingStep: 13), .freePlanConfirmation)
+    XCTAssertEqual(AnalyticsStep(onboardingStep: 14), .appBlocking)
   }
 
   func testOnboardingCompletedFiresOnlyAfterFinalOnboardingStep() {
@@ -226,7 +227,7 @@ final class AnalyticsManagerTests: XCTestCase {
     let telemetry = OnboardingTelemetry(analytics: recorder, isPlus: { false })
 
     telemetry.stepCompleted(from: 9, to: 10)
-    telemetry.stepCompleted(from: 13, to: 14)
+    telemetry.stepCompleted(from: 13, to: 15)
 
     XCTAssertEqual(
       recorder.events,
@@ -235,7 +236,7 @@ final class AnalyticsManagerTests: XCTestCase {
         .onboardingStepCompleted,
         .onboardingCompleted,
       ])
-    XCTAssertEqual(recorder.steps, [.schedule, .appBlocking, nil])
+    XCTAssertEqual(recorder.steps, [.schedule, .freePlanConfirmation, nil])
   }
 
   func testOptOutStopsFutureCaptureAndCanOptBackIn() {

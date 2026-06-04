@@ -271,7 +271,7 @@ struct ContentView: View {
             onContinue: {
               onboardingSelectedFreePlan = false
               withAnimation(.easeInOut(duration: 0.4)) {
-                setOnboardingStep(13)
+                setOnboardingStep(14)
               }
             },
             onSkip: {
@@ -288,6 +288,25 @@ struct ContentView: View {
             ))
 
         case 13:
+          FreePlanConfirmationView(
+            onBack: {
+              withAnimation(.easeInOut(duration: 0.4)) {
+                setOnboardingStep(12)
+              }
+            },
+            onContinue: {
+              withAnimation(.easeInOut(duration: 0.4)) {
+                setOnboardingStep(15)
+              }
+            }
+          )
+          .transition(
+            .asymmetric(
+              insertion: .move(edge: .trailing),
+              removal: .move(edge: .trailing)
+            ))
+
+        case 14:
           AppBlockingSetupView(
             onBack: {
               withAnimation(.easeInOut(duration: 0.4)) {
@@ -296,12 +315,12 @@ struct ContentView: View {
             },
             onContinue: {
               withAnimation(.easeInOut(duration: 0.4)) {
-                setOnboardingStep(14)
+                setOnboardingStep(15)
               }
             },
             onSkip: {
               withAnimation(.easeInOut(duration: 0.4)) {
-                setOnboardingStep(14)
+                setOnboardingStep(15)
               }
             }
           )

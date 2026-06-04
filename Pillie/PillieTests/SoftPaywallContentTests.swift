@@ -33,4 +33,26 @@ final class SoftPaywallContentTests: XCTestCase {
         XCTAssertFalse(content.primaryCTA.contains("Try Plus"))
         XCTAssertFalse(content.monthlyCTA.contains("Go Monthly"))
     }
+
+    func testFreePlanConfirmationContentConfirmsFreeFeaturesWithoutAnotherUpgradeAsk() {
+        let content = FreePlanConfirmationContent.default
+
+        XCTAssertEqual(content.title, "You're all set with")
+        XCTAssertEqual(content.titleAccent, "Pillie")
+        XCTAssertEqual(content.primaryCTA, "Start Using Pillie")
+        XCTAssertEqual(content.confirmations.map(\.title), [
+            "Daily reminders",
+            "Smart reminders",
+            "Cycle tracking"
+        ])
+
+        let visibleCopy = content.visibleCopy.joined(separator: " ").lowercased()
+        XCTAssertTrue(visibleCopy.contains("active"))
+        XCTAssertTrue(visibleCopy.contains("tracking"))
+        XCTAssertFalse(visibleCopy.contains("app blocking"))
+        XCTAssertFalse(visibleCopy.contains("screen time"))
+        XCTAssertFalse(visibleCopy.contains("upgrade"))
+        XCTAssertFalse(visibleCopy.contains("pillie plus"))
+        XCTAssertFalse(visibleCopy.contains("limited offer"))
+    }
 }

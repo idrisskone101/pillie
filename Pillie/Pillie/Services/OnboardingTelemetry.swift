@@ -48,7 +48,7 @@ struct OnboardingTelemetry {
       isPlus: isPlus()
     )
 
-    if previousStep <= 13, nextStep > 13 {
+    if previousStep <= 14, nextStep > 14 {
       track(.onboardingCompleted, source: .onboarding, isPlus: isPlus())
     }
   }
