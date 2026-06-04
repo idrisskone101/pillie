@@ -142,10 +142,12 @@ struct PremiumPaywallView: View {
             VStack {
                 Spacer()
                 footer
-                    .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger4))
                     .padding(.horizontal, 28)
                     .padding(.top, 10)
                     .padding(.bottom, 28)
+                    .transaction { transaction in
+                        transaction.animation = nil
+                    }
                     .background(
                         LinearGradient(
                             colors: [PillieTheme.bg.opacity(0), PillieTheme.bg, PillieTheme.bg],
