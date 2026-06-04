@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 # build-and-run.sh — Build, install, and launch Pillie on the simulator.
 # Usage:
-#   ./scripts/build-and-run.sh              # build + install + launch
+#   ./scripts/build-and-run.sh              # build + install + headless launch
 #   ./scripts/build-and-run.sh --build-only # build only
-#   ./scripts/build-and-run.sh --run-only   # install + launch (skip build)
+#   ./scripts/build-and-run.sh --run-only   # install + headless launch (skip build)
+#   ./scripts/build-and-run.sh --console    # build + install + blocking console launch
 #   PILLIE_DERIVED_DATA=/tmp/PillieDerivedData-demo ./scripts/build-and-run.sh
 
 set -euo pipefail
@@ -33,6 +34,47 @@ else
 fi
 
 APP_PATH="$DERIVED_DATA/Build/Products/Debug-iphonesimulator/Pillie.app"
+BUILD=1
+RUN=1
+CONSOLE=0
+
+usage() {
+  cat <<EOF
+Usage: $0 [--build-only] [--run-only] [--console]
+
+Options:
+  --build-only  Build the app and skip install/launch.
+  --run-only    Install and launch the existing build.
+  --console     Launch attached to the blocking app console.
+
+Default launch is headless so the command returns after simctl prints the app PID.
+EOF
+}
+
+for arg in "$@"; do
+  case "$arg" in
+    --build-only)
+      BUILD=1
+      RUN=0
+      ;;
+    --run-only)
+      BUILD=0
+      RUN=1
+      ;;
+    --console)
+      CONSOLE=1
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    *)
+      echo "Unknown argument: $arg" >&2
+      usage >&2
+      exit 2
+      ;;
+  esac
+done
 
 build() {
   echo "▸ Building $SCHEME..."
@@ -54,12 +96,20 @@ install_app() {
 }
 
 launch_app() {
-  echo "▸ Launching $BUNDLE_ID..."
-  xcrun simctl launch --terminate-running-process --console "$UDID" "$BUNDLE_ID"
+  if [[ "$CONSOLE" == "1" ]]; then
+    echo "▸ Launching $BUNDLE_ID with blocking console..."
+    xcrun simctl launch --terminate-running-process --console "$UDID" "$BUNDLE_ID"
+  else
+    echo "▸ Launching $BUNDLE_ID headlessly..."
+    xcrun simctl launch --terminate-running-process "$UDID" "$BUNDLE_ID"
+  fi
 }
 
-case "${1:-}" in
-  --build-only) build ;;
-  --run-only)   install_app && launch_app ;;
-  *)            build && install_app && launch_app ;;
-esac
+if [[ "$BUILD" == "1" ]]; then
+  build
+fi
+
+if [[ "$RUN" == "1" ]]; then
+  install_app
+  launch_app
+fi

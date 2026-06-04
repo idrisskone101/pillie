@@ -91,6 +91,8 @@ Build, install, and launch:
 cd /Users/idrisskone/Developer/Pillie && Pillie/scripts/build-and-run.sh
 ```
 
+`build-and-run.sh` launches headlessly by default so the command returns after `simctl` prints the app PID. Do not use blocking console launch for routine build/run verification; use it only when actively collecting stdout.
+
 Run focused tests only:
 
 ```bash
@@ -118,7 +120,7 @@ xcrun simctl openurl "$UDID" "pillie://some/path"
 Short blocking console:
 
 ```bash
-xcrun simctl launch --terminate-running-process --console "$UDID" com.idrisskone.pillie
+Pillie/scripts/build-and-run.sh --run-only --console
 ```
 
 Capture larger output:
@@ -203,6 +205,7 @@ Visual QA loop:
 - Never delete `/tmp/PillieDerivedData-*` worktree build folders unless explicitly asked.
 - Never put DerivedData inside the project folder.
 - Always use `--terminate-running-process` with `simctl launch`.
+- Keep simulator launches headless for normal build/run work. `simctl launch --console` and `build-and-run.sh --console` are blocking and should only be used for intentional console capture.
 - Do not revert unrelated user changes.
 - Prefer existing Swift, SwiftUI, service, and view-model patterns over new abstractions.
 - Keep changes scoped to the task and run the relevant build/test verification before handing work back whenever feasible.

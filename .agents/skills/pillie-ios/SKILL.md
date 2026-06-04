@@ -81,6 +81,8 @@ Build, install, and launch in one step:
 cd /Users/idrisskone/Developer/Pillie && Pillie/scripts/build-and-run.sh
 ```
 
+`build-and-run.sh` launches headlessly by default so the command returns after `simctl` prints the app PID. Do not use blocking console launch for routine build/run verification; opt into it only when console output is the thing being inspected.
+
 Run focused tests only:
 
 ```bash
@@ -105,7 +107,7 @@ Short blocking console:
 
 ```bash
 UDID="124DC75F-0771-4C81-841D-F13655138260"
-xcrun simctl launch --terminate-running-process --console "$UDID" com.idrisskone.pillie
+Pillie/scripts/build-and-run.sh --run-only --console
 ```
 
 Larger console capture:
@@ -195,6 +197,7 @@ Use 50% instead of 33.33% for 2x simulators. Inspect the resulting 1x image befo
 
 - Do not delete `/tmp/PillieDerivedData` or `/tmp/PillieDerivedData-*` unless explicitly asked. Incremental builds matter.
 - Do not put DerivedData inside the project folder.
+- Keep simulator launches headless for normal build/run work. `simctl launch --console` and `build-and-run.sh --console` are blocking and should only be used for intentional console capture.
 - Do not revert user changes or unrelated generated Xcode state.
 - Prefer minimal, local changes that keep the app shippable.
 - Run the golden build or a narrower relevant verification before handing work back whenever feasible.
