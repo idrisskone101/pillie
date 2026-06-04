@@ -525,8 +525,7 @@ struct PremiumPaywallView: View {
                         .lineLimit(1)
                         .minimumScaleFactor(0.88)
                         .frame(maxWidth: .infinity)
-                        .frame(height: 34)
-                        .background(PillieTheme.cardWhite.opacity(0.7), in: Capsule())
+                        .frame(height: 30)
                 }
                 .buttonStyle(.plain)
 
@@ -551,7 +550,7 @@ struct PremiumPaywallView: View {
                         }
                     }
                     .frame(minWidth: 118, maxWidth: 136)
-                    .frame(height: 34)
+                    .frame(height: 30)
                 }
                 .buttonStyle(.plain)
                 .disabled(isRestoring)
