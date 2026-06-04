@@ -11,13 +11,15 @@ final class SoftPaywallContentTests: XCTestCase {
         let content = SoftPaywallContent.default
 
         XCTAssertEqual(content.badge, "Pillie Plus")
-        XCTAssertEqual(content.title, "Choose")
+        XCTAssertEqual(content.title, "Stay on Track with")
         XCTAssertEqual(content.titleAccent, "Pillie Plus")
         XCTAssertEqual(content.subtitle, "App blocks and shake checks when reminders need backup.")
         XCTAssertEqual(content.benefits.map(\.title), [
             "Block the scroll",
-            "Shake to make it count"
+            "Shake to make it count",
+            "More Plus perks coming"
         ])
+        XCTAssertEqual(content.benefits.last?.subtitle, "New Pillie Plus tools are included as they launch.")
         XCTAssertEqual(content.primaryCTA, "Try Pillie Plus for free")
         XCTAssertEqual(content.monthlyCTA, "Start Pillie Plus monthly")
         XCTAssertEqual(content.freeCTA, "Continue for Free")

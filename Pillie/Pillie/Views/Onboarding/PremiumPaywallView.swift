@@ -32,7 +32,7 @@ struct SoftPaywallContent {
 
     static let `default` = SoftPaywallContent(
         badge: "Pillie Plus",
-        title: "Choose",
+        title: "Stay on Track with",
         titleAccent: "Pillie Plus",
         subtitle: "App blocks and shake checks when reminders need backup.",
         benefits: [
@@ -47,6 +47,12 @@ struct SoftPaywallContent {
                 tint: PillieTheme.sage,
                 title: "Shake to make it count",
                 subtitle: "Shake to unlock or confirm with intention."
+            ),
+            Benefit(
+                icon: "sparkles",
+                tint: PillieTheme.coralLight,
+                title: "More Plus perks coming",
+                subtitle: "New Pillie Plus tools are included as they launch."
             )
         ],
         reassurance: "No long-term commitment. Cancel anytime in the App Store.",
@@ -238,7 +244,7 @@ struct PremiumPaywallView: View {
                 .foregroundColor(PillieTheme.textPrimary)
              + Text(content.titleAccent)
                 .foregroundColor(PillieTheme.coral))
-            .font(.pillieExtraBold(29))
+            .font(.pillieExtraBold(28))
             .multilineTextAlignment(.center)
 
             Text(content.subtitle)
@@ -246,53 +252,51 @@ struct PremiumPaywallView: View {
                 .foregroundStyle(PillieTheme.textMuted)
                 .lineSpacing(3)
                 .multilineTextAlignment(.center)
-                .frame(maxWidth: 300)
-
+                .frame(maxWidth: 250)
         }
     }
 
     // MARK: - Benefit Rows
 
     private var benefitRows: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: 9) {
             ForEach(Array(content.benefits.enumerated()), id: \.offset) { _, benefit in
                 benefitRow(benefit)
             }
         }
+        .padding(14)
+        .background(
+            RoundedRectangle(cornerRadius: 28)
+                .fill(PillieTheme.cardWhite.opacity(0.76))
+        )
+        .overlay {
+            RoundedRectangle(cornerRadius: 28)
+                .stroke(Color.black.opacity(0.05), lineWidth: 1)
+        }
+        .shadow(color: PillieTheme.cardShadow, radius: 8, y: 4)
     }
 
     private func benefitRow(_ benefit: SoftPaywallContent.Benefit) -> some View {
         HStack(alignment: .center, spacing: 14) {
             Image(systemName: benefit.icon)
-                .font(.system(size: 22, weight: .semibold))
+                .font(.system(size: 18, weight: .semibold))
                 .foregroundStyle(PillieTheme.textPrimary)
-                .frame(width: 44, height: 44)
-                .background(.white, in: RoundedRectangle(cornerRadius: 15))
-                .shadow(color: PillieTheme.cardShadow, radius: 5, y: 3)
+                .frame(width: 34, height: 34)
+                .background(benefit.tint, in: RoundedRectangle(cornerRadius: 12))
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(benefit.title)
-                    .font(.pillie(15, weight: .bold))
+                    .font(.pillie(14, weight: .bold))
                     .foregroundStyle(PillieTheme.textPrimary)
 
                 Text(benefit.subtitle)
-                    .font(.pillie(12, weight: .medium))
+                    .font(.pillie(11, weight: .medium))
                     .foregroundStyle(PillieTheme.textMuted)
                     .lineSpacing(2)
                     .fixedSize(horizontal: false, vertical: true)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(12)
-        .background(
-            RoundedRectangle(cornerRadius: 28)
-                .fill(benefit.tint)
-        )
-        .overlay {
-            RoundedRectangle(cornerRadius: 28)
-                .stroke(.white.opacity(0.55), lineWidth: 1)
-        }
-        .shadow(color: PillieTheme.cardShadow, radius: 7, y: 4)
     }
 
     // MARK: - Pricing Cards
