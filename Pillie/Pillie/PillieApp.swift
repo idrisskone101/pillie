@@ -221,14 +221,25 @@ struct PillieApp: App {
 
     #if DEBUG
     private func handleDebugDeepLink(_ url: URL) {
-        guard url.scheme == "pillie", url.host == "debug", url.path == "/posthog-smoke" else {
+        guard url.scheme == "pillie", url.host == "debug" else { return }
+
+        switch url.path {
+        case "/posthog-smoke":
+            AnalyticsManager.shared.track(.appLaunched, source: .home, isPlus: SubscriptionManager.shared.isPlus)
+            AnalyticsManager.shared.track(.onboardingStarted, source: .onboarding, step: .welcome, isPlus: SubscriptionManager.shared.isPlus)
+            AnalyticsManager.shared.track(.onboardingStepViewed, source: .onboarding, step: .welcome, isPlus: SubscriptionManager.shared.isPlus)
+            AnalyticsManager.shared.flush()
+        case "/plus-app-blocking-setup":
+            SubscriptionManager.shared.setPlusForTesting(true)
+            UserDefaults.standard.set(false, forKey: "onboardingSelectedFreePlan")
+            UserDefaults.standard.set(OnboardingPaywallRoute.appBlockingSetupStep, forKey: "onboardingStep")
+        case "/free-plan-confirmation":
+            SubscriptionManager.shared.setPlusForTesting(false)
+            UserDefaults.standard.set(true, forKey: "onboardingSelectedFreePlan")
+            UserDefaults.standard.set(OnboardingPaywallRoute.freePlanConfirmationStep, forKey: "onboardingStep")
+        default:
             return
         }
-
-        AnalyticsManager.shared.track(.appLaunched, source: .home, isPlus: SubscriptionManager.shared.isPlus)
-        AnalyticsManager.shared.track(.onboardingStarted, source: .onboarding, step: .welcome, isPlus: SubscriptionManager.shared.isPlus)
-        AnalyticsManager.shared.track(.onboardingStepViewed, source: .onboarding, step: .welcome, isPlus: SubscriptionManager.shared.isPlus)
-        AnalyticsManager.shared.flush()
     }
     #endif
 }

@@ -271,13 +271,21 @@ struct ContentView: View {
             onContinue: {
               onboardingSelectedFreePlan = false
               withAnimation(.easeInOut(duration: 0.4)) {
-                setOnboardingStep(14)
+                setOnboardingStep(
+                  OnboardingPaywallRoute.nextStepAfterPaywall(
+                    isPlus: SubscriptionManager.shared.isPlus,
+                    selectedFreePlan: onboardingSelectedFreePlan
+                  ))
               }
             },
             onSkip: {
               onboardingSelectedFreePlan = true
               withAnimation(.easeInOut(duration: 0.4)) {
-                setOnboardingStep(13)
+                setOnboardingStep(
+                  OnboardingPaywallRoute.nextStepAfterPaywall(
+                    isPlus: SubscriptionManager.shared.isPlus,
+                    selectedFreePlan: onboardingSelectedFreePlan
+                  ))
               }
             }
           )

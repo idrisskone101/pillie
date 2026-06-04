@@ -72,6 +72,7 @@ struct PremiumPaywallView: View {
     @State private var isRestoring = false
     @State private var showNoSubscriptionAlert = false
     @State private var offeringsError = false
+    @State private var didCompletePaidRoute = false
     private let performanceTier = PerformanceTier.current
     private let subscriptionManager = SubscriptionManager.shared
     private let telemetry = PaywallSubscriptionTelemetry.live
@@ -162,6 +163,7 @@ struct PremiumPaywallView: View {
         }
         .onAppear {
             telemetry.paywallViewed(source: analyticsSource, isFromOnboarding: isFromOnboarding, isPlus: subscriptionManager.isPlus)
+            routeExistingPlusUserIfNeeded()
             animateIn = true
             guard performanceTier == .standard else {
                 blobPhase = 0
@@ -174,6 +176,9 @@ struct PremiumPaywallView: View {
         .task {
             subscriptionManager.configure()
             await loadOfferings()
+        }
+        .onChange(of: subscriptionManager.isPlus) { _, isPlus in
+            routeExistingPlusUserIfNeeded(isPlus: isPlus)
         }
         .alert("Purchase Error", isPresented: .init(
             get: { purchaseError != nil },
@@ -473,7 +478,7 @@ struct PremiumPaywallView: View {
                         do {
                             try await subscriptionManager.purchase(package)
                             telemetry.purchaseCompleted(source: analyticsSource, plan: selectedPlan.analyticsPlan, isPlus: subscriptionManager.isPlus)
-                            onContinue()
+                            completePaidRoute()
                         } catch {
                             if error.isCancelledPurchase {
                                 telemetry.purchaseCancelled(source: analyticsSource, plan: selectedPlan.analyticsPlan, isPlus: subscriptionManager.isPlus)
@@ -576,7 +581,7 @@ struct PremiumPaywallView: View {
                 try await subscriptionManager.restore()
                 if subscriptionManager.isPlus {
                     telemetry.restoreCompleted(source: analyticsSource, isPlus: subscriptionManager.isPlus)
-                    onContinue()
+                    completePaidRoute()
                 } else {
                     telemetry.restoreFailed(source: analyticsSource, isPlus: subscriptionManager.isPlus)
                     showNoSubscriptionAlert = true
@@ -597,6 +602,17 @@ struct PremiumPaywallView: View {
             os_log(.error, "Pillie: failed to fetch offerings: %{public}@", error.localizedDescription)
             offeringsError = true
         }
+    }
+
+    private func routeExistingPlusUserIfNeeded(isPlus: Bool? = nil) {
+        guard isFromOnboarding, isPlus ?? subscriptionManager.isPlus else { return }
+        completePaidRoute()
+    }
+
+    private func completePaidRoute() {
+        guard !didCompletePaidRoute else { return }
+        didCompletePaidRoute = true
+        onContinue()
     }
 }
 
