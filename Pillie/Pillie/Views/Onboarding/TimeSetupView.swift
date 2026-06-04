@@ -5,6 +5,12 @@
 
 import SwiftUI
 
+enum ReminderTimePickerAccessibility {
+    static let hourLabel = "Reminder hour"
+    static let minuteLabel = "Reminder minute"
+    static let periodLabel = "Reminder period"
+}
+
 struct TimeSetupView: View {
     @Environment(PillStore.self) private var store
 
@@ -113,6 +119,9 @@ struct TimeSetupView: View {
                 .pickerStyle(.wheel)
                 .frame(width: 70, height: 150)
                 .clipped()
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(ReminderTimePickerAccessibility.hourLabel)
+                .accessibilityValue("\(selectedHour)")
 
                 Text(":")
                     .font(.pillieHeadline())
@@ -128,6 +137,9 @@ struct TimeSetupView: View {
                 .pickerStyle(.wheel)
                 .frame(width: 70, height: 150)
                 .clipped()
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(ReminderTimePickerAccessibility.minuteLabel)
+                .accessibilityValue(String(format: "%02d", selectedMinute))
 
                 // AM/PM picker
                 Picker("Period", selection: $selectedPeriod) {
@@ -137,6 +149,9 @@ struct TimeSetupView: View {
                 .pickerStyle(.wheel)
                 .frame(width: 70, height: 150)
                 .clipped()
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(ReminderTimePickerAccessibility.periodLabel)
+                .accessibilityValue(selectedPeriod == 0 ? "AM" : "PM")
             }
 
             // Morning / Evening toggle
