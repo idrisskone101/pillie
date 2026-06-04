@@ -4,24 +4,16 @@
 //
 
 import SwiftUI
-#if os(iOS)
-  import UIKit
-#endif
 
 struct ProductDemoMomentView: View {
   @State private var animateIn = false
-  @State private var blobPhase: CGFloat = 0
   @State private var demoPhase = 0
-  @State private var shakeManager = ShakeDetectionManager(requiredShakes: 3)
-  @State private var phoneTilt: Double = 0
-  @State private var shakeComplete = false
-  private let performanceTier = PerformanceTier.current
 
   let onContinue: () -> Void
 
   var body: some View {
     ZStack {
-      OnboardingBackground(blobPhase: blobPhase, tier: performanceTier)
+      PillieTheme.bg.ignoresSafeArea()
 
       VStack(spacing: 0) {
         Spacer(minLength: 24)
@@ -34,10 +26,10 @@ struct ProductDemoMomentView: View {
             routineLoopCard
               .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger2))
 
-            plusPreviewCard
+            historyPreviewCard
               .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger3))
 
-            Text("Reminders and history stay free. App blocking is a Plus boost.")
+            Text("Daily reminders, logging, and history are part of the free plan.")
               .font(.pillie(11, weight: .medium))
               .foregroundStyle(PillieTheme.textMuted)
               .multilineTextAlignment(.center)
@@ -63,18 +55,6 @@ struct ProductDemoMomentView: View {
     .accessibilityIdentifier("productDemoMomentView")
     .onAppear {
       animateIn = true
-      shakeManager.startDetecting()
-      guard performanceTier == .standard else {
-        blobPhase = 0
-        return
-      }
-      withAnimation(.easeInOut(duration: 8).repeatForever(autoreverses: true)) {
-        blobPhase = 1
-      }
-    }
-    .onDisappear {
-      shakeManager.stopDetecting()
-      shakeComplete = false
     }
     .task {
       while !Task.isCancelled {
@@ -85,59 +65,6 @@ struct ProductDemoMomentView: View {
         }
       }
     }
-    .onChange(of: shakeManager.shakeCount) { oldValue, newValue in
-      guard newValue > oldValue else { return }
-      animatePhoneShake()
-      fireShakeHaptic(count: newValue)
-
-      if shakeManager.isComplete {
-        completeShakeDemo()
-      }
-    }
-  }
-
-  private func animatePhoneShake() {
-    withAnimation(.spring(response: 0.22, dampingFraction: 0.35)) {
-      phoneTilt = phoneTilt == 0 ? -9 : 9
-    }
-    DispatchQueue.main.asyncAfter(deadline: .now() + 0.18) {
-      withAnimation(.spring(response: 0.28, dampingFraction: 0.55)) {
-        phoneTilt = 0
-      }
-    }
-  }
-
-  private func fireShakeHaptic(count: Int) {
-    #if os(iOS)
-      let style: UIImpactFeedbackGenerator.FeedbackStyle
-      switch count {
-      case 1: style = .light
-      case 2: style = .medium
-      default: style = .heavy
-      }
-      UIImpactFeedbackGenerator(style: style).impactOccurred()
-    #endif
-  }
-
-  private func completeShakeDemo() {
-    guard !shakeComplete else { return }
-    shakeManager.stopDetecting()
-
-    #if os(iOS)
-      UINotificationFeedbackGenerator().notificationOccurred(.success)
-    #endif
-
-    withAnimation(.spring(response: 0.35, dampingFraction: 0.65)) {
-      shakeComplete = true
-    }
-
-    DispatchQueue.main.asyncAfter(deadline: .now() + 1.4) {
-      withAnimation(.easeOut(duration: 0.25)) {
-        shakeComplete = false
-      }
-      shakeManager.reset()
-      shakeManager.startDetecting()
-    }
   }
 
   private var titleSection: some View {
@@ -147,7 +74,7 @@ struct ProductDemoMomentView: View {
         .foregroundStyle(PillieTheme.textMuted)
         .textCase(.uppercase)
 
-      Text("Take your dose.\nUnlock your day.")
+      Text("Get reminded.\nLog your dose.")
         .font(.pillie(28, weight: .bold))
         .foregroundStyle(PillieTheme.textPrimary)
         .multilineTextAlignment(.center)
@@ -155,7 +82,7 @@ struct ProductDemoMomentView: View {
         .minimumScaleFactor(0.82)
         .frame(maxWidth: 300)
 
-      Text("Pillie reminds you, you check in, and your apps open back up.")
+      Text("Pillie helps you check in and keeps your history easy to review.")
         .font(.pillie(15, weight: .medium))
         .foregroundStyle(PillieTheme.textMuted)
         .multilineTextAlignment(.center)
@@ -167,9 +94,9 @@ struct ProductDemoMomentView: View {
     HStack(spacing: 8) {
       demoStep(index: 0, icon: "bell.fill", title: "Reminder")
       flowArrow
-      demoStep(index: 1, icon: "iphone.radiowaves.left.and.right", title: "Shake")
+      demoStep(index: 1, icon: "checkmark.circle.fill", title: "Log")
       flowArrow
-      demoStep(index: 2, icon: "lock.open.fill", title: "Unlock")
+      demoStep(index: 2, icon: "calendar.badge.checkmark", title: "History")
     }
     .padding(18)
     .background(RoundedRectangle(cornerRadius: PillieTheme.cardRadius).fill(PillieTheme.cardWhite))
@@ -207,7 +134,7 @@ struct ProductDemoMomentView: View {
     .frame(maxWidth: .infinity)
     .padding(.vertical, 10)
     .background(
-      isActive ? PillieTheme.sage.opacity(0.55) : PillieTheme.bg,
+      isActive ? PillieTheme.coralLight : PillieTheme.bg,
       in: RoundedRectangle(cornerRadius: 18)
     )
     .overlay(
@@ -218,15 +145,15 @@ struct ProductDemoMomentView: View {
     .accessibilityElement(children: .combine)
   }
 
-  private var plusPreviewCard: some View {
-    VStack(alignment: .leading, spacing: 14) {
+  private var historyPreviewCard: some View {
+    VStack(alignment: .leading, spacing: 16) {
       HStack(alignment: .top, spacing: 12) {
         VStack(alignment: .leading, spacing: 5) {
-          Text("Pillie Plus")
+          Text("Your history builds automatically")
             .font(.pillie(14, weight: .black))
             .foregroundStyle(PillieTheme.textPrimary)
 
-          Text("Keep distracting apps paused until you confirm your dose. One quick shake brings them back.")
+          Text("Every check-in updates your streak and cycle timeline so you can see what happened later.")
             .font(.pillie(12, weight: .medium))
             .foregroundStyle(PillieTheme.textMuted)
             .fixedSize(horizontal: false, vertical: true)
@@ -234,7 +161,7 @@ struct ProductDemoMomentView: View {
 
         Spacer()
 
-        Text("Plus")
+        Text("Free")
           .font(.pillie(10, weight: .black))
           .foregroundStyle(PillieTheme.textPrimary)
           .padding(.horizontal, 12)
@@ -242,49 +169,43 @@ struct ProductDemoMomentView: View {
           .background(PillieTheme.coral, in: Capsule())
       }
 
-      HStack(alignment: .center, spacing: 14) {
-        ZStack {
-          RoundedRectangle(cornerRadius: 16)
-            .fill(PillieTheme.cardWhite)
-            .frame(width: 54, height: 54)
-            .shadow(color: PillieTheme.cardShadow, radius: 10, y: 5)
-
-          Image(systemName: "iphone")
-            .font(.system(size: 23, weight: .semibold))
-            .foregroundStyle(PillieTheme.textMuted)
-        }
-        .rotationEffect(.degrees(phoneTilt))
-
-        VStack(alignment: .leading, spacing: 8) {
-          HStack(alignment: .firstTextBaseline) {
-            Text("\(shakeManager.shakeCount) of \(shakeManager.requiredShakes) shakes")
-              .font(.pillie(14, weight: .bold))
-              .foregroundStyle(shakeComplete ? PillieTheme.coral : PillieTheme.textPrimary)
-              .contentTransition(.numericText())
-
-            Spacer(minLength: 8)
-          }
-
-          ProgressView(value: shakeManager.progress)
-            .tint(PillieTheme.coral)
-            .frame(maxWidth: .infinity)
-
-          Text(shakeComplete ? "Nice. You are unlocked." : "Shake three times to confirm.")
-            .font(.pillie(11, weight: .medium))
-            .foregroundStyle(PillieTheme.textMuted)
-            .lineLimit(2)
-            .minimumScaleFactor(0.86)
-            .contentTransition(.opacity)
-        }
+      VStack(spacing: 8) {
+        historyRow(day: "MON", status: "Taken", tint: PillieTheme.coral, icon: "checkmark")
+        historyRow(day: "TUE", status: "Taken", tint: PillieTheme.coral, icon: "checkmark")
+        historyRow(day: "WED", status: "Reminder set", tint: PillieTheme.coral, icon: "bell.fill")
       }
     }
     .padding(16)
-    .background(RoundedRectangle(cornerRadius: 26).fill(PillieTheme.lavender))
+    .background(RoundedRectangle(cornerRadius: 26).fill(PillieTheme.coralLight))
     .overlay(
       RoundedRectangle(cornerRadius: 26)
         .strokeBorder(Color.white.opacity(0.55), lineWidth: 1)
     )
-    .accessibilityIdentifier("pilliePlusPreviewShakeCard")
+    .accessibilityIdentifier("pillieHistoryPreviewCard")
+  }
+
+  private func historyRow(day: String, status: String, tint: Color, icon: String) -> some View {
+    HStack(spacing: 12) {
+      Text(day)
+        .font(.pillie(10, weight: .black))
+        .foregroundStyle(PillieTheme.textMuted)
+        .frame(width: 34, alignment: .leading)
+
+      Image(systemName: icon)
+        .font(.system(size: 12, weight: .black))
+        .foregroundStyle(tint)
+        .frame(width: 28, height: 28)
+        .background(.white.opacity(0.8), in: Circle())
+
+      Text(status)
+        .font(.pillie(12, weight: .bold))
+        .foregroundStyle(PillieTheme.textPrimary)
+
+      Spacer(minLength: 0)
+    }
+    .padding(.horizontal, 12)
+    .padding(.vertical, 9)
+    .background(.white.opacity(0.58), in: RoundedRectangle(cornerRadius: 16))
   }
 }
 
