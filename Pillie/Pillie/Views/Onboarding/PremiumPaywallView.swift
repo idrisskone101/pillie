@@ -16,23 +16,24 @@ struct SoftPaywallContent {
 
     let badge: String
     let title: String
+    let titleAccent: String
     let subtitle: String
     let benefits: [Benefit]
-    let freeTierMessage: String
     let reassurance: String
     let primaryCTA: String
     let monthlyCTA: String
     let freeCTA: String
 
     var visibleCopy: [String] {
-        [badge, title, subtitle]
+        [badge, title, titleAccent, subtitle]
             + benefits.flatMap { [$0.title, $0.subtitle] }
-            + [freeTierMessage, reassurance, primaryCTA, monthlyCTA, freeCTA]
+            + [reassurance, primaryCTA, monthlyCTA, freeCTA]
     }
 
     static let `default` = SoftPaywallContent(
         badge: "Pillie Plus",
-        title: "Stay on track with Pillie Plus",
+        title: "Choose",
+        titleAccent: "Pillie Plus",
         subtitle: "App blocks and shake checks when reminders need backup.",
         benefits: [
             Benefit(
@@ -48,7 +49,6 @@ struct SoftPaywallContent {
                 subtitle: "Shake to unlock or confirm with intention."
             )
         ],
-        freeTierMessage: "Free daily + smart reminders and tracking stay yours.",
         reassurance: "No long-term commitment. Cancel anytime in the App Store.",
         primaryCTA: "Try Pillie Plus for free",
         monthlyCTA: "Start Pillie Plus monthly",
@@ -234,10 +234,12 @@ struct PremiumPaywallView: View {
             }
             .shadow(color: PillieTheme.cardShadow, radius: 8, y: 3)
 
-            Text(content.title)
-                .font(.pillieExtraBold(29))
-                .foregroundStyle(PillieTheme.textPrimary)
-                .multilineTextAlignment(.center)
+            (Text("\(content.title) ")
+                .foregroundColor(PillieTheme.textPrimary)
+             + Text(content.titleAccent)
+                .foregroundColor(PillieTheme.coral))
+            .font(.pillieExtraBold(29))
+            .multilineTextAlignment(.center)
 
             Text(content.subtitle)
                 .font(.pillie(14, weight: .medium))
@@ -246,11 +248,6 @@ struct PremiumPaywallView: View {
                 .multilineTextAlignment(.center)
                 .frame(maxWidth: 300)
 
-            Text(content.freeTierMessage)
-                .font(.pillie(12, weight: .bold))
-                .foregroundStyle(PillieTheme.textMuted.opacity(0.82))
-                .multilineTextAlignment(.center)
-                .frame(maxWidth: 300)
         }
     }
 
@@ -368,7 +365,7 @@ struct PremiumPaywallView: View {
                                 .foregroundStyle(PillieTheme.textMuted)
                         }
 
-                        Text("Pillie Plus starts with 7 days free")
+                        Text("Pillie Plus starts with a 7-day trial")
                             .font(.pillie(13, weight: .semibold))
                             .foregroundStyle(PillieTheme.coral)
                     }
@@ -526,7 +523,7 @@ struct PremiumPaywallView: View {
                                     .font(.pillie(14, weight: .medium))
                                     .opacity(0.6)
                                 Text(selectedPlan == .annual
-                                     ? "7 days free"
+                                     ? "annual trial"
                                      : "\(monthlyPriceText)/mo")
                                     .font(.pillie(13, weight: .medium))
                                     .opacity(0.8)
