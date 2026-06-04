@@ -16,7 +16,7 @@ final class SoftPaywallContentTests: XCTestCase {
             "Strict App Blocking",
             "Shake to Confirm"
         ])
-        XCTAssertEqual(content.freeTierMessage, "Daily reminders, smart reminders, and tracking remain free for all users.")
+        XCTAssertEqual(content.freeTierMessage, "Free reminders and tracking stay included.")
         XCTAssertEqual(content.primaryCTA, "Start 7-Day Free Trial")
         XCTAssertEqual(content.freeCTA, "Continue for Free")
 

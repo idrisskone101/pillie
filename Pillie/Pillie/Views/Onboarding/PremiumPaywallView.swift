@@ -33,7 +33,7 @@ struct SoftPaywallContent {
     static let `default` = SoftPaywallContent(
         badge: "Pillie Plus",
         title: "Consistency with Plus",
-        subtitle: "Unlock advanced routine guardrails for the moments reminders are not enough.",
+        subtitle: "Plus adds stronger guardrails when reminders are not enough.",
         benefits: [
             Benefit(
                 icon: "nosign",
@@ -48,7 +48,7 @@ struct SoftPaywallContent {
                 subtitle: "Use shake-to-unlock or shake-to-confirm when you need extra intent before moving on."
             )
         ],
-        freeTierMessage: "Daily reminders, smart reminders, and tracking remain free for all users.",
+        freeTierMessage: "Free reminders and tracking stay included.",
         reassurance: "No long-term commitment. Cancel anytime in the App Store.",
         primaryCTA: "Start 7-Day Free Trial",
         monthlyCTA: "Subscribe Monthly",
@@ -124,6 +124,9 @@ struct PremiumPaywallView: View {
                             .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger3))
 
                         pricingCards
+                            .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger3))
+
+                        restoreSection
                             .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger3))
                     }
                     .padding(.horizontal, 28)
@@ -240,6 +243,12 @@ struct PremiumPaywallView: View {
                 .font(.pillie(14, weight: .medium))
                 .foregroundStyle(PillieTheme.textMuted)
                 .lineSpacing(3)
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: 300)
+
+            Text(content.freeTierMessage)
+                .font(.pillie(12, weight: .bold))
+                .foregroundStyle(PillieTheme.textMuted.opacity(0.82))
                 .multilineTextAlignment(.center)
                 .frame(maxWidth: 300)
         }
@@ -438,10 +447,38 @@ struct PremiumPaywallView: View {
             }
     }
 
+    // MARK: - Supporting Actions
+
+    private var restoreSection: some View {
+        Button {
+            restorePurchases()
+        } label: {
+            HStack(spacing: 6) {
+                Text("Already subscribed?")
+                    .font(.pillie(12, weight: .regular))
+                    .foregroundStyle(PillieTheme.textMuted.opacity(0.68))
+
+                if isRestoring {
+                    ProgressView()
+                        .tint(PillieTheme.textMuted)
+                        .scaleEffect(0.74)
+                } else {
+                    Text("Restore Purchases")
+                        .font(.pillie(12, weight: .bold))
+                        .foregroundStyle(PillieTheme.textPrimary.opacity(0.7))
+                }
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 4)
+        }
+        .buttonStyle(.plain)
+        .disabled(isRestoring)
+    }
+
     // MARK: - Footer
 
     private var footer: some View {
-        VStack(spacing: 6) {
+        VStack(spacing: 10) {
             if offeringsError {
                 Button {
                     Task { await loadOfferings() }
@@ -506,71 +543,46 @@ struct PremiumPaywallView: View {
                 .disabled(isPurchasing || offerings == nil)
             }
 
-            HStack {
-                Button {
-                    telemetry.continueFreeSelected(source: analyticsSource, isFromOnboarding: isFromOnboarding, isPlus: subscriptionManager.isPlus)
-                    onSkip()
-                } label: {
-                    Text(content.freeCTA)
-                        .font(.pillie(13, weight: .medium))
-                        .foregroundStyle(PillieTheme.textMuted)
-                }
-
-                Spacer()
-
-                Button {
-                    isRestoring = true
-                    telemetry.restoreStarted(source: analyticsSource, isPlus: subscriptionManager.isPlus)
-                    Task {
-                        do {
-                            try await subscriptionManager.restore()
-                            if subscriptionManager.isPlus {
-                                telemetry.restoreCompleted(source: analyticsSource, isPlus: subscriptionManager.isPlus)
-                                onContinue()
-                            } else {
-                                telemetry.restoreFailed(source: analyticsSource, isPlus: subscriptionManager.isPlus)
-                                showNoSubscriptionAlert = true
-                            }
-                        } catch {
-                            telemetry.restoreFailed(source: analyticsSource, isPlus: subscriptionManager.isPlus)
-                            purchaseError = error.localizedDescription
-                        }
-                        isRestoring = false
-                    }
-                } label: {
-                    if isRestoring {
-                        ProgressView()
-                            .tint(PillieTheme.textMuted)
-                    } else {
-                        Text("Restore Purchases")
-                            .font(.pillie(13, weight: .medium))
-                            .foregroundStyle(PillieTheme.textMuted.opacity(0.6))
-                    }
-                }
-                .disabled(isRestoring)
+            Button {
+                telemetry.continueFreeSelected(source: analyticsSource, isFromOnboarding: isFromOnboarding, isPlus: subscriptionManager.isPlus)
+                onSkip()
+            } label: {
+                Text(content.freeCTA)
+                    .font(.pillie(14, weight: .bold))
+                    .foregroundStyle(PillieTheme.textMuted)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 34)
             }
-            .frame(height: 32)
+            .buttonStyle(.plain)
 
-            VStack(spacing: 3) {
-                Text(content.reassurance)
-                    .font(.pillie(10, weight: .regular))
-                    .foregroundStyle(PillieTheme.textMuted.opacity(0.58))
-
-                Text(content.freeTierMessage)
-                    .font(.pillie(10, weight: .semibold))
-                    .foregroundStyle(PillieTheme.textMuted.opacity(0.75))
-                    .multilineTextAlignment(.center)
-                    .lineLimit(2)
-                    .minimumScaleFactor(0.88)
-
-                HStack(spacing: 4) {
-                    Link("Terms of Use", destination: URL(string: "https://idrisskone101.github.io/pillie/terms-and-conditions")!)
-                    Text("|")
-                    Link("Privacy Policy", destination: URL(string: "https://idrisskone101.github.io/pillie/privacy-policy")!)
-                }
-                .font(.pillie(10, weight: .regular))
-                .foregroundStyle(PillieTheme.textMuted.opacity(0.45))
+            HStack(spacing: 4) {
+                Link("Terms of Use", destination: URL(string: "https://idrisskone101.github.io/pillie/terms-and-conditions")!)
+                Text("|")
+                Link("Privacy Policy", destination: URL(string: "https://idrisskone101.github.io/pillie/privacy-policy")!)
             }
+            .font(.pillie(10, weight: .regular))
+            .foregroundStyle(PillieTheme.textMuted.opacity(0.42))
+        }
+    }
+
+    private func restorePurchases() {
+        isRestoring = true
+        telemetry.restoreStarted(source: analyticsSource, isPlus: subscriptionManager.isPlus)
+        Task {
+            do {
+                try await subscriptionManager.restore()
+                if subscriptionManager.isPlus {
+                    telemetry.restoreCompleted(source: analyticsSource, isPlus: subscriptionManager.isPlus)
+                    onContinue()
+                } else {
+                    telemetry.restoreFailed(source: analyticsSource, isPlus: subscriptionManager.isPlus)
+                    showNoSubscriptionAlert = true
+                }
+            } catch {
+                telemetry.restoreFailed(source: analyticsSource, isPlus: subscriptionManager.isPlus)
+                purchaseError = error.localizedDescription
+            }
+            isRestoring = false
         }
     }
 
