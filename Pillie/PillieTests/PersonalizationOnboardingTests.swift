@@ -76,6 +76,33 @@ final class PersonalizationOnboardingTests: XCTestCase {
         XCTAssertNil(ringFixture.store.pack.customBreakDays)
     }
 
+    func testMidCycleOnboardingBackfillKeepsStreakAtZeroUntilUserLogsDueAction() throws {
+        let today = InMemoryStoreFactory.fixedDate("2026-06-03")
+        let fixture = try InMemoryStoreFactory.makeStore(now: today)
+        let store = fixture.store
+
+        store.startNewProtocol(
+            method: .pill,
+            regimen: .twentyFourFour,
+            customActiveDays: nil,
+            customBreakDays: nil,
+            cycleDay: 12,
+            preserveHistory: false
+        )
+
+        let action = try XCTUnwrap(DoseScheduleEngine.dueAction(on: today, pack: store.pack))
+        XCTAssertEqual(action.cycleDay, 12)
+
+        let startDate = try XCTUnwrap(Calendar.current.date(byAdding: .day, value: -11, to: today))
+        XCTAssertEqual(store.scheduleSnapshot(for: startDate)?.status, .taken)
+        XCTAssertEqual(store.currentStreak, 0)
+        XCTAssertEqual(store.streakResetDate, PillieClock.today)
+
+        store.markActionAsTaken(on: today)
+
+        XCTAssertEqual(store.currentStreak, 1)
+    }
+
     func testReminderPlanSummaryReflectsStoredSetupWithNeutralSupportCopy() throws {
         let today = InMemoryStoreFactory.fixedDate("2026-06-03")
         let fixture = try InMemoryStoreFactory.makeStore(now: today)
