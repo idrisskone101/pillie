@@ -32,26 +32,26 @@ struct SoftPaywallContent {
 
     static let `default` = SoftPaywallContent(
         badge: "Pillie Plus",
-        title: "Consistency with Plus",
-        subtitle: "Plus adds stronger guardrails when reminders are not enough.",
+        title: "Backup for chaotic days",
+        subtitle: "Plus adds app blocks and shake checks for the days reminders are not enough.",
         benefits: [
             Benefit(
                 icon: "nosign",
                 tint: PillieTheme.lavender,
-                title: "Strict App Blocking",
-                subtitle: "Locks selected apps after an unlogged due action until you come back to Pillie."
+                title: "Block the scroll",
+                subtitle: "Pause your chosen apps after an overdue, unlogged dose until you check in."
             ),
             Benefit(
                 icon: "iphone.radiowaves.left.and.right",
                 tint: PillieTheme.sage,
-                title: "Shake to Confirm",
-                subtitle: "Use shake-to-unlock or shake-to-confirm when you need extra intent before moving on."
+                title: "Shake to make it count",
+                subtitle: "Add a quick shake to unlock or confirm, so logging feels intentional."
             )
         ],
-        freeTierMessage: "Free reminders and tracking stay included.",
+        freeTierMessage: "Free daily + smart reminders and tracking stay yours.",
         reassurance: "No long-term commitment. Cancel anytime in the App Store.",
-        primaryCTA: "Start 7-Day Free Trial",
-        monthlyCTA: "Subscribe Monthly",
+        primaryCTA: "Try Plus Free",
+        monthlyCTA: "Go Monthly",
         freeCTA: "Continue for Free"
     )
 }
@@ -368,7 +368,7 @@ struct PremiumPaywallView: View {
                                 .foregroundStyle(PillieTheme.textMuted)
                         }
 
-                        Text("7-day free trial, then annual billing")
+                        Text("7 days free, then annual")
                             .font(.pillie(13, weight: .semibold))
                             .foregroundStyle(PillieTheme.coral)
                     }
