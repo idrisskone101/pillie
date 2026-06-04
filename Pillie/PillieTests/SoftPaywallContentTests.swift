@@ -11,13 +11,15 @@ final class SoftPaywallContentTests: XCTestCase {
         let content = SoftPaywallContent.default
 
         XCTAssertEqual(content.badge, "Pillie Plus")
-        XCTAssertEqual(content.title, "Backup for chaotic days")
+        XCTAssertEqual(content.title, "Stay on track with Pillie Plus")
+        XCTAssertEqual(content.subtitle, "App blocks and shake checks when reminders need backup.")
         XCTAssertEqual(content.benefits.map(\.title), [
             "Block the scroll",
             "Shake to make it count"
         ])
         XCTAssertEqual(content.freeTierMessage, "Free daily + smart reminders and tracking stay yours.")
-        XCTAssertEqual(content.primaryCTA, "Try Plus Free")
+        XCTAssertEqual(content.primaryCTA, "Try Pillie Plus for free")
+        XCTAssertEqual(content.monthlyCTA, "Start Pillie Plus monthly")
         XCTAssertEqual(content.freeCTA, "Continue for Free")
 
         let visibleCopy = content.visibleCopy.joined(separator: " ").lowercased()
@@ -26,5 +28,7 @@ final class SoftPaywallContentTests: XCTestCase {
         XCTAssertFalse(visibleCopy.contains("google pay"))
         XCTAssertFalse(visibleCopy.contains("credit card"))
         XCTAssertFalse(visibleCopy.contains("no ads"))
+        XCTAssertFalse(content.primaryCTA.contains("Try Plus"))
+        XCTAssertFalse(content.monthlyCTA.contains("Go Monthly"))
     }
 }

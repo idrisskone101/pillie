@@ -32,26 +32,26 @@ struct SoftPaywallContent {
 
     static let `default` = SoftPaywallContent(
         badge: "Pillie Plus",
-        title: "Backup for chaotic days",
-        subtitle: "Plus adds app blocks and shake checks for the days reminders are not enough.",
+        title: "Stay on track with Pillie Plus",
+        subtitle: "App blocks and shake checks when reminders need backup.",
         benefits: [
             Benefit(
                 icon: "nosign",
                 tint: PillieTheme.lavender,
                 title: "Block the scroll",
-                subtitle: "Pause your chosen apps after an overdue, unlogged dose until you check in."
+                subtitle: "Pause chosen apps until you check in."
             ),
             Benefit(
                 icon: "iphone.radiowaves.left.and.right",
                 tint: PillieTheme.sage,
                 title: "Shake to make it count",
-                subtitle: "Add a quick shake to unlock or confirm, so logging feels intentional."
+                subtitle: "Shake to unlock or confirm with intention."
             )
         ],
         freeTierMessage: "Free daily + smart reminders and tracking stay yours.",
         reassurance: "No long-term commitment. Cancel anytime in the App Store.",
-        primaryCTA: "Try Plus Free",
-        monthlyCTA: "Go Monthly",
+        primaryCTA: "Try Pillie Plus for free",
+        monthlyCTA: "Start Pillie Plus monthly",
         freeCTA: "Continue for Free"
     )
 }
@@ -368,7 +368,7 @@ struct PremiumPaywallView: View {
                                 .foregroundStyle(PillieTheme.textMuted)
                         }
 
-                        Text("7 days free, then annual")
+                        Text("Pillie Plus starts with 7 days free")
                             .font(.pillie(13, weight: .semibold))
                             .foregroundStyle(PillieTheme.coral)
                     }
