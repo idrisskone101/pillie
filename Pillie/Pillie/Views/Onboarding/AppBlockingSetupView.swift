@@ -6,6 +6,44 @@
 import SwiftUI
 import FamilyControls
 
+struct AppBlockingSetupContent {
+    let badge: String
+    let title: String
+    let titleAccent: String
+    let plusSubtitle: String
+    let lockedSubtitle: String
+    let privacyTitle: String
+    let privacyDetail: String
+    let lockedTitle: String
+    let lockedDetail: String
+
+    var visibleCopy: [String] {
+        [
+            badge,
+            title,
+            titleAccent,
+            plusSubtitle,
+            lockedSubtitle,
+            privacyTitle,
+            privacyDetail,
+            lockedTitle,
+            lockedDetail
+        ]
+    }
+
+    static let `default` = AppBlockingSetupContent(
+        badge: "Plus Routine Guard",
+        title: "App Blocking",
+        titleAccent: "Setup",
+        plusSubtitle: "Limit distracting apps until you've completed your daily routine. Pillie uses iOS Screen Time to keep you focused.",
+        lockedSubtitle: "App blocking is a Pillie Plus tool you can set up after upgrading.",
+        privacyTitle: "On-device privacy",
+        privacyDetail: "Your app selections stay on this device. Pillie never sees which apps you choose.",
+        lockedTitle: "Included with Pillie Plus",
+        lockedDetail: "Your free plan still includes daily reminders and cycle tracking. You can upgrade from Settings when you want app blocking."
+    )
+}
+
 struct AppBlockingSetupView: View {
     @Environment(PillStore.self) private var store
     @AppStorage("onboardingSelectedFreePlan") private var onboardingSelectedFreePlan = false
@@ -16,6 +54,7 @@ struct AppBlockingSetupView: View {
     @State private var isRequestingAuth = false
     private let performanceTier = PerformanceTier.current
     private let onboardingTelemetry = OnboardingTelemetry()
+    private let content = AppBlockingSetupContent.default
 
     let onBack: () -> Void
     let onContinue: () -> Void
@@ -98,17 +137,30 @@ struct AppBlockingSetupView: View {
     // MARK: - Title
 
     private var titleSection: some View {
-        VStack(spacing: 8) {
-            (Text("Block your ")
+        VStack(spacing: 10) {
+            Text(content.badge)
+                .font(.pillie(10, weight: .black))
+                .foregroundStyle(PillieTheme.textMuted)
+                .tracking(1.4)
+                .textCase(.uppercase)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 7)
+                .background(.white, in: Capsule())
+                .overlay {
+                    Capsule()
+                        .stroke(Color.black.opacity(0.06), lineWidth: 1)
+                }
+
+            (Text("\(content.title) ")
                 .foregroundStyle(PillieTheme.textPrimary)
-            + Text("apps")
+            + Text(content.titleAccent)
                 .foregroundStyle(PillieTheme.coral))
                 .font(.pillieHeadline())
                 .multilineTextAlignment(.center)
 
             Text(canSetUpBlocking
-                 ? "Lock distracting apps until you've completed your action."
-                 : "App blocking is a Pillie+ tool you can set up after upgrading.")
+                 ? content.plusSubtitle
+                 : content.lockedSubtitle)
                 .font(.pillieBodyLarge())
                 .foregroundStyle(PillieTheme.textMuted)
                 .multilineTextAlignment(.center)
@@ -123,9 +175,15 @@ struct AppBlockingSetupView: View {
                 .font(.system(size: 20))
                 .foregroundStyle(PillieTheme.textMuted)
 
-            Text("App blocking stays on your device. We never see which apps you use.")
-                .font(.pillieBody())
-                .foregroundStyle(PillieTheme.textMuted)
+            VStack(alignment: .leading, spacing: 3) {
+                Text(content.privacyTitle)
+                    .font(.pillieBodyBold())
+                    .foregroundStyle(PillieTheme.textPrimary)
+
+                Text(content.privacyDetail)
+                    .font(.pillieBody())
+                    .foregroundStyle(PillieTheme.textMuted)
+            }
         }
         .padding(16)
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -143,11 +201,11 @@ struct AppBlockingSetupView: View {
                 .font(.system(size: 30, weight: .semibold))
                 .foregroundStyle(PillieTheme.coral)
 
-            Text("Included with Pillie+")
+            Text(content.lockedTitle)
                 .font(.pillieBodyBold())
                 .foregroundStyle(PillieTheme.textPrimary)
 
-            Text("Your free plan still includes daily reminders and cycle tracking. You can upgrade from Settings when you want app blocking.")
+            Text(content.lockedDetail)
                 .font(.pillieBody())
                 .foregroundStyle(PillieTheme.textMuted)
                 .multilineTextAlignment(.center)
