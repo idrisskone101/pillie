@@ -41,12 +41,16 @@ The count of consecutive completed due actions, not consecutive calendar days. P
 _Avoid_: Daily streak, calendar-day streak
 
 **Due Action Reminder**:
-The primary local reminder for the next contraception action that requires user logging, delivered at the user's configured reminder time.
+The primary local reminder for the next contraception action that requires user logging, delivered at the user's configured reminder time. Visible notification copy should avoid cycle-day details and stay warm, discreet, and action-oriented.
 _Avoid_: Daily reminder, generic reminder
 
 **Auto-Reminder Retry**:
-A same-day follow-up reminder for an untaken due action, scheduled at the user's selected retry interval. It does not define the primary reminder time.
+A same-day follow-up reminder for an untaken due action, scheduled at the user's selected retry interval. It uses distinct visible copy from the primary Due Action Reminder, avoids cycle-day details, and should feel softer than the primary reminder.
 _Avoid_: Reminder time, snooze interval
+
+**Auto-Reminder Retry Limit**:
+The maximum number of automatic same-day Auto-Reminder Retry notifications Pillie may send after the primary Due Action Reminder while the due action is still untaken. It does not include the primary Due Action Reminder or a user-requested Snooze. The default limit is 3 retries, and 0 means automatic retries are off.
+_Avoid_: Reminder limit, notification limit, snooze limit
 
 **Supply Reminder**:
 A local reminder about remaining contraception supply: pill refills or patch restocks. Ring routines do not currently expose a supply reminder setting in the launched app.
