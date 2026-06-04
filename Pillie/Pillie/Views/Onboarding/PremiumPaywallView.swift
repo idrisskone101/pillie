@@ -514,37 +514,48 @@ struct PremiumPaywallView: View {
                 .disabled(isPurchasing || offerings == nil)
             }
 
-            Button {
-                telemetry.continueFreeSelected(source: analyticsSource, isFromOnboarding: isFromOnboarding, isPlus: subscriptionManager.isPlus)
-                onSkip()
-            } label: {
-                Text(content.freeCTA)
-                    .font(.pillie(14, weight: .bold))
-                    .foregroundStyle(PillieTheme.textMuted)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 34)
-            }
-            .buttonStyle(.plain)
-
-            Button {
-                restorePurchases()
-            } label: {
-                Group {
-                    if isRestoring {
-                        ProgressView()
-                            .tint(PillieTheme.textMuted)
-                            .scaleEffect(0.72)
-                    } else {
-                        Text("Restore Purchases")
-                            .font(.pillie(12, weight: .bold))
-                            .foregroundStyle(PillieTheme.textMuted.opacity(0.7))
-                    }
+            HStack(spacing: 14) {
+                Button {
+                    telemetry.continueFreeSelected(source: analyticsSource, isFromOnboarding: isFromOnboarding, isPlus: subscriptionManager.isPlus)
+                    onSkip()
+                } label: {
+                    Text(content.freeCTA)
+                        .font(.pillie(13, weight: .bold))
+                        .foregroundStyle(PillieTheme.textPrimary.opacity(0.78))
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.88)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 34)
+                        .background(PillieTheme.cardWhite.opacity(0.7), in: Capsule())
                 }
-                .frame(maxWidth: .infinity)
-                .frame(height: 18)
+                .buttonStyle(.plain)
+
+                Rectangle()
+                    .fill(PillieTheme.textMuted.opacity(0.12))
+                    .frame(width: 1, height: 18)
+
+                Button {
+                    restorePurchases()
+                } label: {
+                    Group {
+                        if isRestoring {
+                            ProgressView()
+                                .tint(PillieTheme.textMuted)
+                                .scaleEffect(0.72)
+                        } else {
+                            Text("Restore Purchases")
+                                .font(.pillie(12, weight: .semibold))
+                                .foregroundStyle(PillieTheme.textMuted.opacity(0.62))
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.86)
+                        }
+                    }
+                    .frame(minWidth: 118, maxWidth: 136)
+                    .frame(height: 34)
+                }
+                .buttonStyle(.plain)
+                .disabled(isRestoring)
             }
-            .buttonStyle(.plain)
-            .disabled(isRestoring)
 
             HStack(spacing: 4) {
                 Link("Terms of Use", destination: URL(string: "https://idrisskone101.github.io/pillie/terms-and-conditions")!)
