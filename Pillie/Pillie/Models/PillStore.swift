@@ -742,6 +742,7 @@ class PillStore {
                     modelContext.delete(day)
                 }
                 backfillPriorDays(from: startDate, count: safeCycleDay - 1, pack: activePack, calendar: Calendar.current)
+                streakResetDate = today
             }
             appActivatedDate = today
         } else {
@@ -762,6 +763,7 @@ class PillStore {
             // Backfill prior days as taken for onboarding mid-cycle
             if safeCycleDay > 1 {
                 backfillPriorDays(from: startDate, count: safeCycleDay - 1, pack: nextPack, calendar: Calendar.current)
+                streakResetDate = today
             }
             appActivatedDate = today
         }
@@ -821,6 +823,9 @@ class PillStore {
         //    All prior days → .taken. No days marked .missed.
         //    Break vs active is preserved in the actionType field.
         backfillPriorDays(from: startDate, count: safeCycleDay - 1, pack: freshPack, calendar: calendar)
+        if safeCycleDay > 1 {
+            streakResetDate = today
+        }
 
         // 5. Set appActivatedDate to today so dates before our backfill
         //    range show as .noData (not .missed). Explicit PillDay records

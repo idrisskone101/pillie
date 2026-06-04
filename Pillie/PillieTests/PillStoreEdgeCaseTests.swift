@@ -34,8 +34,14 @@ final class PillStoreEdgeCaseTests: XCTestCase {
 
         store.updateCycleDay(21)
 
+        let startDate = try XCTUnwrap(Calendar.current.date(byAdding: .day, value: -20, to: today))
+        XCTAssertEqual(store.scheduleSnapshot(for: startDate)?.status, .taken)
         XCTAssertEqual(store.currentStreak, 0)
         XCTAssertEqual(store.streakResetDate, PillieClock.today)
+
+        store.markActionAsTaken(on: today)
+
+        XCTAssertEqual(store.currentStreak, 1)
     }
 
     func testMonthBoundarySeparatesPastAndToday() throws {
