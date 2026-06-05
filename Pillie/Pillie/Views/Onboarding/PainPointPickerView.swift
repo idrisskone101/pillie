@@ -101,7 +101,7 @@ struct PainPointPickerView: View {
         return PersonalizationOptionRow(
             title: painPoint.title,
             subtitle: nil,
-            symbolName: iconName(for: painPoint),
+            symbolName: painPoint.symbolName,
             symbolTint: iconTint(for: painPoint),
             isSelected: isSelected,
             selectionStyle: .checkbox
@@ -124,15 +124,6 @@ struct PainPointPickerView: View {
             helperText: "Select at least one to continue"
         ) {
             onContinue(selected)
-        }
-    }
-
-    private func iconName(for painPoint: PainPoint) -> String {
-        switch painPoint {
-        case .forgetful: return "brain.head.profile"
-        case .chaoticSchedule: return "calendar"
-        case .phoneDistractions: return "iphone"
-        case .noRoutine: return "arrow.triangle.2.circlepath"
         }
     }
 
