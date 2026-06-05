@@ -748,7 +748,7 @@ private struct AutoReminderRetryLimitEditor: View {
             Capsule()
                 .fill(PillieTheme.sage)
                 .frame(width: 36, height: 5)
-                .padding(.top, 12)
+                .padding(.top, 28)
 
             Text("Auto-Reminder Retry Limit")
                 .font(.pillieSubtitleBold())
