@@ -28,9 +28,7 @@ struct StatsRow: View {
         HStack(spacing: 12) {
             // Streak card
             VStack(spacing: 6) {
-                Text("\u{1F525}")
-                    .font(.system(size: 24))
-                    .shadow(color: .black.opacity(0.1), radius: 2, y: 1)
+                statIcon("flame.fill", tint: PillieTheme.coral)
 
                 Text("\(currentStreak)")
                     .font(.pillie(24, weight: .bold))
@@ -76,9 +74,7 @@ struct StatsRow: View {
 
     private var blockingCardContent: some View {
         VStack(spacing: 6) {
-            Text("\u{1F6E1}\u{FE0F}")
-                .font(.system(size: 24))
-                .shadow(color: .black.opacity(0.1), radius: 2, y: 1)
+            statIcon("lock.shield.fill", tint: PillieTheme.sage)
 
             Text(blockingStatusText)
                 .font(.pillie(24, weight: .bold))
@@ -112,6 +108,14 @@ struct StatsRow: View {
                 .textCase(.uppercase)
                 .tracking(1)
         }
+    }
+
+    private func statIcon(_ symbolName: String, tint: Color) -> some View {
+        Image(systemName: symbolName)
+            .font(.system(size: 22, weight: .semibold))
+            .foregroundStyle(tint)
+            .frame(width: 30, height: 30)
+            .contentTransition(.opacity)
     }
 }
 

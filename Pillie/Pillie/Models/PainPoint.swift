@@ -31,12 +31,12 @@ enum PainPoint: String, CaseIterable, Hashable, Identifiable {
         }
     }
 
-    var emoji: String {
+    var symbolName: String {
         switch self {
-        case .forgetful: return "🧠"
-        case .chaoticSchedule: return "🌀"
-        case .phoneDistractions: return "📱"
-        case .noRoutine: return "🔄"
+        case .forgetful: return "brain.head.profile"
+        case .chaoticSchedule: return "calendar"
+        case .phoneDistractions: return "iphone"
+        case .noRoutine: return "arrow.triangle.2.circlepath"
         }
     }
 }
