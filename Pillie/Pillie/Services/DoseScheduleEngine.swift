@@ -69,32 +69,39 @@ struct DoseScheduleAction: Hashable {
     var reminderTitle: String {
         switch type {
         case .pillActive:
-            return "Time for your pill!"
-        case .pillBreak:
-            return "Break day check-in"
+            return "Pillie check-in"
         case .patchChange:
-            return "Time to change your patch"
+            return "Patch check-in"
         case .patchRemove:
-            return "Remove your patch today"
-        case .patchActive:
-            return "Patch is active"
-        case .patchBreak:
-            return "Off week"
+            return "Patch check-in"
         case .ringInsert:
-            return "Insert your ring today"
+            return "Ring check-in"
         case .ringRemove:
-            return "Remove your ring today"
+            return "Ring check-in"
         case .ringReinsert:
-            return "Reinsert your ring today"
-        case .ringActive:
-            return "Ring is active"
-        case .ringBreak:
-            return "Off week"
+            return "Ring check-in"
+        case .pillBreak, .patchActive, .patchBreak, .ringActive, .ringBreak:
+            return "Pillie check-in"
         }
     }
 
     var reminderBody: String {
-        "Cycle day \(cycleDay) of \(cycleLength). Open Pillie to log it."
+        switch type {
+        case .pillActive:
+            return "A quick moment to take your pill and log it."
+        case .patchChange:
+            return "Time to switch your patch when you're ready."
+        case .patchRemove:
+            return "Time to remove your patch when you're ready."
+        case .ringInsert:
+            return "Time to insert your ring when you're ready."
+        case .ringRemove:
+            return "Time to remove your ring when you're ready."
+        case .ringReinsert:
+            return "Time to reinsert your ring when you're ready."
+        case .pillBreak, .patchActive, .patchBreak, .ringActive, .ringBreak:
+            return "Open Pillie when you're ready."
+        }
     }
 }
 

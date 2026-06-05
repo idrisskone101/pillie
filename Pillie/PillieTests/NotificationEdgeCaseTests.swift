@@ -156,4 +156,87 @@ final class NotificationEdgeCaseTests: XCTestCase {
         XCTAssertEqual(todayDueReminders.filter { $0.requestKind == "retry" }.count, 1)
         XCTAssertEqual(todayDueReminders.filter { $0.requestKind == "base" }.count, 0)
     }
+
+    func testPrimaryDueReminderCopyIsWarmAndDiscreetForEachDueAction() throws {
+        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let cases: [(method: ContraceptiveMethod, startOffsetDays: Int, expectedAction: PillDay.ActionType, expectedTitle: String, expectedBody: String)] = [
+            (.pill, 0, .pillActive, "Pillie check-in", "A quick moment to take your pill and log it."),
+            (.patch, 0, .patchChange, "Patch check-in", "Time to switch your patch when you're ready."),
+            (.patch, -21, .patchRemove, "Patch check-in", "Time to remove your patch when you're ready."),
+            (.ring, 0, .ringInsert, "Ring check-in", "Time to insert your ring when you're ready."),
+            (.ring, -21, .ringRemove, "Ring check-in", "Time to remove your ring when you're ready."),
+            (.ring, -28, .ringReinsert, "Ring check-in", "Time to reinsert your ring when you're ready.")
+        ]
+
+        for testCase in cases {
+            let startDate = try XCTUnwrap(Calendar.current.date(byAdding: .day, value: testCase.startOffsetDays, to: now))
+            let fixture = try InMemoryStoreFactory.makeStore(
+                now: now,
+                method: testCase.method,
+                startDate: startDate,
+                ringInsertionDate: testCase.method == .ring ? startDate : nil
+            )
+            fixture.store.autoReminderRetryLimit = 0
+
+            let summaries = NotificationManager.shared.managedRequestSummariesForTesting(
+                store: fixture.store,
+                now: now
+            )
+            let primary = try XCTUnwrap(summaries.first { $0.requestKind == "base" })
+
+            XCTAssertEqual(primary.actionTypeRaw, testCase.expectedAction.rawValue)
+            XCTAssertEqual(primary.title, testCase.expectedTitle)
+            XCTAssertEqual(primary.body, testCase.expectedBody)
+            XCTAssertNotNil(primary.dueDayEpoch)
+            XCTAssertFalse(primary.body.localizedCaseInsensitiveContains("cycle day"))
+        }
+    }
+
+    func testAutoReminderRetryUsesDistinctSofterCopyAndKeepsActionPayload() throws {
+        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
+        fixture.store.autoReminderRetryLimit = 1
+
+        let summaries = NotificationManager.shared.managedRequestSummariesForTesting(
+            store: fixture.store,
+            now: now
+        )
+        let primary = try XCTUnwrap(summaries.first { $0.requestKind == "base" })
+        let retry = try XCTUnwrap(summaries.first { $0.requestKind == "retry" })
+
+        XCTAssertEqual(retry.title, "Still here when you're ready")
+        XCTAssertEqual(retry.body, "Take a tiny moment for your Pillie check-in.")
+        XCTAssertNotEqual(retry.title, primary.title)
+        XCTAssertNotEqual(retry.body, primary.body)
+        XCTAssertEqual(retry.categoryIdentifier, primary.categoryIdentifier)
+        XCTAssertEqual(retry.dueDayEpoch, primary.dueDayEpoch)
+        XCTAssertEqual(retry.actionTypeRaw, PillDay.ActionType.pillActive.rawValue)
+        XCTAssertFalse(retry.body.localizedCaseInsensitiveContains("cycle day"))
+    }
+
+    func testSupplyReminderCopyIsWarmDiscreetAndDoesNotScheduleForRing() throws {
+        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let pillFixture = try InMemoryStoreFactory.makeStore(now: now, method: .pill, startDate: now)
+        let pillRefill = try XCTUnwrap(
+            NotificationManager.shared.managedRequestSummariesForTesting(store: pillFixture.store, now: now)
+                .first { $0.identifier.hasPrefix("pillie_refill_reminder_") }
+        )
+
+        let patchFixture = try InMemoryStoreFactory.makeStore(now: now, method: .patch, startDate: now)
+        let patchRestock = try XCTUnwrap(
+            NotificationManager.shared.managedRequestSummariesForTesting(store: patchFixture.store, now: now)
+                .first { $0.identifier.hasPrefix("pillie_refill_reminder_") }
+        )
+
+        let ringFixture = try InMemoryStoreFactory.makeStore(now: now, method: .ring, startDate: now, ringInsertionDate: now)
+        let ringSummaries = NotificationManager.shared.managedRequestSummariesForTesting(store: ringFixture.store, now: now)
+
+        XCTAssertEqual(pillRefill.title, "Refill check-in")
+        XCTAssertEqual(pillRefill.body, "Looks like you're getting low. A refill soon could save future stress.")
+        XCTAssertEqual(patchRestock.title, "Patch restock check-in")
+        XCTAssertEqual(patchRestock.body, "Looks like you're getting low. A restock soon could save future stress.")
+        XCTAssertFalse(ringSummaries.contains { $0.identifier.hasPrefix("pillie_refill_reminder_") })
+        XCTAssertFalse(pillRefill.body.localizedCaseInsensitiveContains("cycle day"))
+        XCTAssertFalse(patchRestock.body.localizedCaseInsensitiveContains("cycle day"))
+    }
 }
