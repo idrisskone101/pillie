@@ -19,7 +19,7 @@ struct PlusUpsellSheet: View {
     @State private var showNoSubscriptionAlert = false
     @State private var restoreError: String?
     @Environment(\.dismiss) private var dismiss
-    private let telemetry = PaywallSubscriptionTelemetry.live
+    private let telemetry = ProductAnalyticsTelemetry.live
 
     var body: some View {
         VStack(spacing: 24) {
@@ -46,7 +46,7 @@ struct PlusUpsellSheet: View {
 
             VStack(spacing: 12) {
                 Button {
-                    telemetry.plusUpsellUpgradeTapped(isPlus: SubscriptionManager.shared.isPlus)
+                    telemetry.plusUpsellUpgradeTapped()
                     showPaywall = true
                 } label: {
                     Text("Upgrade to Pillie+")
@@ -55,7 +55,7 @@ struct PlusUpsellSheet: View {
                 .padding(.horizontal, 28)
 
                 Button {
-                    telemetry.plusUpsellDismissed(isPlus: SubscriptionManager.shared.isPlus)
+                    telemetry.plusUpsellDismissed()
                     dismiss()
                 } label: {
                     Text("Not Now")
@@ -65,19 +65,19 @@ struct PlusUpsellSheet: View {
 
                 Button {
                     isRestoring = true
-                    telemetry.restoreStarted(source: .upsell, isPlus: SubscriptionManager.shared.isPlus)
+                    telemetry.upsellRestoreStarted()
                     Task {
                         do {
                             try await SubscriptionManager.shared.restore()
                             if SubscriptionManager.shared.isPlus {
-                                telemetry.restoreCompleted(source: .upsell, isPlus: SubscriptionManager.shared.isPlus)
+                                telemetry.upsellRestoreCompleted()
                                 dismiss()
                             } else {
-                                telemetry.restoreFailed(source: .upsell, isPlus: SubscriptionManager.shared.isPlus)
+                                telemetry.upsellRestoreFailed()
                                 showNoSubscriptionAlert = true
                             }
                         } catch {
-                            telemetry.restoreFailed(source: .upsell, isPlus: SubscriptionManager.shared.isPlus)
+                            telemetry.upsellRestoreFailed()
                             restoreError = error.localizedDescription
                         }
                         isRestoring = false
@@ -127,7 +127,7 @@ struct PlusUpsellSheet: View {
             )
         }
         .onAppear {
-            telemetry.plusUpsellViewed(isPlus: SubscriptionManager.shared.isPlus)
+            telemetry.plusUpsellViewed()
         }
     }
 }

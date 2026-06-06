@@ -219,12 +219,11 @@ struct TimeSetupView: View {
 
     private var footer: some View {
         Button {
-            saveTimeToStore()
+            saveReminderTime()
             onContinue()
             DispatchQueue.main.async {
                 onboardingTelemetry.notificationPermissionRequested()
                 NotificationManager.shared.requestAuthorization()
-                NotificationManager.shared.requestReschedule(from: store, reason: "onboarding-reminder-time")
             }
         } label: {
             HStack(spacing: 8) {
@@ -247,14 +246,17 @@ struct TimeSetupView: View {
         selectedPeriod = selection.period
     }
 
-    private func saveTimeToStore() {
+    private func saveReminderTime() {
         let selection = ReminderTimeConverter.toTwentyFourHour(
             hour: selectedHour,
             minute: selectedMinute,
             period: selectedPeriod
         )
-        store.reminderHour = selection.hour
-        store.reminderMinute = selection.minute
+        ScheduleCriticalSettingChange.saveOnboardingReminderTime(
+            store: store,
+            hour: selection.hour,
+            minute: selection.minute
+        )
     }
 }
 

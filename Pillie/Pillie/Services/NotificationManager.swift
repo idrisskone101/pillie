@@ -21,12 +21,9 @@ final class NotificationManager {
     private let snoozeActionID = "SNOOZE_ACTION"
     private let minimumSupportedEpoch: TimeInterval = -2_208_988_800 // 1900-01-01
     private let maximumSupportedEpoch: TimeInterval = 7_258_118_400 // 2200-01-01
+    private let schedulePlanner = ReminderSchedulePlanner()
     private static let perfLog = OSLog(subsystem: Bundle.main.bundleIdentifier ?? "com.idrisskone.pillie", category: "NotificationPerf")
 
-    private let maxPendingReminders = 64
-    private let baseReminderCount = 7
-    private let dueScanLimit = 120
-    private let catchupDelayMinutes = 1
     private let rescheduleDebounceDelay: TimeInterval = 0.25
     private let isRunningTests = ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
 
@@ -36,17 +33,6 @@ final class NotificationManager {
         static let dueDayEpoch = "dueDayEpoch"
         static let actionTypeRaw = "actionTypeRaw"
         static let requestKind = "requestKind"
-    }
-
-    private enum RequestKind: String {
-        case base
-        case retry
-        case snooze
-    }
-
-    private struct SnoozeOverride {
-        let dueDayEpoch: Int
-        let firstFireDate: Date
     }
 
     struct ManagedReminderDiff {
@@ -96,7 +82,7 @@ final class NotificationManager {
         rescheduleFromStore(store, snoozeOverride: nil, reason: "immediate")
     }
 
-    private func rescheduleFromStore(_ store: PillStore, snoozeOverride: SnoozeOverride?, reason: String) {
+    private func rescheduleFromStore(_ store: PillStore, snoozeOverride: ReminderSchedulePlanner.SnoozeOverride?, reason: String) {
         let signpostID = OSSignpostID(log: Self.perfLog)
         os_signpost(.begin, log: Self.perfLog, name: "reminderRebuild", signpostID: signpostID)
         defer { os_signpost(.end, log: Self.perfLog, name: "reminderRebuild", signpostID: signpostID) }
@@ -182,7 +168,7 @@ final class NotificationManager {
         let snoozeStart = Date().addingTimeInterval(TimeInterval(store.autoReminderIntervalMinutes * 60))
         rescheduleFromStore(
             store,
-            snoozeOverride: SnoozeOverride(dueDayEpoch: dueEpoch, firstFireDate: snoozeStart),
+            snoozeOverride: ReminderSchedulePlanner.SnoozeOverride(dueDayEpoch: dueEpoch, firstFireDate: snoozeStart),
             reason: "snooze"
         )
     }
@@ -198,267 +184,77 @@ final class NotificationManager {
     private func buildReminderRequests(
         store: PillStore,
         now: Date,
-        snoozeOverride: SnoozeOverride?
+        snoozeOverride: ReminderSchedulePlanner.SnoozeOverride?
     ) -> [UNNotificationRequest] {
         let calendar = Calendar.current
-        let refillRequest = buildRefillReminderRequestIfNeeded(store: store, now: now, calendar: calendar)
-        let dueReminderBudget = max(0, maxPendingReminders - (refillRequest == nil ? 0 : 1))
-        guard dueReminderBudget > 0 else {
-            return refillRequest.map { [$0] } ?? []
-        }
-
         let candidateDueActions = DoseScheduleEngine.nextDueActions(
             from: now,
-            limit: dueScanLimit,
+            limit: ReminderSchedulePlanner.dueScanLimit,
             pack: store.pack
         )
-
-        let statusByEpochDay = store.statusesByEpochDay(for: candidateDueActions.map(\.date))
-
-        let dueActions = candidateDueActions.filter { action in
-            let key = epochDay(for: action.date, calendar: calendar)
-            return statusByEpochDay[key] != .taken
-        }
-
-        let baseDueActions = Array(dueActions.prefix(min(baseReminderCount, dueReminderBudget)))
-
-        var requests: [UNNotificationRequest] = []
-        var firstReminderByEpoch: [Int: Date] = [:]
-
-        for due in baseDueActions {
-            let dueDay = calendar.startOfDay(for: due.date)
-            let dueEpoch = Int(dueDay.timeIntervalSince1970)
-            let firstReminderDate = firstReminderDateForDueAction(
-                dueDay: dueDay,
+        let intents = schedulePlanner.planReminders(
+            ReminderSchedulePlanner.Input(
                 now: now,
+                pack: store.pack,
                 reminderHour: store.reminderHour,
                 reminderMinute: store.reminderMinute,
-                snoozeOverride: snoozeOverride
-            )
-
-            guard let firstReminderDate,
-                  firstReminderDate < endOfDayExclusive(for: dueDay, calendar: calendar) else {
-                continue
-            }
-
-            let firstKind: RequestKind = (snoozeOverride?.dueDayEpoch == dueEpoch) ? .snooze : .base
-            let baseRequest = makeRequest(
-                for: due,
-                fireDate: firstReminderDate,
-                dueDayEpoch: dueEpoch,
-                kind: firstKind,
-                calendar: calendar
-            )
-            requests.append(baseRequest)
-            firstReminderByEpoch[dueEpoch] = firstReminderDate
-        }
-
-        let remainingBudget = max(0, dueReminderBudget - requests.count)
-        if remainingBudget > 0,
-           let nearestDue = dueActions.first {
-            let retryRequests = buildRetryRequests(
-                for: nearestDue,
-                firstReminderByEpoch: firstReminderByEpoch,
-                now: now,
-                intervalMinutes: store.autoReminderIntervalMinutes,
-                retryLimit: store.autoReminderRetryLimit,
-                budget: remainingBudget,
-                reminderHour: store.reminderHour,
-                reminderMinute: store.reminderMinute,
+                autoReminderIntervalMinutes: store.autoReminderIntervalMinutes,
+                autoReminderRetryLimit: store.autoReminderRetryLimit,
+                refillReminderThresholdDays: store.refillReminderThresholdDays,
+                patchRestockReminderThresholdPatches: store.patchRestockReminderThresholdPatches,
+                candidateDueActions: candidateDueActions,
+                statusByEpochDay: store.statusesByEpochDay(for: candidateDueActions.map(\.date)),
                 snoozeOverride: snoozeOverride,
                 calendar: calendar
             )
-
-            requests.append(contentsOf: retryRequests)
-        }
-
-        var finalRequests = Array(requests.prefix(dueReminderBudget))
-        if let refillRequest {
-            finalRequests.append(refillRequest)
-        }
-        return Array(finalRequests.prefix(maxPendingReminders))
-    }
-
-    private func buildRetryRequests(
-        for due: DoseScheduleAction,
-        firstReminderByEpoch: [Int: Date],
-        now: Date,
-        intervalMinutes: Int,
-        retryLimit: Int,
-        budget: Int,
-        reminderHour: Int,
-        reminderMinute: Int,
-        snoozeOverride: SnoozeOverride?,
-        calendar: Calendar
-    ) -> [UNNotificationRequest] {
-        let cappedBudget = min(budget, retryLimit)
-        guard cappedBudget > 0 else { return [] }
-
-        let dueDay = calendar.startOfDay(for: due.date)
-        let dueEpoch = Int(dueDay.timeIntervalSince1970)
-
-        guard let firstReminderDate = firstReminderByEpoch[dueEpoch]
-            ?? firstReminderDateForDueAction(
-                dueDay: dueDay,
-                now: now,
-                reminderHour: reminderHour,
-                reminderMinute: reminderMinute,
-                snoozeOverride: snoozeOverride
-            ) else {
-            return []
-        }
-
-        let dayEnd = endOfDayExclusive(for: dueDay, calendar: calendar)
-        let interval = TimeInterval(max(1, intervalMinutes) * 60)
-        var nextFire = firstReminderDate.addingTimeInterval(interval)
-
-        var requests: [UNNotificationRequest] = []
-        while requests.count < cappedBudget && nextFire < dayEnd {
-            requests.append(
-                makeRequest(
-                    for: due,
-                    fireDate: nextFire,
-                    dueDayEpoch: dueEpoch,
-                    kind: .retry,
-                    calendar: calendar
-                )
-            )
-            nextFire.addTimeInterval(interval)
-        }
-
-        return requests
-    }
-
-    private func firstReminderDateForDueAction(
-        dueDay: Date,
-        now: Date,
-        reminderHour: Int,
-        reminderMinute: Int,
-        snoozeOverride: SnoozeOverride?
-    ) -> Date? {
-        let calendar = Calendar.current
-        let dueEpoch = Int(dueDay.timeIntervalSince1970)
-
-        if let snoozeOverride,
-           snoozeOverride.dueDayEpoch == dueEpoch {
-            return max(snoozeOverride.firstFireDate, now.addingTimeInterval(1))
-        }
-
-        let configured = reminderDate(on: dueDay, hour: reminderHour, minute: reminderMinute, calendar: calendar)
-
-        if calendar.isDate(dueDay, inSameDayAs: now), configured <= now {
-            return now.addingTimeInterval(TimeInterval(catchupDelayMinutes * 60))
-        }
-
-        return configured
-    }
-
-    private func reminderDate(on day: Date, hour: Int, minute: Int, calendar: Calendar) -> Date {
-        var components = calendar.dateComponents([.year, .month, .day], from: day)
-        components.hour = hour
-        components.minute = minute
-        components.second = 0
-        return calendar.date(from: components) ?? day
-    }
-
-    private func endOfDayExclusive(for day: Date, calendar: Calendar) -> Date {
-        calendar.date(byAdding: .day, value: 1, to: day) ?? day.addingTimeInterval(24 * 60 * 60)
-    }
-
-    private func buildRefillReminderRequestIfNeeded(
-        store: PillStore,
-        now: Date,
-        calendar: Calendar
-    ) -> UNNotificationRequest? {
-        let today = calendar.startOfDay(for: now)
-        let cycleLength = max(1, store.pack.cycleLength)
-        let currentDayIndex = store.pack.cycleDayIndex(on: today, calendar: calendar)
-
-        let supplyUnitsLeft: Int
-        let thresholdDayIndex: Int
-
-        switch store.pack.method {
-        case .pill:
-            let pillsLeft = min(store.refillReminderThresholdDays, cycleLength)
-            supplyUnitsLeft = pillsLeft
-            thresholdDayIndex = max(0, cycleLength - pillsLeft)
-        case .patch:
-            let patchesLeft = store.patchRestockReminderThresholdPatches
-            supplyUnitsLeft = patchesLeft
-            thresholdDayIndex = patchesLeft == 2 ? 0 : 7 // cycle day 1 or 8
-        case .ring:
-            return nil
-        }
-
-        let deltaToThresholdDay = (thresholdDayIndex - currentDayIndex + cycleLength) % cycleLength
-
-        guard let triggerDay = calendar.date(byAdding: .day, value: deltaToThresholdDay, to: today) else {
-            return nil
-        }
-
-        guard let fireDate = firstReminderDateForDueAction(
-            dueDay: triggerDay,
-            now: now,
-            reminderHour: store.reminderHour,
-            reminderMinute: store.reminderMinute,
-            snoozeOverride: nil
-        ),
-        fireDate < endOfDayExclusive(for: triggerDay, calendar: calendar) else {
-            return nil
-        }
-
-        let dueDayEpoch = Int(calendar.startOfDay(for: triggerDay).timeIntervalSince1970)
-        return makeRefillRequest(
-            fireDate: fireDate,
-            dueDayEpoch: dueDayEpoch,
-            supplyUnitsLeft: supplyUnitsLeft,
-            method: store.pack.method,
-            calendar: calendar
         )
+
+        return intents.map { intent in
+            switch intent {
+            case .due(let due):
+                return makeRequest(for: due, calendar: calendar)
+            case .supply(let supply):
+                return makeRefillRequest(for: supply, calendar: calendar)
+            }
+        }
     }
 
     private func makeRequest(
-        for due: DoseScheduleAction,
-        fireDate: Date,
-        dueDayEpoch: Int,
-        kind: RequestKind,
+        for due: ReminderSchedulePlanner.DueReminderIntent,
         calendar: Calendar
     ) -> UNNotificationRequest {
         let content = UNMutableNotificationContent()
-        if kind == .retry {
+        if due.kind == .retry {
             content.title = "Still here when you're ready"
             content.body = "Take a tiny moment for your Pillie check-in."
         } else {
-            content.title = due.reminderTitle
-            content.body = due.reminderBody
+            content.title = due.action.reminderTitle
+            content.body = due.action.reminderBody
         }
         content.sound = .default
         content.categoryIdentifier = categoryID
         content.userInfo = [
-            PayloadKey.dueDayEpoch: dueDayEpoch,
-            PayloadKey.actionTypeRaw: due.type.rawValue,
-            PayloadKey.requestKind: kind.rawValue
+            PayloadKey.dueDayEpoch: due.dueDayEpoch,
+            PayloadKey.actionTypeRaw: due.action.type.rawValue,
+            PayloadKey.requestKind: due.kind.rawValue
         ]
 
-        var components = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: fireDate)
+        var components = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: due.fireDate)
         if components.second == nil {
             components.second = 0
         }
 
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
-        let id = reminderIdentifier(dueDayEpoch: dueDayEpoch, kind: kind, fireDate: fireDate)
+        let id = reminderIdentifier(dueDayEpoch: due.dueDayEpoch, kind: due.kind, fireDate: due.fireDate)
         return UNNotificationRequest(identifier: id, content: content, trigger: trigger)
     }
 
     private func makeRefillRequest(
-        fireDate: Date,
-        dueDayEpoch: Int,
-        supplyUnitsLeft: Int,
-        method: ContraceptiveMethod,
+        for supply: ReminderSchedulePlanner.SupplyReminderIntent,
         calendar: Calendar
     ) -> UNNotificationRequest {
         let content = UNMutableNotificationContent()
-        switch method {
+        switch supply.method {
         case .pill:
             content.title = "Refill check-in"
             content.body = "Looks like you're getting low. A refill soon could save future stress."
@@ -471,13 +267,13 @@ final class NotificationManager {
         }
         content.sound = .default
 
-        var components = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: fireDate)
+        var components = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: supply.fireDate)
         if components.second == nil {
             components.second = 0
         }
 
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
-        let id = refillReminderIdentifier(dueDayEpoch: dueDayEpoch, fireDate: fireDate)
+        let id = refillReminderIdentifier(dueDayEpoch: supply.dueDayEpoch, fireDate: supply.fireDate)
         return UNNotificationRequest(identifier: id, content: content, trigger: trigger)
     }
 
@@ -605,7 +401,7 @@ final class NotificationManager {
 
     // MARK: - ID + Payload
 
-    private func reminderIdentifier(dueDayEpoch: Int, kind: RequestKind, fireDate: Date) -> String {
+    private func reminderIdentifier(dueDayEpoch: Int, kind: ReminderSchedulePlanner.DueReminderKind, fireDate: Date) -> String {
         "\(reminderPrefix)due_\(dueDayEpoch)_\(kind.rawValue)_\(Int(fireDate.timeIntervalSince1970))"
     }
 
@@ -632,10 +428,6 @@ final class NotificationManager {
             return dateFromEpoch(epoch)
         }
         return nil
-    }
-
-    private func epochDay(for date: Date, calendar: Calendar) -> Int {
-        Int(calendar.startOfDay(for: date).timeIntervalSince1970)
     }
 
     private func dateFromEpoch(_ epoch: TimeInterval) -> Date? {
@@ -680,13 +472,16 @@ final class NotificationManager {
     ) -> [ReminderRequestDebugSummary] {
         let dueDayEpoch = Int(Calendar.current.startOfDay(for: now).timeIntervalSince1970)
         return reminderRequestSummaries(
-            from: buildReminderRequests(
-                store: store,
-                now: now,
-                snoozeOverride: SnoozeOverride(dueDayEpoch: dueDayEpoch, firstFireDate: snoozeFirstFireDate)
+                from: buildReminderRequests(
+                    store: store,
+                    now: now,
+                    snoozeOverride: ReminderSchedulePlanner.SnoozeOverride(
+                        dueDayEpoch: dueDayEpoch,
+                        firstFireDate: snoozeFirstFireDate
+                    )
+                )
             )
-        )
-    }
+        }
 
     private func reminderRequestSummaries(from requests: [UNNotificationRequest]) -> [ReminderRequestDebugSummary] {
         requests.compactMap { request in

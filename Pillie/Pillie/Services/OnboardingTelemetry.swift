@@ -6,104 +6,47 @@
 import Foundation
 
 struct OnboardingTelemetry {
-  private let analytics: AnalyticsTracking
-  private let isPlus: () -> Bool
+  private let telemetry: ProductAnalyticsTelemetry
 
   init(
     analytics: AnalyticsTracking = AnalyticsManager.shared,
     isPlus: @escaping () -> Bool = { SubscriptionManager.shared.isPlus }
   ) {
-    self.analytics = analytics
-    self.isPlus = isPlus
+    self.telemetry = ProductAnalyticsTelemetry(analytics: analytics, isPlus: isPlus)
   }
 
   func stepViewed(_ step: Int) {
-    guard let analyticsStep = AnalyticsStep(onboardingStep: step) else { return }
+    guard let analyticsStep = OnboardingFlow.analyticsStep(for: step) else { return }
     if step == 0 {
-      track(
-        .onboardingStarted,
-        source: .onboarding,
-        step: analyticsStep,
-        isPlus: isPlus()
-      )
+      telemetry.onboardingStarted(step: analyticsStep)
     }
-    track(
-      .onboardingStepViewed,
-      source: .onboarding,
-      step: analyticsStep,
-      isPlus: isPlus()
-    )
+    telemetry.onboardingStepViewed(analyticsStep)
   }
 
   func stepCompleted(from previousStep: Int, to nextStep: Int) {
-    guard let analyticsStep = AnalyticsStep(onboardingStep: previousStep), previousStep != nextStep
-    else {
-      return
+    guard let transition = OnboardingFlow.transition(from: previousStep, to: nextStep),
+          let analyticsStep = transition.completedAnalyticsStep else { return }
+
+    if transition.direction == .forward {
+      telemetry.onboardingStepCompleted(analyticsStep)
+    } else {
+      telemetry.onboardingBackTapped(analyticsStep)
     }
 
-    track(
-      nextStep > previousStep ? .onboardingStepCompleted : .onboardingBackTapped,
-      source: .onboarding,
-      step: analyticsStep,
-      isPlus: isPlus()
-    )
-
-    if previousStep <= 15, nextStep > 15 {
-      track(.onboardingCompleted, source: .onboarding, isPlus: isPlus())
+    if transition.completesOnboarding {
+      telemetry.onboardingCompleted()
     }
   }
 
   func notificationPermissionRequested() {
-    track(
-      .notificationPermissionRequested,
-      source: .onboarding,
-      step: .reminderTime,
-      isPlus: isPlus()
-    )
+    telemetry.notificationPermissionRequested()
   }
 
   func screenTimePermissionRequested() {
-    track(
-      .screenTimePermissionRequested,
-      source: .onboarding,
-      step: .appBlocking,
-      isPlus: isPlus()
-    )
+    telemetry.screenTimePermissionRequested()
   }
 
   func screenTimePermissionCompleted(isAuthorized: Bool) {
-    track(
-      .screenTimePermissionCompleted,
-      source: .onboarding,
-      step: .appBlocking,
-      result: isAuthorized ? .granted : .denied,
-      isPlus: isPlus()
-    )
-  }
-
-  private func track(
-    _ event: AnalyticsEvent,
-    source: AnalyticsSource? = nil,
-    step: AnalyticsStep? = nil,
-    screen: AnalyticsScreen? = nil,
-    plan: AnalyticsPlan? = nil,
-    result: AnalyticsResult? = nil,
-    setting: AnalyticsSetting? = nil,
-    acquisitionSource: AcquisitionSource? = nil,
-    isPlus: Bool? = nil,
-    hasBlockingSelection: Bool? = nil
-  ) {
-    analytics.track(
-      event,
-      source: source,
-      step: step,
-      screen: screen,
-      plan: plan,
-      result: result,
-      setting: setting,
-      acquisitionSource: acquisitionSource,
-      isPlus: isPlus,
-      hasBlockingSelection: hasBlockingSelection
-    )
+    telemetry.screenTimePermissionCompleted(isAuthorized: isAuthorized)
   }
 }

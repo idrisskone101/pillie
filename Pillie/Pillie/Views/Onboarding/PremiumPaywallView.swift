@@ -75,7 +75,7 @@ struct PremiumPaywallView: View {
     @State private var didCompletePaidRoute = false
     private let performanceTier = PerformanceTier.current
     private let subscriptionManager = SubscriptionManager.shared
-    private let telemetry = PaywallSubscriptionTelemetry.live
+    private let telemetry = ProductAnalyticsTelemetry.live
     private let content = SoftPaywallContent.default
 
     var isFromOnboarding: Bool = true
@@ -92,10 +92,6 @@ struct PremiumPaywallView: View {
             case .monthly: return .monthly
             }
         }
-    }
-
-    private var analyticsSource: AnalyticsSource {
-        isFromOnboarding ? .onboarding : .settings
     }
 
     private var selectedPackage: Package? {
@@ -162,7 +158,7 @@ struct PremiumPaywallView: View {
             .ignoresSafeArea(.all, edges: .bottom)
         }
         .onAppear {
-            telemetry.paywallViewed(source: analyticsSource, isFromOnboarding: isFromOnboarding, isPlus: subscriptionManager.isPlus)
+            telemetry.paywallViewed(isFromOnboarding: isFromOnboarding)
             routeExistingPlusUserIfNeeded()
             animateIn = true
             guard performanceTier == .standard else {
@@ -341,7 +337,7 @@ struct PremiumPaywallView: View {
             withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
                 selectedPlan = .annual
             }
-            telemetry.planSelected(source: analyticsSource, plan: .annual, isPlus: subscriptionManager.isPlus)
+            telemetry.paywallPlanSelected(plan: .annual, isFromOnboarding: isFromOnboarding)
         } label: {
             VStack(spacing: -12) {
                 HStack {
@@ -403,7 +399,7 @@ struct PremiumPaywallView: View {
             withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
                 selectedPlan = .monthly
             }
-            telemetry.planSelected(source: analyticsSource, plan: .monthly, isPlus: subscriptionManager.isPlus)
+            telemetry.paywallPlanSelected(plan: .monthly, isFromOnboarding: isFromOnboarding)
         } label: {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
@@ -473,17 +469,17 @@ struct PremiumPaywallView: View {
                 Button {
                     guard let package = selectedPackage else { return }
                     isPurchasing = true
-                    telemetry.purchaseStarted(source: analyticsSource, plan: selectedPlan.analyticsPlan, isPlus: subscriptionManager.isPlus)
+                    telemetry.purchaseStarted(plan: selectedPlan.analyticsPlan, isFromOnboarding: isFromOnboarding)
                     Task {
                         do {
                             try await subscriptionManager.purchase(package)
-                            telemetry.purchaseCompleted(source: analyticsSource, plan: selectedPlan.analyticsPlan, isPlus: subscriptionManager.isPlus)
+                            telemetry.purchaseCompleted(plan: selectedPlan.analyticsPlan, isFromOnboarding: isFromOnboarding)
                             completePaidRoute()
                         } catch {
                             if error.isCancelledPurchase {
-                                telemetry.purchaseCancelled(source: analyticsSource, plan: selectedPlan.analyticsPlan, isPlus: subscriptionManager.isPlus)
+                                telemetry.purchaseCancelled(plan: selectedPlan.analyticsPlan, isFromOnboarding: isFromOnboarding)
                             } else {
-                                telemetry.purchaseFailed(source: analyticsSource, plan: selectedPlan.analyticsPlan, isPlus: subscriptionManager.isPlus)
+                                telemetry.purchaseFailed(plan: selectedPlan.analyticsPlan, isFromOnboarding: isFromOnboarding)
                                 purchaseError = error.localizedDescription
                             }
                         }
@@ -523,7 +519,7 @@ struct PremiumPaywallView: View {
 
             HStack(spacing: 14) {
                 Button {
-                    telemetry.continueFreeSelected(source: analyticsSource, isFromOnboarding: isFromOnboarding, isPlus: subscriptionManager.isPlus)
+                    telemetry.continueFreeSelected(isFromOnboarding: isFromOnboarding)
                     onSkip()
                 } label: {
                     Text(content.freeCTA)
@@ -575,19 +571,19 @@ struct PremiumPaywallView: View {
 
     private func restorePurchases() {
         isRestoring = true
-        telemetry.restoreStarted(source: analyticsSource, isPlus: subscriptionManager.isPlus)
+        telemetry.restoreStarted(isFromOnboarding: isFromOnboarding)
         Task {
             do {
                 try await subscriptionManager.restore()
                 if subscriptionManager.isPlus {
-                    telemetry.restoreCompleted(source: analyticsSource, isPlus: subscriptionManager.isPlus)
+                    telemetry.restoreCompleted(isFromOnboarding: isFromOnboarding)
                     completePaidRoute()
                 } else {
-                    telemetry.restoreFailed(source: analyticsSource, isPlus: subscriptionManager.isPlus)
+                    telemetry.restoreFailed(isFromOnboarding: isFromOnboarding)
                     showNoSubscriptionAlert = true
                 }
             } catch {
-                telemetry.restoreFailed(source: analyticsSource, isPlus: subscriptionManager.isPlus)
+                telemetry.restoreFailed(isFromOnboarding: isFromOnboarding)
                 purchaseError = error.localizedDescription
             }
             isRestoring = false

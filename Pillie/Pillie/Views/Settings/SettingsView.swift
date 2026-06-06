@@ -41,7 +41,7 @@ struct SettingsView: View {
                 settingsCard {
                     Button {
                         showProtocolEditor = true
-                        AnalyticsManager.shared.track(.settingsSheetOpened, source: .settings, setting: .protocol, isPlus: SubscriptionManager.shared.isPlus)
+                        ProductAnalyticsTelemetry.live.protocolSettingsOpened()
                     } label: {
                         settingsRow("Contraceptive Type", value: protocolSummary)
                     }
@@ -49,7 +49,7 @@ struct SettingsView: View {
                     divider
                     Button {
                         showTimeEditor = true
-                        AnalyticsManager.shared.track(.settingsSheetOpened, source: .settings, setting: .reminderTime, isPlus: SubscriptionManager.shared.isPlus)
+                        ProductAnalyticsTelemetry.live.reminderTimeSettingsOpened()
                     } label: {
                         settingsRow("Reminder Time", value: store.nextReminderTime)
                     }
@@ -57,7 +57,7 @@ struct SettingsView: View {
                     divider
                     Button {
                         showIntervalEditor = true
-                        AnalyticsManager.shared.track(.settingsSheetOpened, source: .settings, setting: .autoReminderInterval, isPlus: SubscriptionManager.shared.isPlus)
+                        ProductAnalyticsTelemetry.live.autoReminderIntervalSettingsOpened()
                     } label: {
                         settingsRow("Auto-Reminder Interval", value: store.autoReminderIntervalDisplay)
                     }
@@ -65,7 +65,7 @@ struct SettingsView: View {
                     divider
                     Button {
                         showRetryLimitEditor = true
-                        AnalyticsManager.shared.track(.settingsSheetOpened, source: .settings, setting: .autoReminderRetryLimit, isPlus: SubscriptionManager.shared.isPlus)
+                        ProductAnalyticsTelemetry.live.autoReminderRetryLimitSettingsOpened()
                     } label: {
                         settingsRow("Auto-Reminder Retry Limit", value: store.autoReminderRetryLimitDisplay)
                     }
@@ -74,7 +74,7 @@ struct SettingsView: View {
                         divider
                         Button {
                             showRefillReminderEditor = true
-                            AnalyticsManager.shared.track(.settingsSheetOpened, source: .settings, setting: .supplyReminder, isPlus: SubscriptionManager.shared.isPlus)
+                            ProductAnalyticsTelemetry.live.supplyReminderSettingsOpened()
                         } label: {
                             settingsRow(supplyReminderTitle, value: supplyReminderValue)
                         }
@@ -90,7 +90,7 @@ struct SettingsView: View {
                 settingsCard {
                     Button {
                         showCycleDayEditor = true
-                        AnalyticsManager.shared.track(.settingsSheetOpened, source: .settings, setting: .cycleDay, isPlus: SubscriptionManager.shared.isPlus)
+                        ProductAnalyticsTelemetry.live.cycleDaySettingsOpened()
                     } label: {
                         settingsRow("Current Day in Cycle", value: "Day \(store.currentDayIndex + 1) of \(store.pack.cycleLength)")
                     }
@@ -106,12 +106,8 @@ struct SettingsView: View {
                     if SubscriptionManager.shared.isPlus {
                         Button {
                             showBlockedAppsEditor = true
-                            AnalyticsManager.shared.track(
-                                .settingsSheetOpened,
-                                source: .settings,
-                                setting: .blockedApps,
-                                isPlus: SubscriptionManager.shared.isPlus,
-                                hasBlockingSelection: AppBlockingManager.shared.hasAppsSelected
+                            ProductAnalyticsTelemetry.live.blockedAppsSettingsOpened(
+                                hasSelection: AppBlockingManager.shared.hasAppsSelected
                             )
                         } label: {
                             settingsRow("Blocked Apps", value: blockingStatusSummary)
@@ -120,7 +116,7 @@ struct SettingsView: View {
                     } else {
                         Button {
                             showBlockingUpsell = true
-                            AnalyticsManager.shared.track(.plusUpsellViewed, source: .settings, isPlus: SubscriptionManager.shared.isPlus)
+                            ProductAnalyticsTelemetry.live.settingsBlockingUpsellViewed()
                         } label: {
                             settingsRow("Blocked Apps", value: "Pillie+", valueColor: PillieTheme.coral, showLock: true)
                         }
@@ -140,7 +136,7 @@ struct SettingsView: View {
 
                 settingsCard {
                     Button {
-                        AnalyticsManager.shared.track(.settingsSheetOpened, source: .settings, setting: .subscription, isPlus: SubscriptionManager.shared.isPlus)
+                        ProductAnalyticsTelemetry.live.subscriptionSettingsOpened()
                         if SubscriptionManager.shared.isPlus {
                             showManageSubscription = true
                         } else {
@@ -510,7 +506,7 @@ private struct ProtocolEditor: View {
                 .padding(.horizontal, 28)
 
                 Button {
-                    AnalyticsManager.shared.track(.settingsChangeCancelled, source: .settings, setting: .protocol, isPlus: SubscriptionManager.shared.isPlus)
+                    ProductAnalyticsTelemetry.live.protocolChangeCancelled()
                     dismiss()
                 } label: {
                     Text("Cancel")
@@ -531,7 +527,7 @@ private struct ProtocolEditor: View {
                     customBreakDays: selectedMethod == .pill && selectedRegimen == .custom ? customBreakDays : nil,
                     cycleDay: min(max(1, selectedCycleDay), cycleLength)
                 )
-                AnalyticsManager.shared.track(.settingsChangeSaved, source: .settings, setting: .protocol, isPlus: SubscriptionManager.shared.isPlus)
+                ProductAnalyticsTelemetry.live.protocolChangeSaved()
                 dismiss()
             }
         } message: {
@@ -633,8 +629,7 @@ private struct ReminderTimeEditor: View {
             }
 
             Button {
-                saveAndReschedule()
-                AnalyticsManager.shared.track(.settingsChangeSaved, source: .settings, setting: .reminderTime, isPlus: SubscriptionManager.shared.isPlus)
+                saveReminderTime()
                 dismiss()
             } label: {
                 Text("Save")
@@ -658,15 +653,17 @@ private struct ReminderTimeEditor: View {
         selectedPeriod = selection.period
     }
 
-    private func saveAndReschedule() {
+    private func saveReminderTime() {
         let selection = ReminderTimeConverter.toTwentyFourHour(
             hour: selectedHour,
             minute: selectedMinute,
             period: selectedPeriod
         )
-        store.reminderHour = selection.hour
-        store.reminderMinute = selection.minute
-        NotificationManager.shared.requestReschedule(from: store, reason: "settings-reminder-time")
+        ScheduleCriticalSettingChange.saveSettingsReminderTime(
+            store: store,
+            hour: selection.hour,
+            minute: selection.minute
+        )
     }
 }
 
@@ -716,9 +713,10 @@ private struct AutoReminderIntervalEditor: View {
             .padding(.horizontal, 20)
 
             Button {
-                store.autoReminderIntervalMinutes = selectedInterval
-                NotificationManager.shared.requestReschedule(from: store, reason: "settings-auto-interval")
-                AnalyticsManager.shared.track(.settingsChangeSaved, source: .settings, setting: .autoReminderInterval, isPlus: SubscriptionManager.shared.isPlus)
+                ScheduleCriticalSettingChange.saveSettingsAutoReminderInterval(
+                    store: store,
+                    intervalMinutes: selectedInterval
+                )
                 dismiss()
             } label: {
                 Text("Save")
@@ -781,9 +779,10 @@ private struct AutoReminderRetryLimitEditor: View {
             .padding(.horizontal, 20)
 
             Button {
-                store.autoReminderRetryLimit = selectedLimit
-                NotificationManager.shared.requestReschedule(from: store, reason: "settings-auto-retry-limit")
-                AnalyticsManager.shared.track(.settingsChangeSaved, source: .settings, setting: .autoReminderRetryLimit, isPlus: SubscriptionManager.shared.isPlus)
+                ScheduleCriticalSettingChange.saveSettingsAutoReminderRetryLimit(
+                    store: store,
+                    retryLimit: selectedLimit
+                )
                 dismiss()
             } label: {
                 Text("Save")
@@ -869,13 +868,10 @@ private struct RefillReminderThresholdEditor: View {
             .padding(.horizontal, 20)
 
             Button {
-                if isPatchMethod {
-                    store.patchRestockReminderThresholdPatches = selectedThreshold
-                } else {
-                    store.refillReminderThresholdDays = selectedThreshold
-                }
-                NotificationManager.shared.requestReschedule(from: store, reason: "settings-supply-threshold")
-                AnalyticsManager.shared.track(.settingsChangeSaved, source: .settings, setting: .supplyReminder, isPlus: SubscriptionManager.shared.isPlus)
+                ScheduleCriticalSettingChange.saveSettingsSupplyReminderThreshold(
+                    store: store,
+                    threshold: selectedThreshold
+                )
                 dismiss()
             } label: {
                 Text("Save")
@@ -946,7 +942,7 @@ private struct CycleDayEditor: View {
 
             Button {
                 store.updateCycleDay(selectedCycleDay)
-                AnalyticsManager.shared.track(.settingsChangeSaved, source: .settings, setting: .cycleDay, isPlus: SubscriptionManager.shared.isPlus)
+                ProductAnalyticsTelemetry.live.cycleDaySaved()
                 dismiss()
             } label: {
                 Text("Save")

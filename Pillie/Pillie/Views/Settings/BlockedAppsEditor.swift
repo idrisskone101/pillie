@@ -54,25 +54,8 @@ struct BlockedAppsEditor: View {
             .padding(.horizontal, 20)
 
             Button {
-                blockingManager.saveSelection()
-                AnalyticsManager.shared.track(
-                    .settingsChangeSaved,
-                    source: .settings,
-                    setting: .blockedApps,
-                    isPlus: SubscriptionManager.shared.isPlus,
-                    hasBlockingSelection: blockingManager.hasAppsSelected
-                )
-                // Re-schedule and reconcile blocking immediately
-                blockingManager.scheduleDeviceActivityBlock(
-                    hour: store.reminderHour,
-                    minute: store.reminderMinute
-                )
-                blockingManager.reconcileBlockingState(
-                    isTodayTaken: store.isTodayHandled,
-                    reminderHour: store.reminderHour,
-                    reminderMinute: store.reminderMinute,
-                    method: store.pack.method
-                )
+                blockingManager.saveSelectionAndReconcile(routine: appBlockingRoutine)
+                ProductAnalyticsTelemetry.live.blockedAppsSaved(hasSelection: blockingManager.hasAppsSelected)
                 dismiss()
             } label: {
                 Text("Done")
@@ -109,16 +92,7 @@ struct BlockedAppsEditor: View {
                 .tint(PillieTheme.coral)
                 .onChange(of: blockingManager.blockingEnabled) { _, enabled in
                     if enabled {
-                        blockingManager.reconcileBlockingState(
-                            isTodayTaken: store.isTodayHandled,
-                            reminderHour: store.reminderHour,
-                            reminderMinute: store.reminderMinute,
-                            method: store.pack.method
-                        )
-                        blockingManager.scheduleDeviceActivityBlock(
-                            hour: store.reminderHour,
-                            minute: store.reminderMinute
-                        )
+                        blockingManager.reconcileEnabledBlocking(routine: appBlockingRoutine)
                     } else {
                         blockingManager.stopMonitoring()
                     }
@@ -184,6 +158,15 @@ struct BlockedAppsEditor: View {
                 .stroke(PillieTheme.sageHalf, lineWidth: 1)
         )
         .padding(.horizontal, 20)
+    }
+
+    private var appBlockingRoutine: AppBlockingManager.RoutineState {
+        AppBlockingManager.RoutineState(
+            isTodayHandled: store.isTodayHandled,
+            reminderHour: store.reminderHour,
+            reminderMinute: store.reminderMinute,
+            method: store.pack.method
+        )
     }
 }
 

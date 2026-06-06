@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct ContentView: View {
-  @AppStorage("onboardingStep") private var onboardingStep = 0
-  @AppStorage("onboardingSelectedFreePlan") private var onboardingSelectedFreePlan = false
+  @AppStorage(OnboardingFlow.stepStorageKey) private var onboardingStep = OnboardingFlow.firstStep.rawValue
+  @AppStorage(OnboardingFlow.selectedFreePlanStorageKey) private var onboardingSelectedFreePlan = false
   @Environment(PillStore.self) private var store
   @State private var isLoading = true
   @State private var iconScale: CGFloat = 0.9
@@ -19,33 +19,33 @@ struct ContentView: View {
     ZStack {
       // Main content
       ZStack {
-        switch onboardingStep {
-        case 0:
-          WelcomeView {
-            withAnimation(.easeInOut(duration: 0.4)) {
-              setOnboardingStep(1)
-            }
-          }
+	        switch OnboardingFlow.step(for: onboardingStep) {
+	        case .welcome:
+	          WelcomeView {
+	            withAnimation(.easeInOut(duration: 0.4)) {
+	              setOnboardingStep(.analyticsConsent)
+	            }
+	          }
           .transition(
             .asymmetric(
               insertion: .move(edge: .leading),
               removal: .move(edge: .leading)
             ))
 
-        case 1:
-          AnalyticsConsentView(
-            onAllow: {
-              AnalyticsManager.shared.setAnalyticsEnabled(true)
-              withAnimation(.easeInOut(duration: 0.4)) {
-                setOnboardingStep(2)
-              }
-            },
-            onDecline: {
-              AnalyticsManager.shared.setAnalyticsEnabled(false)
-              withAnimation(.easeInOut(duration: 0.4)) {
-                setOnboardingStep(2)
-              }
-            }
+	        case .analyticsConsent:
+	          AnalyticsConsentView(
+	            onAllow: {
+	              AnalyticsManager.shared.setAnalyticsEnabled(true)
+	              withAnimation(.easeInOut(duration: 0.4)) {
+	                setOnboardingStep(.productDemo)
+	              }
+	            },
+	            onDecline: {
+	              AnalyticsManager.shared.setAnalyticsEnabled(false)
+	              withAnimation(.easeInOut(duration: 0.4)) {
+	                setOnboardingStep(.productDemo)
+	              }
+	            }
           )
           .transition(
             .asymmetric(
@@ -53,13 +53,13 @@ struct ContentView: View {
               removal: .move(edge: .trailing)
             ))
 
-        case 2:
-          ProductDemoMomentView(
-            onContinue: {
-              withAnimation(.easeInOut(duration: 0.4)) {
-                setOnboardingStep(3)
-              }
-            }
+	        case .productDemo:
+	          ProductDemoMomentView(
+	            onContinue: {
+	              withAnimation(.easeInOut(duration: 0.4)) {
+	                setOnboardingStep(.plusBlockingDemo)
+	              }
+	            }
           )
           .transition(
             .asymmetric(
@@ -67,13 +67,13 @@ struct ContentView: View {
               removal: .move(edge: .trailing)
             ))
 
-        case 3:
-          PlusBlockingDemoView(
-            onContinue: {
-              withAnimation(.easeInOut(duration: 0.4)) {
-                setOnboardingStep(4)
-              }
-            }
+	        case .plusBlockingDemo:
+	          PlusBlockingDemoView(
+	            onContinue: {
+	              withAnimation(.easeInOut(duration: 0.4)) {
+	                setOnboardingStep(.reviewPrompt)
+	              }
+	            }
           )
           .transition(
             .asymmetric(
@@ -81,13 +81,13 @@ struct ContentView: View {
               removal: .move(edge: .trailing)
             ))
 
-        case 4:
-          ReviewPromptView(
-            onContinue: {
-              withAnimation(.easeInOut(duration: 0.4)) {
-                setOnboardingStep(5)
-              }
-            }
+	        case .reviewPrompt:
+	          ReviewPromptView(
+	            onContinue: {
+	              withAnimation(.easeInOut(duration: 0.4)) {
+	                setOnboardingStep(.painPoints)
+	              }
+	            }
           )
           .transition(
             .asymmetric(
@@ -95,19 +95,19 @@ struct ContentView: View {
               removal: .move(edge: .trailing)
             ))
 
-        case 5:
-          PainPointPickerView(
-            onBack: {
-              withAnimation(.easeInOut(duration: 0.4)) {
-                setOnboardingStep(4)
-              }
-            },
-            onContinue: { points in
-              store.painPoints = points
-              withAnimation(.easeInOut(duration: 0.4)) {
-                setOnboardingStep(6)
-              }
-            }
+	        case .painPoints:
+	          PainPointPickerView(
+	            onBack: {
+	              withAnimation(.easeInOut(duration: 0.4)) {
+	                setOnboardingStep(.reviewPrompt)
+	              }
+	            },
+	            onContinue: { points in
+	              store.painPoints = points
+	              withAnimation(.easeInOut(duration: 0.4)) {
+	                setOnboardingStep(.goal)
+	              }
+	            }
           )
           .transition(
             .asymmetric(
@@ -115,19 +115,19 @@ struct ContentView: View {
               removal: .move(edge: .trailing)
             ))
 
-        case 6:
-          GoalPickerView(
-            onBack: {
-              withAnimation(.easeInOut(duration: 0.4)) {
-                setOnboardingStep(5)
-              }
-            },
-            onContinue: { goal in
-              store.personalGoal = goal
-              withAnimation(.easeInOut(duration: 0.4)) {
-                setOnboardingStep(7)
-              }
-            }
+	        case .goal:
+	          GoalPickerView(
+	            onBack: {
+	              withAnimation(.easeInOut(duration: 0.4)) {
+	                setOnboardingStep(.painPoints)
+	              }
+	            },
+	            onContinue: { goal in
+	              store.personalGoal = goal
+	              withAnimation(.easeInOut(duration: 0.4)) {
+	                setOnboardingStep(.missFrequency)
+	              }
+	            }
           )
           .transition(
             .asymmetric(
@@ -135,19 +135,19 @@ struct ContentView: View {
               removal: .move(edge: .trailing)
             ))
 
-        case 7:
-          MissFrequencyView(
-            onBack: {
-              withAnimation(.easeInOut(duration: 0.4)) {
-                setOnboardingStep(6)
-              }
-            },
-            onContinue: { freq in
-              store.missFrequency = freq
-              withAnimation(.easeInOut(duration: 0.4)) {
-                setOnboardingStep(8)
-              }
-            }
+	        case .missFrequency:
+	          MissFrequencyView(
+	            onBack: {
+	              withAnimation(.easeInOut(duration: 0.4)) {
+	                setOnboardingStep(.goal)
+	              }
+	            },
+	            onContinue: { freq in
+	              store.missFrequency = freq
+	              withAnimation(.easeInOut(duration: 0.4)) {
+	                setOnboardingStep(.acquisitionSource)
+	              }
+	            }
           )
           .transition(
             .asymmetric(
@@ -155,31 +155,25 @@ struct ContentView: View {
               removal: .move(edge: .trailing)
             ))
 
-        case 8:
-          AcquisitionSourceView(
-            onBack: {
-              withAnimation(.easeInOut(duration: 0.4)) {
-                setOnboardingStep(7)
-              }
-            },
+	        case .acquisitionSource:
+	          AcquisitionSourceView(
+	            onBack: {
+	              withAnimation(.easeInOut(duration: 0.4)) {
+	                setOnboardingStep(.missFrequency)
+	              }
+	            },
             onContinue: { source in
               store.acquisitionSource = source
-              AnalyticsManager.shared.track(
-                .onboardingStepCompleted,
-                source: .onboarding,
-                step: .acquisitionSource,
-                acquisitionSource: source,
-                isPlus: SubscriptionManager.shared.isPlus
-              )
-              withAnimation(.easeInOut(duration: 0.4)) {
-                setOnboardingStep(9)
-              }
-            },
-            onSkip: {
-              withAnimation(.easeInOut(duration: 0.4)) {
-                setOnboardingStep(9)
-              }
-            }
+	              ProductAnalyticsTelemetry.live.onboardingAcquisitionSourceCompleted(source)
+	              withAnimation(.easeInOut(duration: 0.4)) {
+	                setOnboardingStep(.method)
+	              }
+	            },
+	            onSkip: {
+	              withAnimation(.easeInOut(duration: 0.4)) {
+	                setOnboardingStep(.method)
+	              }
+	            }
           )
           .transition(
             .asymmetric(
@@ -187,19 +181,19 @@ struct ContentView: View {
               removal: .move(edge: .trailing)
             ))
 
-        case 9:
-          MethodPickerView(
-            onBack: {
-              withAnimation(.easeInOut(duration: 0.4)) {
-                setOnboardingStep(8)
-              }
-            },
-            onContinue: { method in
-              store.contraceptiveMethod = method
-              withAnimation(.easeInOut(duration: 0.4)) {
-                setOnboardingStep(10)
-              }
-            }
+	        case .method:
+	          MethodPickerView(
+	            onBack: {
+	              withAnimation(.easeInOut(duration: 0.4)) {
+	                setOnboardingStep(.acquisitionSource)
+	              }
+	            },
+	            onContinue: { method in
+	              store.contraceptiveMethod = method
+	              withAnimation(.easeInOut(duration: 0.4)) {
+	                setOnboardingStep(.schedule)
+	              }
+	            }
           )
           .transition(
             .asymmetric(
@@ -207,13 +201,13 @@ struct ContentView: View {
               removal: .move(edge: .trailing)
             ))
 
-        case 10:
-          MethodDetailsView(
-            onBack: {
-              withAnimation(.easeInOut(duration: 0.4)) {
-                setOnboardingStep(9)
-              }
-            },
+	        case .schedule:
+	          MethodDetailsView(
+	            onBack: {
+	              withAnimation(.easeInOut(duration: 0.4)) {
+	                setOnboardingStep(.method)
+	              }
+	            },
             onContinue: { regimen, customActive, customBreak, cycleDay in
               store.startNewProtocol(
                 method: store.contraceptiveMethod,
@@ -225,11 +219,11 @@ struct ContentView: View {
               )
               if store.appActivatedDate == nil {
                 store.appActivatedDate = store.today
-              }
-              withAnimation(.easeInOut(duration: 0.4)) {
-                setOnboardingStep(11)
-              }
-            }
+	              }
+	              withAnimation(.easeInOut(duration: 0.4)) {
+	                setOnboardingStep(.reminderTime)
+	              }
+	            }
           )
           .transition(
             .asymmetric(
@@ -237,18 +231,18 @@ struct ContentView: View {
               removal: .move(edge: .trailing)
             ))
 
-        case 11:
-          TimeSetupView(
-            onBack: {
-              withAnimation(.easeInOut(duration: 0.4)) {
-                setOnboardingStep(10)
-              }
-            },
-            onContinue: {
-              withAnimation(.easeInOut(duration: 0.4)) {
-                setOnboardingStep(12)
-              }
-            }
+	        case .reminderTime:
+	          TimeSetupView(
+	            onBack: {
+	              withAnimation(.easeInOut(duration: 0.4)) {
+	                setOnboardingStep(.schedule)
+	              }
+	            },
+	            onContinue: {
+	              withAnimation(.easeInOut(duration: 0.4)) {
+	                setOnboardingStep(.reminderPlan)
+	              }
+	            }
           )
           .transition(
             .asymmetric(
@@ -256,18 +250,18 @@ struct ContentView: View {
               removal: .move(edge: .trailing)
             ))
 
-        case 12:
-          ReminderPlanView(
-            onBack: {
-              withAnimation(.easeInOut(duration: 0.4)) {
-                setOnboardingStep(11)
-              }
-            },
-            onContinue: {
-              withAnimation(.easeInOut(duration: 0.4)) {
-                setOnboardingStep(13)
-              }
-            }
+	        case .reminderPlan:
+	          ReminderPlanView(
+	            onBack: {
+	              withAnimation(.easeInOut(duration: 0.4)) {
+	                setOnboardingStep(.reminderTime)
+	              }
+	            },
+	            onContinue: {
+	              withAnimation(.easeInOut(duration: 0.4)) {
+	                setOnboardingStep(.paywall)
+	              }
+	            }
           )
           .transition(
             .asymmetric(
@@ -275,31 +269,31 @@ struct ContentView: View {
               removal: .move(edge: .trailing)
             ))
 
-        case 13:
-          PremiumPaywallView(
-            onBack: {
-              withAnimation(.easeInOut(duration: 0.4)) {
-                setOnboardingStep(12)
-              }
-            },
-            onContinue: {
-              onboardingSelectedFreePlan = false
-              withAnimation(.easeInOut(duration: 0.4)) {
-                setOnboardingStep(
-                  OnboardingPaywallRoute.nextStepAfterPaywall(
-                    isPlus: SubscriptionManager.shared.isPlus,
-                    selectedFreePlan: onboardingSelectedFreePlan
-                  ))
+	        case .paywall:
+	          PremiumPaywallView(
+	            onBack: {
+	              withAnimation(.easeInOut(duration: 0.4)) {
+	                setOnboardingStep(.reminderPlan)
+	              }
+	            },
+	            onContinue: {
+	              onboardingSelectedFreePlan = false
+	              withAnimation(.easeInOut(duration: 0.4)) {
+	                setOnboardingStep(
+	                  OnboardingFlow.nextStepAfterPaywall(
+	                    isPlus: SubscriptionManager.shared.isPlus,
+	                    selectedFreePlan: onboardingSelectedFreePlan
+	                  ))
               }
             },
             onSkip: {
-              onboardingSelectedFreePlan = true
-              withAnimation(.easeInOut(duration: 0.4)) {
-                setOnboardingStep(
-                  OnboardingPaywallRoute.nextStepAfterPaywall(
-                    isPlus: SubscriptionManager.shared.isPlus,
-                    selectedFreePlan: onboardingSelectedFreePlan
-                  ))
+	              onboardingSelectedFreePlan = true
+	              withAnimation(.easeInOut(duration: 0.4)) {
+	                setOnboardingStep(
+	                  OnboardingFlow.nextStepAfterPaywall(
+	                    isPlus: SubscriptionManager.shared.isPlus,
+	                    selectedFreePlan: onboardingSelectedFreePlan
+	                  ))
               }
             }
           )
@@ -309,18 +303,18 @@ struct ContentView: View {
               removal: .move(edge: .trailing)
             ))
 
-        case 14:
-          FreePlanConfirmationView(
-            onBack: {
-              withAnimation(.easeInOut(duration: 0.4)) {
-                setOnboardingStep(13)
-              }
-            },
-            onContinue: {
-              withAnimation(.easeInOut(duration: 0.4)) {
-                setOnboardingStep(16)
-              }
-            }
+	        case .freePlanConfirmation:
+	          FreePlanConfirmationView(
+	            onBack: {
+	              withAnimation(.easeInOut(duration: 0.4)) {
+	                setOnboardingStep(.paywall)
+	              }
+	            },
+	            onContinue: {
+	              withAnimation(.easeInOut(duration: 0.4)) {
+	                setOnboardingStep(.complete)
+	              }
+	            }
           )
           .transition(
             .asymmetric(
@@ -328,23 +322,23 @@ struct ContentView: View {
               removal: .move(edge: .trailing)
             ))
 
-        case 15:
-          AppBlockingSetupView(
-            onBack: {
-              withAnimation(.easeInOut(duration: 0.4)) {
-                setOnboardingStep(13)
-              }
-            },
-            onContinue: {
-              withAnimation(.easeInOut(duration: 0.4)) {
-                setOnboardingStep(16)
-              }
-            },
-            onSkip: {
-              withAnimation(.easeInOut(duration: 0.4)) {
-                setOnboardingStep(16)
-              }
-            }
+	        case .appBlocking:
+	          AppBlockingSetupView(
+	            onBack: {
+	              withAnimation(.easeInOut(duration: 0.4)) {
+	                setOnboardingStep(.paywall)
+	              }
+	            },
+	            onContinue: {
+	              withAnimation(.easeInOut(duration: 0.4)) {
+	                setOnboardingStep(.complete)
+	              }
+	            },
+	            onSkip: {
+	              withAnimation(.easeInOut(duration: 0.4)) {
+	                setOnboardingStep(.complete)
+	              }
+	            }
           )
           .transition(
             .asymmetric(
@@ -352,10 +346,10 @@ struct ContentView: View {
               removal: .move(edge: .trailing)
             ))
 
-        default:
-          MainTabView()
-            .transition(.opacity)
-        }
+	        case .complete, nil:
+	          MainTabView()
+	            .transition(.opacity)
+	        }
       }
       .font(.pillieBody())
 
@@ -399,12 +393,13 @@ struct ContentView: View {
     }
   }
 
-  private func setOnboardingStep(_ step: Int) {
+  private func setOnboardingStep(_ step: OnboardingFlow.Step) {
     let previousStep = onboardingStep
-    onboardingTelemetry.stepCompleted(from: previousStep, to: step)
+    let nextStep = step.rawValue
+    onboardingTelemetry.stepCompleted(from: previousStep, to: nextStep)
 
-    onboardingStep = step
-    UserDefaults.standard.set(step, forKey: "onboardingStep")
+    onboardingStep = nextStep
+    UserDefaults.standard.set(nextStep, forKey: OnboardingFlow.stepStorageKey)
   }
 
   private func trackOnboardingStepViewed(_ step: Int) {
