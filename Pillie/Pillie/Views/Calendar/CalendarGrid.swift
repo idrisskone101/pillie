@@ -5,37 +5,6 @@
 
 import SwiftUI
 
-enum CalendarDayRelation {
-    case past
-    case today
-    case future
-}
-
-enum CalendarPatchSemanticStyle: Equatable {
-    case invalid
-    case neutral
-    case patchApplied
-    case plannedApplied
-    case changedTaken
-    case changedMissed
-    case changedUpcoming
-    case offWeek
-    case plannedChange
-    case plannedOffWeek
-}
-
-enum CalendarRingSemanticStyle: Equatable {
-    case invalid
-    case neutral
-    case inserted
-    case reinserted
-    case missed
-    case ringFree
-    case plannedInserted
-    case plannedReinserted
-    case plannedRingFree
-}
-
 struct CalendarGrid: View {
     @Environment(PillStore.self) private var store
     let displayedMonth: Date
@@ -111,72 +80,68 @@ struct CalendarGrid: View {
     private func dayCell(day: Int) -> some View {
         let dayDate = dateForDay(day)
         let snapshot = monthSnapshots[day] ?? dayDate.flatMap { store.scheduleSnapshot(for: $0) }
-        let method = snapshot?.pack.method ?? store.pack.method
-        let relation = relation(for: dayDate)
-        let isPatchMethod = method == .patch
-        let isRingMethod = method == .ring
-        let patchStyle = isPatchMethod ? Self.patchSemanticStyle(snapshot: snapshot, relation: relation) : .invalid
-        let ringStyle = isRingMethod ? Self.ringSemanticStyle(snapshot: snapshot, relation: relation) : .invalid
-
-        let status = snapshot?.status
-        let actionType = snapshot?.actionType
-        let hasContext = snapshot?.hasScheduleContext ?? false
-        let isActionDay = snapshot?.isDue ?? false
-        let isPassive = snapshot?.isPassiveActive ?? false
-        let isBreakDay = snapshot?.isBreak ?? false
-        let isFutureDay = relation == .future
-        let visualStatus: PillDay.Status? = isFutureDay ? nil : status
-        let showVisual = !isFutureDay && hasContext
-        let isToday = relation == .today
+        let presentation = CalendarDayPresentation.resolve(
+            snapshot: snapshot,
+            fallbackMethod: store.pack.method,
+            relation: relation(for: dayDate)
+        )
 
         VStack(spacing: 2) {
             ZStack {
                 Circle()
                     .fill(
-                        isPatchMethod
-                            ? patchBackgroundColor(for: patchStyle)
-                            : (isRingMethod
-                                ? ringBackgroundColor(for: ringStyle)
-                                : backgroundColor(for: visualStatus, hasContext: showVisual, isPassive: isPassive))
+                        presentation.isPatchMethod
+                            ? patchBackgroundColor(for: presentation.patchStyle)
+                            : (presentation.isRingMethod
+                                ? ringBackgroundColor(for: presentation.ringStyle)
+                                : backgroundColor(
+                                    for: presentation.visualStatus,
+                                    hasContext: presentation.showVisual,
+                                    isPassive: presentation.isPassiveActive
+                                ))
                     )
                     .overlay(
                         Circle()
                             .strokeBorder(
-                                isPatchMethod
-                                    ? patchStrokeColor(for: patchStyle)
-                                    : (isRingMethod
-                                        ? ringStrokeColor(for: ringStyle)
-                                        : strokeColor(for: visualStatus, hasContext: showVisual, isPassive: isPassive)),
-                                lineWidth: isPatchMethod
-                                    ? patchStrokeWidth(for: patchStyle)
-                                    : (isRingMethod
-                                        ? ringStrokeWidth(for: ringStyle)
-                                        : ((showVisual && (isActionDay || (isPassive && visualStatus == .taken))) ? 1.2 : 0.8))
+                                presentation.isPatchMethod
+                                    ? patchStrokeColor(for: presentation.patchStyle)
+                                    : (presentation.isRingMethod
+                                        ? ringStrokeColor(for: presentation.ringStyle)
+                                        : strokeColor(
+                                            for: presentation.visualStatus,
+                                            hasContext: presentation.showVisual,
+                                            isPassive: presentation.isPassiveActive
+                                        )),
+                                lineWidth: presentation.isPatchMethod
+                                    ? patchStrokeWidth(for: presentation.patchStyle)
+                                    : (presentation.isRingMethod
+                                        ? ringStrokeWidth(for: presentation.ringStyle)
+                                        : defaultStrokeWidth(for: presentation))
                             )
                     )
                     .overlay(
                         Circle()
                             .strokeBorder(
                                 todayRingColor(
-                                    actionType: actionType,
-                                    patchStyle: patchStyle,
-                                    ringStyle: ringStyle,
-                                    isPatchMethod: isPatchMethod,
-                                    isRingMethod: isRingMethod
+                                    actionType: presentation.actionType,
+                                    patchStyle: presentation.patchStyle,
+                                    ringStyle: presentation.ringStyle,
+                                    isPatchMethod: presentation.isPatchMethod,
+                                    isRingMethod: presentation.isRingMethod
                                 ),
                                 lineWidth: 2
                             )
-                            .opacity(isToday ? 1 : 0)
+                            .opacity(presentation.isToday ? 1 : 0)
                     )
 
                 Text("\(day)")
                     .font(.pillie(14, weight: .medium))
                     .foregroundStyle(
-                        isPatchMethod
-                            ? patchTextColor(for: patchStyle)
-                            : (isRingMethod
-                                ? ringTextColor(for: ringStyle)
-                                : textColor(for: visualStatus))
+                        presentation.isPatchMethod
+                            ? patchTextColor(for: presentation.patchStyle)
+                            : (presentation.isRingMethod
+                                ? ringTextColor(for: presentation.ringStyle)
+                                : textColor(for: presentation.visualStatus))
                     )
             }
             .aspectRatio(1, contentMode: .fit)
@@ -184,106 +149,20 @@ struct CalendarGrid: View {
             // Indicator dot
             Circle()
                 .fill(
-                    isPatchMethod
-                        ? patchIndicatorColor(for: patchStyle)
-                        : (isRingMethod ? ringIndicatorColor(for: ringStyle) : eventIndicatorColor(for: actionType))
+                    presentation.isPatchMethod
+                        ? patchIndicatorColor(for: presentation.patchStyle)
+                        : (presentation.isRingMethod
+                            ? ringIndicatorColor(for: presentation.ringStyle)
+                            : eventIndicatorColor(for: presentation.actionType))
                 )
                 .frame(width: 6, height: 6)
                 .opacity(
-                    isPatchMethod
-                        ? patchIndicatorOpacity(for: patchStyle)
-                        : (isRingMethod
-                            ? ringIndicatorOpacity(for: ringStyle)
-                            : ((isToday || isActionDay || isBreakDay) ? (isFutureDay ? 0.4 : 1) : 0))
+                    presentation.isPatchMethod
+                        ? patchIndicatorOpacity(for: presentation.patchStyle)
+                        : (presentation.isRingMethod
+                            ? ringIndicatorOpacity(for: presentation.ringStyle)
+                            : presentation.defaultIndicatorOpacity)
                 )
-        }
-    }
-
-    static func patchSemanticStyle(
-        snapshot: PillScheduleSnapshot?,
-        relation: CalendarDayRelation
-    ) -> CalendarPatchSemanticStyle {
-        guard let snapshot, snapshot.hasScheduleContext, snapshot.status != .noData else {
-            return .invalid
-        }
-
-        let actionType = snapshot.actionType ?? snapshot.dueAction?.type
-
-        switch relation {
-        case .future:
-            switch actionType {
-            case .some(.patchChange), .some(.patchRemove):
-                return .plannedChange
-            case .some(.patchBreak):
-                return .plannedOffWeek
-            case .some(.patchActive):
-                return .plannedApplied
-            default:
-                return snapshot.status == .breakDay ? .plannedOffWeek : .neutral
-            }
-
-        case .past, .today:
-            switch actionType {
-            case .some(.patchBreak):
-                return .offWeek
-            case .some(.patchActive):
-                return .patchApplied
-            case .some(.patchChange), .some(.patchRemove):
-                switch snapshot.status {
-                case .taken:
-                    return .changedTaken
-                case .missed:
-                    return .changedMissed
-                case .upcoming:
-                    return .changedUpcoming
-                case .breakDay:
-                    return .offWeek
-                case .noData, nil:
-                    return relation == .past ? .changedMissed : .changedUpcoming
-                }
-            default:
-                return snapshot.status == .breakDay ? .offWeek : .neutral
-            }
-        }
-    }
-
-    static func ringSemanticStyle(
-        snapshot: PillScheduleSnapshot?,
-        relation: CalendarDayRelation
-    ) -> CalendarRingSemanticStyle {
-        guard let snapshot, snapshot.hasScheduleContext, snapshot.status != .noData else {
-            return .invalid
-        }
-
-        let actionType = snapshot.actionType ?? snapshot.dueAction?.type
-
-        switch relation {
-        case .future:
-            switch actionType {
-            case .some(.ringBreak):
-                return .plannedRingFree
-            case .some(.ringReinsert):
-                return .plannedReinserted
-            case .some(.ringInsert), .some(.ringRemove), .some(.ringActive):
-                return .plannedInserted
-            default:
-                return snapshot.status == .breakDay ? .plannedRingFree : .neutral
-            }
-
-        case .past, .today:
-            if snapshot.status == .missed {
-                return .missed
-            }
-            switch actionType {
-            case .some(.ringBreak):
-                return .ringFree
-            case .some(.ringReinsert):
-                return .reinserted
-            case .some(.ringInsert), .some(.ringRemove), .some(.ringActive):
-                return .inserted
-            default:
-                return snapshot.status == .breakDay ? .ringFree : .neutral
-            }
         }
     }
 
@@ -580,6 +459,14 @@ struct CalendarGrid: View {
         case .upcoming, nil:
             return PillieTheme.sageHalf
         }
+    }
+
+    private func defaultStrokeWidth(for presentation: CalendarDayPresentation) -> CGFloat {
+        if presentation.showVisual &&
+            (presentation.isActionDay || (presentation.isPassiveActive && presentation.visualStatus == .taken)) {
+            return 1.2
+        }
+        return 0.8
     }
 
     private func eventIndicatorColor(for actionType: PillDay.ActionType?) -> Color {
