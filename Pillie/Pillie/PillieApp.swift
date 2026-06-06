@@ -168,7 +168,7 @@ struct PillieApp: App {
 
         if !Self.isRunningTests {
             AnalyticsManager.shared.configure()
-            AnalyticsManager.shared.track(.appLaunched, isPlus: SubscriptionManager.shared.isPlus)
+            ProductAnalyticsTelemetry.live.appLaunched()
             if !Self.isOnboardingActive {
                 SubscriptionManager.shared.configure()
             }
@@ -192,7 +192,7 @@ struct PillieApp: App {
                 .onChange(of: scenePhase) { _, newPhase in
                     guard !Self.isRunningTests else { return }
                     if newPhase == .active {
-                        AnalyticsManager.shared.track(.appBecameActive, isPlus: SubscriptionManager.shared.isPlus)
+                        ProductAnalyticsTelemetry.live.appBecameActive()
                         guard !Self.isOnboardingActive else { return }
                         reconcileScreenTimeState()
                         NotificationManager.shared.requestReschedule(from: store, reason: "app-became-active")
@@ -216,7 +216,9 @@ struct PillieApp: App {
     }
 
     private static var isOnboardingActive: Bool {
-        UserDefaults.standard.integer(forKey: "onboardingStep") < 15
+        OnboardingFlow.isOnboardingActive(
+            rawStep: UserDefaults.standard.integer(forKey: OnboardingFlow.stepStorageKey)
+        )
     }
 
     #if DEBUG
@@ -225,18 +227,18 @@ struct PillieApp: App {
 
         switch url.path {
         case "/posthog-smoke":
-            AnalyticsManager.shared.track(.appLaunched, source: .home, isPlus: SubscriptionManager.shared.isPlus)
-            AnalyticsManager.shared.track(.onboardingStarted, source: .onboarding, step: .welcome, isPlus: SubscriptionManager.shared.isPlus)
-            AnalyticsManager.shared.track(.onboardingStepViewed, source: .onboarding, step: .welcome, isPlus: SubscriptionManager.shared.isPlus)
+            ProductAnalyticsTelemetry.live.appLaunched(source: .home)
+            ProductAnalyticsTelemetry.live.onboardingStarted(step: .welcome)
+            ProductAnalyticsTelemetry.live.onboardingStepViewed(.welcome)
             AnalyticsManager.shared.flush()
         case "/plus-app-blocking-setup":
             SubscriptionManager.shared.setPlusForTesting(true)
-            UserDefaults.standard.set(false, forKey: "onboardingSelectedFreePlan")
-            UserDefaults.standard.set(OnboardingPaywallRoute.appBlockingSetupStep, forKey: "onboardingStep")
+            UserDefaults.standard.set(false, forKey: OnboardingFlow.selectedFreePlanStorageKey)
+            UserDefaults.standard.set(OnboardingFlow.Step.appBlocking.rawValue, forKey: OnboardingFlow.stepStorageKey)
         case "/free-plan-confirmation":
             SubscriptionManager.shared.setPlusForTesting(false)
-            UserDefaults.standard.set(true, forKey: "onboardingSelectedFreePlan")
-            UserDefaults.standard.set(OnboardingPaywallRoute.freePlanConfirmationStep, forKey: "onboardingStep")
+            UserDefaults.standard.set(true, forKey: OnboardingFlow.selectedFreePlanStorageKey)
+            UserDefaults.standard.set(OnboardingFlow.Step.freePlanConfirmation.rawValue, forKey: OnboardingFlow.stepStorageKey)
         default:
             return
         }

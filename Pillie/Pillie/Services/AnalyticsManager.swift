@@ -160,25 +160,8 @@ enum AnalyticsStep: String {
   case appBlocking = "app_blocking"
 
   init?(onboardingStep: Int) {
-    switch onboardingStep {
-    case 0: self = .welcome
-    case 1: self = .analyticsConsent
-    case 2: self = .productDemo
-    case 3: self = .plusBlockingDemo
-    case 4: self = .reviewPrompt
-    case 5: self = .painPoints
-    case 6: self = .goal
-    case 7: self = .missFrequency
-    case 8: self = .acquisitionSource
-    case 9: self = .method
-    case 10: self = .schedule
-    case 11: self = .reminderTime
-    case 12: self = .reminderPlan
-    case 13: self = .paywall
-    case 14: self = .freePlanConfirmation
-    case 15: self = .appBlocking
-    default: return nil
-    }
+    guard let analyticsStep = OnboardingFlow.analyticsStep(for: onboardingStep) else { return nil }
+    self = analyticsStep
   }
 }
 

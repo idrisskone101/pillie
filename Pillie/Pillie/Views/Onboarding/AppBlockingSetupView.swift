@@ -46,7 +46,7 @@ struct AppBlockingSetupContent {
 
 struct AppBlockingSetupView: View {
     @Environment(PillStore.self) private var store
-    @AppStorage("onboardingSelectedFreePlan") private var onboardingSelectedFreePlan = false
+    @AppStorage(OnboardingFlow.selectedFreePlanStorageKey) private var onboardingSelectedFreePlan = false
 
     @State private var animateIn = false
     @State private var blobPhase: CGFloat = 0
@@ -345,25 +345,9 @@ struct AppBlockingSetupView: View {
         VStack(spacing: 4) {
             if canSetUpBlocking {
                 Button {
-                    blockingManager.saveSelection()
-                    AnalyticsManager.shared.track(
-                        .settingsChangeSaved,
-                        source: .onboarding,
-                        step: .appBlocking,
-                        setting: .blockedApps,
-                        isPlus: SubscriptionManager.shared.isPlus,
-                        hasBlockingSelection: blockingManager.hasAppsSelected
-                    )
-                    // Schedule DeviceActivity and apply blocking immediately if past reminder time
-                    AppBlockingManager.shared.scheduleDeviceActivityBlock(
-                        hour: store.reminderHour,
-                        minute: store.reminderMinute
-                    )
-                    AppBlockingManager.shared.reconcileBlockingState(
-                        isTodayTaken: store.isTodayHandled,
-                        reminderHour: store.reminderHour,
-                        reminderMinute: store.reminderMinute,
-                        method: store.pack.method
+                    blockingManager.saveSelectionAndReconcile(routine: appBlockingRoutine)
+                    ProductAnalyticsTelemetry.live.onboardingBlockedAppsSaved(
+                        hasSelection: blockingManager.hasAppsSelected
                     )
                     onContinue()
                 } label: {
@@ -390,6 +374,15 @@ struct AppBlockingSetupView: View {
                 .buttonStyle(.pillieDark)
             }
         }
+    }
+
+    private var appBlockingRoutine: AppBlockingManager.RoutineState {
+        AppBlockingManager.RoutineState(
+            isTodayHandled: store.isTodayHandled,
+            reminderHour: store.reminderHour,
+            reminderMinute: store.reminderMinute,
+            method: store.pack.method
+        )
     }
 }
 

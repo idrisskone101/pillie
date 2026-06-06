@@ -20,6 +20,24 @@ struct HomeView: View {
     @State private var showShakeConfirm = false
     private let unifiedStateTransition = Animation.easeInOut(duration: 0.28)
 
+    private var todayActionState: TodayActionState {
+        #if os(iOS)
+        let reduceMotionEnabled = UIAccessibility.isReduceMotionEnabled
+        #else
+        let reduceMotionEnabled = true
+        #endif
+
+        return TodayActionState.resolve(
+            TodayActionState.Input(
+                isRefillDue: store.isRefillDue,
+                isTodayTaken: store.isTodayTaken,
+                todayDueAction: store.todayDueAction,
+                isPlus: SubscriptionManager.shared.isPlus,
+                reduceMotionEnabled: reduceMotionEnabled
+            )
+        )
+    }
+
     var body: some View {
         ZStack(alignment: .bottom) {
             ScrollView(.vertical, showsIndicators: false) {
@@ -50,7 +68,7 @@ struct HomeView: View {
                     if store.isRefillDue {
                         RefillBannerCard(onRefill: {
                             showRefillConfirmation = true
-                            AnalyticsManager.shared.track(.newPackOrCyclePrompted, source: .home, isPlus: SubscriptionManager.shared.isPlus)
+                            ProductAnalyticsTelemetry.live.newPackOrCyclePrompted()
                         })
                         .modifier(FadeInUp(appeared: appeared, delay: 0.15))
                     }
@@ -95,7 +113,7 @@ struct HomeView: View {
         .alert(store.refillBannerTitle, isPresented: $showRefillConfirmation) {
             Button(store.refillCTALabel) {
                 store.startNewPack()
-                AnalyticsManager.shared.track(.newPackOrCycleStarted, source: .home, isPlus: SubscriptionManager.shared.isPlus)
+                ProductAnalyticsTelemetry.live.newPackOrCycleStarted()
                 #if os(iOS)
                 markTakenHaptic.impactOccurred()
                 #endif
@@ -110,7 +128,7 @@ struct HomeView: View {
                     action: action,
                     onConfirm: {
                         store.markTodayAsTaken()
-                        AnalyticsManager.shared.track(.todayActionCompleted, source: .home, isPlus: SubscriptionManager.shared.isPlus)
+                        ProductAnalyticsTelemetry.live.todayActionCompleted()
                         fireMarkTakenHaptic()
                         showShakeConfirm = false
                     },
@@ -126,15 +144,13 @@ struct HomeView: View {
 
     @ViewBuilder
     private var floatingButton: some View {
-        let isTodayTaken = store.isTodayTaken
-        let isRefillDue = store.isRefillDue
-        let todayDueAction = store.todayDueAction
-        let todayCTA = todayDueAction?.ctaLabel ?? "No Action Due Today"
+        let state = todayActionState
         Group {
-            if isRefillDue {
+            switch state {
+            case .refillDue:
                 Button {
                     showRefillConfirmation = true
-                    AnalyticsManager.shared.track(.newPackOrCyclePrompted, source: .home, isPlus: SubscriptionManager.shared.isPlus)
+                    ProductAnalyticsTelemetry.live.newPackOrCyclePrompted()
                 } label: {
                     HStack(spacing: 8) {
                         Image(systemName: "arrow.triangle.2.circlepath")
@@ -144,10 +160,10 @@ struct HomeView: View {
                 }
                 .buttonStyle(.pillieDark)
                 .transition(.opacity)
-            } else if isTodayTaken {
+            case .completed:
                 Button {
                     store.unmarkTodayAsTaken()
-                    AnalyticsManager.shared.track(.todayActionUndone, source: .home, isPlus: SubscriptionManager.shared.isPlus)
+                    ProductAnalyticsTelemetry.live.todayActionUndone()
                     fireUndoHaptic()
                 } label: {
                     HStack(spacing: 8) {
@@ -158,7 +174,7 @@ struct HomeView: View {
                 }
                 .buttonStyle(PillieTakenButtonStyle())
                 .transition(.opacity)
-            } else if todayDueAction == nil {
+            case .noActionDue:
                 Button {
                     // No due action for today.
                 } label: {
@@ -171,20 +187,14 @@ struct HomeView: View {
                 .buttonStyle(PillieTakenButtonStyle())
                 .allowsHitTesting(false)
                 .transition(.opacity)
-            } else {
+            case .dueAction(let action, let requiresShakeConfirm):
                 Button {
-                    AnalyticsManager.shared.track(.todayActionStarted, source: .home, isPlus: SubscriptionManager.shared.isPlus)
-                    #if os(iOS)
-                    if UIAccessibility.isReduceMotionEnabled || !SubscriptionManager.shared.isPlus {
-                        store.markTodayAsTaken()
-                        AnalyticsManager.shared.track(.todayActionCompleted, source: .home, isPlus: SubscriptionManager.shared.isPlus)
-                        fireMarkTakenHaptic()
-                    } else {
+                    ProductAnalyticsTelemetry.live.todayActionStarted()
+                    if requiresShakeConfirm {
                         showShakeConfirm = true
+                    } else {
+                        completeTodayAction()
                     }
-                    #else
-                    store.markTodayAsTaken()
-                    #endif
                 } label: {
                     HStack(spacing: 8) {
                         Circle()
@@ -195,16 +205,16 @@ struct HomeView: View {
                                     .font(.system(size: 14, weight: .semibold))
                                     .foregroundStyle(.white)
                             )
-                        Text(todayCTA)
+                        Text(action.ctaLabel)
                     }
                 }
                 .buttonStyle(.pillieDark)
                 .transition(.opacity)
             }
         }
-        .animation(unifiedStateTransition, value: isTodayTaken)
-        .animation(unifiedStateTransition, value: isRefillDue)
-        .animation(unifiedStateTransition, value: todayDueAction == nil)
+        .animation(unifiedStateTransition, value: store.isTodayTaken)
+        .animation(unifiedStateTransition, value: store.isRefillDue)
+        .animation(unifiedStateTransition, value: store.todayDueAction == nil)
     }
 
     // MARK: - Helpers
@@ -232,6 +242,12 @@ struct HomeView: View {
         undoHaptic.impactOccurred()
         undoHaptic.prepare()
         #endif
+    }
+
+    private func completeTodayAction() {
+        store.markTodayAsTaken()
+        ProductAnalyticsTelemetry.live.todayActionCompleted()
+        fireMarkTakenHaptic()
     }
 }
 

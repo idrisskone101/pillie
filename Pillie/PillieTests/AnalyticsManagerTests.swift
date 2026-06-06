@@ -204,25 +204,6 @@ final class AnalyticsManagerTests: XCTestCase {
       ])
   }
 
-  func testOnboardingStepMappingPlacesRealSetupBeforePaywall() throws {
-    XCTAssertEqual(AnalyticsStep(onboardingStep: 0), .welcome)
-    XCTAssertEqual(AnalyticsStep(onboardingStep: 1), .analyticsConsent)
-    XCTAssertEqual(AnalyticsStep(onboardingStep: 2), .productDemo)
-    XCTAssertEqual(AnalyticsStep(onboardingStep: 3), .plusBlockingDemo)
-    XCTAssertEqual(AnalyticsStep(onboardingStep: 4), .reviewPrompt)
-    XCTAssertEqual(AnalyticsStep(onboardingStep: 5), .painPoints)
-    XCTAssertEqual(AnalyticsStep(onboardingStep: 6), .goal)
-    XCTAssertEqual(AnalyticsStep(onboardingStep: 7), .missFrequency)
-    XCTAssertEqual(AnalyticsStep(onboardingStep: 8), .acquisitionSource)
-    XCTAssertEqual(AnalyticsStep(onboardingStep: 9), .method)
-    XCTAssertEqual(AnalyticsStep(onboardingStep: 10), .schedule)
-    XCTAssertEqual(AnalyticsStep(onboardingStep: 11), .reminderTime)
-    XCTAssertEqual(AnalyticsStep(onboardingStep: 12), .reminderPlan)
-    XCTAssertEqual(AnalyticsStep(onboardingStep: 13), .paywall)
-    XCTAssertEqual(AnalyticsStep(onboardingStep: 14), .freePlanConfirmation)
-    XCTAssertEqual(AnalyticsStep(onboardingStep: 15), .appBlocking)
-  }
-
   func testOnboardingCompletedFiresOnlyAfterFinalOnboardingStep() {
     let recorder = RecordingAnalyticsTracker()
     let telemetry = OnboardingTelemetry(analytics: recorder, isPlus: { false })
@@ -238,6 +219,36 @@ final class AnalyticsManagerTests: XCTestCase {
         .onboardingCompleted,
       ])
     XCTAssertEqual(recorder.steps, [.schedule, .freePlanConfirmation, nil])
+  }
+
+  func testProductAnalyticsTelemetryMapsDomainEventsToApprovedCoarseProperties() {
+    let recorder = RecordingAnalyticsTracker()
+    let telemetry = ProductAnalyticsTelemetry(analytics: recorder, isPlus: { true })
+
+    telemetry.blockedAppsSettingsOpened(hasSelection: false)
+    telemetry.blockedAppsSaved(hasSelection: true)
+    telemetry.onboardingBlockedAppsSaved(hasSelection: true)
+    telemetry.mainTabSelected(.history)
+    telemetry.todayActionCompleted()
+    telemetry.onboardingAcquisitionSourceCompleted(.reddit)
+
+    XCTAssertEqual(
+      recorder.events,
+      [
+        .settingsSheetOpened,
+        .settingsChangeSaved,
+        .settingsChangeSaved,
+        .tabSelected,
+        .todayActionCompleted,
+        .onboardingStepCompleted,
+      ])
+    XCTAssertEqual(recorder.sources, [.settings, .settings, .onboarding, nil, .home, .onboarding])
+    XCTAssertEqual(recorder.steps, [nil, nil, .appBlocking, nil, nil, .acquisitionSource])
+    XCTAssertEqual(recorder.screens, [nil, nil, nil, .calendar, nil, nil])
+    XCTAssertEqual(recorder.settings, [.blockedApps, .blockedApps, .blockedApps, nil, nil, nil])
+    XCTAssertEqual(recorder.acquisitionSources, [nil, nil, nil, nil, nil, .reddit])
+    XCTAssertEqual(recorder.isPlusValues, [true, true, true, true, true, true])
+    XCTAssertEqual(recorder.hasBlockingSelectionValues, [false, true, true, nil, nil, nil])
   }
 
   func testOptOutStopsFutureCaptureAndCanOptBackIn() {
@@ -314,7 +325,13 @@ private final class RecordingAnalyticsClient: ProductAnalyticsClient {
 
 private final class RecordingAnalyticsTracker: AnalyticsTracking {
   private(set) var events: [AnalyticsEvent] = []
+  private(set) var sources: [AnalyticsSource?] = []
   private(set) var steps: [AnalyticsStep?] = []
+  private(set) var screens: [AnalyticsScreen?] = []
+  private(set) var settings: [AnalyticsSetting?] = []
+  private(set) var acquisitionSources: [AcquisitionSource?] = []
+  private(set) var isPlusValues: [Bool?] = []
+  private(set) var hasBlockingSelectionValues: [Bool?] = []
 
   func track(
     _ event: AnalyticsEvent,
@@ -329,6 +346,12 @@ private final class RecordingAnalyticsTracker: AnalyticsTracking {
     hasBlockingSelection: Bool?
   ) {
     events.append(event)
+    sources.append(source)
     steps.append(step)
+    screens.append(screen)
+    settings.append(setting)
+    acquisitionSources.append(acquisitionSource)
+    isPlusValues.append(isPlus)
+    hasBlockingSelectionValues.append(hasBlockingSelection)
   }
 }

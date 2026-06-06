@@ -1,15 +1,15 @@
 //
-//  PaywallSubscriptionTelemetryTests.swift
+//  ProductAnalyticsTelemetryPaywallTests.swift
 //  PillieTests
 //
 
 import XCTest
 @testable import Pillie
 
-final class PaywallSubscriptionTelemetryTests: XCTestCase {
+final class ProductAnalyticsTelemetryPaywallTests: XCTestCase {
     func testPaywallPlanSelectionCapturesOnlyApprovedCoarseValues() {
         let client = ProductAnalyticsSpy()
-        let defaultsName = "PaywallSubscriptionTelemetryTests.planSelection"
+        let defaultsName = "ProductAnalyticsTelemetryPaywallTests.planSelection"
         UserDefaults().removePersistentDomain(forName: defaultsName)
         let analytics = AnalyticsManager(
             defaults: UserDefaults(suiteName: defaultsName)!,
@@ -19,40 +19,32 @@ final class PaywallSubscriptionTelemetryTests: XCTestCase {
                 "PostHogHost": "https://us.i.posthog.com"
             ]
         )
+        let telemetry = ProductAnalyticsTelemetry(analytics: analytics, isPlus: { false })
 
         analytics.configure()
-        analytics.track(
-            .paywallPlanSelected,
-            source: .onboarding,
-            step: .paywall,
-            plan: .annual,
-            isPlus: false
-        )
+        telemetry.paywallPlanSelected(plan: .annual, isFromOnboarding: true)
 
         XCTAssertEqual(client.events.count, 1)
         XCTAssertEqual(client.events.first?.name, "paywall_plan_selected")
         XCTAssertEqual(client.events.first?.properties["source"], .string("onboarding"))
-        XCTAssertEqual(client.events.first?.properties["step"], .string("paywall"))
         XCTAssertEqual(client.events.first?.properties["plan"], .string("annual"))
         XCTAssertEqual(client.events.first?.properties["is_plus"], .bool(false))
-        XCTAssertEqual(client.events.first?.properties.count, 4)
+        XCTAssertEqual(client.events.first?.properties.count, 3)
         XCTAssertNotNil(client.events.first?.properties["source"])
-        XCTAssertNotNil(client.events.first?.properties["step"])
         XCTAssertNotNil(client.events.first?.properties["plan"])
         XCTAssertNotNil(client.events.first?.properties["is_plus"])
     }
 
     func testPurchaseAndRestoreOutcomesCaptureApprovedResults() {
         let recorder = AnalyticsRecorder()
-        let telemetry = PaywallSubscriptionTelemetry(analytics: recorder)
 
-        telemetry.purchaseStarted(source: .onboarding, plan: .monthly, isPlus: false)
-        telemetry.purchaseCompleted(source: .onboarding, plan: .monthly, isPlus: true)
-        telemetry.purchaseFailed(source: .onboarding, plan: .monthly, isPlus: false)
-        telemetry.purchaseCancelled(source: .onboarding, plan: .monthly, isPlus: false)
-        telemetry.restoreStarted(source: .upsell, isPlus: false)
-        telemetry.restoreCompleted(source: .upsell, isPlus: true)
-        telemetry.restoreFailed(source: .upsell, isPlus: false)
+        telemetry(recorder, isPlus: false).purchaseStarted(plan: .monthly, isFromOnboarding: true)
+        telemetry(recorder, isPlus: true).purchaseCompleted(plan: .monthly, isFromOnboarding: true)
+        telemetry(recorder, isPlus: false).purchaseFailed(plan: .monthly, isFromOnboarding: true)
+        telemetry(recorder, isPlus: false).purchaseCancelled(plan: .monthly, isFromOnboarding: true)
+        telemetry(recorder, isPlus: false).upsellRestoreStarted()
+        telemetry(recorder, isPlus: true).upsellRestoreCompleted()
+        telemetry(recorder, isPlus: false).upsellRestoreFailed()
 
         XCTAssertEqual(recorder.events.map(\.event), [
             .purchaseStarted,
@@ -71,14 +63,13 @@ final class PaywallSubscriptionTelemetryTests: XCTestCase {
 
     func testPaywallContinueFreeAndUpsellActionsCaptureApprovedContext() {
         let recorder = AnalyticsRecorder()
-        let telemetry = PaywallSubscriptionTelemetry(analytics: recorder)
 
-        telemetry.paywallViewed(source: .onboarding, isFromOnboarding: true, isPlus: false)
-        telemetry.paywallViewed(source: .settings, isFromOnboarding: false, isPlus: true)
-        telemetry.continueFreeSelected(source: .onboarding, isFromOnboarding: true, isPlus: false)
-        telemetry.plusUpsellViewed(isPlus: false)
-        telemetry.plusUpsellDismissed(isPlus: false)
-        telemetry.plusUpsellUpgradeTapped(isPlus: false)
+        telemetry(recorder, isPlus: false).paywallViewed(isFromOnboarding: true)
+        telemetry(recorder, isPlus: true).paywallViewed(isFromOnboarding: false)
+        telemetry(recorder, isPlus: false).continueFreeSelected(isFromOnboarding: true)
+        telemetry(recorder, isPlus: false).plusUpsellViewed()
+        telemetry(recorder, isPlus: false).plusUpsellDismissed()
+        telemetry(recorder, isPlus: false).plusUpsellUpgradeTapped()
 
         XCTAssertEqual(recorder.events.map(\.event), [
             .paywallViewed,
@@ -91,6 +82,10 @@ final class PaywallSubscriptionTelemetryTests: XCTestCase {
         XCTAssertEqual(recorder.events.map(\.source), [.onboarding, .settings, .onboarding, .upsell, .upsell, .upsell])
         XCTAssertEqual(recorder.events.map(\.step), [.paywall, nil, .paywall, nil, nil, nil])
         XCTAssertEqual(recorder.events.map(\.isPlus), [false, true, false, false, false, false])
+    }
+
+    private func telemetry(_ analytics: AnalyticsRecorder, isPlus: Bool) -> ProductAnalyticsTelemetry {
+        ProductAnalyticsTelemetry(analytics: analytics, isPlus: { isPlus })
     }
 }
 

@@ -35,6 +35,13 @@ final class AppBlockingManager {
         activitySelection.applicationTokens.count + activitySelection.categoryTokens.count
     }
 
+    struct RoutineState {
+        let isTodayHandled: Bool
+        let reminderHour: Int
+        let reminderMinute: Int
+        let method: ContraceptiveMethod
+    }
+
     /// Whether blocking is effectively on (enabled + apps selected).
     /// Use this single source of truth across all views.
     var isEffectivelyOn: Bool {
@@ -189,6 +196,27 @@ final class AppBlockingManager {
 
         // Past reminder time + not taken = apply blocking
         applyBlocking(reason: method.blockingReasonText)
+    }
+
+    func saveSelectionAndReconcile(routine: RoutineState) {
+        saveSelection()
+        scheduleDeviceActivityBlock(hour: routine.reminderHour, minute: routine.reminderMinute)
+        reconcileBlockingState(
+            isTodayTaken: routine.isTodayHandled,
+            reminderHour: routine.reminderHour,
+            reminderMinute: routine.reminderMinute,
+            method: routine.method
+        )
+    }
+
+    func reconcileEnabledBlocking(routine: RoutineState) {
+        reconcileBlockingState(
+            isTodayTaken: routine.isTodayHandled,
+            reminderHour: routine.reminderHour,
+            reminderMinute: routine.reminderMinute,
+            method: routine.method
+        )
+        scheduleDeviceActivityBlock(hour: routine.reminderHour, minute: routine.reminderMinute)
     }
 
     // MARK: - DeviceActivity Scheduling
