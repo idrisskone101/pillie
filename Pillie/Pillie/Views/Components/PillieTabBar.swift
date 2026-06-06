@@ -13,7 +13,7 @@ enum PillieTab: Int, CaseIterable {
     var label: String {
         switch self {
         case .home: return "Home"
-        case .history: return "Calendar"
+        case .history: return "History"
         case .settings: return "Settings"
         }
     }
@@ -29,6 +29,7 @@ enum PillieTab: Int, CaseIterable {
 
 struct PillieTabBar: View {
     @Binding var selectedTab: PillieTab
+    @Namespace private var indicatorNamespace
 
     var body: some View {
         HStack {
@@ -42,14 +43,15 @@ struct PillieTabBar: View {
                             .font(.system(size: 22))
 
                         if selectedTab == tab {
-                            Circle()
+                            Capsule()
                                 .fill(PillieTheme.coral)
-                                .frame(width: 5, height: 5)
-                                .transition(.scale.combined(with: .opacity))
+                                .matchedGeometryEffect(id: "selected-tab-indicator", in: indicatorNamespace)
+                                .frame(width: 20, height: 5)
+                                .transition(.opacity)
                         } else {
-                            Circle()
+                            Capsule()
                                 .fill(Color.clear)
-                                .frame(width: 5, height: 5)
+                                .frame(width: 20, height: 5)
                         }
 
                         Text(tab.label)
@@ -78,26 +80,27 @@ struct PillieTabBar: View {
                 }
             }
         )
+        .animation(PillieMotion.animation(for: .quick), value: selectedTab)
     }
 }
 
 struct MainTabView: View {
-    @State private var selectedTab: PillieTab = .home
-    @State private var tabDirection: Edge = .trailing
+    @StateObject private var tabSelection = MainTabSelection()
+    @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
     private let performanceTier = PerformanceTier.current
 
     var body: some View {
         ZStack(alignment: .bottom) {
             ZStack {
-                if selectedTab == .home {
+                if tabSelection.selectedTab == .home {
                     HomeView()
                         .transition(tabSlideTransition)
                 }
-                if selectedTab == .history {
+                if tabSelection.selectedTab == .history {
                     HistoryView()
                         .transition(tabSlideTransition)
                 }
-                if selectedTab == .settings {
+                if tabSelection.selectedTab == .settings {
                     SettingsView()
                         .transition(tabSlideTransition)
                 }
@@ -115,30 +118,31 @@ struct MainTabView: View {
     // MARK: - Tab Slide Transition
 
     private var tabSlideTransition: AnyTransition {
-        if performanceTier == .constrained {
+        if accessibilityReduceMotion || performanceTier == .constrained {
             return .opacity
         }
         return .asymmetric(
-            insertion: .move(edge: tabDirection),
-            removal: .move(edge: tabDirection == .trailing ? .leading : .trailing)
+            insertion: .move(edge: tabSelection.tabDirection),
+            removal: .move(edge: tabSelection.tabDirection == .trailing ? .leading : .trailing)
         )
     }
 
     private var tabTransitionAnimation: Animation {
-        performanceTier == .constrained ? .easeInOut(duration: 0.16) : .easeInOut(duration: 0.25)
+        PillieMotion.animation(
+            for: .standard,
+            accessibilityReduceMotion: accessibilityReduceMotion,
+            performanceTier: performanceTier
+        )
     }
 
     /// Custom binding that sets slide direction before updating the selected tab.
     private var tabBinding: Binding<PillieTab> {
         Binding(
-            get: { selectedTab },
+            get: { tabSelection.selectedTab },
             set: { newTab in
-                guard newTab != selectedTab else { return }
-                tabDirection = newTab.rawValue > selectedTab.rawValue ? .trailing : .leading
                 withAnimation(tabTransitionAnimation) {
-                    selectedTab = newTab
+                    _ = tabSelection.select(newTab)
                 }
-                ProductAnalyticsTelemetry.live.mainTabSelected(newTab.analyticsTab)
             }
         )
     }
@@ -165,25 +169,8 @@ struct MainTabView: View {
     }
 
     private func navigateTab(by offset: Int) {
-        let allTabs = PillieTab.allCases
-        guard let idx = allTabs.firstIndex(of: selectedTab) else { return }
-        let newIndex = idx + offset
-        guard allTabs.indices.contains(newIndex) else { return }
-        let target = allTabs[newIndex]
-        tabDirection = target.rawValue > selectedTab.rawValue ? .trailing : .leading
         withAnimation(tabTransitionAnimation) {
-            selectedTab = target
-        }
-        ProductAnalyticsTelemetry.live.mainTabSelected(target.analyticsTab)
-    }
-}
-
-private extension PillieTab {
-    var analyticsTab: ProductAnalyticsTelemetry.MainTab {
-        switch self {
-        case .home: return .today
-        case .history: return .history
-        case .settings: return .settings
+            _ = tabSelection.navigate(by: offset)
         }
     }
 }
