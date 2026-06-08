@@ -7,11 +7,13 @@ import SwiftUI
 
 struct MethodPickerView: View {
     @Environment(PillStore.self) private var store
+    @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
 
     @State private var selectedMethod: ContraceptiveMethod = .pill
     @State private var animateIn = false
     @State private var blobPhase: CGFloat = 0
     private let performanceTier = PerformanceTier.current
+    private let onboardingFeedback = OnboardingInteractionFeedback(performanceTier: PerformanceTier.current)
 
     let onBack: () -> Void
     let onContinue: (ContraceptiveMethod) -> Void
@@ -107,7 +109,9 @@ struct MethodPickerView: View {
         let isSelected = selectedMethod == method
 
         return Button {
-            withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
+            let response = onboardingFeedback.selectChoice(
+                accessibilityReduceMotion: accessibilityReduceMotion)
+            withAnimation(response.motionProfile.animation) {
                 selectedMethod = method
             }
         } label: {

@@ -6,8 +6,11 @@
 import SwiftUI
 
 struct ProductDemoMomentView: View {
+  @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
   @State private var animateIn = false
   @State private var demoPhase = 0
+  private let performanceTier = PerformanceTier.current
+  private let onboardingFeedback = OnboardingInteractionFeedback(performanceTier: PerformanceTier.current)
 
   let onContinue: () -> Void
 
@@ -57,10 +60,12 @@ struct ProductDemoMomentView: View {
       animateIn = true
     }
     .task {
+      guard !accessibilityReduceMotion, performanceTier == .standard else { return }
+      let response = onboardingFeedback.ambientLoop(accessibilityReduceMotion: accessibilityReduceMotion)
       while !Task.isCancelled {
         try? await Task.sleep(for: .seconds(1.35))
         guard !Task.isCancelled else { return }
-        withAnimation(.spring(response: 0.45, dampingFraction: 0.78)) {
+        withAnimation(response.motionProfile.animation) {
           demoPhase = (demoPhase + 1) % 3
         }
       }

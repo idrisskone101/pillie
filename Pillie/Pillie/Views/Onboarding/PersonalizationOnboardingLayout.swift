@@ -75,11 +75,19 @@ struct PersonalizationOptionRow: View {
     var minHeight: CGFloat?
     var verticalPadding: CGFloat?
     let action: () -> Void
+    @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
+    private let onboardingFeedback = OnboardingInteractionFeedback()
 
     var body: some View {
         let compact = (minHeight ?? 100) <= 60
 
-        Button(action: action) {
+        Button {
+            let response = onboardingFeedback.selectChoice(
+                accessibilityReduceMotion: accessibilityReduceMotion)
+            withAnimation(response.motionProfile.animation) {
+                action()
+            }
+        } label: {
             HStack(spacing: 14) {
                 if !symbolName.isEmpty {
                     Image(systemName: symbolName)

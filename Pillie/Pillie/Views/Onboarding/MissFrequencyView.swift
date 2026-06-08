@@ -108,9 +108,7 @@ struct MissFrequencyView: View {
             minHeight: 70,
             verticalPadding: 9
         ) {
-            withAnimation(.spring(response: 0.35, dampingFraction: 0.78)) {
-                selected = frequency
-            }
+            selected = frequency
         }
     }
 

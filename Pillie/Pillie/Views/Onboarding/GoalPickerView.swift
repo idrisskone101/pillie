@@ -106,9 +106,7 @@ struct GoalPickerView: View {
             isSelected: isSelected,
             selectionStyle: .radio
         ) {
-            withAnimation(.spring(response: 0.35, dampingFraction: 0.78)) {
-                selected = goal
-            }
+            selected = goal
         }
     }
 

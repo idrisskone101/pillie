@@ -104,9 +104,7 @@ struct AcquisitionSourceView: View {
             minHeight: 52,
             verticalPadding: 6
         ) {
-            withAnimation(.spring(response: 0.35, dampingFraction: 0.78)) {
-                selected = source
-            }
+            selected = source
         }
         .accessibilityIdentifier("acquisitionSource.\(source.rawValue)")
     }

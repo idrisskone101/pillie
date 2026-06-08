@@ -10,10 +10,12 @@ import SwiftUI
 struct ContentView: View {
   @AppStorage(OnboardingFlow.stepStorageKey) private var onboardingStep = OnboardingFlow.firstStep.rawValue
   @AppStorage(OnboardingFlow.selectedFreePlanStorageKey) private var onboardingSelectedFreePlan = false
+  @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
   @Environment(PillStore.self) private var store
   @State private var isLoading = true
   @State private var iconScale: CGFloat = 0.9
   private let onboardingTelemetry = OnboardingTelemetry()
+  private let onboardingFeedback = OnboardingInteractionFeedback()
 
   var body: some View {
     ZStack {
@@ -22,9 +24,7 @@ struct ContentView: View {
 	        switch OnboardingFlow.step(for: onboardingStep) {
 	        case .welcome:
 	          WelcomeView {
-	            withAnimation(.easeInOut(duration: 0.4)) {
-	              setOnboardingStep(.analyticsConsent)
-	            }
+              continueDemoMoment(to: .analyticsConsent)
 	          }
           .transition(
             .asymmetric(
@@ -36,15 +36,11 @@ struct ContentView: View {
 	          AnalyticsConsentView(
 	            onAllow: {
 	              AnalyticsManager.shared.setAnalyticsEnabled(true)
-	              withAnimation(.easeInOut(duration: 0.4)) {
-	                setOnboardingStep(.productDemo)
-	              }
+                continueDemoMoment(to: .productDemo)
 	            },
 	            onDecline: {
 	              AnalyticsManager.shared.setAnalyticsEnabled(false)
-	              withAnimation(.easeInOut(duration: 0.4)) {
-	                setOnboardingStep(.productDemo)
-	              }
+                continueDemoMoment(to: .productDemo)
 	            }
           )
           .transition(
@@ -56,9 +52,7 @@ struct ContentView: View {
 	        case .productDemo:
 	          ProductDemoMomentView(
 	            onContinue: {
-	              withAnimation(.easeInOut(duration: 0.4)) {
-	                setOnboardingStep(.plusBlockingDemo)
-	              }
+                continueDemoMoment(to: .plusBlockingDemo)
 	            }
           )
           .transition(
@@ -70,9 +64,7 @@ struct ContentView: View {
 	        case .plusBlockingDemo:
 	          PlusBlockingDemoView(
 	            onContinue: {
-	              withAnimation(.easeInOut(duration: 0.4)) {
-	                setOnboardingStep(.reviewPrompt)
-	              }
+                continueDemoMoment(to: .reviewPrompt)
 	            }
           )
           .transition(
@@ -84,9 +76,7 @@ struct ContentView: View {
 	        case .reviewPrompt:
 	          ReviewPromptView(
 	            onContinue: {
-	              withAnimation(.easeInOut(duration: 0.4)) {
-	                setOnboardingStep(.painPoints)
-	              }
+                reviewPromptTransition(to: .painPoints)
 	            }
           )
           .transition(
@@ -98,15 +88,11 @@ struct ContentView: View {
 	        case .painPoints:
 	          PainPointPickerView(
 	            onBack: {
-	              withAnimation(.easeInOut(duration: 0.4)) {
-	                setOnboardingStep(.reviewPrompt)
-	              }
+                lowRiskTransition(to: .reviewPrompt)
 	            },
 	            onContinue: { points in
 	              store.painPoints = points
-	              withAnimation(.easeInOut(duration: 0.4)) {
-	                setOnboardingStep(.goal)
-	              }
+                continueSetupStep(to: .goal)
 	            }
           )
           .transition(
@@ -118,15 +104,11 @@ struct ContentView: View {
 	        case .goal:
 	          GoalPickerView(
 	            onBack: {
-	              withAnimation(.easeInOut(duration: 0.4)) {
-	                setOnboardingStep(.painPoints)
-	              }
+                lowRiskTransition(to: .painPoints)
 	            },
 	            onContinue: { goal in
 	              store.personalGoal = goal
-	              withAnimation(.easeInOut(duration: 0.4)) {
-	                setOnboardingStep(.missFrequency)
-	              }
+                continueSetupStep(to: .missFrequency)
 	            }
           )
           .transition(
@@ -138,15 +120,11 @@ struct ContentView: View {
 	        case .missFrequency:
 	          MissFrequencyView(
 	            onBack: {
-	              withAnimation(.easeInOut(duration: 0.4)) {
-	                setOnboardingStep(.goal)
-	              }
+                lowRiskTransition(to: .goal)
 	            },
 	            onContinue: { freq in
 	              store.missFrequency = freq
-	              withAnimation(.easeInOut(duration: 0.4)) {
-	                setOnboardingStep(.acquisitionSource)
-	              }
+                continueSetupStep(to: .acquisitionSource)
 	            }
           )
           .transition(
@@ -158,21 +136,15 @@ struct ContentView: View {
 	        case .acquisitionSource:
 	          AcquisitionSourceView(
 	            onBack: {
-	              withAnimation(.easeInOut(duration: 0.4)) {
-	                setOnboardingStep(.missFrequency)
-	              }
+                lowRiskTransition(to: .missFrequency)
 	            },
             onContinue: { source in
               store.acquisitionSource = source
 	              ProductAnalyticsTelemetry.live.onboardingAcquisitionSourceCompleted(source)
-	              withAnimation(.easeInOut(duration: 0.4)) {
-	                setOnboardingStep(.method)
-	              }
+                continueSetupStep(to: .method)
 	            },
 	            onSkip: {
-	              withAnimation(.easeInOut(duration: 0.4)) {
-	                setOnboardingStep(.method)
-	              }
+                lowRiskTransition(to: .method)
 	            }
           )
           .transition(
@@ -184,15 +156,11 @@ struct ContentView: View {
 	        case .method:
 	          MethodPickerView(
 	            onBack: {
-	              withAnimation(.easeInOut(duration: 0.4)) {
-	                setOnboardingStep(.acquisitionSource)
-	              }
+                lowRiskTransition(to: .acquisitionSource)
 	            },
 	            onContinue: { method in
 	              store.contraceptiveMethod = method
-	              withAnimation(.easeInOut(duration: 0.4)) {
-	                setOnboardingStep(.schedule)
-	              }
+                continueSetupStep(to: .schedule)
 	            }
           )
           .transition(
@@ -204,9 +172,7 @@ struct ContentView: View {
 	        case .schedule:
 	          MethodDetailsView(
 	            onBack: {
-	              withAnimation(.easeInOut(duration: 0.4)) {
-	                setOnboardingStep(.method)
-	              }
+                lowRiskTransition(to: .method)
 	            },
             onContinue: { regimen, customActive, customBreak, cycleDay in
               store.startNewProtocol(
@@ -220,9 +186,7 @@ struct ContentView: View {
               if store.appActivatedDate == nil {
                 store.appActivatedDate = store.today
 	              }
-	              withAnimation(.easeInOut(duration: 0.4)) {
-	                setOnboardingStep(.reminderTime)
-	              }
+              continueSetupStep(to: .reminderTime)
 	            }
           )
           .transition(
@@ -234,14 +198,10 @@ struct ContentView: View {
 	        case .reminderTime:
 	          TimeSetupView(
 	            onBack: {
-	              withAnimation(.easeInOut(duration: 0.4)) {
-	                setOnboardingStep(.schedule)
-	              }
+                lowRiskTransition(to: .schedule)
 	            },
 	            onContinue: {
-	              withAnimation(.easeInOut(duration: 0.4)) {
-	                setOnboardingStep(.reminderPlan)
-	              }
+                continueSetupStep(to: .reminderPlan)
 	            }
           )
           .transition(
@@ -253,14 +213,10 @@ struct ContentView: View {
 	        case .reminderPlan:
 	          ReminderPlanView(
 	            onBack: {
-	              withAnimation(.easeInOut(duration: 0.4)) {
-	                setOnboardingStep(.reminderTime)
-	              }
+                lowRiskTransition(to: .reminderTime)
 	            },
 	            onContinue: {
-	              withAnimation(.easeInOut(duration: 0.4)) {
-	                setOnboardingStep(.paywall)
-	              }
+                continueSetupStep(to: .paywall)
 	            }
           )
           .transition(
@@ -272,29 +228,27 @@ struct ContentView: View {
 	        case .paywall:
 	          PremiumPaywallView(
 	            onBack: {
-	              withAnimation(.easeInOut(duration: 0.4)) {
-	                setOnboardingStep(.reminderPlan)
-	              }
+                lowRiskTransition(to: .reminderPlan)
 	            },
 	            onContinue: {
 	              onboardingSelectedFreePlan = false
-	              withAnimation(.easeInOut(duration: 0.4)) {
-	                setOnboardingStep(
-	                  OnboardingFlow.nextStepAfterPaywall(
-	                    isPlus: SubscriptionManager.shared.isPlus,
-	                    selectedFreePlan: onboardingSelectedFreePlan
-	                  ))
-              }
+                transitionWithoutFeedback(
+                  to: OnboardingFlow.nextStepAfterPaywall(
+                    isPlus: SubscriptionManager.shared.isPlus,
+                    selectedFreePlan: onboardingSelectedFreePlan
+                  ),
+                  motion: .commitSpring
+                )
             },
             onSkip: {
 	              onboardingSelectedFreePlan = true
-	              withAnimation(.easeInOut(duration: 0.4)) {
-	                setOnboardingStep(
-	                  OnboardingFlow.nextStepAfterPaywall(
-	                    isPlus: SubscriptionManager.shared.isPlus,
-	                    selectedFreePlan: onboardingSelectedFreePlan
-	                  ))
-              }
+                transitionWithoutFeedback(
+                  to: OnboardingFlow.nextStepAfterPaywall(
+                    isPlus: SubscriptionManager.shared.isPlus,
+                    selectedFreePlan: onboardingSelectedFreePlan
+                  ),
+                  motion: .standard
+                )
             }
           )
           .transition(
@@ -306,14 +260,10 @@ struct ContentView: View {
 	        case .freePlanConfirmation:
 	          FreePlanConfirmationView(
 	            onBack: {
-	              withAnimation(.easeInOut(duration: 0.4)) {
-	                setOnboardingStep(.paywall)
-	              }
+                lowRiskTransition(to: .paywall)
 	            },
 	            onContinue: {
-	              withAnimation(.easeInOut(duration: 0.4)) {
-	                setOnboardingStep(.complete)
-	              }
+                continueFreePath(to: .complete)
 	            }
           )
           .transition(
@@ -325,19 +275,13 @@ struct ContentView: View {
 	        case .appBlocking:
 	          AppBlockingSetupView(
 	            onBack: {
-	              withAnimation(.easeInOut(duration: 0.4)) {
-	                setOnboardingStep(.paywall)
-	              }
+                lowRiskTransition(to: .paywall)
 	            },
 	            onContinue: {
-	              withAnimation(.easeInOut(duration: 0.4)) {
-	                setOnboardingStep(.complete)
-	              }
+                openSoftPaywallOrUpgrade(to: .complete)
 	            },
 	            onSkip: {
-	              withAnimation(.easeInOut(duration: 0.4)) {
-	                setOnboardingStep(.complete)
-	              }
+                continueFreePath(to: .complete)
 	            }
           )
           .transition(
@@ -404,6 +348,70 @@ struct ContentView: View {
 
   private func trackOnboardingStepViewed(_ step: Int) {
     onboardingTelemetry.stepViewed(step)
+  }
+
+  private func continueDemoMoment(to step: OnboardingFlow.Step) {
+    transition(
+      to: step,
+      response: onboardingFeedback.continueDemoMoment(
+        accessibilityReduceMotion: accessibilityReduceMotion))
+  }
+
+  private func reviewPromptTransition(to step: OnboardingFlow.Step) {
+    transition(
+      to: step,
+      response: onboardingFeedback.requestOrSkipReview(
+        accessibilityReduceMotion: accessibilityReduceMotion))
+  }
+
+  private func continueSetupStep(to step: OnboardingFlow.Step) {
+    transition(
+      to: step,
+      response: onboardingFeedback.continueSetupStep(
+        accessibilityReduceMotion: accessibilityReduceMotion))
+  }
+
+  private func lowRiskTransition(to step: OnboardingFlow.Step) {
+    transition(
+      to: step,
+      response: onboardingFeedback.continueFreePath(
+        accessibilityReduceMotion: accessibilityReduceMotion))
+  }
+
+  private func openSoftPaywallOrUpgrade(to step: OnboardingFlow.Step) {
+    transition(
+      to: step,
+      response: onboardingFeedback.openSoftPaywallOrUpgrade(
+        accessibilityReduceMotion: accessibilityReduceMotion))
+  }
+
+  private func continueFreePath(to step: OnboardingFlow.Step) {
+    transition(
+      to: step,
+      response: onboardingFeedback.continueFreePath(
+        accessibilityReduceMotion: accessibilityReduceMotion))
+  }
+
+  private func transition(
+    to step: OnboardingFlow.Step,
+    response: OnboardingInteractionFeedback.Response
+  ) {
+    withAnimation(response.motionProfile.animation) {
+      setOnboardingStep(step)
+    }
+  }
+
+  private func transitionWithoutFeedback(
+    to step: OnboardingFlow.Step,
+    motion: PillieMotion.Semantic
+  ) {
+    let profile = PillieMotion.profile(
+      for: motion,
+      accessibilityReduceMotion: accessibilityReduceMotion
+    )
+    withAnimation(profile.animation) {
+      setOnboardingStep(step)
+    }
   }
 }
 

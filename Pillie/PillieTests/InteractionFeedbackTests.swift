@@ -172,6 +172,49 @@ final class InteractionFeedbackTests: XCTestCase {
         XCTAssertEqual(dismiss.motion, .standard)
         XCTAssertTrue(dismiss.motionProfile.usesCalmerSpatialMotion)
     }
+
+    func testOnboardingChoicesContinueAndReviewUseGuidedSharedFeedback() {
+        let feedbackRecorder = RecordingInteractionFeedbackPerformer()
+        let feedback = InteractionFeedback(performer: feedbackRecorder)
+        let onboardingFeedback = OnboardingInteractionFeedback(feedback: feedback)
+
+        let choice = onboardingFeedback.selectChoice(accessibilityReduceMotion: false)
+        let setupContinue = onboardingFeedback.continueSetupStep(accessibilityReduceMotion: false)
+        let demoContinue = onboardingFeedback.continueDemoMoment(accessibilityReduceMotion: false)
+        let review = onboardingFeedback.requestOrSkipReview(accessibilityReduceMotion: true)
+
+        XCTAssertEqual(
+            feedbackRecorder.performedIntents,
+            [.choice, .meaningfulCommit, .lowRiskTap, .lowRiskTap]
+        )
+        XCTAssertEqual(choice.motion, .commitSpring)
+        XCTAssertEqual(setupContinue.motion, .commitSpring)
+        XCTAssertEqual(demoContinue.motion, .standard)
+        XCTAssertEqual(review.motion, .standard)
+        XCTAssertTrue(review.motionProfile.usesCalmerSpatialMotion)
+    }
+
+    func testOnboardingPaywallFreePathAndAmbientLoopsStayRestrained() {
+        let feedbackRecorder = RecordingInteractionFeedbackPerformer()
+        let feedback = InteractionFeedback(performer: feedbackRecorder)
+        let onboardingFeedback = OnboardingInteractionFeedback(
+            feedback: feedback,
+            performanceTier: .constrained
+        )
+
+        let softPaywall = onboardingFeedback.openSoftPaywallOrUpgrade(accessibilityReduceMotion: false)
+        let freePath = onboardingFeedback.continueFreePath(accessibilityReduceMotion: false)
+        let ambient = onboardingFeedback.ambientLoop(accessibilityReduceMotion: false)
+
+        XCTAssertEqual(feedbackRecorder.performedIntents, [.meaningfulCommit, .lowRiskTap])
+        XCTAssertEqual(softPaywall.motion, .commitSpring)
+        XCTAssertEqual(freePath.motion, .standard)
+        XCTAssertEqual(ambient.motion, .entrance)
+        XCTAssertTrue(softPaywall.motionProfile.usesCalmerSpatialMotion)
+        XCTAssertTrue(freePath.motionProfile.usesCalmerSpatialMotion)
+        XCTAssertTrue(ambient.motionProfile.usesCalmerSpatialMotion)
+        XCTAssertTrue(ambient.skipsHaptics)
+    }
 }
 
 private final class RecordingInteractionFeedbackPerformer: InteractionFeedbackPerforming {
