@@ -123,7 +123,7 @@ struct SettingsView: View {
                         .buttonStyle(.plain)
                         .sheet(isPresented: $showBlockingUpsell) {
                             PlusUpsellSheet.appBlocking()
-                            .presentationDetents([.medium])
+                            .presentationDetents([.height(360)])
                             .presentationDragIndicator(.hidden)
                         }
                     }
@@ -204,7 +204,7 @@ struct SettingsView: View {
         }
         .sheet(isPresented: $showTimeEditor) {
             ReminderTimeEditor(store: store)
-                .presentationDetents([.medium])
+                .presentationDetents([.height(380)])
                 .presentationDragIndicator(.hidden)
         }
         .sheet(isPresented: $showIntervalEditor) {
@@ -229,12 +229,12 @@ struct SettingsView: View {
         }
         .sheet(isPresented: $showCycleDayEditor) {
             CycleDayEditor(store: store)
-                .presentationDetents([.medium])
+                .presentationDetents([.height(360)])
                 .presentationDragIndicator(.hidden)
         }
         .sheet(isPresented: $showBlockedAppsEditor) {
             BlockedAppsEditor()
-                .presentationDetents([.medium])
+                .presentationDetents([.height(470)])
                 .presentationDragIndicator(.hidden)
         }
         .fullScreenCover(isPresented: $showPaywall) {
@@ -637,7 +637,7 @@ private struct ReminderTimeEditor: View {
             .buttonStyle(.pillieDark)
             .padding(.horizontal, 28)
 
-            Spacer()
+            Color.clear.frame(height: 16)
         }
         .background(PillieTheme.bg.ignoresSafeArea())
         .onAppear { seedFromStore() }
@@ -950,7 +950,7 @@ private struct CycleDayEditor: View {
             .buttonStyle(.pillieDark)
             .padding(.horizontal, 28)
 
-            Spacer()
+            Color.clear.frame(height: 16)
         }
         .background(PillieTheme.bg.ignoresSafeArea())
         .onAppear {

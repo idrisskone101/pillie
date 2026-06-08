@@ -96,7 +96,7 @@ struct PlusUpsellSheet: View {
                 .disabled(isRestoring)
             }
 
-            Spacer()
+            Color.clear.frame(height: 16)
         }
         .background(PillieTheme.bg.ignoresSafeArea())
         .alert("No Subscription Found", isPresented: $showNoSubscriptionAlert) {

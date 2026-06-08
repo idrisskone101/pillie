@@ -63,7 +63,7 @@ struct BlockedAppsEditor: View {
             .buttonStyle(.pillieDark)
             .padding(.horizontal, 28)
 
-            Spacer()
+            Color.clear.frame(height: 16)
         }
         .background(PillieTheme.bg.ignoresSafeArea())
         .familyActivityPicker(
