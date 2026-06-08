@@ -11,7 +11,7 @@ struct PlusUpsellSheet: View {
     static func appBlocking() -> PlusUpsellSheet {
         PlusUpsellSheet(
             featureName: "App Blocking",
-            featureDescription: "Lock distracting apps until you've taken your pill. Upgrade to Pillie+ to enable app blocking."
+            featureDescription: "Block distracting apps until your pill is logged."
         )
     }
     @State private var showPaywall = false
