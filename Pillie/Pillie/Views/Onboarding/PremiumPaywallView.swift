@@ -63,6 +63,7 @@ struct SoftPaywallContent {
 }
 
 struct PremiumPaywallView: View {
+    @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
     @State private var animateIn = false
     @State private var blobPhase: CGFloat = 0
     @State private var selectedPlan: Plan = .annual
@@ -76,6 +77,7 @@ struct PremiumPaywallView: View {
     private let performanceTier = PerformanceTier.current
     private let subscriptionManager = SubscriptionManager.shared
     private let telemetry = ProductAnalyticsTelemetry.live
+    private let plusFeedback = PlusPaywallInteractionFeedback(performanceTier: PerformanceTier.current)
     private let content = SoftPaywallContent.default
 
     var isFromOnboarding: Bool = true
@@ -334,7 +336,8 @@ struct PremiumPaywallView: View {
 
     private var annualCard: some View {
         Button {
-            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+            let response = plusFeedback.selectPlan(accessibilityReduceMotion: accessibilityReduceMotion)
+            withAnimation(response.motionProfile.animation) {
                 selectedPlan = .annual
             }
             telemetry.paywallPlanSelected(plan: .annual, isFromOnboarding: isFromOnboarding)
@@ -396,7 +399,8 @@ struct PremiumPaywallView: View {
 
     private var monthlyCard: some View {
         Button {
-            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+            let response = plusFeedback.selectPlan(accessibilityReduceMotion: accessibilityReduceMotion)
+            withAnimation(response.motionProfile.animation) {
                 selectedPlan = .monthly
             }
             telemetry.paywallPlanSelected(plan: .monthly, isFromOnboarding: isFromOnboarding)
@@ -467,15 +471,23 @@ struct PremiumPaywallView: View {
                 }
             } else {
                 Button {
-                    guard let package = selectedPackage else { return }
-                    isPurchasing = true
+                    guard let package = selectedPackage else {
+                        plusFeedback.unavailablePurchaseAction(accessibilityReduceMotion: accessibilityReduceMotion)
+                        return
+                    }
+                    let response = plusFeedback.openPaywallOrStartPurchase(accessibilityReduceMotion: accessibilityReduceMotion)
+                    withAnimation(response.motionProfile.animation) {
+                        isPurchasing = true
+                    }
                     telemetry.purchaseStarted(plan: selectedPlan.analyticsPlan, isFromOnboarding: isFromOnboarding)
                     Task {
                         do {
                             try await subscriptionManager.purchase(package)
                             telemetry.purchaseCompleted(plan: selectedPlan.analyticsPlan, isFromOnboarding: isFromOnboarding)
+                            plusFeedback.successfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
                             completePaidRoute()
                         } catch {
+                            plusFeedback.unsuccessfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
                             if error.isCancelledPurchase {
                                 telemetry.purchaseCancelled(plan: selectedPlan.analyticsPlan, isFromOnboarding: isFromOnboarding)
                             } else {
@@ -483,7 +495,9 @@ struct PremiumPaywallView: View {
                                 purchaseError = error.localizedDescription
                             }
                         }
-                        isPurchasing = false
+                        withAnimation(response.motionProfile.animation) {
+                            isPurchasing = false
+                        }
                     }
                 } label: {
                     Group {
@@ -519,8 +533,11 @@ struct PremiumPaywallView: View {
 
             HStack(spacing: 14) {
                 Button {
+                    let response = plusFeedback.dismissOrContinueFree(accessibilityReduceMotion: accessibilityReduceMotion)
                     telemetry.continueFreeSelected(isFromOnboarding: isFromOnboarding)
-                    onSkip()
+                    withAnimation(response.motionProfile.animation) {
+                        onSkip()
+                    }
                 } label: {
                     Text(content.freeCTA)
                         .font(.pillie(13, weight: .bold))
@@ -570,23 +587,35 @@ struct PremiumPaywallView: View {
     }
 
     private func restorePurchases() {
-        isRestoring = true
+        let response = plusFeedback.startRestore(accessibilityReduceMotion: accessibilityReduceMotion)
+        withAnimation(response.motionProfile.animation) {
+            isRestoring = true
+        }
         telemetry.restoreStarted(isFromOnboarding: isFromOnboarding)
         Task {
             do {
                 try await subscriptionManager.restore()
                 if subscriptionManager.isPlus {
                     telemetry.restoreCompleted(isFromOnboarding: isFromOnboarding)
+                    plusFeedback.successfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
                     completePaidRoute()
                 } else {
                     telemetry.restoreFailed(isFromOnboarding: isFromOnboarding)
-                    showNoSubscriptionAlert = true
+                    let calmResponse = plusFeedback.unsuccessfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
+                    withAnimation(calmResponse.motionProfile.animation) {
+                        showNoSubscriptionAlert = true
+                    }
                 }
             } catch {
                 telemetry.restoreFailed(isFromOnboarding: isFromOnboarding)
-                purchaseError = error.localizedDescription
+                let calmResponse = plusFeedback.unsuccessfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
+                withAnimation(calmResponse.motionProfile.animation) {
+                    purchaseError = error.localizedDescription
+                }
             }
-            isRestoring = false
+            withAnimation(response.motionProfile.animation) {
+                isRestoring = false
+            }
         }
     }
 

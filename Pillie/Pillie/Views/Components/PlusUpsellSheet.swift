@@ -20,8 +20,10 @@ struct PlusUpsellSheet: View {
     @State private var isRestoring = false
     @State private var showNoSubscriptionAlert = false
     @State private var restoreError: String?
+    @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
     @Environment(\.dismiss) private var dismiss
     private let telemetry = ProductAnalyticsTelemetry.live
+    private let plusFeedback = PlusPaywallInteractionFeedback(performanceTier: PerformanceTier.current)
 
     var body: some View {
         VStack(spacing: 24) {
@@ -48,8 +50,11 @@ struct PlusUpsellSheet: View {
 
             VStack(spacing: 12) {
                 Button {
+                    let response = plusFeedback.openPaywallOrStartPurchase(accessibilityReduceMotion: accessibilityReduceMotion)
                     telemetry.plusUpsellUpgradeTapped()
-                    showPaywall = true
+                    withAnimation(response.motionProfile.animation) {
+                        showPaywall = true
+                    }
                 } label: {
                     Text("Upgrade to Pillie+")
                 }
@@ -57,8 +62,11 @@ struct PlusUpsellSheet: View {
                 .padding(.horizontal, 28)
 
                 Button {
+                    let response = plusFeedback.dismissOrContinueFree(accessibilityReduceMotion: accessibilityReduceMotion)
                     telemetry.plusUpsellDismissed()
-                    dismiss()
+                    withAnimation(response.motionProfile.animation) {
+                        dismiss()
+                    }
                 } label: {
                     Text("Not Now")
                         .font(.pillie(14, weight: .medium))
@@ -66,23 +74,35 @@ struct PlusUpsellSheet: View {
                 }
 
                 Button {
-                    isRestoring = true
+                    let response = plusFeedback.startRestore(accessibilityReduceMotion: accessibilityReduceMotion)
+                    withAnimation(response.motionProfile.animation) {
+                        isRestoring = true
+                    }
                     telemetry.upsellRestoreStarted()
                     Task {
                         do {
                             try await SubscriptionManager.shared.restore()
                             if SubscriptionManager.shared.isPlus {
                                 telemetry.upsellRestoreCompleted()
+                                plusFeedback.successfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
                                 dismiss()
                             } else {
                                 telemetry.upsellRestoreFailed()
-                                showNoSubscriptionAlert = true
+                                let calmResponse = plusFeedback.unsuccessfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
+                                withAnimation(calmResponse.motionProfile.animation) {
+                                    showNoSubscriptionAlert = true
+                                }
                             }
                         } catch {
                             telemetry.upsellRestoreFailed()
-                            restoreError = error.localizedDescription
+                            let calmResponse = plusFeedback.unsuccessfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
+                            withAnimation(calmResponse.motionProfile.animation) {
+                                restoreError = error.localizedDescription
+                            }
                         }
-                        isRestoring = false
+                        withAnimation(response.motionProfile.animation) {
+                            isRestoring = false
+                        }
                     }
                 } label: {
                     if isRestoring {

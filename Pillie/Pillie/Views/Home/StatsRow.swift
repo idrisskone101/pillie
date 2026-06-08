@@ -6,9 +6,11 @@
 import SwiftUI
 
 struct StatsRow: View {
+    @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
     @Environment(PillStore.self) var store
     @State private var showUpsell = false
     private let valueChangeAnimation = Animation.easeInOut(duration: 0.28)
+    private let plusFeedback = PlusPaywallInteractionFeedback(performanceTier: PerformanceTier.current)
 
     private var isPlus: Bool { SubscriptionManager.shared.isPlus }
 
@@ -58,7 +60,10 @@ struct StatsRow: View {
                     .modifier(StatsCardStyle())
             } else {
                 Button {
-                    showUpsell = true
+                    let response = plusFeedback.openPaywallOrStartPurchase(accessibilityReduceMotion: accessibilityReduceMotion)
+                    withAnimation(response.motionProfile.animation) {
+                        showUpsell = true
+                    }
                 } label: {
                     lockedBlockingCardContent
                         .modifier(StatsCardStyle())
