@@ -5,6 +5,23 @@
 
 import SwiftUI
 
+struct SettingsSheetHeader: View {
+    let title: String
+
+    var body: some View {
+        VStack(spacing: 24) {
+            Capsule()
+                .fill(PillieTheme.sage)
+                .frame(width: 36, height: 5)
+                .padding(.top, 36)
+
+            Text(title)
+                .font(.pillieSubtitleBold())
+                .foregroundStyle(PillieTheme.textPrimary)
+        }
+    }
+}
+
 struct SettingsSheetContainer<Content: View>: View {
     let title: String
     let spacing: CGFloat
@@ -29,14 +46,7 @@ struct SettingsSheetContainer<Content: View>: View {
                 .ignoresSafeArea()
 
             VStack(spacing: spacing) {
-                Capsule()
-                    .fill(PillieTheme.sage)
-                    .frame(width: 36, height: 5)
-                    .padding(.top, 12)
-
-                Text(title)
-                    .font(.pillieSubtitleBold())
-                    .foregroundStyle(PillieTheme.textPrimary)
+                SettingsSheetHeader(title: title)
 
                 content
 

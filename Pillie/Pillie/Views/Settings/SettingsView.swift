@@ -211,18 +211,21 @@ struct SettingsView: View {
         }
         .sheet(isPresented: $showIntervalEditor) {
             AutoReminderIntervalEditor(store: store)
-                .presentationDetents([.medium])
+                .presentationDetents([.height(470)])
                 .presentationDragIndicator(.hidden)
+                .presentationBackground(PillieTheme.bg)
         }
         .sheet(isPresented: $showRetryLimitEditor) {
             AutoReminderRetryLimitEditor(store: store)
-                .presentationDetents([.medium])
+                .presentationDetents([.height(530)])
                 .presentationDragIndicator(.hidden)
+                .presentationBackground(PillieTheme.bg)
         }
         .sheet(isPresented: $showRefillReminderEditor) {
             RefillReminderThresholdEditor(store: store)
-                .presentationDetents([.medium])
+                .presentationDetents([.height(440)])
                 .presentationDragIndicator(.hidden)
+                .presentationBackground(PillieTheme.bg)
         }
         .sheet(isPresented: $showProtocolEditor) {
             ProtocolEditor(store: store)
@@ -381,16 +384,7 @@ private struct ProtocolEditor: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            VStack(spacing: 24) {
-                Capsule()
-                    .fill(PillieTheme.sage)
-                    .frame(width: 36, height: 5)
-                    .padding(.top, 12)
-
-                Text("Edit Schedule")
-                    .font(.pillieSubtitleBold())
-                    .foregroundStyle(PillieTheme.textPrimary)
-            }
+            SettingsSheetHeader(title: "Edit Schedule")
 
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
@@ -668,16 +662,7 @@ private struct AutoReminderIntervalEditor: View {
     @State private var selectedInterval: Int = 10
 
     var body: some View {
-        VStack(spacing: 24) {
-            Capsule()
-                .fill(PillieTheme.sage)
-                .frame(width: 36, height: 5)
-                .padding(.top, 12)
-
-            Text("Auto-Reminder Interval")
-                .font(.pillieSubtitleBold())
-                .foregroundStyle(PillieTheme.textPrimary)
-
+        SettingsSheetContainer(title: "Auto-Reminder Interval") {
             VStack(spacing: 16) {
                 ForEach(PillStore.autoReminderIntervalOptions, id: \.self) { option in
                     Button {
@@ -715,10 +700,7 @@ private struct AutoReminderIntervalEditor: View {
             }
             .buttonStyle(.pillieDark)
             .padding(.horizontal, 28)
-
-            Spacer()
         }
-        .background(PillieTheme.bg.ignoresSafeArea())
         .onAppear {
             selectedInterval = store.autoReminderIntervalMinutes
         }
@@ -734,16 +716,7 @@ private struct AutoReminderRetryLimitEditor: View {
     @State private var selectedLimit: Int = 3
 
     var body: some View {
-        VStack(spacing: 24) {
-            Capsule()
-                .fill(PillieTheme.sage)
-                .frame(width: 36, height: 5)
-                .padding(.top, 28)
-
-            Text("Auto-Reminder Retry Limit")
-                .font(.pillieSubtitleBold())
-                .foregroundStyle(PillieTheme.textPrimary)
-
+        SettingsSheetContainer(title: "Auto-Reminder Retry Limit") {
             VStack(spacing: 16) {
                 ForEach(PillStore.autoReminderRetryLimitOptions, id: \.self) { option in
                     Button {
@@ -781,10 +754,7 @@ private struct AutoReminderRetryLimitEditor: View {
             }
             .buttonStyle(.pillieDark)
             .padding(.horizontal, 28)
-
-            Spacer()
         }
-        .background(PillieTheme.bg.ignoresSafeArea())
         .onAppear {
             selectedLimit = store.autoReminderRetryLimit
         }
@@ -823,16 +793,7 @@ private struct RefillReminderThresholdEditor: View {
     }
 
     var body: some View {
-        VStack(spacing: 24) {
-            Capsule()
-                .fill(PillieTheme.sage)
-                .frame(width: 36, height: 5)
-                .padding(.top, 12)
-
-            Text(editorTitle)
-                .font(.pillieSubtitleBold())
-                .foregroundStyle(PillieTheme.textPrimary)
-
+        SettingsSheetContainer(title: editorTitle) {
             VStack(spacing: 16) {
                 ForEach(thresholdOptions, id: \.self) { option in
                     Button {
@@ -870,10 +831,7 @@ private struct RefillReminderThresholdEditor: View {
             }
             .buttonStyle(.pillieDark)
             .padding(.horizontal, 28)
-
-            Spacer()
         }
-        .background(PillieTheme.bg.ignoresSafeArea())
         .onAppear {
             selectedThreshold = isPatchMethod
                 ? store.patchRestockReminderThresholdPatches
