@@ -39,10 +39,10 @@ final class InteractionFeedbackTests: XCTestCase {
         )
 
         XCTAssertTrue(selection.select(.settings))
-        XCTAssertEqual(selection.tabDirection, .leading)
+        XCTAssertEqual(selection.tabDirection, .trailing)
 
         XCTAssertTrue(selection.select(.history))
-        XCTAssertEqual(selection.tabDirection, .trailing)
+        XCTAssertEqual(selection.tabDirection, .leading)
     }
 
     func testSharedMotionSemanticsIncludeCalmerReducedAndConstrainedProfiles() {
