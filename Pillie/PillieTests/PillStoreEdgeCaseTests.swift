@@ -44,6 +44,20 @@ final class PillStoreEdgeCaseTests: XCTestCase {
         XCTAssertEqual(store.currentStreak, 1)
     }
 
+    func testMarkTodayAfterCycleDayAdjustmentRefreshesStreakObservers() throws {
+        let today = InMemoryStoreFactory.fixedDate("2026-05-26")
+        let fixture = try InMemoryStoreFactory.makeStore(now: today)
+        let store = fixture.store
+
+        store.updateCycleDay(21)
+        let versionAfterCycleDayChange = store.protocolChangeVersion
+
+        store.markTodayAsTaken()
+
+        XCTAssertEqual(store.currentStreak, 1)
+        XCTAssertGreaterThan(store.protocolChangeVersion, versionAfterCycleDayChange)
+    }
+
     func testMonthBoundarySeparatesPastAndToday() throws {
         let today = InMemoryStoreFactory.fixedDate("2026-03-01")
         let startDate = InMemoryStoreFactory.fixedDate("2026-02-28")

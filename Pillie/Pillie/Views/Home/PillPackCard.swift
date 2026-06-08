@@ -90,8 +90,13 @@ struct PillPackCard: View {
                             Image(systemName: "ellipsis")
                                 .font(.system(size: 14, weight: .medium))
                                 .foregroundStyle(.white.opacity(0.5))
+                                .frame(width: 32, height: 32)
                         )
+                        .contentShape(Circle())
+                        .frame(width: 32, height: 32)
                 }
+                .buttonStyle(.plain)
+                .frame(width: 32, height: 32)
             }
 
             ScrollViewReader { proxy in

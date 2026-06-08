@@ -24,6 +24,7 @@ struct StatsRow: View {
     }
 
     var body: some View {
+        let _ = store.protocolChangeVersion
         let currentStreak = store.currentStreak
         HStack(spacing: 12) {
             // Streak card
