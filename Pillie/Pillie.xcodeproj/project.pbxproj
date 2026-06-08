@@ -7,12 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		PH0001022F6A00000082EF2F /* PostHog in Frameworks */ = {isa = PBXBuildFile; productRef = PH0001022F6A00010082EF2F /* PostHog */; };
 		527C07A32F5A4BB900164A1D /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = RC0001022F456DC00082EF2F /* RevenueCat */; };
 		527C07A42F5A4BB900164A1D /* RevenueCatUI in Frameworks */ = {isa = PBXBuildFile; productRef = RC0001032F456DC00082EF2F /* RevenueCatUI */; };
 		DP0001022F456DC00082EF2F /* PillieDeviceActivityMonitor.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = DA0001012F456DC00082EF2F /* PillieDeviceActivityMonitor.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		DP0001032F456DC00082EF2F /* PillieShieldConfiguration.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = SC0001012F456DC00082EF2F /* PillieShieldConfiguration.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		DP0001042F456DC00082EF2F /* PillieShieldAction.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = SA0001012F456DC00082EF2F /* PillieShieldAction.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		PH0001022F6A00000082EF2F /* PostHog in Frameworks */ = {isa = PBXBuildFile; productRef = PH0001022F6A00010082EF2F /* PostHog */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -647,7 +647,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Pillie/Pillie.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = LA7AZKLT84;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
@@ -665,7 +665,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
-				MARKETING_VERSION = 1.11;
+				MARKETING_VERSION = 1.12;
 				POSTHOG_HOST = "https://us.i.posthog.com";
 				POSTHOG_PROJECT_TOKEN = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.idrisskone.pillie;
@@ -692,7 +692,7 @@
 				CLANG_ENABLE_CODE_COVERAGE = NO;
 				CODE_SIGN_ENTITLEMENTS = Pillie/Pillie.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = LA7AZKLT84;
 				ENABLE_CODE_COVERAGE = NO;
 				ENABLE_PREVIEWS = YES;
@@ -711,7 +711,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
-				MARKETING_VERSION = 1.11;
+				MARKETING_VERSION = 1.12;
 				POSTHOG_HOST = "https://us.i.posthog.com";
 				POSTHOG_PROJECT_TOKEN = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.idrisskone.pillie;
@@ -793,7 +793,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = PillieDeviceActivityMonitor/PillieDeviceActivityMonitor.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = LA7AZKLT84;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = PillieDeviceActivityMonitor/Info.plist;
@@ -805,7 +805,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.11;
+				MARKETING_VERSION = 1.12;
 				PRODUCT_BUNDLE_IDENTIFIER = com.idrisskone.pillie.DeviceActivityMonitor;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -823,7 +823,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = PillieDeviceActivityMonitor/PillieDeviceActivityMonitor.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = LA7AZKLT84;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = PillieDeviceActivityMonitor/Info.plist;
@@ -835,7 +835,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.11;
+				MARKETING_VERSION = 1.12;
 				PRODUCT_BUNDLE_IDENTIFIER = com.idrisskone.pillie.DeviceActivityMonitor;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -853,7 +853,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = PillieShieldAction/PillieShieldAction.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = LA7AZKLT84;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = PillieShieldAction/Info.plist;
@@ -865,7 +865,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.11;
+				MARKETING_VERSION = 1.12;
 				PRODUCT_BUNDLE_IDENTIFIER = com.idrisskone.pillie.ShieldAction;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -883,7 +883,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = PillieShieldAction/PillieShieldAction.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = LA7AZKLT84;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = PillieShieldAction/Info.plist;
@@ -895,7 +895,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.11;
+				MARKETING_VERSION = 1.12;
 				PRODUCT_BUNDLE_IDENTIFIER = com.idrisskone.pillie.ShieldAction;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -913,7 +913,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = PillieShieldConfiguration/PillieShieldConfiguration.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = LA7AZKLT84;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = PillieShieldConfiguration/Info.plist;
@@ -925,7 +925,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.11;
+				MARKETING_VERSION = 1.12;
 				PRODUCT_BUNDLE_IDENTIFIER = com.idrisskone.pillie.ShieldConfiguration;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -943,7 +943,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = PillieShieldConfiguration/PillieShieldConfiguration.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = LA7AZKLT84;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = PillieShieldConfiguration/Info.plist;
@@ -955,7 +955,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.11;
+				MARKETING_VERSION = 1.12;
 				PRODUCT_BUNDLE_IDENTIFIER = com.idrisskone.pillie.ShieldConfiguration;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;

@@ -31,6 +31,7 @@ Own the technical execution of Pillie: build features, fix bugs, and maintain a 
 | DerivedData path | `/tmp/PillieDerivedData` in the main checkout; `/tmp/PillieDerivedData-<worktree>` in feature worktrees |
 | Built app path | `<DerivedData>/Build/Products/Debug-iphonesimulator/Pillie.app` |
 | Build script | `Pillie/scripts/build-and-run.sh` |
+| Simulator browser script | `Pillie/scripts/serve-simulator-browser.sh` |
 | Worktree script | `Pillie/scripts/create-worktree.sh` |
 | Codex environment | `.codex/environments/environment.toml` (`Pillie iOS`) |
 
@@ -92,6 +93,15 @@ cd /Users/idrisskone/Developer/Pillie && Pillie/scripts/build-and-run.sh
 ```
 
 `build-and-run.sh` launches headlessly by default so the command returns after `simctl` prints the app PID. Do not use blocking console launch for routine build/run verification; use it only when actively collecting stdout.
+
+Mirror the simulator in Codex Browser:
+
+```bash
+cd /Users/idrisskone/Developer/Pillie
+Pillie/scripts/serve-simulator-browser.sh
+```
+
+Open the localhost URL printed by `serve-sim` in the Codex in-app browser. Keep the command running while using the mirror. The script boots the pinned simulator if needed, kills only stale `serve-sim` helpers for that simulator UDID, and cleans up the helper when the terminal exits. Start `Build and Run` separately when the app itself needs to be rebuilt or relaunched.
 
 Run focused tests only:
 

@@ -8,6 +8,7 @@ set -euo pipefail
 
 chmod +x Pillie/scripts/build-and-run.sh
 chmod +x Pillie/scripts/create-worktree.sh 2>/dev/null || true
+chmod +x Pillie/scripts/serve-simulator-browser.sh 2>/dev/null || true
 
 if [[ "$PWD" == "$HOME/.codex/worktrees/"* ]]; then
   WORKTREE_ID="$(basename "$(dirname "$PWD")")"
@@ -47,3 +48,8 @@ command = "open Pillie/Pillie.xcodeproj"
 name = "Show Booted Simulator"
 icon = "debug"
 command = "xcrun simctl list devices booted"
+
+[[actions]]
+name = "Mirror Simulator in Browser"
+icon = "browser"
+command = "Pillie/scripts/serve-simulator-browser.sh"
