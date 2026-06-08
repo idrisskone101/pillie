@@ -72,6 +72,22 @@ final class InteractionFeedbackTests: XCTestCase {
         XCTAssertEqual(undo.motion, .standard)
         XCTAssertEqual(refill.motion, .commitSpring)
     }
+
+    func testSettingsBrowsingSavesAndSensitiveActionsUseAppropriateSharedFeedback() {
+        let feedbackRecorder = RecordingInteractionFeedbackPerformer()
+        let feedback = InteractionFeedback(performer: feedbackRecorder)
+        let settingsFeedback = SettingsInteractionFeedback(feedback: feedback)
+
+        let browse = settingsFeedback.openRow(accessibilityReduceMotion: false)
+        let save = settingsFeedback.commitScheduleSave(accessibilityReduceMotion: false)
+        let destructive = settingsFeedback.sensitiveOrDestructiveChange(accessibilityReduceMotion: false)
+
+        XCTAssertEqual(feedbackRecorder.performedIntents, [.lowRiskTap, .meaningfulCommit])
+        XCTAssertEqual(browse.motion, .quick)
+        XCTAssertEqual(save.motion, .commitSpring)
+        XCTAssertEqual(destructive.motion, .standard)
+        XCTAssertTrue(destructive.skipsHaptics)
+    }
 }
 
 private final class RecordingInteractionFeedbackPerformer: InteractionFeedbackPerforming {

@@ -9,6 +9,7 @@ import FamilyControls
 
 struct SettingsView: View {
     @Environment(PillStore.self) var store
+    @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
     @AppStorage(AnalyticsManager.analyticsOptOutKey) private var analyticsOptOut = false
     @State private var appeared = false
     @State private var hasAnimatedIn = false
@@ -22,6 +23,8 @@ struct SettingsView: View {
     @State private var showBlockingUpsell = false
     @State private var showPaywall = false
     @State private var showManageSubscription = false
+
+    private let settingsFeedback = SettingsInteractionFeedback()
 
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
@@ -40,7 +43,7 @@ struct SettingsView: View {
 
                 settingsCard {
                     Button {
-                        showProtocolEditor = true
+                        openSettingSheet { showProtocolEditor = true }
                         ProductAnalyticsTelemetry.live.protocolSettingsOpened()
                     } label: {
                         settingsRow("Contraceptive Type", value: protocolSummary)
@@ -48,7 +51,7 @@ struct SettingsView: View {
                     .buttonStyle(.plain)
                     divider
                     Button {
-                        showTimeEditor = true
+                        openSettingSheet { showTimeEditor = true }
                         ProductAnalyticsTelemetry.live.reminderTimeSettingsOpened()
                     } label: {
                         settingsRow("Reminder Time", value: store.nextReminderTime)
@@ -56,7 +59,7 @@ struct SettingsView: View {
                     .buttonStyle(.plain)
                     divider
                     Button {
-                        showIntervalEditor = true
+                        openSettingSheet { showIntervalEditor = true }
                         ProductAnalyticsTelemetry.live.autoReminderIntervalSettingsOpened()
                     } label: {
                         settingsRow("Auto-Reminder Interval", value: store.autoReminderIntervalDisplay)
@@ -64,7 +67,7 @@ struct SettingsView: View {
                     .buttonStyle(.plain)
                     divider
                     Button {
-                        showRetryLimitEditor = true
+                        openSettingSheet { showRetryLimitEditor = true }
                         ProductAnalyticsTelemetry.live.autoReminderRetryLimitSettingsOpened()
                     } label: {
                         settingsRow("Auto-Reminder Retry Limit", value: store.autoReminderRetryLimitDisplay)
@@ -73,7 +76,7 @@ struct SettingsView: View {
                     if store.pack.method != .ring {
                         divider
                         Button {
-                            showRefillReminderEditor = true
+                            openSettingSheet { showRefillReminderEditor = true }
                             ProductAnalyticsTelemetry.live.supplyReminderSettingsOpened()
                         } label: {
                             settingsRow(supplyReminderTitle, value: supplyReminderValue)
@@ -89,7 +92,7 @@ struct SettingsView: View {
 
                 settingsCard {
                     Button {
-                        showCycleDayEditor = true
+                        openSettingSheet { showCycleDayEditor = true }
                         ProductAnalyticsTelemetry.live.cycleDaySettingsOpened()
                     } label: {
                         settingsRow("Current Day in Cycle", value: "Day \(store.currentDayIndex + 1) of \(store.pack.cycleLength)")
@@ -105,7 +108,7 @@ struct SettingsView: View {
                 settingsCard {
                     if SubscriptionManager.shared.isPlus {
                         Button {
-                            showBlockedAppsEditor = true
+                            openSensitiveSetting { showBlockedAppsEditor = true }
                             ProductAnalyticsTelemetry.live.blockedAppsSettingsOpened(
                                 hasSelection: AppBlockingManager.shared.hasAppsSelected
                             )
@@ -115,7 +118,7 @@ struct SettingsView: View {
                         .buttonStyle(.plain)
                     } else {
                         Button {
-                            showBlockingUpsell = true
+                            openSensitiveSetting { showBlockingUpsell = true }
                             ProductAnalyticsTelemetry.live.settingsBlockingUpsellViewed()
                         } label: {
                             settingsRow("Blocked Apps", value: "Pillie+", valueColor: PillieTheme.coral, showLock: true)
@@ -137,12 +140,14 @@ struct SettingsView: View {
 
                 settingsCard {
                     Button {
-                        ProductAnalyticsTelemetry.live.subscriptionSettingsOpened()
-                        if SubscriptionManager.shared.isPlus {
-                            showManageSubscription = true
-                        } else {
-                            showPaywall = true
+                        openSensitiveSetting {
+                            if SubscriptionManager.shared.isPlus {
+                                showManageSubscription = true
+                            } else {
+                                showPaywall = true
+                            }
                         }
+                        ProductAnalyticsTelemetry.live.subscriptionSettingsOpened()
                     } label: {
                         settingsRow(
                             "Subscription",
@@ -277,6 +282,20 @@ struct SettingsView: View {
         .shadow(color: PillieTheme.cardShadow, radius: PillieTheme.cardShadowRadius, y: PillieTheme.cardShadowY)
     }
 
+    private func openSettingSheet(_ update: () -> Void) {
+        let response = settingsFeedback.openRow(accessibilityReduceMotion: accessibilityReduceMotion)
+        withAnimation(response.motionProfile.animation) {
+            update()
+        }
+    }
+
+    private func openSensitiveSetting(_ update: () -> Void) {
+        let response = settingsFeedback.sensitiveOrDestructiveChange(accessibilityReduceMotion: accessibilityReduceMotion)
+        withAnimation(response.motionProfile.animation) {
+            update()
+        }
+    }
+
     private func settingsRow(_ label: String, value: String, valueColor: Color = PillieTheme.textMuted, showChevron: Bool = true, showLock: Bool = false) -> some View {
         HStack {
             Text(label)
@@ -352,6 +371,7 @@ struct SettingsView: View {
 private struct ProtocolEditor: View {
     @Bindable var store: PillStore
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
 
     @State private var selectedMethod: ContraceptiveMethod = .pill
     @State private var selectedRegimen: PillPack.PillRegimenPreset = .twentyOneSeven
@@ -359,6 +379,8 @@ private struct ProtocolEditor: View {
     @State private var customBreakDaysText: String = "7"
     @State private var selectedCycleDay: Int = 1
     @State private var showResetConfirmation = false
+
+    private let settingsFeedback = SettingsInteractionFeedback()
 
     private var customActiveDays: Int {
         let raw = Int(customActiveDaysText) ?? 21
@@ -518,6 +540,7 @@ private struct ProtocolEditor: View {
         .alert("Reset Tracking Data?", isPresented: $showResetConfirmation) {
             Button("Cancel", role: .cancel) { }
             Button("Reset & Save", role: .destructive) {
+                settingsFeedback.sensitiveOrDestructiveChange(accessibilityReduceMotion: accessibilityReduceMotion)
                 store.resetAndStartFresh(
                     method: selectedMethod,
                     regimen: selectedMethod == .pill ? selectedRegimen : .twentyOneSeven,
@@ -578,10 +601,13 @@ private struct ProtocolEditor: View {
 private struct ReminderTimeEditor: View {
     @Bindable var store: PillStore
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
 
     @State private var selectedHour: Int = 8
     @State private var selectedMinute: Int = 0
     @State private var selectedPeriod: Int = 0
+
+    private let settingsFeedback = SettingsInteractionFeedback()
 
     var body: some View {
         SettingsSheetContainer(title: "Change Reminder Time", bottomPadding: 0) {
@@ -618,6 +644,7 @@ private struct ReminderTimeEditor: View {
             }
 
             Button {
+                settingsFeedback.commitScheduleSave(accessibilityReduceMotion: accessibilityReduceMotion)
                 saveReminderTime()
                 dismiss()
             } label: {
@@ -658,8 +685,11 @@ private struct ReminderTimeEditor: View {
 private struct AutoReminderIntervalEditor: View {
     @Bindable var store: PillStore
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
 
     @State private var selectedInterval: Int = 10
+
+    private let settingsFeedback = SettingsInteractionFeedback()
 
     var body: some View {
         SettingsSheetContainer(title: "Auto-Reminder Interval", bottomPadding: 0) {
@@ -690,6 +720,7 @@ private struct AutoReminderIntervalEditor: View {
             .padding(.horizontal, 20)
 
             Button {
+                settingsFeedback.commitScheduleSave(accessibilityReduceMotion: accessibilityReduceMotion)
                 ScheduleCriticalSettingChange.saveSettingsAutoReminderInterval(
                     store: store,
                     intervalMinutes: selectedInterval
@@ -712,8 +743,11 @@ private struct AutoReminderIntervalEditor: View {
 private struct AutoReminderRetryLimitEditor: View {
     @Bindable var store: PillStore
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
 
     @State private var selectedLimit: Int = 3
+
+    private let settingsFeedback = SettingsInteractionFeedback()
 
     var body: some View {
         SettingsSheetContainer(title: "Auto-Reminder Retry Limit", bottomPadding: 0) {
@@ -744,6 +778,7 @@ private struct AutoReminderRetryLimitEditor: View {
             .padding(.horizontal, 20)
 
             Button {
+                settingsFeedback.commitScheduleSave(accessibilityReduceMotion: accessibilityReduceMotion)
                 ScheduleCriticalSettingChange.saveSettingsAutoReminderRetryLimit(
                     store: store,
                     retryLimit: selectedLimit
@@ -777,8 +812,11 @@ private struct AutoReminderRetryLimitEditor: View {
 private struct RefillReminderThresholdEditor: View {
     @Bindable var store: PillStore
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
 
     @State private var selectedThreshold: Int = 5
+
+    private let settingsFeedback = SettingsInteractionFeedback()
 
     private var isPatchMethod: Bool {
         store.pack.method == .patch
@@ -821,6 +859,7 @@ private struct RefillReminderThresholdEditor: View {
             .padding(.horizontal, 20)
 
             Button {
+                settingsFeedback.commitScheduleSave(accessibilityReduceMotion: accessibilityReduceMotion)
                 ScheduleCriticalSettingChange.saveSettingsSupplyReminderThreshold(
                     store: store,
                     threshold: selectedThreshold
@@ -852,8 +891,11 @@ private struct RefillReminderThresholdEditor: View {
 private struct CycleDayEditor: View {
     @Bindable var store: PillStore
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
 
     @State private var selectedCycleDay: Int = 1
+
+    private let settingsFeedback = SettingsInteractionFeedback()
 
     private var cycleLength: Int {
         max(1, store.pack.cycleLength)
@@ -882,6 +924,7 @@ private struct CycleDayEditor: View {
                 .padding(.horizontal, 20)
 
             Button {
+                settingsFeedback.commitScheduleSave(accessibilityReduceMotion: accessibilityReduceMotion)
                 store.updateCycleDay(selectedCycleDay)
                 ProductAnalyticsTelemetry.live.cycleDaySaved()
                 dismiss()
