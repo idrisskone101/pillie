@@ -24,6 +24,7 @@ struct StatsRow: View {
     }
 
     var body: some View {
+        let _ = store.protocolChangeVersion
         let currentStreak = store.currentStreak
         HStack(spacing: 12) {
             // Streak card
@@ -67,8 +68,9 @@ struct StatsRow: View {
         }
         .sheet(isPresented: $showUpsell) {
             PlusUpsellSheet.appBlocking()
-                .presentationDetents([.medium])
+                .presentationDetents([.height(PlusUpsellSheet.compactPresentationHeight)])
                 .presentationDragIndicator(.hidden)
+                .presentationBackground(PillieTheme.bg)
         }
     }
 

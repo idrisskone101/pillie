@@ -4,36 +4,41 @@
 //
 
 import SwiftUI
-#if os(iOS)
-import UIKit
-#endif
 
 struct HomeView: View {
     @Environment(PillStore.self) var store
+    @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
     @State private var appeared = false
     @State private var hasAnimatedIn = false
-    #if os(iOS)
-    @State private var markTakenHaptic = UIImpactFeedbackGenerator(style: .medium)
-    @State private var undoHaptic = UIImpactFeedbackGenerator(style: .light)
-    #endif
     @State private var showRefillConfirmation = false
     @State private var showShakeConfirm = false
-    private let unifiedStateTransition = Animation.easeInOut(duration: 0.28)
+    private let homeFeedback = HomeActionInteractionFeedback()
+
+    private var unifiedStateTransition: Animation {
+        PillieMotion.animation(
+            for: .standard,
+            accessibilityReduceMotion: accessibilityReduceMotion
+        )
+    }
+
+    private var ctaStateTransition: AnyTransition {
+        if accessibilityReduceMotion {
+            return .opacity
+        }
+        return .asymmetric(
+            insertion: .scale(scale: 0.97).combined(with: .opacity),
+            removal: .opacity
+        )
+    }
 
     private var todayActionState: TodayActionState {
-        #if os(iOS)
-        let reduceMotionEnabled = UIAccessibility.isReduceMotionEnabled
-        #else
-        let reduceMotionEnabled = true
-        #endif
-
-        return TodayActionState.resolve(
+        TodayActionState.resolve(
             TodayActionState.Input(
                 isRefillDue: store.isRefillDue,
                 isTodayTaken: store.isTodayTaken,
                 todayDueAction: store.todayDueAction,
                 isPlus: SubscriptionManager.shared.isPlus,
-                reduceMotionEnabled: reduceMotionEnabled
+                reduceMotionEnabled: accessibilityReduceMotion
             )
         )
     }
@@ -105,18 +110,14 @@ struct HomeView: View {
         .onAppear {
             guard !hasAnimatedIn else { return }
             hasAnimatedIn = true
-            prepareHaptics()
             withAnimation(PillieTheme.fadeInUpCurve) {
                 appeared = true
             }
         }
         .alert(store.refillBannerTitle, isPresented: $showRefillConfirmation) {
             Button(store.refillCTALabel) {
-                store.startNewPack()
+                startNewPackOrCycle()
                 ProductAnalyticsTelemetry.live.newPackOrCycleStarted()
-                #if os(iOS)
-                markTakenHaptic.impactOccurred()
-                #endif
             }
             Button("Not Yet", role: .cancel) {}
         } message: {
@@ -127,9 +128,7 @@ struct HomeView: View {
                 ShakeConfirmView(
                     action: action,
                     onConfirm: {
-                        store.markTodayAsTaken()
-                        ProductAnalyticsTelemetry.live.todayActionCompleted()
-                        fireMarkTakenHaptic()
+                        completeTodayAction()
                         showShakeConfirm = false
                     },
                     onDismiss: {
@@ -159,12 +158,16 @@ struct HomeView: View {
                     }
                 }
                 .buttonStyle(.pillieDark)
-                .transition(.opacity)
+                .transition(ctaStateTransition)
             case .completed:
                 Button {
-                    store.unmarkTodayAsTaken()
+                    let feedbackResponse = homeFeedback.undoTodayAction(
+                        accessibilityReduceMotion: accessibilityReduceMotion
+                    )
+                    withAnimation(feedbackResponse.motionProfile.animation) {
+                        store.unmarkTodayAsTaken()
+                    }
                     ProductAnalyticsTelemetry.live.todayActionUndone()
-                    fireUndoHaptic()
                 } label: {
                     HStack(spacing: 8) {
                         Image(systemName: "arrow.uturn.backward")
@@ -173,7 +176,7 @@ struct HomeView: View {
                     }
                 }
                 .buttonStyle(PillieTakenButtonStyle())
-                .transition(.opacity)
+                .transition(ctaStateTransition)
             case .noActionDue:
                 Button {
                     // No due action for today.
@@ -186,7 +189,7 @@ struct HomeView: View {
                 }
                 .buttonStyle(PillieTakenButtonStyle())
                 .allowsHitTesting(false)
-                .transition(.opacity)
+                .transition(ctaStateTransition)
             case .dueAction(let action, let requiresShakeConfirm):
                 Button {
                     ProductAnalyticsTelemetry.live.todayActionStarted()
@@ -209,7 +212,7 @@ struct HomeView: View {
                     }
                 }
                 .buttonStyle(.pillieDark)
-                .transition(.opacity)
+                .transition(ctaStateTransition)
             }
         }
         .animation(unifiedStateTransition, value: store.isTodayTaken)
@@ -223,31 +226,23 @@ struct HomeView: View {
         PillieDateFormatters.homeHeader.string(from: Date())
     }
 
-    private func prepareHaptics() {
-        #if os(iOS)
-        markTakenHaptic.prepare()
-        undoHaptic.prepare()
-        #endif
-    }
-
-    private func fireMarkTakenHaptic() {
-        #if os(iOS)
-        markTakenHaptic.impactOccurred()
-        markTakenHaptic.prepare()
-        #endif
-    }
-
-    private func fireUndoHaptic() {
-        #if os(iOS)
-        undoHaptic.impactOccurred()
-        undoHaptic.prepare()
-        #endif
-    }
-
     private func completeTodayAction() {
-        store.markTodayAsTaken()
+        let feedbackResponse = homeFeedback.commitTodayAction(
+            accessibilityReduceMotion: accessibilityReduceMotion
+        )
+        withAnimation(feedbackResponse.motionProfile.animation) {
+            store.markTodayAsTaken()
+        }
         ProductAnalyticsTelemetry.live.todayActionCompleted()
-        fireMarkTakenHaptic()
+    }
+
+    private func startNewPackOrCycle() {
+        let feedbackResponse = homeFeedback.commitNewPackOrCycle(
+            accessibilityReduceMotion: accessibilityReduceMotion
+        )
+        withAnimation(feedbackResponse.motionProfile.animation) {
+            store.startNewPack()
+        }
     }
 }
 

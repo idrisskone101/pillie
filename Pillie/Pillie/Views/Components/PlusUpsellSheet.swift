@@ -8,6 +8,8 @@ struct PlusUpsellSheet: View {
     let featureName: String
     let featureDescription: String
 
+    static let compactPresentationHeight: CGFloat = 330
+
     static func appBlocking() -> PlusUpsellSheet {
         PlusUpsellSheet(
             featureName: "App Blocking",
@@ -96,10 +98,10 @@ struct PlusUpsellSheet: View {
                 .disabled(isRestoring)
             }
 
-            PillieTheme.bg.frame(height: 16)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-        .background(PillieTheme.bg.ignoresSafeArea())
+        .padding(.bottom, 24)
+        .frame(maxWidth: .infinity, alignment: .top)
+        .background(PillieTheme.bg)
         .alert("No Subscription Found", isPresented: $showNoSubscriptionAlert) {
             Button("OK") { }
         } message: {

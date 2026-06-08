@@ -488,14 +488,22 @@ class PillStore {
     // MARK: - Actions
 
     func markTodayAsTaken() {
+        let wasTodayHandled = isTodayHandled
         markActionAsTaken(on: today)
+        if !wasTodayHandled && isTodayHandled {
+            protocolChangeVersion &+= 1
+        }
         syncTodayTakenToAppGroup()
         AppBlockingManager.shared.removeBlocking()
         scheduleNotificationResync()
     }
 
     func unmarkTodayAsTaken() {
+        let wasTodayHandled = isTodayHandled
         unmarkActionAsTaken(on: today)
+        if wasTodayHandled && !isTodayHandled {
+            protocolChangeVersion &+= 1
+        }
         syncTodayTakenToAppGroup()
         // Re-apply blocking if past reminder time and now untaken
         let now = Date()

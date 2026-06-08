@@ -32,6 +32,7 @@ Own the technical execution of Pillie: build features, fix bugs, and maintain a 
 | Built app path | `<DerivedData>/Build/Products/Debug-iphonesimulator/Pillie.app` |
 | Build script | `Pillie/scripts/build-and-run.sh` |
 | Simulator browser script | `Pillie/scripts/serve-simulator-browser.sh` |
+| Simulator AX/browser mapper | `Pillie/scripts/simulator-browser-ax-map.mjs` |
 | Worktree script | `Pillie/scripts/create-worktree.sh` |
 | Codex environment | `.codex/environments/environment.toml` (`Pillie iOS`) |
 
@@ -102,6 +103,18 @@ Pillie/scripts/serve-simulator-browser.sh
 ```
 
 Open the localhost URL printed by `serve-sim` in the Codex in-app browser. Keep the command running while using the mirror. The script boots the pinned simulator if needed, kills only stale `serve-sim` helpers for that simulator UDID, and cleans up the helper when the terminal exits. Start `Build and Run` separately when the app itself needs to be rebuilt or relaunched.
+
+If Codex Browser annotations drift on the simulator mirror, use the accessibility tree as the source of truth. The mirror is a streamed canvas, so app controls are not regular DOM elements. Read mapped frames from the current `serve-sim` AX endpoint:
+
+```bash
+Pillie/scripts/simulator-browser-ax-map.mjs --filter "Upgrade" --frame 326,121.8,525,1141.4
+```
+
+The `--frame` value is the browser simulator frame as `left,top,width,height` from `getBoundingClientRect()`. Omit `--frame` to print simulator-point frames only, or use `--json` for structured output. Prefer AXe labels/ids for actions whenever possible:
+
+```bash
+axe tap --label "Upgrade to Pillie+" --udid "$UDID"
+```
 
 Run focused tests only:
 

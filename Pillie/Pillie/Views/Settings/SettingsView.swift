@@ -123,9 +123,9 @@ struct SettingsView: View {
                         .buttonStyle(.plain)
                         .sheet(isPresented: $showBlockingUpsell) {
                             PlusUpsellSheet.appBlocking()
-                            .presentationDetents([.height(330)])
-                            .presentationDragIndicator(.hidden)
-                            .presentationBackground(PillieTheme.bg)
+                                .presentationDetents([.height(PlusUpsellSheet.compactPresentationHeight)])
+                                .presentationDragIndicator(.hidden)
+                                .presentationBackground(PillieTheme.bg)
                         }
                     }
                 }
