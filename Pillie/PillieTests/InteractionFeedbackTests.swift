@@ -73,6 +73,36 @@ final class InteractionFeedbackTests: XCTestCase {
         XCTAssertEqual(refill.motion, .commitSpring)
     }
 
+    func testShakeProgressUsesRestrainedSharedFeedbackAndReducedMotionFallback() {
+        let feedbackRecorder = RecordingInteractionFeedbackPerformer()
+        let feedback = InteractionFeedback(performer: feedbackRecorder)
+        let shakeFeedback = ShakeConfirmationInteractionFeedback(feedback: feedback)
+
+        let standard = shakeFeedback.progressShake(accessibilityReduceMotion: false)
+        let reduced = shakeFeedback.progressShake(accessibilityReduceMotion: true)
+
+        XCTAssertEqual(feedbackRecorder.performedIntents, [.lowRiskTap, .lowRiskTap])
+        XCTAssertEqual(standard.motion, .quick)
+        XCTAssertFalse(standard.motionProfile.usesCalmerSpatialMotion)
+        XCTAssertEqual(reduced.motion, .quick)
+        XCTAssertTrue(reduced.motionProfile.usesCalmerSpatialMotion)
+    }
+
+    func testShakeCompletionUsesSuccessFeedbackAndRewardMotion() {
+        let feedbackRecorder = RecordingInteractionFeedbackPerformer()
+        let feedback = InteractionFeedback(performer: feedbackRecorder)
+        let shakeFeedback = ShakeConfirmationInteractionFeedback(feedback: feedback)
+
+        let standard = shakeFeedback.completion(accessibilityReduceMotion: false)
+        let reduced = shakeFeedback.completion(accessibilityReduceMotion: true)
+
+        XCTAssertEqual(feedbackRecorder.performedIntents, [.success, .success])
+        XCTAssertEqual(standard.motion, .rewardSpring)
+        XCTAssertFalse(standard.motionProfile.usesCalmerSpatialMotion)
+        XCTAssertEqual(reduced.motion, .rewardSpring)
+        XCTAssertTrue(reduced.motionProfile.usesCalmerSpatialMotion)
+    }
+
     func testSettingsBrowsingSavesAndSensitiveActionsUseAppropriateSharedFeedback() {
         let feedbackRecorder = RecordingInteractionFeedbackPerformer()
         let feedback = InteractionFeedback(performer: feedbackRecorder)
