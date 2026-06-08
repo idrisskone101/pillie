@@ -118,6 +118,60 @@ final class InteractionFeedbackTests: XCTestCase {
         XCTAssertEqual(destructive.motion, .standard)
         XCTAssertTrue(destructive.skipsHaptics)
     }
+
+    func testPlusSuccessfulPurchaseAndRestoreUseSuccessFeedbackAndRewardMotion() {
+        let feedbackRecorder = RecordingInteractionFeedbackPerformer()
+        let feedback = InteractionFeedback(performer: feedbackRecorder)
+        let plusFeedback = PlusPaywallInteractionFeedback(feedback: feedback)
+
+        let purchase = plusFeedback.successfulPaidOutcome(accessibilityReduceMotion: false)
+        let restore = plusFeedback.successfulPaidOutcome(accessibilityReduceMotion: true)
+
+        XCTAssertEqual(feedbackRecorder.performedIntents, [.success, .success])
+        XCTAssertEqual(purchase.motion, .rewardSpring)
+        XCTAssertFalse(purchase.motionProfile.usesCalmerSpatialMotion)
+        XCTAssertEqual(restore.motion, .rewardSpring)
+        XCTAssertTrue(restore.motionProfile.usesCalmerSpatialMotion)
+    }
+
+    func testPlusFailedCancelledAndUnavailableOutcomesStayCalmWithoutHaptics() {
+        let feedbackRecorder = RecordingInteractionFeedbackPerformer()
+        let feedback = InteractionFeedback(performer: feedbackRecorder)
+        let plusFeedback = PlusPaywallInteractionFeedback(feedback: feedback)
+
+        let failed = plusFeedback.unsuccessfulPaidOutcome(accessibilityReduceMotion: false)
+        let cancelled = plusFeedback.unsuccessfulPaidOutcome(accessibilityReduceMotion: true)
+        let unavailable = plusFeedback.unavailablePurchaseAction(accessibilityReduceMotion: false)
+
+        XCTAssertEqual(feedbackRecorder.performedIntents, [])
+        XCTAssertEqual(failed.motion, .standard)
+        XCTAssertTrue(failed.skipsHaptics)
+        XCTAssertEqual(cancelled.motion, .standard)
+        XCTAssertTrue(cancelled.motionProfile.usesCalmerSpatialMotion)
+        XCTAssertEqual(unavailable.motion, .standard)
+        XCTAssertTrue(unavailable.skipsHaptics)
+    }
+
+    func testPlusPlanUpsellAndFreePathActionsUseRestrainedSharedFeedback() {
+        let feedbackRecorder = RecordingInteractionFeedbackPerformer()
+        let feedback = InteractionFeedback(performer: feedbackRecorder)
+        let plusFeedback = PlusPaywallInteractionFeedback(feedback: feedback)
+
+        let plan = plusFeedback.selectPlan(accessibilityReduceMotion: false)
+        let upgrade = plusFeedback.openPaywallOrStartPurchase(accessibilityReduceMotion: false)
+        let restore = plusFeedback.startRestore(accessibilityReduceMotion: false)
+        let dismiss = plusFeedback.dismissOrContinueFree(accessibilityReduceMotion: true)
+
+        XCTAssertEqual(
+            feedbackRecorder.performedIntents,
+            [.choice, .meaningfulCommit, .lowRiskTap, .lowRiskTap]
+        )
+        XCTAssertEqual(plan.motion, .commitSpring)
+        XCTAssertEqual(upgrade.motion, .commitSpring)
+        XCTAssertEqual(restore.motion, .quick)
+        XCTAssertEqual(dismiss.motion, .standard)
+        XCTAssertTrue(dismiss.motionProfile.usesCalmerSpatialMotion)
+    }
 }
 
 private final class RecordingInteractionFeedbackPerformer: InteractionFeedbackPerforming {
