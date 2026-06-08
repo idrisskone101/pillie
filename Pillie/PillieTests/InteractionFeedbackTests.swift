@@ -44,6 +44,34 @@ final class InteractionFeedbackTests: XCTestCase {
         XCTAssertEqual(constrained.curve, .easeInOut)
         XCTAssertTrue(constrained.usesCalmerSpatialMotion)
     }
+
+    func testHomeCompletionUsesSharedCommitFeedbackAndReducedMotionFallback() {
+        let feedbackRecorder = RecordingInteractionFeedbackPerformer()
+        let feedback = InteractionFeedback(performer: feedbackRecorder)
+        let homeFeedback = HomeActionInteractionFeedback(feedback: feedback)
+
+        let standard = homeFeedback.commitTodayAction(accessibilityReduceMotion: false)
+        let reduced = homeFeedback.commitTodayAction(accessibilityReduceMotion: true)
+
+        XCTAssertEqual(feedbackRecorder.performedIntents, [.meaningfulCommit, .meaningfulCommit])
+        XCTAssertEqual(standard.motion, .commitSpring)
+        XCTAssertFalse(standard.motionProfile.usesCalmerSpatialMotion)
+        XCTAssertEqual(reduced.motion, .commitSpring)
+        XCTAssertTrue(reduced.motionProfile.usesCalmerSpatialMotion)
+    }
+
+    func testHomeUndoAndRefillUseDistinctSharedFeedbackSemantics() {
+        let feedbackRecorder = RecordingInteractionFeedbackPerformer()
+        let feedback = InteractionFeedback(performer: feedbackRecorder)
+        let homeFeedback = HomeActionInteractionFeedback(feedback: feedback)
+
+        let undo = homeFeedback.undoTodayAction(accessibilityReduceMotion: false)
+        let refill = homeFeedback.commitNewPackOrCycle(accessibilityReduceMotion: false)
+
+        XCTAssertEqual(feedbackRecorder.performedIntents, [.lowRiskTap, .meaningfulCommit])
+        XCTAssertEqual(undo.motion, .standard)
+        XCTAssertEqual(refill.motion, .commitSpring)
+    }
 }
 
 private final class RecordingInteractionFeedbackPerformer: InteractionFeedbackPerforming {

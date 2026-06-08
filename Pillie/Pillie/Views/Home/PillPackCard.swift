@@ -12,6 +12,7 @@ struct PillPackCard: View {
     @State private var pendingEntranceAnimation: DispatchWorkItem?
     @State private var cachedCycleSnapshots: [Int: PillScheduleSnapshot] = [:]
     @State private var showNewPackConfirmation = false
+    private let homeFeedback = HomeActionInteractionFeedback()
 
     private var cycleLength: Int { store.pack.cycleLength }
     private var currentCycleDay: Int {
@@ -150,7 +151,12 @@ struct PillPackCard: View {
             isPresented: $showNewPackConfirmation
         ) {
             Button(store.pack.method == .pill ? "Start New Pack" : "Start New Cycle") {
-                store.startNewPack()
+                let feedbackResponse = homeFeedback.commitNewPackOrCycle(
+                    accessibilityReduceMotion: accessibilityReduceMotion
+                )
+                withAnimation(feedbackResponse.motionProfile.animation) {
+                    store.startNewPack()
+                }
             }
             Button("Cancel", role: .cancel) {}
         } message: {
