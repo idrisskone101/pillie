@@ -97,7 +97,7 @@ struct MainTabView: View {
                         .transition(tabSlideTransition)
                 }
                 if tabSelection.selectedTab == .history {
-                    HistoryView()
+                    HistoryView(animatesEntrance: false)
                         .transition(tabSlideTransition)
                 }
                 if tabSelection.selectedTab == .settings {

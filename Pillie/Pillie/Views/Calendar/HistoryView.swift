@@ -8,6 +8,7 @@ import SwiftData
 
 struct HistoryView: View {
     @Environment(PillStore.self) private var store
+    var animatesEntrance: Bool = true
     @State private var displayedMonth: Date = MonthCursor.monthStart(for: Date())
     @State private var infoMonth: Date = MonthCursor.monthStart(for: Date())
     @State private var appeared = false
@@ -38,6 +39,10 @@ struct HistoryView: View {
         .easeInOut(duration: performanceTier == .constrained ? 0.14 : 0.2)
     }
 
+    private var contentAppeared: Bool {
+        animatesEntrance ? appeared : true
+    }
+
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
             VStack(alignment: .leading, spacing: 16) {
@@ -47,13 +52,13 @@ struct HistoryView: View {
                     showsAccessorySlot: true,
                     accessory: nil
                 )
-                    .modifier(FadeInUp(appeared: appeared, delay: 0))
+                    .modifier(FadeInUp(appeared: contentAppeared, delay: 0))
 
                 // Subtitle
                 Text("Your tracking overview")
                     .font(.pillieBody())
                     .foregroundStyle(PillieTheme.textMuted)
-                    .modifier(FadeInUp(appeared: appeared, delay: 0))
+                    .modifier(FadeInUp(appeared: contentAppeared, delay: 0))
 
                 // Color legend
                 VStack(alignment: .leading, spacing: 6) {
@@ -74,7 +79,7 @@ struct HistoryView: View {
                     }
                 }
                 .padding(.top, 4)
-                .modifier(FadeInUp(appeared: appeared, delay: 0.1))
+                .modifier(FadeInUp(appeared: contentAppeared, delay: 0.1))
 
                 // Month navigation
                 HStack {
@@ -105,7 +110,7 @@ struct HistoryView: View {
                     .disabled(isAnimatingTransition)
                 }
                 .padding(.vertical, 8)
-                .modifier(FadeInUp(appeared: appeared, delay: 0.1))
+                .modifier(FadeInUp(appeared: contentAppeared, delay: 0.1))
 
                 // Calendar grid
                 ZStack(alignment: .top) {
@@ -133,7 +138,7 @@ struct HistoryView: View {
                 }
                 .frame(height: calendarContainerHeight, alignment: .top)
                 .clipped()
-                .modifier(FadeInUp(appeared: appeared, delay: 0.2))
+                .modifier(FadeInUp(appeared: contentAppeared, delay: 0.2))
                 .onPreferenceChange(CalendarMonthHeightPreferenceKey.self) { heights in
                     updateCalendarHeight(with: heights)
                 }
@@ -147,7 +152,7 @@ struct HistoryView: View {
                     displayedMonth: infoMonth,
                     animatesValueChanges: !suppressAdherenceValueAnimation
                 )
-                    .modifier(FadeInUp(appeared: appeared, delay: 0.3))
+                    .modifier(FadeInUp(appeared: contentAppeared, delay: 0.3))
             }
             .padding(.horizontal, PillieTheme.screenHorizontalPadding)
             .padding(.top, PillieTheme.scrollTopPadding)
@@ -160,6 +165,10 @@ struct HistoryView: View {
             warmMonthSnapshotCache(for: displayedMonth)
             warmMonthSnapshotCache(for: MonthCursor.month(byAdding: -1, to: displayedMonth))
             warmMonthSnapshotCache(for: MonthCursor.month(byAdding: 1, to: displayedMonth))
+            guard animatesEntrance else {
+                appeared = true
+                return
+            }
             withAnimation(PillieTheme.fadeInUpCurve) {
                 appeared = true
             }
