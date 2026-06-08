@@ -3,6 +3,7 @@
 //  PillieTests
 //
 
+import SwiftUI
 import XCTest
 @testable import Pillie
 
@@ -28,6 +29,20 @@ final class InteractionFeedbackTests: XCTestCase {
         XCTAssertEqual(selection.selectedTab, .history)
         XCTAssertEqual(feedbackRecorder.performedIntents, [.tabChange])
         XCTAssertEqual(trackedTabs.map(\.analyticsScreen), [.calendar])
+    }
+
+    func testMainTabDirectionMatchesHorizontalTabOrder() {
+        let selection = MainTabSelection(
+            initialTab: .home,
+            feedback: InteractionFeedback(performer: RecordingInteractionFeedbackPerformer()),
+            trackSelectedTab: { _ in }
+        )
+
+        XCTAssertTrue(selection.select(.settings))
+        XCTAssertEqual(selection.tabDirection, .leading)
+
+        XCTAssertTrue(selection.select(.history))
+        XCTAssertEqual(selection.tabDirection, .trailing)
     }
 
     func testSharedMotionSemanticsIncludeCalmerReducedAndConstrainedProfiles() {

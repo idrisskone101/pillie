@@ -31,7 +31,7 @@ final class MainTabSelection: ObservableObject {
     func select(_ newTab: PillieTab) -> Bool {
         guard newTab != selectedTab else { return false }
 
-        tabDirection = newTab.rawValue > selectedTab.rawValue ? .trailing : .leading
+        tabDirection = newTab.rawValue > selectedTab.rawValue ? .leading : .trailing
         selectedTab = newTab
         feedback.perform(.tabChange)
         trackSelectedTab(newTab.analyticsTab)
