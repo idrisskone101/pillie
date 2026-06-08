@@ -78,6 +78,7 @@ struct PremiumPaywallView: View {
     private let subscriptionManager = SubscriptionManager.shared
     private let telemetry = ProductAnalyticsTelemetry.live
     private let plusFeedback = PlusPaywallInteractionFeedback(performanceTier: PerformanceTier.current)
+    private let onboardingFeedback = OnboardingInteractionFeedback(performanceTier: PerformanceTier.current)
     private let content = SoftPaywallContent.default
 
     var isFromOnboarding: Bool = true
@@ -475,7 +476,7 @@ struct PremiumPaywallView: View {
                         plusFeedback.unavailablePurchaseAction(accessibilityReduceMotion: accessibilityReduceMotion)
                         return
                     }
-                    let response = plusFeedback.openPaywallOrStartPurchase(accessibilityReduceMotion: accessibilityReduceMotion)
+                    let response = startPurchaseFeedback()
                     withAnimation(response.motionProfile.animation) {
                         isPurchasing = true
                     }
@@ -533,7 +534,7 @@ struct PremiumPaywallView: View {
 
             HStack(spacing: 14) {
                 Button {
-                    let response = plusFeedback.dismissOrContinueFree(accessibilityReduceMotion: accessibilityReduceMotion)
+                    let response = continueFreeFeedback()
                     telemetry.continueFreeSelected(isFromOnboarding: isFromOnboarding)
                     withAnimation(response.motionProfile.animation) {
                         onSkip()
@@ -638,6 +639,36 @@ struct PremiumPaywallView: View {
         guard !didCompletePaidRoute else { return }
         didCompletePaidRoute = true
         onContinue()
+    }
+
+    private func startPurchaseFeedback() -> OnboardingInteractionFeedback.Response {
+        if isFromOnboarding {
+            return onboardingFeedback.openSoftPaywallOrUpgrade(
+                accessibilityReduceMotion: accessibilityReduceMotion)
+        }
+
+        let plusResponse = plusFeedback.openPaywallOrStartPurchase(
+            accessibilityReduceMotion: accessibilityReduceMotion)
+        return OnboardingInteractionFeedback.Response(
+            motion: plusResponse.motion,
+            motionProfile: plusResponse.motionProfile,
+            skipsHaptics: plusResponse.skipsHaptics
+        )
+    }
+
+    private func continueFreeFeedback() -> OnboardingInteractionFeedback.Response {
+        if isFromOnboarding {
+            return onboardingFeedback.continueFreePath(
+                accessibilityReduceMotion: accessibilityReduceMotion)
+        }
+
+        let plusResponse = plusFeedback.dismissOrContinueFree(
+            accessibilityReduceMotion: accessibilityReduceMotion)
+        return OnboardingInteractionFeedback.Response(
+            motion: plusResponse.motion,
+            motionProfile: plusResponse.motionProfile,
+            skipsHaptics: plusResponse.skipsHaptics
+        )
     }
 }
 

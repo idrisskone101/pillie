@@ -9,12 +9,15 @@ import SwiftUI
 #endif
 
 struct PlusBlockingDemoView: View {
+  @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
   @State private var animateIn = false
   @State private var demoPhase = 0
   @State private var shakeManager = ShakeDetectionManager(requiredShakes: 3)
   @State private var phoneTilt: Double = 0
   @State private var shakeIconWiggle = false
   @State private var shakeComplete = false
+  private let performanceTier = PerformanceTier.current
+  private let onboardingFeedback = OnboardingInteractionFeedback(performanceTier: PerformanceTier.current)
 
   let onContinue: () -> Void
 
@@ -55,6 +58,7 @@ struct PlusBlockingDemoView: View {
     .onAppear {
       animateIn = true
       shakeManager.startDetecting()
+      guard !accessibilityReduceMotion, performanceTier == .standard else { return }
       withAnimation(.easeInOut(duration: 0.55).repeatForever(autoreverses: true)) {
         shakeIconWiggle = true
       }
@@ -64,10 +68,12 @@ struct PlusBlockingDemoView: View {
       shakeComplete = false
     }
     .task {
+      guard !accessibilityReduceMotion, performanceTier == .standard else { return }
+      let response = onboardingFeedback.ambientLoop(accessibilityReduceMotion: accessibilityReduceMotion)
       while !Task.isCancelled {
         try? await Task.sleep(for: .seconds(1.45))
         guard !Task.isCancelled else { return }
-        withAnimation(.spring(response: 0.45, dampingFraction: 0.78)) {
+        withAnimation(response.motionProfile.animation) {
           demoPhase = (demoPhase + 1) % 3
         }
       }

@@ -106,12 +106,10 @@ struct PainPointPickerView: View {
             isSelected: isSelected,
             selectionStyle: .checkbox
         ) {
-            withAnimation(.spring(response: 0.35, dampingFraction: 0.78)) {
-                if isSelected {
-                    selected.remove(painPoint)
-                } else {
-                    selected.insert(painPoint)
-                }
+            if isSelected {
+                selected.remove(painPoint)
+            } else {
+                selected.insert(painPoint)
             }
         }
     }

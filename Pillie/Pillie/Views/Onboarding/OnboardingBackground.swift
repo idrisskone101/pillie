@@ -9,10 +9,11 @@ import UIKit
 struct OnboardingBackground: View {
     var blobPhase: CGFloat
     var tier: PerformanceTier = .current
+    @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
 
     var body: some View {
         Group {
-            if tier == .constrained {
+            if accessibilityReduceMotion || tier == .constrained {
                 constrainedBackground
             } else {
                 animatedBackground
