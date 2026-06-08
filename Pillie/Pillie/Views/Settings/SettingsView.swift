@@ -125,6 +125,7 @@ struct SettingsView: View {
                             PlusUpsellSheet.appBlocking()
                             .presentationDetents([.height(360)])
                             .presentationDragIndicator(.hidden)
+                            .presentationBackground(PillieTheme.bg)
                         }
                     }
                 }
@@ -206,6 +207,7 @@ struct SettingsView: View {
             ReminderTimeEditor(store: store)
                 .presentationDetents([.height(380)])
                 .presentationDragIndicator(.hidden)
+                .presentationBackground(PillieTheme.bg)
         }
         .sheet(isPresented: $showIntervalEditor) {
             AutoReminderIntervalEditor(store: store)
@@ -231,11 +233,13 @@ struct SettingsView: View {
             CycleDayEditor(store: store)
                 .presentationDetents([.height(360)])
                 .presentationDragIndicator(.hidden)
+                .presentationBackground(PillieTheme.bg)
         }
         .sheet(isPresented: $showBlockedAppsEditor) {
             BlockedAppsEditor()
                 .presentationDetents([.height(470)])
                 .presentationDragIndicator(.hidden)
+                .presentationBackground(PillieTheme.bg)
         }
         .fullScreenCover(isPresented: $showPaywall) {
             PremiumPaywallView(
@@ -637,7 +641,7 @@ private struct ReminderTimeEditor: View {
             .buttonStyle(.pillieDark)
             .padding(.horizontal, 28)
 
-            Color.clear.frame(height: 16)
+            PillieTheme.bg.frame(height: 16)
         }
         .background(PillieTheme.bg.ignoresSafeArea())
         .onAppear { seedFromStore() }
@@ -950,7 +954,7 @@ private struct CycleDayEditor: View {
             .buttonStyle(.pillieDark)
             .padding(.horizontal, 28)
 
-            Color.clear.frame(height: 16)
+            PillieTheme.bg.frame(height: 16)
         }
         .background(PillieTheme.bg.ignoresSafeArea())
         .onAppear {
