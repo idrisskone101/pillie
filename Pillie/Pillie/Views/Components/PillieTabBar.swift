@@ -85,22 +85,22 @@ struct PillieTabBar: View {
 }
 
 struct MainTabView: View {
-    @StateObject private var tabSelection = MainTabSelection()
-    @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
+    @State private var selectedTab: PillieTab = .home
+    @State private var tabDirection: Edge = .trailing
     private let performanceTier = PerformanceTier.current
 
     var body: some View {
         ZStack(alignment: .bottom) {
             ZStack {
-                if tabSelection.selectedTab == .home {
+                if selectedTab == .home {
                     HomeView()
                         .transition(tabSlideTransition)
                 }
-                if tabSelection.selectedTab == .history {
-                    HistoryView(animatesEntrance: false)
+                if selectedTab == .history {
+                    HistoryView()
                         .transition(tabSlideTransition)
                 }
-                if tabSelection.selectedTab == .settings {
+                if selectedTab == .settings {
                     SettingsView()
                         .transition(tabSlideTransition)
                 }
@@ -118,31 +118,31 @@ struct MainTabView: View {
     // MARK: - Tab Slide Transition
 
     private var tabSlideTransition: AnyTransition {
-        if accessibilityReduceMotion || performanceTier == .constrained {
+        if performanceTier == .constrained {
             return .opacity
         }
         return .asymmetric(
-            insertion: .move(edge: tabSelection.tabDirection),
-            removal: .move(edge: tabSelection.tabDirection == .trailing ? .leading : .trailing)
+            insertion: .move(edge: tabDirection),
+            removal: .move(edge: tabDirection == .trailing ? .leading : .trailing)
         )
     }
 
     private var tabTransitionAnimation: Animation {
-        PillieMotion.animation(
-            for: .standard,
-            accessibilityReduceMotion: accessibilityReduceMotion,
-            performanceTier: performanceTier
-        )
+        performanceTier == .constrained ? .easeInOut(duration: 0.16) : .easeInOut(duration: 0.25)
     }
 
     /// Custom binding that sets slide direction before updating the selected tab.
     private var tabBinding: Binding<PillieTab> {
         Binding(
-            get: { tabSelection.selectedTab },
+            get: { selectedTab },
             set: { newTab in
+                guard newTab != selectedTab else { return }
+                tabDirection = newTab.rawValue > selectedTab.rawValue ? .trailing : .leading
                 withAnimation(tabTransitionAnimation) {
-                    _ = tabSelection.select(newTab)
+                    selectedTab = newTab
                 }
+                InteractionFeedback.live.perform(.tabChange)
+                ProductAnalyticsTelemetry.live.mainTabSelected(newTab.analyticsTab)
             }
         )
     }
@@ -169,8 +169,26 @@ struct MainTabView: View {
     }
 
     private func navigateTab(by offset: Int) {
+        let allTabs = PillieTab.allCases
+        guard let idx = allTabs.firstIndex(of: selectedTab) else { return }
+        let newIndex = idx + offset
+        guard allTabs.indices.contains(newIndex) else { return }
+        let target = allTabs[newIndex]
+        tabDirection = target.rawValue > selectedTab.rawValue ? .trailing : .leading
         withAnimation(tabTransitionAnimation) {
-            _ = tabSelection.navigate(by: offset)
+            selectedTab = target
+        }
+        InteractionFeedback.live.perform(.tabChange)
+        ProductAnalyticsTelemetry.live.mainTabSelected(target.analyticsTab)
+    }
+}
+
+private extension PillieTab {
+    var analyticsTab: ProductAnalyticsTelemetry.MainTab {
+        switch self {
+        case .home: return .today
+        case .history: return .history
+        case .settings: return .settings
         }
     }
 }

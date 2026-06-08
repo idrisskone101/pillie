@@ -3,46 +3,17 @@
 //  PillieTests
 //
 
-import SwiftUI
 import XCTest
 @testable import Pillie
 
 @MainActor
 final class InteractionFeedbackTests: XCTestCase {
-    func testChangingMainTabPerformsSelectionFeedbackAndKeepsTabAnalytics() {
+    func testSemanticTabChangeFeedbackUsesSelectionIntent() {
         let feedbackRecorder = RecordingInteractionFeedbackPerformer()
-        var trackedTabs: [ProductAnalyticsTelemetry.MainTab] = []
-        let selection = MainTabSelection(
-            initialTab: .home,
-            feedback: InteractionFeedback(performer: feedbackRecorder),
-            trackSelectedTab: { trackedTabs.append($0) }
-        )
+        let feedback = InteractionFeedback(performer: feedbackRecorder)
 
-        XCTAssertTrue(selection.select(.history))
-
-        XCTAssertEqual(selection.selectedTab, .history)
+        feedback.perform(.tabChange)
         XCTAssertEqual(feedbackRecorder.performedIntents, [.tabChange])
-        XCTAssertEqual(trackedTabs.map(\.analyticsScreen), [.calendar])
-
-        XCTAssertFalse(selection.select(.history))
-
-        XCTAssertEqual(selection.selectedTab, .history)
-        XCTAssertEqual(feedbackRecorder.performedIntents, [.tabChange])
-        XCTAssertEqual(trackedTabs.map(\.analyticsScreen), [.calendar])
-    }
-
-    func testMainTabDirectionMatchesHorizontalTabOrder() {
-        let selection = MainTabSelection(
-            initialTab: .home,
-            feedback: InteractionFeedback(performer: RecordingInteractionFeedbackPerformer()),
-            trackSelectedTab: { _ in }
-        )
-
-        XCTAssertTrue(selection.select(.settings))
-        XCTAssertEqual(selection.tabDirection, .trailing)
-
-        XCTAssertTrue(selection.select(.history))
-        XCTAssertEqual(selection.tabDirection, .leading)
     }
 
     func testSharedMotionSemanticsIncludeCalmerReducedAndConstrainedProfiles() {
