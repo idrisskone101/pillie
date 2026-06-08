@@ -16,16 +16,7 @@ struct BlockedAppsEditor: View {
     private var blockingManager: AppBlockingManager { .shared }
 
     var body: some View {
-        VStack(spacing: 24) {
-            Capsule()
-                .fill(PillieTheme.sage)
-                .frame(width: 36, height: 5)
-                .padding(.top, 12)
-
-            Text("Blocked Apps")
-                .font(.pillieSubtitleBold())
-                .foregroundStyle(PillieTheme.textPrimary)
-
+        SettingsSheetContainer(title: "Blocked Apps") {
             // Status indicator
             statusCard
 
@@ -62,11 +53,7 @@ struct BlockedAppsEditor: View {
             }
             .buttonStyle(.pillieDark)
             .padding(.horizontal, 28)
-
-            PillieTheme.bg.frame(height: 16)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-        .background(PillieTheme.bg.ignoresSafeArea())
         .familyActivityPicker(
             isPresented: $showPicker,
             selection: Bindable(blockingManager).activitySelection

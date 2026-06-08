@@ -205,7 +205,7 @@ struct SettingsView: View {
         }
         .sheet(isPresented: $showTimeEditor) {
             ReminderTimeEditor(store: store)
-                .presentationDetents([.height(340)])
+                .presentationDetents([.height(320)])
                 .presentationDragIndicator(.hidden)
                 .presentationBackground(PillieTheme.bg)
         }
@@ -231,7 +231,7 @@ struct SettingsView: View {
         }
         .sheet(isPresented: $showCycleDayEditor) {
             CycleDayEditor(store: store)
-                .presentationDetents([.height(340)])
+                .presentationDetents([.height(320)])
                 .presentationDragIndicator(.hidden)
                 .presentationBackground(PillieTheme.bg)
         }
@@ -590,16 +590,7 @@ private struct ReminderTimeEditor: View {
     @State private var selectedPeriod: Int = 0
 
     var body: some View {
-        VStack(spacing: 24) {
-            Capsule()
-                .fill(PillieTheme.sage)
-                .frame(width: 36, height: 5)
-                .padding(.top, 12)
-
-            Text("Change Reminder Time")
-                .font(.pillieSubtitleBold())
-                .foregroundStyle(PillieTheme.textPrimary)
-
+        SettingsSheetContainer(title: "Change Reminder Time", bottomPadding: 0) {
             HStack(spacing: 0) {
                 Picker("Hour", selection: $selectedHour) {
                     ForEach(1...12, id: \.self) { hour in
@@ -640,11 +631,7 @@ private struct ReminderTimeEditor: View {
             }
             .buttonStyle(.pillieDark)
             .padding(.horizontal, 28)
-
-            PillieTheme.bg.frame(height: 16)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-        .background(PillieTheme.bg.ignoresSafeArea())
         .onAppear { seedFromStore() }
     }
 
@@ -915,16 +902,7 @@ private struct CycleDayEditor: View {
     }
 
     var body: some View {
-        VStack(spacing: 24) {
-            Capsule()
-                .fill(PillieTheme.sage)
-                .frame(width: 36, height: 5)
-                .padding(.top, 12)
-
-            Text("Current Cycle Day")
-                .font(.pillieSubtitleBold())
-                .foregroundStyle(PillieTheme.textPrimary)
-
+        SettingsSheetContainer(title: "Current Cycle Day", bottomPadding: 0) {
             Text("Day \(selectedCycleDay) of \(cycleLength)")
                 .font(.pillieHeadline())
                 .foregroundStyle(PillieTheme.textPrimary)
@@ -954,11 +932,7 @@ private struct CycleDayEditor: View {
             }
             .buttonStyle(.pillieDark)
             .padding(.horizontal, 28)
-
-            PillieTheme.bg.frame(height: 16)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-        .background(PillieTheme.bg.ignoresSafeArea())
         .onAppear {
             selectedCycleDay = store.currentDayIndex + 1
         }
