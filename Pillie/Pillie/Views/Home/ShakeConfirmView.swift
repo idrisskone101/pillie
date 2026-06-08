@@ -4,30 +4,81 @@
 //
 
 import SwiftUI
-#if os(iOS)
-import UIKit
-#endif
+
+struct ShakeConfirmationInteractionFeedback {
+    struct Response: Equatable {
+        let motion: PillieMotion.Semantic
+        let motionProfile: PillieMotion.Profile
+    }
+
+    private let feedback: InteractionFeedback
+    private let performanceTier: PerformanceTier
+
+    init(
+        feedback: InteractionFeedback = .live,
+        performanceTier: PerformanceTier = .standard
+    ) {
+        self.feedback = feedback
+        self.performanceTier = performanceTier
+    }
+
+    @discardableResult
+    func progressShake(accessibilityReduceMotion: Bool) -> Response {
+        response(
+            feedbackIntent: .lowRiskTap,
+            motion: .quick,
+            accessibilityReduceMotion: accessibilityReduceMotion
+        )
+    }
+
+    @discardableResult
+    func completion(accessibilityReduceMotion: Bool) -> Response {
+        response(
+            feedbackIntent: .success,
+            motion: .rewardSpring,
+            accessibilityReduceMotion: accessibilityReduceMotion
+        )
+    }
+
+    private func response(
+        feedbackIntent: InteractionFeedback.Intent,
+        motion: PillieMotion.Semantic,
+        accessibilityReduceMotion: Bool
+    ) -> Response {
+        feedback.perform(feedbackIntent)
+        return Response(
+            motion: motion,
+            motionProfile: PillieMotion.profile(
+                for: motion,
+                accessibilityReduceMotion: accessibilityReduceMotion,
+                performanceTier: performanceTier
+            )
+        )
+    }
+}
 
 struct ShakeConfirmView: View {
     let action: DoseScheduleAction
     let onConfirm: () -> Void
     let onDismiss: () -> Void
 
+    @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
     @State private var shakeManager = ShakeDetectionManager()
     @State private var appeared = false
     @State private var celebrating = false
     @State private var emojiOffset: CGFloat = 0
-    #if os(iOS)
-    @State private var completionFeedback = UINotificationFeedbackGenerator()
-    #endif
+    private let shakeFeedback = ShakeConfirmationInteractionFeedback()
 
     private var emoji: String { action.method.emoji }
+    private var progressAnimation: Animation {
+        PillieMotion.animation(for: .quick, accessibilityReduceMotion: accessibilityReduceMotion)
+    }
 
     var body: some View {
         ZStack {
             PillieTheme.bg.ignoresSafeArea()
 
-            ConfettiView(isActive: celebrating)
+            ConfettiView(isActive: celebrating && !accessibilityReduceMotion)
 
             VStack(spacing: 32) {
                 Spacer()
@@ -59,16 +110,23 @@ struct ShakeConfirmView: View {
                         )
                         .frame(width: 140, height: 140)
                         .rotationEffect(.degrees(-90))
-                        .animation(.easeOut(duration: 0.3), value: shakeManager.progress)
+                        .animation(progressAnimation, value: shakeManager.progress)
 
                     Text(emoji)
                         .font(.system(size: 56))
                         .offset(y: emojiOffset)
-                        .scaleEffect(celebrating ? 1.3 : 1.0)
-                        .animation(.spring(response: 0.3, dampingFraction: 0.5), value: celebrating)
+                        .scaleEffect(accessibilityReduceMotion ? 1.0 : (celebrating ? 1.3 : 1.0))
+                        .opacity(celebrating ? 1.0 : 0.94)
+                        .animation(
+                            PillieMotion.animation(
+                                for: .rewardSpring,
+                                accessibilityReduceMotion: accessibilityReduceMotion
+                            ),
+                            value: celebrating
+                        )
                 }
-                .scaleEffect(emojiOffset != 0 ? 1.02 : 1.0)
-                .animation(.spring(response: 0.2, dampingFraction: 0.5), value: emojiOffset)
+                .scaleEffect(accessibilityReduceMotion ? 1.0 : (emojiOffset != 0 ? 1.02 : 1.0))
+                .animation(progressAnimation, value: emojiOffset)
                 .modifier(FadeInUp(appeared: appeared, delay: 0.1))
 
                 // Shake counter
@@ -76,12 +134,12 @@ struct ShakeConfirmView: View {
                     .font(.pillie(20, weight: .bold))
                     .foregroundStyle(PillieTheme.textPrimary)
                     .contentTransition(.numericText())
-                    .animation(.easeOut(duration: 0.2), value: shakeManager.shakeCount)
+                    .animation(progressAnimation, value: shakeManager.shakeCount)
                     .modifier(FadeInUp(appeared: appeared, delay: 0.15))
 
                 Spacer()
 
-if !celebrating {
+                if !celebrating {
                     // Tap-to-confirm alternative (accessibility — WCAG 2.5.4)
                     Button {
                         completeShake()
@@ -100,6 +158,7 @@ if !celebrating {
                     }
                     .padding(.horizontal, 24)
                     .padding(.bottom, 8)
+                    .accessibilityIdentifier("shakeTapToConfirmFallback")
 
                     // Cancel
                     Button {
@@ -116,9 +175,6 @@ if !celebrating {
             .padding(.horizontal, PillieTheme.screenHorizontalPadding)
         }
         .onAppear {
-            #if os(iOS)
-            completionFeedback.prepare()
-            #endif
             shakeManager.startDetecting()
             withAnimation(PillieTheme.fadeInUpCurve) {
                 appeared = true
@@ -129,11 +185,12 @@ if !celebrating {
         }
         .onChange(of: shakeManager.shakeCount) { oldValue, newValue in
             guard newValue > oldValue else { return }
-            bounceEmoji()
-            fireShakeHaptic(count: newValue)
 
             if shakeManager.isComplete {
                 completeShake()
+            } else {
+                bounceEmoji()
+                shakeFeedback.progressShake(accessibilityReduceMotion: accessibilityReduceMotion)
             }
         }
     }
@@ -141,27 +198,15 @@ if !celebrating {
     // MARK: - Private
 
     private func bounceEmoji() {
-        withAnimation(.spring(response: 0.2, dampingFraction: 0.3)) {
+        guard !accessibilityReduceMotion else { return }
+        withAnimation(progressAnimation) {
             emojiOffset = -16
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
-            withAnimation(.spring(response: 0.25, dampingFraction: 0.4)) {
+            withAnimation(progressAnimation) {
                 emojiOffset = 0
             }
         }
-    }
-
-    private func fireShakeHaptic(count: Int) {
-        #if os(iOS)
-        let style: UIImpactFeedbackGenerator.FeedbackStyle
-        switch count {
-        case 1: style = .light
-        case 2: style = .medium
-        default: style = .heavy
-        }
-        let generator = UIImpactFeedbackGenerator(style: style)
-        generator.impactOccurred()
-        #endif
     }
 
     private func completeShake() {
@@ -173,11 +218,9 @@ if !celebrating {
             shakeManager.fillToComplete()
         }
 
-        #if os(iOS)
-        completionFeedback.notificationOccurred(.success)
-        #endif
+        let feedbackResponse = shakeFeedback.completion(accessibilityReduceMotion: accessibilityReduceMotion)
 
-        withAnimation(.spring(response: 0.4, dampingFraction: 0.6)) {
+        withAnimation(feedbackResponse.motionProfile.animation) {
             celebrating = true
         }
 
