@@ -18,6 +18,7 @@ Use this skill whenever the task touches the Pillie iOS app, Xcode project, simu
 - Built app: `<DerivedData>/Build/Products/Debug-iphonesimulator/Pillie.app`
 - Helper script: `Pillie/scripts/build-and-run.sh`
 - Simulator browser script: `Pillie/scripts/serve-simulator-browser.sh`
+- Simulator AX/browser mapper: `Pillie/scripts/simulator-browser-ax-map.mjs`
 - Worktree helper: `Pillie/scripts/create-worktree.sh`
 - Codex environment: `.codex/environments/environment.toml` (`Pillie iOS`)
 
@@ -92,6 +93,14 @@ Pillie/scripts/serve-simulator-browser.sh
 ```
 
 Open the localhost URL printed by `serve-sim` in the Codex in-app browser. Keep this command running while using the mirror. The script boots the pinned simulator if needed, kills only stale `serve-sim` helpers for that simulator UDID, and cleans up the helper when the terminal exits. Build/run the app separately when app code changed.
+
+When Codex Browser annotations drift on the simulator mirror, treat the accessibility tree as canonical. The app is rendered through a streamed canvas, so SwiftUI controls are not regular DOM elements. Use the AX/browser mapper to print simulator-point frames and browser-mapped frames:
+
+```bash
+Pillie/scripts/simulator-browser-ax-map.mjs --filter "Upgrade" --frame 326,121.8,525,1141.4
+```
+
+The `--frame` argument is the simulator mirror frame from `getBoundingClientRect()` in `left,top,width,height` form. Omit it for simulator-point frames only, or use `--json` for structured output.
 
 Run focused tests only:
 

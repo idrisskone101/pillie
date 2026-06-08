@@ -68,8 +68,9 @@ struct StatsRow: View {
         }
         .sheet(isPresented: $showUpsell) {
             PlusUpsellSheet.appBlocking()
-                .presentationDetents([.medium])
+                .presentationDetents([.height(PlusUpsellSheet.compactPresentationHeight)])
                 .presentationDragIndicator(.hidden)
+                .presentationBackground(PillieTheme.bg)
         }
     }
 
