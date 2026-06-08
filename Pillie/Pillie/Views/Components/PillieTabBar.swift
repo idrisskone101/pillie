@@ -13,7 +13,7 @@ enum PillieTab: Int, CaseIterable {
     var label: String {
         switch self {
         case .home: return "Home"
-        case .history: return "Calendar"
+        case .history: return "History"
         case .settings: return "Settings"
         }
     }
@@ -29,6 +29,7 @@ enum PillieTab: Int, CaseIterable {
 
 struct PillieTabBar: View {
     @Binding var selectedTab: PillieTab
+    @Namespace private var indicatorNamespace
 
     var body: some View {
         HStack {
@@ -42,14 +43,15 @@ struct PillieTabBar: View {
                             .font(.system(size: 22))
 
                         if selectedTab == tab {
-                            Circle()
+                            Capsule()
                                 .fill(PillieTheme.coral)
-                                .frame(width: 5, height: 5)
-                                .transition(.scale.combined(with: .opacity))
+                                .matchedGeometryEffect(id: "selected-tab-indicator", in: indicatorNamespace)
+                                .frame(width: 20, height: 5)
+                                .transition(.opacity)
                         } else {
-                            Circle()
+                            Capsule()
                                 .fill(Color.clear)
-                                .frame(width: 5, height: 5)
+                                .frame(width: 20, height: 5)
                         }
 
                         Text(tab.label)
@@ -78,6 +80,7 @@ struct PillieTabBar: View {
                 }
             }
         )
+        .animation(PillieMotion.animation(for: .quick), value: selectedTab)
     }
 }
 
@@ -138,6 +141,7 @@ struct MainTabView: View {
                 withAnimation(tabTransitionAnimation) {
                     selectedTab = newTab
                 }
+                InteractionFeedback.live.perform(.tabChange)
                 ProductAnalyticsTelemetry.live.mainTabSelected(newTab.analyticsTab)
             }
         )
@@ -174,6 +178,7 @@ struct MainTabView: View {
         withAnimation(tabTransitionAnimation) {
             selectedTab = target
         }
+        InteractionFeedback.live.perform(.tabChange)
         ProductAnalyticsTelemetry.live.mainTabSelected(target.analyticsTab)
     }
 }

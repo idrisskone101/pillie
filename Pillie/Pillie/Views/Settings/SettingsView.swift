@@ -123,8 +123,9 @@ struct SettingsView: View {
                         .buttonStyle(.plain)
                         .sheet(isPresented: $showBlockingUpsell) {
                             PlusUpsellSheet.appBlocking()
-                            .presentationDetents([.medium])
+                            .presentationDetents([.height(330)])
                             .presentationDragIndicator(.hidden)
+                            .presentationBackground(PillieTheme.bg)
                         }
                     }
                 }
@@ -204,23 +205,27 @@ struct SettingsView: View {
         }
         .sheet(isPresented: $showTimeEditor) {
             ReminderTimeEditor(store: store)
-                .presentationDetents([.medium])
+                .presentationDetents([.height(320)])
                 .presentationDragIndicator(.hidden)
+                .presentationBackground(PillieTheme.bg)
         }
         .sheet(isPresented: $showIntervalEditor) {
             AutoReminderIntervalEditor(store: store)
-                .presentationDetents([.medium])
+                .presentationDetents([.height(440)])
                 .presentationDragIndicator(.hidden)
+                .presentationBackground(PillieTheme.bg)
         }
         .sheet(isPresented: $showRetryLimitEditor) {
             AutoReminderRetryLimitEditor(store: store)
-                .presentationDetents([.medium])
+                .presentationDetents([.height(500)])
                 .presentationDragIndicator(.hidden)
+                .presentationBackground(PillieTheme.bg)
         }
         .sheet(isPresented: $showRefillReminderEditor) {
             RefillReminderThresholdEditor(store: store)
-                .presentationDetents([.medium])
+                .presentationDetents([.height(410)])
                 .presentationDragIndicator(.hidden)
+                .presentationBackground(PillieTheme.bg)
         }
         .sheet(isPresented: $showProtocolEditor) {
             ProtocolEditor(store: store)
@@ -229,13 +234,15 @@ struct SettingsView: View {
         }
         .sheet(isPresented: $showCycleDayEditor) {
             CycleDayEditor(store: store)
-                .presentationDetents([.medium])
+                .presentationDetents([.height(320)])
                 .presentationDragIndicator(.hidden)
+                .presentationBackground(PillieTheme.bg)
         }
         .sheet(isPresented: $showBlockedAppsEditor) {
             BlockedAppsEditor()
-                .presentationDetents([.medium])
+                .presentationDetents([.height(430)])
                 .presentationDragIndicator(.hidden)
+                .presentationBackground(PillieTheme.bg)
         }
         .fullScreenCover(isPresented: $showPaywall) {
             PremiumPaywallView(
@@ -377,16 +384,7 @@ private struct ProtocolEditor: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            VStack(spacing: 24) {
-                Capsule()
-                    .fill(PillieTheme.sage)
-                    .frame(width: 36, height: 5)
-                    .padding(.top, 12)
-
-                Text("Edit Schedule")
-                    .font(.pillieSubtitleBold())
-                    .foregroundStyle(PillieTheme.textPrimary)
-            }
+            SettingsSheetHeader(title: "Edit Schedule")
 
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
@@ -586,16 +584,7 @@ private struct ReminderTimeEditor: View {
     @State private var selectedPeriod: Int = 0
 
     var body: some View {
-        VStack(spacing: 24) {
-            Capsule()
-                .fill(PillieTheme.sage)
-                .frame(width: 36, height: 5)
-                .padding(.top, 12)
-
-            Text("Change Reminder Time")
-                .font(.pillieSubtitleBold())
-                .foregroundStyle(PillieTheme.textPrimary)
-
+        SettingsSheetContainer(title: "Change Reminder Time", bottomPadding: 0) {
             HStack(spacing: 0) {
                 Picker("Hour", selection: $selectedHour) {
                     ForEach(1...12, id: \.self) { hour in
@@ -636,10 +625,7 @@ private struct ReminderTimeEditor: View {
             }
             .buttonStyle(.pillieDark)
             .padding(.horizontal, 28)
-
-            Spacer()
         }
-        .background(PillieTheme.bg.ignoresSafeArea())
         .onAppear { seedFromStore() }
     }
 
@@ -676,16 +662,7 @@ private struct AutoReminderIntervalEditor: View {
     @State private var selectedInterval: Int = 10
 
     var body: some View {
-        VStack(spacing: 24) {
-            Capsule()
-                .fill(PillieTheme.sage)
-                .frame(width: 36, height: 5)
-                .padding(.top, 12)
-
-            Text("Auto-Reminder Interval")
-                .font(.pillieSubtitleBold())
-                .foregroundStyle(PillieTheme.textPrimary)
-
+        SettingsSheetContainer(title: "Auto-Reminder Interval", bottomPadding: 0) {
             VStack(spacing: 16) {
                 ForEach(PillStore.autoReminderIntervalOptions, id: \.self) { option in
                     Button {
@@ -723,10 +700,7 @@ private struct AutoReminderIntervalEditor: View {
             }
             .buttonStyle(.pillieDark)
             .padding(.horizontal, 28)
-
-            Spacer()
         }
-        .background(PillieTheme.bg.ignoresSafeArea())
         .onAppear {
             selectedInterval = store.autoReminderIntervalMinutes
         }
@@ -742,16 +716,7 @@ private struct AutoReminderRetryLimitEditor: View {
     @State private var selectedLimit: Int = 3
 
     var body: some View {
-        VStack(spacing: 24) {
-            Capsule()
-                .fill(PillieTheme.sage)
-                .frame(width: 36, height: 5)
-                .padding(.top, 28)
-
-            Text("Auto-Reminder Retry Limit")
-                .font(.pillieSubtitleBold())
-                .foregroundStyle(PillieTheme.textPrimary)
-
+        SettingsSheetContainer(title: "Auto-Reminder Retry Limit", bottomPadding: 0) {
             VStack(spacing: 16) {
                 ForEach(PillStore.autoReminderRetryLimitOptions, id: \.self) { option in
                     Button {
@@ -789,10 +754,7 @@ private struct AutoReminderRetryLimitEditor: View {
             }
             .buttonStyle(.pillieDark)
             .padding(.horizontal, 28)
-
-            Spacer()
         }
-        .background(PillieTheme.bg.ignoresSafeArea())
         .onAppear {
             selectedLimit = store.autoReminderRetryLimit
         }
@@ -831,16 +793,7 @@ private struct RefillReminderThresholdEditor: View {
     }
 
     var body: some View {
-        VStack(spacing: 24) {
-            Capsule()
-                .fill(PillieTheme.sage)
-                .frame(width: 36, height: 5)
-                .padding(.top, 12)
-
-            Text(editorTitle)
-                .font(.pillieSubtitleBold())
-                .foregroundStyle(PillieTheme.textPrimary)
-
+        SettingsSheetContainer(title: editorTitle, bottomPadding: 0) {
             VStack(spacing: 16) {
                 ForEach(thresholdOptions, id: \.self) { option in
                     Button {
@@ -878,10 +831,7 @@ private struct RefillReminderThresholdEditor: View {
             }
             .buttonStyle(.pillieDark)
             .padding(.horizontal, 28)
-
-            Spacer()
         }
-        .background(PillieTheme.bg.ignoresSafeArea())
         .onAppear {
             selectedThreshold = isPatchMethod
                 ? store.patchRestockReminderThresholdPatches
@@ -910,16 +860,7 @@ private struct CycleDayEditor: View {
     }
 
     var body: some View {
-        VStack(spacing: 24) {
-            Capsule()
-                .fill(PillieTheme.sage)
-                .frame(width: 36, height: 5)
-                .padding(.top, 12)
-
-            Text("Current Cycle Day")
-                .font(.pillieSubtitleBold())
-                .foregroundStyle(PillieTheme.textPrimary)
-
+        SettingsSheetContainer(title: "Current Cycle Day", bottomPadding: 0) {
             Text("Day \(selectedCycleDay) of \(cycleLength)")
                 .font(.pillieHeadline())
                 .foregroundStyle(PillieTheme.textPrimary)
@@ -949,10 +890,7 @@ private struct CycleDayEditor: View {
             }
             .buttonStyle(.pillieDark)
             .padding(.horizontal, 28)
-
-            Spacer()
         }
-        .background(PillieTheme.bg.ignoresSafeArea())
         .onAppear {
             selectedCycleDay = store.currentDayIndex + 1
         }

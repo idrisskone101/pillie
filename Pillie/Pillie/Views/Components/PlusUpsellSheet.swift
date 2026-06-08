@@ -11,7 +11,7 @@ struct PlusUpsellSheet: View {
     static func appBlocking() -> PlusUpsellSheet {
         PlusUpsellSheet(
             featureName: "App Blocking",
-            featureDescription: "Lock distracting apps until you've taken your pill. Upgrade to Pillie+ to enable app blocking."
+            featureDescription: "Block distracting apps until your pill is logged."
         )
     }
     @State private var showPaywall = false
@@ -96,8 +96,9 @@ struct PlusUpsellSheet: View {
                 .disabled(isRestoring)
             }
 
-            Spacer()
+            PillieTheme.bg.frame(height: 16)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .background(PillieTheme.bg.ignoresSafeArea())
         .alert("No Subscription Found", isPresented: $showNoSubscriptionAlert) {
             Button("OK") { }
