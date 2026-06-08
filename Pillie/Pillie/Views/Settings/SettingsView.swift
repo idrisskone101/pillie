@@ -211,19 +211,19 @@ struct SettingsView: View {
         }
         .sheet(isPresented: $showIntervalEditor) {
             AutoReminderIntervalEditor(store: store)
-                .presentationDetents([.height(470)])
+                .presentationDetents([.height(440)])
                 .presentationDragIndicator(.hidden)
                 .presentationBackground(PillieTheme.bg)
         }
         .sheet(isPresented: $showRetryLimitEditor) {
             AutoReminderRetryLimitEditor(store: store)
-                .presentationDetents([.height(530)])
+                .presentationDetents([.height(500)])
                 .presentationDragIndicator(.hidden)
                 .presentationBackground(PillieTheme.bg)
         }
         .sheet(isPresented: $showRefillReminderEditor) {
             RefillReminderThresholdEditor(store: store)
-                .presentationDetents([.height(440)])
+                .presentationDetents([.height(410)])
                 .presentationDragIndicator(.hidden)
                 .presentationBackground(PillieTheme.bg)
         }
@@ -662,7 +662,7 @@ private struct AutoReminderIntervalEditor: View {
     @State private var selectedInterval: Int = 10
 
     var body: some View {
-        SettingsSheetContainer(title: "Auto-Reminder Interval") {
+        SettingsSheetContainer(title: "Auto-Reminder Interval", bottomPadding: 0) {
             VStack(spacing: 16) {
                 ForEach(PillStore.autoReminderIntervalOptions, id: \.self) { option in
                     Button {
@@ -716,7 +716,7 @@ private struct AutoReminderRetryLimitEditor: View {
     @State private var selectedLimit: Int = 3
 
     var body: some View {
-        SettingsSheetContainer(title: "Auto-Reminder Retry Limit") {
+        SettingsSheetContainer(title: "Auto-Reminder Retry Limit", bottomPadding: 0) {
             VStack(spacing: 16) {
                 ForEach(PillStore.autoReminderRetryLimitOptions, id: \.self) { option in
                     Button {
@@ -793,7 +793,7 @@ private struct RefillReminderThresholdEditor: View {
     }
 
     var body: some View {
-        SettingsSheetContainer(title: editorTitle) {
+        SettingsSheetContainer(title: editorTitle, bottomPadding: 0) {
             VStack(spacing: 16) {
                 ForEach(thresholdOptions, id: \.self) { option in
                     Button {
