@@ -123,7 +123,7 @@ struct SettingsView: View {
                         .buttonStyle(.plain)
                         .sheet(isPresented: $showBlockingUpsell) {
                             PlusUpsellSheet.appBlocking()
-                            .presentationDetents([.height(360)])
+                            .presentationDetents([.height(330)])
                             .presentationDragIndicator(.hidden)
                             .presentationBackground(PillieTheme.bg)
                         }
@@ -205,7 +205,7 @@ struct SettingsView: View {
         }
         .sheet(isPresented: $showTimeEditor) {
             ReminderTimeEditor(store: store)
-                .presentationDetents([.height(380)])
+                .presentationDetents([.height(340)])
                 .presentationDragIndicator(.hidden)
                 .presentationBackground(PillieTheme.bg)
         }
@@ -231,13 +231,13 @@ struct SettingsView: View {
         }
         .sheet(isPresented: $showCycleDayEditor) {
             CycleDayEditor(store: store)
-                .presentationDetents([.height(360)])
+                .presentationDetents([.height(340)])
                 .presentationDragIndicator(.hidden)
                 .presentationBackground(PillieTheme.bg)
         }
         .sheet(isPresented: $showBlockedAppsEditor) {
             BlockedAppsEditor()
-                .presentationDetents([.height(470)])
+                .presentationDetents([.height(430)])
                 .presentationDragIndicator(.hidden)
                 .presentationBackground(PillieTheme.bg)
         }
@@ -643,6 +643,7 @@ private struct ReminderTimeEditor: View {
 
             PillieTheme.bg.frame(height: 16)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .background(PillieTheme.bg.ignoresSafeArea())
         .onAppear { seedFromStore() }
     }
@@ -956,6 +957,7 @@ private struct CycleDayEditor: View {
 
             PillieTheme.bg.frame(height: 16)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .background(PillieTheme.bg.ignoresSafeArea())
         .onAppear {
             selectedCycleDay = store.currentDayIndex + 1

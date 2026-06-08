@@ -65,6 +65,7 @@ struct BlockedAppsEditor: View {
 
             PillieTheme.bg.frame(height: 16)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .background(PillieTheme.bg.ignoresSafeArea())
         .familyActivityPicker(
             isPresented: $showPicker,

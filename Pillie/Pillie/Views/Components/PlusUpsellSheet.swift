@@ -98,6 +98,7 @@ struct PlusUpsellSheet: View {
 
             PillieTheme.bg.frame(height: 16)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .background(PillieTheme.bg.ignoresSafeArea())
         .alert("No Subscription Found", isPresented: $showNoSubscriptionAlert) {
             Button("OK") { }
