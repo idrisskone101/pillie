@@ -676,6 +676,11 @@ struct PremiumPaywallView: View {
 
 private extension Error {
     var isCancelledPurchase: Bool {
+        if let purchaseError = self as? SubscriptionPurchaseError,
+           purchaseError == .userCancelled {
+            return true
+        }
+
         let nsError = self as NSError
         return nsError.domain == "RevenueCat.ErrorCode" && nsError.code == 1
     }

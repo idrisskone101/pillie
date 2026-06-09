@@ -9,11 +9,15 @@ import FamilyControls
 struct AppBlockingSetupContent {
     let badge: String
     let title: String
-    let titleAccent: String
     let plusSubtitle: String
     let lockedSubtitle: String
-    let privacyTitle: String
-    let privacyDetail: String
+    let privacyNote: String
+    let permissionTitle: String
+    let permissionDetail: String
+    let authorizedTitle: String
+    let authorizedDetail: String
+    let selectionTitle: String
+    let noSelectionDetail: String
     let lockedTitle: String
     let lockedDetail: String
 
@@ -21,24 +25,32 @@ struct AppBlockingSetupContent {
         [
             badge,
             title,
-            titleAccent,
             plusSubtitle,
             lockedSubtitle,
-            privacyTitle,
-            privacyDetail,
+            privacyNote,
+            permissionTitle,
+            permissionDetail,
+            authorizedTitle,
+            authorizedDetail,
+            selectionTitle,
+            noSelectionDetail,
             lockedTitle,
             lockedDetail
         ]
     }
 
     static let `default` = AppBlockingSetupContent(
-        badge: "Plus Routine Guard",
+        badge: "Pillie Plus",
         title: "App Blocking",
-        titleAccent: "Setup",
-        plusSubtitle: "Limit distracting apps until you've completed your daily routine. Pillie uses iOS Screen Time to keep you focused.",
+        plusSubtitle: "Choose the apps Pillie should pause after your reminder. iOS Screen Time handles the blocking.",
         lockedSubtitle: "App blocking is a Pillie Plus tool you can set up after upgrading.",
-        privacyTitle: "On-device privacy",
-        privacyDetail: "Your app selections stay on this device. Pillie never sees which apps you choose.",
+        privacyNote: "Your app choices stay on this device.",
+        permissionTitle: "Allow Screen Time",
+        permissionDetail: "Pillie needs permission before it can pause selected apps.",
+        authorizedTitle: "Screen Time connected",
+        authorizedDetail: "Choose the apps you want Pillie to pause.",
+        selectionTitle: "Apps to pause",
+        noSelectionDetail: "No apps selected yet.",
         lockedTitle: "Included with Pillie Plus",
         lockedDetail: "Your free plan still includes daily reminders and cycle tracking. You can upgrade from Settings when you want app blocking."
     )
@@ -76,21 +88,13 @@ struct AppBlockingSetupView: View {
                     .padding(.top, 28)
 
                 ScrollView(showsIndicators: false) {
-                    VStack(spacing: 24) {
+                    VStack(spacing: 22) {
                         titleSection
                             .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger2))
 
-                        infoBox
-                            .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger2))
-
                         if canSetUpBlocking {
-                            authorizationSection
+                            setupSection
                                 .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger3))
-
-                            if blockingManager.isAuthorized {
-                                selectionSection
-                                    .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger4))
-                            }
                         } else {
                             plusLockedSection
                                 .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger4))
@@ -104,7 +108,7 @@ struct AppBlockingSetupView: View {
                 footer
                     .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger4))
                     .padding(.horizontal, 28)
-                    .padding(.bottom, 34)
+                    .padding(.bottom, 18)
             }
         }
         .familyActivityPicker(
@@ -145,17 +149,15 @@ struct AppBlockingSetupView: View {
                 .textCase(.uppercase)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 7)
-                .background(.white, in: Capsule())
+                .background(PillieTheme.coralLight, in: Capsule())
                 .overlay {
                     Capsule()
                         .stroke(Color.black.opacity(0.06), lineWidth: 1)
                 }
 
-            (Text("\(content.title) ")
-                .foregroundStyle(PillieTheme.textPrimary)
-            + Text(content.titleAccent)
-                .foregroundStyle(PillieTheme.coral))
+            Text(content.title)
                 .font(.pillieHeadline())
+                .foregroundStyle(PillieTheme.textPrimary)
                 .multilineTextAlignment(.center)
 
             Text(canSetUpBlocking
@@ -165,32 +167,6 @@ struct AppBlockingSetupView: View {
                 .foregroundStyle(PillieTheme.textMuted)
                 .multilineTextAlignment(.center)
         }
-    }
-
-    // MARK: - Info Box
-
-    private var infoBox: some View {
-        HStack(spacing: 12) {
-            Image(systemName: "lock.shield.fill")
-                .font(.system(size: 20))
-                .foregroundStyle(PillieTheme.textMuted)
-
-            VStack(alignment: .leading, spacing: 3) {
-                Text(content.privacyTitle)
-                    .font(.pillieBodyBold())
-                    .foregroundStyle(PillieTheme.textPrimary)
-
-                Text(content.privacyDetail)
-                    .font(.pillieBody())
-                    .foregroundStyle(PillieTheme.textMuted)
-            }
-        }
-        .padding(16)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(
-            RoundedRectangle(cornerRadius: 20)
-                .fill(PillieTheme.lavender)
-        )
     }
 
     // MARK: - Plus Locked Section
@@ -222,102 +198,111 @@ struct AppBlockingSetupView: View {
         )
     }
 
-    // MARK: - Authorization Section
+    // MARK: - Setup Section
 
-    private var authorizationSection: some View {
-        Group {
-            if blockingManager.isAuthorized {
-                HStack(spacing: 10) {
-                    Image(systemName: "checkmark.circle.fill")
-                        .foregroundStyle(PillieTheme.coral)
-                    Text("Screen Time access granted")
+    private var setupSection: some View {
+        VStack(alignment: .leading, spacing: 18) {
+            HStack(alignment: .top, spacing: 14) {
+                Image(systemName: blockingManager.isAuthorized ? "checkmark.circle.fill" : "lock.shield.fill")
+                    .font(.system(size: 22, weight: .semibold))
+                    .foregroundStyle(PillieTheme.coral)
+                    .frame(width: 42, height: 42)
+                    .background(PillieTheme.coralLight, in: Circle())
+
+                VStack(alignment: .leading, spacing: 6) {
+                    Text(blockingManager.isAuthorized ? content.authorizedTitle : content.permissionTitle)
                         .font(.pillieBodySemibold())
                         .foregroundStyle(PillieTheme.textPrimary)
-                    Spacer()
+
+                    Text(blockingManager.isAuthorized ? content.authorizedDetail : content.permissionDetail)
+                        .font(.pillieBody())
+                        .foregroundStyle(PillieTheme.textMuted)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
-                .padding(16)
-                .background(
-                    RoundedRectangle(cornerRadius: PillieTheme.cardRadius)
-                        .fill(PillieTheme.coralLight)
-                )
+            }
+
+            privacyNote
+
+            if blockingManager.isAuthorized {
+                selectionControl
             } else {
-                VStack(spacing: 16) {
-                    VStack(spacing: 8) {
-                        Image(systemName: "hourglass")
-                            .font(.system(size: 32))
-                            .foregroundStyle(PillieTheme.coral)
-
-                        Text("Screen Time Permission")
-                            .font(.pillieBodyBold())
-                            .foregroundStyle(PillieTheme.textPrimary)
-
-                        Text("Pillie needs Screen Time access to block apps when your reminder fires.")
-                            .font(.pillieBody())
-                            .foregroundStyle(PillieTheme.textMuted)
-                            .multilineTextAlignment(.center)
-                    }
-
-                    Button {
-                        isRequestingAuth = true
-                        onboardingTelemetry.screenTimePermissionRequested()
-                        Task {
-                            await blockingManager.requestAuthorization()
-                            onboardingTelemetry.screenTimePermissionCompleted(isAuthorized: blockingManager.isAuthorized)
-                            isRequestingAuth = false
-                        }
-                    } label: {
-                        HStack(spacing: 8) {
-                            if isRequestingAuth {
-                                ProgressView()
-                                    .tint(.white)
-                            }
-                            Text("Allow Screen Time")
-                        }
-                    }
-                    .buttonStyle(.pillieDark)
-                    .disabled(isRequestingAuth)
-                }
-                .padding(20)
-                .background(
-                    RoundedRectangle(cornerRadius: PillieTheme.cardRadius)
-                        .fill(PillieTheme.cardWhite)
-                )
-                .overlay(
-                    RoundedRectangle(cornerRadius: PillieTheme.cardRadius)
-                        .stroke(PillieTheme.sage, lineWidth: 1)
-                )
+                allowScreenTimeButton
             }
         }
+        .padding(20)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(
+            RoundedRectangle(cornerRadius: PillieTheme.cardRadius)
+                .fill(PillieTheme.cardWhite)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: PillieTheme.cardRadius)
+                .stroke(PillieTheme.sageHalf, lineWidth: 1)
+        )
+        .shadow(color: PillieTheme.cardShadow, radius: PillieTheme.cardShadowRadius, y: PillieTheme.cardShadowY)
     }
 
-    // MARK: - Selection Section
+    private var privacyNote: some View {
+        HStack(spacing: 8) {
+            Image(systemName: "lock.fill")
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(PillieTheme.textMuted)
 
-    private var selectionSection: some View {
-        VStack(spacing: 16) {
-            // Selection summary
-            if blockingManager.hasAppsSelected {
-                let count = blockingManager.activitySelection.applicationTokens.count
-                    + blockingManager.activitySelection.categoryTokens.count
-                HStack(spacing: 10) {
-                    Image(systemName: "app.badge.checkmark")
-                        .foregroundStyle(PillieTheme.coral)
-                    Text("\(count) app\(count == 1 ? "" : "s")/categor\(count == 1 ? "y" : "ies") selected")
-                        .font(.pillieBodySemibold())
-                        .foregroundStyle(PillieTheme.textPrimary)
-                    Spacer()
+            Text(content.privacyNote)
+                .font(.pillie(14, weight: .medium))
+                .foregroundStyle(PillieTheme.textMuted)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .padding(.vertical, 10)
+        .padding(.horizontal, 12)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(PillieTheme.bg, in: RoundedRectangle(cornerRadius: 16))
+    }
+
+    private var allowScreenTimeButton: some View {
+        Button {
+            isRequestingAuth = true
+            onboardingTelemetry.screenTimePermissionRequested()
+            Task {
+                await blockingManager.requestAuthorization()
+                onboardingTelemetry.screenTimePermissionCompleted(isAuthorized: blockingManager.isAuthorized)
+                isRequestingAuth = false
+            }
+        } label: {
+            HStack(spacing: 8) {
+                if isRequestingAuth {
+                    ProgressView()
+                        .tint(.white)
                 }
-                .padding(16)
-                .background(
-                    RoundedRectangle(cornerRadius: PillieTheme.cardRadius)
-                        .fill(PillieTheme.cardWhite)
-                )
-                .overlay(
-                    RoundedRectangle(cornerRadius: PillieTheme.cardRadius)
-                        .stroke(PillieTheme.sageHalf, lineWidth: 1)
-                )
+                Text(content.permissionTitle)
+            }
+        }
+        .buttonStyle(.pillieDark)
+        .disabled(isRequestingAuth)
+    }
+
+    // MARK: - Selection Control
+
+    private var selectionControl: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(alignment: .firstTextBaseline, spacing: 8) {
+                Text(content.selectionTitle)
+                    .font(.pillieBodySemibold())
+                    .foregroundStyle(PillieTheme.textPrimary)
+
+                Spacer()
+
+                if blockingManager.hasAppsSelected {
+                    Text(selectionSummaryText)
+                        .font(.pillieBodySemibold())
+                        .foregroundStyle(PillieTheme.coral)
+                }
             }
 
-            // Choose apps button
+            Text(blockingManager.hasAppsSelected ? "You can change this anytime from Settings." : content.noSelectionDetail)
+                .font(.pillie(14, weight: .medium))
+                .foregroundStyle(PillieTheme.textMuted)
+
             Button {
                 showPicker = true
             } label: {
@@ -339,32 +324,41 @@ struct AppBlockingSetupView: View {
         }
     }
 
+    private var selectionSummaryText: String {
+        let count = blockingManager.activitySelection.applicationTokens.count
+            + blockingManager.activitySelection.categoryTokens.count
+        return "\(count) selected"
+    }
+
     // MARK: - Footer
 
     private var footer: some View {
-        VStack(spacing: 4) {
+        VStack(spacing: 0) {
             if canSetUpBlocking {
-                Button {
-                    blockingManager.saveSelectionAndReconcile(routine: appBlockingRoutine)
-                    ProductAnalyticsTelemetry.live.onboardingBlockedAppsSaved(
-                        hasSelection: blockingManager.hasAppsSelected
-                    )
-                    onContinue()
-                } label: {
-                    HStack(spacing: 8) {
-                        Image(systemName: "lock.fill")
-                        Text("Enable Blocking & Finish")
+                if blockingManager.isAuthorized {
+                    Button {
+                        blockingManager.saveSelectionAndReconcile(routine: appBlockingRoutine)
+                        ProductAnalyticsTelemetry.live.onboardingBlockedAppsSaved(
+                            hasSelection: blockingManager.hasAppsSelected
+                        )
+                        onContinue()
+                    } label: {
+                        Text("Finish Setup")
                     }
+                    .buttonStyle(.pillieDark)
                 }
-                .buttonStyle(.pillieDark)
-                .disabled(!blockingManager.isAuthorized)
 
                 Button {
                     onSkip()
                 } label: {
                     Text("Skip for now")
+                        .font(.pillie(16, weight: .medium))
+                        .foregroundStyle(PillieTheme.textMuted)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 42)
+                        .contentShape(Rectangle())
                 }
-                .buttonStyle(.pillieSecondary)
+                .buttonStyle(.plain)
             } else {
                 Button {
                     onContinue()

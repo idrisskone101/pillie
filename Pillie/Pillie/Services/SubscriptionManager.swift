@@ -6,6 +6,20 @@
 import Foundation
 import RevenueCat
 
+enum SubscriptionPurchaseError: Error, Equatable, LocalizedError {
+    case userCancelled
+    case missingPlusEntitlement
+
+    var errorDescription: String? {
+        switch self {
+        case .userCancelled:
+            return "Purchase cancelled."
+        case .missingPlusEntitlement:
+            return "The purchase finished, but Pillie Plus was not activated. Please try again or restore purchases."
+        }
+    }
+}
+
 @Observable
 final class SubscriptionManager: NSObject {
     static let shared = SubscriptionManager()
@@ -48,7 +62,10 @@ final class SubscriptionManager: NSObject {
         defer { isLoading = false }
 
         let result = try await Purchases.shared.purchase(package: package)
-        isPlus = result.customerInfo.entitlements[Self.entitlementID]?.isActive == true
+        try applyPurchaseResult(
+            userCancelled: result.userCancelled,
+            isPlusEntitlementActive: result.customerInfo.entitlements[Self.entitlementID]?.isActive == true
+        )
     }
 
     // MARK: - Restore
@@ -79,6 +96,19 @@ final class SubscriptionManager: NSObject {
         self.isPlus = isPlus
     }
     #endif
+
+    func applyPurchaseResult(userCancelled: Bool, isPlusEntitlementActive: Bool) throws {
+        if userCancelled {
+            throw SubscriptionPurchaseError.userCancelled
+        }
+
+        guard isPlusEntitlementActive else {
+            isPlus = false
+            throw SubscriptionPurchaseError.missingPlusEntitlement
+        }
+
+        isPlus = true
+    }
 }
 
 // MARK: - PurchasesDelegate
