@@ -17,6 +17,7 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_DIR="$SCRIPT_DIR/.."
 REPO_ROOT="$(cd "$PROJECT_DIR/.." && pwd)"
 REPO_NAME="$(basename "$REPO_ROOT")"
+. "$SCRIPT_DIR/xcode-env.sh"
 
 safe_name() {
   printf "%s" "$1" | tr -cs '[:alnum:]_.-' '-' | sed 's/^-//; s/-$//'
@@ -79,6 +80,9 @@ done
 build() {
   echo "▸ Building $SCHEME..."
   echo "▸ DerivedData: $DERIVED_DATA"
+  if [[ -n "${DEVELOPER_DIR:-}" ]]; then
+    echo "▸ DeveloperDir: $DEVELOPER_DIR"
+  fi
   cd "$PROJECT_DIR"
   xcodebuild \
     -project "$PROJECT" \
@@ -106,6 +110,7 @@ launch_app() {
 }
 
 if [[ "$BUILD" == "1" ]]; then
+  pillie_select_developer_dir
   build
 fi
 

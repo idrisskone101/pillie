@@ -50,6 +50,6 @@ DerivedData for this worktree:
 Build, install, and launch:
   cd "$WORKTREE_PATH" && PILLIE_DERIVED_DATA="$DERIVED_DATA" Pillie/scripts/build-and-run.sh
 
-Open in Xcode:
-  open "$WORKTREE_PATH/Pillie/Pillie.xcodeproj"
+Open in Xcode 27:
+  cd "$WORKTREE_PATH" && Pillie/scripts/open-xcode.sh
 EOF

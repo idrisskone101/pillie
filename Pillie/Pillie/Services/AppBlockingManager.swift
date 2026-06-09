@@ -109,7 +109,7 @@ final class AppBlockingManager {
         authorizationStatus = .approved
         #else
         switch AuthorizationCenter.shared.authorizationStatus {
-        case .approved:
+        case .approved, .approvedWithDataAccess:
             isAuthorized = true
             authorizationStatus = .approved
         case .denied:

@@ -3,6 +3,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+. "${SCRIPT_DIR}/xcode-env.sh"
 
 ASC_APP_ID="${ASC_APP_ID:-6759352439}"
 ASC_VERSION_ID="${ASC_VERSION_ID:-d5695869-040a-47e6-95ea-cdd7c103a5ef}"
@@ -21,7 +22,7 @@ PLAN_PATH="${PLAN_PATH:-${REPO_ROOT}/.asc/screenshots.json}"
 RAW_DIR="${RAW_DIR:-${REPO_ROOT}/screenshots/raw}"
 FRAMED_DIR="${FRAMED_DIR:-${REPO_ROOT}/screenshots/framed}"
 REVIEW_DIR="${REVIEW_DIR:-${REPO_ROOT}/screenshots/review}"
-DERIVED_DATA_PATH="${DERIVED_DATA_PATH:-${REPO_ROOT}/build/appstore-screenshots-derived-data}"
+DERIVED_DATA_PATH="${DERIVED_DATA_PATH:-/tmp/PillieDerivedData-appstore-screenshots}"
 
 APP_DISPLAY_TYPE="APP_${DISPLAY_TYPE#APP_}"
 
@@ -98,6 +99,10 @@ install_koubou_if_missing_or_wrong_version() {
 }
 
 bootstrap_dependencies() {
+  pillie_select_developer_dir
+  if [[ -n "${DEVELOPER_DIR:-}" ]]; then
+    log "DeveloperDir: ${DEVELOPER_DIR}"
+  fi
   require_command asc
   require_command jq
   require_command xcrun

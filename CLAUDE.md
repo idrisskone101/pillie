@@ -11,11 +11,17 @@
 | DerivedData path    | `/tmp/PillieDerivedData` (outside project to avoid iCloud xattr issues) |
 | Built app path      | `/tmp/PillieDerivedData/Build/Products/Debug-iphonesimulator/Pillie.app` |
 | Build script        | `Pillie/scripts/build-and-run.sh`                            |
+| Open Xcode script   | `Pillie/scripts/open-xcode.sh`                               |
+
+Pillie scripts source `Pillie/scripts/xcode-env.sh` and prefer Xcode 27 at `/Users/idrisskone/Downloads/Xcode-beta.app/Contents/Developer`. Override with `PILLIE_DEVELOPER_DIR=/path/to/Xcode.app/Contents/Developer` only when intentionally using a different Xcode.
+
+When building from Xcode.app, use an iOS destination such as `iPhone 17 Pro`, not `My Mac (arm64e)`. `My Mac` is incompatible with the Pillie iOS app and can produce misleading Swift diagnostics.
 
 ## Golden Build Command
 
 ```bash
-cd Pillie && xcodebuild \
+cd Pillie && \
+DEVELOPER_DIR=/Users/idrisskone/Downloads/Xcode-beta.app/Contents/Developer xcodebuild \
   -project Pillie.xcodeproj \
   -scheme Pillie \
   -sdk iphonesimulator \

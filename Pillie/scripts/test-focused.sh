@@ -16,6 +16,7 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_DIR="$SCRIPT_DIR/.."
 REPO_ROOT="$(cd "$PROJECT_DIR/.." && pwd)"
 REPO_NAME="$(basename "$REPO_ROOT")"
+. "$SCRIPT_DIR/xcode-env.sh"
 
 usage() {
   cat <<'USAGE'
@@ -74,6 +75,10 @@ done
 echo "> Running focused Pillie tests..."
 echo "> DerivedData: $DERIVED_DATA"
 echo "> Simulator: $UDID"
+pillie_select_developer_dir
+if [[ -n "${DEVELOPER_DIR:-}" ]]; then
+  echo "> DeveloperDir: $DEVELOPER_DIR"
+fi
 for test_identifier in "$@"; do
   echo "> Test: $(normalize_test_identifier "$test_identifier")"
 done

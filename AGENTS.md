@@ -33,6 +33,7 @@ Own the technical execution of Pillie: build features, fix bugs, and maintain a 
 | MCP build script | `Pillie/scripts/mcp-build-and-run.sh` |
 | Shell build script | `Pillie/scripts/build-and-run.sh` |
 | MCP focused test script | `Pillie/scripts/mcp-test-focused.sh` |
+| Open Xcode script | `Pillie/scripts/open-xcode.sh` |
 | Simulator browser script | `Pillie/scripts/serve-simulator-browser.sh` |
 | Simulator AX/browser mapper | `Pillie/scripts/simulator-browser-ax-map.mjs` |
 | Worktree script | `Pillie/scripts/create-worktree.sh` |
@@ -87,7 +88,16 @@ Pillie/scripts/mcp-build-and-run.sh
 Pillie/scripts/mcp-test-focused.sh SoftPaywallContentTests
 ```
 
-During the Xcode 27 transition, the MCP wrappers auto-select `/Users/idrisskone/Downloads/Xcode-beta.app/Contents/Developer` when the globally selected Xcode is older. Override that with `PILLIE_DEVELOPER_DIR=/path/to/Xcode.app/Contents/Developer` when needed.
+During the Xcode 27 transition, Pillie scripts source `Pillie/scripts/xcode-env.sh` and auto-select `/Users/idrisskone/Downloads/Xcode-beta.app/Contents/Developer` when the globally selected Xcode is older. Override that with `PILLIE_DEVELOPER_DIR=/path/to/Xcode.app/Contents/Developer` when needed.
+
+Open the project in the validated Xcode 27 app with:
+
+```bash
+cd /Users/idrisskone/Developer/Pillie
+Pillie/scripts/open-xcode.sh
+```
+
+When building from Xcode.app, the toolbar destination must be an iOS simulator such as `iPhone 17 Pro`, not `My Mac (arm64e)`. `My Mac` is an incompatible macOS destination for the Pillie iOS app and can surface misleading Swift diagnostics such as `Cannot find 'PillStore' in scope` or `Cannot find 'PillieTheme' in scope`.
 
 Use AXe as the precision/fallback layer when MCP UI automation is missing a gesture, when the accessibility tree is the source of truth, when Codex Browser simulator annotations drift, or when coordinate mapping through the browser mirror is needed. Do not use AXe as the first choice for routine build, run, test, screenshot, or log capture.
 
@@ -96,7 +106,8 @@ Hosted XCTest is expensive regardless of whether it is invoked through MCP or ra
 ## Golden Build Command
 
 ```bash
-cd /Users/idrisskone/Developer/Pillie/Pillie && xcodebuild \
+cd /Users/idrisskone/Developer/Pillie/Pillie && \
+DEVELOPER_DIR=/Users/idrisskone/Downloads/Xcode-beta.app/Contents/Developer xcodebuild \
   -project Pillie.xcodeproj \
   -scheme Pillie \
   -sdk iphonesimulator \

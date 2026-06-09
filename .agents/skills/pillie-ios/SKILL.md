@@ -19,6 +19,7 @@ Use this skill whenever the task touches the Pillie iOS app, Xcode project, simu
 - MCP build script: `Pillie/scripts/mcp-build-and-run.sh`
 - Shell build script: `Pillie/scripts/build-and-run.sh`
 - MCP focused test script: `Pillie/scripts/mcp-test-focused.sh`
+- Open Xcode script: `Pillie/scripts/open-xcode.sh`
 - Simulator browser script: `Pillie/scripts/serve-simulator-browser.sh`
 - Simulator AX/browser mapper: `Pillie/scripts/simulator-browser-ax-map.mjs`
 - Worktree helper: `Pillie/scripts/create-worktree.sh`
@@ -62,7 +63,16 @@ The simulator install is shared by bundle ID (`com.idrisskone.pillie`). Running 
 
 Prefer XcodeBuildMCP/Xcode tooling when available. Use the repo-local MCP wrapper scripts first because they preserve Pillie's pinned simulator and `/tmp` DerivedData rules across Codex sessions. If MCP tooling is unavailable or insufficient, use the shell fallback commands below.
 
-During the Xcode 27 transition, the MCP wrappers auto-select `/Users/idrisskone/Downloads/Xcode-beta.app/Contents/Developer` when the globally selected Xcode is older. Override that with `PILLIE_DEVELOPER_DIR=/path/to/Xcode.app/Contents/Developer` when needed.
+During the Xcode 27 transition, Pillie scripts source `Pillie/scripts/xcode-env.sh` and auto-select `/Users/idrisskone/Downloads/Xcode-beta.app/Contents/Developer` when the globally selected Xcode is older. Override that with `PILLIE_DEVELOPER_DIR=/path/to/Xcode.app/Contents/Developer` when needed.
+
+Open the project in the validated Xcode 27 app with:
+
+```bash
+cd /Users/idrisskone/Developer/Pillie
+Pillie/scripts/open-xcode.sh
+```
+
+When building from Xcode.app, the toolbar destination must be an iOS simulator such as `iPhone 17 Pro`, not `My Mac (arm64e)`. `My Mac` is an incompatible macOS destination for the Pillie iOS app and can surface misleading Swift diagnostics such as `Cannot find 'PillStore' in scope` or `Cannot find 'PillieTheme' in scope`.
 
 For simulator UI verification, prefer MCP UI automation with accessibility identifiers and labels. Use AXe as the precision/fallback layer when MCP is missing a gesture, when the accessibility tree is the source of truth, when Codex Browser simulator annotations drift, or when coordinate mapping through the browser mirror is needed. Coordinate taps are acceptable after taking a 1x screenshot and verifying point coordinates.
 
@@ -73,7 +83,8 @@ Hosted XCTest is expensive regardless of whether it is invoked through MCP or ra
 Golden build command:
 
 ```bash
-cd /Users/idrisskone/Developer/Pillie/Pillie && xcodebuild \
+cd /Users/idrisskone/Developer/Pillie/Pillie && \
+DEVELOPER_DIR=/Users/idrisskone/Downloads/Xcode-beta.app/Contents/Developer xcodebuild \
   -project Pillie.xcodeproj \
   -scheme Pillie \
   -sdk iphonesimulator \

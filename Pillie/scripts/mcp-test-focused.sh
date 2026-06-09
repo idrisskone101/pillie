@@ -16,26 +16,7 @@ PROJECT_DIR="$SCRIPT_DIR/.."
 REPO_ROOT="$(cd "$PROJECT_DIR/.." && pwd)"
 REPO_NAME="$(basename "$REPO_ROOT")"
 PROJECT_PATH="$PROJECT_DIR/Pillie.xcodeproj"
-
-select_developer_dir() {
-  if [[ -n "${PILLIE_DEVELOPER_DIR:-}" ]]; then
-    export DEVELOPER_DIR="$PILLIE_DEVELOPER_DIR"
-    return
-  fi
-
-  if [[ -n "${DEVELOPER_DIR:-}" ]]; then
-    return
-  fi
-
-  local xcode_beta="/Users/idrisskone/Downloads/Xcode-beta.app/Contents/Developer"
-  if [[ -d "$xcode_beta" ]]; then
-    local selected_version
-    selected_version="$(xcodebuild -version 2>/dev/null | sed -n '1s/^Xcode //p')"
-    if [[ "$selected_version" != 27* ]]; then
-      export DEVELOPER_DIR="$xcode_beta"
-    fi
-  fi
-}
+. "$SCRIPT_DIR/xcode-env.sh"
 
 usage() {
   cat <<'USAGE'
@@ -76,7 +57,7 @@ if [[ $# -eq 0 || "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
   exit 0
 fi
 
-select_developer_dir
+pillie_select_developer_dir
 
 if ! command -v xcodebuildmcp >/dev/null 2>&1; then
   echo "xcodebuildmcp is not installed or not on PATH." >&2
