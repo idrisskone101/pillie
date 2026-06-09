@@ -66,6 +66,25 @@ enum OnboardingFlow {
     static let paywallStep: Step = .paywall
     static let finalOnboardingStep: Step = .appBlocking
     static let completedStep: Step = .complete
+    static let displayOrder: [Step] = [
+        .welcome,
+        .productDemo,
+        .plusBlockingDemo,
+        .analyticsConsent,
+        .reviewPrompt,
+        .painPoints,
+        .goal,
+        .missFrequency,
+        .acquisitionSource,
+        .method,
+        .schedule,
+        .reminderTime,
+        .reminderPlan,
+        .paywall,
+        .freePlanConfirmation,
+        .appBlocking,
+        .complete,
+    ]
 
     static func step(for rawValue: Int) -> Step? {
         Step(rawValue: rawValue)
@@ -101,9 +120,18 @@ enum OnboardingFlow {
         return Transition(
             from: previousStep,
             to: nextStep,
-            direction: nextStep.rawValue > previousStep.rawValue ? .forward : .backward,
+            direction: transitionDirection(from: previousStep, to: nextStep),
             completedAnalyticsStep: previousStep.analyticsStep,
             completesOnboarding: completedOnboarding(from: previousRawStep, to: nextRawStep)
         )
+    }
+
+    private static func transitionDirection(from previousStep: Step, to nextStep: Step) -> TransitionDirection {
+        guard let previousIndex = displayOrder.firstIndex(of: previousStep),
+              let nextIndex = displayOrder.firstIndex(of: nextStep) else {
+            return nextStep.rawValue > previousStep.rawValue ? .forward : .backward
+        }
+
+        return nextIndex > previousIndex ? .forward : .backward
     }
 }

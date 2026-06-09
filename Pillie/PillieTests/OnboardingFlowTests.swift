@@ -23,6 +23,13 @@ final class OnboardingFlowTests: XCTestCase {
         XCTAssertEqual(OnboardingFlow.Step.complete.rawValue, 16)
     }
 
+    func testDisplayOrderPlacesAnalyticsConsentImmediatelyBeforeReviewPrompt() {
+        XCTAssertEqual(
+            Array(OnboardingFlow.displayOrder.prefix(5)),
+            [.welcome, .productDemo, .plusBlockingDemo, .analyticsConsent, .reviewPrompt]
+        )
+    }
+
     func testPlusUsersRouteFromPaywallToAppBlockingSetup() {
         XCTAssertEqual(
             OnboardingFlow.nextStepAfterPaywall(isPlus: true, selectedFreePlan: false),
@@ -117,5 +124,25 @@ final class OnboardingFlowTests: XCTestCase {
             )
         )
         XCTAssertTrue(complete.completesOnboarding)
+    }
+
+    func testMovedAnalyticsConsentStillCountsAsForwardNavigation() throws {
+        let toAnalyticsConsent = try XCTUnwrap(
+            OnboardingFlow.transition(
+                from: OnboardingFlow.Step.plusBlockingDemo.rawValue,
+                to: OnboardingFlow.Step.analyticsConsent.rawValue
+            )
+        )
+        XCTAssertEqual(toAnalyticsConsent.direction, .forward)
+        XCTAssertEqual(toAnalyticsConsent.completedAnalyticsStep, .plusBlockingDemo)
+
+        let toReviewPrompt = try XCTUnwrap(
+            OnboardingFlow.transition(
+                from: OnboardingFlow.Step.analyticsConsent.rawValue,
+                to: OnboardingFlow.Step.reviewPrompt.rawValue
+            )
+        )
+        XCTAssertEqual(toReviewPrompt.direction, .forward)
+        XCTAssertEqual(toReviewPrompt.completedAnalyticsStep, .analyticsConsent)
     }
 }

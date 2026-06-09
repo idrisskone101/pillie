@@ -24,7 +24,7 @@ struct ContentView: View {
 	        switch OnboardingFlow.step(for: onboardingStep) {
 	        case .welcome:
 	          WelcomeView {
-              continueDemoMoment(to: .analyticsConsent)
+              continueDemoMoment(to: .productDemo)
 	          }
           .transition(
             .asymmetric(
@@ -36,11 +36,11 @@ struct ContentView: View {
 	          AnalyticsConsentView(
 	            onAllow: {
 	              AnalyticsManager.shared.setAnalyticsEnabled(true)
-                continueDemoMoment(to: .productDemo)
+                continueDemoMoment(to: .reviewPrompt)
 	            },
 	            onDecline: {
 	              AnalyticsManager.shared.setAnalyticsEnabled(false)
-                continueDemoMoment(to: .productDemo)
+                continueDemoMoment(to: .reviewPrompt)
 	            }
           )
           .transition(
@@ -64,7 +64,7 @@ struct ContentView: View {
 	        case .plusBlockingDemo:
 	          PlusBlockingDemoView(
 	            onContinue: {
-                continueDemoMoment(to: .reviewPrompt)
+                continueDemoMoment(to: .analyticsConsent)
 	            }
           )
           .transition(
