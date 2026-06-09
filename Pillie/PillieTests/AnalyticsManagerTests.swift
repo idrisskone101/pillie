@@ -251,6 +251,20 @@ final class AnalyticsManagerTests: XCTestCase {
     XCTAssertEqual(recorder.hasBlockingSelectionValues, [false, true, true, nil, nil, nil])
   }
 
+  func testProductAnalyticsTelemetryDoesNotAddMotionHapticOrAnimationEvents() {
+    let disallowedEventTerms = ["animation", "feedback", "haptic", "motion"]
+    let eventNames = AnalyticsEvent.allCases.map(\.rawValue)
+
+    for eventName in eventNames {
+      for term in disallowedEventTerms {
+        XCTAssertFalse(
+          eventName.contains(term),
+          "\(eventName) should not be captured as Product Analytics Telemetry"
+        )
+      }
+    }
+  }
+
   func testOptOutStopsFutureCaptureAndCanOptBackIn() {
     let client = RecordingAnalyticsClient()
     let manager = makeManager(client: client, token: "phc_test_token")

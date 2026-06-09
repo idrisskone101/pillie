@@ -99,7 +99,7 @@ protocol AnalyticsTracking {
   )
 }
 
-enum AnalyticsEvent: String {
+enum AnalyticsEvent: String, CaseIterable {
   case appLaunched = "app_launched"
   case appBecameActive = "app_became_active"
   case onboardingStarted = "onboarding_started"
