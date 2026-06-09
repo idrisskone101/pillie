@@ -16,7 +16,9 @@ Use this skill whenever the task touches the Pillie iOS app, Xcode project, simu
 - Simulator UDID: `124DC75F-0771-4C81-841D-F13655138260` (iPhone 17 Pro, iOS 26.2)
 - DerivedData: `/tmp/PillieDerivedData` in the main checkout; `/tmp/PillieDerivedData-<worktree>` in feature worktrees
 - Built app: `<DerivedData>/Build/Products/Debug-iphonesimulator/Pillie.app`
-- Helper script: `Pillie/scripts/build-and-run.sh`
+- MCP build script: `Pillie/scripts/mcp-build-and-run.sh`
+- Shell build script: `Pillie/scripts/build-and-run.sh`
+- MCP focused test script: `Pillie/scripts/mcp-test-focused.sh`
 - Simulator browser script: `Pillie/scripts/serve-simulator-browser.sh`
 - Simulator AX/browser mapper: `Pillie/scripts/simulator-browser-ax-map.mjs`
 - Worktree helper: `Pillie/scripts/create-worktree.sh`
@@ -48,19 +50,23 @@ Pillie/scripts/create-worktree.sh codex/<feature-name>
 
 The helper creates or reuses the branch, creates the sibling worktree, and prints the matching `/tmp/PillieDerivedData-<worktree>` build path. Use the helper by default for new Codex worktrees.
 
-The build script auto-selects `/tmp/PillieDerivedData` for the main checkout and `/tmp/PillieDerivedData-<worktree-folder>` for sibling worktrees. Override it explicitly when needed:
+The MCP and shell build scripts auto-select `/tmp/PillieDerivedData` for the main checkout and `/tmp/PillieDerivedData-<worktree-folder>` for sibling worktrees. Override it explicitly when needed:
 
 ```bash
-PILLIE_DERIVED_DATA=/tmp/PillieDerivedData-refill Pillie/scripts/build-and-run.sh
+PILLIE_DERIVED_DATA=/tmp/PillieDerivedData-refill Pillie/scripts/mcp-build-and-run.sh
 ```
 
 The simulator install is shared by bundle ID (`com.idrisskone.pillie`). Running one worktree replaces the app installed from another worktree unless using different simulators or bundle IDs.
 
 ## Tool Preference
 
-Prefer XcodeBuildMCP/Xcode tooling when available. Start by checking current XcodeBuildMCP defaults, then set project, scheme, simulator, and destination if needed. If MCP tooling is unavailable or insufficient, use the shell commands below.
+Prefer XcodeBuildMCP/Xcode tooling when available. Use the repo-local MCP wrapper scripts first because they preserve Pillie's pinned simulator and `/tmp` DerivedData rules across Codex sessions. If MCP tooling is unavailable or insufficient, use the shell fallback commands below.
 
-For simulator UI verification, prefer accessibility identifiers and labels. Coordinate taps are acceptable after taking a 1x screenshot and verifying point coordinates.
+During the Xcode 27 transition, the MCP wrappers auto-select `/Users/idrisskone/Downloads/Xcode-beta.app/Contents/Developer` when the globally selected Xcode is older. Override that with `PILLIE_DEVELOPER_DIR=/path/to/Xcode.app/Contents/Developer` when needed.
+
+For simulator UI verification, prefer MCP UI automation with accessibility identifiers and labels. Use AXe as the precision/fallback layer when MCP is missing a gesture, when the accessibility tree is the source of truth, when Codex Browser simulator annotations drift, or when coordinate mapping through the browser mirror is needed. Coordinate taps are acceptable after taking a 1x screenshot and verifying point coordinates.
+
+Hosted XCTest is expensive regardless of whether it is invoked through MCP or raw `xcodebuild`: `PillieTests` loads inside `Pillie.app` on the simulator. Prefer compile/build proof plus simulator UI proof when app-hosted XCTest is unstable, and reserve hosted tests for explicit focused classes or methods.
 
 ## Build
 
@@ -77,7 +83,13 @@ cd /Users/idrisskone/Developer/Pillie/Pillie && xcodebuild \
   build 2>&1 | xcsift
 ```
 
-Build, install, and launch in one step:
+MCP build, install, and launch in one step:
+
+```bash
+cd /Users/idrisskone/Developer/Pillie && Pillie/scripts/mcp-build-and-run.sh
+```
+
+Shell fallback build, install, and launch in one step:
 
 ```bash
 cd /Users/idrisskone/Developer/Pillie && Pillie/scripts/build-and-run.sh
@@ -102,7 +114,13 @@ Pillie/scripts/simulator-browser-ax-map.mjs --filter "Upgrade" --frame 326,121.8
 
 The `--frame` argument is the simulator mirror frame from `getBoundingClientRect()` in `left,top,width,height` form. Omit it for simulator-point frames only, or use `--json` for structured output.
 
-Run focused tests only:
+Run focused tests only through MCP:
+
+```bash
+cd /Users/idrisskone/Developer/Pillie && Pillie/scripts/mcp-test-focused.sh SoftPaywallContentTests
+```
+
+Shell fallback focused tests:
 
 ```bash
 cd /Users/idrisskone/Developer/Pillie && Pillie/scripts/test-focused.sh SoftPaywallContentTests

@@ -7,6 +7,8 @@ script = '''
 set -euo pipefail
 
 chmod +x Pillie/scripts/build-and-run.sh
+chmod +x Pillie/scripts/mcp-build-and-run.sh 2>/dev/null || true
+chmod +x Pillie/scripts/mcp-test-focused.sh 2>/dev/null || true
 chmod +x Pillie/scripts/create-worktree.sh 2>/dev/null || true
 chmod +x Pillie/scripts/serve-simulator-browser.sh 2>/dev/null || true
 
@@ -25,17 +27,28 @@ fi
 
 echo "Pillie worktree ready."
 echo "DerivedData: $DERIVED_DATA"
-echo "Build: Pillie/scripts/build-and-run.sh --build-only"
-echo "Run: Pillie/scripts/build-and-run.sh"
+echo "MCP Build: Pillie/scripts/mcp-build-and-run.sh --build-only"
+echo "MCP Run: Pillie/scripts/mcp-build-and-run.sh"
+echo "MCP Focused Test: Pillie/scripts/mcp-test-focused.sh <TestClassOrMethod>"
 '''
 
 [[actions]]
-name = "Build"
+name = "MCP Build"
+icon = "test"
+command = "Pillie/scripts/mcp-build-and-run.sh --build-only"
+
+[[actions]]
+name = "MCP Build and Run"
+icon = "run"
+command = "Pillie/scripts/mcp-build-and-run.sh"
+
+[[actions]]
+name = "Shell Build"
 icon = "test"
 command = "Pillie/scripts/build-and-run.sh --build-only"
 
 [[actions]]
-name = "Build and Run"
+name = "Shell Build and Run"
 icon = "run"
 command = "Pillie/scripts/build-and-run.sh"
 

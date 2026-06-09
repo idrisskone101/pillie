@@ -30,7 +30,9 @@ Own the technical execution of Pillie: build features, fix bugs, and maintain a 
 | Simulator UDID | `124DC75F-0771-4C81-841D-F13655138260` (iPhone 17 Pro, iOS 26.2) |
 | DerivedData path | `/tmp/PillieDerivedData` in the main checkout; `/tmp/PillieDerivedData-<worktree>` in feature worktrees |
 | Built app path | `<DerivedData>/Build/Products/Debug-iphonesimulator/Pillie.app` |
-| Build script | `Pillie/scripts/build-and-run.sh` |
+| MCP build script | `Pillie/scripts/mcp-build-and-run.sh` |
+| Shell build script | `Pillie/scripts/build-and-run.sh` |
+| MCP focused test script | `Pillie/scripts/mcp-test-focused.sh` |
 | Simulator browser script | `Pillie/scripts/serve-simulator-browser.sh` |
 | Simulator AX/browser mapper | `Pillie/scripts/simulator-browser-ax-map.mjs` |
 | Worktree script | `Pillie/scripts/create-worktree.sh` |
@@ -70,9 +72,26 @@ cd ../Pillie-<feature-name>
 PILLIE_DERIVED_DATA=/tmp/PillieDerivedData-Pillie-<feature-name> Pillie/scripts/build-and-run.sh
 ```
 
-The build script also auto-selects `/tmp/PillieDerivedData-<worktree-folder>` when the repo folder is not named `Pillie`. Override with `PILLIE_DERIVED_DATA` when needed.
+The MCP and shell build scripts also auto-select `/tmp/PillieDerivedData-<worktree-folder>` when the repo folder is not named `Pillie`. Override with `PILLIE_DERIVED_DATA` when needed.
 
 The simulator install is shared by bundle ID (`com.idrisskone.pillie`). Running one worktree replaces the app installed from another worktree unless you use different simulators or bundle IDs.
+
+## Execution Layer
+
+Default to XcodeBuildMCP for build, run, focused test, logs, screenshots, and ordinary UI automation. Use the Pillie MCP wrapper scripts so every session keeps the pinned simulator and `/tmp` DerivedData rules:
+
+```bash
+cd /Users/idrisskone/Developer/Pillie
+Pillie/scripts/mcp-build-and-run.sh --build-only
+Pillie/scripts/mcp-build-and-run.sh
+Pillie/scripts/mcp-test-focused.sh SoftPaywallContentTests
+```
+
+During the Xcode 27 transition, the MCP wrappers auto-select `/Users/idrisskone/Downloads/Xcode-beta.app/Contents/Developer` when the globally selected Xcode is older. Override that with `PILLIE_DEVELOPER_DIR=/path/to/Xcode.app/Contents/Developer` when needed.
+
+Use AXe as the precision/fallback layer when MCP UI automation is missing a gesture, when the accessibility tree is the source of truth, when Codex Browser simulator annotations drift, or when coordinate mapping through the browser mirror is needed. Do not use AXe as the first choice for routine build, run, test, screenshot, or log capture.
+
+Hosted XCTest is expensive regardless of whether it is invoked through MCP or raw `xcodebuild`: `PillieTests` loads inside `Pillie.app` on the simulator. Prefer compile/build proof plus simulator UI proof when app-hosted XCTest is unstable, and reserve hosted tests for explicit focused classes or methods.
 
 ## Golden Build Command
 
@@ -87,7 +106,13 @@ cd /Users/idrisskone/Developer/Pillie/Pillie && xcodebuild \
   build 2>&1 | xcsift
 ```
 
-Build, install, and launch:
+MCP build, install, and launch:
+
+```bash
+cd /Users/idrisskone/Developer/Pillie && Pillie/scripts/mcp-build-and-run.sh
+```
+
+Shell fallback build, install, and launch:
 
 ```bash
 cd /Users/idrisskone/Developer/Pillie && Pillie/scripts/build-and-run.sh
@@ -116,7 +141,13 @@ The `--frame` value is the browser simulator frame as `left,top,width,height` fr
 axe tap --label "Upgrade to Pillie+" --udid "$UDID"
 ```
 
-Run focused tests only:
+Run focused tests only through MCP:
+
+```bash
+cd /Users/idrisskone/Developer/Pillie && Pillie/scripts/mcp-test-focused.sh SoftPaywallContentTests
+```
+
+Shell fallback focused tests:
 
 ```bash
 cd /Users/idrisskone/Developer/Pillie && Pillie/scripts/test-focused.sh SoftPaywallContentTests
