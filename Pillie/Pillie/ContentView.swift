@@ -16,12 +16,17 @@ struct ContentView: View {
   @State private var iconScale: CGFloat = 0.9
   private let onboardingTelemetry = OnboardingTelemetry()
   private let onboardingFeedback = OnboardingInteractionFeedback()
+  private let subscriptionManager = SubscriptionManager.shared
 
   var body: some View {
     ZStack {
       // Main content
       ZStack {
-	        switch OnboardingFlow.step(for: onboardingStep) {
+	        switch OnboardingFlow.visibleStep(
+            for: onboardingStep,
+            isPlus: subscriptionManager.isPlus,
+            selectedFreePlan: onboardingSelectedFreePlan
+          ) {
 	        case .welcome:
 	          WelcomeView {
               continueDemoMoment(to: .productDemo)
@@ -234,17 +239,17 @@ struct ContentView: View {
 	              onboardingSelectedFreePlan = false
                 transitionWithoutFeedback(
                   to: OnboardingFlow.nextStepAfterPaywall(
-                    isPlus: SubscriptionManager.shared.isPlus,
+                    isPlus: subscriptionManager.isPlus,
                     selectedFreePlan: onboardingSelectedFreePlan
                   ),
                   motion: .commitSpring
                 )
             },
-            onSkip: {
+	            onSkip: {
 	              onboardingSelectedFreePlan = true
                 transitionWithoutFeedback(
                   to: OnboardingFlow.nextStepAfterPaywall(
-                    isPlus: SubscriptionManager.shared.isPlus,
+                    isPlus: subscriptionManager.isPlus,
                     selectedFreePlan: onboardingSelectedFreePlan
                   ),
                   motion: .standard
@@ -330,10 +335,14 @@ struct ContentView: View {
       }
     }
     .onAppear {
+      normalizeVisibleOnboardingStep()
       trackOnboardingStepViewed(onboardingStep)
     }
     .onChange(of: onboardingStep) { _, newStep in
       trackOnboardingStepViewed(newStep)
+    }
+    .onChange(of: subscriptionManager.isPlus) { _, _ in
+      normalizeVisibleOnboardingStep()
     }
   }
 
@@ -348,6 +357,18 @@ struct ContentView: View {
 
   private func trackOnboardingStepViewed(_ step: Int) {
     onboardingTelemetry.stepViewed(step)
+  }
+
+  private func normalizeVisibleOnboardingStep() {
+    guard let visibleStep = OnboardingFlow.visibleStep(
+      for: onboardingStep,
+      isPlus: subscriptionManager.isPlus,
+      selectedFreePlan: onboardingSelectedFreePlan
+    ),
+    visibleStep.rawValue != onboardingStep else { return }
+
+    onboardingStep = visibleStep.rawValue
+    UserDefaults.standard.set(visibleStep.rawValue, forKey: OnboardingFlow.stepStorageKey)
   }
 
   private func continueDemoMoment(to step: OnboardingFlow.Step) {

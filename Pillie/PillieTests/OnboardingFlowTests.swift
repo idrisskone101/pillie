@@ -48,6 +48,33 @@ final class OnboardingFlowTests: XCTestCase {
         )
     }
 
+    func testVisibleStepHidesAppBlockingFromFreeUsers() {
+        XCTAssertEqual(
+            OnboardingFlow.visibleStep(
+                for: OnboardingFlow.Step.appBlocking.rawValue,
+                isPlus: false,
+                selectedFreePlan: false
+            ),
+            .freePlanConfirmation
+        )
+        XCTAssertEqual(
+            OnboardingFlow.visibleStep(
+                for: OnboardingFlow.Step.appBlocking.rawValue,
+                isPlus: true,
+                selectedFreePlan: true
+            ),
+            .freePlanConfirmation
+        )
+        XCTAssertEqual(
+            OnboardingFlow.visibleStep(
+                for: OnboardingFlow.Step.appBlocking.rawValue,
+                isPlus: true,
+                selectedFreePlan: false
+            ),
+            .appBlocking
+        )
+    }
+
     func testStepAnalyticsMappingPlacesRealSetupBeforePaywall() {
         XCTAssertEqual(OnboardingFlow.Step.welcome.analyticsStep, .welcome)
         XCTAssertEqual(OnboardingFlow.Step.analyticsConsent.analyticsStep, .analyticsConsent)

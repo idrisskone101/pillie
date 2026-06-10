@@ -162,7 +162,6 @@ struct PremiumPaywallView: View {
         }
         .onAppear {
             telemetry.paywallViewed(isFromOnboarding: isFromOnboarding)
-            routeExistingPlusUserIfNeeded()
             animateIn = true
             guard performanceTier == .standard else {
                 blobPhase = 0
@@ -174,6 +173,8 @@ struct PremiumPaywallView: View {
         }
         .task {
             subscriptionManager.configure()
+            await subscriptionManager.refreshStatus()
+            routeExistingPlusUserIfNeeded()
             await loadOfferings()
         }
         .onChange(of: subscriptionManager.isPlus) { _, isPlus in
@@ -491,6 +492,7 @@ struct PremiumPaywallView: View {
                             plusFeedback.unsuccessfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
                             if error.isCancelledPurchase {
                                 telemetry.purchaseCancelled(plan: selectedPlan.analyticsPlan, isFromOnboarding: isFromOnboarding)
+                                await subscriptionManager.refreshStatus()
                             } else {
                                 telemetry.purchaseFailed(plan: selectedPlan.analyticsPlan, isFromOnboarding: isFromOnboarding)
                                 purchaseError = error.localizedDescription
