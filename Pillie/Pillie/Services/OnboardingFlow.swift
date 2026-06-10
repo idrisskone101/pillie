@@ -102,6 +102,16 @@ enum OnboardingFlow {
         return .appBlocking
     }
 
+    static func visibleStep(for rawValue: Int, isPlus: Bool, selectedFreePlan: Bool) -> Step? {
+        guard let step = step(for: rawValue) else { return nil }
+
+        if step == .appBlocking, selectedFreePlan || !isPlus {
+            return .freePlanConfirmation
+        }
+
+        return step
+    }
+
     static func isOnboardingActive(rawStep: Int) -> Bool {
         rawStep < completedStep.rawValue
     }
