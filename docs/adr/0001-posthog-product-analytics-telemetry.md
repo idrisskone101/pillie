@@ -10,6 +10,8 @@ Events that occur before Analytics Consent is granted are dropped, not buffered 
 
 Analytics Consent is reversible in Settings. Turning analytics on later starts capture from that point forward only; turning it off stops future capture.
 
+The protection-plan onboarding revamp may track answer-selection events for funnel analysis, but it must not send raw answers for sensitive setup or personalization steps. `onboarding_answer_selected` may include a step identifier and privacy-safe coarse metadata such as answer kind, completion state, or broad acquisition source where already allowed; it must not send reminder times, contraception routine details, Delay Consequence values, failure-frequency values, named Distraction Choices, real blocked app names, FamilyControls app/category tokens, or exact app counts unless the privacy taxonomy is deliberately revised.
+
 The onboarding consent screen should use plain product language, not Apple ATT language. The approved direction is:
 
 - Title: `Help improve Pillie?`
