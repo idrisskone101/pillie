@@ -44,6 +44,10 @@ _Avoid_: Daily streak, calendar-day streak
 The primary local reminder for the next contraception action that requires user logging, delivered at the user's configured reminder time.
 _Avoid_: Daily reminder, generic reminder
 
+**Due Action Time**:
+The method-aware user-facing moment when a Due Action Reminder matters: pill time, patch change time, or ring routine time. Broad brand copy may say pill time, but setup and personalized copy should use method-aware language after the Supported Contraception Method is known.
+_Avoid_: Pill time for every method, generic reminder time
+
 **Auto-Reminder Retry**:
 A same-day follow-up reminder for an untaken due action, scheduled at the user's selected retry interval. It does not define the primary reminder time.
 _Avoid_: Reminder time, snooze interval
@@ -77,16 +81,52 @@ An optional Pillie Plus offer shown during onboarding that keeps a clear free pa
 _Avoid_: Hard paywall, required subscription gate
 
 **Reminder Plan**:
-The onboarding summary of the user's Pillie setup: contraception method, current cycle position, reminder time, and one behavioral support focus. It is not a medical, protection, hormone, or risk-reduction plan.
-_Avoid_: Health plan, protection plan, hormone plan, optimized risk
+The onboarding summary of the user's reminder-only Pillie setup: contraception method, current cycle position, reminder time, and one behavioral support focus. It is not a medical, hormone, or risk-reduction plan.
+_Avoid_: Health plan, hormone plan, optimized risk
+
+**Pill Protection Plan**:
+The onboarding summary of how Pillie will protect pill time from chosen distracting apps during the user's configured due-action window. It is behavioral app-time protection, not medical protection, contraceptive efficacy, or health-risk reduction.
+_Avoid_: Medical protection plan, health protection plan, risk-reduction plan, generic reminder plan
+
+**Draft Pill Protection Plan**:
+A pre-permission onboarding version of the user's intended Pill Protection Plan. It can include one or more broad Distraction Choices, but it is not the saved Screen Time app selection.
+_Avoid_: Active app blocking, saved blocker config, authorized app selection
+
+**Distraction Choice**:
+A broad onboarding answer for what pulls the user away from pill time, covering named apps, behaviors such as snoozing or being busy, and `Other` for apps Pillie does not name directly.
+_Avoid_: Blocked app, Screen Time selection, app token
+
+**Draft Blocked App Choice**:
+A pre-permission onboarding answer for what the user intends Pillie to block during Due Action Time. It is app or category oriented and remains separate from the real Screen Time app selection.
+_Avoid_: Distraction Choice, app token, saved blocker app
+
+**Primary Distraction**:
+The single Distraction Choice Pillie uses in personalized onboarding copy when the user selected more than one. It is a messaging anchor, not a limit on what can later be blocked.
+_Avoid_: Only blocked app, required app, saved blocker app
+
+**Delay Consequence**:
+The user's onboarding answer for what missing or delaying a due action usually feels like emotionally or practically. It is a personalization signal, not a medical outcome or risk statement.
+_Avoid_: Personal goal, health consequence, medical risk
+
+**Risk Window**:
+The user's onboarding answer for when they are most likely to drift away from the due action. In the v1 protection-plan onboarding, it personalizes copy but does not change the blocking start time.
+_Avoid_: Blocking schedule, reminder time, delay timer
+
+**Reminder-Only Onboarding Completion**:
+The completed onboarding state for a user who finishes setup without saved app blocking and Screen Time authorization, regardless of whether they have a Plus entitlement. It means reminders are ready and app blocking remains incomplete.
+_Avoid_: Activated user, protection plan ready, blocker activation
+
+**Protection Plan Activation**:
+The completed onboarding state for a user who has finished onboarding, saved blocker configuration, and completed Screen Time authorization. It is the activation definition for Pillie's app-blocking differentiator.
+_Avoid_: Onboarding complete, reminder-only activation, paywall conversion
 
 **Product Demo Moment**:
-A short onboarding screen that shows Pillie's actual value loop before asking setup questions: due action reminder, completion logging, visible schedule or history feedback, and a clearly labeled interactive Plus challenge preview. It should be implemented as truthful in-app UI, not generic feature marketing.
+A short onboarding screen that shows Pillie's actual value loop before asking setup questions: a Due Action Reminder, the user's drift toward distraction, Pillie turning that moment into a clear checkpoint, and visible completion feedback after the due action is marked taken. It should be implemented as truthful in-app UI, not generic feature marketing.
 _Avoid_: Explainer video, fake app preview, feature list
 
 **Plus Challenge Demo**:
-An interactive preview within the Product Demo Moment of the Pillie Plus shake-to-confirm behavior. It can let users try the shaking motion before purchasing, but it must be clearly labeled as a Plus feature and must not imply free users receive app blocking or challenge mode.
-_Avoid_: Free challenge mode, enabled blocking preview
+A prior onboarding concept for previewing shake-to-confirm or shake-to-unlock behavior. It is not part of the protection-plan onboarding v1 because it competes with the app-blocking differentiator.
+_Avoid_: Product Demo Moment, protection-plan proof, blocker mechanism proof
 
 **Controlled Simulator State**:
 A known app data state created for a simulator QA scenario, including method, regimen, current cycle day, reminder time, and expected due action. It can be reset between scenario families to keep failures attributable.
@@ -134,6 +174,10 @@ Dev: "If a user changes the auto-reminder interval, did they change the morning 
 
 Domain Expert: "No. The Due Action Reminder time and Auto-Reminder Retry cadence are separate reminder concepts."
 
+Dev: "Can personalized setup copy say pill time after the user chose Patch?"
+
+Domain Expert: "No. After the method is known, use Due Action Time language such as patch change time or ring routine time. Pill time is acceptable only as broad Pillie brand copy or for pill users."
+
 Dev: "Should the user edit past days from History in this QA pass?"
 
 Domain Expert: "No. History and Calendar are Read-Only Schedule Surfaces for this PRD; they verify that mutations made elsewhere are reflected correctly."
@@ -158,9 +202,45 @@ Dev: "Can the onboarding summary say Pillie built a personalized health plan?"
 
 Domain Expert: "No. It is a Reminder Plan: method, cycle position, reminder time, and behavioral support focus. Pillie should not imply medical optimization or risk reduction."
 
+Dev: "Can the app-blocking onboarding summary call itself a Pill Protection Plan?"
+
+Domain Expert: "Yes, if it is about protecting pill time from selected distracting apps. It must not imply medical protection, contraceptive efficacy, or reduced health risk."
+
+Dev: "If the user selects TikTok or Other before the paywall, has Pillie saved the blocked apps?"
+
+Domain Expert: "No. That is only a Draft Pill Protection Plan. The real app selection is saved later through Screen Time app selection after authorization."
+
+Dev: "Are Distraction Choices and Draft Blocked App Choices the same thing?"
+
+Domain Expert: "No. Distraction Choices diagnose what gets in the way; Draft Blocked App Choices describe what the user intends Pillie to block before the native Screen Time picker."
+
+Dev: "If the user picks TikTok, YouTube, and Other, can the diagnosis still name one biggest risk?"
+
+Domain Expert: "Yes. Pillie can use a Primary Distraction for personalized copy while keeping all selected Distraction Choices in the Draft Pill Protection Plan."
+
+Dev: "Should onboarding ask for a broad personal goal or what delay usually feels like?"
+
+Domain Expert: "Ask for the Delay Consequence. It gives Pillie emotionally specific personalization without implying medical risk or health optimization."
+
+Dev: "If the user says they drift within five minutes, should Pillie delay blocking for five minutes?"
+
+Domain Expert: "No. In v1 that is a Risk Window for personalization copy. Blocking still starts from the due action reminder time once the real blocker config is saved."
+
+Dev: "Can a user who skipped Screen Time authorization be called activated?"
+
+Domain Expert: "No. That is Reminder-Only Onboarding Completion. Protection Plan Activation requires onboarding completion, saved blocker configuration, and completed Screen Time authorization."
+
+Dev: "If a user starts a Plus trial but denies Screen Time, are they a free user?"
+
+Domain Expert: "No. They have Plus entitlement, but they still have Reminder-Only Onboarding Completion until app blocking is authorized and configured."
+
 Dev: "Should onboarding explain Pillie with a list of features before setup questions?"
 
 Domain Expert: "No. Use a Product Demo Moment that shows the real value loop: reminder, completion logging, and schedule or history feedback."
+
+Dev: "Should the protection-plan onboarding include the shake challenge preview?"
+
+Domain Expert: "No. The Plus Challenge Demo is not part of protection-plan onboarding v1. Keep the proof and paywall centered on app blocking during Due Action Time."
 
 Dev: "Should we test every schedule using the currently installed simulator data?"
 
