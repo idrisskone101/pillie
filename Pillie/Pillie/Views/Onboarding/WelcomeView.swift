@@ -91,15 +91,15 @@ struct WelcomeView: View {
     private var heroArea: some View {
         ZStack(alignment: .topLeading) {
             // Handwriting annotation above grid
-            Text("your new bestie ->")
+            Text("Finally.")
                 .font(.pillieHandwriting())
-                .foregroundStyle(PillieTheme.textMuted)
-                .rotationEffect(.degrees(-12))
-                .offset(x: -16, y: -10)
+                .foregroundStyle(PillieTheme.coral)
+                .rotationEffect(.degrees(12))
+                .offset(x: 204, y: -12)
 
             VStack(spacing: 16) {
                 HStack(spacing: 16) {
-                    // Card 1: Alarm — coral glassmorphic
+                    // Card 1: Locked app checkpoint
                     bentoCard(
                         gradient: LinearGradient(
                             colors: [PillieTheme.coral.opacity(0.6), PillieTheme.coral.opacity(0.1)],
@@ -114,7 +114,7 @@ struct WelcomeView: View {
                             .frame(width: 72, height: 72)
                             .rotationEffect(.degrees(8))
                             .overlay(
-                                Image(systemName: "alarm.fill")
+                                Image(systemName: "shield.checkered")
                                     .font(.system(size: 36))
                                     .foregroundStyle(Color.white)
                                     .rotationEffect(.degrees(8))
@@ -124,7 +124,7 @@ struct WelcomeView: View {
                     .frame(height: 140)
                     .offset(y: floatingOffset)
 
-                    // Card 2: Pill — lavender glassmorphic
+                    // Card 2: Distraction app
                     bentoCard(
                         gradient: LinearGradient(
                             colors: [PillieTheme.lavender.opacity(0.8), PillieTheme.lavender.opacity(0.2)],
@@ -139,8 +139,9 @@ struct WelcomeView: View {
                             .frame(width: 64, height: 64)
                             .rotationEffect(.degrees(-6))
                             .overlay(
-                                Text("\u{1F48A}")
-                                    .font(.system(size: 32))
+                                Image(systemName: "app.badge")
+                                    .font(.system(size: 30, weight: .semibold))
+                                    .foregroundStyle(PillieTheme.textPrimary)
                                     .rotationEffect(.degrees(-6))
                             )
                             .shadow(color: Color.black.opacity(0.04), radius: 8, y: 8)
@@ -166,13 +167,13 @@ struct WelcomeView: View {
                                 .fill(Color.white.opacity(0.8))
                                 .frame(width: 40, height: 40)
                                 .overlay(
-                                    Image(systemName: "bell")
+                                    Image(systemName: "lock.shield")
                                         .font(.system(size: 20))
-                                        .foregroundStyle(PillieTheme.textMuted)
+                                        .foregroundStyle(PillieTheme.coral)
                                 )
                                 .rotationEffect(.degrees(4))
 
-                            Text("Next dose")
+                            Text("Instagram locked")
                                 .font(.pillie(16, weight: .medium))
                                 .foregroundStyle(PillieTheme.textMuted)
                         }
@@ -186,7 +187,7 @@ struct WelcomeView: View {
                                 .shadow(color: PillieTheme.coral.opacity(0.8), radius: 4)
                                 .scaleEffect(pulseScale)
 
-                            Text("8:00 AM")
+                            Text("Check in first")
                                 .font(.pillie(16, weight: .bold))
                                 .foregroundStyle(PillieTheme.textPrimary)
                         }
@@ -241,10 +242,10 @@ struct WelcomeView: View {
 
     private var titleSection: some View {
         VStack(spacing: 0) {
-            Text("The alarm clock")
+            Text("Pill reminders")
                 .font(.pillieTitle())
                 .foregroundStyle(PillieTheme.textPrimary)
-            Text("for your pill.")
+            Text("that fight back.")
                 .font(.pillieTitle())
                 .foregroundStyle(PillieTheme.coral)
         }
@@ -254,7 +255,7 @@ struct WelcomeView: View {
     // MARK: - Subtitle
 
     private var subtitleSection: some View {
-        Text("No more swiping away notifications.\nPillie makes building your habit feel natural and effortless.")
+        Text("Pillie protects pill time by blocking your favorite distractions until you check in.")
             .font(.pillieBody())
             .foregroundStyle(PillieTheme.textMuted)
             .multilineTextAlignment(.center)
@@ -264,14 +265,21 @@ struct WelcomeView: View {
     // MARK: - Buttons
 
     private var buttonSection: some View {
-        Button(action: onGetStarted) {
-            HStack(spacing: 8) {
-                Text("Get Started")
-                Image(systemName: "arrow.right")
+        VStack(spacing: 10) {
+            Button(action: onGetStarted) {
+                HStack(spacing: 8) {
+                    Text("Build my plan")
+                    Image(systemName: "sparkles")
+                }
             }
+            .buttonStyle(.pillieDark)
+            .shadow(color: PillieTheme.dark.opacity(0.4), radius: 15, y: 15)
+
+            Label("Privacy first and local by default", systemImage: "lock.fill")
+                .font(.pillieCaptionMedium())
+                .foregroundStyle(PillieTheme.textMuted.opacity(0.62))
+                .textCase(.uppercase)
         }
-        .buttonStyle(.pillieDark)
-        .shadow(color: PillieTheme.dark.opacity(0.4), radius: 15, y: 15)
     }
 }
 

@@ -62,15 +62,23 @@ enum OnboardingFlow {
         let completesOnboarding: Bool
     }
 
+    struct ShellState: Equatable {
+        let showsBackButton: Bool
+        let progressFraction: Double
+        let progressLabel: String
+        let primaryActionTitle: String
+        let secondaryActionTitle: String?
+        let isPrimaryActionEnabled: Bool
+    }
+
     static let firstStep: Step = .welcome
     static let paywallStep: Step = .paywall
     static let finalOnboardingStep: Step = .appBlocking
     static let completedStep: Step = .complete
     static let displayOrder: [Step] = [
         .welcome,
-        .productDemo,
-        .plusBlockingDemo,
         .analyticsConsent,
+        .productDemo,
         .reviewPrompt,
         .painPoints,
         .goal,
@@ -102,8 +110,37 @@ enum OnboardingFlow {
         return .appBlocking
     }
 
+    static func nextStep(after step: Step) -> Step? {
+        guard let index = displayOrder.firstIndex(of: step),
+              displayOrder.indices.contains(index + 1) else {
+            return nil
+        }
+
+        return displayOrder[index + 1]
+    }
+
+    static func shellState(for step: Step) -> ShellState? {
+        switch step {
+        case .analyticsConsent:
+            return ShellState(
+                showsBackButton: true,
+                progressFraction: 0.2,
+                progressLabel: "STEP 2/10",
+                primaryActionTitle: "Allow Analytics",
+                secondaryActionTitle: "Not Now",
+                isPrimaryActionEnabled: true
+            )
+        default:
+            return nil
+        }
+    }
+
     static func visibleStep(for rawValue: Int, isPlus: Bool, selectedFreePlan: Bool) -> Step? {
         guard let step = step(for: rawValue) else { return nil }
+
+        if step == .plusBlockingDemo {
+            return .productDemo
+        }
 
         if step == .appBlocking, selectedFreePlan || !isPlus {
             return .freePlanConfirmation

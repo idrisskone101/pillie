@@ -29,7 +29,7 @@ struct ContentView: View {
           ) {
 	        case .welcome:
 	          WelcomeView {
-              continueDemoMoment(to: .productDemo)
+              continueDemoMoment(to: OnboardingFlow.nextStep(after: .welcome) ?? .analyticsConsent)
 	          }
           .transition(
             .asymmetric(
@@ -39,13 +39,16 @@ struct ContentView: View {
 
 	        case .analyticsConsent:
 	          AnalyticsConsentView(
+                onBack: {
+                    lowRiskTransition(to: .welcome)
+                },
 	            onAllow: {
 	              AnalyticsManager.shared.setAnalyticsEnabled(true)
-                continueDemoMoment(to: .reviewPrompt)
+                continueDemoMoment(to: OnboardingFlow.nextStep(after: .analyticsConsent) ?? .productDemo)
 	            },
 	            onDecline: {
 	              AnalyticsManager.shared.setAnalyticsEnabled(false)
-                continueDemoMoment(to: .reviewPrompt)
+                continueDemoMoment(to: OnboardingFlow.nextStep(after: .analyticsConsent) ?? .productDemo)
 	            }
           )
           .transition(
@@ -57,7 +60,7 @@ struct ContentView: View {
 	        case .productDemo:
 	          ProductDemoMomentView(
 	            onContinue: {
-                continueDemoMoment(to: .plusBlockingDemo)
+                continueDemoMoment(to: OnboardingFlow.nextStep(after: .productDemo) ?? .reviewPrompt)
 	            }
           )
           .transition(

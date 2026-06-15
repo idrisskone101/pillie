@@ -23,10 +23,10 @@ final class OnboardingFlowTests: XCTestCase {
         XCTAssertEqual(OnboardingFlow.Step.complete.rawValue, 16)
     }
 
-    func testDisplayOrderPlacesAnalyticsConsentImmediatelyBeforeReviewPrompt() {
+    func testDisplayOrderStartsWithWelcomeThenAnalyticsConsentBeforeAnyLaterSetup() {
         XCTAssertEqual(
             Array(OnboardingFlow.displayOrder.prefix(5)),
-            [.welcome, .productDemo, .plusBlockingDemo, .analyticsConsent, .reviewPrompt]
+            [.welcome, .analyticsConsent, .productDemo, .reviewPrompt, .painPoints]
         )
     }
 
@@ -46,6 +46,11 @@ final class OnboardingFlowTests: XCTestCase {
             OnboardingFlow.nextStepAfterPaywall(isPlus: false, selectedFreePlan: false),
             .freePlanConfirmation
         )
+    }
+
+    func testFirstSliceRoutesWelcomeThroughAnalyticsConsentBeforeProof() {
+        XCTAssertEqual(OnboardingFlow.nextStep(after: .welcome), .analyticsConsent)
+        XCTAssertEqual(OnboardingFlow.nextStep(after: .analyticsConsent), .productDemo)
     }
 
     func testVisibleStepHidesAppBlockingFromFreeUsers() {
@@ -73,6 +78,28 @@ final class OnboardingFlowTests: XCTestCase {
             ),
             .appBlocking
         )
+    }
+
+    func testVisibleStepNormalizesLegacyPlusBlockingDemoToCurrentProofStep() {
+        XCTAssertEqual(
+            OnboardingFlow.visibleStep(
+                for: OnboardingFlow.Step.plusBlockingDemo.rawValue,
+                isPlus: false,
+                selectedFreePlan: false
+            ),
+            .productDemo
+        )
+    }
+
+    func testAnalyticsConsentShellHasProgressBackNavigationAndFixedActions() throws {
+        let shell = try XCTUnwrap(OnboardingFlow.shellState(for: .analyticsConsent))
+
+        XCTAssertTrue(shell.showsBackButton)
+        XCTAssertEqual(shell.progressFraction, 0.2, accuracy: 0.001)
+        XCTAssertEqual(shell.progressLabel, "STEP 2/10")
+        XCTAssertEqual(shell.primaryActionTitle, "Allow Analytics")
+        XCTAssertEqual(shell.secondaryActionTitle, "Not Now")
+        XCTAssertTrue(shell.isPrimaryActionEnabled)
     }
 
     func testStepAnalyticsMappingPlacesRealSetupBeforePaywall() {
@@ -153,23 +180,23 @@ final class OnboardingFlowTests: XCTestCase {
         XCTAssertTrue(complete.completesOnboarding)
     }
 
-    func testMovedAnalyticsConsentStillCountsAsForwardNavigation() throws {
+    func testAnalyticsConsentFirstSliceCountsAsForwardNavigation() throws {
         let toAnalyticsConsent = try XCTUnwrap(
             OnboardingFlow.transition(
-                from: OnboardingFlow.Step.plusBlockingDemo.rawValue,
+                from: OnboardingFlow.Step.welcome.rawValue,
                 to: OnboardingFlow.Step.analyticsConsent.rawValue
             )
         )
         XCTAssertEqual(toAnalyticsConsent.direction, .forward)
-        XCTAssertEqual(toAnalyticsConsent.completedAnalyticsStep, .plusBlockingDemo)
+        XCTAssertEqual(toAnalyticsConsent.completedAnalyticsStep, .welcome)
 
-        let toReviewPrompt = try XCTUnwrap(
+        let toProductDemo = try XCTUnwrap(
             OnboardingFlow.transition(
                 from: OnboardingFlow.Step.analyticsConsent.rawValue,
-                to: OnboardingFlow.Step.reviewPrompt.rawValue
+                to: OnboardingFlow.Step.productDemo.rawValue
             )
         )
-        XCTAssertEqual(toReviewPrompt.direction, .forward)
-        XCTAssertEqual(toReviewPrompt.completedAnalyticsStep, .analyticsConsent)
+        XCTAssertEqual(toProductDemo.direction, .forward)
+        XCTAssertEqual(toProductDemo.completedAnalyticsStep, .analyticsConsent)
     }
 }

@@ -239,6 +239,12 @@ struct PillieApp: App {
             SubscriptionManager.shared.setPlusForTesting(false)
             UserDefaults.standard.set(true, forKey: OnboardingFlow.selectedFreePlanStorageKey)
             UserDefaults.standard.set(OnboardingFlow.Step.freePlanConfirmation.rawValue, forKey: OnboardingFlow.stepStorageKey)
+        case "/onboarding-welcome":
+            UserDefaults.standard.set(false, forKey: OnboardingFlow.selectedFreePlanStorageKey)
+            UserDefaults.standard.set(OnboardingFlow.Step.welcome.rawValue, forKey: OnboardingFlow.stepStorageKey)
+        case "/onboarding-consent":
+            UserDefaults.standard.set(false, forKey: OnboardingFlow.selectedFreePlanStorageKey)
+            UserDefaults.standard.set(OnboardingFlow.Step.analyticsConsent.rawValue, forKey: OnboardingFlow.stepStorageKey)
         default:
             return
         }
