@@ -61,6 +61,95 @@ final class ProtectionPlanOnboardingContentTests: XCTestCase {
         }
     }
 
+    // MARK: - Early Value Proof (#74)
+
+    func testEarlyValueProofCommunicatesReminderLockAndRelease() {
+        let content = ProtectionPlanEarlyValueProofContent.default
+        XCTAssertEqual(content.beats.count, 3, "The proof reads as three beats: reminder, lock, release.")
+
+        // Beat 1 — it's pill time, and the apps are tempting.
+        let first = (content.drift.title + " " + content.drift.detail).lowercased()
+        XCTAssertTrue(first.contains("pill"), "Beat 1 must name the pill reminder.")
+        XCTAssertTrue(first.contains("app"), "Beat 1 must show the distracting apps.")
+
+        // Beat 2 — Pillie locks the apps until the pill is taken.
+        let second = content.checkpoint.detail.lowercased()
+        XCTAssertTrue(second.contains("lock"), "Beat 2 must show the apps being locked.")
+        XCTAssertTrue(second.contains("pill"), "Beat 2 must gate the lock on taking the pill.")
+
+        // Beat 3 — checking in unlocks the apps.
+        let third = content.resolved.detail.lowercased()
+        XCTAssertTrue(third.contains("unlock"), "Beat 3 must release the apps once checked in.")
+    }
+
+    func testEarlyValueProofCopyAvoidsConfusingJargon() {
+        // Terms the team flagged as unclear for the women's-health audience.
+        let banned = ["drift", "endless scroll", "social guard", "held"]
+        for line in ProtectionPlanEarlyValueProofContent.default.visibleCopy {
+            let lowered = line.lowercased()
+            for term in banned {
+                XCTAssertFalse(lowered.contains(term), "Copy should avoid the unclear term \"\(term)\": \(line)")
+            }
+        }
+    }
+
+    func testEarlyValueProofExposesCheckInAndContinueCTAs() {
+        let content = ProtectionPlanEarlyValueProofContent.default
+        XCTAssertEqual(content.checkInCTA, "I took my pill")
+        XCTAssertEqual(content.continueCTA, "Continue")
+    }
+
+    func testEarlyValueProofIdleLineIsOnTopic() {
+        // The idle line is the enticing hook; the lock mechanic now lives in the
+        // CTA + the demo, so the idle line only needs to stay about the pill.
+        let rest = ProtectionPlanEarlyValueProofContent.default.restCue.lowercased()
+        XCTAssertFalse(rest.isEmpty)
+        XCTAssertTrue(rest.contains("pill"))
+    }
+
+    func testEarlyValueProofRestCTAInstructsTheDrag() {
+        // At rest the CTA must instruct the drag (so the demo isn't skipped), not
+        // offer a one-tap "I took my pill".
+        let drag = ProtectionPlanEarlyValueProofContent.default.dragCTA
+        XCTAssertEqual(drag, "Drag the dot to your apps")
+        XCTAssertTrue(drag.lowercased().contains("drag"))
+    }
+
+    func testEarlyValueProofTeachesTheShakeCheckIn() {
+        let content = ProtectionPlanEarlyValueProofContent.default
+        // The locked-state cue + CTA teach the real check-in gesture: a phone shake.
+        XCTAssertTrue(content.shakeCue.lowercased().contains("shake"))
+        XCTAssertTrue(content.shakeCue.lowercased().contains("pill"))
+        XCTAssertEqual(content.shakeToTakeCTA, "Shake to take your pill")
+        // The written resolved beat (the static / VoiceOver narrative) names shaking too.
+        XCTAssertTrue(content.resolved.detail.lowercased().contains("shake"))
+        XCTAssertTrue(content.resolved.detail.lowercased().contains("unlock"))
+        XCTAssertTrue(content.accessibilitySummary.lowercased().contains("shake"))
+    }
+
+    func testEarlyValueProofHasNoMedicalOrFakeStatLanguage() {
+        for line in ProtectionPlanEarlyValueProofContent.default.visibleCopy {
+            assertNoMedicalOrFakeClaims(line)
+            XCTAssertFalse(
+                line.contains("%"),
+                "Proof must not invent effectiveness stats; found a percentage in: \(line)"
+            )
+        }
+    }
+
+    func testEarlyValueProofUsesAGenericAppStandInNotThirdPartyBrands() {
+        let brands = ["tiktok", "instagram", "snapchat", "youtube", "facebook", "reddit"]
+        for line in ProtectionPlanEarlyValueProofContent.default.visibleCopy {
+            let lowered = line.lowercased()
+            for brand in brands {
+                XCTAssertFalse(
+                    lowered.contains(brand),
+                    "Proof copy must use a generic stand-in, not the brand \"\(brand)\": \(line)"
+                )
+            }
+        }
+    }
+
     // MARK: - Helpers
 
     private func assertNoMedicalOrFakeClaims(

@@ -69,15 +69,45 @@ final class ProtectionPlanOnboardingTests: XCTestCase {
         XCTAssertEqual(state.analyticsConsentDecision, .allowed)
     }
 
-    // MARK: - Intro handoff
+    // MARK: - Early Value Proof routing (#74)
 
-    func testIntroIsNotFinishedUntilAnalyticsConsentIsCommitted() {
+    func testEarlyValueProofAppearsAfterConsentAndBeforeHandoff() {
         var state = ProtectionPlanOnboardingState()
-        XCTAssertFalse(state.hasFinishedIntro) // welcome
-        state.advance()
-        XCTAssertFalse(state.hasFinishedIntro) // analyticsConsent
-        state.advance() // moves past analyticsConsent
-        XCTAssertTrue(state.hasFinishedIntro)
+        state.advance() // -> analyticsConsent
+        state.recordAnalyticsConsent(allowed: true)
+        state.advance() // commit consent -> earlyValueProof
+
+        XCTAssertEqual(state.currentStep, .earlyValueProof)
+        XCTAssertFalse(
+            state.hasFinishedIntro,
+            "The Early Value Proof is still rendered by the new shell, so the flow must not hand off to the legacy questions yet."
+        )
+    }
+
+    func testIntroHandsOffOnceTheProofAdvancesToTheReviewPrompt() {
+        var state = ProtectionPlanOnboardingState()
+        state.advance() // -> analyticsConsent
+        XCTAssertFalse(state.hasFinishedIntro)
+        state.advance() // -> earlyValueProof
+        XCTAssertFalse(state.hasFinishedIntro)
+        state.advance() // -> reviewPrompt (handoff sentinel into the preserved flow)
+
+        XCTAssertEqual(state.currentStep, .reviewPrompt)
+        XCTAssertTrue(
+            state.hasFinishedIntro,
+            "Reaching the Review Prompt hands off to the preserved review-then-questions flow."
+        )
+    }
+
+    func testGoBackFromProofReturnsToConsentPreservingTheAnswer() {
+        var state = ProtectionPlanOnboardingState()
+        state.advance() // -> analyticsConsent
+        state.recordAnalyticsConsent(allowed: false)
+        state.advance() // -> earlyValueProof
+
+        state.goBack() // back to analyticsConsent
+        XCTAssertEqual(state.currentStep, .analyticsConsent)
+        XCTAssertEqual(state.analyticsConsentDecision, .declined)
     }
 
     // MARK: - Persistence / interruption

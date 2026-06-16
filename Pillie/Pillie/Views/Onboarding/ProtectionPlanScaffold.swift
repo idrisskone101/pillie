@@ -70,6 +70,10 @@ struct ProtectionPlanScaffold<Content: View>: View {
                         .padding(.top, progress == nil ? 8 : 4)
                         .padding(.bottom, 24)
                 }
+                // Only scroll/bounce when content actually overflows. When it fits
+                // (the Early Value Proof case), there's no vertical gesture to
+                // conflict with the horizontal drag on the demo.
+                .scrollBounceBehavior(.basedOnSize)
 
                 ctaStack
                     .padding(.horizontal, PillieTheme.screenHorizontalPadding)
