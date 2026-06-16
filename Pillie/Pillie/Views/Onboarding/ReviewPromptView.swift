@@ -13,6 +13,9 @@ struct ReviewPromptView: View {
   private let performanceTier = PerformanceTier.current
 
   let onContinue: () -> Void
+  /// Optional back affordance. When provided, a back chevron returns to the
+  /// previous onboarding step (the Early Value Proof, re-entering the new shell).
+  var onBack: (() -> Void)? = nil
 
   var body: some View {
     ZStack {
@@ -65,6 +68,13 @@ struct ReviewPromptView: View {
         Spacer()
       }
     }
+    .safeAreaInset(edge: .top, alignment: .leading, spacing: 0) {
+      if let onBack {
+        backButton(onBack)
+          .padding(.leading, PillieTheme.screenHorizontalPadding)
+          .padding(.top, 4)
+      }
+    }
     .accessibilityIdentifier("reviewPromptView")
     .onAppear {
       animateIn = true
@@ -76,6 +86,20 @@ struct ReviewPromptView: View {
         blobPhase = 1
       }
     }
+  }
+
+  private func backButton(_ action: @escaping () -> Void) -> some View {
+    Button(action: action) {
+      Image(systemName: "chevron.left")
+        .font(.system(size: 20, weight: .semibold))
+        .foregroundStyle(PillieTheme.textMuted)
+        .frame(width: 52, height: 52)
+        .background(.white, in: Circle())
+        .overlay { Circle().stroke(Color.black.opacity(0.07), lineWidth: 1) }
+        .shadow(color: Color.black.opacity(0.08), radius: 10, y: 4)
+    }
+    .buttonStyle(.plain)
+    .accessibilityLabel("Back")
   }
 
   private var starRow: some View {

@@ -70,6 +70,18 @@ struct ProductAnalyticsTelemetry {
     )
   }
 
+  /// Distraction Choices answered. The selected choices are sensitive and
+  /// high-cardinality, so only the funnel step is sent — never the choices.
+  func onboardingDistractionChoicesCompleted() {
+    track(.onboardingStepCompleted, source: .onboarding, step: .distractionChoices)
+  }
+
+  /// Delay Consequence answered. The emotional answer is sensitive, so only the
+  /// funnel step is sent — never the answer value.
+  func onboardingDelayConsequenceCompleted() {
+    track(.onboardingStepCompleted, source: .onboarding, step: .delayConsequence)
+  }
+
   func notificationPermissionRequested() {
     track(.notificationPermissionRequested, source: .onboarding, step: .reminderTime)
   }

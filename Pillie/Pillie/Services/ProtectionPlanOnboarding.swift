@@ -63,13 +63,22 @@ enum AnalyticsConsentDecision: String, Equatable {
 struct ProtectionPlanOnboardingState: Equatable {
     private(set) var currentStep: ProtectionPlanStep
     private(set) var analyticsConsentDecision: AnalyticsConsentDecision
+    /// Committed Distraction Choices (multi-select, includes Other). Empty until
+    /// the user commits the answer on the Distraction Choices screen.
+    private(set) var distractionChoices: Set<DistractionChoice>
+    /// Committed Delay Consequence (single-select), or `nil` until answered.
+    private(set) var delayConsequence: DelayConsequence?
 
     init(
         currentStep: ProtectionPlanStep = .first,
-        analyticsConsentDecision: AnalyticsConsentDecision = .undecided
+        analyticsConsentDecision: AnalyticsConsentDecision = .undecided,
+        distractionChoices: Set<DistractionChoice> = [],
+        delayConsequence: DelayConsequence? = nil
     ) {
         self.currentStep = currentStep
         self.analyticsConsentDecision = analyticsConsentDecision
+        self.distractionChoices = distractionChoices
+        self.delayConsequence = delayConsequence
     }
 
     /// Whether the user can step backward from the current step.
@@ -88,6 +97,17 @@ struct ProtectionPlanOnboardingState: Equatable {
     /// Records the Analytics Consent answer as a committed onboarding answer.
     mutating func recordAnalyticsConsent(allowed: Bool) {
         analyticsConsentDecision = allowed ? .allowed : .declined
+    }
+
+    /// Commits the multi-select Distraction Choices answer, replacing any prior
+    /// selection.
+    mutating func recordDistractionChoices(_ choices: Set<DistractionChoice>) {
+        distractionChoices = choices
+    }
+
+    /// Commits the single-select Delay Consequence answer.
+    mutating func recordDelayConsequence(_ consequence: DelayConsequence?) {
+        delayConsequence = consequence
     }
 
     /// Commits the current step and moves forward in the locked order.
@@ -109,6 +129,8 @@ enum ProtectionPlanOnboardingStore {
     enum Keys {
         static let step = "protectionPlanOnboardingStep"
         static let consent = "protectionPlanOnboardingAnalyticsConsent"
+        static let distractionChoices = "protectionPlanOnboardingDistractionChoices"
+        static let delayConsequence = "protectionPlanOnboardingDelayConsequence"
     }
 
     static func load(from defaults: UserDefaults) -> ProtectionPlanOnboardingState {
@@ -116,15 +138,29 @@ enum ProtectionPlanOnboardingStore {
             .flatMap(ProtectionPlanStep.init(rawValue:)) ?? .first
         let consent = defaults.string(forKey: Keys.consent)
             .flatMap(AnalyticsConsentDecision.init(rawValue:)) ?? .undecided
+        let distractionChoices = Set(
+            (defaults.stringArray(forKey: Keys.distractionChoices) ?? [])
+                .compactMap(DistractionChoice.init(rawValue:))
+        )
+        let delayConsequence = defaults.string(forKey: Keys.delayConsequence)
+            .flatMap(DelayConsequence.init(rawValue:))
         return ProtectionPlanOnboardingState(
             currentStep: step,
-            analyticsConsentDecision: consent
+            analyticsConsentDecision: consent,
+            distractionChoices: distractionChoices,
+            delayConsequence: delayConsequence
         )
     }
 
     static func save(_ state: ProtectionPlanOnboardingState, to defaults: UserDefaults) {
         defaults.set(state.currentStep.rawValue, forKey: Keys.step)
         defaults.set(state.analyticsConsentDecision.rawValue, forKey: Keys.consent)
+        defaults.set(state.distractionChoices.map(\.rawValue), forKey: Keys.distractionChoices)
+        if let delayConsequence = state.delayConsequence {
+            defaults.set(delayConsequence.rawValue, forKey: Keys.delayConsequence)
+        } else {
+            defaults.removeObject(forKey: Keys.delayConsequence)
+        }
     }
 }
 
@@ -144,11 +180,23 @@ final class ProtectionPlanOnboardingModel {
 
     var currentStep: ProtectionPlanStep { state.currentStep }
     var analyticsConsentDecision: AnalyticsConsentDecision { state.analyticsConsentDecision }
+    var distractionChoices: Set<DistractionChoice> { state.distractionChoices }
+    var delayConsequence: DelayConsequence? { state.delayConsequence }
     var canGoBack: Bool { state.canGoBack }
     var hasFinishedIntro: Bool { state.hasFinishedIntro }
 
     func recordAnalyticsConsent(allowed: Bool) {
         state.recordAnalyticsConsent(allowed: allowed)
+        persist()
+    }
+
+    func recordDistractionChoices(_ choices: Set<DistractionChoice>) {
+        state.recordDistractionChoices(choices)
+        persist()
+    }
+
+    func recordDelayConsequence(_ consequence: DelayConsequence?) {
+        state.recordDelayConsequence(consequence)
         persist()
     }
 

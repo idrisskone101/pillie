@@ -99,6 +99,22 @@ final class ProtectionPlanOnboardingTests: XCTestCase {
         )
     }
 
+    func testGoBackFromReviewPromptReturnsToTheProofAndReentersTheShell() {
+        // The Review Prompt back button reverses the intro handoff. Stepping back
+        // from reviewPrompt must land on the Early Value Proof and report the intro
+        // as unfinished, so the shell re-renders the proof instead of immediately
+        // re-triggering the handoff (which would bounce the user forward).
+        var state = ProtectionPlanOnboardingState(currentStep: .reviewPrompt)
+        XCTAssertTrue(state.hasFinishedIntro)
+
+        state.goBack()
+        XCTAssertEqual(state.currentStep, .earlyValueProof)
+        XCTAssertFalse(
+            state.hasFinishedIntro,
+            "Returning to the proof must re-enter the new shell, not re-fire the handoff."
+        )
+    }
+
     func testGoBackFromProofReturnsToConsentPreservingTheAnswer() {
         var state = ProtectionPlanOnboardingState()
         state.advance() // -> analyticsConsent
