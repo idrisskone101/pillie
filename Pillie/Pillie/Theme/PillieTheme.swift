@@ -37,6 +37,10 @@ enum PillieTheme {
     static let amberFaded = Color(hex: "E8A87C").opacity(0.2)
     static let sage = Color(hex: "E8EFE8")
     static let sageHalf = Color(hex: "E8EFE8").opacity(0.5)
+    /// The app's established muted green for positive/"verified" accents (also
+    /// used in the free-plan and reminder-plan screens), named here for reuse.
+    /// The `sage` surface tint is too pale to read as a foreground.
+    static let verifiedGreen = Color(hex: "7DA37B")
     static let lavender = Color(hex: "EFEDF4")
     static let patchChangeRose = Color(hex: "E07A8F")
     static let ringReinsertCoral = Color(hex: "D4826A")

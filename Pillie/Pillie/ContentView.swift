@@ -14,6 +14,7 @@ struct ContentView: View {
   @Environment(PillStore.self) private var store
   @State private var isLoading = true
   @State private var iconScale: CGFloat = 0.9
+  @State private var protectionPlanModel = ProtectionPlanOnboardingModel()
   private let onboardingTelemetry = OnboardingTelemetry()
   private let onboardingFeedback = OnboardingInteractionFeedback()
   private let subscriptionManager = SubscriptionManager.shared
@@ -22,6 +23,15 @@ struct ContentView: View {
     ZStack {
       // Main content
       ZStack {
+        if onboardingStep < OnboardingFlow.Step.productDemo.rawValue {
+          // New Protection Plan Onboarding intro (Welcome -> Analytics Consent).
+          ProtectionPlanOnboardingShell(
+            model: protectionPlanModel,
+            splashActive: isLoading,
+            onIntroFinished: handoffFromProtectionPlanIntro
+          )
+          .transition(.opacity)
+        } else {
 	        switch OnboardingFlow.visibleStep(
             for: onboardingStep,
             isPlus: subscriptionManager.isPlus,
@@ -299,6 +309,7 @@ struct ContentView: View {
 	          MainTabView()
 	            .transition(.opacity)
 	        }
+        }
       }
       .font(.pillieBody())
 
@@ -343,6 +354,16 @@ struct ContentView: View {
     }
     .onChange(of: subscriptionManager.isPlus) { _, _ in
       normalizeVisibleOnboardingStep()
+    }
+  }
+
+  /// Hands off from the new Protection Plan intro into the existing onboarding
+  /// flow. Lands at `reviewPrompt` so the legacy welcome, product demos, and the
+  /// legacy analytics-consent step are skipped (consent is never asked twice).
+  private func handoffFromProtectionPlanIntro() {
+    guard onboardingStep < OnboardingFlow.Step.reviewPrompt.rawValue else { return }
+    withAnimation(.easeInOut(duration: 0.3)) {
+      setOnboardingStep(.reviewPrompt)
     }
   }
 
