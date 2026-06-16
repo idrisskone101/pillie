@@ -11,6 +11,20 @@ Use repo-local skills (`.agents/skills`, mirrored into `.claude/skills` for Clau
 
 Use the global `xcodebuildmcp-cli` skill for Apple platform build, run, simulator, log, and UI automation work when available. Prefer XcodeBuildMCP tooling over raw shell commands for Apple workflows, then fall back to the golden commands below when needed.
 
+### Apple Xcode 27 skills (use proactively during development)
+
+These are Apple's official Xcode 27 Agent Skills, installed globally in `~/.claude/skills`. Pillie targets the Xcode 27 / iOS 27 SDK, so **consult the relevant skill before writing or reviewing the matching code — do not rely on memory for SDK 27 behavior.** Treat these as part of the normal development loop, not an afterthought:
+
+- `swiftui-specialist`: writing, reviewing, or editing any SwiftUI view, data flow, modifier, or animation. Use before adding new SwiftUI screens or components.
+- `swiftui-whats-new-27`: any SDK 27 SwiftUI behavior or deprecation. **Mandatory** when a `@State` view fails to compile with "used before being initialized", "invalid redeclaration of synthesized property", or "extraneous argument label" (`@State` is now a macro; reordering init assignments is the WRONG fix), and for `reorderable`, `swipeActions`, toolbar overflow, `AsyncImage(request:)`, item bindings, and `DocumentGroup`.
+- `test-modernizer`: writing new tests or migrating XCTest → Swift Testing. Note the repo's hosted XCTest instability on the Xcode 27 beta (`@MainActor` class deinit crash) — prefer value-type unit tests + simulator UI proof; this skill helps move toward Swift Testing.
+- `device-interaction`: simulator/device visual QA — screenshots, UI hierarchy, touch interactions. Pair with `pillie-ios` for the pinned-simulator conventions.
+- `uikit-app-modernization`: any UIKit code touching `mainScreen`, `interfaceOrientation`, app/scene lifecycle, or safe-area insets.
+- `audit-xcode-security-settings`: hardening build settings, compiler warnings, or static-analysis coverage.
+- `c-bounds-safety`: C code adopting or using `-fbounds-safety` (`__counted_by`, `ptrcheck.h`, etc.).
+
+Default workflow: when a task involves SwiftUI, tests, or on-simulator verification, invoke the matching skill as part of doing the work rather than asking first.
+
 ## Mission
 
 Own the technical execution of Pillie: build features, fix bugs, and maintain a shippable iOS app. Translate product requirements into working code with minimal blast radius.
