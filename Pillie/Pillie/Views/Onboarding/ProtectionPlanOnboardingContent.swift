@@ -157,3 +157,55 @@ struct ProtectionPlanEarlyValueProofContent {
         accessibilitySummary: "When it's time for your pill, Pillie gently locks your distracting apps until you check in. Give your phone a quick shake to take your pill, and they unlock right away."
     )
 }
+
+/// Copy for the Distraction Choices screen (issue #75, Superdesign draft
+/// 0344aa3e). Multi-select: the user names what gets in the way after a reminder,
+/// including an Other catch-all. The selectable options come from
+/// `DistractionChoice`; this struct holds only the surrounding copy.
+struct ProtectionPlanDistractionChoicesContent {
+    let title: String
+    let subtitle: String
+    /// Helper shown under the CTA: states the multi-select intent.
+    let helper: String
+    let primaryCTA: String
+    let choices: [DistractionChoice]
+
+    var visibleCopy: [String] {
+        [title, subtitle, helper, primaryCTA] + choices.map(\.title)
+    }
+
+    static let `default` = ProtectionPlanDistractionChoicesContent(
+        title: "Be honest\u{2026}",
+        subtitle: "What usually gets in the way after your reminder?",
+        helper: "Select all that apply. We'll help you stay focused.",
+        primaryCTA: "Continue",
+        choices: DistractionChoice.allCases
+    )
+}
+
+/// Copy for the Delay Consequence screen (issue #75, Superdesign draft aa808d90).
+/// Single-select: an emotionally specific, non-medical read on what missing or
+/// delaying feels like. Replaces the old PersonalGoal screen in this flow.
+struct ProtectionPlanDelayConsequenceContent {
+    let title: String
+    let subtitle: String
+    /// Helper under the title: frames the answer as calibration, not judgement.
+    let helper: String
+    /// Footnote under the CTA: explains how the answer is used.
+    let footnote: String
+    let primaryCTA: String
+    let choices: [DelayConsequence]
+
+    var visibleCopy: [String] {
+        [title, subtitle, helper, footnote, primaryCTA] + choices.map(\.title)
+    }
+
+    static let `default` = ProtectionPlanDelayConsequenceContent(
+        title: "A quick check-in",
+        subtitle: "What does missing or delaying usually feel like?",
+        helper: "Understanding your feelings helps us calibrate the right level of support.",
+        footnote: "Selected option is used to adjust notification tone and frequency.",
+        primaryCTA: "Continue",
+        choices: DelayConsequence.allCases
+    )
+}

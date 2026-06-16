@@ -148,6 +148,8 @@ enum AnalyticsStep: String {
   case plusBlockingDemo = "plus_blocking_demo"
   case reviewPrompt = "review_prompt"
   case painPoints = "pain_points"
+  case distractionChoices = "distraction_choices"
+  case delayConsequence = "delay_consequence"
   case goal
   case missFrequency = "miss_frequency"
   case acquisitionSource = "acquisition_source"

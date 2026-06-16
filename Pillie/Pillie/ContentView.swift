@@ -92,6 +92,9 @@ struct ContentView: View {
 	          ReviewPromptView(
 	            onContinue: {
                 reviewPromptTransition(to: .painPoints)
+	            },
+	            onBack: {
+	              backFromReviewPromptToProof()
 	            }
           )
           .transition(
@@ -101,12 +104,14 @@ struct ContentView: View {
             ))
 
 	        case .painPoints:
-	          PainPointPickerView(
+	          ProtectionPlanDistractionChoicesView(
+	            model: protectionPlanModel,
+	            progress: ProtectionPlanProgress(index: 5, total: 10),
 	            onBack: {
                 lowRiskTransition(to: .reviewPrompt)
 	            },
-	            onContinue: { points in
-	              store.painPoints = points
+	            onContinue: {
+	              // Distraction Choices are committed inside ProtectionPlanDistractionChoicesView.
                 continueSetupStep(to: .goal)
 	            }
           )
@@ -117,12 +122,14 @@ struct ContentView: View {
             ))
 
 	        case .goal:
-	          GoalPickerView(
+	          ProtectionPlanDelayConsequenceView(
+	            model: protectionPlanModel,
+	            progress: ProtectionPlanProgress(index: 6, total: 10),
 	            onBack: {
                 lowRiskTransition(to: .painPoints)
 	            },
-	            onContinue: { goal in
-	              store.personalGoal = goal
+	            onContinue: {
+	              // Delay Consequence is committed inside ProtectionPlanDelayConsequenceView.
                 continueSetupStep(to: .missFrequency)
 	            }
           )
@@ -404,6 +411,17 @@ struct ContentView: View {
       to: step,
       response: onboardingFeedback.requestOrSkipReview(
         accessibilityReduceMotion: accessibilityReduceMotion))
+  }
+
+  /// Back from the Review Prompt to the Early Value Proof. This reverses the
+  /// intro handoff: the proof lives in the new shell, so we step the shell's
+  /// model back to it and drop the legacy step below `productDemo` so the shell
+  /// is shown again (rendering the proof, not the handoff sentinel).
+  private func backFromReviewPromptToProof() {
+    protectionPlanModel.goBack() // reviewPrompt -> earlyValueProof
+    withAnimation(.easeInOut(duration: 0.3)) {
+      setOnboardingStep(.welcome)
+    }
   }
 
   private func continueSetupStep(to step: OnboardingFlow.Step) {
