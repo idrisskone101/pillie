@@ -168,6 +168,8 @@ cd /Users/idrisskone/Developer/Pillie && Pillie/scripts/test-focused.sh SoftPayw
 
 Pass one or more explicit XCTest classes or methods. The focused test helper uses the same simulator and `/tmp` DerivedData conventions as the build script, and refuses to run without an explicit test target so local verification does not accidentally become a full-suite run.
 
+The scheme marks `PillieTests` as `parallelizable`, so stock `xcodebuild test` clones the simulator once per CPU core and pegs every core (loud fans, hot machine). Both focused-test helpers therefore pass `-parallel-testing-enabled NO` by default — one simulator, one test runner. Override per run with `PILLIE_TEST_PARALLEL=YES` to restore cloning, or cap the compile phase with `PILLIE_BUILD_JOBS=<n>` (e.g. `4`) for a quieter, slower build.
+
 Manual install and launch:
 
 ```bash

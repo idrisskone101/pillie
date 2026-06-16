@@ -72,9 +72,15 @@ for test_identifier in "$@"; do
   ONLY_TESTING_ARGS+=("-only-testing:$(normalize_test_identifier "$test_identifier")")
 done
 
+# Disable parallel testing by default. With parallelizable="YES" in the scheme,
+# xcodebuild clones the simulator once per CPU core, which pegs every core and
+# spins the fans. Override with PILLIE_TEST_PARALLEL=YES to restore cloning.
+PARALLEL_TESTING="${PILLIE_TEST_PARALLEL:-NO}"
+
 echo "> Running focused Pillie tests..."
 echo "> DerivedData: $DERIVED_DATA"
 echo "> Simulator: $UDID"
+echo "> Parallel testing: $PARALLEL_TESTING (PILLIE_TEST_PARALLEL=YES re-enables simulator cloning)"
 pillie_select_developer_dir
 if [[ -n "${DEVELOPER_DIR:-}" ]]; then
   echo "> DeveloperDir: $DEVELOPER_DIR"
@@ -83,13 +89,22 @@ for test_identifier in "$@"; do
   echo "> Test: $(normalize_test_identifier "$test_identifier")"
 done
 
+XCODEBUILD_ARGS=(
+  -project "$PROJECT"
+  -scheme "$SCHEME"
+  -sdk iphonesimulator
+  -destination "id=$UDID"
+  -derivedDataPath "$DERIVED_DATA"
+  -configuration Debug
+  -parallel-testing-enabled "$PARALLEL_TESTING"
+)
+# Optional compile-core cap to keep the build phase quieter (slower, cooler).
+# e.g. PILLIE_BUILD_JOBS=4
+if [[ -n "${PILLIE_BUILD_JOBS:-}" ]]; then
+  XCODEBUILD_ARGS+=(-jobs "$PILLIE_BUILD_JOBS")
+fi
+XCODEBUILD_ARGS+=(test)
+XCODEBUILD_ARGS+=("${ONLY_TESTING_ARGS[@]}")
+
 cd "$PROJECT_DIR"
-xcodebuild \
-  -project "$PROJECT" \
-  -scheme "$SCHEME" \
-  -sdk iphonesimulator \
-  -destination "id=$UDID" \
-  -derivedDataPath "$DERIVED_DATA" \
-  -configuration Debug \
-  test \
-  "${ONLY_TESTING_ARGS[@]}" 2>&1 | xcsift
+xcodebuild "${XCODEBUILD_ARGS[@]}" 2>&1 | xcsift

@@ -80,10 +80,16 @@ for test_identifier in "$@"; do
   ONLY_TESTING_ARGS+=("-only-testing:$(normalize_test_identifier "$test_identifier")")
 done
 
+# Disable parallel testing by default. With parallelizable="YES" in the scheme,
+# xcodebuild clones the simulator once per CPU core, which pegs every core and
+# spins the fans. Override with PILLIE_TEST_PARALLEL=YES to restore cloning.
+PARALLEL_TESTING="${PILLIE_TEST_PARALLEL:-NO}"
+
 echo "> XcodeBuildMCP focused Pillie tests"
 echo "> Project: $PROJECT_PATH"
 echo "> DerivedData: $DERIVED_DATA"
 echo "> Simulator: $UDID"
+echo "> Parallel testing: $PARALLEL_TESTING (PILLIE_TEST_PARALLEL=YES re-enables simulator cloning)"
 if [[ -n "${DEVELOPER_DIR:-}" ]]; then
   echo "> DeveloperDir: $DEVELOPER_DIR"
 fi
@@ -97,7 +103,13 @@ MCP_ARGS=(
   --configuration "$CONFIGURATION"
   --simulator-id "$UDID"
   --derived-data-path "$DERIVED_DATA"
+  "--extra-args=-parallel-testing-enabled"
+  "--extra-args=$PARALLEL_TESTING"
 )
+
+if [[ -n "${PILLIE_BUILD_JOBS:-}" ]]; then
+  MCP_ARGS+=("--extra-args=-jobs" "--extra-args=$PILLIE_BUILD_JOBS")
+fi
 
 for arg in "${ONLY_TESTING_ARGS[@]}"; do
   MCP_ARGS+=("--extra-args=$arg")
