@@ -77,6 +77,15 @@ PILLIE_DERIVED_DATA=/tmp/PillieDerivedData-Pillie-<feature-name> Pillie/scripts/
 
 The MCP and shell build scripts also auto-select `/tmp/PillieDerivedData-<worktree-folder>` when the repo folder is not named `Pillie`. Override with `PILLIE_DERIVED_DATA` when needed.
 
+### Claude Code worktrees
+
+Claude Code uses its own native worktree tooling instead of the Codex **Create worktree** action, but it follows the same branch/path/DerivedData rules. There are two equivalent entry points:
+
+- **Native worktree session** — when the user asks to "work in a worktree," use the `EnterWorktree` tool. It creates a worktree under `Pillie/.claude/worktrees/<name>` on a new branch and switches the session into it. Use `ExitWorktree` (`keep` or `remove`) to leave. The branch base is controlled by the `worktree.baseRef` setting (`fresh` branches from `origin/main`, `head` branches from the current local HEAD).
+- **Helper script** — `Pillie/scripts/create-worktree.sh <branch>` also works from Claude Code. It creates a sibling `/Users/idrisskone/Developer/Pillie-<slug>` worktree and prints the matching DerivedData path and build command, exactly as it does for Codex.
+
+The build and focused-test scripts now detect a Claude Code worktree (`*/.claude/worktrees/*`) and auto-select `/tmp/PillieDerivedData-claude-<name>`, so a Claude worktree never collides with the main checkout or a sibling Codex worktree of the same slug. As always, override with `PILLIE_DERIVED_DATA` when needed.
+
 The simulator install is shared by bundle ID (`com.idrisskone.pillie`). Running one worktree replaces the app installed from another worktree unless you use different simulators or bundle IDs.
 
 ## Execution Layer

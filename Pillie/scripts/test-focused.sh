@@ -61,6 +61,9 @@ if [[ -n "${PILLIE_DERIVED_DATA:-}" ]]; then
 elif [[ "$REPO_ROOT" == "$HOME/.codex/worktrees/"* ]]; then
   WORKTREE_ID="$(basename "$(dirname "$REPO_ROOT")")"
   DERIVED_DATA="/tmp/PillieDerivedData-codex-$(safe_name "$WORKTREE_ID")"
+elif [[ "$REPO_ROOT" == *"/.claude/worktrees/"* ]]; then
+  WORKTREE_ID="${REPO_ROOT##*/.claude/worktrees/}"
+  DERIVED_DATA="/tmp/PillieDerivedData-claude-$(safe_name "$WORKTREE_ID")"
 elif [[ "$REPO_NAME" == "Pillie" ]]; then
   DERIVED_DATA="/tmp/PillieDerivedData"
 else
