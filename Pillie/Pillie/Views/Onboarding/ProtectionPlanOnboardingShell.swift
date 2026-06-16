@@ -20,10 +20,20 @@ struct ProtectionPlanOnboardingShell: View {
 
     @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
 
+    /// Drives the slide direction: forward steps push the new screen in from the
+    /// trailing edge while the old one exits to the leading edge (a clean
+    /// left-to-right push); back navigation reverses it.
+    @State private var goingForward = true
+
     /// Progress shown on the Analytics Consent screen, matching the Superdesign
     /// draft ("STEP 2/10"). Welcome intentionally hides progress.
     private var analyticsConsentProgress: ProtectionPlanProgress {
         ProtectionPlanProgress(index: 2, total: 10)
+    }
+
+    /// Progress shown on the Early Value Proof ("STEP 3/10").
+    private var earlyValueProofProgress: ProtectionPlanProgress {
+        ProtectionPlanProgress(index: 3, total: 10)
     }
 
     var body: some View {
@@ -43,13 +53,19 @@ struct ProtectionPlanOnboardingShell: View {
                     onAllow: { decideConsent(allowed: true) },
                     onDecline: { decideConsent(allowed: false) }
                 )
-                .transition(.asymmetric(
-                    insertion: .move(edge: .trailing),
-                    removal: .move(edge: .trailing)
-                ))
+                .transition(pushTransition)
+
+            case .earlyValueProof:
+                ProtectionPlanEarlyValueProofView(
+                    progress: earlyValueProofProgress,
+                    onBack: goBack,
+                    onContinue: proofContinue
+                )
+                .transition(pushTransition)
 
             default:
-                // Intro complete: hand off to the rest of onboarding.
+                // Intro complete (Review Prompt sentinel reached): hand off to the
+                // preserved Review Prompt and the rest of onboarding.
                 Color.clear
                     .onAppear(perform: onIntroFinished)
             }
@@ -63,7 +79,18 @@ struct ProtectionPlanOnboardingShell: View {
         advance()
     }
 
+    private func proofContinue() {
+        InteractionFeedback.live.perform(.meaningfulCommit)
+        advance() // earlyValueProof -> reviewPrompt (handoff sentinel)
+        // Hand off synchronously so there is no blank frame between the proof and
+        // the preserved Review Prompt.
+        if model.hasFinishedIntro {
+            onIntroFinished()
+        }
+    }
+
     private func advance() {
+        goingForward = true
         withAnimation(transitionAnimation) {
             model.advance()
         }
@@ -71,6 +98,7 @@ struct ProtectionPlanOnboardingShell: View {
 
     private func goBack() {
         InteractionFeedback.live.perform(.lowRiskTap)
+        goingForward = false
         withAnimation(transitionAnimation) {
             model.goBack()
         }
@@ -94,5 +122,15 @@ struct ProtectionPlanOnboardingShell: View {
         accessibilityReduceMotion
             ? .easeInOut(duration: 0.2)
             : .spring(response: 0.45, dampingFraction: 0.86)
+    }
+
+    /// A directional push: the incoming screen enters from one edge while the
+    /// outgoing screen leaves toward the opposite edge, so forward reads
+    /// left-to-right and back reads right-to-left.
+    private var pushTransition: AnyTransition {
+        .asymmetric(
+            insertion: .move(edge: goingForward ? .trailing : .leading),
+            removal: .move(edge: goingForward ? .leading : .trailing)
+        )
     }
 }

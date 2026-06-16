@@ -12,6 +12,7 @@
 		DP0001022F456DC00082EF2F /* PillieDeviceActivityMonitor.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = DA0001012F456DC00082EF2F /* PillieDeviceActivityMonitor.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		DP0001032F456DC00082EF2F /* PillieShieldConfiguration.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = SC0001012F456DC00082EF2F /* PillieShieldConfiguration.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		DP0001042F456DC00082EF2F /* PillieShieldAction.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = SA0001012F456DC00082EF2F /* PillieShieldAction.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		LT0001022F6A00000082EF2F /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = LT0001022F6A00010082EF2F /* Lottie */; };
 		PH0001022F6A00000082EF2F /* PostHog in Frameworks */ = {isa = PBXBuildFile; productRef = PH0001022F6A00010082EF2F /* PostHog */; };
 /* End PBXBuildFile section */
 
@@ -151,6 +152,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				PH0001022F6A00000082EF2F /* PostHog in Frameworks */,
+				LT0001022F6A00000082EF2F /* Lottie in Frameworks */,
 				527C07A42F5A4BB900164A1D /* RevenueCatUI in Frameworks */,
 				527C07A32F5A4BB900164A1D /* RevenueCat in Frameworks */,
 			);
@@ -256,6 +258,7 @@
 			name = Pillie;
 			packageProductDependencies = (
 				PH0001022F6A00010082EF2F /* PostHog */,
+				LT0001022F6A00010082EF2F /* Lottie */,
 				RC0001022F456DC00082EF2F /* RevenueCat */,
 				RC0001032F456DC00082EF2F /* RevenueCatUI */,
 			);
@@ -414,6 +417,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				PH0001012F6A00000082EF2F /* XCRemoteSwiftPackageReference "posthog-ios" */,
+				LT0001012F6A00000082EF2F /* XCRemoteSwiftPackageReference "lottie-ios" */,
 				RC0001012F456DC00082EF2F /* XCRemoteSwiftPackageReference "purchases-ios" */,
 			);
 			preferredProjectObjectVersion = 77;
@@ -1037,6 +1041,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		LT0001012F6A00000082EF2F /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.4.0;
+			};
+		};
 		PH0001012F6A00000082EF2F /* XCRemoteSwiftPackageReference "posthog-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/PostHog/posthog-ios.git";
@@ -1056,6 +1068,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		LT0001022F6A00010082EF2F /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = LT0001012F6A00000082EF2F /* XCRemoteSwiftPackageReference "lottie-ios" */;
+			productName = Lottie;
+		};
 		PH0001022F6A00010082EF2F /* PostHog */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = PH0001012F6A00000082EF2F /* XCRemoteSwiftPackageReference "posthog-ios" */;

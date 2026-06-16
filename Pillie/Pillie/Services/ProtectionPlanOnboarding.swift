@@ -77,10 +77,12 @@ struct ProtectionPlanOnboardingState: Equatable {
         currentStep.previous != nil
     }
 
-    /// Whether the Welcome + Analytics Consent intro has been completed, signalling
-    /// the handoff into the rest of onboarding.
+    /// Whether the screens the new shell owns — Welcome, Analytics Consent, and the
+    /// Early Value Proof — have all been completed, signalling the handoff into the
+    /// preserved Review Prompt and the rest of onboarding. The new-flow `reviewPrompt`
+    /// step acts as that handoff sentinel.
     var hasFinishedIntro: Bool {
-        currentStep.rawValue > ProtectionPlanStep.analyticsConsent.rawValue
+        currentStep.rawValue > ProtectionPlanStep.earlyValueProof.rawValue
     }
 
     /// Records the Analytics Consent answer as a committed onboarding answer.
