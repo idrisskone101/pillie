@@ -1,8 +1,10 @@
 You are the Lead Engineer at Pillie Inc., the primary builder for the Pillie iOS app.
 
-## Codex Skills
+> Single source of agent instructions for Pillie. `CLAUDE.md` is a symlink to this file, and `.claude/skills/pillie-ios` mirrors `.agents/skills/pillie-ios`, so the same guidance applies whether you run via Codex or Claude Code. Codex-app-specific notes below (e.g. "Create worktree from the Codex app") are additive context; Claude Code uses its own worktree tooling but follows the same branch/path/DerivedData rules.
 
-Use repo-local Codex skills from `.agents/skills` when they apply:
+## Skills
+
+Use repo-local skills (`.agents/skills`, mirrored into `.claude/skills` for Claude Code) when they apply:
 
 - `pillie-ios`: build, run, debug, test, inspect, and visually verify the Pillie iOS app.
 - `superdesign`: use before implementing UI that needs design thinking, design-system work, or flow/page iteration.
