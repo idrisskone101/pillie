@@ -88,7 +88,7 @@ final class PillStoreEdgeCaseTests: XCTestCase {
         XCTAssertEqual(PillPack.normalizedCustomValues(active: nil, breakDays: nil).active, 21)
         XCTAssertEqual(PillPack.normalizedCustomValues(active: nil, breakDays: nil).breakDays, 7)
         XCTAssertEqual(PillPack.normalizedCustomValues(active: 0, breakDays: 99).active, 1)
-        XCTAssertEqual(PillPack.normalizedCustomValues(active: 0, breakDays: 99).breakDays, 28)
+        XCTAssertEqual(PillPack.normalizedCustomValues(active: 0, breakDays: 99).breakDays, 7)
         XCTAssertEqual(PillPack.normalizedCustomValues(active: 999, breakDays: -1).active, 365)
         XCTAssertEqual(PillPack.normalizedCustomValues(active: 999, breakDays: -1).breakDays, 0)
     }

@@ -41,4 +41,14 @@ enum ContraceptiveMethod: String, CaseIterable, Codable {
         case .ring: return "Insert day 1, remove day 22, reinsert after 7 days"
         }
     }
+
+    /// Short, plain-language descriptor for the Routine Basics Method cards (#77).
+    /// Cleaner than `subtitle` so the first routine screen stays uncluttered.
+    var routineDescriptor: String {
+        switch self {
+        case .pill: return "Taken daily"
+        case .patch: return "Changed weekly"
+        case .ring: return "Monthly cycle"
+        }
+    }
 }
