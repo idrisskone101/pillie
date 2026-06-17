@@ -112,6 +112,11 @@ struct ProtectionPlanQuestionHeader: View {
             Text(title)
                 .font(.pillieTitle())
                 .foregroundStyle(PillieTheme.textPrimary)
+                // The 42pt title fits short questions on one or two lines; a long
+                // question (e.g. Failure Frequency) auto-shrinks to stay within two
+                // lines instead of pushing the screen to three crowded lines.
+                .lineLimit(2)
+                .minimumScaleFactor(0.7)
                 .fixedSize(horizontal: false, vertical: true)
 
             Text(subtitle)

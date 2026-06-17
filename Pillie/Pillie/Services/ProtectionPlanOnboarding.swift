@@ -68,17 +68,27 @@ struct ProtectionPlanOnboardingState: Equatable {
     private(set) var distractionChoices: Set<DistractionChoice>
     /// Committed Delay Consequence (single-select), or `nil` until answered.
     private(set) var delayConsequence: DelayConsequence?
+    /// Committed Risk Window (single-select), or `nil` until answered. Copy /
+    /// personalization only in v1 — never used to change the blocking schedule.
+    private(set) var riskWindow: RiskWindow?
+    /// Committed Draft Blocked App Choices (multi-select, grouped, includes Other).
+    /// A draft intent only — kept separate from the real Screen Time selection.
+    private(set) var draftBlockedApps: Set<DraftBlockedAppChoice>
 
     init(
         currentStep: ProtectionPlanStep = .first,
         analyticsConsentDecision: AnalyticsConsentDecision = .undecided,
         distractionChoices: Set<DistractionChoice> = [],
-        delayConsequence: DelayConsequence? = nil
+        delayConsequence: DelayConsequence? = nil,
+        riskWindow: RiskWindow? = nil,
+        draftBlockedApps: Set<DraftBlockedAppChoice> = []
     ) {
         self.currentStep = currentStep
         self.analyticsConsentDecision = analyticsConsentDecision
         self.distractionChoices = distractionChoices
         self.delayConsequence = delayConsequence
+        self.riskWindow = riskWindow
+        self.draftBlockedApps = draftBlockedApps
     }
 
     /// Whether the user can step backward from the current step.
@@ -110,6 +120,17 @@ struct ProtectionPlanOnboardingState: Equatable {
         delayConsequence = consequence
     }
 
+    /// Commits the single-select Risk Window answer.
+    mutating func recordRiskWindow(_ window: RiskWindow?) {
+        riskWindow = window
+    }
+
+    /// Commits the multi-select Draft Blocked App Choices answer, replacing any
+    /// prior selection.
+    mutating func recordDraftBlockedApps(_ choices: Set<DraftBlockedAppChoice>) {
+        draftBlockedApps = choices
+    }
+
     /// Commits the current step and moves forward in the locked order.
     mutating func advance() {
         guard let next = currentStep.next else { return }
@@ -131,6 +152,8 @@ enum ProtectionPlanOnboardingStore {
         static let consent = "protectionPlanOnboardingAnalyticsConsent"
         static let distractionChoices = "protectionPlanOnboardingDistractionChoices"
         static let delayConsequence = "protectionPlanOnboardingDelayConsequence"
+        static let riskWindow = "protectionPlanOnboardingRiskWindow"
+        static let draftBlockedApps = "protectionPlanOnboardingDraftBlockedApps"
     }
 
     static func load(from defaults: UserDefaults) -> ProtectionPlanOnboardingState {
@@ -144,11 +167,19 @@ enum ProtectionPlanOnboardingStore {
         )
         let delayConsequence = defaults.string(forKey: Keys.delayConsequence)
             .flatMap(DelayConsequence.init(rawValue:))
+        let riskWindow = defaults.string(forKey: Keys.riskWindow)
+            .flatMap(RiskWindow.init(rawValue:))
+        let draftBlockedApps = Set(
+            (defaults.stringArray(forKey: Keys.draftBlockedApps) ?? [])
+                .compactMap(DraftBlockedAppChoice.init(rawValue:))
+        )
         return ProtectionPlanOnboardingState(
             currentStep: step,
             analyticsConsentDecision: consent,
             distractionChoices: distractionChoices,
-            delayConsequence: delayConsequence
+            delayConsequence: delayConsequence,
+            riskWindow: riskWindow,
+            draftBlockedApps: draftBlockedApps
         )
     }
 
@@ -161,6 +192,12 @@ enum ProtectionPlanOnboardingStore {
         } else {
             defaults.removeObject(forKey: Keys.delayConsequence)
         }
+        if let riskWindow = state.riskWindow {
+            defaults.set(riskWindow.rawValue, forKey: Keys.riskWindow)
+        } else {
+            defaults.removeObject(forKey: Keys.riskWindow)
+        }
+        defaults.set(state.draftBlockedApps.map(\.rawValue), forKey: Keys.draftBlockedApps)
     }
 }
 
@@ -182,6 +219,8 @@ final class ProtectionPlanOnboardingModel {
     var analyticsConsentDecision: AnalyticsConsentDecision { state.analyticsConsentDecision }
     var distractionChoices: Set<DistractionChoice> { state.distractionChoices }
     var delayConsequence: DelayConsequence? { state.delayConsequence }
+    var riskWindow: RiskWindow? { state.riskWindow }
+    var draftBlockedApps: Set<DraftBlockedAppChoice> { state.draftBlockedApps }
     var canGoBack: Bool { state.canGoBack }
     var hasFinishedIntro: Bool { state.hasFinishedIntro }
 
@@ -197,6 +236,16 @@ final class ProtectionPlanOnboardingModel {
 
     func recordDelayConsequence(_ consequence: DelayConsequence?) {
         state.recordDelayConsequence(consequence)
+        persist()
+    }
+
+    func recordRiskWindow(_ window: RiskWindow?) {
+        state.recordRiskWindow(window)
+        persist()
+    }
+
+    func recordDraftBlockedApps(_ choices: Set<DraftBlockedAppChoice>) {
+        state.recordDraftBlockedApps(choices)
         persist()
     }
 

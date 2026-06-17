@@ -18,6 +18,7 @@ struct ProtectionPlanSelectableRow: View {
     }
 
     let title: String
+    var subtitle: String? = nil
     var symbolName: String? = nil
     let isSelected: Bool
     let style: Style
@@ -45,11 +46,21 @@ struct ProtectionPlanSelectableRow: View {
                         )
                 }
 
-                Text(title)
-                    .font(.pillie(18, weight: .bold))
-                    .foregroundStyle(PillieTheme.textPrimary)
-                    .multilineTextAlignment(.leading)
-                    .fixedSize(horizontal: false, vertical: true)
+                VStack(alignment: .leading, spacing: 3) {
+                    Text(title)
+                        .font(.pillie(18, weight: .bold))
+                        .foregroundStyle(PillieTheme.textPrimary)
+                        .multilineTextAlignment(.leading)
+                        .fixedSize(horizontal: false, vertical: true)
+
+                    if let subtitle {
+                        Text(subtitle)
+                            .font(.pillie(14, weight: .regular))
+                            .foregroundStyle(PillieTheme.textMuted)
+                            .multilineTextAlignment(.leading)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                }
 
                 Spacer(minLength: 12)
 
@@ -73,7 +84,7 @@ struct ProtectionPlanSelectableRow: View {
         }
         .buttonStyle(.plain)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(title)
+        .accessibilityLabel(subtitle.map { "\(title), \($0)" } ?? title)
         .accessibilityAddTraits(isSelected ? [.isButton, .isSelected] : .isButton)
         .accessibilityHint(accessibilityHint)
     }
