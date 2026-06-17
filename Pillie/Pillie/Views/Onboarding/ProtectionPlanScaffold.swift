@@ -25,6 +25,40 @@ struct ProtectionPlanProgress: Equatable {
     var badge: String { "STEP \(index)/\(total)" }
 }
 
+/// Single source of truth for the numbered plan-builder progress shown from the first
+/// calibration question through Reminder Time (#77). Centralizing it keeps the bar
+/// advancing coherently — the legacy approach hard-coded `index/total` per screen,
+/// which left Acquisition reading "10/10" while three more setup screens still
+/// followed. A later slice extends `numberedSteps` instead of re-numbering every view.
+enum ProtectionPlanProgressIndex {
+    /// The bespoke intro screens (Welcome, Analytics Consent, Early Value Proof, Review
+    /// Prompt) precede the numbered steps and are counted in the denominator, matching
+    /// the shipped scheme where Distraction Choices is step 5.
+    static let introScreens = 4
+
+    /// The ordered steps that show the numbered progress header, first question
+    /// through Reminder Time.
+    static let numberedSteps: [OnboardingFlow.Step] = [
+        .painPoints,        // Distraction Choices
+        .goal,              // Delay Consequence
+        .missFrequency,     // Failure Frequency
+        .riskWindow,
+        .draftBlockedApps,
+        .acquisitionSource,
+        .method,            // Routine Basics — Method
+        .schedule,          // Routine Basics — Details
+        .reminderTime,      // Reminder Time
+    ]
+
+    static var total: Int { introScreens + numberedSteps.count }
+
+    /// The progress to show for a numbered step. Unknown steps fall back to a full bar.
+    static func progress(for step: OnboardingFlow.Step) -> ProtectionPlanProgress {
+        let position = numberedSteps.firstIndex(of: step).map { introScreens + $0 + 1 } ?? total
+        return ProtectionPlanProgress(index: position, total: total)
+    }
+}
+
 struct ProtectionPlanScaffold<Content: View>: View {
     var progress: ProtectionPlanProgress? = nil
     var onBack: (() -> Void)? = nil

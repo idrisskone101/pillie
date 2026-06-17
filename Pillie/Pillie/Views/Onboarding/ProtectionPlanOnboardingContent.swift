@@ -341,3 +341,83 @@ struct ProtectionPlanAcquisitionSourceContent {
         choices: AcquisitionSource.allCases
     )
 }
+
+/// Copy for the Routine Basics Method screen (issue #77, Superdesign draft
+/// c8d8749d). The first routine screen — the user names which contraception routine
+/// Pillie should protect. Consolidated from the draft's four stacked lines into a
+/// title + question + single footnote so the screen stays uncluttered; each method
+/// card pairs `title` with a plain-language `routineDescriptor`.
+struct ProtectionPlanRoutineMethodContent {
+    let title: String
+    let subtitle: String
+    let footnote: String
+    let primaryCTA: String
+    let choices: [ContraceptiveMethod]
+
+    var visibleCopy: [String] {
+        [title, subtitle, footnote, primaryCTA]
+            + choices.flatMap { [$0.title, $0.routineDescriptor] }
+    }
+
+    static let `default` = ProtectionPlanRoutineMethodContent(
+        title: "The core of it",
+        subtitle: "What routine should Pillie protect?",
+        footnote: "Your plan adapts to how you take it. You can change this anytime.",
+        primaryCTA: "Continue",
+        choices: ContraceptiveMethod.allCases
+    )
+}
+
+/// Copy for the Routine Basics Details screen (issue #77, Superdesign draft
+/// b9b281e6). Replaces the legacy seven-card regimen form: a coarse cycle-position
+/// toggle anchors the exact day, and only the common regimens show up front with the
+/// rest behind "More options". The view chooses the method-specific section (pill
+/// regimen picker vs. patch/ring schedule rules); this struct holds the shared copy.
+struct ProtectionPlanRoutineDetailsContent {
+    let title: String
+    let subtitle: String
+    let cyclePositionHeader: String
+    let regimenHeader: String
+    /// Label for the disclosure that reveals the less common regimens.
+    let moreLabel: String
+    let footnote: String
+    let primaryCTA: String
+
+    var visibleCopy: [String] {
+        [title, subtitle, cyclePositionHeader, regimenHeader, moreLabel, footnote, primaryCTA]
+            + CyclePosition.allCases.map(\.title)
+    }
+
+    static let `default` = ProtectionPlanRoutineDetailsContent(
+        title: "Where are you in your routine?",
+        subtitle: "How far into your cycle are you?",
+        cyclePositionHeader: "Where are you now?",
+        regimenHeader: "Pill regimen",
+        moreLabel: "More options",
+        footnote: "This keeps your reminders in sync with your cycle — for tracking, not medical advice.",
+        primaryCTA: "Continue"
+    )
+}
+
+/// Copy for the Reminder Time screen (issue #77, Superdesign draft ec61e147). Picks
+/// the Due Action Time through the existing production reminder model, kept lean —
+/// the screen leads with the picker and a single method-aware line.
+struct ProtectionPlanReminderTimeContent {
+    let title: String
+    let subtitle: String
+    /// Eyebrow above the time wheel, naming the Due Action Time concept once rather
+    /// than repeating it in a separate helper line.
+    let pickerLabel: String
+    let primaryCTA: String
+
+    var visibleCopy: [String] {
+        [title, subtitle, pickerLabel, primaryCTA]
+    }
+
+    static let `default` = ProtectionPlanReminderTimeContent(
+        title: "The golden hour",
+        subtitle: "When should Pillie step in?",
+        pickerLabel: "Due Action Time",
+        primaryCTA: "Set Reminder Time"
+    )
+}

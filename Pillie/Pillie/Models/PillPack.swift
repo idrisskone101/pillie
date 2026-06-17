@@ -96,7 +96,11 @@ final class PillPack {
     }
 
     static let customActiveRange = 1...365
-    static let customBreakRange = 0...28
+    // Break = the hormone-free / placebo interval. 7 days is the standard maximum used
+    // by every real combined-pill regimen (21/7, 24/4, 26/2, 28/0, 84/7, 365/0 all have
+    // breaks ≤ 7); extending it past 7 isn't an alternative schedule, it just reduces
+    // contraceptive efficacy. So the cap is 7, not an arbitrary one-month value.
+    static let customBreakRange = 0...7
 
     var method: ContraceptiveMethod {
         get { ContraceptiveMethod(rawValue: methodRaw) ?? .pill }

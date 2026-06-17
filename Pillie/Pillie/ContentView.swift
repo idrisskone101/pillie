@@ -106,7 +106,7 @@ struct ContentView: View {
 	        case .painPoints:
 	          ProtectionPlanDistractionChoicesView(
 	            model: protectionPlanModel,
-	            progress: ProtectionPlanProgress(index: 5, total: 10),
+	            progress: ProtectionPlanProgressIndex.progress(for: .painPoints),
 	            onBack: {
                 lowRiskTransition(to: .reviewPrompt)
 	            },
@@ -124,7 +124,7 @@ struct ContentView: View {
 	        case .goal:
 	          ProtectionPlanDelayConsequenceView(
 	            model: protectionPlanModel,
-	            progress: ProtectionPlanProgress(index: 6, total: 10),
+	            progress: ProtectionPlanProgressIndex.progress(for: .goal),
 	            onBack: {
                 lowRiskTransition(to: .painPoints)
 	            },
@@ -141,7 +141,7 @@ struct ContentView: View {
 
 	        case .missFrequency:
 	          ProtectionPlanFailureFrequencyView(
-	            progress: ProtectionPlanProgress(index: 7, total: 10),
+	            progress: ProtectionPlanProgressIndex.progress(for: .missFrequency),
 	            initialSelection: store.missFrequency,
 	            onBack: {
                 lowRiskTransition(to: .goal)
@@ -160,7 +160,7 @@ struct ContentView: View {
 	        case .riskWindow:
           ProtectionPlanRiskWindowView(
             model: protectionPlanModel,
-            progress: ProtectionPlanProgress(index: 8, total: 10),
+            progress: ProtectionPlanProgressIndex.progress(for: .riskWindow),
             onBack: {
               lowRiskTransition(to: .missFrequency)
             },
@@ -178,7 +178,7 @@ struct ContentView: View {
         case .draftBlockedApps:
           ProtectionPlanDraftBlockedAppsView(
             model: protectionPlanModel,
-            progress: ProtectionPlanProgress(index: 9, total: 10),
+            progress: ProtectionPlanProgressIndex.progress(for: .draftBlockedApps),
             onBack: {
               lowRiskTransition(to: .riskWindow)
             },
@@ -195,7 +195,7 @@ struct ContentView: View {
 
         case .acquisitionSource:
 	          ProtectionPlanAcquisitionSourceView(
-	            progress: ProtectionPlanProgress(index: 10, total: 10),
+	            progress: ProtectionPlanProgressIndex.progress(for: .acquisitionSource),
 	            initialSelection: store.acquisitionSource,
 	            onBack: {
                 lowRiskTransition(to: .draftBlockedApps)
@@ -216,7 +216,9 @@ struct ContentView: View {
             ))
 
 	        case .method:
-	          MethodPickerView(
+	          ProtectionPlanRoutineMethodView(
+	            progress: ProtectionPlanProgressIndex.progress(for: .method),
+	            initialMethod: store.contraceptiveMethod,
 	            onBack: {
                 lowRiskTransition(to: .acquisitionSource)
 	            },
@@ -232,7 +234,8 @@ struct ContentView: View {
             ))
 
 	        case .schedule:
-	          MethodDetailsView(
+	          ProtectionPlanRoutineDetailsView(
+	            progress: ProtectionPlanProgressIndex.progress(for: .schedule),
 	            onBack: {
                 lowRiskTransition(to: .method)
 	            },
@@ -258,7 +261,8 @@ struct ContentView: View {
             ))
 
 	        case .reminderTime:
-	          TimeSetupView(
+	          ProtectionPlanReminderTimeView(
+	            progress: ProtectionPlanProgressIndex.progress(for: .reminderTime),
 	            onBack: {
                 lowRiskTransition(to: .schedule)
 	            },
