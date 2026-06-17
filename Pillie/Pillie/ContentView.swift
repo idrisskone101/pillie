@@ -140,13 +140,15 @@ struct ContentView: View {
             ))
 
 	        case .missFrequency:
-	          MissFrequencyView(
+	          ProtectionPlanFailureFrequencyView(
+	            progress: ProtectionPlanProgress(index: 7, total: 10),
+	            initialSelection: store.missFrequency,
 	            onBack: {
                 lowRiskTransition(to: .goal)
 	            },
 	            onContinue: { freq in
 	              store.missFrequency = freq
-                continueSetupStep(to: .acquisitionSource)
+                continueSetupStep(to: .riskWindow)
 	            }
           )
           .transition(
@@ -155,10 +157,48 @@ struct ContentView: View {
               removal: .move(edge: .trailing)
             ))
 
-	        case .acquisitionSource:
-	          AcquisitionSourceView(
+	        case .riskWindow:
+          ProtectionPlanRiskWindowView(
+            model: protectionPlanModel,
+            progress: ProtectionPlanProgress(index: 8, total: 10),
+            onBack: {
+              lowRiskTransition(to: .missFrequency)
+            },
+            onContinue: {
+              // Risk Window is committed inside ProtectionPlanRiskWindowView.
+              continueSetupStep(to: .draftBlockedApps)
+            }
+          )
+          .transition(
+            .asymmetric(
+              insertion: .move(edge: .trailing),
+              removal: .move(edge: .trailing)
+            ))
+
+        case .draftBlockedApps:
+          ProtectionPlanDraftBlockedAppsView(
+            model: protectionPlanModel,
+            progress: ProtectionPlanProgress(index: 9, total: 10),
+            onBack: {
+              lowRiskTransition(to: .riskWindow)
+            },
+            onContinue: {
+              // Draft Blocked App Choices are committed inside the view.
+              continueSetupStep(to: .acquisitionSource)
+            }
+          )
+          .transition(
+            .asymmetric(
+              insertion: .move(edge: .trailing),
+              removal: .move(edge: .trailing)
+            ))
+
+        case .acquisitionSource:
+	          ProtectionPlanAcquisitionSourceView(
+	            progress: ProtectionPlanProgress(index: 10, total: 10),
+	            initialSelection: store.acquisitionSource,
 	            onBack: {
-                lowRiskTransition(to: .missFrequency)
+                lowRiskTransition(to: .draftBlockedApps)
 	            },
             onContinue: { source in
               store.acquisitionSource = source

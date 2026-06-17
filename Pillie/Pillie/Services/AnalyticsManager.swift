@@ -152,6 +152,8 @@ enum AnalyticsStep: String {
   case delayConsequence = "delay_consequence"
   case goal
   case missFrequency = "miss_frequency"
+  case riskWindow = "risk_window"
+  case draftBlockedApps = "draft_blocked_apps"
   case acquisitionSource = "acquisition_source"
   case paywall
   case method

@@ -209,3 +209,135 @@ struct ProtectionPlanDelayConsequenceContent {
         choices: DelayConsequence.allCases
     )
 }
+
+/// Copy for the Failure Frequency screen (issue #76, Superdesign draft 12612ffc).
+/// Single-select. The display labels are updated to Rarely / A few times a month /
+/// Weekly / Multiple times a week, but each option still maps onto the existing
+/// `MissFrequency` storage bucket so persisted answers stay compatible.
+struct ProtectionPlanFailureFrequencyContent {
+    struct Option: Identifiable, Equatable {
+        /// The existing storage bucket this label maps onto.
+        let bucket: MissFrequency
+        let title: String
+        let subtitle: String
+
+        var id: String { bucket.rawValue }
+    }
+
+    let title: String
+    let subtitle: String
+    /// Footnote under the CTA: reassures the answer is private.
+    let footnote: String
+    let primaryCTA: String
+    let options: [Option]
+
+    var visibleCopy: [String] {
+        [title, subtitle, footnote, primaryCTA] + options.flatMap { [$0.title, $0.subtitle] }
+    }
+
+    static let `default` = ProtectionPlanFailureFrequencyContent(
+        title: "How often do reminders fail you?",
+        subtitle: "Being honest helps us adjust the Pillie Protection level for your needs.",
+        footnote: "Your honesty ensures we provide the right level of support. This information is private.",
+        primaryCTA: "Continue",
+        options: [
+            Option(bucket: .rarely, title: "Rarely", subtitle: "Reminders usually work for me"),
+            Option(bucket: .sometimes, title: "A few times a month", subtitle: "Occasionally I still forget"),
+            Option(bucket: .often, title: "Weekly", subtitle: "At least once every week"),
+            Option(bucket: .almostDaily, title: "Multiple times a week", subtitle: "I struggle significantly"),
+        ]
+    )
+}
+
+/// Copy for the Risk Window screen (issue #76, Superdesign draft bae7eb8a).
+/// Single-select. In v1 this is personalization / copy only — the clarifier and
+/// footnote make clear it does not change the actual blocking schedule.
+struct ProtectionPlanRiskWindowContent {
+    let title: String
+    let subtitle: String
+    /// Footnote under the CTA: the single reassurance that this answer is
+    /// personalization only and does not drive the blocking schedule. Kept at the
+    /// bottom so the question header stays one uncluttered subheader.
+    let footnote: String
+    let primaryCTA: String
+    let choices: [RiskWindow]
+
+    var visibleCopy: [String] {
+        [title, subtitle, footnote, primaryCTA]
+            + choices.flatMap { [$0.title, $0.subtitle] }
+    }
+
+    static let `default` = ProtectionPlanRiskWindowContent(
+        title: "Timing is everything",
+        subtitle: "When are you most likely to drift into another app?",
+        footnote: "This shapes your plan — we don't use it to schedule alarms.",
+        primaryCTA: "Continue",
+        choices: RiskWindow.allCases
+    )
+}
+
+/// Copy for the Draft Blocked Apps screen (issue #76, Superdesign drafts f1c3b77e
+/// + ed2e2ec4). Multi-select, grouped categories + apps + an Other catch-all. The
+/// footnote keeps this clearly separate from the real Screen Time app selection,
+/// which happens later with Apple's own picker.
+struct ProtectionPlanDraftBlockedAppsContent {
+    let title: String
+    let subtitle: String
+    let categoriesHeader: String
+    let appsHeader: String
+    /// Header of the live draft-plan summary that fills the lower screen.
+    let summaryTitle: String
+    /// Empty-state line of the summary, before anything is selected.
+    let summaryEmpty: String
+    /// Footnote: clarifies this is a draft and real apps are chosen via Screen Time.
+    let footnote: String
+    let primaryCTA: String
+    let categories: [DraftBlockedAppChoice]
+    let apps: [DraftBlockedAppChoice]
+    let other: DraftBlockedAppChoice
+
+    var visibleCopy: [String] {
+        [title, subtitle, categoriesHeader, appsHeader, summaryTitle, summaryEmpty, footnote, primaryCTA]
+            + (categories + apps + [other]).map(\.title)
+    }
+
+    static let `default` = ProtectionPlanDraftBlockedAppsContent(
+        title: "Which apps should Pillie protect pill time from?",
+        subtitle: "Choose categories or specific apps to draft your distraction blocklist.",
+        categoriesHeader: "Distraction categories",
+        appsHeader: "Specific apps",
+        summaryTitle: "Your protection draft",
+        summaryEmpty: "Tap apps above to start your protection draft.",
+        footnote: "This sets your draft preferences. You'll choose specific apps via Screen Time in the final step.",
+        primaryCTA: "Save Selections",
+        categories: DraftBlockedAppChoice.categories,
+        apps: DraftBlockedAppChoice.apps,
+        other: .other
+    )
+}
+
+/// Copy for the Acquisition Source screen (issue #76, Superdesign draft 3e3d657f).
+/// Single-select but optional (a Skip path). It stays a broad product signal and is
+/// kept distinct from Distraction Choices — "TikTok as a source" is not "TikTok as
+/// a distraction".
+struct ProtectionPlanAcquisitionSourceContent {
+    let eyebrow: String
+    let title: String
+    let subtitle: String
+    let primaryCTA: String
+    let skipCTA: String
+    let choices: [AcquisitionSource]
+
+    var visibleCopy: [String] {
+        [eyebrow, title, subtitle, primaryCTA, skipCTA] + choices.map(\.title)
+    }
+
+    static let `default` = ProtectionPlanAcquisitionSourceContent(
+        eyebrow: "One last thing",
+        title: "Where did you find Pillie?",
+        subtitle: "Your feedback helps us reach more people who need protection.",
+        primaryCTA: "Finish Setup",
+        skipCTA: "Not now",
+        choices: AcquisitionSource.allCases
+    )
+}

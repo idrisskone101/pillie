@@ -31,6 +31,9 @@ struct ProtectionPlanScaffold<Content: View>: View {
 
     let primaryTitle: String
     var primaryIcon: String? = "arrow.right"
+    /// Whether the primary icon gets the gentle horizontal "go" nudge. Directional
+    /// arrows nudge; a static icon (e.g. a shield on a "Save" CTA) should not.
+    var animatesPrimaryIcon: Bool = true
     var isPrimaryEnabled: Bool = true
     let onPrimary: () -> Void
 
@@ -106,7 +109,7 @@ struct ProtectionPlanScaffold<Content: View>: View {
                     Text(primaryTitle)
                     if let primaryIcon {
                         Image(systemName: primaryIcon)
-                            .offset(x: arrowNudge)
+                            .offset(x: animatesPrimaryIcon ? arrowNudge : 0)
                     }
                 }
             }

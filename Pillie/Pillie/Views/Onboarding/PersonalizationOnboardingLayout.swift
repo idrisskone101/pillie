@@ -2,6 +2,13 @@
 //  PersonalizationOnboardingLayout.swift
 //  Pillie
 //
+//  Shared chrome for the legacy personalization onboarding screens that are still
+//  in the flow (method, schedule, reminder time, paywall, etc.): the back +
+//  progress header and the step-progress helper. The selectable row and footer that
+//  used to live here were removed once the calibration question screens migrated to
+//  the Protection Plan plan-builder components (ProtectionPlanScaffold /
+//  ProtectionPlanSelectableRow / ProtectionPlanSelectableChip).
+//
 
 import SwiftUI
 
@@ -56,173 +63,5 @@ enum PersonalizationOnboardingProgress {
 
     static func badge(for step: Int) -> String {
         "STEP \(step)/\(Int(totalSteps))"
-    }
-}
-
-struct PersonalizationOptionRow: View {
-    enum SelectionStyle {
-        case radio
-        case checkbox
-        case checkmark
-    }
-
-    let title: String
-    let subtitle: String?
-    let symbolName: String
-    let symbolTint: Color
-    let isSelected: Bool
-    let selectionStyle: SelectionStyle
-    var minHeight: CGFloat?
-    var verticalPadding: CGFloat?
-    let action: () -> Void
-    @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
-    private let onboardingFeedback = OnboardingInteractionFeedback()
-
-    var body: some View {
-        let compact = (minHeight ?? 100) <= 60
-
-        Button {
-            let response = onboardingFeedback.selectChoice(
-                accessibilityReduceMotion: accessibilityReduceMotion)
-            withAnimation(response.motionProfile.animation) {
-                action()
-            }
-        } label: {
-            HStack(spacing: 14) {
-                if !symbolName.isEmpty {
-                    Image(systemName: symbolName)
-                        .font(.system(size: compact ? 19 : 21, weight: .semibold))
-                        .foregroundStyle(symbolTint)
-                        .frame(width: compact ? 40 : 48, height: compact ? 40 : 48)
-                        .background(symbolTint.opacity(0.14), in: RoundedRectangle(cornerRadius: compact ? 14 : 17))
-                }
-
-                VStack(alignment: .leading, spacing: 6) {
-                    Text(title)
-                        .font(.pillie(compact ? 19 : 20, weight: .bold))
-                        .foregroundStyle(PillieTheme.textPrimary)
-                        .multilineTextAlignment(.leading)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.82)
-
-                    if let subtitle {
-                        Text(subtitle)
-                            .font(.pillie(15, weight: .regular))
-                            .foregroundStyle(PillieTheme.textMuted)
-                            .multilineTextAlignment(.leading)
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.85)
-                    }
-                }
-
-                Spacer(minLength: 10)
-
-                selectionIndicator
-            }
-            .padding(.horizontal, compact ? 20 : 22)
-            .padding(.vertical, verticalPadding ?? (subtitle == nil ? 10 : 11))
-            .frame(maxWidth: .infinity, minHeight: minHeight ?? (subtitle == nil ? 66 : 76), alignment: .leading)
-            .background(
-                RoundedRectangle(cornerRadius: 30)
-                    .fill(isSelected ? PillieTheme.coralLight.opacity(0.78) : .white)
-            )
-            .overlay {
-                RoundedRectangle(cornerRadius: 30)
-                    .stroke(isSelected ? PillieTheme.coral : Color.black.opacity(0.07), lineWidth: isSelected ? 1.6 : 1)
-            }
-            .shadow(color: Color.black.opacity(0.055), radius: 12, y: 6)
-        }
-        .buttonStyle(.plain)
-    }
-
-    @ViewBuilder
-    private var selectionIndicator: some View {
-        switch selectionStyle {
-        case .checkbox:
-            RoundedRectangle(cornerRadius: 7)
-                .stroke(isSelected ? PillieTheme.coral : Color.black.opacity(0.08), lineWidth: 2)
-                .frame(width: 26, height: 26)
-                .background(
-                    RoundedRectangle(cornerRadius: 7)
-                        .fill(isSelected ? PillieTheme.coral : Color.clear)
-                )
-                .overlay {
-                    if isSelected {
-                        Image(systemName: "checkmark")
-                            .font(.system(size: 12, weight: .bold))
-                            .foregroundStyle(.white)
-                    }
-                }
-        case .radio:
-            Circle()
-                .stroke(isSelected ? PillieTheme.coral : Color.black.opacity(0.08), lineWidth: 2)
-                .frame(width: 28, height: 28)
-                .overlay {
-                    if isSelected {
-                        Circle()
-                            .fill(PillieTheme.coral)
-                            .frame(width: 12, height: 12)
-                    }
-                }
-        case .checkmark:
-            if isSelected {
-                Image(systemName: "checkmark")
-                    .font(.system(size: 20, weight: .semibold))
-                    .foregroundStyle(PillieTheme.coral)
-                    .frame(width: 28, height: 28)
-            } else {
-                Color.clear.frame(width: 28, height: 28)
-            }
-        }
-    }
-}
-
-struct PersonalizationFooter: View {
-    let isEnabled: Bool
-    let helperText: String?
-    var skipTitle: String?
-    var onSkip: (() -> Void)?
-    let onContinue: () -> Void
-
-    var body: some View {
-        VStack(spacing: 18) {
-            Button(action: onContinue) {
-                HStack(spacing: 16) {
-                    Text("Continue")
-                    Image(systemName: "arrow.right")
-                }
-            }
-            .buttonStyle(.pillieDark)
-            .disabled(!isEnabled)
-            .opacity(isEnabled ? 1 : 0.38)
-
-            if let skipTitle, let onSkip {
-                Button(action: onSkip) {
-                    Text(skipTitle)
-                        .font(.pillieBodyBold())
-                        .foregroundStyle(PillieTheme.textPrimary)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 16)
-                }
-                .background(Color.white.opacity(0.94), in: RoundedRectangle(cornerRadius: 22))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 22)
-                        .strokeBorder(PillieTheme.textMuted.opacity(0.12), lineWidth: 1)
-                )
-                .shadow(color: PillieTheme.cardShadow, radius: 12, y: 6)
-            }
-
-            if let helperText {
-                Text(helperText)
-                    .font(.pillie(13, weight: .regular))
-                    .italic()
-                    .foregroundStyle(PillieTheme.textMuted.opacity(0.72))
-                    .multilineTextAlignment(.center)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.84)
-                    .lineSpacing(2)
-                    .padding(.horizontal, 8)
-            }
-        }
     }
 }

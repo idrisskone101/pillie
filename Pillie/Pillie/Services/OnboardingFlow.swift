@@ -25,6 +25,11 @@ enum OnboardingFlow {
         case freePlanConfirmation = 14
         case appBlocking = 15
         case complete = 16
+        // Calibration steps added by issue #76. Appended (not renumbered) so the
+        // original persisted raw values are never reinterpreted; their position in
+        // the flow is expressed by `displayOrder`, not by raw-value magnitude.
+        case riskWindow = 17
+        case draftBlockedApps = 18
 
         var analyticsStep: AnalyticsStep? {
             switch self {
@@ -45,6 +50,8 @@ enum OnboardingFlow {
             case .freePlanConfirmation: return .freePlanConfirmation
             case .appBlocking: return .appBlocking
             case .complete: return nil
+            case .riskWindow: return .riskWindow
+            case .draftBlockedApps: return .draftBlockedApps
             }
         }
     }
@@ -75,6 +82,8 @@ enum OnboardingFlow {
         .painPoints,
         .goal,
         .missFrequency,
+        .riskWindow,
+        .draftBlockedApps,
         .acquisitionSource,
         .method,
         .schedule,
@@ -113,11 +122,22 @@ enum OnboardingFlow {
     }
 
     static func isOnboardingActive(rawStep: Int) -> Bool {
-        rawStep < completedStep.rawValue
+        // Identity-based rather than a raw-value magnitude check: calibration steps
+        // (#76) are appended with raw values above `complete`, but are still active
+        // onboarding. Onboarding is active for any real step that is not `complete`.
+        guard let step = step(for: rawStep) else { return false }
+        return step != completedStep
     }
 
     static func completedOnboarding(from previousRawStep: Int, to nextRawStep: Int) -> Bool {
-        previousRawStep <= finalOnboardingStep.rawValue && nextRawStep >= completedStep.rawValue
+        // Onboarding completes exactly when we transition into `complete` from any
+        // earlier step. Identity-based so advancing into an appended calibration step
+        // (raw value above `complete`) is never mistaken for completion.
+        guard let previousStep = step(for: previousRawStep),
+              let nextStep = step(for: nextRawStep) else {
+            return false
+        }
+        return previousStep != completedStep && nextStep == completedStep
     }
 
     static func transition(from previousRawStep: Int, to nextRawStep: Int) -> Transition? {

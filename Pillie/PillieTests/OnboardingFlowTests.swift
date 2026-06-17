@@ -30,6 +30,77 @@ final class OnboardingFlowTests: XCTestCase {
         )
     }
 
+    // MARK: - Calibration steps inserted by issue #76 (Risk Window + Draft Apps)
+
+    func testRiskWindowAndDraftBlockedAppsAreAppendedSoExistingRawValuesAreStable() {
+        // The two calibration steps are appended (not renumbered) so persisted
+        // onboardingStep values for the original flow are never reinterpreted.
+        XCTAssertEqual(OnboardingFlow.Step.riskWindow.rawValue, 17)
+        XCTAssertEqual(OnboardingFlow.Step.draftBlockedApps.rawValue, 18)
+        XCTAssertGreaterThan(OnboardingFlow.Step.riskWindow.rawValue, OnboardingFlow.Step.complete.rawValue)
+    }
+
+    func testDisplayOrderRunsFailureRiskDraftAcquisitionInCalibrationOrder() {
+        let order = OnboardingFlow.displayOrder
+        let calibration: [OnboardingFlow.Step] = [.missFrequency, .riskWindow, .draftBlockedApps, .acquisitionSource]
+        let indices = calibration.compactMap { order.firstIndex(of: $0) }
+        XCTAssertEqual(indices.count, calibration.count, "Every calibration step must appear in displayOrder.")
+        XCTAssertEqual(indices, indices.sorted(), "Calibration steps must be contiguous and ordered.")
+        XCTAssertEqual(indices, Array(indices.first!...indices.last!), "Calibration steps must be contiguous.")
+    }
+
+    func testCalibrationStepsMapToSafeLowCardinalityAnalyticsLabels() {
+        XCTAssertEqual(OnboardingFlow.Step.riskWindow.analyticsStep, .riskWindow)
+        XCTAssertEqual(OnboardingFlow.Step.draftBlockedApps.analyticsStep, .draftBlockedApps)
+        XCTAssertEqual(AnalyticsStep.riskWindow.rawValue, "risk_window")
+        XCTAssertEqual(AnalyticsStep.draftBlockedApps.rawValue, "draft_blocked_apps")
+    }
+
+    func testInsertedCalibrationStepsCountAsActiveOnboarding() {
+        // Appended raw values exceed `complete`, so onboarding-active must be
+        // identity-based, not a raw-value magnitude comparison.
+        XCTAssertTrue(OnboardingFlow.isOnboardingActive(rawStep: OnboardingFlow.Step.riskWindow.rawValue))
+        XCTAssertTrue(OnboardingFlow.isOnboardingActive(rawStep: OnboardingFlow.Step.draftBlockedApps.rawValue))
+    }
+
+    func testAdvancingIntoCalibrationStepsDoesNotCompleteOnboarding() {
+        // Without identity-based completion, missFrequency(7) -> riskWindow(17) would
+        // look like "left the onboarding range and reached >= complete".
+        XCTAssertFalse(
+            OnboardingFlow.completedOnboarding(
+                from: OnboardingFlow.Step.missFrequency.rawValue,
+                to: OnboardingFlow.Step.riskWindow.rawValue
+            )
+        )
+        XCTAssertFalse(
+            OnboardingFlow.completedOnboarding(
+                from: OnboardingFlow.Step.draftBlockedApps.rawValue,
+                to: OnboardingFlow.Step.acquisitionSource.rawValue
+            )
+        )
+    }
+
+    func testCalibrationChainTransitionsResolveForwardAndBackByDisplayOrder() throws {
+        let forwardPairs: [(OnboardingFlow.Step, OnboardingFlow.Step)] = [
+            (.missFrequency, .riskWindow),
+            (.riskWindow, .draftBlockedApps),
+            (.draftBlockedApps, .acquisitionSource),
+        ]
+        for (from, to) in forwardPairs {
+            let transition = try XCTUnwrap(OnboardingFlow.transition(from: from.rawValue, to: to.rawValue))
+            XCTAssertEqual(transition.direction, .forward, "\(from) -> \(to) should be forward.")
+            XCTAssertFalse(transition.completesOnboarding)
+        }
+
+        let back = try XCTUnwrap(
+            OnboardingFlow.transition(
+                from: OnboardingFlow.Step.acquisitionSource.rawValue,
+                to: OnboardingFlow.Step.draftBlockedApps.rawValue
+            )
+        )
+        XCTAssertEqual(back.direction, .backward)
+    }
+
     func testPlusUsersRouteFromPaywallToAppBlockingSetup() {
         XCTAssertEqual(
             OnboardingFlow.nextStepAfterPaywall(isPlus: true, selectedFreePlan: false),

@@ -30,9 +30,50 @@ final class ProtectionPlanAnswerTelemetryTests: XCTestCase {
         AnalyticsPayload(source: .onboarding, step: .delayConsequence, isPlus: isPlus)
     }
 
+    private func riskWindowPayload(isPlus: Bool = false) -> AnalyticsPayload {
+        AnalyticsPayload(source: .onboarding, step: .riskWindow, isPlus: isPlus)
+    }
+
+    private func draftBlockedAppsPayload(isPlus: Bool = false) -> AnalyticsPayload {
+        AnalyticsPayload(source: .onboarding, step: .draftBlockedApps, isPlus: isPlus)
+    }
+
     func testAnswerStepsHaveStableLowCardinalityLabels() {
         XCTAssertEqual(AnalyticsStep.distractionChoices.rawValue, "distraction_choices")
         XCTAssertEqual(AnalyticsStep.delayConsequence.rawValue, "delay_consequence")
+        XCTAssertEqual(AnalyticsStep.riskWindow.rawValue, "risk_window")
+        XCTAssertEqual(AnalyticsStep.draftBlockedApps.rawValue, "draft_blocked_apps")
+    }
+
+    func testRiskWindowAnswerEventCarriesOnlySafeProperties() {
+        let properties = riskWindowPayload().properties
+        XCTAssertEqual(properties["step"], .string("risk_window"))
+        XCTAssertEqual(properties["source"], .string("onboarding"))
+        XCTAssertEqual(properties["is_plus"], .bool(false))
+        assertOnlySafeKeys(properties)
+        assertNoRawText(in: properties, matchingAnyOf: RiskWindow.allCases.map(\.title))
+    }
+
+    func testDraftBlockedAppsAnswerEventNeverLeaksAppNamesOrCounts() {
+        let properties = draftBlockedAppsPayload().properties
+        XCTAssertEqual(properties["step"], .string("draft_blocked_apps"))
+        XCTAssertEqual(properties["source"], .string("onboarding"))
+        XCTAssertEqual(properties["is_plus"], .bool(false))
+        // Only the funnel step is sent — never the chosen apps/categories...
+        assertOnlySafeKeys(properties)
+        assertNoRawText(in: properties, matchingAnyOf: DraftBlockedAppChoice.allCases.map(\.title))
+        // ...and never an exact app count. `AnalyticsPropertyValue` has no numeric
+        // case, and the fixed key set has no slot for a count, so a count cannot be
+        // represented at all. Guard the key set against any count-shaped key, and
+        // confirm no value stringifies the selection size.
+        let countShapedKeys = properties.keys.filter { $0.contains("count") || $0.contains("num") }
+        XCTAssertTrue(countShapedKeys.isEmpty, "No count-shaped property may appear: \(countShapedKeys)")
+        let possibleCounts = Set((0...DraftBlockedAppChoice.allCases.count).map(String.init))
+        for value in properties.values {
+            if case let .string(text) = value {
+                XCTAssertFalse(possibleCounts.contains(text), "A selection count leaked into analytics: \(text)")
+            }
+        }
     }
 
     func testDistractionChoicesAnswerEventCarriesOnlySafeProperties() {
