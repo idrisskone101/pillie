@@ -101,6 +101,55 @@ final class OnboardingFlowTests: XCTestCase {
         XCTAssertEqual(back.direction, .backward)
     }
 
+    // MARK: - Mechanism Proof step inserted by issue #78
+
+    func testMechanismProofIsAppendedSoExistingRawValuesAreStable() {
+        // Appended (not renumbered), like #76's calibration steps, so persisted
+        // onboardingStep values for the original flow are never reinterpreted.
+        XCTAssertEqual(OnboardingFlow.Step.mechanismProof.rawValue, 19)
+        XCTAssertGreaterThan(
+            OnboardingFlow.Step.mechanismProof.rawValue,
+            OnboardingFlow.Step.complete.rawValue
+        )
+    }
+
+    func testMechanismProofMapsToSafeLowCardinalityAnalyticsLabel() {
+        XCTAssertEqual(OnboardingFlow.Step.mechanismProof.analyticsStep, .mechanismProof)
+        XCTAssertEqual(AnalyticsStep.mechanismProof.rawValue, "mechanism_proof")
+    }
+
+    func testMechanismProofIsOmittedFromDisplayOrder() {
+        // The Mechanism Proof demo was dropped from the flow: the diagnosis reveal now
+        // leads straight into the paywall. The step + view are retained but unreachable.
+        XCTAssertFalse(OnboardingFlow.displayOrder.contains(.mechanismProof))
+    }
+
+    func testDisplayOrderPlacesPaywallDirectlyAfterDiagnosis() throws {
+        let order = OnboardingFlow.displayOrder
+        let reminderPlan = try XCTUnwrap(order.firstIndex(of: .reminderPlan))
+        let paywall = try XCTUnwrap(order.firstIndex(of: .paywall))
+        XCTAssertEqual(paywall, reminderPlan + 1, "The paywall follows the diagnosis reveal directly.")
+    }
+
+    func testDiagnosisToPaywallResolvesForwardAndBack() throws {
+        let toPaywall = try XCTUnwrap(
+            OnboardingFlow.transition(
+                from: OnboardingFlow.Step.reminderPlan.rawValue,
+                to: OnboardingFlow.Step.paywall.rawValue
+            )
+        )
+        XCTAssertEqual(toPaywall.direction, .forward)
+        XCTAssertFalse(toPaywall.completesOnboarding)
+
+        let backToDiagnosis = try XCTUnwrap(
+            OnboardingFlow.transition(
+                from: OnboardingFlow.Step.paywall.rawValue,
+                to: OnboardingFlow.Step.reminderPlan.rawValue
+            )
+        )
+        XCTAssertEqual(backToDiagnosis.direction, .backward)
+    }
+
     func testPlusUsersRouteFromPaywallToAppBlockingSetup() {
         XCTAssertEqual(
             OnboardingFlow.nextStepAfterPaywall(isPlus: true, selectedFreePlan: false),

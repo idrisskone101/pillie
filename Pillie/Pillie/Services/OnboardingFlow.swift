@@ -30,6 +30,9 @@ enum OnboardingFlow {
         // the flow is expressed by `displayOrder`, not by raw-value magnitude.
         case riskWindow = 17
         case draftBlockedApps = 18
+        // Mechanism Proof added by issue #78. Appended for the same reason; it sits
+        // between the diagnosis reveal (`reminderPlan` slot) and the paywall.
+        case mechanismProof = 19
 
         var analyticsStep: AnalyticsStep? {
             switch self {
@@ -52,6 +55,7 @@ enum OnboardingFlow {
             case .complete: return nil
             case .riskWindow: return .riskWindow
             case .draftBlockedApps: return .draftBlockedApps
+            case .mechanismProof: return .mechanismProof
             }
         }
     }
@@ -89,6 +93,8 @@ enum OnboardingFlow {
         .schedule,
         .reminderTime,
         .reminderPlan,
+        // .mechanismProof intentionally omitted: the diagnosis reveal now leads
+        // straight into the paywall. The step + view are retained but unreachable.
         .paywall,
         .freePlanConfirmation,
         .appBlocking,

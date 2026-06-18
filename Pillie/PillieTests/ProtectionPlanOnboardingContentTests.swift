@@ -150,6 +150,74 @@ final class ProtectionPlanOnboardingContentTests: XCTestCase {
         }
     }
 
+    // MARK: - Personalized Diagnosis (#78)
+
+    func testDiagnosisContentUsesAnalyzeThenVerifyCopyNotAClinicalReadout() {
+        let content = ProtectionPlanDiagnosisContent.default
+        XCTAssertEqual(content.eyebrow, "FINAL STEP")
+        XCTAssertEqual(content.analyzingTitle, "Building your protection plan")
+        XCTAssertEqual(content.analyzingSubtitle, "Analyzing your habits and focus zones")
+        XCTAssertEqual(content.protectedAppsHeader, "Protected apps")
+        // The reveal now leads straight into the paywall, so the CTA reflects that.
+        XCTAssertEqual(content.primaryCTA, "Activate my plan")
+        // The word "diagnosis" must never reach the user — the screen reveals a plan.
+        for line in content.visibleCopy {
+            XCTAssertFalse(line.lowercased().contains("diagnos"), "User copy must not say diagnosis: \(line)")
+        }
+    }
+
+    func testDiagnosisContentHasNoMedicalOrFakeStatLanguage() {
+        for line in ProtectionPlanDiagnosisContent.default.visibleCopy {
+            assertNoMedicalOrFakeClaims(line)
+            XCTAssertFalse(line.contains("%"), "Diagnosis copy must not invent stats: \(line)")
+        }
+    }
+
+    // MARK: - Mechanism Proof (#78)
+
+    func testMechanismProofShowsTheThreeStepLoopInOrder() {
+        let content = ProtectionPlanMechanismProofContent(method: .pill)
+        XCTAssertEqual(content.steps.map(\.phase), ["TRIGGER", "ENFORCE", "RELEASE"])
+        // Beat 1 rings, beat 2 locks, beat 3 unlocks — the cause/effect loop.
+        XCTAssertEqual(content.trigger.title, "Reminder rings")
+        XCTAssertTrue(content.enforce.title.lowercased().contains("lock"))
+        XCTAssertTrue(content.release.title.lowercased().contains("unlock"))
+        XCTAssertEqual(content.replayCTA, "Replay")
+        XCTAssertEqual(content.continueCTA, "Continue")
+    }
+
+    func testMechanismProofIsMethodAwareInCopyAndCTA() {
+        XCTAssertTrue(ProtectionPlanMechanismProofContent(method: .pill).headline.contains("take your pill"))
+        XCTAssertTrue(ProtectionPlanMechanismProofContent(method: .patch).headline.contains("change your patch"))
+        XCTAssertTrue(ProtectionPlanMechanismProofContent(method: .ring).headline.contains("check your ring"))
+
+        XCTAssertEqual(ProtectionPlanMechanismProofContent(method: .pill).markTakenCTA, "I took my pill")
+        XCTAssertEqual(ProtectionPlanMechanismProofContent(method: .patch).markTakenCTA, "I changed my patch")
+        XCTAssertEqual(ProtectionPlanMechanismProofContent(method: .ring).markTakenCTA, "I checked my ring")
+    }
+
+    func testMechanismProofNeverLeaksPillWordingForPatchOrRing() {
+        // The #77 contract: no pill-specific wording in a patch/ring plan. The brand
+        // "Pillie" legitimately starts with "pill", so scrub it before scanning —
+        // any remaining "pill" is a real leak (pill / pill time / your pill / take
+        // your pill).
+        for method in [ContraceptiveMethod.patch, .ring] {
+            let scrubbed = ProtectionPlanMechanismProofContent(method: method)
+                .visibleCopy.joined(separator: " ").lowercased()
+                .replacingOccurrences(of: "pillie", with: "")
+            XCTAssertFalse(scrubbed.contains("pill"), "\(method) proof leaked pill wording.")
+        }
+    }
+
+    func testMechanismProofContentHasNoMedicalOrFakeStatLanguage() {
+        for method in ContraceptiveMethod.allCases {
+            for line in ProtectionPlanMechanismProofContent(method: method).visibleCopy {
+                assertNoMedicalOrFakeClaims(line)
+                XCTAssertFalse(line.contains("%"), "Proof copy must not invent stats: \(line)")
+            }
+        }
+    }
+
     // MARK: - Helpers
 
     private func assertNoMedicalOrFakeClaims(

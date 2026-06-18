@@ -267,6 +267,9 @@ struct ContentView: View {
                 lowRiskTransition(to: .schedule)
 	            },
 	            onContinue: {
+                // Arriving at the plan from the flow rebuilds it, so play the reveal
+                // animation. (Returning from the paywall keeps the flag set and skips it.)
+                protectionPlanModel.hasRevealedDiagnosisPlan = false
                 continueSetupStep(to: .reminderPlan)
 	            }
           )
@@ -277,9 +280,29 @@ struct ContentView: View {
             ))
 
 	        case .reminderPlan:
-	          ReminderPlanView(
+	          ProtectionPlanDiagnosisView(
+	            model: protectionPlanModel,
 	            onBack: {
                 lowRiskTransition(to: .reminderTime)
+	            },
+	            onContinue: {
+                // Mark the reveal as played so returning here (Back from the paywall)
+                // shows the finished plan instead of replaying the loading animation.
+                protectionPlanModel.hasRevealedDiagnosisPlan = true
+                continueSetupStep(to: .paywall)
+	            }
+          )
+          .transition(
+            .asymmetric(
+              insertion: .move(edge: .trailing),
+              removal: .move(edge: .trailing)
+            ))
+
+	        case .mechanismProof:
+	          ProtectionPlanMechanismProofView(
+	            model: protectionPlanModel,
+	            onBack: {
+                lowRiskTransition(to: .reminderPlan)
 	            },
 	            onContinue: {
                 continueSetupStep(to: .paywall)

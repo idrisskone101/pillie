@@ -421,3 +421,126 @@ struct ProtectionPlanReminderTimeContent {
         primaryCTA: "Set Reminder Time"
     )
 }
+
+/// Static labels for the Personalized Diagnosis / Draft Pill Protection Plan reveal
+/// (issue #78, Superdesign draft 48637486). The *dynamic*, personalized values
+/// (Primary Distraction, Due Action Time, method-aware lead line) come from
+/// `ProtectionPlanDiagnosis`; this struct holds only the surrounding static chrome.
+/// Deliberately carries no scores, stats, or medical framing — the reveal must read
+/// as a personalized plan, not a clinical readout.
+struct ProtectionPlanDiagnosisContent {
+    /// Step label above the headline, e.g. "FINAL STEP".
+    let eyebrow: String
+    /// Headline shown during the analyzing beat (present-progressive).
+    let analyzingTitle: String
+    /// Sub-line shown while the scan plays.
+    let analyzingSubtitle: String
+    /// Header above the plan's strategy points.
+    let strategyHeader: String
+    let protectedAppsHeader: String
+    /// Handwritten accent under the plan ("you're all set!").
+    let handNote: String
+    let primaryCTA: String
+
+    var visibleCopy: [String] {
+        [eyebrow, analyzingTitle, analyzingSubtitle, strategyHeader, protectedAppsHeader, handNote, primaryCTA]
+    }
+
+    static let `default` = ProtectionPlanDiagnosisContent(
+        eyebrow: "FINAL STEP",
+        analyzingTitle: "Building your protection plan",
+        analyzingSubtitle: "Analyzing your habits and focus zones",
+        strategyHeader: "How it protects you",
+        protectedAppsHeader: "Protected apps",
+        handNote: "you're all set!",
+        primaryCTA: "Activate my plan"
+    )
+}
+
+/// Copy for the Mechanism Proof (issue #78, Superdesign drafts c3e8eb96 / 6f6cedb8 /
+/// f1c2c9b9). Shows the three-step loop — reminder rings, distracting apps lock, mark
+/// taken to unlock — replayably and with a readable static state. Method-aware so a
+/// Patch or Ring user never sees pill wording. The Superdesign drafts' "98% of users"
+/// stat and medical-adherence framing are intentionally dropped: the acceptance
+/// criteria forbid fake stats and medical-risk claims.
+struct ProtectionPlanMechanismProofContent {
+    struct Step: Identifiable, Equatable {
+        /// The loop phase label, e.g. "TRIGGER".
+        let phase: String
+        let title: String
+        let detail: String
+        let symbol: String
+
+        // Stable identity — each step has a distinct phase.
+        var id: String { phase }
+    }
+
+    let headline: String
+    /// Beat 1: the reminder fires.
+    let trigger: Step
+    /// Beat 2: the chosen apps are locked.
+    let enforce: Step
+    /// Beat 3: checking in unlocks them.
+    let release: Step
+    /// Badge shown over a sealed app tile.
+    let lockedLabel: String
+    /// Primary action that unlocks the demo (method-aware, past tense).
+    let markTakenCTA: String
+    /// Restarts the loop so the proof is replayable.
+    let replayCTA: String
+    /// Advances to the paywall.
+    let continueCTA: String
+    let footer: String
+    /// A single readable line describing the whole loop for VoiceOver / Reduce Motion.
+    let accessibilitySummary: String
+
+    /// The three beats in loop order.
+    var steps: [Step] { [trigger, enforce, release] }
+
+    var visibleCopy: [String] {
+        [headline]
+            + steps.flatMap { [$0.phase, $0.title, $0.detail] }
+            + [lockedLabel, markTakenCTA, replayCTA, continueCTA, footer, accessibilitySummary]
+    }
+
+    init(method: ContraceptiveMethod) {
+        let language = MethodActionLanguage(method: method)
+        let action = language.actionPhrase
+        let capitalAction = action.prefix(1).uppercased() + action.dropFirst()
+        let moment = language.momentLabel
+
+        headline = "The lock only opens after you \(action)."
+        trigger = Step(
+            phase: "TRIGGER",
+            title: "Reminder rings",
+            detail: "A gentle, persistent nudge when it's \(moment).",
+            symbol: "bell.fill"
+        )
+        enforce = Step(
+            phase: "ENFORCE",
+            title: "Distracting apps lock",
+            detail: "Your chosen apps stay sealed \u{2014} no scrolling past the reminder.",
+            symbol: "lock.fill"
+        )
+        release = Step(
+            phase: "RELEASE",
+            title: "Tap to unlock",
+            detail: "\(capitalAction) and everything opens right back up.",
+            symbol: "checkmark.seal.fill"
+        )
+        lockedLabel = "Locked"
+        markTakenCTA = Self.markTakenLabel(for: method)
+        replayCTA = "Replay"
+        continueCTA = "Continue"
+        footer = "Part of your Pillie Protection Plan."
+        accessibilitySummary = "When it's \(moment), Pillie rings a reminder and locks your distracting apps. \(capitalAction) to unlock them instantly."
+    }
+
+    private static func markTakenLabel(for method: ContraceptiveMethod) -> String {
+        switch method {
+        case .pill: return "I took my pill"
+        case .patch: return "I changed my patch"
+        case .ring: return "I checked my ring"
+        }
+    }
+}

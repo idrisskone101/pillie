@@ -160,6 +160,7 @@ enum AnalyticsStep: String {
   case schedule
   case reminderTime = "reminder_time"
   case reminderPlan = "reminder_plan"
+  case mechanismProof = "mechanism_proof"
   case freePlanConfirmation = "free_plan_confirmation"
   case appBlocking = "app_blocking"
 
