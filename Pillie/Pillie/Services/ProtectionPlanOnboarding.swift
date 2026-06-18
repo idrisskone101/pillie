@@ -210,6 +210,12 @@ final class ProtectionPlanOnboardingModel {
     @ObservationIgnored private let defaults: UserDefaults
     private(set) var state: ProtectionPlanOnboardingState
 
+    /// True once the diagnosis reveal ("building your protection plan") has played
+    /// this session. Returning to the plan — e.g. Back from the paywall — then shows
+    /// the finished plan immediately instead of replaying the loading animation.
+    /// In-memory only: a fresh launch replays the reveal.
+    @ObservationIgnored var hasRevealedDiagnosisPlan = false
+
     init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
         self.state = ProtectionPlanOnboardingStore.load(from: defaults)
