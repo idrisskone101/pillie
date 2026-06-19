@@ -130,10 +130,11 @@ struct AppBlockingSetupView: View {
     // MARK: - Header
 
     private var header: some View {
-        PersonalizationOnboardingHeader(
+        let progress = ProtectionPlanProgressIndex.progress(for: .appBlocking)
+        return PersonalizationOnboardingHeader(
             appeared: animateIn,
-            progress: PersonalizationOnboardingProgress.fraction(for: 10),
-            badge: PersonalizationOnboardingProgress.badge(for: 10),
+            progress: progress.fraction,
+            badge: progress.badge,
             onBack: onBack
         )
     }
