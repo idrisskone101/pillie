@@ -7,58 +7,84 @@ import RevenueCat
 import os
 
 struct SoftPaywallContent {
-    struct Benefit {
-        let icon: String
-        let tint: Color
+    struct ComparisonRow {
         let title: String
-        let subtitle: String
+        let icon: String
+        let iconBackground: Color
+        let iconColor: Color
+        let freeIncluded: Bool
+        let plusIncluded: Bool
     }
 
-    let badge: String
     let title: String
     let titleAccent: String
     let subtitle: String
-    let benefits: [Benefit]
-    let reassurance: String
+    let comparisonLabel: String
+    let freeColumnLabel: String
+    let plusColumnLabel: String
+    let rows: [ComparisonRow]
+    let reassurances: [String]
+    let monthlyReassurances: [String]
     let primaryCTA: String
     let monthlyCTA: String
     let freeCTA: String
+    let restoreCTA: String
 
     var visibleCopy: [String] {
-        [badge, title, titleAccent, subtitle]
-            + benefits.flatMap { [$0.title, $0.subtitle] }
-            + [reassurance, primaryCTA, monthlyCTA, freeCTA]
+        [title, titleAccent, subtitle, comparisonLabel, freeColumnLabel, plusColumnLabel]
+            + rows.map(\.title)
+            + reassurances
+            + monthlyReassurances
+            + [primaryCTA, monthlyCTA, freeCTA, restoreCTA]
     }
 
     static let `default` = SoftPaywallContent(
-        badge: "Pillie Plus",
         title: "Stay on Track with",
         titleAccent: "Pillie Plus",
-        subtitle: "App blocks and shake checks when reminders need backup.",
-        benefits: [
-            Benefit(
+        subtitle: "Blocks distracting apps right when your reminder is due, for the days a nudge isn't enough.",
+        comparisonLabel: "What you get",
+        freeColumnLabel: "Free",
+        plusColumnLabel: "Plus",
+        rows: [
+            ComparisonRow(
+                title: "Daily reminders",
+                icon: "bell.fill",
+                iconBackground: PillieTheme.lavender,
+                iconColor: PillieTheme.dark,
+                freeIncluded: true,
+                plusIncluded: true
+            ),
+            ComparisonRow(
+                title: "Block distracting apps",
                 icon: "nosign",
-                tint: PillieTheme.lavender,
-                title: "Block the scroll",
-                subtitle: "Pause chosen apps until you check in."
+                iconBackground: PillieTheme.lavender,
+                iconColor: PillieTheme.dark,
+                freeIncluded: false,
+                plusIncluded: true
             ),
-            Benefit(
+            ComparisonRow(
+                title: "Shake to confirm",
                 icon: "iphone.radiowaves.left.and.right",
-                tint: PillieTheme.sage,
-                title: "Shake to make it count",
-                subtitle: "Shake to unlock or confirm with intention."
+                iconBackground: PillieTheme.sage,
+                iconColor: PillieTheme.verifiedGreen,
+                freeIncluded: false,
+                plusIncluded: true
             ),
-            Benefit(
+            ComparisonRow(
+                title: "New perks as they launch",
                 icon: "sparkles",
-                tint: PillieTheme.coralLight,
-                title: "More Plus perks coming",
-                subtitle: "New Pillie Plus tools are included as they launch."
+                iconBackground: PillieTheme.coralLight,
+                iconColor: PillieTheme.coral,
+                freeIncluded: false,
+                plusIncluded: true
             )
         ],
-        reassurance: "No long-term commitment. Cancel anytime in the App Store.",
+        reassurances: ["No payment due now", "Cancel anytime"],
+        monthlyReassurances: ["Cancel anytime", "No commitment"],
         primaryCTA: "Try Pillie Plus for free",
         monthlyCTA: "Start Pillie Plus monthly",
-        freeCTA: "Continue with free plan"
+        freeCTA: "Continue with free plan",
+        restoreCTA: "Restore Purchases"
     )
 }
 
@@ -98,16 +124,9 @@ struct PremiumPaywallView: View {
     }
 
     private var selectedPackage: Package? {
-        guard let offering = offerings?.current else { return nil }
         switch selectedPlan {
-        case .annual:
-            return offering.annual ?? offering.availablePackages.first {
-                $0.storeProduct.productIdentifier == SubscriptionManager.annualProductID
-            }
-        case .monthly:
-            return offering.monthly ?? offering.availablePackages.first {
-                $0.storeProduct.productIdentifier == SubscriptionManager.monthlyProductID
-            }
+        case .annual: return annualPackage
+        case .monthly: return monthlyPackage
         }
     }
 
@@ -122,29 +141,34 @@ struct PremiumPaywallView: View {
                     .padding(.top, isFromOnboarding ? 28 : 16)
 
                 ScrollView(showsIndicators: false) {
-                    VStack(spacing: 16) {
+                    VStack(alignment: .leading, spacing: 18) {
                         headlineSection
                             .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger2))
 
-                        benefitRows
+                        comparisonSection
                             .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger3))
 
                         pricingCards
                             .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger3))
 
+                        reassuranceRow
+                            .frame(maxWidth: .infinity)
+                            .padding(.top, 4)
+                            .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger4))
                     }
-                    .padding(.horizontal, 28)
-                    .padding(.top, 14)
-                    .padding(.bottom, PillieTheme.scrollBottomPaddingWithCTA)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal, 24)
+                    .padding(.top, 12)
+                    .padding(.bottom, 150)
                 }
             }
 
             VStack {
                 Spacer()
                 footer
-                    .padding(.horizontal, 28)
+                    .padding(.horizontal, 24)
                     .padding(.top, 10)
-                    .padding(.bottom, 28)
+                    .padding(.bottom, 22)
                     .transaction { transaction in
                         transaction.animation = nil
                     }
@@ -197,13 +221,20 @@ struct PremiumPaywallView: View {
 
     // MARK: - Header
 
+    /// Drawn from the shared plan-builder source of truth so the bar stays in sync with
+    /// the setup questions (it reads a full bar here — every numbered setup step is done
+    /// by the time the paywall appears) instead of the stale legacy "9/10".
+    private var onboardingProgress: ProtectionPlanProgress {
+        ProtectionPlanProgressIndex.progress(for: .paywall)
+    }
+
     private var header: some View {
         Group {
             if isFromOnboarding {
                 PersonalizationOnboardingHeader(
                     appeared: animateIn,
-                    progress: PersonalizationOnboardingProgress.fraction(for: 9),
-                    badge: PersonalizationOnboardingProgress.badge(for: 9),
+                    progress: onboardingProgress.fraction,
+                    badge: onboardingProgress.badge,
                     onBack: onBack
                 )
             } else {
@@ -224,84 +255,148 @@ struct PremiumPaywallView: View {
     // MARK: - Headline
 
     private var headlineSection: some View {
-        VStack(spacing: 12) {
-            HStack(spacing: 6) {
-                Image(systemName: "sparkles")
-                    .font(.system(size: 13, weight: .semibold))
-                    .foregroundStyle(PillieTheme.coral)
-
-                Text(content.badge)
-                    .font(.pillie(10, weight: .black))
-                    .foregroundStyle(PillieTheme.textMuted)
-                    .tracking(1.6)
-                    .textCase(.uppercase)
-            }
-            .padding(.horizontal, 12)
-            .padding(.vertical, 7)
-            .background(.white, in: Capsule())
-            .overlay {
-                Capsule()
-                    .stroke(Color.black.opacity(0.06), lineWidth: 1)
-            }
-            .shadow(color: PillieTheme.cardShadow, radius: 8, y: 3)
-
-            (Text("\(content.title) ")
+        VStack(alignment: .leading, spacing: 6) {
+            (Text("\(content.title)\n")
                 .foregroundColor(PillieTheme.textPrimary)
              + Text(content.titleAccent)
                 .foregroundColor(PillieTheme.coral))
-            .font(.pillieExtraBold(28))
-            .multilineTextAlignment(.center)
+            .font(.pillie(30, weight: .black))
+            .lineSpacing(0)
+            .multilineTextAlignment(.leading)
+            .fixedSize(horizontal: false, vertical: true)
 
             Text(content.subtitle)
-                .font(.pillie(14, weight: .medium))
+                .font(.pillie(15, weight: .medium))
                 .foregroundStyle(PillieTheme.textMuted)
                 .lineSpacing(3)
-                .multilineTextAlignment(.center)
-                .frame(maxWidth: 250)
+                .multilineTextAlignment(.leading)
+                .fixedSize(horizontal: false, vertical: true)
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
-    // MARK: - Benefit Rows
+    // MARK: - Comparison table
 
-    private var benefitRows: some View {
-        VStack(spacing: 9) {
-            ForEach(Array(content.benefits.enumerated()), id: \.offset) { _, benefit in
-                benefitRow(benefit)
+    private var comparisonSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(content.comparisonLabel)
+                .font(.pillie(13, weight: .black))
+                .tracking(1.5)
+                .textCase(.uppercase)
+                .foregroundStyle(PillieTheme.textPrimary)
+
+            comparisonTable
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private var comparisonTable: some View {
+        VStack(spacing: 0) {
+            comparisonHeaderRow
+                .padding(.vertical, 9)
+
+            ForEach(Array(content.rows.enumerated()), id: \.offset) { _, row in
+                Rectangle()
+                    .fill(PillieTheme.sageHalf)
+                    .frame(height: 1)
+                comparisonRow(row)
+                    .padding(.vertical, 8)
             }
         }
-        .padding(14)
+        .padding(.horizontal, 16)
         .background(
-            RoundedRectangle(cornerRadius: 28)
-                .fill(PillieTheme.cardWhite.opacity(0.76))
+            RoundedRectangle(cornerRadius: PillieTheme.cardRadius)
+                .fill(PillieTheme.cardWhite)
         )
         .overlay {
-            RoundedRectangle(cornerRadius: 28)
+            RoundedRectangle(cornerRadius: PillieTheme.cardRadius)
                 .stroke(Color.black.opacity(0.05), lineWidth: 1)
         }
         .shadow(color: PillieTheme.cardShadow, radius: 8, y: 4)
     }
 
-    private func benefitRow(_ benefit: SoftPaywallContent.Benefit) -> some View {
-        HStack(alignment: .center, spacing: 14) {
-            Image(systemName: benefit.icon)
-                .font(.system(size: 18, weight: .semibold))
-                .foregroundStyle(PillieTheme.textPrimary)
-                .frame(width: 34, height: 34)
-                .background(benefit.tint, in: RoundedRectangle(cornerRadius: 12))
+    private var comparisonHeaderRow: some View {
+        HStack(spacing: 0) {
+            Spacer(minLength: 0)
+                .frame(maxWidth: .infinity)
 
-            VStack(alignment: .leading, spacing: 4) {
-                Text(benefit.title)
-                    .font(.pillie(14, weight: .bold))
+            Text(content.freeColumnLabel)
+                .font(.pillie(11, weight: .black))
+                .tracking(0.8)
+                .textCase(.uppercase)
+                .foregroundStyle(PillieTheme.textMuted)
+                .frame(width: 52)
+
+            Text(content.plusColumnLabel)
+                .font(.pillie(11, weight: .black))
+                .tracking(0.8)
+                .textCase(.uppercase)
+                .foregroundStyle(PillieTheme.coral)
+                .padding(.vertical, 4)
+                .frame(width: 56)
+                .background(PillieTheme.coralLight, in: RoundedRectangle(cornerRadius: 8))
+                .frame(width: 60)
+        }
+        .accessibilityHidden(true)
+    }
+
+    private func comparisonRow(_ row: SoftPaywallContent.ComparisonRow) -> some View {
+        HStack(spacing: 0) {
+            HStack(spacing: 11) {
+                Image(systemName: row.icon)
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundStyle(row.iconColor)
+                    .frame(width: 30, height: 30)
+                    .background(row.iconBackground, in: Circle())
+                    .accessibilityHidden(true)
+
+                Text(row.title)
+                    .font(.pillie(14, weight: .semibold))
                     .foregroundStyle(PillieTheme.textPrimary)
-
-                Text(benefit.subtitle)
-                    .font(.pillie(11, weight: .medium))
-                    .foregroundStyle(PillieTheme.textMuted)
-                    .lineSpacing(2)
                     .fixedSize(horizontal: false, vertical: true)
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
+
+            includedGlyph(row.freeIncluded, emphasized: false)
+                .frame(width: 52)
+
+            includedGlyph(row.plusIncluded, emphasized: true)
+                .frame(width: 60)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(comparisonAccessibilityLabel(row))
+    }
+
+    private func includedGlyph(_ included: Bool, emphasized: Bool) -> some View {
+        Group {
+            if included, emphasized {
+                Image(systemName: "checkmark")
+                    .font(.system(size: 14, weight: .bold))
+                    .foregroundStyle(PillieTheme.dark)
+                    .frame(width: 24, height: 24)
+                    .background(PillieTheme.coral, in: Circle())
+            } else if included {
+                Image(systemName: "checkmark")
+                    .font(.system(size: 17, weight: .semibold))
+                    .foregroundStyle(PillieTheme.verifiedGreen)
+            } else {
+                Image(systemName: "minus")
+                    .font(.system(size: 17, weight: .semibold))
+                    .foregroundStyle(PillieTheme.textMuted.opacity(0.45))
+            }
+        }
+        .accessibilityHidden(true)
+    }
+
+    private func comparisonAccessibilityLabel(_ row: SoftPaywallContent.ComparisonRow) -> String {
+        let tiers: String
+        switch (row.freeIncluded, row.plusIncluded) {
+        case (true, true): tiers = "included in Free and Plus"
+        case (false, true): tiers = "Plus only"
+        case (true, false): tiers = "Free only"
+        case (false, false): tiers = "not included"
+        }
+        return "\(row.title), \(tiers)"
     }
 
     // MARK: - Pricing Cards
@@ -309,9 +404,9 @@ struct PremiumPaywallView: View {
     private var pricingCards: some View {
         VStack(spacing: 12) {
             annualCard
-                .zIndex(1)
             monthlyCard
         }
+        .padding(.top, 12)
     }
 
     private var annualPackage: Package? {
@@ -329,130 +424,218 @@ struct PremiumPaywallView: View {
     }
 
     private var annualPriceText: String {
-        annualPackage?.storeProduct.localizedPriceString ?? "$29.99"
+        annualPackage?.storeProduct.localizedPriceString ?? "$49.99"
     }
 
     private var monthlyPriceText: String {
-        monthlyPackage?.storeProduct.localizedPriceString ?? "$4.99"
+        monthlyPackage?.storeProduct.localizedPriceString ?? "$9.99"
+    }
+
+    /// Truthful annual-vs-monthly comparison from the live store prices (issue #79: no
+    /// fake stats). `nil` until both packages have loaded.
+    private var priceComparison: PaywallPriceComparison? {
+        guard let annual = annualPackage?.storeProduct.price,
+              let monthly = monthlyPackage?.storeProduct.price else { return nil }
+        return PaywallPriceComparison(annualPrice: annual, monthlyPrice: monthly)
+    }
+
+    /// "$X/mo" for the annual plan, formatted in the store's currency. `nil` until the
+    /// annual package and its formatter are available.
+    private var annualPerMonthText: String? {
+        guard let comparison = priceComparison,
+              let formatter = annualPackage?.storeProduct.priceFormatter else { return nil }
+        return comparison.monthlyEquivalentString(using: formatter)
+    }
+
+    /// "Save N%" derived from the real prices, or `nil` when there is no honest saving.
+    private var savingsBadgeText: String? {
+        guard let percent = priceComparison?.savingsPercent else { return nil }
+        return "Save \(percent)%"
     }
 
     private var annualCard: some View {
         Button {
-            let response = plusFeedback.selectPlan(accessibilityReduceMotion: accessibilityReduceMotion)
-            withAnimation(response.motionProfile.animation) {
-                selectedPlan = .annual
-            }
-            telemetry.paywallPlanSelected(plan: .annual, isFromOnboarding: isFromOnboarding)
+            selectPlan(.annual)
         } label: {
-            VStack(spacing: -12) {
-                HStack {
-                    Spacer()
-                    Text("Best Value")
-                        .font(.pillie(10, weight: .bold))
-                        .foregroundStyle(.white)
-                        .tracking(0.5)
-                        .textCase(.uppercase)
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 5)
-                        .background(Capsule().fill(PillieTheme.dark))
-                        .padding(.trailing, 16)
-                }
-                .zIndex(1)
-
-                HStack {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("ANNUAL TRIAL")
-                            .font(.pillie(14, weight: .bold))
-                            .foregroundStyle(PillieTheme.textMuted)
+            HStack(alignment: .center, spacing: 14) {
+                VStack(alignment: .leading, spacing: 3) {
+                    HStack(spacing: 8) {
+                        Text("Annual Trial")
+                            .font(.pillie(12, weight: .black))
                             .tracking(1)
+                            .textCase(.uppercase)
+                            .foregroundStyle(Color.white.opacity(0.55))
 
-                        HStack(alignment: .firstTextBaseline, spacing: 2) {
-                            Text(annualPriceText)
-                                .font(.pillieExtraBold(24))
-                                .foregroundStyle(PillieTheme.textPrimary)
-                            Text("/year")
-                                .font(.pillie(14, weight: .medium))
-                                .foregroundStyle(PillieTheme.textMuted)
+                        if let savingsBadgeText {
+                            Text(savingsBadgeText)
+                                .font(.pillie(10, weight: .black))
+                                .tracking(0.6)
+                                .textCase(.uppercase)
+                                .foregroundStyle(PillieTheme.dark)
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 3)
+                                .background(PillieTheme.coral, in: Capsule())
                         }
-
-                        Text("Pillie Plus starts with a 7-day trial")
-                            .font(.pillie(13, weight: .semibold))
-                            .foregroundStyle(PillieTheme.coral)
                     }
 
-                    Spacer()
+                    HStack(alignment: .firstTextBaseline, spacing: 6) {
+                        Text(annualPriceText)
+                            .font(.pillie(26, weight: .black))
+                            .foregroundStyle(.white)
+                        Text("/year")
+                            .font(.pillie(14, weight: .semibold))
+                            .foregroundStyle(Color.white.opacity(0.6))
+                        if let annualPerMonthText {
+                            Text("· \(annualPerMonthText)/mo")
+                                .font(.pillie(13, weight: .semibold))
+                                .foregroundStyle(Color.white.opacity(0.6))
+                        }
+                    }
 
-                    radioCircle(selected: selectedPlan == .annual)
+                    Text("Starts with a 7-day free trial")
+                        .font(.pillie(13, weight: .bold))
+                        .foregroundStyle(PillieTheme.coral)
                 }
-                .padding(16)
-                .background(
-                    RoundedRectangle(cornerRadius: PillieTheme.cardRadius)
-                        .fill(PillieTheme.cardWhite)
-                )
-                .overlay(
-                    RoundedRectangle(cornerRadius: PillieTheme.cardRadius)
-                        .stroke(selectedPlan == .annual ? PillieTheme.coral : PillieTheme.sageHalf, lineWidth: selectedPlan == .annual ? 2 : 1)
-                )
-                .shadow(color: PillieTheme.cardShadow, radius: 8, y: 4)
+                .frame(maxWidth: .infinity, alignment: .leading)
+
+                radioCircle(selected: selectedPlan == .annual, onDark: true)
             }
+            .padding(16)
+            .background(
+                RoundedRectangle(cornerRadius: PillieTheme.buttonRadius)
+                    .fill(PillieTheme.dark)
+            )
+            .overlay {
+                if selectedPlan == .annual {
+                    RoundedRectangle(cornerRadius: PillieTheme.buttonRadius)
+                        .stroke(PillieTheme.coral, lineWidth: 2)
+                }
+            }
+            .overlay(alignment: .topTrailing) {
+                Text("Best Value")
+                    .font(.pillie(10, weight: .black))
+                    .tracking(1)
+                    .textCase(.uppercase)
+                    .foregroundStyle(PillieTheme.dark)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 5)
+                    .background(PillieTheme.coral, in: Capsule())
+                    .offset(x: -16, y: -11)
+            }
+            .shadow(color: PillieTheme.dark.opacity(0.28), radius: 12, y: 8)
         }
         .buttonStyle(.plain)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Annual trial, \(annualPriceText) per year\(annualPerMonthText.map { ", \($0) per month" } ?? ""). Starts with a 7-day free trial.\(savingsBadgeText.map { " \($0)." } ?? "")")
+        .accessibilityAddTraits(selectedPlan == .annual ? [.isButton, .isSelected] : .isButton)
     }
 
     private var monthlyCard: some View {
         Button {
-            let response = plusFeedback.selectPlan(accessibilityReduceMotion: accessibilityReduceMotion)
-            withAnimation(response.motionProfile.animation) {
-                selectedPlan = .monthly
-            }
-            telemetry.paywallPlanSelected(plan: .monthly, isFromOnboarding: isFromOnboarding)
+            selectPlan(.monthly)
         } label: {
-            HStack {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("MONTHLY")
-                        .font(.pillie(14, weight: .bold))
-                        .foregroundStyle(PillieTheme.textMuted)
+            HStack(spacing: 14) {
+                VStack(alignment: .leading, spacing: 3) {
+                    Text("Monthly")
+                        .font(.pillie(12, weight: .black))
                         .tracking(1)
+                        .textCase(.uppercase)
+                        .foregroundStyle(PillieTheme.textMuted)
 
-                    HStack(alignment: .firstTextBaseline, spacing: 2) {
+                    HStack(alignment: .firstTextBaseline, spacing: 6) {
                         Text(monthlyPriceText)
-                            .font(.pillie(20, weight: .bold))
+                            .font(.pillie(26, weight: .black))
                             .foregroundStyle(PillieTheme.textPrimary)
                         Text("/month")
-                            .font(.pillie(14, weight: .medium))
+                            .font(.pillie(14, weight: .semibold))
                             .foregroundStyle(PillieTheme.textMuted)
                     }
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
 
-                Spacer()
-
-                radioCircle(selected: selectedPlan == .monthly)
+                radioCircle(selected: selectedPlan == .monthly, onDark: false)
             }
             .padding(16)
             .background(
-                RoundedRectangle(cornerRadius: PillieTheme.cardRadius)
-                    .fill(PillieTheme.cardWhite)
+                RoundedRectangle(cornerRadius: PillieTheme.buttonRadius)
+                    .fill(selectedPlan == .monthly ? PillieTheme.coralLight : PillieTheme.cardWhite)
             )
-            .overlay(
-                RoundedRectangle(cornerRadius: PillieTheme.cardRadius)
-                    .stroke(selectedPlan == .monthly ? PillieTheme.coral : PillieTheme.sageHalf, lineWidth: selectedPlan == .monthly ? 2 : 1)
-            )
+            .overlay {
+                RoundedRectangle(cornerRadius: PillieTheme.buttonRadius)
+                    .stroke(
+                        selectedPlan == .monthly ? PillieTheme.coral : PillieTheme.sageHalf,
+                        lineWidth: selectedPlan == .monthly ? 2 : 1
+                    )
+            }
             .shadow(color: PillieTheme.cardShadow, radius: 8, y: 4)
         }
         .buttonStyle(.plain)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Monthly, \(monthlyPriceText) per month")
+        .accessibilityAddTraits(selectedPlan == .monthly ? [.isButton, .isSelected] : .isButton)
     }
 
-    private func radioCircle(selected: Bool) -> some View {
-        Circle()
-            .stroke(selected ? PillieTheme.coral : PillieTheme.sage, lineWidth: 2)
-            .frame(width: 24, height: 24)
-            .overlay {
-                if selected {
-                    Circle()
-                        .fill(PillieTheme.coral)
-                        .frame(width: 10, height: 10)
-                }
+    private func selectPlan(_ plan: Plan) {
+        let response = plusFeedback.selectPlan(accessibilityReduceMotion: accessibilityReduceMotion)
+        withAnimation(response.motionProfile.animation) {
+            selectedPlan = plan
+        }
+        telemetry.paywallPlanSelected(plan: plan.analyticsPlan, isFromOnboarding: isFromOnboarding)
+    }
+
+    private func radioCircle(selected: Bool, onDark: Bool) -> some View {
+        ZStack {
+            Circle()
+                .stroke(
+                    selected ? PillieTheme.coral : (onDark ? Color.white.opacity(0.3) : PillieTheme.sage),
+                    lineWidth: 2
+                )
+                .frame(width: 26, height: 26)
+
+            if selected {
+                Circle()
+                    .fill(PillieTheme.coral)
+                    .frame(width: 26, height: 26)
+                    .overlay {
+                        Image(systemName: "checkmark")
+                            .font(.system(size: 14, weight: .bold))
+                            .foregroundStyle(PillieTheme.dark)
+                    }
             }
+        }
+        .accessibilityHidden(true)
+    }
+
+    // MARK: - Reassurance
+
+    // The annual and monthly reassurances are cross-faded in place rather than diffed,
+    // so the shared "Cancel anytime" chip fades instead of sliding across when the plan
+    // changes. Both states occupy the same slot; only opacity animates.
+    private var reassuranceRow: some View {
+        ZStack {
+            reassuranceChips(content.reassurances)
+                .opacity(selectedPlan == .annual ? 1 : 0)
+            reassuranceChips(content.monthlyReassurances)
+                .opacity(selectedPlan == .monthly ? 1 : 0)
+        }
+        .animation(.easeInOut(duration: 0.2), value: selectedPlan)
+    }
+
+    private func reassuranceChips(_ items: [String]) -> some View {
+        HStack(spacing: 16) {
+            ForEach(items, id: \.self) { item in
+                HStack(spacing: 5) {
+                    Image(systemName: "checkmark")
+                        .font(.system(size: 13, weight: .bold))
+                        .foregroundStyle(PillieTheme.verifiedGreen)
+                    Text(item)
+                        .font(.pillie(13, weight: .semibold))
+                        .foregroundStyle(PillieTheme.textPrimary)
+                }
+                .accessibilityElement(children: .combine)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .center)
     }
 
     // MARK: - Footer
@@ -465,73 +648,14 @@ struct PremiumPaywallView: View {
                 } label: {
                     Text("Failed to load plans — Tap to retry")
                         .font(.pillie(16, weight: .bold))
-                    .foregroundStyle(.white)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 52)
-                    .background(PillieTheme.textMuted)
-                    .clipShape(Capsule())
+                        .foregroundStyle(.white)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: PillieTheme.ctaHeight)
+                        .background(PillieTheme.textMuted)
+                        .clipShape(Capsule())
                 }
             } else {
-                Button {
-                    guard let package = selectedPackage else {
-                        plusFeedback.unavailablePurchaseAction(accessibilityReduceMotion: accessibilityReduceMotion)
-                        return
-                    }
-                    let response = startPurchaseFeedback()
-                    withAnimation(response.motionProfile.animation) {
-                        isPurchasing = true
-                    }
-                    telemetry.purchaseStarted(plan: selectedPlan.analyticsPlan, isFromOnboarding: isFromOnboarding)
-                    Task {
-                        do {
-                            try await subscriptionManager.purchase(package)
-                            telemetry.purchaseCompleted(plan: selectedPlan.analyticsPlan, isFromOnboarding: isFromOnboarding)
-                            plusFeedback.successfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
-                            completePaidRoute()
-                        } catch {
-                            plusFeedback.unsuccessfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
-                            if error.isCancelledPurchase {
-                                telemetry.purchaseCancelled(plan: selectedPlan.analyticsPlan, isFromOnboarding: isFromOnboarding)
-                                await subscriptionManager.refreshStatus()
-                            } else {
-                                telemetry.purchaseFailed(plan: selectedPlan.analyticsPlan, isFromOnboarding: isFromOnboarding)
-                                purchaseError = error.localizedDescription
-                            }
-                        }
-                        withAnimation(response.motionProfile.animation) {
-                            isPurchasing = false
-                        }
-                    }
-                } label: {
-                    Group {
-                        if isPurchasing || offerings == nil {
-                            ProgressView()
-                                .tint(.white)
-                        } else {
-                            HStack(spacing: 6) {
-                                Text(selectedPlan == .annual
-                                     ? content.primaryCTA
-                                     : content.monthlyCTA)
-                                    .font(.pillie(16, weight: .bold))
-                                Text("·")
-                                    .font(.pillie(14, weight: .medium))
-                                    .opacity(0.6)
-                                Text(selectedPlan == .annual
-                                     ? "annual trial"
-                                     : "\(monthlyPriceText)/mo")
-                                    .font(.pillie(13, weight: .medium))
-                                    .opacity(0.8)
-                            }
-                        }
-                    }
-                    .foregroundStyle(.white)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 52)
-                    .background(PillieTheme.dark)
-                    .clipShape(Capsule())
-                    .shadow(color: PillieTheme.dark.opacity(0.4), radius: 12, y: 6)
-                }
-                .disabled(isPurchasing || offerings == nil)
+                purchaseButton
             }
 
             HStack(spacing: 14) {
@@ -543,18 +667,16 @@ struct PremiumPaywallView: View {
                     }
                 } label: {
                     Text(content.freeCTA)
-                        .font(.pillie(13, weight: .bold))
-                        .foregroundStyle(PillieTheme.textPrimary.opacity(0.78))
+                        .font(.pillie(13, weight: .semibold))
+                        .foregroundStyle(PillieTheme.textMuted)
                         .lineLimit(1)
                         .minimumScaleFactor(0.88)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 30)
                 }
                 .buttonStyle(.plain)
 
                 Rectangle()
-                    .fill(PillieTheme.textMuted.opacity(0.12))
-                    .frame(width: 1, height: 18)
+                    .fill(PillieTheme.textMuted.opacity(0.3))
+                    .frame(width: 1, height: 13)
 
                 Button {
                     restorePurchases()
@@ -565,15 +687,13 @@ struct PremiumPaywallView: View {
                                 .tint(PillieTheme.textMuted)
                                 .scaleEffect(0.72)
                         } else {
-                            Text("Restore Purchases")
-                                .font(.pillie(12, weight: .semibold))
-                                .foregroundStyle(PillieTheme.textMuted.opacity(0.62))
+                            Text(content.restoreCTA)
+                                .font(.pillie(13, weight: .semibold))
+                                .foregroundStyle(PillieTheme.textMuted)
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.86)
                         }
                     }
-                    .frame(minWidth: 118, maxWidth: 136)
-                    .frame(height: 30)
                 }
                 .buttonStyle(.plain)
                 .disabled(isRestoring)
@@ -581,12 +701,63 @@ struct PremiumPaywallView: View {
 
             HStack(spacing: 4) {
                 Link("Terms of Use", destination: URL(string: "https://idrisskone101.github.io/pillie/terms-and-conditions")!)
-                Text("|")
+                Text("·")
                 Link("Privacy Policy", destination: URL(string: "https://idrisskone101.github.io/pillie/privacy-policy")!)
             }
-            .font(.pillie(10, weight: .regular))
-            .foregroundStyle(PillieTheme.textMuted.opacity(0.42))
+            .font(.pillie(11, weight: .regular))
+            .foregroundStyle(PillieTheme.textMuted.opacity(0.7))
         }
+    }
+
+    private var purchaseButton: some View {
+        Button {
+            guard let package = selectedPackage else {
+                plusFeedback.unavailablePurchaseAction(accessibilityReduceMotion: accessibilityReduceMotion)
+                return
+            }
+            let response = startPurchaseFeedback()
+            withAnimation(response.motionProfile.animation) {
+                isPurchasing = true
+            }
+            telemetry.purchaseStarted(plan: selectedPlan.analyticsPlan, isFromOnboarding: isFromOnboarding)
+            Task {
+                do {
+                    try await subscriptionManager.purchase(package)
+                    telemetry.purchaseCompleted(plan: selectedPlan.analyticsPlan, isFromOnboarding: isFromOnboarding)
+                    plusFeedback.successfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
+                    completePaidRoute()
+                } catch {
+                    plusFeedback.unsuccessfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
+                    if error.isCancelledPurchase {
+                        telemetry.purchaseCancelled(plan: selectedPlan.analyticsPlan, isFromOnboarding: isFromOnboarding)
+                        await subscriptionManager.refreshStatus()
+                    } else {
+                        telemetry.purchaseFailed(plan: selectedPlan.analyticsPlan, isFromOnboarding: isFromOnboarding)
+                        purchaseError = error.localizedDescription
+                    }
+                }
+                withAnimation(response.motionProfile.animation) {
+                    isPurchasing = false
+                }
+            }
+        } label: {
+            Group {
+                if isPurchasing || offerings == nil {
+                    ProgressView()
+                        .tint(.white)
+                } else {
+                    Text(selectedPlan == .annual ? content.primaryCTA : content.monthlyCTA)
+                        .font(.pillie(17, weight: .bold))
+                }
+            }
+            .foregroundStyle(.white)
+            .frame(maxWidth: .infinity)
+            .frame(height: PillieTheme.ctaHeight)
+            .background(PillieTheme.dark)
+            .clipShape(Capsule())
+            .shadow(color: PillieTheme.dark.opacity(0.4), radius: 12, y: 6)
+        }
+        .disabled(isPurchasing || offerings == nil)
     }
 
     private func restorePurchases() {
