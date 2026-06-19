@@ -114,7 +114,7 @@ struct ProtectionPlanScaffold<Content: View>: View {
 
                 ctaStack
                     .padding(.horizontal, PillieTheme.screenHorizontalPadding)
-                    .padding(.bottom, 34)
+                    .padding(.bottom, PillieTheme.onboardingCTABottomPadding)
             }
         }
         .onAppear {

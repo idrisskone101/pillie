@@ -75,7 +75,7 @@ struct AnalyticsConsentView: View {
                     .accessibilityIdentifier("declineAnalyticsButton")
                 }
                 .padding(.horizontal, PillieTheme.screenHorizontalPadding)
-                .padding(.bottom, 34)
+                .padding(.bottom, PillieTheme.onboardingCTABottomPadding)
             }
         }
         .onAppear {

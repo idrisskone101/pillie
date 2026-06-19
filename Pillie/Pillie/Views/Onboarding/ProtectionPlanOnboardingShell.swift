@@ -64,8 +64,8 @@ struct ProtectionPlanOnboardingShell: View {
                 .transition(pushTransition)
 
             default:
-                // Intro complete (Review Prompt sentinel reached): hand off to the
-                // preserved Review Prompt and the rest of onboarding.
+                // Intro complete (handoff sentinel reached): hand off to the first
+                // question and the rest of onboarding.
                 Color.clear
                     .onAppear(perform: onIntroFinished)
             }
@@ -81,9 +81,9 @@ struct ProtectionPlanOnboardingShell: View {
 
     private func proofContinue() {
         InteractionFeedback.live.perform(.meaningfulCommit)
-        advance() // earlyValueProof -> reviewPrompt (handoff sentinel)
+        advance() // earlyValueProof -> handoff sentinel
         // Hand off synchronously so there is no blank frame between the proof and
-        // the preserved Review Prompt.
+        // the first question.
         if model.hasFinishedIntro {
             onIntroFinished()
         }

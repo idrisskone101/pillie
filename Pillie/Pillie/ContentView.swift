@@ -51,11 +51,11 @@ struct ContentView: View {
 	          AnalyticsConsentView(
 	            onAllow: {
 	              AnalyticsManager.shared.setAnalyticsEnabled(true)
-                continueDemoMoment(to: .reviewPrompt)
+                continueDemoMoment(to: .painPoints)
 	            },
 	            onDecline: {
 	              AnalyticsManager.shared.setAnalyticsEnabled(false)
-                continueDemoMoment(to: .reviewPrompt)
+                continueDemoMoment(to: .painPoints)
 	            }
           )
           .transition(
@@ -89,26 +89,16 @@ struct ContentView: View {
             ))
 
 	        case .reviewPrompt:
-	          ReviewPromptView(
-	            onContinue: {
-                reviewPromptTransition(to: .painPoints)
-	            },
-	            onBack: {
-	              backFromReviewPromptToProof()
-	            }
-          )
-          .transition(
-            .asymmetric(
-              insertion: .move(edge: .trailing),
-              removal: .move(edge: .trailing)
-            ))
+	          // Retired step: `visibleStep` migrates it forward to `.painPoints`, so
+	          // this arm only exists to keep the switch exhaustive and is never shown.
+	          Color.clear
 
 	        case .painPoints:
 	          ProtectionPlanDistractionChoicesView(
 	            model: protectionPlanModel,
 	            progress: ProtectionPlanProgressIndex.progress(for: .painPoints),
 	            onBack: {
-                lowRiskTransition(to: .reviewPrompt)
+                backFromQuestionsToProof()
 	            },
 	            onContinue: {
 	              // Distraction Choices are committed inside ProtectionPlanDistractionChoicesView.
@@ -432,12 +422,13 @@ struct ContentView: View {
   }
 
   /// Hands off from the new Protection Plan intro into the existing onboarding
-  /// flow. Lands at `reviewPrompt` so the legacy welcome, product demos, and the
-  /// legacy analytics-consent step are skipped (consent is never asked twice).
+  /// flow. Lands at `painPoints` (the first question) so the legacy welcome,
+  /// product demos, and legacy analytics-consent step are skipped (consent is never
+  /// asked twice) and the retired review request is bypassed entirely.
   private func handoffFromProtectionPlanIntro() {
-    guard onboardingStep < OnboardingFlow.Step.reviewPrompt.rawValue else { return }
+    guard onboardingStep < OnboardingFlow.Step.painPoints.rawValue else { return }
     withAnimation(.easeInOut(duration: 0.3)) {
-      setOnboardingStep(.reviewPrompt)
+      setOnboardingStep(.painPoints)
     }
   }
 
@@ -473,19 +464,12 @@ struct ContentView: View {
         accessibilityReduceMotion: accessibilityReduceMotion))
   }
 
-  private func reviewPromptTransition(to step: OnboardingFlow.Step) {
-    transition(
-      to: step,
-      response: onboardingFeedback.requestOrSkipReview(
-        accessibilityReduceMotion: accessibilityReduceMotion))
-  }
-
-  /// Back from the Review Prompt to the Early Value Proof. This reverses the
+  /// Back from the first question to the Early Value Proof. This reverses the
   /// intro handoff: the proof lives in the new shell, so we step the shell's
   /// model back to it and drop the legacy step below `productDemo` so the shell
   /// is shown again (rendering the proof, not the handoff sentinel).
-  private func backFromReviewPromptToProof() {
-    protectionPlanModel.goBack() // reviewPrompt -> earlyValueProof
+  private func backFromQuestionsToProof() {
+    protectionPlanModel.goBack() // handoff sentinel -> earlyValueProof
     withAnimation(.easeInOut(duration: 0.3)) {
       setOnboardingStep(.welcome)
     }

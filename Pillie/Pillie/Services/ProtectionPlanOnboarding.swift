@@ -98,8 +98,8 @@ struct ProtectionPlanOnboardingState: Equatable {
 
     /// Whether the screens the new shell owns — Welcome, Analytics Consent, and the
     /// Early Value Proof — have all been completed, signalling the handoff into the
-    /// preserved Review Prompt and the rest of onboarding. The new-flow `reviewPrompt`
-    /// step acts as that handoff sentinel.
+    /// rest of onboarding. The `reviewPrompt` step is retained only as that handoff
+    /// sentinel; the review request screen itself was removed.
     var hasFinishedIntro: Bool {
         currentStep.rawValue > ProtectionPlanStep.earlyValueProof.rawValue
     }

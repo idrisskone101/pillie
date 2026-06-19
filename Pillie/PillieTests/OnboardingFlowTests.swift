@@ -23,10 +23,27 @@ final class OnboardingFlowTests: XCTestCase {
         XCTAssertEqual(OnboardingFlow.Step.complete.rawValue, 16)
     }
 
-    func testDisplayOrderPlacesAnalyticsConsentImmediatelyBeforeReviewPrompt() {
+    func testDisplayOrderPlacesAnalyticsConsentImmediatelyBeforeFirstQuestion() {
+        // The review request was retired, so Analytics Consent now hands straight
+        // off to the first question (Distraction Choices / painPoints).
         XCTAssertEqual(
             Array(OnboardingFlow.displayOrder.prefix(5)),
-            [.welcome, .productDemo, .plusBlockingDemo, .analyticsConsent, .reviewPrompt]
+            [.welcome, .productDemo, .plusBlockingDemo, .analyticsConsent, .painPoints]
+        )
+        XCTAssertFalse(OnboardingFlow.displayOrder.contains(.reviewPrompt))
+    }
+
+    func testRetiredReviewPromptStepMigratesForwardToFirstQuestion() {
+        // The raw value is preserved for persistence, but anyone landing on it is
+        // migrated to the first question instead of the removed review screen.
+        XCTAssertEqual(OnboardingFlow.Step.reviewPrompt.rawValue, 4)
+        XCTAssertEqual(
+            OnboardingFlow.visibleStep(
+                for: OnboardingFlow.Step.reviewPrompt.rawValue,
+                isPlus: false,
+                selectedFreePlan: false
+            ),
+            .painPoints
         )
     }
 
@@ -283,13 +300,13 @@ final class OnboardingFlowTests: XCTestCase {
         XCTAssertEqual(toAnalyticsConsent.direction, .forward)
         XCTAssertEqual(toAnalyticsConsent.completedAnalyticsStep, .plusBlockingDemo)
 
-        let toReviewPrompt = try XCTUnwrap(
+        let toFirstQuestion = try XCTUnwrap(
             OnboardingFlow.transition(
                 from: OnboardingFlow.Step.analyticsConsent.rawValue,
-                to: OnboardingFlow.Step.reviewPrompt.rawValue
+                to: OnboardingFlow.Step.painPoints.rawValue
             )
         )
-        XCTAssertEqual(toReviewPrompt.direction, .forward)
-        XCTAssertEqual(toReviewPrompt.completedAnalyticsStep, .analyticsConsent)
+        XCTAssertEqual(toFirstQuestion.direction, .forward)
+        XCTAssertEqual(toFirstQuestion.completedAnalyticsStep, .analyticsConsent)
     }
 }
