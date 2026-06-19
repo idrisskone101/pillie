@@ -12,6 +12,10 @@ enum OnboardingFlow {
         case analyticsConsent = 1
         case productDemo = 2
         case plusBlockingDemo = 3
+        // Retired: the in-onboarding review request was removed. The case (and its
+        // raw value) is retained so persisted `onboardingStep` values are never
+        // reinterpreted; it is dropped from `displayOrder` and `visibleStep` maps it
+        // forward to `.painPoints`, so it is never rendered.
         case reviewPrompt = 4
         case painPoints = 5
         case goal = 6
@@ -82,7 +86,7 @@ enum OnboardingFlow {
         .productDemo,
         .plusBlockingDemo,
         .analyticsConsent,
-        .reviewPrompt,
+        // .reviewPrompt retired: the intro now hands off straight into the questions.
         .painPoints,
         .goal,
         .missFrequency,
@@ -119,6 +123,13 @@ enum OnboardingFlow {
 
     static func visibleStep(for rawValue: Int, isPlus: Bool, selectedFreePlan: Bool) -> Step? {
         guard let step = step(for: rawValue) else { return nil }
+
+        // The review request was retired. Anyone persisted on the old step (or handed
+        // off to it) is migrated forward to the first question so they never land on
+        // the removed screen.
+        if step == .reviewPrompt {
+            return .painPoints
+        }
 
         if step == .appBlocking, selectedFreePlan || !isPlus {
             return .freePlanConfirmation

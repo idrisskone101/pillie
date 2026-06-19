@@ -56,7 +56,7 @@ final class ProtectionPlanConsentGatingTests: XCTestCase {
 
         // User taps "Allow Analytics".
         manager.setAnalyticsEnabled(true)
-        manager.track(.onboardingStepViewed, step: .reviewPrompt)
+        manager.track(.onboardingStepViewed, step: .painPoints)
 
         // Only the post-consent event flows; the earlier ones are not replayed.
         XCTAssertEqual(client.capturedEvents, [AnalyticsEvent.onboardingStepViewed.rawValue])
@@ -73,7 +73,7 @@ final class ProtectionPlanConsentGatingTests: XCTestCase {
 
         // User taps "Not Now".
         manager.setAnalyticsEnabled(false)
-        manager.track(.onboardingStepViewed, step: .reviewPrompt)
+        manager.track(.onboardingStepViewed, step: .painPoints)
 
         XCTAssertEqual(
             client.capturedEvents, [],

@@ -90,18 +90,18 @@ final class ProtectionPlanOnboardingTests: XCTestCase {
         XCTAssertFalse(state.hasFinishedIntro)
         state.advance() // -> earlyValueProof
         XCTAssertFalse(state.hasFinishedIntro)
-        state.advance() // -> reviewPrompt (handoff sentinel into the preserved flow)
+        state.advance() // -> reviewPrompt (handoff sentinel into the questions flow)
 
         XCTAssertEqual(state.currentStep, .reviewPrompt)
         XCTAssertTrue(
             state.hasFinishedIntro,
-            "Reaching the Review Prompt hands off to the preserved review-then-questions flow."
+            "Reaching the handoff sentinel hands off to the questions flow."
         )
     }
 
-    func testGoBackFromReviewPromptReturnsToTheProofAndReentersTheShell() {
-        // The Review Prompt back button reverses the intro handoff. Stepping back
-        // from reviewPrompt must land on the Early Value Proof and report the intro
+    func testGoBackFromHandoffSentinelReturnsToTheProofAndReentersTheShell() {
+        // Backing out of the first question reverses the intro handoff. Stepping back
+        // from the sentinel must land on the Early Value Proof and report the intro
         // as unfinished, so the shell re-renders the proof instead of immediately
         // re-triggering the handoff (which would bounce the user forward).
         var state = ProtectionPlanOnboardingState(currentStep: .reviewPrompt)
