@@ -424,7 +424,7 @@ struct ProtectionPlanMechanismProofView: View {
         .accessibilityIdentifier("protectionPlanPrimaryCTA")
         .padding(.horizontal, PillieTheme.screenHorizontalPadding)
         .padding(.top, 12)
-        .padding(.bottom, 34)
+        .padding(.bottom, PillieTheme.onboardingCTABottomPadding)
         .background(
             LinearGradient(
                 colors: [PillieTheme.bg.opacity(0), PillieTheme.bg, PillieTheme.bg],

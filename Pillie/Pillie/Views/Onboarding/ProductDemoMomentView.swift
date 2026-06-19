@@ -52,7 +52,7 @@ struct ProductDemoMomentView: View {
         .accessibilityIdentifier("productDemoContinueButton")
         .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger4))
         .padding(.horizontal, 28)
-        .padding(.bottom, 34)
+        .padding(.bottom, PillieTheme.onboardingCTABottomPadding)
       }
     }
     .accessibilityIdentifier("productDemoMomentView")

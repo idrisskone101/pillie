@@ -76,6 +76,12 @@ enum PillieTheme {
     static let scrollBottomPaddingDefault: CGFloat = 100
     static let scrollTopPadding: CGFloat = 12
     static let screenHorizontalPadding: CGFloat = 20
+    /// Bottom inset (above the safe area) for the fixed CTA stack on onboarding
+    /// screens whose CTAs respect the safe area. Single source of truth so every
+    /// such screen shares one baseline — and so the bottom button of a two-option
+    /// stack lands on the same y as a single-option CTA. Lowered from the legacy
+    /// 34pt so the CTAs sit lower and hand more vertical room back to the content.
+    static let onboardingCTABottomPadding: CGFloat = 16
     static let primaryTitleAccessoryHeight: CGFloat = 44
     static let primaryTitleAccessoryToTitleSpacing: CGFloat = 16
 

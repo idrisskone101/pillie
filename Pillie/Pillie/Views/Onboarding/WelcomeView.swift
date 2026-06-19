@@ -46,7 +46,7 @@ struct WelcomeView: View {
                     .opacity(animateIn ? 1 : 0)
                     .animation(PillieTheme.fadeInUpCurve.delay(PillieTheme.stagger4), value: animateIn)
                     .padding(.horizontal, 28)
-                    .padding(.bottom, 34)
+                    .padding(.bottom, PillieTheme.onboardingCTABottomPadding)
             }
         }
         .onAppear {
