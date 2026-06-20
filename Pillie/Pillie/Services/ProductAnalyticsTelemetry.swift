@@ -61,6 +61,15 @@ struct ProductAnalyticsTelemetry {
     track(.onboardingCompleted, source: .onboarding)
   }
 
+  /// Reports the terminal completion classification. Fires exactly one event —
+  /// `protection_plan_activated` only when app blocking is genuinely activated, and
+  /// `reminder_only_completion` otherwise. Reminder-only completion never emits an
+  /// activation event. Both carry only coarse, consent-safe context (`source`,
+  /// `is_plus`); no personalization answers, app names, or counts.
+  func onboardingOutcomeClassified(_ outcome: ProtectionPlanCompletion.Outcome) {
+    track(outcome.analyticsEvent, source: .onboarding)
+  }
+
   func onboardingAcquisitionSourceCompleted(_ source: AcquisitionSource) {
     track(
       .onboardingStepCompleted,

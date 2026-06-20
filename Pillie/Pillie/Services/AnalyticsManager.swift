@@ -107,6 +107,8 @@ enum AnalyticsEvent: String, CaseIterable {
   case onboardingStepCompleted = "onboarding_step_completed"
   case onboardingBackTapped = "onboarding_back_tapped"
   case onboardingCompleted = "onboarding_completed"
+  case reminderOnlyCompletion = "reminder_only_completion"
+  case protectionPlanActivated = "protection_plan_activated"
   case paywallViewed = "paywall_viewed"
   case paywallPlanSelected = "paywall_plan_selected"
   case purchaseStarted = "purchase_started"

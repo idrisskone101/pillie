@@ -14,6 +14,9 @@ struct HomeView: View {
     @State private var hasAnimatedIn = false
     @State private var showRefillConfirmation = false
     @State private var showShakeConfirm = false
+    @State private var showBlockingSetup = false
+    @State private var showBlockingPaywall = false
+    @AppStorage("homeBlockingStatusCardDismissed") private var blockingCardDismissed = false
     private let homeFeedback = HomeActionInteractionFeedback()
 
     private var unifiedStateTransition: Animation {
@@ -31,6 +34,36 @@ struct HomeView: View {
             insertion: .scale(scale: 0.97).combined(with: .opacity),
             removal: .opacity
         )
+    }
+
+    /// Whether the home state is Reminder-Only Onboarding Completion (and which
+    /// variant), derived live from entitlement + Screen Time + saved blocker config.
+    /// Resolves to `.active` once Protection Plan Activation is reached, which hides
+    /// the enable-blocking-later card.
+    private var blockingPresentation: BlockingStatusPresentation {
+        let blocking = AppBlockingManager.shared
+        let outcome = ProtectionPlanCompletion.outcome(
+            for: ProtectionPlanCompletion.State(
+                isEntitled: SubscriptionManager.shared.isPlus,
+                screenTimeAuthorized: blocking.authorizationStatus == .approved,
+                // A non-empty saved selection — independent of the blocking pause toggle.
+                blockerConfigSaved: blocking.hasAppsSelected
+            )
+        )
+        return BlockingStatusPresentation.make(
+            outcome: outcome,
+            isEntitled: SubscriptionManager.shared.isPlus
+        )
+    }
+
+    private func handleBlockingCardAction() {
+        if SubscriptionManager.shared.isPlus {
+            // Entitled but reminder-only: finish Screen Time setup directly.
+            showBlockingSetup = true
+        } else {
+            // Free: go straight to the paywall (it reports paywallViewed itself).
+            showBlockingPaywall = true
+        }
     }
 
     private var todayActionState: TodayActionState {
@@ -71,6 +104,19 @@ struct HomeView: View {
 
                     StatusCard()
                         .modifier(FadeInUp(appeared: appeared, delay: 0.1))
+
+                    if !blockingCardDismissed,
+                       let blockingCard = BlockingStatusCardContent.make(for: blockingPresentation) {
+                        BlockingStatusCard(
+                            content: blockingCard,
+                            onPrimaryAction: { handleBlockingCardAction() },
+                            onDismiss: {
+                                withAnimation(unifiedStateTransition) { blockingCardDismissed = true }
+                            }
+                        )
+                        .modifier(FadeInUp(appeared: appeared, delay: 0.15))
+                        .transition(ctaStateTransition)
+                    }
 
                     if store.isRefillDue {
                         RefillBannerCard(onRefill: {
@@ -124,6 +170,20 @@ struct HomeView: View {
             Button("Not Yet", role: .cancel) {}
         } message: {
             Text("This will start a new \(store.pack.method == .pill ? "pack" : "cycle") from today. Your previous history will be preserved.")
+        }
+        .sheet(isPresented: $showBlockingSetup) {
+            BlockedAppsEditor()
+                .presentationDetents([.height(430)])
+                .presentationDragIndicator(.hidden)
+                .presentationBackground(PillieTheme.bg)
+        }
+        .fullScreenCover(isPresented: $showBlockingPaywall) {
+            PremiumPaywallView(
+                isFromOnboarding: false,
+                onBack: { showBlockingPaywall = false },
+                onContinue: { showBlockingPaywall = false },
+                onSkip: { showBlockingPaywall = false }
+            )
         }
         .fullScreenCover(isPresented: $showShakeConfirm) {
             if let action = store.todayDueAction {

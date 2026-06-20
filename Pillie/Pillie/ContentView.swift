@@ -437,8 +437,28 @@ struct ContentView: View {
     let nextStep = step.rawValue
     onboardingTelemetry.stepCompleted(from: previousStep, to: nextStep)
 
+    if OnboardingFlow.completedOnboarding(from: previousStep, to: nextStep) {
+      // Classify the terminal completion state. Reminder-only completion reports
+      // `reminder_only_completion`; only genuine activation (saved blocker config +
+      // Screen Time authorization) reports `protection_plan_activated`.
+      ProductAnalyticsTelemetry.live.onboardingOutcomeClassified(
+        ProtectionPlanCompletion.outcome(for: currentCompletionState)
+      )
+    }
+
     onboardingStep = nextStep
     UserDefaults.standard.set(nextStep, forKey: OnboardingFlow.stepStorageKey)
+  }
+
+  /// The blocker/entitlement state captured at the moment onboarding completes.
+  private var currentCompletionState: ProtectionPlanCompletion.State {
+    let blocking = AppBlockingManager.shared
+    return ProtectionPlanCompletion.State(
+      isEntitled: subscriptionManager.isPlus,
+      screenTimeAuthorized: blocking.authorizationStatus == .approved,
+      // A non-empty saved selection — independent of the blocking-enabled pause toggle.
+      blockerConfigSaved: blocking.hasAppsSelected
+    )
   }
 
   private func trackOnboardingStepViewed(_ step: Int) {
