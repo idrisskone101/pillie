@@ -62,6 +62,30 @@ final class ProtectionPlanConsentGatingTests: XCTestCase {
         XCTAssertEqual(client.capturedEvents, [AnalyticsEvent.onboardingStepViewed.rawValue])
     }
 
+    func testBlockerConfigSaveIsDroppedUntilConsentIsGranted() {
+        // AC4: a valid app-selection save fires blocker_config_saved only within
+        // consent boundaries. Through the real telemetry + manager, a save before
+        // consent is dropped (not buffered); after consent it flows once.
+        let client = RecordingAnalyticsClient()
+        let manager = AnalyticsManager(
+            defaults: defaults,
+            client: client,
+            infoDictionary: validInfoDictionary
+        )
+        manager.configure()
+        let telemetry = ProductAnalyticsTelemetry(analytics: manager, isPlus: { true })
+
+        telemetry.onboardingBlockerConfigSaved(hasSelection: true)
+        XCTAssertEqual(
+            client.capturedEvents, [],
+            "A blocker save before consent must be dropped, never captured or buffered."
+        )
+
+        manager.setAnalyticsEnabled(true)
+        telemetry.onboardingBlockerConfigSaved(hasSelection: true)
+        XCTAssertEqual(client.capturedEvents, [AnalyticsEvent.blockerConfigSaved.rawValue])
+    }
+
     func testDecliningConsentKeepsProductAnalyticsDropped() {
         let client = RecordingAnalyticsClient()
         let manager = AnalyticsManager(

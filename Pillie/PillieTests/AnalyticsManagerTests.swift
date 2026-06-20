@@ -227,7 +227,7 @@ final class AnalyticsManagerTests: XCTestCase {
 
     telemetry.blockedAppsSettingsOpened(hasSelection: false)
     telemetry.blockedAppsSaved(hasSelection: true)
-    telemetry.onboardingBlockedAppsSaved(hasSelection: true)
+    telemetry.onboardingBlockerConfigSaved(hasSelection: true)
     telemetry.mainTabSelected(.history)
     telemetry.todayActionCompleted()
     telemetry.onboardingAcquisitionSourceCompleted(.reddit)
@@ -237,7 +237,7 @@ final class AnalyticsManagerTests: XCTestCase {
       [
         .settingsSheetOpened,
         .settingsChangeSaved,
-        .settingsChangeSaved,
+        .blockerConfigSaved,
         .tabSelected,
         .todayActionCompleted,
         .onboardingStepCompleted,
@@ -245,10 +245,29 @@ final class AnalyticsManagerTests: XCTestCase {
     XCTAssertEqual(recorder.sources, [.settings, .settings, .onboarding, nil, .home, .onboarding])
     XCTAssertEqual(recorder.steps, [nil, nil, .appBlocking, nil, nil, .acquisitionSource])
     XCTAssertEqual(recorder.screens, [nil, nil, nil, .calendar, nil, nil])
-    XCTAssertEqual(recorder.settings, [.blockedApps, .blockedApps, .blockedApps, nil, nil, nil])
+    // The onboarding blocker save fires the dedicated event, so it carries no
+    // `setting` (the event itself means "blocked apps saved"); the Settings-side
+    // save still reuses settings_change_saved with setting=blocked_apps.
+    XCTAssertEqual(recorder.settings, [.blockedApps, .blockedApps, nil, nil, nil, nil])
     XCTAssertEqual(recorder.acquisitionSources, [nil, nil, nil, nil, nil, .reddit])
     XCTAssertEqual(recorder.isPlusValues, [true, true, true, true, true, true])
     XCTAssertEqual(recorder.hasBlockingSelectionValues, [false, true, true, nil, nil, nil])
+  }
+
+  func testOnboardingBlockerConfigSaveFiresDedicatedCoarseEvent() {
+    // AC4/AC6: a valid save in onboarding fires `blocker_config_saved` with only
+    // coarse, consent-safe context — the selection bit, never names/tokens/counts.
+    let recorder = RecordingAnalyticsTracker()
+    let telemetry = ProductAnalyticsTelemetry(analytics: recorder, isPlus: { true })
+
+    telemetry.onboardingBlockerConfigSaved(hasSelection: true)
+
+    XCTAssertEqual(recorder.events, [.blockerConfigSaved])
+    XCTAssertEqual(recorder.sources, [.onboarding])
+    XCTAssertEqual(recorder.steps, [.appBlocking])
+    XCTAssertEqual(recorder.settings, [nil])
+    XCTAssertEqual(recorder.hasBlockingSelectionValues, [true])
+    XCTAssertEqual(recorder.isPlusValues, [true])
   }
 
   func testProductAnalyticsTelemetryDoesNotAddMotionHapticOrAnimationEvents() {

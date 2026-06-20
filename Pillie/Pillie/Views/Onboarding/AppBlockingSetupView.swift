@@ -2,56 +2,88 @@
 //  AppBlockingSetupView.swift
 //  Pillie
 //
+//  Issue #82 — Native App Selection And Blocker Config Save (design Option B).
+//
+//  The post-authorization wrapper for the native Screen Time picker. There is no
+//  separate primer: "Choose apps to block" requests Screen Time authorization
+//  inline (if needed) and goes straight into the system FamilyActivityPicker.
+//  An honest empty state keeps the skip / reminder-only path, a valid selection
+//  saves the blocker config and fires `blocker_config_saved`, and the summary is
+//  privacy-safe — Pillie only ever knows the count (see BlockerSelectionState).
+//
 
 import SwiftUI
 import FamilyControls
 
 struct AppBlockingSetupContent {
+    /// A generic category hint shown in the empty state — illustrative only, never
+    /// the user's real selection (which is opaque tokens Pillie cannot read).
+    struct CategoryHint: Equatable {
+        let name: String
+        let symbol: String
+    }
+
+    // Hero
     let badge: String
-    let title: String
-    let plusSubtitle: String
-    let lockedSubtitle: String
+    let titleLead: String
+    let titleAccent: String
+    let subtitle: String
+
+    // Empty state
+    let emptyTitle: String
+    let emptyDetail: String
+    let categoryHints: [CategoryHint]
+    let chooseAppsCTA: String
+
+    // Selected state
+    let selectedSummaryLabel: String
+    let selectedPrivacyNote: String
+    let changeSelectionCTA: String
+
+    // Shared privacy + footer
     let privacyNote: String
-    let permissionTitle: String
-    let permissionDetail: String
-    let authorizedTitle: String
-    let authorizedDetail: String
-    let selectionTitle: String
-    let noSelectionDetail: String
+    let finishCTA: String
+    let skipCTA: String
+
+    // Locked fallback (reached only if entitlement drops underneath the screen)
     let lockedTitle: String
+    let lockedSubtitle: String
     let lockedDetail: String
 
     var visibleCopy: [String] {
         [
-            badge,
-            title,
-            plusSubtitle,
-            lockedSubtitle,
-            privacyNote,
-            permissionTitle,
-            permissionDetail,
-            authorizedTitle,
-            authorizedDetail,
-            selectionTitle,
-            noSelectionDetail,
-            lockedTitle,
-            lockedDetail
+            badge, titleLead, titleAccent, subtitle,
+            emptyTitle, emptyDetail
+        ]
+        + categoryHints.map(\.name)
+        + [
+            chooseAppsCTA, selectedSummaryLabel, selectedPrivacyNote, changeSelectionCTA,
+            privacyNote, finishCTA, skipCTA, lockedTitle, lockedSubtitle, lockedDetail
         ]
     }
 
     static let `default` = AppBlockingSetupContent(
         badge: "Pillie Plus",
-        title: "App Blocking",
-        plusSubtitle: "Choose the apps Pillie should pause after your reminder. iOS Screen Time handles the blocking.",
-        lockedSubtitle: "App blocking is a Pillie Plus tool you can set up after upgrading.",
-        privacyNote: "Your app choices stay on this device.",
-        permissionTitle: "Allow Screen Time",
-        permissionDetail: "Pillie needs permission before it can pause selected apps.",
-        authorizedTitle: "Screen Time connected",
-        authorizedDetail: "Choose the apps you want Pillie to pause.",
-        selectionTitle: "Apps to pause",
-        noSelectionDetail: "No apps selected yet.",
+        titleLead: "Block the apps",
+        titleAccent: "that pull you in.",
+        subtitle: "Pick the categories Pillie should pause right after your reminder.",
+        emptyTitle: "Nothing paused yet",
+        emptyDetail: "You'll choose real apps in the Screen Time picker. We only ever store the count.",
+        categoryHints: [
+            CategoryHint(name: "Social", symbol: "bubble.left.and.bubble.right.fill"),
+            CategoryHint(name: "Entertainment", symbol: "play.rectangle.fill"),
+            CategoryHint(name: "Games", symbol: "gamecontroller.fill"),
+            CategoryHint(name: "Shopping", symbol: "bag.fill")
+        ],
+        chooseAppsCTA: "Choose apps to block",
+        selectedSummaryLabel: "apps & categories blocked",
+        selectedPrivacyNote: "Pillie stores only the count — never which apps.",
+        changeSelectionCTA: "Change selection",
+        privacyNote: "Your choices stay on this device.",
+        finishCTA: "Finish Setup",
+        skipCTA: "Skip for now",
         lockedTitle: "Included with Pillie Plus",
+        lockedSubtitle: "App blocking is a Pillie Plus tool you can set up after upgrading.",
         lockedDetail: "Your free plan still includes daily reminders and cycle tracking. You can upgrade from Settings when you want app blocking."
     )
 }
@@ -73,8 +105,17 @@ struct AppBlockingSetupView: View {
     let onSkip: () -> Void
 
     private var blockingManager: AppBlockingManager { .shared }
+
     private var canSetUpBlocking: Bool {
         SubscriptionManager.shared.isPlus && !onboardingSelectedFreePlan
+    }
+
+    /// Count-only view of the live selection — the deep, testable core.
+    private var selection: BlockerSelectionState {
+        BlockerSelectionState(
+            applicationCount: blockingManager.activitySelection.applicationTokens.count,
+            categoryCount: blockingManager.activitySelection.categoryTokens.count
+        )
     }
 
     var body: some View {
@@ -84,31 +125,37 @@ struct AppBlockingSetupView: View {
             VStack(spacing: 0) {
                 header
                     .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger1))
-                    .padding(.horizontal, 24)
+                    .padding(.horizontal, PillieTheme.screenHorizontalPadding)
                     .padding(.top, 28)
 
                 ScrollView(showsIndicators: false) {
-                    VStack(spacing: 22) {
-                        titleSection
+                    VStack(alignment: .leading, spacing: 22) {
+                        heroSection
                             .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger2))
 
                         if canSetUpBlocking {
-                            setupSection
-                                .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger3))
+                            Group {
+                                if selection.isEmpty {
+                                    emptyStateCard
+                                } else {
+                                    selectedStateCard
+                                }
+                            }
+                            .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger3))
                         } else {
-                            plusLockedSection
-                                .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger4))
+                            lockedSection
+                                .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger3))
                         }
                     }
-                    .padding(.horizontal, 28)
-                    .padding(.top, 32)
-                    .padding(.bottom, 24)
+                    .padding(.horizontal, PillieTheme.screenHorizontalPadding)
+                    .padding(.top, 18)
+                    .padding(.bottom, 16)
                 }
 
                 footer
                     .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger4))
-                    .padding(.horizontal, 28)
-                    .padding(.bottom, 18)
+                    .padding(.horizontal, PillieTheme.screenHorizontalPadding)
+                    .padding(.bottom, PillieTheme.onboardingCTABottomPadding)
             }
         }
         .familyActivityPicker(
@@ -139,10 +186,10 @@ struct AppBlockingSetupView: View {
         )
     }
 
-    // MARK: - Title
+    // MARK: - Hero
 
-    private var titleSection: some View {
-        VStack(spacing: 10) {
+    private var heroSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
             Text(content.badge)
                 .font(.pillie(10, weight: .black))
                 .foregroundStyle(PillieTheme.textMuted)
@@ -152,27 +199,131 @@ struct AppBlockingSetupView: View {
                 .padding(.vertical, 7)
                 .background(PillieTheme.coralLight, in: Capsule())
                 .overlay {
-                    Capsule()
-                        .stroke(Color.black.opacity(0.06), lineWidth: 1)
+                    Capsule().stroke(Color.black.opacity(0.06), lineWidth: 1)
                 }
 
-            Text(content.title)
-                .font(.pillieHeadline())
-                .foregroundStyle(PillieTheme.textPrimary)
-                .multilineTextAlignment(.center)
+            (Text(content.titleLead + "\n").foregroundColor(PillieTheme.textPrimary)
+                + Text(content.titleAccent).foregroundColor(PillieTheme.coral))
+                .font(.pillie(34, weight: .bold))
+                .fixedSize(horizontal: false, vertical: true)
 
-            Text(canSetUpBlocking
-                 ? content.plusSubtitle
-                 : content.lockedSubtitle)
+            Text(canSetUpBlocking ? content.subtitle : content.lockedSubtitle)
                 .font(.pillieBodyLarge())
                 .foregroundStyle(PillieTheme.textMuted)
-                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
-    // MARK: - Plus Locked Section
+    // MARK: - Empty State
 
-    private var plusLockedSection: some View {
+    private var emptyStateCard: some View {
+        VStack(spacing: 12) {
+            ZStack {
+                Circle()
+                    .strokeBorder(PillieTheme.coral, style: StrokeStyle(lineWidth: 2, dash: [6, 5]))
+                    .frame(width: 60, height: 60)
+                Image(systemName: "pause.fill")
+                    .font(.system(size: 22, weight: .semibold))
+                    .foregroundStyle(PillieTheme.coral)
+            }
+
+            Text(content.emptyTitle)
+                .font(.pillieBodyBold())
+                .foregroundStyle(PillieTheme.textPrimary)
+
+            Text(content.emptyDetail)
+                .font(.pillieBody())
+                .foregroundStyle(PillieTheme.textMuted)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(.horizontal, 6)
+
+            ProtectionPlanFlowLayout(horizontalSpacing: 8, verticalSpacing: 8) {
+                ForEach(content.categoryHints, id: \.name) { hint in
+                    hintChip(hint)
+                }
+            }
+            .padding(.top, 2)
+
+            HStack(spacing: 8) {
+                Image(systemName: "lock.fill")
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(PillieTheme.textMuted)
+                Text(content.privacyNote)
+                    .font(.pillie(13, weight: .medium))
+                    .foregroundStyle(PillieTheme.textMuted)
+            }
+            .padding(.top, 4)
+        }
+        .padding(22)
+        .frame(maxWidth: .infinity)
+        .modifier(BlockerCardSurface())
+    }
+
+    private func hintChip(_ hint: AppBlockingSetupContent.CategoryHint) -> some View {
+        HStack(spacing: 6) {
+            Image(systemName: hint.symbol)
+                .font(.system(size: 12, weight: .semibold))
+            Text(hint.name)
+                .font(.pillie(12, weight: .semibold))
+        }
+        .foregroundStyle(PillieTheme.textMuted)
+        .padding(.horizontal, 12)
+        .padding(.vertical, 7)
+        .background(PillieTheme.bg, in: Capsule())
+        .overlay { Capsule().stroke(Color.black.opacity(0.06), lineWidth: 1) }
+    }
+
+    // MARK: - Selected State
+
+    private var selectedStateCard: some View {
+        VStack(alignment: .leading, spacing: 18) {
+            // Count-only summary — no category icons/names, just how many are
+            // blocked. Pillie never learns which apps (AC5).
+            HStack(spacing: 16) {
+                Text(selection.countText)
+                    .font(.pillie(40, weight: .bold))
+                    .foregroundStyle(PillieTheme.coral)
+                    .monospacedDigit()
+
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(content.selectedSummaryLabel)
+                        .font(.pillieBodySemibold())
+                        .foregroundStyle(PillieTheme.textPrimary)
+                    Text(content.selectedPrivacyNote)
+                        .font(.pillie(13, weight: .medium))
+                        .foregroundStyle(PillieTheme.textMuted)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+
+                Spacer(minLength: 0)
+            }
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel("\(selection.accessibilitySummary). \(content.selectedPrivacyNote)")
+
+            Button(action: chooseApps) {
+                HStack(spacing: 8) {
+                    Image(systemName: "pencil")
+                        .font(.system(size: 16, weight: .semibold))
+                    Text(content.changeSelectionCTA)
+                        .font(.pillieBodySemibold())
+                }
+                .foregroundStyle(PillieTheme.textPrimary)
+                .frame(maxWidth: .infinity)
+                .frame(height: 52)
+                .background(PillieTheme.lavender, in: RoundedRectangle(cornerRadius: PillieTheme.buttonRadius))
+            }
+            .buttonStyle(.plain)
+        }
+        .padding(20)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .modifier(BlockerCardSurface())
+    }
+
+    // MARK: - Locked fallback
+
+    private var lockedSection: some View {
         VStack(spacing: 16) {
             Image(systemName: "lock.fill")
                 .font(.system(size: 30, weight: .semibold))
@@ -189,186 +340,85 @@ struct AppBlockingSetupView: View {
         }
         .padding(20)
         .frame(maxWidth: .infinity)
-        .background(
-            RoundedRectangle(cornerRadius: PillieTheme.cardRadius)
-                .fill(PillieTheme.cardWhite)
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: PillieTheme.cardRadius)
-                .stroke(PillieTheme.sageHalf, lineWidth: 1)
-        )
+        .modifier(BlockerCardSurface())
     }
 
-    // MARK: - Setup Section
+    // MARK: - Footer
+    //
+    // A single bottom-anchored primary CTA at the shared onboarding baseline. It
+    // morphs "Choose apps to block" → "Finish Setup" once a selection exists, so
+    // the dark CTA never competes with a second dark button (the in-card action is
+    // the lavender "Change selection"). "Skip for now" keeps the reminder-only path.
 
-    private var setupSection: some View {
-        VStack(alignment: .leading, spacing: 18) {
-            HStack(alignment: .top, spacing: 14) {
-                Image(systemName: blockingManager.isAuthorized ? "checkmark.circle.fill" : "lock.shield.fill")
-                    .font(.system(size: 22, weight: .semibold))
-                    .foregroundStyle(PillieTheme.coral)
-                    .frame(width: 42, height: 42)
-                    .background(PillieTheme.coralLight, in: Circle())
-
-                VStack(alignment: .leading, spacing: 6) {
-                    Text(blockingManager.isAuthorized ? content.authorizedTitle : content.permissionTitle)
-                        .font(.pillieBodySemibold())
-                        .foregroundStyle(PillieTheme.textPrimary)
-
-                    Text(blockingManager.isAuthorized ? content.authorizedDetail : content.permissionDetail)
-                        .font(.pillieBody())
-                        .foregroundStyle(PillieTheme.textMuted)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-            }
-
-            privacyNote
-
-            if blockingManager.isAuthorized {
-                selectionControl
+    private var footer: some View {
+        VStack(spacing: 12) {
+            if canSetUpBlocking {
+                primaryCTA
+                skipButton
             } else {
-                allowScreenTimeButton
+                Button(action: onContinue) {
+                    Text(content.finishCTA)
+                }
+                .buttonStyle(.pillieDark)
             }
         }
-        .padding(20)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(
-            RoundedRectangle(cornerRadius: PillieTheme.cardRadius)
-                .fill(PillieTheme.cardWhite)
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: PillieTheme.cardRadius)
-                .stroke(PillieTheme.sageHalf, lineWidth: 1)
-        )
-        .shadow(color: PillieTheme.cardShadow, radius: PillieTheme.cardShadowRadius, y: PillieTheme.cardShadowY)
     }
 
-    private var privacyNote: some View {
-        HStack(spacing: 8) {
-            Image(systemName: "lock.fill")
-                .font(.system(size: 12, weight: .semibold))
-                .foregroundStyle(PillieTheme.textMuted)
-
-            Text(content.privacyNote)
-                .font(.pillie(14, weight: .medium))
-                .foregroundStyle(PillieTheme.textMuted)
-                .fixedSize(horizontal: false, vertical: true)
-        }
-        .padding(.vertical, 10)
-        .padding(.horizontal, 12)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(PillieTheme.bg, in: RoundedRectangle(cornerRadius: 16))
-    }
-
-    private var allowScreenTimeButton: some View {
-        Button {
-            isRequestingAuth = true
-            onboardingTelemetry.screenTimePermissionRequested()
-            Task {
-                await blockingManager.requestAuthorization()
-                onboardingTelemetry.screenTimePermissionCompleted(isAuthorized: blockingManager.isAuthorized)
-                isRequestingAuth = false
-            }
-        } label: {
+    private var primaryCTA: some View {
+        // No primer: when empty, the CTA requests Screen Time authorization inline
+        // and opens the system picker; once apps are chosen it saves and continues.
+        Button(action: selection.hasSelection ? finishSetup : chooseApps) {
             HStack(spacing: 8) {
                 if isRequestingAuth {
-                    ProgressView()
-                        .tint(.white)
+                    ProgressView().tint(.white)
+                } else if !selection.hasSelection {
+                    Image(systemName: "shield.fill")
+                        .font(.system(size: 17, weight: .semibold))
                 }
-                Text(content.permissionTitle)
+                Text(selection.hasSelection ? content.finishCTA : content.chooseAppsCTA)
             }
         }
         .buttonStyle(.pillieDark)
         .disabled(isRequestingAuth)
     }
 
-    // MARK: - Selection Control
-
-    private var selectionControl: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack(alignment: .firstTextBaseline, spacing: 8) {
-                Text(content.selectionTitle)
-                    .font(.pillieBodySemibold())
-                    .foregroundStyle(PillieTheme.textPrimary)
-
-                Spacer()
-
-                if blockingManager.hasAppsSelected {
-                    Text(selectionSummaryText)
-                        .font(.pillieBodySemibold())
-                        .foregroundStyle(PillieTheme.coral)
-                }
-            }
-
-            Text(blockingManager.hasAppsSelected ? "You can change this anytime from Settings." : content.noSelectionDetail)
-                .font(.pillie(14, weight: .medium))
+    private var skipButton: some View {
+        Button(action: onSkip) {
+            Text(content.skipCTA)
+                .font(.pillie(16, weight: .medium))
                 .foregroundStyle(PillieTheme.textMuted)
-
-            Button {
-                showPicker = true
-            } label: {
-                HStack(spacing: 8) {
-                    Image(systemName: blockingManager.hasAppsSelected ? "pencil" : "plus")
-                        .font(.system(size: 16, weight: .semibold))
-                    Text(blockingManager.hasAppsSelected ? "Change apps" : "Choose apps to block")
-                        .font(.pillieBodySemibold())
-                }
-                .foregroundStyle(PillieTheme.coral)
                 .frame(maxWidth: .infinity)
-                .frame(height: 56)
-                .background(
-                    RoundedRectangle(cornerRadius: PillieTheme.cardRadius)
-                        .strokeBorder(PillieTheme.coral, style: StrokeStyle(lineWidth: 2, dash: [8, 6]))
-                )
+                .frame(height: 42)
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+    }
+
+    // MARK: - Actions
+
+    private func chooseApps() {
+        Task {
+            if !blockingManager.isAuthorized {
+                isRequestingAuth = true
+                onboardingTelemetry.screenTimePermissionRequested()
+                await blockingManager.requestAuthorization()
+                onboardingTelemetry.screenTimePermissionCompleted(isAuthorized: blockingManager.isAuthorized)
+                isRequestingAuth = false
             }
-            .buttonStyle(.plain)
+            if blockingManager.isAuthorized {
+                showPicker = true
+            }
         }
     }
 
-    private var selectionSummaryText: String {
-        let count = blockingManager.activitySelection.applicationTokens.count
-            + blockingManager.activitySelection.categoryTokens.count
-        return "\(count) selected"
-    }
-
-    // MARK: - Footer
-
-    private var footer: some View {
-        VStack(spacing: 0) {
-            if canSetUpBlocking {
-                if blockingManager.isAuthorized {
-                    Button {
-                        blockingManager.saveSelectionAndReconcile(routine: appBlockingRoutine)
-                        ProductAnalyticsTelemetry.live.onboardingBlockedAppsSaved(
-                            hasSelection: blockingManager.hasAppsSelected
-                        )
-                        onContinue()
-                    } label: {
-                        Text("Finish Setup")
-                    }
-                    .buttonStyle(.pillieDark)
-                }
-
-                Button {
-                    onSkip()
-                } label: {
-                    Text("Skip for now")
-                        .font(.pillie(16, weight: .medium))
-                        .foregroundStyle(PillieTheme.textMuted)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 42)
-                        .contentShape(Rectangle())
-                }
-                .buttonStyle(.plain)
-            } else {
-                Button {
-                    onContinue()
-                } label: {
-                    Text("Finish Setup")
-                }
-                .buttonStyle(.pillieDark)
-            }
-        }
+    private func finishSetup() {
+        // AC2: never save an empty configuration (the CTA is also disabled when empty).
+        guard selection.canSaveBlockerConfig else { return }
+        blockingManager.saveSelectionAndReconcile(routine: appBlockingRoutine)
+        ProductAnalyticsTelemetry.live.onboardingBlockerConfigSaved(
+            hasSelection: blockingManager.hasAppsSelected
+        )
+        onContinue()
     }
 
     private var appBlockingRoutine: AppBlockingManager.RoutineState {
@@ -381,35 +431,24 @@ struct AppBlockingSetupView: View {
     }
 }
 
-// MARK: - PillieToggle
+// MARK: - Card surface
 
-struct PillieToggle: View {
-    @Binding var isOn: Bool
-
-    private let width: CGFloat = 52
-    private let height: CGFloat = 32
-    private let thumbSize: CGFloat = 26
-    private let padding: CGFloat = 3
-
-    var body: some View {
-        Button {
-            withAnimation(.spring(response: 0.35, dampingFraction: 0.6)) {
-                isOn.toggle()
-            }
-        } label: {
-            ZStack(alignment: isOn ? .trailing : .leading) {
-                Capsule()
-                    .fill(isOn ? PillieTheme.coral : PillieTheme.sage)
-                    .frame(width: width, height: height)
-
-                Circle()
-                    .fill(Color.white)
-                    .frame(width: thumbSize, height: thumbSize)
-                    .shadow(color: .black.opacity(0.12), radius: 4, y: 2)
-                    .padding(padding)
-            }
-        }
-        .buttonStyle(.plain)
+private struct BlockerCardSurface: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .background(
+                RoundedRectangle(cornerRadius: PillieTheme.cardRadius)
+                    .fill(PillieTheme.cardWhite)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: PillieTheme.cardRadius)
+                    .stroke(Color.black.opacity(0.06), lineWidth: 1)
+            )
+            .shadow(
+                color: PillieTheme.cardShadow,
+                radius: PillieTheme.cardShadowRadius,
+                y: PillieTheme.cardShadowY
+            )
     }
 }
 

@@ -108,12 +108,15 @@ struct ProductAnalyticsTelemetry {
     )
   }
 
-  func onboardingBlockedAppsSaved(hasSelection: Bool) {
+  /// A valid app selection saved its blocker configuration during onboarding.
+  /// Fires the dedicated `blocker_config_saved` event with only the coarse
+  /// selection bit — never app names, tokens, or a count (the payload schema has
+  /// no slot for them). The dedicated event is why no `setting` is attached.
+  func onboardingBlockerConfigSaved(hasSelection: Bool) {
     track(
-      .settingsChangeSaved,
+      .blockerConfigSaved,
       source: .onboarding,
       step: .appBlocking,
-      setting: .blockedApps,
       hasBlockingSelection: hasSelection
     )
   }
