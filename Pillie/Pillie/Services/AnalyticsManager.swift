@@ -166,6 +166,7 @@ enum AnalyticsStep: String {
   case mechanismProof = "mechanism_proof"
   case freePlanConfirmation = "free_plan_confirmation"
   case appBlocking = "app_blocking"
+  case protectionPlanReady = "protection_plan_ready"
 
   init?(onboardingStep: Int) {
     guard let analyticsStep = OnboardingFlow.analyticsStep(for: onboardingStep) else { return nil }

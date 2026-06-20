@@ -290,6 +290,74 @@ final class OnboardingFlowTests: XCTestCase {
         XCTAssertTrue(complete.completesOnboarding)
     }
 
+    // MARK: - Pill Protection Plan Ready step inserted by issue #83
+
+    func testProtectionPlanReadyIsAppendedSoExistingRawValuesAreStable() {
+        // Appended (not renumbered), like #76/#78, so persisted onboardingStep values
+        // for the original flow are never reinterpreted.
+        XCTAssertEqual(OnboardingFlow.Step.protectionPlanReady.rawValue, 20)
+        XCTAssertGreaterThan(
+            OnboardingFlow.Step.protectionPlanReady.rawValue,
+            OnboardingFlow.Step.complete.rawValue
+        )
+    }
+
+    func testProtectionPlanReadyMapsToSafeLowCardinalityAnalyticsLabel() {
+        XCTAssertEqual(OnboardingFlow.Step.protectionPlanReady.analyticsStep, .protectionPlanReady)
+        XCTAssertEqual(AnalyticsStep.protectionPlanReady.rawValue, "protection_plan_ready")
+    }
+
+    func testProtectionPlanReadySitsBetweenAppBlockingAndCompleteInDisplayOrder() throws {
+        // Activated users finish App Blocking, land on the ready screen, then open the
+        // app — so the ready step renders directly between the two.
+        let order = OnboardingFlow.displayOrder
+        let appBlocking = try XCTUnwrap(order.firstIndex(of: .appBlocking))
+        let ready = try XCTUnwrap(order.firstIndex(of: .protectionPlanReady))
+        let complete = try XCTUnwrap(order.firstIndex(of: .complete))
+        XCTAssertEqual(ready, appBlocking + 1, "Ready follows the app-blocking save directly.")
+        XCTAssertEqual(complete, ready + 1, "The app opens right after the ready screen.")
+    }
+
+    func testReachingProtectionPlanReadyDoesNotCompleteOnboarding() {
+        // Saving the blocker config advances to the ready screen, which is still active
+        // onboarding. Completion (and activation classification) fires only when the
+        // ready screen hands off into the app.
+        XCTAssertTrue(
+            OnboardingFlow.isOnboardingActive(rawStep: OnboardingFlow.Step.protectionPlanReady.rawValue)
+        )
+        XCTAssertFalse(
+            OnboardingFlow.completedOnboarding(
+                from: OnboardingFlow.Step.appBlocking.rawValue,
+                to: OnboardingFlow.Step.protectionPlanReady.rawValue
+            )
+        )
+    }
+
+    func testAppBlockingToProtectionPlanReadyResolvesForwardWithoutCompleting() throws {
+        let transition = try XCTUnwrap(
+            OnboardingFlow.transition(
+                from: OnboardingFlow.Step.appBlocking.rawValue,
+                to: OnboardingFlow.Step.protectionPlanReady.rawValue
+            )
+        )
+        XCTAssertEqual(transition.direction, .forward)
+        XCTAssertFalse(transition.completesOnboarding)
+    }
+
+    func testProtectionPlanReadyToCompleteFinishesOnboardingAndKeepsCompletedStepLabel() throws {
+        let transition = try XCTUnwrap(
+            OnboardingFlow.transition(
+                from: OnboardingFlow.Step.protectionPlanReady.rawValue,
+                to: OnboardingFlow.Step.complete.rawValue
+            )
+        )
+        XCTAssertEqual(transition.direction, .forward)
+        XCTAssertTrue(transition.completesOnboarding)
+        // A non-nil completed step keeps the generic step machine firing
+        // `onboarding_completed` when the ready screen hands off into the app.
+        XCTAssertEqual(transition.completedAnalyticsStep, .protectionPlanReady)
+    }
+
     func testMovedAnalyticsConsentStillCountsAsForwardNavigation() throws {
         let toAnalyticsConsent = try XCTUnwrap(
             OnboardingFlow.transition(
