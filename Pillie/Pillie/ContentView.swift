@@ -357,7 +357,14 @@ struct ContentView: View {
                 lowRiskTransition(to: .paywall)
 	            },
 	            onContinue: {
-                openSoftPaywallOrUpgrade(to: .complete)
+                // A valid save with Screen Time authorization is genuine activation —
+                // land on the Pill Protection Plan Ready screen. Anything short of
+                // activation (e.g. authorized but later cleared) opens the app directly.
+                if ProtectionPlanCompletion.landsOnProtectionPlanReady(for: currentCompletionState) {
+                  continueSetupStep(to: .protectionPlanReady)
+                } else {
+                  openSoftPaywallOrUpgrade(to: .complete)
+                }
 	            },
 	            onSkip: {
                 continueFreePath(to: .complete)
@@ -367,6 +374,21 @@ struct ContentView: View {
             .asymmetric(
               insertion: .move(edge: .trailing),
               removal: .move(edge: .trailing)
+            ))
+
+	        case .protectionPlanReady:
+	          ProtectionPlanReadyView(
+	            onContinue: {
+                // Hands off into the app. Leaving the ready screen for `.complete` is
+                // the completion boundary that fires `onboarding_completed` and the
+                // `protection_plan_activated` classification.
+                continueSetupStep(to: .complete)
+	            }
+          )
+          .transition(
+            .asymmetric(
+              insertion: .move(edge: .trailing),
+              removal: .opacity
             ))
 
 	        case .complete, nil:

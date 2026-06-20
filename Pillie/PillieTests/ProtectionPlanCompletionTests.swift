@@ -76,6 +76,59 @@ final class ProtectionPlanCompletionTests: XCTestCase {
         XCTAssertEqual(outcome, .reminderOnly)
     }
 
+    // MARK: - Ready-screen routing (issue #83)
+
+    func testActivatedUserLandsOnProtectionPlanReady() {
+        // AC1: activated users land on Pill Protection Plan Ready after a valid save.
+        let state = ProtectionPlanCompletion.State(
+            isEntitled: true,
+            screenTimeAuthorized: true,
+            blockerConfigSaved: true
+        )
+
+        XCTAssertTrue(ProtectionPlanCompletion.landsOnProtectionPlanReady(for: state))
+    }
+
+    func testReminderOnlyUsersNeverLandOnProtectionPlanReady() {
+        // AC5: reminder-only users are not activated and must not see the ready screen.
+        let authorizedButEmpty = ProtectionPlanCompletion.State(
+            isEntitled: true,
+            screenTimeAuthorized: true,
+            blockerConfigSaved: false
+        )
+        let skippedScreenTime = ProtectionPlanCompletion.State(
+            isEntitled: true,
+            screenTimeAuthorized: false,
+            blockerConfigSaved: false
+        )
+        let free = ProtectionPlanCompletion.State(
+            isEntitled: false,
+            screenTimeAuthorized: false,
+            blockerConfigSaved: false
+        )
+
+        XCTAssertFalse(ProtectionPlanCompletion.landsOnProtectionPlanReady(for: authorizedButEmpty))
+        XCTAssertFalse(ProtectionPlanCompletion.landsOnProtectionPlanReady(for: skippedScreenTime))
+        XCTAssertFalse(ProtectionPlanCompletion.landsOnProtectionPlanReady(for: free))
+    }
+
+    func testLandingOnProtectionPlanReadyAlwaysAgreesWithActivationClassification() {
+        // The ready screen is shown iff the terminal outcome is activation; the
+        // routing and the telemetry classification must never disagree.
+        let states = [
+            ProtectionPlanCompletion.State(isEntitled: true, screenTimeAuthorized: true, blockerConfigSaved: true),
+            ProtectionPlanCompletion.State(isEntitled: true, screenTimeAuthorized: true, blockerConfigSaved: false),
+            ProtectionPlanCompletion.State(isEntitled: true, screenTimeAuthorized: false, blockerConfigSaved: true),
+            ProtectionPlanCompletion.State(isEntitled: false, screenTimeAuthorized: false, blockerConfigSaved: false),
+        ]
+        for state in states {
+            XCTAssertEqual(
+                ProtectionPlanCompletion.landsOnProtectionPlanReady(for: state),
+                ProtectionPlanCompletion.outcome(for: state) == .protectionPlanActivated
+            )
+        }
+    }
+
     // MARK: - Entitlement without activation
 
     func testPlusEntitlementWithoutActivationIsFlaggedAsUnactivatedEntitlement() {

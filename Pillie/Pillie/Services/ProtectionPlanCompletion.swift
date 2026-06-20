@@ -48,6 +48,14 @@ enum ProtectionPlanCompletion {
         return .reminderOnly
     }
 
+    /// Whether a valid blocker config save should land the user on the Pill Protection
+    /// Plan Ready screen. Shown iff onboarding genuinely activated (saved blocker config
+    /// + Screen Time authorization); reminder-only completion opens the app directly,
+    /// so it is the exact complement of the activation classification.
+    static func landsOnProtectionPlanReady(for state: State) -> Bool {
+        outcome(for: state) == .protectionPlanActivated
+    }
+
     /// Whether the user holds a Plus entitlement but has not activated app blocking —
     /// the "Plus but reminder-only" case. The UI must not describe them as free, while
     /// still offering a path to enable blocking later.

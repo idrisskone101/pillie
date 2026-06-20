@@ -37,6 +37,10 @@ enum OnboardingFlow {
         // Mechanism Proof added by issue #78. Appended for the same reason; it sits
         // between the diagnosis reveal (`reminderPlan` slot) and the paywall.
         case mechanismProof = 19
+        // Pill Protection Plan Ready added by issue #83. Appended for the same reason;
+        // it is the terminal activation screen shown after a valid blocker config save,
+        // sitting between `appBlocking` and `complete`.
+        case protectionPlanReady = 20
 
         var analyticsStep: AnalyticsStep? {
             switch self {
@@ -60,6 +64,7 @@ enum OnboardingFlow {
             case .riskWindow: return .riskWindow
             case .draftBlockedApps: return .draftBlockedApps
             case .mechanismProof: return .mechanismProof
+            case .protectionPlanReady: return .protectionPlanReady
             }
         }
     }
@@ -102,6 +107,9 @@ enum OnboardingFlow {
         .paywall,
         .freePlanConfirmation,
         .appBlocking,
+        // Pill Protection Plan Ready (#83): the terminal activation screen between a
+        // valid blocker config save and opening the app.
+        .protectionPlanReady,
         .complete,
     ]
 
