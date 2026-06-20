@@ -88,9 +88,10 @@ final class SoftPaywallContentTests: XCTestCase {
         XCTAssertEqual(content.title, "You're all set with")
         XCTAssertEqual(content.titleAccent, "Pillie")
         XCTAssertEqual(content.primaryCTA, "Start Using Pillie")
+        // Verified-seal hero redesign confirms the two free pillars (reminders +
+        // tracking); the old "Smart reminders" card was dropped.
         XCTAssertEqual(content.confirmations.map(\.title), [
             "Daily reminders",
-            "Smart reminders",
             "Cycle tracking"
         ])
 
