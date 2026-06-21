@@ -60,6 +60,10 @@ _Avoid_: Daily reminders, smart notifications for free users, never-miss reminde
 A local reminder about remaining contraception supply: pill refills or patch restocks. Ring routines do not currently expose a supply reminder setting in the launched app.
 _Avoid_: Due action reminder, ring refill reminder
 
+**Custom Reminder Message**:
+A Pillie Plus perk that lets the user replace the default reminder copy with their own free text. In v1 it covers the Due Action Reminder and the Auto-Reminder Retry — each with its own title and body (four fields total) — and does not cover the Supply Reminder. It personalizes message content only: it does not change reminder timing, auto-reminder cadence, retry limits, or supply thresholds, and each field independently falls back to the default method-aware copy when left blank. It is additive — free users keep every existing reminder setting. It is a named Pillie Plus perk listed as a comparison row on the Soft Onboarding Paywall (and the Settings paywall, which share the same content), but it is a supporting perk — Plus App Blocking remains the differentiator and the paywall hero. As a Personalization Setting it survives a contraception method change and is not part of a Tracking Data Reset, mirroring how Reminder Time persists; the user edits it themselves if the wording no longer matches their method. Because it is the user's own private, on-device reminder to themselves (never shown to others, never leaving the device), it is not Pillie-authored copy and is not held to Pillie's medical-claims copy rules; the constraints that matter are display length and graceful fallback. Its text is private routine content and must never be sent as Product Analytics Telemetry; only coarse funnel and adoption signals (upsell viewed/tapped, editor opened, a boolean of whether each field is customized) may be captured.
+_Avoid_: Custom reminder time, custom schedule, voice pack, Pillie-authored copy, custom supply reminder
+
 **Read-Only Schedule Surface**:
 A view that presents schedule, status, and adherence without directly editing individual day records. Home, Settings, onboarding, notifications, and blocking flows create the mutations that these surfaces reflect.
 _Avoid_: Calendar editing, history editing
@@ -261,3 +265,15 @@ Domain Expert: "No. Use a Controlled Simulator State for each scenario family, t
 Dev: "Are daylight saving and month-end checks overkill?"
 
 Domain Expert: "No. They are Date/Time Boundary Flows because Pillie is only trustworthy if schedule behavior survives local clock and calendar boundaries."
+
+Dev: "A Plus user typed their own reminder text — do we run it through our medical-claims copy rules?"
+
+Domain Expert: "No. That is a Custom Reminder Message: the user's private, on-device reminder to themselves. It is not Pillie-authored copy, so our medical-claims rules don't apply. The real constraints are display length, enforced at input, and falling back to the default method-aware copy when a field is blank."
+
+Dev: "A user switched from Pill to Patch — should their custom reminder text get wiped with the Tracking Data Reset?"
+
+Domain Expert: "No. A Custom Reminder Message is a Personalization Setting, so it persists across method changes just like Reminder Time. A Tracking Data Reset only clears tracking history and schedule math. If the wording no longer fits, the user edits it."
+
+Dev: "Can we log what the user wrote in their custom reminder to see how people personalize?"
+
+Domain Expert: "No. The text is private routine content and must never be sent as Product Analytics Telemetry. You may capture coarse funnel and adoption signals only — upsell viewed or tapped, editor opened, and a boolean of whether a field is customized."
