@@ -159,6 +159,9 @@ enum AnalyticsSource: String {
   case settings
   case home
   case upsell
+  /// The one-time Smart Reminders migration notice shown to pre-existing free users
+  /// when Smart Reminders moves to Pillie+ (ADR 0004 / #104).
+  case migration
 }
 
 enum AnalyticsStep: String {

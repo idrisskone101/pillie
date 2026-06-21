@@ -15,6 +15,8 @@ struct ContentView: View {
   @State private var isLoading = true
   @State private var iconScale: CGFloat = 0.9
   @State private var protectionPlanModel = ProtectionPlanOnboardingModel()
+  @State private var showSmartRemindersMigrationNotice = false
+  @State private var didEvaluateMigrationNotice = false
   private let onboardingTelemetry = OnboardingTelemetry()
   private let onboardingFeedback = OnboardingInteractionFeedback()
   private let subscriptionManager = SubscriptionManager.shared
@@ -406,6 +408,15 @@ struct ContentView: View {
       withAnimation(.easeInOut(duration: 0.4)) {
         isLoading = false
       }
+      // First launch after the Smart Reminders gate shipped: evaluate the one-time
+      // migration notice once the splash clears (so the Plus entitlement has settled).
+      evaluateSmartRemindersMigrationNotice()
+    }
+    .sheet(isPresented: $showSmartRemindersMigrationNotice) {
+      SmartRemindersMigrationNoticeSheet()
+        .presentationDetents([.height(SmartRemindersMigrationNoticeSheet.presentationHeight)])
+        .presentationDragIndicator(.hidden)
+        .presentationBackground(PillieTheme.bg)
     }
     .onAppear {
       normalizeVisibleOnboardingStep()
@@ -461,6 +472,25 @@ struct ContentView: View {
 
   private func trackOnboardingStepViewed(_ step: Int) {
     onboardingTelemetry.stepViewed(step)
+  }
+
+  /// Runs the one-time Smart Reminders migration-notice evaluation (ADR 0004 / #104).
+  /// Guarded so it runs at most once per launch; `evaluate` records the persistent marker
+  /// so a pre-existing free user sees the notice exactly once and never again. Brand-new /
+  /// mid-onboarding users (onboarding not yet complete) and Plus users are never shown it.
+  private func evaluateSmartRemindersMigrationNotice() {
+    guard !didEvaluateMigrationNotice else { return }
+    didEvaluateMigrationNotice = true
+
+    let onboardingComplete = OnboardingFlow.step(for: onboardingStep) == .complete
+    let shouldShow = SmartRemindersMigrationNotice.evaluate(
+      defaults: .standard,
+      onboardingComplete: onboardingComplete,
+      isPlus: subscriptionManager.isPlus
+    )
+    if shouldShow {
+      showSmartRemindersMigrationNotice = true
+    }
   }
 
   private func normalizeVisibleOnboardingStep() {
