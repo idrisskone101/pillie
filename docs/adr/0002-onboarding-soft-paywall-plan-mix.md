@@ -65,3 +65,5 @@ Paywall trust cues must be truthful and operational: the annual trial, App Store
 The Soft Onboarding Paywall must clearly explain what Pillie Plus includes before asking for payment. It should include a compact Plus value breakdown for App Blocking and shake-to-unlock or shake-to-confirm behavior. It should also preserve the free path by making clear that smart reminders, daily reminders, and tracking remain available without Plus.
 
 Use a short Plus benefit list, not a full Free-vs-Plus comparison table, for the v1 paywall. The list should focus on actual Plus benefits: app blocking after an unlogged due action and shake-to-unlock or shake-to-confirm behavior. Smart reminders, daily reminders, and tracking remain available in the free tier.
+
+> **Superseded in part by [ADR 0004](0004-smart-reminders-move-to-pillie-plus.md):** Smart Reminders (the Auto-Reminder Retry escalation and the Snooze re-fire) are now a Pillie Plus entitlement and are no longer free. Only the primary daily reminder (the Due Action Reminder) and Supply Reminders remain free. The paywall now includes a "Smart Reminders" benefit row.

@@ -49,8 +49,12 @@ The method-aware user-facing moment when a Due Action Reminder matters: pill tim
 _Avoid_: Pill time for every method, generic reminder time
 
 **Auto-Reminder Retry**:
-A same-day follow-up reminder for an untaken due action, scheduled at the user's selected retry interval. It does not define the primary reminder time.
-_Avoid_: Reminder time, snooze interval
+A same-day follow-up reminder for an untaken due action, scheduled at the user's selected retry interval. It is the automatic part of [[Smart Reminders]] and requires a Pillie Plus entitlement. It does not define the primary reminder time.
+_Avoid_: Reminder time, snooze interval, free-tier follow-up
+
+**Smart Reminders**:
+The Pillie Plus feature covering every same-day re-fire of a Due Action Reminder after the first: the automatic Auto-Reminder Retry escalation and the user-initiated Snooze re-fire. Free users receive a single Due Action Reminder per due action with no retries and no Snooze action. Smart Reminders is a behavioral nudge enhancement; it does not change the primary reminder time and is not a medical or efficacy claim. The free-tier "Daily reminders" benefit refers only to the primary Due Action Reminder, not to Smart Reminders.
+_Avoid_: Daily reminders, smart notifications for free users, never-miss reminders
 
 **Supply Reminder**:
 A local reminder about remaining contraception supply: pill refills or patch restocks. Ring routines do not currently expose a supply reminder setting in the launched app.
@@ -173,6 +177,14 @@ Domain Expert: "No. The Streak counts consecutive completed due actions, so pass
 Dev: "If a user changes the auto-reminder interval, did they change the morning reminder time?"
 
 Domain Expert: "No. The Due Action Reminder time and Auto-Reminder Retry cadence are separate reminder concepts."
+
+Dev: "We promised daily reminders stay free, so doesn't gating the auto-reminder settings break that promise?"
+
+Domain Expert: "No. The free 'Daily reminders' benefit is the single Due Action Reminder. Smart Reminders are the same-day follow-ups after it — the Auto-Reminder Retry escalation and the Snooze re-fire — and those are Pillie Plus only."
+
+Dev: "Can a free user still tap Snooze on a reminder?"
+
+Domain Expert: "No. Snooze is part of Smart Reminders. Free users get one Due Action Reminder per due action with no Snooze action and no retries. Supply Reminders stay free."
 
 Dev: "Can personalized setup copy say pill time after the user chose Patch?"
 
