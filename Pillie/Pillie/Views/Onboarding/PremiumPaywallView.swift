@@ -9,11 +9,30 @@ import os
 struct SoftPaywallContent {
     struct ComparisonRow {
         let title: String
+        let detail: String?
         let icon: String
         let iconBackground: Color
         let iconColor: Color
         let freeIncluded: Bool
         let plusIncluded: Bool
+
+        init(
+            title: String,
+            detail: String? = nil,
+            icon: String,
+            iconBackground: Color,
+            iconColor: Color,
+            freeIncluded: Bool,
+            plusIncluded: Bool
+        ) {
+            self.title = title
+            self.detail = detail
+            self.icon = icon
+            self.iconBackground = iconBackground
+            self.iconColor = iconColor
+            self.freeIncluded = freeIncluded
+            self.plusIncluded = plusIncluded
+        }
     }
 
     let title: String
@@ -33,6 +52,7 @@ struct SoftPaywallContent {
     var visibleCopy: [String] {
         [title, titleAccent, subtitle, comparisonLabel, freeColumnLabel, plusColumnLabel]
             + rows.map(\.title)
+            + rows.compactMap(\.detail)
             + reassurances
             + monthlyReassurances
             + [primaryCTA, monthlyCTA, freeCTA, restoreCTA]
@@ -52,6 +72,15 @@ struct SoftPaywallContent {
                 iconBackground: PillieTheme.lavender,
                 iconColor: PillieTheme.dark,
                 freeIncluded: true,
+                plusIncluded: true
+            ),
+            ComparisonRow(
+                title: "Smart Reminders",
+                detail: "Pillie keeps reminding you until you log it.",
+                icon: "bell.badge.fill",
+                iconBackground: PillieTheme.lavender,
+                iconColor: PillieTheme.dark,
+                freeIncluded: false,
                 plusIncluded: true
             ),
             ComparisonRow(
@@ -359,10 +388,19 @@ struct PremiumPaywallView: View {
                     .background(row.iconBackground, in: Circle())
                     .accessibilityHidden(true)
 
-                Text(row.title)
-                    .font(.pillie(14, weight: .semibold))
-                    .foregroundStyle(PillieTheme.textPrimary)
-                    .fixedSize(horizontal: false, vertical: true)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(row.title)
+                        .font(.pillie(14, weight: .semibold))
+                        .foregroundStyle(PillieTheme.textPrimary)
+                        .fixedSize(horizontal: false, vertical: true)
+
+                    if let detail = row.detail {
+                        Text(detail)
+                            .font(.pillie(12, weight: .medium))
+                            .foregroundStyle(PillieTheme.textMuted)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
 
@@ -404,6 +442,9 @@ struct PremiumPaywallView: View {
         case (false, true): tiers = "Plus only"
         case (true, false): tiers = "Free only"
         case (false, false): tiers = "not included"
+        }
+        if let detail = row.detail {
+            return "\(row.title), \(detail), \(tiers)"
         }
         return "\(row.title), \(tiers)"
     }
