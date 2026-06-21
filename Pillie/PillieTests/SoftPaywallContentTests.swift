@@ -32,6 +32,7 @@ final class SoftPaywallContentTests: XCTestCase {
         XCTAssertEqual(content.plusColumnLabel, "Plus")
         XCTAssertEqual(content.rows.map(\.title), [
             "Daily reminders",
+            "Smart Reminders",
             "Block distracting apps",
             "Shake to confirm",
             "New perks as they launch"
@@ -40,6 +41,35 @@ final class SoftPaywallContentTests: XCTestCase {
         // The shared free path is reminders only; every Plus capability stays Plus-only.
         XCTAssertEqual(content.rows.filter(\.freeIncluded).map(\.title), ["Daily reminders"])
         XCTAssertTrue(content.rows.allSatisfy(\.plusIncluded))
+    }
+
+    func testSoftPaywallSmartRemindersRowFramesTheFollowUpEscalationAsPlusOnly() {
+        let content = SoftPaywallContent.default
+        let titles = content.rows.map(\.title)
+
+        // The Smart Reminders row sits directly after the free Daily reminders row so the
+        // free-vs-Plus contrast between the two is legible (ADR 0004).
+        guard let dailyIndex = titles.firstIndex(of: "Daily reminders"),
+              let smartIndex = titles.firstIndex(of: "Smart Reminders") else {
+            return XCTFail("Both the daily and smart reminder rows must exist.")
+        }
+        XCTAssertEqual(smartIndex, dailyIndex + 1, "Smart Reminders must be adjacent to Daily reminders.")
+
+        let smart = content.rows[smartIndex]
+        XCTAssertFalse(smart.freeIncluded, "Smart Reminders is Plus-only.")
+        XCTAssertTrue(smart.plusIncluded)
+
+        // Copy reads as the same-day follow-up escalation, distinct from the base daily reminder.
+        let detail = (smart.detail ?? "").lowercased()
+        XCTAssertTrue(
+            detail.contains("until you log it"),
+            "Smart Reminders copy must frame the follow-up escalation, not the base reminder."
+        )
+
+        // No medical/efficacy/"never miss" claims (ADR 0002 trust constraints).
+        for banned in ["never miss", "guarantee", "clinically", "medical", "doctor", "efficacy"] {
+            XCTAssertFalse(detail.contains(banned), "Smart Reminders copy must avoid '\(banned)'.")
+        }
     }
 
     func testSoftPaywallKeepsAClearTruthfulFreeAndTrialPath() {
