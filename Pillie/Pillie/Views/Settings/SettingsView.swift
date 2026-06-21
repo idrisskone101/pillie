@@ -20,6 +20,7 @@ struct SettingsView: View {
     @State private var showCycleDayEditor = false
     @State private var showBlockedAppsEditor = false
     @State private var showBlockingUpsell = false
+    @State private var showSmartRemindersUpsell = false
     @State private var showPaywall = false
     @State private var showManageSubscription = false
 
@@ -57,21 +58,37 @@ struct SettingsView: View {
                     }
                     .buttonStyle(.plain)
                     divider
-                    Button {
-                        openSettingSheet { showIntervalEditor = true }
-                        ProductAnalyticsTelemetry.live.autoReminderIntervalSettingsOpened()
-                    } label: {
-                        settingsRow("Auto-Reminder Interval", value: store.autoReminderIntervalDisplay)
+                    if SubscriptionManager.shared.isPlus {
+                        Button {
+                            openSettingSheet { showIntervalEditor = true }
+                            ProductAnalyticsTelemetry.live.autoReminderIntervalSettingsOpened()
+                        } label: {
+                            settingsRow("Auto-Reminder Interval", value: store.autoReminderIntervalDisplay)
+                        }
+                        .buttonStyle(.plain)
+                        divider
+                        Button {
+                            openSettingSheet { showRetryLimitEditor = true }
+                            ProductAnalyticsTelemetry.live.autoReminderRetryLimitSettingsOpened()
+                        } label: {
+                            settingsRow("Auto-Reminder Retry Limit", value: store.autoReminderRetryLimitDisplay)
+                        }
+                        .buttonStyle(.plain)
+                    } else {
+                        Button {
+                            openSettingSheet { showSmartRemindersUpsell = true }
+                            ProductAnalyticsTelemetry.live.settingsSmartRemindersUpsellViewed()
+                        } label: {
+                            settingsRow("Smart Reminders", value: "Pillie+", valueColor: PillieTheme.coral, showLock: true)
+                        }
+                        .buttonStyle(.plain)
+                        .sheet(isPresented: $showSmartRemindersUpsell) {
+                            PlusUpsellSheet.smartReminders()
+                                .presentationDetents([.height(PlusUpsellSheet.compactPresentationHeight)])
+                                .presentationDragIndicator(.hidden)
+                                .presentationBackground(PillieTheme.bg)
+                        }
                     }
-                    .buttonStyle(.plain)
-                    divider
-                    Button {
-                        openSettingSheet { showRetryLimitEditor = true }
-                        ProductAnalyticsTelemetry.live.autoReminderRetryLimitSettingsOpened()
-                    } label: {
-                        settingsRow("Auto-Reminder Retry Limit", value: store.autoReminderRetryLimitDisplay)
-                    }
-                    .buttonStyle(.plain)
                     if store.pack.method != .ring {
                         divider
                         Button {

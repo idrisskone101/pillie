@@ -207,6 +207,10 @@ struct ProductAnalyticsTelemetry {
     track(.plusUpsellViewed, source: .settings)
   }
 
+  func settingsSmartRemindersUpsellViewed() {
+    track(.plusUpsellViewed, source: .settings)
+  }
+
   func plusUpsellDismissed() {
     track(.plusUpsellDismissed, source: .upsell)
   }
