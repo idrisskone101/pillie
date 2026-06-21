@@ -20,6 +20,32 @@ enum SubscriptionPurchaseError: Error, Equatable, LocalizedError {
     }
 }
 
+/// The paid-conversion telemetry that a successful purchase should emit.
+enum SubscriptionConversionEvent: Equatable {
+    /// A free trial began — its own funnel step, distinct from a paid charge.
+    case trialStarted
+    /// A real, immediate paid charge.
+    case purchaseCompleted
+}
+
+/// What a successful `purchase` actually was, so the paywall can record the right
+/// (or no) analytics event. The classification is a pure value type so the
+/// trial/paid/sandbox decision is unit-testable without RevenueCat.
+struct PurchaseOutcome: Equatable {
+    /// The active entitlement is in its trial period (`PeriodType.trial`).
+    let isTrial: Bool
+    /// The transaction came from the StoreKit/RevenueCat sandbox (dev, TestFlight,
+    /// App Review). Never a real payer, so it must not inflate paid metrics.
+    let isSandbox: Bool
+
+    /// The conversion event to record, or `nil` to suppress it. Sandbox transactions
+    /// emit nothing; otherwise a trial and a paid charge are distinct events.
+    var conversionEvent: SubscriptionConversionEvent? {
+        guard !isSandbox else { return nil }
+        return isTrial ? .trialStarted : .purchaseCompleted
+    }
+}
+
 @Observable
 final class SubscriptionManager: NSObject {
     static let shared = SubscriptionManager()
@@ -52,19 +78,44 @@ final class SubscriptionManager: NSObject {
         // Listen for subscription changes
         Purchases.shared.delegate = self
 
+        applyAttribution()
         Task { await refreshStatus() }
+    }
+
+    /// Ties RevenueCat to the in-app analytics person and tags the subscriber with the
+    /// coarse acquisition source. Setting the PostHog distinct id (`$posthogUserId`)
+    /// lets RevenueCat's PostHog integration land server-side subscription events
+    /// (renewals, trial→paid conversions) on the same person as the in-app funnel; the
+    /// `acquisition_source` attribute lets paid conversions be segmented by source.
+    /// Reads the source from the value PillStore already persisted during onboarding,
+    /// so it is applied whenever RevenueCat configures (at launch or before the paywall),
+    /// regardless of whether RevenueCat existed when the user answered the step.
+    private func applyAttribution() {
+        if let distinctId = AnalyticsManager.shared.distinctId, !distinctId.isEmpty {
+            Purchases.shared.attribution.setPostHogUserID(distinctId)
+        }
+        if let source = UserDefaults.standard.string(forKey: PillStore.acquisitionSourceKey),
+           !source.isEmpty {
+            Purchases.shared.attribution.setAttributes(["acquisition_source": source])
+        }
     }
 
     // MARK: - Purchase
 
-    func purchase(_ package: Package) async throws {
+    @discardableResult
+    func purchase(_ package: Package) async throws -> PurchaseOutcome {
         isLoading = true
         defer { isLoading = false }
 
         let result = try await Purchases.shared.purchase(package: package)
+        let entitlement = result.customerInfo.entitlements[Self.entitlementID]
         try applyPurchaseResult(
             userCancelled: result.userCancelled,
-            isPlusEntitlementActive: result.customerInfo.entitlements[Self.entitlementID]?.isActive == true
+            isPlusEntitlementActive: entitlement?.isActive == true
+        )
+        return PurchaseOutcome(
+            isTrial: entitlement?.periodType == .trial,
+            isSandbox: entitlement?.isSandbox ?? false
         )
     }
 

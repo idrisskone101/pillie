@@ -33,12 +33,24 @@ struct ProductAnalyticsConfiguration: Equatable {
   let sessionReplay: Bool
   let surveys: Bool
   let isOptedOut: Bool
+  /// Process person profiles for every event (PostHog `personProfiles = .always`).
+  /// Required so that person properties set via `$set` — notably `acquisition_source`
+  /// — stick for anonymous users (we never call `identify`, per ADR 0001), letting the
+  /// funnel be broken down by source. Default PostHog behavior (`.identifiedOnly`) drops
+  /// `$set` for users who never identify.
+  let personProfilesAlways: Bool
 }
 
 protocol ProductAnalyticsClient: AnyObject {
   func configure(_ configuration: ProductAnalyticsConfiguration)
-  func setOptedOut(_ isOptedOut: Bool)
-  func capture(event: String, properties: [String: AnalyticsPropertyValue])
+  func capture(
+    event: String,
+    properties: [String: AnalyticsPropertyValue],
+    personProperties: [String: AnalyticsPropertyValue]
+  )
+  /// The current anonymous distinct id, used to join server-side RevenueCat events
+  /// to the same PostHog person. `nil` before the SDK is configured.
+  func distinctId() -> String?
   func flush()
 }
 
@@ -52,6 +64,7 @@ final class PostHogAnalyticsClient: ProductAnalyticsClient {
     config.preloadFeatureFlags = configuration.preloadFeatureFlags
     config.setDefaultPersonProperties = configuration.setDefaultPersonProperties
     config.optOut = configuration.isOptedOut
+    config.personProfiles = configuration.personProfilesAlways ? .always : .identifiedOnly
 
     #if os(iOS)
       config.captureElementInteractions = configuration.captureElementInteractions
@@ -64,19 +77,22 @@ final class PostHogAnalyticsClient: ProductAnalyticsClient {
     PostHogSDK.shared.setup(config)
   }
 
-  func setOptedOut(_ isOptedOut: Bool) {
-    if isOptedOut {
-      PostHogSDK.shared.optOut()
-    } else {
-      PostHogSDK.shared.optIn()
-    }
-  }
-
-  func capture(event: String, properties: [String: AnalyticsPropertyValue]) {
+  func capture(
+    event: String,
+    properties: [String: AnalyticsPropertyValue],
+    personProperties: [String: AnalyticsPropertyValue]
+  ) {
     PostHogSDK.shared.capture(
       event,
-      properties: properties.mapValues(\.postHogValue)
+      properties: properties.mapValues(\.postHogValue),
+      userProperties: personProperties.isEmpty
+        ? nil
+        : personProperties.mapValues(\.postHogValue)
     )
+  }
+
+  func distinctId() -> String? {
+    PostHogSDK.shared.getDistinctId()
   }
 
   func flush() {
@@ -113,6 +129,7 @@ enum AnalyticsEvent: String, CaseIterable {
   case paywallViewed = "paywall_viewed"
   case paywallPlanSelected = "paywall_plan_selected"
   case purchaseStarted = "purchase_started"
+  case trialStarted = "trial_started"
   case purchaseCompleted = "purchase_completed"
   case purchaseFailed = "purchase_failed"
   case purchaseCancelled = "purchase_cancelled"
@@ -254,6 +271,18 @@ struct AnalyticsPayload {
     }
     return properties
   }
+
+  /// Person properties (`$set`) to attach to the event. `acquisition_source` is
+  /// promoted from an event-only property to a person property so the funnel can be
+  /// broken down by source. It rides the event that already carries it (the
+  /// acquisition-source onboarding step) — no extra event, no `identify`.
+  var personProperties: [String: AnalyticsPropertyValue] {
+    var properties: [String: AnalyticsPropertyValue] = [:]
+    if let acquisitionSource {
+      properties["acquisition_source"] = .string(acquisitionSource.rawValue)
+    }
+    return properties
+  }
 }
 
 final class AnalyticsManager: AnalyticsTracking {
@@ -300,9 +329,18 @@ final class AnalyticsManager: AnalyticsTracking {
         setDefaultPersonProperties: false,
         sessionReplay: false,
         surveys: false,
-        isOptedOut: !isAnalyticsEnabled
+        isOptedOut: !isAnalyticsEnabled,
+        personProfilesAlways: true
       ))
     isConfigured = true
+  }
+
+  /// The PostHog anonymous distinct id, exposed so RevenueCat can tag the subscriber
+  /// with it and join server-side subscription events to the same person. `nil` until
+  /// PostHog is configured.
+  var distinctId: String? {
+    guard isConfigured else { return nil }
+    return client.distinctId()
   }
 
   func track(
@@ -330,7 +368,11 @@ final class AnalyticsManager: AnalyticsTracking {
       isPlus: isPlus,
       hasBlockingSelection: hasBlockingSelection
     )
-    client.capture(event: event.rawValue, properties: payload.properties)
+    client.capture(
+      event: event.rawValue,
+      properties: payload.properties,
+      personProperties: payload.personProperties
+    )
   }
 
   func flush() {

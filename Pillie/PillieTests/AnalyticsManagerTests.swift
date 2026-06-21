@@ -197,6 +197,53 @@ final class AnalyticsManagerTests: XCTestCase {
       ])
   }
 
+  func testAcquisitionSourceIsAlsoPromotedToPersonProperty() throws {
+    let client = RecordingAnalyticsClient()
+    let manager = makeManager(client: client, token: "phc_test_token")
+
+    manager.configure()
+    manager.track(.appLaunched, source: .home, isPlus: false)
+    manager.track(
+      .onboardingStepCompleted,
+      source: .onboarding,
+      step: .acquisitionSource,
+      acquisitionSource: .reddit,
+      isPlus: false
+    )
+
+    // app_launched carries no acquisition source, so it sets no person properties.
+    XCTAssertEqual(client.captures.first?.personProperties, [:])
+    // The acquisition-source step promotes the coarse value to a person property
+    // ($set) so the funnel can be broken down by source — without identify().
+    let acquisition = try XCTUnwrap(client.captures.last)
+    XCTAssertEqual(acquisition.properties["acquisition_source"], .string("reddit"))
+    XCTAssertEqual(acquisition.personProperties, ["acquisition_source": .string("reddit")])
+  }
+
+  func testTrialStartedAndPurchaseCompletedAreDistinctEvents() {
+    let recorder = RecordingAnalyticsTracker()
+    let telemetry = ProductAnalyticsTelemetry(analytics: recorder, isPlus: { true })
+
+    telemetry.trialStarted(plan: .annual, isFromOnboarding: true)
+    telemetry.purchaseCompleted(plan: .monthly, isFromOnboarding: false)
+
+    XCTAssertEqual(recorder.events, [.trialStarted, .purchaseCompleted])
+    XCTAssertEqual(recorder.sources, [.onboarding, .settings])
+  }
+
+  func testOnboardingStartedFiresOnceWhenEnteringTheFirstStep() {
+    let recorder = RecordingAnalyticsTracker()
+    let telemetry = OnboardingTelemetry(analytics: recorder, isPlus: { false })
+
+    // Entering step 0 (welcome) starts the activation funnel exactly once...
+    telemetry.stepViewed(0)
+    // ...and viewing a later step never re-fires onboarding_started.
+    telemetry.stepViewed(OnboardingFlow.Step.acquisitionSource.rawValue)
+
+    XCTAssertEqual(recorder.events.filter { $0 == .onboardingStarted }.count, 1)
+    XCTAssertEqual(recorder.events.first, .onboardingStarted)
+  }
+
   func testOnboardingCompletedFiresOnlyAfterFinalOnboardingStep() {
     let recorder = RecordingAnalyticsTracker()
     let telemetry = OnboardingTelemetry(analytics: recorder, isPlus: { false })
@@ -211,7 +258,10 @@ final class AnalyticsManagerTests: XCTestCase {
         .onboardingStepCompleted,
         .onboardingCompleted,
       ])
-    XCTAssertEqual(recorder.steps, [.schedule, .freePlanConfirmation, nil])
+    // Step 9 is `.method` (step 10 is `.schedule`); a forward transition records the
+    // step it left. The earlier `.schedule` expectation was stale after the onboarding
+    // step renumbering — unrelated to this ticket's analytics work.
+    XCTAssertEqual(recorder.steps, [.method, .freePlanConfirmation, nil])
   }
 
   func testProductAnalyticsTelemetryMapsDomainEventsToApprovedCoarseProperties() {
@@ -311,21 +361,26 @@ final class AnalyticsManagerTests: XCTestCase {
 
 private final class RecordingAnalyticsClient: ProductAnalyticsClient {
   private(set) var configurations: [ProductAnalyticsConfiguration] = []
-  private(set) var optOutChanges: [Bool] = []
-  private(set) var captures: [(event: String, properties: [String: AnalyticsPropertyValue])] = []
+  private(set) var captures: [(
+    event: String,
+    properties: [String: AnalyticsPropertyValue],
+    personProperties: [String: AnalyticsPropertyValue]
+  )] = []
   private(set) var flushCount = 0
 
   func configure(_ configuration: ProductAnalyticsConfiguration) {
     configurations.append(configuration)
   }
 
-  func setOptedOut(_ isOptedOut: Bool) {
-    optOutChanges.append(isOptedOut)
+  func capture(
+    event: String,
+    properties: [String: AnalyticsPropertyValue],
+    personProperties: [String: AnalyticsPropertyValue]
+  ) {
+    captures.append((event, properties, personProperties))
   }
 
-  func capture(event: String, properties: [String: AnalyticsPropertyValue]) {
-    captures.append((event, properties))
-  }
+  func distinctId() -> String? { "test-distinct-id" }
 
   func flush() {
     flushCount += 1

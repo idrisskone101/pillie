@@ -758,8 +758,19 @@ struct PremiumPaywallView: View {
             telemetry.purchaseStarted(plan: selectedPlan.analyticsPlan, isFromOnboarding: isFromOnboarding)
             Task {
                 do {
-                    try await subscriptionManager.purchase(package)
-                    telemetry.purchaseCompleted(plan: selectedPlan.analyticsPlan, isFromOnboarding: isFromOnboarding)
+                    let outcome = try await subscriptionManager.purchase(package)
+                    // Record the conversion as its own funnel step: a trial start is
+                    // distinct from a paid charge, and sandbox transactions
+                    // (dev/TestFlight/review) emit nothing so they never inflate paid
+                    // metrics. The user still proceeds either way.
+                    switch outcome.conversionEvent {
+                    case .trialStarted:
+                        telemetry.trialStarted(plan: selectedPlan.analyticsPlan, isFromOnboarding: isFromOnboarding)
+                    case .purchaseCompleted:
+                        telemetry.purchaseCompleted(plan: selectedPlan.analyticsPlan, isFromOnboarding: isFromOnboarding)
+                    case nil:
+                        break
+                    }
                     plusFeedback.successfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
                     completePaidRoute()
                 } catch {

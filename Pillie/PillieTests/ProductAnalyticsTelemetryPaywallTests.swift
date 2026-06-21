@@ -93,23 +93,25 @@ private final class ProductAnalyticsSpy: ProductAnalyticsClient {
     struct Event: Equatable {
         let name: String
         let properties: [String: AnalyticsPropertyValue]
+        let personProperties: [String: AnalyticsPropertyValue]
     }
 
     private(set) var configurations: [ProductAnalyticsConfiguration] = []
     private(set) var events: [Event] = []
-    private(set) var optOutStates: [Bool] = []
 
     func configure(_ configuration: ProductAnalyticsConfiguration) {
         configurations.append(configuration)
     }
 
-    func setOptedOut(_ isOptedOut: Bool) {
-        optOutStates.append(isOptedOut)
+    func capture(
+        event: String,
+        properties: [String: AnalyticsPropertyValue],
+        personProperties: [String: AnalyticsPropertyValue]
+    ) {
+        events.append(Event(name: event, properties: properties, personProperties: personProperties))
     }
 
-    func capture(event: String, properties: [String: AnalyticsPropertyValue]) {
-        events.append(Event(name: event, properties: properties))
-    }
+    func distinctId() -> String? { nil }
 
     func flush() {}
 }

@@ -137,6 +137,13 @@ struct ProductAnalyticsTelemetry {
     track(.purchaseStarted, source: paywallSource(isFromOnboarding: isFromOnboarding), plan: plan)
   }
 
+  /// A free trial began. Distinct from `purchaseCompleted` (a real paid conversion) so
+  /// the funnel can see trial starts as their own step — the dominant drop‑off given
+  /// how few installs reach a paid charge. Fired only for non‑sandbox transactions.
+  func trialStarted(plan: AnalyticsPlan, isFromOnboarding: Bool) {
+    track(.trialStarted, source: paywallSource(isFromOnboarding: isFromOnboarding), plan: plan)
+  }
+
   func purchaseCompleted(plan: AnalyticsPlan, isFromOnboarding: Bool) {
     track(
       .purchaseCompleted,
