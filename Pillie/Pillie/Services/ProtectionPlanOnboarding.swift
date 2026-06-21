@@ -15,8 +15,8 @@ import Foundation
 /// The locked high-level order from ADR `0003-protection-plan-onboarding`.
 ///
 /// Raw values are stable and persisted, so new cases must only ever be appended.
-/// Only `welcome` and `analyticsConsent` are rendered in the first vertical slice;
-/// the remaining cases reserve the routing order for later slices.
+/// `analyticsConsent` is retired and never rendered — it is retained only so
+/// persisted step values migrate forward (see `ProtectionPlanOnboardingStore`).
 enum ProtectionPlanStep: Int, CaseIterable {
     case welcome = 0
     case analyticsConsent = 1
@@ -53,20 +53,10 @@ enum ProtectionPlanStep: Int, CaseIterable {
     }
 }
 
-/// The user's committed Analytics Consent answer. Kept separate from the live
-/// `AnalyticsManager` opt-out flag so back navigation can restore the previous
-/// selection without re-toggling capture.
-enum AnalyticsConsentDecision: String, Equatable {
-    case undecided
-    case allowed
-    case declined
-}
-
 /// The committed onboarding state: the current step plus the answers collected so
 /// far. A value type with pure mutating transitions — the deep, testable core.
 struct ProtectionPlanOnboardingState: Equatable {
     private(set) var currentStep: ProtectionPlanStep
-    private(set) var analyticsConsentDecision: AnalyticsConsentDecision
     /// Committed Distraction Choices (multi-select, includes Other). Empty until
     /// the user commits the answer on the Distraction Choices screen.
     private(set) var distractionChoices: Set<DistractionChoice>
@@ -81,14 +71,12 @@ struct ProtectionPlanOnboardingState: Equatable {
 
     init(
         currentStep: ProtectionPlanStep = .first,
-        analyticsConsentDecision: AnalyticsConsentDecision = .undecided,
         distractionChoices: Set<DistractionChoice> = [],
         delayConsequence: DelayConsequence? = nil,
         riskWindow: RiskWindow? = nil,
         draftBlockedApps: Set<DraftBlockedAppChoice> = []
     ) {
         self.currentStep = currentStep
-        self.analyticsConsentDecision = analyticsConsentDecision
         self.distractionChoices = distractionChoices
         self.delayConsequence = delayConsequence
         self.riskWindow = riskWindow
@@ -100,17 +88,12 @@ struct ProtectionPlanOnboardingState: Equatable {
         currentStep.previous != nil
     }
 
-    /// Whether the screens the new shell owns — Welcome, Analytics Consent, and the
-    /// Early Value Proof — have all been completed, signalling the handoff into the
-    /// rest of onboarding. The `reviewPrompt` step is retained only as that handoff
-    /// sentinel; the review request screen itself was removed.
+    /// Whether the screens the new shell owns — Welcome and the Early Value Proof —
+    /// have all been completed, signalling the handoff into the rest of onboarding.
+    /// The `reviewPrompt` step is retained only as that handoff sentinel; the review
+    /// request screen itself was removed.
     var hasFinishedIntro: Bool {
         currentStep.rawValue > ProtectionPlanStep.earlyValueProof.rawValue
-    }
-
-    /// Records the Analytics Consent answer as a committed onboarding answer.
-    mutating func recordAnalyticsConsent(allowed: Bool) {
-        analyticsConsentDecision = allowed ? .allowed : .declined
     }
 
     /// Commits the multi-select Distraction Choices answer, replacing any prior
@@ -153,7 +136,6 @@ struct ProtectionPlanOnboardingState: Equatable {
 enum ProtectionPlanOnboardingStore {
     enum Keys {
         static let step = "protectionPlanOnboardingStep"
-        static let consent = "protectionPlanOnboardingAnalyticsConsent"
         static let distractionChoices = "protectionPlanOnboardingDistractionChoices"
         static let delayConsequence = "protectionPlanOnboardingDelayConsequence"
         static let riskWindow = "protectionPlanOnboardingRiskWindow"
@@ -166,8 +148,6 @@ enum ProtectionPlanOnboardingStore {
         // Analytics Consent was retired; migrate anyone persisted on it forward to
         // the Early Value Proof so they never land on the removed screen.
         let step = loadedStep == .analyticsConsent ? .earlyValueProof : loadedStep
-        let consent = defaults.string(forKey: Keys.consent)
-            .flatMap(AnalyticsConsentDecision.init(rawValue:)) ?? .undecided
         let distractionChoices = Set(
             (defaults.stringArray(forKey: Keys.distractionChoices) ?? [])
                 .compactMap(DistractionChoice.init(rawValue:))
@@ -182,7 +162,6 @@ enum ProtectionPlanOnboardingStore {
         )
         return ProtectionPlanOnboardingState(
             currentStep: step,
-            analyticsConsentDecision: consent,
             distractionChoices: distractionChoices,
             delayConsequence: delayConsequence,
             riskWindow: riskWindow,
@@ -192,7 +171,6 @@ enum ProtectionPlanOnboardingStore {
 
     static func save(_ state: ProtectionPlanOnboardingState, to defaults: UserDefaults) {
         defaults.set(state.currentStep.rawValue, forKey: Keys.step)
-        defaults.set(state.analyticsConsentDecision.rawValue, forKey: Keys.consent)
         defaults.set(state.distractionChoices.map(\.rawValue), forKey: Keys.distractionChoices)
         if let delayConsequence = state.delayConsequence {
             defaults.set(delayConsequence.rawValue, forKey: Keys.delayConsequence)
@@ -229,18 +207,12 @@ final class ProtectionPlanOnboardingModel {
     }
 
     var currentStep: ProtectionPlanStep { state.currentStep }
-    var analyticsConsentDecision: AnalyticsConsentDecision { state.analyticsConsentDecision }
     var distractionChoices: Set<DistractionChoice> { state.distractionChoices }
     var delayConsequence: DelayConsequence? { state.delayConsequence }
     var riskWindow: RiskWindow? { state.riskWindow }
     var draftBlockedApps: Set<DraftBlockedAppChoice> { state.draftBlockedApps }
     var canGoBack: Bool { state.canGoBack }
     var hasFinishedIntro: Bool { state.hasFinishedIntro }
-
-    func recordAnalyticsConsent(allowed: Bool) {
-        state.recordAnalyticsConsent(allowed: allowed)
-        persist()
-    }
 
     func recordDistractionChoices(_ choices: Set<DistractionChoice>) {
         state.recordDistractionChoices(choices)

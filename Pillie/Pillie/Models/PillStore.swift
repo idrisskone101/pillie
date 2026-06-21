@@ -156,7 +156,8 @@ class PillStore {
     private static let painPointsKey = "pillie_pain_points"
     private static let personalGoalKey = "personalGoal"
     private static let missFrequencyKey = "missFrequency"
-    private static let acquisitionSourceKey = "pillie_acquisition_source"
+    // Read by SubscriptionManager to tag the RevenueCat subscriber with acquisition_source.
+    static let acquisitionSourceKey = "pillie_acquisition_source"
     private static let minimumSupportedEpoch: TimeInterval = -2_208_988_800 // 1900-01-01
     private static let maximumSupportedEpoch: TimeInterval = 7_258_118_400 // 2200-01-01
     private static let snapshotCacheLimitPerPack = 512

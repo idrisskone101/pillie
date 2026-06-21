@@ -29,11 +29,11 @@ The destructive schedule-edit behavior where Pillie clears existing tracking his
 _Avoid_: Preserve history, silent migration
 
 **Product Analytics Telemetry**:
-First-party app usage signals collected with the user's consent to understand whether Pillie flows are working and where users drop off. It excludes Apple-defined Tracking, advertising identifiers, cross-app or cross-site matching, and routine details such as contraception history, reminder times, app-blocking selections, or dose outcomes unless those details are separately approved. PostHog capture must not start until the user grants analytics consent.
+First-party app usage signals collected to understand whether Pillie flows are working and where users drop off. It excludes Apple-defined Tracking, advertising identifiers, cross-app or cross-site matching, and routine details such as contraception history, reminder times, app-blocking selections, or dose outcomes unless those details are separately approved. Capture is always on and begins at app launch; the protection boundary is the PII-free event taxonomy, not a consent gate (see ADR 0004).
 _Avoid_: Tracking, surveillance, behavioral ads
 
 **Analytics Consent**:
-The user's onboarding choice to allow or decline first-party Product Analytics Telemetry. Declining must still allow full app use, and no PostHog events should be sent before consent is granted.
+Retired (ADR 0004). The onboarding consent step and the Settings opt-out were removed in favor of always-on, PII-free-by-construction analytics; capture begins at launch with no consent gate. Kept as a historical term — it once meant the user's onboarding choice to allow or decline analytics, with no events sent before a grant.
 _Avoid_: Tracking permission, ATT prompt, required consent
 
 **Streak**:
@@ -160,11 +160,11 @@ Domain Expert: "No. Confirmed method or regimen edits use a Tracking Data Reset,
 
 Dev: "Can we call PostHog event collection tracking?"
 
-Domain Expert: "No. Use Product Analytics Telemetry for consented first-party app usage signals. Tracking still refers to Pillie's routine history in product language or Apple-defined cross-app and cross-site Tracking in privacy language."
+Domain Expert: "No. Use Product Analytics Telemetry for first-party app usage signals. Tracking still refers to Pillie's routine history in product language or Apple-defined cross-app and cross-site Tracking in privacy language."
 
-Dev: "Can Pillie send onboarding analytics before the user has answered the analytics consent screen?"
+Dev: "Can Pillie send onboarding analytics before the user has answered an analytics consent screen?"
 
-Domain Expert: "No. Analytics Consent must be granted before PostHog capture starts; declining must not block app use."
+Domain Expert: "There is no consent screen — analytics is always on and begins at app launch (ADR 0004). The protection is the PII-free event taxonomy, not a consent gate; declining was retired along with the screen."
 
 Dev: "Does a ring-free day count toward the streak?"
 

@@ -62,4 +62,21 @@ final class SubscriptionManagerEdgeCaseTests: XCTestCase {
 
         XCTAssertTrue(SubscriptionManager.shared.isPlus)
     }
+
+    func testPurchaseOutcomeDistinguishesTrialPaidAndExcludesSandbox() {
+        // A real immediate charge → purchase_completed.
+        XCTAssertEqual(
+            PurchaseOutcome(isTrial: false, isSandbox: false).conversionEvent,
+            .purchaseCompleted
+        )
+        // A free trial start → its own distinct funnel step.
+        XCTAssertEqual(
+            PurchaseOutcome(isTrial: true, isSandbox: false).conversionEvent,
+            .trialStarted
+        )
+        // Sandbox transactions (dev/TestFlight/review) are never real conversions and
+        // must emit nothing, so they don't inflate paid metrics.
+        XCTAssertNil(PurchaseOutcome(isTrial: true, isSandbox: true).conversionEvent)
+        XCTAssertNil(PurchaseOutcome(isTrial: false, isSandbox: true).conversionEvent)
+    }
 }
