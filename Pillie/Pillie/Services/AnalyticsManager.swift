@@ -111,7 +111,9 @@ protocol AnalyticsTracking {
     setting: AnalyticsSetting?,
     acquisitionSource: AcquisitionSource?,
     isPlus: Bool?,
-    hasBlockingSelection: Bool?
+    hasBlockingSelection: Bool?,
+    titleCustomized: Bool?,
+    bodyCustomized: Bool?
   )
 }
 
@@ -221,6 +223,7 @@ enum AnalyticsSetting: String {
   case `protocol`
   case cycleDay = "cycle_day"
   case blockedApps = "blocked_apps"
+  case customReminders = "custom_reminders"
   case subscription
 }
 
@@ -234,6 +237,8 @@ struct AnalyticsPayload {
   let acquisitionSource: AcquisitionSource?
   let isPlus: Bool?
   let hasBlockingSelection: Bool?
+  let titleCustomized: Bool?
+  let bodyCustomized: Bool?
 
   init(
     source: AnalyticsSource? = nil,
@@ -244,7 +249,9 @@ struct AnalyticsPayload {
     setting: AnalyticsSetting? = nil,
     acquisitionSource: AcquisitionSource? = nil,
     isPlus: Bool? = nil,
-    hasBlockingSelection: Bool? = nil
+    hasBlockingSelection: Bool? = nil,
+    titleCustomized: Bool? = nil,
+    bodyCustomized: Bool? = nil
   ) {
     self.source = source
     self.step = step
@@ -255,6 +262,8 @@ struct AnalyticsPayload {
     self.acquisitionSource = acquisitionSource
     self.isPlus = isPlus
     self.hasBlockingSelection = hasBlockingSelection
+    self.titleCustomized = titleCustomized
+    self.bodyCustomized = bodyCustomized
   }
 
   var properties: [String: AnalyticsPropertyValue] {
@@ -271,6 +280,12 @@ struct AnalyticsPayload {
     if let isPlus { properties["is_plus"] = .bool(isPlus) }
     if let hasBlockingSelection {
       properties["has_blocking_selection"] = .bool(hasBlockingSelection)
+    }
+    if let titleCustomized {
+      properties["title_customized"] = .bool(titleCustomized)
+    }
+    if let bodyCustomized {
+      properties["body_customized"] = .bool(bodyCustomized)
     }
     return properties
   }
@@ -356,7 +371,9 @@ final class AnalyticsManager: AnalyticsTracking {
     setting: AnalyticsSetting? = nil,
     acquisitionSource: AcquisitionSource? = nil,
     isPlus: Bool? = nil,
-    hasBlockingSelection: Bool? = nil
+    hasBlockingSelection: Bool? = nil,
+    titleCustomized: Bool? = nil,
+    bodyCustomized: Bool? = nil
   ) {
     guard isConfigured, isAnalyticsEnabled else { return }
 
@@ -369,7 +386,9 @@ final class AnalyticsManager: AnalyticsTracking {
       setting: setting,
       acquisitionSource: acquisitionSource,
       isPlus: isPlus,
-      hasBlockingSelection: hasBlockingSelection
+      hasBlockingSelection: hasBlockingSelection,
+      titleCustomized: titleCustomized,
+      bodyCustomized: bodyCustomized
     )
     client.capture(
       event: event.rawValue,

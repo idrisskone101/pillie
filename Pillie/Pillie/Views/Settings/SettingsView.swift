@@ -21,6 +21,8 @@ struct SettingsView: View {
     @State private var showBlockedAppsEditor = false
     @State private var showBlockingUpsell = false
     @State private var showSmartRemindersUpsell = false
+    @State private var showCustomRemindersEditor = false
+    @State private var showCustomRemindersUpsell = false
     @State private var showPaywall = false
     @State private var showManageSubscription = false
 
@@ -84,6 +86,29 @@ struct SettingsView: View {
                         .buttonStyle(.plain)
                         .sheet(isPresented: $showSmartRemindersUpsell) {
                             PlusUpsellSheet.smartReminders()
+                                .presentationDetents([.height(PlusUpsellSheet.compactPresentationHeight)])
+                                .presentationDragIndicator(.hidden)
+                                .presentationBackground(PillieTheme.bg)
+                        }
+                    }
+                    divider
+                    if SubscriptionManager.shared.isPlus {
+                        Button {
+                            openSettingSheet { showCustomRemindersEditor = true }
+                        } label: {
+                            settingsRow("Reminder Messages", value: reminderMessagesSummary)
+                        }
+                        .buttonStyle(.plain)
+                    } else {
+                        Button {
+                            openSettingSheet { showCustomRemindersUpsell = true }
+                            ProductAnalyticsTelemetry.live.settingsCustomRemindersUpsellViewed()
+                        } label: {
+                            settingsRow("Reminder Messages", value: "Pillie+", valueColor: PillieTheme.coral, showLock: true)
+                        }
+                        .buttonStyle(.plain)
+                        .sheet(isPresented: $showCustomRemindersUpsell) {
+                            PlusUpsellSheet.customReminders()
                                 .presentationDetents([.height(PlusUpsellSheet.compactPresentationHeight)])
                                 .presentationDragIndicator(.hidden)
                                 .presentationBackground(PillieTheme.bg)
@@ -237,6 +262,12 @@ struct SettingsView: View {
                 .presentationDragIndicator(.hidden)
                 .presentationBackground(PillieTheme.bg)
         }
+        .sheet(isPresented: $showCustomRemindersEditor) {
+            CustomReminderMessagesEditor(store: store)
+                .presentationDetents([.height(460)])
+                .presentationDragIndicator(.hidden)
+                .presentationBackground(PillieTheme.bg)
+        }
         .fullScreenCover(isPresented: $showPaywall) {
             PremiumPaywallView(
                 isFromOnboarding: false,
@@ -322,6 +353,12 @@ struct SettingsView: View {
 
     private var blockingStatusSummary: String {
         AppBlockingManager.shared.statusSummary
+    }
+
+    private var reminderMessagesSummary: String {
+        let hasTitle = CustomReminderCopy.isCustomized(store.customDueReminderTitle)
+        let hasBody = CustomReminderCopy.isCustomized(store.customDueReminderBody)
+        return (hasTitle || hasBody) ? "Custom" : "Default"
     }
 
     private var protocolSummary: String {

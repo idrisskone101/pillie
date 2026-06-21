@@ -21,6 +21,14 @@ struct PlusUpsellContent: Equatable {
         featureName: "Smart Reminders",
         featureDescription: "Pillie keeps reminding you until you log it — gentle follow-up nudges after the first reminder."
     )
+
+    /// Custom Reminder Messages frames the perk as writing your own private nudge.
+    /// It is the user's own words (ADR 0004), so the copy stays personal and avoids
+    /// medical/efficacy claims.
+    static let customReminders = PlusUpsellContent(
+        featureName: "Reminder Messages",
+        featureDescription: "Write your own words for the daily reminder — exactly what you type is what you'll see."
+    )
 }
 
 struct PlusUpsellSheet: View {
@@ -45,6 +53,10 @@ struct PlusUpsellSheet: View {
 
     static func smartReminders() -> PlusUpsellSheet {
         PlusUpsellSheet(content: .smartReminders)
+    }
+
+    static func customReminders() -> PlusUpsellSheet {
+        PlusUpsellSheet(content: .customReminders)
     }
     @State private var showPaywall = false
     @State private var isRestoring = false

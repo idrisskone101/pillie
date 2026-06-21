@@ -84,6 +84,42 @@ final class PillStoreEdgeCaseTests: XCTestCase {
         XCTAssertEqual(snapshot?.status, .upcoming)
     }
 
+    func testCustomReminderCopySurvivesContraceptionMethodChangeAndTrackingReset() throws {
+        let today = InMemoryStoreFactory.fixedDate("2026-05-26")
+        let fixture = try InMemoryStoreFactory.makeStore(now: today, method: .pill, startDate: today)
+        let store = fixture.store
+
+        store.customDueReminderTitle = "My own title 💖"
+        store.customDueReminderBody = "Just for me."
+
+        // A method change is a Tracking Data Reset (resetAndStartFresh wipes the records
+        // and switches method). Custom copy is a Personalization Setting, so it must remain.
+        store.resetAndStartFresh(
+            method: .ring,
+            regimen: .twentyOneSeven,
+            customActiveDays: nil,
+            customBreakDays: nil,
+            cycleDay: 1
+        )
+
+        XCTAssertEqual(store.contraceptiveMethod, .ring)
+        XCTAssertEqual(store.customDueReminderTitle, "My own title 💖")
+        XCTAssertEqual(store.customDueReminderBody, "Just for me.")
+    }
+
+    func testCustomReminderCopyPersistsAcrossStoreReload() throws {
+        let today = InMemoryStoreFactory.fixedDate("2026-05-26")
+        let fixture = try InMemoryStoreFactory.makeStore(now: today, startDate: today)
+        fixture.store.customDueReminderTitle = "Persisted title"
+        fixture.store.customDueReminderBody = "Persisted body"
+
+        // A fresh PillStore over the same context reloads settings from UserDefaults —
+        // models the app relaunching (e.g. after Plus lapses and later resubscribes).
+        let reloaded = PillStore(modelContext: fixture.context)
+        XCTAssertEqual(reloaded.customDueReminderTitle, "Persisted title")
+        XCTAssertEqual(reloaded.customDueReminderBody, "Persisted body")
+    }
+
     func testCustomPillValuesClampUnsafePersistedInput() {
         XCTAssertEqual(PillPack.normalizedCustomValues(active: nil, breakDays: nil).active, 21)
         XCTAssertEqual(PillPack.normalizedCustomValues(active: nil, breakDays: nil).breakDays, 7)

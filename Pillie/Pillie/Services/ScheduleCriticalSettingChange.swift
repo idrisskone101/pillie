@@ -54,6 +54,24 @@ enum ScheduleCriticalSettingChange {
         ProductAnalyticsTelemetry.live.supplyReminderSaved()
     }
 
+    /// Saves the Custom Reminder Message copy (Pillie+) and reschedules so the new
+    /// words take effect on the next Due Action Reminder. Words never affect timing,
+    /// snooze, retry cadence, or supply scheduling — only the title/body strings. The
+    /// save event carries only two coarse booleans, never the strings.
+    static func saveSettingsCustomReminders(
+        store: PillStore,
+        title: String,
+        body: String
+    ) {
+        store.customDueReminderTitle = title
+        store.customDueReminderBody = body
+        NotificationManager.shared.requestReschedule(from: store, reason: "settings-custom-reminders")
+        ProductAnalyticsTelemetry.live.customRemindersSaved(
+            titleCustomized: CustomReminderCopy.isCustomized(title),
+            bodyCustomized: CustomReminderCopy.isCustomized(body)
+        )
+    }
+
     private static func saveReminderTime(
         store: PillStore,
         hour: Int,

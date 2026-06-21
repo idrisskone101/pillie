@@ -17,6 +17,7 @@ final class SettingsTelemetryTests: XCTestCase {
             .protocol,
             .cycleDay,
             .blockedApps,
+            .customReminders,
             .subscription
         ]
 
@@ -28,8 +29,36 @@ final class SettingsTelemetryTests: XCTestCase {
             "protocol",
             "cycle_day",
             "blocked_apps",
+            "custom_reminders",
             "subscription"
         ])
+    }
+
+    func testCustomRemindersSavedPayloadCarriesOnlyCoarseCustomizationBooleans() {
+        let properties = AnalyticsPayload(
+            source: .settings,
+            setting: .customReminders,
+            isPlus: true,
+            titleCustomized: true,
+            bodyCustomized: false
+        ).properties
+
+        // Only the setting category, source, is_plus, and the two customization bits —
+        // never the message strings or their lengths.
+        XCTAssertEqual(Set(properties.keys), [
+            "source",
+            "setting",
+            "is_plus",
+            "title_customized",
+            "body_customized"
+        ])
+        XCTAssertEqual(properties["setting"], .string("custom_reminders"))
+        XCTAssertEqual(properties["title_customized"], .bool(true))
+        XCTAssertEqual(properties["body_customized"], .bool(false))
+        XCTAssertNil(properties["title"])
+        XCTAssertNil(properties["body"])
+        XCTAssertNil(properties["title_length"])
+        XCTAssertNil(properties["body_length"])
     }
 
     func testSettingsOpenSaveAndCancelEventsUseApprovedNames() {
