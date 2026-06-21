@@ -9,8 +9,94 @@ import XCTest
 @MainActor
 final class NotificationEdgeCaseTests: XCTestCase {
     override func tearDown() {
+        SubscriptionManager.shared.setPlusForTesting(false)
         InMemoryStoreFactory.resetClockAndDefaults()
         super.tearDown()
+    }
+
+    func testFreeUserReceivesSingleDueReminderWithoutRetries() throws {
+        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
+        fixture.store.autoReminderRetryLimit = 3
+        SubscriptionManager.shared.setPlusForTesting(false)
+
+        let summaries = NotificationManager.shared.managedRequestSummariesForTesting(
+            store: fixture.store,
+            now: now
+        )
+        let todayEpoch = Int(Calendar.current.startOfDay(for: now).timeIntervalSince1970)
+        let todayDueReminders = summaries.filter { $0.dueDayEpoch == todayEpoch }
+
+        XCTAssertEqual(todayDueReminders.filter { $0.requestKind == "base" }.count, 1)
+        XCTAssertEqual(todayDueReminders.filter { $0.requestKind == "retry" }.count, 0)
+    }
+
+    func testPlusUserReceivesRetriesPerStoredLimit() throws {
+        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
+        fixture.store.autoReminderRetryLimit = 3
+        SubscriptionManager.shared.setPlusForTesting(true)
+
+        let summaries = NotificationManager.shared.managedRequestSummariesForTesting(
+            store: fixture.store,
+            now: now
+        )
+        let todayEpoch = Int(Calendar.current.startOfDay(for: now).timeIntervalSince1970)
+        let todayDueReminders = summaries.filter { $0.dueDayEpoch == todayEpoch }
+
+        XCTAssertEqual(todayDueReminders.filter { $0.requestKind == "base" }.count, 1)
+        XCTAssertEqual(todayDueReminders.filter { $0.requestKind == "retry" }.count, 3)
+    }
+
+    func testReminderCategoryDropsSnoozeActionForFreeUsers() {
+        let freeActions = NotificationManager.shared.reminderCategoryActionIdentifiersForTesting(isPlus: false)
+        let plusActions = NotificationManager.shared.reminderCategoryActionIdentifiersForTesting(isPlus: true)
+
+        XCTAssertEqual(freeActions, [NotificationManager.shared.markTakenAction])
+        XCTAssertEqual(
+            plusActions,
+            [NotificationManager.shared.markTakenAction, NotificationManager.shared.snoozeAction]
+        )
+    }
+
+    func testFreeUserStoredRetryLimitIsPreservedAndReturnsOnUpgrade() throws {
+        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
+        fixture.store.autoReminderRetryLimit = 5
+        SubscriptionManager.shared.setPlusForTesting(false)
+
+        let todayEpoch = Int(Calendar.current.startOfDay(for: now).timeIntervalSince1970)
+        let freeReminders = NotificationManager.shared.managedRequestSummariesForTesting(
+            store: fixture.store,
+            now: now
+        )
+        .filter { $0.dueDayEpoch == todayEpoch }
+
+        XCTAssertEqual(freeReminders.filter { $0.requestKind == "retry" }.count, 0)
+        // Gating must not mutate the stored preference.
+        XCTAssertEqual(fixture.store.autoReminderRetryLimit, 5)
+
+        SubscriptionManager.shared.setPlusForTesting(true)
+        let plusReminders = NotificationManager.shared.managedRequestSummariesForTesting(
+            store: fixture.store,
+            now: now
+        )
+        .filter { $0.dueDayEpoch == todayEpoch }
+
+        XCTAssertEqual(plusReminders.filter { $0.requestKind == "retry" }.count, 5)
+    }
+
+    func testFreeUserSupplyReminderIsUnaffected() throws {
+        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let fixture = try InMemoryStoreFactory.makeStore(now: now, method: .pill, startDate: now)
+        SubscriptionManager.shared.setPlusForTesting(false)
+
+        let summaries = NotificationManager.shared.managedRequestSummariesForTesting(
+            store: fixture.store,
+            now: now
+        )
+
+        XCTAssertTrue(summaries.contains { $0.identifier.hasPrefix("pillie_refill_reminder_") })
     }
 
     func testReminderBeforeNowSchedulesCatchupInsteadOfDroppingToday() throws {
@@ -118,6 +204,9 @@ final class NotificationEdgeCaseTests: XCTestCase {
         let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
         let retryLimits = [1, 3, 5]
 
+        // Auto-Reminder Retry is a Smart Reminders (Plus) perk now (ADR 0004).
+        SubscriptionManager.shared.setPlusForTesting(true)
+
         for retryLimit in retryLimits {
             let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
             fixture.store.autoReminderRetryLimit = retryLimit
@@ -142,6 +231,8 @@ final class NotificationEdgeCaseTests: XCTestCase {
         let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
         let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
         fixture.store.autoReminderRetryLimit = 1
+        // Snooze is a Smart Reminders (Plus) perk now (ADR 0004).
+        SubscriptionManager.shared.setPlusForTesting(true)
         let snoozeFireDate = now.addingTimeInterval(10 * 60)
 
         let summaries = NotificationManager.shared.managedRequestSummariesForTesting(
@@ -196,6 +287,8 @@ final class NotificationEdgeCaseTests: XCTestCase {
         let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
         let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
         fixture.store.autoReminderRetryLimit = 1
+        // Auto-Reminder Retry is a Smart Reminders (Plus) perk now (ADR 0004).
+        SubscriptionManager.shared.setPlusForTesting(true)
 
         let summaries = NotificationManager.shared.managedRequestSummariesForTesting(
             store: fixture.store,

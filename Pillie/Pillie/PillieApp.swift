@@ -170,6 +170,14 @@ struct PillieApp: App {
             AnalyticsManager.shared.configure()
             ProductAnalyticsTelemetry.live.appLaunched()
             if !Self.isOnboardingActive {
+                // Re-plan reminders immediately when the Plus entitlement flips so
+                // Smart Reminders apply on upgrade / drop on churn without waiting for
+                // the next natural reschedule (ADR 0004). Set before configure() so the
+                // initial entitlement refresh is covered too.
+                SubscriptionManager.shared.onEntitlementChange = { _ in
+                    guard let store = AppDelegate.store else { return }
+                    NotificationManager.shared.requestReschedule(from: store, reason: "entitlement-change")
+                }
                 SubscriptionManager.shared.configure()
             }
         }

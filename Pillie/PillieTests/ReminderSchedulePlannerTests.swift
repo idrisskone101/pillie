@@ -110,6 +110,82 @@ final class ReminderSchedulePlannerTests: XCTestCase {
         XCTAssertEqual(todayIntents.filter { $0.kind == .base }.count, 0)
     }
 
+    func testFreeUserGetsSingleDueReminderWithNoRetries() throws {
+        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
+        let todayEpoch = epochDay(for: now)
+
+        let todayIntents = dueIntents(
+            for: fixture.store,
+            now: now,
+            autoReminderRetryLimit: 3,
+            smartRemindersEnabled: false
+        )
+        .filter { $0.dueDayEpoch == todayEpoch }
+
+        XCTAssertEqual(todayIntents.filter { $0.kind == .base }.count, 1)
+        XCTAssertEqual(todayIntents.filter { $0.kind == .retry }.count, 0)
+    }
+
+    func testFreeUserSnoozeOverrideIsIgnored() throws {
+        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
+        let todayEpoch = epochDay(for: now)
+        let snoozeFireDate = now.addingTimeInterval(10 * 60)
+
+        let todayIntents = dueIntents(
+            for: fixture.store,
+            now: now,
+            autoReminderRetryLimit: 3,
+            snoozeOverride: ReminderSchedulePlanner.SnoozeOverride(
+                dueDayEpoch: todayEpoch,
+                firstFireDate: snoozeFireDate
+            ),
+            smartRemindersEnabled: false
+        )
+        .filter { $0.dueDayEpoch == todayEpoch }
+
+        XCTAssertEqual(todayIntents.filter { $0.kind == .snooze }.count, 0)
+        XCTAssertEqual(todayIntents.filter { $0.kind == .retry }.count, 0)
+        XCTAssertEqual(todayIntents.filter { $0.kind == .base }.count, 1)
+    }
+
+    func testPlusUserRetainsRetriesAndSnooze() throws {
+        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
+        let todayEpoch = epochDay(for: now)
+        let snoozeFireDate = now.addingTimeInterval(10 * 60)
+
+        let todayIntents = dueIntents(
+            for: fixture.store,
+            now: now,
+            autoReminderRetryLimit: 3,
+            snoozeOverride: ReminderSchedulePlanner.SnoozeOverride(
+                dueDayEpoch: todayEpoch,
+                firstFireDate: snoozeFireDate
+            ),
+            smartRemindersEnabled: true
+        )
+        .filter { $0.dueDayEpoch == todayEpoch }
+
+        XCTAssertEqual(todayIntents.filter { $0.kind == .snooze }.count, 1)
+        XCTAssertEqual(todayIntents.filter { $0.kind == .retry }.count, 3)
+        XCTAssertEqual(todayIntents.filter { $0.kind == .base }.count, 0)
+    }
+
+    func testFreeUserStillReceivesSupplyReminders() throws {
+        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let pillFixture = try InMemoryStoreFactory.makeStore(now: now, method: .pill, startDate: now)
+
+        let supply = plan(for: pillFixture.store, now: now, smartRemindersEnabled: false)
+            .compactMap { intent -> ReminderSchedulePlanner.SupplyReminderIntent? in
+                if case .supply(let supply) = intent { return supply }
+                return nil
+            }
+
+        XCTAssertEqual(supply.map(\.method), [.pill])
+    }
+
     func testBuildsPillAndPatchSupplyRemindersButNotRing() throws {
         let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
         let pillFixture = try InMemoryStoreFactory.makeStore(now: now, method: .pill, startDate: now)
@@ -136,7 +212,8 @@ final class ReminderSchedulePlannerTests: XCTestCase {
         autoReminderIntervalMinutes: Int? = nil,
         autoReminderRetryLimit: Int? = nil,
         statusOverrides: [Int: PillDay.Status] = [:],
-        snoozeOverride: ReminderSchedulePlanner.SnoozeOverride? = nil
+        snoozeOverride: ReminderSchedulePlanner.SnoozeOverride? = nil,
+        smartRemindersEnabled: Bool = true
     ) -> [ReminderSchedulePlanner.Intent] {
         let calendar = Calendar.current
         let candidateDueActions = DoseScheduleEngine.nextDueActions(
@@ -160,6 +237,7 @@ final class ReminderSchedulePlannerTests: XCTestCase {
                 candidateDueActions: candidateDueActions,
                 statusByEpochDay: statusByEpochDay,
                 snoozeOverride: snoozeOverride,
+                smartRemindersEnabled: smartRemindersEnabled,
                 calendar: calendar
             )
         )
@@ -170,14 +248,16 @@ final class ReminderSchedulePlannerTests: XCTestCase {
         now: Date,
         autoReminderRetryLimit: Int? = nil,
         statusOverrides: [Int: PillDay.Status] = [:],
-        snoozeOverride: ReminderSchedulePlanner.SnoozeOverride? = nil
+        snoozeOverride: ReminderSchedulePlanner.SnoozeOverride? = nil,
+        smartRemindersEnabled: Bool = true
     ) -> [ReminderSchedulePlanner.DueReminderIntent] {
         plan(
             for: store,
             now: now,
             autoReminderRetryLimit: autoReminderRetryLimit,
             statusOverrides: statusOverrides,
-            snoozeOverride: snoozeOverride
+            snoozeOverride: snoozeOverride,
+            smartRemindersEnabled: smartRemindersEnabled
         )
         .compactMap { intent in
             if case .due(let due) = intent { return due }
