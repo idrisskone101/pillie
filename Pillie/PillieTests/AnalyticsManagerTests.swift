@@ -396,6 +396,8 @@ private final class RecordingAnalyticsTracker: AnalyticsTracking {
   private(set) var acquisitionSources: [AcquisitionSource?] = []
   private(set) var isPlusValues: [Bool?] = []
   private(set) var hasBlockingSelectionValues: [Bool?] = []
+  private(set) var titleCustomizedValues: [Bool?] = []
+  private(set) var bodyCustomizedValues: [Bool?] = []
 
   func track(
     _ event: AnalyticsEvent,
@@ -407,7 +409,9 @@ private final class RecordingAnalyticsTracker: AnalyticsTracking {
     setting: AnalyticsSetting?,
     acquisitionSource: AcquisitionSource?,
     isPlus: Bool?,
-    hasBlockingSelection: Bool?
+    hasBlockingSelection: Bool?,
+    titleCustomized: Bool?,
+    bodyCustomized: Bool?
   ) {
     events.append(event)
     sources.append(source)
@@ -417,5 +421,7 @@ private final class RecordingAnalyticsTracker: AnalyticsTracking {
     acquisitionSources.append(acquisitionSource)
     isPlusValues.append(isPlus)
     hasBlockingSelectionValues.append(hasBlockingSelection)
+    titleCustomizedValues.append(titleCustomized)
+    bodyCustomizedValues.append(bodyCustomized)
   }
 }

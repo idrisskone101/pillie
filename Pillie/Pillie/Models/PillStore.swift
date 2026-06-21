@@ -73,6 +73,17 @@ class PillStore {
     var contraceptiveMethod: ContraceptiveMethod {
         didSet { UserDefaults.standard.set(contraceptiveMethod.rawValue, forKey: Self.contraceptiveMethodKey) }
     }
+    /// Raw custom Due Action Reminder title (Pillie+ perk). A Personalization Setting,
+    /// not Tracking Data: it survives a contraception method change and a Tracking Data
+    /// Reset, and is retained — but ignored — when Plus lapses (build-time gate lives in
+    /// `CustomReminderCopy`). Empty string means "use the default method-aware copy".
+    var customDueReminderTitle: String {
+        didSet { UserDefaults.standard.set(customDueReminderTitle, forKey: Self.customDueReminderTitleKey) }
+    }
+    /// Raw custom Due Action Reminder body (Pillie+ perk). See `customDueReminderTitle`.
+    var customDueReminderBody: String {
+        didSet { UserDefaults.standard.set(customDueReminderBody, forKey: Self.customDueReminderBodyKey) }
+    }
     var appActivatedDate: Date? {
         didSet {
             if let date = appActivatedDate {
@@ -151,6 +162,8 @@ class PillStore {
     private static let refillReminderThresholdDaysKey = "pillie_refill_reminder_threshold_days"
     private static let patchRestockReminderThresholdPatchesKey = "pillie_patch_restock_threshold_patches"
     private static let contraceptiveMethodKey = "pillie_contraceptive_method"
+    private static let customDueReminderTitleKey = "pillie_custom_due_reminder_title"
+    private static let customDueReminderBodyKey = "pillie_custom_due_reminder_body"
     private static let appActivatedDateKey = "pillie_app_activated_date"
     private static let streakResetDateKey = "pillie_streak_reset_date"
     private static let painPointsKey = "pillie_pain_points"
@@ -1016,6 +1029,9 @@ class PillStore {
         self.patchRestockReminderThresholdPatches = Self.normalizedPatchRestockReminderThreshold(
             defaults.object(forKey: Self.patchRestockReminderThresholdPatchesKey) as? Int ?? 1
         )
+
+        self.customDueReminderTitle = defaults.string(forKey: Self.customDueReminderTitleKey) ?? ""
+        self.customDueReminderBody = defaults.string(forKey: Self.customDueReminderBodyKey) ?? ""
 
         let defaultMethod = resolvedPacks
             .sorted(by: { $0.packNumber < $1.packNumber })

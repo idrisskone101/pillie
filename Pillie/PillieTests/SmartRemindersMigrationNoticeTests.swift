@@ -182,6 +182,8 @@ private struct NoOpMigrationTracker: AnalyticsTracking {
         setting: AnalyticsSetting?,
         acquisitionSource: AcquisitionSource?,
         isPlus: Bool?,
-        hasBlockingSelection: Bool?
+        hasBlockingSelection: Bool?,
+        titleCustomized: Bool?,
+        bodyCustomized: Bool?
     ) {}
 }

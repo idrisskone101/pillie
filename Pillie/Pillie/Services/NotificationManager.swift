@@ -227,10 +227,24 @@ final class NotificationManager {
             )
         )
 
+        // Custom Reminder Messages (Pillie+): resolve once per reschedule. The build-time
+        // gate lives in `CustomReminderCopy` — a non-Plus user's stored copy is ignored and
+        // defaults fire. Enforcement is eventual: already-queued notifications revert on the
+        // next reschedule (ADR 0004).
+        let isPlus = SubscriptionManager.shared.isPlus
+        let customTitle = store.customDueReminderTitle
+        let customBody = store.customDueReminderBody
+
         return intents.map { intent in
             switch intent {
             case .due(let due):
-                return makeRequest(for: due, calendar: calendar)
+                return makeRequest(
+                    for: due,
+                    calendar: calendar,
+                    customTitle: customTitle,
+                    customBody: customBody,
+                    isPlus: isPlus
+                )
             case .supply(let supply):
                 return makeRefillRequest(for: supply, calendar: calendar)
             }
@@ -239,15 +253,31 @@ final class NotificationManager {
 
     private func makeRequest(
         for due: ReminderSchedulePlanner.DueReminderIntent,
-        calendar: Calendar
+        calendar: Calendar,
+        customTitle: String,
+        customBody: String,
+        isPlus: Bool
     ) -> UNNotificationRequest {
         let content = UNMutableNotificationContent()
         if due.kind == .retry {
             content.title = "Still here when you're ready"
             content.body = "Take a tiny moment for your Pillie check-in."
         } else {
-            content.title = due.action.reminderTitle
-            content.body = due.action.reminderBody
+            // The base (and snooze re-fire) Due Action Reminder carries the user's custom
+            // copy when Plus; any blank field falls back independently to the default
+            // method-aware copy, so an empty notification can never fire.
+            content.title = CustomReminderCopy.effective(
+                custom: customTitle,
+                default: due.action.reminderTitle,
+                cap: CustomReminderCopy.titleCap,
+                isPlus: isPlus
+            )
+            content.body = CustomReminderCopy.effective(
+                custom: customBody,
+                default: due.action.reminderBody,
+                cap: CustomReminderCopy.bodyCap,
+                isPlus: isPlus
+            )
         }
         content.sound = .default
         content.categoryIdentifier = categoryID

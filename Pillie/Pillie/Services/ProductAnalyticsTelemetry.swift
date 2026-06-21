@@ -211,6 +211,10 @@ struct ProductAnalyticsTelemetry {
     track(.plusUpsellViewed, source: .settings)
   }
 
+  func settingsCustomRemindersUpsellViewed() {
+    track(.plusUpsellViewed, source: .settings)
+  }
+
   func plusUpsellDismissed() {
     track(.plusUpsellDismissed, source: .upsell)
   }
@@ -278,6 +282,10 @@ struct ProductAnalyticsTelemetry {
     settingsSheetOpened(.blockedApps, hasBlockingSelection: hasSelection)
   }
 
+  func customRemindersSettingsOpened() {
+    settingsSheetOpened(.customReminders)
+  }
+
   func subscriptionSettingsOpened() {
     settingsSheetOpened(.subscription)
   }
@@ -312,6 +320,18 @@ struct ProductAnalyticsTelemetry {
 
   func blockedAppsSaved(hasSelection: Bool) {
     settingsChangeSaved(.blockedApps, hasBlockingSelection: hasSelection)
+  }
+
+  /// The Custom Reminder Messages editor saved. Carries only two coarse booleans —
+  /// whether each field ended up customized — never the strings or their lengths.
+  func customRemindersSaved(titleCustomized: Bool, bodyCustomized: Bool) {
+    track(
+      .settingsChangeSaved,
+      source: .settings,
+      setting: .customReminders,
+      titleCustomized: titleCustomized,
+      bodyCustomized: bodyCustomized
+    )
   }
 
   func todayActionStarted() {
@@ -365,7 +385,9 @@ struct ProductAnalyticsTelemetry {
     result: AnalyticsResult? = nil,
     setting: AnalyticsSetting? = nil,
     acquisitionSource: AcquisitionSource? = nil,
-    hasBlockingSelection: Bool? = nil
+    hasBlockingSelection: Bool? = nil,
+    titleCustomized: Bool? = nil,
+    bodyCustomized: Bool? = nil
   ) {
     analytics.track(
       event,
@@ -377,7 +399,9 @@ struct ProductAnalyticsTelemetry {
       setting: setting,
       acquisitionSource: acquisitionSource,
       isPlus: isPlus(),
-      hasBlockingSelection: hasBlockingSelection
+      hasBlockingSelection: hasBlockingSelection,
+      titleCustomized: titleCustomized,
+      bodyCustomized: bodyCustomized
     )
   }
 }

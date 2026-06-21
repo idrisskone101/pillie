@@ -118,6 +118,8 @@ enum InMemoryStoreFactory {
             "pillie_refill_reminder_threshold_days",
             "pillie_patch_restock_threshold_patches",
             "pillie_contraceptive_method",
+            "pillie_custom_due_reminder_title",
+            "pillie_custom_due_reminder_body",
             "pillie_app_activated_date",
             "pillie_streak_reset_date",
             "pillie_pain_points",
