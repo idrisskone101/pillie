@@ -10,7 +10,6 @@ import FamilyControls
 struct SettingsView: View {
     @Environment(PillStore.self) var store
     @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
-    @AppStorage(AnalyticsManager.analyticsOptOutKey) private var analyticsOptOut = false
     @State private var appeared = false
     @State private var hasAnimatedIn = false
     @State private var showTimeEditor = false
@@ -156,34 +155,6 @@ struct SettingsView: View {
                         )
                     }
                     .buttonStyle(.plain)
-                }
-                .modifier(FadeInUp(appeared: appeared, delay: 0.3))
-
-                // MARK: - Privacy
-                sectionHeader("PRIVACY")
-                    .modifier(FadeInUp(appeared: appeared, delay: 0.3))
-
-                settingsCard {
-                    Toggle(isOn: Binding(
-                        get: { !analyticsOptOut },
-                        set: { isEnabled in
-                            analyticsOptOut = !isEnabled
-                            AnalyticsManager.shared.setAnalyticsEnabled(isEnabled)
-                        }
-                    )) {
-                        VStack(alignment: .leading, spacing: 3) {
-                            Text("Usage Analytics")
-                                .font(.pillieSubtitleBold())
-                                .foregroundStyle(PillieTheme.textPrimary)
-                            Text("Help improve Pillie with anonymous app-flow data.")
-                                .font(.pillieCaption())
-                                .foregroundStyle(PillieTheme.textMuted)
-                        }
-                    }
-                    .tint(PillieTheme.coral)
-                    .accessibilityIdentifier("usageAnalyticsToggle")
-                    .padding(.horizontal, 20)
-                    .padding(.vertical, 14)
                 }
                 .modifier(FadeInUp(appeared: appeared, delay: 0.3))
 

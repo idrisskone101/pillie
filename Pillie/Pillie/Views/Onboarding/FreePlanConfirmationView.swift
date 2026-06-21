@@ -56,6 +56,7 @@ struct FreePlanConfirmationContent {
 }
 
 struct FreePlanConfirmationView: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var animateIn = false
     @State private var blobPhase: CGFloat = 0
     private let performanceTier = PerformanceTier.current
@@ -101,7 +102,10 @@ struct FreePlanConfirmationView: View {
         }
         .onAppear {
             animateIn = true
-            guard performanceTier == .standard else {
+            guard PillieMotion.decorativeMotionEnabled(
+                accessibilityReduceMotion: reduceMotion,
+                performanceTier: performanceTier
+            ) else {
                 blobPhase = 0
                 return
             }

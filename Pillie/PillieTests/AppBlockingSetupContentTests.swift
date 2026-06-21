@@ -69,6 +69,31 @@ final class AppBlockingSetupContentTests: XCTestCase {
         XCTAssertFalse(visibleCopy.contains("ads"))
     }
 
+    // MARK: - Permission-state VoiceOver labels (#84 QA)
+
+    func testEmptyPermissionStateExposesOneClearVoiceOverLabel() {
+        // The empty permission card reads as a single coherent element instead of
+        // scattered Text/chip fragments — same treatment as the selected card.
+        let label = content.emptyStateAccessibilityLabel
+        XCTAssertTrue(label.contains(content.emptyTitle))
+        XCTAssertTrue(label.contains("Screen Time"))
+        XCTAssertTrue(label.lowercased().contains("count"))
+        XCTAssertGreaterThan(label.count, content.emptyTitle.count)
+    }
+
+    func testLockedPermissionStateExposesOneClearVoiceOverLabel() {
+        let label = content.lockedAccessibilityLabel
+        XCTAssertTrue(label.contains(content.lockedTitle))
+        XCTAssertTrue(label.contains(content.lockedDetail))
+    }
+
+    func testPermissionStateAccessibilityLabelsNameNoRealApps() {
+        let combined = (content.emptyStateAccessibilityLabel + " " + content.lockedAccessibilityLabel).lowercased()
+        for name in ["tiktok", "instagram", "youtube", "snapchat", "facebook", "reddit"] {
+            XCTAssertFalse(combined.contains(name), "VoiceOver label must not name a real app: \(name)")
+        }
+    }
+
     // MARK: - AC5: copy must never name real third-party apps
 
     func testVisibleCopyNeverNamesRealThirdPartyApps() {

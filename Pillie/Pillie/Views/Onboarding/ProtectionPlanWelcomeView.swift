@@ -26,7 +26,10 @@ struct ProtectionPlanWelcomeView: View {
 
     /// Heavy, looping motion only runs on a capable device with motion allowed.
     private var animationsEnabled: Bool {
-        performanceTier == .standard && !reduceMotion
+        PillieMotion.decorativeMotionEnabled(
+            accessibilityReduceMotion: reduceMotion,
+            performanceTier: performanceTier
+        )
     }
 
     /// A single-element array holds the dot static; two phases make it breathe.

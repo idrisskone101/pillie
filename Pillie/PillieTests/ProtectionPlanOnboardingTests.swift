@@ -3,9 +3,9 @@
 //  PillieTests
 //
 //  Covers the deep, UI-free state core of Protection Plan Onboarding: step
-//  routing, forward/back navigation with committed-answer preservation, and
-//  persistence across app interruption. Exercises value types directly so there
-//  is no main-actor `@Observable` deinit hazard in the test host.
+//  routing, forward/back navigation, and persistence across app interruption.
+//  Exercises value types directly so there is no main-actor `@Observable` deinit
+//  hazard in the test host.
 //
 
 import XCTest
@@ -31,9 +31,11 @@ final class ProtectionPlanOnboardingTests: XCTestCase {
 
     // MARK: - Step routing
 
-    func testWelcomeIsFirstStepAndAnalyticsConsentFollowsImmediately() {
+    func testWelcomeIsFirstStepAndProofFollowsImmediately() {
+        // Analytics Consent was retired, so Welcome leads straight to the Early
+        // Value Proof (analytics is collected for everyone, no consent screen).
         XCTAssertEqual(ProtectionPlanStep.first, .welcome)
-        XCTAssertEqual(ProtectionPlanStep.welcome.next, .analyticsConsent)
+        XCTAssertEqual(ProtectionPlanStep.welcome.next, .earlyValueProof)
     }
 
     func testNewStateStartsAtWelcomeWithNoBackNavigation() {
@@ -44,38 +46,25 @@ final class ProtectionPlanOnboardingTests: XCTestCase {
 
     // MARK: - Forward / back navigation
 
-    func testAdvanceMovesToTheNextStepInOrder() {
+    func testAdvanceMovesFromWelcomeToTheProof() {
         var state = ProtectionPlanOnboardingState()
         state.advance()
-        XCTAssertEqual(state.currentStep, .analyticsConsent)
+        XCTAssertEqual(state.currentStep, .earlyValueProof)
         XCTAssertTrue(state.canGoBack)
     }
 
-    func testGoBackReturnsToThePreviousStep() {
+    func testGoBackFromProofReturnsToWelcome() {
         var state = ProtectionPlanOnboardingState()
-        state.advance()
+        state.advance() // -> earlyValueProof
         state.goBack()
         XCTAssertEqual(state.currentStep, .welcome)
     }
 
-    func testGoBackPreservesCommittedConsentAnswer() {
-        var state = ProtectionPlanOnboardingState()
-        state.advance() // -> analyticsConsent
-        state.recordAnalyticsConsent(allowed: true)
-        state.advance() // commit consent, move past the intro
-
-        state.goBack() // back to analyticsConsent
-        XCTAssertEqual(state.currentStep, .analyticsConsent)
-        XCTAssertEqual(state.analyticsConsentDecision, .allowed)
-    }
-
     // MARK: - Early Value Proof routing (#74)
 
-    func testEarlyValueProofAppearsAfterConsentAndBeforeHandoff() {
+    func testEarlyValueProofAppearsAfterWelcomeAndBeforeHandoff() {
         var state = ProtectionPlanOnboardingState()
-        state.advance() // -> analyticsConsent
-        state.recordAnalyticsConsent(allowed: true)
-        state.advance() // commit consent -> earlyValueProof
+        state.advance() // welcome -> earlyValueProof
 
         XCTAssertEqual(state.currentStep, .earlyValueProof)
         XCTAssertFalse(
@@ -86,8 +75,6 @@ final class ProtectionPlanOnboardingTests: XCTestCase {
 
     func testIntroHandsOffOnceTheProofAdvancesToTheReviewPrompt() {
         var state = ProtectionPlanOnboardingState()
-        state.advance() // -> analyticsConsent
-        XCTAssertFalse(state.hasFinishedIntro)
         state.advance() // -> earlyValueProof
         XCTAssertFalse(state.hasFinishedIntro)
         state.advance() // -> reviewPrompt (handoff sentinel into the questions flow)
@@ -115,34 +102,30 @@ final class ProtectionPlanOnboardingTests: XCTestCase {
         )
     }
 
-    func testGoBackFromProofReturnsToConsentPreservingTheAnswer() {
-        var state = ProtectionPlanOnboardingState()
-        state.advance() // -> analyticsConsent
-        state.recordAnalyticsConsent(allowed: false)
-        state.advance() // -> earlyValueProof
-
-        state.goBack() // back to analyticsConsent
-        XCTAssertEqual(state.currentStep, .analyticsConsent)
-        XCTAssertEqual(state.analyticsConsentDecision, .declined)
-    }
-
     // MARK: - Persistence / interruption
 
     func testCommittedStateSurvivesAppInterruption() {
         var state = ProtectionPlanOnboardingState()
-        state.advance() // -> analyticsConsent
-        state.recordAnalyticsConsent(allowed: false)
+        state.advance() // -> earlyValueProof
         ProtectionPlanOnboardingStore.save(state, to: defaults)
 
         // Simulate the app being killed and relaunched.
         let resumed = ProtectionPlanOnboardingStore.load(from: defaults)
-        XCTAssertEqual(resumed.currentStep, .analyticsConsent)
-        XCTAssertEqual(resumed.analyticsConsentDecision, .declined)
+        XCTAssertEqual(resumed.currentStep, .earlyValueProof)
     }
 
-    func testFreshDefaultsLoadToWelcomeUndecided() {
+    func testPersistedAnalyticsConsentStepMigratesForwardToProofOnLoad() {
+        // Analytics Consent was retired; a user persisted on the old consent step
+        // resumes on the Early Value Proof rather than the removed screen.
+        let state = ProtectionPlanOnboardingState(currentStep: .analyticsConsent)
+        ProtectionPlanOnboardingStore.save(state, to: defaults)
+
+        let resumed = ProtectionPlanOnboardingStore.load(from: defaults)
+        XCTAssertEqual(resumed.currentStep, .earlyValueProof)
+    }
+
+    func testFreshDefaultsLoadToWelcome() {
         let loaded = ProtectionPlanOnboardingStore.load(from: defaults)
         XCTAssertEqual(loaded.currentStep, .welcome)
-        XCTAssertEqual(loaded.analyticsConsentDecision, .undecided)
     }
 }

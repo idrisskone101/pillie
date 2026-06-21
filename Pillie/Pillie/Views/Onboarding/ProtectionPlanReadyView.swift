@@ -70,7 +70,10 @@ struct ProtectionPlanReadyView: View {
     }
 
     private var motionEnabled: Bool {
-        !accessibilityReduceMotion && performanceTier == .standard
+        PillieMotion.decorativeMotionEnabled(
+            accessibilityReduceMotion: accessibilityReduceMotion,
+            performanceTier: performanceTier
+        )
     }
 
     var body: some View {

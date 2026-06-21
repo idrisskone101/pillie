@@ -48,21 +48,10 @@ struct ContentView: View {
             ))
 
 	        case .analyticsConsent:
-	          AnalyticsConsentView(
-	            onAllow: {
-	              AnalyticsManager.shared.setAnalyticsEnabled(true)
-                continueDemoMoment(to: .painPoints)
-	            },
-	            onDecline: {
-	              AnalyticsManager.shared.setAnalyticsEnabled(false)
-                continueDemoMoment(to: .painPoints)
-	            }
-          )
-          .transition(
-            .asymmetric(
-              insertion: .move(edge: .trailing),
-              removal: .move(edge: .trailing)
-            ))
+	          // Retired: the Analytics Consent screen was removed (analytics is
+	          // collected for everyone). The new shell owns steps 0–1, so this
+	          // legacy arm is unreachable and only exists to keep the switch exhaustive.
+	          Color.clear
 
 	        case .productDemo:
 	          ProductDemoMomentView(
@@ -156,24 +145,6 @@ struct ContentView: View {
             },
             onContinue: {
               // Risk Window is committed inside ProtectionPlanRiskWindowView.
-              continueSetupStep(to: .draftBlockedApps)
-            }
-          )
-          .transition(
-            .asymmetric(
-              insertion: .move(edge: .trailing),
-              removal: .move(edge: .trailing)
-            ))
-
-        case .draftBlockedApps:
-          ProtectionPlanDraftBlockedAppsView(
-            model: protectionPlanModel,
-            progress: ProtectionPlanProgressIndex.progress(for: .draftBlockedApps),
-            onBack: {
-              lowRiskTransition(to: .riskWindow)
-            },
-            onContinue: {
-              // Draft Blocked App Choices are committed inside the view.
               continueSetupStep(to: .acquisitionSource)
             }
           )
@@ -183,12 +154,17 @@ struct ContentView: View {
               removal: .move(edge: .trailing)
             ))
 
+        case .draftBlockedApps:
+          // Retired step: `visibleStep` migrates it forward to `.acquisitionSource`,
+          // so this arm only exists to keep the switch exhaustive and is never shown.
+          Color.clear
+
         case .acquisitionSource:
 	          ProtectionPlanAcquisitionSourceView(
 	            progress: ProtectionPlanProgressIndex.progress(for: .acquisitionSource),
 	            initialSelection: store.acquisitionSource,
 	            onBack: {
-                lowRiskTransition(to: .draftBlockedApps)
+                lowRiskTransition(to: .riskWindow)
 	            },
             onContinue: { source in
               store.acquisitionSource = source

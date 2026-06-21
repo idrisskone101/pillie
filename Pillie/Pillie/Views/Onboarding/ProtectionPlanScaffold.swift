@@ -43,7 +43,7 @@ enum ProtectionPlanProgressIndex {
         .goal,              // Delay Consequence
         .missFrequency,     // Failure Frequency
         .riskWindow,
-        .draftBlockedApps,
+        // .draftBlockedApps retired (the draft-blocklist question was removed).
         .acquisitionSource,
         .method,            // Routine Basics — Method
         .schedule,          // Routine Basics — Details
@@ -135,23 +135,11 @@ struct ProtectionPlanScaffold<Content: View>: View {
     }
 
     private var ctaStack: some View {
-        // Primary on top, secondary below. The stack is bottom-anchored, so the
-        // bottom of the CTA area is consistent across screens.
+        // Secondary (skip) above the primary, so the dark primary CTA stays
+        // bottom-anchored at exactly the same position as single-CTA screens.
+        // Otherwise the primary sits higher on screens that have a skip and visibly
+        // slides down when transitioning to a screen without one.
         VStack(spacing: 12) {
-            Button(action: onPrimary) {
-                HStack(spacing: 10) {
-                    Text(primaryTitle)
-                    if let primaryIcon {
-                        Image(systemName: primaryIcon)
-                            .offset(x: animatesPrimaryIcon ? arrowNudge : 0)
-                    }
-                }
-            }
-            .buttonStyle(.pillieDark)
-            .disabled(!isPrimaryEnabled)
-            .opacity(isPrimaryEnabled ? 1 : 0.38)
-            .accessibilityIdentifier("protectionPlanPrimaryCTA")
-
             if let secondaryTitle, let onSecondary {
                 Button(action: onSecondary) {
                     Text(secondaryTitle)
@@ -168,6 +156,20 @@ struct ProtectionPlanScaffold<Content: View>: View {
                 .shadow(color: PillieTheme.cardShadow, radius: 12, y: 6)
                 .accessibilityIdentifier("protectionPlanSecondaryCTA")
             }
+
+            Button(action: onPrimary) {
+                HStack(spacing: 10) {
+                    Text(primaryTitle)
+                    if let primaryIcon {
+                        Image(systemName: primaryIcon)
+                            .offset(x: animatesPrimaryIcon ? arrowNudge : 0)
+                    }
+                }
+            }
+            .buttonStyle(.pillieDark)
+            .disabled(!isPrimaryEnabled)
+            .opacity(isPrimaryEnabled ? 1 : 0.38)
+            .accessibilityIdentifier("protectionPlanPrimaryCTA")
         }
     }
 }

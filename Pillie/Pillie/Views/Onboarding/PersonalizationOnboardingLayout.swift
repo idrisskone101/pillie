@@ -34,6 +34,8 @@ struct PersonalizationOnboardingHeader: View {
             }
             .buttonStyle(.plain)
 
+            // The "STEP n/N" counter is intentionally not shown; the bar carries the
+            // progress on its own, still labelled for VoiceOver.
             GeometryReader { geo in
                 Capsule()
                     .fill(PillieTheme.sage.opacity(0.65))
@@ -44,12 +46,8 @@ struct PersonalizationOnboardingHeader: View {
                     }
             }
             .frame(height: 7)
-
-            Text(badge)
-                .font(.pillie(14, weight: .bold))
-                .tracking(1.2)
-                .foregroundStyle(PillieTheme.coral)
-                .frame(minWidth: 72, alignment: .trailing)
+            .accessibilityElement()
+            .accessibilityLabel(badge)
         }
     }
 }

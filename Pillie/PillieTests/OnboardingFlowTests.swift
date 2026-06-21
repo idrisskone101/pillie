@@ -57,13 +57,16 @@ final class OnboardingFlowTests: XCTestCase {
         XCTAssertGreaterThan(OnboardingFlow.Step.riskWindow.rawValue, OnboardingFlow.Step.complete.rawValue)
     }
 
-    func testDisplayOrderRunsFailureRiskDraftAcquisitionInCalibrationOrder() {
+    func testDisplayOrderRunsFailureRiskAcquisitionInCalibrationOrder() {
         let order = OnboardingFlow.displayOrder
-        let calibration: [OnboardingFlow.Step] = [.missFrequency, .riskWindow, .draftBlockedApps, .acquisitionSource]
+        // Draft Blocked Apps was retired, so the calibration run is Failure → Risk
+        // Window → Acquisition Source (no draft-blocklist step between them).
+        let calibration: [OnboardingFlow.Step] = [.missFrequency, .riskWindow, .acquisitionSource]
         let indices = calibration.compactMap { order.firstIndex(of: $0) }
         XCTAssertEqual(indices.count, calibration.count, "Every calibration step must appear in displayOrder.")
         XCTAssertEqual(indices, indices.sorted(), "Calibration steps must be contiguous and ordered.")
         XCTAssertEqual(indices, Array(indices.first!...indices.last!), "Calibration steps must be contiguous.")
+        XCTAssertFalse(order.contains(.draftBlockedApps), "Retired draft-blocklist step must not be in displayOrder.")
     }
 
     func testCalibrationStepsMapToSafeLowCardinalityAnalyticsLabels() {
@@ -100,8 +103,7 @@ final class OnboardingFlowTests: XCTestCase {
     func testCalibrationChainTransitionsResolveForwardAndBackByDisplayOrder() throws {
         let forwardPairs: [(OnboardingFlow.Step, OnboardingFlow.Step)] = [
             (.missFrequency, .riskWindow),
-            (.riskWindow, .draftBlockedApps),
-            (.draftBlockedApps, .acquisitionSource),
+            (.riskWindow, .acquisitionSource),
         ]
         for (from, to) in forwardPairs {
             let transition = try XCTUnwrap(OnboardingFlow.transition(from: from.rawValue, to: to.rawValue))
@@ -112,10 +114,26 @@ final class OnboardingFlowTests: XCTestCase {
         let back = try XCTUnwrap(
             OnboardingFlow.transition(
                 from: OnboardingFlow.Step.acquisitionSource.rawValue,
-                to: OnboardingFlow.Step.draftBlockedApps.rawValue
+                to: OnboardingFlow.Step.riskWindow.rawValue
             )
         )
         XCTAssertEqual(back.direction, .backward)
+    }
+
+    func testDraftBlockedAppsIsRetiredAndMigratesForwardToAcquisitionSource() {
+        // The draft-blocklist question was removed. Its case + raw value are retained
+        // for persistence compatibility, but it is dropped from displayOrder and anyone
+        // persisted on it is migrated forward so they never land on the removed screen.
+        XCTAssertEqual(OnboardingFlow.Step.draftBlockedApps.rawValue, 18)
+        XCTAssertFalse(OnboardingFlow.displayOrder.contains(.draftBlockedApps))
+        XCTAssertEqual(
+            OnboardingFlow.visibleStep(
+                for: OnboardingFlow.Step.draftBlockedApps.rawValue,
+                isPlus: false,
+                selectedFreePlan: false
+            ),
+            .acquisitionSource
+        )
     }
 
     // MARK: - Mechanism Proof step inserted by issue #78

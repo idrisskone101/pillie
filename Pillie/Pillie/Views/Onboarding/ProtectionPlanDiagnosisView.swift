@@ -16,8 +16,9 @@
 //  is enriched with the real answers we collect across onboarding: the primary
 //  distraction, Due Action Time (+ time-of-day), the regimen/cycle, risk window,
 //  failure frequency, how missing feels, habits, method, and protected apps. Under
-//  Reduce Motion / VoiceOver / a constrained device the analyze beat is skipped and
-//  the verified plan is placed immediately.
+//  Reduce Motion / VoiceOver the analyze beat is skipped and the verified plan is
+//  placed immediately; the reveal still plays on constrained / thermally-throttled
+//  devices (only the looping background blob is suppressed there).
 //
 
 import Lottie
@@ -50,9 +51,18 @@ struct ProtectionPlanDiagnosisView: View {
     private let content = ProtectionPlanDiagnosisContent.default
     private let performanceTier = PerformanceTier.current
 
+    private var interactionFeedback: OnboardingInteractionFeedback {
+        OnboardingInteractionFeedback(performanceTier: performanceTier)
+    }
+
     private var animateReveal: Bool {
-        performanceTier == .standard && !reduceMotion && !voiceOverEnabled
-            && !model.hasRevealedDiagnosisPlan
+        // The "building your plan" reveal is a meaningful one-time moment, NOT
+        // ambient looping decoration — so it plays even on a thermally-throttled or
+        // Low Power Mode device (where it was previously skipped). We only skip it
+        // for accessibility (Reduce Motion / VoiceOver) or once it has already
+        // played this session. The looping background blob stays performance-gated
+        // on its own in `onAppear`.
+        !reduceMotion && !voiceOverEnabled && !model.hasRevealedDiagnosisPlan
     }
 
     private var diagnosis: ProtectionPlanDiagnosis {
@@ -106,6 +116,10 @@ struct ProtectionPlanDiagnosisView: View {
         }
         .onAppear {
             revealAnimation = LottieAnimation.named("plan_reveal")
+            // Warm RevenueCat + offerings now (a couple of screens before the
+            // paywall) so the paywall renders its prices/CTA instantly instead of
+            // doing a cold network fetch while the user waits on a spinner.
+            SubscriptionManager.shared.prefetchOfferings()
             guard animateReveal else {
                 verified = true
                 canopyIn = true
@@ -117,18 +131,64 @@ struct ProtectionPlanDiagnosisView: View {
             }
             revealPlayed = true
             withAnimation(.easeOut(duration: 0.4).delay(0.25)) { analyzeShown = true }
-            withAnimation(.easeInOut(duration: 8).repeatForever(autoreverses: true)) { blobPhase = 1 }
+            // Only the looping background blob is performance-gated — it's the
+            // expensive ambient piece. The reveal itself plays regardless.
+            if PillieMotion.decorativeMotionEnabled(
+                accessibilityReduceMotion: reduceMotion,
+                performanceTier: performanceTier
+            ) {
+                withAnimation(.easeInOut(duration: 8).repeatForever(autoreverses: true)) { blobPhase = 1 }
+            } else {
+                blobPhase = 0
+            }
         }
         .task {
             guard animateReveal else { return }
-            try? await Task.sleep(for: .seconds(2.6))
+            // Hold the "building your plan" loading beat until BOTH the minimum
+            // animation time has played AND RevenueCat offerings are preloaded, so
+            // the paywall that follows renders instantly. Capped so a slow network
+            // can never strand the user on the loading screen.
+            await waitForRevealReady()
             guard !Task.isCancelled else { return }
-            withAnimation(.spring(response: 0.55, dampingFraction: 0.8)) { verified = true }
+            let resolved = interactionFeedback.markDueActionTaken(accessibilityReduceMotion: reduceMotion)
+            withAnimation(resolved.motionProfile.animation) { verified = true }
             withAnimation(.easeInOut(duration: 0.5).delay(0.3)) { checkProgress = 1 }
-            InteractionFeedback.live.perform(.success)
             // NB: the "revealed" flag is set when leaving via the CTA (so Back from the
             // paywall skips the reveal). It must NOT be set here — doing so flips
             // `animateReveal` to false mid-reveal and cancels the canopy entrance.
+        }
+    }
+
+    // MARK: - Reveal timing
+
+    /// The shortest the loading beat ever runs (the original animation length), so
+    /// the reveal is never abrupt even if offerings are already cached.
+    private static let minimumRevealSeconds: Double = 2.6
+    /// The longest the loading beat waits on RevenueCat before revealing anyway, so a
+    /// slow/failed offerings fetch can never strand the user on the loading screen.
+    private static let offeringsWaitCapSeconds: Double = 5
+
+    /// Completes once the loading beat may end: after both the minimum animation
+    /// time and the (capped) RevenueCat offerings preload. Running them concurrently
+    /// means the reveal fires at whichever is longer.
+    private func waitForRevealReady() async {
+        async let minimumBeat: Void = quietSleep(seconds: Self.minimumRevealSeconds)
+        async let offeringsWarm: Void = waitForOfferings(maxSeconds: Self.offeringsWaitCapSeconds)
+        _ = await (minimumBeat, offeringsWarm)
+    }
+
+    private func quietSleep(seconds: Double) async {
+        try? await Task.sleep(for: .seconds(seconds))
+    }
+
+    /// Awaits the offerings fetch (coalesced with the onAppear prefetch by
+    /// RevenueCat), but never longer than `maxSeconds`.
+    private func waitForOfferings(maxSeconds: Double) async {
+        await withTaskGroup(of: Void.self) { group in
+            group.addTask { _ = try? await SubscriptionManager.shared.fetchOfferings() }
+            group.addTask { try? await Task.sleep(for: .seconds(maxSeconds)) }
+            _ = await group.next()   // return as soon as offerings load OR the cap elapses
+            group.cancelAll()
         }
     }
 
@@ -548,12 +608,14 @@ private struct ShieldMedallion: View {
                 .fill(.white)
                 .frame(width: 97, height: 97)
                 .overlay(Circle().stroke(.white.opacity(0.55), lineWidth: 6))
-                .shadow(color: PillieTheme.coral.opacity(0.45), radius: 13, y: 12)
+                .shadow(color: Color.black.opacity(0.16), radius: 13, y: 12)
 
+            // Brand-dark shield with a coral check — mirrors the Pillie logo (dark
+            // tile + coral mark) so the medallion isn't all pink.
             CrestShield()
                 .fill(
                     LinearGradient(
-                        colors: [Color(hex: "FFC9C5"), Color(hex: "FFA7AB")],
+                        colors: [Color(hex: "3A3531"), PillieTheme.dark],
                         startPoint: .top,
                         endPoint: .bottom
                     )
@@ -562,10 +624,10 @@ private struct ShieldMedallion: View {
                 .overlay {
                     CrestCheck()
                         .trim(from: 0, to: checkProgress)
-                        .stroke(.white, style: StrokeStyle(lineWidth: 6, lineCap: .round, lineJoin: .round))
+                        .stroke(PillieTheme.coral, style: StrokeStyle(lineWidth: 6, lineCap: .round, lineJoin: .round))
                         .frame(width: 53, height: 57)
                 }
-                .shadow(color: PillieTheme.coral.opacity(0.4), radius: 6, y: 4)
+                .shadow(color: PillieTheme.dark.opacity(0.3), radius: 6, y: 4)
         }
         .accessibilityHidden(true)
     }

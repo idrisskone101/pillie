@@ -84,6 +84,16 @@ final class SubscriptionManager: NSObject {
         try await Purchases.shared.offerings()
     }
 
+    /// Warm RevenueCat + the offerings cache ahead of the paywall. Called a couple
+    /// of screens before the paywall (the diagnosis reveal) so that, by the time the
+    /// paywall appears, `fetchOfferings()` returns from cache instead of doing a cold
+    /// network round-trip while the user waits on a spinner. Idempotent and safe to
+    /// call repeatedly: `configure()` guards itself and RevenueCat caches offerings.
+    func prefetchOfferings() {
+        configure()
+        Task { _ = try? await fetchOfferings() }
+    }
+
     // MARK: - Refresh
 
     func refreshStatus() async {
