@@ -4,17 +4,47 @@
 
 import SwiftUI
 
+/// Copy for a `PlusUpsellSheet` variant, kept as a value type so the framing of
+/// each Plus-gated feature can be unit-tested without rendering the view.
+struct PlusUpsellContent: Equatable {
+    let featureName: String
+    let featureDescription: String
+
+    static let appBlocking = PlusUpsellContent(
+        featureName: "App Blocking",
+        featureDescription: "Block distracting apps until your pill is logged."
+    )
+
+    /// Smart Reminders reads as the follow-up escalation after the first reminder
+    /// (ADR 0004), never the base daily reminder, and avoids medical/efficacy claims.
+    static let smartReminders = PlusUpsellContent(
+        featureName: "Smart Reminders",
+        featureDescription: "Pillie keeps reminding you until you log it — gentle follow-up nudges after the first reminder."
+    )
+}
+
 struct PlusUpsellSheet: View {
     let featureName: String
     let featureDescription: String
 
     static let compactPresentationHeight: CGFloat = 330
 
+    init(featureName: String, featureDescription: String) {
+        self.featureName = featureName
+        self.featureDescription = featureDescription
+    }
+
+    init(content: PlusUpsellContent) {
+        self.featureName = content.featureName
+        self.featureDescription = content.featureDescription
+    }
+
     static func appBlocking() -> PlusUpsellSheet {
-        PlusUpsellSheet(
-            featureName: "App Blocking",
-            featureDescription: "Block distracting apps until your pill is logged."
-        )
+        PlusUpsellSheet(content: .appBlocking)
+    }
+
+    static func smartReminders() -> PlusUpsellSheet {
+        PlusUpsellSheet(content: .smartReminders)
     }
     @State private var showPaywall = false
     @State private var isRestoring = false
