@@ -75,9 +75,16 @@ struct ProtectionPlanEarlyValueProofView: View {
     /// Roughly one tick per visible trail dash across the lane (dash period ~10pt).
     private let dashTickCount = 14
 
+    private var interactionFeedback: OnboardingInteractionFeedback {
+        OnboardingInteractionFeedback(performanceTier: performanceTier)
+    }
+
     /// Heavy / looping motion only on a capable device with motion allowed.
     private var animationsEnabled: Bool {
-        performanceTier == .standard && !reduceMotion
+        PillieMotion.decorativeMotionEnabled(
+            accessibilityReduceMotion: reduceMotion,
+            performanceTier: performanceTier
+        )
     }
 
     /// Reduce Motion or VoiceOver: skip the interactive layer, present the resolved
@@ -162,9 +169,12 @@ struct ProtectionPlanEarlyValueProofView: View {
             guard newValue > oldValue, isLatched, !hasResolved else { return }
             animateCometShake()
             // Per-shake escalation; performCheckIn owns the single success haptic.
-            InteractionFeedback.live.perform(
-                newValue >= shakeManager.requiredShakes ? .meaningfulCommit : .lowRiskTap
-            )
+            // The final shake "locks it in"; intermediate shakes are light ticks.
+            if newValue >= shakeManager.requiredShakes {
+                interactionFeedback.lockProtectionMoment(accessibilityReduceMotion: reduceMotion)
+            } else {
+                interactionFeedback.easeProtectionMoment(accessibilityReduceMotion: reduceMotion)
+            }
             if shakeManager.isComplete { performCheckIn() }
         }
         .onDisappear {
@@ -194,7 +204,7 @@ struct ProtectionPlanEarlyValueProofView: View {
 
     /// A one-shot "drag me" bounce on the dot when the user taps the rest CTA.
     private func nudgeComet() {
-        InteractionFeedback.live.perform(.lowRiskTap)
+        interactionFeedback.easeProtectionMoment(accessibilityReduceMotion: reduceMotion)
         guard animationsEnabled else { return }
         withAnimation(.spring(response: 0.3, dampingFraction: 0.4)) { cometNudgeX = 16 }
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.22) {
@@ -206,8 +216,8 @@ struct ProtectionPlanEarlyValueProofView: View {
         guard !hasResolved else { return }   // idempotent: a final shake + tap can't double-fire
         shakeManager.stopDetecting()
         cometWiggle = false
-        InteractionFeedback.live.perform(.success)
-        withAnimation(resolveAnimation) {
+        let resolved = interactionFeedback.markDueActionTaken(accessibilityReduceMotion: reduceMotion)
+        withAnimation(resolved.motionProfile.animation) {
             hasResolved = true
             trailBow = 0
         }
@@ -230,11 +240,11 @@ struct ProtectionPlanEarlyValueProofView: View {
     /// threshold un-seals the app.
     private func updateLatch(for progress: CGFloat) {
         if !isLatched, progress >= latchThreshold {
-            withAnimation(.snappy(duration: 0.35)) { isLatched = true }
-            InteractionFeedback.live.perform(.meaningfulCommit)
+            let latched = interactionFeedback.lockProtectionMoment(accessibilityReduceMotion: reduceMotion)
+            withAnimation(latched.motionProfile.animation) { isLatched = true }
         } else if isLatched, progress <= unlatchThreshold {
-            withAnimation(.snappy(duration: 0.35)) { isLatched = false }
-            InteractionFeedback.live.perform(.lowRiskTap)
+            let eased = interactionFeedback.easeProtectionMoment(accessibilityReduceMotion: reduceMotion)
+            withAnimation(eased.motionProfile.animation) { isLatched = false }
         }
     }
 

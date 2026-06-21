@@ -17,12 +17,9 @@ struct ProtectionPlanProgressHeader: View {
     var body: some View {
         HStack(spacing: 16) {
             backButton
+            // The "STEP n/N" counter is intentionally not shown; the bar carries the
+            // progress on its own (and still announces position via VoiceOver).
             progressBar
-            Text(progress.badge)
-                .font(.pillie(13, weight: .bold))
-                .tracking(1.1)
-                .foregroundStyle(PillieTheme.coral)
-                .frame(minWidth: 64, alignment: .trailing)
         }
     }
 

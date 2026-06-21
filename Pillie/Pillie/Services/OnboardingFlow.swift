@@ -33,6 +33,11 @@ enum OnboardingFlow {
         // original persisted raw values are never reinterpreted; their position in
         // the flow is expressed by `displayOrder`, not by raw-value magnitude.
         case riskWindow = 17
+        // Retired: the "which apps should Pillie block" draft question was removed —
+        // the diagnosis now derives the plan from the Distraction Choices answer. The
+        // case (and raw value) is retained so persisted `onboardingStep` values are
+        // never reinterpreted; it is dropped from `displayOrder` and `visibleStep`
+        // migrates it forward to `.acquisitionSource`, so it is never rendered.
         case draftBlockedApps = 18
         // Mechanism Proof added by issue #78. Appended for the same reason; it sits
         // between the diagnosis reveal (`reminderPlan` slot) and the paywall.
@@ -96,7 +101,8 @@ enum OnboardingFlow {
         .goal,
         .missFrequency,
         .riskWindow,
-        .draftBlockedApps,
+        // .draftBlockedApps retired: the diagnosis derives the plan from the
+        // Distraction Choices answer, so the draft-blocklist question was removed.
         .acquisitionSource,
         .method,
         .schedule,
@@ -137,6 +143,12 @@ enum OnboardingFlow {
         // the removed screen.
         if step == .reviewPrompt {
             return .painPoints
+        }
+
+        // The "which apps to block" draft question was removed; anyone persisted on
+        // it (or handed off to it) is migrated forward to the next question.
+        if step == .draftBlockedApps {
+            return .acquisitionSource
         }
 
         if step == .appBlocking, selectedFreePlan || !isPlus {

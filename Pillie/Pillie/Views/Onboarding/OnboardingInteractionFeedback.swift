@@ -86,6 +86,47 @@ struct OnboardingInteractionFeedback {
         )
     }
 
+    // MARK: - Interactive proof / diagnosis moments
+    //
+    // The bespoke proof scenes share one three-beat narrative — apps seal shut,
+    // a light reversible adjustment, then the earned release when the user takes
+    // their pill. Routing each beat through these methods keeps the haptic intent
+    // and the paired commit/reward motion identical across Early Value Proof,
+    // Mechanism Proof, and the Diagnosis verified reveal.
+
+    /// A significant proof beat: protected apps seal/lock shut (EVP comet latch,
+    /// Mechanism lock-in, the final shake before resolve).
+    @discardableResult
+    func lockProtectionMoment(accessibilityReduceMotion: Bool) -> Response {
+        response(
+            feedbackIntent: .meaningfulCommit,
+            motion: .commitSpring,
+            accessibilityReduceMotion: accessibilityReduceMotion
+        )
+    }
+
+    /// A light, low-stakes proof touch: dragging the catch back below the latch,
+    /// an intermediate shake tick, a "drag me" hint, or replaying the demo.
+    @discardableResult
+    func easeProtectionMoment(accessibilityReduceMotion: Bool) -> Response {
+        response(
+            feedbackIntent: .lowRiskTap,
+            motion: .standard,
+            accessibilityReduceMotion: accessibilityReduceMotion
+        )
+    }
+
+    /// The earned payoff: the user marks the due action taken and the apps release
+    /// (EVP resolve, Mechanism mark-taken, Diagnosis verified-plan reveal).
+    @discardableResult
+    func markDueActionTaken(accessibilityReduceMotion: Bool) -> Response {
+        response(
+            feedbackIntent: .success,
+            motion: .rewardSpring,
+            accessibilityReduceMotion: accessibilityReduceMotion
+        )
+    }
+
     private func response(
         feedbackIntent: InteractionFeedback.Intent?,
         motion: PillieMotion.Semantic,

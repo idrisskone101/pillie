@@ -40,12 +40,16 @@ enum ProtectionPlanStep: Int, CaseIterable {
     /// The next step in the locked order, or `nil` once the flow runs past the
     /// final modeled step.
     var next: ProtectionPlanStep? {
-        ProtectionPlanStep(rawValue: rawValue + 1)
+        // Analytics Consent was retired — Welcome leads straight to the Early Value
+        // Proof (analytics is collected for everyone, with no consent screen).
+        if self == .welcome { return .earlyValueProof }
+        return ProtectionPlanStep(rawValue: rawValue + 1)
     }
 
     /// The previous step in the locked order, or `nil` at the first step.
     var previous: ProtectionPlanStep? {
-        ProtectionPlanStep(rawValue: rawValue - 1)
+        if self == .earlyValueProof { return .welcome }   // Analytics Consent retired.
+        return ProtectionPlanStep(rawValue: rawValue - 1)
     }
 }
 
@@ -157,8 +161,11 @@ enum ProtectionPlanOnboardingStore {
     }
 
     static func load(from defaults: UserDefaults) -> ProtectionPlanOnboardingState {
-        let step = (defaults.object(forKey: Keys.step) as? Int)
+        let loadedStep = (defaults.object(forKey: Keys.step) as? Int)
             .flatMap(ProtectionPlanStep.init(rawValue:)) ?? .first
+        // Analytics Consent was retired; migrate anyone persisted on it forward to
+        // the Early Value Proof so they never land on the removed screen.
+        let step = loadedStep == .analyticsConsent ? .earlyValueProof : loadedStep
         let consent = defaults.string(forKey: Keys.consent)
             .flatMap(AnalyticsConsentDecision.init(rawValue:)) ?? .undecided
         let distractionChoices = Set(

@@ -19,8 +19,8 @@ const CX = 256, CY = 252
 // Brand palette (PillieTheme).
 const coral = [1.0, 0.7176, 0.698]      // #FFB7B2
 const amber = [0.909, 0.659, 0.486]     // #E8A87C  (legacy accent, no longer on the shield)
-const shieldTop = [1.0, 0.788, 0.773]    // #FFC9C5  (shield top — brand coral, matches the medallion)
-const shieldBottom = [1.0, 0.655, 0.671] // #FFA7AB  (shield bottom — deeper coral)
+const shieldTop = [0.2275, 0.2078, 0.1922]    // #3A3531  (shield top — brand dark, matches the medallion)
+const shieldBottom = [0.1608, 0.1451, 0.1412] // #292524  (shield bottom — brand dark)
 const coralLight = [1.0, 0.941, 0.929]  // #FFF0ED
 const cream = [1.0, 0.968, 0.957]
 const white = [1, 1, 1]
@@ -226,7 +226,7 @@ function checkmark(startF, endF) {
     ty: 'gr', nm: 'check-g', it: [
       { ty: 'sh', nm: 'check', ks: stat(checkPath) },
       drawOn(startF, endF),
-      { ty: 'st', c: stat([...white, 1]), o: stat(100), w: stat(13), lc: 2, lj: 2 },
+      { ty: 'st', c: stat([...coral, 1]), o: stat(100), w: stat(13), lc: 2, lj: 2 },
       trIdentity(),
     ],
   }]

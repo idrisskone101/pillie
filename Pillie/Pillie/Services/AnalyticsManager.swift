@@ -258,8 +258,6 @@ struct AnalyticsPayload {
 
 final class AnalyticsManager: AnalyticsTracking {
   static let shared = AnalyticsManager()
-  static let analyticsOptOutKey = "pillie_analytics_opt_out"
-  static let analyticsConsentGrantedKey = "pillie_analytics_consent_granted"
 
   private var isConfigured = false
   private let defaults: UserDefaults
@@ -276,10 +274,10 @@ final class AnalyticsManager: AnalyticsTracking {
     self.infoDictionary = infoDictionary
   }
 
-  var isAnalyticsEnabled: Bool {
-    defaults.bool(forKey: Self.analyticsConsentGrantedKey)
-      && !defaults.bool(forKey: Self.analyticsOptOutKey)
-  }
+  // Product analytics is collected for everyone — there is no consent gate or
+  // opt-out. The telemetry payload is PII-free by construction (low-cardinality
+  // labels only; see AnalyticsPayload), so capture is always enabled.
+  var isAnalyticsEnabled: Bool { true }
 
   func configure() {
     guard !isConfigured else { return }
@@ -305,15 +303,6 @@ final class AnalyticsManager: AnalyticsTracking {
         isOptedOut: !isAnalyticsEnabled
       ))
     isConfigured = true
-  }
-
-  func setAnalyticsEnabled(_ enabled: Bool) {
-    if enabled {
-      defaults.set(true, forKey: Self.analyticsConsentGrantedKey)
-    }
-    defaults.set(!enabled, forKey: Self.analyticsOptOutKey)
-    guard isConfigured else { return }
-    client.setOptedOut(!enabled)
   }
 
   func track(

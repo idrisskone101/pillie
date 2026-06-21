@@ -108,6 +108,18 @@ enum PillieMotion {
         ).animation
     }
 
+    /// Whether purely cosmetic, looping decoration (background blobs, pulse
+    /// rings, breathing/float loops) should run. Such motion carries no meaning,
+    /// so it is suppressed for Reduce Motion users and on constrained devices.
+    /// The single source of truth every onboarding screen should consult rather
+    /// than re-deriving the boolean.
+    static func decorativeMotionEnabled(
+        accessibilityReduceMotion: Bool,
+        performanceTier: PerformanceTier = .current
+    ) -> Bool {
+        !accessibilityReduceMotion && performanceTier == .standard
+    }
+
     private static func calmerProfile(for semantic: Semantic) -> Profile {
         let duration: Double
         switch semantic {

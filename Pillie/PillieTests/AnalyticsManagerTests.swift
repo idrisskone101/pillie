@@ -54,23 +54,25 @@ final class AnalyticsManagerTests: XCTestCase {
     XCTAssertFalse(configuration.setDefaultPersonProperties)
     XCTAssertFalse(configuration.sessionReplay)
     XCTAssertFalse(configuration.surveys)
-    XCTAssertTrue(configuration.isOptedOut)
+    // Analytics is collected for everyone, so configure opts in (never opted out).
+    XCTAssertFalse(configuration.isOptedOut)
   }
 
-  func testFreshInstallDropsPreConsentEventsAndCapturesOnlyAfterExplicitConsent() {
+  func testEventsAreCapturedImmediatelyAfterConfigureWithoutConsent() {
     let client = RecordingAnalyticsClient()
     let manager = makeManager(client: client, token: "phc_test_token")
 
+    // Analytics is collected for everyone — every event flows from launch, with no
+    // consent gate to drop the early ones.
     manager.configure()
     manager.track(.appLaunched, source: .home, isPlus: false)
     manager.track(.onboardingStepViewed, source: .onboarding, step: .welcome, isPlus: false)
-    manager.setAnalyticsEnabled(true)
     manager.track(.onboardingStepViewed, source: .onboarding, step: .painPoints, isPlus: false)
 
-    XCTAssertEqual(client.optOutChanges, [false])
-    XCTAssertEqual(client.captures.map(\.event), ["onboarding_step_viewed"])
+    XCTAssertEqual(client.captures.count, 3)
+    XCTAssertEqual(client.captures.last?.event, "onboarding_step_viewed")
     XCTAssertEqual(
-      client.captures.first?.properties,
+      client.captures.last?.properties,
       [
         "source": .string("onboarding"),
         "step": .string("pain_points"),
@@ -115,7 +117,6 @@ final class AnalyticsManagerTests: XCTestCase {
     let client = RecordingAnalyticsClient()
     let manager = makeManager(client: client, token: "phc_test_token")
 
-    manager.setAnalyticsEnabled(true)
     manager.configure()
     manager.track(.onboardingStepViewed, source: .onboarding, step: .welcome, isPlus: false)
     manager.track(.onboardingStepCompleted, source: .onboarding, step: .reminderTime, isPlus: false)
@@ -170,19 +171,11 @@ final class AnalyticsManagerTests: XCTestCase {
       ])
   }
 
-  func testAcquisitionSourceTelemetryUsesApprovedValueAndRequiresConsent() throws {
+  func testAcquisitionSourceTelemetryUsesApprovedValue() throws {
     let client = RecordingAnalyticsClient()
     let manager = makeManager(client: client, token: "phc_test_token")
 
     manager.configure()
-    manager.track(
-      .onboardingStepCompleted,
-      source: .onboarding,
-      step: .acquisitionSource,
-      acquisitionSource: .reddit,
-      isPlus: false
-    )
-    manager.setAnalyticsEnabled(true)
     manager.track(
       .onboardingStepCompleted,
       source: .onboarding,
@@ -284,21 +277,7 @@ final class AnalyticsManagerTests: XCTestCase {
     }
   }
 
-  func testOptOutStopsFutureCaptureAndCanOptBackIn() {
-    let client = RecordingAnalyticsClient()
-    let manager = makeManager(client: client, token: "phc_test_token")
-
-    manager.configure()
-    manager.setAnalyticsEnabled(false)
-    manager.track(.appBecameActive, source: .home)
-    manager.setAnalyticsEnabled(true)
-    manager.track(.appBecameActive, source: .home)
-
-    XCTAssertEqual(client.optOutChanges, [true, false])
-    XCTAssertEqual(client.captures.map(\.event), ["app_became_active"])
-  }
-
-  func testFlushOnlyRunsWhenAnalyticsIsConfiguredAndEnabled() {
+  func testFlushOnlyRunsWhenConfigured() {
     let configuredClient = RecordingAnalyticsClient()
     let configuredManager = makeManager(client: configuredClient, token: "phc_test_token")
 
@@ -309,9 +288,6 @@ final class AnalyticsManagerTests: XCTestCase {
     let unconfiguredManager = makeManager(client: unconfiguredClient, token: " ")
     unconfiguredManager.configure()
     unconfiguredManager.flush()
-
-    configuredManager.setAnalyticsEnabled(false)
-    configuredManager.flush()
 
     XCTAssertEqual(configuredClient.flushCount, 1)
     XCTAssertEqual(unconfiguredClient.flushCount, 0)

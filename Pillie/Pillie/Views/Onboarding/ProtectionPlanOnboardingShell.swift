@@ -25,12 +25,6 @@ struct ProtectionPlanOnboardingShell: View {
     /// left-to-right push); back navigation reverses it.
     @State private var goingForward = true
 
-    /// Progress shown on the Analytics Consent screen, matching the Superdesign
-    /// draft ("STEP 2/10"). Welcome intentionally hides progress.
-    private var analyticsConsentProgress: ProtectionPlanProgress {
-        ProtectionPlanProgress(index: 2, total: 10)
-    }
-
     /// Progress shown on the Early Value Proof ("STEP 3/10").
     private var earlyValueProofProgress: ProtectionPlanProgress {
         ProtectionPlanProgress(index: 3, total: 10)
@@ -46,16 +40,9 @@ struct ProtectionPlanOnboardingShell: View {
                         removal: .move(edge: .leading)
                     ))
 
-            case .analyticsConsent:
-                ProtectionPlanAnalyticsConsentView(
-                    progress: analyticsConsentProgress,
-                    onBack: goBack,
-                    onAllow: { decideConsent(allowed: true) },
-                    onDecline: { decideConsent(allowed: false) }
-                )
-                .transition(pushTransition)
-
-            case .earlyValueProof:
+            case .analyticsConsent, .earlyValueProof:
+                // Analytics Consent was retired (analytics is collected for everyone);
+                // a user persisted on the old consent step resumes on the proof.
                 ProtectionPlanEarlyValueProofView(
                     progress: earlyValueProofProgress,
                     onBack: goBack,
@@ -101,20 +88,6 @@ struct ProtectionPlanOnboardingShell: View {
         goingForward = false
         withAnimation(transitionAnimation) {
             model.goBack()
-        }
-    }
-
-    private func decideConsent(allowed: Bool) {
-        // Distinct feedback: granting is a success, declining is a soft tap.
-        InteractionFeedback.live.perform(allowed ? .success : .lowRiskTap)
-        // Commit the answer, then gate telemetry. Declining must not block the flow.
-        model.recordAnalyticsConsent(allowed: allowed)
-        AnalyticsManager.shared.setAnalyticsEnabled(allowed)
-        advance()
-        // Hand off synchronously once the intro is committed so there is no blank
-        // frame between Analytics Consent and the next onboarding step.
-        if model.hasFinishedIntro {
-            onIntroFinished()
         }
     }
 

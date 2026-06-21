@@ -62,6 +62,19 @@ struct AppBlockingSetupContent {
         ]
     }
 
+    /// One combined VoiceOver label for the empty permission card, so it reads as
+    /// a single coherent element (title → what happens → privacy) rather than a
+    /// run of separate Text + category-chip fragments.
+    var emptyStateAccessibilityLabel: String {
+        "\(emptyTitle). \(emptyDetail) \(privacyNote)"
+    }
+
+    /// One combined VoiceOver label for the locked (entitlement-dropped) fallback
+    /// card, mirroring the empty/selected cards' single-element treatment.
+    var lockedAccessibilityLabel: String {
+        "\(lockedTitle). \(lockedDetail)"
+    }
+
     static let `default` = AppBlockingSetupContent(
         badge: "Pillie Plus",
         titleLead: "Block the apps",
@@ -90,6 +103,7 @@ struct AppBlockingSetupContent {
 
 struct AppBlockingSetupView: View {
     @Environment(PillStore.self) private var store
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @AppStorage(OnboardingFlow.selectedFreePlanStorageKey) private var onboardingSelectedFreePlan = false
 
     @State private var animateIn = false
@@ -164,7 +178,12 @@ struct AppBlockingSetupView: View {
         )
         .onAppear {
             animateIn = true
-            guard performanceTier == .standard else {
+            // The looping background blob is purely decorative — suppress it for
+            // Reduce Motion users and on constrained devices (shared gate).
+            guard PillieMotion.decorativeMotionEnabled(
+                accessibilityReduceMotion: reduceMotion,
+                performanceTier: performanceTier
+            ) else {
                 blobPhase = 0
                 return
             }
@@ -259,6 +278,10 @@ struct AppBlockingSetupView: View {
         .padding(22)
         .frame(maxWidth: .infinity)
         .modifier(BlockerCardSurface())
+        // Read the card as one coherent element; the category chips are
+        // illustrative decoration, so they fold into the combined label.
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(content.emptyStateAccessibilityLabel)
     }
 
     private func hintChip(_ hint: AppBlockingSetupContent.CategoryHint) -> some View {
@@ -341,6 +364,8 @@ struct AppBlockingSetupView: View {
         .padding(20)
         .frame(maxWidth: .infinity)
         .modifier(BlockerCardSurface())
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(content.lockedAccessibilityLabel)
     }
 
     // MARK: - Footer

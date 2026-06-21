@@ -336,7 +336,9 @@ struct ProtectionPlanAcquisitionSourceContent {
         eyebrow: "One last thing",
         title: "Where did you find Pillie?",
         subtitle: "Your feedback helps us reach more people who need protection.",
-        primaryCTA: "Finish Setup",
+        // Not the end of onboarding — the contraception routine setup follows, so
+        // the CTA continues into setup rather than implying it's done.
+        primaryCTA: "Continue Setup",
         skipCTA: "Not now",
         choices: AcquisitionSource.allCases
     )

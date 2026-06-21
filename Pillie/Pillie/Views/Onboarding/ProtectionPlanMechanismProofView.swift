@@ -51,8 +51,15 @@ struct ProtectionPlanMechanismProofView: View {
         )
     }
 
+    private var interactionFeedback: OnboardingInteractionFeedback {
+        OnboardingInteractionFeedback(performanceTier: performanceTier)
+    }
+
     private var animationsEnabled: Bool {
-        performanceTier == .standard && !reduceMotion
+        PillieMotion.decorativeMotionEnabled(
+            accessibilityReduceMotion: reduceMotion,
+            performanceTier: performanceTier
+        )
     }
 
     /// Reduce Motion or VoiceOver: skip the animated loop, present the locked scene +
@@ -126,10 +133,10 @@ struct ProtectionPlanMechanismProofView: View {
             phase = .ringing
             try? await Task.sleep(for: .seconds(1.3))
             guard !Task.isCancelled, phase == .ringing else { return }
-            withAnimation(.spring(response: 0.5, dampingFraction: 0.78)) {
+            let latched = interactionFeedback.lockProtectionMoment(accessibilityReduceMotion: reduceMotion)
+            withAnimation(latched.motionProfile.animation) {
                 phase = .locked
             }
-            InteractionFeedback.live.perform(.meaningfulCommit)
         }
     }
 
@@ -307,10 +314,10 @@ struct ProtectionPlanMechanismProofView: View {
 
     private var markTakenButton: some View {
         Button {
-            withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
+            let resolved = interactionFeedback.markDueActionTaken(accessibilityReduceMotion: reduceMotion)
+            withAnimation(resolved.motionProfile.animation) {
                 phase = .unlocked
             }
-            InteractionFeedback.live.perform(.success)
         } label: {
             HStack(spacing: 8) {
                 Image(systemName: "checkmark.circle.fill")
@@ -437,7 +444,7 @@ struct ProtectionPlanMechanismProofView: View {
     }
 
     private func replay() {
-        InteractionFeedback.live.perform(.lowRiskTap)
+        interactionFeedback.easeProtectionMoment(accessibilityReduceMotion: reduceMotion)
         playToken += 1
     }
 }

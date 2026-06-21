@@ -90,6 +90,7 @@ struct SoftPaywallContent {
 
 struct PremiumPaywallView: View {
     @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @State private var animateIn = false
     @State private var blobPhase: CGFloat = 0
     @State private var selectedPlan: Plan = .annual
@@ -187,7 +188,10 @@ struct PremiumPaywallView: View {
         .onAppear {
             telemetry.paywallViewed(isFromOnboarding: isFromOnboarding)
             animateIn = true
-            guard performanceTier == .standard else {
+            guard PillieMotion.decorativeMotionEnabled(
+                accessibilityReduceMotion: accessibilityReduceMotion,
+                performanceTier: performanceTier
+            ) else {
                 blobPhase = 0
                 return
             }
@@ -197,9 +201,14 @@ struct PremiumPaywallView: View {
         }
         .task {
             subscriptionManager.configure()
+            // Offerings (prices + CTA) and the entitlement refresh are independent,
+            // so load them concurrently — the CTA un-spins as soon as offerings
+            // arrive instead of waiting behind the customer-info fetch. Offerings are
+            // usually already warm from the diagnosis-screen prefetch.
+            async let offeringsLoaded: Void = loadOfferings()
             await subscriptionManager.refreshStatus()
             routeExistingPlusUserIfNeeded()
-            await loadOfferings()
+            await offeringsLoaded
         }
         .onChange(of: subscriptionManager.isPlus) { _, isPlus in
             routeExistingPlusUserIfNeeded(isPlus: isPlus)
@@ -648,6 +657,8 @@ struct PremiumPaywallView: View {
                 } label: {
                     Text("Failed to load plans — Tap to retry")
                         .font(.pillie(16, weight: .bold))
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.6)
                         .foregroundStyle(.white)
                         .frame(maxWidth: .infinity)
                         .frame(height: PillieTheme.ctaHeight)
@@ -658,46 +669,7 @@ struct PremiumPaywallView: View {
                 purchaseButton
             }
 
-            HStack(spacing: 14) {
-                Button {
-                    let response = continueFreeFeedback()
-                    telemetry.continueFreeSelected(isFromOnboarding: isFromOnboarding)
-                    withAnimation(response.motionProfile.animation) {
-                        onSkip()
-                    }
-                } label: {
-                    Text(content.freeCTA)
-                        .font(.pillie(13, weight: .semibold))
-                        .foregroundStyle(PillieTheme.textMuted)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.88)
-                }
-                .buttonStyle(.plain)
-
-                Rectangle()
-                    .fill(PillieTheme.textMuted.opacity(0.3))
-                    .frame(width: 1, height: 13)
-
-                Button {
-                    restorePurchases()
-                } label: {
-                    Group {
-                        if isRestoring {
-                            ProgressView()
-                                .tint(PillieTheme.textMuted)
-                                .scaleEffect(0.72)
-                        } else {
-                            Text(content.restoreCTA)
-                                .font(.pillie(13, weight: .semibold))
-                                .foregroundStyle(PillieTheme.textMuted)
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.86)
-                        }
-                    }
-                }
-                .buttonStyle(.plain)
-                .disabled(isRestoring)
-            }
+            secondaryLinks
 
             HStack(spacing: 4) {
                 Link("Terms of Use", destination: URL(string: "https://idrisskone101.github.io/pillie/terms-and-conditions")!)
@@ -707,6 +679,70 @@ struct PremiumPaywallView: View {
             .font(.pillie(11, weight: .regular))
             .foregroundStyle(PillieTheme.textMuted.opacity(0.7))
         }
+    }
+
+    // The "Continue with free plan" / "Restore Purchases" links sit side-by-side
+    // with a divider at normal sizes, but at accessibility Dynamic Type sizes each
+    // would only get ~half the width and truncate ("Continue with free…"), so they
+    // stack vertically (and the now-meaningless divider is dropped) instead.
+    private var secondaryLinks: some View {
+        Group {
+            if dynamicTypeSize.isAccessibilitySize {
+                VStack(spacing: 12) {
+                    continueFreeButton
+                    restoreButton
+                }
+            } else {
+                HStack(spacing: 14) {
+                    continueFreeButton
+
+                    Rectangle()
+                        .fill(PillieTheme.textMuted.opacity(0.3))
+                        .frame(width: 1, height: 13)
+
+                    restoreButton
+                }
+            }
+        }
+    }
+
+    private var continueFreeButton: some View {
+        Button {
+            let response = continueFreeFeedback()
+            telemetry.continueFreeSelected(isFromOnboarding: isFromOnboarding)
+            withAnimation(response.motionProfile.animation) {
+                onSkip()
+            }
+        } label: {
+            Text(content.freeCTA)
+                .font(.pillie(13, weight: .semibold))
+                .foregroundStyle(PillieTheme.textMuted)
+                .lineLimit(1)
+                .minimumScaleFactor(0.6)
+        }
+        .buttonStyle(.plain)
+    }
+
+    private var restoreButton: some View {
+        Button {
+            restorePurchases()
+        } label: {
+            Group {
+                if isRestoring {
+                    ProgressView()
+                        .tint(PillieTheme.textMuted)
+                        .scaleEffect(0.72)
+                } else {
+                    Text(content.restoreCTA)
+                        .font(.pillie(13, weight: .semibold))
+                        .foregroundStyle(PillieTheme.textMuted)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.6)
+                }
+            }
+        }
+        .buttonStyle(.plain)
+        .disabled(isRestoring)
     }
 
     private var purchaseButton: some View {
@@ -748,6 +784,10 @@ struct PremiumPaywallView: View {
                 } else {
                     Text(selectedPlan == .annual ? content.primaryCTA : content.monthlyCTA)
                         .font(.pillie(17, weight: .bold))
+                        // Keep the primary CTA on one line at large Dynamic Type
+                        // sizes instead of truncating ("Try Pillie Plus for fr…").
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.6)
                 }
             }
             .foregroundStyle(.white)
