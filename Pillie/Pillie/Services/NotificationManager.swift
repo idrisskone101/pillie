@@ -42,7 +42,7 @@ final class NotificationManager {
     }
 
     private init() {
-        registerCategory()
+        registerCategory(includeSnooze: SubscriptionManager.shared.isPlus)
     }
 
     // MARK: - Authorization
@@ -99,6 +99,10 @@ final class NotificationManager {
         // Ensure the extension has the latest taken state before scheduling
         store.syncTodayTakenToAppGroup()
 
+        // Keep the notification category in sync with the entitlement so the Snooze
+        // action only appears for Plus users (Smart Reminders gate, ADR 0004).
+        registerCategory(includeSnooze: SubscriptionManager.shared.isPlus)
+
         let requests = buildReminderRequests(store: store, now: Date(), snoozeOverride: snoozeOverride)
         applyManagedReminderRequests(requests)
 
@@ -115,23 +119,36 @@ final class NotificationManager {
 
     // MARK: - Category Registration
 
-    private func registerCategory() {
-        let markTakenAction = UNNotificationAction(
-            identifier: markTakenActionID,
-            title: "Mark as Taken",
-            options: []
-        )
-        let snoozeAction = UNNotificationAction(
-            identifier: snoozeActionID,
-            title: "Snooze",
-            options: []
-        )
+    /// Registers the reminder category. The Snooze action is a Smart Reminders perk
+    /// (a user-triggered follow-up re-fire) and is only included for Plus users; free
+    /// users get a reminder with no Snooze action (ADR 0004).
+    private func registerCategory(includeSnooze: Bool) {
         let category = UNNotificationCategory(
             identifier: categoryID,
-            actions: [markTakenAction, snoozeAction],
+            actions: reminderCategoryActions(includeSnooze: includeSnooze),
             intentIdentifiers: []
         )
         center.setNotificationCategories([category])
+    }
+
+    private func reminderCategoryActions(includeSnooze: Bool) -> [UNNotificationAction] {
+        var actions = [
+            UNNotificationAction(
+                identifier: markTakenActionID,
+                title: "Mark as Taken",
+                options: []
+            )
+        ]
+        if includeSnooze {
+            actions.append(
+                UNNotificationAction(
+                    identifier: snoozeActionID,
+                    title: "Snooze",
+                    options: []
+                )
+            )
+        }
+        return actions
     }
 
     // MARK: - Action Handling
@@ -205,6 +222,7 @@ final class NotificationManager {
                 candidateDueActions: candidateDueActions,
                 statusByEpochDay: store.statusesByEpochDay(for: candidateDueActions.map(\.date)),
                 snoozeOverride: snoozeOverride,
+                smartRemindersEnabled: SubscriptionManager.shared.isPlus,
                 calendar: calendar
             )
         )
@@ -451,6 +469,10 @@ final class NotificationManager {
         var fireDate: Date? {
             Calendar.current.date(from: dateComponents)
         }
+    }
+
+    func reminderCategoryActionIdentifiersForTesting(isPlus: Bool) -> [String] {
+        reminderCategoryActions(includeSnooze: isPlus).map(\.identifier)
     }
 
     func managedRequestIdentifiersForTesting(store: PillStore, now: Date = Date()) -> [String] {

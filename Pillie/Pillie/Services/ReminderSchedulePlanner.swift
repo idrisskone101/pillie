@@ -34,6 +34,13 @@ struct ReminderSchedulePlanner {
         let candidateDueActions: [DoseScheduleAction]
         let statusByEpochDay: [Int: PillDay.Status]
         let snoozeOverride: SnoozeOverride?
+        /// Whether Smart Reminders (Auto-Reminder Retry + Snooze re-fire) apply.
+        /// Mirrors the `pillie_plus` entitlement. When false, the effective retry
+        /// limit is forced to 0 and any snooze override is ignored, so a free user
+        /// gets exactly one Due Action Reminder. The stored Interval/Retry Limit
+        /// settings are never mutated — gating happens here, not in storage. See
+        /// ADR 0004.
+        let smartRemindersEnabled: Bool
         let calendar: Calendar
     }
 
@@ -57,6 +64,13 @@ struct ReminderSchedulePlanner {
     }
 
     func planReminders(_ input: Input) -> [Intent] {
+        // Smart Reminders gating: free users keep exactly one Due Action Reminder
+        // with no auto-retries and no snooze re-fire. Supply reminders are planned
+        // separately below and are unaffected. The stored settings are read but not
+        // mutated (ADR 0004).
+        let effectiveRetryLimit = input.smartRemindersEnabled ? input.autoReminderRetryLimit : 0
+        let effectiveSnoozeOverride = input.smartRemindersEnabled ? input.snoozeOverride : nil
+
         let supplyIntent = planSupplyReminder(input)
         let dueReminderBudget = max(0, Self.maxPendingReminders - (supplyIntent == nil ? 0 : 1))
         guard dueReminderBudget > 0 else {
@@ -80,7 +94,7 @@ struct ReminderSchedulePlanner {
                 now: input.now,
                 reminderHour: input.reminderHour,
                 reminderMinute: input.reminderMinute,
-                snoozeOverride: input.snoozeOverride,
+                snoozeOverride: effectiveSnoozeOverride,
                 calendar: input.calendar
             )
 
@@ -89,7 +103,7 @@ struct ReminderSchedulePlanner {
                 continue
             }
 
-            let firstKind: DueReminderKind = (input.snoozeOverride?.dueDayEpoch == dueEpoch) ? .snooze : .base
+            let firstKind: DueReminderKind = (effectiveSnoozeOverride?.dueDayEpoch == dueEpoch) ? .snooze : .base
             dueIntents.append(
                 DueReminderIntent(
                     action: due,
@@ -110,11 +124,11 @@ struct ReminderSchedulePlanner {
                     firstReminderByEpoch: firstReminderByEpoch,
                     now: input.now,
                     intervalMinutes: input.autoReminderIntervalMinutes,
-                    retryLimit: input.autoReminderRetryLimit,
+                    retryLimit: effectiveRetryLimit,
                     budget: remainingBudget,
                     reminderHour: input.reminderHour,
                     reminderMinute: input.reminderMinute,
-                    snoozeOverride: input.snoozeOverride,
+                    snoozeOverride: effectiveSnoozeOverride,
                     calendar: input.calendar
                 )
             )

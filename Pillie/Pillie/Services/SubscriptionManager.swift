@@ -55,6 +55,13 @@ final class SubscriptionManager: NSObject {
     private(set) var isPlus = false
     private(set) var isLoading = false
 
+    /// Fired whenever the Plus entitlement actually flips (upgrade or churn), never on
+    /// a no-op refresh. Wired at launch to re-plan Smart Reminders immediately so the
+    /// change takes effect without waiting for the next natural reschedule (ADR 0004).
+    /// `@ObservationIgnored` because it is a side-effect hook, not observable UI state.
+    @ObservationIgnored
+    var onEntitlementChange: ((Bool) -> Void)?
+
     // MARK: - Constants
 
     static let apiKey = "appl_jAqXDkTjrIxXrqrDsPQInTuIsdp"
@@ -65,6 +72,15 @@ final class SubscriptionManager: NSObject {
 
     private override init() {
         super.init()
+    }
+
+    /// Single funnel for every entitlement mutation. Updates `isPlus` and fires
+    /// `onEntitlementChange` only when the value actually flips, so refreshes that
+    /// re-confirm the same state never trigger a redundant reschedule.
+    private func setIsPlus(_ newValue: Bool) {
+        guard isPlus != newValue else { return }
+        isPlus = newValue
+        onEntitlementChange?(newValue)
     }
 
     // MARK: - Configure (call once at app launch)
@@ -126,7 +142,7 @@ final class SubscriptionManager: NSObject {
         defer { isLoading = false }
 
         let customerInfo = try await Purchases.shared.restorePurchases()
-        isPlus = customerInfo.entitlements[Self.entitlementID]?.isActive == true
+        setIsPlus(customerInfo.entitlements[Self.entitlementID]?.isActive == true)
     }
 
     // MARK: - Fetch Offerings
@@ -149,12 +165,12 @@ final class SubscriptionManager: NSObject {
 
     func refreshStatus() async {
         guard let customerInfo = try? await Purchases.shared.customerInfo() else { return }
-        isPlus = customerInfo.entitlements[Self.entitlementID]?.isActive == true
+        setIsPlus(customerInfo.entitlements[Self.entitlementID]?.isActive == true)
     }
 
     #if DEBUG
     func setPlusForTesting(_ isPlus: Bool) {
-        self.isPlus = isPlus
+        setIsPlus(isPlus)
     }
     #endif
 
@@ -164,11 +180,11 @@ final class SubscriptionManager: NSObject {
         }
 
         guard isPlusEntitlementActive else {
-            isPlus = false
+            setIsPlus(false)
             throw SubscriptionPurchaseError.missingPlusEntitlement
         }
 
-        isPlus = true
+        setIsPlus(true)
     }
 }
 
@@ -178,7 +194,7 @@ extension SubscriptionManager: PurchasesDelegate {
     nonisolated func purchases(_ purchases: Purchases, receivedUpdated customerInfo: CustomerInfo) {
         let active = customerInfo.entitlements[Self.entitlementID]?.isActive == true
         Task { @MainActor in
-            self.isPlus = active
+            self.setIsPlus(active)
         }
     }
 }

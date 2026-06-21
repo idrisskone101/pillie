@@ -9,8 +9,38 @@ import XCTest
 @MainActor
 final class SubscriptionManagerEdgeCaseTests: XCTestCase {
     override func tearDown() {
+        SubscriptionManager.shared.onEntitlementChange = nil
         SubscriptionManager.shared.setPlusForTesting(false)
+        SubscriptionManager.shared.onEntitlementChange = nil
         super.tearDown()
+    }
+
+    func testEntitlementChangeFiresRescheduleHookOnUpgradeAndChurn() throws {
+        SubscriptionManager.shared.setPlusForTesting(false)
+
+        var observed: [Bool] = []
+        SubscriptionManager.shared.onEntitlementChange = { observed.append($0) }
+
+        // Upgrade.
+        try SubscriptionManager.shared.applyPurchaseResult(
+            userCancelled: false,
+            isPlusEntitlementActive: true
+        )
+        // Churn.
+        SubscriptionManager.shared.setPlusForTesting(false)
+
+        XCTAssertEqual(observed, [true, false])
+    }
+
+    func testEntitlementHookDoesNotFireWhenStateIsUnchanged() {
+        SubscriptionManager.shared.setPlusForTesting(true)
+
+        var fireCount = 0
+        SubscriptionManager.shared.onEntitlementChange = { _ in fireCount += 1 }
+
+        SubscriptionManager.shared.setPlusForTesting(true)
+
+        XCTAssertEqual(fireCount, 0)
     }
 
     func testDebugPlusOverrideCanExerciseEntitlementGatedFlows() {
