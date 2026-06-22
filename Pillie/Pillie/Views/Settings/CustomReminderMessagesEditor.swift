@@ -28,6 +28,24 @@ struct CustomReminderMessagesEditor: View {
     /// Same Plus gate the notification build uses, so the preview honors the entitlement.
     private var isPlus: Bool { SubscriptionManager.shared.isPlus }
 
+    /// The method-aware default copy each field seeds with when no custom value is stored —
+    /// the exact strings the notification falls back to (see `CustomReminderPreview`).
+    private var defaultTitle: String { CustomReminderPreview.defaultDailyTitle(method: method) }
+    private var defaultBody: String { CustomReminderPreview.defaultDailyBody(method: method) }
+    private var defaultRetryTitle: String { NotificationManager.defaultRetryTitle }
+    private var defaultRetryBody: String { NotificationManager.defaultRetryBody }
+
+    /// The value to show in a field on open: the saved custom text, or the default when blank.
+    private func prefilled(_ stored: String, default defaultCopy: String) -> String {
+        stored.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? defaultCopy : stored
+    }
+
+    /// The value to persist: an untouched default collapses back to "" so the field stays on
+    /// the live default (and never pins today's wording), matching the blank→default contract.
+    private func normalized(_ text: String, default defaultCopy: String) -> String {
+        text.trimmingCharacters(in: .whitespacesAndNewlines) == defaultCopy ? "" : text
+    }
+
     private var titleBinding: Binding<String> {
         Binding(
             get: { titleText },
@@ -57,7 +75,7 @@ struct CustomReminderMessagesEditor: View {
     }
 
     var body: some View {
-        SettingsSheetContainer(title: "Reminder Messages") {
+        SettingsSheetContainer(title: "Custom Messages") {
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 28) {
                     group(
@@ -72,7 +90,7 @@ struct CustomReminderMessagesEditor: View {
                     )
 
                     group(
-                        header: "FOLLOW-UP REMINDER",
+                        header: "FOLLOW-UP NUDGE",
                         titleBinding: retryTitleBinding,
                         titleCount: retryTitleText.count,
                         bodyBinding: retryBodyBinding,
@@ -82,7 +100,7 @@ struct CustomReminderMessagesEditor: View {
                         previewIdentifier: "reminder-preview-followup"
                     )
 
-                    Text("Leave a field blank to use Pillie's default wording.")
+                    Text("Leave anything blank and Pillie uses its own wording.")
                         .font(.pillieCaption())
                         .foregroundStyle(PillieTheme.textMuted)
 
@@ -90,10 +108,10 @@ struct CustomReminderMessagesEditor: View {
                         settingsFeedback.commitScheduleSave(accessibilityReduceMotion: accessibilityReduceMotion)
                         ScheduleCriticalSettingChange.saveSettingsCustomReminders(
                             store: store,
-                            title: titleText,
-                            body: bodyText,
-                            retryTitle: retryTitleText,
-                            retryBody: retryBodyText
+                            title: normalized(titleText, default: defaultTitle),
+                            body: normalized(bodyText, default: defaultBody),
+                            retryTitle: normalized(retryTitleText, default: defaultRetryTitle),
+                            retryBody: normalized(retryBodyText, default: defaultRetryBody)
                         )
                         dismiss()
                     } label: {
@@ -107,10 +125,14 @@ struct CustomReminderMessagesEditor: View {
             }
         }
         .onAppear {
-            titleText = store.customDueReminderTitle
-            bodyText = store.customDueReminderBody
-            retryTitleText = store.customRetryReminderTitle
-            retryBodyText = store.customRetryReminderBody
+            // Seed every field with the wording that will actually fire: the saved custom
+            // text where present, otherwise the same default the notification would use. Both
+            // sections open pre-filled and editable rather than blank, while the "blank uses
+            // Pillie's default" contract is preserved by re-normalizing on save.
+            titleText = prefilled(store.customDueReminderTitle, default: defaultTitle)
+            bodyText = prefilled(store.customDueReminderBody, default: defaultBody)
+            retryTitleText = prefilled(store.customRetryReminderTitle, default: defaultRetryTitle)
+            retryBodyText = prefilled(store.customRetryReminderBody, default: defaultRetryBody)
             ProductAnalyticsTelemetry.live.customRemindersSettingsOpened()
         }
     }
@@ -167,14 +189,11 @@ struct CustomReminderMessagesEditor: View {
                 .tracking(2)
 
             HStack(alignment: .top, spacing: 12) {
-                RoundedRectangle(cornerRadius: 9, style: .continuous)
-                    .fill(PillieTheme.coral)
+                Image("HomeAvatarLogo")
+                    .resizable()
+                    .scaledToFill()
                     .frame(width: 38, height: 38)
-                    .overlay(
-                        Image(systemName: "pills.fill")
-                            .font(.system(size: 18, weight: .semibold))
-                            .foregroundStyle(.white)
-                    )
+                    .clipShape(RoundedRectangle(cornerRadius: 9, style: .continuous))
 
                 VStack(alignment: .leading, spacing: 2) {
                     HStack(alignment: .firstTextBaseline) {

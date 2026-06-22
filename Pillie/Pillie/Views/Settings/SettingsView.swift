@@ -62,41 +62,9 @@ struct SettingsView: View {
                     divider
                     if SubscriptionManager.shared.isPlus {
                         Button {
-                            openSettingSheet { showIntervalEditor = true }
-                            ProductAnalyticsTelemetry.live.autoReminderIntervalSettingsOpened()
-                        } label: {
-                            settingsRow("Auto-Reminder Interval", value: store.autoReminderIntervalDisplay)
-                        }
-                        .buttonStyle(.plain)
-                        divider
-                        Button {
-                            openSettingSheet { showRetryLimitEditor = true }
-                            ProductAnalyticsTelemetry.live.autoReminderRetryLimitSettingsOpened()
-                        } label: {
-                            settingsRow("Auto-Reminder Retry Limit", value: store.autoReminderRetryLimitDisplay)
-                        }
-                        .buttonStyle(.plain)
-                    } else {
-                        Button {
-                            openSettingSheet { showSmartRemindersUpsell = true }
-                            ProductAnalyticsTelemetry.live.settingsSmartRemindersUpsellViewed()
-                        } label: {
-                            settingsRow("Smart Reminders", value: "Pillie+", valueColor: PillieTheme.coral, showLock: true)
-                        }
-                        .buttonStyle(.plain)
-                        .sheet(isPresented: $showSmartRemindersUpsell) {
-                            PlusUpsellSheet.smartReminders()
-                                .presentationDetents([.height(PlusUpsellSheet.compactPresentationHeight)])
-                                .presentationDragIndicator(.hidden)
-                                .presentationBackground(PillieTheme.bg)
-                        }
-                    }
-                    divider
-                    if SubscriptionManager.shared.isPlus {
-                        Button {
                             openSettingSheet { showCustomRemindersEditor = true }
                         } label: {
-                            settingsRow("Reminder Messages", value: reminderMessagesSummary)
+                            settingsRow("Custom Messages", value: reminderMessagesSummary)
                         }
                         .buttonStyle(.plain)
                     } else {
@@ -104,7 +72,7 @@ struct SettingsView: View {
                             openSettingSheet { showCustomRemindersUpsell = true }
                             ProductAnalyticsTelemetry.live.settingsCustomRemindersUpsellViewed()
                         } label: {
-                            settingsRow("Reminder Messages", value: "Pillie+", valueColor: PillieTheme.coral, showLock: true)
+                            settingsRow("Custom Messages", value: "Pillie+", valueColor: PillieTheme.coral, showLock: true)
                         }
                         .buttonStyle(.plain)
                         .sheet(isPresented: $showCustomRemindersUpsell) {
@@ -126,6 +94,53 @@ struct SettingsView: View {
                     }
                 }
                 .modifier(FadeInUp(appeared: appeared, delay: 0.1))
+
+                // MARK: - Smart Notifications
+                sectionHeader("SMART NOTIFICATIONS")
+                    .modifier(FadeInUp(appeared: appeared, delay: 0.12))
+
+                settingsCard {
+                    if SubscriptionManager.shared.isPlus {
+                        Button {
+                            openSettingSheet { showIntervalEditor = true }
+                            ProductAnalyticsTelemetry.live.autoReminderIntervalSettingsOpened()
+                        } label: {
+                            settingsRow("Nudge Frequency", value: store.autoReminderIntervalDisplay)
+                        }
+                        .buttonStyle(.plain)
+                        divider
+                        Button {
+                            openSettingSheet { showRetryLimitEditor = true }
+                            ProductAnalyticsTelemetry.live.autoReminderRetryLimitSettingsOpened()
+                        } label: {
+                            settingsRow("Number of Nudges", value: store.autoReminderRetryLimitDisplay)
+                        }
+                        .buttonStyle(.plain)
+                    } else {
+                        Button {
+                            openSettingSheet { showSmartRemindersUpsell = true }
+                            ProductAnalyticsTelemetry.live.settingsSmartRemindersUpsellViewed()
+                        } label: {
+                            settingsRow("Nudge Frequency", value: "Pillie+", valueColor: PillieTheme.coral, showLock: true)
+                        }
+                        .buttonStyle(.plain)
+                        divider
+                        Button {
+                            openSettingSheet { showSmartRemindersUpsell = true }
+                            ProductAnalyticsTelemetry.live.settingsSmartRemindersUpsellViewed()
+                        } label: {
+                            settingsRow("Number of Nudges", value: "Pillie+", valueColor: PillieTheme.coral, showLock: true)
+                        }
+                        .buttonStyle(.plain)
+                        .sheet(isPresented: $showSmartRemindersUpsell) {
+                            PlusUpsellSheet.smartReminders()
+                                .presentationDetents([.height(PlusUpsellSheet.compactPresentationHeight)])
+                                .presentationDragIndicator(.hidden)
+                                .presentationBackground(PillieTheme.bg)
+                        }
+                    }
+                }
+                .modifier(FadeInUp(appeared: appeared, delay: 0.12))
 
                 // MARK: - Cycle
                 sectionHeader("CYCLE")
@@ -721,14 +736,14 @@ private struct AutoReminderIntervalEditor: View {
     private let settingsFeedback = SettingsInteractionFeedback()
 
     var body: some View {
-        SettingsSheetContainer(title: "Auto-Reminder Interval", bottomPadding: 0) {
+        SettingsSheetContainer(title: "Nudge Frequency", bottomPadding: 0) {
             VStack(spacing: 16) {
                 ForEach(PillStore.autoReminderIntervalOptions, id: \.self) { option in
                     Button {
                         selectedInterval = option
                     } label: {
                         HStack {
-                            Text("\(option) minutes")
+                            Text("Every \(option) minutes")
                                 .font(.pillieBodyBold())
                                 .foregroundStyle(PillieTheme.textPrimary)
                             Spacer()
@@ -779,7 +794,7 @@ private struct AutoReminderRetryLimitEditor: View {
     private let settingsFeedback = SettingsInteractionFeedback()
 
     var body: some View {
-        SettingsSheetContainer(title: "Auto-Reminder Retry Limit", bottomPadding: 0) {
+        SettingsSheetContainer(title: "Number of Nudges", bottomPadding: 0) {
             VStack(spacing: 16) {
                 ForEach(PillStore.autoReminderRetryLimitOptions, id: \.self) { option in
                     Button {
@@ -829,9 +844,9 @@ private struct AutoReminderRetryLimitEditor: View {
         case 0:
             return "Off"
         case 1:
-            return "1 retry"
+            return "1 nudge"
         default:
-            return "\(option) retries"
+            return "\(option) nudges"
         }
     }
 }

@@ -19,15 +19,15 @@ struct PlusUpsellContent: Equatable {
     /// (ADR 0004), never the base daily reminder, and avoids medical/efficacy claims.
     static let smartReminders = PlusUpsellContent(
         featureName: "Smart Reminders",
-        featureDescription: "Pillie keeps reminding you until you log it — gentle follow-up nudges after the first reminder."
+        featureDescription: "Pillie sends gentle follow-up nudges until you log it."
     )
 
     /// Custom Reminder Messages frames the perk as writing your own private nudge.
     /// It is the user's own words (ADR 0004), so the copy stays personal and avoids
     /// medical/efficacy claims.
     static let customReminders = PlusUpsellContent(
-        featureName: "Reminder Messages",
-        featureDescription: "Write your own words for the daily reminder — exactly what you type is what you'll see."
+        featureName: "Custom Messages",
+        featureDescription: "Word the daily reminder yourself — what you type is what you'll see."
     )
 }
 
@@ -35,7 +35,7 @@ struct PlusUpsellSheet: View {
     let featureName: String
     let featureDescription: String
 
-    static let compactPresentationHeight: CGFloat = 330
+    static let compactPresentationHeight: CGFloat = 360
 
     init(featureName: String, featureDescription: String) {
         self.featureName = featureName
@@ -87,6 +87,8 @@ struct PlusUpsellSheet: View {
                     .font(.pillieBody())
                     .foregroundStyle(PillieTheme.textMuted)
                     .multilineTextAlignment(.center)
+                    .lineLimit(2)
+                    .fixedSize(horizontal: false, vertical: true)
                     .padding(.horizontal, 16)
             }
 

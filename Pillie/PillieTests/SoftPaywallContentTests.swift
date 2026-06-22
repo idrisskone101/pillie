@@ -60,17 +60,9 @@ final class SoftPaywallContentTests: XCTestCase {
         XCTAssertFalse(smart.freeIncluded, "Smart Reminders is Plus-only.")
         XCTAssertTrue(smart.plusIncluded)
 
-        // Copy reads as the same-day follow-up escalation, distinct from the base daily reminder.
-        let detail = (smart.detail ?? "").lowercased()
-        XCTAssertTrue(
-            detail.contains("until you log it"),
-            "Smart Reminders copy must frame the follow-up escalation, not the base reminder."
-        )
-
-        // No medical/efficacy/"never miss" claims (ADR 0002 trust constraints).
-        for banned in ["never miss", "guarantee", "clinically", "medical", "doctor", "efficacy"] {
-            XCTAssertFalse(detail.contains(banned), "Smart Reminders copy must avoid '\(banned)'.")
-        }
+        // The comparison row stays a single, subheading-free line — the escalation framing
+        // lives in the dedicated upsell copy, not the paywall comparison list.
+        XCTAssertNil(smart.detail, "Smart Reminders comparison row must not carry a subheading.")
     }
 
     func testSoftPaywallSurfacesCustomReminderMessagesAsAPlusOnlyRowAboveTheCatchAll() {
@@ -92,6 +84,7 @@ final class SoftPaywallContentTests: XCTestCase {
         let custom = content.rows[customIndex]
         XCTAssertFalse(custom.freeIncluded, "Custom reminder messages is Plus-only.")
         XCTAssertTrue(custom.plusIncluded)
+        XCTAssertNil(custom.detail, "Custom reminder messages comparison row must not carry a subheading.")
     }
 
     func testSoftPaywallKeepsAClearTruthfulFreeAndTrialPath() {

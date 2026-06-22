@@ -219,21 +219,6 @@ struct ProductAnalyticsTelemetry {
     track(.plusUpsellDismissed, source: .upsell)
   }
 
-  /// The one-time Smart Reminders migration notice (#104) was shown to a pre-existing
-  /// free user. Reuses the Plus upsell events, scoped to the `migration` source so the
-  /// notice is distinguishable from the settings/onboarding upsell in the funnel.
-  func smartRemindersMigrationNoticeViewed() {
-    track(.plusUpsellViewed, source: .migration)
-  }
-
-  func smartRemindersMigrationNoticeUpgradeTapped() {
-    track(.plusUpsellUpgradeTapped, source: .migration)
-  }
-
-  func smartRemindersMigrationNoticeDismissed() {
-    track(.plusUpsellDismissed, source: .migration)
-  }
-
   func plusUpsellUpgradeTapped() {
     track(.plusUpsellUpgradeTapped, source: .upsell)
   }

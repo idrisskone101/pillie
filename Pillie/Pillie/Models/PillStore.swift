@@ -302,7 +302,7 @@ class PillStore {
     }
 
     var autoReminderIntervalDisplay: String {
-        "\(autoReminderIntervalMinutes) min"
+        "Every \(autoReminderIntervalMinutes) min"
     }
 
     var autoReminderRetryLimitDisplay: String {
@@ -310,9 +310,9 @@ class PillStore {
         case 0:
             return "Off"
         case 1:
-            return "1 retry"
+            return "1 nudge"
         default:
-            return "\(autoReminderRetryLimit) retries"
+            return "\(autoReminderRetryLimit) nudges"
         }
     }
 

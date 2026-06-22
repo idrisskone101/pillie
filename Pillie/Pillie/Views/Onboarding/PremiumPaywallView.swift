@@ -76,7 +76,6 @@ struct SoftPaywallContent {
             ),
             ComparisonRow(
                 title: "Smart Reminders",
-                detail: "Pillie keeps reminding you until you log it.",
                 icon: "bell.badge.fill",
                 iconBackground: PillieTheme.lavender,
                 iconColor: PillieTheme.dark,
@@ -101,7 +100,6 @@ struct SoftPaywallContent {
             ),
             ComparisonRow(
                 title: "Custom reminder messages",
-                detail: "Word your reminders however you like.",
                 icon: "text.bubble.fill",
                 iconBackground: PillieTheme.lavender,
                 iconColor: PillieTheme.dark,
@@ -401,7 +399,8 @@ struct PremiumPaywallView: View {
                     Text(row.title)
                         .font(.pillie(14, weight: .semibold))
                         .foregroundStyle(PillieTheme.textPrimary)
-                        .fixedSize(horizontal: false, vertical: true)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.8)
 
                     if let detail = row.detail {
                         Text(detail)
