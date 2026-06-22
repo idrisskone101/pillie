@@ -234,6 +234,8 @@ final class NotificationManager {
         let isPlus = SubscriptionManager.shared.isPlus
         let customTitle = store.customDueReminderTitle
         let customBody = store.customDueReminderBody
+        let customRetryTitle = store.customRetryReminderTitle
+        let customRetryBody = store.customRetryReminderBody
 
         return intents.map { intent in
             switch intent {
@@ -243,6 +245,8 @@ final class NotificationManager {
                     calendar: calendar,
                     customTitle: customTitle,
                     customBody: customBody,
+                    customRetryTitle: customRetryTitle,
+                    customRetryBody: customRetryBody,
                     isPlus: isPlus
                 )
             case .supply(let supply):
@@ -251,17 +255,37 @@ final class NotificationManager {
         }
     }
 
+    /// Default copy for the Auto-Reminder Retry, used as the fallback when a custom retry
+    /// field is blank or the user is not Plus.
+    static let defaultRetryTitle = "Still here when you're ready"
+    static let defaultRetryBody = "Take a tiny moment for your Pillie check-in."
+
     private func makeRequest(
         for due: ReminderSchedulePlanner.DueReminderIntent,
         calendar: Calendar,
         customTitle: String,
         customBody: String,
+        customRetryTitle: String,
+        customRetryBody: String,
         isPlus: Bool
     ) -> UNNotificationRequest {
         let content = UNMutableNotificationContent()
         if due.kind == .retry {
-            content.title = "Still here when you're ready"
-            content.body = "Take a tiny moment for your Pillie check-in."
+            // The Auto-Reminder Retry carries the user's custom follow-up copy when Plus;
+            // each field falls back independently to the default retry copy when blank, so
+            // an empty notification can never fire (same gate as the base reminder).
+            content.title = CustomReminderCopy.effective(
+                custom: customRetryTitle,
+                default: Self.defaultRetryTitle,
+                cap: CustomReminderCopy.titleCap,
+                isPlus: isPlus
+            )
+            content.body = CustomReminderCopy.effective(
+                custom: customRetryBody,
+                default: Self.defaultRetryBody,
+                cap: CustomReminderCopy.bodyCap,
+                isPlus: isPlus
+            )
         } else {
             // The base (and snooze re-fire) Due Action Reminder carries the user's custom
             // copy when Plus; any blank field falls back independently to the default

@@ -6,10 +6,11 @@
 import SwiftUI
 
 /// Editor for the Custom Reminder Message perk (Pillie+). Lets a subscriber write the
-/// title and body of the daily Due Action Reminder. What they type is exactly what fires
-/// (WYSIWYG); a blank field falls back to the default method-aware copy at fire time
-/// (see `CustomReminderCopy`). Hard caps are enforced as the user types, with a live
-/// character counter. Words never change reminder timing, snooze, or supply scheduling.
+/// title and body of both the daily Due Action Reminder and the Auto-Reminder Retry.
+/// What they type is exactly what fires (WYSIWYG); a blank field falls back to the
+/// default copy at fire time (see `CustomReminderCopy`). Hard caps are enforced as the
+/// user types, with a live character counter. Words never change reminder timing,
+/// snooze, retry cadence, or supply scheduling.
 struct CustomReminderMessagesEditor: View {
     @Bindable var store: PillStore
     @Environment(\.dismiss) private var dismiss
@@ -17,6 +18,8 @@ struct CustomReminderMessagesEditor: View {
 
     @State private var titleText: String = ""
     @State private var bodyText: String = ""
+    @State private var retryTitleText: String = ""
+    @State private var retryBodyText: String = ""
 
     private let settingsFeedback = SettingsInteractionFeedback()
 
@@ -34,56 +37,104 @@ struct CustomReminderMessagesEditor: View {
         )
     }
 
+    private var retryTitleBinding: Binding<String> {
+        Binding(
+            get: { retryTitleText },
+            set: { retryTitleText = String($0.prefix(CustomReminderCopy.titleCap)) }
+        )
+    }
+
+    private var retryBodyBinding: Binding<String> {
+        Binding(
+            get: { retryBodyText },
+            set: { retryBodyText = String($0.prefix(CustomReminderCopy.bodyCap)) }
+        )
+    }
+
     var body: some View {
         SettingsSheetContainer(title: "Reminder Messages") {
-            VStack(alignment: .leading, spacing: 20) {
-                Text("DAILY REMINDER")
-                    .font(.pillieCaptionMedium())
-                    .foregroundStyle(PillieTheme.textMuted)
-                    .tracking(2)
+            ScrollView(.vertical, showsIndicators: false) {
+                VStack(alignment: .leading, spacing: 28) {
+                    group(
+                        header: "DAILY REMINDER",
+                        titleBinding: titleBinding,
+                        titleCount: titleText.count,
+                        bodyBinding: bodyBinding,
+                        bodyCount: bodyText.count
+                    )
 
-                field(
-                    label: "Title",
-                    placeholder: "Pillie's default title",
-                    text: titleBinding,
-                    count: titleText.count,
-                    cap: CustomReminderCopy.titleCap,
-                    axis: .horizontal
-                )
+                    group(
+                        header: "FOLLOW-UP REMINDER",
+                        titleBinding: retryTitleBinding,
+                        titleCount: retryTitleText.count,
+                        bodyBinding: retryBodyBinding,
+                        bodyCount: retryBodyText.count
+                    )
 
-                field(
-                    label: "Message",
-                    placeholder: "Pillie's default message",
-                    text: bodyBinding,
-                    count: bodyText.count,
-                    cap: CustomReminderCopy.bodyCap,
-                    axis: .vertical
-                )
+                    Text("Leave a field blank to use Pillie's default wording.")
+                        .font(.pillieCaption())
+                        .foregroundStyle(PillieTheme.textMuted)
 
-                Text("Leave a field blank to use Pillie's default wording.")
-                    .font(.pillieCaption())
-                    .foregroundStyle(PillieTheme.textMuted)
+                    Button {
+                        settingsFeedback.commitScheduleSave(accessibilityReduceMotion: accessibilityReduceMotion)
+                        ScheduleCriticalSettingChange.saveSettingsCustomReminders(
+                            store: store,
+                            title: titleText,
+                            body: bodyText,
+                            retryTitle: retryTitleText,
+                            retryBody: retryBodyText
+                        )
+                        dismiss()
+                    } label: {
+                        Text("Save")
+                    }
+                    .buttonStyle(.pillieDark)
+                    .padding(.top, 4)
+                }
+                .padding(.horizontal, 24)
+                .padding(.bottom, 24)
             }
-            .padding(.horizontal, 24)
-
-            Button {
-                settingsFeedback.commitScheduleSave(accessibilityReduceMotion: accessibilityReduceMotion)
-                ScheduleCriticalSettingChange.saveSettingsCustomReminders(
-                    store: store,
-                    title: titleText,
-                    body: bodyText
-                )
-                dismiss()
-            } label: {
-                Text("Save")
-            }
-            .buttonStyle(.pillieDark)
-            .padding(.horizontal, 28)
         }
         .onAppear {
             titleText = store.customDueReminderTitle
             bodyText = store.customDueReminderBody
+            retryTitleText = store.customRetryReminderTitle
+            retryBodyText = store.customRetryReminderBody
             ProductAnalyticsTelemetry.live.customRemindersSettingsOpened()
+        }
+    }
+
+    @ViewBuilder
+    private func group(
+        header: String,
+        titleBinding: Binding<String>,
+        titleCount: Int,
+        bodyBinding: Binding<String>,
+        bodyCount: Int
+    ) -> some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text(header)
+                .font(.pillieCaptionMedium())
+                .foregroundStyle(PillieTheme.textMuted)
+                .tracking(2)
+
+            field(
+                label: "Title",
+                placeholder: "Pillie's default title",
+                text: titleBinding,
+                count: titleCount,
+                cap: CustomReminderCopy.titleCap,
+                axis: .horizontal
+            )
+
+            field(
+                label: "Message",
+                placeholder: "Pillie's default message",
+                text: bodyBinding,
+                count: bodyCount,
+                cap: CustomReminderCopy.bodyCap,
+                axis: .vertical
+            )
         }
     }
 

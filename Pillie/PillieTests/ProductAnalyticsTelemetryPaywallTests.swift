@@ -156,7 +156,9 @@ private final class AnalyticsRecorder: AnalyticsTracking {
         isPlus: Bool?,
         hasBlockingSelection: Bool?,
         titleCustomized: Bool?,
-        bodyCustomized: Bool?
+        bodyCustomized: Bool?,
+        retryTitleCustomized: Bool?,
+        retryBodyCustomized: Bool?
     ) {
         events.append(Event(event: event, source: source, step: step, plan: plan, result: result, isPlus: isPlus))
     }

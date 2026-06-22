@@ -264,7 +264,7 @@ struct SettingsView: View {
         }
         .sheet(isPresented: $showCustomRemindersEditor) {
             CustomReminderMessagesEditor(store: store)
-                .presentationDetents([.height(460)])
+                .presentationDetents([.large])
                 .presentationDragIndicator(.hidden)
                 .presentationBackground(PillieTheme.bg)
         }
@@ -356,9 +356,13 @@ struct SettingsView: View {
     }
 
     private var reminderMessagesSummary: String {
-        let hasTitle = CustomReminderCopy.isCustomized(store.customDueReminderTitle)
-        let hasBody = CustomReminderCopy.isCustomized(store.customDueReminderBody)
-        return (hasTitle || hasBody) ? "Custom" : "Default"
+        let hasCustom = [
+            store.customDueReminderTitle,
+            store.customDueReminderBody,
+            store.customRetryReminderTitle,
+            store.customRetryReminderBody
+        ].contains { CustomReminderCopy.isCustomized($0) }
+        return hasCustom ? "Custom" : "Default"
     }
 
     private var protocolSummary: String {

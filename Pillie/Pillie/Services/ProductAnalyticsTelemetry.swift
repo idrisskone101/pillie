@@ -322,15 +322,22 @@ struct ProductAnalyticsTelemetry {
     settingsChangeSaved(.blockedApps, hasBlockingSelection: hasSelection)
   }
 
-  /// The Custom Reminder Messages editor saved. Carries only two coarse booleans —
-  /// whether each field ended up customized — never the strings or their lengths.
-  func customRemindersSaved(titleCustomized: Bool, bodyCustomized: Bool) {
+  /// The Custom Reminder Messages editor saved. Carries only coarse booleans — whether
+  /// each of the four fields ended up customized — never the strings or their lengths.
+  func customRemindersSaved(
+    titleCustomized: Bool,
+    bodyCustomized: Bool,
+    retryTitleCustomized: Bool,
+    retryBodyCustomized: Bool
+  ) {
     track(
       .settingsChangeSaved,
       source: .settings,
       setting: .customReminders,
       titleCustomized: titleCustomized,
-      bodyCustomized: bodyCustomized
+      bodyCustomized: bodyCustomized,
+      retryTitleCustomized: retryTitleCustomized,
+      retryBodyCustomized: retryBodyCustomized
     )
   }
 
@@ -387,7 +394,9 @@ struct ProductAnalyticsTelemetry {
     acquisitionSource: AcquisitionSource? = nil,
     hasBlockingSelection: Bool? = nil,
     titleCustomized: Bool? = nil,
-    bodyCustomized: Bool? = nil
+    bodyCustomized: Bool? = nil,
+    retryTitleCustomized: Bool? = nil,
+    retryBodyCustomized: Bool? = nil
   ) {
     analytics.track(
       event,
@@ -401,7 +410,9 @@ struct ProductAnalyticsTelemetry {
       isPlus: isPlus(),
       hasBlockingSelection: hasBlockingSelection,
       titleCustomized: titleCustomized,
-      bodyCustomized: bodyCustomized
+      bodyCustomized: bodyCustomized,
+      retryTitleCustomized: retryTitleCustomized,
+      retryBodyCustomized: retryBodyCustomized
     )
   }
 }

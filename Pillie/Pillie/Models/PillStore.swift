@@ -84,6 +84,15 @@ class PillStore {
     var customDueReminderBody: String {
         didSet { UserDefaults.standard.set(customDueReminderBody, forKey: Self.customDueReminderBodyKey) }
     }
+    /// Raw custom Auto-Reminder Retry title (Pillie+ perk). Same Personalization-Setting
+    /// semantics as `customDueReminderTitle`; empty means "use the default retry copy".
+    var customRetryReminderTitle: String {
+        didSet { UserDefaults.standard.set(customRetryReminderTitle, forKey: Self.customRetryReminderTitleKey) }
+    }
+    /// Raw custom Auto-Reminder Retry body (Pillie+ perk). See `customRetryReminderTitle`.
+    var customRetryReminderBody: String {
+        didSet { UserDefaults.standard.set(customRetryReminderBody, forKey: Self.customRetryReminderBodyKey) }
+    }
     var appActivatedDate: Date? {
         didSet {
             if let date = appActivatedDate {
@@ -164,6 +173,8 @@ class PillStore {
     private static let contraceptiveMethodKey = "pillie_contraceptive_method"
     private static let customDueReminderTitleKey = "pillie_custom_due_reminder_title"
     private static let customDueReminderBodyKey = "pillie_custom_due_reminder_body"
+    private static let customRetryReminderTitleKey = "pillie_custom_retry_reminder_title"
+    private static let customRetryReminderBodyKey = "pillie_custom_retry_reminder_body"
     private static let appActivatedDateKey = "pillie_app_activated_date"
     private static let streakResetDateKey = "pillie_streak_reset_date"
     private static let painPointsKey = "pillie_pain_points"
@@ -1032,6 +1043,8 @@ class PillStore {
 
         self.customDueReminderTitle = defaults.string(forKey: Self.customDueReminderTitleKey) ?? ""
         self.customDueReminderBody = defaults.string(forKey: Self.customDueReminderBodyKey) ?? ""
+        self.customRetryReminderTitle = defaults.string(forKey: Self.customRetryReminderTitleKey) ?? ""
+        self.customRetryReminderBody = defaults.string(forKey: Self.customRetryReminderBodyKey) ?? ""
 
         let defaultMethod = resolvedPacks
             .sorted(by: { $0.packNumber < $1.packNumber })

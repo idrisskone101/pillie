@@ -33,6 +33,21 @@ final class CustomReminderNotificationTests: XCTestCase {
     }
 
     @MainActor
+    private func retryReminder(
+        store: PillStore,
+        now: Date
+    ) -> NotificationManager.ReminderRequestDebugSummary? {
+        let summaries = NotificationManager.shared.managedRequestSummariesForTesting(
+            store: store,
+            now: now
+        )
+        let todayEpoch = Int(Calendar.current.startOfDay(for: now).timeIntervalSince1970)
+        return summaries.first {
+            $0.dueDayEpoch == todayEpoch && $0.requestKind == "retry"
+        }
+    }
+
+    @MainActor
     private func cleanUp() {
         SubscriptionManager.shared.setPlusForTesting(false)
         InMemoryStoreFactory.resetClockAndDefaults()
@@ -107,6 +122,52 @@ final class CustomReminderNotificationTests: XCTestCase {
         let base = try XCTUnwrap(baseReminder(store: fixture.store, now: now))
         XCTAssertEqual(base.title, "Log it 💊")
         XCTAssertEqual(base.body, "Don't forget — okay?")
+        cleanUp()
+    }
+
+    // MARK: - Auto-Reminder Retry customization
+
+    @MainActor
+    func testPlusUserWithCustomRetryCopyGetsCustomRetryTitleAndBody() throws {
+        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
+        // Retries only build for Plus users; one retry is enough to assert its copy.
+        fixture.store.autoReminderRetryLimit = 1
+        fixture.store.customRetryReminderTitle = "Still nudging you 👀"
+        fixture.store.customRetryReminderBody = "Whenever you're ready — no rush."
+        SubscriptionManager.shared.setPlusForTesting(true)
+
+        let retry = try XCTUnwrap(retryReminder(store: fixture.store, now: now))
+        XCTAssertEqual(retry.title, "Still nudging you 👀")
+        XCTAssertEqual(retry.body, "Whenever you're ready — no rush.")
+
+        // The retry copy is independent of the base reminder.
+        let base = try XCTUnwrap(baseReminder(store: fixture.store, now: now))
+        XCTAssertNotEqual(retry.title, base.title)
+        cleanUp()
+    }
+
+    @MainActor
+    func testBlankRetryFieldFallsBackToDefaultRetryCopyIndependently() throws {
+        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
+        fixture.store.autoReminderRetryLimit = 1
+        SubscriptionManager.shared.setPlusForTesting(true)
+
+        // Capture the default retry copy (no custom set).
+        let defaultRetry = try XCTUnwrap(retryReminder(store: fixture.store, now: now))
+        let defaultRetryBody = defaultRetry.body
+        XCTAssertFalse(defaultRetry.title.isEmpty)
+        XCTAssertFalse(defaultRetryBody.isEmpty)
+
+        // Custom retry title only — the blank body must fall back independently.
+        fixture.store.customRetryReminderTitle = "My follow-up line"
+        fixture.store.customRetryReminderBody = "   "
+
+        let retry = try XCTUnwrap(retryReminder(store: fixture.store, now: now))
+        XCTAssertEqual(retry.title, "My follow-up line")
+        XCTAssertEqual(retry.body, defaultRetryBody)
+        XCTAssertFalse(retry.body.isEmpty, "An empty notification body can never fire.")
         cleanUp()
     }
 }
