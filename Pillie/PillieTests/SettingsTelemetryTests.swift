@@ -61,6 +61,36 @@ final class SettingsTelemetryTests: XCTestCase {
         XCTAssertNil(properties["body_length"])
     }
 
+    func testCustomRemindersSavedPayloadCoversAllFourFieldsAsCoarseBooleans() {
+        // The save event now spans the Due Action Reminder and the Auto-Reminder Retry —
+        // four coarse booleans, one per field, and still never any strings or lengths.
+        let properties = AnalyticsPayload(
+            source: .settings,
+            setting: .customReminders,
+            isPlus: true,
+            titleCustomized: true,
+            bodyCustomized: false,
+            retryTitleCustomized: false,
+            retryBodyCustomized: true
+        ).properties
+
+        XCTAssertEqual(Set(properties.keys), [
+            "source",
+            "setting",
+            "is_plus",
+            "title_customized",
+            "body_customized",
+            "retry_title_customized",
+            "retry_body_customized"
+        ])
+        XCTAssertEqual(properties["retry_title_customized"], .bool(false))
+        XCTAssertEqual(properties["retry_body_customized"], .bool(true))
+        XCTAssertNil(properties["retry_title"])
+        XCTAssertNil(properties["retry_body"])
+        XCTAssertNil(properties["retry_title_length"])
+        XCTAssertNil(properties["retry_body_length"])
+    }
+
     func testSettingsOpenSaveAndCancelEventsUseApprovedNames() {
         XCTAssertEqual(
             [

@@ -113,7 +113,9 @@ protocol AnalyticsTracking {
     isPlus: Bool?,
     hasBlockingSelection: Bool?,
     titleCustomized: Bool?,
-    bodyCustomized: Bool?
+    bodyCustomized: Bool?,
+    retryTitleCustomized: Bool?,
+    retryBodyCustomized: Bool?
   )
 }
 
@@ -239,6 +241,8 @@ struct AnalyticsPayload {
   let hasBlockingSelection: Bool?
   let titleCustomized: Bool?
   let bodyCustomized: Bool?
+  let retryTitleCustomized: Bool?
+  let retryBodyCustomized: Bool?
 
   init(
     source: AnalyticsSource? = nil,
@@ -251,7 +255,9 @@ struct AnalyticsPayload {
     isPlus: Bool? = nil,
     hasBlockingSelection: Bool? = nil,
     titleCustomized: Bool? = nil,
-    bodyCustomized: Bool? = nil
+    bodyCustomized: Bool? = nil,
+    retryTitleCustomized: Bool? = nil,
+    retryBodyCustomized: Bool? = nil
   ) {
     self.source = source
     self.step = step
@@ -264,6 +270,8 @@ struct AnalyticsPayload {
     self.hasBlockingSelection = hasBlockingSelection
     self.titleCustomized = titleCustomized
     self.bodyCustomized = bodyCustomized
+    self.retryTitleCustomized = retryTitleCustomized
+    self.retryBodyCustomized = retryBodyCustomized
   }
 
   var properties: [String: AnalyticsPropertyValue] {
@@ -286,6 +294,12 @@ struct AnalyticsPayload {
     }
     if let bodyCustomized {
       properties["body_customized"] = .bool(bodyCustomized)
+    }
+    if let retryTitleCustomized {
+      properties["retry_title_customized"] = .bool(retryTitleCustomized)
+    }
+    if let retryBodyCustomized {
+      properties["retry_body_customized"] = .bool(retryBodyCustomized)
     }
     return properties
   }
@@ -373,7 +387,9 @@ final class AnalyticsManager: AnalyticsTracking {
     isPlus: Bool? = nil,
     hasBlockingSelection: Bool? = nil,
     titleCustomized: Bool? = nil,
-    bodyCustomized: Bool? = nil
+    bodyCustomized: Bool? = nil,
+    retryTitleCustomized: Bool? = nil,
+    retryBodyCustomized: Bool? = nil
   ) {
     guard isConfigured, isAnalyticsEnabled else { return }
 
@@ -388,7 +404,9 @@ final class AnalyticsManager: AnalyticsTracking {
       isPlus: isPlus,
       hasBlockingSelection: hasBlockingSelection,
       titleCustomized: titleCustomized,
-      bodyCustomized: bodyCustomized
+      bodyCustomized: bodyCustomized,
+      retryTitleCustomized: retryTitleCustomized,
+      retryBodyCustomized: retryBodyCustomized
     )
     client.capture(
       event: event.rawValue,

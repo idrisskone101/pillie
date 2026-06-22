@@ -105,6 +105,8 @@ private struct NoOpTracker: AnalyticsTracking {
         isPlus: Bool?,
         hasBlockingSelection: Bool?,
         titleCustomized: Bool?,
-        bodyCustomized: Bool?
+        bodyCustomized: Bool?,
+        retryTitleCustomized: Bool?,
+        retryBodyCustomized: Bool?
     ) {}
 }
