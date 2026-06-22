@@ -23,6 +23,11 @@ struct CustomReminderMessagesEditor: View {
 
     private let settingsFeedback = SettingsInteractionFeedback()
 
+    /// The contraception method whose default copy fills any blank preview field.
+    private var method: ContraceptiveMethod { store.pack.method }
+    /// Same Plus gate the notification build uses, so the preview honors the entitlement.
+    private var isPlus: Bool { SubscriptionManager.shared.isPlus }
+
     private var titleBinding: Binding<String> {
         Binding(
             get: { titleText },
@@ -60,7 +65,10 @@ struct CustomReminderMessagesEditor: View {
                         titleBinding: titleBinding,
                         titleCount: titleText.count,
                         bodyBinding: bodyBinding,
-                        bodyCount: bodyText.count
+                        bodyCount: bodyText.count,
+                        previewTitle: CustomReminderPreview.dailyTitle(custom: titleText, method: method, isPlus: isPlus),
+                        previewBody: CustomReminderPreview.dailyBody(custom: bodyText, method: method, isPlus: isPlus),
+                        previewIdentifier: "reminder-preview-daily"
                     )
 
                     group(
@@ -68,7 +76,10 @@ struct CustomReminderMessagesEditor: View {
                         titleBinding: retryTitleBinding,
                         titleCount: retryTitleText.count,
                         bodyBinding: retryBodyBinding,
-                        bodyCount: retryBodyText.count
+                        bodyCount: retryBodyText.count,
+                        previewTitle: CustomReminderPreview.retryTitle(custom: retryTitleText, isPlus: isPlus),
+                        previewBody: CustomReminderPreview.retryBody(custom: retryBodyText, isPlus: isPlus),
+                        previewIdentifier: "reminder-preview-followup"
                     )
 
                     Text("Leave a field blank to use Pillie's default wording.")
@@ -110,7 +121,10 @@ struct CustomReminderMessagesEditor: View {
         titleBinding: Binding<String>,
         titleCount: Int,
         bodyBinding: Binding<String>,
-        bodyCount: Int
+        bodyCount: Int,
+        previewTitle: String,
+        previewBody: String,
+        previewIdentifier: String
     ) -> some View {
         VStack(alignment: .leading, spacing: 16) {
             Text(header)
@@ -135,7 +149,66 @@ struct CustomReminderMessagesEditor: View {
                 cap: CustomReminderCopy.bodyCap,
                 axis: .vertical
             )
+
+            previewBanner(title: previewTitle, body: previewBody, identifier: previewIdentifier)
         }
+    }
+
+    /// A mock lock-screen notification banner that renders the *effective* copy that will
+    /// actually fire — custom text where present, the method-aware default where a field is
+    /// blank. Driven entirely by `CustomReminderPreview`, so it can never diverge from the
+    /// scheduled notification.
+    @ViewBuilder
+    private func previewBanner(title: String, body: String, identifier: String) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("PREVIEW")
+                .font(.pillieCaption())
+                .foregroundStyle(PillieTheme.textMuted.opacity(0.7))
+                .tracking(2)
+
+            HStack(alignment: .top, spacing: 12) {
+                RoundedRectangle(cornerRadius: 9, style: .continuous)
+                    .fill(PillieTheme.coral)
+                    .frame(width: 38, height: 38)
+                    .overlay(
+                        Image(systemName: "pills.fill")
+                            .font(.system(size: 18, weight: .semibold))
+                            .foregroundStyle(.white)
+                    )
+
+                VStack(alignment: .leading, spacing: 2) {
+                    HStack(alignment: .firstTextBaseline) {
+                        Text(title)
+                            .font(.pillieBody())
+                            .fontWeight(.semibold)
+                            .foregroundStyle(PillieTheme.textPrimary)
+                            .lineLimit(2)
+                            .accessibilityIdentifier("\(identifier)-title")
+                        Spacer(minLength: 8)
+                        Text("now")
+                            .font(.pillieCaption())
+                            .foregroundStyle(PillieTheme.textMuted.opacity(0.7))
+                    }
+                    Text(body)
+                        .font(.pillieCaption())
+                        .foregroundStyle(PillieTheme.textMuted)
+                        .lineLimit(3)
+                        .accessibilityIdentifier("\(identifier)-body")
+                }
+            }
+            .padding(14)
+            .background(
+                RoundedRectangle(cornerRadius: PillieTheme.cardRadius, style: .continuous)
+                    .fill(PillieTheme.cardWhite)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: PillieTheme.cardRadius, style: .continuous)
+                    .stroke(PillieTheme.sageHalf, lineWidth: 1)
+            )
+        }
+        .accessibilityIdentifier(identifier)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Notification preview. \(title). \(body)")
     }
 
     @ViewBuilder

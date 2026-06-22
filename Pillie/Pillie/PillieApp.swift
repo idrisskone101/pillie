@@ -247,6 +247,12 @@ struct PillieApp: App {
             SubscriptionManager.shared.setPlusForTesting(false)
             UserDefaults.standard.set(true, forKey: OnboardingFlow.selectedFreePlanStorageKey)
             UserDefaults.standard.set(OnboardingFlow.Step.freePlanConfirmation.rawValue, forKey: OnboardingFlow.stepStorageKey)
+        case "/plus-home":
+            // QA shortcut: land on the onboarded main app as a Plus subscriber so the
+            // Plus-gated Settings surfaces (e.g. Reminder Messages) are reachable.
+            SubscriptionManager.shared.setPlusForTesting(true)
+            UserDefaults.standard.set(false, forKey: OnboardingFlow.selectedFreePlanStorageKey)
+            UserDefaults.standard.set(OnboardingFlow.Step.complete.rawValue, forKey: OnboardingFlow.stepStorageKey)
         default:
             return
         }
