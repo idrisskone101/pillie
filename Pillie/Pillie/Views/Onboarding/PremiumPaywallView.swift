@@ -100,6 +100,15 @@ struct SoftPaywallContent {
                 plusIncluded: true
             ),
             ComparisonRow(
+                title: "Custom reminder messages",
+                detail: "Word your reminders however you like.",
+                icon: "text.bubble.fill",
+                iconBackground: PillieTheme.lavender,
+                iconColor: PillieTheme.dark,
+                freeIncluded: false,
+                plusIncluded: true
+            ),
+            ComparisonRow(
                 title: "New perks as they launch",
                 icon: "sparkles",
                 iconBackground: PillieTheme.coralLight,

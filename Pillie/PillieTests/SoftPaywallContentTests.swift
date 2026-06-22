@@ -35,6 +35,7 @@ final class SoftPaywallContentTests: XCTestCase {
             "Smart Reminders",
             "Block distracting apps",
             "Shake to confirm",
+            "Custom reminder messages",
             "New perks as they launch"
         ])
 
@@ -70,6 +71,27 @@ final class SoftPaywallContentTests: XCTestCase {
         for banned in ["never miss", "guarantee", "clinically", "medical", "doctor", "efficacy"] {
             XCTAssertFalse(detail.contains(banned), "Smart Reminders copy must avoid '\(banned)'.")
         }
+    }
+
+    func testSoftPaywallSurfacesCustomReminderMessagesAsAPlusOnlyRowAboveTheCatchAll() {
+        let content = SoftPaywallContent.default
+        let titles = content.rows.map(\.title)
+
+        // The Custom reminder messages row sits directly above the "New perks" catch-all
+        // as a supporting Plus perk — app blocking stays the hero (issue #109).
+        guard let customIndex = titles.firstIndex(of: "Custom reminder messages"),
+              let catchAllIndex = titles.firstIndex(of: "New perks as they launch") else {
+            return XCTFail("Both the custom reminder messages and catch-all rows must exist.")
+        }
+        XCTAssertEqual(
+            customIndex,
+            catchAllIndex - 1,
+            "Custom reminder messages must sit directly above the New perks catch-all."
+        )
+
+        let custom = content.rows[customIndex]
+        XCTAssertFalse(custom.freeIncluded, "Custom reminder messages is Plus-only.")
+        XCTAssertTrue(custom.plusIncluded)
     }
 
     func testSoftPaywallKeepsAClearTruthfulFreeAndTrialPath() {
