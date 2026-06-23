@@ -23,6 +23,16 @@ struct CustomReminderMessagesEditor: View {
     @State private var lastCallTitleText: String = ""
     @State private var lastCallBodyText: String = ""
 
+    /// Identifies every editable field so a single keyboard toolbar "Done" button (and
+    /// interactive scroll-to-dismiss) can resign whichever field is active.
+    private enum Field: Hashable {
+        case dailyTitle, dailyBody
+        case retryTitle, retryBody
+        case lastCallTitle, lastCallBody
+    }
+
+    @FocusState private var focusedField: Field?
+
     private let settingsFeedback = SettingsInteractionFeedback()
 
     /// The contraception method whose default copy fills any blank preview field.
@@ -50,80 +60,55 @@ struct CustomReminderMessagesEditor: View {
         text.trimmingCharacters(in: .whitespacesAndNewlines) == defaultCopy ? "" : text
     }
 
-    private var titleBinding: Binding<String> {
-        Binding(
-            get: { titleText },
-            set: { titleText = String($0.prefix(CustomReminderCopy.titleCap)) }
-        )
-    }
-
-    private var bodyBinding: Binding<String> {
-        Binding(
-            get: { bodyText },
-            set: { bodyText = String($0.prefix(CustomReminderCopy.bodyCap)) }
-        )
-    }
-
-    private var retryTitleBinding: Binding<String> {
-        Binding(
-            get: { retryTitleText },
-            set: { retryTitleText = String($0.prefix(CustomReminderCopy.titleCap)) }
-        )
-    }
-
-    private var retryBodyBinding: Binding<String> {
-        Binding(
-            get: { retryBodyText },
-            set: { retryBodyText = String($0.prefix(CustomReminderCopy.bodyCap)) }
-        )
-    }
-
-    private var lastCallTitleBinding: Binding<String> {
-        Binding(
-            get: { lastCallTitleText },
-            set: { lastCallTitleText = String($0.prefix(CustomReminderCopy.titleCap)) }
-        )
-    }
-
-    private var lastCallBodyBinding: Binding<String> {
-        Binding(
-            get: { lastCallBodyText },
-            set: { lastCallBodyText = String($0.prefix(CustomReminderCopy.bodyCap)) }
-        )
-    }
-
     var body: some View {
         SettingsSheetContainer(title: "Custom Messages") {
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 28) {
+                    Text("Write what each reminder says. Pillie shows a live preview of exactly how it'll land on your lock screen.")
+                        .font(.pillieBody())
+                        .foregroundStyle(PillieTheme.textMuted)
+                        .fixedSize(horizontal: false, vertical: true)
+
                     group(
-                        header: "DAILY REMINDER",
-                        titleBinding: titleBinding,
+                        index: 1,
+                        header: "Daily reminder",
+                        subtitle: "Your main nudge when today's dose is due.",
+                        titleBinding: $titleText,
                         titleCount: titleText.count,
-                        bodyBinding: bodyBinding,
+                        bodyBinding: $bodyText,
                         bodyCount: bodyText.count,
+                        titleField: .dailyTitle,
+                        bodyField: .dailyBody,
                         previewTitle: CustomReminderPreview.dailyTitle(custom: titleText, method: method, isPlus: isPlus),
                         previewBody: CustomReminderPreview.dailyBody(custom: bodyText, method: method, isPlus: isPlus),
                         previewIdentifier: "reminder-preview-daily"
                     )
 
                     group(
-                        header: "FOLLOW-UP NUDGE",
-                        titleBinding: retryTitleBinding,
+                        index: 2,
+                        header: "Follow-up nudge",
+                        subtitle: "A gentle retry if you haven't logged it yet.",
+                        titleBinding: $retryTitleText,
                         titleCount: retryTitleText.count,
-                        bodyBinding: retryBodyBinding,
+                        bodyBinding: $retryBodyText,
                         bodyCount: retryBodyText.count,
+                        titleField: .retryTitle,
+                        bodyField: .retryBody,
                         previewTitle: CustomReminderPreview.retryTitle(custom: retryTitleText, isPlus: isPlus),
                         previewBody: CustomReminderPreview.retryBody(custom: retryBodyText, isPlus: isPlus),
                         previewIdentifier: "reminder-preview-followup"
                     )
 
                     group(
-                        header: "LAST CALL",
-                        titleBinding: lastCallTitleBinding,
+                        index: 3,
+                        header: "Last call",
+                        subtitle: "A final heads-up before the day ends.",
+                        titleBinding: $lastCallTitleText,
                         titleCount: lastCallTitleText.count,
-                        bodyBinding: lastCallBodyBinding,
+                        bodyBinding: $lastCallBodyText,
                         bodyCount: lastCallBodyText.count,
+                        titleField: .lastCallTitle,
+                        bodyField: .lastCallBody,
                         previewTitle: CustomReminderPreview.lastCallTitle(custom: lastCallTitleText, method: method, isPlus: isPlus),
                         previewBody: CustomReminderPreview.lastCallBody(custom: lastCallBodyText, method: method, isPlus: isPlus),
                         previewIdentifier: "reminder-preview-lastcall"
@@ -132,6 +117,8 @@ struct CustomReminderMessagesEditor: View {
                     Text("Leave anything blank and Pillie uses its own wording.")
                         .font(.pillieCaption())
                         .foregroundStyle(PillieTheme.textMuted)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .padding(.top, 4)
 
                     Button {
                         settingsFeedback.commitScheduleSave(accessibilityReduceMotion: accessibilityReduceMotion)
@@ -149,10 +136,22 @@ struct CustomReminderMessagesEditor: View {
                         Text("Save")
                     }
                     .buttonStyle(.pillieDark)
-                    .padding(.top, 4)
+                    .padding(.top, 8)
                 }
                 .padding(.horizontal, 24)
-                .padding(.bottom, 24)
+                // The dark CTA casts a soft drop shadow (radius 15, y 8); without room
+                // below it the ScrollView clips the shadow against the beige bg, leaving
+                // a hard cut-off line. Reserve enough space for the shadow to fade out.
+                .padding(.bottom, 40)
+            }
+            .scrollDismissesKeyboard(.interactively)
+            .toolbar {
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    Button("Done") { focusedField = nil }
+                        .font(.pillieBodySemibold())
+                        .foregroundStyle(PillieTheme.textPrimary)
+                }
             }
         }
         .onAppear {
@@ -172,20 +171,21 @@ struct CustomReminderMessagesEditor: View {
 
     @ViewBuilder
     private func group(
+        index: Int,
         header: String,
+        subtitle: String,
         titleBinding: Binding<String>,
         titleCount: Int,
         bodyBinding: Binding<String>,
         bodyCount: Int,
+        titleField: Field,
+        bodyField: Field,
         previewTitle: String,
         previewBody: String,
         previewIdentifier: String
     ) -> some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text(header)
-                .font(.pillieCaptionMedium())
-                .foregroundStyle(PillieTheme.textMuted)
-                .tracking(2)
+        VStack(alignment: .leading, spacing: 14) {
+            sectionHeader(index: index, header: header, subtitle: subtitle)
 
             field(
                 label: "Title",
@@ -193,7 +193,8 @@ struct CustomReminderMessagesEditor: View {
                 text: titleBinding,
                 count: titleCount,
                 cap: CustomReminderCopy.titleCap,
-                axis: .horizontal
+                axis: .horizontal,
+                field: titleField
             )
 
             field(
@@ -202,11 +203,37 @@ struct CustomReminderMessagesEditor: View {
                 text: bodyBinding,
                 count: bodyCount,
                 cap: CustomReminderCopy.bodyCap,
-                axis: .vertical
+                axis: .vertical,
+                field: bodyField
             )
 
             previewBanner(title: previewTitle, body: previewBody, identifier: previewIdentifier)
         }
+    }
+
+    /// A numbered, two-line header so the three reminders read as an ordered sequence
+    /// (daily → follow-up → last call) and each one clearly states what it does.
+    @ViewBuilder
+    private func sectionHeader(index: Int, header: String, subtitle: String) -> some View {
+        HStack(alignment: .center, spacing: 12) {
+            Text("\(index)")
+                .font(.pillie(15, weight: .bold))
+                .foregroundStyle(.white)
+                .frame(width: 28, height: 28)
+                .background(Circle().fill(PillieTheme.dark))
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(header)
+                    .font(.pillieBodyBold())
+                    .foregroundStyle(PillieTheme.textPrimary)
+                Text(subtitle)
+                    .font(.pillieDate())
+                    .foregroundStyle(PillieTheme.textMuted)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(header). \(subtitle)")
     }
 
     /// A mock lock-screen notification banner that renders the *effective* copy that will
@@ -257,6 +284,7 @@ struct CustomReminderMessagesEditor: View {
                 RoundedRectangle(cornerRadius: PillieTheme.cardRadius, style: .continuous)
                     .stroke(PillieTheme.sageHalf, lineWidth: 1)
             )
+            .shadow(color: PillieTheme.cardShadow, radius: 10, y: 4)
         }
         .accessibilityIdentifier(identifier)
         .accessibilityElement(children: .combine)
@@ -270,13 +298,16 @@ struct CustomReminderMessagesEditor: View {
         text: Binding<String>,
         count: Int,
         cap: Int,
-        axis: Axis
+        axis: Axis,
+        field: Field
     ) -> some View {
+        let isFocused = focusedField == field
         VStack(alignment: .leading, spacing: 6) {
             HStack {
                 Text(label)
-                    .font(.pillieCaption())
+                    .font(.pillieCaptionMedium())
                     .foregroundStyle(PillieTheme.textMuted)
+                    .tracking(1)
                 Spacer()
                 Text("\(count)/\(cap)")
                     .font(.pillieCaption())
@@ -288,6 +319,14 @@ struct CustomReminderMessagesEditor: View {
                 .lineLimit(axis == .vertical ? 3...5 : 1...1)
                 .font(.pillieBody())
                 .foregroundStyle(PillieTheme.textPrimary)
+                .focused($focusedField, equals: field)
+                // Hard cap: drop anything typed or pasted past the limit so the field
+                // can never exceed `cap` (the count label stays in sync).
+                .onChange(of: text.wrappedValue) { _, newValue in
+                    if newValue.count > cap {
+                        text.wrappedValue = String(newValue.prefix(cap))
+                    }
+                }
                 .padding(.horizontal, 14)
                 .padding(.vertical, 12)
                 .background(
@@ -296,8 +335,11 @@ struct CustomReminderMessagesEditor: View {
                 )
                 .overlay(
                     RoundedRectangle(cornerRadius: PillieTheme.cardRadius)
-                        .stroke(PillieTheme.sageHalf, lineWidth: 1)
+                        .stroke(isFocused ? PillieTheme.verifiedGreen : PillieTheme.sageHalf,
+                                lineWidth: isFocused ? 1.5 : 1)
                 )
+                .shadow(color: PillieTheme.cardShadow, radius: 10, y: 4)
+                .animation(.easeInOut(duration: 0.15), value: isFocused)
         }
     }
 }

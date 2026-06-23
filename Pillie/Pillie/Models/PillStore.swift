@@ -144,6 +144,13 @@ class PillStore {
             }
         }
     }
+    /// Whether Pillie offers Adaptive Reminder Time suggestions (#126). A Pillie+ Smart
+    /// Notifications perk, toggled from Settings. Default ON; when off, the suggestion
+    /// card never surfaces regardless of logging history. Only affects the proposal — it
+    /// never changes the reminder time on its own.
+    var adaptiveReminderEnabled: Bool {
+        didSet { UserDefaults.standard.set(adaptiveReminderEnabled, forKey: Self.adaptiveReminderEnabledKey) }
+    }
     var appActivatedDate: Date? {
         didSet {
             if let date = appActivatedDate {
@@ -234,6 +241,7 @@ class PillStore {
     private static let customLastCallReminderBodyKey = "pillie_custom_last_call_reminder_body"
     private static let adaptiveReminderLastDismissalKey = "pillie_adaptive_reminder_last_dismissal"
     private static let adaptiveReminderLastDismissedDeltaKey = "pillie_adaptive_reminder_last_dismissed_delta"
+    private static let adaptiveReminderEnabledKey = "pillie_adaptive_reminder_enabled"
     private static let appActivatedDateKey = "pillie_app_activated_date"
     private static let streakResetDateKey = "pillie_streak_reset_date"
     private static let painPointsKey = "pillie_pain_points"
@@ -589,6 +597,8 @@ class PillStore {
     /// acts on this automatically — the suggestion only surfaces a dismissible card,
     /// and any change is applied through the normal reminder-time path on accept.
     var adaptiveReminderSuggestion: AdaptiveReminderTimeAnalyzer.Suggestion? {
+        guard adaptiveReminderEnabled else { return nil }
+
         let records = packs
             .flatMap { $0.days }
             .map { (date: $0.date, takenAt: $0.takenAt) }
@@ -1171,6 +1181,8 @@ class PillStore {
             self.adaptiveReminderLastDismissal = nil
         }
         self.adaptiveReminderLastDismissedDelta = defaults.object(forKey: Self.adaptiveReminderLastDismissedDeltaKey) as? Int
+        // Default ON: Adaptive Reminder Time is a Pillie+ Smart Notifications perk (#126).
+        self.adaptiveReminderEnabled = defaults.object(forKey: Self.adaptiveReminderEnabledKey) as? Bool ?? true
 
         let defaultMethod = resolvedPacks
             .sorted(by: { $0.packNumber < $1.packNumber })

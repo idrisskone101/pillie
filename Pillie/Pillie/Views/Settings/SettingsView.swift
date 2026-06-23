@@ -124,6 +124,15 @@ struct SettingsView: View {
                             settingsRow("Last Call Reminder", value: store.lastCallReminderDisplay)
                         }
                         .buttonStyle(.plain)
+                        divider
+                        adaptiveReminderRow {
+                            Toggle("", isOn: Binding(
+                                get: { store.adaptiveReminderEnabled },
+                                set: { store.adaptiveReminderEnabled = $0 }
+                            ))
+                                .labelsHidden()
+                                .tint(PillieTheme.coral)
+                        }
                     } else {
                         Button {
                             openSettingSheet { showSmartRemindersUpsell = true }
@@ -146,6 +155,24 @@ struct SettingsView: View {
                             ProductAnalyticsTelemetry.live.settingsSmartRemindersUpsellViewed()
                         } label: {
                             settingsRow("Last Call Reminder", value: "Pillie+", valueColor: PillieTheme.coral, showLock: true)
+                        }
+                        .buttonStyle(.plain)
+                        divider
+                        Button {
+                            openSettingSheet { showSmartRemindersUpsell = true }
+                            ProductAnalyticsTelemetry.live.settingsSmartRemindersUpsellViewed()
+                        } label: {
+                            adaptiveReminderRow {
+                                Image(systemName: "lock.fill")
+                                    .font(.system(size: 11, weight: .semibold))
+                                    .foregroundStyle(PillieTheme.coral)
+                                Text("Pillie+")
+                                    .font(.pillie(15, weight: .regular))
+                                    .foregroundStyle(PillieTheme.coral)
+                                Image(systemName: "chevron.right")
+                                    .font(.system(size: 13, weight: .semibold))
+                                    .foregroundStyle(PillieTheme.textMuted.opacity(0.4))
+                            }
                         }
                         .buttonStyle(.plain)
                         .sheet(isPresented: $showSmartRemindersUpsell) {
@@ -412,6 +439,32 @@ struct SettingsView: View {
             ))
                 .labelsHidden()
                 .tint(PillieTheme.coral)
+        }
+        .padding(.horizontal, 20)
+        .padding(.vertical, 16)
+        .contentShape(Rectangle())
+    }
+
+    /// Adaptive Reminder Time row (#126). A Smart Notifications / Pillie+ perk that lets
+    /// Pillie propose shifting the daily reminder toward when the user actually logs. The
+    /// trailing accessory is a toggle for Plus users and a lock for free users; both share
+    /// the same title and one-line subtitle so the row reads the same either way.
+    private func adaptiveReminderRow<Accessory: View>(@ViewBuilder accessory: () -> Accessory) -> some View {
+        HStack(alignment: .center, spacing: 8) {
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Adaptive Reminder Time")
+                    .font(.pillieSubtitleBold())
+                    .foregroundStyle(PillieTheme.textPrimary)
+                Text("Suggests a reminder time based on when you log.")
+                    .font(.pillie(13, weight: .regular))
+                    .foregroundStyle(PillieTheme.textMuted)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
+            }
+
+            Spacer(minLength: 8)
+
+            accessory()
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 16)
@@ -793,9 +846,11 @@ private struct LastCallReminderEditor: View {
     var body: some View {
         SettingsSheetContainer(title: "Last Call Reminder", bottomPadding: 0) {
             VStack(spacing: 20) {
-                Text("A gentle end-of-day re-fire of your reminder, sent only if today's action is still open.")
+                Text("A final nudge if today's action is still open.")
                     .font(.pillieCaption())
                     .foregroundStyle(PillieTheme.textMuted)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 28)
 
