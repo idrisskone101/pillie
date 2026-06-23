@@ -122,6 +122,28 @@ class PillStore {
     var customLastCallReminderBody: String {
         didSet { UserDefaults.standard.set(customLastCallReminderBody, forKey: Self.customLastCallReminderBodyKey) }
     }
+    /// When the user last dismissed an Adaptive Reminder Time Suggestion (#126). Starts
+    /// the ~14-day cooldown so the card is not re-pitched immediately after a dismissal.
+    var adaptiveReminderLastDismissal: Date? {
+        didSet {
+            if let date = adaptiveReminderLastDismissal {
+                UserDefaults.standard.set(date, forKey: Self.adaptiveReminderLastDismissalKey)
+            } else {
+                UserDefaults.standard.removeObject(forKey: Self.adaptiveReminderLastDismissalKey)
+            }
+        }
+    }
+    /// The signed delta (minutes) of the last dismissed suggestion, so the exact same
+    /// delta is never re-pitched after a dismissal (#126).
+    var adaptiveReminderLastDismissedDelta: Int? {
+        didSet {
+            if let delta = adaptiveReminderLastDismissedDelta {
+                UserDefaults.standard.set(delta, forKey: Self.adaptiveReminderLastDismissedDeltaKey)
+            } else {
+                UserDefaults.standard.removeObject(forKey: Self.adaptiveReminderLastDismissedDeltaKey)
+            }
+        }
+    }
     var appActivatedDate: Date? {
         didSet {
             if let date = appActivatedDate {
@@ -210,6 +232,8 @@ class PillStore {
     private static let customRetryReminderBodyKey = "pillie_custom_retry_reminder_body"
     private static let customLastCallReminderTitleKey = "pillie_custom_last_call_reminder_title"
     private static let customLastCallReminderBodyKey = "pillie_custom_last_call_reminder_body"
+    private static let adaptiveReminderLastDismissalKey = "pillie_adaptive_reminder_last_dismissal"
+    private static let adaptiveReminderLastDismissedDeltaKey = "pillie_adaptive_reminder_last_dismissed_delta"
     private static let appActivatedDateKey = "pillie_app_activated_date"
     private static let streakResetDateKey = "pillie_streak_reset_date"
     private static let painPointsKey = "pillie_pain_points"
@@ -557,6 +581,41 @@ class PillStore {
         return statuses
     }
 
+    // MARK: - Adaptive Reminder Time Suggestion (#126)
+
+    /// A confident proposal to shift the primary reminder time toward when the user
+    /// actually logs, or `nil` when no such proposal exists (too few logs, high
+    /// variance, an active cooldown, or a previously-dismissed delta). Pillie never
+    /// acts on this automatically — the suggestion only surfaces a dismissible card,
+    /// and any change is applied through the normal reminder-time path on accept.
+    var adaptiveReminderSuggestion: AdaptiveReminderTimeAnalyzer.Suggestion? {
+        let records = packs
+            .flatMap { $0.days }
+            .map { (date: $0.date, takenAt: $0.takenAt) }
+
+        let logs = AdaptiveReminderLogBuilder.logs(
+            from: records,
+            reminderHour: reminderHour,
+            reminderMinute: reminderMinute
+        )
+
+        return AdaptiveReminderTimeAnalyzer().suggestion(
+            logs: logs,
+            currentReminderHour: reminderHour,
+            currentReminderMinute: reminderMinute,
+            now: PillieClock.now,
+            lastDismissal: adaptiveReminderLastDismissal,
+            lastDismissedDelta: adaptiveReminderLastDismissedDelta
+        )
+    }
+
+    /// Hides the suggestion card and starts the cooldown. The dismissed delta is
+    /// recorded so the same delta is not re-pitched after a dismissal.
+    func dismissAdaptiveReminderSuggestion(delta: Int) {
+        adaptiveReminderLastDismissal = PillieClock.now
+        adaptiveReminderLastDismissedDelta = delta
+    }
+
     // MARK: - Actions
 
     func markTodayAsTaken() {
@@ -604,12 +663,14 @@ class PillStore {
             existingDay.date = day
             existingDay.status = .taken
             existingDay.actionType = due.type
+            existingDay.takenAt = PillieClock.now
             index(dayRecord: existingDay, forPackID: targetPack.id, epochDay: dayEpoch)
         } else {
             let newDay = PillDay(
                 date: day,
                 status: .taken,
                 actionType: due.type,
+                takenAt: PillieClock.now,
                 pack: targetPack
             )
             modelContext.insert(newDay)
@@ -690,6 +751,8 @@ class PillStore {
             }
         }
 
+        // Clear the adaptive-timing signal before removing the record.
+        existingDay.takenAt = nil
         modelContext.delete(existingDay)
         removeDayRecordIndex(forPackID: targetPack.id, epochDay: dayEpoch)
         invalidateSnapshotCache(forPackID: targetPack.id, epochDay: dayEpoch)
@@ -1101,6 +1164,14 @@ class PillStore {
         self.customLastCallReminderTitle = defaults.string(forKey: Self.customLastCallReminderTitleKey) ?? ""
         self.customLastCallReminderBody = defaults.string(forKey: Self.customLastCallReminderBodyKey) ?? ""
 
+        if let storedDismissal = defaults.object(forKey: Self.adaptiveReminderLastDismissalKey) as? Date,
+           Self.isValidPersistedDate(storedDismissal) {
+            self.adaptiveReminderLastDismissal = storedDismissal
+        } else {
+            self.adaptiveReminderLastDismissal = nil
+        }
+        self.adaptiveReminderLastDismissedDelta = defaults.object(forKey: Self.adaptiveReminderLastDismissedDeltaKey) as? Int
+
         let defaultMethod = resolvedPacks
             .sorted(by: { $0.packNumber < $1.packNumber })
             .last(where: { $0.isCurrent })?.method ?? .pill
@@ -1151,6 +1222,35 @@ class PillStore {
 
         rebuildReadIndexes()
     }
+
+    #if DEBUG
+    /// Seeds a consistent late-logging history so the Adaptive Reminder Time Suggestion
+    /// card (#126) surfaces for simulator QA. Inserts `count` recent taken days whose
+    /// `takenAt` lands `offsetMinutes` after the current reminder time, and clears any
+    /// active dismissal cooldown. DEBUG-only QA shortcut — never compiled into release.
+    func seedAdaptiveReminderDebugLogs(count: Int = 12, offsetMinutes: Int = 45) {
+        guard let pack = activePack else { return }
+        let calendar = Calendar.current
+        let todayStart = calendar.startOfDay(for: PillieClock.now)
+
+        adaptiveReminderLastDismissal = nil
+        adaptiveReminderLastDismissedDelta = nil
+
+        for dayOffset in 1...count {
+            guard let day = calendar.date(byAdding: .day, value: -dayOffset, to: todayStart),
+                  let scheduled = calendar.date(bySettingHour: reminderHour, minute: reminderMinute, second: 0, of: day)
+            else { continue }
+            let takenAt = scheduled.addingTimeInterval(Double(offsetMinutes) * 60)
+            modelContext.insert(
+                PillDay(date: day, status: .taken, actionType: .pillActive, takenAt: takenAt, pack: pack)
+            )
+        }
+
+        try? modelContext.save()
+        refreshPacks()
+        rebuildReadIndexes()
+    }
+    #endif
 
     // MARK: - Preview
 

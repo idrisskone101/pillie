@@ -12,6 +12,10 @@ final class PillDay: Identifiable {
     var date: Date
     var status: Status
     var actionTypeRaw: String = ActionType.pillActive.rawValue
+    /// On-device timestamp of when this action was actually marked taken.
+    /// Used by the Adaptive Reminder Time Suggestion; never sent as analytics.
+    /// Defaults to nil so existing records migrate cleanly.
+    var takenAt: Date?
     var pack: PillPack?
 
     enum Status: String, Codable, Hashable {
@@ -103,12 +107,14 @@ final class PillDay: Identifiable {
         date: Date,
         status: Status,
         actionType: ActionType = .pillActive,
+        takenAt: Date? = nil,
         pack: PillPack? = nil
     ) {
         self.id = id
         self.date = date
         self.status = status
         self.actionTypeRaw = actionType.rawValue
+        self.takenAt = takenAt
         self.pack = pack
     }
 }

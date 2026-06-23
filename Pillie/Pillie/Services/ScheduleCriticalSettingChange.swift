@@ -23,6 +23,20 @@ enum ScheduleCriticalSettingChange {
         ProductAnalyticsTelemetry.live.reminderTimeSaved()
     }
 
+    /// Applies the Adaptive Reminder Time Suggestion (#126) the user accepted on Home.
+    /// It goes through the very same `saveReminderTime` path as the Settings editor, so
+    /// the change is never silent: the reminder time updates and all reminders reschedule,
+    /// and the blocking start time moves only as a consequence of the user-confirmed new
+    /// reminder time — never independently.
+    static func acceptAdaptiveReminderSuggestion(
+        store: PillStore,
+        hour: Int,
+        minute: Int
+    ) {
+        saveReminderTime(store: store, hour: hour, minute: minute, reason: "adaptive-reminder-accepted")
+        ProductAnalyticsTelemetry.live.adaptiveReminderSuggestionAccepted()
+    }
+
     static func saveSettingsAutoReminderInterval(
         store: PillStore,
         intervalMinutes: Int

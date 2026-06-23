@@ -158,6 +158,9 @@ enum AnalyticsEvent: String, CaseIterable {
   case plusUpsellViewed = "plus_upsell_viewed"
   case plusUpsellDismissed = "plus_upsell_dismissed"
   case plusUpsellUpgradeTapped = "plus_upsell_upgrade_tapped"
+  case adaptiveReminderSuggestionShown = "adaptive_reminder_suggestion_shown"
+  case adaptiveReminderSuggestionAccepted = "adaptive_reminder_suggestion_accepted"
+  case adaptiveReminderSuggestionDismissed = "adaptive_reminder_suggestion_dismissed"
 }
 
 enum AnalyticsSource: String {

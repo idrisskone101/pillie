@@ -253,6 +253,14 @@ struct PillieApp: App {
             SubscriptionManager.shared.setPlusForTesting(true)
             UserDefaults.standard.set(false, forKey: OnboardingFlow.selectedFreePlanStorageKey)
             UserDefaults.standard.set(OnboardingFlow.Step.complete.rawValue, forKey: OnboardingFlow.stepStorageKey)
+        case "/adaptive-reminder-suggestion":
+            // QA shortcut (#126): land on Home as a Plus subscriber with a seeded
+            // consistent late-logging history so the Adaptive Reminder Time Suggestion
+            // card surfaces and its accept/dismiss flow can be verified in the simulator.
+            SubscriptionManager.shared.setPlusForTesting(true)
+            UserDefaults.standard.set(false, forKey: OnboardingFlow.selectedFreePlanStorageKey)
+            UserDefaults.standard.set(OnboardingFlow.Step.complete.rawValue, forKey: OnboardingFlow.stepStorageKey)
+            store.seedAdaptiveReminderDebugLogs()
         default:
             return
         }
