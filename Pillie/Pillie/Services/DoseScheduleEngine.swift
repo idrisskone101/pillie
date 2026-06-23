@@ -103,6 +103,33 @@ struct DoseScheduleAction: Hashable {
             return "Open Pillie when you're ready."
         }
     }
+
+    /// Title for the end-of-day Last Call backstop. Pillie-authored, single title across
+    /// methods; the body carries the method-specific action.
+    var lastCallReminderTitle: String {
+        "Last call for today"
+    }
+
+    /// Method-aware body for the Last Call backstop. Obeys the medical-claims copy rules
+    /// — no "never miss", no "protect", no efficacy framing.
+    var lastCallReminderBody: String {
+        switch type {
+        case .pillActive:
+            return "The day's almost over — a good moment to take your pill and log it."
+        case .patchChange:
+            return "The day's almost over — a good moment to switch your patch and log it."
+        case .patchRemove:
+            return "The day's almost over — a good moment to remove your patch and log it."
+        case .ringInsert:
+            return "The day's almost over — a good moment to insert your ring and log it."
+        case .ringRemove:
+            return "The day's almost over — a good moment to remove your ring and log it."
+        case .ringReinsert:
+            return "The day's almost over — a good moment to reinsert your ring and log it."
+        case .pillBreak, .patchActive, .patchBreak, .ringActive, .ringBreak:
+            return "The day's almost over — open Pillie when you're ready."
+        }
+    }
 }
 
 enum DoseScheduleEngine {

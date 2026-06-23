@@ -15,6 +15,7 @@ struct SettingsView: View {
     @State private var showTimeEditor = false
     @State private var showIntervalEditor = false
     @State private var showRetryLimitEditor = false
+    @State private var showLastCallEditor = false
     @State private var showRefillReminderEditor = false
     @State private var showProtocolEditor = false
     @State private var showCycleDayEditor = false
@@ -116,6 +117,13 @@ struct SettingsView: View {
                             settingsRow("Number of Nudges", value: store.autoReminderRetryLimitDisplay)
                         }
                         .buttonStyle(.plain)
+                        divider
+                        Button {
+                            openSettingSheet { showLastCallEditor = true }
+                        } label: {
+                            settingsRow("Last Call Reminder", value: store.lastCallReminderDisplay)
+                        }
+                        .buttonStyle(.plain)
                     } else {
                         Button {
                             openSettingSheet { showSmartRemindersUpsell = true }
@@ -130,6 +138,14 @@ struct SettingsView: View {
                             ProductAnalyticsTelemetry.live.settingsSmartRemindersUpsellViewed()
                         } label: {
                             settingsRow("Number of Nudges", value: "Pillie+", valueColor: PillieTheme.coral, showLock: true)
+                        }
+                        .buttonStyle(.plain)
+                        divider
+                        Button {
+                            openSettingSheet { showSmartRemindersUpsell = true }
+                            ProductAnalyticsTelemetry.live.settingsSmartRemindersUpsellViewed()
+                        } label: {
+                            settingsRow("Last Call Reminder", value: "Pillie+", valueColor: PillieTheme.coral, showLock: true)
                         }
                         .buttonStyle(.plain)
                         .sheet(isPresented: $showSmartRemindersUpsell) {
@@ -253,6 +269,12 @@ struct SettingsView: View {
         .sheet(isPresented: $showRetryLimitEditor) {
             AutoReminderRetryLimitEditor(store: store)
                 .presentationDetents([.height(500)])
+                .presentationDragIndicator(.hidden)
+                .presentationBackground(PillieTheme.bg)
+        }
+        .sheet(isPresented: $showLastCallEditor) {
+            LastCallReminderEditor(store: store)
+                .presentationDetents([.height(440)])
                 .presentationDragIndicator(.hidden)
                 .presentationBackground(PillieTheme.bg)
         }
@@ -748,6 +770,109 @@ private struct ReminderTimeEditor: View {
         )
         ScheduleCriticalSettingChange.saveSettingsReminderTime(
             store: store,
+            hour: selection.hour,
+            minute: selection.minute
+        )
+    }
+}
+
+// MARK: - Last Call Reminder Editor
+
+private struct LastCallReminderEditor: View {
+    @Bindable var store: PillStore
+    @Environment(\.dismiss) private var dismiss
+    @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
+
+    @State private var isEnabled: Bool = false
+    @State private var selectedHour: Int = 9
+    @State private var selectedMinute: Int = 0
+    @State private var selectedPeriod: Int = 1
+
+    private let settingsFeedback = SettingsInteractionFeedback()
+
+    var body: some View {
+        SettingsSheetContainer(title: "Last Call Reminder", bottomPadding: 0) {
+            VStack(spacing: 20) {
+                Text("A gentle end-of-day re-fire of your reminder, sent only if today's action is still open.")
+                    .font(.pillieCaption())
+                    .foregroundStyle(PillieTheme.textMuted)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 28)
+
+                Toggle("Last Call Reminder", isOn: $isEnabled)
+                    .toggleStyle(SwitchToggleStyle(tint: PillieTheme.coral))
+                    .font(.pillieBodyBold())
+                    .foregroundStyle(PillieTheme.textPrimary)
+                    .padding(.horizontal, 28)
+
+                HStack(spacing: 0) {
+                    Picker("Hour", selection: $selectedHour) {
+                        ForEach(1...12, id: \.self) { hour in
+                            Text("\(hour)").tag(hour)
+                        }
+                    }
+                    .pickerStyle(.wheel)
+                    .frame(width: 70, height: 130)
+                    .clipped()
+
+                    Text(":")
+                        .font(.pillieHeadline())
+                        .foregroundStyle(PillieTheme.textPrimary)
+
+                    Picker("Minute", selection: $selectedMinute) {
+                        ForEach(0..<60, id: \.self) { minute in
+                            Text(String(format: "%02d", minute)).tag(minute)
+                        }
+                    }
+                    .pickerStyle(.wheel)
+                    .frame(width: 70, height: 130)
+                    .clipped()
+
+                    Picker("Period", selection: $selectedPeriod) {
+                        Text("AM").tag(0)
+                        Text("PM").tag(1)
+                    }
+                    .pickerStyle(.wheel)
+                    .frame(width: 70, height: 130)
+                    .clipped()
+                }
+                .opacity(isEnabled ? 1 : 0.4)
+                .disabled(!isEnabled)
+            }
+
+            Button {
+                settingsFeedback.commitScheduleSave(accessibilityReduceMotion: accessibilityReduceMotion)
+                saveLastCallReminder()
+                dismiss()
+            } label: {
+                Text("Save")
+            }
+            .buttonStyle(.pillieDark)
+            .padding(.horizontal, 28)
+        }
+        .onAppear { seedFromStore() }
+    }
+
+    private func seedFromStore() {
+        isEnabled = store.lastCallReminderEnabled
+        let selection = ReminderTimeConverter.toTwelveHour(
+            hour24: store.lastCallReminderHour,
+            minute: store.lastCallReminderMinute
+        )
+        selectedHour = selection.hour
+        selectedMinute = selection.minute
+        selectedPeriod = selection.period
+    }
+
+    private func saveLastCallReminder() {
+        let selection = ReminderTimeConverter.toTwentyFourHour(
+            hour: selectedHour,
+            minute: selectedMinute,
+            period: selectedPeriod
+        )
+        ScheduleCriticalSettingChange.saveSettingsLastCallReminder(
+            store: store,
+            enabled: isEnabled,
             hour: selection.hour,
             minute: selection.minute
         )

@@ -41,6 +41,21 @@ enum ScheduleCriticalSettingChange {
         ProductAnalyticsTelemetry.live.autoReminderRetryLimitSaved()
     }
 
+    /// Saves the Last Call Reminder on/off state and time, then reschedules so the
+    /// end-of-day backstop is (re)planned. Timing is gated again at build time via the
+    /// `pillie_plus` entitlement; the stored values are never mutated by the gate.
+    static func saveSettingsLastCallReminder(
+        store: PillStore,
+        enabled: Bool,
+        hour: Int,
+        minute: Int
+    ) {
+        store.lastCallReminderEnabled = enabled
+        store.lastCallReminderHour = hour
+        store.lastCallReminderMinute = minute
+        NotificationManager.shared.requestReschedule(from: store, reason: "settings-last-call")
+    }
+
     static func saveSettingsSupplyReminderThreshold(
         store: PillStore,
         threshold: Int

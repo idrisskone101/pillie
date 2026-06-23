@@ -79,6 +79,20 @@ class PillStore {
     var contraceptiveMethod: ContraceptiveMethod {
         didSet { UserDefaults.standard.set(contraceptiveMethod.rawValue, forKey: Self.contraceptiveMethodKey) }
     }
+    /// Whether the Last Call Reminder — a single end-of-day re-fire of the Due Action
+    /// Reminder that fires only while the action is still untaken — is enabled. A Smart
+    /// Reminders perk: stored even for free users but gated off at notification build time
+    /// via the `pillie_plus` entitlement (ADR 0004). Default off.
+    var lastCallReminderEnabled: Bool {
+        didSet { UserDefaults.standard.set(lastCallReminderEnabled, forKey: Self.lastCallReminderEnabledKey) }
+    }
+    /// Configured Last Call time-of-day (24h). Default 21:00 (9:00 PM local).
+    var lastCallReminderHour: Int {
+        didSet { UserDefaults.standard.set(lastCallReminderHour, forKey: Self.lastCallReminderHourKey) }
+    }
+    var lastCallReminderMinute: Int {
+        didSet { UserDefaults.standard.set(lastCallReminderMinute, forKey: Self.lastCallReminderMinuteKey) }
+    }
     /// Raw custom Due Action Reminder title (Pillie+ perk). A Personalization Setting,
     /// not Tracking Data: it survives a contraception method change and a Tracking Data
     /// Reset, and is retained — but ignored — when Plus lapses (build-time gate lives in
@@ -178,6 +192,9 @@ class PillStore {
     private static let patchRestockReminderThresholdPatchesKey = "pillie_patch_restock_threshold_patches"
     private static let contraceptiveMethodKey = "pillie_contraceptive_method"
     private static let cycleTransitionNoticeEnabledKey = "pillie_cycle_transition_notice_enabled"
+    private static let lastCallReminderEnabledKey = "pillie_last_call_reminder_enabled"
+    private static let lastCallReminderHourKey = "pillie_last_call_reminder_hour"
+    private static let lastCallReminderMinuteKey = "pillie_last_call_reminder_minute"
     private static let customDueReminderTitleKey = "pillie_custom_due_reminder_title"
     private static let customDueReminderBodyKey = "pillie_custom_due_reminder_body"
     private static let customRetryReminderTitleKey = "pillie_custom_retry_reminder_title"
@@ -325,6 +342,18 @@ class PillStore {
 
     var refillReminderThresholdDisplay: String {
         "\(refillReminderThresholdDays) days before end"
+    }
+
+    var lastCallReminderTimeDisplay: String {
+        let h = lastCallReminderHour
+        let m = lastCallReminderMinute
+        let period = h >= 12 ? "PM" : "AM"
+        let displayHour = h == 0 ? 12 : (h > 12 ? h - 12 : h)
+        return String(format: "%d:%02d %@", displayHour, m, period)
+    }
+
+    var lastCallReminderDisplay: String {
+        lastCallReminderEnabled ? lastCallReminderTimeDisplay : "Off"
     }
 
     var patchRestockReminderThresholdDisplay: String {
@@ -1050,6 +1079,9 @@ class PillStore {
 
         // Default ON: the Cycle Transition Notice is a free clarity aid (#123).
         self.cycleTransitionNoticeEnabled = defaults.object(forKey: Self.cycleTransitionNoticeEnabledKey) as? Bool ?? true
+        self.lastCallReminderEnabled = defaults.object(forKey: Self.lastCallReminderEnabledKey) as? Bool ?? false
+        self.lastCallReminderHour = defaults.object(forKey: Self.lastCallReminderHourKey) as? Int ?? 21
+        self.lastCallReminderMinute = defaults.object(forKey: Self.lastCallReminderMinuteKey) as? Int ?? 0
 
         self.customDueReminderTitle = defaults.string(forKey: Self.customDueReminderTitleKey) ?? ""
         self.customDueReminderBody = defaults.string(forKey: Self.customDueReminderBodyKey) ?? ""

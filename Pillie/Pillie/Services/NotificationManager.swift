@@ -225,6 +225,9 @@ final class NotificationManager {
                 snoozeOverride: snoozeOverride,
                 smartRemindersEnabled: SubscriptionManager.shared.isPlus,
                 cycleTransitionEnabled: store.cycleTransitionNoticeEnabled,
+                lastCallEnabled: store.lastCallReminderEnabled,
+                lastCallHour: store.lastCallReminderHour,
+                lastCallMinute: store.lastCallReminderMinute,
                 calendar: calendar
             )
         )
@@ -274,7 +277,12 @@ final class NotificationManager {
         isPlus: Bool
     ) -> UNNotificationRequest {
         let content = UNMutableNotificationContent()
-        if due.kind == .retry {
+        if due.kind == .lastCall {
+            // The Last Call backstop always uses Pillie-authored, method-aware copy
+            // (obeys the medical-claims copy rules). It is not customizable.
+            content.title = due.action.lastCallReminderTitle
+            content.body = due.action.lastCallReminderBody
+        } else if due.kind == .retry {
             // The Auto-Reminder Retry carries the user's custom follow-up copy when Plus;
             // each field falls back independently to the default retry copy when blank, so
             // an empty notification can never fire (same gate as the base reminder).

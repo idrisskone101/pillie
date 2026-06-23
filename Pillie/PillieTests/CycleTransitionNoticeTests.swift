@@ -63,6 +63,9 @@ final class CycleTransitionNoticeTests: XCTestCase {
                 snoozeOverride: nil,
                 smartRemindersEnabled: smartRemindersEnabled,
                 cycleTransitionEnabled: cycleTransitionEnabled,
+                lastCallEnabled: false,
+                lastCallHour: 21,
+                lastCallMinute: 0,
                 calendar: calendar
             )
         )
