@@ -60,48 +60,6 @@ struct CustomReminderMessagesEditor: View {
         text.trimmingCharacters(in: .whitespacesAndNewlines) == defaultCopy ? "" : text
     }
 
-    private var titleBinding: Binding<String> {
-        Binding(
-            get: { titleText },
-            set: { titleText = String($0.prefix(CustomReminderCopy.titleCap)) }
-        )
-    }
-
-    private var bodyBinding: Binding<String> {
-        Binding(
-            get: { bodyText },
-            set: { bodyText = String($0.prefix(CustomReminderCopy.bodyCap)) }
-        )
-    }
-
-    private var retryTitleBinding: Binding<String> {
-        Binding(
-            get: { retryTitleText },
-            set: { retryTitleText = String($0.prefix(CustomReminderCopy.titleCap)) }
-        )
-    }
-
-    private var retryBodyBinding: Binding<String> {
-        Binding(
-            get: { retryBodyText },
-            set: { retryBodyText = String($0.prefix(CustomReminderCopy.bodyCap)) }
-        )
-    }
-
-    private var lastCallTitleBinding: Binding<String> {
-        Binding(
-            get: { lastCallTitleText },
-            set: { lastCallTitleText = String($0.prefix(CustomReminderCopy.titleCap)) }
-        )
-    }
-
-    private var lastCallBodyBinding: Binding<String> {
-        Binding(
-            get: { lastCallBodyText },
-            set: { lastCallBodyText = String($0.prefix(CustomReminderCopy.bodyCap)) }
-        )
-    }
-
     var body: some View {
         SettingsSheetContainer(title: "Custom Messages") {
             ScrollView(.vertical, showsIndicators: false) {
@@ -115,9 +73,9 @@ struct CustomReminderMessagesEditor: View {
                         index: 1,
                         header: "Daily reminder",
                         subtitle: "Your main nudge when today's dose is due.",
-                        titleBinding: titleBinding,
+                        titleBinding: $titleText,
                         titleCount: titleText.count,
-                        bodyBinding: bodyBinding,
+                        bodyBinding: $bodyText,
                         bodyCount: bodyText.count,
                         titleField: .dailyTitle,
                         bodyField: .dailyBody,
@@ -130,9 +88,9 @@ struct CustomReminderMessagesEditor: View {
                         index: 2,
                         header: "Follow-up nudge",
                         subtitle: "A gentle retry if you haven't logged it yet.",
-                        titleBinding: retryTitleBinding,
+                        titleBinding: $retryTitleText,
                         titleCount: retryTitleText.count,
-                        bodyBinding: retryBodyBinding,
+                        bodyBinding: $retryBodyText,
                         bodyCount: retryBodyText.count,
                         titleField: .retryTitle,
                         bodyField: .retryBody,
@@ -145,9 +103,9 @@ struct CustomReminderMessagesEditor: View {
                         index: 3,
                         header: "Last call",
                         subtitle: "A final heads-up before the day ends.",
-                        titleBinding: lastCallTitleBinding,
+                        titleBinding: $lastCallTitleText,
                         titleCount: lastCallTitleText.count,
-                        bodyBinding: lastCallBodyBinding,
+                        bodyBinding: $lastCallBodyText,
                         bodyCount: lastCallBodyText.count,
                         titleField: .lastCallTitle,
                         bodyField: .lastCallBody,
@@ -362,6 +320,13 @@ struct CustomReminderMessagesEditor: View {
                 .font(.pillieBody())
                 .foregroundStyle(PillieTheme.textPrimary)
                 .focused($focusedField, equals: field)
+                // Hard cap: drop anything typed or pasted past the limit so the field
+                // can never exceed `cap` (the count label stays in sync).
+                .onChange(of: text.wrappedValue) { _, newValue in
+                    if newValue.count > cap {
+                        text.wrappedValue = String(newValue.prefix(cap))
+                    }
+                }
                 .padding(.horizontal, 14)
                 .padding(.vertical, 12)
                 .background(

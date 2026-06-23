@@ -846,9 +846,11 @@ private struct LastCallReminderEditor: View {
     var body: some View {
         SettingsSheetContainer(title: "Last Call Reminder", bottomPadding: 0) {
             VStack(spacing: 20) {
-                Text("A gentle end-of-day re-fire of your reminder, sent only if today's action is still open.")
+                Text("A final nudge if today's action is still open.")
                     .font(.pillieCaption())
                     .foregroundStyle(PillieTheme.textMuted)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 28)
 
