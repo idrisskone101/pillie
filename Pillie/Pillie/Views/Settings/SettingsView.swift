@@ -154,6 +154,8 @@ struct SettingsView: View {
                         settingsRow("Current Day in Cycle", value: "Day \(store.currentDayIndex + 1) of \(store.pack.cycleLength)")
                     }
                     .buttonStyle(.plain)
+                    divider
+                    cycleTransitionNoticeToggleRow
                 }
                 .modifier(FadeInUp(appeared: appeared, delay: 0.15))
 
@@ -364,6 +366,34 @@ struct SettingsView: View {
             .fill(PillieTheme.sage.opacity(0.3))
             .frame(height: 0.5)
             .padding(.leading, 20)
+    }
+
+    /// Free Cycle Transition Notice toggle (#123). Default ON. Not a Pillie+ perk, so it
+    /// has no lock and is shown to every user.
+    private var cycleTransitionNoticeToggleRow: some View {
+        HStack(alignment: .top) {
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Break Week Notice")
+                    .font(.pillieSubtitleBold())
+                    .foregroundStyle(PillieTheme.textPrimary)
+                Text("A heads-up when reminders pause for your break week.")
+                    .font(.pillie(13, weight: .regular))
+                    .foregroundStyle(PillieTheme.textMuted)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
+            Spacer()
+
+            Toggle("", isOn: Binding(
+                get: { store.cycleTransitionNoticeEnabled },
+                set: { ScheduleCriticalSettingChange.saveCycleTransitionNoticeEnabled(store: store, enabled: $0) }
+            ))
+                .labelsHidden()
+                .tint(PillieTheme.coral)
+        }
+        .padding(.horizontal, 20)
+        .padding(.vertical, 16)
+        .contentShape(Rectangle())
     }
 
     private var blockingStatusSummary: String {
