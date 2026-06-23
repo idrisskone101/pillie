@@ -144,6 +144,26 @@ _Avoid_: Existing simulator state, production device state
 A schedule scenario that probes behavior around clock, calendar, and cycle boundaries. These flows are first-class QA stories because Pillie depends on accurate local date and time interpretation.
 _Avoid_: Exotic time case, optional edge case
 
+**Review Prompt**:
+Pillie's two-step in-app ask for an App Store rating, shown as a Home card to free and Plus users alike once they reach [[Review Prompt Eligibility]]. Step one is a [[Sentiment Gate]]; only a positive response advances to the [[Native Review Request]], and a negative response opens the [[Feedback Escape Hatch]]. It is never a hard gate on app use and is not a Pillie Plus perk. Distinct from the retired in-onboarding review request (the `reviewPrompt` onboarding step, now dead and never rendered) which asked for a rating before the user had any demonstrated success; this Home Review Prompt is its success-gated successor, which is the whole point of [[Review Prompt Eligibility]].
+_Avoid_: Review module, rating popup, feedback form, in-onboarding review step
+
+**Sentiment Gate**:
+Step one of the [[Review Prompt]]: a low-stakes Home card asking how the user feels about Pillie (a positive/negative choice, not stars). It exists to keep unhappy users out of Apple's public rating flow, so its only job is to branch to the [[Native Review Request]] or the [[Feedback Escape Hatch]]. It is itself a [[Read-Only Schedule Surface]] consumer — it shows because of schedule success but never edits schedule data.
+_Avoid_: Star picker, in-app rating, NPS survey
+
+**Native Review Request**:
+The positive-path outcome of the [[Sentiment Gate]]: a single call to Apple's StoreKit `requestReview`, which the system may or may not display and which is capped by Apple at three prompts per user per 365 days. Pillie treats firing it as best-effort and never assumes the system sheet appeared or that a rating was left.
+_Avoid_: Guaranteed prompt, App Store write-review deep link, unlimited rating ask
+
+**Feedback Escape Hatch**:
+The negative-path outcome of the [[Sentiment Gate]]: a pre-filled native Mail composer to Pillie support (`pillieapp@gmail.com`) that captures dissatisfaction privately instead of sending the user to the public App Store rating. Its purpose is to protect the star average and give unhappy users a place to be heard; the email body the user types is private and is never sent as [[Product Analytics Telemetry]] (only a coarse "negative chosen" funnel signal may be). A missing Mail account is tolerated, not blocked on.
+_Avoid_: Public review, App Store redirect, server-side ticket system, logging feedback text
+
+**Review Prompt Eligibility**:
+The on-device condition that makes a user "successful for a bit" enough to see the [[Review Prompt]], derived purely from an unbroken [[Streak]] crossing a method-aware threshold: pill `>= 3`, patch `>= 1`, ring `>= 2`. The thresholds target roughly the same "demonstrated success" tenure across methods despite different due-action cadences (pill daily, patch weekly, ring cyclic); ring is `>= 2` rather than `>= 1` specifically so the day-one insertion does not fire the prompt at setup. Because a streak inherently encodes calendar tenure, there is no separate days-since-install floor — the streak is the whole eligibility signal. Cooldown after dismissal and re-show policy are defined in [the Review Prompt ADR]. Eligibility math stays on-device; only coarse funnel signals may become [[Product Analytics Telemetry]].
+_Avoid_: Days-since-install floor, fixed cross-method threshold, adherence percentage sent to analytics, server-side targeting
+
 ## Example Dialogue
 
 Dev: "When the user changes from Day 18 to Day 12, is that an advance?"
