@@ -113,6 +113,15 @@ class PillStore {
     var customRetryReminderBody: String {
         didSet { UserDefaults.standard.set(customRetryReminderBody, forKey: Self.customRetryReminderBodyKey) }
     }
+    /// Raw custom Last Call Reminder title (Pillie+ perk). Same Personalization-Setting
+    /// semantics as `customDueReminderTitle`; empty means "use the default Last Call copy".
+    var customLastCallReminderTitle: String {
+        didSet { UserDefaults.standard.set(customLastCallReminderTitle, forKey: Self.customLastCallReminderTitleKey) }
+    }
+    /// Raw custom Last Call Reminder body (Pillie+ perk). See `customLastCallReminderTitle`.
+    var customLastCallReminderBody: String {
+        didSet { UserDefaults.standard.set(customLastCallReminderBody, forKey: Self.customLastCallReminderBodyKey) }
+    }
     /// When the user last dismissed an Adaptive Reminder Time Suggestion (#126). Starts
     /// the ~14-day cooldown so the card is not re-pitched immediately after a dismissal.
     var adaptiveReminderLastDismissal: Date? {
@@ -221,6 +230,8 @@ class PillStore {
     private static let customDueReminderBodyKey = "pillie_custom_due_reminder_body"
     private static let customRetryReminderTitleKey = "pillie_custom_retry_reminder_title"
     private static let customRetryReminderBodyKey = "pillie_custom_retry_reminder_body"
+    private static let customLastCallReminderTitleKey = "pillie_custom_last_call_reminder_title"
+    private static let customLastCallReminderBodyKey = "pillie_custom_last_call_reminder_body"
     private static let adaptiveReminderLastDismissalKey = "pillie_adaptive_reminder_last_dismissal"
     private static let adaptiveReminderLastDismissedDeltaKey = "pillie_adaptive_reminder_last_dismissed_delta"
     private static let appActivatedDateKey = "pillie_app_activated_date"
@@ -1150,6 +1161,8 @@ class PillStore {
         self.customDueReminderBody = defaults.string(forKey: Self.customDueReminderBodyKey) ?? ""
         self.customRetryReminderTitle = defaults.string(forKey: Self.customRetryReminderTitleKey) ?? ""
         self.customRetryReminderBody = defaults.string(forKey: Self.customRetryReminderBodyKey) ?? ""
+        self.customLastCallReminderTitle = defaults.string(forKey: Self.customLastCallReminderTitleKey) ?? ""
+        self.customLastCallReminderBody = defaults.string(forKey: Self.customLastCallReminderBodyKey) ?? ""
 
         if let storedDismissal = defaults.object(forKey: Self.adaptiveReminderLastDismissalKey) as? Date,
            Self.isValidPersistedDate(storedDismissal) {

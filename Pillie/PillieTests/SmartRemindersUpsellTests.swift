@@ -107,6 +107,8 @@ private struct NoOpTracker: AnalyticsTracking {
         titleCustomized: Bool?,
         bodyCustomized: Bool?,
         retryTitleCustomized: Bool?,
-        retryBodyCustomized: Bool?
+        retryBodyCustomized: Bool?,
+        lastCallTitleCustomized: Bool?,
+        lastCallBodyCustomized: Bool?
     ) {}
 }

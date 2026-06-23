@@ -115,7 +115,9 @@ protocol AnalyticsTracking {
     titleCustomized: Bool?,
     bodyCustomized: Bool?,
     retryTitleCustomized: Bool?,
-    retryBodyCustomized: Bool?
+    retryBodyCustomized: Bool?,
+    lastCallTitleCustomized: Bool?,
+    lastCallBodyCustomized: Bool?
   )
 }
 
@@ -246,6 +248,8 @@ struct AnalyticsPayload {
   let bodyCustomized: Bool?
   let retryTitleCustomized: Bool?
   let retryBodyCustomized: Bool?
+  let lastCallTitleCustomized: Bool?
+  let lastCallBodyCustomized: Bool?
 
   init(
     source: AnalyticsSource? = nil,
@@ -260,7 +264,9 @@ struct AnalyticsPayload {
     titleCustomized: Bool? = nil,
     bodyCustomized: Bool? = nil,
     retryTitleCustomized: Bool? = nil,
-    retryBodyCustomized: Bool? = nil
+    retryBodyCustomized: Bool? = nil,
+    lastCallTitleCustomized: Bool? = nil,
+    lastCallBodyCustomized: Bool? = nil
   ) {
     self.source = source
     self.step = step
@@ -275,6 +281,8 @@ struct AnalyticsPayload {
     self.bodyCustomized = bodyCustomized
     self.retryTitleCustomized = retryTitleCustomized
     self.retryBodyCustomized = retryBodyCustomized
+    self.lastCallTitleCustomized = lastCallTitleCustomized
+    self.lastCallBodyCustomized = lastCallBodyCustomized
   }
 
   var properties: [String: AnalyticsPropertyValue] {
@@ -303,6 +311,12 @@ struct AnalyticsPayload {
     }
     if let retryBodyCustomized {
       properties["retry_body_customized"] = .bool(retryBodyCustomized)
+    }
+    if let lastCallTitleCustomized {
+      properties["last_call_title_customized"] = .bool(lastCallTitleCustomized)
+    }
+    if let lastCallBodyCustomized {
+      properties["last_call_body_customized"] = .bool(lastCallBodyCustomized)
     }
     return properties
   }
@@ -392,7 +406,9 @@ final class AnalyticsManager: AnalyticsTracking {
     titleCustomized: Bool? = nil,
     bodyCustomized: Bool? = nil,
     retryTitleCustomized: Bool? = nil,
-    retryBodyCustomized: Bool? = nil
+    retryBodyCustomized: Bool? = nil,
+    lastCallTitleCustomized: Bool? = nil,
+    lastCallBodyCustomized: Bool? = nil
   ) {
     guard isConfigured, isAnalyticsEnabled else { return }
 
@@ -409,7 +425,9 @@ final class AnalyticsManager: AnalyticsTracking {
       titleCustomized: titleCustomized,
       bodyCustomized: bodyCustomized,
       retryTitleCustomized: retryTitleCustomized,
-      retryBodyCustomized: retryBodyCustomized
+      retryBodyCustomized: retryBodyCustomized,
+      lastCallTitleCustomized: lastCallTitleCustomized,
+      lastCallBodyCustomized: lastCallBodyCustomized
     )
     client.capture(
       event: event.rawValue,

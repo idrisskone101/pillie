@@ -83,28 +83,34 @@ enum ScheduleCriticalSettingChange {
         ProductAnalyticsTelemetry.live.supplyReminderSaved()
     }
 
-    /// Saves the Custom Reminder Message copy (Pillie+) for both the Due Action Reminder
-    /// and the Auto-Reminder Retry, then reschedules so the new words take effect on the
-    /// next build. Words never affect timing, snooze, retry cadence, or supply scheduling
-    /// — only the title/body strings. The save event carries only four coarse booleans
-    /// (whether each field is customized), never the strings.
+    /// Saves the Custom Reminder Message copy (Pillie+) for the Due Action Reminder, the
+    /// Auto-Reminder Retry, and the Last Call Reminder, then reschedules so the new words
+    /// take effect on the next build. Words never affect timing, snooze, retry cadence, or
+    /// supply scheduling — only the title/body strings. The save event carries only six
+    /// coarse booleans (whether each field is customized), never the strings.
     static func saveSettingsCustomReminders(
         store: PillStore,
         title: String,
         body: String,
         retryTitle: String,
-        retryBody: String
+        retryBody: String,
+        lastCallTitle: String,
+        lastCallBody: String
     ) {
         store.customDueReminderTitle = title
         store.customDueReminderBody = body
         store.customRetryReminderTitle = retryTitle
         store.customRetryReminderBody = retryBody
+        store.customLastCallReminderTitle = lastCallTitle
+        store.customLastCallReminderBody = lastCallBody
         NotificationManager.shared.requestReschedule(from: store, reason: "settings-custom-reminders")
         ProductAnalyticsTelemetry.live.customRemindersSaved(
             titleCustomized: CustomReminderCopy.isCustomized(title),
             bodyCustomized: CustomReminderCopy.isCustomized(body),
             retryTitleCustomized: CustomReminderCopy.isCustomized(retryTitle),
-            retryBodyCustomized: CustomReminderCopy.isCustomized(retryBody)
+            retryBodyCustomized: CustomReminderCopy.isCustomized(retryBody),
+            lastCallTitleCustomized: CustomReminderCopy.isCustomized(lastCallTitle),
+            lastCallBodyCustomized: CustomReminderCopy.isCustomized(lastCallBody)
         )
     }
 

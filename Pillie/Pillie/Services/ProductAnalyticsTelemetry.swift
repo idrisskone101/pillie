@@ -308,12 +308,14 @@ struct ProductAnalyticsTelemetry {
   }
 
   /// The Custom Reminder Messages editor saved. Carries only coarse booleans — whether
-  /// each of the four fields ended up customized — never the strings or their lengths.
+  /// each of the six fields ended up customized — never the strings or their lengths.
   func customRemindersSaved(
     titleCustomized: Bool,
     bodyCustomized: Bool,
     retryTitleCustomized: Bool,
-    retryBodyCustomized: Bool
+    retryBodyCustomized: Bool,
+    lastCallTitleCustomized: Bool,
+    lastCallBodyCustomized: Bool
   ) {
     track(
       .settingsChangeSaved,
@@ -322,7 +324,9 @@ struct ProductAnalyticsTelemetry {
       titleCustomized: titleCustomized,
       bodyCustomized: bodyCustomized,
       retryTitleCustomized: retryTitleCustomized,
-      retryBodyCustomized: retryBodyCustomized
+      retryBodyCustomized: retryBodyCustomized,
+      lastCallTitleCustomized: lastCallTitleCustomized,
+      lastCallBodyCustomized: lastCallBodyCustomized
     )
   }
 
@@ -399,7 +403,9 @@ struct ProductAnalyticsTelemetry {
     titleCustomized: Bool? = nil,
     bodyCustomized: Bool? = nil,
     retryTitleCustomized: Bool? = nil,
-    retryBodyCustomized: Bool? = nil
+    retryBodyCustomized: Bool? = nil,
+    lastCallTitleCustomized: Bool? = nil,
+    lastCallBodyCustomized: Bool? = nil
   ) {
     analytics.track(
       event,
@@ -415,7 +421,9 @@ struct ProductAnalyticsTelemetry {
       titleCustomized: titleCustomized,
       bodyCustomized: bodyCustomized,
       retryTitleCustomized: retryTitleCustomized,
-      retryBodyCustomized: retryBodyCustomized
+      retryBodyCustomized: retryBodyCustomized,
+      lastCallTitleCustomized: lastCallTitleCustomized,
+      lastCallBodyCustomized: lastCallBodyCustomized
     )
   }
 }

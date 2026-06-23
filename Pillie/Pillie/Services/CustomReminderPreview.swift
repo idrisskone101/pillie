@@ -67,6 +67,38 @@ enum CustomReminderPreview {
         )
     }
 
+    /// Representative default Last Call title for the method's primary check-in. Sourced
+    /// straight off `DoseScheduleAction.lastCallReminderTitle` (the notification's source
+    /// of truth), so the preview never diverges from what fires.
+    static func defaultLastCallTitle(method: ContraceptiveMethod) -> String {
+        representativeAction(for: method).lastCallReminderTitle
+    }
+
+    /// Representative default Last Call body for the method's primary check-in.
+    static func defaultLastCallBody(method: ContraceptiveMethod) -> String {
+        representativeAction(for: method).lastCallReminderBody
+    }
+
+    /// Effective Last Call title shown in the preview as the user types.
+    static func lastCallTitle(custom: String, method: ContraceptiveMethod, isPlus: Bool) -> String {
+        CustomReminderCopy.effective(
+            custom: custom,
+            default: defaultLastCallTitle(method: method),
+            cap: CustomReminderCopy.titleCap,
+            isPlus: isPlus
+        )
+    }
+
+    /// Effective Last Call body shown in the preview as the user types.
+    static func lastCallBody(custom: String, method: ContraceptiveMethod, isPlus: Bool) -> String {
+        CustomReminderCopy.effective(
+            custom: custom,
+            default: defaultLastCallBody(method: method),
+            cap: CustomReminderCopy.bodyCap,
+            isPlus: isPlus
+        )
+    }
+
     /// The primary check-in the method's user sees most often. Used only to source the
     /// representative default copy for the preview; the live notification still derives its
     /// default from the actual due action of the day, but both read the same

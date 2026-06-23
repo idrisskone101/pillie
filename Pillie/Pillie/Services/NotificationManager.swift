@@ -241,6 +241,8 @@ final class NotificationManager {
         let customBody = store.customDueReminderBody
         let customRetryTitle = store.customRetryReminderTitle
         let customRetryBody = store.customRetryReminderBody
+        let customLastCallTitle = store.customLastCallReminderTitle
+        let customLastCallBody = store.customLastCallReminderBody
 
         return intents.map { intent in
             switch intent {
@@ -252,6 +254,8 @@ final class NotificationManager {
                     customBody: customBody,
                     customRetryTitle: customRetryTitle,
                     customRetryBody: customRetryBody,
+                    customLastCallTitle: customLastCallTitle,
+                    customLastCallBody: customLastCallBody,
                     isPlus: isPlus
                 )
             case .supply(let supply):
@@ -274,14 +278,29 @@ final class NotificationManager {
         customBody: String,
         customRetryTitle: String,
         customRetryBody: String,
+        customLastCallTitle: String,
+        customLastCallBody: String,
         isPlus: Bool
     ) -> UNNotificationRequest {
         let content = UNMutableNotificationContent()
         if due.kind == .lastCall {
-            // The Last Call backstop always uses Pillie-authored, method-aware copy
-            // (obeys the medical-claims copy rules). It is not customizable.
-            content.title = due.action.lastCallReminderTitle
-            content.body = due.action.lastCallReminderBody
+            // The Last Call backstop carries the user's custom copy when Plus; any blank
+            // field falls back independently to the Pillie-authored, method-aware default
+            // (which obeys the medical-claims copy rules), so an empty notification can
+            // never fire. Last Call only schedules for Plus users, so the gate is a no-op
+            // in practice, but the resolver keeps the same contract as the other fields.
+            content.title = CustomReminderCopy.effective(
+                custom: customLastCallTitle,
+                default: due.action.lastCallReminderTitle,
+                cap: CustomReminderCopy.titleCap,
+                isPlus: isPlus
+            )
+            content.body = CustomReminderCopy.effective(
+                custom: customLastCallBody,
+                default: due.action.lastCallReminderBody,
+                cap: CustomReminderCopy.bodyCap,
+                isPlus: isPlus
+            )
         } else if due.kind == .retry {
             // The Auto-Reminder Retry carries the user's custom follow-up copy when Plus;
             // each field falls back independently to the default retry copy when blank, so

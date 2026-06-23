@@ -398,6 +398,8 @@ private final class RecordingAnalyticsTracker: AnalyticsTracking {
   private(set) var hasBlockingSelectionValues: [Bool?] = []
   private(set) var titleCustomizedValues: [Bool?] = []
   private(set) var bodyCustomizedValues: [Bool?] = []
+  private(set) var lastCallTitleCustomizedValues: [Bool?] = []
+  private(set) var lastCallBodyCustomizedValues: [Bool?] = []
 
   func track(
     _ event: AnalyticsEvent,
@@ -413,7 +415,9 @@ private final class RecordingAnalyticsTracker: AnalyticsTracking {
     titleCustomized: Bool?,
     bodyCustomized: Bool?,
     retryTitleCustomized: Bool?,
-    retryBodyCustomized: Bool?
+    retryBodyCustomized: Bool?,
+    lastCallTitleCustomized: Bool?,
+    lastCallBodyCustomized: Bool?
   ) {
     events.append(event)
     sources.append(source)
@@ -425,5 +429,7 @@ private final class RecordingAnalyticsTracker: AnalyticsTracking {
     hasBlockingSelectionValues.append(hasBlockingSelection)
     titleCustomizedValues.append(titleCustomized)
     bodyCustomizedValues.append(bodyCustomized)
+    lastCallTitleCustomizedValues.append(lastCallTitleCustomized)
+    lastCallBodyCustomizedValues.append(lastCallBodyCustomized)
   }
 }
