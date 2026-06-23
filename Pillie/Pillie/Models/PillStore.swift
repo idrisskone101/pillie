@@ -564,12 +564,14 @@ class PillStore {
             existingDay.date = day
             existingDay.status = .taken
             existingDay.actionType = due.type
+            existingDay.takenAt = PillieClock.now
             index(dayRecord: existingDay, forPackID: targetPack.id, epochDay: dayEpoch)
         } else {
             let newDay = PillDay(
                 date: day,
                 status: .taken,
                 actionType: due.type,
+                takenAt: PillieClock.now,
                 pack: targetPack
             )
             modelContext.insert(newDay)
@@ -650,6 +652,8 @@ class PillStore {
             }
         }
 
+        // Clear the adaptive-timing signal before removing the record.
+        existingDay.takenAt = nil
         modelContext.delete(existingDay)
         removeDayRecordIndex(forPackID: targetPack.id, epochDay: dayEpoch)
         invalidateSnapshotCache(forPackID: targetPack.id, epochDay: dayEpoch)
