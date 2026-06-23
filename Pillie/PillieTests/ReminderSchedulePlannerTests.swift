@@ -206,6 +206,140 @@ final class ReminderSchedulePlannerTests: XCTestCase {
         XCTAssertTrue(ringSupply.isEmpty)
     }
 
+    // MARK: - Cycle Transition Notice (#123)
+
+    func testCycleTransitionNoticeFiresOnBreakWeekStartForEachMethod() throws {
+        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let calendar = Calendar.current
+
+        let fixtures: [(ContraceptiveMethod, InMemoryStoreFixture)] = [
+            (.pill, try InMemoryStoreFactory.makeStore(now: now, method: .pill, startDate: now)),
+            (.patch, try InMemoryStoreFactory.makeStore(now: now, method: .patch, startDate: now)),
+            (.ring, try InMemoryStoreFactory.makeStore(
+                now: now,
+                method: .ring,
+                startDate: now,
+                ringInsertionDate: now
+            ))
+        ]
+
+        for (method, fixture) in fixtures {
+            let notices = cycleTransitionIntents(for: fixture.store, now: now)
+            XCTAssertEqual(notices.count, 1, "Expected exactly one notice for \(method)")
+            let notice = try XCTUnwrap(notices.first)
+            XCTAssertEqual(notice.method, method)
+
+            // The transition day is the first day of the break/off week: it is a break day,
+            // and the day before it is not.
+            let transitionDay = Date(timeIntervalSince1970: TimeInterval(notice.transitionDayEpoch))
+            XCTAssertEqual(isBreakDay(transitionDay, pack: fixture.store.pack, calendar: calendar), true)
+            let dayBefore = try XCTUnwrap(calendar.date(byAdding: .day, value: -1, to: transitionDay))
+            XCTAssertEqual(isBreakDay(dayBefore, pack: fixture.store.pack, calendar: calendar), false)
+
+            // It fires at the configured reminder time on that day.
+            let expectedFire = calendar.date(
+                bySettingHour: fixture.store.reminderHour,
+                minute: fixture.store.reminderMinute,
+                second: 0,
+                of: transitionDay
+            )
+            XCTAssertEqual(notice.fireDate, expectedFire)
+        }
+    }
+
+    func testCycleTransitionNoticeCarriesNextActivePhaseResumeDate() throws {
+        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let calendar = Calendar.current
+        let fixture = try InMemoryStoreFactory.makeStore(now: now, method: .pill, startDate: now)
+
+        let notice = try XCTUnwrap(cycleTransitionIntents(for: fixture.store, now: now).first)
+        let transitionDay = Date(timeIntervalSince1970: TimeInterval(notice.transitionDayEpoch))
+
+        // The resume date is the active-phase / new-pack start: not a break day, and the
+        // day before it still is. It is also the FIRST active day after the transition.
+        XCTAssertEqual(isBreakDay(notice.resumeDate, pack: fixture.store.pack, calendar: calendar), false)
+        let dayBeforeResume = try XCTUnwrap(calendar.date(byAdding: .day, value: -1, to: notice.resumeDate))
+        XCTAssertEqual(isBreakDay(dayBeforeResume, pack: fixture.store.pack, calendar: calendar), true)
+        XCTAssertGreaterThan(notice.resumeDate, transitionDay)
+
+        // For a 21/7 pill cycle starting today (cycle day 1), the break starts on day 22
+        // and the next pack starts on day 29 — i.e. cycleLength days after today.
+        let expectedResume = calendar.date(
+            byAdding: .day,
+            value: fixture.store.pack.cycleLength,
+            to: calendar.startOfDay(for: now)
+        )
+        XCTAssertEqual(notice.resumeDate, expectedResume)
+    }
+
+    func testCycleTransitionNoticeIsNotGatedByEntitlement() throws {
+        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let fixture = try InMemoryStoreFactory.makeStore(now: now, method: .pill, startDate: now)
+
+        let freeNotices = plan(for: fixture.store, now: now, smartRemindersEnabled: false)
+            .compactMap { intent -> ReminderSchedulePlanner.CycleTransitionIntent? in
+                if case .cycleTransition(let notice) = intent { return notice }
+                return nil
+            }
+
+        XCTAssertEqual(freeNotices.count, 1)
+        XCTAssertEqual(freeNotices.first?.method, .pill)
+    }
+
+    func testCycleTransitionNoticeAbsentOnActivePhaseStart() throws {
+        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let calendar = Calendar.current
+        let fixture = try InMemoryStoreFactory.makeStore(now: now, method: .pill, startDate: now)
+
+        // The only planned notice lands on a break day, never on an active-phase start, so
+        // it never doubles up with the day-1 Due Action Reminder.
+        let notices = cycleTransitionIntents(for: fixture.store, now: now)
+        for notice in notices {
+            let transitionDay = Date(timeIntervalSince1970: TimeInterval(notice.transitionDayEpoch))
+            XCTAssertEqual(isBreakDay(transitionDay, pack: fixture.store.pack, calendar: calendar), true)
+        }
+
+        // No managed reminder shares the transition slot's day with the resume (active) day.
+        let resumeEpochs = Set(notices.map { Int(calendar.startOfDay(for: $0.resumeDate).timeIntervalSince1970) })
+        let transitionEpochs = Set(notices.map(\.transitionDayEpoch))
+        XCTAssertTrue(resumeEpochs.isDisjoint(with: transitionEpochs))
+    }
+
+    func testCycleTransitionNoticeAbsentWhenDisabled() throws {
+        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let fixture = try InMemoryStoreFactory.makeStore(now: now, method: .pill, startDate: now)
+
+        let notices = cycleTransitionIntents(for: fixture.store, now: now, cycleTransitionEnabled: false)
+        XCTAssertTrue(notices.isEmpty)
+    }
+
+    func testCycleTransitionNoticeAbsentForContinuousRegimen() throws {
+        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let fixture = try InMemoryStoreFactory.makeStore(
+            now: now,
+            regimen: .threeSixtyFiveZero,
+            startDate: now
+        )
+
+        XCTAssertTrue(cycleTransitionIntents(for: fixture.store, now: now).isEmpty)
+    }
+
+    private func cycleTransitionIntents(
+        for store: PillStore,
+        now: Date,
+        cycleTransitionEnabled: Bool = true
+    ) -> [ReminderSchedulePlanner.CycleTransitionIntent] {
+        plan(for: store, now: now, cycleTransitionEnabled: cycleTransitionEnabled)
+            .compactMap { intent in
+                if case .cycleTransition(let notice) = intent { return notice }
+                return nil
+            }
+    }
+
+    private func isBreakDay(_ date: Date, pack: PillPack, calendar: Calendar) -> Bool {
+        DoseScheduleEngine.dueAction(on: date, pack: pack, calendar: calendar)?.isBreak ?? false
+    }
+
     private func plan(
         for store: PillStore,
         now: Date,
@@ -213,7 +347,8 @@ final class ReminderSchedulePlannerTests: XCTestCase {
         autoReminderRetryLimit: Int? = nil,
         statusOverrides: [Int: PillDay.Status] = [:],
         snoozeOverride: ReminderSchedulePlanner.SnoozeOverride? = nil,
-        smartRemindersEnabled: Bool = true
+        smartRemindersEnabled: Bool = true,
+        cycleTransitionEnabled: Bool = true
     ) -> [ReminderSchedulePlanner.Intent] {
         let calendar = Calendar.current
         let candidateDueActions = DoseScheduleEngine.nextDueActions(
@@ -238,6 +373,7 @@ final class ReminderSchedulePlannerTests: XCTestCase {
                 statusByEpochDay: statusByEpochDay,
                 snoozeOverride: snoozeOverride,
                 smartRemindersEnabled: smartRemindersEnabled,
+                cycleTransitionEnabled: cycleTransitionEnabled,
                 calendar: calendar
             )
         )

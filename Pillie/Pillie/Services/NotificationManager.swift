@@ -16,6 +16,7 @@ final class NotificationManager {
     private let legacyReminderPrefix = "pillie_due_reminder_"
     private let reminderPrefix = "pillie_reminder_"
     private let refillReminderPrefix = "pillie_refill_reminder_"
+    private let cycleTransitionPrefix = "pillie_cycle_notice_"
     private let categoryID = "PILL_REMINDER"
     private let markTakenActionID = "MARK_TAKEN_ACTION"
     private let snoozeActionID = "SNOOZE_ACTION"
@@ -223,6 +224,7 @@ final class NotificationManager {
                 statusByEpochDay: store.statusesByEpochDay(for: candidateDueActions.map(\.date)),
                 snoozeOverride: snoozeOverride,
                 smartRemindersEnabled: SubscriptionManager.shared.isPlus,
+                cycleTransitionEnabled: store.cycleTransitionNoticeEnabled,
                 calendar: calendar
             )
         )
@@ -251,6 +253,8 @@ final class NotificationManager {
                 )
             case .supply(let supply):
                 return makeRefillRequest(for: supply, calendar: calendar)
+            case .cycleTransition(let notice):
+                return makeCycleTransitionRequest(for: notice, calendar: calendar)
             }
         }
     }
@@ -346,6 +350,37 @@ final class NotificationManager {
 
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
         let id = refillReminderIdentifier(dueDayEpoch: supply.dueDayEpoch, fireDate: supply.fireDate)
+        return UNNotificationRequest(identifier: id, content: content, trigger: trigger)
+    }
+
+    /// Builds the free Cycle Transition Notice (#123). Copy is Pillie-authored and
+    /// method-aware (`CycleTransitionCopy`) — never the user's custom reminder copy, since
+    /// this is not part of the Custom Reminder Message perk. The notice is informational,
+    /// so it carries no category/actions (no Mark as Taken / Snooze).
+    private func makeCycleTransitionRequest(
+        for notice: ReminderSchedulePlanner.CycleTransitionIntent,
+        calendar: Calendar
+    ) -> UNNotificationRequest {
+        let content = UNMutableNotificationContent()
+        content.title = CycleTransitionCopy.title(for: notice.method)
+        content.body = CycleTransitionCopy.body(
+            for: notice.method,
+            resumeDate: notice.resumeDate,
+            calendar: calendar
+        )
+        content.sound = .default
+        content.userInfo = [
+            PayloadKey.dueDayEpoch: notice.transitionDayEpoch,
+            PayloadKey.requestKind: "cycleTransition"
+        ]
+
+        var components = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: notice.fireDate)
+        if components.second == nil {
+            components.second = 0
+        }
+
+        let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
+        let id = cycleTransitionIdentifier(transitionDayEpoch: notice.transitionDayEpoch, fireDate: notice.fireDate)
         return UNNotificationRequest(identifier: id, content: content, trigger: trigger)
     }
 
@@ -481,11 +516,16 @@ final class NotificationManager {
         "\(refillReminderPrefix)day_\(dueDayEpoch)_\(Int(fireDate.timeIntervalSince1970))"
     }
 
+    private func cycleTransitionIdentifier(transitionDayEpoch: Int, fireDate: Date) -> String {
+        "\(cycleTransitionPrefix)day_\(transitionDayEpoch)_\(Int(fireDate.timeIntervalSince1970))"
+    }
+
     private func isManagedReminderID(_ id: String) -> Bool {
         id == legacyReminderID
             || id.hasPrefix(legacyReminderPrefix)
             || id.hasPrefix(reminderPrefix)
             || id.hasPrefix(refillReminderPrefix)
+            || id.hasPrefix(cycleTransitionPrefix)
     }
 
     private func dueDateFromPayload(userInfo: [AnyHashable: Any]) -> Date? {

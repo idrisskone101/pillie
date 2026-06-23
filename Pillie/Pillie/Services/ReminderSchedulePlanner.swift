@@ -41,6 +41,11 @@ struct ReminderSchedulePlanner {
         /// settings are never mutated — gating happens here, not in storage. See
         /// ADR 0004.
         let smartRemindersEnabled: Bool
+        /// Whether the free Cycle Transition Notice is planned (#123). Defaults ON in
+        /// Settings. This is NOT a Smart Reminders / Pillie+ perk — it is a free,
+        /// informational notice and is deliberately independent of
+        /// `smartRemindersEnabled`.
+        let cycleTransitionEnabled: Bool
         let calendar: Calendar
     }
 
@@ -58,9 +63,24 @@ struct ReminderSchedulePlanner {
         let method: ContraceptiveMethod
     }
 
+    /// The free Cycle Transition Notice (#123): a single informational notice fired at
+    /// the user's reminder time on the first break/off-week day, explaining the upcoming
+    /// silence and naming the date the active phase resumes. It fills the daily slot a
+    /// Due Action Reminder would occupy on active days; on the break day that slot is
+    /// otherwise empty.
+    struct CycleTransitionIntent: Hashable {
+        /// Start-of-day epoch of the first break/off-week day (the transition day).
+        let transitionDayEpoch: Int
+        let fireDate: Date
+        let method: ContraceptiveMethod
+        /// Start-of-day of the day the active phase resumes (the next active-phase start).
+        let resumeDate: Date
+    }
+
     enum Intent: Hashable {
         case due(DueReminderIntent)
         case supply(SupplyReminderIntent)
+        case cycleTransition(CycleTransitionIntent)
     }
 
     func planReminders(_ input: Input) -> [Intent] {
@@ -72,9 +92,15 @@ struct ReminderSchedulePlanner {
         let effectiveSnoozeOverride = input.smartRemindersEnabled ? input.snoozeOverride : nil
 
         let supplyIntent = planSupplyReminder(input)
-        let dueReminderBudget = max(0, Self.maxPendingReminders - (supplyIntent == nil ? 0 : 1))
+        // The Cycle Transition Notice is free and not gated by `smartRemindersEnabled`.
+        let cycleTransitionIntent = planCycleTransitionNotice(input)
+        let reservedAuxiliarySlots = (supplyIntent == nil ? 0 : 1) + (cycleTransitionIntent == nil ? 0 : 1)
+        let dueReminderBudget = max(0, Self.maxPendingReminders - reservedAuxiliarySlots)
         guard dueReminderBudget > 0 else {
-            return supplyIntent.map { [.supply($0)] } ?? []
+            var auxiliary: [Intent] = []
+            if let supplyIntent { auxiliary.append(.supply(supplyIntent)) }
+            if let cycleTransitionIntent { auxiliary.append(.cycleTransition(cycleTransitionIntent)) }
+            return Array(auxiliary.prefix(Self.maxPendingReminders))
         }
 
         let dueActions = input.candidateDueActions.filter { action in
@@ -137,6 +163,9 @@ struct ReminderSchedulePlanner {
         var intents = Array(dueIntents.prefix(dueReminderBudget)).map(Intent.due)
         if let supplyIntent {
             intents.append(.supply(supplyIntent))
+        }
+        if let cycleTransitionIntent {
+            intents.append(.cycleTransition(cycleTransitionIntent))
         }
         return Array(intents.prefix(Self.maxPendingReminders))
     }
@@ -237,6 +266,92 @@ struct ReminderSchedulePlanner {
             supplyUnitsLeft: supplyUnitsLeft,
             method: input.pack.method
         )
+    }
+
+    /// Plans the free Cycle Transition Notice (#123) for the next break/off week.
+    ///
+    /// Scans forward from today for the first active→break boundary (a day whose action
+    /// is a break type while the previous day is not), which lands on the first placebo
+    /// day for the pill and the first off-week day after removal for the patch/ring. The
+    /// notice fires at the user's reminder time on that day and never coincides with an
+    /// active-phase / new-pack start (those are active days, already covered by a Due
+    /// Action Reminder). Continuous regimens with no break week (e.g. 28/0, 365/0) get
+    /// no notice.
+    private func planCycleTransitionNotice(_ input: Input) -> CycleTransitionIntent? {
+        guard input.cycleTransitionEnabled else { return nil }
+        guard input.pack.breakDays > 0 else { return nil }
+
+        let calendar = input.calendar
+        let cycleLength = max(1, input.pack.cycleLength)
+        let today = calendar.startOfDay(for: input.now)
+
+        // Look up to ~two cycles ahead so the boundary is always reachable regardless of
+        // where in the cycle "today" falls.
+        let scanLimit = cycleLength * 2 + 2
+
+        guard let yesterday = calendar.date(byAdding: .day, value: -1, to: today) else { return nil }
+        var previousIsBreak = isBreakDay(yesterday, pack: input.pack, calendar: calendar)
+
+        var cursor = today
+        var transitionDay: Date?
+        for _ in 0..<scanLimit {
+            let currentIsBreak = isBreakDay(cursor, pack: input.pack, calendar: calendar)
+            if currentIsBreak && !previousIsBreak {
+                transitionDay = cursor
+                break
+            }
+            previousIsBreak = currentIsBreak
+            guard let next = calendar.date(byAdding: .day, value: 1, to: cursor) else { break }
+            cursor = next
+        }
+
+        guard let transitionDay else { return nil }
+
+        guard let fireDate = firstReminderDateForDueAction(
+            dueDay: transitionDay,
+            now: input.now,
+            reminderHour: input.reminderHour,
+            reminderMinute: input.reminderMinute,
+            snoozeOverride: nil,
+            calendar: calendar
+        ),
+        fireDate < endOfDayExclusive(for: transitionDay, calendar: calendar) else {
+            return nil
+        }
+
+        guard let resumeDate = firstActiveDay(
+            after: transitionDay,
+            pack: input.pack,
+            calendar: calendar,
+            withinDays: cycleLength + 1
+        ) else {
+            return nil
+        }
+
+        return CycleTransitionIntent(
+            transitionDayEpoch: Int(transitionDay.timeIntervalSince1970),
+            fireDate: fireDate,
+            method: input.pack.method,
+            resumeDate: resumeDate
+        )
+    }
+
+    private func isBreakDay(_ date: Date, pack: PillPack, calendar: Calendar) -> Bool {
+        DoseScheduleEngine.dueAction(on: date, pack: pack, calendar: calendar)?.isBreak ?? false
+    }
+
+    /// First non-break (active-phase) day strictly after `day`, i.e. the day the active
+    /// phase resumes. Scans at most `withinDays` days forward.
+    private func firstActiveDay(after day: Date, pack: PillPack, calendar: Calendar, withinDays: Int) -> Date? {
+        var cursor = day
+        for _ in 0..<max(0, withinDays) {
+            guard let next = calendar.date(byAdding: .day, value: 1, to: cursor) else { return nil }
+            cursor = next
+            if !isBreakDay(cursor, pack: pack, calendar: calendar) {
+                return cursor
+            }
+        }
+        return nil
     }
 
     private func firstReminderDateForDueAction(

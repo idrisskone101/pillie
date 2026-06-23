@@ -70,6 +70,12 @@ class PillStore {
             UserDefaults.standard.set(normalized, forKey: Self.patchRestockReminderThresholdPatchesKey)
         }
     }
+    /// Whether the free Cycle Transition Notice (#123) is planned. Defaults ON. This is a
+    /// free, informational notice — it is NOT a Smart Reminders / Pillie+ perk and is not
+    /// gated by the entitlement.
+    var cycleTransitionNoticeEnabled: Bool {
+        didSet { UserDefaults.standard.set(cycleTransitionNoticeEnabled, forKey: Self.cycleTransitionNoticeEnabledKey) }
+    }
     var contraceptiveMethod: ContraceptiveMethod {
         didSet { UserDefaults.standard.set(contraceptiveMethod.rawValue, forKey: Self.contraceptiveMethodKey) }
     }
@@ -171,6 +177,7 @@ class PillStore {
     private static let refillReminderThresholdDaysKey = "pillie_refill_reminder_threshold_days"
     private static let patchRestockReminderThresholdPatchesKey = "pillie_patch_restock_threshold_patches"
     private static let contraceptiveMethodKey = "pillie_contraceptive_method"
+    private static let cycleTransitionNoticeEnabledKey = "pillie_cycle_transition_notice_enabled"
     private static let customDueReminderTitleKey = "pillie_custom_due_reminder_title"
     private static let customDueReminderBodyKey = "pillie_custom_due_reminder_body"
     private static let customRetryReminderTitleKey = "pillie_custom_retry_reminder_title"
@@ -1040,6 +1047,9 @@ class PillStore {
         self.patchRestockReminderThresholdPatches = Self.normalizedPatchRestockReminderThreshold(
             defaults.object(forKey: Self.patchRestockReminderThresholdPatchesKey) as? Int ?? 1
         )
+
+        // Default ON: the Cycle Transition Notice is a free clarity aid (#123).
+        self.cycleTransitionNoticeEnabled = defaults.object(forKey: Self.cycleTransitionNoticeEnabledKey) as? Bool ?? true
 
         self.customDueReminderTitle = defaults.string(forKey: Self.customDueReminderTitleKey) ?? ""
         self.customDueReminderBody = defaults.string(forKey: Self.customDueReminderBodyKey) ?? ""

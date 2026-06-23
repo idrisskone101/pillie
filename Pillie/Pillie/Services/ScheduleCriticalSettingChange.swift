@@ -79,6 +79,16 @@ enum ScheduleCriticalSettingChange {
         )
     }
 
+    /// Saves the free Cycle Transition Notice toggle (#123) and reschedules so the notice
+    /// is added or removed on the next build. Free for all users — not gated by Pillie+.
+    static func saveCycleTransitionNoticeEnabled(
+        store: PillStore,
+        enabled: Bool
+    ) {
+        store.cycleTransitionNoticeEnabled = enabled
+        NotificationManager.shared.requestReschedule(from: store, reason: "settings-cycle-transition-notice")
+    }
+
     private static func saveReminderTime(
         store: PillStore,
         hour: Int,
