@@ -16,6 +16,7 @@ struct HomeView: View {
     @State private var showShakeConfirm = false
     @State private var showBlockingSetup = false
     @State private var showBlockingPaywall = false
+    @State private var adaptiveReminderShownLogged = false
     @AppStorage("homeBlockingStatusCardDismissed") private var blockingCardDismissed = false
     private let homeFeedback = HomeActionInteractionFeedback()
 
@@ -64,6 +65,15 @@ struct HomeView: View {
             // Free: go straight to the paywall (it reports paywallViewed itself).
             showBlockingPaywall = true
         }
+    }
+
+    /// Copy + gating for the Adaptive Reminder Time Suggestion card (#126). `nil` for
+    /// free users, or when the analyzer has no confident, non-cooled-down suggestion.
+    private var adaptiveReminderContent: AdaptiveReminderSuggestionCardContent? {
+        AdaptiveReminderSuggestionCardContent.make(
+            suggestion: store.adaptiveReminderSuggestion,
+            isPlus: SubscriptionManager.shared.isPlus
+        )
     }
 
     private var todayActionState: TodayActionState {
@@ -124,6 +134,34 @@ struct HomeView: View {
                             ProductAnalyticsTelemetry.live.newPackOrCyclePrompted()
                         })
                         .modifier(FadeInUp(appeared: appeared, delay: 0.15))
+                    }
+
+                    if let adaptiveContent = adaptiveReminderContent {
+                        AdaptiveReminderSuggestionCard(
+                            content: adaptiveContent,
+                            onAccept: {
+                                withAnimation(unifiedStateTransition) {
+                                    ScheduleCriticalSettingChange.acceptAdaptiveReminderSuggestion(
+                                        store: store,
+                                        hour: adaptiveContent.suggestedHour,
+                                        minute: adaptiveContent.suggestedMinute
+                                    )
+                                }
+                            },
+                            onDismiss: {
+                                withAnimation(unifiedStateTransition) {
+                                    store.dismissAdaptiveReminderSuggestion(delta: adaptiveContent.deltaMinutes)
+                                }
+                                ProductAnalyticsTelemetry.live.adaptiveReminderSuggestionDismissed()
+                            }
+                        )
+                        .onAppear {
+                            guard !adaptiveReminderShownLogged else { return }
+                            adaptiveReminderShownLogged = true
+                            ProductAnalyticsTelemetry.live.adaptiveReminderSuggestionShown()
+                        }
+                        .modifier(FadeInUp(appeared: appeared, delay: 0.15))
+                        .transition(ctaStateTransition)
                     }
 
                     PillPackCard()
