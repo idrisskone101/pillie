@@ -6,11 +6,11 @@
 import SwiftUI
 
 /// Editor for the Custom Reminder Message perk (Pillie+). Lets a subscriber write the
-/// title and body of both the daily Due Action Reminder and the Auto-Reminder Retry.
-/// What they type is exactly what fires (WYSIWYG); a blank field falls back to the
-/// default copy at fire time (see `CustomReminderCopy`). Hard caps are enforced as the
-/// user types, with a live character counter. Words never change reminder timing,
-/// snooze, retry cadence, or supply scheduling.
+/// title and body of the daily Due Action Reminder, the Auto-Reminder Retry, and the
+/// end-of-day Last Call Reminder. What they type is exactly what fires (WYSIWYG); a
+/// blank field falls back to the default copy at fire time (see `CustomReminderCopy`).
+/// Hard caps are enforced as the user types, with a live character counter. Words never
+/// change reminder timing, snooze, retry cadence, or supply scheduling.
 struct CustomReminderMessagesEditor: View {
     @Bindable var store: PillStore
     @Environment(\.dismiss) private var dismiss
@@ -20,6 +20,8 @@ struct CustomReminderMessagesEditor: View {
     @State private var bodyText: String = ""
     @State private var retryTitleText: String = ""
     @State private var retryBodyText: String = ""
+    @State private var lastCallTitleText: String = ""
+    @State private var lastCallBodyText: String = ""
 
     private let settingsFeedback = SettingsInteractionFeedback()
 
@@ -34,6 +36,8 @@ struct CustomReminderMessagesEditor: View {
     private var defaultBody: String { CustomReminderPreview.defaultDailyBody(method: method) }
     private var defaultRetryTitle: String { NotificationManager.defaultRetryTitle }
     private var defaultRetryBody: String { NotificationManager.defaultRetryBody }
+    private var defaultLastCallTitle: String { CustomReminderPreview.defaultLastCallTitle(method: method) }
+    private var defaultLastCallBody: String { CustomReminderPreview.defaultLastCallBody(method: method) }
 
     /// The value to show in a field on open: the saved custom text, or the default when blank.
     private func prefilled(_ stored: String, default defaultCopy: String) -> String {
@@ -74,6 +78,20 @@ struct CustomReminderMessagesEditor: View {
         )
     }
 
+    private var lastCallTitleBinding: Binding<String> {
+        Binding(
+            get: { lastCallTitleText },
+            set: { lastCallTitleText = String($0.prefix(CustomReminderCopy.titleCap)) }
+        )
+    }
+
+    private var lastCallBodyBinding: Binding<String> {
+        Binding(
+            get: { lastCallBodyText },
+            set: { lastCallBodyText = String($0.prefix(CustomReminderCopy.bodyCap)) }
+        )
+    }
+
     var body: some View {
         SettingsSheetContainer(title: "Custom Messages") {
             ScrollView(.vertical, showsIndicators: false) {
@@ -100,6 +118,17 @@ struct CustomReminderMessagesEditor: View {
                         previewIdentifier: "reminder-preview-followup"
                     )
 
+                    group(
+                        header: "LAST CALL",
+                        titleBinding: lastCallTitleBinding,
+                        titleCount: lastCallTitleText.count,
+                        bodyBinding: lastCallBodyBinding,
+                        bodyCount: lastCallBodyText.count,
+                        previewTitle: CustomReminderPreview.lastCallTitle(custom: lastCallTitleText, method: method, isPlus: isPlus),
+                        previewBody: CustomReminderPreview.lastCallBody(custom: lastCallBodyText, method: method, isPlus: isPlus),
+                        previewIdentifier: "reminder-preview-lastcall"
+                    )
+
                     Text("Leave anything blank and Pillie uses its own wording.")
                         .font(.pillieCaption())
                         .foregroundStyle(PillieTheme.textMuted)
@@ -111,7 +140,9 @@ struct CustomReminderMessagesEditor: View {
                             title: normalized(titleText, default: defaultTitle),
                             body: normalized(bodyText, default: defaultBody),
                             retryTitle: normalized(retryTitleText, default: defaultRetryTitle),
-                            retryBody: normalized(retryBodyText, default: defaultRetryBody)
+                            retryBody: normalized(retryBodyText, default: defaultRetryBody),
+                            lastCallTitle: normalized(lastCallTitleText, default: defaultLastCallTitle),
+                            lastCallBody: normalized(lastCallBodyText, default: defaultLastCallBody)
                         )
                         dismiss()
                     } label: {
@@ -133,6 +164,8 @@ struct CustomReminderMessagesEditor: View {
             bodyText = prefilled(store.customDueReminderBody, default: defaultBody)
             retryTitleText = prefilled(store.customRetryReminderTitle, default: defaultRetryTitle)
             retryBodyText = prefilled(store.customRetryReminderBody, default: defaultRetryBody)
+            lastCallTitleText = prefilled(store.customLastCallReminderTitle, default: defaultLastCallTitle)
+            lastCallBodyText = prefilled(store.customLastCallReminderBody, default: defaultLastCallBody)
             ProductAnalyticsTelemetry.live.customRemindersSettingsOpened()
         }
     }

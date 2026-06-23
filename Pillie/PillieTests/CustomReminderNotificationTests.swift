@@ -48,6 +48,21 @@ final class CustomReminderNotificationTests: XCTestCase {
     }
 
     @MainActor
+    private func lastCallReminder(
+        store: PillStore,
+        now: Date
+    ) -> NotificationManager.ReminderRequestDebugSummary? {
+        let summaries = NotificationManager.shared.managedRequestSummariesForTesting(
+            store: store,
+            now: now
+        )
+        let todayEpoch = Int(Calendar.current.startOfDay(for: now).timeIntervalSince1970)
+        return summaries.first {
+            $0.dueDayEpoch == todayEpoch && $0.requestKind == "lastCall"
+        }
+    }
+
+    @MainActor
     private func cleanUp() {
         SubscriptionManager.shared.setPlusForTesting(false)
         InMemoryStoreFactory.resetClockAndDefaults()
@@ -168,6 +183,67 @@ final class CustomReminderNotificationTests: XCTestCase {
         XCTAssertEqual(retry.title, "My follow-up line")
         XCTAssertEqual(retry.body, defaultRetryBody)
         XCTAssertFalse(retry.body.isEmpty, "An empty notification body can never fire.")
+        cleanUp()
+    }
+
+    // MARK: - Last Call Reminder customization
+
+    @MainActor
+    func testPlusUserWithCustomLastCallCopyGetsCustomTitleAndBody() throws {
+        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
+        // Last Call only schedules for Plus users with the backstop enabled.
+        fixture.store.lastCallReminderEnabled = true
+        fixture.store.customLastCallReminderTitle = "Last chance, love 🌙"
+        fixture.store.customLastCallReminderBody = "The day's nearly done — log it."
+        SubscriptionManager.shared.setPlusForTesting(true)
+
+        let lastCall = try XCTUnwrap(lastCallReminder(store: fixture.store, now: now))
+        XCTAssertEqual(lastCall.title, "Last chance, love 🌙")
+        XCTAssertEqual(lastCall.body, "The day's nearly done — log it.")
+
+        // The Last Call copy is independent of the base reminder.
+        let base = try XCTUnwrap(baseReminder(store: fixture.store, now: now))
+        XCTAssertNotEqual(lastCall.body, base.body)
+        cleanUp()
+    }
+
+    @MainActor
+    func testBlankLastCallFieldFallsBackToDefaultLastCallCopyIndependently() throws {
+        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
+        fixture.store.lastCallReminderEnabled = true
+        SubscriptionManager.shared.setPlusForTesting(true)
+
+        // Capture the default Last Call copy (no custom set).
+        let defaultLastCall = try XCTUnwrap(lastCallReminder(store: fixture.store, now: now))
+        let defaultBody = defaultLastCall.body
+        XCTAssertFalse(defaultLastCall.title.isEmpty)
+        XCTAssertFalse(defaultBody.isEmpty)
+
+        // Custom title only — the blank body must fall back independently.
+        fixture.store.customLastCallReminderTitle = "My own last call"
+        fixture.store.customLastCallReminderBody = "   "
+
+        let lastCall = try XCTUnwrap(lastCallReminder(store: fixture.store, now: now))
+        XCTAssertEqual(lastCall.title, "My own last call")
+        XCTAssertEqual(lastCall.body, defaultBody)
+        XCTAssertFalse(lastCall.body.isEmpty, "An empty notification body can never fire.")
+        cleanUp()
+    }
+
+    @MainActor
+    func testCustomLastCallCopyTrimsSurroundingWhitespaceWhenFired() throws {
+        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
+        fixture.store.lastCallReminderEnabled = true
+        fixture.store.customLastCallReminderTitle = "   Last call 🌙   "
+        fixture.store.customLastCallReminderBody = "  Wrap up your day — okay?  "
+        SubscriptionManager.shared.setPlusForTesting(true)
+
+        let lastCall = try XCTUnwrap(lastCallReminder(store: fixture.store, now: now))
+        XCTAssertEqual(lastCall.title, "Last call 🌙")
+        XCTAssertEqual(lastCall.body, "Wrap up your day — okay?")
         cleanUp()
     }
 }

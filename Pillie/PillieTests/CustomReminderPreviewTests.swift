@@ -101,4 +101,69 @@ final class CustomReminderPreviewTests: XCTestCase {
             NotificationManager.defaultRetryBody
         )
     }
+
+    // MARK: - Last Call reminder preview
+
+    func testCustomLastCallTextWinsWhenPresent() {
+        XCTAssertEqual(
+            CustomReminderPreview.lastCallTitle(custom: "Last chance, love 🌙", method: .pill, isPlus: true),
+            "Last chance, love 🌙"
+        )
+        XCTAssertEqual(
+            CustomReminderPreview.lastCallBody(custom: "The day's nearly done — log it.", method: .pill, isPlus: true),
+            "The day's nearly done — log it."
+        )
+    }
+
+    func testBlankLastCallFieldFallsBackToMethodDefault() {
+        let defaultTitle = CustomReminderPreview.defaultLastCallTitle(method: .pill)
+        let defaultBody = CustomReminderPreview.defaultLastCallBody(method: .pill)
+        XCTAssertFalse(defaultTitle.isEmpty)
+        XCTAssertFalse(defaultBody.isEmpty)
+
+        XCTAssertEqual(
+            CustomReminderPreview.lastCallTitle(custom: "   ", method: .pill, isPlus: true),
+            defaultTitle
+        )
+        XCTAssertEqual(
+            CustomReminderPreview.lastCallBody(custom: "", method: .pill, isPlus: true),
+            defaultBody
+        )
+    }
+
+    func testLastCallDefaultBodyIsMethodAware() {
+        let bodies = ContraceptiveMethod.allCases.map { CustomReminderPreview.defaultLastCallBody(method: $0) }
+        XCTAssertTrue(bodies.allSatisfy { !$0.isEmpty })
+        // Patch and ring users must never see pill wording in their default Last Call body.
+        XCTAssertTrue(CustomReminderPreview.defaultLastCallBody(method: .patch).lowercased().contains("patch"))
+        XCTAssertTrue(CustomReminderPreview.defaultLastCallBody(method: .ring).lowercased().contains("ring"))
+        XCTAssertFalse(CustomReminderPreview.defaultLastCallBody(method: .patch).lowercased().contains("pill"))
+        XCTAssertFalse(CustomReminderPreview.defaultLastCallBody(method: .ring).lowercased().contains("pill"))
+    }
+
+    func testNonPlusLastCallPreviewShowsDefaultEvenWithCustomText() {
+        XCTAssertEqual(
+            CustomReminderPreview.lastCallTitle(custom: "Resubscribe to see me", method: .pill, isPlus: false),
+            CustomReminderPreview.defaultLastCallTitle(method: .pill)
+        )
+    }
+
+    func testLastCallPreviewClampsAndTrimsExactlyLikeTheNotification() {
+        let longCustom = String(repeating: "B", count: CustomReminderCopy.bodyCap + 25)
+        XCTAssertEqual(
+            CustomReminderPreview.lastCallBody(custom: longCustom, method: .pill, isPlus: true),
+            CustomReminderCopy.effective(
+                custom: longCustom,
+                default: CustomReminderPreview.defaultLastCallBody(method: .pill),
+                cap: CustomReminderCopy.bodyCap,
+                isPlus: true
+            )
+        )
+
+        let padded = "   Last call 🌙   "
+        XCTAssertEqual(
+            CustomReminderPreview.lastCallTitle(custom: padded, method: .pill, isPlus: true),
+            "Last call 🌙"
+        )
+    }
 }
