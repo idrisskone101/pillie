@@ -395,4 +395,30 @@ final class OnboardingFlowTests: XCTestCase {
         XCTAssertEqual(toFirstQuestion.direction, .forward)
         XCTAssertEqual(toFirstQuestion.completedAnalyticsStep, .analyticsConsent)
     }
+
+    func testDisplayIndexReportsZeroBasedPositionWithinDisplayOrder() {
+        // step_index for the funnel is the step's position in `displayOrder` — the
+        // canonical render/funnel sequence — not its frozen raw value. So it is
+        // monotonic with real progression even though raw values have gaps.
+        XCTAssertEqual(OnboardingFlow.displayIndex(for: OnboardingFlow.Step.welcome.rawValue), 0)
+        XCTAssertEqual(OnboardingFlow.displayIndex(for: OnboardingFlow.Step.painPoints.rawValue), 4)
+        XCTAssertEqual(OnboardingFlow.displayIndex(for: OnboardingFlow.Step.appBlocking.rawValue), 15)
+
+        // Every visible step's index matches its position in displayOrder exactly.
+        for (position, step) in OnboardingFlow.displayOrder.enumerated() {
+            XCTAssertEqual(
+                OnboardingFlow.displayIndex(for: step.rawValue), position,
+                "\(step) should report its displayOrder position as step_index.")
+        }
+    }
+
+    func testDisplayIndexIsNilForRetiredAndUnknownSteps() {
+        // Retired steps are dropped from displayOrder (their raw values are kept only
+        // so persisted state is never reinterpreted), so they have no funnel position.
+        XCTAssertNil(OnboardingFlow.displayIndex(for: OnboardingFlow.Step.reviewPrompt.rawValue))
+        XCTAssertNil(OnboardingFlow.displayIndex(for: OnboardingFlow.Step.draftBlockedApps.rawValue))
+        XCTAssertNil(OnboardingFlow.displayIndex(for: OnboardingFlow.Step.mechanismProof.rawValue))
+        // An out-of-range raw value (no such step) has no position either.
+        XCTAssertNil(OnboardingFlow.displayIndex(for: 999))
+    }
 }

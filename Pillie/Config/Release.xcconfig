@@ -1,4 +1,12 @@
 POSTHOG_HOST = https:/$()/us.i.posthog.com
+
+// PostHog Project API Key (phc_...). Paste the project's write-only ingestion key
+// below to commit it: it is safe to ship in the client binary, and committing it makes
+// EVERY Release/TestFlight/App Store build emit analytics — closing the ~25% install-
+// coverage gap (#140). Debug builds intentionally omit it (no dev analytics, no
+// production pollution). While this stays empty, a Release build fault-logs loudly and
+// AnalyticsManager.didFailConfiguration is true instead of silently dropping every
+// event. Secrets.xcconfig (gitignored) can override per environment.
 POSTHOG_PROJECT_TOKEN =
 
 #include? "Secrets.xcconfig"

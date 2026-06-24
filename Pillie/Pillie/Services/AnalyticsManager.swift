@@ -5,16 +5,20 @@
 
 import Foundation
 import PostHog
+import os
 
 enum AnalyticsPropertyValue: Equatable {
   case string(String)
   case bool(Bool)
+  case int(Int)
 
   var postHogValue: Any {
     switch self {
     case .string(let value):
       return value
     case .bool(let value):
+      return value
+    case .int(let value):
       return value
     }
   }
@@ -105,6 +109,7 @@ protocol AnalyticsTracking {
     _ event: AnalyticsEvent,
     source: AnalyticsSource?,
     step: AnalyticsStep?,
+    stepIndex: Int?,
     screen: AnalyticsScreen?,
     plan: AnalyticsPlan?,
     result: AnalyticsResult?,
@@ -237,6 +242,7 @@ enum AnalyticsSetting: String {
 struct AnalyticsPayload {
   let source: AnalyticsSource?
   let step: AnalyticsStep?
+  let stepIndex: Int?
   let screen: AnalyticsScreen?
   let plan: AnalyticsPlan?
   let result: AnalyticsResult?
@@ -254,6 +260,7 @@ struct AnalyticsPayload {
   init(
     source: AnalyticsSource? = nil,
     step: AnalyticsStep? = nil,
+    stepIndex: Int? = nil,
     screen: AnalyticsScreen? = nil,
     plan: AnalyticsPlan? = nil,
     result: AnalyticsResult? = nil,
@@ -270,6 +277,7 @@ struct AnalyticsPayload {
   ) {
     self.source = source
     self.step = step
+    self.stepIndex = stepIndex
     self.screen = screen
     self.plan = plan
     self.result = result
@@ -289,6 +297,7 @@ struct AnalyticsPayload {
     var properties: [String: AnalyticsPropertyValue] = [:]
     if let source { properties["source"] = .string(source.rawValue) }
     if let step { properties["step"] = .string(step.rawValue) }
+    if let stepIndex { properties["step_index"] = .int(stepIndex) }
     if let screen { properties["screen"] = .string(screen.rawValue) }
     if let plan { properties["plan"] = .string(plan.rawValue) }
     if let result { properties["result"] = .string(result.rawValue) }
@@ -342,6 +351,12 @@ final class AnalyticsManager: AnalyticsTracking {
   private let client: ProductAnalyticsClient
   private let infoDictionary: [String: Any]?
 
+  /// `true` when `configure()` ran but found no usable `PostHogProjectToken`, so the
+  /// SDK was never set up and every event is dropped. Surfaced (not silent) because a
+  /// missing token is what reduced PostHog install coverage to ~25% (#140). Observable
+  /// for tests and asserted loudly in DEBUG.
+  private(set) var didFailConfiguration = false
+
   init(
     defaults: UserDefaults = .standard,
     client: ProductAnalyticsClient = PostHogAnalyticsClient(),
@@ -361,6 +376,7 @@ final class AnalyticsManager: AnalyticsTracking {
     guard !isConfigured else { return }
     guard let projectToken = infoDictionaryString("PostHogProjectToken"), !projectToken.isEmpty
     else {
+      reportConfigurationFailure()
       return
     }
 
@@ -396,6 +412,7 @@ final class AnalyticsManager: AnalyticsTracking {
     _ event: AnalyticsEvent,
     source: AnalyticsSource? = nil,
     step: AnalyticsStep? = nil,
+    stepIndex: Int? = nil,
     screen: AnalyticsScreen? = nil,
     plan: AnalyticsPlan? = nil,
     result: AnalyticsResult? = nil,
@@ -415,6 +432,7 @@ final class AnalyticsManager: AnalyticsTracking {
     let payload = AnalyticsPayload(
       source: source,
       step: step,
+      stepIndex: stepIndex,
       screen: screen,
       plan: plan,
       result: result,
@@ -439,6 +457,20 @@ final class AnalyticsManager: AnalyticsTracking {
   func flush() {
     guard isConfigured, isAnalyticsEnabled else { return }
     client.flush()
+  }
+
+  /// A missing token used to fail silently — `configure()` returned, every `track`
+  /// no-opped, and no one noticed until the funnel looked broken. Make it loud: flag
+  /// it for observability (tests, in-app diagnostics) and fault-log it so a tokenless
+  /// Release build is visible in Console instead of silently dropping every event.
+  /// Debug builds intentionally ship without a token (no dev analytics, no prod
+  /// pollution), so this stays a log + flag rather than a crash.
+  private func reportConfigurationFailure() {
+    didFailConfiguration = true
+    os_log(
+      .fault,
+      "Pillie analytics: PostHogProjectToken missing or empty — analytics disabled and every event will be dropped. Set POSTHOG_PROJECT_TOKEN (Config/Release.xcconfig)."
+    )
   }
 
   private func infoDictionaryString(_ key: String) -> String? {

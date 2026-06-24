@@ -148,6 +148,7 @@ private final class AnalyticsRecorder: AnalyticsTracking {
         _ event: AnalyticsEvent,
         source: AnalyticsSource?,
         step: AnalyticsStep?,
+        stepIndex: Int?,
         screen: AnalyticsScreen?,
         plan: AnalyticsPlan?,
         result: AnalyticsResult?,
