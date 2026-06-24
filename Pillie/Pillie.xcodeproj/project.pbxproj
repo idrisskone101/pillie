@@ -14,6 +14,7 @@
 		DP0001042F456DC00082EF2F /* PillieShieldAction.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = SA0001012F456DC00082EF2F /* PillieShieldAction.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		LT0001022F6A00000082EF2F /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = LT0001022F6A00010082EF2F /* Lottie */; };
 		PH0001022F6A00000082EF2F /* PostHog in Frameworks */ = {isa = PBXBuildFile; productRef = PH0001022F6A00010082EF2F /* PostHog */; };
+		AF0001032F6B00020082EF2F /* AppsFlyerLib in Frameworks */ = {isa = PBXBuildFile; productRef = AF0001022F6B00010082EF2F /* AppsFlyerLib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,6 +71,7 @@
 		529E8B372F57645D0000F2B9 /* ManagedSettingsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ManagedSettingsUI.framework; path = Library/Frameworks/ManagedSettingsUI.framework; sourceTree = DEVELOPER_DIR; };
 		529E8B4A2F57648B0000F2B9 /* DeviceActivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DeviceActivity.framework; path = System/Library/Frameworks/DeviceActivity.framework; sourceTree = SDKROOT; };
 		CF0001012F6B00000082EF2F /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
+		CF0001032F6B00010082EF2F /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		DA0001012F456DC00082EF2F /* PillieDeviceActivityMonitor.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = PillieDeviceActivityMonitor.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		SA0001012F456DC00082EF2F /* PillieShieldAction.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = PillieShieldAction.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		SC0001012F456DC00082EF2F /* PillieShieldConfiguration.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = PillieShieldConfiguration.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -155,6 +157,7 @@
 				LT0001022F6A00000082EF2F /* Lottie in Frameworks */,
 				527C07A42F5A4BB900164A1D /* RevenueCatUI in Frameworks */,
 				527C07A32F5A4BB900164A1D /* RevenueCat in Frameworks */,
+				AF0001032F6B00020082EF2F /* AppsFlyerLib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -229,6 +232,7 @@
 			isa = PBXGroup;
 			children = (
 				CF0001012F6B00000082EF2F /* Release.xcconfig */,
+				CF0001032F6B00010082EF2F /* Debug.xcconfig */,
 			);
 			path = Config;
 			sourceTree = "<group>";
@@ -261,6 +265,7 @@
 				LT0001022F6A00010082EF2F /* Lottie */,
 				RC0001022F456DC00082EF2F /* RevenueCat */,
 				RC0001032F456DC00082EF2F /* RevenueCatUI */,
+				AF0001022F6B00010082EF2F /* AppsFlyerLib */,
 			);
 			productName = Pillie;
 			productReference = 525916652F456DC00082EF2F /* Pillie.app */;
@@ -419,6 +424,7 @@
 				PH0001012F6A00000082EF2F /* XCRemoteSwiftPackageReference "posthog-ios" */,
 				LT0001012F6A00000082EF2F /* XCRemoteSwiftPackageReference "lottie-ios" */,
 				RC0001012F456DC00082EF2F /* XCRemoteSwiftPackageReference "purchases-ios" */,
+				AF0001012F6B00000082EF2F /* XCRemoteSwiftPackageReference "AppsFlyerFramework" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 525916662F456DC00082EF2F /* Products */;
@@ -656,6 +662,7 @@
 		};
 		525916712F456DC10082EF2F /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CF0001032F6B00010082EF2F /* Debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1065,6 +1072,14 @@
 				minimumVersion = 5.21.1;
 			};
 		};
+		AF0001012F6B00000082EF2F /* XCRemoteSwiftPackageReference "AppsFlyerFramework" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/AppsFlyerSDK/AppsFlyerFramework.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.18.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1087,6 +1102,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = RC0001012F456DC00082EF2F /* XCRemoteSwiftPackageReference "purchases-ios" */;
 			productName = RevenueCatUI;
+		};
+		AF0001022F6B00010082EF2F /* AppsFlyerLib */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AF0001012F6B00000082EF2F /* XCRemoteSwiftPackageReference "AppsFlyerFramework" */;
+			productName = AppsFlyerLib;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

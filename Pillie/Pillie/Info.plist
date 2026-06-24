@@ -35,10 +35,14 @@
 	</array>
 	<key>NSMotionUsageDescription</key>
 	<string>Pillie uses motion to detect shakes for the fun dose confirmation mini-game.</string>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>Allow tracking so Pillie can measure which channels brought you here and improve the app. We never sell your personal data.</string>
 	<key>PostHogHost</key>
 	<string>$(POSTHOG_HOST)</string>
 	<key>PostHogProjectToken</key>
 	<string>$(POSTHOG_PROJECT_TOKEN)</string>
+	<key>AppsFlyerDevKey</key>
+	<string>$(APPSFLYER_DEV_KEY)</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>UIApplicationSceneManifest</key>

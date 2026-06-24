@@ -9,4 +9,11 @@ POSTHOG_HOST = https:/$()/us.i.posthog.com
 // event. Secrets.xcconfig (gitignored) can override per environment.
 POSTHOG_PROJECT_TOKEN =
 
+// AppsFlyer dev key (account-level). Safe to ship in the client binary, but kept
+// out of git like the PostHog key: paste it into Secrets.xcconfig (gitignored) to
+// activate attribution for Release/TestFlight/App Store builds. Empty here means
+// the AppsFlyer SDK no-ops loudly (AppsFlyerManager.didFailConfiguration) rather
+// than sending malformed installs.
+APPSFLYER_DEV_KEY =
+
 #include? "Secrets.xcconfig"

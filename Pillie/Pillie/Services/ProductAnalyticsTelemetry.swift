@@ -69,6 +69,8 @@ struct ProductAnalyticsTelemetry {
 
   func onboardingCompleted() {
     track(.onboardingCompleted, source: .onboarding)
+    // af_complete_registration — onboarding is Pillie's "registration" milestone.
+    AppsFlyerManager.shared.logCompleteRegistration()
   }
 
   /// Reports the terminal completion classification. Fires exactly one event —

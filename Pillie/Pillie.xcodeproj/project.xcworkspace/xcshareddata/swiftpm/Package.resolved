@@ -1,6 +1,15 @@
 {
-  "originHash" : "9ac60eca07747d306e561089444812ca3f9cf6e7fb9de8f6e2357a3a6a22dabf",
+  "originHash" : "56ebe714b14fbeb20cf907684a952ad51714c2cfb32df64d197477ead8050008",
   "pins" : [
+    {
+      "identity" : "appsflyerframework",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/AppsFlyerSDK/AppsFlyerFramework.git",
+      "state" : {
+        "revision" : "edd3e30e4bafe527bc3df51250479302120510f3",
+        "version" : "6.18.1"
+      }
+    },
     {
       "identity" : "lottie-ios",
       "kind" : "remoteSourceControl",
