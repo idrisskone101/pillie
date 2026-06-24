@@ -380,12 +380,14 @@ struct ProductAnalyticsTelemetry {
     track(.adaptiveReminderSuggestionDismissed, source: .home)
   }
 
-  // MARK: - Home Review Prompt (#133)
+  // MARK: - Home Review Prompt (#132 / #133)
   //
-  // The Sentiment Gate captures only its lifecycle — shown / positive-tapped. Both
-  // are flat and property-free: the contraception method, the Streak value, and the
-  // appearance ordinal are never attached (PRD #132 / ADR 0001/0004). There is no
-  // payload field for any of them, so none can leak.
+  // The Sentiment Gate captures only its lifecycle — shown / positive / negative /
+  // dismissed. All four are flat and property-free: the contraception method, the
+  // Streak value, the appearance ordinal, and the feedback email text are never
+  // attached (PRD #132 / ADR 0001/0004). There is no payload field for any of them, so
+  // none can leak; the Native Review Request firing and Feedback Escape Hatch text are
+  // never reported beyond this coarse funnel signal.
 
   func reviewPromptShown() {
     track(.reviewPromptShown, source: .home)
@@ -393,6 +395,14 @@ struct ProductAnalyticsTelemetry {
 
   func reviewPromptPositiveTapped() {
     track(.reviewPromptPositiveTapped, source: .home)
+  }
+
+  func reviewPromptNegativeTapped() {
+    track(.reviewPromptNegativeTapped, source: .home)
+  }
+
+  func reviewPromptDismissed() {
+    track(.reviewPromptDismissed, source: .home)
   }
 
   private func paywallSource(isFromOnboarding: Bool) -> AnalyticsSource {

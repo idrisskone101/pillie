@@ -168,6 +168,8 @@ enum AnalyticsEvent: String, CaseIterable {
   case adaptiveReminderSuggestionDismissed = "adaptive_reminder_suggestion_dismissed"
   case reviewPromptShown = "review_prompt_shown"
   case reviewPromptPositiveTapped = "review_prompt_positive_tapped"
+  case reviewPromptNegativeTapped = "review_prompt_negative_tapped"
+  case reviewPromptDismissed = "review_prompt_dismissed"
 }
 
 enum AnalyticsSource: String {
