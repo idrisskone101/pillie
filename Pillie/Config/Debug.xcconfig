@@ -1,0 +1,18 @@
+// Debug build configuration for the Pillie app target.
+//
+// Carries local-only secrets for development/QA builds via the gitignored
+// Secrets.xcconfig (same mechanism as Release.xcconfig). Today that is just the
+// AppsFlyer dev key, so an install fired from a Debug simulator build can be
+// verified end-to-end against the AppsFlyer dashboard. Without Secrets.xcconfig the
+// key resolves empty and the AppsFlyer SDK simply no-ops (logs a fault) — the app
+// still builds and runs.
+//
+// PostHog stays intentionally absent here: Debug builds emit no product analytics
+// (see Release.xcconfig / #140). Those keys remain inline in the Debug build
+// settings and override anything an xcconfig could set.
+
+// Empty default so $(APPSFLYER_DEV_KEY) substitution in Info.plist never leaks a
+// literal token; Secrets.xcconfig overrides this with the real key.
+APPSFLYER_DEV_KEY =
+
+#include? "Secrets.xcconfig"

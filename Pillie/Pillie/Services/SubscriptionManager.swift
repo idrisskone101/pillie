@@ -110,6 +110,14 @@ final class SubscriptionManager: NSObject {
         if let distinctId = AnalyticsManager.shared.distinctId, !distinctId.isEmpty {
             Purchases.shared.attribution.setPostHogUserID(distinctId)
         }
+        // Share the AppsFlyer device id so RevenueCat's server-side subscription events
+        // (renewals, trial→paid) join the same user in AppsFlyer. The id is
+        // device-persistent, so reading it here is correct regardless of whether
+        // AppsFlyer's own configure() has already run this launch.
+        let appsFlyerID = AppsFlyerManager.shared.appsFlyerUID
+        if !appsFlyerID.isEmpty {
+            Purchases.shared.attribution.setAppsflyerID(appsFlyerID)
+        }
         if let source = UserDefaults.standard.string(forKey: PillStore.acquisitionSourceKey),
            !source.isEmpty {
             Purchases.shared.attribution.setAttributes(["acquisition_source": source])
@@ -129,10 +137,64 @@ final class SubscriptionManager: NSObject {
             userCancelled: result.userCancelled,
             isPlusEntitlementActive: entitlement?.isActive == true
         )
-        return PurchaseOutcome(
+
+        let outcome = PurchaseOutcome(
             isTrial: entitlement?.periodType == .trial,
             isSandbox: entitlement?.isSandbox ?? false
         )
+        reportConversionToAppsFlyer(outcome, transaction: result.transaction, product: package.storeProduct)
+        return outcome
+    }
+
+    /// Persisted set of StoreKit transaction ids already reported to AppsFlyer, so a
+    /// purchase is counted exactly once across launches.
+    private static let loggedAppsFlyerTxKey = "appsflyer_logged_transaction_ids"
+
+    /// Report a successful purchase/trial to AppsFlyer from the real RevenueCat
+    /// completion so revenue is accurate and de-duped. Three guards keep the SKAN
+    /// revenue model clean:
+    ///   • Sandbox transactions emit nothing (`conversionEvent == nil`).
+    ///   • Only a genuine StoreKit transaction counts — renewals arrive via the
+    ///     `PurchasesDelegate` and restores via `restore()`, neither of which calls
+    ///     this; a re-tap that yields no new transaction has `transaction == nil` and
+    ///     is skipped.
+    ///   • Each `transactionIdentifier` is logged at most once (persisted), so a
+    ///     replayed/duplicate transaction never inflates revenue.
+    /// `af_start_trial` maps to the actual trial-began outcome — not the button-tap
+    /// `purchase_started` event, which also fires on cancel/failure.
+    private func reportConversionToAppsFlyer(
+        _ outcome: PurchaseOutcome,
+        transaction: StoreTransaction?,
+        product: StoreProduct
+    ) {
+        guard let conversion = outcome.conversionEvent else { return }
+        guard let txID = transaction?.transactionIdentifier, !txID.isEmpty else { return }
+        guard markTransactionLoggedIfNew(txID) else { return }
+
+        let currency = product.currencyCode ?? "USD"
+        switch conversion {
+        case .purchaseCompleted:
+            AppsFlyerManager.shared.logPurchase(
+                revenue: (product.price as NSDecimalNumber).doubleValue,
+                currency: currency,
+                productId: product.productIdentifier
+            )
+        case .trialStarted:
+            AppsFlyerManager.shared.logStartTrial(
+                currency: currency,
+                productId: product.productIdentifier
+            )
+        }
+    }
+
+    /// Records `transactionID` and returns `true` the first time it is seen; returns
+    /// `false` if it was already reported. Persisted so restores/replays never re-log.
+    private func markTransactionLoggedIfNew(_ transactionID: String) -> Bool {
+        var ids = Set(UserDefaults.standard.stringArray(forKey: Self.loggedAppsFlyerTxKey) ?? [])
+        guard !ids.contains(transactionID) else { return false }
+        ids.insert(transactionID)
+        UserDefaults.standard.set(Array(ids), forKey: Self.loggedAppsFlyerTxKey)
+        return true
     }
 
     // MARK: - Restore

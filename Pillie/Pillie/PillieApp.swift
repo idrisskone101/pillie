@@ -46,6 +46,15 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
             print("Pillie DEBUG memory warning received at uptime \(uptime)s")
         }
         #endif
+
+        // Configure AppsFlyer attribution. Keys/delegate are set here so they are in
+        // place before the first didBecomeActive; configure() registers the observer
+        // that sends the launch. Skipped during XCTest (no network in tests; avoids
+        // the @MainActor deinit instability on the Xcode 27 beta).
+        if !Self.isRunningTests {
+            AppsFlyerManager.shared.configure()
+        }
+
         return true
     }
 
