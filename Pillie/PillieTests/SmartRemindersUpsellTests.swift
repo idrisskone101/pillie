@@ -97,6 +97,7 @@ private struct NoOpTracker: AnalyticsTracking {
         _ event: AnalyticsEvent,
         source: AnalyticsSource?,
         step: AnalyticsStep?,
+        stepIndex: Int?,
         screen: AnalyticsScreen?,
         plan: AnalyticsPlan?,
         result: AnalyticsResult?,

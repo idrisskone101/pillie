@@ -127,6 +127,15 @@ enum OnboardingFlow {
         step(for: rawValue)?.analyticsStep
     }
 
+    /// The step's 0-based position within `displayOrder` — the funnel `step_index`.
+    /// Derived from the canonical render/funnel sequence rather than the frozen raw
+    /// value, so it stays monotonic with real progression. Retired steps (dropped
+    /// from `displayOrder`) and unknown raw values have no position and return `nil`.
+    static func displayIndex(for rawValue: Int) -> Int? {
+        guard let step = step(for: rawValue) else { return nil }
+        return displayOrder.firstIndex(of: step)
+    }
+
     static func nextStepAfterPaywall(isPlus: Bool, selectedFreePlan: Bool) -> Step {
         if selectedFreePlan || !isPlus {
             return .freePlanConfirmation

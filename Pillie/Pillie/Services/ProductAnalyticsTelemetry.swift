@@ -24,37 +24,47 @@ struct ProductAnalyticsTelemetry {
 
   private let analytics: AnalyticsTracking
   private let isPlus: () -> Bool
+  private let acquisitionSource: () -> AcquisitionSource?
 
   init(
     analytics: AnalyticsTracking = AnalyticsManager.shared,
-    isPlus: @escaping () -> Bool = { SubscriptionManager.shared.isPlus }
+    isPlus: @escaping () -> Bool = { SubscriptionManager.shared.isPlus },
+    acquisitionSource: @escaping () -> AcquisitionSource? = {
+      AcquisitionSource(
+        rawValue: UserDefaults.standard.string(forKey: PillStore.acquisitionSourceKey) ?? "")
+    }
   ) {
     self.analytics = analytics
     self.isPlus = isPlus
+    self.acquisitionSource = acquisitionSource
   }
 
+  // The activation funnel can only be split by channel if `acquisition_source` rides
+  // a guaranteed-fire event, not just the deep "how'd you hear" step that most installs
+  // never reach. Attaching the persisted answer here `$set`s it on the person for every
+  // user who has answered — including those who drop before completing onboarding (#140).
   func appLaunched(source: AnalyticsSource? = nil) {
-    track(.appLaunched, source: source)
+    track(.appLaunched, source: source, acquisitionSource: acquisitionSource())
   }
 
   func appBecameActive() {
-    track(.appBecameActive)
+    track(.appBecameActive, acquisitionSource: acquisitionSource())
   }
 
   func onboardingStarted(step: AnalyticsStep) {
     track(.onboardingStarted, source: .onboarding, step: step)
   }
 
-  func onboardingStepViewed(_ step: AnalyticsStep) {
-    track(.onboardingStepViewed, source: .onboarding, step: step)
+  func onboardingStepViewed(_ step: AnalyticsStep, stepIndex: Int? = nil) {
+    track(.onboardingStepViewed, source: .onboarding, step: step, stepIndex: stepIndex)
   }
 
-  func onboardingStepCompleted(_ step: AnalyticsStep) {
-    track(.onboardingStepCompleted, source: .onboarding, step: step)
+  func onboardingStepCompleted(_ step: AnalyticsStep, stepIndex: Int? = nil) {
+    track(.onboardingStepCompleted, source: .onboarding, step: step, stepIndex: stepIndex)
   }
 
-  func onboardingBackTapped(_ step: AnalyticsStep) {
-    track(.onboardingBackTapped, source: .onboarding, step: step)
+  func onboardingBackTapped(_ step: AnalyticsStep, stepIndex: Int? = nil) {
+    track(.onboardingBackTapped, source: .onboarding, step: step, stepIndex: stepIndex)
   }
 
   func onboardingCompleted() {
@@ -394,6 +404,7 @@ struct ProductAnalyticsTelemetry {
     _ event: AnalyticsEvent,
     source: AnalyticsSource? = nil,
     step: AnalyticsStep? = nil,
+    stepIndex: Int? = nil,
     screen: AnalyticsScreen? = nil,
     plan: AnalyticsPlan? = nil,
     result: AnalyticsResult? = nil,
@@ -411,6 +422,7 @@ struct ProductAnalyticsTelemetry {
       event,
       source: source,
       step: step,
+      stepIndex: stepIndex,
       screen: screen,
       plan: plan,
       result: result,

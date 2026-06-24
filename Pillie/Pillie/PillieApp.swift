@@ -205,6 +205,11 @@ struct PillieApp: App {
                         reconcileScreenTimeState()
                         NotificationManager.shared.requestReschedule(from: store, reason: "app-became-active")
                     } else if newPhase == .background {
+                        // Flush buffered analytics before the app is suspended/killed.
+                        // TikTok installs that bounce mid-onboarding otherwise lose their
+                        // early funnel events (app_launched, onboarding_started), which
+                        // is a major contributor to the ~25% coverage gap (#140).
+                        AnalyticsManager.shared.flush()
                         // Schedule BGAppRefreshTask when going to background
                         AppDelegate.scheduleScreenTimeReconcileTask()
                     }

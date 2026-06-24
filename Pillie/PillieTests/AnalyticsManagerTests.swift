@@ -233,7 +233,9 @@ final class AnalyticsManagerTests: XCTestCase {
 
   func testOnboardingStartedFiresOnceWhenEnteringTheFirstStep() {
     let recorder = RecordingAnalyticsTracker()
-    let telemetry = OnboardingTelemetry(analytics: recorder, isPlus: { false })
+    // Inject the per-test defaults suite so the once-per-install latch starts clean
+    // and never leaks across runs via `.standard`.
+    let telemetry = OnboardingTelemetry(analytics: recorder, isPlus: { false }, defaults: defaults)
 
     // Entering step 0 (welcome) starts the activation funnel exactly once...
     telemetry.stepViewed(0)
@@ -391,6 +393,7 @@ private final class RecordingAnalyticsTracker: AnalyticsTracking {
   private(set) var events: [AnalyticsEvent] = []
   private(set) var sources: [AnalyticsSource?] = []
   private(set) var steps: [AnalyticsStep?] = []
+  private(set) var stepIndices: [Int?] = []
   private(set) var screens: [AnalyticsScreen?] = []
   private(set) var settings: [AnalyticsSetting?] = []
   private(set) var acquisitionSources: [AcquisitionSource?] = []
@@ -405,6 +408,7 @@ private final class RecordingAnalyticsTracker: AnalyticsTracking {
     _ event: AnalyticsEvent,
     source: AnalyticsSource?,
     step: AnalyticsStep?,
+    stepIndex: Int?,
     screen: AnalyticsScreen?,
     plan: AnalyticsPlan?,
     result: AnalyticsResult?,
@@ -422,6 +426,7 @@ private final class RecordingAnalyticsTracker: AnalyticsTracking {
     events.append(event)
     sources.append(source)
     steps.append(step)
+    stepIndices.append(stepIndex)
     screens.append(screen)
     settings.append(setting)
     acquisitionSources.append(acquisitionSource)
