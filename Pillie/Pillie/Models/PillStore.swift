@@ -152,11 +152,27 @@ class PillStore {
         didSet { UserDefaults.standard.set(adaptiveReminderEnabled, forKey: Self.adaptiveReminderEnabledKey) }
     }
     /// Whether the Home Review Prompt's Sentiment Gate has been permanently answered
-    /// (PRD #132 / ADR 0005). A positive (or, in later slices, negative) response sets
-    /// this once and the card never returns. Mirrors `adaptiveReminderLastDismissal`'s
-    /// `UserDefaults` persistence so suppression survives across launches. Default off.
+    /// (PRD #132 / ADR 0005). A positive OR negative response sets this once and the card
+    /// never returns. Mirrors `adaptiveReminderLastDismissal`'s `UserDefaults` persistence
+    /// so suppression survives across launches. Default off.
     var reviewPromptPermanentlySuppressed: Bool {
         didSet { UserDefaults.standard.set(reviewPromptPermanentlySuppressed, forKey: Self.reviewPromptPermanentlySuppressedKey) }
+    }
+    /// When the Review Prompt card was last soft-dismissed (the close control). Starts the
+    /// 90-day cooldown so the success-gated ask only re-shows after a long while (#132).
+    var reviewPromptLastSoftDismissal: Date? {
+        didSet {
+            if let date = reviewPromptLastSoftDismissal {
+                UserDefaults.standard.set(date, forKey: Self.reviewPromptLastSoftDismissalKey)
+            } else {
+                UserDefaults.standard.removeObject(forKey: Self.reviewPromptLastSoftDismissalKey)
+            }
+        }
+    }
+    /// How many times the Review Prompt card has been soft-dismissed. The card is
+    /// permanently suppressed once this reaches the lifetime cap (#132).
+    var reviewPromptSoftDismissalCount: Int {
+        didSet { UserDefaults.standard.set(reviewPromptSoftDismissalCount, forKey: Self.reviewPromptSoftDismissalCountKey) }
     }
     var appActivatedDate: Date? {
         didSet {
@@ -250,6 +266,8 @@ class PillStore {
     private static let adaptiveReminderLastDismissedDeltaKey = "pillie_adaptive_reminder_last_dismissed_delta"
     private static let adaptiveReminderEnabledKey = "pillie_adaptive_reminder_enabled"
     private static let reviewPromptPermanentlySuppressedKey = "pillie_review_prompt_permanently_suppressed"
+    private static let reviewPromptLastSoftDismissalKey = "pillie_review_prompt_last_soft_dismissal"
+    private static let reviewPromptSoftDismissalCountKey = "pillie_review_prompt_soft_dismissal_count"
     private static let appActivatedDateKey = "pillie_app_activated_date"
     private static let streakResetDateKey = "pillie_streak_reset_date"
     private static let painPointsKey = "pillie_pain_points"
@@ -632,6 +650,41 @@ class PillStore {
     func dismissAdaptiveReminderSuggestion(delta: Int) {
         adaptiveReminderLastDismissal = PillieClock.now
         adaptiveReminderLastDismissedDelta = delta
+    }
+
+    // MARK: - Home Review Prompt (#132)
+
+    /// Whether the Home Review Prompt's Sentiment Gate card shows this pass, or why it is
+    /// suppressed. `higherPriorityCardShowing` is supplied by Home (whether the Refill,
+    /// Adaptive Reminder, or Blocking card would render) so the "one ask per visit" rule
+    /// stays a pure, tested branch rather than view logic. Streak basis is the active
+    /// pack's method, matching how `currentStreak` is counted.
+    func reviewPromptDecision(higherPriorityCardShowing: Bool) -> ReviewPromptEligibility.Decision {
+        ReviewPromptEligibility.evaluate(
+            for: ReviewPromptEligibility.State(
+                method: pack.method,
+                currentStreak: currentStreak,
+                permanentlySuppressed: reviewPromptPermanentlySuppressed,
+                lastSoftDismissal: reviewPromptLastSoftDismissal,
+                softDismissalCount: reviewPromptSoftDismissalCount,
+                higherPriorityCardShowing: higherPriorityCardShowing,
+                now: PillieClock.now
+            )
+        )
+    }
+
+    /// Records that the user answered the Sentiment Gate (positive or negative). Both
+    /// answers permanently suppress the prompt — a responder is never re-asked, even after
+    /// Apple's annual quota resets.
+    func recordReviewPromptAnswered() {
+        reviewPromptPermanentlySuppressed = true
+    }
+
+    /// Soft-dismisses the Review Prompt card (the close control): starts the 90-day
+    /// cooldown and counts the appearance toward the lifetime cap.
+    func softDismissReviewPrompt() {
+        reviewPromptLastSoftDismissal = PillieClock.now
+        reviewPromptSoftDismissalCount += 1
     }
 
     // MARK: - Actions
@@ -1193,6 +1246,14 @@ class PillStore {
         self.adaptiveReminderEnabled = defaults.object(forKey: Self.adaptiveReminderEnabledKey) as? Bool ?? true
         // Default off: set once a user answers the Review Prompt's Sentiment Gate (#133).
         self.reviewPromptPermanentlySuppressed = defaults.bool(forKey: Self.reviewPromptPermanentlySuppressedKey)
+        // Home Review Prompt soft-dismiss lifecycle (#132) — default "never dismissed".
+        if let storedReviewDismissal = defaults.object(forKey: Self.reviewPromptLastSoftDismissalKey) as? Date,
+           Self.isValidPersistedDate(storedReviewDismissal) {
+            self.reviewPromptLastSoftDismissal = storedReviewDismissal
+        } else {
+            self.reviewPromptLastSoftDismissal = nil
+        }
+        self.reviewPromptSoftDismissalCount = defaults.object(forKey: Self.reviewPromptSoftDismissalCountKey) as? Int ?? 0
 
         let defaultMethod = resolvedPacks
             .sorted(by: { $0.packNumber < $1.packNumber })
@@ -1277,7 +1338,10 @@ class PillStore {
             markActionAsTaken(on: date)
         }
 
+        // Clear the full suppression lifecycle so the card reliably surfaces for QA.
         reviewPromptPermanentlySuppressed = false
+        reviewPromptLastSoftDismissal = nil
+        reviewPromptSoftDismissalCount = 0
         try? modelContext.save()
         refreshPacks()
         rebuildReadIndexes()

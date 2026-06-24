@@ -12,6 +12,7 @@ struct HomeView: View {
     @Environment(PillStore.self) var store
     @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
     @Environment(\.requestReview) private var requestReview
+    @Environment(\.openURL) private var openURL
     @State private var appeared = false
     @State private var hasAnimatedIn = false
     @State private var showRefillConfirmation = false
@@ -22,6 +23,10 @@ struct HomeView: View {
     @State private var reviewPromptShownLogged = false
     @AppStorage("homeBlockingStatusCardDismissed") private var blockingCardDismissed = false
     private let homeFeedback = HomeActionInteractionFeedback()
+
+    /// Pillie support inbox for the Feedback Escape Hatch (#132 / ADR 0005).
+    private static let feedbackEmailAddress = "pillieapp@gmail.com"
+    private static let feedbackEmailSubject = "Pillie feedback"
 
     private var unifiedStateTransition: Animation {
         PillieMotion.animation(
@@ -70,6 +75,13 @@ struct HomeView: View {
         }
     }
 
+    /// Copy for the enable-blocking-later card, or `nil` when blocking is active or the
+    /// card was dismissed — in which case it does not occupy this Home pass.
+    private var blockingCardContent: BlockingStatusCardContent? {
+        guard !blockingCardDismissed else { return nil }
+        return BlockingStatusCardContent.make(for: blockingPresentation)
+    }
+
     /// Copy + gating for the Adaptive Reminder Time Suggestion card (#126). `nil` for
     /// free users, or when the analyzer has no confident, non-cooled-down suggestion.
     private var adaptiveReminderContent: AdaptiveReminderSuggestionCardContent? {
@@ -79,18 +91,22 @@ struct HomeView: View {
         )
     }
 
-    /// Copy + gating for the Home Review Prompt's Sentiment Gate card (#133). `nil`
-    /// until an unbroken Streak crosses the method-aware threshold, and forever after a
-    /// positive response permanently suppresses it. Shown to free and Plus users alike.
+    /// Whether a higher-priority Home "ask" card (Refill, Adaptive Reminder, or Blocking)
+    /// would render this pass. Feeds the Review Prompt's `higherPriorityCardShowing` input
+    /// so the lowest-priority rating ask yields — at most one ask per Home visit (#132).
+    private var higherPriorityCardShowing: Bool {
+        blockingCardContent != nil || store.isRefillDue || adaptiveReminderContent != nil
+    }
+
+    /// Copy + gating for the Home Review Prompt's Sentiment Gate card (#132). `nil` unless
+    /// the user has reached Review Prompt Eligibility — an unbroken Streak past the
+    /// method-aware threshold, never answered, not in cooldown or capped — and no
+    /// higher-priority card is showing. Eligibility math lives entirely in
+    /// `ReviewPromptEligibility` (on-device). Shown to free and Plus users alike.
     private var reviewPromptContent: ReviewPromptCardContent? {
-        let decision = ReviewPromptEligibility.evaluate(
-            for: ReviewPromptEligibility.State(
-                method: store.pack.method,
-                currentStreak: store.currentStreak,
-                permanentlySuppressed: store.reviewPromptPermanentlySuppressed
-            )
+        ReviewPromptCardContent.make(
+            decision: store.reviewPromptDecision(higherPriorityCardShowing: higherPriorityCardShowing)
         )
-        return ReviewPromptCardContent.make(decision: decision)
     }
 
     private var todayActionState: TodayActionState {
@@ -132,8 +148,7 @@ struct HomeView: View {
                     StatusCard()
                         .modifier(FadeInUp(appeared: appeared, delay: 0.1))
 
-                    if !blockingCardDismissed,
-                       let blockingCard = BlockingStatusCardContent.make(for: blockingPresentation) {
+                    if let blockingCard = blockingCardContent {
                         BlockingStatusCard(
                             content: blockingCard,
                             onPrimaryAction: { handleBlockingCardAction() },
@@ -192,15 +207,13 @@ struct HomeView: View {
                     if let reviewContent = reviewPromptContent {
                         ReviewPromptCard(
                             content: reviewContent,
-                            onPositive: {
-                                // Best-effort: fire Apple's Native Review Request, then
-                                // permanently suppress the prompt in the same action so it
-                                // never returns — regardless of whether the sheet appeared.
-                                requestReview()
+                            onPositive: { handleReviewPromptPositive() },
+                            onNegative: { handleReviewPromptNegative() },
+                            onDismiss: {
                                 withAnimation(unifiedStateTransition) {
-                                    store.reviewPromptPermanentlySuppressed = true
+                                    store.softDismissReviewPrompt()
                                 }
-                                ProductAnalyticsTelemetry.live.reviewPromptPositiveTapped()
+                                ProductAnalyticsTelemetry.live.reviewPromptDismissed()
                             }
                         )
                         .onAppear {
@@ -374,6 +387,41 @@ struct HomeView: View {
             store.markTodayAsTaken()
         }
         ProductAnalyticsTelemetry.live.todayActionCompleted()
+    }
+
+    /// Positive Sentiment Gate response: fire Apple's Native Review Request immediately
+    /// (the system sheet animates over the card) and permanently suppress the prompt in
+    /// the same action. Pillie never waits to confirm the sheet appeared or that a rating
+    /// was left — every fire is best-effort (#132 / ADR 0005).
+    private func handleReviewPromptPositive() {
+        requestReview()
+        withAnimation(unifiedStateTransition) {
+            store.recordReviewPromptAnswered()
+        }
+        ProductAnalyticsTelemetry.live.reviewPromptPositiveTapped()
+    }
+
+    /// Negative Sentiment Gate response: open the Feedback Escape Hatch — a pre-filled,
+    /// pre-addressed Mail composer to Pillie support — and permanently suppress the
+    /// prompt. A device with no Mail account is tolerated (the prompt is still marked
+    /// answered) and never blocked on. The feedback text is private and never reported.
+    private func handleReviewPromptNegative() {
+        if let mailURL = feedbackMailURL() {
+            openURL(mailURL)
+        }
+        withAnimation(unifiedStateTransition) {
+            store.recordReviewPromptAnswered()
+        }
+        ProductAnalyticsTelemetry.live.reviewPromptNegativeTapped()
+    }
+
+    /// A `mailto:` URL pre-addressed to Pillie support with a "Pillie feedback" subject.
+    private func feedbackMailURL() -> URL? {
+        var components = URLComponents()
+        components.scheme = "mailto"
+        components.path = Self.feedbackEmailAddress
+        components.queryItems = [URLQueryItem(name: "subject", value: Self.feedbackEmailSubject)]
+        return components.url
     }
 
     private func startNewPackOrCycle() {
