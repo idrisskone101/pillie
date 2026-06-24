@@ -24,10 +24,6 @@ struct HomeView: View {
     @AppStorage("homeBlockingStatusCardDismissed") private var blockingCardDismissed = false
     private let homeFeedback = HomeActionInteractionFeedback()
 
-    /// Pillie support inbox for the Feedback Escape Hatch (#132 / ADR 0005).
-    private static let feedbackEmailAddress = "pillieapp@gmail.com"
-    private static let feedbackEmailSubject = "Pillie feedback"
-
     private var unifiedStateTransition: Animation {
         PillieMotion.animation(
             for: .standard,
@@ -406,22 +402,13 @@ struct HomeView: View {
     /// prompt. A device with no Mail account is tolerated (the prompt is still marked
     /// answered) and never blocked on. The feedback text is private and never reported.
     private func handleReviewPromptNegative() {
-        if let mailURL = feedbackMailURL() {
+        if let mailURL = FeedbackEscapeHatch.mailURL {
             openURL(mailURL)
         }
         withAnimation(unifiedStateTransition) {
             store.recordReviewPromptAnswered()
         }
         ProductAnalyticsTelemetry.live.reviewPromptNegativeTapped()
-    }
-
-    /// A `mailto:` URL pre-addressed to Pillie support with a "Pillie feedback" subject.
-    private func feedbackMailURL() -> URL? {
-        var components = URLComponents()
-        components.scheme = "mailto"
-        components.path = Self.feedbackEmailAddress
-        components.queryItems = [URLQueryItem(name: "subject", value: Self.feedbackEmailSubject)]
-        return components.url
     }
 
     private func startNewPackOrCycle() {
