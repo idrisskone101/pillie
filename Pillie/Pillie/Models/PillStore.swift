@@ -151,6 +151,13 @@ class PillStore {
     var adaptiveReminderEnabled: Bool {
         didSet { UserDefaults.standard.set(adaptiveReminderEnabled, forKey: Self.adaptiveReminderEnabledKey) }
     }
+    /// Whether the Home Review Prompt's Sentiment Gate has been permanently answered
+    /// (PRD #132 / ADR 0005). A positive (or, in later slices, negative) response sets
+    /// this once and the card never returns. Mirrors `adaptiveReminderLastDismissal`'s
+    /// `UserDefaults` persistence so suppression survives across launches. Default off.
+    var reviewPromptPermanentlySuppressed: Bool {
+        didSet { UserDefaults.standard.set(reviewPromptPermanentlySuppressed, forKey: Self.reviewPromptPermanentlySuppressedKey) }
+    }
     var appActivatedDate: Date? {
         didSet {
             if let date = appActivatedDate {
@@ -242,6 +249,7 @@ class PillStore {
     private static let adaptiveReminderLastDismissalKey = "pillie_adaptive_reminder_last_dismissal"
     private static let adaptiveReminderLastDismissedDeltaKey = "pillie_adaptive_reminder_last_dismissed_delta"
     private static let adaptiveReminderEnabledKey = "pillie_adaptive_reminder_enabled"
+    private static let reviewPromptPermanentlySuppressedKey = "pillie_review_prompt_permanently_suppressed"
     private static let appActivatedDateKey = "pillie_app_activated_date"
     private static let streakResetDateKey = "pillie_streak_reset_date"
     private static let painPointsKey = "pillie_pain_points"
@@ -1183,6 +1191,8 @@ class PillStore {
         self.adaptiveReminderLastDismissedDelta = defaults.object(forKey: Self.adaptiveReminderLastDismissedDeltaKey) as? Int
         // Default ON: Adaptive Reminder Time is a Pillie+ Smart Notifications perk (#126).
         self.adaptiveReminderEnabled = defaults.object(forKey: Self.adaptiveReminderEnabledKey) as? Bool ?? true
+        // Default off: set once a user answers the Review Prompt's Sentiment Gate (#133).
+        self.reviewPromptPermanentlySuppressed = defaults.bool(forKey: Self.reviewPromptPermanentlySuppressedKey)
 
         let defaultMethod = resolvedPacks
             .sorted(by: { $0.packNumber < $1.packNumber })
@@ -1236,6 +1246,43 @@ class PillStore {
     }
 
     #if DEBUG
+    /// Seeds a fresh pill pack whose recent due actions are all taken, producing an
+    /// unbroken Streak well past the pill threshold so the Home Review Prompt's Sentiment
+    /// Gate card (#133) surfaces for simulator QA. Replaces existing packs/days and clears
+    /// permanent suppression. DEBUG-only QA shortcut — never compiled into release.
+    func seedReviewPromptEligibleStreak(days: Int = 6) {
+        try? modelContext.delete(model: PillDay.self)
+        try? modelContext.delete(model: PillPack.self)
+
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: PillieClock.now)
+        let startDate = calendar.date(byAdding: .day, value: -days, to: today) ?? today
+
+        let pack = PillPack(
+            packType: .twentyOneSeven,
+            method: .pill,
+            pillRegimen: .twentyOneSeven,
+            startDate: startDate,
+            packNumber: 1,
+            isCurrent: true
+        )
+        modelContext.insert(pack)
+        try? modelContext.save()
+        refreshPacks()
+        rebuildReadIndexes()
+
+        // Mark every due action from the pack start through today taken.
+        for dayOffset in stride(from: days, through: 0, by: -1) {
+            guard let date = calendar.date(byAdding: .day, value: -dayOffset, to: today) else { continue }
+            markActionAsTaken(on: date)
+        }
+
+        reviewPromptPermanentlySuppressed = false
+        try? modelContext.save()
+        refreshPacks()
+        rebuildReadIndexes()
+    }
+
     /// Seeds a consistent late-logging history so the Adaptive Reminder Time Suggestion
     /// card (#126) surfaces for simulator QA. Inserts `count` recent taken days whose
     /// `takenAt` lands `offsetMinutes` after the current reminder time, and clears any

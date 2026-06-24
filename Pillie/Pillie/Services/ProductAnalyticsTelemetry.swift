@@ -380,6 +380,21 @@ struct ProductAnalyticsTelemetry {
     track(.adaptiveReminderSuggestionDismissed, source: .home)
   }
 
+  // MARK: - Home Review Prompt (#133)
+  //
+  // The Sentiment Gate captures only its lifecycle — shown / positive-tapped. Both
+  // are flat and property-free: the contraception method, the Streak value, and the
+  // appearance ordinal are never attached (PRD #132 / ADR 0001/0004). There is no
+  // payload field for any of them, so none can leak.
+
+  func reviewPromptShown() {
+    track(.reviewPromptShown, source: .home)
+  }
+
+  func reviewPromptPositiveTapped() {
+    track(.reviewPromptPositiveTapped, source: .home)
+  }
+
   private func paywallSource(isFromOnboarding: Bool) -> AnalyticsSource {
     isFromOnboarding ? .onboarding : .settings
   }

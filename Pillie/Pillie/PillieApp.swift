@@ -275,6 +275,14 @@ struct PillieApp: App {
             UserDefaults.standard.set(false, forKey: OnboardingFlow.selectedFreePlanStorageKey)
             UserDefaults.standard.set(OnboardingFlow.Step.complete.rawValue, forKey: OnboardingFlow.stepStorageKey)
             store.seedAdaptiveReminderDebugLogs()
+        case "/review-prompt":
+            // QA shortcut (#133): land on Home with an unbroken Streak past the pill
+            // threshold so the Review Prompt's Sentiment Gate card surfaces and the
+            // positive tap → Native Review Request can be verified in the simulator.
+            SubscriptionManager.shared.setPlusForTesting(false)
+            UserDefaults.standard.set(true, forKey: OnboardingFlow.selectedFreePlanStorageKey)
+            UserDefaults.standard.set(OnboardingFlow.Step.complete.rawValue, forKey: OnboardingFlow.stepStorageKey)
+            store.seedReviewPromptEligibleStreak()
         default:
             return
         }
