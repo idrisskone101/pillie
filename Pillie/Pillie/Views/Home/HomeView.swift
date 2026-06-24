@@ -6,10 +6,12 @@
 //
 
 import SwiftUI
+import StoreKit
 
 struct HomeView: View {
     @Environment(PillStore.self) var store
     @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
+    @Environment(\.requestReview) private var requestReview
     @State private var appeared = false
     @State private var hasAnimatedIn = false
     @State private var showRefillConfirmation = false
@@ -17,6 +19,7 @@ struct HomeView: View {
     @State private var showBlockingSetup = false
     @State private var showBlockingPaywall = false
     @State private var adaptiveReminderShownLogged = false
+    @State private var reviewPromptShownLogged = false
     @AppStorage("homeBlockingStatusCardDismissed") private var blockingCardDismissed = false
     private let homeFeedback = HomeActionInteractionFeedback()
 
@@ -74,6 +77,20 @@ struct HomeView: View {
             suggestion: store.adaptiveReminderSuggestion,
             isPlus: SubscriptionManager.shared.isPlus
         )
+    }
+
+    /// Copy + gating for the Home Review Prompt's Sentiment Gate card (#133). `nil`
+    /// until an unbroken Streak crosses the method-aware threshold, and forever after a
+    /// positive response permanently suppresses it. Shown to free and Plus users alike.
+    private var reviewPromptContent: ReviewPromptCardContent? {
+        let decision = ReviewPromptEligibility.evaluate(
+            for: ReviewPromptEligibility.State(
+                method: store.pack.method,
+                currentStreak: store.currentStreak,
+                permanentlySuppressed: store.reviewPromptPermanentlySuppressed
+            )
+        )
+        return ReviewPromptCardContent.make(decision: decision)
     }
 
     private var todayActionState: TodayActionState {
@@ -171,6 +188,29 @@ struct HomeView: View {
                     StatsRow()
                         .modifier(FadeInUp(appeared: appeared, delay: 0.3))
                         .animation(unifiedStateTransition, value: store.isTodayTaken)
+
+                    if let reviewContent = reviewPromptContent {
+                        ReviewPromptCard(
+                            content: reviewContent,
+                            onPositive: {
+                                // Best-effort: fire Apple's Native Review Request, then
+                                // permanently suppress the prompt in the same action so it
+                                // never returns — regardless of whether the sheet appeared.
+                                requestReview()
+                                withAnimation(unifiedStateTransition) {
+                                    store.reviewPromptPermanentlySuppressed = true
+                                }
+                                ProductAnalyticsTelemetry.live.reviewPromptPositiveTapped()
+                            }
+                        )
+                        .onAppear {
+                            guard !reviewPromptShownLogged else { return }
+                            reviewPromptShownLogged = true
+                            ProductAnalyticsTelemetry.live.reviewPromptShown()
+                        }
+                        .modifier(FadeInUp(appeared: appeared, delay: 0.3))
+                        .transition(ctaStateTransition)
+                    }
 
                     // Handwriting motivation
                     Text("Keep it up, you're doing great!")
