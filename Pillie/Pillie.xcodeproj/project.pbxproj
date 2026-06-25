@@ -9,12 +9,12 @@
 /* Begin PBXBuildFile section */
 		527C07A32F5A4BB900164A1D /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = RC0001022F456DC00082EF2F /* RevenueCat */; };
 		527C07A42F5A4BB900164A1D /* RevenueCatUI in Frameworks */ = {isa = PBXBuildFile; productRef = RC0001032F456DC00082EF2F /* RevenueCatUI */; };
+		AF0001032F6B00020082EF2F /* AppsFlyerLib in Frameworks */ = {isa = PBXBuildFile; productRef = AF0001022F6B00010082EF2F /* AppsFlyerLib */; };
 		DP0001022F456DC00082EF2F /* PillieDeviceActivityMonitor.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = DA0001012F456DC00082EF2F /* PillieDeviceActivityMonitor.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		DP0001032F456DC00082EF2F /* PillieShieldConfiguration.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = SC0001012F456DC00082EF2F /* PillieShieldConfiguration.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		DP0001042F456DC00082EF2F /* PillieShieldAction.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = SA0001012F456DC00082EF2F /* PillieShieldAction.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		LT0001022F6A00000082EF2F /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = LT0001022F6A00010082EF2F /* Lottie */; };
 		PH0001022F6A00000082EF2F /* PostHog in Frameworks */ = {isa = PBXBuildFile; productRef = PH0001022F6A00010082EF2F /* PostHog */; };
-		AF0001032F6B00020082EF2F /* AppsFlyerLib in Frameworks */ = {isa = PBXBuildFile; productRef = AF0001022F6B00010082EF2F /* AppsFlyerLib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -668,7 +668,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Pillie/Pillie.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = LA7AZKLT84;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
@@ -714,7 +714,7 @@
 				CLANG_ENABLE_CODE_COVERAGE = NO;
 				CODE_SIGN_ENTITLEMENTS = Pillie/Pillie.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = LA7AZKLT84;
 				ENABLE_CODE_COVERAGE = NO;
 				ENABLE_PREVIEWS = YES;
@@ -813,7 +813,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = PillieDeviceActivityMonitor/PillieDeviceActivityMonitor.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = LA7AZKLT84;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = PillieDeviceActivityMonitor/Info.plist;
@@ -843,7 +843,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = PillieDeviceActivityMonitor/PillieDeviceActivityMonitor.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = LA7AZKLT84;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = PillieDeviceActivityMonitor/Info.plist;
@@ -873,7 +873,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = PillieShieldAction/PillieShieldAction.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = LA7AZKLT84;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = PillieShieldAction/Info.plist;
@@ -903,7 +903,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = PillieShieldAction/PillieShieldAction.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = LA7AZKLT84;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = PillieShieldAction/Info.plist;
@@ -933,7 +933,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = PillieShieldConfiguration/PillieShieldConfiguration.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = LA7AZKLT84;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = PillieShieldConfiguration/Info.plist;
@@ -963,7 +963,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = PillieShieldConfiguration/PillieShieldConfiguration.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = LA7AZKLT84;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = PillieShieldConfiguration/Info.plist;
@@ -1048,6 +1048,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		AF0001012F6B00000082EF2F /* XCRemoteSwiftPackageReference "AppsFlyerFramework" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/AppsFlyerSDK/AppsFlyerFramework.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.18.1;
+			};
+		};
 		LT0001012F6A00000082EF2F /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/airbnb/lottie-ios.git";
@@ -1072,17 +1080,14 @@
 				minimumVersion = 5.21.1;
 			};
 		};
-		AF0001012F6B00000082EF2F /* XCRemoteSwiftPackageReference "AppsFlyerFramework" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/AppsFlyerSDK/AppsFlyerFramework.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 6.18.1;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		AF0001022F6B00010082EF2F /* AppsFlyerLib */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AF0001012F6B00000082EF2F /* XCRemoteSwiftPackageReference "AppsFlyerFramework" */;
+			productName = AppsFlyerLib;
+		};
 		LT0001022F6A00010082EF2F /* Lottie */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = LT0001012F6A00000082EF2F /* XCRemoteSwiftPackageReference "lottie-ios" */;
@@ -1102,11 +1107,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = RC0001012F456DC00082EF2F /* XCRemoteSwiftPackageReference "purchases-ios" */;
 			productName = RevenueCatUI;
-		};
-		AF0001022F6B00010082EF2F /* AppsFlyerLib */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = AF0001012F6B00000082EF2F /* XCRemoteSwiftPackageReference "AppsFlyerFramework" */;
-			productName = AppsFlyerLib;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
