@@ -8,7 +8,7 @@ import SwiftUI
 struct StatsRow: View {
     @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
     @Environment(PillStore.self) var store
-    @State private var showUpsell = false
+    @State private var showPaywall = false
     private let valueChangeAnimation = Animation.easeInOut(duration: 0.28)
     private let plusFeedback = PlusPaywallInteractionFeedback(performanceTier: PerformanceTier.current)
 
@@ -62,7 +62,7 @@ struct StatsRow: View {
                 Button {
                     let response = plusFeedback.openPaywallOrStartPurchase(accessibilityReduceMotion: accessibilityReduceMotion)
                     withAnimation(response.motionProfile.animation) {
-                        showUpsell = true
+                        showPaywall = true
                     }
                 } label: {
                     lockedBlockingCardContent
@@ -71,11 +71,13 @@ struct StatsRow: View {
                 .buttonStyle(.plain)
             }
         }
-        .sheet(isPresented: $showUpsell) {
-            PlusUpsellSheet.appBlocking()
-                .presentationDetents([.height(PlusUpsellSheet.compactPresentationHeight)])
-                .presentationDragIndicator(.hidden)
-                .presentationBackground(PillieTheme.bg)
+        .fullScreenCover(isPresented: $showPaywall) {
+            PremiumPaywallView(
+                isFromOnboarding: false,
+                onBack: { showPaywall = false },
+                onContinue: { showPaywall = false },
+                onSkip: { showPaywall = false }
+            )
         }
     }
 

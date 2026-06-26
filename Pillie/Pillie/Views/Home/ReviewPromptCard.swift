@@ -86,13 +86,16 @@ struct ReviewPromptCard: View {
 
     private var positiveButton: some View {
         Button(action: onPositive) {
-            HStack(spacing: 8) {
+            HStack(spacing: 6) {
                 Text(content.positiveTitle)
                     .font(.pillieBodySemibold())
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
                 Image(systemName: "star.fill")
                     .font(.system(size: 13, weight: .bold))
             }
             .foregroundStyle(.white)
+            .padding(.horizontal, 14)
             .frame(maxWidth: .infinity)
             .frame(height: 48)
             .background(PillieTheme.textPrimary, in: Capsule())
@@ -106,6 +109,9 @@ struct ReviewPromptCard: View {
             Text(content.negativeTitle)
                 .font(.pillieBodySemibold())
                 .foregroundStyle(PillieTheme.textPrimary)
+                .lineLimit(1)
+                .minimumScaleFactor(0.8)
+                .padding(.horizontal, 14)
                 .frame(maxWidth: .infinity)
                 .frame(height: 48)
                 .background(
