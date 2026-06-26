@@ -74,6 +74,11 @@ struct ProtectionPlanScaffold<Content: View>: View {
     var secondaryTitle: String? = nil
     var onSecondary: (() -> Void)? = nil
 
+    /// Renders the primary CTA above the secondary (skip) instead of the default
+    /// secondary-above-primary order. Opt-in per screen so the primary is not
+    /// bottom-anchored — used where the screen wants "Continue" to lead.
+    var primaryAboveSecondary: Bool = false
+
     @ViewBuilder var content: () -> Content
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -135,41 +140,54 @@ struct ProtectionPlanScaffold<Content: View>: View {
     }
 
     private var ctaStack: some View {
-        // Secondary (skip) above the primary, so the dark primary CTA stays
+        // Default: secondary (skip) above the primary, so the dark primary CTA stays
         // bottom-anchored at exactly the same position as single-CTA screens.
         // Otherwise the primary sits higher on screens that have a skip and visibly
-        // slides down when transitioning to a screen without one.
+        // slides down when transitioning to a screen without one. Screens that opt into
+        // `primaryAboveSecondary` lead with the primary instead.
         VStack(spacing: 12) {
-            if let secondaryTitle, let onSecondary {
-                Button(action: onSecondary) {
-                    Text(secondaryTitle)
-                        .font(.pillieBodyBold())
-                        .foregroundStyle(PillieTheme.textPrimary)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 16)
-                }
-                .background(Color.white.opacity(0.94), in: RoundedRectangle(cornerRadius: 22))
-                .overlay {
-                    RoundedRectangle(cornerRadius: 22)
-                        .strokeBorder(PillieTheme.textMuted.opacity(0.12), lineWidth: 1)
-                }
-                .shadow(color: PillieTheme.cardShadow, radius: 12, y: 6)
-                .accessibilityIdentifier("protectionPlanSecondaryCTA")
+            if primaryAboveSecondary {
+                primaryButton
+                secondaryButton
+            } else {
+                secondaryButton
+                primaryButton
             }
-
-            Button(action: onPrimary) {
-                HStack(spacing: 10) {
-                    Text(primaryTitle)
-                    if let primaryIcon {
-                        Image(systemName: primaryIcon)
-                            .offset(x: animatesPrimaryIcon ? arrowNudge : 0)
-                    }
-                }
-            }
-            .buttonStyle(.pillieDark)
-            .disabled(!isPrimaryEnabled)
-            .opacity(isPrimaryEnabled ? 1 : 0.38)
-            .accessibilityIdentifier("protectionPlanPrimaryCTA")
         }
+    }
+
+    @ViewBuilder private var secondaryButton: some View {
+        if let secondaryTitle, let onSecondary {
+            Button(action: onSecondary) {
+                Text(secondaryTitle)
+                    .font(.pillieBodyBold())
+                    .foregroundStyle(PillieTheme.textPrimary)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 16)
+            }
+            .background(Color.white.opacity(0.94), in: RoundedRectangle(cornerRadius: 22))
+            .overlay {
+                RoundedRectangle(cornerRadius: 22)
+                    .strokeBorder(PillieTheme.textMuted.opacity(0.12), lineWidth: 1)
+            }
+            .shadow(color: PillieTheme.cardShadow, radius: 12, y: 6)
+            .accessibilityIdentifier("protectionPlanSecondaryCTA")
+        }
+    }
+
+    private var primaryButton: some View {
+        Button(action: onPrimary) {
+            HStack(spacing: 10) {
+                Text(primaryTitle)
+                if let primaryIcon {
+                    Image(systemName: primaryIcon)
+                        .offset(x: animatesPrimaryIcon ? arrowNudge : 0)
+                }
+            }
+        }
+        .buttonStyle(.pillieDark)
+        .disabled(!isPrimaryEnabled)
+        .opacity(isPrimaryEnabled ? 1 : 0.38)
+        .accessibilityIdentifier("protectionPlanPrimaryCTA")
     }
 }

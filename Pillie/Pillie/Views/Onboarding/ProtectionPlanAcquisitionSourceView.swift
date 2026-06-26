@@ -40,7 +40,8 @@ struct ProtectionPlanAcquisitionSourceView: View {
             isPrimaryEnabled: selected != nil,
             onPrimary: commit,
             secondaryTitle: content.skipCTA,
-            onSecondary: onSkip
+            onSecondary: onSkip,
+            primaryAboveSecondary: true
         ) {
             VStack(alignment: .leading, spacing: 20) {
                 VStack(alignment: .leading, spacing: 8) {
