@@ -198,7 +198,12 @@ final class PillPack {
         dayIndex >= activeDays
     }
 
-    func cycleDayIndex(on date: Date, calendar: Calendar = .current) -> Int {
+    /// Non-wrapping count of days elapsed within this pack's cycle, using the same
+    /// anchor resolution as `cycleDayIndex`: 0 on the first cycle day, negative before
+    /// it, and `cycleLength` (or more) once the single cycle this pack models is over.
+    /// A pack starting mid-cycle (`cycleDayAnchorIndex > 0`) therefore completes after
+    /// `cycleLength - anchor` calendar days, not `cycleLength`.
+    func elapsedCycleDays(on date: Date, calendar: Calendar = .current) -> Int {
         let anchorDate: Date
         let anchorOffset: Int
         if method == .ring, let ringDate = ringInsertionDate {
@@ -211,7 +216,11 @@ final class PillPack {
         let start = calendar.startOfDay(for: Self.validatedDate(anchorDate, fallback: Date()))
         let target = calendar.startOfDay(for: Self.validatedDate(date, fallback: start))
         let diff = calendar.dateComponents([.day], from: start, to: target).day ?? 0
-        let modulo = (diff + anchorOffset) % cycleLength
+        return diff + anchorOffset
+    }
+
+    func cycleDayIndex(on date: Date, calendar: Calendar = .current) -> Int {
+        let modulo = elapsedCycleDays(on: date, calendar: calendar) % cycleLength
         return modulo >= 0 ? modulo : (modulo + cycleLength)
     }
 
