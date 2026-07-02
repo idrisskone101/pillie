@@ -93,12 +93,16 @@ An optional onboarding answer for how the user heard about Pillie, stored locall
 _Avoid_: Tracking source, ad identifier, referral identity
 
 **Plus App Blocking**:
-The Pillie Plus feature that blocks selected apps after a due action remains untaken. Free users should not be led to believe app blocking is active without a Plus entitlement, and onboarding should only offer setup controls to users with Plus or an active trial.
+The Pillie Plus feature that blocks selected apps after a due action remains untaken. Users should not be led to believe app blocking is active without [[Plus Access]], and setup controls should only appear for users with Plus Access (a Plus entitlement or an active [[Reverse Trial]]).
 _Avoid_: Free app blocking, enabled blocking for free users
 
 **Soft Onboarding Paywall**:
-An optional Pillie Plus offer shown during onboarding that keeps a clear free path available. It should appear after the user has enough personalized setup context to understand the value of upgrading, and may use coarse personalization buckets without displaying routine details or exact answers.
-_Avoid_: Hard paywall, required subscription gate
+Retired (Reverse Trial). The in-onboarding Plus purchase offer was replaced by the [[Trial Granted Moment]] — onboarding no longer contains any purchase UI, because every new user receives a [[Reverse Trial]] instead. Kept as a historical term — it once meant an optional Plus offer shown during onboarding with a clear free path. The Settings-initiated paywall and the [[Trial-End Paywall]] are separate surfaces and are not retired.
+_Avoid_: Hard paywall, required subscription gate, onboarding purchase step (current app)
+
+**Trial Granted Moment**:
+The onboarding screen that replaces the retired [[Soft Onboarding Paywall]]: a non-purchase announcement that the user's [[Reverse Trial]] has started — full Plus, free for 14 days, no payment details — shown before blocker setup. Its jobs are honesty (the user knows a clock is running) and priming the day-14 keep-your-protection framing. It must state the trial's duration, what turns off when it ends, and the post-trial price of keeping Plus — App Review's required pre-trial disclosures — but this is one line of plain disclosure, not purchase UI. It offers nothing to buy and has no decline path, because there is nothing to decline.
+_Avoid_: Paywall, offer screen, plan picker, silent trial start, undisclosed post-trial price
 
 **Reminder Plan**:
 The onboarding summary of the user's reminder-only Pillie setup: contraception method, current cycle position, reminder time, and one behavioral support focus. It is not a medical, hormone, or risk-reduction plan.
@@ -175,6 +179,22 @@ _Avoid_: Public review, App Store redirect, server-side ticket system, logging f
 **Open Line**:
 Pillie's always-available two-way support channel: two warm-labeled rows in a Settings support section — one for sharing a feature idea, one for reporting something not working — each opening a pre-addressed email to Pillie support (`pillieapp@gmail.com`) with an intent-specific subject. Email is the channel precisely because it is two-way: Pillie has no backend, and the reply-able thread *is* the open line. The issue-report intent may pre-seed a device/app diagnostics footer (app version, iOS version, device model) but must never pre-seed routine details such as contraception method or cycle position; the idea intent seeds no body at all. What the user types is private and is never sent as [[Product Analytics Telemetry]] — only a coarse per-intent "row tapped" funnel signal may be. A device that cannot open the email composer gets a visible fallback that shows the support address to copy, never a silent no-op. Distinct from the [[Feedback Escape Hatch]], which is prompt-driven and reserved for the [[Sentiment Gate]]'s negative path.
 _Avoid_: Feedback Escape Hatch, feedback form, in-app ticket system, server-side inbox, shake to report, logging message text
+
+**Reverse Trial**:
+A 14-day period of full [[Plus Access]] granted automatically and without payment details to every user who lacks a Plus entitlement: new users at the [[Trial Granted Moment]] during onboarding (the clock starts there, not at onboarding completion — blocker setup then runs under real Plus Access), existing free users on first launch after the update that introduces it. It is a Pillie product state, not a StoreKit introductory offer — no purchase, card, or App Store sheet is involved in starting it. Fourteen days is deliberate: it covers at least two due actions for every Supported Contraception Method, so patch and ring users also feel Plus App Blocking before being asked to pay. The trial covers 14 full local calendar days from the grant and expires at the local-day rollover after day 14 — never mid-blocking-window, so the last trial day is fully protected and expiry copy can honestly say "tonight." Blocking must never outlive Plus Access, even if the app is not opened after expiry. At expiry the user keeps their saved configuration (blocker selection, custom reminder text) but the Plus features gate off; nothing the user set up is deleted.
+_Avoid_: Free trial (StoreKit sense), intro offer, 7-day trial, blocker-only trial, config wipe at expiry
+
+**Trial-End Paywall**:
+The Plus offer shown once, as a dismissible full-screen sheet, on first launch after a [[Reverse Trial]] expires. For users with [[Protection Plan Activation]] it is loss-framed around their own trial record (blocks intercepted, on-time doses, streak) — "keep your protection," not a generic feature list. For users who never configured the blocker it is gain-framed instead, and it always states plainly that reminders stay free. It is never a hard gate on app use and never repeats on every launch; after dismissal the [[Protection Off State]] Home card is the way back to it.
+_Avoid_: Hard paywall, launch-loop paywall, generic feature list for protection users, loss framing for reminder-only users
+
+**Protection Off State**:
+The clearly visible in-app state after a [[Reverse Trial]] expires without purchase for a user who had blocker configuration: the saved blocker config is preserved but inert, blocking has stopped, and a persistent Home card says so and reopens the [[Trial-End Paywall]]. It exists so lapsing is never silent — the user should never believe blocking is active when it is not.
+_Avoid_: Config wipe, silent lapse, disabled account, error state
+
+**Plus Access**:
+The single gate every Pillie Plus feature checks: a user has Plus Access iff they hold a Plus entitlement or an active [[Reverse Trial]]. All Plus features — Plus App Blocking, [[Smart Reminders]], [[Custom Reminder Message]], [[Adaptive Reminder Time Suggestion]] — honor the same gate; there is no per-feature trial gating and no "blocker-only trial" tier.
+_Avoid_: Plus entitlement (when trial should also count), blocker-only trial, per-feature trial flags
 
 **Review Prompt Eligibility**:
 The on-device condition that makes a user "successful for a bit" enough to see the [[Review Prompt]], derived purely from an unbroken [[Streak]] crossing a method-aware threshold: pill `>= 3`, patch `>= 1`, ring `>= 2`. The thresholds target roughly the same "demonstrated success" tenure across methods despite different due-action cadences (pill daily, patch weekly, ring cyclic); ring is `>= 2` rather than `>= 1` specifically so the day-one insertion does not fire the prompt at setup. Because a streak inherently encodes calendar tenure, there is no separate days-since-install floor — the streak is the whole eligibility signal. Cooldown after dismissal and re-show policy are defined in [the Review Prompt ADR]. Eligibility math stays on-device; only coarse funnel signals may become [[Product Analytics Telemetry]].
