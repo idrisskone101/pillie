@@ -169,8 +169,12 @@ The positive-path outcome of the [[Sentiment Gate]]: a single call to Apple's St
 _Avoid_: Guaranteed prompt, App Store write-review deep link, unlimited rating ask
 
 **Feedback Escape Hatch**:
-The negative-path outcome of the [[Sentiment Gate]]: a pre-filled native Mail composer to Pillie support (`pillieapp@gmail.com`) that captures dissatisfaction privately instead of sending the user to the public App Store rating. Its purpose is to protect the star average and give unhappy users a place to be heard; the email body the user types is private and is never sent as [[Product Analytics Telemetry]] (only a coarse "negative chosen" funnel signal may be). A missing Mail account is tolerated, not blocked on.
-_Avoid_: Public review, App Store redirect, server-side ticket system, logging feedback text
+The negative-path outcome of the [[Sentiment Gate]]: a pre-filled native Mail composer to Pillie support (`pillieapp@gmail.com`) that captures dissatisfaction privately instead of sending the user to the public App Store rating. Its purpose is to protect the star average and give unhappy users a place to be heard; the email body the user types is private and is never sent as [[Product Analytics Telemetry]] (only a coarse "negative chosen" funnel signal may be). A missing Mail account is tolerated, not blocked on. Distinct from the [[Open Line]], which is the always-available Settings channel the user reaches on their own initiative rather than via a prompt.
+_Avoid_: Public review, App Store redirect, server-side ticket system, logging feedback text, general contact button
+
+**Open Line**:
+Pillie's always-available two-way support channel: two warm-labeled rows in a Settings support section — one for sharing a feature idea, one for reporting something not working — each opening a pre-addressed email to Pillie support (`pillieapp@gmail.com`) with an intent-specific subject. Email is the channel precisely because it is two-way: Pillie has no backend, and the reply-able thread *is* the open line. The issue-report intent may pre-seed a device/app diagnostics footer (app version, iOS version, device model) but must never pre-seed routine details such as contraception method or cycle position; the idea intent seeds no body at all. What the user types is private and is never sent as [[Product Analytics Telemetry]] — only a coarse per-intent "row tapped" funnel signal may be. A device that cannot open the email composer gets a visible fallback that shows the support address to copy, never a silent no-op. Distinct from the [[Feedback Escape Hatch]], which is prompt-driven and reserved for the [[Sentiment Gate]]'s negative path.
+_Avoid_: Feedback Escape Hatch, feedback form, in-app ticket system, server-side inbox, shake to report, logging message text
 
 **Review Prompt Eligibility**:
 The on-device condition that makes a user "successful for a bit" enough to see the [[Review Prompt]], derived purely from an unbroken [[Streak]] crossing a method-aware threshold: pill `>= 3`, patch `>= 1`, ring `>= 2`. The thresholds target roughly the same "demonstrated success" tenure across methods despite different due-action cadences (pill daily, patch weekly, ring cyclic); ring is `>= 2` rather than `>= 1` specifically so the day-one insertion does not fire the prompt at setup. Because a streak inherently encodes calendar tenure, there is no separate days-since-install floor — the streak is the whole eligibility signal. Cooldown after dismissal and re-show policy are defined in [the Review Prompt ADR]. Eligibility math stays on-device; only coarse funnel signals may become [[Product Analytics Telemetry]].
@@ -309,3 +313,11 @@ Domain Expert: "No. A Custom Reminder Message is a Personalization Setting, so i
 Dev: "Can we log what the user wrote in their custom reminder to see how people personalize?"
 
 Domain Expert: "No. The text is private routine content and must never be sent as Product Analytics Telemetry. You may capture coarse funnel and adoption signals only — upsell viewed or tapped, editor opened, and a boolean of whether a field is customized."
+
+Dev: "A user tapped 'Something Not Working?' in Settings — did they use the Feedback Escape Hatch?"
+
+Domain Expert: "No. That is the Open Line, the always-available Settings channel the user reaches on their own initiative. The Feedback Escape Hatch is only the Sentiment Gate's negative path."
+
+Dev: "The issue-report email pre-fills diagnostics — can it include the user's method and cycle day so schedule bugs are easier to triage?"
+
+Domain Expert: "No. The Open Line's diagnostics footer is device and app info only. Routine details are never pre-seeded; if a bug is schedule-related, ask in the reply — that is the two-way channel working as intended."
