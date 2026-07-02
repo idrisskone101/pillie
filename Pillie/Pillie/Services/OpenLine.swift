@@ -96,6 +96,31 @@ enum OpenLine {
     static let issueInvitation =
         "Tell us what went wrong — the more detail, the better. Type above this line."
 
+    /// The visible fallback shown when the device cannot route a `mailto:` URL
+    /// (no Mail account configured, or URL composition failed): an alert that
+    /// shows the support address and offers to copy it. This is the Open Line's
+    /// no-silent-no-op guarantee (#155) — the strings live here, on the value
+    /// type, so both SUPPORT rows present the identical, unit-testable contract.
+    enum MailFallback {
+        /// Alert title: names what went wrong in plain words.
+        static let title = "Couldn't Open Mail"
+
+        /// Alert message: names the situation and shows the address itself, so
+        /// the user can reach support by hand even without tapping Copy.
+        static let message =
+            "It looks like Mail isn't set up on this device. You can reach us anytime at \(OpenLine.recipient)."
+
+        /// Action that writes `addressToCopy` to the pasteboard.
+        static let copyActionTitle = "Copy Address"
+
+        /// What Copy Address puts on the pasteboard: the bare support address,
+        /// so the view reads the whole fallback contract from this one type.
+        static let addressToCopy = OpenLine.recipient
+
+        /// Plain dismissal; the alert already delivered the address visibly.
+        static let dismissActionTitle = "OK"
+    }
+
     /// A `mailto:` URL pre-addressed to Pillie support with the intent's subject,
     /// and — for an issue report — its diagnostics body. The suggestion intent
     /// seeds no body: the user writes freely, and nothing this builds can carry

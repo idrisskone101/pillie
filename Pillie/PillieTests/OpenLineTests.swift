@@ -145,6 +145,35 @@ final class OpenLineTests: XCTestCase {
         )
     }
 
+    func testMailFallbackMessageShowsTheSupportAddress() {
+        // The no-silent-no-op guarantee: when the composer can't open, the
+        // visible fallback must show the address itself so the user can still
+        // reach support by hand.
+        XCTAssertTrue(
+            OpenLine.MailFallback.message.contains("pillieapp@gmail.com"),
+            OpenLine.MailFallback.message
+        )
+    }
+
+    func testMailFallbackAlertStringsAreTheFullContract() {
+        // The whole alert, pinned: title, message, and both action titles. These
+        // are shared by both SUPPORT rows, so a reword here is a deliberate
+        // contract change, not a UI tweak.
+        XCTAssertEqual(OpenLine.MailFallback.title, "Couldn't Open Mail")
+        XCTAssertEqual(
+            OpenLine.MailFallback.message,
+            "It looks like Mail isn't set up on this device. You can reach us anytime at pillieapp@gmail.com."
+        )
+        XCTAssertEqual(OpenLine.MailFallback.copyActionTitle, "Copy Address")
+        XCTAssertEqual(OpenLine.MailFallback.dismissActionTitle, "OK")
+    }
+
+    func testMailFallbackCopiesTheSupportAddress() {
+        // What Copy Address puts on the pasteboard: the bare, sendable address —
+        // exactly the Open Line recipient, no mailto scheme, no decoration.
+        XCTAssertEqual(OpenLine.MailFallback.addressToCopy, "pillieapp@gmail.com")
+    }
+
     func testSuggestionMailURLCarriesNoBody() throws {
         // The suggestion intent seeds no body at all: the user writes freely and
         // nothing the Open Line builds can carry message content anywhere.
