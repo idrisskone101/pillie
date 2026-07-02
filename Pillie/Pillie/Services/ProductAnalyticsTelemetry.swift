@@ -416,6 +416,10 @@ struct ProductAnalyticsTelemetry {
     track(.openLineSuggestionTapped, source: .settings)
   }
 
+  func openLineIssueReportTapped() {
+    track(.openLineIssueReportTapped, source: .settings)
+  }
+
   private func paywallSource(isFromOnboarding: Bool) -> AnalyticsSource {
     isFromOnboarding ? .onboarding : .settings
   }

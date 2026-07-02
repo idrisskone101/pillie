@@ -171,6 +171,7 @@ enum AnalyticsEvent: String, CaseIterable {
   case reviewPromptNegativeTapped = "review_prompt_negative_tapped"
   case reviewPromptDismissed = "review_prompt_dismissed"
   case openLineSuggestionTapped = "open_line_suggestion_tapped"
+  case openLineIssueReportTapped = "open_line_issue_report_tapped"
 }
 
 enum AnalyticsSource: String {
