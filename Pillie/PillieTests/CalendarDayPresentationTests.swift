@@ -126,24 +126,42 @@ final class CalendarDayPresentationTests: XCTestCase {
         XCTAssertEqual(presentation.defaultIndicatorOpacity, 1)
     }
 
+    /// Packs backing fabricated snapshots. The Xcode 27 beta hosted-XCTest runner
+    /// aborts when a @MainActor/@Observable class (which includes @Model) deallocates
+    /// mid-invocation (see xcode27-beta-mainactor-deinit-crash), so every pack is
+    /// retained for the process lifetime instead of being scoped to the helper.
+    private static var keepAlivePacks: [PillPack] = []
+
     private func snapshot(
         method: ContraceptiveMethod,
         type: PillDay.ActionType,
         status: PillDay.Status
     ) throws -> PillScheduleSnapshot {
         let now = InMemoryStoreFactory.fixedDate("2026-06-03")
-        let fixture = try InMemoryStoreFactory.makeStore(now: now, method: method, startDate: now)
+        // A bare, un-inserted pack is enough for presentation resolution — no
+        // PillStore or ModelContainer needed (both crash the beta host when they
+        // deallocate inside the test invocation).
+        let pack = PillPack(
+            packType: .twentyOneSeven,
+            method: method,
+            pillRegimen: .twentyOneSeven,
+            startDate: now,
+            packNumber: 1,
+            isCurrent: true
+        )
+        Self.keepAlivePacks.append(pack)
+
         let action = DoseScheduleAction(
             date: now,
             type: type,
             method: method,
             cycleDay: 1,
-            cycleLength: fixture.store.pack.cycleLength
+            cycleLength: pack.cycleLength
         )
 
         return PillScheduleSnapshot(
             date: now,
-            pack: fixture.store.pack,
+            pack: pack,
             cycleDayIndex: 0,
             dueAction: action,
             status: status,
