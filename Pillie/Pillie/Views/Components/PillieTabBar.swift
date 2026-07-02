@@ -93,18 +93,16 @@ struct MainTabView: View {
     var body: some View {
         ZStack(alignment: .bottom) {
             GeometryReader { proxy in
-                // All three panes stay alive so a tab switch only animates offset and
-                // opacity — it never rebuilds a screen (rebuilds caused first-frame
-                // hitches and replayed every entrance animation). The transition is a
-                // fade with a short directional nudge rather than a full-width slide:
-                // dense text sweeping a whole screen shimmers on sample-and-hold
-                // displays even at a perfect frame rate, so the content never travels
-                // more than `slideNudge` points.
+                // All three panes stay alive so a tab switch only animates offsets —
+                // it never rebuilds a screen (rebuilds caused first-frame hitches and
+                // replayed every entrance animation). During a slide the outgoing and
+                // incoming panes tile the full width edge-to-edge over their opaque
+                // backgrounds, so the non-participating pane (zIndex 0) is never seen.
                 ZStack {
                     ForEach(PillieTab.allCases, id: \.rawValue) { tab in
                         pane(for: tab)
-                            .offset(x: paneOffset(for: tab))
-                            .opacity(tab == selectedTab ? 1 : 0)
+                            .offset(x: paneOffset(for: tab, width: proxy.size.width))
+                            .opacity(paneOpacity(for: tab))
                             .zIndex(tab == selectedTab ? 2 : (tab == previousTab ? 1 : 0))
                             .allowsHitTesting(tab == selectedTab)
                             .accessibilityHidden(tab != selectedTab)
@@ -130,26 +128,25 @@ struct MainTabView: View {
         }
     }
 
-    // MARK: - Tab Transition (fade + directional nudge)
+    // MARK: - Tab Slide Transition
 
-    /// How far a pane rests toward its side of the selected tab. Small on purpose —
-    /// enough to read direction, not enough for text to visibly sweep.
-    private let slideNudge: CGFloat = 24
-
-    /// Pure crossfade (no nudge) when motion should stay minimal.
+    /// Crossfade instead of sliding when motion should stay minimal.
     private var crossfadesTabs: Bool {
         performanceTier == .constrained || accessibilityReduceMotion
     }
 
-    private func paneOffset(for tab: PillieTab) -> CGFloat {
+    private func paneOffset(for tab: PillieTab, width: CGFloat) -> CGFloat {
         guard !crossfadesTabs, tab != selectedTab else { return 0 }
-        return tab.rawValue > selectedTab.rawValue ? slideNudge : -slideNudge
+        return tab.rawValue > selectedTab.rawValue ? width : -width
+    }
+
+    private func paneOpacity(for tab: PillieTab) -> Double {
+        guard crossfadesTabs else { return 1 }
+        return tab == selectedTab ? 1 : 0
     }
 
     private var tabTransitionAnimation: Animation {
-        performanceTier == .constrained
-            ? .easeInOut(duration: 0.16)
-            : .spring(response: 0.3, dampingFraction: 0.9)
+        performanceTier == .constrained ? .easeInOut(duration: 0.16) : .easeInOut(duration: 0.25)
     }
 
     private var tabBinding: Binding<PillieTab> {
