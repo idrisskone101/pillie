@@ -27,6 +27,7 @@ struct SettingsView: View {
     @State private var showCustomRemindersUpsell = false
     @State private var showPaywall = false
     @State private var showManageSubscription = false
+    @State private var showOpenLineMailFallback = false
 
     private let settingsFeedback = SettingsInteractionFeedback()
 
@@ -270,9 +271,7 @@ struct SettingsView: View {
 
                 settingsCard {
                     Button {
-                        if let mailURL = OpenLine.mailURL(for: .suggestion) {
-                            openURL(mailURL)
-                        }
+                        openMailOrFallback(OpenLine.mailURL(for: .suggestion))
                         ProductAnalyticsTelemetry.live.openLineSuggestionTapped()
                     } label: {
                         settingsRow("Share an Idea", value: "")
@@ -283,9 +282,7 @@ struct SettingsView: View {
                         // Diagnostics are gathered live here and injected as plain
                         // values; `OpenLine` composes a deterministic body that
                         // carries device/app info only, never routine data.
-                        if let mailURL = OpenLine.mailURL(for: .issueReport(.current())) {
-                            openURL(mailURL)
-                        }
+                        openMailOrFallback(OpenLine.mailURL(for: .issueReport(.current())))
                         ProductAnalyticsTelemetry.live.openLineIssueReportTapped()
                     } label: {
                         settingsRow("Something Not Working?", value: "")
@@ -377,6 +374,14 @@ struct SettingsView: View {
             )
         }
         .manageSubscriptionsSheet(isPresented: $showManageSubscription)
+        .alert(OpenLine.MailFallback.title, isPresented: $showOpenLineMailFallback) {
+            Button(OpenLine.MailFallback.copyActionTitle) {
+                UIPasteboard.general.string = OpenLine.MailFallback.addressToCopy
+            }
+            Button(OpenLine.MailFallback.dismissActionTitle, role: .cancel) {}
+        } message: {
+            Text(OpenLine.MailFallback.message)
+        }
     }
 
     // MARK: - Components
@@ -412,6 +417,21 @@ struct SettingsView: View {
         let response = settingsFeedback.sensitiveOrDestructiveChange(accessibilityReduceMotion: accessibilityReduceMotion)
         withAnimation(response.motionProfile.animation) {
             update()
+        }
+    }
+
+    /// The Open Line's no-silent-no-op guarantee (#155): open the composer when
+    /// the device can route the mailto, otherwise present the copy-address
+    /// fallback alert — including when URL composition itself returned `nil`.
+    private func openMailOrFallback(_ mailURL: URL?) {
+        guard let mailURL else {
+            showOpenLineMailFallback = true
+            return
+        }
+        openURL(mailURL) { accepted in
+            if !accepted {
+                showOpenLineMailFallback = true
+            }
         }
     }
 
