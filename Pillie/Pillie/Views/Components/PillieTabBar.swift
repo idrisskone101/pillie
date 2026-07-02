@@ -86,28 +86,32 @@ struct PillieTabBar: View {
 
 struct MainTabView: View {
     @State private var selectedTab: PillieTab = .home
-    @State private var tabDirection: Edge = .trailing
+    @State private var previousTab: PillieTab = .home
+    @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
     private let performanceTier = PerformanceTier.current
 
     var body: some View {
         ZStack(alignment: .bottom) {
-            ZStack {
-                if selectedTab == .home {
-                    HomeView()
-                        .transition(tabSlideTransition)
+            GeometryReader { proxy in
+                // All three panes stay alive so a tab switch only animates offsets —
+                // it never rebuilds a screen (rebuilds caused first-frame hitches and
+                // replayed every entrance animation). During a slide the outgoing and
+                // incoming panes tile the full width edge-to-edge over their opaque
+                // backgrounds, so the non-participating pane (zIndex 0) is never seen.
+                ZStack {
+                    ForEach(PillieTab.allCases, id: \.rawValue) { tab in
+                        pane(for: tab)
+                            .offset(x: paneOffset(for: tab, width: proxy.size.width))
+                            .opacity(paneOpacity(for: tab))
+                            .zIndex(tab == selectedTab ? 2 : (tab == previousTab ? 1 : 0))
+                            .allowsHitTesting(tab == selectedTab)
+                            .accessibilityHidden(tab != selectedTab)
+                    }
                 }
-                if selectedTab == .history {
-                    HistoryView()
-                        .transition(tabSlideTransition)
-                }
-                if selectedTab == .settings {
-                    SettingsView()
-                        .transition(tabSlideTransition)
-                }
+                .frame(width: proxy.size.width, height: proxy.size.height)
+                .clipped()
+                .gesture(edgeSwipeGesture(screenWidth: proxy.size.width))
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .clipped()
-            .gesture(edgeSwipeGesture)
 
             PillieTabBar(selectedTab: tabBinding)
         }
@@ -115,45 +119,61 @@ struct MainTabView: View {
         .ignoresSafeArea(.container, edges: .bottom)
     }
 
+    @ViewBuilder
+    private func pane(for tab: PillieTab) -> some View {
+        switch tab {
+        case .home: HomeView()
+        case .history: HistoryView()
+        case .settings: SettingsView()
+        }
+    }
+
     // MARK: - Tab Slide Transition
 
-    private var tabSlideTransition: AnyTransition {
-        if performanceTier == .constrained {
-            return .opacity
-        }
-        return .asymmetric(
-            insertion: .move(edge: tabDirection),
-            removal: .move(edge: tabDirection == .trailing ? .leading : .trailing)
-        )
+    /// Crossfade instead of sliding when motion should stay minimal.
+    private var crossfadesTabs: Bool {
+        performanceTier == .constrained || accessibilityReduceMotion
+    }
+
+    private func paneOffset(for tab: PillieTab, width: CGFloat) -> CGFloat {
+        guard !crossfadesTabs, tab != selectedTab else { return 0 }
+        return tab.rawValue > selectedTab.rawValue ? width : -width
+    }
+
+    private func paneOpacity(for tab: PillieTab) -> Double {
+        guard crossfadesTabs else { return 1 }
+        return tab == selectedTab ? 1 : 0
     }
 
     private var tabTransitionAnimation: Animation {
         performanceTier == .constrained ? .easeInOut(duration: 0.16) : .easeInOut(duration: 0.25)
     }
 
-    /// Custom binding that sets slide direction before updating the selected tab.
     private var tabBinding: Binding<PillieTab> {
         Binding(
             get: { selectedTab },
             set: { newTab in
-                guard newTab != selectedTab else { return }
-                tabDirection = newTab.rawValue > selectedTab.rawValue ? .trailing : .leading
-                withAnimation(tabTransitionAnimation) {
-                    selectedTab = newTab
-                }
-                InteractionFeedback.live.perform(.tabChange)
-                ProductAnalyticsTelemetry.live.mainTabSelected(newTab.analyticsTab)
+                switchTab(to: newTab)
             }
         )
     }
 
+    private func switchTab(to target: PillieTab) {
+        guard target != selectedTab else { return }
+        previousTab = selectedTab
+        withAnimation(tabTransitionAnimation) {
+            selectedTab = target
+        }
+        InteractionFeedback.live.perform(.tabChange)
+        ProductAnalyticsTelemetry.live.mainTabSelected(target.analyticsTab)
+    }
+
     // MARK: - Edge Swipe
 
-    private var edgeSwipeGesture: some Gesture {
+    private func edgeSwipeGesture(screenWidth: CGFloat) -> some Gesture {
         DragGesture(minimumDistance: 20)
             .onEnded { value in
                 let startX = value.startLocation.x
-                let screenWidth = UIScreen.main.bounds.width
                 let edgeZone: CGFloat = 30
                 let tx = value.translation.width
 
@@ -173,13 +193,7 @@ struct MainTabView: View {
         guard let idx = allTabs.firstIndex(of: selectedTab) else { return }
         let newIndex = idx + offset
         guard allTabs.indices.contains(newIndex) else { return }
-        let target = allTabs[newIndex]
-        tabDirection = target.rawValue > selectedTab.rawValue ? .trailing : .leading
-        withAnimation(tabTransitionAnimation) {
-            selectedTab = target
-        }
-        InteractionFeedback.live.perform(.tabChange)
-        ProductAnalyticsTelemetry.live.mainTabSelected(target.analyticsTab)
+        switchTab(to: allTabs[newIndex])
     }
 }
 
