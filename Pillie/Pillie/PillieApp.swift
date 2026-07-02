@@ -209,6 +209,11 @@ struct PillieApp: App {
                 .onChange(of: scenePhase) { _, newPhase in
                     guard !Self.isRunningTests else { return }
                     if newPhase == .active {
+                        // Returning to the foreground may cross a day boundary the
+                        // NSCalendarDayChanged observer missed while suspended —
+                        // refresh the day-relative read model before anything below
+                        // (Screen Time reconcile, reminder replan) consumes it.
+                        store.refreshDayContextIfNeeded()
                         ProductAnalyticsTelemetry.live.appBecameActive()
                         guard !Self.isOnboardingActive else { return }
                         reconcileScreenTimeState()

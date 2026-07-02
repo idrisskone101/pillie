@@ -1,3 +1,5 @@
+// xcode: set sdk=iOS
+
 //
 //  PillStore.swift
 //  Pillie
@@ -6,6 +8,7 @@
 import Foundation
 import SwiftUI
 import SwiftData
+import UIKit
 import os.signpost
 
 @Observable
@@ -243,6 +246,12 @@ class PillStore {
     private var snapshotCacheByPackID: [UUID: [Int: PillScheduleSnapshot]] = [:]
     private var packTimeline: [PackTimelineEntry] = []
 
+    /// Epoch day the cached read model was last computed against. Snapshot statuses
+    /// are relative to `today` (upcoming vs missed, passive auto-taken, cycle-end
+    /// gaps), so crossing midnight with the app resident must invalidate the caches.
+    @ObservationIgnored private var lastKnownEpochDay: Int = 0
+    @ObservationIgnored private var dayContextObservers: [NSObjectProtocol] = []
+
     // MARK: - UserDefaults keys (settings only)
 
     private static let reminderHourKey = "pillie_reminder_hour"
@@ -317,11 +326,14 @@ class PillStore {
            action.type == .ringReinsert {
             return false
         }
-        return daysOnCurrentPack >= pack.cycleLength
+        // elapsedCycleDays honors the mid-cycle anchor (and pinned ring insertion),
+        // so a pack that started on cycle day N completes after cycleLength - (N-1)
+        // calendar days — the same day cycleDayIndex wraps back to day 1.
+        return pack.elapsedCycleDays(on: today) >= pack.cycleLength
     }
 
     var daysOverdue: Int {
-        max(0, daysOnCurrentPack - pack.cycleLength)
+        max(0, pack.elapsedCycleDays(on: today) - pack.cycleLength)
     }
 
     var refillCTALabel: String {
@@ -557,6 +569,13 @@ class PillStore {
 
         guard let resolvedDate = Calendar.current.date(byAdding: .day, value: dayOffset, to: baseDate) else {
             return nil
+        }
+        // Indices before a mid-cycle anchor resolve to dates owned by the previous
+        // pack (e.g. the pill days logged before a method switch). Render those from
+        // the pack that actually tracked them so real records show instead of
+        // phantom misses.
+        if let owner = self.pack(for: resolvedDate), owner.id != pack.id {
+            return scheduleSnapshot(for: resolvedDate, in: owner)
         }
         return scheduleSnapshot(for: resolvedDate, in: pack)
     }
@@ -927,6 +946,15 @@ class PillStore {
                 isCurrent: true
             )
             modelContext.insert(nextPack)
+
+            // Same-method restart mid-cycle: the back-dated startDate makes this
+            // pack own the overlapped days, hiding the old pack's records. Backfill
+            // them as taken (mirroring the mid-cycle onboarding assumption) so they
+            // don't surface as missed, and keep the streak honest.
+            if !useTodayAsStartDate && safeCycleDay > 1 {
+                backfillPriorDays(from: startDate, count: safeCycleDay - 1, pack: nextPack, calendar: Calendar.current)
+                streakResetDate = today
+            }
         } else if let activePack {
             activePack.method = method
             activePack.pillRegimen = method == .pill ? regimen : .twentyOneSeven
@@ -1102,6 +1130,13 @@ class PillStore {
         let cycleLength = max(1, activePack.cycleLength)
         let safeCycleDay = max(1, min(newCycleDay, cycleLength))
 
+        // Remember whether today was already logged so a cycle-day adjustment
+        // doesn't silently undo the day's check-in.
+        let todayEpoch = epochDay(for: today)
+        let todayRecord = dayRecord(forPackID: activePack.id, epochDay: todayEpoch)
+        let takenTodayAt: Date? = todayRecord?.status == .taken ? todayRecord?.takenAt : nil
+        let hadTakenToday = todayRecord?.status == .taken
+
         // 1. Adjust the pack so today = safeCycleDay.
         //    All methods (pill, patch, ring) recompute startDate so the
         //    schedule engine anchors correctly and backfilled action types
@@ -1138,6 +1173,20 @@ class PillStore {
         // 6. Persist and rebuild
         persist()
         refreshPacks()
+
+        // 7. Re-log today if it was already checked in before the adjustment and the
+        //    reshaped schedule still expects a user action today. The original
+        //    takenAt is restored so the adaptive-reminder signal is unchanged.
+        if hadTakenToday,
+           let snapshot = scheduleSnapshot(for: today),
+           snapshot.dueAction?.type.requiresUserAction == true {
+            markActionAsTaken(on: today)
+            if let restored = dayRecord(forPackID: snapshot.pack.id, epochDay: todayEpoch) {
+                restored.takenAt = takenTodayAt
+            }
+            persist()
+        }
+
         protocolChangeVersion &+= 1
         NotificationManager.shared.requestReschedule(from: self, reason: "cycle-day-update")
     }
@@ -1304,6 +1353,49 @@ class PillStore {
         }
 
         rebuildReadIndexes()
+
+        lastKnownEpochDay = epochDay(for: PillieClock.now)
+        dayContextObservers.append(
+            NotificationCenter.default.addObserver(
+                forName: .NSCalendarDayChanged, object: nil, queue: .main
+            ) { [weak self] _ in
+                self?.refreshDayContextIfNeeded()
+            }
+        )
+        dayContextObservers.append(
+            NotificationCenter.default.addObserver(
+                forName: UIApplication.significantTimeChangeNotification, object: nil, queue: .main
+            ) { [weak self] _ in
+                self?.refreshDayContext(force: true)
+            }
+        )
+    }
+
+    deinit {
+        for observer in dayContextObservers {
+            NotificationCenter.default.removeObserver(observer)
+        }
+    }
+
+    // MARK: - Day Rollover
+
+    /// Drops the day-relative read model when the calendar day changed while the app
+    /// stayed resident (midnight rollover, long suspension). Without this, yesterday's
+    /// untaken day keeps rendering as "upcoming" and Home/Calendar never advance until
+    /// the next cold launch. Cheap no-op while the day is unchanged.
+    func refreshDayContextIfNeeded() {
+        refreshDayContext(force: false)
+    }
+
+    private func refreshDayContext(force: Bool) {
+        let currentEpochDay = epochDay(for: PillieClock.now)
+        guard force || currentEpochDay != lastKnownEpochDay else { return }
+        lastKnownEpochDay = currentEpochDay
+        invalidateAllSnapshotCaches()
+        // Observable nudge: HistoryView resets to the current month and the cycle
+        // strip recenters on the new day.
+        protocolChangeVersion &+= 1
+        syncTodayTakenToAppGroup()
     }
 
     #if DEBUG
@@ -1601,6 +1693,15 @@ class PillStore {
             return day < startOfDaySafe(activation, fallback: day)
         }()
 
+        // A pack models exactly one cycle. Past days beyond its end (the gap between
+        // finishing a cycle and tapping Start New Pack/Cycle) had nothing genuinely
+        // due — the schedule engine only wraps them as a forward-looking prediction —
+        // so without an explicit record they carry no tracking data. Future days keep
+        // the wrapped prediction.
+        let isPastCycleEndGap = day < today
+            && pack.elapsedCycleDays(on: day, calendar: Calendar.current) >= pack.cycleLength
+        let hasNoTrackingContext = isBeforeActivation || isPastCycleEndGap
+
         let resolvedStatus: PillDay.Status?
         if let record = dayRecord {
             // Upcoming is non-terminal; recompute fallback state for past dates.
@@ -1608,11 +1709,11 @@ class PillStore {
                 resolvedStatus = record.status
             } else if let due {
                 if due.type.isBreakType {
-                    resolvedStatus = isBeforeActivation ? .noData : .breakDay
+                    resolvedStatus = hasNoTrackingContext ? .noData : .breakDay
                 } else if due.type.isPassiveActive {
-                    resolvedStatus = isBeforeActivation ? .noData : (day < today ? .taken : .upcoming)
+                    resolvedStatus = hasNoTrackingContext ? .noData : (day < today ? .taken : .upcoming)
                 } else if day < today {
-                    resolvedStatus = isBeforeActivation ? .noData : .missed
+                    resolvedStatus = hasNoTrackingContext ? .noData : .missed
                 } else {
                     resolvedStatus = .upcoming
                 }
@@ -1621,11 +1722,11 @@ class PillStore {
             }
         } else if let due {
             if due.type.isBreakType {
-                resolvedStatus = isBeforeActivation ? .noData : .breakDay
+                resolvedStatus = hasNoTrackingContext ? .noData : .breakDay
             } else if due.type.isPassiveActive {
-                resolvedStatus = isBeforeActivation ? .noData : (day < today ? .taken : .upcoming)
+                resolvedStatus = hasNoTrackingContext ? .noData : (day < today ? .taken : .upcoming)
             } else if day < today {
-                resolvedStatus = isBeforeActivation ? .noData : .missed
+                resolvedStatus = hasNoTrackingContext ? .noData : .missed
             } else {
                 resolvedStatus = .upcoming
             }

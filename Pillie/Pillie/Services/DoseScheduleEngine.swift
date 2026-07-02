@@ -149,14 +149,11 @@ enum DoseScheduleEngine {
             )
 
         case .patch:
-            // Patch change schedule is anchored to startDate directly,
-            // ignoring cycleDayAnchorIndex. This mirrors the ring approach
-            // so that editing the cycle day in Settings never shifts the
-            // next patch change date.
-            let anchorStart = calendar.startOfDay(for: pack.startDate)
-            let target = calendar.startOfDay(for: date)
-            let diff = calendar.dateComponents([.day], from: anchorStart, to: target).day ?? 0
-            let scheduleDay = ((diff % 28) + 28) % 28 + 1
+            // Patch schedule days come from the same cycleDayIndex math as the
+            // calendar and cycle strip, so change/remove days honor a mid-cycle
+            // start (cycleDayAnchorIndex > 0 after a method switch) instead of
+            // silently restarting the 1/8/15 rhythm at the pack's startDate.
+            let scheduleDay = cycleDay
 
             let type: PillDay.ActionType
             if [1, 8, 15].contains(scheduleDay) {
@@ -179,17 +176,16 @@ enum DoseScheduleEngine {
         case .ring:
             // Ring actions are anchored to ringInsertionDate (pinned at first
             // check-in) so that editing the cycle day in Settings never shifts
-            // the removal date. Falls back to startDate when not yet pinned.
-            let anchorDate = pack.ringInsertionDate ?? pack.startDate
-            let anchorStart = calendar.startOfDay(for: anchorDate)
-            let target = calendar.startOfDay(for: date)
-            let diff = calendar.dateComponents([.day], from: anchorStart, to: target).day ?? 0
-            let ringDay = ((diff % 28) + 28) % 28 + 1
+            // the removal date. While unpinned this follows cycleDayIndex —
+            // startDate plus the mid-cycle anchor — so the schedule and the
+            // displayed cycle day always agree.
+            let ringDay = cycleDay
+            let elapsed = pack.elapsedCycleDays(on: date, calendar: calendar)
 
             let type: PillDay.ActionType
             switch ringDay {
             case 1:
-                type = diff > 0 ? .ringReinsert : .ringInsert
+                type = elapsed > 0 ? .ringReinsert : .ringInsert
             case 2...21:
                 type = .ringActive
             case 22:
