@@ -405,6 +405,17 @@ struct ProductAnalyticsTelemetry {
     track(.reviewPromptDismissed, source: .home)
   }
 
+  // MARK: - Open Line (#152 / #153)
+  //
+  // One coarse event per Open Line row tap — the standard envelope and nothing
+  // else. iOS never reports whether an email was actually sent, so the tap is by
+  // design the only funnel signal; what the user types stays between them and the
+  // developer and is never attached here.
+
+  func openLineSuggestionTapped() {
+    track(.openLineSuggestionTapped, source: .settings)
+  }
+
   private func paywallSource(isFromOnboarding: Bool) -> AnalyticsSource {
     isFromOnboarding ? .onboarding : .settings
   }

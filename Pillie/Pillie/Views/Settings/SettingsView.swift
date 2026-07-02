@@ -10,6 +10,7 @@ import FamilyControls
 struct SettingsView: View {
     @Environment(PillStore.self) var store
     @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
+    @Environment(\.openURL) private var openURL
     @State private var appeared = false
     @State private var hasAnimatedIn = false
     @State private var showTimeEditor = false
@@ -255,6 +256,26 @@ struct SettingsView: View {
                             value: SubscriptionManager.shared.isPlus ? "Pillie Plus" : "Free Plan",
                             valueColor: SubscriptionManager.shared.isPlus ? PillieTheme.coral : PillieTheme.textPrimary
                         )
+                    }
+                    .buttonStyle(.plain)
+                }
+                .modifier(FadeInUp(appeared: appeared, delay: 0.3))
+
+                // MARK: - Support (Open Line, #152 / #153)
+                // Always-available, identical for free and Plus. The warm label is
+                // UI-only copy; the mailto subject and telemetry name are stable
+                // contracts owned by `OpenLine` and the telemetry service.
+                sectionHeader("SUPPORT")
+                    .modifier(FadeInUp(appeared: appeared, delay: 0.3))
+
+                settingsCard {
+                    Button {
+                        if let mailURL = OpenLine.mailURL(for: .suggestion) {
+                            openURL(mailURL)
+                        }
+                        ProductAnalyticsTelemetry.live.openLineSuggestionTapped()
+                    } label: {
+                        settingsRow("Share an Idea", value: "")
                     }
                     .buttonStyle(.plain)
                 }
