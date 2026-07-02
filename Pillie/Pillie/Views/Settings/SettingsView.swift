@@ -278,6 +278,19 @@ struct SettingsView: View {
                         settingsRow("Share an Idea", value: "")
                     }
                     .buttonStyle(.plain)
+                    divider
+                    Button {
+                        // Diagnostics are gathered live here and injected as plain
+                        // values; `OpenLine` composes a deterministic body that
+                        // carries device/app info only, never routine data.
+                        if let mailURL = OpenLine.mailURL(for: .issueReport(.current())) {
+                            openURL(mailURL)
+                        }
+                        ProductAnalyticsTelemetry.live.openLineIssueReportTapped()
+                    } label: {
+                        settingsRow("Something Not Working?", value: "")
+                    }
+                    .buttonStyle(.plain)
                 }
                 .modifier(FadeInUp(appeared: appeared, delay: 0.3))
 

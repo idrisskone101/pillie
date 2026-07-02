@@ -2,7 +2,7 @@
 //  OpenLine.swift
 //  Pillie
 //
-//  Pure value-type address for the Open Line (PRD #152 / #153): Pillie's
+//  Pure value-type address for the Open Line (PRD #152 / #153 / #154): Pillie's
 //  always-available two-way support channel, reached from a SUPPORT section in
 //  Settings on the user's own initiative. Distinct from `FeedbackEscapeHatch`,
 //  which is prompt-driven and reserved for the Sentiment Gate's negative path —
@@ -10,9 +10,12 @@
 //
 //  Email is the channel deliberately (ADR 0005 precedent: Pillie has no backend,
 //  and a reply-able thread *is* the open line), so this owns the externally
-//  observable contract: the support recipient and the intent-specific subjects.
-//  Subjects are mechanical and stable — the developer's inbox filters pre-triage
-//  on them — while the warm row labels live in the UI and may be reworded freely.
+//  observable contract: the support recipient, the intent-specific subjects, and
+//  the issue report's seeded body. Subjects are mechanical and stable — the
+//  developer's inbox filters pre-triage on them — while the warm row labels live
+//  in the UI and may be reworded freely. The issue body carries only injected
+//  device/app diagnostics (see `Diagnostics`); routine data never rides it, and
+//  what the user types is theirs alone.
 //
 
 import Foundation
@@ -21,11 +24,43 @@ enum OpenLine {
     /// Pillie support inbox every Open Line intent is addressed to.
     static let recipient = "pillieapp@gmail.com"
 
+    /// Device/app facts seeded into an issue report's footer so the developer can
+    /// reproduce without a round-trip. Deliberately holds *plain values only* —
+    /// version strings, never routine data — so body composition stays
+    /// deterministic and unit-testable. The live values are read from
+    /// `Bundle`/`UIDevice` at the call site (`Diagnostics.current`), never here.
+    struct Diagnostics: Equatable {
+        /// Marketing version, e.g. `"2.0.1"` (CFBundleShortVersionString).
+        let appVersion: String
+        /// Build number, e.g. `"42"` (CFBundleVersion).
+        let build: String
+        /// OS version, e.g. `"26.2"` (UIDevice.systemVersion).
+        let systemVersion: String
+        /// Hardware identifier, e.g. `"iPhone17,1"`.
+        let deviceModel: String
+
+        /// Stacked, one fact per line under a separator rule. Values are
+        /// interpolated verbatim; nothing about the user's routine appears here.
+        var footer: String {
+            """
+            ———
+            App: \(appVersion) (\(build))
+            iOS: \(systemVersion)
+            Device: \(deviceModel)
+            """
+        }
+    }
+
     /// Why the user is reaching out. Each intent carries its own stable,
     /// inbox-filterable subject so mail arrives pre-triaged.
     enum Intent {
         /// A feature idea ("Share an Idea" row). Seeds no body at all.
         case suggestion
+
+        /// Something is broken ("Something Not Working?" row). Seeds a warm
+        /// invitation plus a device/app diagnostics footer — the injected
+        /// `Diagnostics` values and nothing about the user's routine.
+        case issueReport(Diagnostics)
 
         /// Subject seeded into the composer; mechanical and PII-free, with an
         /// em dash matching the developer's inbox filters.
@@ -33,20 +68,50 @@ enum OpenLine {
             switch self {
             case .suggestion:
                 return "Pillie — Suggestion"
+            case .issueReport:
+                return "Pillie — Issue Report"
+            }
+        }
+
+        /// Text seeded into the composer body. `nil` for suggestion (the user
+        /// writes freely). For an issue report, a diagnostics footer only — never
+        /// message content, never routine data.
+        var body: String? {
+            switch self {
+            case .suggestion:
+                return nil
+            case .issueReport(let diagnostics):
+                return """
+                    \(OpenLine.issueInvitation)
+
+                    \(diagnostics.footer)
+                    """
             }
         }
     }
 
-    /// A `mailto:` URL pre-addressed to Pillie support with the intent's subject.
-    /// The suggestion intent seeds no body: the user writes freely, and nothing
-    /// this builds can carry message content into a URL, telemetry, or logs.
-    /// `nil` only if URL composition ever fails — callers must still surface a
-    /// visible fallback, never a silent no-op.
+    /// Warm opener seeded above the diagnostics footer. The register invites the
+    /// user to describe what happened *above this line*; it carries no routine
+    /// data and can be reworded freely without touching the stable subject.
+    static let issueInvitation =
+        "Tell us what went wrong — the more detail, the better. Type above this line."
+
+    /// A `mailto:` URL pre-addressed to Pillie support with the intent's subject,
+    /// and — for an issue report — its diagnostics body. The suggestion intent
+    /// seeds no body: the user writes freely, and nothing this builds can carry
+    /// *message content* into a URL, telemetry, or logs. An issue report seeds
+    /// only device/app diagnostics, never routine data. `nil` only if URL
+    /// composition ever fails — callers must still surface a visible fallback,
+    /// never a silent no-op.
     static func mailURL(for intent: Intent) -> URL? {
         var components = URLComponents()
         components.scheme = "mailto"
         components.path = recipient
-        components.queryItems = [URLQueryItem(name: "subject", value: intent.subject)]
+        var queryItems = [URLQueryItem(name: "subject", value: intent.subject)]
+        if let body = intent.body {
+            queryItems.append(URLQueryItem(name: "body", value: body))
+        }
+        components.queryItems = queryItems
         return components.url
     }
 }

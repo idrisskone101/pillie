@@ -23,6 +23,15 @@ final class OpenLineTelemetryTests: XCTestCase {
         )
     }
 
+    func testIssueReportRowTapEventUsesApprovedName() {
+        // The second and final Open Line event — the "exactly two, nothing more"
+        // budget. Stable name so funnel history survives copy changes.
+        XCTAssertEqual(
+            AnalyticsEvent.openLineIssueReportTapped.rawValue,
+            "open_line_issue_report_tapped"
+        )
+    }
+
     func testOpenLineTapPayloadIsStandardEnvelopeOnly() {
         // Source and the coarse plan flag — no setting category, no message
         // content, no intent detail beyond the event name itself.
