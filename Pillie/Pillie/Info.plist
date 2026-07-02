@@ -43,6 +43,8 @@
 	<string>$(POSTHOG_PROJECT_TOKEN)</string>
 	<key>AppsFlyerDevKey</key>
 	<string>$(APPSFLYER_DEV_KEY)</string>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>UIApplicationSceneManifest</key>

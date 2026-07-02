@@ -59,6 +59,16 @@ protocol ProductAnalyticsClient: AnyObject {
 }
 
 final class PostHogAnalyticsClient: ProductAnalyticsClient {
+  /// PostHog's capture pipeline does non-trivial synchronous work on the calling
+  /// thread. Every call site is a UI action on the main thread, and that work was
+  /// measured at ~15ms per event on iOS 27 — enough to drop the first frame of any
+  /// animation started in the same interaction (e.g. the tab-switch slide). A serial
+  /// queue keeps events ordered while keeping their cost off the render-critical path.
+  private let captureQueue = DispatchQueue(
+    label: "com.idrisskone.pillie.posthog-capture",
+    qos: .utility
+  )
+
   func configure(_ configuration: ProductAnalyticsConfiguration) {
     let config = PostHogConfig(projectToken: configuration.projectToken, host: configuration.host)
     config.captureApplicationLifecycleEvents = configuration.captureApplicationLifecycleEvents
@@ -86,13 +96,15 @@ final class PostHogAnalyticsClient: ProductAnalyticsClient {
     properties: [String: AnalyticsPropertyValue],
     personProperties: [String: AnalyticsPropertyValue]
   ) {
-    PostHogSDK.shared.capture(
-      event,
-      properties: properties.mapValues(\.postHogValue),
-      userProperties: personProperties.isEmpty
-        ? nil
-        : personProperties.mapValues(\.postHogValue)
-    )
+    captureQueue.async {
+      PostHogSDK.shared.capture(
+        event,
+        properties: properties.mapValues(\.postHogValue),
+        userProperties: personProperties.isEmpty
+          ? nil
+          : personProperties.mapValues(\.postHogValue)
+      )
+    }
   }
 
   func distinctId() -> String? {
@@ -100,7 +112,9 @@ final class PostHogAnalyticsClient: ProductAnalyticsClient {
   }
 
   func flush() {
-    PostHogSDK.shared.flush()
+    captureQueue.async {
+      PostHogSDK.shared.flush()
+    }
   }
 }
 
