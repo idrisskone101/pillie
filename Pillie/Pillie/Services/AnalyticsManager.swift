@@ -157,6 +157,9 @@ enum AnalyticsEvent: String, CaseIterable {
   case paywallPlanSelected = "paywall_plan_selected"
   case purchaseStarted = "purchase_started"
   case trialStarted = "trial_started"
+  /// A Reverse Trial grant was written (ADR 0007). Distinct from `trialStarted`,
+  /// which keeps its StoreKit-intro-offer meaning.
+  case trialGranted = "trial_granted"
   case purchaseCompleted = "purchase_completed"
   case purchaseFailed = "purchase_failed"
   case purchaseCancelled = "purchase_cancelled"
@@ -223,6 +226,9 @@ enum AnalyticsStep: String {
   case freePlanConfirmation = "free_plan_confirmation"
   case appBlocking = "app_blocking"
   case protectionPlanReady = "protection_plan_ready"
+  // The step label is `trial_granted_moment` (the screen); the `trial_granted`
+  // event name stays reserved for the grant itself.
+  case trialGranted = "trial_granted_moment"
 
   init?(onboardingStep: Int) {
     guard let analyticsStep = OnboardingFlow.analyticsStep(for: onboardingStep) else { return nil }
