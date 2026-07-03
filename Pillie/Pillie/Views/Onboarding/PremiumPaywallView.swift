@@ -42,6 +42,8 @@ struct SoftPaywallContent {
     let freeColumnLabel: String
     let plusColumnLabel: String
     let rows: [ComparisonRow]
+    let annualPlanLabel: String
+    let monthlyPlanLabel: String
     let reassurances: [String]
     let monthlyReassurances: [String]
     let primaryCTA: String
@@ -53,6 +55,7 @@ struct SoftPaywallContent {
         [title, titleAccent, subtitle, comparisonLabel, freeColumnLabel, plusColumnLabel]
             + rows.map(\.title)
             + rows.compactMap(\.detail)
+            + [annualPlanLabel, monthlyPlanLabel]
             + reassurances
             + monthlyReassurances
             + [primaryCTA, monthlyCTA, freeCTA, restoreCTA]
@@ -115,9 +118,11 @@ struct SoftPaywallContent {
                 plusIncluded: true
             )
         ],
-        reassurances: ["No payment due now", "Cancel anytime"],
+        annualPlanLabel: "Annual",
+        monthlyPlanLabel: "Monthly",
+        reassurances: ["Cancel anytime"],
         monthlyReassurances: ["Cancel anytime", "No commitment"],
-        primaryCTA: "Try Pillie Plus for free",
+        primaryCTA: "Unlock Pillie Plus",
         monthlyCTA: "Start Pillie Plus monthly",
         freeCTA: "Continue with free plan",
         restoreCTA: "Restore Purchases"
@@ -482,11 +487,11 @@ struct PremiumPaywallView: View {
     }
 
     private var annualPriceText: String {
-        annualPackage?.storeProduct.localizedPriceString ?? "$49.99"
+        annualPackage?.storeProduct.localizedPriceString ?? "$29.99"
     }
 
     private var monthlyPriceText: String {
-        monthlyPackage?.storeProduct.localizedPriceString ?? "$9.99"
+        monthlyPackage?.storeProduct.localizedPriceString ?? "$4.99"
     }
 
     /// Truthful annual-vs-monthly comparison from the live store prices (issue #79: no
@@ -505,10 +510,11 @@ struct PremiumPaywallView: View {
         return comparison.monthlyEquivalentString(using: formatter)
     }
 
-    /// "Save N%" derived from the real prices, or `nil` when there is no honest saving.
+    /// "N months free" derived from the real prices (issue #162's annual anchor), or
+    /// `nil` when there is no honest saving.
     private var savingsBadgeText: String? {
-        guard let percent = priceComparison?.savingsPercent else { return nil }
-        return "Save \(percent)%"
+        guard let months = priceComparison?.monthsFree else { return nil }
+        return months == 1 ? "1 month free" : "\(months) months free"
     }
 
     private var annualCard: some View {
@@ -518,7 +524,7 @@ struct PremiumPaywallView: View {
             HStack(alignment: .center, spacing: 14) {
                 VStack(alignment: .leading, spacing: 3) {
                     HStack(spacing: 8) {
-                        Text("Annual Trial")
+                        Text(content.annualPlanLabel)
                             .font(.pillie(12, weight: .black))
                             .tracking(1)
                             .textCase(.uppercase)
@@ -549,10 +555,6 @@ struct PremiumPaywallView: View {
                                 .foregroundStyle(Color.white.opacity(0.6))
                         }
                     }
-
-                    Text("Starts with a 7-day free trial")
-                        .font(.pillie(13, weight: .bold))
-                        .foregroundStyle(PillieTheme.coral)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
 
@@ -584,7 +586,7 @@ struct PremiumPaywallView: View {
         }
         .buttonStyle(.plain)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Annual trial, \(annualPriceText) per year\(annualPerMonthText.map { ", \($0) per month" } ?? ""). Starts with a 7-day free trial.\(savingsBadgeText.map { " \($0)." } ?? "")")
+        .accessibilityLabel("Annual, \(annualPriceText) per year\(annualPerMonthText.map { ", \($0) per month" } ?? "").\(savingsBadgeText.map { " \($0)." } ?? "")")
         .accessibilityAddTraits(selectedPlan == .annual ? [.isButton, .isSelected] : .isButton)
     }
 
@@ -594,7 +596,7 @@ struct PremiumPaywallView: View {
         } label: {
             HStack(spacing: 14) {
                 VStack(alignment: .leading, spacing: 3) {
-                    Text("Monthly")
+                    Text(content.monthlyPlanLabel)
                         .font(.pillie(12, weight: .black))
                         .tracking(1)
                         .textCase(.uppercase)

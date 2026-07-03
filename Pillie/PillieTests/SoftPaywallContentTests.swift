@@ -87,27 +87,29 @@ final class SoftPaywallContentTests: XCTestCase {
         XCTAssertNil(custom.detail, "Custom reminder messages comparison row must not carry a subheading.")
     }
 
-    func testSoftPaywallKeepsAClearTruthfulFreeAndTrialPath() {
+    func testSoftPaywallSellsACleanDirectBuyWithNoTrialPromise() {
         let content = SoftPaywallContent.default
 
-        // The annual trial genuinely charges nothing up front.
-        XCTAssertEqual(content.reassurances, ["No payment due now", "Cancel anytime"])
+        // Reverse Trial (ADR 0007 / issue #162): the StoreKit intro offer is gone, so
+        // both plans bill immediately — no surface may claim "no payment due now".
+        XCTAssertEqual(content.reassurances, ["Cancel anytime"])
+        XCTAssertEqual(content.monthlyReassurances, ["Cancel anytime", "No commitment"])
 
-        // The monthly plan bills immediately, so its reassurances must never claim
-        // there is "no payment due now".
-        XCTAssertTrue(content.monthlyReassurances.contains("Cancel anytime"))
-        XCTAssertFalse(
-            content.monthlyReassurances.contains { $0.lowercased().contains("no payment due now") },
-            "Monthly bills today — it must not promise 'no payment due now'."
-        )
-
-        XCTAssertEqual(content.primaryCTA, "Try Pillie Plus for free")
+        XCTAssertEqual(content.primaryCTA, "Unlock Pillie Plus")
         XCTAssertEqual(content.freeCTA, "Continue with free plan")
         XCTAssertEqual(content.restoreCTA, "Restore Purchases")
 
-        // Only the annual plan carries the 7-day trial, so the monthly CTA must never
-        // promise something "free".
+        // Neither purchase CTA may promise something "free" — a direct buy charges today.
+        XCTAssertFalse(content.primaryCTA.lowercased().contains("free"))
         XCTAssertFalse(content.monthlyCTA.lowercased().contains("free"))
+
+        // The plan-card labels live in the content model (not hardcoded in the view) so
+        // the banned-copy sweep can see them; the old view-only "Annual Trial" label is
+        // exactly how trial copy escaped the test net.
+        XCTAssertEqual(content.annualPlanLabel, "Annual")
+        XCTAssertEqual(content.monthlyPlanLabel, "Monthly")
+        XCTAssertTrue(content.visibleCopy.contains(content.annualPlanLabel))
+        XCTAssertTrue(content.visibleCopy.contains(content.monthlyPlanLabel))
     }
 
     func testSoftPaywallCopyAvoidsFakeUrgencyFakeStatsAndMedicalClaims() {
@@ -118,7 +120,10 @@ final class SoftPaywallContentTests: XCTestCase {
         for banned in [
             "limited offer", "act now", "hurry", "only today", "don't miss", "ends soon",
             "% of users", "studies show", "clinically", "doctor", "medical", "guaranteed",
-            "credit card", "google pay", "no ads", "habit mastery"
+            "credit card", "google pay", "no ads", "habit mastery",
+            // Reverse Trial (issue #162): the StoreKit intro offer is gone, so no
+            // surface may promise a trial or a payment-free start.
+            "trial", "7-day", "no payment due now"
         ] {
             XCTAssertFalse(
                 visibleCopy.contains(banned),
