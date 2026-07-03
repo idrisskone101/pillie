@@ -65,6 +65,12 @@ final class SubscriptionManager: NSObject {
     /// The persisted Reverse Trial grant moment, if any (Keychain-backed).
     private(set) var trialGrantDate: Date?
 
+    /// Whether the RevenueCat entitlement state has actually loaded this launch.
+    /// `hasEntitlement` starts `false` before the first customer-info fetch, so
+    /// the existing-user update grant (#165) must wait for this before deciding —
+    /// otherwise a paying subscriber would be misread as free.
+    private(set) var hasResolvedEntitlement = false
+
     private(set) var isLoading = false
 
     /// Fired whenever Plus Access actually flips (purchase, churn, trial grant,
@@ -100,6 +106,7 @@ final class SubscriptionManager: NSObject {
     /// after every write so the predicate can never be bypassed.
     private func setEntitlement(_ newValue: Bool) {
         hasEntitlement = newValue
+        hasResolvedEntitlement = true
         refreshPlusAccess()
     }
 

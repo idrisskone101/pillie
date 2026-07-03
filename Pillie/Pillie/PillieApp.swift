@@ -329,6 +329,17 @@ struct PillieApp: App {
                 .queryItems?.first(where: { $0.name == "count" })?.value.flatMap(Int.init) ?? 5
             let state = BlockerInterventionSharedState()
             for _ in 0..<max(0, count) { state.recordIntercept() }
+        case "/update-trial-announcement":
+            // QA shortcut (#165): pre-seed the onboarded-free existing-user state —
+            // onboarding complete, no entitlement, no trial grant, update window
+            // open. Relaunch the app after opening this link: the next launch
+            // grants the trial, fires `trial_granted` (source: update), and shows
+            // the one-time announcement sheet.
+            SubscriptionManager.shared.setPlusForTesting(false)
+            SubscriptionManager.shared.debugOverrideTrialGrantDate(nil)
+            UserDefaults.standard.removeObject(forKey: ExistingUserTrialGrant.handledStorageKey)
+            UserDefaults.standard.set(false, forKey: OnboardingFlow.selectedFreePlanStorageKey)
+            UserDefaults.standard.set(OnboardingFlow.Step.complete.rawValue, forKey: OnboardingFlow.stepStorageKey)
         case "/review-prompt":
             // QA shortcut (#133): land on Home with an unbroken Streak past the pill
             // threshold so the Review Prompt's Sentiment Gate card surfaces and the

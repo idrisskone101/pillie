@@ -201,6 +201,9 @@ enum AnalyticsSource: String {
   /// The one-time Smart Reminders migration notice shown to pre-existing free users
   /// when Smart Reminders moves to Pillie+ (ADR 0004 / #104).
   case migration
+  /// The existing-user Reverse Trial grant on first launch after the introducing
+  /// update (#165 / ADR 0007), so it splits from `onboarding` grants in the funnel.
+  case update
 }
 
 enum AnalyticsStep: String {
