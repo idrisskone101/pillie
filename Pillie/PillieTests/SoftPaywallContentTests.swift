@@ -132,26 +132,8 @@ final class SoftPaywallContentTests: XCTestCase {
         }
     }
 
-    func testFreePlanConfirmationContentConfirmsFreeFeaturesWithoutAnotherUpgradeAsk() {
-        let content = FreePlanConfirmationContent.default
-
-        XCTAssertEqual(content.title, "You're all set with")
-        XCTAssertEqual(content.titleAccent, "Pillie")
-        XCTAssertEqual(content.primaryCTA, "Start Using Pillie")
-        // Verified-seal hero redesign confirms the two free pillars (reminders +
-        // tracking); the old "Smart reminders" card was dropped.
-        XCTAssertEqual(content.confirmations.map(\.title), [
-            "Daily reminders",
-            "Cycle tracking"
-        ])
-
-        let visibleCopy = content.visibleCopy.joined(separator: " ").lowercased()
-        XCTAssertTrue(visibleCopy.contains("active"))
-        XCTAssertTrue(visibleCopy.contains("tracking"))
-        XCTAssertFalse(visibleCopy.contains("app blocking"))
-        XCTAssertFalse(visibleCopy.contains("screen time"))
-        XCTAssertFalse(visibleCopy.contains("upgrade"))
-        XCTAssertFalse(visibleCopy.contains("pillie plus"))
-        XCTAssertFalse(visibleCopy.contains("limited offer"))
-    }
+    // The FreePlanConfirmationContent test left with the view it covered: the
+    // free-plan confirmation branch was retired by the Reverse Trial
+    // (issue #164 / ADR 0007) — the Trial Granted Moment replaced the paywall
+    // and everyone flows into the Screen Time branch.
 }

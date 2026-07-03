@@ -252,10 +252,11 @@ struct ContentView: View {
                 lowRiskTransition(to: .reminderTime)
 	            },
 	            onContinue: {
-                // Mark the reveal as played so returning here (Back from the paywall)
-                // shows the finished plan instead of replaying the loading animation.
+                // Mark the reveal as played so returning here (Back from the Trial
+                // Granted Moment) shows the finished plan instead of replaying the
+                // loading animation.
                 protectionPlanModel.hasRevealedDiagnosisPlan = true
-                continueSetupStep(to: .paywall)
+                continueSetupStep(to: .trialGranted)
 	            }
           )
           .transition(
@@ -271,7 +272,7 @@ struct ContentView: View {
                 lowRiskTransition(to: .reminderPlan)
 	            },
 	            onContinue: {
-                continueSetupStep(to: .paywall)
+                continueSetupStep(to: .trialGranted)
 	            }
           )
           .transition(
@@ -280,47 +281,32 @@ struct ContentView: View {
               removal: .move(edge: .trailing)
             ))
 
-	        case .paywall:
-	          PremiumPaywallView(
+	        case .paywall, .freePlanConfirmation:
+	          // Retired (issue #164 / ADR 0007): the onboarding paywall and the
+	          // free-plan confirmation behind it were replaced by the Trial Granted
+	          // Moment. `visibleStep` migrates both forward to `.trialGranted`, so
+	          // these arms are unreachable and only keep the switch exhaustive.
+	          Color.clear
+
+	        case .trialGranted:
+	          TrialGrantedMomentView(
 	            onBack: {
                 lowRiskTransition(to: .reminderPlan)
 	            },
 	            onContinue: {
-	              onboardingSelectedFreePlan = false
-                transitionWithoutFeedback(
-                  to: OnboardingFlow.nextStepAfterPaywall(
-                    isPlus: subscriptionManager.hasPlusAccess,
-                    selectedFreePlan: onboardingSelectedFreePlan
-                  ),
-                  motion: .commitSpring
-                )
-            },
-	            onSkip: {
-	              onboardingSelectedFreePlan = true
-                transitionWithoutFeedback(
-                  to: OnboardingFlow.nextStepAfterPaywall(
-                    isPlus: subscriptionManager.hasPlusAccess,
-                    selectedFreePlan: onboardingSelectedFreePlan
-                  ),
-                  motion: .standard
-                )
-            }
-          )
-          .transition(
-            .asymmetric(
-              insertion: .move(edge: .trailing),
-              removal: .move(edge: .trailing)
-            ))
-
-	        case .freePlanConfirmation:
-	          FreePlanConfirmationView(
-	            onBack: {
-                lowRiskTransition(to: .paywall)
-	            },
-	            onContinue: {
-                continueFreePath(to: .complete)
+                continueSetupStep(to: .appBlocking)
 	            }
           )
+          .onAppear {
+            // Showing the screen writes the trial grant — the 14-day clock starts
+            // here, not at onboarding completion, so blocker setup runs under real
+            // Plus Access and an abandoner who returns still holds their trial.
+            // `trial_granted` fires only when the grant is actually written;
+            // revisiting the screen (Back, relaunch) never re-emits it.
+            if subscriptionManager.grantReverseTrial() {
+              ProductAnalyticsTelemetry.live.trialGranted()
+            }
+          }
           .transition(
             .asymmetric(
               insertion: .move(edge: .trailing),
@@ -330,7 +316,7 @@ struct ContentView: View {
 	        case .appBlocking:
 	          AppBlockingSetupView(
 	            onBack: {
-                lowRiskTransition(to: .paywall)
+                lowRiskTransition(to: .trialGranted)
 	            },
 	            onContinue: {
                 // A valid save with Screen Time authorization is genuine activation —

@@ -73,6 +73,17 @@ final class SubscriptionManagerTrialTests: XCTestCase {
         XCTAssertEqual(SubscriptionManager.shared.trialGrantDate, firstGrant)
     }
 
+    func testGrantReportsWhetherANewGrantWasWritten() {
+        // The Trial Granted Moment fires `trial_granted` iff the grant was actually
+        // written on this showing — revisiting the screen (Back, relaunch) must not
+        // re-emit the event (issue #164).
+        let firstGrant = Date(timeIntervalSince1970: 1_750_000_000)
+        XCTAssertTrue(SubscriptionManager.shared.grantReverseTrial(now: firstGrant))
+
+        let revisit = calendar.date(byAdding: .day, value: 1, to: firstGrant)!
+        XCTAssertFalse(SubscriptionManager.shared.grantReverseTrial(now: revisit))
+    }
+
     func testGrantWhileEntitledDoesNotFireHook() {
         SubscriptionManager.shared.setPlusForTesting(true)
 

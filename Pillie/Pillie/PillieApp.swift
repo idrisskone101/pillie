@@ -279,10 +279,14 @@ struct PillieApp: App {
             SubscriptionManager.shared.setPlusForTesting(true)
             UserDefaults.standard.set(false, forKey: OnboardingFlow.selectedFreePlanStorageKey)
             UserDefaults.standard.set(OnboardingFlow.Step.appBlocking.rawValue, forKey: OnboardingFlow.stepStorageKey)
-        case "/free-plan-confirmation":
+        case "/trial-granted-moment":
+            // QA shortcut (#164): land on the Trial Granted Moment with no prior
+            // grant or entitlement, exactly as a new user reaches it — showing the
+            // screen should write the grant and fire `trial_granted` once.
             SubscriptionManager.shared.setPlusForTesting(false)
-            UserDefaults.standard.set(true, forKey: OnboardingFlow.selectedFreePlanStorageKey)
-            UserDefaults.standard.set(OnboardingFlow.Step.freePlanConfirmation.rawValue, forKey: OnboardingFlow.stepStorageKey)
+            SubscriptionManager.shared.debugOverrideTrialGrantDate(nil)
+            UserDefaults.standard.set(false, forKey: OnboardingFlow.selectedFreePlanStorageKey)
+            UserDefaults.standard.set(OnboardingFlow.Step.trialGranted.rawValue, forKey: OnboardingFlow.stepStorageKey)
         case "/trial-grant":
             // QA control (#160): start a Reverse Trial now — every Plus feature
             // should unlock exactly as if the entitlement flipped on.

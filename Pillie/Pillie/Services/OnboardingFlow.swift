@@ -46,6 +46,10 @@ enum OnboardingFlow {
         // it is the terminal activation screen shown after a valid blocker config save,
         // sitting between `appBlocking` and `complete`.
         case protectionPlanReady = 20
+        // Trial Granted Moment added by issue #164 (ADR 0007). Appended for the same
+        // reason; it replaces the retired paywall at the old paywall position —
+        // a non-purchase announcement that the Reverse Trial has started.
+        case trialGranted = 21
 
         var analyticsStep: AnalyticsStep? {
             switch self {
@@ -70,6 +74,7 @@ enum OnboardingFlow {
             case .draftBlockedApps: return .draftBlockedApps
             case .mechanismProof: return .mechanismProof
             case .protectionPlanReady: return .protectionPlanReady
+            case .trialGranted: return .trialGranted
             }
         }
     }
@@ -88,7 +93,6 @@ enum OnboardingFlow {
     }
 
     static let firstStep: Step = .welcome
-    static let paywallStep: Step = .paywall
     static let finalOnboardingStep: Step = .appBlocking
     static let completedStep: Step = .complete
     static let displayOrder: [Step] = [
@@ -109,9 +113,13 @@ enum OnboardingFlow {
         .reminderTime,
         .reminderPlan,
         // .mechanismProof intentionally omitted: the diagnosis reveal now leads
-        // straight into the paywall. The step + view are retained but unreachable.
-        .paywall,
-        .freePlanConfirmation,
+        // straight into the Trial Granted Moment. The step + view are retained but
+        // unreachable.
+        // .paywall and .freePlanConfirmation retired (issue #164 / ADR 0007): the
+        // Reverse Trial replaces the onboarding purchase offer, so the Trial Granted
+        // Moment sits at the old paywall position and everyone proceeds into the
+        // Screen Time branch.
+        .trialGranted,
         .appBlocking,
         // Pill Protection Plan Ready (#83): the terminal activation screen between a
         // valid blocker config save and opening the app.
@@ -136,14 +144,6 @@ enum OnboardingFlow {
         return displayOrder.firstIndex(of: step)
     }
 
-    static func nextStepAfterPaywall(isPlus: Bool, selectedFreePlan: Bool) -> Step {
-        if selectedFreePlan || !isPlus {
-            return .freePlanConfirmation
-        }
-
-        return .appBlocking
-    }
-
     static func visibleStep(for rawValue: Int, isPlus: Bool, selectedFreePlan: Bool) -> Step? {
         guard let step = step(for: rawValue) else { return nil }
 
@@ -160,8 +160,13 @@ enum OnboardingFlow {
             return .acquisitionSource
         }
 
-        if step == .appBlocking, selectedFreePlan || !isPlus {
-            return .freePlanConfirmation
+        // The paywall (and the free-plan confirmation behind it) was retired by the
+        // Reverse Trial (issue #164 / ADR 0007). Anyone persisted mid-onboarding on
+        // either step resumes at the Trial Granted Moment, and the free-plan divert
+        // away from `appBlocking` is gone — blocker setup runs under real Plus
+        // Access for everyone.
+        if step == .paywall || step == .freePlanConfirmation {
+            return .trialGranted
         }
 
         return step
