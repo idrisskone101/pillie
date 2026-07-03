@@ -36,10 +36,17 @@ class PillieDeviceActivityMonitor: DeviceActivityMonitor {
             return
         }
 
-        // Skip if user already took their action today
-        let isTaken = defaults?.bool(forKey: AppGroupKeys.isTodayTaken) ?? false
-        if isTaken {
-            Self.logger.info("Skipping — isTodayTaken is true")
+        // Skip only if the action was taken TODAY. The flag is written by the
+        // main app, which may not have run since yesterday — a bare Bool here
+        // meant yesterday's taken silently cancelled today's blocking. The day
+        // stamp rejects stale state; a missing stamp (legacy install) fails
+        // toward blocking.
+        let stamp = TodayTakenStamp(
+            isTaken: defaults?.bool(forKey: AppGroupKeys.isTodayTaken) ?? false,
+            epochDay: defaults?.object(forKey: AppGroupKeys.todayTakenEpochDay) as? Int
+        )
+        if stamp.isTakenToday(now: Date()) {
+            Self.logger.info("Skipping — action already taken today")
             return
         }
 

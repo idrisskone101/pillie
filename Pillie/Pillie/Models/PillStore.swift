@@ -737,7 +737,7 @@ class PillStore {
     }
 
     func syncTodayTakenToAppGroup() {
-        ScreenTimeSharedState.isTodayTaken = isTodayHandled
+        ScreenTimeSharedState.setTodayTaken(isTodayHandled, now: PillieClock.now)
     }
 
     func markActionAsTaken(on date: Date) {

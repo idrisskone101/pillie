@@ -66,11 +66,23 @@ enum ScreenTimeSharedState {
 
     // MARK: - Today Taken Flag
 
-    static var isTodayTaken: Bool {
-        get { defaults?.bool(forKey: AppGroupKeys.isTodayTaken) ?? false }
-        set {
-            defaults?.set(newValue, forKey: AppGroupKeys.isTodayTaken)
-            defaults?.synchronize()
-        }
+    /// Writes the flag together with the day it describes. The
+    /// DeviceActivityMonitor extension rejects the flag when the stamp isn't
+    /// today's, so yesterday's true can't cancel today's blocking when the
+    /// app never ran overnight.
+    static func setTodayTaken(_ isTaken: Bool, now: Date = Date()) {
+        defaults?.set(isTaken, forKey: AppGroupKeys.isTodayTaken)
+        defaults?.set(
+            TodayTakenStamp.epochDay(for: now),
+            forKey: AppGroupKeys.todayTakenEpochDay
+        )
+        defaults?.synchronize()
+    }
+
+    static var todayTakenStamp: TodayTakenStamp {
+        TodayTakenStamp(
+            isTaken: defaults?.bool(forKey: AppGroupKeys.isTodayTaken) ?? false,
+            epochDay: defaults?.object(forKey: AppGroupKeys.todayTakenEpochDay) as? Int
+        )
     }
 }
