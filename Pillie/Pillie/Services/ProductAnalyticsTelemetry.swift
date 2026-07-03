@@ -179,6 +179,14 @@ struct ProductAnalyticsTelemetry {
     track(.trialGranted, source: .onboarding)
   }
 
+  /// A Reverse Trial grant was written for an existing onboarded free user on
+  /// first launch after the introducing update (#165 / ADR 0007). Same event as
+  /// the onboarding grant with `source: update`, so the two grant cohorts split
+  /// cleanly. Fired only when the grant is actually written.
+  func updateTrialGranted() {
+    track(.trialGranted, source: .update)
+  }
+
   func paywallViewed(isFromOnboarding: Bool) {
     track(
       .paywallViewed,

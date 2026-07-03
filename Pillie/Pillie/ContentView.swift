@@ -15,6 +15,9 @@ struct ContentView: View {
   @State private var isLoading = true
   @State private var iconScale: CGFloat = 0.9
   @State private var protectionPlanModel = ProtectionPlanOnboardingModel()
+  @State private var showUpdateTrialAnnouncement = false
+  @State private var updateTrialWantsBlockerSetup = false
+  @State private var showUpdateTrialBlockerSetup = false
   private let onboardingTelemetry = OnboardingTelemetry()
   private let onboardingFeedback = OnboardingInteractionFeedback()
   private let subscriptionManager = SubscriptionManager.shared
@@ -356,6 +359,48 @@ struct ContentView: View {
 	        case .complete, nil:
 	          MainTabView()
 	            .transition(.opacity)
+	            .onAppear {
+	              evaluateExistingUserTrialGrant()
+	            }
+	            .onChange(of: subscriptionManager.hasResolvedEntitlement) { _, _ in
+	              // Entitlement usually resolves after the first render — re-run
+	              // the check once RevenueCat state is actually known.
+	              evaluateExistingUserTrialGrant()
+	            }
+	            .sheet(
+	              isPresented: $showUpdateTrialAnnouncement,
+	              onDismiss: {
+	                // Chain into the Settings blocker editor only after the
+	                // announcement has fully dismissed — presenting a second sheet
+	                // while the first is still up is dropped by SwiftUI.
+	                if updateTrialWantsBlockerSetup {
+	                  updateTrialWantsBlockerSetup = false
+	                  showUpdateTrialBlockerSetup = true
+	                }
+	              }
+	            ) {
+	              UpdateTrialAnnouncementView(
+	                onSetUpBlocking: {
+	                  updateTrialWantsBlockerSetup = true
+	                  showUpdateTrialAnnouncement = false
+	                },
+	                onDismiss: {
+	                  showUpdateTrialAnnouncement = false
+	                }
+	              )
+	              .presentationDetents([.height(UpdateTrialAnnouncementView.presentationHeight)])
+	              .presentationDragIndicator(.hidden)
+	              .presentationBackground(PillieTheme.bg)
+	            }
+	            .sheet(isPresented: $showUpdateTrialBlockerSetup) {
+	              // The existing Settings blocker editor: completing setup here
+	              // runs under the freshly granted trial's Plus Access, so a valid
+	              // save activates blocking exactly like any Plus user's.
+	              BlockedAppsEditor()
+	                .presentationDetents([.height(430)])
+	                .presentationDragIndicator(.hidden)
+	                .presentationBackground(PillieTheme.bg)
+	            }
 	        }
         }
       }
@@ -392,6 +437,9 @@ struct ContentView: View {
       withAnimation(.easeInOut(duration: 0.4)) {
         isLoading = false
       }
+      // Entitlement may have resolved while the splash was still covering the
+      // app; the announcement check waits for the splash, so re-run it now.
+      evaluateExistingUserTrialGrant()
     }
     .onAppear {
       normalizeVisibleOnboardingStep()
@@ -403,6 +451,41 @@ struct ContentView: View {
     .onChange(of: subscriptionManager.hasPlusAccess) { _, _ in
       normalizeVisibleOnboardingStep()
     }
+  }
+
+  /// Issue #165 (ADR 0007): grant the Reverse Trial to the existing base on
+  /// first launch after the introducing update. Runs whenever the onboarded
+  /// main UI is (re)entered, when entitlement state resolves, and when the
+  /// splash clears; `ExistingUserTrialGrant` decides, this method executes —
+  /// grant, `trial_granted` (source: update), the one-shot persisted window,
+  /// and the announcement sheet.
+  private func evaluateExistingUserTrialGrant() {
+    // Never present the announcement while the splash still covers the app —
+    // undecided states leave the window open, so the check re-runs after it.
+    guard !isLoading else { return }
+
+    let defaults = UserDefaults.standard
+    let decision = ExistingUserTrialGrant.evaluate(
+      for: ExistingUserTrialGrant.State(
+        isOnboardingComplete: !OnboardingFlow.isOnboardingActive(rawStep: onboardingStep),
+        isEntitlementResolved: subscriptionManager.hasResolvedEntitlement,
+        hasEntitlement: subscriptionManager.hasEntitlement,
+        hasTrialGrant: subscriptionManager.trialGrantDate != nil,
+        alreadyHandled: defaults.bool(forKey: ExistingUserTrialGrant.handledStorageKey)
+      )
+    )
+
+    if ExistingUserTrialGrant.closesWindow(decision) {
+      defaults.set(true, forKey: ExistingUserTrialGrant.handledStorageKey)
+    }
+    guard decision == .grantAndAnnounce else { return }
+
+    // Same once-only contract as the Trial Granted Moment: the event fires iff
+    // the grant was actually written.
+    if subscriptionManager.grantReverseTrial() {
+      ProductAnalyticsTelemetry.live.updateTrialGranted()
+    }
+    showUpdateTrialAnnouncement = true
   }
 
   /// Hands off from the new Protection Plan intro into the existing onboarding

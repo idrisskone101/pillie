@@ -96,6 +96,14 @@ final class SubscriptionManagerTrialTests: XCTestCase {
         XCTAssertTrue(SubscriptionManager.shared.hasPlusAccess)
     }
 
+    func testEntitlementWritesMarkEntitlementResolved() {
+        // The existing-user update grant (#165) must not decide before RevenueCat
+        // state has loaded — any write through the entitlement funnel (purchase,
+        // restore, refresh, delegate push) marks it resolved.
+        SubscriptionManager.shared.setPlusForTesting(false)
+        XCTAssertTrue(SubscriptionManager.shared.hasResolvedEntitlement)
+    }
+
     func testEntitlementChurnDuringActiveTrialKeepsAccessWithoutFiring() {
         // Subscriber with an active trial grant on record: losing the
         // entitlement must not interrupt Plus Access while the trial covers it.
