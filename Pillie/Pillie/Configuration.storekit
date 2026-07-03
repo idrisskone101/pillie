@@ -42,14 +42,10 @@
           "familyShareable" : false,
           "groupNumber" : 2,
           "internalID" : "annual_001",
-          "introductoryOffer" : {
-            "internalID" : "annual_trial_001",
-            "paymentMode" : "free",
-            "subscriptionPeriod" : "P1W"
-          },
+          "introductoryOffer" : null,
           "localizations" : [
             {
-              "description" : "Annual access to Pillie Plus features with free trial",
+              "description" : "Annual access to Pillie Plus features",
               "displayName" : "Pillie Plus Annual",
               "locale" : "en_US"
             }

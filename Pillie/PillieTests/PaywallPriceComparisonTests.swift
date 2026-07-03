@@ -17,28 +17,27 @@ final class PaywallPriceComparisonTests: XCTestCase {
         )
     }
 
-    func testSavingsPercentIsDerivedFromRealPricesNotHardcoded() {
-        // Annual spread over 12 months ($4.17/mo) vs paying $9.99/mo is ~58% cheaper —
-        // the same number the design mocks up, but computed from the live prices.
-        let comparison = PaywallPriceComparison(annualPrice: 49.99, monthlyPrice: 9.99)
-        XCTAssertEqual(comparison.savingsPercent, 58)
+    func testMonthsFreeIsDerivedFromRealPricesNotHardcoded() {
+        // Reverse Trial pricing (issue #162): $29.99/yr vs $4.99/mo — the annual price
+        // buys ~6 months of monthly, so the honest anchor is "6 months free", computed
+        // from the live prices rather than copied from a mock.
+        let comparison = PaywallPriceComparison(annualPrice: 29.99, monthlyPrice: 4.99)
+        XCTAssertEqual(comparison.monthsFree, 6)
     }
 
-    func testSavingsPercentTracksWhateverPricesTheStoreReturns() {
-        // A different real price pair yields a different, still-truthful saving.
-        // 59.99 / 12 = 5.00 ; 1 - (5.00 / 7.99) = 0.374 -> 37%
-        let comparison = PaywallPriceComparison(annualPrice: 59.99, monthlyPrice: 7.99)
-        XCTAssertEqual(comparison.savingsPercent, 37)
+    func testMonthsFreeTracksWhateverPricesTheStoreReturns() {
+        // The classic 10x-monthly annual yields the classic "2 months free".
+        let comparison = PaywallPriceComparison(annualPrice: 49.90, monthlyPrice: 4.99)
+        XCTAssertEqual(comparison.monthsFree, 2)
     }
 
-    func testSavingsPercentIsNilWhenThereIsNoTruthfulSavingToClaim() {
-        // An annual plan that is not actually cheaper per month must never invent a badge.
-        let noSaving = PaywallPriceComparison(annualPrice: 120, monthlyPrice: 9.99)
-        XCTAssertNil(noSaving.savingsPercent)
+    func testMonthsFreeIsNilWhenThereIsNoTruthfulSavingToClaim() {
+        // An annual plan that costs a full year of monthly (or more) gives nothing free.
+        XCTAssertNil(PaywallPriceComparison(annualPrice: 120, monthlyPrice: 9.99).monthsFree)
 
-        // Degenerate / missing monthly price cannot produce a percentage.
-        let zeroMonthly = PaywallPriceComparison(annualPrice: 49.99, monthlyPrice: 0)
-        XCTAssertNil(zeroMonthly.savingsPercent)
+        // Degenerate / missing prices cannot produce a claim.
+        XCTAssertNil(PaywallPriceComparison(annualPrice: 29.99, monthlyPrice: 0).monthsFree)
+        XCTAssertNil(PaywallPriceComparison(annualPrice: 0, monthlyPrice: 4.99).monthsFree)
     }
 
     func testMonthlyEquivalentStringUsesTheProvidedCurrencyFormatter() {
