@@ -12,8 +12,11 @@ enum AppGroupConstants {
 
 enum AppGroupKeys {
     static let isTodayTaken = "pillie_is_today_taken"
+    static let todayTakenEpochDay = "pillie_today_taken_epoch_day"
     static let familyActivitySelectionData = "pillie_family_activity_selection_data"
     static let blockingRequested = "pillie_blocking_requested"
     static let blockingReason = "pillie_blocking_reason"
     static let blockingEnabled = "pillie_blocking_enabled"
+    static let interventionUnflushedCount = "pillie_intervention_unflushed_count"
+    static let interventionLifetimeTotal = "pillie_intervention_lifetime_total"
 }

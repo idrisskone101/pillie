@@ -133,6 +133,14 @@ struct ProductAnalyticsTelemetry {
     )
   }
 
+  /// Shield intercepts accumulated in the App Group flushed on app open
+  /// (#161 / ADR 0007). The shield extension cannot send events itself, so one
+  /// aggregated event carries the count — never one event per intercept, and
+  /// never app names or routine details (coarse counts only).
+  func blockerInterventionFired(count: Int) {
+    track(.blockerInterventionFired, interventionCount: count)
+  }
+
   func paywallViewed(isFromOnboarding: Bool) {
     track(
       .paywallViewed,
@@ -453,6 +461,7 @@ struct ProductAnalyticsTelemetry {
     setting: AnalyticsSetting? = nil,
     acquisitionSource: AcquisitionSource? = nil,
     hasBlockingSelection: Bool? = nil,
+    interventionCount: Int? = nil,
     titleCustomized: Bool? = nil,
     bodyCustomized: Bool? = nil,
     retryTitleCustomized: Bool? = nil,
@@ -472,6 +481,7 @@ struct ProductAnalyticsTelemetry {
       acquisitionSource: acquisitionSource,
       isPlus: isPlus(),
       hasBlockingSelection: hasBlockingSelection,
+      interventionCount: interventionCount,
       titleCustomized: titleCustomized,
       bodyCustomized: bodyCustomized,
       retryTitleCustomized: retryTitleCustomized,
