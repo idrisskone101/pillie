@@ -458,8 +458,6 @@ final class AnalyticsManager: AnalyticsTracking {
     lastCallTitleCustomized: Bool? = nil,
     lastCallBodyCustomized: Bool? = nil
   ) {
-    guard isConfigured, isAnalyticsEnabled else { return }
-
     let payload = AnalyticsPayload(
       source: source,
       step: step,
@@ -479,6 +477,20 @@ final class AnalyticsManager: AnalyticsTracking {
       lastCallTitleCustomized: lastCallTitleCustomized,
       lastCallBodyCustomized: lastCallBodyCustomized
     )
+
+    #if DEBUG
+      // Debug builds ship without a PostHog token, so captures are dropped and
+      // otherwise invisible. Mirror every track into OSLog so simulator QA can
+      // verify events (name + coarse properties; the payload is PII-free by
+      // construction). Stream with:
+      //   log stream --predicate 'subsystem == "com.idrisskone.pillie"' --level debug
+      Logger(subsystem: "com.idrisskone.pillie", category: "analytics")
+        .debug(
+          "Pillie analytics capture: \(event.rawValue, privacy: .public) \(payload.properties.map { "\($0.key)=\($0.value.postHogValue)" }.sorted().joined(separator: " "), privacy: .public)"
+        )
+    #endif
+
+    guard isConfigured, isAnalyticsEnabled else { return }
     client.capture(
       event: event.rawValue,
       properties: payload.properties,
