@@ -133,6 +133,36 @@ struct ProductAnalyticsTelemetry {
     )
   }
 
+  /// Screen Time authorization requested from the Settings blocker editor. Same
+  /// event name as the onboarding request but `source: settings`, so the
+  /// day-1 activation funnel can split the two surfaces (#163).
+  func settingsScreenTimePermissionRequested() {
+    track(.screenTimePermissionRequested, source: .settings)
+  }
+
+  /// The Settings-side Screen Time authorization request resolved. Carries the
+  /// same coarse granted/denied result as onboarding, with `source: settings`.
+  func settingsScreenTimePermissionCompleted(isAuthorized: Bool) {
+    track(
+      .screenTimePermissionCompleted,
+      source: .settings,
+      result: isAuthorized ? .granted : .denied
+    )
+  }
+
+  /// The Settings blocker editor saved its configuration. Fires the same dedicated
+  /// `blocker_config_saved` event as onboarding but with `source: settings`, so the
+  /// activation metric can tell day-1 onboarding setup apart from later Settings
+  /// setup (#163). Same PII boundary: only the coarse selection bit, never app
+  /// names, tokens, or a count.
+  func settingsBlockerConfigSaved(hasSelection: Bool) {
+    track(
+      .blockerConfigSaved,
+      source: .settings,
+      hasBlockingSelection: hasSelection
+    )
+  }
+
   /// Shield intercepts accumulated in the App Group flushed on app open
   /// (#161 / ADR 0007). The shield extension cannot send events itself, so one
   /// aggregated event carries the count — never one event per intercept, and

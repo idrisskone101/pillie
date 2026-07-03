@@ -12,6 +12,7 @@ struct BlockedAppsEditor: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(PillStore.self) private var store
     @State private var showPicker = false
+    @State private var isRequestingAuth = false
 
     private var blockingManager: AppBlockingManager { .shared }
 
@@ -24,12 +25,14 @@ struct BlockedAppsEditor: View {
             selectionSummary
 
             // Choose apps button
-            Button {
-                showPicker = true
-            } label: {
+            Button(action: chooseApps) {
                 HStack(spacing: 8) {
-                    Image(systemName: blockingManager.hasAppsSelected ? "pencil" : "plus")
-                        .font(.system(size: 16, weight: .semibold))
+                    if isRequestingAuth {
+                        ProgressView().tint(PillieTheme.coral)
+                    } else {
+                        Image(systemName: blockingManager.hasAppsSelected ? "pencil" : "plus")
+                            .font(.system(size: 16, weight: .semibold))
+                    }
                     Text(blockingManager.hasAppsSelected ? "Change apps" : "Choose apps to block")
                         .font(.pillieBodySemibold())
                 }
@@ -42,11 +45,22 @@ struct BlockedAppsEditor: View {
                 )
             }
             .buttonStyle(.plain)
+            .disabled(isRequestingAuth)
             .padding(.horizontal, 20)
 
             Button {
                 blockingManager.saveSelectionAndReconcile(routine: appBlockingRoutine)
                 ProductAnalyticsTelemetry.live.blockedAppsSaved(hasSelection: blockingManager.hasAppsSelected)
+                // #163: the same dedicated event onboarding fires, with
+                // source=settings, so the day-1 activation metric can tell the
+                // two blocker-setup surfaces apart. Gated on a real selection
+                // like onboarding's finishSetup — an empty Done must not count
+                // as "blocker configured" in the activation metric.
+                if blockingManager.hasAppsSelected {
+                    ProductAnalyticsTelemetry.live.settingsBlockerConfigSaved(
+                        hasSelection: true
+                    )
+                }
                 dismiss()
             } label: {
                 Text("Done")
@@ -58,6 +72,27 @@ struct BlockedAppsEditor: View {
             isPresented: $showPicker,
             selection: Bindable(blockingManager).activitySelection
         )
+    }
+
+    // Reverse-trial users can reach this editor without ever passing onboarding's
+    // blocker step, so Settings must be able to request Screen Time authorization
+    // itself — previously the picker just opened unauthorized. Mirrors
+    // AppBlockingSetupView.chooseApps(), with source=settings telemetry (#163).
+    private func chooseApps() {
+        Task {
+            if !blockingManager.isAuthorized {
+                isRequestingAuth = true
+                ProductAnalyticsTelemetry.live.settingsScreenTimePermissionRequested()
+                await blockingManager.requestAuthorization()
+                ProductAnalyticsTelemetry.live.settingsScreenTimePermissionCompleted(
+                    isAuthorized: blockingManager.isAuthorized
+                )
+                isRequestingAuth = false
+            }
+            if blockingManager.isAuthorized {
+                showPicker = true
+            }
+        }
     }
 
     private var statusCard: some View {
