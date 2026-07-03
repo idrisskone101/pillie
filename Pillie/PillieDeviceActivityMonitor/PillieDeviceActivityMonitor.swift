@@ -36,6 +36,17 @@ class PillieDeviceActivityMonitor: DeviceActivityMonitor {
             return
         }
 
+        // Blocking must never outlive Plus Access (#167 / ADR 0007): the main
+        // app mirrors a coarse access-valid-until date into the App Group, so
+        // an expired Reverse Trial stops blocking here even if the app is never
+        // opened again. A missing mirror (legacy install) fails toward blocking.
+        let accessValidUntil = defaults?.object(forKey: AppGroupKeys.plusAccessValidUntil) as? Double
+        if !PlusAccessMirror.allowsBlocking(validUntilEpochSeconds: accessValidUntil, now: Date()) {
+            Self.logger.info("Skipping — Plus Access expired; clearing any stale shields")
+            clearShieldsAndState()
+            return
+        }
+
         // Skip only if the action was taken TODAY. The flag is written by the
         // main app, which may not have run since yesterday — a bare Bool here
         // meant yesterday's taken silently cancelled today's blocking. The day
@@ -87,15 +98,19 @@ class PillieDeviceActivityMonitor: DeviceActivityMonitor {
         Self.logger.info("intervalDidEnd fired for activity: \(activity.rawValue)")
 
         // End-of-day cleanup: remove all shields
+        clearShieldsAndState()
+
+        Self.logger.info("Shields removed and state cleared")
+    }
+
+    /// Removes all shields and resets the shared blocking-requested state.
+    private nonisolated func clearShieldsAndState() {
         store.shield.applications = nil
         store.shield.applicationCategories = nil
         store.shield.webDomains = nil
 
-        let defaults = self.defaults
         defaults?.set(false, forKey: AppGroupKeys.blockingRequested)
         defaults?.set("", forKey: AppGroupKeys.blockingReason)
         defaults?.synchronize()
-
-        Self.logger.info("Shields removed and state cleared")
     }
 }

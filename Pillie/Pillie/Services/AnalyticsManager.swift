@@ -160,6 +160,9 @@ enum AnalyticsEvent: String, CaseIterable {
   /// A Reverse Trial grant was written (ADR 0007). Distinct from `trialStarted`,
   /// which keeps its StoreKit-intro-offer meaning.
   case trialGranted = "trial_granted"
+  /// A Reverse Trial's Plus Access ended without conversion (#167 / ADR 0007).
+  /// Recorded once, on the first app open at-or-after expiry.
+  case trialExpired = "trial_expired"
   case purchaseCompleted = "purchase_completed"
   case purchaseFailed = "purchase_failed"
   case purchaseCancelled = "purchase_cancelled"

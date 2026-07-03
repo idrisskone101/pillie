@@ -187,6 +187,13 @@ struct ProductAnalyticsTelemetry {
     track(.trialGranted, source: .update)
   }
 
+  /// A Reverse Trial's Plus Access ended without conversion (#167 / ADR 0007).
+  /// Fired exactly once, on the first app open at-or-after expiry — the
+  /// decision and one-shot flag live in `TrialExpiredEvent`.
+  func trialExpired() {
+    track(.trialExpired)
+  }
+
   func paywallViewed(isFromOnboarding: Bool) {
     track(
       .paywallViewed,
