@@ -43,7 +43,7 @@ final class NotificationManager {
     }
 
     private init() {
-        registerCategory(includeSnooze: SubscriptionManager.shared.isPlus)
+        registerCategory(includeSnooze: SubscriptionManager.shared.hasPlusAccess)
     }
 
     // MARK: - Authorization
@@ -102,7 +102,7 @@ final class NotificationManager {
 
         // Keep the notification category in sync with the entitlement so the Snooze
         // action only appears for Plus users (Smart Reminders gate, ADR 0004).
-        registerCategory(includeSnooze: SubscriptionManager.shared.isPlus)
+        registerCategory(includeSnooze: SubscriptionManager.shared.hasPlusAccess)
 
         let requests = buildReminderRequests(store: store, now: Date(), snoozeOverride: snoozeOverride)
         applyManagedReminderRequests(requests)
@@ -223,7 +223,7 @@ final class NotificationManager {
                 candidateDueActions: candidateDueActions,
                 statusByEpochDay: store.statusesByEpochDay(for: candidateDueActions.map(\.date)),
                 snoozeOverride: snoozeOverride,
-                smartRemindersEnabled: SubscriptionManager.shared.isPlus,
+                smartRemindersEnabled: SubscriptionManager.shared.hasPlusAccess,
                 cycleTransitionEnabled: store.cycleTransitionNoticeEnabled,
                 lastCallEnabled: store.lastCallReminderEnabled,
                 lastCallHour: store.lastCallReminderHour,
@@ -236,7 +236,7 @@ final class NotificationManager {
         // gate lives in `CustomReminderCopy` — a non-Plus user's stored copy is ignored and
         // defaults fire. Enforcement is eventual: already-queued notifications revert on the
         // next reschedule (ADR 0004).
-        let isPlus = SubscriptionManager.shared.isPlus
+        let isPlus = SubscriptionManager.shared.hasPlusAccess
         let customTitle = store.customDueReminderTitle
         let customBody = store.customDueReminderBody
         let customRetryTitle = store.customRetryReminderTitle

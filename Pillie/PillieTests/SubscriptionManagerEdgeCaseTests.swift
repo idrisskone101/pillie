@@ -8,6 +8,13 @@ import XCTest
 
 @MainActor
 final class SubscriptionManagerEdgeCaseTests: XCTestCase {
+    override func setUp() {
+        super.setUp()
+        // Isolate from any real Keychain trial grant: these tests assert that
+        // the hook mirrors the entitlement, which only holds with no trial.
+        SubscriptionManager.shared.setTrialGrantStoreForTesting(InMemoryTrialGrantStore())
+    }
+
     override func tearDown() {
         SubscriptionManager.shared.onEntitlementChange = nil
         SubscriptionManager.shared.setPlusForTesting(false)
@@ -45,13 +52,13 @@ final class SubscriptionManagerEdgeCaseTests: XCTestCase {
 
     func testDebugPlusOverrideCanExerciseEntitlementGatedFlows() {
         SubscriptionManager.shared.setPlusForTesting(false)
-        XCTAssertFalse(SubscriptionManager.shared.isPlus)
+        XCTAssertFalse(SubscriptionManager.shared.hasEntitlement)
 
         SubscriptionManager.shared.setPlusForTesting(true)
-        XCTAssertTrue(SubscriptionManager.shared.isPlus)
+        XCTAssertTrue(SubscriptionManager.shared.hasEntitlement)
 
         SubscriptionManager.shared.setPlusForTesting(false)
-        XCTAssertFalse(SubscriptionManager.shared.isPlus)
+        XCTAssertFalse(SubscriptionManager.shared.hasEntitlement)
     }
 
     func testCancelledPurchaseDoesNotChangePlusState() {
@@ -65,7 +72,7 @@ final class SubscriptionManagerEdgeCaseTests: XCTestCase {
         ) { error in
             XCTAssertEqual(error as? SubscriptionPurchaseError, .userCancelled)
         }
-        XCTAssertTrue(SubscriptionManager.shared.isPlus)
+        XCTAssertTrue(SubscriptionManager.shared.hasEntitlement)
     }
 
     func testPurchaseWithoutPlusEntitlementDoesNotActivatePlus() {
@@ -79,7 +86,7 @@ final class SubscriptionManagerEdgeCaseTests: XCTestCase {
         ) { error in
             XCTAssertEqual(error as? SubscriptionPurchaseError, .missingPlusEntitlement)
         }
-        XCTAssertFalse(SubscriptionManager.shared.isPlus)
+        XCTAssertFalse(SubscriptionManager.shared.hasEntitlement)
     }
 
     func testSuccessfulPurchaseActivatesPlus() throws {
@@ -90,7 +97,7 @@ final class SubscriptionManagerEdgeCaseTests: XCTestCase {
             isPlusEntitlementActive: true
         )
 
-        XCTAssertTrue(SubscriptionManager.shared.isPlus)
+        XCTAssertTrue(SubscriptionManager.shared.hasEntitlement)
     }
 
     func testPurchaseOutcomeDistinguishesTrialPaidAndExcludesSandbox() {

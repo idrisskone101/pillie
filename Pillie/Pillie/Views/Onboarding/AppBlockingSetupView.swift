@@ -121,7 +121,7 @@ struct AppBlockingSetupView: View {
     private var blockingManager: AppBlockingManager { .shared }
 
     private var canSetUpBlocking: Bool {
-        SubscriptionManager.shared.isPlus && !onboardingSelectedFreePlan
+        SubscriptionManager.shared.hasPlusAccess && !onboardingSelectedFreePlan
     }
 
     /// Count-only view of the live selection — the deep, testable core.

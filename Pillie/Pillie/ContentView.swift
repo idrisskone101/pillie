@@ -34,7 +34,7 @@ struct ContentView: View {
         } else {
 	        switch OnboardingFlow.visibleStep(
             for: onboardingStep,
-            isPlus: subscriptionManager.isPlus,
+            isPlus: subscriptionManager.hasPlusAccess,
             selectedFreePlan: onboardingSelectedFreePlan
           ) {
 	        case .welcome:
@@ -289,7 +289,7 @@ struct ContentView: View {
 	              onboardingSelectedFreePlan = false
                 transitionWithoutFeedback(
                   to: OnboardingFlow.nextStepAfterPaywall(
-                    isPlus: subscriptionManager.isPlus,
+                    isPlus: subscriptionManager.hasPlusAccess,
                     selectedFreePlan: onboardingSelectedFreePlan
                   ),
                   motion: .commitSpring
@@ -299,7 +299,7 @@ struct ContentView: View {
 	              onboardingSelectedFreePlan = true
                 transitionWithoutFeedback(
                   to: OnboardingFlow.nextStepAfterPaywall(
-                    isPlus: subscriptionManager.isPlus,
+                    isPlus: subscriptionManager.hasPlusAccess,
                     selectedFreePlan: onboardingSelectedFreePlan
                   ),
                   motion: .standard
@@ -414,7 +414,7 @@ struct ContentView: View {
     .onChange(of: onboardingStep) { _, newStep in
       trackOnboardingStepViewed(newStep)
     }
-    .onChange(of: subscriptionManager.isPlus) { _, _ in
+    .onChange(of: subscriptionManager.hasPlusAccess) { _, _ in
       normalizeVisibleOnboardingStep()
     }
   }
@@ -452,7 +452,7 @@ struct ContentView: View {
   private var currentCompletionState: ProtectionPlanCompletion.State {
     let blocking = AppBlockingManager.shared
     return ProtectionPlanCompletion.State(
-      isEntitled: subscriptionManager.isPlus,
+      isEntitled: subscriptionManager.hasPlusAccess,
       screenTimeAuthorized: blocking.authorizationStatus == .approved,
       // A non-empty saved selection — independent of the blocking-enabled pause toggle.
       blockerConfigSaved: blocking.hasAppsSelected
@@ -466,7 +466,7 @@ struct ContentView: View {
   private func normalizeVisibleOnboardingStep() {
     guard let visibleStep = OnboardingFlow.visibleStep(
       for: onboardingStep,
-      isPlus: subscriptionManager.isPlus,
+      isPlus: subscriptionManager.hasPlusAccess,
       selectedFreePlan: onboardingSelectedFreePlan
     ),
     visibleStep.rawValue != onboardingStep else { return }

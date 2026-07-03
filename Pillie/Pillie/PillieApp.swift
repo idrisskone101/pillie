@@ -214,6 +214,12 @@ struct PillieApp: App {
                         // refresh the day-relative read model before anything below
                         // (Screen Time reconcile, reminder replan) consumes it.
                         store.refreshDayContextIfNeeded()
+                        // A Reverse Trial can expire while suspended (local midnight
+                        // after day 14). Re-derive Plus Access before the consumers
+                        // below read it — a flip fires onEntitlementChange, and the
+                        // Screen Time reconcile drops blocking (ADR 0007: blocking
+                        // must never outlive Plus Access).
+                        SubscriptionManager.shared.refreshPlusAccess()
                         ProductAnalyticsTelemetry.live.appBecameActive()
                         guard !Self.isOnboardingActive else { return }
                         reconcileScreenTimeState()
@@ -266,6 +272,25 @@ struct PillieApp: App {
             SubscriptionManager.shared.setPlusForTesting(false)
             UserDefaults.standard.set(true, forKey: OnboardingFlow.selectedFreePlanStorageKey)
             UserDefaults.standard.set(OnboardingFlow.Step.freePlanConfirmation.rawValue, forKey: OnboardingFlow.stepStorageKey)
+        case "/trial-grant":
+            // QA control (#160): start a Reverse Trial now — every Plus feature
+            // should unlock exactly as if the entitlement flipped on.
+            SubscriptionManager.shared.grantReverseTrial()
+            reconcileScreenTimeState()
+        case "/trial-age":
+            // QA control (#160): age the existing (or a fresh) trial back by
+            // ?days=N (default 15, i.e. past the day-14 rollover) so expiry
+            // gating is demoable without waiting two weeks.
+            let days = URLComponents(url: url, resolvingAgainstBaseURL: false)?
+                .queryItems?.first(where: { $0.name == "days" })?.value.flatMap(Int.init) ?? 15
+            let baseline = SubscriptionManager.shared.trialGrantDate ?? Date()
+            let agedGrant = Calendar.current.date(byAdding: .day, value: -days, to: baseline) ?? baseline
+            SubscriptionManager.shared.debugOverrideTrialGrantDate(agedGrant)
+            reconcileScreenTimeState()
+        case "/trial-clear":
+            // QA control (#160): remove the persisted grant entirely.
+            SubscriptionManager.shared.debugOverrideTrialGrantDate(nil)
+            reconcileScreenTimeState()
         case "/plus-home":
             // QA shortcut: land on the onboarded main app as a Plus subscriber so the
             // Plus-gated Settings surfaces (e.g. Reminder Messages) are reachable.

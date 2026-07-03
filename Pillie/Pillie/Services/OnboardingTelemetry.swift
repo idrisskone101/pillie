@@ -17,7 +17,7 @@ struct OnboardingTelemetry {
 
   init(
     analytics: AnalyticsTracking = AnalyticsManager.shared,
-    isPlus: @escaping () -> Bool = { SubscriptionManager.shared.isPlus },
+    isPlus: @escaping () -> Bool = { SubscriptionManager.shared.hasEntitlement },
     defaults: UserDefaults = .standard
   ) {
     self.telemetry = ProductAnalyticsTelemetry(analytics: analytics, isPlus: isPlus)

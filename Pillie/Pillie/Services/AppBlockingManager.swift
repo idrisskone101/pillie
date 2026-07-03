@@ -128,7 +128,7 @@ final class AppBlockingManager {
     // MARK: - Shield Management
 
     func applyBlocking(reason: String) {
-        guard SubscriptionManager.shared.isPlus else { return }
+        guard SubscriptionManager.shared.hasPlusAccess else { return }
         guard hasAppsSelected else { return }
 
         #if !targetEnvironment(simulator)
@@ -168,7 +168,7 @@ final class AppBlockingManager {
         reminderMinute: Int,
         method: ContraceptiveMethod
     ) {
-        guard SubscriptionManager.shared.isPlus else {
+        guard SubscriptionManager.shared.hasPlusAccess else {
             if blockingActive { removeBlocking() }
             return
         }

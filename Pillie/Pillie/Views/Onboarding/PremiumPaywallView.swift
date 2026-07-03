@@ -246,7 +246,7 @@ struct PremiumPaywallView: View {
             routeExistingPlusUserIfNeeded()
             await offeringsLoaded
         }
-        .onChange(of: subscriptionManager.isPlus) { _, isPlus in
+        .onChange(of: subscriptionManager.hasEntitlement) { _, isPlus in
             routeExistingPlusUserIfNeeded(isPlus: isPlus)
         }
         .alert("Purchase Error", isPresented: .init(
@@ -869,7 +869,7 @@ struct PremiumPaywallView: View {
         Task {
             do {
                 try await subscriptionManager.restore()
-                if subscriptionManager.isPlus {
+                if subscriptionManager.hasEntitlement {
                     telemetry.restoreCompleted(isFromOnboarding: isFromOnboarding)
                     plusFeedback.successfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
                     completePaidRoute()
@@ -904,7 +904,7 @@ struct PremiumPaywallView: View {
     }
 
     private func routeExistingPlusUserIfNeeded(isPlus: Bool? = nil) {
-        guard isFromOnboarding, isPlus ?? subscriptionManager.isPlus else { return }
+        guard isFromOnboarding, isPlus ?? subscriptionManager.hasEntitlement else { return }
         completePaidRoute()
     }
 

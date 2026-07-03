@@ -126,7 +126,7 @@ struct PlusUpsellSheet: View {
                     Task {
                         do {
                             try await SubscriptionManager.shared.restore()
-                            if SubscriptionManager.shared.isPlus {
+                            if SubscriptionManager.shared.hasEntitlement {
                                 telemetry.upsellRestoreCompleted()
                                 plusFeedback.successfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
                                 dismiss()

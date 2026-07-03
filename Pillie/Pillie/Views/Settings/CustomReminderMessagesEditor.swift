@@ -38,7 +38,7 @@ struct CustomReminderMessagesEditor: View {
     /// The contraception method whose default copy fills any blank preview field.
     private var method: ContraceptiveMethod { store.pack.method }
     /// Same Plus gate the notification build uses, so the preview honors the entitlement.
-    private var isPlus: Bool { SubscriptionManager.shared.isPlus }
+    private var isPlus: Bool { SubscriptionManager.shared.hasPlusAccess }
 
     /// The method-aware default copy each field seeds with when no custom value is stored —
     /// the exact strings the notification falls back to (see `CustomReminderPreview`).

@@ -63,7 +63,7 @@ struct SettingsView: View {
                     }
                     .buttonStyle(.plain)
                     divider
-                    if SubscriptionManager.shared.isPlus {
+                    if SubscriptionManager.shared.hasPlusAccess {
                         Button {
                             openSettingSheet { showCustomRemindersEditor = true }
                         } label: {
@@ -103,7 +103,7 @@ struct SettingsView: View {
                     .modifier(FadeInUp(appeared: appeared, delay: 0.12))
 
                 settingsCard {
-                    if SubscriptionManager.shared.isPlus {
+                    if SubscriptionManager.shared.hasPlusAccess {
                         Button {
                             openSettingSheet { showIntervalEditor = true }
                             ProductAnalyticsTelemetry.live.autoReminderIntervalSettingsOpened()
@@ -209,7 +209,7 @@ struct SettingsView: View {
                     .modifier(FadeInUp(appeared: appeared, delay: 0.1))
 
                 settingsCard {
-                    if SubscriptionManager.shared.isPlus {
+                    if SubscriptionManager.shared.hasPlusAccess {
                         Button {
                             openSensitiveSetting { showBlockedAppsEditor = true }
                             ProductAnalyticsTelemetry.live.blockedAppsSettingsOpened(
@@ -244,7 +244,7 @@ struct SettingsView: View {
                 settingsCard {
                     Button {
                         openSensitiveSetting {
-                            if SubscriptionManager.shared.isPlus {
+                            if SubscriptionManager.shared.hasEntitlement {
                                 showManageSubscription = true
                             } else {
                                 showPaywall = true
@@ -254,8 +254,8 @@ struct SettingsView: View {
                     } label: {
                         settingsRow(
                             "Subscription",
-                            value: SubscriptionManager.shared.isPlus ? "Pillie Plus" : "Free Plan",
-                            valueColor: SubscriptionManager.shared.isPlus ? PillieTheme.coral : PillieTheme.textPrimary
+                            value: SubscriptionManager.shared.hasEntitlement ? "Pillie Plus" : "Free Plan",
+                            valueColor: SubscriptionManager.shared.hasEntitlement ? PillieTheme.coral : PillieTheme.textPrimary
                         )
                     }
                     .buttonStyle(.plain)
