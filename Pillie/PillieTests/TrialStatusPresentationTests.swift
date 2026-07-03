@@ -1,0 +1,162 @@
+//
+//  TrialStatusPresentationTests.swift
+//  PillieTests
+//
+//  Value-type unit tests (no hosted @MainActor XCTest) for the in-trial
+//  indicator + status sheet presentation (issue #166 / ADR 0007). Mirrors
+//  ReverseTrialClockTests: fixed calendar, pure inputs, boundary days.
+//
+
+import XCTest
+
+@testable import Pillie
+
+final class TrialStatusPresentationTests: XCTestCase {
+
+    /// Fixed local calendar so boundary expectations are deterministic.
+    private var calendar: Calendar = {
+        var cal = Calendar(identifier: .gregorian)
+        cal.timeZone = TimeZone(identifier: "Europe/Paris")!
+        return cal
+    }()
+
+    private func date(
+        _ year: Int, _ month: Int, _ day: Int,
+        _ hour: Int = 12, _ minute: Int = 0
+    ) -> Date {
+        calendar.date(from: DateComponents(
+            year: year, month: month, day: day, hour: hour, minute: minute
+        ))!
+    }
+
+    // Granted 2026-07-01 10:00 → full days July 2–15, expiry July 16 00:00.
+    private func trialState(hasEntitlement: Bool = false) -> PlusAccessState {
+        PlusAccessState(hasEntitlement: hasEntitlement, trialGrantDate: date(2026, 7, 1, 10, 0))
+    }
+
+    // MARK: - Tracer bullet: an active trial surfaces the indicator
+
+    func testActiveTrialProducesIndicatorWithDaysRemaining() {
+        // Day 1 (first full day): 14 rollovers left.
+        let presentation = TrialStatusPresentation.make(
+            state: trialState(),
+            calendar: calendar,
+            now: date(2026, 7, 2, 9, 0)
+        )
+
+        XCTAssertEqual(presentation?.daysRemaining, 14)
+    }
+
+    // MARK: - Indicator label (day-count boundaries)
+
+    func testIndicatorLabelCountsDownAcrossTheTrial() {
+        func label(onDay day: Int) -> String? {
+            TrialStatusPresentation.make(
+                state: trialState(),
+                calendar: calendar,
+                now: date(2026, 7, 1 + day, 9, 0)
+            )?.indicatorLabel
+        }
+
+        // Day 1 (first full day).
+        XCTAssertEqual(label(onDay: 1), "Plus trial — 14 days left")
+        // Day 13 (the day before the last protected day).
+        XCTAssertEqual(label(onDay: 13), "Plus trial — 2 days left")
+    }
+
+    func testGrantDayLabelClampsToFourteenDays() {
+        // The partial grant day has 15 rollovers left, but the trial promises
+        // "14 days free" — never show a count above the promise.
+        let presentation = TrialStatusPresentation.make(
+            state: trialState(),
+            calendar: calendar,
+            now: date(2026, 7, 1, 10, 30)
+        )
+
+        XCTAssertEqual(presentation?.indicatorLabel, "Plus trial — 14 days left")
+    }
+
+    func testFinalProtectedDayReadsEndsTonight() {
+        // July 15 is the last protected day (expiry July 16 00:00). The whole
+        // day is still fully covered, so the honest copy is "ends tonight" —
+        // never "0 days left" while active, and never a plural "1 days left".
+        let presentation = TrialStatusPresentation.make(
+            state: trialState(),
+            calendar: calendar,
+            now: date(2026, 7, 15, 22, 0)
+        )
+
+        XCTAssertEqual(presentation?.indicatorLabel, "Plus trial — ends tonight")
+        XCTAssertEqual(presentation?.endsTonight, true)
+    }
+
+    // MARK: - Status sheet content
+
+    func testSheetContentExplainsRemainingTimeExpiryAndKeepPlusPath() {
+        let content = TrialStatusPresentation.make(
+            state: trialState(),
+            calendar: calendar,
+            now: date(2026, 7, 2, 9, 0)
+        )?.sheetContent
+
+        XCTAssertEqual(content?.title, "14 days left in your Plus trial")
+        // What's currently unlocked matches the Trial Granted Moment's perks.
+        XCTAssertEqual(content?.unlockedItems, [
+            "App blocking", "Shake to confirm", "Smart Reminders", "Custom messages",
+        ])
+        // What expiry changes: blocking off, reminders stay free, setup kept.
+        XCTAssertEqual(content?.expiryItems, [
+            "App blocking turns off",
+            "Reminders stay free, forever",
+            "Your blocker setup is saved",
+        ])
+        // The quiet buy-early path into the existing purchase flow.
+        XCTAssertEqual(content?.ctaTitle, "Keep Plus")
+    }
+
+    func testSheetTitleOnFinalDayReadsEndsTonight() {
+        let content = TrialStatusPresentation.make(
+            state: trialState(),
+            calendar: calendar,
+            now: date(2026, 7, 15, 22, 0)
+        )?.sheetContent
+
+        XCTAssertEqual(content?.title, "Your Plus trial ends tonight")
+    }
+
+    // MARK: - No indicator for entitled users, expired trials, or no trial
+
+    func testEntitledUserMidTrialGetsNoIndicator() {
+        // Purchasing during the trial must remove the indicator immediately,
+        // even though the trial clock is still running.
+        let presentation = TrialStatusPresentation.make(
+            state: trialState(hasEntitlement: true),
+            calendar: calendar,
+            now: date(2026, 7, 2, 9, 0)
+        )
+
+        XCTAssertNil(presentation)
+    }
+
+    func testExpiredTrialGetsNoIndicator() {
+        // Expiry midnight (July 16 00:00) and beyond: indicator is gone.
+        XCTAssertNil(TrialStatusPresentation.make(
+            state: trialState(),
+            calendar: calendar,
+            now: date(2026, 7, 16, 0, 0)
+        ))
+        XCTAssertNil(TrialStatusPresentation.make(
+            state: trialState(),
+            calendar: calendar,
+            now: date(2026, 8, 20, 12, 0)
+        ))
+    }
+
+    func testNoTrialEverGrantedGetsNoIndicator() {
+        XCTAssertNil(TrialStatusPresentation.make(
+            state: PlusAccessState(hasEntitlement: false, trialGrantDate: nil),
+            calendar: calendar,
+            now: date(2026, 7, 2, 9, 0)
+        ))
+    }
+}
