@@ -49,7 +49,7 @@ struct HomeView: View {
         let blocking = AppBlockingManager.shared
         let outcome = ProtectionPlanCompletion.outcome(
             for: ProtectionPlanCompletion.State(
-                isEntitled: SubscriptionManager.shared.isPlus,
+                isEntitled: SubscriptionManager.shared.hasPlusAccess,
                 screenTimeAuthorized: blocking.authorizationStatus == .approved,
                 // A non-empty saved selection — independent of the blocking pause toggle.
                 blockerConfigSaved: blocking.hasAppsSelected
@@ -57,12 +57,12 @@ struct HomeView: View {
         )
         return BlockingStatusPresentation.make(
             outcome: outcome,
-            isEntitled: SubscriptionManager.shared.isPlus
+            isEntitled: SubscriptionManager.shared.hasPlusAccess
         )
     }
 
     private func handleBlockingCardAction() {
-        if SubscriptionManager.shared.isPlus {
+        if SubscriptionManager.shared.hasPlusAccess {
             // Entitled but reminder-only: finish Screen Time setup directly.
             showBlockingSetup = true
         } else {
@@ -83,7 +83,7 @@ struct HomeView: View {
     private var adaptiveReminderContent: AdaptiveReminderSuggestionCardContent? {
         AdaptiveReminderSuggestionCardContent.make(
             suggestion: store.adaptiveReminderSuggestion,
-            isPlus: SubscriptionManager.shared.isPlus
+            isPlus: SubscriptionManager.shared.hasPlusAccess
         )
     }
 
@@ -111,7 +111,7 @@ struct HomeView: View {
                 isRefillDue: store.isRefillDue,
                 isTodayTaken: store.isTodayTaken,
                 todayDueAction: store.todayDueAction,
-                isPlus: SubscriptionManager.shared.isPlus,
+                isPlus: SubscriptionManager.shared.hasPlusAccess,
                 reduceMotionEnabled: accessibilityReduceMotion
             )
         )

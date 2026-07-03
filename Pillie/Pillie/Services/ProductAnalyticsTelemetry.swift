@@ -28,7 +28,7 @@ struct ProductAnalyticsTelemetry {
 
   init(
     analytics: AnalyticsTracking = AnalyticsManager.shared,
-    isPlus: @escaping () -> Bool = { SubscriptionManager.shared.isPlus },
+    isPlus: @escaping () -> Bool = { SubscriptionManager.shared.hasEntitlement },
     acquisitionSource: @escaping () -> AcquisitionSource? = {
       AcquisitionSource(
         rawValue: UserDefaults.standard.string(forKey: PillStore.acquisitionSourceKey) ?? "")

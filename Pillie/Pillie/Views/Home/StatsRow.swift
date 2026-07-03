@@ -12,7 +12,7 @@ struct StatsRow: View {
     private let valueChangeAnimation = Animation.easeInOut(duration: 0.28)
     private let plusFeedback = PlusPaywallInteractionFeedback(performanceTier: PerformanceTier.current)
 
-    private var isPlus: Bool { SubscriptionManager.shared.isPlus }
+    private var isPlus: Bool { SubscriptionManager.shared.hasPlusAccess }
 
     private var blockingStatusText: String {
         let mgr = AppBlockingManager.shared

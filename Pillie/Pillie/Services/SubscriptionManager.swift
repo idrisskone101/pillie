@@ -52,15 +52,31 @@ final class SubscriptionManager: NSObject {
 
     // MARK: - Public State
 
-    private(set) var isPlus = false
+    /// Plus Access (CONTEXT.md): the single predicate every Plus feature gates
+    /// on — Plus entitlement OR active Reverse Trial. Recomputed through
+    /// `refreshPlusAccess`, never written directly.
+    private(set) var hasPlusAccess = false
+
+    /// The raw RevenueCat `pillie_plus` entitlement. Only purchase/restore
+    /// surfaces and paid-conversion analytics read this; feature gates must use
+    /// `hasPlusAccess` so a Reverse Trial feels exactly like Plus (ADR 0007).
+    private(set) var hasEntitlement = false
+
+    /// The persisted Reverse Trial grant moment, if any (Keychain-backed).
+    private(set) var trialGrantDate: Date?
+
     private(set) var isLoading = false
 
-    /// Fired whenever the Plus entitlement actually flips (upgrade or churn), never on
-    /// a no-op refresh. Wired at launch to re-plan Smart Reminders immediately so the
-    /// change takes effect without waiting for the next natural reschedule (ADR 0004).
+    /// Fired whenever Plus Access actually flips (purchase, churn, trial grant,
+    /// trial expiry), never on a no-op refresh. Wired at launch to re-plan Smart
+    /// Reminders immediately so the change takes effect without waiting for the
+    /// next natural reschedule (ADR 0004); blocking reconciles off the same hook.
     /// `@ObservationIgnored` because it is a side-effect hook, not observable UI state.
     @ObservationIgnored
     var onEntitlementChange: ((Bool) -> Void)?
+
+    @ObservationIgnored
+    private var trialGrantStore: TrialGrantStoring = KeychainTrialGrantStore()
 
     // MARK: - Constants
 
@@ -72,15 +88,44 @@ final class SubscriptionManager: NSObject {
 
     private override init() {
         super.init()
+        trialGrantDate = trialGrantStore.loadGrantDate()
+        hasPlusAccess = plusAccessState.hasPlusAccess(calendar: .current, now: Date())
     }
 
-    /// Single funnel for every entitlement mutation. Updates `isPlus` and fires
-    /// `onEntitlementChange` only when the value actually flips, so refreshes that
-    /// re-confirm the same state never trigger a redundant reschedule.
-    private func setIsPlus(_ newValue: Bool) {
-        guard isPlus != newValue else { return }
-        isPlus = newValue
+    private var plusAccessState: PlusAccessState {
+        PlusAccessState(hasEntitlement: hasEntitlement, trialGrantDate: trialGrantDate)
+    }
+
+    /// Single funnel for every entitlement mutation; Plus Access is re-derived
+    /// after every write so the predicate can never be bypassed.
+    private func setEntitlement(_ newValue: Bool) {
+        hasEntitlement = newValue
+        refreshPlusAccess()
+    }
+
+    /// Re-evaluates the Plus Access predicate and fires `onEntitlementChange`
+    /// only when the value actually flips, so refreshes that re-confirm the same
+    /// state never trigger a redundant reschedule. Called after every entitlement
+    /// or trial mutation, and safe to call at any re-evaluation point (launch,
+    /// foreground) to catch a trial that expired while the app was closed.
+    func refreshPlusAccess(now: Date = Date()) {
+        let newValue = plusAccessState.hasPlusAccess(calendar: .current, now: now)
+        guard hasPlusAccess != newValue else { return }
+        hasPlusAccess = newValue
         onEntitlementChange?(newValue)
+    }
+
+    // MARK: - Reverse Trial
+
+    /// Grants the Reverse Trial (ADR 0007): persists the grant moment in the
+    /// Keychain and unlocks Plus Access through the same hook a purchase fires.
+    /// A no-op when a grant already exists — reinstalls and repeat calls must
+    /// never restart the 14-day clock.
+    func grantReverseTrial(now: Date = Date()) {
+        guard trialGrantDate == nil else { return }
+        trialGrantStore.saveGrantDate(now)
+        trialGrantDate = now
+        refreshPlusAccess(now: now)
     }
 
     // MARK: - Configure (call once at app launch)
@@ -204,7 +249,7 @@ final class SubscriptionManager: NSObject {
         defer { isLoading = false }
 
         let customerInfo = try await Purchases.shared.restorePurchases()
-        setIsPlus(customerInfo.entitlements[Self.entitlementID]?.isActive == true)
+        setEntitlement(customerInfo.entitlements[Self.entitlementID]?.isActive == true)
     }
 
     // MARK: - Fetch Offerings
@@ -227,12 +272,32 @@ final class SubscriptionManager: NSObject {
 
     func refreshStatus() async {
         guard let customerInfo = try? await Purchases.shared.customerInfo() else { return }
-        setIsPlus(customerInfo.entitlements[Self.entitlementID]?.isActive == true)
+        setEntitlement(customerInfo.entitlements[Self.entitlementID]?.isActive == true)
     }
 
     #if DEBUG
     func setPlusForTesting(_ isPlus: Bool) {
-        setIsPlus(isPlus)
+        setEntitlement(isPlus)
+    }
+
+    /// Test seam: swap the Keychain store for an in-memory double and re-sync
+    /// trial state from it.
+    func setTrialGrantStoreForTesting(_ store: TrialGrantStoring) {
+        trialGrantStore = store
+        trialGrantDate = store.loadGrantDate()
+        refreshPlusAccess()
+    }
+
+    /// Debug/demo control (issue #160): overwrite or clear the persisted grant
+    /// so a trial can be granted, aged past expiry, or reset on the simulator.
+    func debugOverrideTrialGrantDate(_ date: Date?) {
+        if let date {
+            trialGrantStore.saveGrantDate(date)
+        } else {
+            trialGrantStore.clearGrantDate()
+        }
+        trialGrantDate = date
+        refreshPlusAccess()
     }
     #endif
 
@@ -242,11 +307,11 @@ final class SubscriptionManager: NSObject {
         }
 
         guard isPlusEntitlementActive else {
-            setIsPlus(false)
+            setEntitlement(false)
             throw SubscriptionPurchaseError.missingPlusEntitlement
         }
 
-        setIsPlus(true)
+        setEntitlement(true)
     }
 }
 
@@ -256,7 +321,7 @@ extension SubscriptionManager: PurchasesDelegate {
     nonisolated func purchases(_ purchases: Purchases, receivedUpdated customerInfo: CustomerInfo) {
         let active = customerInfo.entitlements[Self.entitlementID]?.isActive == true
         Task { @MainActor in
-            self.setIsPlus(active)
+            self.setEntitlement(active)
         }
     }
 }
