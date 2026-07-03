@@ -19,6 +19,8 @@ struct HomeView: View {
     @State private var showShakeConfirm = false
     @State private var showBlockingSetup = false
     @State private var showBlockingPaywall = false
+    @State private var showTrialStatusSheet = false
+    @State private var showTrialKeepPlusPaywall = false
     @State private var adaptiveReminderShownLogged = false
     @State private var reviewPromptShownLogged = false
     @AppStorage("homeBlockingStatusCardDismissed") private var blockingCardDismissed = false
@@ -105,6 +107,21 @@ struct HomeView: View {
         )
     }
 
+    /// The in-trial indicator + status sheet surface (#166), or `nil` when no
+    /// indicator should exist: entitled (a mid-trial purchase hides it on the
+    /// next Home pass), expired, or never granted. Derived live so day counts
+    /// and expiry can never drift from the Reverse Trial clock.
+    private var trialPresentation: TrialStatusPresentation? {
+        TrialStatusPresentation.make(
+            state: PlusAccessState(
+                hasEntitlement: SubscriptionManager.shared.hasEntitlement,
+                trialGrantDate: SubscriptionManager.shared.trialGrantDate
+            ),
+            calendar: Calendar.current,
+            now: Date()
+        )
+    }
+
     private var todayActionState: TodayActionState {
         TodayActionState.resolve(
             TodayActionState.Input(
@@ -140,6 +157,15 @@ struct HomeView: View {
                         }
                     )
                         .modifier(FadeInUp(appeared: appeared, delay: 0))
+
+                    if let trial = trialPresentation {
+                        TrialIndicatorBadge(
+                            label: trial.indicatorLabel,
+                            onTap: { showTrialStatusSheet = true }
+                        )
+                        .modifier(FadeInUp(appeared: appeared, delay: 0.05))
+                        .transition(ctaStateTransition)
+                    }
 
                     StatusCard()
                         .modifier(FadeInUp(appeared: appeared, delay: 0.1))
@@ -270,6 +296,31 @@ struct HomeView: View {
                 onBack: { showBlockingPaywall = false },
                 onContinue: { showBlockingPaywall = false },
                 onSkip: { showBlockingPaywall = false }
+            )
+        }
+        .sheet(isPresented: $showTrialStatusSheet) {
+            if let trial = trialPresentation {
+                TrialStatusSheet(
+                    content: trial.sheetContent,
+                    onKeepPlus: {
+                        // The quiet buy-early path: into the existing purchase
+                        // flow (it reports paywallViewed itself).
+                        showTrialStatusSheet = false
+                        showTrialKeepPlusPaywall = true
+                    },
+                    onDismiss: { showTrialStatusSheet = false }
+                )
+                .presentationDetents([.height(TrialStatusSheet.presentationHeight)])
+                .presentationDragIndicator(.hidden)
+                .presentationBackground(PillieTheme.bg)
+            }
+        }
+        .fullScreenCover(isPresented: $showTrialKeepPlusPaywall) {
+            PremiumPaywallView(
+                isFromOnboarding: false,
+                onBack: { showTrialKeepPlusPaywall = false },
+                onContinue: { showTrialKeepPlusPaywall = false },
+                onSkip: { showTrialKeepPlusPaywall = false }
             )
         }
         .fullScreenCover(isPresented: $showShakeConfirm) {
