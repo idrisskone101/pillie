@@ -44,6 +44,13 @@ final class PillieShieldConfigurationExtension: ShieldConfigurationDataSource {
     }
 
     private nonisolated func makeShieldConfiguration() -> ShieldConfiguration {
+        // Rendering the shield IS the intercept — the aha moment behind
+        // blocker_intervention_fired (#161). This extension has no network,
+        // so the count accumulates in the App Group and the main app flushes
+        // it to PostHog on next open. Coarse count only; the shielded app is
+        // never recorded.
+        BlockerInterventionSharedState().recordIntercept()
+
         let reason = blockingReason.trimmingCharacters(in: .whitespacesAndNewlines)
         let subtitleText: String
         if reason.isEmpty {

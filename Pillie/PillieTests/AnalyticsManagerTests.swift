@@ -416,6 +416,7 @@ private final class RecordingAnalyticsTracker: AnalyticsTracking {
     acquisitionSource: AcquisitionSource?,
     isPlus: Bool?,
     hasBlockingSelection: Bool?,
+    interventionCount: Int?,
     titleCustomized: Bool?,
     bodyCustomized: Bool?,
     retryTitleCustomized: Bool?,

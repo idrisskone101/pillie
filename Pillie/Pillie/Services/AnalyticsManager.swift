@@ -131,6 +131,7 @@ protocol AnalyticsTracking {
     acquisitionSource: AcquisitionSource?,
     isPlus: Bool?,
     hasBlockingSelection: Bool?,
+    interventionCount: Int?,
     titleCustomized: Bool?,
     bodyCustomized: Bool?,
     retryTitleCustomized: Bool?,
@@ -151,6 +152,7 @@ enum AnalyticsEvent: String, CaseIterable {
   case reminderOnlyCompletion = "reminder_only_completion"
   case protectionPlanActivated = "protection_plan_activated"
   case blockerConfigSaved = "blocker_config_saved"
+  case blockerInterventionFired = "blocker_intervention_fired"
   case paywallViewed = "paywall_viewed"
   case paywallPlanSelected = "paywall_plan_selected"
   case purchaseStarted = "purchase_started"
@@ -270,6 +272,9 @@ struct AnalyticsPayload {
   let acquisitionSource: AcquisitionSource?
   let isPlus: Bool?
   let hasBlockingSelection: Bool?
+  /// Aggregated shield-intercept count carried by `blocker_intervention_fired`
+  /// — one event per flush, never one per intercept (#161).
+  let interventionCount: Int?
   let titleCustomized: Bool?
   let bodyCustomized: Bool?
   let retryTitleCustomized: Bool?
@@ -288,6 +293,7 @@ struct AnalyticsPayload {
     acquisitionSource: AcquisitionSource? = nil,
     isPlus: Bool? = nil,
     hasBlockingSelection: Bool? = nil,
+    interventionCount: Int? = nil,
     titleCustomized: Bool? = nil,
     bodyCustomized: Bool? = nil,
     retryTitleCustomized: Bool? = nil,
@@ -305,6 +311,7 @@ struct AnalyticsPayload {
     self.acquisitionSource = acquisitionSource
     self.isPlus = isPlus
     self.hasBlockingSelection = hasBlockingSelection
+    self.interventionCount = interventionCount
     self.titleCustomized = titleCustomized
     self.bodyCustomized = bodyCustomized
     self.retryTitleCustomized = retryTitleCustomized
@@ -328,6 +335,9 @@ struct AnalyticsPayload {
     if let isPlus { properties["is_plus"] = .bool(isPlus) }
     if let hasBlockingSelection {
       properties["has_blocking_selection"] = .bool(hasBlockingSelection)
+    }
+    if let interventionCount {
+      properties["intervention_count"] = .int(interventionCount)
     }
     if let titleCustomized {
       properties["title_customized"] = .bool(titleCustomized)
@@ -440,6 +450,7 @@ final class AnalyticsManager: AnalyticsTracking {
     acquisitionSource: AcquisitionSource? = nil,
     isPlus: Bool? = nil,
     hasBlockingSelection: Bool? = nil,
+    interventionCount: Int? = nil,
     titleCustomized: Bool? = nil,
     bodyCustomized: Bool? = nil,
     retryTitleCustomized: Bool? = nil,
@@ -460,6 +471,7 @@ final class AnalyticsManager: AnalyticsTracking {
       acquisitionSource: acquisitionSource,
       isPlus: isPlus,
       hasBlockingSelection: hasBlockingSelection,
+      interventionCount: interventionCount,
       titleCustomized: titleCustomized,
       bodyCustomized: bodyCustomized,
       retryTitleCustomized: retryTitleCustomized,

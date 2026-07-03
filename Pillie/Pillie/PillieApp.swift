@@ -221,6 +221,11 @@ struct PillieApp: App {
                         // must never outlive Plus Access).
                         SubscriptionManager.shared.refreshPlusAccess()
                         ProductAnalyticsTelemetry.live.appBecameActive()
+                        // Shield intercepts accumulated while we weren't running
+                        // (#161): flush the App Group delta as one aggregated
+                        // blocker_intervention_fired. Before the onboarding guard —
+                        // blocking fires for any user whose Protection Plan is live.
+                        flushBlockerInterventions()
                         guard !Self.isOnboardingActive else { return }
                         reconcileScreenTimeState()
                         NotificationManager.shared.requestReschedule(from: store, reason: "app-became-active")
@@ -235,6 +240,12 @@ struct PillieApp: App {
                     }
                 }
         }
+    }
+
+    private func flushBlockerInterventions() {
+        let count = BlockerInterventionSharedState().flushUnflushed()
+        guard count > 0 else { return }
+        ProductAnalyticsTelemetry.live.blockerInterventionFired(count: count)
     }
 
     private func reconcileScreenTimeState() {
@@ -305,6 +316,15 @@ struct PillieApp: App {
             UserDefaults.standard.set(false, forKey: OnboardingFlow.selectedFreePlanStorageKey)
             UserDefaults.standard.set(OnboardingFlow.Step.complete.rawValue, forKey: OnboardingFlow.stepStorageKey)
             store.seedAdaptiveReminderDebugLogs()
+        case "/intervention-seed":
+            // QA control (#161): record N shield intercepts exactly as the
+            // shield extension does, so the foreground flush is demoable
+            // without firing a real shield (simulator Screen Time is not
+            // trusted). Background and reopen the app to trigger the flush.
+            let count = URLComponents(url: url, resolvingAgainstBaseURL: false)?
+                .queryItems?.first(where: { $0.name == "count" })?.value.flatMap(Int.init) ?? 5
+            let state = BlockerInterventionSharedState()
+            for _ in 0..<max(0, count) { state.recordIntercept() }
         case "/review-prompt":
             // QA shortcut (#133): land on Home with an unbroken Streak past the pill
             // threshold so the Review Prompt's Sentiment Gate card surfaces and the
