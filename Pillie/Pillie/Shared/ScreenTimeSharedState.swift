@@ -64,6 +64,21 @@ enum ScreenTimeSharedState {
         }
     }
 
+    // MARK: - Plus Access Mirror
+
+    /// The coarse access-valid-until mirror (#167): a derived copy of the
+    /// authoritative Keychain/RevenueCat access state, refreshed on every
+    /// `refreshPlusAccess`, so the DeviceActivityMonitor extension can
+    /// self-disable blocking at expiry without the app ever opening.
+    static func setPlusAccessValidUntil(_ date: Date) {
+        defaults?.set(date.timeIntervalSince1970, forKey: AppGroupKeys.plusAccessValidUntil)
+        defaults?.synchronize()
+    }
+
+    static var plusAccessValidUntilEpochSeconds: Double? {
+        defaults?.object(forKey: AppGroupKeys.plusAccessValidUntil) as? Double
+    }
+
     // MARK: - Today Taken Flag
 
     /// Writes the flag together with the day it describes. The

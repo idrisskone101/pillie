@@ -116,6 +116,13 @@ final class SubscriptionManager: NSObject {
     /// or trial mutation, and safe to call at any re-evaluation point (launch,
     /// foreground) to catch a trial that expired while the app was closed.
     func refreshPlusAccess(now: Date = Date()) {
+        // Refresh the App Group mirror on every re-evaluation, not just flips:
+        // the shield side must learn the new valid-until date the moment access
+        // state changes (grant, purchase, entitlement resolution), so blocking
+        // can self-disable at expiry even if the app never opens again (#167).
+        ScreenTimeSharedState.setPlusAccessValidUntil(
+            PlusAccessMirror.validUntil(state: plusAccessState, calendar: .current)
+        )
         let newValue = plusAccessState.hasPlusAccess(calendar: .current, now: now)
         guard hasPlusAccess != newValue else { return }
         hasPlusAccess = newValue

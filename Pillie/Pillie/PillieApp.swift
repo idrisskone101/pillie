@@ -220,6 +220,10 @@ struct PillieApp: App {
                         // Screen Time reconcile drops blocking (ADR 0007: blocking
                         // must never outlive Plus Access).
                         SubscriptionManager.shared.refreshPlusAccess()
+                        // First open at-or-after expiry records `trial_expired`
+                        // exactly once (#167). After the refresh above so the
+                        // decision reads post-reconcile state.
+                        recordTrialExpiredIfNeeded()
                         ProductAnalyticsTelemetry.live.appBecameActive()
                         // Shield intercepts accumulated while we weren't running
                         // (#161): flush the App Group delta as one aggregated
@@ -240,6 +244,26 @@ struct PillieApp: App {
                     }
                 }
         }
+    }
+
+    /// Records `trial_expired` on the first app open at-or-after Reverse Trial
+    /// expiry (#167). The decision defers until RevenueCat has resolved
+    /// entitlement this launch, so a mid-trial converter is never misread as
+    /// expired; the persisted flag makes the event exactly-once.
+    private func recordTrialExpiredIfNeeded() {
+        let manager = SubscriptionManager.shared
+        guard TrialExpiredEvent.shouldFire(
+            state: PlusAccessState(
+                hasEntitlement: manager.hasEntitlement,
+                trialGrantDate: manager.trialGrantDate
+            ),
+            entitlementResolved: manager.hasResolvedEntitlement,
+            alreadyFired: UserDefaults.standard.bool(forKey: TrialExpiredEvent.firedStorageKey),
+            calendar: .current,
+            now: Date()
+        ) else { return }
+        ProductAnalyticsTelemetry.live.trialExpired()
+        UserDefaults.standard.set(true, forKey: TrialExpiredEvent.firedStorageKey)
     }
 
     private func flushBlockerInterventions() {
@@ -289,7 +313,10 @@ struct PillieApp: App {
             UserDefaults.standard.set(OnboardingFlow.Step.trialGranted.rawValue, forKey: OnboardingFlow.stepStorageKey)
         case "/trial-grant":
             // QA control (#160): start a Reverse Trial now — every Plus feature
-            // should unlock exactly as if the entitlement flipped on.
+            // should unlock exactly as if the entitlement flipped on. A fresh
+            // trial also re-opens the one-shot `trial_expired` window (#167) so
+            // expiry stays demoable across repeated QA runs.
+            UserDefaults.standard.removeObject(forKey: TrialExpiredEvent.firedStorageKey)
             SubscriptionManager.shared.grantReverseTrial()
             reconcileScreenTimeState()
         case "/trial-age":
@@ -303,7 +330,9 @@ struct PillieApp: App {
             SubscriptionManager.shared.debugOverrideTrialGrantDate(agedGrant)
             reconcileScreenTimeState()
         case "/trial-clear":
-            // QA control (#160): remove the persisted grant entirely.
+            // QA control (#160): remove the persisted grant entirely, including
+            // the one-shot `trial_expired` flag (#167).
+            UserDefaults.standard.removeObject(forKey: TrialExpiredEvent.firedStorageKey)
             SubscriptionManager.shared.debugOverrideTrialGrantDate(nil)
             reconcileScreenTimeState()
         case "/plus-home":

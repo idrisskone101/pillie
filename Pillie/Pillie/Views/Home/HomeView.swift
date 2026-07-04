@@ -80,6 +80,18 @@ struct HomeView: View {
         return BlockingStatusCardContent.make(for: blockingPresentation)
     }
 
+    /// Copy + gating for the Protection Off State card (#167): Plus Access ended
+    /// for a user with saved blocker config, so blocking stopped but the setup is
+    /// preserved inert. Persistent — no dismissal state — until access returns.
+    /// Routes to the paywall (the Trial-End Paywall replaces that route when its
+    /// slice lands).
+    private var protectionOffContent: ProtectionOffCardContent? {
+        ProtectionOffCardContent.make(
+            hasPlusAccess: SubscriptionManager.shared.hasPlusAccess,
+            blockerConfigSaved: AppBlockingManager.shared.hasAppsSelected
+        )
+    }
+
     /// Copy + gating for the Adaptive Reminder Time Suggestion card (#126). `nil` for
     /// free users, or when the analyzer has no confident, non-cooled-down suggestion.
     private var adaptiveReminderContent: AdaptiveReminderSuggestionCardContent? {
@@ -93,7 +105,8 @@ struct HomeView: View {
     /// would render this pass. Feeds the Review Prompt's `higherPriorityCardShowing` input
     /// so the lowest-priority rating ask yields — at most one ask per Home visit (#132).
     private var higherPriorityCardShowing: Bool {
-        blockingCardContent != nil || store.isRefillDue || adaptiveReminderContent != nil
+        protectionOffContent != nil || blockingCardContent != nil || store.isRefillDue
+            || adaptiveReminderContent != nil
     }
 
     /// Copy + gating for the Home Review Prompt's Sentiment Gate card (#132). `nil` unless
@@ -169,6 +182,19 @@ struct HomeView: View {
 
                     StatusCard()
                         .modifier(FadeInUp(appeared: appeared, delay: 0.1))
+
+                    if let protectionOff = protectionOffContent {
+                        ProtectionOffCard(
+                            content: protectionOff,
+                            onPrimaryAction: {
+                                // Paywall reports paywallViewed itself; the
+                                // Trial-End Paywall takes over this route later.
+                                showBlockingPaywall = true
+                            }
+                        )
+                        .modifier(FadeInUp(appeared: appeared, delay: 0.15))
+                        .transition(ctaStateTransition)
+                    }
 
                     if let blockingCard = blockingCardContent {
                         BlockingStatusCard(
