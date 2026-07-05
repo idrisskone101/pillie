@@ -1,0 +1,26 @@
+{
+  "effortLevel": "high",
+  "permissions": {
+    "allow": [
+      "Bash(xcodebuild:*)",
+      "Bash(xcrun simctl:*)",
+      "Bash(xcodebuildmcp:*)",
+      "Bash(axe describe-ui:*)",
+      "Bash(axe tap:*)",
+      "Bash(axe type:*)",
+      "Bash(axe swipe:*)",
+      "Bash(axe gesture:*)",
+      "Bash(axe button:*)",
+      "Bash(ls:*)",
+      "Bash(grep:*)",
+      "Bash(find:*)",
+      "Bash(wc:*)",
+      "Bash(Pillie/scripts/mcp-build-and-run.sh:*)",
+      "Bash(Pillie/scripts/build-and-run.sh:*)",
+      "Bash(Pillie/scripts/mcp-test-focused.sh:*)",
+      "Bash(Pillie/scripts/test-focused.sh:*)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "mcp__XcodeBuildMCP"
+    ]
+  }
+}
