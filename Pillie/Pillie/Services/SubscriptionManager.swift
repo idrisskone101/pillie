@@ -104,10 +104,20 @@ final class SubscriptionManager: NSObject {
 
     /// Single funnel for every entitlement mutation; Plus Access is re-derived
     /// after every write so the predicate can never be bypassed.
+    ///
+    /// A raw-entitlement flip fires `onEntitlementChange` even when Plus Access
+    /// itself does not move — a mid-trial purchase keeps `hasPlusAccess` true,
+    /// but reminders must still replan so the pending day-10/13 trial expiry
+    /// warnings cancel (#168).
     private func setEntitlement(_ newValue: Bool) {
+        let rawFlipped = hasEntitlement != newValue
+        let accessBefore = hasPlusAccess
         hasEntitlement = newValue
         hasResolvedEntitlement = true
         refreshPlusAccess()
+        if rawFlipped, hasPlusAccess == accessBefore {
+            onEntitlementChange?(hasPlusAccess)
+        }
     }
 
     /// Re-evaluates the Plus Access predicate and fires `onEntitlementChange`

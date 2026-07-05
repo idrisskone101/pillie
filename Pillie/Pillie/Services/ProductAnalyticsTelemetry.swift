@@ -194,6 +194,13 @@ struct ProductAnalyticsTelemetry {
     track(.trialExpired)
   }
 
+  /// A day-10/13 trial expiry warning was delivered or handled (#168 /
+  /// ADR 0007). `day` is the trial day the warning belongs to (10 or 13);
+  /// the once-per-day dedupe lives in `TrialExpiryWarningDelivery`.
+  func trialExpiryWarningSent(day: Int) {
+    track(.trialExpiryWarningSent, trialWarningDay: day)
+  }
+
   func paywallViewed(isFromOnboarding: Bool) {
     track(
       .paywallViewed,
@@ -515,6 +522,7 @@ struct ProductAnalyticsTelemetry {
     acquisitionSource: AcquisitionSource? = nil,
     hasBlockingSelection: Bool? = nil,
     interventionCount: Int? = nil,
+    trialWarningDay: Int? = nil,
     titleCustomized: Bool? = nil,
     bodyCustomized: Bool? = nil,
     retryTitleCustomized: Bool? = nil,
@@ -535,6 +543,7 @@ struct ProductAnalyticsTelemetry {
       isPlus: isPlus(),
       hasBlockingSelection: hasBlockingSelection,
       interventionCount: interventionCount,
+      trialWarningDay: trialWarningDay,
       titleCustomized: titleCustomized,
       bodyCustomized: bodyCustomized,
       retryTitleCustomized: retryTitleCustomized,

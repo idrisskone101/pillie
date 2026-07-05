@@ -269,6 +269,7 @@ private final class FunnelRecorder: AnalyticsTracking {
     isPlus: Bool?,
     hasBlockingSelection: Bool?,
     interventionCount: Int?,
+    trialWarningDay: Int?,
     titleCustomized: Bool?,
     bodyCustomized: Bool?,
     retryTitleCustomized: Bool?,

@@ -42,6 +42,25 @@ final class SubscriptionManagerTrialTests: XCTestCase {
         XCTAssertFalse(SubscriptionManager.shared.hasEntitlement)
     }
 
+    func testMidTrialPurchaseFiresEntitlementChangeHook() throws {
+        // A mid-trial purchase flips the raw entitlement while `hasPlusAccess`
+        // stays true (the trial already granted it). The hook must still fire so
+        // reminders replan and the pending day-10/13 expiry warnings cancel (#168).
+        SubscriptionManager.shared.grantReverseTrial()
+
+        var observed: [Bool] = []
+        SubscriptionManager.shared.onEntitlementChange = { observed.append($0) }
+
+        try SubscriptionManager.shared.applyPurchaseResult(
+            userCancelled: false,
+            isPlusEntitlementActive: true
+        )
+
+        XCTAssertEqual(observed, [true])
+        XCTAssertTrue(SubscriptionManager.shared.hasEntitlement)
+        XCTAssertTrue(SubscriptionManager.shared.hasPlusAccess)
+    }
+
     func testTrialExpiryFiresEntitlementChangeHookAndGatesOff() {
         let grantMoment = Date(timeIntervalSince1970: 1_750_000_000)
         SubscriptionManager.shared.grantReverseTrial(now: grantMoment)
@@ -104,18 +123,21 @@ final class SubscriptionManagerTrialTests: XCTestCase {
         XCTAssertTrue(SubscriptionManager.shared.hasResolvedEntitlement)
     }
 
-    func testEntitlementChurnDuringActiveTrialKeepsAccessWithoutFiring() {
+    func testEntitlementChurnDuringActiveTrialKeepsAccessAndReplans() {
         // Subscriber with an active trial grant on record: losing the
         // entitlement must not interrupt Plus Access while the trial covers it.
+        // The hook still fires once (#168): back on trial-only access, the
+        // reminder replan restores the day-10/13 expiry warnings a purchase
+        // had cancelled.
         SubscriptionManager.shared.grantReverseTrial()
         SubscriptionManager.shared.setPlusForTesting(true)
 
-        var fireCount = 0
-        SubscriptionManager.shared.onEntitlementChange = { _ in fireCount += 1 }
+        var observed: [Bool] = []
+        SubscriptionManager.shared.onEntitlementChange = { observed.append($0) }
 
         SubscriptionManager.shared.setPlusForTesting(false)
 
-        XCTAssertEqual(fireCount, 0)
+        XCTAssertEqual(observed, [true])
         XCTAssertTrue(SubscriptionManager.shared.hasPlusAccess)
     }
 }

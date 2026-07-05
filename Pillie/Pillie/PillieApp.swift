@@ -72,11 +72,25 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         willPresent notification: UNNotification,
         withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
     ) {
+        recordTrialWarningDeliveryIfNeeded(userInfo: notification.request.content.userInfo)
         // Foreground fallback: apply blocking when reminder fires while app is open
         if let store = Self.store, !store.isTodayHandled {
             AppBlockingManager.shared.applyBlocking(reason: store.pack.method.blockingReasonText)
         }
         completionHandler([.banner, .sound])
+    }
+
+    /// Records `trial_expiry_warning_sent` with `day: 10 | 13` when a trial
+    /// expiry warning is delivered (foreground) or handled (tapped) — at most
+    /// once per day value, so a banner later tapped never double-counts (#168).
+    private func recordTrialWarningDeliveryIfNeeded(userInfo: [AnyHashable: Any]) {
+        let defaults = UserDefaults.standard
+        let sentDays = defaults.array(forKey: TrialExpiryWarningDelivery.sentDaysStorageKey) as? [Int] ?? []
+        guard let day = TrialExpiryWarningDelivery.day(fromUserInfo: userInfo, alreadySentDays: sentDays) else {
+            return
+        }
+        defaults.set(sentDays + [day], forKey: TrialExpiryWarningDelivery.sentDaysStorageKey)
+        ProductAnalyticsTelemetry.live.trialExpiryWarningSent(day: day)
     }
 
     // Handle notification action buttons
@@ -85,6 +99,8 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         didReceive response: UNNotificationResponse,
         withCompletionHandler completionHandler: @escaping () -> Void
     ) {
+        recordTrialWarningDeliveryIfNeeded(userInfo: response.notification.request.content.userInfo)
+
         guard let store = Self.store else {
             completionHandler()
             return
@@ -315,8 +331,10 @@ struct PillieApp: App {
             // QA control (#160): start a Reverse Trial now — every Plus feature
             // should unlock exactly as if the entitlement flipped on. A fresh
             // trial also re-opens the one-shot `trial_expired` window (#167) so
-            // expiry stays demoable across repeated QA runs.
+            // expiry stays demoable across repeated QA runs. The warning-sent
+            // dedupe resets with it so the day-10/13 events re-fire too (#168).
             UserDefaults.standard.removeObject(forKey: TrialExpiredEvent.firedStorageKey)
+            UserDefaults.standard.removeObject(forKey: TrialExpiryWarningDelivery.sentDaysStorageKey)
             SubscriptionManager.shared.grantReverseTrial()
             reconcileScreenTimeState()
         case "/trial-age":
@@ -331,8 +349,10 @@ struct PillieApp: App {
             reconcileScreenTimeState()
         case "/trial-clear":
             // QA control (#160): remove the persisted grant entirely, including
-            // the one-shot `trial_expired` flag (#167).
+            // the one-shot `trial_expired` flag (#167) and the warning-sent
+            // dedupe (#168).
             UserDefaults.standard.removeObject(forKey: TrialExpiredEvent.firedStorageKey)
+            UserDefaults.standard.removeObject(forKey: TrialExpiryWarningDelivery.sentDaysStorageKey)
             SubscriptionManager.shared.debugOverrideTrialGrantDate(nil)
             reconcileScreenTimeState()
         case "/plus-home":
@@ -349,6 +369,31 @@ struct PillieApp: App {
             UserDefaults.standard.set(false, forKey: OnboardingFlow.selectedFreePlanStorageKey)
             UserDefaults.standard.set(OnboardingFlow.Step.complete.rawValue, forKey: OnboardingFlow.stepStorageKey)
             store.seedAdaptiveReminderDebugLogs()
+        case "/request-notification-permission":
+            // QA control (#168): surface the system notification prompt on
+            // installs seeded past onboarding, where the real permission step
+            // never ran and scheduling would otherwise be silently dropped.
+            NotificationManager.shared.requestAuthorization()
+        case "/dump-pending-notifications":
+            // QA control (#168): print every pending notification request to
+            // OSLog so scheduled reminders/warnings are verifiable on the
+            // simulator. Stream with:
+            //   log stream --predicate 'subsystem == "com.idrisskone.pillie"' --level debug
+            let grantDescription = SubscriptionManager.shared.trialGrantDate?.description ?? "none"
+            UNUserNotificationCenter.current().getNotificationSettings { settings in
+                os.Logger(subsystem: "com.idrisskone.pillie", category: "qa")
+                    .debug("Pillie QA auth status: \(settings.authorizationStatus.rawValue, privacy: .public) trialGrant=\(grantDescription, privacy: .public)")
+            }
+            UNUserNotificationCenter.current().getPendingNotificationRequests { requests in
+                let logger = os.Logger(subsystem: "com.idrisskone.pillie", category: "qa")
+                logger.debug("Pillie QA pending requests: \(requests.count, privacy: .public)")
+                for request in requests.sorted(by: { $0.identifier < $1.identifier }) {
+                    let fireDate = (request.trigger as? UNCalendarNotificationTrigger)?.nextTriggerDate()
+                    logger.debug(
+                        "Pillie QA pending: \(request.identifier, privacy: .public) fire=\(fireDate?.description ?? "-", privacy: .public) title=\(request.content.title, privacy: .public)"
+                    )
+                }
+            }
         case "/intervention-seed":
             // QA control (#161): record N shield intercepts exactly as the
             // shield extension does, so the foreground flush is demoable

@@ -66,6 +66,8 @@ final class CycleTransitionNoticeTests: XCTestCase {
                 lastCallEnabled: false,
                 lastCallHour: 21,
                 lastCallMinute: 0,
+                trialGrantDate: nil,
+                hasEntitlement: false,
                 calendar: calendar
             )
         )

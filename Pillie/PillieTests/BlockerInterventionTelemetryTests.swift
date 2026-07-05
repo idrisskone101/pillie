@@ -71,6 +71,7 @@ private final class InterventionAnalyticsRecorder: AnalyticsTracking {
         isPlus: Bool?,
         hasBlockingSelection: Bool?,
         interventionCount: Int?,
+        trialWarningDay: Int?,
         titleCustomized: Bool?,
         bodyCustomized: Bool?,
         retryTitleCustomized: Bool?,
