@@ -17,6 +17,7 @@ final class NotificationManager {
     private let reminderPrefix = "pillie_reminder_"
     private let refillReminderPrefix = "pillie_refill_reminder_"
     private let cycleTransitionPrefix = "pillie_cycle_notice_"
+    private let trialWarningPrefix = "pillie_trial_warning_"
     private let categoryID = "PILL_REMINDER"
     private let markTakenActionID = "MARK_TAKEN_ACTION"
     private let snoozeActionID = "SNOOZE_ACTION"
@@ -34,6 +35,9 @@ final class NotificationManager {
         static let dueDayEpoch = "dueDayEpoch"
         static let actionTypeRaw = "actionTypeRaw"
         static let requestKind = "requestKind"
+        // Shared with the delivery decision so the payload and the
+        // `trial_expiry_warning_sent` reader can never drift apart (#168).
+        static let trialWarningDay = TrialExpiryWarningDelivery.dayKey
     }
 
     struct ManagedReminderDiff {
@@ -228,6 +232,8 @@ final class NotificationManager {
                 lastCallEnabled: store.lastCallReminderEnabled,
                 lastCallHour: store.lastCallReminderHour,
                 lastCallMinute: store.lastCallReminderMinute,
+                trialGrantDate: SubscriptionManager.shared.trialGrantDate,
+                hasEntitlement: SubscriptionManager.shared.hasEntitlement,
                 calendar: calendar
             )
         )
@@ -262,8 +268,35 @@ final class NotificationManager {
                 return makeRefillRequest(for: supply, calendar: calendar)
             case .cycleTransition(let notice):
                 return makeCycleTransitionRequest(for: notice, calendar: calendar)
+            case .trialExpiryWarning(let warning):
+                return makeTrialWarningRequest(for: warning, calendar: calendar)
             }
         }
+    }
+
+    /// Builds a Reverse Trial expiry warning (#168). Copy is Pillie-authored
+    /// (`TrialExpiryWarningCopy`) — informational, so no category/actions.
+    private func makeTrialWarningRequest(
+        for warning: ReminderSchedulePlanner.TrialExpiryWarningIntent,
+        calendar: Calendar
+    ) -> UNNotificationRequest {
+        let content = UNMutableNotificationContent()
+        content.title = TrialExpiryWarningCopy.title(day: warning.day)
+        content.body = TrialExpiryWarningCopy.body(day: warning.day)
+        content.sound = .default
+        content.userInfo = [
+            PayloadKey.requestKind: TrialExpiryWarningDelivery.requestKindValue,
+            PayloadKey.trialWarningDay: warning.day
+        ]
+
+        var components = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: warning.fireDate)
+        if components.second == nil {
+            components.second = 0
+        }
+
+        let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
+        let id = trialWarningIdentifier(day: warning.day, fireDate: warning.fireDate)
+        return UNNotificationRequest(identifier: id, content: content, trigger: trigger)
     }
 
     /// Default copy for the Auto-Reminder Retry, used as the fallback when a custom retry
@@ -547,12 +580,17 @@ final class NotificationManager {
         "\(cycleTransitionPrefix)day_\(transitionDayEpoch)_\(Int(fireDate.timeIntervalSince1970))"
     }
 
+    private func trialWarningIdentifier(day: Int, fireDate: Date) -> String {
+        "\(trialWarningPrefix)day_\(day)_\(Int(fireDate.timeIntervalSince1970))"
+    }
+
     private func isManagedReminderID(_ id: String) -> Bool {
         id == legacyReminderID
             || id.hasPrefix(legacyReminderPrefix)
             || id.hasPrefix(reminderPrefix)
             || id.hasPrefix(refillReminderPrefix)
             || id.hasPrefix(cycleTransitionPrefix)
+            || id.hasPrefix(trialWarningPrefix)
     }
 
     private func dueDateFromPayload(userInfo: [AnyHashable: Any]) -> Date? {
@@ -585,6 +623,7 @@ final class NotificationManager {
         let dueDayEpoch: Int?
         let actionTypeRaw: String?
         let requestKind: String?
+        let trialWarningDay: Int?
         let dateComponents: DateComponents
 
         var fireDate: Date? {
@@ -640,6 +679,7 @@ final class NotificationManager {
                 dueDayEpoch: userInfo[PayloadKey.dueDayEpoch] as? Int,
                 actionTypeRaw: userInfo[PayloadKey.actionTypeRaw] as? String,
                 requestKind: userInfo[PayloadKey.requestKind] as? String,
+                trialWarningDay: userInfo[PayloadKey.trialWarningDay] as? Int,
                 dateComponents: trigger.dateComponents
             )
         }

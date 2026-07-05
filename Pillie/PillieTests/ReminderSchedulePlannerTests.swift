@@ -571,6 +571,8 @@ final class ReminderSchedulePlannerTests: XCTestCase {
                 lastCallEnabled: lastCallEnabled,
                 lastCallHour: lastCallHour,
                 lastCallMinute: lastCallMinute,
+                trialGrantDate: nil,
+                hasEntitlement: false,
                 calendar: calendar
             )
         )

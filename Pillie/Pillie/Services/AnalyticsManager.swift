@@ -132,6 +132,7 @@ protocol AnalyticsTracking {
     isPlus: Bool?,
     hasBlockingSelection: Bool?,
     interventionCount: Int?,
+    trialWarningDay: Int?,
     titleCustomized: Bool?,
     bodyCustomized: Bool?,
     retryTitleCustomized: Bool?,
@@ -163,6 +164,10 @@ enum AnalyticsEvent: String, CaseIterable {
   /// A Reverse Trial's Plus Access ended without conversion (#167 / ADR 0007).
   /// Recorded once, on the first app open at-or-after expiry.
   case trialExpired = "trial_expired"
+  /// A day-10/13 trial expiry warning notification was delivered or handled
+  /// (#168 / ADR 0007). Carries `day: 10 | 13`; recorded at most once per day
+  /// value (`TrialExpiryWarningDelivery`).
+  case trialExpiryWarningSent = "trial_expiry_warning_sent"
   case purchaseCompleted = "purchase_completed"
   case purchaseFailed = "purchase_failed"
   case purchaseCancelled = "purchase_cancelled"
@@ -287,6 +292,9 @@ struct AnalyticsPayload {
   /// Aggregated shield-intercept count carried by `blocker_intervention_fired`
   /// — one event per flush, never one per intercept (#161).
   let interventionCount: Int?
+  /// The trial day (10 or 13) carried as `day` by `trial_expiry_warning_sent`
+  /// (#168 / ADR 0007).
+  let trialWarningDay: Int?
   let titleCustomized: Bool?
   let bodyCustomized: Bool?
   let retryTitleCustomized: Bool?
@@ -306,6 +314,7 @@ struct AnalyticsPayload {
     isPlus: Bool? = nil,
     hasBlockingSelection: Bool? = nil,
     interventionCount: Int? = nil,
+    trialWarningDay: Int? = nil,
     titleCustomized: Bool? = nil,
     bodyCustomized: Bool? = nil,
     retryTitleCustomized: Bool? = nil,
@@ -324,6 +333,7 @@ struct AnalyticsPayload {
     self.isPlus = isPlus
     self.hasBlockingSelection = hasBlockingSelection
     self.interventionCount = interventionCount
+    self.trialWarningDay = trialWarningDay
     self.titleCustomized = titleCustomized
     self.bodyCustomized = bodyCustomized
     self.retryTitleCustomized = retryTitleCustomized
@@ -350,6 +360,9 @@ struct AnalyticsPayload {
     }
     if let interventionCount {
       properties["intervention_count"] = .int(interventionCount)
+    }
+    if let trialWarningDay {
+      properties["day"] = .int(trialWarningDay)
     }
     if let titleCustomized {
       properties["title_customized"] = .bool(titleCustomized)
@@ -463,6 +476,7 @@ final class AnalyticsManager: AnalyticsTracking {
     isPlus: Bool? = nil,
     hasBlockingSelection: Bool? = nil,
     interventionCount: Int? = nil,
+    trialWarningDay: Int? = nil,
     titleCustomized: Bool? = nil,
     bodyCustomized: Bool? = nil,
     retryTitleCustomized: Bool? = nil,
@@ -482,6 +496,7 @@ final class AnalyticsManager: AnalyticsTracking {
       isPlus: isPlus,
       hasBlockingSelection: hasBlockingSelection,
       interventionCount: interventionCount,
+      trialWarningDay: trialWarningDay,
       titleCustomized: titleCustomized,
       bodyCustomized: bodyCustomized,
       retryTitleCustomized: retryTitleCustomized,
