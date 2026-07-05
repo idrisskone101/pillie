@@ -254,8 +254,8 @@ struct SettingsView: View {
                     } label: {
                         settingsRow(
                             "Subscription",
-                            value: SubscriptionManager.shared.hasEntitlement ? "Pillie Plus" : "Free Plan",
-                            valueColor: SubscriptionManager.shared.hasEntitlement ? PillieTheme.coral : PillieTheme.textPrimary
+                            value: subscriptionRowValue,
+                            valueColor: subscriptionRowValueColor
                         )
                     }
                     .buttonStyle(.plain)
@@ -523,6 +523,20 @@ struct SettingsView: View {
         .padding(.horizontal, 20)
         .padding(.vertical, 16)
         .contentShape(Rectangle())
+    }
+
+    /// The Subscription row's value. `hasEntitlement` is deliberately false
+    /// during a Reverse Trial (only `hasPlusAccess` includes it), so trial
+    /// users need their own label instead of a misleading "Free Plan".
+    private var subscriptionRowValue: String {
+        let manager = SubscriptionManager.shared
+        if manager.hasEntitlement { return "Pillie Plus" }
+        if manager.hasPlusAccess { return "Plus Trial" }
+        return "Free Plan"
+    }
+
+    private var subscriptionRowValueColor: Color {
+        SubscriptionManager.shared.hasPlusAccess ? PillieTheme.coral : PillieTheme.textPrimary
     }
 
     private var blockingStatusSummary: String {
