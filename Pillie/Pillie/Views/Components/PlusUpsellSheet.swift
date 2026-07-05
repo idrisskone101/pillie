@@ -139,6 +139,7 @@ struct PlusUpsellSheet: View {
                             }
                         } catch {
                             telemetry.upsellRestoreFailed()
+                            telemetry.trackError(.restore, error: error)
                             let calmResponse = plusFeedback.unsuccessfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
                             withAnimation(calmResponse.motionProfile.animation) {
                                 restoreError = error.localizedDescription

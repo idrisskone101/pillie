@@ -52,6 +52,10 @@ struct ProductAnalyticsConfiguration: Equatable {
   /// funnel be broken down by source. Default PostHog behavior (`.identifiedOnly`) drops
   /// `$set` for users who never identify.
   let personProfilesAlways: Bool
+  /// Auto-capture uncaught NSExceptions / Swift errors as `$exception` events
+  /// (PostHog `errorTrackingConfig.autoCapture`), giving the founder dashboard a
+  /// crash-rate signal (#179).
+  let captureExceptions: Bool
 }
 
 protocol ProductAnalyticsClient: AnyObject {
@@ -61,10 +65,45 @@ protocol ProductAnalyticsClient: AnyObject {
     properties: [String: AnalyticsPropertyValue],
     personProperties: [String: AnalyticsPropertyValue]
   )
+  /// Capture a handled error as a `$exception` event so it groups in PostHog
+  /// Error Tracking with a stack-classified fingerprint (#179).
+  func captureException(_ error: Error, properties: [String: AnalyticsPropertyValue])
   /// The current anonymous distinct id, used to join server-side RevenueCat events
   /// to the same PostHog person. `nil` before the SDK is configured.
   func distinctId() -> String?
   func flush()
+}
+
+/// The failing subsystem carried as `domain` on `app_error`, kept a closed
+/// low-cardinality enum (never a raw string) so the "Errors by domain" dashboard
+/// panel stays plottable and no free-form text can leak PII (#179).
+enum AppErrorDomain: String {
+  /// StoreKit / RevenueCat purchase flow failures (excluding user cancels).
+  case purchase
+  /// RevenueCat restore-purchases failures.
+  case restore
+  /// RevenueCat offerings fetch failures (paywall spinner dead-ends).
+  case offerings
+  /// Screen Time / FamilyControls authorization and monitoring failures.
+  case screenTime = "screen_time"
+  /// Local notification authorization and scheduling failures.
+  case notifications
+  /// Deliberate QA errors fired from the DEBUG smoke deep link.
+  case debug
+}
+
+/// Coarse severity on `app_error` so the dashboard can split noise (`warning`)
+/// from real failures (`error`) and crashes surfaced manually (`fatal`).
+enum AppErrorSeverity: String {
+  case warning
+  case error
+  case fatal
+}
+
+// The client grew `captureException` for #179; a default no-op keeps the many
+// test spies compiling. `PostHogAnalyticsClient` overrides it for real capture.
+extension ProductAnalyticsClient {
+  func captureException(_ error: Error, properties: [String: AnalyticsPropertyValue]) {}
 }
 
 final class PostHogAnalyticsClient: ProductAnalyticsClient {
@@ -88,6 +127,7 @@ final class PostHogAnalyticsClient: ProductAnalyticsClient {
     config.setDefaultPersonProperties = configuration.setDefaultPersonProperties
     config.optOut = configuration.isOptedOut
     config.personProfiles = configuration.personProfilesAlways ? .always : .identifiedOnly
+    config.errorTrackingConfig.autoCapture = configuration.captureExceptions
 
     #if os(iOS)
       config.captureElementInteractions = configuration.captureElementInteractions
@@ -117,6 +157,15 @@ final class PostHogAnalyticsClient: ProductAnalyticsClient {
         userProperties: personProperties.isEmpty
           ? nil
           : personProperties.mapValues(\.postHogValue)
+      )
+    }
+  }
+
+  func captureException(_ error: Error, properties: [String: AnalyticsPropertyValue]) {
+    captureQueue.async {
+      PostHogSDK.shared.captureException(
+        error,
+        properties: properties.mapValues(\.postHogValue)
       )
     }
   }
@@ -156,6 +205,25 @@ protocol AnalyticsTracking {
     lastCallTitleCustomized: Bool?,
     lastCallBodyCustomized: Bool?
   )
+
+  /// Report a handled failure as `app_error` + `$exception` (#179).
+  func trackError(
+    _ domain: AppErrorDomain,
+    error: Error,
+    context: [String: String],
+    severity: AppErrorSeverity
+  )
+}
+
+// Default no-op so the funnel-focused test recorders that only care about
+// track() keep compiling; `AnalyticsManager` provides the real implementation.
+extension AnalyticsTracking {
+  func trackError(
+    _ domain: AppErrorDomain,
+    error: Error,
+    context: [String: String],
+    severity: AppErrorSeverity
+  ) {}
 }
 
 enum AnalyticsEvent: String, CaseIterable {
@@ -223,6 +291,9 @@ enum AnalyticsEvent: String, CaseIterable {
   /// (0–3): how many real shakes happened before resolution, so the funnel can
   /// see the CTA-tap fallback and mid-shake abandonment.
   case demoShakeCompleted = "demo_shake_completed"
+  /// A handled failure (#179). Carries `domain` + `message` + `code` + `severity`
+  /// via `trackError`, never through the `AnalyticsPayload` envelope.
+  case appError = "app_error"
 }
 
 enum AnalyticsSource: String {
@@ -504,7 +575,8 @@ final class AnalyticsManager: AnalyticsTracking {
         sessionReplayMaskAllSandboxedViews: true,
         surveys: false,
         isOptedOut: !isAnalyticsEnabled,
-        personProfilesAlways: true
+        personProfilesAlways: true,
+        captureExceptions: true
       ))
     isConfigured = true
   }
@@ -581,6 +653,56 @@ final class AnalyticsManager: AnalyticsTracking {
       properties: payload.properties,
       personProperties: payload.personProperties
     )
+  }
+
+  /// Report a handled failure (#179). Emits two captures:
+  ///   • `app_error` — flat, dashboard-friendly (`domain`, `message`, `code`,
+  ///     `severity`, plus any `context` entries), the event the founder
+  ///     dashboard's error-rate panel plots.
+  ///   • `$exception` — the raw error through PostHog Error Tracking, so handled
+  ///     failures group by fingerprint next to autocaptured crashes.
+  /// PII boundary: `domain`/`severity` are closed enums, `code` is the NSError
+  /// code, and `message` is the error's own description — never user content,
+  /// tokens, or free-form input. `context` values must be low-cardinality labels
+  /// chosen at the call site (e.g. `operation: schedule`).
+  /// Expected user cancellations (StoreKit `.userCancelled`) must NOT be routed
+  /// here — they keep their product events and stay out of the error rate.
+  func trackError(
+    _ domain: AppErrorDomain,
+    error: Error,
+    context: [String: String] = [:],
+    severity: AppErrorSeverity = .error
+  ) {
+    // The `$exception` capture carries only the classification labels — PostHog
+    // derives message/stack from the error itself; `app_error` adds the flat
+    // `message` + `code` the dashboard plots.
+    var exceptionProperties: [String: AnalyticsPropertyValue] = [
+      "domain": .string(domain.rawValue),
+      "severity": .string(severity.rawValue),
+    ]
+    for (key, value) in context {
+      exceptionProperties[key] = .string(value)
+    }
+    var properties = exceptionProperties
+    properties["message"] = .string(error.localizedDescription)
+    properties["code"] = .int((error as NSError).code)
+
+    #if DEBUG
+      // Same OSLog mirror as track(): debug builds have no PostHog token, so this
+      // is the only way simulator QA can see the error capture.
+      Logger(subsystem: "com.idrisskone.pillie", category: "analytics")
+        .debug(
+          "Pillie analytics capture: \(AnalyticsEvent.appError.rawValue, privacy: .public) \(properties.map { "\($0.key)=\($0.value.postHogValue)" }.sorted().joined(separator: " "), privacy: .public)"
+        )
+    #endif
+
+    guard isConfigured, isAnalyticsEnabled else { return }
+    client.capture(
+      event: AnalyticsEvent.appError.rawValue,
+      properties: properties,
+      personProperties: [:]
+    )
+    client.captureException(error, properties: exceptionProperties)
   }
 
   func flush() {

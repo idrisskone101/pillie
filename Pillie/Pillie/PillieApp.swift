@@ -315,6 +315,18 @@ struct PillieApp: App {
             ProductAnalyticsTelemetry.live.onboardingStarted(step: .welcome)
             ProductAnalyticsTelemetry.live.onboardingStepViewed(.welcome)
             AnalyticsManager.shared.flush()
+        case "/error-tracking-smoke":
+            // QA control (#179): fire a deliberate handled error so PostHog shows
+            // both an `app_error` and a `$exception` for the same failure. Debug
+            // builds have no token, so verify via the OSLog analytics mirror.
+            let smokeError = NSError(
+                domain: "com.idrisskone.pillie.debug-smoke", code: 179,
+                userInfo: [NSLocalizedDescriptionKey: "deliberate error-tracking smoke test"]
+            )
+            ProductAnalyticsTelemetry.live.trackError(
+                .debug, error: smokeError, context: ["operation": "smoke"]
+            )
+            AnalyticsManager.shared.flush()
         case "/plus-app-blocking-setup":
             SubscriptionManager.shared.setPlusForTesting(true)
             UserDefaults.standard.set(false, forKey: OnboardingFlow.selectedFreePlanStorageKey)
