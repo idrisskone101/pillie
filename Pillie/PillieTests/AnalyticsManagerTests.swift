@@ -48,7 +48,9 @@ final class AnalyticsManagerTests: XCTestCase {
     XCTAssertFalse(configuration.captureApplicationLifecycleEvents)
     XCTAssertFalse(configuration.captureScreenViews)
     XCTAssertFalse(configuration.captureElementInteractions)
-    XCTAssertFalse(configuration.enableSwizzling)
+    // Swizzling stays enabled solely because PostHogReplayIntegration requires it;
+    // the capture-feature flags above are all false, so nothing else auto-captures.
+    XCTAssertTrue(configuration.enableSwizzling)
     XCTAssertFalse(configuration.sendFeatureFlagEvent)
     XCTAssertFalse(configuration.preloadFeatureFlags)
     XCTAssertFalse(configuration.setDefaultPersonProperties)

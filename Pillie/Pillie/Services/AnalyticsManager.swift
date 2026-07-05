@@ -564,7 +564,11 @@ final class AnalyticsManager: AnalyticsTracking {
         captureApplicationLifecycleEvents: false,
         captureScreenViews: false,
         captureElementInteractions: false,
-        enableSwizzling: false,
+        // PostHogReplayIntegration.requiresSwizzling — with swizzling off the SDK
+        // silently skips installing session replay even when sessionReplay is true.
+        // Auto-capture stays off regardless: lifecycle/screen-view/element/survey
+        // flags below are what actually enable the other swizzling integrations.
+        enableSwizzling: true,
         sendFeatureFlagEvent: false,
         preloadFeatureFlags: false,
         setDefaultPersonProperties: false,
