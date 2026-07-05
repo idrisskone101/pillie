@@ -18,7 +18,10 @@ jobs:
       (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude')) ||
       (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@claude')) ||
       (github.event_name == 'issues' && (contains(github.event.issue.body, '@claude') || contains(github.event.issue.title, '@claude')))
-    runs-on: ubuntu-latest
+    # macOS runner so the iOS toolchain (Xcode, simulators, xcodebuildmcp, axe)
+    # is available — required for the pillie-ios / Xcode 27 skills to work.
+    # NOTE: macOS runners bill ~10x ubuntu minutes.
+    runs-on: macos-26
     permissions:
       contents: read
       pull-requests: read
@@ -31,7 +34,41 @@ jobs:
         with:
           fetch-depth: 1
 
+      - name: Select latest Xcode
+        run: |
+          XCODE_APP="$(ls -d /Applications/Xcode*.app | sort -V | tail -n 1)"
+          echo "Selecting $XCODE_APP"
+          sudo xcode-select -s "$XCODE_APP/Contents/Developer"
+          xcodebuild -version
+
+      # Apple's official Xcode 27 Agent Skills (swiftui-specialist,
+      # swiftui-whats-new-27, test-modernizer, device-interaction,
+      # uikit-app-modernization, audit-xcode-security-settings,
+      # c-bounds-safety) ship inside Xcode itself. Export them from the
+      # selected Xcode instead of committing copies to this public repo,
+      # so they always match the toolchain in use.
+      - name: Install Apple Xcode Agent Skills
+        run: |
+          mkdir -p ~/.claude/skills
+          xcrun mcpbridge run-agent skills export \
+            --output-dir ~/.claude/skills \
+            --replace-existing
+          ls ~/.claude/skills
+
+      - name: Install XcodeBuildMCP CLI and skill
+        run: |
+          npm install -g xcodebuildmcp
+          xcodebuildmcp init --dest ~/.claude/skills --force --style minimal
+
+      - name: Install AXe (simulator accessibility automation)
+        run: brew install cameroncooke/axe/axe
+
       - name: Run Claude Code
         uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          # Repo settings (.claude/settings.json — effortLevel, permission
+          # allowlist) and repo skills (.claude/skills/) load automatically
+          # from the checkout; only the MCP servers need explicit wiring.
+          claude_args: |
+            --mcp-config .github/claude-mcp-config.json
