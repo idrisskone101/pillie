@@ -16,8 +16,6 @@ final class PillieShieldConfigurationExtension: ShieldConfigurationDataSource {
         static let title        = UIColor(red: 41/255,  green: 37/255,  blue: 36/255,  alpha: 1) // #292524
         static let subtitle     = UIColor(red: 120/255, green: 113/255, blue: 108/255, alpha: 1) // #78716C
         static let primaryBtnBg = UIColor(red: 41/255,  green: 37/255,  blue: 36/255,  alpha: 1) // #292524
-        static let secondary    = UIColor(red: 120/255, green: 113/255, blue: 108/255, alpha: 1) // #78716C
-        static let coral        = UIColor(red: 224/255, green: 122/255, blue: 143/255, alpha: 1) // #E07A8F
         static let coralLight   = UIColor(red: 255/255, green: 240/255, blue: 237/255, alpha: 1) // #FFF0ED
     }
 
@@ -62,9 +60,13 @@ final class PillieShieldConfigurationExtension: ShieldConfigurationDataSource {
         return ShieldConfiguration(
             backgroundBlurStyle: .systemUltraThinMaterialLight,
             backgroundColor: Palette.coralLight,
+            // The asset carries transparent headroom so the badge renders lower
+            // in the system's fixed icon frame; the leading title newline drops
+            // the text block with it. Both are deliberate — the stock layout
+            // sits too high on the shield.
             icon: UIImage(named: "ShieldIcon"),
             title: ShieldConfiguration.Label(
-                text: "Time for self-care!",
+                text: "\nTime for self-care!",
                 color: Palette.title
             ),
             subtitle: ShieldConfiguration.Label(
