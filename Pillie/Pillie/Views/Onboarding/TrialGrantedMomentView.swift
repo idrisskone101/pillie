@@ -45,7 +45,6 @@ struct TrialGrantedMomentContent {
     let subtitle: String
     let today: Today
     let laterDays: [TimelineDay]
-    let handNote: String
     /// The App Review pre-trial disclosures as one plain line: trial duration,
     /// what turns off at expiry, and the post-trial price (ADR 0007).
     let disclosure: String
@@ -55,7 +54,7 @@ struct TrialGrantedMomentContent {
         [badge, title, titleAccent, subtitle, today.label, today.title]
             + today.perks.map(\.title)
             + laterDays.flatMap { [$0.label, $0.title, $0.detail] }
-            + [handNote, disclosure, primaryCTA]
+            + [disclosure, primaryCTA]
     }
 
     static let `default` = TrialGrantedMomentContent(
@@ -91,7 +90,6 @@ struct TrialGrantedMomentContent {
                 symbolColor: PillieTheme.verifiedGreen
             ),
         ],
-        handNote: "today's the fun part!",
         disclosure: "Your free trial lasts 14 days — app blocking turns off when it ends. After that, Plus is $29.99/year, or keep using reminders free.",
         primaryCTA: "Start my free trial"
     )
@@ -129,10 +127,6 @@ struct TrialGrantedMomentView: View {
 
                         TrialGrantedTimelineCard(today: content.today, laterDays: content.laterDays)
                             .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger3))
-
-                        handNote
-                            .frame(maxWidth: .infinity)
-                            .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger4))
                     }
                     .padding(.horizontal, 24)
                     .padding(.top, 16)
@@ -170,13 +164,6 @@ struct TrialGrantedMomentView: View {
             badge: "Trial granted",
             onBack: onBack
         )
-    }
-
-    private var handNote: some View {
-        Text(content.handNote)
-            .font(.pillieHandwriting(size: 27))
-            .foregroundStyle(PillieTheme.textMuted)
-            .rotationEffect(.degrees(-2))
     }
 
     private var footer: some View {
@@ -329,14 +316,12 @@ private struct TrialGrantedPerkChips: View {
     let perks: [TrialGrantedMomentContent.Perk]
 
     var body: some View {
-        // Two leading-aligned rows of two chips, matching the design's inline wrap.
-        VStack(alignment: .leading, spacing: 6) {
-            ForEach(Array(stride(from: 0, to: perks.count, by: 2)), id: \.self) { rowStart in
-                HStack(spacing: 6) {
-                    ForEach(rowStart..<min(rowStart + 2, perks.count), id: \.self) { index in
-                        chip(perks[index])
-                    }
-                }
+        // A wrapping flow so each chip keeps its label on one line (e.g. "Smart
+        // Reminders" never breaks) and wraps to the next row only when the full
+        // chip would overflow the card.
+        ProtectionPlanFlowLayout(horizontalSpacing: 6, verticalSpacing: 6) {
+            ForEach(perks, id: \.title) { perk in
+                chip(perk)
             }
         }
     }
@@ -347,6 +332,8 @@ private struct TrialGrantedPerkChips: View {
                 .font(.system(size: 10, weight: .semibold))
             Text(perk.title)
                 .font(.pillie(12, weight: .semibold))
+                .lineLimit(1)
+                .fixedSize(horizontal: true, vertical: false)
         }
         .foregroundStyle(PillieTheme.textPrimary)
         .padding(.horizontal, 10)

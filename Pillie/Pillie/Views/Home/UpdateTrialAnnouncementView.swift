@@ -97,7 +97,7 @@ struct UpdateTrialAnnouncementView: View {
                 onDismiss: onDismiss
             )
         }
-        .padding(.bottom, 24)
+        .padding(.bottom, 10)
         .frame(maxWidth: .infinity, alignment: .top)
         .background(PillieTheme.bg)
     }

@@ -398,6 +398,40 @@ class PillStore {
         return streak
     }
 
+    /// The dose record inside a date window (issue #169, the Trial-End
+    /// Paywall's own-stats): decided due actions and how many were completed.
+    /// Only terminal statuses count — `.upcoming` (today, not yet logged),
+    /// break days, and `.noData` gaps are excluded from both sides so a gap or
+    /// an unfinished today never reads as a miss.
+    func doseRecord(from startDate: Date, to endDate: Date) -> (taken: Int, due: Int) {
+        guard let targetPack = activePack else { return (0, 0) }
+        let cal = Calendar.current
+        let windowStart = cal.startOfDay(for: startDate)
+        let windowEnd = min(cal.startOfDay(for: endDate), today)
+        let dueDates = dueDatesBackwards(
+            from: windowEnd,
+            pack: targetPack,
+            maxDueActions: max(120, targetPack.cycleLength * 8)
+        )
+
+        var taken = 0
+        var due = 0
+        for dueDate in dueDates {
+            if dueDate < windowStart { break }
+            guard let status = scheduleSnapshot(for: dueDate, in: targetPack)?.status else { continue }
+            switch status {
+            case .taken:
+                taken += 1
+                due += 1
+            case .missed:
+                due += 1
+            case .upcoming, .breakDay, .noData:
+                continue
+            }
+        }
+        return (taken, due)
+    }
+
     var nextReminderTime: String {
         let h = reminderHour
         let m = reminderMinute

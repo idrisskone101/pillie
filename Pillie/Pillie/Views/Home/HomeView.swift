@@ -21,6 +21,7 @@ struct HomeView: View {
     @State private var showBlockingPaywall = false
     @State private var showTrialStatusSheet = false
     @State private var showTrialKeepPlusPaywall = false
+    @State private var showTrialEndPaywall = false
     @State private var adaptiveReminderShownLogged = false
     @State private var reviewPromptShownLogged = false
     @AppStorage("homeBlockingStatusCardDismissed") private var blockingCardDismissed = false
@@ -83,13 +84,68 @@ struct HomeView: View {
     /// Copy + gating for the Protection Off State card (#167): Plus Access ended
     /// for a user with saved blocker config, so blocking stopped but the setup is
     /// preserved inert. Persistent — no dismissal state — until access returns.
-    /// Routes to the paywall (the Trial-End Paywall replaces that route when its
-    /// slice lands).
+    /// Its CTA reopens the Trial-End Paywall (#169); the Settings paywall remains
+    /// the fallback for lapsed payers who never held a Reverse Trial.
     private var protectionOffContent: ProtectionOffCardContent? {
         ProtectionOffCardContent.make(
             hasPlusAccess: SubscriptionManager.shared.hasPlusAccess,
             blockerConfigSaved: AppBlockingManager.shared.hasAppsSelected
         )
+    }
+
+    /// The Trial-End Paywall's copy + cohort (#169), or `nil` when it must not
+    /// exist: entitled, trial still active, or never granted. Derived live so
+    /// the sheet can never outlive a purchase or show mid-trial.
+    private var trialEndPaywallContent: TrialEndPaywallContent? {
+        TrialEndPaywallContent.make(
+            state: PlusAccessState(
+                hasEntitlement: SubscriptionManager.shared.hasEntitlement,
+                trialGrantDate: SubscriptionManager.shared.trialGrantDate
+            ),
+            blockerConfigSaved: AppBlockingManager.shared.hasAppsSelected,
+            stats: trialEndOwnStats,
+            calendar: Calendar.current,
+            now: Date()
+        )
+    }
+
+    /// The user's own trial record for the loss-framed sheet. Raw optionals:
+    /// a stat that cannot be read stays `nil` and drops its row (ADR 0002 —
+    /// never a zero shown as a brag). The intercept counter is the lifetime
+    /// total, which only ever accrues under Plus Access (#161).
+    private var trialEndOwnStats: TrialEndOwnStats {
+        guard let grantDate = SubscriptionManager.shared.trialGrantDate else { return .none }
+        let calendar = Calendar.current
+        let expiry = ReverseTrialClock(grantDate: grantDate).expiryMoment(calendar: calendar)
+        let lastProtectedDay = calendar.date(byAdding: .day, value: -1, to: expiry) ?? expiry
+        let record = store.doseRecord(from: grantDate, to: lastProtectedDay)
+        return TrialEndOwnStats(
+            blocksIntercepted: BlockerInterventionSharedState().counter.lifetimeTotal,
+            dosesTaken: record.due > 0 ? record.taken : nil,
+            dosesDue: record.due > 0 ? record.due : nil,
+            currentStreak: store.currentStreak
+        )
+    }
+
+    /// Auto-present the Trial-End Paywall exactly once, on the first Home pass
+    /// at-or-after expiry (#169). The decision defers until RevenueCat resolves
+    /// entitlement; the persisted flag makes it once-only — afterwards the
+    /// Protection Off card is the way back.
+    private func autoPresentTrialEndPaywallIfNeeded() {
+        let manager = SubscriptionManager.shared
+        guard TrialEndPaywallAutoPresentation.shouldPresent(
+            state: PlusAccessState(
+                hasEntitlement: manager.hasEntitlement,
+                trialGrantDate: manager.trialGrantDate
+            ),
+            entitlementResolved: manager.hasResolvedEntitlement,
+            alreadyShown: UserDefaults.standard.bool(
+                forKey: TrialEndPaywallAutoPresentation.shownStorageKey),
+            calendar: Calendar.current,
+            now: Date()
+        ), trialEndPaywallContent != nil else { return }
+        UserDefaults.standard.set(true, forKey: TrialEndPaywallAutoPresentation.shownStorageKey)
+        showTrialEndPaywall = true
     }
 
     /// Copy + gating for the Adaptive Reminder Time Suggestion card (#126). `nil` for
@@ -187,9 +243,15 @@ struct HomeView: View {
                         ProtectionOffCard(
                             content: protectionOff,
                             onPrimaryAction: {
-                                // Paywall reports paywallViewed itself; the
-                                // Trial-End Paywall takes over this route later.
-                                showBlockingPaywall = true
+                                // The Trial-End Paywall is this card's re-entry
+                                // point after expiry (#169); the Settings paywall
+                                // stays the fallback for lapsed payers with no
+                                // expired trial. Each reports paywallViewed itself.
+                                if trialEndPaywallContent != nil {
+                                    showTrialEndPaywall = true
+                                } else {
+                                    showBlockingPaywall = true
+                                }
                             }
                         )
                         .modifier(FadeInUp(appeared: appeared, delay: 0.15))
@@ -295,11 +357,21 @@ struct HomeView: View {
         }
         .background(PillieTheme.bg.ignoresSafeArea())
         .onAppear {
+            autoPresentTrialEndPaywallIfNeeded()
             guard !hasAnimatedIn else { return }
             hasAnimatedIn = true
             withAnimation(PillieTheme.fadeInUpCurve) {
                 appeared = true
             }
+        }
+        // Entitlement usually resolves after the first render; the auto-present
+        // decision defers until it has (#169), so re-run the check then — and
+        // when the grant date changes (QA deep links age or clear the trial).
+        .onChange(of: SubscriptionManager.shared.hasResolvedEntitlement) { _, _ in
+            autoPresentTrialEndPaywallIfNeeded()
+        }
+        .onChange(of: SubscriptionManager.shared.trialGrantDate) { _, _ in
+            autoPresentTrialEndPaywallIfNeeded()
         }
         .alert(store.refillBannerTitle, isPresented: $showRefillConfirmation) {
             Button(store.refillCTALabel) {
@@ -339,6 +411,14 @@ struct HomeView: View {
                 .presentationDetents([.height(TrialStatusSheet.presentationHeight)])
                 .presentationDragIndicator(.hidden)
                 .presentationBackground(PillieTheme.bg)
+            }
+        }
+        .fullScreenCover(isPresented: $showTrialEndPaywall) {
+            if let content = trialEndPaywallContent {
+                TrialEndPaywallView(
+                    content: content,
+                    onDismiss: { showTrialEndPaywall = false }
+                )
             }
         }
         .fullScreenCover(isPresented: $showTrialKeepPlusPaywall) {

@@ -133,6 +133,7 @@ protocol AnalyticsTracking {
     hasBlockingSelection: Bool?,
     interventionCount: Int?,
     trialWarningDay: Int?,
+    trialEndCohort: TrialEndPaywallCohort?,
     titleCustomized: Bool?,
     bodyCustomized: Bool?,
     retryTitleCustomized: Bool?,
@@ -212,6 +213,9 @@ enum AnalyticsSource: String {
   /// The existing-user Reverse Trial grant on first launch after the introducing
   /// update (#165 / ADR 0007), so it splits from `onboarding` grants in the funnel.
   case update
+  /// The Trial-End Paywall shown after Reverse Trial expiry (#169 / ADR 0007),
+  /// so its funnel splits from onboarding and Settings paywall traffic.
+  case trialEnd = "trial_end"
 }
 
 enum AnalyticsStep: String {
@@ -295,6 +299,9 @@ struct AnalyticsPayload {
   /// The trial day (10 or 13) carried as `day` by `trial_expiry_warning_sent`
   /// (#168 / ADR 0007).
   let trialWarningDay: Int?
+  /// The Trial-End Paywall cohort carried as `cohort` by `paywall_viewed`
+  /// with `source: trial_end` (#169 / ADR 0007).
+  let trialEndCohort: TrialEndPaywallCohort?
   let titleCustomized: Bool?
   let bodyCustomized: Bool?
   let retryTitleCustomized: Bool?
@@ -315,6 +322,7 @@ struct AnalyticsPayload {
     hasBlockingSelection: Bool? = nil,
     interventionCount: Int? = nil,
     trialWarningDay: Int? = nil,
+    trialEndCohort: TrialEndPaywallCohort? = nil,
     titleCustomized: Bool? = nil,
     bodyCustomized: Bool? = nil,
     retryTitleCustomized: Bool? = nil,
@@ -334,6 +342,7 @@ struct AnalyticsPayload {
     self.hasBlockingSelection = hasBlockingSelection
     self.interventionCount = interventionCount
     self.trialWarningDay = trialWarningDay
+    self.trialEndCohort = trialEndCohort
     self.titleCustomized = titleCustomized
     self.bodyCustomized = bodyCustomized
     self.retryTitleCustomized = retryTitleCustomized
@@ -363,6 +372,9 @@ struct AnalyticsPayload {
     }
     if let trialWarningDay {
       properties["day"] = .int(trialWarningDay)
+    }
+    if let trialEndCohort {
+      properties["cohort"] = .string(trialEndCohort.rawValue)
     }
     if let titleCustomized {
       properties["title_customized"] = .bool(titleCustomized)
@@ -477,6 +489,7 @@ final class AnalyticsManager: AnalyticsTracking {
     hasBlockingSelection: Bool? = nil,
     interventionCount: Int? = nil,
     trialWarningDay: Int? = nil,
+    trialEndCohort: TrialEndPaywallCohort? = nil,
     titleCustomized: Bool? = nil,
     bodyCustomized: Bool? = nil,
     retryTitleCustomized: Bool? = nil,
@@ -497,6 +510,7 @@ final class AnalyticsManager: AnalyticsTracking {
       hasBlockingSelection: hasBlockingSelection,
       interventionCount: interventionCount,
       trialWarningDay: trialWarningDay,
+      trialEndCohort: trialEndCohort,
       titleCustomized: titleCustomized,
       bodyCustomized: bodyCustomized,
       retryTitleCustomized: retryTitleCustomized,

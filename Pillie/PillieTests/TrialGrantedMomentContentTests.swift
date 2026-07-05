@@ -51,7 +51,6 @@ final class TrialGrantedMomentContentTests: XCTestCase {
         XCTAssertEqual(content.title, "Your next two weeks,")
         XCTAssertEqual(content.titleAccent, "on us.")
         XCTAssertEqual(content.subtitle, "A full trial of Pillie Plus starts now — here's how it goes.")
-        XCTAssertEqual(content.handNote, "today's the fun part!")
     }
 
     func testTimelineMapsTodayHeadsUpAndDayFourteenChoice() {
