@@ -766,6 +766,7 @@ struct TrialEndPaywallView: View {
                     await subscriptionManager.refreshStatus()
                 } else {
                     telemetry.trialEndPurchaseFailed(plan: plan.analyticsPlan)
+                    telemetry.trackError(.purchase, error: error)
                     purchaseError = error.localizedDescription
                 }
             }
@@ -798,6 +799,7 @@ struct TrialEndPaywallView: View {
                 }
             } catch {
                 telemetry.trialEndRestoreFailed()
+                telemetry.trackError(.restore, error: error)
                 let calmResponse = plusFeedback.unsuccessfulPaidOutcome(
                     accessibilityReduceMotion: accessibilityReduceMotion)
                 withAnimation(calmResponse.motionProfile.animation) {
@@ -821,6 +823,7 @@ struct TrialEndPaywallView: View {
             offerings = try await subscriptionManager.fetchOfferings()
         } catch {
             os_log(.error, "Pillie: failed to fetch trial-end offerings: %{public}@", error.localizedDescription)
+            telemetry.trackError(.offerings, error: error)
             offeringsError = true
         }
     }

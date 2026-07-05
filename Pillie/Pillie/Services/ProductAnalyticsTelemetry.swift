@@ -543,6 +543,24 @@ struct ProductAnalyticsTelemetry {
     track(.openLineIssueReportTapped, source: .settings)
   }
 
+  // MARK: - Error tracking (#179)
+
+  /// Report a handled failure so it counts toward the founder dashboard's error
+  /// rate. Captures `app_error` (flat `domain`/`message`/`code`/`severity`) and
+  /// mirrors the raw error into PostHog Error Tracking as `$exception`.
+  /// PII boundary: `domain` is a closed enum and `context` values must be
+  /// low-cardinality labels (e.g. `operation: schedule`) — never user content,
+  /// tokens, or free-form input. Expected user cancellations (StoreKit
+  /// `.userCancelled`) keep their product events and must not be routed here.
+  func trackError(
+    _ domain: AppErrorDomain,
+    error: Error,
+    context: [String: String] = [:],
+    severity: AppErrorSeverity = .error
+  ) {
+    analytics.trackError(domain, error: error, context: context, severity: severity)
+  }
+
   private func paywallSource(isFromOnboarding: Bool) -> AnalyticsSource {
     isFromOnboarding ? .onboarding : .settings
   }

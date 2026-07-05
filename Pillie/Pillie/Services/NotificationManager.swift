@@ -57,6 +57,9 @@ final class NotificationManager {
         center.requestAuthorization(options: [.alert, .sound, .badge]) { _, error in
             if let error {
                 os_log(.error, "Pillie notification auth error: %{public}@", error.localizedDescription)
+                ProductAnalyticsTelemetry.live.trackError(
+                    .notifications, error: error, context: ["operation": "authorization"]
+                )
             }
         }
     }
@@ -524,6 +527,9 @@ final class NotificationManager {
                 self.center.add(request) { error in
                     if let error {
                         os_log(.error, "Pillie schedule error: %{public}@", error.localizedDescription)
+                        ProductAnalyticsTelemetry.live.trackError(
+                            .notifications, error: error, context: ["operation": "schedule"]
+                        )
                     }
                 }
             }

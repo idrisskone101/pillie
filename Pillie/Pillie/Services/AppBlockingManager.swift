@@ -110,6 +110,12 @@ final class AppBlockingManager {
             isAuthorized = false
             authorizationStatus = .denied
             Self.logger.error("Screen Time auth error: \(error.localizedDescription)")
+            // `warning`, not `error`: this catch also fires when the user declines
+            // the system dialog, which is a choice rather than a malfunction.
+            ProductAnalyticsTelemetry.live.trackError(
+                .screenTime, error: error,
+                context: ["operation": "authorization"], severity: .warning
+            )
         }
         #endif
     }
@@ -259,6 +265,9 @@ final class AppBlockingManager {
             Self.logger.info("scheduleDeviceActivityBlock: monitoring started successfully")
         } catch {
             Self.logger.error("scheduleDeviceActivityBlock: failed — \(error.localizedDescription)")
+            ProductAnalyticsTelemetry.live.trackError(
+                .screenTime, error: error, context: ["operation": "monitoring"]
+            )
         }
         #endif
     }

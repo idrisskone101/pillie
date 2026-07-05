@@ -831,6 +831,7 @@ struct PremiumPaywallView: View {
                         await subscriptionManager.refreshStatus()
                     } else {
                         telemetry.purchaseFailed(plan: selectedPlan.analyticsPlan, isFromOnboarding: isFromOnboarding)
+                        telemetry.trackError(.purchase, error: error)
                         purchaseError = error.localizedDescription
                     }
                 }
@@ -884,6 +885,7 @@ struct PremiumPaywallView: View {
                 }
             } catch {
                 telemetry.restoreFailed(isFromOnboarding: isFromOnboarding)
+                telemetry.trackError(.restore, error: error)
                 let calmResponse = plusFeedback.unsuccessfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
                 withAnimation(calmResponse.motionProfile.animation) {
                     purchaseError = error.localizedDescription
@@ -901,6 +903,7 @@ struct PremiumPaywallView: View {
             offerings = try await subscriptionManager.fetchOfferings()
         } catch {
             os_log(.error, "Pillie: failed to fetch offerings: %{public}@", error.localizedDescription)
+            telemetry.trackError(.offerings, error: error)
             offeringsError = true
         }
     }
