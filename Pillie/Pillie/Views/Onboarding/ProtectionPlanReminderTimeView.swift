@@ -209,7 +209,9 @@ struct ProtectionPlanReminderTimeView: View {
         onContinue()
         DispatchQueue.main.async {
             onboardingTelemetry.notificationPermissionRequested()
-            NotificationManager.shared.requestAuthorization()
+            NotificationManager.shared.requestAuthorization { granted in
+                onboardingTelemetry.notificationPermissionCompleted(granted: granted)
+            }
         }
     }
 

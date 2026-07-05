@@ -103,8 +103,28 @@ struct ProductAnalyticsTelemetry {
     track(.onboardingStepCompleted, source: .onboarding, step: .delayConsequence)
   }
 
+  /// The Early Value Proof shake check-in resolved (#175). `shakeCount` is the
+  /// number of real shakes performed before resolution (0–3) — the CTA tap is a
+  /// fallback (no CoreMotion on simulator, not everyone can shake), so a low
+  /// count with a resolution means the fallback was used.
+  func demoShakeCompleted(shakeCount: Int) {
+    track(.demoShakeCompleted, source: .onboarding, step: .demoShake, shakeCount: shakeCount)
+  }
+
   func notificationPermissionRequested() {
     track(.notificationPermissionRequested, source: .onboarding, step: .reminderTime)
+  }
+
+  /// The system notification prompt resolved (#175). Same step as the request
+  /// so the pair lines up in the funnel, with the coarse granted/denied result
+  /// — mirroring `screenTimePermissionCompleted`.
+  func notificationPermissionCompleted(granted: Bool) {
+    track(
+      .notificationPermissionCompleted,
+      source: .onboarding,
+      step: .reminderTime,
+      result: granted ? .granted : .denied
+    )
   }
 
   func screenTimePermissionRequested() {
@@ -577,6 +597,7 @@ struct ProductAnalyticsTelemetry {
     acquisitionSource: AcquisitionSource? = nil,
     hasBlockingSelection: Bool? = nil,
     interventionCount: Int? = nil,
+    shakeCount: Int? = nil,
     trialWarningDay: Int? = nil,
     trialEndCohort: TrialEndPaywallCohort? = nil,
     titleCustomized: Bool? = nil,
@@ -599,6 +620,7 @@ struct ProductAnalyticsTelemetry {
       isPlus: isPlus(),
       hasBlockingSelection: hasBlockingSelection,
       interventionCount: interventionCount,
+      shakeCount: shakeCount,
       trialWarningDay: trialWarningDay,
       trialEndCohort: trialEndCohort,
       titleCustomized: titleCustomized,

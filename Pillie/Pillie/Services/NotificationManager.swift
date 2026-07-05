@@ -52,11 +52,17 @@ final class NotificationManager {
 
     // MARK: - Authorization
 
-    func requestAuthorization() {
+    /// `completion` delivers the system prompt's coarse outcome on the main
+    /// queue so the caller can report `notification_permission_completed`
+    /// (#175). Never invoked under XCTest (the whole request is skipped).
+    func requestAuthorization(completion: ((Bool) -> Void)? = nil) {
         guard !isRunningTests else { return }
-        center.requestAuthorization(options: [.alert, .sound, .badge]) { _, error in
+        center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
             if let error {
                 os_log(.error, "Pillie notification auth error: %{public}@", error.localizedDescription)
+            }
+            if let completion {
+                DispatchQueue.main.async { completion(granted) }
             }
         }
     }

@@ -61,6 +61,9 @@ struct ProtectionPlanEarlyValueProofView: View {
     /// The real check-in mechanic: shake the phone (3×). CoreMotion is unavailable
     /// on the simulator, so the CTA tap is the fallback there (and for a11y).
     @State private var shakeManager = ShakeDetectionManager(requiredShakes: 3)
+    /// Demo funnel instrumentation (#175): one `onboarding_step_viewed` per stage
+    /// per screen visit (the dedupe lives in the telemetry value, not the view).
+    @State private var demoTelemetry = EarlyValueProofTelemetry()
 
     private let content = ProtectionPlanEarlyValueProofContent.default
     private let performanceTier = PerformanceTier.current
@@ -142,6 +145,9 @@ struct ProtectionPlanEarlyValueProofView: View {
         }
         .accessibilityIdentifier("protectionPlanEarlyValueProofView")
         .onAppear {
+            // The static (Reduce Motion / VoiceOver) path presents the resolved
+            // state directly, so it reports the stage actually shown.
+            demoTelemetry.stageViewed(prefersStaticProof ? .unlocked : .drag)
             withAnimation(PillieTheme.fadeInUpCurve) { appeared = true }
             // Warm the Lottie during the calm entrance, not at the resolve tap.
             if unlockAnimation == nil {
@@ -154,6 +160,7 @@ struct ProtectionPlanEarlyValueProofView: View {
         .onChange(of: isLatched) { _, latched in
             guard !prefersStaticProof else { return }
             if latched {
+                demoTelemetry.stageViewed(.shake)
                 shakeManager.startDetecting()
                 guard animationsEnabled else { return }
                 withAnimation(.easeInOut(duration: 0.55).repeatForever(autoreverses: true)) {
@@ -175,7 +182,7 @@ struct ProtectionPlanEarlyValueProofView: View {
             } else {
                 interactionFeedback.easeProtectionMoment(accessibilityReduceMotion: reduceMotion)
             }
-            if shakeManager.isComplete { performCheckIn() }
+            if shakeManager.isComplete { performCheckIn(realShakeCount: newValue) }
         }
         .onDisappear {
             shakeManager.stopDetecting()
@@ -194,8 +201,11 @@ struct ProtectionPlanEarlyValueProofView: View {
         // simulator has no CoreMotion, and not everyone can shake): fill the ring
         // to full, then resolve.
         if isLatched {
+            // Capture the real shakes before the fill overwrites the count —
+            // `shake_count` below 3 is how the funnel sees the tap fallback.
+            let realShakes = shakeManager.shakeCount
             shakeManager.fillToComplete()
-            performCheckIn()
+            performCheckIn(realShakeCount: realShakes)
             return
         }
         // At rest the CTA does NOT skip the demo — it points the user at the dot.
@@ -212,8 +222,10 @@ struct ProtectionPlanEarlyValueProofView: View {
         }
     }
 
-    private func performCheckIn() {
+    private func performCheckIn(realShakeCount: Int) {
         guard !hasResolved else { return }   // idempotent: a final shake + tap can't double-fire
+        demoTelemetry.shakeCheckInCompleted(shakeCount: realShakeCount)
+        demoTelemetry.stageViewed(.unlocked)
         shakeManager.stopDetecting()
         cometWiggle = false
         let resolved = interactionFeedback.markDueActionTaken(accessibilityReduceMotion: reduceMotion)

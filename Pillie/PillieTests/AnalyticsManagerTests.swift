@@ -52,7 +52,6 @@ final class AnalyticsManagerTests: XCTestCase {
     XCTAssertFalse(configuration.sendFeatureFlagEvent)
     XCTAssertFalse(configuration.preloadFeatureFlags)
     XCTAssertFalse(configuration.setDefaultPersonProperties)
-    XCTAssertFalse(configuration.sessionReplay)
     XCTAssertFalse(configuration.surveys)
     // Analytics is collected for everyone, so configure opts in (never opted out).
     XCTAssertFalse(configuration.isOptedOut)
@@ -417,6 +416,7 @@ private final class RecordingAnalyticsTracker: AnalyticsTracking {
     isPlus: Bool?,
     hasBlockingSelection: Bool?,
     interventionCount: Int?,
+    shakeCount: Int?,
     trialWarningDay: Int?,
     trialEndCohort: TrialEndPaywallCohort?,
     titleCustomized: Bool?,

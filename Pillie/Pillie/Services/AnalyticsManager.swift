@@ -35,6 +35,15 @@ struct ProductAnalyticsConfiguration: Equatable {
   let preloadFeatureFlags: Bool
   let setDefaultPersonProperties: Bool
   let sessionReplay: Bool
+  /// PostHog captures SwiftUI replay via periodic screenshots; wireframe mode
+  /// cannot see SwiftUI content, so replay requires screenshot mode here.
+  let sessionReplayScreenshotMode: Bool
+  // Masking controls (#175). This is a health app: pill names, schedules, and
+  // health answers must never appear in a recording, so every masking control
+  // ships engaged.
+  let sessionReplayMaskAllTextInputs: Bool
+  let sessionReplayMaskAllImages: Bool
+  let sessionReplayMaskAllSandboxedViews: Bool
   let surveys: Bool
   let isOptedOut: Bool
   /// Process person profiles for every event (PostHog `personProfiles = .always`).
@@ -83,6 +92,11 @@ final class PostHogAnalyticsClient: ProductAnalyticsClient {
     #if os(iOS)
       config.captureElementInteractions = configuration.captureElementInteractions
       config.sessionReplay = configuration.sessionReplay
+      config.sessionReplayConfig.screenshotMode = configuration.sessionReplayScreenshotMode
+      config.sessionReplayConfig.maskAllTextInputs = configuration.sessionReplayMaskAllTextInputs
+      config.sessionReplayConfig.maskAllImages = configuration.sessionReplayMaskAllImages
+      config.sessionReplayConfig.maskAllSandboxedViews =
+        configuration.sessionReplayMaskAllSandboxedViews
       if #available(iOS 15.0, *) {
         config.surveys = configuration.surveys
       }
@@ -132,6 +146,7 @@ protocol AnalyticsTracking {
     isPlus: Bool?,
     hasBlockingSelection: Bool?,
     interventionCount: Int?,
+    shakeCount: Int?,
     trialWarningDay: Int?,
     trialEndCohort: TrialEndPaywallCohort?,
     titleCustomized: Bool?,
@@ -177,6 +192,10 @@ enum AnalyticsEvent: String, CaseIterable {
   case restoreFailed = "restore_failed"
   case continueFreeSelected = "continue_free_selected"
   case notificationPermissionRequested = "notification_permission_requested"
+  /// The notification authorization prompt resolved (#175). Carries
+  /// `result: granted | denied` — the symmetric partner of the requested
+  /// event, mirroring the screen_time pair.
+  case notificationPermissionCompleted = "notification_permission_completed"
   case screenTimePermissionRequested = "screen_time_permission_requested"
   case screenTimePermissionCompleted = "screen_time_permission_completed"
   case tabSelected = "tab_selected"
@@ -200,6 +219,10 @@ enum AnalyticsEvent: String, CaseIterable {
   case reviewPromptDismissed = "review_prompt_dismissed"
   case openLineSuggestionTapped = "open_line_suggestion_tapped"
   case openLineIssueReportTapped = "open_line_issue_report_tapped"
+  /// The Early Value Proof shake check-in resolved (#175). Carries `shake_count`
+  /// (0–3): how many real shakes happened before resolution, so the funnel can
+  /// see the CTA-tap fallback and mid-shake abandonment.
+  case demoShakeCompleted = "demo_shake_completed"
 }
 
 enum AnalyticsSource: String {
@@ -232,6 +255,13 @@ enum AnalyticsStep: String {
   case riskWindow = "risk_window"
   case draftBlockedApps = "draft_blocked_apps"
   case acquisitionSource = "acquisition_source"
+  // The three Early Value Proof demo stages (#175). They fill the funnel gap
+  // between welcome (step_index 0) and pain_points (step_index 4): the stages
+  // are phases of one screen, not `OnboardingFlow` steps, so their indices are
+  // owned by `EarlyValueProofStage`, not `displayOrder`.
+  case demoDrag = "demo_drag"
+  case demoShake = "demo_shake"
+  case demoUnlocked = "demo_unlocked"
   case paywall
   case method
   case schedule
@@ -296,6 +326,9 @@ struct AnalyticsPayload {
   /// Aggregated shield-intercept count carried by `blocker_intervention_fired`
   /// — one event per flush, never one per intercept (#161).
   let interventionCount: Int?
+  /// Real shakes performed before the Early Value Proof check-in resolved,
+  /// carried as `shake_count` by `demo_shake_completed` (#175).
+  let shakeCount: Int?
   /// The trial day (10 or 13) carried as `day` by `trial_expiry_warning_sent`
   /// (#168 / ADR 0007).
   let trialWarningDay: Int?
@@ -321,6 +354,7 @@ struct AnalyticsPayload {
     isPlus: Bool? = nil,
     hasBlockingSelection: Bool? = nil,
     interventionCount: Int? = nil,
+    shakeCount: Int? = nil,
     trialWarningDay: Int? = nil,
     trialEndCohort: TrialEndPaywallCohort? = nil,
     titleCustomized: Bool? = nil,
@@ -341,6 +375,7 @@ struct AnalyticsPayload {
     self.isPlus = isPlus
     self.hasBlockingSelection = hasBlockingSelection
     self.interventionCount = interventionCount
+    self.shakeCount = shakeCount
     self.trialWarningDay = trialWarningDay
     self.trialEndCohort = trialEndCohort
     self.titleCustomized = titleCustomized
@@ -369,6 +404,9 @@ struct AnalyticsPayload {
     }
     if let interventionCount {
       properties["intervention_count"] = .int(interventionCount)
+    }
+    if let shakeCount {
+      properties["shake_count"] = .int(shakeCount)
     }
     if let trialWarningDay {
       properties["day"] = .int(trialWarningDay)
@@ -459,7 +497,11 @@ final class AnalyticsManager: AnalyticsTracking {
         sendFeatureFlagEvent: false,
         preloadFeatureFlags: false,
         setDefaultPersonProperties: false,
-        sessionReplay: false,
+        sessionReplay: true,
+        sessionReplayScreenshotMode: true,
+        sessionReplayMaskAllTextInputs: true,
+        sessionReplayMaskAllImages: true,
+        sessionReplayMaskAllSandboxedViews: true,
         surveys: false,
         isOptedOut: !isAnalyticsEnabled,
         personProfilesAlways: true
@@ -488,6 +530,7 @@ final class AnalyticsManager: AnalyticsTracking {
     isPlus: Bool? = nil,
     hasBlockingSelection: Bool? = nil,
     interventionCount: Int? = nil,
+    shakeCount: Int? = nil,
     trialWarningDay: Int? = nil,
     trialEndCohort: TrialEndPaywallCohort? = nil,
     titleCustomized: Bool? = nil,
@@ -509,6 +552,7 @@ final class AnalyticsManager: AnalyticsTracking {
       isPlus: isPlus,
       hasBlockingSelection: hasBlockingSelection,
       interventionCount: interventionCount,
+      shakeCount: shakeCount,
       trialWarningDay: trialWarningDay,
       trialEndCohort: trialEndCohort,
       titleCustomized: titleCustomized,
