@@ -54,6 +54,10 @@ struct OnboardingTelemetry {
     telemetry.notificationPermissionRequested()
   }
 
+  func notificationPermissionCompleted(granted: Bool) {
+    telemetry.notificationPermissionCompleted(granted: granted)
+  }
+
   func screenTimePermissionRequested() {
     telemetry.screenTimePermissionRequested()
   }

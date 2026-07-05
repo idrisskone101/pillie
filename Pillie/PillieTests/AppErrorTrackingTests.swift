@@ -148,6 +148,7 @@ private final class ErrorRecordingTracker: AnalyticsTracking {
     isPlus: Bool?,
     hasBlockingSelection: Bool?,
     interventionCount: Int?,
+    shakeCount: Int?,
     trialWarningDay: Int?,
     trialEndCohort: TrialEndPaywallCohort?,
     titleCustomized: Bool?,

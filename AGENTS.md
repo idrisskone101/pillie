@@ -13,7 +13,7 @@ Use the global `xcodebuildmcp-cli` skill for Apple platform build, run, simulato
 
 ### Apple Xcode 27 skills (use proactively during development)
 
-These are Apple's official Xcode 27 Agent Skills, installed globally in `~/.claude/skills`. Pillie targets the Xcode 27 / iOS 27 SDK, so **consult the relevant skill before writing or reviewing the matching code — do not rely on memory for SDK 27 behavior.** Treat these as part of the normal development loop, not an afterthought:
+These are Apple's official Xcode 27 Agent Skills, installed globally in `~/.claude/skills` on developer Macs; in GitHub Actions, `.github/workflows/claude.yml` exports the same skills from the runner's Xcode (`xcrun mcpbridge run-agent skills export`) into the runner's `~/.claude/skills` before Claude starts, so the same guidance applies in CI. Pillie targets the Xcode 27 / iOS 27 SDK, so **consult the relevant skill before writing or reviewing the matching code — do not rely on memory for SDK 27 behavior.** Treat these as part of the normal development loop, not an afterthought:
 
 - `swiftui-specialist`: writing, reviewing, or editing any SwiftUI view, data flow, modifier, or animation. Use before adding new SwiftUI screens or components.
 - `swiftui-whats-new-27`: any SDK 27 SwiftUI behavior or deprecation. **Mandatory** when a `@State` view fails to compile with "used before being initialized", "invalid redeclaration of synthesized property", or "extraneous argument label" (`@State` is now a macro; reordering init assignments is the WRONG fix), and for `reorderable`, `swipeActions`, toolbar overflow, `AsyncImage(request:)`, item bindings, and `DocumentGroup`.
