@@ -107,6 +107,7 @@ private struct NoOpTracker: AnalyticsTracking {
         hasBlockingSelection: Bool?,
         interventionCount: Int?,
         trialWarningDay: Int?,
+        trialEndCohort: TrialEndPaywallCohort?,
         titleCustomized: Bool?,
         bodyCustomized: Bool?,
         retryTitleCustomized: Bool?,

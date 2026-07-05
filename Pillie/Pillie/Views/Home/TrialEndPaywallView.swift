@@ -1,0 +1,919 @@
+//
+//  TrialEndPaywallView.swift
+//  Pillie
+//
+//  The Trial-End Paywall (issue #169 / ADR 0007 / CONTEXT.md): the purchase
+//  ask after the user has lived with the blocker, shown once on first launch
+//  after Reverse Trial expiry and re-opened from the Protection Off card.
+//  Cohort copy + own-stats assembly live in TrialEndPaywallContent (value-type
+//  tested); this view owns plan selection, purchase/restore, and the success
+//  state. Claude Design "Trial-End Paywall" 2a–2e.
+//
+
+import SwiftUI
+import RevenueCat
+import os
+
+struct TrialEndPaywallView: View {
+    @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
+    @State private var animateIn = false
+    @State private var selectedPlan: Plan = .annual
+    @State private var offerings: Offerings?
+    @State private var offeringsError = false
+    @State private var purchaseError: String?
+    @State private var isPurchasing = false
+    @State private var isRestoring = false
+    @State private var showNoSubscriptionAlert = false
+    @State private var purchaseSucceeded = false
+    @State private var succeededPlan: Plan = .annual
+    private let subscriptionManager = SubscriptionManager.shared
+    private let telemetry = ProductAnalyticsTelemetry.live
+    private let plusFeedback = PlusPaywallInteractionFeedback(performanceTier: PerformanceTier.current)
+
+    let content: TrialEndPaywallContent
+    let onDismiss: () -> Void
+
+    #if DEBUG
+    /// One-shot UserDefaults key consumed on appear to force the success state
+    /// for simulator QA (see the /trial-end-paywall debug deep link).
+    static let debugSuccessStateKey = "trialEndPaywallDebugSuccessState"
+    #endif
+
+    private enum Plan {
+        case annual, monthly
+
+        var analyticsPlan: AnalyticsPlan {
+            switch self {
+            case .annual: return .annual
+            case .monthly: return .monthly
+            }
+        }
+    }
+
+    var body: some View {
+        ZStack {
+            PillieTheme.bg.ignoresSafeArea()
+            backgroundBlob
+
+            if purchaseSucceeded {
+                successState
+                    .transition(.opacity)
+            } else {
+                offerState
+                    .transition(.opacity)
+            }
+        }
+        .animation(PillieTheme.fadeInUpCurve, value: purchaseSucceeded)
+        .onAppear {
+            telemetry.trialEndPaywallViewed(cohort: content.cohort)
+            withAnimation(PillieTheme.fadeInUpCurve) { animateIn = true }
+            #if DEBUG
+            // QA seam (#169): sandbox purchases aren't reachable from simctl
+            // launches, so pillie://debug/trial-end-paywall?success=1 seeds this
+            // one-shot flag to render the success state for visual QA.
+            if UserDefaults.standard.bool(forKey: Self.debugSuccessStateKey) {
+                UserDefaults.standard.removeObject(forKey: Self.debugSuccessStateKey)
+                purchaseSucceeded = true
+            }
+            #endif
+        }
+        .task {
+            subscriptionManager.configure()
+            async let offeringsLoaded: Void = loadOfferings()
+            await subscriptionManager.refreshStatus()
+            await offeringsLoaded
+        }
+        .alert("Purchase Error", isPresented: .init(
+            get: { purchaseError != nil },
+            set: { if !$0 { purchaseError = nil } }
+        )) {
+            Button("OK") { purchaseError = nil }
+        } message: {
+            Text(purchaseError ?? "")
+        }
+        // Design 2e: the native no-subscription alert over the sheet, matching
+        // the existing paywall's restore path.
+        .alert("No Subscription Found", isPresented: $showNoSubscriptionAlert) {
+            Button("OK") {}
+        } message: {
+            Text("No active subscription was found for this account.")
+        }
+        .accessibilityIdentifier("trialEndPaywall")
+    }
+
+    // MARK: - Background
+
+    private var backgroundBlob: some View {
+        let color: Color
+        switch content.card {
+        case .record(_, _, _, let quietShieldNote):
+            color = quietShieldNote == nil ? PillieTheme.coral.opacity(0.28) : PillieTheme.sage.opacity(0.9)
+        case .perks:
+            color = content.cohort == .reminderOnly
+                ? PillieTheme.lavender.opacity(0.8)
+                : PillieTheme.coral.opacity(0.28)
+        }
+        return Circle()
+            .fill(color)
+            .frame(width: 230, height: 230)
+            .blur(radius: 50)
+            .offset(x: content.cohort == .reminderOnly ? -110 : 110, y: -60)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+            .ignoresSafeArea()
+            .accessibilityHidden(true)
+    }
+
+    // MARK: - Offer state (designs 2a / 2b / 2c)
+
+    private var offerState: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            HStack {
+                Spacer()
+                Button {
+                    dismissWithoutPurchase()
+                } label: {
+                    Image(systemName: "xmark")
+                        .font(.system(size: 13, weight: .semibold))
+                        .foregroundStyle(PillieTheme.textPrimary)
+                        .frame(width: 32, height: 32)
+                        .background(PillieTheme.sage, in: Circle())
+                }
+                .accessibilityLabel("Close")
+                .accessibilityIdentifier("trialEndPaywallClose")
+            }
+
+            (Text("\(content.title)\n").foregroundColor(PillieTheme.textPrimary)
+                + Text(content.titleAccent).foregroundColor(PillieTheme.coral))
+                .font(.pillie(30, weight: .black))
+                .lineSpacing(0)
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(.top, 8)
+                .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger1))
+
+            Text(content.subtitle)
+                .font(.pillie(14, weight: .medium))
+                .foregroundStyle(PillieTheme.textMuted)
+                .lineSpacing(2)
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(.top, 8)
+                .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger2))
+
+            centerpieceCard
+                .padding(.top, 16)
+                .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger3))
+
+            Text(content.handwrittenAside)
+                .font(.pillieHandwriting(size: 23))
+                .foregroundStyle(PillieTheme.textMuted)
+                .frame(maxWidth: .infinity)
+                .rotationEffect(.degrees(-2))
+                .padding(.top, 10)
+                .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger4))
+
+            Spacer(minLength: 12)
+
+            Group {
+                planTiles
+                reassuranceRow
+                    .padding(.top, 14)
+                purchaseButton
+                    .padding(.top, 12)
+                secondaryLinks
+                    .padding(.top, 12)
+                legalFooter
+                    .padding(.top, 8)
+            }
+            .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger5))
+        }
+        .padding(.horizontal, 24)
+        .padding(.top, 8)
+        .padding(.bottom, 8)
+    }
+
+    // MARK: - Centerpiece card
+
+    @ViewBuilder
+    private var centerpieceCard: some View {
+        switch content.card {
+        case .record(let kicker, let dateRange, let rows, let quietShieldNote):
+            recordCard(kicker: kicker, dateRange: dateRange, rows: rows, quietShieldNote: quietShieldNote)
+        case .perks(let kicker, let chips, let footnote):
+            perksCard(kicker: kicker, chips: chips, footnote: footnote)
+        }
+    }
+
+    private func recordCard(
+        kicker: String,
+        dateRange: String,
+        rows: [TrialEndPaywallContent.RecordRow],
+        quietShieldNote: String?
+    ) -> some View {
+        VStack(alignment: .leading, spacing: 0) {
+            HStack {
+                Text(kicker)
+                    .font(.pillie(10, weight: .black))
+                    .tracking(1.5)
+                    .textCase(.uppercase)
+                    .foregroundStyle(PillieTheme.coral)
+                Spacer()
+                Text(dateRange)
+                    .font(.pillie(10, weight: .black))
+                    .tracking(1.5)
+                    .textCase(.uppercase)
+                    .foregroundStyle(Color.white.opacity(0.4))
+            }
+            .padding(.bottom, 6)
+
+            ForEach(Array(rows.enumerated()), id: \.offset) { index, row in
+                if index > 0 {
+                    Rectangle()
+                        .fill(Color.white.opacity(0.1))
+                        .frame(height: 1)
+                }
+                HStack(alignment: .firstTextBaseline) {
+                    Text(row.label)
+                        .font(.pillie(14, weight: .medium))
+                        .foregroundStyle(Color.white.opacity(0.85))
+                    Spacer()
+                    (Text(row.value)
+                        .font(.pillie(22, weight: .black))
+                        .foregroundColor(row.emphasized ? PillieTheme.coral : .white)
+                        + Text(row.valueSuffix.map { " \($0)" } ?? "")
+                        .font(.pillie(13, weight: .semibold))
+                        .foregroundColor(Color.white.opacity(0.5)))
+                }
+                .padding(.vertical, 13)
+                .accessibilityElement(children: .combine)
+            }
+
+            if let quietShieldNote {
+                if !rows.isEmpty {
+                    Rectangle()
+                        .fill(Color.white.opacity(0.1))
+                        .frame(height: 1)
+                }
+                HStack(alignment: .top, spacing: 10) {
+                    Image(systemName: "shield")
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundStyle(PillieTheme.coral)
+                        .padding(.top, 1)
+                        .accessibilityHidden(true)
+                    Text(quietShieldNote)
+                        .font(.pillie(13, weight: .medium))
+                        .foregroundStyle(Color.white.opacity(0.7))
+                        .lineSpacing(2)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                .padding(.top, 13)
+            }
+        }
+        .padding(20)
+        .background(
+            RoundedRectangle(cornerRadius: PillieTheme.cardRadius)
+                .fill(PillieTheme.dark)
+        )
+        .shadow(color: PillieTheme.dark.opacity(0.25), radius: 15, y: 8)
+        .accessibilityIdentifier("trialEndPaywallRecordCard")
+    }
+
+    private func perksCard(kicker: String, chips: [String], footnote: String) -> some View {
+        VStack(alignment: .leading, spacing: 0) {
+            Text(kicker)
+                .font(.pillie(10, weight: .black))
+                .tracking(1.5)
+                .textCase(.uppercase)
+                .foregroundStyle(PillieTheme.coral)
+
+            FlowingChips(chips: chips)
+                .padding(.top, 12)
+
+            Text(footnote)
+                .font(.pillie(13, weight: .medium))
+                .foregroundStyle(Color.white.opacity(0.6))
+                .lineSpacing(2)
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(.top, 14)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(20)
+        .background(
+            RoundedRectangle(cornerRadius: PillieTheme.cardRadius)
+                .fill(PillieTheme.dark)
+        )
+        .shadow(color: PillieTheme.dark.opacity(0.25), radius: 15, y: 8)
+        .accessibilityIdentifier("trialEndPaywallPerksCard")
+    }
+
+    // MARK: - Plan tiles
+
+    private var annualPackage: Package? {
+        guard let offering = offerings?.current else { return nil }
+        return offering.annual ?? offering.availablePackages.first {
+            $0.storeProduct.productIdentifier == SubscriptionManager.annualProductID
+        }
+    }
+
+    private var monthlyPackage: Package? {
+        guard let offering = offerings?.current else { return nil }
+        return offering.monthly ?? offering.availablePackages.first {
+            $0.storeProduct.productIdentifier == SubscriptionManager.monthlyProductID
+        }
+    }
+
+    private var selectedPackage: Package? {
+        switch selectedPlan {
+        case .annual: return annualPackage
+        case .monthly: return monthlyPackage
+        }
+    }
+
+    private var annualPriceText: String {
+        annualPackage?.storeProduct.localizedPriceString ?? "$29.99"
+    }
+
+    private var monthlyPriceText: String {
+        monthlyPackage?.storeProduct.localizedPriceString ?? "$4.99"
+    }
+
+    /// Truthful annual-vs-monthly comparison from live store prices (ADR 0002:
+    /// no fake stats). `nil` until both packages have loaded.
+    private var priceComparison: PaywallPriceComparison? {
+        guard let annual = annualPackage?.storeProduct.price,
+              let monthly = monthlyPackage?.storeProduct.price else { return nil }
+        return PaywallPriceComparison(annualPrice: annual, monthlyPrice: monthly)
+    }
+
+    private var annualPerMonthText: String? {
+        guard let comparison = priceComparison,
+              let formatter = annualPackage?.storeProduct.priceFormatter else { return nil }
+        return comparison.monthlyEquivalentString(using: formatter)
+    }
+
+    /// "2 months free" derived from real prices (the #162 annual anchor), or
+    /// `nil` when there is no honest saving.
+    private var savingsBadgeText: String? {
+        guard let months = priceComparison?.monthsFree else { return nil }
+        return months == 1 ? "1 month free" : "\(months) months free"
+    }
+
+    private var planTiles: some View {
+        HStack(alignment: .top, spacing: 10) {
+            annualTile
+                .frame(maxWidth: .infinity)
+            monthlyTile
+                .frame(maxWidth: .infinity)
+        }
+        .padding(.top, 10)
+    }
+
+    private var annualTile: some View {
+        Button {
+            selectPlan(.annual)
+        } label: {
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Annual")
+                    .font(.pillie(11, weight: .black))
+                    .tracking(1)
+                    .textCase(.uppercase)
+                    .foregroundStyle(Color.white.opacity(0.55))
+                    .padding(.top, 4)
+
+                HStack(alignment: .firstTextBaseline, spacing: 4) {
+                    Text(annualPriceText)
+                        .font(.pillie(24, weight: .black))
+                        .foregroundStyle(.white)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.6)
+                    Text("/yr")
+                        .font(.pillie(13, weight: .semibold))
+                        .foregroundStyle(Color.white.opacity(0.6))
+                }
+
+                Text(annualPerMonthText.map { "\($0)/mo" } ?? " ")
+                    .font(.pillie(12, weight: .semibold))
+                    .foregroundStyle(Color.white.opacity(0.6))
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(14)
+            .background(
+                RoundedRectangle(cornerRadius: PillieTheme.buttonRadius)
+                    .fill(PillieTheme.dark)
+            )
+            .overlay {
+                if selectedPlan == .annual {
+                    RoundedRectangle(cornerRadius: PillieTheme.buttonRadius)
+                        .stroke(PillieTheme.coral, lineWidth: 2)
+                }
+            }
+            .overlay(alignment: .topTrailing) {
+                radioCircle(selected: selectedPlan == .annual, onDark: true)
+                    .padding(12)
+            }
+            .overlay(alignment: .topLeading) {
+                if let savingsBadgeText {
+                    Text(savingsBadgeText)
+                        .font(.pillie(9, weight: .black))
+                        .tracking(0.8)
+                        .textCase(.uppercase)
+                        .foregroundStyle(PillieTheme.dark)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 4)
+                        .background(PillieTheme.coral, in: Capsule())
+                        .offset(x: 14, y: -10)
+                }
+            }
+            .shadow(color: PillieTheme.dark.opacity(0.28), radius: 12, y: 8)
+        }
+        .buttonStyle(.plain)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Annual, \(annualPriceText) per year\(annualPerMonthText.map { ", \($0) per month" } ?? "").\(savingsBadgeText.map { " \($0)." } ?? "")")
+        .accessibilityAddTraits(selectedPlan == .annual ? [.isButton, .isSelected] : .isButton)
+        .accessibilityIdentifier("trialEndPaywallAnnualPlan")
+    }
+
+    private var monthlyTile: some View {
+        Button {
+            selectPlan(.monthly)
+        } label: {
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Monthly")
+                    .font(.pillie(11, weight: .black))
+                    .tracking(1)
+                    .textCase(.uppercase)
+                    .foregroundStyle(PillieTheme.textMuted)
+                    .padding(.top, 4)
+
+                HStack(alignment: .firstTextBaseline, spacing: 4) {
+                    Text(monthlyPriceText)
+                        .font(.pillie(24, weight: .black))
+                        .foregroundStyle(PillieTheme.textPrimary)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.6)
+                    Text("/mo")
+                        .font(.pillie(13, weight: .semibold))
+                        .foregroundStyle(PillieTheme.textMuted)
+                }
+
+                Text("No commitment")
+                    .font(.pillie(12, weight: .semibold))
+                    .foregroundStyle(PillieTheme.textMuted)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(14)
+            .background(
+                RoundedRectangle(cornerRadius: PillieTheme.buttonRadius)
+                    .fill(selectedPlan == .monthly ? PillieTheme.coralLight : PillieTheme.cardWhite)
+            )
+            .overlay {
+                RoundedRectangle(cornerRadius: PillieTheme.buttonRadius)
+                    .stroke(
+                        selectedPlan == .monthly ? PillieTheme.coral : PillieTheme.sageHalf,
+                        lineWidth: selectedPlan == .monthly ? 2 : 1
+                    )
+            }
+            .overlay(alignment: .topTrailing) {
+                radioCircle(selected: selectedPlan == .monthly, onDark: false)
+                    .padding(12)
+            }
+            .shadow(color: PillieTheme.cardShadow, radius: 8, y: 4)
+        }
+        .buttonStyle(.plain)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Monthly, \(monthlyPriceText) per month. No commitment.")
+        .accessibilityAddTraits(selectedPlan == .monthly ? [.isButton, .isSelected] : .isButton)
+        .accessibilityIdentifier("trialEndPaywallMonthlyPlan")
+    }
+
+    private func radioCircle(selected: Bool, onDark: Bool) -> some View {
+        ZStack {
+            Circle()
+                .stroke(
+                    selected ? PillieTheme.coral : (onDark ? Color.white.opacity(0.3) : PillieTheme.sage),
+                    lineWidth: 2
+                )
+                .frame(width: 22, height: 22)
+
+            if selected {
+                Circle()
+                    .fill(PillieTheme.coral)
+                    .frame(width: 22, height: 22)
+                    .overlay {
+                        Image(systemName: "checkmark")
+                            .font(.system(size: 11, weight: .bold))
+                            .foregroundStyle(PillieTheme.dark)
+                    }
+            }
+        }
+        .accessibilityHidden(true)
+    }
+
+    private func selectPlan(_ plan: Plan) {
+        let response = plusFeedback.selectPlan(accessibilityReduceMotion: accessibilityReduceMotion)
+        withAnimation(response.motionProfile.animation) {
+            selectedPlan = plan
+        }
+        telemetry.trialEndPlanSelected(plan: plan.analyticsPlan)
+    }
+
+    // MARK: - Reassurance + footer
+
+    private var reassuranceRow: some View {
+        HStack(spacing: 16) {
+            ForEach(["Reminders stay free forever", "Cancel anytime"], id: \.self) { item in
+                HStack(spacing: 5) {
+                    Image(systemName: "checkmark")
+                        .font(.system(size: 12, weight: .bold))
+                        .foregroundStyle(PillieTheme.verifiedGreen)
+                    Text(item)
+                        .font(.pillie(12, weight: .semibold))
+                        .foregroundStyle(PillieTheme.textPrimary)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.8)
+                }
+                .accessibilityElement(children: .combine)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .center)
+    }
+
+    private var purchaseButton: some View {
+        Button {
+            purchaseSelectedPlan()
+        } label: {
+            Group {
+                if isPurchasing || offerings == nil && !offeringsError {
+                    ProgressView()
+                        .tint(.white)
+                } else if offeringsError {
+                    Text("Failed to load plans — Tap to retry")
+                        .font(.pillie(16, weight: .bold))
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.6)
+                } else {
+                    HStack(spacing: 10) {
+                        Text(content.primaryCTA)
+                            .font(.pillie(17, weight: .bold))
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.6)
+                        Image(systemName: "arrow.right")
+                            .font(.system(size: 14, weight: .semibold))
+                    }
+                }
+            }
+            .foregroundStyle(.white)
+            .frame(maxWidth: .infinity)
+            .frame(height: PillieTheme.ctaHeight)
+            .background(offeringsError ? PillieTheme.textMuted : PillieTheme.dark)
+            .clipShape(Capsule())
+            .shadow(color: PillieTheme.dark.opacity(0.4), radius: 12, y: 6)
+        }
+        .disabled(isPurchasing || (offerings == nil && !offeringsError))
+        .accessibilityIdentifier("trialEndPaywallCTA")
+    }
+
+    private var secondaryLinks: some View {
+        HStack(spacing: 14) {
+            Button {
+                dismissWithoutPurchase()
+            } label: {
+                Text("Not now")
+                    .font(.pillie(13, weight: .semibold))
+                    .foregroundStyle(PillieTheme.textMuted)
+            }
+            .buttonStyle(.plain)
+            .accessibilityIdentifier("trialEndPaywallNotNow")
+
+            Rectangle()
+                .fill(PillieTheme.textMuted.opacity(0.3))
+                .frame(width: 1, height: 13)
+
+            Button {
+                restorePurchases()
+            } label: {
+                Group {
+                    if isRestoring {
+                        ProgressView()
+                            .tint(PillieTheme.textMuted)
+                            .scaleEffect(0.72)
+                    } else {
+                        Text("Restore Purchases")
+                            .font(.pillie(13, weight: .semibold))
+                            .foregroundStyle(PillieTheme.textMuted)
+                    }
+                }
+            }
+            .buttonStyle(.plain)
+            .disabled(isRestoring)
+            .accessibilityIdentifier("trialEndPaywallRestore")
+        }
+        .frame(maxWidth: .infinity, alignment: .center)
+    }
+
+    private var legalFooter: some View {
+        VStack(spacing: 2) {
+            Text("Renews automatically until cancelled in Settings.")
+            HStack(spacing: 4) {
+                Link("Terms of Use", destination: URL(string: "https://idrisskone101.github.io/pillie/terms-and-conditions")!)
+                    .underline()
+                Text("·")
+                Link("Privacy Policy", destination: URL(string: "https://idrisskone101.github.io/pillie/privacy-policy")!)
+                    .underline()
+            }
+        }
+        .font(.pillie(10, weight: .regular))
+        .foregroundStyle(PillieTheme.textMuted.opacity(0.7))
+        .frame(maxWidth: .infinity, alignment: .center)
+    }
+
+    // MARK: - Success state (design 2d)
+
+    private var successState: some View {
+        VStack(spacing: 0) {
+            Spacer()
+
+            ZStack {
+                Circle()
+                    .fill(PillieTheme.coral.opacity(0.35))
+                    .frame(width: 124, height: 124)
+                Circle()
+                    .fill(PillieTheme.coral)
+                    .frame(width: 96, height: 96)
+                Image(systemName: "checkmark")
+                    .font(.system(size: 40, weight: .bold))
+                    .foregroundStyle(PillieTheme.dark)
+            }
+            .accessibilityHidden(true)
+
+            (Text("You're ").foregroundColor(PillieTheme.textPrimary)
+                + Text("covered.").foregroundColor(PillieTheme.coral))
+                .font(.pillie(34, weight: .black))
+                .padding(.top, 24)
+
+            Text(successSubtitle)
+                .font(.pillie(15, weight: .medium))
+                .foregroundStyle(PillieTheme.textMuted)
+                .lineSpacing(3)
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: 300)
+                .padding(.top, 10)
+
+            Text("welcome back, bestie!")
+                .font(.pillieHandwriting(size: 26))
+                .foregroundStyle(PillieTheme.patchChangeRose)
+                .rotationEffect(.degrees(-2))
+                .padding(.top, 12)
+
+            HStack(spacing: 10) {
+                Image(systemName: "shield")
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(PillieTheme.coral)
+                    .accessibilityHidden(true)
+                Text(successPlanLabel)
+                    .font(.pillie(13, weight: .semibold))
+                    .foregroundStyle(.white)
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 12)
+            .background(PillieTheme.dark, in: RoundedRectangle(cornerRadius: 20))
+            .shadow(color: PillieTheme.dark.opacity(0.25), radius: 15, y: 8)
+            .padding(.top, 22)
+
+            Spacer()
+            Spacer()
+
+            Button {
+                onDismiss()
+            } label: {
+                HStack(spacing: 10) {
+                    Text("Back to Today")
+                        .font(.pillie(17, weight: .bold))
+                    Image(systemName: "arrow.right")
+                        .font(.system(size: 14, weight: .semibold))
+                }
+                .foregroundStyle(.white)
+                .frame(maxWidth: .infinity)
+                .frame(height: PillieTheme.ctaHeight)
+                .background(PillieTheme.dark)
+                .clipShape(Capsule())
+                .shadow(color: PillieTheme.dark.opacity(0.4), radius: 12, y: 6)
+            }
+            .accessibilityIdentifier("trialEndPaywallSuccessCTA")
+
+            Text("Manage or cancel anytime in Settings.")
+                .font(.pillie(11, weight: .medium))
+                .foregroundStyle(PillieTheme.textMuted.opacity(0.7))
+                .padding(.top, 12)
+        }
+        .padding(.horizontal, 24)
+        .padding(.bottom, 8)
+        .accessibilityIdentifier("trialEndPaywallSuccess")
+    }
+
+    /// Honest per-cohort success copy (ADR 0002): "blocking is back on" is only
+    /// claimed for users whose blocker config is actually saved.
+    private var successSubtitle: String {
+        switch content.cohort {
+        case .blockerConfigured:
+            return "Pillie Plus is active — app blocking is back on for tonight's reminder."
+        case .reminderOnly:
+            return "Pillie Plus is active — set up app blocking whenever you're ready."
+        }
+    }
+
+    private var successPlanLabel: String {
+        switch succeededPlan {
+        case .annual: return "Annual · \(annualPriceText)/year"
+        case .monthly: return "Monthly · \(monthlyPriceText)/month"
+        }
+    }
+
+    // MARK: - Purchase / restore
+
+    private func purchaseSelectedPlan() {
+        if offeringsError {
+            Task { await loadOfferings() }
+            return
+        }
+        guard let package = selectedPackage else {
+            plusFeedback.unavailablePurchaseAction(accessibilityReduceMotion: accessibilityReduceMotion)
+            return
+        }
+        let response = plusFeedback.openPaywallOrStartPurchase(
+            accessibilityReduceMotion: accessibilityReduceMotion)
+        withAnimation(response.motionProfile.animation) {
+            isPurchasing = true
+        }
+        let plan = selectedPlan
+        telemetry.trialEndPurchaseStarted(plan: plan.analyticsPlan)
+        Task {
+            do {
+                let outcome = try await subscriptionManager.purchase(package)
+                switch outcome.conversionEvent {
+                case .trialStarted:
+                    telemetry.trialEndTrialStarted(plan: plan.analyticsPlan)
+                case .purchaseCompleted:
+                    telemetry.trialEndPurchaseCompleted(plan: plan.analyticsPlan)
+                case nil:
+                    break
+                }
+                plusFeedback.successfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
+                succeededPlan = plan
+                purchaseSucceeded = true
+            } catch {
+                plusFeedback.unsuccessfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
+                if error.isCancelledTrialEndPurchase {
+                    telemetry.trialEndPurchaseCancelled(plan: plan.analyticsPlan)
+                    await subscriptionManager.refreshStatus()
+                } else {
+                    telemetry.trialEndPurchaseFailed(plan: plan.analyticsPlan)
+                    purchaseError = error.localizedDescription
+                }
+            }
+            withAnimation(response.motionProfile.animation) {
+                isPurchasing = false
+            }
+        }
+    }
+
+    private func restorePurchases() {
+        let response = plusFeedback.startRestore(accessibilityReduceMotion: accessibilityReduceMotion)
+        withAnimation(response.motionProfile.animation) {
+            isRestoring = true
+        }
+        telemetry.trialEndRestoreStarted()
+        Task {
+            do {
+                try await subscriptionManager.restore()
+                if subscriptionManager.hasEntitlement {
+                    telemetry.trialEndRestoreCompleted()
+                    plusFeedback.successfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
+                    purchaseSucceeded = true
+                } else {
+                    telemetry.trialEndRestoreFailed()
+                    let calmResponse = plusFeedback.unsuccessfulPaidOutcome(
+                        accessibilityReduceMotion: accessibilityReduceMotion)
+                    withAnimation(calmResponse.motionProfile.animation) {
+                        showNoSubscriptionAlert = true
+                    }
+                }
+            } catch {
+                telemetry.trialEndRestoreFailed()
+                let calmResponse = plusFeedback.unsuccessfulPaidOutcome(
+                    accessibilityReduceMotion: accessibilityReduceMotion)
+                withAnimation(calmResponse.motionProfile.animation) {
+                    purchaseError = error.localizedDescription
+                }
+            }
+            withAnimation(response.motionProfile.animation) {
+                isRestoring = false
+            }
+        }
+    }
+
+    private func dismissWithoutPurchase() {
+        telemetry.trialEndNotNowSelected()
+        onDismiss()
+    }
+
+    private func loadOfferings() async {
+        offeringsError = false
+        do {
+            offerings = try await subscriptionManager.fetchOfferings()
+        } catch {
+            os_log(.error, "Pillie: failed to fetch trial-end offerings: %{public}@", error.localizedDescription)
+            offeringsError = true
+        }
+    }
+}
+
+// MARK: - Perk chips
+
+/// The gain-framed card's wrapping chip row. A simple two-row split (the four
+/// perks never fit one line) keeps this free of layout-protocol complexity.
+private struct FlowingChips: View {
+    let chips: [String]
+
+    private var iconName: (String) -> String {
+        { chip in
+            switch chip {
+            case "App blocking": return "nosign"
+            case "Shake to confirm": return "iphone.radiowaves.left.and.right"
+            case "Smart Reminders": return "bell.badge"
+            default: return "text.bubble"
+            }
+        }
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            ForEach(0..<((chips.count + 1) / 2), id: \.self) { rowIndex in
+                HStack(spacing: 8) {
+                    ForEach(chips[rowIndex * 2..<min(rowIndex * 2 + 2, chips.count)], id: \.self) { chip in
+                        HStack(spacing: 6) {
+                            Image(systemName: iconName(chip))
+                                .font(.system(size: 11, weight: .semibold))
+                                .foregroundStyle(PillieTheme.coral)
+                                .accessibilityHidden(true)
+                            Text(chip)
+                                .font(.pillie(13, weight: .semibold))
+                                .foregroundStyle(.white)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.8)
+                        }
+                        .padding(.horizontal, 13)
+                        .padding(.vertical, 8)
+                        .background(Color.white.opacity(0.1), in: Capsule())
+                    }
+                }
+            }
+        }
+    }
+}
+
+// MARK: - Error helper
+
+private extension Error {
+    var isCancelledTrialEndPurchase: Bool {
+        if let purchaseError = self as? SubscriptionPurchaseError,
+           purchaseError == .userCancelled {
+            return true
+        }
+
+        let nsError = self as NSError
+        return nsError.domain == "RevenueCat.ErrorCode" && nsError.code == 1
+    }
+}
+
+#Preview("Loss-framed (2a)") {
+    TrialEndPaywallView(
+        content: TrialEndPaywallContent.make(
+            state: PlusAccessState(
+                hasEntitlement: false,
+                trialGrantDate: Calendar.current.date(byAdding: .day, value: -16, to: Date())
+            ),
+            blockerConfigSaved: true,
+            stats: TrialEndOwnStats(
+                blocksIntercepted: 23, dosesTaken: 13, dosesDue: 14, currentStreak: 9
+            ),
+            calendar: .current,
+            now: Date()
+        )!,
+        onDismiss: {}
+    )
+}
+
+#Preview("Gain-framed (2b)") {
+    TrialEndPaywallView(
+        content: TrialEndPaywallContent.make(
+            state: PlusAccessState(
+                hasEntitlement: false,
+                trialGrantDate: Calendar.current.date(byAdding: .day, value: -16, to: Date())
+            ),
+            blockerConfigSaved: false,
+            stats: .none,
+            calendar: .current,
+            now: Date()
+        )!,
+        onDismiss: {}
+    )
+}

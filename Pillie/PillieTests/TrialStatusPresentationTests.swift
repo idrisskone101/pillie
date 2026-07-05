@@ -111,7 +111,7 @@ final class TrialStatusPresentationTests: XCTestCase {
             "Your blocker setup is saved",
         ])
         // The quiet buy-early path into the existing purchase flow.
-        XCTAssertEqual(content?.ctaTitle, "Keep Plus")
+        XCTAssertEqual(content?.ctaTitle, "Keep Pillie Plus")
     }
 
     func testSheetTitleOnFinalDayReadsEndsTonight() {

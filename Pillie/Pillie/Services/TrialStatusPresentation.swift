@@ -51,7 +51,7 @@ struct TrialStatusPresentation: Equatable {
                 "Reminders stay free, forever",
                 "Your blocker setup is saved",
             ],
-            ctaTitle: "Keep Plus"
+            ctaTitle: "Keep Pillie Plus"
         )
     }
 

@@ -133,6 +133,7 @@ private final class BlockerSourceAnalyticsRecorder: AnalyticsTracking {
         hasBlockingSelection: Bool?,
         interventionCount: Int?,
         trialWarningDay: Int?,
+        trialEndCohort: TrialEndPaywallCohort?,
         titleCustomized: Bool?,
         bodyCustomized: Bool?,
         retryTitleCustomized: Bool?,

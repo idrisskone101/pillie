@@ -201,6 +201,61 @@ struct ProductAnalyticsTelemetry {
     track(.trialExpiryWarningSent, trialWarningDay: day)
   }
 
+  // MARK: - Trial-End Paywall (#169)
+  //
+  // The post-expiry purchase ask carries `source: trial_end` on every funnel
+  // event so it splits cleanly from onboarding and Settings paywall traffic.
+  // `paywall_viewed` additionally carries the coarse `cohort` property
+  // (blocker_configured | reminder_only); the user's own stats shown on the
+  // sheet (blocks, doses, streak) are never attached.
+
+  func trialEndPaywallViewed(cohort: TrialEndPaywallCohort) {
+    track(.paywallViewed, source: .trialEnd, trialEndCohort: cohort)
+  }
+
+  func trialEndPlanSelected(plan: AnalyticsPlan) {
+    track(.paywallPlanSelected, source: .trialEnd, plan: plan)
+  }
+
+  func trialEndPurchaseStarted(plan: AnalyticsPlan) {
+    track(.purchaseStarted, source: .trialEnd, plan: plan)
+  }
+
+  /// StoreKit classified the conversion as a trial start (sandbox aside, the
+  /// trial-end offer has no intro trial after #162 — kept for completeness).
+  func trialEndTrialStarted(plan: AnalyticsPlan) {
+    track(.trialStarted, source: .trialEnd, plan: plan)
+  }
+
+  func trialEndPurchaseCompleted(plan: AnalyticsPlan) {
+    track(.purchaseCompleted, source: .trialEnd, plan: plan, result: .completed)
+  }
+
+  func trialEndPurchaseFailed(plan: AnalyticsPlan) {
+    track(.purchaseFailed, source: .trialEnd, plan: plan, result: .failed)
+  }
+
+  func trialEndPurchaseCancelled(plan: AnalyticsPlan) {
+    track(.purchaseCancelled, source: .trialEnd, plan: plan, result: .cancelled)
+  }
+
+  func trialEndRestoreStarted() {
+    track(.restoreStarted, source: .trialEnd)
+  }
+
+  func trialEndRestoreCompleted() {
+    track(.restoreCompleted, source: .trialEnd, result: .completed)
+  }
+
+  func trialEndRestoreFailed() {
+    track(.restoreFailed, source: .trialEnd, result: .failed)
+  }
+
+  /// The "Not now" dismissal — the trial-end analogue of continuing free.
+  func trialEndNotNowSelected() {
+    track(.continueFreeSelected, source: .trialEnd)
+  }
+
   func paywallViewed(isFromOnboarding: Bool) {
     track(
       .paywallViewed,
@@ -523,6 +578,7 @@ struct ProductAnalyticsTelemetry {
     hasBlockingSelection: Bool? = nil,
     interventionCount: Int? = nil,
     trialWarningDay: Int? = nil,
+    trialEndCohort: TrialEndPaywallCohort? = nil,
     titleCustomized: Bool? = nil,
     bodyCustomized: Bool? = nil,
     retryTitleCustomized: Bool? = nil,
@@ -544,6 +600,7 @@ struct ProductAnalyticsTelemetry {
       hasBlockingSelection: hasBlockingSelection,
       interventionCount: interventionCount,
       trialWarningDay: trialWarningDay,
+      trialEndCohort: trialEndCohort,
       titleCustomized: titleCustomized,
       bodyCustomized: bodyCustomized,
       retryTitleCustomized: retryTitleCustomized,

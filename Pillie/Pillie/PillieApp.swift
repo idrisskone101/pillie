@@ -335,6 +335,7 @@ struct PillieApp: App {
             // dedupe resets with it so the day-10/13 events re-fire too (#168).
             UserDefaults.standard.removeObject(forKey: TrialExpiredEvent.firedStorageKey)
             UserDefaults.standard.removeObject(forKey: TrialExpiryWarningDelivery.sentDaysStorageKey)
+            UserDefaults.standard.removeObject(forKey: TrialEndPaywallAutoPresentation.shownStorageKey)
             SubscriptionManager.shared.grantReverseTrial()
             reconcileScreenTimeState()
         case "/trial-age":
@@ -353,6 +354,7 @@ struct PillieApp: App {
             // dedupe (#168).
             UserDefaults.standard.removeObject(forKey: TrialExpiredEvent.firedStorageKey)
             UserDefaults.standard.removeObject(forKey: TrialExpiryWarningDelivery.sentDaysStorageKey)
+            UserDefaults.standard.removeObject(forKey: TrialEndPaywallAutoPresentation.shownStorageKey)
             SubscriptionManager.shared.debugOverrideTrialGrantDate(nil)
             reconcileScreenTimeState()
         case "/plus-home":
@@ -414,6 +416,30 @@ struct PillieApp: App {
             UserDefaults.standard.removeObject(forKey: ExistingUserTrialGrant.handledStorageKey)
             UserDefaults.standard.set(false, forKey: OnboardingFlow.selectedFreePlanStorageKey)
             UserDefaults.standard.set(OnboardingFlow.Step.complete.rawValue, forKey: OnboardingFlow.stepStorageKey)
+        case "/trial-end-paywall":
+            // QA shortcut (#169): land on Home with a trial aged past expiry and
+            // the one-shot auto-present window reopened, so the Trial-End
+            // Paywall appears on the next Home pass. `?cohort=blocker` forces
+            // the blocker-configured (loss-framed) cohort — FamilyControls
+            // tokens can never be selected on the simulator; anything else is
+            // the reminder-only (gain-framed) cohort. Combine with
+            // /intervention-seed and /review-prompt-style seeded history for
+            // real-looking stats.
+            let queryItems = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems
+            let cohort = queryItems?.first(where: { $0.name == "cohort" })?.value
+            AppBlockingManager.shared.debugBlockerConfiguredOverride = (cohort == "blocker")
+            if queryItems?.first(where: { $0.name == "success" })?.value == "1" {
+                // Render the post-purchase success state (sandbox purchases are
+                // unreachable from simctl launches).
+                UserDefaults.standard.set(true, forKey: TrialEndPaywallView.debugSuccessStateKey)
+            }
+            SubscriptionManager.shared.setPlusForTesting(false)
+            let agedGrant = Calendar.current.date(byAdding: .day, value: -16, to: Date()) ?? Date()
+            UserDefaults.standard.removeObject(forKey: TrialEndPaywallAutoPresentation.shownStorageKey)
+            UserDefaults.standard.set(false, forKey: OnboardingFlow.selectedFreePlanStorageKey)
+            UserDefaults.standard.set(OnboardingFlow.Step.complete.rawValue, forKey: OnboardingFlow.stepStorageKey)
+            SubscriptionManager.shared.debugOverrideTrialGrantDate(agedGrant)
+            reconcileScreenTimeState()
         case "/review-prompt":
             // QA shortcut (#133): land on Home with an unbroken Streak past the pill
             // threshold so the Review Prompt's Sentiment Gate card surfaces and the

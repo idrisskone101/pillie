@@ -27,8 +27,19 @@ final class AppBlockingManager {
         didSet { ScreenTimeSharedState.saveSelection(activitySelection) }
     }
 
+    #if DEBUG
+    /// QA seam (#169): FamilyControls tokens can never be selected on the
+    /// simulator, so the blocker-configured cohort (Protection Off card,
+    /// loss-framed Trial-End Paywall) is unreachable there without this.
+    /// Set via `pillie://debug/trial-end-paywall?cohort=blocker`.
+    var debugBlockerConfiguredOverride: Bool?
+    #endif
+
     var hasAppsSelected: Bool {
-        !activitySelection.applicationTokens.isEmpty || !activitySelection.categoryTokens.isEmpty
+        #if DEBUG
+        if let debugBlockerConfiguredOverride { return debugBlockerConfiguredOverride }
+        #endif
+        return !activitySelection.applicationTokens.isEmpty || !activitySelection.categoryTokens.isEmpty
     }
 
     var selectedCount: Int {
