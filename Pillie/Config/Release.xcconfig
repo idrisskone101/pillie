@@ -1,19 +1,19 @@
 POSTHOG_HOST = https:/$()/us.i.posthog.com
 
-// PostHog Project API Key (phc_...). Paste the project's write-only ingestion key
-// below to commit it: it is safe to ship in the client binary, and committing it makes
-// EVERY Release/TestFlight/App Store build emit analytics — closing the ~25% install-
-// coverage gap (#140). Debug builds intentionally omit it (no dev analytics, no
-// production pollution). While this stays empty, a Release build fault-logs loudly and
-// AnalyticsManager.didFailConfiguration is true instead of silently dropping every
-// event. Secrets.xcconfig (gitignored) can override per environment.
-POSTHOG_PROJECT_TOKEN =
+// PostHog Project API Key (phc_...). Committed on purpose: it is a write-only public
+// ingestion key, safe to ship in the client binary, and Xcode Cloud builds from a
+// fresh clone where the gitignored Secrets.xcconfig does not exist — leaving this
+// empty shipped 2.0.1 with no analytics at all (every event dropped for the lifetime
+// of the binary; see #140 for the earlier ~25% variant of the same failure). Debug
+// builds intentionally omit it (no dev analytics, no production pollution).
+// Secrets.xcconfig (gitignored) can still override per environment.
+POSTHOG_PROJECT_TOKEN = phc_uoo2fMUsqKo7YUVXxXAk37AzovUceX8BJCg7EJEmafvJ
 
-// AppsFlyer dev key (account-level). Safe to ship in the client binary, but kept
-// out of git like the PostHog key: paste it into Secrets.xcconfig (gitignored) to
-// activate attribution for Release/TestFlight/App Store builds. Empty here means
-// the AppsFlyer SDK no-ops loudly (AppsFlyerManager.didFailConfiguration) rather
-// than sending malformed installs.
-APPSFLYER_DEV_KEY =
+// AppsFlyer dev key (account-level). Committed for the same reason as the PostHog
+// key: it ships in (and is extractable from) every release binary regardless, and
+// keeping it only in the gitignored Secrets.xcconfig meant Xcode Cloud builds had no
+// attribution. Empty means the AppsFlyer SDK no-ops loudly
+// (AppsFlyerManager.didFailConfiguration) rather than sending malformed installs.
+APPSFLYER_DEV_KEY = rUohFRQezcXERXXLgVf36g
 
 #include? "Secrets.xcconfig"
