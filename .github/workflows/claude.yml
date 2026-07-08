@@ -22,10 +22,14 @@ jobs:
     # is available — required for the pillie-ios / Xcode 27 skills to work.
     # NOTE: macOS runners bill ~10x ubuntu minutes.
     runs-on: macos-26
+    timeout-minutes: 45
     permissions:
-      contents: read
-      pull-requests: read
-      issues: read
+      # Claude needs write access to push branches, open PRs, and comment back
+      # on the issue/PR that invoked it. Read-only permissions let the action
+      # start, but prevent it from actually delivering code changes.
+      contents: write
+      pull-requests: write
+      issues: write
       id-token: write
       actions: read
     steps:
