@@ -6,7 +6,7 @@ on:
   pull_request_review_comment:
     types: [created]
   issues:
-    types: [opened, assigned]
+    types: [opened, edited, assigned]
   pull_request_review:
     types: [submitted]
 
@@ -51,7 +51,16 @@ jobs:
       # c-bounds-safety) ship inside Xcode itself. Export them from the
       # selected Xcode instead of committing copies to this public repo,
       # so they always match the toolchain in use.
+      #
+      # IMPORTANT: this export has hung indefinitely on the CI runner (no output
+      # for 19-45 min, then the job hit its 45-min timeout and the "Run Claude
+      # Code" step was skipped — Claude never ran, never commented, never opened
+      # PRs). It is therefore time-boxed and non-fatal: if it stalls or fails, the
+      # job kills just this step and still proceeds to run Claude (without these
+      # optional Apple skills) rather than burning the whole budget.
       - name: Install Apple Xcode Agent Skills
+        continue-on-error: true
+        timeout-minutes: 5
         run: |
           mkdir -p ~/.claude/skills
           xcrun mcpbridge run-agent skills export \
@@ -60,11 +69,15 @@ jobs:
           ls ~/.claude/skills
 
       - name: Install XcodeBuildMCP CLI and skill
+        continue-on-error: true
+        timeout-minutes: 10
         run: |
           npm install -g xcodebuildmcp
           xcodebuildmcp init --dest ~/.claude/skills --force --style minimal
 
       - name: Install AXe (simulator accessibility automation)
+        continue-on-error: true
+        timeout-minutes: 10
         run: brew install cameroncooke/axe/axe
 
       - name: Run Claude Code
