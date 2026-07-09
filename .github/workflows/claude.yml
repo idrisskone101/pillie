@@ -32,6 +32,15 @@ jobs:
       issues: write
       id-token: write
       actions: read
+    env:
+      # App Store Connect credentials for the `asc` CLI. HAS_ASC gates the ASC
+      # steps below so they are skipped entirely (zero runner cost) until these
+      # repo secrets are configured; the moment they exist, the steps activate.
+      ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+      ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+      ASC_PRIVATE_KEY_B64: ${{ secrets.ASC_PRIVATE_KEY_B64 }}
+      ASC_APP_ID: "6759352439"
+      HAS_ASC: ${{ secrets.ASC_KEY_ID != '' && secrets.ASC_PRIVATE_KEY_B64 != '' }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -79,6 +88,27 @@ jobs:
         continue-on-error: true
         timeout-minutes: 10
         run: brew install cameroncooke/axe/axe
+
+      # Keep the App Store marketing version ahead of what's already shipped so
+      # Xcode Cloud deliveries never fail with ITMS-90186 ("train closed") /
+      # ITMS-90062 ("version must be higher"). Installs the App Store Connect CLI
+      # (asccli.sh) and runs scripts/ensure-marketing-version.mjs, which asks ASC
+      # whether the current MARKETING_VERSION is on a closed train and, if so,
+      # bumps it in the working tree. Claude then includes the bump in whatever
+      # commit/PR it produces. Both steps are skipped until the ASC_* secrets exist.
+      - name: Set up App Store Connect CLI
+        if: env.HAS_ASC == 'true'
+        continue-on-error: true
+        timeout-minutes: 5
+        uses: rudrankriyam/setup-asc@v1
+        with:
+          version: latest
+
+      - name: Ensure marketing version is shippable
+        if: env.HAS_ASC == 'true'
+        continue-on-error: true
+        timeout-minutes: 5
+        run: node scripts/ensure-marketing-version.mjs
 
       - name: Run Claude Code
         uses: anthropics/claude-code-action@v1
