@@ -25,6 +25,7 @@ struct ProtectionPlanReminderTimeView: View {
     @State private var selectedMinute = 0
     @State private var selectedPeriod = 0 // 0 = AM, 1 = PM
     @State private var appeared = false
+    @State private var isCommitting = false
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     private let performanceTier = PerformanceTier.current
@@ -75,6 +76,7 @@ struct ProtectionPlanReminderTimeView: View {
             primaryIcon: "bell.fill",
             animatesPrimaryIcon: false,
             isPrimaryEnabled: true,
+            isPrimaryLoading: isCommitting,
             onPrimary: commit
         ) {
             VStack(alignment: .leading, spacing: 20) {
@@ -195,24 +197,24 @@ struct ProtectionPlanReminderTimeView: View {
 
     // MARK: - Commit + seeding
 
+    /// Persists the chosen time, resolves notification authorization, and only
+    /// then advances the flow — scheduling happens strictly after a grant, so a
+    /// fresh install can never hit the code-2003 "Source is not authorized"
+    /// storm (#196). The CTA shows a spinner and swallows re-taps while the iOS
+    /// permission prompt is up.
     private func commit() {
+        guard !isCommitting else { return }
+        isCommitting = true
         let selection = ReminderTimeConverter.toTwentyFourHour(
             hour: selectedHour,
             minute: selectedMinute,
             period: selectedPeriod
         )
-        ScheduleCriticalSettingChange.saveOnboardingReminderTime(
-            store: store,
-            hour: selection.hour,
-            minute: selection.minute
-        )
-        onContinue()
-        DispatchQueue.main.async {
-            onboardingTelemetry.notificationPermissionRequested()
-            NotificationManager.shared.requestAuthorization { granted in
-                onboardingTelemetry.notificationPermissionCompleted(granted: granted)
+        OnboardingReminderCommit.live(store: store, telemetry: onboardingTelemetry)
+            .run(hour: selection.hour, minute: selection.minute) {
+                isCommitting = false
+                onContinue()
             }
-        }
     }
 
     private func seedFromStore() {
