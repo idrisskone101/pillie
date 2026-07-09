@@ -291,6 +291,15 @@ Visual QA loop:
 5. Screenshot again to verify the result.
 6. Repeat until the behavior is confirmed.
 
+## Versioning and Release
+
+Bump the app's marketing version on every change set that will be merged to `main` and shipped.
+
+- The App Store / marketing version lives as `MARKETING_VERSION` in `Pillie/Pillie.xcodeproj/project.pbxproj` (one entry per build config / target; currently `2.0.2` across all of them). Keep every occurrence identical.
+- When preparing work for merge, increment the patch component by one unless the user asks for a minor/major bump: e.g. `2.0.2` -> `2.0.3`. Update **every** `MARKETING_VERSION = ...;` line so the app and its 3 extensions (DeviceActivityMonitor, ShieldAction, ShieldConfiguration) stay in lockstep.
+- Do **not** edit `CURRENT_PROJECT_VERSION` (the build number). Xcode Cloud sets it automatically from `$CI_BUILD_NUMBER` via `ci_scripts/ci_pre_xcodebuild.sh`; hardcoding it causes duplicate/non-increasing-build rejections on TestFlight.
+- Call out the new version in the PR description so review and release notes stay in sync.
+
 ## Rules
 
 - Never delete `/tmp/PillieDerivedData` unless explicitly asked.
