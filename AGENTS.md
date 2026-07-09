@@ -293,12 +293,15 @@ Visual QA loop:
 
 ## Versioning and Release
 
-Bump the app's marketing version on every change set that will be merged to `main` and shipped.
+The App Store marketing version is bumped **automatically** — do not hand-increment `MARKETING_VERSION` on every change.
 
-- The App Store / marketing version lives as `MARKETING_VERSION` in `Pillie/Pillie.xcodeproj/project.pbxproj` (one entry per build config / target; currently `2.0.2` across all of them). Keep every occurrence identical.
-- When preparing work for merge, increment the patch component by one unless the user asks for a minor/major bump: e.g. `2.0.2` -> `2.0.3`. Update **every** `MARKETING_VERSION = ...;` line so the app and its 3 extensions (DeviceActivityMonitor, ShieldAction, ShieldConfiguration) stay in lockstep.
+- `scripts/ensure-marketing-version.mjs` asks App Store Connect (via the `asc` CLI, asccli.sh) whether the current `MARKETING_VERSION` in `Pillie/Pillie.xcodeproj/project.pbxproj` is still shippable. If that version's App Store "train" is closed (already shipped or in review) it bumps every `MARKETING_VERSION` entry to the next free patch; otherwise it leaves the version alone (day-to-day builds stack fine under an open train).
+- The Claude workflow (`.github/workflows/claude.yml`) runs this script before Claude on every run, so any commit/PR Claude produces already carries the correct version. **You normally never touch the version yourself**, and you should not add a manual bump on top of it (that would double-bump).
+- In a local worktree you can run the same logic:
+  - `node scripts/ensure-marketing-version.mjs --check` — report only (exit 10 if a bump is needed)
+  - `node scripts/ensure-marketing-version.mjs --profile "Pillie ASO"` — apply, using the local asc profile
 - Do **not** edit `CURRENT_PROJECT_VERSION` (the build number). Xcode Cloud sets it automatically from `$CI_BUILD_NUMBER` via `ci_scripts/ci_pre_xcodebuild.sh`; hardcoding it causes duplicate/non-increasing-build rejections on TestFlight.
-- Call out the new version in the PR description so review and release notes stay in sync.
+- Only set the marketing version by hand when the user explicitly asks for a specific minor/major version (e.g. `2.0.x` → `2.1.0`); then update **every** `MARKETING_VERSION = ...;` line so the app and its 3 extensions (DeviceActivityMonitor, ShieldAction, ShieldConfiguration) stay in lockstep.
 
 ## Rules
 
