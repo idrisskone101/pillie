@@ -172,6 +172,11 @@ struct ContentView: View {
             onContinue: { source in
               store.acquisitionSource = source
 	              ProductAnalyticsTelemetry.live.onboardingAcquisitionSourceCompleted(source)
+              // If RevenueCat already configured this session (e.g. offerings were
+              // prefetched), forward the source now so the subscriber attribute
+              // exists before any same-session purchase (#197); otherwise the
+              // configure-time attribution pass picks it up from PillStore.
+              SubscriptionManager.shared.recordAcquisitionSource(source)
                 continueSetupStep(to: .method)
 	            },
 	            onSkip: {

@@ -46,6 +46,39 @@ struct PurchaseOutcome: Equatable {
     }
 }
 
+/// The attribution writes Pillie sends to RevenueCat, as a seam over
+/// `Purchases.shared.attribution` so the wiring is testable without configuring
+/// the real SDK (issue #197). The live conformance can only exist after
+/// `Purchases.configure(...)`, which is what makes AdServices enablement and
+/// subscriber-attribute writes safely ordered.
+protocol RevenueCatAttributionSetting: AnyObject {
+    func setPostHogUserID(_ id: String)
+    func setAppsflyerID(_ id: String)
+    func setAttributes(_ attributes: [String: String])
+    func enableAdServicesAttributionTokenCollection()
+}
+
+/// Live adapter over `Purchases.shared.attribution`. Must only be constructed
+/// after `Purchases.configure(...)` — `SubscriptionManager.configure()` is the
+/// sole construction site.
+private final class PurchasesAttributionSink: RevenueCatAttributionSetting {
+    func setPostHogUserID(_ id: String) {
+        Purchases.shared.attribution.setPostHogUserID(id)
+    }
+
+    func setAppsflyerID(_ id: String) {
+        Purchases.shared.attribution.setAppsflyerID(id)
+    }
+
+    func setAttributes(_ attributes: [String: String]) {
+        Purchases.shared.attribution.setAttributes(attributes)
+    }
+
+    func enableAdServicesAttributionTokenCollection() {
+        Purchases.shared.attribution.enableAdServicesAttributionTokenCollection()
+    }
+}
+
 @Observable
 final class SubscriptionManager: NSObject {
     static let shared = SubscriptionManager()
@@ -83,6 +116,13 @@ final class SubscriptionManager: NSObject {
 
     @ObservationIgnored
     private var trialGrantStore: TrialGrantStoring = KeychainTrialGrantStore()
+
+    /// The live RevenueCat attribution surface, set by `configure()` once
+    /// `Purchases.configure(...)` has run and nil before it — which is what
+    /// keeps every attribution write ordered after SDK configuration.
+    /// Internal (not private) so tests can inject a recorder.
+    @ObservationIgnored
+    var attributionSink: RevenueCatAttributionSetting?
 
     // MARK: - Constants
 
@@ -166,34 +206,54 @@ final class SubscriptionManager: NSObject {
         // Listen for subscription changes
         Purchases.shared.delegate = self
 
-        applyAttribution()
+        let sink = PurchasesAttributionSink()
+        attributionSink = sink
+        applyAttribution(
+            to: sink,
+            distinctId: AnalyticsManager.shared.distinctId,
+            appsFlyerId: AppsFlyerManager.shared.appsFlyerUID,
+            acquisitionSource: UserDefaults.standard.string(forKey: PillStore.acquisitionSourceKey)
+        )
         Task { await refreshStatus() }
     }
 
-    /// Ties RevenueCat to the in-app analytics person and tags the subscriber with the
-    /// coarse acquisition source. Setting the PostHog distinct id (`$posthogUserId`)
-    /// lets RevenueCat's PostHog integration land server-side subscription events
-    /// (renewals, trial→paid conversions) on the same person as the in-app funnel; the
-    /// `acquisition_source` attribute lets paid conversions be segmented by source.
-    /// Reads the source from the value PillStore already persisted during onboarding,
-    /// so it is applied whenever RevenueCat configures (at launch or before the paywall),
-    /// regardless of whether RevenueCat existed when the user answered the step.
-    private func applyAttribution() {
-        if let distinctId = AnalyticsManager.shared.distinctId, !distinctId.isEmpty {
-            Purchases.shared.attribution.setPostHogUserID(distinctId)
+    /// Ties RevenueCat to the in-app analytics person, tags the subscriber with the
+    /// coarse acquisition source, and enables standard Apple Search Ads attribution
+    /// (issue #197). Setting the PostHog distinct id (`$posthogUserId`) lets
+    /// RevenueCat's PostHog integration land server-side subscription events
+    /// (renewals, trial→paid conversions) on the same person as the in-app funnel;
+    /// the AppsFlyer id joins the same user in AppsFlyer; the `acquisition_source`
+    /// attribute lets paid conversions be segmented by source. AdServices token
+    /// collection is the standard (no ATT prompt, no IDFA) attribution flavor and
+    /// runs once per launch, right after `Purchases.configure(...)` — the SDK
+    /// de-dupes token posts across launches. The acquisition source is the value
+    /// PillStore persisted during onboarding, so it is applied whenever RevenueCat
+    /// configures regardless of whether RevenueCat existed when the user answered.
+    func applyAttribution(
+        to attribution: RevenueCatAttributionSetting,
+        distinctId: String?,
+        appsFlyerId: String,
+        acquisitionSource: String?
+    ) {
+        attribution.enableAdServicesAttributionTokenCollection()
+        if let distinctId, !distinctId.isEmpty {
+            attribution.setPostHogUserID(distinctId)
         }
-        // Share the AppsFlyer device id so RevenueCat's server-side subscription events
-        // (renewals, trial→paid) join the same user in AppsFlyer. The id is
-        // device-persistent, so reading it here is correct regardless of whether
-        // AppsFlyer's own configure() has already run this launch.
-        let appsFlyerID = AppsFlyerManager.shared.appsFlyerUID
-        if !appsFlyerID.isEmpty {
-            Purchases.shared.attribution.setAppsflyerID(appsFlyerID)
+        if !appsFlyerId.isEmpty {
+            attribution.setAppsflyerID(appsFlyerId)
         }
-        if let source = UserDefaults.standard.string(forKey: PillStore.acquisitionSourceKey),
-           !source.isEmpty {
-            Purchases.shared.attribution.setAttributes(["acquisition_source": source])
+        if let acquisitionSource, !acquisitionSource.isEmpty {
+            attribution.setAttributes(["acquisition_source": acquisitionSource])
         }
+    }
+
+    /// Forwards the acquisition source to RevenueCat the moment the user commits
+    /// it in onboarding (issue #197). Before `configure()` this is a no-op: the
+    /// value is persisted by `PillStore` and picked up by the configure-time
+    /// attribution pass, so the attribute is set exactly when it becomes known
+    /// and never before the SDK exists.
+    func recordAcquisitionSource(_ source: AcquisitionSource) {
+        attributionSink?.setAttributes(["acquisition_source": source.rawValue])
     }
 
     // MARK: - Purchase
