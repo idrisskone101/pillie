@@ -7,18 +7,28 @@ import XCTest
 @testable import Pillie
 
 final class ProductAnalyticsTelemetryPaywallTests: XCTestCase {
+    // Xcode 27 beta hosted-XCTest workaround: deallocating any @MainActor class
+    // mid-invocation aborts in libmalloc (isolated-deinit back-deploy bug), which
+    // crashed the host app once per test in this suite. Retain every class
+    // instance a test creates for the process lifetime — same pattern as
+    // OnboardingFunnelInstrumentationTests (#140).
+    private static var keptObjects: [AnyObject] = []
+
     func testPaywallPlanSelectionCapturesOnlyApprovedCoarseValues() {
         let client = ProductAnalyticsSpy()
         let defaultsName = "ProductAnalyticsTelemetryPaywallTests.planSelection"
         UserDefaults().removePersistentDomain(forName: defaultsName)
+        let defaults = UserDefaults(suiteName: defaultsName)!
         let analytics = AnalyticsManager(
-            defaults: UserDefaults(suiteName: defaultsName)!,
+            defaults: defaults,
             client: client,
             infoDictionary: [
                 "PostHogProjectToken": "test-token",
                 "PostHogHost": "https://us.i.posthog.com"
             ]
         )
+        Self.keptObjects.append(defaults)
+        Self.keptObjects.append(analytics)
         let telemetry = ProductAnalyticsTelemetry(analytics: analytics, isPlus: { false })
 
         analytics.configure()
@@ -96,6 +106,13 @@ private final class ProductAnalyticsSpy: ProductAnalyticsClient {
         let personProperties: [String: AnalyticsPropertyValue]
     }
 
+    // Process-lifetime retention: see keptObjects on ProductAnalyticsTelemetryPaywallTests.
+    private static var keepAlive: [ProductAnalyticsSpy] = []
+
+    init() {
+        Self.keepAlive.append(self)
+    }
+
     private(set) var configurations: [ProductAnalyticsConfiguration] = []
     private(set) var events: [Event] = []
 
@@ -140,6 +157,13 @@ private final class AnalyticsRecorder: AnalyticsTracking {
             self.result = result
             self.isPlus = isPlus
         }
+    }
+
+    // Process-lifetime retention: see keptObjects on ProductAnalyticsTelemetryPaywallTests.
+    private static var keepAlive: [AnalyticsRecorder] = []
+
+    init() {
+        Self.keepAlive.append(self)
     }
 
     private(set) var events: [Event] = []

@@ -12,10 +12,19 @@ final class AnalyticsManagerTests: XCTestCase {
   private var defaultsSuiteName: String!
   private var defaults: UserDefaults!
 
+  // Xcode 27 beta hosted-XCTest workaround: deallocating any @MainActor class
+  // mid-invocation aborts in libmalloc (isolated-deinit back-deploy bug), which
+  // crashed the host app once per test in this suite. Retain every class
+  // instance a test creates for the process lifetime so nothing deallocates
+  // while an invocation is on the stack — same pattern as
+  // OnboardingFunnelInstrumentationTests (#140).
+  private static var keptObjects: [AnyObject] = []
+
   override func setUp() {
     super.setUp()
     defaultsSuiteName = "AnalyticsManagerTests-\(UUID().uuidString)"
     defaults = UserDefaults(suiteName: defaultsSuiteName)!
+    Self.keptObjects.append(defaults)
   }
 
   override func tearDown() {
@@ -351,7 +360,7 @@ final class AnalyticsManagerTests: XCTestCase {
     token: String,
     host: String = "https://us.i.posthog.com"
   ) -> AnalyticsManager {
-    AnalyticsManager(
+    let manager = AnalyticsManager(
       defaults: defaults,
       client: client,
       infoDictionary: [
@@ -359,10 +368,19 @@ final class AnalyticsManagerTests: XCTestCase {
         "PostHogHost": host,
       ]
     )
+    Self.keptObjects.append(manager)
+    return manager
   }
 }
 
 private final class RecordingAnalyticsClient: ProductAnalyticsClient {
+  // Process-lifetime retention: see keptObjects on AnalyticsManagerTests.
+  private static var keepAlive: [RecordingAnalyticsClient] = []
+
+  init() {
+    Self.keepAlive.append(self)
+  }
+
   private(set) var configurations: [ProductAnalyticsConfiguration] = []
   private(set) var captures: [(
     event: String,
@@ -391,6 +409,13 @@ private final class RecordingAnalyticsClient: ProductAnalyticsClient {
 }
 
 private final class RecordingAnalyticsTracker: AnalyticsTracking {
+  // Process-lifetime retention: see keptObjects on AnalyticsManagerTests.
+  private static var keepAlive: [RecordingAnalyticsTracker] = []
+
+  init() {
+    Self.keepAlive.append(self)
+  }
+
   private(set) var events: [AnalyticsEvent] = []
   private(set) var sources: [AnalyticsSource?] = []
   private(set) var steps: [AnalyticsStep?] = []

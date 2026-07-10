@@ -6,12 +6,25 @@
 import Foundation
 
 enum ScheduleCriticalSettingChange {
+    /// Persists the Reminder Time chosen during onboarding without touching the
+    /// notification pipeline. On a fresh install notification authorization has
+    /// not been resolved yet, so scheduling here made every
+    /// `UNUserNotificationCenter.add` fail with code 2003 (#196). Scheduling
+    /// happens in `scheduleOnboardingReminders` once authorization is granted.
     static func saveOnboardingReminderTime(
         store: PillStore,
         hour: Int,
         minute: Int
     ) {
-        saveReminderTime(store: store, hour: hour, minute: minute, reason: "onboarding-reminder-time")
+        store.reminderHour = hour
+        store.reminderMinute = minute
+    }
+
+    /// Builds the onboarding reminder schedule. Only called after the user
+    /// granted notification authorization (#196); a denial skips scheduling
+    /// entirely so it can never produce a code-2003 error storm.
+    static func scheduleOnboardingReminders(store: PillStore) {
+        NotificationManager.shared.requestReschedule(from: store, reason: "onboarding-reminder-time-authorized")
     }
 
     static func saveSettingsReminderTime(

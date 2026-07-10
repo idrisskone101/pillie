@@ -69,6 +69,10 @@ struct ProtectionPlanScaffold<Content: View>: View {
     /// arrows nudge; a static icon (e.g. a shield on a "Save" CTA) should not.
     var animatesPrimaryIcon: Bool = true
     var isPrimaryEnabled: Bool = true
+    /// Shows a spinner in place of the icon and blocks further taps while the
+    /// screen waits on async work (e.g. the iOS notification permission prompt),
+    /// so users get progress feedback instead of a dead button to rage-click (#196).
+    var isPrimaryLoading: Bool = false
     let onPrimary: () -> Void
 
     var secondaryTitle: String? = nil
@@ -179,15 +183,19 @@ struct ProtectionPlanScaffold<Content: View>: View {
         Button(action: onPrimary) {
             HStack(spacing: 10) {
                 Text(primaryTitle)
-                if let primaryIcon {
+                if isPrimaryLoading {
+                    ProgressView()
+                        .tint(.white)
+                } else if let primaryIcon {
                     Image(systemName: primaryIcon)
                         .offset(x: animatesPrimaryIcon ? arrowNudge : 0)
                 }
             }
         }
         .buttonStyle(.pillieDark)
-        .disabled(!isPrimaryEnabled)
-        .opacity(isPrimaryEnabled ? 1 : 0.38)
+        .disabled(!isPrimaryEnabled || isPrimaryLoading)
+        // A loading CTA keeps full opacity: it is busy, not unavailable.
+        .opacity(isPrimaryEnabled || isPrimaryLoading ? 1 : 0.38)
         .accessibilityIdentifier("protectionPlanPrimaryCTA")
     }
 }
