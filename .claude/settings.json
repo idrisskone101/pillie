@@ -19,8 +19,6 @@
       "Bash(Pillie/scripts/build-and-run.sh:*)",
       "Bash(Pillie/scripts/mcp-test-focused.sh:*)",
       "Bash(Pillie/scripts/test-focused.sh:*)",
-      "Bash(asc:*)",
-      "Bash(node scripts/ensure-marketing-version.mjs:*)",
       "WebFetch(domain:raw.githubusercontent.com)",
       "mcp__XcodeBuildMCP"
     ]
