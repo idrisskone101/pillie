@@ -26,15 +26,14 @@ ships it to **TestFlight internal testing** so you can tap-test on your phone be
   Cloud build-number counter was seeded above the previous App Store max so uploads always
   increase. **Never set this by hand.** All uploads must go through Xcode Cloud so the counter
   stays monotonic.
-- **Marketing version** (`MARKETING_VERSION`, e.g. `2.0.3`): **automated via App Store Connect.**
+- **Marketing version** (`MARKETING_VERSION`, e.g. `2.0.3`): keep it ahead of what's shipped.
   A live App Store version's "train" closes — Apple rejects new builds under it (ITMS-90186 /
   ITMS-90062). Day-to-day PR builds all stack under the current marketing version fine, so it only
   needs to bump once the current version actually ships. `scripts/ensure-marketing-version.mjs`
-  makes that call automatically: it queries App Store Connect (via the `asc` CLI, asccli.sh) and
-  bumps every `MARKETING_VERSION` to the next free patch only when the current one is on a closed
-  train. The Claude workflow runs it before each run; locally run
-  `node scripts/ensure-marketing-version.mjs --profile "Pillie ASO"`. Requires the ASC_KEY_ID /
-  ASC_ISSUER_ID / ASC_PRIVATE_KEY_B64 repo secrets in CI. Keep all targets on the same value.
+  makes that call: it queries App Store Connect (via the `asc` CLI, asccli.sh) and bumps every
+  `MARKETING_VERSION` to the next free patch only when the current one is on a closed train. Run
+  `node scripts/ensure-marketing-version.mjs --profile "Pillie ASO"` before a release build. Keep
+  all targets on the same value.
 
 ## If a build fails
 
