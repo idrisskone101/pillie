@@ -8,10 +8,48 @@ import UserNotifications
 import os
 import os.signpost
 
+protocol NotificationCenterScheduling: AnyObject {
+    func getAuthorizationStatus(completion: @escaping @Sendable (UNAuthorizationStatus) -> Void)
+    func requestAuthorization(
+        options: UNAuthorizationOptions,
+        completionHandler: @escaping @Sendable (Bool, (any Error)?) -> Void
+    )
+    func setNotificationCategories(_ categories: Set<UNNotificationCategory>)
+    func getPendingNotificationRequests(completionHandler: @escaping @Sendable ([UNNotificationRequest]) -> Void)
+    func add(
+        _ request: UNNotificationRequest,
+        withCompletionHandler completionHandler: (@Sendable ((any Error)?) -> Void)?
+    )
+    func removePendingNotificationRequests(withIdentifiers identifiers: [String])
+    func getDeliveredNotifications(completionHandler: @escaping @Sendable ([UNNotification]) -> Void)
+    func removeDeliveredNotifications(withIdentifiers identifiers: [String])
+}
+
+extension UNUserNotificationCenter: NotificationCenterScheduling {
+    func getAuthorizationStatus(completion: @escaping @Sendable (UNAuthorizationStatus) -> Void) {
+        getNotificationSettings { settings in
+            completion(settings.authorizationStatus)
+        }
+    }
+}
+
+private extension UNAuthorizationStatus {
+    var permitsNotificationScheduling: Bool {
+        switch self {
+        case .authorized, .provisional, .ephemeral:
+            true
+        case .notDetermined, .denied:
+            false
+        @unknown default:
+            false
+        }
+    }
+}
+
 final class NotificationManager {
     static let shared = NotificationManager()
 
-    private let center = UNUserNotificationCenter.current()
+    private let center: any NotificationCenterScheduling
     private let legacyReminderID = "pillie_daily_reminder"
     private let legacyReminderPrefix = "pillie_due_reminder_"
     private let reminderPrefix = "pillie_reminder_"
@@ -27,7 +65,9 @@ final class NotificationManager {
     private static let perfLog = OSLog(subsystem: Bundle.main.bundleIdentifier ?? "com.idrisskone.pillie", category: "NotificationPerf")
 
     private let rescheduleDebounceDelay: TimeInterval = 0.25
-    private let isRunningTests = ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
+    private let isRunningTests: Bool
+    private let scheduleDeviceActivityBlock: (_ hour: Int, _ minute: Int) -> Void
+    private let trackSchedulingError: (_ error: any Error) -> Void
 
     private var pendingRescheduleWorkItem: DispatchWorkItem?
 
@@ -46,7 +86,23 @@ final class NotificationManager {
         let staleDeliveredIDs: [String]
     }
 
-    private init() {
+    init(
+        center: any NotificationCenterScheduling = UNUserNotificationCenter.current(),
+        isRunningTests: Bool = ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil,
+        scheduleDeviceActivityBlock: @escaping (_ hour: Int, _ minute: Int) -> Void = { hour, minute in
+            AppBlockingManager.shared.scheduleDeviceActivityBlock(hour: hour, minute: minute)
+        },
+        trackSchedulingError: @escaping (_ error: any Error) -> Void = { error in
+            os_log(.error, "Pillie schedule error: %{public}@", error.localizedDescription)
+            ProductAnalyticsTelemetry.live.trackError(
+                .notifications, error: error, context: ["operation": "schedule"]
+            )
+        }
+    ) {
+        self.center = center
+        self.isRunningTests = isRunningTests
+        self.scheduleDeviceActivityBlock = scheduleDeviceActivityBlock
+        self.trackSchedulingError = trackSchedulingError
         registerCategory(includeSnooze: SubscriptionManager.shared.hasPlusAccess)
     }
 
@@ -103,13 +159,6 @@ final class NotificationManager {
 
         os_signpost(.event, log: Self.perfLog, name: "reminderRebuildReason", "%{public}s", reason)
 
-        // Warn if the user has disabled notifications — all scheduled reminders will silently fail
-        center.getNotificationSettings { settings in
-            if settings.authorizationStatus == .denied {
-                os_log(.info, "Pillie: notifications denied by user — reminders will not fire")
-            }
-        }
-
         // Ensure the extension has the latest taken state before scheduling
         store.syncTodayTakenToAppGroup()
 
@@ -121,10 +170,7 @@ final class NotificationManager {
         applyManagedReminderRequests(requests)
 
         // Sync DeviceActivity schedule with reminder time
-        AppBlockingManager.shared.scheduleDeviceActivityBlock(
-            hour: store.reminderHour,
-            minute: store.reminderMinute
-        )
+        scheduleDeviceActivityBlock(store.reminderHour, store.reminderMinute)
     }
 
     func cancelAllMethodReminders() {
@@ -502,9 +548,23 @@ final class NotificationManager {
     }
 
     private func applyManagedReminderRequests(_ newRequests: [UNNotificationRequest]) {
+        center.getAuthorizationStatus { [weak self] status in
+            guard let self else { return }
+            guard status.permitsNotificationScheduling else {
+                if status == .denied {
+                    os_log(.info, "Pillie: notifications denied by user — reminders will not fire")
+                }
+                return
+            }
+            self.applyAuthorizedManagedReminderRequests(newRequests)
+        }
+    }
+
+    private func applyAuthorizedManagedReminderRequests(_ newRequests: [UNNotificationRequest]) {
         let managedNewRequests = newRequests.filter { isManagedReminderID($0.identifier) }
         let newRequestByID = Dictionary(uniqueKeysWithValues: managedNewRequests.map { ($0.identifier, $0) })
         let newManagedIDs = Array(newRequestByID.keys)
+        let errorReporter = NotificationScheduleBatchErrorReporter(report: trackSchedulingError)
 
         center.getPendingNotificationRequests { [weak self] existingRequests in
             guard let self else { return }
@@ -532,10 +592,7 @@ final class NotificationManager {
                 guard let request = newRequestByID[id] else { continue }
                 self.center.add(request) { error in
                     if let error {
-                        os_log(.error, "Pillie schedule error: %{public}@", error.localizedDescription)
-                        ProductAnalyticsTelemetry.live.trackError(
-                            .notifications, error: error, context: ["operation": "schedule"]
-                        )
+                        errorReporter.reportOnce(error)
                     }
                 }
             }
@@ -555,6 +612,27 @@ final class NotificationManager {
                     self.center.removeDeliveredNotifications(withIdentifiers: deliveredDiff.staleDeliveredIDs)
                 }
             }
+        }
+    }
+
+    private final class NotificationScheduleBatchErrorReporter: @unchecked Sendable {
+        private let lock = NSLock()
+        private var didReport = false
+        private let report: (_ error: any Error) -> Void
+
+        init(report: @escaping (_ error: any Error) -> Void) {
+            self.report = report
+        }
+
+        func reportOnce(_ error: any Error) {
+            lock.lock()
+            guard !didReport else {
+                lock.unlock()
+                return
+            }
+            didReport = true
+            lock.unlock()
+            report(error)
         }
     }
 
