@@ -33,11 +33,8 @@ struct ProtectionPlanEarlyValueProofView: View {
     @State private var beadProgress: CGFloat = 0
     /// How far the trail bows down toward the distraction (0 = straight/calm).
     @State private var trailBow: CGFloat = 0
-    /// Whether Pillie is currently holding the app (the Social Guard is sealed).
-    /// Driven live off `beadProgress` with hysteresis, so dragging back un-seals it.
-    @State private var isLatched = false
-    /// The committed end state — only set by tapping the check-in CTA.
-    @State private var hasResolved = false
+    /// UI-free interaction state shared with the public behavior tests (#206).
+    @State private var demoState = EarlyValueProofDemoState()
     /// The verifiedGreen "melt" ring sweep on resolve.
     @State private var ringFill: CGFloat = 0
     @State private var horizontalLocked = false
@@ -96,6 +93,8 @@ struct ProtectionPlanEarlyValueProofView: View {
         reduceMotion || voiceOverEnabled
     }
 
+    private var isLatched: Bool { demoState.isLatched }
+    private var hasResolved: Bool { demoState.isResolved }
     private var isResolved: Bool { hasResolved || prefersStaticProof }
     /// The frosted "Locked" pane is visible only while actively holding.
     private var showsGuard: Bool { isLatched && !isResolved }
@@ -123,7 +122,9 @@ struct ProtectionPlanEarlyValueProofView: View {
             onBack: onBack,
             primaryTitle: isResolved ? content.continueCTA : (isLatched ? content.shakeToTakeCTA : content.dragCTA),
             primaryIcon: isResolved ? "arrow.right" : (isLatched ? "iphone.radiowaves.left.and.right" : "hand.draw.fill"),
-            onPrimary: handlePrimary
+            onPrimary: handlePrimary,
+            secondaryTitle: !isResolved ? content.skipDemoCTA : nil,
+            onSecondary: skipDemo
         ) {
             VStack(spacing: 16) {
                 header
@@ -145,6 +146,10 @@ struct ProtectionPlanEarlyValueProofView: View {
         }
         .accessibilityIdentifier("protectionPlanEarlyValueProofView")
         .onAppear {
+            demoState.updateAccessibility(
+                reduceMotion: reduceMotion,
+                voiceOverEnabled: voiceOverEnabled
+            )
             // The static (Reduce Motion / VoiceOver) path presents the resolved
             // state directly, so it reports the stage actually shown.
             demoTelemetry.stageViewed(prefersStaticProof ? .unlocked : .drag)
@@ -154,6 +159,18 @@ struct ProtectionPlanEarlyValueProofView: View {
                 unlockAnimation = LottieAnimation.named("unlock_success")
             }
             dashTick.prepare()
+        }
+        .onChange(of: reduceMotion) { _, newValue in
+            demoState.updateAccessibility(
+                reduceMotion: newValue,
+                voiceOverEnabled: voiceOverEnabled
+            )
+        }
+        .onChange(of: voiceOverEnabled) { _, newValue in
+            demoState.updateAccessibility(
+                reduceMotion: reduceMotion,
+                voiceOverEnabled: newValue
+            )
         }
         // Shake detection is bound to the latch (off during drift/rest), so a shake
         // only ever counts toward unlocking once the apps are actually locked.
@@ -182,7 +199,12 @@ struct ProtectionPlanEarlyValueProofView: View {
             } else {
                 interactionFeedback.easeProtectionMoment(accessibilityReduceMotion: reduceMotion)
             }
-            if shakeManager.isComplete { performCheckIn(realShakeCount: newValue) }
+            if shakeManager.isComplete {
+                performCheckIn(
+                    action: .shake(count: newValue, required: shakeManager.requiredShakes),
+                    realShakeCount: newValue
+                )
+            }
         }
         .onDisappear {
             shakeManager.stopDetecting()
@@ -193,23 +215,31 @@ struct ProtectionPlanEarlyValueProofView: View {
     // MARK: - Actions
 
     private func handlePrimary() {
-        if isResolved {
+        switch demoState.handle(.primary) {
+        case .advance:
             onContinue()
-            return
-        }
-        // Once locked, a single CTA tap is the fallback for taking the pill (the
-        // simulator has no CoreMotion, and not everyone can shake): fill the ring
-        // to full, then resolve.
-        if isLatched {
+        case .resolved(.tapFallback):
+            // Once locked, a single CTA tap is the fallback for taking the pill
+            // (the simulator has no CoreMotion, and not everyone can shake).
             // Capture the real shakes before the fill overwrites the count —
             // `shake_count` below 3 is how the funnel sees the tap fallback.
             let realShakes = shakeManager.shakeCount
             shakeManager.fillToComplete()
-            performCheckIn(realShakeCount: realShakes)
-            return
+            finishCheckIn(realShakeCount: realShakes)
+        case .noChange:
+            // The primary remains the optional demo affordance. The visible
+            // secondary action is the tap-only escape (#206).
+            nudgeComet()
+        case .latched, .unlatched, .resolved(.interactive), .resolved(.skip),
+             .resolved(.accessibility):
+            break
         }
-        // At rest the CTA does NOT skip the demo — it points the user at the dot.
-        nudgeComet()
+    }
+
+    private func skipDemo() {
+        guard demoState.handle(.skip) == .advance(.skip) else { return }
+        demoTelemetry.demoSkipped()
+        onContinue()
     }
 
     /// A one-shot "drag me" bounce on the dot when the user taps the rest CTA.
@@ -222,15 +252,18 @@ struct ProtectionPlanEarlyValueProofView: View {
         }
     }
 
-    private func performCheckIn(realShakeCount: Int) {
-        guard !hasResolved else { return }   // idempotent: a final shake + tap can't double-fire
+    private func performCheckIn(action: EarlyValueProofDemoAction, realShakeCount: Int) {
+        guard case .resolved = demoState.handle(action) else { return }
+        finishCheckIn(realShakeCount: realShakeCount)
+    }
+
+    private func finishCheckIn(realShakeCount: Int) {
         demoTelemetry.shakeCheckInCompleted(shakeCount: realShakeCount)
         demoTelemetry.stageViewed(.unlocked)
         shakeManager.stopDetecting()
         cometWiggle = false
         let resolved = interactionFeedback.markDueActionTaken(accessibilityReduceMotion: reduceMotion)
         withAnimation(resolved.motionProfile.animation) {
-            hasResolved = true
             trailBow = 0
         }
         withAnimation(.easeInOut(duration: 0.5)) { ringFill = 1 }
@@ -253,10 +286,14 @@ struct ProtectionPlanEarlyValueProofView: View {
     private func updateLatch(for progress: CGFloat) {
         if !isLatched, progress >= latchThreshold {
             let latched = interactionFeedback.lockProtectionMoment(accessibilityReduceMotion: reduceMotion)
-            withAnimation(latched.motionProfile.animation) { isLatched = true }
+            withAnimation(latched.motionProfile.animation) {
+                _ = demoState.handle(.drag(progress: Double(progress)))
+            }
         } else if isLatched, progress <= unlatchThreshold {
             let eased = interactionFeedback.easeProtectionMoment(accessibilityReduceMotion: reduceMotion)
-            withAnimation(eased.motionProfile.animation) { isLatched = false }
+            withAnimation(eased.motionProfile.animation) {
+                _ = demoState.handle(.drag(progress: Double(progress)))
+            }
         }
     }
 

@@ -61,4 +61,8 @@ struct EarlyValueProofTelemetry {
   func shakeCheckInCompleted(shakeCount: Int) {
     telemetry.demoShakeCompleted(shakeCount: shakeCount)
   }
+
+  func demoSkipped() {
+    telemetry.demoSkipped()
+  }
 }
