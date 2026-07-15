@@ -76,6 +76,17 @@ final class EarlyValueProofTelemetryTests: XCTestCase {
     XCTAssertEqual(payload.properties["shake_count"], .int(3))
     XCTAssertNil(AnalyticsPayload().properties["shake_count"])
   }
+
+  func testSkipReportsDedicatedDemoSkippedEvent() {
+    let recorder = DemoFunnelRecorder()
+    let telemetry = EarlyValueProofTelemetry(analytics: recorder, isPlus: { false })
+
+    telemetry.demoSkipped()
+
+    let skipped = recorder.events.first { $0.event == .demoSkipped }
+    XCTAssertEqual(skipped?.source, .onboarding)
+    XCTAssertEqual(skipped?.step, .demoDrag)
+  }
 }
 
 // MARK: - Recorder

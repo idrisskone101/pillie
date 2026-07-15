@@ -57,9 +57,10 @@ struct ProtectionPlanEarlyValueProofContent {
     let resolved: Beat
     /// Primary action label once the pill is taken (kept for semantics/tests).
     let checkInCTA: String
-    /// The bottom CTA label at rest — instructs the drag so the demo can't be
-    /// skipped with a single tap.
+    /// The bottom primary CTA label at rest, preserving the optional drag demo.
     let dragCTA: String
+    /// Visible tap-only escape from the optional interaction.
+    let skipDemoCTA: String
     /// Advances out of the proof once the moment has played (or immediately in the
     /// static / VoiceOver equivalent).
     let continueCTA: String
@@ -79,7 +80,7 @@ struct ProtectionPlanEarlyValueProofContent {
     var visibleCopy: [String] {
         [eyebrow, title, restCue]
             + beats.flatMap { [$0.title, $0.detail] }
-            + [checkInCTA, dragCTA, continueCTA, shakeCue, shakeToTakeCTA, reassurance, accessibilitySummary]
+            + [checkInCTA, dragCTA, skipDemoCTA, continueCTA, shakeCue, shakeToTakeCTA, reassurance, accessibilitySummary]
     }
 
     static let `default` = ProtectionPlanEarlyValueProofContent(
@@ -103,6 +104,7 @@ struct ProtectionPlanEarlyValueProofContent {
         ),
         checkInCTA: "I took my pill",
         dragCTA: "Drag the dot to your apps",
+        skipDemoCTA: "Skip demo",
         continueCTA: "Continue",
         shakeCue: "Now shake your phone to take your pill — three quick shakes.",
         shakeToTakeCTA: "Shake to take your pill",

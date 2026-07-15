@@ -310,6 +310,9 @@ enum AnalyticsEvent: String, CaseIterable {
   /// (0–3): how many real shakes happened before resolution, so the funnel can
   /// see the CTA-tap fallback and mid-shake abandonment.
   case demoShakeCompleted = "demo_shake_completed"
+  /// The user chose the visible tap-only escape from the optional Early Value
+  /// Proof interaction (#206).
+  case demoSkipped = "demo_skipped"
   /// A handled failure (#179). Carries `domain` + `message` + `code` + `severity`
   /// via `trackError`, never through the `AnalyticsPayload` envelope.
   case appError = "app_error"

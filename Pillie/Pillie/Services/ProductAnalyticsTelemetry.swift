@@ -123,6 +123,10 @@ struct ProductAnalyticsTelemetry {
     track(.demoShakeCompleted, source: .onboarding, step: .demoShake, shakeCount: shakeCount)
   }
 
+  func demoSkipped() {
+    track(.demoSkipped, source: .onboarding, step: .demoDrag)
+  }
+
   func notificationPermissionRequested() {
     track(.notificationPermissionRequested, source: .onboarding, step: .reminderTime)
   }

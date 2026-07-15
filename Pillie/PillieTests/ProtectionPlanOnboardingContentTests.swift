@@ -68,6 +68,10 @@ final class ProtectionPlanOnboardingContentTests: XCTestCase {
         XCTAssertEqual(content.continueCTA, "Continue")
     }
 
+    func testEarlyValueProofExposesVisibleSkipDemoAction() {
+        XCTAssertEqual(ProtectionPlanEarlyValueProofContent.default.skipDemoCTA, "Skip demo")
+    }
+
     func testEarlyValueProofIdleLineIsOnTopic() {
         // The idle line is the enticing hook; the lock mechanic now lives in the
         // CTA + the demo, so the idle line only needs to stay about the pill.
