@@ -53,7 +53,7 @@ struct OnboardingTelemetry {
 
     if transition.direction == .forward,
        transition.from == .reminderPlan,
-       transition.to == .trialGranted,
+       transition.to == .appBlocking,
        !defaults.bool(forKey: Self.coreOnboardingCompletedEmittedKey) {
       defaults.set(true, forKey: Self.coreOnboardingCompletedEmittedKey)
       telemetry.coreOnboardingCompleted()

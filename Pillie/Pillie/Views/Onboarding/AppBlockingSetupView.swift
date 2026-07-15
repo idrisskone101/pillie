@@ -28,6 +28,7 @@ struct AppBlockingSetupContent {
     let titleLead: String
     let titleAccent: String
     let subtitle: String
+    let trialDisclosure: String
 
     // Empty state
     let emptyTitle: String
@@ -52,7 +53,7 @@ struct AppBlockingSetupContent {
 
     var visibleCopy: [String] {
         [
-            badge, titleLead, titleAccent, subtitle,
+            badge, titleLead, titleAccent, subtitle, trialDisclosure,
             emptyTitle, emptyDetail
         ]
         + categoryHints.map(\.name)
@@ -80,6 +81,7 @@ struct AppBlockingSetupContent {
         titleLead: "Block the apps",
         titleAccent: "that pull you in.",
         subtitle: "Pick the categories Pillie should pause right after your reminder.",
+        trialDisclosure: "Pillie Plus is unlocked for 14 days. No card required.",
         emptyTitle: "Nothing paused yet",
         emptyDetail: "You'll choose real apps in the Screen Time picker. We only ever store the count.",
         categoryHints: [
@@ -230,6 +232,8 @@ struct AppBlockingSetupView: View {
                 .font(.pillieBodyLarge())
                 .foregroundStyle(PillieTheme.textMuted)
                 .fixedSize(horizontal: false, vertical: true)
+
+            TrialUnlockDisclosure(text: content.trialDisclosure)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
@@ -453,6 +457,29 @@ struct AppBlockingSetupView: View {
             reminderMinute: store.reminderMinute,
             method: store.pack.method
         )
+    }
+}
+
+private struct TrialUnlockDisclosure: View {
+    let text: String
+
+    var body: some View {
+        HStack(alignment: .top, spacing: 9) {
+            Image(systemName: "checkmark.seal.fill")
+                .font(.pillie(15, weight: .semibold))
+                .foregroundStyle(PillieTheme.coral)
+
+            Text(text)
+                .font(.pillie(14, weight: .semibold))
+                .foregroundStyle(PillieTheme.textPrimary)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 10)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(PillieTheme.coralLight, in: RoundedRectangle(cornerRadius: 14))
+        .accessibilityElement(children: .combine)
+        .accessibilityIdentifier("appBlockingTrialDisclosure")
     }
 }
 

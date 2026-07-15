@@ -113,13 +113,11 @@ enum OnboardingFlow {
         .reminderTime,
         .reminderPlan,
         // .mechanismProof intentionally omitted: the diagnosis reveal now leads
-        // straight into the Trial Granted Moment. The step + view are retained but
-        // unreachable.
+        // straight into app-blocking setup. The step + view are retained but unreachable.
         // .paywall and .freePlanConfirmation retired (issue #164 / ADR 0007): the
-        // Reverse Trial replaces the onboarding purchase offer, so the Trial Granted
-        // Moment sits at the old paywall position and everyone proceeds into the
-        // Screen Time branch.
-        .trialGranted,
+        // Reverse Trial replaces the onboarding purchase offer, and issue #204 retires
+        // the Trial Granted Moment as a mandatory gate. Everyone proceeds directly
+        // into the Screen Time branch.
         .appBlocking,
         // Pill Protection Plan Ready (#83): the terminal activation screen between a
         // valid blocker config save and opening the app.
@@ -144,6 +142,24 @@ enum OnboardingFlow {
         return displayOrder.firstIndex(of: step)
     }
 
+    static func nextStep(after step: Step) -> Step? {
+        guard let index = displayOrder.firstIndex(of: step) else { return nil }
+        let nextIndex = displayOrder.index(after: index)
+        guard nextIndex < displayOrder.endIndex else { return nil }
+        return displayOrder[nextIndex]
+    }
+
+    static func previousStep(before step: Step) -> Step? {
+        guard let index = displayOrder.firstIndex(of: step), index > displayOrder.startIndex else {
+            return nil
+        }
+        return displayOrder[displayOrder.index(before: index)]
+    }
+
+    static func grantsReverseTrial(on step: Step) -> Bool {
+        step == .appBlocking
+    }
+
     static func visibleStep(for rawValue: Int, isPlus: Bool, selectedFreePlan: Bool) -> Step? {
         guard let step = step(for: rawValue) else { return nil }
 
@@ -160,13 +176,12 @@ enum OnboardingFlow {
             return .acquisitionSource
         }
 
-        // The paywall (and the free-plan confirmation behind it) was retired by the
-        // Reverse Trial (issue #164 / ADR 0007). Anyone persisted mid-onboarding on
-        // either step resumes at the Trial Granted Moment, and the free-plan divert
-        // away from `appBlocking` is gone — blocker setup runs under real Plus
-        // Access for everyone.
-        if step == .paywall || step == .freePlanConfirmation {
-            return .trialGranted
+        // The paywall and free-plan confirmation were retired by the Reverse Trial
+        // (issue #164 / ADR 0007), and issue #204 retires the Trial Granted Moment as
+        // a blocking gate. Anyone persisted on those steps resumes at app-blocking
+        // setup, which runs under real Plus Access for everyone.
+        if step == .paywall || step == .freePlanConfirmation || step == .trialGranted {
+            return .appBlocking
         }
 
         return step

@@ -169,13 +169,21 @@ final class OnboardingFlowTests: XCTestCase {
         XCTAssertEqual(OnboardingFlow.Step.freePlanConfirmation.rawValue, 14)
     }
 
-    func testDisplayOrderPlacesTrialGrantedDirectlyAfterDiagnosisAndBeforeScreenTimeBranch() throws {
-        let order = OnboardingFlow.displayOrder
-        let reminderPlan = try XCTUnwrap(order.firstIndex(of: .reminderPlan))
-        let trialGranted = try XCTUnwrap(order.firstIndex(of: .trialGranted))
-        let appBlocking = try XCTUnwrap(order.firstIndex(of: .appBlocking))
-        XCTAssertEqual(trialGranted, reminderPlan + 1, "The Trial Granted Moment sits at the old paywall position.")
-        XCTAssertEqual(appBlocking, trialGranted + 1, "Everyone proceeds into the Screen Time branch.")
+    func testDisplayOrderRoutesDiagnosisDirectlyIntoAppBlocking() {
+        XCTAssertEqual(OnboardingFlow.nextStep(after: .reminderPlan), .appBlocking)
+        XCTAssertFalse(
+            OnboardingFlow.displayOrder.contains(.trialGranted),
+            "The Trial Granted Moment is no longer a blocking onboarding step."
+        )
+    }
+
+    func testAppBlockingBackNavigationReturnsDirectlyToDiagnosis() {
+        XCTAssertEqual(OnboardingFlow.previousStep(before: .appBlocking), .reminderPlan)
+    }
+
+    func testReverseTrialIsGrantedWhenAppBlockingBecomesVisible() {
+        XCTAssertTrue(OnboardingFlow.grantsReverseTrial(on: .appBlocking))
+        XCTAssertFalse(OnboardingFlow.grantsReverseTrial(on: .trialGranted))
     }
 
     func testTrialGrantedMapsToSafeLowCardinalityAnalyticsLabel() {
@@ -190,44 +198,27 @@ final class OnboardingFlowTests: XCTestCase {
         XCTAssertFalse(OnboardingFlow.displayOrder.contains(.freePlanConfirmation))
     }
 
-    func testDiagnosisToTrialGrantedResolvesForwardAndOnIntoAppBlocking() throws {
-        let toTrialGranted = try XCTUnwrap(
-            OnboardingFlow.transition(
-                from: OnboardingFlow.Step.reminderPlan.rawValue,
-                to: OnboardingFlow.Step.trialGranted.rawValue
-            )
-        )
-        XCTAssertEqual(toTrialGranted.direction, .forward)
-        XCTAssertFalse(toTrialGranted.completesOnboarding)
-
+    func testDiagnosisToAppBlockingResolvesForwardWithoutCompletingOnboarding() throws {
         let toAppBlocking = try XCTUnwrap(
             OnboardingFlow.transition(
-                from: OnboardingFlow.Step.trialGranted.rawValue,
+                from: OnboardingFlow.Step.reminderPlan.rawValue,
                 to: OnboardingFlow.Step.appBlocking.rawValue
             )
         )
         XCTAssertEqual(toAppBlocking.direction, .forward)
         XCTAssertFalse(toAppBlocking.completesOnboarding)
-
-        let backToDiagnosis = try XCTUnwrap(
-            OnboardingFlow.transition(
-                from: OnboardingFlow.Step.trialGranted.rawValue,
-                to: OnboardingFlow.Step.reminderPlan.rawValue
-            )
-        )
-        XCTAssertEqual(backToDiagnosis.direction, .backward)
     }
 
     func testTrialGrantedCountsAsActiveOnboardingSoAbandonersResumeWithTheirTrial() {
-        // Killing the app on the Trial Granted Moment must resume onboarding there
-        // (with the trial already written), never as a completed user.
+        // The retired raw value remains an active onboarding identity so it migrates
+        // forward to app-blocking setup, never to completed app state.
         XCTAssertTrue(OnboardingFlow.isOnboardingActive(rawStep: OnboardingFlow.Step.trialGranted.rawValue))
     }
 
-    func testRetiredPaywallAndFreePlanStepsMigrateForwardToTrialGrantedMoment() {
-        // Anyone persisted mid-onboarding on the retired paywall (or the free-plan
-        // confirmation behind it) resumes at the Trial Granted Moment instead.
-        for retired in [OnboardingFlow.Step.paywall, .freePlanConfirmation] {
+    func testRetiredTrialAndPaywallStepsMigrateForwardToAppBlocking() {
+        // Anyone persisted on a retired announcement or purchase step resumes at
+        // app-blocking setup instead of seeing the removed gate.
+        for retired in [OnboardingFlow.Step.paywall, .freePlanConfirmation, .trialGranted] {
             for isPlus in [true, false] {
                 for selectedFreePlan in [true, false] {
                     XCTAssertEqual(
@@ -236,8 +227,8 @@ final class OnboardingFlowTests: XCTestCase {
                             isPlus: isPlus,
                             selectedFreePlan: selectedFreePlan
                         ),
-                        .trialGranted,
-                        "\(retired) should migrate to the Trial Granted Moment."
+                        .appBlocking,
+                        "\(retired) should migrate to app-blocking setup."
                     )
                 }
             }
@@ -433,10 +424,10 @@ final class OnboardingFlowTests: XCTestCase {
         // monotonic with real progression even though raw values have gaps.
         XCTAssertEqual(OnboardingFlow.displayIndex(for: OnboardingFlow.Step.welcome.rawValue), 0)
         XCTAssertEqual(OnboardingFlow.displayIndex(for: OnboardingFlow.Step.painPoints.rawValue), 4)
-        // The paywall + free-plan pair collapsed into the single Trial Granted
-        // Moment (#164), so the Screen Time branch moved up one position.
-        XCTAssertEqual(OnboardingFlow.displayIndex(for: OnboardingFlow.Step.trialGranted.rawValue), 13)
-        XCTAssertEqual(OnboardingFlow.displayIndex(for: OnboardingFlow.Step.appBlocking.rawValue), 14)
+        // The retired Trial Granted Moment is no longer a funnel position (#204),
+        // so the Screen Time branch follows the diagnosis directly.
+        XCTAssertNil(OnboardingFlow.displayIndex(for: OnboardingFlow.Step.trialGranted.rawValue))
+        XCTAssertEqual(OnboardingFlow.displayIndex(for: OnboardingFlow.Step.appBlocking.rawValue), 13)
 
         // Every visible step's index matches its position in displayOrder exactly.
         for (position, step) in OnboardingFlow.displayOrder.enumerated() {

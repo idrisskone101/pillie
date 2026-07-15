@@ -260,11 +260,12 @@ struct ContentView: View {
                 lowRiskTransition(to: .reminderTime)
 	            },
 	            onContinue: {
-                // Mark the reveal as played so returning here (Back from the Trial
-                // Granted Moment) shows the finished plan instead of replaying the
-                // loading animation.
+                // Mark the reveal as played so returning here from app-blocking setup
+                // shows the finished plan instead of replaying the loading animation.
                 protectionPlanModel.hasRevealedDiagnosisPlan = true
-                continueSetupStep(to: .trialGranted)
+                if let nextStep = OnboardingFlow.nextStep(after: .reminderPlan) {
+                  continueSetupStep(to: nextStep)
+                }
 	            }
           )
           .transition(
@@ -304,19 +305,8 @@ struct ContentView: View {
 	            onContinue: {
                 continueSetupStep(to: .appBlocking)
 	            }
-          )
-          .onAppear {
-            onboardingTelemetry.trialOfferViewed()
-            // Showing the screen writes the trial grant — the 14-day clock starts
-            // here, not at onboarding completion, so blocker setup runs under real
-            // Plus Access and an abandoner who returns still holds their trial.
-            // `trial_granted` fires only when the grant is actually written;
-            // revisiting the screen (Back, relaunch) never re-emits it.
-            if subscriptionManager.grantReverseTrial() {
-              onboardingTelemetry.trialActivated()
-            }
-          }
-          .transition(
+	          )
+	          .transition(
             .asymmetric(
               insertion: .move(edge: .trailing),
               removal: .move(edge: .trailing)
@@ -325,7 +315,9 @@ struct ContentView: View {
 	        case .appBlocking:
 	          AppBlockingSetupView(
 	            onBack: {
-                lowRiskTransition(to: .trialGranted)
+                if let previousStep = OnboardingFlow.previousStep(before: .appBlocking) {
+                  lowRiskTransition(to: previousStep)
+                }
 	            },
 	            onContinue: {
                 // A valid save with Screen Time authorization is genuine activation —
@@ -343,11 +335,19 @@ struct ContentView: View {
                 onboardingTelemetry.blockerSetupSkipped()
                 continueFreePath(to: .complete)
 	            }
-          )
-          .onAppear {
-            onboardingTelemetry.blockerSetupStarted()
-          }
-          .transition(
+	          )
+	          .onAppear {
+	            // App-blocking setup is now the first visible surface that describes
+	            // the unlocked 14-day Plus access. Grant on that same appearance so
+	            // copy and entitlement timing agree. The store remains once-only, so
+	            // Back/relaunch never re-emits `trial_granted`.
+	            if OnboardingFlow.grantsReverseTrial(on: .appBlocking),
+	               subscriptionManager.grantReverseTrial() {
+	              onboardingTelemetry.trialActivated()
+	            }
+	            onboardingTelemetry.blockerSetupStarted()
+	          }
+	          .transition(
             .asymmetric(
               insertion: .move(edge: .trailing),
               removal: .move(edge: .trailing)

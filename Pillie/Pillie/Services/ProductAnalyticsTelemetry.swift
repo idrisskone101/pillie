@@ -203,12 +203,12 @@ struct ProductAnalyticsTelemetry {
     track(.blockerInterventionFired, interventionCount: count)
   }
 
-  /// A Reverse Trial grant was written at the Trial Granted Moment (#164 /
-  /// ADR 0007). Fired only when the grant is actually written — revisiting the
-  /// screen never re-emits it. Never fires `trial_started`, which keeps its
+  /// A Reverse Trial grant was written when app-blocking setup appeared (#204 /
+  /// ADR 0007). Fired only when the grant is actually written — revisiting setup
+  /// never re-emits it. Never fires `trial_started`, which keeps its
   /// StoreKit-intro-offer meaning.
   func trialGranted() {
-    track(.trialGranted, source: .onboarding, step: .trialGranted)
+    track(.trialGranted, source: .onboarding, step: .appBlocking)
   }
 
   func trialOfferViewed() {
@@ -218,7 +218,7 @@ struct ProductAnalyticsTelemetry {
   /// Reports successful Reverse Trial activation and keeps the pre-existing
   /// `trial_granted` event for ADR 0007 dashboards.
   func trialActivated() {
-    track(.trialActivated, source: .onboarding, step: .trialGranted)
+    track(.trialActivated, source: .onboarding, step: .appBlocking)
     trialGranted()
   }
 

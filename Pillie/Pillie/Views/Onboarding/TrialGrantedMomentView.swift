@@ -91,7 +91,7 @@ struct TrialGrantedMomentContent {
             ),
         ],
         disclosure: "Your free trial lasts 14 days — app blocking turns off when it ends. After that, Plus is $29.99/year, or keep using reminders free.",
-        primaryCTA: "Start my free trial"
+        primaryCTA: "Continue to app blocking"
     )
 }
 

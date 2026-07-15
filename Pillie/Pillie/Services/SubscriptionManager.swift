@@ -185,7 +185,7 @@ final class SubscriptionManager: NSObject {
     /// Keychain and unlocks Plus Access through the same hook a purchase fires.
     /// A no-op when a grant already exists — reinstalls and repeat calls must
     /// never restart the 14-day clock. Returns whether a new grant was written,
-    /// so the Trial Granted Moment can fire `trial_granted` exactly once.
+    /// so app-blocking setup can fire `trial_granted` exactly once.
     @discardableResult
     func grantReverseTrial(now: Date = Date()) -> Bool {
         guard trialGrantDate == nil else { return false }

@@ -15,6 +15,15 @@ final class AppBlockingSetupContentTests: XCTestCase {
         XCTAssertTrue(content.subtitle.lowercased().contains("reminder"))
     }
 
+    func testTrialDisclosureIsClearAndDoesNotReplaceSkip() {
+        XCTAssertEqual(
+            content.trialDisclosure,
+            "Pillie Plus is unlocked for 14 days. No card required."
+        )
+        XCTAssertTrue(content.visibleCopy.contains(content.trialDisclosure))
+        XCTAssertEqual(content.skipCTA, "Skip for now")
+    }
+
     // MARK: - Empty state (AC3 honest empty state)
 
     func testEmptyStateExplainsScreenTimePickerAndCountOnlyStorage() {

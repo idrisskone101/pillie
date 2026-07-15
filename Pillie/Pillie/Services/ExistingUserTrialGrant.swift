@@ -22,7 +22,7 @@ enum ExistingUserTrialGrant {
 
         /// Why this launch does not grant.
         enum Reason: Equatable {
-            /// Onboarding has not completed — the Trial Granted Moment owns the
+            /// Onboarding has not completed — app-blocking setup owns the
             /// grant for this user; they must never be granted twice.
             case stillOnboarding
             /// A paying Plus subscriber — sees nothing and changes in no way.
@@ -43,7 +43,7 @@ enum ExistingUserTrialGrant {
     /// The launch state the decision is derived from.
     struct State: Equatable {
         /// Whether onboarding has ever completed. Mid-onboarding users get the
-        /// onboarding grant at the Trial Granted Moment instead — never both.
+        /// onboarding grant at app-blocking setup instead — never both.
         let isOnboardingComplete: Bool
         /// Whether the RevenueCat entitlement state has actually loaded this
         /// launch. `hasEntitlement` starts `false` before the first customer-info
@@ -52,7 +52,7 @@ enum ExistingUserTrialGrant {
         /// The raw Plus entitlement — paying subscribers see nothing.
         let hasEntitlement: Bool
         /// Whether a Reverse Trial grant already exists (Keychain), e.g. from the
-        /// onboarding Trial Granted Moment.
+        /// onboarding app-blocking setup.
         let hasTrialGrant: Bool
         /// Whether the one-shot update window was already consumed on a previous
         /// launch.

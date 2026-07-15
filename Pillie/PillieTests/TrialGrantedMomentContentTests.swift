@@ -32,7 +32,7 @@ final class TrialGrantedMomentContentTests: XCTestCase {
     // MARK: - Single continue action, nothing to buy
 
     func testTheOnlyActionIsTheSingleContinueCTA() {
-        XCTAssertEqual(content.primaryCTA, "Start my free trial")
+        XCTAssertEqual(content.primaryCTA, "Continue to app blocking")
     }
 
     func testCopyOffersNothingToBuyAndNoDeclinePath() {
