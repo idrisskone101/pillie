@@ -306,13 +306,14 @@ struct ContentView: View {
 	            }
           )
           .onAppear {
+            onboardingTelemetry.trialOfferViewed()
             // Showing the screen writes the trial grant — the 14-day clock starts
             // here, not at onboarding completion, so blocker setup runs under real
             // Plus Access and an abandoner who returns still holds their trial.
             // `trial_granted` fires only when the grant is actually written;
             // revisiting the screen (Back, relaunch) never re-emits it.
             if subscriptionManager.grantReverseTrial() {
-              ProductAnalyticsTelemetry.live.trialGranted()
+              onboardingTelemetry.trialActivated()
             }
           }
           .transition(
@@ -331,15 +332,21 @@ struct ContentView: View {
                 // land on the Pill Protection Plan Ready screen. Anything short of
                 // activation (e.g. authorized but later cleared) opens the app directly.
                 if ProtectionPlanCompletion.landsOnProtectionPlanReady(for: currentCompletionState) {
+                  onboardingTelemetry.blockerSetupCompleted()
                   continueSetupStep(to: .protectionPlanReady)
                 } else {
+                  onboardingTelemetry.blockerSetupSkipped()
                   openSoftPaywallOrUpgrade(to: .complete)
                 }
 	            },
 	            onSkip: {
+                onboardingTelemetry.blockerSetupSkipped()
                 continueFreePath(to: .complete)
 	            }
           )
+          .onAppear {
+            onboardingTelemetry.blockerSetupStarted()
+          }
           .transition(
             .asymmetric(
               insertion: .move(edge: .trailing),
@@ -349,9 +356,8 @@ struct ContentView: View {
 	        case .protectionPlanReady:
 	          ProtectionPlanReadyView(
 	            onContinue: {
-                // Hands off into the app. Leaving the ready screen for `.complete` is
-                // the completion boundary that fires `onboarding_completed` and the
-                // `protection_plan_activated` classification.
+                // Hands off into the app. Core onboarding was already counted at the
+                // reminder plan; this terminal boundary classifies genuine protection.
                 continueSetupStep(to: .complete)
 	            }
           )
@@ -510,7 +516,9 @@ struct ContentView: View {
     onboardingTelemetry.stepCompleted(from: previousStep, to: nextStep)
 
     if OnboardingFlow.completedOnboarding(from: previousStep, to: nextStep) {
-      // Classify the terminal completion state. Reminder-only completion reports
+      // Classify the optional blocker outcome at the terminal handoff. Core
+      // onboarding was already counted at reminderPlan -> trialGranted.
+      // Reminder-only completion reports
       // `reminder_only_completion`; only genuine activation (saved blocker config +
       // Screen Time authorization) reports `protection_plan_activated`.
       ProductAnalyticsTelemetry.live.onboardingOutcomeClassified(

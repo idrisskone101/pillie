@@ -123,6 +123,37 @@ final class AnalyticsManagerTests: XCTestCase {
       ])
   }
 
+  func testSplitOnboardingEventCarriesVersionBuildSessionSourceAndStage() throws {
+    let client = RecordingAnalyticsClient()
+    let manager = AnalyticsManager(
+      defaults: defaults,
+      client: client,
+      infoDictionary: [
+        "PostHogProjectToken": "phc_test_token",
+        "PostHogHost": "https://us.i.posthog.com",
+        "CFBundleShortVersionString": "2.0.4",
+        "CFBundleVersion": "203",
+      ],
+      sessionID: "session-203"
+    )
+    Self.keptObjects.append(manager)
+
+    manager.configure()
+    manager.track(
+      .coreOnboardingCompleted,
+      source: .onboarding,
+      step: .reminderPlan,
+      isPlus: false
+    )
+
+    let properties = try XCTUnwrap(client.captures.first?.properties)
+    XCTAssertEqual(properties["app_version"], .string("2.0.4"))
+    XCTAssertEqual(properties["app_build"], .string("203"))
+    XCTAssertEqual(properties["session_id"], .string("session-203"))
+    XCTAssertEqual(properties["source"], .string("onboarding"))
+    XCTAssertEqual(properties["step"], .string("reminder_plan"))
+  }
+
   func testOnboardingPermissionTelemetryUsesApprovedCoarsePropertiesOnly() {
     let client = RecordingAnalyticsClient()
     let manager = makeManager(client: client, token: "phc_test_token")
@@ -256,7 +287,7 @@ final class AnalyticsManagerTests: XCTestCase {
     XCTAssertEqual(recorder.events.first, .onboardingStarted)
   }
 
-  func testOnboardingCompletedFiresOnlyAfterFinalOnboardingStep() {
+  func testFinalOnboardingHandoffDoesNotRefireCoreCompatibilityCompletion() {
     let recorder = RecordingAnalyticsTracker()
     let telemetry = OnboardingTelemetry(analytics: recorder, isPlus: { false })
 
@@ -268,12 +299,97 @@ final class AnalyticsManagerTests: XCTestCase {
       [
         .onboardingStepCompleted,
         .onboardingStepCompleted,
-        .onboardingCompleted,
       ])
     // Step 9 is `.method` (step 10 is `.schedule`); a forward transition records the
     // step it left. The earlier `.schedule` expectation was stale after the onboarding
     // step renumbering — unrelated to this ticket's analytics work.
-    XCTAssertEqual(recorder.steps, [.method, .freePlanConfirmation, nil])
+    XCTAssertEqual(recorder.steps, [.method, .freePlanConfirmation])
+  }
+
+  func testCoreOnboardingCompletionFiresOnceWhenReminderPlanIsAccepted() {
+    let recorder = RecordingAnalyticsTracker()
+    let telemetry = OnboardingTelemetry(analytics: recorder, isPlus: { false }, defaults: defaults)
+
+    telemetry.stepCompleted(
+      from: OnboardingFlow.Step.reminderPlan.rawValue,
+      to: OnboardingFlow.Step.trialGranted.rawValue
+    )
+    telemetry.stepCompleted(
+      from: OnboardingFlow.Step.trialGranted.rawValue,
+      to: OnboardingFlow.Step.reminderPlan.rawValue
+    )
+    telemetry.stepCompleted(
+      from: OnboardingFlow.Step.reminderPlan.rawValue,
+      to: OnboardingFlow.Step.trialGranted.rawValue
+    )
+
+    XCTAssertEqual(
+      recorder.events,
+      [
+        .onboardingStepCompleted,
+        .coreOnboardingCompleted,
+        .onboardingCompleted,
+        .onboardingBackTapped,
+        .onboardingStepCompleted,
+      ]
+    )
+  }
+
+  func testPostCoreOnboardingStagesAreIndependentOrderedAndSingleFire() {
+    let recorder = RecordingAnalyticsTracker()
+    let telemetry = OnboardingTelemetry(analytics: recorder, isPlus: { true }, defaults: defaults)
+
+    telemetry.stepCompleted(
+      from: OnboardingFlow.Step.reminderPlan.rawValue,
+      to: OnboardingFlow.Step.trialGranted.rawValue
+    )
+    telemetry.trialOfferViewed()
+    telemetry.trialOfferViewed()
+    telemetry.trialActivated()
+    telemetry.trialActivated()
+    telemetry.blockerSetupStarted()
+    telemetry.blockerSetupStarted()
+    telemetry.blockerSetupSkipped()
+    telemetry.blockerSetupSkipped()
+    telemetry.stepCompleted(
+      from: OnboardingFlow.Step.appBlocking.rawValue,
+      to: OnboardingFlow.Step.complete.rawValue
+    )
+
+    let splitEvents: Set<AnalyticsEvent> = [
+      .coreOnboardingCompleted,
+      .onboardingCompleted,
+      .trialOfferViewed,
+      .trialActivated,
+      .trialGranted,
+      .blockerSetupStarted,
+      .blockerSetupSkipped,
+    ]
+    XCTAssertEqual(
+      recorder.events.filter(splitEvents.contains),
+      [
+        .coreOnboardingCompleted,
+        .onboardingCompleted,
+        .trialOfferViewed,
+        .trialActivated,
+        .trialGranted,
+        .blockerSetupStarted,
+        .blockerSetupSkipped,
+      ]
+    )
+  }
+
+  func testBlockerSetupCompletionIsDistinctFromProtectionPlanActivationAndSingleFire() {
+    let recorder = RecordingAnalyticsTracker()
+    let telemetry = OnboardingTelemetry(analytics: recorder, isPlus: { true }, defaults: defaults)
+
+    telemetry.blockerSetupCompleted()
+    telemetry.blockerSetupCompleted()
+
+    XCTAssertEqual(recorder.events, [.blockerSetupCompleted])
+    XCTAssertFalse(recorder.events.contains(.protectionPlanActivated))
+    XCTAssertEqual(recorder.sources, [.onboarding])
+    XCTAssertEqual(recorder.steps, [.appBlocking])
   }
 
   func testProductAnalyticsTelemetryMapsDomainEventsToApprovedCoarseProperties() {

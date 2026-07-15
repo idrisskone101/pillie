@@ -11,6 +11,12 @@ struct OnboardingTelemetry {
   /// user resumes on or how many times the first screen is re-rendered. Replaces the
   /// fragile `step == 0` position check that missed resumed users entirely (#140).
   static let onboardingStartedEmittedKey = "onboarding_started_emitted"
+  static let coreOnboardingCompletedEmittedKey = "core_onboarding_completed_emitted"
+  static let trialOfferViewedEmittedKey = "trial_offer_viewed_emitted"
+  static let trialActivatedEmittedKey = "trial_activated_emitted"
+  static let blockerSetupStartedEmittedKey = "blocker_setup_started_emitted"
+  static let blockerSetupSkippedEmittedKey = "blocker_setup_skipped_emitted"
+  static let blockerSetupCompletedEmittedKey = "blocker_setup_completed_emitted"
 
   private let telemetry: ProductAnalyticsTelemetry
   private let defaults: UserDefaults
@@ -45,8 +51,42 @@ struct OnboardingTelemetry {
       telemetry.onboardingBackTapped(analyticsStep, stepIndex: stepIndex)
     }
 
-    if transition.completesOnboarding {
-      telemetry.onboardingCompleted()
+    if transition.direction == .forward,
+       transition.from == .reminderPlan,
+       transition.to == .trialGranted,
+       !defaults.bool(forKey: Self.coreOnboardingCompletedEmittedKey) {
+      defaults.set(true, forKey: Self.coreOnboardingCompletedEmittedKey)
+      telemetry.coreOnboardingCompleted()
+    }
+  }
+
+  func trialOfferViewed() {
+    emitOnce(key: Self.trialOfferViewedEmittedKey) {
+      telemetry.trialOfferViewed()
+    }
+  }
+
+  func trialActivated() {
+    emitOnce(key: Self.trialActivatedEmittedKey) {
+      telemetry.trialActivated()
+    }
+  }
+
+  func blockerSetupStarted() {
+    emitOnce(key: Self.blockerSetupStartedEmittedKey) {
+      telemetry.blockerSetupStarted()
+    }
+  }
+
+  func blockerSetupSkipped() {
+    emitOnce(key: Self.blockerSetupSkippedEmittedKey) {
+      telemetry.blockerSetupSkipped()
+    }
+  }
+
+  func blockerSetupCompleted() {
+    emitOnce(key: Self.blockerSetupCompletedEmittedKey) {
+      telemetry.blockerSetupCompleted()
     }
   }
 
@@ -64,5 +104,11 @@ struct OnboardingTelemetry {
 
   func screenTimePermissionCompleted(isAuthorized: Bool) {
     telemetry.screenTimePermissionCompleted(isAuthorized: isAuthorized)
+  }
+
+  private func emitOnce(key: String, event: () -> Void) {
+    guard !defaults.bool(forKey: key) else { return }
+    defaults.set(true, forKey: key)
+    event()
   }
 }

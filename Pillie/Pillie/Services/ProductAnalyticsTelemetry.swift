@@ -68,18 +68,30 @@ struct ProductAnalyticsTelemetry {
   }
 
   func onboardingCompleted() {
-    track(.onboardingCompleted, source: .onboarding)
+    track(.onboardingCompleted, source: .onboarding, step: .reminderPlan)
     // af_complete_registration — onboarding is Pillie's "registration" milestone.
     AppsFlyerManager.shared.logCompleteRegistration()
+  }
+
+  /// Reports the stable core-onboarding boundary before trial or blocker setup.
+  /// `onboarding_completed` remains alongside it as a compatibility event for
+  /// existing PostHog dashboards and lifecycle automation.
+  func coreOnboardingCompleted() {
+    track(.coreOnboardingCompleted, source: .onboarding, step: .reminderPlan)
+    onboardingCompleted()
   }
 
   /// Reports the terminal completion classification. Fires exactly one event —
   /// `protection_plan_activated` only when app blocking is genuinely activated, and
   /// `reminder_only_completion` otherwise. Reminder-only completion never emits an
   /// activation event. Both carry only coarse, consent-safe context (`source`,
-  /// `is_plus`); no personalization answers, app names, or counts.
+  /// stable `step`, `is_plus`); no personalization answers, app names, or counts.
   func onboardingOutcomeClassified(_ outcome: ProtectionPlanCompletion.Outcome) {
-    track(outcome.analyticsEvent, source: .onboarding)
+    track(
+      outcome.analyticsEvent,
+      source: .onboarding,
+      step: outcome == .protectionPlanActivated ? .protectionPlanReady : .appBlocking
+    )
   }
 
   func onboardingAcquisitionSourceCompleted(_ source: AcquisitionSource) {
@@ -196,7 +208,30 @@ struct ProductAnalyticsTelemetry {
   /// screen never re-emits it. Never fires `trial_started`, which keeps its
   /// StoreKit-intro-offer meaning.
   func trialGranted() {
-    track(.trialGranted, source: .onboarding)
+    track(.trialGranted, source: .onboarding, step: .trialGranted)
+  }
+
+  func trialOfferViewed() {
+    track(.trialOfferViewed, source: .onboarding, step: .trialGranted)
+  }
+
+  /// Reports successful Reverse Trial activation and keeps the pre-existing
+  /// `trial_granted` event for ADR 0007 dashboards.
+  func trialActivated() {
+    track(.trialActivated, source: .onboarding, step: .trialGranted)
+    trialGranted()
+  }
+
+  func blockerSetupStarted() {
+    track(.blockerSetupStarted, source: .onboarding, step: .appBlocking)
+  }
+
+  func blockerSetupSkipped() {
+    track(.blockerSetupSkipped, source: .onboarding, step: .appBlocking)
+  }
+
+  func blockerSetupCompleted() {
+    track(.blockerSetupCompleted, source: .onboarding, step: .appBlocking)
   }
 
   /// A Reverse Trial grant was written for an existing onboarded free user on
