@@ -2,17 +2,14 @@
 //  ProtectionPlanFailureFrequencyView.swift
 //  Pillie
 //
-//  Failure Frequency — the third plan-builder question (issue #76, Superdesign
-//  draft 12612ffc). Single-select. The display labels are updated (Rarely / A few
-//  times a month / Weekly / Multiple times a week) but each maps onto the existing
-//  `MissFrequency` storage bucket, so the answer stays compatible with the legacy
-//  reminder-plan logic. The screen re-seeds from the persisted bucket on appear so
-//  back navigation restores the answer.
+//  Consolidated timing question (#207): failure frequency and relevant risk window.
+//  Both persisted values are restored together when the user navigates back.
 //
 
 import SwiftUI
 
 struct ProtectionPlanFailureFrequencyView: View {
+    let model: ProtectionPlanOnboardingModel
     let progress: ProtectionPlanProgress
     /// The previously committed bucket, so back navigation re-seeds the screen.
     let initialSelection: MissFrequency?
@@ -21,7 +18,7 @@ struct ProtectionPlanFailureFrequencyView: View {
 
     private let content = ProtectionPlanFailureFrequencyContent.default
 
-    @State private var selected: MissFrequency?
+    @State private var selection = ProtectionPlanTimingSelection()
     @State private var appeared = false
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -36,7 +33,7 @@ struct ProtectionPlanFailureFrequencyView: View {
             progress: progress,
             onBack: onBack,
             primaryTitle: content.primaryCTA,
-            isPrimaryEnabled: selected != nil,
+            isPrimaryEnabled: selection.canContinue,
             onPrimary: commit
         ) {
             VStack(alignment: .leading, spacing: 20) {
@@ -45,23 +42,27 @@ struct ProtectionPlanFailureFrequencyView: View {
                     .offset(y: revealOffset)
                     .animation(reveal(delay: PillieTheme.stagger1), value: appeared)
 
-                VStack(spacing: 10) {
-                    ForEach(content.options) { option in
-                        ProtectionPlanSelectableRow(
-                            title: option.title,
-                            subtitle: option.subtitle,
-                            isSelected: selected == option.bucket,
-                            style: .radio
-                        ) {
-                            selected = option.bucket
-                        }
-                    }
-                }
+                ProtectionPlanFrequencyChoicesSection(
+                    options: content.options,
+                    selected: selection.missFrequency,
+                    onSelect: { selection.selectFrequency($0) }
+                )
                 .opacity(appeared ? 1 : 0)
                 .offset(y: revealOffset)
                 .animation(reveal(delay: PillieTheme.stagger2), value: appeared)
 
-                Text(content.footnote)
+                ProtectionPlanRiskWindowChoicesSection(
+                    title: content.riskWindowTitle,
+                    subtitle: content.riskWindowSubtitle,
+                    choices: content.riskWindows,
+                    selected: selection.riskWindow,
+                    onSelect: { selection.selectRiskWindow($0) }
+                )
+                .opacity(appeared ? 1 : 0)
+                .offset(y: revealOffset)
+                .animation(reveal(delay: PillieTheme.stagger3), value: appeared)
+
+                Text(content.riskWindowFootnote)
                     .font(.pillie(13, weight: .regular))
                     .italic()
                     .foregroundStyle(PillieTheme.textMuted.opacity(0.78))
@@ -74,14 +75,19 @@ struct ProtectionPlanFailureFrequencyView: View {
             }
         }
         .onAppear {
-            selected = initialSelection
+            selection = ProtectionPlanTimingSelection(
+                missFrequency: initialSelection,
+                riskWindow: model.riskWindow
+            )
             appeared = true
         }
     }
 
     private func commit() {
-        guard let selected else { return }
-        onContinue(selected)
+        guard let frequency = selection.missFrequency,
+              let riskWindow = selection.riskWindow else { return }
+        model.recordRiskWindow(riskWindow)
+        onContinue(frequency)
     }
 
     private var revealOffset: CGFloat {
@@ -94,8 +100,54 @@ struct ProtectionPlanFailureFrequencyView: View {
     }
 }
 
+private struct ProtectionPlanFrequencyChoicesSection: View {
+    let options: [ProtectionPlanFailureFrequencyContent.Option]
+    let selected: MissFrequency?
+    let onSelect: (MissFrequency) -> Void
+
+    var body: some View {
+        ProtectionPlanFlowLayout(horizontalSpacing: 8, verticalSpacing: 8) {
+            ForEach(options) { option in
+                ProtectionPlanSelectableChip(
+                    title: option.title,
+                    isSelected: selected == option.bucket,
+                    allowsMultipleSelection: false
+                ) {
+                    onSelect(option.bucket)
+                }
+            }
+        }
+    }
+}
+
+private struct ProtectionPlanRiskWindowChoicesSection: View {
+    let title: String
+    let subtitle: String
+    let choices: [RiskWindow]
+    let selected: RiskWindow?
+    let onSelect: (RiskWindow) -> Void
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            ProtectionPlanQuestionSectionHeader(title: title, subtitle: subtitle)
+            ProtectionPlanFlowLayout(horizontalSpacing: 8, verticalSpacing: 8) {
+                ForEach(choices) { window in
+                    ProtectionPlanSelectableChip(
+                        title: window.title,
+                        isSelected: selected == window,
+                        allowsMultipleSelection: false
+                    ) {
+                        onSelect(window)
+                    }
+                }
+            }
+        }
+    }
+}
+
 #Preview {
     ProtectionPlanFailureFrequencyView(
+        model: ProtectionPlanOnboardingModel(),
         progress: ProtectionPlanProgressIndex.progress(for: .missFrequency),
         initialSelection: nil,
         onBack: {},

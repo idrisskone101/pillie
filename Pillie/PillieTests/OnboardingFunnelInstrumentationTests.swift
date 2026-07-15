@@ -48,10 +48,10 @@ final class OnboardingFunnelInstrumentationTests: XCTestCase {
     let recorder = FunnelRecorder()
     let telemetry = OnboardingTelemetry(analytics: recorder, isPlus: { false })
 
-    // Advancing painPoints → goal completes (leaves) painPoints.
+    // Advancing combined intent → combined timing completes the first screen.
     telemetry.stepCompleted(
       from: OnboardingFlow.Step.painPoints.rawValue,
-      to: OnboardingFlow.Step.goal.rawValue)
+      to: OnboardingFlow.Step.missFrequency.rawValue)
 
     let completed = recorder.events.first { $0.event == .onboardingStepCompleted }
     XCTAssertEqual(completed?.step, .painPoints)

@@ -12,6 +12,22 @@ import XCTest
 @testable import Pillie
 
 final class ProtectionPlanQuestionContentTests: XCTestCase {
+    func testConsolidatedPersonalizationContentIncludesBothRequiredSections() {
+        let intent = ProtectionPlanDistractionChoicesContent.default
+        XCTAssertEqual(intent.choices, DistractionChoice.allCases)
+        XCTAssertEqual(intent.desiredOutcomes, DelayConsequence.allCases)
+        XCTAssertFalse(intent.desiredOutcomeTitle.isEmpty)
+
+        let timing = ProtectionPlanFailureFrequencyContent.default
+        XCTAssertEqual(timing.options.map(\.bucket), MissFrequency.allCases)
+        XCTAssertEqual(timing.riskWindows, RiskWindow.allCases)
+        XCTAssertTrue(timing.riskWindowFootnote.lowercased().contains("schedule alarms"))
+
+        for line in intent.visibleCopy + timing.visibleCopy {
+            assertNoMedicalOrFakeClaims(line)
+        }
+    }
+
     // MARK: - Distraction Choices
 
     func testDistractionChoicesContentMatchesDraftAndIsMultiSelectWithOther() {

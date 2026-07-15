@@ -124,9 +124,14 @@ struct ProtectionPlanDistractionChoicesContent {
     let helper: String
     let primaryCTA: String
     let choices: [DistractionChoice]
+    let desiredOutcomeTitle: String
+    let desiredOutcomeSubtitle: String
+    let desiredOutcomes: [DelayConsequence]
 
     var visibleCopy: [String] {
-        [title, subtitle, helper, primaryCTA] + choices.map(\.title)
+        [title, subtitle, helper, desiredOutcomeTitle, desiredOutcomeSubtitle, primaryCTA]
+            + choices.map(\.title)
+            + desiredOutcomes.map(\.desiredOutcomeTitle)
     }
 
     static let `default` = ProtectionPlanDistractionChoicesContent(
@@ -134,7 +139,10 @@ struct ProtectionPlanDistractionChoicesContent {
         subtitle: "What usually gets in the way after your reminder?",
         helper: "Select all that apply. We'll help you stay focused.",
         primaryCTA: "Continue",
-        choices: DistractionChoice.allCases
+        choices: DistractionChoice.allCases,
+        desiredOutcomeTitle: "What would better follow-through give you?",
+        desiredOutcomeSubtitle: "Choose the outcome that matters most.",
+        desiredOutcomes: DelayConsequence.allCases
     )
 }
 
@@ -185,9 +193,15 @@ struct ProtectionPlanFailureFrequencyContent {
     let footnote: String
     let primaryCTA: String
     let options: [Option]
+    let riskWindowTitle: String
+    let riskWindowSubtitle: String
+    let riskWindowFootnote: String
+    let riskWindows: [RiskWindow]
 
     var visibleCopy: [String] {
-        [title, subtitle, footnote, primaryCTA] + options.flatMap { [$0.title, $0.subtitle] }
+        [title, subtitle, footnote, riskWindowTitle, riskWindowSubtitle, riskWindowFootnote, primaryCTA]
+            + options.flatMap { [$0.title, $0.subtitle] }
+            + riskWindows.flatMap { [$0.title, $0.subtitle] }
     }
 
     static let `default` = ProtectionPlanFailureFrequencyContent(
@@ -200,7 +214,11 @@ struct ProtectionPlanFailureFrequencyContent {
             Option(bucket: .sometimes, title: "A few times a month", subtitle: "Occasionally I still forget"),
             Option(bucket: .often, title: "Weekly", subtitle: "At least once every week"),
             Option(bucket: .almostDaily, title: "Multiple times a week", subtitle: "I struggle significantly"),
-        ]
+        ],
+        riskWindowTitle: "When are you most likely to drift?",
+        riskWindowSubtitle: "Choose the pattern that sounds most like you.",
+        riskWindowFootnote: "This shapes your plan — we don't use it to schedule alarms.",
+        riskWindows: RiskWindow.allCases
     )
 }
 

@@ -331,6 +331,16 @@ struct PillieApp: App {
             SubscriptionManager.shared.setPlusForTesting(true)
             UserDefaults.standard.set(false, forKey: OnboardingFlow.selectedFreePlanStorageKey)
             UserDefaults.standard.set(OnboardingFlow.Step.appBlocking.rawValue, forKey: OnboardingFlow.stepStorageKey)
+        case "/onboarding-personalization-intent":
+            UserDefaults.standard.set(
+                OnboardingFlow.Step.painPoints.rawValue,
+                forKey: OnboardingFlow.stepStorageKey
+            )
+        case "/onboarding-personalization-timing":
+            UserDefaults.standard.set(
+                OnboardingFlow.Step.missFrequency.rawValue,
+                forKey: OnboardingFlow.stepStorageKey
+            )
         case "/trial-granted-moment":
             // Legacy QA shortcut (#164): the retired step migrates to app-blocking
             // setup (#204), which writes the grant and fires `trial_granted` once.

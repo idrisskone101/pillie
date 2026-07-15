@@ -20,9 +20,7 @@ final class OnboardingFlowTests: XCTestCase {
             .plusBlockingDemo,
             .analyticsConsent,
             .painPoints,
-            .goal,
             .missFrequency,
-            .riskWindow,
             .acquisitionSource,
             .method,
             .schedule,
@@ -34,7 +32,7 @@ final class OnboardingFlowTests: XCTestCase {
 
         XCTAssertEqual(
             visibleSteps.map { ProtectionPlanProgressIndex.progress(for: $0).index },
-            [1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3]
+            [1, 1, 1, 2, 2, 2, 3, 3, 3, 3, 3, 3]
         )
     }
 
@@ -56,6 +54,8 @@ final class OnboardingFlowTests: XCTestCase {
     func testRetiredConditionalStepsResolveWithoutChangingSections() throws {
         let migrations: [(OnboardingFlow.Step, OnboardingFlow.Step)] = [
             (.reviewPrompt, .painPoints),
+            (.goal, .missFrequency),
+            (.riskWindow, .acquisitionSource),
             (.draftBlockedApps, .acquisitionSource),
             (.paywall, .appBlocking),
             (.freePlanConfirmation, .appBlocking),
@@ -77,6 +77,65 @@ final class OnboardingFlowTests: XCTestCase {
                 "Migrating \(retired) must not change user-facing progress."
             )
         }
+    }
+
+    func testPersonalizationUsesTwoScreensAndMigratesRetiredQuestionStepsForward() {
+        let personalizationSteps = OnboardingFlow.displayOrder.filter {
+            [.painPoints, .goal, .missFrequency, .riskWindow].contains($0)
+        }
+
+        XCTAssertEqual(personalizationSteps, [.painPoints, .missFrequency])
+        XCTAssertEqual(
+            OnboardingFlow.visibleStep(
+                for: OnboardingFlow.Step.goal.rawValue,
+                isPlus: false,
+                selectedFreePlan: false
+            ),
+            .missFrequency
+        )
+        XCTAssertEqual(
+            OnboardingFlow.visibleStep(
+                for: OnboardingFlow.Step.riskWindow.rawValue,
+                isPlus: false,
+                selectedFreePlan: false
+            ),
+            .acquisitionSource
+        )
+    }
+
+    func testPartialPersonalizationResumeDefaultsOnlyMissingRetiredAnswers() {
+        XCTAssertEqual(
+            ProtectionPlanPersonalizationMigration.answersForResume(
+                at: .goal,
+                desiredOutcome: nil,
+                riskWindow: .laterInDay
+            ),
+            .init(desiredOutcome: .dontCare, riskWindow: .laterInDay)
+        )
+        XCTAssertEqual(
+            ProtectionPlanPersonalizationMigration.answersForResume(
+                at: .goal,
+                desiredOutcome: .overthink,
+                riskWindow: nil
+            ),
+            .init(desiredOutcome: .overthink, riskWindow: nil)
+        )
+        XCTAssertEqual(
+            ProtectionPlanPersonalizationMigration.answersForResume(
+                at: .riskWindow,
+                desiredOutcome: .stressful,
+                riskWindow: nil
+            ),
+            .init(desiredOutcome: .stressful, riskWindow: .randomly)
+        )
+        XCTAssertEqual(
+            ProtectionPlanPersonalizationMigration.answersForResume(
+                at: .riskWindow,
+                desiredOutcome: nil,
+                riskWindow: .rightAfterAlarm
+            ),
+            .init(desiredOutcome: nil, riskWindow: .rightAfterAlarm)
+        )
     }
 
     func testRawStepOrderPreservesPersistedOnboardingState() {
@@ -133,15 +192,14 @@ final class OnboardingFlowTests: XCTestCase {
         XCTAssertGreaterThan(OnboardingFlow.Step.riskWindow.rawValue, OnboardingFlow.Step.complete.rawValue)
     }
 
-    func testDisplayOrderRunsFailureRiskAcquisitionInCalibrationOrder() {
+    func testDisplayOrderRunsCombinedTimingThenAcquisition() {
         let order = OnboardingFlow.displayOrder
-        // Draft Blocked Apps was retired, so the calibration run is Failure → Risk
-        // Window → Acquisition Source (no draft-blocklist step between them).
-        let calibration: [OnboardingFlow.Step] = [.missFrequency, .riskWindow, .acquisitionSource]
+        let calibration: [OnboardingFlow.Step] = [.missFrequency, .acquisitionSource]
         let indices = calibration.compactMap { order.firstIndex(of: $0) }
         XCTAssertEqual(indices.count, calibration.count, "Every calibration step must appear in displayOrder.")
         XCTAssertEqual(indices, indices.sorted(), "Calibration steps must be contiguous and ordered.")
         XCTAssertEqual(indices, Array(indices.first!...indices.last!), "Calibration steps must be contiguous.")
+        XCTAssertFalse(order.contains(.riskWindow), "Risk Window is a section of the combined timing screen.")
         XCTAssertFalse(order.contains(.draftBlockedApps), "Retired draft-blocklist step must not be in displayOrder.")
     }
 
@@ -178,8 +236,7 @@ final class OnboardingFlowTests: XCTestCase {
 
     func testCalibrationChainTransitionsResolveForwardAndBackByDisplayOrder() throws {
         let forwardPairs: [(OnboardingFlow.Step, OnboardingFlow.Step)] = [
-            (.missFrequency, .riskWindow),
-            (.riskWindow, .acquisitionSource),
+            (.missFrequency, .acquisitionSource),
         ]
         for (from, to) in forwardPairs {
             let transition = try XCTUnwrap(OnboardingFlow.transition(from: from.rawValue, to: to.rawValue))
@@ -190,7 +247,7 @@ final class OnboardingFlowTests: XCTestCase {
         let back = try XCTUnwrap(
             OnboardingFlow.transition(
                 from: OnboardingFlow.Step.acquisitionSource.rawValue,
-                to: OnboardingFlow.Step.riskWindow.rawValue
+                to: OnboardingFlow.Step.missFrequency.rawValue
             )
         )
         XCTAssertEqual(back.direction, .backward)
@@ -503,7 +560,7 @@ final class OnboardingFlowTests: XCTestCase {
         // The retired Trial Granted Moment is no longer a funnel position (#204),
         // so the Screen Time branch follows the diagnosis directly.
         XCTAssertNil(OnboardingFlow.displayIndex(for: OnboardingFlow.Step.trialGranted.rawValue))
-        XCTAssertEqual(OnboardingFlow.displayIndex(for: OnboardingFlow.Step.appBlocking.rawValue), 13)
+        XCTAssertEqual(OnboardingFlow.displayIndex(for: OnboardingFlow.Step.appBlocking.rawValue), 11)
 
         // Every visible step's index matches its position in displayOrder exactly.
         for (position, step) in OnboardingFlow.displayOrder.enumerated() {
@@ -517,6 +574,8 @@ final class OnboardingFlowTests: XCTestCase {
         // Retired steps are dropped from displayOrder (their raw values are kept only
         // so persisted state is never reinterpreted), so they have no funnel position.
         XCTAssertNil(OnboardingFlow.displayIndex(for: OnboardingFlow.Step.reviewPrompt.rawValue))
+        XCTAssertNil(OnboardingFlow.displayIndex(for: OnboardingFlow.Step.goal.rawValue))
+        XCTAssertNil(OnboardingFlow.displayIndex(for: OnboardingFlow.Step.riskWindow.rawValue))
         XCTAssertNil(OnboardingFlow.displayIndex(for: OnboardingFlow.Step.draftBlockedApps.rawValue))
         XCTAssertNil(OnboardingFlow.displayIndex(for: OnboardingFlow.Step.mechanismProof.rawValue))
         // An out-of-range raw value (no such step) has no position either.

@@ -2,12 +2,8 @@
 //  ProtectionPlanDistractionChoicesView.swift
 //  Pillie
 //
-//  Distraction Choices — the first plan-builder question (issue #75, Superdesign
-//  draft 0344aa3e). Multi-select, including an Other catch-all: the user names
-//  what usually gets in the way after a reminder. Built on the shared
-//  `ProtectionPlanScaffold`. The committed answer lives in the testable
-//  onboarding value core, so back navigation restores it; only a coarse,
-//  low-cardinality funnel event is sent — never the raw choices.
+//  Consolidated intent question (#207): what gets in the way and what better
+//  follow-through should provide. Both existing answer fields remain committed.
 //
 
 import SwiftUI
@@ -21,7 +17,7 @@ struct ProtectionPlanDistractionChoicesView: View {
     private let content = ProtectionPlanDistractionChoicesContent.default
     private let telemetry = ProductAnalyticsTelemetry.live
 
-    @State private var selected: Set<DistractionChoice> = []
+    @State private var selection = ProtectionPlanIntentSelection()
     @State private var appeared = false
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -36,7 +32,7 @@ struct ProtectionPlanDistractionChoicesView: View {
             progress: progress,
             onBack: onBack,
             primaryTitle: content.primaryCTA,
-            isPrimaryEnabled: !selected.isEmpty,
+            isPrimaryEnabled: selection.canContinue,
             onPrimary: commit
         ) {
             VStack(alignment: .leading, spacing: 20) {
@@ -45,21 +41,25 @@ struct ProtectionPlanDistractionChoicesView: View {
                     .offset(y: revealOffset)
                     .animation(reveal(delay: PillieTheme.stagger1), value: appeared)
 
-                VStack(spacing: 10) {
-                    ForEach(content.choices) { choice in
-                        ProtectionPlanSelectableRow(
-                            title: choice.title,
-                            symbolName: choice.symbolName,
-                            isSelected: selected.contains(choice),
-                            style: .checkbox
-                        ) {
-                            toggle(choice)
-                        }
-                    }
-                }
+                ProtectionPlanIntentChoicesSection(
+                    choices: content.choices,
+                    selected: selection.distractionChoices,
+                    onSelect: { selection.toggle($0) }
+                )
                 .opacity(appeared ? 1 : 0)
                 .offset(y: revealOffset)
                 .animation(reveal(delay: PillieTheme.stagger2), value: appeared)
+
+                ProtectionPlanDesiredOutcomeSection(
+                    title: content.desiredOutcomeTitle,
+                    subtitle: content.desiredOutcomeSubtitle,
+                    outcomes: content.desiredOutcomes,
+                    selected: selection.desiredOutcome,
+                    onSelect: { selection.selectOutcome($0) }
+                )
+                .opacity(appeared ? 1 : 0)
+                .offset(y: revealOffset)
+                .animation(reveal(delay: PillieTheme.stagger3), value: appeared)
 
                 Text(content.helper)
                     .font(.pillie(13, weight: .regular))
@@ -73,22 +73,20 @@ struct ProtectionPlanDistractionChoicesView: View {
         }
         .onAppear {
             // Restore the committed answer so back navigation re-seeds the screen.
-            selected = model.distractionChoices
+            selection = ProtectionPlanIntentSelection(
+                distractionChoices: model.distractionChoices,
+                desiredOutcome: model.delayConsequence
+            )
             appeared = true
         }
     }
 
-    private func toggle(_ choice: DistractionChoice) {
-        if selected.contains(choice) {
-            selected.remove(choice)
-        } else {
-            selected.insert(choice)
-        }
-    }
-
     private func commit() {
-        model.recordDistractionChoices(selected)
+        guard let desiredOutcome = selection.desiredOutcome else { return }
+        model.recordDistractionChoices(selection.distractionChoices)
+        model.recordDelayConsequence(desiredOutcome)
         telemetry.onboardingDistractionChoicesCompleted()
+        telemetry.onboardingDelayConsequenceCompleted()
         onContinue()
     }
 
@@ -99,6 +97,74 @@ struct ProtectionPlanDistractionChoicesView: View {
 
     private func reveal(delay: Double) -> Animation? {
         animationsEnabled ? PillieTheme.fadeInUpCurve.delay(delay) : .easeOut(duration: 0.25)
+    }
+}
+
+private struct ProtectionPlanIntentChoicesSection: View {
+    let choices: [DistractionChoice]
+    let selected: Set<DistractionChoice>
+    let onSelect: (DistractionChoice) -> Void
+
+    var body: some View {
+        ProtectionPlanFlowLayout(horizontalSpacing: 8, verticalSpacing: 8) {
+            ForEach(choices) { choice in
+                ProtectionPlanSelectableChip(
+                    title: choice.title,
+                    isSelected: selected.contains(choice)
+                ) {
+                    onSelect(choice)
+                }
+            }
+        }
+    }
+}
+
+private struct ProtectionPlanDesiredOutcomeSection: View {
+    let title: String
+    let subtitle: String
+    let outcomes: [DelayConsequence]
+    let selected: DelayConsequence?
+    let onSelect: (DelayConsequence) -> Void
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            ProtectionPlanQuestionSectionHeader(title: title, subtitle: subtitle)
+            ProtectionPlanFlowLayout(horizontalSpacing: 8, verticalSpacing: 8) {
+                ForEach(outcomes) { outcome in
+                    ProtectionPlanSelectableChip(
+                        title: outcome.desiredOutcomeTitle,
+                        isSelected: selected == outcome,
+                        allowsMultipleSelection: false
+                    ) {
+                        onSelect(outcome)
+                    }
+                }
+            }
+        }
+    }
+}
+
+/// Secondary heading inside a consolidated question screen. It preserves the
+/// primary screen title's hierarchy while keeping both sections easy to scan.
+struct ProtectionPlanQuestionSectionHeader: View {
+    let title: String
+    let subtitle: String
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text(title)
+                .font(.pillie(24, weight: .bold))
+                .foregroundStyle(PillieTheme.textPrimary)
+                .fixedSize(horizontal: false, vertical: true)
+
+            Text(subtitle)
+                .font(.pillie(15, weight: .regular))
+                .foregroundStyle(PillieTheme.textMuted)
+                .lineSpacing(3)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .accessibilityElement(children: .combine)
     }
 }
 
