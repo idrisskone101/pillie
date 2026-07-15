@@ -333,13 +333,15 @@ struct ProtectionPlanRoutineDetailsContent {
     let subtitle: String
     let cyclePositionHeader: String
     let regimenHeader: String
+    /// Disclosure that reveals the optional exact cycle-day adjustment.
+    let editExactDayLabel: String
     /// Label for the disclosure that reveals the less common regimens.
     let moreLabel: String
     let footnote: String
     let primaryCTA: String
 
     var visibleCopy: [String] {
-        [title, subtitle, cyclePositionHeader, regimenHeader, moreLabel, footnote, primaryCTA]
+        [title, subtitle, cyclePositionHeader, regimenHeader, editExactDayLabel, moreLabel, footnote, primaryCTA]
             + CyclePosition.allCases.map(\.title)
     }
 
@@ -348,6 +350,7 @@ struct ProtectionPlanRoutineDetailsContent {
         subtitle: "How far into your cycle are you?",
         cyclePositionHeader: "Where are you now?",
         regimenHeader: "Pill regimen",
+        editExactDayLabel: "Edit exact day",
         moreLabel: "More options",
         footnote: "This keeps your reminders in sync with your cycle — for tracking, not medical advice.",
         primaryCTA: "Continue"

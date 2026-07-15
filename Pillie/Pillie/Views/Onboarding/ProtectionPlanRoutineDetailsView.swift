@@ -2,13 +2,9 @@
 //  ProtectionPlanRoutineDetailsView.swift
 //  Pillie
 //
-//  Routine Basics — Details (issue #77, Superdesign draft b9b281e6). Replaces the
-//  legacy seven-card regimen form. A coarse "Just starting / Mid-cycle / Near the
-//  end" toggle anchors the exact cycle day (fine-tuned with a stepper); Pill users
-//  pick a regimen with the three common options up front and the rest behind "More
-//  options"; Patch and Ring users see their fixed schedule instead. The committed
-//  answer flows through the existing production model (`PillStore.startNewProtocol`),
-//  so nothing about the reminder/cycle engine changes — only the surface.
+//  Fast, progressive-disclosure routine setup. Coarse position and the common
+//  schedule are enough to continue; exact-day and uncommon/custom controls remain
+//  available without changing the values committed to PillStore.
 //
 
 import SwiftUI
@@ -19,62 +15,37 @@ struct ProtectionPlanRoutineDetailsView: View {
     let onContinue: (PillPack.PillRegimenPreset, Int?, Int?, Int) -> Void
 
     @Environment(PillStore.self) private var store
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private let content = ProtectionPlanRoutineDetailsContent.default
-
-    @State private var selectedRegimen: PillPack.PillRegimenPreset = .twentyOneSeven
-    // Keyboard-free scroll-wheel selections (Int, not text) — a numberPad TextField
-    // here crashed on device when the software keyboard presented inside the
-    // transitioning, conditionally-mounted scaffold subtree. Wheels remove the
-    // keyboard entirely, so that crash is structurally impossible.
-    @State private var customActive = 21
-    @State private var customBreak = 7
-    @State private var cycleDay = 1
-    @State private var showMore = false
-    @State private var appeared = false
-
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     private let performanceTier = PerformanceTier.current
+
+    // Seeded from the production pack in onAppear so Back restores committed values
+    // without a custom init (important for the SDK 27 @State macro).
+    @State private var draft = RoutineSetupDraft(method: .pill)
+    @State private var showMore = false
+    @State private var showExactDay = false
+    @State private var appeared = false
 
     private var animationsEnabled: Bool {
         performanceTier == .standard && !reduceMotion
     }
 
-    private var method: ContraceptiveMethod { store.contraceptiveMethod }
-    private var section: RoutineDetailsSection { RoutineDetailsSection(method: method) }
-
-    private var customActiveDays: Int {
-        min(max(customActive, PillPack.customActiveRange.lowerBound), PillPack.customActiveRange.upperBound)
-    }
-
-    private var customBreakDays: Int {
-        min(max(customBreak, PillPack.customBreakRange.lowerBound), PillPack.customBreakRange.upperBound)
-    }
-
-    private var cycleLength: Int {
-        switch method {
-        case .pill:
-            return selectedRegimen == .custom ? customActiveDays + customBreakDays : selectedRegimen.cycleLength
-        case .patch, .ring:
-            return 28
-        }
-    }
-
-    private var currentPosition: CyclePosition {
-        CyclePosition.position(forCycleDay: cycleDay, cycleLength: cycleLength)
-    }
-
     private var scheduleSummaryText: String {
-        switch section {
+        switch draft.section {
         case .pillRegimen:
-            return "\(selectedRegimen.routineDisplayName) · \(selectedRegimen.scheduleSubtitle)"
+            return "\(draft.selectedRegimen.routineDisplayName) · \(draft.selectedRegimen.scheduleSubtitle)"
         case .fixedSchedule:
-            return method == .patch ? "Weekly patch · 28-day cycle" : "Monthly ring · 28-day cycle"
+            return draft.method == .patch ? "Weekly patch · 28-day cycle" : "Monthly ring · 28-day cycle"
         }
     }
 
     private var summary: ProtectionPlanRoutineSummary {
-        ProtectionPlanRoutineSummary(method: method, scheduleSummary: scheduleSummaryText, cycleDay: cycleDay)
+        ProtectionPlanRoutineSummary(
+            method: draft.method,
+            scheduleSummary: scheduleSummaryText,
+            cycleDay: draft.cycleDay
+        )
     }
 
     var body: some View {
@@ -89,18 +60,38 @@ struct ProtectionPlanRoutineDetailsView: View {
                 ProtectionPlanQuestionHeader(title: content.title, subtitle: content.subtitle)
                     .planBuilderReveal(appeared, animationsEnabled, delay: PillieTheme.stagger1)
 
-                positionSection
-                    .planBuilderReveal(appeared, animationsEnabled, delay: PillieTheme.stagger2)
+                RoutineCyclePositionSection(
+                    header: content.cyclePositionHeader,
+                    editExactDayLabel: content.editExactDayLabel,
+                    currentPosition: CyclePosition.position(
+                        forCycleDay: draft.cycleDay,
+                        cycleLength: draft.cycleLength
+                    ),
+                    cycleDay: draft.cycleDay,
+                    cycleLength: draft.cycleLength,
+                    isEditingExactDay: $showExactDay,
+                    onSelectPosition: { draft.selectPosition($0) },
+                    onSetExactDay: { draft.setExactCycleDay($0) }
+                )
+                .planBuilderReveal(appeared, animationsEnabled, delay: PillieTheme.stagger2)
 
-                Group {
-                    switch section {
-                    case .pillRegimen:
-                        regimenSection
-                    case .fixedSchedule:
-                        fixedScheduleSection
-                    }
+                switch draft.section {
+                case .pillRegimen:
+                    RoutinePillRegimenSection(
+                        header: content.regimenHeader,
+                        moreLabel: content.moreLabel,
+                        commonRegimens: draft.visibleCommonRegimens,
+                        selectedRegimen: draft.selectedRegimen,
+                        showMore: $showMore,
+                        customActiveDays: $draft[customDays: .active],
+                        customBreakDays: $draft[customDays: .breakDays],
+                        onSelectRegimen: { draft.selectRegimen($0) }
+                    )
+                    .planBuilderReveal(appeared, animationsEnabled, delay: PillieTheme.stagger3)
+                case .fixedSchedule:
+                    RoutineFixedScheduleSection(method: draft.method)
+                        .planBuilderReveal(appeared, animationsEnabled, delay: PillieTheme.stagger3)
                 }
-                .planBuilderReveal(appeared, animationsEnabled, delay: PillieTheme.stagger3)
 
                 ProtectionPlanRoutineCard(summary: summary, animationsEnabled: animationsEnabled)
                     .planBuilderReveal(appeared, animationsEnabled, delay: PillieTheme.stagger4)
@@ -115,19 +106,37 @@ struct ProtectionPlanRoutineDetailsView: View {
             }
         }
         .onAppear {
-            seedFromStore()
+            draft = RoutineSetupDraft(method: store.contraceptiveMethod, activePack: store.pack, today: store.today)
+            showMore = draft.requiresMoreOptions
+            showExactDay = false
             appeared = true
         }
-        .onChange(of: selectedRegimen) { _, _ in clampCycleDay() }
-        .onChange(of: customActive) { _, _ in clampCycleDay() }
-        .onChange(of: customBreak) { _, _ in clampCycleDay() }
     }
 
-    // MARK: - Cycle position
+    private func commit() {
+        let output = draft.commit
+        onContinue(
+            output.regimen,
+            output.customActiveDays,
+            output.customBreakDays,
+            output.cycleDay
+        )
+    }
+}
 
-    private var positionSection: some View {
+private struct RoutineCyclePositionSection: View {
+    let header: String
+    let editExactDayLabel: String
+    let currentPosition: CyclePosition
+    let cycleDay: Int
+    let cycleLength: Int
+    @Binding var isEditingExactDay: Bool
+    let onSelectPosition: (CyclePosition) -> Void
+    let onSetExactDay: (Int) -> Void
+
+    var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            sectionHeader(content.cyclePositionHeader)
+            RoutineSectionHeader(text: header)
 
             HStack(spacing: 8) {
                 ForEach(CyclePosition.allCases) { position in
@@ -135,7 +144,12 @@ struct ProtectionPlanRoutineDetailsView: View {
                 }
             }
 
-            dayStepper
+            exactDayDisclosure
+
+            if isEditingExactDay {
+                exactDayStepper
+                    .transition(.opacity.combined(with: .move(edge: .top)))
+            }
         }
     }
 
@@ -143,7 +157,7 @@ struct ProtectionPlanRoutineDetailsView: View {
         let isSelected = currentPosition == position
         return Button {
             InteractionFeedback.live.perform(.choice)
-            setCycleDay(position.cycleDay(in: cycleLength))
+            onSelectPosition(position)
         } label: {
             VStack(spacing: 6) {
                 Image(systemName: position.symbolName)
@@ -154,8 +168,8 @@ struct ProtectionPlanRoutineDetailsView: View {
                     .fixedSize(horizontal: false, vertical: true)
             }
             .foregroundStyle(isSelected ? PillieTheme.coral : PillieTheme.textMuted)
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 14)
+            .frame(maxWidth: .infinity, minHeight: 48)
+            .padding(.vertical, 12)
             .background(
                 RoundedRectangle(cornerRadius: 18)
                     .fill(isSelected ? PillieTheme.coralLight.opacity(0.8) : .white)
@@ -170,25 +184,60 @@ struct ProtectionPlanRoutineDetailsView: View {
         .accessibilityAddTraits(isSelected ? [.isButton, .isSelected] : .isButton)
     }
 
-    private var dayStepper: some View {
-        HStack(spacing: 16) {
-            stepperButton(systemName: "minus") { setCycleDay(cycleDay - 1) }
-                .accessibilityLabel("Previous cycle day")
-
-            VStack(spacing: 1) {
-                Text("Day \(cycleDay)")
-                    .font(.pillie(20, weight: .bold))
+    private var exactDayDisclosure: some View {
+        HStack(spacing: 12) {
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Day \(cycleDay) of \(cycleLength)")
+                    .font(.pillie(16, weight: .bold))
                     .foregroundStyle(PillieTheme.textPrimary)
                     .monospacedDigit()
                     .accessibilityIdentifier("routineCycleDayValue")
-                Text("of \(cycleLength)")
+                Text("Calculated from your position")
                     .font(.pillie(12, weight: .regular))
                     .foregroundStyle(PillieTheme.textMuted)
             }
-            .frame(maxWidth: .infinity)
+            .fixedSize(horizontal: false, vertical: true)
 
-            stepperButton(systemName: "plus") { setCycleDay(cycleDay + 1) }
-                .accessibilityLabel("Next cycle day")
+            Spacer(minLength: 8)
+
+            Button {
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    isEditingExactDay.toggle()
+                }
+            } label: {
+                HStack(spacing: 5) {
+                    Text(isEditingExactDay ? "Done" : editExactDayLabel)
+                    Image(systemName: isEditingExactDay ? "chevron.up" : "chevron.down")
+                        .font(.system(size: 10, weight: .bold))
+                }
+                .font(.pillie(13, weight: .bold))
+                .foregroundStyle(PillieTheme.coral)
+                .multilineTextAlignment(.trailing)
+            }
+            .buttonStyle(.plain)
+            .accessibilityIdentifier("routineEditExactDay")
+            .accessibilityValue(isEditingExactDay ? "Expanded" : "Collapsed")
+        }
+        .padding(.horizontal, 14)
+        .padding(.vertical, 12)
+        .background(RoundedRectangle(cornerRadius: 18).fill(PillieTheme.sage.opacity(0.5)))
+    }
+
+    private var exactDayStepper: some View {
+        HStack(spacing: 16) {
+            stepperButton(systemName: "minus", label: "Previous cycle day") {
+                onSetExactDay(cycleDay - 1)
+            }
+
+            Text("Day \(cycleDay)")
+                .font(.pillie(20, weight: .bold))
+                .foregroundStyle(PillieTheme.textPrimary)
+                .monospacedDigit()
+                .frame(maxWidth: .infinity)
+
+            stepperButton(systemName: "plus", label: "Next cycle day") {
+                onSetExactDay(cycleDay + 1)
+            }
         }
         .padding(.horizontal, 14)
         .padding(.vertical, 10)
@@ -197,7 +246,11 @@ struct ProtectionPlanRoutineDetailsView: View {
         .accessibilityValue("Day \(cycleDay) of \(cycleLength)")
     }
 
-    private func stepperButton(systemName: String, action: @escaping () -> Void) -> some View {
+    private func stepperButton(
+        systemName: String,
+        label: String,
+        action: @escaping () -> Void
+    ) -> some View {
         Button {
             InteractionFeedback.live.perform(.lowRiskTap)
             action()
@@ -205,51 +258,71 @@ struct ProtectionPlanRoutineDetailsView: View {
             Image(systemName: systemName)
                 .font(.system(size: 15, weight: .bold))
                 .foregroundStyle(PillieTheme.textPrimary)
-                .frame(width: 40, height: 40)
+                .frame(width: 44, height: 44)
                 .background(.white, in: Circle())
                 .overlay { Circle().stroke(Color.black.opacity(0.06), lineWidth: 1) }
         }
         .buttonStyle(.plain)
+        .accessibilityLabel(label)
         .accessibilityIdentifier(systemName == "plus" ? "routineCycleDayPlus" : "routineCycleDayMinus")
     }
+}
 
-    // MARK: - Pill regimen
+private struct RoutinePillRegimenSection: View {
+    let header: String
+    let moreLabel: String
+    let commonRegimens: [PillPack.PillRegimenPreset]
+    let selectedRegimen: PillPack.PillRegimenPreset
+    @Binding var showMore: Bool
+    @Binding var customActiveDays: Int
+    @Binding var customBreakDays: Int
+    let onSelectRegimen: (PillPack.PillRegimenPreset) -> Void
 
-    private var regimenSection: some View {
+    var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            sectionHeader(content.regimenHeader)
+            RoutineSectionHeader(text: header)
 
             VStack(spacing: 10) {
-                ForEach(RoutineRegimenCatalog.common, id: \.self) { regimen in
+                ForEach(commonRegimens, id: \.self) { regimen in
                     regimenRow(regimen)
                 }
 
-                if showMore {
-                    ForEach(RoutineRegimenCatalog.more, id: \.self) { regimen in
-                        regimenRow(regimen)
-                    }
-                } else {
-                    Button {
-                        withAnimation(.easeInOut(duration: 0.25)) { showMore = true }
-                    } label: {
-                        HStack(spacing: 6) {
-                            Text(content.moreLabel)
-                            Image(systemName: "chevron.down")
-                                .font(.system(size: 11, weight: .bold))
+                DisclosureGroup(isExpanded: $showMore) {
+                    VStack(spacing: 10) {
+                        ForEach(RoutineRegimenCatalog.more, id: \.self) { regimen in
+                            regimenRow(regimen)
                         }
+                    }
+                    .padding(.top, 10)
+                } label: {
+                    Text(moreLabel)
                         .font(.pillie(14, weight: .bold))
                         .foregroundStyle(PillieTheme.textMuted)
                         .frame(maxWidth: .infinity)
-                        .padding(.vertical, 12)
-                        .background(RoundedRectangle(cornerRadius: 16).fill(Color.white.opacity(0.6)))
-                        .overlay { RoundedRectangle(cornerRadius: 16).stroke(Color.black.opacity(0.06), lineWidth: 1) }
-                    }
-                    .buttonStyle(.plain)
-                    .accessibilityIdentifier("routineMoreRegimens")
+                        .multilineTextAlignment(.center)
                 }
+                .tint(PillieTheme.textMuted)
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
+                .background(RoundedRectangle(cornerRadius: 16).fill(Color.white.opacity(0.6)))
+                .overlay { RoundedRectangle(cornerRadius: 16).stroke(Color.black.opacity(0.06), lineWidth: 1) }
+                .accessibilityIdentifier("routineMoreRegimens")
+                .accessibilityValue(showMore ? "Expanded" : "Collapsed")
 
                 if selectedRegimen == .custom {
-                    customInputs
+                    HStack(spacing: 12) {
+                        customWheel(
+                            title: "Active days",
+                            selection: $customActiveDays,
+                            range: PillPack.customActiveRange
+                        )
+                        customWheel(
+                            title: "Break days",
+                            selection: $customBreakDays,
+                            range: PillPack.customBreakRange
+                        )
+                    }
+                    .padding(.top, 2)
                 }
             }
         }
@@ -264,22 +337,15 @@ struct ProtectionPlanRoutineDetailsView: View {
         ) {
             var transaction = Transaction()
             transaction.animation = nil
-            withTransaction(transaction) { selectedRegimen = regimen }
+            withTransaction(transaction) { onSelectRegimen(regimen) }
         }
     }
 
-    private var customInputs: some View {
-        HStack(spacing: 12) {
-            customWheel(title: "Active days", selection: $customActive, range: PillPack.customActiveRange)
-            customWheel(title: "Break days", selection: $customBreak, range: PillPack.customBreakRange)
-        }
-        .padding(.top, 2)
-    }
-
-    /// Keyboard-free numeric entry: a scroll wheel bound to an Int in range, matching
-    /// the Reminder Time picker. No software keyboard = the on-device numpad crash
-    /// cannot occur, and any value in range is reachable instantly.
-    private func customWheel(title: String, selection: Binding<Int>, range: ClosedRange<Int>) -> some View {
+    private func customWheel(
+        title: String,
+        selection: Binding<Int>,
+        range: ClosedRange<Int>
+    ) -> some View {
         VStack(alignment: .leading, spacing: 6) {
             Text(title.uppercased())
                 .font(.pillie(11, weight: .bold))
@@ -303,27 +369,40 @@ struct ProtectionPlanRoutineDetailsView: View {
         }
         .frame(maxWidth: .infinity)
     }
+}
 
-    // MARK: - Patch / Ring fixed schedule
+private struct RoutineFixedScheduleSection: View {
+    let method: ContraceptiveMethod
 
-    private var fixedScheduleSection: some View {
+    var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            sectionHeader(method == .patch ? "Patch schedule" : "Ring schedule")
+            RoutineSectionHeader(text: method == .patch ? "Patch schedule" : "Ring schedule")
 
             VStack(alignment: .leading, spacing: 12) {
-                scheduleRule(icon: method == .patch ? "square.on.square" : "circle.circle",
-                             text: method == .patch ? "Day 1: apply patch" : "Day 1: insert ring")
-                scheduleRule(icon: "calendar",
-                             text: method == .patch ? "Days 8 & 15: change patch" : "Days 2–21: ring stays in")
-                scheduleRule(icon: "arrow.uturn.backward",
-                             text: method == .patch ? "Day 22: remove patch" : "Day 22: remove ring")
-                scheduleRule(icon: "pause.circle",
-                             text: "Days 23–28: \(method == .patch ? "patch" : "ring")-free week")
+                scheduleRule(
+                    icon: method == .patch ? "square.on.square" : "circle.circle",
+                    text: method == .patch ? "Day 1: apply patch" : "Day 1: insert ring"
+                )
+                scheduleRule(
+                    icon: "calendar",
+                    text: method == .patch ? "Days 8 & 15: change patch" : "Days 2–21: ring stays in"
+                )
+                scheduleRule(
+                    icon: "arrow.uturn.backward",
+                    text: method == .patch ? "Day 22: remove patch" : "Day 22: remove ring"
+                )
+                scheduleRule(
+                    icon: "pause.circle",
+                    text: "Days 23–28: \(method == .patch ? "patch" : "ring")-free week"
+                )
             }
             .padding(16)
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(.white, in: RoundedRectangle(cornerRadius: PillieTheme.cardRadius))
-            .overlay { RoundedRectangle(cornerRadius: PillieTheme.cardRadius).stroke(Color.black.opacity(0.06), lineWidth: 1) }
+            .overlay {
+                RoundedRectangle(cornerRadius: PillieTheme.cardRadius)
+                    .stroke(Color.black.opacity(0.06), lineWidth: 1)
+            }
         }
     }
 
@@ -339,63 +418,16 @@ struct ProtectionPlanRoutineDetailsView: View {
                 .fixedSize(horizontal: false, vertical: true)
         }
     }
+}
 
-    // MARK: - Shared
+private struct RoutineSectionHeader: View {
+    let text: String
 
-    private func sectionHeader(_ text: String) -> some View {
+    var body: some View {
         Text(text.uppercased())
             .font(.pillie(12, weight: .bold))
             .tracking(1.5)
             .foregroundStyle(PillieTheme.textMuted)
-    }
-
-    // MARK: - Commit + seeding
-
-    private func commit() {
-        onContinue(
-            selectedRegimen,
-            selectedRegimen == .custom ? customActiveDays : nil,
-            selectedRegimen == .custom ? customBreakDays : nil,
-            min(max(1, cycleDay), max(1, cycleLength))
-        )
-    }
-
-    private func seedFromStore() {
-        let activePack = store.pack
-        if method == .pill && activePack.method == .pill {
-            selectedRegimen = activePack.pillRegimen
-            if selectedRegimen == .custom {
-                customActive = min(max(activePack.customActiveDays ?? 21, PillPack.customActiveRange.lowerBound), PillPack.customActiveRange.upperBound)
-                customBreak = min(max(activePack.customBreakDays ?? 7, PillPack.customBreakRange.lowerBound), PillPack.customBreakRange.upperBound)
-            }
-        } else {
-            selectedRegimen = .twentyOneSeven
-            customActive = 21
-            customBreak = 7
-        }
-        if activePack.method == method {
-            cycleDay = activePack.cycleDayIndex(on: store.today) + 1
-        } else {
-            cycleDay = 1
-        }
-        showMore = RoutineRegimenCatalog.more.contains(selectedRegimen)
-        clampCycleDay()
-    }
-
-    private func clampCycleDay() {
-        var transaction = Transaction()
-        transaction.animation = nil
-        withTransaction(transaction) {
-            cycleDay = min(max(1, cycleDay), max(1, cycleLength))
-        }
-    }
-
-    private func setCycleDay(_ value: Int) {
-        var transaction = Transaction()
-        transaction.animation = nil
-        withTransaction(transaction) {
-            cycleDay = min(max(1, value), max(1, cycleLength))
-        }
     }
 }
 
