@@ -233,9 +233,28 @@ enum AnalyticsEvent: String, CaseIterable {
   case onboardingStepViewed = "onboarding_step_viewed"
   case onboardingStepCompleted = "onboarding_step_completed"
   case onboardingBackTapped = "onboarding_back_tapped"
+  /// The user finished Pillie's core reminder setup: method, schedule, reminder
+  /// time, notification decision, and generated reminder plan. This boundary is
+  /// intentionally before the optional Reverse Trial and app-blocking branch.
+  case coreOnboardingCompleted = "core_onboarding_completed"
+  /// Compatibility alias for dashboards and lifecycle automation. New analysis
+  /// should use `core_onboarding_completed`; this event has the same core boundary.
   case onboardingCompleted = "onboarding_completed"
   case reminderOnlyCompletion = "reminder_only_completion"
   case protectionPlanActivated = "protection_plan_activated"
+  /// The Reverse Trial announcement became visible. This is exposure only; it
+  /// does not imply that a trial grant was successfully written.
+  case trialOfferViewed = "trial_offer_viewed"
+  /// Pillie's Reverse Trial grant was successfully written during onboarding.
+  /// `trial_granted` remains as the compatibility event used by ADR 0007.
+  case trialActivated = "trial_activated"
+  /// The optional Screen Time/app-selection branch became visible.
+  case blockerSetupStarted = "blocker_setup_started"
+  /// The user entered the app without finishing optional app blocking.
+  case blockerSetupSkipped = "blocker_setup_skipped"
+  /// A valid app selection was saved after Screen Time authorization. This
+  /// setup milestone is distinct from the terminal protection activation.
+  case blockerSetupCompleted = "blocker_setup_completed"
   case blockerConfigSaved = "blocker_config_saved"
   case blockerInterventionFired = "blocker_intervention_fired"
   case paywallViewed = "paywall_viewed"
@@ -526,6 +545,7 @@ final class AnalyticsManager: AnalyticsTracking {
   private let defaults: UserDefaults
   private let client: ProductAnalyticsClient
   private let infoDictionary: [String: Any]?
+  private let sessionID: String
 
   /// `true` when `configure()` ran but found no usable `PostHogProjectToken`, so the
   /// SDK was never set up and every event is dropped. Surfaced (not silent) because a
@@ -536,11 +556,13 @@ final class AnalyticsManager: AnalyticsTracking {
   init(
     defaults: UserDefaults = .standard,
     client: ProductAnalyticsClient = PostHogAnalyticsClient(),
-    infoDictionary: [String: Any]? = nil
+    infoDictionary: [String: Any]? = nil,
+    sessionID: String = UUID().uuidString
   ) {
     self.defaults = defaults
     self.client = client
     self.infoDictionary = infoDictionary
+    self.sessionID = sessionID
   }
 
   // Product analytics is collected for everyone — there is no consent gate or
@@ -639,6 +661,14 @@ final class AnalyticsManager: AnalyticsTracking {
       lastCallBodyCustomized: lastCallBodyCustomized
     )
 
+    var properties = payload.properties
+    if source == .onboarding, step != nil, event.carriesSplitOnboardingContext {
+      properties["app_version"] = .string(
+        infoDictionaryString("CFBundleShortVersionString") ?? "unknown")
+      properties["app_build"] = .string(infoDictionaryString("CFBundleVersion") ?? "unknown")
+      properties["session_id"] = .string(sessionID)
+    }
+
     #if DEBUG
       // Debug builds ship without a PostHog token, so captures are dropped and
       // otherwise invisible. Mirror every track into OSLog so simulator QA can
@@ -647,14 +677,14 @@ final class AnalyticsManager: AnalyticsTracking {
       //   log stream --predicate 'subsystem == "com.idrisskone.pillie"' --level debug
       Logger(subsystem: "com.idrisskone.pillie", category: "analytics")
         .debug(
-          "Pillie analytics capture: \(event.rawValue, privacy: .public) \(payload.properties.map { "\($0.key)=\($0.value.postHogValue)" }.sorted().joined(separator: " "), privacy: .public)"
+          "Pillie analytics capture: \(event.rawValue, privacy: .public) \(properties.map { "\($0.key)=\($0.value.postHogValue)" }.sorted().joined(separator: " "), privacy: .public)"
         )
     #endif
 
     guard isConfigured, isAnalyticsEnabled else { return }
     client.capture(
       event: event.rawValue,
-      properties: payload.properties,
+      properties: properties,
       personProperties: payload.personProperties
     )
   }
@@ -734,5 +764,27 @@ final class AnalyticsManager: AnalyticsTracking {
     let value = raw.trimmingCharacters(in: .whitespacesAndNewlines)
     guard !value.isEmpty, !value.hasPrefix("$(") else { return nil }
     return value
+  }
+}
+
+private extension AnalyticsEvent {
+  /// Split onboarding funnel events carry an explicit common envelope so raw
+  /// exports remain joinable even outside PostHog's SDK-generated `$` fields.
+  var carriesSplitOnboardingContext: Bool {
+    switch self {
+    case .coreOnboardingCompleted,
+         .onboardingCompleted,
+         .trialOfferViewed,
+         .trialActivated,
+         .trialGranted,
+         .blockerSetupStarted,
+         .blockerSetupCompleted,
+         .blockerSetupSkipped,
+         .reminderOnlyCompletion,
+         .protectionPlanActivated:
+      return true
+    default:
+      return false
+    }
   }
 }
