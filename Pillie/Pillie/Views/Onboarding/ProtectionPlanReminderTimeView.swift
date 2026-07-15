@@ -230,7 +230,7 @@ struct ProtectionPlanReminderTimeView: View {
 
 #Preview {
     ProtectionPlanReminderTimeView(
-        progress: ProtectionPlanProgress(index: 13, total: 13),
+        progress: ProtectionPlanProgressIndex.progress(for: .reminderTime),
         onBack: {},
         onContinue: {}
     )

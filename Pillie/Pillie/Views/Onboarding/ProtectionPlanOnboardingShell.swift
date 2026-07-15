@@ -25,9 +25,9 @@ struct ProtectionPlanOnboardingShell: View {
     /// left-to-right push); back navigation reverses it.
     @State private var goingForward = true
 
-    /// Progress shown on the Early Value Proof ("STEP 3/10").
+    /// Progress shown on the Early Value Proof.
     private var earlyValueProofProgress: ProtectionPlanProgress {
-        ProtectionPlanProgress(index: 3, total: 10)
+        ProtectionPlanProgressIndex.progress(for: .productDemo)
     }
 
     var body: some View {

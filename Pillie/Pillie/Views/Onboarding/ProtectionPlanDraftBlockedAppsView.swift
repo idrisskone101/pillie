@@ -154,7 +154,7 @@ struct ProtectionPlanDraftBlockedAppsView: View {
 #Preview {
     ProtectionPlanDraftBlockedAppsView(
         model: ProtectionPlanOnboardingModel(),
-        progress: ProtectionPlanProgress(index: 9, total: 10),
+        progress: ProtectionPlanProgressIndex.progress(for: .draftBlockedApps),
         onBack: {},
         onContinue: {}
     )

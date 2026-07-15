@@ -133,7 +133,7 @@ struct ProtectionPlanQuestionHeader: View {
 #Preview {
     ProtectionPlanDistractionChoicesView(
         model: ProtectionPlanOnboardingModel(),
-        progress: ProtectionPlanProgress(index: 5, total: 10),
+        progress: ProtectionPlanProgressIndex.progress(for: .painPoints),
         onBack: {},
         onContinue: {}
     )

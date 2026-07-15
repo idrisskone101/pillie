@@ -96,7 +96,7 @@ struct ProtectionPlanFailureFrequencyView: View {
 
 #Preview {
     ProtectionPlanFailureFrequencyView(
-        progress: ProtectionPlanProgress(index: 7, total: 10),
+        progress: ProtectionPlanProgressIndex.progress(for: .missFrequency),
         initialSelection: nil,
         onBack: {},
         onContinue: { _ in }

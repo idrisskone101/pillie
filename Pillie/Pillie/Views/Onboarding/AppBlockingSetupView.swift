@@ -201,8 +201,7 @@ struct AppBlockingSetupView: View {
         let progress = ProtectionPlanProgressIndex.progress(for: .appBlocking)
         return PersonalizationOnboardingHeader(
             appeared: animateIn,
-            progress: progress.fraction,
-            badge: progress.badge,
+            progress: progress,
             onBack: onBack
         )
     }

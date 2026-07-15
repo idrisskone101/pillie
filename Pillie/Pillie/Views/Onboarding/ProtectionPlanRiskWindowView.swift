@@ -97,7 +97,7 @@ struct ProtectionPlanRiskWindowView: View {
 #Preview {
     ProtectionPlanRiskWindowView(
         model: ProtectionPlanOnboardingModel(),
-        progress: ProtectionPlanProgress(index: 8, total: 10),
+        progress: ProtectionPlanProgressIndex.progress(for: .riskWindow),
         onBack: {},
         onContinue: {}
     )

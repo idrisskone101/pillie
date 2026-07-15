@@ -277,8 +277,7 @@ struct ReminderPlanView: View {
     private var header: some View {
         PersonalizationOnboardingHeader(
             appeared: animateIn,
-            progress: PersonalizationOnboardingProgress.fraction(for: 8),
-            badge: PersonalizationOnboardingProgress.badge(for: 8),
+            progress: ProtectionPlanProgressIndex.progress(for: .reminderPlan),
             onBack: onBack
         )
     }

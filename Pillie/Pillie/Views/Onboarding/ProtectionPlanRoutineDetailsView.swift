@@ -433,7 +433,7 @@ private struct RoutineSectionHeader: View {
 
 #Preview {
     ProtectionPlanRoutineDetailsView(
-        progress: ProtectionPlanProgress(index: 12, total: 13),
+        progress: ProtectionPlanProgressIndex.progress(for: .schedule),
         onBack: {},
         onContinue: { _, _, _, _ in }
     )

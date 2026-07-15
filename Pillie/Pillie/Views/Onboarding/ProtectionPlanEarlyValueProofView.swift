@@ -802,7 +802,7 @@ private struct AttentionTrailShape: Shape {
 
 #Preview {
     ProtectionPlanEarlyValueProofView(
-        progress: ProtectionPlanProgress(index: 3, total: 10),
+        progress: ProtectionPlanProgressIndex.progress(for: .productDemo),
         onBack: {},
         onContinue: {}
     )

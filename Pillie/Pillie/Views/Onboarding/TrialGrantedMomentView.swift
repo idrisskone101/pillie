@@ -156,12 +156,9 @@ struct TrialGrantedMomentView: View {
     }
 
     private var header: some View {
-        // The plan-builder questions are behind us; the bar reads full, matching
-        // the design's fully-coral progress track.
         PersonalizationOnboardingHeader(
             appeared: animateIn,
-            progress: 1,
-            badge: "Trial granted",
+            progress: ProtectionPlanProgressIndex.progress(for: .trialGranted),
             onBack: onBack
         )
     }

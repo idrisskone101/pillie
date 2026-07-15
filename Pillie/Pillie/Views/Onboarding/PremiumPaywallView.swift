@@ -271,9 +271,8 @@ struct PremiumPaywallView: View {
 
     // MARK: - Header
 
-    /// Drawn from the shared plan-builder source of truth so the bar stays in sync with
-    /// the setup questions (it reads a full bar here — every numbered setup step is done
-    /// by the time the paywall appears) instead of the stale legacy "9/10".
+    /// Drawn from the shared onboarding section source of truth so this retired branch
+    /// cannot reintroduce a screen-count denominator if it is previewed or restored.
     private var onboardingProgress: ProtectionPlanProgress {
         ProtectionPlanProgressIndex.progress(for: .paywall)
     }
@@ -283,8 +282,7 @@ struct PremiumPaywallView: View {
             if isFromOnboarding {
                 PersonalizationOnboardingHeader(
                     appeared: animateIn,
-                    progress: onboardingProgress.fraction,
-                    badge: onboardingProgress.badge,
+                    progress: onboardingProgress,
                     onBack: onBack
                 )
             } else {

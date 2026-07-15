@@ -96,7 +96,7 @@ struct ProtectionPlanAcquisitionSourceView: View {
 
 #Preview {
     ProtectionPlanAcquisitionSourceView(
-        progress: ProtectionPlanProgress(index: 10, total: 10),
+        progress: ProtectionPlanProgressIndex.progress(for: .acquisitionSource),
         initialSelection: nil,
         onBack: {},
         onContinue: { _ in },

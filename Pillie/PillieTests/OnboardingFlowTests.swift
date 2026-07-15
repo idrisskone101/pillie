@@ -3,6 +3,82 @@ import XCTest
 @testable import Pillie
 
 final class OnboardingFlowTests: XCTestCase {
+    func testOnboardingProgressUsesOneThreeSectionDenominatorAcrossTheFlow() {
+        let progress = [
+            ProtectionPlanProgressIndex.progress(for: .productDemo),
+            ProtectionPlanProgressIndex.progress(for: .painPoints),
+            ProtectionPlanProgressIndex.progress(for: .method),
+            ProtectionPlanProgressIndex.progress(for: .appBlocking),
+        ]
+
+        XCTAssertEqual(progress.map(\.total), [3, 3, 3, 3])
+    }
+
+    func testVisibleFlowAdvancesThroughSectionsWithoutMovingBackward() {
+        let visibleSteps: [OnboardingFlow.Step] = [
+            .productDemo,
+            .plusBlockingDemo,
+            .analyticsConsent,
+            .painPoints,
+            .goal,
+            .missFrequency,
+            .riskWindow,
+            .acquisitionSource,
+            .method,
+            .schedule,
+            .reminderTime,
+            .reminderPlan,
+            .appBlocking,
+            .protectionPlanReady,
+        ]
+
+        XCTAssertEqual(
+            visibleSteps.map { ProtectionPlanProgressIndex.progress(for: $0).index },
+            [1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3]
+        )
+    }
+
+    func testSectionProgressProvidesMeaningfulVoiceOverAnnouncements() {
+        XCTAssertEqual(
+            String(localized: ProtectionPlanProgressIndex.progress(for: .productDemo).accessibilityLabel),
+            "See how Pillie works, section 1 of 3"
+        )
+        XCTAssertEqual(
+            String(localized: ProtectionPlanProgressIndex.progress(for: .painPoints).accessibilityLabel),
+            "Personalize your plan, section 2 of 3"
+        )
+        XCTAssertEqual(
+            String(localized: ProtectionPlanProgressIndex.progress(for: .reminderTime).accessibilityLabel),
+            "Set your reminder, section 3 of 3"
+        )
+    }
+
+    func testRetiredConditionalStepsResolveWithoutChangingSections() throws {
+        let migrations: [(OnboardingFlow.Step, OnboardingFlow.Step)] = [
+            (.reviewPrompt, .painPoints),
+            (.draftBlockedApps, .acquisitionSource),
+            (.paywall, .appBlocking),
+            (.freePlanConfirmation, .appBlocking),
+            (.trialGranted, .appBlocking),
+        ]
+
+        for (retired, expectedVisible) in migrations {
+            let visible = try XCTUnwrap(
+                OnboardingFlow.visibleStep(
+                    for: retired.rawValue,
+                    isPlus: false,
+                    selectedFreePlan: false
+                )
+            )
+            XCTAssertEqual(visible, expectedVisible)
+            XCTAssertEqual(
+                ProtectionPlanProgressIndex.progress(for: retired).section,
+                ProtectionPlanProgressIndex.progress(for: visible).section,
+                "Migrating \(retired) must not change user-facing progress."
+            )
+        }
+    }
+
     func testRawStepOrderPreservesPersistedOnboardingState() {
         XCTAssertEqual(OnboardingFlow.Step.welcome.rawValue, 0)
         XCTAssertEqual(OnboardingFlow.Step.analyticsConsent.rawValue, 1)

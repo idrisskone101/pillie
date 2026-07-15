@@ -106,7 +106,7 @@ struct ProtectionPlanDelayConsequenceView: View {
 #Preview {
     ProtectionPlanDelayConsequenceView(
         model: ProtectionPlanOnboardingModel(),
-        progress: ProtectionPlanProgress(index: 6, total: 10),
+        progress: ProtectionPlanProgressIndex.progress(for: .goal),
         onBack: {},
         onContinue: {}
     )

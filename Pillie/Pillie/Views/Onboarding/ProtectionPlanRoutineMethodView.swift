@@ -106,7 +106,7 @@ struct ProtectionPlanRoutineMethodView: View {
 
 #Preview {
     ProtectionPlanRoutineMethodView(
-        progress: ProtectionPlanProgress(index: 11, total: 13),
+        progress: ProtectionPlanProgressIndex.progress(for: .method),
         initialMethod: .pill,
         onBack: {},
         onContinue: { _ in }
