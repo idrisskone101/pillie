@@ -32,6 +32,20 @@ enum DelayConsequence: String, CaseIterable, Hashable, Identifiable {
         }
     }
 
+    /// Positive desired-outcome wording used by the consolidated intent screen.
+    /// The persisted cases stay unchanged, preserving the diagnosis semantics for
+    /// existing answers while asking new users one clearer combined question.
+    var desiredOutcomeTitle: String {
+        switch self {
+        case .stressful: return "Less stress"
+        case .annoying: return "Fewer interruptions"
+        case .scary: return "More reassurance"
+        case .overthink: return "Peace of mind"
+        case .doubleCheck: return "Confidence it's done"
+        case .dontCare: return "A simpler routine"
+        }
+    }
+
     var symbolName: String {
         switch self {
         case .stressful: return "wind"

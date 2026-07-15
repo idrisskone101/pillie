@@ -94,24 +94,6 @@ struct ContentView: View {
 	            },
 	            onContinue: {
 	              // Distraction Choices are committed inside ProtectionPlanDistractionChoicesView.
-                continueSetupStep(to: .goal)
-	            }
-          )
-          .transition(
-            .asymmetric(
-              insertion: .move(edge: .trailing),
-              removal: .move(edge: .trailing)
-            ))
-
-	        case .goal:
-	          ProtectionPlanDelayConsequenceView(
-	            model: protectionPlanModel,
-	            progress: ProtectionPlanProgressIndex.progress(for: .goal),
-	            onBack: {
-                lowRiskTransition(to: .painPoints)
-	            },
-	            onContinue: {
-	              // Delay Consequence is committed inside ProtectionPlanDelayConsequenceView.
                 continueSetupStep(to: .missFrequency)
 	            }
           )
@@ -121,16 +103,21 @@ struct ContentView: View {
               removal: .move(edge: .trailing)
             ))
 
+	        case .goal:
+	          // Retired standalone outcome step: `visibleStep` migrates it forward.
+	          Color.clear
+
 	        case .missFrequency:
 	          ProtectionPlanFailureFrequencyView(
+	            model: protectionPlanModel,
 	            progress: ProtectionPlanProgressIndex.progress(for: .missFrequency),
 	            initialSelection: store.missFrequency,
 	            onBack: {
-                lowRiskTransition(to: .goal)
+                lowRiskTransition(to: .painPoints)
 	            },
 	            onContinue: { freq in
 	              store.missFrequency = freq
-                continueSetupStep(to: .riskWindow)
+                continueSetupStep(to: .acquisitionSource)
 	            }
           )
           .transition(
@@ -140,22 +127,8 @@ struct ContentView: View {
             ))
 
 	        case .riskWindow:
-          ProtectionPlanRiskWindowView(
-            model: protectionPlanModel,
-            progress: ProtectionPlanProgressIndex.progress(for: .riskWindow),
-            onBack: {
-              lowRiskTransition(to: .missFrequency)
-            },
-            onContinue: {
-              // Risk Window is committed inside ProtectionPlanRiskWindowView.
-              continueSetupStep(to: .acquisitionSource)
-            }
-          )
-          .transition(
-            .asymmetric(
-              insertion: .move(edge: .trailing),
-              removal: .move(edge: .trailing)
-            ))
+	          // Retired standalone risk-window step: `visibleStep` migrates it forward.
+	          Color.clear
 
         case .draftBlockedApps:
           // Retired step: `visibleStep` migrates it forward to `.acquisitionSource`,
@@ -167,7 +140,7 @@ struct ContentView: View {
 	            progress: ProtectionPlanProgressIndex.progress(for: .acquisitionSource),
 	            initialSelection: store.acquisitionSource,
 	            onBack: {
-                lowRiskTransition(to: .riskWindow)
+                lowRiskTransition(to: .missFrequency)
 	            },
             onContinue: { source in
               store.acquisitionSource = source
@@ -546,6 +519,20 @@ struct ContentView: View {
   }
 
   private func normalizeVisibleOnboardingStep() {
+    if let persistedStep = OnboardingFlow.step(for: onboardingStep) {
+      let migratedAnswers = ProtectionPlanPersonalizationMigration.answersForResume(
+        at: persistedStep,
+        desiredOutcome: protectionPlanModel.delayConsequence,
+        riskWindow: protectionPlanModel.riskWindow
+      )
+      if migratedAnswers.desiredOutcome != protectionPlanModel.delayConsequence {
+        protectionPlanModel.recordDelayConsequence(migratedAnswers.desiredOutcome)
+      }
+      if migratedAnswers.riskWindow != protectionPlanModel.riskWindow {
+        protectionPlanModel.recordRiskWindow(migratedAnswers.riskWindow)
+      }
+    }
+
     guard let visibleStep = OnboardingFlow.visibleStep(
       for: onboardingStep,
       isPlus: subscriptionManager.hasPlusAccess,

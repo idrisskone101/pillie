@@ -14,6 +14,46 @@ final class PersonalizationOnboardingTests: XCTestCase {
         super.tearDown()
     }
 
+    func testCombinedIntentScreenCoversEverySelectionAndRestoresCommittedAnswer() {
+        for distraction in DistractionChoice.allCases {
+            for outcome in DelayConsequence.allCases {
+                var selection = ProtectionPlanIntentSelection()
+                selection.toggle(distraction)
+                selection.selectOutcome(outcome)
+
+                XCTAssertTrue(selection.canContinue)
+                XCTAssertEqual(selection.distractionChoices, [distraction])
+                XCTAssertEqual(selection.desiredOutcome, outcome)
+
+                let restored = ProtectionPlanIntentSelection(
+                    distractionChoices: selection.distractionChoices,
+                    desiredOutcome: selection.desiredOutcome
+                )
+                XCTAssertEqual(restored, selection)
+            }
+        }
+    }
+
+    func testCombinedTimingScreenCoversEverySelectionAndRestoresCommittedAnswer() {
+        for frequency in MissFrequency.allCases {
+            for riskWindow in RiskWindow.allCases {
+                var selection = ProtectionPlanTimingSelection()
+                selection.selectFrequency(frequency)
+                selection.selectRiskWindow(riskWindow)
+
+                XCTAssertTrue(selection.canContinue)
+                XCTAssertEqual(selection.missFrequency, frequency)
+                XCTAssertEqual(selection.riskWindow, riskWindow)
+
+                let restored = ProtectionPlanTimingSelection(
+                    missFrequency: selection.missFrequency,
+                    riskWindow: selection.riskWindow
+                )
+                XCTAssertEqual(restored, selection)
+            }
+        }
+    }
+
     func testAcquisitionSourcePersistsAsCoarseLocalValue() throws {
         let fixture = try InMemoryStoreFactory.makeStore(
             now: InMemoryStoreFactory.fixedDate("2026-06-03")

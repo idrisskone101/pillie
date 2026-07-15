@@ -12,6 +12,64 @@
 
 import Foundation
 
+/// Draft selections for the consolidated intent question (#207). Keeping the
+/// interaction state in a value type makes every choice and back-navigation
+/// restoration path testable without hosting a SwiftUI view.
+struct ProtectionPlanIntentSelection: Equatable {
+    private(set) var distractionChoices: Set<DistractionChoice>
+    private(set) var desiredOutcome: DelayConsequence?
+
+    init(
+        distractionChoices: Set<DistractionChoice> = [],
+        desiredOutcome: DelayConsequence? = nil
+    ) {
+        self.distractionChoices = distractionChoices
+        self.desiredOutcome = desiredOutcome
+    }
+
+    var canContinue: Bool {
+        !distractionChoices.isEmpty && desiredOutcome != nil
+    }
+
+    mutating func toggle(_ choice: DistractionChoice) {
+        if distractionChoices.contains(choice) {
+            distractionChoices.remove(choice)
+        } else {
+            distractionChoices.insert(choice)
+        }
+    }
+
+    mutating func selectOutcome(_ outcome: DelayConsequence) {
+        desiredOutcome = outcome
+    }
+}
+
+/// Draft selections for the consolidated timing question (#207).
+struct ProtectionPlanTimingSelection: Equatable {
+    private(set) var missFrequency: MissFrequency?
+    private(set) var riskWindow: RiskWindow?
+
+    init(
+        missFrequency: MissFrequency? = nil,
+        riskWindow: RiskWindow? = nil
+    ) {
+        self.missFrequency = missFrequency
+        self.riskWindow = riskWindow
+    }
+
+    var canContinue: Bool {
+        missFrequency != nil && riskWindow != nil
+    }
+
+    mutating func selectFrequency(_ frequency: MissFrequency) {
+        missFrequency = frequency
+    }
+
+    mutating func selectRiskWindow(_ window: RiskWindow) {
+        riskWindow = window
+    }
+}
+
 /// The locked high-level order from ADR `0003-protection-plan-onboarding`.
 ///
 /// Raw values are stable and persisted, so new cases must only ever be appended.

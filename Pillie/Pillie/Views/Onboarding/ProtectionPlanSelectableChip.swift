@@ -14,6 +14,7 @@ import SwiftUI
 struct ProtectionPlanSelectableChip: View {
     let title: String
     let isSelected: Bool
+    var allowsMultipleSelection = true
     let action: () -> Void
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -56,7 +57,14 @@ struct ProtectionPlanSelectableChip: View {
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(title)
         .accessibilityAddTraits(isSelected ? [.isButton, .isSelected] : .isButton)
-        .accessibilityHint(isSelected ? "Selected. Double tap to remove." : "Double tap to select. You can pick more than one.")
+        .accessibilityHint(accessibilityHint)
+    }
+
+    private var accessibilityHint: String {
+        if allowsMultipleSelection {
+            return isSelected ? "Selected. Double tap to remove." : "Double tap to select. You can pick more than one."
+        }
+        return isSelected ? "Selected." : "Double tap to choose."
     }
 }
 

@@ -101,10 +101,11 @@ enum OnboardingFlow {
         .plusBlockingDemo,
         .analyticsConsent,
         // .reviewPrompt retired: the intro now hands off straight into the questions.
+        // Personalization is consolidated into two screens (#207). The original
+        // raw values stay frozen for safe resume migration, while the canonical
+        // display order keeps only the combined intent and timing steps.
         .painPoints,
-        .goal,
         .missFrequency,
-        .riskWindow,
         // .draftBlockedApps retired: the diagnosis derives the plan from the
         // Distraction Choices answer, so the draft-blocklist question was removed.
         .acquisitionSource,
@@ -170,6 +171,16 @@ enum OnboardingFlow {
             return .painPoints
         }
 
+        // The former standalone outcome and risk-window questions are now sections
+        // of the two consolidated personalization screens. Resume forward so a
+        // partially completed onboarding never repeats an earlier question.
+        if step == .goal {
+            return .missFrequency
+        }
+        if step == .riskWindow {
+            return .acquisitionSource
+        }
+
         // The "which apps to block" draft question was removed; anyone persisted on
         // it (or handed off to it) is migrated forward to the next question.
         if step == .draftBlockedApps {
@@ -229,5 +240,25 @@ enum OnboardingFlow {
         }
 
         return nextIndex > previousIndex ? .forward : .backward
+    }
+}
+
+/// Missing-answer defaults for users resumed on one of the two retired standalone
+/// personalization steps (#207). Existing committed answers always win.
+enum ProtectionPlanPersonalizationMigration {
+    struct Answers: Equatable {
+        let desiredOutcome: DelayConsequence?
+        let riskWindow: RiskWindow?
+    }
+
+    static func answersForResume(
+        at step: OnboardingFlow.Step,
+        desiredOutcome: DelayConsequence?,
+        riskWindow: RiskWindow?
+    ) -> Answers {
+        Answers(
+            desiredOutcome: step == .goal ? desiredOutcome ?? .dontCare : desiredOutcome,
+            riskWindow: step == .riskWindow ? riskWindow ?? .randomly : riskWindow
+        )
     }
 }
