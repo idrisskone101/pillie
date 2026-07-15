@@ -312,15 +312,15 @@ final class AnalyticsManagerTests: XCTestCase {
 
     telemetry.stepCompleted(
       from: OnboardingFlow.Step.reminderPlan.rawValue,
-      to: OnboardingFlow.Step.trialGranted.rawValue
+      to: OnboardingFlow.Step.appBlocking.rawValue
     )
     telemetry.stepCompleted(
-      from: OnboardingFlow.Step.trialGranted.rawValue,
+      from: OnboardingFlow.Step.appBlocking.rawValue,
       to: OnboardingFlow.Step.reminderPlan.rawValue
     )
     telemetry.stepCompleted(
       from: OnboardingFlow.Step.reminderPlan.rawValue,
-      to: OnboardingFlow.Step.trialGranted.rawValue
+      to: OnboardingFlow.Step.appBlocking.rawValue
     )
 
     XCTAssertEqual(
@@ -341,10 +341,8 @@ final class AnalyticsManagerTests: XCTestCase {
 
     telemetry.stepCompleted(
       from: OnboardingFlow.Step.reminderPlan.rawValue,
-      to: OnboardingFlow.Step.trialGranted.rawValue
+      to: OnboardingFlow.Step.appBlocking.rawValue
     )
-    telemetry.trialOfferViewed()
-    telemetry.trialOfferViewed()
     telemetry.trialActivated()
     telemetry.trialActivated()
     telemetry.blockerSetupStarted()
@@ -359,7 +357,6 @@ final class AnalyticsManagerTests: XCTestCase {
     let splitEvents: Set<AnalyticsEvent> = [
       .coreOnboardingCompleted,
       .onboardingCompleted,
-      .trialOfferViewed,
       .trialActivated,
       .trialGranted,
       .blockerSetupStarted,
@@ -370,7 +367,6 @@ final class AnalyticsManagerTests: XCTestCase {
       [
         .coreOnboardingCompleted,
         .onboardingCompleted,
-        .trialOfferViewed,
         .trialActivated,
         .trialGranted,
         .blockerSetupStarted,
