@@ -43,6 +43,7 @@ final class ProtectionPlanRoutineContentTests: XCTestCase {
         XCTAssertEqual(content.subtitle, "How far into your cycle are you?")
         XCTAssertEqual(content.cyclePositionHeader, "Where are you now?")
         XCTAssertEqual(content.regimenHeader, "Pill regimen")
+        XCTAssertEqual(content.editExactDayLabel, "Edit exact day")
         // The "More options" disclosure is the mechanism that keeps the screen clean
         // while still reaching every regimen.
         XCTAssertEqual(content.moreLabel, "More options")
