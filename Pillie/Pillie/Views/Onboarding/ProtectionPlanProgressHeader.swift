@@ -3,8 +3,7 @@
 //  Pillie
 //
 //  Bespoke progress header for the Protection Plan flow: a back button, a
-//  segmented progress capsule whose fill springs in with a glowing leading edge,
-//  and the "STEP n/N" badge. Kept separate from the legacy personalization header
+//  section title and progress capsule. Kept separate from the legacy personalization header
 //  so the plan-builder chrome can evolve independently.
 //
 
@@ -17,9 +16,13 @@ struct ProtectionPlanProgressHeader: View {
     var body: some View {
         HStack(spacing: 16) {
             backButton
-            // The "STEP n/N" counter is intentionally not shown; the bar carries the
-            // progress on its own (and still announces position via VoiceOver).
-            progressBar
+            VStack(alignment: .leading, spacing: 7) {
+                Text(progress.title)
+                    .font(.pillie(13, weight: .semibold))
+                    .foregroundStyle(PillieTheme.textMuted)
+                    .accessibilityHidden(true)
+                progressBar
+            }
         }
     }
 
@@ -52,13 +55,13 @@ struct ProtectionPlanProgressHeader: View {
         }
         .frame(height: 8)
         .accessibilityElement()
-        .accessibilityLabel(progress.badge)
+        .accessibilityLabel(Text(progress.accessibilityLabel))
     }
 }
 
 #Preview {
     ProtectionPlanProgressHeader(
-        progress: ProtectionPlanProgress(index: 2, total: 10),
+        progress: ProtectionPlanProgressIndex.progress(for: .painPoints),
         onBack: {}
     )
     .padding()

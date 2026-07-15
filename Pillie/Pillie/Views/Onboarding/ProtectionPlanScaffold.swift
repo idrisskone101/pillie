@@ -3,59 +3,69 @@
 //  Pillie
 //
 //  Shared chrome for Protection Plan Onboarding screens: a soft branded
-//  background, an optional progress header (back button + segmented progress +
-//  "STEP n/N" badge), scrollable content, and a fixed bottom CTA stack with
+//  background, an optional progress header (back button + section progress),
+//  scrollable content, and a fixed bottom CTA stack with
 //  explicit enabled/disabled states. Later calibration screens reuse this so the
 //  flow container stays consistent.
 //
 
 import SwiftUI
 
-/// Visible progress for a calibration step. `nil` on screens that intentionally
+/// Visible section progress for onboarding. `nil` on screens that intentionally
 /// hide progress (e.g. Welcome).
 struct ProtectionPlanProgress: Equatable {
-    let index: Int
-    let total: Int
+    enum Section: Int, CaseIterable {
+        case seeHowPillieWorks = 1
+        case personalizeYourPlan
+        case setYourReminder
+
+        var title: LocalizedStringResource {
+            switch self {
+            case .seeHowPillieWorks: "See how Pillie works"
+            case .personalizeYourPlan: "Personalize your plan"
+            case .setYourReminder: "Set your reminder"
+            }
+        }
+
+        var accessibilityLabel: LocalizedStringResource {
+            switch self {
+            case .seeHowPillieWorks: "See how Pillie works, section 1 of 3"
+            case .personalizeYourPlan: "Personalize your plan, section 2 of 3"
+            case .setYourReminder: "Set your reminder, section 3 of 3"
+            }
+        }
+    }
+
+    let section: Section
+
+    var index: Int { section.rawValue }
+    var total: Int { Section.allCases.count }
+    var title: LocalizedStringResource { section.title }
 
     var fraction: CGFloat {
-        guard total > 0 else { return 0 }
         return CGFloat(index) / CGFloat(total)
     }
 
-    var badge: String { "STEP \(index)/\(total)" }
+    var accessibilityLabel: LocalizedStringResource { section.accessibilityLabel }
 }
 
-/// Single source of truth for the numbered plan-builder progress shown from the first
-/// calibration question through Reminder Time (#77). Centralizing it keeps the bar
-/// advancing coherently — the legacy approach hard-coded `index/total` per screen,
-/// which left Acquisition reading "10/10" while three more setup screens still
-/// followed. A later slice extends `numberedSteps` instead of re-numbering every view.
+/// Single source of truth for the stable, user-facing onboarding sections. Individual
+/// screens can be inserted, retired, or skipped without changing the three-section
+/// expectation or making progress move backward.
 enum ProtectionPlanProgressIndex {
-    /// The bespoke intro screens (Welcome, Analytics Consent, Early Value Proof, Review
-    /// Prompt) precede the numbered steps and are counted in the denominator, matching
-    /// the shipped scheme where Distraction Choices is step 5.
-    static let introScreens = 4
-
-    /// The ordered steps that show the numbered progress header, first question
-    /// through Reminder Time.
-    static let numberedSteps: [OnboardingFlow.Step] = [
-        .painPoints,        // Distraction Choices
-        .goal,              // Delay Consequence
-        .missFrequency,     // Failure Frequency
-        .riskWindow,
-        // .draftBlockedApps retired (the draft-blocklist question was removed).
-        .acquisitionSource,
-        .method,            // Routine Basics — Method
-        .schedule,          // Routine Basics — Details
-        .reminderTime,      // Reminder Time
-    ]
-
-    static var total: Int { introScreens + numberedSteps.count }
-
-    /// The progress to show for a numbered step. Unknown steps fall back to a full bar.
     static func progress(for step: OnboardingFlow.Step) -> ProtectionPlanProgress {
-        let position = numberedSteps.firstIndex(of: step).map { introScreens + $0 + 1 } ?? total
-        return ProtectionPlanProgress(index: position, total: total)
+        let section: ProtectionPlanProgress.Section = switch step {
+        case .welcome, .analyticsConsent, .productDemo, .plusBlockingDemo:
+            .seeHowPillieWorks
+        case .reviewPrompt, .painPoints, .goal, .missFrequency, .acquisitionSource,
+             .riskWindow, .draftBlockedApps:
+            .personalizeYourPlan
+        case .method, .schedule, .reminderTime, .reminderPlan, .paywall,
+             .freePlanConfirmation, .appBlocking, .complete, .mechanismProof,
+             .protectionPlanReady, .trialGranted:
+            .setYourReminder
+        }
+        return ProtectionPlanProgress(section: section)
     }
 }
 
