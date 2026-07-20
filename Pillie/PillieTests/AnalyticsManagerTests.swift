@@ -347,8 +347,8 @@ final class AnalyticsManagerTests: XCTestCase {
     telemetry.trialActivated()
     telemetry.blockerSetupStarted()
     telemetry.blockerSetupStarted()
-    telemetry.blockerSetupSkipped()
-    telemetry.blockerSetupSkipped()
+    telemetry.blockerSetupSkipped(authorizationState: .notRequested)
+    telemetry.blockerSetupSkipped(authorizationState: .notRequested)
     telemetry.stepCompleted(
       from: OnboardingFlow.Step.appBlocking.rawValue,
       to: OnboardingFlow.Step.complete.rawValue

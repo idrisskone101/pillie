@@ -94,12 +94,52 @@ final class ProductAnalyticsTelemetryPaywallTests: XCTestCase {
         XCTAssertEqual(recorder.events.map(\.isPlus), [false, true, false, false, false, false])
     }
 
+    func testTrialStatusPaywallViewCarriesStableSurfaceContext() {
+        let client = ProductAnalyticsSpy()
+        let defaultsName = "ProductAnalyticsTelemetryPaywallTests.trialStatusSurface"
+        UserDefaults().removePersistentDomain(forName: defaultsName)
+        let defaults = UserDefaults(suiteName: defaultsName)!
+        let analytics = AnalyticsManager(
+            defaults: defaults,
+            client: client,
+            infoDictionary: [
+                "PostHogProjectToken": "test-token",
+                "PostHogHost": "https://us.i.posthog.com"
+            ]
+        )
+        Self.keptObjects.append(defaults)
+        Self.keptObjects.append(analytics)
+        let telemetry = ProductAnalyticsTelemetry(analytics: analytics, isPlus: { true })
+
+        analytics.configure()
+        telemetry.paywallViewed(surface: .trialStatus)
+
+        XCTAssertEqual(client.events.count, 1)
+        XCTAssertEqual(client.events.first?.name, "paywall_viewed")
+        XCTAssertEqual(client.events.first?.properties["source"], .string("settings"))
+        XCTAssertEqual(client.events.first?.properties["surface"], .string("trial_status"))
+        XCTAssertEqual(client.events.first?.properties["is_plus"], .bool(true))
+        XCTAssertEqual(client.events.first?.properties.count, 3)
+    }
+
+    func testPaywallSurfaceTaxonomyUsesOnlyApprovedStableValues() {
+        XCTAssertEqual(
+            AnalyticsPaywallSurface.allCases.map(\.rawValue),
+            [
+                AnalyticsPaywallSurface.trialStatus,
+                .settingsSubscription,
+                .blockingGate,
+                .smartReminderGate
+            ].map(\.rawValue)
+        )
+    }
+
     private func telemetry(_ analytics: AnalyticsRecorder, isPlus: Bool) -> ProductAnalyticsTelemetry {
         ProductAnalyticsTelemetry(analytics: analytics, isPlus: { isPlus })
     }
 }
 
-private final class ProductAnalyticsSpy: ProductAnalyticsClient {
+final class ProductAnalyticsSpy: ProductAnalyticsClient {
     struct Event: Equatable {
         let name: String
         let properties: [String: AnalyticsPropertyValue]

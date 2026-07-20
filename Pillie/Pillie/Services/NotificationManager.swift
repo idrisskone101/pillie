@@ -68,13 +68,15 @@ final class NotificationManager {
     private let isRunningTests: Bool
     private let scheduleDeviceActivityBlock: (_ hour: Int, _ minute: Int) -> Void
     private let trackSchedulingError: (_ error: any Error) -> Void
+    private let hasPlusAccess: () -> Bool
+    private let trackSmartReminderRetryScheduled: (_ count: Int) -> Void
 
     private var pendingRescheduleWorkItem: DispatchWorkItem?
 
     private enum PayloadKey {
         static let dueDayEpoch = "dueDayEpoch"
         static let actionTypeRaw = "actionTypeRaw"
-        static let requestKind = "requestKind"
+        static let requestKind = SmartReminderDelivery.requestKindKey
         // Shared with the delivery decision so the payload and the
         // `trial_expiry_warning_sent` reader can never drift apart (#168).
         static let trialWarningDay = TrialExpiryWarningDelivery.dayKey
@@ -97,13 +99,19 @@ final class NotificationManager {
             ProductAnalyticsTelemetry.live.trackError(
                 .notifications, error: error, context: ["operation": "schedule"]
             )
+        },
+        hasPlusAccess: @escaping () -> Bool = { SubscriptionManager.shared.hasPlusAccess },
+        trackSmartReminderRetryScheduled: @escaping (_ count: Int) -> Void = {
+            ProductAnalyticsTelemetry.live.smartReminderRetryScheduled(count: $0)
         }
     ) {
         self.center = center
         self.isRunningTests = isRunningTests
         self.scheduleDeviceActivityBlock = scheduleDeviceActivityBlock
         self.trackSchedulingError = trackSchedulingError
-        registerCategory(includeSnooze: SubscriptionManager.shared.hasPlusAccess)
+        self.hasPlusAccess = hasPlusAccess
+        self.trackSmartReminderRetryScheduled = trackSmartReminderRetryScheduled
+        registerCategory(includeSnooze: hasPlusAccess())
     }
 
     // MARK: - Authorization
@@ -164,7 +172,7 @@ final class NotificationManager {
 
         // Keep the notification category in sync with the entitlement so the Snooze
         // action only appears for Plus users (Smart Reminders gate, ADR 0004).
-        registerCategory(includeSnooze: SubscriptionManager.shared.hasPlusAccess)
+        registerCategory(includeSnooze: hasPlusAccess())
 
         let requests = buildReminderRequests(store: store, now: Date(), snoozeOverride: snoozeOverride)
         applyManagedReminderRequests(requests)
@@ -282,7 +290,7 @@ final class NotificationManager {
                 candidateDueActions: candidateDueActions,
                 statusByEpochDay: store.statusesByEpochDay(for: candidateDueActions.map(\.date)),
                 snoozeOverride: snoozeOverride,
-                smartRemindersEnabled: SubscriptionManager.shared.hasPlusAccess,
+                smartRemindersEnabled: hasPlusAccess(),
                 cycleTransitionEnabled: store.cycleTransitionNoticeEnabled,
                 lastCallEnabled: store.lastCallReminderEnabled,
                 lastCallHour: store.lastCallReminderHour,
@@ -297,7 +305,7 @@ final class NotificationManager {
         // gate lives in `CustomReminderCopy` — a non-Plus user's stored copy is ignored and
         // defaults fire. Enforcement is eventual: already-queued notifications revert on the
         // next reschedule (ADR 0004).
-        let isPlus = SubscriptionManager.shared.hasPlusAccess
+        let isPlus = hasPlusAccess()
         let customTitle = store.customDueReminderTitle
         let customBody = store.customDueReminderBody
         let customRetryTitle = store.customRetryReminderTitle
@@ -595,6 +603,16 @@ final class NotificationManager {
                         errorReporter.reportOnce(error)
                     }
                 }
+            }
+
+            let scheduledRetryCount = diff.missingRequestIDs.reduce(into: 0) { count, id in
+                guard let request = newRequestByID[id],
+                      request.content.userInfo[PayloadKey.requestKind] as? String
+                        == ReminderSchedulePlanner.DueReminderKind.retry.rawValue else { return }
+                count += 1
+            }
+            if scheduledRetryCount > 0 {
+                self.trackSmartReminderRetryScheduled(scheduledRetryCount)
             }
 
             self.center.getDeliveredNotifications { [weak self] notifications in

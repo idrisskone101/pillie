@@ -61,6 +61,12 @@ final class SmartRemindersUpsellTests: XCTestCase {
         )
     }
 
+    func testFeatureUpsellsRouteToStablePaywallSurfaces() {
+        XCTAssertEqual(PlusUpsellContent.smartReminders.paywallSurface, .smartReminderGate)
+        XCTAssertEqual(PlusUpsellContent.appBlocking.paywallSurface, .blockingGate)
+        XCTAssertEqual(PlusUpsellContent.customReminders.paywallSurface, .settingsSubscription)
+    }
+
     // MARK: - Telemetry (mirrors the Blocking upsell events)
     //
     // Hosted XCTest on the Xcode 27 beta aborts when a class instance is deallocated
