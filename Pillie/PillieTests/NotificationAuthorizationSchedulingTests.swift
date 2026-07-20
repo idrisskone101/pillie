@@ -118,6 +118,30 @@ struct NotificationAuthorizationSchedulingTests {
         #expect(center.addedRequests.count > 1)
         #expect(reportedErrors.count == 1)
     }
+
+    @Test
+    func `Authorized scheduling reports one aggregate Smart Reminder retry count`() throws {
+        let center = RecordingNotificationCenter(authorizationStatus: .authorized)
+        var scheduledRetryCounts: [Int] = []
+        let manager = NotificationManager(
+            center: center,
+            isRunningTests: false,
+            scheduleDeviceActivityBlock: { _, _ in },
+            hasPlusAccess: { true },
+            trackSmartReminderRetryScheduled: { scheduledRetryCounts.append($0) }
+        )
+        let fixture = try InMemoryStoreFactory.makeStore(
+            now: InMemoryStoreFactory.fixedDate("2026-07-14", hour: 8)
+        )
+
+        manager.rescheduleFromStore(fixture.store)
+
+        let addedRetryCount = center.addedRequests.filter {
+            $0.content.userInfo["requestKind"] as? String == "retry"
+        }.count
+        #expect(addedRetryCount > 0)
+        #expect(scheduledRetryCounts == [addedRetryCount])
+    }
 }
 
 @MainActor

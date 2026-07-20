@@ -9,17 +9,20 @@ import SwiftUI
 struct PlusUpsellContent: Equatable {
     let featureName: String
     let featureDescription: String
+    let paywallSurface: AnalyticsPaywallSurface
 
     static let appBlocking = PlusUpsellContent(
         featureName: "App Blocking",
-        featureDescription: "Block distracting apps until your pill is logged."
+        featureDescription: "Block distracting apps until your pill is logged.",
+        paywallSurface: .blockingGate
     )
 
     /// Smart Reminders reads as the follow-up escalation after the first reminder
     /// (ADR 0004), never the base daily reminder, and avoids medical/efficacy claims.
     static let smartReminders = PlusUpsellContent(
         featureName: "Smart Reminders",
-        featureDescription: "Pillie sends gentle follow-up nudges until you log it."
+        featureDescription: "Pillie sends gentle follow-up nudges until you log it.",
+        paywallSurface: .smartReminderGate
     )
 
     /// Custom Reminder Messages frames the perk as writing your own private nudge.
@@ -27,24 +30,32 @@ struct PlusUpsellContent: Equatable {
     /// medical/efficacy claims.
     static let customReminders = PlusUpsellContent(
         featureName: "Custom Messages",
-        featureDescription: "Word the daily reminder yourself — what you type is what you'll see."
+        featureDescription: "Word the daily reminder yourself — what you type is what you'll see.",
+        paywallSurface: .settingsSubscription
     )
 }
 
 struct PlusUpsellSheet: View {
     let featureName: String
     let featureDescription: String
+    let paywallSurface: AnalyticsPaywallSurface
 
     static let compactPresentationHeight: CGFloat = 360
 
-    init(featureName: String, featureDescription: String) {
+    init(
+        featureName: String,
+        featureDescription: String,
+        paywallSurface: AnalyticsPaywallSurface = .settingsSubscription
+    ) {
         self.featureName = featureName
         self.featureDescription = featureDescription
+        self.paywallSurface = paywallSurface
     }
 
     init(content: PlusUpsellContent) {
         self.featureName = content.featureName
         self.featureDescription = content.featureDescription
+        self.paywallSurface = content.paywallSurface
     }
 
     static func appBlocking() -> PlusUpsellSheet {
@@ -183,6 +194,7 @@ struct PlusUpsellSheet: View {
         .fullScreenCover(isPresented: $showPaywall) {
             PremiumPaywallView(
                 isFromOnboarding: false,
+                paywallSurface: paywallSurface,
                 onBack: { showPaywall = false },
                 onContinue: {
                     showPaywall = false

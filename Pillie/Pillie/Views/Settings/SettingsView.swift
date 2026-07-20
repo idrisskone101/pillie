@@ -368,6 +368,7 @@ struct SettingsView: View {
         .fullScreenCover(isPresented: $showPaywall) {
             PremiumPaywallView(
                 isFromOnboarding: false,
+                paywallSurface: .settingsSubscription,
                 onBack: { showPaywall = false },
                 onContinue: { showPaywall = false },
                 onSkip: { showPaywall = false }

@@ -78,9 +78,9 @@ struct OnboardingTelemetry {
     }
   }
 
-  func blockerSetupSkipped() {
+  func blockerSetupSkipped(authorizationState: AnalyticsAuthorizationState) {
     emitOnce(key: Self.blockerSetupSkippedEmittedKey) {
-      telemetry.blockerSetupSkipped()
+      telemetry.blockerSetupSkipped(authorizationState: authorizationState)
     }
   }
 

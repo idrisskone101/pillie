@@ -33,3 +33,35 @@ A developer-granted free period involves no payment, so guideline 3.1.1's IAP re
 - `blocker_intervention_fired` cannot be a live event (the shield extension is sandboxed, no network); interventions are counted in the App Group and flushed on next app open. The same counter feeds the Trial-End Paywall's own-stats.
 - Lapsed former subscribers count as "without Plus" and receive a Reverse Trial; the cohort is tiny and this is accepted.
 - ADR 0002's paywall sequencing (paywall before the Screen Time branch, free-plan confirmation branch) is superseded; its calibration-step ordering and truthful-copy rules stand.
+
+## Measurement taxonomy and interpretation guardrails (#217)
+
+The Reverse Trial value funnel is interpreted as:
+
+`trial_granted → blocker activation → realized value → trial_expired → trial-end paywall → purchase_started → rc_initial_purchase`
+
+RevenueCat remains authoritative for a real initial purchase. `purchase_started` is intent, and neither it nor an in-app completion event should be treated as subscription truth.
+
+| Event | Required coarse context | Interpretation |
+| --- | --- | --- |
+| `trial_badge_tapped` | `source = home`, `is_plus` | The passive Home indicator was deliberately opened. |
+| `trial_status_sheet_viewed` | `source = home`, `is_plus` | The status sheet became visible; it is not a purchase impression. |
+| `trial_status_feature_tapped` | `feature = app_blocking \| shake_to_confirm \| smart_reminders \| custom_messages` | Interest in one named Pillie-authored perk, never user content. |
+| `paywall_viewed` | Existing `source` plus `surface = trial_status \| settings_subscription \| blocking_gate \| smart_reminder_gate` where applicable | `source` stays backward-compatible; use `surface` to distinguish the concrete entry point. |
+| `blocker_setup_skipped` | `authorization_state = not_requested \| denied \| authorized` | Segments the setup boundary without selected apps, categories, or token counts. |
+| `smart_reminder_retry_scheduled` | `retry_count` | Count of newly queued retry requests in one scheduler diff, not every reschedule attempt. |
+| `smart_reminder_retry_fired` | `is_plus` | A retry was delivered in the foreground or later handled; request ids are used only for local dedupe and are never captured. |
+| `smart_reminder_outcome` | `outcome = opened \| completed \| snoozed`, `is_plus` | The action taken on that retry notification. It does not claim medication adherence beyond the recorded app action. |
+
+Do not attach reminder title/body, medication or regimen data, reminder times, FamilyControls selections/tokens/counts, notification request identifiers, or session-replay identifiers to these events. Counts and closed enums are the privacy boundary.
+
+### Production-safe verification plan
+
+Use a Debug build and the analytics OSLog mirror; do not send simulator or TestFlight QA traffic to production PostHog. Start from a fresh local analytics state, perform one interaction at a time, and verify exactly one matching log line before continuing:
+
+1. Tap the Home trial badge once; expect one `trial_badge_tapped`, then one `trial_status_sheet_viewed` when the sheet appears.
+2. Tap one unlocked feature item; expect one `trial_status_feature_tapped` with only its approved `feature` value.
+3. Tap **Keep Pillie Plus**, the Settings subscription row, a blocking gate, and the Smart Reminders gate in separate runs; each `paywall_viewed` keeps its legacy `source` and has the matching stable `surface`.
+4. Exercise blocker skip before requesting Screen Time, after denial, and after authorization; expect one persisted `blocker_setup_skipped` per onboarding install with the matching `authorization_state` and no selection data.
+5. Trigger one authorized reminder rebuild with newly missing retries; expect one `smart_reminder_retry_scheduled` whose `retry_count` equals the newly queued retry requests. A no-op rebuild must emit none.
+6. Deliver or handle one retry request; expect one deduplicated `smart_reminder_retry_fired`. Open, mark complete, or snooze it; expect one `smart_reminder_outcome` with the corresponding enum and no notification content or identifier.

@@ -73,6 +73,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
     ) {
         recordTrialWarningDeliveryIfNeeded(userInfo: notification.request.content.userInfo)
+        recordSmartReminderFireIfNeeded(request: notification.request)
         // Foreground fallback: apply blocking when reminder fires while app is open
         if let store = Self.store, !store.isTodayHandled {
             AppBlockingManager.shared.applyBlocking(reason: store.pack.method.blockingReasonText)
@@ -93,6 +94,41 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         ProductAnalyticsTelemetry.live.trialExpiryWarningSent(day: day)
     }
 
+    private func recordSmartReminderFireIfNeeded(request: UNNotificationRequest) {
+        let defaults = UserDefaults.standard
+        let recordedIdentifiers = defaults.stringArray(
+            forKey: SmartReminderDelivery.firedRequestIdentifiersStorageKey
+        ) ?? []
+        let requestKind = request.content.userInfo[SmartReminderDelivery.requestKindKey] as? String
+        guard SmartReminderDelivery.shouldRecordFire(
+            requestIdentifier: request.identifier,
+            requestKind: requestKind,
+            alreadyRecordedRequestIdentifiers: recordedIdentifiers
+        ) else { return }
+
+        // Request ids contain only Pillie's own kind/day/timestamp tokens. Keep a
+        // small rolling dedupe window locally; the identifier is never captured.
+        defaults.set(
+            Array((recordedIdentifiers + [request.identifier]).suffix(64)),
+            forKey: SmartReminderDelivery.firedRequestIdentifiersStorageKey
+        )
+        ProductAnalyticsTelemetry.live.smartReminderRetryFired()
+    }
+
+    private func recordSmartReminderOutcomeIfNeeded(response: UNNotificationResponse) {
+        let requestKind = response.notification.request.content.userInfo[
+            SmartReminderDelivery.requestKindKey
+        ] as? String
+        guard let outcome = SmartReminderDelivery.outcome(
+            requestKind: requestKind,
+            actionIdentifier: response.actionIdentifier,
+            markTakenActionIdentifier: NotificationManager.shared.markTakenAction,
+            snoozeActionIdentifier: NotificationManager.shared.snoozeAction,
+            defaultActionIdentifier: UNNotificationDefaultActionIdentifier
+        ) else { return }
+        ProductAnalyticsTelemetry.live.smartReminderOutcome(outcome)
+    }
+
     // Handle notification action buttons
     func userNotificationCenter(
         _ center: UNUserNotificationCenter,
@@ -100,6 +136,8 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         withCompletionHandler completionHandler: @escaping () -> Void
     ) {
         recordTrialWarningDeliveryIfNeeded(userInfo: response.notification.request.content.userInfo)
+        recordSmartReminderFireIfNeeded(request: response.notification.request)
+        recordSmartReminderOutcomeIfNeeded(response: response)
 
         guard let store = Self.store else {
             completionHandler()

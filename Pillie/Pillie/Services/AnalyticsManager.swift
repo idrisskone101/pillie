@@ -206,6 +206,40 @@ protocol AnalyticsTracking {
     lastCallBodyCustomized: Bool?
   )
 
+  func track(
+    _ event: AnalyticsEvent,
+    source: AnalyticsSource?,
+    surface: AnalyticsPaywallSurface,
+    isPlus: Bool?
+  )
+
+  func track(
+    _ event: AnalyticsEvent,
+    source: AnalyticsSource?,
+    trialStatusFeature: AnalyticsTrialStatusFeature,
+    isPlus: Bool?
+  )
+
+  func track(
+    _ event: AnalyticsEvent,
+    source: AnalyticsSource?,
+    step: AnalyticsStep?,
+    authorizationState: AnalyticsAuthorizationState,
+    isPlus: Bool?
+  )
+
+  func track(
+    _ event: AnalyticsEvent,
+    retryCount: Int,
+    isPlus: Bool?
+  )
+
+  func track(
+    _ event: AnalyticsEvent,
+    smartReminderOutcome: AnalyticsSmartReminderOutcome,
+    isPlus: Bool?
+  )
+
   /// Report a handled failure as `app_error` + `$exception` (#179).
   func trackError(
     _ domain: AppErrorDomain,
@@ -218,6 +252,81 @@ protocol AnalyticsTracking {
 // Default no-op so the funnel-focused test recorders that only care about
 // track() keep compiling; `AnalyticsManager` provides the real implementation.
 extension AnalyticsTracking {
+  func track(
+    _ event: AnalyticsEvent,
+    smartReminderOutcome: AnalyticsSmartReminderOutcome,
+    isPlus: Bool?
+  ) {
+    trackLegacy(event, isPlus: isPlus)
+  }
+
+  func track(
+    _ event: AnalyticsEvent,
+    retryCount: Int,
+    isPlus: Bool?
+  ) {
+    trackLegacy(event, isPlus: isPlus)
+  }
+
+  func track(
+    _ event: AnalyticsEvent,
+    source: AnalyticsSource?,
+    step: AnalyticsStep?,
+    authorizationState: AnalyticsAuthorizationState,
+    isPlus: Bool?
+  ) {
+    trackLegacy(event, source: source, step: step, isPlus: isPlus)
+  }
+
+  func track(
+    _ event: AnalyticsEvent,
+    source: AnalyticsSource?,
+    trialStatusFeature: AnalyticsTrialStatusFeature,
+    isPlus: Bool?
+  ) {
+    trackLegacy(event, source: source, isPlus: isPlus)
+  }
+
+  func track(
+    _ event: AnalyticsEvent,
+    source: AnalyticsSource?,
+    surface: AnalyticsPaywallSurface,
+    isPlus: Bool?
+  ) {
+    trackLegacy(event, source: source, isPlus: isPlus)
+  }
+
+  private func trackLegacy(
+    _ event: AnalyticsEvent,
+    source: AnalyticsSource? = nil,
+    step: AnalyticsStep? = nil,
+    isPlus: Bool?
+  ) {
+    track(
+      event,
+      source: source,
+      step: step,
+      stepIndex: nil,
+      screen: nil,
+      plan: nil,
+      result: nil,
+      setting: nil,
+      acquisitionSource: nil,
+      isPlus: isPlus,
+      hasBlockingSelection: nil,
+      interventionCount: nil,
+      shakeCount: nil,
+      trialWarningDay: nil,
+      trialEndCohort: nil,
+      titleCustomized: nil,
+      bodyCustomized: nil,
+      retryTitleCustomized: nil,
+      retryBodyCustomized: nil,
+      lastCallTitleCustomized: nil,
+      lastCallBodyCustomized: nil
+    )
+  }
+
   func trackError(
     _ domain: AppErrorDomain,
     error: Error,
@@ -267,6 +376,12 @@ enum AnalyticsEvent: String, CaseIterable {
   /// A Reverse Trial's Plus Access ended without conversion (#167 / ADR 0007).
   /// Recorded once, on the first app open at-or-after expiry.
   case trialExpired = "trial_expired"
+  case trialBadgeTapped = "trial_badge_tapped"
+  case trialStatusSheetViewed = "trial_status_sheet_viewed"
+  case trialStatusFeatureTapped = "trial_status_feature_tapped"
+  case smartReminderRetryScheduled = "smart_reminder_retry_scheduled"
+  case smartReminderRetryFired = "smart_reminder_retry_fired"
+  case smartReminderOutcome = "smart_reminder_outcome"
   /// A day-10/13 trial expiry warning notification was delivered or handled
   /// (#168 / ADR 0007). Carries `day: 10 | 13`; recorded at most once per day
   /// value (`TrialExpiryWarningDelivery`).
@@ -332,6 +447,32 @@ enum AnalyticsSource: String {
   /// The Trial-End Paywall shown after Reverse Trial expiry (#169 / ADR 0007),
   /// so its funnel splits from onboarding and Settings paywall traffic.
   case trialEnd = "trial_end"
+}
+
+enum AnalyticsPaywallSurface: String, CaseIterable {
+  case trialStatus = "trial_status"
+  case settingsSubscription = "settings_subscription"
+  case blockingGate = "blocking_gate"
+  case smartReminderGate = "smart_reminder_gate"
+}
+
+enum AnalyticsTrialStatusFeature: String, CaseIterable {
+  case appBlocking = "app_blocking"
+  case shakeToConfirm = "shake_to_confirm"
+  case smartReminders = "smart_reminders"
+  case customMessages = "custom_messages"
+}
+
+enum AnalyticsAuthorizationState: String, CaseIterable {
+  case notRequested = "not_requested"
+  case denied
+  case authorized
+}
+
+enum AnalyticsSmartReminderOutcome: String, CaseIterable {
+  case opened
+  case completed
+  case snoozed
 }
 
 enum AnalyticsStep: String {
@@ -428,6 +569,11 @@ struct AnalyticsPayload {
   /// The Trial-End Paywall cohort carried as `cohort` by `paywall_viewed`
   /// with `source: trial_end` (#169 / ADR 0007).
   let trialEndCohort: TrialEndPaywallCohort?
+  let paywallSurface: AnalyticsPaywallSurface?
+  let trialStatusFeature: AnalyticsTrialStatusFeature?
+  let authorizationState: AnalyticsAuthorizationState?
+  let retryCount: Int?
+  let smartReminderOutcome: AnalyticsSmartReminderOutcome?
   let titleCustomized: Bool?
   let bodyCustomized: Bool?
   let retryTitleCustomized: Bool?
@@ -450,6 +596,11 @@ struct AnalyticsPayload {
     shakeCount: Int? = nil,
     trialWarningDay: Int? = nil,
     trialEndCohort: TrialEndPaywallCohort? = nil,
+    paywallSurface: AnalyticsPaywallSurface? = nil,
+    trialStatusFeature: AnalyticsTrialStatusFeature? = nil,
+    authorizationState: AnalyticsAuthorizationState? = nil,
+    retryCount: Int? = nil,
+    smartReminderOutcome: AnalyticsSmartReminderOutcome? = nil,
     titleCustomized: Bool? = nil,
     bodyCustomized: Bool? = nil,
     retryTitleCustomized: Bool? = nil,
@@ -471,6 +622,11 @@ struct AnalyticsPayload {
     self.shakeCount = shakeCount
     self.trialWarningDay = trialWarningDay
     self.trialEndCohort = trialEndCohort
+    self.paywallSurface = paywallSurface
+    self.trialStatusFeature = trialStatusFeature
+    self.authorizationState = authorizationState
+    self.retryCount = retryCount
+    self.smartReminderOutcome = smartReminderOutcome
     self.titleCustomized = titleCustomized
     self.bodyCustomized = bodyCustomized
     self.retryTitleCustomized = retryTitleCustomized
@@ -506,6 +662,21 @@ struct AnalyticsPayload {
     }
     if let trialEndCohort {
       properties["cohort"] = .string(trialEndCohort.rawValue)
+    }
+    if let paywallSurface {
+      properties["surface"] = .string(paywallSurface.rawValue)
+    }
+    if let trialStatusFeature {
+      properties["feature"] = .string(trialStatusFeature.rawValue)
+    }
+    if let authorizationState {
+      properties["authorization_state"] = .string(authorizationState.rawValue)
+    }
+    if let retryCount {
+      properties["retry_count"] = .int(retryCount)
+    }
+    if let smartReminderOutcome {
+      properties["outcome"] = .string(smartReminderOutcome.rawValue)
     }
     if let titleCustomized {
       properties["title_customized"] = .bool(titleCustomized)
@@ -664,6 +835,88 @@ final class AnalyticsManager: AnalyticsTracking {
       lastCallBodyCustomized: lastCallBodyCustomized
     )
 
+    capture(event, payload: payload, source: source, step: step)
+  }
+
+  func track(
+    _ event: AnalyticsEvent,
+    source: AnalyticsSource?,
+    surface: AnalyticsPaywallSurface,
+    isPlus: Bool?
+  ) {
+    let payload = AnalyticsPayload(
+      source: source,
+      isPlus: isPlus,
+      paywallSurface: surface
+    )
+
+    capture(event, payload: payload, source: source)
+  }
+
+  func track(
+    _ event: AnalyticsEvent,
+    source: AnalyticsSource?,
+    trialStatusFeature: AnalyticsTrialStatusFeature,
+    isPlus: Bool?
+  ) {
+    let payload = AnalyticsPayload(
+      source: source,
+      isPlus: isPlus,
+      trialStatusFeature: trialStatusFeature
+    )
+
+    capture(event, payload: payload, source: source)
+  }
+
+  func track(
+    _ event: AnalyticsEvent,
+    source: AnalyticsSource?,
+    step: AnalyticsStep?,
+    authorizationState: AnalyticsAuthorizationState,
+    isPlus: Bool?
+  ) {
+    let payload = AnalyticsPayload(
+      source: source,
+      step: step,
+      isPlus: isPlus,
+      authorizationState: authorizationState
+    )
+
+    capture(event, payload: payload, source: source, step: step)
+  }
+
+  func track(
+    _ event: AnalyticsEvent,
+    retryCount: Int,
+    isPlus: Bool?
+  ) {
+    let payload = AnalyticsPayload(
+      isPlus: isPlus,
+      retryCount: retryCount
+    )
+
+    capture(event, payload: payload)
+  }
+
+  func track(
+    _ event: AnalyticsEvent,
+    smartReminderOutcome: AnalyticsSmartReminderOutcome,
+    isPlus: Bool?
+  ) {
+    let payload = AnalyticsPayload(
+      isPlus: isPlus,
+      smartReminderOutcome: smartReminderOutcome
+    )
+
+    capture(event, payload: payload)
+  }
+
+  private func capture(
+    _ event: AnalyticsEvent,
+    payload: AnalyticsPayload,
+    source: AnalyticsSource? = nil,
+    step: AnalyticsStep? = nil
+  ) {
     var properties = payload.properties
     if source == .onboarding, step != nil, event.carriesSplitOnboardingContext {
       properties["app_version"] = .string(
@@ -673,11 +926,8 @@ final class AnalyticsManager: AnalyticsTracking {
     }
 
     #if DEBUG
-      // Debug builds ship without a PostHog token, so captures are dropped and
-      // otherwise invisible. Mirror every track into OSLog so simulator QA can
-      // verify events (name + coarse properties; the payload is PII-free by
-      // construction). Stream with:
-      //   log stream --predicate 'subsystem == "com.idrisskone.pillie"' --level debug
+      // Debug builds ship without a PostHog token, so the PII-free event mirror
+      // is the simulator verification surface.
       Logger(subsystem: "com.idrisskone.pillie", category: "analytics")
         .debug(
           "Pillie analytics capture: \(event.rawValue, privacy: .public) \(properties.map { "\($0.key)=\($0.value.postHogValue)" }.sorted().joined(separator: " "), privacy: .public)"

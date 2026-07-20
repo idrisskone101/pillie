@@ -230,8 +230,14 @@ struct ProductAnalyticsTelemetry {
     track(.blockerSetupStarted, source: .onboarding, step: .appBlocking)
   }
 
-  func blockerSetupSkipped() {
-    track(.blockerSetupSkipped, source: .onboarding, step: .appBlocking)
+  func blockerSetupSkipped(authorizationState: AnalyticsAuthorizationState) {
+    analytics.track(
+      .blockerSetupSkipped,
+      source: .onboarding,
+      step: .appBlocking,
+      authorizationState: authorizationState,
+      isPlus: isPlus()
+    )
   }
 
   func blockerSetupCompleted() {
@@ -251,6 +257,44 @@ struct ProductAnalyticsTelemetry {
   /// decision and one-shot flag live in `TrialExpiredEvent`.
   func trialExpired() {
     track(.trialExpired)
+  }
+
+  func trialBadgeTapped() {
+    track(.trialBadgeTapped, source: .home)
+  }
+
+  func trialStatusSheetViewed() {
+    track(.trialStatusSheetViewed, source: .home)
+  }
+
+  func trialStatusFeatureTapped(_ feature: AnalyticsTrialStatusFeature) {
+    analytics.track(
+      .trialStatusFeatureTapped,
+      source: .home,
+      trialStatusFeature: feature,
+      isPlus: isPlus()
+    )
+  }
+
+  func smartReminderRetryScheduled(count: Int) {
+    guard count > 0 else { return }
+    analytics.track(
+      .smartReminderRetryScheduled,
+      retryCount: count,
+      isPlus: isPlus()
+    )
+  }
+
+  func smartReminderRetryFired() {
+    track(.smartReminderRetryFired)
+  }
+
+  func smartReminderOutcome(_ outcome: AnalyticsSmartReminderOutcome) {
+    analytics.track(
+      .smartReminderOutcome,
+      smartReminderOutcome: outcome,
+      isPlus: isPlus()
+    )
   }
 
   /// A day-10/13 trial expiry warning was delivered or handled (#168 /
@@ -320,6 +364,15 @@ struct ProductAnalyticsTelemetry {
       .paywallViewed,
       source: paywallSource(isFromOnboarding: isFromOnboarding),
       step: isFromOnboarding ? .paywall : nil
+    )
+  }
+
+  func paywallViewed(surface: AnalyticsPaywallSurface) {
+    analytics.track(
+      .paywallViewed,
+      source: .settings,
+      surface: surface,
+      isPlus: isPlus()
     )
   }
 

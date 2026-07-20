@@ -74,6 +74,7 @@ struct StatsRow: View {
         .fullScreenCover(isPresented: $showPaywall) {
             PremiumPaywallView(
                 isFromOnboarding: false,
+                paywallSurface: .blockingGate,
                 onBack: { showPaywall = false },
                 onContinue: { showPaywall = false },
                 onSkip: { showPaywall = false }

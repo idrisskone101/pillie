@@ -230,7 +230,10 @@ struct HomeView: View {
                     if let trial = trialPresentation {
                         TrialIndicatorBadge(
                             label: trial.indicatorLabel,
-                            onTap: { showTrialStatusSheet = true }
+                            onTap: {
+                                ProductAnalyticsTelemetry.live.trialBadgeTapped()
+                                showTrialStatusSheet = true
+                            }
                         )
                         .modifier(FadeInUp(appeared: appeared, delay: 0.05))
                         .transition(ctaStateTransition)
@@ -391,6 +394,7 @@ struct HomeView: View {
         .fullScreenCover(isPresented: $showBlockingPaywall) {
             PremiumPaywallView(
                 isFromOnboarding: false,
+                paywallSurface: .blockingGate,
                 onBack: { showBlockingPaywall = false },
                 onContinue: { showBlockingPaywall = false },
                 onSkip: { showBlockingPaywall = false }
@@ -406,8 +410,14 @@ struct HomeView: View {
                         showTrialStatusSheet = false
                         showTrialKeepPlusPaywall = true
                     },
+                    onFeatureTap: { feature in
+                        ProductAnalyticsTelemetry.live.trialStatusFeatureTapped(feature)
+                    },
                     onDismiss: { showTrialStatusSheet = false }
                 )
+                .onAppear {
+                    ProductAnalyticsTelemetry.live.trialStatusSheetViewed()
+                }
                 .presentationDetents([.height(TrialStatusSheet.presentationHeight)])
                 .presentationDragIndicator(.hidden)
                 .presentationBackground(PillieTheme.bg)
@@ -424,6 +434,7 @@ struct HomeView: View {
         .fullScreenCover(isPresented: $showTrialKeepPlusPaywall) {
             PremiumPaywallView(
                 isFromOnboarding: false,
+                paywallSurface: .trialStatus,
                 onBack: { showTrialKeepPlusPaywall = false },
                 onContinue: { showTrialKeepPlusPaywall = false },
                 onSkip: { showTrialKeepPlusPaywall = false }

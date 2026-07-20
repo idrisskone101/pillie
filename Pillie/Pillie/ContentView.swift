@@ -300,12 +300,16 @@ struct ContentView: View {
                   onboardingTelemetry.blockerSetupCompleted()
                   continueSetupStep(to: .protectionPlanReady)
                 } else {
-                  onboardingTelemetry.blockerSetupSkipped()
+                  onboardingTelemetry.blockerSetupSkipped(
+                    authorizationState: blockerAuthorizationAnalyticsState
+                  )
                   openSoftPaywallOrUpgrade(to: .complete)
                 }
 	            },
 	            onSkip: {
-                onboardingTelemetry.blockerSetupSkipped()
+                onboardingTelemetry.blockerSetupSkipped(
+                  authorizationState: blockerAuthorizationAnalyticsState
+                )
                 continueFreePath(to: .complete)
 	            }
 	          )
@@ -512,6 +516,14 @@ struct ContentView: View {
       // A non-empty saved selection — independent of the blocking-enabled pause toggle.
       blockerConfigSaved: blocking.hasAppsSelected
     )
+  }
+
+  private var blockerAuthorizationAnalyticsState: AnalyticsAuthorizationState {
+    switch AppBlockingManager.shared.authorizationStatus {
+    case .notDetermined: return .notRequested
+    case .denied: return .denied
+    case .approved: return .authorized
+    }
   }
 
   private func trackOnboardingStepViewed(_ step: Int) {

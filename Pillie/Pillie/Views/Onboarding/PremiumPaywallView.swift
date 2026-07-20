@@ -150,6 +150,7 @@ struct PremiumPaywallView: View {
     private let content = SoftPaywallContent.default
 
     var isFromOnboarding: Bool = true
+    var paywallSurface: AnalyticsPaywallSurface? = nil
     let onBack: () -> Void
     let onContinue: () -> Void
     let onSkip: () -> Void
@@ -227,7 +228,11 @@ struct PremiumPaywallView: View {
             .ignoresSafeArea(.all, edges: .bottom)
         }
         .onAppear {
-            telemetry.paywallViewed(isFromOnboarding: isFromOnboarding)
+            if let paywallSurface {
+                telemetry.paywallViewed(surface: paywallSurface)
+            } else {
+                telemetry.paywallViewed(isFromOnboarding: isFromOnboarding)
+            }
             animateIn = true
             guard PillieMotion.decorativeMotionEnabled(
                 accessibilityReduceMotion: accessibilityReduceMotion,

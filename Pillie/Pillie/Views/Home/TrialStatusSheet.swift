@@ -45,12 +45,17 @@ struct TrialStatusSheet: View {
 
     let content: TrialStatusSheetContent
     let onKeepPlus: () -> Void
+    let onFeatureTap: (AnalyticsTrialStatusFeature) -> Void
     let onDismiss: () -> Void
 
     /// The same perk symbols the Trial Granted Moment and update announcement
     /// use, paired positionally with the content's unlocked items.
     private static let perkSymbols = [
         "nosign", "iphone.radiowaves.left.and.right", "bell.fill", "text.bubble.fill",
+    ]
+
+    private static let analyticsFeatures: [AnalyticsTrialStatusFeature] = [
+        .appBlocking, .shakeToConfirm, .smartReminders, .customMessages,
     ]
 
     private let expirySymbols = ["nosign", "bell.fill", "checkmark.circle.fill"]
@@ -79,22 +84,29 @@ struct TrialStatusSheet: View {
 
                 LazyVGrid(columns: columns, spacing: 12) {
                     ForEach(Array(content.unlockedItems.enumerated()), id: \.element) { index, item in
-                        HStack(spacing: 10) {
-                            Image(systemName: Self.perkSymbols[
-                                min(index, Self.perkSymbols.count - 1)
+                        Button {
+                            onFeatureTap(Self.analyticsFeatures[
+                                min(index, Self.analyticsFeatures.count - 1)
                             ])
-                            .font(.system(size: 15, weight: .semibold))
-                            .foregroundStyle(PillieTheme.coral)
-                            Text(item)
-                                .font(.pillie(13, weight: .semibold))
-                                .foregroundStyle(PillieTheme.textPrimary)
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.85)
-                            Spacer(minLength: 0)
+                        } label: {
+                            HStack(spacing: 10) {
+                                Image(systemName: Self.perkSymbols[
+                                    min(index, Self.perkSymbols.count - 1)
+                                ])
+                                .font(.system(size: 15, weight: .semibold))
+                                .foregroundStyle(PillieTheme.coral)
+                                Text(item)
+                                    .font(.pillie(13, weight: .semibold))
+                                    .foregroundStyle(PillieTheme.textPrimary)
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.85)
+                                Spacer(minLength: 0)
+                            }
+                            .padding(.horizontal, 14)
+                            .padding(.vertical, 16)
+                            .background(PillieTheme.sage.opacity(0.35), in: RoundedRectangle(cornerRadius: 14))
                         }
-                        .padding(.horizontal, 14)
-                        .padding(.vertical, 16)
-                        .background(PillieTheme.sage.opacity(0.35), in: RoundedRectangle(cornerRadius: 14))
+                        .buttonStyle(.plain)
                     }
                 }
             }
@@ -156,6 +168,7 @@ struct TrialStatusSheet: View {
     TrialStatusSheet(
         content: TrialStatusPresentation(daysRemaining: 5).sheetContent,
         onKeepPlus: {},
+        onFeatureTap: { _ in },
         onDismiss: {}
     )
 }
