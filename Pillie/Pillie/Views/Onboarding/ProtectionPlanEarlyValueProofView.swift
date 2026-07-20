@@ -47,9 +47,6 @@ struct ProtectionPlanEarlyValueProofView: View {
     /// Per-shake tilt kick and the idle "waiting for a shake" wiggle on the comet.
     @State private var cometTilt: Double = 0
     @State private var cometWiggle = false
-    /// One-shot horizontal bounce when the user taps the CTA at rest (a "drag me"
-    /// hint) — tapping never skips the demo, it points them at the dot.
-    @State private var cometNudgeX: CGFloat = 0
     /// Light "ratchet" haptic per trail dash as the dot is dragged. A dedicated
     /// prepared generator keeps the rapid ticks crisp; the latch tick is heavier
     /// (`.meaningfulCommit`) so the end of the drag feels more significant.
@@ -102,6 +99,10 @@ struct ProtectionPlanEarlyValueProofView: View {
     /// unresolved, motion-allowed path.
     private var showsShakeStep: Bool { isLatched && !hasResolved && !prefersStaticProof }
 
+    private var primaryAction: EarlyValueProofDemoPrimaryAction? {
+        demoState.primaryAction
+    }
+
     /// At rest (idle, interactive), gently rock the dot to invite the drag.
     private var showsRestNudge: Bool {
         !isLatched && !hasResolved && !prefersStaticProof && beadProgress < 0.05
@@ -120,8 +121,9 @@ struct ProtectionPlanEarlyValueProofView: View {
         ProtectionPlanScaffold(
             progress: progress,
             onBack: onBack,
-            primaryTitle: isResolved ? content.continueCTA : (isLatched ? content.shakeToTakeCTA : content.dragCTA),
-            primaryIcon: isResolved ? "arrow.right" : (isLatched ? "iphone.radiowaves.left.and.right" : "hand.draw.fill"),
+            primaryTitle: primaryAction == .checkInFallback ? content.shakeToTakeCTA : content.continueCTA,
+            primaryIcon: primaryAction == .checkInFallback ? "iphone.radiowaves.left.and.right" : "arrow.right",
+            showsPrimary: primaryAction != nil,
             onPrimary: handlePrimary,
             secondaryTitle: !isResolved ? content.skipDemoCTA : nil,
             onSecondary: skipDemo
@@ -135,6 +137,9 @@ struct ProtectionPlanEarlyValueProofView: View {
                     captionStack
                 }
                 momentCard
+                if primaryAction == nil {
+                    dragInstruction
+                }
                 // The written 3-beat narrative is only for the static / VoiceOver
                 // path (no thumb interaction), so it stays below the card.
                 if prefersStaticProof {
@@ -227,9 +232,7 @@ struct ProtectionPlanEarlyValueProofView: View {
             shakeManager.fillToComplete()
             finishCheckIn(realShakeCount: realShakes)
         case .noChange:
-            // The primary remains the optional demo affordance. The visible
-            // secondary action is the tap-only escape (#206).
-            nudgeComet()
+            break
         case .latched, .unlatched, .resolved(.interactive), .resolved(.skip),
              .resolved(.accessibility):
             break
@@ -240,16 +243,6 @@ struct ProtectionPlanEarlyValueProofView: View {
         guard demoState.handle(.skip) == .advance(.skip) else { return }
         demoTelemetry.demoSkipped()
         onContinue()
-    }
-
-    /// A one-shot "drag me" bounce on the dot when the user taps the rest CTA.
-    private func nudgeComet() {
-        interactionFeedback.easeProtectionMoment(accessibilityReduceMotion: reduceMotion)
-        guard animationsEnabled else { return }
-        withAnimation(.spring(response: 0.3, dampingFraction: 0.4)) { cometNudgeX = 16 }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.22) {
-            withAnimation(.spring(response: 0.4, dampingFraction: 0.55)) { cometNudgeX = 0 }
-        }
     }
 
     private func performCheckIn(action: EarlyValueProofDemoAction, realShakeCount: Int) {
@@ -387,7 +380,16 @@ struct ProtectionPlanEarlyValueProofView: View {
             // The written trail carries the narrative for VoiceOver in the static
             // path, so the decorative lane is one ignored element there.
             .accessibilityElement(children: .ignore)
-            .accessibilityLabel(content.accessibilitySummary)
+            .accessibilityLabel(
+                isResolved ? content.accessibilitySummary : (isLatched ? content.checkpoint.title : content.dragCTA)
+            )
+            .accessibilityHint(
+                isResolved
+                    ? ""
+                    : (isLatched ? content.shakeCue : "Drag right along the path to lock your apps.")
+            )
+            .accessibilityAddTraits(isResolved ? [] : .allowsDirectInteraction)
+            .accessibilityIdentifier("earlyValueProofDragLane")
             .accessibilityHidden(prefersStaticProof)
     }
 
@@ -423,6 +425,13 @@ struct ProtectionPlanEarlyValueProofView: View {
                 trail
                     .frame(width: trailWidth, height: h)
                     .position(x: (p0.x + p1.x) / 2, y: baseline)
+                if showsHint {
+                    Image(systemName: "arrow.right")
+                        .font(.system(size: 13, weight: .bold))
+                        .foregroundStyle(PillieTheme.coral.opacity(0.72))
+                        .position(x: (p0.x + p1.x) / 2, y: baseline - 20)
+                        .accessibilityHidden(true)
+                }
                 appFeedTile.position(tileCenter)
                 if showsGuard { guardPane.position(tileCenter) }
                 focusComet.position(x: puckX, y: puck.y)
@@ -552,8 +561,7 @@ struct ProtectionPlanEarlyValueProofView: View {
             }
         }
         .scaleEffect(isLatched ? 1.05 : (0.9 + beadProgress * 0.22))
-        // Tap-the-CTA bounce + a gentle idle rock that says "drag me" at rest.
-        .offset(x: cometNudgeX)
+        // A gentle idle rock says "drag me" at rest.
         .phaseAnimator(restNudgePhases) { view, dx in
             view.offset(x: dx)
         } animation: { _ in
@@ -677,6 +685,19 @@ struct ProtectionPlanEarlyValueProofView: View {
     }
 
     // MARK: - Narration
+
+    /// Explicit gesture teaching without button chrome. The actual drag target
+    /// immediately above carries the accessibility label, hint, and interaction.
+    private var dragInstruction: some View {
+        HStack(spacing: 8) {
+            Image(systemName: "hand.draw.fill")
+            Text(content.dragCTA)
+                .font(.pillieBodyBold())
+            Image(systemName: "arrow.right")
+        }
+        .foregroundStyle(PillieTheme.coral)
+        .accessibilityHidden(true)
+    }
 
     /// Live, single-line narration that tracks the moment: a drag invitation at
     /// rest, then drift → checkpoint → resolution copy as the user acts.

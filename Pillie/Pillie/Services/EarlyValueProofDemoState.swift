@@ -29,6 +29,11 @@ enum EarlyValueProofDemoOutcome: Equatable {
     case advance(EarlyValueProofDemoCompletion)
 }
 
+enum EarlyValueProofDemoPrimaryAction: Equatable {
+    case checkInFallback
+    case continueOnboarding
+}
+
 struct EarlyValueProofDemoState: Equatable {
     private var reduceMotion: Bool
     private var voiceOverEnabled: Bool
@@ -39,6 +44,18 @@ struct EarlyValueProofDemoState: Equatable {
     init(reduceMotion: Bool = false, voiceOverEnabled: Bool = false) {
         self.reduceMotion = reduceMotion
         self.voiceOverEnabled = voiceOverEnabled
+    }
+
+    /// The idle demo is intentionally drag-only. Exposing no primary action keeps
+    /// the view from rendering button chrome for instructional copy.
+    var primaryAction: EarlyValueProofDemoPrimaryAction? {
+        if completion != nil || reduceMotion || voiceOverEnabled {
+            return .continueOnboarding
+        }
+        if isLatched {
+            return .checkInFallback
+        }
+        return nil
     }
 
     mutating func updateAccessibility(reduceMotion: Bool, voiceOverEnabled: Bool) {

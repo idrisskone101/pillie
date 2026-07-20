@@ -10,6 +10,15 @@ import XCTest
 @testable import Pillie
 
 final class EarlyValueProofInteractionTests: XCTestCase {
+    func testIdleDemoOffersDragWithoutAPrimaryTapAction() {
+        var demo = EarlyValueProofDemoState()
+
+        XCTAssertNil(demo.primaryAction)
+        XCTAssertEqual(demo.handle(.primary), .noChange)
+        XCTAssertFalse(demo.isLatched)
+        XCTAssertFalse(demo.isResolved)
+    }
+
     func testSkipAdvancesFromTheIdleDemo() {
         var demo = EarlyValueProofDemoState()
 
