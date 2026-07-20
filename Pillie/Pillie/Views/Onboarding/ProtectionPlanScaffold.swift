@@ -83,6 +83,9 @@ struct ProtectionPlanScaffold<Content: View>: View {
     /// screen waits on async work (e.g. the iOS notification permission prompt),
     /// so users get progress feedback instead of a dead button to rage-click (#196).
     var isPrimaryLoading: Bool = false
+    /// Some interactive screens teach a gesture without presenting the teaching
+    /// copy as a tappable CTA. Those screens can temporarily omit the primary.
+    var showsPrimary: Bool = true
     let onPrimary: () -> Void
 
     var secondaryTitle: String? = nil
@@ -161,11 +164,11 @@ struct ProtectionPlanScaffold<Content: View>: View {
         // `primaryAboveSecondary` lead with the primary instead.
         VStack(spacing: 12) {
             if primaryAboveSecondary {
-                primaryButton
+                if showsPrimary { primaryButton }
                 secondaryButton
             } else {
                 secondaryButton
-                primaryButton
+                if showsPrimary { primaryButton }
             }
         }
     }
