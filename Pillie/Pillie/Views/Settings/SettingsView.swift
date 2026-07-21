@@ -1005,7 +1005,7 @@ private struct LastCallReminderEditor: View {
 
 // MARK: - Auto Reminder Interval Editor
 
-private struct AutoReminderIntervalEditor: View {
+struct AutoReminderIntervalEditor: View {
     @Bindable var store: PillStore
     @Environment(\.dismiss) private var dismiss
     @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion

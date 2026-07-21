@@ -38,20 +38,21 @@ struct TrialStatusPresentation: Equatable {
 
     /// Copy for the trial status sheet behind the indicator.
     var sheetContent: TrialStatusSheetContent {
+        sheetContent(for: .unconfigured)
+    }
+
+    func sheetContent(for activationState: TrialActivationState) -> TrialStatusSheetContent {
         TrialStatusSheetContent(
             title: endsTonight
                 ? "Your Plus trial ends tonight"
                 : "\(displayedDaysRemaining) days left in your Plus trial",
-            // Matches the Trial Granted Moment's perk list.
-            unlockedItems: [
-                "App blocking", "Shake to confirm", "Smart Reminders", "Custom messages",
-            ],
             expiryItems: [
                 "App blocking turns off",
                 "Reminders stay free, forever",
                 "Your blocker setup is saved",
             ],
-            ctaTitle: "Keep Pillie Plus"
+            ctaTitle: "Keep Pillie Plus",
+            activationItems: TrialActivationItem.make(for: activationState)
         )
     }
 
@@ -79,7 +80,107 @@ struct TrialStatusPresentation: Equatable {
 /// flow — the only in-trial purchase surface besides the Settings row.
 struct TrialStatusSheetContent: Equatable {
     let title: String
-    let unlockedItems: [String]
     let expiryItems: [String]
     let ctaTitle: String
+    let activationItems: [TrialActivationItem]
+}
+
+struct TrialActivationState: Equatable {
+    let appBlockingActive: Bool
+    let customMessagesCustomized: Bool
+    let smartRemindersCustomized: Bool
+
+    static let unconfigured = TrialActivationState(
+        appBlockingActive: false,
+        customMessagesCustomized: false,
+        smartRemindersCustomized: false
+    )
+}
+
+enum TrialActivationAction: Equatable {
+    case appBlocking
+    case customMessages
+    case smartReminders
+}
+
+struct TrialActivationItem: Equatable {
+    let feature: AnalyticsTrialStatusFeature
+    let title: String
+    let status: AnalyticsTrialActivationStatus
+    let action: TrialActivationAction?
+    let isRecommended: Bool
+
+    var statusTitle: String {
+        switch status {
+        case .setUp: "Set up"
+        case .active: "Active"
+        case .activeAutomatically: "Active automatically"
+        case .personalize: "Personalize"
+        case .customized: "Customized"
+        case .on: "On"
+        }
+    }
+
+    var actionTitle: String? {
+        switch action {
+        case .appBlocking: status == .active ? "Manage" : "Set up"
+        case .customMessages: status == .customized ? "Edit" : "Personalize"
+        case .smartReminders: "Customize"
+        case nil: nil
+        }
+    }
+
+    var symbolName: String {
+        switch feature {
+        case .appBlocking: "nosign"
+        case .shakeToConfirm: "iphone.radiowaves.left.and.right"
+        case .smartReminders: "bell.fill"
+        case .customMessages: "text.bubble.fill"
+        }
+    }
+
+    static func make(for state: TrialActivationState) -> [TrialActivationItem] {
+        let recommendation: TrialActivationAction? = if !state.appBlockingActive {
+            .appBlocking
+        } else if !state.customMessagesCustomized {
+            .customMessages
+        } else if !state.smartRemindersCustomized {
+            .smartReminders
+        } else {
+            // All setup is complete. Smart Reminders remains the useful,
+            // adjustable control, so the hub still has exactly one next action.
+            .smartReminders
+        }
+
+        return [
+            TrialActivationItem(
+                feature: .appBlocking,
+                title: "App blocking",
+                status: state.appBlockingActive ? .active : .setUp,
+                action: .appBlocking,
+                isRecommended: recommendation == .appBlocking
+            ),
+            TrialActivationItem(
+                feature: .smartReminders,
+                title: "Smart Reminders",
+                status: state.smartRemindersCustomized ? .customized : .activeAutomatically,
+                action: .smartReminders,
+                isRecommended: recommendation == .smartReminders
+            ),
+            TrialActivationItem(
+                feature: .customMessages,
+                title: "Custom messages",
+                status: state.customMessagesCustomized ? .customized : .personalize,
+                action: .customMessages,
+                isRecommended: recommendation == .customMessages
+            ),
+            TrialActivationItem(
+                feature: .shakeToConfirm,
+                title: "Shake to confirm",
+                status: .on,
+                action: nil,
+                isRecommended: false
+            ),
+        ]
+    }
 }

@@ -217,6 +217,8 @@ protocol AnalyticsTracking {
     _ event: AnalyticsEvent,
     source: AnalyticsSource?,
     trialStatusFeature: AnalyticsTrialStatusFeature,
+    trialActivationStatus: AnalyticsTrialActivationStatus,
+    isRecommended: Bool,
     isPlus: Bool?
   )
 
@@ -282,6 +284,8 @@ extension AnalyticsTracking {
     _ event: AnalyticsEvent,
     source: AnalyticsSource?,
     trialStatusFeature: AnalyticsTrialStatusFeature,
+    trialActivationStatus: AnalyticsTrialActivationStatus,
+    isRecommended: Bool,
     isPlus: Bool?
   ) {
     trackLegacy(event, source: source, isPlus: isPlus)
@@ -463,6 +467,15 @@ enum AnalyticsTrialStatusFeature: String, CaseIterable {
   case customMessages = "custom_messages"
 }
 
+enum AnalyticsTrialActivationStatus: String, CaseIterable {
+  case setUp = "set_up"
+  case active
+  case activeAutomatically = "active_automatically"
+  case personalize
+  case customized
+  case on
+}
+
 enum AnalyticsAuthorizationState: String, CaseIterable {
   case notRequested = "not_requested"
   case denied
@@ -571,6 +584,8 @@ struct AnalyticsPayload {
   let trialEndCohort: TrialEndPaywallCohort?
   let paywallSurface: AnalyticsPaywallSurface?
   let trialStatusFeature: AnalyticsTrialStatusFeature?
+  let trialActivationStatus: AnalyticsTrialActivationStatus?
+  let isRecommended: Bool?
   let authorizationState: AnalyticsAuthorizationState?
   let retryCount: Int?
   let smartReminderOutcome: AnalyticsSmartReminderOutcome?
@@ -598,6 +613,8 @@ struct AnalyticsPayload {
     trialEndCohort: TrialEndPaywallCohort? = nil,
     paywallSurface: AnalyticsPaywallSurface? = nil,
     trialStatusFeature: AnalyticsTrialStatusFeature? = nil,
+    trialActivationStatus: AnalyticsTrialActivationStatus? = nil,
+    isRecommended: Bool? = nil,
     authorizationState: AnalyticsAuthorizationState? = nil,
     retryCount: Int? = nil,
     smartReminderOutcome: AnalyticsSmartReminderOutcome? = nil,
@@ -624,6 +641,8 @@ struct AnalyticsPayload {
     self.trialEndCohort = trialEndCohort
     self.paywallSurface = paywallSurface
     self.trialStatusFeature = trialStatusFeature
+    self.trialActivationStatus = trialActivationStatus
+    self.isRecommended = isRecommended
     self.authorizationState = authorizationState
     self.retryCount = retryCount
     self.smartReminderOutcome = smartReminderOutcome
@@ -668,6 +687,12 @@ struct AnalyticsPayload {
     }
     if let trialStatusFeature {
       properties["feature"] = .string(trialStatusFeature.rawValue)
+    }
+    if let trialActivationStatus {
+      properties["status"] = .string(trialActivationStatus.rawValue)
+    }
+    if let isRecommended {
+      properties["is_recommended"] = .bool(isRecommended)
     }
     if let authorizationState {
       properties["authorization_state"] = .string(authorizationState.rawValue)
@@ -857,12 +882,16 @@ final class AnalyticsManager: AnalyticsTracking {
     _ event: AnalyticsEvent,
     source: AnalyticsSource?,
     trialStatusFeature: AnalyticsTrialStatusFeature,
+    trialActivationStatus: AnalyticsTrialActivationStatus,
+    isRecommended: Bool,
     isPlus: Bool?
   ) {
     let payload = AnalyticsPayload(
       source: source,
       isPlus: isPlus,
-      trialStatusFeature: trialStatusFeature
+      trialStatusFeature: trialStatusFeature,
+      trialActivationStatus: trialActivationStatus,
+      isRecommended: isRecommended
     )
 
     capture(event, payload: payload, source: source)

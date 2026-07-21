@@ -41,32 +41,15 @@ struct TrialIndicatorBadge: View {
 /// happens at expiry, and the quiet buy-early path into the existing purchase
 /// flow. Presentation-only — copy comes from `TrialStatusSheetContent`.
 struct TrialStatusSheet: View {
-    static let presentationHeight: CGFloat = 560
+    static let presentationHeight: CGFloat = 680
 
     let content: TrialStatusSheetContent
     let onKeepPlus: () -> Void
-    let onFeatureTap: (AnalyticsTrialStatusFeature) -> Void
+    let onFeatureTap: (TrialActivationItem) -> Void
     let onDismiss: () -> Void
 
-    /// The same perk symbols the Trial Granted Moment and update announcement
-    /// use, paired positionally with the content's unlocked items.
-    private static let perkSymbols = [
-        "nosign", "iphone.radiowaves.left.and.right", "bell.fill", "text.bubble.fill",
-    ]
-
-    private static let analyticsFeatures: [AnalyticsTrialStatusFeature] = [
-        .appBlocking, .shakeToConfirm, .smartReminders, .customMessages,
-    ]
-
-    private let expirySymbols = ["nosign", "bell.fill", "checkmark.circle.fill"]
-
-    private let columns = [
-        GridItem(.flexible(), spacing: 12),
-        GridItem(.flexible(), spacing: 12),
-    ]
-
     var body: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: 16) {
             Capsule()
                 .fill(PillieTheme.sage)
                 .frame(width: 36, height: 5)
@@ -79,88 +62,166 @@ struct TrialStatusSheet: View {
                 .fixedSize(horizontal: false, vertical: true)
                 .padding(.horizontal, 28)
 
-            VStack(alignment: .leading, spacing: 10) {
-                sectionLabel("Unlocked right now")
-
-                LazyVGrid(columns: columns, spacing: 12) {
-                    ForEach(Array(content.unlockedItems.enumerated()), id: \.element) { index, item in
-                        Button {
-                            onFeatureTap(Self.analyticsFeatures[
-                                min(index, Self.analyticsFeatures.count - 1)
-                            ])
-                        } label: {
-                            HStack(spacing: 10) {
-                                Image(systemName: Self.perkSymbols[
-                                    min(index, Self.perkSymbols.count - 1)
-                                ])
-                                .font(.system(size: 15, weight: .semibold))
-                                .foregroundStyle(PillieTheme.coral)
-                                Text(item)
-                                    .font(.pillie(13, weight: .semibold))
-                                    .foregroundStyle(PillieTheme.textPrimary)
-                                    .lineLimit(1)
-                                    .minimumScaleFactor(0.85)
-                                Spacer(minLength: 0)
-                            }
-                            .padding(.horizontal, 14)
-                            .padding(.vertical, 16)
-                            .background(PillieTheme.sage.opacity(0.35), in: RoundedRectangle(cornerRadius: 14))
-                        }
-                        .buttonStyle(.plain)
-                    }
-                }
-            }
-            .padding(.horizontal, 28)
-
-            VStack(alignment: .leading, spacing: 10) {
-                sectionLabel("When the trial ends")
-
-                VStack(alignment: .leading, spacing: 8) {
-                    ForEach(Array(content.expiryItems.enumerated()), id: \.element) { index, item in
-                        HStack(spacing: 10) {
-                            Image(systemName: expirySymbols[
-                                min(index, expirySymbols.count - 1)
-                            ])
-                            .font(.system(size: 13, weight: .semibold))
-                            .foregroundStyle(PillieTheme.textMuted)
-                            .frame(width: 18)
-                            Text(item)
-                                .font(.pillie(14, weight: .medium))
-                                .foregroundStyle(PillieTheme.textPrimary)
-                        }
-                    }
-                }
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal, 28)
+            TrialActivationList(items: content.activationItems, onTap: onFeatureTap)
+            TrialExpirySummary(items: content.expiryItems)
 
             Spacer(minLength: 0)
 
-            VStack(spacing: 12) {
-                Button(action: onKeepPlus) {
-                    Text(content.ctaTitle)
-                }
-                .buttonStyle(.pillieDark)
-                .accessibilityIdentifier("trialKeepPlus")
-
-                Button(action: onDismiss) {
-                    Text("Done")
-                        .font(.pillie(14, weight: .medium))
-                        .foregroundStyle(PillieTheme.textMuted)
-                }
-            }
-            .padding(.horizontal, 28)
+            TrialStatusFooter(
+                ctaTitle: content.ctaTitle,
+                onKeepPlus: onKeepPlus,
+                onDismiss: onDismiss
+            )
         }
         .padding(.bottom, 10)
         .frame(maxWidth: .infinity, alignment: .top)
         .background(PillieTheme.bg)
     }
 
-    private func sectionLabel(_ text: String) -> some View {
-        Text(text.uppercased())
-            .font(.pillieCaptionMedium())
-            .foregroundStyle(PillieTheme.textMuted)
-            .kerning(1)
+}
+
+private struct TrialActivationList: View {
+    let items: [TrialActivationItem]
+    let onTap: (TrialActivationItem) -> Void
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("TRY YOUR PLUS FEATURES")
+                .font(.pillieCaptionMedium())
+                .foregroundStyle(PillieTheme.textMuted)
+                .kerning(1)
+
+            ForEach(items, id: \.feature.rawValue) { item in
+                TrialActivationFeatureRow(item: item) {
+                    onTap(item)
+                }
+            }
+        }
+        .padding(.horizontal, 28)
+    }
+}
+
+private struct TrialActivationFeatureRow: View {
+    let item: TrialActivationItem
+    let onTap: () -> Void
+
+    var body: some View {
+        Button(action: onTap) {
+            HStack(spacing: 12) {
+                Image(systemName: item.symbolName)
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundStyle(PillieTheme.coral)
+                    .frame(width: 22)
+
+                VStack(alignment: .leading, spacing: 3) {
+                    HStack(spacing: 7) {
+                        Text(item.title)
+                            .font(.pillie(14, weight: .semibold))
+                            .foregroundStyle(PillieTheme.textPrimary)
+
+                        if item.isRecommended {
+                            Text("RECOMMENDED")
+                                .font(.pillie(9, weight: .bold))
+                                .foregroundStyle(PillieTheme.coral)
+                        }
+                    }
+
+                    Text(item.statusTitle)
+                        .font(.pillie(12, weight: .medium))
+                        .foregroundStyle(PillieTheme.textMuted)
+                }
+
+                Spacer(minLength: 8)
+
+                if let actionTitle = item.actionTitle {
+                    Text(actionTitle)
+                        .font(.pillie(12, weight: .bold))
+                        .foregroundStyle(PillieTheme.coral)
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 11, weight: .semibold))
+                        .foregroundStyle(PillieTheme.coral.opacity(0.7))
+                } else {
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundStyle(PillieTheme.verifiedGreen)
+                }
+            }
+            .padding(.horizontal, 14)
+            .padding(.vertical, 10)
+            .background(
+                item.isRecommended ? PillieTheme.coralLight : PillieTheme.sage.opacity(0.25),
+                in: RoundedRectangle(cornerRadius: 14)
+            )
+            .overlay {
+                RoundedRectangle(cornerRadius: 14)
+                    .stroke(
+                        item.isRecommended ? PillieTheme.coral.opacity(0.55) : PillieTheme.sageHalf,
+                        lineWidth: item.isRecommended ? 1.5 : 1
+                    )
+            }
+        }
+        .buttonStyle(.plain)
+        .disabled(item.action == nil)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(accessibilityLabel)
+        .accessibilityHint(item.action == nil ? "" : "Opens this feature's settings")
+    }
+
+    private var accessibilityLabel: String {
+        let recommendation = item.isRecommended ? ", recommended next action" : ""
+        let action = item.actionTitle.map { ", action: \($0)" } ?? ""
+        return "\(item.title), \(item.statusTitle)\(recommendation)\(action)"
+    }
+}
+
+private struct TrialExpirySummary: View {
+    let items: [String]
+    private let symbols = ["nosign", "bell.fill", "checkmark.circle.fill"]
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 7) {
+            Text("WHEN THE TRIAL ENDS")
+                .font(.pillieCaptionMedium())
+                .foregroundStyle(PillieTheme.textMuted)
+                .kerning(1)
+
+            ForEach(items.indices, id: \.self) { index in
+                HStack(spacing: 9) {
+                    Image(systemName: symbols[min(index, symbols.count - 1)])
+                        .font(.system(size: 12, weight: .semibold))
+                        .foregroundStyle(PillieTheme.textMuted)
+                        .frame(width: 18)
+                    Text(items[index])
+                        .font(.pillie(13, weight: .medium))
+                        .foregroundStyle(PillieTheme.textPrimary)
+                }
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal, 28)
+    }
+}
+
+private struct TrialStatusFooter: View {
+    let ctaTitle: String
+    let onKeepPlus: () -> Void
+    let onDismiss: () -> Void
+
+    var body: some View {
+        VStack(spacing: 10) {
+            Button(action: onKeepPlus) {
+                Text(ctaTitle)
+            }
+            .buttonStyle(.pillieDark)
+            .accessibilityIdentifier("trialKeepPlus")
+
+            Button(action: onDismiss) {
+                Text("Done")
+                    .font(.pillie(14, weight: .medium))
+                    .foregroundStyle(PillieTheme.textMuted)
+            }
+        }
+        .padding(.horizontal, 28)
     }
 }
 
