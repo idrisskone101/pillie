@@ -27,6 +27,24 @@ final class PillStoreEdgeCaseTests: XCTestCase {
         XCTAssertEqual(store.currentStreak, 3)
     }
 
+    func testScheduledBreakWeekPreservesStreak() throws {
+        let today = InMemoryStoreFactory.fixedDate("2026-05-28")
+        let startDate = InMemoryStoreFactory.fixedDate("2026-05-01")
+        let fixture = try InMemoryStoreFactory.makeStore(
+            now: today,
+            regimen: .twentyOneSeven,
+            startDate: startDate
+        )
+        let store = fixture.store
+
+        store.markActionAsTaken(on: InMemoryStoreFactory.fixedDate("2026-05-19"))
+        store.markActionAsTaken(on: InMemoryStoreFactory.fixedDate("2026-05-20"))
+        store.markActionAsTaken(on: InMemoryStoreFactory.fixedDate("2026-05-21"))
+
+        XCTAssertEqual(store.scheduleSnapshot(for: today)?.status, .breakDay)
+        XCTAssertEqual(store.currentStreak, 3)
+    }
+
     func testCycleDayAdjustmentBackfillDoesNotInflateStreak() throws {
         let today = InMemoryStoreFactory.fixedDate("2026-05-26")
         let fixture = try InMemoryStoreFactory.makeStore(now: today)

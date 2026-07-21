@@ -126,15 +126,6 @@ struct SettingsView: View {
                             settingsRow("Last Call Reminder", value: store.lastCallReminderDisplay)
                         }
                         .buttonStyle(.plain)
-                        divider
-                        adaptiveReminderRow {
-                            Toggle("", isOn: Binding(
-                                get: { store.adaptiveReminderEnabled },
-                                set: { store.adaptiveReminderEnabled = $0 }
-                            ))
-                                .labelsHidden()
-                                .tint(PillieTheme.coral)
-                        }
                     } else {
                         Button {
                             openSettingSheet { showSmartRemindersUpsell = true }
@@ -157,24 +148,6 @@ struct SettingsView: View {
                             ProductAnalyticsTelemetry.live.settingsSmartRemindersUpsellViewed()
                         } label: {
                             settingsRow("Last Call Reminder", value: "Pillie+", valueColor: PillieTheme.coral, showLock: true)
-                        }
-                        .buttonStyle(.plain)
-                        divider
-                        Button {
-                            openSettingSheet { showSmartRemindersUpsell = true }
-                            ProductAnalyticsTelemetry.live.settingsSmartRemindersUpsellViewed()
-                        } label: {
-                            adaptiveReminderRow {
-                                Image(systemName: "lock.fill")
-                                    .font(.system(size: 11, weight: .semibold))
-                                    .foregroundStyle(PillieTheme.coral)
-                                Text("Pillie+")
-                                    .font(.pillie(15, weight: .regular))
-                                    .foregroundStyle(PillieTheme.coral)
-                                Image(systemName: "chevron.right")
-                                    .font(.system(size: 13, weight: .semibold))
-                                    .foregroundStyle(PillieTheme.textMuted.opacity(0.4))
-                            }
                         }
                         .buttonStyle(.plain)
                         .sheet(isPresented: $showSmartRemindersUpsell) {
@@ -500,6 +473,8 @@ struct SettingsView: View {
         .contentShape(Rectangle())
     }
 
+    /// Retained for a future restore, but intentionally not rendered while the feature's
+    /// medical-claims positioning is under review.
     /// Adaptive Reminder Time row (#126). A Smart Notifications / Pillie+ perk that lets
     /// Pillie propose shifting the daily reminder toward when the user actually logs. The
     /// trailing accessory is a toggle for Plus users and a lock for free users; both share
