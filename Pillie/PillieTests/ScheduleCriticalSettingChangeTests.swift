@@ -86,4 +86,30 @@ final class ScheduleCriticalSettingChangeTests: XCTestCase {
         XCTAssertEqual(pillFixture.store.refillReminderThresholdDays, 7)
         XCTAssertEqual(patchFixture.store.patchRestockReminderThresholdPatches, 2)
     }
+
+    func testSettingsCustomReminderSavePersistsEveryPresetMessage() throws {
+        let fixture = try InMemoryStoreFactory.makeStore(
+            now: InMemoryStoreFactory.fixedDate("2026-06-03")
+        )
+        let messages = CustomReminderPreset.direct.messages
+
+        ScheduleCriticalSettingChange.saveSettingsCustomReminders(
+            store: fixture.store,
+            title: messages.dueTitle,
+            body: messages.dueBody,
+            retryTitle: messages.retryTitle,
+            retryBody: messages.retryBody,
+            lastCallTitle: messages.lastCallTitle,
+            lastCallBody: messages.lastCallBody,
+            preset: .direct,
+            editedAfterPreset: false
+        )
+
+        XCTAssertEqual(fixture.store.customDueReminderTitle, messages.dueTitle)
+        XCTAssertEqual(fixture.store.customDueReminderBody, messages.dueBody)
+        XCTAssertEqual(fixture.store.customRetryReminderTitle, messages.retryTitle)
+        XCTAssertEqual(fixture.store.customRetryReminderBody, messages.retryBody)
+        XCTAssertEqual(fixture.store.customLastCallReminderTitle, messages.lastCallTitle)
+        XCTAssertEqual(fixture.store.customLastCallReminderBody, messages.lastCallBody)
+    }
 }

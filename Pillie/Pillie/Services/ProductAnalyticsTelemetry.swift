@@ -560,26 +560,28 @@ struct ProductAnalyticsTelemetry {
     settingsChangeSaved(.blockedApps, hasBlockingSelection: hasSelection)
   }
 
-  /// The Custom Reminder Messages editor saved. Carries only coarse booleans — whether
-  /// each of the six fields ended up customized — never the strings or their lengths.
+  /// The Custom Reminder Messages editor saved. Carries only coarse booleans, the
+  /// low-cardinality preset id, and whether that preset was edited — never message text.
   func customRemindersSaved(
     titleCustomized: Bool,
     bodyCustomized: Bool,
     retryTitleCustomized: Bool,
     retryBodyCustomized: Bool,
     lastCallTitleCustomized: Bool,
-    lastCallBodyCustomized: Bool
+    lastCallBodyCustomized: Bool,
+    preset: CustomReminderPreset?,
+    editedAfterPreset: Bool
   ) {
-    track(
-      .settingsChangeSaved,
-      source: .settings,
-      setting: .customReminders,
+    analytics.trackCustomReminderSave(
+      isPlus: isPlus(),
       titleCustomized: titleCustomized,
       bodyCustomized: bodyCustomized,
       retryTitleCustomized: retryTitleCustomized,
       retryBodyCustomized: retryBodyCustomized,
       lastCallTitleCustomized: lastCallTitleCustomized,
-      lastCallBodyCustomized: lastCallBodyCustomized
+      lastCallBodyCustomized: lastCallBodyCustomized,
+      preset: preset,
+      editedAfterPreset: editedAfterPreset
     )
   }
 

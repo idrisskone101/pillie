@@ -125,6 +125,20 @@ final class SettingsTelemetryTests: XCTestCase {
         XCTAssertNil(properties["last_call_body_length"])
     }
 
+    func testCustomReminderPresetTelemetryDistinguishesPresetFromManualEditingWithoutCopy() {
+        let properties = AnalyticsPayload(
+            source: .settings,
+            setting: .customReminders,
+            reminderPreset: .gentle,
+            reminderPresetEdited: true
+        ).properties
+
+        XCTAssertEqual(properties["reminder_preset"], .string("gentle"))
+        XCTAssertEqual(properties["reminder_preset_edited"], .bool(true))
+        XCTAssertNil(properties["title"])
+        XCTAssertNil(properties["body"])
+    }
+
     func testSettingsOpenSaveAndCancelEventsUseApprovedNames() {
         XCTAssertEqual(
             [

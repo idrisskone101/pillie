@@ -14,6 +14,140 @@ final class CustomReminderCopyTests: XCTestCase {
     private let defaultTitle = "Pillie check-in"
     private let defaultBody = "A quick moment to take your pill and log it."
 
+    func testGentlePresetPopulatesEveryReminderMessage() {
+        XCTAssertEqual(
+            CustomReminderPreset.gentle.messages,
+            CustomReminderMessages(
+                dueTitle: "A gentle reminder",
+                dueBody: "It’s time to check in with Pillie.",
+                retryTitle: "Still time to check in",
+                retryBody: "Open Pillie when you’re ready.",
+                lastCallTitle: "One last reminder",
+                lastCallBody: "Open Pillie to update today’s status."
+            )
+        )
+    }
+
+    func testDirectPresetPopulatesEveryReminderMessage() {
+        XCTAssertEqual(
+            CustomReminderPreset.direct.messages,
+            CustomReminderMessages(
+                dueTitle: "Pillie check-in due",
+                dueBody: "Open Pillie to mark today’s pill.",
+                retryTitle: "Pillie check-in waiting",
+                retryBody: "Open Pillie to update your status.",
+                lastCallTitle: "Final Pillie reminder",
+                lastCallBody: "Open Pillie to complete or update today’s check-in."
+            )
+        )
+    }
+
+    func testEncouragingPresetPopulatesEveryReminderMessage() {
+        XCTAssertEqual(
+            CustomReminderPreset.encouraging.messages,
+            CustomReminderMessages(
+                dueTitle: "You’re building consistency",
+                dueBody: "Open Pillie for today’s check-in.",
+                retryTitle: "Keep your routine moving",
+                retryBody: "Open Pillie to update today’s status.",
+                lastCallTitle: "Finish today’s check-in",
+                lastCallBody: "Open Pillie for one final check-in."
+            )
+        )
+    }
+
+    func testPrivateDiscreetPresetPopulatesEveryReminderMessage() {
+        XCTAssertEqual(
+            CustomReminderPreset.privateDiscreet.messages,
+            CustomReminderMessages(
+                dueTitle: "Time for your check-in",
+                dueBody: "Open Pillie when convenient.",
+                retryTitle: "Check-in still pending",
+                retryBody: "Open Pillie when convenient.",
+                lastCallTitle: "Final check-in reminder",
+                lastCallBody: "Open Pillie to update your status."
+            )
+        )
+    }
+
+    func testPresetMatchingDistinguishesAnUneditedPresetFromManualCopy() {
+        let gentle = CustomReminderPreset.gentle.messages
+        XCTAssertEqual(CustomReminderPreset.matching(gentle), .gentle)
+
+        let edited = CustomReminderMessages(
+            dueTitle: gentle.dueTitle,
+            dueBody: "My own follow-up",
+            retryTitle: gentle.retryTitle,
+            retryBody: gentle.retryBody,
+            lastCallTitle: gentle.lastCallTitle,
+            lastCallBody: gentle.lastCallBody
+        )
+        XCTAssertNil(CustomReminderPreset.matching(edited))
+    }
+
+    func testPresetDisplayNamesMatchTheApprovedProductNames() {
+        XCTAssertEqual(
+            CustomReminderPreset.allCases.map(\.displayName),
+            ["Gentle", "Direct", "Encouraging", "Private / discreet"]
+        )
+    }
+
+    func testDraftPreservesExistingCustomMessagesOnOpen() {
+        let existing = CustomReminderMessages(
+            dueTitle: "My title",
+            dueBody: "My message",
+            retryTitle: "Retry title",
+            retryBody: "Retry message",
+            lastCallTitle: "Last title",
+            lastCallBody: "Last message"
+        )
+
+        XCTAssertEqual(CustomReminderDraft(messages: existing).messages, existing)
+    }
+
+    func testApplyingPresetReplacesTheDraftWithoutSavingEarly() {
+        var draft = CustomReminderDraft(messages: CustomReminderPreset.gentle.messages)
+
+        draft.apply(.direct)
+
+        XCTAssertEqual(draft.messages, CustomReminderPreset.direct.messages)
+        XCTAssertEqual(draft.appliedPreset, .direct)
+        XCTAssertFalse(draft.wasEditedAfterPreset)
+    }
+
+    func testManualEditAfterPresetIsDistinguishableWithoutLosingPresetIdentity() {
+        var draft = CustomReminderDraft(messages: CustomReminderPreset.gentle.messages)
+        draft.apply(.gentle)
+
+        draft.messages.dueBody = "My private wording"
+
+        XCTAssertEqual(draft.appliedPreset, .gentle)
+        XCTAssertTrue(draft.wasEditedAfterPreset)
+    }
+
+    func testRestoreDefaultsReplacesDraftAndClearsPresetAttribution() {
+        var draft = CustomReminderDraft(messages: CustomReminderPreset.direct.messages)
+        draft.apply(.direct)
+        let defaults = CustomReminderPreset.gentle.messages
+
+        draft.restoreDefaults(defaults)
+
+        XCTAssertEqual(draft.messages, defaults)
+        XCTAssertNil(draft.appliedPreset)
+        XCTAssertFalse(draft.wasEditedAfterPreset)
+    }
+
+    func testCancellingDiscardsPresetChangesAndRestoresTheOpenedCopy() {
+        let existing = CustomReminderPreset.gentle.messages
+        var draft = CustomReminderDraft(messages: existing)
+        draft.apply(.direct)
+
+        draft.discardChanges()
+
+        XCTAssertEqual(draft.messages, existing)
+        XCTAssertNil(draft.appliedPreset)
+    }
+
     // MARK: - Plus, under cap
 
     func testUnderCapCustomIsPreservedForPlus() {

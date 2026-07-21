@@ -100,7 +100,7 @@ enum ScheduleCriticalSettingChange {
     /// Auto-Reminder Retry, and the Last Call Reminder, then reschedules so the new words
     /// take effect on the next build. Words never affect timing, snooze, retry cadence, or
     /// supply scheduling — only the title/body strings. The save event carries only six
-    /// coarse booleans (whether each field is customized), never the strings.
+    /// coarse customization booleans plus preset attribution, never the strings.
     static func saveSettingsCustomReminders(
         store: PillStore,
         title: String,
@@ -108,7 +108,9 @@ enum ScheduleCriticalSettingChange {
         retryTitle: String,
         retryBody: String,
         lastCallTitle: String,
-        lastCallBody: String
+        lastCallBody: String,
+        preset: CustomReminderPreset? = nil,
+        editedAfterPreset: Bool = false
     ) {
         store.customDueReminderTitle = title
         store.customDueReminderBody = body
@@ -123,7 +125,9 @@ enum ScheduleCriticalSettingChange {
             retryTitleCustomized: CustomReminderCopy.isCustomized(retryTitle),
             retryBodyCustomized: CustomReminderCopy.isCustomized(retryBody),
             lastCallTitleCustomized: CustomReminderCopy.isCustomized(lastCallTitle),
-            lastCallBodyCustomized: CustomReminderCopy.isCustomized(lastCallBody)
+            lastCallBodyCustomized: CustomReminderCopy.isCustomized(lastCallBody),
+            preset: preset,
+            editedAfterPreset: editedAfterPreset
         )
     }
 
