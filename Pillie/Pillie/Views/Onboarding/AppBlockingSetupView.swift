@@ -5,11 +5,12 @@
 //  Issue #82 — Native App Selection And Blocker Config Save (design Option B).
 //
 //  The post-authorization wrapper for the native Screen Time picker. There is no
-//  separate primer: "Choose apps to block" requests Screen Time authorization
+//  separate primer: the pill-time CTA requests Screen Time authorization
 //  inline (if needed) and goes straight into the system FamilyActivityPicker.
-//  An honest empty state keeps the skip / reminder-only path, a valid selection
-//  saves the blocker config and fires `blocker_config_saved`, and the summary is
-//  privacy-safe — Pillie only ever knows the count (see BlockerSelectionState).
+//  A denial stays on this screen with an explicit retry route. An honest
+//  reminder-only path remains available, a valid selection saves the blocker config
+//  and fires `blocker_config_saved`, and the summary is privacy-safe — Pillie only
+//  ever knows the count (see BlockerSelectionState).
 //
 
 import SwiftUI
@@ -36,6 +37,11 @@ struct AppBlockingSetupContent {
     let categoryHints: [CategoryHint]
     let chooseAppsCTA: String
 
+    // Authorization recovery
+    let authorizationDeniedTitle: String
+    let authorizationDeniedDetail: String
+    let retryAuthorizationCTA: String
+
     // Selected state
     let selectedSummaryLabel: String
     let selectedPrivacyNote: String
@@ -54,7 +60,8 @@ struct AppBlockingSetupContent {
     var visibleCopy: [String] {
         [
             badge, titleLead, titleAccent, subtitle, trialDisclosure,
-            emptyTitle, emptyDetail
+            emptyTitle, emptyDetail,
+            authorizationDeniedTitle, authorizationDeniedDetail, retryAuthorizationCTA
         ]
         + categoryHints.map(\.name)
         + [
@@ -80,27 +87,86 @@ struct AppBlockingSetupContent {
         badge: "Pillie Plus",
         titleLead: "Block the apps",
         titleAccent: "that pull you in.",
-        subtitle: "Pick the categories Pillie should pause right after your reminder.",
+        subtitle: "Selected apps pause only after your Pillie reminder and unlock when you log your pill.",
         trialDisclosure: "Pillie Plus is unlocked for 14 days. No card required.",
         emptyTitle: "Nothing paused yet",
-        emptyDetail: "You'll choose real apps in the Screen Time picker. We only ever store the count.",
+        emptyDetail: "Choose apps in Screen Time. You can change your selection later, and Pillie only stores the count.",
         categoryHints: [
             CategoryHint(name: "Social", symbol: "bubble.left.and.bubble.right.fill"),
             CategoryHint(name: "Entertainment", symbol: "play.rectangle.fill"),
             CategoryHint(name: "Games", symbol: "gamecontroller.fill"),
             CategoryHint(name: "Shopping", symbol: "bag.fill")
         ],
-        chooseAppsCTA: "Choose apps to block",
+        chooseAppsCTA: "Choose apps to pause at pill time",
+        authorizationDeniedTitle: "Screen Time wasn't enabled",
+        authorizationDeniedDetail: "Nothing changed. Try again when you're ready, or continue with reminders only.",
+        retryAuthorizationCTA: "Try Screen Time again",
         selectedSummaryLabel: "apps & categories blocked",
         selectedPrivacyNote: "Pillie stores only the count — never which apps.",
         changeSelectionCTA: "Change selection",
         privacyNote: "Your choices stay on this device.",
         finishCTA: "Finish Setup",
-        skipCTA: "Skip for now",
+        skipCTA: "Continue with reminders only",
         lockedTitle: "Included with Pillie Plus",
         lockedSubtitle: "App blocking is a Pillie Plus tool you can set up after upgrading.",
         lockedDetail: "Your free plan still includes daily reminders and cycle tracking. You can upgrade from Settings when you want app blocking."
-    )
+)
+}
+
+/// Observable permission-request behavior kept separate from the opaque Screen Time
+/// authorization API so denial, retry, and picker presentation stay deterministic.
+struct AppBlockingSetupPermissionState: Equatable {
+    enum Phase: Equatable {
+        case ready
+        case requesting
+        case recovery
+    }
+
+    enum Resolution: Equatable {
+        case openPicker
+        case showRecovery
+    }
+
+    private(set) var phase: Phase = .ready
+
+    var isRequesting: Bool { phase == .requesting }
+    var isRecoveryVisible: Bool { phase == .recovery }
+
+    /// The initial CTA and recovery retry each begin an explicit Apple request.
+    /// Repeated taps while a request is already in flight are ignored.
+    mutating func beginRequest() -> Bool {
+        guard !isRequesting else { return false }
+        phase = .requesting
+        return true
+    }
+
+    mutating func completeRequest(isAuthorized: Bool) -> Resolution {
+        if isAuthorized {
+            phase = .ready
+            return .openPicker
+        }
+
+        phase = .recovery
+        return .showRecovery
+    }
+
+    /// Simulator FamilyControls authorization is always approved, so DEBUG UI QA
+    /// needs a way to render the exact recovery state a real denial reaches.
+    mutating func showRecoveryForDebug() {
+        phase = .recovery
+    }
+}
+
+/// The primary CTA may save only when Screen Time is currently authorized.
+/// Keeping this decision value-based prevents a retained selection from skipping
+/// the authorization recovery path.
+enum AppBlockingSetupPrimaryAction: Equatable {
+    case requestAuthorization
+    case finishSetup
+
+    static func resolve(hasSelection: Bool, isAuthorized: Bool) -> Self {
+        hasSelection && isAuthorized ? .finishSetup : .requestAuthorization
+    }
 }
 
 struct AppBlockingSetupView: View {
@@ -111,7 +177,11 @@ struct AppBlockingSetupView: View {
     @State private var animateIn = false
     @State private var blobPhase: CGFloat = 0
     @State private var showPicker = false
-    @State private var isRequestingAuth = false
+    @State private var permissionState = AppBlockingSetupPermissionState()
+    #if DEBUG
+    @AppStorage("pillie_debug_app_blocking_authorization_recovery")
+    private var debugAuthorizationRecovery = false
+    #endif
     private let performanceTier = PerformanceTier.current
     private let onboardingTelemetry = OnboardingTelemetry()
     private let content = AppBlockingSetupContent.default
@@ -151,7 +221,9 @@ struct AppBlockingSetupView: View {
 
                         if canSetUpBlocking {
                             Group {
-                                if selection.isEmpty {
+                                if permissionState.isRecoveryVisible {
+                                    authorizationRecoveryCard
+                                } else if selection.isEmpty {
                                     emptyStateCard
                                 } else {
                                     selectedStateCard
@@ -180,6 +252,11 @@ struct AppBlockingSetupView: View {
         )
         .onAppear {
             animateIn = true
+            #if DEBUG
+            if debugAuthorizationRecovery {
+                permissionState.showRecoveryForDebug()
+            }
+            #endif
             // The looping background blob is purely decorative — suppress it for
             // Reduce Motion users and on constrained devices (shared gate).
             guard PillieMotion.decorativeMotionEnabled(
@@ -193,6 +270,13 @@ struct AppBlockingSetupView: View {
                 blobPhase = 1
             }
         }
+        #if DEBUG
+        .onChange(of: debugAuthorizationRecovery) { _, isRecoveryVisible in
+            if isRecoveryVisible {
+                permissionState.showRecoveryForDebug()
+            }
+        }
+        #endif
     }
 
     // MARK: - Header
@@ -301,6 +385,29 @@ struct AppBlockingSetupView: View {
         .overlay { Capsule().stroke(Color.black.opacity(0.06), lineWidth: 1) }
     }
 
+    private var authorizationRecoveryCard: some View {
+        VStack(spacing: 12) {
+            Image(systemName: "exclamationmark.shield.fill")
+                .font(.system(size: 30, weight: .semibold))
+                .foregroundStyle(PillieTheme.coral)
+
+            Text(content.authorizationDeniedTitle)
+                .font(.pillieBodyBold())
+                .foregroundStyle(PillieTheme.textPrimary)
+
+            Text(content.authorizationDeniedDetail)
+                .font(.pillieBody())
+                .foregroundStyle(PillieTheme.textMuted)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .padding(22)
+        .frame(maxWidth: .infinity)
+        .modifier(BlockerCardSurface())
+        .accessibilityElement(children: .combine)
+        .accessibilityIdentifier("appBlockingAuthorizationRecovery")
+    }
+
     // MARK: - Selected State
 
     private var selectedStateCard: some View {
@@ -374,7 +481,7 @@ struct AppBlockingSetupView: View {
     // MARK: - Footer
     //
     // A single bottom-anchored primary CTA at the shared onboarding baseline. It
-    // morphs "Choose apps to block" → "Finish Setup" once a selection exists, so
+    // morphs the pill-time CTA → "Finish Setup" once a selection exists, so
     // the dark CTA never competes with a second dark button (the in-card action is
     // the lavender "Change selection"). "Skip for now" keeps the reminder-only path.
 
@@ -395,19 +502,41 @@ struct AppBlockingSetupView: View {
     private var primaryCTA: some View {
         // No primer: when empty, the CTA requests Screen Time authorization inline
         // and opens the system picker; once apps are chosen it saves and continues.
-        Button(action: selection.hasSelection ? finishSetup : chooseApps) {
+        Button(action: performPrimaryAction) {
             HStack(spacing: 8) {
-                if isRequestingAuth {
+                if permissionState.isRequesting {
                     ProgressView().tint(.white)
                 } else if !selection.hasSelection {
                     Image(systemName: "shield.fill")
                         .font(.system(size: 17, weight: .semibold))
                 }
-                Text(selection.hasSelection ? content.finishCTA : content.chooseAppsCTA)
+                Text(primaryActionTitle)
             }
         }
         .buttonStyle(.pillieDark)
-        .disabled(isRequestingAuth)
+        .disabled(permissionState.isRequesting)
+    }
+
+    private var primaryActionTitle: String {
+        if primaryAction == .finishSetup { return content.finishCTA }
+        if permissionState.isRecoveryVisible { return content.retryAuthorizationCTA }
+        return content.chooseAppsCTA
+    }
+
+    private var primaryAction: AppBlockingSetupPrimaryAction {
+        AppBlockingSetupPrimaryAction.resolve(
+            hasSelection: selection.hasSelection,
+            isAuthorized: blockingManager.isAuthorized
+        )
+    }
+
+    private func performPrimaryAction() {
+        switch primaryAction {
+        case .requestAuthorization:
+            chooseApps()
+        case .finishSetup:
+            finishSetup()
+        }
     }
 
     private var skipButton: some View {
@@ -427,13 +556,17 @@ struct AppBlockingSetupView: View {
     private func chooseApps() {
         Task {
             if !blockingManager.isAuthorized {
-                isRequestingAuth = true
+                guard permissionState.beginRequest() else { return }
                 onboardingTelemetry.screenTimePermissionRequested()
                 await blockingManager.requestAuthorization()
                 onboardingTelemetry.screenTimePermissionCompleted(isAuthorized: blockingManager.isAuthorized)
-                isRequestingAuth = false
-            }
-            if blockingManager.isAuthorized {
+                let resolution = permissionState.completeRequest(
+                    isAuthorized: blockingManager.isAuthorized
+                )
+                if resolution == .openPicker {
+                    showPicker = true
+                }
+            } else {
                 showPicker = true
             }
         }
