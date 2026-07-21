@@ -206,6 +206,18 @@ protocol AnalyticsTracking {
     lastCallBodyCustomized: Bool?
   )
 
+  func trackCustomReminderSave(
+    isPlus: Bool,
+    titleCustomized: Bool,
+    bodyCustomized: Bool,
+    retryTitleCustomized: Bool,
+    retryBodyCustomized: Bool,
+    lastCallTitleCustomized: Bool,
+    lastCallBodyCustomized: Bool,
+    preset: CustomReminderPreset?,
+    editedAfterPreset: Bool
+  )
+
   func track(
     _ event: AnalyticsEvent,
     source: AnalyticsSource?,
@@ -254,6 +266,42 @@ protocol AnalyticsTracking {
 // Default no-op so the funnel-focused test recorders that only care about
 // track() keep compiling; `AnalyticsManager` provides the real implementation.
 extension AnalyticsTracking {
+  func trackCustomReminderSave(
+    isPlus: Bool,
+    titleCustomized: Bool,
+    bodyCustomized: Bool,
+    retryTitleCustomized: Bool,
+    retryBodyCustomized: Bool,
+    lastCallTitleCustomized: Bool,
+    lastCallBodyCustomized: Bool,
+    preset: CustomReminderPreset?,
+    editedAfterPreset: Bool
+  ) {
+    track(
+      .settingsChangeSaved,
+      source: .settings,
+      step: nil,
+      stepIndex: nil,
+      screen: nil,
+      plan: nil,
+      result: nil,
+      setting: .customReminders,
+      acquisitionSource: nil,
+      isPlus: isPlus,
+      hasBlockingSelection: nil,
+      interventionCount: nil,
+      shakeCount: nil,
+      trialWarningDay: nil,
+      trialEndCohort: nil,
+      titleCustomized: titleCustomized,
+      bodyCustomized: bodyCustomized,
+      retryTitleCustomized: retryTitleCustomized,
+      retryBodyCustomized: retryBodyCustomized,
+      lastCallTitleCustomized: lastCallTitleCustomized,
+      lastCallBodyCustomized: lastCallBodyCustomized
+    )
+  }
+
   func track(
     _ event: AnalyticsEvent,
     smartReminderOutcome: AnalyticsSmartReminderOutcome,
@@ -595,6 +643,8 @@ struct AnalyticsPayload {
   let retryBodyCustomized: Bool?
   let lastCallTitleCustomized: Bool?
   let lastCallBodyCustomized: Bool?
+  let reminderPreset: CustomReminderPreset?
+  let reminderPresetEdited: Bool?
 
   init(
     source: AnalyticsSource? = nil,
@@ -623,7 +673,9 @@ struct AnalyticsPayload {
     retryTitleCustomized: Bool? = nil,
     retryBodyCustomized: Bool? = nil,
     lastCallTitleCustomized: Bool? = nil,
-    lastCallBodyCustomized: Bool? = nil
+    lastCallBodyCustomized: Bool? = nil,
+    reminderPreset: CustomReminderPreset? = nil,
+    reminderPresetEdited: Bool? = nil
   ) {
     self.source = source
     self.step = step
@@ -652,6 +704,8 @@ struct AnalyticsPayload {
     self.retryBodyCustomized = retryBodyCustomized
     self.lastCallTitleCustomized = lastCallTitleCustomized
     self.lastCallBodyCustomized = lastCallBodyCustomized
+    self.reminderPreset = reminderPreset
+    self.reminderPresetEdited = reminderPresetEdited
   }
 
   var properties: [String: AnalyticsPropertyValue] {
@@ -720,6 +774,12 @@ struct AnalyticsPayload {
     }
     if let lastCallBodyCustomized {
       properties["last_call_body_customized"] = .bool(lastCallBodyCustomized)
+    }
+    if let reminderPreset {
+      properties["reminder_preset"] = .string(reminderPreset.rawValue)
+    }
+    if let reminderPresetEdited {
+      properties["reminder_preset_edited"] = .bool(reminderPresetEdited)
     }
     return properties
   }
@@ -861,6 +921,33 @@ final class AnalyticsManager: AnalyticsTracking {
     )
 
     capture(event, payload: payload, source: source, step: step)
+  }
+
+  func trackCustomReminderSave(
+    isPlus: Bool,
+    titleCustomized: Bool,
+    bodyCustomized: Bool,
+    retryTitleCustomized: Bool,
+    retryBodyCustomized: Bool,
+    lastCallTitleCustomized: Bool,
+    lastCallBodyCustomized: Bool,
+    preset: CustomReminderPreset?,
+    editedAfterPreset: Bool
+  ) {
+    let payload = AnalyticsPayload(
+      source: .settings,
+      setting: .customReminders,
+      isPlus: isPlus,
+      titleCustomized: titleCustomized,
+      bodyCustomized: bodyCustomized,
+      retryTitleCustomized: retryTitleCustomized,
+      retryBodyCustomized: retryBodyCustomized,
+      lastCallTitleCustomized: lastCallTitleCustomized,
+      lastCallBodyCustomized: lastCallBodyCustomized,
+      reminderPreset: preset,
+      reminderPresetEdited: preset == nil ? nil : editedAfterPreset
+    )
+    capture(.settingsChangeSaved, payload: payload, source: .settings)
   }
 
   func track(

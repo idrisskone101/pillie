@@ -16,19 +16,26 @@ struct CustomReminderMessagesEditor: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
 
-    @State private var titleText: String = ""
-    @State private var bodyText: String = ""
-    @State private var retryTitleText: String = ""
-    @State private var retryBodyText: String = ""
-    @State private var lastCallTitleText: String = ""
-    @State private var lastCallBodyText: String = ""
+    @State private var draft = CustomReminderDraft(
+        messages: CustomReminderMessages(
+            dueTitle: "",
+            dueBody: "",
+            retryTitle: "",
+            retryBody: "",
+            lastCallTitle: "",
+            lastCallBody: ""
+        )
+    )
 
     /// Identifies every editable field so a single keyboard toolbar "Done" button (and
     /// interactive scroll-to-dismiss) can resign whichever field is active.
-    private enum Field: Hashable {
-        case dailyTitle, dailyBody
-        case retryTitle, retryBody
-        case lastCallTitle, lastCallBody
+    private enum Field: String, Hashable {
+        case dailyTitle = "daily-title"
+        case dailyBody = "daily-body"
+        case retryTitle = "retry-title"
+        case retryBody = "retry-body"
+        case lastCallTitle = "last-call-title"
+        case lastCallBody = "last-call-body"
     }
 
     @FocusState private var focusedField: Field?
@@ -48,6 +55,16 @@ struct CustomReminderMessagesEditor: View {
     private var defaultRetryBody: String { NotificationManager.defaultRetryBody }
     private var defaultLastCallTitle: String { CustomReminderPreview.defaultLastCallTitle(method: method) }
     private var defaultLastCallBody: String { CustomReminderPreview.defaultLastCallBody(method: method) }
+    private var defaultMessages: CustomReminderMessages {
+        CustomReminderMessages(
+            dueTitle: defaultTitle,
+            dueBody: defaultBody,
+            retryTitle: defaultRetryTitle,
+            retryBody: defaultRetryBody,
+            lastCallTitle: defaultLastCallTitle,
+            lastCallBody: defaultLastCallBody
+        )
+    }
 
     /// The value to show in a field on open: the saved custom text, or the default when blank.
     private func prefilled(_ stored: String, default defaultCopy: String) -> String {
@@ -69,18 +86,29 @@ struct CustomReminderMessagesEditor: View {
                         .foregroundStyle(PillieTheme.textMuted)
                         .fixedSize(horizontal: false, vertical: true)
 
+                    CustomReminderPresetPicker(
+                        draft: $draft,
+                        feedback: settingsFeedback,
+                        accessibilityReduceMotion: accessibilityReduceMotion
+                    )
+
+                    Text("Advanced editor")
+                        .font(.pillieBodyBold())
+                        .foregroundStyle(PillieTheme.textPrimary)
+                        .accessibilityAddTraits(.isHeader)
+
                     group(
                         index: 1,
                         header: "Daily reminder",
                         subtitle: "Your main nudge when today's dose is due.",
-                        titleBinding: $titleText,
-                        titleCount: titleText.count,
-                        bodyBinding: $bodyText,
-                        bodyCount: bodyText.count,
+                        titleBinding: $draft.messages.dueTitle,
+                        titleCount: draft.messages.dueTitle.count,
+                        bodyBinding: $draft.messages.dueBody,
+                        bodyCount: draft.messages.dueBody.count,
                         titleField: .dailyTitle,
                         bodyField: .dailyBody,
-                        previewTitle: CustomReminderPreview.dailyTitle(custom: titleText, method: method, isPlus: isPlus),
-                        previewBody: CustomReminderPreview.dailyBody(custom: bodyText, method: method, isPlus: isPlus),
+                        previewTitle: CustomReminderPreview.dailyTitle(custom: draft.messages.dueTitle, method: method, isPlus: isPlus),
+                        previewBody: CustomReminderPreview.dailyBody(custom: draft.messages.dueBody, method: method, isPlus: isPlus),
                         previewIdentifier: "reminder-preview-daily"
                     )
 
@@ -88,14 +116,14 @@ struct CustomReminderMessagesEditor: View {
                         index: 2,
                         header: "Follow-up nudge",
                         subtitle: "A gentle retry if you haven't logged it yet.",
-                        titleBinding: $retryTitleText,
-                        titleCount: retryTitleText.count,
-                        bodyBinding: $retryBodyText,
-                        bodyCount: retryBodyText.count,
+                        titleBinding: $draft.messages.retryTitle,
+                        titleCount: draft.messages.retryTitle.count,
+                        bodyBinding: $draft.messages.retryBody,
+                        bodyCount: draft.messages.retryBody.count,
                         titleField: .retryTitle,
                         bodyField: .retryBody,
-                        previewTitle: CustomReminderPreview.retryTitle(custom: retryTitleText, isPlus: isPlus),
-                        previewBody: CustomReminderPreview.retryBody(custom: retryBodyText, isPlus: isPlus),
+                        previewTitle: CustomReminderPreview.retryTitle(custom: draft.messages.retryTitle, isPlus: isPlus),
+                        previewBody: CustomReminderPreview.retryBody(custom: draft.messages.retryBody, isPlus: isPlus),
                         previewIdentifier: "reminder-preview-followup"
                     )
 
@@ -103,16 +131,28 @@ struct CustomReminderMessagesEditor: View {
                         index: 3,
                         header: "Last call",
                         subtitle: "A final heads-up before the day ends.",
-                        titleBinding: $lastCallTitleText,
-                        titleCount: lastCallTitleText.count,
-                        bodyBinding: $lastCallBodyText,
-                        bodyCount: lastCallBodyText.count,
+                        titleBinding: $draft.messages.lastCallTitle,
+                        titleCount: draft.messages.lastCallTitle.count,
+                        bodyBinding: $draft.messages.lastCallBody,
+                        bodyCount: draft.messages.lastCallBody.count,
                         titleField: .lastCallTitle,
                         bodyField: .lastCallBody,
-                        previewTitle: CustomReminderPreview.lastCallTitle(custom: lastCallTitleText, method: method, isPlus: isPlus),
-                        previewBody: CustomReminderPreview.lastCallBody(custom: lastCallBodyText, method: method, isPlus: isPlus),
+                        previewTitle: CustomReminderPreview.lastCallTitle(custom: draft.messages.lastCallTitle, method: method, isPlus: isPlus),
+                        previewBody: CustomReminderPreview.lastCallBody(custom: draft.messages.lastCallBody, method: method, isPlus: isPlus),
                         previewIdentifier: "reminder-preview-lastcall"
                     )
+
+                    Button("Restore Pillie defaults") {
+                        settingsFeedback.sensitiveOrDestructiveChange(
+                            accessibilityReduceMotion: accessibilityReduceMotion
+                        )
+                        draft.restoreDefaults(defaultMessages)
+                        focusedField = nil
+                    }
+                    .font(.pillieBodySemibold())
+                    .foregroundStyle(PillieTheme.textPrimary)
+                    .frame(maxWidth: .infinity)
+                    .accessibilityIdentifier("reminder-restore-defaults")
 
                     Text("Leave anything blank and Pillie uses its own wording.")
                         .font(.pillieCaption())
@@ -124,12 +164,14 @@ struct CustomReminderMessagesEditor: View {
                         settingsFeedback.commitScheduleSave(accessibilityReduceMotion: accessibilityReduceMotion)
                         ScheduleCriticalSettingChange.saveSettingsCustomReminders(
                             store: store,
-                            title: normalized(titleText, default: defaultTitle),
-                            body: normalized(bodyText, default: defaultBody),
-                            retryTitle: normalized(retryTitleText, default: defaultRetryTitle),
-                            retryBody: normalized(retryBodyText, default: defaultRetryBody),
-                            lastCallTitle: normalized(lastCallTitleText, default: defaultLastCallTitle),
-                            lastCallBody: normalized(lastCallBodyText, default: defaultLastCallBody)
+                            title: normalized(draft.messages.dueTitle, default: defaultTitle),
+                            body: normalized(draft.messages.dueBody, default: defaultBody),
+                            retryTitle: normalized(draft.messages.retryTitle, default: defaultRetryTitle),
+                            retryBody: normalized(draft.messages.retryBody, default: defaultRetryBody),
+                            lastCallTitle: normalized(draft.messages.lastCallTitle, default: defaultLastCallTitle),
+                            lastCallBody: normalized(draft.messages.lastCallBody, default: defaultLastCallBody),
+                            preset: draft.appliedPreset,
+                            editedAfterPreset: draft.wasEditedAfterPreset
                         )
                         dismiss()
                     } label: {
@@ -137,6 +179,12 @@ struct CustomReminderMessagesEditor: View {
                     }
                     .buttonStyle(.pillieDark)
                     .padding(.top, 8)
+
+                    Button("Cancel") {
+                        draft.discardChanges()
+                        dismiss()
+                    }
+                    .buttonStyle(.pillieSecondary)
                 }
                 .padding(.horizontal, 24)
                 // The dark CTA casts a soft drop shadow (radius 15, y 8); without room
@@ -159,12 +207,16 @@ struct CustomReminderMessagesEditor: View {
             // text where present, otherwise the same default the notification would use. Both
             // sections open pre-filled and editable rather than blank, while the "blank uses
             // Pillie's default" contract is preserved by re-normalizing on save.
-            titleText = prefilled(store.customDueReminderTitle, default: defaultTitle)
-            bodyText = prefilled(store.customDueReminderBody, default: defaultBody)
-            retryTitleText = prefilled(store.customRetryReminderTitle, default: defaultRetryTitle)
-            retryBodyText = prefilled(store.customRetryReminderBody, default: defaultRetryBody)
-            lastCallTitleText = prefilled(store.customLastCallReminderTitle, default: defaultLastCallTitle)
-            lastCallBodyText = prefilled(store.customLastCallReminderBody, default: defaultLastCallBody)
+            draft = CustomReminderDraft(
+                messages: CustomReminderMessages(
+                    dueTitle: prefilled(store.customDueReminderTitle, default: defaultTitle),
+                    dueBody: prefilled(store.customDueReminderBody, default: defaultBody),
+                    retryTitle: prefilled(store.customRetryReminderTitle, default: defaultRetryTitle),
+                    retryBody: prefilled(store.customRetryReminderBody, default: defaultRetryBody),
+                    lastCallTitle: prefilled(store.customLastCallReminderTitle, default: defaultLastCallTitle),
+                    lastCallBody: prefilled(store.customLastCallReminderBody, default: defaultLastCallBody)
+                )
+            )
             ProductAnalyticsTelemetry.live.customRemindersSettingsOpened()
         }
     }
@@ -316,6 +368,7 @@ struct CustomReminderMessagesEditor: View {
             }
 
             TextField(placeholder, text: text, axis: axis)
+                .accessibilityIdentifier("reminder-field-\(field.rawValue)")
                 .lineLimit(axis == .vertical ? 3...5 : 1...1)
                 .font(.pillieBody())
                 .foregroundStyle(PillieTheme.textPrimary)
@@ -340,6 +393,68 @@ struct CustomReminderMessagesEditor: View {
                 )
                 .shadow(color: PillieTheme.cardShadow, radius: 10, y: 4)
                 .animation(.easeInOut(duration: 0.15), value: isFocused)
+        }
+    }
+}
+
+private struct CustomReminderPresetPicker: View {
+    @Binding var draft: CustomReminderDraft
+    let feedback: SettingsInteractionFeedback
+    let accessibilityReduceMotion: Bool
+
+    private let columns = [
+        GridItem(.flexible(), spacing: 10),
+        GridItem(.flexible(), spacing: 10)
+    ]
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            VStack(alignment: .leading, spacing: 3) {
+                Text("Start with a tone")
+                    .font(.pillieBodyBold())
+                    .foregroundStyle(PillieTheme.textPrimary)
+                Text("One tap fills all three reminders. Fine-tune anything below.")
+                    .font(.pillieDate())
+                    .foregroundStyle(PillieTheme.textMuted)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
+            LazyVGrid(columns: columns, spacing: 10) {
+                ForEach(CustomReminderPreset.allCases) { preset in
+                    let isSelected = draft.appliedPreset == preset
+                        || (draft.appliedPreset == nil
+                            && CustomReminderPreset.matching(draft.messages) == preset)
+
+                    Button {
+                        feedback.openRow(accessibilityReduceMotion: accessibilityReduceMotion)
+                        draft.apply(preset)
+                    } label: {
+                        HStack(spacing: 7) {
+                            Text(preset.displayName)
+                                .font(.pillieDate())
+                                .lineLimit(2)
+                            Spacer(minLength: 0)
+                            Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
+                                .font(.pillie(14, weight: .semibold))
+                        }
+                        .foregroundStyle(isSelected ? Color.white : PillieTheme.textPrimary)
+                        .padding(.horizontal, 12)
+                        .frame(maxWidth: .infinity, minHeight: 48)
+                        .background(
+                            RoundedRectangle(cornerRadius: PillieTheme.cardRadius, style: .continuous)
+                                .fill(isSelected ? PillieTheme.dark : PillieTheme.cardWhite)
+                        )
+                        .overlay(
+                            RoundedRectangle(cornerRadius: PillieTheme.cardRadius, style: .continuous)
+                                .stroke(isSelected ? PillieTheme.dark : PillieTheme.sageHalf, lineWidth: 1)
+                        )
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("\(preset.displayName) reminder preset")
+                    .accessibilityValue(isSelected ? "Selected" : "Not selected")
+                    .accessibilityIdentifier("reminder-preset-\(preset.rawValue)")
+                }
+            }
         }
     }
 }
