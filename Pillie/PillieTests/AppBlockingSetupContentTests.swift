@@ -5,14 +5,19 @@ import XCTest
 final class AppBlockingSetupContentTests: XCTestCase {
     private let content = AppBlockingSetupContent.default
 
-    // MARK: - Hero (Option B framing)
+    // MARK: - Reversible pill-time framing (#218)
 
-    func testHeroCopyUsesOptionBBlockingFraming() {
+    func testSetupCopyExplainsPillTimePauseMedicationUnlockAndReversibility() {
         XCTAssertEqual(content.badge, "Pillie Plus")
-        XCTAssertEqual(content.titleLead, "Block the apps")
-        XCTAssertEqual(content.titleAccent, "that pull you in.")
-        XCTAssertTrue(content.subtitle.lowercased().contains("pause"))
-        XCTAssertTrue(content.subtitle.lowercased().contains("reminder"))
+        XCTAssertEqual(content.chooseAppsCTA, "Choose apps to pause at pill time")
+
+        let explanation = [content.subtitle, content.emptyDetail]
+            .joined(separator: " ")
+            .lowercased()
+        XCTAssertTrue(explanation.contains("after your pillie reminder"))
+        XCTAssertTrue(explanation.contains("unlock when you log your pill"))
+        XCTAssertTrue(explanation.contains("change"))
+        XCTAssertTrue(explanation.contains("later"))
     }
 
     func testTrialDisclosureIsClearAndDoesNotReplaceSkip() {
@@ -21,7 +26,47 @@ final class AppBlockingSetupContentTests: XCTestCase {
             "Pillie Plus is unlocked for 14 days. No card required."
         )
         XCTAssertTrue(content.visibleCopy.contains(content.trialDisclosure))
-        XCTAssertEqual(content.skipCTA, "Skip for now")
+        XCTAssertEqual(content.skipCTA, "Continue with reminders only")
+    }
+
+    func testDeniedOrCancelledAuthorizationShowsRecoveryWithoutStrandingReminderOnly() {
+        var permission = AppBlockingSetupPermissionState()
+
+        XCTAssertTrue(permission.beginRequest())
+        XCTAssertEqual(
+            permission.completeRequest(isAuthorized: false),
+            .showRecovery
+        )
+        XCTAssertTrue(permission.isRecoveryVisible)
+        XCTAssertEqual(content.retryAuthorizationCTA, "Try Screen Time again")
+        XCTAssertEqual(content.skipCTA, "Continue with reminders only")
+    }
+
+    func testRecoveryRetryStartsANewExplicitAuthorizationRequest() {
+        var permission = AppBlockingSetupPermissionState()
+        XCTAssertTrue(permission.beginRequest())
+        XCTAssertEqual(permission.completeRequest(isAuthorized: false), .showRecovery)
+
+        XCTAssertTrue(permission.beginRequest())
+        XCTAssertTrue(permission.isRequesting)
+    }
+
+    func testSavedSelectionWithoutAuthorizationRequestsPermissionBeforeSaving() {
+        XCTAssertEqual(
+            AppBlockingSetupPrimaryAction.resolve(
+                hasSelection: true,
+                isAuthorized: false
+            ),
+            .requestAuthorization
+        )
+    }
+
+    func testDebugRecoverySeamRendersTheSameDeniedStateUsedByAuthorizationFailure() {
+        var permission = AppBlockingSetupPermissionState()
+
+        permission.showRecoveryForDebug()
+
+        XCTAssertTrue(permission.isRecoveryVisible)
     }
 
     // MARK: - Empty state (AC3 honest empty state)
@@ -30,7 +75,7 @@ final class AppBlockingSetupContentTests: XCTestCase {
         XCTAssertFalse(content.emptyTitle.isEmpty)
         XCTAssertTrue(content.emptyDetail.contains("Screen Time"))
         XCTAssertTrue(content.emptyDetail.lowercased().contains("count"))
-        XCTAssertEqual(content.chooseAppsCTA, "Choose apps to block")
+        XCTAssertEqual(content.chooseAppsCTA, "Choose apps to pause at pill time")
     }
 
     func testCategoryHintsAreGenericCategoriesNotAppNames() {
@@ -63,7 +108,7 @@ final class AppBlockingSetupContentTests: XCTestCase {
 
     func testFooterUsesFinishAndSkipCopy() {
         XCTAssertEqual(content.finishCTA, "Finish Setup")
-        XCTAssertEqual(content.skipCTA, "Skip for now")
+        XCTAssertEqual(content.skipCTA, "Continue with reminders only")
     }
 
     // MARK: - Invariants preserved from the prior screen

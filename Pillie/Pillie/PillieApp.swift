@@ -368,6 +368,21 @@ struct PillieApp: App {
         case "/plus-app-blocking-setup":
             SubscriptionManager.shared.setPlusForTesting(true)
             UserDefaults.standard.set(false, forKey: OnboardingFlow.selectedFreePlanStorageKey)
+            UserDefaults.standard.set(
+                false,
+                forKey: "pillie_debug_app_blocking_authorization_recovery"
+            )
+            UserDefaults.standard.set(OnboardingFlow.Step.appBlocking.rawValue, forKey: OnboardingFlow.stepStorageKey)
+        case "/plus-app-blocking-recovery":
+            // Simulator FamilyControls authorization auto-approves. This QA-only
+            // route renders the same recovery state a real denied/cancelled request
+            // reaches, without changing persisted selection or authorization.
+            SubscriptionManager.shared.setPlusForTesting(true)
+            UserDefaults.standard.set(false, forKey: OnboardingFlow.selectedFreePlanStorageKey)
+            UserDefaults.standard.set(
+                true,
+                forKey: "pillie_debug_app_blocking_authorization_recovery"
+            )
             UserDefaults.standard.set(OnboardingFlow.Step.appBlocking.rawValue, forKey: OnboardingFlow.stepStorageKey)
         case "/onboarding-personalization-intent":
             UserDefaults.standard.set(
