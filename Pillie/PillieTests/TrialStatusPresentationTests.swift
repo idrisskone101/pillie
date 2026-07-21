@@ -100,10 +100,6 @@ final class TrialStatusPresentationTests: XCTestCase {
         )?.sheetContent
 
         XCTAssertEqual(content?.title, "14 days left in your Plus trial")
-        // What's currently unlocked matches the Trial Granted Moment's perks.
-        XCTAssertEqual(content?.unlockedItems, [
-            "App blocking", "Shake to confirm", "Smart Reminders", "Custom messages",
-        ])
         // What expiry changes: blocking off, reminders stay free, setup kept.
         XCTAssertEqual(content?.expiryItems, [
             "App blocking turns off",
@@ -112,6 +108,97 @@ final class TrialStatusPresentationTests: XCTestCase {
         ])
         // The quiet buy-early path into the existing purchase flow.
         XCTAssertEqual(content?.ctaTitle, "Keep Pillie Plus")
+    }
+
+    // MARK: - Activation hub (#219)
+
+    func testUnconfiguredTrialRecommendsAppBlockingFirst() {
+        let content = TrialStatusPresentation(daysRemaining: 14).sheetContent(
+            for: TrialActivationState(
+                appBlockingActive: false,
+                customMessagesCustomized: false,
+                smartRemindersCustomized: false
+            )
+        )
+
+        XCTAssertEqual(content.activationItems, [
+            TrialActivationItem(
+                feature: .appBlocking,
+                title: "App blocking",
+                status: .setUp,
+                action: .appBlocking,
+                isRecommended: true
+            ),
+            TrialActivationItem(
+                feature: .smartReminders,
+                title: "Smart Reminders",
+                status: .activeAutomatically,
+                action: .smartReminders,
+                isRecommended: false
+            ),
+            TrialActivationItem(
+                feature: .customMessages,
+                title: "Custom messages",
+                status: .personalize,
+                action: .customMessages,
+                isRecommended: false
+            ),
+            TrialActivationItem(
+                feature: .shakeToConfirm,
+                title: "Shake to confirm",
+                status: .on,
+                action: nil,
+                isRecommended: false
+            ),
+        ])
+    }
+
+    func testConfiguredBlockingRecommendsCustomMessagesNext() {
+        let content = TrialStatusPresentation(daysRemaining: 14).sheetContent(
+            for: TrialActivationState(
+                appBlockingActive: true,
+                customMessagesCustomized: false,
+                smartRemindersCustomized: false
+            )
+        )
+
+        XCTAssertEqual(
+            content.activationItems.first(where: \.isRecommended)?.action,
+            .customMessages
+        )
+    }
+
+    func testCustomizedMessagesRecommendSmartRemindersLast() {
+        let content = TrialStatusPresentation(daysRemaining: 14).sheetContent(
+            for: TrialActivationState(
+                appBlockingActive: true,
+                customMessagesCustomized: true,
+                smartRemindersCustomized: false
+            )
+        )
+
+        XCTAssertEqual(
+            content.activationItems.first(where: \.isRecommended)?.action,
+            .smartReminders
+        )
+    }
+
+    func testFullyConfiguredTrialStillPrioritizesOneAdjustableAction() {
+        let content = TrialStatusPresentation(daysRemaining: 14).sheetContent(
+            for: TrialActivationState(
+                appBlockingActive: true,
+                customMessagesCustomized: true,
+                smartRemindersCustomized: true
+            )
+        )
+
+        XCTAssertEqual(content.activationItems.map(\.status), [
+            .active, .customized, .customized, .on,
+        ])
+        XCTAssertEqual(
+            content.activationItems.filter(\.isRecommended).map(\.action),
+            [.smartReminders]
+        )
     }
 
     func testSheetTitleOnFinalDayReadsEndsTonight() {

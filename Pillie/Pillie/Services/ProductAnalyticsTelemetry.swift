@@ -267,11 +267,17 @@ struct ProductAnalyticsTelemetry {
     track(.trialStatusSheetViewed, source: .home)
   }
 
-  func trialStatusFeatureTapped(_ feature: AnalyticsTrialStatusFeature) {
+  func trialStatusFeatureTapped(
+    _ feature: AnalyticsTrialStatusFeature,
+    status: AnalyticsTrialActivationStatus,
+    isRecommended: Bool
+  ) {
     analytics.track(
       .trialStatusFeatureTapped,
       source: .home,
       trialStatusFeature: feature,
+      trialActivationStatus: status,
+      isRecommended: isRecommended,
       isPlus: isPlus()
     )
   }

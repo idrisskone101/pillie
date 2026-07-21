@@ -21,6 +21,9 @@ struct HomeView: View {
     @State private var showBlockingPaywall = false
     @State private var showTrialStatusSheet = false
     @State private var showTrialKeepPlusPaywall = false
+    @State private var showTrialCustomMessagesEditor = false
+    @State private var showTrialSmartRemindersEditor = false
+    @State private var pendingTrialActivationAction: TrialActivationAction?
     @State private var showTrialEndPaywall = false
     @State private var adaptiveReminderShownLogged = false
     @State private var reviewPromptShownLogged = false
@@ -189,6 +192,52 @@ struct HomeView: View {
             calendar: Calendar.current,
             now: Date()
         )
+    }
+
+    private var trialActivationState: TrialActivationState {
+        let blocking = AppBlockingManager.shared
+        let customMessagesCustomized = [
+            store.customDueReminderTitle,
+            store.customDueReminderBody,
+            store.customRetryReminderTitle,
+            store.customRetryReminderBody,
+            store.customLastCallReminderTitle,
+            store.customLastCallReminderBody,
+        ].contains(where: CustomReminderCopy.isCustomized)
+
+        return TrialActivationState(
+            appBlockingActive: blocking.authorizationStatus == .approved
+                && blocking.isEffectivelyOn,
+            customMessagesCustomized: customMessagesCustomized,
+            smartRemindersCustomized: store.autoReminderIntervalMinutes != 10
+                || store.autoReminderRetryLimit != 3
+                || store.lastCallReminderEnabled
+                || !store.adaptiveReminderEnabled
+        )
+    }
+
+    private func handleTrialActivationTap(_ item: TrialActivationItem) {
+        guard let action = item.action else { return }
+        ProductAnalyticsTelemetry.live.trialStatusFeatureTapped(
+            item.feature,
+            status: item.status,
+            isRecommended: item.isRecommended
+        )
+        pendingTrialActivationAction = action
+        showTrialStatusSheet = false
+    }
+
+    private func presentPendingTrialActivationAction() {
+        guard let action = pendingTrialActivationAction else { return }
+        pendingTrialActivationAction = nil
+        switch action {
+        case .appBlocking:
+            showBlockingSetup = true
+        case .customMessages:
+            showTrialCustomMessagesEditor = true
+        case .smartReminders:
+            showTrialSmartRemindersEditor = true
+        }
     }
 
     private var todayActionState: TodayActionState {
@@ -400,19 +449,20 @@ struct HomeView: View {
                 onSkip: { showBlockingPaywall = false }
             )
         }
-        .sheet(isPresented: $showTrialStatusSheet) {
+        .sheet(
+            isPresented: $showTrialStatusSheet,
+            onDismiss: presentPendingTrialActivationAction
+        ) {
             if let trial = trialPresentation {
                 TrialStatusSheet(
-                    content: trial.sheetContent,
+                    content: trial.sheetContent(for: trialActivationState),
                     onKeepPlus: {
                         // The quiet buy-early path: into the existing purchase
                         // flow (it reports paywallViewed itself).
                         showTrialStatusSheet = false
                         showTrialKeepPlusPaywall = true
                     },
-                    onFeatureTap: { feature in
-                        ProductAnalyticsTelemetry.live.trialStatusFeatureTapped(feature)
-                    },
+                    onFeatureTap: handleTrialActivationTap,
                     onDismiss: { showTrialStatusSheet = false }
                 )
                 .onAppear {
@@ -422,6 +472,18 @@ struct HomeView: View {
                 .presentationDragIndicator(.hidden)
                 .presentationBackground(PillieTheme.bg)
             }
+        }
+        .sheet(isPresented: $showTrialCustomMessagesEditor) {
+            CustomReminderMessagesEditor(store: store)
+                .presentationDetents([.large])
+                .presentationDragIndicator(.hidden)
+                .presentationBackground(PillieTheme.bg)
+        }
+        .sheet(isPresented: $showTrialSmartRemindersEditor) {
+            AutoReminderIntervalEditor(store: store)
+                .presentationDetents([.height(440)])
+                .presentationDragIndicator(.hidden)
+                .presentationBackground(PillieTheme.bg)
         }
         .fullScreenCover(isPresented: $showTrialEndPaywall) {
             if let content = trialEndPaywallContent {

@@ -412,6 +412,34 @@ struct PillieApp: App {
             UserDefaults.standard.removeObject(forKey: TrialEndPaywallAutoPresentation.shownStorageKey)
             SubscriptionManager.shared.grantReverseTrial()
             reconcileScreenTimeState()
+        case "/trial-activation-hub":
+            // QA seam (#219): FamilyControls selections cannot be made on the
+            // simulator, so seed the three acceptance states without changing
+            // production behavior. `state` is unconfigured, partial, or full.
+            let state = URLComponents(url: url, resolvingAgainstBaseURL: false)?
+                .queryItems?.first(where: { $0.name == "state" })?.value ?? "unconfigured"
+            let hasBlocking = state == "partial" || state == "full"
+            let fullyConfigured = state == "full"
+
+            SubscriptionManager.shared.setPlusForTesting(false)
+            SubscriptionManager.shared.debugOverrideTrialGrantDate(Date())
+            UserDefaults.standard.set(false, forKey: OnboardingFlow.selectedFreePlanStorageKey)
+            UserDefaults.standard.set(OnboardingFlow.Step.complete.rawValue, forKey: OnboardingFlow.stepStorageKey)
+
+            AppBlockingManager.shared.debugBlockerConfiguredOverride = hasBlocking
+            AppBlockingManager.shared.blockingEnabled = hasBlocking
+
+            store.customDueReminderTitle = fullyConfigured ? "My daily reminder" : ""
+            store.customDueReminderBody = ""
+            store.customRetryReminderTitle = ""
+            store.customRetryReminderBody = ""
+            store.customLastCallReminderTitle = ""
+            store.customLastCallReminderBody = ""
+            store.autoReminderIntervalMinutes = fullyConfigured ? 30 : 10
+            store.autoReminderRetryLimit = 3
+            store.lastCallReminderEnabled = false
+            store.adaptiveReminderEnabled = true
+            reconcileScreenTimeState()
         case "/trial-age":
             // QA control (#160): age the existing (or a fresh) trial back by
             // ?days=N (default 15, i.e. past the day-14 rollover) so expiry
