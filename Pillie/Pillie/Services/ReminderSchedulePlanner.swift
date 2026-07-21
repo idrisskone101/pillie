@@ -411,15 +411,17 @@ struct ReminderSchedulePlanner {
 
         guard let transitionDay else { return nil }
 
-        guard let fireDate = firstReminderDateForDueAction(
-            dueDay: transitionDay,
-            now: input.now,
-            reminderHour: input.reminderHour,
-            reminderMinute: input.reminderMinute,
-            snoozeOverride: nil,
+        let fireDate = reminderDate(
+            on: transitionDay,
+            hour: input.reminderHour,
+            minute: input.reminderMinute,
             calendar: calendar
-        ),
-        fireDate < endOfDayExclusive(for: transitionDay, calendar: calendar) else {
+        )
+        // This is a one-shot informational notice, not a due action. Once its scheduled
+        // moment passes, a later app-driven rebuild must not turn it into a catch-up
+        // reminder and re-fire it throughout the transition day.
+        guard fireDate > input.now,
+              fireDate < endOfDayExclusive(for: transitionDay, calendar: calendar) else {
             return nil
         }
 

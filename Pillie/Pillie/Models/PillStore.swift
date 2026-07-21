@@ -1791,7 +1791,8 @@ class PillStore {
         var scannedDays = 0
 
         while dueDates.count < maxDueActions && scannedDays < scanLimitDays {
-            if DoseScheduleEngine.dueAction(on: cursor, pack: pack) != nil {
+            if let action = DoseScheduleEngine.dueAction(on: cursor, pack: pack),
+               action.type.requiresUserAction {
                 dueDates.append(cursor)
             }
 

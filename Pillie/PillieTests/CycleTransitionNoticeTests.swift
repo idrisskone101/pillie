@@ -152,6 +152,20 @@ final class CycleTransitionNoticeTests: XCTestCase {
         XCTAssertEqual(free.first?.method, .pill)
     }
 
+    func testNoticeDoesNotCatchUpOrRepeatAfterItsScheduledTime() {
+        let start = day(2026, 5, 26)
+        let pack = pack(method: .pill, startDate: start)
+        let transitionDay = day(2026, 6, 16)
+        let afterScheduledFire = calendar.date(
+            bySettingHour: 9,
+            minute: 0,
+            second: 0,
+            of: transitionDay
+        )!
+
+        XCTAssertTrue(notices(pack: pack, now: afterScheduledFire).isEmpty)
+    }
+
     // MARK: - Absent on the active-phase start / when disabled / continuous regimens
 
     func testNoticeNeverLandsOnActivePhaseStart() throws {

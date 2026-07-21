@@ -107,46 +107,62 @@ private struct TrialActivationFeatureRow: View {
 
     var body: some View {
         Button(action: onTap) {
-            HStack(spacing: 12) {
+            HStack(spacing: 10) {
                 Image(systemName: item.symbolName)
                     .font(.system(size: 15, weight: .semibold))
                     .foregroundStyle(PillieTheme.coral)
                     .frame(width: 22)
 
                 VStack(alignment: .leading, spacing: 3) {
-                    HStack(spacing: 7) {
+                    HStack(spacing: 5) {
                         Text(item.title)
                             .font(.pillie(14, weight: .semibold))
                             .foregroundStyle(PillieTheme.textPrimary)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.85)
+                            .allowsTightening(true)
+                            .layoutPriority(1)
 
                         if item.isRecommended {
                             Text("RECOMMENDED")
                                 .font(.pillie(9, weight: .bold))
                                 .foregroundStyle(PillieTheme.coral)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.8)
+                                .allowsTightening(true)
                         }
                     }
 
                     Text(item.statusTitle)
                         .font(.pillie(12, weight: .medium))
                         .foregroundStyle(PillieTheme.textMuted)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.85)
+                        .allowsTightening(true)
                 }
+                .layoutPriority(1)
 
-                Spacer(minLength: 8)
+                Spacer(minLength: 4)
 
                 if let actionTitle = item.actionTitle {
-                    Text(actionTitle)
-                        .font(.pillie(12, weight: .bold))
-                        .foregroundStyle(PillieTheme.coral)
-                    Image(systemName: "chevron.right")
-                        .font(.system(size: 11, weight: .semibold))
-                        .foregroundStyle(PillieTheme.coral.opacity(0.7))
+                    HStack(spacing: 5) {
+                        Text(actionTitle)
+                            .font(.pillie(12, weight: .bold))
+                            .foregroundStyle(PillieTheme.coral)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.85)
+                            .allowsTightening(true)
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 11, weight: .semibold))
+                            .foregroundStyle(PillieTheme.coral.opacity(0.7))
+                    }
                 } else {
                     Image(systemName: "checkmark.circle.fill")
                         .font(.system(size: 16, weight: .semibold))
                         .foregroundStyle(PillieTheme.verifiedGreen)
                 }
             }
-            .padding(.horizontal, 14)
+            .padding(.horizontal, 12)
             .padding(.vertical, 10)
             .background(
                 item.isRecommended ? PillieTheme.coralLight : PillieTheme.sage.opacity(0.25),
