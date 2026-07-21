@@ -185,13 +185,13 @@ private struct TrialExpirySummary: View {
                 .foregroundStyle(PillieTheme.textMuted)
                 .kerning(1)
 
-            ForEach(items.enumerated(), id: \.element) { index, item in
+            ForEach(items.indices, id: \.self) { index in
                 HStack(spacing: 9) {
                     Image(systemName: symbols[min(index, symbols.count - 1)])
                         .font(.system(size: 12, weight: .semibold))
                         .foregroundStyle(PillieTheme.textMuted)
                         .frame(width: 18)
-                    Text(item)
+                    Text(items[index])
                         .font(.pillie(13, weight: .medium))
                         .foregroundStyle(PillieTheme.textPrimary)
                 }

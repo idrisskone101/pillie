@@ -194,6 +194,7 @@ struct HomeView: View {
         )
     }
 
+    @MainActor
     private var trialActivationState: TrialActivationState {
         let blocking = AppBlockingManager.shared
         let customMessagesCustomized = [
