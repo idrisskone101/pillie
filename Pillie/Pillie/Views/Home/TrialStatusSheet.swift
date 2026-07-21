@@ -3,7 +3,7 @@
 //  Pillie
 //
 //  Issue #166 (Reverse Trial 7/10 / ADR 0007): the trial's only in-trial
-//  surfaces — the small persistent "Plus trial — N days left" indicator on
+//  surfaces — the small persistent protection/trial indicator on
 //  Home and the status sheet behind it. Informational, never an upsell card:
 //  the sheet's quiet "Keep Plus" button and the Settings upgrade row are the
 //  only purchase paths during the trial. All copy and visibility rules live in

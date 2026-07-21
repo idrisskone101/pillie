@@ -202,6 +202,7 @@ struct PillieApp: App {
 
     private let container: ModelContainer
     @State private var store: PillStore
+    @State private var showFirstInterventionConfirmation = false
     private static var isRunningTests: Bool {
         ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
     }
@@ -252,6 +253,14 @@ struct PillieApp: App {
                 .environment(store)
                 .modelContainer(container)
                 .preferredColorScheme(.light)
+                .alert(
+                    "Protection stepped in",
+                    isPresented: $showFirstInterventionConfirmation
+                ) {
+                    Button("Got it", role: .cancel) {}
+                } message: {
+                    Text("Your protection plan stepped in when a blocked app was opened.")
+                }
                 .onAppear {
                     AppDelegate.store = store
                 }
@@ -324,6 +333,22 @@ struct PillieApp: App {
         let count = BlockerInterventionSharedState().flushUnflushed()
         guard count > 0 else { return }
         ProductAnalyticsTelemetry.live.blockerInterventionFired(count: count)
+
+        let manager = SubscriptionManager.shared
+        let defaults = UserDefaults.standard
+        guard FirstInterventionConfirmation.shouldPresent(
+            flushedCount: count,
+            state: PlusAccessState(
+                hasEntitlement: manager.hasEntitlement,
+                trialGrantDate: manager.trialGrantDate
+            ),
+            alreadyShown: defaults.bool(forKey: FirstInterventionConfirmation.shownStorageKey),
+            calendar: .current,
+            now: Date()
+        ) else { return }
+
+        defaults.set(true, forKey: FirstInterventionConfirmation.shownStorageKey)
+        showFirstInterventionConfirmation = true
     }
 
     private func reconcileScreenTimeState() {
@@ -423,6 +448,9 @@ struct PillieApp: App {
 
             SubscriptionManager.shared.setPlusForTesting(false)
             SubscriptionManager.shared.debugOverrideTrialGrantDate(Date())
+            UserDefaults.standard.removeObject(
+                forKey: FirstInterventionConfirmation.shownStorageKey
+            )
             UserDefaults.standard.set(false, forKey: OnboardingFlow.selectedFreePlanStorageKey)
             UserDefaults.standard.set(OnboardingFlow.Step.complete.rawValue, forKey: OnboardingFlow.stepStorageKey)
 

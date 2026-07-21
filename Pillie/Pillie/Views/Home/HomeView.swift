@@ -189,6 +189,7 @@ struct HomeView: View {
                 hasEntitlement: SubscriptionManager.shared.hasEntitlement,
                 trialGrantDate: SubscriptionManager.shared.trialGrantDate
             ),
+            protectionActive: trialActivationState.appBlockingActive,
             calendar: Calendar.current,
             now: Date()
         )
