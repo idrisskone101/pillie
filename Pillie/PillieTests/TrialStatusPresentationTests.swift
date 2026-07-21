@@ -47,6 +47,28 @@ final class TrialStatusPresentationTests: XCTestCase {
         XCTAssertEqual(presentation?.daysRemaining, 14)
     }
 
+    func testActiveTrialWithProtectionShowsTruthfulProtectionStatus() {
+        let presentation = TrialStatusPresentation.make(
+            state: trialState(),
+            protectionActive: true,
+            calendar: calendar,
+            now: date(2026, 7, 2, 9, 0)
+        )
+
+        XCTAssertEqual(presentation?.indicatorLabel, "Protection active · 14 days left")
+    }
+
+    func testActiveTrialWithoutProtectionShowsTruthfulSetupStatus() {
+        let presentation = TrialStatusPresentation.make(
+            state: trialState(),
+            protectionActive: false,
+            calendar: calendar,
+            now: date(2026, 7, 2, 9, 0)
+        )
+
+        XCTAssertEqual(presentation?.indicatorLabel, "Set up protection · 14 days left")
+    }
+
     // MARK: - Indicator label (day-count boundaries)
 
     func testIndicatorLabelCountsDownAcrossTheTrial() {
@@ -59,9 +81,9 @@ final class TrialStatusPresentationTests: XCTestCase {
         }
 
         // Day 1 (first full day).
-        XCTAssertEqual(label(onDay: 1), "Plus trial — 14 days left")
+        XCTAssertEqual(label(onDay: 1), "Set up protection · 14 days left")
         // Day 13 (the day before the last protected day).
-        XCTAssertEqual(label(onDay: 13), "Plus trial — 2 days left")
+        XCTAssertEqual(label(onDay: 13), "Set up protection · 2 days left")
     }
 
     func testGrantDayLabelClampsToFourteenDays() {
@@ -73,7 +95,7 @@ final class TrialStatusPresentationTests: XCTestCase {
             now: date(2026, 7, 1, 10, 30)
         )
 
-        XCTAssertEqual(presentation?.indicatorLabel, "Plus trial — 14 days left")
+        XCTAssertEqual(presentation?.indicatorLabel, "Set up protection · 14 days left")
     }
 
     func testFinalProtectedDayReadsEndsTonight() {
@@ -86,7 +108,7 @@ final class TrialStatusPresentationTests: XCTestCase {
             now: date(2026, 7, 15, 22, 0)
         )
 
-        XCTAssertEqual(presentation?.indicatorLabel, "Plus trial — ends tonight")
+        XCTAssertEqual(presentation?.indicatorLabel, "Set up protection · ends tonight")
         XCTAssertEqual(presentation?.endsTonight, true)
     }
 
