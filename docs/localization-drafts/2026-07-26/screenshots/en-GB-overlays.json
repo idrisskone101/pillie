@@ -1,0 +1,55 @@
+{
+  "status": "copy-only draft; no rendered or uploaded assets",
+  "sourceFrameOrder": [
+    "Core reminder promise",
+    "Schedule and alarm setup",
+    "App blocking and return",
+    "History and tracking",
+    "Shake to confirm"
+  ],
+  "layoutRules": {
+    "headlineLimit": 48,
+    "supportingLimit": 80,
+    "maxHeadlineLines": 2,
+    "maxSupportingLines": 2,
+    "review": "Render at 100% and verify no orphan words before any separately approved screenshot upload."
+  },
+  "locales": [
+    {
+      "lane": "en-GB",
+      "uiLanguage": "English",
+      "overlays": [
+        {
+          "position": 1,
+          "headline": "Birth control reminders that follow through",
+          "supporting": "Support for pill, patch and ring routines",
+          "screen": "Today overview"
+        },
+        {
+          "position": 2,
+          "headline": "Set a routine that fits your day",
+          "supporting": "Choose your schedule, time and follow-up reminders",
+          "screen": "Reminder plan"
+        },
+        {
+          "position": 3,
+          "headline": "Log your dose. Get back to your apps.",
+          "supporting": "Pillie Plus can pause selected distractions",
+          "screen": "App blocking"
+        },
+        {
+          "position": 4,
+          "headline": "See every check-in at a glance",
+          "supporting": "Review taken, missed and break-day history",
+          "screen": "History"
+        },
+        {
+          "position": 5,
+          "headline": "Shake to confirm when you’re done",
+          "supporting": "An optional extra step for your routine",
+          "screen": "Shake confirmation"
+        }
+      ]
+    }
+  ]
+}
