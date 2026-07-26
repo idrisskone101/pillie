@@ -1,0 +1,29 @@
+{
+  "snapshot": {
+    "retrievedAt": "2026-07-26",
+    "appId": "6759352439",
+    "bundleId": "com.idrisskone.pillie",
+    "version": "2.0.5",
+    "versionId": "e46094a1-f9c6-4cfd-9515-04dc17592c66",
+    "appInfoLocalizationId": "e8d1d2bf-f316-483d-bf30-fac345df730d",
+    "versionLocalizationId": "8e8c8f37-9d02-473b-884c-48afe53a9c92",
+    "state": "READY_FOR_DISTRIBUTION",
+    "source": "read-only App Store Connect CLI",
+    "immutableControl": true
+  },
+  "appInfo": {
+    "locale": "en-US",
+    "name": "Pillie: Birth Control Reminder",
+    "subtitle": "Pill Reminder, Patch & Ring",
+    "privacyPolicyUrl": "https://idrisskone101.github.io/pillie/privacy-policy"
+  },
+  "versionLocalization": {
+    "locale": "en-US",
+    "description": "Pillie is a birth control reminder for the moments when normal alarms are too easy to ignore.\n\nSet your pill, patch, or ring schedule, choose your reminders, and let Pillie help you follow through. When it is time, Pillie can block distracting apps until your dose is marked done, so \"in a minute\" does not quietly become an hour.\n\nWhy Pillie:\n• Birth control reminders for pill, patch, and ring routines\n• App blocking to help keep distractions out of the way\n• Quick actions to Mark as Taken or Snooze\n• Shake to Confirm for a small extra commitment step\n• Follow-up reminders at your chosen interval\n• Refill reminders for pill users\n• Monthly history with taken, missed, and break-day states\n• Streaks and adherence overview\n• Flexible schedules for common pill regimens and custom cycles\n\nBuilt for real life:\n• Change reminder time, cycle day, and regimen anytime\n• Track your routine without guilt or complicated setup\n• Keep your tracking data on your device\n\nPillie is not medical advice and does not replace guidance from your clinician. Always follow your birth control instructions.\n\nTerms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/",
+    "keywords": "contraceptive,contraception,medication,alarm,depo,iud,shot,mini,refill,cycle,missed,tracker,nuvaring",
+    "marketingUrl": "https://idrisskone101.github.io/pillie/",
+    "supportUrl": "https://idrisskone101.github.io/pillie/support",
+    "whatsNew": "This update includes general improvements, cleanup, and bug fixes to keep Pillie running smoothly."
+  }
+}
+

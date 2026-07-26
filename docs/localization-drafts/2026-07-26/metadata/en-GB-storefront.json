@@ -1,0 +1,33 @@
+{
+  "sourceControl": "../source/en-US-control.json",
+  "policy": {
+    "additiveOnly": true,
+    "doNotModifyLocale": "en-US",
+    "nameLimit": 30,
+    "subtitleLimit": 30,
+    "keywordsLimit": 100,
+    "descriptionLimit": 4000,
+    "whatsNewLimit": 4000,
+    "healthPolicy": "Describe reminder and logging functionality. Do not imply contraceptive efficacy, clinical protection, or guaranteed adherence."
+  },
+  "drafts": [
+    {
+      "lane": "en-GB",
+      "ascLocale": "en-GB",
+      "scope": "storefront-only",
+      "appInfo": {
+        "name": "Pillie: Birth Control Reminder",
+        "subtitle": "Pill, Patch & Ring Reminder",
+        "privacyPolicyUrl": "https://idrisskone101.github.io/pillie/privacy-policy"
+      },
+      "versionLocalization": {
+        "description": "Pillie is a birth control reminder for moments when an ordinary alarm is too easy to dismiss.\n\nSet a pill, patch or ring schedule, choose your reminders and use Pillie to support your routine. When it is time, Pillie Plus can pause selected distracting apps until the dose is marked as taken.\n\nWhy Pillie:\n• Reminders for pill, patch and ring routines\n• Optional app blocking to reduce distractions\n• Quick actions to Mark as Taken or Snooze\n• Shake to Confirm as an optional extra check-in step\n• Follow-up reminders at an interval you choose\n• Refill reminders for pill users\n• Monthly history with taken, missed and break-day states\n• Streak and adherence summaries\n• Flexible schedules for common pill regimens and custom cycles\n\nBuilt for everyday routines:\n• Change reminder time, cycle day and regimen at any time\n• Track a routine without guilt or complicated setup\n• Keep tracking data on your device\n\nPillie provides reminders and tracking only. It is not medical advice and does not replace guidance from a clinician. Always follow the instructions for your birth control method.\n\nTerms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/",
+        "keywords": "contraception,contraceptive,medication,alarm,combined,mini,refill,cycle,missed,dose,tracker,nuvaring",
+        "marketingUrl": "https://idrisskone101.github.io/pillie/",
+        "supportUrl": "https://idrisskone101.github.io/pillie/support",
+        "whatsNew": "This update includes general improvements, tidy-up work and bug fixes to keep Pillie running smoothly.",
+        "promotionalText": null
+      }
+    }
+  ]
+}
