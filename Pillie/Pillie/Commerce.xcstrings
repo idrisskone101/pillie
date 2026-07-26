@@ -34,6 +34,669 @@
           }
         }
       }
+    },
+    "paywall.title": {
+      "comment": "No adherence guarantee [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stay on top of your routine with Pillie Plus"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tieni sotto controllo la routine con Pillie Plus"
+          }
+        }
+      }
+    },
+    "paywall.subtitle": {
+      "comment": "Functionality only [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pause selected apps when a reminder is due, for days when one prompt is not enough."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Metti in pausa le app selezionate quando arriva un promemoria, nei giorni in cui un solo avviso non basta."
+          }
+        }
+      }
+    },
+    "paywall.feature.daily_reminders": {
+      "comment": "Feature [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daily reminders"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promemoria quotidiani"
+          }
+        }
+      }
+    },
+    "paywall.feature.smart_reminders": {
+      "comment": "Feature [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Smart Reminders"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promemoria smart"
+          }
+        }
+      }
+    },
+    "paywall.feature.app_blocking": {
+      "comment": "Feature [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pause distracting apps"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Metti in pausa le app che distraggono"
+          }
+        }
+      }
+    },
+    "paywall.feature.shake": {
+      "comment": "Feature [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shake to Confirm"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Muovi per confermare"
+          }
+        }
+      }
+    },
+    "paywall.feature.custom_messages": {
+      "comment": "Feature [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Custom reminder messages"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Messaggi dei promemoria personalizzati"
+          }
+        }
+      }
+    },
+    "paywall.feature.future": {
+      "comment": "Feature [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New features as they launch"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nuove funzioni al loro arrivo"
+          }
+        }
+      }
+    },
+    "paywall.plan.annual": {
+      "comment": "Plan title [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annual"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annuale"
+          }
+        }
+      }
+    },
+    "paywall.plan.monthly": {
+      "comment": "Plan title [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Monthly"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mensile"
+          }
+        }
+      }
+    },
+    "paywall.plan.best_value": {
+      "comment": "Badge; verify pricing basis [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Best Value"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Più conveniente"
+          }
+        }
+      }
+    },
+    "paywall.plan.price_period": {
+      "comment": "Both values from StoreKit [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ per %@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ per %@"
+          }
+        }
+      }
+    },
+    "paywall.plan.cancel_anytime": {
+      "comment": "Subscription management [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Manage or cancel at any time in Settings."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gestisci o annulla in qualsiasi momento dalle Impostazioni."
+          }
+        }
+      }
+    },
+    "paywall.action.upgrade": {
+      "comment": "Purchase CTA [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Upgrade to Pillie Plus"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Passa a Pillie Plus"
+          }
+        }
+      }
+    },
+    "paywall.action.restore": {
+      "comment": "Restore CTA [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restore Purchases"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ripristina acquisti"
+          }
+        }
+      }
+    },
+    "paywall.action.terms": {
+      "comment": "External link [legal]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terms of Use"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Condizioni d’uso"
+          }
+        }
+      }
+    },
+    "paywall.action.privacy": {
+      "comment": "External link [legal]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Privacy Policy"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Informativa sulla privacy"
+          }
+        }
+      }
+    },
+    "paywall.loading.failed": {
+      "comment": "Load error [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn’t load plans. Tap to try again."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossibile caricare i piani. Tocca per riprovare."
+          }
+        }
+      }
+    },
+    "paywall.purchase_error.title": {
+      "comment": "Alert title [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Purchase Error"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Errore di acquisto"
+          }
+        }
+      }
+    },
+    "paywall.restore_error.title": {
+      "comment": "Alert title [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restore Error"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Errore di ripristino"
+          }
+        }
+      }
+    },
+    "paywall.no_subscription.title": {
+      "comment": "Alert title [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No Subscription Found"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nessun abbonamento trovato"
+          }
+        }
+      }
+    },
+    "paywall.no_subscription.body": {
+      "comment": "Alert body [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No active subscription was found for this account."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Non è stato trovato alcun abbonamento attivo per questo account."
+          }
+        }
+      }
+    },
+    "trial.granted.title": {
+      "comment": "Trial duration must match StoreKit offer [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your next two weeks with Pillie Plus"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le prossime due settimane con Pillie Plus"
+          }
+        }
+      }
+    },
+    "trial.granted.subtitle": {
+      "comment": "No “full” overclaim [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your Pillie Plus trial starts now. Here is what is included."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La prova di Pillie Plus inizia ora. Ecco cosa include."
+          }
+        }
+      }
+    },
+    "trial.timeline.today": {
+      "comment": "Timeline label [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oggi"
+          }
+        }
+      }
+    },
+    "trial.timeline.today_title": {
+      "comment": "Entitlement statement [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus features are available"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le funzioni Plus sono disponibili"
+          }
+        }
+      }
+    },
+    "trial.timeline.warning": {
+      "comment": "Avoid hard-coded day unless actual offer [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Before the trial ends"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prima della fine della prova"
+          }
+        }
+      }
+    },
+    "trial.timeline.choose": {
+      "comment": "User choice [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose whether to continue"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scegli se continuare"
+          }
+        }
+      }
+    },
+    "trial.status.title": {
+      "comment": "Trial sheet heading [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Try your Plus features"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prova le funzioni Plus"
+          }
+        }
+      }
+    },
+    "trial.status.ends": {
+      "comment": "Locale-aware date [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trial ends %@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La prova termina il %@"
+          }
+        }
+      }
+    },
+    "trial.status.after_title": {
+      "comment": "Section heading [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "When the trial ends"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Al termine della prova"
+          }
+        }
+      }
+    },
+    "trial.end.title": {
+      "comment": "No fragment styling [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your Pillie Plus trial has ended"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La prova di Pillie Plus è terminata"
+          }
+        }
+      }
+    },
+    "trial.end.subtitle": {
+      "comment": "Entitlement statement [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App blocking is now off. Your standard reminders remain available."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il blocco delle app ora è disattivato. I promemoria standard restano disponibili."
+          }
+        }
+      }
+    },
+    "trial.end.blocks": {
+      "comment": "Usage metric, not intercepted/protected [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apps paused"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App messe in pausa"
+          }
+        }
+      }
+    },
+    "trial.end.actions": {
+      "comment": "Usage metric [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Actions logged"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Azioni registrate"
+          }
+        }
+      }
+    },
+    "trial.end.streak": {
+      "comment": "Usage metric [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Current streak"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Serie attuale"
+          }
+        }
+      }
+    },
+    "trial.end.free_title": {
+      "comment": "Free state [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reminders remain available"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I promemoria restano disponibili"
+          }
+        }
+      }
+    },
+    "trial.end.welcome_back": {
+      "comment": "Post-purchase success [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus is active again"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus è di nuovo attivo"
+          }
+        }
+      }
+    },
+    "trial.end.back_today": {
+      "comment": "Dismiss success [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Back to Today"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Torna a Oggi"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

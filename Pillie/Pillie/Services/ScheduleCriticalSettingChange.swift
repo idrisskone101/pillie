@@ -6,6 +6,35 @@
 import Foundation
 
 enum ScheduleCriticalSettingChange {
+    struct Confirmation: Equatable {
+        let title: String
+        let body: String
+        let confirmTitle: String
+        let cancelTitle: String
+    }
+
+    static func confirmation(
+        cycleDay: Int,
+        locale: Locale = .current
+    ) -> Confirmation {
+        Confirmation(
+            title: PillieLocalization.string(
+                "settings.schedule_reset.title",
+                locale: locale
+            ),
+            body: PillieLocalization.formatted(
+                "settings.schedule_reset.body",
+                locale: locale,
+                arguments: Int64(cycleDay)
+            ),
+            confirmTitle: PillieLocalization.string(
+                "settings.schedule_reset.confirm",
+                locale: locale
+            ),
+            cancelTitle: PillieLocalization.string("global.action.cancel", locale: locale)
+        )
+    }
+
     /// Persists the Reminder Time chosen during onboarding without touching the
     /// notification pipeline. On a fresh install notification authorization has
     /// not been resolved yet, so scheduling here made every

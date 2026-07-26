@@ -16,6 +16,7 @@ import os
 
 struct TrialEndPaywallView: View {
     @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
+    @Environment(\.locale) private var locale
     @State private var animateIn = false
     @State private var selectedPlan: Plan = .annual
     @State private var offerings: Offerings?
@@ -83,20 +84,34 @@ struct TrialEndPaywallView: View {
             await subscriptionManager.refreshStatus()
             await offeringsLoaded
         }
-        .alert("Purchase Error", isPresented: .init(
+        .alert(PillieLocalization.string(
+            "paywall.purchase_error.title",
+            table: "Commerce",
+            locale: locale
+        ), isPresented: .init(
             get: { purchaseError != nil },
             set: { if !$0 { purchaseError = nil } }
         )) {
-            Button("OK") { purchaseError = nil }
+            Button(PillieLocalization.string("global.action.ok", locale: locale)) {
+                purchaseError = nil
+            }
         } message: {
             Text(purchaseError ?? "")
         }
         // Design 2e: the native no-subscription alert over the sheet, matching
         // the existing paywall's restore path.
-        .alert("No Subscription Found", isPresented: $showNoSubscriptionAlert) {
-            Button("OK") {}
+        .alert(PillieLocalization.string(
+            "paywall.no_subscription.title",
+            table: "Commerce",
+            locale: locale
+        ), isPresented: $showNoSubscriptionAlert) {
+            Button(PillieLocalization.string("global.action.ok", locale: locale)) {}
         } message: {
-            Text("No active subscription was found for this account.")
+            Text(PillieLocalization.string(
+                "paywall.no_subscription.body",
+                table: "Commerce",
+                locale: locale
+            ))
         }
         .accessibilityIdentifier("trialEndPaywall")
     }
@@ -138,7 +153,10 @@ struct TrialEndPaywallView: View {
                         .frame(width: 32, height: 32)
                         .background(PillieTheme.sage, in: Circle())
                 }
-                .accessibilityLabel("Close")
+                .accessibilityLabel(PillieLocalization.string(
+                    "global.action.close",
+                    locale: locale
+                ))
                 .accessibilityIdentifier("trialEndPaywallClose")
             }
 
@@ -328,11 +346,11 @@ struct TrialEndPaywallView: View {
     }
 
     private var annualPriceText: String {
-        annualPackage?.storeProduct.localizedPriceString ?? "$29.99"
+        annualPackage?.storeProduct.localizedPriceString ?? "—"
     }
 
     private var monthlyPriceText: String {
-        monthlyPackage?.storeProduct.localizedPriceString ?? "$4.99"
+        monthlyPackage?.storeProduct.localizedPriceString ?? "—"
     }
 
     /// Truthful annual-vs-monthly comparison from live store prices (ADR 0002:
@@ -352,8 +370,28 @@ struct TrialEndPaywallView: View {
     /// "2 months free" derived from real prices (the #162 annual anchor), or
     /// `nil` when there is no honest saving.
     private var savingsBadgeText: String? {
-        guard let months = priceComparison?.monthsFree else { return nil }
-        return months == 1 ? "1 month free" : "\(months) months free"
+        guard priceComparison?.monthsFree != nil else { return nil }
+        return PillieLocalization.string(
+            "paywall.plan.best_value",
+            table: "Commerce",
+            locale: locale
+        )
+    }
+
+    private var annualPriceAndPeriodText: String {
+        CommercePresentation.priceAndPeriod(
+            displayPrice: annualPriceText,
+            subscriptionPeriod: annualPackage?.storeProduct.subscriptionPeriod,
+            locale: locale
+        )
+    }
+
+    private var monthlyPriceAndPeriodText: String {
+        CommercePresentation.priceAndPeriod(
+            displayPrice: monthlyPriceText,
+            subscriptionPeriod: monthlyPackage?.storeProduct.subscriptionPeriod,
+            locale: locale
+        )
     }
 
     private var planTiles: some View {
@@ -371,7 +409,11 @@ struct TrialEndPaywallView: View {
             selectPlan(.annual)
         } label: {
             VStack(alignment: .leading, spacing: 4) {
-                Text("Annual")
+                Text(PillieLocalization.string(
+                    "paywall.plan.annual",
+                    table: "Commerce",
+                    locale: locale
+                ))
                     .font(.pillie(11, weight: .black))
                     .tracking(1)
                     .textCase(.uppercase)
@@ -379,17 +421,21 @@ struct TrialEndPaywallView: View {
                     .padding(.top, 4)
 
                 HStack(alignment: .firstTextBaseline, spacing: 4) {
-                    Text(annualPriceText)
+                    Text(annualPriceAndPeriodText)
                         .font(.pillie(24, weight: .black))
                         .foregroundStyle(.white)
                         .lineLimit(1)
                         .minimumScaleFactor(0.6)
-                    Text("/yr")
-                        .font(.pillie(13, weight: .semibold))
-                        .foregroundStyle(Color.white.opacity(0.6))
                 }
 
-                Text(annualPerMonthText.map { "\($0)/mo" } ?? " ")
+                Text(annualPerMonthText.map {
+                    CommercePresentation.priceAndPeriod(
+                        displayPrice: $0,
+                        periodValue: 1,
+                        periodUnit: .month,
+                        locale: locale
+                    )
+                } ?? " ")
                     .font(.pillie(12, weight: .semibold))
                     .foregroundStyle(Color.white.opacity(0.6))
             }
@@ -426,7 +472,7 @@ struct TrialEndPaywallView: View {
         }
         .buttonStyle(.plain)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Annual, \(annualPriceText) per year\(annualPerMonthText.map { ", \($0) per month" } ?? "").\(savingsBadgeText.map { " \($0)." } ?? "")")
+        .accessibilityLabel(annualPriceAndPeriodText)
         .accessibilityAddTraits(selectedPlan == .annual ? [.isButton, .isSelected] : .isButton)
         .accessibilityIdentifier("trialEndPaywallAnnualPlan")
     }
@@ -436,7 +482,11 @@ struct TrialEndPaywallView: View {
             selectPlan(.monthly)
         } label: {
             VStack(alignment: .leading, spacing: 4) {
-                Text("Monthly")
+                Text(PillieLocalization.string(
+                    "paywall.plan.monthly",
+                    table: "Commerce",
+                    locale: locale
+                ))
                     .font(.pillie(11, weight: .black))
                     .tracking(1)
                     .textCase(.uppercase)
@@ -444,17 +494,18 @@ struct TrialEndPaywallView: View {
                     .padding(.top, 4)
 
                 HStack(alignment: .firstTextBaseline, spacing: 4) {
-                    Text(monthlyPriceText)
+                    Text(monthlyPriceAndPeriodText)
                         .font(.pillie(24, weight: .black))
                         .foregroundStyle(PillieTheme.textPrimary)
                         .lineLimit(1)
                         .minimumScaleFactor(0.6)
-                    Text("/mo")
-                        .font(.pillie(13, weight: .semibold))
-                        .foregroundStyle(PillieTheme.textMuted)
                 }
 
-                Text("No commitment")
+                Text(PillieLocalization.string(
+                    "paywall.plan.cancel_anytime",
+                    table: "Commerce",
+                    locale: locale
+                ))
                     .font(.pillie(12, weight: .semibold))
                     .foregroundStyle(PillieTheme.textMuted)
             }
@@ -479,7 +530,7 @@ struct TrialEndPaywallView: View {
         }
         .buttonStyle(.plain)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Monthly, \(monthlyPriceText) per month. No commitment.")
+        .accessibilityLabel(monthlyPriceAndPeriodText)
         .accessibilityAddTraits(selectedPlan == .monthly ? [.isButton, .isSelected] : .isButton)
         .accessibilityIdentifier("trialEndPaywallMonthlyPlan")
     }
@@ -519,7 +570,18 @@ struct TrialEndPaywallView: View {
 
     private var reassuranceRow: some View {
         HStack(spacing: 16) {
-            ForEach(["Reminders stay free forever", "Cancel anytime"], id: \.self) { item in
+            ForEach([
+                PillieLocalization.string(
+                    "trial.end.free_title",
+                    table: "Commerce",
+                    locale: locale
+                ),
+                PillieLocalization.string(
+                    "paywall.plan.cancel_anytime",
+                    table: "Commerce",
+                    locale: locale
+                ),
+            ], id: \.self) { item in
                 HStack(spacing: 5) {
                     Image(systemName: "checkmark")
                         .font(.system(size: 12, weight: .bold))
@@ -527,7 +589,7 @@ struct TrialEndPaywallView: View {
                     Text(item)
                         .font(.pillie(12, weight: .semibold))
                         .foregroundStyle(PillieTheme.textPrimary)
-                        .lineLimit(1)
+                        .lineLimit(2)
                         .minimumScaleFactor(0.8)
                 }
                 .accessibilityElement(children: .combine)
@@ -545,7 +607,11 @@ struct TrialEndPaywallView: View {
                     ProgressView()
                         .tint(.white)
                 } else if offeringsError {
-                    Text("Failed to load plans — Tap to retry")
+                    Text(PillieLocalization.string(
+                        "paywall.loading.failed",
+                        table: "Commerce",
+                        locale: locale
+                    ))
                         .font(.pillie(16, weight: .bold))
                         .lineLimit(1)
                         .minimumScaleFactor(0.6)
@@ -576,7 +642,7 @@ struct TrialEndPaywallView: View {
             Button {
                 dismissWithoutPurchase()
             } label: {
-                Text("Not now")
+                Text(PillieLocalization.string("global.action.not_now", locale: locale))
                     .font(.pillie(13, weight: .semibold))
                     .foregroundStyle(PillieTheme.textMuted)
             }
@@ -596,7 +662,11 @@ struct TrialEndPaywallView: View {
                             .tint(PillieTheme.textMuted)
                             .scaleEffect(0.72)
                     } else {
-                        Text("Restore Purchases")
+                        Text(PillieLocalization.string(
+                            "paywall.action.restore",
+                            table: "Commerce",
+                            locale: locale
+                        ))
                             .font(.pillie(13, weight: .semibold))
                             .foregroundStyle(PillieTheme.textMuted)
                     }
@@ -611,12 +681,24 @@ struct TrialEndPaywallView: View {
 
     private var legalFooter: some View {
         VStack(spacing: 2) {
-            Text("Renews automatically until cancelled in Settings.")
+            Text(PillieLocalization.string(
+                "paywall.plan.cancel_anytime",
+                table: "Commerce",
+                locale: locale
+            ))
             HStack(spacing: 4) {
-                Link("Terms of Use", destination: URL(string: "https://idrisskone101.github.io/pillie/terms-and-conditions")!)
+                Link(PillieLocalization.string(
+                    "paywall.action.terms",
+                    table: "Commerce",
+                    locale: locale
+                ), destination: URL(string: "https://idrisskone101.github.io/pillie/terms-and-conditions")!)
                     .underline()
                 Text("·")
-                Link("Privacy Policy", destination: URL(string: "https://idrisskone101.github.io/pillie/privacy-policy")!)
+                Link(PillieLocalization.string(
+                    "paywall.action.privacy",
+                    table: "Commerce",
+                    locale: locale
+                ), destination: URL(string: "https://idrisskone101.github.io/pillie/privacy-policy")!)
                     .underline()
             }
         }
@@ -644,8 +726,12 @@ struct TrialEndPaywallView: View {
             }
             .accessibilityHidden(true)
 
-            (Text("You're ").foregroundColor(PillieTheme.textPrimary)
-                + Text("covered.").foregroundColor(PillieTheme.coral))
+            Text(PillieLocalization.string(
+                "trial.end.welcome_back",
+                table: "Commerce",
+                locale: locale
+            ))
+                .foregroundColor(PillieTheme.textPrimary)
                 .font(.pillie(34, weight: .black))
                 .padding(.top, 24)
 
@@ -657,7 +743,11 @@ struct TrialEndPaywallView: View {
                 .frame(maxWidth: 300)
                 .padding(.top, 10)
 
-            Text("welcome back, bestie!")
+            Text(PillieLocalization.string(
+                "trial.end.welcome_back",
+                table: "Commerce",
+                locale: locale
+            ))
                 .font(.pillieHandwriting(size: 26))
                 .foregroundStyle(PillieTheme.patchChangeRose)
                 .rotationEffect(.degrees(-2))
@@ -685,7 +775,11 @@ struct TrialEndPaywallView: View {
                 onDismiss()
             } label: {
                 HStack(spacing: 10) {
-                    Text("Back to Today")
+                    Text(PillieLocalization.string(
+                        "trial.end.back_today",
+                        table: "Commerce",
+                        locale: locale
+                    ))
                         .font(.pillie(17, weight: .bold))
                     Image(systemName: "arrow.right")
                         .font(.system(size: 14, weight: .semibold))
@@ -699,7 +793,11 @@ struct TrialEndPaywallView: View {
             }
             .accessibilityIdentifier("trialEndPaywallSuccessCTA")
 
-            Text("Manage or cancel anytime in Settings.")
+            Text(PillieLocalization.string(
+                "paywall.plan.cancel_anytime",
+                table: "Commerce",
+                locale: locale
+            ))
                 .font(.pillie(11, weight: .medium))
                 .foregroundStyle(PillieTheme.textMuted.opacity(0.7))
                 .padding(.top, 12)
@@ -722,8 +820,8 @@ struct TrialEndPaywallView: View {
 
     private var successPlanLabel: String {
         switch succeededPlan {
-        case .annual: return "Annual · \(annualPriceText)/year"
-        case .monthly: return "Monthly · \(monthlyPriceText)/month"
+        case .annual: return annualPriceAndPeriodText
+        case .monthly: return monthlyPriceAndPeriodText
         }
     }
 

@@ -84,23 +84,77 @@ struct TrialGrantedMomentContent {
             TimelineDay(
                 label: "Day 14",
                 title: "You choose",
-                detail: "Keep reminders free, or stay with Plus at $29.99/year.",
+                detail: "Keep reminders free, or choose whether to continue with Plus.",
                 symbolName: "leaf.fill",
                 circleBackground: PillieTheme.sage,
                 symbolColor: PillieTheme.verifiedGreen
             ),
         ],
-        disclosure: "Your free trial lasts 14 days — app blocking turns off when it ends. After that, Plus is $29.99/year, or keep using reminders free.",
+        disclosure: "Your free trial lasts 14 days. App blocking turns off when it ends, while reminders stay free.",
         primaryCTA: "Continue to app blocking"
     )
+
+    static func localized(locale: Locale = .current) -> TrialGrantedMomentContent {
+        func commerce(_ key: String) -> String {
+            PillieLocalization.string(key, table: "Commerce", locale: locale)
+        }
+        return TrialGrantedMomentContent(
+            badge: commerce("trial.granted.title"),
+            title: commerce("trial.granted.title"),
+            titleAccent: "",
+            subtitle: commerce("trial.granted.subtitle"),
+            today: Today(
+                label: commerce("trial.timeline.today"),
+                title: commerce("trial.timeline.today_title"),
+                perks: [
+                    Perk(title: commerce("paywall.feature.app_blocking"), symbolName: "nosign"),
+                    Perk(
+                        title: commerce("paywall.feature.shake"),
+                        symbolName: "iphone.radiowaves.left.and.right"
+                    ),
+                    Perk(
+                        title: commerce("paywall.feature.smart_reminders"),
+                        symbolName: "bell.fill"
+                    ),
+                    Perk(
+                        title: commerce("paywall.feature.custom_messages"),
+                        symbolName: "text.bubble.fill"
+                    ),
+                ]
+            ),
+            laterDays: [
+                TimelineDay(
+                    label: commerce("trial.timeline.warning"),
+                    title: commerce("trial.timeline.warning"),
+                    detail: commerce("trial.granted.subtitle"),
+                    symbolName: "bell.fill",
+                    circleBackground: PillieTheme.lavender,
+                    symbolColor: PillieTheme.textPrimary
+                ),
+                TimelineDay(
+                    label: commerce("trial.timeline.choose"),
+                    title: commerce("trial.timeline.choose"),
+                    detail: commerce("paywall.plan.cancel_anytime"),
+                    symbolName: "leaf.fill",
+                    circleBackground: PillieTheme.sage,
+                    symbolColor: PillieTheme.verifiedGreen
+                ),
+            ],
+            disclosure: commerce("trial.end.subtitle"),
+            primaryCTA: PillieLocalization.string("global.action.continue", locale: locale)
+        )
+    }
 }
 
 struct TrialGrantedMomentView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.locale) private var locale
     @State private var animateIn = false
     @State private var blobPhase: CGFloat = 0
     private let performanceTier = PerformanceTier.current
-    private let content = TrialGrantedMomentContent.default
+    private var content: TrialGrantedMomentContent {
+        TrialGrantedMomentContent.localized(locale: locale)
+    }
 
     let onBack: () -> Void
     let onContinue: () -> Void

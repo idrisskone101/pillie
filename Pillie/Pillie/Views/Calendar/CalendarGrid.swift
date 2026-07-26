@@ -7,13 +7,21 @@ import SwiftUI
 
 struct CalendarGrid: View {
     @Environment(PillStore.self) private var store
+    @Environment(\.locale) private var locale
     let displayedMonth: Date
     let monthSnapshots: [Int: PillScheduleSnapshot]
 
-    private let weekdays = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 4), count: 7)
 
-    private let calendar = Calendar.current
+    private var calendar: Calendar {
+        var value = Calendar.current
+        value.locale = locale
+        return value
+    }
+
+    private var weekdays: [String] {
+        calendar.veryShortStandaloneWeekdaySymbols
+    }
 
     private var year: Int {
         calendar.component(.year, from: displayedMonth)
@@ -164,6 +172,11 @@ struct CalendarGrid: View {
                             : presentation.defaultIndicatorOpacity)
                 )
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(dayAccessibilityLabel(
+            date: dayDate,
+            presentation: presentation
+        ))
     }
 
     // MARK: - Status Lookup
@@ -189,6 +202,31 @@ struct CalendarGrid: View {
             return .today
         }
         return day < store.today ? .past : .future
+    }
+
+    private func dayAccessibilityLabel(
+        date: Date?,
+        presentation: CalendarDayPresentation
+    ) -> String {
+        guard let date else { return "" }
+        if presentation.isFutureDay {
+            return date.formatted(
+                Date.FormatStyle().day().month(.wide).year().locale(locale)
+            )
+        }
+        let status: HistoryPresentation.DayStatus
+        if presentation.isBreakDay || presentation.status == .breakDay {
+            status = .breakDay
+        } else if presentation.status == .taken {
+            status = .completed
+        } else {
+            status = .unlogged
+        }
+        return HistoryPresentation.dayAccessibilityLabel(
+            date: date,
+            status: status,
+            locale: locale
+        )
     }
 
     private var emptyCell: some View {

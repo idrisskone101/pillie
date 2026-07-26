@@ -7,19 +7,19 @@ import SwiftUI
 
 struct StatusCard: View {
     @Environment(PillStore.self) var store
+    @Environment(\.locale) private var locale
     private let valueChangeAnimation = Animation.easeInOut(duration: 0.28)
-    private static let alarmDayLabelFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "EEE, MMM d"
-        return formatter
-    }()
 
     var body: some View {
         let isTodayTaken = store.isTodayTaken
         let isTodayPassiveOrBreak = store.isTodayPassiveOrBreak
         let alarmAction = store.alarmAction
         let todayAction = store.dueAction(on: store.today)
-        let reminderTime = store.nextReminderTime
+        let reminderTime = SettingsPresentation.time(
+            hour: store.reminderHour,
+            minute: store.reminderMinute,
+            locale: locale
+        )
         let iconName = iconName(for: isTodayPassiveOrBreak ? todayAction : alarmAction, isTodayTaken: isTodayTaken)
         let actionTitle = actionTitle(
             for: alarmAction,
@@ -61,7 +61,8 @@ struct StatusCard: View {
                 Text(actionTitle)
                     .font(.pillieBody())
                     .foregroundStyle(isTodayTaken ? PillieTheme.textPrimary : PillieTheme.textMuted)
-                    .lineLimit(isTodayTaken ? 2 : 1)
+                    .lineLimit(2)
+                    .fixedSize(horizontal: false, vertical: true)
                     .contentTransition(.opacity)
                     .animation(valueChangeAnimation, value: actionTitle)
             }
@@ -120,23 +121,32 @@ struct StatusCard: View {
         reminderTime: String
     ) -> String {
         if isTodayPassiveOrBreak && !isTodayTaken {
-            return todayAction?.actionTitle ?? "No action due"
+            return PillieLocalization.string("today.empty.title", locale: locale)
         }
 
-        guard let alarmAction else { return "No action due" }
-        guard isTodayTaken else { return alarmAction.actionTitle }
+        guard let alarmAction else {
+            return PillieLocalization.string("today.empty.title", locale: locale)
+        }
+        guard isTodayTaken else {
+            return PillieLocalization.string("today.action.mark_complete", locale: locale)
+        }
 
-        let nextAction = alarmAction.badgeLabel.lowercased()
         let calendar = Calendar.current
-        if let tomorrow = calendar.date(byAdding: .day, value: 1, to: store.today),
-           calendar.isDate(alarmAction.date, inSameDayAs: tomorrow) {
-            return "Taken today. Next \(nextAction) tomorrow at \(reminderTime)."
-        }
         if calendar.isDate(alarmAction.date, inSameDayAs: store.today) {
-            return "Taken today. Next \(nextAction) at \(reminderTime)."
+            return PillieLocalization.string("global.status.completed", locale: locale)
         }
-        let dayLabel = Self.alarmDayLabelFormatter.string(from: alarmAction.date)
-        return "Taken today. Next \(nextAction) \(dayLabel) at \(reminderTime)."
+        let dateText = alarmAction.date.formatted(
+            Date.FormatStyle()
+                .weekday(.wide)
+                .day()
+                .month(.wide)
+                .locale(locale)
+        )
+        return PillieLocalization.formatted(
+            "today.next_action.date",
+            locale: locale,
+            arguments: dateText
+        )
     }
 
     private func badgeText(
@@ -146,12 +156,14 @@ struct StatusCard: View {
         isTodayPassiveOrBreak: Bool
     ) -> String {
         if isTodayTaken {
-            return "TAKEN"
+            return PillieLocalization.string("global.status.completed", locale: locale)
         }
         if isTodayPassiveOrBreak {
-            return todayAction?.badgeLabel ?? "NONE"
+            return PillieLocalization.string("global.status.break_day", locale: locale)
         }
-        return alarmAction?.badgeLabel ?? "NONE"
+        return alarmAction == nil
+            ? PillieLocalization.string("today.empty.title", locale: locale)
+            : PillieLocalization.string("today.next_action.title", locale: locale)
     }
 }
 

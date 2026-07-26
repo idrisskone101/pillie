@@ -15,6 +15,7 @@ struct BlockingStatusCard: View {
     let content: BlockingStatusCardContent
     let onPrimaryAction: () -> Void
     let onDismiss: () -> Void
+    @Environment(\.locale) private var locale
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -74,7 +75,7 @@ struct BlockingStatusCard: View {
                 .background(PillieTheme.bg, in: Circle())
         }
         .buttonStyle(.plain)
-        .accessibilityLabel("Dismiss")
+        .accessibilityLabel(PillieLocalization.string("global.action.close", locale: locale))
         .accessibilityIdentifier("homeBlockingStatusCardDismiss")
     }
 

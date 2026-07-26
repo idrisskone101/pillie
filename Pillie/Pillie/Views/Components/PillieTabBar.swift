@@ -10,11 +10,14 @@ enum PillieTab: Int, CaseIterable {
     case history
     case settings
 
-    var label: String {
+    func label(locale: Locale = .current) -> String {
         switch self {
-        case .home: return "Home"
-        case .history: return "History"
-        case .settings: return "Settings"
+        case .home:
+            return PillieLocalization.string("today.navigation.title", locale: locale)
+        case .history:
+            return PillieLocalization.string("history.navigation.title", locale: locale)
+        case .settings:
+            return PillieLocalization.string("settings.navigation.title", locale: locale)
         }
     }
 
@@ -29,6 +32,7 @@ enum PillieTab: Int, CaseIterable {
 
 struct PillieTabBar: View {
     @Binding var selectedTab: PillieTab
+    @Environment(\.locale) private var locale
     @Namespace private var indicatorNamespace
 
     var body: some View {
@@ -54,7 +58,7 @@ struct PillieTabBar: View {
                                 .frame(width: 20, height: 5)
                         }
 
-                        Text(tab.label)
+                        Text(tab.label(locale: locale))
                             .font(.pillie(10, weight: selectedTab == tab ? .bold : .medium))
                     }
                     .frame(maxWidth: .infinity)

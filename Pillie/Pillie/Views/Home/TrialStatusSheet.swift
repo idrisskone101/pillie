@@ -83,10 +83,15 @@ struct TrialStatusSheet: View {
 private struct TrialActivationList: View {
     let items: [TrialActivationItem]
     let onTap: (TrialActivationItem) -> Void
+    @Environment(\.locale) private var locale
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("TRY YOUR PLUS FEATURES")
+            Text(PillieLocalization.string(
+                "trial.status.title",
+                table: "Commerce",
+                locale: locale
+            ).uppercased(with: locale))
                 .font(.pillieCaptionMedium())
                 .foregroundStyle(PillieTheme.textMuted)
                 .kerning(1)
@@ -104,6 +109,7 @@ private struct TrialActivationList: View {
 private struct TrialActivationFeatureRow: View {
     let item: TrialActivationItem
     let onTap: () -> Void
+    @Environment(\.locale) private var locale
 
     var body: some View {
         Button(action: onTap) {
@@ -124,7 +130,11 @@ private struct TrialActivationFeatureRow: View {
                             .layoutPriority(1)
 
                         if item.isRecommended {
-                            Text("RECOMMENDED")
+                            Text(PillieLocalization.string(
+                                "paywall.plan.best_value",
+                                table: "Commerce",
+                                locale: locale
+                            ).uppercased(with: locale))
                                 .font(.pillie(9, weight: .bold))
                                 .foregroundStyle(PillieTheme.coral)
                                 .lineLimit(1)
@@ -180,23 +190,39 @@ private struct TrialActivationFeatureRow: View {
         .disabled(item.action == nil)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(accessibilityLabel)
-        .accessibilityHint(item.action == nil ? "" : "Opens this feature's settings")
+        .accessibilityHint(item.action == nil ? "" : item.actionTitle ?? "")
     }
 
     private var accessibilityLabel: String {
-        let recommendation = item.isRecommended ? ", recommended next action" : ""
-        let action = item.actionTitle.map { ", action: \($0)" } ?? ""
-        return "\(item.title), \(item.statusTitle)\(recommendation)\(action)"
+        [
+            item.title,
+            item.statusTitle,
+            item.isRecommended
+                ? PillieLocalization.string(
+                    "paywall.plan.best_value",
+                    table: "Commerce",
+                    locale: locale
+                )
+                : nil,
+            item.actionTitle,
+        ]
+        .compactMap { $0 }
+        .joined(separator: ", ")
     }
 }
 
 private struct TrialExpirySummary: View {
     let items: [String]
     private let symbols = ["nosign", "bell.fill", "checkmark.circle.fill"]
+    @Environment(\.locale) private var locale
 
     var body: some View {
         VStack(alignment: .leading, spacing: 7) {
-            Text("WHEN THE TRIAL ENDS")
+            Text(PillieLocalization.string(
+                "trial.status.after_title",
+                table: "Commerce",
+                locale: locale
+            ).uppercased(with: locale))
                 .font(.pillieCaptionMedium())
                 .foregroundStyle(PillieTheme.textMuted)
                 .kerning(1)
@@ -222,6 +248,7 @@ private struct TrialStatusFooter: View {
     let ctaTitle: String
     let onKeepPlus: () -> Void
     let onDismiss: () -> Void
+    @Environment(\.locale) private var locale
 
     var body: some View {
         VStack(spacing: 10) {
@@ -232,7 +259,7 @@ private struct TrialStatusFooter: View {
             .accessibilityIdentifier("trialKeepPlus")
 
             Button(action: onDismiss) {
-                Text("Done")
+                Text(PillieLocalization.string("global.action.done", locale: locale))
                     .font(.pillie(14, weight: .medium))
                     .foregroundStyle(PillieTheme.textMuted)
             }

@@ -7,6 +7,7 @@ import SwiftUI
 
 struct StatsRow: View {
     @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
+    @Environment(\.locale) private var locale
     @Environment(PillStore.self) var store
     @State private var showPaywall = false
     private let valueChangeAnimation = Animation.easeInOut(duration: 0.28)
@@ -16,13 +17,14 @@ struct StatsRow: View {
 
     private var blockingStatusText: String {
         let mgr = AppBlockingManager.shared
-        if !mgr.blockingEnabled { return "Off" }
-        if !mgr.hasAppsSelected { return "Off" }
-        return mgr.blockingActive ? "Active" : "On"
+        if !mgr.blockingEnabled || !mgr.hasAppsSelected {
+            return PillieLocalization.string("global.status.off", locale: locale)
+        }
+        return PillieLocalization.string("global.status.on", locale: locale)
     }
 
     private var blockingSubtitle: String {
-        AppBlockingManager.shared.isEffectivelyOn ? "Blocking" : "No Blocks"
+        PillieLocalization.string("today.protection.status_title", locale: locale)
     }
 
     var body: some View {
@@ -39,7 +41,11 @@ struct StatsRow: View {
                     .contentTransition(.numericText())
                     .animation(valueChangeAnimation, value: currentStreak)
 
-                Text("Day Streak")
+                Text(PillieLocalization.string(
+                    "trial.end.streak",
+                    table: "Commerce",
+                    locale: locale
+                ))
                     .font(.pillieCaption())
                     .foregroundStyle(PillieTheme.coral)
                     .textCase(.uppercase)
@@ -112,7 +118,7 @@ struct StatsRow: View {
                 .font(.pillie(24, weight: .bold))
                 .foregroundStyle(PillieTheme.textPrimary)
 
-            Text("Blocking")
+            Text(PillieLocalization.string("today.protection.status_title", locale: locale))
                 .font(.pillieCaption())
                 .foregroundStyle(PillieTheme.textMuted)
                 .textCase(.uppercase)

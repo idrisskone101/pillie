@@ -3026,6 +3026,1672 @@
           }
         }
       }
+    },
+    "today.navigation.title": {
+      "comment": "Main tab [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oggi"
+          }
+        }
+      }
+    },
+    "today.greeting": {
+      "comment": "Encouraging, non-judgemental [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep it up—you’re doing great!"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continua così!"
+          }
+        }
+      }
+    },
+    "today.action.mark_complete": {
+      "comment": "Method-neutral primary action [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mark as Completed"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Segna come completata"
+          }
+        }
+      }
+    },
+    "today.action.undo_complete": {
+      "comment": "Undo label [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Completed — tap to undo"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Completata — tocca per annullare"
+          }
+        }
+      }
+    },
+    "today.action.snooze": {
+      "comment": "Snooze action [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remind Me Later"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ricordamelo più tardi"
+          }
+        }
+      }
+    },
+    "today.action.shake": {
+      "comment": "Feature action [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shake to Confirm"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Muovi per confermare"
+          }
+        }
+      }
+    },
+    "today.action.tap_instead": {
+      "comment": "Fallback action [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap to Confirm Instead"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tocca per confermare"
+          }
+        }
+      }
+    },
+    "today.empty.title": {
+      "comment": "Break/no-action state [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No action due today"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nessuna azione prevista oggi"
+          }
+        }
+      }
+    },
+    "today.empty.body": {
+      "comment": "No missed implication [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your schedule has no action for today."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il programma non prevede azioni per oggi."
+          }
+        }
+      }
+    },
+    "today.next_action.title": {
+      "comment": "Method-neutral [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next action"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prossima azione"
+          }
+        }
+      }
+    },
+    "today.next_action.date": {
+      "comment": "Locale-aware date [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next action: %@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prossima azione: %@"
+          }
+        }
+      }
+    },
+    "today.pack.title": {
+      "comment": "Method-neutral card [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Current cycle"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ciclo attuale"
+          }
+        }
+      }
+    },
+    "today.pack.day_of_total": {
+      "comment": "Integer placeholders [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Day %lld of %lld"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Giorno %lld di %lld"
+          }
+        }
+      }
+    },
+    "today.pack.window": {
+      "comment": "Use plural/select variation [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Showing %lld-day window"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Visualizzazione di %lld giorni"
+          }
+        }
+      }
+    },
+    "today.pack.start_new.title": {
+      "comment": "cycleType is pack/cycle with select variation [destructive]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start a new %@?"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avviare un nuovo %@?"
+          }
+        }
+      }
+    },
+    "today.pack.start_new.body": {
+      "comment": "Method-aware select variation [destructive]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This starts a new %@ today. Previous history is kept."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Da oggi inizia un nuovo %@. La cronologia precedente viene conservata."
+          }
+        }
+      }
+    },
+    "today.pack.start_new.confirm": {
+      "comment": "Confirmation [destructive]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start New"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avvia"
+          }
+        }
+      }
+    },
+    "today.refill.title": {
+      "comment": "Pill only [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pill supply reminder"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promemoria scorte pillola"
+          }
+        }
+      }
+    },
+    "today.refill.body": {
+      "comment": "Plural variation; estimate [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You have about %lld pills remaining."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restano circa %lld pillole."
+          }
+        }
+      }
+    },
+    "today.protection.status_title": {
+      "comment": "Feature status [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App blocking"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blocco delle app"
+          }
+        }
+      }
+    },
+    "today.protection.active": {
+      "comment": "Functionality only [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selected apps are paused until you log today’s action."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le app selezionate sono in pausa finché non registri l’azione di oggi."
+          }
+        }
+      }
+    },
+    "today.protection.inactive": {
+      "comment": "Feature status [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App blocking is off"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il blocco delle app è disattivato"
+          }
+        }
+      }
+    },
+    "today.intervention.alert.title": {
+      "comment": "Alert after blocked-app attempt [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App blocking stepped in"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il blocco delle app è intervenuto"
+          }
+        }
+      }
+    },
+    "today.intervention.alert.body": {
+      "comment": "Observed app state [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A selected app was opened while today’s action was still open."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "È stata aperta un’app selezionata mentre l’azione di oggi era ancora da registrare."
+          }
+        }
+      }
+    },
+    "history.navigation.title": {
+      "comment": "Main tab [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "History"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cronologia"
+          }
+        }
+      }
+    },
+    "history.title": {
+      "comment": "Tracking, not medical [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your tracking overview"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Riepilogo delle registrazioni"
+          }
+        }
+      }
+    },
+    "history.month.title": {
+      "comment": "Conservative rewrite [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your Monthly Care"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il tuo mese"
+          }
+        }
+      }
+    },
+    "history.month.checkins": {
+      "comment": "Plural variation [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld check-ins"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld registrazioni"
+          }
+        }
+      }
+    },
+    "history.month.checkins_body": {
+      "comment": "Supporting text [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "check-ins logged so far"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "registrazioni effettuate finora"
+          }
+        }
+      }
+    },
+    "history.month.on_track": {
+      "comment": "Replaces on-track clinical implication [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld%% logged"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld%% registrato"
+          }
+        }
+      }
+    },
+    "history.legend.completed": {
+      "comment": "Legend [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Completed"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Completata"
+          }
+        }
+      }
+    },
+    "history.legend.unlogged": {
+      "comment": "Legend [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not logged"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Non registrata"
+          }
+        }
+      }
+    },
+    "history.legend.break": {
+      "comment": "Legend [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Break"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pausa"
+          }
+        }
+      }
+    },
+    "history.accessibility.day": {
+      "comment": "Locale-aware date and localised status [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: %@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: %@"
+          }
+        }
+      }
+    },
+    "settings.navigation.title": {
+      "comment": "Main tab [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settings"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impostazioni"
+          }
+        }
+      }
+    },
+    "settings.section.my_pillie": {
+      "comment": "Section title [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "My Pillie"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il mio Pillie"
+          }
+        }
+      }
+    },
+    "settings.section.reminders": {
+      "comment": "Section title [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reminders"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promemoria"
+          }
+        }
+      }
+    },
+    "settings.section.cycle": {
+      "comment": "Section title [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Routine & Cycle"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Routine e ciclo"
+          }
+        }
+      }
+    },
+    "settings.section.blocking": {
+      "comment": "Section title [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App Blocking"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blocco delle app"
+          }
+        }
+      }
+    },
+    "settings.section.account": {
+      "comment": "Section title [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Account"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Account"
+          }
+        }
+      }
+    },
+    "settings.section.support": {
+      "comment": "Section title [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Support"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Assistenza"
+          }
+        }
+      }
+    },
+    "settings.reminder_time.title": {
+      "comment": "Settings row [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reminder Time"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Orario del promemoria"
+          }
+        }
+      }
+    },
+    "settings.reminder_time.value": {
+      "comment": "Locale-aware time only [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@"
+          }
+        }
+      }
+    },
+    "settings.followup.title": {
+      "comment": "Settings row [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Follow-up Reminders"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promemoria successivi"
+          }
+        }
+      }
+    },
+    "settings.followup.interval": {
+      "comment": "Plural variation [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Every %lld minutes"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ogni %lld minuti"
+          }
+        }
+      }
+    },
+    "settings.final_reminder.title": {
+      "comment": "Replaces last chance [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Final Scheduled Reminder"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promemoria finale programmato"
+          }
+        }
+      }
+    },
+    "settings.final_reminder.body": {
+      "comment": "No medical urgency [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A final reminder if today’s action is still open."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un ultimo promemoria se l’azione di oggi è ancora da registrare."
+          }
+        }
+      }
+    },
+    "settings.break_notice.title": {
+      "comment": "Pill regimen feature [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Break Week Notice"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avviso settimana di pausa"
+          }
+        }
+      }
+    },
+    "settings.break_notice.body": {
+      "comment": "Pill regimen feature [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A notice when reminders pause for your break week."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un avviso quando i promemoria si interrompono per la settimana di pausa."
+          }
+        }
+      }
+    },
+    "settings.adaptive_time.title": {
+      "comment": "Plus feature [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adaptive Reminder Time"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Orario del promemoria adattivo"
+          }
+        }
+      }
+    },
+    "settings.adaptive_time.body": {
+      "comment": "Suggestion only [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suggests a reminder time based on when you log actions."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suggerisce un orario in base a quando registri le azioni."
+          }
+        }
+      }
+    },
+    "settings.method.title": {
+      "comment": "Settings row [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Method"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Metodo"
+          }
+        }
+      }
+    },
+    "settings.regimen.title": {
+      "comment": "Pill only [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pill Regimen"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schema della pillola"
+          }
+        }
+      }
+    },
+    "settings.schedule.title": {
+      "comment": "Editor section [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schedule"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Programma"
+          }
+        }
+      }
+    },
+    "settings.cycle_day.title": {
+      "comment": "Editor section [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Current Cycle Day"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Giorno attuale del ciclo"
+          }
+        }
+      }
+    },
+    "settings.cycle_day.adjust": {
+      "comment": "Action [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adjust current day"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modifica il giorno attuale"
+          }
+        }
+      }
+    },
+    "settings.cycle_day.history_note": {
+      "comment": "State mutation disclosure [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Earlier days are marked completed. No earlier day is marked missed."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I giorni precedenti vengono segnati come completati. Nessun giorno precedente viene segnato come dimenticato."
+          }
+        }
+      }
+    },
+    "settings.schedule_reset.title": {
+      "comment": "Destructive alert [destructive]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reset Tracking Data?"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reimpostare i dati di monitoraggio?"
+          }
+        }
+      }
+    },
+    "settings.schedule_reset.body": {
+      "comment": "Integer placeholder [destructive]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Changing the schedule resets all tracking history and starts at day %lld. This cannot be undone."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La modifica del programma reimposta tutta la cronologia e riparte dal giorno %lld. L’operazione non può essere annullata."
+          }
+        }
+      }
+    },
+    "settings.schedule_reset.confirm": {
+      "comment": "Destructive action [destructive]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reset & Save"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reimposta e salva"
+          }
+        }
+      }
+    },
+    "settings.custom_messages.title": {
+      "comment": "Editor title [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reminder Messages"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Messaggi dei promemoria"
+          }
+        }
+      }
+    },
+    "settings.custom_messages.body": {
+      "comment": "User-authored text is never translated [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Write what each reminder says. The preview shows how it will appear on your Lock Screen."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scrivi il testo di ogni promemoria. L’anteprima mostra come apparirà sulla schermata di blocco."
+          }
+        }
+      }
+    },
+    "settings.custom_messages.advanced": {
+      "comment": "Editor mode [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Advanced Editor"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Editor avanzato"
+          }
+        }
+      }
+    },
+    "settings.custom_messages.restore": {
+      "comment": "Restores locale defaults, not en-US [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restore Pillie Defaults"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ripristina i testi di Pillie"
+          }
+        }
+      }
+    },
+    "settings.custom_messages.blank": {
+      "comment": "Locale-specific defaults [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leave a field blank to use Pillie’s default wording."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lascia un campo vuoto per usare il testo predefinito di Pillie."
+          }
+        }
+      }
+    },
+    "settings.custom_messages.preview": {
+      "comment": "Section label [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preview"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anteprima"
+          }
+        }
+      }
+    },
+    "settings.custom_messages.start_tone": {
+      "comment": "Preset picker [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start with a tone"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scegli uno stile di partenza"
+          }
+        }
+      }
+    },
+    "settings.custom_messages.start_tone_body": {
+      "comment": "Preset action [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "One tap fills all reminder fields. You can edit each one below."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un tocco compila tutti i campi dei promemoria. Puoi modificarli singolarmente qui sotto."
+          }
+        }
+      }
+    },
+    "settings.tone.gentle": {
+      "comment": "Preset name [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gentle"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delicato"
+          }
+        }
+      }
+    },
+    "settings.tone.direct": {
+      "comment": "Preset name [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Direct"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diretto"
+          }
+        }
+      }
+    },
+    "settings.tone.encouraging": {
+      "comment": "Preset name [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Encouraging"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Incoraggiante"
+          }
+        }
+      }
+    },
+    "settings.tone.private": {
+      "comment": "Preset name [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Private"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Riservato"
+          }
+        }
+      }
+    },
+    "settings.blocked_apps.title": {
+      "comment": "Editor title [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selected Apps"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App selezionate"
+          }
+        }
+      }
+    },
+    "settings.blocked_apps.edit": {
+      "comment": "Editor action [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose Apps"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scegli le app"
+          }
+        }
+      }
+    },
+    "settings.subscription.title": {
+      "comment": "Subscription row [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus"
+          }
+        }
+      }
+    },
+    "settings.subscription.manage": {
+      "comment": "External StoreKit management [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Manage Subscription"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gestisci abbonamento"
+          }
+        }
+      }
+    },
+    "settings.restore.title": {
+      "comment": "Action [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restore Purchases"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ripristina acquisti"
+          }
+        }
+      }
+    },
+    "settings.support.email": {
+      "comment": "Mail composer [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Email Support"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contatta l’assistenza"
+          }
+        }
+      }
+    },
+    "settings.support.privacy": {
+      "comment": "External link [legal]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Privacy Policy"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Informativa sulla privacy"
+          }
+        }
+      }
+    },
+    "settings.support.terms": {
+      "comment": "External link [legal]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terms of Use"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Condizioni d’uso"
+          }
+        }
+      }
+    },
+    "settings.support.version": {
+      "comment": "App version placeholder [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Version %@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Versione %@"
+          }
+        }
+      }
+    },
+    "support.mail_failed.title": {
+      "comment": "Fallback alert [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn’t Open Mail"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossibile aprire Mail"
+          }
+        }
+      }
+    },
+    "support.mail_failed.body": {
+      "comment": "Email placeholder [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Email us at %@."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scrivici a %@."
+          }
+        }
+      }
+    },
+    "error.generic.title": {
+      "comment": "Generic error [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Something Went Wrong"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Si è verificato un problema"
+          }
+        }
+      }
+    },
+    "error.generic.body": {
+      "comment": "Generic error [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Please try again."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Riprova."
+          }
+        }
+      }
+    },
+    "error.notifications_denied.title": {
+      "comment": "Permission state [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notifications Are Off"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le notifiche sono disattivate"
+          }
+        }
+      }
+    },
+    "error.notifications_denied.body": {
+      "comment": "Capability statement [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turn on notifications in Settings to receive scheduled reminders."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Attiva le notifiche nelle Impostazioni per ricevere i promemoria programmati."
+          }
+        }
+      }
+    },
+    "error.screen_time.title": {
+      "comment": "FamilyControls permission [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App Blocking Needs Permission"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il blocco delle app richiede l’autorizzazione"
+          }
+        }
+      }
+    },
+    "error.screen_time.body": {
+      "comment": "Capability statement [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow Screen Time access to select and pause apps."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consenti l’accesso a Tempo di utilizzo per scegliere e mettere in pausa le app."
+          }
+        }
+      }
+    },
+    "empty.history.title": {
+      "comment": "Empty history [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No history yet"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nessuna cronologia"
+          }
+        }
+      }
+    },
+    "empty.history.body": {
+      "comment": "Tracking only [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Logged actions will appear here."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le azioni registrate appariranno qui."
+          }
+        }
+      }
+    },
+    "empty.blocked_apps.title": {
+      "comment": "Empty selection [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No apps selected"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nessuna app selezionata"
+          }
+        }
+      }
+    },
+    "empty.blocked_apps.body": {
+      "comment": "Feature setup [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose apps to use App Blocking."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scegli le app da usare con il blocco."
+          }
+        }
+      }
+    },
+    "accessibility.progress.steps": {
+      "comment": "Onboarding progress [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Step %lld of %lld"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Passaggio %lld di %lld"
+          }
+        }
+      }
+    },
+    "accessibility.shake.progress": {
+      "comment": "Integer placeholders [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld of %lld movements completed"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld movimenti completati su %lld"
+          }
+        }
+      }
+    },
+    "accessibility.paywall.selected": {
+      "comment": "Plan selection state [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@, selected"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@, selezionato"
+          }
+        }
+      }
+    },
+    "accessibility.toggle.state": {
+      "comment": "Both arguments are localised resources [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@, %@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@, %@"
+          }
+        }
+      }
+    },
+    "legal.disclaimer": {
+      "comment": "Use in app where a disclaimer is shown [legal]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie provides reminders and tracking only. It is not medical advice and does not replace guidance from a clinician. Always follow the instructions for your birth control method."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie offre esclusivamente promemoria e monitoraggio. Non fornisce consulenza medica e non sostituisce le indicazioni di un professionista sanitario. Segui sempre le istruzioni del tuo metodo contraccettivo."
+          }
+        }
+      }
     }
   },
   "version": "1.0"

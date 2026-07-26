@@ -67,19 +67,113 @@ struct TrialEndPaywallContent: Equatable {
         blockerConfigSaved: Bool,
         stats: TrialEndOwnStats,
         calendar: Calendar,
-        now: Date
+        now: Date,
+        locale: Locale = .current
     ) -> TrialEndPaywallContent? {
         guard !state.hasEntitlement, let grantDate = state.trialGrantDate,
               !state.trialActive(calendar: calendar, now: now) else {
             return nil
         }
         let cohort: TrialEndPaywallCohort = blockerConfigSaved ? .blockerConfigured : .reminderOnly
+        if locale.language.languageCode?.identifier == "it" {
+            return localized(
+                cohort: cohort,
+                grantDate: grantDate,
+                stats: stats,
+                calendar: calendar,
+                locale: locale
+            )
+        }
         switch cohort {
         case .blockerConfigured:
             return lossFramed(grantDate: grantDate, stats: stats, calendar: calendar, now: now)
         case .reminderOnly:
             return gainFramed()
         }
+    }
+
+    private static func localized(
+        cohort: TrialEndPaywallCohort,
+        grantDate: Date,
+        stats: TrialEndOwnStats,
+        calendar: Calendar,
+        locale: Locale
+    ) -> TrialEndPaywallContent {
+        func commerce(_ key: String) -> String {
+            PillieLocalization.string(key, table: "Commerce", locale: locale)
+        }
+        var rows: [RecordRow] = []
+        if let blocks = stats.blocksIntercepted, blocks > 0 {
+            rows.append(RecordRow(
+                label: commerce("trial.end.blocks"),
+                value: blocks.formatted(.number.locale(locale)),
+                valueSuffix: nil,
+                emphasized: true
+            ))
+        }
+        if let actions = stats.dosesTaken, actions > 0 {
+            rows.append(RecordRow(
+                label: commerce("trial.end.actions"),
+                value: actions.formatted(.number.locale(locale)),
+                valueSuffix: nil,
+                emphasized: false
+            ))
+        }
+        if let streak = stats.currentStreak, streak > 0 {
+            rows.append(RecordRow(
+                label: commerce("trial.end.streak"),
+                value: streak.formatted(.number.locale(locale)),
+                valueSuffix: nil,
+                emphasized: false
+            ))
+        }
+
+        let card: CenterpieceCard = rows.isEmpty
+            ? .perks(
+                kicker: commerce("trial.end.free_title"),
+                chips: [
+                    commerce("paywall.feature.app_blocking"),
+                    commerce("paywall.feature.shake"),
+                    commerce("paywall.feature.smart_reminders"),
+                    commerce("paywall.feature.custom_messages"),
+                ],
+                footnote: commerce("paywall.subtitle")
+            )
+            : .record(
+                kicker: commerce("trial.end.title"),
+                dateRange: localizedRecordDateRange(
+                    grantDate: grantDate,
+                    calendar: calendar,
+                    locale: locale
+                ),
+                rows: rows,
+                quietShieldNote: nil
+            )
+
+        return TrialEndPaywallContent(
+            cohort: cohort,
+            title: commerce("trial.end.title"),
+            titleAccent: "",
+            subtitle: commerce("trial.end.subtitle"),
+            card: card,
+            handwrittenAside: "",
+            primaryCTA: commerce("paywall.action.upgrade")
+        )
+    }
+
+    private static func localizedRecordDateRange(
+        grantDate: Date,
+        calendar: Calendar,
+        locale: Locale
+    ) -> String {
+        let expiry = ReverseTrialClock(grantDate: grantDate).expiryMoment(calendar: calendar)
+        let lastDay = calendar.date(byAdding: .day, value: -1, to: expiry) ?? expiry
+        let formatter = DateFormatter()
+        formatter.calendar = calendar
+        formatter.timeZone = calendar.timeZone
+        formatter.locale = locale
+        formatter.setLocalizedDateFormatFromTemplate("MMMd")
+        return "\(formatter.string(from: grantDate)) – \(formatter.string(from: lastDay))"
     }
 
     // MARK: - Loss framing (blocker-configured cohort)
@@ -159,8 +253,8 @@ struct TrialEndPaywallContent: Equatable {
         let formatter = DateFormatter()
         formatter.calendar = calendar
         formatter.timeZone = calendar.timeZone
-        formatter.locale = Locale(identifier: "en_US")
-        formatter.dateFormat = "MMM d"
+        formatter.locale = .current
+        formatter.setLocalizedDateFormatFromTemplate("MMMd")
         return "\(formatter.string(from: grantDate)) – \(formatter.string(from: lastProtectedDay))"
     }
 

@@ -21,7 +21,7 @@ final class TrialGrantedMomentContentTests: XCTestCase {
     func testDisclosureLineCarriesDurationWhatTurnsOffAndPostTrialPrice() {
         XCTAssertEqual(
             content.disclosure,
-            "Your free trial lasts 14 days — app blocking turns off when it ends. After that, Plus is $29.99/year, or keep using reminders free."
+            "Your free trial lasts 14 days. App blocking turns off when it ends, while reminders stay free."
         )
     }
 
@@ -66,7 +66,7 @@ final class TrialGrantedMomentContentTests: XCTestCase {
             content.laterDays.map(\.detail),
             [
                 "We'll remind you before your trial ends. No surprises.",
-                "Keep reminders free, or stay with Plus at $29.99/year.",
+                "Keep reminders free, or choose whether to continue with Plus.",
             ]
         )
     }

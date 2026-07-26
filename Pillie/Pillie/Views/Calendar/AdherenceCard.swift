@@ -7,6 +7,7 @@ import SwiftUI
 
 struct AdherenceCard: View {
     @Environment(PillStore.self) private var store
+    @Environment(\.locale) private var locale
     let displayedMonth: Date
     let animatesValueChanges: Bool
     private let valueChangeAnimation = Animation.spring(response: 0.24, dampingFraction: 0.78)
@@ -19,10 +20,13 @@ struct AdherenceCard: View {
         store.monthAdherence(for: displayedMonth)
     }
 
-    private var monthBadgeLabel: String {
-        Calendar.current.isDate(displayedMonth, equalTo: Date(), toGranularity: .month)
-            ? "This month"
-            : PillieDateFormatters.monthYear.string(from: displayedMonth)
+    private var summary: HistoryPresentation.MonthSummary {
+        HistoryPresentation.monthSummary(
+            completed: stats.completed,
+            percentage: stats.percentage,
+            displayedMonth: displayedMonth,
+            locale: locale
+        )
     }
 
     private var monthAnimationKey: String {
@@ -36,13 +40,13 @@ struct AdherenceCard: View {
         VStack(alignment: .leading, spacing: 12) {
             // Header
             HStack {
-                Text("Your Monthly Care")
+                Text(summary.title)
                     .font(.pillieBodyBold())
                     .foregroundStyle(PillieTheme.textPrimary)
 
                 Spacer()
 
-                Text(monthBadgeLabel)
+                Text(summary.month)
                     .font(.pillieCaptionMedium())
                     .foregroundStyle(PillieTheme.coral)
                     .padding(.horizontal, 12)
@@ -53,31 +57,31 @@ struct AdherenceCard: View {
 
             // Large number
             if animatesValueChanges {
-                Text("\(stats.completed) check-ins")
+                Text(summary.completedCount)
                     .id("checkins-\(monthAnimationKey)")
                     .font(.pillieHuge())
                     .foregroundStyle(PillieTheme.textPrimary)
                     .transition(valuePopTransition)
             } else {
-                Text("\(stats.completed) check-ins")
+                Text(summary.completedCount)
                     .font(.pillieHuge())
                     .foregroundStyle(PillieTheme.textPrimary)
             }
 
             // Subtitle
-            Text("check-ins you've logged so far")
+            Text(summary.completedBody)
                 .font(.pillieBody())
                 .foregroundStyle(PillieTheme.textMuted)
 
             // Consistency row
             HStack(spacing: 8) {
-                Text("\(stats.percentage)% on track")
+                Text(summary.percentage)
                     .font(.pillieSubtitleBold())
                     .foregroundStyle(PillieTheme.coral)
                     .contentTransition(.opacity)
                     .animation(animatesValueChanges ? valueChangeAnimation : nil, value: displayedMonth)
 
-                Text(stats.due > 0 ? "\(stats.completed)/\(stats.due) done" : "No check-ins due yet")
+                Text(stats.due > 0 ? "\(stats.completed)/\(stats.due)" : "")
                     .font(.pillieHandwriting())
                     .foregroundStyle(PillieTheme.textMuted)
                     .rotationEffect(.degrees(-5))

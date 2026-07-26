@@ -15,6 +15,7 @@ struct CustomReminderMessagesEditor: View {
     @Bindable var store: PillStore
     @Environment(\.dismiss) private var dismiss
     @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
+    @Environment(\.locale) private var locale
 
     @State private var draft = CustomReminderDraft(
         messages: CustomReminderMessages(
@@ -78,10 +79,16 @@ struct CustomReminderMessagesEditor: View {
     }
 
     var body: some View {
-        SettingsSheetContainer(title: "Custom Messages") {
+        SettingsSheetContainer(title: PillieLocalization.string(
+            "settings.custom_messages.title",
+            locale: locale
+        )) {
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 28) {
-                    Text("Write what each reminder says. Pillie shows a live preview of exactly how it'll land on your lock screen.")
+                    Text(PillieLocalization.string(
+                        "settings.custom_messages.body",
+                        locale: locale
+                    ))
                         .font(.pillieBody())
                         .foregroundStyle(PillieTheme.textMuted)
                         .fixedSize(horizontal: false, vertical: true)
@@ -92,15 +99,24 @@ struct CustomReminderMessagesEditor: View {
                         accessibilityReduceMotion: accessibilityReduceMotion
                     )
 
-                    Text("Advanced editor")
+                    Text(PillieLocalization.string(
+                        "settings.custom_messages.advanced",
+                        locale: locale
+                    ))
                         .font(.pillieBodyBold())
                         .foregroundStyle(PillieTheme.textPrimary)
                         .accessibilityAddTraits(.isHeader)
 
                     group(
                         index: 1,
-                        header: "Daily reminder",
-                        subtitle: "Your main nudge when today's dose is due.",
+                        header: PillieLocalization.string(
+                            "settings.reminder_time.title",
+                            locale: locale
+                        ),
+                        subtitle: PillieLocalization.string(
+                            "settings.custom_messages.body",
+                            locale: locale
+                        ),
                         titleBinding: $draft.messages.dueTitle,
                         titleCount: draft.messages.dueTitle.count,
                         bodyBinding: $draft.messages.dueBody,
@@ -114,8 +130,14 @@ struct CustomReminderMessagesEditor: View {
 
                     group(
                         index: 2,
-                        header: "Follow-up nudge",
-                        subtitle: "A gentle retry if you haven't logged it yet.",
+                        header: PillieLocalization.string(
+                            "settings.followup.title",
+                            locale: locale
+                        ),
+                        subtitle: PillieLocalization.string(
+                            "settings.final_reminder.body",
+                            locale: locale
+                        ),
                         titleBinding: $draft.messages.retryTitle,
                         titleCount: draft.messages.retryTitle.count,
                         bodyBinding: $draft.messages.retryBody,
@@ -129,8 +151,14 @@ struct CustomReminderMessagesEditor: View {
 
                     group(
                         index: 3,
-                        header: "Last call",
-                        subtitle: "A final heads-up before the day ends.",
+                        header: PillieLocalization.string(
+                            "settings.final_reminder.title",
+                            locale: locale
+                        ),
+                        subtitle: PillieLocalization.string(
+                            "settings.final_reminder.body",
+                            locale: locale
+                        ),
                         titleBinding: $draft.messages.lastCallTitle,
                         titleCount: draft.messages.lastCallTitle.count,
                         bodyBinding: $draft.messages.lastCallBody,
@@ -142,7 +170,10 @@ struct CustomReminderMessagesEditor: View {
                         previewIdentifier: "reminder-preview-lastcall"
                     )
 
-                    Button("Restore Pillie defaults") {
+                    Button(PillieLocalization.string(
+                        "settings.custom_messages.restore",
+                        locale: locale
+                    )) {
                         settingsFeedback.sensitiveOrDestructiveChange(
                             accessibilityReduceMotion: accessibilityReduceMotion
                         )
@@ -154,7 +185,10 @@ struct CustomReminderMessagesEditor: View {
                     .frame(maxWidth: .infinity)
                     .accessibilityIdentifier("reminder-restore-defaults")
 
-                    Text("Leave anything blank and Pillie uses its own wording.")
+                    Text(PillieLocalization.string(
+                        "settings.custom_messages.blank",
+                        locale: locale
+                    ))
                         .font(.pillieCaption())
                         .foregroundStyle(PillieTheme.textMuted)
                         .frame(maxWidth: .infinity, alignment: .center)
@@ -175,12 +209,12 @@ struct CustomReminderMessagesEditor: View {
                         )
                         dismiss()
                     } label: {
-                        Text("Save")
+                        Text(PillieLocalization.string("global.action.save", locale: locale))
                     }
                     .buttonStyle(.pillieDark)
                     .padding(.top, 8)
 
-                    Button("Cancel") {
+                    Button(PillieLocalization.string("global.action.cancel", locale: locale)) {
                         draft.discardChanges()
                         dismiss()
                     }
@@ -196,7 +230,9 @@ struct CustomReminderMessagesEditor: View {
             .toolbar {
                 ToolbarItemGroup(placement: .keyboard) {
                     Spacer()
-                    Button("Done") { focusedField = nil }
+                    Button(PillieLocalization.string("global.action.done", locale: locale)) {
+                        focusedField = nil
+                    }
                         .font(.pillieBodySemibold())
                         .foregroundStyle(PillieTheme.textPrimary)
                 }
@@ -295,7 +331,10 @@ struct CustomReminderMessagesEditor: View {
     @ViewBuilder
     private func previewBanner(title: String, body: String, identifier: String) -> some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("PREVIEW")
+            Text(PillieLocalization.string(
+                "settings.custom_messages.preview",
+                locale: locale
+            ))
                 .font(.pillieCaption())
                 .foregroundStyle(PillieTheme.textMuted.opacity(0.7))
                 .tracking(2)
@@ -316,7 +355,9 @@ struct CustomReminderMessagesEditor: View {
                             .lineLimit(2)
                             .accessibilityIdentifier("\(identifier)-title")
                         Spacer(minLength: 8)
-                        Text("now")
+                        Text(Date.now.formatted(
+                            .relative(presentation: .named).locale(locale)
+                        ))
                             .font(.pillieCaption())
                             .foregroundStyle(PillieTheme.textMuted.opacity(0.7))
                     }
@@ -340,7 +381,11 @@ struct CustomReminderMessagesEditor: View {
         }
         .accessibilityIdentifier(identifier)
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("Notification preview. \(title). \(body)")
+        .accessibilityLabel([
+            PillieLocalization.string("settings.custom_messages.preview", locale: locale),
+            title,
+            body,
+        ].joined(separator: ". "))
     }
 
     @ViewBuilder
@@ -399,6 +444,7 @@ struct CustomReminderMessagesEditor: View {
 
 private struct CustomReminderPresetPicker: View {
     @Binding var draft: CustomReminderDraft
+    @Environment(\.locale) private var locale
     let feedback: SettingsInteractionFeedback
     let accessibilityReduceMotion: Bool
 
@@ -410,10 +456,16 @@ private struct CustomReminderPresetPicker: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             VStack(alignment: .leading, spacing: 3) {
-                Text("Start with a tone")
+                Text(PillieLocalization.string(
+                    "settings.custom_messages.start_tone",
+                    locale: locale
+                ))
                     .font(.pillieBodyBold())
                     .foregroundStyle(PillieTheme.textPrimary)
-                Text("One tap fills all three reminders. Fine-tune anything below.")
+                Text(PillieLocalization.string(
+                    "settings.custom_messages.start_tone_body",
+                    locale: locale
+                ))
                     .font(.pillieDate())
                     .foregroundStyle(PillieTheme.textMuted)
                     .fixedSize(horizontal: false, vertical: true)
@@ -423,14 +475,17 @@ private struct CustomReminderPresetPicker: View {
                 ForEach(CustomReminderPreset.allCases) { preset in
                     let isSelected = draft.appliedPreset == preset
                         || (draft.appliedPreset == nil
-                            && CustomReminderPreset.matching(draft.messages) == preset)
+                            && CustomReminderPreset.matching(
+                                draft.messages,
+                                locale: locale
+                            ) == preset)
 
                     Button {
                         feedback.openRow(accessibilityReduceMotion: accessibilityReduceMotion)
-                        draft.apply(preset)
+                        draft.apply(preset, locale: locale)
                     } label: {
                         HStack(spacing: 7) {
-                            Text(preset.displayName)
+                            Text(preset.localizedDisplayName(locale: locale))
                                 .font(.pillieDate())
                                 .lineLimit(2)
                             Spacer(minLength: 0)
@@ -450,7 +505,7 @@ private struct CustomReminderPresetPicker: View {
                         )
                     }
                     .buttonStyle(.plain)
-                    .accessibilityLabel("\(preset.displayName) reminder preset")
+                    .accessibilityLabel(preset.localizedDisplayName(locale: locale))
                     .accessibilityValue(isSelected ? "Selected" : "Not selected")
                     .accessibilityIdentifier("reminder-preset-\(preset.rawValue)")
                 }

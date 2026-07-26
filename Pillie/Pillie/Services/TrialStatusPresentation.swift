@@ -16,10 +16,19 @@ struct TrialStatusPresentation: Equatable {
     /// Local-day rollovers until expiry (`ReverseTrialClock.daysRemaining`).
     let daysRemaining: Int
     let protectionActive: Bool
+    let trialEndDate: Date?
+    let locale: Locale
 
-    init(daysRemaining: Int, protectionActive: Bool = false) {
+    init(
+        daysRemaining: Int,
+        protectionActive: Bool = false,
+        trialEndDate: Date? = nil,
+        locale: Locale = .current
+    ) {
         self.daysRemaining = daysRemaining
         self.protectionActive = protectionActive
+        self.trialEndDate = trialEndDate
+        self.locale = locale
     }
 
     /// Day count as shown to the user: the trial promises "14 days free", so
@@ -38,6 +47,13 @@ struct TrialStatusPresentation: Equatable {
     /// The persistent indicator distinguishes active protection from setup
     /// still being needed while preserving the trial countdown.
     var indicatorLabel: String {
+        if locale.language.languageCode?.identifier == "it" {
+            return PillieLocalization.string(
+                "trial.status.title",
+                table: "Commerce",
+                locale: locale
+            )
+        }
         if protectionActive {
             return endsTonight
                 ? "Protection active · ends tonight"
@@ -54,7 +70,35 @@ struct TrialStatusPresentation: Equatable {
     }
 
     func sheetContent(for activationState: TrialActivationState) -> TrialStatusSheetContent {
-        TrialStatusSheetContent(
+        if locale.language.languageCode?.identifier == "it" {
+            let title = trialEndDate.map {
+                CommercePresentation.trialEndText(date: $0, locale: locale)
+            } ?? PillieLocalization.string(
+                "trial.status.title",
+                table: "Commerce",
+                locale: locale
+            )
+            return TrialStatusSheetContent(
+                title: title,
+                expiryItems: [
+                    PillieLocalization.string(
+                        "trial.end.subtitle",
+                        table: "Commerce",
+                        locale: locale
+                    ),
+                ],
+                ctaTitle: PillieLocalization.string(
+                    "paywall.action.upgrade",
+                    table: "Commerce",
+                    locale: locale
+                ),
+                activationItems: TrialActivationItem.make(
+                    for: activationState,
+                    locale: locale
+                )
+            )
+        }
+        return TrialStatusSheetContent(
             title: endsTonight
                 ? "Your Plus trial ends tonight"
                 : "\(displayedDaysRemaining) days left in your Plus trial",
@@ -64,7 +108,7 @@ struct TrialStatusPresentation: Equatable {
                 "Your blocker setup is saved",
             ],
             ctaTitle: "Keep Pillie Plus",
-            activationItems: TrialActivationItem.make(for: activationState)
+            activationItems: TrialActivationItem.make(for: activationState, locale: locale)
         )
     }
 
@@ -75,7 +119,8 @@ struct TrialStatusPresentation: Equatable {
         state: PlusAccessState,
         protectionActive: Bool = false,
         calendar: Calendar,
-        now: Date
+        now: Date,
+        locale: Locale = .current
     ) -> TrialStatusPresentation? {
         // Entitlement wins over a still-running trial clock: a mid-trial
         // purchase removes the indicator immediately.
@@ -84,7 +129,9 @@ struct TrialStatusPresentation: Equatable {
         guard clock.isActive(calendar: calendar, now: now) else { return nil }
         return TrialStatusPresentation(
             daysRemaining: clock.daysRemaining(calendar: calendar, now: now),
-            protectionActive: protectionActive
+            protectionActive: protectionActive,
+            trialEndDate: clock.expiryMoment(calendar: calendar),
+            locale: locale
         )
     }
 }
@@ -153,7 +200,10 @@ struct TrialActivationItem: Equatable {
         }
     }
 
-    static func make(for state: TrialActivationState) -> [TrialActivationItem] {
+    static func make(
+        for state: TrialActivationState,
+        locale: Locale = .current
+    ) -> [TrialActivationItem] {
         let recommendation: TrialActivationAction? = if !state.appBlockingActive {
             .appBlocking
         } else if !state.customMessagesCustomized {
@@ -166,31 +216,37 @@ struct TrialActivationItem: Equatable {
             .smartReminders
         }
 
+        let italian = locale.language.languageCode?.identifier == "it"
+        func title(_ key: String, fallback: String) -> String {
+            italian
+                ? PillieLocalization.string(key, table: "Commerce", locale: locale)
+                : fallback
+        }
         return [
             TrialActivationItem(
                 feature: .appBlocking,
-                title: "App blocking",
+                title: title("paywall.feature.app_blocking", fallback: "App blocking"),
                 status: state.appBlockingActive ? .active : .setUp,
                 action: .appBlocking,
                 isRecommended: recommendation == .appBlocking
             ),
             TrialActivationItem(
                 feature: .smartReminders,
-                title: "Smart Reminders",
+                title: title("paywall.feature.smart_reminders", fallback: "Smart Reminders"),
                 status: state.smartRemindersCustomized ? .customized : .activeAutomatically,
                 action: .smartReminders,
                 isRecommended: recommendation == .smartReminders
             ),
             TrialActivationItem(
                 feature: .customMessages,
-                title: "Custom messages",
+                title: title("paywall.feature.custom_messages", fallback: "Custom messages"),
                 status: state.customMessagesCustomized ? .customized : .personalize,
                 action: .customMessages,
                 isRecommended: recommendation == .customMessages
             ),
             TrialActivationItem(
                 feature: .shakeToConfirm,
-                title: "Shake to confirm",
+                title: title("paywall.feature.shake", fallback: "Shake to confirm"),
                 status: .on,
                 action: nil,
                 isRecommended: false
