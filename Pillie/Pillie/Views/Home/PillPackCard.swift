@@ -8,6 +8,7 @@ import SwiftUI
 struct PillPackCard: View {
     @Environment(PillStore.self) var store
     @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
+    @Environment(\.locale) private var locale
     @State private var hasRunEntranceAnimation = false
     @State private var pendingEntranceAnimation: DispatchWorkItem?
     @State private var cachedCycleSnapshots: [Int: PillScheduleSnapshot] = [:]
@@ -23,21 +24,15 @@ struct PillPackCard: View {
     }
 
     private var headerTitle: String {
-        switch store.pack.method {
-        case .pill:
-            return "Pill \(currentCycleDay) · Day \(currentCycleDay)"
-        case .patch, .ring:
-            return "\(store.pack.methodTitle) Cycle · Day \(currentCycleDay)"
-        }
+        PillieLocalization.string("today.pack.title", locale: locale)
     }
 
     private var cycleOrdinalLabel: String {
-        switch store.pack.method {
-        case .pill:
-            return "Pack \(store.pack.packNumber)"
-        case .patch, .ring:
-            return "Cycle \(store.pack.packNumber)"
-        }
+        SettingsPresentation.cycleDay(
+            day: currentCycleDay,
+            total: cycleLength,
+            locale: locale
+        )
     }
 
     private var displayedIndices: [Int] {
@@ -65,7 +60,7 @@ struct PillPackCard: View {
                         .font(.pillieBodySemibold())
                         .foregroundStyle(.white)
 
-                    Text("\(cycleOrdinalLabel) · \(store.pack.regimenLabel)")
+                    Text("\(cycleOrdinalLabel) · \(store.pack.pillRegimen.localizedRoutineDisplayName(locale: locale))")
                         .font(.pillieCaption())
                         .foregroundStyle(.white.opacity(0.4))
                         .tracking(1)
@@ -78,7 +73,10 @@ struct PillPackCard: View {
                         showNewPackConfirmation = true
                     } label: {
                         Label(
-                            store.pack.method == .pill ? "Start New Pack" : "Start New Cycle",
+                            PillieLocalization.string(
+                                "today.pack.start_new.confirm",
+                                locale: locale
+                            ),
                             systemImage: "arrow.triangle.2.circlepath"
                         )
                     }
@@ -134,7 +132,11 @@ struct PillPackCard: View {
             }
 
             if cycleLength > displayedIndices.count {
-                Text("Showing \(displayedIndices.count)-day window")
+                Text(PillieLocalization.formatted(
+                    "today.pack.window",
+                    locale: locale,
+                    arguments: Int64(displayedIndices.count)
+                ))
                     .font(.pillieCaption())
                     .foregroundStyle(.white.opacity(0.45))
                     .textCase(.uppercase)
@@ -142,7 +144,11 @@ struct PillPackCard: View {
             }
 
             // Footer
-            Text("Day \(currentCycleDay) of \(store.pack.cycleLength)")
+            Text(SettingsPresentation.cycleDay(
+                day: currentCycleDay,
+                total: store.pack.cycleLength,
+                locale: locale
+            ))
                 .font(.pillieCaption())
                 .foregroundStyle(.white.opacity(0.5))
                 .textCase(.uppercase)
@@ -152,10 +158,17 @@ struct PillPackCard: View {
         .background(PillieTheme.dark)
         .clipShape(RoundedRectangle(cornerRadius: PillieTheme.cardRadius))
         .alert(
-            store.pack.method == .pill ? "Start New Pack?" : "Start New Cycle?",
+            PillieLocalization.formatted(
+                "today.pack.start_new.title",
+                locale: locale,
+                arguments: cycleTypeText
+            ),
             isPresented: $showNewPackConfirmation
         ) {
-            Button(store.pack.method == .pill ? "Start New Pack" : "Start New Cycle") {
+            Button(PillieLocalization.string(
+                "today.pack.start_new.confirm",
+                locale: locale
+            )) {
                 let feedbackResponse = homeFeedback.commitNewPackOrCycle(
                     accessibilityReduceMotion: accessibilityReduceMotion
                 )
@@ -163,10 +176,24 @@ struct PillPackCard: View {
                     store.startNewPack()
                 }
             }
-            Button("Cancel", role: .cancel) {}
+            Button(PillieLocalization.string(
+                "global.action.cancel",
+                locale: locale
+            ), role: .cancel) {}
         } message: {
-            Text("This will start a new \(store.pack.method == .pill ? "pack" : "cycle") from today. Your previous history will be preserved.")
+            Text(PillieLocalization.formatted(
+                "today.pack.start_new.body",
+                locale: locale,
+                arguments: cycleTypeText
+            ))
         }
+    }
+
+    private var cycleTypeText: String {
+        if locale.language.languageCode?.identifier == "it" {
+            return store.pack.method == .pill ? "ciclo della confezione" : "ciclo"
+        }
+        return store.pack.method == .pill ? "pack" : "cycle"
     }
 
     // MARK: - Pill Circle

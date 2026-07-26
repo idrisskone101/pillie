@@ -7,6 +7,7 @@ import SwiftUI
 
 struct RefillBannerCard: View {
     @Environment(PillStore.self) var store
+    @Environment(\.locale) private var locale
     let onRefill: () -> Void
 
     var body: some View {
@@ -22,12 +23,18 @@ struct RefillBannerCard: View {
                 )
 
             // Title
-            Text(store.refillBannerTitle)
+            Text(PillieLocalization.string("today.refill.title", locale: locale))
                 .font(.pillie(20, weight: .bold))
                 .foregroundStyle(PillieTheme.textPrimary)
 
             // Subtitle
-            Text(store.refillBannerSubtitle)
+            Text(PillieLocalization.formatted(
+                "today.pack.start_new.body",
+                locale: locale,
+                arguments: locale.language.languageCode?.identifier == "it"
+                    ? (store.pack.method == .pill ? "ciclo della confezione" : "ciclo")
+                    : (store.pack.method == .pill ? "pack" : "cycle")
+            ))
                 .font(.pillieBody())
                 .foregroundStyle(PillieTheme.textMuted)
                 .multilineTextAlignment(.center)
@@ -37,7 +44,10 @@ struct RefillBannerCard: View {
                 HStack(spacing: 8) {
                     Image(systemName: "arrow.triangle.2.circlepath")
                         .font(.system(size: 16, weight: .semibold))
-                    Text(store.refillCTALabel)
+                    Text(PillieLocalization.string(
+                        "today.pack.start_new.confirm",
+                        locale: locale
+                    ))
                 }
             }
             .buttonStyle(.pillieDark)

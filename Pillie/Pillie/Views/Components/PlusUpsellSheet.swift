@@ -75,6 +75,7 @@ struct PlusUpsellSheet: View {
     @State private var restoreError: String?
     @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.locale) private var locale
     private let telemetry = ProductAnalyticsTelemetry.live
     private let plusFeedback = PlusPaywallInteractionFeedback(performanceTier: PerformanceTier.current)
 
@@ -90,11 +91,15 @@ struct PlusUpsellSheet: View {
                     .font(.system(size: 32))
                     .foregroundStyle(PillieTheme.coral)
 
-                Text(featureName)
+                Text(localizedFeatureName)
                     .font(.pillieExtraBold(24))
                     .foregroundStyle(PillieTheme.textPrimary)
 
-                Text(featureDescription)
+                Text(PillieLocalization.string(
+                    "paywall.subtitle",
+                    table: "Commerce",
+                    locale: locale
+                ))
                     .font(.pillieBody())
                     .foregroundStyle(PillieTheme.textMuted)
                     .multilineTextAlignment(.center)
@@ -111,7 +116,11 @@ struct PlusUpsellSheet: View {
                         showPaywall = true
                     }
                 } label: {
-                    Text("Upgrade to Pillie+")
+                    Text(PillieLocalization.string(
+                        "paywall.action.upgrade",
+                        table: "Commerce",
+                        locale: locale
+                    ))
                 }
                 .buttonStyle(.pillieDark)
                 .padding(.horizontal, 28)
@@ -123,7 +132,7 @@ struct PlusUpsellSheet: View {
                         dismiss()
                     }
                 } label: {
-                    Text("Not Now")
+                    Text(PillieLocalization.string("global.action.not_now", locale: locale))
                         .font(.pillie(14, weight: .medium))
                         .foregroundStyle(PillieTheme.textMuted)
                 }
@@ -166,7 +175,11 @@ struct PlusUpsellSheet: View {
                             .tint(PillieTheme.textMuted)
                             .frame(height: 16)
                     } else {
-                        Text("Restore Purchases")
+                        Text(PillieLocalization.string(
+                            "paywall.action.restore",
+                            table: "Commerce",
+                            locale: locale
+                        ))
                             .font(.pillie(12, weight: .medium))
                             .foregroundStyle(PillieTheme.textMuted.opacity(0.6))
                     }
@@ -178,16 +191,30 @@ struct PlusUpsellSheet: View {
         .padding(.bottom, 24)
         .frame(maxWidth: .infinity, alignment: .top)
         .background(PillieTheme.bg)
-        .alert("No Subscription Found", isPresented: $showNoSubscriptionAlert) {
-            Button("OK") { }
+        .alert(PillieLocalization.string(
+            "paywall.no_subscription.title",
+            table: "Commerce",
+            locale: locale
+        ), isPresented: $showNoSubscriptionAlert) {
+            Button(PillieLocalization.string("global.action.ok", locale: locale)) { }
         } message: {
-            Text("No active subscription was found for this account.")
+            Text(PillieLocalization.string(
+                "paywall.no_subscription.body",
+                table: "Commerce",
+                locale: locale
+            ))
         }
-        .alert("Restore Error", isPresented: .init(
+        .alert(PillieLocalization.string(
+            "paywall.restore_error.title",
+            table: "Commerce",
+            locale: locale
+        ), isPresented: .init(
             get: { restoreError != nil },
             set: { if !$0 { restoreError = nil } }
         )) {
-            Button("OK") { restoreError = nil }
+            Button(PillieLocalization.string("global.action.ok", locale: locale)) {
+                restoreError = nil
+            }
         } message: {
             Text(restoreError ?? "")
         }
@@ -209,5 +236,17 @@ struct PlusUpsellSheet: View {
         .onAppear {
             telemetry.plusUpsellViewed()
         }
+    }
+
+    private var localizedFeatureName: String {
+        let key = switch paywallSurface {
+        case .blockingGate:
+            "paywall.feature.app_blocking"
+        case .smartReminderGate:
+            "paywall.feature.smart_reminders"
+        default:
+            "paywall.feature.custom_messages"
+        }
+        return PillieLocalization.string(key, table: "Commerce", locale: locale)
     }
 }

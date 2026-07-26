@@ -30,8 +30,8 @@ struct CustomReminderDraft: Equatable {
         return messages != appliedPreset.messages
     }
 
-    mutating func apply(_ preset: CustomReminderPreset) {
-        messages = preset.messages
+    mutating func apply(_ preset: CustomReminderPreset, locale: Locale = .current) {
+        messages = preset.localizedMessages(locale: locale)
         appliedPreset = preset
     }
 
@@ -63,8 +63,46 @@ enum CustomReminderPreset: String, CaseIterable, Identifiable {
         }
     }
 
-    static func matching(_ messages: CustomReminderMessages) -> Self? {
-        allCases.first { $0.messages == messages }
+    func localizedDisplayName(locale: Locale = .current) -> String {
+        let key = switch self {
+        case .gentle: "settings.tone.gentle"
+        case .direct: "settings.tone.direct"
+        case .encouraging: "settings.tone.encouraging"
+        case .privateDiscreet: "settings.tone.private"
+        }
+        return PillieLocalization.string(key, locale: locale)
+    }
+
+    static func matching(
+        _ messages: CustomReminderMessages,
+        locale: Locale = .current
+    ) -> Self? {
+        allCases.first {
+            $0.messages == messages || $0.localizedMessages(locale: locale) == messages
+        }
+    }
+
+    func localizedMessages(locale: Locale = .current) -> CustomReminderMessages {
+        guard locale.language.languageCode?.identifier == "it" else {
+            return messages
+        }
+        let stem = switch self {
+        case .gentle: "notification.custom.gentle"
+        case .direct: "notification.custom.direct"
+        case .encouraging: "notification.custom.encouraging"
+        case .privateDiscreet: "notification.custom.private"
+        }
+        return CustomReminderMessages(
+            dueTitle: PillieLocalization.string(
+                "notification.custom.private.primary",
+                locale: locale
+            ),
+            dueBody: PillieLocalization.string("\(stem).primary", locale: locale),
+            retryTitle: PillieLocalization.string("notification.followup.title", locale: locale),
+            retryBody: PillieLocalization.string("\(stem).followup", locale: locale),
+            lastCallTitle: PillieLocalization.string("notification.final.title", locale: locale),
+            lastCallBody: PillieLocalization.string("\(stem).final", locale: locale)
+        )
     }
 
     var messages: CustomReminderMessages {

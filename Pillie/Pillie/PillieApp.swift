@@ -254,12 +254,12 @@ struct PillieApp: App {
                 .modelContainer(container)
                 .preferredColorScheme(.light)
                 .alert(
-                    "Protection stepped in",
+                    PillieLocalization.string("today.intervention.alert.title"),
                     isPresented: $showFirstInterventionConfirmation
                 ) {
-                    Button("Got it", role: .cancel) {}
+                    Button(PillieLocalization.string("global.action.ok"), role: .cancel) {}
                 } message: {
-                    Text("Your protection plan stepped in when a blocked app was opened.")
+                    Text(PillieLocalization.string("today.intervention.alert.body"))
                 }
                 .onAppear {
                     AppDelegate.store = store

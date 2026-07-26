@@ -63,6 +63,7 @@ struct ShakeConfirmView: View {
     let onDismiss: () -> Void
 
     @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
+    @Environment(\.locale) private var locale
     @State private var shakeManager = ShakeDetectionManager()
     @State private var appeared = false
     @State private var celebrating = false
@@ -84,13 +85,17 @@ struct ShakeConfirmView: View {
                 Spacer()
 
                 // Headline
-                Text(celebrating ? "Done!" : "Shake to Confirm")
+                Text(celebrating
+                    ? PillieLocalization.string("global.action.done", locale: locale)
+                    : PillieLocalization.string("today.action.shake", locale: locale))
                     .font(.pillieHeadline())
                     .foregroundStyle(PillieTheme.textPrimary)
                     .modifier(FadeInUp(appeared: appeared, delay: 0))
 
                 // Subtitle
-                Text(celebrating ? action.ctaLabel : "Give your phone a shake\nto mark today's dose")
+                Text(celebrating
+                    ? PillieLocalization.string("global.status.completed", locale: locale)
+                    : PillieLocalization.string("today.action.mark_complete", locale: locale))
                     .font(.pillieBody())
                     .foregroundStyle(PillieTheme.textMuted)
                     .multilineTextAlignment(.center)
@@ -147,7 +152,10 @@ struct ShakeConfirmView: View {
                         HStack(spacing: 8) {
                             Image(systemName: "hand.tap")
                                 .font(.system(size: 16, weight: .semibold))
-                            Text("Tap to Confirm Instead")
+                            Text(PillieLocalization.string(
+                                "today.action.tap_instead",
+                                locale: locale
+                            ))
                         }
                         .font(.pillie(18, weight: .semibold))
                         .foregroundStyle(PillieTheme.textPrimary)
@@ -165,7 +173,7 @@ struct ShakeConfirmView: View {
                         shakeManager.stopDetecting()
                         onDismiss()
                     } label: {
-                        Text("Cancel")
+                        Text(PillieLocalization.string("global.action.cancel", locale: locale))
                             .font(.pillie(16, weight: .semibold))
                             .foregroundStyle(PillieTheme.textMuted)
                     }

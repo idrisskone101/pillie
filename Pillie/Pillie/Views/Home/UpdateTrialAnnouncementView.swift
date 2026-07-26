@@ -56,6 +56,22 @@ struct UpdateTrialAnnouncementContent {
         primaryCTA: "Set up app blocking",
         dismissCTA: "Not now"
     )
+
+    static func localized(locale: Locale = .current) -> UpdateTrialAnnouncementContent {
+        let trial = TrialGrantedMomentContent.localized(locale: locale)
+        return UpdateTrialAnnouncementContent(
+            badge: trial.today.label,
+            title: trial.title,
+            titleAccent: trial.titleAccent,
+            subtitle: trial.subtitle,
+            perks: trial.today.perks.map {
+                Perk(title: $0.title, symbolName: $0.symbolName)
+            },
+            disclosure: trial.disclosure,
+            primaryCTA: PillieLocalization.string("global.action.continue", locale: locale),
+            dismissCTA: PillieLocalization.string("global.action.not_now", locale: locale)
+        )
+    }
 }
 
 /// The one-time announcement sheet. Presentation-only: the grant itself and
@@ -65,7 +81,10 @@ struct UpdateTrialAnnouncementContent {
 struct UpdateTrialAnnouncementView: View {
     static let presentationHeight: CGFloat = 540
 
-    private let content = UpdateTrialAnnouncementContent.default
+    @Environment(\.locale) private var locale
+    private var content: UpdateTrialAnnouncementContent {
+        UpdateTrialAnnouncementContent.localized(locale: locale)
+    }
 
     let onSetUpBlocking: () -> Void
     let onDismiss: () -> Void
@@ -139,10 +158,7 @@ struct UpdateTrialAnnouncementHeader: View {
 struct UpdateTrialPerkGrid: View {
     let perks: [UpdateTrialAnnouncementContent.Perk]
 
-    private let columns = [
-        GridItem(.flexible(), spacing: 12),
-        GridItem(.flexible(), spacing: 12),
-    ]
+    private let columns = [GridItem(.flexible())]
 
     var body: some View {
         LazyVGrid(columns: columns, spacing: 12) {
@@ -154,12 +170,12 @@ struct UpdateTrialPerkGrid: View {
                     Text(perk.title)
                         .font(.pillie(13, weight: .semibold))
                         .foregroundStyle(PillieTheme.textPrimary)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.85)
+                        .lineLimit(2)
+                        .fixedSize(horizontal: false, vertical: true)
                     Spacer(minLength: 0)
                 }
                 .padding(.horizontal, 14)
-                .padding(.vertical, 20)
+                .padding(.vertical, 10)
                 .background(PillieTheme.sage.opacity(0.35), in: RoundedRectangle(cornerRadius: 14))
             }
         }

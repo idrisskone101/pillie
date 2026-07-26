@@ -9,6 +9,7 @@ import FamilyControls
 
 struct SettingsView: View {
     @Environment(PillStore.self) var store
+    @Environment(\.locale) private var locale
     @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
     @Environment(\.openURL) private var openURL
     @State private var appeared = false
@@ -35,7 +36,10 @@ struct SettingsView: View {
         ScrollView(.vertical, showsIndicators: false) {
             VStack(alignment: .leading, spacing: 24) {
                 PrimaryTitleAnchor(
-                    title: "Settings",
+                    title: PillieLocalization.string(
+                        "settings.navigation.title",
+                        locale: locale
+                    ),
                     titleFont: .pillieExtraBold(36),
                     showsAccessorySlot: true,
                     accessory: nil
@@ -43,7 +47,10 @@ struct SettingsView: View {
                     .modifier(FadeInUp(appeared: appeared, delay: 0))
 
                 // MARK: - My Pillie
-                sectionHeader("MY PILLIE")
+                sectionHeader(PillieLocalization.string(
+                    "settings.section.my_pillie",
+                    locale: locale
+                ))
                     .modifier(FadeInUp(appeared: appeared, delay: 0))
 
                 settingsCard {
@@ -51,7 +58,10 @@ struct SettingsView: View {
                         openSettingSheet { showProtocolEditor = true }
                         ProductAnalyticsTelemetry.live.protocolSettingsOpened()
                     } label: {
-                        settingsRow("Contraceptive Type", value: protocolSummary)
+                        settingsRow(
+                            PillieLocalization.string("settings.method.title", locale: locale),
+                            value: protocolSummary
+                        )
                     }
                     .buttonStyle(.plain)
                     divider
@@ -59,7 +69,17 @@ struct SettingsView: View {
                         openSettingSheet { showTimeEditor = true }
                         ProductAnalyticsTelemetry.live.reminderTimeSettingsOpened()
                     } label: {
-                        settingsRow("Reminder Time", value: store.nextReminderTime)
+                        settingsRow(
+                            PillieLocalization.string(
+                                "settings.reminder_time.title",
+                                locale: locale
+                            ),
+                            value: SettingsPresentation.time(
+                                hour: store.reminderHour,
+                                minute: store.reminderMinute,
+                                locale: locale
+                            )
+                        )
                     }
                     .buttonStyle(.plain)
                     divider
@@ -67,7 +87,10 @@ struct SettingsView: View {
                         Button {
                             openSettingSheet { showCustomRemindersEditor = true }
                         } label: {
-                            settingsRow("Custom Messages", value: reminderMessagesSummary)
+                            settingsRow(PillieLocalization.string(
+                                "settings.custom_messages.title",
+                                locale: locale
+                            ), value: reminderMessagesSummary)
                         }
                         .buttonStyle(.plain)
                     } else {
@@ -75,7 +98,10 @@ struct SettingsView: View {
                             openSettingSheet { showCustomRemindersUpsell = true }
                             ProductAnalyticsTelemetry.live.settingsCustomRemindersUpsellViewed()
                         } label: {
-                            settingsRow("Custom Messages", value: "Pillie+", valueColor: PillieTheme.coral, showLock: true)
+                            settingsRow(PillieLocalization.string(
+                                "settings.custom_messages.title",
+                                locale: locale
+                            ), value: "Pillie+", valueColor: PillieTheme.coral, showLock: true)
                         }
                         .buttonStyle(.plain)
                         .sheet(isPresented: $showCustomRemindersUpsell) {
@@ -99,7 +125,10 @@ struct SettingsView: View {
                 .modifier(FadeInUp(appeared: appeared, delay: 0.1))
 
                 // MARK: - Smart Notifications
-                sectionHeader("SMART NOTIFICATIONS")
+                sectionHeader(PillieLocalization.string(
+                    "settings.section.reminders",
+                    locale: locale
+                ))
                     .modifier(FadeInUp(appeared: appeared, delay: 0.12))
 
                 settingsCard {
@@ -108,7 +137,13 @@ struct SettingsView: View {
                             openSettingSheet { showIntervalEditor = true }
                             ProductAnalyticsTelemetry.live.autoReminderIntervalSettingsOpened()
                         } label: {
-                            settingsRow("Nudge Frequency", value: store.autoReminderIntervalDisplay)
+                            settingsRow(PillieLocalization.string(
+                                "settings.followup.title",
+                                locale: locale
+                            ), value: SettingsPresentation.interval(
+                                minutes: store.autoReminderIntervalMinutes,
+                                locale: locale
+                            ))
                         }
                         .buttonStyle(.plain)
                         divider
@@ -116,14 +151,26 @@ struct SettingsView: View {
                             openSettingSheet { showRetryLimitEditor = true }
                             ProductAnalyticsTelemetry.live.autoReminderRetryLimitSettingsOpened()
                         } label: {
-                            settingsRow("Number of Nudges", value: store.autoReminderRetryLimitDisplay)
+                            settingsRow(PillieLocalization.string(
+                                "settings.followup.title",
+                                locale: locale
+                            ), value: store.autoReminderRetryLimit.formatted(.number.locale(locale)))
                         }
                         .buttonStyle(.plain)
                         divider
                         Button {
                             openSettingSheet { showLastCallEditor = true }
                         } label: {
-                            settingsRow("Last Call Reminder", value: store.lastCallReminderDisplay)
+                            settingsRow(PillieLocalization.string(
+                                "settings.final_reminder.title",
+                                locale: locale
+                            ), value: store.lastCallReminderEnabled
+                                ? SettingsPresentation.time(
+                                    hour: store.lastCallReminderHour,
+                                    minute: store.lastCallReminderMinute,
+                                    locale: locale
+                                )
+                                : PillieLocalization.string("global.status.off", locale: locale))
                         }
                         .buttonStyle(.plain)
                     } else {
@@ -131,7 +178,10 @@ struct SettingsView: View {
                             openSettingSheet { showSmartRemindersUpsell = true }
                             ProductAnalyticsTelemetry.live.settingsSmartRemindersUpsellViewed()
                         } label: {
-                            settingsRow("Nudge Frequency", value: "Pillie+", valueColor: PillieTheme.coral, showLock: true)
+                            settingsRow(PillieLocalization.string(
+                                "settings.followup.title",
+                                locale: locale
+                            ), value: "Pillie+", valueColor: PillieTheme.coral, showLock: true)
                         }
                         .buttonStyle(.plain)
                         divider
@@ -139,7 +189,10 @@ struct SettingsView: View {
                             openSettingSheet { showSmartRemindersUpsell = true }
                             ProductAnalyticsTelemetry.live.settingsSmartRemindersUpsellViewed()
                         } label: {
-                            settingsRow("Number of Nudges", value: "Pillie+", valueColor: PillieTheme.coral, showLock: true)
+                            settingsRow(PillieLocalization.string(
+                                "settings.followup.title",
+                                locale: locale
+                            ), value: "Pillie+", valueColor: PillieTheme.coral, showLock: true)
                         }
                         .buttonStyle(.plain)
                         divider
@@ -147,7 +200,10 @@ struct SettingsView: View {
                             openSettingSheet { showSmartRemindersUpsell = true }
                             ProductAnalyticsTelemetry.live.settingsSmartRemindersUpsellViewed()
                         } label: {
-                            settingsRow("Last Call Reminder", value: "Pillie+", valueColor: PillieTheme.coral, showLock: true)
+                            settingsRow(PillieLocalization.string(
+                                "settings.final_reminder.title",
+                                locale: locale
+                            ), value: "Pillie+", valueColor: PillieTheme.coral, showLock: true)
                         }
                         .buttonStyle(.plain)
                         .sheet(isPresented: $showSmartRemindersUpsell) {
@@ -161,7 +217,10 @@ struct SettingsView: View {
                 .modifier(FadeInUp(appeared: appeared, delay: 0.12))
 
                 // MARK: - Cycle
-                sectionHeader("CYCLE")
+                sectionHeader(PillieLocalization.string(
+                    "settings.section.cycle",
+                    locale: locale
+                ))
                     .modifier(FadeInUp(appeared: appeared, delay: 0.15))
 
                 settingsCard {
@@ -169,7 +228,14 @@ struct SettingsView: View {
                         openSettingSheet { showCycleDayEditor = true }
                         ProductAnalyticsTelemetry.live.cycleDaySettingsOpened()
                     } label: {
-                        settingsRow("Current Day in Cycle", value: "Day \(store.currentDayIndex + 1) of \(store.pack.cycleLength)")
+                        settingsRow(PillieLocalization.string(
+                            "settings.cycle_day.title",
+                            locale: locale
+                        ), value: SettingsPresentation.cycleDay(
+                            day: store.currentDayIndex + 1,
+                            total: store.pack.cycleLength,
+                            locale: locale
+                        ))
                     }
                     .buttonStyle(.plain)
                     divider
@@ -178,7 +244,10 @@ struct SettingsView: View {
                 .modifier(FadeInUp(appeared: appeared, delay: 0.15))
 
                 // MARK: - Blocking
-                sectionHeader("BLOCKING")
+                sectionHeader(PillieLocalization.string(
+                    "settings.section.blocking",
+                    locale: locale
+                ))
                     .modifier(FadeInUp(appeared: appeared, delay: 0.1))
 
                 settingsCard {
@@ -189,7 +258,10 @@ struct SettingsView: View {
                                 hasSelection: AppBlockingManager.shared.hasAppsSelected
                             )
                         } label: {
-                            settingsRow("Blocked Apps", value: blockingStatusSummary)
+                            settingsRow(PillieLocalization.string(
+                                "settings.blocked_apps.title",
+                                locale: locale
+                            ), value: blockingStatusSummary)
                         }
                         .buttonStyle(.plain)
                     } else {
@@ -197,7 +269,10 @@ struct SettingsView: View {
                             openSensitiveSetting { showBlockingUpsell = true }
                             ProductAnalyticsTelemetry.live.settingsBlockingUpsellViewed()
                         } label: {
-                            settingsRow("Blocked Apps", value: "Pillie+", valueColor: PillieTheme.coral, showLock: true)
+                            settingsRow(PillieLocalization.string(
+                                "settings.blocked_apps.title",
+                                locale: locale
+                            ), value: "Pillie+", valueColor: PillieTheme.coral, showLock: true)
                         }
                         .buttonStyle(.plain)
                         .sheet(isPresented: $showBlockingUpsell) {
@@ -211,7 +286,10 @@ struct SettingsView: View {
                 .modifier(FadeInUp(appeared: appeared, delay: 0.2))
 
                 // MARK: - Account
-                sectionHeader("ACCOUNT")
+                sectionHeader(PillieLocalization.string(
+                    "settings.section.account",
+                    locale: locale
+                ))
                     .modifier(FadeInUp(appeared: appeared, delay: 0.2))
 
                 settingsCard {
@@ -226,7 +304,7 @@ struct SettingsView: View {
                         ProductAnalyticsTelemetry.live.subscriptionSettingsOpened()
                     } label: {
                         settingsRow(
-                            "Subscription",
+                            PillieLocalization.string("settings.subscription.title", locale: locale),
                             value: subscriptionRowValue,
                             valueColor: subscriptionRowValueColor
                         )
@@ -239,7 +317,10 @@ struct SettingsView: View {
                 // Always-available, identical for free and Plus. The warm label is
                 // UI-only copy; the mailto subject and telemetry name are stable
                 // contracts owned by `OpenLine` and the telemetry service.
-                sectionHeader("SUPPORT")
+                sectionHeader(PillieLocalization.string(
+                    "settings.section.support",
+                    locale: locale
+                ))
                     .modifier(FadeInUp(appeared: appeared, delay: 0.3))
 
                 settingsCard {
@@ -247,7 +328,10 @@ struct SettingsView: View {
                         openMailOrFallback(OpenLine.mailURL(for: .suggestion))
                         ProductAnalyticsTelemetry.live.openLineSuggestionTapped()
                     } label: {
-                        settingsRow("Share an Idea", value: "")
+                        settingsRow(PillieLocalization.string(
+                            "settings.support.email",
+                            locale: locale
+                        ), value: "")
                     }
                     .buttonStyle(.plain)
                     divider
@@ -258,14 +342,17 @@ struct SettingsView: View {
                         openMailOrFallback(OpenLine.mailURL(for: .issueReport(.current())))
                         ProductAnalyticsTelemetry.live.openLineIssueReportTapped()
                     } label: {
-                        settingsRow("Something Not Working?", value: "")
+                        settingsRow(PillieLocalization.string(
+                            "settings.support.email",
+                            locale: locale
+                        ), value: "")
                     }
                     .buttonStyle(.plain)
                 }
                 .modifier(FadeInUp(appeared: appeared, delay: 0.3))
 
                 // Handwriting accent
-                Text("you're doing amazing!")
+                Text(PillieLocalization.string("today.greeting", locale: locale))
                     .font(.pillieHandwriting())
                     .foregroundStyle(PillieTheme.textMuted)
                     .frame(maxWidth: .infinity)
@@ -348,13 +435,23 @@ struct SettingsView: View {
             )
         }
         .manageSubscriptionsSheet(isPresented: $showManageSubscription)
-        .alert(OpenLine.MailFallback.title, isPresented: $showOpenLineMailFallback) {
-            Button(OpenLine.MailFallback.copyActionTitle) {
+        .alert(PillieLocalization.string(
+            "support.mail_failed.title",
+            locale: locale
+        ), isPresented: $showOpenLineMailFallback) {
+            Button(OpenLine.MailFallback.addressToCopy) {
                 UIPasteboard.general.string = OpenLine.MailFallback.addressToCopy
             }
-            Button(OpenLine.MailFallback.dismissActionTitle, role: .cancel) {}
+            Button(PillieLocalization.string(
+                "global.action.close",
+                locale: locale
+            ), role: .cancel) {}
         } message: {
-            Text(OpenLine.MailFallback.message)
+            Text(PillieLocalization.formatted(
+                "support.mail_failed.body",
+                locale: locale,
+                arguments: OpenLine.MailFallback.addressToCopy
+            ))
         }
     }
 
@@ -414,6 +511,8 @@ struct SettingsView: View {
             Text(label)
                 .font(.pillieSubtitleBold())
                 .foregroundStyle(PillieTheme.textPrimary)
+                .fixedSize(horizontal: false, vertical: true)
+                .layoutPriority(1)
 
             Spacer()
 
@@ -426,6 +525,8 @@ struct SettingsView: View {
             Text(value)
                 .font(.pillie(15, weight: .regular))
                 .foregroundStyle(valueColor)
+                .multilineTextAlignment(.trailing)
+                .fixedSize(horizontal: false, vertical: true)
 
             if showChevron {
                 Image(systemName: "chevron.right")
@@ -450,10 +551,10 @@ struct SettingsView: View {
     private var cycleTransitionNoticeToggleRow: some View {
         HStack(alignment: .top) {
             VStack(alignment: .leading, spacing: 2) {
-                Text("Break Week Notice")
+                Text(PillieLocalization.string("settings.break_notice.title", locale: locale))
                     .font(.pillieSubtitleBold())
                     .foregroundStyle(PillieTheme.textPrimary)
-                Text("A heads-up when reminders pause for your break week.")
+                Text(PillieLocalization.string("settings.break_notice.body", locale: locale))
                     .font(.pillie(13, weight: .regular))
                     .foregroundStyle(PillieTheme.textMuted)
                     .fixedSize(horizontal: false, vertical: true)
@@ -482,14 +583,13 @@ struct SettingsView: View {
     private func adaptiveReminderRow<Accessory: View>(@ViewBuilder accessory: () -> Accessory) -> some View {
         HStack(alignment: .center, spacing: 8) {
             VStack(alignment: .leading, spacing: 2) {
-                Text("Adaptive Reminder Time")
+                Text(PillieLocalization.string("settings.adaptive_time.title", locale: locale))
                     .font(.pillieSubtitleBold())
                     .foregroundStyle(PillieTheme.textPrimary)
-                Text("Suggests a reminder time based on when you log.")
+                Text(PillieLocalization.string("settings.adaptive_time.body", locale: locale))
                     .font(.pillie(13, weight: .regular))
                     .foregroundStyle(PillieTheme.textMuted)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.8)
+                    .fixedSize(horizontal: false, vertical: true)
             }
 
             Spacer(minLength: 8)
@@ -507,8 +607,14 @@ struct SettingsView: View {
     private var subscriptionRowValue: String {
         let manager = SubscriptionManager.shared
         if manager.hasEntitlement { return "Pillie Plus" }
-        if manager.hasPlusAccess { return "Plus Trial" }
-        return "Free Plan"
+        if manager.hasPlusAccess {
+            return PillieLocalization.string(
+                "trial.status.title",
+                table: "Commerce",
+                locale: locale
+            )
+        }
+        return PillieLocalization.string("global.status.free", locale: locale)
     }
 
     private var subscriptionRowValueColor: Color {
@@ -516,7 +622,10 @@ struct SettingsView: View {
     }
 
     private var blockingStatusSummary: String {
-        AppBlockingManager.shared.statusSummary
+        PillieLocalization.string(
+            AppBlockingManager.shared.isEffectivelyOn ? "global.status.on" : "global.status.off",
+            locale: locale
+        )
     }
 
     private var reminderMessagesSummary: String {
@@ -526,35 +635,32 @@ struct SettingsView: View {
             store.customRetryReminderTitle,
             store.customRetryReminderBody
         ].contains { CustomReminderCopy.isCustomized($0) }
-        return hasCustom ? "Custom" : "Default"
+        return hasCustom
+            ? PillieLocalization.string("global.action.edit", locale: locale)
+            : PillieLocalization.string("settings.custom_messages.restore", locale: locale)
     }
 
     private var protocolSummary: String {
         switch store.pack.method {
         case .pill:
-            return "Pill (\(store.pack.pillRegimen.title))"
+            return "\(store.pack.method.localizedTitle(locale: locale)) (\(store.pack.pillRegimen.localizedRoutineDisplayName(locale: locale)))"
         case .patch:
-            return "Patch"
+            return store.pack.method.localizedTitle(locale: locale)
         case .ring:
-            return "Ring"
+            return store.pack.method.localizedTitle(locale: locale)
         }
     }
 
     private var supplyReminderTitle: String {
-        switch store.pack.method {
-        case .patch:
-            return "Restock Reminder"
-        case .pill, .ring:
-            return "Refill Reminder"
-        }
+        PillieLocalization.string("today.refill.title", locale: locale)
     }
 
     private var supplyReminderValue: String {
         switch store.pack.method {
         case .patch:
-            return store.patchRestockReminderThresholdDisplay
+            return store.patchRestockReminderThresholdPatches.formatted(.number.locale(locale))
         case .pill, .ring:
-            return store.refillReminderThresholdDisplay
+            return store.refillReminderThresholdDays.formatted(.number.locale(locale))
         }
     }
 }
@@ -564,6 +670,7 @@ struct SettingsView: View {
 private struct ProtocolEditor: View {
     @Bindable var store: PillStore
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.locale) private var locale
     @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
 
     @State private var selectedMethod: ContraceptiveMethod = .pill
@@ -597,26 +704,39 @@ private struct ProtocolEditor: View {
         }
     }
 
+    private var resetConfirmation: ScheduleCriticalSettingChange.Confirmation {
+        ScheduleCriticalSettingChange.confirmation(
+            cycleDay: selectedCycleDay,
+            locale: locale
+        )
+    }
+
     var body: some View {
         VStack(spacing: 0) {
-            SettingsSheetHeader(title: "Edit Schedule")
+            SettingsSheetHeader(title: PillieLocalization.string(
+                "settings.schedule.title",
+                locale: locale
+            ))
 
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
-                    Text("Method")
+                    Text(PillieLocalization.string("settings.method.title", locale: locale))
                         .font(.pillieCaptionMedium())
                         .foregroundStyle(PillieTheme.textMuted)
                         .tracking(2)
 
-                    Picker("Method", selection: $selectedMethod) {
+                    Picker(PillieLocalization.string(
+                        "settings.method.title",
+                        locale: locale
+                    ), selection: $selectedMethod) {
                         ForEach(ContraceptiveMethod.allCases, id: \.self) { method in
-                            Text(method.title).tag(method)
+                            Text(method.localizedTitle(locale: locale)).tag(method)
                         }
                     }
                     .pickerStyle(.segmented)
 
                     if selectedMethod == .pill {
-                        Text("Pill Regimen")
+                        Text(PillieLocalization.string("settings.regimen.title", locale: locale))
                             .font(.pillieCaptionMedium())
                             .foregroundStyle(PillieTheme.textMuted)
                             .tracking(2)
@@ -628,10 +748,10 @@ private struct ProtocolEditor: View {
                                 } label: {
                                     HStack {
                                         VStack(alignment: .leading, spacing: 4) {
-                                            Text(regimen.title)
+                                            Text(regimen.localizedRoutineDisplayName(locale: locale))
                                                 .font(.pillieBodyBold())
                                                 .foregroundStyle(PillieTheme.textPrimary)
-                                            Text(regimen.scheduleSubtitle)
+                                            Text(regimen.localizedScheduleSubtitle(locale: locale))
                                                 .font(.pillieBody())
                                                 .foregroundStyle(PillieTheme.textMuted)
                                         }
@@ -658,7 +778,7 @@ private struct ProtocolEditor: View {
                             }
                         }
                     } else {
-                        Text("SCHEDULE")
+                        Text(PillieLocalization.string("settings.schedule.title", locale: locale))
                             .font(.pillieCaptionMedium())
                             .foregroundStyle(PillieTheme.textMuted)
                             .tracking(2)
@@ -678,23 +798,33 @@ private struct ProtocolEditor: View {
                             )
                     }
 
-                    Text("CURRENT CYCLE DAY")
+                    Text(PillieLocalization.string("settings.cycle_day.title", locale: locale))
                         .font(.pillieCaptionMedium())
                         .foregroundStyle(PillieTheme.textMuted)
                         .tracking(2)
 
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Day \(selectedCycleDay) of \(cycleLength)")
+                        Text(SettingsPresentation.cycleDay(
+                            day: selectedCycleDay,
+                            total: cycleLength,
+                            locale: locale
+                        ))
                             .font(.pillieBodyBold())
                             .foregroundStyle(PillieTheme.textPrimary)
 
                         Stepper(value: $selectedCycleDay, in: 1...max(1, cycleLength)) {
-                            Text("Adjust to your current day")
+                            Text(PillieLocalization.string(
+                                "settings.cycle_day.adjust",
+                                locale: locale
+                            ))
                                 .font(.pillieBody())
                                 .foregroundStyle(PillieTheme.textMuted)
                         }
 
-                        Text("Days before your selected day will be marked as taken.")
+                        Text(PillieLocalization.string(
+                            "settings.cycle_day.history_note",
+                            locale: locale
+                        ))
                             .font(.pillieCaption())
                             .foregroundStyle(PillieTheme.textMuted)
                     }
@@ -713,7 +843,7 @@ private struct ProtocolEditor: View {
                 Button {
                     showResetConfirmation = true
                 } label: {
-                    Text("Save")
+                    Text(PillieLocalization.string("global.action.save", locale: locale))
                 }
                 .buttonStyle(.pillieDark)
                 .padding(.horizontal, 28)
@@ -722,7 +852,7 @@ private struct ProtocolEditor: View {
                     ProductAnalyticsTelemetry.live.protocolChangeCancelled()
                     dismiss()
                 } label: {
-                    Text("Cancel")
+                    Text(PillieLocalization.string("global.action.cancel", locale: locale))
                 }
                 .buttonStyle(.pillieSecondary)
                 .padding(.horizontal, 28)
@@ -730,9 +860,9 @@ private struct ProtocolEditor: View {
             .padding(.bottom, 20)
         }
         .background(PillieTheme.bg.ignoresSafeArea())
-        .alert("Reset Tracking Data?", isPresented: $showResetConfirmation) {
-            Button("Cancel", role: .cancel) { }
-            Button("Reset & Save", role: .destructive) {
+        .alert(resetConfirmation.title, isPresented: $showResetConfirmation) {
+            Button(resetConfirmation.cancelTitle, role: .cancel) { }
+            Button(resetConfirmation.confirmTitle, role: .destructive) {
                 settingsFeedback.sensitiveOrDestructiveChange(accessibilityReduceMotion: accessibilityReduceMotion)
                 store.resetAndStartFresh(
                     method: selectedMethod,
@@ -745,7 +875,7 @@ private struct ProtocolEditor: View {
                 dismiss()
             }
         } message: {
-            Text("Changing your schedule will reset all tracking history. You'll start at day \(selectedCycleDay). This cannot be undone.")
+            Text(resetConfirmation.body)
         }
         .onAppear(perform: seedFromStore)
         .onChange(of: selectedMethod) { _, _ in clampCycleDay() }
@@ -795,53 +925,33 @@ private struct ReminderTimeEditor: View {
     @Bindable var store: PillStore
     @Environment(\.dismiss) private var dismiss
     @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
+    @Environment(\.locale) private var locale
 
-    @State private var selectedHour: Int = 8
-    @State private var selectedMinute: Int = 0
-    @State private var selectedPeriod: Int = 0
+    @State private var selectedTime = Date()
 
     private let settingsFeedback = SettingsInteractionFeedback()
 
     var body: some View {
-        SettingsSheetContainer(title: "Change Reminder Time", bottomPadding: 0) {
-            HStack(spacing: 0) {
-                Picker("Hour", selection: $selectedHour) {
-                    ForEach(1...12, id: \.self) { hour in
-                        Text("\(hour)").tag(hour)
-                    }
-                }
-                .pickerStyle(.wheel)
-                .frame(width: 70, height: 150)
-                .clipped()
-
-                Text(":")
-                    .font(.pillieHeadline())
-                    .foregroundStyle(PillieTheme.textPrimary)
-
-                Picker("Minute", selection: $selectedMinute) {
-                    ForEach(0..<60, id: \.self) { minute in
-                        Text(String(format: "%02d", minute)).tag(minute)
-                    }
-                }
-                .pickerStyle(.wheel)
-                .frame(width: 70, height: 150)
-                .clipped()
-
-                Picker("Period", selection: $selectedPeriod) {
-                    Text("AM").tag(0)
-                    Text("PM").tag(1)
-                }
-                .pickerStyle(.wheel)
-                .frame(width: 70, height: 150)
-                .clipped()
-            }
+        SettingsSheetContainer(
+            title: PillieLocalization.string("settings.reminder_time.title", locale: locale),
+            bottomPadding: 0
+        ) {
+            DatePicker(
+                "",
+                selection: $selectedTime,
+                displayedComponents: .hourAndMinute
+            )
+            .datePickerStyle(.wheel)
+            .labelsHidden()
+            .environment(\.locale, locale)
+            .frame(height: 170)
 
             Button {
                 settingsFeedback.commitScheduleSave(accessibilityReduceMotion: accessibilityReduceMotion)
                 saveReminderTime()
                 dismiss()
             } label: {
-                Text("Save")
+                Text(PillieLocalization.string("global.action.save", locale: locale))
             }
             .buttonStyle(.pillieDark)
             .padding(.horizontal, 28)
@@ -850,25 +960,23 @@ private struct ReminderTimeEditor: View {
     }
 
     private func seedFromStore() {
-        let selection = ReminderTimeConverter.toTwelveHour(
-            hour24: store.reminderHour,
-            minute: store.reminderMinute
-        )
-        selectedHour = selection.hour
-        selectedMinute = selection.minute
-        selectedPeriod = selection.period
+        selectedTime = Calendar.current.date(
+            from: DateComponents(
+                year: 2001,
+                month: 1,
+                day: 1,
+                hour: store.reminderHour,
+                minute: store.reminderMinute
+            )
+        ) ?? Date()
     }
 
     private func saveReminderTime() {
-        let selection = ReminderTimeConverter.toTwentyFourHour(
-            hour: selectedHour,
-            minute: selectedMinute,
-            period: selectedPeriod
-        )
+        let selection = Calendar.current.dateComponents([.hour, .minute], from: selectedTime)
         ScheduleCriticalSettingChange.saveSettingsReminderTime(
             store: store,
-            hour: selection.hour,
-            minute: selection.minute
+            hour: selection.hour ?? store.reminderHour,
+            minute: selection.minute ?? store.reminderMinute
         )
     }
 }
@@ -879,62 +987,44 @@ private struct LastCallReminderEditor: View {
     @Bindable var store: PillStore
     @Environment(\.dismiss) private var dismiss
     @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
+    @Environment(\.locale) private var locale
 
     @State private var isEnabled: Bool = false
-    @State private var selectedHour: Int = 9
-    @State private var selectedMinute: Int = 0
-    @State private var selectedPeriod: Int = 1
+    @State private var selectedTime = Date()
 
     private let settingsFeedback = SettingsInteractionFeedback()
 
     var body: some View {
-        SettingsSheetContainer(title: "Last Call Reminder", bottomPadding: 0) {
+        SettingsSheetContainer(
+            title: PillieLocalization.string("settings.final_reminder.title", locale: locale),
+            bottomPadding: 0
+        ) {
             VStack(spacing: 20) {
-                Text("A final nudge if today's action is still open.")
+                Text(PillieLocalization.string("settings.final_reminder.body", locale: locale))
                     .font(.pillieCaption())
                     .foregroundStyle(PillieTheme.textMuted)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.7)
+                    .fixedSize(horizontal: false, vertical: true)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 28)
 
-                Toggle("Last Call Reminder", isOn: $isEnabled)
+                Toggle(
+                    PillieLocalization.string("settings.final_reminder.title", locale: locale),
+                    isOn: $isEnabled
+                )
                     .toggleStyle(SwitchToggleStyle(tint: PillieTheme.coral))
                     .font(.pillieBodyBold())
                     .foregroundStyle(PillieTheme.textPrimary)
                     .padding(.horizontal, 28)
 
-                HStack(spacing: 0) {
-                    Picker("Hour", selection: $selectedHour) {
-                        ForEach(1...12, id: \.self) { hour in
-                            Text("\(hour)").tag(hour)
-                        }
-                    }
-                    .pickerStyle(.wheel)
-                    .frame(width: 70, height: 130)
-                    .clipped()
-
-                    Text(":")
-                        .font(.pillieHeadline())
-                        .foregroundStyle(PillieTheme.textPrimary)
-
-                    Picker("Minute", selection: $selectedMinute) {
-                        ForEach(0..<60, id: \.self) { minute in
-                            Text(String(format: "%02d", minute)).tag(minute)
-                        }
-                    }
-                    .pickerStyle(.wheel)
-                    .frame(width: 70, height: 130)
-                    .clipped()
-
-                    Picker("Period", selection: $selectedPeriod) {
-                        Text("AM").tag(0)
-                        Text("PM").tag(1)
-                    }
-                    .pickerStyle(.wheel)
-                    .frame(width: 70, height: 130)
-                    .clipped()
-                }
+                DatePicker(
+                    "",
+                    selection: $selectedTime,
+                    displayedComponents: .hourAndMinute
+                )
+                .datePickerStyle(.wheel)
+                .labelsHidden()
+                .environment(\.locale, locale)
+                .frame(height: 150)
                 .opacity(isEnabled ? 1 : 0.4)
                 .disabled(!isEnabled)
             }
@@ -944,7 +1034,7 @@ private struct LastCallReminderEditor: View {
                 saveLastCallReminder()
                 dismiss()
             } label: {
-                Text("Save")
+                Text(PillieLocalization.string("global.action.save", locale: locale))
             }
             .buttonStyle(.pillieDark)
             .padding(.horizontal, 28)
@@ -954,26 +1044,24 @@ private struct LastCallReminderEditor: View {
 
     private func seedFromStore() {
         isEnabled = store.lastCallReminderEnabled
-        let selection = ReminderTimeConverter.toTwelveHour(
-            hour24: store.lastCallReminderHour,
-            minute: store.lastCallReminderMinute
-        )
-        selectedHour = selection.hour
-        selectedMinute = selection.minute
-        selectedPeriod = selection.period
+        selectedTime = Calendar.current.date(
+            from: DateComponents(
+                year: 2001,
+                month: 1,
+                day: 1,
+                hour: store.lastCallReminderHour,
+                minute: store.lastCallReminderMinute
+            )
+        ) ?? Date()
     }
 
     private func saveLastCallReminder() {
-        let selection = ReminderTimeConverter.toTwentyFourHour(
-            hour: selectedHour,
-            minute: selectedMinute,
-            period: selectedPeriod
-        )
+        let selection = Calendar.current.dateComponents([.hour, .minute], from: selectedTime)
         ScheduleCriticalSettingChange.saveSettingsLastCallReminder(
             store: store,
             enabled: isEnabled,
-            hour: selection.hour,
-            minute: selection.minute
+            hour: selection.hour ?? store.lastCallReminderHour,
+            minute: selection.minute ?? store.lastCallReminderMinute
         )
     }
 }
@@ -984,20 +1072,24 @@ struct AutoReminderIntervalEditor: View {
     @Bindable var store: PillStore
     @Environment(\.dismiss) private var dismiss
     @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
+    @Environment(\.locale) private var locale
 
     @State private var selectedInterval: Int = 10
 
     private let settingsFeedback = SettingsInteractionFeedback()
 
     var body: some View {
-        SettingsSheetContainer(title: "Nudge Frequency", bottomPadding: 0) {
+        SettingsSheetContainer(
+            title: PillieLocalization.string("settings.followup.title", locale: locale),
+            bottomPadding: 0
+        ) {
             VStack(spacing: 16) {
                 ForEach(PillStore.autoReminderIntervalOptions, id: \.self) { option in
                     Button {
                         selectedInterval = option
                     } label: {
                         HStack {
-                            Text("Every \(option) minutes")
+                            Text(SettingsPresentation.interval(minutes: option, locale: locale))
                                 .font(.pillieBodyBold())
                                 .foregroundStyle(PillieTheme.textPrimary)
                             Spacer()
@@ -1025,7 +1117,7 @@ struct AutoReminderIntervalEditor: View {
                 )
                 dismiss()
             } label: {
-                Text("Save")
+                Text(PillieLocalization.string("global.action.save", locale: locale))
             }
             .buttonStyle(.pillieDark)
             .padding(.horizontal, 28)
@@ -1042,13 +1134,17 @@ private struct AutoReminderRetryLimitEditor: View {
     @Bindable var store: PillStore
     @Environment(\.dismiss) private var dismiss
     @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
+    @Environment(\.locale) private var locale
 
     @State private var selectedLimit: Int = 3
 
     private let settingsFeedback = SettingsInteractionFeedback()
 
     var body: some View {
-        SettingsSheetContainer(title: "Number of Nudges", bottomPadding: 0) {
+        SettingsSheetContainer(
+            title: PillieLocalization.string("settings.followup.title", locale: locale),
+            bottomPadding: 0
+        ) {
             VStack(spacing: 16) {
                 ForEach(PillStore.autoReminderRetryLimitOptions, id: \.self) { option in
                     Button {
@@ -1083,7 +1179,7 @@ private struct AutoReminderRetryLimitEditor: View {
                 )
                 dismiss()
             } label: {
-                Text("Save")
+                Text(PillieLocalization.string("global.action.save", locale: locale))
             }
             .buttonStyle(.pillieDark)
             .padding(.horizontal, 28)
@@ -1096,11 +1192,9 @@ private struct AutoReminderRetryLimitEditor: View {
     private func optionLabel(for option: Int) -> String {
         switch option {
         case 0:
-            return "Off"
-        case 1:
-            return "1 nudge"
+            return PillieLocalization.string("global.status.off", locale: locale)
         default:
-            return "\(option) nudges"
+            return option.formatted(.number.locale(locale))
         }
     }
 }
@@ -1111,6 +1205,7 @@ private struct RefillReminderThresholdEditor: View {
     @Bindable var store: PillStore
     @Environment(\.dismiss) private var dismiss
     @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
+    @Environment(\.locale) private var locale
 
     @State private var selectedThreshold: Int = 5
 
@@ -1121,7 +1216,7 @@ private struct RefillReminderThresholdEditor: View {
     }
 
     private var editorTitle: String {
-        isPatchMethod ? "Restock Reminder" : "Refill Reminder"
+        PillieLocalization.string("today.refill.title", locale: locale)
     }
 
     private var thresholdOptions: [Int] {
@@ -1164,7 +1259,7 @@ private struct RefillReminderThresholdEditor: View {
                 )
                 dismiss()
             } label: {
-                Text("Save")
+                Text(PillieLocalization.string("global.action.save", locale: locale))
             }
             .buttonStyle(.pillieDark)
             .padding(.horizontal, 28)
@@ -1177,10 +1272,7 @@ private struct RefillReminderThresholdEditor: View {
     }
 
     private func thresholdLabel(for option: Int) -> String {
-        if isPatchMethod {
-            return option == 1 ? "1 patch left" : "\(option) patches left"
-        }
-        return "\(option) days before end"
+        option.formatted(.number.locale(locale))
     }
 }
 
@@ -1190,6 +1282,7 @@ private struct CycleDayEditor: View {
     @Bindable var store: PillStore
     @Environment(\.dismiss) private var dismiss
     @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
+    @Environment(\.locale) private var locale
 
     @State private var selectedCycleDay: Int = 1
 
@@ -1200,8 +1293,15 @@ private struct CycleDayEditor: View {
     }
 
     var body: some View {
-        SettingsSheetContainer(title: "Current Cycle Day", bottomPadding: 0) {
-            Text("Day \(selectedCycleDay) of \(cycleLength)")
+        SettingsSheetContainer(
+            title: PillieLocalization.string("settings.cycle_day.title", locale: locale),
+            bottomPadding: 0
+        ) {
+            Text(SettingsPresentation.cycleDay(
+                day: selectedCycleDay,
+                total: cycleLength,
+                locale: locale
+            ))
                 .font(.pillieHeadline())
                 .foregroundStyle(PillieTheme.textPrimary)
 
@@ -1209,13 +1309,13 @@ private struct CycleDayEditor: View {
                 value: $selectedCycleDay,
                 in: 1...cycleLength
             ) {
-                Text("Adjust current day")
+                Text(PillieLocalization.string("settings.cycle_day.adjust", locale: locale))
                     .font(.pillieBody())
                     .foregroundStyle(PillieTheme.textMuted)
             }
             .padding(.horizontal, 20)
 
-            Text("Days before your selected day will be marked as taken. No days will be marked as missed.")
+            Text(PillieLocalization.string("settings.cycle_day.history_note", locale: locale))
                 .font(.pillieCaption())
                 .foregroundStyle(PillieTheme.textMuted)
                 .multilineTextAlignment(.center)
@@ -1227,7 +1327,7 @@ private struct CycleDayEditor: View {
                 ProductAnalyticsTelemetry.live.cycleDaySaved()
                 dismiss()
             } label: {
-                Text("Save")
+                Text(PillieLocalization.string("global.action.save", locale: locale))
             }
             .buttonStyle(.pillieDark)
             .padding(.horizontal, 28)

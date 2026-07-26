@@ -11,6 +11,8 @@
 //  way back to the upgrade path until access returns.
 //
 
+import Foundation
+
 /// Copy for the Protection Off card. `nil` when the card must not show.
 struct ProtectionOffCardContent: Equatable {
     let title: String
@@ -23,9 +25,25 @@ struct ProtectionOffCardContent: Equatable {
     /// cohort instead.
     static func make(
         hasPlusAccess: Bool,
-        blockerConfigSaved: Bool
+        blockerConfigSaved: Bool,
+        locale: Locale = .current
     ) -> ProtectionOffCardContent? {
         guard !hasPlusAccess, blockerConfigSaved else { return nil }
+        if locale.language.languageCode?.identifier == "it" {
+            return ProtectionOffCardContent(
+                title: PillieLocalization.string("today.protection.inactive", locale: locale),
+                detail: PillieLocalization.string(
+                    "trial.end.subtitle",
+                    table: "Commerce",
+                    locale: locale
+                ),
+                ctaTitle: PillieLocalization.string(
+                    "paywall.action.upgrade",
+                    table: "Commerce",
+                    locale: locale
+                )
+            )
+        }
         return ProtectionOffCardContent(
             title: "App blocking is off",
             detail: "Your Plus access ended, so apps aren't being blocked. Your blocker setup is saved — turn Plus back on to pick up right where you left off.",

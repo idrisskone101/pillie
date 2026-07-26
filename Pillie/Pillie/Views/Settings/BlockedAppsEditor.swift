@@ -10,6 +10,7 @@ import FamilyControls
 
 struct BlockedAppsEditor: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.locale) private var locale
     @Environment(PillStore.self) private var store
     @State private var showPicker = false
     @State private var isRequestingAuth = false
@@ -17,7 +18,10 @@ struct BlockedAppsEditor: View {
     private var blockingManager: AppBlockingManager { .shared }
 
     var body: some View {
-        SettingsSheetContainer(title: "Blocked Apps") {
+        SettingsSheetContainer(title: PillieLocalization.string(
+            "settings.blocked_apps.title",
+            locale: locale
+        )) {
             // Status indicator
             statusCard
 
@@ -33,7 +37,10 @@ struct BlockedAppsEditor: View {
                         Image(systemName: blockingManager.hasAppsSelected ? "pencil" : "plus")
                             .font(.system(size: 16, weight: .semibold))
                     }
-                    Text(blockingManager.hasAppsSelected ? "Change apps" : "Choose apps to block")
+                    Text(PillieLocalization.string(
+                        "settings.blocked_apps.edit",
+                        locale: locale
+                    ))
                         .font(.pillieBodySemibold())
                 }
                 .foregroundStyle(PillieTheme.coral)
@@ -63,7 +70,7 @@ struct BlockedAppsEditor: View {
                 }
                 dismiss()
             } label: {
-                Text("Done")
+                Text(PillieLocalization.string("global.action.done", locale: locale))
             }
             .buttonStyle(.pillieDark)
             .padding(.horizontal, 28)
@@ -139,8 +146,10 @@ struct BlockedAppsEditor: View {
     }
 
     private var statusLabel: String {
-        if !blockingManager.blockingEnabled { return "Blocking Off" }
-        return blockingManager.blockingActive ? "Blocking Active" : "Blocking Enabled"
+        PillieLocalization.string(
+            blockingManager.blockingActive ? "global.status.on" : "global.status.off",
+            locale: locale
+        )
     }
 
     private var selectionSummary: some View {
@@ -149,13 +158,16 @@ struct BlockedAppsEditor: View {
                 let count = blockingManager.selectedCount
                 summaryCard(
                     icon: "app.badge.checkmark",
-                    text: "\(count) app\(count == 1 ? "" : "s")/categor\(count == 1 ? "y" : "ies") selected",
+                    text: "\(count.formatted(.number.locale(locale))) · \(PillieLocalization.string("settings.blocked_apps.title", locale: locale))",
                     iconColor: PillieTheme.coral
                 )
             } else {
                 summaryCard(
                     icon: "app.dashed",
-                    text: "No apps selected yet",
+                    text: PillieLocalization.string(
+                        "empty.blocked_apps.title",
+                        locale: locale
+                    ),
                     iconColor: PillieTheme.textMuted
                 )
             }

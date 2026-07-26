@@ -10,6 +10,7 @@ import StoreKit
 
 struct HomeView: View {
     @Environment(PillStore.self) var store
+    @Environment(\.locale) private var locale
     @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
     @Environment(\.requestReview) private var requestReview
     @Environment(\.openURL) private var openURL
@@ -81,7 +82,7 @@ struct HomeView: View {
     /// card was dismissed — in which case it does not occupy this Home pass.
     private var blockingCardContent: BlockingStatusCardContent? {
         guard !blockingCardDismissed else { return nil }
-        return BlockingStatusCardContent.make(for: blockingPresentation)
+        return BlockingStatusCardContent.make(for: blockingPresentation, locale: locale)
     }
 
     /// Copy + gating for the Protection Off State card (#167): Plus Access ended
@@ -92,7 +93,8 @@ struct HomeView: View {
     private var protectionOffContent: ProtectionOffCardContent? {
         ProtectionOffCardContent.make(
             hasPlusAccess: SubscriptionManager.shared.hasPlusAccess,
-            blockerConfigSaved: AppBlockingManager.shared.hasAppsSelected
+            blockerConfigSaved: AppBlockingManager.shared.hasAppsSelected,
+            locale: locale
         )
     }
 
@@ -108,7 +110,8 @@ struct HomeView: View {
             blockerConfigSaved: AppBlockingManager.shared.hasAppsSelected,
             stats: trialEndOwnStats,
             calendar: Calendar.current,
-            now: Date()
+            now: Date(),
+            locale: locale
         )
     }
 
@@ -191,7 +194,8 @@ struct HomeView: View {
             ),
             protectionActive: trialActivationState.appBlockingActive,
             calendar: Calendar.current,
-            now: Date()
+            now: Date(),
+            locale: locale
         )
     }
 
@@ -259,7 +263,10 @@ struct HomeView: View {
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 16) {
                     PrimaryTitleAnchor(
-                        title: "Today",
+                        title: PillieLocalization.string(
+                            "today.navigation.title",
+                            locale: locale
+                        ),
                         titleFont: .pillieHeadline().weight(.bold),
                         showsAccessorySlot: true,
                         accessory: {
@@ -390,7 +397,7 @@ struct HomeView: View {
                     }
 
                     // Handwriting motivation
-                    Text("Keep it up, you're doing great!")
+                    Text(PillieLocalization.string("today.greeting", locale: locale))
                         .font(.pillieHandwriting())
                         .foregroundStyle(PillieTheme.textMuted)
                         .frame(maxWidth: .infinity)
@@ -427,14 +434,25 @@ struct HomeView: View {
         .onChange(of: SubscriptionManager.shared.trialGrantDate) { _, _ in
             autoPresentTrialEndPaywallIfNeeded()
         }
-        .alert(store.refillBannerTitle, isPresented: $showRefillConfirmation) {
-            Button(store.refillCTALabel) {
+        .alert(PillieLocalization.formatted(
+            "today.pack.start_new.title",
+            locale: locale,
+            arguments: cycleTypeText
+        ), isPresented: $showRefillConfirmation) {
+            Button(PillieLocalization.string(
+                "today.pack.start_new.confirm",
+                locale: locale
+            )) {
                 startNewPackOrCycle()
                 ProductAnalyticsTelemetry.live.newPackOrCycleStarted()
             }
-            Button("Not Yet", role: .cancel) {}
+            Button(PillieLocalization.string("global.action.not_now", locale: locale), role: .cancel) {}
         } message: {
-            Text("This will start a new \(store.pack.method == .pill ? "pack" : "cycle") from today. Your previous history will be preserved.")
+            Text(PillieLocalization.formatted(
+                "today.pack.start_new.body",
+                locale: locale,
+                arguments: cycleTypeText
+            ))
         }
         .sheet(isPresented: $showBlockingSetup) {
             BlockedAppsEditor()
@@ -535,7 +553,7 @@ struct HomeView: View {
                     HStack(spacing: 8) {
                         Image(systemName: "arrow.triangle.2.circlepath")
                             .font(.system(size: 16, weight: .semibold))
-                        Text(store.refillCTALabel)
+                        Text(state.localizedPrimaryLabel(locale: locale))
                     }
                 }
                 .buttonStyle(.pillieDark)
@@ -553,7 +571,7 @@ struct HomeView: View {
                     HStack(spacing: 8) {
                         Image(systemName: "arrow.uturn.backward")
                             .font(.system(size: 16, weight: .semibold))
-                        Text("Completed (Tap to undo)")
+                        Text(state.localizedPrimaryLabel(locale: locale))
                     }
                 }
                 .buttonStyle(PillieTakenButtonStyle())
@@ -565,7 +583,7 @@ struct HomeView: View {
                     HStack(spacing: 8) {
                         Image(systemName: "calendar")
                             .font(.system(size: 16, weight: .semibold))
-                        Text("No Action Due Today")
+                        Text(state.localizedPrimaryLabel(locale: locale))
                     }
                 }
                 .buttonStyle(PillieTakenButtonStyle())
@@ -589,7 +607,7 @@ struct HomeView: View {
                                     .font(.system(size: 14, weight: .semibold))
                                     .foregroundStyle(.white)
                             )
-                        Text(action.ctaLabel)
+                        Text(state.localizedPrimaryLabel(locale: locale))
                     }
                 }
                 .buttonStyle(.pillieDark)
@@ -604,7 +622,20 @@ struct HomeView: View {
     // MARK: - Helpers
 
     private var dateString: String {
-        PillieDateFormatters.homeHeader.string(from: Date())
+        Date().formatted(
+            Date.FormatStyle()
+                .weekday(.wide)
+                .day()
+                .month(.wide)
+                .locale(locale)
+        )
+    }
+
+    private var cycleTypeText: String {
+        if locale.language.languageCode?.identifier == "it" {
+            return store.pack.method == .pill ? "ciclo della confezione" : "ciclo"
+        }
+        return store.pack.method == .pill ? "pack" : "cycle"
     }
 
     private func completeTodayAction() {

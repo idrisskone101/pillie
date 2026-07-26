@@ -8,6 +8,7 @@ import SwiftData
 
 struct HistoryView: View {
     @Environment(PillStore.self) private var store
+    @Environment(\.locale) private var locale
     @State private var displayedMonth: Date = MonthCursor.monthStart(for: Date())
     @State private var infoMonth: Date = MonthCursor.monthStart(for: Date())
     @State private var appeared = false
@@ -42,7 +43,7 @@ struct HistoryView: View {
         ScrollView(.vertical, showsIndicators: false) {
             VStack(alignment: .leading, spacing: 16) {
                 PrimaryTitleAnchor(
-                    title: "History",
+                    title: PillieLocalization.string("history.navigation.title", locale: locale),
                     titleFont: .pillieExtraBold(36),
                     showsAccessorySlot: true,
                     accessory: nil
@@ -50,7 +51,7 @@ struct HistoryView: View {
                     .modifier(FadeInUp(appeared: appeared, delay: 0))
 
                 // Subtitle
-                Text("Your tracking overview")
+                Text(PillieLocalization.string("history.title", locale: locale))
                     .font(.pillieBody())
                     .foregroundStyle(PillieTheme.textMuted)
                     .modifier(FadeInUp(appeared: appeared, delay: 0))
@@ -64,12 +65,18 @@ struct HistoryView: View {
                     }
                     if store.pack.method == .patch {
                         HStack(spacing: 16) {
-                            legendItem(color: PillieTheme.patchChangeRose, label: "Change / Remove")
+                            legendItem(
+                                color: PillieTheme.patchChangeRose,
+                                label: legendLabels.active
+                            )
                         }
                     }
                     if store.pack.method == .ring {
                         HStack(spacing: 16) {
-                            legendItem(color: PillieTheme.ringReinsertCoral, label: "Reinsert Date")
+                            legendItem(
+                                color: PillieTheme.ringReinsertCoral,
+                                label: legendLabels.active
+                            )
                         }
                     }
                 }
@@ -172,18 +179,17 @@ struct HistoryView: View {
     // MARK: - Computed Properties
 
     private var legendLabels: (active: String, missed: String, rest: String) {
-        switch store.pack.method {
-        case .pill:
-            return ("Taken", "Missed", "Break")
-        case .patch:
-            return ("Changed", "Missed", "Off Week")
-        case .ring:
-            return ("Inserted", "Missed", "Ring-Free")
-        }
+        (
+            PillieLocalization.string("history.legend.completed", locale: locale),
+            PillieLocalization.string("history.legend.unlogged", locale: locale),
+            PillieLocalization.string("history.legend.break", locale: locale)
+        )
     }
 
     private var monthYearString: String {
-        PillieDateFormatters.monthYear.string(from: infoMonth)
+        infoMonth.formatted(
+            Date.FormatStyle().month(.wide).year().locale(locale)
+        )
     }
 
     private var monthIdentity: String {

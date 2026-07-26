@@ -9,6 +9,8 @@
 //  to enable it, without describing Plus-but-reminder-only users as free.
 //
 
+import Foundation
+
 /// Which blocking-status surface to show, derived from the completion classification.
 enum BlockingStatusPresentation: Equatable {
     /// App blocking is activated and running — no setup prompt.
@@ -47,7 +49,51 @@ struct BlockingStatusCardContent: Equatable {
 
     var visibleCopy: [String] { [title, detail, ctaTitle] }
 
-    static func make(for presentation: BlockingStatusPresentation) -> BlockingStatusCardContent? {
+    static func make(
+        for presentation: BlockingStatusPresentation,
+        locale: Locale = .current
+    ) -> BlockingStatusCardContent? {
+        if locale.language.languageCode?.identifier == "it" {
+            switch presentation {
+            case .active:
+                return nil
+            case .incompleteEntitled:
+                return BlockingStatusCardContent(
+                    title: PillieLocalization.string(
+                        "today.protection.inactive",
+                        locale: locale
+                    ),
+                    detail: PillieLocalization.string(
+                        "paywall.subtitle",
+                        table: "Commerce",
+                        locale: locale
+                    ),
+                    ctaTitle: PillieLocalization.string(
+                        "settings.blocked_apps.edit",
+                        locale: locale
+                    ),
+                    isLocked: false
+                )
+            case .incompleteFree:
+                return BlockingStatusCardContent(
+                    title: PillieLocalization.string(
+                        "today.protection.inactive",
+                        locale: locale
+                    ),
+                    detail: PillieLocalization.string(
+                        "paywall.subtitle",
+                        table: "Commerce",
+                        locale: locale
+                    ),
+                    ctaTitle: PillieLocalization.string(
+                        "paywall.action.upgrade",
+                        table: "Commerce",
+                        locale: locale
+                    ),
+                    isLocked: true
+                )
+            }
+        }
         switch presentation {
         case .active:
             return nil

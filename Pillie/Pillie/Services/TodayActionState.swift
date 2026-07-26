@@ -28,7 +28,7 @@ enum TodayActionState: Equatable {
             return .completed
         }
 
-        guard let todayDueAction = input.todayDueAction else {
+        guard let todayDueAction = input.todayDueAction, !todayDueAction.isBreak else {
             return .noActionDue
         }
 
@@ -36,5 +36,21 @@ enum TodayActionState: Equatable {
             todayDueAction,
             requiresShakeConfirm: input.isPlus && !input.reduceMotionEnabled
         )
+    }
+
+    func localizedPrimaryLabel(locale: Locale = .current) -> String {
+        switch self {
+        case .refillDue:
+            PillieLocalization.string("today.pack.start_new.confirm", locale: locale)
+        case .completed:
+            PillieLocalization.string("today.action.undo_complete", locale: locale)
+        case .noActionDue:
+            PillieLocalization.string("today.empty.title", locale: locale)
+        case .dueAction(let action, _):
+            PillieLocalization.string(
+                action.isBreak ? "today.empty.title" : "today.action.mark_complete",
+                locale: locale
+            )
+        }
     }
 }

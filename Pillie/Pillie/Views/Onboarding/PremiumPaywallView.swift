@@ -127,11 +127,84 @@ struct SoftPaywallContent {
         freeCTA: "Continue with free plan",
         restoreCTA: "Restore Purchases"
     )
+
+    static func localized(locale: Locale = .current) -> SoftPaywallContent {
+        func commerce(_ key: String) -> String {
+            PillieLocalization.string(key, table: "Commerce", locale: locale)
+        }
+        return SoftPaywallContent(
+            title: commerce("paywall.title"),
+            titleAccent: "",
+            subtitle: commerce("paywall.subtitle"),
+            comparisonLabel: "Pillie Plus",
+            freeColumnLabel: PillieLocalization.string("global.status.free", locale: locale),
+            plusColumnLabel: "Plus",
+            rows: [
+                ComparisonRow(
+                    title: commerce("paywall.feature.daily_reminders"),
+                    icon: "bell.fill",
+                    iconBackground: PillieTheme.lavender,
+                    iconColor: PillieTheme.dark,
+                    freeIncluded: true,
+                    plusIncluded: true
+                ),
+                ComparisonRow(
+                    title: commerce("paywall.feature.smart_reminders"),
+                    icon: "bell.badge.fill",
+                    iconBackground: PillieTheme.lavender,
+                    iconColor: PillieTheme.dark,
+                    freeIncluded: false,
+                    plusIncluded: true
+                ),
+                ComparisonRow(
+                    title: commerce("paywall.feature.app_blocking"),
+                    icon: "nosign",
+                    iconBackground: PillieTheme.lavender,
+                    iconColor: PillieTheme.dark,
+                    freeIncluded: false,
+                    plusIncluded: true
+                ),
+                ComparisonRow(
+                    title: commerce("paywall.feature.shake"),
+                    icon: "iphone.radiowaves.left.and.right",
+                    iconBackground: PillieTheme.sage,
+                    iconColor: PillieTheme.verifiedGreen,
+                    freeIncluded: false,
+                    plusIncluded: true
+                ),
+                ComparisonRow(
+                    title: commerce("paywall.feature.custom_messages"),
+                    icon: "text.bubble.fill",
+                    iconBackground: PillieTheme.lavender,
+                    iconColor: PillieTheme.dark,
+                    freeIncluded: false,
+                    plusIncluded: true
+                ),
+                ComparisonRow(
+                    title: commerce("paywall.feature.future"),
+                    icon: "sparkles",
+                    iconBackground: PillieTheme.coralLight,
+                    iconColor: PillieTheme.coral,
+                    freeIncluded: false,
+                    plusIncluded: true
+                ),
+            ],
+            annualPlanLabel: commerce("paywall.plan.annual"),
+            monthlyPlanLabel: commerce("paywall.plan.monthly"),
+            reassurances: [commerce("paywall.plan.cancel_anytime")],
+            monthlyReassurances: [commerce("paywall.plan.cancel_anytime")],
+            primaryCTA: commerce("paywall.action.upgrade"),
+            monthlyCTA: commerce("paywall.action.upgrade"),
+            freeCTA: PillieLocalization.string("global.action.not_now", locale: locale),
+            restoreCTA: commerce("paywall.action.restore")
+        )
+    }
 }
 
 struct PremiumPaywallView: View {
     @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.locale) private var locale
     @State private var animateIn = false
     @State private var blobPhase: CGFloat = 0
     @State private var selectedPlan: Plan = .annual
@@ -147,7 +220,9 @@ struct PremiumPaywallView: View {
     private let telemetry = ProductAnalyticsTelemetry.live
     private let plusFeedback = PlusPaywallInteractionFeedback(performanceTier: PerformanceTier.current)
     private let onboardingFeedback = OnboardingInteractionFeedback(performanceTier: PerformanceTier.current)
-    private let content = SoftPaywallContent.default
+    private var content: SoftPaywallContent {
+        SoftPaywallContent.localized(locale: locale)
+    }
 
     var isFromOnboarding: Bool = true
     var paywallSurface: AnalyticsPaywallSurface? = nil
@@ -259,18 +334,32 @@ struct PremiumPaywallView: View {
         .onChange(of: subscriptionManager.hasEntitlement) { _, isPlus in
             routeExistingPlusUserIfNeeded(isPlus: isPlus)
         }
-        .alert("Purchase Error", isPresented: .init(
+        .alert(PillieLocalization.string(
+            "paywall.purchase_error.title",
+            table: "Commerce",
+            locale: locale
+        ), isPresented: .init(
             get: { purchaseError != nil },
             set: { if !$0 { purchaseError = nil } }
         )) {
-            Button("OK") { purchaseError = nil }
+            Button(PillieLocalization.string("global.action.ok", locale: locale)) {
+                purchaseError = nil
+            }
         } message: {
             Text(purchaseError ?? "")
         }
-        .alert("No Subscription Found", isPresented: $showNoSubscriptionAlert) {
-            Button("OK") { }
+        .alert(PillieLocalization.string(
+            "paywall.no_subscription.title",
+            table: "Commerce",
+            locale: locale
+        ), isPresented: $showNoSubscriptionAlert) {
+            Button(PillieLocalization.string("global.action.ok", locale: locale)) { }
         } message: {
-            Text("No active subscription was found for this account.")
+            Text(PillieLocalization.string(
+                "paywall.no_subscription.body",
+                table: "Commerce",
+                locale: locale
+            ))
         }
     }
 
@@ -490,11 +579,27 @@ struct PremiumPaywallView: View {
     }
 
     private var annualPriceText: String {
-        annualPackage?.storeProduct.localizedPriceString ?? "$29.99"
+        annualPackage?.storeProduct.localizedPriceString ?? "—"
     }
 
     private var monthlyPriceText: String {
-        monthlyPackage?.storeProduct.localizedPriceString ?? "$4.99"
+        monthlyPackage?.storeProduct.localizedPriceString ?? "—"
+    }
+
+    private var annualPriceAndPeriodText: String {
+        CommercePresentation.priceAndPeriod(
+            displayPrice: annualPriceText,
+            subscriptionPeriod: annualPackage?.storeProduct.subscriptionPeriod,
+            locale: locale
+        )
+    }
+
+    private var monthlyPriceAndPeriodText: String {
+        CommercePresentation.priceAndPeriod(
+            displayPrice: monthlyPriceText,
+            subscriptionPeriod: monthlyPackage?.storeProduct.subscriptionPeriod,
+            locale: locale
+        )
     }
 
     /// Truthful annual-vs-monthly comparison from the live store prices (issue #79: no
@@ -516,8 +621,12 @@ struct PremiumPaywallView: View {
     /// "N months free" derived from the real prices (issue #162's annual anchor), or
     /// `nil` when there is no honest saving.
     private var savingsBadgeText: String? {
-        guard let months = priceComparison?.monthsFree else { return nil }
-        return months == 1 ? "1 month free" : "\(months) months free"
+        guard priceComparison?.monthsFree != nil else { return nil }
+        return PillieLocalization.string(
+            "paywall.plan.best_value",
+            table: "Commerce",
+            locale: locale
+        )
     }
 
     private var annualCard: some View {
@@ -545,15 +654,17 @@ struct PremiumPaywallView: View {
                         }
                     }
 
-                    HStack(alignment: .firstTextBaseline, spacing: 6) {
-                        Text(annualPriceText)
+                    VStack(alignment: .leading, spacing: 3) {
+                        Text(annualPriceAndPeriodText)
                             .font(.pillie(26, weight: .black))
                             .foregroundStyle(.white)
-                        Text("/year")
-                            .font(.pillie(14, weight: .semibold))
-                            .foregroundStyle(Color.white.opacity(0.6))
                         if let annualPerMonthText {
-                            Text("· \(annualPerMonthText)/mo")
+                            Text(CommercePresentation.priceAndPeriod(
+                                displayPrice: annualPerMonthText,
+                                periodValue: 1,
+                                periodUnit: .month,
+                                locale: locale
+                            ))
                                 .font(.pillie(13, weight: .semibold))
                                 .foregroundStyle(Color.white.opacity(0.6))
                         }
@@ -575,7 +686,11 @@ struct PremiumPaywallView: View {
                 }
             }
             .overlay(alignment: .topTrailing) {
-                Text("Best Value")
+                Text(PillieLocalization.string(
+                    "paywall.plan.best_value",
+                    table: "Commerce",
+                    locale: locale
+                ))
                     .font(.pillie(10, weight: .black))
                     .tracking(1)
                     .textCase(.uppercase)
@@ -589,7 +704,7 @@ struct PremiumPaywallView: View {
         }
         .buttonStyle(.plain)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Annual, \(annualPriceText) per year\(annualPerMonthText.map { ", \($0) per month" } ?? "").\(savingsBadgeText.map { " \($0)." } ?? "")")
+        .accessibilityLabel(annualPriceAndPeriodText)
         .accessibilityAddTraits(selectedPlan == .annual ? [.isButton, .isSelected] : .isButton)
     }
 
@@ -606,12 +721,9 @@ struct PremiumPaywallView: View {
                         .foregroundStyle(PillieTheme.textMuted)
 
                     HStack(alignment: .firstTextBaseline, spacing: 6) {
-                        Text(monthlyPriceText)
+                        Text(monthlyPriceAndPeriodText)
                             .font(.pillie(26, weight: .black))
                             .foregroundStyle(PillieTheme.textPrimary)
-                        Text("/month")
-                            .font(.pillie(14, weight: .semibold))
-                            .foregroundStyle(PillieTheme.textMuted)
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -634,7 +746,7 @@ struct PremiumPaywallView: View {
         }
         .buttonStyle(.plain)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Monthly, \(monthlyPriceText) per month")
+        .accessibilityLabel(monthlyPriceAndPeriodText)
         .accessibilityAddTraits(selectedPlan == .monthly ? [.isButton, .isSelected] : .isButton)
     }
 
@@ -709,7 +821,11 @@ struct PremiumPaywallView: View {
                 Button {
                     Task { await loadOfferings() }
                 } label: {
-                    Text("Failed to load plans — Tap to retry")
+                    Text(PillieLocalization.string(
+                        "paywall.loading.failed",
+                        table: "Commerce",
+                        locale: locale
+                    ))
                         .font(.pillie(16, weight: .bold))
                         .lineLimit(1)
                         .minimumScaleFactor(0.6)
@@ -726,9 +842,17 @@ struct PremiumPaywallView: View {
             secondaryLinks
 
             HStack(spacing: 4) {
-                Link("Terms of Use", destination: URL(string: "https://idrisskone101.github.io/pillie/terms-and-conditions")!)
+                Link(PillieLocalization.string(
+                    "paywall.action.terms",
+                    table: "Commerce",
+                    locale: locale
+                ), destination: URL(string: "https://idrisskone101.github.io/pillie/terms-and-conditions")!)
                 Text("·")
-                Link("Privacy Policy", destination: URL(string: "https://idrisskone101.github.io/pillie/privacy-policy")!)
+                Link(PillieLocalization.string(
+                    "paywall.action.privacy",
+                    table: "Commerce",
+                    locale: locale
+                ), destination: URL(string: "https://idrisskone101.github.io/pillie/privacy-policy")!)
             }
             .font(.pillie(11, weight: .regular))
             .foregroundStyle(PillieTheme.textMuted.opacity(0.7))
