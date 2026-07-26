@@ -22,12 +22,16 @@ struct ProtectionPlanWelcomeContent {
         [eyebrow, title, subtitle, primaryCTA]
     }
 
-    static let `default` = ProtectionPlanWelcomeContent(
-        eyebrow: "Your afternoon dose is due — distracting apps stay locked until you check in.",
-        title: "Pill reminders that fight back.",
-        subtitle: "Pillie blocks your distracting apps until you take your pill — the reminder you can't ignore.",
-        primaryCTA: "Build my plan"
-    )
+    static var `default`: ProtectionPlanWelcomeContent { localized() }
+
+    static func localized(locale: Locale = .current) -> ProtectionPlanWelcomeContent {
+        ProtectionPlanWelcomeContent(
+            eyebrow: PillieLocalization.string("onboarding.welcome.eyebrow", locale: locale),
+            title: PillieLocalization.string("onboarding.welcome.title", locale: locale),
+            subtitle: PillieLocalization.string("onboarding.welcome.subtitle", locale: locale),
+            primaryCTA: PillieLocalization.string("global.action.get_started", locale: locale)
+        )
+    }
 }
 
 /// Copy for the Early Value Proof "magic moment" (issue #74). The scene reads as
@@ -83,34 +87,40 @@ struct ProtectionPlanEarlyValueProofContent {
             + [checkInCTA, dragCTA, skipDemoCTA, continueCTA, shakeCue, shakeToTakeCTA, reassurance, accessibilitySummary]
     }
 
-    static let `default` = ProtectionPlanEarlyValueProofContent(
-        eyebrow: "How Pillie helps",
-        title: "We'll help you remember.",
-        restCue: "Never miss your pill again — taking it becomes the easiest part of your day.",
-        drift: Beat(
-            symbol: "alarm.fill",
-            title: "It's pill time",
-            detail: "Your reminder pops up — but your apps are right there, and it's so easy to say \u{201C}later\u{201D}."
-        ),
-        checkpoint: Beat(
-            symbol: "lock.fill",
-            title: "Your apps lock",
-            detail: "Pillie gently locks them until you take your pill. No nagging — just a little pause."
-        ),
-        resolved: Beat(
-            symbol: "iphone.radiowaves.left.and.right",
-            title: "Shake to take your pill",
-            detail: "Just shake your phone to take your pill, and your apps unlock right away — easy, and you stayed on track."
-        ),
-        checkInCTA: "I took my pill",
-        dragCTA: "Drag the dot to your apps",
-        skipDemoCTA: "Skip demo",
-        continueCTA: "Continue",
-        shakeCue: "Now shake your phone to take your pill — three quick shakes.",
-        shakeToTakeCTA: "Shake to take your pill",
-        reassurance: "You choose which apps. We'll handle the timing.",
-        accessibilitySummary: "When it's time for your pill, Pillie gently locks your distracting apps until you check in. Give your phone a quick shake to take your pill, and they unlock right away."
-    )
+    static var `default`: ProtectionPlanEarlyValueProofContent { localized() }
+
+    static func localized(locale: Locale = .current) -> ProtectionPlanEarlyValueProofContent {
+        let title = PillieLocalization.string("onboarding.blocking_demo.title", locale: locale)
+        let body = PillieLocalization.string("onboarding.blocking_demo.body", locale: locale)
+        return ProtectionPlanEarlyValueProofContent(
+            eyebrow: PillieLocalization.string("onboarding.demo.title", locale: locale),
+            title: title,
+            restCue: body,
+            drift: Beat(
+                symbol: "alarm.fill",
+                title: PillieLocalization.string("onboarding.demo.step.reminder", locale: locale),
+                detail: PillieLocalization.string("onboarding.demo.remind_log", locale: locale)
+            ),
+            checkpoint: Beat(
+                symbol: "lock.fill",
+                title: PillieLocalization.string("onboarding.blocking_demo.apps_blocked", locale: locale),
+                detail: PillieLocalization.string("onboarding.blocking_demo.apps_blocked_body", locale: locale)
+            ),
+            resolved: Beat(
+                symbol: "iphone.radiowaves.left.and.right",
+                title: PillieLocalization.string("onboarding.blocking_demo.apps_unlock", locale: locale),
+                detail: PillieLocalization.string("onboarding.blocking_demo.apps_unlock_body", locale: locale)
+            ),
+            checkInCTA: PillieLocalization.string("notification.action.complete", locale: locale),
+            dragCTA: PillieLocalization.string("onboarding.blocking_demo.shake_title", locale: locale),
+            skipDemoCTA: PillieLocalization.string("global.action.not_now", locale: locale),
+            continueCTA: PillieLocalization.string("global.action.continue", locale: locale),
+            shakeCue: PillieLocalization.string("onboarding.blocking_demo.shake_body", locale: locale),
+            shakeToTakeCTA: PillieLocalization.string("onboarding.blocking_demo.shake_title", locale: locale),
+            reassurance: PillieLocalization.string("onboarding.demo.explainer", locale: locale),
+            accessibilitySummary: "\(title) \(body)"
+        )
+    }
 }
 
 /// Copy for the Distraction Choices screen (issue #75, Superdesign draft
@@ -134,16 +144,20 @@ struct ProtectionPlanDistractionChoicesContent {
             + desiredOutcomes.map(\.desiredOutcomeTitle)
     }
 
-    static let `default` = ProtectionPlanDistractionChoicesContent(
-        title: "Be honest\u{2026}",
-        subtitle: "What usually gets in the way after your reminder?",
-        helper: "Select all that apply. We'll help you stay focused.",
-        primaryCTA: "Continue",
-        choices: DistractionChoice.allCases,
-        desiredOutcomeTitle: "What would better follow-through give you?",
-        desiredOutcomeSubtitle: "Choose the outcome that matters most.",
-        desiredOutcomes: DelayConsequence.allCases
-    )
+    static var `default`: ProtectionPlanDistractionChoicesContent { localized() }
+
+    static func localized(locale: Locale = .current) -> ProtectionPlanDistractionChoicesContent {
+        ProtectionPlanDistractionChoicesContent(
+            title: PillieLocalization.string("onboarding.personalise.pain.title", locale: locale),
+            subtitle: PillieLocalization.string("onboarding.personalise.pain.subtitle", locale: locale),
+            helper: PillieLocalization.string("onboarding.personalise.distraction.subtitle", locale: locale),
+            primaryCTA: PillieLocalization.string("global.action.continue", locale: locale),
+            choices: DistractionChoice.allCases,
+            desiredOutcomeTitle: PillieLocalization.string("onboarding.personalise.outcome.title", locale: locale),
+            desiredOutcomeSubtitle: PillieLocalization.string("onboarding.personalise.outcome.subtitle", locale: locale),
+            desiredOutcomes: DelayConsequence.allCases
+        )
+    }
 }
 
 /// Copy for the Delay Consequence screen (issue #75, Superdesign draft aa808d90).
@@ -204,22 +218,26 @@ struct ProtectionPlanFailureFrequencyContent {
             + riskWindows.flatMap { [$0.title, $0.subtitle] }
     }
 
-    static let `default` = ProtectionPlanFailureFrequencyContent(
-        title: "How often do reminders fail you?",
-        subtitle: "Being honest helps us adjust the Pillie Protection level for your needs.",
-        footnote: "Your honesty ensures we provide the right level of support. This information is private.",
-        primaryCTA: "Continue",
+    static var `default`: ProtectionPlanFailureFrequencyContent { localized() }
+
+    static func localized(locale: Locale = .current) -> ProtectionPlanFailureFrequencyContent {
+        ProtectionPlanFailureFrequencyContent(
+        title: PillieLocalization.string("onboarding.frequency.title", locale: locale),
+        subtitle: PillieLocalization.string("onboarding.frequency.subtitle", locale: locale),
+        footnote: PillieLocalization.string("onboarding.plan.disclaimer", locale: locale),
+        primaryCTA: PillieLocalization.string("global.action.continue", locale: locale),
         options: [
-            Option(bucket: .rarely, title: "Rarely", subtitle: "Reminders usually work for me"),
-            Option(bucket: .sometimes, title: "A few times a month", subtitle: "Occasionally I still forget"),
-            Option(bucket: .often, title: "Weekly", subtitle: "At least once every week"),
-            Option(bucket: .almostDaily, title: "Multiple times a week", subtitle: "I struggle significantly"),
+            Option(bucket: .rarely, title: PillieLocalization.string("onboarding.frequency.rarely.title", locale: locale), subtitle: PillieLocalization.string("onboarding.frequency.rarely.subtitle", locale: locale)),
+            Option(bucket: .sometimes, title: PillieLocalization.string("onboarding.frequency.sometimes.title", locale: locale), subtitle: PillieLocalization.string("onboarding.frequency.sometimes.subtitle", locale: locale)),
+            Option(bucket: .often, title: PillieLocalization.string("onboarding.frequency.often.title", locale: locale), subtitle: PillieLocalization.string("onboarding.frequency.often.subtitle", locale: locale)),
+            Option(bucket: .almostDaily, title: PillieLocalization.string("onboarding.frequency.daily.title", locale: locale), subtitle: PillieLocalization.string("onboarding.frequency.daily.subtitle", locale: locale)),
         ],
-        riskWindowTitle: "When are you most likely to drift?",
-        riskWindowSubtitle: "Choose the pattern that sounds most like you.",
-        riskWindowFootnote: "This shapes your plan — we don't use it to schedule alarms.",
+        riskWindowTitle: PillieLocalization.string("onboarding.risk_window.title", locale: locale),
+        riskWindowSubtitle: PillieLocalization.string("onboarding.risk_window.subtitle", locale: locale),
+        riskWindowFootnote: PillieLocalization.string("onboarding.plan.disclaimer", locale: locale),
         riskWindows: RiskWindow.allCases
     )
+    }
 }
 
 /// Copy for the Risk Window screen (issue #76, Superdesign draft bae7eb8a).
@@ -305,16 +323,20 @@ struct ProtectionPlanAcquisitionSourceContent {
         [eyebrow, title, subtitle, primaryCTA, skipCTA] + choices.map(\.title)
     }
 
-    static let `default` = ProtectionPlanAcquisitionSourceContent(
-        eyebrow: "One last thing",
-        title: "Where did you find Pillie?",
-        subtitle: "Your feedback helps us reach more people who need protection.",
+    static var `default`: ProtectionPlanAcquisitionSourceContent { localized() }
+
+    static func localized(locale: Locale = .current) -> ProtectionPlanAcquisitionSourceContent {
+        ProtectionPlanAcquisitionSourceContent(
+        eyebrow: PillieLocalization.string("onboarding.welcome.next_action", locale: locale),
+        title: PillieLocalization.string("onboarding.acquisition.title", locale: locale),
+        subtitle: PillieLocalization.string("onboarding.acquisition.subtitle", locale: locale),
         // Not the end of onboarding — the contraception routine setup follows, so
         // the CTA continues into setup rather than implying it's done.
-        primaryCTA: "Continue Setup",
-        skipCTA: "Not now",
+        primaryCTA: PillieLocalization.string("global.action.continue", locale: locale),
+        skipCTA: PillieLocalization.string("global.action.not_now", locale: locale),
         choices: AcquisitionSource.allCases
     )
+    }
 }
 
 /// Copy for the Routine Basics Method screen (issue #77, Superdesign draft
@@ -334,13 +356,17 @@ struct ProtectionPlanRoutineMethodContent {
             + choices.flatMap { [$0.title, $0.routineDescriptor] }
     }
 
-    static let `default` = ProtectionPlanRoutineMethodContent(
-        title: "The core of it",
-        subtitle: "What routine should Pillie protect?",
-        footnote: "Your plan adapts to how you take it. You can change this anytime.",
-        primaryCTA: "Continue",
-        choices: ContraceptiveMethod.allCases
-    )
+    static var `default`: ProtectionPlanRoutineMethodContent { localized() }
+
+    static func localized(locale: Locale = .current) -> ProtectionPlanRoutineMethodContent {
+        ProtectionPlanRoutineMethodContent(
+            title: PillieLocalization.string("onboarding.method.title", locale: locale),
+            subtitle: PillieLocalization.string("onboarding.method.subtitle", locale: locale),
+            footnote: PillieLocalization.string("onboarding.plan.disclaimer", locale: locale),
+            primaryCTA: PillieLocalization.string("global.action.continue", locale: locale),
+            choices: ContraceptiveMethod.allCases
+        )
+    }
 }
 
 /// Copy for the Routine Basics Details screen (issue #77, Superdesign draft
@@ -365,16 +391,20 @@ struct ProtectionPlanRoutineDetailsContent {
             + CyclePosition.allCases.map(\.title)
     }
 
-    static let `default` = ProtectionPlanRoutineDetailsContent(
-        title: "Where are you in your routine?",
-        subtitle: "How far into your cycle are you?",
-        cyclePositionHeader: "Where are you now?",
-        regimenHeader: "Pill regimen",
-        editExactDayLabel: "Edit exact day",
-        moreLabel: "More options",
-        footnote: "This keeps your reminders in sync with your cycle — for tracking, not medical advice.",
-        primaryCTA: "Continue"
-    )
+    static var `default`: ProtectionPlanRoutineDetailsContent { localized() }
+
+    static func localized(locale: Locale = .current) -> ProtectionPlanRoutineDetailsContent {
+        ProtectionPlanRoutineDetailsContent(
+            title: PillieLocalization.string("onboarding.cycle_position.title", locale: locale),
+            subtitle: PillieLocalization.string("onboarding.cycle_position.subtitle", locale: locale),
+            cyclePositionHeader: PillieLocalization.string("onboarding.cycle_position.title", locale: locale),
+            regimenHeader: PillieLocalization.string("onboarding.regimen.title", locale: locale),
+            editExactDayLabel: PillieLocalization.string("global.action.edit", locale: locale),
+            moreLabel: PillieLocalization.string("onboarding.regimen.custom", locale: locale),
+            footnote: PillieLocalization.string("onboarding.plan.disclaimer", locale: locale),
+            primaryCTA: PillieLocalization.string("global.action.continue", locale: locale)
+        )
+    }
 }
 
 /// Copy for the Reminder Time screen (issue #77, Superdesign draft ec61e147). Picks
@@ -392,12 +422,16 @@ struct ProtectionPlanReminderTimeContent {
         [title, subtitle, pickerLabel, primaryCTA]
     }
 
-    static let `default` = ProtectionPlanReminderTimeContent(
-        title: "The golden hour",
-        subtitle: "When should Pillie step in?",
-        pickerLabel: "Due Action Time",
-        primaryCTA: "Set Reminder Time"
-    )
+    static var `default`: ProtectionPlanReminderTimeContent { localized() }
+
+    static func localized(locale: Locale = .current) -> ProtectionPlanReminderTimeContent {
+        ProtectionPlanReminderTimeContent(
+            title: PillieLocalization.string("onboarding.reminder_time.title", locale: locale),
+            subtitle: PillieLocalization.string("onboarding.reminder_time.subtitle", locale: locale),
+            pickerLabel: PillieLocalization.string("onboarding.plan.schedule", locale: locale),
+            primaryCTA: PillieLocalization.string("onboarding.permission.cta", locale: locale)
+        )
+    }
 }
 
 /// Static labels for the Personalized Diagnosis / Draft Pill Protection Plan reveal
@@ -424,15 +458,19 @@ struct ProtectionPlanDiagnosisContent {
         [eyebrow, analyzingTitle, analyzingSubtitle, strategyHeader, protectedAppsHeader, handNote, primaryCTA]
     }
 
-    static let `default` = ProtectionPlanDiagnosisContent(
-        eyebrow: "FINAL STEP",
-        analyzingTitle: "Building your protection plan",
-        analyzingSubtitle: "Analyzing your habits and focus zones",
-        strategyHeader: "How it protects you",
-        protectedAppsHeader: "Protected apps",
-        handNote: "you're all set!",
-        primaryCTA: "Activate my plan"
-    )
+    static var `default`: ProtectionPlanDiagnosisContent { localized() }
+
+    static func localized(locale: Locale = .current) -> ProtectionPlanDiagnosisContent {
+        ProtectionPlanDiagnosisContent(
+            eyebrow: PillieLocalization.string("onboarding.welcome.next_action", locale: locale),
+            analyzingTitle: PillieLocalization.string("onboarding.plan.title", locale: locale),
+            analyzingSubtitle: PillieLocalization.string("onboarding.plan.subtitle", locale: locale),
+            strategyHeader: PillieLocalization.string("onboarding.plan.support", locale: locale),
+            protectedAppsHeader: PillieLocalization.string("onboarding.blocking_setup.title", locale: locale),
+            handNote: PillieLocalization.string("onboarding.ready.title", locale: locale),
+            primaryCTA: PillieLocalization.string("global.action.continue", locale: locale)
+        )
+    }
 }
 
 /// Copy for the Mechanism Proof (issue #78, Superdesign drafts c3e8eb96 / 6f6cedb8 /

@@ -22,9 +22,12 @@ struct ProtectionPlanRoutineSummary: Equatable {
     var cycleDay: Int?
     /// Formatted reminder time, e.g. "9:30 AM". Nil before the reminder-time screen.
     var reminderTimeText: String?
+    var locale: Locale = .current
 
     /// Fixed card title.
-    static let title = "Your plan so far"
+    static var title: String {
+        PillieLocalization.string("onboarding.plan.title")
+    }
 
     struct Row: Equatable, Identifiable {
         let symbol: String
@@ -37,39 +40,86 @@ struct ProtectionPlanRoutineSummary: Equatable {
     /// Progressive, method-aware headline. An invitation before a method is chosen, a
     /// forward-looking promise once it is, and a concrete one once a time is set.
     var headline: String {
-        guard let method else {
-            return "Let's build your protection plan."
-        }
-        let language = MethodActionLanguage(method: method)
-        if let reminderTimeText {
-            return "Pillie protects \(language.objectNoun) at \(reminderTimeText)."
-        }
-        return "Pillie will protect \(language.objectNoun)."
+        method == nil
+            ? PillieLocalization.string("onboarding.plan.subtitle", locale: locale)
+            : PillieLocalization.string("onboarding.plan.title", locale: locale)
     }
 
     /// Receipt rows, appearing in the order the user commits them.
     var rows: [Row] {
         var rows: [Row] = []
         if let method {
-            rows.append(Row(symbol: "cross.case.fill", label: "Method", value: method.title))
+            rows.append(
+                Row(
+                    symbol: "cross.case.fill",
+                    label: PillieLocalization.string("onboarding.plan.method", locale: locale),
+                    value: method.localizedTitle(locale: locale)
+                )
+            )
         }
         if let scheduleSummary {
-            rows.append(Row(symbol: "calendar", label: "Schedule", value: scheduleSummary))
+            rows.append(
+                Row(
+                    symbol: "calendar",
+                    label: PillieLocalization.string("onboarding.plan.schedule", locale: locale),
+                    value: scheduleSummary
+                )
+            )
         }
         if let cycleDay {
-            rows.append(Row(symbol: "number", label: "Cycle day", value: "Day \(cycleDay)"))
+            rows.append(
+                Row(
+                    symbol: "number",
+                    label: PillieLocalization.string("onboarding.plan.current_cycle", locale: locale),
+                    value: PillieLocalization.formatted(
+                        "onboarding.cycle_position.day",
+                        locale: locale,
+                        arguments: cycleDay
+                    )
+                )
+            )
         }
         if let reminderTimeText {
-            rows.append(Row(symbol: "bell.fill", label: "Reminder", value: reminderTimeText))
+            rows.append(
+                Row(
+                    symbol: "bell.fill",
+                    label: PillieLocalization.string("onboarding.demo.step.reminder", locale: locale),
+                    value: reminderTimeText
+                )
+            )
         }
         return rows
     }
 
     /// Formats a 12-hour picker selection as display text, e.g. "9:30 AM". Shared by
     /// the Reminder Time preview and the plan card so the live time reads identically.
-    static func clockText(hour12: Int, minute: Int, isPM: Bool) -> String {
+    static func clockText(
+        hour12: Int,
+        minute: Int,
+        isPM: Bool,
+        locale: Locale = .current
+    ) -> String {
         let normalizedHour = (((hour12 - 1) % 12) + 12) % 12 + 1
         let normalizedMinute = max(0, min(59, minute))
-        return String(format: "%d:%02d %@", normalizedHour, normalizedMinute, isPM ? "PM" : "AM")
+        let hour24 = (normalizedHour % 12) + (isPM ? 12 : 0)
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(secondsFromGMT: 0) ?? .gmt
+        let date = calendar.date(
+            from: DateComponents(
+                timeZone: calendar.timeZone,
+                year: 2001,
+                month: 1,
+                day: 1,
+                hour: hour24,
+                minute: normalizedMinute
+            )
+        ) ?? Date(timeIntervalSince1970: 0)
+        let formatter = DateFormatter()
+        formatter.locale = locale
+        formatter.calendar = calendar
+        formatter.timeZone = calendar.timeZone
+        formatter.dateStyle = .none
+        formatter.timeStyle = .short
+        return formatter.string(from: date)
     }
 }

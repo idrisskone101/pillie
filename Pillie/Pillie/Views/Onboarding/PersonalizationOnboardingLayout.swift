@@ -32,7 +32,7 @@ struct PersonalizationOnboardingHeader: View {
                     .shadow(color: Color.black.opacity(0.08), radius: 10, y: 4)
             }
             .buttonStyle(.plain)
-            .accessibilityLabel("Back")
+            .accessibilityLabel(PillieLocalization.string("global.action.back"))
 
             VStack(alignment: .leading, spacing: 7) {
                 Text(progress.title)

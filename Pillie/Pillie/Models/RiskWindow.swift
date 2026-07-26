@@ -20,20 +20,17 @@ enum RiskWindow: String, CaseIterable, Hashable, Identifiable {
     var id: String { rawValue }
 
     var title: String {
+        let key: String
         switch self {
-        case .rightAfterAlarm: return "Right after the alarm"
-        case .withinFiveMinutes: return "Within 5 minutes"
-        case .laterInDay: return "Later in the day"
-        case .randomly: return "Randomly"
+        case .rightAfterAlarm: key = "onboarding.risk_window.right_after"
+        case .withinFiveMinutes: key = "onboarding.risk_window.within_five"
+        case .laterInDay: key = "onboarding.risk_window.later"
+        case .randomly: key = "onboarding.risk_window.random"
         }
+        return PillieLocalization.string(key)
     }
 
     var subtitle: String {
-        switch self {
-        case .rightAfterAlarm: return "The danger zone"
-        case .withinFiveMinutes: return "The slow drift"
-        case .laterInDay: return "After the morning rush"
-        case .randomly: return "No specific pattern"
-        }
+        PillieLocalization.string("onboarding.risk_window.subtitle")
     }
 }

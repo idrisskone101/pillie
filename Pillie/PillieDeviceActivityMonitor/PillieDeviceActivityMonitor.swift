@@ -21,6 +21,10 @@ class PillieDeviceActivityMonitor: DeviceActivityMonitor {
 
     private let defaults = AppGroupConstants.sharedDefaults
 
+    private nonisolated static func localized(_ key: String) -> String {
+        Bundle.main.localizedString(forKey: key, value: nil, table: "Shield")
+    }
+
     override nonisolated func intervalDidStart(for activity: DeviceActivityName) {
         super.intervalDidStart(for: activity)
         Self.logger.info("intervalDidStart fired for activity: \(activity.rawValue)")
@@ -87,7 +91,10 @@ class PillieDeviceActivityMonitor: DeviceActivityMonitor {
             : selection.webDomainTokens
 
         defaults?.set(true, forKey: AppGroupKeys.blockingRequested)
-        defaults?.set("Time for your contraceptive!", forKey: AppGroupKeys.blockingReason)
+        defaults?.set(
+            Self.localized("shield.blocking_reason"),
+            forKey: AppGroupKeys.blockingReason
+        )
         defaults?.synchronize()
 
         Self.logger.info("Shields applied and state persisted")

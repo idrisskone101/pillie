@@ -34,9 +34,9 @@ struct ProtectionPlanRoutineDetailsView: View {
     private var scheduleSummaryText: String {
         switch draft.section {
         case .pillRegimen:
-            return "\(draft.selectedRegimen.routineDisplayName) · \(draft.selectedRegimen.scheduleSubtitle)"
+            return draft.selectedRegimen.localizedScheduleSummary()
         case .fixedSchedule:
-            return draft.method == .patch ? "Weekly patch · 28-day cycle" : "Monthly ring · 28-day cycle"
+            return draft.method.routineDescriptor
         }
     }
 
@@ -187,12 +187,18 @@ private struct RoutineCyclePositionSection: View {
     private var exactDayDisclosure: some View {
         HStack(spacing: 12) {
             VStack(alignment: .leading, spacing: 2) {
-                Text("Day \(cycleDay) of \(cycleLength)")
+                Text(
+                    PillieLocalization.formatted(
+                        "onboarding.cycle_position.day_of_total",
+                        arguments: cycleDay,
+                        cycleLength
+                    )
+                )
                     .font(.pillie(16, weight: .bold))
                     .foregroundStyle(PillieTheme.textPrimary)
                     .monospacedDigit()
                     .accessibilityIdentifier("routineCycleDayValue")
-                Text("Calculated from your position")
+                Text(PillieLocalization.string("onboarding.cycle_position.calculated"))
                     .font(.pillie(12, weight: .regular))
                     .foregroundStyle(PillieTheme.textMuted)
             }
@@ -206,7 +212,7 @@ private struct RoutineCyclePositionSection: View {
                 }
             } label: {
                 HStack(spacing: 5) {
-                    Text(isEditingExactDay ? "Done" : editExactDayLabel)
+                    Text(isEditingExactDay ? PillieLocalization.string("global.action.done") : editExactDayLabel)
                     Image(systemName: isEditingExactDay ? "chevron.up" : "chevron.down")
                         .font(.system(size: 10, weight: .bold))
                 }
@@ -216,7 +222,11 @@ private struct RoutineCyclePositionSection: View {
             }
             .buttonStyle(.plain)
             .accessibilityIdentifier("routineEditExactDay")
-            .accessibilityValue(isEditingExactDay ? "Expanded" : "Collapsed")
+            .accessibilityValue(
+                PillieLocalization.string(
+                    isEditingExactDay ? "accessibility.expanded" : "accessibility.collapsed"
+                )
+            )
         }
         .padding(.horizontal, 14)
         .padding(.vertical, 12)
@@ -225,17 +235,22 @@ private struct RoutineCyclePositionSection: View {
 
     private var exactDayStepper: some View {
         HStack(spacing: 16) {
-            stepperButton(systemName: "minus", label: "Previous cycle day") {
+            stepperButton(systemName: "minus", label: PillieLocalization.string("onboarding.cycle_position.previous")) {
                 onSetExactDay(cycleDay - 1)
             }
 
-            Text("Day \(cycleDay)")
+            Text(
+                PillieLocalization.formatted(
+                    "onboarding.cycle_position.day",
+                    arguments: cycleDay
+                )
+            )
                 .font(.pillie(20, weight: .bold))
                 .foregroundStyle(PillieTheme.textPrimary)
                 .monospacedDigit()
                 .frame(maxWidth: .infinity)
 
-            stepperButton(systemName: "plus", label: "Next cycle day") {
+            stepperButton(systemName: "plus", label: PillieLocalization.string("onboarding.cycle_position.next")) {
                 onSetExactDay(cycleDay + 1)
             }
         }
@@ -243,7 +258,13 @@ private struct RoutineCyclePositionSection: View {
         .padding(.vertical, 10)
         .background(RoundedRectangle(cornerRadius: 18).fill(PillieTheme.sage.opacity(0.5)))
         .accessibilityElement(children: .contain)
-        .accessibilityValue("Day \(cycleDay) of \(cycleLength)")
+        .accessibilityValue(
+            PillieLocalization.formatted(
+                "onboarding.cycle_position.day_of_total",
+                arguments: cycleDay,
+                cycleLength
+            )
+        )
     }
 
     private func stepperButton(
@@ -307,17 +328,21 @@ private struct RoutinePillRegimenSection: View {
                 .background(RoundedRectangle(cornerRadius: 16).fill(Color.white.opacity(0.6)))
                 .overlay { RoundedRectangle(cornerRadius: 16).stroke(Color.black.opacity(0.06), lineWidth: 1) }
                 .accessibilityIdentifier("routineMoreRegimens")
-                .accessibilityValue(showMore ? "Expanded" : "Collapsed")
+                .accessibilityValue(
+                    PillieLocalization.string(
+                        showMore ? "accessibility.expanded" : "accessibility.collapsed"
+                    )
+                )
 
                 if selectedRegimen == .custom {
                     HStack(spacing: 12) {
                         customWheel(
-                            title: "Active days",
+                            title: PillieLocalization.string("onboarding.regimen.active_days"),
                             selection: $customActiveDays,
                             range: PillPack.customActiveRange
                         )
                         customWheel(
-                            title: "Break days",
+                            title: PillieLocalization.string("onboarding.regimen.break_days"),
                             selection: $customBreakDays,
                             range: PillPack.customBreakRange
                         )
@@ -330,8 +355,8 @@ private struct RoutinePillRegimenSection: View {
 
     private func regimenRow(_ regimen: PillPack.PillRegimenPreset) -> some View {
         ProtectionPlanSelectableRow(
-            title: regimen.routineDisplayName,
-            subtitle: regimen.scheduleSubtitle,
+            title: regimen.localizedRoutineDisplayName(),
+            subtitle: regimen.localizedScheduleSubtitle(),
             isSelected: selectedRegimen == regimen,
             style: .radio
         ) {
@@ -376,24 +401,36 @@ private struct RoutineFixedScheduleSection: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            RoutineSectionHeader(text: method == .patch ? "Patch schedule" : "Ring schedule")
+            RoutineSectionHeader(
+                text: PillieLocalization.string(
+                    method == .patch ? "onboarding.fixed.patch.title" : "onboarding.fixed.ring.title"
+                )
+            )
 
             VStack(alignment: .leading, spacing: 12) {
                 scheduleRule(
                     icon: method == .patch ? "square.on.square" : "circle.circle",
-                    text: method == .patch ? "Day 1: apply patch" : "Day 1: insert ring"
+                    text: PillieLocalization.string(
+                        method == .patch ? "onboarding.fixed.patch.day1" : "onboarding.fixed.ring.day1"
+                    )
                 )
                 scheduleRule(
                     icon: "calendar",
-                    text: method == .patch ? "Days 8 & 15: change patch" : "Days 2–21: ring stays in"
+                    text: PillieLocalization.string(
+                        method == .patch ? "onboarding.fixed.patch.day8" : "onboarding.fixed.ring.day2"
+                    )
                 )
                 scheduleRule(
                     icon: "arrow.uturn.backward",
-                    text: method == .patch ? "Day 22: remove patch" : "Day 22: remove ring"
+                    text: PillieLocalization.string(
+                        method == .patch ? "onboarding.fixed.patch.day22" : "onboarding.fixed.ring.day22"
+                    )
                 )
                 scheduleRule(
                     icon: "pause.circle",
-                    text: "Days 23–28: \(method == .patch ? "patch" : "ring")-free week"
+                    text: PillieLocalization.string(
+                        method == .patch ? "onboarding.fixed.patch.break" : "onboarding.fixed.ring.break"
+                    )
                 )
             }
             .padding(16)

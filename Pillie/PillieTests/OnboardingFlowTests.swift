@@ -38,15 +38,15 @@ final class OnboardingFlowTests: XCTestCase {
 
     func testSectionProgressProvidesMeaningfulVoiceOverAnnouncements() {
         XCTAssertEqual(
-            String(localized: ProtectionPlanProgressIndex.progress(for: .productDemo).accessibilityLabel),
+            ProtectionPlanProgressIndex.progress(for: .productDemo).accessibilityLabel,
             "See how Pillie works, section 1 of 3"
         )
         XCTAssertEqual(
-            String(localized: ProtectionPlanProgressIndex.progress(for: .painPoints).accessibilityLabel),
+            ProtectionPlanProgressIndex.progress(for: .painPoints).accessibilityLabel,
             "Personalize your plan, section 2 of 3"
         )
         XCTAssertEqual(
-            String(localized: ProtectionPlanProgressIndex.progress(for: .reminderTime).accessibilityLabel),
+            ProtectionPlanProgressIndex.progress(for: .reminderTime).accessibilityLabel,
             "Set your reminder, section 3 of 3"
         )
     }

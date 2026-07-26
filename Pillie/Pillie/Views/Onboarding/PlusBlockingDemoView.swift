@@ -45,7 +45,7 @@ struct PlusBlockingDemoView: View {
         }
 
         Button(action: onContinue) {
-          Text("Continue")
+          Text(PillieLocalization.string("global.action.continue"))
         }
         .buttonStyle(.pillieDark)
         .accessibilityIdentifier("plusBlockingDemoContinueButton")
@@ -99,7 +99,7 @@ struct PlusBlockingDemoView: View {
         .padding(.vertical, 7)
         .background(PillieTheme.coral, in: Capsule())
 
-      Text("Block distractions\nuntil you check in.")
+      Text(PillieLocalization.string("onboarding.blocking_demo.title"))
         .font(.pillie(27, weight: .bold))
         .foregroundStyle(PillieTheme.textPrimary)
         .multilineTextAlignment(.center)
@@ -107,7 +107,7 @@ struct PlusBlockingDemoView: View {
         .minimumScaleFactor(0.82)
         .frame(maxWidth: 320)
 
-      Text("Pillie Plus can pause selected apps when your reminder fires, then unlock them after you confirm your dose.")
+      Text(PillieLocalization.string("onboarding.blocking_demo.body"))
         .font(.pillie(14, weight: .medium))
         .foregroundStyle(PillieTheme.textMuted)
         .multilineTextAlignment(.center)
@@ -120,8 +120,8 @@ struct PlusBlockingDemoView: View {
       storyboardRow(
         index: 0,
         icon: "bell.badge.fill",
-        title: "Reminder fires",
-        detail: "Your daily dose nudge arrives.",
+        title: PillieLocalization.string("onboarding.demo.step.reminder"),
+        detail: PillieLocalization.string("onboarding.demo.remind_log"),
         tint: PillieTheme.coral
       )
 
@@ -196,11 +196,11 @@ struct PlusBlockingDemoView: View {
         .background(PillieTheme.cardWhite, in: RoundedRectangle(cornerRadius: 14))
 
       VStack(alignment: .leading, spacing: 3) {
-        Text("Apps stay blocked")
+        Text(PillieLocalization.string("onboarding.blocking_demo.apps_blocked"))
           .font(.pillie(12, weight: .black))
           .foregroundStyle(PillieTheme.textPrimary)
 
-        Text("Instagram, Safari, and other selected apps wait until you confirm.")
+        Text(PillieLocalization.string("onboarding.blocking_demo.apps_blocked_body"))
           .font(.pillie(10, weight: .medium))
           .foregroundStyle(PillieTheme.textMuted)
           .lineLimit(2)
@@ -231,11 +231,11 @@ struct PlusBlockingDemoView: View {
         .background(PillieTheme.cardWhite, in: RoundedRectangle(cornerRadius: 14))
 
       VStack(alignment: .leading, spacing: 3) {
-        Text("Apps unlock")
+        Text(PillieLocalization.string("onboarding.blocking_demo.apps_unlock"))
           .font(.pillie(12, weight: .black))
           .foregroundStyle(PillieTheme.textPrimary)
 
-        Text("Dose handled. Your day opens back up.")
+        Text(PillieLocalization.string("onboarding.blocking_demo.apps_unlock_body"))
           .font(.pillie(10, weight: .medium))
           .foregroundStyle(PillieTheme.textMuted)
           .lineLimit(1)
@@ -275,12 +275,12 @@ struct PlusBlockingDemoView: View {
 
           VStack(alignment: .leading, spacing: 4) {
             HStack(spacing: 7) {
-              Text("Try shake-to-unlock")
+              Text(PillieLocalization.string("onboarding.blocking_demo.shake_title"))
                 .font(.pillie(14, weight: .black))
                 .foregroundStyle(PillieTheme.textPrimary)
             }
 
-            Text("Shake your phone now, or tap this card in Simulator.")
+            Text(PillieLocalization.string("onboarding.blocking_demo.shake_body"))
               .font(.pillie(11, weight: .medium))
               .foregroundStyle(PillieTheme.textMuted)
               .fixedSize(horizontal: false, vertical: true)
@@ -291,13 +291,19 @@ struct PlusBlockingDemoView: View {
 
         VStack(alignment: .leading, spacing: 8) {
           HStack {
-            Text("\(shakeManager.shakeCount) of \(shakeManager.requiredShakes) shakes")
+            Text(
+              PillieLocalization.formatted(
+                "onboarding.blocking_demo.shake_progress",
+                arguments: shakeManager.shakeCount,
+                shakeManager.requiredShakes
+              )
+            )
               .font(.pillie(13, weight: .bold))
               .foregroundStyle(shakeComplete ? PillieTheme.coral : PillieTheme.textPrimary)
 
             Spacer()
 
-            Text(shakeComplete ? "Unlocked" : "Demo")
+            Text(shakeComplete ? PillieLocalization.string("global.status.completed") : "Demo")
               .font(.pillie(10, weight: .black))
               .foregroundStyle(PillieTheme.textMuted)
           }
@@ -305,7 +311,11 @@ struct PlusBlockingDemoView: View {
           ProgressView(value: shakeManager.progress)
             .tint(PillieTheme.coral)
 
-          Text(shakeComplete ? "Nice. Apps would unlock now." : "Three quick shakes confirms your dose.")
+          Text(
+            shakeComplete
+              ? PillieLocalization.string("onboarding.blocking_demo.apps_unlock_body")
+              : PillieLocalization.string("onboarding.blocking_demo.shake_body")
+          )
             .font(.pillie(11, weight: .medium))
             .foregroundStyle(PillieTheme.textMuted)
         }

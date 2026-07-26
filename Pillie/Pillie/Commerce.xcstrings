@@ -1,0 +1,40 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "onboarding.blocking_setup.plus_locked": {
+      "comment": "Entitlement statement [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App blocking is a Pillie Plus feature you can set up after upgrading."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il blocco delle app è una funzione di Pillie Plus configurabile dopo l’upgrade."
+          }
+        }
+      }
+    },
+    "onboarding.demo.free_body": {
+      "comment": "Free entitlement statement [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daily reminders, logging and history are included in the free plan."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promemoria quotidiani, registrazione e cronologia sono inclusi nel piano gratuito."
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

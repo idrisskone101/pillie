@@ -40,12 +40,15 @@ struct ProtectionPlanReadyContent {
             isPM: twelve.period == 1
         )
         return ProtectionPlanReadyContent(
-            title: "You're",
-            titleAccent: "protected.",
-            subtitle: "Pillie's watching the clock so you don't have to. It all just runs, quietly.",
-            statusLabel: "Active from \(time) daily",
-            handNote: "we've got you",
-            primaryCTA: "Start Using Pillie"
+            title: PillieLocalization.string("onboarding.ready.title"),
+            titleAccent: "",
+            subtitle: PillieLocalization.string("onboarding.ready.subtitle"),
+            statusLabel: PillieLocalization.formatted(
+                "onboarding.reminder_time.accessibility",
+                arguments: time
+            ),
+            handNote: "",
+            primaryCTA: PillieLocalization.string("onboarding.ready.cta")
         )
     }
 }
@@ -157,7 +160,8 @@ struct ProtectionPlanReadyView: View {
 
     private var titleSection: some View {
         VStack(spacing: 14) {
-            (Text("\(content.title) ").foregroundStyle(PillieTheme.textPrimary)
+            (Text(content.title + (content.titleAccent.isEmpty ? "" : " "))
+                .foregroundStyle(PillieTheme.textPrimary)
                 + Text(content.titleAccent).foregroundStyle(PillieTheme.coral))
                 .font(.pillieTitle())
                 .tracking(-0.5)

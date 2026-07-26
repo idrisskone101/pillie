@@ -11,10 +11,14 @@ enum ContraceptiveMethod: String, CaseIterable, Codable {
     case ring
 
     var title: String {
+        localizedTitle()
+    }
+
+    func localizedTitle(locale: Locale = .current) -> String {
         switch self {
-        case .pill: return "The Pill"
-        case .patch: return "The Patch"
-        case .ring: return "The Ring"
+        case .pill: return PillieLocalization.string("global.method.pill", locale: locale)
+        case .patch: return PillieLocalization.string("global.method.patch", locale: locale)
+        case .ring: return PillieLocalization.string("global.method.ring", locale: locale)
         }
     }
 
@@ -27,11 +31,11 @@ enum ContraceptiveMethod: String, CaseIterable, Codable {
     }
 
     var blockingReasonText: String {
-        switch self {
-        case .pill: return "Time to take your pill!"
-        case .patch: return "Time for your patch change!"
-        case .ring: return "Time for your ring action!"
-        }
+        blockingReasonText()
+    }
+
+    func blockingReasonText(locale: Locale = .current) -> String {
+        PillieLocalization.string("shield.blocking_reason", locale: locale)
     }
 
     var subtitle: String {
@@ -45,10 +49,17 @@ enum ContraceptiveMethod: String, CaseIterable, Codable {
     /// Short, plain-language descriptor for the Routine Basics Method cards (#77).
     /// Cleaner than `subtitle` so the first routine screen stays uncluttered.
     var routineDescriptor: String {
+        localizedRoutineDescriptor()
+    }
+
+    func localizedRoutineDescriptor(locale: Locale = .current) -> String {
         switch self {
-        case .pill: return "Taken daily"
-        case .patch: return "Changed weekly"
-        case .ring: return "Monthly cycle"
+        case .pill:
+            return PillieLocalization.string("onboarding.method.pill.subtitle", locale: locale)
+        case .patch:
+            return PillieLocalization.string("onboarding.method.patch.subtitle", locale: locale)
+        case .ring:
+            return PillieLocalization.string("onboarding.method.ring.subtitle", locale: locale)
         }
     }
 }

@@ -67,68 +67,59 @@ struct DoseScheduleAction: Hashable {
     }
 
     var reminderTitle: String {
-        switch type {
-        case .pillActive:
-            return "Pillie check-in"
-        case .patchChange:
-            return "Patch check-in"
-        case .patchRemove:
-            return "Patch check-in"
-        case .ringInsert:
-            return "Ring check-in"
-        case .ringRemove:
-            return "Ring check-in"
-        case .ringReinsert:
-            return "Ring check-in"
-        case .pillBreak, .patchActive, .patchBreak, .ringActive, .ringBreak:
-            return "Pillie check-in"
+        localizedReminderTitle()
+    }
+
+    func localizedReminderTitle(locale: Locale = .current) -> String {
+        let key: String
+        switch method {
+        case .pill: key = "notification.reminder.pill.title"
+        case .patch: key = "notification.reminder.patch.title"
+        case .ring: key = "notification.reminder.ring.title"
         }
+        return PillieLocalization.string(key, locale: locale)
     }
 
     var reminderBody: String {
-        switch type {
-        case .pillActive:
-            return "A quick moment to take your pill and log it."
-        case .patchChange:
-            return "Time to switch your patch when you're ready."
-        case .patchRemove:
-            return "Time to remove your patch when you're ready."
-        case .ringInsert:
-            return "Time to insert your ring when you're ready."
-        case .ringRemove:
-            return "Time to remove your ring when you're ready."
-        case .ringReinsert:
-            return "Time to reinsert your ring when you're ready."
-        case .pillBreak, .patchActive, .patchBreak, .ringActive, .ringBreak:
-            return "Open Pillie when you're ready."
+        localizedReminderBody()
+    }
+
+    func localizedReminderBody(locale: Locale = .current) -> String {
+        let key: String
+        switch method {
+        case .pill: key = "notification.reminder.pill.body"
+        case .patch: key = "notification.reminder.patch.body"
+        case .ring: key = "notification.reminder.ring.body"
         }
+        return PillieLocalization.string(key, locale: locale)
+    }
+
+    func localizedFollowUpTitle(locale: Locale = .current) -> String {
+        PillieLocalization.string("notification.followup.title", locale: locale)
+    }
+
+    func localizedFollowUpBody(locale: Locale = .current) -> String {
+        PillieLocalization.string("notification.followup.body", locale: locale)
+    }
+
+    func localizedFinalTitle(locale: Locale = .current) -> String {
+        PillieLocalization.string("notification.final.title", locale: locale)
+    }
+
+    func localizedFinalBody(locale: Locale = .current) -> String {
+        PillieLocalization.string("notification.final.body", locale: locale)
     }
 
     /// Title for the end-of-day Last Call backstop. Pillie-authored, single title across
     /// methods; the body carries the method-specific action.
     var lastCallReminderTitle: String {
-        "Last call for today"
+        localizedFinalTitle()
     }
 
     /// Method-aware body for the Last Call backstop. Obeys the medical-claims copy rules
     /// — no "never miss", no "protect", no efficacy framing.
     var lastCallReminderBody: String {
-        switch type {
-        case .pillActive:
-            return "The day's almost over — a good moment to take your pill and log it."
-        case .patchChange:
-            return "The day's almost over — a good moment to switch your patch and log it."
-        case .patchRemove:
-            return "The day's almost over — a good moment to remove your patch and log it."
-        case .ringInsert:
-            return "The day's almost over — a good moment to insert your ring and log it."
-        case .ringRemove:
-            return "The day's almost over — a good moment to remove your ring and log it."
-        case .ringReinsert:
-            return "The day's almost over — a good moment to reinsert your ring and log it."
-        case .pillBreak, .patchActive, .patchBreak, .ringActive, .ringBreak:
-            return "The day's almost over — open Pillie when you're ready."
-        }
+        localizedFinalBody()
     }
 }
 

@@ -184,11 +184,7 @@ struct ProtectionPlanDiagnosis: Equatable {
 
     /// The capitalised method word used in the plan name.
     private var planWord: String {
-        switch method {
-        case .pill: return "Pill"
-        case .patch: return "Patch"
-        case .ring: return "Ring"
-        }
+        method.title
     }
 
     /// Lowercase method word for in-sentence headlines, e.g. "pill" in
@@ -196,33 +192,36 @@ struct ProtectionPlanDiagnosis: Equatable {
     var methodWord: String { planWord.lowercased() }
 
     var headline: String {
-        "Your Draft \(planWord) Protection Plan"
+        PillieLocalization.string("onboarding.plan.title")
     }
 
     /// The personalised one-liner under the headline. Names the app + Due Action Time
     /// when a specific distraction was identified; frames apps broadly otherwise.
     var leadLine: String {
-        if primaryDistraction.isSpecific {
-            return "Your biggest risk is \(primaryDistraction.displayName) right after your \(dueActionTimeText) reminder. Pillie locks distracting apps until you \(language.actionPhrase)."
-        }
-        return "After your \(dueActionTimeText) reminder, distracting apps are the gap. Pillie locks them until you \(language.actionPhrase)."
+        PillieLocalization.string("onboarding.plan.subtitle")
     }
 
     /// "Main risk" card value.
     var mainRiskValue: String {
-        primaryDistraction.isSpecific ? primaryDistraction.displayName : "Distracting apps"
+        primaryDistraction.isSpecific
+            ? primaryDistraction.displayName
+            : PillieLocalization.string("onboarding.blocking_setup.title")
     }
 
     /// "Window" card value — the Due Action Time.
     var windowValue: String { dueActionTimeText }
 
     /// "Protection" card value.
-    var protectionModeValue: String { "Auto-Lock" }
+    var protectionModeValue: String {
+        PillieLocalization.string("onboarding.plan.support")
+    }
 
     /// The protected-apps summary line. Falls back to a broad phrase when no concrete
     /// app was chosen, so the plan never reads as empty.
     var protectedAppsLabel: String {
-        guard !protectedApps.isEmpty else { return "Your distracting apps" }
+        guard !protectedApps.isEmpty else {
+            return PillieLocalization.string("onboarding.blocking_setup.title")
+        }
         return protectedApps.map(\.displayName).joined(separator: ", ")
     }
 
@@ -231,7 +230,7 @@ struct ProtectionPlanDiagnosis: Equatable {
     /// app-lock card so the reveal still communicates "your distracting apps stay
     /// locked until you check in" even when no app list was ever collected.
     var lockMechanismSummary: String {
-        "Your distracting apps stay locked until you \(language.actionPhrase)."
+        PillieLocalization.string("onboarding.blocking_setup.subtitle")
     }
 
     /// The signals Pillie "detected" from the calibration, shown as chips during the
@@ -242,9 +241,7 @@ struct ProtectionPlanDiagnosis: Equatable {
     var detectedSignals: [String] {
         var raw: [String] = [mainRiskValue, windowValue]
         if let riskWindow { raw.append(riskWindow.title) }
-        if let missFrequencyChip { raw.append(missFrequencyChip) }
-        if let delayConsequenceChip { raw.append(delayConsequenceChip) }
-        raw.append(contentsOf: distractionHabitChips)
+        raw.append(contentsOf: distractionChoices.map(\.title))
 
         var seen = Set<String>()
         var unique: [String] = []
@@ -292,7 +289,11 @@ struct ProtectionPlanDiagnosis: Equatable {
     /// staying free of fake stats, specific app names (no trademark snags), em dashes,
     /// and mechanism claims the app doesn't honor.
     var strategyPoints: [String] {
-        [lockStrategyPoint, riskStrategyPoint, reassuranceStrategyPoint]
+        [
+            PillieLocalization.string("onboarding.plan.subtitle"),
+            PillieLocalization.string("onboarding.blocking_setup.subtitle"),
+            PillieLocalization.string("onboarding.plan.disclaimer"),
+        ]
     }
 
     /// The concrete "what happens" when it's time. Generic about which apps (never
@@ -330,7 +331,7 @@ struct ProtectionPlanDiagnosis: Equatable {
 
     /// Honest framing: this is an editable draft, not a committed configuration.
     var disclaimer: String {
-        "A draft based on your answers. You can edit it anytime in Settings."
+        PillieLocalization.string("onboarding.plan.disclaimer")
     }
 
     /// Every user-visible string, for safe-copy assertions and accessibility.

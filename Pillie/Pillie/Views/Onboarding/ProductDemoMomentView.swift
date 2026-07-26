@@ -32,7 +32,7 @@ struct ProductDemoMomentView: View {
             historyPreviewCard
               .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger3))
 
-            Text("Daily reminders, logging, and history are part of the free plan.")
+            Text(PillieLocalization.string("onboarding.demo.free_body"))
               .font(.pillie(11, weight: .medium))
               .foregroundStyle(PillieTheme.textMuted)
               .multilineTextAlignment(.center)
@@ -46,7 +46,7 @@ struct ProductDemoMomentView: View {
         }
 
         Button(action: onContinue) {
-          Text("Continue")
+          Text(PillieLocalization.string("global.action.continue"))
         }
         .buttonStyle(.pillieDark)
         .accessibilityIdentifier("productDemoContinueButton")
@@ -74,12 +74,12 @@ struct ProductDemoMomentView: View {
 
   private var titleSection: some View {
     VStack(spacing: 10) {
-      Text("Your Daily Flow")
+      Text(PillieLocalization.string("onboarding.demo.title"))
         .font(.pillie(11, weight: .black))
         .foregroundStyle(PillieTheme.textMuted)
         .textCase(.uppercase)
 
-      Text("Get reminded.\nLog your dose.")
+      Text(PillieLocalization.string("onboarding.demo.remind_log"))
         .font(.pillie(28, weight: .bold))
         .foregroundStyle(PillieTheme.textPrimary)
         .multilineTextAlignment(.center)
@@ -87,7 +87,7 @@ struct ProductDemoMomentView: View {
         .minimumScaleFactor(0.82)
         .frame(maxWidth: 300)
 
-      Text("Pillie helps you check in and keeps your history easy to review.")
+      Text(PillieLocalization.string("onboarding.demo.explainer"))
         .font(.pillie(15, weight: .medium))
         .foregroundStyle(PillieTheme.textMuted)
         .multilineTextAlignment(.center)
@@ -97,11 +97,11 @@ struct ProductDemoMomentView: View {
 
   private var routineLoopCard: some View {
     HStack(spacing: 8) {
-      demoStep(index: 0, icon: "bell.fill", title: "Reminder")
+      demoStep(index: 0, icon: "bell.fill", title: PillieLocalization.string("onboarding.demo.step.reminder"))
       flowArrow
-      demoStep(index: 1, icon: "checkmark.circle.fill", title: "Log")
+      demoStep(index: 1, icon: "checkmark.circle.fill", title: PillieLocalization.string("onboarding.demo.step.log"))
       flowArrow
-      demoStep(index: 2, icon: "calendar.badge.checkmark", title: "History")
+      demoStep(index: 2, icon: "calendar.badge.checkmark", title: PillieLocalization.string("onboarding.demo.step.history"))
     }
     .padding(18)
     .background(RoundedRectangle(cornerRadius: PillieTheme.cardRadius).fill(PillieTheme.cardWhite))
@@ -154,11 +154,11 @@ struct ProductDemoMomentView: View {
     VStack(alignment: .leading, spacing: 16) {
       HStack(alignment: .top, spacing: 12) {
         VStack(alignment: .leading, spacing: 5) {
-          Text("Your history builds automatically")
+          Text(PillieLocalization.string("onboarding.demo.history_title"))
             .font(.pillie(14, weight: .black))
             .foregroundStyle(PillieTheme.textPrimary)
 
-          Text("Every check-in updates your streak and cycle timeline so you can see what happened later.")
+          Text(PillieLocalization.string("onboarding.demo.history_body"))
             .font(.pillie(12, weight: .medium))
             .foregroundStyle(PillieTheme.textMuted)
             .fixedSize(horizontal: false, vertical: true)
@@ -166,7 +166,7 @@ struct ProductDemoMomentView: View {
 
         Spacer()
 
-        Text("Free")
+        Text(PillieLocalization.string("global.status.free"))
           .font(.pillie(10, weight: .black))
           .foregroundStyle(PillieTheme.textPrimary)
           .padding(.horizontal, 12)
@@ -175,9 +175,9 @@ struct ProductDemoMomentView: View {
       }
 
       VStack(spacing: 8) {
-        historyRow(day: "MON", status: "Taken", tint: PillieTheme.coral, icon: "checkmark")
-        historyRow(day: "TUE", status: "Taken", tint: PillieTheme.coral, icon: "checkmark")
-        historyRow(day: "WED", status: "Reminder set", tint: PillieTheme.coral, icon: "bell.fill")
+        historyRow(day: PillieLocalization.string("onboarding.demo.weekday.mon"), status: PillieLocalization.string("global.status.completed"), tint: PillieTheme.coral, icon: "checkmark")
+        historyRow(day: PillieLocalization.string("onboarding.demo.weekday.tue"), status: PillieLocalization.string("global.status.completed"), tint: PillieTheme.coral, icon: "checkmark")
+        historyRow(day: PillieLocalization.string("onboarding.demo.weekday.wed"), status: PillieLocalization.string("onboarding.demo.step.reminder"), tint: PillieTheme.coral, icon: "bell.fill")
       }
     }
     .padding(16)
