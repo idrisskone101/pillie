@@ -83,34 +83,38 @@ struct AppBlockingSetupContent {
         "\(lockedTitle). \(lockedDetail)"
     }
 
-    static let `default` = AppBlockingSetupContent(
+    static var `default`: AppBlockingSetupContent { localized() }
+
+    static func localized(locale: Locale = .current) -> AppBlockingSetupContent {
+        AppBlockingSetupContent(
         badge: "Pillie Plus",
-        titleLead: "Block the apps",
-        titleAccent: "that pull you in.",
-        subtitle: "Selected apps pause only after your Pillie reminder and unlock when you log your pill.",
-        trialDisclosure: "Pillie Plus is unlocked for 14 days. No card required.",
-        emptyTitle: "Nothing paused yet",
-        emptyDetail: "Choose apps in Screen Time. You can change your selection later, and Pillie only stores the count.",
+        titleLead: PillieLocalization.string("onboarding.blocking_setup.title", locale: locale),
+        titleAccent: "",
+        subtitle: PillieLocalization.string("onboarding.blocking_setup.subtitle", locale: locale),
+        trialDisclosure: PillieLocalization.string("onboarding.blocking_setup.plus_locked", locale: locale),
+        emptyTitle: PillieLocalization.string("onboarding.blocking_setup.title", locale: locale),
+        emptyDetail: PillieLocalization.string("onboarding.blocking_setup.subtitle", locale: locale),
         categoryHints: [
-            CategoryHint(name: "Social", symbol: "bubble.left.and.bubble.right.fill"),
-            CategoryHint(name: "Entertainment", symbol: "play.rectangle.fill"),
-            CategoryHint(name: "Games", symbol: "gamecontroller.fill"),
-            CategoryHint(name: "Shopping", symbol: "bag.fill")
+            CategoryHint(name: PillieLocalization.string("onboarding.personalise.distraction.social", locale: locale), symbol: "bubble.left.and.bubble.right.fill"),
+            CategoryHint(name: PillieLocalization.string("onboarding.personalise.distraction.video", locale: locale), symbol: "play.rectangle.fill"),
+            CategoryHint(name: PillieLocalization.string("onboarding.personalise.distraction.games", locale: locale), symbol: "gamecontroller.fill"),
+            CategoryHint(name: PillieLocalization.string("onboarding.personalise.distraction.other", locale: locale), symbol: "bag.fill")
         ],
-        chooseAppsCTA: "Choose apps to pause at pill time",
-        authorizationDeniedTitle: "Screen Time wasn't enabled",
-        authorizationDeniedDetail: "Nothing changed. Try again when you're ready, or continue with reminders only.",
-        retryAuthorizationCTA: "Try Screen Time again",
-        selectedSummaryLabel: "apps & categories blocked",
-        selectedPrivacyNote: "Pillie stores only the count — never which apps.",
-        changeSelectionCTA: "Change selection",
-        privacyNote: "Your choices stay on this device.",
-        finishCTA: "Finish Setup",
-        skipCTA: "Continue with reminders only",
-        lockedTitle: "Included with Pillie Plus",
-        lockedSubtitle: "App blocking is a Pillie Plus tool you can set up after upgrading.",
-        lockedDetail: "Your free plan still includes daily reminders and cycle tracking. You can upgrade from Settings when you want app blocking."
-)
+        chooseAppsCTA: PillieLocalization.string("onboarding.blocking_setup.title", locale: locale),
+        authorizationDeniedTitle: PillieLocalization.string("onboarding.permission.title", locale: locale),
+        authorizationDeniedDetail: PillieLocalization.string("onboarding.permission.body", locale: locale),
+        retryAuthorizationCTA: PillieLocalization.string("global.action.retry", locale: locale),
+        selectedSummaryLabel: PillieLocalization.string("onboarding.blocking_setup.subtitle", locale: locale),
+        selectedPrivacyNote: PillieLocalization.string("onboarding.plan.disclaimer", locale: locale),
+        changeSelectionCTA: PillieLocalization.string("global.action.edit", locale: locale),
+        privacyNote: PillieLocalization.string("onboarding.plan.disclaimer", locale: locale),
+        finishCTA: PillieLocalization.string("global.action.continue", locale: locale),
+        skipCTA: PillieLocalization.string("global.action.continue", locale: locale),
+        lockedTitle: PillieLocalization.string("onboarding.blocking_setup.plus_locked", locale: locale),
+        lockedSubtitle: PillieLocalization.string("onboarding.blocking_setup.plus_locked", locale: locale),
+        lockedDetail: PillieLocalization.string("onboarding.demo.free_body", locale: locale)
+        )
+    }
 }
 
 /// Observable permission-request behavior kept separate from the opaque Screen Time
@@ -306,7 +310,8 @@ struct AppBlockingSetupView: View {
                     Capsule().stroke(Color.black.opacity(0.06), lineWidth: 1)
                 }
 
-            (Text(content.titleLead + "\n").foregroundColor(PillieTheme.textPrimary)
+            (Text(content.titleLead + (content.titleAccent.isEmpty ? "" : "\n"))
+                .foregroundColor(PillieTheme.textPrimary)
                 + Text(content.titleAccent).foregroundColor(PillieTheme.coral))
                 .font(.pillie(34, weight: .bold))
                 .fixedSize(horizontal: false, vertical: true)
@@ -511,6 +516,8 @@ struct AppBlockingSetupView: View {
                         .font(.system(size: 17, weight: .semibold))
                 }
                 Text(primaryActionTitle)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.55)
             }
         }
         .buttonStyle(.pillieDark)

@@ -1,0 +1,91 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "shield.blocking_reason": {
+      "comment": "Shared app-group fallback [shield]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today’s Pillie action is still open."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L’azione Pillie di oggi è ancora da registrare."
+          }
+        }
+      }
+    },
+    "shield.primary_action": {
+      "comment": "Extension button [shield]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Pillie"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apri Pillie"
+          }
+        }
+      }
+    },
+    "shield.secondary": {
+      "comment": "Extension secondary text [shield]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This app will be waiting."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Questa app ti aspetta."
+          }
+        }
+      }
+    },
+    "shield.subtitle": {
+      "comment": "Extension subtitle; method-neutral [shield]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Log today’s action, then return to this app."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registra l’azione di oggi, poi torna a questa app."
+          }
+        }
+      }
+    },
+    "shield.title": {
+      "comment": "Extension title; neutral [shield]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Time for a quick check-in"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "È il momento di registrare"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

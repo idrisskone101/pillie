@@ -25,12 +25,12 @@ enum AcquisitionSource: String, CaseIterable, Hashable, Identifiable {
 
     var title: String {
         switch self {
-        case .tiktok: return "TikTok"
-        case .instagram: return "Instagram"
-        case .appStoreSearch: return "App Store search"
-        case .friendOrWordOfMouth: return "Friend or word of mouth"
-        case .reddit: return "Reddit"
-        case .other: return "Other"
+        case .tiktok: return PillieLocalization.string("onboarding.acquisition.tiktok")
+        case .instagram: return PillieLocalization.string("onboarding.acquisition.instagram")
+        case .appStoreSearch: return PillieLocalization.string("onboarding.acquisition.app_store")
+        case .friendOrWordOfMouth: return PillieLocalization.string("onboarding.acquisition.friend")
+        case .reddit: return PillieLocalization.string("onboarding.acquisition.reddit")
+        case .other: return PillieLocalization.string("onboarding.acquisition.other")
         }
     }
 }

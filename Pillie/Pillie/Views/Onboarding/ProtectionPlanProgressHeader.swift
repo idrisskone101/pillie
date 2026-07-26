@@ -37,7 +37,7 @@ struct ProtectionPlanProgressHeader: View {
                 .shadow(color: Color.black.opacity(0.08), radius: 10, y: 4)
         }
         .buttonStyle(.plain)
-        .accessibilityLabel("Back")
+        .accessibilityLabel(PillieLocalization.string("global.action.back"))
     }
 
     private var progressBar: some View {
@@ -55,7 +55,7 @@ struct ProtectionPlanProgressHeader: View {
         }
         .frame(height: 8)
         .accessibilityElement()
-        .accessibilityLabel(Text(progress.accessibilityLabel))
+        .accessibilityLabel(progress.accessibilityLabel)
     }
 }
 

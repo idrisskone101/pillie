@@ -19,19 +19,25 @@ struct ProtectionPlanProgress: Equatable {
         case personalizeYourPlan
         case setYourReminder
 
-        var title: LocalizedStringResource {
+        var title: String {
             switch self {
-            case .seeHowPillieWorks: "See how Pillie works"
-            case .personalizeYourPlan: "Personalize your plan"
-            case .setYourReminder: "Set your reminder"
+            case .seeHowPillieWorks:
+                PillieLocalization.string("accessibility.progress.intro.title")
+            case .personalizeYourPlan:
+                PillieLocalization.string("accessibility.progress.personalize.title")
+            case .setYourReminder:
+                PillieLocalization.string("accessibility.progress.reminder.title")
             }
         }
 
-        var accessibilityLabel: LocalizedStringResource {
+        var accessibilityLabel: String {
             switch self {
-            case .seeHowPillieWorks: "See how Pillie works, section 1 of 3"
-            case .personalizeYourPlan: "Personalize your plan, section 2 of 3"
-            case .setYourReminder: "Set your reminder, section 3 of 3"
+            case .seeHowPillieWorks:
+                PillieLocalization.string("accessibility.progress.intro")
+            case .personalizeYourPlan:
+                PillieLocalization.string("accessibility.progress.personalize")
+            case .setYourReminder:
+                PillieLocalization.string("accessibility.progress.reminder")
             }
         }
     }
@@ -40,13 +46,13 @@ struct ProtectionPlanProgress: Equatable {
 
     var index: Int { section.rawValue }
     var total: Int { Section.allCases.count }
-    var title: LocalizedStringResource { section.title }
+    var title: String { section.title }
 
     var fraction: CGFloat {
         return CGFloat(index) / CGFloat(total)
     }
 
-    var accessibilityLabel: LocalizedStringResource { section.accessibilityLabel }
+    var accessibilityLabel: String { section.accessibilityLabel }
 }
 
 /// Single source of truth for the stable, user-facing onboarding sections. Individual

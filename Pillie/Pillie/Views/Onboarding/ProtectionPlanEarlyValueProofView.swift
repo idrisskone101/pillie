@@ -386,7 +386,7 @@ struct ProtectionPlanEarlyValueProofView: View {
             .accessibilityHint(
                 isResolved
                     ? ""
-                    : (isLatched ? content.shakeCue : "Drag right along the path to lock your apps.")
+                    : (isLatched ? content.shakeCue : PillieLocalization.string("accessibility.drag_help"))
             )
             .accessibilityAddTraits(isResolved ? [] : .allowsDirectInteraction)
             .accessibilityIdentifier("earlyValueProofDragLane")

@@ -328,8 +328,8 @@ struct ProtectionPlanDiagnosisView: View {
             ProtectionPlanBackBar(onBack: onBack)
 
             // Centered headline, matching the Coral Canopy reference.
-            (Text("Your \(plan.methodWord) plan\nis ").foregroundStyle(.white)
-                + Text("ready.").foregroundStyle(PillieTheme.textPrimary))
+            Text(plan.headline)
+                .foregroundStyle(PillieTheme.textPrimary)
                 .font(.pillie(40, weight: .black))
                 .multilineTextAlignment(.center)
                 .lineSpacing(-9)
@@ -338,7 +338,7 @@ struct ProtectionPlanDiagnosisView: View {
                 .fixedSize(horizontal: false, vertical: true)
                 .frame(maxWidth: .infinity)
                 .padding(.top, 18)
-                .accessibilityLabel("Your \(plan.methodWord) plan is ready. \(plan.leadLine)")
+                .accessibilityLabel("\(plan.headline). \(plan.leadLine)")
         }
         .frame(maxWidth: .infinity)
         .padding(.horizontal, 24)
@@ -544,10 +544,9 @@ struct ProtectionPlanDiagnosisView: View {
 
     private func reminderLabel(hour: Int) -> String {
         switch hour {
-        case 5..<12: return "Morning reminder"
-        case 12..<17: return "Afternoon reminder"
-        case 17..<22: return "Evening reminder"
-        default: return "Daily reminder"
+        case 5..<12: return PillieLocalization.string("onboarding.reminder_time.morning")
+        case 17..<22: return PillieLocalization.string("onboarding.reminder_time.evening")
+        default: return PillieLocalization.string("onboarding.demo.step.reminder")
         }
     }
 
@@ -555,13 +554,15 @@ struct ProtectionPlanDiagnosisView: View {
         switch store.contraceptiveMethod {
         case .pill:
             let pack = store.pack
-            let active = pack.pillRegimen == .custom ? (pack.customActiveDays ?? pack.activeDays) : pack.activeDays
-            let breakDays = pack.pillRegimen == .custom ? (pack.customBreakDays ?? pack.breakDays) : pack.breakDays
-            return ("pills.fill", breakDays > 0 ? "\(active) / \(breakDays)" : "Daily", "Pill cycle")
+            return (
+                "pills.fill",
+                pack.pillRegimen.localizedScheduleSummary(),
+                PillieLocalization.string("onboarding.plan.current_cycle")
+            )
         case .patch:
-            return ("bandage.fill", "Weekly", "Patch change")
+            return ("bandage.fill", store.contraceptiveMethod.routineDescriptor, PillieLocalization.string("onboarding.plan.current_cycle"))
         case .ring:
-            return ("circle.circle", "Monthly", "Ring cycle")
+            return ("circle.circle", store.contraceptiveMethod.routineDescriptor, PillieLocalization.string("onboarding.plan.current_cycle"))
         }
     }
 }
@@ -685,7 +686,7 @@ struct ProtectionPlanBackBar: View {
                     .shadow(color: Color.black.opacity(0.08), radius: 10, y: 4)
             }
             .buttonStyle(.plain)
-            .accessibilityLabel("Back")
+            .accessibilityLabel(PillieLocalization.string("global.action.back"))
             .accessibilityIdentifier("protectionPlanBackButton")
 
             Spacer()

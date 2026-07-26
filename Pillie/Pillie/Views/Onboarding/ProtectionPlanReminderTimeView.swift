@@ -21,9 +21,7 @@ struct ProtectionPlanReminderTimeView: View {
     private let content = ProtectionPlanReminderTimeContent.default
     private let onboardingTelemetry = OnboardingTelemetry()
 
-    @State private var selectedHour = 8
-    @State private var selectedMinute = 0
-    @State private var selectedPeriod = 0 // 0 = AM, 1 = PM
+    @State private var selectedTime = Date()
     @State private var appeared = false
     @State private var isCommitting = false
 
@@ -35,22 +33,18 @@ struct ProtectionPlanReminderTimeView: View {
     }
 
     private var liveTimeText: String {
-        ProtectionPlanRoutineSummary.clockText(
-            hour12: selectedHour,
-            minute: selectedMinute,
-            isPM: selectedPeriod == 1
-        )
+        selectedTime.formatted(date: .omitted, time: .shortened)
     }
 
     private var scheduleSummaryText: String {
         let pack = store.pack
         switch pack.method {
         case .pill:
-            return "\(pack.pillRegimen.routineDisplayName) · \(pack.pillRegimen.scheduleSubtitle)"
+            return pack.pillRegimen.localizedScheduleSummary()
         case .patch:
-            return "Weekly patch · 28-day cycle"
+            return pack.method.routineDescriptor
         case .ring:
-            return "Monthly ring · 28-day cycle"
+            return pack.method.routineDescriptor
         }
     }
 
@@ -59,13 +53,13 @@ struct ProtectionPlanReminderTimeView: View {
             method: store.contraceptiveMethod,
             scheduleSummary: scheduleSummaryText,
             cycleDay: store.pack.cycleDayIndex(on: store.today) + 1,
-            reminderTimeText: liveTimeText
+            reminderTimeText: liveTimeText,
+            locale: .current
         )
     }
 
     private var protectionLine: String {
-        let language = MethodActionLanguage(method: store.contraceptiveMethod)
-        return "Distracting apps lock from \(liveTimeText) until you \(language.actionPhrase)."
+        PillieLocalization.string("onboarding.blocking_setup.subtitle")
     }
 
     var body: some View {
@@ -113,60 +107,31 @@ struct ProtectionPlanReminderTimeView: View {
                 .tracking(1.8)
                 .foregroundStyle(PillieTheme.coral)
 
-            HStack(spacing: 0) {
-                Picker("Hour", selection: $selectedHour) {
-                    ForEach(1...12, id: \.self) { hour in
-                        Text("\(hour)").tag(hour)
-                    }
-                }
-                .pickerStyle(.wheel)
-                .frame(width: 64, height: 150)
-                .clipped()
-                .accessibilityElement(children: .ignore)
-                .accessibilityLabel(ReminderTimePickerAccessibility.hourLabel)
-                .accessibilityValue("\(selectedHour)")
-
-                Text(":")
-                    .font(.pillie(28, weight: .bold))
-                    .foregroundStyle(PillieTheme.textPrimary)
-
-                Picker("Minute", selection: $selectedMinute) {
-                    ForEach(0..<60, id: \.self) { minute in
-                        Text(String(format: "%02d", minute)).tag(minute)
-                    }
-                }
-                .pickerStyle(.wheel)
-                .frame(width: 64, height: 150)
-                .clipped()
-                .accessibilityElement(children: .ignore)
-                .accessibilityLabel(ReminderTimePickerAccessibility.minuteLabel)
-                .accessibilityValue(String(format: "%02d", selectedMinute))
-
-                Picker("Period", selection: $selectedPeriod) {
-                    Text("AM").tag(0)
-                    Text("PM").tag(1)
-                }
-                .pickerStyle(.wheel)
-                .frame(width: 64, height: 150)
-                .clipped()
-                .accessibilityElement(children: .ignore)
-                .accessibilityLabel(ReminderTimePickerAccessibility.periodLabel)
-                .accessibilityValue(selectedPeriod == 0 ? "AM" : "PM")
-            }
+            DatePicker(
+                "",
+                selection: $selectedTime,
+                displayedComponents: .hourAndMinute
+            )
+            .labelsHidden()
+            .datePickerStyle(.wheel)
+            .frame(height: 150)
+            .clipped()
+            .accessibilityLabel(
+                PillieLocalization.formatted(
+                    "onboarding.reminder_time.accessibility",
+                    arguments: liveTimeText
+                )
+            )
 
             HStack(spacing: 0) {
-                quickToggle(title: "Morning", icon: "sun.max.fill", isSelected: selectedPeriod == 0) {
+                quickToggle(title: PillieLocalization.string("onboarding.reminder_time.morning"), icon: "sun.max.fill", isSelected: selectedHour < 12) {
                     withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
-                        selectedHour = 8
-                        selectedMinute = 0
-                        selectedPeriod = 0
+                        selectedTime = date(hour: 8, minute: 0)
                     }
                 }
-                quickToggle(title: "Evening", icon: "moon.fill", isSelected: selectedPeriod == 1) {
+                quickToggle(title: PillieLocalization.string("onboarding.reminder_time.evening"), icon: "moon.fill", isSelected: selectedHour >= 12) {
                     withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
-                        selectedHour = 8
-                        selectedMinute = 0
-                        selectedPeriod = 1
+                        selectedTime = date(hour: 20, minute: 0)
                     }
                 }
             }
@@ -205,26 +170,29 @@ struct ProtectionPlanReminderTimeView: View {
     private func commit() {
         guard !isCommitting else { return }
         isCommitting = true
-        let selection = ReminderTimeConverter.toTwentyFourHour(
-            hour: selectedHour,
-            minute: selectedMinute,
-            period: selectedPeriod
-        )
+        let selection = Calendar.current.dateComponents([.hour, .minute], from: selectedTime)
         OnboardingReminderCommit.live(store: store, telemetry: onboardingTelemetry)
-            .run(hour: selection.hour, minute: selection.minute) {
+            .run(hour: selection.hour ?? 8, minute: selection.minute ?? 0) {
                 isCommitting = false
                 onContinue()
             }
     }
 
     private func seedFromStore() {
-        let selection = ReminderTimeConverter.toTwelveHour(
-            hour24: store.reminderHour,
-            minute: store.reminderMinute
-        )
-        selectedHour = selection.hour
-        selectedMinute = selection.minute
-        selectedPeriod = selection.period
+        selectedTime = date(hour: store.reminderHour, minute: store.reminderMinute)
+    }
+
+    private var selectedHour: Int {
+        Calendar.current.component(.hour, from: selectedTime)
+    }
+
+    private func date(hour: Int, minute: Int) -> Date {
+        Calendar.current.date(
+            bySettingHour: hour,
+            minute: minute,
+            second: 0,
+            of: selectedTime
+        ) ?? selectedTime
     }
 }
 

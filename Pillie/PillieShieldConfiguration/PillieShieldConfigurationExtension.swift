@@ -22,7 +22,12 @@ final class PillieShieldConfigurationExtension: ShieldConfigurationDataSource {
     private let defaults = AppGroupConstants.sharedDefaults
 
     private var blockingReason: String {
-        defaults?.string(forKey: AppGroupKeys.blockingReason) ?? "Take your pill, then get back to it"
+        defaults?.string(forKey: AppGroupKeys.blockingReason)
+            ?? localized("shield.blocking_reason")
+    }
+
+    private nonisolated func localized(_ key: String) -> String {
+        Bundle.main.localizedString(forKey: key, value: nil, table: "Shield")
     }
 
     override nonisolated func configuration(shielding application: Application) -> ShieldConfiguration {
@@ -52,9 +57,9 @@ final class PillieShieldConfigurationExtension: ShieldConfigurationDataSource {
         let reason = blockingReason.trimmingCharacters(in: .whitespacesAndNewlines)
         let subtitleText: String
         if reason.isEmpty {
-            subtitleText = "\nTake your pill, then get back to it\nYour apps will be waiting"
+            subtitleText = "\n\(localized("shield.subtitle"))\n\(localized("shield.secondary"))"
         } else {
-            subtitleText = "\n\(reason)\nYour apps will be waiting"
+            subtitleText = "\n\(reason)\n\(localized("shield.secondary"))"
         }
 
         return ShieldConfiguration(
@@ -66,7 +71,7 @@ final class PillieShieldConfigurationExtension: ShieldConfigurationDataSource {
             // sits too high on the shield.
             icon: UIImage(named: "ShieldIcon"),
             title: ShieldConfiguration.Label(
-                text: "\nTime for self-care!",
+                text: "\n\(localized("shield.title"))",
                 color: Palette.title
             ),
             subtitle: ShieldConfiguration.Label(
@@ -74,7 +79,7 @@ final class PillieShieldConfigurationExtension: ShieldConfigurationDataSource {
                 color: Palette.subtitle
             ),
             primaryButtonLabel: ShieldConfiguration.Label(
-                text: "On it! ✨",
+                text: localized("shield.primary_action"),
                 color: .white
             ),
             primaryButtonBackgroundColor: Palette.primaryBtnBg

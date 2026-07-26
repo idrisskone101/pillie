@@ -92,9 +92,13 @@ struct ProtectionPlanSelectableRow: View {
     private var accessibilityHint: String {
         switch style {
         case .checkbox:
-            return isSelected ? "Selected. Double tap to remove." : "Double tap to select. You can pick more than one."
+            return isSelected
+                ? PillieLocalization.string("accessibility.selection.selected_remove")
+                : PillieLocalization.string("accessibility.selection.select_multiple")
         case .radio:
-            return isSelected ? "Selected." : "Double tap to choose."
+            return isSelected
+                ? PillieLocalization.string("accessibility.selection.selected")
+                : PillieLocalization.string("accessibility.selection.choose")
         }
     }
 

@@ -199,11 +199,17 @@ final class NotificationManager {
         center.setNotificationCategories([category])
     }
 
-    private func reminderCategoryActions(includeSnooze: Bool) -> [UNNotificationAction] {
+    private func reminderCategoryActions(
+        includeSnooze: Bool,
+        locale: Locale = .current
+    ) -> [UNNotificationAction] {
         var actions = [
             UNNotificationAction(
                 identifier: markTakenActionID,
-                title: "Mark as Taken",
+                title: PillieLocalization.string(
+                    "notification.action.complete",
+                    locale: locale
+                ),
                 options: []
             )
         ]
@@ -211,7 +217,10 @@ final class NotificationManager {
             actions.append(
                 UNNotificationAction(
                     identifier: snoozeActionID,
-                    title: "Snooze",
+                    title: PillieLocalization.string(
+                        "notification.action.snooze",
+                        locale: locale
+                    ),
                     options: []
                 )
             )
@@ -364,8 +373,12 @@ final class NotificationManager {
 
     /// Default copy for the Auto-Reminder Retry, used as the fallback when a custom retry
     /// field is blank or the user is not Plus.
-    static let defaultRetryTitle = "Still here when you're ready"
-    static let defaultRetryBody = "Take a tiny moment for your Pillie check-in."
+    static var defaultRetryTitle: String {
+        PillieLocalization.string("notification.followup.title")
+    }
+    static var defaultRetryBody: String {
+        PillieLocalization.string("notification.followup.body")
+    }
 
     private func makeRequest(
         for due: ReminderSchedulePlanner.DueReminderIntent,
@@ -455,14 +468,14 @@ final class NotificationManager {
         let content = UNMutableNotificationContent()
         switch supply.method {
         case .pill:
-            content.title = "Refill check-in"
-            content.body = "Looks like you're getting low. A refill soon could save future stress."
+            content.title = PillieLocalization.string("notification.refill.title")
+            content.body = PillieLocalization.string("notification.refill.body")
         case .patch:
-            content.title = "Patch restock check-in"
-            content.body = "Looks like you're getting low. A restock soon could save future stress."
+            content.title = PillieLocalization.string("notification.refill.patch.title")
+            content.body = PillieLocalization.string("notification.refill.patch.body")
         case .ring:
-            content.title = "Supply check-in"
-            content.body = "Time to check your contraception supply."
+            content.title = PillieLocalization.string("notification.refill.ring.title")
+            content.body = PillieLocalization.string("notification.refill.ring.body")
         }
         content.sound = .default
 
@@ -741,6 +754,13 @@ final class NotificationManager {
 
     func reminderCategoryActionIdentifiersForTesting(isPlus: Bool) -> [String] {
         reminderCategoryActions(includeSnooze: isPlus).map(\.identifier)
+    }
+
+    func reminderCategoryActionTitlesForTesting(
+        isPlus: Bool,
+        locale: Locale = .current
+    ) -> [String] {
+        reminderCategoryActions(includeSnooze: isPlus, locale: locale).map(\.title)
     }
 
     func managedRequestIdentifiersForTesting(store: PillStore, now: Date = Date()) -> [String] {

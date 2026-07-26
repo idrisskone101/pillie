@@ -36,14 +36,16 @@ enum DelayConsequence: String, CaseIterable, Hashable, Identifiable {
     /// The persisted cases stay unchanged, preserving the diagnosis semantics for
     /// existing answers while asking new users one clearer combined question.
     var desiredOutcomeTitle: String {
+        let key: String
         switch self {
-        case .stressful: return "Less stress"
-        case .annoying: return "Fewer interruptions"
-        case .scary: return "More reassurance"
-        case .overthink: return "Peace of mind"
-        case .doubleCheck: return "Confidence it's done"
-        case .dontCare: return "A simpler routine"
+        case .stressful: key = "onboarding.personalise.outcome.stress"
+        case .annoying: key = "onboarding.personalise.outcome.interruptions"
+        case .scary: key = "onboarding.personalise.outcome.reassurance"
+        case .overthink: key = "onboarding.personalise.outcome.peace"
+        case .doubleCheck: key = "onboarding.personalise.outcome.confidence"
+        case .dontCare: key = "onboarding.personalise.outcome.simple"
         }
+        return PillieLocalization.string(key)
     }
 
     var symbolName: String {

@@ -1,0 +1,3032 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "accessibility.collapsed": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Collapsed"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Compresso"
+          }
+        }
+      }
+    },
+    "accessibility.drag_help": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drag right along the path to pause your apps."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trascina verso destra lungo il percorso per mettere in pausa le app."
+          }
+        }
+      }
+    },
+    "accessibility.expanded": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Expanded"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Espanso"
+          }
+        }
+      }
+    },
+    "accessibility.progress.intro": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "See how Pillie works, section 1 of 3"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scopri come funziona Pillie, sezione 1 di 3"
+          }
+        }
+      }
+    },
+    "accessibility.progress.intro.title": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "See how Pillie works"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scopri come funziona Pillie"
+          }
+        }
+      }
+    },
+    "accessibility.progress.personalize": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personalize your plan, section 2 of 3"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personalizza il tuo piano, sezione 2 di 3"
+          }
+        }
+      }
+    },
+    "accessibility.progress.personalize.title": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personalize your plan"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personalizza il tuo piano"
+          }
+        }
+      }
+    },
+    "accessibility.progress.reminder": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set your reminder, section 3 of 3"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configura il promemoria, sezione 3 di 3"
+          }
+        }
+      }
+    },
+    "accessibility.progress.reminder.title": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set your reminder"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configura il promemoria"
+          }
+        }
+      }
+    },
+    "accessibility.selection.choose": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Double tap to choose."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tocca due volte per scegliere."
+          }
+        }
+      }
+    },
+    "accessibility.selection.select_multiple": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Double tap to select. You can pick more than one."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tocca due volte per selezionare. Puoi scegliere più opzioni."
+          }
+        }
+      }
+    },
+    "accessibility.selection.selected": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selected."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selezionata."
+          }
+        }
+      }
+    },
+    "accessibility.selection.selected_remove": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selected. Double tap to remove."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selezionata. Tocca due volte per rimuovere."
+          }
+        }
+      }
+    },
+    "global.action.back": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Back"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Indietro"
+          }
+        }
+      }
+    },
+    "global.action.cancel": {
+      "comment": "Cancel without saving [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annulla"
+          }
+        }
+      }
+    },
+    "global.action.close": {
+      "comment": "Close modal [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Close"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chiudi"
+          }
+        }
+      }
+    },
+    "global.action.continue": {
+      "comment": "Primary forward action [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continue"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continua"
+          }
+        }
+      }
+    },
+    "global.action.disable": {
+      "comment": "Disable feature [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Disable"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Disattiva"
+          }
+        }
+      }
+    },
+    "global.action.done": {
+      "comment": "Dismiss or finish [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Done"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fine"
+          }
+        }
+      }
+    },
+    "global.action.edit": {
+      "comment": "Edit an existing value [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edit"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modifica"
+          }
+        }
+      }
+    },
+    "global.action.enable": {
+      "comment": "Enable feature [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enable"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Attiva"
+          }
+        }
+      }
+    },
+    "global.action.get_started": {
+      "comment": "First-launch CTA [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Get Started"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inizia"
+          }
+        }
+      }
+    },
+    "global.action.not_now": {
+      "comment": "Defer optional action [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not Now"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Non ora"
+          }
+        }
+      }
+    },
+    "global.action.ok": {
+      "comment": "Acknowledge alert [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
+          }
+        }
+      }
+    },
+    "global.action.retry": {
+      "comment": "Retry failed load [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Try Again"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Riprova"
+          }
+        }
+      }
+    },
+    "global.action.save": {
+      "comment": "Persist edits [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salva"
+          }
+        }
+      }
+    },
+    "global.method.other": {
+      "comment": "Other method [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Other"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Altro"
+          }
+        }
+      }
+    },
+    "global.method.patch": {
+      "comment": "Contraceptive method [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Patch"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cerotto"
+          }
+        }
+      }
+    },
+    "global.method.pill": {
+      "comment": "Contraceptive method [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pill"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillola"
+          }
+        }
+      }
+    },
+    "global.method.ring": {
+      "comment": "Contraceptive method [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ring"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anello"
+          }
+        }
+      }
+    },
+    "global.status.break_day": {
+      "comment": "Not a missed action [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Break day"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Giorno di pausa"
+          }
+        }
+      }
+    },
+    "global.status.completed": {
+      "comment": "Method-neutral completion state [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Completed"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Completata"
+          }
+        }
+      }
+    },
+    "global.status.free": {
+      "comment": "Free tier label [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Free"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gratis"
+          }
+        }
+      }
+    },
+    "global.status.locked": {
+      "comment": "Selected apps are blocked [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Locked"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloccate"
+          }
+        }
+      }
+    },
+    "global.status.missed": {
+      "comment": "Prefer observed state over claiming non-use [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No action logged"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nessuna azione registrata"
+          }
+        }
+      }
+    },
+    "global.status.off": {
+      "comment": "Compact disabled status [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Off"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Disattivo"
+          }
+        }
+      }
+    },
+    "global.status.on": {
+      "comment": "Compact enabled status [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Attivo"
+          }
+        }
+      }
+    },
+    "onboarding.acquisition.app_store": {
+      "comment": "Option [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App Store search"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ricerca sull’App Store"
+          }
+        }
+      }
+    },
+    "onboarding.acquisition.friend": {
+      "comment": "Option [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Friend or family"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amici o famiglia"
+          }
+        }
+      }
+    },
+    "onboarding.acquisition.instagram": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Instagram"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Instagram"
+          }
+        }
+      }
+    },
+    "onboarding.acquisition.other": {
+      "comment": "Option [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Other"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Altro"
+          }
+        }
+      }
+    },
+    "onboarding.acquisition.reddit": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reddit"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reddit"
+          }
+        }
+      }
+    },
+    "onboarding.acquisition.social": {
+      "comment": "Option [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Social media"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Social network"
+          }
+        }
+      }
+    },
+    "onboarding.acquisition.subtitle": {
+      "comment": "Avoid need/protection wording [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your answer helps more people discover the app."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La risposta aiuta altre persone a scoprire l’app."
+          }
+        }
+      }
+    },
+    "onboarding.acquisition.tiktok": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TikTok"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TikTok"
+          }
+        }
+      }
+    },
+    "onboarding.acquisition.title": {
+      "comment": "Attribution question [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Where did you find Pillie?"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dove hai scoperto Pillie?"
+          }
+        }
+      }
+    },
+    "onboarding.blocking_demo.apps_blocked": {
+      "comment": "State heading [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selected apps pause"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le app selezionate vengono messe in pausa"
+          }
+        }
+      }
+    },
+    "onboarding.blocking_demo.apps_blocked_body": {
+      "comment": "Avoid named third-party examples [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selected apps wait until you confirm."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le app selezionate restano in pausa fino alla conferma."
+          }
+        }
+      }
+    },
+    "onboarding.blocking_demo.apps_unlock": {
+      "comment": "State heading [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apps are available again"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le app sono di nuovo disponibili"
+          }
+        }
+      }
+    },
+    "onboarding.blocking_demo.apps_unlock_body": {
+      "comment": "Method-neutral [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Action logged. Continue with your day."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Azione registrata. Continua la tua giornata."
+          }
+        }
+      }
+    },
+    "onboarding.blocking_demo.body": {
+      "comment": "Functionality, not medical protection [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus can pause selected apps when a reminder is due, then make them available after you log the action."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus può mettere in pausa le app selezionate quando arriva il promemoria e renderle di nuovo disponibili dopo la registrazione."
+          }
+        }
+      }
+    },
+    "onboarding.blocking_demo.shake_body": {
+      "comment": "Instruction [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shake your phone now, or tap this card in Simulator."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Muovi ora il telefono oppure tocca questa scheda nel simulatore."
+          }
+        }
+      }
+    },
+    "onboarding.blocking_demo.shake_progress": {
+      "comment": "Both placeholders are integers [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld of %lld shakes"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld movimenti su %lld"
+          }
+        }
+      }
+    },
+    "onboarding.blocking_demo.shake_title": {
+      "comment": "Feature name [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Try Shake to Confirm"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prova Muovi per confermare"
+          }
+        }
+      }
+    },
+    "onboarding.blocking_demo.title": {
+      "comment": "Replaces protection claim [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reduce distractions until you check in."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Riduci le distrazioni finché non registri l’azione."
+          }
+        }
+      }
+    },
+    "onboarding.blocking_setup.subtitle": {
+      "comment": "Method-neutral [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selected apps pause after a Pillie reminder and become available after you log the action."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le app selezionate vengono messe in pausa dopo un promemoria di Pillie e tornano disponibili dopo la registrazione."
+          }
+        }
+      }
+    },
+    "onboarding.blocking_setup.title": {
+      "comment": "Screen Time setup [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose apps to pause"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scegli le app da mettere in pausa"
+          }
+        }
+      }
+    },
+    "onboarding.cycle_position.calculated": {
+      "comment": "Tracking setup [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Calculated from your position"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Calcolato in base alla posizione indicata"
+          }
+        }
+      }
+    },
+    "onboarding.cycle_position.day": {
+      "comment": "Integer placeholder [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Day %lld"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Giorno %lld"
+          }
+        }
+      }
+    },
+    "onboarding.cycle_position.day_of_total": {
+      "comment": "Two integer placeholders [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Day %lld of %lld"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Giorno %lld di %lld"
+          }
+        }
+      }
+    },
+    "onboarding.cycle_position.just_starting": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Just starting"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All’inizio"
+          }
+        }
+      }
+    },
+    "onboarding.cycle_position.mid_cycle": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mid-cycle"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A metà ciclo"
+          }
+        }
+      }
+    },
+    "onboarding.cycle_position.near_end": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Near the end"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verso la fine"
+          }
+        }
+      }
+    },
+    "onboarding.cycle_position.next": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next cycle day"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Giorno successivo del ciclo"
+          }
+        }
+      }
+    },
+    "onboarding.cycle_position.previous": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Previous cycle day"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Giorno precedente del ciclo"
+          }
+        }
+      }
+    },
+    "onboarding.cycle_position.subtitle": {
+      "comment": "Tracking setup [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose your current cycle day."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scegli il giorno attuale del ciclo."
+          }
+        }
+      }
+    },
+    "onboarding.cycle_position.title": {
+      "comment": "Complete question [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Where are you in your routine?"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A che punto sei della tua routine?"
+          }
+        }
+      }
+    },
+    "onboarding.demo.explainer": {
+      "comment": "No adherence guarantee [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie helps you check in and keeps your history easy to review."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie ti aiuta a registrare le azioni e mantiene la cronologia facile da consultare."
+          }
+        }
+      }
+    },
+    "onboarding.demo.history_body": {
+      "comment": "Tracking statement only [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Every check-in updates your streak and cycle timeline so you can review it later."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ogni registrazione aggiorna la serie e la sequenza del ciclo, così puoi consultarle in seguito."
+          }
+        }
+      }
+    },
+    "onboarding.demo.history_title": {
+      "comment": "Only after an action is logged [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your history builds automatically"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La cronologia si aggiorna automaticamente"
+          }
+        }
+      }
+    },
+    "onboarding.demo.remind_log": {
+      "comment": "Method-neutral for pill/patch/ring [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Get reminded. Log your action."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ricevi il promemoria. Registra l’azione."
+          }
+        }
+      }
+    },
+    "onboarding.demo.step.history": {
+      "comment": "Demo step [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "History"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cronologia"
+          }
+        }
+      }
+    },
+    "onboarding.demo.step.log": {
+      "comment": "Demo step [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Log"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registra"
+          }
+        }
+      }
+    },
+    "onboarding.demo.step.reminder": {
+      "comment": "Demo step [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reminder"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promemoria"
+          }
+        }
+      }
+    },
+    "onboarding.demo.title": {
+      "comment": "Product demo title [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your Daily Flow"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La tua routine quotidiana"
+          }
+        }
+      }
+    },
+    "onboarding.demo.weekday.mon": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "MON"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "LUN"
+          }
+        }
+      }
+    },
+    "onboarding.demo.weekday.tue": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TUE"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "MAR"
+          }
+        }
+      }
+    },
+    "onboarding.demo.weekday.wed": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "WED"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "MER"
+          }
+        }
+      }
+    },
+    "onboarding.fixed.patch.break": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Days 23–28: patch-free week"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Giorni 23–28: settimana senza cerotto"
+          }
+        }
+      }
+    },
+    "onboarding.fixed.patch.day1": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Day 1: apply patch"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Giorno 1: applica il cerotto"
+          }
+        }
+      }
+    },
+    "onboarding.fixed.patch.day22": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Day 22: remove patch"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Giorno 22: rimuovi il cerotto"
+          }
+        }
+      }
+    },
+    "onboarding.fixed.patch.day8": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Days 8 and 15: change patch"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Giorni 8 e 15: cambia il cerotto"
+          }
+        }
+      }
+    },
+    "onboarding.fixed.patch.title": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Patch schedule"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Programma del cerotto"
+          }
+        }
+      }
+    },
+    "onboarding.fixed.ring.break": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Days 23–28: ring-free week"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Giorni 23–28: settimana senza anello"
+          }
+        }
+      }
+    },
+    "onboarding.fixed.ring.day1": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Day 1: insert ring"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Giorno 1: inserisci l’anello"
+          }
+        }
+      }
+    },
+    "onboarding.fixed.ring.day2": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Days 2–21: ring stays in"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Giorni 2–21: l’anello resta inserito"
+          }
+        }
+      }
+    },
+    "onboarding.fixed.ring.day22": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Day 22: remove ring"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Giorno 22: rimuovi l’anello"
+          }
+        }
+      }
+    },
+    "onboarding.fixed.ring.title": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ring schedule"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Programma dell’anello"
+          }
+        }
+      }
+    },
+    "onboarding.frequency.daily.subtitle": {
+      "comment": "Non-judgemental [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I need stronger reminder support"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ho bisogno di un supporto più insistente"
+          }
+        }
+      }
+    },
+    "onboarding.frequency.daily.title": {
+      "comment": "Frequency option [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Several times a week"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Più volte a settimana"
+          }
+        }
+      }
+    },
+    "onboarding.frequency.often.subtitle": {
+      "comment": "Frequency option [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "At least once most weeks"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Almeno una volta nella maggior parte delle settimane"
+          }
+        }
+      }
+    },
+    "onboarding.frequency.often.title": {
+      "comment": "Frequency option [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weekly"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ogni settimana"
+          }
+        }
+      }
+    },
+    "onboarding.frequency.rarely.subtitle": {
+      "comment": "No guarantee [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reminders usually work for me"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Di solito i promemoria funzionano per me"
+          }
+        }
+      }
+    },
+    "onboarding.frequency.rarely.title": {
+      "comment": "Frequency option [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rarely"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Raramente"
+          }
+        }
+      }
+    },
+    "onboarding.frequency.sometimes.subtitle": {
+      "comment": "Frequency option [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sometimes I still forget"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A volte me ne dimentico"
+          }
+        }
+      }
+    },
+    "onboarding.frequency.sometimes.title": {
+      "comment": "Frequency option [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A few times a month"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Qualche volta al mese"
+          }
+        }
+      }
+    },
+    "onboarding.frequency.subtitle": {
+      "comment": "Replaces protection level [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your answer helps tailor the reminder support level."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La risposta aiuta a personalizzare il livello di supporto dei promemoria."
+          }
+        }
+      }
+    },
+    "onboarding.frequency.title": {
+      "comment": "Observed reminder behaviour [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How often do reminders go unnoticed?"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quanto spesso i promemoria passano inosservati?"
+          }
+        }
+      }
+    },
+    "onboarding.method.patch.subtitle": {
+      "comment": "Method-specific action [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A patch change schedule"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un programma per il cambio del cerotto"
+          }
+        }
+      }
+    },
+    "onboarding.method.pill.subtitle": {
+      "comment": "Method option [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A daily pill schedule"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un programma quotidiano per la pillola"
+          }
+        }
+      }
+    },
+    "onboarding.method.ring.subtitle": {
+      "comment": "Method-specific action [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A ring schedule"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un programma per l’anello"
+          }
+        }
+      }
+    },
+    "onboarding.method.subtitle": {
+      "comment": "Reminder only [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Which routine should Pillie remind you about?"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Per quale routine vuoi ricevere i promemoria di Pillie?"
+          }
+        }
+      }
+    },
+    "onboarding.method.title": {
+      "comment": "Contraceptive method selection [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose your method"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scegli il tuo metodo"
+          }
+        }
+      }
+    },
+    "onboarding.permission.body": {
+      "comment": "Capability statement [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie needs notification permission to send the reminders you set."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie necessita dell’autorizzazione alle notifiche per inviare i promemoria impostati."
+          }
+        }
+      }
+    },
+    "onboarding.permission.cta": {
+      "comment": "Pre-permission CTA [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continue to Notification Settings"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continua alle impostazioni delle notifiche"
+          }
+        }
+      }
+    },
+    "onboarding.permission.title": {
+      "comment": "Pre-permission screen [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow notifications"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consenti le notifiche"
+          }
+        }
+      }
+    },
+    "onboarding.personalise.choice.busy": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I’m busy when they arrive"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quando arrivano sto facendo altro"
+          }
+        }
+      }
+    },
+    "onboarding.personalise.choice.forget": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I just forget"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Me ne dimentico"
+          }
+        }
+      }
+    },
+    "onboarding.personalise.choice.instagram": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Instagram"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Instagram"
+          }
+        }
+      }
+    },
+    "onboarding.personalise.choice.messages": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Messages"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Messaggi"
+          }
+        }
+      }
+    },
+    "onboarding.personalise.choice.other": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Other"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Altro"
+          }
+        }
+      }
+    },
+    "onboarding.personalise.choice.snooze": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I dismiss reminders"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ignoro i promemoria"
+          }
+        }
+      }
+    },
+    "onboarding.personalise.choice.tiktok": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TikTok"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TikTok"
+          }
+        }
+      }
+    },
+    "onboarding.personalise.choice.youtube": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "YouTube"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "YouTube"
+          }
+        }
+      }
+    },
+    "onboarding.personalise.distraction.browsing": {
+      "comment": "Category [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Web browsing"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Navigazione web"
+          }
+        }
+      }
+    },
+    "onboarding.personalise.distraction.games": {
+      "comment": "Category [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Games"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Giochi"
+          }
+        }
+      }
+    },
+    "onboarding.personalise.distraction.other": {
+      "comment": "Category [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Other"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Altro"
+          }
+        }
+      }
+    },
+    "onboarding.personalise.distraction.social": {
+      "comment": "Category [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Social media"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Social network"
+          }
+        }
+      }
+    },
+    "onboarding.personalise.distraction.subtitle": {
+      "comment": "Screen Time selection [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose categories or specific apps for your draft blocklist."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scegli categorie o app specifiche per la bozza dell’elenco da bloccare."
+          }
+        }
+      }
+    },
+    "onboarding.personalise.distraction.title": {
+      "comment": "App categories or selected apps [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Which apps distract you most?"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quali app ti distraggono di più?"
+          }
+        }
+      }
+    },
+    "onboarding.personalise.distraction.video": {
+      "comment": "Category [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Short videos"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Video brevi"
+          }
+        }
+      }
+    },
+    "onboarding.personalise.outcome.confidence": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Confidence it’s done"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La certezza di aver completato"
+          }
+        }
+      }
+    },
+    "onboarding.personalise.outcome.interruptions": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fewer interruptions"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meno interruzioni"
+          }
+        }
+      }
+    },
+    "onboarding.personalise.outcome.option.blocking": {
+      "comment": "No protection claim [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reduce app distractions"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Riduci le distrazioni delle app"
+          }
+        }
+      }
+    },
+    "onboarding.personalise.outcome.option.followup": {
+      "comment": "Reminder behaviour [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Follow up until I log it"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ripeti finché non registro"
+          }
+        }
+      }
+    },
+    "onboarding.personalise.outcome.option.history": {
+      "comment": "Tracking outcome [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show a clear history"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mostra una cronologia chiara"
+          }
+        }
+      }
+    },
+    "onboarding.personalise.outcome.peace": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Peace of mind"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Serenità"
+          }
+        }
+      }
+    },
+    "onboarding.personalise.outcome.reassurance": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "More reassurance"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Più tranquillità"
+          }
+        }
+      }
+    },
+    "onboarding.personalise.outcome.simple": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A simpler routine"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Una routine più semplice"
+          }
+        }
+      }
+    },
+    "onboarding.personalise.outcome.stress": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Less stress"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meno stress"
+          }
+        }
+      }
+    },
+    "onboarding.personalise.outcome.subtitle": {
+      "comment": "Support, not protection [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose the kind of support you want from Pillie."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scegli il tipo di supporto che desideri da Pillie."
+          }
+        }
+      }
+    },
+    "onboarding.personalise.outcome.title": {
+      "comment": "Avoid guaranteed outcome [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What would make reminders more useful?"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cosa renderebbe i promemoria più utili?"
+          }
+        }
+      }
+    },
+    "onboarding.personalise.pain.option.busy": {
+      "comment": "Gender-neutral Italian wording [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I’m busy when they arrive"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quando arrivano sto facendo altro"
+          }
+        }
+      }
+    },
+    "onboarding.personalise.pain.option.dismiss": {
+      "comment": "User-selected option [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I dismiss reminders"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ignoro i promemoria"
+          }
+        }
+      }
+    },
+    "onboarding.personalise.pain.option.forget": {
+      "comment": "User-selected option [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I just forget"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Me ne dimentico"
+          }
+        }
+      }
+    },
+    "onboarding.personalise.pain.option.schedule": {
+      "comment": "User-selected option [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "My schedule changes"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I miei orari cambiano"
+          }
+        }
+      }
+    },
+    "onboarding.personalise.pain.subtitle": {
+      "comment": "Non-judgemental [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose the answer that feels closest to your experience."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scegli la risposta più vicina alla tua esperienza."
+          }
+        }
+      }
+    },
+    "onboarding.personalise.pain.title": {
+      "comment": "Complete question [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What makes your routine hardest to remember?"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cosa rende più difficile ricordare la tua routine?"
+          }
+        }
+      }
+    },
+    "onboarding.plan.current_cycle": {
+      "comment": "Summary row [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Current cycle"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ciclo attuale"
+          }
+        }
+      }
+    },
+    "onboarding.plan.disclaimer": {
+      "comment": "Not a medical recommendation [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This reminder setup is based on your selections. You can change it later in Settings."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Questa configurazione dei promemoria si basa sulle tue scelte. Puoi modificarla in seguito nelle Impostazioni."
+          }
+        }
+      }
+    },
+    "onboarding.plan.method": {
+      "comment": "Summary row [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Method"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Metodo"
+          }
+        }
+      }
+    },
+    "onboarding.plan.schedule": {
+      "comment": "Summary row [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schedule"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Programma"
+          }
+        }
+      }
+    },
+    "onboarding.plan.see_recommendation": {
+      "comment": "Avoid recommendation/medical implication [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "See Suggested Setup"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vedi la configurazione suggerita"
+          }
+        }
+      }
+    },
+    "onboarding.plan.subtitle": {
+      "comment": "No diagnostic claim [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Built from the routine you selected."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Creato in base alla routine che hai scelto."
+          }
+        }
+      }
+    },
+    "onboarding.plan.support": {
+      "comment": "Replaces protection focus [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reminder support"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Supporto dei promemoria"
+          }
+        }
+      }
+    },
+    "onboarding.plan.title": {
+      "comment": "No forced newline [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your personalised reminder plan"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il tuo piano di promemoria personalizzato"
+          }
+        }
+      }
+    },
+    "onboarding.ready.cta": {
+      "comment": "Finish onboarding [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Go to Today"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vai a Oggi"
+          }
+        }
+      }
+    },
+    "onboarding.ready.subtitle": {
+      "comment": "No guarantee [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie will follow the schedule you selected. You can change it at any time."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie seguirà il programma selezionato. Puoi modificarlo in qualsiasi momento."
+          }
+        }
+      }
+    },
+    "onboarding.ready.title": {
+      "comment": "Replaces protection-ready claim [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your reminder setup is ready."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La configurazione dei promemoria è pronta."
+          }
+        }
+      }
+    },
+    "onboarding.regimen.21_7": {
+      "comment": "Regimen option [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "21 active days, 7 break days"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "21 giorni attivi, 7 giorni di pausa"
+          }
+        }
+      }
+    },
+    "onboarding.regimen.24_4": {
+      "comment": "Regimen option [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24 active days, 4 break days"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24 giorni attivi, 4 giorni di pausa"
+          }
+        }
+      }
+    },
+    "onboarding.regimen.28_0": {
+      "comment": "Regimen option [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "28 active days, no break"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "28 giorni attivi, senza pausa"
+          }
+        }
+      }
+    },
+    "onboarding.regimen.active_days": {
+      "comment": "Integer setting [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Active days"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Giorni attivi"
+          }
+        }
+      }
+    },
+    "onboarding.regimen.break_days": {
+      "comment": "Integer setting [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Break days"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Giorni di pausa"
+          }
+        }
+      }
+    },
+    "onboarding.regimen.custom": {
+      "comment": "Regimen option [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Custom cycle"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ciclo personalizzato"
+          }
+        }
+      }
+    },
+    "onboarding.regimen.name.continuous": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continuous"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continuo"
+          }
+        }
+      }
+    },
+    "onboarding.regimen.name.custom": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Custom"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personalizzato"
+          }
+        }
+      }
+    },
+    "onboarding.regimen.name.standard": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Standard"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Standard"
+          }
+        }
+      }
+    },
+    "onboarding.regimen.title": {
+      "comment": "Pill only [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose your pill regimen"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scegli lo schema della pillola"
+          }
+        }
+      }
+    },
+    "onboarding.reminder_time.accessibility": {
+      "comment": "Locale-aware formatted time [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reminder time: %@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Orario del promemoria: %@"
+          }
+        }
+      }
+    },
+    "onboarding.reminder_time.evening": {
+      "comment": "Quick time preset [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Evening"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sera"
+          }
+        }
+      }
+    },
+    "onboarding.reminder_time.morning": {
+      "comment": "Quick time preset [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Morning"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mattina"
+          }
+        }
+      }
+    },
+    "onboarding.reminder_time.subtitle": {
+      "comment": "Reminder only [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "When should Pillie remind you?"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quando vuoi ricevere il promemoria di Pillie?"
+          }
+        }
+      }
+    },
+    "onboarding.reminder_time.title": {
+      "comment": "Complete title [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a reminder time"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scegli l’orario del promemoria"
+          }
+        }
+      }
+    },
+    "onboarding.risk_window.immediately": {
+      "comment": "Option [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Right after the reminder"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Subito dopo il promemoria"
+          }
+        }
+      }
+    },
+    "onboarding.risk_window.later": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Later in the day"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Più tardi nella giornata"
+          }
+        }
+      }
+    },
+    "onboarding.risk_window.minutes": {
+      "comment": "Option [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A few minutes later"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dopo qualche minuto"
+          }
+        }
+      }
+    },
+    "onboarding.risk_window.random": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "It varies"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dipende"
+          }
+        }
+      }
+    },
+    "onboarding.risk_window.right_after": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Right after the reminder"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Subito dopo il promemoria"
+          }
+        }
+      }
+    },
+    "onboarding.risk_window.subtitle": {
+      "comment": "Question subtitle [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose the pattern that sounds most like you."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scegli la situazione che ti somiglia di più."
+          }
+        }
+      }
+    },
+    "onboarding.risk_window.title": {
+      "comment": "Timing question [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "When are you most likely to open another app?"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quando è più probabile che tu apra un’altra app?"
+          }
+        }
+      }
+    },
+    "onboarding.risk_window.varies": {
+      "comment": "Option [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "It varies"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dipende"
+          }
+        }
+      }
+    },
+    "onboarding.risk_window.within_five": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A few minutes later"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dopo qualche minuto"
+          }
+        }
+      }
+    },
+    "onboarding.welcome.eyebrow": {
+      "comment": "Playful brand line [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "your new bestie →"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "la tua nuova alleata →"
+          }
+        }
+      }
+    },
+    "onboarding.welcome.next_action": {
+      "comment": "Method-neutral [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next action"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prossima azione"
+          }
+        }
+      }
+    },
+    "onboarding.welcome.subtitle": {
+      "comment": "Conservative rewrite; no effortless or guarantee claim [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No more swiping away notifications. Pillie makes your routine easier to keep visible."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Non ignorare più i promemoria con un gesto. Pillie rende la tua routine più facile da tenere sotto controllo."
+          }
+        }
+      }
+    },
+    "onboarding.welcome.title": {
+      "comment": "Translate as one sentence; remove split title fragments [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The alarm clock for your pill."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La sveglia per la tua pillola."
+          }
+        }
+      }
+    },
+    "shield.blocking_reason": {
+      "comment": "Shared app-group fallback [shield]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today’s Pillie action is still open."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L’azione Pillie di oggi è ancora da registrare."
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

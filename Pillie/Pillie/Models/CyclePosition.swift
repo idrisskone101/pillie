@@ -23,9 +23,9 @@ enum CyclePosition: String, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .justStarting: return "Just starting"
-        case .midCycle: return "Mid-cycle"
-        case .nearEnd: return "Near the end"
+        case .justStarting: return PillieLocalization.string("onboarding.cycle_position.just_starting")
+        case .midCycle: return PillieLocalization.string("onboarding.cycle_position.mid_cycle")
+        case .nearEnd: return PillieLocalization.string("onboarding.cycle_position.near_end")
         }
     }
 

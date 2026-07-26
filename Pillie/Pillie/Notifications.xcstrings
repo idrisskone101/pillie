@@ -1,0 +1,652 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "notification.action.complete": {
+      "comment": "Category action; method-neutral [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mark as Completed"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Segna come completata"
+          }
+        }
+      }
+    },
+    "notification.action.snooze": {
+      "comment": "Category action [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remind Me Later"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ricordamelo più tardi"
+          }
+        }
+      }
+    },
+    "notification.active_resume.body": {
+      "comment": "Reminder statement [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your next active-day reminder follows the time you selected."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il prossimo promemoria per un giorno attivo seguirà l’orario scelto."
+          }
+        }
+      }
+    },
+    "notification.active_resume.title": {
+      "comment": "Regimen transition [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scheduled reminders resume today"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I promemoria programmati riprendono oggi"
+          }
+        }
+      }
+    },
+    "notification.break_start.body": {
+      "comment": "Pill regimen only [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scheduled pill reminders pause during your break days."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I promemoria programmati per la pillola si interrompono durante i giorni di pausa."
+          }
+        }
+      }
+    },
+    "notification.break_start.patch.body": {
+      "comment": "Issue #233 method-aware notification",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scheduled patch reminders pause during your patch-free days."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I promemoria programmati per il cerotto si interrompono durante i giorni senza cerotto."
+          }
+        }
+      }
+    },
+    "notification.break_start.ring.body": {
+      "comment": "Issue #233 method-aware notification",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scheduled ring reminders pause during your ring-free days."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I promemoria programmati per l’anello si interrompono durante i giorni senza anello."
+          }
+        }
+      }
+    },
+    "notification.break_start.title": {
+      "comment": "Regimen transition [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Break days begin today"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I giorni di pausa iniziano oggi"
+          }
+        }
+      }
+    },
+    "notification.custom.direct.final": {
+      "comment": "Default preset [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Final reminder: no action is logged yet."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promemoria finale: non è ancora stata registrata alcuna azione."
+          }
+        }
+      }
+    },
+    "notification.custom.direct.followup": {
+      "comment": "Default preset [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today’s action is still open."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L’azione di oggi è ancora da registrare."
+          }
+        }
+      }
+    },
+    "notification.custom.direct.primary": {
+      "comment": "Default preset [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your scheduled action is due."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "È prevista l’azione programmata."
+          }
+        }
+      }
+    },
+    "notification.custom.encouraging.final": {
+      "comment": "Default preset [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last scheduled check-in for today."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ultima registrazione programmata per oggi."
+          }
+        }
+      }
+    },
+    "notification.custom.encouraging.followup": {
+      "comment": "Default preset [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You can log today’s action when you’re ready."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Puoi registrare l’azione di oggi quando vuoi."
+          }
+        }
+      }
+    },
+    "notification.custom.encouraging.primary": {
+      "comment": "Default preset [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A quick check-in for today’s routine."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Una breve registrazione per la routine di oggi."
+          }
+        }
+      }
+    },
+    "notification.custom.gentle.final": {
+      "comment": "Default preset [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "One last reminder is scheduled for today."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Per oggi è programmato un ultimo promemoria."
+          }
+        }
+      }
+    },
+    "notification.custom.gentle.followup": {
+      "comment": "Default preset [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "When you’re ready, remember to log today’s action."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quando vuoi, ricorda di registrare l’azione di oggi."
+          }
+        }
+      }
+    },
+    "notification.custom.gentle.primary": {
+      "comment": "Default preset; health-neutral [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A gentle reminder for your routine."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un promemoria delicato per la tua routine."
+          }
+        }
+      }
+    },
+    "notification.custom.private.final": {
+      "comment": "Discreet preset [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Final Pillie reminder for today."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ultimo promemoria Pillie per oggi."
+          }
+        }
+      }
+    },
+    "notification.custom.private.followup": {
+      "comment": "Discreet preset [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your Pillie check-in is still open."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La registrazione di Pillie è ancora aperta."
+          }
+        }
+      }
+    },
+    "notification.custom.private.primary": {
+      "comment": "Discreet preset [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie reminder"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promemoria Pillie"
+          }
+        }
+      }
+    },
+    "notification.final.body": {
+      "comment": "Observed state only [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No action is logged yet for today."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Per oggi non è ancora stata registrata alcuna azione."
+          }
+        }
+      }
+    },
+    "notification.final.title": {
+      "comment": "Replaces last chance [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Final scheduled reminder"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promemoria finale programmato"
+          }
+        }
+      }
+    },
+    "notification.followup.body": {
+      "comment": "No judgement or urgency [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today’s action is still open. Log it when you’re ready."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L’azione di oggi è ancora da registrare. Fallo quando vuoi."
+          }
+        }
+      }
+    },
+    "notification.followup.title": {
+      "comment": "Neutral title [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reminder follow-up"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promemoria successivo"
+          }
+        }
+      }
+    },
+    "notification.refill.body": {
+      "comment": "Estimate; no pharmacy claim [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your current supply may be running low. Check it when convenient."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le scorte attuali potrebbero essere quasi terminate. Controllale quando puoi."
+          }
+        }
+      }
+    },
+    "notification.refill.patch.body": {
+      "comment": "Issue #233 method-aware notification",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your current patch supply may be running low. Check it when convenient."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le scorte attuali di cerotti potrebbero essere quasi terminate. Controllale quando puoi."
+          }
+        }
+      }
+    },
+    "notification.refill.patch.title": {
+      "comment": "Issue #233 method-aware notification",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Patch supply reminder"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promemoria scorte cerotti"
+          }
+        }
+      }
+    },
+    "notification.refill.ring.body": {
+      "comment": "Issue #233 method-aware notification",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your current ring supply may be running low. Check it when convenient."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le scorte attuali di anelli potrebbero essere quasi terminate. Controllale quando puoi."
+          }
+        }
+      }
+    },
+    "notification.refill.ring.title": {
+      "comment": "Issue #233 method-aware notification",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ring supply reminder"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promemoria scorte anelli"
+          }
+        }
+      }
+    },
+    "notification.refill.title": {
+      "comment": "Pill only [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pill supply reminder"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promemoria scorte pillola"
+          }
+        }
+      }
+    },
+    "notification.reminder.patch.body": {
+      "comment": "Implementation should select change/remove/apply action [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your scheduled patch action is due. Log it when you’re done."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "È prevista l’azione programmata per il cerotto. Registrala quando hai finito."
+          }
+        }
+      }
+    },
+    "notification.reminder.patch.title": {
+      "comment": "Patch-specific title [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Patch reminder"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promemoria cerotto"
+          }
+        }
+      }
+    },
+    "notification.reminder.pill.body": {
+      "comment": "Reminder, not advice [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "It’s time for your scheduled pill. Log it when you’re done."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "È l’ora programmata per la pillola. Registrala quando hai finito."
+          }
+        }
+      }
+    },
+    "notification.reminder.pill.title": {
+      "comment": "Pill-specific title [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pill reminder"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promemoria pillola"
+          }
+        }
+      }
+    },
+    "notification.reminder.ring.body": {
+      "comment": "Implementation should select insert/remove/reinsert action [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your scheduled ring action is due. Log it when you’re done."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "È prevista l’azione programmata per l’anello. Registrala quando hai finito."
+          }
+        }
+      }
+    },
+    "notification.reminder.ring.title": {
+      "comment": "Ring-specific title [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ring reminder"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promemoria anello"
+          }
+        }
+      }
+    },
+    "notification.trial_ending.body": {
+      "comment": "Entitlement transition [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App blocking will turn off when the trial ends. Standard reminders remain available."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il blocco delle app si disattiverà al termine della prova. I promemoria standard resteranno disponibili."
+          }
+        }
+      }
+    },
+    "notification.trial_ending.title": {
+      "comment": "Trial warning [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your Pillie Plus trial is ending soon"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La prova di Pillie Plus terminerà presto"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

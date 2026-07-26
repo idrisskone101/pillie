@@ -28,16 +28,18 @@ enum DistractionChoice: String, CaseIterable, Hashable, Identifiable {
     var isOther: Bool { self == .other }
 
     var title: String {
+        let key: String
         switch self {
-        case .tiktok: return "TikTok"
-        case .instagram: return "Instagram"
-        case .youtube: return "YouTube"
-        case .messages: return "Messages"
-        case .snooze: return "I snooze it"
-        case .busy: return "I'm busy"
-        case .forget: return "I just forget"
-        case .other: return "Other"
+        case .tiktok: key = "onboarding.personalise.choice.tiktok"
+        case .instagram: key = "onboarding.personalise.choice.instagram"
+        case .youtube: key = "onboarding.personalise.choice.youtube"
+        case .messages: key = "onboarding.personalise.choice.messages"
+        case .snooze: key = "onboarding.personalise.choice.snooze"
+        case .busy: key = "onboarding.personalise.choice.busy"
+        case .forget: key = "onboarding.personalise.choice.forget"
+        case .other: key = "onboarding.personalise.choice.other"
         }
+        return PillieLocalization.string(key)
     }
 
     var symbolName: String {
