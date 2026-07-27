@@ -378,7 +378,16 @@ struct ProductAnalyticsTelemetry {
   }
 
   func trialDeclineFeedbackSubmitted(_ reason: TrialDeclineFeedbackReason) {
-    trackTrialDeclineFeedback(.completedSubmitted(reason))
+    trialDeclineFeedbackSubmitted(
+      TrialDeclineFeedbackSubmission(reason: reason, hasText: false)
+    )
+  }
+
+  func trialDeclineFeedbackSubmitted(_ submission: TrialDeclineFeedbackSubmission) {
+    if submission.hasText {
+      trackTrialDeclineFeedback(.textSubmitted(submission.reason))
+    }
+    trackTrialDeclineFeedback(.completedSubmitted(submission))
   }
 
   func trialDeclineFeedbackCompleted(outcome: AnalyticsTrialDeclineFeedbackOutcome) {
@@ -391,7 +400,7 @@ struct ProductAnalyticsTelemetry {
       event.analyticsEvent,
       declineFeedbackOutcome: event.outcome,
       declineFeedbackReason: event.reason,
-      declineFeedbackHasText: event.outcome == .submitted ? false : nil,
+      declineFeedbackHasText: event.hasText,
       isPlus: isPlus()
     )
   }

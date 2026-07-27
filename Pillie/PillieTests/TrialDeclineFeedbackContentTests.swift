@@ -43,6 +43,98 @@ final class TrialDeclineFeedbackContentTests: XCTestCase {
         XCTAssertEqual(questionnaire.selectedReason, .technicalIssue)
     }
 
+    func testOptionalDetailIsVisibleOnlyForMissingFeatureAndOther() {
+        for reason in TrialDeclineFeedbackQuestionnaire.availableReasons {
+            var questionnaire = TrialDeclineFeedbackQuestionnaire()
+
+            questionnaire.select(reason)
+
+            XCTAssertEqual(
+                questionnaire.showsOptionalDetail,
+                reason == .missingFeature || reason == .other,
+                reason.analyticsValue
+            )
+        }
+    }
+
+    func testOptionalDetailIsCappedAtTheVisible240CharacterLimit() {
+        var questionnaire = TrialDeclineFeedbackQuestionnaire()
+        questionnaire.select(.missingFeature)
+
+        questionnaire.updateOptionalDetail(String(repeating: "a", count: 241))
+
+        XCTAssertEqual(TrialDeclineFeedbackQuestionnaire.maximumOptionalDetailLength, 240)
+        XCTAssertEqual(questionnaire.optionalDetail.count, 240)
+    }
+
+    func testSubmissionUsesTrimmedPresenceMetadataForBothOptionalDetailReasons() {
+        var missingFeature = TrialDeclineFeedbackQuestionnaire()
+        missingFeature.select(.missingFeature)
+        missingFeature.updateOptionalDetail("  Dark mode please. \n")
+
+        var other = TrialDeclineFeedbackQuestionnaire()
+        other.select(.other)
+        other.updateOptionalDetail(" \n\t ")
+
+        XCTAssertTrue(missingFeature.hasOptionalDetail)
+        XCTAssertFalse(other.hasOptionalDetail)
+        XCTAssertEqual(
+            missingFeature.submit(),
+            TrialDeclineFeedbackSubmission(reason: .missingFeature, hasText: true)
+        )
+        XCTAssertEqual(
+            other.submit(),
+            TrialDeclineFeedbackSubmission(reason: .other, hasText: false)
+        )
+    }
+
+    func testChangingTheSelectedReasonDiscardsStaleOptionalDetail() {
+        var questionnaire = TrialDeclineFeedbackQuestionnaire()
+        questionnaire.select(.missingFeature)
+        questionnaire.updateOptionalDetail("A private draft")
+
+        questionnaire.select(.other)
+
+        XCTAssertEqual(questionnaire.selectedReason, .other)
+        XCTAssertEqual(questionnaire.optionalDetail, "")
+        XCTAssertFalse(questionnaire.hasOptionalDetail)
+    }
+
+    func testSubmissionDiscardsRawOptionalDetailAfterDerivingPresence() {
+        var questionnaire = TrialDeclineFeedbackQuestionnaire()
+        questionnaire.select(.missingFeature)
+        questionnaire.updateOptionalDetail("A private draft")
+
+        let submission = questionnaire.submit()
+
+        XCTAssertEqual(
+            submission,
+            TrialDeclineFeedbackSubmission(reason: .missingFeature, hasText: true)
+        )
+        XCTAssertEqual(questionnaire.optionalDetail, "")
+    }
+
+    func testQuestionnaireRetainsDetailOnlyWhileAnEligibleFieldIsUnresolved() {
+        for reason in TrialDeclineFeedbackQuestionnaire.availableReasons
+            where reason != .missingFeature && reason != .other {
+            var questionnaire = TrialDeclineFeedbackQuestionnaire()
+            questionnaire.select(reason)
+
+            questionnaire.updateOptionalDetail("A private draft")
+
+            XCTAssertEqual(questionnaire.optionalDetail, "", reason.analyticsValue)
+        }
+
+        var completed = TrialDeclineFeedbackQuestionnaire()
+        completed.select(.other)
+        completed.updateOptionalDetail("A private draft")
+        _ = completed.submit()
+
+        completed.updateOptionalDetail("A second private draft")
+
+        XCTAssertEqual(completed.optionalDetail, "")
+    }
+
     func testEveryReasonCanSubmitATerminalClosedResponseWithoutARescueOffer() {
         for reason in TrialDeclineFeedbackQuestionnaire.availableReasons {
             var questionnaire = TrialDeclineFeedbackQuestionnaire()
@@ -81,6 +173,28 @@ final class TrialDeclineFeedbackContentTests: XCTestCase {
                     .filter(\.isEmpty).count,
                 0
             )
+        }
+    }
+
+    func testOptionalDetailExperienceIsLocalizedForEveryShippedLocale() {
+        let english = TrialDeclineFeedbackContent.make(locale: Locale(identifier: "en"))
+        let italian = TrialDeclineFeedbackContent.make(locale: Locale(identifier: "it"))
+        let german = TrialDeclineFeedbackContent.make(locale: Locale(identifier: "de"))
+
+        XCTAssertEqual(
+            english.optionalDetailPrivacyGuidance,
+            "Please don’t include personal health details."
+        )
+        XCTAssertEqual(
+            english.optionalDetailCharacterCount(0),
+            "0 of 240 characters"
+        )
+        for content in [english, italian, german] {
+            XCTAssertFalse(content.optionalDetailTitle.isEmpty)
+            XCTAssertFalse(content.optionalDetailPlaceholder.isEmpty)
+            XCTAssertFalse(content.optionalDetailPrivacyGuidance.isEmpty)
+            XCTAssertFalse(content.done.isEmpty)
+            XCTAssertFalse(content.optionalDetailCharacterCount(240).isEmpty)
         }
     }
 

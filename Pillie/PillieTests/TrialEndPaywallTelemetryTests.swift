@@ -88,7 +88,9 @@ final class TrialEndPaywallTelemetryTests: XCTestCase {
     func testSubmittedDeclineReasonEmitsOnlyClosedPrivacySafeWirePayloads() {
         let events: [TrialDeclineFeedbackTelemetryEvent] = [
             .reasonSelected(.tooExpensive),
-            .completedSubmitted(.tooExpensive),
+            .completedSubmitted(
+                TrialDeclineFeedbackSubmission(reason: .tooExpensive, hasText: false)
+            ),
         ]
 
         XCTAssertEqual(events.map(\.analyticsEvent.rawValue), [
@@ -106,6 +108,35 @@ final class TrialEndPaywallTelemetryTests: XCTestCase {
             "outcome": .string("submitted"),
             "reason": .string("too_expensive"),
             "has_text": .bool(false),
+        ])
+    }
+
+    func testOptionalDetailSubmissionEmitsOnlyClosedPresenceMetadata() {
+        let event = TrialDeclineFeedbackTelemetryEvent.textSubmitted(.missingFeature)
+
+        XCTAssertEqual(
+            event.analyticsEvent.rawValue,
+            "trial_decline_feedback_text_submitted"
+        )
+        XCTAssertEqual(event.payload(isPlus: false).properties, [
+            "source": .string("trial_end"),
+            "is_plus": .bool(false),
+            "reason": .string("missing_feature"),
+            "has_text": .bool(true),
+        ])
+    }
+
+    func testCompletedSubmissionCarriesOnlyClosedReasonAndPresenceMetadata() {
+        let event = TrialDeclineFeedbackTelemetryEvent.completedSubmitted(
+            TrialDeclineFeedbackSubmission(reason: .other, hasText: true)
+        )
+
+        XCTAssertEqual(event.payload(isPlus: false).properties, [
+            "source": .string("trial_end"),
+            "is_plus": .bool(false),
+            "outcome": .string("submitted"),
+            "reason": .string("other"),
+            "has_text": .bool(true),
         ])
     }
 
@@ -129,6 +160,34 @@ final class TrialEndPaywallTelemetryTests: XCTestCase {
                 outcome: .submitted,
                 reason: .missingFeature,
                 hasText: false,
+                isPlus: false
+            ),
+        ])
+    }
+
+    func testSubmittedOptionalDetailJourneyCapturesPresenceThenOneTerminalCompletion() {
+        let recorder = TrialDeclineFeedbackAnalyticsRecorder()
+        let telemetry = ProductAnalyticsTelemetry(analytics: recorder, isPlus: { false })
+        let submission = TrialDeclineFeedbackSubmission(
+            reason: .missingFeature,
+            hasText: true
+        )
+
+        telemetry.trialDeclineFeedbackSubmitted(submission)
+
+        XCTAssertEqual(recorder.events, [
+            .init(
+                event: .trialDeclineFeedbackTextSubmitted,
+                outcome: nil,
+                reason: .missingFeature,
+                hasText: true,
+                isPlus: false
+            ),
+            .init(
+                event: .trialDeclineFeedbackCompleted,
+                outcome: .submitted,
+                reason: .missingFeature,
+                hasText: true,
                 isPlus: false
             ),
         ])
