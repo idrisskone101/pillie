@@ -73,6 +73,22 @@ struct TrialDeclineFeedbackView: View {
                         onSelect: select
                     )
 
+                    if questionnaire.showsOptionalDetail {
+                        TrialDeclineFeedbackOptionalDetail(
+                            title: content.optionalDetailTitle,
+                            placeholder: content.optionalDetailPlaceholder,
+                            privacyGuidance: content.optionalDetailPrivacyGuidance,
+                            doneTitle: content.done,
+                            characterCount: content.optionalDetailCharacterCount(
+                                questionnaire.optionalDetail.count
+                            ),
+                            text: Binding(
+                                get: { questionnaire.optionalDetail },
+                                set: { questionnaire.updateOptionalDetail($0) }
+                            )
+                        )
+                    }
+
                     TrialDeclineFeedbackActions(
                         submitTitle: content.submit,
                         skipTitle: content.skip,
@@ -85,6 +101,7 @@ struct TrialDeclineFeedbackView: View {
                 .padding(.top, 8)
                 .padding(.bottom, 32)
             }
+            .scrollDismissesKeyboard(.interactively)
         }
         .animation(
             accessibilityReduceMotion ? nil : PillieTheme.fadeInUpCurve,
@@ -106,7 +123,7 @@ struct TrialDeclineFeedbackView: View {
     private func submit() {
         guard !hasResolved, let submission = questionnaire.submit() else { return }
         hasResolved = true
-        ProductAnalyticsTelemetry.live.trialDeclineFeedbackSubmitted(submission.reason)
+        ProductAnalyticsTelemetry.live.trialDeclineFeedbackSubmitted(submission)
         onResolve()
     }
 
@@ -116,6 +133,115 @@ struct TrialDeclineFeedbackView: View {
         ProductAnalyticsTelemetry.live.trialDeclineFeedbackSkipped()
         ProductAnalyticsTelemetry.live.trialDeclineFeedbackCompleted(outcome: .skipped)
         onResolve()
+    }
+}
+
+private struct TrialDeclineFeedbackOptionalDetail: View {
+    @FocusState private var isFocused: Bool
+
+    let title: String
+    let placeholder: String
+    let privacyGuidance: String
+    let doneTitle: String
+    let characterCount: String
+    @Binding var text: String
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text(title)
+                .font(.system(.headline, design: .rounded, weight: .bold))
+                .foregroundStyle(PillieTheme.textPrimary)
+                .fixedSize(horizontal: false, vertical: true)
+
+            ZStack(alignment: .topLeading) {
+                if text.isEmpty {
+                    Text(placeholder)
+                        .font(.system(.body, design: .rounded))
+                        .foregroundStyle(PillieTheme.textMuted)
+                        .padding(.horizontal, 5)
+                        .padding(.vertical, 8)
+                        .allowsHitTesting(false)
+                        .accessibilityHidden(true)
+                }
+
+                TextEditor(text: $text)
+                    .font(.system(.body, design: .rounded))
+                    .foregroundStyle(PillieTheme.textPrimary)
+                    .scrollContentBackground(.hidden)
+                    .frame(minHeight: 112)
+                    .focused($isFocused)
+                    // PostHog globally masks every text input. Mark this field
+                    // sensitive as an additional field-level replay/screenshot boundary.
+                    .privacySensitive()
+                    .accessibilityLabel(title)
+                    .accessibilityHint(privacyGuidance)
+                    .accessibilityValue(characterCount)
+                    .accessibilityIdentifier("trialDeclineFeedbackOptionalDetail")
+            }
+            .padding(10)
+            .background(PillieTheme.bg, in: RoundedRectangle(cornerRadius: 16))
+
+            TrialDeclineFeedbackPrivacyFooter(
+                privacyGuidance: privacyGuidance,
+                visibleCharacterCount: text.count,
+                accessibilityCharacterCount: characterCount
+            )
+        }
+        .padding(20)
+        .background(
+            PillieTheme.cardWhite,
+            in: RoundedRectangle(cornerRadius: PillieTheme.cardRadius)
+        )
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button(doneTitle) {
+                    isFocused = false
+                }
+                .accessibilityIdentifier("trialDeclineFeedbackKeyboardDone")
+            }
+        }
+    }
+}
+
+private struct TrialDeclineFeedbackPrivacyFooter: View {
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
+    let privacyGuidance: String
+    let visibleCharacterCount: Int
+    let accessibilityCharacterCount: String
+
+    var body: some View {
+        if dynamicTypeSize.isAccessibilitySize {
+            VStack(alignment: .leading, spacing: 8) {
+                guidance
+                count
+                    .frame(maxWidth: .infinity, alignment: .trailing)
+            }
+        } else {
+            HStack(alignment: .firstTextBaseline, spacing: 12) {
+                guidance
+                Spacer(minLength: 8)
+                count
+            }
+        }
+    }
+
+    private var guidance: some View {
+        Label(privacyGuidance, systemImage: "hand.raised.fill")
+            .font(.system(.footnote, design: .rounded, weight: .semibold))
+            .foregroundStyle(PillieTheme.textMuted)
+            .fixedSize(horizontal: false, vertical: true)
+            .accessibilityIdentifier("trialDeclineFeedbackPrivacyGuidance")
+    }
+
+    private var count: some View {
+        Text(verbatim: "\(visibleCharacterCount)/\(TrialDeclineFeedbackQuestionnaire.maximumOptionalDetailLength)")
+            .font(.system(.footnote, design: .rounded, weight: .bold))
+            .monospacedDigit()
+            .foregroundStyle(PillieTheme.textMuted)
+            .accessibilityLabel(accessibilityCharacterCount)
+            .accessibilityIdentifier("trialDeclineFeedbackCharacterCount")
     }
 }
 

@@ -479,6 +479,7 @@ enum AnalyticsEvent: String, CaseIterable {
   case continueFreeSelected = "continue_free_selected"
   case trialDeclineFeedbackViewed = "trial_decline_feedback_viewed"
   case trialDeclineFeedbackReasonSelected = "trial_decline_feedback_reason_selected"
+  case trialDeclineFeedbackTextSubmitted = "trial_decline_feedback_text_submitted"
   case trialDeclineFeedbackSkipped = "trial_decline_feedback_skipped"
   case trialDeclineFeedbackCompleted = "trial_decline_feedback_completed"
   case notificationPermissionRequested = "notification_permission_requested"
@@ -580,14 +581,16 @@ enum AnalyticsTrialDeclineFeedbackOutcome: String, Equatable {
 enum TrialDeclineFeedbackTelemetryEvent {
   case viewed
   case reasonSelected(TrialDeclineFeedbackReason)
+  case textSubmitted(TrialDeclineFeedbackReason)
   case skipped
   case completedSkipped
-  case completedSubmitted(TrialDeclineFeedbackReason)
+  case completedSubmitted(TrialDeclineFeedbackSubmission)
 
   var analyticsEvent: AnalyticsEvent {
     switch self {
     case .viewed: return .trialDeclineFeedbackViewed
     case .reasonSelected: return .trialDeclineFeedbackReasonSelected
+    case .textSubmitted: return .trialDeclineFeedbackTextSubmitted
     case .skipped: return .trialDeclineFeedbackSkipped
     case .completedSkipped, .completedSubmitted: return .trialDeclineFeedbackCompleted
     }
@@ -595,7 +598,7 @@ enum TrialDeclineFeedbackTelemetryEvent {
 
   var outcome: AnalyticsTrialDeclineFeedbackOutcome? {
     switch self {
-    case .viewed, .reasonSelected, .skipped: return nil
+    case .viewed, .reasonSelected, .textSubmitted, .skipped: return nil
     case .completedSkipped: return .skipped
     case .completedSubmitted: return .submitted
     }
@@ -603,8 +606,19 @@ enum TrialDeclineFeedbackTelemetryEvent {
 
   var reason: TrialDeclineFeedbackReason? {
     switch self {
-    case .reasonSelected(let reason), .completedSubmitted(let reason): return reason
+    case .reasonSelected(let reason), .textSubmitted(let reason):
+      return reason
+    case .completedSubmitted(let submission):
+      return submission.reason
     case .viewed, .skipped, .completedSkipped: return nil
+    }
+  }
+
+  var hasText: Bool? {
+    switch self {
+    case .textSubmitted: return true
+    case .completedSubmitted(let submission): return submission.hasText
+    case .viewed, .reasonSelected, .skipped, .completedSkipped: return nil
     }
   }
 
@@ -614,7 +628,7 @@ enum TrialDeclineFeedbackTelemetryEvent {
       isPlus: isPlus,
       declineFeedbackOutcome: outcome,
       declineFeedbackReason: reason,
-      declineFeedbackHasText: outcome == .submitted ? false : nil
+      declineFeedbackHasText: hasText
     )
   }
 }

@@ -1266,6 +1266,121 @@
         }
       }
     },
+    "trial.decline_feedback.detail.title": {
+      "comment": "Heading above the optional short detail field for Missing a feature and Other.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add a little detail (optional)"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aggiungi qualche dettaglio (facoltativo)"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Füge ein kurzes Detail hinzu (optional)"
+          }
+        }
+      }
+    },
+    "trial.decline_feedback.detail.character_count": {
+      "comment": "VoiceOver value for the optional detail field's current and maximum character count.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld of %lld characters"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld caratteri su %lld"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld von %lld Zeichen"
+          }
+        }
+      }
+    },
+    "trial.decline_feedback.detail.placeholder": {
+      "comment": "Placeholder inside the optional short Trial-End decline-feedback field.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What would make Pillie better?"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cosa renderebbe Pillie migliore?"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Was würde Pillie besser machen?"
+          }
+        }
+      }
+    },
+    "trial.decline_feedback.detail.privacy": {
+      "comment": "Adjacent warning that the optional detail field must not contain personal health details.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Please don’t include personal health details."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Non includere dettagli personali sulla salute."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bitte gib keine persönlichen Gesundheitsdetails an."
+          }
+        }
+      }
+    },
+    "trial.decline_feedback.detail.done": {
+      "comment": "Keyboard toolbar action that dismisses the optional detail field.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Done"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fine"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fertig"
+          }
+        }
+      }
+    },
     "trial.end.continue_free": {
       "comment": "Explicit non-purchase action on the Trial-End Paywall.",
       "localizations": {
