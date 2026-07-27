@@ -26,10 +26,12 @@ struct HomeView: View {
     @State private var showTrialSmartRemindersEditor = false
     @State private var pendingTrialActivationAction: TrialActivationAction?
     @State private var showTrialEndPaywall = false
+    @State private var showTrialDeclineThankYou = false
     @State private var adaptiveReminderShownLogged = false
     @State private var reviewPromptShownLogged = false
     @AppStorage("homeBlockingStatusCardDismissed") private var blockingCardDismissed = false
     private let homeFeedback = HomeActionInteractionFeedback()
+    private let trialDeclineFeedbackStore = KeychainTrialDeclineFeedbackResolutionStore()
 
     private var unifiedStateTransition: Animation {
         PillieMotion.animation(
@@ -152,6 +154,35 @@ struct HomeView: View {
         ), trialEndPaywallContent != nil else { return }
         UserDefaults.standard.set(true, forKey: TrialEndPaywallAutoPresentation.shownStorageKey)
         showTrialEndPaywall = true
+    }
+
+    private func routeTrialDeclineFeedback() -> TrialDeclineFeedbackRoute {
+        let manager = SubscriptionManager.shared
+        return TrialDeclineFeedbackRoute.evaluate(
+            action: .continueFree,
+            state: PlusAccessState(
+                hasEntitlement: manager.hasEntitlement,
+                trialGrantDate: manager.trialGrantDate
+            ),
+            entitlementResolved: manager.hasResolvedEntitlement,
+            questionnaireResolved: trialDeclineFeedbackStore.isResolved(),
+            calendar: Calendar.current,
+            now: Date()
+        )
+    }
+
+    private func resolveTrialDeclineFeedback() {
+        trialDeclineFeedbackStore.markResolved()
+        showTrialEndPaywall = false
+        withAnimation(unifiedStateTransition) {
+            showTrialDeclineThankYou = true
+        }
+        Task {
+            try? await Task.sleep(for: .seconds(2.5))
+            withAnimation(unifiedStateTransition) {
+                showTrialDeclineThankYou = false
+            }
+        }
     }
 
     /// Copy + gating for the Adaptive Reminder Time Suggestion card (#126). `nil` for
@@ -417,6 +448,21 @@ struct HomeView: View {
                 .padding(.bottom, 100)
         }
         .background(PillieTheme.bg.ignoresSafeArea())
+        .overlay(alignment: .top) {
+            if showTrialDeclineThankYou {
+                TrialDeclineThankYouBanner(
+                    message: TrialDeclineFeedbackContent.make(locale: locale).thankYou
+                )
+                .padding(.horizontal, 20)
+                .padding(.top, 12)
+                .transition(
+                    accessibilityReduceMotion
+                        ? .opacity
+                        : .move(edge: .top).combined(with: .opacity)
+                )
+                .allowsHitTesting(false)
+            }
+        }
         .onAppear {
             autoPresentTrialEndPaywallIfNeeded()
             guard !hasAnimatedIn else { return }
@@ -509,7 +555,10 @@ struct HomeView: View {
             if let content = trialEndPaywallContent {
                 TrialEndPaywallView(
                     content: content,
-                    onDismiss: { showTrialEndPaywall = false }
+                    declineFeedbackContent: .make(locale: locale),
+                    routeContinueFree: routeTrialDeclineFeedback,
+                    onDismiss: { showTrialEndPaywall = false },
+                    onFeedbackResolved: resolveTrialDeclineFeedback
                 )
             }
         }
@@ -695,6 +744,28 @@ private struct PillieTakenButtonStyle: ButtonStyle {
             .frame(height: PillieTheme.ctaHeight)
             .background(PillieTheme.sage)
             .clipShape(Capsule())
+    }
+}
+
+private struct TrialDeclineThankYouBanner: View {
+    let message: String
+
+    var body: some View {
+        HStack(spacing: 10) {
+            Image(systemName: "checkmark.circle.fill")
+                .foregroundStyle(PillieTheme.verifiedGreen)
+                .accessibilityHidden(true)
+            Text(message)
+                .font(.system(.subheadline, design: .rounded, weight: .semibold))
+                .foregroundStyle(.white)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .padding(.horizontal, 18)
+        .padding(.vertical, 14)
+        .background(PillieTheme.dark, in: Capsule())
+        .shadow(color: PillieTheme.dark.opacity(0.22), radius: 12, y: 6)
+        .accessibilityElement(children: .combine)
+        .accessibilityIdentifier("trialDeclineFeedbackThankYou")
     }
 }
 

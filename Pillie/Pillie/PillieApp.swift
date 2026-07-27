@@ -557,13 +557,21 @@ struct PillieApp: App {
             // real-looking stats.
             let queryItems = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems
             let cohort = queryItems?.first(where: { $0.name == "cohort" })?.value
+            let feedback = queryItems?.first(where: { $0.name == "feedback" })?.value
+            let subscriber = queryItems?.first(where: { $0.name == "subscriber" })?.value == "1"
             AppBlockingManager.shared.debugBlockerConfiguredOverride = (cohort == "blocker")
+            let feedbackStore = KeychainTrialDeclineFeedbackResolutionStore()
+            if feedback == "resolved" {
+                feedbackStore.markResolved()
+            } else if feedback == "unresolved" {
+                feedbackStore.clearResolution()
+            }
             if queryItems?.first(where: { $0.name == "success" })?.value == "1" {
                 // Render the post-purchase success state (sandbox purchases are
                 // unreachable from simctl launches).
                 UserDefaults.standard.set(true, forKey: TrialEndPaywallView.debugSuccessStateKey)
             }
-            SubscriptionManager.shared.setPlusForTesting(false)
+            SubscriptionManager.shared.setPlusForTesting(subscriber)
             let agedGrant = Calendar.current.date(byAdding: .day, value: -16, to: Date()) ?? Date()
             UserDefaults.standard.removeObject(forKey: TrialEndPaywallAutoPresentation.shownStorageKey)
             UserDefaults.standard.set(false, forKey: OnboardingFlow.selectedFreePlanStorageKey)

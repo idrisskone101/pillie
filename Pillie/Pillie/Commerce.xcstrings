@@ -1196,6 +1196,144 @@
           }
         }
       }
+    },
+    "trial.decline_feedback.title": {
+      "comment": "Heading for the optional Trial-End decline-feedback surface.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A quick question"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Una domanda veloce"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eine kurze Frage"
+          }
+        }
+      }
+    },
+    "trial.decline_feedback.prompt": {
+      "comment": "Question shown before future structured decline reasons are added.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What made Pillie+ not the right fit?"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Perché Pillie+ non faceva al caso tuo?"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Warum hat Pillie+ nicht zu dir gepasst?"
+          }
+        }
+      }
+    },
+    "trial.decline_feedback.optional_note": {
+      "comment": "Privacy reassurance on the optional Trial-End decline-feedback surface.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sharing is optional. You can skip and keep using Pillie for free."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Condividere è facoltativo. Puoi saltare e continuare a usare Pillie gratis."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine Antwort ist freiwillig. Du kannst überspringen und Pillie kostenlos weiter nutzen."
+          }
+        }
+      }
+    },
+    "trial.end.continue_free": {
+      "comment": "Explicit non-purchase action on the Trial-End Paywall.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continue free"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continua gratis"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kostenlos fortfahren"
+          }
+        }
+      }
+    },
+    "trial.decline_feedback.skip": {
+      "comment": "Button that skips and resolves the optional Trial-End questionnaire.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skip"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salta"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Überspringen"
+          }
+        }
+      }
+    },
+    "trial.decline_feedback.thank_you": {
+      "comment": "Brief non-blocking acknowledgment after the optional questionnaire is skipped.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thanks — your feedback helps us improve Pillie."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grazie — il tuo feedback ci aiuta a migliorare Pillie."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Danke — dein Feedback hilft uns, Pillie zu verbessern."
+          }
+        }
+      }
     }
   },
   "version": "1.0"

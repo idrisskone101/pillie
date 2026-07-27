@@ -27,12 +27,16 @@ struct TrialEndPaywallView: View {
     @State private var showNoSubscriptionAlert = false
     @State private var purchaseSucceeded = false
     @State private var succeededPlan: Plan = .annual
+    @State private var showDeclineFeedback = false
     private let subscriptionManager = SubscriptionManager.shared
     private let telemetry = ProductAnalyticsTelemetry.live
     private let plusFeedback = PlusPaywallInteractionFeedback(performanceTier: PerformanceTier.current)
 
     let content: TrialEndPaywallContent
+    let declineFeedbackContent: TrialDeclineFeedbackContent
+    let routeContinueFree: () -> TrialDeclineFeedbackRoute
     let onDismiss: () -> Void
+    let onFeedbackResolved: () -> Void
 
     #if DEBUG
     /// One-shot UserDefaults key consumed on appear to force the success state
@@ -56,7 +60,13 @@ struct TrialEndPaywallView: View {
             PillieTheme.bg.ignoresSafeArea()
             backgroundBlob
 
-            if purchaseSucceeded {
+            if showDeclineFeedback {
+                TrialDeclineFeedbackView(
+                    content: declineFeedbackContent,
+                    onResolve: onFeedbackResolved
+                )
+                .transition(.opacity)
+            } else if purchaseSucceeded {
                 successState
                     .transition(.opacity)
             } else {
@@ -113,7 +123,6 @@ struct TrialEndPaywallView: View {
                 locale: locale
             ))
         }
-        .accessibilityIdentifier("trialEndPaywall")
     }
 
     // MARK: - Background
@@ -145,7 +154,7 @@ struct TrialEndPaywallView: View {
             HStack {
                 Spacer()
                 Button {
-                    dismissWithoutPurchase()
+                    onDismiss()
                 } label: {
                     Image(systemName: "xmark")
                         .font(.system(size: 13, weight: .semibold))
@@ -640,14 +649,14 @@ struct TrialEndPaywallView: View {
     private var secondaryLinks: some View {
         HStack(spacing: 14) {
             Button {
-                dismissWithoutPurchase()
+                continueFree()
             } label: {
-                Text(PillieLocalization.string("global.action.not_now", locale: locale))
+                Text(declineFeedbackContent.continueFree)
                     .font(.pillie(13, weight: .semibold))
                     .foregroundStyle(PillieTheme.textMuted)
             }
             .buttonStyle(.plain)
-            .accessibilityIdentifier("trialEndPaywallNotNow")
+            .accessibilityIdentifier("trialEndPaywallContinueFree")
 
             Rectangle()
                 .fill(PillieTheme.textMuted.opacity(0.3))
@@ -910,9 +919,16 @@ struct TrialEndPaywallView: View {
         }
     }
 
-    private func dismissWithoutPurchase() {
-        telemetry.trialEndNotNowSelected()
-        onDismiss()
+    private func continueFree() {
+        telemetry.trialEndContinueFreeSelected()
+        switch routeContinueFree() {
+        case .enterFreeApp:
+            onDismiss()
+        case .presentFeedback:
+            withAnimation(accessibilityReduceMotion ? nil : PillieTheme.fadeInUpCurve) {
+                showDeclineFeedback = true
+            }
+        }
     }
 
     private func loadOfferings() async {
@@ -999,7 +1015,10 @@ private extension Error {
             calendar: .current,
             now: Date()
         )!,
-        onDismiss: {}
+        declineFeedbackContent: .make(),
+        routeContinueFree: { .presentFeedback },
+        onDismiss: {},
+        onFeedbackResolved: {}
     )
 }
 
@@ -1015,6 +1034,9 @@ private extension Error {
             calendar: .current,
             now: Date()
         )!,
-        onDismiss: {}
+        declineFeedbackContent: .make(),
+        routeContinueFree: { .presentFeedback },
+        onDismiss: {},
+        onFeedbackResolved: {}
     )
 }

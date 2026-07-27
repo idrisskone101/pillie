@@ -39,7 +39,7 @@ final class TrialEndPaywallTelemetryTests: XCTestCase {
         telemetry.trialEndRestoreStarted()
         telemetry.trialEndRestoreCompleted()
         telemetry.trialEndRestoreFailed()
-        telemetry.trialEndNotNowSelected()
+        telemetry.trialEndContinueFreeSelected()
 
         XCTAssertEqual(client.events.map(\.name), [
             "paywall_plan_selected",
@@ -57,6 +57,32 @@ final class TrialEndPaywallTelemetryTests: XCTestCase {
         }
         XCTAssertEqual(client.events[2].properties["plan"], .string("annual"))
         XCTAssertEqual(client.events[2].properties["result"], .string("completed"))
+    }
+
+    func testTrialDeclineFeedbackSkipEmitsOnlyApprovedWirePayloads() {
+        let events: [TrialDeclineFeedbackTelemetryEvent] = [
+            .viewed,
+            .skipped,
+            .completedSkipped,
+        ]
+
+        XCTAssertEqual(events.map(\.analyticsEvent.rawValue), [
+            "trial_decline_feedback_viewed",
+            "trial_decline_feedback_skipped",
+            "trial_decline_feedback_completed",
+        ])
+        let properties = events.map { $0.payload(isPlus: false).properties }
+        for payload in properties {
+            XCTAssertEqual(payload["source"], .string("trial_end"))
+            XCTAssertEqual(payload["is_plus"], .bool(false))
+        }
+        XCTAssertEqual(properties[0].count, 2)
+        XCTAssertEqual(properties[1].count, 2)
+        XCTAssertEqual(properties[2], [
+            "source": .string("trial_end"),
+            "is_plus": .bool(false),
+            "outcome": .string("skipped"),
+        ])
     }
 
     private func makeTelemetry(

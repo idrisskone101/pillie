@@ -360,9 +360,30 @@ struct ProductAnalyticsTelemetry {
     track(.restoreFailed, source: .trialEnd, result: .failed)
   }
 
-  /// The "Not now" dismissal — the trial-end analogue of continuing free.
-  func trialEndNotNowSelected() {
+  /// The explicit non-purchase action on the Trial-End Paywall.
+  func trialEndContinueFreeSelected() {
     track(.continueFreeSelected, source: .trialEnd)
+  }
+
+  func trialDeclineFeedbackViewed() {
+    trackTrialDeclineFeedback(.viewed)
+  }
+
+  func trialDeclineFeedbackSkipped() {
+    trackTrialDeclineFeedback(.skipped)
+  }
+
+  func trialDeclineFeedbackCompleted(outcome: AnalyticsTrialDeclineFeedbackOutcome) {
+    guard outcome == .skipped else { return }
+    trackTrialDeclineFeedback(.completedSkipped)
+  }
+
+  private func trackTrialDeclineFeedback(_ event: TrialDeclineFeedbackTelemetryEvent) {
+    analytics.track(
+      event.analyticsEvent,
+      declineFeedbackOutcome: event.outcome,
+      isPlus: isPlus()
+    )
   }
 
   func paywallViewed(isFromOnboarding: Bool) {
