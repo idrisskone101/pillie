@@ -83,7 +83,9 @@ enum CustomReminderPreset: String, CaseIterable, Identifiable {
     }
 
     func localizedMessages(locale: Locale = .current) -> CustomReminderMessages {
-        guard locale.language.languageCode?.identifier == "it" else {
+        let localizedPresetLanguages = ["de", "it"]
+        guard let languageCode = locale.language.languageCode?.identifier,
+              localizedPresetLanguages.contains(languageCode) else {
             return messages
         }
         let stem = switch self {

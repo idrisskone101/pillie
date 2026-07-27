@@ -31,9 +31,10 @@ struct RefillBannerCard: View {
             Text(PillieLocalization.formatted(
                 "today.pack.start_new.body",
                 locale: locale,
-                arguments: locale.language.languageCode?.identifier == "it"
-                    ? (store.pack.method == .pill ? "ciclo della confezione" : "ciclo")
-                    : (store.pack.method == .pill ? "pack" : "cycle")
+                arguments: CycleNounPresentation.localizedNoun(
+                    for: store.pack.method,
+                    locale: locale
+                )
             ))
                 .font(.pillieBody())
                 .foregroundStyle(PillieTheme.textMuted)

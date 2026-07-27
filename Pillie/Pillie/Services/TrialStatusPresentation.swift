@@ -47,7 +47,7 @@ struct TrialStatusPresentation: Equatable {
     /// The persistent indicator distinguishes active protection from setup
     /// still being needed while preserving the trial countdown.
     var indicatorLabel: String {
-        if locale.language.languageCode?.identifier == "it" {
+        if ["de", "it"].contains(locale.language.languageCode?.identifier ?? "") {
             return PillieLocalization.string(
                 "trial.status.title",
                 table: "Commerce",
@@ -70,7 +70,7 @@ struct TrialStatusPresentation: Equatable {
     }
 
     func sheetContent(for activationState: TrialActivationState) -> TrialStatusSheetContent {
-        if locale.language.languageCode?.identifier == "it" {
+        if ["de", "it"].contains(locale.language.languageCode?.identifier ?? "") {
             let title = trialEndDate.map {
                 CommercePresentation.trialEndText(date: $0, locale: locale)
             } ?? PillieLocalization.string(
@@ -170,9 +170,21 @@ struct TrialActivationItem: Equatable {
     let status: AnalyticsTrialActivationStatus
     let action: TrialActivationAction?
     let isRecommended: Bool
+    var locale: Locale = .current
 
     var statusTitle: String {
-        switch status {
+        if ["de", "it"].contains(locale.language.languageCode?.identifier ?? "") {
+            let key = switch status {
+            case .setUp: "trial.activation.status.setup"
+            case .active: "trial.activation.status.active"
+            case .activeAutomatically: "trial.activation.status.active_automatically"
+            case .personalize: "trial.activation.status.personalize"
+            case .customized: "trial.activation.status.customized"
+            case .on: "trial.activation.status.on"
+            }
+            return PillieLocalization.string(key, table: "Commerce", locale: locale)
+        }
+        return switch status {
         case .setUp: "Set up"
         case .active: "Active"
         case .activeAutomatically: "Active automatically"
@@ -183,7 +195,26 @@ struct TrialActivationItem: Equatable {
     }
 
     var actionTitle: String? {
-        switch action {
+        if ["de", "it"].contains(locale.language.languageCode?.identifier ?? "") {
+            let key: String? = switch action {
+            case .appBlocking:
+                status == .active
+                    ? "trial.activation.action.manage"
+                    : "trial.activation.action.setup"
+            case .customMessages:
+                status == .customized
+                    ? "trial.activation.action.edit"
+                    : "trial.activation.action.personalize"
+            case .smartReminders:
+                "trial.activation.action.customize"
+            case nil:
+                nil
+            }
+            return key.map {
+                PillieLocalization.string($0, table: "Commerce", locale: locale)
+            }
+        }
+        return switch action {
         case .appBlocking: status == .active ? "Manage" : "Set up"
         case .customMessages: status == .customized ? "Edit" : "Personalize"
         case .smartReminders: "Customize"
@@ -216,9 +247,11 @@ struct TrialActivationItem: Equatable {
             .smartReminders
         }
 
-        let italian = locale.language.languageCode?.identifier == "it"
+        let localizedLanguage = ["de", "it"].contains(
+            locale.language.languageCode?.identifier ?? ""
+        )
         func title(_ key: String, fallback: String) -> String {
-            italian
+            localizedLanguage
                 ? PillieLocalization.string(key, table: "Commerce", locale: locale)
                 : fallback
         }
@@ -228,28 +261,32 @@ struct TrialActivationItem: Equatable {
                 title: title("paywall.feature.app_blocking", fallback: "App blocking"),
                 status: state.appBlockingActive ? .active : .setUp,
                 action: .appBlocking,
-                isRecommended: recommendation == .appBlocking
+                isRecommended: recommendation == .appBlocking,
+                locale: locale
             ),
             TrialActivationItem(
                 feature: .smartReminders,
                 title: title("paywall.feature.smart_reminders", fallback: "Smart Reminders"),
                 status: state.smartRemindersCustomized ? .customized : .activeAutomatically,
                 action: .smartReminders,
-                isRecommended: recommendation == .smartReminders
+                isRecommended: recommendation == .smartReminders,
+                locale: locale
             ),
             TrialActivationItem(
                 feature: .customMessages,
                 title: title("paywall.feature.custom_messages", fallback: "Custom messages"),
                 status: state.customMessagesCustomized ? .customized : .personalize,
                 action: .customMessages,
-                isRecommended: recommendation == .customMessages
+                isRecommended: recommendation == .customMessages,
+                locale: locale
             ),
             TrialActivationItem(
                 feature: .shakeToConfirm,
                 title: title("paywall.feature.shake", fallback: "Shake to confirm"),
                 status: .on,
                 action: nil,
-                isRecommended: false
+                isRecommended: false,
+                locale: locale
             ),
         ]
     }

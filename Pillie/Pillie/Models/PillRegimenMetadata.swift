@@ -25,18 +25,16 @@ extension PillPack.PillRegimenPreset {
             key = "onboarding.regimen.21_7"
         case .twentyFourFour:
             key = "onboarding.regimen.24_4"
-        case .twentyEightZero, .threeSixtyFiveZero:
+        case .twentySixTwo:
+            key = "onboarding.regimen.26_2"
+        case .twentyEightZero:
             key = "onboarding.regimen.28_0"
+        case .eightyFourSeven:
+            key = "onboarding.regimen.84_7"
+        case .threeSixtyFiveZero:
+            key = "onboarding.regimen.365_0"
         case .custom:
             key = "onboarding.regimen.custom"
-        case .twentySixTwo:
-            return locale.language.languageCode?.identifier == "it"
-                ? "26 giorni attivi, 2 giorni di pausa"
-                : "26 active days, 2 break days"
-        case .eightyFourSeven:
-            return locale.language.languageCode?.identifier == "it"
-                ? "84 giorni attivi, 7 giorni di pausa"
-                : "84 active days, 7 break days"
         }
         return PillieLocalization.string(key, locale: locale)
     }

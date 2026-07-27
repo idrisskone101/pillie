@@ -15,6 +15,12 @@
             "state": "translated",
             "value": "Segna come completata"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Als erledigt markieren"
+          }
         }
       }
     },
@@ -31,6 +37,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ricordamelo più tardi"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Später erinnern"
           }
         }
       }
@@ -49,6 +61,12 @@
             "state": "translated",
             "value": "Il prossimo promemoria per un giorno attivo seguirà l’orario scelto."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine nächste Erinnerung für einen aktiven Tag folgt der ausgewählten Uhrzeit."
+          }
         }
       }
     },
@@ -65,6 +83,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "I promemoria programmati riprendono oggi"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geplante Erinnerungen beginnen heute wieder"
           }
         }
       }
@@ -83,6 +107,12 @@
             "state": "translated",
             "value": "I promemoria programmati per la pillola si interrompono durante i giorni di pausa."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geplante Pillenerinnerungen pausieren während deiner Pausentage."
+          }
         }
       }
     },
@@ -99,6 +129,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "I promemoria programmati per il cerotto si interrompono durante i giorni senza cerotto."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geplante Pflastererinnerungen pausieren während deiner pflasterfreien Tage."
           }
         }
       }
@@ -117,6 +153,12 @@
             "state": "translated",
             "value": "I promemoria programmati per l’anello si interrompono durante i giorni senza anello."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geplante Ringerinnerungen pausieren während deiner ringfreien Tage."
+          }
         }
       }
     },
@@ -133,6 +175,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "I giorni di pausa iniziano oggi"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine Pausentage beginnen heute"
           }
         }
       }
@@ -151,6 +199,12 @@
             "state": "translated",
             "value": "Promemoria finale: non è ancora stata registrata alcuna azione."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Letzte Erinnerung: Noch keine Aktion protokolliert."
+          }
         }
       }
     },
@@ -167,6 +221,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "L’azione di oggi è ancora da registrare."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die heutige Aktion ist noch offen."
           }
         }
       }
@@ -185,6 +245,12 @@
             "state": "translated",
             "value": "È prevista l’azione programmata."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine geplante Aktion ist fällig."
+          }
         }
       }
     },
@@ -201,6 +267,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ultima registrazione programmata per oggi."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Letzter geplanter Check-in für heute."
           }
         }
       }
@@ -219,6 +291,12 @@
             "state": "translated",
             "value": "Puoi registrare l’azione di oggi quando vuoi."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du kannst die heutige Aktion protokollieren, wenn du bereit bist."
+          }
         }
       }
     },
@@ -235,6 +313,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Una breve registrazione per la routine di oggi."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ein kurzer Check-in für deine heutige Routine."
           }
         }
       }
@@ -253,6 +337,12 @@
             "state": "translated",
             "value": "Per oggi è programmato un ultimo promemoria."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Für heute ist noch eine letzte Erinnerung geplant."
+          }
         }
       }
     },
@@ -269,6 +359,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Quando vuoi, ricorda di registrare l’azione di oggi."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wenn du bereit bist, denk daran, die heutige Aktion zu protokollieren."
           }
         }
       }
@@ -287,6 +383,12 @@
             "state": "translated",
             "value": "Un promemoria delicato per la tua routine."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eine sanfte Erinnerung an deine Routine."
+          }
         }
       }
     },
@@ -303,6 +405,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ultimo promemoria Pillie per oggi."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Letzte Pillie-Erinnerung für heute."
           }
         }
       }
@@ -321,6 +429,12 @@
             "state": "translated",
             "value": "La registrazione di Pillie è ancora aperta."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dein Pillie-Check-in ist noch offen."
+          }
         }
       }
     },
@@ -337,6 +451,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Promemoria Pillie"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie-Erinnerung"
           }
         }
       }
@@ -355,6 +475,12 @@
             "state": "translated",
             "value": "Per oggi non è ancora stata registrata alcuna azione."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Für heute ist noch keine Aktion protokolliert."
+          }
         }
       }
     },
@@ -371,6 +497,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Promemoria finale programmato"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Letzte geplante Erinnerung"
           }
         }
       }
@@ -389,6 +521,12 @@
             "state": "translated",
             "value": "L’azione di oggi è ancora da registrare. Fallo quando vuoi."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die heutige Aktion ist noch offen. Protokolliere sie, wenn du bereit bist."
+          }
         }
       }
     },
@@ -405,6 +543,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Promemoria successivo"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Folgeerinnerung"
           }
         }
       }
@@ -423,6 +567,12 @@
             "state": "translated",
             "value": "Le scorte attuali potrebbero essere quasi terminate. Controllale quando puoi."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dein aktueller Vorrat könnte bald zur Neige gehen. Prüfe ihn bei Gelegenheit."
+          }
         }
       }
     },
@@ -439,6 +589,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Le scorte attuali di cerotti potrebbero essere quasi terminate. Controllale quando puoi."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dein Pflastervorrat könnte bald zur Neige gehen. Prüfe ihn bei Gelegenheit."
           }
         }
       }
@@ -457,6 +613,12 @@
             "state": "translated",
             "value": "Promemoria scorte cerotti"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erinnerung an den Pflastervorrat"
+          }
         }
       }
     },
@@ -473,6 +635,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Le scorte attuali di anelli potrebbero essere quasi terminate. Controllale quando puoi."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dein Ringvorrat könnte bald zur Neige gehen. Prüfe ihn bei Gelegenheit."
           }
         }
       }
@@ -491,6 +659,12 @@
             "state": "translated",
             "value": "Promemoria scorte anelli"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erinnerung an den Ringvorrat"
+          }
         }
       }
     },
@@ -507,6 +681,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Promemoria scorte pillola"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erinnerung an den Pillenvorrat"
           }
         }
       }
@@ -525,6 +705,12 @@
             "state": "translated",
             "value": "È prevista l’azione programmata per il cerotto. Registrala quando hai finito."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine geplante Pflasteraktion ist fällig. Protokolliere sie danach."
+          }
         }
       }
     },
@@ -541,6 +727,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Promemoria cerotto"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pflastererinnerung"
           }
         }
       }
@@ -559,6 +751,12 @@
             "state": "translated",
             "value": "È l’ora programmata per la pillola. Registrala quando hai finito."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Es ist Zeit für deine geplante Pille. Protokolliere die Aktion danach."
+          }
         }
       }
     },
@@ -575,6 +773,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Promemoria pillola"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillenerinnerung"
           }
         }
       }
@@ -593,6 +797,12 @@
             "state": "translated",
             "value": "È prevista l’azione programmata per l’anello. Registrala quando hai finito."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine geplante Ringaktion ist fällig. Protokolliere sie danach."
+          }
         }
       }
     },
@@ -609,6 +819,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Promemoria anello"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ringerinnerung"
           }
         }
       }
@@ -627,6 +843,12 @@
             "state": "translated",
             "value": "Il blocco delle app si disattiverà al termine della prova. I promemoria standard resteranno disponibili."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die App-Pause wird am Ende der Testphase deaktiviert. Standarderinnerungen bleiben verfügbar."
+          }
         }
       }
     },
@@ -643,6 +865,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "La prova di Pillie Plus terminerà presto"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine Pillie-Plus-Testphase endet bald"
           }
         }
       }

@@ -20,7 +20,13 @@ enum SettingsPresentation {
         minutes: Int,
         locale: Locale = .current
     ) -> String {
-        PillieLocalization.formatted(
+        if minutes == 1 {
+            return PillieLocalization.string(
+                "settings.followup.interval.single",
+                locale: locale
+            )
+        }
+        return PillieLocalization.formatted(
             "settings.followup.interval",
             locale: locale,
             arguments: Int64(minutes)
