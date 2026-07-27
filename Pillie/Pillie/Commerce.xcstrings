@@ -1312,6 +1312,190 @@
         }
       }
     },
+    "trial.decline_feedback.submit": {
+      "comment": "Submits the selected closed Trial-End decline reason.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Submit"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Invia"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Senden"
+          }
+        }
+      }
+    },
+    "trial.decline_feedback.reason.too_expensive": {
+      "comment": "Closed Trial-End decline reason.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Too expensive"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Troppo costoso"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zu teuer"
+          }
+        }
+      }
+    },
+    "trial.decline_feedback.reason.not_used_enough": {
+      "comment": "Closed Trial-End decline reason.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Don’t use it enough"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Non lo uso abbastanza"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ich nutze es nicht oft genug"
+          }
+        }
+      }
+    },
+    "trial.decline_feedback.reason.missing_feature": {
+      "comment": "Closed Trial-End decline reason.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Missing a feature"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Manca una funzionalità"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eine Funktion fehlt"
+          }
+        }
+      }
+    },
+    "trial.decline_feedback.reason.just_trying": {
+      "comment": "Closed Trial-End decline reason.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Just trying it"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lo stavo solo provando"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ich wollte es nur ausprobieren"
+          }
+        }
+      }
+    },
+    "trial.decline_feedback.reason.prefer_another_app": {
+      "comment": "Closed Trial-End decline reason.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prefer another app"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preferisco un’altra app"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ich bevorzuge eine andere App"
+          }
+        }
+      }
+    },
+    "trial.decline_feedback.reason.technical_issue": {
+      "comment": "Closed Trial-End decline reason.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Had a technical issue"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ho avuto un problema tecnico"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ich hatte ein technisches Problem"
+          }
+        }
+      }
+    },
+    "trial.decline_feedback.reason.other": {
+      "comment": "Closed Trial-End decline reason.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Other"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Altro"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sonstiges"
+          }
+        }
+      }
+    },
     "trial.decline_feedback.thank_you": {
       "comment": "Brief non-blocking acknowledgment after the optional questionnaire is skipped.",
       "localizations": {
