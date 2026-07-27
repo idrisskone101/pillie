@@ -254,6 +254,12 @@ protocol AnalyticsTracking {
     isPlus: Bool?
   )
 
+  func track(
+    _ event: AnalyticsEvent,
+    declineFeedbackOutcome: AnalyticsTrialDeclineFeedbackOutcome?,
+    isPlus: Bool?
+  )
+
   /// Report a handled failure as `app_error` + `$exception` (#179).
   func trackError(
     _ domain: AppErrorDomain,
@@ -305,6 +311,14 @@ extension AnalyticsTracking {
   func track(
     _ event: AnalyticsEvent,
     smartReminderOutcome: AnalyticsSmartReminderOutcome,
+    isPlus: Bool?
+  ) {
+    trackLegacy(event, isPlus: isPlus)
+  }
+
+  func track(
+    _ event: AnalyticsEvent,
+    declineFeedbackOutcome: AnalyticsTrialDeclineFeedbackOutcome?,
     isPlus: Bool?
   ) {
     trackLegacy(event, isPlus: isPlus)
@@ -445,6 +459,9 @@ enum AnalyticsEvent: String, CaseIterable {
   case restoreCompleted = "restore_completed"
   case restoreFailed = "restore_failed"
   case continueFreeSelected = "continue_free_selected"
+  case trialDeclineFeedbackViewed = "trial_decline_feedback_viewed"
+  case trialDeclineFeedbackSkipped = "trial_decline_feedback_skipped"
+  case trialDeclineFeedbackCompleted = "trial_decline_feedback_completed"
   case notificationPermissionRequested = "notification_permission_requested"
   /// The notification authorization prompt resolved (#175). Carries
   /// `result: granted | denied` — the symmetric partner of the requested
@@ -534,6 +551,39 @@ enum AnalyticsSmartReminderOutcome: String, CaseIterable {
   case opened
   case completed
   case snoozed
+}
+
+enum AnalyticsTrialDeclineFeedbackOutcome: String, Equatable {
+  case skipped
+}
+
+enum TrialDeclineFeedbackTelemetryEvent {
+  case viewed
+  case skipped
+  case completedSkipped
+
+  var analyticsEvent: AnalyticsEvent {
+    switch self {
+    case .viewed: return .trialDeclineFeedbackViewed
+    case .skipped: return .trialDeclineFeedbackSkipped
+    case .completedSkipped: return .trialDeclineFeedbackCompleted
+    }
+  }
+
+  var outcome: AnalyticsTrialDeclineFeedbackOutcome? {
+    switch self {
+    case .viewed, .skipped: return nil
+    case .completedSkipped: return .skipped
+    }
+  }
+
+  func payload(isPlus: Bool) -> AnalyticsPayload {
+    AnalyticsPayload(
+      source: .trialEnd,
+      isPlus: isPlus,
+      declineFeedbackOutcome: outcome
+    )
+  }
 }
 
 enum AnalyticsStep: String {
@@ -637,6 +687,7 @@ struct AnalyticsPayload {
   let authorizationState: AnalyticsAuthorizationState?
   let retryCount: Int?
   let smartReminderOutcome: AnalyticsSmartReminderOutcome?
+  let declineFeedbackOutcome: AnalyticsTrialDeclineFeedbackOutcome?
   let titleCustomized: Bool?
   let bodyCustomized: Bool?
   let retryTitleCustomized: Bool?
@@ -668,6 +719,7 @@ struct AnalyticsPayload {
     authorizationState: AnalyticsAuthorizationState? = nil,
     retryCount: Int? = nil,
     smartReminderOutcome: AnalyticsSmartReminderOutcome? = nil,
+    declineFeedbackOutcome: AnalyticsTrialDeclineFeedbackOutcome? = nil,
     titleCustomized: Bool? = nil,
     bodyCustomized: Bool? = nil,
     retryTitleCustomized: Bool? = nil,
@@ -698,6 +750,7 @@ struct AnalyticsPayload {
     self.authorizationState = authorizationState
     self.retryCount = retryCount
     self.smartReminderOutcome = smartReminderOutcome
+    self.declineFeedbackOutcome = declineFeedbackOutcome
     self.titleCustomized = titleCustomized
     self.bodyCustomized = bodyCustomized
     self.retryTitleCustomized = retryTitleCustomized
@@ -756,6 +809,9 @@ struct AnalyticsPayload {
     }
     if let smartReminderOutcome {
       properties["outcome"] = .string(smartReminderOutcome.rawValue)
+    }
+    if let declineFeedbackOutcome {
+      properties["outcome"] = .string(declineFeedbackOutcome.rawValue)
     }
     if let titleCustomized {
       properties["title_customized"] = .bool(titleCustomized)
@@ -1012,6 +1068,20 @@ final class AnalyticsManager: AnalyticsTracking {
     )
 
     capture(event, payload: payload)
+  }
+
+  func track(
+    _ event: AnalyticsEvent,
+    declineFeedbackOutcome: AnalyticsTrialDeclineFeedbackOutcome?,
+    isPlus: Bool?
+  ) {
+    let payload = AnalyticsPayload(
+      source: .trialEnd,
+      isPlus: isPlus,
+      declineFeedbackOutcome: declineFeedbackOutcome
+    )
+
+    capture(event, payload: payload, source: .trialEnd)
   }
 
   func track(
