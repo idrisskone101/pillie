@@ -29,7 +29,7 @@ struct ProtectionOffCardContent: Equatable {
         locale: Locale = .current
     ) -> ProtectionOffCardContent? {
         guard !hasPlusAccess, blockerConfigSaved else { return nil }
-        if locale.language.languageCode?.identifier == "it" {
+        if ["de", "it"].contains(locale.language.languageCode?.identifier ?? "") {
             return ProtectionOffCardContent(
                 title: PillieLocalization.string("today.protection.inactive", locale: locale),
                 detail: PillieLocalization.string(

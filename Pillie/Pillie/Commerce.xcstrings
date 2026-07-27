@@ -15,6 +15,12 @@
             "state": "translated",
             "value": "Il blocco delle app è una funzione di Pillie Plus configurabile dopo l’upgrade."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die App-Pause ist eine Pillie-Plus-Funktion, die du nach dem Upgrade einrichten kannst."
+          }
         }
       }
     },
@@ -31,6 +37,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Promemoria quotidiani, registrazione e cronologia sono inclusi nel piano gratuito."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tägliche Erinnerungen, Protokollierung und Verlauf sind im kostenlosen Tarif enthalten."
           }
         }
       }
@@ -49,6 +61,12 @@
             "state": "translated",
             "value": "Tieni sotto controllo la routine con Pillie Plus"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Behalte deine Routine mit Pillie Plus im Blick"
+          }
         }
       }
     },
@@ -65,6 +83,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Metti in pausa le app selezionate quando arriva un promemoria, nei giorni in cui un solo avviso non basta."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pausiere ausgewählte Apps, wenn eine Erinnerung fällig ist — für Tage, an denen ein Hinweis nicht genügt."
           }
         }
       }
@@ -83,6 +107,12 @@
             "state": "translated",
             "value": "Promemoria quotidiani"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tägliche Erinnerungen"
+          }
         }
       }
     },
@@ -99,6 +129,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Promemoria smart"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Smarte Erinnerungen"
           }
         }
       }
@@ -117,6 +153,12 @@
             "state": "translated",
             "value": "Metti in pausa le app che distraggono"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ablenkende Apps pausieren"
+          }
         }
       }
     },
@@ -133,6 +175,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Muovi per confermare"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zum Bestätigen schütteln"
           }
         }
       }
@@ -151,6 +199,12 @@
             "state": "translated",
             "value": "Messaggi dei promemoria personalizzati"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eigene Erinnerungstexte"
+          }
         }
       }
     },
@@ -167,6 +221,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nuove funzioni al loro arrivo"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neue Funktionen direkt zum Start"
           }
         }
       }
@@ -185,6 +245,12 @@
             "state": "translated",
             "value": "Annuale"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jährlich"
+          }
         }
       }
     },
@@ -201,6 +267,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Mensile"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Monatlich"
           }
         }
       }
@@ -219,6 +291,12 @@
             "state": "translated",
             "value": "Più conveniente"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bestes Angebot"
+          }
         }
       }
     },
@@ -235,6 +313,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@ per %@"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ pro %@"
           }
         }
       }
@@ -253,6 +337,12 @@
             "state": "translated",
             "value": "Gestisci o annulla in qualsiasi momento dalle Impostazioni."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jederzeit in den Einstellungen verwalten oder kündigen."
+          }
         }
       }
     },
@@ -269,6 +359,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Passa a Pillie Plus"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Auf Pillie Plus upgraden"
           }
         }
       }
@@ -287,6 +383,12 @@
             "state": "translated",
             "value": "Ripristina acquisti"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Käufe wiederherstellen"
+          }
         }
       }
     },
@@ -303,6 +405,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Condizioni d’uso"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nutzungsbedingungen"
           }
         }
       }
@@ -321,6 +429,12 @@
             "state": "translated",
             "value": "Informativa sulla privacy"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Datenschutz"
+          }
         }
       }
     },
@@ -337,6 +451,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Impossibile caricare i piani. Tocca per riprovare."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tarife konnten nicht geladen werden. Tippe, um es erneut zu versuchen."
           }
         }
       }
@@ -355,6 +475,12 @@
             "state": "translated",
             "value": "Errore di acquisto"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kauffehler"
+          }
         }
       }
     },
@@ -371,6 +497,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Errore di ripristino"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fehler beim Wiederherstellen"
           }
         }
       }
@@ -389,6 +521,12 @@
             "state": "translated",
             "value": "Nessun abbonamento trovato"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kein Abo gefunden"
+          }
         }
       }
     },
@@ -405,6 +543,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Non è stato trovato alcun abbonamento attivo per questo account."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Für diesen Account wurde kein aktives Abo gefunden."
           }
         }
       }
@@ -423,6 +567,12 @@
             "state": "translated",
             "value": "Le prossime due settimane con Pillie Plus"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine nächsten zwei Wochen mit Pillie Plus"
+          }
         }
       }
     },
@@ -439,6 +589,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "La prova di Pillie Plus inizia ora. Ecco cosa include."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine Pillie-Plus-Testphase beginnt jetzt. Das ist enthalten."
           }
         }
       }
@@ -457,6 +613,12 @@
             "state": "translated",
             "value": "Oggi"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heute"
+          }
         }
       }
     },
@@ -473,6 +635,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Le funzioni Plus sono disponibili"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus-Funktionen sind verfügbar"
           }
         }
       }
@@ -491,6 +659,12 @@
             "state": "translated",
             "value": "Prima della fine della prova"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vor dem Ende der Testphase"
+          }
         }
       }
     },
@@ -507,6 +681,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Scegli se continuare"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entscheide, ob du weitermachen möchtest"
           }
         }
       }
@@ -525,6 +705,12 @@
             "state": "translated",
             "value": "Prova le funzioni Plus"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Probiere deine Plus-Funktionen"
+          }
         }
       }
     },
@@ -541,6 +727,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "La prova termina il %@"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Testphase endet am %@"
           }
         }
       }
@@ -559,6 +751,12 @@
             "state": "translated",
             "value": "Al termine della prova"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nach dem Ende der Testphase"
+          }
         }
       }
     },
@@ -575,6 +773,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "La prova di Pillie Plus è terminata"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine Pillie-Plus-Testphase ist beendet"
           }
         }
       }
@@ -593,6 +797,12 @@
             "state": "translated",
             "value": "Il blocco delle app ora è disattivato. I promemoria standard restano disponibili."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die App-Pause ist jetzt deaktiviert. Deine Standarderinnerungen bleiben verfügbar."
+          }
         }
       }
     },
@@ -609,6 +819,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "App messe in pausa"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pausierte Apps"
           }
         }
       }
@@ -627,6 +843,12 @@
             "state": "translated",
             "value": "Azioni registrate"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Protokollierte Aktionen"
+          }
         }
       }
     },
@@ -643,6 +865,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Serie attuale"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktuelle Serie"
           }
         }
       }
@@ -661,6 +889,12 @@
             "state": "translated",
             "value": "I promemoria restano disponibili"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erinnerungen bleiben verfügbar"
+          }
         }
       }
     },
@@ -678,6 +912,12 @@
             "state": "translated",
             "value": "Pillie Plus è di nuovo attivo"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus ist wieder aktiv"
+          }
         }
       }
     },
@@ -694,6 +934,265 @@
           "stringUnit": {
             "state": "translated",
             "value": "Torna a Oggi"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zurück zu Heute"
+          }
+        }
+      }
+    },
+    "trial.activation.status.setup": {
+      "comment": "Trial feature status or action label.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set up"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configura"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Einrichten"
+          }
+        }
+      }
+    },
+    "trial.activation.status.active": {
+      "comment": "Trial feature status or action label.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Active"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Attivo"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktiv"
+          }
+        }
+      }
+    },
+    "trial.activation.status.active_automatically": {
+      "comment": "Trial feature status or action label.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Active automatically"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Attivo automaticamente"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatisch aktiv"
+          }
+        }
+      }
+    },
+    "trial.activation.status.personalize": {
+      "comment": "Trial feature status or action label.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personalize"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personalizza"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personalisieren"
+          }
+        }
+      }
+    },
+    "trial.activation.status.customized": {
+      "comment": "Trial feature status or action label.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Customized"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personalizzato"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personalisiert"
+          }
+        }
+      }
+    },
+    "trial.activation.status.on": {
+      "comment": "Trial feature status or action label.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Attivo"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktiv"
+          }
+        }
+      }
+    },
+    "trial.activation.action.manage": {
+      "comment": "Trial feature status or action label.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Manage"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gestisci"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verwalten"
+          }
+        }
+      }
+    },
+    "trial.activation.action.setup": {
+      "comment": "Trial feature status or action label.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set up"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configura"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Einrichten"
+          }
+        }
+      }
+    },
+    "trial.activation.action.edit": {
+      "comment": "Trial feature status or action label.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edit"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modifica"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bearbeiten"
+          }
+        }
+      }
+    },
+    "trial.activation.action.personalize": {
+      "comment": "Trial feature status or action label.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personalize"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personalizza"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personalisieren"
+          }
+        }
+      }
+    },
+    "trial.activation.action.customize": {
+      "comment": "Trial feature status or action label.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Customize"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personalizza"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anpassen"
           }
         }
       }

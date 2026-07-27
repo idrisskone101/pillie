@@ -1,0 +1,35 @@
+{
+  "sourceControl": "../source/en-US-control.json",
+  "reviewStatus": "DRAFT_REQUIRES_MAINTAINER_APPROVAL",
+  "policy": {
+    "additiveOnly": true,
+    "doNotModifyLocale": "en-US",
+    "nameLimit": 30,
+    "subtitleLimit": 30,
+    "keywordsLimit": 100,
+    "descriptionLimit": 4000,
+    "whatsNewLimit": 4000,
+    "healthPolicy": "Describe reminder and logging functionality. Do not imply contraceptive efficacy, clinical protection, or guaranteed adherence.",
+    "tone": "Formal German Sie for storefront copy."
+  },
+  "drafts": [
+    {
+      "lane": "de-DE",
+      "ascLocale": "de-DE",
+      "scope": "storefront-review-only",
+      "appInfo": {
+        "name": "Pillie: Pillen-Erinnerung",
+        "subtitle": "Pille, Ring & Pflaster",
+        "privacyPolicyUrl": "https://idrisskone101.github.io/pillie/privacy-policy"
+      },
+      "versionLocalization": {
+        "description": "Pillie erinnert Sie an Ihre Routine mit Pille, Pflaster oder Ring – für Momente, in denen sich ein gewöhnlicher Alarm zu leicht wegwischen lässt.\n\nRichten Sie Ihren Zeitplan ein, wählen Sie Ihre Erinnerungen und lassen Sie sich von Pillie bei Ihrer Routine unterstützen. Wenn eine Erinnerung fällig ist, kann Pillie Plus ausgewählte ablenkende Apps pausieren, bis Sie die Aktion protokolliert haben.\n\nWarum Pillie:\n• Erinnerungen für Routinen mit Pille, Pflaster und Ring\n• Optionale App-Pause, um Ablenkungen zu reduzieren\n• Schnellaktionen zum Erledigen oder späteren Erinnern\n• Zum Bestätigen schütteln als optionaler zusätzlicher Check-in\n• Folgeerinnerungen in einem von Ihnen gewählten Intervall\n• Vorratserinnerungen für Pillennutzerinnen\n• Monatsverlauf mit protokollierten Aktionen, offenen Tagen und Pausentagen\n• Serien und übersichtliche Routinen\n• Flexible Zeitpläne für gängige Pillenschemata und eigene Zyklen\n\nFür den Alltag:\n• Erinnerungszeit, Zyklustag und Schema jederzeit ändern\n• Ihre Routine ohne Schuldgefühl oder komplizierte Einrichtung protokollieren\n• Ihre Protokolldaten auf Ihrem Gerät behalten\n\nPillie bietet ausschließlich Erinnerungen und Protokollierung. Die App stellt keine medizinische Beratung dar und ersetzt nicht die Empfehlung einer medizinischen Fachperson. Befolgen Sie immer die Anweisungen für Ihre Verhütungsmethode.\n\nNutzungsbedingungen: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/",
+        "keywords": "verhütung,antibabypille,pillenalarm,medikament,zyklus,einnahme,vergessen,dosis,nuvaring",
+        "marketingUrl": "https://idrisskone101.github.io/pillie/",
+        "supportUrl": "https://idrisskone101.github.io/pillie/support",
+        "whatsNew": "Dieses Update enthält allgemeine Verbesserungen, Aufräumarbeiten und Fehlerbehebungen, damit Pillie weiterhin zuverlässig läuft.",
+        "promotionalText": null
+      }
+    }
+  ]
+}

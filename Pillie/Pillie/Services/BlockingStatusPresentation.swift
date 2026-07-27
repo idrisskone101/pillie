@@ -53,7 +53,7 @@ struct BlockingStatusCardContent: Equatable {
         for presentation: BlockingStatusPresentation,
         locale: Locale = .current
     ) -> BlockingStatusCardContent? {
-        if locale.language.languageCode?.identifier == "it" {
+        if ["de", "it"].contains(locale.language.languageCode?.identifier ?? "") {
             switch presentation {
             case .active:
                 return nil

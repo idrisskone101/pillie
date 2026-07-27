@@ -632,10 +632,10 @@ struct HomeView: View {
     }
 
     private var cycleTypeText: String {
-        if locale.language.languageCode?.identifier == "it" {
-            return store.pack.method == .pill ? "ciclo della confezione" : "ciclo"
-        }
-        return store.pack.method == .pill ? "pack" : "cycle"
+        CycleNounPresentation.localizedNoun(
+            for: store.pack.method,
+            locale: locale
+        )
     }
 
     private func completeTodayAction() {

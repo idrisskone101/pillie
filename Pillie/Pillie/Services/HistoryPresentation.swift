@@ -30,7 +30,9 @@ enum HistoryPresentation {
                     .locale(locale)
             ),
             completedCount: PillieLocalization.formatted(
-                "history.month.checkins",
+                completed == 1
+                    ? "history.month.checkin.single"
+                    : "history.month.checkins",
                 locale: locale,
                 arguments: Int64(completed)
             ),

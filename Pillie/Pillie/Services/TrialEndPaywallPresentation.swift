@@ -75,7 +75,7 @@ struct TrialEndPaywallContent: Equatable {
             return nil
         }
         let cohort: TrialEndPaywallCohort = blockerConfigSaved ? .blockerConfigured : .reminderOnly
-        if locale.language.languageCode?.identifier == "it" {
+        if ["de", "it"].contains(locale.language.languageCode?.identifier ?? "") {
             return localized(
                 cohort: cohort,
                 grantDate: grantDate,

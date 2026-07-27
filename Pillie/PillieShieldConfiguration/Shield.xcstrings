@@ -15,6 +15,12 @@
             "state": "translated",
             "value": "L’azione Pillie di oggi è ancora da registrare."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die heutige Pillie-Aktion ist noch offen."
+          }
         }
       }
     },
@@ -31,6 +37,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Apri Pillie"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie öffnen"
           }
         }
       }
@@ -49,6 +61,12 @@
             "state": "translated",
             "value": "Questa app ti aspetta."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diese App wartet auf dich."
+          }
         }
       }
     },
@@ -66,6 +84,12 @@
             "state": "translated",
             "value": "Registra l’azione di oggi, poi torna a questa app."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Protokolliere die heutige Aktion und kehre dann zu dieser App zurück."
+          }
         }
       }
     },
@@ -82,6 +106,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "È il momento di registrare"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zeit für einen kurzen Check-in"
           }
         }
       }
