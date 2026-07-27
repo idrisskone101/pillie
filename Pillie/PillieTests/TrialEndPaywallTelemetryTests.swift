@@ -85,6 +85,55 @@ final class TrialEndPaywallTelemetryTests: XCTestCase {
         ])
     }
 
+    func testSubmittedDeclineReasonEmitsOnlyClosedPrivacySafeWirePayloads() {
+        let events: [TrialDeclineFeedbackTelemetryEvent] = [
+            .reasonSelected(.tooExpensive),
+            .completedSubmitted(.tooExpensive),
+        ]
+
+        XCTAssertEqual(events.map(\.analyticsEvent.rawValue), [
+            "trial_decline_feedback_reason_selected",
+            "trial_decline_feedback_completed",
+        ])
+        XCTAssertEqual(events[0].payload(isPlus: false).properties, [
+            "source": .string("trial_end"),
+            "is_plus": .bool(false),
+            "reason": .string("too_expensive"),
+        ])
+        XCTAssertEqual(events[1].payload(isPlus: false).properties, [
+            "source": .string("trial_end"),
+            "is_plus": .bool(false),
+            "outcome": .string("submitted"),
+            "reason": .string("too_expensive"),
+            "has_text": .bool(false),
+        ])
+    }
+
+    func testSubmittedDeclineJourneyCapturesSelectionThenOneTerminalCompletion() {
+        let recorder = TrialDeclineFeedbackAnalyticsRecorder()
+        let telemetry = ProductAnalyticsTelemetry(analytics: recorder, isPlus: { false })
+
+        telemetry.trialDeclineFeedbackReasonSelected(.missingFeature)
+        telemetry.trialDeclineFeedbackSubmitted(.missingFeature)
+
+        XCTAssertEqual(recorder.events, [
+            .init(
+                event: .trialDeclineFeedbackReasonSelected,
+                outcome: nil,
+                reason: .missingFeature,
+                hasText: nil,
+                isPlus: false
+            ),
+            .init(
+                event: .trialDeclineFeedbackCompleted,
+                outcome: .submitted,
+                reason: .missingFeature,
+                hasText: false,
+                isPlus: false
+            ),
+        ])
+    }
+
     private func makeTelemetry(
         name: String
     ) -> (ProductAnalyticsTelemetry, TrialEndAnalyticsClientSpy) {
@@ -101,6 +150,67 @@ final class TrialEndPaywallTelemetryTests: XCTestCase {
         )
         analytics.configure()
         return (ProductAnalyticsTelemetry(analytics: analytics, isPlus: { false }), client)
+    }
+}
+
+private final class TrialDeclineFeedbackAnalyticsRecorder: AnalyticsTracking {
+    // Xcode 27's hosted XCTest runner can crash while tearing down class test
+    // doubles. Keep the recorder alive for the process, matching the existing
+    // analytics-test seam elsewhere in this target.
+    private static var keepAlive: [TrialDeclineFeedbackAnalyticsRecorder] = []
+
+    struct Event: Equatable {
+        let event: AnalyticsEvent
+        let outcome: AnalyticsTrialDeclineFeedbackOutcome?
+        let reason: TrialDeclineFeedbackReason?
+        let hasText: Bool?
+        let isPlus: Bool?
+    }
+
+    private(set) var events: [Event] = []
+
+    init() {
+        Self.keepAlive.append(self)
+    }
+
+    func track(
+        _ event: AnalyticsEvent,
+        source: AnalyticsSource?,
+        step: AnalyticsStep?,
+        stepIndex: Int?,
+        screen: AnalyticsScreen?,
+        plan: AnalyticsPlan?,
+        result: AnalyticsResult?,
+        setting: AnalyticsSetting?,
+        acquisitionSource: AcquisitionSource?,
+        isPlus: Bool?,
+        hasBlockingSelection: Bool?,
+        interventionCount: Int?,
+        shakeCount: Int?,
+        trialWarningDay: Int?,
+        trialEndCohort: TrialEndPaywallCohort?,
+        titleCustomized: Bool?,
+        bodyCustomized: Bool?,
+        retryTitleCustomized: Bool?,
+        retryBodyCustomized: Bool?,
+        lastCallTitleCustomized: Bool?,
+        lastCallBodyCustomized: Bool?
+    ) {}
+
+    func track(
+        _ event: AnalyticsEvent,
+        declineFeedbackOutcome: AnalyticsTrialDeclineFeedbackOutcome?,
+        declineFeedbackReason: TrialDeclineFeedbackReason?,
+        declineFeedbackHasText: Bool?,
+        isPlus: Bool?
+    ) {
+        events.append(Event(
+            event: event,
+            outcome: declineFeedbackOutcome,
+            reason: declineFeedbackReason,
+            hasText: declineFeedbackHasText,
+            isPlus: isPlus
+        ))
     }
 }
 

@@ -373,6 +373,14 @@ struct ProductAnalyticsTelemetry {
     trackTrialDeclineFeedback(.skipped)
   }
 
+  func trialDeclineFeedbackReasonSelected(_ reason: TrialDeclineFeedbackReason) {
+    trackTrialDeclineFeedback(.reasonSelected(reason))
+  }
+
+  func trialDeclineFeedbackSubmitted(_ reason: TrialDeclineFeedbackReason) {
+    trackTrialDeclineFeedback(.completedSubmitted(reason))
+  }
+
   func trialDeclineFeedbackCompleted(outcome: AnalyticsTrialDeclineFeedbackOutcome) {
     guard outcome == .skipped else { return }
     trackTrialDeclineFeedback(.completedSkipped)
@@ -382,6 +390,8 @@ struct ProductAnalyticsTelemetry {
     analytics.track(
       event.analyticsEvent,
       declineFeedbackOutcome: event.outcome,
+      declineFeedbackReason: event.reason,
+      declineFeedbackHasText: event.outcome == .submitted ? false : nil,
       isPlus: isPlus()
     )
   }
