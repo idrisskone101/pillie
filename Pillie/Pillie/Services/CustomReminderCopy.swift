@@ -17,32 +17,38 @@ struct CustomReminderMessages: Equatable {
 struct CustomReminderDraft: Equatable {
     var messages: CustomReminderMessages
     private(set) var appliedPreset: CustomReminderPreset?
+    private var appliedPresetMessages: CustomReminderMessages?
     private let originalMessages: CustomReminderMessages
 
     init(messages: CustomReminderMessages) {
         self.messages = messages
         self.appliedPreset = nil
+        self.appliedPresetMessages = nil
         self.originalMessages = messages
     }
 
     var wasEditedAfterPreset: Bool {
-        guard let appliedPreset else { return false }
-        return messages != appliedPreset.messages
+        guard appliedPreset != nil, let appliedPresetMessages else { return false }
+        return messages != appliedPresetMessages
     }
 
     mutating func apply(_ preset: CustomReminderPreset, locale: Locale = .current) {
-        messages = preset.localizedMessages(locale: locale)
+        let localizedMessages = preset.localizedMessages(locale: locale)
+        messages = localizedMessages
         appliedPreset = preset
+        appliedPresetMessages = localizedMessages
     }
 
     mutating func restoreDefaults(_ defaults: CustomReminderMessages) {
         messages = defaults
         appliedPreset = nil
+        appliedPresetMessages = nil
     }
 
     mutating func discardChanges() {
         messages = originalMessages
         appliedPreset = nil
+        appliedPresetMessages = nil
     }
 }
 
@@ -96,7 +102,7 @@ enum CustomReminderPreset: String, CaseIterable, Identifiable {
         }
         return CustomReminderMessages(
             dueTitle: PillieLocalization.string(
-                "notification.custom.private.primary",
+                "\(stem).title",
                 locale: locale
             ),
             dueBody: PillieLocalization.string("\(stem).primary", locale: locale),

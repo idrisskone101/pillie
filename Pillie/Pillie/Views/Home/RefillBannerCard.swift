@@ -23,7 +23,10 @@ struct RefillBannerCard: View {
                 )
 
             // Title
-            Text(PillieLocalization.string("today.refill.title", locale: locale))
+            Text(SettingsPresentation.supplyReminderTitle(
+                method: store.pack.method,
+                locale: locale
+            ))
                 .font(.pillie(20, weight: .bold))
                 .foregroundStyle(PillieTheme.textPrimary)
 

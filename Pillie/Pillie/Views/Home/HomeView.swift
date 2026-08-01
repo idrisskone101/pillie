@@ -190,7 +190,8 @@ struct HomeView: View {
     private var adaptiveReminderContent: AdaptiveReminderSuggestionCardContent? {
         AdaptiveReminderSuggestionCardContent.make(
             suggestion: store.adaptiveReminderSuggestion,
-            isPlus: SubscriptionManager.shared.hasPlusAccess
+            isPlus: SubscriptionManager.shared.hasPlusAccess,
+            locale: locale
         )
     }
 
@@ -209,7 +210,8 @@ struct HomeView: View {
     /// `ReviewPromptEligibility` (on-device). Shown to free and Plus users alike.
     private var reviewPromptContent: ReviewPromptCardContent? {
         ReviewPromptCardContent.make(
-            decision: store.reviewPromptDecision(higherPriorityCardShowing: higherPriorityCardShowing)
+            decision: store.reviewPromptDecision(higherPriorityCardShowing: higherPriorityCardShowing),
+            locale: locale
         )
     }
 
@@ -714,7 +716,7 @@ struct HomeView: View {
     /// prompt. A device with no Mail account is tolerated (the prompt is still marked
     /// answered) and never blocked on. The feedback text is private and never reported.
     private func handleReviewPromptNegative() {
-        if let mailURL = FeedbackEscapeHatch.mailURL {
+        if let mailURL = FeedbackEscapeHatch.mailURL(locale: locale) {
             openURL(mailURL)
         }
         withAnimation(unifiedStateTransition) {
@@ -740,6 +742,7 @@ private struct PillieTakenButtonStyle: ButtonStyle {
         configuration.label
             .font(.pillie(18, weight: .semibold))
             .foregroundStyle(PillieTheme.textPrimary)
+            .pillieAdaptiveLineLimit(minimumScaleFactor: 0.65)
             .frame(maxWidth: .infinity)
             .frame(height: PillieTheme.ctaHeight)
             .background(PillieTheme.sage)

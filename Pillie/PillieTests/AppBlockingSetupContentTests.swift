@@ -3,30 +3,32 @@ import XCTest
 @testable import Pillie
 
 final class AppBlockingSetupContentTests: XCTestCase {
-    private let content = AppBlockingSetupContent.default
+    private let content = AppBlockingSetupContent.localized(
+        locale: Locale(identifier: "en_US")
+    )
 
     // MARK: - Reversible pill-time framing (#218)
 
     func testSetupCopyExplainsPillTimePauseMedicationUnlockAndReversibility() {
         XCTAssertEqual(content.badge, "Pillie Plus")
-        XCTAssertEqual(content.chooseAppsCTA, "Choose apps to pause at pill time")
+        XCTAssertEqual(content.chooseAppsCTA, "Choose apps to pause")
 
         let explanation = [content.subtitle, content.emptyDetail]
             .joined(separator: " ")
             .lowercased()
-        XCTAssertTrue(explanation.contains("after your pillie reminder"))
-        XCTAssertTrue(explanation.contains("unlock when you log your pill"))
-        XCTAssertTrue(explanation.contains("change"))
-        XCTAssertTrue(explanation.contains("later"))
+        XCTAssertTrue(explanation.contains("after a pillie reminder"))
+        XCTAssertTrue(explanation.contains("become available after you log the action"))
+        XCTAssertEqual(content.changeSelectionCTA, "Edit")
+        XCTAssertEqual(content.skipCTA, "Continue without app blocking")
     }
 
     func testTrialDisclosureIsClearAndDoesNotReplaceSkip() {
         XCTAssertEqual(
             content.trialDisclosure,
-            "Pillie Plus is unlocked for 14 days. No card required."
+            "Your free trial lasts 14 days. App blocking turns off when it ends, while reminders stay free."
         )
         XCTAssertTrue(content.visibleCopy.contains(content.trialDisclosure))
-        XCTAssertEqual(content.skipCTA, "Continue with reminders only")
+        XCTAssertEqual(content.skipCTA, "Continue without app blocking")
     }
 
     func testDeniedOrCancelledAuthorizationShowsRecoveryWithoutStrandingReminderOnly() {
@@ -38,8 +40,8 @@ final class AppBlockingSetupContentTests: XCTestCase {
             .showRecovery
         )
         XCTAssertTrue(permission.isRecoveryVisible)
-        XCTAssertEqual(content.retryAuthorizationCTA, "Try Screen Time again")
-        XCTAssertEqual(content.skipCTA, "Continue with reminders only")
+        XCTAssertEqual(content.retryAuthorizationCTA, "Try Again")
+        XCTAssertEqual(content.skipCTA, "Continue without app blocking")
     }
 
     func testRecoveryRetryStartsANewExplicitAuthorizationRequest() {
@@ -74,30 +76,32 @@ final class AppBlockingSetupContentTests: XCTestCase {
     func testEmptyStateExplainsScreenTimePickerAndCountOnlyStorage() {
         XCTAssertFalse(content.emptyTitle.isEmpty)
         XCTAssertTrue(content.emptyDetail.contains("Screen Time"))
-        XCTAssertTrue(content.emptyDetail.lowercased().contains("count"))
-        XCTAssertEqual(content.chooseAppsCTA, "Choose apps to pause at pill time")
+        XCTAssertTrue(content.privacyNote.lowercased().contains("number"))
+        XCTAssertEqual(content.emptyDetail, "Use Apple Screen Time to choose categories or apps.")
+        XCTAssertEqual(content.chooseAppsCTA, "Choose apps to pause")
     }
 
     func testCategoryHintsAreGenericCategoriesNotAppNames() {
         XCTAssertEqual(
             content.categoryHints.map(\.name),
-            ["Social", "Entertainment", "Games", "Shopping"]
+            ["Social media", "Short videos", "Games", "Other"]
         )
     }
 
     // MARK: - Selected state (AC5 privacy-safe summary)
 
     func testSelectedStateCopyReassuresPrivacy() {
-        XCTAssertEqual(content.changeSelectionCTA, "Change selection")
+        XCTAssertEqual(content.changeSelectionCTA, "Edit")
         let note = content.selectedPrivacyNote.lowercased()
         // Pillie stores only a count; it never learns which apps were chosen.
-        XCTAssertTrue(note.contains("never") || note.contains("count"))
+        XCTAssertTrue(note.contains("number"))
+        XCTAssertTrue(note.contains("device"))
     }
 
     func testSelectedSummaryLabelIsGenericAndNamesNoApps() {
         // The selected state shows only a count + this label — no category chips,
         // icons, or app names.
-        XCTAssertEqual(content.selectedSummaryLabel, "apps & categories blocked")
+        XCTAssertEqual(content.selectedSummaryLabel, "Apps selected")
         let label = content.selectedSummaryLabel.lowercased()
         for name in ["tiktok", "instagram", "youtube", "snapchat"] {
             XCTAssertFalse(label.contains(name))
@@ -107,8 +111,8 @@ final class AppBlockingSetupContentTests: XCTestCase {
     // MARK: - Footer
 
     func testFooterUsesFinishAndSkipCopy() {
-        XCTAssertEqual(content.finishCTA, "Finish Setup")
-        XCTAssertEqual(content.skipCTA, "Continue with reminders only")
+        XCTAssertEqual(content.finishCTA, "Continue")
+        XCTAssertEqual(content.skipCTA, "Continue without app blocking")
     }
 
     // MARK: - Invariants preserved from the prior screen
@@ -131,7 +135,7 @@ final class AppBlockingSetupContentTests: XCTestCase {
         let label = content.emptyStateAccessibilityLabel
         XCTAssertTrue(label.contains(content.emptyTitle))
         XCTAssertTrue(label.contains("Screen Time"))
-        XCTAssertTrue(label.lowercased().contains("count"))
+        XCTAssertTrue(label.lowercased().contains("number"))
         XCTAssertGreaterThan(label.count, content.emptyTitle.count)
     }
 

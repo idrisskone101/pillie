@@ -266,13 +266,36 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Selezionata."
+            "value": "Opzione selezionata."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Ausgewählt."
+          }
+        }
+      }
+    },
+    "accessibility.selection.not_selected": {
+      "comment": "Accessibility value for an unselected option [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not selected."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opzione non selezionata."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nicht ausgewählt."
           }
         }
       }
@@ -289,7 +312,7 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Selezionata. Tocca due volte per rimuovere."
+            "value": "Opzione selezionata. Tocca due volte per rimuovere."
           }
         },
         "de": {
@@ -1186,13 +1209,59 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Muovi ora il telefono oppure tocca questa scheda nel simulatore."
+            "value": "Scuoti ora il telefono oppure tocca questa scheda nel simulatore."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Schüttle jetzt dein iPhone oder tippe im Simulator auf diese Karte."
+          }
+        }
+      }
+    },
+    "onboarding.blocking_demo.apps_label": {
+      "comment": "Label beneath the distracting-app demo tile [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your apps"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le tue app"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine Apps"
+          }
+        }
+      }
+    },
+    "onboarding.blocking_demo.locked_label": {
+      "comment": "Compact state label inside the distracting-app demo [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paused"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In pausa"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pausiert"
           }
         }
       }
@@ -1209,7 +1278,7 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld movimenti su %lld"
+            "value": "%lld di %lld scosse"
           }
         },
         "de": {
@@ -1232,13 +1301,59 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Prova Muovi per confermare"
+            "value": "Scuoti per confermare"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Probiere „Zum Bestätigen schütteln“"
+          }
+        }
+      }
+    },
+    "onboarding.blocking_demo.drag_title": {
+      "comment": "Compact instruction beneath the draggable demo lane [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drag to your apps"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trascina verso le app"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zu deinen Apps ziehen"
+          }
+        }
+      }
+    },
+    "onboarding.blocking_demo.demo_label": {
+      "comment": "Status label for the interactive app-blocking demonstration [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Demo"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Demo"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Demo"
           }
         }
       }
@@ -1285,6 +1400,144 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ausgewählte Apps pausieren nach einer Pillie-Erinnerung und sind nach dem Protokollieren der Aktion wieder verfügbar."
+          }
+        }
+      }
+    },
+    "onboarding.blocking_setup.empty_detail": {
+      "comment": "Explains the native Screen Time picker before authorization [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use Apple Screen Time to choose categories or apps."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Usa Tempo di utilizzo di Apple per scegliere categorie o app."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wähle mit Apple Bildschirmzeit Kategorien oder Apps aus."
+          }
+        }
+      }
+    },
+    "onboarding.blocking_setup.selected_count": {
+      "comment": "Privacy-safe VoiceOver summary; placeholder is selected app/category count [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld selected"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld elementi selezionati"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld ausgewählt"
+          }
+        }
+      }
+    },
+    "onboarding.blocking_setup.selected_count_one": {
+      "comment": "Privacy-safe singular VoiceOver summary for one selected app or category [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 selected"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 elemento selezionato"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 ausgewählt"
+          }
+        }
+      }
+    },
+    "onboarding.blocking_setup.privacy": {
+      "comment": "Privacy-safe explanation of the opaque Screen Time selection [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie only receives the number of items selected. Your selection stays on this device."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie riceve solo il numero di elementi selezionati. La selezione resta su questo dispositivo."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie erhält nur die Anzahl der ausgewählten Elemente. Deine Auswahl bleibt auf diesem Gerät."
+          }
+        }
+      }
+    },
+    "onboarding.blocking_setup.selected_summary": {
+      "comment": "Compact label beside the privacy-safe selected item count [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apps selected"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App selezionate"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apps ausgewählt"
+          }
+        }
+      }
+    },
+    "onboarding.blocking_setup.skip": {
+      "comment": "Reminder-only onboarding path [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continue without app blocking"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continua senza blocco app"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ohne App-Pause fortfahren"
           }
         }
       }
@@ -2405,7 +2658,7 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Continua alle impostazioni delle notifiche"
+            "value": "Attiva notifiche"
           }
         },
         "de": {
@@ -2796,7 +3049,7 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "La certezza di aver completato"
+            "value": "La certezza di averlo fatto"
           }
         },
         "de": {
@@ -3175,6 +3428,29 @@
         }
       }
     },
+    "onboarding.plan.card_label": {
+      "comment": "Compact eyebrow above the live onboarding plan card [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your plan"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il tuo piano"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dein Plan"
+          }
+        }
+      }
+    },
     "onboarding.plan.current_cycle": {
       "comment": "Summary row [health]",
       "localizations": {
@@ -3309,6 +3585,98 @@
           "stringUnit": {
             "state": "translated",
             "value": "Erstellt aus deiner ausgewählten Routine."
+          }
+        }
+      }
+    },
+    "onboarding.plan.main_risk.generic": {
+      "comment": "Generic detected-risk value when no specific distracting app was selected [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Distracting apps"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App che distraggono"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ablenkende Apps"
+          }
+        }
+      }
+    },
+    "onboarding.plan.detected_accessibility": {
+      "comment": "VoiceOver summary for the personalized-plan analysis; placeholders are title and comma-separated signals [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@. Detected: %@."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@. Rilevati: %@."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@. Erkannt: %@."
+          }
+        }
+      }
+    },
+    "onboarding.plan.protected_apps_header": {
+      "comment": "Compact heading beside the app-lock illustration in the onboarding plan [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Protected apps"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App in pausa"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pausierte Apps"
+          }
+        }
+      }
+    },
+    "onboarding.plan.ready_accent": {
+      "comment": "Short handwritten accent beneath the completed onboarding plan [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All set!"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tutto pronto!"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alles bereit!"
           }
         }
       }
@@ -3980,6 +4348,121 @@
         }
       }
     },
+    "onboarding.welcome.demo.apps_locked": {
+      "comment": "Welcome hero detail after the distracting apps become unavailable.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Locked until you check in"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In pausa fino alla registrazione"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pausiert bis zu deinem Check-in"
+          }
+        }
+      }
+    },
+    "onboarding.welcome.demo.apps_open": {
+      "comment": "Welcome hero detail before the distracting apps become unavailable.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tempting to open…"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ti viene voglia di aprirle…"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verlockend zu öffnen …"
+          }
+        }
+      }
+    },
+    "onboarding.welcome.demo.apps_title": {
+      "comment": "Welcome hero title for apps that compete for the user's attention.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Distracting apps"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App che distraggono"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ablenkende Apps"
+          }
+        }
+      }
+    },
+    "onboarding.welcome.demo.reminder_time": {
+      "comment": "Welcome hero reminder subtitle. The placeholder is a locale-formatted sample time.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reminder · %@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promemoria · %@"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erinnerung · %@"
+          }
+        }
+      }
+    },
+    "onboarding.welcome.demo.reminder_title": {
+      "comment": "Welcome hero title for the sample afternoon reminder.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afternoon dose"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promemoria pomeridiano"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erinnerung am Nachmittag"
+          }
+        }
+      }
+    },
     "onboarding.welcome.eyebrow": {
       "comment": "Playful brand line [standard]",
       "localizations": {
@@ -4153,7 +4636,7 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Segna come completata"
+            "value": "Registra ora"
           }
         },
         "de": {
@@ -4210,6 +4693,167 @@
         }
       }
     },
+    "today.adaptive_reminder.headline": {
+      "comment": "Adaptive reminder recommendation headline; placeholder is locale-formatted time [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You usually log around %@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Di solito registri verso le %@"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du protokollierst meist gegen %@"
+          }
+        }
+      }
+    },
+    "today.adaptive_reminder.body": {
+      "comment": "Adaptive reminder recommendation explanation; placeholder is locale-formatted time [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Want to move your daily reminder to %@ so it lands when you're ready?"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vuoi spostare il promemoria giornaliero alle %@, così arriva quando ti è più utile?"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Möchtest du deine tägliche Erinnerung auf %@ verschieben, damit sie passender ankommt?"
+          }
+        }
+      }
+    },
+    "today.adaptive_reminder.accept": {
+      "comment": "Adaptive reminder recommendation action; placeholder is locale-formatted time [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Move reminder to %@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sposta il promemoria alle %@"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erinnerung auf %@ verschieben"
+          }
+        }
+      }
+    },
+    "today.review_prompt.title": {
+      "comment": "Home sentiment-gate headline [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enjoying Pillie?"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ti piace Pillie?"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gefällt dir Pillie?"
+          }
+        }
+      }
+    },
+    "today.review_prompt.body": {
+      "comment": "Home sentiment-gate explanation [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "We'd love to hear how it's going for you."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ci piacerebbe sapere come ti trovi."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wir würden gern wissen, wie es für dich läuft."
+          }
+        }
+      }
+    },
+    "today.review_prompt.positive": {
+      "comment": "Positive sentiment action [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yes, I'm enjoying it"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sì, mi piace"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ja, es gefällt mir"
+          }
+        }
+      }
+    },
+    "today.review_prompt.negative": {
+      "comment": "Negative sentiment action [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not really"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Non molto"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nicht wirklich"
+          }
+        }
+      }
+    },
     "today.action.shake": {
       "comment": "Feature action [standard]",
       "localizations": {
@@ -4222,7 +4866,7 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Muovi per confermare"
+            "value": "Scuoti per confermare"
           }
         },
         "de": {
@@ -4498,13 +5142,59 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Promemoria scorte pillola"
+            "value": "Promemoria scorte di pillole"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Erinnerung an den Pillenvorrat"
+          }
+        }
+      }
+    },
+    "today.refill.title.patch": {
+      "comment": "Patch supply reminder title [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Patch supply reminder"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promemoria scorte di cerotti"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erinnerung an den Pflastervorrat"
+          }
+        }
+      }
+    },
+    "today.refill.title.ring": {
+      "comment": "Ring supply reminder title [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ring supply reminder"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promemoria scorte di anelli"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erinnerung an den Ringvorrat"
           }
         }
       }
@@ -5107,6 +5797,75 @@
         }
       }
     },
+    "settings.followup.interval_title": {
+      "comment": "Compact Settings row and editor title for follow-up cadence [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Interval"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Intervallo"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Intervall"
+          }
+        }
+      }
+    },
+    "settings.followup.retry_limit_title": {
+      "comment": "Compact Settings row and editor title for follow-up count [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Repeats"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ripetizioni"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wiederholungen"
+          }
+        }
+      }
+    },
+    "settings.followup.body": {
+      "comment": "Description of recurring follow-up reminders [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Additional reminders while today’s action is still open."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promemoria aggiuntivi finché l’azione di oggi resta da registrare."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weitere Erinnerungen, solange die heutige Aktion noch offen ist."
+          }
+        }
+      }
+    },
     "settings.followup.interval": {
       "comment": "Plural variation [notification]",
       "localizations": {
@@ -5136,19 +5895,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Final Scheduled Reminder"
+            "value": "Final Reminder"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Promemoria finale programmato"
+            "value": "Promemoria finale"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Letzte geplante Erinnerung"
+            "value": "Letzte Erinnerung"
           }
         }
       }
@@ -5521,6 +6280,29 @@
         }
       }
     },
+    "settings.custom_messages.daily_group": {
+      "comment": "Heading for the daily reminder title and message fields [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daily reminder"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promemoria giornaliero"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tägliche Erinnerung"
+          }
+        }
+      }
+    },
     "settings.custom_messages.advanced": {
       "comment": "Editor mode [standard]",
       "localizations": {
@@ -5544,6 +6326,98 @@
         }
       }
     },
+    "settings.custom_messages.field.title": {
+      "comment": "Custom reminder title field label [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Title"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Titolo"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Titel"
+          }
+        }
+      }
+    },
+    "settings.custom_messages.field.message": {
+      "comment": "Custom reminder message field label [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Message"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Messaggio"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nachricht"
+          }
+        }
+      }
+    },
+    "settings.custom_messages.placeholder.title": {
+      "comment": "Custom reminder title placeholder [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie’s default title"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Titolo predefinito di Pillie"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillies Standardtitel"
+          }
+        }
+      }
+    },
+    "settings.custom_messages.placeholder.message": {
+      "comment": "Custom reminder message placeholder [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie’s default message"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Messaggio predefinito di Pillie"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillies Standardnachricht"
+          }
+        }
+      }
+    },
     "settings.custom_messages.restore": {
       "comment": "Restores locale defaults, not en-US [notification]",
       "localizations": {
@@ -5563,6 +6437,52 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pillie-Standards wiederherstellen"
+          }
+        }
+      }
+    },
+    "settings.custom_messages.status.customized": {
+      "comment": "Compact Settings row value when reminder messages were customized [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Customized"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personalizzati"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personalisiert"
+          }
+        }
+      }
+    },
+    "settings.custom_messages.status.default": {
+      "comment": "Compact Settings row value when Pillie default reminder messages are in use [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Default"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Predefiniti"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Standard"
           }
         }
       }
@@ -5866,6 +6786,52 @@
         }
       }
     },
+    "settings.support.suggestion": {
+      "comment": "Open Line action for product suggestions [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share an Idea"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suggerisci un miglioramento"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Idee teilen"
+          }
+        }
+      }
+    },
+    "settings.support.issue_report": {
+      "comment": "Open Line action for reporting an issue [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Report a Problem"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Segnala un problema"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Problem melden"
+          }
+        }
+      }
+    },
     "settings.support.email": {
       "comment": "Mail composer [standard]",
       "localizations": {
@@ -6000,6 +6966,121 @@
           "stringUnit": {
             "state": "translated",
             "value": "Schreib uns an %@."
+          }
+        }
+      }
+    },
+    "support.feedback.subject": {
+      "comment": "Private feedback email subject [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie feedback"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Feedback su Pillie"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Feedback zu Pillie"
+          }
+        }
+      }
+    },
+    "support.open_line.subject.suggestion": {
+      "comment": "Suggestion email subject [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie — Suggestion"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie — Suggerimento"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie — Vorschlag"
+          }
+        }
+      }
+    },
+    "support.open_line.subject.issue_report": {
+      "comment": "Issue-report email subject [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie — Issue Report"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie — Segnalazione di un problema"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie — Problembericht"
+          }
+        }
+      }
+    },
+    "support.open_line.issue_invitation": {
+      "comment": "Issue-report email body invitation [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tell us what went wrong — the more detail, the better. Type above this line."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Raccontaci che cosa non ha funzionato: più dettagli inserisci, meglio è. Scrivi sopra questa riga."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beschreibe, was nicht funktioniert hat — je mehr Details, desto besser. Schreibe über dieser Zeile."
+          }
+        }
+      }
+    },
+    "support.open_line.diagnostics.device": {
+      "comment": "Device label in issue-report diagnostics [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Device"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dispositivo"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gerät"
           }
         }
       }

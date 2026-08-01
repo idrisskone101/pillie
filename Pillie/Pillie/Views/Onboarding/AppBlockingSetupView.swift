@@ -91,9 +91,16 @@ struct AppBlockingSetupContent {
         titleLead: PillieLocalization.string("onboarding.blocking_setup.title", locale: locale),
         titleAccent: "",
         subtitle: PillieLocalization.string("onboarding.blocking_setup.subtitle", locale: locale),
-        trialDisclosure: PillieLocalization.string("onboarding.blocking_setup.plus_locked", locale: locale),
+        trialDisclosure: PillieLocalization.string(
+            "trial.granted.disclosure",
+            table: "Commerce",
+            locale: locale
+        ),
         emptyTitle: PillieLocalization.string("onboarding.blocking_setup.title", locale: locale),
-        emptyDetail: PillieLocalization.string("onboarding.blocking_setup.subtitle", locale: locale),
+        emptyDetail: PillieLocalization.string(
+            "onboarding.blocking_setup.empty_detail",
+            locale: locale
+        ),
         categoryHints: [
             CategoryHint(name: PillieLocalization.string("onboarding.personalise.distraction.social", locale: locale), symbol: "bubble.left.and.bubble.right.fill"),
             CategoryHint(name: PillieLocalization.string("onboarding.personalise.distraction.video", locale: locale), symbol: "play.rectangle.fill"),
@@ -101,15 +108,21 @@ struct AppBlockingSetupContent {
             CategoryHint(name: PillieLocalization.string("onboarding.personalise.distraction.other", locale: locale), symbol: "bag.fill")
         ],
         chooseAppsCTA: PillieLocalization.string("onboarding.blocking_setup.title", locale: locale),
-        authorizationDeniedTitle: PillieLocalization.string("onboarding.permission.title", locale: locale),
-        authorizationDeniedDetail: PillieLocalization.string("onboarding.permission.body", locale: locale),
+        authorizationDeniedTitle: PillieLocalization.string("error.screen_time.title", locale: locale),
+        authorizationDeniedDetail: PillieLocalization.string("error.screen_time.body", locale: locale),
         retryAuthorizationCTA: PillieLocalization.string("global.action.retry", locale: locale),
-        selectedSummaryLabel: PillieLocalization.string("onboarding.blocking_setup.subtitle", locale: locale),
-        selectedPrivacyNote: PillieLocalization.string("onboarding.plan.disclaimer", locale: locale),
+        selectedSummaryLabel: PillieLocalization.string(
+            "onboarding.blocking_setup.selected_summary",
+            locale: locale
+        ),
+        selectedPrivacyNote: PillieLocalization.string(
+            "onboarding.blocking_setup.privacy",
+            locale: locale
+        ),
         changeSelectionCTA: PillieLocalization.string("global.action.edit", locale: locale),
-        privacyNote: PillieLocalization.string("onboarding.plan.disclaimer", locale: locale),
+        privacyNote: PillieLocalization.string("onboarding.blocking_setup.privacy", locale: locale),
         finishCTA: PillieLocalization.string("global.action.continue", locale: locale),
-        skipCTA: PillieLocalization.string("global.action.continue", locale: locale),
+        skipCTA: PillieLocalization.string("onboarding.blocking_setup.skip", locale: locale),
         lockedTitle: PillieLocalization.string("onboarding.blocking_setup.plus_locked", locale: locale),
         lockedSubtitle: PillieLocalization.string("onboarding.blocking_setup.plus_locked", locale: locale),
         lockedDetail: PillieLocalization.string("onboarding.demo.free_body", locale: locale)
@@ -175,6 +188,8 @@ enum AppBlockingSetupPrimaryAction: Equatable {
 
 struct AppBlockingSetupView: View {
     @Environment(PillStore.self) private var store
+    @Environment(\.locale) private var locale
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @AppStorage(OnboardingFlow.selectedFreePlanStorageKey) private var onboardingSelectedFreePlan = false
 
@@ -314,7 +329,9 @@ struct AppBlockingSetupView: View {
                 .foregroundColor(PillieTheme.textPrimary)
                 + Text(content.titleAccent).foregroundColor(PillieTheme.coral))
                 .font(.pillie(34, weight: .bold))
-                .fixedSize(horizontal: false, vertical: true)
+                .lineLimit(dynamicTypeSize.isAccessibilitySize ? 3 : 1)
+                .minimumScaleFactor(dynamicTypeSize.isAccessibilitySize ? 1 : 0.68)
+                .allowsTightening(true)
 
             Text(canSetUpBlocking ? content.subtitle : content.lockedSubtitle)
                 .font(.pillieBodyLarge())
@@ -342,6 +359,9 @@ struct AppBlockingSetupView: View {
             Text(content.emptyTitle)
                 .font(.pillieBodyBold())
                 .foregroundStyle(PillieTheme.textPrimary)
+                .lineLimit(dynamicTypeSize.isAccessibilitySize ? 2 : 1)
+                .minimumScaleFactor(dynamicTypeSize.isAccessibilitySize ? 1 : 0.75)
+                .allowsTightening(true)
 
             Text(content.emptyDetail)
                 .font(.pillieBody())
@@ -399,6 +419,9 @@ struct AppBlockingSetupView: View {
             Text(content.authorizationDeniedTitle)
                 .font(.pillieBodyBold())
                 .foregroundStyle(PillieTheme.textPrimary)
+                .lineLimit(dynamicTypeSize.isAccessibilitySize ? 2 : 1)
+                .minimumScaleFactor(dynamicTypeSize.isAccessibilitySize ? 1 : 0.72)
+                .allowsTightening(true)
 
             Text(content.authorizationDeniedDetail)
                 .font(.pillieBody())
@@ -429,6 +452,9 @@ struct AppBlockingSetupView: View {
                     Text(content.selectedSummaryLabel)
                         .font(.pillieBodySemibold())
                         .foregroundStyle(PillieTheme.textPrimary)
+                        .lineLimit(dynamicTypeSize.isAccessibilitySize ? 2 : 1)
+                        .minimumScaleFactor(dynamicTypeSize.isAccessibilitySize ? 1 : 0.75)
+                        .allowsTightening(true)
                     Text(content.selectedPrivacyNote)
                         .font(.pillie(13, weight: .medium))
                         .foregroundStyle(PillieTheme.textMuted)
@@ -438,7 +464,9 @@ struct AppBlockingSetupView: View {
                 Spacer(minLength: 0)
             }
             .accessibilityElement(children: .ignore)
-            .accessibilityLabel("\(selection.accessibilitySummary). \(content.selectedPrivacyNote)")
+            .accessibilityLabel(
+                "\(selection.localizedAccessibilitySummary(locale: locale)). \(content.selectedPrivacyNote)"
+            )
 
             Button(action: chooseApps) {
                 HStack(spacing: 8) {
@@ -551,8 +579,11 @@ struct AppBlockingSetupView: View {
             Text(content.skipCTA)
                 .font(.pillie(16, weight: .medium))
                 .foregroundStyle(PillieTheme.textMuted)
+                .lineLimit(dynamicTypeSize.isAccessibilitySize ? 2 : 1)
+                .minimumScaleFactor(dynamicTypeSize.isAccessibilitySize ? 1 : 0.72)
+                .allowsTightening(true)
                 .frame(maxWidth: .infinity)
-                .frame(height: 42)
+                .frame(minHeight: 42)
                 .contentShape(Rectangle())
         }
         .buttonStyle(.plain)

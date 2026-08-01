@@ -23,14 +23,24 @@ enum FeedbackEscapeHatch {
     /// Subject seeded into the composer; intentionally generic and PII-free.
     static let subject = "Pillie feedback"
 
+    /// Kept for locale-aware call sites. The locale deliberately does not affect
+    /// this stable inbox-routing contract.
+    static func localizedSubject(locale _: Locale = .current) -> String {
+        subject
+    }
+
     /// A `mailto:` URL pre-addressed to Pillie support with a "Pillie feedback"
     /// subject and no body. `nil` only if URL composition ever fails — callers
     /// tolerate that the same way they tolerate a device with no Mail account.
-    static var mailURL: URL? {
+    static var mailURL: URL? { mailURL() }
+
+    static func mailURL(locale: Locale = .current) -> URL? {
         var components = URLComponents()
         components.scheme = "mailto"
         components.path = recipient
-        components.queryItems = [URLQueryItem(name: "subject", value: subject)]
+        components.queryItems = [
+            URLQueryItem(name: "subject", value: subject)
+        ]
         return components.url
     }
 }

@@ -68,6 +68,70 @@ enum CommercePresentation {
         )
     }
 
+    static func trialEndSuccessSubtitle(
+        cohort: TrialEndPaywallCohort,
+        locale: Locale = .current
+    ) -> String {
+        let key = switch cohort {
+        case .blockerConfigured: "trial.end.success.blocking"
+        case .reminderOnly: "trial.end.success.reminder_only"
+        }
+        return PillieLocalization.string(key, table: "Commerce", locale: locale)
+    }
+
+    static func comparisonTierLabel(
+        freeIncluded: Bool,
+        plusIncluded: Bool,
+        locale: Locale = .current
+    ) -> String {
+        let key = switch (freeIncluded, plusIncluded) {
+        case (true, true): "paywall.accessibility.tier.both"
+        case (false, true): "paywall.accessibility.tier.plus_only"
+        case (true, false): "paywall.accessibility.tier.free_only"
+        case (false, false): "paywall.accessibility.tier.neither"
+        }
+        return PillieLocalization.string(key, table: "Commerce", locale: locale)
+    }
+
+    static func purchaseErrorMessage(
+        _ error: Error,
+        locale: Locale = .current
+    ) -> String {
+        if let purchaseError = error as? SubscriptionPurchaseError,
+           purchaseError == .missingPlusEntitlement {
+            return PillieLocalization.string(
+                "paywall.purchase_error.missing_entitlement",
+                table: "Commerce",
+                locale: locale
+            )
+        }
+        return genericErrorMessage(locale: locale)
+    }
+
+    static func restoreErrorMessage(
+        _ error: Error,
+        locale: Locale = .current
+    ) -> String {
+        genericErrorMessage(locale: locale)
+    }
+
+    private static func genericErrorMessage(locale: Locale) -> String {
+        PillieLocalization.string(
+            "paywall.error.generic_body",
+            table: "Commerce",
+            locale: locale
+        )
+    }
+
+    /// Semantic feature-to-symbol order for the four gain-framed trial-end perks.
+    /// The UI pairs these with localized titles by position and never compares copy.
+    static let trialEndPerkSymbols = [
+        "nosign",
+        "iphone.radiowaves.left.and.right",
+        "bell.badge",
+        "text.bubble",
+    ]
+
     private static func periodText(
         value: Int,
         unit: PeriodUnit,

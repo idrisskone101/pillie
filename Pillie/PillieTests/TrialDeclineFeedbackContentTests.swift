@@ -207,6 +207,7 @@ final class TrialDeclineFeedbackContentTests: XCTestCase {
         XCTAssertEqual(english.skip, "Skip")
         XCTAssertEqual(italian.continueFree, "Continua gratis")
         XCTAssertEqual(italian.skip, "Salta")
+        XCTAssertEqual(italian.close, "Chiudi")
         XCTAssertEqual(german.continueFree, "Kostenlos fortfahren")
         XCTAssertEqual(german.skip, "Überspringen")
         XCTAssertFalse(english.title.isEmpty)

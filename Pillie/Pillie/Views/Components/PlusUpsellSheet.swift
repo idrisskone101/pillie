@@ -40,7 +40,7 @@ struct PlusUpsellSheet: View {
     let featureDescription: String
     let paywallSurface: AnalyticsPaywallSurface
 
-    static let compactPresentationHeight: CGFloat = 360
+    static let compactPresentationHeight: CGFloat = 420
 
     init(
         featureName: String,
@@ -94,6 +94,7 @@ struct PlusUpsellSheet: View {
                 Text(localizedFeatureName)
                     .font(.pillieExtraBold(24))
                     .foregroundStyle(PillieTheme.textPrimary)
+                    .pillieAdaptiveLineLimit(minimumScaleFactor: 0.72)
 
                 Text(PillieLocalization.string(
                     "paywall.subtitle",
@@ -103,7 +104,6 @@ struct PlusUpsellSheet: View {
                     .font(.pillieBody())
                     .foregroundStyle(PillieTheme.textMuted)
                     .multilineTextAlignment(.center)
-                    .lineLimit(2)
                     .fixedSize(horizontal: false, vertical: true)
                     .padding(.horizontal, 16)
             }
@@ -162,7 +162,10 @@ struct PlusUpsellSheet: View {
                             telemetry.trackError(.restore, error: error)
                             let calmResponse = plusFeedback.unsuccessfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
                             withAnimation(calmResponse.motionProfile.animation) {
-                                restoreError = error.localizedDescription
+                                restoreError = CommercePresentation.restoreErrorMessage(
+                                    error,
+                                    locale: locale
+                                )
                             }
                         }
                         withAnimation(response.motionProfile.animation) {
@@ -241,11 +244,11 @@ struct PlusUpsellSheet: View {
     private var localizedFeatureName: String {
         let key = switch paywallSurface {
         case .blockingGate:
-            "paywall.feature.app_blocking"
+            "paywall.feature.app_blocking.compact"
         case .smartReminderGate:
             "paywall.feature.smart_reminders"
         default:
-            "paywall.feature.custom_messages"
+            "paywall.feature.custom_messages.compact"
         }
         return PillieLocalization.string(key, table: "Commerce", locale: locale)
     }

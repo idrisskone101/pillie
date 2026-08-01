@@ -27,6 +27,7 @@ struct TrialIndicatorBadge: View {
                 Text(label)
                     .font(.pillie(13, weight: .semibold))
                     .foregroundStyle(PillieTheme.textPrimary)
+                    .pillieAdaptiveLineLimit(minimumScaleFactor: 0.72)
             }
             .padding(.horizontal, 14)
             .padding(.vertical, 8)
@@ -131,7 +132,7 @@ private struct TrialActivationFeatureRow: View {
 
                         if item.isRecommended {
                             Text(PillieLocalization.string(
-                                "paywall.plan.best_value",
+                                "trial.activation.recommended",
                                 table: "Commerce",
                                 locale: locale
                             ).uppercased(with: locale))
@@ -199,7 +200,7 @@ private struct TrialActivationFeatureRow: View {
             item.statusTitle,
             item.isRecommended
                 ? PillieLocalization.string(
-                    "paywall.plan.best_value",
+                    "trial.activation.recommended",
                     table: "Commerce",
                     locale: locale
                 )

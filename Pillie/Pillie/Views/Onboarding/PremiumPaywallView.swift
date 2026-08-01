@@ -157,7 +157,7 @@ struct SoftPaywallContent {
                     plusIncluded: true
                 ),
                 ComparisonRow(
-                    title: commerce("paywall.feature.app_blocking"),
+                    title: commerce("paywall.feature.app_blocking.compact"),
                     icon: "nosign",
                     iconBackground: PillieTheme.lavender,
                     iconColor: PillieTheme.dark,
@@ -173,7 +173,7 @@ struct SoftPaywallContent {
                     plusIncluded: true
                 ),
                 ComparisonRow(
-                    title: commerce("paywall.feature.custom_messages"),
+                    title: commerce("paywall.feature.custom_messages.compact"),
                     icon: "text.bubble.fill",
                     iconBackground: PillieTheme.lavender,
                     iconColor: PillieTheme.dark,
@@ -181,7 +181,7 @@ struct SoftPaywallContent {
                     plusIncluded: true
                 ),
                 ComparisonRow(
-                    title: commerce("paywall.feature.future"),
+                    title: commerce("paywall.feature.future.compact"),
                     icon: "sparkles",
                     iconBackground: PillieTheme.coralLight,
                     iconColor: PillieTheme.coral,
@@ -191,8 +191,8 @@ struct SoftPaywallContent {
             ],
             annualPlanLabel: commerce("paywall.plan.annual"),
             monthlyPlanLabel: commerce("paywall.plan.monthly"),
-            reassurances: [commerce("paywall.plan.cancel_anytime")],
-            monthlyReassurances: [commerce("paywall.plan.cancel_anytime")],
+            reassurances: [commerce("paywall.plan.cancel_anytime_short")],
+            monthlyReassurances: [commerce("paywall.plan.cancel_anytime_short")],
             primaryCTA: commerce("paywall.action.upgrade"),
             monthlyCTA: commerce("paywall.action.upgrade"),
             freeCTA: PillieLocalization.string("global.action.not_now", locale: locale),
@@ -397,8 +397,11 @@ struct PremiumPaywallView: View {
     // MARK: - Headline
 
     private var headlineSection: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            (Text("\(content.title)\n")
+        let titleLead = content.titleAccent.isEmpty
+            ? content.title
+            : "\(content.title)\n"
+        return VStack(alignment: .leading, spacing: 6) {
+            (Text(titleLead)
                 .foregroundColor(PillieTheme.textPrimary)
              + Text(content.titleAccent)
                 .foregroundColor(PillieTheme.coral))
@@ -541,13 +544,11 @@ struct PremiumPaywallView: View {
     }
 
     private func comparisonAccessibilityLabel(_ row: SoftPaywallContent.ComparisonRow) -> String {
-        let tiers: String
-        switch (row.freeIncluded, row.plusIncluded) {
-        case (true, true): tiers = "included in Free and Plus"
-        case (false, true): tiers = "Plus only"
-        case (true, false): tiers = "Free only"
-        case (false, false): tiers = "not included"
-        }
+        let tiers = CommercePresentation.comparisonTierLabel(
+            freeIncluded: row.freeIncluded,
+            plusIncluded: row.plusIncluded,
+            locale: locale
+        )
         if let detail = row.detail {
             return "\(row.title), \(detail), \(tiers)"
         }
@@ -635,24 +636,11 @@ struct PremiumPaywallView: View {
         } label: {
             HStack(alignment: .center, spacing: 14) {
                 VStack(alignment: .leading, spacing: 3) {
-                    HStack(spacing: 8) {
-                        Text(content.annualPlanLabel)
-                            .font(.pillie(12, weight: .black))
-                            .tracking(1)
-                            .textCase(.uppercase)
-                            .foregroundStyle(Color.white.opacity(0.55))
-
-                        if let savingsBadgeText {
-                            Text(savingsBadgeText)
-                                .font(.pillie(10, weight: .black))
-                                .tracking(0.6)
-                                .textCase(.uppercase)
-                                .foregroundStyle(PillieTheme.dark)
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 3)
-                                .background(PillieTheme.coral, in: Capsule())
-                        }
-                    }
+                    Text(content.annualPlanLabel)
+                        .font(.pillie(12, weight: .black))
+                        .tracking(1)
+                        .textCase(.uppercase)
+                        .foregroundStyle(Color.white.opacity(0.55))
 
                     VStack(alignment: .leading, spacing: 3) {
                         Text(annualPriceAndPeriodText)
@@ -686,25 +674,27 @@ struct PremiumPaywallView: View {
                 }
             }
             .overlay(alignment: .topTrailing) {
-                Text(PillieLocalization.string(
-                    "paywall.plan.best_value",
-                    table: "Commerce",
-                    locale: locale
-                ))
-                    .font(.pillie(10, weight: .black))
-                    .tracking(1)
-                    .textCase(.uppercase)
-                    .foregroundStyle(PillieTheme.dark)
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 5)
-                    .background(PillieTheme.coral, in: Capsule())
-                    .offset(x: -16, y: -11)
+                if let savingsBadgeText {
+                    Text(savingsBadgeText)
+                        .font(.pillie(10, weight: .black))
+                        .tracking(1)
+                        .textCase(.uppercase)
+                        .foregroundStyle(PillieTheme.dark)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 5)
+                        .background(PillieTheme.coral, in: Capsule())
+                        .offset(x: -16, y: -11)
+                }
             }
             .shadow(color: PillieTheme.dark.opacity(0.28), radius: 12, y: 8)
         }
         .buttonStyle(.plain)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(annualPriceAndPeriodText)
+        .accessibilityLabel(
+            [content.annualPlanLabel, annualPriceAndPeriodText, savingsBadgeText]
+                .compactMap { $0 }
+                .joined(separator: ", ")
+        )
         .accessibilityAddTraits(selectedPlan == .annual ? [.isButton, .isSelected] : .isButton)
     }
 
@@ -806,6 +796,7 @@ struct PremiumPaywallView: View {
                     Text(item)
                         .font(.pillie(13, weight: .semibold))
                         .foregroundStyle(PillieTheme.textPrimary)
+                        .pillieAdaptiveLineLimit(minimumScaleFactor: 0.75)
                 }
                 .accessibilityElement(children: .combine)
             }
@@ -959,7 +950,10 @@ struct PremiumPaywallView: View {
                     } else {
                         telemetry.purchaseFailed(plan: selectedPlan.analyticsPlan, isFromOnboarding: isFromOnboarding)
                         telemetry.trackError(.purchase, error: error)
-                        purchaseError = error.localizedDescription
+                        purchaseError = CommercePresentation.purchaseErrorMessage(
+                            error,
+                            locale: locale
+                        )
                     }
                 }
                 withAnimation(response.motionProfile.animation) {
@@ -1015,7 +1009,10 @@ struct PremiumPaywallView: View {
                 telemetry.trackError(.restore, error: error)
                 let calmResponse = plusFeedback.unsuccessfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
                 withAnimation(calmResponse.motionProfile.animation) {
-                    purchaseError = error.localizedDescription
+                    purchaseError = CommercePresentation.purchaseErrorMessage(
+                        error,
+                        locale: locale
+                    )
                 }
             }
             withAnimation(response.motionProfile.animation) {

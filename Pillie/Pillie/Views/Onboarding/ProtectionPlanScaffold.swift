@@ -185,6 +185,7 @@ struct ProtectionPlanScaffold<Content: View>: View {
                 Text(secondaryTitle)
                     .font(.pillieBodyBold())
                     .foregroundStyle(PillieTheme.textPrimary)
+                    .pillieAdaptiveLineLimit(minimumScaleFactor: 0.7)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 16)
             }

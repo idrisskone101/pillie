@@ -140,7 +140,7 @@ struct TrialGrantedMomentContent {
                     symbolColor: PillieTheme.verifiedGreen
                 ),
             ],
-            disclosure: commerce("trial.end.subtitle"),
+            disclosure: commerce("trial.granted.disclosure"),
             primaryCTA: PillieLocalization.string("global.action.continue", locale: locale)
         )
     }

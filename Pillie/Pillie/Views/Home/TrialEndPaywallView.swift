@@ -150,7 +150,11 @@ struct TrialEndPaywallView: View {
     // MARK: - Offer state (designs 2a / 2b / 2c)
 
     private var offerState: some View {
-        VStack(alignment: .leading, spacing: 0) {
+        let titleLead = content.titleAccent.isEmpty
+            ? content.title
+            : "\(content.title)\n"
+        return ScrollView(showsIndicators: false) {
+          VStack(alignment: .leading, spacing: 0) {
             HStack {
                 Spacer()
                 Button {
@@ -169,7 +173,7 @@ struct TrialEndPaywallView: View {
                 .accessibilityIdentifier("trialEndPaywallClose")
             }
 
-            (Text("\(content.title)\n").foregroundColor(PillieTheme.textPrimary)
+            (Text(titleLead).foregroundColor(PillieTheme.textPrimary)
                 + Text(content.titleAccent).foregroundColor(PillieTheme.coral))
                 .font(.pillie(30, weight: .black))
                 .lineSpacing(0)
@@ -211,10 +215,12 @@ struct TrialEndPaywallView: View {
                     .padding(.top, 8)
             }
             .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger5))
+          }
+          .padding(.horizontal, 24)
+          .padding(.top, 8)
+          .padding(.bottom, 32)
         }
-        .padding(.horizontal, 24)
-        .padding(.top, 8)
-        .padding(.bottom, 8)
+        .scrollBounceBehavior(.basedOnSize)
     }
 
     // MARK: - Centerpiece card
@@ -242,12 +248,14 @@ struct TrialEndPaywallView: View {
                     .tracking(1.5)
                     .textCase(.uppercase)
                     .foregroundStyle(PillieTheme.coral)
+                    .pillieAdaptiveLineLimit(minimumScaleFactor: 0.75)
                 Spacer()
                 Text(dateRange)
                     .font(.pillie(10, weight: .black))
                     .tracking(1.5)
                     .textCase(.uppercase)
                     .foregroundStyle(Color.white.opacity(0.4))
+                    .pillieAdaptiveLineLimit(minimumScaleFactor: 0.75)
             }
             .padding(.bottom, 6)
 
@@ -311,7 +319,10 @@ struct TrialEndPaywallView: View {
                 .textCase(.uppercase)
                 .foregroundStyle(PillieTheme.coral)
 
-            FlowingChips(chips: chips)
+            FlowingChips(
+                chips: chips,
+                symbols: CommercePresentation.trialEndPerkSymbols
+            )
                 .padding(.top, 12)
 
             Text(footnote)
@@ -511,7 +522,7 @@ struct TrialEndPaywallView: View {
                 }
 
                 Text(PillieLocalization.string(
-                    "paywall.plan.cancel_anytime",
+                    "paywall.plan.cancel_anytime_short",
                     table: "Commerce",
                     locale: locale
                 ))
@@ -586,7 +597,7 @@ struct TrialEndPaywallView: View {
                     locale: locale
                 ),
                 PillieLocalization.string(
-                    "paywall.plan.cancel_anytime",
+                    "paywall.plan.cancel_anytime_short",
                     table: "Commerce",
                     locale: locale
                 ),
@@ -742,6 +753,7 @@ struct TrialEndPaywallView: View {
             ))
                 .foregroundColor(PillieTheme.textPrimary)
                 .font(.pillie(34, weight: .black))
+                .pillieAdaptiveLineLimit(minimumScaleFactor: 0.72)
                 .padding(.top, 24)
 
             Text(successSubtitle)
@@ -803,7 +815,7 @@ struct TrialEndPaywallView: View {
             .accessibilityIdentifier("trialEndPaywallSuccessCTA")
 
             Text(PillieLocalization.string(
-                "paywall.plan.cancel_anytime",
+                "paywall.plan.cancel_anytime_short",
                 table: "Commerce",
                 locale: locale
             ))
@@ -819,12 +831,10 @@ struct TrialEndPaywallView: View {
     /// Honest per-cohort success copy (ADR 0002): "blocking is back on" is only
     /// claimed for users whose blocker config is actually saved.
     private var successSubtitle: String {
-        switch content.cohort {
-        case .blockerConfigured:
-            return "Pillie Plus is active — app blocking is back on for tonight's reminder."
-        case .reminderOnly:
-            return "Pillie Plus is active — set up app blocking whenever you're ready."
-        }
+        CommercePresentation.trialEndSuccessSubtitle(
+            cohort: content.cohort,
+            locale: locale
+        )
     }
 
     private var successPlanLabel: String {
@@ -874,7 +884,10 @@ struct TrialEndPaywallView: View {
                 } else {
                     telemetry.trialEndPurchaseFailed(plan: plan.analyticsPlan)
                     telemetry.trackError(.purchase, error: error)
-                    purchaseError = error.localizedDescription
+                    purchaseError = CommercePresentation.purchaseErrorMessage(
+                        error,
+                        locale: locale
+                    )
                 }
             }
             withAnimation(response.motionProfile.animation) {
@@ -910,7 +923,10 @@ struct TrialEndPaywallView: View {
                 let calmResponse = plusFeedback.unsuccessfulPaidOutcome(
                     accessibilityReduceMotion: accessibilityReduceMotion)
                 withAnimation(calmResponse.motionProfile.animation) {
-                    purchaseError = error.localizedDescription
+                    purchaseError = CommercePresentation.purchaseErrorMessage(
+                        error,
+                        locale: locale
+                    )
                 }
             }
             withAnimation(response.motionProfile.animation) {
@@ -949,29 +965,26 @@ struct TrialEndPaywallView: View {
 /// perks never fit one line) keeps this free of layout-protocol complexity.
 private struct FlowingChips: View {
     let chips: [String]
+    let symbols: [String]
 
-    private var iconName: (String) -> String {
-        { chip in
-            switch chip {
-            case "App blocking": return "nosign"
-            case "Shake to confirm": return "iphone.radiowaves.left.and.right"
-            case "Smart Reminders": return "bell.badge"
-            default: return "text.bubble"
-            }
-        }
+    private var indexedChips: [(offset: Int, title: String)] {
+        chips.enumerated().map { ($0.offset, $0.element) }
     }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             ForEach(0..<((chips.count + 1) / 2), id: \.self) { rowIndex in
                 HStack(spacing: 8) {
-                    ForEach(chips[rowIndex * 2..<min(rowIndex * 2 + 2, chips.count)], id: \.self) { chip in
+                    ForEach(
+                        indexedChips[rowIndex * 2..<min(rowIndex * 2 + 2, indexedChips.count)],
+                        id: \.offset
+                    ) { chip in
                         HStack(spacing: 6) {
-                            Image(systemName: iconName(chip))
+                            Image(systemName: symbols[chip.offset])
                                 .font(.system(size: 11, weight: .semibold))
                                 .foregroundStyle(PillieTheme.coral)
                                 .accessibilityHidden(true)
-                            Text(chip)
+                            Text(chip.title)
                                 .font(.pillie(13, weight: .semibold))
                                 .foregroundStyle(.white)
                                 .lineLimit(1)

@@ -83,8 +83,10 @@ final class ProtectionPlanOnboardingContentTests: XCTestCase {
     func testEarlyValueProofRestCTAInstructsTheDrag() {
         // At rest the CTA must instruct the drag (so the demo isn't skipped), not
         // offer a one-tap "I took my pill".
-        let drag = ProtectionPlanEarlyValueProofContent.default.dragCTA
-        XCTAssertEqual(drag, "Drag the dot to your apps")
+        let drag = ProtectionPlanEarlyValueProofContent.localized(
+            locale: Locale(identifier: "en_US")
+        ).dragCTA
+        XCTAssertEqual(drag, "Drag to your apps")
         XCTAssertTrue(drag.lowercased().contains("drag"))
     }
 

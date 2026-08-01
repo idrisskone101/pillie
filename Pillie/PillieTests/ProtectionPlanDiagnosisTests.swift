@@ -119,7 +119,7 @@ final class ProtectionPlanDiagnosisTests: XCTestCase {
     func testPrimaryDistractionDisplayNameAndSpecificity() {
         XCTAssertEqual(PrimaryDistraction.app(.tiktok).displayName, "TikTok")
         XCTAssertTrue(PrimaryDistraction.app(.tiktok).isSpecific)
-        XCTAssertEqual(PrimaryDistraction.generic.displayName, "your distracting apps")
+        XCTAssertEqual(PrimaryDistraction.generic.displayName, "Distracting apps")
         XCTAssertFalse(PrimaryDistraction.generic.isSpecific)
     }
 

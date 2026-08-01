@@ -13,6 +13,7 @@ import XCTest
 @testable import Pillie
 
 final class TrialEndPaywallContentTests: XCTestCase {
+    private let english = Locale(identifier: "en_US")
 
     /// Fixed local calendar so boundary expectations are deterministic.
     private var calendar: Calendar = {
@@ -57,7 +58,8 @@ final class TrialEndPaywallContentTests: XCTestCase {
             blockerConfigSaved: true,
             stats: fullStats(),
             calendar: calendar,
-            now: firstExpiredMorning
+            now: firstExpiredMorning,
+            locale: english
         )
 
         XCTAssertEqual(content?.cohort, .blockerConfigured)
@@ -72,7 +74,8 @@ final class TrialEndPaywallContentTests: XCTestCase {
             blockerConfigSaved: true,
             stats: fullStats(),
             calendar: calendar,
-            now: firstExpiredMorning
+            now: firstExpiredMorning,
+            locale: english
         )
 
         XCTAssertEqual(content?.title, "That was Plus,")
@@ -86,7 +89,8 @@ final class TrialEndPaywallContentTests: XCTestCase {
             blockerConfigSaved: true,
             stats: fullStats(blocks: 23, taken: 13, due: 14, streak: 9),
             calendar: calendar,
-            now: firstExpiredMorning
+            now: firstExpiredMorning,
+            locale: english
         )
 
         guard case .record(let kicker, _, let rows, let quietShieldNote)? = content?.card else {
@@ -113,7 +117,8 @@ final class TrialEndPaywallContentTests: XCTestCase {
             blockerConfigSaved: true,
             stats: fullStats(),
             calendar: calendar,
-            now: firstExpiredMorning
+            now: firstExpiredMorning,
+            locale: english
         )
 
         guard case .record(_, let dateRange, _, _)? = content?.card else {
@@ -121,6 +126,23 @@ final class TrialEndPaywallContentTests: XCTestCase {
         }
         // Granted Jun 21, last protected day Jul 5 (expiry Jul 6 00:00).
         XCTAssertEqual(dateRange, "Jun 21 – Jul 5")
+    }
+
+    func testEnglishUKKeepsGenericEnglishCopyAndUsesBritishDateOrder() {
+        let content = TrialEndPaywallContent.make(
+            state: expiredState(),
+            blockerConfigSaved: true,
+            stats: fullStats(),
+            calendar: calendar,
+            now: firstExpiredMorning,
+            locale: Locale(identifier: "en_GB")
+        )
+
+        XCTAssertEqual(content?.title, "That was Plus,")
+        guard case .record(_, let dateRange, _, _)? = content?.card else {
+            return XCTFail("Expected the own-record card")
+        }
+        XCTAssertEqual(dateRange, "21 Jun – 5 Jul")
     }
 
     // MARK: - Zero-blocks fallback (design 2c)
@@ -131,7 +153,8 @@ final class TrialEndPaywallContentTests: XCTestCase {
             blockerConfigSaved: true,
             stats: fullStats(blocks: 0),
             calendar: calendar,
-            now: firstExpiredMorning
+            now: firstExpiredMorning,
+            locale: english
         )
 
         // Zero blocks is never shown as a brag — the headline reframes instead.
@@ -157,7 +180,8 @@ final class TrialEndPaywallContentTests: XCTestCase {
             blockerConfigSaved: true,
             stats: fullStats(blocks: nil),
             calendar: calendar,
-            now: firstExpiredMorning
+            now: firstExpiredMorning,
+            locale: english
         )
 
         XCTAssertEqual(content?.title, "That was Plus,")
@@ -176,7 +200,8 @@ final class TrialEndPaywallContentTests: XCTestCase {
             blockerConfigSaved: true,
             stats: fullStats(blocks: 23, taken: 0, due: 8, streak: 0),
             calendar: calendar,
-            now: firstExpiredMorning
+            now: firstExpiredMorning,
+            locale: english
         )
 
         guard case .record(_, _, let rows, _)? = content?.card else {
@@ -193,7 +218,8 @@ final class TrialEndPaywallContentTests: XCTestCase {
             blockerConfigSaved: false,
             stats: .none,
             calendar: calendar,
-            now: firstExpiredMorning
+            now: firstExpiredMorning,
+            locale: english
         )
 
         XCTAssertEqual(content?.cohort, .reminderOnly)
@@ -221,7 +247,8 @@ final class TrialEndPaywallContentTests: XCTestCase {
             blockerConfigSaved: true,
             stats: fullStats(blocks: nil, taken: nil, due: nil, streak: 0),
             calendar: calendar,
-            now: firstExpiredMorning
+            now: firstExpiredMorning,
+            locale: english
         )
 
         XCTAssertEqual(content?.cohort, .blockerConfigured)
@@ -239,7 +266,8 @@ final class TrialEndPaywallContentTests: XCTestCase {
             blockerConfigSaved: true,
             stats: fullStats(),
             calendar: calendar,
-            now: date(2026, 7, 5, 9, 0) // last protected day — still active
+            now: date(2026, 7, 5, 9, 0), // last protected day — still active
+            locale: english
         ))
     }
 
@@ -249,7 +277,8 @@ final class TrialEndPaywallContentTests: XCTestCase {
             blockerConfigSaved: true,
             stats: fullStats(),
             calendar: calendar,
-            now: firstExpiredMorning
+            now: firstExpiredMorning,
+            locale: english
         ))
     }
 
@@ -259,7 +288,8 @@ final class TrialEndPaywallContentTests: XCTestCase {
             blockerConfigSaved: true,
             stats: fullStats(),
             calendar: calendar,
-            now: firstExpiredMorning
+            now: firstExpiredMorning,
+            locale: english
         ))
     }
 }

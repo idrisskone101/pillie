@@ -39,7 +39,7 @@ struct TrialDeclineFeedbackView: View {
                                 .frame(width: 44, height: 44)
                                 .background(PillieTheme.sage, in: Circle())
                         }
-                        .accessibilityLabel("global.action.close")
+                        .accessibilityLabel(content.close)
                         .accessibilityIdentifier("trialDeclineFeedbackClose")
                     }
 

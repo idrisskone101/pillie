@@ -42,6 +42,9 @@ struct CustomReminderMessagesEditor: View {
     @FocusState private var focusedField: Field?
 
     private let settingsFeedback = SettingsInteractionFeedback()
+    private var editorContent: CustomReminderEditorContent {
+        CustomReminderEditorContent.localized(locale: locale)
+    }
 
     /// The contraception method whose default copy fills any blank preview field.
     private var method: ContraceptiveMethod { store.pack.method }
@@ -110,7 +113,7 @@ struct CustomReminderMessagesEditor: View {
                     group(
                         index: 1,
                         header: PillieLocalization.string(
-                            "settings.reminder_time.title",
+                            "settings.custom_messages.daily_group",
                             locale: locale
                         ),
                         subtitle: PillieLocalization.string(
@@ -135,7 +138,7 @@ struct CustomReminderMessagesEditor: View {
                             locale: locale
                         ),
                         subtitle: PillieLocalization.string(
-                            "settings.final_reminder.body",
+                            "settings.followup.body",
                             locale: locale
                         ),
                         titleBinding: $draft.messages.retryTitle,
@@ -276,8 +279,8 @@ struct CustomReminderMessagesEditor: View {
             sectionHeader(index: index, header: header, subtitle: subtitle)
 
             field(
-                label: "Title",
-                placeholder: "Pillie's default title",
+                label: editorContent.titleFieldLabel,
+                placeholder: editorContent.defaultTitlePlaceholder,
                 text: titleBinding,
                 count: titleCount,
                 cap: CustomReminderCopy.titleCap,
@@ -286,8 +289,8 @@ struct CustomReminderMessagesEditor: View {
             )
 
             field(
-                label: "Message",
-                placeholder: "Pillie's default message",
+                label: editorContent.messageFieldLabel,
+                placeholder: editorContent.defaultMessagePlaceholder,
                 text: bodyBinding,
                 count: bodyCount,
                 cap: CustomReminderCopy.bodyCap,
@@ -487,7 +490,7 @@ private struct CustomReminderPresetPicker: View {
                         HStack(spacing: 7) {
                             Text(preset.localizedDisplayName(locale: locale))
                                 .font(.pillieDate())
-                                .lineLimit(2)
+                                .pillieAdaptiveLineLimit(minimumScaleFactor: 0.72)
                             Spacer(minLength: 0)
                             Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
                                 .font(.pillie(14, weight: .semibold))
@@ -506,7 +509,10 @@ private struct CustomReminderPresetPicker: View {
                     }
                     .buttonStyle(.plain)
                     .accessibilityLabel(preset.localizedDisplayName(locale: locale))
-                    .accessibilityValue(isSelected ? "Selected" : "Not selected")
+                    .accessibilityValue(
+                        CustomReminderEditorContent.localized(locale: locale)
+                            .selectionValue(isSelected: isSelected)
+                    )
                     .accessibilityIdentifier("reminder-preset-\(preset.rawValue)")
                 }
             }

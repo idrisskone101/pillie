@@ -39,15 +39,15 @@ final class OnboardingFlowTests: XCTestCase {
     func testSectionProgressProvidesMeaningfulVoiceOverAnnouncements() {
         XCTAssertEqual(
             ProtectionPlanProgressIndex.progress(for: .productDemo).accessibilityLabel,
-            "See how Pillie works, section 1 of 3"
+            PillieLocalization.string("accessibility.progress.intro", locale: .current)
         )
         XCTAssertEqual(
             ProtectionPlanProgressIndex.progress(for: .painPoints).accessibilityLabel,
-            "Personalize your plan, section 2 of 3"
+            PillieLocalization.string("accessibility.progress.personalize", locale: .current)
         )
         XCTAssertEqual(
             ProtectionPlanProgressIndex.progress(for: .reminderTime).accessibilityLabel,
-            "Set your reminder, section 3 of 3"
+            PillieLocalization.string("accessibility.progress.reminder", locale: .current)
         )
     }
 
@@ -290,6 +290,17 @@ final class OnboardingFlowTests: XCTestCase {
         // The Mechanism Proof demo was dropped from the flow: the diagnosis reveal now
         // leads straight into the paywall. The step + view are retained but unreachable.
         XCTAssertFalse(OnboardingFlow.displayOrder.contains(.mechanismProof))
+    }
+
+    func testRetiredMechanismProofResumeMigratesToLocalizedAppBlockingStep() {
+        XCTAssertEqual(
+            OnboardingFlow.visibleStep(
+                for: OnboardingFlow.Step.mechanismProof.rawValue,
+                isPlus: true,
+                selectedFreePlan: false
+            ),
+            .appBlocking
+        )
     }
 
     // MARK: - Trial Granted Moment replaces the paywall (issue #164 / ADR 0007)

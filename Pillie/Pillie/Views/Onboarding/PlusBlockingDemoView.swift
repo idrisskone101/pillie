@@ -303,7 +303,11 @@ struct PlusBlockingDemoView: View {
 
             Spacer()
 
-            Text(shakeComplete ? PillieLocalization.string("global.status.completed") : "Demo")
+            Text(
+              shakeComplete
+                ? PillieLocalization.string("global.status.completed")
+                : PillieLocalization.string("onboarding.blocking_demo.demo_label")
+            )
               .font(.pillie(10, weight: .black))
               .foregroundStyle(PillieTheme.textMuted)
           }

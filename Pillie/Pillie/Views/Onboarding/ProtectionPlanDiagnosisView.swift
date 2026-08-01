@@ -30,6 +30,7 @@ struct ProtectionPlanDiagnosisView: View {
     let onContinue: () -> Void
 
     @Environment(PillStore.self) private var store
+    @Environment(\.locale) private var locale
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.accessibilityVoiceOverEnabled) private var voiceOverEnabled
 
@@ -48,7 +49,9 @@ struct ProtectionPlanDiagnosisView: View {
     /// Draws the medallion checkmark on once the plan is verified.
     @State private var checkProgress: CGFloat = 0
 
-    private let content = ProtectionPlanDiagnosisContent.default
+    private var content: ProtectionPlanDiagnosisContent {
+        ProtectionPlanDiagnosisContent.localized(locale: locale)
+    }
     private let performanceTier = PerformanceTier.current
 
     private var interactionFeedback: OnboardingInteractionFeedback {
@@ -73,7 +76,8 @@ struct ProtectionPlanDiagnosisView: View {
         let timeText = ProtectionPlanRoutineSummary.clockText(
             hour12: selection.hour,
             minute: selection.minute,
-            isPM: selection.period == 1
+            isPM: selection.period == 1,
+            locale: locale
         )
         return ProtectionPlanDiagnosis(
             primaryDistraction: ProtectionPlanDiagnosisEngine.primaryDistraction(
@@ -89,7 +93,8 @@ struct ProtectionPlanDiagnosisView: View {
             riskWindow: model.riskWindow,
             distractionChoices: model.distractionChoices,
             delayConsequence: model.delayConsequence,
-            missFrequency: store.missFrequency
+            missFrequency: store.missFrequency,
+            locale: locale
         )
     }
 
@@ -241,7 +246,7 @@ struct ProtectionPlanDiagnosisView: View {
             .padding(.bottom, 120)
         }
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("\(content.analyzingTitle). Detected: \(plan.detectedSignals.joined(separator: ", ")).")
+        .accessibilityLabel(content.analyzingAccessibilityLabel(signals: plan.detectedSignals))
     }
 
     private var sealHero: some View {
@@ -387,26 +392,41 @@ struct ProtectionPlanDiagnosisView: View {
     }
 
     private func statTiles(_ plan: ProtectionPlanDiagnosis) -> some View {
-        let cycle = cycleStat()
+        let cycle = ProtectionPlanCycleStatContent.make(
+            method: store.contraceptiveMethod,
+            regimen: store.pack.pillRegimen,
+            activeDays: store.pack.activeDays,
+            breakDays: store.pack.breakDays,
+            locale: locale
+        )
         return HStack(spacing: 12) {
             statTile(
                 icon: "alarm.fill",
                 tint: PillieTheme.coral,
                 background: PillieTheme.coralLight,
                 value: plan.windowValue,
+                accessibilityValue: plan.windowValue,
                 label: reminderLabel(hour: store.reminderHour)
             )
             statTile(
-                icon: cycle.icon,
+                icon: cycle.symbolName,
                 tint: Color(hex: "8B83A8"),
                 background: PillieTheme.lavender,
-                value: cycle.value,
+                value: cycle.compactValue,
+                accessibilityValue: cycle.accessibilityValue,
                 label: cycle.label
             )
         }
     }
 
-    private func statTile(icon: String, tint: Color, background: Color, value: String, label: String) -> some View {
+    private func statTile(
+        icon: String,
+        tint: Color,
+        background: Color,
+        value: String,
+        accessibilityValue: String,
+        label: String
+    ) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             Image(systemName: icon)
                 .font(.system(size: 18, weight: .semibold))
@@ -425,7 +445,8 @@ struct ProtectionPlanDiagnosisView: View {
         .padding(15)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(background, in: RoundedRectangle(cornerRadius: 20))
-        .accessibilityElement(children: .combine)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(label), \(accessibilityValue)")
     }
 
     /// Represents the lock mechanism generically — a small cluster of stand-in app
@@ -550,21 +571,6 @@ struct ProtectionPlanDiagnosisView: View {
         }
     }
 
-    private func cycleStat() -> (icon: String, value: String, label: String) {
-        switch store.contraceptiveMethod {
-        case .pill:
-            let pack = store.pack
-            return (
-                "pills.fill",
-                pack.pillRegimen.localizedScheduleSummary(),
-                PillieLocalization.string("onboarding.plan.current_cycle")
-            )
-        case .patch:
-            return ("bandage.fill", store.contraceptiveMethod.routineDescriptor, PillieLocalization.string("onboarding.plan.current_cycle"))
-        case .ring:
-            return ("circle.circle", store.contraceptiveMethod.routineDescriptor, PillieLocalization.string("onboarding.plan.current_cycle"))
-        }
-    }
 }
 
 /// A soft crest shield (matching the Coral Canopy / Lottie shield silhouette).

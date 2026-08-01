@@ -30,13 +30,21 @@ enum DistractionApp: String, CaseIterable, Equatable {
     case messages
 
     var displayName: String {
+        localizedDisplayName()
+    }
+
+    func localizedDisplayName(locale: Locale = .current) -> String {
         switch self {
         case .tiktok: return "TikTok"
         case .instagram: return "Instagram"
         case .snapchat: return "Snapchat"
         case .youtube: return "YouTube"
         case .x: return "X"
-        case .messages: return "Messages"
+        case .messages:
+            return PillieLocalization.string(
+                "onboarding.personalise.choice.messages",
+                locale: locale
+            )
         }
     }
 
@@ -64,9 +72,14 @@ enum PrimaryDistraction: Equatable {
 
     /// User-facing name. The generic fallback reads naturally inside a sentence.
     var displayName: String {
+        localizedDisplayName()
+    }
+
+    func localizedDisplayName(locale: Locale = .current) -> String {
         switch self {
-        case .app(let app): return app.displayName
-        case .generic: return "your distracting apps"
+        case .app(let app): return app.localizedDisplayName(locale: locale)
+        case .generic:
+            return PillieLocalization.string("onboarding.plan.main_risk.generic", locale: locale)
         }
     }
 
@@ -144,6 +157,53 @@ enum ProtectionPlanDiagnosisEngine {
     }
 }
 
+/// Method-aware presentation copy for the narrow cycle tile in the diagnosis.
+/// The visual value stays compact enough for one line while VoiceOver retains the
+/// complete regimen or routine detail that the tile previously displayed.
+struct ProtectionPlanCycleStatContent: Equatable {
+    let symbolName: String
+    let compactValue: String
+    let accessibilityValue: String
+    let label: String
+
+    static func make(
+        method: ContraceptiveMethod,
+        regimen: PillPack.PillRegimenPreset,
+        activeDays: Int,
+        breakDays: Int,
+        locale: Locale = .current
+    ) -> ProtectionPlanCycleStatContent {
+        let label = PillieLocalization.string(
+            "onboarding.plan.current_cycle",
+            locale: locale
+        )
+
+        switch method {
+        case .pill:
+            return ProtectionPlanCycleStatContent(
+                symbolName: "pills.fill",
+                compactValue: "\(activeDays)/\(breakDays)",
+                accessibilityValue: regimen.localizedScheduleSummary(locale: locale),
+                label: label
+            )
+        case .patch:
+            return ProtectionPlanCycleStatContent(
+                symbolName: "bandage.fill",
+                compactValue: method.localizedTitle(locale: locale),
+                accessibilityValue: method.localizedRoutineDescriptor(locale: locale),
+                label: label
+            )
+        case .ring:
+            return ProtectionPlanCycleStatContent(
+                symbolName: "circle.circle",
+                compactValue: method.localizedTitle(locale: locale),
+                accessibilityValue: method.localizedRoutineDescriptor(locale: locale),
+                label: label
+            )
+        }
+    }
+}
+
 /// The Draft Pill Protection Plan copy, built from the derived plan + the user's
 /// method and Due Action Time. A pure value type — all strings are deterministic
 /// and method-aware (never leaking pill wording into a Patch or Ring plan).
@@ -159,6 +219,7 @@ struct ProtectionPlanDiagnosis: Equatable {
     let distractionChoices: Set<DistractionChoice>
     let delayConsequence: DelayConsequence?
     let missFrequency: MissFrequency?
+    let locale: Locale
 
     init(
         primaryDistraction: PrimaryDistraction,
@@ -168,7 +229,8 @@ struct ProtectionPlanDiagnosis: Equatable {
         riskWindow: RiskWindow?,
         distractionChoices: Set<DistractionChoice> = [],
         delayConsequence: DelayConsequence? = nil,
-        missFrequency: MissFrequency? = nil
+        missFrequency: MissFrequency? = nil,
+        locale: Locale = .current
     ) {
         self.primaryDistraction = primaryDistraction
         self.protectedApps = protectedApps
@@ -178,13 +240,14 @@ struct ProtectionPlanDiagnosis: Equatable {
         self.distractionChoices = distractionChoices
         self.delayConsequence = delayConsequence
         self.missFrequency = missFrequency
+        self.locale = locale
     }
 
     private var language: MethodActionLanguage { MethodActionLanguage(method: method) }
 
     /// The capitalised method word used in the plan name.
     private var planWord: String {
-        method.title
+        method.localizedTitle(locale: locale)
     }
 
     /// Lowercase method word for in-sentence headlines, e.g. "pill" in
@@ -192,20 +255,20 @@ struct ProtectionPlanDiagnosis: Equatable {
     var methodWord: String { planWord.lowercased() }
 
     var headline: String {
-        PillieLocalization.string("onboarding.plan.title")
+        PillieLocalization.string("onboarding.plan.title", locale: locale)
     }
 
     /// The personalised one-liner under the headline. Names the app + Due Action Time
     /// when a specific distraction was identified; frames apps broadly otherwise.
     var leadLine: String {
-        PillieLocalization.string("onboarding.plan.subtitle")
+        PillieLocalization.string("onboarding.plan.subtitle", locale: locale)
     }
 
     /// "Main risk" card value.
     var mainRiskValue: String {
         primaryDistraction.isSpecific
-            ? primaryDistraction.displayName
-            : PillieLocalization.string("onboarding.blocking_setup.title")
+            ? primaryDistraction.localizedDisplayName(locale: locale)
+            : PillieLocalization.string("onboarding.plan.main_risk.generic", locale: locale)
     }
 
     /// "Window" card value — the Due Action Time.
@@ -213,16 +276,18 @@ struct ProtectionPlanDiagnosis: Equatable {
 
     /// "Protection" card value.
     var protectionModeValue: String {
-        PillieLocalization.string("onboarding.plan.support")
+        PillieLocalization.string("onboarding.plan.support", locale: locale)
     }
 
     /// The protected-apps summary line. Falls back to a broad phrase when no concrete
     /// app was chosen, so the plan never reads as empty.
     var protectedAppsLabel: String {
         guard !protectedApps.isEmpty else {
-            return PillieLocalization.string("onboarding.blocking_setup.title")
+            return PillieLocalization.string("onboarding.blocking_setup.title", locale: locale)
         }
-        return protectedApps.map(\.displayName).joined(separator: ", ")
+        return protectedApps
+            .map { $0.localizedDisplayName(locale: locale) }
+            .joined(separator: ", ")
     }
 
     /// A generic, method-aware description of the core lock mechanism that stands on
@@ -230,7 +295,7 @@ struct ProtectionPlanDiagnosis: Equatable {
     /// app-lock card so the reveal still communicates "your distracting apps stay
     /// locked until you check in" even when no app list was ever collected.
     var lockMechanismSummary: String {
-        PillieLocalization.string("onboarding.blocking_setup.subtitle")
+        PillieLocalization.string("onboarding.blocking_setup.subtitle", locale: locale)
     }
 
     /// The signals Pillie "detected" from the calibration, shown as chips during the
@@ -240,8 +305,8 @@ struct ProtectionPlanDiagnosis: Equatable {
     /// what they told us. Deduped and capped so the scan stays readable.
     var detectedSignals: [String] {
         var raw: [String] = [mainRiskValue, windowValue]
-        if let riskWindow { raw.append(riskWindow.title) }
-        raw.append(contentsOf: distractionChoices.map(\.title))
+        if let riskWindow { raw.append(riskWindow.localizedTitle(locale: locale)) }
+        raw.append(contentsOf: distractionChoices.map { $0.localizedTitle(locale: locale) })
 
         var seen = Set<String>()
         var unique: [String] = []
@@ -290,9 +355,9 @@ struct ProtectionPlanDiagnosis: Equatable {
     /// and mechanism claims the app doesn't honor.
     var strategyPoints: [String] {
         [
-            PillieLocalization.string("onboarding.plan.subtitle"),
-            PillieLocalization.string("onboarding.blocking_setup.subtitle"),
-            PillieLocalization.string("onboarding.plan.disclaimer"),
+            PillieLocalization.string("onboarding.plan.subtitle", locale: locale),
+            PillieLocalization.string("onboarding.blocking_setup.subtitle", locale: locale),
+            PillieLocalization.string("onboarding.plan.disclaimer", locale: locale),
         ]
     }
 
@@ -331,7 +396,7 @@ struct ProtectionPlanDiagnosis: Equatable {
 
     /// Honest framing: this is an editable draft, not a committed configuration.
     var disclaimer: String {
-        PillieLocalization.string("onboarding.plan.disclaimer")
+        PillieLocalization.string("onboarding.plan.disclaimer", locale: locale)
     }
 
     /// Every user-visible string, for safe-copy assertions and accessibility.

@@ -82,6 +82,7 @@ struct TrialDeclineFeedbackContent: Equatable {
     let optionalDetailCharacterCountFormat: String
     let done: String
     let continueFree: String
+    let close: String
     let skip: String
     let submit: String
     let thankYou: String
@@ -116,6 +117,7 @@ struct TrialDeclineFeedbackContent: Equatable {
             ),
             done: commerce("trial.decline_feedback.detail.done"),
             continueFree: commerce("trial.end.continue_free"),
+            close: PillieLocalization.string("global.action.close", locale: locale),
             skip: commerce("trial.decline_feedback.skip"),
             submit: commerce("trial.decline_feedback.submit"),
             thankYou: commerce("trial.decline_feedback.thank_you"),

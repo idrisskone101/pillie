@@ -81,6 +81,211 @@ final class ItalianLocalizationContractTests: XCTestCase {
         )
     }
 
+    func testWelcomeDemoChromeUsesItalianRuntimeCopy() {
+        let italian = Locale(identifier: "it_IT")
+
+        XCTAssertEqual(
+            PillieLocalization.string("onboarding.welcome.demo.reminder_title", locale: italian),
+            "Promemoria pomeridiano"
+        )
+        XCTAssertEqual(
+            PillieLocalization.formatted(
+                "onboarding.welcome.demo.reminder_time",
+                locale: italian,
+                arguments: "14:00"
+            ),
+            "Promemoria · 14:00"
+        )
+        XCTAssertEqual(
+            PillieLocalization.string("onboarding.welcome.demo.apps_title", locale: italian),
+            "App che distraggono"
+        )
+        XCTAssertEqual(
+            PillieLocalization.string("onboarding.welcome.demo.apps_locked", locale: italian),
+            "In pausa fino alla registrazione"
+        )
+        XCTAssertEqual(
+            PillieLocalization.string("onboarding.welcome.demo.apps_open", locale: italian),
+            "Ti viene voglia di aprirle…"
+        )
+        XCTAssertEqual(
+            PillieLocalization.string("onboarding.blocking_demo.demo_label", locale: italian),
+            "Demo"
+        )
+    }
+
+    func testEarlyValueProofChromeAndHighRiskActionsUseCompactItalianCopy() {
+        let italian = Locale(identifier: "it_IT")
+
+        XCTAssertEqual(
+            PillieLocalization.string("onboarding.permission.cta", locale: italian),
+            "Attiva notifiche"
+        )
+        XCTAssertEqual(
+            PillieLocalization.string("onboarding.blocking_demo.shake_title", locale: italian),
+            "Scuoti per confermare"
+        )
+        XCTAssertEqual(
+            PillieLocalization.string("onboarding.blocking_demo.drag_title", locale: italian),
+            "Trascina verso le app"
+        )
+        XCTAssertEqual(
+            PillieLocalization.string("onboarding.blocking_demo.shake_body", locale: italian),
+            "Scuoti ora il telefono oppure tocca questa scheda nel simulatore."
+        )
+        XCTAssertEqual(
+            PillieLocalization.string("today.action.shake", locale: italian),
+            "Scuoti per confermare"
+        )
+        XCTAssertEqual(
+            PillieLocalization.string("onboarding.blocking_demo.apps_label", locale: italian),
+            "Le tue app"
+        )
+        XCTAssertEqual(
+            PillieLocalization.string("onboarding.blocking_demo.locked_label", locale: italian),
+            "In pausa"
+        )
+        XCTAssertEqual(
+            PillieLocalization.formatted(
+                "onboarding.blocking_demo.shake_progress",
+                locale: italian,
+                arguments: Int64(2), Int64(3)
+            ),
+            "2 di 3 scosse"
+        )
+    }
+
+    func testPersonalisationOutcomeUsesCompleteNaturalItalianCopy() {
+        XCTAssertEqual(
+            PillieLocalization.string(
+                "onboarding.personalise.outcome.confidence",
+                locale: Locale(identifier: "it_IT")
+            ),
+            "La certezza di averlo fatto"
+        )
+    }
+
+    func testDiagnosisAndBlockerAccessibilityUseItalianRuntimeCopy() {
+        let italian = Locale(identifier: "it_IT")
+        let content = ProtectionPlanDiagnosisContent.localized(locale: italian)
+
+        XCTAssertEqual(
+            content.analyzingAccessibilityLabel(signals: ["Messaggi", "21:05"]),
+            "Il tuo piano di promemoria personalizzato. Rilevati: Messaggi, 21:05."
+        )
+        XCTAssertEqual(
+            DistractionApp.messages.localizedDisplayName(locale: italian),
+            "Messaggi"
+        )
+        XCTAssertEqual(
+            BlockerSelectionState(applicationCount: 2, categoryCount: 1)
+                .localizedAccessibilitySummary(locale: italian),
+            "3 elementi selezionati"
+        )
+        XCTAssertEqual(
+            BlockerSelectionState(applicationCount: 1, categoryCount: 0)
+                .localizedAccessibilitySummary(locale: italian),
+            "1 elemento selezionato"
+        )
+
+        let genericDiagnosis = ProtectionPlanDiagnosis(
+            primaryDistraction: .generic,
+            protectedApps: [],
+            method: .pill,
+            dueActionTimeText: "21:05",
+            riskWindow: nil,
+            distractionChoices: [],
+            delayConsequence: nil,
+            missFrequency: nil,
+            locale: italian
+        )
+        XCTAssertEqual(genericDiagnosis.mainRiskValue, "App che distraggono")
+    }
+
+    func testActiveOnboardingUsesCompactItalianPlanChrome() {
+        let italian = Locale(identifier: "it_IT")
+        let diagnosis = ProtectionPlanDiagnosisContent.localized(locale: italian)
+        let routine = ProtectionPlanRoutineSummary(locale: italian)
+
+        XCTAssertEqual(routine.cardLabel, "Il tuo piano")
+        XCTAssertEqual(diagnosis.protectedAppsHeader, "App in pausa")
+        XCTAssertEqual(
+            ProtectionPlanRoutineSummary(method: .pill, locale: italian)
+                .accessibilityHeadings,
+            ["Il tuo piano di promemoria personalizzato"]
+        )
+        XCTAssertEqual(diagnosis.handNote, "Tutto pronto!")
+    }
+
+    func testDiagnosisCycleTileKeepsFullItalianDetailBehindCompactVisualCopy() {
+        let italian = Locale(identifier: "it_IT")
+
+        let pill = ProtectionPlanCycleStatContent.make(
+            method: .pill,
+            regimen: .twentyOneSeven,
+            activeDays: 21,
+            breakDays: 7,
+            locale: italian
+        )
+        XCTAssertEqual(pill.compactValue, "21/7")
+        XCTAssertEqual(pill.accessibilityValue, "21 giorni attivi, 7 giorni di pausa")
+
+        let patch = ProtectionPlanCycleStatContent.make(
+            method: .patch,
+            regimen: .twentyOneSeven,
+            activeDays: 21,
+            breakDays: 7,
+            locale: italian
+        )
+        XCTAssertEqual(patch.compactValue, "Cerotto")
+        XCTAssertEqual(
+            patch.accessibilityValue,
+            ContraceptiveMethod.patch.localizedRoutineDescriptor(locale: italian)
+        )
+
+        let ring = ProtectionPlanCycleStatContent.make(
+            method: .ring,
+            regimen: .twentyOneSeven,
+            activeDays: 21,
+            breakDays: 7,
+            locale: italian
+        )
+        XCTAssertEqual(ring.compactValue, "Anello")
+        XCTAssertEqual(
+            ring.accessibilityValue,
+            ContraceptiveMethod.ring.localizedRoutineDescriptor(locale: italian)
+        )
+    }
+
+    func testAppBlockingSetupUsesScreenTimeAndTrialAwareItalianCopy() {
+        let content = AppBlockingSetupContent.localized(
+            locale: Locale(identifier: "it_IT")
+        )
+
+        XCTAssertEqual(
+            content.trialDisclosure,
+            "La prova gratuita dura 14 giorni. Al termine, il blocco delle app si disattiva, mentre i promemoria restano gratuiti."
+        )
+        XCTAssertEqual(
+            content.emptyDetail,
+            "Usa Tempo di utilizzo di Apple per scegliere categorie o app."
+        )
+        XCTAssertEqual(
+            content.authorizationDeniedTitle,
+            "Il blocco delle app richiede l’autorizzazione"
+        )
+        XCTAssertEqual(
+            content.authorizationDeniedDetail,
+            "Consenti l’accesso a Tempo di utilizzo per scegliere e mettere in pausa le app."
+        )
+        XCTAssertEqual(content.selectedSummaryLabel, "App selezionate")
+        XCTAssertEqual(
+            content.selectedPrivacyNote,
+            "Pillie riceve solo il numero di elementi selezionati. La selezione resta su questo dispositivo."
+        )
+        XCTAssertEqual(content.skipCTA, "Continua senza blocco app")
+    }
+
     func testMethodAwareNotificationsAndCategoryActionsResolveInItalian() {
         let italian = Locale(identifier: "it_IT")
         let date = Date(timeIntervalSince1970: 1_767_225_600)
@@ -118,14 +323,14 @@ final class ItalianLocalizationContractTests: XCTestCase {
         )
         XCTAssertEqual(
             actions.map { $0.localizedFinalTitle(locale: italian) },
-            Array(repeating: "Promemoria finale programmato", count: 3)
+            Array(repeating: "Promemoria finale", count: 3)
         )
         XCTAssertEqual(
             NotificationManager.shared.reminderCategoryActionTitlesForTesting(
                 isPlus: true,
                 locale: italian
             ),
-            ["Segna come completata", "Ricordamelo più tardi"]
+            ["Registra ora", "Ricordamelo più tardi"]
         )
 
         XCTAssertEqual(

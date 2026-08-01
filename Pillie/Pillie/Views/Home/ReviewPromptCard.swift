@@ -29,7 +29,7 @@ struct ReviewPromptCard: View {
                     Text(content.headline)
                         .font(.pillieBodyBold())
                         .foregroundStyle(PillieTheme.textPrimary)
-                        .fixedSize(horizontal: false, vertical: true)
+                        .pillieAdaptiveLineLimit(minimumScaleFactor: 0.75)
 
                     Text(content.body)
                         .font(.pillie(13, weight: .medium))
@@ -90,8 +90,7 @@ struct ReviewPromptCard: View {
             HStack(spacing: 6) {
                 Text(content.positiveTitle)
                     .font(.pillieBodySemibold())
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.8)
+                    .pillieAdaptiveLineLimit(minimumScaleFactor: 0.72)
                 Image(systemName: "star.fill")
                     .font(.system(size: 13, weight: .bold))
             }
@@ -110,8 +109,7 @@ struct ReviewPromptCard: View {
             Text(content.negativeTitle)
                 .font(.pillieBodySemibold())
                 .foregroundStyle(PillieTheme.textPrimary)
-                .lineLimit(1)
-                .minimumScaleFactor(0.8)
+                .pillieAdaptiveLineLimit(minimumScaleFactor: 0.72)
                 .padding(.horizontal, 14)
                 .frame(maxWidth: .infinity)
                 .frame(height: 48)
