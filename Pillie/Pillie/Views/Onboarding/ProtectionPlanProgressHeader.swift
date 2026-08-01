@@ -20,6 +20,7 @@ struct ProtectionPlanProgressHeader: View {
                 Text(progress.title)
                     .font(.pillie(13, weight: .semibold))
                     .foregroundStyle(PillieTheme.textMuted)
+                    .pillieAdaptiveLineLimit(minimumScaleFactor: 0.75)
                     .accessibilityHidden(true)
                 progressBar
             }

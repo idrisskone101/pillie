@@ -42,11 +42,19 @@ enum OpenLine {
         /// Stacked, one fact per line under a separator rule. Values are
         /// interpolated verbatim; nothing about the user's routine appears here.
         var footer: String {
-            """
+            localizedFooter()
+        }
+
+        func localizedFooter(locale: Locale = .current) -> String {
+            let deviceLabel = PillieLocalization.string(
+                "support.open_line.diagnostics.device",
+                locale: locale
+            )
+            return """
             ———
             App: \(appVersion) (\(build))
             iOS: \(systemVersion)
-            Device: \(deviceModel)
+            \(deviceLabel): \(deviceModel)
             """
         }
     }
@@ -73,18 +81,28 @@ enum OpenLine {
             }
         }
 
+        /// Kept for callers that also localize the body. The locale deliberately
+        /// does not affect this inbox-routing contract.
+        func localizedSubject(locale _: Locale = .current) -> String {
+            subject
+        }
+
         /// Text seeded into the composer body. `nil` for suggestion (the user
         /// writes freely). For an issue report, a diagnostics footer only — never
         /// message content, never routine data.
         var body: String? {
+            localizedBody()
+        }
+
+        func localizedBody(locale: Locale = .current) -> String? {
             switch self {
             case .suggestion:
                 return nil
             case .issueReport(let diagnostics):
                 return """
-                    \(OpenLine.issueInvitation)
+                    \(OpenLine.localizedIssueInvitation(locale: locale))
 
-                    \(diagnostics.footer)
+                    \(diagnostics.localizedFooter(locale: locale))
                     """
             }
         }
@@ -93,8 +111,11 @@ enum OpenLine {
     /// Warm opener seeded above the diagnostics footer. The register invites the
     /// user to describe what happened *above this line*; it carries no routine
     /// data and can be reworded freely without touching the stable subject.
-    static let issueInvitation =
-        "Tell us what went wrong — the more detail, the better. Type above this line."
+    static var issueInvitation: String { localizedIssueInvitation() }
+
+    static func localizedIssueInvitation(locale: Locale = .current) -> String {
+        PillieLocalization.string("support.open_line.issue_invitation", locale: locale)
+    }
 
     /// The visible fallback shown when the device cannot route a `mailto:` URL
     /// (no Mail account configured, or URL composition failed): an alert that
@@ -128,12 +149,14 @@ enum OpenLine {
     /// only device/app diagnostics, never routine data. `nil` only if URL
     /// composition ever fails — callers must still surface a visible fallback,
     /// never a silent no-op.
-    static func mailURL(for intent: Intent) -> URL? {
+    static func mailURL(for intent: Intent, locale: Locale = .current) -> URL? {
         var components = URLComponents()
         components.scheme = "mailto"
         components.path = recipient
-        var queryItems = [URLQueryItem(name: "subject", value: intent.subject)]
-        if let body = intent.body {
+        var queryItems = [
+            URLQueryItem(name: "subject", value: intent.subject)
+        ]
+        if let body = intent.localizedBody(locale: locale) {
             queryItems.append(URLQueryItem(name: "body", value: body))
         }
         components.queryItems = queryItems

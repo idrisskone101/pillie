@@ -14,19 +14,61 @@ import SwiftUI
 struct ProtectionPlanWelcomeContent {
     /// Accessibility description of the hero "moment" panel.
     let eyebrow: String
+    let reminderTitle: String
+    let reminderSubtitle: String
+    let appsTitle: String
+    let appsAvailableDetail: String
+    let appsLockedDetail: String
     let title: String
     let subtitle: String
     let primaryCTA: String
 
     var visibleCopy: [String] {
-        [eyebrow, title, subtitle, primaryCTA]
+        [
+            eyebrow,
+            reminderTitle,
+            reminderSubtitle,
+            appsTitle,
+            appsAvailableDetail,
+            appsLockedDetail,
+            title,
+            subtitle,
+            primaryCTA,
+        ]
     }
 
     static var `default`: ProtectionPlanWelcomeContent { localized() }
 
     static func localized(locale: Locale = .current) -> ProtectionPlanWelcomeContent {
-        ProtectionPlanWelcomeContent(
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.locale = locale
+        let sampleTime = calendar.date(
+            from: DateComponents(year: 2001, month: 1, day: 1, hour: 14, minute: 0)
+        )?.formatted(Date.FormatStyle().hour().minute().locale(locale)) ?? "14:00"
+
+        return ProtectionPlanWelcomeContent(
             eyebrow: PillieLocalization.string("onboarding.welcome.eyebrow", locale: locale),
+            reminderTitle: PillieLocalization.string(
+                "onboarding.welcome.demo.reminder_title",
+                locale: locale
+            ),
+            reminderSubtitle: PillieLocalization.formatted(
+                "onboarding.welcome.demo.reminder_time",
+                locale: locale,
+                arguments: sampleTime
+            ),
+            appsTitle: PillieLocalization.string(
+                "onboarding.welcome.demo.apps_title",
+                locale: locale
+            ),
+            appsAvailableDetail: PillieLocalization.string(
+                "onboarding.welcome.demo.apps_open",
+                locale: locale
+            ),
+            appsLockedDetail: PillieLocalization.string(
+                "onboarding.welcome.demo.apps_locked",
+                locale: locale
+            ),
             title: PillieLocalization.string("onboarding.welcome.title", locale: locale),
             subtitle: PillieLocalization.string("onboarding.welcome.subtitle", locale: locale),
             primaryCTA: PillieLocalization.string("global.action.get_started", locale: locale)
@@ -50,6 +92,10 @@ struct ProtectionPlanEarlyValueProofContent {
 
     let eyebrow: String
     let title: String
+    private let locale: Locale
+    let sampleTimeText: String
+    let appsLabel: String
+    let lockedLabel: String
     /// Idle (rest) caption shown above the card: states the core value and invites
     /// the slide. The merged subheader — no longer a separate static subtitle.
     let restCue: String
@@ -82,9 +128,17 @@ struct ProtectionPlanEarlyValueProofContent {
     var beats: [Beat] { [drift, checkpoint, resolved] }
 
     var visibleCopy: [String] {
-        [eyebrow, title, restCue]
+        [eyebrow, title, sampleTimeText, appsLabel, lockedLabel, restCue]
             + beats.flatMap { [$0.title, $0.detail] }
             + [checkInCTA, dragCTA, skipDemoCTA, continueCTA, shakeCue, shakeToTakeCTA, reassurance, accessibilitySummary]
+    }
+
+    func shakeProgress(current: Int, total: Int) -> String {
+        PillieLocalization.formatted(
+            "onboarding.blocking_demo.shake_progress",
+            locale: locale,
+            arguments: Int64(current), Int64(total)
+        )
     }
 
     static var `default`: ProtectionPlanEarlyValueProofContent { localized() }
@@ -92,9 +146,24 @@ struct ProtectionPlanEarlyValueProofContent {
     static func localized(locale: Locale = .current) -> ProtectionPlanEarlyValueProofContent {
         let title = PillieLocalization.string("onboarding.blocking_demo.title", locale: locale)
         let body = PillieLocalization.string("onboarding.blocking_demo.body", locale: locale)
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.locale = locale
+        let sampleTime = calendar.date(
+            from: DateComponents(year: 2001, month: 1, day: 1, hour: 14, minute: 0)
+        )?.formatted(Date.FormatStyle().hour().minute().locale(locale)) ?? "14:00"
         return ProtectionPlanEarlyValueProofContent(
             eyebrow: PillieLocalization.string("onboarding.demo.title", locale: locale),
             title: title,
+            locale: locale,
+            sampleTimeText: sampleTime,
+            appsLabel: PillieLocalization.string(
+                "onboarding.blocking_demo.apps_label",
+                locale: locale
+            ),
+            lockedLabel: PillieLocalization.string(
+                "onboarding.blocking_demo.locked_label",
+                locale: locale
+            ),
             restCue: body,
             drift: Beat(
                 symbol: "alarm.fill",
@@ -112,7 +181,7 @@ struct ProtectionPlanEarlyValueProofContent {
                 detail: PillieLocalization.string("onboarding.blocking_demo.apps_unlock_body", locale: locale)
             ),
             checkInCTA: PillieLocalization.string("notification.action.complete", locale: locale),
-            dragCTA: PillieLocalization.string("onboarding.blocking_demo.shake_title", locale: locale),
+            dragCTA: PillieLocalization.string("onboarding.blocking_demo.drag_title", locale: locale),
             skipDemoCTA: PillieLocalization.string("global.action.not_now", locale: locale),
             continueCTA: PillieLocalization.string("global.action.continue", locale: locale),
             shakeCue: PillieLocalization.string("onboarding.blocking_demo.shake_body", locale: locale),
@@ -441,6 +510,7 @@ struct ProtectionPlanReminderTimeContent {
 /// Deliberately carries no scores, stats, or medical framing — the reveal must read
 /// as a personalized plan, not a clinical readout.
 struct ProtectionPlanDiagnosisContent {
+    private let locale: Locale
     /// Step label above the headline, e.g. "FINAL STEP".
     let eyebrow: String
     /// Headline shown during the analyzing beat (present-progressive).
@@ -458,16 +528,31 @@ struct ProtectionPlanDiagnosisContent {
         [eyebrow, analyzingTitle, analyzingSubtitle, strategyHeader, protectedAppsHeader, handNote, primaryCTA]
     }
 
+    func analyzingAccessibilityLabel(signals: [String]) -> String {
+        PillieLocalization.formatted(
+            "onboarding.plan.detected_accessibility",
+            locale: locale,
+            arguments: analyzingTitle, signals.joined(separator: ", ")
+        )
+    }
+
     static var `default`: ProtectionPlanDiagnosisContent { localized() }
 
     static func localized(locale: Locale = .current) -> ProtectionPlanDiagnosisContent {
         ProtectionPlanDiagnosisContent(
+            locale: locale,
             eyebrow: PillieLocalization.string("onboarding.welcome.next_action", locale: locale),
             analyzingTitle: PillieLocalization.string("onboarding.plan.title", locale: locale),
             analyzingSubtitle: PillieLocalization.string("onboarding.plan.subtitle", locale: locale),
             strategyHeader: PillieLocalization.string("onboarding.plan.support", locale: locale),
-            protectedAppsHeader: PillieLocalization.string("onboarding.blocking_setup.title", locale: locale),
-            handNote: PillieLocalization.string("onboarding.ready.title", locale: locale),
+            protectedAppsHeader: PillieLocalization.string(
+                "onboarding.plan.protected_apps_header",
+                locale: locale
+            ),
+            handNote: PillieLocalization.string(
+                "onboarding.plan.ready_accent",
+                locale: locale
+            ),
             primaryCTA: PillieLocalization.string("global.action.continue", locale: locale)
         )
     }

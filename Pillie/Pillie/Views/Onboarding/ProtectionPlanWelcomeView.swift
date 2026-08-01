@@ -139,12 +139,14 @@ struct ProtectionPlanWelcomeView: View {
             iconTile(symbol: "alarm.fill", fill: PillieTheme.coral)
 
             VStack(alignment: .leading, spacing: 3) {
-                Text("Afternoon dose")
+                Text(content.reminderTitle)
                     .font(.pillie(17, weight: .bold))
                     .foregroundStyle(PillieTheme.textPrimary)
-                Text("Reminder · 2:00 PM")
+                    .pillieAdaptiveLineLimit(minimumScaleFactor: 0.78)
+                Text(content.reminderSubtitle)
                     .font(.pillie(14, weight: .medium))
                     .foregroundStyle(PillieTheme.textMuted)
+                    .pillieAdaptiveLineLimit(minimumScaleFactor: 0.78)
             }
 
             Spacer(minLength: 8)
@@ -192,15 +194,16 @@ struct ProtectionPlanWelcomeView: View {
             }
 
             VStack(alignment: .leading, spacing: 3) {
-                Text("Distracting apps")
+                Text(content.appsTitle)
                     .font(.pillie(17, weight: .bold))
                     .foregroundStyle(PillieTheme.textPrimary)
-                // The locked copy is longer and wraps, so the row grows as it
-                // locks — an intentional "expanding" beat on the panel.
-                Text(isLocked ? "Locked until you check in" : "Tempting to open…")
+                    .pillieAdaptiveLineLimit(minimumScaleFactor: 0.78)
+                // Keep this compact hero chrome on one line at standard text sizes.
+                Text(isLocked ? content.appsLockedDetail : content.appsAvailableDetail)
                     .font(.pillie(14, weight: .medium))
                     .foregroundStyle(isLocked ? PillieTheme.textMuted : PillieTheme.coral)
                     .contentTransition(.opacity)
+                    .pillieAdaptiveLineLimit(minimumScaleFactor: 0.72)
             }
 
             Spacer(minLength: 8)

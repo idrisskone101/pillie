@@ -44,9 +44,21 @@ struct AdaptiveReminderSuggestionCardContent: Equatable {
         )
 
         return AdaptiveReminderSuggestionCardContent(
-            headline: "You usually log around \(timeString)",
-            body: "Want to move your daily reminder to \(timeString) so it lands when you're ready?",
-            acceptTitle: "Move reminder to \(timeString)",
+            headline: PillieLocalization.formatted(
+                "today.adaptive_reminder.headline",
+                locale: locale,
+                arguments: timeString
+            ),
+            body: PillieLocalization.formatted(
+                "today.adaptive_reminder.body",
+                locale: locale,
+                arguments: timeString
+            ),
+            acceptTitle: PillieLocalization.formatted(
+                "today.adaptive_reminder.accept",
+                locale: locale,
+                arguments: timeString
+            ),
             suggestedHour: suggestion.hour,
             suggestedMinute: suggestion.minute,
             deltaMinutes: suggestion.deltaMinutes

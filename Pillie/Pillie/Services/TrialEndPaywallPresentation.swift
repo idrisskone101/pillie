@@ -86,7 +86,13 @@ struct TrialEndPaywallContent: Equatable {
         }
         switch cohort {
         case .blockerConfigured:
-            return lossFramed(grantDate: grantDate, stats: stats, calendar: calendar, now: now)
+            return lossFramed(
+                grantDate: grantDate,
+                stats: stats,
+                calendar: calendar,
+                now: now,
+                locale: locale
+            )
         case .reminderOnly:
             return gainFramed()
         }
@@ -132,15 +138,15 @@ struct TrialEndPaywallContent: Equatable {
             ? .perks(
                 kicker: commerce("trial.end.free_title"),
                 chips: [
-                    commerce("paywall.feature.app_blocking"),
+                    commerce("paywall.feature.app_blocking.compact"),
                     commerce("paywall.feature.shake"),
                     commerce("paywall.feature.smart_reminders"),
-                    commerce("paywall.feature.custom_messages"),
+                    commerce("paywall.feature.custom_messages.compact"),
                 ],
                 footnote: commerce("paywall.subtitle")
             )
             : .record(
-                kicker: commerce("trial.end.title"),
+                kicker: commerce("trial.end.kicker"),
                 dateRange: localizedRecordDateRange(
                     grantDate: grantDate,
                     calendar: calendar,
@@ -182,7 +188,8 @@ struct TrialEndPaywallContent: Equatable {
         grantDate: Date,
         stats: TrialEndOwnStats,
         calendar: Calendar,
-        now: Date
+        now: Date,
+        locale: Locale
     ) -> TrialEndPaywallContent {
         let rows = recordRows(stats: stats)
         // No usable stat at all: nothing honest to anchor loss framing on, so
@@ -209,7 +216,11 @@ struct TrialEndPaywallContent: Equatable {
             subtitle: "Your 14 days ended — app blocking is now off. Reminders stay free forever.",
             card: .record(
                 kicker: "Your 14-day record",
-                dateRange: recordDateRange(grantDate: grantDate, calendar: calendar),
+                dateRange: recordDateRange(
+                    grantDate: grantDate,
+                    calendar: calendar,
+                    locale: locale
+                ),
                 rows: rows,
                 quietShieldNote: quietShield
                     ? "Your blocker stood guard all 14 days — it never had to step in. That's the good outcome."
@@ -246,14 +257,18 @@ struct TrialEndPaywallContent: Equatable {
 
     /// "Jun 21 – Jul 5": grant day through the last protected day (the day
     /// before the midnight-after-day-14 expiry moment).
-    private static func recordDateRange(grantDate: Date, calendar: Calendar) -> String {
+    private static func recordDateRange(
+        grantDate: Date,
+        calendar: Calendar,
+        locale: Locale
+    ) -> String {
         let clock = ReverseTrialClock(grantDate: grantDate)
         let expiry = clock.expiryMoment(calendar: calendar)
         let lastProtectedDay = calendar.date(byAdding: .day, value: -1, to: expiry) ?? expiry
         let formatter = DateFormatter()
         formatter.calendar = calendar
         formatter.timeZone = calendar.timeZone
-        formatter.locale = .current
+        formatter.locale = locale
         formatter.setLocalizedDateFormatFromTemplate("MMMd")
         return "\(formatter.string(from: grantDate)) – \(formatter.string(from: lastProtectedDay))"
     }

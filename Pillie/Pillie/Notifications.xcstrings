@@ -13,7 +13,7 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Segna come completata"
+            "value": "Registra ora"
           }
         },
         "de": {
@@ -254,6 +254,29 @@
         }
       }
     },
+    "notification.custom.direct.title": {
+      "comment": "Direct preset primary notification title [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie check-in due"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registrazione Pillie da completare"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie-Check-in fällig"
+          }
+        }
+      }
+    },
     "notification.custom.encouraging.final": {
       "comment": "Default preset [notification]",
       "localizations": {
@@ -319,6 +342,29 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ein kurzer Check-in für deine heutige Routine."
+          }
+        }
+      }
+    },
+    "notification.custom.encouraging.title": {
+      "comment": "Encouraging preset primary notification title [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You’re building consistency"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stai costruendo costanza"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du baust Beständigkeit auf"
           }
         }
       }
@@ -392,6 +438,29 @@
         }
       }
     },
+    "notification.custom.gentle.title": {
+      "comment": "Gentle preset primary notification title [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A gentle reminder"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un promemoria delicato"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eine sanfte Erinnerung"
+          }
+        }
+      }
+    },
     "notification.custom.private.final": {
       "comment": "Discreet preset [notification]",
       "localizations": {
@@ -461,6 +530,29 @@
         }
       }
     },
+    "notification.custom.private.title": {
+      "comment": "Discreet preset primary notification title [notification]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Time for your check-in"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "È il momento di registrare"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zeit für deinen Check-in"
+          }
+        }
+      }
+    },
     "notification.final.body": {
       "comment": "Observed state only [health]",
       "localizations": {
@@ -496,7 +588,7 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Promemoria finale programmato"
+            "value": "Promemoria finale"
           }
         },
         "de": {
@@ -871,6 +963,98 @@
           "stringUnit": {
             "state": "translated",
             "value": "Deine Pillie-Plus-Testphase endet bald"
+          }
+        }
+      }
+    },
+    "notification.trial_expiry.day10.body": {
+      "comment": "Reverse Trial day-10 warning; app-blocking scope only [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App blocking turns off in 5 days. Reminders stay free, forever."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il blocco delle app si disattiverà tra 5 giorni. I promemoria resteranno gratuiti, per sempre."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die App-Sperre wird in 5 Tagen deaktiviert. Erinnerungen bleiben dauerhaft kostenlos."
+          }
+        }
+      }
+    },
+    "notification.trial_expiry.day10.title": {
+      "comment": "Reverse Trial day-10 warning title [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your Plus trial ends soon"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La prova di Pillie Plus terminerà presto"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine Plus-Testphase endet bald"
+          }
+        }
+      }
+    },
+    "notification.trial_expiry.day13.body": {
+      "comment": "Reverse Trial day-13 warning; app-blocking scope only [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App blocking turns off tomorrow night. Reminders stay free, forever."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il blocco delle app si disattiverà domani sera. I promemoria resteranno gratuiti, per sempre."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die App-Sperre wird morgen Abend deaktiviert. Erinnerungen bleiben dauerhaft kostenlos."
+          }
+        }
+      }
+    },
+    "notification.trial_expiry.day13.title": {
+      "comment": "Reverse Trial day-13 warning title [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your Plus trial is almost over"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La prova di Pillie Plus sta per terminare"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine Plus-Testphase ist fast vorbei"
           }
         }
       }

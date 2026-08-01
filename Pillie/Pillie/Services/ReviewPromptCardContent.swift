@@ -11,6 +11,8 @@
 //  without leaking any of the signals the eligibility check used.
 //
 
+import Foundation
+
 struct ReviewPromptCardContent: Equatable {
     /// Step-one Sentiment Gate question.
     let headline: String
@@ -23,13 +25,22 @@ struct ReviewPromptCardContent: Equatable {
 
     var visibleCopy: [String] { [headline, body, positiveTitle, negativeTitle] }
 
-    static func make(decision: ReviewPromptEligibility.Decision) -> ReviewPromptCardContent? {
+    static func make(
+        decision: ReviewPromptEligibility.Decision,
+        locale: Locale = .current
+    ) -> ReviewPromptCardContent? {
         guard decision == .show else { return nil }
         return ReviewPromptCardContent(
-            headline: "Enjoying Pillie?",
-            body: "We'd love to hear how it's going for you.",
-            positiveTitle: "Yes, I'm enjoying it",
-            negativeTitle: "Not really"
+            headline: PillieLocalization.string("today.review_prompt.title", locale: locale),
+            body: PillieLocalization.string("today.review_prompt.body", locale: locale),
+            positiveTitle: PillieLocalization.string(
+                "today.review_prompt.positive",
+                locale: locale
+            ),
+            negativeTitle: PillieLocalization.string(
+                "today.review_prompt.negative",
+                locale: locale
+            )
         )
     }
 }

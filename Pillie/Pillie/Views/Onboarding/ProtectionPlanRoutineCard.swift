@@ -21,10 +21,11 @@ struct ProtectionPlanRoutineCard: View {
                 Image(systemName: "shield.lefthalf.filled")
                     .font(.system(size: 12, weight: .bold))
                     .foregroundStyle(PillieTheme.coral)
-                Text(ProtectionPlanRoutineSummary.title.uppercased())
+                Text(summary.cardLabel.uppercased(with: summary.locale))
                     .font(.pillie(11, weight: .bold))
                     .tracking(1.6)
                     .foregroundStyle(PillieTheme.textMuted)
+                    .pillieAdaptiveLineLimit(minimumScaleFactor: 0.85)
             }
 
             Text(summary.headline)
@@ -83,7 +84,7 @@ struct ProtectionPlanRoutineCard: View {
     }
 
     private var accessibilityText: String {
-        ([ProtectionPlanRoutineSummary.title, summary.headline]
+        (summary.accessibilityHeadings
             + summary.rows.map { "\($0.label): \($0.value)" }).joined(separator: ". ")
     }
 }

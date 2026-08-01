@@ -187,6 +187,13 @@ enum OnboardingFlow {
             return .acquisitionSource
         }
 
+        // The retained Mechanism Proof implementation predates runtime localization
+        // and is no longer part of the canonical flow. Resume persisted users at the
+        // next live step so they cannot land on an obsolete English-only screen.
+        if step == .mechanismProof {
+            return .appBlocking
+        }
+
         // The paywall and free-plan confirmation were retired by the Reverse Trial
         // (issue #164 / ADR 0007), and issue #204 retires the Trial Granted Moment as
         // a blocking gate. Anyone persisted on those steps resumes at app-blocking

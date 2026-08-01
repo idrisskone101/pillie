@@ -10,6 +10,7 @@ import FamilyControls
 struct SettingsView: View {
     @Environment(PillStore.self) var store
     @Environment(\.locale) private var locale
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
     @Environment(\.openURL) private var openURL
     @State private var appeared = false
@@ -138,7 +139,7 @@ struct SettingsView: View {
                             ProductAnalyticsTelemetry.live.autoReminderIntervalSettingsOpened()
                         } label: {
                             settingsRow(PillieLocalization.string(
-                                "settings.followup.title",
+                                "settings.followup.interval_title",
                                 locale: locale
                             ), value: SettingsPresentation.interval(
                                 minutes: store.autoReminderIntervalMinutes,
@@ -152,7 +153,7 @@ struct SettingsView: View {
                             ProductAnalyticsTelemetry.live.autoReminderRetryLimitSettingsOpened()
                         } label: {
                             settingsRow(PillieLocalization.string(
-                                "settings.followup.title",
+                                "settings.followup.retry_limit_title",
                                 locale: locale
                             ), value: store.autoReminderRetryLimit.formatted(.number.locale(locale)))
                         }
@@ -179,7 +180,7 @@ struct SettingsView: View {
                             ProductAnalyticsTelemetry.live.settingsSmartRemindersUpsellViewed()
                         } label: {
                             settingsRow(PillieLocalization.string(
-                                "settings.followup.title",
+                                "settings.followup.interval_title",
                                 locale: locale
                             ), value: "Pillie+", valueColor: PillieTheme.coral, showLock: true)
                         }
@@ -190,7 +191,7 @@ struct SettingsView: View {
                             ProductAnalyticsTelemetry.live.settingsSmartRemindersUpsellViewed()
                         } label: {
                             settingsRow(PillieLocalization.string(
-                                "settings.followup.title",
+                                "settings.followup.retry_limit_title",
                                 locale: locale
                             ), value: "Pillie+", valueColor: PillieTheme.coral, showLock: true)
                         }
@@ -325,11 +326,11 @@ struct SettingsView: View {
 
                 settingsCard {
                     Button {
-                        openMailOrFallback(OpenLine.mailURL(for: .suggestion))
+                        openMailOrFallback(OpenLine.mailURL(for: .suggestion, locale: locale))
                         ProductAnalyticsTelemetry.live.openLineSuggestionTapped()
                     } label: {
                         settingsRow(PillieLocalization.string(
-                            "settings.support.email",
+                            "settings.support.suggestion",
                             locale: locale
                         ), value: "")
                     }
@@ -339,11 +340,14 @@ struct SettingsView: View {
                         // Diagnostics are gathered live here and injected as plain
                         // values; `OpenLine` composes a deterministic body that
                         // carries device/app info only, never routine data.
-                        openMailOrFallback(OpenLine.mailURL(for: .issueReport(.current())))
+                        openMailOrFallback(OpenLine.mailURL(
+                            for: .issueReport(.current()),
+                            locale: locale
+                        ))
                         ProductAnalyticsTelemetry.live.openLineIssueReportTapped()
                     } label: {
                         settingsRow(PillieLocalization.string(
-                            "settings.support.email",
+                            "settings.support.issue_report",
                             locale: locale
                         ), value: "")
                     }
@@ -409,7 +413,7 @@ struct SettingsView: View {
         }
         .sheet(isPresented: $showCycleDayEditor) {
             CycleDayEditor(store: store)
-                .presentationDetents([.height(320)])
+                .presentationDetents([.large])
                 .presentationDragIndicator(.hidden)
                 .presentationBackground(PillieTheme.bg)
         }
@@ -506,37 +510,78 @@ struct SettingsView: View {
         }
     }
 
+    @ViewBuilder
     private func settingsRow(_ label: String, value: String, valueColor: Color = PillieTheme.textMuted, showChevron: Bool = true, showLock: Bool = false) -> some View {
-        HStack {
-            Text(label)
-                .font(.pillieSubtitleBold())
-                .foregroundStyle(PillieTheme.textPrimary)
-                .fixedSize(horizontal: false, vertical: true)
-                .layoutPriority(1)
+        if dynamicTypeSize.isAccessibilitySize {
+            HStack(alignment: .top, spacing: 8) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(label)
+                        .font(.pillieSubtitleBold())
+                        .foregroundStyle(PillieTheme.textPrimary)
+                        .fixedSize(horizontal: false, vertical: true)
 
-            Spacer()
+                    if !value.isEmpty {
+                        Text(value)
+                            .font(.pillie(15, weight: .regular))
+                            .foregroundStyle(valueColor)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
 
-            if showLock {
-                Image(systemName: "lock.fill")
-                    .font(.system(size: 11, weight: .semibold))
-                    .foregroundStyle(PillieTheme.coral)
+                if showLock {
+                    Image(systemName: "lock.fill")
+                        .font(.system(size: 11, weight: .semibold))
+                        .foregroundStyle(PillieTheme.coral)
+                }
+
+                if showChevron {
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 13, weight: .semibold))
+                        .foregroundStyle(PillieTheme.textMuted.opacity(0.4))
+                }
             }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 16)
+            .contentShape(Rectangle())
+        } else {
+            HStack(spacing: 8) {
+                Text(label)
+                    .font(.pillieSubtitleBold())
+                    .foregroundStyle(PillieTheme.textPrimary)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.72)
+                    .allowsTightening(true)
+                    .layoutPriority(1)
 
-            Text(value)
-                .font(.pillie(15, weight: .regular))
-                .foregroundStyle(valueColor)
-                .multilineTextAlignment(.trailing)
-                .fixedSize(horizontal: false, vertical: true)
+                Spacer(minLength: 4)
 
-            if showChevron {
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 13, weight: .semibold))
-                    .foregroundStyle(PillieTheme.textMuted.opacity(0.4))
+                if showLock {
+                    Image(systemName: "lock.fill")
+                        .font(.system(size: 11, weight: .semibold))
+                        .foregroundStyle(PillieTheme.coral)
+                }
+
+                if !value.isEmpty {
+                    Text(value)
+                        .font(.pillie(15, weight: .regular))
+                        .foregroundStyle(valueColor)
+                        .multilineTextAlignment(.trailing)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.68)
+                        .allowsTightening(true)
+                }
+
+                if showChevron {
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 13, weight: .semibold))
+                        .foregroundStyle(PillieTheme.textMuted.opacity(0.4))
+                }
             }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 16)
+            .contentShape(Rectangle())
         }
-        .padding(.horizontal, 20)
-        .padding(.vertical, 16)
-        .contentShape(Rectangle())
     }
 
     private var divider: some View {
@@ -609,7 +654,7 @@ struct SettingsView: View {
         if manager.hasEntitlement { return "Pillie Plus" }
         if manager.hasPlusAccess {
             return PillieLocalization.string(
-                "trial.status.title",
+                "trial.status.active_short",
                 table: "Commerce",
                 locale: locale
             )
@@ -635,9 +680,10 @@ struct SettingsView: View {
             store.customRetryReminderTitle,
             store.customRetryReminderBody
         ].contains { CustomReminderCopy.isCustomized($0) }
-        return hasCustom
-            ? PillieLocalization.string("global.action.edit", locale: locale)
-            : PillieLocalization.string("settings.custom_messages.restore", locale: locale)
+        return SettingsPresentation.reminderMessagesSummary(
+            hasCustom: hasCustom,
+            locale: locale
+        )
     }
 
     private var protocolSummary: String {
@@ -652,7 +698,10 @@ struct SettingsView: View {
     }
 
     private var supplyReminderTitle: String {
-        PillieLocalization.string("today.refill.title", locale: locale)
+        SettingsPresentation.supplyReminderTitle(
+            method: store.pack.method,
+            locale: locale
+        )
     }
 
     private var supplyReminderValue: String {
@@ -712,6 +761,11 @@ private struct ProtocolEditor: View {
     }
 
     var body: some View {
+        let protocolPresentation = ProtocolEditorPresentation.localized(
+            method: selectedMethod,
+            locale: locale
+        )
+
         VStack(spacing: 0) {
             SettingsSheetHeader(title: PillieLocalization.string(
                 "settings.schedule.title",
@@ -773,8 +827,14 @@ private struct ProtocolEditor: View {
 
                         if selectedRegimen == .custom {
                             HStack(spacing: 12) {
-                                customInputCard(title: "Active Days", text: $customActiveDaysText)
-                                customInputCard(title: "Break Days", text: $customBreakDaysText)
+                                customInputCard(
+                                    title: protocolPresentation.customDayLabels[0],
+                                    text: $customActiveDaysText
+                                )
+                                customInputCard(
+                                    title: protocolPresentation.customDayLabels[1],
+                                    text: $customBreakDaysText
+                                )
                             }
                         }
                     } else {
@@ -783,11 +843,23 @@ private struct ProtocolEditor: View {
                             .foregroundStyle(PillieTheme.textMuted)
                             .tracking(2)
 
-                        Text(selectedMethod == .patch
-                             ? "Patch reminders: day 1 apply, days 8 and 15 change, day 22 remove, days 23-28 patch-free."
-                             : "Ring reminders: day 1 insert, days 2-21 ring inserted, day 22 remove, days 23-28 ring-free.")
-                            .font(.pillieBody())
-                            .foregroundStyle(PillieTheme.textPrimary)
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text(protocolPresentation.scheduleTitle)
+                                .font(.pillieBodyBold())
+                                .foregroundStyle(PillieTheme.textPrimary)
+                                .pillieAdaptiveLineLimit(minimumScaleFactor: 0.8)
+
+                            ForEach(protocolPresentation.scheduleLines, id: \.self) { line in
+                                HStack(alignment: .firstTextBaseline, spacing: 8) {
+                                    Text("•")
+                                        .accessibilityHidden(true)
+                                    Text(line)
+                                        .font(.pillieBody())
+                                        .foregroundStyle(PillieTheme.textPrimary)
+                                        .fixedSize(horizontal: false, vertical: true)
+                                }
+                            }
+                        }
                             .padding(16)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .background(PillieTheme.cardWhite)
@@ -1080,7 +1152,7 @@ struct AutoReminderIntervalEditor: View {
 
     var body: some View {
         SettingsSheetContainer(
-            title: PillieLocalization.string("settings.followup.title", locale: locale),
+            title: PillieLocalization.string("settings.followup.interval_title", locale: locale),
             bottomPadding: 0
         ) {
             VStack(spacing: 16) {
@@ -1142,7 +1214,7 @@ private struct AutoReminderRetryLimitEditor: View {
 
     var body: some View {
         SettingsSheetContainer(
-            title: PillieLocalization.string("settings.followup.title", locale: locale),
+            title: PillieLocalization.string("settings.followup.retry_limit_title", locale: locale),
             bottomPadding: 0
         ) {
             VStack(spacing: 16) {
@@ -1216,7 +1288,10 @@ private struct RefillReminderThresholdEditor: View {
     }
 
     private var editorTitle: String {
-        PillieLocalization.string("today.refill.title", locale: locale)
+        SettingsPresentation.supplyReminderTitle(
+            method: store.pack.method,
+            locale: locale
+        )
     }
 
     private var thresholdOptions: [Int] {

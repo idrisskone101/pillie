@@ -79,7 +79,7 @@ struct UpdateTrialAnnouncementContent {
 /// this sheet is presented, mirroring how the Trial Granted Moment stays
 /// presentation-only.
 struct UpdateTrialAnnouncementView: View {
-    static let presentationHeight: CGFloat = 540
+    static let presentationHeight: CGFloat = 620
 
     @Environment(\.locale) private var locale
     private var content: UpdateTrialAnnouncementContent {
@@ -90,34 +90,35 @@ struct UpdateTrialAnnouncementView: View {
     let onDismiss: () -> Void
 
     var body: some View {
-        VStack(spacing: 20) {
-            Capsule()
-                .fill(PillieTheme.sage)
-                .frame(width: 36, height: 5)
-                .padding(.top, 12)
+        ScrollView(showsIndicators: false) {
+            VStack(spacing: 20) {
+                Capsule()
+                    .fill(PillieTheme.sage)
+                    .frame(width: 36, height: 5)
+                    .padding(.top, 12)
 
-            UpdateTrialAnnouncementHeader(
-                badge: content.badge,
-                title: content.title,
-                titleAccent: content.titleAccent,
-                subtitle: content.subtitle
-            )
+                UpdateTrialAnnouncementHeader(
+                    badge: content.badge,
+                    title: content.title,
+                    titleAccent: content.titleAccent,
+                    subtitle: content.subtitle
+                )
 
-            UpdateTrialPerkGrid(perks: content.perks)
-                .padding(.horizontal, 28)
+                UpdateTrialPerkGrid(perks: content.perks)
+                    .padding(.horizontal, 28)
 
-            Spacer(minLength: 0)
-
-            UpdateTrialAnnouncementActions(
-                disclosure: content.disclosure,
-                primaryCTA: content.primaryCTA,
-                dismissCTA: content.dismissCTA,
-                onSetUpBlocking: onSetUpBlocking,
-                onDismiss: onDismiss
-            )
+                UpdateTrialAnnouncementActions(
+                    disclosure: content.disclosure,
+                    primaryCTA: content.primaryCTA,
+                    dismissCTA: content.dismissCTA,
+                    onSetUpBlocking: onSetUpBlocking,
+                    onDismiss: onDismiss
+                )
+            }
+            .padding(.bottom, 20)
+            .frame(maxWidth: .infinity, alignment: .top)
         }
-        .padding(.bottom, 10)
-        .frame(maxWidth: .infinity, alignment: .top)
+        .scrollBounceBehavior(.basedOnSize)
         .background(PillieTheme.bg)
     }
 }
@@ -170,8 +171,7 @@ struct UpdateTrialPerkGrid: View {
                     Text(perk.title)
                         .font(.pillie(13, weight: .semibold))
                         .foregroundStyle(PillieTheme.textPrimary)
-                        .lineLimit(2)
-                        .fixedSize(horizontal: false, vertical: true)
+                        .pillieAdaptiveLineLimit(minimumScaleFactor: 0.75)
                     Spacer(minLength: 0)
                 }
                 .padding(.horizontal, 14)

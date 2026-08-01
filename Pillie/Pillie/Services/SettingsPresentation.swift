@@ -45,4 +45,117 @@ enum SettingsPresentation {
             Int64(total)
         )
     }
+
+    static func reminderMessagesSummary(
+        hasCustom: Bool,
+        locale: Locale = .current
+    ) -> String {
+        PillieLocalization.string(
+            hasCustom
+                ? "settings.custom_messages.status.customized"
+                : "settings.custom_messages.status.default",
+            locale: locale
+        )
+    }
+
+    static func supplyReminderTitle(
+        method: ContraceptiveMethod,
+        locale: Locale = .current
+    ) -> String {
+        let key = switch method {
+        case .pill: "today.refill.title"
+        case .patch: "today.refill.title.patch"
+        case .ring: "today.refill.title.ring"
+        }
+        return PillieLocalization.string(key, locale: locale)
+    }
+}
+
+struct ProtocolEditorPresentation: Equatable {
+    let customDayLabels: [String]
+    let scheduleTitle: String
+    let scheduleLines: [String]
+
+    static func localized(
+        method: ContraceptiveMethod,
+        locale: Locale = .current
+    ) -> ProtocolEditorPresentation {
+        let customDayLabels = [
+            PillieLocalization.string("onboarding.regimen.active_days", locale: locale),
+            PillieLocalization.string("onboarding.regimen.break_days", locale: locale),
+        ]
+
+        switch method {
+        case .pill:
+            return ProtocolEditorPresentation(
+                customDayLabels: customDayLabels,
+                scheduleTitle: PillieLocalization.string("settings.schedule.title", locale: locale),
+                scheduleLines: []
+            )
+        case .patch:
+            return ProtocolEditorPresentation(
+                customDayLabels: customDayLabels,
+                scheduleTitle: PillieLocalization.string("onboarding.fixed.patch.title", locale: locale),
+                scheduleLines: [
+                    PillieLocalization.string("onboarding.fixed.patch.day1", locale: locale),
+                    PillieLocalization.string("onboarding.fixed.patch.day8", locale: locale),
+                    PillieLocalization.string("onboarding.fixed.patch.day22", locale: locale),
+                    PillieLocalization.string("onboarding.fixed.patch.break", locale: locale),
+                ]
+            )
+        case .ring:
+            return ProtocolEditorPresentation(
+                customDayLabels: customDayLabels,
+                scheduleTitle: PillieLocalization.string("onboarding.fixed.ring.title", locale: locale),
+                scheduleLines: [
+                    PillieLocalization.string("onboarding.fixed.ring.day1", locale: locale),
+                    PillieLocalization.string("onboarding.fixed.ring.day2", locale: locale),
+                    PillieLocalization.string("onboarding.fixed.ring.day22", locale: locale),
+                    PillieLocalization.string("onboarding.fixed.ring.break", locale: locale),
+                ]
+            )
+        }
+    }
+}
+
+struct CustomReminderEditorContent: Equatable {
+    let titleFieldLabel: String
+    let messageFieldLabel: String
+    let defaultTitlePlaceholder: String
+    let defaultMessagePlaceholder: String
+    private let selectedValue: String
+    private let notSelectedValue: String
+
+    func selectionValue(isSelected: Bool) -> String {
+        isSelected ? selectedValue : notSelectedValue
+    }
+
+    static func localized(locale: Locale = .current) -> CustomReminderEditorContent {
+        CustomReminderEditorContent(
+            titleFieldLabel: PillieLocalization.string(
+                "settings.custom_messages.field.title",
+                locale: locale
+            ),
+            messageFieldLabel: PillieLocalization.string(
+                "settings.custom_messages.field.message",
+                locale: locale
+            ),
+            defaultTitlePlaceholder: PillieLocalization.string(
+                "settings.custom_messages.placeholder.title",
+                locale: locale
+            ),
+            defaultMessagePlaceholder: PillieLocalization.string(
+                "settings.custom_messages.placeholder.message",
+                locale: locale
+            ),
+            selectedValue: PillieLocalization.string(
+                "accessibility.selection.selected",
+                locale: locale
+            ),
+            notSelectedValue: PillieLocalization.string(
+                "accessibility.selection.not_selected",
+                locale: locale
+            )
+        )
+    }
 }

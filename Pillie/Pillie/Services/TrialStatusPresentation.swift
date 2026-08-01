@@ -48,10 +48,20 @@ struct TrialStatusPresentation: Equatable {
     /// still being needed while preserving the trial countdown.
     var indicatorLabel: String {
         if ["de", "it"].contains(locale.language.languageCode?.identifier ?? "") {
-            return PillieLocalization.string(
-                "trial.status.title",
+            let key = switch (protectionActive, endsTonight) {
+            case (true, true): "trial.status.indicator.active_tonight"
+            case (true, false): "trial.status.indicator.active"
+            case (false, true): "trial.status.indicator.setup_tonight"
+            case (false, false): "trial.status.indicator.setup"
+            }
+            if endsTonight {
+                return PillieLocalization.string(key, table: "Commerce", locale: locale)
+            }
+            return PillieLocalization.formatted(
+                key,
                 table: "Commerce",
-                locale: locale
+                locale: locale,
+                arguments: Int64(displayedDaysRemaining)
             )
         }
         if protectionActive {
@@ -82,13 +92,23 @@ struct TrialStatusPresentation: Equatable {
                 title: title,
                 expiryItems: [
                     PillieLocalization.string(
-                        "trial.end.subtitle",
+                        "trial.status.after.blocking_off",
+                        table: "Commerce",
+                        locale: locale
+                    ),
+                    PillieLocalization.string(
+                        "trial.status.after.reminders_free",
+                        table: "Commerce",
+                        locale: locale
+                    ),
+                    PillieLocalization.string(
+                        "trial.status.after.setup_saved",
                         table: "Commerce",
                         locale: locale
                     ),
                 ],
                 ctaTitle: PillieLocalization.string(
-                    "paywall.action.upgrade",
+                    "trial.status.keep_plus",
                     table: "Commerce",
                     locale: locale
                 ),
@@ -258,7 +278,7 @@ struct TrialActivationItem: Equatable {
         return [
             TrialActivationItem(
                 feature: .appBlocking,
-                title: title("paywall.feature.app_blocking", fallback: "App blocking"),
+                title: title("paywall.feature.app_blocking.compact", fallback: "App blocking"),
                 status: state.appBlockingActive ? .active : .setUp,
                 action: .appBlocking,
                 isRecommended: recommendation == .appBlocking,
@@ -274,7 +294,7 @@ struct TrialActivationItem: Equatable {
             ),
             TrialActivationItem(
                 feature: .customMessages,
-                title: title("paywall.feature.custom_messages", fallback: "Custom messages"),
+                title: title("paywall.feature.custom_messages.compact", fallback: "Custom messages"),
                 status: state.customMessagesCustomized ? .customized : .personalize,
                 action: .customMessages,
                 isRecommended: recommendation == .customMessages,

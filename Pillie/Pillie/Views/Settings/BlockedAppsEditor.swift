@@ -178,6 +178,7 @@ struct BlockedAppsEditor: View {
         HStack(spacing: 10) {
             Image(systemName: icon)
                 .foregroundStyle(iconColor)
+                .accessibilityHidden(true)
             Text(text)
                 .font(.pillieBody())
                 .foregroundStyle(PillieTheme.textMuted)

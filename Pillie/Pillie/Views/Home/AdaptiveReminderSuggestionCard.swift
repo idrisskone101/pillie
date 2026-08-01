@@ -28,7 +28,7 @@ struct AdaptiveReminderSuggestionCard: View {
                     Text(content.headline)
                         .font(.pillieBodyBold())
                         .foregroundStyle(PillieTheme.textPrimary)
-                        .fixedSize(horizontal: false, vertical: true)
+                        .pillieAdaptiveLineLimit(minimumScaleFactor: 0.72)
 
                     Text(content.body)
                         .font(.pillie(13, weight: .medium))
@@ -86,6 +86,7 @@ struct AdaptiveReminderSuggestionCard: View {
             HStack(spacing: 8) {
                 Text(content.acceptTitle)
                     .font(.pillieBodySemibold())
+                    .pillieAdaptiveLineLimit(minimumScaleFactor: 0.72)
                 Image(systemName: "arrow.right")
                     .font(.system(size: 13, weight: .bold))
             }

@@ -174,7 +174,12 @@ final class NotificationManager {
         // action only appears for Plus users (Smart Reminders gate, ADR 0004).
         registerCategory(includeSnooze: hasPlusAccess())
 
-        let requests = buildReminderRequests(store: store, now: Date(), snoozeOverride: snoozeOverride)
+        let requests = buildReminderRequests(
+            store: store,
+            now: Date(),
+            snoozeOverride: snoozeOverride,
+            locale: .current
+        )
         applyManagedReminderRequests(requests)
 
         // Sync DeviceActivity schedule with reminder time
@@ -278,7 +283,8 @@ final class NotificationManager {
     private func buildReminderRequests(
         store: PillStore,
         now: Date,
-        snoozeOverride: ReminderSchedulePlanner.SnoozeOverride?
+        snoozeOverride: ReminderSchedulePlanner.SnoozeOverride?,
+        locale: Locale
     ) -> [UNNotificationRequest] {
         let calendar = Calendar.current
         let candidateDueActions = DoseScheduleEngine.nextDueActions(
@@ -341,7 +347,11 @@ final class NotificationManager {
             case .cycleTransition(let notice):
                 return makeCycleTransitionRequest(for: notice, calendar: calendar)
             case .trialExpiryWarning(let warning):
-                return makeTrialWarningRequest(for: warning, calendar: calendar)
+                return makeTrialWarningRequest(
+                    for: warning,
+                    calendar: calendar,
+                    locale: locale
+                )
             }
         }
     }
@@ -350,11 +360,12 @@ final class NotificationManager {
     /// (`TrialExpiryWarningCopy`) — informational, so no category/actions.
     private func makeTrialWarningRequest(
         for warning: ReminderSchedulePlanner.TrialExpiryWarningIntent,
-        calendar: Calendar
+        calendar: Calendar,
+        locale: Locale
     ) -> UNNotificationRequest {
         let content = UNMutableNotificationContent()
-        content.title = TrialExpiryWarningCopy.title(day: warning.day)
-        content.body = TrialExpiryWarningCopy.body(day: warning.day)
+        content.title = TrialExpiryWarningCopy.title(day: warning.day, locale: locale)
+        content.body = TrialExpiryWarningCopy.body(day: warning.day, locale: locale)
         content.sound = .default
         content.userInfo = [
             PayloadKey.requestKind: TrialExpiryWarningDelivery.requestKindValue,
@@ -764,14 +775,23 @@ final class NotificationManager {
     }
 
     func managedRequestIdentifiersForTesting(store: PillStore, now: Date = Date()) -> [String] {
-        buildReminderRequests(store: store, now: now, snoozeOverride: nil)
+        buildReminderRequests(store: store, now: now, snoozeOverride: nil, locale: .current)
             .map(\.identifier)
             .sorted()
     }
 
-    func managedRequestSummariesForTesting(store: PillStore, now: Date = Date()) -> [ReminderRequestDebugSummary] {
+    func managedRequestSummariesForTesting(
+        store: PillStore,
+        now: Date = Date(),
+        locale: Locale = .current
+    ) -> [ReminderRequestDebugSummary] {
         reminderRequestSummaries(
-            from: buildReminderRequests(store: store, now: now, snoozeOverride: nil)
+            from: buildReminderRequests(
+                store: store,
+                now: now,
+                snoozeOverride: nil,
+                locale: locale
+            )
         )
     }
 
@@ -788,7 +808,8 @@ final class NotificationManager {
                     snoozeOverride: ReminderSchedulePlanner.SnoozeOverride(
                         dueDayEpoch: dueDayEpoch,
                         firstFireDate: snoozeFirstFireDate
-                    )
+                    ),
+                    locale: .current
                 )
             )
         }

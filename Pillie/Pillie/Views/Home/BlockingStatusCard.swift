@@ -26,7 +26,7 @@ struct BlockingStatusCard: View {
                     Text(content.title)
                         .font(.pillieBodyBold())
                         .foregroundStyle(PillieTheme.textPrimary)
-                        .fixedSize(horizontal: false, vertical: true)
+                        .pillieAdaptiveLineLimit(minimumScaleFactor: 0.7)
 
                     Text(content.detail)
                         .font(.pillie(13, weight: .medium))
@@ -88,6 +88,7 @@ struct BlockingStatusCard: View {
                 }
                 Text(content.ctaTitle)
                     .font(.pillieBodySemibold())
+                    .pillieAdaptiveLineLimit(minimumScaleFactor: 0.72)
                 Image(systemName: "arrow.right")
                     .font(.system(size: 13, weight: .bold))
             }

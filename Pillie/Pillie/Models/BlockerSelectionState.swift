@@ -12,6 +12,8 @@
 //  testable without booting FamilyControls.
 //
 
+import Foundation
+
 /// Count-derived view of the user's Screen Time selection.
 struct BlockerSelectionState: Equatable {
     /// Number of individually selected applications (opaque token count).
@@ -41,5 +43,19 @@ struct BlockerSelectionState: Equatable {
 
     /// AC5: a generic, count-only summary for VoiceOver and any text summary —
     /// "3 selected", never "TikTok, Instagram".
-    var accessibilitySummary: String { "\(selectedCount) selected" }
+    var accessibilitySummary: String { localizedAccessibilitySummary() }
+
+    func localizedAccessibilitySummary(locale: Locale = .current) -> String {
+        if selectedCount == 1 {
+            return PillieLocalization.string(
+                "onboarding.blocking_setup.selected_count_one",
+                locale: locale
+            )
+        }
+        return PillieLocalization.formatted(
+            "onboarding.blocking_setup.selected_count",
+            locale: locale,
+            arguments: Int64(selectedCount)
+        )
+    }
 }

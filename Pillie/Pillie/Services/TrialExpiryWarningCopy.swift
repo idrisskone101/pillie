@@ -11,15 +11,17 @@
 import Foundation
 
 enum TrialExpiryWarningCopy {
-    static func title(day: Int) -> String {
-        day >= 13
-            ? "Your Plus trial is almost over"
-            : "Your Plus trial ends soon"
+    static func title(day: Int, locale: Locale = .current) -> String {
+        let key = day >= 13
+            ? "notification.trial_expiry.day13.title"
+            : "notification.trial_expiry.day10.title"
+        return PillieLocalization.string(key, table: "Notifications", locale: locale)
     }
 
-    static func body(day: Int) -> String {
-        day >= 13
-            ? "App blocking turns off tomorrow night. Reminders stay free, forever."
-            : "App blocking turns off in 5 days. Reminders stay free, forever."
+    static func body(day: Int, locale: Locale = .current) -> String {
+        let key = day >= 13
+            ? "notification.trial_expiry.day13.body"
+            : "notification.trial_expiry.day10.body"
+        return PillieLocalization.string(key, table: "Notifications", locale: locale)
     }
 }

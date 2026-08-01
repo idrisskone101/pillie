@@ -61,30 +61,35 @@ struct StatusCard: View {
                 Text(actionTitle)
                     .font(.pillieBody())
                     .foregroundStyle(isTodayTaken ? PillieTheme.textPrimary : PillieTheme.textMuted)
-                    .lineLimit(2)
-                    .fixedSize(horizontal: false, vertical: true)
+                    .pillieAdaptiveLineLimit(minimumScaleFactor: 0.72)
+                    .layoutPriority(1)
                     .contentTransition(.opacity)
                     .animation(valueChangeAnimation, value: actionTitle)
             }
 
             Spacer()
 
-            // NEXT PILL badge
-            HStack(spacing: 5) {
-                Circle()
-                    .fill(PillieTheme.coral)
-                    .frame(width: 6, height: 6)
+            // NEXT ACTION badge. Empty days already say there is no action in
+            // the main label, so omit the duplicate badge instead of squeezing
+            // two long localized labels into this compact row.
+            if let badgeText {
+                HStack(spacing: 5) {
+                    Circle()
+                        .fill(PillieTheme.coral)
+                        .frame(width: 6, height: 6)
 
-                Text(badgeText)
-                    .font(.pillieCaption())
-                    .foregroundStyle(PillieTheme.coral)
-                    .contentTransition(.opacity)
-                    .animation(valueChangeAnimation, value: badgeText)
+                    Text(badgeText)
+                        .font(.pillieCaption())
+                        .foregroundStyle(PillieTheme.coral)
+                        .pillieAdaptiveLineLimit(minimumScaleFactor: 0.72)
+                        .contentTransition(.opacity)
+                        .animation(valueChangeAnimation, value: badgeText)
+                }
+                .padding(.horizontal, 10)
+                .padding(.vertical, 5)
+                .background(isTodayTaken ? Color.white.opacity(0.8) : PillieTheme.coral.opacity(0.1))
+                .clipShape(Capsule())
             }
-            .padding(.horizontal, 10)
-            .padding(.vertical, 5)
-            .background(isTodayTaken ? Color.white.opacity(0.8) : PillieTheme.coral.opacity(0.1))
-            .clipShape(Capsule())
         }
         .padding(16)
         .background(isTodayTaken ? PillieTheme.coralLight : PillieTheme.cardWhite)
@@ -154,16 +159,15 @@ struct StatusCard: View {
         todayAction: DoseScheduleAction?,
         isTodayTaken: Bool,
         isTodayPassiveOrBreak: Bool
-    ) -> String {
+    ) -> String? {
         if isTodayTaken {
             return PillieLocalization.string("global.status.completed", locale: locale)
         }
         if isTodayPassiveOrBreak {
             return PillieLocalization.string("global.status.break_day", locale: locale)
         }
-        return alarmAction == nil
-            ? PillieLocalization.string("today.empty.title", locale: locale)
-            : PillieLocalization.string("today.next_action.title", locale: locale)
+        guard alarmAction != nil else { return nil }
+        return PillieLocalization.string("today.next_action.title", locale: locale)
     }
 }
 

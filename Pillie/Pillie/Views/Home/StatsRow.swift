@@ -50,6 +50,7 @@ struct StatsRow: View {
                     .foregroundStyle(PillieTheme.coral)
                     .textCase(.uppercase)
                     .tracking(1)
+                    .pillieAdaptiveLineLimit(minimumScaleFactor: 0.72)
             }
             .padding(20)
             .frame(maxWidth: .infinity)
@@ -95,6 +96,7 @@ struct StatsRow: View {
             Text(blockingStatusText)
                 .font(.pillie(24, weight: .bold))
                 .foregroundStyle(PillieTheme.textPrimary)
+                .pillieAdaptiveLineLimit(minimumScaleFactor: 0.72)
                 .contentTransition(.opacity)
                 .animation(valueChangeAnimation, value: blockingStatusText)
 
@@ -103,6 +105,7 @@ struct StatsRow: View {
                 .foregroundStyle(PillieTheme.textMuted)
                 .textCase(.uppercase)
                 .tracking(1)
+                .pillieAdaptiveLineLimit(minimumScaleFactor: 0.72)
                 .contentTransition(.opacity)
                 .animation(valueChangeAnimation, value: blockingSubtitle)
         }
@@ -123,6 +126,7 @@ struct StatsRow: View {
                 .foregroundStyle(PillieTheme.textMuted)
                 .textCase(.uppercase)
                 .tracking(1)
+                .pillieAdaptiveLineLimit(minimumScaleFactor: 0.72)
         }
     }
 

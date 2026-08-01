@@ -29,6 +29,22 @@ struct ProtectionPlanRoutineSummary: Equatable {
         PillieLocalization.string("onboarding.plan.title")
     }
 
+    /// Compact visual eyebrow for the narrow live-plan card. The complete title
+    /// remains available to VoiceOver through `accessibilityTitle`.
+    var cardLabel: String {
+        PillieLocalization.string("onboarding.plan.card_label", locale: locale)
+    }
+
+    var accessibilityTitle: String {
+        PillieLocalization.string("onboarding.plan.title", locale: locale)
+    }
+
+    var accessibilityHeadings: [String] {
+        headline == accessibilityTitle
+            ? [accessibilityTitle]
+            : [accessibilityTitle, headline]
+    }
+
     struct Row: Equatable, Identifiable {
         let symbol: String
         let label: String
@@ -42,7 +58,7 @@ struct ProtectionPlanRoutineSummary: Equatable {
     var headline: String {
         method == nil
             ? PillieLocalization.string("onboarding.plan.subtitle", locale: locale)
-            : PillieLocalization.string("onboarding.plan.title", locale: locale)
+            : accessibilityTitle
     }
 
     /// Receipt rows, appearing in the order the user commits them.

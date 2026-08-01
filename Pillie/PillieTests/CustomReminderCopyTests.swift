@@ -115,6 +115,19 @@ final class CustomReminderCopyTests: XCTestCase {
         XCTAssertFalse(draft.wasEditedAfterPreset)
     }
 
+    func testApplyingItalianPresetIsNotReportedAsAManualEdit() {
+        var draft = CustomReminderDraft(messages: CustomReminderPreset.gentle.messages)
+
+        draft.apply(.direct, locale: Locale(identifier: "it_IT"))
+
+        XCTAssertEqual(
+            draft.messages,
+            CustomReminderPreset.direct.localizedMessages(locale: Locale(identifier: "it_IT"))
+        )
+        XCTAssertEqual(draft.appliedPreset, .direct)
+        XCTAssertFalse(draft.wasEditedAfterPreset)
+    }
+
     func testManualEditAfterPresetIsDistinguishableWithoutLosingPresetIdentity() {
         var draft = CustomReminderDraft(messages: CustomReminderPreset.gentle.messages)
         draft.apply(.gentle)

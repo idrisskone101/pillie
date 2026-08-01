@@ -174,7 +174,7 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Muovi per confermare"
+            "value": "Scuoti per confermare"
           }
         },
         "de": {
@@ -227,6 +227,75 @@
           "stringUnit": {
             "state": "translated",
             "value": "Neue Funktionen direkt zum Start"
+          }
+        }
+      }
+    },
+    "paywall.feature.app_blocking.compact": {
+      "comment": "Compact feature title for comparison rows and chips [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App blocking"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blocco app distraenti"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App-Pause"
+          }
+        }
+      }
+    },
+    "paywall.feature.custom_messages.compact": {
+      "comment": "Compact feature title for comparison rows and chips [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reminder messages"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Messaggi promemoria su misura"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erinnerungstexte"
+          }
+        }
+      }
+    },
+    "paywall.feature.future.compact": {
+      "comment": "Compact feature title for comparison rows and chips [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Future features"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nuove funzioni incluse"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Künftige Funktionen"
           }
         }
       }
@@ -346,6 +415,29 @@
         }
       }
     },
+    "paywall.plan.cancel_anytime_short": {
+      "comment": "Compact reassurance for plan cards and chips [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel anytime"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annulla quando vuoi"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jederzeit kündbar"
+          }
+        }
+      }
+    },
     "paywall.action.upgrade": {
       "comment": "Purchase CTA [paywall]",
       "localizations": {
@@ -438,6 +530,98 @@
         }
       }
     },
+    "paywall.accessibility.tier.both": {
+      "comment": "VoiceOver comparison state [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "included in Free and Plus"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "disponibilità: Free e Plus"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "in Free und Plus enthalten"
+          }
+        }
+      }
+    },
+    "paywall.accessibility.tier.plus_only": {
+      "comment": "VoiceOver comparison state [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus only"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "disponibilità: solo Plus"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "nur Plus"
+          }
+        }
+      }
+    },
+    "paywall.accessibility.tier.free_only": {
+      "comment": "VoiceOver comparison state [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Free only"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "disponibilità: solo Free"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "nur Free"
+          }
+        }
+      }
+    },
+    "paywall.accessibility.tier.neither": {
+      "comment": "VoiceOver comparison state [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "not included"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "disponibilità: nessuna"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "nicht enthalten"
+          }
+        }
+      }
+    },
     "paywall.loading.failed": {
       "comment": "Load error [paywall]",
       "localizations": {
@@ -480,6 +664,52 @@
           "stringUnit": {
             "state": "translated",
             "value": "Kauffehler"
+          }
+        }
+      }
+    },
+    "paywall.purchase_error.missing_entitlement": {
+      "comment": "Purchase completed without activating Plus [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The purchase finished, but Pillie Plus was not activated. Please try again or restore purchases."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L’acquisto è stato completato, ma Pillie Plus non è stato attivato. Riprova o ripristina gli acquisti."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Kauf wurde abgeschlossen, aber Pillie Plus wurde nicht aktiviert. Versuche es erneut oder stelle die Käufe wieder her."
+          }
+        }
+      }
+    },
+    "paywall.error.generic_body": {
+      "comment": "Localized safe fallback when a store error has no guaranteed localized message [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Something went wrong. Please try again."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Qualcosa è andato storto. Riprova."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Etwas ist schiefgelaufen. Bitte versuche es erneut."
           }
         }
       }
@@ -599,6 +829,29 @@
         }
       }
     },
+    "trial.granted.disclosure": {
+      "comment": "Pre-trial duration and expiry disclosure [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your free trial lasts 14 days. App blocking turns off when it ends, while reminders stay free."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La prova gratuita dura 14 giorni. Al termine, il blocco delle app si disattiva, mentre i promemoria restano gratuiti."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine kostenlose Testphase dauert 14 Tage. Danach wird die App-Pause deaktiviert, Erinnerungen bleiben kostenlos."
+          }
+        }
+      }
+    },
     "trial.timeline.today": {
       "comment": "Timeline label [paywall]",
       "localizations": {
@@ -714,6 +967,29 @@
         }
       }
     },
+    "trial.status.active_short": {
+      "comment": "Compact Settings value for an active Reverse Trial [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trial active"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prova attiva"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Testphase aktiv"
+          }
+        }
+      }
+    },
     "trial.status.ends": {
       "comment": "Locale-aware date [paywall]",
       "localizations": {
@@ -756,6 +1032,213 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nach dem Ende der Testphase"
+          }
+        }
+      }
+    },
+    "trial.status.indicator.active": {
+      "comment": "Active-trial Home badge; placeholder is days remaining [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Protection active · %lld days left"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Protezione attiva · %lld giorni rimasti"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schutz aktiv · noch %lld Tage"
+          }
+        }
+      }
+    },
+    "trial.status.indicator.active_tonight": {
+      "comment": "Active-trial Home badge on the last protected day [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Protection active · ends tonight"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Protezione attiva · termina stasera"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schutz aktiv · endet heute"
+          }
+        }
+      }
+    },
+    "trial.status.indicator.setup": {
+      "comment": "Active-trial Home badge when app protection still needs setup; placeholder is days remaining [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set up protection · %lld days left"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configura protezione · %lld giorni rimasti"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schutz einrichten · noch %lld Tage"
+          }
+        }
+      }
+    },
+    "trial.status.indicator.setup_tonight": {
+      "comment": "Active-trial Home badge on the last day when app protection still needs setup [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set up protection · ends tonight"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configura protezione · termina stasera"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schutz einrichten · endet heute"
+          }
+        }
+      }
+    },
+    "trial.status.after.blocking_off": {
+      "comment": "Future change summarized during an active trial [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App blocking turns off"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il blocco delle app si disattiva"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die App-Pause wird deaktiviert"
+          }
+        }
+      }
+    },
+    "trial.status.after.reminders_free": {
+      "comment": "Future reminder availability summarized during an active trial [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reminders stay free, forever"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I promemoria restano gratuiti, per sempre"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erinnerungen bleiben dauerhaft kostenlos"
+          }
+        }
+      }
+    },
+    "trial.status.after.setup_saved": {
+      "comment": "Future blocker setup retention summarized during an active trial [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your blocker setup is saved"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La configurazione del blocco resta salvata"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine App-Pause-Konfiguration bleibt gespeichert"
+          }
+        }
+      }
+    },
+    "trial.status.keep_plus": {
+      "comment": "Quiet in-trial purchase path [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep Pillie Plus"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mantieni Pillie Plus"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus behalten"
+          }
+        }
+      }
+    },
+    "trial.end.kicker": {
+      "comment": "Compact header beside the trial-end date [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your 14 days"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I tuoi 14 giorni"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine 14 Tage"
           }
         }
       }
@@ -898,6 +1381,52 @@
         }
       }
     },
+    "trial.end.success.blocking": {
+      "comment": "Post-purchase success for users with a saved blocker configuration [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus is active — app blocking is back on for tonight's reminder."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus è attivo: il blocco delle app è di nuovo attivo per il promemoria di stasera."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus ist aktiv: Die App-Pause ist für die heutige Erinnerung wieder eingeschaltet."
+          }
+        }
+      }
+    },
+    "trial.end.success.reminder_only": {
+      "comment": "Post-purchase success for users without a saved blocker configuration [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus is active — set up app blocking whenever you're ready."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus è attivo: configura il blocco delle app quando vuoi."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus ist aktiv: Richte die App-Pause ein, wenn du bereit bist."
+          }
+        }
+      }
+    },
     "trial.end.welcome_back": {
       "comment": "Post-purchase success [paywall]",
       "localizations": {
@@ -940,6 +1469,29 @@
           "stringUnit": {
             "state": "translated",
             "value": "Zurück zu Heute"
+          }
+        }
+      }
+    },
+    "trial.activation.recommended": {
+      "comment": "Compact recommendation badge in the trial activation checklist [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recommended"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consigliato"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Empfohlen"
           }
         }
       }

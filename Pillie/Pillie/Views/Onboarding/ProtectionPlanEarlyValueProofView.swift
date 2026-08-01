@@ -355,6 +355,11 @@ struct ProtectionPlanEarlyValueProofView: View {
                 .font(.pillieTitle())
                 .foregroundStyle(PillieTheme.textPrimary)
                 .multilineTextAlignment(.center)
+                .pillieAdaptiveLineLimit(
+                    regular: 3,
+                    minimumScaleFactor: 0.78,
+                    accessibility: 5
+                )
         }
         .opacity(appeared ? 1 : 0)
         .offset(y: appeared ? 0 : 12)
@@ -448,14 +453,18 @@ struct ProtectionPlanEarlyValueProofView: View {
                         .allowsHitTesting(false)
                 }
 
-                Text("2:00 PM")
+                Text(content.sampleTimeText)
                     .font(.pillie(11, weight: .bold))
                     .foregroundStyle(PillieTheme.textMuted)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
                     .position(x: bellCenter.x, y: baseline + 47)
-                Text("Your apps")
+                Text(content.appsLabel)
                     .font(.pillie(11, weight: .bold))
                     .foregroundStyle(PillieTheme.textMuted)
-                    .fixedSize()
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.72)
+                    .allowsTightening(true)
                     .position(x: tileCenter.x, y: baseline + 52)
             }
         }
@@ -674,9 +683,12 @@ struct ProtectionPlanEarlyValueProofView: View {
                             .foregroundStyle(PillieTheme.coral)
                             .symbolEffect(.bounce, value: showsGuard)
                     }
-                    Text("Locked")
+                    Text(content.lockedLabel)
                         .font(.pillie(11, weight: .bold))
                         .foregroundStyle(PillieTheme.textPrimary)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.72)
+                        .allowsTightening(true)
                 }
             }
             .shadow(color: PillieTheme.coral.opacity(0.25), radius: 12, y: 4)
@@ -719,16 +731,23 @@ struct ProtectionPlanEarlyValueProofView: View {
 
             // At-a-glance shake count while locked (parity with the Plus demo).
             if showsShakeStep {
-                Text("\(shakeManager.shakeCount) of \(shakeManager.requiredShakes) shakes")
+                Text(
+                    content.shakeProgress(
+                        current: shakeManager.shakeCount,
+                        total: shakeManager.requiredShakes
+                    )
+                )
                     .font(.pillieCaptionMedium())
                     .foregroundStyle(PillieTheme.coral)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
                     .contentTransition(.numericText())
                     .animation(resolveAnimation, value: shakeManager.shakeCount)
             }
         }
-        // Reserve a fixed height for the tallest state (2-line cue + count) so the
-        // card below never moves while the caption changes during a drag.
-        .frame(maxWidth: .infinity, minHeight: 72, maxHeight: 72)
+        // Reserve space for the common state while allowing longer localized copy
+        // to expand instead of overlapping the card below.
+        .frame(maxWidth: .infinity, minHeight: 72)
         // Breathing room above/below the live copy.
         .padding(.vertical, 10)
     }
@@ -785,7 +804,9 @@ struct ProtectionPlanEarlyValueProofView: View {
             .font(.pillieCaptionMedium())
             .foregroundStyle(PillieTheme.textMuted)
             .multilineTextAlignment(.center)
+            .fixedSize(horizontal: false, vertical: true)
             .padding(.top, 2)
+            .padding(.bottom, 8)
     }
 
     // MARK: - Geometry

@@ -28,6 +28,10 @@ enum DistractionChoice: String, CaseIterable, Hashable, Identifiable {
     var isOther: Bool { self == .other }
 
     var title: String {
+        localizedTitle()
+    }
+
+    func localizedTitle(locale: Locale = .current) -> String {
         let key: String
         switch self {
         case .tiktok: key = "onboarding.personalise.choice.tiktok"
@@ -39,7 +43,7 @@ enum DistractionChoice: String, CaseIterable, Hashable, Identifiable {
         case .forget: key = "onboarding.personalise.choice.forget"
         case .other: key = "onboarding.personalise.choice.other"
         }
-        return PillieLocalization.string(key)
+        return PillieLocalization.string(key, locale: locale)
     }
 
     var symbolName: String {

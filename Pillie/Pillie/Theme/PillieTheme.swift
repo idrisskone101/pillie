@@ -211,3 +211,41 @@ extension Font {
         .pillie(16, weight: .bold)
     }
 }
+
+/// Keeps compact localized labels on one line at standard text sizes without
+/// forcing Accessibility Dynamic Type to shrink or truncate them. Accessibility
+/// sizes may use the extra line only when the available width requires it.
+private struct PillieAdaptiveLineLimit: ViewModifier {
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
+    let regularLineLimit: Int
+    let minimumScaleFactor: CGFloat
+    let accessibilityLineLimit: Int?
+
+    func body(content: Content) -> some View {
+        content
+            .lineLimit(
+                dynamicTypeSize.isAccessibilitySize
+                    ? accessibilityLineLimit
+                    : regularLineLimit
+            )
+            .minimumScaleFactor(
+                dynamicTypeSize.isAccessibilitySize ? 1 : minimumScaleFactor
+            )
+            .allowsTightening(!dynamicTypeSize.isAccessibilitySize)
+    }
+}
+
+extension View {
+    func pillieAdaptiveLineLimit(
+        regular: Int = 1,
+        minimumScaleFactor: CGFloat,
+        accessibility: Int? = 2
+    ) -> some View {
+        modifier(PillieAdaptiveLineLimit(
+            regularLineLimit: regular,
+            minimumScaleFactor: minimumScaleFactor,
+            accessibilityLineLimit: accessibility
+        ))
+    }
+}
