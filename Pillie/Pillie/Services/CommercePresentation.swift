@@ -1,6 +1,28 @@
 import Foundation
 import RevenueCat
 
+enum PilliePlusPlan: String, CaseIterable, Equatable {
+    case annual
+    case monthly
+    case lifetime
+
+    var productID: String {
+        switch self {
+        case .annual: SubscriptionManager.annualProductID
+        case .monthly: SubscriptionManager.monthlyProductID
+        case .lifetime: SubscriptionManager.lifetimeProductID
+        }
+    }
+
+    var analyticsPlan: AnalyticsPlan {
+        switch self {
+        case .annual: .annual
+        case .monthly: .monthly
+        case .lifetime: .lifetime
+        }
+    }
+}
+
 enum CommercePresentation {
     enum PeriodUnit {
         case day

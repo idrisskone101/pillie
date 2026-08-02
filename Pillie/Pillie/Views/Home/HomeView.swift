@@ -116,7 +116,8 @@ struct HomeView: View {
             stats: trialEndOwnStats,
             calendar: Calendar.current,
             now: Date(),
-            locale: locale
+            locale: locale,
+            hardPaywallEnabled: SubscriptionManager.shared.hardPaywallEnabled
         )
     }
 
@@ -149,7 +150,9 @@ struct HomeView: View {
                 hasEntitlement: manager.hasEntitlement,
                 trialGrantDate: manager.trialGrantDate
             ),
+            terms: trialEndPaywallContent?.terms ?? .legacy,
             entitlementResolved: manager.hasResolvedEntitlement,
+            configurationResolved: manager.hasResolvedHardPaywallConfiguration,
             alreadyShown: UserDefaults.standard.bool(
                 forKey: TrialEndPaywallAutoPresentation.shownStorageKey),
             calendar: Calendar.current,
@@ -498,6 +501,9 @@ struct HomeView: View {
         // decision defers until it has (#169), so re-run the check then — and
         // when the grant date changes (QA deep links age or clear the trial).
         .onChange(of: SubscriptionManager.shared.hasResolvedEntitlement) { _, _ in
+            autoPresentTrialEndPaywallIfNeeded()
+        }
+        .onChange(of: SubscriptionManager.shared.hasResolvedHardPaywallConfiguration) { _, _ in
             autoPresentTrialEndPaywallIfNeeded()
         }
         .onChange(of: SubscriptionManager.shared.trialGrantDate) { _, _ in

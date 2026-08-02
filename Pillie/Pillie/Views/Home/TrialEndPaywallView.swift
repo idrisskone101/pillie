@@ -19,7 +19,7 @@ struct TrialEndPaywallView: View {
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.locale) private var locale
     @State private var animateIn = false
-    @State private var selectedPlan: Plan = .annual
+    @State private var selectedPlan: PilliePlusPlan = .annual
     @State private var offerings: Offerings?
     @State private var offeringsError = false
     @State private var purchaseError: String?
@@ -27,7 +27,7 @@ struct TrialEndPaywallView: View {
     @State private var isRestoring = false
     @State private var showNoSubscriptionAlert = false
     @State private var purchaseSucceeded = false
-    @State private var succeededPlan: Plan = .annual
+    @State private var succeededPlan: PilliePlusPlan = .annual
     @State private var showDeclineFeedback = false
     private let subscriptionManager = SubscriptionManager.shared
     private let telemetry = ProductAnalyticsTelemetry.live
@@ -44,17 +44,6 @@ struct TrialEndPaywallView: View {
     /// for simulator QA (see the /trial-end-paywall debug deep link).
     static let debugSuccessStateKey = "trialEndPaywallDebugSuccessState"
     #endif
-
-    private enum Plan {
-        case annual, monthly
-
-        var analyticsPlan: AnalyticsPlan {
-            switch self {
-            case .annual: return .annual
-            case .monthly: return .monthly
-            }
-        }
-    }
 
     var body: some View {
         ZStack {
@@ -76,8 +65,9 @@ struct TrialEndPaywallView: View {
             }
         }
         .animation(PillieTheme.fadeInUpCurve, value: purchaseSucceeded)
+        .interactiveDismissDisabled(!content.allowsContinueFree)
         .onAppear {
-            telemetry.trialEndPaywallViewed(cohort: content.cohort)
+            telemetry.trialEndPaywallViewed(cohort: content.cohort, terms: content.terms)
             withAnimation(PillieTheme.fadeInUpCurve) { animateIn = true }
             #if DEBUG
             // QA seam (#169): sandbox purchases aren't reachable from simctl
@@ -158,20 +148,22 @@ struct TrialEndPaywallView: View {
           VStack(alignment: .leading, spacing: 0) {
             HStack {
                 Spacer()
-                Button {
-                    onDismiss()
-                } label: {
-                    Image(systemName: "xmark")
-                        .font(.system(size: 13, weight: .semibold))
-                        .foregroundStyle(PillieTheme.textPrimary)
-                        .frame(width: 32, height: 32)
-                        .background(PillieTheme.sage, in: Circle())
+                if content.allowsContinueFree {
+                    Button {
+                        onDismiss()
+                    } label: {
+                        Image(systemName: "xmark")
+                            .font(.system(size: 13, weight: .semibold))
+                            .foregroundStyle(PillieTheme.textPrimary)
+                            .frame(width: 32, height: 32)
+                            .background(PillieTheme.sage, in: Circle())
+                    }
+                    .accessibilityLabel(PillieLocalization.string(
+                        "global.action.close",
+                        locale: locale
+                    ))
+                    .accessibilityIdentifier("trialEndPaywallClose")
                 }
-                .accessibilityLabel(PillieLocalization.string(
-                    "global.action.close",
-                    locale: locale
-                ))
-                .accessibilityIdentifier("trialEndPaywallClose")
             }
 
             (Text(titleLead).foregroundColor(PillieTheme.textPrimary)
@@ -206,8 +198,10 @@ struct TrialEndPaywallView: View {
 
             Group {
                 planTiles
-                reassuranceRow
-                    .padding(.top, 14)
+                if content.allowsContinueFree {
+                    reassuranceRow
+                        .padding(.top, 14)
+                }
                 purchaseButton
                     .padding(.top, 12)
                 secondaryLinks
@@ -359,10 +353,18 @@ struct TrialEndPaywallView: View {
         }
     }
 
+    private var lifetimePackage: Package? {
+        guard let offering = offerings?.current else { return nil }
+        return offering.lifetime ?? offering.availablePackages.first {
+            $0.storeProduct.productIdentifier == SubscriptionManager.lifetimeProductID
+        }
+    }
+
     private var selectedPackage: Package? {
         switch selectedPlan {
         case .annual: return annualPackage
         case .monthly: return monthlyPackage
+        case .lifetime: return lifetimePackage
         }
     }
 
@@ -372,6 +374,14 @@ struct TrialEndPaywallView: View {
 
     private var monthlyPriceText: String {
         monthlyPackage?.storeProduct.localizedPriceString ?? "—"
+    }
+
+    private var lifetimePriceText: String {
+        lifetimePackage?.storeProduct.localizedPriceString ?? "—"
+    }
+
+    private var lifetimeTitle: String {
+        lifetimePackage?.storeProduct.localizedTitle ?? "Pillie Plus Lifetime"
     }
 
     /// Truthful annual-vs-monthly comparison from live store prices (ADR 0002:
@@ -417,20 +427,23 @@ struct TrialEndPaywallView: View {
 
     @ViewBuilder
     private var planTiles: some View {
-        Group {
-            if dynamicTypeSize.isAccessibilitySize {
-                VStack(spacing: 14) {
-                    annualTile
-                    monthlyTile
-                }
-            } else {
-                HStack(alignment: .top, spacing: 10) {
-                    annualTile
-                        .frame(maxWidth: .infinity)
-                    monthlyTile
-                        .frame(maxWidth: .infinity)
+        VStack(spacing: 14) {
+            Group {
+                if dynamicTypeSize.isAccessibilitySize {
+                    VStack(spacing: 14) {
+                        annualTile
+                        monthlyTile
+                    }
+                } else {
+                    HStack(alignment: .top, spacing: 10) {
+                        annualTile
+                            .frame(maxWidth: .infinity)
+                        monthlyTile
+                            .frame(maxWidth: .infinity)
+                    }
                 }
             }
+            lifetimeTile
         }
         .padding(.top, 10)
     }
@@ -571,6 +584,44 @@ struct TrialEndPaywallView: View {
         .accessibilityIdentifier("trialEndPaywallMonthlyPlan")
     }
 
+    private var lifetimeTile: some View {
+        Button {
+            selectPlan(.lifetime)
+        } label: {
+            HStack(spacing: 12) {
+                VStack(alignment: .leading, spacing: 3) {
+                    Text(lifetimeTitle)
+                        .font(.pillie(12, weight: .black))
+                        .foregroundStyle(PillieTheme.textPrimary)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.75)
+                }
+                Spacer()
+                Text(lifetimePriceText)
+                    .font(.pillie(20, weight: .black))
+                    .foregroundStyle(PillieTheme.textPrimary)
+                radioCircle(selected: selectedPlan == .lifetime, onDark: false)
+            }
+            .padding(14)
+            .background(
+                RoundedRectangle(cornerRadius: PillieTheme.buttonRadius)
+                    .fill(selectedPlan == .lifetime ? PillieTheme.coralLight : PillieTheme.cardWhite)
+            )
+            .overlay {
+                RoundedRectangle(cornerRadius: PillieTheme.buttonRadius)
+                    .stroke(
+                        selectedPlan == .lifetime ? PillieTheme.coral : PillieTheme.sageHalf,
+                        lineWidth: selectedPlan == .lifetime ? 2 : 1
+                    )
+            }
+        }
+        .buttonStyle(.plain)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(lifetimeTitle), \(lifetimePriceText)")
+        .accessibilityAddTraits(selectedPlan == .lifetime ? [.isButton, .isSelected] : .isButton)
+        .accessibilityIdentifier("trialEndPaywallLifetimePlan")
+    }
+
     private func radioCircle(selected: Bool, onDark: Bool) -> some View {
         ZStack {
             Circle()
@@ -594,30 +645,40 @@ struct TrialEndPaywallView: View {
         .accessibilityHidden(true)
     }
 
-    private func selectPlan(_ plan: Plan) {
+    private func selectPlan(_ plan: PilliePlusPlan) {
         let response = plusFeedback.selectPlan(accessibilityReduceMotion: accessibilityReduceMotion)
         withAnimation(response.motionProfile.animation) {
             selectedPlan = plan
         }
-        telemetry.trialEndPlanSelected(plan: plan.analyticsPlan)
+        telemetry.trialEndPlanSelected(
+            plan: plan.analyticsPlan,
+            cohort: content.cohort,
+            terms: content.terms
+        )
     }
 
     // MARK: - Reassurance + footer
 
     @ViewBuilder
     private var reassuranceRow: some View {
-        let items = [
-            PillieLocalization.string(
+        let items = selectedPlan == .lifetime
+            ? [PillieLocalization.string(
                 "trial.end.free_title",
                 table: "Commerce",
                 locale: locale
-            ),
-            PillieLocalization.string(
-                "paywall.plan.cancel_anytime_short",
-                table: "Commerce",
-                locale: locale
-            ),
-        ]
+            )]
+            : [
+                PillieLocalization.string(
+                    "trial.end.free_title",
+                    table: "Commerce",
+                    locale: locale
+                ),
+                PillieLocalization.string(
+                    "paywall.plan.cancel_anytime_short",
+                    table: "Commerce",
+                    locale: locale
+                ),
+            ]
 
         Group {
             if dynamicTypeSize.isAccessibilitySize {
@@ -695,25 +756,30 @@ struct TrialEndPaywallView: View {
 
     @ViewBuilder
     private var secondaryLinks: some View {
-        Group {
-            if dynamicTypeSize.isAccessibilitySize {
-                VStack(spacing: 10) {
-                    continueFreeButton
-                    restorePurchasesButton
-                }
-            } else {
-                HStack(spacing: 14) {
-                    continueFreeButton
+        if content.allowsContinueFree {
+            Group {
+                if dynamicTypeSize.isAccessibilitySize {
+                    VStack(spacing: 10) {
+                        continueFreeButton
+                        restorePurchasesButton
+                    }
+                } else {
+                    HStack(spacing: 14) {
+                        continueFreeButton
 
-                    Rectangle()
-                        .fill(PillieTheme.textMuted.opacity(0.3))
-                        .frame(width: 1, height: 13)
+                        Rectangle()
+                            .fill(PillieTheme.textMuted.opacity(0.3))
+                            .frame(width: 1, height: 13)
 
-                    restorePurchasesButton
+                        restorePurchasesButton
+                    }
                 }
             }
+            .frame(maxWidth: .infinity, alignment: .center)
+        } else {
+            restorePurchasesButton
+                .frame(maxWidth: .infinity, alignment: .center)
         }
-        .frame(maxWidth: .infinity, alignment: .center)
     }
 
     private var continueFreeButton: some View {
@@ -759,11 +825,13 @@ struct TrialEndPaywallView: View {
 
     private var legalFooter: some View {
         VStack(spacing: 2) {
-            Text(PillieLocalization.string(
-                "paywall.plan.cancel_anytime",
-                table: "Commerce",
-                locale: locale
-            ))
+            if selectedPlan != .lifetime {
+                Text(PillieLocalization.string(
+                    "paywall.plan.cancel_anytime",
+                    table: "Commerce",
+                    locale: locale
+                ))
+            }
             HStack(spacing: 4) {
                 Link(PillieLocalization.string(
                     "paywall.action.terms",
@@ -899,6 +967,7 @@ struct TrialEndPaywallView: View {
         switch succeededPlan {
         case .annual: return annualPriceAndPeriodText
         case .monthly: return monthlyPriceAndPeriodText
+        case .lifetime: return "\(lifetimeTitle) · \(lifetimePriceText)"
         }
     }
 
@@ -919,15 +988,27 @@ struct TrialEndPaywallView: View {
             isPurchasing = true
         }
         let plan = selectedPlan
-        telemetry.trialEndPurchaseStarted(plan: plan.analyticsPlan)
+        telemetry.trialEndPurchaseStarted(
+            plan: plan.analyticsPlan,
+            cohort: content.cohort,
+            terms: content.terms
+        )
         Task {
             do {
                 let outcome = try await subscriptionManager.purchase(package)
                 switch outcome.conversionEvent {
                 case .trialStarted:
-                    telemetry.trialEndTrialStarted(plan: plan.analyticsPlan)
+                    telemetry.trialEndTrialStarted(
+                        plan: plan.analyticsPlan,
+                        cohort: content.cohort,
+                        terms: content.terms
+                    )
                 case .purchaseCompleted:
-                    telemetry.trialEndPurchaseCompleted(plan: plan.analyticsPlan)
+                    telemetry.trialEndPurchaseCompleted(
+                        plan: plan.analyticsPlan,
+                        cohort: content.cohort,
+                        terms: content.terms
+                    )
                 case nil:
                     break
                 }
@@ -937,10 +1018,18 @@ struct TrialEndPaywallView: View {
             } catch {
                 plusFeedback.unsuccessfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
                 if error.isCancelledTrialEndPurchase {
-                    telemetry.trialEndPurchaseCancelled(plan: plan.analyticsPlan)
+                    telemetry.trialEndPurchaseCancelled(
+                        plan: plan.analyticsPlan,
+                        cohort: content.cohort,
+                        terms: content.terms
+                    )
                     await subscriptionManager.refreshStatus()
                 } else {
-                    telemetry.trialEndPurchaseFailed(plan: plan.analyticsPlan)
+                    telemetry.trialEndPurchaseFailed(
+                        plan: plan.analyticsPlan,
+                        cohort: content.cohort,
+                        terms: content.terms
+                    )
                     telemetry.trackError(.purchase, error: error)
                     purchaseError = CommercePresentation.purchaseErrorMessage(
                         error,
@@ -959,16 +1048,22 @@ struct TrialEndPaywallView: View {
         withAnimation(response.motionProfile.animation) {
             isRestoring = true
         }
-        telemetry.trialEndRestoreStarted()
+        telemetry.trialEndRestoreStarted(cohort: content.cohort, terms: content.terms)
         Task {
             do {
                 try await subscriptionManager.restore()
                 if subscriptionManager.hasEntitlement {
-                    telemetry.trialEndRestoreCompleted()
+                    telemetry.trialEndRestoreCompleted(
+                        cohort: content.cohort,
+                        terms: content.terms
+                    )
                     plusFeedback.successfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
                     purchaseSucceeded = true
                 } else {
-                    telemetry.trialEndRestoreFailed()
+                    telemetry.trialEndRestoreFailed(
+                        cohort: content.cohort,
+                        terms: content.terms
+                    )
                     let calmResponse = plusFeedback.unsuccessfulPaidOutcome(
                         accessibilityReduceMotion: accessibilityReduceMotion)
                     withAnimation(calmResponse.motionProfile.animation) {
@@ -976,7 +1071,10 @@ struct TrialEndPaywallView: View {
                     }
                 }
             } catch {
-                telemetry.trialEndRestoreFailed()
+                telemetry.trialEndRestoreFailed(
+                    cohort: content.cohort,
+                    terms: content.terms
+                )
                 telemetry.trackError(.restore, error: error)
                 let calmResponse = plusFeedback.unsuccessfulPaidOutcome(
                     accessibilityReduceMotion: accessibilityReduceMotion)
@@ -994,7 +1092,8 @@ struct TrialEndPaywallView: View {
     }
 
     private func continueFree() {
-        telemetry.trialEndContinueFreeSelected()
+        guard content.allowsContinueFree else { return }
+        telemetry.trialEndContinueFreeSelected(cohort: content.cohort, terms: content.terms)
         switch routeContinueFree() {
         case .enterFreeApp:
             onDismiss()

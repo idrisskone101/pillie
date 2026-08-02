@@ -18,30 +18,35 @@ final class TrialEndPaywallTelemetryTests: XCTestCase {
     func testTrialEndPaywallViewedCarriesTrialEndSourceAndCohort() {
         let (telemetry, client) = makeTelemetry(name: "viewed")
 
-        telemetry.trialEndPaywallViewed(cohort: .blockerConfigured)
-        telemetry.trialEndPaywallViewed(cohort: .reminderOnly)
+        telemetry.trialEndPaywallViewed(cohort: .blockerConfigured, terms: .hardPaywall)
+        telemetry.trialEndPaywallViewed(cohort: .reminderOnly, terms: .legacy)
 
         XCTAssertEqual(client.events.map(\.name), ["paywall_viewed", "paywall_viewed"])
         XCTAssertEqual(client.events[0].properties["source"], .string("trial_end"))
         XCTAssertEqual(client.events[0].properties["surface"], .string("trial_end"))
-        XCTAssertEqual(client.events[0].properties["cohort"], .string("blocker_configured"))
-        XCTAssertEqual(client.events[1].properties["cohort"], .string("reminder_only"))
-        // Only the approved coarse values: source, surface, cohort, is_plus.
-        XCTAssertEqual(client.events[0].properties.count, 4)
+        XCTAssertEqual(client.events[0].properties["cohort"], .string("post_cutover"))
+        XCTAssertEqual(client.events[1].properties["cohort"], .string("pre_cutover"))
+        XCTAssertEqual(
+            client.events[0].properties["paywall_variant"],
+            .string("blocker_configured")
+        )
+        XCTAssertEqual(client.events[1].properties["paywall_variant"], .string("reminder_only"))
+        // Only approved coarse values: source, surface, cohort, variant, is_plus.
+        XCTAssertEqual(client.events[0].properties.count, 5)
     }
 
     func testTrialEndPurchaseFunnelIsAttributedToTrialEndSource() {
         let (telemetry, client) = makeTelemetry(name: "funnel")
 
-        telemetry.trialEndPlanSelected(plan: .annual)
-        telemetry.trialEndPurchaseStarted(plan: .annual)
-        telemetry.trialEndPurchaseCompleted(plan: .annual)
-        telemetry.trialEndPurchaseFailed(plan: .monthly)
-        telemetry.trialEndPurchaseCancelled(plan: .monthly)
-        telemetry.trialEndRestoreStarted()
-        telemetry.trialEndRestoreCompleted()
-        telemetry.trialEndRestoreFailed()
-        telemetry.trialEndContinueFreeSelected()
+        telemetry.trialEndPlanSelected(plan: .annual, cohort: .blockerConfigured, terms: .hardPaywall)
+        telemetry.trialEndPurchaseStarted(plan: .annual, cohort: .blockerConfigured, terms: .hardPaywall)
+        telemetry.trialEndPurchaseCompleted(plan: .annual, cohort: .blockerConfigured, terms: .hardPaywall)
+        telemetry.trialEndPurchaseFailed(plan: .monthly, cohort: .blockerConfigured, terms: .hardPaywall)
+        telemetry.trialEndPurchaseCancelled(plan: .monthly, cohort: .blockerConfigured, terms: .hardPaywall)
+        telemetry.trialEndRestoreStarted(cohort: .blockerConfigured, terms: .hardPaywall)
+        telemetry.trialEndRestoreCompleted(cohort: .blockerConfigured, terms: .hardPaywall)
+        telemetry.trialEndRestoreFailed(cohort: .blockerConfigured, terms: .hardPaywall)
+        telemetry.trialEndContinueFreeSelected(cohort: .reminderOnly, terms: .legacy)
 
         XCTAssertEqual(client.events.map(\.name), [
             "paywall_plan_selected",
@@ -58,6 +63,15 @@ final class TrialEndPaywallTelemetryTests: XCTestCase {
             XCTAssertEqual(event.properties["source"], .string("trial_end"), event.name)
             XCTAssertEqual(event.properties["surface"], .string("trial_end"), event.name)
         }
+        for event in client.events.dropLast() {
+            XCTAssertEqual(event.properties["cohort"], .string("post_cutover"), event.name)
+            XCTAssertEqual(
+                event.properties["paywall_variant"],
+                .string("blocker_configured"),
+                event.name
+            )
+        }
+        XCTAssertEqual(client.events.last?.properties["cohort"], .string("pre_cutover"))
         XCTAssertEqual(client.events[2].properties["plan"], .string("annual"))
         XCTAssertEqual(client.events[2].properties["result"], .string("completed"))
     }

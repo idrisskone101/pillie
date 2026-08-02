@@ -21,12 +21,16 @@ enum TrialEndPaywallAutoPresentation {
     /// deciding early would misread a mid-trial converter as expired.
     static func shouldPresent(
         state: PlusAccessState,
+        terms: TrialEndAccessTerms = .legacy,
         entitlementResolved: Bool,
+        configurationResolved: Bool = true,
         alreadyShown: Bool,
         calendar: Calendar,
         now: Date
     ) -> Bool {
-        guard entitlementResolved, !alreadyShown, !state.hasEntitlement,
+        guard entitlementResolved, configurationResolved,
+              terms == .hardPaywall || !alreadyShown,
+              !state.hasEntitlement,
               state.trialGrantDate != nil else {
             return false
         }

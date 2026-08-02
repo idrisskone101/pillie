@@ -59,6 +59,18 @@ final class TrialEndPaywallAutoPresentationTests: XCTestCase {
         ))
     }
 
+    func testHardPaywallPresentsEvenWhenLegacySheetWasAlreadyShown() {
+        XCTAssertTrue(TrialEndPaywallAutoPresentation.shouldPresent(
+            state: state(),
+            terms: .hardPaywall,
+            entitlementResolved: true,
+            configurationResolved: true,
+            alreadyShown: true,
+            calendar: calendar,
+            now: firstExpiredMorning
+        ))
+    }
+
     func testDefersWhileEntitlementIsUnresolved() {
         // `hasEntitlement` starts false before RevenueCat resolves — deciding
         // early would misread a mid-trial converter as expired (#167 seam).

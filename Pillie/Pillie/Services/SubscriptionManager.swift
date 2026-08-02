@@ -104,6 +104,15 @@ final class SubscriptionManager: NSObject {
     /// otherwise a paying subscriber would be misread as free.
     private(set) var hasResolvedEntitlement = false
 
+    /// Issue #257's remotely controlled cutover gate from the current RevenueCat
+    /// offering metadata. The ratified cutover is enabled unless the dashboard
+    /// explicitly sets `hard_paywall_enabled` to false.
+    private(set) var hardPaywallEnabled = true
+
+    /// Auto-presentation waits for this first launch refresh so a dashboard kill
+    /// switch cannot briefly show the hard wall before RevenueCat responds.
+    private(set) var hasResolvedHardPaywallConfiguration = false
+
     private(set) var isLoading = false
 
     /// Fired whenever Plus Access actually flips (purchase, churn, trial grant,
@@ -130,6 +139,7 @@ final class SubscriptionManager: NSObject {
     nonisolated static let entitlementID = "pillie_plus"
     static let monthlyProductID = "com.idrisskone.pillie.plus.monthly"
     static let annualProductID = "com.idrisskone.pillie.plus.annual"
+    static let lifetimeProductID = "com.idrisskone.pillie.plus.lifetime"
     private var isConfigured = false
 
     private override init() {
@@ -223,7 +233,12 @@ final class SubscriptionManager: NSObject {
             appsFlyerId: AppsFlyerManager.shared.appsFlyerUID,
             acquisitionSource: UserDefaults.standard.string(forKey: PillStore.acquisitionSourceKey)
         )
-        Task { await refreshStatus() }
+        Task {
+            async let entitlementRefresh: Void = refreshStatus()
+            async let paywallConfigurationRefresh: Void = refreshHardPaywallConfiguration()
+            await entitlementRefresh
+            await paywallConfigurationRefresh
+        }
     }
 
     /// Ties RevenueCat to the in-app analytics person, tags the subscriber with the
@@ -351,7 +366,21 @@ final class SubscriptionManager: NSObject {
     // MARK: - Fetch Offerings
 
     func fetchOfferings() async throws -> Offerings {
-        try await Purchases.shared.offerings()
+        let offerings = try await Purchases.shared.offerings()
+        let configuration = HardPaywallRemoteConfiguration(
+            offeringMetadata: offerings.current?.metadata ?? [:]
+        )
+        hardPaywallEnabled = configuration.isEnabled
+        hasResolvedHardPaywallConfiguration = true
+        return offerings
+    }
+
+    /// Refreshes the dashboard kill switch on launch. A failed fetch keeps the
+    /// ratified default enabled; the next successful launch fetch can still roll
+    /// post-cutover cohorts back without an app update.
+    private func refreshHardPaywallConfiguration() async {
+        _ = try? await fetchOfferings()
+        hasResolvedHardPaywallConfiguration = true
     }
 
     /// Warm RevenueCat + the offerings cache ahead of the paywall. Called a couple

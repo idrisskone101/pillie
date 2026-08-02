@@ -12,6 +12,50 @@
 
 import Foundation
 
+/// The terms fixed to a Reverse Trial cohort when the trial is granted.
+enum TrialEndAccessTerms: Equatable {
+    case legacy
+    case hardPaywall
+}
+
+enum TrialTermsCohort: String, Equatable {
+    case preCutover = "pre_cutover"
+    case postCutover = "post_cutover"
+
+    init(terms: TrialEndAccessTerms) {
+        self = terms == .hardPaywall ? .postCutover : .preCutover
+    }
+}
+
+/// Dashboard-controlled rollback read from the current RevenueCat offering.
+/// Missing or malformed metadata keeps the ratified cutover enabled; operators
+/// explicitly set `hard_paywall_enabled` to `false` to restore legacy terms.
+struct HardPaywallRemoteConfiguration: Equatable {
+    static let metadataKey = "hard_paywall_enabled"
+
+    let isEnabled: Bool
+
+    init(offeringMetadata: [String: Any]) {
+        isEnabled = offeringMetadata[Self.metadataKey] as? Bool ?? true
+    }
+}
+
+/// Issue #257's immutable cohort gate. The cutover is an absolute instant:
+/// 2026-08-14 00:00 America/Montreal (EDT) == 2026-08-14 04:00 UTC.
+enum HardPaywallPolicy {
+    static let cutoverInstant = Date(timeIntervalSince1970: 1_786_680_000)
+
+    static func terms(
+        forTrialGrantedAt grantDate: Date,
+        hardPaywallEnabled: Bool
+    ) -> TrialEndAccessTerms {
+        guard hardPaywallEnabled, grantDate >= cutoverInstant else {
+            return .legacy
+        }
+        return .hardPaywall
+    }
+}
+
 /// Which framing the expired user gets (ADR 0007): loss-framed around their own
 /// trial record for the blocker-configured cohort, gain-framed for users who
 /// never configured the blocker and so have nothing to lose yet. The raw value
@@ -61,6 +105,9 @@ struct TrialEndPaywallContent: Equatable {
     let card: CenterpieceCard
     let handwrittenAside: String
     let primaryCTA: String
+    let terms: TrialEndAccessTerms
+
+    var allowsContinueFree: Bool { terms == .legacy }
 
     static func make(
         state: PlusAccessState,
@@ -68,16 +115,23 @@ struct TrialEndPaywallContent: Equatable {
         stats: TrialEndOwnStats,
         calendar: Calendar,
         now: Date,
-        locale: Locale = .current
+        locale: Locale = .current,
+        hardPaywallEnabled: Bool = false
     ) -> TrialEndPaywallContent? {
         guard !state.hasEntitlement, let grantDate = state.trialGrantDate,
               !state.trialActive(calendar: calendar, now: now) else {
             return nil
         }
+        let terms = HardPaywallPolicy.terms(
+            forTrialGrantedAt: grantDate,
+            hardPaywallEnabled: hardPaywallEnabled
+        )
         let cohort: TrialEndPaywallCohort = blockerConfigSaved ? .blockerConfigured : .reminderOnly
-        if ["de", "it"].contains(locale.language.languageCode?.identifier ?? "") {
+        if terms == .hardPaywall
+            || ["de", "it"].contains(locale.language.languageCode?.identifier ?? "") {
             return localized(
                 cohort: cohort,
+                terms: terms,
                 grantDate: grantDate,
                 stats: stats,
                 calendar: calendar,
@@ -87,6 +141,7 @@ struct TrialEndPaywallContent: Equatable {
         switch cohort {
         case .blockerConfigured:
             return lossFramed(
+                terms: terms,
                 grantDate: grantDate,
                 stats: stats,
                 calendar: calendar,
@@ -94,12 +149,13 @@ struct TrialEndPaywallContent: Equatable {
                 locale: locale
             )
         case .reminderOnly:
-            return gainFramed()
+            return gainFramed(terms: terms)
         }
     }
 
     private static func localized(
         cohort: TrialEndPaywallCohort,
+        terms: TrialEndAccessTerms,
         grantDate: Date,
         stats: TrialEndOwnStats,
         calendar: Calendar,
@@ -136,7 +192,9 @@ struct TrialEndPaywallContent: Equatable {
 
         let card: CenterpieceCard = rows.isEmpty
             ? .perks(
-                kicker: commerce("trial.end.free_title"),
+                kicker: commerce(
+                    terms == .hardPaywall ? "trial.end.kicker" : "trial.end.free_title"
+                ),
                 chips: [
                     commerce("paywall.feature.app_blocking.compact"),
                     commerce("paywall.feature.shake"),
@@ -160,10 +218,13 @@ struct TrialEndPaywallContent: Equatable {
             cohort: cohort,
             title: commerce("trial.end.title"),
             titleAccent: "",
-            subtitle: commerce("trial.end.subtitle"),
+            subtitle: commerce(
+                terms == .hardPaywall ? "paywall.subtitle" : "trial.end.subtitle"
+            ),
             card: card,
             handwrittenAside: "",
-            primaryCTA: commerce("paywall.action.upgrade")
+            primaryCTA: commerce("paywall.action.upgrade"),
+            terms: terms
         )
     }
 
@@ -185,6 +246,7 @@ struct TrialEndPaywallContent: Equatable {
     // MARK: - Loss framing (blocker-configured cohort)
 
     private static func lossFramed(
+        terms: TrialEndAccessTerms,
         grantDate: Date,
         stats: TrialEndOwnStats,
         calendar: Calendar,
@@ -202,7 +264,8 @@ struct TrialEndPaywallContent: Equatable {
                 subtitle: "Your 14 days ended — app blocking is now off. Reminders stay free forever.",
                 card: perksCard,
                 handwrittenAside: "worth keeping, right?",
-                primaryCTA: "Keep my protection"
+                primaryCTA: "Keep my protection",
+                terms: terms
             )
         }
         // Zero blocks is the good outcome, not a failed stat: the counter row is
@@ -227,7 +290,8 @@ struct TrialEndPaywallContent: Equatable {
                     : nil
             ),
             handwrittenAside: quietShield ? "quiet shield, strong streak" : "worth keeping, right?",
-            primaryCTA: "Keep my protection"
+            primaryCTA: "Keep my protection",
+            terms: terms
         )
     }
 
@@ -275,7 +339,7 @@ struct TrialEndPaywallContent: Equatable {
 
     // MARK: - Gain framing (reminder-only cohort)
 
-    private static func gainFramed() -> TrialEndPaywallContent {
+    private static func gainFramed(terms: TrialEndAccessTerms) -> TrialEndPaywallContent {
         TrialEndPaywallContent(
             cohort: .reminderOnly,
             title: "Reminders are",
@@ -283,7 +347,8 @@ struct TrialEndPaywallContent: Equatable {
             subtitle: "Your trial ended. Your reminders keep working — Plus is here whenever you want app blocking and more.",
             card: perksCard,
             handwrittenAside: "whenever you're ready!",
-            primaryCTA: "Unlock Pillie Plus"
+            primaryCTA: "Unlock Pillie Plus",
+            terms: terms
         )
     }
 
