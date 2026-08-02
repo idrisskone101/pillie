@@ -158,11 +158,7 @@ struct PillPackCard: View {
         .background(PillieTheme.dark)
         .clipShape(RoundedRectangle(cornerRadius: PillieTheme.cardRadius))
         .alert(
-            PillieLocalization.formatted(
-                "today.pack.start_new.title",
-                locale: locale,
-                arguments: cycleTypeText
-            ),
+            startNewConfirmation.title,
             isPresented: $showNewPackConfirmation
         ) {
             Button(PillieLocalization.string(
@@ -181,16 +177,12 @@ struct PillPackCard: View {
                 locale: locale
             ), role: .cancel) {}
         } message: {
-            Text(PillieLocalization.formatted(
-                "today.pack.start_new.body",
-                locale: locale,
-                arguments: cycleTypeText
-            ))
+            Text(startNewConfirmation.body)
         }
     }
 
-    private var cycleTypeText: String {
-        CycleNounPresentation.localizedNoun(
+    private var startNewConfirmation: CycleNounPresentation.StartNewConfirmation {
+        CycleNounPresentation.startNewConfirmation(
             for: store.pack.method,
             locale: locale
         )

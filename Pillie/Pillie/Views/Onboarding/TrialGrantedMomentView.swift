@@ -99,9 +99,9 @@ struct TrialGrantedMomentContent {
             PillieLocalization.string(key, table: "Commerce", locale: locale)
         }
         return TrialGrantedMomentContent(
-            badge: commerce("trial.granted.title"),
-            title: commerce("trial.granted.title"),
-            titleAccent: "",
+            badge: commerce("trial.granted.badge"),
+            title: commerce("trial.granted.headline"),
+            titleAccent: commerce("trial.granted.headline_accent"),
             subtitle: commerce("trial.granted.subtitle"),
             today: Today(
                 label: commerce("trial.timeline.today"),
@@ -124,24 +124,24 @@ struct TrialGrantedMomentContent {
             ),
             laterDays: [
                 TimelineDay(
-                    label: commerce("trial.timeline.warning"),
-                    title: commerce("trial.timeline.warning"),
-                    detail: commerce("trial.granted.subtitle"),
+                    label: commerce("trial.granted.warning.label"),
+                    title: commerce("trial.granted.warning.title"),
+                    detail: commerce("trial.granted.warning.detail"),
                     symbolName: "bell.fill",
                     circleBackground: PillieTheme.lavender,
                     symbolColor: PillieTheme.textPrimary
                 ),
                 TimelineDay(
-                    label: commerce("trial.timeline.choose"),
-                    title: commerce("trial.timeline.choose"),
-                    detail: commerce("paywall.plan.cancel_anytime"),
+                    label: commerce("trial.granted.choice.label"),
+                    title: commerce("trial.granted.choice.title"),
+                    detail: commerce("trial.granted.choice.detail"),
                     symbolName: "leaf.fill",
                     circleBackground: PillieTheme.sage,
                     symbolColor: PillieTheme.verifiedGreen
                 ),
             ],
             disclosure: commerce("trial.granted.disclosure"),
-            primaryCTA: PillieLocalization.string("global.action.continue", locale: locale)
+            primaryCTA: commerce("trial.granted.cta")
         )
     }
 }

@@ -392,6 +392,14 @@
         }
       }
     },
+    "paywall.plan.price_period_multiple": {
+      "comment": "StoreKit price followed by a multi-unit billing interval [paywall]",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "%@ every %@" } },
+        "it": { "stringUnit": { "state": "translated", "value": "%@ ogni %@" } },
+        "de": { "stringUnit": { "state": "translated", "value": "%@ alle %@" } }
+      }
+    },
     "paywall.plan.cancel_anytime": {
       "comment": "Subscription management [paywall]",
       "localizations": {
@@ -456,7 +464,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Auf Pillie Plus upgraden"
+            "value": "Zu Pillie Plus wechseln"
           }
         }
       }
@@ -548,7 +556,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "in Free und Plus enthalten"
+            "value": "im kostenlosen Tarif und in Plus enthalten"
           }
         }
       }
@@ -594,7 +602,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "nur Free"
+            "value": "nur im kostenlosen Tarif"
           }
         }
       }
@@ -663,7 +671,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kauffehler"
+            "value": "Fehler beim Kauf"
           }
         }
       }
@@ -778,9 +786,89 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Für diesen Account wurde kein aktives Abo gefunden."
+            "value": "Für dieses Konto wurde kein aktives Abo gefunden."
           }
         }
+      }
+    },
+    "trial.granted.badge": {
+      "comment": "Trial duration and payment requirement badge [trial granted]",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "14 days free · no card" } },
+        "it": { "stringUnit": { "state": "translated", "value": "14 giorni gratis · nessuna carta" } },
+        "de": { "stringUnit": { "state": "translated", "value": "14 Tage gratis · keine Karte" } }
+      }
+    },
+    "trial.granted.headline": {
+      "comment": "First line of the trial-granted headline [trial granted]",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Your next two weeks," } },
+        "it": { "stringUnit": { "state": "translated", "value": "Le prossime due settimane" } },
+        "de": { "stringUnit": { "state": "translated", "value": "Deine nächsten zwei Wochen" } }
+      }
+    },
+    "trial.granted.headline_accent": {
+      "comment": "Accented second line of the trial-granted headline [trial granted]",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "on us." } },
+        "it": { "stringUnit": { "state": "translated", "value": "le offriamo noi." } },
+        "de": { "stringUnit": { "state": "translated", "value": "gehen auf uns." } }
+      }
+    },
+    "trial.granted.warning.label": {
+      "comment": "Day label for the pre-expiry warning [trial granted]",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Day 12" } },
+        "it": { "stringUnit": { "state": "translated", "value": "Giorno 12" } },
+        "de": { "stringUnit": { "state": "translated", "value": "Tag 12" } }
+      }
+    },
+    "trial.granted.warning.title": {
+      "comment": "Title for the pre-expiry warning [trial granted]",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "A gentle heads-up" } },
+        "it": { "stringUnit": { "state": "translated", "value": "Un promemoria discreto" } },
+        "de": { "stringUnit": { "state": "translated", "value": "Eine kurze Erinnerung" } }
+      }
+    },
+    "trial.granted.warning.detail": {
+      "comment": "Detail for the pre-expiry warning [trial granted]",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "We'll remind you before your trial ends. No surprises." } },
+        "it": { "stringUnit": { "state": "translated", "value": "Ti avviseremo prima della fine della prova. Nessuna sorpresa." } },
+        "de": { "stringUnit": { "state": "translated", "value": "Bevor deine Testphase endet, geben wir dir rechtzeitig Bescheid. Ohne Überraschungen." } }
+      }
+    },
+    "trial.granted.choice.label": {
+      "comment": "Day label for the post-trial choice [trial granted]",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Day 14" } },
+        "it": { "stringUnit": { "state": "translated", "value": "Giorno 14" } },
+        "de": { "stringUnit": { "state": "translated", "value": "Tag 14" } }
+      }
+    },
+    "trial.granted.choice.title": {
+      "comment": "Title for the post-trial choice [trial granted]",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "You choose" } },
+        "it": { "stringUnit": { "state": "translated", "value": "Decidi tu" } },
+        "de": { "stringUnit": { "state": "translated", "value": "Du entscheidest" } }
+      }
+    },
+    "trial.granted.choice.detail": {
+      "comment": "Detail explaining the post-trial choice [trial granted]",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Keep reminders free, or choose whether to continue with Plus." } },
+        "it": { "stringUnit": { "state": "translated", "value": "I promemoria restano gratuiti. Decidi tu se mantenere Plus." } },
+        "de": { "stringUnit": { "state": "translated", "value": "Erinnerungen bleiben kostenlos. Plus behältst du nur, wenn du möchtest." } }
+      }
+    },
+    "trial.granted.cta": {
+      "comment": "Continue button leading to app-blocking setup [trial granted]",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Continue to app blocking" } },
+        "it": { "stringUnit": { "state": "translated", "value": "Continua con il blocco app" } },
+        "de": { "stringUnit": { "state": "translated", "value": "Weiter zur App-Pause" } }
       }
     },
     "trial.granted.title": {
@@ -962,7 +1050,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Probiere deine Plus-Funktionen"
+            "value": "Deine Plus-Funktionen"
           }
         }
       }
@@ -1054,7 +1142,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Schutz aktiv · noch %lld Tage"
+            "value": "App-Pause aktiv · noch %lld Tage"
           }
         }
       }
@@ -1077,7 +1165,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Schutz aktiv · endet heute"
+            "value": "App-Pause aktiv · letzter Tag"
           }
         }
       }
@@ -1100,7 +1188,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Schutz einrichten · noch %lld Tage"
+            "value": "App-Pause einrichten · noch %lld Tage"
           }
         }
       }
@@ -1123,7 +1211,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Schutz einrichten · endet heute"
+            "value": "App-Pause einrichten · letzter Tag"
           }
         }
       }
@@ -1192,7 +1280,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Deine App-Pause-Konfiguration bleibt gespeichert"
+            "value": "Deine App-Auswahl bleibt gespeichert"
           }
         }
       }
@@ -1238,7 +1326,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Deine 14 Tage"
+            "value": "14 Tage Plus"
           }
         }
       }
@@ -1468,7 +1556,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zurück zu Heute"
+            "value": "Zurück zur Übersicht"
           }
         }
       }
@@ -1606,7 +1694,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Personalisiert"
+            "value": "Angepasst"
           }
         }
       }
@@ -1721,7 +1809,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Personalisieren"
+            "value": "Anpassen"
           }
         }
       }
@@ -1790,7 +1878,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Warum hat Pillie+ nicht zu dir gepasst?"
+            "value": "Warum hat Pillie Plus nicht zu dir gepasst?"
           }
         }
       }
@@ -1813,7 +1901,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Deine Antwort ist freiwillig. Du kannst überspringen und Pillie kostenlos weiter nutzen."
+            "value": "Deine Antwort ist freiwillig. Du kannst die Frage überspringen und Pillie kostenlos weiter nutzen."
           }
         }
       }
@@ -1836,7 +1924,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Füge ein kurzes Detail hinzu (optional)"
+            "value": "Noch ein Hinweis (optional)"
           }
         }
       }

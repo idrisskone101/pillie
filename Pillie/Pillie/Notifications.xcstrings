@@ -364,7 +364,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Du baust Beständigkeit auf"
+            "value": "Du bleibst dran"
           }
         }
       }
@@ -847,7 +847,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Es ist Zeit für deine geplante Pille. Protokolliere die Aktion danach."
+            "value": "Es ist Zeit für deine Pille. Protokolliere die Aktion danach."
           }
         }
       }
@@ -985,7 +985,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Die App-Sperre wird in 5 Tagen deaktiviert. Erinnerungen bleiben dauerhaft kostenlos."
+            "value": "Die App-Pause wird in 5 Tagen deaktiviert. Erinnerungen bleiben dauerhaft kostenlos."
           }
         }
       }
@@ -1031,7 +1031,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Die App-Sperre wird morgen Abend deaktiviert. Erinnerungen bleiben dauerhaft kostenlos."
+            "value": "Die App-Pause wird morgen Abend deaktiviert. Erinnerungen bleiben dauerhaft kostenlos."
           }
         }
       }

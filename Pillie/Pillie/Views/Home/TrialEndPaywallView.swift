@@ -16,6 +16,7 @@ import os
 
 struct TrialEndPaywallView: View {
     @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.locale) private var locale
     @State private var animateIn = false
     @State private var selectedPlan: Plan = .annual
@@ -414,12 +415,22 @@ struct TrialEndPaywallView: View {
         )
     }
 
+    @ViewBuilder
     private var planTiles: some View {
-        HStack(alignment: .top, spacing: 10) {
-            annualTile
-                .frame(maxWidth: .infinity)
-            monthlyTile
-                .frame(maxWidth: .infinity)
+        Group {
+            if dynamicTypeSize.isAccessibilitySize {
+                VStack(spacing: 14) {
+                    annualTile
+                    monthlyTile
+                }
+            } else {
+                HStack(alignment: .top, spacing: 10) {
+                    annualTile
+                        .frame(maxWidth: .infinity)
+                    monthlyTile
+                        .frame(maxWidth: .infinity)
+                }
+            }
         }
         .padding(.top, 10)
     }
@@ -438,7 +449,10 @@ struct TrialEndPaywallView: View {
                     .tracking(1)
                     .textCase(.uppercase)
                     .foregroundStyle(Color.white.opacity(0.55))
-                    .padding(.top, 4)
+                    .padding(
+                        .top,
+                        dynamicTypeSize.isAccessibilitySize && savingsBadgeText != nil ? 24 : 4
+                    )
 
                 HStack(alignment: .firstTextBaseline, spacing: 4) {
                     Text(annualPriceAndPeriodText)
@@ -481,6 +495,8 @@ struct TrialEndPaywallView: View {
                         .font(.pillie(9, weight: .black))
                         .tracking(0.8)
                         .textCase(.uppercase)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.8)
                         .foregroundStyle(PillieTheme.dark)
                         .padding(.horizontal, 10)
                         .padding(.vertical, 4)
@@ -588,34 +604,54 @@ struct TrialEndPaywallView: View {
 
     // MARK: - Reassurance + footer
 
+    @ViewBuilder
     private var reassuranceRow: some View {
-        HStack(spacing: 16) {
-            ForEach([
-                PillieLocalization.string(
-                    "trial.end.free_title",
-                    table: "Commerce",
-                    locale: locale
-                ),
-                PillieLocalization.string(
-                    "paywall.plan.cancel_anytime_short",
-                    table: "Commerce",
-                    locale: locale
-                ),
-            ], id: \.self) { item in
-                HStack(spacing: 5) {
-                    Image(systemName: "checkmark")
-                        .font(.system(size: 12, weight: .bold))
-                        .foregroundStyle(PillieTheme.verifiedGreen)
-                    Text(item)
-                        .font(.pillie(12, weight: .semibold))
-                        .foregroundStyle(PillieTheme.textPrimary)
-                        .lineLimit(2)
-                        .minimumScaleFactor(0.8)
+        let items = [
+            PillieLocalization.string(
+                "trial.end.free_title",
+                table: "Commerce",
+                locale: locale
+            ),
+            PillieLocalization.string(
+                "paywall.plan.cancel_anytime_short",
+                table: "Commerce",
+                locale: locale
+            ),
+        ]
+
+        Group {
+            if dynamicTypeSize.isAccessibilitySize {
+                VStack(alignment: .leading, spacing: 8) {
+                    ForEach(items, id: \.self) { item in
+                        reassuranceItem(item)
+                    }
                 }
-                .accessibilityElement(children: .combine)
+            } else {
+                HStack(spacing: 16) {
+                    ForEach(items, id: \.self) { item in
+                        reassuranceItem(item)
+                    }
+                }
             }
         }
-        .frame(maxWidth: .infinity, alignment: .center)
+        .frame(
+            maxWidth: .infinity,
+            alignment: dynamicTypeSize.isAccessibilitySize ? .leading : .center
+        )
+    }
+
+    private func reassuranceItem(_ item: String) -> some View {
+        HStack(spacing: 5) {
+            Image(systemName: "checkmark")
+                .font(.system(size: 12, weight: .bold))
+                .foregroundStyle(PillieTheme.verifiedGreen)
+            Text(item)
+                .font(.pillie(12, weight: .semibold))
+                .foregroundStyle(PillieTheme.textPrimary)
+                .lineLimit(dynamicTypeSize.isAccessibilitySize ? 1 : 2)
+                .minimumScaleFactor(0.8)
+        }
+        .accessibilityElement(children: .combine)
     }
 
     private var purchaseButton: some View {
@@ -657,46 +693,68 @@ struct TrialEndPaywallView: View {
         .accessibilityIdentifier("trialEndPaywallCTA")
     }
 
+    @ViewBuilder
     private var secondaryLinks: some View {
-        HStack(spacing: 14) {
-            Button {
-                continueFree()
-            } label: {
-                Text(declineFeedbackContent.continueFree)
-                    .font(.pillie(13, weight: .semibold))
-                    .foregroundStyle(PillieTheme.textMuted)
-            }
-            .buttonStyle(.plain)
-            .accessibilityIdentifier("trialEndPaywallContinueFree")
+        Group {
+            if dynamicTypeSize.isAccessibilitySize {
+                VStack(spacing: 10) {
+                    continueFreeButton
+                    restorePurchasesButton
+                }
+            } else {
+                HStack(spacing: 14) {
+                    continueFreeButton
 
-            Rectangle()
-                .fill(PillieTheme.textMuted.opacity(0.3))
-                .frame(width: 1, height: 13)
+                    Rectangle()
+                        .fill(PillieTheme.textMuted.opacity(0.3))
+                        .frame(width: 1, height: 13)
 
-            Button {
-                restorePurchases()
-            } label: {
-                Group {
-                    if isRestoring {
-                        ProgressView()
-                            .tint(PillieTheme.textMuted)
-                            .scaleEffect(0.72)
-                    } else {
-                        Text(PillieLocalization.string(
-                            "paywall.action.restore",
-                            table: "Commerce",
-                            locale: locale
-                        ))
-                            .font(.pillie(13, weight: .semibold))
-                            .foregroundStyle(PillieTheme.textMuted)
-                    }
+                    restorePurchasesButton
                 }
             }
-            .buttonStyle(.plain)
-            .disabled(isRestoring)
-            .accessibilityIdentifier("trialEndPaywallRestore")
         }
         .frame(maxWidth: .infinity, alignment: .center)
+    }
+
+    private var continueFreeButton: some View {
+        Button {
+            continueFree()
+        } label: {
+            Text(declineFeedbackContent.continueFree)
+                .font(.pillie(13, weight: .semibold))
+                .foregroundStyle(PillieTheme.textMuted)
+                .lineLimit(1)
+                .minimumScaleFactor(0.8)
+        }
+        .buttonStyle(.plain)
+        .accessibilityIdentifier("trialEndPaywallContinueFree")
+    }
+
+    private var restorePurchasesButton: some View {
+        Button {
+            restorePurchases()
+        } label: {
+            Group {
+                if isRestoring {
+                    ProgressView()
+                        .tint(PillieTheme.textMuted)
+                        .scaleEffect(0.72)
+                } else {
+                    Text(PillieLocalization.string(
+                        "paywall.action.restore",
+                        table: "Commerce",
+                        locale: locale
+                    ))
+                        .font(.pillie(13, weight: .semibold))
+                        .foregroundStyle(PillieTheme.textMuted)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.8)
+                }
+            }
+        }
+        .buttonStyle(.plain)
+        .disabled(isRestoring)
+        .accessibilityIdentifier("trialEndPaywallRestore")
     }
 
     private var legalFooter: some View {
@@ -964,6 +1022,7 @@ struct TrialEndPaywallView: View {
 /// The gain-framed card's wrapping chip row. A simple two-row split (the four
 /// perks never fit one line) keeps this free of layout-protocol complexity.
 private struct FlowingChips: View {
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     let chips: [String]
     let symbols: [String]
 
@@ -973,30 +1032,40 @@ private struct FlowingChips: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            ForEach(0..<((chips.count + 1) / 2), id: \.self) { rowIndex in
-                HStack(spacing: 8) {
-                    ForEach(
-                        indexedChips[rowIndex * 2..<min(rowIndex * 2 + 2, indexedChips.count)],
-                        id: \.offset
-                    ) { chip in
-                        HStack(spacing: 6) {
-                            Image(systemName: symbols[chip.offset])
-                                .font(.system(size: 11, weight: .semibold))
-                                .foregroundStyle(PillieTheme.coral)
-                                .accessibilityHidden(true)
-                            Text(chip.title)
-                                .font(.pillie(13, weight: .semibold))
-                                .foregroundStyle(.white)
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.8)
+            if dynamicTypeSize.isAccessibilitySize {
+                ForEach(indexedChips, id: \.offset) { chip in
+                    chipView(chip)
+                }
+            } else {
+                ForEach(0..<((chips.count + 1) / 2), id: \.self) { rowIndex in
+                    HStack(spacing: 8) {
+                        ForEach(
+                            indexedChips[rowIndex * 2..<min(rowIndex * 2 + 2, indexedChips.count)],
+                            id: \.offset
+                        ) { chip in
+                            chipView(chip)
                         }
-                        .padding(.horizontal, 13)
-                        .padding(.vertical, 8)
-                        .background(Color.white.opacity(0.1), in: Capsule())
                     }
                 }
             }
         }
+    }
+
+    private func chipView(_ chip: (offset: Int, title: String)) -> some View {
+        HStack(spacing: 6) {
+            Image(systemName: symbols[chip.offset])
+                .font(.system(size: 11, weight: .semibold))
+                .foregroundStyle(PillieTheme.coral)
+                .accessibilityHidden(true)
+            Text(chip.title)
+                .font(.pillie(13, weight: .semibold))
+                .foregroundStyle(.white)
+                .lineLimit(1)
+                .minimumScaleFactor(0.8)
+        }
+        .padding(.horizontal, 13)
+        .padding(.vertical, 8)
+        .background(Color.white.opacity(0.1), in: Capsule())
     }
 }
 

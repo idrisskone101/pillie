@@ -480,7 +480,7 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
                 periodUnit: .month,
                 locale: italian
             ),
-            "14,99 € per 3 mesi"
+            "14,99 € ogni 3 mesi"
         )
         XCTAssertEqual(
             CommercePresentation.trialEndText(date: trialEnd, locale: italian),
@@ -536,7 +536,8 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
         )
 
         XCTAssertEqual(content.badge, "Oggi")
-        XCTAssertEqual(content.title, "Le prossime due settimane con Pillie Plus")
+        XCTAssertEqual(content.title, "Le prossime due settimane")
+        XCTAssertEqual(content.titleAccent, "le offriamo noi.")
         XCTAssertEqual(content.subtitle, "La prova di Pillie Plus inizia ora. Ecco cosa include.")
         XCTAssertEqual(
             content.perks.map(\.title),

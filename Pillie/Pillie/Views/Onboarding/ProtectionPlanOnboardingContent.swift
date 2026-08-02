@@ -576,6 +576,7 @@ struct ProtectionPlanMechanismProofContent {
         var id: String { phase }
     }
 
+    let eyebrow: String
     let headline: String
     /// Beat 1: the reminder fires.
     let trigger: Step
@@ -592,6 +593,8 @@ struct ProtectionPlanMechanismProofContent {
     /// Advances to the paywall.
     let continueCTA: String
     let footer: String
+    let unlockedConfirmation: String
+    let replayAccessibilityHint: String
     /// A single readable line describing the whole loop for VoiceOver / Reduce Motion.
     let accessibilitySummary: String
 
@@ -599,49 +602,60 @@ struct ProtectionPlanMechanismProofContent {
     var steps: [Step] { [trigger, enforce, release] }
 
     var visibleCopy: [String] {
-        [headline]
+        [eyebrow, headline]
             + steps.flatMap { [$0.phase, $0.title, $0.detail] }
-            + [lockedLabel, markTakenCTA, replayCTA, continueCTA, footer, accessibilitySummary]
+            + [
+                lockedLabel,
+                markTakenCTA,
+                replayCTA,
+                continueCTA,
+                footer,
+                unlockedConfirmation,
+                replayAccessibilityHint,
+                accessibilitySummary,
+            ]
     }
 
-    init(method: ContraceptiveMethod) {
-        let language = MethodActionLanguage(method: method)
-        let action = language.actionPhrase
-        let capitalAction = action.prefix(1).uppercased() + action.dropFirst()
-        let moment = language.momentLabel
+    init(method: ContraceptiveMethod, locale: Locale = .current) {
+        func localized(_ key: String) -> String {
+            PillieLocalization.string(key, locale: locale)
+        }
 
-        headline = "The lock only opens after you \(action)."
+        eyebrow = localized("onboarding.mechanism.eyebrow")
+        headline = localized("onboarding.mechanism.headline")
         trigger = Step(
-            phase: "TRIGGER",
-            title: "Reminder rings",
-            detail: "A gentle, persistent nudge when it's \(moment).",
+            phase: localized("onboarding.mechanism.trigger.phase"),
+            title: localized("onboarding.mechanism.trigger.title"),
+            detail: localized("onboarding.mechanism.trigger.detail"),
             symbol: "bell.fill"
         )
         enforce = Step(
-            phase: "ENFORCE",
-            title: "Distracting apps lock",
-            detail: "Your chosen apps stay sealed \u{2014} no scrolling past the reminder.",
+            phase: localized("onboarding.mechanism.enforce.phase"),
+            title: localized("onboarding.mechanism.enforce.title"),
+            detail: localized("onboarding.mechanism.enforce.detail"),
             symbol: "lock.fill"
         )
         release = Step(
-            phase: "RELEASE",
-            title: "Tap to unlock",
-            detail: "\(capitalAction) and everything opens right back up.",
+            phase: localized("onboarding.mechanism.release.phase"),
+            title: localized("onboarding.mechanism.release.title"),
+            detail: localized("onboarding.mechanism.release.detail"),
             symbol: "checkmark.seal.fill"
         )
-        lockedLabel = "Locked"
-        markTakenCTA = Self.markTakenLabel(for: method)
-        replayCTA = "Replay"
-        continueCTA = "Continue"
-        footer = "Part of your Pillie Protection Plan."
-        accessibilitySummary = "When it's \(moment), Pillie rings a reminder and locks your distracting apps. \(capitalAction) to unlock them instantly."
+        lockedLabel = localized("onboarding.mechanism.locked")
+        markTakenCTA = localized(Self.markTakenKey(for: method))
+        replayCTA = localized("onboarding.mechanism.replay")
+        continueCTA = localized("onboarding.mechanism.continue")
+        footer = localized("onboarding.mechanism.footer")
+        unlockedConfirmation = localized("onboarding.mechanism.unlocked")
+        replayAccessibilityHint = localized("onboarding.mechanism.replay_hint")
+        accessibilitySummary = localized("onboarding.mechanism.accessibility_summary")
     }
 
-    private static func markTakenLabel(for method: ContraceptiveMethod) -> String {
+    private static func markTakenKey(for method: ContraceptiveMethod) -> String {
         switch method {
-        case .pill: return "I took my pill"
-        case .patch: return "I changed my patch"
-        case .ring: return "I checked my ring"
+        case .pill: return "onboarding.mechanism.mark.pill"
+        case .patch: return "onboarding.mechanism.mark.patch"
+        case .ring: return "onboarding.mechanism.mark.ring"
         }
     }
 }

@@ -60,8 +60,9 @@ struct CalendarGrid: View {
         VStack(spacing: 8) {
             // Weekday headers
             HStack {
-                ForEach(weekdays, id: \.self) { day in
-                    Text(day)
+                // Localized initials can repeat; the fixed weekday position is the stable identity.
+                ForEach(weekdays.indices, id: \.self) { index in
+                    Text(weekdays[index])
                         .font(.pillieCaption())
                         .textCase(.uppercase)
                         .foregroundStyle(PillieTheme.textMuted)
