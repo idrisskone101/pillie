@@ -207,7 +207,7 @@ struct PremiumPaywallView: View {
     @Environment(\.locale) private var locale
     @State private var animateIn = false
     @State private var blobPhase: CGFloat = 0
-    @State private var selectedPlan: Plan = .annual
+    @State private var selectedPlan: PilliePlusPlan = .annual
     @State private var offerings: Offerings?
     @State private var purchaseError: String?
     @State private var isPurchasing = false
@@ -230,21 +230,11 @@ struct PremiumPaywallView: View {
     let onContinue: () -> Void
     let onSkip: () -> Void
 
-    private enum Plan {
-        case annual, monthly
-
-        var analyticsPlan: AnalyticsPlan {
-            switch self {
-            case .annual: return .annual
-            case .monthly: return .monthly
-            }
-        }
-    }
-
     private var selectedPackage: Package? {
         switch selectedPlan {
         case .annual: return annualPackage
         case .monthly: return monthlyPackage
+        case .lifetime: return lifetimePackage
         }
     }
 
@@ -561,22 +551,36 @@ struct PremiumPaywallView: View {
         VStack(spacing: 12) {
             annualCard
             monthlyCard
+            lifetimeCard
         }
         .padding(.top, 12)
     }
 
     private var annualPackage: Package? {
-        guard let offering = offerings?.current else { return nil }
-        return offering.annual ?? offering.availablePackages.first {
-            $0.storeProduct.productIdentifier == SubscriptionManager.annualProductID
-        }
+        package(for: .annual)
     }
 
     private var monthlyPackage: Package? {
+        package(for: .monthly)
+    }
+
+    private var lifetimePackage: Package? {
+        package(for: .lifetime)
+    }
+
+    private func package(for plan: PilliePlusPlan) -> Package? {
         guard let offering = offerings?.current else { return nil }
-        return offering.monthly ?? offering.availablePackages.first {
-            $0.storeProduct.productIdentifier == SubscriptionManager.monthlyProductID
+        let preferredPackage = switch plan {
+        case .annual: offering.annual
+        case .monthly: offering.monthly
+        case .lifetime: offering.lifetime
         }
+        return PilliePlusPackageResolver.resolve(
+            plan: plan,
+            preferredPackage: preferredPackage,
+            availablePackages: offering.availablePackages,
+            productIdentifier: \Package.storeProduct.productIdentifier
+        )
     }
 
     private var annualPriceText: String {
@@ -585,6 +589,14 @@ struct PremiumPaywallView: View {
 
     private var monthlyPriceText: String {
         monthlyPackage?.storeProduct.localizedPriceString ?? "—"
+    }
+
+    private var lifetimePriceText: String {
+        lifetimePackage?.storeProduct.localizedPriceString ?? "—"
+    }
+
+    private var lifetimeTitle: String {
+        lifetimePackage?.storeProduct.localizedTitle ?? "Pillie Plus Lifetime"
     }
 
     private var annualPriceAndPeriodText: String {
@@ -740,7 +752,46 @@ struct PremiumPaywallView: View {
         .accessibilityAddTraits(selectedPlan == .monthly ? [.isButton, .isSelected] : .isButton)
     }
 
-    private func selectPlan(_ plan: Plan) {
+    private var lifetimeCard: some View {
+        Button {
+            selectPlan(.lifetime)
+        } label: {
+            HStack(spacing: 14) {
+                Text(lifetimeTitle)
+                    .font(.pillie(12, weight: .black))
+                    .foregroundStyle(PillieTheme.textPrimary)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.75)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+
+                Text(lifetimePriceText)
+                    .font(.pillie(24, weight: .black))
+                    .foregroundStyle(PillieTheme.textPrimary)
+
+                radioCircle(selected: selectedPlan == .lifetime, onDark: false)
+            }
+            .padding(16)
+            .background(
+                RoundedRectangle(cornerRadius: PillieTheme.buttonRadius)
+                    .fill(selectedPlan == .lifetime ? PillieTheme.coralLight : PillieTheme.cardWhite)
+            )
+            .overlay {
+                RoundedRectangle(cornerRadius: PillieTheme.buttonRadius)
+                    .stroke(
+                        selectedPlan == .lifetime ? PillieTheme.coral : PillieTheme.sageHalf,
+                        lineWidth: selectedPlan == .lifetime ? 2 : 1
+                    )
+            }
+            .shadow(color: PillieTheme.cardShadow, radius: 8, y: 4)
+        }
+        .buttonStyle(.plain)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(lifetimeTitle), \(lifetimePriceText)")
+        .accessibilityAddTraits(selectedPlan == .lifetime ? [.isButton, .isSelected] : .isButton)
+        .accessibilityIdentifier("premiumPaywallLifetimePlan")
+    }
+
+    private func selectPlan(_ plan: PilliePlusPlan) {
         let response = plusFeedback.selectPlan(accessibilityReduceMotion: accessibilityReduceMotion)
         withAnimation(response.motionProfile.animation) {
             selectedPlan = plan
@@ -993,7 +1044,7 @@ struct PremiumPaywallView: View {
                     ProgressView()
                         .tint(.white)
                 } else {
-                    Text(selectedPlan == .annual ? content.primaryCTA : content.monthlyCTA)
+                    Text(selectedPlan == .monthly ? content.monthlyCTA : content.primaryCTA)
                         .font(.pillie(17, weight: .bold))
                         // Keep the primary CTA on one line at large Dynamic Type
                         // sizes instead of truncating ("Try Pillie Plus for fr…").

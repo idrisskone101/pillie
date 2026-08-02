@@ -13,8 +13,14 @@ import Foundation
 
 nonisolated final class InMemoryTrialGrantStore: TrialGrantStoring {
     private(set) var grantDate: Date?
+    private(set) var termsCohort: TrialTermsCohort?
 
     func loadGrantDate() -> Date? { grantDate }
     func saveGrantDate(_ date: Date) { grantDate = date }
-    func clearGrantDate() { grantDate = nil }
+    func loadTermsCohort() -> TrialTermsCohort? { termsCohort }
+    func saveTermsCohort(_ cohort: TrialTermsCohort) { termsCohort = cohort }
+    func clearGrantDate() {
+        grantDate = nil
+        termsCohort = nil
+    }
 }

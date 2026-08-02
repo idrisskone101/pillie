@@ -231,6 +231,18 @@ protocol AnalyticsTracking {
     _ event: AnalyticsEvent,
     source: AnalyticsSource?,
     surface: AnalyticsPaywallSurface,
+    trialTermsCohort: TrialTermsCohort,
+    trialEndCohort: TrialEndPaywallCohort,
+    isPlus: Bool?
+  )
+
+  func track(
+    _ event: AnalyticsEvent,
+    source: AnalyticsSource?,
+    surface: AnalyticsPaywallSurface,
+    plan: AnalyticsPlan?,
+    result: AnalyticsResult?,
+    trialTermsCohort: TrialTermsCohort,
     trialEndCohort: TrialEndPaywallCohort,
     isPlus: Bool?
   )
@@ -396,10 +408,31 @@ extension AnalyticsTracking {
     _ event: AnalyticsEvent,
     source: AnalyticsSource?,
     surface: AnalyticsPaywallSurface,
+    trialTermsCohort: TrialTermsCohort,
     trialEndCohort: TrialEndPaywallCohort,
     isPlus: Bool?
   ) {
     trackLegacy(event, source: source, isPlus: isPlus)
+  }
+
+  func track(
+    _ event: AnalyticsEvent,
+    source: AnalyticsSource?,
+    surface: AnalyticsPaywallSurface,
+    plan: AnalyticsPlan?,
+    result: AnalyticsResult?,
+    trialTermsCohort: TrialTermsCohort,
+    trialEndCohort: TrialEndPaywallCohort,
+    isPlus: Bool?
+  ) {
+    track(
+      event,
+      source: source,
+      surface: surface,
+      plan: plan,
+      result: result,
+      isPlus: isPlus
+    )
   }
 
   private func trackLegacy(
@@ -706,6 +739,7 @@ enum AnalyticsScreen: String {
 enum AnalyticsPlan: String {
   case annual
   case monthly
+  case lifetime
 }
 
 enum AnalyticsResult: String {
@@ -748,9 +782,11 @@ struct AnalyticsPayload {
   /// The trial day (10 or 13) carried as `day` by `trial_expiry_warning_sent`
   /// (#168 / ADR 0007).
   let trialWarningDay: Int?
-  /// The Trial-End Paywall cohort carried as `cohort` by `paywall_viewed`
-  /// with `source: trial_end` (#169 / ADR 0007).
+  /// The Trial-End Paywall presentation variant carried as the compatibility
+  /// `cohort` key and the explicit `paywall_variant` alias (#169 / ADR 0007).
   let trialEndCohort: TrialEndPaywallCohort?
+  /// The immutable pre/post-cutover trial cohort for issue #257.
+  let trialTermsCohort: TrialTermsCohort?
   let paywallSurface: AnalyticsPaywallSurface?
   let trialStatusFeature: AnalyticsTrialStatusFeature?
   let trialActivationStatus: AnalyticsTrialActivationStatus?
@@ -785,6 +821,7 @@ struct AnalyticsPayload {
     shakeCount: Int? = nil,
     trialWarningDay: Int? = nil,
     trialEndCohort: TrialEndPaywallCohort? = nil,
+    trialTermsCohort: TrialTermsCohort? = nil,
     paywallSurface: AnalyticsPaywallSurface? = nil,
     trialStatusFeature: AnalyticsTrialStatusFeature? = nil,
     trialActivationStatus: AnalyticsTrialActivationStatus? = nil,
@@ -818,6 +855,7 @@ struct AnalyticsPayload {
     self.shakeCount = shakeCount
     self.trialWarningDay = trialWarningDay
     self.trialEndCohort = trialEndCohort
+    self.trialTermsCohort = trialTermsCohort
     self.paywallSurface = paywallSurface
     self.trialStatusFeature = trialStatusFeature
     self.trialActivationStatus = trialActivationStatus
@@ -865,6 +903,10 @@ struct AnalyticsPayload {
     }
     if let trialEndCohort {
       properties["cohort"] = .string(trialEndCohort.rawValue)
+      properties["paywall_variant"] = .string(trialEndCohort.rawValue)
+    }
+    if let trialTermsCohort {
+      properties["trial_terms_cohort"] = .string(trialTermsCohort.rawValue)
     }
     if let paywallSurface {
       properties["surface"] = .string(paywallSurface.rawValue)
@@ -1112,6 +1154,7 @@ final class AnalyticsManager: AnalyticsTracking {
     _ event: AnalyticsEvent,
     source: AnalyticsSource?,
     surface: AnalyticsPaywallSurface,
+    trialTermsCohort: TrialTermsCohort,
     trialEndCohort: TrialEndPaywallCohort,
     isPlus: Bool?
   ) {
@@ -1119,6 +1162,30 @@ final class AnalyticsManager: AnalyticsTracking {
       source: source,
       isPlus: isPlus,
       trialEndCohort: trialEndCohort,
+      trialTermsCohort: trialTermsCohort,
+      paywallSurface: surface
+    )
+
+    capture(event, payload: payload, source: source)
+  }
+
+  func track(
+    _ event: AnalyticsEvent,
+    source: AnalyticsSource?,
+    surface: AnalyticsPaywallSurface,
+    plan: AnalyticsPlan?,
+    result: AnalyticsResult?,
+    trialTermsCohort: TrialTermsCohort,
+    trialEndCohort: TrialEndPaywallCohort,
+    isPlus: Bool?
+  ) {
+    let payload = AnalyticsPayload(
+      source: source,
+      plan: plan,
+      result: result,
+      isPlus: isPlus,
+      trialEndCohort: trialEndCohort,
+      trialTermsCohort: trialTermsCohort,
       paywallSurface: surface
     )
 

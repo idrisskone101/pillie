@@ -318,63 +318,160 @@ struct ProductAnalyticsTelemetry {
   // (blocker_configured | reminder_only); the user's own stats shown on the
   // sheet (blocks, doses, streak) are never attached.
 
-  func trialEndPaywallViewed(cohort: TrialEndPaywallCohort) {
+  func trialEndPaywallViewed(
+    cohort: TrialEndPaywallCohort,
+    terms: TrialEndAccessTerms,
+    termsCohort: TrialTermsCohort? = nil
+  ) {
     analytics.track(
       .paywallViewed,
       source: .trialEnd,
       surface: .trialEnd,
+      trialTermsCohort: termsCohort ?? TrialTermsCohort(terms: terms),
       trialEndCohort: cohort,
       isPlus: isPlus()
     )
   }
 
-  func trialEndPlanSelected(plan: AnalyticsPlan) {
-    trackTrialEndPaywall(.paywallPlanSelected, plan: plan)
+  func trialEndPlanSelected(
+    plan: AnalyticsPlan,
+    cohort: TrialEndPaywallCohort,
+    terms: TrialEndAccessTerms,
+    termsCohort: TrialTermsCohort? = nil
+  ) {
+    trackTrialEndPaywall(
+      .paywallPlanSelected,
+      plan: plan,
+      cohort: cohort,
+      terms: terms,
+      termsCohort: termsCohort
+    )
   }
 
-  func trialEndPurchaseStarted(plan: AnalyticsPlan) {
-    trackTrialEndPaywall(.purchaseStarted, plan: plan)
+  func trialEndPurchaseStarted(
+    plan: AnalyticsPlan,
+    cohort: TrialEndPaywallCohort,
+    terms: TrialEndAccessTerms,
+    termsCohort: TrialTermsCohort? = nil
+  ) {
+    trackTrialEndPaywall(
+      .purchaseStarted, plan: plan, cohort: cohort, terms: terms, termsCohort: termsCohort)
   }
 
   /// StoreKit classified the conversion as a trial start (sandbox aside, the
   /// trial-end offer has no intro trial after #162 — kept for completeness).
-  func trialEndTrialStarted(plan: AnalyticsPlan) {
-    trackTrialEndPaywall(.trialStarted, plan: plan)
+  func trialEndTrialStarted(
+    plan: AnalyticsPlan,
+    cohort: TrialEndPaywallCohort,
+    terms: TrialEndAccessTerms,
+    termsCohort: TrialTermsCohort? = nil
+  ) {
+    trackTrialEndPaywall(
+      .trialStarted, plan: plan, cohort: cohort, terms: terms, termsCohort: termsCohort)
   }
 
-  func trialEndPurchaseCompleted(plan: AnalyticsPlan) {
-    trackTrialEndPaywall(.purchaseCompleted, plan: plan, result: .completed)
+  func trialEndPurchaseCompleted(
+    plan: AnalyticsPlan,
+    cohort: TrialEndPaywallCohort,
+    terms: TrialEndAccessTerms,
+    termsCohort: TrialTermsCohort? = nil
+  ) {
+    trackTrialEndPaywall(
+      .purchaseCompleted,
+      plan: plan,
+      result: .completed,
+      cohort: cohort,
+      terms: terms,
+      termsCohort: termsCohort
+    )
   }
 
-  func trialEndPurchaseFailed(plan: AnalyticsPlan) {
-    trackTrialEndPaywall(.purchaseFailed, plan: plan, result: .failed)
+  func trialEndPurchaseFailed(
+    plan: AnalyticsPlan,
+    cohort: TrialEndPaywallCohort,
+    terms: TrialEndAccessTerms,
+    termsCohort: TrialTermsCohort? = nil
+  ) {
+    trackTrialEndPaywall(
+      .purchaseFailed,
+      plan: plan,
+      result: .failed,
+      cohort: cohort,
+      terms: terms,
+      termsCohort: termsCohort
+    )
   }
 
-  func trialEndPurchaseCancelled(plan: AnalyticsPlan) {
-    trackTrialEndPaywall(.purchaseCancelled, plan: plan, result: .cancelled)
+  func trialEndPurchaseCancelled(
+    plan: AnalyticsPlan,
+    cohort: TrialEndPaywallCohort,
+    terms: TrialEndAccessTerms,
+    termsCohort: TrialTermsCohort? = nil
+  ) {
+    trackTrialEndPaywall(
+      .purchaseCancelled,
+      plan: plan,
+      result: .cancelled,
+      cohort: cohort,
+      terms: terms,
+      termsCohort: termsCohort
+    )
   }
 
-  func trialEndRestoreStarted() {
-    trackTrialEndPaywall(.restoreStarted)
+  func trialEndRestoreStarted(
+    cohort: TrialEndPaywallCohort,
+    terms: TrialEndAccessTerms,
+    termsCohort: TrialTermsCohort? = nil
+  ) {
+    trackTrialEndPaywall(
+      .restoreStarted, cohort: cohort, terms: terms, termsCohort: termsCohort)
   }
 
-  func trialEndRestoreCompleted() {
-    trackTrialEndPaywall(.restoreCompleted, result: .completed)
+  func trialEndRestoreCompleted(
+    cohort: TrialEndPaywallCohort,
+    terms: TrialEndAccessTerms,
+    termsCohort: TrialTermsCohort? = nil
+  ) {
+    trackTrialEndPaywall(
+      .restoreCompleted,
+      result: .completed,
+      cohort: cohort,
+      terms: terms,
+      termsCohort: termsCohort
+    )
   }
 
-  func trialEndRestoreFailed() {
-    trackTrialEndPaywall(.restoreFailed, result: .failed)
+  func trialEndRestoreFailed(
+    cohort: TrialEndPaywallCohort,
+    terms: TrialEndAccessTerms,
+    termsCohort: TrialTermsCohort? = nil
+  ) {
+    trackTrialEndPaywall(
+      .restoreFailed,
+      result: .failed,
+      cohort: cohort,
+      terms: terms,
+      termsCohort: termsCohort
+    )
   }
 
   /// The explicit non-purchase action on the Trial-End Paywall.
-  func trialEndContinueFreeSelected() {
-    trackTrialEndPaywall(.continueFreeSelected)
+  func trialEndContinueFreeSelected(
+    cohort: TrialEndPaywallCohort,
+    terms: TrialEndAccessTerms,
+    termsCohort: TrialTermsCohort? = nil
+  ) {
+    trackTrialEndPaywall(
+      .continueFreeSelected, cohort: cohort, terms: terms, termsCohort: termsCohort)
   }
 
   private func trackTrialEndPaywall(
     _ event: AnalyticsEvent,
     plan: AnalyticsPlan? = nil,
-    result: AnalyticsResult? = nil
+    result: AnalyticsResult? = nil,
+    cohort: TrialEndPaywallCohort,
+    terms: TrialEndAccessTerms,
+    termsCohort: TrialTermsCohort? = nil
   ) {
     analytics.track(
       event,
@@ -382,6 +479,8 @@ struct ProductAnalyticsTelemetry {
       surface: .trialEnd,
       plan: plan,
       result: result,
+      trialTermsCohort: termsCohort ?? TrialTermsCohort(terms: terms),
+      trialEndCohort: cohort,
       isPlus: isPlus()
     )
   }

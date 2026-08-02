@@ -115,9 +115,19 @@ struct HomeView: View {
             blockerConfigSaved: AppBlockingManager.shared.hasAppsSelected,
             stats: trialEndOwnStats,
             calendar: Calendar.current,
-            now: Date(),
-            locale: locale
+            now: trialEndEvaluationDate,
+            locale: locale,
+            hardPaywallEnabled: SubscriptionManager.shared.hardPaywallEnabled,
+            termsCohort: SubscriptionManager.shared.trialTermsCohort
         )
+    }
+
+    private var trialEndEvaluationDate: Date {
+        #if DEBUG
+        SubscriptionManager.shared.debugTrialEndEvaluationDate ?? Date()
+        #else
+        Date()
+        #endif
     }
 
     /// The user's own trial record for the loss-framed sheet. Raw optionals:
@@ -149,13 +159,25 @@ struct HomeView: View {
                 hasEntitlement: manager.hasEntitlement,
                 trialGrantDate: manager.trialGrantDate
             ),
+            terms: trialEndPaywallContent?.terms ?? .legacy,
+            termsCohort: trialEndPaywallContent?.termsCohort ?? .preCutover,
             entitlementResolved: manager.hasResolvedEntitlement,
+            configurationResolved: manager.hasResolvedHardPaywallConfiguration,
             alreadyShown: UserDefaults.standard.bool(
                 forKey: TrialEndPaywallAutoPresentation.shownStorageKey),
+            rollbackAlreadyShown: UserDefaults.standard.bool(
+                forKey: TrialEndPaywallAutoPresentation.rollbackShownStorageKey),
             calendar: Calendar.current,
-            now: Date()
+            now: trialEndEvaluationDate
         ), trialEndPaywallContent != nil else { return }
         UserDefaults.standard.set(true, forKey: TrialEndPaywallAutoPresentation.shownStorageKey)
+        if trialEndPaywallContent?.terms == .legacy,
+           trialEndPaywallContent?.termsCohort == .postCutover {
+            UserDefaults.standard.set(
+                true,
+                forKey: TrialEndPaywallAutoPresentation.rollbackShownStorageKey
+            )
+        }
         showTrialEndPaywall = true
     }
 
@@ -500,7 +522,17 @@ struct HomeView: View {
         .onChange(of: SubscriptionManager.shared.hasResolvedEntitlement) { _, _ in
             autoPresentTrialEndPaywallIfNeeded()
         }
+        .onChange(of: SubscriptionManager.shared.hasResolvedHardPaywallConfiguration) { _, _ in
+            autoPresentTrialEndPaywallIfNeeded()
+        }
         .onChange(of: SubscriptionManager.shared.trialGrantDate) { _, _ in
+            autoPresentTrialEndPaywallIfNeeded()
+        }
+        .onChange(of: SubscriptionManager.shared.hasPlusAccess) { previous, current in
+            guard TrialEndPaywallAutoPresentation.shouldReevaluate(
+                previousPlusAccess: previous,
+                currentPlusAccess: current
+            ) else { return }
             autoPresentTrialEndPaywallIfNeeded()
         }
         .alert(startNewConfirmation.title, isPresented: $showRefillConfirmation) {
