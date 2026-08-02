@@ -30,6 +30,9 @@ enum ExistingUserTrialGrant {
             /// A Reverse Trial grant already exists (active or expired) — the
             /// 14-day clock is never restarted.
             case alreadyTrialed
+            /// This installation belongs to the hard-paywall cohort, so the
+            /// legacy-update migration must never create a free trial for it.
+            case postCutoverInstall
             /// The one-shot update window was consumed on a previous launch —
             /// the announcement shows exactly once.
             case alreadyHandled
@@ -54,6 +57,9 @@ enum ExistingUserTrialGrant {
         /// Whether a Reverse Trial grant already exists (Keychain), e.g. from the
         /// onboarding app-blocking setup.
         let hasTrialGrant: Bool
+        /// The immutable installation cohort. Only genuine pre-cutover installs
+        /// are eligible for the one-time legacy migration.
+        let termsCohort: TrialTermsCohort
         /// Whether the one-shot update window was already consumed on a previous
         /// launch.
         let alreadyHandled: Bool
@@ -79,21 +85,26 @@ enum ExistingUserTrialGrant {
         if state.hasTrialGrant {
             return .suppressed(.alreadyTrialed)
         }
+        if state.termsCohort == .postCutover {
+            return .suppressed(.postCutoverInstall)
+        }
         return .grantAndAnnounce
     }
 
     /// Whether this decision consumes the one-shot update window (the caller
     /// persists the handled flag). Terminal outcomes — a grant, an entitled
-    /// subscriber, an already-trialed user — close it: they must not receive a
-    /// surprise grant on some later launch (e.g. after churning), which would no
-    /// longer be "first launch after the introducing update". Undecided launches
-    /// (mid-onboarding, entitlement not yet loaded) leave it open so the check
-    /// runs again; `alreadyHandled` means the flag is already persisted.
+    /// subscriber, an already-trialed user, or a post-cutover install — close it:
+    /// they must not receive a surprise grant on some later launch (e.g. after
+    /// churning), which would no longer be "first launch after the introducing
+    /// update". Undecided launches (mid-onboarding, entitlement not yet loaded)
+    /// leave it open so the check runs again; `alreadyHandled` means the flag is
+    /// already persisted.
     static func closesWindow(_ decision: Decision) -> Bool {
         switch decision {
         case .grantAndAnnounce,
              .suppressed(.alreadyEntitled),
-             .suppressed(.alreadyTrialed):
+             .suppressed(.alreadyTrialed),
+             .suppressed(.postCutoverInstall):
             return true
         case .suppressed(.stillOnboarding),
              .suppressed(.entitlementUnresolved),

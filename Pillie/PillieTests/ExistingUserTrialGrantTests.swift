@@ -23,6 +23,7 @@ final class ExistingUserTrialGrantTests: XCTestCase {
         isEntitlementResolved: Bool = true,
         hasEntitlement: Bool = false,
         hasTrialGrant: Bool = false,
+        termsCohort: TrialTermsCohort = .preCutover,
         alreadyHandled: Bool = false
     ) -> ExistingUserTrialGrant.State {
         ExistingUserTrialGrant.State(
@@ -30,6 +31,7 @@ final class ExistingUserTrialGrantTests: XCTestCase {
             isEntitlementResolved: isEntitlementResolved,
             hasEntitlement: hasEntitlement,
             hasTrialGrant: hasTrialGrant,
+            termsCohort: termsCohort,
             alreadyHandled: alreadyHandled
         )
     }
@@ -38,6 +40,13 @@ final class ExistingUserTrialGrantTests: XCTestCase {
         XCTAssertEqual(
             ExistingUserTrialGrant.evaluate(for: state()),
             .grantAndAnnounce
+        )
+    }
+
+    func testCompletedPostCutoverInstallWithoutGrantIsNotGrandfathered() {
+        XCTAssertEqual(
+            ExistingUserTrialGrant.evaluate(for: state(termsCohort: .postCutover)),
+            .suppressed(.postCutoverInstall)
         )
     }
 
@@ -91,12 +100,14 @@ final class ExistingUserTrialGrantTests: XCTestCase {
 
     func testTerminalDecisionsConsumeTheUpdateWindow() {
         // Granting consumes the window, and so do the terminal exclusions: a
-        // subscriber (or already-trialed user) evaluated once must not receive a
-        // surprise grant on some later launch (e.g. after churning) — that would
-        // no longer be "first launch after the introducing update".
+        // subscriber, already-trialed user, or post-cutover install evaluated
+        // once must not receive a surprise grant on some later launch (e.g.
+        // after churning) — that would no longer be "first launch after the
+        // introducing update".
         XCTAssertTrue(ExistingUserTrialGrant.closesWindow(.grantAndAnnounce))
         XCTAssertTrue(ExistingUserTrialGrant.closesWindow(.suppressed(.alreadyEntitled)))
         XCTAssertTrue(ExistingUserTrialGrant.closesWindow(.suppressed(.alreadyTrialed)))
+        XCTAssertTrue(ExistingUserTrialGrant.closesWindow(.suppressed(.postCutoverInstall)))
     }
 
     func testUndecidedLaunchesLeaveTheWindowOpen() {

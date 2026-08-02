@@ -484,12 +484,14 @@ struct ContentView: View {
     guard !isLoading else { return }
 
     let defaults = UserDefaults.standard
+    let termsCohort = currentTrialTermsCohort
     let decision = ExistingUserTrialGrant.evaluate(
       for: ExistingUserTrialGrant.State(
         isOnboardingComplete: !OnboardingFlow.isOnboardingActive(rawStep: onboardingStep),
         isEntitlementResolved: subscriptionManager.hasResolvedEntitlement,
         hasEntitlement: subscriptionManager.hasEntitlement,
         hasTrialGrant: subscriptionManager.trialGrantDate != nil,
+        termsCohort: termsCohort,
         alreadyHandled: defaults.bool(forKey: ExistingUserTrialGrant.handledStorageKey)
       )
     )
@@ -501,7 +503,7 @@ struct ContentView: View {
 
     // Same once-only contract as the Trial Granted Moment: the event fires iff
     // the grant was actually written.
-    if subscriptionManager.grantReverseTrial(termsCohort: .preCutover) {
+    if subscriptionManager.grantReverseTrial(termsCohort: termsCohort) {
       ProductAnalyticsTelemetry.live.updateTrialGranted()
     }
     showUpdateTrialAnnouncement = true
