@@ -9,6 +9,7 @@ import SwiftData
 struct HistoryView: View {
     @Environment(PillStore.self) private var store
     @Environment(\.locale) private var locale
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @State private var displayedMonth: Date = MonthCursor.monthStart(for: Date())
     @State private var infoMonth: Date = MonthCursor.monthStart(for: Date())
     @State private var appeared = false
@@ -58,11 +59,7 @@ struct HistoryView: View {
 
                 // Color legend
                 VStack(alignment: .leading, spacing: 6) {
-                    HStack(spacing: 16) {
-                        legendItem(color: PillieTheme.sage, label: legendLabels.active)
-                        legendItem(color: PillieTheme.amber, label: legendLabels.missed)
-                        legendItem(color: PillieTheme.lavender, label: legendLabels.rest)
-                    }
+                    primaryLegend
                     if store.pack.method == .patch {
                         HStack(spacing: 16) {
                             legendItem(
@@ -430,6 +427,23 @@ struct HistoryView: View {
 
     // MARK: - Legend
 
+    @ViewBuilder
+    private var primaryLegend: some View {
+        if dynamicTypeSize.isAccessibilitySize {
+            VStack(alignment: .leading, spacing: 8) {
+                legendItem(color: PillieTheme.sage, label: legendLabels.active)
+                legendItem(color: PillieTheme.amber, label: legendLabels.missed)
+                legendItem(color: PillieTheme.lavender, label: legendLabels.rest)
+            }
+        } else {
+            HStack(spacing: 16) {
+                legendItem(color: PillieTheme.sage, label: legendLabels.active)
+                legendItem(color: PillieTheme.amber, label: legendLabels.missed)
+                legendItem(color: PillieTheme.lavender, label: legendLabels.rest)
+            }
+        }
+    }
+
     private func legendItem(color: Color, label: String) -> some View {
         HStack(spacing: 6) {
             Circle()
@@ -438,6 +452,7 @@ struct HistoryView: View {
             Text(label)
                 .font(.pillieBody())
                 .foregroundStyle(PillieTheme.textMuted)
+                .fixedSize(horizontal: false, vertical: true)
         }
     }
 }

@@ -8,6 +8,7 @@ import SwiftUI
 struct StatusCard: View {
     @Environment(PillStore.self) var store
     @Environment(\.locale) private var locale
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     private let valueChangeAnimation = Animation.easeInOut(duration: 0.28)
 
     var body: some View {
@@ -36,7 +37,44 @@ struct StatusCard: View {
         )
 
         HStack(spacing: 14) {
-            // Alarm icon circle
+            statusMainContent(
+                iconName: iconName,
+                reminderTime: reminderTime,
+                actionTitle: actionTitle,
+                isTodayTaken: isTodayTaken
+            )
+            .layoutPriority(1)
+
+            Spacer(minLength: 0)
+
+            // At Accessibility Dynamic Type sizes the subtitle already states the
+            // action. Omitting the duplicate badge gives that localized sentence
+            // enough width to remain complete instead of ending in an ellipsis.
+            if !dynamicTypeSize.isAccessibilitySize {
+                if let badgeText {
+                    badge(badgeText, isTodayTaken: isTodayTaken)
+                }
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(16)
+        .background(isTodayTaken ? PillieTheme.coralLight : PillieTheme.cardWhite)
+        .clipShape(RoundedRectangle(cornerRadius: PillieTheme.cardRadius))
+        .overlay(
+            RoundedRectangle(cornerRadius: PillieTheme.cardRadius)
+                .stroke(isTodayTaken ? PillieTheme.coralFaded : PillieTheme.sageHalf, lineWidth: 1)
+        )
+        .shadow(color: PillieTheme.cardShadow, radius: PillieTheme.cardShadowRadius, y: PillieTheme.cardShadowY)
+        .animation(valueChangeAnimation, value: isTodayTaken)
+    }
+
+    private func statusMainContent(
+        iconName: String,
+        reminderTime: String,
+        actionTitle: String,
+        isTodayTaken: Bool
+    ) -> some View {
+        HStack(spacing: 14) {
             Circle()
                 .fill(isTodayTaken ? PillieTheme.coral : PillieTheme.lavender)
                 .frame(width: 48, height: 48)
@@ -48,7 +86,6 @@ struct StatusCard: View {
                         .animation(valueChangeAnimation, value: iconName)
                 )
 
-            // Time + subtitle
             VStack(alignment: .leading, spacing: 2) {
                 Text(reminderTime)
                     .font(.pillie(28, weight: .bold))
@@ -66,40 +103,26 @@ struct StatusCard: View {
                     .contentTransition(.opacity)
                     .animation(valueChangeAnimation, value: actionTitle)
             }
-
-            Spacer()
-
-            // NEXT ACTION badge. Empty days already say there is no action in
-            // the main label, so omit the duplicate badge instead of squeezing
-            // two long localized labels into this compact row.
-            if let badgeText {
-                HStack(spacing: 5) {
-                    Circle()
-                        .fill(PillieTheme.coral)
-                        .frame(width: 6, height: 6)
-
-                    Text(badgeText)
-                        .font(.pillieCaption())
-                        .foregroundStyle(PillieTheme.coral)
-                        .pillieAdaptiveLineLimit(minimumScaleFactor: 0.72)
-                        .contentTransition(.opacity)
-                        .animation(valueChangeAnimation, value: badgeText)
-                }
-                .padding(.horizontal, 10)
-                .padding(.vertical, 5)
-                .background(isTodayTaken ? Color.white.opacity(0.8) : PillieTheme.coral.opacity(0.1))
-                .clipShape(Capsule())
-            }
         }
-        .padding(16)
-        .background(isTodayTaken ? PillieTheme.coralLight : PillieTheme.cardWhite)
-        .clipShape(RoundedRectangle(cornerRadius: PillieTheme.cardRadius))
-        .overlay(
-            RoundedRectangle(cornerRadius: PillieTheme.cardRadius)
-                .stroke(isTodayTaken ? PillieTheme.coralFaded : PillieTheme.sageHalf, lineWidth: 1)
-        )
-        .shadow(color: PillieTheme.cardShadow, radius: PillieTheme.cardShadowRadius, y: PillieTheme.cardShadowY)
-        .animation(valueChangeAnimation, value: isTodayTaken)
+    }
+
+    private func badge(_ text: String, isTodayTaken: Bool) -> some View {
+        HStack(spacing: 5) {
+            Circle()
+                .fill(PillieTheme.coral)
+                .frame(width: 6, height: 6)
+
+            Text(text)
+                .font(.pillieCaption())
+                .foregroundStyle(PillieTheme.coral)
+                .pillieAdaptiveLineLimit(minimumScaleFactor: 0.72)
+                .contentTransition(.opacity)
+                .animation(valueChangeAnimation, value: text)
+        }
+        .padding(.horizontal, 10)
+        .padding(.vertical, 5)
+        .background(isTodayTaken ? Color.white.opacity(0.8) : PillieTheme.coral.opacity(0.1))
+        .clipShape(Capsule())
     }
 
     private func iconName(for alarmAction: DoseScheduleAction?, isTodayTaken: Bool) -> String {

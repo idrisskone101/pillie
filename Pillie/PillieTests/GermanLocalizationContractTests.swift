@@ -49,6 +49,40 @@ final class GermanLocalizationContractTests: XCTestCase {
         }
     }
 
+    func testActiveAccessibilityAndSetupDetailsUseCompleteIdiomaticGerman() {
+        let german = Locale(identifier: "de_DE")
+        let expectedByKeyAndTable = [
+            ("onboarding.cycle_position.calculated", "Localizable", "Aus deiner Auswahl berechnet"),
+            ("onboarding.regimen.name.custom", "Localizable", "Individuell"),
+            ("trial.decline_feedback.optional_note", "Commerce", "Deine Antwort ist freiwillig. Du kannst die Frage überspringen und Pillie kostenlos weiter nutzen."),
+        ]
+
+        for (key, table, expected) in expectedByKeyAndTable {
+            XCTAssertEqual(
+                PillieLocalization.string(key, table: table, locale: german),
+                expected,
+                "Incorrect German localization for \(key)"
+            )
+        }
+
+        XCTAssertEqual(
+            CommercePresentation.comparisonTierLabel(
+                freeIncluded: true,
+                plusIncluded: true,
+                locale: german
+            ),
+            "im kostenlosen Tarif und in Plus enthalten"
+        )
+        XCTAssertEqual(
+            CommercePresentation.comparisonTierLabel(
+                freeIncluded: true,
+                plusIncluded: false,
+                locale: german
+            ),
+            "nur im kostenlosen Tarif"
+        )
+    }
+
     func testOnboardingNotificationsAndShieldPresentFriendlyGermanCopy() {
         let german = Locale(identifier: "de_DE")
         let date = Date(timeIntervalSince1970: 1_767_225_600)
@@ -106,7 +140,7 @@ final class GermanLocalizationContractTests: XCTestCase {
         )
         XCTAssertEqual(
             ContraceptiveMethod.pill.blockingReasonText(locale: german),
-            "Die heutige Pillie-Aktion ist noch offen."
+            "Die heutige Aktion ist in Pillie noch offen."
         )
     }
 
@@ -120,7 +154,7 @@ final class GermanLocalizationContractTests: XCTestCase {
 
         XCTAssertEqual(
             TodayActionState.completed.localizedPrimaryLabel(locale: german),
-            "Erledigt — tippe zum Rückgängigmachen"
+            "Erledigt · Rückgängig"
         )
         XCTAssertEqual(
             HistoryPresentation.monthSummary(
@@ -161,7 +195,7 @@ final class GermanLocalizationContractTests: XCTestCase {
                 periodUnit: .month,
                 locale: german
             ),
-            "14,99 € pro 3 Monate"
+            "14,99 € alle 3 Monate"
         )
         XCTAssertEqual(
             CommercePresentation.trialEndText(date: date, locale: german),
@@ -214,7 +248,7 @@ final class GermanLocalizationContractTests: XCTestCase {
         XCTAssertEqual(
             CustomReminderPreset.gentle.localizedMessages(locale: german),
             CustomReminderMessages(
-                dueTitle: "Pillie-Erinnerung",
+                dueTitle: "Eine sanfte Erinnerung",
                 dueBody: "Eine sanfte Erinnerung an deine Routine.",
                 retryTitle: "Folgeerinnerung",
                 retryBody: "Wenn du bereit bist, denk daran, die heutige Aktion zu protokollieren.",
@@ -272,17 +306,17 @@ final class GermanLocalizationContractTests: XCTestCase {
             )
         )
         XCTAssertEqual(protectionOff.title, "App-Pause ist deaktiviert")
-        XCTAssertEqual(protectionOff.ctaTitle, "Auf Pillie Plus upgraden")
+        XCTAssertEqual(protectionOff.ctaTitle, "Zu Pillie Plus wechseln")
 
         let trial = TrialStatusPresentation(
             daysRemaining: 7,
             protectionActive: true,
             locale: german
         )
-        XCTAssertEqual(trial.indicatorLabel, "Probiere deine Plus-Funktionen")
+        XCTAssertEqual(trial.indicatorLabel, "App-Pause aktiv · noch 7 Tage")
         XCTAssertEqual(
             trial.sheetContent.ctaTitle,
-            "Auf Pillie Plus upgraden"
+            "Pillie Plus behalten"
         )
 
         let activationItems = TrialActivationItem.make(
@@ -292,9 +326,9 @@ final class GermanLocalizationContractTests: XCTestCase {
         XCTAssertEqual(
             activationItems.map(\.title),
             [
-                "Ablenkende Apps pausieren",
+                "App-Pause",
                 "Smarte Erinnerungen",
-                "Eigene Erinnerungstexte",
+                "Erinnerungstexte",
                 "Zum Bestätigen schütteln",
             ]
         )
@@ -304,17 +338,26 @@ final class GermanLocalizationContractTests: XCTestCase {
         XCTAssertEqual(activationItems[1].actionTitle, "Anpassen")
     }
 
-    func testNewPackConfirmationUsesGermanMethodAwareNouns() {
+    func testNewPackConfirmationUsesNaturalGermanMethodAwareGrammar() {
         let german = Locale(identifier: "de_DE")
 
         XCTAssertEqual(
-            ContraceptiveMethod.allCases.map {
-                CycleNounPresentation.localizedNoun(
-                    for: $0,
-                    locale: german
-                )
-            },
-            ["Packung", "Zyklus", "Zyklus"]
+            CycleNounPresentation.startNewConfirmation(for: .pill, locale: german),
+            CycleNounPresentation.StartNewConfirmation(
+                title: "Neue Packung beginnen?",
+                body: "Damit beginnt heute eine neue Packung. Dein bisheriger Verlauf bleibt erhalten."
+            )
+        )
+        XCTAssertEqual(
+            CycleNounPresentation.startNewConfirmation(for: .patch, locale: german),
+            CycleNounPresentation.StartNewConfirmation(
+                title: "Neuen Zyklus beginnen?",
+                body: "Damit beginnt heute ein neuer Zyklus. Dein bisheriger Verlauf bleibt erhalten."
+            )
+        )
+        XCTAssertEqual(
+            CycleNounPresentation.startNewConfirmation(for: .ring, locale: german),
+            CycleNounPresentation.startNewConfirmation(for: .patch, locale: german)
         )
     }
 
@@ -348,7 +391,7 @@ final class GermanLocalizationContractTests: XCTestCase {
         XCTAssertEqual(
             actions.map { $0.localizedReminderBody(locale: german) },
             [
-                "Es ist Zeit für deine geplante Pille. Protokolliere die Aktion danach.",
+                "Es ist Zeit für deine Pille. Protokolliere die Aktion danach.",
                 "Deine geplante Pflasteraktion ist fällig. Protokolliere sie danach.",
                 "Deine geplante Ringaktion ist fällig. Protokolliere sie danach.",
             ]

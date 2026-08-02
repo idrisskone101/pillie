@@ -1,0 +1,67 @@
+{
+  "sourceControl": "../../2026-07-26/source/en-US-control.json",
+  "reviewStatus": "READY_FOR_USER_REVIEW_REQUIRES_EXPLICIT_APPROVAL",
+  "keywordStatus": "FINAL_ASTRO_VALIDATED_REQUIRES_EXPLICIT_USER_APPROVAL",
+  "target": {
+    "locale": "de-DE",
+    "version": "2.0.6",
+    "versionId": "b1440d5c-9b53-4bc0-98ec-8b0f40de0dec",
+    "appInfoId": "d03b4450-ab0c-45fd-94b7-3c36edb33b09",
+    "liveVersionState": "PREPARE_FOR_SUBMISSION",
+    "liveAppInfoState": "PREPARE_FOR_SUBMISSION",
+    "liveDeDEAppInfoLocalization": "ABSENT",
+    "liveDeDEVersionLocalization": "ABSENT",
+    "scope": "german-storefront-only"
+  },
+  "policy": {
+    "additiveOrLocaleScopedOnly": true,
+    "doNotModifyLocale": "en-US",
+    "nameLimit": 30,
+    "subtitleLimit": 30,
+    "keywordsLimit": 100,
+    "descriptionLimit": 4000,
+    "whatsNewLimit": 4000,
+    "promotionalTextLimit": 170,
+    "healthPolicy": "Describe reminder, logging, history, and optional app-pause functionality. Do not imply contraceptive efficacy, clinical protection, or guaranteed adherence.",
+    "tone": "Natural, professional German with formal Sie address in storefront copy."
+  },
+  "appInfo": {
+    "locale": "de-DE",
+    "name": "Pillie: Pillen-Erinnerung",
+    "subtitle": "Pille, Ring & Pflaster",
+    "privacyPolicyUrl": "https://idrisskone101.github.io/pillie/privacy-policy"
+  },
+  "versionLocalization": {
+    "locale": "de-DE",
+    "description": "Pillie erinnert Sie an Ihre Routine mit Pille, Pflaster oder Ring – für Momente, in denen sich ein normaler Alarm zu leicht wegwischen lässt.\n\nRichten Sie Ihren Zeitplan ein, wählen Sie Ihre Erinnerungen und behalten Sie Ihre Routine im Blick. Mit Pillie Plus lassen sich ausgewählte ablenkende Apps pausieren, bis Sie die fällige Aktion protokolliert haben.\n\nDas bietet Pillie:\n• Erinnerungen für Pille, Pflaster und Ring\n• Optionale App-Pause, um Ablenkungen zu reduzieren\n• Schnellaktionen zum Erledigen oder späteren Erinnern\n• Optionales Schütteln zum Bestätigen\n• Folgeerinnerungen in einem selbst gewählten Abstand\n• Vorratserinnerungen für Pillenpackungen\n• Monatsverlauf mit protokollierten Aktionen, offenen Tagen und Pausentagen\n• Serien und ein klarer Überblick über die Routine\n• Flexible Zeitpläne für gängige Pillenschemata und eigene Zyklen\n\nFür den Alltag:\n• Erinnerungszeit, Zyklustag und Schema jederzeit ändern\n• Die Routine ohne komplizierte Einrichtung protokollieren\n• Protokolldaten auf dem Gerät behalten\n\nPillie dient ausschließlich zur Erinnerung und Protokollierung. Die App bietet keine medizinische Beratung und ersetzt nicht die Empfehlung einer medizinischen Fachperson. Befolgen Sie stets die Hinweise zu Ihrer Verhütungsmethode.\n\nNutzungsbedingungen: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/",
+    "keywords": "pillenalarm,zyklus,tracker,medikamente,medikamenten,tabletten,einnahme,antibabypille,vergessen,dosis",
+    "marketingUrl": "https://idrisskone101.github.io/pillie/",
+    "supportUrl": "https://idrisskone101.github.io/pillie/support",
+    "whatsNew": "Pillie ist jetzt vollständig auf Deutsch verfügbar. Außerdem wurden Texte und Layouts verbessert und kleinere Fehler behoben.",
+    "promotionalText": "Erinnerungen für Pille, Pflaster und Ring – mit Verlauf und optionaler App-Pause für Ihren Alltag."
+  },
+  "keywordCandidates": [
+    {
+      "id": "FINAL",
+      "status": "recommended-final-astro",
+      "characters": 100,
+      "value": "pillenalarm,zyklus,tracker,medikamente,medikamenten,tabletten,einnahme,antibabypille,vergessen,dosis"
+    }
+  ],
+  "keywordResearch": {
+    "provider": "Astro local MCP",
+    "market": "Germany",
+    "completed": "2026-08-01",
+    "signals": [
+      { "term": "pillenalarm", "popularity": 34, "difficulty": 48, "pillieRankBefore": 119, "pillieRankAfter": 105 },
+      { "term": "zyklus tracker", "popularity": 53, "difficulty": 70 },
+      { "term": "medikamente", "popularity": 22, "difficulty": 58 },
+      { "term": "medikamenten erinnerung", "popularity": 9, "difficulty": 43 },
+      { "term": "tabletten erinnerung", "popularity": 7, "difficulty": 42 },
+      { "term": "einnahme erinnerung", "popularity": 5, "difficulty": 7 },
+      { "term": "antibabypille erinnerung", "popularity": 5, "competingApps": 25 }
+    ],
+    "excludedSuggestions": ["nuvaring", "refill"],
+    "exclusionReason": "Excluded because neither term has a sufficiently precise, policy-safe rationale for the recommended German listing; NuvaRing is a third-party brand and refill is English."
+  }
+}

@@ -31,14 +31,10 @@ struct RefillBannerCard: View {
                 .foregroundStyle(PillieTheme.textPrimary)
 
             // Subtitle
-            Text(PillieLocalization.formatted(
-                "today.pack.start_new.body",
-                locale: locale,
-                arguments: CycleNounPresentation.localizedNoun(
-                    for: store.pack.method,
-                    locale: locale
-                )
-            ))
+            Text(CycleNounPresentation.startNewConfirmation(
+                for: store.pack.method,
+                locale: locale
+            ).body)
                 .font(.pillieBody())
                 .foregroundStyle(PillieTheme.textMuted)
                 .multilineTextAlignment(.center)

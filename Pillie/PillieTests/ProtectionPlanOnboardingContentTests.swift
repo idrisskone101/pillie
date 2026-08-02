@@ -12,49 +12,52 @@ import XCTest
 @testable import Pillie
 
 final class ProtectionPlanOnboardingContentTests: XCTestCase {
+    private let english = Locale(identifier: "en_US")
+
     // MARK: - Welcome
 
-    func testWelcomeContentMatchesDraftAndLeadsWithTheBlockingDifferentiator() {
-        let content = ProtectionPlanWelcomeContent.default
-        XCTAssertEqual(content.title, "Pill reminders that fight back.")
-        XCTAssertEqual(content.primaryCTA, "Build my plan")
+    func testWelcomeContentMatchesCurrentReminderFirstCopy() {
+        let content = ProtectionPlanWelcomeContent.localized(locale: english)
+        XCTAssertEqual(content.title, "The alarm clock for your pill.")
+        XCTAssertEqual(content.primaryCTA, "Get Started")
         XCTAssertTrue(
-            content.subtitle.lowercased().contains("block"),
-            "Welcome must lead with the app-blocking differentiator."
+            content.subtitle.lowercased().contains("notifications"),
+            "Welcome must explain why Pillie's reminder is harder to overlook."
         )
     }
 
     func testWelcomeContentHasNoMedicalOrFakeUrgencyLanguage() {
-        for line in ProtectionPlanWelcomeContent.default.visibleCopy {
+        for line in ProtectionPlanWelcomeContent.localized(locale: english).visibleCopy {
             assertNoMedicalOrFakeClaims(line)
         }
     }
 
     // MARK: - Early Value Proof (#74)
 
-    func testEarlyValueProofCommunicatesReminderLockAndRelease() {
-        let content = ProtectionPlanEarlyValueProofContent.default
-        XCTAssertEqual(content.beats.count, 3, "The proof reads as three beats: reminder, lock, release.")
+    func testEarlyValueProofCommunicatesReminderPauseAndRelease() {
+        let content = ProtectionPlanEarlyValueProofContent.localized(locale: english)
+        XCTAssertEqual(content.beats.count, 3, "The proof reads as three beats: reminder, pause, release.")
 
-        // Beat 1 — it's pill time, and the apps are tempting.
+        // Beat 1 — the reminder arrives and asks for the action to be logged.
         let first = (content.drift.title + " " + content.drift.detail).lowercased()
-        XCTAssertTrue(first.contains("pill"), "Beat 1 must name the pill reminder.")
-        XCTAssertTrue(first.contains("app"), "Beat 1 must show the distracting apps.")
+        XCTAssertTrue(first.contains("reminder"), "Beat 1 must name the reminder.")
+        XCTAssertTrue(first.contains("log"), "Beat 1 must explain the check-in action.")
 
-        // Beat 2 — Pillie locks the apps until the pill is taken.
-        let second = content.checkpoint.detail.lowercased()
-        XCTAssertTrue(second.contains("lock"), "Beat 2 must show the apps being locked.")
-        XCTAssertTrue(second.contains("pill"), "Beat 2 must gate the lock on taking the pill.")
+        // Beat 2 — selected apps pause until the user confirms.
+        let second = (content.checkpoint.title + " " + content.checkpoint.detail).lowercased()
+        XCTAssertTrue(second.contains("pause"), "Beat 2 must show the selected apps pausing.")
+        XCTAssertTrue(second.contains("confirm"), "Beat 2 must explain how the pause ends.")
 
-        // Beat 3 — checking in unlocks the apps.
-        let third = content.resolved.detail.lowercased()
-        XCTAssertTrue(third.contains("unlock"), "Beat 3 must release the apps once checked in.")
+        // Beat 3 — logging the action makes the apps available again.
+        let third = (content.resolved.title + " " + content.resolved.detail).lowercased()
+        XCTAssertTrue(third.contains("available"), "Beat 3 must make the apps available again.")
+        XCTAssertTrue(third.contains("logged"), "Beat 3 must follow a logged action.")
     }
 
     func testEarlyValueProofCopyAvoidsConfusingJargon() {
         // Terms the team flagged as unclear for the women's-health audience.
         let banned = ["drift", "endless scroll", "social guard", "held"]
-        for line in ProtectionPlanEarlyValueProofContent.default.visibleCopy {
+        for line in ProtectionPlanEarlyValueProofContent.localized(locale: english).visibleCopy {
             let lowered = line.lowercased()
             for term in banned {
                 XCTAssertFalse(lowered.contains(term), "Copy should avoid the unclear term \"\(term)\": \(line)")
@@ -63,21 +66,24 @@ final class ProtectionPlanOnboardingContentTests: XCTestCase {
     }
 
     func testEarlyValueProofExposesCheckInAndContinueCTAs() {
-        let content = ProtectionPlanEarlyValueProofContent.default
-        XCTAssertEqual(content.checkInCTA, "I took my pill")
+        let content = ProtectionPlanEarlyValueProofContent.localized(locale: english)
+        XCTAssertEqual(content.checkInCTA, "Mark as Completed")
         XCTAssertEqual(content.continueCTA, "Continue")
     }
 
     func testEarlyValueProofExposesVisibleSkipDemoAction() {
-        XCTAssertEqual(ProtectionPlanEarlyValueProofContent.default.skipDemoCTA, "Skip demo")
+        XCTAssertEqual(
+            ProtectionPlanEarlyValueProofContent.localized(locale: english).skipDemoCTA,
+            "Not Now"
+        )
     }
 
     func testEarlyValueProofIdleLineIsOnTopic() {
         // The idle line is the enticing hook; the lock mechanic now lives in the
         // CTA + the demo, so the idle line only needs to stay about the pill.
-        let rest = ProtectionPlanEarlyValueProofContent.default.restCue.lowercased()
+        let rest = ProtectionPlanEarlyValueProofContent.localized(locale: english).restCue.lowercased()
         XCTAssertFalse(rest.isEmpty)
-        XCTAssertTrue(rest.contains("pill"))
+        XCTAssertTrue(rest.contains("pause"))
     }
 
     func testEarlyValueProofRestCTAInstructsTheDrag() {
@@ -91,19 +97,19 @@ final class ProtectionPlanOnboardingContentTests: XCTestCase {
     }
 
     func testEarlyValueProofTeachesTheShakeCheckIn() {
-        let content = ProtectionPlanEarlyValueProofContent.default
+        let content = ProtectionPlanEarlyValueProofContent.localized(locale: english)
         // The locked-state cue + CTA teach the real check-in gesture: a phone shake.
         XCTAssertTrue(content.shakeCue.lowercased().contains("shake"))
-        XCTAssertTrue(content.shakeCue.lowercased().contains("pill"))
-        XCTAssertEqual(content.shakeToTakeCTA, "Shake to take your pill")
-        // The written resolved beat (the static / VoiceOver narrative) names shaking too.
-        XCTAssertTrue(content.resolved.detail.lowercased().contains("shake"))
-        XCTAssertTrue(content.resolved.detail.lowercased().contains("unlock"))
-        XCTAssertTrue(content.accessibilitySummary.lowercased().contains("shake"))
+        XCTAssertTrue(content.shakeCue.lowercased().contains("phone"))
+        XCTAssertEqual(content.shakeToTakeCTA, "Try Shake to Confirm")
+        // The static / VoiceOver narrative still explains the pause-and-log loop.
+        XCTAssertTrue(content.resolved.detail.lowercased().contains("logged"))
+        XCTAssertTrue(content.resolved.title.lowercased().contains("available"))
+        XCTAssertTrue(content.accessibilitySummary.lowercased().contains("log"))
     }
 
     func testEarlyValueProofHasNoMedicalOrFakeStatLanguage() {
-        for line in ProtectionPlanEarlyValueProofContent.default.visibleCopy {
+        for line in ProtectionPlanEarlyValueProofContent.localized(locale: english).visibleCopy {
             assertNoMedicalOrFakeClaims(line)
             XCTAssertFalse(
                 line.contains("%"),
@@ -114,7 +120,7 @@ final class ProtectionPlanOnboardingContentTests: XCTestCase {
 
     func testEarlyValueProofUsesAGenericAppStandInNotThirdPartyBrands() {
         let brands = ["tiktok", "instagram", "snapchat", "youtube", "facebook", "reddit"]
-        for line in ProtectionPlanEarlyValueProofContent.default.visibleCopy {
+        for line in ProtectionPlanEarlyValueProofContent.localized(locale: english).visibleCopy {
             let lowered = line.lowercased()
             for brand in brands {
                 XCTAssertFalse(
@@ -128,13 +134,12 @@ final class ProtectionPlanOnboardingContentTests: XCTestCase {
     // MARK: - Personalized Diagnosis (#78)
 
     func testDiagnosisContentUsesAnalyzeThenVerifyCopyNotAClinicalReadout() {
-        let content = ProtectionPlanDiagnosisContent.default
-        XCTAssertEqual(content.eyebrow, "FINAL STEP")
-        XCTAssertEqual(content.analyzingTitle, "Building your protection plan")
-        XCTAssertEqual(content.analyzingSubtitle, "Analyzing your habits and focus zones")
+        let content = ProtectionPlanDiagnosisContent.localized(locale: english)
+        XCTAssertEqual(content.eyebrow, "Next action")
+        XCTAssertEqual(content.analyzingTitle, "Your personalised reminder plan")
+        XCTAssertEqual(content.analyzingSubtitle, "Built from the routine you selected.")
         XCTAssertEqual(content.protectedAppsHeader, "Protected apps")
-        // The reveal now leads straight into the paywall, so the CTA reflects that.
-        XCTAssertEqual(content.primaryCTA, "Activate my plan")
+        XCTAssertEqual(content.primaryCTA, "Continue")
         // The word "diagnosis" must never reach the user — the screen reveals a plan.
         for line in content.visibleCopy {
             XCTAssertFalse(line.lowercased().contains("diagnos"), "User copy must not say diagnosis: \(line)")
@@ -142,7 +147,7 @@ final class ProtectionPlanOnboardingContentTests: XCTestCase {
     }
 
     func testDiagnosisContentHasNoMedicalOrFakeStatLanguage() {
-        for line in ProtectionPlanDiagnosisContent.default.visibleCopy {
+        for line in ProtectionPlanDiagnosisContent.localized(locale: english).visibleCopy {
             assertNoMedicalOrFakeClaims(line)
             XCTAssertFalse(line.contains("%"), "Diagnosis copy must not invent stats: \(line)")
         }
@@ -151,24 +156,69 @@ final class ProtectionPlanOnboardingContentTests: XCTestCase {
     // MARK: - Mechanism Proof (#78)
 
     func testMechanismProofShowsTheThreeStepLoopInOrder() {
-        let content = ProtectionPlanMechanismProofContent(method: .pill)
-        XCTAssertEqual(content.steps.map(\.phase), ["TRIGGER", "ENFORCE", "RELEASE"])
+        let content = ProtectionPlanMechanismProofContent(method: .pill, locale: english)
+        XCTAssertEqual(content.steps.map(\.phase), ["REMINDER", "APP PAUSE", "CONTINUE"])
         // Beat 1 rings, beat 2 locks, beat 3 unlocks — the cause/effect loop.
         XCTAssertEqual(content.trigger.title, "Reminder rings")
-        XCTAssertTrue(content.enforce.title.lowercased().contains("lock"))
-        XCTAssertTrue(content.release.title.lowercased().contains("unlock"))
+        XCTAssertTrue(content.enforce.title.lowercased().contains("pause"))
+        XCTAssertTrue(content.release.title.lowercased().contains("log"))
         XCTAssertEqual(content.replayCTA, "Replay")
         XCTAssertEqual(content.continueCTA, "Continue")
     }
 
     func testMechanismProofIsMethodAwareInCopyAndCTA() {
-        XCTAssertTrue(ProtectionPlanMechanismProofContent(method: .pill).headline.contains("take your pill"))
-        XCTAssertTrue(ProtectionPlanMechanismProofContent(method: .patch).headline.contains("change your patch"))
-        XCTAssertTrue(ProtectionPlanMechanismProofContent(method: .ring).headline.contains("check your ring"))
+        XCTAssertEqual(
+            Set(ContraceptiveMethod.allCases.map {
+                ProtectionPlanMechanismProofContent(method: $0, locale: english).headline
+            }).count,
+            1,
+            "The shared explanation should stay compact while the action remains method-aware."
+        )
 
-        XCTAssertEqual(ProtectionPlanMechanismProofContent(method: .pill).markTakenCTA, "I took my pill")
-        XCTAssertEqual(ProtectionPlanMechanismProofContent(method: .patch).markTakenCTA, "I changed my patch")
-        XCTAssertEqual(ProtectionPlanMechanismProofContent(method: .ring).markTakenCTA, "I checked my ring")
+        XCTAssertEqual(ProtectionPlanMechanismProofContent(method: .pill, locale: english).markTakenCTA, "I took my pill")
+        XCTAssertEqual(ProtectionPlanMechanismProofContent(method: .patch, locale: english).markTakenCTA, "I changed my patch")
+        XCTAssertEqual(ProtectionPlanMechanismProofContent(method: .ring, locale: english).markTakenCTA, "I checked my ring")
+    }
+
+    func testMechanismProofPresentsCompleteIdiomaticGermanCopy() {
+        let german = Locale(identifier: "de_DE")
+        let content = ProtectionPlanMechanismProofContent(method: .pill, locale: german)
+
+        XCTAssertEqual(content.eyebrow, "SO FUNKTIONIERT’S")
+        XCTAssertEqual(
+            content.headline,
+            "Deine Apps werden wieder verfügbar, sobald du die heutige Aktion protokollierst."
+        )
+        XCTAssertEqual(
+            content.steps.map { [$0.phase, $0.title, $0.detail] },
+            [
+                ["ERINNERUNG", "Erinnerung klingelt", "Eine sanfte Erinnerung zur gewählten Zeit."],
+                ["APP-PAUSE", "Ablenkende Apps pausieren", "Ausgewählte Apps bleiben pausiert, bis du die Aktion protokollierst."],
+                ["WEITER", "Aktion protokollieren", "Danach sind deine Apps sofort wieder verfügbar."],
+            ]
+        )
+        XCTAssertEqual(content.lockedLabel, "PAUSIERT")
+        XCTAssertEqual(content.markTakenCTA, "Ich habe meine Pille genommen")
+        XCTAssertEqual(
+            ProtectionPlanMechanismProofContent(method: .patch, locale: german).markTakenCTA,
+            "Ich habe mein Pflaster gewechselt"
+        )
+        XCTAssertEqual(
+            ProtectionPlanMechanismProofContent(method: .ring, locale: german).markTakenCTA,
+            "Ich habe meinen Ring geprüft"
+        )
+        XCTAssertEqual(content.replayCTA, "Noch einmal")
+        XCTAssertEqual(content.continueCTA, "Weiter")
+        XCTAssertEqual(content.footer, "Teil deines Pillie-Erinnerungsplans.")
+        XCTAssertEqual(
+            content.unlockedConfirmation,
+            "Erledigt — deine Apps sind wieder verfügbar."
+        )
+        XCTAssertEqual(
+            content.replayAccessibilityHint,
+            "Spielt die Demonstration der App-Pause erneut ab."
+        )
+        XCTAssertFalse(content.visibleCopy.joined(separator: " ").contains("HOW IT WORKS"))
     }
 
     func testMechanismProofNeverLeaksPillWordingForPatchOrRing() {
@@ -177,7 +227,7 @@ final class ProtectionPlanOnboardingContentTests: XCTestCase {
         // any remaining "pill" is a real leak (pill / pill time / your pill / take
         // your pill).
         for method in [ContraceptiveMethod.patch, .ring] {
-            let scrubbed = ProtectionPlanMechanismProofContent(method: method)
+            let scrubbed = ProtectionPlanMechanismProofContent(method: method, locale: english)
                 .visibleCopy.joined(separator: " ").lowercased()
                 .replacingOccurrences(of: "pillie", with: "")
             XCTAssertFalse(scrubbed.contains("pill"), "\(method) proof leaked pill wording.")
@@ -186,7 +236,7 @@ final class ProtectionPlanOnboardingContentTests: XCTestCase {
 
     func testMechanismProofContentHasNoMedicalOrFakeStatLanguage() {
         for method in ContraceptiveMethod.allCases {
-            for line in ProtectionPlanMechanismProofContent(method: method).visibleCopy {
+            for line in ProtectionPlanMechanismProofContent(method: method, locale: english).visibleCopy {
                 assertNoMedicalOrFakeClaims(line)
                 XCTAssertFalse(line.contains("%"), "Proof copy must not invent stats: \(line)")
             }

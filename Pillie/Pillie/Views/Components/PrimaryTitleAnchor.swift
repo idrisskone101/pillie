@@ -29,7 +29,9 @@ struct PrimaryTitleAnchor: View {
             Text(title)
                 .font(titleFont)
                 .foregroundStyle(titleColor)
+                .lineLimit(1)
+                .minimumScaleFactor(0.65)
+                .allowsTightening(true)
         }
     }
 }
-

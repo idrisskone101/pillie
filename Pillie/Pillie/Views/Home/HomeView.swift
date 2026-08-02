@@ -12,6 +12,7 @@ struct HomeView: View {
     @Environment(PillStore.self) var store
     @Environment(\.locale) private var locale
     @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.requestReview) private var requestReview
     @Environment(\.openURL) private var openURL
     @State private var appeared = false
@@ -333,6 +334,15 @@ struct HomeView: View {
                     StatusCard()
                         .modifier(FadeInUp(appeared: appeared, delay: 0.1))
 
+                    // At Accessibility Dynamic Type sizes the primary action belongs
+                    // in the scroll flow. Keeping the regular floating treatment here
+                    // would cover the expanded cards below it and squeeze the long
+                    // localized label into the edge of the screen.
+                    if dynamicTypeSize.isAccessibilitySize {
+                        floatingButton
+                            .modifier(FadeInUp(appeared: appeared, delay: 0.12))
+                    }
+
                     if let protectionOff = protectionOffContent {
                         ProtectionOffCard(
                             content: protectionOff,
@@ -441,13 +451,21 @@ struct HomeView: View {
                 }
                 .padding(.horizontal, PillieTheme.screenHorizontalPadding)
                 .padding(.top, PillieTheme.scrollTopPadding)
-                .padding(.bottom, PillieTheme.scrollBottomPaddingWithCTA)
+                .padding(
+                    .bottom,
+                    dynamicTypeSize.isAccessibilitySize
+                        ? PillieTheme.scrollBottomPaddingDefault
+                        : PillieTheme.scrollBottomPaddingWithCTA
+                )
             }
 
-            // Floating button
-            floatingButton
-                .padding(.horizontal, 24)
-                .padding(.bottom, 100)
+            // The compact layout keeps the action persistently reachable. At large
+            // accessibility sizes it is rendered above in document order instead.
+            if !dynamicTypeSize.isAccessibilitySize {
+                floatingButton
+                    .padding(.horizontal, 24)
+                    .padding(.bottom, 100)
+            }
         }
         .background(PillieTheme.bg.ignoresSafeArea())
         .overlay(alignment: .top) {
@@ -482,11 +500,7 @@ struct HomeView: View {
         .onChange(of: SubscriptionManager.shared.trialGrantDate) { _, _ in
             autoPresentTrialEndPaywallIfNeeded()
         }
-        .alert(PillieLocalization.formatted(
-            "today.pack.start_new.title",
-            locale: locale,
-            arguments: cycleTypeText
-        ), isPresented: $showRefillConfirmation) {
+        .alert(startNewConfirmation.title, isPresented: $showRefillConfirmation) {
             Button(PillieLocalization.string(
                 "today.pack.start_new.confirm",
                 locale: locale
@@ -496,11 +510,7 @@ struct HomeView: View {
             }
             Button(PillieLocalization.string("global.action.not_now", locale: locale), role: .cancel) {}
         } message: {
-            Text(PillieLocalization.formatted(
-                "today.pack.start_new.body",
-                locale: locale,
-                arguments: cycleTypeText
-            ))
+            Text(startNewConfirmation.body)
         }
         .sheet(isPresented: $showBlockingSetup) {
             BlockedAppsEditor()
@@ -601,10 +611,18 @@ struct HomeView: View {
                     showRefillConfirmation = true
                     ProductAnalyticsTelemetry.live.newPackOrCyclePrompted()
                 } label: {
-                    HStack(spacing: 8) {
-                        Image(systemName: "arrow.triangle.2.circlepath")
-                            .font(.system(size: 16, weight: .semibold))
-                        Text(state.localizedPrimaryLabel(locale: locale))
+                    Group {
+                        if dynamicTypeSize.isAccessibilitySize {
+                            accessibilityFloatingButtonLabel(
+                                state.localizedPrimaryLabel(locale: locale)
+                            )
+                        } else {
+                            HStack(spacing: 8) {
+                                Image(systemName: "arrow.triangle.2.circlepath")
+                                    .font(.system(size: 16, weight: .semibold))
+                                Text(state.localizedPrimaryLabel(locale: locale))
+                            }
+                        }
                     }
                 }
                 .buttonStyle(.pillieDark)
@@ -619,10 +637,18 @@ struct HomeView: View {
                     }
                     ProductAnalyticsTelemetry.live.todayActionUndone()
                 } label: {
-                    HStack(spacing: 8) {
-                        Image(systemName: "arrow.uturn.backward")
-                            .font(.system(size: 16, weight: .semibold))
-                        Text(state.localizedPrimaryLabel(locale: locale))
+                    Group {
+                        if dynamicTypeSize.isAccessibilitySize {
+                            accessibilityFloatingButtonLabel(
+                                state.localizedPrimaryLabel(locale: locale)
+                            )
+                        } else {
+                            HStack(spacing: 8) {
+                                Image(systemName: "arrow.uturn.backward")
+                                    .font(.system(size: 16, weight: .semibold))
+                                Text(state.localizedPrimaryLabel(locale: locale))
+                            }
+                        }
                     }
                 }
                 .buttonStyle(PillieTakenButtonStyle())
@@ -631,16 +657,24 @@ struct HomeView: View {
                 Button {
                     // No due action for today.
                 } label: {
-                    HStack(spacing: 8) {
-                        Image(systemName: "calendar")
-                            .font(.system(size: 16, weight: .semibold))
-                        Text(state.localizedPrimaryLabel(locale: locale))
+                    Group {
+                        if dynamicTypeSize.isAccessibilitySize {
+                            accessibilityFloatingButtonLabel(
+                                state.localizedPrimaryLabel(locale: locale)
+                            )
+                        } else {
+                            HStack(spacing: 8) {
+                                Image(systemName: "calendar")
+                                    .font(.system(size: 16, weight: .semibold))
+                                Text(state.localizedPrimaryLabel(locale: locale))
+                            }
+                        }
                     }
                 }
                 .buttonStyle(PillieTakenButtonStyle())
                 .allowsHitTesting(false)
                 .transition(ctaStateTransition)
-            case .dueAction(let action, let requiresShakeConfirm):
+            case .dueAction(_, let requiresShakeConfirm):
                 Button {
                     ProductAnalyticsTelemetry.live.todayActionStarted()
                     if requiresShakeConfirm {
@@ -649,16 +683,24 @@ struct HomeView: View {
                         completeTodayAction()
                     }
                 } label: {
-                    HStack(spacing: 8) {
-                        Circle()
-                            .fill(.white.opacity(0.2))
-                            .frame(width: 32, height: 32)
-                            .overlay(
-                                Image(systemName: "checkmark")
-                                    .font(.system(size: 14, weight: .semibold))
-                                    .foregroundStyle(.white)
+                    Group {
+                        if dynamicTypeSize.isAccessibilitySize {
+                            accessibilityFloatingButtonLabel(
+                                state.localizedPrimaryLabel(locale: locale)
                             )
-                        Text(state.localizedPrimaryLabel(locale: locale))
+                        } else {
+                            HStack(spacing: 8) {
+                                Circle()
+                                    .fill(.white.opacity(0.2))
+                                    .frame(width: 32, height: 32)
+                                    .overlay(
+                                        Image(systemName: "checkmark")
+                                            .font(.system(size: 14, weight: .semibold))
+                                            .foregroundStyle(.white)
+                                    )
+                                Text(state.localizedPrimaryLabel(locale: locale))
+                            }
+                        }
                     }
                 }
                 .buttonStyle(.pillieDark)
@@ -668,6 +710,14 @@ struct HomeView: View {
         .animation(unifiedStateTransition, value: store.isTodayTaken)
         .animation(unifiedStateTransition, value: store.isRefillDue)
         .animation(unifiedStateTransition, value: store.todayDueAction == nil)
+    }
+
+    private func accessibilityFloatingButtonLabel(_ label: String) -> some View {
+        Text(label)
+            .lineLimit(1)
+            .minimumScaleFactor(0.55)
+            .allowsTightening(true)
+            .frame(maxWidth: .infinity)
     }
 
     // MARK: - Helpers
@@ -682,8 +732,8 @@ struct HomeView: View {
         )
     }
 
-    private var cycleTypeText: String {
-        CycleNounPresentation.localizedNoun(
+    private var startNewConfirmation: CycleNounPresentation.StartNewConfirmation {
+        CycleNounPresentation.startNewConfirmation(
             for: store.pack.method,
             locale: locale
         )

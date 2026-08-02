@@ -35,8 +35,12 @@ catalogs.each do |label, relative_path|
     localizations = entry.fetch("localizations", {})
     english = localizations.dig("en", "stringUnit", "value")
     german = localizations.dig("de", "stringUnit", "value")
+    german_state = localizations.dig("de", "stringUnit", "state")
     errors << "#{label}: #{key} missing English control" if english.nil? || english.empty?
     errors << "#{label}: #{key} missing German localization" if german.nil? || german.empty?
+    unless german_state == "translated"
+      errors << "#{label}: #{key} German localization state is #{german_state.inspect}, expected \"translated\""
+    end
     next unless english && german
 
     if english.scan(placeholder).sort != german.scan(placeholder).sort
@@ -92,6 +96,61 @@ unexpected_commerce_keys = commerce_strings.keys.reject do |key|
 end
 unless unexpected_commerce_keys.empty?
   errors << "commerce: unexpected target keys #{unexpected_commerce_keys.join(", ")}"
+end
+
+def parse_strings_file(path)
+  File.read(path).scan(
+    /^\s*"((?:[^"\\]|\\.)*)"\s*=\s*"((?:[^"\\]|\\.)*)"\s*;\s*$/
+  ).to_h
+end
+
+info_plist_expectations = {
+  "Pillie/Pillie/de.lproj/InfoPlist.strings" => {
+    "NSMotionUsageDescription" =>
+      "Pillie verwendet Bewegungssensoren, um Schütteln zu erkennen, wenn du eine Aktion bestätigst.",
+    "NSUserTrackingUsageDescription" =>
+      "Erlaube das Tracking, damit wir nachvollziehen können, über welche Kanäle du Pillie gefunden hast, und die App verbessern können. Wir verkaufen deine personenbezogenen Daten niemals.",
+  },
+  "Pillie/PillieDeviceActivityMonitor/de.lproj/InfoPlist.strings" => {
+    "CFBundleDisplayName" => "Pillie",
+  },
+  "Pillie/PillieShieldAction/de.lproj/InfoPlist.strings" => {
+    "CFBundleDisplayName" => "Pillie",
+  },
+  "Pillie/PillieShieldConfiguration/de.lproj/InfoPlist.strings" => {
+    "CFBundleDisplayName" => "Pillie",
+  },
+}
+
+info_plist_expectations.each do |relative_path, expected_values|
+  path = File.join(root, relative_path)
+  unless File.file?(path)
+    errors << "#{relative_path}: missing German InfoPlist.strings resource"
+    next
+  end
+
+  actual_values = parse_strings_file(path)
+  expected_values.each do |key, expected_value|
+    actual_value = actual_values[key]
+    unless actual_value == expected_value
+      errors << "#{relative_path}: #{key} is #{actual_value.inspect}, expected #{expected_value.inspect}"
+    end
+  end
+end
+
+project_path = File.join(root, "Pillie/Pillie.xcodeproj/project.pbxproj")
+if File.file?(project_path)
+  known_regions_block = File.read(project_path).match(/knownRegions = \((.*?)\);/m)
+  if known_regions_block
+    known_regions = known_regions_block[1].lines.map do |line|
+      line.strip.delete_suffix(",").delete_prefix('"').delete_suffix('"')
+    end
+    errors << "Xcode project: German is missing from knownRegions" unless known_regions.include?("de")
+  else
+    errors << "Xcode project: missing knownRegions block"
+  end
+else
+  errors << "Xcode project: missing project.pbxproj"
 end
 
 abort(errors.join("\n")) unless errors.empty?

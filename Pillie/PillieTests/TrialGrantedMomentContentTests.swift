@@ -71,6 +71,24 @@ final class TrialGrantedMomentContentTests: XCTestCase {
         )
     }
 
+    func testGermanTrialGrantedMomentUsesCompleteIdiomaticCopy() {
+        let german = TrialGrantedMomentContent.localized(locale: Locale(identifier: "de_DE"))
+
+        XCTAssertEqual(german.badge, "14 Tage gratis · keine Karte")
+        XCTAssertEqual(german.title, "Deine nächsten zwei Wochen")
+        XCTAssertEqual(german.titleAccent, "gehen auf uns.")
+        XCTAssertEqual(german.laterDays.map(\.label), ["Tag 12", "Tag 14"])
+        XCTAssertEqual(german.laterDays.map(\.title), ["Eine kurze Erinnerung", "Du entscheidest"])
+        XCTAssertEqual(
+            german.laterDays.map(\.detail),
+            [
+                "Bevor deine Testphase endet, geben wir dir rechtzeitig Bescheid. Ohne Überraschungen.",
+                "Erinnerungen bleiben kostenlos. Plus behältst du nur, wenn du möchtest.",
+            ]
+        )
+        XCTAssertEqual(german.primaryCTA, "Weiter zur App-Pause")
+    }
+
     // MARK: - Truthful copy (ADR 0002 rules stand)
 
     func testCopyNeverPromisesActiveBlockingBeforeSetup() {

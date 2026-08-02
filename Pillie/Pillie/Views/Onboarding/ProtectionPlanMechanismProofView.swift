@@ -25,6 +25,7 @@ struct ProtectionPlanMechanismProofView: View {
     @Environment(PillStore.self) private var store
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.accessibilityVoiceOverEnabled) private var voiceOverEnabled
+    @Environment(\.locale) private var locale
 
     private enum Phase { case ringing, locked, unlocked }
 
@@ -39,7 +40,10 @@ struct ProtectionPlanMechanismProofView: View {
     private let performanceTier = PerformanceTier.current
 
     private var content: ProtectionPlanMechanismProofContent {
-        ProtectionPlanMechanismProofContent(method: store.contraceptiveMethod)
+        ProtectionPlanMechanismProofContent(
+            method: store.contraceptiveMethod,
+            locale: locale
+        )
     }
 
     /// The app tiles to lock. Drawn from the user's own answers; a neutral
@@ -144,7 +148,7 @@ struct ProtectionPlanMechanismProofView: View {
 
     private var header: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("HOW IT WORKS")
+            Text(content.eyebrow)
                 .font(.pillie(12, weight: .bold))
                 .tracking(1.6)
                 .foregroundStyle(PillieTheme.coral)
@@ -335,29 +339,47 @@ struct ProtectionPlanMechanismProofView: View {
     }
 
     private var unlockedConfirmation: some View {
+        ViewThatFits(in: .horizontal) {
+            HStack(spacing: 10) {
+                unlockedMessage
+                Spacer(minLength: 0)
+                replayButton
+            }
+
+            VStack(alignment: .leading, spacing: 10) {
+                unlockedMessage
+                replayButton
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .padding(.vertical, 6)
+    }
+
+    private var unlockedMessage: some View {
         HStack(spacing: 10) {
             Image(systemName: "checkmark.seal.fill")
                 .font(.system(size: 18, weight: .bold))
                 .foregroundStyle(Color(hex: "7DA37B"))
-            Text("Unlocked — your apps are back.")
+            Text(content.unlockedConfirmation)
                 .font(.pillie(14, weight: .bold))
                 .foregroundStyle(PillieTheme.textPrimary)
-            Spacer(minLength: 0)
-
-            Button(action: replay) {
-                HStack(spacing: 5) {
-                    Image(systemName: "arrow.counterclockwise")
-                    Text(content.replayCTA)
-                }
-                .font(.pillie(13, weight: .bold))
-                .foregroundStyle(PillieTheme.coral)
-            }
-            .buttonStyle(.plain)
-            .accessibilityIdentifier("mechanismProofReplay")
-            .accessibilityLabel(content.replayCTA)
-            .accessibilityHint("Plays the lock and unlock demonstration again.")
+                .fixedSize(horizontal: false, vertical: true)
         }
-        .padding(.vertical, 6)
+    }
+
+    private var replayButton: some View {
+        Button(action: replay) {
+            HStack(spacing: 5) {
+                Image(systemName: "arrow.counterclockwise")
+                Text(content.replayCTA)
+            }
+            .font(.pillie(13, weight: .bold))
+            .foregroundStyle(PillieTheme.coral)
+        }
+        .buttonStyle(.plain)
+        .accessibilityIdentifier("mechanismProofReplay")
+        .accessibilityLabel(content.replayCTA)
+        .accessibilityHint(content.replayAccessibilityHint)
     }
 
     // MARK: - Step list

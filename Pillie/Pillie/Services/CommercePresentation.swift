@@ -15,8 +15,11 @@ enum CommercePresentation {
         periodUnit: PeriodUnit,
         locale: Locale = .current
     ) -> String {
-        PillieLocalization.formatted(
-            "paywall.plan.price_period",
+        let key = periodValue == 1
+            ? "paywall.plan.price_period"
+            : "paywall.plan.price_period_multiple"
+        return PillieLocalization.formatted(
+            key,
             table: "Commerce",
             locale: locale,
             arguments: displayPrice,
