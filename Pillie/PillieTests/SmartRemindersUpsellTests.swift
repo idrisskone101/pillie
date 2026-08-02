@@ -62,9 +62,9 @@ final class SmartRemindersUpsellTests: XCTestCase {
     }
 
     func testFeatureUpsellsRouteToStablePaywallSurfaces() {
-        XCTAssertEqual(PlusUpsellContent.smartReminders.paywallSurface, .smartReminderGate)
-        XCTAssertEqual(PlusUpsellContent.appBlocking.paywallSurface, .blockingGate)
-        XCTAssertEqual(PlusUpsellContent.customReminders.paywallSurface, .settingsSubscription)
+        XCTAssertEqual(PlusUpsellContent.smartReminders.paywallSurface, .plusUpsell)
+        XCTAssertEqual(PlusUpsellContent.appBlocking.paywallSurface, .plusUpsell)
+        XCTAssertEqual(PlusUpsellContent.customReminders.paywallSurface, .plusUpsell)
     }
 
     // MARK: - Telemetry (mirrors the Blocking upsell events)
@@ -76,25 +76,27 @@ final class SmartRemindersUpsellTests: XCTestCase {
     // payload shape the settings upsell emits, and smoke-invoke the entry point
     // through a struct tracker so no reference type is allocated.
 
-    func testSettingsUpsellViewedUsesTheApprovedSettingsSourcedEvent() {
+    func testPlusUpsellViewedUsesTheApprovedSurfaceContract() {
         XCTAssertEqual(AnalyticsEvent.plusUpsellViewed.rawValue, "plus_upsell_viewed")
 
-        // The Smart Reminders settings upsell mirrors the Blocking one exactly:
-        // a `plus_upsell_viewed` event sourced to settings, carrying only coarse,
-        // PII-free context.
-        let properties = AnalyticsPayload(source: .settings, isPlus: false).properties
+        // Every feature sheet owns its one view emission under one stable contract.
+        let properties = AnalyticsPayload(
+            source: .upsell,
+            isPlus: false,
+            paywallSurface: .plusUpsell
+        ).properties
         XCTAssertEqual(properties, [
-            "source": .string("settings"),
+            "source": .string("upsell"),
+            "surface": .string("plus_upsell"),
             "is_plus": .bool(false)
         ])
     }
 
-    func testSettingsSmartRemindersUpsellViewedEntryPointInvokesWithoutTrapping() {
+    func testPlusUpsellViewedEntryPointInvokesWithoutTrapping() {
         // Binds the test to the real method symbol. A struct tracker keeps the run
         // free of any class deallocation, which is what aborts hosted XCTest here.
         let telemetry = ProductAnalyticsTelemetry(analytics: NoOpTracker(), isPlus: { false })
-        telemetry.settingsSmartRemindersUpsellViewed()
-        telemetry.settingsBlockingUpsellViewed()
+        telemetry.plusUpsellViewed()
     }
 }
 

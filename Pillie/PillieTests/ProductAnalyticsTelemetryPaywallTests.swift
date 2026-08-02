@@ -116,7 +116,7 @@ final class ProductAnalyticsTelemetryPaywallTests: XCTestCase {
 
         XCTAssertEqual(client.events.count, 1)
         XCTAssertEqual(client.events.first?.name, "paywall_viewed")
-        XCTAssertEqual(client.events.first?.properties["source"], .string("settings"))
+        XCTAssertEqual(client.events.first?.properties["source"], .string("home"))
         XCTAssertEqual(client.events.first?.properties["surface"], .string("trial_status"))
         XCTAssertEqual(client.events.first?.properties["is_plus"], .bool(true))
         XCTAssertEqual(client.events.first?.properties.count, 3)
@@ -128,10 +128,158 @@ final class ProductAnalyticsTelemetryPaywallTests: XCTestCase {
             [
                 AnalyticsPaywallSurface.trialStatus,
                 .settingsSubscription,
-                .blockingGate,
-                .smartReminderGate
+                .protectionOffCard,
+                .homeBlockingCard,
+                .trialEnd,
+                .plusUpsell
             ].map(\.rawValue)
         )
+    }
+
+    func testPaywallFunnelCarriesSurfaceAndResolvesPlusAtCaptureTime() {
+        let client = ProductAnalyticsSpy()
+        let defaultsName = "ProductAnalyticsTelemetryPaywallTests.surfaceFunnel"
+        UserDefaults().removePersistentDomain(forName: defaultsName)
+        let defaults = UserDefaults(suiteName: defaultsName)!
+        let analytics = AnalyticsManager(
+            defaults: defaults,
+            client: client,
+            infoDictionary: [
+                "PostHogProjectToken": "test-token",
+                "PostHogHost": "https://us.i.posthog.com"
+            ]
+        )
+        Self.keptObjects.append(defaults)
+        Self.keptObjects.append(analytics)
+        var hasPlusAccess = false
+        let telemetry = ProductAnalyticsTelemetry(
+            analytics: analytics,
+            isPlus: { hasPlusAccess }
+        )
+
+        analytics.configure()
+        telemetry.paywallViewed(surface: .settingsSubscription)
+        hasPlusAccess = true
+        telemetry.paywallPlanSelected(
+            plan: .annual,
+            isFromOnboarding: false,
+            surface: .settingsSubscription
+        )
+        telemetry.purchaseStarted(
+            plan: .annual,
+            isFromOnboarding: false,
+            surface: .settingsSubscription
+        )
+        telemetry.purchaseCompleted(
+            plan: .annual,
+            isFromOnboarding: false,
+            surface: .settingsSubscription
+        )
+        telemetry.purchaseCancelled(
+            plan: .annual,
+            isFromOnboarding: false,
+            surface: .settingsSubscription
+        )
+        telemetry.continueFreeSelected(
+            isFromOnboarding: false,
+            surface: .settingsSubscription
+        )
+
+        XCTAssertEqual(client.events.map(\.name), [
+            "paywall_viewed",
+            "paywall_plan_selected",
+            "purchase_started",
+            "purchase_completed",
+            "purchase_cancelled",
+            "continue_free_selected"
+        ])
+        XCTAssertEqual(
+            client.events.map { $0.properties["surface"] },
+            Array(repeating: .string("settings_subscription"), count: 6)
+        )
+        XCTAssertEqual(
+            client.events.map { $0.properties["source"] },
+            Array(repeating: .string("settings"), count: 6)
+        )
+        XCTAssertEqual(
+            client.events.map { $0.properties["is_plus"] },
+            [.bool(false), .bool(true), .bool(true), .bool(true), .bool(true), .bool(true)]
+        )
+        XCTAssertEqual(client.events[1].properties["plan"], .string("annual"))
+        XCTAssertEqual(client.events[3].properties["result"], .string("completed"))
+        XCTAssertEqual(client.events[4].properties["result"], .string("cancelled"))
+    }
+
+    func testPlusUpsellActionsShareOneSurfaceContract() {
+        let client = ProductAnalyticsSpy()
+        let defaultsName = "ProductAnalyticsTelemetryPaywallTests.plusUpsell"
+        UserDefaults().removePersistentDomain(forName: defaultsName)
+        let defaults = UserDefaults(suiteName: defaultsName)!
+        let analytics = AnalyticsManager(
+            defaults: defaults,
+            client: client,
+            infoDictionary: [
+                "PostHogProjectToken": "test-token",
+                "PostHogHost": "https://us.i.posthog.com"
+            ]
+        )
+        Self.keptObjects.append(defaults)
+        Self.keptObjects.append(analytics)
+        let telemetry = ProductAnalyticsTelemetry(analytics: analytics, isPlus: { false })
+
+        analytics.configure()
+        telemetry.plusUpsellViewed()
+        telemetry.plusUpsellUpgradeTapped()
+        telemetry.plusUpsellDismissed()
+
+        XCTAssertEqual(client.events.map(\.name), [
+            "plus_upsell_viewed",
+            "plus_upsell_upgrade_tapped",
+            "plus_upsell_dismissed"
+        ])
+        for event in client.events {
+            XCTAssertEqual(event.properties, [
+                "source": .string("upsell"),
+                "surface": .string("plus_upsell"),
+                "is_plus": .bool(false)
+            ])
+        }
+    }
+
+    func testEveryPaywallSurfaceMapsToOneApprovedSource() {
+        let recorder = AnalyticsRecorder()
+        let telemetry = ProductAnalyticsTelemetry(analytics: recorder, isPlus: { true })
+
+        let surfaces = AnalyticsPaywallSurface.allCases
+        for surface in surfaces {
+            telemetry.paywallViewed(surface: surface)
+        }
+
+        XCTAssertEqual(recorder.surfaceEvents.map { $0.surface }, surfaces)
+        XCTAssertEqual(recorder.surfaceEvents.map { $0.source }, [
+            .home,
+            .settings,
+            .home,
+            .home,
+            .trialEnd,
+            .upsell
+        ])
+        XCTAssertEqual(recorder.surfaceEvents.map { $0.isPlus }, Array(repeating: true, count: 6))
+    }
+
+    func testAppLaunchReadsResolvedPlusAccessAtCaptureTime() {
+        let recorder = AnalyticsRecorder()
+        var hasPlusAccess = false
+        let telemetry = ProductAnalyticsTelemetry(
+            analytics: recorder,
+            isPlus: { hasPlusAccess }
+        )
+        hasPlusAccess = true
+
+        telemetry.appLaunched()
+
+        XCTAssertEqual(recorder.events.map(\.event), [.appLaunched])
+        XCTAssertEqual(recorder.events.first?.isPlus, true)
     }
 
     private func telemetry(_ analytics: AnalyticsRecorder, isPlus: Bool) -> ProductAnalyticsTelemetry {
@@ -207,6 +355,11 @@ private final class AnalyticsRecorder: AnalyticsTracking {
     }
 
     private(set) var events: [Event] = []
+    private(set) var surfaceEvents: [(
+        source: AnalyticsSource?,
+        surface: AnalyticsPaywallSurface?,
+        isPlus: Bool?
+    )] = []
 
     func track(
         _ event: AnalyticsEvent,
@@ -232,5 +385,23 @@ private final class AnalyticsRecorder: AnalyticsTracking {
         lastCallBodyCustomized: Bool?
     ) {
         events.append(Event(event: event, source: source, step: step, plan: plan, result: result, isPlus: isPlus))
+    }
+
+    func track(
+        _ event: AnalyticsEvent,
+        source: AnalyticsSource?,
+        surface: AnalyticsPaywallSurface?,
+        plan: AnalyticsPlan?,
+        result: AnalyticsResult?,
+        isPlus: Bool?
+    ) {
+        events.append(Event(
+            event: event,
+            source: source,
+            plan: plan,
+            result: result,
+            isPlus: isPlus
+        ))
+        surfaceEvents.append((source, surface, isPlus))
     }
 }

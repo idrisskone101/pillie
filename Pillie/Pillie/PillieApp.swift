@@ -232,7 +232,6 @@ struct PillieApp: App {
 
         if !Self.isRunningTests {
             AnalyticsManager.shared.configure()
-            ProductAnalyticsTelemetry.live.appLaunched()
             if !Self.isOnboardingActive {
                 // Re-plan reminders immediately when the Plus entitlement flips so
                 // Smart Reminders apply on upgrade / drop on churn without waiting for
@@ -244,6 +243,9 @@ struct PillieApp: App {
                 }
                 SubscriptionManager.shared.configure()
             }
+            // For returning users, RevenueCat configuration synchronously applies
+            // cached entitlement state first, so `is_plus` is resolved at capture.
+            ProductAnalyticsTelemetry.live.appLaunched()
         }
     }
 

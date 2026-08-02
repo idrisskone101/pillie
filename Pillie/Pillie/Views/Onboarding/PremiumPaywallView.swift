@@ -745,7 +745,11 @@ struct PremiumPaywallView: View {
         withAnimation(response.motionProfile.animation) {
             selectedPlan = plan
         }
-        telemetry.paywallPlanSelected(plan: plan.analyticsPlan, isFromOnboarding: isFromOnboarding)
+        telemetry.paywallPlanSelected(
+            plan: plan.analyticsPlan,
+            isFromOnboarding: isFromOnboarding,
+            surface: paywallSurface
+        )
     }
 
     private func radioCircle(selected: Bool, onDark: Bool) -> some View {
@@ -878,7 +882,10 @@ struct PremiumPaywallView: View {
     private var continueFreeButton: some View {
         Button {
             let response = continueFreeFeedback()
-            telemetry.continueFreeSelected(isFromOnboarding: isFromOnboarding)
+            telemetry.continueFreeSelected(
+                isFromOnboarding: isFromOnboarding,
+                surface: paywallSurface
+            )
             withAnimation(response.motionProfile.animation) {
                 onSkip()
             }
@@ -924,7 +931,11 @@ struct PremiumPaywallView: View {
             withAnimation(response.motionProfile.animation) {
                 isPurchasing = true
             }
-            telemetry.purchaseStarted(plan: selectedPlan.analyticsPlan, isFromOnboarding: isFromOnboarding)
+            telemetry.purchaseStarted(
+                plan: selectedPlan.analyticsPlan,
+                isFromOnboarding: isFromOnboarding,
+                surface: paywallSurface
+            )
             Task {
                 do {
                     let outcome = try await subscriptionManager.purchase(package)
@@ -934,9 +945,17 @@ struct PremiumPaywallView: View {
                     // metrics. The user still proceeds either way.
                     switch outcome.conversionEvent {
                     case .trialStarted:
-                        telemetry.trialStarted(plan: selectedPlan.analyticsPlan, isFromOnboarding: isFromOnboarding)
+                        telemetry.trialStarted(
+                            plan: selectedPlan.analyticsPlan,
+                            isFromOnboarding: isFromOnboarding,
+                            surface: paywallSurface
+                        )
                     case .purchaseCompleted:
-                        telemetry.purchaseCompleted(plan: selectedPlan.analyticsPlan, isFromOnboarding: isFromOnboarding)
+                        telemetry.purchaseCompleted(
+                            plan: selectedPlan.analyticsPlan,
+                            isFromOnboarding: isFromOnboarding,
+                            surface: paywallSurface
+                        )
                     case nil:
                         break
                     }
@@ -945,10 +964,18 @@ struct PremiumPaywallView: View {
                 } catch {
                     plusFeedback.unsuccessfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
                     if error.isCancelledPurchase {
-                        telemetry.purchaseCancelled(plan: selectedPlan.analyticsPlan, isFromOnboarding: isFromOnboarding)
+                        telemetry.purchaseCancelled(
+                            plan: selectedPlan.analyticsPlan,
+                            isFromOnboarding: isFromOnboarding,
+                            surface: paywallSurface
+                        )
                         await subscriptionManager.refreshStatus()
                     } else {
-                        telemetry.purchaseFailed(plan: selectedPlan.analyticsPlan, isFromOnboarding: isFromOnboarding)
+                        telemetry.purchaseFailed(
+                            plan: selectedPlan.analyticsPlan,
+                            isFromOnboarding: isFromOnboarding,
+                            surface: paywallSurface
+                        )
                         telemetry.trackError(.purchase, error: error)
                         purchaseError = CommercePresentation.purchaseErrorMessage(
                             error,
