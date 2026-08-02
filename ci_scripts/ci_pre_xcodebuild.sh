@@ -20,6 +20,14 @@ if [ -z "$CI_BUILD_NUMBER" ]; then
   exit 0
 fi
 
+# Xcode Cloud also invokes this hook before test-without-building actions. Those
+# actions reuse products from build-for-testing and do not check out the source
+# repository, so there is no project file whose build number needs updating.
+if [ -z "$CI_PRIMARY_REPOSITORY_PATH" ]; then
+  echo "CI_PRIMARY_REPOSITORY_PATH not set; no source checkout to update."
+  exit 0
+fi
+
 PROJECT="$CI_PRIMARY_REPOSITORY_PATH/Pillie/Pillie.xcodeproj/project.pbxproj"
 
 echo "Setting CURRENT_PROJECT_VERSION to $CI_BUILD_NUMBER"
