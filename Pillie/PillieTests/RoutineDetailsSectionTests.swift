@@ -20,4 +20,11 @@ final class RoutineDetailsSectionTests: XCTestCase {
         XCTAssertEqual(RoutineDetailsSection(method: .patch), .fixedSchedule)
         XCTAssertEqual(RoutineDetailsSection(method: .ring), .fixedSchedule)
     }
+
+    func testExactDayCardTapExpandsCollapsedEditor() {
+        XCTAssertEqual(
+            RoutineExactDayCardAction.resolve(isEditingExactDay: false),
+            .expand
+        )
+    }
 }

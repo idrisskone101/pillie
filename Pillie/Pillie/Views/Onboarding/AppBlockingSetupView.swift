@@ -186,6 +186,15 @@ enum AppBlockingSetupPrimaryAction: Equatable {
     }
 }
 
+enum AppBlockingSetupEmptyCardAction: Equatable {
+    case chooseApps
+
+    static func resolve(hasSelection: Bool, isRequesting: Bool) -> Self? {
+        guard !hasSelection, !isRequesting else { return nil }
+        return .chooseApps
+    }
+}
+
 struct AppBlockingSetupView: View {
     @Environment(PillStore.self) private var store
     @Environment(\.locale) private var locale
@@ -346,54 +355,65 @@ struct AppBlockingSetupView: View {
     // MARK: - Empty State
 
     private var emptyStateCard: some View {
-        VStack(spacing: 12) {
-            ZStack {
-                Circle()
-                    .strokeBorder(PillieTheme.coral, style: StrokeStyle(lineWidth: 2, dash: [6, 5]))
-                    .frame(width: 60, height: 60)
-                Image(systemName: "pause.fill")
-                    .font(.system(size: 22, weight: .semibold))
-                    .foregroundStyle(PillieTheme.coral)
-            }
-
-            Text(content.emptyTitle)
-                .font(.pillieBodyBold())
-                .foregroundStyle(PillieTheme.textPrimary)
-                .lineLimit(dynamicTypeSize.isAccessibilitySize ? 2 : 1)
-                .minimumScaleFactor(dynamicTypeSize.isAccessibilitySize ? 1 : 0.75)
-                .allowsTightening(true)
-
-            Text(content.emptyDetail)
-                .font(.pillieBody())
-                .foregroundStyle(PillieTheme.textMuted)
-                .multilineTextAlignment(.center)
-                .fixedSize(horizontal: false, vertical: true)
-                .padding(.horizontal, 6)
-
-            ProtectionPlanFlowLayout(horizontalSpacing: 8, verticalSpacing: 8) {
-                ForEach(content.categoryHints, id: \.name) { hint in
-                    hintChip(hint)
+        Button(action: chooseApps) {
+            VStack(spacing: 12) {
+                ZStack {
+                    Circle()
+                        .strokeBorder(PillieTheme.coral, style: StrokeStyle(lineWidth: 2, dash: [6, 5]))
+                        .frame(width: 60, height: 60)
+                    Image(systemName: "pause.fill")
+                        .font(.system(size: 22, weight: .semibold))
+                        .foregroundStyle(PillieTheme.coral)
                 }
-            }
-            .padding(.top, 2)
 
-            HStack(spacing: 8) {
-                Image(systemName: "lock.fill")
-                    .font(.system(size: 12, weight: .semibold))
+                Text(content.emptyTitle)
+                    .font(.pillieBodyBold())
+                    .foregroundStyle(PillieTheme.textPrimary)
+                    .lineLimit(dynamicTypeSize.isAccessibilitySize ? 2 : 1)
+                    .minimumScaleFactor(dynamicTypeSize.isAccessibilitySize ? 1 : 0.75)
+                    .allowsTightening(true)
+
+                Text(content.emptyDetail)
+                    .font(.pillieBody())
                     .foregroundStyle(PillieTheme.textMuted)
-                Text(content.privacyNote)
-                    .font(.pillie(13, weight: .medium))
-                    .foregroundStyle(PillieTheme.textMuted)
+                    .multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(.horizontal, 6)
+
+                ProtectionPlanFlowLayout(horizontalSpacing: 8, verticalSpacing: 8) {
+                    ForEach(content.categoryHints, id: \.name) { hint in
+                        hintChip(hint)
+                    }
+                }
+                .padding(.top, 2)
+
+                HStack(spacing: 8) {
+                    Image(systemName: "lock.fill")
+                        .font(.system(size: 12, weight: .semibold))
+                        .foregroundStyle(PillieTheme.textMuted)
+                    Text(content.privacyNote)
+                        .font(.pillie(13, weight: .medium))
+                        .foregroundStyle(PillieTheme.textMuted)
+                }
+                .padding(.top, 4)
             }
-            .padding(.top, 4)
+            .padding(22)
+            .frame(maxWidth: .infinity)
+            .contentShape(Rectangle())
         }
-        .padding(22)
-        .frame(maxWidth: .infinity)
+        .buttonStyle(.plain)
+        .disabled(
+            AppBlockingSetupEmptyCardAction.resolve(
+                hasSelection: selection.hasSelection,
+                isRequesting: permissionState.isRequesting
+            ) == nil
+        )
         .modifier(BlockerCardSurface())
         // Read the card as one coherent element; the category chips are
         // illustrative decoration, so they fold into the combined label.
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(content.emptyStateAccessibilityLabel)
+        .accessibilityIdentifier("appBlockingEmptyStateCard")
     }
 
     private func hintChip(_ hint: AppBlockingSetupContent.CategoryHint) -> some View {
