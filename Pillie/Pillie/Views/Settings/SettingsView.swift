@@ -408,7 +408,9 @@ struct SettingsView: View {
         }
         .sheet(isPresented: $showCycleDayEditor) {
             CycleDayEditor(store: store)
-                .presentationDetents([.large])
+                .presentationDetents([
+                    dynamicTypeSize.isAccessibilitySize ? .large : .height(400)
+                ])
                 .presentationDragIndicator(.hidden)
                 .presentationBackground(PillieTheme.bg)
         }

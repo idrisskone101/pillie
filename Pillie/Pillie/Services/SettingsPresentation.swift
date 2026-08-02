@@ -46,6 +46,16 @@ enum SettingsPresentation {
         )
     }
 
+    static func blockingToggleStatus(
+        isEnabled: Bool,
+        locale: Locale = .current
+    ) -> String {
+        PillieLocalization.string(
+            isEnabled ? "global.status.on" : "global.status.off",
+            locale: locale
+        )
+    }
+
     static func reminderMessagesSummary(
         hasCustom: Bool,
         locale: Locale = .current
