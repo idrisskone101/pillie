@@ -207,8 +207,23 @@ struct PillieApp: App {
         ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
     }
 
+    private static func recordInstallCohortIfNeeded(at date: Date = Date()) {
+        let defaults = UserDefaults.standard
+        let assignment = TrialInstallCohort.assignment(
+            at: date,
+            hasExistingAppState: defaults.object(forKey: OnboardingFlow.stepStorageKey) != nil
+                || defaults.bool(forKey: OnboardingTelemetry.onboardingStartedEmittedKey),
+            previousAssignment: TrialInstallCohort.storedAssignment(in: defaults)
+        )
+        defaults.set(assignment.rawValue, forKey: TrialInstallCohort.assignmentStorageKey)
+    }
+
     init() {
         PillieFontRegistration.registerFontsIfNeeded()
+
+        if !Self.isRunningTests {
+            Self.recordInstallCohortIfNeeded()
+        }
 
         let schema = Schema([PillPack.self, PillDay.self])
         let config: ModelConfiguration
@@ -554,11 +569,14 @@ struct PillieApp: App {
             // Paywall appears on the next Home pass. `?cohort=blocker` forces
             // the blocker-configured (loss-framed) cohort — FamilyControls
             // tokens can never be selected on the simulator; anything else is
-            // the reminder-only (gain-framed) cohort. Combine with
+            // the reminder-only (gain-framed) cohort. `?terms=hard` applies a
+            // deterministic post-cutover expired scenario for pre-cutover QA.
+            // Combine with
             // /intervention-seed and /review-prompt-style seeded history for
             // real-looking stats.
             let queryItems = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems
             let cohort = queryItems?.first(where: { $0.name == "cohort" })?.value
+            let forceHardPaywall = queryItems?.first(where: { $0.name == "terms" })?.value == "hard"
             let feedback = queryItems?.first(where: { $0.name == "feedback" })?.value
             let subscriber = queryItems?.first(where: { $0.name == "subscriber" })?.value == "1"
             AppBlockingManager.shared.debugBlockerConfiguredOverride = (cohort == "blocker")
@@ -574,11 +592,13 @@ struct PillieApp: App {
                 UserDefaults.standard.set(true, forKey: TrialEndPaywallView.debugSuccessStateKey)
             }
             SubscriptionManager.shared.setPlusForTesting(subscriber)
-            let agedGrant = Calendar.current.date(byAdding: .day, value: -16, to: Date()) ?? Date()
+            let scenario = TrialEndPaywallDebugScenario.make(
+                forceHardPaywall: forceHardPaywall
+            )
             UserDefaults.standard.removeObject(forKey: TrialEndPaywallAutoPresentation.shownStorageKey)
             UserDefaults.standard.set(false, forKey: OnboardingFlow.selectedFreePlanStorageKey)
             UserDefaults.standard.set(OnboardingFlow.Step.complete.rawValue, forKey: OnboardingFlow.stepStorageKey)
-            SubscriptionManager.shared.debugOverrideTrialGrantDate(agedGrant)
+            SubscriptionManager.shared.debugApplyTrialEndPaywallScenario(scenario)
             reconcileScreenTimeState()
         case "/review-prompt":
             // QA shortcut (#133): land on Home with an unbroken Streak past the pill

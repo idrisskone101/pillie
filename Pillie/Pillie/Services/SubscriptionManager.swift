@@ -98,6 +98,11 @@ final class SubscriptionManager: NSObject {
     /// The persisted Reverse Trial grant moment, if any (Keychain-backed).
     private(set) var trialGrantDate: Date?
 
+    /// The immutable pre/post-cutover assignment persisted with the grant. It
+    /// normally follows the grant instant, with a pre-cutover override for an
+    /// existing installation that is explicitly grandfathered by issue #257.
+    private(set) var trialTermsCohort: TrialTermsCohort?
+
     /// Whether the RevenueCat entitlement state has actually loaded this launch.
     /// `hasEntitlement` starts `false` before the first customer-info fetch, so
     /// the existing-user update grant (#165) must wait for this before deciding —
@@ -145,6 +150,11 @@ final class SubscriptionManager: NSObject {
     private override init() {
         super.init()
         trialGrantDate = trialGrantStore.loadGrantDate()
+        if let storedCohort = trialGrantStore.loadTermsCohort() {
+            trialTermsCohort = storedCohort
+        } else if let trialGrantDate {
+            trialTermsCohort = HardPaywallPolicy.cohort(forTrialGrantedAt: trialGrantDate)
+        }
         hasPlusAccess = plusAccessState.hasPlusAccess(calendar: .current, now: Date())
     }
 
@@ -197,10 +207,17 @@ final class SubscriptionManager: NSObject {
     /// never restart the 14-day clock. Returns whether a new grant was written,
     /// so app-blocking setup can fire `trial_granted` exactly once.
     @discardableResult
-    func grantReverseTrial(now: Date = Date()) -> Bool {
+    func grantReverseTrial(
+        now: Date = Date(),
+        termsCohort: TrialTermsCohort? = nil
+    ) -> Bool {
         guard trialGrantDate == nil else { return false }
+        let assignedCohort = termsCohort
+            ?? HardPaywallPolicy.cohort(forTrialGrantedAt: now)
+        trialGrantStore.saveTermsCohort(assignedCohort)
         trialGrantStore.saveGrantDate(now)
         trialGrantDate = now
+        trialTermsCohort = assignedCohort
         refreshPlusAccess(now: now)
         return true
     }
@@ -360,7 +377,16 @@ final class SubscriptionManager: NSObject {
         defer { isLoading = false }
 
         let customerInfo = try await Purchases.shared.restorePurchases()
-        setEntitlement(customerInfo.entitlements[Self.entitlementID]?.isActive == true)
+        applyRestoreResult(
+            isPlusEntitlementActive: customerInfo.entitlements[Self.entitlementID]?.isActive == true
+        )
+    }
+
+    /// Shared restore result funnel for subscriptions and the lifetime
+    /// non-consumable: RevenueCat maps every product to `pillie_plus`, and the
+    /// client restores that entitlement without branching on product duration.
+    func applyRestoreResult(isPlusEntitlementActive: Bool) {
+        setEntitlement(isPlusEntitlementActive)
     }
 
     // MARK: - Fetch Offerings
@@ -401,6 +427,8 @@ final class SubscriptionManager: NSObject {
     }
 
     #if DEBUG
+    private(set) var debugTrialEndEvaluationDate: Date?
+
     func setPlusForTesting(_ isPlus: Bool) {
         setEntitlement(isPlus)
     }
@@ -410,19 +438,43 @@ final class SubscriptionManager: NSObject {
     func setTrialGrantStoreForTesting(_ store: TrialGrantStoring) {
         trialGrantStore = store
         trialGrantDate = store.loadGrantDate()
+        if let storedCohort = store.loadTermsCohort() {
+            trialTermsCohort = storedCohort
+        } else if let trialGrantDate {
+            trialTermsCohort = HardPaywallPolicy.cohort(forTrialGrantedAt: trialGrantDate)
+        } else {
+            trialTermsCohort = nil
+        }
         refreshPlusAccess()
     }
 
     /// Debug/demo control (issue #160): overwrite or clear the persisted grant
     /// so a trial can be granted, aged past expiry, or reset on the simulator.
-    func debugOverrideTrialGrantDate(_ date: Date?) {
+    func debugOverrideTrialGrantDate(
+        _ date: Date?,
+        termsCohort: TrialTermsCohort? = nil
+    ) {
+        debugTrialEndEvaluationDate = nil
         if let date {
+            let cohort = termsCohort
+                ?? HardPaywallPolicy.cohort(forTrialGrantedAt: date)
+            trialGrantStore.saveTermsCohort(cohort)
             trialGrantStore.saveGrantDate(date)
+            trialTermsCohort = cohort
         } else {
             trialGrantStore.clearGrantDate()
+            trialTermsCohort = nil
         }
         trialGrantDate = date
         refreshPlusAccess()
+    }
+
+    func debugApplyTrialEndPaywallScenario(_ scenario: TrialEndPaywallDebugScenario) {
+        debugOverrideTrialGrantDate(
+            scenario.grantDate,
+            termsCohort: scenario.termsCohort
+        )
+        debugTrialEndEvaluationDate = scenario.evaluationDate
     }
     #endif
 

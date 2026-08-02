@@ -557,24 +557,30 @@ struct PremiumPaywallView: View {
     }
 
     private var annualPackage: Package? {
-        guard let offering = offerings?.current else { return nil }
-        return offering.annual ?? offering.availablePackages.first {
-            $0.storeProduct.productIdentifier == SubscriptionManager.annualProductID
-        }
+        package(for: .annual)
     }
 
     private var monthlyPackage: Package? {
-        guard let offering = offerings?.current else { return nil }
-        return offering.monthly ?? offering.availablePackages.first {
-            $0.storeProduct.productIdentifier == SubscriptionManager.monthlyProductID
-        }
+        package(for: .monthly)
     }
 
     private var lifetimePackage: Package? {
+        package(for: .lifetime)
+    }
+
+    private func package(for plan: PilliePlusPlan) -> Package? {
         guard let offering = offerings?.current else { return nil }
-        return offering.lifetime ?? offering.availablePackages.first {
-            $0.storeProduct.productIdentifier == SubscriptionManager.lifetimeProductID
+        let preferredPackage = switch plan {
+        case .annual: offering.annual
+        case .monthly: offering.monthly
+        case .lifetime: offering.lifetime
         }
+        return PilliePlusPackageResolver.resolve(
+            plan: plan,
+            preferredPackage: preferredPackage,
+            availablePackages: offering.availablePackages,
+            productIdentifier: \Package.storeProduct.productIdentifier
+        )
     }
 
     private var annualPriceText: String {

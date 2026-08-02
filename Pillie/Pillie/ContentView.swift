@@ -318,8 +318,14 @@ struct ContentView: View {
 	            // the unlocked 14-day Plus access. Grant on that same appearance so
 	            // copy and entitlement timing agree. The store remains once-only, so
 	            // Back/relaunch never re-emits `trial_granted`.
+	            let grantDate = Date()
+	            let termsCohort = TrialInstallCohort.storedAssignment()
+	              ?? HardPaywallPolicy.cohort(forTrialGrantedAt: grantDate)
 	            if OnboardingFlow.grantsReverseTrial(on: .appBlocking),
-	               subscriptionManager.grantReverseTrial() {
+	               subscriptionManager.grantReverseTrial(
+	                 now: grantDate,
+	                 termsCohort: termsCohort
+	               ) {
 	              onboardingTelemetry.trialActivated()
 	            }
 	            onboardingTelemetry.blockerSetupStarted()
@@ -470,7 +476,7 @@ struct ContentView: View {
 
     // Same once-only contract as the Trial Granted Moment: the event fires iff
     // the grant was actually written.
-    if subscriptionManager.grantReverseTrial() {
+    if subscriptionManager.grantReverseTrial(termsCohort: .preCutover) {
       ProductAnalyticsTelemetry.live.updateTrialGranted()
     }
     showUpdateTrialAnnouncement = true

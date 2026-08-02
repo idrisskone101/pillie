@@ -24,15 +24,40 @@ final class TrialEndPaywallTelemetryTests: XCTestCase {
         XCTAssertEqual(client.events.map(\.name), ["paywall_viewed", "paywall_viewed"])
         XCTAssertEqual(client.events[0].properties["source"], .string("trial_end"))
         XCTAssertEqual(client.events[0].properties["surface"], .string("trial_end"))
-        XCTAssertEqual(client.events[0].properties["cohort"], .string("post_cutover"))
-        XCTAssertEqual(client.events[1].properties["cohort"], .string("pre_cutover"))
+        XCTAssertEqual(client.events[0].properties["cohort"], .string("blocker_configured"))
+        XCTAssertEqual(client.events[1].properties["cohort"], .string("reminder_only"))
+        XCTAssertEqual(
+            client.events[0].properties["trial_terms_cohort"],
+            .string("post_cutover")
+        )
+        XCTAssertEqual(
+            client.events[1].properties["trial_terms_cohort"],
+            .string("pre_cutover")
+        )
         XCTAssertEqual(
             client.events[0].properties["paywall_variant"],
             .string("blocker_configured")
         )
         XCTAssertEqual(client.events[1].properties["paywall_variant"], .string("reminder_only"))
-        // Only approved coarse values: source, surface, cohort, variant, is_plus.
-        XCTAssertEqual(client.events[0].properties.count, 5)
+        // Only approved coarse values: source, surface, legacy cohort, terms cohort,
+        // explicit variant alias, and is_plus.
+        XCTAssertEqual(client.events[0].properties.count, 6)
+    }
+
+    func testKillSwitchRollbackKeepsPostCutoverCohortAndLegacyVariantKey() {
+        let (telemetry, client) = makeTelemetry(name: "kill-switch-cohort")
+
+        telemetry.trialEndPaywallViewed(
+            cohort: .blockerConfigured,
+            terms: .legacy,
+            termsCohort: .postCutover
+        )
+
+        XCTAssertEqual(client.events[0].properties["cohort"], .string("blocker_configured"))
+        XCTAssertEqual(
+            client.events[0].properties["trial_terms_cohort"],
+            .string("post_cutover")
+        )
     }
 
     func testTrialEndPurchaseFunnelIsAttributedToTrialEndSource() {
@@ -64,14 +89,24 @@ final class TrialEndPaywallTelemetryTests: XCTestCase {
             XCTAssertEqual(event.properties["surface"], .string("trial_end"), event.name)
         }
         for event in client.events.dropLast() {
-            XCTAssertEqual(event.properties["cohort"], .string("post_cutover"), event.name)
+            XCTAssertEqual(
+                event.properties["cohort"], .string("blocker_configured"), event.name)
+            XCTAssertEqual(
+                event.properties["trial_terms_cohort"],
+                .string("post_cutover"),
+                event.name
+            )
             XCTAssertEqual(
                 event.properties["paywall_variant"],
                 .string("blocker_configured"),
                 event.name
             )
         }
-        XCTAssertEqual(client.events.last?.properties["cohort"], .string("pre_cutover"))
+        XCTAssertEqual(client.events.last?.properties["cohort"], .string("reminder_only"))
+        XCTAssertEqual(
+            client.events.last?.properties["trial_terms_cohort"],
+            .string("pre_cutover")
+        )
         XCTAssertEqual(client.events[2].properties["plan"], .string("annual"))
         XCTAssertEqual(client.events[2].properties["result"], .string("completed"))
     }

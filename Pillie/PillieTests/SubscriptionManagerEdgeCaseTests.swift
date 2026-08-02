@@ -89,15 +89,28 @@ final class SubscriptionManagerEdgeCaseTests: XCTestCase {
         XCTAssertFalse(SubscriptionManager.shared.hasEntitlement)
     }
 
-    func testSuccessfulPurchaseActivatesPlus() throws {
+    func testLifetimePurchaseActivatesSharedPlusEntitlement() throws {
         SubscriptionManager.shared.setPlusForTesting(false)
 
+        XCTAssertEqual(PilliePlusPlan.lifetime.productID, SubscriptionManager.lifetimeProductID)
         try SubscriptionManager.shared.applyPurchaseResult(
             userCancelled: false,
             isPlusEntitlementActive: true
         )
 
         XCTAssertTrue(SubscriptionManager.shared.hasEntitlement)
+    }
+
+    func testLifetimeRestoreActivatesSharedPlusEntitlement() {
+        SubscriptionManager.shared.setPlusForTesting(false)
+
+        SubscriptionManager.shared.applyRestoreResult(
+            isPlusEntitlementActive: true
+        )
+
+        XCTAssertEqual(PilliePlusPlan.lifetime.productID, SubscriptionManager.lifetimeProductID)
+        XCTAssertTrue(SubscriptionManager.shared.hasEntitlement)
+        XCTAssertTrue(SubscriptionManager.shared.hasPlusAccess)
     }
 
     func testPurchaseOutcomeDistinguishesTrialPaidAndExcludesSandbox() {

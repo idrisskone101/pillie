@@ -24,6 +24,7 @@ final class TrialGrantStoreTests: XCTestCase {
 
         // Empty store has no grant.
         XCTAssertNil(store.loadGrantDate(), "\(name): cleared store should be empty")
+        XCTAssertNil(store.loadTermsCohort(), "\(name): cleared cohort should be empty")
 
         // Round trip.
         let grant = Date(timeIntervalSince1970: 1_750_000_000)
@@ -33,6 +34,12 @@ final class TrialGrantStoreTests: XCTestCase {
             grant.timeIntervalSince1970,
             accuracy: 0.001,
             "\(name): should round-trip the grant date"
+        )
+        store.saveTermsCohort(.preCutover)
+        XCTAssertEqual(
+            store.loadTermsCohort(),
+            .preCutover,
+            "\(name): should round-trip the immutable terms cohort"
         )
 
         // Overwrite wins.
@@ -44,10 +51,17 @@ final class TrialGrantStoreTests: XCTestCase {
             accuracy: 0.001,
             "\(name): a second save should overwrite the first"
         )
+        store.saveTermsCohort(.postCutover)
+        XCTAssertEqual(
+            store.loadTermsCohort(),
+            .postCutover,
+            "\(name): a cohort overwrite should win"
+        )
 
         // Clear empties it again.
         store.clearGrantDate()
         XCTAssertNil(store.loadGrantDate(), "\(name): clear should remove the grant")
+        XCTAssertNil(store.loadTermsCohort(), "\(name): clear should remove the cohort")
     }
 
     func testInMemoryStoreHonorsContract() {

@@ -3,8 +3,8 @@
 //  Pillie
 //
 //  Drives the Trial-End Paywall (issue #169 / ADR 0007 / CONTEXT.md): the Plus
-//  offer shown once, as a dismissible full-screen sheet, on first launch after
-//  a Reverse Trial expires. Pure presentation logic (no SwiftUI) so cohort
+//  expiry offer: dismissible once for legacy cohorts, mandatory for hard-paywall
+//  cohorts. Pure presentation logic (no SwiftUI) so cohort
 //  selection and own-stats assembly are testable as value types — including the
 //  honesty contract from ADR 0002: real stats only, missing stats drop their
 //  row instead of bragging zeros.
@@ -27,6 +27,31 @@ enum TrialTermsCohort: String, Equatable {
     }
 }
 
+/// Assigns the immutable trial cohort at the installation boundary. Existing
+/// app state identifies installs that predate this cutover release, while a
+/// persisted marker carries the decision forward until a trial is granted.
+enum TrialInstallCohort {
+    static let assignmentStorageKey = "trialInstallHardPaywallCohort"
+
+    static func assignment(
+        at date: Date,
+        hasExistingAppState: Bool,
+        previousAssignment: TrialTermsCohort?
+    ) -> TrialTermsCohort {
+        if let previousAssignment {
+            return previousAssignment
+        }
+        if hasExistingAppState || date < HardPaywallPolicy.cutoverInstant {
+            return .preCutover
+        }
+        return .postCutover
+    }
+
+    static func storedAssignment(in defaults: UserDefaults = .standard) -> TrialTermsCohort? {
+        defaults.string(forKey: assignmentStorageKey).flatMap(TrialTermsCohort.init(rawValue:))
+    }
+}
+
 /// Dashboard-controlled rollback read from the current RevenueCat offering.
 /// Missing or malformed metadata keeps the ratified cutover enabled; operators
 /// explicitly set `hard_paywall_enabled` to `false` to restore legacy terms.
@@ -45,16 +70,68 @@ struct HardPaywallRemoteConfiguration: Equatable {
 enum HardPaywallPolicy {
     static let cutoverInstant = Date(timeIntervalSince1970: 1_786_680_000)
 
+    static func cohort(forTrialGrantedAt grantDate: Date) -> TrialTermsCohort {
+        grantDate >= cutoverInstant ? .postCutover : .preCutover
+    }
+
     static func terms(
         forTrialGrantedAt grantDate: Date,
         hardPaywallEnabled: Bool
     ) -> TrialEndAccessTerms {
-        guard hardPaywallEnabled, grantDate >= cutoverInstant else {
+        terms(
+            for: cohort(forTrialGrantedAt: grantDate),
+            hardPaywallEnabled: hardPaywallEnabled
+        )
+    }
+
+    static func terms(
+        for cohort: TrialTermsCohort,
+        hardPaywallEnabled: Bool
+    ) -> TrialEndAccessTerms {
+        guard hardPaywallEnabled, cohort == .postCutover else {
             return .legacy
         }
         return .hardPaywall
     }
 }
+
+#if DEBUG
+/// Deterministic future-cutover scenario for simulator QA before August 14.
+/// Production still evaluates the real clock; only the debug deep link supplies
+/// this explicit evaluation instant.
+struct TrialEndPaywallDebugScenario: Equatable {
+    let grantDate: Date
+    let evaluationDate: Date
+    let termsCohort: TrialTermsCohort
+
+    static func make(
+        forceHardPaywall: Bool,
+        now: Date = Date(),
+        calendar: Calendar = .current
+    ) -> TrialEndPaywallDebugScenario {
+        if forceHardPaywall {
+            let grantDate = HardPaywallPolicy.cutoverInstant
+            let evaluationDate = calendar.date(
+                byAdding: .day,
+                value: 16,
+                to: grantDate
+            ) ?? grantDate.addingTimeInterval(16 * 86_400)
+            return TrialEndPaywallDebugScenario(
+                grantDate: grantDate,
+                evaluationDate: evaluationDate,
+                termsCohort: .postCutover
+            )
+        }
+
+        let grantDate = calendar.date(byAdding: .day, value: -16, to: now) ?? now
+        return TrialEndPaywallDebugScenario(
+            grantDate: grantDate,
+            evaluationDate: now,
+            termsCohort: HardPaywallPolicy.cohort(forTrialGrantedAt: grantDate)
+        )
+    }
+}
+#endif
 
 /// Which framing the expired user gets (ADR 0007): loss-framed around their own
 /// trial record for the blocker-configured cohort, gain-framed for users who
@@ -106,6 +183,7 @@ struct TrialEndPaywallContent: Equatable {
     let handwrittenAside: String
     let primaryCTA: String
     let terms: TrialEndAccessTerms
+    let termsCohort: TrialTermsCohort
 
     var allowsContinueFree: Bool { terms == .legacy }
 
@@ -116,14 +194,17 @@ struct TrialEndPaywallContent: Equatable {
         calendar: Calendar,
         now: Date,
         locale: Locale = .current,
-        hardPaywallEnabled: Bool = false
+        hardPaywallEnabled: Bool = false,
+        termsCohort: TrialTermsCohort? = nil
     ) -> TrialEndPaywallContent? {
         guard !state.hasEntitlement, let grantDate = state.trialGrantDate,
               !state.trialActive(calendar: calendar, now: now) else {
             return nil
         }
+        let assignedTermsCohort = termsCohort
+            ?? HardPaywallPolicy.cohort(forTrialGrantedAt: grantDate)
         let terms = HardPaywallPolicy.terms(
-            forTrialGrantedAt: grantDate,
+            for: assignedTermsCohort,
             hardPaywallEnabled: hardPaywallEnabled
         )
         let cohort: TrialEndPaywallCohort = blockerConfigSaved ? .blockerConfigured : .reminderOnly
@@ -132,6 +213,7 @@ struct TrialEndPaywallContent: Equatable {
             return localized(
                 cohort: cohort,
                 terms: terms,
+                termsCohort: assignedTermsCohort,
                 grantDate: grantDate,
                 stats: stats,
                 calendar: calendar,
@@ -142,6 +224,7 @@ struct TrialEndPaywallContent: Equatable {
         case .blockerConfigured:
             return lossFramed(
                 terms: terms,
+                termsCohort: assignedTermsCohort,
                 grantDate: grantDate,
                 stats: stats,
                 calendar: calendar,
@@ -149,13 +232,14 @@ struct TrialEndPaywallContent: Equatable {
                 locale: locale
             )
         case .reminderOnly:
-            return gainFramed(terms: terms)
+            return gainFramed(terms: terms, termsCohort: assignedTermsCohort)
         }
     }
 
     private static func localized(
         cohort: TrialEndPaywallCohort,
         terms: TrialEndAccessTerms,
+        termsCohort: TrialTermsCohort,
         grantDate: Date,
         stats: TrialEndOwnStats,
         calendar: Calendar,
@@ -224,7 +308,8 @@ struct TrialEndPaywallContent: Equatable {
             card: card,
             handwrittenAside: "",
             primaryCTA: commerce("paywall.action.upgrade"),
-            terms: terms
+            terms: terms,
+            termsCohort: termsCohort
         )
     }
 
@@ -247,6 +332,7 @@ struct TrialEndPaywallContent: Equatable {
 
     private static func lossFramed(
         terms: TrialEndAccessTerms,
+        termsCohort: TrialTermsCohort,
         grantDate: Date,
         stats: TrialEndOwnStats,
         calendar: Calendar,
@@ -265,7 +351,8 @@ struct TrialEndPaywallContent: Equatable {
                 card: perksCard,
                 handwrittenAside: "worth keeping, right?",
                 primaryCTA: "Keep my protection",
-                terms: terms
+                terms: terms,
+                termsCohort: termsCohort
             )
         }
         // Zero blocks is the good outcome, not a failed stat: the counter row is
@@ -291,7 +378,8 @@ struct TrialEndPaywallContent: Equatable {
             ),
             handwrittenAside: quietShield ? "quiet shield, strong streak" : "worth keeping, right?",
             primaryCTA: "Keep my protection",
-            terms: terms
+            terms: terms,
+            termsCohort: termsCohort
         )
     }
 
@@ -339,7 +427,10 @@ struct TrialEndPaywallContent: Equatable {
 
     // MARK: - Gain framing (reminder-only cohort)
 
-    private static func gainFramed(terms: TrialEndAccessTerms) -> TrialEndPaywallContent {
+    private static func gainFramed(
+        terms: TrialEndAccessTerms,
+        termsCohort: TrialTermsCohort
+    ) -> TrialEndPaywallContent {
         TrialEndPaywallContent(
             cohort: .reminderOnly,
             title: "Reminders are",
@@ -348,7 +439,8 @@ struct TrialEndPaywallContent: Equatable {
             card: perksCard,
             handwrittenAside: "whenever you're ready!",
             primaryCTA: "Unlock Pillie Plus",
-            terms: terms
+            terms: terms,
+            termsCohort: termsCohort
         )
     }
 

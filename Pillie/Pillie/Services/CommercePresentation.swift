@@ -23,6 +23,19 @@ enum PilliePlusPlan: String, CaseIterable, Equatable {
     }
 }
 
+enum PilliePlusPackageResolver {
+    static func resolve<Package>(
+        plan: PilliePlusPlan,
+        preferredPackage: Package?,
+        availablePackages: [Package],
+        productIdentifier: KeyPath<Package, String>
+    ) -> Package? {
+        preferredPackage ?? availablePackages.first {
+            $0[keyPath: productIdentifier] == plan.productID
+        }
+    }
+}
+
 enum CommercePresentation {
     enum PeriodUnit {
         case day

@@ -92,6 +92,21 @@ final class SubscriptionManagerTrialTests: XCTestCase {
         XCTAssertEqual(SubscriptionManager.shared.trialGrantDate, firstGrant)
     }
 
+    func testGrandfatheredCohortPersistsWithPostCutoverGrant() {
+        let store = InMemoryTrialGrantStore()
+        SubscriptionManager.shared.setTrialGrantStoreForTesting(store)
+        let postCutoverGrant = Date(timeIntervalSince1970: 1_787_200_000)
+
+        SubscriptionManager.shared.grantReverseTrial(
+            now: postCutoverGrant,
+            termsCohort: .preCutover
+        )
+        SubscriptionManager.shared.setTrialGrantStoreForTesting(store)
+
+        XCTAssertEqual(SubscriptionManager.shared.trialGrantDate, postCutoverGrant)
+        XCTAssertEqual(SubscriptionManager.shared.trialTermsCohort, .preCutover)
+    }
+
     func testGrantReportsWhetherANewGrantWasWritten() {
         // The Trial Granted Moment fires `trial_granted` iff the grant was actually
         // written on this showing — revisiting the screen (Back, relaunch) must not

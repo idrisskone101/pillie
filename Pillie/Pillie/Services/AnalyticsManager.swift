@@ -782,8 +782,8 @@ struct AnalyticsPayload {
   /// The trial day (10 or 13) carried as `day` by `trial_expiry_warning_sent`
   /// (#168 / ADR 0007).
   let trialWarningDay: Int?
-  /// The Trial-End Paywall cohort carried as `cohort` by `paywall_viewed`
-  /// with `source: trial_end` (#169 / ADR 0007).
+  /// The Trial-End Paywall presentation variant carried as the compatibility
+  /// `cohort` key and the explicit `paywall_variant` alias (#169 / ADR 0007).
   let trialEndCohort: TrialEndPaywallCohort?
   /// The immutable pre/post-cutover trial cohort for issue #257.
   let trialTermsCohort: TrialTermsCohort?
@@ -902,10 +902,11 @@ struct AnalyticsPayload {
       properties["day"] = .int(trialWarningDay)
     }
     if let trialEndCohort {
+      properties["cohort"] = .string(trialEndCohort.rawValue)
       properties["paywall_variant"] = .string(trialEndCohort.rawValue)
     }
     if let trialTermsCohort {
-      properties["cohort"] = .string(trialTermsCohort.rawValue)
+      properties["trial_terms_cohort"] = .string(trialTermsCohort.rawValue)
     }
     if let paywallSurface {
       properties["surface"] = .string(paywallSurface.rawValue)

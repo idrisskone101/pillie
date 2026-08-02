@@ -67,7 +67,11 @@ struct TrialEndPaywallView: View {
         .animation(PillieTheme.fadeInUpCurve, value: purchaseSucceeded)
         .interactiveDismissDisabled(!content.allowsContinueFree)
         .onAppear {
-            telemetry.trialEndPaywallViewed(cohort: content.cohort, terms: content.terms)
+            telemetry.trialEndPaywallViewed(
+                cohort: content.cohort,
+                terms: content.terms,
+                termsCohort: content.termsCohort
+            )
             withAnimation(PillieTheme.fadeInUpCurve) { animateIn = true }
             #if DEBUG
             // QA seam (#169): sandbox purchases aren't reachable from simctl
@@ -340,24 +344,30 @@ struct TrialEndPaywallView: View {
     // MARK: - Plan tiles
 
     private var annualPackage: Package? {
-        guard let offering = offerings?.current else { return nil }
-        return offering.annual ?? offering.availablePackages.first {
-            $0.storeProduct.productIdentifier == SubscriptionManager.annualProductID
-        }
+        package(for: .annual)
     }
 
     private var monthlyPackage: Package? {
-        guard let offering = offerings?.current else { return nil }
-        return offering.monthly ?? offering.availablePackages.first {
-            $0.storeProduct.productIdentifier == SubscriptionManager.monthlyProductID
-        }
+        package(for: .monthly)
     }
 
     private var lifetimePackage: Package? {
+        package(for: .lifetime)
+    }
+
+    private func package(for plan: PilliePlusPlan) -> Package? {
         guard let offering = offerings?.current else { return nil }
-        return offering.lifetime ?? offering.availablePackages.first {
-            $0.storeProduct.productIdentifier == SubscriptionManager.lifetimeProductID
+        let preferredPackage = switch plan {
+        case .annual: offering.annual
+        case .monthly: offering.monthly
+        case .lifetime: offering.lifetime
         }
+        return PilliePlusPackageResolver.resolve(
+            plan: plan,
+            preferredPackage: preferredPackage,
+            availablePackages: offering.availablePackages,
+            productIdentifier: \Package.storeProduct.productIdentifier
+        )
     }
 
     private var selectedPackage: Package? {
@@ -653,7 +663,8 @@ struct TrialEndPaywallView: View {
         telemetry.trialEndPlanSelected(
             plan: plan.analyticsPlan,
             cohort: content.cohort,
-            terms: content.terms
+            terms: content.terms,
+            termsCohort: content.termsCohort
         )
     }
 
@@ -991,7 +1002,8 @@ struct TrialEndPaywallView: View {
         telemetry.trialEndPurchaseStarted(
             plan: plan.analyticsPlan,
             cohort: content.cohort,
-            terms: content.terms
+            terms: content.terms,
+            termsCohort: content.termsCohort
         )
         Task {
             do {
@@ -1001,13 +1013,15 @@ struct TrialEndPaywallView: View {
                     telemetry.trialEndTrialStarted(
                         plan: plan.analyticsPlan,
                         cohort: content.cohort,
-                        terms: content.terms
+                        terms: content.terms,
+                        termsCohort: content.termsCohort
                     )
                 case .purchaseCompleted:
                     telemetry.trialEndPurchaseCompleted(
                         plan: plan.analyticsPlan,
                         cohort: content.cohort,
-                        terms: content.terms
+                        terms: content.terms,
+                        termsCohort: content.termsCohort
                     )
                 case nil:
                     break
@@ -1021,14 +1035,16 @@ struct TrialEndPaywallView: View {
                     telemetry.trialEndPurchaseCancelled(
                         plan: plan.analyticsPlan,
                         cohort: content.cohort,
-                        terms: content.terms
+                        terms: content.terms,
+                        termsCohort: content.termsCohort
                     )
                     await subscriptionManager.refreshStatus()
                 } else {
                     telemetry.trialEndPurchaseFailed(
                         plan: plan.analyticsPlan,
                         cohort: content.cohort,
-                        terms: content.terms
+                        terms: content.terms,
+                        termsCohort: content.termsCohort
                     )
                     telemetry.trackError(.purchase, error: error)
                     purchaseError = CommercePresentation.purchaseErrorMessage(
@@ -1048,21 +1064,27 @@ struct TrialEndPaywallView: View {
         withAnimation(response.motionProfile.animation) {
             isRestoring = true
         }
-        telemetry.trialEndRestoreStarted(cohort: content.cohort, terms: content.terms)
+        telemetry.trialEndRestoreStarted(
+            cohort: content.cohort,
+            terms: content.terms,
+            termsCohort: content.termsCohort
+        )
         Task {
             do {
                 try await subscriptionManager.restore()
                 if subscriptionManager.hasEntitlement {
                     telemetry.trialEndRestoreCompleted(
                         cohort: content.cohort,
-                        terms: content.terms
+                        terms: content.terms,
+                        termsCohort: content.termsCohort
                     )
                     plusFeedback.successfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
                     purchaseSucceeded = true
                 } else {
                     telemetry.trialEndRestoreFailed(
                         cohort: content.cohort,
-                        terms: content.terms
+                        terms: content.terms,
+                        termsCohort: content.termsCohort
                     )
                     let calmResponse = plusFeedback.unsuccessfulPaidOutcome(
                         accessibilityReduceMotion: accessibilityReduceMotion)
@@ -1073,7 +1095,8 @@ struct TrialEndPaywallView: View {
             } catch {
                 telemetry.trialEndRestoreFailed(
                     cohort: content.cohort,
-                    terms: content.terms
+                    terms: content.terms,
+                    termsCohort: content.termsCohort
                 )
                 telemetry.trackError(.restore, error: error)
                 let calmResponse = plusFeedback.unsuccessfulPaidOutcome(
@@ -1093,7 +1116,11 @@ struct TrialEndPaywallView: View {
 
     private func continueFree() {
         guard content.allowsContinueFree else { return }
-        telemetry.trialEndContinueFreeSelected(cohort: content.cohort, terms: content.terms)
+        telemetry.trialEndContinueFreeSelected(
+            cohort: content.cohort,
+            terms: content.terms,
+            termsCohort: content.termsCohort
+        )
         switch routeContinueFree() {
         case .enterFreeApp:
             onDismiss()

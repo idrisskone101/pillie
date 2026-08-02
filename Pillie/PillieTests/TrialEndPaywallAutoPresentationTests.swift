@@ -13,6 +13,44 @@ import XCTest
 @testable import Pillie
 
 final class TrialEndPaywallAutoPresentationTests: XCTestCase {
+    func testPlusAccessEndingTriggersPaywallReevaluation() {
+        XCTAssertTrue(TrialEndPaywallAutoPresentation.shouldReevaluate(
+            previousPlusAccess: true,
+            currentPlusAccess: false
+        ))
+        XCTAssertFalse(TrialEndPaywallAutoPresentation.shouldReevaluate(
+            previousPlusAccess: false,
+            currentPlusAccess: true
+        ))
+    }
+
+    func testKillSwitchPresentsLegacySurfaceAfterHardWallWasShown() {
+        let now = Date()
+        let grantDate = Calendar.current.date(byAdding: .day, value: -16, to: now)!
+
+        XCTAssertTrue(TrialEndPaywallAutoPresentation.shouldPresent(
+            state: PlusAccessState(hasEntitlement: false, trialGrantDate: grantDate),
+            terms: .legacy,
+            termsCohort: .postCutover,
+            entitlementResolved: true,
+            configurationResolved: true,
+            alreadyShown: true,
+            calendar: .current,
+            now: now
+        ))
+        XCTAssertFalse(TrialEndPaywallAutoPresentation.shouldPresent(
+            state: PlusAccessState(hasEntitlement: false, trialGrantDate: grantDate),
+            terms: .legacy,
+            termsCohort: .postCutover,
+            entitlementResolved: true,
+            configurationResolved: true,
+            alreadyShown: true,
+            rollbackAlreadyShown: true,
+            calendar: .current,
+            now: now
+        ))
+    }
+
 
     private var calendar: Calendar = {
         var cal = Calendar(identifier: .gregorian)

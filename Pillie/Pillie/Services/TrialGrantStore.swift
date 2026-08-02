@@ -12,6 +12,8 @@ import Security
 nonisolated protocol TrialGrantStoring {
     func loadGrantDate() -> Date?
     func saveGrantDate(_ date: Date)
+    func loadTermsCohort() -> TrialTermsCohort?
+    func saveTermsCohort(_ cohort: TrialTermsCohort)
     func clearGrantDate()
 }
 
@@ -26,12 +28,21 @@ nonisolated protocol TrialGrantStoring {
 nonisolated final class KeychainTrialGrantStore: TrialGrantStoring {
     private static let service = "com.idrisskone.pillie.reverse-trial"
     private static let account = "reverse_trial_grant_date"
+    private static let cohortAccount = "reverse_trial_terms_cohort"
 
     private var baseQuery: [String: Any] {
         [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: Self.service,
             kSecAttrAccount as String: Self.account,
+        ]
+    }
+
+    private var cohortQuery: [String: Any] {
+        [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: Self.service,
+            kSecAttrAccount as String: Self.cohortAccount,
         ]
     }
 
@@ -62,7 +73,33 @@ nonisolated final class KeychainTrialGrantStore: TrialGrantStoring {
         }
     }
 
+    func loadTermsCohort() -> TrialTermsCohort? {
+        var query = cohortQuery
+        query[kSecReturnData as String] = true
+        query[kSecMatchLimit as String] = kSecMatchLimitOne
+
+        var result: AnyObject?
+        guard SecItemCopyMatching(query as CFDictionary, &result) == errSecSuccess,
+              let data = result as? Data,
+              let rawValue = String(data: data, encoding: .utf8)
+        else { return nil }
+        return TrialTermsCohort(rawValue: rawValue)
+    }
+
+    func saveTermsCohort(_ cohort: TrialTermsCohort) {
+        let data = Data(cohort.rawValue.utf8)
+        var attributes = cohortQuery
+        attributes[kSecValueData as String] = data
+        attributes[kSecAttrAccessible as String] = kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
+
+        let status = SecItemAdd(attributes as CFDictionary, nil)
+        if status == errSecDuplicateItem {
+            SecItemUpdate(cohortQuery as CFDictionary, [kSecValueData as String: data] as CFDictionary)
+        }
+    }
+
     func clearGrantDate() {
         SecItemDelete(baseQuery as CFDictionary)
+        SecItemDelete(cohortQuery as CFDictionary)
     }
 }
