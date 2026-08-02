@@ -21,6 +21,13 @@ enum PilliePlusPlan: String, CaseIterable, Equatable {
         case .lifetime: .lifetime
         }
     }
+
+    var showsCancellationDisclosure: Bool {
+        switch self {
+        case .annual, .monthly: true
+        case .lifetime: false
+        }
+    }
 }
 
 enum PilliePlusPackageResolver {

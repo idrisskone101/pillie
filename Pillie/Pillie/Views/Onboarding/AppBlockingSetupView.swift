@@ -81,7 +81,8 @@ struct AppBlockingSetupContent {
     /// One combined VoiceOver label for the locked (entitlement-dropped) fallback
     /// card, mirroring the empty/selected cards' single-element treatment.
     var lockedAccessibilityLabel: String {
-        "\(lockedTitle). \(lockedDetail)"
+        let separator = lockedTitle.last.map { ".!?…".contains($0) } == true ? " " : ". "
+        return "\(lockedTitle)\(separator)\(lockedDetail)"
     }
 
     static var `default`: AppBlockingSetupContent { localized() }

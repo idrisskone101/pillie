@@ -20,8 +20,8 @@ enum TrialEndSuccessOutcome: Equatable {
 
     var showsCancellationNote: Bool {
         switch self {
-        case .purchased(.annual), .purchased(.monthly): true
-        case .purchased(.lifetime), .restored: false
+        case .purchased(let plan): plan.showsCancellationDisclosure
+        case .restored: false
         }
     }
 
@@ -862,7 +862,7 @@ struct TrialEndPaywallView: View {
 
     private var legalFooter: some View {
         VStack(spacing: 2) {
-            if selectedPlan != .lifetime {
+            if selectedPlan.showsCancellationDisclosure {
                 Text(PillieLocalization.string(
                     "paywall.plan.cancel_anytime",
                     table: "Commerce",

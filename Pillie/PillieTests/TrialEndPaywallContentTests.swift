@@ -31,6 +31,12 @@ final class TrialEndPaywallContentTests: XCTestCase {
         XCTAssertFalse(TrialEndSuccessOutcome.restored.showsCancellationNote)
     }
 
+    func testLifetimeSelectionDoesNotClaimItCanBeCancelled() {
+        XCTAssertTrue(PilliePlusPlan.annual.showsCancellationDisclosure)
+        XCTAssertTrue(PilliePlusPlan.monthly.showsCancellationDisclosure)
+        XCTAssertFalse(PilliePlusPlan.lifetime.showsCancellationDisclosure)
+    }
+
     func testRestoredEntitlementSuccessUsesGenericPriceFreeLabel() {
         XCTAssertEqual(
             TrialEndSuccessOutcome.restored.label(

@@ -206,6 +206,10 @@ final class AppBlockingSetupContentTests: XCTestCase {
         XCTAssertTrue(label.contains(content.lockedDetail))
     }
 
+    func testLockedPermissionVoiceOverLabelDoesNotDoubleSentencePunctuation() {
+        XCTAssertFalse(content.lockedAccessibilityLabel.contains(".."))
+    }
+
     func testPermissionStateAccessibilityLabelsNameNoRealApps() {
         let combined = (content.emptyStateAccessibilityLabel + " " + content.lockedAccessibilityLabel).lowercased()
         for name in ["tiktok", "instagram", "youtube", "snapchat", "facebook", "reddit"] {
