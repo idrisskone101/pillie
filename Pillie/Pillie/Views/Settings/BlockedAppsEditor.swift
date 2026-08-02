@@ -15,7 +15,7 @@ struct BlockedAppsEditor: View {
     @State private var showPicker = false
     @State private var isRequestingAuth = false
 
-    private var blockingManager: AppBlockingManager { .shared }
+    @Bindable private var blockingManager = AppBlockingManager.shared
 
     var body: some View {
         SettingsSheetContainer(title: PillieLocalization.string(
@@ -111,15 +111,19 @@ struct BlockedAppsEditor: View {
             Text(statusLabel)
                 .font(.pillieBodySemibold())
                 .foregroundStyle(PillieTheme.textPrimary)
+                .accessibilityHidden(true)
 
             Spacer()
 
-            Toggle("", isOn: Binding(
-                get: { blockingManager.blockingEnabled },
-                set: { blockingManager.blockingEnabled = $0 }
-            ))
+            Toggle("", isOn: $blockingManager.blockingEnabled)
                 .labelsHidden()
                 .tint(PillieTheme.coral)
+                .accessibilityLabel(PillieLocalization.string(
+                    "settings.section.blocking",
+                    locale: locale
+                ))
+                .accessibilityValue(statusLabel)
+                .accessibilityIdentifier("blockedAppsEnabledToggle")
                 .onChange(of: blockingManager.blockingEnabled) { _, enabled in
                     if enabled {
                         blockingManager.reconcileEnabledBlocking(routine: appBlockingRoutine)
@@ -146,8 +150,8 @@ struct BlockedAppsEditor: View {
     }
 
     private var statusLabel: String {
-        PillieLocalization.string(
-            blockingManager.blockingActive ? "global.status.on" : "global.status.off",
+        SettingsPresentation.blockingToggleStatus(
+            isEnabled: blockingManager.blockingEnabled,
             locale: locale
         )
     }

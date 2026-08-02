@@ -8,6 +8,19 @@ import XCTest
 @testable import Pillie
 
 final class BlockingStatusPresentationTests: XCTestCase {
+    func testSettingsToggleStatusFollowsEnabledPreference() {
+        let english = Locale(identifier: "en")
+
+        XCTAssertEqual(
+            SettingsPresentation.blockingToggleStatus(isEnabled: true, locale: english),
+            "On"
+        )
+        XCTAssertEqual(
+            SettingsPresentation.blockingToggleStatus(isEnabled: false, locale: english),
+            "Off"
+        )
+    }
+
     // MARK: - Mapping from completion state
 
     func testActivatedUserShowsActivePresentation() {
