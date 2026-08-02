@@ -1,6 +1,98 @@
 {
   "sourceLanguage": "en",
   "strings": {
+    "onboarding.blocking_setup.subscriber_disclosure": {
+      "comment": "Paid subscriber status on the app-blocking onboarding surface [subscription]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus is active on this account. Set up app blocking whenever you’re ready."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus è attivo su questo account. Configura il blocco delle app quando vuoi."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus ist für dieses Konto aktiv. Richte die App-Pause ein, wenn du bereit bist."
+          }
+        }
+      }
+    },
+    "commerce.access_verification.title": {
+      "comment": "Access verification gate title [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Checking your Pillie Plus access"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verifica dell’accesso a Pillie Plus"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie-Plus-Zugang wird geprüft"
+          }
+        }
+      }
+    },
+    "commerce.access_verification.body": {
+      "comment": "Access verification gate guidance [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connect to the internet so Pillie can verify your purchases before opening the app."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connettiti a internet così Pillie può verificare i tuoi acquisti prima di aprire l’app."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verbinde dich mit dem Internet, damit Pillie deine Käufe prüfen kann, bevor die App geöffnet wird."
+          }
+        }
+      }
+    },
+    "commerce.access_verification.error": {
+      "comment": "Access verification retry guidance [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "We couldn’t verify your access. Check your connection, try again, or restore purchases."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Non è stato possibile verificare l’accesso. Controlla la connessione, riprova o ripristina gli acquisti."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dein Zugang konnte nicht geprüft werden. Prüfe die Verbindung, versuche es erneut oder stelle Käufe wieder her."
+          }
+        }
+      }
+    },
     "onboarding.blocking_setup.plus_locked": {
       "comment": "Entitlement statement [paywall]",
       "localizations": {
@@ -20,6 +112,29 @@
           "stringUnit": {
             "state": "translated",
             "value": "Die App-Pause ist eine Pillie-Plus-Funktion, die du nach dem Upgrade einrichten kannst."
+          }
+        }
+      }
+    },
+    "onboarding.blocking_setup.hard_paywall_locked_detail": {
+      "comment": "Paid-access requirement shown when a hard-cohort trial expires during onboarding [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose monthly, annual, or lifetime to keep using Pillie."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scegli il piano mensile, annuale o a vita per continuare a usare Pillie."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wähle einen Monats-, Jahres- oder Lifetime-Tarif, um Pillie weiter zu nutzen."
           }
         }
       }
@@ -863,6 +978,29 @@
         "de": { "stringUnit": { "state": "translated", "value": "Erinnerungen bleiben kostenlos. Plus behältst du nur, wenn du möchtest." } }
       }
     },
+    "trial.granted.choice.detail.hard_paywall": {
+      "comment": "Day 14 paid-access requirement for hard-paywall cohorts [trial granted]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose monthly, annual, or lifetime to keep using Pillie."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scegli il piano mensile, annuale o a vita per continuare a usare Pillie."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wähle einen Monats-, Jahres- oder Lifetime-Tarif, um Pillie weiter zu nutzen."
+          }
+        }
+      }
+    },
     "trial.granted.cta": {
       "comment": "Continue button leading to app-blocking setup [trial granted]",
       "localizations": {
@@ -923,19 +1061,42 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your free trial lasts 14 days. App blocking turns off when it ends, while reminders stay free."
+            "value": "Your free trial lasts 14 days. No card required. App blocking turns off when it ends, while reminders stay free."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "La prova gratuita dura 14 giorni. Al termine, il blocco delle app si disattiva, mentre i promemoria restano gratuiti."
+            "value": "La prova gratuita dura 14 giorni. Non serve una carta. Al termine, il blocco delle app si disattiva, mentre i promemoria restano gratuiti."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Deine kostenlose Testphase dauert 14 Tage. Danach wird die App-Pause deaktiviert, Erinnerungen bleiben kostenlos."
+            "value": "Deine kostenlose Testphase dauert 14 Tage. Keine Kreditkarte erforderlich. Danach wird die App-Pause deaktiviert, Erinnerungen bleiben kostenlos."
+          }
+        }
+      }
+    },
+    "trial.granted.disclosure.hard_paywall": {
+      "comment": "Pre-trial duration and paid-access requirement for hard-paywall cohorts [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your free trial lasts 14 days. No card required. After it ends, choose monthly, annual, or lifetime to keep using Pillie."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La prova gratuita dura 14 giorni. Non serve una carta. Al termine, scegli il piano mensile, annuale o a vita per continuare a usare Pillie."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine kostenlose Testphase dauert 14 Tage. Keine Kreditkarte erforderlich. Danach brauchst du einen Monats-, Jahres- oder Lifetime-Tarif, um Pillie weiter zu nutzen."
           }
         }
       }
@@ -1235,6 +1396,52 @@
           "stringUnit": {
             "state": "translated",
             "value": "Die App-Pause wird deaktiviert"
+          }
+        }
+      }
+    },
+    "trial.status.after.plus_pauses": {
+      "comment": "Hard-cohort access change summarized during an active trial [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus access pauses"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L’accesso a Pillie Plus si interrompe"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dein Zugriff auf Pillie Plus pausiert"
+          }
+        }
+      }
+    },
+    "trial.status.after.plan_required": {
+      "comment": "Hard-cohort paid-access requirement summarized during an active trial [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose monthly, annual, or lifetime to continue"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scegli il piano mensile, annuale o a vita per continuare"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wähle monatlich, jährlich oder Lifetime, um fortzufahren"
           }
         }
       }
@@ -2017,6 +2224,29 @@
           "stringUnit": {
             "state": "translated",
             "value": "Fertig"
+          }
+        }
+      }
+    },
+    "trial.end.access_restored": {
+      "comment": "Generic success label after restoring an unknown subscription or lifetime product [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus access restored"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Accesso a Pillie Plus ripristinato"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zugriff auf Pillie Plus wiederhergestellt"
           }
         }
       }

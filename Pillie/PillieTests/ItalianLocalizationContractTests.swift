@@ -264,7 +264,7 @@ final class ItalianLocalizationContractTests: XCTestCase {
 
         XCTAssertEqual(
             content.trialDisclosure,
-            "La prova gratuita dura 14 giorni. Al termine, il blocco delle app si disattiva, mentre i promemoria restano gratuiti."
+            "La prova gratuita dura 14 giorni. Non serve una carta. Al termine, il blocco delle app si disattiva, mentre i promemoria restano gratuiti."
         )
         XCTAssertEqual(
             content.emptyDetail,

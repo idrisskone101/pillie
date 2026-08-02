@@ -18,9 +18,60 @@ struct ContentView: View {
   @State private var showUpdateTrialAnnouncement = false
   @State private var updateTrialWantsBlockerSetup = false
   @State private var showUpdateTrialBlockerSetup = false
+  @State private var onboardingCommerceResolution = CommerceResolutionAttempt()
+  @State private var isResolvingOnboardingAccess = false
+  @State private var onboardingAccessResolutionFailed = false
+  @State private var isResolvingRootCommerce = false
+  @State private var rootCommerceResolutionFailed = false
   private let onboardingTelemetry = OnboardingTelemetry()
   private let onboardingFeedback = OnboardingInteractionFeedback()
   private let subscriptionManager = SubscriptionManager.shared
+
+  private var currentTrialTermsCohort: TrialTermsCohort {
+    subscriptionManager.trialTermsCohort
+      ?? TrialInstallCohort.storedAssignment()
+      ?? HardPaywallPolicy.cohort(forTrialGrantedAt: Date())
+  }
+
+  private var onboardingTrialEndTerms: TrialEndAccessTerms {
+    HardPaywallPolicy.terms(
+      for: currentTrialTermsCohort,
+      hardPaywallEnabled: subscriptionManager.hardPaywallEnabled
+    )
+  }
+
+  private var rootTrialEndPaywallCohort: TrialEndPaywallCohort {
+    AppBlockingManager.shared.hasAppsSelected ? .blockerConfigured : .reminderOnly
+  }
+
+  private var rootCommerceGate: RootCommerceGate {
+    let now = Date()
+    let termsCohort = subscriptionManager.trialTermsCohort
+      ?? TrialInstallCohort.storedAssignment()
+      ?? HardPaywallPolicy.cohort(
+        forTrialGrantedAt: subscriptionManager.trialGrantDate ?? now
+      )
+    return RootCommerceGate.resolve(
+      state: PlusAccessState(
+        hasEntitlement: subscriptionManager.hasEntitlement,
+        trialGrantDate: subscriptionManager.trialGrantDate
+      ),
+      termsCohort: termsCohort,
+      hardPaywallEnabled: subscriptionManager.hardPaywallEnabled,
+      entitlementResolved: subscriptionManager.hasResolvedEntitlement,
+      configurationResolved: subscriptionManager.hasResolvedHardPaywallConfiguration,
+      calendar: .current,
+      now: now
+    )
+  }
+
+  private var onboardingTrialActivationRoute: OnboardingTrialActivationRoute {
+    OnboardingTrialActivationRoute.resolve(
+      hasEntitlement: subscriptionManager.hasEntitlement,
+      entitlementResolved: subscriptionManager.hasResolvedEntitlement,
+      configurationResolved: subscriptionManager.hasResolvedHardPaywallConfiguration
+    )
+  }
 
   var body: some View {
     ZStack {
@@ -286,50 +337,7 @@ struct ContentView: View {
             ))
 
 	        case .appBlocking:
-	          AppBlockingSetupView(
-	            onBack: {
-                if let previousStep = OnboardingFlow.previousStep(before: .appBlocking) {
-                  lowRiskTransition(to: previousStep)
-                }
-	            },
-	            onContinue: {
-                // A valid save with Screen Time authorization is genuine activation —
-                // land on the Pill Protection Plan Ready screen. Anything short of
-                // activation (e.g. authorized but later cleared) opens the app directly.
-                if ProtectionPlanCompletion.landsOnProtectionPlanReady(for: currentCompletionState) {
-                  onboardingTelemetry.blockerSetupCompleted()
-                  continueSetupStep(to: .protectionPlanReady)
-                } else {
-                  onboardingTelemetry.blockerSetupSkipped(
-                    authorizationState: blockerAuthorizationAnalyticsState
-                  )
-                  openSoftPaywallOrUpgrade(to: .complete)
-                }
-	            },
-	            onSkip: {
-                onboardingTelemetry.blockerSetupSkipped(
-                  authorizationState: blockerAuthorizationAnalyticsState
-                )
-                continueFreePath(to: .complete)
-	            }
-	          )
-	          .onAppear {
-	            // App-blocking setup is now the first visible surface that describes
-	            // the unlocked 14-day Plus access. Grant on that same appearance so
-	            // copy and entitlement timing agree. The store remains once-only, so
-	            // Back/relaunch never re-emits `trial_granted`.
-	            let grantDate = Date()
-	            let termsCohort = TrialInstallCohort.storedAssignment()
-	              ?? HardPaywallPolicy.cohort(forTrialGrantedAt: grantDate)
-	            if OnboardingFlow.grantsReverseTrial(on: .appBlocking),
-	               subscriptionManager.grantReverseTrial(
-	                 now: grantDate,
-	                 termsCohort: termsCohort
-	               ) {
-	              onboardingTelemetry.trialActivated()
-	            }
-	            onboardingTelemetry.blockerSetupStarted()
-	          }
+	          appBlockingStep
 	          .transition(
             .asymmetric(
               insertion: .move(edge: .trailing),
@@ -341,7 +349,11 @@ struct ContentView: View {
 	            onContinue: {
                 // Hands off into the app. Core onboarding was already counted at the
                 // reminder plan; this terminal boundary classifies genuine protection.
-                continueSetupStep(to: .complete)
+                routeOnboardingCompletion(
+                  response: onboardingFeedback.continueSetupStep(
+                    accessibilityReduceMotion: accessibilityReduceMotion
+                  )
+                )
 	            }
           )
           .transition(
@@ -351,7 +363,19 @@ struct ContentView: View {
             ))
 
 	        case .complete, nil:
-	          MainTabView()
+	          if rootCommerceGate == .verifyingAccess {
+	            CommerceAccessVerificationView(
+	              isWorking: isResolvingRootCommerce,
+	              didFail: rootCommerceResolutionFailed,
+	              onRetry: refreshRootCommerceAccess,
+	              onRestore: restoreRootCommerceAccess
+	            )
+	            .transition(.opacity)
+	            .task {
+	              await resolveRootCommerceAccess()
+	            }
+	          } else {
+	            MainTabView()
 	            .transition(.opacity)
 	            .onAppear {
 	              evaluateExistingUserTrialGrant()
@@ -395,6 +419,7 @@ struct ContentView: View {
 	                .presentationDragIndicator(.hidden)
 	                .presentationBackground(PillieTheme.bg)
 	            }
+	          }
 	        }
         }
       }
@@ -569,6 +594,209 @@ struct ContentView: View {
         accessibilityReduceMotion: accessibilityReduceMotion))
   }
 
+  @ViewBuilder
+  private var appBlockingStep: some View {
+    if onboardingTrialActivationRoute == .verifyingAccess {
+      CommerceAccessVerificationView(
+        isWorking: isResolvingOnboardingAccess,
+        didFail: onboardingAccessResolutionFailed,
+        onRetry: refreshOnboardingAccess,
+        onRestore: restoreOnboardingAccess
+      )
+      .task {
+        await resolveOnboardingAccess()
+      }
+    } else {
+      AppBlockingSetupView(
+        trialEndTerms: onboardingTrialEndTerms,
+        isPaidSubscriber: onboardingTrialActivationRoute == .subscriber,
+        onBack: {
+          if let previousStep = OnboardingFlow.previousStep(before: .appBlocking) {
+            lowRiskTransition(to: previousStep)
+          }
+        },
+        onContinue: {
+          guard !onboardingCommerceResolution.isResolving else { return }
+          if ProtectionPlanCompletion.landsOnProtectionPlanReady(for: currentCompletionState) {
+            onboardingTelemetry.blockerSetupCompleted()
+            continueSetupStep(to: .protectionPlanReady)
+          } else {
+            onboardingTelemetry.blockerSetupSkipped(
+              authorizationState: blockerAuthorizationAnalyticsState
+            )
+            routeOnboardingCompletion(
+              response: onboardingFeedback.openSoftPaywallOrUpgrade(
+                accessibilityReduceMotion: accessibilityReduceMotion
+              )
+            )
+          }
+        },
+        onSkip: {
+          guard !onboardingCommerceResolution.isResolving else { return }
+          onboardingTelemetry.blockerSetupSkipped(
+            authorizationState: blockerAuthorizationAnalyticsState
+          )
+          routeOnboardingCompletion(
+            response: onboardingFeedback.continueFreePath(
+              accessibilityReduceMotion: accessibilityReduceMotion
+            )
+          )
+        }
+      )
+      .onAppear {
+        if onboardingTrialActivationRoute == .grantTrial {
+          let grantDate = Date()
+          let termsCohort = TrialInstallCohort.storedAssignment()
+            ?? HardPaywallPolicy.cohort(forTrialGrantedAt: grantDate)
+          if OnboardingFlow.grantsReverseTrial(on: .appBlocking),
+             subscriptionManager.grantReverseTrial(
+               now: grantDate,
+               termsCohort: termsCohort
+             ) {
+            onboardingTelemetry.trialActivated()
+          }
+        }
+        onboardingTelemetry.blockerSetupStarted()
+      }
+    }
+  }
+
+  private func refreshOnboardingAccess() {
+    Task { await resolveOnboardingAccess() }
+  }
+
+  private func resolveOnboardingAccess() async {
+    guard !isResolvingOnboardingAccess else { return }
+    isResolvingOnboardingAccess = true
+    onboardingAccessResolutionFailed = false
+    await subscriptionManager.refreshCommerceState()
+    onboardingAccessResolutionFailed = onboardingTrialActivationRoute == .verifyingAccess
+    isResolvingOnboardingAccess = false
+  }
+
+  private func restoreOnboardingAccess() {
+    guard !isResolvingOnboardingAccess else { return }
+    isResolvingOnboardingAccess = true
+    onboardingAccessResolutionFailed = false
+    ProductAnalyticsTelemetry.live.restoreStarted(isFromOnboarding: true)
+    Task {
+      do {
+        try await subscriptionManager.restore()
+        switch RestoreAccessOutcome.resolve(
+          hasEntitlement: subscriptionManager.hasEntitlement
+        ) {
+        case .restored:
+          ProductAnalyticsTelemetry.live.restoreCompleted(isFromOnboarding: true)
+        case .missingPurchase:
+          ProductAnalyticsTelemetry.live.restoreFailed(isFromOnboarding: true)
+        }
+      } catch {
+        ProductAnalyticsTelemetry.live.restoreFailed(isFromOnboarding: true)
+        ProductAnalyticsTelemetry.live.trackError(.restore, error: error)
+        onboardingAccessResolutionFailed = true
+      }
+      isResolvingOnboardingAccess = false
+    }
+  }
+
+  private func onboardingCompletionRoute(now: Date = Date()) -> OnboardingCompletionRoute {
+    let termsCohort = subscriptionManager.trialTermsCohort
+      ?? TrialInstallCohort.storedAssignment()
+      ?? HardPaywallPolicy.cohort(
+        forTrialGrantedAt: subscriptionManager.trialGrantDate ?? now
+      )
+    return OnboardingCompletionRoute.resolve(
+      state: PlusAccessState(
+        hasEntitlement: subscriptionManager.hasEntitlement,
+        trialGrantDate: subscriptionManager.trialGrantDate
+      ),
+      termsCohort: termsCohort,
+      hardPaywallEnabled: subscriptionManager.hardPaywallEnabled,
+      entitlementResolved: subscriptionManager.hasResolvedEntitlement,
+      configurationResolved: subscriptionManager.hasResolvedHardPaywallConfiguration,
+      calendar: .current,
+      now: now
+    )
+  }
+
+  private func routeOnboardingCompletion(
+    response: OnboardingInteractionFeedback.Response
+  ) {
+    switch onboardingCompletionRoute() {
+    case .complete, .hardPaywall:
+      // Home owns the canonical trial-end purchase surface. For a resolved
+      // hard cohort, entering Home immediately satisfies its auto-presentation
+      // contract; there is no continue-free state between these transitions.
+      transition(to: .complete, response: response)
+    case .awaitingCommerceResolution:
+      guard onboardingCommerceResolution.begin() else { return }
+      // Persist onboarding completion, but do not fail open into usable Home.
+      // The completed-root branch resolves to CommerceAccessVerificationView,
+      // which owns progress, retry, and restore until customer info is known.
+      // Moving synchronously also avoids a late refresh forcing completion after
+      // the user navigates Back from this screen.
+      transition(to: .complete, response: response)
+    }
+  }
+
+  private func refreshRootCommerceAccess() {
+    Task { await resolveRootCommerceAccess() }
+  }
+
+  private func resolveRootCommerceAccess() async {
+    guard !isResolvingRootCommerce else { return }
+    isResolvingRootCommerce = true
+    rootCommerceResolutionFailed = false
+    await subscriptionManager.refreshCommerceState()
+    rootCommerceResolutionFailed = rootCommerceGate == .verifyingAccess
+    isResolvingRootCommerce = false
+  }
+
+  private func restoreRootCommerceAccess() {
+    guard !isResolvingRootCommerce else { return }
+    isResolvingRootCommerce = true
+    rootCommerceResolutionFailed = false
+    let cohort = rootTrialEndPaywallCohort
+    let terms = onboardingTrialEndTerms
+    let termsCohort = currentTrialTermsCohort
+    ProductAnalyticsTelemetry.live.trialEndRestoreStarted(
+      cohort: cohort,
+      terms: terms,
+      termsCohort: termsCohort
+    )
+    Task {
+      do {
+        try await subscriptionManager.restore()
+        switch RestoreAccessOutcome.resolve(
+          hasEntitlement: subscriptionManager.hasEntitlement
+        ) {
+        case .restored:
+          ProductAnalyticsTelemetry.live.trialEndRestoreCompleted(
+            cohort: cohort,
+            terms: terms,
+            termsCohort: termsCohort
+          )
+        case .missingPurchase:
+          ProductAnalyticsTelemetry.live.trialEndRestoreFailed(
+            cohort: cohort,
+            terms: terms,
+            termsCohort: termsCohort
+          )
+          rootCommerceResolutionFailed = true
+        }
+      } catch {
+        ProductAnalyticsTelemetry.live.trialEndRestoreFailed(
+          cohort: cohort,
+          terms: terms,
+          termsCohort: termsCohort
+        )
+        ProductAnalyticsTelemetry.live.trackError(.restore, error: error)
+        rootCommerceResolutionFailed = true
+      }
+      isResolvingRootCommerce = false
+    }
+  }
+
   /// Back from the first question to the Early Value Proof. This reverses the
   /// intro handoff: the proof lives in the new shell, so we step the shell's
   /// model back to it and drop the legacy step below `productDemo` so the shell
@@ -588,20 +816,6 @@ struct ContentView: View {
   }
 
   private func lowRiskTransition(to step: OnboardingFlow.Step) {
-    transition(
-      to: step,
-      response: onboardingFeedback.continueFreePath(
-        accessibilityReduceMotion: accessibilityReduceMotion))
-  }
-
-  private func openSoftPaywallOrUpgrade(to step: OnboardingFlow.Step) {
-    transition(
-      to: step,
-      response: onboardingFeedback.openSoftPaywallOrUpgrade(
-        accessibilityReduceMotion: accessibilityReduceMotion))
-  }
-
-  private func continueFreePath(to step: OnboardingFlow.Step) {
     transition(
       to: step,
       response: onboardingFeedback.continueFreePath(
@@ -634,4 +848,81 @@ struct ContentView: View {
 #Preview {
   ContentView()
     .environment(PillStore.previewStore())
+}
+
+private struct CommerceAccessVerificationView: View {
+  let isWorking: Bool
+  let didFail: Bool
+  let onRetry: () -> Void
+  let onRestore: () -> Void
+  @Environment(\.locale) private var locale
+
+  var body: some View {
+    VStack(spacing: 20) {
+      Spacer()
+
+      Image(systemName: "checkmark.shield.fill")
+        .font(.system(size: 44, weight: .semibold))
+        .foregroundStyle(PillieTheme.coral)
+
+      Text(PillieLocalization.string(
+        "commerce.access_verification.title",
+        table: "Commerce",
+        locale: locale
+      ))
+      .font(.pillieExtraBold(26))
+      .foregroundStyle(PillieTheme.textPrimary)
+      .multilineTextAlignment(.center)
+
+      Text(PillieLocalization.string(
+        didFail
+          ? "commerce.access_verification.error"
+          : "commerce.access_verification.body",
+        table: "Commerce",
+        locale: locale
+      ))
+      .font(.pillieBody())
+      .foregroundStyle(PillieTheme.textMuted)
+      .multilineTextAlignment(.center)
+      .fixedSize(horizontal: false, vertical: true)
+
+      if isWorking {
+        ProgressView()
+          .tint(PillieTheme.coral)
+          .padding(.top, 4)
+      } else {
+        Button(action: onRetry) {
+          Text(PillieLocalization.string(
+            "global.action.retry",
+            locale: locale
+          ))
+          .font(.pillie(17, weight: .bold))
+          .foregroundStyle(.white)
+          .frame(maxWidth: .infinity)
+          .frame(height: PillieTheme.ctaHeight)
+          .background(PillieTheme.dark)
+          .clipShape(Capsule())
+        }
+        .accessibilityIdentifier("commerceAccessRetryButton")
+
+        Button {
+          onRestore()
+        } label: {
+          Text(PillieLocalization.string(
+            "paywall.action.restore",
+            table: "Commerce",
+            locale: locale
+          ))
+          .font(.pillie(15, weight: .semibold))
+          .foregroundStyle(PillieTheme.textMuted)
+        }
+        .accessibilityIdentifier("commerceAccessRestoreButton")
+      }
+
+      Spacer()
+    }
+    .padding(.horizontal, 32)
+    .background(PillieTheme.bg.ignoresSafeArea())
+    .accessibilityIdentifier("commerceAccessVerification")
+  }
 }

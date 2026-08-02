@@ -90,11 +90,14 @@ struct TrialGrantedMomentContent {
                 symbolColor: PillieTheme.verifiedGreen
             ),
         ],
-        disclosure: "Your free trial lasts 14 days. App blocking turns off when it ends, while reminders stay free.",
+        disclosure: "Your free trial lasts 14 days. No card required. App blocking turns off when it ends, while reminders stay free.",
         primaryCTA: "Continue to app blocking"
     )
 
-    static func localized(locale: Locale = .current) -> TrialGrantedMomentContent {
+    static func localized(
+        locale: Locale = .current,
+        trialEndTerms: TrialEndAccessTerms = .legacy
+    ) -> TrialGrantedMomentContent {
         func commerce(_ key: String) -> String {
             PillieLocalization.string(key, table: "Commerce", locale: locale)
         }
@@ -134,13 +137,21 @@ struct TrialGrantedMomentContent {
                 TimelineDay(
                     label: commerce("trial.granted.choice.label"),
                     title: commerce("trial.granted.choice.title"),
-                    detail: commerce("trial.granted.choice.detail"),
+                    detail: commerce(
+                        trialEndTerms == .hardPaywall
+                            ? "trial.granted.choice.detail.hard_paywall"
+                            : "trial.granted.choice.detail"
+                    ),
                     symbolName: "leaf.fill",
                     circleBackground: PillieTheme.sage,
                     symbolColor: PillieTheme.verifiedGreen
                 ),
             ],
-            disclosure: commerce("trial.granted.disclosure"),
+            disclosure: commerce(
+                trialEndTerms == .hardPaywall
+                    ? "trial.granted.disclosure.hard_paywall"
+                    : "trial.granted.disclosure"
+            ),
             primaryCTA: commerce("trial.granted.cta")
         )
     }
@@ -152,8 +163,21 @@ struct TrialGrantedMomentView: View {
     @State private var animateIn = false
     @State private var blobPhase: CGFloat = 0
     private let performanceTier = PerformanceTier.current
+    private let subscriptionManager = SubscriptionManager.shared
+    private var trialEndTerms: TrialEndAccessTerms {
+        let termsCohort = subscriptionManager.trialTermsCohort
+            ?? TrialInstallCohort.storedAssignment()
+            ?? HardPaywallPolicy.cohort(forTrialGrantedAt: Date())
+        return HardPaywallPolicy.terms(
+            for: termsCohort,
+            hardPaywallEnabled: subscriptionManager.hardPaywallEnabled
+        )
+    }
     private var content: TrialGrantedMomentContent {
-        TrialGrantedMomentContent.localized(locale: locale)
+        TrialGrantedMomentContent.localized(
+            locale: locale,
+            trialEndTerms: trialEndTerms
+        )
     }
 
     let onBack: () -> Void

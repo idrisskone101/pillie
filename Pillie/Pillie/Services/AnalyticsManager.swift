@@ -230,6 +230,16 @@ protocol AnalyticsTracking {
   func track(
     _ event: AnalyticsEvent,
     source: AnalyticsSource?,
+    surface: AnalyticsPaywallSurface?,
+    plan: AnalyticsPlan?,
+    result: AnalyticsResult?,
+    trialTermsCohort: TrialTermsCohort?,
+    isPlus: Bool?
+  )
+
+  func track(
+    _ event: AnalyticsEvent,
+    source: AnalyticsSource?,
     surface: AnalyticsPaywallSurface,
     trialTermsCohort: TrialTermsCohort,
     trialEndCohort: TrialEndPaywallCohort,
@@ -402,6 +412,25 @@ extension AnalyticsTracking {
     isPlus: Bool?
   ) {
     trackLegacy(event, source: source, isPlus: isPlus)
+  }
+
+  func track(
+    _ event: AnalyticsEvent,
+    source: AnalyticsSource?,
+    surface: AnalyticsPaywallSurface?,
+    plan: AnalyticsPlan?,
+    result: AnalyticsResult?,
+    trialTermsCohort: TrialTermsCohort?,
+    isPlus: Bool?
+  ) {
+    track(
+      event,
+      source: source,
+      surface: surface,
+      plan: plan,
+      result: result,
+      isPlus: isPlus
+    )
   }
 
   func track(
@@ -1144,6 +1173,27 @@ final class AnalyticsManager: AnalyticsTracking {
       plan: plan,
       result: result,
       isPlus: isPlus,
+      paywallSurface: surface
+    )
+
+    capture(event, payload: payload, source: source)
+  }
+
+  func track(
+    _ event: AnalyticsEvent,
+    source: AnalyticsSource?,
+    surface: AnalyticsPaywallSurface?,
+    plan: AnalyticsPlan?,
+    result: AnalyticsResult?,
+    trialTermsCohort: TrialTermsCohort?,
+    isPlus: Bool?
+  ) {
+    let payload = AnalyticsPayload(
+      source: source,
+      plan: plan,
+      result: result,
+      isPlus: isPlus,
+      trialTermsCohort: trialTermsCohort,
       paywallSurface: surface
     )
 

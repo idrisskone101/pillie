@@ -56,6 +56,7 @@ struct AppBlockingSetupContent {
     let lockedTitle: String
     let lockedSubtitle: String
     let lockedDetail: String
+    let lockedCTA: String
 
     var visibleCopy: [String] {
         [
@@ -66,7 +67,7 @@ struct AppBlockingSetupContent {
         + categoryHints.map(\.name)
         + [
             chooseAppsCTA, selectedSummaryLabel, selectedPrivacyNote, changeSelectionCTA,
-            privacyNote, finishCTA, skipCTA, lockedTitle, lockedSubtitle, lockedDetail
+            privacyNote, finishCTA, skipCTA, lockedTitle, lockedSubtitle, lockedDetail, lockedCTA
         ]
     }
 
@@ -85,14 +86,22 @@ struct AppBlockingSetupContent {
 
     static var `default`: AppBlockingSetupContent { localized() }
 
-    static func localized(locale: Locale = .current) -> AppBlockingSetupContent {
+    static func localized(
+        locale: Locale = .current,
+        trialEndTerms: TrialEndAccessTerms = .legacy,
+        isPaidSubscriber: Bool = false
+    ) -> AppBlockingSetupContent {
         AppBlockingSetupContent(
         badge: "Pillie Plus",
         titleLead: PillieLocalization.string("onboarding.blocking_setup.title", locale: locale),
         titleAccent: "",
         subtitle: PillieLocalization.string("onboarding.blocking_setup.subtitle", locale: locale),
         trialDisclosure: PillieLocalization.string(
-            "trial.granted.disclosure",
+            isPaidSubscriber
+                ? "onboarding.blocking_setup.subscriber_disclosure"
+                : trialEndTerms == .hardPaywall
+                    ? "trial.granted.disclosure.hard_paywall"
+                    : "trial.granted.disclosure",
             table: "Commerce",
             locale: locale
         ),
@@ -125,7 +134,20 @@ struct AppBlockingSetupContent {
         skipCTA: PillieLocalization.string("onboarding.blocking_setup.skip", locale: locale),
         lockedTitle: PillieLocalization.string("onboarding.blocking_setup.plus_locked", locale: locale),
         lockedSubtitle: PillieLocalization.string("onboarding.blocking_setup.plus_locked", locale: locale),
-        lockedDetail: PillieLocalization.string("onboarding.demo.free_body", locale: locale)
+        lockedDetail: PillieLocalization.string(
+            trialEndTerms == .hardPaywall
+                ? "onboarding.blocking_setup.hard_paywall_locked_detail"
+                : "onboarding.demo.free_body",
+            table: "Commerce",
+            locale: locale
+        ),
+        lockedCTA: PillieLocalization.string(
+            trialEndTerms == .hardPaywall
+                ? "paywall.action.upgrade"
+                : "global.action.continue",
+            table: trialEndTerms == .hardPaywall ? "Commerce" : nil,
+            locale: locale
+        )
         )
     }
 }
@@ -212,11 +234,33 @@ struct AppBlockingSetupView: View {
     #endif
     private let performanceTier = PerformanceTier.current
     private let onboardingTelemetry = OnboardingTelemetry()
-    private let content = AppBlockingSetupContent.default
+    private var content: AppBlockingSetupContent {
+        AppBlockingSetupContent.localized(
+            locale: locale,
+            trialEndTerms: trialEndTerms,
+            isPaidSubscriber: isPaidSubscriber
+        )
+    }
 
+    let trialEndTerms: TrialEndAccessTerms
+    let isPaidSubscriber: Bool
     let onBack: () -> Void
     let onContinue: () -> Void
     let onSkip: () -> Void
+
+    init(
+        trialEndTerms: TrialEndAccessTerms = .legacy,
+        isPaidSubscriber: Bool = false,
+        onBack: @escaping () -> Void,
+        onContinue: @escaping () -> Void,
+        onSkip: @escaping () -> Void
+    ) {
+        self.trialEndTerms = trialEndTerms
+        self.isPaidSubscriber = isPaidSubscriber
+        self.onBack = onBack
+        self.onContinue = onContinue
+        self.onSkip = onSkip
+    }
 
     private var blockingManager: AppBlockingManager { .shared }
 
@@ -545,7 +589,7 @@ struct AppBlockingSetupView: View {
                 skipButton
             } else {
                 Button(action: onContinue) {
-                    Text(content.finishCTA)
+                    Text(content.lockedCTA)
                 }
                 .buttonStyle(.pillieDark)
             }

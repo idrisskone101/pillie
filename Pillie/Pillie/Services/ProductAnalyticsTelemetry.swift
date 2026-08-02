@@ -25,6 +25,7 @@ struct ProductAnalyticsTelemetry {
   private let analytics: AnalyticsTracking
   private let isPlus: () -> Bool
   private let acquisitionSource: () -> AcquisitionSource?
+  private let trialTermsCohort: () -> TrialTermsCohort?
 
   init(
     analytics: AnalyticsTracking = AnalyticsManager.shared,
@@ -32,11 +33,15 @@ struct ProductAnalyticsTelemetry {
     acquisitionSource: @escaping () -> AcquisitionSource? = {
       AcquisitionSource(
         rawValue: UserDefaults.standard.string(forKey: PillStore.acquisitionSourceKey) ?? "")
+    },
+    trialTermsCohort: @escaping () -> TrialTermsCohort? = {
+      SubscriptionManager.shared.trialTermsCohort
     }
   ) {
     self.analytics = analytics
     self.isPlus = isPlus
     self.acquisitionSource = acquisitionSource
+    self.trialTermsCohort = trialTermsCohort
   }
 
   // The activation funnel can only be split by channel if `acquisition_source` rides
@@ -256,7 +261,15 @@ struct ProductAnalyticsTelemetry {
   /// Fired exactly once, on the first app open at-or-after expiry — the
   /// decision and one-shot flag live in `TrialExpiredEvent`.
   func trialExpired() {
-    track(.trialExpired)
+    analytics.track(
+      .trialExpired,
+      source: nil,
+      surface: nil,
+      plan: nil,
+      result: nil,
+      trialTermsCohort: trialTermsCohort(),
+      isPlus: isPlus()
+    )
   }
 
   func trialBadgeTapped() {
@@ -540,6 +553,7 @@ struct ProductAnalyticsTelemetry {
       surface: surface,
       plan: nil,
       result: nil,
+      trialTermsCohort: trialTermsCohort(),
       isPlus: isPlus()
     )
   }
@@ -628,22 +642,37 @@ struct ProductAnalyticsTelemetry {
     )
   }
 
-  func restoreStarted(isFromOnboarding: Bool) {
-    track(.restoreStarted, source: paywallSource(isFromOnboarding: isFromOnboarding))
+  func restoreStarted(
+    isFromOnboarding: Bool,
+    surface: AnalyticsPaywallSurface? = nil
+  ) {
+    trackPaywall(
+      .restoreStarted,
+      isFromOnboarding: isFromOnboarding,
+      surface: surface
+    )
   }
 
-  func restoreCompleted(isFromOnboarding: Bool) {
-    track(
+  func restoreCompleted(
+    isFromOnboarding: Bool,
+    surface: AnalyticsPaywallSurface? = nil
+  ) {
+    trackPaywall(
       .restoreCompleted,
-      source: paywallSource(isFromOnboarding: isFromOnboarding),
+      isFromOnboarding: isFromOnboarding,
+      surface: surface,
       result: .completed
     )
   }
 
-  func restoreFailed(isFromOnboarding: Bool) {
-    track(
+  func restoreFailed(
+    isFromOnboarding: Bool,
+    surface: AnalyticsPaywallSurface? = nil
+  ) {
+    trackPaywall(
       .restoreFailed,
-      source: paywallSource(isFromOnboarding: isFromOnboarding),
+      isFromOnboarding: isFromOnboarding,
+      surface: surface,
       result: .failed
     )
   }
@@ -684,6 +713,7 @@ struct ProductAnalyticsTelemetry {
       surface: surface,
       plan: plan,
       result: result,
+      trialTermsCohort: trialTermsCohort(),
       isPlus: isPlus()
     )
   }

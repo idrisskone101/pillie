@@ -25,10 +25,61 @@ final class AppBlockingSetupContentTests: XCTestCase {
     func testTrialDisclosureIsClearAndDoesNotReplaceSkip() {
         XCTAssertEqual(
             content.trialDisclosure,
-            "Your free trial lasts 14 days. App blocking turns off when it ends, while reminders stay free."
+            "Your free trial lasts 14 days. No card required. App blocking turns off when it ends, while reminders stay free."
         )
         XCTAssertTrue(content.visibleCopy.contains(content.trialDisclosure))
         XCTAssertEqual(content.skipCTA, "Continue without app blocking")
+    }
+
+    func testHardPaywallTrialDisclosureRequiresAPlanAfterFourteenDays() {
+        let hardPaywallContent = AppBlockingSetupContent.localized(
+            locale: Locale(identifier: "en_US"),
+            trialEndTerms: .hardPaywall
+        )
+
+        XCTAssertEqual(
+            hardPaywallContent.trialDisclosure,
+            "Your free trial lasts 14 days. No card required. After it ends, choose monthly, annual, or lifetime to keep using Pillie."
+        )
+    }
+
+    func testEveryTrialDisclosureStatesThatNoCardIsRequired() {
+        let hardPaywallContent = AppBlockingSetupContent.localized(
+            locale: Locale(identifier: "en_US"),
+            trialEndTerms: .hardPaywall
+        )
+
+        XCTAssertTrue(content.trialDisclosure.localizedCaseInsensitiveContains("no card required"))
+        XCTAssertTrue(
+            hardPaywallContent.trialDisclosure.localizedCaseInsensitiveContains("no card required")
+        )
+    }
+
+    func testPaidSubscriberDisclosureDoesNotPromiseAReverseTrial() {
+        let subscriberContent = AppBlockingSetupContent.localized(
+            locale: Locale(identifier: "en_US"),
+            trialEndTerms: .hardPaywall,
+            isPaidSubscriber: true
+        )
+
+        XCTAssertEqual(
+            subscriberContent.trialDisclosure,
+            "Pillie Plus is active on this account. Set up app blocking whenever you’re ready."
+        )
+        XCTAssertFalse(subscriberContent.trialDisclosure.contains("14 days"))
+    }
+
+    func testHardPaywallLockedFallbackOffersUpgradeInsteadOfAFreeExit() {
+        let hardPaywallContent = AppBlockingSetupContent.localized(
+            locale: Locale(identifier: "en_US"),
+            trialEndTerms: .hardPaywall
+        )
+
+        XCTAssertEqual(
+            hardPaywallContent.lockedDetail,
+            "Choose monthly, annual, or lifetime to keep using Pillie."
+        )
+        XCTAssertEqual(hardPaywallContent.lockedCTA, "Upgrade to Pillie Plus")
     }
 
     func testDeniedOrCancelledAuthorizationShowsRecoveryWithoutStrandingReminderOnly() {

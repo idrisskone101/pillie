@@ -122,6 +122,142 @@ final class ProductAnalyticsTelemetryPaywallTests: XCTestCase {
         XCTAssertEqual(client.events.first?.properties.count, 3)
     }
 
+    func testOrdinaryPaywallViewCarriesPostCutoverTrialTermsCohort() {
+        let client = ProductAnalyticsSpy()
+        let defaultsName = "ProductAnalyticsTelemetryPaywallTests.trialTermsCohort"
+        UserDefaults().removePersistentDomain(forName: defaultsName)
+        let defaults = UserDefaults(suiteName: defaultsName)!
+        let analytics = AnalyticsManager(
+            defaults: defaults,
+            client: client,
+            infoDictionary: [
+                "PostHogProjectToken": "test-token",
+                "PostHogHost": "https://us.i.posthog.com"
+            ]
+        )
+        Self.keptObjects.append(defaults)
+        Self.keptObjects.append(analytics)
+        let telemetry = ProductAnalyticsTelemetry(
+            analytics: analytics,
+            isPlus: { false },
+            trialTermsCohort: { .postCutover }
+        )
+
+        analytics.configure()
+        telemetry.paywallViewed(surface: .trialStatus)
+
+        XCTAssertEqual(
+            client.events.first?.properties["trial_terms_cohort"],
+            .string("post_cutover")
+        )
+    }
+
+    func testOrdinaryPaywallPurchasesCarryPostCutoverTrialTermsCohort() {
+        let client = ProductAnalyticsSpy()
+        let defaultsName = "ProductAnalyticsTelemetryPaywallTests.purchaseTrialTermsCohort"
+        UserDefaults().removePersistentDomain(forName: defaultsName)
+        let defaults = UserDefaults(suiteName: defaultsName)!
+        let analytics = AnalyticsManager(
+            defaults: defaults,
+            client: client,
+            infoDictionary: [
+                "PostHogProjectToken": "test-token",
+                "PostHogHost": "https://us.i.posthog.com"
+            ]
+        )
+        Self.keptObjects.append(defaults)
+        Self.keptObjects.append(analytics)
+        let telemetry = ProductAnalyticsTelemetry(
+            analytics: analytics,
+            isPlus: { false },
+            trialTermsCohort: { .postCutover }
+        )
+
+        analytics.configure()
+        telemetry.purchaseStarted(
+            plan: .lifetime,
+            isFromOnboarding: false,
+            surface: .settingsSubscription
+        )
+        telemetry.purchaseCompleted(
+            plan: .lifetime,
+            isFromOnboarding: false,
+            surface: .settingsSubscription
+        )
+
+        XCTAssertEqual(client.events.map(\.name), ["purchase_started", "purchase_completed"])
+        XCTAssertEqual(
+            client.events.map { $0.properties["trial_terms_cohort"] },
+            [.string("post_cutover"), .string("post_cutover")]
+        )
+    }
+
+    func testOrdinaryPaywallRestoreCarriesSurfaceAndPostCutoverCohort() {
+        let client = ProductAnalyticsSpy()
+        let defaultsName = "ProductAnalyticsTelemetryPaywallTests.restoreTrialTermsCohort"
+        UserDefaults().removePersistentDomain(forName: defaultsName)
+        let defaults = UserDefaults(suiteName: defaultsName)!
+        let analytics = AnalyticsManager(
+            defaults: defaults,
+            client: client,
+            infoDictionary: [
+                "PostHogProjectToken": "test-token",
+                "PostHogHost": "https://us.i.posthog.com"
+            ]
+        )
+        Self.keptObjects.append(defaults)
+        Self.keptObjects.append(analytics)
+        let telemetry = ProductAnalyticsTelemetry(
+            analytics: analytics,
+            isPlus: { false },
+            trialTermsCohort: { .postCutover }
+        )
+
+        analytics.configure()
+        telemetry.restoreCompleted(
+            isFromOnboarding: false,
+            surface: .settingsSubscription
+        )
+
+        XCTAssertEqual(client.events.first?.name, "restore_completed")
+        XCTAssertEqual(client.events.first?.properties["surface"], .string("settings_subscription"))
+        XCTAssertEqual(
+            client.events.first?.properties["trial_terms_cohort"],
+            .string("post_cutover")
+        )
+    }
+
+    func testTrialExpiredCarriesPostCutoverTrialTermsCohort() {
+        let client = ProductAnalyticsSpy()
+        let defaultsName = "ProductAnalyticsTelemetryPaywallTests.expiredTrialTermsCohort"
+        UserDefaults().removePersistentDomain(forName: defaultsName)
+        let defaults = UserDefaults(suiteName: defaultsName)!
+        let analytics = AnalyticsManager(
+            defaults: defaults,
+            client: client,
+            infoDictionary: [
+                "PostHogProjectToken": "test-token",
+                "PostHogHost": "https://us.i.posthog.com"
+            ]
+        )
+        Self.keptObjects.append(defaults)
+        Self.keptObjects.append(analytics)
+        let telemetry = ProductAnalyticsTelemetry(
+            analytics: analytics,
+            isPlus: { false },
+            trialTermsCohort: { .postCutover }
+        )
+
+        analytics.configure()
+        telemetry.trialExpired()
+
+        XCTAssertEqual(client.events.first?.name, "trial_expired")
+        XCTAssertEqual(
+            client.events.first?.properties["trial_terms_cohort"],
+            .string("post_cutover")
+        )
+    }
+
     func testPaywallSurfaceTaxonomyUsesOnlyApprovedStableValues() {
         XCTAssertEqual(
             AnalyticsPaywallSurface.allCases.map(\.rawValue),

@@ -13,6 +13,63 @@ import XCTest
 @testable import Pillie
 
 final class TrialEndPaywallContentTests: XCTestCase {
+    func testRestoreWithoutAnActiveEntitlementIsNotACompletedRestore() {
+        XCTAssertEqual(
+            RestoreAccessOutcome.resolve(hasEntitlement: false),
+            .missingPurchase
+        )
+        XCTAssertEqual(
+            RestoreAccessOutcome.resolve(hasEntitlement: true),
+            .restored
+        )
+    }
+
+    func testCancellationNoteOnlyAppearsForSubscriptionPurchases() {
+        XCTAssertTrue(TrialEndSuccessOutcome.purchased(.annual).showsCancellationNote)
+        XCTAssertTrue(TrialEndSuccessOutcome.purchased(.monthly).showsCancellationNote)
+        XCTAssertFalse(TrialEndSuccessOutcome.purchased(.lifetime).showsCancellationNote)
+        XCTAssertFalse(TrialEndSuccessOutcome.restored.showsCancellationNote)
+    }
+
+    func testRestoredEntitlementSuccessUsesGenericPriceFreeLabel() {
+        XCTAssertEqual(
+            TrialEndSuccessOutcome.restored.label(
+                annual: "$29.99 / year",
+                monthly: "$4.99 / month",
+                lifetime: "Pillie Plus Lifetime · $69.99",
+                restored: "Pillie Plus access restored"
+            ),
+            "Pillie Plus access restored"
+        )
+    }
+
+    func testPresentedPaywallSnapshotSurvivesEntitlementRemovingLiveContent() {
+        guard let content = TrialEndPaywallContent.make(
+            state: expiredState(),
+            blockerConfigSaved: false,
+            stats: .none,
+            calendar: calendar,
+            now: firstExpiredMorning,
+            locale: english
+        ) else {
+            return XCTFail("Expected expired-trial content")
+        }
+        var presentation = TrialEndPaywallPresentationState()
+        presentation.present(content)
+
+        let liveContentAfterPurchase = TrialEndPaywallContent.make(
+            state: expiredState(hasEntitlement: true),
+            blockerConfigSaved: false,
+            stats: .none,
+            calendar: calendar,
+            now: firstExpiredMorning,
+            locale: english
+        )
+
+        XCTAssertNil(liveContentAfterPurchase)
+        XCTAssertEqual(presentation.presentedContent, content)
+    }
+
     private let english = Locale(identifier: "en_US")
 
     /// Fixed local calendar so boundary expectations are deterministic.

@@ -20,6 +20,15 @@ enum SubscriptionPurchaseError: Error, Equatable, LocalizedError {
     }
 }
 
+enum RestoreAccessOutcome: Equatable {
+    case restored
+    case missingPurchase
+
+    static func resolve(hasEntitlement: Bool) -> RestoreAccessOutcome {
+        hasEntitlement ? .restored : .missingPurchase
+    }
+}
+
 /// The paid-conversion telemetry that a successful purchase should emit.
 enum SubscriptionConversionEvent: Equatable {
     /// A free trial began — its own funnel step, distinct from a paid charge.
@@ -424,6 +433,15 @@ final class SubscriptionManager: NSObject {
     func refreshStatus() async {
         guard let customerInfo = try? await Purchases.shared.customerInfo() else { return }
         setEntitlement(customerInfo.entitlements[Self.entitlementID]?.isActive == true)
+    }
+
+    /// Resolves both pieces of launch commerce state used by the hard-wall gate.
+    /// Keeping them in one awaited operation prevents onboarding or the root gate
+    /// from retrying customer info while silently leaving the kill switch pending.
+    func refreshCommerceState() async {
+        async let entitlementRefresh: Void = refreshStatus()
+        async let configurationRefresh: Void = refreshHardPaywallConfiguration()
+        _ = await (entitlementRefresh, configurationRefresh)
     }
 
     #if DEBUG

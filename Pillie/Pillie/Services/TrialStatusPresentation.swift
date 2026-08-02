@@ -18,17 +18,20 @@ struct TrialStatusPresentation: Equatable {
     let protectionActive: Bool
     let trialEndDate: Date?
     let locale: Locale
+    let trialEndTerms: TrialEndAccessTerms
 
     init(
         daysRemaining: Int,
         protectionActive: Bool = false,
         trialEndDate: Date? = nil,
-        locale: Locale = .current
+        locale: Locale = .current,
+        trialEndTerms: TrialEndAccessTerms = .legacy
     ) {
         self.daysRemaining = daysRemaining
         self.protectionActive = protectionActive
         self.trialEndDate = trialEndDate
         self.locale = locale
+        self.trialEndTerms = trialEndTerms
     }
 
     /// Day count as shown to the user: the trial promises "14 days free", so
@@ -47,7 +50,8 @@ struct TrialStatusPresentation: Equatable {
     /// The persistent indicator distinguishes active protection from setup
     /// still being needed while preserving the trial countdown.
     var indicatorLabel: String {
-        if ["de", "it"].contains(locale.language.languageCode?.identifier ?? "") {
+        if trialEndTerms == .hardPaywall
+            || ["de", "it"].contains(locale.language.languageCode?.identifier ?? "") {
             let key = switch (protectionActive, endsTonight) {
             case (true, true): "trial.status.indicator.active_tonight"
             case (true, false): "trial.status.indicator.active"
@@ -80,7 +84,8 @@ struct TrialStatusPresentation: Equatable {
     }
 
     func sheetContent(for activationState: TrialActivationState) -> TrialStatusSheetContent {
-        if ["de", "it"].contains(locale.language.languageCode?.identifier ?? "") {
+        if trialEndTerms == .hardPaywall
+            || ["de", "it"].contains(locale.language.languageCode?.identifier ?? "") {
             let title = trialEndDate.map {
                 CommercePresentation.trialEndText(date: $0, locale: locale)
             } ?? PillieLocalization.string(
@@ -90,21 +95,34 @@ struct TrialStatusPresentation: Equatable {
             )
             return TrialStatusSheetContent(
                 title: title,
-                expiryItems: [
-                    PillieLocalization.string(
-                        "trial.status.after.blocking_off",
+                expiryRows: [
+                    TrialExpiryRow(
+                        text: PillieLocalization.string(
+                        trialEndTerms == .hardPaywall
+                            ? "trial.status.after.plus_pauses"
+                            : "trial.status.after.blocking_off",
                         table: "Commerce",
                         locale: locale
+                        ),
+                        symbol: trialEndTerms == .hardPaywall ? "lock.fill" : "nosign"
                     ),
-                    PillieLocalization.string(
-                        "trial.status.after.reminders_free",
+                    TrialExpiryRow(
+                        text: PillieLocalization.string(
+                        trialEndTerms == .hardPaywall
+                            ? "trial.status.after.plan_required"
+                            : "trial.status.after.reminders_free",
                         table: "Commerce",
                         locale: locale
+                        ),
+                        symbol: trialEndTerms == .hardPaywall ? "creditcard.fill" : "bell.fill"
                     ),
-                    PillieLocalization.string(
-                        "trial.status.after.setup_saved",
-                        table: "Commerce",
-                        locale: locale
+                    TrialExpiryRow(
+                        text: PillieLocalization.string(
+                            "trial.status.after.setup_saved",
+                            table: "Commerce",
+                            locale: locale
+                        ),
+                        symbol: "checkmark.circle.fill"
                     ),
                 ],
                 ctaTitle: PillieLocalization.string(
@@ -122,10 +140,13 @@ struct TrialStatusPresentation: Equatable {
             title: endsTonight
                 ? "Your Plus trial ends tonight"
                 : "\(displayedDaysRemaining) days left in your Plus trial",
-            expiryItems: [
-                "App blocking turns off",
-                "Reminders stay free, forever",
-                "Your blocker setup is saved",
+            expiryRows: [
+                TrialExpiryRow(text: "App blocking turns off", symbol: "nosign"),
+                TrialExpiryRow(text: "Reminders stay free, forever", symbol: "bell.fill"),
+                TrialExpiryRow(
+                    text: "Your blocker setup is saved",
+                    symbol: "checkmark.circle.fill"
+                ),
             ],
             ctaTitle: "Keep Pillie Plus",
             activationItems: TrialActivationItem.make(for: activationState, locale: locale)
@@ -140,18 +161,26 @@ struct TrialStatusPresentation: Equatable {
         protectionActive: Bool = false,
         calendar: Calendar,
         now: Date,
-        locale: Locale = .current
+        locale: Locale = .current,
+        hardPaywallEnabled: Bool = false,
+        termsCohort: TrialTermsCohort? = nil
     ) -> TrialStatusPresentation? {
         // Entitlement wins over a still-running trial clock: a mid-trial
         // purchase removes the indicator immediately.
         guard !state.hasEntitlement, let grantDate = state.trialGrantDate else { return nil }
         let clock = ReverseTrialClock(grantDate: grantDate)
         guard clock.isActive(calendar: calendar, now: now) else { return nil }
+        let assignedTermsCohort = termsCohort
+            ?? HardPaywallPolicy.cohort(forTrialGrantedAt: grantDate)
         return TrialStatusPresentation(
             daysRemaining: clock.daysRemaining(calendar: calendar, now: now),
             protectionActive: protectionActive,
             trialEndDate: clock.expiryMoment(calendar: calendar),
-            locale: locale
+            locale: locale,
+            trialEndTerms: HardPaywallPolicy.terms(
+                for: assignedTermsCohort,
+                hardPaywallEnabled: hardPaywallEnabled
+            )
         )
     }
 }
@@ -161,9 +190,14 @@ struct TrialStatusPresentation: Equatable {
 /// flow — the only in-trial purchase surface besides the Settings row.
 struct TrialStatusSheetContent: Equatable {
     let title: String
-    let expiryItems: [String]
+    let expiryRows: [TrialExpiryRow]
     let ctaTitle: String
     let activationItems: [TrialActivationItem]
+}
+
+struct TrialExpiryRow: Equatable {
+    let text: String
+    let symbol: String
 }
 
 struct TrialActivationState: Equatable {

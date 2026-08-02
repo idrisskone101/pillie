@@ -14,6 +14,45 @@ import BackgroundTasks
 import RevenueCat
 import os
 
+enum SubscriptionLaunchPolicy {
+    static func shouldConfigureRevenueCat(
+        isRunningTests: Bool,
+        isOnboardingActive: Bool
+    ) -> Bool {
+        !isRunningTests
+    }
+}
+
+enum TrialAccessLifecycle {
+    enum Event {
+        case calendarDayChanged
+        case significantTimeChanged
+    }
+
+    static func handle(
+        _ event: Event,
+        refreshAccess: () -> Void,
+        reconcileProtection: () -> Void
+    ) {
+        switch event {
+        case .calendarDayChanged, .significantTimeChanged:
+            refreshAccess()
+            reconcileProtection()
+        }
+    }
+
+    @discardableResult
+    static func handleForeground(
+        isOnboardingActive: Bool,
+        refreshAccess: () -> Void,
+        reconcileProtection: () -> Void
+    ) -> Bool {
+        refreshAccess()
+        reconcileProtection()
+        return !isOnboardingActive
+    }
+}
+
 class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     static var store: PillStore?
     #if DEBUG
@@ -209,11 +248,12 @@ struct PillieApp: App {
 
     private static func recordInstallCohortIfNeeded(at date: Date = Date()) {
         let defaults = UserDefaults.standard
-        let assignment = TrialInstallCohort.assignment(
+        let assignment = TrialInstallCohort.recordAssignment(
             at: date,
             hasExistingAppState: defaults.object(forKey: OnboardingFlow.stepStorageKey) != nil
                 || defaults.bool(forKey: OnboardingTelemetry.onboardingStartedEmittedKey),
-            previousAssignment: TrialInstallCohort.storedAssignment(in: defaults)
+            store: KeychainTrialGrantStore(),
+            fallbackAssignment: TrialInstallCohort.storedAssignment(in: defaults)
         )
         defaults.set(assignment.rawValue, forKey: TrialInstallCohort.assignmentStorageKey)
     }
@@ -256,6 +296,15 @@ struct PillieApp: App {
                     guard let store = AppDelegate.store else { return }
                     NotificationManager.shared.requestReschedule(from: store, reason: "entitlement-change")
                 }
+            }
+            if SubscriptionLaunchPolicy.shouldConfigureRevenueCat(
+                isRunningTests: Self.isRunningTests,
+                isOnboardingActive: Self.isOnboardingActive
+            ) {
+                // RevenueCat must resolve paid access and issue #257's remote
+                // hard-wall switch even while onboarding is active. Otherwise a
+                // user who resumes onboarding after trial expiry can reach Home
+                // with both commerce states unresolved and bypass the wall.
                 SubscriptionManager.shared.configure()
             }
             // For returning users, RevenueCat configuration synchronously applies
@@ -299,19 +348,26 @@ struct PillieApp: App {
                         // below read it — a flip fires onEntitlementChange, and the
                         // Screen Time reconcile drops blocking (ADR 0007: blocking
                         // must never outlive Plus Access).
-                        SubscriptionManager.shared.refreshPlusAccess()
-                        // First open at-or-after expiry records `trial_expired`
-                        // exactly once (#167). After the refresh above so the
-                        // decision reads post-reconcile state.
-                        recordTrialExpiredIfNeeded()
+                        let shouldRunPostOnboardingWork = TrialAccessLifecycle.handleForeground(
+                            isOnboardingActive: Self.isOnboardingActive,
+                            refreshAccess: {
+                                SubscriptionManager.shared.refreshPlusAccess()
+                                // First open at-or-after expiry records `trial_expired`
+                                // exactly once (#167), after access re-evaluation.
+                                recordTrialExpiredIfNeeded()
+                            },
+                            // A saved onboarding selection can already have applied
+                            // shields. Remove them at expiry even if the user remains
+                            // on protectionPlanReady; only reminder work stays gated.
+                            reconcileProtection: reconcileScreenTimeState
+                        )
                         ProductAnalyticsTelemetry.live.appBecameActive()
                         // Shield intercepts accumulated while we weren't running
                         // (#161): flush the App Group delta as one aggregated
                         // blocker_intervention_fired. Before the onboarding guard —
                         // blocking fires for any user whose Protection Plan is live.
                         flushBlockerInterventions()
-                        guard !Self.isOnboardingActive else { return }
-                        reconcileScreenTimeState()
+                        guard shouldRunPostOnboardingWork else { return }
                         NotificationManager.shared.requestReschedule(from: store, reason: "app-became-active")
                     } else if newPhase == .background {
                         // Flush buffered analytics before the app is suspended/killed.
@@ -322,6 +378,37 @@ struct PillieApp: App {
                         // Schedule BGAppRefreshTask when going to background
                         AppDelegate.scheduleScreenTimeReconcileTask()
                     }
+                }
+                .onReceive(NotificationCenter.default.publisher(for: .NSCalendarDayChanged)) { _ in
+                    guard !Self.isRunningTests else { return }
+                    TrialAccessLifecycle.handle(
+                        .calendarDayChanged,
+                        refreshAccess: {
+                            // A trial can expire while Pillie remains foregrounded
+                            // across local midnight. Reconcile immediately so Home's
+                            // existing access-change observer presents the hard wall.
+                            SubscriptionManager.shared.refreshPlusAccess()
+                            recordTrialExpiredIfNeeded()
+                        },
+                        reconcileProtection: reconcileScreenTimeState
+                    )
+                }
+                .onReceive(
+                    NotificationCenter.default.publisher(
+                        for: UIApplication.significantTimeChangeNotification
+                    )
+                ) { _ in
+                    guard !Self.isRunningTests else { return }
+                    TrialAccessLifecycle.handle(
+                        .significantTimeChanged,
+                        refreshAccess: {
+                            // Clock and time-zone changes can cross the trial's
+                            // local-day expiry boundary without changing scene phase.
+                            SubscriptionManager.shared.refreshPlusAccess()
+                            recordTrialExpiredIfNeeded()
+                        },
+                        reconcileProtection: reconcileScreenTimeState
+                    )
                 }
         }
     }
@@ -408,7 +495,24 @@ struct PillieApp: App {
             )
             AnalyticsManager.shared.flush()
         case "/plus-app-blocking-setup":
-            SubscriptionManager.shared.setPlusForTesting(true)
+            let queryItems = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems
+            let forceHardPaywall = queryItems?
+                .first(where: { $0.name == "terms" })?.value == "hard"
+            if forceHardPaywall {
+                let expired = queryItems?
+                    .first(where: { $0.name == "expired" })?.value == "1"
+                let scenario = OnboardingHardPaywallDebugScenario.make(expired: expired)
+                SubscriptionManager.shared.setPlusForTesting(false)
+                SubscriptionManager.shared.debugOverrideTrialGrantDate(
+                    scenario.grantDate,
+                    termsCohort: scenario.termsCohort
+                )
+                UserDefaults.standard.removeObject(
+                    forKey: TrialEndPaywallAutoPresentation.shownStorageKey
+                )
+            } else {
+                SubscriptionManager.shared.setPlusForTesting(true)
+            }
             UserDefaults.standard.set(false, forKey: OnboardingFlow.selectedFreePlanStorageKey)
             UserDefaults.standard.set(
                 false,
@@ -460,11 +564,21 @@ struct PillieApp: App {
             // production behavior. `state` is unconfigured, partial, or full.
             let state = URLComponents(url: url, resolvingAgainstBaseURL: false)?
                 .queryItems?.first(where: { $0.name == "state" })?.value ?? "unconfigured"
+            let forceHardPaywall = URLComponents(url: url, resolvingAgainstBaseURL: false)?
+                .queryItems?.first(where: { $0.name == "terms" })?.value == "hard"
             let hasBlocking = state == "partial" || state == "full"
             let fullyConfigured = state == "full"
 
             SubscriptionManager.shared.setPlusForTesting(false)
-            SubscriptionManager.shared.debugOverrideTrialGrantDate(Date())
+            if forceHardPaywall {
+                let scenario = OnboardingHardPaywallDebugScenario.make(expired: false)
+                SubscriptionManager.shared.debugOverrideTrialGrantDate(
+                    scenario.grantDate,
+                    termsCohort: scenario.termsCohort
+                )
+            } else {
+                SubscriptionManager.shared.debugOverrideTrialGrantDate(Date())
+            }
             UserDefaults.standard.removeObject(
                 forKey: FirstInterventionConfirmation.shownStorageKey
             )

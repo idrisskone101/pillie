@@ -201,6 +201,21 @@ struct SoftPaywallContent {
     }
 }
 
+enum PremiumPaywallFreeExitPolicy {
+    static func allowsContinueFree(
+        isFromOnboarding: Bool,
+        trialEndTerms: TrialEndAccessTerms
+    ) -> Bool {
+        !isFromOnboarding || trialEndTerms == .legacy
+    }
+}
+
+enum PremiumPaywallComparisonPolicy {
+    static func showsFreeColumn(trialEndTerms: TrialEndAccessTerms) -> Bool {
+        trialEndTerms == .legacy
+    }
+}
+
 struct PremiumPaywallView: View {
     @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
@@ -229,6 +244,29 @@ struct PremiumPaywallView: View {
     let onBack: () -> Void
     let onContinue: () -> Void
     let onSkip: () -> Void
+
+    private var trialEndTerms: TrialEndAccessTerms {
+        let termsCohort = subscriptionManager.trialTermsCohort
+            ?? TrialInstallCohort.storedAssignment()
+            ?? HardPaywallPolicy.cohort(forTrialGrantedAt: Date())
+        return HardPaywallPolicy.terms(
+            for: termsCohort,
+            hardPaywallEnabled: subscriptionManager.hardPaywallEnabled
+        )
+    }
+
+    private var allowsContinueFree: Bool {
+        PremiumPaywallFreeExitPolicy.allowsContinueFree(
+            isFromOnboarding: isFromOnboarding,
+            trialEndTerms: trialEndTerms
+        )
+    }
+
+    private var showsFreeColumn: Bool {
+        PremiumPaywallComparisonPolicy.showsFreeColumn(
+            trialEndTerms: trialEndTerms
+        )
+    }
 
     private var selectedPackage: Package? {
         switch selectedPlan {
@@ -455,12 +493,14 @@ struct PremiumPaywallView: View {
             Spacer(minLength: 0)
                 .frame(maxWidth: .infinity)
 
-            Text(content.freeColumnLabel)
-                .font(.pillie(11, weight: .black))
-                .tracking(0.8)
-                .textCase(.uppercase)
-                .foregroundStyle(PillieTheme.textMuted)
-                .frame(width: 52)
+            if showsFreeColumn {
+                Text(content.freeColumnLabel)
+                    .font(.pillie(11, weight: .black))
+                    .tracking(0.8)
+                    .textCase(.uppercase)
+                    .foregroundStyle(PillieTheme.textMuted)
+                    .frame(width: 52)
+            }
 
             Text(content.plusColumnLabel)
                 .font(.pillie(11, weight: .black))
@@ -502,8 +542,10 @@ struct PremiumPaywallView: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
 
-            includedGlyph(row.freeIncluded, emphasized: false)
-                .frame(width: 52)
+            if showsFreeColumn {
+                includedGlyph(row.freeIncluded, emphasized: false)
+                    .frame(width: 52)
+            }
 
             includedGlyph(row.plusIncluded, emphasized: true)
                 .frame(width: 60)
@@ -534,6 +576,9 @@ struct PremiumPaywallView: View {
     }
 
     private func comparisonAccessibilityLabel(_ row: SoftPaywallContent.ComparisonRow) -> String {
+        guard showsFreeColumn else {
+            return "\(row.title), Pillie Plus"
+        }
         let tiers = CommercePresentation.comparisonTierLabel(
             freeIncluded: row.freeIncluded,
             plusIncluded: row.plusIncluded,
@@ -911,7 +956,9 @@ struct PremiumPaywallView: View {
     // stack vertically (and the now-meaningless divider is dropped) instead.
     private var secondaryLinks: some View {
         Group {
-            if dynamicTypeSize.isAccessibilitySize {
+            if !allowsContinueFree {
+                restoreButton
+            } else if dynamicTypeSize.isAccessibilitySize {
                 VStack(spacing: 12) {
                     continueFreeButton
                     restoreButton
@@ -1067,23 +1114,35 @@ struct PremiumPaywallView: View {
         withAnimation(response.motionProfile.animation) {
             isRestoring = true
         }
-        telemetry.restoreStarted(isFromOnboarding: isFromOnboarding)
+        telemetry.restoreStarted(
+            isFromOnboarding: isFromOnboarding,
+            surface: paywallSurface
+        )
         Task {
             do {
                 try await subscriptionManager.restore()
                 if subscriptionManager.hasEntitlement {
-                    telemetry.restoreCompleted(isFromOnboarding: isFromOnboarding)
+                    telemetry.restoreCompleted(
+                        isFromOnboarding: isFromOnboarding,
+                        surface: paywallSurface
+                    )
                     plusFeedback.successfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
                     completePaidRoute()
                 } else {
-                    telemetry.restoreFailed(isFromOnboarding: isFromOnboarding)
+                    telemetry.restoreFailed(
+                        isFromOnboarding: isFromOnboarding,
+                        surface: paywallSurface
+                    )
                     let calmResponse = plusFeedback.unsuccessfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
                     withAnimation(calmResponse.motionProfile.animation) {
                         showNoSubscriptionAlert = true
                     }
                 }
             } catch {
-                telemetry.restoreFailed(isFromOnboarding: isFromOnboarding)
+                telemetry.restoreFailed(
+                    isFromOnboarding: isFromOnboarding,
+                    surface: paywallSurface
+                )
                 telemetry.trackError(.restore, error: error)
                 let calmResponse = plusFeedback.unsuccessfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
                 withAnimation(calmResponse.motionProfile.animation) {

@@ -64,7 +64,7 @@ struct TrialStatusSheet: View {
                 .padding(.horizontal, 28)
 
             TrialActivationList(items: content.activationItems, onTap: onFeatureTap)
-            TrialExpirySummary(items: content.expiryItems)
+            TrialExpirySummary(rows: content.expiryRows)
 
             Spacer(minLength: 0)
 
@@ -213,8 +213,7 @@ private struct TrialActivationFeatureRow: View {
 }
 
 private struct TrialExpirySummary: View {
-    let items: [String]
-    private let symbols = ["nosign", "bell.fill", "checkmark.circle.fill"]
+    let rows: [TrialExpiryRow]
     @Environment(\.locale) private var locale
 
     var body: some View {
@@ -228,13 +227,13 @@ private struct TrialExpirySummary: View {
                 .foregroundStyle(PillieTheme.textMuted)
                 .kerning(1)
 
-            ForEach(items.indices, id: \.self) { index in
+            ForEach(rows.indices, id: \.self) { index in
                 HStack(spacing: 9) {
-                    Image(systemName: symbols[min(index, symbols.count - 1)])
+                    Image(systemName: rows[index].symbol)
                         .font(.system(size: 12, weight: .semibold))
                         .foregroundStyle(PillieTheme.textMuted)
                         .frame(width: 18)
-                    Text(items[index])
+                    Text(rows[index].text)
                         .font(.pillie(13, weight: .medium))
                         .foregroundStyle(PillieTheme.textPrimary)
                 }

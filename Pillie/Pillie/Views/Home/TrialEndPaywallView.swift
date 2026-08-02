@@ -14,6 +14,32 @@ import SwiftUI
 import RevenueCat
 import os
 
+enum TrialEndSuccessOutcome: Equatable {
+    case purchased(PilliePlusPlan)
+    case restored
+
+    var showsCancellationNote: Bool {
+        switch self {
+        case .purchased(.annual), .purchased(.monthly): true
+        case .purchased(.lifetime), .restored: false
+        }
+    }
+
+    func label(
+        annual: String,
+        monthly: String,
+        lifetime: String,
+        restored: String
+    ) -> String {
+        switch self {
+        case .purchased(.annual): return annual
+        case .purchased(.monthly): return monthly
+        case .purchased(.lifetime): return lifetime
+        case .restored: return restored
+        }
+    }
+}
+
 struct TrialEndPaywallView: View {
     @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
@@ -27,7 +53,7 @@ struct TrialEndPaywallView: View {
     @State private var isRestoring = false
     @State private var showNoSubscriptionAlert = false
     @State private var purchaseSucceeded = false
-    @State private var succeededPlan: PilliePlusPlan = .annual
+    @State private var successOutcome: TrialEndSuccessOutcome = .purchased(.annual)
     @State private var showDeclineFeedback = false
     private let subscriptionManager = SubscriptionManager.shared
     private let telemetry = ProductAnalyticsTelemetry.live
@@ -951,14 +977,16 @@ struct TrialEndPaywallView: View {
             }
             .accessibilityIdentifier("trialEndPaywallSuccessCTA")
 
-            Text(PillieLocalization.string(
-                "paywall.plan.cancel_anytime_short",
-                table: "Commerce",
-                locale: locale
-            ))
-                .font(.pillie(11, weight: .medium))
-                .foregroundStyle(PillieTheme.textMuted.opacity(0.7))
-                .padding(.top, 12)
+            if successOutcome.showsCancellationNote {
+                Text(PillieLocalization.string(
+                    "paywall.plan.cancel_anytime_short",
+                    table: "Commerce",
+                    locale: locale
+                ))
+                    .font(.pillie(11, weight: .medium))
+                    .foregroundStyle(PillieTheme.textMuted.opacity(0.7))
+                    .padding(.top, 12)
+            }
         }
         .padding(.horizontal, 24)
         .padding(.bottom, 8)
@@ -975,11 +1003,16 @@ struct TrialEndPaywallView: View {
     }
 
     private var successPlanLabel: String {
-        switch succeededPlan {
-        case .annual: return annualPriceAndPeriodText
-        case .monthly: return monthlyPriceAndPeriodText
-        case .lifetime: return "\(lifetimeTitle) · \(lifetimePriceText)"
-        }
+        successOutcome.label(
+            annual: annualPriceAndPeriodText,
+            monthly: monthlyPriceAndPeriodText,
+            lifetime: "\(lifetimeTitle) · \(lifetimePriceText)",
+            restored: PillieLocalization.string(
+                "trial.end.access_restored",
+                table: "Commerce",
+                locale: locale
+            )
+        )
     }
 
     // MARK: - Purchase / restore
@@ -1027,7 +1060,7 @@ struct TrialEndPaywallView: View {
                     break
                 }
                 plusFeedback.successfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
-                succeededPlan = plan
+                successOutcome = .purchased(plan)
                 purchaseSucceeded = true
             } catch {
                 plusFeedback.unsuccessfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
@@ -1079,6 +1112,7 @@ struct TrialEndPaywallView: View {
                         termsCohort: content.termsCohort
                     )
                     plusFeedback.successfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
+                    successOutcome = .restored
                     purchaseSucceeded = true
                 } else {
                     telemetry.trialEndRestoreFailed(
