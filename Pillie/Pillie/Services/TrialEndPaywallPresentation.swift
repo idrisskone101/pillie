@@ -50,6 +50,25 @@ enum TrialInstallCohort {
     static func storedAssignment(in defaults: UserDefaults = .standard) -> TrialTermsCohort? {
         defaults.string(forKey: assignmentStorageKey).flatMap(TrialTermsCohort.init(rawValue:))
     }
+
+    @discardableResult
+    static func recordAssignment(
+        at date: Date,
+        hasExistingAppState: Bool,
+        store: TrialGrantStoring,
+        fallbackAssignment: TrialTermsCohort? = nil
+    ) -> TrialTermsCohort {
+        let persistedAssignment = store.loadTermsCohort()
+            ?? store.loadGrantDate().map(HardPaywallPolicy.cohort(forTrialGrantedAt:))
+            ?? fallbackAssignment
+        let assignedCohort = assignment(
+            at: date,
+            hasExistingAppState: hasExistingAppState,
+            previousAssignment: persistedAssignment
+        )
+        store.saveTermsCohort(assignedCohort)
+        return assignedCohort
+    }
 }
 
 /// Dashboard-controlled rollback read from the current RevenueCat offering.
@@ -451,5 +470,17 @@ struct TrialEndPaywallContent: Equatable {
             chips: ["App blocking", "Shake to confirm", "Smart Reminders", "Custom messages"],
             footnote: "For the days a reminder isn't enough — apps you pick stay blocked until your dose is logged."
         )
+    }
+}
+
+struct TrialEndPaywallPresentationState: Equatable {
+    private(set) var presentedContent: TrialEndPaywallContent?
+
+    mutating func present(_ content: TrialEndPaywallContent) {
+        presentedContent = content
+    }
+
+    mutating func dismiss() {
+        presentedContent = nil
     }
 }

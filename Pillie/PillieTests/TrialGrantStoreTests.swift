@@ -71,4 +71,44 @@ final class TrialGrantStoreTests: XCTestCase {
     func testKeychainStoreHonorsContract() {
         assertContract(KeychainTrialGrantStore(), "keychain")
     }
+
+    func testPreGrantInstallAssignmentSurvivesAReinstall() {
+        let store = InMemoryTrialGrantStore()
+        let beforeCutover = HardPaywallPolicy.cutoverInstant.addingTimeInterval(-60)
+        let afterCutover = HardPaywallPolicy.cutoverInstant.addingTimeInterval(60)
+
+        XCTAssertEqual(
+            TrialInstallCohort.recordAssignment(
+                at: beforeCutover,
+                hasExistingAppState: true,
+                store: store
+            ),
+            .preCutover
+        )
+        XCTAssertEqual(
+            TrialInstallCohort.recordAssignment(
+                at: afterCutover,
+                hasExistingAppState: false,
+                store: store
+            ),
+            .preCutover
+        )
+    }
+
+    func testExistingGrantDeterminesMissingCohortBeforeReinstallDate() {
+        let store = InMemoryTrialGrantStore()
+        let beforeCutover = HardPaywallPolicy.cutoverInstant.addingTimeInterval(-60)
+        let afterCutover = HardPaywallPolicy.cutoverInstant.addingTimeInterval(60)
+        store.saveGrantDate(beforeCutover)
+
+        XCTAssertEqual(
+            TrialInstallCohort.recordAssignment(
+                at: afterCutover,
+                hasExistingAppState: false,
+                store: store
+            ),
+            .preCutover
+        )
+        XCTAssertEqual(store.loadTermsCohort(), .preCutover)
+    }
 }

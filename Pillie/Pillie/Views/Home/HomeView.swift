@@ -28,6 +28,7 @@ struct HomeView: View {
     @State private var showTrialSmartRemindersEditor = false
     @State private var pendingTrialActivationAction: TrialActivationAction?
     @State private var showTrialEndPaywall = false
+    @State private var trialEndPaywallPresentation = TrialEndPaywallPresentationState()
     @State private var showTrialDeclineThankYou = false
     @State private var adaptiveReminderShownLogged = false
     @State private var reviewPromptShownLogged = false
@@ -178,6 +179,9 @@ struct HomeView: View {
                 forKey: TrialEndPaywallAutoPresentation.rollbackShownStorageKey
             )
         }
+        if let content = trialEndPaywallContent {
+            trialEndPaywallPresentation.present(content)
+        }
         showTrialEndPaywall = true
     }
 
@@ -253,7 +257,9 @@ struct HomeView: View {
             protectionActive: trialActivationState.appBlockingActive,
             calendar: Calendar.current,
             now: Date(),
-            locale: locale
+            locale: locale,
+            hardPaywallEnabled: SubscriptionManager.shared.hardPaywallEnabled,
+            termsCohort: SubscriptionManager.shared.trialTermsCohort
         )
     }
 
@@ -375,7 +381,8 @@ struct HomeView: View {
                                 // point after expiry (#169); the Settings paywall
                                 // stays the fallback for lapsed payers with no
                                 // expired trial. Each reports paywallViewed itself.
-                                if trialEndPaywallContent != nil {
+                                if let content = trialEndPaywallContent {
+                                    trialEndPaywallPresentation.present(content)
                                     showTrialEndPaywall = true
                                 } else {
                                     blockingPaywallSurface = .protectionOffCard
@@ -598,8 +605,11 @@ struct HomeView: View {
                 .presentationDragIndicator(.hidden)
                 .presentationBackground(PillieTheme.bg)
         }
-        .fullScreenCover(isPresented: $showTrialEndPaywall) {
-            if let content = trialEndPaywallContent {
+        .fullScreenCover(
+            isPresented: $showTrialEndPaywall,
+            onDismiss: { trialEndPaywallPresentation.dismiss() }
+        ) {
+            if let content = trialEndPaywallPresentation.presentedContent {
                 TrialEndPaywallView(
                     content: content,
                     declineFeedbackContent: .make(locale: locale),

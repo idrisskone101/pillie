@@ -3,6 +3,129 @@
 //  Pillie
 //
 
+import Foundation
+
+enum OnboardingCompletionRoute: Equatable {
+    case complete
+    case awaitingCommerceResolution
+    case hardPaywall
+
+    static func resolve(
+        state: PlusAccessState,
+        termsCohort: TrialTermsCohort,
+        hardPaywallEnabled: Bool,
+        entitlementResolved: Bool,
+        configurationResolved: Bool,
+        calendar: Calendar,
+        now: Date
+    ) -> OnboardingCompletionRoute {
+        if state.hasEntitlement || state.trialActive(calendar: calendar, now: now) {
+            return .complete
+        }
+        guard state.trialGrantDate != nil else { return .complete }
+        guard termsCohort == .postCutover else { return .complete }
+        if configurationResolved, !hardPaywallEnabled {
+            return .complete
+        }
+        guard entitlementResolved, configurationResolved else {
+            return .awaitingCommerceResolution
+        }
+        return HardPaywallPolicy.terms(
+            for: termsCohort,
+            hardPaywallEnabled: hardPaywallEnabled
+        ) == .hardPaywall ? .hardPaywall : .complete
+    }
+}
+
+enum RootCommerceGate: Equatable {
+    case app
+    case verifyingAccess
+
+    static func resolve(
+        state: PlusAccessState,
+        termsCohort: TrialTermsCohort,
+        hardPaywallEnabled: Bool,
+        entitlementResolved: Bool,
+        configurationResolved: Bool,
+        calendar: Calendar,
+        now: Date
+    ) -> RootCommerceGate {
+        switch OnboardingCompletionRoute.resolve(
+            state: state,
+            termsCohort: termsCohort,
+            hardPaywallEnabled: hardPaywallEnabled,
+            entitlementResolved: entitlementResolved,
+            configurationResolved: configurationResolved,
+            calendar: calendar,
+            now: now
+        ) {
+        case .awaitingCommerceResolution:
+            return .verifyingAccess
+        case .complete, .hardPaywall:
+            return .app
+        }
+    }
+}
+
+struct CommerceResolutionAttempt: Equatable {
+    private(set) var isResolving = false
+
+    mutating func begin() -> Bool {
+        guard !isResolving else { return false }
+        isResolving = true
+        return true
+    }
+
+    mutating func finish() {
+        isResolving = false
+    }
+}
+
+enum OnboardingTrialActivationRoute: Equatable {
+    case verifyingAccess
+    case subscriber
+    case grantTrial
+
+    static func resolve(
+        hasEntitlement: Bool,
+        entitlementResolved: Bool,
+        configurationResolved: Bool
+    ) -> OnboardingTrialActivationRoute {
+        guard entitlementResolved, configurationResolved else {
+            return .verifyingAccess
+        }
+        return hasEntitlement ? .subscriber : .grantTrial
+    }
+
+    static func shouldGrantTrial(
+        after previous: OnboardingTrialActivationRoute,
+        current: OnboardingTrialActivationRoute
+    ) -> Bool {
+        previous != current && current == .grantTrial
+    }
+}
+
+#if DEBUG
+struct OnboardingHardPaywallDebugScenario: Equatable {
+    let grantDate: Date
+    let termsCohort: TrialTermsCohort
+
+    static func make(
+        expired: Bool,
+        now: Date = Date(),
+        calendar: Calendar = .current
+    ) -> OnboardingHardPaywallDebugScenario {
+        let grantDate = expired
+            ? calendar.date(byAdding: .day, value: -16, to: now) ?? now
+            : now
+        return OnboardingHardPaywallDebugScenario(
+            grantDate: grantDate,
+            termsCohort: .postCutover
+        )
+    }
+}
+#endif
+
 enum OnboardingFlow {
     static let stepStorageKey = "onboardingStep"
     static let selectedFreePlanStorageKey = "onboardingSelectedFreePlan"

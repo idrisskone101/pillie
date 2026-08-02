@@ -123,13 +123,58 @@ final class TrialStatusPresentationTests: XCTestCase {
 
         XCTAssertEqual(content?.title, "14 days left in your Plus trial")
         // What expiry changes: blocking off, reminders stay free, setup kept.
-        XCTAssertEqual(content?.expiryItems, [
+        XCTAssertEqual(content?.expiryRows.map(\.text), [
             "App blocking turns off",
             "Reminders stay free, forever",
             "Your blocker setup is saved",
         ])
         // The quiet buy-early path into the existing purchase flow.
         XCTAssertEqual(content?.ctaTitle, "Keep Pillie Plus")
+    }
+
+    func testHardPaywallSheetExplainsThatPaidAccessIsRequiredAtExpiry() {
+        let content = TrialStatusPresentation.make(
+            state: trialState(),
+            calendar: calendar,
+            now: date(2026, 7, 2, 9, 0),
+            locale: Locale(identifier: "en_US"),
+            hardPaywallEnabled: true,
+            termsCohort: .postCutover
+        )?.sheetContent
+
+        XCTAssertEqual(content?.expiryRows.map(\.text), [
+            "Pillie Plus access pauses",
+            "Choose monthly, annual, or lifetime to continue",
+            "Your blocker setup is saved",
+        ])
+        XCTAssertEqual(content?.expiryRows.map(\.symbol), [
+            "lock.fill",
+            "creditcard.fill",
+            "checkmark.circle.fill",
+        ])
+    }
+
+    func testHardPaywallExpiryRowsStructurallyPairCopyAndSymbols() {
+        let rows = TrialStatusPresentation.make(
+            state: trialState(),
+            calendar: calendar,
+            now: date(2026, 7, 2, 9, 0),
+            locale: Locale(identifier: "en_US"),
+            hardPaywallEnabled: true,
+            termsCohort: .postCutover
+        )?.sheetContent.expiryRows
+
+        XCTAssertEqual(rows, [
+            TrialExpiryRow(text: "Pillie Plus access pauses", symbol: "lock.fill"),
+            TrialExpiryRow(
+                text: "Choose monthly, annual, or lifetime to continue",
+                symbol: "creditcard.fill"
+            ),
+            TrialExpiryRow(
+                text: "Your blocker setup is saved",
+                symbol: "checkmark.circle.fill"
+            ),
+        ])
     }
 
     // MARK: - Activation hub (#219)

@@ -552,7 +552,7 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
         XCTAssertEqual(content.dismissCTA, "Non ora")
         XCTAssertEqual(
             content.disclosure,
-            "La prova gratuita dura 14 giorni. Al termine, il blocco delle app si disattiva, mentre i promemoria restano gratuiti."
+            "La prova gratuita dura 14 giorni. Non serve una carta. Al termine, il blocco delle app si disattiva, mentre i promemoria restano gratuiti."
         )
     }
 
@@ -572,7 +572,7 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
         )
         XCTAssertEqual(active.indicatorLabel, "Protezione attiva · 7 giorni rimasti")
         XCTAssertEqual(
-            active.sheetContent.expiryItems,
+            active.sheetContent.expiryRows.map(\.text),
             [
                 "Il blocco delle app si disattiva",
                 "I promemoria restano gratuiti, per sempre",

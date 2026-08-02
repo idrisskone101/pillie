@@ -21,12 +21,28 @@ final class TrialGrantedMomentContentTests: XCTestCase {
     func testDisclosureLineCarriesDurationWhatTurnsOffAndPostTrialPrice() {
         XCTAssertEqual(
             content.disclosure,
-            "Your free trial lasts 14 days. App blocking turns off when it ends, while reminders stay free."
+            "Your free trial lasts 14 days. No card required. App blocking turns off when it ends, while reminders stay free."
         )
     }
 
     func testDisclosureIsPartOfTheVisibleCopy() {
         XCTAssertTrue(content.visibleCopy.contains(content.disclosure))
+    }
+
+    func testHardPaywallDayFourteenRequiresAPaidPlanToContinue() {
+        let hardPaywallContent = TrialGrantedMomentContent.localized(
+            locale: Locale(identifier: "en_US"),
+            trialEndTerms: .hardPaywall
+        )
+
+        XCTAssertEqual(
+            hardPaywallContent.laterDays.last?.detail,
+            "Choose monthly, annual, or lifetime to keep using Pillie."
+        )
+        XCTAssertEqual(
+            hardPaywallContent.disclosure,
+            "Your free trial lasts 14 days. No card required. After it ends, choose monthly, annual, or lifetime to keep using Pillie."
+        )
     }
 
     // MARK: - Single continue action, nothing to buy

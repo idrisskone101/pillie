@@ -7,6 +7,28 @@ import XCTest
 @testable import Pillie
 
 final class SoftPaywallContentTests: XCTestCase {
+    func testHardPaywallOnboardingDoesNotAllowContinueFree() {
+        XCTAssertFalse(
+            PremiumPaywallFreeExitPolicy.allowsContinueFree(
+                isFromOnboarding: true,
+                trialEndTerms: .hardPaywall
+            )
+        )
+    }
+
+    func testHardCohortOrdinaryPaywallDoesNotRenderAFreePlanColumn() {
+        XCTAssertFalse(
+            PremiumPaywallComparisonPolicy.showsFreeColumn(
+                trialEndTerms: .hardPaywall
+            )
+        )
+        XCTAssertTrue(
+            PremiumPaywallComparisonPolicy.showsFreeColumn(
+                trialEndTerms: .legacy
+            )
+        )
+    }
+
     func testSoftPaywallLeadsWithAppBlockingForDueActionTime() {
         let content = SoftPaywallContent.default
 

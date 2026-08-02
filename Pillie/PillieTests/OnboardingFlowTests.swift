@@ -422,6 +422,167 @@ final class OnboardingFlowTests: XCTestCase {
         XCTAssertFalse(OnboardingFlow.isOnboardingActive(rawStep: OnboardingFlow.Step.complete.rawValue))
     }
 
+    func testOnboardingLaunchStillConfiguresRevenueCat() {
+        XCTAssertTrue(
+            SubscriptionLaunchPolicy.shouldConfigureRevenueCat(
+                isRunningTests: false,
+                isOnboardingActive: true
+            )
+        )
+    }
+
+    func testExpiredPostCutoverOnboardingRoutesToHardPaywall() {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(identifier: "America/Montreal")!
+        let now = calendar.date(
+            byAdding: .day,
+            value: 16,
+            to: HardPaywallPolicy.cutoverInstant
+        )!
+
+        XCTAssertEqual(
+            OnboardingCompletionRoute.resolve(
+                state: PlusAccessState(
+                    hasEntitlement: false,
+                    trialGrantDate: HardPaywallPolicy.cutoverInstant
+                ),
+                termsCohort: .postCutover,
+                hardPaywallEnabled: true,
+                entitlementResolved: true,
+                configurationResolved: true,
+                calendar: calendar,
+                now: now
+            ),
+            .hardPaywall
+        )
+    }
+
+    func testResolvedKillSwitchLetsExpiredOnboardingCompleteWhileEntitlementIsUnknown() {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(identifier: "America/Montreal")!
+        let now = calendar.date(
+            byAdding: .day,
+            value: 16,
+            to: HardPaywallPolicy.cutoverInstant
+        )!
+
+        XCTAssertEqual(
+            OnboardingCompletionRoute.resolve(
+                state: PlusAccessState(
+                    hasEntitlement: false,
+                    trialGrantDate: HardPaywallPolicy.cutoverInstant
+                ),
+                termsCohort: .postCutover,
+                hardPaywallEnabled: false,
+                entitlementResolved: false,
+                configurationResolved: true,
+                calendar: calendar,
+                now: now
+            ),
+            .complete
+        )
+    }
+
+    func testCompletedHardCohortVerifiesAccessWhileEntitlementIsUnknown() {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(identifier: "America/Montreal")!
+        let now = calendar.date(
+            byAdding: .day,
+            value: 16,
+            to: HardPaywallPolicy.cutoverInstant
+        )!
+
+        XCTAssertEqual(
+            RootCommerceGate.resolve(
+                state: PlusAccessState(
+                    hasEntitlement: false,
+                    trialGrantDate: HardPaywallPolicy.cutoverInstant
+                ),
+                termsCohort: .postCutover,
+                hardPaywallEnabled: true,
+                entitlementResolved: false,
+                configurationResolved: true,
+                calendar: calendar,
+                now: now
+            ),
+            .verifyingAccess
+        )
+    }
+
+    func testCommerceResolutionAttemptRejectsDuplicateBeginsUntilFinished() {
+        var attempt = CommerceResolutionAttempt()
+
+        XCTAssertTrue(attempt.begin())
+        XCTAssertFalse(attempt.begin())
+        attempt.finish()
+        XCTAssertTrue(attempt.begin())
+    }
+
+    func testOnboardingTrialActivationSeparatesSubscribersFromFreeUsers() {
+        XCTAssertEqual(
+            OnboardingTrialActivationRoute.resolve(
+                hasEntitlement: false,
+                entitlementResolved: false,
+                configurationResolved: true
+            ),
+            .verifyingAccess
+        )
+        XCTAssertEqual(
+            OnboardingTrialActivationRoute.resolve(
+                hasEntitlement: true,
+                entitlementResolved: true,
+                configurationResolved: true
+            ),
+            .subscriber
+        )
+        XCTAssertEqual(
+            OnboardingTrialActivationRoute.resolve(
+                hasEntitlement: false,
+                entitlementResolved: true,
+                configurationResolved: true
+            ),
+            .grantTrial
+        )
+    }
+
+    func testSubscriberToFreeActivationTransitionGrantsTrialWithoutRemounting() {
+        XCTAssertTrue(
+            OnboardingTrialActivationRoute.shouldGrantTrial(
+                after: .subscriber,
+                current: .grantTrial
+            )
+        )
+        XCTAssertFalse(
+            OnboardingTrialActivationRoute.shouldGrantTrial(
+                after: .subscriber,
+                current: .subscriber
+            )
+        )
+    }
+
+    #if DEBUG
+    func testHardPaywallDebugScenarioCanResumeExpiredOnboarding() {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(identifier: "America/Montreal")!
+        let now = calendar.date(
+            from: DateComponents(year: 2026, month: 8, day: 2, hour: 12)
+        )!
+        let scenario = OnboardingHardPaywallDebugScenario.make(
+            expired: true,
+            now: now,
+            calendar: calendar
+        )
+
+        XCTAssertEqual(scenario.termsCohort, .postCutover)
+        XCTAssertFalse(
+            PlusAccessState(
+                hasEntitlement: false,
+                trialGrantDate: scenario.grantDate
+            ).trialActive(calendar: calendar, now: now)
+        )
+    }
+    #endif
+
     func testCompletionBoundaryFiresWhenLeavingFinalOnboardingStepRange() {
         XCTAssertFalse(
             OnboardingFlow.completedOnboarding(

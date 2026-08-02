@@ -6,9 +6,11 @@
 import Foundation
 import Security
 
-/// Persistence seam for the Reverse Trial grant timestamp (ADR 0007). Only the
-/// grant moment is ever stored — `trialActive` is always re-derived through
-/// `ReverseTrialClock` so the trial state cannot be edited independently.
+/// Persistence seam for the Reverse Trial grant timestamp and immutable terms
+/// cohort (ADRs 0007/0008). `trialActive` is always re-derived through
+/// `ReverseTrialClock` so the trial state cannot be edited independently; the
+/// cohort may be recorded before grant so reinstalling mid-onboarding cannot
+/// move an installation across the cutover.
 nonisolated protocol TrialGrantStoring {
     func loadGrantDate() -> Date?
     func saveGrantDate(_ date: Date)
