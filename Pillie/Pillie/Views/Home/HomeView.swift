@@ -21,6 +21,7 @@ struct HomeView: View {
     @State private var showShakeConfirm = false
     @State private var showBlockingSetup = false
     @State private var showBlockingPaywall = false
+    @State private var blockingPaywallSurface: AnalyticsPaywallSurface = .homeBlockingCard
     @State private var showTrialStatusSheet = false
     @State private var showTrialKeepPlusPaywall = false
     @State private var showTrialCustomMessagesEditor = false
@@ -77,6 +78,7 @@ struct HomeView: View {
             showBlockingSetup = true
         } else {
             // Free: go straight to the paywall (it reports paywallViewed itself).
+            blockingPaywallSurface = .homeBlockingCard
             showBlockingPaywall = true
         }
     }
@@ -354,6 +356,7 @@ struct HomeView: View {
                                 if trialEndPaywallContent != nil {
                                     showTrialEndPaywall = true
                                 } else {
+                                    blockingPaywallSurface = .protectionOffCard
                                     showBlockingPaywall = true
                                 }
                             }
@@ -521,7 +524,7 @@ struct HomeView: View {
         .fullScreenCover(isPresented: $showBlockingPaywall) {
             PremiumPaywallView(
                 isFromOnboarding: false,
-                paywallSurface: .blockingGate,
+                paywallSurface: blockingPaywallSurface,
                 onBack: { showBlockingPaywall = false },
                 onContinue: { showBlockingPaywall = false },
                 onSkip: { showBlockingPaywall = false }

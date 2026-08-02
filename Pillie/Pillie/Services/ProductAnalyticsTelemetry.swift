@@ -28,7 +28,7 @@ struct ProductAnalyticsTelemetry {
 
   init(
     analytics: AnalyticsTracking = AnalyticsManager.shared,
-    isPlus: @escaping () -> Bool = { SubscriptionManager.shared.hasEntitlement },
+    isPlus: @escaping () -> Bool = { SubscriptionManager.shared.hasPlusAccess },
     acquisitionSource: @escaping () -> AcquisitionSource? = {
       AcquisitionSource(
         rawValue: UserDefaults.standard.string(forKey: PillStore.acquisitionSourceKey) ?? "")
@@ -319,50 +319,71 @@ struct ProductAnalyticsTelemetry {
   // sheet (blocks, doses, streak) are never attached.
 
   func trialEndPaywallViewed(cohort: TrialEndPaywallCohort) {
-    track(.paywallViewed, source: .trialEnd, trialEndCohort: cohort)
+    analytics.track(
+      .paywallViewed,
+      source: .trialEnd,
+      surface: .trialEnd,
+      trialEndCohort: cohort,
+      isPlus: isPlus()
+    )
   }
 
   func trialEndPlanSelected(plan: AnalyticsPlan) {
-    track(.paywallPlanSelected, source: .trialEnd, plan: plan)
+    trackTrialEndPaywall(.paywallPlanSelected, plan: plan)
   }
 
   func trialEndPurchaseStarted(plan: AnalyticsPlan) {
-    track(.purchaseStarted, source: .trialEnd, plan: plan)
+    trackTrialEndPaywall(.purchaseStarted, plan: plan)
   }
 
   /// StoreKit classified the conversion as a trial start (sandbox aside, the
   /// trial-end offer has no intro trial after #162 — kept for completeness).
   func trialEndTrialStarted(plan: AnalyticsPlan) {
-    track(.trialStarted, source: .trialEnd, plan: plan)
+    trackTrialEndPaywall(.trialStarted, plan: plan)
   }
 
   func trialEndPurchaseCompleted(plan: AnalyticsPlan) {
-    track(.purchaseCompleted, source: .trialEnd, plan: plan, result: .completed)
+    trackTrialEndPaywall(.purchaseCompleted, plan: plan, result: .completed)
   }
 
   func trialEndPurchaseFailed(plan: AnalyticsPlan) {
-    track(.purchaseFailed, source: .trialEnd, plan: plan, result: .failed)
+    trackTrialEndPaywall(.purchaseFailed, plan: plan, result: .failed)
   }
 
   func trialEndPurchaseCancelled(plan: AnalyticsPlan) {
-    track(.purchaseCancelled, source: .trialEnd, plan: plan, result: .cancelled)
+    trackTrialEndPaywall(.purchaseCancelled, plan: plan, result: .cancelled)
   }
 
   func trialEndRestoreStarted() {
-    track(.restoreStarted, source: .trialEnd)
+    trackTrialEndPaywall(.restoreStarted)
   }
 
   func trialEndRestoreCompleted() {
-    track(.restoreCompleted, source: .trialEnd, result: .completed)
+    trackTrialEndPaywall(.restoreCompleted, result: .completed)
   }
 
   func trialEndRestoreFailed() {
-    track(.restoreFailed, source: .trialEnd, result: .failed)
+    trackTrialEndPaywall(.restoreFailed, result: .failed)
   }
 
   /// The explicit non-purchase action on the Trial-End Paywall.
   func trialEndContinueFreeSelected() {
-    track(.continueFreeSelected, source: .trialEnd)
+    trackTrialEndPaywall(.continueFreeSelected)
+  }
+
+  private func trackTrialEndPaywall(
+    _ event: AnalyticsEvent,
+    plan: AnalyticsPlan? = nil,
+    result: AnalyticsResult? = nil
+  ) {
+    analytics.track(
+      event,
+      source: .trialEnd,
+      surface: .trialEnd,
+      plan: plan,
+      result: result,
+      isPlus: isPlus()
+    )
   }
 
   func trialDeclineFeedbackViewed() {
@@ -416,49 +437,93 @@ struct ProductAnalyticsTelemetry {
   func paywallViewed(surface: AnalyticsPaywallSurface) {
     analytics.track(
       .paywallViewed,
-      source: .settings,
+      source: source(for: surface),
       surface: surface,
+      plan: nil,
+      result: nil,
       isPlus: isPlus()
     )
   }
 
-  func paywallPlanSelected(plan: AnalyticsPlan, isFromOnboarding: Bool) {
-    track(.paywallPlanSelected, source: paywallSource(isFromOnboarding: isFromOnboarding), plan: plan)
+  func paywallPlanSelected(
+    plan: AnalyticsPlan,
+    isFromOnboarding: Bool,
+    surface: AnalyticsPaywallSurface? = nil
+  ) {
+    trackPaywall(
+      .paywallPlanSelected,
+      isFromOnboarding: isFromOnboarding,
+      surface: surface,
+      plan: plan
+    )
   }
 
-  func purchaseStarted(plan: AnalyticsPlan, isFromOnboarding: Bool) {
-    track(.purchaseStarted, source: paywallSource(isFromOnboarding: isFromOnboarding), plan: plan)
+  func purchaseStarted(
+    plan: AnalyticsPlan,
+    isFromOnboarding: Bool,
+    surface: AnalyticsPaywallSurface? = nil
+  ) {
+    trackPaywall(
+      .purchaseStarted,
+      isFromOnboarding: isFromOnboarding,
+      surface: surface,
+      plan: plan
+    )
   }
 
   /// A free trial began. Distinct from `purchaseCompleted` (a real paid conversion) so
   /// the funnel can see trial starts as their own step — the dominant drop‑off given
   /// how few installs reach a paid charge. Fired only for non‑sandbox transactions.
-  func trialStarted(plan: AnalyticsPlan, isFromOnboarding: Bool) {
-    track(.trialStarted, source: paywallSource(isFromOnboarding: isFromOnboarding), plan: plan)
+  func trialStarted(
+    plan: AnalyticsPlan,
+    isFromOnboarding: Bool,
+    surface: AnalyticsPaywallSurface? = nil
+  ) {
+    trackPaywall(
+      .trialStarted,
+      isFromOnboarding: isFromOnboarding,
+      surface: surface,
+      plan: plan
+    )
   }
 
-  func purchaseCompleted(plan: AnalyticsPlan, isFromOnboarding: Bool) {
-    track(
+  func purchaseCompleted(
+    plan: AnalyticsPlan,
+    isFromOnboarding: Bool,
+    surface: AnalyticsPaywallSurface? = nil
+  ) {
+    trackPaywall(
       .purchaseCompleted,
-      source: paywallSource(isFromOnboarding: isFromOnboarding),
+      isFromOnboarding: isFromOnboarding,
+      surface: surface,
       plan: plan,
       result: .completed
     )
   }
 
-  func purchaseFailed(plan: AnalyticsPlan, isFromOnboarding: Bool) {
-    track(
+  func purchaseFailed(
+    plan: AnalyticsPlan,
+    isFromOnboarding: Bool,
+    surface: AnalyticsPaywallSurface? = nil
+  ) {
+    trackPaywall(
       .purchaseFailed,
-      source: paywallSource(isFromOnboarding: isFromOnboarding),
+      isFromOnboarding: isFromOnboarding,
+      surface: surface,
       plan: plan,
       result: .failed
     )
   }
 
-  func purchaseCancelled(plan: AnalyticsPlan, isFromOnboarding: Bool) {
-    track(
+  func purchaseCancelled(
+    plan: AnalyticsPlan,
+    isFromOnboarding: Bool,
+    surface: AnalyticsPaywallSurface? = nil
+  ) {
+    trackPaywall(
       .purchaseCancelled,
-      source: paywallSource(isFromOnboarding: isFromOnboarding),
+      isFromOnboarding: isFromOnboarding,
+      surface: surface,
       plan: plan,
       result: .cancelled
     )
@@ -484,36 +549,80 @@ struct ProductAnalyticsTelemetry {
     )
   }
 
-  func continueFreeSelected(isFromOnboarding: Bool) {
-    track(
+  func continueFreeSelected(
+    isFromOnboarding: Bool,
+    surface: AnalyticsPaywallSurface? = nil
+  ) {
+    trackPaywall(
       .continueFreeSelected,
-      source: paywallSource(isFromOnboarding: isFromOnboarding),
+      isFromOnboarding: isFromOnboarding,
+      surface: surface,
       step: isFromOnboarding ? .paywall : nil
     )
   }
 
+  private func trackPaywall(
+    _ event: AnalyticsEvent,
+    isFromOnboarding: Bool,
+    surface: AnalyticsPaywallSurface?,
+    step: AnalyticsStep? = nil,
+    plan: AnalyticsPlan? = nil,
+    result: AnalyticsResult? = nil
+  ) {
+    guard let surface else {
+      track(
+        event,
+        source: paywallSource(isFromOnboarding: isFromOnboarding),
+        step: step,
+        plan: plan,
+        result: result
+      )
+      return
+    }
+    analytics.track(
+      event,
+      source: source(for: surface),
+      surface: surface,
+      plan: plan,
+      result: result,
+      isPlus: isPlus()
+    )
+  }
+
+  private func source(for surface: AnalyticsPaywallSurface) -> AnalyticsSource {
+    switch surface {
+    case .trialStatus, .protectionOffCard, .homeBlockingCard:
+      return .home
+    case .settingsSubscription:
+      return .settings
+    case .trialEnd:
+      return .trialEnd
+    case .plusUpsell:
+      return .upsell
+    }
+  }
+
   func plusUpsellViewed() {
-    track(.plusUpsellViewed, source: .upsell)
-  }
-
-  func settingsBlockingUpsellViewed() {
-    track(.plusUpsellViewed, source: .settings)
-  }
-
-  func settingsSmartRemindersUpsellViewed() {
-    track(.plusUpsellViewed, source: .settings)
-  }
-
-  func settingsCustomRemindersUpsellViewed() {
-    track(.plusUpsellViewed, source: .settings)
+    trackPlusUpsell(.plusUpsellViewed)
   }
 
   func plusUpsellDismissed() {
-    track(.plusUpsellDismissed, source: .upsell)
+    trackPlusUpsell(.plusUpsellDismissed)
   }
 
   func plusUpsellUpgradeTapped() {
-    track(.plusUpsellUpgradeTapped, source: .upsell)
+    trackPlusUpsell(.plusUpsellUpgradeTapped)
+  }
+
+  private func trackPlusUpsell(_ event: AnalyticsEvent) {
+    analytics.track(
+      event,
+      source: .upsell,
+      surface: .plusUpsell,
+      plan: nil,
+      result: nil,
+      isPlus: isPlus()
+    )
   }
 
   func upsellRestoreStarted() {

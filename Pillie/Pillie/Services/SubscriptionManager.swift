@@ -206,6 +206,15 @@ final class SubscriptionManager: NSObject {
         // Listen for subscription changes
         Purchases.shared.delegate = self
 
+        // Resolve the last known paid state synchronously before launch telemetry.
+        // RevenueCat refreshes this cache below, but returning subscribers should
+        // not be reported as free during that network round trip.
+        if let cachedCustomerInfo = Purchases.shared.cachedCustomerInfo {
+            setEntitlement(
+                cachedCustomerInfo.entitlements[Self.entitlementID]?.isActive == true
+            )
+        }
+
         let sink = PurchasesAttributionSink()
         attributionSink = sink
         applyAttribution(

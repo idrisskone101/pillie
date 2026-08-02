@@ -9,12 +9,14 @@ import SwiftUI
 struct PlusUpsellContent: Equatable {
     let featureName: String
     let featureDescription: String
+    let localizedFeatureKey: String
     let paywallSurface: AnalyticsPaywallSurface
 
     static let appBlocking = PlusUpsellContent(
         featureName: "App Blocking",
         featureDescription: "Block distracting apps until your pill is logged.",
-        paywallSurface: .blockingGate
+        localizedFeatureKey: "paywall.feature.app_blocking.compact",
+        paywallSurface: .plusUpsell
     )
 
     /// Smart Reminders reads as the follow-up escalation after the first reminder
@@ -22,7 +24,8 @@ struct PlusUpsellContent: Equatable {
     static let smartReminders = PlusUpsellContent(
         featureName: "Smart Reminders",
         featureDescription: "Pillie sends gentle follow-up nudges until you log it.",
-        paywallSurface: .smartReminderGate
+        localizedFeatureKey: "paywall.feature.smart_reminders",
+        paywallSurface: .plusUpsell
     )
 
     /// Custom Reminder Messages frames the perk as writing your own private nudge.
@@ -31,13 +34,15 @@ struct PlusUpsellContent: Equatable {
     static let customReminders = PlusUpsellContent(
         featureName: "Custom Messages",
         featureDescription: "Word the daily reminder yourself — what you type is what you'll see.",
-        paywallSurface: .settingsSubscription
+        localizedFeatureKey: "paywall.feature.custom_messages.compact",
+        paywallSurface: .plusUpsell
     )
 }
 
 struct PlusUpsellSheet: View {
     let featureName: String
     let featureDescription: String
+    let localizedFeatureKey: String
     let paywallSurface: AnalyticsPaywallSurface
 
     static let compactPresentationHeight: CGFloat = 420
@@ -45,16 +50,19 @@ struct PlusUpsellSheet: View {
     init(
         featureName: String,
         featureDescription: String,
-        paywallSurface: AnalyticsPaywallSurface = .settingsSubscription
+        localizedFeatureKey: String = "paywall.feature.custom_messages.compact",
+        paywallSurface: AnalyticsPaywallSurface = .plusUpsell
     ) {
         self.featureName = featureName
         self.featureDescription = featureDescription
+        self.localizedFeatureKey = localizedFeatureKey
         self.paywallSurface = paywallSurface
     }
 
     init(content: PlusUpsellContent) {
         self.featureName = content.featureName
         self.featureDescription = content.featureDescription
+        self.localizedFeatureKey = content.localizedFeatureKey
         self.paywallSurface = content.paywallSurface
     }
 
@@ -70,6 +78,7 @@ struct PlusUpsellSheet: View {
         PlusUpsellSheet(content: .customReminders)
     }
     @State private var showPaywall = false
+    @State private var hasTrackedView = false
     @State private var isRestoring = false
     @State private var showNoSubscriptionAlert = false
     @State private var restoreError: String?
@@ -237,19 +246,13 @@ struct PlusUpsellSheet: View {
             )
         }
         .onAppear {
+            guard !hasTrackedView else { return }
+            hasTrackedView = true
             telemetry.plusUpsellViewed()
         }
     }
 
     private var localizedFeatureName: String {
-        let key = switch paywallSurface {
-        case .blockingGate:
-            "paywall.feature.app_blocking.compact"
-        case .smartReminderGate:
-            "paywall.feature.smart_reminders"
-        default:
-            "paywall.feature.custom_messages.compact"
-        }
-        return PillieLocalization.string(key, table: "Commerce", locale: locale)
+        PillieLocalization.string(localizedFeatureKey, table: "Commerce", locale: locale)
     }
 }

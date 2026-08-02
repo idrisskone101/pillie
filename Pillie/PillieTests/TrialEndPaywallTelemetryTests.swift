@@ -13,6 +13,7 @@ import XCTest
 @testable import Pillie
 
 final class TrialEndPaywallTelemetryTests: XCTestCase {
+    private static var keptObjects: [AnyObject] = []
 
     func testTrialEndPaywallViewedCarriesTrialEndSourceAndCohort() {
         let (telemetry, client) = makeTelemetry(name: "viewed")
@@ -22,10 +23,11 @@ final class TrialEndPaywallTelemetryTests: XCTestCase {
 
         XCTAssertEqual(client.events.map(\.name), ["paywall_viewed", "paywall_viewed"])
         XCTAssertEqual(client.events[0].properties["source"], .string("trial_end"))
+        XCTAssertEqual(client.events[0].properties["surface"], .string("trial_end"))
         XCTAssertEqual(client.events[0].properties["cohort"], .string("blocker_configured"))
         XCTAssertEqual(client.events[1].properties["cohort"], .string("reminder_only"))
-        // Only the approved coarse values: source, cohort, is_plus.
-        XCTAssertEqual(client.events[0].properties.count, 3)
+        // Only the approved coarse values: source, surface, cohort, is_plus.
+        XCTAssertEqual(client.events[0].properties.count, 4)
     }
 
     func testTrialEndPurchaseFunnelIsAttributedToTrialEndSource() {
@@ -54,6 +56,7 @@ final class TrialEndPaywallTelemetryTests: XCTestCase {
         ])
         for event in client.events {
             XCTAssertEqual(event.properties["source"], .string("trial_end"), event.name)
+            XCTAssertEqual(event.properties["surface"], .string("trial_end"), event.name)
         }
         XCTAssertEqual(client.events[2].properties["plan"], .string("annual"))
         XCTAssertEqual(client.events[2].properties["result"], .string("completed"))
@@ -199,14 +202,18 @@ final class TrialEndPaywallTelemetryTests: XCTestCase {
         let client = TrialEndAnalyticsClientSpy()
         let defaultsName = "TrialEndPaywallTelemetryTests.\(name)"
         UserDefaults().removePersistentDomain(forName: defaultsName)
+        let defaults = UserDefaults(suiteName: defaultsName)!
         let analytics = AnalyticsManager(
-            defaults: UserDefaults(suiteName: defaultsName)!,
+            defaults: defaults,
             client: client,
             infoDictionary: [
                 "PostHogProjectToken": "test-token",
                 "PostHogHost": "https://us.i.posthog.com",
             ]
         )
+        Self.keptObjects.append(defaults)
+        Self.keptObjects.append(client)
+        Self.keptObjects.append(analytics)
         analytics.configure()
         return (ProductAnalyticsTelemetry(analytics: analytics, isPlus: { false }), client)
     }

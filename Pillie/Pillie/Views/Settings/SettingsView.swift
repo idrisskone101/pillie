@@ -97,7 +97,6 @@ struct SettingsView: View {
                     } else {
                         Button {
                             openSettingSheet { showCustomRemindersUpsell = true }
-                            ProductAnalyticsTelemetry.live.settingsCustomRemindersUpsellViewed()
                         } label: {
                             settingsRow(PillieLocalization.string(
                                 "settings.custom_messages.title",
@@ -177,7 +176,6 @@ struct SettingsView: View {
                     } else {
                         Button {
                             openSettingSheet { showSmartRemindersUpsell = true }
-                            ProductAnalyticsTelemetry.live.settingsSmartRemindersUpsellViewed()
                         } label: {
                             settingsRow(PillieLocalization.string(
                                 "settings.followup.interval_title",
@@ -188,7 +186,6 @@ struct SettingsView: View {
                         divider
                         Button {
                             openSettingSheet { showSmartRemindersUpsell = true }
-                            ProductAnalyticsTelemetry.live.settingsSmartRemindersUpsellViewed()
                         } label: {
                             settingsRow(PillieLocalization.string(
                                 "settings.followup.retry_limit_title",
@@ -199,7 +196,6 @@ struct SettingsView: View {
                         divider
                         Button {
                             openSettingSheet { showSmartRemindersUpsell = true }
-                            ProductAnalyticsTelemetry.live.settingsSmartRemindersUpsellViewed()
                         } label: {
                             settingsRow(PillieLocalization.string(
                                 "settings.final_reminder.title",
@@ -268,7 +264,6 @@ struct SettingsView: View {
                     } else {
                         Button {
                             openSensitiveSetting { showBlockingUpsell = true }
-                            ProductAnalyticsTelemetry.live.settingsBlockingUpsellViewed()
                         } label: {
                             settingsRow(PillieLocalization.string(
                                 "settings.blocked_apps.title",

@@ -221,7 +221,17 @@ protocol AnalyticsTracking {
   func track(
     _ event: AnalyticsEvent,
     source: AnalyticsSource?,
+    surface: AnalyticsPaywallSurface?,
+    plan: AnalyticsPlan?,
+    result: AnalyticsResult?,
+    isPlus: Bool?
+  )
+
+  func track(
+    _ event: AnalyticsEvent,
+    source: AnalyticsSource?,
     surface: AnalyticsPaywallSurface,
+    trialEndCohort: TrialEndPaywallCohort,
     isPlus: Bool?
   )
 
@@ -374,7 +384,19 @@ extension AnalyticsTracking {
   func track(
     _ event: AnalyticsEvent,
     source: AnalyticsSource?,
+    surface: AnalyticsPaywallSurface?,
+    plan: AnalyticsPlan?,
+    result: AnalyticsResult?,
+    isPlus: Bool?
+  ) {
+    trackLegacy(event, source: source, isPlus: isPlus)
+  }
+
+  func track(
+    _ event: AnalyticsEvent,
+    source: AnalyticsSource?,
     surface: AnalyticsPaywallSurface,
+    trialEndCohort: TrialEndPaywallCohort,
     isPlus: Bool?
   ) {
     trackLegacy(event, source: source, isPlus: isPlus)
@@ -541,8 +563,10 @@ enum AnalyticsSource: String {
 enum AnalyticsPaywallSurface: String, CaseIterable {
   case trialStatus = "trial_status"
   case settingsSubscription = "settings_subscription"
-  case blockingGate = "blocking_gate"
-  case smartReminderGate = "smart_reminder_gate"
+  case protectionOffCard = "protection_off_card"
+  case homeBlockingCard = "home_blocking_card"
+  case trialEnd = "trial_end"
+  case plusUpsell = "plus_upsell"
 }
 
 enum AnalyticsTrialStatusFeature: String, CaseIterable {
@@ -1068,12 +1092,33 @@ final class AnalyticsManager: AnalyticsTracking {
   func track(
     _ event: AnalyticsEvent,
     source: AnalyticsSource?,
+    surface: AnalyticsPaywallSurface?,
+    plan: AnalyticsPlan?,
+    result: AnalyticsResult?,
+    isPlus: Bool?
+  ) {
+    let payload = AnalyticsPayload(
+      source: source,
+      plan: plan,
+      result: result,
+      isPlus: isPlus,
+      paywallSurface: surface
+    )
+
+    capture(event, payload: payload, source: source)
+  }
+
+  func track(
+    _ event: AnalyticsEvent,
+    source: AnalyticsSource?,
     surface: AnalyticsPaywallSurface,
+    trialEndCohort: TrialEndPaywallCohort,
     isPlus: Bool?
   ) {
     let payload = AnalyticsPayload(
       source: source,
       isPlus: isPlus,
+      trialEndCohort: trialEndCohort,
       paywallSurface: surface
     )
 
