@@ -81,6 +81,16 @@ final class AppBlockingSetupContentTests: XCTestCase {
         XCTAssertEqual(content.chooseAppsCTA, "Choose apps to pause")
     }
 
+    func testEmptyStateCardOffersChooseAppsActionWhenIdle() {
+        XCTAssertEqual(
+            AppBlockingSetupEmptyCardAction.resolve(
+                hasSelection: false,
+                isRequesting: false
+            ),
+            .chooseApps
+        )
+    }
+
     func testCategoryHintsAreGenericCategoriesNotAppNames() {
         XCTAssertEqual(
             content.categoryHints.map(\.name),

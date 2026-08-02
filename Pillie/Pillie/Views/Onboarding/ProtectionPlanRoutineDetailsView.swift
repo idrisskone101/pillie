@@ -9,6 +9,15 @@
 
 import SwiftUI
 
+enum RoutineExactDayCardAction: Equatable {
+    case expand
+    case collapse
+
+    static func resolve(isEditingExactDay: Bool) -> Self {
+        isEditingExactDay ? .collapse : .expand
+    }
+}
+
 struct ProtectionPlanRoutineDetailsView: View {
     let progress: ProtectionPlanProgress
     let onBack: () -> Void
@@ -185,32 +194,35 @@ private struct RoutineCyclePositionSection: View {
     }
 
     private var exactDayDisclosure: some View {
-        HStack(spacing: 12) {
-            VStack(alignment: .leading, spacing: 2) {
-                Text(
-                    PillieLocalization.formatted(
-                        "onboarding.cycle_position.day_of_total",
-                        arguments: cycleDay,
-                        cycleLength
-                    )
-                )
-                    .font(.pillie(16, weight: .bold))
-                    .foregroundStyle(PillieTheme.textPrimary)
-                    .monospacedDigit()
-                    .accessibilityIdentifier("routineCycleDayValue")
-                Text(PillieLocalization.string("onboarding.cycle_position.calculated"))
-                    .font(.pillie(12, weight: .regular))
-                    .foregroundStyle(PillieTheme.textMuted)
+        Button {
+            let action = RoutineExactDayCardAction.resolve(
+                isEditingExactDay: isEditingExactDay
+            )
+            withAnimation(.easeInOut(duration: 0.2)) {
+                isEditingExactDay = action == .expand
             }
-            .fixedSize(horizontal: false, vertical: true)
-
-            Spacer(minLength: 8)
-
-            Button {
-                withAnimation(.easeInOut(duration: 0.2)) {
-                    isEditingExactDay.toggle()
+        } label: {
+            HStack(spacing: 12) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(
+                        PillieLocalization.formatted(
+                            "onboarding.cycle_position.day_of_total",
+                            arguments: cycleDay,
+                            cycleLength
+                        )
+                    )
+                        .font(.pillie(16, weight: .bold))
+                        .foregroundStyle(PillieTheme.textPrimary)
+                        .monospacedDigit()
+                        .accessibilityIdentifier("routineCycleDayValue")
+                    Text(PillieLocalization.string("onboarding.cycle_position.calculated"))
+                        .font(.pillie(12, weight: .regular))
+                        .foregroundStyle(PillieTheme.textMuted)
                 }
-            } label: {
+                .fixedSize(horizontal: false, vertical: true)
+
+                Spacer(minLength: 8)
+
                 HStack(spacing: 5) {
                     Text(isEditingExactDay ? PillieLocalization.string("global.action.done") : editExactDayLabel)
                     Image(systemName: isEditingExactDay ? "chevron.up" : "chevron.down")
@@ -220,17 +232,18 @@ private struct RoutineCyclePositionSection: View {
                 .foregroundStyle(PillieTheme.coral)
                 .multilineTextAlignment(.trailing)
             }
-            .buttonStyle(.plain)
-            .accessibilityIdentifier("routineEditExactDay")
-            .accessibilityValue(
-                PillieLocalization.string(
-                    isEditingExactDay ? "accessibility.expanded" : "accessibility.collapsed"
-                )
-            )
+            .padding(.horizontal, 14)
+            .padding(.vertical, 12)
+            .contentShape(Rectangle())
+            .background(RoundedRectangle(cornerRadius: 18).fill(PillieTheme.sage.opacity(0.5)))
         }
-        .padding(.horizontal, 14)
-        .padding(.vertical, 12)
-        .background(RoundedRectangle(cornerRadius: 18).fill(PillieTheme.sage.opacity(0.5)))
+        .buttonStyle(.plain)
+        .accessibilityIdentifier("routineEditExactDay")
+        .accessibilityValue(
+            PillieLocalization.string(
+                isEditingExactDay ? "accessibility.expanded" : "accessibility.collapsed"
+            )
+        )
     }
 
     private var exactDayStepper: some View {
