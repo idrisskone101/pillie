@@ -644,20 +644,30 @@ struct ContentView: View {
         }
       )
       .onAppear {
-        if onboardingTrialActivationRoute == .grantTrial {
-          let grantDate = Date()
-          let termsCohort = TrialInstallCohort.storedAssignment()
-            ?? HardPaywallPolicy.cohort(forTrialGrantedAt: grantDate)
-          if OnboardingFlow.grantsReverseTrial(on: .appBlocking),
-             subscriptionManager.grantReverseTrial(
-               now: grantDate,
-               termsCohort: termsCohort
-             ) {
-            onboardingTelemetry.trialActivated()
-          }
-        }
+        grantOnboardingTrialIfNeeded(for: onboardingTrialActivationRoute)
         onboardingTelemetry.blockerSetupStarted()
       }
+      .onChange(of: onboardingTrialActivationRoute) { previous, current in
+        guard OnboardingTrialActivationRoute.shouldGrantTrial(
+          after: previous,
+          current: current
+        ) else { return }
+        grantOnboardingTrialIfNeeded(for: current)
+      }
+    }
+  }
+
+  private func grantOnboardingTrialIfNeeded(for route: OnboardingTrialActivationRoute) {
+    guard route == .grantTrial,
+          OnboardingFlow.grantsReverseTrial(on: .appBlocking) else { return }
+    let grantDate = Date()
+    let termsCohort = TrialInstallCohort.storedAssignment()
+      ?? HardPaywallPolicy.cohort(forTrialGrantedAt: grantDate)
+    if subscriptionManager.grantReverseTrial(
+      now: grantDate,
+      termsCohort: termsCohort
+    ) {
+      onboardingTelemetry.trialActivated()
     }
   }
 

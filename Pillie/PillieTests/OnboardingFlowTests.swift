@@ -545,6 +545,21 @@ final class OnboardingFlowTests: XCTestCase {
         )
     }
 
+    func testSubscriberToFreeActivationTransitionGrantsTrialWithoutRemounting() {
+        XCTAssertTrue(
+            OnboardingTrialActivationRoute.shouldGrantTrial(
+                after: .subscriber,
+                current: .grantTrial
+            )
+        )
+        XCTAssertFalse(
+            OnboardingTrialActivationRoute.shouldGrantTrial(
+                after: .subscriber,
+                current: .subscriber
+            )
+        )
+    }
+
     #if DEBUG
     func testHardPaywallDebugScenarioCanResumeExpiredOnboarding() {
         var calendar = Calendar(identifier: .gregorian)

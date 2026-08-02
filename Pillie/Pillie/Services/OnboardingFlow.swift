@@ -96,6 +96,13 @@ enum OnboardingTrialActivationRoute: Equatable {
         }
         return hasEntitlement ? .subscriber : .grantTrial
     }
+
+    static func shouldGrantTrial(
+        after previous: OnboardingTrialActivationRoute,
+        current: OnboardingTrialActivationRoute
+    ) -> Bool {
+        previous != current && current == .grantTrial
+    }
 }
 
 #if DEBUG
