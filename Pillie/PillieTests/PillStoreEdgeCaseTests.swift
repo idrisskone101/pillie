@@ -4,6 +4,7 @@
 //
 
 import XCTest
+import SwiftData
 @testable import Pillie
 
 @MainActor
@@ -60,6 +61,282 @@ final class PillStoreEdgeCaseTests: XCTestCase {
         store.markActionAsTaken(on: today)
 
         XCTAssertEqual(store.currentStreak, 1)
+    }
+
+    func testCycleDayAdjustmentKeepsPriorBreakDaysNeutral() throws {
+        let today = InMemoryStoreFactory.fixedDate("2026-05-27")
+        let fixture = try InMemoryStoreFactory.makeStore(
+            now: today,
+            regimen: .twentyOneSeven
+        )
+        let store = fixture.store
+
+        store.updateCycleDay(27)
+
+        let finalActiveDay = try XCTUnwrap(Calendar.current.date(byAdding: .day, value: -6, to: today))
+        XCTAssertEqual(store.scheduleSnapshot(for: finalActiveDay)?.actionType, .pillActive)
+        XCTAssertEqual(store.scheduleSnapshot(for: finalActiveDay)?.status, .taken)
+
+        for offset in -5 ... -1 {
+            let breakDay = try XCTUnwrap(Calendar.current.date(byAdding: .day, value: offset, to: today))
+            let snapshot = try XCTUnwrap(store.scheduleSnapshot(for: breakDay))
+            XCTAssertEqual(snapshot.actionType, .pillBreak)
+            XCTAssertEqual(snapshot.status, .breakDay, "Past cycle day \(27 + offset) must stay neutral.")
+        }
+
+        let persistedBreakRecords = try fixture.context.fetch(FetchDescriptor<PillDay>())
+            .filter { $0.actionType == .pillBreak }
+        XCTAssertEqual(persistedBreakRecords.count, 5)
+        XCTAssertTrue(persistedBreakRecords.allSatisfy { $0.status == .breakDay })
+
+        XCTAssertEqual(store.scheduleSnapshot(for: today)?.status, .breakDay)
+    }
+
+    func testCycleDayAdjustmentKeepsPatchOffWeekNeutral() throws {
+        let today = InMemoryStoreFactory.fixedDate("2026-05-28")
+        let fixture = try InMemoryStoreFactory.makeStore(now: today, method: .patch)
+
+        fixture.store.updateCycleDay(28)
+
+        let removalDay = try XCTUnwrap(Calendar.current.date(byAdding: .day, value: -6, to: today))
+        let removalSnapshot = try XCTUnwrap(fixture.store.scheduleSnapshot(for: removalDay))
+        XCTAssertEqual(removalSnapshot.actionType, .patchRemove)
+        XCTAssertEqual(removalSnapshot.status, .taken)
+
+        let records = try fixture.context.fetch(FetchDescriptor<PillDay>())
+        let breakRecords = records.filter { $0.actionType == .patchBreak }
+        XCTAssertEqual(breakRecords.count, 5)
+        XCTAssertTrue(breakRecords.allSatisfy { $0.status == .breakDay })
+        XCTAssertEqual(fixture.store.scheduleSnapshot(for: today)?.actionType, .patchBreak)
+        XCTAssertEqual(fixture.store.scheduleSnapshot(for: today)?.status, .breakDay)
+    }
+
+    func testCycleDayAdjustmentKeepsPinnedRingOffWeekNeutral() throws {
+        let today = InMemoryStoreFactory.fixedDate("2026-05-28")
+        let fixture = try InMemoryStoreFactory.makeStore(
+            now: today,
+            method: .ring,
+            ringInsertionDate: today
+        )
+
+        fixture.store.updateCycleDay(28)
+
+        let removalDay = try XCTUnwrap(Calendar.current.date(byAdding: .day, value: -6, to: today))
+        let removalSnapshot = try XCTUnwrap(fixture.store.scheduleSnapshot(for: removalDay))
+        XCTAssertEqual(removalSnapshot.actionType, .ringRemove)
+        XCTAssertEqual(removalSnapshot.status, .taken)
+
+        let records = try fixture.context.fetch(FetchDescriptor<PillDay>())
+        let breakRecords = records.filter { $0.actionType == .ringBreak }
+        XCTAssertEqual(breakRecords.count, 5)
+        XCTAssertTrue(breakRecords.allSatisfy { $0.status == .breakDay })
+        XCTAssertEqual(fixture.store.scheduleSnapshot(for: today)?.actionType, .ringBreak)
+        XCTAssertEqual(fixture.store.scheduleSnapshot(for: today)?.status, .breakDay)
+    }
+
+    func testPersistedTakenBreakRecordIsRepairedOnReload() throws {
+        let today = InMemoryStoreFactory.fixedDate("2026-05-27")
+        let cycleStart = InMemoryStoreFactory.fixedDate("2026-05-01")
+        let fixture = try InMemoryStoreFactory.makeStore(
+            now: today,
+            regimen: .twentyOneSeven,
+            startDate: cycleStart
+        )
+        let priorBreakDay = try XCTUnwrap(Calendar.current.date(byAdding: .day, value: -1, to: today))
+        fixture.context.insert(PillDay(
+            date: priorBreakDay,
+            status: .taken,
+            actionType: .pillBreak,
+            pack: fixture.pack
+        ))
+        try fixture.context.save()
+
+        _ = PillStore(modelContext: fixture.context)
+        let repairedRecord = try XCTUnwrap(
+            fixture.context.fetch(FetchDescriptor<PillDay>()).first
+        )
+
+        XCTAssertEqual(repairedRecord.status, .breakDay)
+    }
+
+    func testTakenBreakRecordResolvesAsBreakDayAtReadBoundary() throws {
+        let today = InMemoryStoreFactory.fixedDate("2026-05-27")
+        let cycleStart = InMemoryStoreFactory.fixedDate("2026-05-01")
+        let fixture = try InMemoryStoreFactory.makeStore(
+            now: today,
+            regimen: .twentyOneSeven,
+            startDate: cycleStart
+        )
+        let priorBreakDay = try XCTUnwrap(Calendar.current.date(byAdding: .day, value: -1, to: today))
+        fixture.context.insert(PillDay(
+            date: priorBreakDay,
+            status: .taken,
+            actionType: .pillBreak,
+            pack: fixture.pack
+        ))
+        try fixture.context.save()
+
+        let reloadedStore = PillStore(modelContext: fixture.context)
+        let indexedRecord = try XCTUnwrap(
+            fixture.context.fetch(FetchDescriptor<PillDay>()).first
+        )
+        // Simulate an invalid row arriving after initialization so the one-time
+        // migration cannot hide a regression in live snapshot canonicalization.
+        indexedRecord.status = .taken
+
+        let snapshot = try XCTUnwrap(reloadedStore.scheduleSnapshot(for: priorBreakDay))
+        XCTAssertEqual(snapshot.actionType, .pillBreak)
+        XCTAssertEqual(snapshot.status, .breakDay)
+    }
+
+    func testBlockingScheduleMirrorUsesRealRegimenActionDays() throws {
+        let cycleStart = InMemoryStoreFactory.fixedDate("2026-07-01")
+        let fixture = try InMemoryStoreFactory.makeStore(
+            now: cycleStart,
+            regimen: .twentySixTwo,
+            startDate: cycleStart
+        )
+        let mirror = fixture.store.blockingScheduleMirror
+        let day26 = try XCTUnwrap(Calendar.current.date(byAdding: .day, value: 25, to: cycleStart))
+        let day27 = try XCTUnwrap(Calendar.current.date(byAdding: .day, value: 26, to: cycleStart))
+        let day28 = try XCTUnwrap(Calendar.current.date(byAdding: .day, value: 27, to: cycleStart))
+        let nextCycleStart = try XCTUnwrap(Calendar.current.date(byAdding: .day, value: 28, to: cycleStart))
+
+        XCTAssertTrue(mirror.requiresAction(on: day26))
+        XCTAssertFalse(mirror.requiresAction(on: day27))
+        XCTAssertFalse(mirror.requiresAction(on: day28))
+        XCTAssertTrue(mirror.requiresAction(on: nextCycleStart))
+    }
+
+    func testStoreMirrorStaysAlignedWithPackAfterDSTTimezoneChange() throws {
+        var torontoCalendar = Calendar(identifier: .gregorian)
+        torontoCalendar.timeZone = try XCTUnwrap(TimeZone(identifier: "America/Toronto"))
+        var limaCalendar = Calendar(identifier: .gregorian)
+        limaCalendar.timeZone = try XCTUnwrap(TimeZone(identifier: "America/Lima"))
+        let cycleStart = try XCTUnwrap(torontoCalendar.date(from: DateComponents(
+            calendar: torontoCalendar,
+            timeZone: torontoCalendar.timeZone,
+            year: 2026,
+            month: 3,
+            day: 1,
+            hour: 0
+        )))
+        let mirrorWriteDate = try XCTUnwrap(torontoCalendar.date(from: DateComponents(
+            calendar: torontoCalendar,
+            timeZone: torontoCalendar.timeZone,
+            year: 2026,
+            month: 3,
+            day: 15,
+            hour: 12
+        )))
+        let targetDate = try XCTUnwrap(limaCalendar.date(from: DateComponents(
+            calendar: limaCalendar,
+            timeZone: limaCalendar.timeZone,
+            year: 2026,
+            month: 3,
+            day: 21,
+            hour: 12
+        )))
+        let fixture = try InMemoryStoreFactory.makeStore(
+            now: mirrorWriteDate,
+            regimen: .twentyOneSeven,
+            startDate: cycleStart
+        )
+        let mirror = fixture.store.blockingScheduleMirror
+        let packCycleDayIndex = fixture.pack.cycleDayIndex(
+            on: targetDate,
+            calendar: limaCalendar
+        )
+        let action = try XCTUnwrap(DoseScheduleEngine.dueAction(
+            on: targetDate,
+            pack: fixture.pack,
+            calendar: limaCalendar
+        ))
+
+        XCTAssertEqual(packCycleDayIndex, 20)
+        XCTAssertTrue(action.type.requiresUserAction)
+        XCTAssertEqual(
+            mirror.requiresAction(on: targetDate, calendar: limaCalendar),
+            action.type.requiresUserAction
+        )
+    }
+
+    func testBlockingScheduleMirrorMatchesPatchActionAndPassiveDays() throws {
+        let cycleStart = InMemoryStoreFactory.fixedDate("2026-07-01")
+        let fixture = try InMemoryStoreFactory.makeStore(
+            now: cycleStart,
+            method: .patch,
+            startDate: cycleStart
+        )
+        let mirror = fixture.store.blockingScheduleMirror
+        let passiveDay = try XCTUnwrap(Calendar.current.date(byAdding: .day, value: 1, to: cycleStart))
+        let patchChangeDay = try XCTUnwrap(Calendar.current.date(byAdding: .day, value: 7, to: cycleStart))
+        let removalDay = try XCTUnwrap(Calendar.current.date(byAdding: .day, value: 21, to: cycleStart))
+        let breakDay = try XCTUnwrap(Calendar.current.date(byAdding: .day, value: 22, to: cycleStart))
+
+        XCTAssertTrue(mirror.requiresAction(on: cycleStart))
+        XCTAssertFalse(mirror.requiresAction(on: passiveDay))
+        XCTAssertTrue(mirror.requiresAction(on: patchChangeDay))
+        XCTAssertTrue(mirror.requiresAction(on: removalDay))
+        XCTAssertFalse(mirror.requiresAction(on: breakDay))
+    }
+
+    func testBlockingScheduleMirrorMatchesPinnedRingActionAndPassiveDays() throws {
+        let cycleStart = InMemoryStoreFactory.fixedDate("2026-07-01")
+        let fixture = try InMemoryStoreFactory.makeStore(
+            now: cycleStart,
+            method: .ring,
+            startDate: cycleStart,
+            ringInsertionDate: cycleStart
+        )
+        let mirror = fixture.store.blockingScheduleMirror
+        let passiveDay = try XCTUnwrap(Calendar.current.date(byAdding: .day, value: 1, to: cycleStart))
+        let removalDay = try XCTUnwrap(Calendar.current.date(byAdding: .day, value: 21, to: cycleStart))
+        let breakDay = try XCTUnwrap(Calendar.current.date(byAdding: .day, value: 22, to: cycleStart))
+        let nextInsertionDay = try XCTUnwrap(Calendar.current.date(byAdding: .day, value: 28, to: cycleStart))
+
+        XCTAssertTrue(mirror.requiresAction(on: cycleStart))
+        XCTAssertFalse(mirror.requiresAction(on: passiveDay))
+        XCTAssertTrue(mirror.requiresAction(on: removalDay))
+        XCTAssertFalse(mirror.requiresAction(on: breakDay))
+        XCTAssertTrue(mirror.requiresAction(on: nextInsertionDay))
+    }
+
+    func testStoreMirrorSurvivesAppGroupWriterAndExtensionReadPath() throws {
+        let cycleStart = InMemoryStoreFactory.fixedDate("2026-07-01")
+        let fixture = try InMemoryStoreFactory.makeStore(
+            now: cycleStart,
+            regimen: .twentySixTwo,
+            startDate: cycleStart
+        )
+        let suiteName = "pillie.tests.blocking-schedule.\(UUID().uuidString)"
+        let defaults = try XCTUnwrap(UserDefaults(suiteName: suiteName))
+        defer { defaults.removePersistentDomain(forName: suiteName) }
+
+        ScreenTimeSharedState.setBlockingScheduleMirror(
+            fixture.store.blockingScheduleMirror,
+            in: defaults
+        )
+
+        // Mirrors the extension read boundary: shared key -> Data -> shared codec.
+        let decoded = try XCTUnwrap(BlockingScheduleMirror.decode(
+            from: defaults.data(forKey: BlockingScheduleMirror.storageKey)
+        ))
+        let day26 = try XCTUnwrap(Calendar.current.date(byAdding: .day, value: 25, to: cycleStart))
+        let day27 = try XCTUnwrap(Calendar.current.date(byAdding: .day, value: 26, to: cycleStart))
+        let staleHandledStamp = TodayTakenStamp(
+            isTaken: true,
+            epochDay: TodayTakenStamp.epochDay(for: day26)
+        )
+
+        XCTAssertEqual(
+            BlockingInterventionPolicy.decision(
+                schedule: decoded,
+                handledStamp: staleHandledStamp,
+                now: day27
+            ),
+            .clearShields
+        )
     }
 
     func testMarkTodayAfterCycleDayAdjustmentRefreshesStreakObservers() throws {

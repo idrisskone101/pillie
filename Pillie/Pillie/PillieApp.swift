@@ -209,7 +209,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
 
         store.syncTodayTakenToAppGroup()
         AppBlockingManager.shared.reconcileBlockingState(
-            isTodayTaken: store.isTodayHandled,
+            isTodayHandled: store.isTodayHandled,
             reminderHour: store.reminderHour,
             reminderMinute: store.reminderMinute,
             method: store.pack.method
@@ -459,7 +459,7 @@ struct PillieApp: App {
         AppBlockingManager.shared.updateAuthorizationStatus()
         store.syncTodayTakenToAppGroup()
         AppBlockingManager.shared.reconcileBlockingState(
-            isTodayTaken: store.isTodayHandled,
+            isTodayHandled: store.isTodayHandled,
             reminderHour: store.reminderHour,
             reminderMinute: store.reminderMinute,
             method: store.pack.method

@@ -2,11 +2,10 @@
 //  TodayTakenStamp.swift
 //  Pillie
 //
-//  Day-scoped "today taken" flag shared with the DeviceActivityMonitor
-//  extension. The bare Bool it replaces went stale overnight: the app only
-//  rewrites it while running, so yesterday's true silently cancelled today's
-//  blocking at Due Action Time. Pairing the flag with the day it was written
-//  lets the extension reject stale state on its own.
+//  Day-scoped handled flag shared with the DeviceActivityMonitor extension.
+//  Legacy symbol/key names still say "taken," but true also covers a scheduled
+//  break or passive day. Pairing the Bool with its day lets the extension reject
+//  yesterday's completed action without mistaking it for today's state.
 //
 
 import Foundation
@@ -21,7 +20,7 @@ struct TodayTakenStamp: Equatable {
         Int(calendar.startOfDay(for: date).timeIntervalSince1970)
     }
 
-    /// True only when the flag is set AND was written today. A missing or
+    /// True only when the handled flag is set AND was written today. A missing or
     /// mismatched stamp fails toward blocking: a dismissible shield beats
     /// silently skipped protection.
     func isTakenToday(now: Date, calendar: Calendar = .current) -> Bool {

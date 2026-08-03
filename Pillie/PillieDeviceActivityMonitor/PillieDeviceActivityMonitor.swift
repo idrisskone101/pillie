@@ -32,6 +32,7 @@ class PillieDeviceActivityMonitor: DeviceActivityMonitor {
         let defaults = self.defaults
         // Force disk refresh so we read the latest values written by the main app
         defaults?.synchronize()
+        let now = Date()
 
         // Skip if blocking is disabled by user
         let blockingEnabled = defaults?.bool(forKey: AppGroupKeys.blockingEnabled, default: true) ?? true
@@ -45,24 +46,40 @@ class PillieDeviceActivityMonitor: DeviceActivityMonitor {
         // an expired Reverse Trial stops blocking here even if the app is never
         // opened again. A missing mirror (legacy install) fails toward blocking.
         let accessValidUntil = defaults?.object(forKey: AppGroupKeys.plusAccessValidUntil) as? Double
-        if !PlusAccessMirror.allowsBlocking(validUntilEpochSeconds: accessValidUntil, now: Date()) {
+        if !PlusAccessMirror.allowsBlocking(validUntilEpochSeconds: accessValidUntil, now: now) {
             Self.logger.info("Skipping — Plus Access expired; clearing any stale shields")
             clearShieldsAndState()
             return
         }
 
-        // Skip only if the action was taken TODAY. The flag is written by the
-        // main app, which may not have run since yesterday — a bare Bool here
-        // meant yesterday's taken silently cancelled today's blocking. The day
-        // stamp rejects stale state; a missing stamp (legacy install) fails
-        // toward blocking.
+        // The daily DeviceActivity interval must still honor Pillie's actual
+        // cycle. A periodic action-day mirror lets the extension clear shields
+        // throughout break/passive days and resume on the next action day even
+        // if the main app never wakes in between. A missing mirror preserves the
+        // legacy fail-toward-blocking behavior until the next app launch.
+        let blockingSchedule = BlockingScheduleMirror.decode(
+            from: defaults?.data(forKey: BlockingScheduleMirror.storageKey)
+        )
         let stamp = TodayTakenStamp(
             isTaken: defaults?.bool(forKey: AppGroupKeys.isTodayTaken) ?? false,
             epochDay: defaults?.object(forKey: AppGroupKeys.todayTakenEpochDay) as? Int
         )
-        if stamp.isTakenToday(now: Date()) {
-            Self.logger.info("Skipping — action already taken today")
+
+        switch BlockingInterventionPolicy.decision(
+            schedule: blockingSchedule,
+            handledStamp: stamp,
+            now: now
+        ) {
+        case .clearShields:
+            if blockingSchedule?.requiresAction(on: now) == false {
+                Self.logger.info("Skipping — no user action scheduled today; clearing stale shields")
+            } else {
+                Self.logger.info("Skipping — action already handled today; clearing stale shields")
+            }
+            clearShieldsAndState()
             return
+        case .applyShields:
+            break
         }
 
         // Load saved selection from App Group

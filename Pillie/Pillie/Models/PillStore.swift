@@ -490,6 +490,38 @@ class PillStore {
         return snapshot.isPassiveActive || snapshot.isBreak
     }
 
+    /// Periodic action-day rule mirrored to the DeviceActivity extension. The
+    /// indices come from DoseScheduleEngine itself so blocking cannot drift from
+    /// the schedule used by Home, Calendar, and reminders.
+    var blockingScheduleMirror: BlockingScheduleMirror {
+        let activePack = pack
+        let calendar = Calendar.current
+        let referenceDate = today
+        let cycleLength = activePack.cycleLength
+        let anchor = activePack.resolvedCycleAnchor()
+        var actionDayIndices: Set<Int> = []
+
+        for offset in 0..<cycleLength {
+            guard let date = calendar.date(byAdding: .day, value: offset, to: referenceDate),
+                  let action = DoseScheduleEngine.dueAction(
+                    on: date,
+                    pack: activePack,
+                    calendar: calendar
+                  ),
+                  action.type.requiresUserAction else {
+                continue
+            }
+            actionDayIndices.insert(action.cycleDay - 1)
+        }
+
+        return BlockingScheduleMirror(
+            anchorDate: anchor.date,
+            anchorCycleDayIndex: anchor.dayIndex,
+            cycleLength: cycleLength,
+            actionDayIndices: Array(actionDayIndices)
+        )
+    }
+
     var todayDueAction: DoseScheduleAction? {
         guard !isRefillDue else { return nil }
         guard let action = dueAction(on: today) else { return nil }
@@ -772,6 +804,20 @@ class PillStore {
 
     func syncTodayTakenToAppGroup() {
         ScreenTimeSharedState.setTodayTaken(isTodayHandled, now: PillieClock.now)
+        ScreenTimeSharedState.setBlockingScheduleMirror(blockingScheduleMirror)
+    }
+
+    /// Schedule mutations cannot wait for the debounced notification rebuild:
+    /// the app may suspend before it writes the extension mirror, and an already-
+    /// active shield must be cleared immediately when today becomes a no-action day.
+    private func reconcileBlockingAfterScheduleChange() {
+        syncTodayTakenToAppGroup()
+        AppBlockingManager.shared.reconcileBlockingState(
+            isTodayHandled: isTodayHandled,
+            reminderHour: reminderHour,
+            reminderMinute: reminderMinute,
+            method: pack.method
+        )
     }
 
     func markActionAsTaken(on date: Date) {
@@ -1050,6 +1096,7 @@ class PillStore {
         if methodChanged {
             protocolChangeVersion &+= 1
         }
+        reconcileBlockingAfterScheduleChange()
         NotificationManager.shared.requestReschedule(from: self, reason: "protocol-change")
         return true
     }
@@ -1096,8 +1143,7 @@ class PillStore {
         modelContext.insert(freshPack)
 
         // 4. Backfill current cycle days before today (days 1 through safeCycleDay-1)
-        //    All prior days → .taken. No days marked .missed.
-        //    Break vs active is preserved in the actionType field.
+        //    Prior action days → .taken; break days → .breakDay. Nothing is .missed.
         backfillPriorDays(from: startDate, count: safeCycleDay - 1, pack: freshPack, calendar: calendar)
         if safeCycleDay > 1 {
             streakResetDate = today
@@ -1114,12 +1160,14 @@ class PillStore {
         packs = Self.fetchPacks(context: modelContext)
         rebuildReadIndexes()
         protocolChangeVersion &+= 1
+        reconcileBlockingAfterScheduleChange()
         NotificationManager.shared.requestReschedule(from: self, reason: "full-reset")
     }
 
     // MARK: - Backfill Helpers
 
-    /// Creates PillDay records for prior cycle days, marking them all as `.taken`.
+    /// Creates PillDay records for prior cycle days. Action days are treated as
+    /// completed while break days remain neutral because nothing was due.
     /// Handles pill, patch, and ring methods with correct action types.
     private func backfillPriorDays(from startDate: Date, count: Int, pack: PillPack, calendar: Calendar = .current) {
         guard count > 0 else { return }
@@ -1139,7 +1187,8 @@ class PillStore {
                 actionType = DoseScheduleEngine.dueAction(on: date, pack: pack, calendar: calendar)?.type
                     ?? fallbackActionType(for: pack, on: date, calendar: calendar)
             }
-            let record = PillDay(date: date, status: .taken, actionType: actionType, pack: pack)
+            let status: PillDay.Status = actionType.isBreakType ? .breakDay : .taken
+            let record = PillDay(date: date, status: status, actionType: actionType, pack: pack)
             modelContext.insert(record)
         }
     }
@@ -1157,7 +1206,7 @@ class PillStore {
     // MARK: - Update Cycle Day (Backfill Taken)
 
     /// Adjusts the active pack so today corresponds to `newCycleDay` and backfills
-    /// all prior days as taken. No days are marked as missed.
+    /// prior action days as taken. Break days stay neutral and nothing is missed.
     func updateCycleDay(_ newCycleDay: Int) {
         guard let activePack else { return }
         let calendar = Calendar.current
@@ -1191,9 +1240,8 @@ class PillStore {
             modelContext.delete(day)
         }
 
-        // 3. Backfill days 1 through (safeCycleDay - 1) as .taken.
-        //    No days marked .missed — we assume the user completed everything before the app.
-        //    Break vs active is preserved in the actionType field.
+        // 3. Backfill days 1 through (safeCycleDay - 1). Action days are .taken;
+        //    break days are .breakDay, and no day is marked .missed.
         backfillPriorDays(from: backfillStart, count: safeCycleDay - 1, pack: activePack, calendar: calendar)
 
         // 4. Set appActivatedDate to today so dates before our backfill
@@ -1201,7 +1249,7 @@ class PillStore {
         //    we created above always take precedence in the snapshot engine.
         appActivatedDate = today
 
-        // 5. Reset streak so backfilled .taken records don't inflate it.
+        // 5. Reset streak so backfilled completed action records don't inflate it.
         streakResetDate = today
 
         // 6. Persist and rebuild
@@ -1222,6 +1270,7 @@ class PillStore {
         }
 
         protocolChangeVersion &+= 1
+        reconcileBlockingAfterScheduleChange()
         NotificationManager.shared.requestReschedule(from: self, reason: "cycle-day-update")
     }
 
@@ -1253,6 +1302,7 @@ class PillStore {
         packs = Self.fetchPacks(context: modelContext)
         rebuildReadIndexes()
         protocolChangeVersion &+= 1
+        reconcileBlockingAfterScheduleChange()
         NotificationManager.shared.requestReschedule(from: self, reason: "refill-new-pack")
     }
 
@@ -1278,7 +1328,7 @@ class PillStore {
             resolvedPacks = [defaultPack]
         }
 
-        Self.sanitizePersistedDatesIfNeeded(context: modelContext, packs: resolvedPacks)
+        Self.sanitizePersistedDataIfNeeded(context: modelContext, packs: resolvedPacks)
         resolvedPacks = Self.fetchPacks(context: modelContext)
 
         if !resolvedPacks.contains(where: { $0.isCurrent }),
@@ -1571,7 +1621,7 @@ class PillStore {
         return Calendar.current.startOfDay(for: validated)
     }
 
-    private static func sanitizePersistedDatesIfNeeded(context: ModelContext, packs: [PillPack]) {
+    private static func sanitizePersistedDataIfNeeded(context: ModelContext, packs: [PillPack]) {
         let calendar = Calendar.current
         let today = PillieClock.today
         var didMutate = false
@@ -1596,6 +1646,14 @@ class PillStore {
             let sanitizedDay = calendar.startOfDay(for: validatedDate(day.date, fallback: fallback))
             if day.date != sanitizedDay {
                 day.date = sanitizedDay
+                didMutate = true
+            }
+            // Cycle-day adjustment builds from older releases could persist
+            // no-action break records as completed. Repair that invalid state
+            // once so raw-record consumers agree with the schedule snapshot.
+            if day.actionType.isBreakType, day.status == .taken {
+                day.status = .breakDay
+                day.takenAt = nil
                 didMutate = true
             }
         }
@@ -1738,8 +1796,14 @@ class PillStore {
 
         let resolvedStatus: PillDay.Status?
         if let record = dayRecord {
+            // Cycle-day adjustment builds explicit historical records. Older
+            // versions could persist `.taken` for a break-action record, which
+            // rendered the no-action day green. The action semantic is
+            // authoritative, so repair those records at the read boundary too.
+            if actionType?.isBreakType == true {
+                resolvedStatus = .breakDay
             // Upcoming is non-terminal; recompute fallback state for past dates.
-            if record.status != .upcoming {
+            } else if record.status != .upcoming {
                 resolvedStatus = record.status
             } else if let due {
                 if due.type.isBreakType {
