@@ -51,6 +51,7 @@ final class AppBlockingManager {
         let reminderHour: Int
         let reminderMinute: Int
         let method: ContraceptiveMethod
+        let blockingSchedule: BlockingScheduleMirror
     }
 
     /// Whether blocking is effectively on (enabled + apps selected).
@@ -177,10 +178,11 @@ final class AppBlockingManager {
         blockingActive = false
     }
 
-    /// Reconciles blocking state: applies shields if past reminder time and not yet taken,
-    /// or removes them if already taken. Call on app launch, foreground return, and after setup.
+    /// Reconciles blocking state: applies shields after reminder time only when
+    /// today's action is still pending, and removes them when today is handled
+    /// (completed, passive, or a break day).
     func reconcileBlockingState(
-        isTodayTaken: Bool,
+        isTodayHandled: Bool,
         reminderHour: Int,
         reminderMinute: Int,
         method: ContraceptiveMethod
@@ -194,7 +196,7 @@ final class AppBlockingManager {
             return
         }
 
-        if isTodayTaken {
+        if isTodayHandled {
             removeBlocking()
             return
         }
@@ -217,9 +219,10 @@ final class AppBlockingManager {
 
     func saveSelectionAndReconcile(routine: RoutineState) {
         saveSelection()
+        ScreenTimeSharedState.setBlockingScheduleMirror(routine.blockingSchedule)
         scheduleDeviceActivityBlock(hour: routine.reminderHour, minute: routine.reminderMinute)
         reconcileBlockingState(
-            isTodayTaken: routine.isTodayHandled,
+            isTodayHandled: routine.isTodayHandled,
             reminderHour: routine.reminderHour,
             reminderMinute: routine.reminderMinute,
             method: routine.method
@@ -227,8 +230,9 @@ final class AppBlockingManager {
     }
 
     func reconcileEnabledBlocking(routine: RoutineState) {
+        ScreenTimeSharedState.setBlockingScheduleMirror(routine.blockingSchedule)
         reconcileBlockingState(
-            isTodayTaken: routine.isTodayHandled,
+            isTodayHandled: routine.isTodayHandled,
             reminderHour: routine.reminderHour,
             reminderMinute: routine.reminderMinute,
             method: routine.method

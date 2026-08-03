@@ -79,9 +79,36 @@ enum ScreenTimeSharedState {
         defaults?.object(forKey: AppGroupKeys.plusAccessValidUntil) as? Double
     }
 
-    // MARK: - Today Taken Flag
+    // MARK: - Blocking Schedule Mirror
 
-    /// Writes the flag together with the day it describes. The
+    /// Mirrors a periodic action-day rule so the extension can distinguish due-
+    /// action days from break/passive days while Pillie is suspended. Method and
+    /// regimen labels are intentionally not persisted here.
+    static func setBlockingScheduleMirror(_ schedule: BlockingScheduleMirror) {
+        setBlockingScheduleMirror(schedule, in: defaults)
+    }
+
+    /// Injectable storage seam used by regression tests to exercise the same
+    /// App Group writer without mutating the real shared suite.
+    static func setBlockingScheduleMirror(
+        _ schedule: BlockingScheduleMirror,
+        in defaults: UserDefaults?
+    ) {
+        guard let data = schedule.encodedData() else { return }
+        defaults?.set(data, forKey: BlockingScheduleMirror.storageKey)
+        defaults?.synchronize()
+    }
+
+    static var blockingScheduleMirror: BlockingScheduleMirror? {
+        BlockingScheduleMirror.decode(
+            from: defaults?.data(forKey: BlockingScheduleMirror.storageKey)
+        )
+    }
+
+    // MARK: - Today Handled Stamp (Legacy Taken Key)
+
+    /// Writes the handled state (taken or no action scheduled) together with
+    /// the day it describes. The
     /// DeviceActivityMonitor extension rejects the flag when the stamp isn't
     /// today's, so yesterday's true can't cancel today's blocking when the
     /// app never ran overnight.

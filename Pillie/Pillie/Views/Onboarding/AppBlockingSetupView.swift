@@ -690,7 +690,8 @@ struct AppBlockingSetupView: View {
             isTodayHandled: store.isTodayHandled,
             reminderHour: store.reminderHour,
             reminderMinute: store.reminderMinute,
-            method: store.pack.method
+            method: store.pack.method,
+            blockingSchedule: store.blockingScheduleMirror
         )
     }
 }

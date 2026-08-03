@@ -204,19 +204,25 @@ final class PillPack {
     /// A pack starting mid-cycle (`cycleDayAnchorIndex > 0`) therefore completes after
     /// `cycleLength - anchor` calendar days, not `cycleLength`.
     func elapsedCycleDays(on date: Date, calendar: Calendar = .current) -> Int {
-        let anchorDate: Date
-        let anchorOffset: Int
-        if method == .ring, let ringDate = ringInsertionDate {
-            anchorDate = ringDate
-            anchorOffset = 0
-        } else {
-            anchorDate = startDate
-            anchorOffset = Self.normalizedCycleDayAnchorIndex(cycleDayAnchorIndex, cycleLength: cycleLength)
-        }
-        let start = calendar.startOfDay(for: Self.validatedDate(anchorDate, fallback: Date()))
+        let anchor = resolvedCycleAnchor()
+        let start = calendar.startOfDay(for: Self.validatedDate(anchor.date, fallback: Date()))
         let target = calendar.startOfDay(for: Self.validatedDate(date, fallback: start))
         let diff = calendar.dateComponents([.day], from: start, to: target).day ?? 0
-        return diff + anchorOffset
+        return diff + anchor.dayIndex
+    }
+
+    /// The single anchor used by cycle math and by the DeviceActivity schedule
+    /// mirror. Keeping the raw anchor date plus its cycle offset lets both sides
+    /// recompute the whole day index in the same current calendar after a time-
+    /// zone change.
+    func resolvedCycleAnchor() -> (date: Date, dayIndex: Int) {
+        if method == .ring, let ringDate = ringInsertionDate {
+            return (ringDate, 0)
+        }
+        return (
+            startDate,
+            Self.normalizedCycleDayAnchorIndex(cycleDayAnchorIndex, cycleLength: cycleLength)
+        )
     }
 
     func cycleDayIndex(on date: Date, calendar: Calendar = .current) -> Int {
