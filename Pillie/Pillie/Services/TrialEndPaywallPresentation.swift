@@ -28,20 +28,21 @@ enum TrialTermsCohort: String, Equatable {
 }
 
 /// Assigns the immutable trial cohort at the installation boundary. Existing
-/// app state identifies installs that predate this cutover release, while a
+/// app state identifies installs that predate the hard-paywall rollout, while
+/// every genuinely new install receives hard-paywall terms immediately. A
 /// persisted marker carries the decision forward until a trial is granted.
 enum TrialInstallCohort {
     static let assignmentStorageKey = "trialInstallHardPaywallCohort"
 
     static func assignment(
-        at date: Date,
+        at _: Date,
         hasExistingAppState: Bool,
         previousAssignment: TrialTermsCohort?
     ) -> TrialTermsCohort {
         if let previousAssignment {
             return previousAssignment
         }
-        if hasExistingAppState || date < HardPaywallPolicy.cutoverInstant {
+        if hasExistingAppState {
             return .preCutover
         }
         return .postCutover
@@ -72,8 +73,9 @@ enum TrialInstallCohort {
 }
 
 /// Dashboard-controlled rollback read from the current RevenueCat offering.
-/// Missing or malformed metadata keeps the ratified cutover enabled; operators
-/// explicitly set `hard_paywall_enabled` to `false` to restore legacy terms.
+/// Missing or malformed metadata keeps the ratified hard-paywall default enabled;
+/// operators explicitly set `hard_paywall_enabled` to `false` to restore legacy
+/// terms.
 struct HardPaywallRemoteConfiguration: Equatable {
     static let metadataKey = "hard_paywall_enabled"
 
@@ -84,8 +86,10 @@ struct HardPaywallRemoteConfiguration: Equatable {
     }
 }
 
-/// Issue #257's immutable cohort gate. The cutover is an absolute instant:
-/// 2026-08-14 00:00 America/Montreal (EDT) == 2026-08-14 04:00 UTC.
+/// Issue #257's immutable terms gate. `cutoverInstant` remains the historical
+/// boundary used to infer a cohort for legacy grants that predate the stored
+/// installation assignment. New installs are assigned `.postCutover` directly
+/// by `TrialInstallCohort`, regardless of the current date.
 enum HardPaywallPolicy {
     static let cutoverInstant = Date(timeIntervalSince1970: 1_786_680_000)
 
@@ -115,9 +119,9 @@ enum HardPaywallPolicy {
 }
 
 #if DEBUG
-/// Deterministic future-cutover scenario for simulator QA before August 14.
-/// Production still evaluates the real clock; only the debug deep link supplies
-/// this explicit evaluation instant.
+/// Deterministic hard-paywall scenario for simulator QA. Production uses the
+/// stored installation cohort; only the debug deep link supplies this explicit
+/// evaluation instant.
 struct TrialEndPaywallDebugScenario: Equatable {
     let grantDate: Date
     let evaluationDate: Date

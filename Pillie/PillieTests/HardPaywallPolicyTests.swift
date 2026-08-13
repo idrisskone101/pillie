@@ -30,7 +30,7 @@ struct HardPaywallPolicyTests {
         ))!
     }
 
-    @Test func `Grant before cutover keeps legacy terms`() {
+    @Test func `Historical grant before cutover keeps legacy terms`() {
         let grantDate = date(2026, 8, 13, 23, 59)
 
         #expect(HardPaywallPolicy.terms(
@@ -58,6 +58,14 @@ struct HardPaywallPolicyTests {
         ) == .preCutover)
         #expect(TrialInstallCohort.assignment(
             at: postCutoverGrant,
+            hasExistingAppState: false,
+            previousAssignment: nil
+        ) == .postCutover)
+    }
+
+    @Test func `Fresh install gets hard-paywall terms regardless of the old date`() {
+        #expect(TrialInstallCohort.assignment(
+            at: date(2026, 8, 12, 9, 0),
             hasExistingAppState: false,
             previousAssignment: nil
         ) == .postCutover)

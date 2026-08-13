@@ -8,7 +8,6 @@ import SwiftUI
 struct StatusCard: View {
     @Environment(PillStore.self) var store
     @Environment(\.locale) private var locale
-    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     private let valueChangeAnimation = Animation.easeInOut(duration: 0.28)
 
     var body: some View {
@@ -29,33 +28,12 @@ struct StatusCard: View {
             isTodayPassiveOrBreak: isTodayPassiveOrBreak,
             reminderTime: reminderTime
         )
-        let badgeText = badgeText(
-            alarmAction: alarmAction,
-            todayAction: todayAction,
-            isTodayTaken: isTodayTaken,
-            isTodayPassiveOrBreak: isTodayPassiveOrBreak
+        statusMainContent(
+            iconName: iconName,
+            reminderTime: reminderTime,
+            actionTitle: actionTitle,
+            isTodayTaken: isTodayTaken
         )
-
-        HStack(spacing: 14) {
-            statusMainContent(
-                iconName: iconName,
-                reminderTime: reminderTime,
-                actionTitle: actionTitle,
-                isTodayTaken: isTodayTaken
-            )
-            .layoutPriority(1)
-
-            Spacer(minLength: 0)
-
-            // At Accessibility Dynamic Type sizes the subtitle already states the
-            // action. Omitting the duplicate badge gives that localized sentence
-            // enough width to remain complete instead of ending in an ellipsis.
-            if !dynamicTypeSize.isAccessibilitySize {
-                if let badgeText {
-                    badge(badgeText, isTodayTaken: isTodayTaken)
-                }
-            }
-        }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(16)
         .background(isTodayTaken ? PillieTheme.coralLight : PillieTheme.cardWhite)
@@ -104,25 +82,6 @@ struct StatusCard: View {
                     .animation(valueChangeAnimation, value: actionTitle)
             }
         }
-    }
-
-    private func badge(_ text: String, isTodayTaken: Bool) -> some View {
-        HStack(spacing: 5) {
-            Circle()
-                .fill(PillieTheme.coral)
-                .frame(width: 6, height: 6)
-
-            Text(text)
-                .font(.pillieCaption())
-                .foregroundStyle(PillieTheme.coral)
-                .pillieAdaptiveLineLimit(minimumScaleFactor: 0.72)
-                .contentTransition(.opacity)
-                .animation(valueChangeAnimation, value: text)
-        }
-        .padding(.horizontal, 10)
-        .padding(.vertical, 5)
-        .background(isTodayTaken ? Color.white.opacity(0.8) : PillieTheme.coral.opacity(0.1))
-        .clipShape(Capsule())
     }
 
     private func iconName(for alarmAction: DoseScheduleAction?, isTodayTaken: Bool) -> String {
@@ -177,21 +136,6 @@ struct StatusCard: View {
         )
     }
 
-    private func badgeText(
-        alarmAction: DoseScheduleAction?,
-        todayAction: DoseScheduleAction?,
-        isTodayTaken: Bool,
-        isTodayPassiveOrBreak: Bool
-    ) -> String? {
-        if isTodayTaken {
-            return PillieLocalization.string("global.status.completed", locale: locale)
-        }
-        if isTodayPassiveOrBreak {
-            return PillieLocalization.string("global.status.break_day", locale: locale)
-        }
-        guard alarmAction != nil else { return nil }
-        return PillieLocalization.string("today.next_action.title", locale: locale)
-    }
 }
 
 #Preview {

@@ -119,8 +119,8 @@ final class SubscriptionManager: NSObject {
     private(set) var hasResolvedEntitlement = false
 
     /// Issue #257's remotely controlled cutover gate from the current RevenueCat
-    /// offering metadata. The ratified cutover is enabled unless the dashboard
-    /// explicitly sets `hard_paywall_enabled` to false.
+    /// offering metadata. The ratified hard-paywall default is enabled unless the
+    /// dashboard explicitly sets `hard_paywall_enabled` to false.
     private(set) var hardPaywallEnabled = true
 
     /// Auto-presentation waits for this first launch refresh so a dashboard kill

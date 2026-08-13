@@ -5,6 +5,7 @@
 
 import SwiftUI
 import SwiftData
+import UIKit
 
 struct HistoryView: View {
     @Environment(PillStore.self) private var store
@@ -25,7 +26,6 @@ struct HistoryView: View {
     @State private var isAnimatingTransition = false
     @State private var suppressAdherenceValueAnimation = false
     @State private var calendarWidth: CGFloat = 0
-    @State private var horizontalLocked = false
     @State private var monthSnapshotCache: [String: [Int: PillScheduleSnapshot]] = [:]
 
     private let performanceTier = PerformanceTier.current
@@ -126,7 +126,14 @@ struct HistoryView: View {
                         .zIndex(1)
                 }
                 .contentShape(Rectangle())
-                .gesture(monthDragGesture)
+                .overlay {
+                    HorizontalMonthDragSurface(
+                        onChanged: updateMonthDrag,
+                        onEnded: endMonthDrag,
+                        onCancelled: cancelMonthDrag
+                    )
+                    .accessibilityHidden(true)
+                }
                 .background {
                     GeometryReader { proxy in
                         Color.clear.preference(
@@ -230,54 +237,44 @@ struct HistoryView: View {
 
     // MARK: - Drag Gesture
 
-    private var monthDragGesture: some Gesture {
-        DragGesture(minimumDistance: 15)
-            .onChanged { value in
-                guard !isAnimatingTransition else { return }
+    private func updateMonthDrag(_ translation: CGFloat) {
+        guard !isAnimatingTransition else { return }
 
-                let tx = value.translation.width
-                let ty = value.translation.height
+        isDragging = true
+        dragOffset = translation
 
-                // Direction-lock: only claim horizontal if it's dominant
-                if !isDragging {
-                    guard abs(tx) > abs(ty) * 1.2 else { return }
-                    isDragging = true
-                    horizontalLocked = true
-                }
-                guard horizontalLocked else { return }
+        let direction: CGFloat = translation < 0 ? 1 : -1
+        if adjacentMonth == nil || transitionDirection != direction {
+            transitionDirection = direction
+            let month = MonthCursor.month(byAdding: Int(direction), to: displayedMonth)
+            adjacentMonth = month
+            warmMonthSnapshotCache(for: month)
+        }
+    }
 
-                dragOffset = tx
+    private func endMonthDrag(translation: CGFloat, velocity: CGFloat) {
+        guard isDragging else {
+            resetDragState()
+            return
+        }
 
-                // Determine which adjacent month to show
-                let dir: CGFloat = tx < 0 ? 1 : -1 // swipe left → next month (dir +1)
-                if adjacentMonth == nil || transitionDirection != dir {
-                    transitionDirection = dir
-                    let month = MonthCursor.month(byAdding: Int(dir), to: displayedMonth)
-                    adjacentMonth = month
-                    warmMonthSnapshotCache(for: month)
-                }
+        let threshold = slideDistance * 0.25
+        let matchingVelocity = (translation < 0 && velocity < -200)
+            || (translation > 0 && velocity > 200)
 
-                // Interpolate container height during drag
-                interpolateHeight(progress: abs(tx) / slideDistance)
-            }
-            .onEnded { value in
-                guard isDragging, horizontalLocked else {
-                    resetDragState()
-                    return
-                }
+        if abs(translation) > threshold || matchingVelocity {
+            completeMonthTransition()
+        } else {
+            cancelMonthTransition()
+        }
+    }
 
-                let tx = value.translation.width
-                let vx = value.velocity.width
-                let threshold = slideDistance * 0.25
-
-                // Complete if dragged far enough or flicked fast enough
-                let matchingVelocity = (tx < 0 && vx < -200) || (tx > 0 && vx > 200)
-                if abs(tx) > threshold || matchingVelocity {
-                    completeMonthTransition()
-                } else {
-                    cancelMonthTransition()
-                }
-            }
+    private func cancelMonthDrag() {
+        guard isDragging else {
+            resetDragState()
+            return
+        }
+        cancelMonthTransition()
     }
 
     // MARK: - Navigation (buttons)
@@ -310,27 +307,26 @@ struct HistoryView: View {
 
         let nextMonthID = Self.monthIdentity(for: nextMonth)
         let targetOffset = -transitionDirection * slideDistance
+        let nextMonthHeight = measuredMonthHeights[nextMonthID]
         suppressAdherenceValueAnimation = shouldSuppressAdherenceValueAnimation(nextMonthID: nextMonthID)
 
         withAnimation(transitionAnimation, completionCriteria: .logicallyComplete) {
             dragOffset = targetOffset
-            if let knownHeight = measuredMonthHeights[nextMonthID] {
-                calendarContainerHeight = knownHeight
-            }
         } completion: {
             displayedMonth = nextMonth
             warmMonthSnapshotCache(for: nextMonth)
             resetDragState()
+            if let nextMonthHeight {
+                withAnimation(transitionAnimation) {
+                    calendarContainerHeight = nextMonthHeight
+                }
+            }
         }
     }
 
     private func cancelMonthTransition() {
         withAnimation(transitionAnimation, completionCriteria: .logicallyComplete) {
             dragOffset = 0
-            // Restore current month height
-            if let currentHeight = measuredMonthHeights[monthIdentity] {
-                calendarContainerHeight = currentHeight
-            }
         } completion: {
             resetDragState()
         }
@@ -339,7 +335,6 @@ struct HistoryView: View {
     private func resetDragState() {
         dragOffset = 0
         isDragging = false
-        horizontalLocked = false
         adjacentMonth = nil
         transitionDirection = 0
         isAnimatingTransition = false
@@ -347,18 +342,6 @@ struct HistoryView: View {
     }
 
     // MARK: - Height Management
-
-    private func interpolateHeight(progress: CGFloat) {
-        guard let adj = adjacentMonth else { return }
-        let currentID = monthIdentity
-        let adjID = Self.monthIdentity(for: adj)
-
-        guard let currentH = measuredMonthHeights[currentID],
-              let adjH = measuredMonthHeights[adjID] else { return }
-
-        let clamped = min(max(progress, 0), 1)
-        calendarContainerHeight = currentH + (adjH - currentH) * clamped
-    }
 
     private func updateCalendarHeight(with heights: [String: CGFloat]) {
         guard !heights.isEmpty else { return }
@@ -454,6 +437,129 @@ struct HistoryView: View {
                 .foregroundStyle(PillieTheme.textMuted)
                 .fixedSize(horizontal: false, vertical: true)
         }
+    }
+}
+
+/// A horizontal-only pan surface that explicitly wins over the surrounding
+/// vertical scroll view. The ancestor waits for this recognizer to reject a
+/// vertical drag; horizontal drags therefore cannot move both axes at once.
+private struct HorizontalMonthDragSurface: UIViewRepresentable {
+    var onChanged: (CGFloat) -> Void
+    var onEnded: (_ translation: CGFloat, _ velocity: CGFloat) -> Void
+    var onCancelled: () -> Void
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(
+            onChanged: onChanged,
+            onEnded: onEnded,
+            onCancelled: onCancelled
+        )
+    }
+
+    func makeUIView(context: Context) -> MonthDragSurfaceView {
+        let view = MonthDragSurfaceView()
+        view.backgroundColor = .clear
+        view.isAccessibilityElement = false
+
+        let panGesture = UIPanGestureRecognizer(
+            target: context.coordinator,
+            action: #selector(Coordinator.handlePan(_:))
+        )
+        panGesture.delegate = context.coordinator
+        panGesture.cancelsTouchesInView = true
+        view.addGestureRecognizer(panGesture)
+
+        context.coordinator.panGesture = panGesture
+        view.didMoveToWindowHandler = { [weak view, weak coordinator = context.coordinator] in
+            guard let view, let coordinator else { return }
+            coordinator.configureGesturePriority(from: view)
+        }
+
+        return view
+    }
+
+    func updateUIView(_ uiView: MonthDragSurfaceView, context: Context) {
+        context.coordinator.onChanged = onChanged
+        context.coordinator.onEnded = onEnded
+        context.coordinator.onCancelled = onCancelled
+        context.coordinator.configureGesturePriority(from: uiView)
+    }
+
+    final class Coordinator: NSObject, UIGestureRecognizerDelegate {
+        var onChanged: (CGFloat) -> Void
+        var onEnded: (_ translation: CGFloat, _ velocity: CGFloat) -> Void
+        var onCancelled: () -> Void
+        weak var panGesture: UIPanGestureRecognizer?
+        weak var configuredScrollView: UIScrollView?
+
+        init(
+            onChanged: @escaping (CGFloat) -> Void,
+            onEnded: @escaping (_ translation: CGFloat, _ velocity: CGFloat) -> Void,
+            onCancelled: @escaping () -> Void
+        ) {
+            self.onChanged = onChanged
+            self.onEnded = onEnded
+            self.onCancelled = onCancelled
+        }
+
+        func configureGesturePriority(from view: UIView) {
+            guard let panGesture else { return }
+
+            var ancestor = view.superview
+            while let candidate = ancestor {
+                if let scrollView = candidate as? UIScrollView {
+                    guard configuredScrollView !== scrollView else { return }
+                    scrollView.panGestureRecognizer.require(toFail: panGesture)
+                    configuredScrollView = scrollView
+                    return
+                }
+                ancestor = candidate.superview
+            }
+        }
+
+        func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+            guard let panGesture = gestureRecognizer as? UIPanGestureRecognizer else {
+                return false
+            }
+            let velocity = panGesture.velocity(in: panGesture.view)
+            return abs(velocity.x) > abs(velocity.y)
+        }
+
+        func gestureRecognizer(
+            _ gestureRecognizer: UIGestureRecognizer,
+            shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer
+        ) -> Bool {
+            false
+        }
+
+        @objc func handlePan(_ gesture: UIPanGestureRecognizer) {
+            let translation = gesture.translation(in: gesture.view).x
+
+            switch gesture.state {
+            case .began, .changed:
+                onChanged(translation)
+            case .ended:
+                onEnded(
+                    translation,
+                    gesture.velocity(in: gesture.view).x
+                )
+            case .cancelled, .failed:
+                onCancelled()
+            case .possible:
+                break
+            @unknown default:
+                onCancelled()
+            }
+        }
+    }
+}
+
+private final class MonthDragSurfaceView: UIView {
+    var didMoveToWindowHandler: (() -> Void)?
+
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
+        didMoveToWindowHandler?()
     }
 }
 

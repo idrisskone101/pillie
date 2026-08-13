@@ -153,6 +153,9 @@ struct ReminderSchedulePlanner {
         }
 
         let dueActions = input.candidateDueActions.filter { action in
+            // Break and passive days are never reminder-bearing, even if a
+            // stale or malformed candidate bypasses DoseScheduleEngine's scan.
+            guard action.type.requiresUserAction else { return false }
             let key = epochDay(for: action.date, calendar: input.calendar)
             return input.statusByEpochDay[key] != .taken
         }

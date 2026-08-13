@@ -23,6 +23,7 @@ final class ExistingUserTrialGrantTests: XCTestCase {
         isEntitlementResolved: Bool = true,
         hasEntitlement: Bool = false,
         hasTrialGrant: Bool = false,
+        termsCohort: TrialTermsCohort = .preCutover,
         alreadyHandled: Bool = false
     ) -> ExistingUserTrialGrant.State {
         ExistingUserTrialGrant.State(
@@ -30,6 +31,7 @@ final class ExistingUserTrialGrantTests: XCTestCase {
             isEntitlementResolved: isEntitlementResolved,
             hasEntitlement: hasEntitlement,
             hasTrialGrant: hasTrialGrant,
+            termsCohort: termsCohort,
             alreadyHandled: alreadyHandled
         )
     }
@@ -38,6 +40,13 @@ final class ExistingUserTrialGrantTests: XCTestCase {
         XCTAssertEqual(
             ExistingUserTrialGrant.evaluate(for: state()),
             .grantAndAnnounce
+        )
+    }
+
+    func testCompletedPostCutoverInstallWithoutGrantIsNotGrandfathered() {
+        XCTAssertEqual(
+            ExistingUserTrialGrant.evaluate(for: state(termsCohort: .postCutover)),
+            .suppressed(.postCutoverInstall)
         )
     }
 
@@ -97,6 +106,7 @@ final class ExistingUserTrialGrantTests: XCTestCase {
         XCTAssertTrue(ExistingUserTrialGrant.closesWindow(.grantAndAnnounce))
         XCTAssertTrue(ExistingUserTrialGrant.closesWindow(.suppressed(.alreadyEntitled)))
         XCTAssertTrue(ExistingUserTrialGrant.closesWindow(.suppressed(.alreadyTrialed)))
+        XCTAssertTrue(ExistingUserTrialGrant.closesWindow(.suppressed(.postCutoverInstall)))
     }
 
     func testUndecidedLaunchesLeaveTheWindowOpen() {
