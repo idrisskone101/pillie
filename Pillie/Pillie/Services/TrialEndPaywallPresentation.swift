@@ -488,3 +488,10 @@ struct TrialEndPaywallPresentationState: Equatable {
         presentedContent = nil
     }
 }
+
+/// Presentation plumbing for `fullScreenCover(item:)`: the identity only tracks
+/// the presented snapshot across re-renders, so any stable per-content value
+/// works. The content itself is immutable while presented.
+extension TrialEndPaywallContent: Identifiable {
+    var id: String { "\(cohort)-\(terms)-\(termsCohort)" }
+}
