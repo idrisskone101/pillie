@@ -27,8 +27,22 @@ struct HomeView: View {
     @State private var showTrialCustomMessagesEditor = false
     @State private var showTrialSmartRemindersEditor = false
     @State private var pendingTrialActivationAction: TrialActivationAction?
-    @State private var showTrialEndPaywall = false
     @State private var trialEndPaywallPresentation = TrialEndPaywallPresentationState()
+
+    /// The presented Trial-End Paywall snapshot as an item binding: the cover and
+    /// its content are one atomic unit, so the paywall can never present blank.
+    private var trialEndPaywallItem: Binding<TrialEndPaywallContent?> {
+        Binding(
+            get: { trialEndPaywallPresentation.presentedContent },
+            set: { newValue in
+                if let newValue {
+                    trialEndPaywallPresentation.present(newValue)
+                } else {
+                    trialEndPaywallPresentation.dismiss()
+                }
+            }
+        )
+    }
     @State private var showTrialDeclineThankYou = false
     @State private var adaptiveReminderShownLogged = false
     @State private var reviewPromptShownLogged = false
@@ -180,9 +194,19 @@ struct HomeView: View {
             )
         }
         if let content = trialEndPaywallContent {
+            presentTrialEndPaywall(content)
+        }
+    }
+
+    /// The Trial-End Paywall presentation must not be written synchronously from
+    /// a body re-evaluation trigger (`.onAppear` / `.onChange` of the `@Observable`
+    /// subscription state): a mid-update write is rolled back when the update
+    /// finishes, which previously left the cover presenting a nil snapshot — a
+    /// blank white screen. Deferring one tick lands the write in a clean update.
+    private func presentTrialEndPaywall(_ content: TrialEndPaywallContent) {
+        DispatchQueue.main.async {
             trialEndPaywallPresentation.present(content)
         }
-        showTrialEndPaywall = true
     }
 
     private func routeTrialDeclineFeedback() -> TrialDeclineFeedbackRoute {
@@ -202,7 +226,7 @@ struct HomeView: View {
 
     private func resolveTrialDeclineFeedback() {
         trialDeclineFeedbackStore.markResolved()
-        showTrialEndPaywall = false
+        trialEndPaywallPresentation.dismiss()
         withAnimation(unifiedStateTransition) {
             showTrialDeclineThankYou = true
         }
@@ -382,8 +406,7 @@ struct HomeView: View {
                                 // stays the fallback for lapsed payers with no
                                 // expired trial. Each reports paywallViewed itself.
                                 if let content = trialEndPaywallContent {
-                                    trialEndPaywallPresentation.present(content)
-                                    showTrialEndPaywall = true
+                                    presentTrialEndPaywall(content)
                                 } else {
                                     blockingPaywallSurface = .protectionOffCard
                                     showBlockingPaywall = true
@@ -606,18 +629,16 @@ struct HomeView: View {
                 .presentationBackground(PillieTheme.bg)
         }
         .fullScreenCover(
-            isPresented: $showTrialEndPaywall,
+            item: trialEndPaywallItem,
             onDismiss: { trialEndPaywallPresentation.dismiss() }
-        ) {
-            if let content = trialEndPaywallPresentation.presentedContent {
-                TrialEndPaywallView(
-                    content: content,
-                    declineFeedbackContent: .make(locale: locale),
-                    routeContinueFree: routeTrialDeclineFeedback,
-                    onDismiss: { showTrialEndPaywall = false },
-                    onFeedbackResolved: resolveTrialDeclineFeedback
-                )
-            }
+        ) { content in
+            TrialEndPaywallView(
+                content: content,
+                declineFeedbackContent: .make(locale: locale),
+                routeContinueFree: routeTrialDeclineFeedback,
+                onDismiss: { trialEndPaywallPresentation.dismiss() },
+                onFeedbackResolved: resolveTrialDeclineFeedback
+            )
         }
         .fullScreenCover(isPresented: $showTrialKeepPlusPaywall) {
             PremiumPaywallView(
