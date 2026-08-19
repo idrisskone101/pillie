@@ -439,9 +439,30 @@ final class AnalyticsManagerTests: XCTestCase {
 
   func testProductAnalyticsTelemetryDoesNotAddMotionHapticOrAnimationEvents() {
     let disallowedEventTerms = ["animation", "feedback", "haptic", "motion"]
+    // Product-domain exceptions (#246): the one-time trial-decline survey is a
+    // legitimate product funnel, not the Interaction Feedback (haptics/motion)
+    // instrumentation the #60 guard disallows. These event names are a live
+    // analytics contract, so they stay; any new event containing a disallowed
+    // term still fails unless it is consciously allowlisted here.
+    let allowedProductDomainEvents: Set<String> = [
+      "trial_decline_feedback_viewed",
+      "trial_decline_feedback_reason_selected",
+      "trial_decline_feedback_text_submitted",
+      "trial_decline_feedback_skipped",
+      "trial_decline_feedback_completed",
+    ]
     let eventNames = AnalyticsEvent.allCases.map(\.rawValue)
 
-    for eventName in eventNames {
+    // The allowlist must not rot: if an exempted event is renamed or removed,
+    // fail loudly so this list is revisited.
+    for allowed in allowedProductDomainEvents {
+      XCTAssertTrue(
+        eventNames.contains(allowed),
+        "\(allowed) was renamed or removed — update the product-domain allowlist"
+      )
+    }
+
+    for eventName in eventNames where !allowedProductDomainEvents.contains(eventName) {
       for term in disallowedEventTerms {
         XCTAssertFalse(
           eventName.contains(term),
