@@ -367,8 +367,10 @@ final class AnalyticsManagerTests: XCTestCase {
       [
         .coreOnboardingCompleted,
         .onboardingCompleted,
-        .trialActivated,
+        // #265: the grant precedes activation so ordered funnels preserve the
+        // Reverse Trial lifecycle order.
         .trialGranted,
+        .trialActivated,
         .blockerSetupStarted,
         .blockerSetupSkipped,
       ]
