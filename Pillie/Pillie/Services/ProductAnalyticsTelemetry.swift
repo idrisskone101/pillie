@@ -225,10 +225,11 @@ struct ProductAnalyticsTelemetry {
   }
 
   /// Reports successful Reverse Trial activation and keeps the pre-existing
-  /// `trial_granted` event for ADR 0007 dashboards.
+  /// `trial_granted` event for ADR 0007 dashboards. `trial_granted` is emitted
+  /// first so ordered funnels preserve the grant → activation lifecycle (#265).
   func trialActivated() {
-    track(.trialActivated, source: .onboarding, step: .appBlocking)
     trialGranted()
+    track(.trialActivated, source: .onboarding, step: .appBlocking)
   }
 
   func blockerSetupStarted() {
