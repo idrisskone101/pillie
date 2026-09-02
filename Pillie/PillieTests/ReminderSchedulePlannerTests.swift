@@ -549,9 +549,6 @@ final class ReminderSchedulePlannerTests: XCTestCase {
     }
 
     func testFutureDayReplansAtConfiguredTimeDespiteServedEntry() throws {
-        // Reminder-time changes must reach future days: a served entry recorded
-        // under the old time (e.g. 8:00) must not freeze tomorrow's base when the
-        // user has since moved the reminder to 9:30.
         let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 10, minute: 0)
         let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
         fixture.store.reminderHour = 9
@@ -575,8 +572,6 @@ final class ReminderSchedulePlannerTests: XCTestCase {
     }
 
     func testTodayBeforeConfiguredTimeIgnoresServedEntry() throws {
-        // Same-day reminder-time change while the configured time is still ahead:
-        // the new configured time wins over a served entry recorded pre-change.
         let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 10, minute: 0)
         let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
         fixture.store.reminderHour = 22

@@ -177,7 +177,7 @@ struct ReminderSchedulePlanner {
             let dueDay = input.calendar.startOfDay(for: due.date)
             let dueEpoch = Int(dueDay.timeIntervalSince1970)
             let served = input.servedBaseFireDateByDueDayEpoch[dueEpoch]
-            let anchor = dueDayReminderAnchorDate(
+            let anchor = originalFirstReminderDate(
                 dueDay: dueDay,
                 now: input.now,
                 reminderHour: input.reminderHour,
@@ -487,10 +487,7 @@ struct ReminderSchedulePlanner {
         let configured = reminderDate(on: dueDay, hour: reminderHour, minute: reminderMinute, calendar: calendar)
         let endOfDay = endOfDayExclusive(for: dueDay, calendar: calendar)
 
-        // The served record only governs catch-up territory: today, after the
-        // configured time has passed. Everywhere else the configured time wins so
-        // reminder-time changes always replan future (or later-today) reminders.
-        guard calendar.isDate(dueDay, inSameDayAs: now), configured <= now else {
+        guard isCatchUpTerritory(dueDay: dueDay, now: now, configuredFireDate: configured, calendar: calendar) else {
             return configured
         }
 
@@ -503,7 +500,9 @@ struct ReminderSchedulePlanner {
         return now.addingTimeInterval(TimeInterval(Self.catchupDelayMinutes * 60))
     }
 
-    private func dueDayReminderAnchorDate(
+    /// The day's original first-reminder moment, anchoring retry cadence and the
+    /// Last Call gap. Outside catch-up territory this is the configured time.
+    private func originalFirstReminderDate(
         dueDay: Date,
         now: Date,
         reminderHour: Int,
@@ -512,13 +511,17 @@ struct ReminderSchedulePlanner {
         calendar: Calendar
     ) -> Date {
         let configured = reminderDate(on: dueDay, hour: reminderHour, minute: reminderMinute, calendar: calendar)
-        // The served fire moment is the anchor only once the configured moment was
-        // consumed (base fired or catch-up armed); otherwise anchor to configured.
         if let servedBaseFireDate,
-           calendar.isDate(dueDay, inSameDayAs: now), configured <= now {
+           isCatchUpTerritory(dueDay: dueDay, now: now, configuredFireDate: configured, calendar: calendar) {
             return servedBaseFireDate
         }
         return configured
+    }
+
+    /// Catch-up territory is today after the configured reminder time has passed:
+    /// the only place a served record may suppress or freeze the base reminder.
+    private func isCatchUpTerritory(dueDay: Date, now: Date, configuredFireDate: Date, calendar: Calendar) -> Bool {
+        calendar.isDate(dueDay, inSameDayAs: now) && configuredFireDate <= now
     }
 
     private func firstReminderDateForDueAction(

@@ -83,8 +83,8 @@ final class NotificationManager {
     }
 
     private final class LedgerMutationBox {
-        var ledger: DueBaseReminderLedger
-        init(_ ledger: DueBaseReminderLedger) { self.ledger = ledger }
+        var ledger: ServedBaseReminderLedger
+        init(_ ledger: ServedBaseReminderLedger) { self.ledger = ledger }
     }
 
     struct ManagedReminderDiff {
@@ -187,7 +187,7 @@ final class NotificationManager {
             self.center.getDeliveredNotifications { [weak self] delivered in
                 guard let self else { return }
 
-                let ledger = DueBaseReminderLedger.load()
+                let ledger = ServedBaseReminderLedger.load()
                 let managedPending = pending.filter { self.isManagedReminderID($0.identifier) }
                 let managedDelivered = delivered.filter { self.isManagedReminderID($0.request.identifier) }
                 let servedMap = ledger.servedBaseFireDates(
@@ -269,8 +269,8 @@ final class NotificationManager {
 
         store.markActionAsTaken(on: dueDate)
         AppBlockingManager.shared.removeBlocking()
-        var ledger = DueBaseReminderLedger.load()
-        ledger.clear(dueDayEpoch: dueEpoch)
+        var ledger = ServedBaseReminderLedger.load()
+        ledger.clearServedRecordWhenTaken(dueDayEpoch: dueEpoch)
         ledger.save()
         clearReminders(forDueDayEpoch: dueEpoch)
         rescheduleFromStore(store)
@@ -293,10 +293,6 @@ final class NotificationManager {
         }
 
         clearReminders(forDueDayEpoch: dueEpoch)
-        // The served-base ledger entry must survive a snooze: without it the next
-        // override-less rebuild would read the day as never-served and arm a catch-up
-        // base alongside the pending snooze. The snooze override is evaluated before
-        // the served record, so keeping the entry cannot block the snooze re-fire.
         let snoozeStart = Date().addingTimeInterval(TimeInterval(store.autoReminderIntervalMinutes * 60))
         rescheduleFromStore(
             store,
@@ -617,7 +613,7 @@ final class NotificationManager {
     private func applyManagedReminderRequests(
         _ newRequests: [UNNotificationRequest],
         store: PillStore,
-        ledger: DueBaseReminderLedger
+        ledger: ServedBaseReminderLedger
     ) {
         center.getAuthorizationStatus { [weak self] status in
             guard let self else { return }
@@ -634,7 +630,7 @@ final class NotificationManager {
     private func applyAuthorizedManagedReminderRequests(
         _ newRequests: [UNNotificationRequest],
         store: PillStore,
-        ledger: DueBaseReminderLedger
+        ledger: ServedBaseReminderLedger
     ) {
         let managedNewRequests = newRequests.filter { isManagedReminderID($0.identifier) }
         let newRequestByID = Dictionary(uniqueKeysWithValues: managedNewRequests.map { ($0.identifier, $0) })

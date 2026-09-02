@@ -1,14 +1,12 @@
 //
-//  DueBaseReminderLedger.swift
+//  ServedBaseReminderLedger.swift
 //  Pillie
 //
 
 import Foundation
 import UserNotifications
 
-/// Persisted record of base Due Action Reminders the app actually committed to
-/// schedule. Bounded to recent horizon; keyed by start-of-day epoch.
-struct DueBaseReminderLedger: Codable, Equatable {
+struct ServedBaseReminderLedger: Codable, Equatable {
     private(set) var fireEpochByDueDayEpoch: [Int: Int]
 
     static let userDefaultsKey = "pillie_served_base_reminder_by_day"
@@ -18,10 +16,10 @@ struct DueBaseReminderLedger: Codable, Equatable {
         self.fireEpochByDueDayEpoch = fireEpochByDueDayEpoch
     }
 
-    static func load() -> DueBaseReminderLedger {
+    static func load() -> ServedBaseReminderLedger {
         guard let data = UserDefaults.standard.data(forKey: userDefaultsKey),
-              let ledger = try? JSONDecoder().decode(DueBaseReminderLedger.self, from: data) else {
-            return DueBaseReminderLedger()
+              let ledger = try? JSONDecoder().decode(ServedBaseReminderLedger.self, from: data) else {
+            return ServedBaseReminderLedger()
         }
         return ledger
     }
@@ -42,9 +40,8 @@ struct DueBaseReminderLedger: Codable, Equatable {
         }
     }
 
-    mutating func clear(dueDayEpoch: Int) -> DueBaseReminderLedger {
+    mutating func clearServedRecordWhenTaken(dueDayEpoch: Int) {
         fireEpochByDueDayEpoch.removeValue(forKey: dueDayEpoch)
-        return self
     }
 
     func servedBaseFireDates(
