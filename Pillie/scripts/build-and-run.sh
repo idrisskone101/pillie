@@ -9,7 +9,7 @@
 
 set -euo pipefail
 
-UDID="124DC75F-0771-4C81-841D-F13655138260"
+UDID="${PILLIE_SIMULATOR_UDID:-124DC75F-0771-4C81-841D-F13655138260}"
 SCHEME="Pillie"
 PROJECT="Pillie.xcodeproj"
 BUNDLE_ID="com.idrisskone.pillie"
@@ -52,6 +52,12 @@ Options:
   --console     Launch attached to the blocking app console.
 
 Default launch is headless so the command returns after simctl prints the app PID.
+
+Environment:
+  PILLIE_DERIVED_DATA=/tmp/PillieDerivedData-demo
+  PILLIE_SIMULATOR_UDID=<simulator-udid>
+  PILLIE_BUILD_JOBS=<n>          compile cores (default 4)
+  PILLIE_KEEP_EXTRA_SIMS=YES     leave other booted simulators running
 EOF
 }
 
@@ -81,8 +87,11 @@ for arg in "$@"; do
 done
 
 build() {
+  local jobs
+  jobs="$(pillie_build_jobs)"
   echo "▸ Building $SCHEME..."
   echo "▸ DerivedData: $DERIVED_DATA"
+  echo "▸ Jobs: $jobs (PILLIE_BUILD_JOBS to override)"
   if [[ -n "${DEVELOPER_DIR:-}" ]]; then
     echo "▸ DeveloperDir: $DEVELOPER_DIR"
   fi
@@ -94,6 +103,7 @@ build() {
     -destination "id=$UDID" \
     -derivedDataPath "$DERIVED_DATA" \
     -configuration Debug \
+    -jobs "$jobs" \
     build 2>&1 | xcsift
 }
 
@@ -112,8 +122,10 @@ launch_app() {
   fi
 }
 
+pillie_select_developer_dir
+pillie_shutdown_extra_simulators "$UDID"
+
 if [[ "$BUILD" == "1" ]]; then
-  pillie_select_developer_dir
   build
 fi
 

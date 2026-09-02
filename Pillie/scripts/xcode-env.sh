@@ -58,3 +58,57 @@ pillie_xcode_app_path() {
     printf "%s" "/Applications/Xcode.app"
   fi
 }
+
+pillie_default_simulator_udid() {
+  printf "%s" "${PILLIE_SIMULATOR_UDID:-124DC75F-0771-4C81-841D-F13655138260}"
+}
+
+# Quiet-by-default Swift compile parallelism. Uncapped `xcodebuild` uses every
+# CPU core (10 on the M5) and is the usual fan trigger for "just launch the
+# simulator". Override with PILLIE_BUILD_JOBS=10 for a full-speed compile.
+pillie_build_jobs() {
+  printf "%s" "${PILLIE_BUILD_JOBS:-4}"
+}
+
+# XCTest simulator cloning. Keep this off locally: parallelizable test
+# destinations clone one iPhone 17 Pro per CPU core.
+pillie_parallel_testing_enabled() {
+  printf "%s" "${PILLIE_TEST_PARALLEL:-NO}"
+}
+
+# Keep a single booted simulator. Each extra iPhone 17 Pro in Device Hub adds
+# SpringBoard plus several SimMetalHost processes. Skip with
+# PILLIE_KEEP_EXTRA_SIMS=YES when two canvases are intentional.
+pillie_shutdown_extra_simulators() {
+  local keep_udid="$1"
+  local extra
+  if [[ "${PILLIE_KEEP_EXTRA_SIMS:-}" == "YES" ]]; then
+    return 0
+  fi
+  extra="$(
+    PILLIE_KEEP_UDID="$keep_udid" python3 - <<'PY'
+import json, os, subprocess, sys
+keep = os.environ["PILLIE_KEEP_UDID"]
+try:
+    raw = subprocess.check_output(
+        ["xcrun", "simctl", "list", "devices", "booted", "-j"],
+        stderr=subprocess.DEVNULL,
+    )
+except subprocess.CalledProcessError:
+    sys.exit(0)
+data = json.loads(raw)
+for devices in data.get("devices", {}).values():
+    for device in devices:
+        if device.get("state") == "Booted" and device.get("udid") != keep:
+            print(f"{device['udid']}\t{device.get('name', '')}")
+PY
+  )"
+  if [[ -z "$extra" ]]; then
+    return 0
+  fi
+  while IFS=$'\t' read -r udid name; do
+    [[ -z "$udid" ]] && continue
+    echo "> Shutting down extra simulator: ${name:-unknown} ($udid)"
+    xcrun simctl shutdown "$udid" >/dev/null 2>&1 || true
+  done <<< "$extra"
+}

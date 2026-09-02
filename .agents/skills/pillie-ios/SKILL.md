@@ -24,32 +24,34 @@ Use this skill whenever the task touches the Pillie iOS app, Xcode project, simu
 - Simulator AX/browser mapper: `Pillie/scripts/simulator-browser-ax-map.mjs`
 - Worktree helper: `Pillie/scripts/create-worktree.sh`
 - Codex environment: `.codex/environments/environment.toml` (`Pillie iOS`)
+- opencode config: `opencode.json` (project) + `.opencode/instructions/opencode.md` overlay
 
 Keep DerivedData in `/tmp`. The project folder can be iCloud-backed, and project-local DerivedData can break codesigning because of Finder xattrs.
 
 ## Git Worktrees
 
-Use Git worktrees for parallel feature work. Codex-created feature worktrees should use branch names like `codex/<feature-name>` and sibling paths like `/Users/idrisskone/Developer/Pillie-<feature-name>`.
+Use Git worktrees for parallel feature work. Feature worktrees use branch names like `codex/<feature-name>` (Codex) or `feature/<feature-name>` (opencode) and sibling paths like `/Users/idrisskone/Developer/Pillie-<feature-name>`.
 
-When starting a new task from the Codex app, use **Create worktree** and select the `Pillie iOS` local environment. The environment setup runs automatically, exposes the Build/Run actions in the thread UI, and lets `build-and-run.sh` choose the right `/tmp/PillieDerivedData-*` path for the Codex-managed worktree.
+When starting a new task from the Codex app, use **Create worktree** and select the `Pillie iOS` local environment. The environment setup runs automatically, exposes the Build/Run actions in the thread UI, and lets `build-and-run.sh` choose the right `/tmp/PillieDerivedData-*` path for the Codex-managed worktree. opencode has no equivalent app action — opencode sessions create worktrees only through the helper script below with a `feature/<slug>` branch, and skip the Codex Browser mirror workflow entirely (use the screenshot + AXe Visual QA loop instead).
 
-Default Codex task rule:
+Default task rule:
 
 - Treat `/Users/idrisskone/Developer/Pillie` as the orchestration checkout.
 - For every new implementation, bug fix, UI change, QA fix, refactor, or build/test task that needs file edits, create or enter a feature worktree before changing app code.
-- Name Codex task branches `codex/<short-task-slug>` unless the user requests a specific branch.
+- Name branches `codex/<short-task-slug>` from Codex or `feature/<short-task-slug>` from opencode unless the user requests a specific branch.
 - Use sibling paths like `/Users/idrisskone/Developer/Pillie-<short-task-slug>`.
 - If the current working directory is the main checkout and no task worktree exists yet, run the helper below first, then continue all edits, builds, simulator installs, screenshots, and commits from that worktree.
-- Only edit the main checkout directly for repo-level workflow files such as `AGENTS.md`, `.agents/skills`, or worktree helper scripts, unless the user explicitly asks to work on `main`.
+- Only edit the main checkout directly for repo-level workflow files such as `AGENTS.md`, `.agents/skills`, `opencode.json`, or worktree helper scripts, unless the user explicitly asks to work on `main`.
 
 Create a feature worktree with:
 
 ```bash
 cd /Users/idrisskone/Developer/Pillie
-Pillie/scripts/create-worktree.sh codex/<feature-name>
+Pillie/scripts/create-worktree.sh codex/<feature-name>   # Codex
+Pillie/scripts/create-worktree.sh feature/<feature-name> # opencode
 ```
 
-The helper creates or reuses the branch, creates the sibling worktree, and prints the matching `/tmp/PillieDerivedData-<worktree>` build path. Use the helper by default for new Codex worktrees.
+The helper creates or reuses the branch, creates the sibling worktree, and prints the matching `/tmp/PillieDerivedData-<worktree>` build path. Use the helper by default for new worktrees.
 
 The MCP and shell build scripts auto-select `/tmp/PillieDerivedData` for the main checkout and `/tmp/PillieDerivedData-<worktree-folder>` for sibling worktrees. Override it explicitly when needed:
 
@@ -61,7 +63,7 @@ The simulator install is shared by bundle ID (`com.idrisskone.pillie`). Running 
 
 ## Tool Preference
 
-Prefer XcodeBuildMCP/Xcode tooling when available. Use the repo-local MCP wrapper scripts first because they preserve Pillie's pinned simulator and `/tmp` DerivedData rules across Codex sessions. If MCP tooling is unavailable or insufficient, use the shell fallback commands below.
+Prefer XcodeBuildMCP/Xcode tooling when available. Use the repo-local MCP wrapper scripts first because they preserve Pillie's pinned simulator and `/tmp` DerivedData rules across agent sessions. If MCP tooling is unavailable or insufficient, use the shell fallback commands below.
 
 During the Xcode 27 transition, Pillie scripts source `Pillie/scripts/xcode-env.sh` and auto-select `/Users/idrisskone/Downloads/Xcode-beta.app/Contents/Developer` when the globally selected Xcode is older. Override that with `PILLIE_DEVELOPER_DIR=/path/to/Xcode.app/Contents/Developer` when needed.
 
@@ -91,6 +93,7 @@ DEVELOPER_DIR=/Users/idrisskone/Downloads/Xcode-beta.app/Contents/Developer xcod
   -destination "id=124DC75F-0771-4C81-841D-F13655138260" \
   -derivedDataPath /tmp/PillieDerivedData \
   -configuration Debug \
+  -jobs 4 \
   build 2>&1 | xcsift
 ```
 
@@ -108,7 +111,7 @@ cd /Users/idrisskone/Developer/Pillie && Pillie/scripts/build-and-run.sh
 
 `build-and-run.sh` launches headlessly by default so the command returns after `simctl` prints the app PID. Do not use blocking console launch for routine build/run verification; opt into it only when console output is the thing being inspected.
 
-Mirror the simulator into Codex Browser:
+Mirror the simulator into Codex Browser (Codex sessions only — skip this in opencode and use the Visual QA Loop below):
 
 ```bash
 cd /Users/idrisskone/Developer/Pillie
@@ -139,7 +142,7 @@ cd /Users/idrisskone/Developer/Pillie && Pillie/scripts/test-focused.sh SoftPayw
 
 Pass one or more explicit XCTest classes or methods. The helper uses the same simulator and `/tmp` DerivedData selection as `build-and-run.sh`, and intentionally requires at least one test target to avoid accidental full-suite local runs.
 
-The scheme marks `PillieTests` as `parallelizable`, so stock `xcodebuild test` clones the simulator once per CPU core and pegs every core (loud fans, hot machine). Both focused-test helpers pass `-parallel-testing-enabled NO` by default — one simulator, one test runner. Override per run with `PILLIE_TEST_PARALLEL=YES` to restore cloning, or cap the compile phase with `PILLIE_BUILD_JOBS=<n>` (e.g. `4`) for a quieter, slower build.
+Local launch and test stay on **one simulator**. `PillieTests` is not parallelizable in the scheme, so Xcode.app Test and unwrapped `xcodebuild test` no longer clone one iPhone 17 Pro per CPU core. Build and test scripts also cap Swift compile at 4 jobs by default and shut down extra booted simulators. Override with `PILLIE_TEST_PARALLEL=YES` to restore cloning, `PILLIE_BUILD_JOBS=10` for a full-speed compile, or `PILLIE_KEEP_EXTRA_SIMS=YES` to leave other Device Hub canvases running.
 
 Manual install and launch:
 
@@ -247,6 +250,7 @@ Use 50% instead of 33.33% for 2x simulators. Inspect the resulting 1x image befo
 
 - Do not delete `/tmp/PillieDerivedData` or `/tmp/PillieDerivedData-*` unless explicitly asked. Incremental builds matter.
 - Do not put DerivedData inside the project folder.
+- Keep one booted simulator unless the task explicitly needs a second canvas. Launch/test scripts shut extra sims down; set `PILLIE_KEEP_EXTRA_SIMS=YES` to leave them.
 - Keep simulator launches headless for normal build/run work. `simctl launch --console` and `build-and-run.sh --console` are blocking and should only be used for intentional console capture.
 - Do not revert user changes or unrelated generated Xcode state.
 - Prefer minimal, local changes that keep the app shippable.

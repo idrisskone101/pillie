@@ -31,6 +31,9 @@ Examples:
 Environment overrides:
   PILLIE_DERIVED_DATA=/tmp/PillieDerivedData-demo
   PILLIE_SIMULATOR_UDID=<simulator-udid>
+  PILLIE_BUILD_JOBS=<n>          compile cores (default 4)
+  PILLIE_TEST_PARALLEL=YES       re-enable per-core simulator clones
+  PILLIE_KEEP_EXTRA_SIMS=YES     leave other booted simulators running
 USAGE
 }
 
@@ -75,16 +78,16 @@ for test_identifier in "$@"; do
   ONLY_TESTING_ARGS+=("-only-testing:$(normalize_test_identifier "$test_identifier")")
 done
 
-# Disable parallel testing by default. With parallelizable="YES" in the scheme,
-# xcodebuild clones the simulator once per CPU core, which pegs every core and
-# spins the fans. Override with PILLIE_TEST_PARALLEL=YES to restore cloning.
-PARALLEL_TESTING="${PILLIE_TEST_PARALLEL:-NO}"
+PARALLEL_TESTING="$(pillie_parallel_testing_enabled)"
+JOBS="$(pillie_build_jobs)"
 
 echo "> Running focused Pillie tests..."
 echo "> DerivedData: $DERIVED_DATA"
 echo "> Simulator: $UDID"
+echo "> Jobs: $JOBS (PILLIE_BUILD_JOBS to override)"
 echo "> Parallel testing: $PARALLEL_TESTING (PILLIE_TEST_PARALLEL=YES re-enables simulator cloning)"
 pillie_select_developer_dir
+pillie_shutdown_extra_simulators "$UDID"
 if [[ -n "${DEVELOPER_DIR:-}" ]]; then
   echo "> DeveloperDir: $DEVELOPER_DIR"
 fi
@@ -100,13 +103,9 @@ XCODEBUILD_ARGS=(
   -derivedDataPath "$DERIVED_DATA"
   -configuration Debug
   -parallel-testing-enabled "$PARALLEL_TESTING"
+  -jobs "$JOBS"
+  test
 )
-# Optional compile-core cap to keep the build phase quieter (slower, cooler).
-# e.g. PILLIE_BUILD_JOBS=4
-if [[ -n "${PILLIE_BUILD_JOBS:-}" ]]; then
-  XCODEBUILD_ARGS+=(-jobs "$PILLIE_BUILD_JOBS")
-fi
-XCODEBUILD_ARGS+=(test)
 XCODEBUILD_ARGS+=("${ONLY_TESTING_ARGS[@]}")
 
 cd "$PROJECT_DIR"
