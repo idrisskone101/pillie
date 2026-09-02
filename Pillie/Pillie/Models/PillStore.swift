@@ -1523,6 +1523,59 @@ class PillStore {
         rebuildReadIndexes()
     }
 
+    /// Replaces the live pack with a DEBUG history plan (missed days, finished
+    /// pack, marketing calendar). Sets `appActivatedDate` to the pack start so
+    /// unmarked past due days resolve as missed instead of no-data.
+    func replacePack(with plan: DebugPackHistoryPlan) {
+        try? modelContext.delete(model: PillDay.self)
+        try? modelContext.delete(model: PillPack.self)
+
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: PillieClock.now)
+        let startDate = calendar.date(
+            byAdding: .day,
+            value: -plan.startDaysAgo,
+            to: today
+        ) ?? today
+
+        let pack = PillPack(
+            packType: .twentyOneSeven,
+            method: .pill,
+            pillRegimen: .twentyOneSeven,
+            startDate: startDate,
+            packNumber: 1,
+            isCurrent: true
+        )
+        modelContext.insert(pack)
+
+        for (offset, status) in plan.pastStatuses.enumerated() {
+            guard let date = calendar.date(
+                byAdding: .day,
+                value: offset,
+                to: startDate
+            ) else { continue }
+            let action: PillDay.ActionType = status == .breakDay ? .pillBreak : .pillActive
+            let takenAt = status == .taken
+                ? date.addingTimeInterval(9 * 3_600)
+                : nil
+            modelContext.insert(
+                PillDay(
+                    date: date,
+                    status: status,
+                    actionType: action,
+                    takenAt: takenAt,
+                    pack: pack
+                )
+            )
+        }
+
+        appActivatedDate = startDate
+        try? modelContext.save()
+        refreshPacks()
+        rebuildReadIndexes()
+        protocolChangeVersion &+= 1
+    }
+
     /// Seeds a consistent late-logging history so the Adaptive Reminder Time Suggestion
     /// card (#126) surfaces for simulator QA. Inserts `count` recent taken days whose
     /// `takenAt` lands `offsetMinutes` after the current reminder time, and clears any

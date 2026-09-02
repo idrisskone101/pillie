@@ -28,6 +28,9 @@ struct HomeView: View {
     @State private var showTrialSmartRemindersEditor = false
     @State private var pendingTrialActivationAction: TrialActivationAction?
     @State private var trialEndPaywallPresentation = TrialEndPaywallPresentationState()
+    #if DEBUG
+    @State private var showDeveloperMenu = false
+    #endif
 
     /// The presented Trial-End Paywall snapshot as an item binding: the cover and
     /// its content are one atomic unit, so the paywall can never present blank.
@@ -366,7 +369,18 @@ struct HomeView: View {
 
                                     Spacer()
 
+                                    #if DEBUG
+                                    Button {
+                                        showDeveloperMenu = true
+                                    } label: {
+                                        HomeAvatarLogoBadge()
+                                    }
+                                    .buttonStyle(.plain)
+                                    .accessibilityLabel(Text(verbatim: "Developer menu"))
+                                    .accessibilityIdentifier("developerMenuAvatarButton")
+                                    #else
                                     HomeAvatarLogoBadge()
+                                    #endif
                                 }
                             )
                         }
@@ -663,6 +677,17 @@ struct HomeView: View {
                 )
             }
         }
+        #if DEBUG
+        .sheet(isPresented: $showDeveloperMenu) {
+            DeveloperMenuView()
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .pillieDebugQADidApply)) { _ in
+            trialEndPaywallPresentation.dismiss()
+            DispatchQueue.main.async {
+                autoPresentTrialEndPaywallIfNeeded()
+            }
+        }
+        #endif
     }
 
     // MARK: - Floating Button

@@ -90,6 +90,9 @@ struct TrialEndPaywallView: View {
                     .transition(.opacity)
             }
         }
+        #if DEBUG
+        .developerMenuAnchor()
+        #endif
         .animation(PillieTheme.fadeInUpCurve, value: purchaseSucceeded)
         .interactiveDismissDisabled(!content.allowsContinueFree)
         .onAppear {

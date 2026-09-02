@@ -405,7 +405,15 @@ final class SubscriptionManager: NSObject {
         let configuration = HardPaywallRemoteConfiguration(
             offeringMetadata: offerings.current?.metadata ?? [:]
         )
+        #if DEBUG
+        if let override = debugHardPaywallEnabledOverride {
+            hardPaywallEnabled = override
+        } else {
+            hardPaywallEnabled = configuration.isEnabled
+        }
+        #else
         hardPaywallEnabled = configuration.isEnabled
+        #endif
         hasResolvedHardPaywallConfiguration = true
         return offerings
     }
@@ -446,9 +454,20 @@ final class SubscriptionManager: NSObject {
 
     #if DEBUG
     private(set) var debugTrialEndEvaluationDate: Date?
+    private var debugHardPaywallEnabledOverride: Bool?
 
     func setPlusForTesting(_ isPlus: Bool) {
         setEntitlement(isPlus)
+    }
+
+    /// Simulator QA: pin the dashboard kill switch so `fetchOfferings()` cannot
+    /// overwrite a rollback or hard-wall scenario mid-session.
+    func debugSetHardPaywallEnabled(_ enabled: Bool?) {
+        debugHardPaywallEnabledOverride = enabled
+        if let enabled {
+            hardPaywallEnabled = enabled
+        }
+        hasResolvedHardPaywallConfiguration = true
     }
 
     /// Test seam: swap the Keychain store for an in-memory double and re-sync
