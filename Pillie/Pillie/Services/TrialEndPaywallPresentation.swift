@@ -153,6 +153,33 @@ struct TrialEndPaywallDebugScenario: Equatable {
             termsCohort: HardPaywallPolicy.cohort(forTrialGrantedAt: grantDate)
         )
     }
+
+    /// Explicit pre/post-cutover expiry, independent of today's date vs cutover.
+    static func expired(
+        termsCohort: TrialTermsCohort,
+        now: Date = Date(),
+        calendar: Calendar = .current
+    ) -> TrialEndPaywallDebugScenario {
+        let grantDate: Date
+        switch termsCohort {
+        case .postCutover:
+            grantDate = HardPaywallPolicy.cutoverInstant
+        case .preCutover:
+            grantDate = HardPaywallPolicy.cutoverInstant.addingTimeInterval(-60)
+        }
+        let aged = calendar.date(
+            byAdding: .day,
+            value: ReverseTrialClock.fullDays + 2,
+            to: grantDate
+        ) ?? grantDate.addingTimeInterval(
+            Double(ReverseTrialClock.fullDays + 2) * 86_400
+        )
+        return TrialEndPaywallDebugScenario(
+            grantDate: grantDate,
+            evaluationDate: max(aged, now),
+            termsCohort: termsCohort
+        )
+    }
 }
 #endif
 

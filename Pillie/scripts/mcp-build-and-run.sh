@@ -29,6 +29,8 @@ Environment overrides:
   PILLIE_DERIVED_DATA=/tmp/PillieDerivedData-demo
   PILLIE_SIMULATOR_UDID=<simulator-udid>
   PILLIE_DEVELOPER_DIR=/path/to/Xcode.app/Contents/Developer
+  PILLIE_BUILD_JOBS=<n>          compile cores (default 4)
+  PILLIE_KEEP_EXTRA_SIMS=YES     leave other booted simulators running
 EOF
 }
 
@@ -74,18 +76,24 @@ else
   DERIVED_DATA="/tmp/PillieDerivedData-$(safe_name "$REPO_NAME")"
 fi
 
+JOBS="$(pillie_build_jobs)"
+pillie_shutdown_extra_simulators "$UDID"
+
 COMMON_ARGS=(
   --project-path "$PROJECT_PATH"
   --scheme "$SCHEME"
   --configuration "$CONFIGURATION"
   --simulator-id "$UDID"
   --derived-data-path "$DERIVED_DATA"
+  "--extra-args=-jobs"
+  "--extra-args=$JOBS"
 )
 
 echo "> XcodeBuildMCP Pillie build"
 echo "> Project: $PROJECT_PATH"
 echo "> DerivedData: $DERIVED_DATA"
 echo "> Simulator: $UDID"
+echo "> Jobs: $JOBS (PILLIE_BUILD_JOBS to override)"
 if [[ -n "${DEVELOPER_DIR:-}" ]]; then
   echo "> DeveloperDir: $DEVELOPER_DIR"
 fi

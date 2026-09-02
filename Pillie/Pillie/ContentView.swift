@@ -448,6 +448,18 @@ struct ContentView: View {
         .allowsHitTesting(false)
       }
     }
+    #if DEBUG
+    .overlay(alignment: .bottomTrailing) {
+      if !isLoading, OnboardingFlow.isOnboardingActive(rawStep: onboardingStep) {
+        DeveloperMenuEntryButton()
+          .padding(.trailing, 16)
+          .padding(.bottom, 28)
+      }
+    }
+    .onReceive(NotificationCenter.default.publisher(for: .pillieDebugQADidApply)) { _ in
+      evaluateExistingUserTrialGrant()
+    }
+    #endif
     .task {
       withAnimation(.easeOut(duration: 0.5)) {
         iconScale = 1.0

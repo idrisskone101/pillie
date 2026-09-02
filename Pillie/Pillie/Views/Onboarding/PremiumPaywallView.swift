@@ -330,6 +330,9 @@ struct PremiumPaywallView: View {
             }
             .ignoresSafeArea(.all, edges: .bottom)
         }
+        #if DEBUG
+        .developerMenuAnchor()
+        #endif
         .onAppear {
             if let paywallSurface {
                 telemetry.paywallViewed(surface: paywallSurface)

@@ -30,6 +30,9 @@ struct SettingsView: View {
     @State private var showPaywall = false
     @State private var showManageSubscription = false
     @State private var showOpenLineMailFallback = false
+    #if DEBUG
+    @State private var showDeveloperMenu = false
+    #endif
 
     private let settingsFeedback = SettingsInteractionFeedback()
 
@@ -349,6 +352,25 @@ struct SettingsView: View {
                     .buttonStyle(.plain)
                 }
                 .modifier(FadeInUp(appeared: appeared, delay: 0.3))
+
+                #if DEBUG
+                sectionHeader("DEVELOPER")
+                    .modifier(FadeInUp(appeared: appeared, delay: 0.3))
+
+                settingsCard {
+                    Button {
+                        showDeveloperMenu = true
+                    } label: {
+                        settingsRow("Jump to a QA state", value: "Simulator only")
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityIdentifier("settingsDeveloperMenuRow")
+                }
+                .modifier(FadeInUp(appeared: appeared, delay: 0.3))
+                .sheet(isPresented: $showDeveloperMenu) {
+                    DeveloperMenuView()
+                }
+                #endif
 
                 // Handwriting accent
                 Text(PillieLocalization.string("today.greeting", locale: locale))
