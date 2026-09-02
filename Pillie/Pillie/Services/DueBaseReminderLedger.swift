@@ -92,7 +92,7 @@ struct DueBaseReminderLedger: Codable, Equatable {
     private static func parseBaseDueReminder(_ request: UNNotificationRequest) -> ParsedBaseDueReminder? {
         guard request.content.userInfo[SmartReminderDelivery.requestKindKey] as? String
             == ReminderSchedulePlanner.DueReminderKind.base.rawValue,
-              let dueDayEpoch = request.content.userInfo["dueDayEpoch"] as? Int,
+              let dueDayEpoch = request.content.userInfo[NotificationManager.PayloadKey.dueDayEpoch] as? Int,
               let fireDate = NotificationManager.fireDate(from: request) else {
             return nil
         }

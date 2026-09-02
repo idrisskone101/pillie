@@ -73,7 +73,7 @@ final class NotificationManager {
 
     private var pendingRescheduleWorkItem: DispatchWorkItem?
 
-    private enum PayloadKey {
+    enum PayloadKey {
         static let dueDayEpoch = "dueDayEpoch"
         static let actionTypeRaw = "actionTypeRaw"
         static let requestKind = SmartReminderDelivery.requestKindKey
@@ -293,9 +293,10 @@ final class NotificationManager {
         }
 
         clearReminders(forDueDayEpoch: dueEpoch)
-        var ledger = DueBaseReminderLedger.load()
-        ledger.clear(dueDayEpoch: dueEpoch)
-        ledger.save()
+        // The served-base ledger entry must survive a snooze: without it the next
+        // override-less rebuild would read the day as never-served and arm a catch-up
+        // base alongside the pending snooze. The snooze override is evaluated before
+        // the served record, so keeping the entry cannot block the snooze re-fire.
         let snoozeStart = Date().addingTimeInterval(TimeInterval(store.autoReminderIntervalMinutes * 60))
         rescheduleFromStore(
             store,
