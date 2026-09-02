@@ -5744,6 +5744,182 @@
         }
       }
     },
+    "history.dayCorrection.taken.title": {
+      "comment": "Day correction sheet row [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Taken"
+          }
+        }
+      }
+    },
+    "history.dayCorrection.taken.subtitle": {
+      "comment": "Day correction sheet row [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I took this dose"
+          }
+        }
+      }
+    },
+    "history.dayCorrection.unlogged.title": {
+      "comment": "Day correction sheet row [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unlogged"
+          }
+        }
+      }
+    },
+    "history.dayCorrection.unlogged.subtitle": {
+      "comment": "Day correction sheet row [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nothing logged for this day"
+          }
+        }
+      }
+    },
+    "history.dayCorrection.break.title": {
+      "comment": "Day correction sheet row [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Break"
+          }
+        }
+      }
+    },
+    "history.dayCorrection.break.subtitle": {
+      "comment": "Day correction sheet row [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Placebo or off-week"
+          }
+        }
+      }
+    },
+    "history.dayCorrection.subtitle.morning": {
+      "comment": "Day correction sheet dose subtitle [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Morning %@ at %@"
+          }
+        }
+      }
+    },
+    "history.dayCorrection.subtitle.afternoon": {
+      "comment": "Day correction sheet dose subtitle [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afternoon %@ at %@"
+          }
+        }
+      }
+    },
+    "history.dayCorrection.subtitle.evening": {
+      "comment": "Day correction sheet dose subtitle [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Evening %@ at %@"
+          }
+        }
+      }
+    },
+    "history.dayCorrection.method.pill": {
+      "comment": "Method noun in day correction subtitle [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "pill"
+          }
+        }
+      }
+    },
+    "history.dayCorrection.method.patch": {
+      "comment": "Method noun in day correction subtitle [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "patch"
+          }
+        }
+      }
+    },
+    "history.dayCorrection.method.ring": {
+      "comment": "Method noun in day correction subtitle [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ring"
+          }
+        }
+      }
+    },
+    "history.coachMark.new": {
+      "comment": "History day correction coach mark [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New"
+          }
+        }
+      }
+    },
+    "history.coachMark.title": {
+      "comment": "History day correction coach mark [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap a day you logged wrong."
+          }
+        }
+      }
+    },
+    "history.coachMark.body": {
+      "comment": "History day correction coach mark [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Change Unlogged to Taken, or pick Break."
+          }
+        }
+      }
+    },
+    "history.coachMark.dismiss": {
+      "comment": "History day correction coach mark [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Got it"
+          }
+        }
+      }
+    },
     "history.accessibility.day": {
       "comment": "Locale-aware date and localised status [health]",
       "localizations": {

@@ -27,6 +27,9 @@ struct HistoryView: View {
     @State private var suppressAdherenceValueAnimation = false
     @State private var calendarWidth: CGFloat = 0
     @State private var monthSnapshotCache: [String: [Int: PillScheduleSnapshot]] = [:]
+    @State private var dayHitFrames: [String: [Int: CGRect]] = [:]
+    @State private var correctionTarget: HistoryEditableDay?
+    @AppStorage(HistoryCoachMarkState.storageKey) private var coachMarkDismissed = false
 
     private let performanceTier = PerformanceTier.current
 
@@ -112,27 +115,53 @@ struct HistoryView: View {
                 .modifier(FadeInUp(appeared: appeared, delay: 0.1))
 
                 // Calendar grid
-                ZStack(alignment: .top) {
-                    if let adjacentMonth {
-                        monthGrid(for: adjacentMonth)
-                            .offset(x: transitionDirection * slideDistance + dragOffset)
-                            .transition(.identity)
-                            .zIndex(0)
-                    }
+                ZStack(alignment: .topLeading) {
+                    ZStack(alignment: .top) {
+                        if let adjacentMonth {
+                            monthGrid(for: adjacentMonth)
+                                .offset(x: transitionDirection * slideDistance + dragOffset)
+                                .transition(.identity)
+                                .zIndex(0)
+                        }
 
-                    monthGrid(for: displayedMonth)
-                        .offset(x: dragOffset)
-                        .transition(.identity)
-                        .zIndex(1)
+                        monthGrid(for: displayedMonth)
+                            .offset(x: dragOffset)
+                            .transition(.identity)
+                            .zIndex(1)
+                    }
+                    .clipped()
                 }
                 .contentShape(Rectangle())
+                .overlayPreferenceValue(CalendarDayHitFramesPreferenceKey.self) { anchors in
+                    GeometryReader { proxy in
+                        Color.clear
+                            .onAppear {
+                                resolveDayHitFrames(anchors, in: proxy)
+                            }
+                            .onChange(of: anchorFrameToken(anchors)) { _, _ in
+                                resolveDayHitFrames(anchors, in: proxy)
+                            }
+                    }
+                }
                 .overlay {
                     HorizontalMonthDragSurface(
                         onChanged: updateMonthDrag,
                         onEnded: endMonthDrag,
-                        onCancelled: cancelMonthDrag
+                        onCancelled: cancelMonthDrag,
+                        onTap: handleCalendarTap
                     )
                     .accessibilityHidden(true)
+                }
+                .overlay(alignment: .topLeading) {
+                    if let targetDay = coachMarkTargetDay,
+                       let frame = dayHitFrames[monthIdentity]?[targetDay],
+                       calendarWidth > 0 {
+                        HistoryCoachMark(
+                            targetFrame: frame,
+                            calendarWidth: calendarWidth,
+                            onDismiss: dismissCoachMark
+                        )
+                    }
                 }
                 .background {
                     GeometryReader { proxy in
@@ -143,7 +172,7 @@ struct HistoryView: View {
                     }
                 }
                 .frame(height: calendarContainerHeight, alignment: .top)
-                .clipped()
+                .zIndex(1)
                 .modifier(FadeInUp(appeared: appeared, delay: 0.2))
                 .onPreferenceChange(CalendarMonthHeightPreferenceKey.self) { heights in
                     updateCalendarHeight(with: heights)
@@ -178,6 +207,20 @@ struct HistoryView: View {
         .onChange(of: store.protocolChangeVersion) { _, _ in
             resetToCurrentMonthForProtocolChange()
         }
+        .onChange(of: store.lastDayCorrection) { _, event in
+            patchMonthSnapshotCache(for: event)
+        }
+        .sheet(item: $correctionTarget) { target in
+            HistoryDayCorrectionSheet(day: target) { outcome in
+                store.correctPastDay(on: target.date, to: outcome)
+            }
+            .presentationDetents([
+                .height(HistoryDayCorrectionSheet.height(rowCount: target.options.selectableOutcomes.count))
+            ])
+            .presentationDragIndicator(.hidden)
+            .presentationBackground(PillieTheme.cardWhite)
+            .presentationCornerRadius(28)
+        }
     }
 
     // MARK: - Computed Properties
@@ -198,6 +241,15 @@ struct HistoryView: View {
 
     private var monthIdentity: String {
         Self.monthIdentity(for: displayedMonth)
+    }
+
+    private var coachMarkTargetDay: Int? {
+        guard !coachMarkDismissed else { return nil }
+        return HistoryCoachMarkState.target(
+            in: snapshots(for: displayedMonth),
+            month: displayedMonth,
+            today: store.today
+        )
     }
 
     private var slideDistance: CGFloat {
@@ -221,7 +273,14 @@ struct HistoryView: View {
     @ViewBuilder
     private func monthGrid(for month: Date) -> some View {
         let monthID = Self.monthIdentity(for: month)
-        CalendarGrid(displayedMonth: month, monthSnapshots: snapshots(for: month))
+        CalendarGrid(
+            displayedMonth: month,
+            monthSnapshots: snapshots(for: month),
+            highlightedDay: month == displayedMonth ? coachMarkTargetDay : nil,
+            onEditableDayActivate: { day in
+                openCorrectionSheet(for: day, in: month)
+            }
+        )
             .background {
                 GeometryReader { proxy in
                     Color.clear.preference(
@@ -233,6 +292,73 @@ struct HistoryView: View {
             .onAppear {
                 warmMonthSnapshotCache(for: month)
             }
+    }
+
+    private func handleCalendarTap(at point: CGPoint) {
+        dismissCoachMark()
+
+        guard let day = CalendarDayHitTest.day(
+            at: point,
+            in: dayHitFrames[monthIdentity] ?? [:]
+        ) else {
+            return
+        }
+
+        openCorrectionSheet(for: day, in: displayedMonth)
+    }
+
+    private func openCorrectionSheet(for day: Int, in month: Date) {
+        dismissCoachMark()
+
+        guard let date = CalendarGrid.date(forDay: day, in: month),
+              let snapshot = store.scheduleSnapshot(for: date),
+              let options = store.dayCorrectionOptions(for: snapshot) else {
+            return
+        }
+
+        correctionTarget = HistoryEditableDay(
+            date: date,
+            snapshot: snapshot,
+            options: options
+        )
+    }
+
+    private func dismissCoachMark() {
+        coachMarkDismissed = true
+    }
+
+    private func anchorFrameToken(_ anchors: [String: [Int: Anchor<CGRect>]]) -> String {
+        anchors
+            .sorted { $0.key < $1.key }
+            .map { monthID, dayAnchors in
+                let days = dayAnchors.keys.sorted().map(String.init).joined(separator: ",")
+                return "\(monthID)[\(days)]"
+            }
+            .joined(separator: "|")
+    }
+
+    private func resolveDayHitFrames(
+        _ anchors: [String: [Int: Anchor<CGRect>]],
+        in proxy: GeometryProxy
+    ) {
+        var resolved: [String: [Int: CGRect]] = [:]
+        for (monthID, dayAnchors) in anchors {
+            var frames: [Int: CGRect] = [:]
+            for (day, anchor) in dayAnchors {
+                frames[day] = proxy[anchor]
+            }
+            resolved[monthID] = frames
+        }
+        dayHitFrames = resolved
+    }
+
+    private func patchMonthSnapshotCache(for event: DayCorrectionEvent?) {
+        guard let event else { return }
+        let key = Self.monthIdentity(for: event.monthStart)
+        guard var monthCache = monthSnapshotCache[key] else { return }
+        guard let updated = store.scheduleSnapshot(for: event.date) else { return }
+        monthCache[event.dayOfMonth] = updated
+        monthSnapshotCache[key] = monthCache
     }
 
     // MARK: - Drag Gesture
@@ -447,12 +573,14 @@ private struct HorizontalMonthDragSurface: UIViewRepresentable {
     var onChanged: (CGFloat) -> Void
     var onEnded: (_ translation: CGFloat, _ velocity: CGFloat) -> Void
     var onCancelled: () -> Void
+    var onTap: (CGPoint) -> Void
 
     func makeCoordinator() -> Coordinator {
         Coordinator(
             onChanged: onChanged,
             onEnded: onEnded,
-            onCancelled: onCancelled
+            onCancelled: onCancelled,
+            onTap: onTap
         )
     }
 
@@ -469,6 +597,14 @@ private struct HorizontalMonthDragSurface: UIViewRepresentable {
         panGesture.cancelsTouchesInView = true
         view.addGestureRecognizer(panGesture)
 
+        let tapGesture = UITapGestureRecognizer(
+            target: context.coordinator,
+            action: #selector(Coordinator.handleTap(_:))
+        )
+        tapGesture.delegate = context.coordinator
+        view.addGestureRecognizer(tapGesture)
+        tapGesture.require(toFail: panGesture)
+
         context.coordinator.panGesture = panGesture
         view.didMoveToWindowHandler = { [weak view, weak coordinator = context.coordinator] in
             guard let view, let coordinator else { return }
@@ -482,6 +618,7 @@ private struct HorizontalMonthDragSurface: UIViewRepresentable {
         context.coordinator.onChanged = onChanged
         context.coordinator.onEnded = onEnded
         context.coordinator.onCancelled = onCancelled
+        context.coordinator.onTap = onTap
         context.coordinator.configureGesturePriority(from: uiView)
     }
 
@@ -489,17 +626,20 @@ private struct HorizontalMonthDragSurface: UIViewRepresentable {
         var onChanged: (CGFloat) -> Void
         var onEnded: (_ translation: CGFloat, _ velocity: CGFloat) -> Void
         var onCancelled: () -> Void
+        var onTap: (CGPoint) -> Void
         weak var panGesture: UIPanGestureRecognizer?
         weak var configuredScrollView: UIScrollView?
 
         init(
             onChanged: @escaping (CGFloat) -> Void,
             onEnded: @escaping (_ translation: CGFloat, _ velocity: CGFloat) -> Void,
-            onCancelled: @escaping () -> Void
+            onCancelled: @escaping () -> Void,
+            onTap: @escaping (CGPoint) -> Void
         ) {
             self.onChanged = onChanged
             self.onEnded = onEnded
             self.onCancelled = onCancelled
+            self.onTap = onTap
         }
 
         func configureGesturePriority(from view: UIView) {
@@ -518,6 +658,9 @@ private struct HorizontalMonthDragSurface: UIViewRepresentable {
         }
 
         func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+            if gestureRecognizer is UITapGestureRecognizer {
+                return true
+            }
             guard let panGesture = gestureRecognizer as? UIPanGestureRecognizer else {
                 return false
             }
@@ -550,6 +693,11 @@ private struct HorizontalMonthDragSurface: UIViewRepresentable {
             @unknown default:
                 onCancelled()
             }
+        }
+
+        @objc func handleTap(_ gesture: UITapGestureRecognizer) {
+            guard gesture.state == .ended else { return }
+            onTap(gesture.location(in: gesture.view))
         }
     }
 }

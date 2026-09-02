@@ -10,6 +10,8 @@ struct CalendarGrid: View {
     @Environment(\.locale) private var locale
     let displayedMonth: Date
     let monthSnapshots: [Int: PillScheduleSnapshot]
+    var highlightedDay: Int?
+    var onEditableDayActivate: ((Int) -> Void)?
 
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 4), count: 7)
 
@@ -51,9 +53,29 @@ struct CalendarGrid: View {
         return ((occupiedSlots + 6) / 7) * 7
     }
 
-    init(displayedMonth: Date, monthSnapshots: [Int: PillScheduleSnapshot] = [:]) {
+    init(
+        displayedMonth: Date,
+        monthSnapshots: [Int: PillScheduleSnapshot] = [:],
+        highlightedDay: Int? = nil,
+        onEditableDayActivate: ((Int) -> Void)? = nil
+    ) {
         self.displayedMonth = displayedMonth
         self.monthSnapshots = monthSnapshots
+        self.highlightedDay = highlightedDay
+        self.onEditableDayActivate = onEditableDayActivate
+    }
+
+    private var monthID: String {
+        let components = calendar.dateComponents([.year, .month], from: displayedMonth)
+        let year = components.year ?? 0
+        let monthNumber = components.month ?? 0
+        return "\(year)-\(monthNumber)"
+    }
+
+    static func date(forDay day: Int, in month: Date, calendar: Calendar = .current) -> Date? {
+        var components = calendar.dateComponents([.year, .month], from: month)
+        components.day = day
+        return calendar.date(from: components)
     }
 
     var body: some View {
@@ -94,6 +116,7 @@ struct CalendarGrid: View {
             fallbackMethod: store.pack.method,
             relation: relation(for: dayDate)
         )
+        let editable = isEditable(day: day, snapshot: snapshot)
 
         VStack(spacing: 2) {
             ZStack {
@@ -142,6 +165,11 @@ struct CalendarGrid: View {
                             )
                             .opacity(presentation.isToday ? 1 : 0)
                     )
+                    .overlay(
+                        Circle()
+                            .strokeBorder(PillieTheme.coral, lineWidth: 2)
+                            .opacity(highlightedDay == day ? 1 : 0)
+                    )
 
                 Text("\(day)")
                     .font(.pillie(14, weight: .medium))
@@ -178,6 +206,20 @@ struct CalendarGrid: View {
             date: dayDate,
             presentation: presentation
         ))
+        .accessibilityAddTraits(editable ? .isButton : [])
+        .modifier(EditableDayAccessibilityID(editable: editable, id: "historyEditableDay.\(monthID).\(day)"))
+        .accessibilityAction {
+            guard editable else { return }
+            onEditableDayActivate?(day)
+        }
+        .anchorPreference(key: CalendarDayHitFramesPreferenceKey.self, value: .bounds) { anchor in
+            editable ? [monthID: [day: anchor]] : [:]
+        }
+    }
+
+    private func isEditable(day: Int, snapshot: PillScheduleSnapshot?) -> Bool {
+        guard let snapshot else { return false }
+        return store.dayCorrectionOptions(for: snapshot) != nil
     }
 
     // MARK: - Status Lookup
@@ -538,4 +580,38 @@ struct CalendarGrid: View {
     CalendarGrid(displayedMonth: Date())
         .padding()
         .environment(PillStore.previewStore())
+}
+
+struct CalendarDayHitFramesPreferenceKey: PreferenceKey {
+    static var defaultValue: [String: [Int: Anchor<CGRect>]] = [:]
+
+    static func reduce(
+        value: inout [String: [Int: Anchor<CGRect>]],
+        nextValue: () -> [String: [Int: Anchor<CGRect>]]
+    ) {
+        for (monthID, dayFrames) in nextValue() {
+            var merged = value[monthID] ?? [:]
+            merged.merge(dayFrames) { _, latest in latest }
+            value[monthID] = merged
+        }
+    }
+}
+
+enum CalendarDayHitTest {
+    static func day(at point: CGPoint, in frames: [Int: CGRect]) -> Int? {
+        frames.first { $0.value.insetBy(dx: -4, dy: -4).contains(point) }?.key
+    }
+}
+
+private struct EditableDayAccessibilityID: ViewModifier {
+    let editable: Bool
+    let id: String
+
+    func body(content: Content) -> some View {
+        if editable {
+            content.accessibilityIdentifier(id)
+        } else {
+            content
+        }
+    }
 }
