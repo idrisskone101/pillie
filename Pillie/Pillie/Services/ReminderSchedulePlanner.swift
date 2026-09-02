@@ -170,42 +170,52 @@ struct ReminderSchedulePlanner {
         var dueIntents: [DueReminderIntent] = []
         var lastCallIntents: [DueReminderIntent] = []
         var firstReminderByEpoch: [Int: Date] = [:]
+        var retryAnchorByEpoch: [Int: Date] = [:]
         var lastCallByEpoch: [Int: Date] = [:]
 
         for due in baseDueActions {
             let dueDay = input.calendar.startOfDay(for: due.date)
             let dueEpoch = Int(dueDay.timeIntervalSince1970)
-            let firstReminderDate = firstReminderDateForDueAction(
+            let served = input.servedBaseFireDateByDueDayEpoch[dueEpoch]
+            let anchor = dueDayReminderAnchorDate(
+                dueDay: dueDay,
+                reminderHour: input.reminderHour,
+                reminderMinute: input.reminderMinute,
+                servedBaseFireDate: served,
+                calendar: input.calendar
+            )
+            let firstReminderDate = firstBaseReminderDateForDueAction(
                 dueDay: dueDay,
                 now: input.now,
                 reminderHour: input.reminderHour,
                 reminderMinute: input.reminderMinute,
                 snoozeOverride: effectiveSnoozeOverride,
+                servedBaseFireDate: served,
                 calendar: input.calendar
             )
 
-            guard let firstReminderDate,
-                  firstReminderDate < endOfDayExclusive(for: dueDay, calendar: input.calendar) else {
-                continue
+            if let firstReminderDate,
+               firstReminderDate < endOfDayExclusive(for: dueDay, calendar: input.calendar) {
+                let firstKind: DueReminderKind = (effectiveSnoozeOverride?.dueDayEpoch == dueEpoch) ? .snooze : .base
+                dueIntents.append(
+                    DueReminderIntent(
+                        action: due,
+                        fireDate: firstReminderDate,
+                        dueDayEpoch: dueEpoch,
+                        kind: firstKind
+                    )
+                )
+                firstReminderByEpoch[dueEpoch] = firstReminderDate
             }
 
-            let firstKind: DueReminderKind = (effectiveSnoozeOverride?.dueDayEpoch == dueEpoch) ? .snooze : .base
-            dueIntents.append(
-                DueReminderIntent(
-                    action: due,
-                    fireDate: firstReminderDate,
-                    dueDayEpoch: dueEpoch,
-                    kind: firstKind
-                )
-            )
-            firstReminderByEpoch[dueEpoch] = firstReminderDate
+            retryAnchorByEpoch[dueEpoch] = firstReminderByEpoch[dueEpoch] ?? anchor
 
             // At most one Last Call per untaken due-action day, only when it sits at
             // least `lastCallMinimumGapMinutes` after the day's first reminder.
             if lastCallEnabled,
                let lastCallDate = lastCallDateForDueDay(
                    dueDay: dueDay,
-                   firstReminderDate: firstReminderDate,
+                   firstReminderDate: anchor,
                    now: input.now,
                    lastCallHour: input.lastCallHour,
                    lastCallMinute: input.lastCallMinute,
@@ -230,14 +240,11 @@ struct ReminderSchedulePlanner {
            let nearestDue = dueActions.first {
             let retries = planRetryReminders(
                 for: nearestDue,
-                firstReminderByEpoch: firstReminderByEpoch,
+                retryAnchorByEpoch: retryAnchorByEpoch,
                 now: input.now,
                 intervalMinutes: input.autoReminderIntervalMinutes,
                 retryLimit: effectiveRetryLimit,
                 budget: remainingBudget,
-                reminderHour: input.reminderHour,
-                reminderMinute: input.reminderMinute,
-                snoozeOverride: effectiveSnoozeOverride,
                 calendar: input.calendar
             )
             // Drop any retry that would land within the guard window of the Last Call so
@@ -285,14 +292,11 @@ struct ReminderSchedulePlanner {
 
     private func planRetryReminders(
         for due: DoseScheduleAction,
-        firstReminderByEpoch: [Int: Date],
+        retryAnchorByEpoch: [Int: Date],
         now: Date,
         intervalMinutes: Int,
         retryLimit: Int,
         budget: Int,
-        reminderHour: Int,
-        reminderMinute: Int,
-        snoozeOverride: SnoozeOverride?,
         calendar: Calendar
     ) -> [DueReminderIntent] {
         let cappedBudget = min(budget, retryLimit)
@@ -301,32 +305,26 @@ struct ReminderSchedulePlanner {
         let dueDay = calendar.startOfDay(for: due.date)
         let dueEpoch = Int(dueDay.timeIntervalSince1970)
 
-        guard let firstReminderDate = firstReminderByEpoch[dueEpoch]
-            ?? firstReminderDateForDueAction(
-                dueDay: dueDay,
-                now: now,
-                reminderHour: reminderHour,
-                reminderMinute: reminderMinute,
-                snoozeOverride: snoozeOverride,
-                calendar: calendar
-            ) else {
+        guard let anchor = retryAnchorByEpoch[dueEpoch] else {
             return []
         }
 
         let dayEnd = endOfDayExclusive(for: dueDay, calendar: calendar)
         let interval = TimeInterval(max(1, intervalMinutes) * 60)
-        var nextFire = firstReminderDate.addingTimeInterval(interval)
+        var nextFire = anchor.addingTimeInterval(interval)
 
         var intents: [DueReminderIntent] = []
         while intents.count < cappedBudget && nextFire < dayEnd {
-            intents.append(
-                DueReminderIntent(
-                    action: due,
-                    fireDate: nextFire,
-                    dueDayEpoch: dueEpoch,
-                    kind: .retry
+            if nextFire > now {
+                intents.append(
+                    DueReminderIntent(
+                        action: due,
+                        fireDate: nextFire,
+                        dueDayEpoch: dueEpoch,
+                        kind: .retry
+                    )
                 )
-            )
+            }
             nextFire.addTimeInterval(interval)
         }
 
@@ -469,12 +467,13 @@ struct ReminderSchedulePlanner {
         return nil
     }
 
-    private func firstReminderDateForDueAction(
+    private func firstBaseReminderDateForDueAction(
         dueDay: Date,
         now: Date,
         reminderHour: Int,
         reminderMinute: Int,
         snoozeOverride: SnoozeOverride?,
+        servedBaseFireDate: Date?,
         calendar: Calendar
     ) -> Date? {
         let dueEpoch = Int(dueDay.timeIntervalSince1970)
@@ -485,12 +484,51 @@ struct ReminderSchedulePlanner {
         }
 
         let configured = reminderDate(on: dueDay, hour: reminderHour, minute: reminderMinute, calendar: calendar)
+        let endOfDay = endOfDayExclusive(for: dueDay, calendar: calendar)
+
+        if let served = servedBaseFireDate {
+            if served <= now { return nil }
+            if served < endOfDay { return served }
+            return nil
+        }
 
         if calendar.isDate(dueDay, inSameDayAs: now), configured <= now {
             return now.addingTimeInterval(TimeInterval(Self.catchupDelayMinutes * 60))
         }
 
         return configured
+    }
+
+    private func dueDayReminderAnchorDate(
+        dueDay: Date,
+        reminderHour: Int,
+        reminderMinute: Int,
+        servedBaseFireDate: Date?,
+        calendar: Calendar
+    ) -> Date {
+        if let servedBaseFireDate {
+            return servedBaseFireDate
+        }
+        return reminderDate(on: dueDay, hour: reminderHour, minute: reminderMinute, calendar: calendar)
+    }
+
+    private func firstReminderDateForDueAction(
+        dueDay: Date,
+        now: Date,
+        reminderHour: Int,
+        reminderMinute: Int,
+        snoozeOverride: SnoozeOverride?,
+        calendar: Calendar
+    ) -> Date? {
+        firstBaseReminderDateForDueAction(
+            dueDay: dueDay,
+            now: now,
+            reminderHour: reminderHour,
+            reminderMinute: reminderMinute,
+            snoozeOverride: snoozeOverride,
+            servedBaseFireDate: nil,
+            calendar: calendar
+        )
     }
 
     /// The Last Call fire date for a due-action day, or nil when it should be suppressed.

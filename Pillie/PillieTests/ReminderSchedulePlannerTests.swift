@@ -530,7 +530,7 @@ final class ReminderSchedulePlannerTests: XCTestCase {
     }
 
     func testStabilizesPendingBaseFireDateFromServedMap() throws {
-        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 10, minute: 5)
+        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 10, minute: 0)
         let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
         fixture.store.reminderHour = 8
         fixture.store.reminderMinute = 0
@@ -549,7 +549,7 @@ final class ReminderSchedulePlannerTests: XCTestCase {
     }
 
     func testRetriesAnchorWhenBaseSuppressedAfterServed() throws {
-        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 10, minute: 5)
+        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 8, minute: 5)
         let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
         fixture.store.reminderHour = 8
         fixture.store.reminderMinute = 0
@@ -654,7 +654,7 @@ final class ReminderSchedulePlannerTests: XCTestCase {
     }
 
     func testBackToBackPlanConvergesWithStableServedBase() throws {
-        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 10, minute: 5)
+        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 10, minute: 0)
         let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
         fixture.store.reminderHour = 8
         fixture.store.reminderMinute = 0
