@@ -312,6 +312,7 @@ final class NotificationManager {
                 lastCallMinute: store.lastCallReminderMinute,
                 trialGrantDate: SubscriptionManager.shared.trialGrantDate,
                 hasEntitlement: SubscriptionManager.shared.hasEntitlement,
+                servedBaseFireDateByDueDayEpoch: [:],
                 calendar: calendar
             )
         )

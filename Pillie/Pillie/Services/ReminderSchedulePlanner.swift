@@ -77,6 +77,12 @@ struct ReminderSchedulePlanner {
         /// trial itself. Entitled users get no expiry warnings: a mid-trial purchase
         /// replans and both pending warnings fall out as stale.
         let hasEntitlement: Bool
+        /// For each untaken due day, the fire date of a base reminder already
+        /// committed by NotificationManager (persisted, pending, or delivered).
+        /// Empty → planner may emit first-time catch-up. Non-empty + fire <= now
+        /// → suppress further base for that day. Non-empty + fire > now → re-plan
+        /// the same fire date (stable request id across rebuilds).
+        let servedBaseFireDateByDueDayEpoch: [Int: Date]
         let calendar: Calendar
     }
 

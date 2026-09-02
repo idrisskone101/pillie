@@ -173,6 +173,7 @@ final class TrialExpiryWarningPlannerTests: XCTestCase {
                 lastCallMinute: 0,
                 trialGrantDate: trialGrantDate,
                 hasEntitlement: hasEntitlement,
+                servedBaseFireDateByDueDayEpoch: [:],
                 calendar: calendar
             )
         )
