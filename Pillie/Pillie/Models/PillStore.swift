@@ -15,6 +15,8 @@ import os.signpost
 class PillStore {
     private(set) var packs: [PillPack]
     var protocolChangeVersion: Int = 0
+    private(set) var lastDayCorrection: DayCorrectionEvent?
+    private var dayCorrectionSequence = 0
 
     var pack: PillPack {
         if let current = activePack {
@@ -388,9 +390,12 @@ class PillStore {
                 continue
             }
 
-            if snapshot.status == .taken {
+            switch snapshot.status {
+            case .taken:
                 streak += 1
-            } else {
+            case .breakDay:
+                continue
+            default:
                 break
             }
         }
@@ -887,6 +892,100 @@ class PillStore {
         }
     }
 
+    func dayCorrectionOptions(for snapshot: PillScheduleSnapshot) -> DayCorrectionOptions? {
+        let calendar = Calendar.current
+        let day = calendar.startOfDay(for: snapshot.date)
+        let relation: CalendarDayRelation
+        if calendar.isDate(day, inSameDayAs: today) {
+            relation = .today
+        } else if day < today {
+            relation = .past
+        } else {
+            relation = .future
+        }
+        return DayCorrectionPolicy.options(for: snapshot, relation: relation)
+    }
+
+    @discardableResult
+    func correctPastDay(on date: Date, to outcome: DayCorrectionOutcome) -> Bool {
+        let day = startOfDaySafe(date)
+        guard day < today else { return false }
+        guard let snapshot = scheduleSnapshot(for: day),
+              let options = dayCorrectionOptions(for: snapshot),
+              options.allows(outcome),
+              let due = snapshot.dueAction else {
+            return false
+        }
+
+        let targetPack = snapshot.pack
+        let dayEpoch = epochDay(for: day)
+
+        switch outcome {
+        case .taken:
+            if let existingDay = dayRecord(forPackID: targetPack.id, epochDay: dayEpoch)
+                ?? targetPack.days.first(where: {
+                    Calendar.current.isDate(Self.validatedDate($0.date, fallback: day), inSameDayAs: day)
+                }) {
+                existingDay.date = day
+                existingDay.status = .taken
+                existingDay.actionType = due.type
+                existingDay.takenAt = nil
+                index(dayRecord: existingDay, forPackID: targetPack.id, epochDay: dayEpoch)
+            } else {
+                let newDay = PillDay(
+                    date: day,
+                    status: .taken,
+                    actionType: due.type,
+                    takenAt: nil,
+                    pack: targetPack
+                )
+                modelContext.insert(newDay)
+                index(dayRecord: newDay, forPackID: targetPack.id, epochDay: dayEpoch)
+            }
+        case .unlogged:
+            if let existingDay = dayRecord(forPackID: targetPack.id, epochDay: dayEpoch) {
+                modelContext.delete(existingDay)
+                removeDayRecordIndex(forPackID: targetPack.id, epochDay: dayEpoch)
+            }
+        case .breakDay:
+            if let existingDay = dayRecord(forPackID: targetPack.id, epochDay: dayEpoch)
+                ?? targetPack.days.first(where: {
+                    Calendar.current.isDate(Self.validatedDate($0.date, fallback: day), inSameDayAs: day)
+                }) {
+                existingDay.date = day
+                existingDay.status = .breakDay
+                existingDay.actionType = due.type
+                existingDay.takenAt = nil
+                index(dayRecord: existingDay, forPackID: targetPack.id, epochDay: dayEpoch)
+            } else {
+                let newDay = PillDay(
+                    date: day,
+                    status: .breakDay,
+                    actionType: due.type,
+                    takenAt: nil,
+                    pack: targetPack
+                )
+                modelContext.insert(newDay)
+                index(dayRecord: newDay, forPackID: targetPack.id, epochDay: dayEpoch)
+            }
+        }
+
+        invalidateSnapshotCache(forPackID: targetPack.id, epochDay: dayEpoch)
+        scheduleStoreCommit()
+
+        dayCorrectionSequence += 1
+        let calendar = Calendar.current
+        let monthStartComponents = calendar.dateComponents([.year, .month], from: day)
+        let monthStart = calendar.date(from: monthStartComponents) ?? day
+        lastDayCorrection = DayCorrectionEvent(
+            sequence: dayCorrectionSequence,
+            date: day,
+            monthStart: monthStart,
+            dayOfMonth: calendar.component(.day, from: day)
+        )
+        return true
+    }
+
     func unmarkActionAsTaken(on date: Date) {
         let day = startOfDaySafe(date)
         let dayEpoch = epochDay(for: day)
@@ -966,7 +1065,7 @@ class PillStore {
             }
 
             if snapshot.status == .noData { continue }
-            if snapshot.isDue {
+            if snapshot.countsTowardAdherence {
                 due += 1
                 if snapshot.status == .taken {
                     completed += 1
