@@ -6,7 +6,7 @@ The 2026-07-02 marketing audit showed the onboarding paywall converting at zero 
 
 ## Decisions and reasons
 
-**Full Plus, one predicate.** The trial unlocks everything Plus does (blocking, Smart Reminders, Custom Reminder Messages, Adaptive Reminder Time Suggestions) through a single Plus Access gate (`entitlement || trialActive`). No per-feature trial flags — the trial must feel exactly like Plus, and scattered `isPlus` call sites get consolidated behind one choke point.
+**Full Plus, one predicate.** The trial unlocks everything Plus does (blocking, Smart Reminders, Custom Reminder Messages) through a single Plus Access gate (`entitlement || trialActive`). No per-feature trial flags — the trial must feel exactly like Plus, and scattered `isPlus` call sites get consolidated behind one choke point.
 
 **Client-side trial state (Keychain), not RevenueCat promotional entitlements.** RC promotional entitlements would unify gating and analytics with real subscriptions, but the grant requires a server-side call with the secret API key, and Pillie deliberately has no backend. Trial state therefore lives on-device: a grant timestamp in the Keychain (survives reinstall well enough; some abuse leakage is accepted for v1) — this is the app's first Keychain use; everything else is UserDefaults, which reinstall would wipe. Trial users are invisible to RevenueCat dashboards; PostHog events carry the cohort instead. **Migration trigger:** if trial→paid conversion clears the ≥3% keep-going bar, invest in the RC promotional-entitlement path (cloud function grant) for cross-device consistency and RC cohort analytics.
 

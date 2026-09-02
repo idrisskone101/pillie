@@ -4861,75 +4861,6 @@
         }
       }
     },
-    "today.adaptive_reminder.headline": {
-      "comment": "Adaptive reminder recommendation headline; placeholder is locale-formatted time [notification]",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "You usually log around %@"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Di solito registri verso le %@"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Du protokollierst meist gegen %@"
-          }
-        }
-      }
-    },
-    "today.adaptive_reminder.body": {
-      "comment": "Adaptive reminder recommendation explanation; placeholder is locale-formatted time [notification]",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Want to move your daily reminder to %@ so it lands when you're ready?"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vuoi spostare il promemoria giornaliero alle %@, così arriva quando ti è più utile?"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Möchtest du deine tägliche Erinnerung auf %@ verschieben, damit sie besser zu deinem Alltag passt?"
-          }
-        }
-      }
-    },
-    "today.adaptive_reminder.accept": {
-      "comment": "Adaptive reminder recommendation action; placeholder is locale-formatted time [notification]",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Move reminder to %@"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sposta il promemoria alle %@"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Erinnerung auf %@ verschieben"
-          }
-        }
-      }
-    },
     "today.review_prompt.title": {
       "comment": "Home sentiment-gate headline [standard]",
       "localizations": {
@@ -6177,52 +6108,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Eine Mitteilung, wenn Erinnerungen während deiner Pausenwoche aussetzen."
-          }
-        }
-      }
-    },
-    "settings.adaptive_time.title": {
-      "comment": "Plus feature [notification]",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Adaptive Reminder Time"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Orario del promemoria adattivo"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Smarte Erinnerungszeit"
-          }
-        }
-      }
-    },
-    "settings.adaptive_time.body": {
-      "comment": "Suggestion only [health]",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Suggests a reminder time based on when you log actions."
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Suggerisce un orario in base a quando registri le azioni."
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Schlägt eine Erinnerungszeit anhand deiner protokollierten Aktionen vor."
           }
         }
       }

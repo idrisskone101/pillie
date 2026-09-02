@@ -638,33 +638,6 @@ struct SettingsView: View {
         .contentShape(Rectangle())
     }
 
-    /// Retained for a future restore, but intentionally not rendered while the feature's
-    /// medical-claims positioning is under review.
-    /// Adaptive Reminder Time row (#126). A Smart Notifications / Pillie+ perk that lets
-    /// Pillie propose shifting the daily reminder toward when the user actually logs. The
-    /// trailing accessory is a toggle for Plus users and a lock for free users; both share
-    /// the same title and one-line subtitle so the row reads the same either way.
-    private func adaptiveReminderRow<Accessory: View>(@ViewBuilder accessory: () -> Accessory) -> some View {
-        HStack(alignment: .center, spacing: 8) {
-            VStack(alignment: .leading, spacing: 2) {
-                Text(PillieLocalization.string("settings.adaptive_time.title", locale: locale))
-                    .font(.pillieSubtitleBold())
-                    .foregroundStyle(PillieTheme.textPrimary)
-                Text(PillieLocalization.string("settings.adaptive_time.body", locale: locale))
-                    .font(.pillie(13, weight: .regular))
-                    .foregroundStyle(PillieTheme.textMuted)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-
-            Spacer(minLength: 8)
-
-            accessory()
-        }
-        .padding(.horizontal, 20)
-        .padding(.vertical, 16)
-        .contentShape(Rectangle())
-    }
-
     /// The Subscription row's value. `hasEntitlement` is deliberately false
     /// during a Reverse Trial (only `hasPlusAccess` includes it), so trial
     /// users need their own label instead of a misleading "Free Plan".

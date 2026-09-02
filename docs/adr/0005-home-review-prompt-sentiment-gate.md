@@ -14,11 +14,11 @@ An earlier attempt — the in-onboarding `reviewPrompt` step described in ADR 00
 
 **Eligibility is an unbroken Streak crossing a method-aware threshold** — pill `>= 3`, patch `>= 1`, ring `>= 2`. Because a Streak counts completed due actions (not calendar days) and due-action cadence differs by method (pill daily, patch weekly, ring cyclic), a single fixed threshold would ask pill users in a week and effectively never ask ring users. Method-aware thresholds target roughly the same "~1–2 weeks of demonstrated success" across methods. Ring is `>= 2` rather than `>= 1` specifically so the day-one ring insertion does not fire the prompt at setup. A Streak inherently encodes calendar tenure, so there is no separate days-since-install floor.
 
-**Lifecycle.** A positive or negative response suppresses the prompt permanently. A soft dismiss (the close control) starts a 90-day cooldown and is permanently suppressed after 3 total appearances. The 90-day cooldown is far longer than the Adaptive Reminder card's ~14 days on purpose — a rating ask is higher-stakes and shares Apple's annual budget.
+**Lifecycle.** A positive or negative response suppresses the prompt permanently. A soft dismiss (the close control) starts a 90-day cooldown and is permanently suppressed after 3 total appearances. The 90-day cooldown is long on purpose — a rating ask is higher-stakes and shares Apple's annual budget.
 
 **Negative path is `mailto:` only.** Pillie has no backend, so the Feedback Escape Hatch opens the native Mail composer pre-addressed to `pillieapp@gmail.com`. A device without a configured Mail account is tolerated (the prompt is still marked answered), not blocked on.
 
-**Yields to other Home cards.** The Review Prompt is the lowest-priority Home card and shows at most one "ask" per visit: it stays hidden when the Refill, Adaptive Reminder, or Blocking card would render. It sits after `StatsRow` so it never pushes the pill/cycle card down.
+**Yields to other Home cards.** The Review Prompt is the lowest-priority Home card and shows at most one "ask" per visit: it stays hidden when the Refill or Blocking card would render. It sits after `StatsRow` so it never pushes the pill/cycle card down.
 
 **Telemetry stays PII-free (ADR 0001/0004).** Four flat, property-free events — `reviewPromptShown`, `reviewPromptPositiveTapped`, `reviewPromptNegativeTapped`, `reviewPromptDismissed`. Contraception method, Streak value, appearance ordinal, and feedback text are never sent.
 

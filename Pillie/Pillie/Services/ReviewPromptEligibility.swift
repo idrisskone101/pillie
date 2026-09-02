@@ -42,8 +42,8 @@ enum ReviewPromptEligibility {
             case inCooldown
             /// Soft-dismissed the maximum number of times — permanently capped.
             case lifetimeCapReached
-            /// A higher-priority Home card (Refill / Adaptive Reminder / Blocking) is
-            /// showing this pass; the rating ask yields (one ask per visit).
+            /// A higher-priority Home card (Refill / Blocking) is showing this pass;
+            /// the rating ask yields (one ask per visit).
             case yieldingToOtherCard
         }
     }
@@ -66,9 +66,8 @@ enum ReviewPromptEligibility {
         let now: Date
     }
 
-    /// Days the card stays hidden after a soft dismiss before it may re-show. Far longer
-    /// than the Adaptive Reminder card's ~14 days on purpose — a rating ask is
-    /// higher-stakes and shares Apple's annual prompt budget (ADR 0005).
+    /// Days the card stays hidden after a soft dismiss before it may re-show. A rating
+    /// ask is higher-stakes and shares Apple's annual prompt budget (ADR 0005).
     static let softDismissalCooldownDays = 90
     /// Total appearances before the card is permanently suppressed. Each soft dismiss is
     /// one appearance; the card appears at most this many times.
