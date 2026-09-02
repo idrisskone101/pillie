@@ -548,6 +548,56 @@ final class ReminderSchedulePlannerTests: XCTestCase {
         XCTAssertEqual(todayBase.fireDate, servedAt)
     }
 
+    func testFutureDayReplansAtConfiguredTimeDespiteServedEntry() throws {
+        // Reminder-time changes must reach future days: a served entry recorded
+        // under the old time (e.g. 8:00) must not freeze tomorrow's base when the
+        // user has since moved the reminder to 9:30.
+        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 10, minute: 0)
+        let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
+        fixture.store.reminderHour = 9
+        fixture.store.reminderMinute = 30
+        let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: now)!
+        let tomorrowEpoch = epochDay(for: tomorrow)
+        let staleServedAt = InMemoryStoreFactory.fixedDate("2026-05-27", hour: 8, minute: 0)
+
+        let tomorrowBase = try XCTUnwrap(
+            dueIntents(
+                for: fixture.store,
+                now: now,
+                servedBaseFireDateByDueDayEpoch: [tomorrowEpoch: staleServedAt]
+            ).first { $0.dueDayEpoch == tomorrowEpoch && $0.kind == .base }
+        )
+
+        XCTAssertEqual(
+            tomorrowBase.fireDate,
+            InMemoryStoreFactory.fixedDate("2026-05-27", hour: 9, minute: 30)
+        )
+    }
+
+    func testTodayBeforeConfiguredTimeIgnoresServedEntry() throws {
+        // Same-day reminder-time change while the configured time is still ahead:
+        // the new configured time wins over a served entry recorded pre-change.
+        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 10, minute: 0)
+        let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
+        fixture.store.reminderHour = 22
+        fixture.store.reminderMinute = 0
+        let todayEpoch = epochDay(for: now)
+        let staleServedAt = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 21, minute: 45)
+
+        let todayBase = try XCTUnwrap(
+            dueIntents(
+                for: fixture.store,
+                now: now,
+                servedBaseFireDateByDueDayEpoch: [todayEpoch: staleServedAt]
+            ).first { $0.dueDayEpoch == todayEpoch && $0.kind == .base }
+        )
+
+        XCTAssertEqual(
+            todayBase.fireDate,
+            InMemoryStoreFactory.fixedDate("2026-05-26", hour: 22, minute: 0)
+        )
+    }
+
     func testRetriesAnchorWhenBaseSuppressedAfterServed() throws {
         let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 8, minute: 5)
         let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)

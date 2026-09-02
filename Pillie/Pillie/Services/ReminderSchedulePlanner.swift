@@ -179,6 +179,7 @@ struct ReminderSchedulePlanner {
             let served = input.servedBaseFireDateByDueDayEpoch[dueEpoch]
             let anchor = dueDayReminderAnchorDate(
                 dueDay: dueDay,
+                now: input.now,
                 reminderHour: input.reminderHour,
                 reminderMinute: input.reminderMinute,
                 servedBaseFireDate: served,
@@ -486,30 +487,38 @@ struct ReminderSchedulePlanner {
         let configured = reminderDate(on: dueDay, hour: reminderHour, minute: reminderMinute, calendar: calendar)
         let endOfDay = endOfDayExclusive(for: dueDay, calendar: calendar)
 
+        // The served record only governs catch-up territory: today, after the
+        // configured time has passed. Everywhere else the configured time wins so
+        // reminder-time changes always replan future (or later-today) reminders.
+        guard calendar.isDate(dueDay, inSameDayAs: now), configured <= now else {
+            return configured
+        }
+
         if let served = servedBaseFireDate {
             if served <= now { return nil }
             if served < endOfDay { return served }
             return nil
         }
 
-        if calendar.isDate(dueDay, inSameDayAs: now), configured <= now {
-            return now.addingTimeInterval(TimeInterval(Self.catchupDelayMinutes * 60))
-        }
-
-        return configured
+        return now.addingTimeInterval(TimeInterval(Self.catchupDelayMinutes * 60))
     }
 
     private func dueDayReminderAnchorDate(
         dueDay: Date,
+        now: Date,
         reminderHour: Int,
         reminderMinute: Int,
         servedBaseFireDate: Date?,
         calendar: Calendar
     ) -> Date {
-        if let servedBaseFireDate {
+        let configured = reminderDate(on: dueDay, hour: reminderHour, minute: reminderMinute, calendar: calendar)
+        // The served fire moment is the anchor only once the configured moment was
+        // consumed (base fired or catch-up armed); otherwise anchor to configured.
+        if let servedBaseFireDate,
+           calendar.isDate(dueDay, inSameDayAs: now), configured <= now {
             return servedBaseFireDate
         }
-        return reminderDate(on: dueDay, hour: reminderHour, minute: reminderMinute, calendar: calendar)
+        return configured
     }
 
     private func firstReminderDateForDueAction(
