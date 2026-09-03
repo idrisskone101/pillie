@@ -212,7 +212,7 @@ struct CalendarGrid: View {
             onActivate: { onEditableDayActivate?(day) }
         ))
         .anchorPreference(key: CalendarDayHitFramesPreferenceKey.self, value: .bounds) { anchor in
-            editable ? [monthID: [day: anchor]] : [:]
+            [monthID: [day: anchor]]
         }
     }
 
@@ -597,8 +597,74 @@ struct CalendarDayHitFramesPreferenceKey: PreferenceKey {
 }
 
 enum CalendarDayHitTest {
-    static func day(at point: CGPoint, in frames: [Int: CGRect]) -> Int? {
-        frames.first { $0.value.insetBy(dx: -4, dy: -4).contains(point) }?.key
+    static let weekdayHeaderHeight: CGFloat = 13
+    static let headerToGridSpacing: CGFloat = 8
+    static let columnCount = 7
+    static let columnSpacing: CGFloat = 4
+    static let rowSpacing: CGFloat = 6
+    static let cellAccessoryHeight: CGFloat = 8
+
+    static func day(
+        at point: CGPoint,
+        calendarWidth: CGFloat,
+        daysInMonth: Int,
+        leadingBlanks: Int,
+        frames: [Int: CGRect] = [:]
+    ) -> Int? {
+        if let day = frames.first(where: { $0.value.contains(point) })?.key {
+            return day
+        }
+
+        return gridDay(
+            at: point,
+            calendarWidth: calendarWidth,
+            daysInMonth: daysInMonth,
+            leadingBlanks: leadingBlanks,
+            frames: frames
+        )
+    }
+
+    private static func gridDay(
+        at point: CGPoint,
+        calendarWidth: CGFloat,
+        daysInMonth: Int,
+        leadingBlanks: Int,
+        frames: [Int: CGRect]
+    ) -> Int? {
+        guard calendarWidth > 0, daysInMonth > 0 else { return nil }
+        guard point.x >= -8, point.x <= calendarWidth + 8 else { return nil }
+
+        let cellWidth = (calendarWidth - columnSpacing * CGFloat(columnCount - 1)) / CGFloat(columnCount)
+        guard cellWidth > 0 else { return nil }
+        let cellHeight = (frames.values.first?.height ?? (cellWidth + cellAccessoryHeight))
+        let strideY = cellHeight + rowSpacing
+        let gridTop = gridOriginY(frames: frames, leadingBlanks: leadingBlanks, strideY: strideY)
+        guard point.y >= gridTop - 8 else { return nil }
+
+        let col = min(
+            max(Int(point.x / (cellWidth + columnSpacing)), 0),
+            columnCount - 1
+        )
+        let row = Int((point.y - gridTop) / strideY)
+        guard row >= 0 else { return nil }
+
+        let slot = row * columnCount + col
+        let day = slot - leadingBlanks + 1
+        guard day >= 1, day <= daysInMonth else { return nil }
+        return day
+    }
+
+    private static func gridOriginY(
+        frames: [Int: CGRect],
+        leadingBlanks: Int,
+        strideY: CGFloat
+    ) -> CGFloat {
+        guard let top = frames.min(by: { $0.value.minY < $1.value.minY }) else {
+            return weekdayHeaderHeight + headerToGridSpacing
+        }
+        let slot = leadingBlanks + top.key - 1
+        let row = max(slot / columnCount, 0)
+        return top.value.minY - CGFloat(row) * strideY
     }
 }
 

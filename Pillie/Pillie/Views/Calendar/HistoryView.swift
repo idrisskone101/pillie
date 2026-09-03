@@ -138,19 +138,10 @@ struct HistoryView: View {
                             .onAppear {
                                 resolveDayHitFrames(anchors, in: proxy)
                             }
-                            .onChange(of: anchorFrameToken(anchors)) { _, _ in
+                            .onChange(of: hitFrameLayoutToken(anchors, in: proxy)) { _, _ in
                                 resolveDayHitFrames(anchors, in: proxy)
                             }
                     }
-                }
-                .overlay {
-                    HorizontalMonthDragSurface(
-                        onChanged: updateMonthDrag,
-                        onEnded: endMonthDrag,
-                        onCancelled: cancelMonthDrag,
-                        onTap: handleCalendarTap
-                    )
-                    .accessibilityHidden(true)
                 }
                 .overlay(alignment: .topLeading) {
                     if let targetDay = coachMarkTargetDay,
@@ -163,7 +154,17 @@ struct HistoryView: View {
                             calendarHeight: calendarHeight,
                             onDismiss: dismissCoachMark
                         )
+                        .allowsHitTesting(false)
                     }
+                }
+                .overlay {
+                    HorizontalMonthDragSurface(
+                        onChanged: updateMonthDrag,
+                        onEnded: endMonthDrag,
+                        onCancelled: cancelMonthDrag,
+                        onTap: handleCalendarTap(at:in:)
+                    )
+                    .accessibilityHidden(true)
                 }
                 .background {
                     GeometryReader { proxy in
@@ -296,12 +297,22 @@ struct HistoryView: View {
             }
     }
 
-    private func handleCalendarTap(at point: CGPoint) {
+    private func handleCalendarTap(at point: CGPoint, in viewWidth: CGFloat) {
         dismissCoachMark()
+
+        var calendar = Calendar.current
+        calendar.locale = locale
+        let monthStart = MonthCursor.monthStart(for: displayedMonth, calendar: calendar)
+        let leadingBlanks = calendar.component(.weekday, from: monthStart) - 1
+        let daysInMonth = calendar.range(of: .day, in: .month, for: displayedMonth)?.count ?? 0
+        let width = viewWidth > 0 ? viewWidth : calendarWidth
 
         guard let day = CalendarDayHitTest.day(
             at: point,
-            in: dayHitFrames[monthIdentity] ?? [:]
+            calendarWidth: width,
+            daysInMonth: daysInMonth,
+            leadingBlanks: leadingBlanks,
+            frames: dayHitFrames[monthIdentity] ?? [:]
         ) else {
             return
         }
@@ -329,12 +340,18 @@ struct HistoryView: View {
         coachMarkDismissed = true
     }
 
-    private func anchorFrameToken(_ anchors: [String: [Int: Anchor<CGRect>]]) -> String {
+    private func hitFrameLayoutToken(
+        _ anchors: [String: [Int: Anchor<CGRect>]],
+        in proxy: GeometryProxy
+    ) -> String {
         anchors
             .sorted { $0.key < $1.key }
             .map { monthID, dayAnchors in
-                let days = dayAnchors.keys.sorted().map(String.init).joined(separator: ",")
-                return "\(monthID)[\(days)]"
+                let days = dayAnchors.keys.sorted().map { day in
+                    let frame = proxy[dayAnchors[day]!]
+                    return "\(day):\(Int(frame.minX)),\(Int(frame.minY)),\(Int(frame.width)),\(Int(frame.height))"
+                }
+                return "\(monthID)[\(days.joined(separator: ";"))]"
             }
             .joined(separator: "|")
     }
@@ -575,7 +592,7 @@ private struct HorizontalMonthDragSurface: UIViewRepresentable {
     var onChanged: (CGFloat) -> Void
     var onEnded: (_ translation: CGFloat, _ velocity: CGFloat) -> Void
     var onCancelled: () -> Void
-    var onTap: (CGPoint) -> Void
+    var onTap: (CGPoint, CGFloat) -> Void
 
     func makeCoordinator() -> Coordinator {
         Coordinator(
@@ -590,13 +607,14 @@ private struct HorizontalMonthDragSurface: UIViewRepresentable {
         let view = MonthDragSurfaceView()
         view.backgroundColor = .clear
         view.isAccessibilityElement = false
+        view.isUserInteractionEnabled = true
 
         let panGesture = UIPanGestureRecognizer(
             target: context.coordinator,
             action: #selector(Coordinator.handlePan(_:))
         )
         panGesture.delegate = context.coordinator
-        panGesture.cancelsTouchesInView = true
+        panGesture.cancelsTouchesInView = false
         view.addGestureRecognizer(panGesture)
 
         let tapGesture = UITapGestureRecognizer(
@@ -604,10 +622,14 @@ private struct HorizontalMonthDragSurface: UIViewRepresentable {
             action: #selector(Coordinator.handleTap(_:))
         )
         tapGesture.delegate = context.coordinator
+        tapGesture.cancelsTouchesInView = false
         view.addGestureRecognizer(tapGesture)
-        tapGesture.require(toFail: panGesture)
 
         context.coordinator.panGesture = panGesture
+        context.coordinator.surfaceView = view
+        view.onTapAtPoint = { [weak coordinator = context.coordinator] point in
+            coordinator?.deliverTap(at: point)
+        }
         view.didMoveToWindowHandler = { [weak view, weak coordinator = context.coordinator] in
             guard let view, let coordinator else { return }
             coordinator.configureGesturePriority(from: view)
@@ -621,6 +643,10 @@ private struct HorizontalMonthDragSurface: UIViewRepresentable {
         context.coordinator.onEnded = onEnded
         context.coordinator.onCancelled = onCancelled
         context.coordinator.onTap = onTap
+        context.coordinator.surfaceView = uiView
+        uiView.onTapAtPoint = { [weak coordinator = context.coordinator] point in
+            coordinator?.deliverTap(at: point)
+        }
         context.coordinator.configureGesturePriority(from: uiView)
     }
 
@@ -628,15 +654,18 @@ private struct HorizontalMonthDragSurface: UIViewRepresentable {
         var onChanged: (CGFloat) -> Void
         var onEnded: (_ translation: CGFloat, _ velocity: CGFloat) -> Void
         var onCancelled: () -> Void
-        var onTap: (CGPoint) -> Void
+        var onTap: (CGPoint, CGFloat) -> Void
         weak var panGesture: UIPanGestureRecognizer?
         weak var configuredScrollView: UIScrollView?
+        weak var surfaceView: MonthDragSurfaceView?
+        private var panActive = false
+        private var lastDeliveredTapTime: TimeInterval = 0
 
         init(
             onChanged: @escaping (CGFloat) -> Void,
             onEnded: @escaping (_ translation: CGFloat, _ velocity: CGFloat) -> Void,
             onCancelled: @escaping () -> Void,
-            onTap: @escaping (CGPoint) -> Void
+            onTap: @escaping (CGPoint, CGFloat) -> Void
         ) {
             self.onChanged = onChanged
             self.onEnded = onEnded
@@ -661,13 +690,14 @@ private struct HorizontalMonthDragSurface: UIViewRepresentable {
 
         func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
             if gestureRecognizer is UITapGestureRecognizer {
-                return true
+                return !panActive
             }
             guard let panGesture = gestureRecognizer as? UIPanGestureRecognizer else {
                 return false
             }
+            let translation = panGesture.translation(in: panGesture.view)
             let velocity = panGesture.velocity(in: panGesture.view)
-            return abs(velocity.x) > abs(velocity.y)
+            return abs(translation.x) > abs(translation.y) && abs(velocity.x) > abs(velocity.y)
         }
 
         func gestureRecognizer(
@@ -677,39 +707,89 @@ private struct HorizontalMonthDragSurface: UIViewRepresentable {
             false
         }
 
+        func deliverTap(at point: CGPoint) {
+            guard !panActive else { return }
+            let now = ProcessInfo.processInfo.systemUptime
+            guard now - lastDeliveredTapTime > 0.2 else { return }
+            lastDeliveredTapTime = now
+            let width = surfaceView?.bounds.width ?? 0
+            onTap(point, width)
+        }
+
         @objc func handlePan(_ gesture: UIPanGestureRecognizer) {
             let translation = gesture.translation(in: gesture.view).x
 
             switch gesture.state {
-            case .began, .changed:
+            case .began:
+                panActive = true
+                onChanged(translation)
+            case .changed:
                 onChanged(translation)
             case .ended:
+                panActive = false
                 onEnded(
                     translation,
                     gesture.velocity(in: gesture.view).x
                 )
             case .cancelled, .failed:
+                panActive = false
                 onCancelled()
             case .possible:
                 break
             @unknown default:
+                panActive = false
                 onCancelled()
             }
         }
 
         @objc func handleTap(_ gesture: UITapGestureRecognizer) {
             guard gesture.state == .ended else { return }
-            onTap(gesture.location(in: gesture.view))
+            deliverTap(at: gesture.location(in: gesture.view))
         }
     }
 }
 
 private final class MonthDragSurfaceView: UIView {
     var didMoveToWindowHandler: (() -> Void)?
+    var onTapAtPoint: ((CGPoint) -> Void)?
+
+    private var touchStart: CGPoint?
+    private var touchMoved = false
 
     override func didMoveToWindow() {
         super.didMoveToWindow()
         didMoveToWindowHandler?()
+    }
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        touchStart = touches.first?.location(in: self)
+        touchMoved = false
+        super.touchesBegan(touches, with: event)
+    }
+
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if let start = touchStart, let current = touches.first?.location(in: self) {
+            if hypot(current.x - start.x, current.y - start.y) > 10 {
+                touchMoved = true
+            }
+        }
+        super.touchesMoved(touches, with: event)
+    }
+
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        defer {
+            touchStart = nil
+            touchMoved = false
+            super.touchesEnded(touches, with: event)
+        }
+        guard !touchMoved, let start = touchStart else { return }
+        onTapAtPoint?(start)
+    }
+
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        touchStart = nil
+        touchMoved = false
+        super.touchesCancelled(touches, with: event)
     }
 }
 
