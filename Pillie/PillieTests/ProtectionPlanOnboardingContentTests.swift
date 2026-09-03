@@ -104,7 +104,7 @@ final class ProtectionPlanOnboardingContentTests: XCTestCase {
         let drag = ProtectionPlanEarlyValueProofContent.localized(
             locale: Locale(identifier: "en_US")
         ).dragCTA
-        XCTAssertEqual(drag, "Drag to your apps")
+        XCTAssertEqual(drag, "drag this onto your apps.")
         XCTAssertTrue(drag.lowercased().contains("drag"))
     }
 
@@ -117,7 +117,7 @@ final class ProtectionPlanOnboardingContentTests: XCTestCase {
         // The static / VoiceOver narrative still explains the pause-and-log loop.
         XCTAssertTrue(content.resolved.detail.lowercased().contains("logged"))
         XCTAssertTrue(content.resolved.title.lowercased().contains("available"))
-        XCTAssertTrue(content.accessibilitySummary.lowercased().contains("log"))
+        XCTAssertTrue(content.accessibilitySummary.lowercased().contains("check"))
     }
 
     func testEarlyValueProofHasNoMedicalOrFakeStatLanguage() {
@@ -147,11 +147,11 @@ final class ProtectionPlanOnboardingContentTests: XCTestCase {
 
     func testDiagnosisContentUsesAnalyzeThenVerifyCopyNotAClinicalReadout() {
         let content = ProtectionPlanDiagnosisContent.localized(locale: english)
-        XCTAssertEqual(content.eyebrow, "Next action")
+        XCTAssertEqual(content.eyebrow, "next")
         XCTAssertEqual(content.analyzingTitle, "Your personalised reminder plan")
         XCTAssertEqual(content.analyzingSubtitle, "Built from the routine you selected.")
         XCTAssertEqual(content.protectedAppsHeader, "Protected apps")
-        XCTAssertEqual(content.primaryCTA, "Continue")
+        XCTAssertEqual(content.primaryCTA, "continue.")
         // The word "diagnosis" must never reach the user — the screen reveals a plan.
         for line in content.visibleCopy {
             XCTAssertFalse(line.lowercased().contains("diagnos"), "User copy must not say diagnosis: \(line)")

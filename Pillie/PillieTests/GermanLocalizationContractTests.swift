@@ -53,7 +53,7 @@ final class GermanLocalizationContractTests: XCTestCase {
         let german = Locale(identifier: "de_DE")
         let expectedByKeyAndTable = [
             ("onboarding.cycle_position.calculated", "Localizable", "Aus deiner Auswahl berechnet"),
-            ("onboarding.regimen.name.custom", "Localizable", "eigene"),
+            ("onboarding.regimen.name.custom", "Localizable", "eigener Zyklus"),
             ("trial.decline_feedback.optional_note", "Commerce", "das ist optional. du kannst überspringen und Pillie weiter kostenlos nutzen."),
         ]
 
@@ -181,7 +181,7 @@ final class GermanLocalizationContractTests: XCTestCase {
         )
         XCTAssertEqual(
             SettingsPresentation.cycleDay(day: 3, total: 28, locale: german),
-            "Tag 3 von 28"
+            "tag 3 von 28"
         )
         XCTAssertEqual(
             CommercePresentation.priceAndPeriod(
@@ -297,7 +297,7 @@ final class GermanLocalizationContractTests: XCTestCase {
                 "28 aktive Tage, keine Pause",
                 "84 aktive Tage, 7 Pausentage",
                 "365 aktive Tage, keine Pause",
-                "Eigener Zyklus",
+                "eigene",
             ]
         )
     }
@@ -360,14 +360,14 @@ final class GermanLocalizationContractTests: XCTestCase {
             CycleNounPresentation.startNewConfirmation(for: .pill, locale: german),
             CycleNounPresentation.StartNewConfirmation(
                 title: "Neue Packung beginnen?",
-                body: "Damit beginnt heute eine neue Packung. Dein bisheriger Verlauf bleibt erhalten."
+                body: "das startet heute eine neue Packung. deine alte Historie bleibt."
             )
         )
         XCTAssertEqual(
             CycleNounPresentation.startNewConfirmation(for: .patch, locale: german),
             CycleNounPresentation.StartNewConfirmation(
                 title: "Neuen Zyklus beginnen?",
-                body: "Damit beginnt heute ein neuer Zyklus. Dein bisheriger Verlauf bleibt erhalten."
+                body: "das startet heute einen neuen Zyklus. deine alte Historie bleibt."
             )
         )
         XCTAssertEqual(
@@ -500,7 +500,7 @@ final class GermanLocalizationContractTests: XCTestCase {
             "Wenn du den Zeitplan änderst, wird der gesamte Protokollverlauf zurückgesetzt und bei Tag 8 neu begonnen. Dies kann nicht rückgängig gemacht werden."
         )
         XCTAssertEqual(confirmation.confirmTitle, "Zurücksetzen & sichern")
-        XCTAssertEqual(confirmation.cancelTitle, "Abbrechen")
+        XCTAssertEqual(confirmation.cancelTitle, "abbrechen")
     }
 
     func testGermanHealthAndReminderCopyAvoidsProhibitedClaims() {

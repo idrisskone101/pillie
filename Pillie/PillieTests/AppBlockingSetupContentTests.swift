@@ -11,24 +11,24 @@ final class AppBlockingSetupContentTests: XCTestCase {
 
     func testSetupCopyExplainsPillTimePauseMedicationUnlockAndReversibility() {
         XCTAssertEqual(content.badge, "Pillie Plus")
-        XCTAssertEqual(content.chooseAppsCTA, "Choose apps to pause")
+        XCTAssertEqual(content.chooseAppsCTA, "choose apps to pause.")
 
         let explanation = [content.subtitle, content.emptyDetail]
             .joined(separator: " ")
             .lowercased()
         XCTAssertTrue(explanation.contains("after a pillie reminder"))
-        XCTAssertTrue(explanation.contains("become available after you log the action"))
+        XCTAssertTrue(explanation.contains("come back after you check in"))
         XCTAssertEqual(content.changeSelectionCTA, "Edit")
-        XCTAssertEqual(content.skipCTA, "Continue without app blocking")
+        XCTAssertEqual(content.skipCTA, "continue without app blocking.")
     }
 
     func testTrialDisclosureIsClearAndDoesNotReplaceSkip() {
         XCTAssertEqual(
             content.trialDisclosure,
-            "Your free trial lasts 14 days. No card required. App blocking turns off when it ends, while reminders stay free."
+            "your free trial lasts 14 days. no card needed. app blocking turns off when it ends, and reminders stay free."
         )
         XCTAssertTrue(content.visibleCopy.contains(content.trialDisclosure))
-        XCTAssertEqual(content.skipCTA, "Continue without app blocking")
+        XCTAssertEqual(content.skipCTA, "continue without app blocking.")
     }
 
     func testHardPaywallTrialDisclosureRequiresAPlanAfterFourteenDays() {
@@ -39,7 +39,7 @@ final class AppBlockingSetupContentTests: XCTestCase {
 
         XCTAssertEqual(
             hardPaywallContent.trialDisclosure,
-            "Your free trial lasts 14 days. No card required. After it ends, choose monthly, annual, or lifetime to keep using Pillie."
+            "your free trial lasts 14 days. no card needed. after it ends, you can choose monthly, annual, or lifetime to keep plus."
         )
     }
 
@@ -49,9 +49,9 @@ final class AppBlockingSetupContentTests: XCTestCase {
             trialEndTerms: .hardPaywall
         )
 
-        XCTAssertTrue(content.trialDisclosure.localizedCaseInsensitiveContains("no card required"))
+        XCTAssertTrue(content.trialDisclosure.localizedCaseInsensitiveContains("no card needed"))
         XCTAssertTrue(
-            hardPaywallContent.trialDisclosure.localizedCaseInsensitiveContains("no card required")
+            hardPaywallContent.trialDisclosure.localizedCaseInsensitiveContains("no card needed")
         )
     }
 
@@ -92,7 +92,7 @@ final class AppBlockingSetupContentTests: XCTestCase {
         )
         XCTAssertTrue(permission.isRecoveryVisible)
         XCTAssertEqual(content.retryAuthorizationCTA, "Try Again")
-        XCTAssertEqual(content.skipCTA, "Continue without app blocking")
+        XCTAssertEqual(content.skipCTA, "continue without app blocking.")
     }
 
     func testRecoveryRetryStartsANewExplicitAuthorizationRequest() {
@@ -129,7 +129,7 @@ final class AppBlockingSetupContentTests: XCTestCase {
         XCTAssertTrue(content.emptyDetail.contains("Screen Time"))
         XCTAssertTrue(content.privacyNote.lowercased().contains("number"))
         XCTAssertEqual(content.emptyDetail, "Use Apple Screen Time to choose categories or apps.")
-        XCTAssertEqual(content.chooseAppsCTA, "Choose apps to pause")
+        XCTAssertEqual(content.chooseAppsCTA, "choose apps to pause.")
     }
 
     func testEmptyStateCardOffersChooseAppsActionWhenIdle() {
@@ -172,8 +172,8 @@ final class AppBlockingSetupContentTests: XCTestCase {
     // MARK: - Footer
 
     func testFooterUsesFinishAndSkipCopy() {
-        XCTAssertEqual(content.finishCTA, "Continue")
-        XCTAssertEqual(content.skipCTA, "Continue without app blocking")
+        XCTAssertEqual(content.finishCTA, "continue.")
+        XCTAssertEqual(content.skipCTA, "continue without app blocking.")
     }
 
     // MARK: - Invariants preserved from the prior screen

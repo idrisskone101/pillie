@@ -285,7 +285,7 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
             "La modifica del programma reimposta tutta la cronologia e riparte dal giorno 8. L’operazione non può essere annullata."
         )
         XCTAssertEqual(confirmation.confirmTitle, "Reimposta e salva")
-        XCTAssertEqual(confirmation.cancelTitle, "Annulla")
+        XCTAssertEqual(confirmation.cancelTitle, "annulla")
     }
 
     func testSettingsPresentationUsesItalianTimeIntervalAndCycleDayFormatting() {
@@ -301,19 +301,19 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
         )
         XCTAssertEqual(
             SettingsPresentation.cycleDay(day: 3, total: 28, locale: italian),
-            "Giorno 3 di 28"
+            "giorno 3 di 28"
         )
         XCTAssertEqual(
             SettingsPresentation.supplyReminderTitle(method: .pill, locale: italian),
-            "Promemoria scorte di pillole"
+            "scorte pillola"
         )
         XCTAssertEqual(
             SettingsPresentation.supplyReminderTitle(method: .patch, locale: italian),
-            "Promemoria scorte di cerotti"
+            "scorte cerotto"
         )
         XCTAssertEqual(
             SettingsPresentation.supplyReminderTitle(method: .ring, locale: italian),
-            "Promemoria scorte di anelli"
+            "scorte anello"
         )
     }
 
@@ -322,11 +322,11 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
 
         XCTAssertEqual(
             ProtocolEditorPresentation.localized(method: .pill, locale: italian).customDayLabels,
-            ["Giorni attivi", "Giorni di pausa"]
+            ["giorni attivi", "giorni di pausa"]
         )
 
         let patch = ProtocolEditorPresentation.localized(method: .patch, locale: italian)
-        XCTAssertEqual(patch.scheduleTitle, "Programma del cerotto")
+        XCTAssertEqual(patch.scheduleTitle, "piano cerotto")
         XCTAssertEqual(
             patch.scheduleLines,
             [
@@ -338,7 +338,7 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
         )
 
         let ring = ProtocolEditorPresentation.localized(method: .ring, locale: italian)
-        XCTAssertEqual(ring.scheduleTitle, "Programma dell’anello")
+        XCTAssertEqual(ring.scheduleTitle, "piano anello")
         XCTAssertEqual(
             ring.scheduleLines,
             [
