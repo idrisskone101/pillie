@@ -27,7 +27,7 @@ final class ItalianCommerceRuntimeLocalizationTests: XCTestCase {
                 plusIncluded: true,
                 locale: italian
             ),
-            "disponibilità: Free e Plus"
+            "Disponibilità: Free e Plus"
         )
         XCTAssertEqual(
             CommercePresentation.comparisonTierLabel(
@@ -35,7 +35,7 @@ final class ItalianCommerceRuntimeLocalizationTests: XCTestCase {
                 plusIncluded: true,
                 locale: italian
             ),
-            "disponibilità: solo Plus"
+            "Disponibilità: solo Plus"
         )
         XCTAssertEqual(
             CommercePresentation.comparisonTierLabel(
@@ -43,7 +43,7 @@ final class ItalianCommerceRuntimeLocalizationTests: XCTestCase {
                 plusIncluded: false,
                 locale: italian
             ),
-            "disponibilità: solo Free"
+            "Disponibilità: solo Free"
         )
         XCTAssertEqual(
             CommercePresentation.comparisonTierLabel(
@@ -51,7 +51,7 @@ final class ItalianCommerceRuntimeLocalizationTests: XCTestCase {
                 plusIncluded: false,
                 locale: italian
             ),
-            "disponibilità: nessuna"
+            "Disponibilità: nessuna"
         )
 
         XCTAssertEqual(
