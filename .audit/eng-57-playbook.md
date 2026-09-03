@@ -4,7 +4,7 @@ Locked EN/DE/IT from ENG-58 and ENG-62 through ENG-73 goes live. The user sees t
 
 ## Done predicate
 
-Every locked triple in `tools/girly-pop-copy/catalog.py` matches the compiled catalogs. Due-action, plus-gate, and protection-card leftovers that ignored English catalogs now read those keys. Simulator AX on Today, History, Settings, and the smart-reminders gate shows the locked English. Medical-claim rules, analytics event names, and identifiers stay unchanged.
+Every locked triple in `Pillie/scripts/copy-rewrite/locked-copy.json` matches the compiled catalogs. Due-action, plus-gate, and protection-card leftovers that ignored English catalogs now read those keys. Simulator AX on Today, History, Settings, and the smart-reminders gate shows the locked English. Medical-claim rules, analytics event names, and identifiers stay unchanged.
 
 ## Rigor
 

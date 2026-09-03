@@ -10,3 +10,5 @@ ts	phase	decision	why	evidence	result
 2026-09-03T03:10:00Z	loop	Free blocking card CTA uses today.protection.add	off.cta is the ended-plus path	BlockingStatusPresentation.swift	done
 2026-09-03T03:10:00Z	loop	Lifetime title fallback reads paywall.plan.lifetime	ENG-68 locked string	PremiumPaywallView.swift TrialEndPaywallView.swift	done
 2026-09-03T03:20:00Z	verify	Simulator Today History Settings and trial sheet show locked EN	axe + 1x screenshots on iPhone 17 Pro	/tmp/eng57-qa	pass
+2026-09-03T03:05:48Z	verify	Free-user plus-gates use their own Commerce keys not paywall.subtitle	ENG-66 and ENG-67 said the bodies must diverge	.audit/eng-57-qa/smart-reminders-gate.png .audit/eng-57-qa/blocking-gate.png	pass
+2026-09-03T03:05:48Z	verify	Committed lever verify passed 217 triples	Reviewer can rerun the script	python3 Pillie/scripts/copy-rewrite/apply-locked-copy.py verify	pass
