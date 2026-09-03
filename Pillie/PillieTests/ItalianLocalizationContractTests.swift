@@ -119,7 +119,7 @@ final class ItalianLocalizationContractTests: XCTestCase {
 
         XCTAssertEqual(
             PillieLocalization.string("onboarding.permission.cta", locale: italian),
-            "Attiva notifiche"
+            "Continua alle notifiche"
         )
         XCTAssertEqual(
             PillieLocalization.string("onboarding.blocking_demo.shake_title", locale: italian),

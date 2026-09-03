@@ -1847,6 +1847,14 @@
       "en": "Next",
       "de": "Als Nächstes",
       "it": "Dopo"
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Localizable",
+      "key": "onboarding.permission.cta",
+      "en": "Continue to notification settings",
+      "de": "Weiter zu den Mitteilungen",
+      "it": "Continua alle notifiche"
     }
   ]
 }

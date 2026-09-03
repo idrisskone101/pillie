@@ -151,7 +151,7 @@ SPECIAL_IT: dict[tuple[str, str], str] = {
     ("Localizable", "onboarding.personalise.pain.title"): "Cosa ti ostacola?",
     ("Localizable", "onboarding.personalise.outcome.title"): "Cosa aiuterebbe di più?",
     ("Localizable", "onboarding.frequency.title"): "Quanto spesso?",
-    ("Localizable", "onboarding.permission.cta"): "Attiva notifiche",
+    ("Localizable", "onboarding.permission.cta"): "Continua alle notifiche",
     ("Localizable", "onboarding.risk_window.title"): "Quando ti distrai di solito?",
     ("Localizable", "onboarding.plan.title"): "Il tuo piano promemoria",
     ("Localizable", "onboarding.ready.title"): "Tutto pronto.",
