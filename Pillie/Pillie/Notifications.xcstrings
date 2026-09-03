@@ -605,19 +605,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "hey, quick check-in is still open. log it when you're ready"
+            "value": "Hey, quick check-in is still open. Log it when you're ready"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "ehi, il check-in veloce è ancora aperto. registralo quando vuoi"
+            "value": "Ehi, il check-in veloce è ancora aperto. Registralo quando vuoi"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "hey, der kurze Check-in ist noch offen. trag's ein, wenn du soweit bist"
+            "value": "Hey, der kurze Check-in ist noch offen. Trag's ein, wenn du soweit bist"
           }
         }
       }
@@ -789,19 +789,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "hey, quick check-in. log your patch when you're done"
+            "value": "Hey, quick check-in. Log your patch when you're done"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "ehi, check-in veloce. registralo quando hai finito"
+            "value": "Ehi, check-in veloce. Registralo quando hai finito"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "hey, kurzer Check-in. trag dein Pflaster ein, wenn du fertig bist"
+            "value": "Hey, kurzer Check-in. Trag dein Pflaster ein, wenn du fertig bist"
           }
         }
       }
@@ -812,13 +812,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "pillie time!"
+            "value": "Pillie time!"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "pillie time!"
+            "value": "Pillie time!"
           }
         },
         "de": {
@@ -835,19 +835,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "hey, quick check-in. log your pill when you're done"
+            "value": "Hey, quick check-in. Log your pill when you're done"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "ehi, check-in veloce. registrala quando hai finito"
+            "value": "Ehi, check-in veloce. Registrala quando hai finito"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "hey, kurzer Check-in. trag deine Pille ein, wenn du fertig bist"
+            "value": "Hey, kurzer Check-in. Trag deine Pille ein, wenn du fertig bist"
           }
         }
       }
@@ -858,13 +858,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "pillie time!"
+            "value": "Pillie time!"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "pillie time!"
+            "value": "Pillie time!"
           }
         },
         "de": {
@@ -881,19 +881,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "hey, quick check-in. log your ring when you're done"
+            "value": "Hey, quick check-in. Log your ring when you're done"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "ehi, check-in veloce. registralo quando hai finito"
+            "value": "Ehi, check-in veloce. Registralo quando hai finito"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "hey, kurzer Check-in. trag deinen Ring ein, wenn du fertig bist"
+            "value": "Hey, kurzer Check-in. Trag deinen Ring ein, wenn du fertig bist"
           }
         }
       }
@@ -904,13 +904,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "pillie time!"
+            "value": "Pillie time!"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "pillie time!"
+            "value": "Pillie time!"
           }
         },
         "de": {

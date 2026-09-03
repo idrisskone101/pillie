@@ -37,11 +37,11 @@ final class ItalianLocalizationContractTests: XCTestCase {
 
         XCTAssertEqual(
             ProtectionPlanWelcomeContent.localized(locale: italian).title,
-            "la sveglia per la tua pillola."
+            "La sveglia per la tua pillola."
         )
         XCTAssertEqual(
             ProtectionPlanRoutineMethodContent.localized(locale: italian).title,
-            "Scegli il tuo metodo"
+            "Scegli il tuo metodo."
         )
         XCTAssertEqual(
             ContraceptiveMethod.allCases.map { $0.localizedTitle(locale: italian) },
@@ -86,7 +86,7 @@ final class ItalianLocalizationContractTests: XCTestCase {
 
         XCTAssertEqual(
             PillieLocalization.string("onboarding.welcome.demo.reminder_title", locale: italian),
-            "Promemoria pomeridiano"
+            "Check-in del pomeriggio"
         )
         XCTAssertEqual(
             PillieLocalization.formatted(
@@ -98,11 +98,11 @@ final class ItalianLocalizationContractTests: XCTestCase {
         )
         XCTAssertEqual(
             PillieLocalization.string("onboarding.welcome.demo.apps_title", locale: italian),
-            "App che distraggono"
+            "Le tue app"
         )
         XCTAssertEqual(
             PillieLocalization.string("onboarding.welcome.demo.apps_locked", locale: italian),
-            "In pausa fino alla registrazione"
+            "In pausa finché non fai il check-in"
         )
         XCTAssertEqual(
             PillieLocalization.string("onboarding.welcome.demo.apps_open", locale: italian),
@@ -127,7 +127,7 @@ final class ItalianLocalizationContractTests: XCTestCase {
         )
         XCTAssertEqual(
             PillieLocalization.string("onboarding.blocking_demo.drag_title", locale: italian),
-            "Trascina verso le app"
+            "Trascina questo sulle tue app."
         )
         XCTAssertEqual(
             PillieLocalization.string("onboarding.blocking_demo.shake_body", locale: italian),
@@ -171,7 +171,7 @@ final class ItalianLocalizationContractTests: XCTestCase {
 
         XCTAssertEqual(
             content.analyzingAccessibilityLabel(signals: ["Messaggi", "21:05"]),
-            "Il tuo piano di promemoria personalizzato. Rilevati: Messaggi, 21:05."
+            "Il tuo piano promemoria. Rilevati: Messaggi, 21:05."
         )
         XCTAssertEqual(
             DistractionApp.messages.localizedDisplayName(locale: italian),
@@ -185,7 +185,7 @@ final class ItalianLocalizationContractTests: XCTestCase {
         XCTAssertEqual(
             BlockerSelectionState(applicationCount: 1, categoryCount: 0)
                 .localizedAccessibilitySummary(locale: italian),
-            "1 elemento selezionato"
+            "1 Elemento selezionato"
         )
 
         let genericDiagnosis = ProtectionPlanDiagnosis(
@@ -212,7 +212,7 @@ final class ItalianLocalizationContractTests: XCTestCase {
         XCTAssertEqual(
             ProtectionPlanRoutineSummary(method: .pill, locale: italian)
                 .accessibilityHeadings,
-            ["Il tuo piano di promemoria personalizzato"]
+            ["Il tuo piano promemoria"]
         )
         XCTAssertEqual(diagnosis.handNote, "Tutto pronto!")
     }
@@ -264,7 +264,7 @@ final class ItalianLocalizationContractTests: XCTestCase {
 
         XCTAssertEqual(
             content.trialDisclosure,
-            "La prova gratuita dura 14 giorni. Non serve una carta. Al termine, il blocco delle app si disattiva, mentre i promemoria restano gratuiti."
+            "Il tuo trial gratis dura 14 giorni. Non serve la carta. Il blocco app si spegne quando finisce, e i promemoria restano gratis."
         )
         XCTAssertEqual(
             content.emptyDetail,
@@ -315,7 +315,7 @@ final class ItalianLocalizationContractTests: XCTestCase {
 
         XCTAssertEqual(
             actions.map { $0.localizedReminderTitle(locale: italian) },
-            ["pillie time!", "pillie time!", "pillie time!"]
+            ["Pillie time!", "Pillie time!", "Pillie time!"]
         )
         XCTAssertEqual(
             actions.map { $0.localizedFollowUpTitle(locale: italian) },
