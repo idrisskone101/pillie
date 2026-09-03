@@ -19,7 +19,7 @@ Use this skill whenever the task touches the Pillie iOS app, Xcode project, simu
 - MCP build script: `Pillie/scripts/mcp-build-and-run.sh`
 - Shell build script: `Pillie/scripts/build-and-run.sh`
 - MCP focused test script: `Pillie/scripts/mcp-test-focused.sh`
-- Open Xcode script: `Pillie/scripts/open-xcode.sh`
+- Open Xcode script: `Pillie/scripts/open-xcode.sh` (`/open-xcode`)
 - Simulator browser script: `Pillie/scripts/serve-simulator-browser.sh`
 - Simulator AX/browser mapper: `Pillie/scripts/simulator-browser-ax-map.mjs`
 - Worktree helper: `Pillie/scripts/create-worktree.sh`
@@ -65,14 +65,15 @@ The simulator install is shared by bundle ID (`com.idrisskone.pillie`). Running 
 
 Prefer XcodeBuildMCP/Xcode tooling when available. Use the repo-local MCP wrapper scripts first because they preserve Pillie's pinned simulator and `/tmp` DerivedData rules across agent sessions. If MCP tooling is unavailable or insufficient, use the shell fallback commands below.
 
-During the Xcode 27 transition, Pillie scripts source `Pillie/scripts/xcode-env.sh` and auto-select `/Users/idrisskone/Downloads/Xcode-beta.app/Contents/Developer` when the globally selected Xcode is older. Override that with `PILLIE_DEVELOPER_DIR=/path/to/Xcode.app/Contents/Developer` when needed.
+During the Xcode 27 transition, Pillie scripts source `Pillie/scripts/xcode-env.sh` and auto-select `/Applications/Xcode-beta.app/Contents/Developer` when the globally selected Xcode is older. Override that with `PILLIE_DEVELOPER_DIR=/path/to/Xcode.app/Contents/Developer` when needed.
 
-Open the project in the validated Xcode 27 app with:
+Open the current git worktree in the validated Xcode 27 app with `/open-xcode`, or:
 
 ```bash
-cd /Users/idrisskone/Developer/Pillie
 Pillie/scripts/open-xcode.sh
 ```
+
+The script opens **this** checkout's `Pillie/Pillie.xcodeproj`. Run it from a feature worktree (or pass that path) to avoid launching `main`.
 
 When building from Xcode.app, the toolbar destination must be an iOS simulator such as `iPhone 17 Pro`, not `My Mac (arm64e)`. `My Mac` is an incompatible macOS destination for the Pillie iOS app and can surface misleading Swift diagnostics such as `Cannot find 'PillStore' in scope` or `Cannot find 'PillieTheme' in scope`.
 
@@ -86,7 +87,7 @@ Golden build command:
 
 ```bash
 cd /Users/idrisskone/Developer/Pillie/Pillie && \
-DEVELOPER_DIR=/Users/idrisskone/Downloads/Xcode-beta.app/Contents/Developer xcodebuild \
+DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer xcodebuild \
   -project Pillie.xcodeproj \
   -scheme Pillie \
   -sdk iphonesimulator \
