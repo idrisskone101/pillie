@@ -4,9 +4,10 @@ You are the Lead Engineer at Pillie Inc., the primary builder for the Pillie iOS
 
 ## Skills
 
-Use repo-local skills (`.agents/skills`, mirrored into `.claude/skills` for Claude Code; opencode discovers `.agents/skills` natively) when they apply:
+Use repo-local skills (`.agents/skills`, mirrored into `.claude/skills` for Claude Code and `.cursor/skills` for Cursor; opencode discovers `.agents/skills` natively) when they apply:
 
 - `pillie-ios`: build, run, debug, test, inspect, and visually verify the Pillie iOS app.
+- `open-xcode`: `/open-xcode` — open this git worktree in Xcode 27.
 - `superdesign`: use before implementing UI that needs design thinking, design-system work, or flow/page iteration.
 
 Use the global `xcodebuildmcp-cli` skill for Apple platform build, run, simulator, log, and UI automation work when available. Prefer XcodeBuildMCP tooling over raw shell commands for Apple workflows, then fall back to the golden commands below when needed.
@@ -124,14 +125,15 @@ Pillie/scripts/mcp-build-and-run.sh
 Pillie/scripts/mcp-test-focused.sh SoftPaywallContentTests
 ```
 
-During the Xcode 27 transition, Pillie scripts source `Pillie/scripts/xcode-env.sh` and auto-select `/Users/idrisskone/Downloads/Xcode-beta.app/Contents/Developer` when the globally selected Xcode is older. Override that with `PILLIE_DEVELOPER_DIR=/path/to/Xcode.app/Contents/Developer` when needed.
+During the Xcode 27 transition, Pillie scripts source `Pillie/scripts/xcode-env.sh` and auto-select `/Applications/Xcode-beta.app/Contents/Developer` when the globally selected Xcode is older. Override that with `PILLIE_DEVELOPER_DIR=/path/to/Xcode.app/Contents/Developer` when needed.
 
-Open the project in the validated Xcode 27 app with:
+Open the current git worktree in the validated Xcode 27 app with `/open-xcode`, or:
 
 ```bash
-cd /Users/idrisskone/Developer/Pillie
 Pillie/scripts/open-xcode.sh
 ```
+
+The script resolves `Pillie/Pillie.xcodeproj` from the current checkout (cwd, or an optional path). Invoke it from a feature worktree to open that worktree, not `main`.
 
 When building from Xcode.app, the toolbar destination must be an iOS simulator such as `iPhone 17 Pro`, not `My Mac (arm64e)`. `My Mac` is an incompatible macOS destination for the Pillie iOS app and can surface misleading Swift diagnostics such as `Cannot find 'PillStore' in scope` or `Cannot find 'PillieTheme' in scope`.
 
@@ -143,7 +145,7 @@ Hosted XCTest is expensive regardless of whether it is invoked through MCP or ra
 
 ```bash
 cd /Users/idrisskone/Developer/Pillie/Pillie && \
-DEVELOPER_DIR=/Users/idrisskone/Downloads/Xcode-beta.app/Contents/Developer xcodebuild \
+DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer xcodebuild \
  -project Pillie.xcodeproj \
  -scheme Pillie \
  -sdk iphonesimulator \

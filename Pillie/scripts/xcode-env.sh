@@ -6,7 +6,7 @@
 # silently drift back to the globally selected Xcode 26.x toolchain.
 
 pillie_default_developer_dir() {
-  printf "%s" "${PILLIE_XCODE27_DEVELOPER_DIR:-/Users/idrisskone/Downloads/Xcode-beta.app/Contents/Developer}"
+  printf "%s" "${PILLIE_XCODE27_DEVELOPER_DIR:-/Applications/Xcode-beta.app/Contents/Developer}"
 }
 
 pillie_developer_dir_version() {
