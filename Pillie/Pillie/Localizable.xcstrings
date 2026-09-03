@@ -835,19 +835,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "cancel"
+            "value": "Cancel"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "annulla"
+            "value": "Annulla"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "abbrechen"
+            "value": "Abbrechen"
           }
         }
       }
@@ -858,19 +858,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "close"
+            "value": "Close"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "chiudi"
+            "value": "Chiudi"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "schließen"
+            "value": "Schließen"
           }
         }
       }
@@ -881,19 +881,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "continue."
+            "value": "Continue"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "continua."
+            "value": "Continua"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "weiter."
+            "value": "Weiter"
           }
         }
       }
@@ -996,19 +996,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "get started."
+            "value": "Get started"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "inizia."
+            "value": "Inizia"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "loslegen."
+            "value": "Loslegen"
           }
         }
       }
@@ -1019,19 +1019,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "not now"
+            "value": "Not now"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "non ora"
+            "value": "Non ora"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "jetzt nicht"
+            "value": "Jetzt nicht"
           }
         }
       }
@@ -1088,19 +1088,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "save"
+            "value": "Save"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "salva"
+            "value": "Salva"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "speichern"
+            "value": "Speichern"
           }
         }
       }
@@ -2008,19 +2008,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "continue without app blocking."
+            "value": "Continue without app blocking"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "continua senza blocco app."
+            "value": "Continua senza blocco app"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "weiter ohne App-Pause."
+            "value": "Weiter ohne App-Pause"
           }
         }
       }
@@ -2031,19 +2031,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "choose apps to pause."
+            "value": "Choose apps to pause"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "scegli le app da mettere in pausa."
+            "value": "Scegli le app da mettere in pausa"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "wähl Apps zum Pausieren."
+            "value": "Wähl Apps zum Pausieren"
           }
         }
       }
@@ -5136,19 +5136,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "that's logged. tap to undo."
+            "value": "That's logged. Tap to undo."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "è registrato. tocca per annullare."
+            "value": "È registrato. Tocca per annullare."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "das ist eingetragen. tippe zum rückgängig machen."
+            "value": "Das ist eingetragen. Tippe zum Rückgängig machen."
           }
         }
       }
@@ -5228,19 +5228,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "move the reminder to %@."
+            "value": "Move the reminder to %@"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "sposta il promemoria alle %@."
+            "value": "Sposta il promemoria alle %@"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Erinnerung auf %@ legen."
+            "value": "Erinnerung auf %@ legen"
           }
         }
       }
@@ -5297,19 +5297,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "yes, i'm enjoying it."
+            "value": "Yes, I'm enjoying it"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "sì, mi piace."
+            "value": "Sì, mi piace"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "ja, es gefällt mir."
+            "value": "Ja, es gefällt mir"
           }
         }
       }
@@ -5320,19 +5320,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "not really."
+            "value": "Not really"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "non proprio."
+            "value": "Non proprio"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "nicht wirklich."
+            "value": "Nicht wirklich"
           }
         }
       }
@@ -5688,19 +5688,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "start new"
+            "value": "Start new"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "inizia nuovo"
+            "value": "Inizia nuovo"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "neu starten"
+            "value": "Neu starten"
           }
         }
       }
@@ -6700,13 +6700,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "change the day"
+            "value": "Change the day"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "cambia il giorno"
+            "value": "Cambia il giorno"
           }
         },
         "de": {
@@ -8172,7 +8172,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "take pill"
+            "value": "Take pill"
           }
         },
         "de": {
@@ -8195,7 +8195,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "apply patch"
+            "value": "Apply patch"
           }
         },
         "de": {
@@ -8218,7 +8218,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "change patch"
+            "value": "Change patch"
           }
         },
         "de": {
@@ -8241,7 +8241,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "remove patch"
+            "value": "Remove patch"
           }
         },
         "de": {
@@ -8264,7 +8264,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "insert ring"
+            "value": "Insert ring"
           }
         },
         "de": {
@@ -8287,7 +8287,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "change ring"
+            "value": "Change ring"
           }
         },
         "de": {
@@ -8310,7 +8310,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "remove ring"
+            "value": "Remove ring"
           }
         },
         "de": {
@@ -8540,19 +8540,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "turn plus back on."
+            "value": "Turn Plus back on"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus wieder einschalten."
+            "value": "Plus wieder einschalten"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "riattiva plus."
+            "value": "Riattiva Plus"
           }
         }
       }
@@ -8586,19 +8586,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "set up app blocking."
+            "value": "Set up app blocking"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "App-Pause einrichten."
+            "value": "App-Pause einrichten"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "imposta il blocco app."
+            "value": "Imposta il blocco app"
           }
         }
       }
@@ -8770,7 +8770,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "add app blocking"
+            "value": "Add app blocking"
           }
         },
         "de": {
@@ -8782,7 +8782,7 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "aggiungi il blocco"
+            "value": "Aggiungi il blocco"
           }
         }
       }
@@ -8816,7 +8816,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "add app blocking"
+            "value": "Add app blocking"
           }
         },
         "de": {
@@ -8828,7 +8828,7 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "aggiungi il blocco"
+            "value": "Aggiungi il blocco"
           }
         }
       }

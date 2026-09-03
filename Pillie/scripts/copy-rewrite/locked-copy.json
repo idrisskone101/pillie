@@ -1,5 +1,5 @@
 {
-  "source": "ENG-57 locked triples from Linear ENG-58 and ENG-62 through ENG-73",
+  "source": "ENG-57 locked triples from Linear ENG-58 and ENG-62 through ENG-73. CTAs use sentence case with Pillie/Plus as proper nouns. Chrome and body stay lowercase.",
   "entries": [
     {
       "issue": "ENG-58",
@@ -7,7 +7,7 @@
       "key": "today.action.take_pill",
       "create": true,
       "comment": "Due-action FAB and card for a pill day",
-      "en": "take pill",
+      "en": "Take pill",
       "de": "Pille nehmen",
       "it": "Prendi la pillola"
     },
@@ -17,7 +17,7 @@
       "key": "today.action.apply_patch",
       "create": true,
       "comment": "Due-action for patch day 1",
-      "en": "apply patch",
+      "en": "Apply patch",
       "de": "Pflaster aufkleben",
       "it": "Applica cerotto"
     },
@@ -27,7 +27,7 @@
       "key": "today.action.change_patch",
       "create": true,
       "comment": "Due-action for patch change days",
-      "en": "change patch",
+      "en": "Change patch",
       "de": "Pflaster wechseln",
       "it": "Cambia cerotto"
     },
@@ -37,7 +37,7 @@
       "key": "today.action.remove_patch",
       "create": true,
       "comment": "Due-action for patch remove day",
-      "en": "remove patch",
+      "en": "Remove patch",
       "de": "Pflaster abnehmen",
       "it": "Togli cerotto"
     },
@@ -47,7 +47,7 @@
       "key": "today.action.insert_ring",
       "create": true,
       "comment": "Due-action for ring insert",
-      "en": "insert ring",
+      "en": "Insert ring",
       "de": "Ring einsetzen",
       "it": "Inserisci anello"
     },
@@ -57,7 +57,7 @@
       "key": "today.action.change_ring",
       "create": true,
       "comment": "Due-action for ring change or reinsert",
-      "en": "change ring",
+      "en": "Change ring",
       "de": "Ring wechseln",
       "it": "Cambia anello"
     },
@@ -67,7 +67,7 @@
       "key": "today.action.remove_ring",
       "create": true,
       "comment": "Due-action for ring remove",
-      "en": "remove ring",
+      "en": "Remove ring",
       "de": "Ring rausnehmen",
       "it": "Togli anello"
     },
@@ -283,9 +283,18 @@
       "key": "today.protection.add",
       "create": true,
       "comment": "Today blocking card CTA for free users",
-      "en": "add app blocking",
+      "en": "Add app blocking",
       "de": "App-Pause dazunehmen",
-      "it": "aggiungi il blocco"
+      "it": "Aggiungi il blocco"
+    },
+    {
+      "issue": "ENG-63",
+      "table": "Localizable",
+      "key": "today.protection.off.cta",
+      "comment": "Free user CTA on the Today blocking card",
+      "en": "Add app blocking",
+      "de": "App-Pause dazunehmen",
+      "it": "Aggiungi il blocco"
     },
     {
       "issue": "ENG-63",
@@ -307,9 +316,9 @@
       "issue": "ENG-63",
       "table": "Localizable",
       "key": "today.pack.start_new.confirm",
-      "en": "start new",
-      "de": "neu starten",
-      "it": "inizia nuovo"
+      "en": "Start new",
+      "de": "Neu starten",
+      "it": "Inizia nuovo"
     },
     {
       "issue": "ENG-63",
@@ -557,9 +566,9 @@
       "issue": "ENG-65",
       "table": "Localizable",
       "key": "settings.cycle_day.adjust",
-      "en": "change the day",
+      "en": "Change the day",
       "de": "Tag ändern",
-      "it": "cambia il giorno"
+      "it": "Cambia il giorno"
     },
     {
       "issue": "ENG-65",
@@ -573,17 +582,17 @@
       "issue": "ENG-65",
       "table": "Localizable",
       "key": "global.action.save",
-      "en": "save",
-      "de": "speichern",
-      "it": "salva"
+      "en": "Save",
+      "de": "Speichern",
+      "it": "Salva"
     },
     {
       "issue": "ENG-65",
       "table": "Localizable",
       "key": "global.action.cancel",
-      "en": "cancel",
-      "de": "abbrechen",
-      "it": "annulla"
+      "en": "Cancel",
+      "de": "Abbrechen",
+      "it": "Annulla"
     },
     {
       "issue": "ENG-66",
@@ -607,25 +616,25 @@
       "issue": "ENG-66",
       "table": "Commerce",
       "key": "paywall.action.upgrade",
-      "en": "get pillie plus",
+      "en": "Get Pillie Plus",
       "de": "Pillie Plus holen",
-      "it": "prendi pillie plus"
+      "it": "Prendi Pillie Plus"
     },
     {
       "issue": "ENG-66",
       "table": "Localizable",
       "key": "global.action.not_now",
-      "en": "not now",
-      "de": "jetzt nicht",
-      "it": "non ora"
+      "en": "Not now",
+      "de": "Jetzt nicht",
+      "it": "Non ora"
     },
     {
       "issue": "ENG-66",
       "table": "Commerce",
       "key": "paywall.action.restore",
-      "en": "restore purchases",
+      "en": "Restore purchases",
       "de": "Käufe wiederherstellen",
-      "it": "ripristina acquisti"
+      "it": "Ripristina acquisti"
     },
     {
       "issue": "ENG-67",
@@ -855,9 +864,9 @@
       "issue": "ENG-69",
       "table": "Localizable",
       "key": "global.action.close",
-      "en": "close",
-      "de": "schließen",
-      "it": "chiudi"
+      "en": "Close",
+      "de": "Schließen",
+      "it": "Chiudi"
     },
     {
       "issue": "ENG-70",
@@ -871,9 +880,9 @@
       "issue": "ENG-70",
       "table": "Localizable",
       "key": "today.action.undo_complete",
-      "en": "that's logged. tap to undo.",
-      "de": "das ist eingetragen. tippe zum rückgängig machen.",
-      "it": "è registrato. tocca per annullare."
+      "en": "That's logged. Tap to undo.",
+      "de": "Das ist eingetragen. Tippe zum Rückgängig machen.",
+      "it": "È registrato. Tocca per annullare."
     },
     {
       "issue": "ENG-70",
@@ -919,9 +928,9 @@
       "issue": "ENG-70",
       "table": "Localizable",
       "key": "today.adaptive_reminder.accept",
-      "en": "move the reminder to %@.",
-      "de": "Erinnerung auf %@ legen.",
-      "it": "sposta il promemoria alle %@."
+      "en": "Move the reminder to %@",
+      "de": "Erinnerung auf %@ legen",
+      "it": "Sposta il promemoria alle %@"
     },
     {
       "issue": "ENG-70",
@@ -943,17 +952,17 @@
       "issue": "ENG-70",
       "table": "Localizable",
       "key": "today.review_prompt.negative",
-      "en": "not really.",
-      "de": "nicht wirklich.",
-      "it": "non proprio."
+      "en": "Not really",
+      "de": "Nicht wirklich",
+      "it": "Non proprio"
     },
     {
       "issue": "ENG-70",
       "table": "Localizable",
       "key": "today.review_prompt.positive",
-      "en": "yes, i'm enjoying it.",
-      "de": "ja, es gefällt mir.",
-      "it": "sì, mi piace."
+      "en": "Yes, I'm enjoying it",
+      "de": "Ja, es gefällt mir",
+      "it": "Sì, mi piace"
     },
     {
       "issue": "ENG-70",
@@ -971,9 +980,9 @@
       "key": "today.protection.ended.cta",
       "create": true,
       "comment": "Today protection-off CTA",
-      "en": "turn plus back on.",
-      "de": "Plus wieder einschalten.",
-      "it": "riattiva plus."
+      "en": "Turn Plus back on",
+      "de": "Plus wieder einschalten",
+      "it": "Riattiva Plus"
     },
     {
       "issue": "ENG-70",
@@ -1061,9 +1070,9 @@
       "key": "today.protection.setup.cta",
       "create": true,
       "comment": "Today unconfigured blocking CTA",
-      "en": "set up app blocking.",
-      "de": "App-Pause einrichten.",
-      "it": "imposta il blocco app."
+      "en": "Set up app blocking",
+      "de": "App-Pause einrichten",
+      "it": "Imposta il blocco app"
     },
     {
       "issue": "ENG-71",
@@ -1131,9 +1140,9 @@
       "key": "trial.end.keep_plus",
       "create": true,
       "comment": "Hard trial-end CTA",
-      "en": "keep pillie plus.",
-      "de": "Pillie Plus behalten.",
-      "it": "tieni pillie plus."
+      "en": "Keep Pillie Plus",
+      "de": "Pillie Plus behalten",
+      "it": "Tieni Pillie Plus"
     },
     {
       "issue": "ENG-71",
@@ -1163,9 +1172,9 @@
       "issue": "ENG-71",
       "table": "Commerce",
       "key": "trial.end.back_today",
-      "en": "back to today.",
-      "de": "zurück zu heute.",
-      "it": "torna a oggi."
+      "en": "Back to today",
+      "de": "Zurück zu heute",
+      "it": "Torna a oggi"
     },
     {
       "issue": "ENG-71",
@@ -1233,17 +1242,17 @@
       "key": "trial.end.keep_plus_short",
       "create": true,
       "comment": "Legacy keep plus CTA",
-      "en": "keep plus.",
-      "de": "Plus behalten.",
-      "it": "tieni plus."
+      "en": "Keep Plus",
+      "de": "Plus behalten",
+      "it": "Tieni Plus"
     },
     {
       "issue": "ENG-71",
       "table": "Commerce",
       "key": "trial.end.continue_free",
-      "en": "keep reminders free.",
-      "de": "Erinnerungen weiter kostenlos.",
-      "it": "tieni i promemoria gratis."
+      "en": "Keep reminders free",
+      "de": "Erinnerungen weiter kostenlos",
+      "it": "Tieni i promemoria gratis"
     },
     {
       "issue": "ENG-71",
@@ -1306,8 +1315,8 @@
       "table": "Commerce",
       "key": "trial.activation.action.manage",
       "en": "Manage",
-      "de": "verwalten",
-      "it": "gestisci"
+      "de": "Verwalten",
+      "it": "Gestisci"
     },
     {
       "issue": "ENG-72",
@@ -1330,16 +1339,16 @@
       "table": "Commerce",
       "key": "trial.activation.action.customize",
       "en": "Customize",
-      "de": "anpassen",
-      "it": "personalizza"
+      "de": "Anpassen",
+      "it": "Personalizza"
     },
     {
       "issue": "ENG-72",
       "table": "Commerce",
       "key": "trial.activation.action.edit",
       "en": "Edit",
-      "de": "bearbeiten",
-      "it": "modifica"
+      "de": "Bearbeiten",
+      "it": "Modifica"
     },
     {
       "issue": "ENG-72",
@@ -1354,8 +1363,8 @@
       "table": "Commerce",
       "key": "trial.activation.action.setup",
       "en": "Set up",
-      "de": "einrichten",
-      "it": "imposta"
+      "de": "Einrichten",
+      "it": "Imposta"
     },
     {
       "issue": "ENG-72",
@@ -1370,8 +1379,8 @@
       "table": "Commerce",
       "key": "trial.activation.action.personalize",
       "en": "Personalize",
-      "de": "personalisieren",
-      "it": "personalizza"
+      "de": "Personalisieren",
+      "it": "Personalizza"
     },
     {
       "issue": "ENG-72",
@@ -1409,17 +1418,17 @@
       "issue": "ENG-72",
       "table": "Commerce",
       "key": "trial.status.keep_plus",
-      "en": "keep pillie plus.",
-      "de": "Pillie Plus behalten.",
-      "it": "tieni pillie plus."
+      "en": "Keep Pillie Plus",
+      "de": "Pillie Plus behalten",
+      "it": "Tieni Pillie Plus"
     },
     {
       "issue": "ENG-72",
       "table": "Commerce",
       "key": "trial.decline_feedback.detail.done",
-      "en": "done.",
-      "de": "fertig.",
-      "it": "fatto."
+      "en": "Done",
+      "de": "Fertig",
+      "it": "Fatto"
     },
     {
       "issue": "ENG-72",
@@ -1457,9 +1466,9 @@
       "issue": "ENG-72",
       "table": "Localizable",
       "key": "global.action.continue",
-      "en": "continue.",
-      "de": "weiter.",
-      "it": "continua."
+      "en": "Continue",
+      "de": "Weiter",
+      "it": "Continua"
     },
     {
       "issue": "ENG-73",
@@ -1593,9 +1602,9 @@
       "issue": "ENG-73",
       "table": "Localizable",
       "key": "global.action.get_started",
-      "en": "get started.",
-      "de": "loslegen.",
-      "it": "inizia."
+      "en": "Get started",
+      "de": "Loslegen",
+      "it": "Inizia"
     },
     {
       "issue": "ENG-73",
@@ -1801,9 +1810,9 @@
       "issue": "ENG-73",
       "table": "Localizable",
       "key": "onboarding.blocking_setup.title",
-      "en": "choose apps to pause.",
-      "de": "wähl Apps zum Pausieren.",
-      "it": "scegli le app da mettere in pausa."
+      "en": "Choose apps to pause",
+      "de": "Wähl Apps zum Pausieren",
+      "it": "Scegli le app da mettere in pausa"
     },
     {
       "issue": "ENG-73",
@@ -1817,9 +1826,9 @@
       "issue": "ENG-73",
       "table": "Localizable",
       "key": "onboarding.blocking_setup.skip",
-      "en": "continue without app blocking.",
-      "de": "weiter ohne App-Pause.",
-      "it": "continua senza blocco app."
+      "en": "Continue without app blocking",
+      "de": "Weiter ohne App-Pause",
+      "it": "Continua senza blocco app"
     },
     {
       "issue": "ENG-73",

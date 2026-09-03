@@ -31,7 +31,7 @@ final class GermanLocalizationContractTests: XCTestCase {
             "onboarding.reminder_time.title": "wähl eine Erinnerungszeit.",
             "onboarding.plan.title": "Dein persönlicher Erinnerungsplan",
             "onboarding.permission.title": "Mitteilungen erlauben",
-            "onboarding.blocking_setup.title": "wähl Apps zum Pausieren.",
+            "onboarding.blocking_setup.title": "Wähl Apps zum Pausieren",
             "onboarding.ready.title": "Deine Erinnerungen sind eingerichtet.",
             "notification.reminder.pill.title": "Pillie-Zeit!",
             "notification.reminder.patch.title": "Pillie-Zeit!",
@@ -154,7 +154,7 @@ final class GermanLocalizationContractTests: XCTestCase {
 
         XCTAssertEqual(
             TodayActionState.completed.localizedPrimaryLabel(locale: german),
-            "das ist eingetragen. tippe zum rückgängig machen."
+            "Das ist eingetragen. Tippe zum Rückgängig machen."
         )
         XCTAssertEqual(
             HistoryPresentation.monthSummary(
@@ -311,7 +311,7 @@ final class GermanLocalizationContractTests: XCTestCase {
             )
         )
         XCTAssertEqual(entitledCard.title, "du hast App-Pause noch nicht eingerichtet.")
-        XCTAssertEqual(entitledCard.ctaTitle, "App-Pause einrichten.")
+        XCTAssertEqual(entitledCard.ctaTitle, "App-Pause einrichten")
 
         let protectionOff = try XCTUnwrap(
             ProtectionOffCardContent.make(
@@ -321,7 +321,7 @@ final class GermanLocalizationContractTests: XCTestCase {
             )
         )
         XCTAssertEqual(protectionOff.title, "App-Pause ist aus")
-        XCTAssertEqual(protectionOff.ctaTitle, "Plus wieder einschalten.")
+        XCTAssertEqual(protectionOff.ctaTitle, "Plus wieder einschalten")
 
         let trial = TrialStatusPresentation(
             daysRemaining: 7,
@@ -331,7 +331,7 @@ final class GermanLocalizationContractTests: XCTestCase {
         XCTAssertEqual(trial.indicatorLabel, "Plus ist an · noch 7 Tage")
         XCTAssertEqual(
             trial.sheetContent.ctaTitle,
-            "Pillie Plus behalten."
+            "Pillie Plus behalten"
         )
 
         let activationItems = TrialActivationItem.make(
@@ -348,9 +348,9 @@ final class GermanLocalizationContractTests: XCTestCase {
             ]
         )
         XCTAssertEqual(activationItems[0].statusTitle, "Einrichten")
-        XCTAssertEqual(activationItems[0].actionTitle, "einrichten")
+        XCTAssertEqual(activationItems[0].actionTitle, "Einrichten")
         XCTAssertEqual(activationItems[1].statusTitle, "automatisch aktiv")
-        XCTAssertEqual(activationItems[1].actionTitle, "anpassen")
+        XCTAssertEqual(activationItems[1].actionTitle, "Anpassen")
     }
 
     func testNewPackConfirmationUsesNaturalGermanMethodAwareGrammar() {
@@ -500,7 +500,7 @@ final class GermanLocalizationContractTests: XCTestCase {
             "Wenn du den Zeitplan änderst, wird der gesamte Protokollverlauf zurückgesetzt und bei Tag 8 neu begonnen. Dies kann nicht rückgängig gemacht werden."
         )
         XCTAssertEqual(confirmation.confirmTitle, "Zurücksetzen & sichern")
-        XCTAssertEqual(confirmation.cancelTitle, "abbrechen")
+        XCTAssertEqual(confirmation.cancelTitle, "Abbrechen")
     }
 
     func testGermanHealthAndReminderCopyAvoidsProhibitedClaims() {

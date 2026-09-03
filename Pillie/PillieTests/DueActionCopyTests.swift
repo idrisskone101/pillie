@@ -7,13 +7,13 @@ final class DueActionCopyTests: XCTestCase {
     private let date = Date(timeIntervalSince1970: 1_767_225_600)
 
     func testDueActionVerbsMatchLockedEnglish() {
-        XCTAssertEqual(label(.pillActive, method: .pill, day: 1), "take pill")
-        XCTAssertEqual(label(.patchChange, method: .patch, day: 1), "apply patch")
-        XCTAssertEqual(label(.patchChange, method: .patch, day: 8), "change patch")
-        XCTAssertEqual(label(.patchRemove, method: .patch, day: 22), "remove patch")
-        XCTAssertEqual(label(.ringInsert, method: .ring, day: 1), "insert ring")
-        XCTAssertEqual(label(.ringReinsert, method: .ring, day: 1), "change ring")
-        XCTAssertEqual(label(.ringRemove, method: .ring, day: 22), "remove ring")
+        XCTAssertEqual(label(.pillActive, method: .pill, day: 1), "Take pill")
+        XCTAssertEqual(label(.patchChange, method: .patch, day: 1), "Apply patch")
+        XCTAssertEqual(label(.patchChange, method: .patch, day: 8), "Change patch")
+        XCTAssertEqual(label(.patchRemove, method: .patch, day: 22), "Remove patch")
+        XCTAssertEqual(label(.ringInsert, method: .ring, day: 1), "Insert ring")
+        XCTAssertEqual(label(.ringReinsert, method: .ring, day: 1), "Change ring")
+        XCTAssertEqual(label(.ringRemove, method: .ring, day: 22), "Remove ring")
         XCTAssertEqual(label(.pillBreak, method: .pill, day: 22), "there's nothing due today.")
     }
 

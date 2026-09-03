@@ -211,7 +211,7 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
         )
         XCTAssertEqual(
             TodayActionState.completed.localizedPrimaryLabel(locale: italian),
-            "è registrato. tocca per annullare."
+            "È registrato. Tocca per annullare."
         )
         XCTAssertEqual(
             TodayActionState.dueAction(breakAction, requiresShakeConfirm: false)
@@ -285,7 +285,7 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
             "La modifica del programma reimposta tutta la cronologia e riparte dal giorno 8. L’operazione non può essere annullata."
         )
         XCTAssertEqual(confirmation.confirmTitle, "Reimposta e salva")
-        XCTAssertEqual(confirmation.cancelTitle, "annulla")
+        XCTAssertEqual(confirmation.cancelTitle, "Annulla")
     }
 
     func testSettingsPresentationUsesItalianTimeIntervalAndCycleDayFormatting() {
@@ -570,8 +570,8 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
                 ),
             ]
         )
-        XCTAssertEqual(content.primaryCTA, "continua")
-        XCTAssertEqual(content.dismissCTA, "non ora")
+        XCTAssertEqual(content.primaryCTA, "Continua")
+        XCTAssertEqual(content.dismissCTA, "Non ora")
         XCTAssertEqual(
             content.disclosure,
             "il tuo trial gratis dura 14 giorni. non serve la carta. il blocco app si spegne quando finisce, e i promemoria restano gratis."
@@ -609,7 +609,7 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
                 "la tua configurazione del blocco app è salvata.",
             ]
         )
-        XCTAssertEqual(active.sheetContent.ctaTitle, "tieni pillie plus.")
+        XCTAssertEqual(active.sheetContent.ctaTitle, "Tieni Pillie Plus")
 
         let setup = TrialStatusPresentation(
             daysRemaining: 7,
@@ -626,8 +626,8 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
         )
         XCTAssertEqual(review.headline, "ti piace Pillie?")
         XCTAssertEqual(review.body, "come sta andando finora?")
-        XCTAssertEqual(review.positiveTitle, "sì, mi piace.")
-        XCTAssertEqual(review.negativeTitle, "non proprio.")
+        XCTAssertEqual(review.positiveTitle, "Sì, mi piace")
+        XCTAssertEqual(review.negativeTitle, "Non proprio")
 
         let suggestion = AdaptiveReminderTimeAnalyzer.Suggestion(
             hour: 20,
@@ -651,7 +651,7 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
             adaptive.body,
             "vuoi spostare il promemoria giornaliero alle \(time), così arriva quando registri di solito?"
         )
-        XCTAssertEqual(adaptive.acceptTitle, "sposta il promemoria alle \(time).")
+        XCTAssertEqual(adaptive.acceptTitle, "Sposta il promemoria alle \(time)")
     }
 
     func testSupportMailComposerKeepsRoutingSubjectsStableAndLocalizesBody() throws {

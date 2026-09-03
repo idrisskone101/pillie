@@ -151,7 +151,7 @@ final class ProtectionPlanOnboardingContentTests: XCTestCase {
         XCTAssertEqual(content.analyzingTitle, "Your personalised reminder plan")
         XCTAssertEqual(content.analyzingSubtitle, "Built from the routine you selected.")
         XCTAssertEqual(content.protectedAppsHeader, "Protected apps")
-        XCTAssertEqual(content.primaryCTA, "continue.")
+        XCTAssertEqual(content.primaryCTA, "Continue")
         // The word "diagnosis" must never reach the user — the screen reveals a plan.
         for line in content.visibleCopy {
             XCTAssertFalse(line.lowercased().contains("diagnos"), "User copy must not say diagnosis: \(line)")

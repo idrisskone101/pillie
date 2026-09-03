@@ -582,13 +582,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "get pillie plus"
+            "value": "Get Pillie Plus"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "prendi pillie plus"
+            "value": "Prendi Pillie Plus"
           }
         },
         "de": {
@@ -605,13 +605,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "restore purchases"
+            "value": "Restore purchases"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "ripristina acquisti"
+            "value": "Ripristina acquisti"
           }
         },
         "de": {
@@ -1663,19 +1663,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "keep pillie plus."
+            "value": "Keep Pillie Plus"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "tieni pillie plus."
+            "value": "Tieni Pillie Plus"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus behalten."
+            "value": "Pillie Plus behalten"
           }
         }
       }
@@ -1916,19 +1916,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "back to today."
+            "value": "Back to today"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "torna a oggi."
+            "value": "Torna a oggi"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "zurück zu heute."
+            "value": "Zurück zu heute"
           }
         }
       }
@@ -2106,13 +2106,13 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "gestisci"
+            "value": "Gestisci"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "verwalten"
+            "value": "Verwalten"
           }
         }
       }
@@ -2129,13 +2129,13 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "imposta"
+            "value": "Imposta"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "einrichten"
+            "value": "Einrichten"
           }
         }
       }
@@ -2152,13 +2152,13 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "modifica"
+            "value": "Modifica"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "bearbeiten"
+            "value": "Bearbeiten"
           }
         }
       }
@@ -2175,13 +2175,13 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "personalizza"
+            "value": "Personalizza"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "personalisieren"
+            "value": "Personalisieren"
           }
         }
       }
@@ -2198,13 +2198,13 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "personalizza"
+            "value": "Personalizza"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "anpassen"
+            "value": "Anpassen"
           }
         }
       }
@@ -2376,19 +2376,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "done."
+            "value": "Done"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "fatto."
+            "value": "Fatto"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "fertig."
+            "value": "Fertig"
           }
         }
       }
@@ -2422,19 +2422,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "keep reminders free."
+            "value": "Keep reminders free"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "tieni i promemoria gratis."
+            "value": "Tieni i promemoria gratis"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Erinnerungen weiter kostenlos."
+            "value": "Erinnerungen weiter kostenlos"
           }
         }
       }
@@ -3135,19 +3135,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "keep pillie plus."
+            "value": "Keep Pillie Plus"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus behalten."
+            "value": "Pillie Plus behalten"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "tieni pillie plus."
+            "value": "Tieni Pillie Plus"
           }
         }
       }
@@ -3250,19 +3250,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "keep plus."
+            "value": "Keep Plus"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus behalten."
+            "value": "Plus behalten"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "tieni plus."
+            "value": "Tieni Plus"
           }
         }
       }

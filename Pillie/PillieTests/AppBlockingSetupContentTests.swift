@@ -11,7 +11,7 @@ final class AppBlockingSetupContentTests: XCTestCase {
 
     func testSetupCopyExplainsPillTimePauseMedicationUnlockAndReversibility() {
         XCTAssertEqual(content.badge, "Pillie Plus")
-        XCTAssertEqual(content.chooseAppsCTA, "choose apps to pause.")
+        XCTAssertEqual(content.chooseAppsCTA, "Choose apps to pause")
 
         let explanation = [content.subtitle, content.emptyDetail]
             .joined(separator: " ")
@@ -19,7 +19,7 @@ final class AppBlockingSetupContentTests: XCTestCase {
         XCTAssertTrue(explanation.contains("after a pillie reminder"))
         XCTAssertTrue(explanation.contains("come back after you check in"))
         XCTAssertEqual(content.changeSelectionCTA, "Edit")
-        XCTAssertEqual(content.skipCTA, "continue without app blocking.")
+        XCTAssertEqual(content.skipCTA, "Continue without app blocking")
     }
 
     func testTrialDisclosureIsClearAndDoesNotReplaceSkip() {
@@ -28,7 +28,7 @@ final class AppBlockingSetupContentTests: XCTestCase {
             "your free trial lasts 14 days. no card needed. app blocking turns off when it ends, and reminders stay free."
         )
         XCTAssertTrue(content.visibleCopy.contains(content.trialDisclosure))
-        XCTAssertEqual(content.skipCTA, "continue without app blocking.")
+        XCTAssertEqual(content.skipCTA, "Continue without app blocking")
     }
 
     func testHardPaywallTrialDisclosureRequiresAPlanAfterFourteenDays() {
@@ -79,7 +79,7 @@ final class AppBlockingSetupContentTests: XCTestCase {
             hardPaywallContent.lockedDetail,
             "Choose monthly, annual, or lifetime to keep using Pillie."
         )
-        XCTAssertEqual(hardPaywallContent.lockedCTA, "get pillie plus")
+        XCTAssertEqual(hardPaywallContent.lockedCTA, "Get Pillie Plus")
     }
 
     func testDeniedOrCancelledAuthorizationShowsRecoveryWithoutStrandingReminderOnly() {
@@ -92,7 +92,7 @@ final class AppBlockingSetupContentTests: XCTestCase {
         )
         XCTAssertTrue(permission.isRecoveryVisible)
         XCTAssertEqual(content.retryAuthorizationCTA, "Try Again")
-        XCTAssertEqual(content.skipCTA, "continue without app blocking.")
+        XCTAssertEqual(content.skipCTA, "Continue without app blocking")
     }
 
     func testRecoveryRetryStartsANewExplicitAuthorizationRequest() {
@@ -129,7 +129,7 @@ final class AppBlockingSetupContentTests: XCTestCase {
         XCTAssertTrue(content.emptyDetail.contains("Screen Time"))
         XCTAssertTrue(content.privacyNote.lowercased().contains("number"))
         XCTAssertEqual(content.emptyDetail, "Use Apple Screen Time to choose categories or apps.")
-        XCTAssertEqual(content.chooseAppsCTA, "choose apps to pause.")
+        XCTAssertEqual(content.chooseAppsCTA, "Choose apps to pause")
     }
 
     func testEmptyStateCardOffersChooseAppsActionWhenIdle() {
@@ -172,8 +172,8 @@ final class AppBlockingSetupContentTests: XCTestCase {
     // MARK: - Footer
 
     func testFooterUsesFinishAndSkipCopy() {
-        XCTAssertEqual(content.finishCTA, "continue.")
-        XCTAssertEqual(content.skipCTA, "continue without app blocking.")
+        XCTAssertEqual(content.finishCTA, "Continue")
+        XCTAssertEqual(content.skipCTA, "Continue without app blocking")
     }
 
     // MARK: - Invariants preserved from the prior screen
