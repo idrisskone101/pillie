@@ -206,12 +206,11 @@ struct CalendarGrid: View {
             date: dayDate,
             presentation: presentation
         ))
-        .accessibilityAddTraits(editable ? .isButton : [])
-        .modifier(EditableDayAccessibilityID(editable: editable, id: "historyEditableDay.\(monthID).\(day)"))
-        .accessibilityAction {
-            guard editable else { return }
-            onEditableDayActivate?(day)
-        }
+        .modifier(EditableDayAccessibility(
+            editable: editable,
+            id: "historyEditableDay.\(monthID).\(day)",
+            onActivate: { onEditableDayActivate?(day) }
+        ))
         .anchorPreference(key: CalendarDayHitFramesPreferenceKey.self, value: .bounds) { anchor in
             editable ? [monthID: [day: anchor]] : [:]
         }
@@ -603,13 +602,19 @@ enum CalendarDayHitTest {
     }
 }
 
-private struct EditableDayAccessibilityID: ViewModifier {
+private struct EditableDayAccessibility: ViewModifier {
     let editable: Bool
     let id: String
+    let onActivate: () -> Void
 
     func body(content: Content) -> some View {
         if editable {
-            content.accessibilityIdentifier(id)
+            content
+                .accessibilityAddTraits(.isButton)
+                .accessibilityIdentifier(id)
+                .accessibilityAction {
+                    onActivate()
+                }
         } else {
             content
         }

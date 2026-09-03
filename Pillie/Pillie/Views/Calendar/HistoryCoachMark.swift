@@ -8,18 +8,34 @@ import SwiftUI
 struct HistoryCoachMark: View {
     let targetFrame: CGRect
     let calendarWidth: CGFloat
+    let calendarHeight: CGFloat
     let onDismiss: () -> Void
 
     @Environment(\.locale) private var locale
 
     private static let tooltipWidth: CGFloat = 220
+    private static let tooltipHitHeight: CGFloat = 180
     private static let caretSize: CGFloat = 12
     private static let caretOffsetX: CGFloat = 22
     private static let verticalGap: CGFloat = 10
 
     var body: some View {
         tooltip
-            .offset(x: tooltipOrigin.x, y: tooltipOrigin.y)
+            .padding(.leading, tooltipOrigin.x)
+            .padding(.top, tooltipOrigin.y)
+            .frame(
+                width: calendarWidth,
+                height: calendarHeight,
+                alignment: .topLeading
+            )
+            .contentShape(
+                Path(CGRect(
+                    x: tooltipOrigin.x,
+                    y: tooltipOrigin.y,
+                    width: Self.tooltipWidth,
+                    height: Self.tooltipHitHeight
+                ))
+            )
     }
 
     private var tooltipOrigin: CGPoint {
@@ -75,6 +91,7 @@ struct HistoryCoachMark: View {
                 .frame(width: Self.caretSize, height: Self.caretSize)
                 .rotationEffect(.degrees(45))
                 .offset(x: Self.caretOffsetX, y: -Self.caretSize / 2)
+                .allowsHitTesting(false)
         }
     }
 }

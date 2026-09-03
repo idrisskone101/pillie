@@ -62,7 +62,7 @@ struct HistoryDayCorrectionSheet: View {
                     method: store.pack.method,
                     locale: locale
                 ))
-                .font(.pillieBodySemibold())
+                .font(.pillieBody())
                 .foregroundStyle(PillieTheme.textMuted)
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
@@ -131,8 +131,8 @@ struct HistoryDayCorrectionSheet: View {
                 .foregroundStyle(PillieTheme.verifiedGreen)
         case .unlogged:
             Image(systemName: "xmark")
-                .font(.pillie(18, weight: .semibold))
-                .foregroundStyle(PillieTheme.amber)
+                .font(.pillie(16, weight: .bold))
+                .foregroundStyle(.white)
         case .breakDay:
             Image(systemName: "minus")
                 .font(.pillie(18, weight: .semibold))
@@ -143,7 +143,7 @@ struct HistoryDayCorrectionSheet: View {
     private func outcomeTileColor(_ outcome: DayCorrectionOutcome) -> Color {
         switch outcome {
         case .taken: PillieTheme.sage
-        case .unlogged: PillieTheme.amberFaded
+        case .unlogged: PillieTheme.amber
         case .breakDay: PillieTheme.lavender
         }
     }

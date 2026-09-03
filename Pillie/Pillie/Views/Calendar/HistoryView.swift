@@ -155,10 +155,12 @@ struct HistoryView: View {
                 .overlay(alignment: .topLeading) {
                     if let targetDay = coachMarkTargetDay,
                        let frame = dayHitFrames[monthIdentity]?[targetDay],
-                       calendarWidth > 0 {
+                       calendarWidth > 0,
+                       let calendarHeight = calendarContainerHeight {
                         HistoryCoachMark(
                             targetFrame: frame,
                             calendarWidth: calendarWidth,
+                            calendarHeight: calendarHeight,
                             onDismiss: dismissCoachMark
                         )
                     }
