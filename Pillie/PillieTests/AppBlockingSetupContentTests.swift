@@ -25,7 +25,7 @@ final class AppBlockingSetupContentTests: XCTestCase {
     func testTrialDisclosureIsClearAndDoesNotReplaceSkip() {
         XCTAssertEqual(
             content.trialDisclosure,
-            "your free trial lasts 14 days. no card needed. app blocking turns off when it ends, and reminders stay free."
+            "14 days free, no card needed. App blocking turns off after the trial. Reminders stay free."
         )
         XCTAssertTrue(content.visibleCopy.contains(content.trialDisclosure))
         XCTAssertEqual(content.skipCTA, "Continue without app blocking")
@@ -39,7 +39,7 @@ final class AppBlockingSetupContentTests: XCTestCase {
 
         XCTAssertEqual(
             hardPaywallContent.trialDisclosure,
-            "your free trial lasts 14 days. no card needed. after it ends, you can choose monthly, annual, or lifetime to keep plus."
+            "Your free trial lasts 14 days. No card needed. After it ends, choose monthly, annual, or lifetime to keep Plus."
         )
     }
 
