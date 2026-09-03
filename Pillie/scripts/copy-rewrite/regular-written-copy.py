@@ -75,7 +75,8 @@ SPECIAL_DE: dict[tuple[str, str], str] = {
     ("Localizable", "onboarding.personalise.pain.title"): "Was kommt dir in die Quere?",
     ("Localizable", "onboarding.personalise.choice.busy"): "Ich hab dann keine Zeit.",
     ("Localizable", "onboarding.personalise.outcome.title"): "Was würde mehr helfen?",
-    ("Localizable", "onboarding.frequency.title"): "Wie oft rutscht das durch?",
+    ("Localizable", "onboarding.frequency.title"): "Wie oft?",
+    ("Localizable", "onboarding.permission.cta"): "Weiter zu den Mitteilungen",
     ("Localizable", "onboarding.risk_window.title"): "Wann schweifst du meistens ab?",
     ("Localizable", "onboarding.plan.title"): "Dein Erinnerungsplan",
     ("Localizable", "onboarding.ready.title"): "Alles bereit.",
@@ -149,13 +150,14 @@ SPECIAL_IT: dict[tuple[str, str], str] = {
     ),
     ("Localizable", "onboarding.personalise.pain.title"): "Cosa ti ostacola?",
     ("Localizable", "onboarding.personalise.outcome.title"): "Cosa aiuterebbe di più?",
-    ("Localizable", "onboarding.frequency.title"): "Quanto spesso sfugge?",
+    ("Localizable", "onboarding.frequency.title"): "Quanto spesso?",
+    ("Localizable", "onboarding.permission.cta"): "Attiva notifiche",
     ("Localizable", "onboarding.risk_window.title"): "Quando ti distrai di solito?",
     ("Localizable", "onboarding.plan.title"): "Il tuo piano promemoria",
     ("Localizable", "onboarding.ready.title"): "Tutto pronto.",
     ("Localizable", "onboarding.blocking_demo.title"): "Le app restano in pausa fino al check-in.",
     ("Localizable", "onboarding.mechanism.unlocked"): "Fatto. Le tue app sono di nuovo disponibili.",
-    ("Localizable", "onboarding.method.title"): "Scegli il tuo metodo.",
+    ("Localizable", "onboarding.method.title"): "Scegli il metodo.",
     ("Commerce", "trial.end.legacy.title"): "La prova Plus è finita.",
     ("Commerce", "trial.end.worth_keeping"): "Vuoi tenere Plus?",
     ("Commerce", "trial.granted.headline_accent"): "offerta nostra.",
@@ -217,25 +219,25 @@ SPECIAL_EN: dict[tuple[str, str], str] = {
     ("Localizable", "onboarding.welcome.title"): "The alarm clock for your pill.",
     ("Localizable", "onboarding.welcome.subtitle"): "You can't swipe this reminder away.",
     ("Localizable", "today.protection.off.detail.pill"): (
-        "Reminders are on. Plus pauses apps until you check in."
+        "Reminders stay on. Plus can pause apps."
     ),
     ("Localizable", "today.protection.off.detail.patch.apply"): (
-        "Reminders are on. Plus pauses apps until you check in."
+        "Reminders stay on. Plus can pause apps."
     ),
     ("Localizable", "today.protection.off.detail.patch.change"): (
-        "Reminders are on. Plus pauses apps until you check in."
+        "Reminders stay on. Plus can pause apps."
     ),
     ("Localizable", "today.protection.off.detail.patch.remove"): (
-        "Reminders are on. Plus pauses apps until you check in."
+        "Reminders stay on. Plus can pause apps."
     ),
     ("Localizable", "today.protection.off.detail.ring.insert"): (
-        "Reminders are on. Plus pauses apps until you check in."
+        "Reminders stay on. Plus can pause apps."
     ),
     ("Localizable", "today.protection.off.detail.ring.change"): (
-        "Reminders are on. Plus pauses apps until you check in."
+        "Reminders stay on. Plus can pause apps."
     ),
     ("Localizable", "today.protection.off.detail.ring.remove"): (
-        "Reminders are on. Plus pauses apps until you check in."
+        "Reminders stay on. Plus can pause apps."
     ),
     ("Localizable", "today.protection.setup.detail.pill"): (
         "Daily reminders are already on. Finish setup if you want apps to pause until you check in."
@@ -271,10 +273,11 @@ SPECIAL_EN: dict[tuple[str, str], str] = {
     ("Localizable", "onboarding.demo.title"): "Your daily flow",
     ("Localizable", "onboarding.demo.explainer"): "Pillie helps you check in and review your history.",
     ("Localizable", "onboarding.demo.history_title"): "Your history builds as you go",
-    ("Localizable", "onboarding.method.title"): "Choose your method.",
+    ("Localizable", "onboarding.method.title"): "Pick your method.",
     ("Localizable", "onboarding.method.subtitle"): "What should Pillie remind you about?",
     ("Localizable", "onboarding.method.pill.subtitle"): "Pill · a daily pill schedule",
-    ("Localizable", "onboarding.method.patch.subtitle"): "Patch · a schedule for changing your patch",
+    ("Localizable", "onboarding.method.patch.subtitle"): "Patch · a change schedule",
+    ("Localizable", "onboarding.permission.cta"): "Continue to notification settings",
     ("Localizable", "onboarding.method.ring.subtitle"): "Ring · a ring schedule",
     ("Localizable", "onboarding.regimen.title"): "Choose your pill regimen.",
     ("Localizable", "onboarding.regimen.21_7"): "21 active days, 7 break days",
@@ -283,7 +286,7 @@ SPECIAL_EN: dict[tuple[str, str], str] = {
     ("Localizable", "onboarding.regimen.28_0"): "28 active days, no break",
     ("Localizable", "onboarding.regimen.84_7"): "84 active days, 7 break days",
     ("Localizable", "onboarding.regimen.365_0"): "365 active days, no break",
-    ("Localizable", "onboarding.reminder_time.title"): "Pick a reminder time.",
+    ("Localizable", "onboarding.reminder_time.title"): "Pick a time.",
     ("Localizable", "onboarding.reminder_time.subtitle"): "When should Pillie remind you?",
     ("Localizable", "onboarding.acquisition.title"): "Where did you find Pillie?",
     ("Localizable", "onboarding.acquisition.subtitle"): "Your answer helps more people find the app.",
@@ -291,7 +294,7 @@ SPECIAL_EN: dict[tuple[str, str], str] = {
     ("Localizable", "onboarding.personalise.pain.subtitle"): "Choose the answer that feels closest.",
     ("Localizable", "onboarding.personalise.outcome.title"): "What would help more?",
     ("Localizable", "onboarding.personalise.outcome.subtitle"): "Choose the support you want from Pillie.",
-    ("Localizable", "onboarding.frequency.title"): "How often do they slip?",
+    ("Localizable", "onboarding.frequency.title"): "How often?",
     ("Localizable", "onboarding.risk_window.title"): "When do you usually drift?",
     ("Localizable", "onboarding.plan.title"): "Your reminder plan",
     ("Localizable", "onboarding.ready.title"): "You're all set.",

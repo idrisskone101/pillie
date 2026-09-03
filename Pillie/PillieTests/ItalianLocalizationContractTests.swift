@@ -41,7 +41,7 @@ final class ItalianLocalizationContractTests: XCTestCase {
         )
         XCTAssertEqual(
             ProtectionPlanRoutineMethodContent.localized(locale: italian).title,
-            "Scegli il tuo metodo."
+            "Scegli il metodo."
         )
         XCTAssertEqual(
             ContraceptiveMethod.allCases.map { $0.localizedTitle(locale: italian) },

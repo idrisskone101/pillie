@@ -2974,19 +2974,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "How often do they slip?"
+            "value": "How often?"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Quanto spesso sfugge?"
+            "value": "Quanto spesso?"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wie oft rutscht das durch?"
+            "value": "Wie oft?"
           }
         }
       }
@@ -2997,7 +2997,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Patch · a schedule for changing your patch"
+            "value": "Patch · a change schedule"
           }
         },
         "it": {
@@ -3089,13 +3089,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Choose your method."
+            "value": "Pick your method."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Scegli il tuo metodo."
+            "value": "Scegli il metodo."
           }
         },
         "de": {
@@ -3135,7 +3135,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Continue to Notification Settings"
+            "value": "Continue to notification settings"
           }
         },
         "it": {
@@ -3147,7 +3147,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zu den Mitteilungseinstellungen"
+            "value": "Weiter zu den Mitteilungen"
           }
         }
       }
@@ -3193,7 +3193,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ich hab keine Zeit, wenn sie kommen."
+            "value": "Ich hab dann keine Zeit."
           }
         }
       }
@@ -4607,7 +4607,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pick a reminder time."
+            "value": "Pick a time."
           }
         },
         "it": {
@@ -8356,7 +8356,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reminders are on. Plus pauses apps until you check in."
+            "value": "Reminders stay on. Plus can pause apps."
           }
         },
         "de": {
@@ -8379,7 +8379,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reminders are on. Plus pauses apps until you check in."
+            "value": "Reminders stay on. Plus can pause apps."
           }
         },
         "de": {
@@ -8402,7 +8402,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reminders are on. Plus pauses apps until you check in."
+            "value": "Reminders stay on. Plus can pause apps."
           }
         },
         "de": {
@@ -8425,7 +8425,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reminders are on. Plus pauses apps until you check in."
+            "value": "Reminders stay on. Plus can pause apps."
           }
         },
         "de": {
@@ -8448,7 +8448,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reminders are on. Plus pauses apps until you check in."
+            "value": "Reminders stay on. Plus can pause apps."
           }
         },
         "de": {
@@ -8471,7 +8471,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reminders are on. Plus pauses apps until you check in."
+            "value": "Reminders stay on. Plus can pause apps."
           }
         },
         "de": {
@@ -8494,7 +8494,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reminders are on. Plus pauses apps until you check in."
+            "value": "Reminders stay on. Plus can pause apps."
           }
         },
         "de": {

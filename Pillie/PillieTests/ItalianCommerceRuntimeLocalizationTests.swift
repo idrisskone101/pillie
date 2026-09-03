@@ -18,7 +18,7 @@ final class ItalianCommerceRuntimeLocalizationTests: XCTestCase {
                 cohort: .reminderOnly,
                 locale: italian
             ),
-            "Pillie Plus è attivo: configura il blocco delle app quando vuoi."
+            "Pillie Plus è attivo. Puoi impostare il blocco app quando vuoi."
         )
 
         XCTAssertEqual(

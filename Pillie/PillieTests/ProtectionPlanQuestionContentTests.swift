@@ -75,7 +75,7 @@ final class ProtectionPlanQuestionContentTests: XCTestCase {
 
     func testFailureFrequencyUsesNewLabelsOverTheExistingStorageBuckets() {
         let content = ProtectionPlanFailureFrequencyContent.default
-        XCTAssertEqual(content.title, "How often do they slip?")
+        XCTAssertEqual(content.title, "How often?")
         XCTAssertEqual(
             content.subtitle,
             "Your answer helps tailor the reminder support level."

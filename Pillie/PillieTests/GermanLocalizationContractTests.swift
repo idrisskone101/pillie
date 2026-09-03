@@ -8,7 +8,7 @@ final class GermanLocalizationContractTests: XCTestCase {
         let expectedByKey = [
             "onboarding.personalise.pain.title": "Was kommt dir in die Quere?",
             "onboarding.personalise.choice.snooze": "Ich wische Erinnerungen weg.",
-            "onboarding.personalise.choice.busy": "Ich hab keine Zeit, wenn sie kommen.",
+            "onboarding.personalise.choice.busy": "Ich hab dann keine Zeit.",
             "onboarding.personalise.choice.forget": "Ich vergesse es einfach.",
             "onboarding.personalise.outcome.interruptions": "Weniger Unterbrechungen",
         ]

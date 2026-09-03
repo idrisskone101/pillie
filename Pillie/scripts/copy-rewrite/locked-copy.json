@@ -213,7 +213,7 @@
       "key": "today.protection.off.detail.pill",
       "create": true,
       "comment": "Today blocking card detail while reminders run, pill",
-      "en": "Reminders are on. Plus pauses apps until you check in.",
+      "en": "Reminders stay on. Plus can pause apps.",
       "de": "Erinnerungen laufen. Plus pausiert Apps bis zum Check-in.",
       "it": "I promemoria ci sono. Plus mette in pausa le app fino al check-in."
     },
@@ -223,7 +223,7 @@
       "key": "today.protection.off.detail.patch.apply",
       "create": true,
       "comment": "Today blocking card detail, apply patch",
-      "en": "Reminders are on. Plus pauses apps until you check in.",
+      "en": "Reminders stay on. Plus can pause apps.",
       "de": "Erinnerungen laufen. Plus pausiert Apps bis zum Check-in.",
       "it": "I promemoria ci sono. Plus mette in pausa le app fino al check-in."
     },
@@ -233,7 +233,7 @@
       "key": "today.protection.off.detail.patch.change",
       "create": true,
       "comment": "Today blocking card detail, change patch",
-      "en": "Reminders are on. Plus pauses apps until you check in.",
+      "en": "Reminders stay on. Plus can pause apps.",
       "de": "Erinnerungen laufen. Plus pausiert Apps bis zum Check-in.",
       "it": "I promemoria ci sono. Plus mette in pausa le app fino al check-in."
     },
@@ -243,7 +243,7 @@
       "key": "today.protection.off.detail.patch.remove",
       "create": true,
       "comment": "Today blocking card detail, remove patch",
-      "en": "Reminders are on. Plus pauses apps until you check in.",
+      "en": "Reminders stay on. Plus can pause apps.",
       "de": "Erinnerungen laufen. Plus pausiert Apps bis zum Check-in.",
       "it": "I promemoria ci sono. Plus mette in pausa le app fino al check-in."
     },
@@ -253,7 +253,7 @@
       "key": "today.protection.off.detail.ring.insert",
       "create": true,
       "comment": "Today blocking card detail, insert ring",
-      "en": "Reminders are on. Plus pauses apps until you check in.",
+      "en": "Reminders stay on. Plus can pause apps.",
       "de": "Erinnerungen laufen. Plus pausiert Apps bis zum Check-in.",
       "it": "I promemoria ci sono. Plus mette in pausa le app fino al check-in."
     },
@@ -263,7 +263,7 @@
       "key": "today.protection.off.detail.ring.change",
       "create": true,
       "comment": "Today blocking card detail, change ring",
-      "en": "Reminders are on. Plus pauses apps until you check in.",
+      "en": "Reminders stay on. Plus can pause apps.",
       "de": "Erinnerungen laufen. Plus pausiert Apps bis zum Check-in.",
       "it": "I promemoria ci sono. Plus mette in pausa le app fino al check-in."
     },
@@ -273,7 +273,7 @@
       "key": "today.protection.off.detail.ring.remove",
       "create": true,
       "comment": "Today blocking card detail, remove ring",
-      "en": "Reminders are on. Plus pauses apps until you check in.",
+      "en": "Reminders stay on. Plus can pause apps.",
       "de": "Erinnerungen laufen. Plus pausiert Apps bis zum Check-in.",
       "it": "I promemoria ci sono. Plus mette in pausa le app fino al check-in."
     },
@@ -1693,7 +1693,7 @@
       "table": "Localizable",
       "key": "onboarding.personalise.choice.busy",
       "en": "I'm busy then.",
-      "de": "Ich hab keine Zeit, wenn sie kommen.",
+      "de": "Ich hab dann keine Zeit.",
       "it": "Sono occupata quando arrivano."
     },
     {
@@ -1764,7 +1764,7 @@
       "issue": "ENG-73",
       "table": "Localizable",
       "key": "onboarding.method.patch.subtitle",
-      "en": "Patch · a schedule for changing your patch",
+      "en": "Patch · a change schedule",
       "de": "Pflaster · ein Plan zum Wechseln deines Pflasters",
       "it": "Cerotto · un piano per cambiare il cerotto"
     },
