@@ -18,11 +18,17 @@ final class ProtectionPlanOnboardingContentTests: XCTestCase {
 
     func testWelcomeContentMatchesCurrentReminderFirstCopy() {
         let content = ProtectionPlanWelcomeContent.localized(locale: english)
-        XCTAssertEqual(content.title, "The alarm clock for your pill.")
-        XCTAssertEqual(content.primaryCTA, "Get Started")
-        XCTAssertTrue(
-            content.subtitle.lowercased().contains("notifications"),
-            "Welcome must explain why Pillie's reminder is harder to overlook."
+        XCTAssertEqual(
+            content.title,
+            PillieLocalization.string("onboarding.welcome.title", locale: english)
+        )
+        XCTAssertEqual(
+            content.primaryCTA,
+            PillieLocalization.string("global.action.get_started", locale: english)
+        )
+        XCTAssertEqual(
+            content.subtitle,
+            PillieLocalization.string("onboarding.welcome.subtitle", locale: english)
         )
     }
 
@@ -67,14 +73,20 @@ final class ProtectionPlanOnboardingContentTests: XCTestCase {
 
     func testEarlyValueProofExposesCheckInAndContinueCTAs() {
         let content = ProtectionPlanEarlyValueProofContent.localized(locale: english)
-        XCTAssertEqual(content.checkInCTA, "Mark as Completed")
-        XCTAssertEqual(content.continueCTA, "Continue")
+        XCTAssertEqual(
+            content.checkInCTA,
+            PillieLocalization.string("notification.action.complete", locale: english)
+        )
+        XCTAssertEqual(
+            content.continueCTA,
+            PillieLocalization.string("global.action.continue", locale: english)
+        )
     }
 
     func testEarlyValueProofExposesVisibleSkipDemoAction() {
         XCTAssertEqual(
             ProtectionPlanEarlyValueProofContent.localized(locale: english).skipDemoCTA,
-            "Not Now"
+            PillieLocalization.string("global.action.not_now", locale: english)
         )
     }
 

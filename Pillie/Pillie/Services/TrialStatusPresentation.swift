@@ -50,32 +50,21 @@ struct TrialStatusPresentation: Equatable {
     /// The persistent indicator distinguishes active protection from setup
     /// still being needed while preserving the trial countdown.
     var indicatorLabel: String {
-        if trialEndTerms == .hardPaywall
-            || ["de", "it"].contains(locale.language.languageCode?.identifier ?? "") {
-            let key = switch (protectionActive, endsTonight) {
-            case (true, true): "trial.status.indicator.active_tonight"
-            case (true, false): "trial.status.indicator.active"
-            case (false, true): "trial.status.indicator.setup_tonight"
-            case (false, false): "trial.status.indicator.setup"
-            }
-            if endsTonight {
-                return PillieLocalization.string(key, table: "Commerce", locale: locale)
-            }
-            return PillieLocalization.formatted(
-                key,
-                table: "Commerce",
-                locale: locale,
-                arguments: Int64(displayedDaysRemaining)
-            )
+        let key = switch (protectionActive, endsTonight) {
+        case (true, true): "trial.status.indicator.active_tonight"
+        case (true, false): "trial.status.indicator.active"
+        case (false, true): "trial.status.indicator.setup_tonight"
+        case (false, false): "trial.status.indicator.setup"
         }
-        if protectionActive {
-            return endsTonight
-                ? "Protection active · ends tonight"
-                : "Protection active · \(displayedDaysRemaining) days left"
+        if endsTonight {
+            return PillieLocalization.string(key, table: "Commerce", locale: locale)
         }
-        return endsTonight
-            ? "Set up protection · ends tonight"
-            : "Set up protection · \(displayedDaysRemaining) days left"
+        return PillieLocalization.formatted(
+            key,
+            table: "Commerce",
+            locale: locale,
+            arguments: Int64(displayedDaysRemaining)
+        )
     }
 
     /// Copy for the trial status sheet behind the indicator.
@@ -84,72 +73,54 @@ struct TrialStatusPresentation: Equatable {
     }
 
     func sheetContent(for activationState: TrialActivationState) -> TrialStatusSheetContent {
-        if trialEndTerms == .hardPaywall
-            || ["de", "it"].contains(locale.language.languageCode?.identifier ?? "") {
-            let title = trialEndDate.map {
-                CommercePresentation.trialEndText(date: $0, locale: locale)
-            } ?? PillieLocalization.string(
-                "trial.status.title",
-                table: "Commerce",
-                locale: locale
-            )
-            return TrialStatusSheetContent(
-                title: title,
-                expiryRows: [
-                    TrialExpiryRow(
-                        text: PillieLocalization.string(
+        let title = trialEndDate.map {
+            CommercePresentation.trialEndText(date: $0, locale: locale)
+        } ?? PillieLocalization.string(
+            "trial.status.title",
+            table: "Commerce",
+            locale: locale
+        )
+        return TrialStatusSheetContent(
+            title: title,
+            expiryRows: [
+                TrialExpiryRow(
+                    text: PillieLocalization.string(
                         trialEndTerms == .hardPaywall
                             ? "trial.status.after.plus_pauses"
                             : "trial.status.after.blocking_off",
                         table: "Commerce",
                         locale: locale
-                        ),
-                        symbol: trialEndTerms == .hardPaywall ? "lock.fill" : "nosign"
                     ),
-                    TrialExpiryRow(
-                        text: PillieLocalization.string(
+                    symbol: trialEndTerms == .hardPaywall ? "lock.fill" : "nosign"
+                ),
+                TrialExpiryRow(
+                    text: PillieLocalization.string(
                         trialEndTerms == .hardPaywall
                             ? "trial.status.after.plan_required"
                             : "trial.status.after.reminders_free",
                         table: "Commerce",
                         locale: locale
-                        ),
-                        symbol: trialEndTerms == .hardPaywall ? "creditcard.fill" : "bell.fill"
                     ),
-                    TrialExpiryRow(
-                        text: PillieLocalization.string(
-                            "trial.status.after.setup_saved",
-                            table: "Commerce",
-                            locale: locale
-                        ),
-                        symbol: "checkmark.circle.fill"
-                    ),
-                ],
-                ctaTitle: PillieLocalization.string(
-                    "trial.status.keep_plus",
-                    table: "Commerce",
-                    locale: locale
+                    symbol: trialEndTerms == .hardPaywall ? "creditcard.fill" : "bell.fill"
                 ),
-                activationItems: TrialActivationItem.make(
-                    for: activationState,
-                    locale: locale
-                )
-            )
-        }
-        return TrialStatusSheetContent(
-            title: endsTonight
-                ? "Your Plus trial ends tonight"
-                : "\(displayedDaysRemaining) days left in your Plus trial",
-            expiryRows: [
-                TrialExpiryRow(text: "App blocking turns off", symbol: "nosign"),
-                TrialExpiryRow(text: "Reminders stay free, forever", symbol: "bell.fill"),
                 TrialExpiryRow(
-                    text: "Your blocker setup is saved",
+                    text: PillieLocalization.string(
+                        "trial.status.after.setup_saved",
+                        table: "Commerce",
+                        locale: locale
+                    ),
                     symbol: "checkmark.circle.fill"
                 ),
             ],
-            ctaTitle: "Keep Pillie Plus",
-            activationItems: TrialActivationItem.make(for: activationState, locale: locale)
+            ctaTitle: PillieLocalization.string(
+                "trial.status.keep_plus",
+                table: "Commerce",
+                locale: locale
+            ),
+            activationItems: TrialActivationItem.make(
+                for: activationState,
+                locale: locale
+            )
         )
     }
 
@@ -227,52 +198,34 @@ struct TrialActivationItem: Equatable {
     var locale: Locale = .current
 
     var statusTitle: String {
-        if ["de", "it"].contains(locale.language.languageCode?.identifier ?? "") {
-            let key = switch status {
-            case .setUp: "trial.activation.status.setup"
-            case .active: "trial.activation.status.active"
-            case .activeAutomatically: "trial.activation.status.active_automatically"
-            case .personalize: "trial.activation.status.personalize"
-            case .customized: "trial.activation.status.customized"
-            case .on: "trial.activation.status.on"
-            }
-            return PillieLocalization.string(key, table: "Commerce", locale: locale)
+        let key = switch status {
+        case .setUp: "trial.activation.status.setup"
+        case .active: "trial.activation.status.active"
+        case .activeAutomatically: "trial.activation.status.active_automatically"
+        case .personalize: "trial.activation.status.personalize"
+        case .customized: "trial.activation.status.customized"
+        case .on: "trial.activation.status.on"
         }
-        return switch status {
-        case .setUp: "Set up"
-        case .active: "Active"
-        case .activeAutomatically: "Active automatically"
-        case .personalize: "Personalize"
-        case .customized: "Customized"
-        case .on: "On"
-        }
+        return PillieLocalization.string(key, table: "Commerce", locale: locale)
     }
 
     var actionTitle: String? {
-        if ["de", "it"].contains(locale.language.languageCode?.identifier ?? "") {
-            let key: String? = switch action {
-            case .appBlocking:
-                status == .active
-                    ? "trial.activation.action.manage"
-                    : "trial.activation.action.setup"
-            case .customMessages:
-                status == .customized
-                    ? "trial.activation.action.edit"
-                    : "trial.activation.action.personalize"
-            case .smartReminders:
-                "trial.activation.action.customize"
-            case nil:
-                nil
-            }
-            return key.map {
-                PillieLocalization.string($0, table: "Commerce", locale: locale)
-            }
+        let key: String? = switch action {
+        case .appBlocking:
+            status == .active
+                ? "trial.activation.action.manage"
+                : "trial.activation.action.setup"
+        case .customMessages:
+            status == .customized
+                ? "trial.activation.action.edit"
+                : "trial.activation.action.personalize"
+        case .smartReminders:
+            "trial.activation.action.customize"
+        case nil:
+            nil
         }
-        return switch action {
-        case .appBlocking: status == .active ? "Manage" : "Set up"
-        case .customMessages: status == .customized ? "Edit" : "Personalize"
-        case .smartReminders: "Customize"
-        case nil: nil
+        return key.map {
+            PillieLocalization.string($0, table: "Commerce", locale: locale)
         }
     }
 
@@ -301,18 +254,13 @@ struct TrialActivationItem: Equatable {
             .smartReminders
         }
 
-        let localizedLanguage = ["de", "it"].contains(
-            locale.language.languageCode?.identifier ?? ""
-        )
-        func title(_ key: String, fallback: String) -> String {
-            localizedLanguage
-                ? PillieLocalization.string(key, table: "Commerce", locale: locale)
-                : fallback
+        func title(_ key: String) -> String {
+            PillieLocalization.string(key, table: "Commerce", locale: locale)
         }
         return [
             TrialActivationItem(
                 feature: .appBlocking,
-                title: title("paywall.feature.app_blocking.compact", fallback: "App blocking"),
+                title: title("paywall.feature.app_blocking.compact"),
                 status: state.appBlockingActive ? .active : .setUp,
                 action: .appBlocking,
                 isRecommended: recommendation == .appBlocking,
@@ -320,7 +268,7 @@ struct TrialActivationItem: Equatable {
             ),
             TrialActivationItem(
                 feature: .smartReminders,
-                title: title("paywall.feature.smart_reminders", fallback: "Smart Reminders"),
+                title: title("paywall.feature.smart_reminders"),
                 status: state.smartRemindersCustomized ? .customized : .activeAutomatically,
                 action: .smartReminders,
                 isRecommended: recommendation == .smartReminders,
@@ -328,7 +276,7 @@ struct TrialActivationItem: Equatable {
             ),
             TrialActivationItem(
                 feature: .customMessages,
-                title: title("paywall.feature.custom_messages.compact", fallback: "Custom messages"),
+                title: title("paywall.feature.custom_messages.compact"),
                 status: state.customMessagesCustomized ? .customized : .personalize,
                 action: .customMessages,
                 isRecommended: recommendation == .customMessages,
@@ -336,7 +284,7 @@ struct TrialActivationItem: Equatable {
             ),
             TrialActivationItem(
                 feature: .shakeToConfirm,
-                title: title("paywall.feature.shake", fallback: "Shake to confirm"),
+                title: title("paywall.feature.shake"),
                 status: .on,
                 action: nil,
                 isRecommended: false,

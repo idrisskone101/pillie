@@ -95,7 +95,7 @@ struct ShakeConfirmView: View {
                 // Subtitle
                 Text(celebrating
                     ? PillieLocalization.string("global.status.completed", locale: locale)
-                    : PillieLocalization.string("today.action.mark_complete", locale: locale))
+                    : DueActionCopy.localizedLabel(for: action, locale: locale))
                     .font(.pillieBody())
                     .foregroundStyle(PillieTheme.textMuted)
                     .multilineTextAlignment(.center)

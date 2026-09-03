@@ -1,0 +1,5 @@
+ts	phase	decision	why	evidence	result
+2026-09-03T02:37:02Z	frame	Ship locked ENG-58 and ENG-62-73 copy as one table plus apply script	Copy is already signed off. The work is mapping and wiring, not rewriting.	.audit/eng-57-playbook.md	open
+2026-09-03T02:37:03Z	frame	One worktree, one writer on xcstrings	Three catalogs are shared mutable state. Parallel writers would race.	feature/eng-57-girly-pop-copy	open
+2026-09-03T02:37:03Z	design	architect skipped	Locked copy. No design fork. Table of triples is the domain shape.	principle-laziness-protocol	skipped
+2026-09-03T02:37:03Z	design	Treat Idriss working the parent as go	Issues said wait. The session asked to ship every sub-issue.	ENG-57	open

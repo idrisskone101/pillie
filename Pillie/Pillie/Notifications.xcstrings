@@ -605,19 +605,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Today’s action is still open. Log it when you’re ready."
+            "value": "hey, quick check-in is still open. log it when you're ready"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "L’azione di oggi è ancora da registrare. Fallo quando vuoi."
+            "value": "ehi, il check-in veloce è ancora aperto. registralo quando vuoi"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Die heutige Aktion ist noch offen. Protokolliere sie, wenn du bereit bist."
+            "value": "hey, der kurze Check-in ist noch offen. trag's ein, wenn du soweit bist"
           }
         }
       }
@@ -789,19 +789,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your scheduled patch action is due. Log it when you’re done."
+            "value": "hey, quick check-in. log your patch when you're done"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "È prevista l’azione programmata per il cerotto. Registrala quando hai finito."
+            "value": "ehi, check-in veloce. registralo quando hai finito"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Deine geplante Pflasteraktion ist fällig. Protokolliere sie danach."
+            "value": "hey, kurzer Check-in. trag dein Pflaster ein, wenn du fertig bist"
           }
         }
       }
@@ -812,19 +812,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Patch reminder"
+            "value": "pillie time!"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Promemoria cerotto"
+            "value": "pillie time!"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pflastererinnerung"
+            "value": "Pillie-Zeit!"
           }
         }
       }
@@ -835,19 +835,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "It’s time for your scheduled pill. Log it when you’re done."
+            "value": "hey, quick check-in. log your pill when you're done"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "È l’ora programmata per la pillola. Registrala quando hai finito."
+            "value": "ehi, check-in veloce. registrala quando hai finito"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Es ist Zeit für deine Pille. Protokolliere die Aktion danach."
+            "value": "hey, kurzer Check-in. trag deine Pille ein, wenn du fertig bist"
           }
         }
       }
@@ -858,19 +858,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pill reminder"
+            "value": "pillie time!"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Promemoria pillola"
+            "value": "pillie time!"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillenerinnerung"
+            "value": "Pillie-Zeit!"
           }
         }
       }
@@ -881,19 +881,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your scheduled ring action is due. Log it when you’re done."
+            "value": "hey, quick check-in. log your ring when you're done"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "È prevista l’azione programmata per l’anello. Registrala quando hai finito."
+            "value": "ehi, check-in veloce. registralo quando hai finito"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Deine geplante Ringaktion ist fällig. Protokolliere sie danach."
+            "value": "hey, kurzer Check-in. trag deinen Ring ein, wenn du fertig bist"
           }
         }
       }
@@ -904,19 +904,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ring reminder"
+            "value": "pillie time!"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Promemoria anello"
+            "value": "pillie time!"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ringerinnerung"
+            "value": "Pillie-Zeit!"
           }
         }
       }

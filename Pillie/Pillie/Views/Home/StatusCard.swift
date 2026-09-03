@@ -115,7 +115,7 @@ struct StatusCard: View {
             return PillieLocalization.string("today.empty.title", locale: locale)
         }
         guard isTodayTaken else {
-            return PillieLocalization.string("today.action.mark_complete", locale: locale)
+            return DueActionCopy.localizedLabel(for: alarmAction, locale: locale)
         }
 
         let calendar = Calendar.current

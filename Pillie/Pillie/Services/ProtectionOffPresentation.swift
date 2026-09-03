@@ -29,25 +29,16 @@ struct ProtectionOffCardContent: Equatable {
         locale: Locale = .current
     ) -> ProtectionOffCardContent? {
         guard !hasPlusAccess, blockerConfigSaved else { return nil }
-        if ["de", "it"].contains(locale.language.languageCode?.identifier ?? "") {
-            return ProtectionOffCardContent(
-                title: PillieLocalization.string("today.protection.inactive", locale: locale),
-                detail: PillieLocalization.string(
-                    "trial.end.subtitle",
-                    table: "Commerce",
-                    locale: locale
-                ),
-                ctaTitle: PillieLocalization.string(
-                    "paywall.action.upgrade",
-                    table: "Commerce",
-                    locale: locale
-                )
-            )
-        }
         return ProtectionOffCardContent(
-            title: "App blocking is off",
-            detail: "Your Plus access ended, so apps aren't being blocked. Your blocker setup is saved — turn Plus back on to pick up right where you left off.",
-            ctaTitle: "Turn protection back on"
+            title: PillieLocalization.string("today.protection.inactive", locale: locale),
+            detail: PillieLocalization.string(
+                "today.protection.ended.detail",
+                locale: locale
+            ),
+            ctaTitle: PillieLocalization.string(
+                "today.protection.ended.cta",
+                locale: locale
+            )
         )
     }
 }

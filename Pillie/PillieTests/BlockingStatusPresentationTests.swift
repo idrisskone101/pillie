@@ -62,33 +62,39 @@ final class BlockingStatusPresentationTests: XCTestCase {
     }
 
     func testEntitledIncompleteCardLabelsBlockingIncompleteAndOffersSetup() throws {
-        let card = try XCTUnwrap(BlockingStatusCardContent.make(for: .incompleteEntitled))
-
-        // AC3: clearly labels blocking as incomplete / not active.
-        let copy = card.visibleCopy.joined(separator: " ").lowercased()
-        XCTAssertTrue(
-            copy.contains("isn't on") || copy.contains("not on")
-                || copy.contains("isn't set up") || copy.contains("incomplete")
+        let english = Locale(identifier: "en_US")
+        let card = try XCTUnwrap(
+            BlockingStatusCardContent.make(for: .incompleteEntitled, locale: english)
         )
-        // AC4: a clear path to enable blocking later.
-        XCTAssertTrue(card.ctaTitle.lowercased().contains("set up"))
-        // Entitled users go straight to Screen Time setup, not the paywall.
+
+        XCTAssertEqual(
+            card.title,
+            PillieLocalization.string("today.protection.setup.title", locale: english)
+        )
+        XCTAssertEqual(
+            card.ctaTitle,
+            PillieLocalization.string("today.protection.setup.cta", locale: english)
+        )
         XCTAssertFalse(card.isLocked)
-        // Must not falsely claim blocking is active/on.
-        XCTAssertFalse(copy.contains("active"))
-        XCTAssertFalse(copy.contains("blocking is on"))
+        XCTAssertFalse(card.visibleCopy.joined(separator: " ").lowercased().contains("blocking is on"))
     }
 
     func testFreeIncompleteCardLabelsBlockingOffAndOffersUpgrade() throws {
-        let card = try XCTUnwrap(BlockingStatusCardContent.make(for: .incompleteFree))
+        let english = Locale(identifier: "en_US")
+        let card = try XCTUnwrap(
+            BlockingStatusCardContent.make(for: .incompleteFree, locale: english)
+        )
 
-        let copy = card.visibleCopy.joined(separator: " ").lowercased()
-        // AC3: blocking is clearly not on.
-        XCTAssertTrue(copy.contains("isn't on") || copy.contains("not on") || copy.contains("isn't set up"))
-        // AC4 (free variant): the path is unlocking via Plus.
-        XCTAssertTrue(copy.contains("plus") || copy.contains("unlock"))
+        XCTAssertEqual(
+            card.title,
+            PillieLocalization.string("today.protection.inactive", locale: english)
+        )
+        XCTAssertEqual(
+            card.ctaTitle,
+            PillieLocalization.string("today.protection.off.cta", locale: english)
+        )
+        XCTAssertTrue(card.detail.lowercased().contains("plus"))
         XCTAssertTrue(card.isLocked)
-        XCTAssertFalse(copy.contains("active"))
     }
 
     func testReminderOnlyCardsReassureRemindersStillWork() throws {

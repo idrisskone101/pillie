@@ -41,15 +41,9 @@ struct StatsRow: View {
                     .contentTransition(.numericText())
                     .animation(valueChangeAnimation, value: currentStreak)
 
-                Text(PillieLocalization.string(
-                    "trial.end.streak",
-                    table: "Commerce",
-                    locale: locale
-                ))
+                Text(PillieLocalization.string("today.streak.title", locale: locale))
                     .font(.pillieCaption())
                     .foregroundStyle(PillieTheme.coral)
-                    .textCase(.uppercase)
-                    .tracking(1)
                     .pillieAdaptiveLineLimit(minimumScaleFactor: 0.72)
             }
             .padding(20)
@@ -103,8 +97,6 @@ struct StatsRow: View {
             Text(blockingSubtitle)
                 .font(.pillieCaption())
                 .foregroundStyle(PillieTheme.textMuted)
-                .textCase(.uppercase)
-                .tracking(1)
                 .pillieAdaptiveLineLimit(minimumScaleFactor: 0.72)
                 .contentTransition(.opacity)
                 .animation(valueChangeAnimation, value: blockingSubtitle)
@@ -124,8 +116,6 @@ struct StatsRow: View {
             Text(PillieLocalization.string("today.protection.status_title", locale: locale))
                 .font(.pillieCaption())
                 .foregroundStyle(PillieTheme.textMuted)
-                .textCase(.uppercase)
-                .tracking(1)
                 .pillieAdaptiveLineLimit(minimumScaleFactor: 0.72)
         }
     }

@@ -275,7 +275,10 @@ struct SettingsView: View {
                         }
                         .buttonStyle(.plain)
                         .sheet(isPresented: $showBlockingUpsell) {
-                            PlusUpsellSheet.appBlocking()
+                            PlusUpsellSheet.appBlocking(
+                                action: store.dueAction(on: store.today),
+                                method: store.pack.method
+                            )
                                 .presentationDetents([.height(PlusUpsellSheet.compactPresentationHeight)])
                                 .presentationDragIndicator(.hidden)
                                 .presentationBackground(PillieTheme.bg)

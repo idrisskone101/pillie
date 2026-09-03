@@ -79,7 +79,7 @@ final class AppBlockingSetupContentTests: XCTestCase {
             hardPaywallContent.lockedDetail,
             "Choose monthly, annual, or lifetime to keep using Pillie."
         )
-        XCTAssertEqual(hardPaywallContent.lockedCTA, "Upgrade to Pillie Plus")
+        XCTAssertEqual(hardPaywallContent.lockedCTA, "get pillie plus")
     }
 
     func testDeniedOrCancelledAuthorizationShowsRecoveryWithoutStrandingReminderOnly() {

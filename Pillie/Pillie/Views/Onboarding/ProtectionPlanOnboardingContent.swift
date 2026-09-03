@@ -327,13 +327,17 @@ struct ProtectionPlanRiskWindowContent {
             + choices.flatMap { [$0.title, $0.subtitle] }
     }
 
-    static let `default` = ProtectionPlanRiskWindowContent(
-        title: "Timing is everything",
-        subtitle: "When are you most likely to drift into another app?",
-        footnote: "This shapes your plan — we don't use it to schedule alarms.",
-        primaryCTA: "Continue",
-        choices: RiskWindow.allCases
-    )
+    static var `default`: ProtectionPlanRiskWindowContent { localized() }
+
+    static func localized(locale: Locale = .current) -> ProtectionPlanRiskWindowContent {
+        ProtectionPlanRiskWindowContent(
+            title: PillieLocalization.string("onboarding.risk_window.title", locale: locale),
+            subtitle: PillieLocalization.string("onboarding.risk_window.subtitle", locale: locale),
+            footnote: PillieLocalization.string("onboarding.plan.disclaimer", locale: locale),
+            primaryCTA: PillieLocalization.string("global.action.continue", locale: locale),
+            choices: RiskWindow.allCases
+        )
+    }
 }
 
 /// Copy for the Draft Blocked Apps screen (issue #76, Superdesign drafts f1c3b77e

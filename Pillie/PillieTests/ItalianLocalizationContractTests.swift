@@ -37,7 +37,7 @@ final class ItalianLocalizationContractTests: XCTestCase {
 
         XCTAssertEqual(
             ProtectionPlanWelcomeContent.localized(locale: italian).title,
-            "La sveglia per la tua pillola."
+            "la sveglia per la tua pillola."
         )
         XCTAssertEqual(
             ProtectionPlanRoutineMethodContent.localized(locale: italian).title,
@@ -315,7 +315,7 @@ final class ItalianLocalizationContractTests: XCTestCase {
 
         XCTAssertEqual(
             actions.map { $0.localizedReminderTitle(locale: italian) },
-            ["Promemoria pillola", "Promemoria cerotto", "Promemoria anello"]
+            ["pillie time!", "pillie time!", "pillie time!"]
         )
         XCTAssertEqual(
             actions.map { $0.localizedFollowUpTitle(locale: italian) },
