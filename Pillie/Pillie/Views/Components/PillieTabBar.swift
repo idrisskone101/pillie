@@ -4,6 +4,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 enum PillieTab: Int, CaseIterable {
     case home
@@ -72,9 +73,13 @@ struct PillieTabBar: View {
         .padding(.bottom, 28)
         .background(
             ZStack {
+                // Flat fill: the previous material backdrop was 85% covered by white
+                // (visually inert) but forced a live blur of the sliding panes on
+                // every frame of a tab transition.
+                Rectangle()
+                    .fill(PillieTheme.bg)
                 Rectangle()
                     .fill(.white.opacity(0.85))
-                    .background(.ultraThinMaterial)
 
                 VStack {
                     Rectangle()
@@ -90,41 +95,55 @@ struct PillieTabBar: View {
 
 struct MainTabView: View {
     @State private var selectedTab: PillieTab = .home
-    @State private var previousTab: PillieTab = .home
     @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
+    @Environment(PillStore.self) private var store
+    @Environment(\.modelContext) private var modelContext
     private let performanceTier = PerformanceTier.current
 
     var body: some View {
         ZStack(alignment: .bottom) {
-            GeometryReader { proxy in
-                // All three panes stay alive so a tab switch only animates offsets —
-                // it never rebuilds a screen (rebuilds caused first-frame hitches and
-                // replayed every entrance animation). During a slide the outgoing and
-                // incoming panes tile the full width edge-to-edge over their opaque
-                // backgrounds, so the non-participating pane (zIndex 0) is never seen.
-                ZStack {
-                    ForEach(PillieTab.allCases, id: \.rawValue) { tab in
-                        pane(for: tab)
-                            .offset(x: paneOffset(for: tab, width: proxy.size.width))
-                            .opacity(paneOpacity(for: tab))
-                            .zIndex(tab == selectedTab ? 2 : (tab == previousTab ? 1 : 0))
-                            .allowsHitTesting(tab == selectedTab)
-                            .accessibilityHidden(tab != selectedTab)
-                    }
-                }
-                .frame(width: proxy.size.width, height: proxy.size.height)
-                .clipped()
-                .gesture(edgeSwipeGesture(screenWidth: proxy.size.width))
-            }
+            // All three panes stay alive inside a UIKit container so a tab switch
+            // never rebuilds a screen, and the slide itself is a Core Animation
+            // transform — committed once, interpolated off the main thread.
+            TabPaneContainer(
+                selectedTab: selectedTab,
+                crossfades: crossfadesTabs,
+                duration: tabTransitionDuration,
+                onEdgeSwipe: navigateTab(by:),
+                makePane: pane(for:)
+            )
+            // Full-bleed so UIKit hands each pane its real safe-area insets and the
+            // slide carries the status-bar band along with the content.
+            .ignoresSafeArea()
 
             PillieTabBar(selectedTab: tabBinding)
         }
         .background(PillieTheme.bg.ignoresSafeArea())
         .ignoresSafeArea(.container, edges: .bottom)
+        #if DEBUG || PILLIE_FRAME_PROBE
+        .task {
+            guard TabSwitchFrameProbe.isLoopRequested else { return }
+            await TabSwitchFrameProbe.shared.runLoop { switchTab(to: $0) }
+        }
+        #endif
+    }
+
+    /// Each pane is hosted in its own `UIHostingController`, which does not inherit
+    /// the SwiftUI environment from this hierarchy, so the app-level values the
+    /// panes depend on are re-applied here. The bottom safe area is dropped to
+    /// match the container's `ignoresSafeArea`; the tab bar floats over it.
+    private func pane(for tab: PillieTab) -> AnyView {
+        AnyView(
+            paneContent(for: tab)
+                .ignoresSafeArea(.container, edges: .bottom)
+                .font(.pillieBody())
+                .environment(store)
+                .modelContainer(modelContext.container)
+        )
     }
 
     @ViewBuilder
-    private func pane(for tab: PillieTab) -> some View {
+    private func paneContent(for tab: PillieTab) -> some View {
         switch tab {
         case .home: HomeView()
         case .history: HistoryView()
@@ -139,18 +158,8 @@ struct MainTabView: View {
         performanceTier == .constrained || accessibilityReduceMotion
     }
 
-    private func paneOffset(for tab: PillieTab, width: CGFloat) -> CGFloat {
-        guard !crossfadesTabs, tab != selectedTab else { return 0 }
-        return tab.rawValue > selectedTab.rawValue ? width : -width
-    }
-
-    private func paneOpacity(for tab: PillieTab) -> Double {
-        guard crossfadesTabs else { return 1 }
-        return tab == selectedTab ? 1 : 0
-    }
-
-    private var tabTransitionAnimation: Animation {
-        performanceTier == .constrained ? .easeInOut(duration: 0.16) : .easeInOut(duration: 0.25)
+    private var tabTransitionDuration: TimeInterval {
+        performanceTier == .constrained ? 0.16 : 0.25
     }
 
     private var tabBinding: Binding<PillieTab> {
@@ -164,33 +173,19 @@ struct MainTabView: View {
 
     private func switchTab(to target: PillieTab) {
         guard target != selectedTab else { return }
-        previousTab = selectedTab
-        withAnimation(tabTransitionAnimation) {
-            selectedTab = target
-        }
+        #if DEBUG || PILLIE_FRAME_PROBE
+        TabSwitchFrameProbe.shared.beginTransition(
+            label: "\(selectedTab)->\(target)",
+            duration: tabTransitionDuration
+        )
+        #endif
+        // No withAnimation: the container animates the switch in Core Animation.
+        selectedTab = target
         InteractionFeedback.live.perform(.tabChange)
         ProductAnalyticsTelemetry.live.mainTabSelected(target.analyticsTab)
     }
 
     // MARK: - Edge Swipe
-
-    private func edgeSwipeGesture(screenWidth: CGFloat) -> some Gesture {
-        DragGesture(minimumDistance: 20)
-            .onEnded { value in
-                let startX = value.startLocation.x
-                let edgeZone: CGFloat = 30
-                let tx = value.translation.width
-
-                // Swipe right from left edge → previous tab
-                if startX < edgeZone, tx > 50 {
-                    navigateTab(by: -1)
-                }
-                // Swipe left from right edge → next tab
-                else if startX > screenWidth - edgeZone, tx < -50 {
-                    navigateTab(by: 1)
-                }
-            }
-    }
 
     private func navigateTab(by offset: Int) {
         let allTabs = PillieTab.allCases
@@ -214,4 +209,5 @@ private extension PillieTab {
 #Preview {
     MainTabView()
         .environment(PillStore.previewStore())
+        .modelContainer(PillStore.previewContainer)
 }
