@@ -5876,46 +5876,35 @@
         }
       }
     },
-    "history.coachMark.new": {
-      "comment": "History day correction coach mark [health]",
+    "history.discovery.banner": {
+      "comment": "History day correction discovery banner [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Days are tappable now. Tap a day to update it."
+          }
+        }
+      }
+    },
+    "history.discovery.dismiss": {
+      "comment": "History day correction discovery banner [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dismiss"
+          }
+        }
+      }
+    },
+    "history.discovery.new": {
+      "comment": "History day correction discovery banner [health]",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "New"
-          }
-        }
-      }
-    },
-    "history.coachMark.title": {
-      "comment": "History day correction coach mark [health]",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tap a day you logged wrong."
-          }
-        }
-      }
-    },
-    "history.coachMark.body": {
-      "comment": "History day correction coach mark [health]",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Change Unlogged to Taken, or pick Break."
-          }
-        }
-      }
-    },
-    "history.coachMark.dismiss": {
-      "comment": "History day correction coach mark [health]",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Got it"
           }
         }
       }

@@ -124,6 +124,9 @@ struct PillPackCard: View {
                 .onChange(of: store.isTodayTaken) { _, _ in
                     refreshCycleSnapshots()
                 }
+                .onChange(of: store.lastDayCorrection) { _, _ in
+                    refreshCycleSnapshots()
+                }
                 .onDisappear {
                     hasRunEntranceAnimation = false
                     pendingEntranceAnimation?.cancel()

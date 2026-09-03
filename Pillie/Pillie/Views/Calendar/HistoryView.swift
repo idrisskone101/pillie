@@ -29,7 +29,7 @@ struct HistoryView: View {
     @State private var monthSnapshotCache: [String: [Int: PillScheduleSnapshot]] = [:]
     @State private var dayHitFrames: [String: [Int: CGRect]] = [:]
     @State private var correctionTarget: HistoryEditableDay?
-    @AppStorage(HistoryCoachMarkState.storageKey) private var coachMarkDismissed = false
+    @AppStorage(HistoryDiscoveryAnnouncement.storageKey) private var discoveryDismissed = false
 
     private let performanceTier = PerformanceTier.current
 
@@ -59,6 +59,16 @@ struct HistoryView: View {
                     .font(.pillieBody())
                     .foregroundStyle(PillieTheme.textMuted)
                     .modifier(FadeInUp(appeared: appeared, delay: 0))
+
+                if !discoveryDismissed {
+                    HistoryDiscoveryBanner {
+                        withAnimation(PillieMotion.animation(for: .quick)) {
+                            discoveryDismissed = true
+                        }
+                    }
+                    .transition(.opacity)
+                    .modifier(FadeInUp(appeared: appeared, delay: 0.05))
+                }
 
                 // Color legend
                 VStack(alignment: .leading, spacing: 6) {
@@ -141,20 +151,6 @@ struct HistoryView: View {
                             .onChange(of: hitFrameLayoutToken(anchors, in: proxy)) { _, _ in
                                 resolveDayHitFrames(anchors, in: proxy)
                             }
-                    }
-                }
-                .overlay(alignment: .topLeading) {
-                    if let targetDay = coachMarkTargetDay,
-                       let frame = dayHitFrames[monthIdentity]?[targetDay],
-                       calendarWidth > 0,
-                       let calendarHeight = calendarContainerHeight {
-                        HistoryCoachMark(
-                            targetFrame: frame,
-                            calendarWidth: calendarWidth,
-                            calendarHeight: calendarHeight,
-                            onDismiss: dismissCoachMark
-                        )
-                        .allowsHitTesting(false)
                     }
                 }
                 .overlay {
@@ -246,15 +242,6 @@ struct HistoryView: View {
         Self.monthIdentity(for: displayedMonth)
     }
 
-    private var coachMarkTargetDay: Int? {
-        guard !coachMarkDismissed else { return nil }
-        return HistoryCoachMarkState.target(
-            in: snapshots(for: displayedMonth),
-            month: displayedMonth,
-            today: store.today
-        )
-    }
-
     private var slideDistance: CGFloat {
         max(calendarWidth, 320)
     }
@@ -279,7 +266,6 @@ struct HistoryView: View {
         CalendarGrid(
             displayedMonth: month,
             monthSnapshots: snapshots(for: month),
-            highlightedDay: month == displayedMonth ? coachMarkTargetDay : nil,
             onEditableDayActivate: { day in
                 openCorrectionSheet(for: day, in: month)
             }
@@ -298,8 +284,6 @@ struct HistoryView: View {
     }
 
     private func handleCalendarTap(at point: CGPoint, in viewWidth: CGFloat) {
-        dismissCoachMark()
-
         var calendar = Calendar.current
         calendar.locale = locale
         let monthStart = MonthCursor.monthStart(for: displayedMonth, calendar: calendar)
@@ -321,8 +305,6 @@ struct HistoryView: View {
     }
 
     private func openCorrectionSheet(for day: Int, in month: Date) {
-        dismissCoachMark()
-
         guard let date = CalendarGrid.date(forDay: day, in: month),
               let snapshot = store.scheduleSnapshot(for: date),
               let options = store.dayCorrectionOptions(for: snapshot) else {
@@ -334,10 +316,6 @@ struct HistoryView: View {
             snapshot: snapshot,
             options: options
         )
-    }
-
-    private func dismissCoachMark() {
-        coachMarkDismissed = true
     }
 
     private func hitFrameLayoutToken(

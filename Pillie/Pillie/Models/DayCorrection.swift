@@ -69,37 +69,6 @@ struct DayCorrectionEvent: Equatable {
     let dayOfMonth: Int
 }
 
-enum HistoryCoachMarkState {
-    static let storageKey = "historyDayCorrectionCoachMarkDismissed"
-
-    static func target(
-        in snapshots: [Int: PillScheduleSnapshot],
-        month: Date,
-        today: Date
-    ) -> Int? {
-        let calendar = Calendar.current
-        let todayStart = calendar.startOfDay(for: today)
-        var monthComponents = calendar.dateComponents([.year, .month], from: month)
-        guard let monthStart = calendar.date(from: monthComponents) else { return nil }
-
-        var bestDay: Int?
-        var bestDate: Date?
-
-        for (day, snapshot) in snapshots {
-            guard let date = calendar.date(byAdding: .day, value: day - 1, to: monthStart) else {
-                continue
-            }
-            let dayStart = calendar.startOfDay(for: date)
-            guard dayStart < todayStart else { continue }
-            guard snapshot.isDue else { continue }
-            guard snapshot.status == .missed else { continue }
-
-            if bestDate == nil || dayStart > bestDate! {
-                bestDate = dayStart
-                bestDay = day
-            }
-        }
-
-        return bestDay
-    }
+enum HistoryDiscoveryAnnouncement {
+    static let storageKey = "historyDayCorrectionDiscoveryDismissed"
 }

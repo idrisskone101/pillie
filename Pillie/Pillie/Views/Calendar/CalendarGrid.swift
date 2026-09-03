@@ -10,7 +10,6 @@ struct CalendarGrid: View {
     @Environment(\.locale) private var locale
     let displayedMonth: Date
     let monthSnapshots: [Int: PillScheduleSnapshot]
-    var highlightedDay: Int?
     var onEditableDayActivate: ((Int) -> Void)?
 
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 4), count: 7)
@@ -56,12 +55,10 @@ struct CalendarGrid: View {
     init(
         displayedMonth: Date,
         monthSnapshots: [Int: PillScheduleSnapshot] = [:],
-        highlightedDay: Int? = nil,
         onEditableDayActivate: ((Int) -> Void)? = nil
     ) {
         self.displayedMonth = displayedMonth
         self.monthSnapshots = monthSnapshots
-        self.highlightedDay = highlightedDay
         self.onEditableDayActivate = onEditableDayActivate
     }
 
@@ -164,11 +161,6 @@ struct CalendarGrid: View {
                                 lineWidth: 2
                             )
                             .opacity(presentation.isToday ? 1 : 0)
-                    )
-                    .overlay(
-                        Circle()
-                            .strokeBorder(PillieTheme.coral, lineWidth: 2)
-                            .opacity(highlightedDay == day ? 1 : 0)
                     )
 
                 Text("\(day)")

@@ -66,53 +66,6 @@ final class DayCorrectionPolicyTests: XCTestCase {
         XCTAssertNil(DayCorrectionPolicy.options(for: snapshot, relation: .past))
     }
 
-    func testCoachMarkTargetPicksLatestMissedPastDueDay() {
-        let today = fixedDate("2026-06-10")
-        let month = monthStart("2026-06-01")
-        let snapshots: [Int: PillScheduleSnapshot] = [
-            3: makeSnapshot(
-                method: .pill,
-                type: .pillActive,
-                status: .missed,
-                relationDate: fixedDate("2026-06-03")
-            ),
-            7: makeSnapshot(
-                method: .pill,
-                type: .pillActive,
-                status: .taken,
-                relationDate: fixedDate("2026-06-07")
-            ),
-            8: makeSnapshot(
-                method: .pill,
-                type: .pillActive,
-                status: .missed,
-                relationDate: fixedDate("2026-06-08")
-            ),
-        ]
-
-        XCTAssertEqual(
-            HistoryCoachMarkState.target(in: snapshots, month: month, today: today),
-            8
-        )
-    }
-
-    func testCoachMarkTargetIsNilWhenNoMissedPastDueDays() {
-        let today = fixedDate("2026-06-10")
-        let month = monthStart("2026-06-01")
-        let snapshots: [Int: PillScheduleSnapshot] = [
-            7: makeSnapshot(
-                method: .pill,
-                type: .pillActive,
-                status: .taken,
-                relationDate: fixedDate("2026-06-07")
-            ),
-        ]
-
-        XCTAssertNil(
-            HistoryCoachMarkState.target(in: snapshots, month: month, today: today)
-        )
-    }
-
     func testCountsTowardAdherenceIsFalseForBreakStatusOnDueDay() {
         let snapshot = makeSnapshot(
             method: .pill,
@@ -154,14 +107,6 @@ final class DayCorrectionPolicyTests: XCTestCase {
         components.year = Int(value.prefix(4))
         components.month = Int(value.dropFirst(5).prefix(2))
         components.day = Int(value.suffix(2))
-        return Calendar.current.date(from: components)!
-    }
-
-    private func monthStart(_ value: String) -> Date {
-        var components = DateComponents()
-        components.year = Int(value.prefix(4))
-        components.month = Int(value.dropFirst(5).prefix(2))
-        components.day = 1
         return Calendar.current.date(from: components)!
     }
 

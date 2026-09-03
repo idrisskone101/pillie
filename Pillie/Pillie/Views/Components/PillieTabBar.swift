@@ -33,6 +33,7 @@ enum PillieTab: Int, CaseIterable {
 struct PillieTabBar: View {
     @Binding var selectedTab: PillieTab
     @Environment(\.locale) private var locale
+    @AppStorage(HistoryDiscoveryAnnouncement.storageKey) private var discoveryDismissed = false
     @Namespace private var indicatorNamespace
 
     var body: some View {
@@ -63,6 +64,20 @@ struct PillieTabBar: View {
                     }
                     .frame(maxWidth: .infinity)
                     .foregroundStyle(selectedTab == tab ? PillieTheme.coral : PillieTheme.textMuted.opacity(0.5))
+                    .overlay(alignment: .topTrailing) {
+                        if tab == .history, !discoveryDismissed {
+                            Circle()
+                                .fill(PillieTheme.coral)
+                                .overlay {
+                                    Circle()
+                                        .strokeBorder(Color.white, lineWidth: 1.5)
+                                }
+                                .frame(width: 8, height: 8)
+                                .offset(x: -28, y: -2)
+                                .accessibilityHidden(true)
+                                .transition(.opacity)
+                        }
+                    }
                 }
                 .buttonStyle(.plain)
             }
@@ -85,6 +100,7 @@ struct PillieTabBar: View {
             }
         )
         .animation(PillieMotion.animation(for: .quick), value: selectedTab)
+        .animation(PillieMotion.animation(for: .quick), value: discoveryDismissed)
     }
 }
 
