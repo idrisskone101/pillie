@@ -6,11 +6,11 @@ final class GermanLocalizationContractTests: XCTestCase {
     func testGermanOnboardingCompoundLabelsStayCompactForAccessibilityLayouts() {
         let german = Locale(identifier: "de_DE")
         let expectedByKey = [
-            "onboarding.personalise.pain.title": "Was stört deine Routine?",
-            "onboarding.personalise.choice.snooze": "Ich wische sie weg",
-            "onboarding.personalise.choice.busy": "Ich bin beschäftigt",
-            "onboarding.personalise.choice.forget": "Ich vergesse es",
-            "onboarding.personalise.outcome.interruptions": "Weniger Störungen",
+            "onboarding.personalise.pain.title": "Was kommt dazwischen?",
+            "onboarding.personalise.choice.snooze": "Ich wische Erinnerungen weg.",
+            "onboarding.personalise.choice.busy": "Ich hab dann keine Zeit.",
+            "onboarding.personalise.choice.forget": "Ich vergesse es einfach.",
+            "onboarding.personalise.outcome.interruptions": "Weniger Unterbrechungen",
         ]
 
         for (key, expected) in expectedByKey {
@@ -24,18 +24,18 @@ final class GermanLocalizationContractTests: XCTestCase {
 
     func testRequiredSetupAndReminderKeysResolveInGermanWithoutEnglishFallback() {
         let expectedByKey = [
-            "onboarding.welcome.title": "Der Wecker für deine Pille.",
-            "onboarding.method.title": "Wähle deine Methode",
+            "onboarding.welcome.title": "Der Wecker für deine Pille, jeden Abend.",
+            "onboarding.method.title": "Wähl die Methode.",
             "onboarding.regimen.21_7": "21 aktive Tage, 7 Pausentage",
-            "onboarding.cycle_position.title": "Wo bist du in deiner Routine?",
-            "onboarding.reminder_time.title": "Wähle eine Erinnerungszeit",
-            "onboarding.plan.title": "Dein persönlicher Erinnerungsplan",
+            "onboarding.cycle_position.title": "Wo stehst du in deiner Routine?",
+            "onboarding.reminder_time.title": "Wähl eine Zeit.",
+            "onboarding.plan.title": "Dein Erinnerungsplan",
             "onboarding.permission.title": "Mitteilungen erlauben",
-            "onboarding.blocking_setup.title": "Wähle Apps zum Pausieren",
-            "onboarding.ready.title": "Deine Erinnerungen sind eingerichtet.",
-            "notification.reminder.pill.title": "Pillenerinnerung",
-            "notification.reminder.patch.title": "Pflastererinnerung",
-            "notification.reminder.ring.title": "Ringerinnerung",
+            "onboarding.blocking_setup.title": "Wähl Apps zum Pausieren",
+            "onboarding.ready.title": "Alles bereit.",
+            "notification.reminder.pill.title": "Pillie-Zeit!",
+            "notification.reminder.patch.title": "Pillie-Zeit!",
+            "notification.reminder.ring.title": "Pillie-Zeit!",
             "notification.action.complete": "Als erledigt markieren",
             "notification.action.snooze": "Später erinnern",
         ]
@@ -53,8 +53,8 @@ final class GermanLocalizationContractTests: XCTestCase {
         let german = Locale(identifier: "de_DE")
         let expectedByKeyAndTable = [
             ("onboarding.cycle_position.calculated", "Localizable", "Aus deiner Auswahl berechnet"),
-            ("onboarding.regimen.name.custom", "Localizable", "Individuell"),
-            ("trial.decline_feedback.optional_note", "Commerce", "Deine Antwort ist freiwillig. Du kannst die Frage überspringen und Pillie kostenlos weiter nutzen."),
+            ("onboarding.regimen.name.custom", "Localizable", "Eigener Zyklus"),
+            ("trial.decline_feedback.optional_note", "Commerce", "Das ist optional. Du kannst überspringen und Pillie weiter kostenlos nutzen."),
         ]
 
         for (key, table, expected) in expectedByKeyAndTable {
@@ -71,7 +71,7 @@ final class GermanLocalizationContractTests: XCTestCase {
                 plusIncluded: true,
                 locale: german
             ),
-            "im kostenlosen Tarif und in Plus enthalten"
+            "Im kostenlosen Tarif und in Plus enthalten"
         )
         XCTAssertEqual(
             CommercePresentation.comparisonTierLabel(
@@ -79,7 +79,7 @@ final class GermanLocalizationContractTests: XCTestCase {
                 plusIncluded: false,
                 locale: german
             ),
-            "nur im kostenlosen Tarif"
+            "Nur im kostenlosen Tarif"
         )
     }
 
@@ -116,7 +116,7 @@ final class GermanLocalizationContractTests: XCTestCase {
         )
         XCTAssertEqual(
             actions.map { $0.localizedReminderTitle(locale: german) },
-            ["Pillenerinnerung", "Pflastererinnerung", "Ringerinnerung"]
+            ["Pillie-Zeit!", "Pillie-Zeit!", "Pillie-Zeit!"]
         )
         XCTAssertEqual(
             NotificationManager.shared.reminderCategoryActionTitlesForTesting(
@@ -154,7 +154,7 @@ final class GermanLocalizationContractTests: XCTestCase {
 
         XCTAssertEqual(
             TodayActionState.completed.localizedPrimaryLabel(locale: german),
-            "Erledigt · Rückgängig"
+            "Eingetragen. Zum Rückgängig tippen.",
         )
         XCTAssertEqual(
             HistoryPresentation.monthSummary(
@@ -164,11 +164,15 @@ final class GermanLocalizationContractTests: XCTestCase {
                 locale: german
             ),
             HistoryPresentation.MonthSummary(
-                title: "Dein Monatsüberblick",
+                title: "Dieser Monat",
                 month: "Juli 2026",
-                completedCount: "3 Einträge",
-                completedBody: "bisher protokollierte Einträge",
-                percentage: "75 % protokolliert"
+                completedCount: "3 Check-ins",
+                completedBody: "Check-ins bisher",
+                percentage: PillieLocalization.formatted(
+                    "history.month.on_track",
+                    locale: german,
+                    arguments: Int64(75)
+                )
             )
         )
         XCTAssertEqual(
@@ -199,7 +203,18 @@ final class GermanLocalizationContractTests: XCTestCase {
         )
         XCTAssertEqual(
             CommercePresentation.trialEndText(date: date, locale: german),
-            "Testphase endet am 15. Juli 2026"
+            PillieLocalization.formatted(
+                "trial.status.ends",
+                table: "Commerce",
+                locale: german,
+                arguments: date.formatted(
+                    Date.FormatStyle()
+                        .day()
+                        .month(.wide)
+                        .year()
+                        .locale(german)
+                )
+            )
         )
 
         let authored = CustomReminderMessages(
@@ -228,7 +243,7 @@ final class GermanLocalizationContractTests: XCTestCase {
                 displayedMonth: date,
                 locale: german
             ).completedCount,
-            "1 Eintrag"
+            "1 Check-in"
         )
         XCTAssertEqual(
             SettingsPresentation.interval(minutes: 1, locale: german),
@@ -251,7 +266,7 @@ final class GermanLocalizationContractTests: XCTestCase {
                 dueTitle: "Eine sanfte Erinnerung",
                 dueBody: "Eine sanfte Erinnerung an deine Routine.",
                 retryTitle: "Folgeerinnerung",
-                retryBody: "Wenn du bereit bist, denk daran, die heutige Aktion zu protokollieren.",
+                retryBody: "Wenn du bereit bist, denk daran, heute einzuchecken.",
                 lastCallTitle: "Letzte geplante Erinnerung",
                 lastCallBody: "Für heute ist noch eine letzte Erinnerung geplant."
             )
@@ -282,7 +297,7 @@ final class GermanLocalizationContractTests: XCTestCase {
                 "28 aktive Tage, keine Pause",
                 "84 aktive Tage, 7 Pausentage",
                 "365 aktive Tage, keine Pause",
-                "Eigener Zyklus",
+                "Eigene",
             ]
         )
     }
@@ -295,8 +310,8 @@ final class GermanLocalizationContractTests: XCTestCase {
                 locale: german
             )
         )
-        XCTAssertEqual(entitledCard.title, "App-Pause ist deaktiviert")
-        XCTAssertEqual(entitledCard.ctaTitle, "Apps auswählen")
+        XCTAssertEqual(entitledCard.title, "Du hast App-Pause noch nicht eingerichtet.")
+        XCTAssertEqual(entitledCard.ctaTitle, "App-Pause einrichten")
 
         let protectionOff = try XCTUnwrap(
             ProtectionOffCardContent.make(
@@ -305,15 +320,15 @@ final class GermanLocalizationContractTests: XCTestCase {
                 locale: german
             )
         )
-        XCTAssertEqual(protectionOff.title, "App-Pause ist deaktiviert")
-        XCTAssertEqual(protectionOff.ctaTitle, "Zu Pillie Plus wechseln")
+        XCTAssertEqual(protectionOff.title, "App-Pause ist aus")
+        XCTAssertEqual(protectionOff.ctaTitle, "Plus wieder einschalten")
 
         let trial = TrialStatusPresentation(
             daysRemaining: 7,
             protectionActive: true,
             locale: german
         )
-        XCTAssertEqual(trial.indicatorLabel, "App-Pause aktiv · noch 7 Tage")
+        XCTAssertEqual(trial.indicatorLabel, "Plus ist an · noch 7 Tage")
         XCTAssertEqual(
             trial.sheetContent.ctaTitle,
             "Pillie Plus behalten"
@@ -329,7 +344,7 @@ final class GermanLocalizationContractTests: XCTestCase {
                 "App-Pause",
                 "Smarte Erinnerungen",
                 "Erinnerungstexte",
-                "Zum Bestätigen schütteln",
+                "Schütteln zum Eintragen",
             ]
         )
         XCTAssertEqual(activationItems[0].statusTitle, "Einrichten")
@@ -345,14 +360,14 @@ final class GermanLocalizationContractTests: XCTestCase {
             CycleNounPresentation.startNewConfirmation(for: .pill, locale: german),
             CycleNounPresentation.StartNewConfirmation(
                 title: "Neue Packung beginnen?",
-                body: "Damit beginnt heute eine neue Packung. Dein bisheriger Verlauf bleibt erhalten."
+                body: "Das startet heute eine neue Packung. Deine alte Historie bleibt."
             )
         )
         XCTAssertEqual(
             CycleNounPresentation.startNewConfirmation(for: .patch, locale: german),
             CycleNounPresentation.StartNewConfirmation(
                 title: "Neuen Zyklus beginnen?",
-                body: "Damit beginnt heute ein neuer Zyklus. Dein bisheriger Verlauf bleibt erhalten."
+                body: "Das startet heute einen neuen Zyklus. Deine alte Historie bleibt."
             )
         )
         XCTAssertEqual(
@@ -391,18 +406,18 @@ final class GermanLocalizationContractTests: XCTestCase {
         XCTAssertEqual(
             actions.map { $0.localizedReminderBody(locale: german) },
             [
-                "Es ist Zeit für deine Pille. Protokolliere die Aktion danach.",
-                "Deine geplante Pflasteraktion ist fällig. Protokolliere sie danach.",
-                "Deine geplante Ringaktion ist fällig. Protokolliere sie danach.",
+                "Hey, kurzer Check-in. Trag deine Pille ein, wenn du fertig bist",
+                "Hey, kurzer Check-in. Kleb dein Pflaster auf, wenn du fertig bist",
+                "Hey, kurzer Check-in. Setz deinen Ring ein, wenn du fertig bist",
             ]
         )
         XCTAssertEqual(
             actions[0].localizedFollowUpBody(locale: german),
-            "Die heutige Aktion ist noch offen. Protokolliere sie, wenn du bereit bist."
+            "Hey, der kurze Check-in ist noch offen. Check-in, wenn du soweit bist"
         )
         XCTAssertEqual(
             actions[0].localizedFinalBody(locale: german),
-            "Für heute ist noch keine Aktion protokolliert."
+            "Für heute noch kein Check-in."
         )
         XCTAssertEqual(
             PillieLocalization.string(
@@ -447,16 +462,16 @@ final class GermanLocalizationContractTests: XCTestCase {
         XCTAssertEqual(
             TodayActionState.dueAction(openAction, requiresShakeConfirm: false)
                 .localizedPrimaryLabel(locale: german),
-            "Als erledigt markieren"
+            "Pille nehmen"
         )
         XCTAssertEqual(
             TodayActionState.dueAction(breakAction, requiresShakeConfirm: false)
                 .localizedPrimaryLabel(locale: german),
-            "Heute ist keine Aktion fällig"
+            "Heute ist nichts fällig."
         )
         XCTAssertEqual(
             TodayActionState.noActionDue.localizedPrimaryLabel(locale: german),
-            "Heute ist keine Aktion fällig"
+            "Heute ist nichts fällig."
         )
         XCTAssertEqual(
             HistoryPresentation.dayAccessibilityLabel(
@@ -472,7 +487,7 @@ final class GermanLocalizationContractTests: XCTestCase {
                 status: .unlogged,
                 locale: german
             ),
-            "15. Juli 2026: Nicht protokolliert"
+            "15. Juli 2026: Nicht eingetragen"
         )
 
         let confirmation = ScheduleCriticalSettingChange.confirmation(

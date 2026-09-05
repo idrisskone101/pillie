@@ -78,6 +78,10 @@ final class TrialEndPaywallContentTests: XCTestCase {
 
     private let english = Locale(identifier: "en_US")
 
+    private func commerce(_ key: String) -> String {
+        PillieLocalization.string(key, table: "Commerce", locale: english)
+    }
+
     /// Fixed local calendar so boundary expectations are deterministic.
     private var calendar: Calendar = {
         var cal = Calendar(identifier: .gregorian)
@@ -126,7 +130,7 @@ final class TrialEndPaywallContentTests: XCTestCase {
         )
 
         XCTAssertEqual(content?.cohort, .blockerConfigured)
-        XCTAssertEqual(content?.primaryCTA, "Keep my protection")
+        XCTAssertEqual(content?.primaryCTA, commerce("trial.end.legacy.keep"))
     }
 
     // MARK: - Loss-framed copy + record card (design 2a)
@@ -141,9 +145,11 @@ final class TrialEndPaywallContentTests: XCTestCase {
             locale: english
         )
 
-        XCTAssertEqual(content?.title, "That was Plus,")
-        XCTAssertEqual(content?.titleAccent, "working for you.")
-        XCTAssertEqual(content?.handwrittenAside, "worth keeping, right?")
+        XCTAssertEqual(content?.title, commerce("trial.end.legacy.title"))
+        XCTAssertEqual(content?.titleAccent, "")
+        XCTAssertEqual(content?.handwrittenAside, commerce("trial.end.legacy.aside"))
+        XCTAssertEqual(content?.subtitle, commerce("trial.end.legacy.subtitle"))
+        XCTAssertTrue(content?.allowsContinueFree == true)
     }
 
     func testRecordCardCarriesAllThreeRowsWithRealStats() {
@@ -159,17 +165,26 @@ final class TrialEndPaywallContentTests: XCTestCase {
         guard case .record(let kicker, _, let rows, let quietShieldNote)? = content?.card else {
             return XCTFail("Expected the own-record card, got \(String(describing: content?.card))")
         }
-        XCTAssertEqual(kicker, "Your 14-day record")
+        XCTAssertEqual(kicker, commerce("trial.end.legacy.record"))
         XCTAssertNil(quietShieldNote)
         XCTAssertEqual(rows, [
             TrialEndPaywallContent.RecordRow(
-                label: "Blocks intercepted", value: "23", valueSuffix: nil, emphasized: true
+                label: commerce("trial.end.legacy.blocks"),
+                value: "23",
+                valueSuffix: nil,
+                emphasized: true
             ),
             TrialEndPaywallContent.RecordRow(
-                label: "Doses on time", value: "13", valueSuffix: "of 14", emphasized: false
+                label: commerce("trial.end.legacy.on_time"),
+                value: "13",
+                valueSuffix: nil,
+                emphasized: false
             ),
             TrialEndPaywallContent.RecordRow(
-                label: "Current streak", value: "🔥 9 days", valueSuffix: nil, emphasized: false
+                label: commerce("trial.end.streak"),
+                value: "9",
+                valueSuffix: nil,
+                emphasized: false
             ),
         ])
     }
@@ -201,7 +216,14 @@ final class TrialEndPaywallContentTests: XCTestCase {
             locale: Locale(identifier: "en_GB")
         )
 
-        XCTAssertEqual(content?.title, "That was Plus,")
+        XCTAssertEqual(
+            content?.title,
+            PillieLocalization.string(
+                "trial.end.legacy.title",
+                table: "Commerce",
+                locale: Locale(identifier: "en_GB")
+            )
+        )
         guard case .record(_, let dateRange, _, _)? = content?.card else {
             return XCTFail("Expected the own-record card")
         }
@@ -220,19 +242,18 @@ final class TrialEndPaywallContentTests: XCTestCase {
             locale: english
         )
 
-        // Zero blocks is never shown as a brag — the headline reframes instead.
-        XCTAssertEqual(content?.title, "Your quiet")
-        XCTAssertEqual(content?.titleAccent, "safety net.")
-        XCTAssertEqual(content?.handwrittenAside, "quiet shield, strong streak")
+        XCTAssertEqual(content?.title, commerce("trial.end.legacy.title"))
+        XCTAssertEqual(content?.titleAccent, "")
+        XCTAssertEqual(content?.handwrittenAside, commerce("trial.end.legacy.aside"))
 
         guard case .record(_, _, let rows, let quietShieldNote)? = content?.card else {
             return XCTFail("Expected the own-record card")
         }
-        XCTAssertEqual(rows.map(\.label), ["Doses on time", "Current streak"])
-        XCTAssertEqual(
-            quietShieldNote,
-            "Your blocker stood guard all 14 days — it never had to step in. That's the good outcome."
-        )
+        XCTAssertEqual(rows.map(\.label), [
+            commerce("trial.end.legacy.on_time"),
+            commerce("trial.end.streak"),
+        ])
+        XCTAssertNil(quietShieldNote)
     }
 
     func testUnknownBlocksDropsTheRowWithoutTheQuietShieldNote() {
@@ -247,11 +268,14 @@ final class TrialEndPaywallContentTests: XCTestCase {
             locale: english
         )
 
-        XCTAssertEqual(content?.title, "That was Plus,")
+        XCTAssertEqual(content?.title, commerce("trial.end.legacy.title"))
         guard case .record(_, _, let rows, let quietShieldNote)? = content?.card else {
             return XCTFail("Expected the own-record card")
         }
-        XCTAssertEqual(rows.map(\.label), ["Doses on time", "Current streak"])
+        XCTAssertEqual(rows.map(\.label), [
+            commerce("trial.end.legacy.on_time"),
+            commerce("trial.end.streak"),
+        ])
         XCTAssertNil(quietShieldNote)
     }
 
@@ -270,12 +294,12 @@ final class TrialEndPaywallContentTests: XCTestCase {
         guard case .record(_, _, let rows, _)? = content?.card else {
             return XCTFail("Expected the own-record card")
         }
-        XCTAssertEqual(rows.map(\.label), ["Blocks intercepted"])
+        XCTAssertEqual(rows.map(\.label), [commerce("trial.end.legacy.blocks")])
     }
 
     // MARK: - Gain-framed cohort (design 2b)
 
-    func testReminderOnlyCohortGetsGainFramedPerksAndFreeForeverHeadline() {
+    func testReminderOnlyCohortGetsGainFramedPerksAndFreeAvailableHeadline() {
         let content = TrialEndPaywallContent.make(
             state: expiredState(),
             blockerConfigSaved: false,
@@ -286,17 +310,21 @@ final class TrialEndPaywallContentTests: XCTestCase {
         )
 
         XCTAssertEqual(content?.cohort, .reminderOnly)
-        XCTAssertEqual(content?.title, "Reminders are")
-        XCTAssertEqual(content?.titleAccent, "free. Forever.")
-        XCTAssertEqual(content?.primaryCTA, "Unlock Pillie Plus")
-        XCTAssertEqual(content?.handwrittenAside, "whenever you're ready!")
+        XCTAssertEqual(content?.title, commerce("trial.end.legacy.title"))
+        XCTAssertEqual(content?.titleAccent, "")
+        XCTAssertEqual(content?.primaryCTA, commerce("trial.end.legacy.keep"))
+        XCTAssertEqual(content?.handwrittenAside, commerce("trial.end.legacy.aside"))
 
         guard case .perks(let kicker, let chips, _)? = content?.card else {
             return XCTFail("Expected the perks card, got \(String(describing: content?.card))")
         }
-        XCTAssertEqual(kicker, "What Plus adds")
-        // The same four perks the Trial Granted Moment promised.
-        XCTAssertEqual(chips, ["App blocking", "Shake to confirm", "Smart Reminders", "Custom messages"])
+        XCTAssertEqual(kicker, commerce("trial.end.free_title"))
+        XCTAssertEqual(chips, [
+            commerce("paywall.feature.app_blocking.compact"),
+            commerce("paywall.feature.shake"),
+            commerce("paywall.feature.smart_reminders"),
+            commerce("paywall.feature.custom_messages.compact"),
+        ])
     }
 
     // MARK: - Missing stats fall back gracefully
@@ -315,7 +343,7 @@ final class TrialEndPaywallContentTests: XCTestCase {
         )
 
         XCTAssertEqual(content?.cohort, .blockerConfigured)
-        XCTAssertEqual(content?.primaryCTA, "Keep my protection")
+        XCTAssertEqual(content?.primaryCTA, commerce("trial.end.legacy.keep"))
         guard case .perks? = content?.card else {
             return XCTFail("Expected the perks fallback, got \(String(describing: content?.card))")
         }

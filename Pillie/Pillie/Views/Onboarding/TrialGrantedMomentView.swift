@@ -57,42 +57,7 @@ struct TrialGrantedMomentContent {
             + [disclosure, primaryCTA]
     }
 
-    static let `default` = TrialGrantedMomentContent(
-        badge: "14 days free · no card",
-        title: "Your next two weeks,",
-        titleAccent: "on us.",
-        subtitle: "A full trial of Pillie Plus starts now — here's how it goes.",
-        today: Today(
-            label: "Today",
-            title: "Everything unlocks",
-            perks: [
-                Perk(title: "App blocking", symbolName: "nosign"),
-                Perk(title: "Shake to confirm", symbolName: "iphone.radiowaves.left.and.right"),
-                Perk(title: "Smart Reminders", symbolName: "bell.fill"),
-                Perk(title: "Custom messages", symbolName: "text.bubble.fill"),
-            ]
-        ),
-        laterDays: [
-            TimelineDay(
-                label: "Day 12",
-                title: "A gentle heads-up",
-                detail: "We'll remind you before your trial ends. No surprises.",
-                symbolName: "bell.fill",
-                circleBackground: PillieTheme.lavender,
-                symbolColor: PillieTheme.textPrimary
-            ),
-            TimelineDay(
-                label: "Day 14",
-                title: "You choose",
-                detail: "Keep reminders free, or choose whether to continue with Plus.",
-                symbolName: "leaf.fill",
-                circleBackground: PillieTheme.sage,
-                symbolColor: PillieTheme.verifiedGreen
-            ),
-        ],
-        disclosure: "Your free trial lasts 14 days. No card required. App blocking turns off when it ends, while reminders stay free.",
-        primaryCTA: "Continue to app blocking"
-    )
+    static var `default`: TrialGrantedMomentContent { localized() }
 
     static func localized(
         locale: Locale = .current,

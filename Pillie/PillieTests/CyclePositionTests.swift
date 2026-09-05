@@ -23,6 +23,12 @@ final class CyclePositionTests: XCTestCase {
         XCTAssertEqual(Set(CyclePosition.allCases.map(\.title)).count, 3)
     }
 
+    func testPackTrackActiveIndexMatchesStartMidEndOrder() {
+        XCTAssertEqual(CyclePosition.justStarting.packTrackActiveIndex, 0)
+        XCTAssertEqual(CyclePosition.midCycle.packTrackActiveIndex, 1)
+        XCTAssertEqual(CyclePosition.nearEnd.packTrackActiveIndex, 2)
+    }
+
     func testAnchorDaysForAStandardTwentyEightDayCycle() {
         XCTAssertEqual(CyclePosition.justStarting.cycleDay(in: 28), 1)
         XCTAssertEqual(CyclePosition.midCycle.cycleDay(in: 28), 14)

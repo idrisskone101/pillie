@@ -104,7 +104,12 @@ struct HomeView: View {
     /// card was dismissed — in which case it does not occupy this Home pass.
     private var blockingCardContent: BlockingStatusCardContent? {
         guard !blockingCardDismissed else { return nil }
-        return BlockingStatusCardContent.make(for: blockingPresentation, locale: locale)
+        return BlockingStatusCardContent.make(
+            for: blockingPresentation,
+            method: store.pack.method,
+            action: store.dueAction(on: store.today),
+            locale: locale
+        )
     }
 
     /// Copy + gating for the Protection Off State card (#167): Plus Access ended

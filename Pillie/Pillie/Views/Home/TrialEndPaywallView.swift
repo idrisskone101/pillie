@@ -420,7 +420,8 @@ struct TrialEndPaywallView: View {
     }
 
     private var lifetimeTitle: String {
-        lifetimePackage?.storeProduct.localizedTitle ?? "Pillie Plus Lifetime"
+        lifetimePackage?.storeProduct.localizedTitle
+            ?? PillieLocalization.string("paywall.plan.lifetime", table: "Commerce", locale: locale)
     }
 
     /// Truthful annual-vs-monthly comparison from live store prices (ADR 0002:

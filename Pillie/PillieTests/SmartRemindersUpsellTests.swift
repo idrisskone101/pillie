@@ -7,31 +7,32 @@ import XCTest
 @testable import Pillie
 
 final class SmartRemindersUpsellTests: XCTestCase {
-
-    // MARK: - Upsell copy (ADR 0004 framing)
+    private let english = Locale(identifier: "en_US")
 
     func testSmartRemindersUpsellIsEscalationFramedNotTheBaseReminder() {
         let content = PlusUpsellContent.smartReminders
+        let title = commerce(content.localizedFeatureKey)
+        let description = commerce(content.subtitleKey)
 
-        XCTAssertEqual(content.featureName, "Smart Reminders")
-
-        let description = content.featureDescription.lowercased()
-        // ADR 0004: copy must read Smart Reminders as the follow-up escalation
-        // ("Pillie keeps reminding you until you log it"), not the base daily reminder.
+        XCTAssertEqual(title, "Smart reminders")
         XCTAssertTrue(
             description.contains("until you log"),
             "Upsell must frame Smart Reminders as repeating until the user logs."
         )
         XCTAssertTrue(
-            description.contains("follow") || description.contains("after the first"),
-            "Upsell must frame Smart Reminders as a follow-up after the first reminder, not the base reminder."
+            description.contains("keeps pinging") || description.contains("how often"),
+            "Upsell must frame Smart Reminders as extra pings after the first reminder."
+        )
+        XCTAssertNotEqual(
+            content.subtitleKey,
+            "paywall.subtitle",
+            "Smart Reminders must not reuse the app-blocking paywall body."
         )
     }
 
     func testSmartRemindersUpsellAvoidsMedicalAndEfficacyClaims() {
-        let description = PlusUpsellContent.smartReminders.featureDescription.lowercased()
+        let description = commerce(PlusUpsellContent.smartReminders.subtitleKey).lowercased()
 
-        // ADR 0002 / 0004 / CONTEXT.md: no medical, efficacy, or "never miss" claims.
         let bannedPhrases = [
             "never miss",
             "miss a dose",
@@ -51,35 +52,34 @@ final class SmartRemindersUpsellTests: XCTestCase {
         }
     }
 
-    func testAppBlockingUpsellContentIsPreserved() {
-        // Regression: the existing App Blocking upsell copy is unchanged by the refactor.
-        let content = PlusUpsellContent.appBlocking
-        XCTAssertEqual(content.featureName, "App Blocking")
+    func testAppBlockingUpsellUsesMethodAwareLockedBody() {
+        let content = PlusUpsellContent.appBlocking()
+        XCTAssertEqual(commerce(content.localizedFeatureKey), "App blocking")
         XCTAssertEqual(
-            content.featureDescription,
-            "Block distracting apps until your pill is logged."
+            commerce(content.subtitleKey),
+            "Your apps pause when the reminder is due, until you take your pill."
         )
+    }
+
+    func testCustomRemindersUpsellUsesADedicatedBody() {
+        let content = PlusUpsellContent.customReminders
+        XCTAssertEqual(commerce(content.localizedFeatureKey), "Reminder messages")
+        XCTAssertEqual(
+            commerce(content.subtitleKey),
+            "Write the ping in your own words. Plus lets you change the daily one and the last one."
+        )
+        XCTAssertNotEqual(content.subtitleKey, content.localizedFeatureKey)
     }
 
     func testFeatureUpsellsRouteToStablePaywallSurfaces() {
         XCTAssertEqual(PlusUpsellContent.smartReminders.paywallSurface, .plusUpsell)
-        XCTAssertEqual(PlusUpsellContent.appBlocking.paywallSurface, .plusUpsell)
+        XCTAssertEqual(PlusUpsellContent.appBlocking().paywallSurface, .plusUpsell)
         XCTAssertEqual(PlusUpsellContent.customReminders.paywallSurface, .plusUpsell)
     }
-
-    // MARK: - Telemetry (mirrors the Blocking upsell events)
-    //
-    // Hosted XCTest on the Xcode 27 beta aborts when a class instance is deallocated
-    // during a test (the documented @MainActor/class deinit crash), so a recording
-    // spy cannot be used here. These assertions follow the surviving value-type
-    // pattern from SettingsTelemetryTests: assert the event identifier and the
-    // payload shape the settings upsell emits, and smoke-invoke the entry point
-    // through a struct tracker so no reference type is allocated.
 
     func testPlusUpsellViewedUsesTheApprovedSurfaceContract() {
         XCTAssertEqual(AnalyticsEvent.plusUpsellViewed.rawValue, "plus_upsell_viewed")
 
-        // Every feature sheet owns its one view emission under one stable contract.
         let properties = AnalyticsPayload(
             source: .upsell,
             isPlus: false,
@@ -93,10 +93,12 @@ final class SmartRemindersUpsellTests: XCTestCase {
     }
 
     func testPlusUpsellViewedEntryPointInvokesWithoutTrapping() {
-        // Binds the test to the real method symbol. A struct tracker keeps the run
-        // free of any class deallocation, which is what aborts hosted XCTest here.
         let telemetry = ProductAnalyticsTelemetry(analytics: NoOpTracker(), isPlus: { false })
         telemetry.plusUpsellViewed()
+    }
+
+    private func commerce(_ key: String) -> String {
+        PillieLocalization.string(key, table: "Commerce", locale: english)
     }
 }
 

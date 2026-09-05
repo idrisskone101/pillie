@@ -202,6 +202,12 @@ struct SoftPaywallContent {
 }
 
 enum PremiumPaywallFreeExitPolicy {
+    /// Whether SoftPaywall shows a secondary dismiss without purchase.
+    ///
+    /// Settings / mid-trial Keep Plus (`isFromOnboarding == false`) always allow
+    /// dismiss — trial users still have Plus, and the control is "Not now", not a
+    /// free-forever promise. Onboarding hard-paywall cohorts cannot skip.
+    /// Grandfathered (legacy) installs may continue free from either surface.
     static func allowsContinueFree(
         isFromOnboarding: Bool,
         trialEndTerms: TrialEndAccessTerms
@@ -644,7 +650,8 @@ struct PremiumPaywallView: View {
     }
 
     private var lifetimeTitle: String {
-        lifetimePackage?.storeProduct.localizedTitle ?? "Pillie Plus Lifetime"
+        lifetimePackage?.storeProduct.localizedTitle
+            ?? PillieLocalization.string("paywall.plan.lifetime", table: "Commerce", locale: locale)
     }
 
     private var annualPriceAndPeriodText: String {

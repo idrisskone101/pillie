@@ -258,32 +258,15 @@ struct TrialEndPaywallContent: Equatable {
             hardPaywallEnabled: hardPaywallEnabled
         )
         let cohort: TrialEndPaywallCohort = blockerConfigSaved ? .blockerConfigured : .reminderOnly
-        if terms == .hardPaywall
-            || ["de", "it"].contains(locale.language.languageCode?.identifier ?? "") {
-            return localized(
-                cohort: cohort,
-                terms: terms,
-                termsCohort: assignedTermsCohort,
-                grantDate: grantDate,
-                stats: stats,
-                calendar: calendar,
-                locale: locale
-            )
-        }
-        switch cohort {
-        case .blockerConfigured:
-            return lossFramed(
-                terms: terms,
-                termsCohort: assignedTermsCohort,
-                grantDate: grantDate,
-                stats: stats,
-                calendar: calendar,
-                now: now,
-                locale: locale
-            )
-        case .reminderOnly:
-            return gainFramed(terms: terms, termsCohort: assignedTermsCohort)
-        }
+        return localized(
+            cohort: cohort,
+            terms: terms,
+            termsCohort: assignedTermsCohort,
+            grantDate: grantDate,
+            stats: stats,
+            calendar: calendar,
+            locale: locale
+        )
     }
 
     private static func localized(
@@ -298,10 +281,16 @@ struct TrialEndPaywallContent: Equatable {
         func commerce(_ key: String) -> String {
             PillieLocalization.string(key, table: "Commerce", locale: locale)
         }
+        let blockLabel = terms == .legacy
+            ? "trial.end.legacy.blocks"
+            : "trial.end.blocks"
+        let actionLabel = terms == .legacy
+            ? "trial.end.legacy.on_time"
+            : "trial.end.actions"
         var rows: [RecordRow] = []
         if let blocks = stats.blocksIntercepted, blocks > 0 {
             rows.append(RecordRow(
-                label: commerce("trial.end.blocks"),
+                label: commerce(blockLabel),
                 value: blocks.formatted(.number.locale(locale)),
                 valueSuffix: nil,
                 emphasized: true
@@ -309,7 +298,7 @@ struct TrialEndPaywallContent: Equatable {
         }
         if let actions = stats.dosesTaken, actions > 0 {
             rows.append(RecordRow(
-                label: commerce("trial.end.actions"),
+                label: commerce(actionLabel),
                 value: actions.formatted(.number.locale(locale)),
                 valueSuffix: nil,
                 emphasized: false
@@ -338,7 +327,9 @@ struct TrialEndPaywallContent: Equatable {
                 footnote: commerce("paywall.subtitle")
             )
             : .record(
-                kicker: commerce("trial.end.kicker"),
+                kicker: commerce(
+                    terms == .legacy ? "trial.end.legacy.record" : "trial.end.kicker"
+                ),
                 dateRange: localizedRecordDateRange(
                     grantDate: grantDate,
                     calendar: calendar,
@@ -350,17 +341,35 @@ struct TrialEndPaywallContent: Equatable {
 
         return TrialEndPaywallContent(
             cohort: cohort,
-            title: commerce("trial.end.title"),
-            titleAccent: "",
-            subtitle: commerce(
-                terms == .hardPaywall ? "paywall.subtitle" : "trial.end.subtitle"
+            title: commerce(
+                terms == .legacy ? "trial.end.legacy.title" : "trial.end.title"
             ),
+            titleAccent: "",
+            subtitle: commerce(subtitleKey(cohort: cohort, terms: terms)),
             card: card,
-            handwrittenAside: "",
-            primaryCTA: commerce("paywall.action.upgrade"),
+            handwrittenAside: terms == .legacy ? commerce("trial.end.legacy.aside") : "",
+            primaryCTA: commerce(
+                terms == .hardPaywall
+                    ? "trial.status.keep_plus"
+                    : "trial.end.legacy.keep"
+            ),
             terms: terms,
             termsCohort: termsCohort
         )
+    }
+
+    private static func subtitleKey(
+        cohort: TrialEndPaywallCohort,
+        terms: TrialEndAccessTerms
+    ) -> String {
+        switch (terms, cohort) {
+        case (.hardPaywall, .blockerConfigured):
+            "trial.end.hard.blocker"
+        case (.hardPaywall, .reminderOnly):
+            "trial.end.hard.reminders"
+        case (.legacy, _):
+            "trial.end.legacy.subtitle"
+        }
     }
 
     private static func localizedRecordDateRange(
@@ -376,131 +385,6 @@ struct TrialEndPaywallContent: Equatable {
         formatter.locale = locale
         formatter.setLocalizedDateFormatFromTemplate("MMMd")
         return "\(formatter.string(from: grantDate)) – \(formatter.string(from: lastDay))"
-    }
-
-    // MARK: - Loss framing (blocker-configured cohort)
-
-    private static func lossFramed(
-        terms: TrialEndAccessTerms,
-        termsCohort: TrialTermsCohort,
-        grantDate: Date,
-        stats: TrialEndOwnStats,
-        calendar: Calendar,
-        now: Date,
-        locale: Locale
-    ) -> TrialEndPaywallContent {
-        let rows = recordRows(stats: stats)
-        // No usable stat at all: nothing honest to anchor loss framing on, so
-        // the record gives way to the perks card — never a wall of zeros.
-        guard !rows.isEmpty else {
-            return TrialEndPaywallContent(
-                cohort: .blockerConfigured,
-                title: "That was Plus,",
-                titleAccent: "working for you.",
-                subtitle: "Your 14 days ended — app blocking is now off. Reminders stay free forever.",
-                card: perksCard,
-                handwrittenAside: "worth keeping, right?",
-                primaryCTA: "Keep my protection",
-                terms: terms,
-                termsCohort: termsCohort
-            )
-        }
-        // Zero blocks is the good outcome, not a failed stat: the counter row is
-        // dropped and a shield note reframes the quiet trial. `nil` (unknown)
-        // also drops the row but claims nothing (ADR 0002: real stats only).
-        let quietShield = stats.blocksIntercepted == 0
-        return TrialEndPaywallContent(
-            cohort: .blockerConfigured,
-            title: quietShield ? "Your quiet" : "That was Plus,",
-            titleAccent: quietShield ? "safety net." : "working for you.",
-            subtitle: "Your 14 days ended — app blocking is now off. Reminders stay free forever.",
-            card: .record(
-                kicker: "Your 14-day record",
-                dateRange: recordDateRange(
-                    grantDate: grantDate,
-                    calendar: calendar,
-                    locale: locale
-                ),
-                rows: rows,
-                quietShieldNote: quietShield
-                    ? "Your blocker stood guard all 14 days — it never had to step in. That's the good outcome."
-                    : nil
-            ),
-            handwrittenAside: quietShield ? "quiet shield, strong streak" : "worth keeping, right?",
-            primaryCTA: "Keep my protection",
-            terms: terms,
-            termsCohort: termsCohort
-        )
-    }
-
-    private static func recordRows(stats: TrialEndOwnStats) -> [RecordRow] {
-        var rows: [RecordRow] = []
-        if let blocks = stats.blocksIntercepted, blocks > 0 {
-            rows.append(RecordRow(
-                label: "Blocks intercepted", value: "\(blocks)", valueSuffix: nil, emphasized: true
-            ))
-        }
-        // `taken > 0` too: "0 of 8" is a zero brag, not an anchor.
-        if let taken = stats.dosesTaken, let due = stats.dosesDue, due > 0, taken > 0 {
-            rows.append(RecordRow(
-                label: "Doses on time", value: "\(taken)", valueSuffix: "of \(due)", emphasized: false
-            ))
-        }
-        if let streak = stats.currentStreak, streak > 0 {
-            rows.append(RecordRow(
-                label: "Current streak",
-                value: streak == 1 ? "🔥 1 day" : "🔥 \(streak) days",
-                valueSuffix: nil,
-                emphasized: false
-            ))
-        }
-        return rows
-    }
-
-    /// "Jun 21 – Jul 5": grant day through the last protected day (the day
-    /// before the midnight-after-day-14 expiry moment).
-    private static func recordDateRange(
-        grantDate: Date,
-        calendar: Calendar,
-        locale: Locale
-    ) -> String {
-        let clock = ReverseTrialClock(grantDate: grantDate)
-        let expiry = clock.expiryMoment(calendar: calendar)
-        let lastProtectedDay = calendar.date(byAdding: .day, value: -1, to: expiry) ?? expiry
-        let formatter = DateFormatter()
-        formatter.calendar = calendar
-        formatter.timeZone = calendar.timeZone
-        formatter.locale = locale
-        formatter.setLocalizedDateFormatFromTemplate("MMMd")
-        return "\(formatter.string(from: grantDate)) – \(formatter.string(from: lastProtectedDay))"
-    }
-
-    // MARK: - Gain framing (reminder-only cohort)
-
-    private static func gainFramed(
-        terms: TrialEndAccessTerms,
-        termsCohort: TrialTermsCohort
-    ) -> TrialEndPaywallContent {
-        TrialEndPaywallContent(
-            cohort: .reminderOnly,
-            title: "Reminders are",
-            titleAccent: "free. Forever.",
-            subtitle: "Your trial ended. Your reminders keep working — Plus is here whenever you want app blocking and more.",
-            card: perksCard,
-            handwrittenAside: "whenever you're ready!",
-            primaryCTA: "Unlock Pillie Plus",
-            terms: terms,
-            termsCohort: termsCohort
-        )
-    }
-
-    private static var perksCard: CenterpieceCard {
-        .perks(
-            kicker: "What Plus adds",
-            // Matches the Trial Granted Moment's perk list.
-            chips: ["App blocking", "Shake to confirm", "Smart Reminders", "Custom messages"],
-            footnote: "For the days a reminder isn't enough — apps you pick stay blocked until your dose is logged."
-        )
     }
 }
 

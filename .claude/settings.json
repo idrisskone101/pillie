@@ -15,10 +15,13 @@
       "Bash(grep:*)",
       "Bash(find:*)",
       "Bash(wc:*)",
+      "Bash(make:*)",
       "Bash(Pillie/scripts/mcp-build-and-run.sh:*)",
       "Bash(Pillie/scripts/build-and-run.sh:*)",
       "Bash(Pillie/scripts/mcp-test-focused.sh:*)",
       "Bash(Pillie/scripts/test-focused.sh:*)",
+      "Bash(Pillie/scripts/diagnose.sh:*)",
+      "Bash(Pillie/scripts/create-worktree.sh:*)",
       "WebFetch(domain:raw.githubusercontent.com)",
       "mcp__XcodeBuildMCP"
     ]
