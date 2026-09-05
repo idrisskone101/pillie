@@ -6,7 +6,7 @@
 import SwiftUI
 
 /// Bottom sheet that rewrites one past day's status. The sheet sizes itself
-/// from its measured content so Dynamic Type and wrapping locales never clip
+/// from its measured content so longer, wrapping localizations never clip
 /// the last row.
 struct HistoryDayCorrectionSheet: View {
     let day: HistoryEditableDay
@@ -16,6 +16,8 @@ struct HistoryDayCorrectionSheet: View {
     @Environment(\.locale) private var locale
     @Environment(PillStore.self) private var store
     @State private var contentHeight: CGFloat = 320
+    /// A second tap while the sheet is animating out must not commit twice.
+    @State private var hasSelected = false
 
     var body: some View {
         VStack(spacing: 16) {
@@ -36,13 +38,12 @@ struct HistoryDayCorrectionSheet: View {
                 .foregroundStyle(PillieTheme.dark)
                 .frame(maxWidth: .infinity, alignment: .leading)
 
-                // The method comes from the day's own pack so a day logged under
-                // a previous method reads correctly. The reminder time is the
-                // current one: past reminder times are not stored.
+                // The reminder time is the current one: past reminder times
+                // are not stored.
                 Text(HistoryPresentation.doseSubtitle(
                     reminderHour: store.reminderHour,
                     reminderMinute: store.reminderMinute,
-                    method: day.snapshot.pack.method,
+                    method: day.method,
                     locale: locale
                 ))
                 .font(.pillieBody())
@@ -74,6 +75,8 @@ struct HistoryDayCorrectionSheet: View {
     private func correctionRow(_ outcome: DayCorrectionOutcome) -> some View {
         let isSelected = day.options.currentOutcome == outcome
         Button {
+            guard !hasSelected else { return }
+            hasSelected = true
             onSelect(outcome)
             dismiss()
         } label: {

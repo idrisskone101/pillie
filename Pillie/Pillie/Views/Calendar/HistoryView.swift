@@ -528,7 +528,7 @@ private struct HorizontalMonthDragSurface: UIViewRepresentable {
     }
 
     static func dismantleUIView(_ uiView: MonthDragSurfaceView, coordinator: Coordinator) {
-        coordinator.detach()
+        coordinator.tearDown()
     }
 
     final class Coordinator: NSObject, UIGestureRecognizerDelegate {
@@ -537,7 +537,8 @@ private struct HorizontalMonthDragSurface: UIViewRepresentable {
         var onCancelled: () -> Void
         /// The coordinator owns the recognizer: it must outlive the moment it is
         /// added to the scroll view, which only happens once the surface is in
-        /// a window.
+        /// a window. `UIGestureRecognizer` retains its targets, so this is a
+        /// cycle until `tearDown()` removes the target.
         let panGesture = UIPanGestureRecognizer()
         weak var surfaceView: UIView?
         private weak var configuredScrollView: UIScrollView?
@@ -574,6 +575,11 @@ private struct HorizontalMonthDragSurface: UIViewRepresentable {
         func detach() {
             configuredScrollView?.removeGestureRecognizer(panGesture)
             configuredScrollView = nil
+        }
+
+        func tearDown() {
+            detach()
+            panGesture.removeTarget(self, action: nil)
         }
 
         func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {

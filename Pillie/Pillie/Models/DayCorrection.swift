@@ -30,11 +30,14 @@ struct DayCorrectionOptions: Equatable {
 }
 
 /// A past calendar day the user may correct, resolved once by the grid so the
-/// sheet and the store never re-derive it.
-struct HistoryEditableDay: Identifiable {
+/// sheet never re-derives it. Plain values only: the store re-validates
+/// against a fresh snapshot when the correction is applied.
+struct HistoryEditableDay: Identifiable, Equatable {
     var id: Date { date }
     let date: Date
-    let snapshot: PillScheduleSnapshot
+    /// The method of the pack that owns this day, which may differ from the
+    /// current pack's method.
+    let method: ContraceptiveMethod
     let options: DayCorrectionOptions
 }
 
@@ -51,8 +54,11 @@ enum DayCorrectionPolicy {
             return nil
         }
         // Reinserting the ring starts a new cycle (`markActionAsTaken`), which a
-        // single-day rewrite cannot reproduce. Those days stay read-only.
-        guard due.type != .ringReinsert else { return nil }
+        // single-day rewrite cannot reproduce. Both faces of that day stay
+        // read-only: the missed reinsert on the old pack (due `.ringReinsert`)
+        // and the auto-started pack's day 1, whose schedule says `.ringInsert`
+        // but whose record was written as `.ringReinsert`.
+        guard due.type != .ringReinsert, snapshot.actionType != .ringReinsert else { return nil }
 
         switch (due.type.isBreakType, snapshot.status) {
         case (true, .taken), (true, .missed):

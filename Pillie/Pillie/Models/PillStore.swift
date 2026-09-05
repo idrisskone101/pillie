@@ -389,10 +389,11 @@ class PillStore {
                 continue
             }
 
+            // A user-declared skip neither extends nor ends the streak.
+            guard snapshot.countsTowardAdherence else { continue }
+
             if snapshot.status == .taken {
                 streak += 1
-            } else if snapshot.status == .breakDay {
-                continue
             } else {
                 break
             }
@@ -941,11 +942,8 @@ class PillStore {
                 modelContext.delete(targetPack)
                 // Restore previous pack and unmark its ringReinsert
                 previousPack.isCurrent = true
-                if let prevRecord = dayRecord(forPackID: previousPack.id, epochDay: dayEpoch),
-                   prevRecord.actionType == .ringReinsert {
-                    modelContext.delete(prevRecord)
-                    removeDayRecordIndex(forPackID: previousPack.id, epochDay: dayEpoch)
-                    invalidateSnapshotCache(forPackID: previousPack.id, epochDay: dayEpoch)
+                if dayRecord(forPackID: previousPack.id, epochDay: dayEpoch)?.actionType == .ringReinsert {
+                    deleteDayRecord(in: previousPack, day: day)
                 }
                 persist()
                 packs = Self.fetchPacks(context: modelContext)
