@@ -68,6 +68,7 @@ final class CycleTransitionNoticeTests: XCTestCase {
                 lastCallMinute: 0,
                 trialGrantDate: nil,
                 hasEntitlement: false,
+                servedBaseFireDateByDueDayEpoch: [:],
                 calendar: calendar
             )
         )
