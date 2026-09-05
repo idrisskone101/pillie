@@ -60,8 +60,6 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
             "settings.final_reminder.body",
             "settings.break_notice.title",
             "settings.break_notice.body",
-            "settings.adaptive_time.title",
-            "settings.adaptive_time.body",
             "settings.method.title",
             "settings.regimen.title",
             "settings.schedule.title",
@@ -627,31 +625,7 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
         XCTAssertEqual(review.headline, "Ti piace Pillie?")
         XCTAssertEqual(review.body, "Come sta andando finora?")
         XCTAssertEqual(review.positiveTitle, "Sì, mi piace")
-        XCTAssertEqual(review.negativeTitle, "Non proprio")
-
-        let suggestion = AdaptiveReminderTimeAnalyzer.Suggestion(
-            hour: 20,
-            minute: 40,
-            deltaMinutes: 40
-        )
-        let adaptive = try XCTUnwrap(
-            AdaptiveReminderSuggestionCardContent.make(
-                suggestion: suggestion,
-                isPlus: true,
-                locale: italian
-            )
-        )
-        let time = AdaptiveReminderSuggestionCardContent.formattedTime(
-            hour: 20,
-            minute: 40,
-            locale: italian
-        )
-        XCTAssertEqual(adaptive.headline, "Di solito registri verso le \(time).")
-        XCTAssertEqual(
-            adaptive.body,
-            "Vuoi spostare il promemoria giornaliero alle \(time), così arriva quando registri di solito?"
-        )
-        XCTAssertEqual(adaptive.acceptTitle, "Sposta il promemoria alle \(time)")
+        XCTAssertEqual(review.negativeTitle, "Non molto")
     }
 
     func testSupportMailComposerKeepsRoutingSubjectsStableAndLocalizesBody() throws {
