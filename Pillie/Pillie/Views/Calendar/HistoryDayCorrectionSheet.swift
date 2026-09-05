@@ -5,9 +5,12 @@
 
 import SwiftUI
 
-/// Bottom sheet that rewrites one past day's status. The sheet sizes itself
-/// from its measured content so longer, wrapping localizations never clip
-/// the last row.
+/// Bottom sheet that rewrites one past day's status.
+///
+/// Height is a fixed detent derived from the option count — not measured from
+/// the sheet's own geometry. Measuring into `presentationDetents` creates a
+/// feedback loop (content fills the detent → reports a larger height → detent
+/// grows) that eventually expands the sheet to full screen.
 struct HistoryDayCorrectionSheet: View {
     let day: HistoryEditableDay
     let onSelect: (DayCorrectionOutcome) -> Void
@@ -15,57 +18,64 @@ struct HistoryDayCorrectionSheet: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.locale) private var locale
     @Environment(PillStore.self) private var store
-    @State private var contentHeight: CGFloat = 320
     /// A second tap while the sheet is animating out must not commit twice.
     @State private var hasSelected = false
 
+    /// Grabber + title block + rows + bottom pad. Sized for default Dynamic
+    /// Type; larger text scrolls inside the detent instead of growing it.
+    private var presentationHeight: CGFloat {
+        let rows = CGFloat(day.options.selectableOutcomes.count)
+        return 108 + rows * 78 + 48
+    }
+
     var body: some View {
-        VStack(spacing: 16) {
-            Capsule()
-                .fill(PillieTheme.hairline)
-                .frame(width: 40, height: 4)
-                .padding(.top, 12)
+        ScrollView {
+            VStack(spacing: 16) {
+                Capsule()
+                    .fill(PillieTheme.hairline)
+                    .frame(width: 40, height: 4)
+                    .padding(.top, 12)
 
-            VStack(spacing: 4) {
-                Text(day.date.formatted(
-                    Date.FormatStyle()
-                        .weekday(.wide)
-                        .day()
-                        .locale(locale)
-                ))
-                .font(.pillieExtraBold(28))
-                .tracking(-0.56)
-                .foregroundStyle(PillieTheme.dark)
-                .frame(maxWidth: .infinity, alignment: .leading)
+                VStack(spacing: 4) {
+                    Text(day.date.formatted(
+                        Date.FormatStyle()
+                            .weekday(.wide)
+                            .day()
+                            .locale(locale)
+                    ))
+                    .font(.pillieExtraBold(28))
+                    .tracking(-0.56)
+                    .foregroundStyle(PillieTheme.dark)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .fixedSize(horizontal: false, vertical: true)
 
-                // The reminder time is the current one: past reminder times
-                // are not stored.
-                Text(HistoryPresentation.doseSubtitle(
-                    reminderHour: store.reminderHour,
-                    reminderMinute: store.reminderMinute,
-                    method: day.method,
-                    locale: locale
-                ))
-                .font(.pillieBody())
-                .foregroundStyle(PillieTheme.textMuted)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            }
+                    // The reminder time is the current one: past reminder times
+                    // are not stored.
+                    Text(HistoryPresentation.doseSubtitle(
+                        reminderHour: store.reminderHour,
+                        reminderMinute: store.reminderMinute,
+                        method: day.method,
+                        locale: locale
+                    ))
+                    .font(.pillieBody())
+                    .foregroundStyle(PillieTheme.textMuted)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .fixedSize(horizontal: false, vertical: true)
+                }
 
-            VStack(spacing: 8) {
-                ForEach(day.options.selectableOutcomes, id: \.self) { outcome in
-                    correctionRow(outcome)
+                VStack(spacing: 8) {
+                    ForEach(day.options.selectableOutcomes, id: \.self) { outcome in
+                        correctionRow(outcome)
+                    }
                 }
             }
+            .padding(.horizontal, 20)
+            .padding(.bottom, 36)
+            .frame(maxWidth: .infinity, alignment: .top)
         }
-        .padding(.horizontal, 20)
-        .padding(.bottom, 36)
-        .frame(maxWidth: .infinity, alignment: .top)
-        .onGeometryChange(for: CGFloat.self) { proxy in
-            proxy.size.height
-        } action: { height in
-            contentHeight = height
-        }
-        .presentationDetents([.height(contentHeight)])
+        .scrollBounceBehavior(.basedOnSize)
+        .scrollIndicators(.hidden)
+        .presentationDetents([.height(presentationHeight)])
         .presentationDragIndicator(.hidden)
         .presentationBackground(PillieTheme.cardWhite)
         .presentationCornerRadius(PillieTheme.cardRadius)
