@@ -4,7 +4,7 @@
 //
 //  Value-type unit tests (no hosted @MainActor XCTest) for the Sentiment Gate
 //  card content factory (PRD #132 / ADR 0005). Mirrors
-//  AdaptiveReminderSuggestionCardContentTests.
+//  ReviewPromptCardContentTests.
 //
 
 import XCTest

@@ -14,7 +14,6 @@ TEST_TARGET="PillieTests"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_DIR="$SCRIPT_DIR/.."
 REPO_ROOT="$(cd "$PROJECT_DIR/.." && pwd)"
-REPO_NAME="$(basename "$REPO_ROOT")"
 PROJECT_PATH="$PROJECT_DIR/Pillie.xcodeproj"
 . "$SCRIPT_DIR/xcode-env.sh"
 
@@ -36,10 +35,6 @@ Environment overrides:
   PILLIE_TEST_PARALLEL=YES       re-enable per-core simulator clones
   PILLIE_KEEP_EXTRA_SIMS=YES     leave other booted simulators running
 USAGE
-}
-
-safe_name() {
-  printf "%s" "$1" | tr -cs '[:alnum:]_.-' '-' | sed 's/^-//; s/-$//'
 }
 
 normalize_test_identifier() {
@@ -67,19 +62,7 @@ if ! command -v xcodebuildmcp >/dev/null 2>&1; then
   exit 127
 fi
 
-if [[ -n "${PILLIE_DERIVED_DATA:-}" ]]; then
-  DERIVED_DATA="$PILLIE_DERIVED_DATA"
-elif [[ "$REPO_ROOT" == "$HOME/.codex/worktrees/"* ]]; then
-  WORKTREE_ID="$(basename "$(dirname "$REPO_ROOT")")"
-  DERIVED_DATA="/tmp/PillieDerivedData-codex-$(safe_name "$WORKTREE_ID")"
-elif [[ "$REPO_ROOT" == *"/.claude/worktrees/"* ]]; then
-  WORKTREE_ID="${REPO_ROOT##*/.claude/worktrees/}"
-  DERIVED_DATA="/tmp/PillieDerivedData-claude-$(safe_name "$WORKTREE_ID")"
-elif [[ "$REPO_NAME" == "Pillie" ]]; then
-  DERIVED_DATA="/tmp/PillieDerivedData"
-else
-  DERIVED_DATA="/tmp/PillieDerivedData-$(safe_name "$REPO_NAME")"
-fi
+DERIVED_DATA="$(pillie_derived_data_for_repo_root "$REPO_ROOT")"
 
 ONLY_TESTING_ARGS=()
 for test_identifier in "$@"; do

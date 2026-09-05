@@ -14,7 +14,7 @@ final class DueActionCopyTests: XCTestCase {
         XCTAssertEqual(label(.ringInsert, method: .ring, day: 1), "Insert ring")
         XCTAssertEqual(label(.ringReinsert, method: .ring, day: 1), "Change ring")
         XCTAssertEqual(label(.ringRemove, method: .ring, day: 22), "Remove ring")
-        XCTAssertEqual(label(.pillBreak, method: .pill, day: 22), "there's nothing due today.")
+        XCTAssertEqual(label(.pillBreak, method: .pill, day: 22), "There's nothing due today.")
     }
 
     func testMethodAwareProtectionCopyUsesApplyOnFirstPatchDay() {

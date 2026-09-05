@@ -96,6 +96,7 @@ final class LastCallReminderPlannerTests: XCTestCase {
             lastCallMinute: lastCallMinute,
             trialGrantDate: nil,
             hasEntitlement: false,
+            servedBaseFireDateByDueDayEpoch: [:],
             calendar: calendar
         )
     }

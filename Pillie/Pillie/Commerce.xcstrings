@@ -105,13 +105,13 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Il blocco delle app è una funzione di Pillie Plus configurabile dopo l’upgrade."
+            "value": "Il blocco è Plus. Setup dopo l’upgrade."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Die App-Pause ist eine Pillie-Plus-Funktion, die du nach dem Upgrade einrichten kannst."
+            "value": "App-Pause ist Plus. Setup nach dem Upgrade."
           }
         }
       }
@@ -168,19 +168,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "you get more than one ping with pillie plus."
+            "value": "More than one ping with Pillie Plus."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "con pillie plus hai più di un ping."
+            "value": "Più di un ping con Pillie Plus."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "mit Pillie Plus bekommst du mehr als einen Ping."
+            "value": "Mehr als ein Ping mit Pillie Plus."
           }
         }
       }
@@ -191,19 +191,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "if one reminder isn't enough, it keeps pinging until you log today. your apps can pause when it's due, and you also get shake to confirm, your own reminder messages, and whatever comes next."
+            "value": "Pillie Plus keeps pinging until you log today, and can pause apps until you check in."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "se un promemoria non basta, continua a mandare ping finché non registri oggi. le tue app possono andare in pausa quando è l'ora, e hai anche scuoti per registrare, i tuoi testi dei promemoria, e quello che arriva dopo."
+            "value": "Plus continua a mandare ping e può pausare le app."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "wenn eine Erinnerung nicht reicht, pingt es weiter, bis du heute einträgst. deine Apps können pausieren, wenn es soweit ist, und du bekommst außerdem schütteln zum Eintragen, eigene Erinnerungstexte, und was noch kommt."
+            "value": "Plus pingt weiter und kann Apps pausieren."
           }
         }
       }
@@ -214,19 +214,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "daily reminders"
+            "value": "Daily reminders"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "promemoria giornalieri"
+            "value": "Promemoria giornalieri"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "tägliche Erinnerungen"
+            "value": "Tägliche Erinnerungen"
           }
         }
       }
@@ -237,19 +237,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "smart reminders"
+            "value": "Smart reminders"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "promemoria smart"
+            "value": "Promemoria smart"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "smarte Erinnerungen"
+            "value": "Smarte Erinnerungen"
           }
         }
       }
@@ -260,13 +260,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "app blocking"
+            "value": "App blocking"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "blocco app"
+            "value": "Blocco app"
           }
         },
         "de": {
@@ -283,19 +283,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "shake to confirm"
+            "value": "Shake to confirm"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "scuoti per registrare"
+            "value": "Scuoti per registrare"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "schütteln zum Eintragen"
+            "value": "Schütteln zum Eintragen"
           }
         }
       }
@@ -306,13 +306,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "reminder messages"
+            "value": "Reminder messages"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "testi dei promemoria"
+            "value": "Testi dei promemoria"
           }
         },
         "de": {
@@ -329,19 +329,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "future features"
+            "value": "Future features"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "il resto dopo"
+            "value": "Il resto dopo"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "was noch kommt"
+            "value": "Was noch kommt"
           }
         }
       }
@@ -352,13 +352,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "app blocking"
+            "value": "App blocking"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "blocco app"
+            "value": "Blocco app"
           }
         },
         "de": {
@@ -375,13 +375,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "reminder messages"
+            "value": "Reminder messages"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "testi dei promemoria"
+            "value": "Testi dei promemoria"
           }
         },
         "de": {
@@ -398,19 +398,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "future features"
+            "value": "Future features"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "il resto dopo"
+            "value": "Il resto dopo"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "was noch kommt"
+            "value": "Was noch kommt"
           }
         }
       }
@@ -421,19 +421,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "annual"
+            "value": "Annual"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "annuale"
+            "value": "Annuale"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "jährlich"
+            "value": "Jährlich"
           }
         }
       }
@@ -444,19 +444,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "monthly"
+            "value": "Monthly"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "mensile"
+            "value": "Mensile"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "monatlich"
+            "value": "Monatlich"
           }
         }
       }
@@ -467,19 +467,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "best value"
+            "value": "Best value"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "conviene di più"
+            "value": "Conviene di più"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "bestes Angebot"
+            "value": "Bestes Angebot"
           }
         }
       }
@@ -536,19 +536,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "you can manage or cancel anytime in settings."
+            "value": "You can manage or cancel anytime in settings."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "puoi gestire o disdire quando vuoi dalle impostazioni."
+            "value": "Puoi gestire o disdire quando vuoi dalle impostazioni."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "du kannst jederzeit in den Einstellungen verwalten oder kündigen."
+            "value": "Du kannst jederzeit in den Einstellungen verwalten oder kündigen."
           }
         }
       }
@@ -559,19 +559,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "cancel anytime"
+            "value": "Cancel anytime"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "disdici quando vuoi"
+            "value": "Disdici quando vuoi"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "jederzeit kündbar"
+            "value": "Jederzeit kündbar"
           }
         }
       }
@@ -674,19 +674,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "included in Free and Plus"
+            "value": "Included in Free and Plus"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "disponibilità: Free e Plus"
+            "value": "Disponibilità: Free e Plus"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "im kostenlosen Tarif und in Plus enthalten"
+            "value": "Im kostenlosen Tarif und in Plus enthalten"
           }
         }
       }
@@ -703,13 +703,13 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "disponibilità: solo Plus"
+            "value": "Disponibilità: solo Plus"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "nur Plus"
+            "value": "Nur Plus"
           }
         }
       }
@@ -726,13 +726,13 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "disponibilità: solo Free"
+            "value": "Disponibilità: solo Free"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "nur im kostenlosen Tarif"
+            "value": "Nur im kostenlosen Tarif"
           }
         }
       }
@@ -743,19 +743,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "not included"
+            "value": "Not included"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "disponibilità: nessuna"
+            "value": "Disponibilità: nessuna"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "nicht enthalten"
+            "value": "Nicht enthalten"
           }
         }
       }
@@ -927,13 +927,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "14 days free · no card"
+            "value": "14 Days free · no card"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "14 giorni gratis · nessuna carta"
+            "value": "14 Giorni gratis · nessuna carta"
           }
         },
         "de": {
@@ -950,19 +950,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "your next two weeks are"
+            "value": "Your next two weeks are"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "le tue prossime due settimane sono"
+            "value": "Le tue prossime due settimane sono"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "deine nächsten zwei Wochen gehen"
+            "value": "Deine nächsten zwei Wochen gehen"
           }
         }
       }
@@ -1203,19 +1203,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "your pillie plus trial starts now. here's what's included."
+            "value": "Your Pillie Plus trial starts now. Here's what's included."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "il tuo trial di pillie plus inizia ora. ecco cosa c'è dentro."
+            "value": "Il tuo trial di Pillie Plus inizia ora. Ecco cosa c'è dentro."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "dein Pillie Plus-Trial startet jetzt. hier ist, was drin ist."
+            "value": "Dein Pillie Plus-Trial startet jetzt. Hier ist, was drin ist."
           }
         }
       }
@@ -1226,19 +1226,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "your free trial lasts 14 days. no card needed. app blocking turns off when it ends, and reminders stay free."
+            "value": "14 days free, no card needed. App blocking turns off after the trial. Reminders stay free."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "il tuo trial gratis dura 14 giorni. non serve la carta. il blocco app si spegne quando finisce, e i promemoria restano gratis."
+            "value": "14 giorni gratis, niente carta. Il blocco finisce col trial. I promemoria restano gratis."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "dein Gratis-Trial dauert 14 Tage. keine Karte nötig. App-Pause geht aus, wenn er endet, und Erinnerungen bleiben kostenlos."
+            "value": "14 Tage gratis, keine Karte. App-Pause endet mit dem Trial. Erinnerungen bleiben frei."
           }
         }
       }
@@ -1249,19 +1249,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "your free trial lasts 14 days. no card needed. after it ends, you can choose monthly, annual, or lifetime to keep plus."
+            "value": "Your free trial lasts 14 days. No card needed. After it ends, choose monthly, annual, or lifetime to keep Plus."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "il tuo trial gratis dura 14 giorni. non serve la carta. dopo puoi scegliere mensile, annuale o a vita per tenere plus."
+            "value": "Il tuo trial gratis dura 14 giorni. Non serve la carta. Dopo puoi scegliere mensile, annuale o a vita per tenere plus."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "dein Gratis-Trial dauert 14 Tage. keine Karte nötig. danach kannst du monatlich, jährlich oder lebenslang wählen, um Plus zu behalten."
+            "value": "Dein Gratis-Trial dauert 14 Tage. Keine Karte nötig. Danach kannst du monatlich, jährlich oder lebenslang wählen, um Plus zu behalten."
           }
         }
       }
@@ -1364,19 +1364,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "try your plus features."
+            "value": "Try your Plus features."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "prova le tue funzioni plus."
+            "value": "Prova le tue funzioni plus."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "probier deine Plus-Features."
+            "value": "Probier deine Plus-Features."
           }
         }
       }
@@ -1410,19 +1410,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "your trial ends on %@."
+            "value": "Your trial ends on %@."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "il tuo trial finisce il %@."
+            "value": "Il tuo trial finisce il %@."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "dein Trial endet am %@."
+            "value": "Dein Trial endet am %@."
           }
         }
       }
@@ -1433,19 +1433,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "when the trial ends."
+            "value": "When the trial ends."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "quando il trial finisce."
+            "value": "Quando il trial finisce."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "wenn der Trial endet."
+            "value": "Wenn der Trial endet."
           }
         }
       }
@@ -1456,13 +1456,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "plus is on · %lld days left"
+            "value": "Plus is on · %lld days left"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "plus è attivo · %lld giorni rimasti"
+            "value": "Plus è attivo · %lld giorni rimasti"
           }
         },
         "de": {
@@ -1479,13 +1479,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "plus is on · it ends tonight."
+            "value": "Plus is on · it ends tonight."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "plus è attivo · finisce stasera."
+            "value": "Plus è attivo · finisce stasera."
           }
         },
         "de": {
@@ -1502,13 +1502,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "set up app blocking · %lld days left"
+            "value": "Set up app blocking · %lld days left"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "imposta il blocco app · %lld giorni rimasti"
+            "value": "Imposta il blocco app · %lld giorni rimasti"
           }
         },
         "de": {
@@ -1525,13 +1525,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "set up app blocking · it ends tonight."
+            "value": "Set up app blocking · it ends tonight."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "imposta il blocco app · finisce stasera."
+            "value": "Imposta il blocco app · finisce stasera."
           }
         },
         "de": {
@@ -1571,19 +1571,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "pillie plus access pauses."
+            "value": "Pillie Plus access pauses."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "l'accesso a pillie plus va in pausa."
+            "value": "L'accesso a Pillie Plus va in pausa."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "der Pillie Plus-Zugang pausiert."
+            "value": "Der Pillie Plus-Zugang pausiert."
           }
         }
       }
@@ -1594,19 +1594,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "you can choose monthly, annual, or lifetime to continue."
+            "value": "You can choose monthly, annual, or lifetime to continue."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "puoi scegliere mensile, annuale o a vita per continuare."
+            "value": "Puoi scegliere mensile, annuale o a vita per continuare."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "du kannst monatlich, jährlich oder lebenslang wählen, um weiterzumachen."
+            "value": "Du kannst monatlich, jährlich oder lebenslang wählen, um weiterzumachen."
           }
         }
       }
@@ -1640,19 +1640,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "your app blocking setup is saved."
+            "value": "Your app blocking setup is saved."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "la tua configurazione del blocco app è salvata."
+            "value": "La tua configurazione del blocco app è salvata."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "dein App-Pause-Setup ist gespeichert."
+            "value": "Dein App-Pause-Setup ist gespeichert."
           }
         }
       }
@@ -1686,19 +1686,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "your 14 days"
+            "value": "Your 14 days"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "i tuoi 14 giorni"
+            "value": "I tuoi 14 giorni"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "deine 14 Tage"
+            "value": "Deine 14 Tage"
           }
         }
       }
@@ -1709,19 +1709,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "your pillie plus trial is over."
+            "value": "Your Pillie Plus trial is over."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "il tuo trial di pillie plus è finito."
+            "value": "Il tuo trial di Pillie Plus è finito."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "dein Pillie Plus-Trial ist vorbei."
+            "value": "Dein Pillie Plus-Trial ist vorbei."
           }
         }
       }
@@ -1755,13 +1755,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "apps paused"
+            "value": "Apps paused"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "app in pausa"
+            "value": "App in pausa"
           }
         },
         "de": {
@@ -1778,13 +1778,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "actions logged"
+            "value": "Actions logged"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "azioni registrate"
+            "value": "Azioni registrate"
           }
         },
         "de": {
@@ -1801,19 +1801,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "current streak"
+            "value": "Current streak"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "streak attuale"
+            "value": "Streak attuale"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "aktuelle Serie"
+            "value": "Aktuelle Serie"
           }
         }
       }
@@ -1824,13 +1824,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "reminders stay available."
+            "value": "Reminders stay available."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "i promemoria restano."
+            "value": "I promemoria restano."
           }
         },
         "de": {
@@ -1870,19 +1870,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "pillie plus is on. you can set up app blocking whenever you're ready."
+            "value": "Pillie Plus is on. You can set up app blocking whenever you're ready."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "pillie plus è attivo. puoi impostare il blocco app quando vuoi."
+            "value": "Pillie Plus è attivo. Puoi impostare il blocco app quando vuoi."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus ist an. du kannst App-Pause einrichten, wann du soweit bist."
+            "value": "Pillie Plus ist an. Du kannst App-Pause einrichten, wann du soweit bist."
           }
         }
       }
@@ -1893,13 +1893,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "pillie plus is on again."
+            "value": "Pillie Plus is on again."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "pillie plus è di nuovo attivo."
+            "value": "Pillie Plus è di nuovo attivo."
           }
         },
         "de": {
@@ -1945,13 +1945,13 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "consigliato"
+            "value": "Consigliato"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "empfohlen"
+            "value": "Empfohlen"
           }
         }
       }
@@ -1985,19 +1985,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "active"
+            "value": "Active"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "attivo"
+            "value": "Attivo"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "aktiv"
+            "value": "Aktiv"
           }
         }
       }
@@ -2014,13 +2014,13 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "attivo da solo"
+            "value": "Attivo da solo"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "automatisch aktiv"
+            "value": "Automatisch aktiv"
           }
         }
       }
@@ -2060,13 +2060,13 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "personalizzato"
+            "value": "Personalizzato"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "angepasst"
+            "value": "Angepasst"
           }
         }
       }
@@ -2083,13 +2083,13 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "attivo"
+            "value": "Attivo"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "an"
+            "value": "An"
           }
         }
       }
@@ -2215,19 +2215,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "one quick question."
+            "value": "One quick question."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "una domanda veloce."
+            "value": "Una domanda veloce."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "eine kurze Frage."
+            "value": "Eine kurze Frage."
           }
         }
       }
@@ -2238,19 +2238,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "what made pillie plus not the right fit?"
+            "value": "What made Pillie Plus not the right fit?"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "cosa ha fatto sì che pillie plus non fosse quello giusto?"
+            "value": "Cosa ha fatto sì che Pillie Plus non fosse quello giusto?"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "warum war Pillie Plus nicht das Richtige?"
+            "value": "Warum war Pillie Plus nicht das Richtige?"
           }
         }
       }
@@ -2261,19 +2261,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "this is optional. you can skip and keep using pillie for free."
+            "value": "This is optional. You can skip and keep using Pillie for free."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "questo è facoltativo. puoi saltare e continuare a usare pillie gratis."
+            "value": "Questo è facoltativo. Puoi saltare e continuare a usare Pillie gratis."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "das ist optional. du kannst überspringen und Pillie weiter kostenlos nutzen."
+            "value": "Das ist optional. Du kannst überspringen und Pillie weiter kostenlos nutzen."
           }
         }
       }
@@ -2491,19 +2491,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "too expensive."
+            "value": "Too expensive."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "troppo caro."
+            "value": "Troppo caro."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "zu teuer."
+            "value": "Zu teuer."
           }
         }
       }
@@ -2514,19 +2514,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "i don't use it enough."
+            "value": "I don't use it enough."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "non lo uso abbastanza."
+            "value": "Non lo uso abbastanza."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "ich nutze es nicht genug."
+            "value": "Ich nutze es nicht genug."
           }
         }
       }
@@ -2537,19 +2537,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "it's missing a feature."
+            "value": "It's missing a feature."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "manca una funzione."
+            "value": "Manca una funzione."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "da fehlt eine Funktion."
+            "value": "Da fehlt eine Funktion."
           }
         }
       }
@@ -2560,19 +2560,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "i was just trying it."
+            "value": "I was just trying it."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "lo stavo solo provando."
+            "value": "Lo stavo solo provando."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "ich hab's nur ausprobiert."
+            "value": "Ich hab's nur ausprobiert."
           }
         }
       }
@@ -2583,19 +2583,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "i use something else."
+            "value": "I use something else."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "uso un'altra app."
+            "value": "Uso un'altra app."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "ich nutze was anderes."
+            "value": "Ich nutze was anderes."
           }
         }
       }
@@ -2606,19 +2606,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "something broke."
+            "value": "Something broke."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "qualcosa si è rotto."
+            "value": "Qualcosa si è rotto."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "irgendwas ist kaputtgegangen."
+            "value": "Irgendwas ist kaputtgegangen."
           }
         }
       }
@@ -2629,19 +2629,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "other."
+            "value": "Other."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "altro."
+            "value": "Altro."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "sonstiges."
+            "value": "Sonstiges."
           }
         }
       }
@@ -2675,19 +2675,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "keeps pinging until you log today. you pick how often, how many, and the last ping."
+            "value": "Keeps pinging until you log today. You pick how often, how many, and the last ping."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "pingt weiter, bis du heute einträgst. du wählst wie oft, wie viele, und den letzten Ping."
+            "value": "Pingt weiter, bis du heute einträgst. Du wählst wie oft, wie viele, und den letzten Ping."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "continua a mandare ping finché non registri oggi. scegli ogni quanto, quanti, e l'ultimo ping."
+            "value": "Continua a mandare ping finché non registri oggi. Scegli ogni quanto, quanti, e l'ultimo ping."
           }
         }
       }
@@ -2698,19 +2698,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "your apps pause when the reminder is due, until you take your pill."
+            "value": "Your apps pause when the reminder is due, until you take your pill."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "deine Apps pausieren, wenn die Erinnerung kommt, bis du deine Pille nimmst."
+            "value": "Deine Apps pausieren, wenn die Erinnerung kommt, bis du deine Pille nimmst."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "le tue app vanno in pausa quando arriva il promemoria, finché non prendi la pillola."
+            "value": "Le tue app vanno in pausa quando arriva il promemoria, finché non prendi la pillola."
           }
         }
       }
@@ -2721,19 +2721,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "your apps pause when the reminder is due, until you apply your patch."
+            "value": "Your apps pause when the reminder is due, until you apply your patch."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "deine Apps pausieren, wenn die Erinnerung kommt, bis du das Pflaster aufklebst."
+            "value": "Deine Apps pausieren, wenn die Erinnerung kommt, bis du das Pflaster aufklebst."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "le tue app vanno in pausa quando arriva il promemoria, finché non applichi il cerotto."
+            "value": "Le tue app vanno in pausa quando arriva il promemoria, finché non applichi il cerotto."
           }
         }
       }
@@ -2744,19 +2744,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "your apps pause when the reminder is due, until you change your patch."
+            "value": "Your apps pause when the reminder is due, until you change your patch."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "deine Apps pausieren, wenn die Erinnerung kommt, bis du das Pflaster wechselst."
+            "value": "Deine Apps pausieren, wenn die Erinnerung kommt, bis du das Pflaster wechselst."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "le tue app vanno in pausa quando arriva il promemoria, finché non cambi il cerotto."
+            "value": "Le tue app vanno in pausa quando arriva il promemoria, finché non cambi il cerotto."
           }
         }
       }
@@ -2767,19 +2767,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "your apps pause when the reminder is due, until you remove your patch."
+            "value": "Your apps pause when the reminder is due, until you remove your patch."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "deine Apps pausieren, wenn die Erinnerung kommt, bis du das Pflaster abnimmst."
+            "value": "Deine Apps pausieren, wenn die Erinnerung kommt, bis du das Pflaster abnimmst."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "le tue app vanno in pausa quando arriva il promemoria, finché non togli il cerotto."
+            "value": "Le tue app vanno in pausa quando arriva il promemoria, finché non togli il cerotto."
           }
         }
       }
@@ -2790,19 +2790,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "your apps pause when the reminder is due, until you insert your ring."
+            "value": "Your apps pause when the reminder is due, until you insert your ring."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "deine Apps pausieren, wenn die Erinnerung kommt, bis du den Ring einsetzt."
+            "value": "Deine Apps pausieren, wenn die Erinnerung kommt, bis du den Ring einsetzt."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "le tue app vanno in pausa quando arriva il promemoria, finché non inserisci l'anello."
+            "value": "Le tue app vanno in pausa quando arriva il promemoria, finché non inserisci l'anello."
           }
         }
       }
@@ -2813,19 +2813,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "your apps pause when the reminder is due, until you change your ring."
+            "value": "Your apps pause when the reminder is due, until you change your ring."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "deine Apps pausieren, wenn die Erinnerung kommt, bis du den Ring wechselst."
+            "value": "Deine Apps pausieren, wenn die Erinnerung kommt, bis du den Ring wechselst."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "le tue app vanno in pausa quando arriva il promemoria, finché non cambi l'anello."
+            "value": "Le tue app vanno in pausa quando arriva il promemoria, finché non cambi l'anello."
           }
         }
       }
@@ -2836,19 +2836,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "your apps pause when the reminder is due, until you remove your ring."
+            "value": "Your apps pause when the reminder is due, until you remove your ring."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "deine Apps pausieren, wenn die Erinnerung kommt, bis du den Ring rausnimmst."
+            "value": "Deine Apps pausieren, wenn die Erinnerung kommt, bis du den Ring rausnimmst."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "le tue app vanno in pausa quando arriva il promemoria, finché non togli l'anello."
+            "value": "Le tue app vanno in pausa quando arriva il promemoria, finché non togli l'anello."
           }
         }
       }
@@ -2859,7 +2859,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "pillie plus lifetime"
+            "value": "Pillie Plus lifetime"
           }
         },
         "de": {
@@ -2871,7 +2871,7 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "pillie plus a vita"
+            "value": "Pillie Plus a vita"
           }
         }
       }
@@ -2882,19 +2882,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "you had extra pings and paused apps for 14 days. keep plus if you want that to stay on."
+            "value": "You had extra pings and paused apps for 14 days. Keep Plus if you want that to stay on."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "du hattest extra Pings und pausierte Apps für 14 Tage. behalt Plus, wenn das so bleiben soll."
+            "value": "Du hattest extra Pings und pausierte Apps für 14 Tage. Behalt Plus, wenn das so bleiben soll."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "hai avuto ping extra e app in pausa per 14 giorni. tieni plus se vuoi che resti così."
+            "value": "Hai avuto ping extra e app in pausa per 14 giorni. Tieni plus se vuoi che resti così."
           }
         }
       }
@@ -2905,19 +2905,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "you had extra pings for 14 days. keep plus if you want those to stay on."
+            "value": "You had extra pings for 14 days. Keep Plus if you want those to stay on."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "du hattest extra Pings für 14 Tage. behalt Plus, wenn die so bleiben sollen."
+            "value": "Du hattest extra Pings für 14 Tage. Behalt Plus, wenn die so bleiben sollen."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "hai avuto ping extra per 14 giorni. tieni plus se vuoi che restino."
+            "value": "Hai avuto ping extra per 14 giorni. Tieni plus se vuoi che restino."
           }
         }
       }
@@ -2928,19 +2928,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "that was plus, working for you."
+            "value": "Your Plus trial just ended."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "das war Plus, und es hat für dich gearbeitet."
+            "value": "Deine Plus-Testphase ist vorbei."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "quello era plus, e funzionava per te."
+            "value": "La prova Plus è finita."
           }
         }
       }
@@ -2951,19 +2951,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "your 14 days ended, so app blocking is off. reminders stay free forever."
+            "value": "Your 14 days ended, so app blocking is off. Reminders stay free forever."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "deine 14 Tage sind um, also ist App-Pause aus. Erinnerungen bleiben für immer kostenlos."
+            "value": "Deine 14 Tage sind um, also ist App-Pause aus. Erinnerungen bleiben für immer kostenlos."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "i tuoi 14 giorni sono finiti, quindi il blocco app è spento. i promemoria restano gratis per sempre."
+            "value": "I tuoi 14 giorni sono finiti, quindi il blocco app è spento. I promemoria restano gratis per sempre."
           }
         }
       }
@@ -2974,19 +2974,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "your 14-day record"
+            "value": "Your 14-day record"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "dein 14-Tage-Stand"
+            "value": "Dein 14-Tage-Stand"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "il tuo resoconto di 14 giorni"
+            "value": "Il tuo resoconto di 14 giorni"
           }
         }
       }
@@ -2997,7 +2997,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "blocks intercepted"
+            "value": "Blocks intercepted"
           }
         },
         "de": {
@@ -3009,7 +3009,7 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "blocchi intercettati"
+            "value": "Blocchi intercettati"
           }
         }
       }
@@ -3020,19 +3020,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "logged on time"
+            "value": "Logged on time"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "rechtzeitig eingetragen"
+            "value": "Rechtzeitig eingetragen"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "registrato in orario"
+            "value": "Registrato in orario"
           }
         }
       }
@@ -3043,7 +3043,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "keep plus."
+            "value": "Keep Plus."
           }
         },
         "de": {
@@ -3055,7 +3055,7 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "tieni plus."
+            "value": "Tieni Plus."
           }
         }
       }
@@ -3066,19 +3066,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "worth keeping, right?"
+            "value": "Want to keep Plus?"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "das behält man, oder?"
+            "value": "Das behält man, oder?"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "vale la pena tenerlo, no?"
+            "value": "Vale la pena tenerlo, no?"
           }
         }
       }
@@ -3089,19 +3089,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "you had extra pings and paused apps for 14 days. keep plus if you want that to stay on."
+            "value": "You had extra pings and paused apps for 14 days. Keep Plus if you want that to stay on."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "du hattest extra Pings und pausierte Apps für 14 Tage. behalt Plus, wenn das so bleiben soll."
+            "value": "Du hattest extra Pings und pausierte Apps für 14 Tage. Behalt Plus, wenn das so bleiben soll."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "hai avuto ping extra e app in pausa per 14 giorni. tieni plus se vuoi che resti così."
+            "value": "Hai avuto ping extra e app in pausa per 14 giorni. Tieni plus se vuoi che resti così."
           }
         }
       }
@@ -3112,19 +3112,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "you had extra pings for 14 days. keep plus if you want those to stay on."
+            "value": "You had extra pings for 14 days. Keep Plus if you want those to stay on."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "du hattest extra Pings für 14 Tage. behalt Plus, wenn die so bleiben sollen."
+            "value": "Du hattest extra Pings für 14 Tage. Behalt Plus, wenn die so bleiben sollen."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "hai avuto ping extra per 14 giorni. tieni plus se vuoi che restino."
+            "value": "Hai avuto ping extra per 14 giorni. Tieni plus se vuoi che restino."
           }
         }
       }
@@ -3158,19 +3158,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "your 14-day record"
+            "value": "Your 14-day record"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "dein 14-Tage-Stand"
+            "value": "Dein 14-Tage-Stand"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "il tuo resoconto di 14 giorni"
+            "value": "Il tuo resoconto di 14 giorni"
           }
         }
       }
@@ -3181,7 +3181,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "blocks intercepted"
+            "value": "Blocks intercepted"
           }
         },
         "de": {
@@ -3193,7 +3193,7 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "blocchi intercettati"
+            "value": "Blocchi intercettati"
           }
         }
       }
@@ -3204,19 +3204,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "logged on time"
+            "value": "Logged on time"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "rechtzeitig eingetragen"
+            "value": "Rechtzeitig eingetragen"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "registrato in orario"
+            "value": "Registrato in orario"
           }
         }
       }
@@ -3227,19 +3227,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "worth keeping, right?"
+            "value": "Want to keep Plus?"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "das behält man, oder?"
+            "value": "Plus behalten?"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "vale la pena tenerlo, no?"
+            "value": "Vuoi tenere Plus?"
           }
         }
       }
@@ -3263,6 +3263,29 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tieni Plus"
+          }
+        }
+      }
+    },
+    "paywall.upsell.custom_messages.body": {
+      "comment": "Custom reminder messages plus-gate body",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Write the ping in your own words. Plus lets you change the daily one and the last one."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schreib den Ping in deinen Worten. Plus ändert den täglichen und den letzten."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scrivi il ping con le tue parole. Plus cambia quello giornaliero e l'ultimo."
           }
         }
       }

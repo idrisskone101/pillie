@@ -104,7 +104,7 @@ final class ProtectionPlanOnboardingContentTests: XCTestCase {
         let drag = ProtectionPlanEarlyValueProofContent.localized(
             locale: Locale(identifier: "en_US")
         ).dragCTA
-        XCTAssertEqual(drag, "drag this onto your apps.")
+        XCTAssertEqual(drag, "Drag this onto your apps.")
         XCTAssertTrue(drag.lowercased().contains("drag"))
     }
 
@@ -147,8 +147,8 @@ final class ProtectionPlanOnboardingContentTests: XCTestCase {
 
     func testDiagnosisContentUsesAnalyzeThenVerifyCopyNotAClinicalReadout() {
         let content = ProtectionPlanDiagnosisContent.localized(locale: english)
-        XCTAssertEqual(content.eyebrow, "next")
-        XCTAssertEqual(content.analyzingTitle, "Your personalised reminder plan")
+        XCTAssertEqual(content.eyebrow, "Next")
+        XCTAssertEqual(content.analyzingTitle, "Your reminder plan")
         XCTAssertEqual(content.analyzingSubtitle, "Built from the routine you selected.")
         XCTAssertEqual(content.protectedAppsHeader, "Protected apps")
         XCTAssertEqual(content.primaryCTA, "Continue")
@@ -224,7 +224,7 @@ final class ProtectionPlanOnboardingContentTests: XCTestCase {
         XCTAssertEqual(content.footer, "Teil deines Pillie-Erinnerungsplans.")
         XCTAssertEqual(
             content.unlockedConfirmation,
-            "Erledigt — deine Apps sind wieder verfügbar."
+            "Erledigt. Deine Apps sind wieder da."
         )
         XCTAssertEqual(
             content.replayAccessibilityHint,

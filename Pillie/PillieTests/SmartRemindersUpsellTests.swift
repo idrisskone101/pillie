@@ -14,7 +14,7 @@ final class SmartRemindersUpsellTests: XCTestCase {
         let title = commerce(content.localizedFeatureKey)
         let description = commerce(content.subtitleKey)
 
-        XCTAssertEqual(title, "smart reminders")
+        XCTAssertEqual(title, "Smart reminders")
         XCTAssertTrue(
             description.contains("until you log"),
             "Upsell must frame Smart Reminders as repeating until the user logs."
@@ -54,11 +54,21 @@ final class SmartRemindersUpsellTests: XCTestCase {
 
     func testAppBlockingUpsellUsesMethodAwareLockedBody() {
         let content = PlusUpsellContent.appBlocking()
-        XCTAssertEqual(commerce(content.localizedFeatureKey), "app blocking")
+        XCTAssertEqual(commerce(content.localizedFeatureKey), "App blocking")
         XCTAssertEqual(
             commerce(content.subtitleKey),
-            "your apps pause when the reminder is due, until you take your pill."
+            "Your apps pause when the reminder is due, until you take your pill."
         )
+    }
+
+    func testCustomRemindersUpsellUsesADedicatedBody() {
+        let content = PlusUpsellContent.customReminders
+        XCTAssertEqual(commerce(content.localizedFeatureKey), "Reminder messages")
+        XCTAssertEqual(
+            commerce(content.subtitleKey),
+            "Write the ping in your own words. Plus lets you change the daily one and the last one."
+        )
+        XCTAssertNotEqual(content.subtitleKey, content.localizedFeatureKey)
     }
 
     func testFeatureUpsellsRouteToStablePaywallSurfaces() {

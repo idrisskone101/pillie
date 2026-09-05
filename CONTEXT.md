@@ -60,10 +60,6 @@ _Avoid_: Daily reminders, smart notifications for free users, never-miss reminde
 A single same-day end-of-day re-fire of a Due Action Reminder that fires only when the due action is still untaken, as a final backstop before the day rolls over and the action becomes missed. It is a member of [[Smart Reminders]] and requires a Pillie Plus entitlement, but it is its own concept with its own on/off toggle and fires independently of the Auto-Reminder Retry cadence — it still fires when the retry limit is 0 or after retries are exhausted, and it does not fire when the Auto-Reminder Retry has already converted the action to taken. There is at most one Last Call Reminder per due action per day. It does not change the primary reminder time and is not a medical or efficacy claim.
 _Avoid_: Auto-Reminder Retry, final retry, missed-dose alert, daily summary, free-tier backstop
 
-**Adaptive Reminder Time Suggestion**:
-A Pillie Plus, on-device suggestion that the user shift their primary reminder time toward when they actually log, derived from the gap between the Due Action Time and recent real log times. It only ever suggests — the user confirms the change; Pillie never silently moves the reminder time, because reminder time is a Schedule-Critical Setting that also anchors the blocking window. It surfaces as a dismissible in-app suggestion, not a push notification, and its log-time signal stays on-device and is never sent as Product Analytics Telemetry. It does not add or change Smart Reminders re-fires.
-_Avoid_: Auto-adjust reminder, silent reschedule, smart push, learned reminder notification
-
 **Supply Reminder**:
 A local reminder about remaining contraception supply: pill refills or patch restocks. Ring routines do not currently expose a supply reminder setting in the launched app.
 _Avoid_: Due action reminder, ring refill reminder
@@ -193,7 +189,7 @@ The clearly visible in-app state after a [[Reverse Trial]] expires without purch
 _Avoid_: Config wipe, silent lapse, disabled account, error state
 
 **Plus Access**:
-The single gate every Pillie Plus feature checks: a user has Plus Access iff they hold a Plus entitlement or an active [[Reverse Trial]]. All Plus features — Plus App Blocking, [[Smart Reminders]], [[Custom Reminder Message]], [[Adaptive Reminder Time Suggestion]] — honor the same gate; there is no per-feature trial gating and no "blocker-only trial" tier.
+The single gate every Pillie Plus feature checks: a user has Plus Access iff they hold a Plus entitlement or an active [[Reverse Trial]]. All Plus features — Plus App Blocking, [[Smart Reminders]], [[Custom Reminder Message]] — honor the same gate; there is no per-feature trial gating and no "blocker-only trial" tier.
 _Avoid_: Plus entitlement (when trial should also count), blocker-only trial, per-feature trial flags
 
 **Review Prompt Eligibility**:

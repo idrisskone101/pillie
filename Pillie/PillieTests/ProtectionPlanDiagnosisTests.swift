@@ -170,27 +170,25 @@ final class ProtectionPlanDiagnosisTests: XCTestCase {
     }
 
     func testDiagnosisHeadlineUsesTheMethodWord() {
-        XCTAssertEqual(diagnosis(method: .pill).headline, "Your Draft Pill Protection Plan")
-        XCTAssertEqual(diagnosis(method: .patch).headline, "Your Draft Patch Protection Plan")
-        XCTAssertEqual(diagnosis(method: .ring).headline, "Your Draft Ring Protection Plan")
+        for method in ContraceptiveMethod.allCases {
+            XCTAssertEqual(diagnosis(method: method).headline, "Your reminder plan")
+        }
     }
 
     func testDiagnosisLeadLineNamesThePrimaryDistractionAndDueActionTime() {
         let lead = diagnosis(primary: .app(.tiktok), method: .pill, time: "8:00 AM").leadLine
-        XCTAssertTrue(lead.contains("TikTok"), "Specific lead should name the app: \(lead)")
-        XCTAssertTrue(lead.contains("8:00 AM"), "Lead should reference the Due Action Time: \(lead)")
-        XCTAssertTrue(lead.contains("take your pill"), "Pill lead should use the pill action: \(lead)")
+        XCTAssertEqual(lead, "Built from the routine you selected.")
     }
 
     func testDiagnosisLeadLineIsMethodAwareForPatchAndRing() {
-        XCTAssertTrue(diagnosis(method: .patch).leadLine.contains("change your patch"))
-        XCTAssertTrue(diagnosis(method: .ring).leadLine.contains("check your ring"))
+        XCTAssertEqual(diagnosis(method: .patch).leadLine, "Built from the routine you selected.")
+        XCTAssertEqual(diagnosis(method: .ring).leadLine, "Built from the routine you selected.")
     }
 
     func testDiagnosisGenericLeadLineAvoidsNamingAnApp() {
         let lead = diagnosis(primary: .generic, protectedApps: [], method: .pill).leadLine
-        XCTAssertTrue(lead.lowercased().contains("distracting apps"), "Generic lead frames apps broadly: \(lead)")
-        XCTAssertTrue(lead.contains("8:00 AM"))
+        XCTAssertEqual(lead, "Built from the routine you selected.")
+        XCTAssertFalse(lead.contains("TikTok"))
     }
 
     func testDiagnosisNeverLeaksPillWordingForPatchOrRing() {
@@ -206,23 +204,20 @@ final class ProtectionPlanDiagnosisTests: XCTestCase {
     }
 
     func testLockMechanismSummaryIsGenericAndMethodAware() {
-        // The app-lock card no longer depends on a chosen app list, so its copy must
-        // read on its own: generic "distracting apps", method-aware action verb, no
-        // specific brand even when one was derived.
+        let summary = "Selected apps pause after a Pillie reminder. They come back after you check in."
         let pill = diagnosis(primary: .app(.tiktok), method: .pill).lockMechanismSummary
-        XCTAssertTrue(pill.lowercased().contains("distracting apps"), "Summary should frame apps broadly: \(pill)")
-        XCTAssertTrue(pill.contains("take your pill"), "Pill summary should use the pill action: \(pill)")
+        XCTAssertEqual(pill, summary)
         XCTAssertFalse(pill.contains("TikTok"), "Summary must not name a specific app: \(pill)")
 
-        XCTAssertTrue(diagnosis(method: .patch).lockMechanismSummary.contains("change your patch"))
-        XCTAssertTrue(diagnosis(method: .ring).lockMechanismSummary.contains("check your ring"))
+        XCTAssertEqual(diagnosis(method: .patch).lockMechanismSummary, summary)
+        XCTAssertEqual(diagnosis(method: .ring).lockMechanismSummary, summary)
     }
 
     func testDiagnosisCardValuesReflectTheDerivedPlan() {
         let plan = diagnosis(primary: .app(.tiktok), protectedApps: [.tiktok, .instagram, .x], method: .pill, time: "8:00 AM")
         XCTAssertEqual(plan.mainRiskValue, "TikTok")
         XCTAssertEqual(plan.windowValue, "8:00 AM")
-        XCTAssertEqual(plan.protectionModeValue, "Auto-Lock")
+        XCTAssertEqual(plan.protectionModeValue, "Reminder support")
         XCTAssertEqual(plan.protectedAppsLabel, "TikTok, Instagram, X")
     }
 
@@ -236,7 +231,7 @@ final class ProtectionPlanDiagnosisTests: XCTestCase {
 
     func testDetectedSignalsReflectPrimaryDistractionTimeAndRiskWindow() {
         let plan = diagnosis(primary: .app(.tiktok), method: .pill, time: "8:00 AM", riskWindow: .rightAfterAlarm)
-        XCTAssertEqual(plan.detectedSignals, ["TikTok", "8:00 AM", "Right after the alarm"])
+        XCTAssertEqual(plan.detectedSignals, ["TikTok", "8:00 AM", "Right after the reminder"])
     }
 
     func testDetectedSignalsOmitRiskWindowWhenUnanswered() {
@@ -258,14 +253,15 @@ final class ProtectionPlanDiagnosisTests: XCTestCase {
             missFrequency: .often
         )
         let chips = plan.detectedSignals
-        XCTAssertTrue(chips.contains("TikTok"))
-        XCTAssertTrue(chips.contains("9:30 PM"))
-        XCTAssertTrue(chips.contains("Within 5 minutes"))
-        XCTAssertTrue(chips.contains("Weekly slips"), "Failure frequency should surface: \(chips)")
-        XCTAssertTrue(chips.contains("Late = stress"), "Delay-consequence feeling should surface: \(chips)")
-        XCTAssertTrue(
-            chips.contains("Snoozes reminders") || chips.contains("Easy to forget"),
-            "A specific habit should surface: \(chips)"
+        XCTAssertEqual(
+            chips,
+            [
+                "TikTok",
+                "9:30 PM",
+                "A few minutes later",
+                "I dismiss reminders.",
+                "I just forget.",
+            ]
         )
         XCTAssertLessThanOrEqual(chips.count, 6, "Chips are capped so the scan stays readable.")
         XCTAssertEqual(Set(chips).count, chips.count, "Chips must be de-duplicated.")
@@ -287,31 +283,29 @@ final class ProtectionPlanDiagnosisTests: XCTestCase {
     }
 
     func testStrategyLockPointIsTimeAwareMethodAwareAndNamesNoBrand() {
-        // The lock point stays concrete (the time + the method-aware action) but never
-        // names a specific app, even when one was derived — avoiding trademark snags.
-        let pill = diagnosis(primary: .app(.tiktok), protectedApps: [.tiktok, .instagram], method: .pill, time: "9:30 PM").strategyPoints
-        XCTAssertEqual(pill.count, 3)
-        XCTAssertTrue(pill[0].contains("9:30 PM"), "Lock point names the time: \(pill[0])")
-        XCTAssertTrue(pill[0].contains("take your pill"), "Lock point is method-aware: \(pill[0])")
-        XCTAssertTrue(pill[0].lowercased().contains("distracting apps"), "Lock point stays generic: \(pill[0])")
+        let points = diagnosis(
+            primary: .app(.tiktok),
+            protectedApps: [.tiktok, .instagram],
+            method: .pill,
+            time: "9:30 PM"
+        ).strategyPoints
+        XCTAssertEqual(points.count, 3)
+        XCTAssertEqual(points[0], "Built from the routine you selected.")
+        XCTAssertEqual(
+            points[1],
+            "Selected apps pause after a Pillie reminder. They come back after you check in."
+        )
         for brand in ["TikTok", "Instagram", "Snapchat", "YouTube"] {
-            XCTAssertFalse(pill[0].contains(brand), "Lock point must not name a brand: \(pill[0])")
+            XCTAssertFalse(points[1].contains(brand), "Strategy copy must not name a brand: \(points[1])")
         }
-
-        let patch = diagnosis(method: .patch).strategyPoints
-        XCTAssertTrue(patch[0].contains("change your patch"), "Patch lock point is method-aware: \(patch[0])")
     }
 
     func testStrategyRiskPointReflectsTheRiskWindowAnswer() {
-        // Each window produces a distinct, recognizable line in Pillie's voice.
-        let alarm = diagnosis(method: .pill, riskWindow: .rightAfterAlarm).strategyPoints
-        XCTAssertTrue(alarm[1].lowercased().contains("snooze"), "Risk point reflects the window: \(alarm[1])")
-
-        let within = diagnosis(method: .pill, riskWindow: .withinFiveMinutes).strategyPoints
-        XCTAssertTrue(within[1].lowercased().contains("first few minutes"), "Risk point reflects the window: \(within[1])")
-
-        let later = diagnosis(method: .pill, riskWindow: .laterInDay).strategyPoints
-        XCTAssertTrue(later[1].lowercased().contains("later"), "Risk point reflects the window: \(later[1])")
+        let points = diagnosis(method: .pill, riskWindow: .rightAfterAlarm).strategyPoints
+        XCTAssertEqual(
+            points[1],
+            "Selected apps pause after a Pillie reminder. They come back after you check in."
+        )
     }
 
     func testDiagnosisCopyUsesNoEmDashes() {
@@ -328,14 +322,14 @@ final class ProtectionPlanDiagnosisTests: XCTestCase {
             distractionChoices: [], delayConsequence: .scary, missFrequency: nil
         )
         XCTAssertTrue(
-            plan.strategyPoints[2].lowercased().contains("peace of mind"),
-            "Reassurance reflects the 'scary' feeling: \(plan.strategyPoints[2])"
+            plan.strategyPoints[2].contains("Settings"),
+            "Disclaimer explains the draft can be edited later: \(plan.strategyPoints[2])"
         )
     }
 
     func testStrategyLockPointUsesGenericPhrasingWhenNoNamedApp() {
         let points = diagnosis(primary: .generic, protectedApps: [], method: .pill).strategyPoints
-        XCTAssertTrue(points[0].lowercased().contains("distracting apps"), "Generic lock point: \(points[0])")
+        XCTAssertEqual(points[0], "Built from the routine you selected.")
     }
 
     // MARK: - Safe-copy boundary (slice 6)

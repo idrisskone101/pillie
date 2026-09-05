@@ -884,24 +884,6 @@ struct ProductAnalyticsTelemetry {
     track(.newPackOrCycleStarted, source: .home)
   }
 
-  // MARK: - Adaptive Reminder Time Suggestion (#126)
-  //
-  // The Home suggestion card captures only its lifecycle — shown / accepted /
-  // dismissed. No suggested time, delta, or log-time signal is ever attached; the
-  // on-device `takenAt` data that drives the suggestion never leaves the device.
-
-  func adaptiveReminderSuggestionShown() {
-    track(.adaptiveReminderSuggestionShown, source: .home)
-  }
-
-  func adaptiveReminderSuggestionAccepted() {
-    track(.adaptiveReminderSuggestionAccepted, source: .home)
-  }
-
-  func adaptiveReminderSuggestionDismissed() {
-    track(.adaptiveReminderSuggestionDismissed, source: .home)
-  }
-
   // MARK: - Home Review Prompt (#132 / #133)
   //
   // The Sentiment Gate captures only its lifecycle — shown / positive / negative /

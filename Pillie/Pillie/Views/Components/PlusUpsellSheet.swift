@@ -34,7 +34,7 @@ struct PlusUpsellContent: Equatable {
 
     static let customReminders = PlusUpsellContent(
         localizedFeatureKey: "paywall.feature.custom_messages.compact",
-        subtitleKey: "paywall.feature.custom_messages",
+        subtitleKey: "paywall.upsell.custom_messages.body",
         paywallSurface: .plusUpsell
     )
 }

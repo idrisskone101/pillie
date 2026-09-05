@@ -7,11 +7,30 @@ import XCTest
 @testable import Pillie
 
 final class SoftPaywallContentTests: XCTestCase {
-    func testHardPaywallOnboardingDoesNotAllowContinueFree() {
+    func testHardPaywallBlocksOnboardingSkipButSettingsCanStillDismiss() {
         XCTAssertFalse(
             PremiumPaywallFreeExitPolicy.allowsContinueFree(
                 isFromOnboarding: true,
                 trialEndTerms: .hardPaywall
+            )
+        )
+        // Mid-trial / Settings: dismiss is allowed; free-column copy stays legacy-only.
+        XCTAssertTrue(
+            PremiumPaywallFreeExitPolicy.allowsContinueFree(
+                isFromOnboarding: false,
+                trialEndTerms: .hardPaywall
+            )
+        )
+        XCTAssertTrue(
+            PremiumPaywallFreeExitPolicy.allowsContinueFree(
+                isFromOnboarding: true,
+                trialEndTerms: .legacy
+            )
+        )
+        XCTAssertTrue(
+            PremiumPaywallFreeExitPolicy.allowsContinueFree(
+                isFromOnboarding: false,
+                trialEndTerms: .legacy
             )
         )
     }
