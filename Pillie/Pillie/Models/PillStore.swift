@@ -874,7 +874,8 @@ class PillStore {
     /// learns from a time the user did not actually take the dose. `.breakDay`
     /// on a due day is a user-declared skip: it keeps the due action type but
     /// is excluded from adherence and does not break a streak. `.unlogged`
-    /// removes the record so the day reads as missed again.
+    /// writes an explicit `.missed` record so the day reads as missed even
+    /// where the schedule fallback would be `.noData`.
     @discardableResult
     func correctPastDay(on date: Date, to outcome: DayCorrectionOutcome) -> Bool {
         let day = startOfDaySafe(date)
@@ -888,26 +889,25 @@ class PillStore {
 
         let targetPack = snapshot.pack
 
-        switch outcome {
-        case .taken:
-            upsertDayRecord(
-                in: targetPack,
-                day: day,
-                status: .taken,
-                actionType: due.type,
-                takenAt: nil
-            )
+        // Every outcome writes an explicit record, including `.unlogged`.
+        // Deleting the record instead would let the snapshot fall back to
+        // `.noData` on days before `appActivatedDate` (anyone who onboarded
+        // mid-cycle) or in a past cycle-end gap, which renders blank and is
+        // not editable again: a one-way door.
+        let status: PillDay.Status = switch outcome {
+        case .taken: .taken
+        case .unlogged: .missed
+        case .breakDay: .breakDay
+        }
+        upsertDayRecord(
+            in: targetPack,
+            day: day,
+            status: status,
+            actionType: due.type,
+            takenAt: nil
+        )
+        if outcome == .taken {
             pinRingInsertionAnchorIfNeeded(for: targetPack)
-        case .unlogged:
-            deleteDayRecord(in: targetPack, day: day)
-        case .breakDay:
-            upsertDayRecord(
-                in: targetPack,
-                day: day,
-                status: .breakDay,
-                actionType: due.type,
-                takenAt: nil
-            )
         }
 
         return true
@@ -1799,23 +1799,20 @@ class PillStore {
             })
     }
 
-    @discardableResult
     private func upsertDayRecord(
         in pack: PillPack,
         day: Date,
         status: PillDay.Status,
         actionType: PillDay.ActionType,
         takenAt: Date?
-    ) -> PillDay {
+    ) {
         let dayEpoch = epochDay(for: day)
-        let record: PillDay
         if let existing = existingDayRecord(in: pack, day: day, epochDay: dayEpoch) {
             existing.date = day
             existing.status = status
             existing.actionType = actionType
             existing.takenAt = takenAt
             index(dayRecord: existing, forPackID: pack.id, epochDay: dayEpoch)
-            record = existing
         } else {
             let newDay = PillDay(
                 date: day,
@@ -1826,23 +1823,17 @@ class PillStore {
             )
             modelContext.insert(newDay)
             index(dayRecord: newDay, forPackID: pack.id, epochDay: dayEpoch)
-            record = newDay
         }
         noteDayRecordChange(packID: pack.id, epochDay: dayEpoch)
-        return record
     }
 
-    @discardableResult
-    private func deleteDayRecord(in pack: PillPack, day: Date) -> PillDay? {
+    private func deleteDayRecord(in pack: PillPack, day: Date) {
         let dayEpoch = epochDay(for: day)
-        guard let existing = existingDayRecord(in: pack, day: day, epochDay: dayEpoch) else {
-            return nil
-        }
+        guard let existing = existingDayRecord(in: pack, day: day, epochDay: dayEpoch) else { return }
         existing.takenAt = nil
         modelContext.delete(existing)
         removeDayRecordIndex(forPackID: pack.id, epochDay: dayEpoch)
         noteDayRecordChange(packID: pack.id, epochDay: dayEpoch)
-        return existing
     }
 
     private func noteDayRecordChange(packID: UUID, epochDay: Int) {

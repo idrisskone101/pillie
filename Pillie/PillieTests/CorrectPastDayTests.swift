@@ -89,6 +89,58 @@ final class CorrectPastDayTests: XCTestCase {
         XCTAssertEqual(after.due, before.due - 1)
     }
 
+    func testUnloggedBeforeActivationStaysMissedAndEditable() throws {
+        // Mid-cycle onboarding: the store backfills taken records before
+        // `appActivatedDate`. Setting one of those to Unlogged must not fall
+        // back to `.noData`, which renders blank and is not editable again.
+        let today = InMemoryStoreFactory.fixedDate("2026-05-26")
+        let startDate = InMemoryStoreFactory.fixedDate("2026-05-20")
+        let backfilled = InMemoryStoreFactory.fixedDate("2026-05-22")
+        let fixture = try InMemoryStoreFactory.makeStore(now: today, startDate: startDate)
+        let store = fixture.store
+        store.markActionAsTaken(on: backfilled)
+        store.appActivatedDate = InMemoryStoreFactory.fixedDate("2026-05-24")
+        XCTAssertEqual(store.scheduleSnapshot(for: backfilled)?.status, .taken)
+
+        XCTAssertTrue(store.correctPastDay(on: backfilled, to: .unlogged))
+
+        let snapshot = try XCTUnwrap(store.scheduleSnapshot(for: backfilled))
+        XCTAssertEqual(snapshot.status, .missed)
+        XCTAssertEqual(
+            DayCorrectionPolicy.options(for: snapshot, relation: .past)?.currentOutcome,
+            .unlogged
+        )
+        XCTAssertTrue(store.correctPastDay(on: backfilled, to: .taken))
+        XCTAssertEqual(store.scheduleSnapshot(for: backfilled)?.status, .taken)
+    }
+
+    func testRingReinsertDayIsNotCorrectableFromEitherPack() throws {
+        // Live reinsert check-in rolls the cycle over into a new pack. A
+        // single-day rewrite cannot undo that, so the date is read-only on
+        // both the old pack (reinsert record) and the new pack (insert due).
+        let startDate = InMemoryStoreFactory.fixedDate("2026-05-01")
+        let reinsertDay = InMemoryStoreFactory.fixedDate("2026-05-29")
+        let fixture = try InMemoryStoreFactory.makeStore(now: reinsertDay, method: .ring, startDate: startDate)
+        let store = fixture.store
+        XCTAssertEqual(store.scheduleSnapshot(for: reinsertDay)?.dueAction?.type, .ringReinsert)
+
+        // Live check-in on the reinsert day rolls over into a new pack.
+        store.markActionAsTaken(on: reinsertDay)
+        let revision = store.dayRecordsRevision
+        let packCount = store.packs.count
+        XCTAssertGreaterThan(packCount, 1)
+
+        // Next day, the user opens History.
+        PillieClock.setFixedNowForTesting(InMemoryStoreFactory.fixedDate("2026-05-30"))
+        let resolved = try XCTUnwrap(store.scheduleSnapshot(for: reinsertDay))
+        XCTAssertEqual(resolved.actionType, .ringReinsert)
+        XCTAssertNil(DayCorrectionPolicy.options(for: resolved, relation: .past))
+
+        XCTAssertFalse(store.correctPastDay(on: reinsertDay, to: .unlogged))
+        XCTAssertEqual(store.dayRecordsRevision, revision)
+        XCTAssertEqual(store.packs.count, packCount)
+    }
+
     func testCorrectPastDayRejectsToday() throws {
         let today = InMemoryStoreFactory.fixedDate("2026-05-26")
         let fixture = try InMemoryStoreFactory.makeStore(now: today, startDate: today)

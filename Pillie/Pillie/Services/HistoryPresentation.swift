@@ -93,20 +93,7 @@ enum HistoryPresentation {
             "history.dayCorrection.method.\(method.rawValue)",
             locale: locale
         )
-        let timeText = reminderTimeText(hour: reminderHour, minute: reminderMinute, locale: locale)
+        let timeText = SettingsPresentation.time(hour: reminderHour, minute: reminderMinute, locale: locale)
         return PillieLocalization.formatted(timeKey, locale: locale, arguments: methodNoun, timeText)
-    }
-
-    private static func reminderTimeText(hour: Int, minute: Int, locale: Locale) -> String {
-        var components = DateComponents()
-        components.hour = hour
-        components.minute = minute
-        let date = Calendar.current.date(from: components) ?? Date()
-        return date.formatted(
-            Date.FormatStyle()
-                .hour(.defaultDigits(amPM: .abbreviated))
-                .minute(.twoDigits)
-                .locale(locale)
-        )
     }
 }
