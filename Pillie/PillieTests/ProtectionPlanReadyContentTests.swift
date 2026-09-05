@@ -14,32 +14,46 @@ import XCTest
 @testable import Pillie
 
 final class ProtectionPlanReadyContentTests: XCTestCase {
+    private func expectedStatusLabel(reminderHour: Int, reminderMinute: Int) -> String {
+        let twelve = ReminderTimeConverter.toTwelveHour(hour24: reminderHour, minute: reminderMinute)
+        let time = ProtectionPlanRoutineSummary.clockText(
+            hour12: twelve.hour,
+            minute: twelve.minute,
+            isPM: twelve.period == 1
+        )
+        return PillieLocalization.formatted(
+            "onboarding.reminder_time.accessibility",
+            arguments: time
+        )
+    }
+
     // MARK: - Tracer: the configured reminder time is shown
 
     func testReadyScreenShowsTheConfiguredMorningReminderTime() {
         let content = ProtectionPlanReadyContent.make(reminderHour: 8, reminderMinute: 0)
-        XCTAssertEqual(content.statusLabel, "Active from 8:00 AM daily")
+        XCTAssertEqual(content.statusLabel, expectedStatusLabel(reminderHour: 8, reminderMinute: 0))
     }
 
     func testReminderTimeIsDynamicAcrossAfternoonAndMidnight() {
         XCTAssertEqual(
             ProtectionPlanReadyContent.make(reminderHour: 20, reminderMinute: 30).statusLabel,
-            "Active from 8:30 PM daily"
+            expectedStatusLabel(reminderHour: 20, reminderMinute: 30)
         )
         XCTAssertEqual(
             ProtectionPlanReadyContent.make(reminderHour: 0, reminderMinute: 5).statusLabel,
-            "Active from 12:05 AM daily"
+            expectedStatusLabel(reminderHour: 0, reminderMinute: 5)
         )
     }
 
-    // MARK: - Fixed handoff copy ("You're protected.")
+    // MARK: - Fixed handoff copy
 
     func testReadyScreenKeepsTheProtectedHandoffCopy() {
         let content = ProtectionPlanReadyContent.make(reminderHour: 9, reminderMinute: 0)
-        XCTAssertEqual(content.title, "You're")
-        XCTAssertEqual(content.titleAccent, "protected.")
-        XCTAssertEqual(content.handNote, "we've got you")
-        XCTAssertEqual(content.primaryCTA, "Start Using Pillie")
+        XCTAssertEqual(content.title, PillieLocalization.string("onboarding.ready.title"))
+        XCTAssertEqual(content.titleAccent, "")
+        XCTAssertEqual(content.subtitle, PillieLocalization.string("onboarding.ready.subtitle"))
+        XCTAssertEqual(content.handNote, "")
+        XCTAssertEqual(content.primaryCTA, PillieLocalization.string("onboarding.ready.cta"))
         XCTAssertFalse(content.subtitle.isEmpty)
         XCTAssertTrue(content.visibleCopy.contains(content.statusLabel))
     }

@@ -85,9 +85,11 @@ end
 commerce_strings = JSON.parse(
   File.read(File.join(root, "Pillie/Pillie/Commerce.xcstrings"))
 ).fetch("strings")
-allowed_commerce_prefixes = %w[paywall. trial.]
+allowed_commerce_prefixes = %w[paywall. trial. commerce.]
 allowed_commerce_keys = %w[
   onboarding.blocking_setup.plus_locked
+  onboarding.blocking_setup.subscriber_disclosure
+  onboarding.blocking_setup.hard_paywall_locked_detail
   onboarding.demo.free_body
 ]
 unexpected_commerce_keys = commerce_strings.keys.reject do |key|

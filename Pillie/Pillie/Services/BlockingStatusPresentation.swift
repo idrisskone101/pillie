@@ -51,64 +51,43 @@ struct BlockingStatusCardContent: Equatable {
 
     static func make(
         for presentation: BlockingStatusPresentation,
+        method: ContraceptiveMethod = .pill,
+        action: DoseScheduleAction? = nil,
         locale: Locale = .current
     ) -> BlockingStatusCardContent? {
-        if ["de", "it"].contains(locale.language.languageCode?.identifier ?? "") {
-            switch presentation {
-            case .active:
-                return nil
-            case .incompleteEntitled:
-                return BlockingStatusCardContent(
-                    title: PillieLocalization.string(
-                        "today.protection.inactive",
-                        locale: locale
-                    ),
-                    detail: PillieLocalization.string(
-                        "paywall.subtitle",
-                        table: "Commerce",
-                        locale: locale
-                    ),
-                    ctaTitle: PillieLocalization.string(
-                        "settings.blocked_apps.edit",
-                        locale: locale
-                    ),
-                    isLocked: false
-                )
-            case .incompleteFree:
-                return BlockingStatusCardContent(
-                    title: PillieLocalization.string(
-                        "today.protection.inactive",
-                        locale: locale
-                    ),
-                    detail: PillieLocalization.string(
-                        "paywall.subtitle",
-                        table: "Commerce",
-                        locale: locale
-                    ),
-                    ctaTitle: PillieLocalization.string(
-                        "paywall.action.upgrade",
-                        table: "Commerce",
-                        locale: locale
-                    ),
-                    isLocked: true
-                )
-            }
-        }
         switch presentation {
         case .active:
             return nil
         case .incompleteEntitled:
             return BlockingStatusCardContent(
-                title: "App blocking isn't on yet",
-                detail: "Your daily reminders are working. Finish setup to keep distracting apps paused until you take your pill.",
-                ctaTitle: "Set up app blocking",
+                title: PillieLocalization.string(
+                    "today.protection.setup.title",
+                    locale: locale
+                ),
+                detail: PillieLocalization.string(
+                    MethodAwareCopy.key(.todaySetup, action: action, method: method),
+                    locale: locale
+                ),
+                ctaTitle: PillieLocalization.string(
+                    "today.protection.setup.cta",
+                    locale: locale
+                ),
                 isLocked: false
             )
         case .incompleteFree:
             return BlockingStatusCardContent(
-                title: "App blocking isn't on",
-                detail: "Your daily reminders are working. Add it with Pillie Plus to keep distracting apps paused until you take your pill.",
-                ctaTitle: "Unlock app blocking",
+                title: PillieLocalization.string(
+                    "today.protection.inactive",
+                    locale: locale
+                ),
+                detail: PillieLocalization.string(
+                    MethodAwareCopy.key(.todayOff, action: action, method: method),
+                    locale: locale
+                ),
+                ctaTitle: PillieLocalization.string(
+                    "today.protection.add",
+                    locale: locale
+                ),
                 isLocked: true
             )
         }

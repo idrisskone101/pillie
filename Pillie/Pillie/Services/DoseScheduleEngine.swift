@@ -86,10 +86,29 @@ struct DoseScheduleAction: Hashable {
 
     func localizedReminderBody(locale: Locale = .current) -> String {
         let key: String
-        switch method {
-        case .pill: key = "notification.reminder.pill.body"
-        case .patch: key = "notification.reminder.patch.body"
-        case .ring: key = "notification.reminder.ring.body"
+        switch type {
+        case .pillActive:
+            key = "notification.reminder.pill.body"
+        case .patchChange:
+            key = cycleDay == 1
+                ? "notification.reminder.patch.apply.body"
+                : "notification.reminder.patch.change.body"
+        case .patchRemove:
+            key = "notification.reminder.patch.remove.body"
+        case .ringInsert:
+            key = "notification.reminder.ring.insert.body"
+        case .ringReinsert:
+            key = "notification.reminder.ring.change.body"
+        case .ringRemove:
+            key = "notification.reminder.ring.remove.body"
+        case .pillBreak, .patchActive, .patchBreak, .ringActive, .ringBreak:
+            // Break/active quiet days should not schedule a due reminder; fall back
+            // to the method's primary check-in body if one is ever requested.
+            switch method {
+            case .pill: key = "notification.reminder.pill.body"
+            case .patch: key = "notification.reminder.patch.apply.body"
+            case .ring: key = "notification.reminder.ring.insert.body"
+            }
         }
         return PillieLocalization.string(key, locale: locale)
     }

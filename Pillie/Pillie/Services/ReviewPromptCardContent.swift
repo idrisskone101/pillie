@@ -3,8 +3,8 @@
 //  Pillie
 //
 //  Pure value-type copy + gating for the Home Review Prompt's Sentiment Gate
-//  card (PRD #132 / ADR 0005 / #133). Mirrors `AdaptiveReminderSuggestionCardContent.make`:
-//  the factory returns `nil` unless the eligibility decision is `.show`.
+//  card (PRD #132 / ADR 0005 / #133). The factory returns `nil` unless the
+//  eligibility decision is `.show`.
 //
 //  Copy is static and method-agnostic — it never interpolates the contraception
 //  method, the Streak value, or an appearance ordinal — so it can be rendered

@@ -6,7 +6,7 @@
 # silently drift back to the globally selected Xcode 26.x toolchain.
 
 pillie_default_developer_dir() {
-  printf "%s" "${PILLIE_XCODE27_DEVELOPER_DIR:-/Users/idrisskone/Downloads/Xcode-beta.app/Contents/Developer}"
+  printf "%s" "${PILLIE_XCODE27_DEVELOPER_DIR:-/Applications/Xcode-beta.app/Contents/Developer}"
 }
 
 pillie_developer_dir_version() {
@@ -61,6 +61,36 @@ pillie_xcode_app_path() {
 
 pillie_default_simulator_udid() {
   printf "%s" "${PILLIE_SIMULATOR_UDID:-124DC75F-0771-4C81-841D-F13655138260}"
+}
+
+pillie_safe_name() {
+  printf "%s" "$1" | tr -cs '[:alnum:]_.-' '-' | sed 's/^-//; s/-$//'
+}
+
+# /tmp DerivedData for a checkout. Project-local DerivedData can pick up
+# iCloud xattrs and break codesigning.
+pillie_derived_data_for_repo_root() {
+  local repo_root repo_name
+  repo_root="${1:-}"
+  repo_name="$(basename "$repo_root")"
+
+  if [[ -n "${PILLIE_DERIVED_DATA:-}" ]]; then
+    printf "%s" "$PILLIE_DERIVED_DATA"
+    return
+  fi
+  if [[ "$repo_root" == "$HOME/.codex/worktrees/"* ]]; then
+    printf "%s" "/tmp/PillieDerivedData-codex-$(pillie_safe_name "$(basename "$(dirname "$repo_root")")")"
+    return
+  fi
+  if [[ "$repo_root" == *"/.claude/worktrees/"* ]]; then
+    printf "%s" "/tmp/PillieDerivedData-claude-$(pillie_safe_name "${repo_root##*/.claude/worktrees/}")"
+    return
+  fi
+  if [[ "$repo_name" == "Pillie" ]]; then
+    printf "%s" "/tmp/PillieDerivedData"
+    return
+  fi
+  printf "%s" "/tmp/PillieDerivedData-$(pillie_safe_name "$repo_name")"
 }
 
 # Quiet-by-default Swift compile parallelism. Uncapped `xcodebuild` uses every

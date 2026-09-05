@@ -21,7 +21,7 @@ final class ProtectionPlanQuestionContentTests: XCTestCase {
         let timing = ProtectionPlanFailureFrequencyContent.default
         XCTAssertEqual(timing.options.map(\.bucket), MissFrequency.allCases)
         XCTAssertEqual(timing.riskWindows, RiskWindow.allCases)
-        XCTAssertTrue(timing.riskWindowFootnote.lowercased().contains("schedule alarms"))
+        XCTAssertTrue(timing.riskWindowFootnote.contains("Settings"))
 
         for line in intent.visibleCopy + timing.visibleCopy {
             assertNoMedicalOrFakeClaims(line)
@@ -32,12 +32,11 @@ final class ProtectionPlanQuestionContentTests: XCTestCase {
 
     func testDistractionChoicesContentMatchesDraftAndIsMultiSelectWithOther() {
         let content = ProtectionPlanDistractionChoicesContent.default
-        XCTAssertEqual(content.title, "Be honest\u{2026}")
-        XCTAssertEqual(content.subtitle, "What usually gets in the way after your reminder?")
-        XCTAssertEqual(content.helper, "Select all that apply. We'll help you stay focused.")
+        XCTAssertEqual(content.title, "What's in the way?")
+        XCTAssertEqual(content.subtitle, "Choose the answer that feels closest.")
+        XCTAssertEqual(content.helper, "Choose categories or specific apps for your draft blocklist.")
         XCTAssertEqual(content.primaryCTA, "Continue")
-        // Multi-select intent + an Other catch-all are part of the contract.
-        XCTAssertTrue(content.helper.lowercased().contains("select all that apply"))
+        XCTAssertTrue(content.helper.lowercased().contains("blocklist"))
         XCTAssertEqual(content.choices, DistractionChoice.allCases)
         XCTAssertTrue(content.choices.contains(.other))
     }
@@ -76,17 +75,17 @@ final class ProtectionPlanQuestionContentTests: XCTestCase {
 
     func testFailureFrequencyUsesNewLabelsOverTheExistingStorageBuckets() {
         let content = ProtectionPlanFailureFrequencyContent.default
-        XCTAssertEqual(content.title, "How often do reminders fail you?")
+        XCTAssertEqual(content.title, "How often do you miss your pill?")
         XCTAssertEqual(
             content.subtitle,
-            "Being honest helps us adjust the Pillie Protection level for your needs."
+            "So we know how firm the reminders should be."
         )
         XCTAssertEqual(content.primaryCTA, "Continue")
 
         // Acceptance criterion: exactly these labels, in ascending order.
         XCTAssertEqual(
             content.options.map(\.title),
-            ["Rarely", "A few times a month", "Weekly", "Multiple times a week"]
+            ["Rarely", "A few times a month", "Weekly", "Several times a week"]
         )
         // ...while each maps onto a distinct existing MissFrequency bucket, covering
         // all four, so persisted miss-frequency answers stay compatible.
@@ -104,15 +103,22 @@ final class ProtectionPlanQuestionContentTests: XCTestCase {
 
     func testRiskWindowContentMakesClearItDoesNotChangeTheSchedule() {
         let content = ProtectionPlanRiskWindowContent.default
-        XCTAssertEqual(content.title, "Timing is everything")
-        XCTAssertEqual(content.subtitle, "When are you most likely to drift into another app?")
-        XCTAssertEqual(content.footnote, "This shapes your plan \u{2014} we don't use it to schedule alarms.")
+        XCTAssertEqual(
+            content.title,
+            "How soon do you usually take it after the reminder?"
+        )
+        XCTAssertEqual(
+            content.subtitle,
+            "Just a rough sense. You can change this later."
+        )
+        XCTAssertEqual(
+            content.footnote,
+            "This reminder setup is based on your selections. You can change it later in Settings."
+        )
         XCTAssertEqual(content.primaryCTA, "Continue")
         XCTAssertEqual(content.choices, RiskWindow.allCases)
 
-        // The single bottom reassurance must explicitly tell the user this does not
-        // drive the actual blocking schedule (v1 keeps Risk Window as copy only).
-        XCTAssertTrue(content.footnote.lowercased().contains("schedule alarms"))
+        XCTAssertTrue(content.footnote.contains("Settings"))
     }
 
     func testRiskWindowContentHasNoMedicalOrFakeStatLanguage() {
@@ -152,13 +158,13 @@ final class ProtectionPlanQuestionContentTests: XCTestCase {
 
     func testAcquisitionSourceContentIsOptionalAndDistinctFromDistractionChoices() {
         let content = ProtectionPlanAcquisitionSourceContent.default
-        XCTAssertEqual(content.eyebrow, "One last thing")
+        XCTAssertEqual(content.eyebrow, "Next")
         XCTAssertEqual(content.title, "Where did you find Pillie?")
         XCTAssertEqual(
             content.subtitle,
-            "Your feedback helps us reach more people who need protection."
+            "Your answer helps more people find the app."
         )
-        XCTAssertEqual(content.primaryCTA, "Finish Setup")
+        XCTAssertEqual(content.primaryCTA, "Continue")
         // Optional: there is a real skip path.
         XCTAssertFalse(content.skipCTA.isEmpty)
         XCTAssertEqual(content.skipCTA, "Not now")

@@ -5,7 +5,8 @@
 //  A coarse "where are you in your routine" position for the Routine Basics Details
 //  screen (#77). It is a friendlier, faster entry point than a bare day stepper: the
 //  user taps Just starting / Mid-cycle / Near the end to jump the exact cycle day,
-//  then fine-tunes if they want. The exact day is what the production model stores
+//  then fine-tunes if they want. Icons use a three-slot pack track (not sun/moon).
+//  The exact day is what the production model stores
 //  (`PillStore.startNewProtocol(cycleDay:)`), so this type only maps between the
 //  coarse bucket and a clamped day — it never persists on its own.
 //
@@ -29,11 +30,12 @@ enum CyclePosition: String, CaseIterable, Identifiable {
         }
     }
 
-    var symbolName: String {
+    /// Which blister slot is lit in the pack-track icon (0 = start, 1 = mid, 2 = end).
+    var packTrackActiveIndex: Int {
         switch self {
-        case .justStarting: return "sunrise.fill"
-        case .midCycle: return "sun.max.fill"
-        case .nearEnd: return "moon.stars.fill"
+        case .justStarting: return 0
+        case .midCycle: return 1
+        case .nearEnd: return 2
         }
     }
 

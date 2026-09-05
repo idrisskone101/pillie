@@ -14,7 +14,7 @@ final class CorrectPastDayTests: XCTestCase {
         super.tearDown()
     }
 
-    func testCorrectPastDueDayToTakenWritesNilTakenAtAndCountsCheckIn() throws {
+    func testCorrectPastDueDayToTakenCountsCheckIn() throws {
         let today = InMemoryStoreFactory.fixedDate("2026-05-26")
         let startDate = InMemoryStoreFactory.fixedDate("2026-05-20")
         let yesterday = InMemoryStoreFactory.fixedDate("2026-05-25")
@@ -31,7 +31,7 @@ final class CorrectPastDayTests: XCTestCase {
         let record = try XCTUnwrap(fixture.pack.days.first {
             Calendar.current.isDate($0.date, inSameDayAs: yesterday)
         })
-        XCTAssertNil(record.takenAt)
+        XCTAssertEqual(record.status, .taken)
 
         let after = store.monthAdherence(for: yesterday)
         XCTAssertEqual(after.completed, before.completed + 1)

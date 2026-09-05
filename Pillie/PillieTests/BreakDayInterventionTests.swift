@@ -91,6 +91,7 @@ final class BreakDayInterventionTests: XCTestCase {
                 lastCallMinute: 0,
                 trialGrantDate: nil,
                 hasEntitlement: false,
+                servedBaseFireDateByDueDayEpoch: [:],
                 calendar: .current
             )
         )

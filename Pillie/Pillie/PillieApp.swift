@@ -606,7 +606,6 @@ struct PillieApp: App {
             store.autoReminderIntervalMinutes = fullyConfigured ? 30 : 10
             store.autoReminderRetryLimit = 3
             store.lastCallReminderEnabled = false
-            store.adaptiveReminderEnabled = true
             reconcileScreenTimeState()
         case "/trial-age":
             // QA control (#160): age the existing (or a fresh) trial back by
@@ -633,14 +632,6 @@ struct PillieApp: App {
             SubscriptionManager.shared.setPlusForTesting(true)
             UserDefaults.standard.set(false, forKey: OnboardingFlow.selectedFreePlanStorageKey)
             UserDefaults.standard.set(OnboardingFlow.Step.complete.rawValue, forKey: OnboardingFlow.stepStorageKey)
-        case "/adaptive-reminder-suggestion":
-            // QA shortcut (#126): land on Home as a Plus subscriber with a seeded
-            // consistent late-logging history so the Adaptive Reminder Time Suggestion
-            // card surfaces and its accept/dismiss flow can be verified in the simulator.
-            SubscriptionManager.shared.setPlusForTesting(true)
-            UserDefaults.standard.set(false, forKey: OnboardingFlow.selectedFreePlanStorageKey)
-            UserDefaults.standard.set(OnboardingFlow.Step.complete.rawValue, forKey: OnboardingFlow.stepStorageKey)
-            store.seedAdaptiveReminderDebugLogs()
         case "/request-notification-permission":
             // QA control (#168): surface the system notification prompt on
             // installs seeded past onboarding, where the real permission step

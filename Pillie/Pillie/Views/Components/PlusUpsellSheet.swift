@@ -7,67 +7,56 @@ import SwiftUI
 /// Copy for a `PlusUpsellSheet` variant, kept as a value type so the framing of
 /// each Plus-gated feature can be unit-tested without rendering the view.
 struct PlusUpsellContent: Equatable {
-    let featureName: String
-    let featureDescription: String
     let localizedFeatureKey: String
+    let subtitleKey: String
     let paywallSurface: AnalyticsPaywallSurface
 
-    static let appBlocking = PlusUpsellContent(
-        featureName: "App Blocking",
-        featureDescription: "Block distracting apps until your pill is logged.",
-        localizedFeatureKey: "paywall.feature.app_blocking.compact",
-        paywallSurface: .plusUpsell
-    )
+    static func appBlocking(
+        action: DoseScheduleAction? = nil,
+        method: ContraceptiveMethod = .pill
+    ) -> PlusUpsellContent {
+        PlusUpsellContent(
+            localizedFeatureKey: "paywall.feature.app_blocking.compact",
+            subtitleKey: MethodAwareCopy.key(
+                .upsellBlocking,
+                action: action,
+                method: method
+            ),
+            paywallSurface: .plusUpsell
+        )
+    }
 
-    /// Smart Reminders reads as the follow-up escalation after the first reminder
-    /// (ADR 0004), never the base daily reminder, and avoids medical/efficacy claims.
     static let smartReminders = PlusUpsellContent(
-        featureName: "Smart Reminders",
-        featureDescription: "Pillie sends gentle follow-up nudges until you log it.",
         localizedFeatureKey: "paywall.feature.smart_reminders",
+        subtitleKey: "paywall.upsell.smart_reminders.body",
         paywallSurface: .plusUpsell
     )
 
-    /// Custom Reminder Messages frames the perk as writing your own private nudge.
-    /// It is the user's own words (ADR 0004), so the copy stays personal and avoids
-    /// medical/efficacy claims.
     static let customReminders = PlusUpsellContent(
-        featureName: "Custom Messages",
-        featureDescription: "Word the daily reminder yourself — what you type is what you'll see.",
         localizedFeatureKey: "paywall.feature.custom_messages.compact",
+        subtitleKey: "paywall.upsell.custom_messages.body",
         paywallSurface: .plusUpsell
     )
 }
 
 struct PlusUpsellSheet: View {
-    let featureName: String
-    let featureDescription: String
     let localizedFeatureKey: String
+    let subtitleKey: String
     let paywallSurface: AnalyticsPaywallSurface
 
     static let compactPresentationHeight: CGFloat = 420
 
-    init(
-        featureName: String,
-        featureDescription: String,
-        localizedFeatureKey: String = "paywall.feature.custom_messages.compact",
-        paywallSurface: AnalyticsPaywallSurface = .plusUpsell
-    ) {
-        self.featureName = featureName
-        self.featureDescription = featureDescription
-        self.localizedFeatureKey = localizedFeatureKey
-        self.paywallSurface = paywallSurface
-    }
-
     init(content: PlusUpsellContent) {
-        self.featureName = content.featureName
-        self.featureDescription = content.featureDescription
         self.localizedFeatureKey = content.localizedFeatureKey
+        self.subtitleKey = content.subtitleKey
         self.paywallSurface = content.paywallSurface
     }
 
-    static func appBlocking() -> PlusUpsellSheet {
-        PlusUpsellSheet(content: .appBlocking)
+    static func appBlocking(
+        action: DoseScheduleAction? = nil,
+        method: ContraceptiveMethod = .pill
+    ) -> PlusUpsellSheet {
+        PlusUpsellSheet(content: .appBlocking(action: action, method: method))
     }
 
     static func smartReminders() -> PlusUpsellSheet {
@@ -106,7 +95,7 @@ struct PlusUpsellSheet: View {
                     .pillieAdaptiveLineLimit(minimumScaleFactor: 0.72)
 
                 Text(PillieLocalization.string(
-                    "paywall.subtitle",
+                    subtitleKey,
                     table: "Commerce",
                     locale: locale
                 ))

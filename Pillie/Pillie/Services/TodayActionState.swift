@@ -47,10 +47,7 @@ enum TodayActionState: Equatable {
         case .noActionDue:
             PillieLocalization.string("today.empty.title", locale: locale)
         case .dueAction(let action, _):
-            PillieLocalization.string(
-                action.isBreak ? "today.empty.title" : "today.action.mark_complete",
-                locale: locale
-            )
+            DueActionCopy.localizedLabel(for: action, locale: locale)
         }
     }
 }

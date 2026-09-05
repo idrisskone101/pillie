@@ -1,0 +1,1981 @@
+{
+  "source": "Regular written copy. Sentence case for chrome and body. CTAs stay sentence case. Pillie and Plus stay proper nouns.",
+  "entries": [
+    {
+      "issue": "ENG-58",
+      "table": "Localizable",
+      "key": "today.action.take_pill",
+      "create": true,
+      "comment": "Due-action FAB and card for a pill day",
+      "en": "Take pill",
+      "de": "Pille nehmen",
+      "it": "Prendi la pillola"
+    },
+    {
+      "issue": "ENG-58",
+      "table": "Localizable",
+      "key": "today.action.apply_patch",
+      "create": true,
+      "comment": "Due-action for patch day 1",
+      "en": "Apply patch",
+      "de": "Pflaster aufkleben",
+      "it": "Applica cerotto"
+    },
+    {
+      "issue": "ENG-58",
+      "table": "Localizable",
+      "key": "today.action.change_patch",
+      "create": true,
+      "comment": "Due-action for patch change days",
+      "en": "Change patch",
+      "de": "Pflaster wechseln",
+      "it": "Cambia cerotto"
+    },
+    {
+      "issue": "ENG-58",
+      "table": "Localizable",
+      "key": "today.action.remove_patch",
+      "create": true,
+      "comment": "Due-action for patch remove day",
+      "en": "Remove patch",
+      "de": "Pflaster abnehmen",
+      "it": "Togli cerotto"
+    },
+    {
+      "issue": "ENG-58",
+      "table": "Localizable",
+      "key": "today.action.insert_ring",
+      "create": true,
+      "comment": "Due-action for ring insert",
+      "en": "Insert ring",
+      "de": "Ring einsetzen",
+      "it": "Inserisci anello"
+    },
+    {
+      "issue": "ENG-58",
+      "table": "Localizable",
+      "key": "today.action.change_ring",
+      "create": true,
+      "comment": "Due-action for ring change or reinsert",
+      "en": "Change ring",
+      "de": "Ring wechseln",
+      "it": "Cambia anello"
+    },
+    {
+      "issue": "ENG-58",
+      "table": "Localizable",
+      "key": "today.action.remove_ring",
+      "create": true,
+      "comment": "Due-action for ring remove",
+      "en": "Remove ring",
+      "de": "Ring rausnehmen",
+      "it": "Togli anello"
+    },
+    {
+      "issue": "ENG-58",
+      "table": "Notifications",
+      "key": "notification.reminder.pill.title",
+      "en": "Pillie time!",
+      "de": "Pillie-Zeit!",
+      "it": "Pillie time!"
+    },
+    {
+      "issue": "ENG-58",
+      "table": "Notifications",
+      "key": "notification.reminder.patch.title",
+      "en": "Pillie time!",
+      "de": "Pillie-Zeit!",
+      "it": "Pillie time!"
+    },
+    {
+      "issue": "ENG-58",
+      "table": "Notifications",
+      "key": "notification.reminder.ring.title",
+      "en": "Pillie time!",
+      "de": "Pillie-Zeit!",
+      "it": "Pillie time!"
+    },
+    {
+      "issue": "ENG-58",
+      "table": "Notifications",
+      "key": "notification.reminder.pill.body",
+      "en": "Hey, quick check-in. Log your pill when you're done",
+      "de": "Hey, kurzer Check-in. Trag deine Pille ein, wenn du fertig bist",
+      "it": "Ehi, check-in veloce. Registrala quando hai finito",
+      "create": true
+    },
+    {
+      "issue": "ENG-58",
+      "table": "Notifications",
+      "key": "notification.followup.body",
+      "en": "Hey, quick check-in is still open. Check in when you're ready",
+      "de": "Hey, der kurze Check-in ist noch offen. Check-in, wenn du soweit bist",
+      "it": "Ehi, il check-in veloce è ancora aperto. Fai il check-in quando vuoi",
+      "create": true
+    },
+    {
+      "issue": "ENG-62",
+      "table": "Localizable",
+      "key": "history.title",
+      "en": "Your month so far",
+      "de": "Dein Monat bisher",
+      "it": "Il tuo mese finora"
+    },
+    {
+      "issue": "ENG-62",
+      "table": "Localizable",
+      "key": "history.legend.completed",
+      "en": "Done",
+      "de": "Erledigt",
+      "it": "Fatto"
+    },
+    {
+      "issue": "ENG-62",
+      "table": "Localizable",
+      "key": "history.legend.unlogged",
+      "en": "Not logged",
+      "de": "Nicht eingetragen",
+      "it": "Non registrato"
+    },
+    {
+      "issue": "ENG-62",
+      "table": "Localizable",
+      "key": "history.legend.break",
+      "en": "Break",
+      "de": "Pause",
+      "it": "Pausa"
+    },
+    {
+      "issue": "ENG-62",
+      "table": "Localizable",
+      "key": "history.month.title",
+      "en": "This month",
+      "de": "Dieser Monat",
+      "it": "Questo mese"
+    },
+    {
+      "issue": "ENG-62",
+      "table": "Localizable",
+      "key": "history.month.checkins",
+      "en": "%lld check-ins",
+      "de": "%lld Check-ins",
+      "it": "%lld check-in"
+    },
+    {
+      "issue": "ENG-62",
+      "table": "Localizable",
+      "key": "history.month.checkin.single",
+      "en": "%lld check-in",
+      "de": "%lld Check-in",
+      "it": "%lld check-in"
+    },
+    {
+      "issue": "ENG-62",
+      "table": "Localizable",
+      "key": "history.month.checkins_body",
+      "en": "Check-ins so far",
+      "de": "Check-ins bisher",
+      "it": "Check-in finora"
+    },
+    {
+      "issue": "ENG-62",
+      "table": "Localizable",
+      "key": "history.month.on_track",
+      "en": "%lld%% logged",
+      "de": "%lld%% eingetragen",
+      "it": "%lld%% registrato"
+    },
+    {
+      "issue": "ENG-63",
+      "table": "Localizable",
+      "key": "today.protection.inactive",
+      "en": "App blocking is off",
+      "de": "App-Pause ist aus",
+      "it": "Il blocco è spento"
+    },
+    {
+      "issue": "ENG-63",
+      "table": "Localizable",
+      "key": "today.protection.off.detail.pill",
+      "create": true,
+      "comment": "Today blocking card detail while reminders run, pill",
+      "en": "Reminders stay on. Plus can pause apps.",
+      "de": "Erinnerungen an. Plus pausiert Apps.",
+      "it": "I promemoria restano. Plus può pausare le app."
+    },
+    {
+      "issue": "ENG-63",
+      "table": "Localizable",
+      "key": "today.protection.off.detail.patch.apply",
+      "create": true,
+      "comment": "Today blocking card detail, apply patch",
+      "en": "Reminders stay on. Plus can pause apps.",
+      "de": "Erinnerungen an. Plus pausiert Apps.",
+      "it": "I promemoria restano. Plus può pausare le app."
+    },
+    {
+      "issue": "ENG-63",
+      "table": "Localizable",
+      "key": "today.protection.off.detail.patch.change",
+      "create": true,
+      "comment": "Today blocking card detail, change patch",
+      "en": "Reminders stay on. Plus can pause apps.",
+      "de": "Erinnerungen an. Plus pausiert Apps.",
+      "it": "I promemoria restano. Plus può pausare le app."
+    },
+    {
+      "issue": "ENG-63",
+      "table": "Localizable",
+      "key": "today.protection.off.detail.patch.remove",
+      "create": true,
+      "comment": "Today blocking card detail, remove patch",
+      "en": "Reminders stay on. Plus can pause apps.",
+      "de": "Erinnerungen an. Plus pausiert Apps.",
+      "it": "I promemoria restano. Plus può pausare le app."
+    },
+    {
+      "issue": "ENG-63",
+      "table": "Localizable",
+      "key": "today.protection.off.detail.ring.insert",
+      "create": true,
+      "comment": "Today blocking card detail, insert ring",
+      "en": "Reminders stay on. Plus can pause apps.",
+      "de": "Erinnerungen an. Plus pausiert Apps.",
+      "it": "I promemoria restano. Plus può pausare le app."
+    },
+    {
+      "issue": "ENG-63",
+      "table": "Localizable",
+      "key": "today.protection.off.detail.ring.change",
+      "create": true,
+      "comment": "Today blocking card detail, change ring",
+      "en": "Reminders stay on. Plus can pause apps.",
+      "de": "Erinnerungen an. Plus pausiert Apps.",
+      "it": "I promemoria restano. Plus può pausare le app."
+    },
+    {
+      "issue": "ENG-63",
+      "table": "Localizable",
+      "key": "today.protection.off.detail.ring.remove",
+      "create": true,
+      "comment": "Today blocking card detail, remove ring",
+      "en": "Reminders stay on. Plus can pause apps.",
+      "de": "Erinnerungen an. Plus pausiert Apps.",
+      "it": "I promemoria restano. Plus può pausare le app."
+    },
+    {
+      "issue": "ENG-63",
+      "table": "Localizable",
+      "key": "today.protection.add",
+      "create": true,
+      "comment": "Today blocking card CTA for free users",
+      "en": "Add app blocking",
+      "de": "App-Pause dazunehmen",
+      "it": "Aggiungi il blocco"
+    },
+    {
+      "issue": "ENG-63",
+      "table": "Localizable",
+      "key": "today.protection.off.cta",
+      "comment": "Free user CTA on the Today blocking card",
+      "en": "Add app blocking",
+      "de": "App-Pause dazunehmen",
+      "it": "Aggiungi il blocco"
+    },
+    {
+      "issue": "ENG-63",
+      "table": "Localizable",
+      "key": "today.pack.title",
+      "en": "This cycle",
+      "de": "Dieser Zyklus",
+      "it": "Questo ciclo"
+    },
+    {
+      "issue": "ENG-63",
+      "table": "Localizable",
+      "key": "today.pack.day_of_total",
+      "en": "Day %lld of %lld",
+      "de": "Tag %lld von %lld",
+      "it": "Giorno %lld di %lld"
+    },
+    {
+      "issue": "ENG-63",
+      "table": "Localizable",
+      "key": "today.pack.start_new.confirm",
+      "en": "Start new",
+      "de": "Neu starten",
+      "it": "Inizia nuovo"
+    },
+    {
+      "issue": "ENG-63",
+      "table": "Localizable",
+      "key": "today.stats.streak",
+      "create": true,
+      "comment": "Today streak card label, not the trial-end stat",
+      "en": "Your streak",
+      "de": "Dein Streak",
+      "it": "La tua streak"
+    },
+    {
+      "issue": "ENG-63",
+      "table": "Localizable",
+      "key": "today.protection.status_title",
+      "en": "App blocking",
+      "de": "App-Pause",
+      "it": "Blocco app"
+    },
+    {
+      "issue": "ENG-63",
+      "table": "Localizable",
+      "key": "today.greeting",
+      "en": "Still showing up",
+      "de": "Du bist weiter da",
+      "it": "Ci sei ancora"
+    },
+    {
+      "issue": "ENG-64",
+      "table": "Localizable",
+      "key": "settings.section.my_pillie",
+      "en": "My Pillie",
+      "de": "Mein Pillie",
+      "it": "Il mio Pillie"
+    },
+    {
+      "issue": "ENG-64",
+      "table": "Localizable",
+      "key": "settings.method.title",
+      "en": "Method",
+      "de": "Methode",
+      "it": "Metodo"
+    },
+    {
+      "issue": "ENG-64",
+      "table": "Localizable",
+      "key": "settings.reminder_time.title",
+      "en": "Reminder time",
+      "de": "Erinnerungszeit",
+      "it": "Orario promemoria"
+    },
+    {
+      "issue": "ENG-64",
+      "table": "Localizable",
+      "key": "settings.custom_messages.title",
+      "en": "Reminder messages",
+      "de": "Erinnerungstexte",
+      "it": "Testi dei promemoria"
+    },
+    {
+      "issue": "ENG-64",
+      "table": "Localizable",
+      "key": "today.refill.title",
+      "en": "Pill supply reminder",
+      "de": "Pillenvorrat",
+      "it": "Scorte pillola"
+    },
+    {
+      "issue": "ENG-64",
+      "table": "Localizable",
+      "key": "today.refill.title.patch",
+      "en": "Patch supply reminder",
+      "de": "Pflastervorrat",
+      "it": "Scorte cerotto"
+    },
+    {
+      "issue": "ENG-64",
+      "table": "Localizable",
+      "key": "today.refill.title.ring",
+      "en": "Ring supply reminder",
+      "de": "Ringvorrat",
+      "it": "Scorte anello"
+    },
+    {
+      "issue": "ENG-64",
+      "table": "Localizable",
+      "key": "settings.section.reminders",
+      "en": "Reminders",
+      "de": "Erinnerungen",
+      "it": "Promemoria"
+    },
+    {
+      "issue": "ENG-64",
+      "table": "Localizable",
+      "key": "settings.followup.interval_title",
+      "en": "Interval",
+      "de": "Abstand",
+      "it": "Intervallo"
+    },
+    {
+      "issue": "ENG-64",
+      "table": "Localizable",
+      "key": "settings.followup.retry_limit_title",
+      "en": "Repeats",
+      "de": "Wiederholungen",
+      "it": "Ripetizioni"
+    },
+    {
+      "issue": "ENG-64",
+      "table": "Localizable",
+      "key": "settings.final_reminder.title",
+      "en": "Last ping",
+      "de": "Letzter Ping",
+      "it": "Ultimo ping"
+    },
+    {
+      "issue": "ENG-64",
+      "table": "Localizable",
+      "key": "settings.section.cycle",
+      "en": "Routine",
+      "de": "Routine",
+      "it": "Routine"
+    },
+    {
+      "issue": "ENG-64",
+      "table": "Localizable",
+      "key": "settings.cycle_day.title",
+      "en": "Cycle day",
+      "de": "Zyklustag",
+      "it": "Giorno del ciclo"
+    },
+    {
+      "issue": "ENG-64",
+      "table": "Localizable",
+      "key": "settings.break_notice.title",
+      "en": "Break-week ping",
+      "de": "Pausen-Ping",
+      "it": "Ping della pausa"
+    },
+    {
+      "issue": "ENG-64",
+      "table": "Localizable",
+      "key": "settings.break_notice.body",
+      "en": "A ping when reminders pause for your break week.",
+      "de": "Ein Ping, wenn Erinnerungen in der Pause aussetzen.",
+      "it": "Un ping quando i promemoria si fermano nella settimana di pausa."
+    },
+    {
+      "issue": "ENG-64",
+      "table": "Localizable",
+      "key": "settings.section.blocking",
+      "en": "App blocking",
+      "de": "App-Pause",
+      "it": "Blocco app"
+    },
+    {
+      "issue": "ENG-64",
+      "table": "Localizable",
+      "key": "settings.blocked_apps.title",
+      "en": "Your apps",
+      "de": "Deine Apps",
+      "it": "Le tue app"
+    },
+    {
+      "issue": "ENG-64",
+      "table": "Localizable",
+      "key": "settings.section.account",
+      "en": "Account",
+      "de": "Account",
+      "it": "Account"
+    },
+    {
+      "issue": "ENG-64",
+      "table": "Localizable",
+      "key": "settings.section.support",
+      "en": "Support",
+      "de": "Support",
+      "it": "Supporto"
+    },
+    {
+      "issue": "ENG-64",
+      "table": "Localizable",
+      "key": "settings.support.suggestion",
+      "en": "Share an idea",
+      "de": "Idee teilen",
+      "it": "Condividi un'idea"
+    },
+    {
+      "issue": "ENG-64",
+      "table": "Localizable",
+      "key": "settings.support.issue_report",
+      "en": "Report a problem",
+      "de": "Problem melden",
+      "it": "Segnala un problema"
+    },
+    {
+      "issue": "ENG-65",
+      "table": "Localizable",
+      "key": "settings.schedule.title",
+      "en": "Schedule",
+      "de": "Zeitplan",
+      "it": "Programma"
+    },
+    {
+      "issue": "ENG-65",
+      "table": "Localizable",
+      "key": "settings.regimen.title",
+      "en": "Pill regimen",
+      "de": "Pillenplan",
+      "it": "Piano pillola"
+    },
+    {
+      "issue": "ENG-65",
+      "table": "Localizable",
+      "key": "onboarding.regimen.custom",
+      "en": "Custom",
+      "de": "Eigene",
+      "it": "Personalizzato"
+    },
+    {
+      "issue": "ENG-65",
+      "table": "Localizable",
+      "key": "onboarding.regimen.name.custom",
+      "en": "Custom cycle",
+      "de": "Eigener Zyklus",
+      "it": "Ciclo tuo"
+    },
+    {
+      "issue": "ENG-65",
+      "table": "Localizable",
+      "key": "onboarding.regimen.active_days",
+      "en": "Active days",
+      "de": "Aktive Tage",
+      "it": "Giorni attivi"
+    },
+    {
+      "issue": "ENG-65",
+      "table": "Localizable",
+      "key": "onboarding.regimen.break_days",
+      "en": "Break days",
+      "de": "Pausentage",
+      "it": "Giorni di pausa"
+    },
+    {
+      "issue": "ENG-65",
+      "table": "Localizable",
+      "key": "settings.cycle_day.adjust",
+      "en": "Change the day",
+      "de": "Tag ändern",
+      "it": "Cambia il giorno"
+    },
+    {
+      "issue": "ENG-65",
+      "table": "Localizable",
+      "key": "settings.cycle_day.history_note",
+      "en": "Earlier days count as done. Nothing gets marked missed.",
+      "de": "Frühere Tage gelten als erledigt. Kein Tag wird als verpasst markiert.",
+      "it": "I giorni precedenti contano come fatti. Nessuno viene segnato come saltato."
+    },
+    {
+      "issue": "ENG-65",
+      "table": "Localizable",
+      "key": "global.action.save",
+      "en": "Save",
+      "de": "Speichern",
+      "it": "Salva"
+    },
+    {
+      "issue": "ENG-65",
+      "table": "Localizable",
+      "key": "global.action.cancel",
+      "en": "Cancel",
+      "de": "Abbrechen",
+      "it": "Annulla"
+    },
+    {
+      "issue": "ENG-66",
+      "table": "Commerce",
+      "key": "paywall.feature.smart_reminders",
+      "en": "Smart reminders",
+      "de": "Smarte Erinnerungen",
+      "it": "Promemoria smart"
+    },
+    {
+      "issue": "ENG-66",
+      "table": "Commerce",
+      "key": "paywall.upsell.smart_reminders.body",
+      "create": true,
+      "comment": "Smart Reminders plus-gate body. Not the blocking body.",
+      "en": "Keeps pinging until you log today. You pick how often, how many, and the last ping.",
+      "de": "Pingt weiter, bis du heute einträgst. Du wählst wie oft, wie viele, und den letzten Ping.",
+      "it": "Continua a mandare ping finché non registri oggi. Scegli ogni quanto, quanti, e l'ultimo ping."
+    },
+    {
+      "issue": "ENG-67",
+      "table": "Commerce",
+      "key": "paywall.upsell.custom_messages.body",
+      "create": true,
+      "comment": "Custom reminder messages plus-gate body",
+      "en": "Write the ping in your own words. Plus lets you change the daily one and the last one.",
+      "de": "Schreib den Ping in deinen Worten. Plus ändert den täglichen und den letzten.",
+      "it": "Scrivi il ping con le tue parole. Plus cambia quello giornaliero e l'ultimo."
+    },
+    {
+      "issue": "ENG-66",
+      "table": "Commerce",
+      "key": "paywall.action.upgrade",
+      "en": "Get Pillie Plus",
+      "de": "Pillie Plus holen",
+      "it": "Prendi Pillie Plus"
+    },
+    {
+      "issue": "ENG-66",
+      "table": "Localizable",
+      "key": "global.action.not_now",
+      "en": "Not now",
+      "de": "Jetzt nicht",
+      "it": "Non ora"
+    },
+    {
+      "issue": "ENG-66",
+      "table": "Commerce",
+      "key": "paywall.action.restore",
+      "en": "Restore purchases",
+      "de": "Käufe wiederherstellen",
+      "it": "Ripristina acquisti"
+    },
+    {
+      "issue": "ENG-67",
+      "table": "Commerce",
+      "key": "paywall.feature.app_blocking.compact",
+      "en": "App blocking",
+      "de": "App-Pause",
+      "it": "Blocco app"
+    },
+    {
+      "issue": "ENG-67",
+      "table": "Commerce",
+      "key": "paywall.upsell.app_blocking.body.pill",
+      "create": true,
+      "comment": "App blocking plus-gate body, pill",
+      "en": "Your apps pause when the reminder is due, until you take your pill.",
+      "de": "Deine Apps pausieren, wenn die Erinnerung kommt, bis du deine Pille nimmst.",
+      "it": "Le tue app vanno in pausa quando arriva il promemoria, finché non prendi la pillola."
+    },
+    {
+      "issue": "ENG-67",
+      "table": "Commerce",
+      "key": "paywall.upsell.app_blocking.body.patch.apply",
+      "create": true,
+      "comment": "App blocking plus-gate body, apply patch",
+      "en": "Your apps pause when the reminder is due, until you apply your patch.",
+      "de": "Deine Apps pausieren, wenn die Erinnerung kommt, bis du das Pflaster aufklebst.",
+      "it": "Le tue app vanno in pausa quando arriva il promemoria, finché non applichi il cerotto."
+    },
+    {
+      "issue": "ENG-67",
+      "table": "Commerce",
+      "key": "paywall.upsell.app_blocking.body.patch.change",
+      "create": true,
+      "comment": "App blocking plus-gate body, change patch",
+      "en": "Your apps pause when the reminder is due, until you change your patch.",
+      "de": "Deine Apps pausieren, wenn die Erinnerung kommt, bis du das Pflaster wechselst.",
+      "it": "Le tue app vanno in pausa quando arriva il promemoria, finché non cambi il cerotto."
+    },
+    {
+      "issue": "ENG-67",
+      "table": "Commerce",
+      "key": "paywall.upsell.app_blocking.body.patch.remove",
+      "create": true,
+      "comment": "App blocking plus-gate body, remove patch",
+      "en": "Your apps pause when the reminder is due, until you remove your patch.",
+      "de": "Deine Apps pausieren, wenn die Erinnerung kommt, bis du das Pflaster abnimmst.",
+      "it": "Le tue app vanno in pausa quando arriva il promemoria, finché non togli il cerotto."
+    },
+    {
+      "issue": "ENG-67",
+      "table": "Commerce",
+      "key": "paywall.upsell.app_blocking.body.ring.insert",
+      "create": true,
+      "comment": "App blocking plus-gate body, insert ring",
+      "en": "Your apps pause when the reminder is due, until you insert your ring.",
+      "de": "Deine Apps pausieren, wenn die Erinnerung kommt, bis du den Ring einsetzt.",
+      "it": "Le tue app vanno in pausa quando arriva il promemoria, finché non inserisci l'anello."
+    },
+    {
+      "issue": "ENG-67",
+      "table": "Commerce",
+      "key": "paywall.upsell.app_blocking.body.ring.change",
+      "create": true,
+      "comment": "App blocking plus-gate body, change ring",
+      "en": "Your apps pause when the reminder is due, until you change your ring.",
+      "de": "Deine Apps pausieren, wenn die Erinnerung kommt, bis du den Ring wechselst.",
+      "it": "Le tue app vanno in pausa quando arriva il promemoria, finché non cambi l'anello."
+    },
+    {
+      "issue": "ENG-67",
+      "table": "Commerce",
+      "key": "paywall.upsell.app_blocking.body.ring.remove",
+      "create": true,
+      "comment": "App blocking plus-gate body, remove ring",
+      "en": "Your apps pause when the reminder is due, until you remove your ring.",
+      "de": "Deine Apps pausieren, wenn die Erinnerung kommt, bis du den Ring rausnimmst.",
+      "it": "Le tue app vanno in pausa quando arriva il promemoria, finché non togli l'anello."
+    },
+    {
+      "issue": "ENG-68",
+      "table": "Commerce",
+      "key": "paywall.title",
+      "en": "More than one ping with Pillie Plus.",
+      "de": "Mehr als ein Ping mit Pillie Plus.",
+      "it": "Più di un ping con Pillie Plus."
+    },
+    {
+      "issue": "ENG-68",
+      "table": "Commerce",
+      "key": "paywall.subtitle",
+      "en": "Pillie Plus keeps pinging until you log today, and can pause apps until you check in.",
+      "de": "Plus pingt weiter und kann Apps pausieren.",
+      "it": "Plus continua a mandare ping e può pausare le app."
+    },
+    {
+      "issue": "ENG-68",
+      "table": "Commerce",
+      "key": "paywall.feature.daily_reminders",
+      "en": "Daily reminders",
+      "de": "Tägliche Erinnerungen",
+      "it": "Promemoria giornalieri"
+    },
+    {
+      "issue": "ENG-68",
+      "table": "Commerce",
+      "key": "paywall.feature.app_blocking",
+      "en": "App blocking",
+      "de": "App-Pause",
+      "it": "Blocco app"
+    },
+    {
+      "issue": "ENG-68",
+      "table": "Commerce",
+      "key": "paywall.feature.shake",
+      "en": "Shake to confirm",
+      "de": "Schütteln zum Eintragen",
+      "it": "Scuoti per registrare"
+    },
+    {
+      "issue": "ENG-68",
+      "table": "Commerce",
+      "key": "paywall.feature.custom_messages",
+      "en": "Reminder messages",
+      "de": "Erinnerungstexte",
+      "it": "Testi dei promemoria"
+    },
+    {
+      "issue": "ENG-68",
+      "table": "Commerce",
+      "key": "paywall.feature.custom_messages.compact",
+      "en": "Reminder messages",
+      "de": "Erinnerungstexte",
+      "it": "Testi dei promemoria"
+    },
+    {
+      "issue": "ENG-68",
+      "table": "Commerce",
+      "key": "paywall.feature.future",
+      "en": "Future features",
+      "de": "Was noch kommt",
+      "it": "Il resto dopo"
+    },
+    {
+      "issue": "ENG-68",
+      "table": "Commerce",
+      "key": "paywall.feature.future.compact",
+      "en": "Future features",
+      "de": "Was noch kommt",
+      "it": "Il resto dopo"
+    },
+    {
+      "issue": "ENG-68",
+      "table": "Commerce",
+      "key": "paywall.plan.annual",
+      "en": "Annual",
+      "de": "Jährlich",
+      "it": "Annuale"
+    },
+    {
+      "issue": "ENG-68",
+      "table": "Commerce",
+      "key": "paywall.plan.best_value",
+      "en": "Best value",
+      "de": "Bestes Angebot",
+      "it": "Conviene di più"
+    },
+    {
+      "issue": "ENG-68",
+      "table": "Commerce",
+      "key": "paywall.plan.monthly",
+      "en": "Monthly",
+      "de": "Monatlich",
+      "it": "Mensile"
+    },
+    {
+      "issue": "ENG-68",
+      "table": "Commerce",
+      "key": "paywall.plan.lifetime",
+      "create": true,
+      "comment": "Lifetime plan row when Store title is missing",
+      "en": "Pillie Plus lifetime",
+      "de": "Pillie Plus lebenslang",
+      "it": "Pillie Plus a vita"
+    },
+    {
+      "issue": "ENG-68",
+      "table": "Commerce",
+      "key": "paywall.plan.cancel_anytime_short",
+      "en": "Cancel anytime",
+      "de": "Jederzeit kündbar",
+      "it": "Disdici quando vuoi"
+    },
+    {
+      "issue": "ENG-68",
+      "table": "Commerce",
+      "key": "paywall.action.terms",
+      "en": "Terms of Use",
+      "de": "Nutzungsbedingungen",
+      "it": "Termini di utilizzo"
+    },
+    {
+      "issue": "ENG-68",
+      "table": "Commerce",
+      "key": "paywall.action.privacy",
+      "en": "Privacy Policy",
+      "de": "Datenschutz",
+      "it": "Privacy"
+    },
+    {
+      "issue": "ENG-69",
+      "table": "Localizable",
+      "key": "support.mail_failed.title",
+      "en": "We couldn't open the mail app.",
+      "de": "Die Mail-App ist nicht aufgegangen.",
+      "it": "Non siamo riuscite ad aprire l'app mail."
+    },
+    {
+      "issue": "ENG-69",
+      "table": "Localizable",
+      "key": "support.mail_failed.body",
+      "en": "You can email us at %@.",
+      "de": "Du kannst uns schreiben an %@.",
+      "it": "Puoi scriverci a %@."
+    },
+    {
+      "issue": "ENG-69",
+      "table": "Localizable",
+      "key": "global.action.close",
+      "en": "Close",
+      "de": "Schließen",
+      "it": "Chiudi"
+    },
+    {
+      "issue": "ENG-70",
+      "table": "Localizable",
+      "key": "today.next_action.date",
+      "en": "Your next one is on %@.",
+      "de": "Deine nächste ist am %@.",
+      "it": "La prossima è il %@."
+    },
+    {
+      "issue": "ENG-70",
+      "table": "Localizable",
+      "key": "today.action.undo_complete",
+      "en": "That's logged. Tap to undo.",
+      "de": "Eingetragen. Zum Rückgängig tippen.",
+      "it": "È registrato. Tocca per annullare."
+    },
+    {
+      "issue": "ENG-70",
+      "table": "Localizable",
+      "key": "today.empty.title",
+      "en": "There's nothing due today.",
+      "de": "Heute ist nichts fällig.",
+      "it": "Oggi non c'è niente in programma."
+    },
+    {
+      "issue": "ENG-70",
+      "table": "Localizable",
+      "key": "today.pack.start_new.pill.body",
+      "en": "This starts a new pack today. Your old history stays.",
+      "de": "Das startet heute eine neue Packung. Deine alte Historie bleibt.",
+      "it": "Questo inizia oggi una nuova confezione. La cronologia vecchia resta."
+    },
+    {
+      "issue": "ENG-70",
+      "table": "Localizable",
+      "key": "today.pack.start_new.cycle.body",
+      "en": "This starts a new cycle today. Your old history stays.",
+      "de": "Das startet heute einen neuen Zyklus. Deine alte Historie bleibt.",
+      "it": "Questo inizia oggi un nuovo ciclo. La cronologia vecchia resta."
+    },
+    {
+      "issue": "ENG-70",
+      "table": "Localizable",
+      "key": "today.adaptive_reminder.headline",
+      "en": "You usually log around %@.",
+      "de": "Du trägst meist gegen %@ ein.",
+      "it": "Di solito registri verso le %@."
+    },
+    {
+      "issue": "ENG-70",
+      "table": "Localizable",
+      "key": "today.adaptive_reminder.body",
+      "en": "Want to move your daily reminder to %@ so it shows up when you usually log?",
+      "de": "Willst du die tägliche Erinnerung auf %@ legen, damit sie kommt, wenn du meist einträgst?",
+      "it": "Vuoi spostare il promemoria giornaliero alle %@, così arriva quando registri di solito?"
+    },
+    {
+      "issue": "ENG-70",
+      "table": "Localizable",
+      "key": "today.adaptive_reminder.accept",
+      "en": "Move the reminder to %@",
+      "de": "Erinnerung auf %@ legen",
+      "it": "Sposta il promemoria alle %@"
+    },
+    {
+      "issue": "ENG-70",
+      "table": "Localizable",
+      "key": "today.review_prompt.title",
+      "en": "Enjoying Pillie?",
+      "de": "Magst du Pillie?",
+      "it": "Ti piace Pillie?"
+    },
+    {
+      "issue": "ENG-70",
+      "table": "Localizable",
+      "key": "today.review_prompt.body",
+      "en": "How's it going for you so far?",
+      "de": "Wie läuft's für dich bisher?",
+      "it": "Come sta andando finora?"
+    },
+    {
+      "issue": "ENG-70",
+      "table": "Localizable",
+      "key": "today.review_prompt.negative",
+      "en": "Not really",
+      "de": "Nicht wirklich",
+      "it": "Non proprio"
+    },
+    {
+      "issue": "ENG-70",
+      "table": "Localizable",
+      "key": "today.review_prompt.positive",
+      "en": "Yes, I'm enjoying it",
+      "de": "Ja, es gefällt mir",
+      "it": "Sì, mi piace"
+    },
+    {
+      "issue": "ENG-70",
+      "table": "Localizable",
+      "key": "today.protection.ended.detail",
+      "create": true,
+      "comment": "Today card after plus access ends",
+      "en": "Your Plus access ended, so your apps aren't paused. Your setup is saved. Turn Plus back on and it picks up where you left off.",
+      "de": "Dein Plus-Zugang ist zu Ende, also sind deine Apps nicht pausiert. Dein Setup ist gespeichert. Hol Plus zurück und es geht weiter wie vorher.",
+      "it": "Il tuo accesso plus è finito, quindi le app non sono in pausa. La tua configurazione è salvata. Riattiva plus e riprende da dove eri."
+    },
+    {
+      "issue": "ENG-70",
+      "table": "Localizable",
+      "key": "today.protection.ended.cta",
+      "create": true,
+      "comment": "Today protection-off CTA",
+      "en": "Turn Plus back on",
+      "de": "Plus wieder einschalten",
+      "it": "Riattiva Plus"
+    },
+    {
+      "issue": "ENG-70",
+      "table": "Localizable",
+      "key": "today.protection.setup.title",
+      "create": true,
+      "comment": "Today unconfigured blocking title",
+      "en": "You haven't set up app blocking yet.",
+      "de": "Du hast App-Pause noch nicht eingerichtet.",
+      "it": "Non hai ancora impostato il blocco app."
+    },
+    {
+      "issue": "ENG-70",
+      "table": "Localizable",
+      "key": "today.protection.setup.detail.pill",
+      "create": true,
+      "comment": "Today unconfigured blocking detail, pill",
+      "en": "Daily reminders are already on. Finish setup if you want apps to pause until you check in.",
+      "de": "Tägliche Erinnerungen laufen schon. Richte es zu Ende ein, wenn Apps bis zum Check-in pausieren sollen.",
+      "it": "I promemoria giornalieri funzionano già. Finisci il setup se vuoi che le app vadano in pausa fino al check-in."
+    },
+    {
+      "issue": "ENG-70",
+      "table": "Localizable",
+      "key": "today.protection.setup.detail.patch.apply",
+      "create": true,
+      "comment": "Today unconfigured blocking detail, apply patch",
+      "en": "Daily reminders are already on. Finish setup if you want apps to pause until you check in.",
+      "de": "Tägliche Erinnerungen laufen schon. Richte es zu Ende ein, wenn Apps bis zum Check-in pausieren sollen.",
+      "it": "I promemoria giornalieri funzionano già. Finisci il setup se vuoi che le app vadano in pausa fino al check-in."
+    },
+    {
+      "issue": "ENG-70",
+      "table": "Localizable",
+      "key": "today.protection.setup.detail.patch.change",
+      "create": true,
+      "comment": "Today unconfigured blocking detail, change patch",
+      "en": "Daily reminders are already on. Finish setup if you want apps to pause until you check in.",
+      "de": "Tägliche Erinnerungen laufen schon. Richte es zu Ende ein, wenn Apps bis zum Check-in pausieren sollen.",
+      "it": "I promemoria giornalieri funzionano già. Finisci il setup se vuoi che le app vadano in pausa fino al check-in."
+    },
+    {
+      "issue": "ENG-70",
+      "table": "Localizable",
+      "key": "today.protection.setup.detail.patch.remove",
+      "create": true,
+      "comment": "Today unconfigured blocking detail, remove patch",
+      "en": "Daily reminders are already on. Finish setup if you want apps to pause until you check in.",
+      "de": "Tägliche Erinnerungen laufen schon. Richte es zu Ende ein, wenn Apps bis zum Check-in pausieren sollen.",
+      "it": "I promemoria giornalieri funzionano già. Finisci il setup se vuoi che le app vadano in pausa fino al check-in."
+    },
+    {
+      "issue": "ENG-70",
+      "table": "Localizable",
+      "key": "today.protection.setup.detail.ring.insert",
+      "create": true,
+      "comment": "Today unconfigured blocking detail, insert ring",
+      "en": "Daily reminders are already on. Finish setup if you want apps to pause until you check in.",
+      "de": "Tägliche Erinnerungen laufen schon. Richte es zu Ende ein, wenn Apps bis zum Check-in pausieren sollen.",
+      "it": "I promemoria giornalieri funzionano già. Finisci il setup se vuoi che le app vadano in pausa fino al check-in."
+    },
+    {
+      "issue": "ENG-70",
+      "table": "Localizable",
+      "key": "today.protection.setup.detail.ring.change",
+      "create": true,
+      "comment": "Today unconfigured blocking detail, change ring",
+      "en": "Daily reminders are already on. Finish setup if you want apps to pause until you check in.",
+      "de": "Tägliche Erinnerungen laufen schon. Richte es zu Ende ein, wenn Apps bis zum Check-in pausieren sollen.",
+      "it": "I promemoria giornalieri funzionano già. Finisci il setup se vuoi che le app vadano in pausa fino al check-in."
+    },
+    {
+      "issue": "ENG-70",
+      "table": "Localizable",
+      "key": "today.protection.setup.detail.ring.remove",
+      "create": true,
+      "comment": "Today unconfigured blocking detail, remove ring",
+      "en": "Daily reminders are already on. Finish setup if you want apps to pause until you check in.",
+      "de": "Tägliche Erinnerungen laufen schon. Richte es zu Ende ein, wenn Apps bis zum Check-in pausieren sollen.",
+      "it": "I promemoria giornalieri funzionano già. Finisci il setup se vuoi che le app vadano in pausa fino al check-in."
+    },
+    {
+      "issue": "ENG-70",
+      "table": "Localizable",
+      "key": "today.protection.setup.cta",
+      "create": true,
+      "comment": "Today unconfigured blocking CTA",
+      "en": "Set up app blocking",
+      "de": "App-Pause einrichten",
+      "it": "Imposta il blocco app"
+    },
+    {
+      "issue": "ENG-71",
+      "table": "Commerce",
+      "key": "trial.end.title",
+      "en": "Your Pillie Plus trial is over.",
+      "de": "Dein Pillie Plus-Trial ist vorbei.",
+      "it": "Il tuo trial di Pillie Plus è finito."
+    },
+    {
+      "issue": "ENG-71",
+      "table": "Commerce",
+      "key": "trial.end.subtitle.hard",
+      "create": true,
+      "comment": "Hard trial-end subtitle with blocking",
+      "en": "You had extra pings and paused apps for 14 days. Keep Plus if you want that to stay on.",
+      "de": "Du hattest extra Pings und pausierte Apps für 14 Tage. Behalt Plus, wenn das so bleiben soll.",
+      "it": "Hai avuto ping extra e app in pausa per 14 giorni. Tieni plus se vuoi che resti così."
+    },
+    {
+      "issue": "ENG-71",
+      "table": "Commerce",
+      "key": "trial.end.subtitle.reminders",
+      "create": true,
+      "comment": "Hard trial-end subtitle reminders only",
+      "en": "You had extra pings for 14 days. Keep Plus if you want those to stay on.",
+      "de": "Du hattest extra Pings für 14 Tage. Behalt Plus, wenn die so bleiben sollen.",
+      "it": "Hai avuto ping extra per 14 giorni. Tieni plus se vuoi che restino."
+    },
+    {
+      "issue": "ENG-71",
+      "table": "Commerce",
+      "key": "trial.end.kicker",
+      "en": "Your 14 days",
+      "de": "Deine 14 Tage",
+      "it": "I tuoi 14 giorni"
+    },
+    {
+      "issue": "ENG-71",
+      "table": "Commerce",
+      "key": "trial.end.blocks",
+      "en": "Apps paused",
+      "de": "Apps pausiert",
+      "it": "App in pausa"
+    },
+    {
+      "issue": "ENG-71",
+      "table": "Commerce",
+      "key": "trial.end.actions",
+      "en": "Actions logged",
+      "de": "Aktionen eingetragen",
+      "it": "Azioni registrate"
+    },
+    {
+      "issue": "ENG-71",
+      "table": "Commerce",
+      "key": "trial.end.streak",
+      "en": "Current streak",
+      "de": "Aktuelle Serie",
+      "it": "Streak attuale"
+    },
+    {
+      "issue": "ENG-71",
+      "table": "Commerce",
+      "key": "trial.end.keep_plus",
+      "create": true,
+      "comment": "Hard trial-end CTA",
+      "en": "Keep Pillie Plus",
+      "de": "Pillie Plus behalten",
+      "it": "Tieni Pillie Plus"
+    },
+    {
+      "issue": "ENG-71",
+      "table": "Commerce",
+      "key": "paywall.plan.cancel_anytime",
+      "en": "You can manage or cancel anytime in settings.",
+      "de": "Du kannst jederzeit in den Einstellungen verwalten oder kündigen.",
+      "it": "Puoi gestire o disdire quando vuoi dalle impostazioni."
+    },
+    {
+      "issue": "ENG-71",
+      "table": "Commerce",
+      "key": "trial.end.welcome_back",
+      "en": "Pillie Plus is on again.",
+      "de": "Pillie Plus ist wieder an.",
+      "it": "Pillie Plus è di nuovo attivo."
+    },
+    {
+      "issue": "ENG-71",
+      "table": "Commerce",
+      "key": "trial.end.success.reminder_only",
+      "en": "Pillie Plus is on. You can set up app blocking whenever you're ready.",
+      "de": "Pillie Plus ist an. Du kannst App-Pause einrichten, wann du soweit bist.",
+      "it": "Pillie Plus è attivo. Puoi impostare il blocco app quando vuoi."
+    },
+    {
+      "issue": "ENG-71",
+      "table": "Commerce",
+      "key": "trial.end.back_today",
+      "en": "Back to today",
+      "de": "Zurück zu heute",
+      "it": "Torna a oggi"
+    },
+    {
+      "issue": "ENG-71",
+      "table": "Commerce",
+      "key": "trial.end.legacy.title",
+      "create": true,
+      "comment": "Legacy trial-end headline",
+      "en": "Your Plus trial just ended.",
+      "de": "Deine Plus-Testphase ist vorbei.",
+      "it": "La prova Plus è finita."
+    },
+    {
+      "issue": "ENG-71",
+      "table": "Commerce",
+      "key": "trial.end.legacy.subtitle",
+      "create": true,
+      "comment": "Legacy trial-end subtitle",
+      "en": "Your 14 days ended, so app blocking is off. Reminders stay free forever.",
+      "de": "Deine 14 Tage sind um, also ist App-Pause aus. Erinnerungen bleiben für immer kostenlos.",
+      "it": "I tuoi 14 giorni sono finiti, quindi il blocco app è spento. I promemoria restano gratis per sempre."
+    },
+    {
+      "issue": "ENG-71",
+      "table": "Commerce",
+      "key": "trial.end.record",
+      "create": true,
+      "comment": "Legacy 14-day record heading",
+      "en": "Your 14-day record",
+      "de": "Dein 14-Tage-Stand",
+      "it": "Il tuo resoconto di 14 giorni"
+    },
+    {
+      "issue": "ENG-71",
+      "table": "Commerce",
+      "key": "trial.end.blocks_intercepted",
+      "create": true,
+      "comment": "Legacy blocks intercepted stat",
+      "en": "Blocks intercepted",
+      "de": "Blocks abgefangen",
+      "it": "Blocchi intercettati"
+    },
+    {
+      "issue": "ENG-71",
+      "table": "Commerce",
+      "key": "trial.end.logged_on_time",
+      "create": true,
+      "comment": "Legacy logged on time stat",
+      "en": "Logged on time",
+      "de": "Rechtzeitig eingetragen",
+      "it": "Registrato in orario"
+    },
+    {
+      "issue": "ENG-71",
+      "table": "Commerce",
+      "key": "trial.end.worth_keeping",
+      "create": true,
+      "comment": "Legacy trial-end closer",
+      "en": "Want to keep Plus?",
+      "de": "Plus behalten?",
+      "it": "Vuoi tenere Plus?"
+    },
+    {
+      "issue": "ENG-71",
+      "table": "Commerce",
+      "key": "trial.end.keep_plus_short",
+      "create": true,
+      "comment": "Legacy keep plus CTA",
+      "en": "Keep Plus",
+      "de": "Plus behalten",
+      "it": "Tieni Plus"
+    },
+    {
+      "issue": "ENG-71",
+      "table": "Commerce",
+      "key": "trial.end.continue_free",
+      "en": "Keep reminders free",
+      "de": "Erinnerungen weiter kostenlos",
+      "it": "Tieni i promemoria gratis"
+    },
+    {
+      "issue": "ENG-71",
+      "table": "Commerce",
+      "key": "trial.end.free_title",
+      "en": "Reminders stay available.",
+      "de": "Erinnerungen bleiben da.",
+      "it": "I promemoria restano."
+    },
+    {
+      "issue": "ENG-72",
+      "table": "Commerce",
+      "key": "trial.status.indicator.active",
+      "en": "Plus is on · %lld days left",
+      "de": "Plus ist an · noch %lld Tage",
+      "it": "Plus è attivo · %lld giorni rimasti"
+    },
+    {
+      "issue": "ENG-72",
+      "table": "Commerce",
+      "key": "trial.status.indicator.active_tonight",
+      "en": "Plus is on · it ends tonight.",
+      "de": "Plus ist an · es endet heute Nacht.",
+      "it": "Plus è attivo · finisce stasera."
+    },
+    {
+      "issue": "ENG-72",
+      "table": "Commerce",
+      "key": "trial.status.indicator.setup",
+      "en": "Set up app blocking · %lld days left",
+      "de": "App-Pause einrichten · noch %lld Tage",
+      "it": "Imposta il blocco app · %lld giorni rimasti"
+    },
+    {
+      "issue": "ENG-72",
+      "table": "Commerce",
+      "key": "trial.status.ends",
+      "en": "Your trial ends on %@.",
+      "de": "Dein Trial endet am %@.",
+      "it": "Il tuo trial finisce il %@."
+    },
+    {
+      "issue": "ENG-72",
+      "table": "Commerce",
+      "key": "trial.status.title",
+      "en": "Try your Plus features.",
+      "de": "Probier deine Plus-Features.",
+      "it": "Prova le tue funzioni plus."
+    },
+    {
+      "issue": "ENG-72",
+      "table": "Commerce",
+      "key": "trial.activation.status.active",
+      "en": "Active",
+      "de": "Aktiv",
+      "it": "Attivo"
+    },
+    {
+      "issue": "ENG-72",
+      "table": "Commerce",
+      "key": "trial.activation.action.manage",
+      "en": "Manage",
+      "de": "Verwalten",
+      "it": "Gestisci"
+    },
+    {
+      "issue": "ENG-72",
+      "table": "Commerce",
+      "key": "trial.activation.recommended",
+      "en": "Recommended",
+      "de": "Empfohlen",
+      "it": "Consigliato"
+    },
+    {
+      "issue": "ENG-72",
+      "table": "Commerce",
+      "key": "trial.activation.status.customized",
+      "en": "Customized",
+      "de": "Angepasst",
+      "it": "Personalizzato"
+    },
+    {
+      "issue": "ENG-72",
+      "table": "Commerce",
+      "key": "trial.activation.action.customize",
+      "en": "Customize",
+      "de": "Anpassen",
+      "it": "Personalizza"
+    },
+    {
+      "issue": "ENG-72",
+      "table": "Commerce",
+      "key": "trial.activation.action.edit",
+      "en": "Edit",
+      "de": "Bearbeiten",
+      "it": "Modifica"
+    },
+    {
+      "issue": "ENG-72",
+      "table": "Commerce",
+      "key": "trial.activation.status.on",
+      "en": "On",
+      "de": "An",
+      "it": "Attivo"
+    },
+    {
+      "issue": "ENG-72",
+      "table": "Commerce",
+      "key": "trial.activation.action.setup",
+      "en": "Set up",
+      "de": "Einrichten",
+      "it": "Imposta"
+    },
+    {
+      "issue": "ENG-72",
+      "table": "Commerce",
+      "key": "trial.activation.status.active_automatically",
+      "en": "Active automatically",
+      "de": "Automatisch aktiv",
+      "it": "Attivo da solo"
+    },
+    {
+      "issue": "ENG-72",
+      "table": "Commerce",
+      "key": "trial.activation.action.personalize",
+      "en": "Personalize",
+      "de": "Personalisieren",
+      "it": "Personalizza"
+    },
+    {
+      "issue": "ENG-72",
+      "table": "Commerce",
+      "key": "trial.status.after_title",
+      "en": "When the trial ends.",
+      "de": "Wenn der Trial endet.",
+      "it": "Quando il trial finisce."
+    },
+    {
+      "issue": "ENG-72",
+      "table": "Commerce",
+      "key": "trial.status.after.plus_pauses",
+      "en": "Pillie Plus access pauses.",
+      "de": "Der Pillie Plus-Zugang pausiert.",
+      "it": "L'accesso a Pillie Plus va in pausa."
+    },
+    {
+      "issue": "ENG-72",
+      "table": "Commerce",
+      "key": "trial.status.after.plan_required",
+      "en": "You can choose monthly, annual, or lifetime to continue.",
+      "de": "Du kannst monatlich, jährlich oder lebenslang wählen, um weiterzumachen.",
+      "it": "Puoi scegliere mensile, annuale o a vita per continuare."
+    },
+    {
+      "issue": "ENG-72",
+      "table": "Commerce",
+      "key": "trial.status.after.setup_saved",
+      "en": "Your app blocking setup is saved.",
+      "de": "Dein App-Pause-Setup ist gespeichert.",
+      "it": "La tua configurazione del blocco app è salvata."
+    },
+    {
+      "issue": "ENG-72",
+      "table": "Commerce",
+      "key": "trial.status.keep_plus",
+      "en": "Keep Pillie Plus",
+      "de": "Pillie Plus behalten",
+      "it": "Tieni Pillie Plus"
+    },
+    {
+      "issue": "ENG-72",
+      "table": "Commerce",
+      "key": "trial.decline_feedback.detail.done",
+      "en": "Done",
+      "de": "Fertig",
+      "it": "Fatto"
+    },
+    {
+      "issue": "ENG-72",
+      "table": "Commerce",
+      "key": "trial.granted.headline",
+      "en": "Your next two weeks are",
+      "de": "Deine nächsten zwei Wochen gehen",
+      "it": "Le tue prossime due settimane sono"
+    },
+    {
+      "issue": "ENG-72",
+      "table": "Commerce",
+      "key": "trial.granted.headline_accent",
+      "en": "on us.",
+      "de": "auf uns.",
+      "it": "offerta nostra."
+    },
+    {
+      "issue": "ENG-72",
+      "table": "Commerce",
+      "key": "trial.granted.subtitle",
+      "en": "Your Pillie Plus trial starts now. Here's what's included.",
+      "de": "Dein Pillie Plus-Trial startet jetzt. Hier ist, was drin ist.",
+      "it": "Il tuo trial di Pillie Plus inizia ora. Ecco cosa c'è dentro."
+    },
+    {
+      "issue": "ENG-72",
+      "table": "Commerce",
+      "key": "trial.granted.disclosure",
+      "en": "14 days free, no card needed. App blocking turns off after the trial. Reminders stay free.",
+      "de": "14 Tage gratis, keine Karte. App-Pause endet mit dem Trial. Erinnerungen bleiben frei.",
+      "it": "14 giorni gratis, niente carta. Il blocco finisce col trial. I promemoria restano gratis."
+    },
+    {
+      "issue": "ENG-72",
+      "table": "Localizable",
+      "key": "global.action.continue",
+      "en": "Continue",
+      "de": "Weiter",
+      "it": "Continua"
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Commerce",
+      "key": "trial.decline_feedback.title",
+      "en": "One quick question.",
+      "de": "Eine kurze Frage.",
+      "it": "Una domanda veloce."
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Commerce",
+      "key": "trial.decline_feedback.prompt",
+      "en": "What made Pillie Plus not the right fit?",
+      "de": "Warum war Pillie Plus nicht das Richtige?",
+      "it": "Cosa ha fatto sì che Pillie Plus non fosse quello giusto?"
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Commerce",
+      "key": "trial.decline_feedback.optional_note",
+      "en": "This is optional. You can skip and keep using Pillie for free.",
+      "de": "Das ist optional. Du kannst überspringen und Pillie weiter kostenlos nutzen.",
+      "it": "Questo è facoltativo. Puoi saltare e continuare a usare Pillie gratis."
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Commerce",
+      "key": "trial.decline_feedback.reason.too_expensive",
+      "en": "Too expensive.",
+      "de": "Zu teuer.",
+      "it": "Troppo caro."
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Commerce",
+      "key": "trial.decline_feedback.reason.not_used_enough",
+      "en": "I don't use it enough.",
+      "de": "Ich nutze es nicht genug.",
+      "it": "Non lo uso abbastanza."
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Commerce",
+      "key": "trial.decline_feedback.reason.missing_feature",
+      "en": "It's missing a feature.",
+      "de": "Da fehlt eine Funktion.",
+      "it": "Manca una funzione."
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Commerce",
+      "key": "trial.decline_feedback.reason.just_trying",
+      "en": "I was just trying it.",
+      "de": "Ich hab's nur ausprobiert.",
+      "it": "Lo stavo solo provando."
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Commerce",
+      "key": "trial.decline_feedback.reason.prefer_another_app",
+      "en": "I use something else.",
+      "de": "Ich nutze was anderes.",
+      "it": "Uso un'altra app."
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Commerce",
+      "key": "trial.decline_feedback.reason.technical_issue",
+      "en": "Something broke.",
+      "de": "Irgendwas ist kaputtgegangen.",
+      "it": "Qualcosa si è rotto."
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Commerce",
+      "key": "trial.decline_feedback.reason.other",
+      "en": "Other.",
+      "de": "Sonstiges.",
+      "it": "Altro."
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Localizable",
+      "key": "onboarding.welcome.demo.reminder_title",
+      "en": "Nightly check-in",
+      "de": "Check-in am Abend",
+      "it": "Check-in serale"
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Localizable",
+      "key": "onboarding.welcome.demo.reminder_time",
+      "en": "Reminder · %@",
+      "de": "Erinnerung · %@",
+      "it": "Promemoria · %@"
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Localizable",
+      "key": "onboarding.welcome.demo.apps_title",
+      "en": "Your apps",
+      "de": "Deine Apps",
+      "it": "Le tue app"
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Localizable",
+      "key": "onboarding.welcome.demo.apps_locked",
+      "en": "Paused until you check in",
+      "de": "Pausiert, bis du den Check-in machst",
+      "it": "In pausa finché non fai il check-in"
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Localizable",
+      "key": "onboarding.welcome.title",
+      "en": "The alarm clock for your pill.",
+      "de": "Der Wecker für deine Pille, jeden Abend.",
+      "it": "La sveglia per la tua pillola, ogni sera."
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Localizable",
+      "key": "onboarding.welcome.subtitle",
+      "en": "You can't swipe this reminder away. It stays until you check in.",
+      "de": "Du kannst sie nicht wegwischen. Sie bleibt bis zum Check-in.",
+      "it": "Non puoi scartarlo. Resta fino al check-in."
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Localizable",
+      "key": "global.action.get_started",
+      "en": "Get started",
+      "de": "Loslegen",
+      "it": "Inizia"
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Localizable",
+      "key": "accessibility.progress.intro.title",
+      "en": "See how Pillie works.",
+      "de": "So funktioniert Pillie.",
+      "it": "Ecco come funziona Pillie."
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Localizable",
+      "key": "onboarding.demo.title",
+      "en": "Your daily flow",
+      "de": "Dein Tagesablauf",
+      "it": "Il tuo flusso del giorno"
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Localizable",
+      "key": "onboarding.blocking_demo.title",
+      "en": "Apps pause until you check in.",
+      "de": "Apps pausieren bis zum Check-in.",
+      "it": "App in pausa fino al check-in."
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Localizable",
+      "key": "onboarding.blocking_demo.body",
+      "en": "Pillie Plus can pause selected apps when a reminder is due. They come back after you check in.",
+      "de": "Plus pausiert Apps bei einer Erinnerung. Nach dem Check-in sind sie wieder da.",
+      "it": "Plus mette in pausa le app al promemoria. Tornano dopo il check-in."
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Localizable",
+      "key": "onboarding.blocking_demo.drag_title",
+      "en": "Drag this onto your apps.",
+      "de": "Zieh das auf deine Apps.",
+      "it": "Trascina questo sulle tue app."
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Localizable",
+      "key": "onboarding.demo.explainer",
+      "en": "Pillie helps you check in and review your history.",
+      "de": "Pillie hilft dir beim Check-in und hält deine Historie leicht nachschaubar.",
+      "it": "Pillie ti aiuta a fare il check-in e a rivedere la cronologia."
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Localizable",
+      "key": "accessibility.progress.personalize.title",
+      "en": "Personalize your plan.",
+      "de": "Mach deinen Plan persönlich.",
+      "it": "Personalizza il tuo piano."
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Localizable",
+      "key": "onboarding.personalise.pain.subtitle",
+      "en": "Choose the answer that feels closest.",
+      "de": "Nimm die Antwort, die sich am nächsten anfühlt.",
+      "it": "Scegli la risposta che ti assomiglia di più."
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Localizable",
+      "key": "onboarding.personalise.choice.snooze",
+      "en": "I dismiss reminders.",
+      "de": "Ich wische Erinnerungen weg.",
+      "it": "Scarto i promemoria."
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Localizable",
+      "key": "onboarding.personalise.choice.busy",
+      "en": "I'm busy then.",
+      "de": "Ich hab dann keine Zeit.",
+      "it": "Sono occupata quando arrivano."
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Localizable",
+      "key": "onboarding.personalise.choice.forget",
+      "en": "I just forget.",
+      "de": "Ich vergesse es einfach.",
+      "it": "Semplicemente dimentico."
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Localizable",
+      "key": "onboarding.personalise.outcome.subtitle",
+      "en": "Choose the support you want from Pillie.",
+      "de": "Such dir aus, welche Unterstützung du von Pillie willst.",
+      "it": "Scegli il tipo di supporto che vuoi da Pillie."
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Localizable",
+      "key": "onboarding.personalise.outcome.stress",
+      "en": "Less stress",
+      "de": "Weniger Stress",
+      "it": "Meno stress"
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Localizable",
+      "key": "onboarding.personalise.outcome.interruptions",
+      "en": "Fewer interruptions",
+      "de": "Weniger Unterbrechungen",
+      "it": "Meno interruzioni"
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Localizable",
+      "key": "onboarding.personalise.outcome.reassurance",
+      "en": "More reassurance",
+      "de": "Mehr Sicherheit",
+      "it": "Più rassicurazione"
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Localizable",
+      "key": "onboarding.personalise.outcome.peace",
+      "en": "Peace of mind",
+      "de": "Ein ruhiger Kopf",
+      "it": "Più serenità"
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Localizable",
+      "key": "onboarding.method.subtitle",
+      "en": "What should Pillie remind you about?",
+      "de": "An welche Routine soll Pillie dich erinnern?",
+      "it": "Di quale routine deve ricordarti Pillie?"
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Localizable",
+      "key": "onboarding.method.pill.subtitle",
+      "en": "Pill · a daily pill schedule",
+      "de": "Pille · ein täglicher Pillenplan",
+      "it": "Pillola · un piano pillola quotidiano"
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Localizable",
+      "key": "onboarding.method.patch.subtitle",
+      "en": "Patch · a change schedule",
+      "de": "Pflaster · ein Wechselplan",
+      "it": "Cerotto · un piano di cambio"
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Localizable",
+      "key": "onboarding.method.ring.subtitle",
+      "en": "Ring · a ring schedule",
+      "de": "Ring · ein Ringplan",
+      "it": "Anello · un piano anello"
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Localizable",
+      "key": "onboarding.regimen.title",
+      "en": "Choose your pill regimen.",
+      "de": "Wähl deinen Pillenplan.",
+      "it": "Scegli il tuo piano pillola."
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Localizable",
+      "key": "onboarding.reminder_time.subtitle",
+      "en": "When should Pillie remind you?",
+      "de": "Wann soll Pillie dich erinnern?",
+      "it": "Quando deve ricordarti Pillie?"
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Localizable",
+      "key": "onboarding.reminder_time.morning",
+      "en": "Morning",
+      "de": "Morgens",
+      "it": "Mattina"
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Localizable",
+      "key": "onboarding.reminder_time.evening",
+      "en": "Evening",
+      "de": "Abends",
+      "it": "Sera"
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Localizable",
+      "key": "onboarding.blocking_setup.subtitle",
+      "en": "Selected apps pause after a Pillie reminder. They come back after you check in.",
+      "de": "Ausgewählte Apps pausieren nach einer Erinnerung. Nach dem Check-in sind sie wieder da.",
+      "it": "Le app scelte vanno in pausa al promemoria. Tornano dopo il check-in."
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Localizable",
+      "key": "onboarding.blocking_setup.title",
+      "en": "Choose apps to pause",
+      "de": "Wähl Apps zum Pausieren",
+      "it": "Scegli le app da pausare"
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Commerce",
+      "key": "trial.granted.disclosure.hard_paywall",
+      "en": "Your free trial lasts 14 days. No card needed. After it ends, choose monthly, annual, or lifetime to keep Plus.",
+      "de": "Dein Gratis-Trial dauert 14 Tage. Keine Karte nötig. Danach kannst du monatlich, jährlich oder lebenslang wählen, um Plus zu behalten.",
+      "it": "Il tuo trial gratis dura 14 giorni. Non serve la carta. Dopo puoi scegliere mensile, annuale o a vita per tenere plus."
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Localizable",
+      "key": "onboarding.blocking_setup.skip",
+      "en": "Continue without app blocking",
+      "de": "Weiter ohne App-Pause",
+      "it": "Continua senza blocco app"
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Localizable",
+      "key": "onboarding.welcome.next_action",
+      "en": "Next",
+      "de": "Als Nächstes",
+      "it": "Dopo"
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Localizable",
+      "key": "onboarding.permission.cta",
+      "en": "Continue to notification settings",
+      "de": "Weiter zu den Mitteilungen",
+      "it": "Continua alle notifiche"
+    },
+    {
+      "issue": "ENG-58",
+      "table": "Notifications",
+      "key": "notification.reminder.patch.apply.body",
+      "create": true,
+      "en": "Hey, quick check-in. Apply your patch when you're done",
+      "de": "Hey, kurzer Check-in. Kleb dein Pflaster auf, wenn du fertig bist",
+      "it": "Ehi, check-in veloce. Applica il cerotto quando hai finito"
+    },
+    {
+      "issue": "ENG-58",
+      "table": "Notifications",
+      "key": "notification.reminder.patch.change.body",
+      "create": true,
+      "en": "Hey, quick check-in. Change your patch when you're done",
+      "de": "Hey, kurzer Check-in. Wechsel dein Pflaster, wenn du fertig bist",
+      "it": "Ehi, check-in veloce. Cambia il cerotto quando hai finito"
+    },
+    {
+      "issue": "ENG-58",
+      "table": "Notifications",
+      "key": "notification.reminder.patch.remove.body",
+      "create": true,
+      "en": "Hey, quick check-in. Remove your patch when you're done",
+      "de": "Hey, kurzer Check-in. Nimm dein Pflaster ab, wenn du fertig bist",
+      "it": "Ehi, check-in veloce. Togli il cerotto quando hai finito"
+    },
+    {
+      "issue": "ENG-58",
+      "table": "Notifications",
+      "key": "notification.reminder.ring.insert.body",
+      "create": true,
+      "en": "Hey, quick check-in. Insert your ring when you're done",
+      "de": "Hey, kurzer Check-in. Setz deinen Ring ein, wenn du fertig bist",
+      "it": "Ehi, check-in veloce. Inserisci l'anello quando hai finito"
+    },
+    {
+      "issue": "ENG-58",
+      "table": "Notifications",
+      "key": "notification.reminder.ring.change.body",
+      "create": true,
+      "en": "Hey, quick check-in. Change your ring when you're done",
+      "de": "Hey, kurzer Check-in. Wechsel deinen Ring, wenn du fertig bist",
+      "it": "Ehi, check-in veloce. Cambia l'anello quando hai finito"
+    },
+    {
+      "issue": "ENG-58",
+      "table": "Notifications",
+      "key": "notification.reminder.ring.remove.body",
+      "create": true,
+      "en": "Hey, quick check-in. Remove your ring when you're done",
+      "de": "Hey, kurzer Check-in. Nimm deinen Ring raus, wenn du fertig bist",
+      "it": "Ehi, check-in veloce. Togli l'anello quando hai finito"
+    },
+    {
+      "issue": "ENG-58",
+      "table": "Notifications",
+      "key": "notification.final.body",
+      "create": true,
+      "en": "Still no check-in for today.",
+      "de": "Für heute noch kein Check-in.",
+      "it": "Per oggi non c'è ancora un check-in."
+    },
+    {
+      "issue": "ENG-58",
+      "table": "Notifications",
+      "key": "notification.trial_expiry.day10.body",
+      "create": true,
+      "en": "App blocking turns off in 5 days.",
+      "de": "Die App-Pause wird in 5 Tagen deaktiviert.",
+      "it": "Il blocco delle app si disattiverà tra 5 giorni."
+    },
+    {
+      "issue": "ENG-58",
+      "table": "Notifications",
+      "key": "notification.trial_expiry.day13.body",
+      "create": true,
+      "en": "App blocking turns off tomorrow night.",
+      "de": "Die App-Pause wird morgen Abend deaktiviert.",
+      "it": "Il blocco delle app si disattiverà domani sera."
+    },
+    {
+      "issue": "ENG-58",
+      "table": "Notifications",
+      "key": "notification.trial_ending.body",
+      "create": true,
+      "en": "App blocking will turn off when the trial ends.",
+      "de": "Die App-Pause wird am Ende der Testphase deaktiviert.",
+      "it": "Il blocco delle app si disattiverà al termine della prova."
+    },
+    {
+      "issue": "ENG-58",
+      "table": "Notifications",
+      "key": "notification.custom.direct.primary",
+      "create": true,
+      "en": "Your scheduled check-in is due.",
+      "de": "Dein geplanter Check-in ist fällig.",
+      "it": "È previsto il check-in programmato."
+    },
+    {
+      "issue": "ENG-58",
+      "table": "Notifications",
+      "key": "notification.custom.direct.followup",
+      "create": true,
+      "en": "Today's check-in is still open.",
+      "de": "Der heutige Check-in ist noch offen.",
+      "it": "Il check-in di oggi è ancora da fare."
+    },
+    {
+      "issue": "ENG-58",
+      "table": "Notifications",
+      "key": "notification.custom.direct.final",
+      "create": true,
+      "en": "Final reminder: still no check-in for today.",
+      "de": "Letzte Erinnerung: für heute noch kein Check-in.",
+      "it": "Promemoria finale: per oggi non c'è ancora un check-in."
+    },
+    {
+      "issue": "ENG-58",
+      "table": "Notifications",
+      "key": "notification.custom.encouraging.followup",
+      "create": true,
+      "en": "You can check in when you're ready.",
+      "de": "Du kannst den Check-in machen, wenn du bereit bist.",
+      "it": "Puoi fare il check-in quando vuoi."
+    },
+    {
+      "issue": "ENG-58",
+      "table": "Notifications",
+      "key": "notification.custom.gentle.followup",
+      "create": true,
+      "en": "When you're ready, remember to check in today.",
+      "de": "Wenn du bereit bist, denk daran, heute einzuchecken.",
+      "it": "Quando vuoi, ricorda di fare il check-in oggi."
+    }
+  ]
+}

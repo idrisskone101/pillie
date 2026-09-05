@@ -126,39 +126,9 @@ class PillStore {
     var customLastCallReminderBody: String {
         didSet { UserDefaults.standard.set(customLastCallReminderBody, forKey: Self.customLastCallReminderBodyKey) }
     }
-    /// When the user last dismissed an Adaptive Reminder Time Suggestion (#126). Starts
-    /// the ~14-day cooldown so the card is not re-pitched immediately after a dismissal.
-    var adaptiveReminderLastDismissal: Date? {
-        didSet {
-            if let date = adaptiveReminderLastDismissal {
-                UserDefaults.standard.set(date, forKey: Self.adaptiveReminderLastDismissalKey)
-            } else {
-                UserDefaults.standard.removeObject(forKey: Self.adaptiveReminderLastDismissalKey)
-            }
-        }
-    }
-    /// The signed delta (minutes) of the last dismissed suggestion, so the exact same
-    /// delta is never re-pitched after a dismissal (#126).
-    var adaptiveReminderLastDismissedDelta: Int? {
-        didSet {
-            if let delta = adaptiveReminderLastDismissedDelta {
-                UserDefaults.standard.set(delta, forKey: Self.adaptiveReminderLastDismissedDeltaKey)
-            } else {
-                UserDefaults.standard.removeObject(forKey: Self.adaptiveReminderLastDismissedDeltaKey)
-            }
-        }
-    }
-    /// Whether Pillie offers Adaptive Reminder Time suggestions (#126). A Pillie+ Smart
-    /// Notifications perk, toggled from Settings. Default ON; when off, the suggestion
-    /// card never surfaces regardless of logging history. Only affects the proposal — it
-    /// never changes the reminder time on its own.
-    var adaptiveReminderEnabled: Bool {
-        didSet { UserDefaults.standard.set(adaptiveReminderEnabled, forKey: Self.adaptiveReminderEnabledKey) }
-    }
     /// Whether the Home Review Prompt's Sentiment Gate has been permanently answered
     /// (PRD #132 / ADR 0005). A positive OR negative response sets this once and the card
-    /// never returns. Mirrors `adaptiveReminderLastDismissal`'s `UserDefaults` persistence
-    /// so suppression survives across launches. Default off.
+    /// never returns. Default off.
     var reviewPromptPermanentlySuppressed: Bool {
         didSet { UserDefaults.standard.set(reviewPromptPermanentlySuppressed, forKey: Self.reviewPromptPermanentlySuppressedKey) }
     }
@@ -272,9 +242,6 @@ class PillStore {
     private static let customRetryReminderBodyKey = "pillie_custom_retry_reminder_body"
     private static let customLastCallReminderTitleKey = "pillie_custom_last_call_reminder_title"
     private static let customLastCallReminderBodyKey = "pillie_custom_last_call_reminder_body"
-    private static let adaptiveReminderLastDismissalKey = "pillie_adaptive_reminder_last_dismissal"
-    private static let adaptiveReminderLastDismissedDeltaKey = "pillie_adaptive_reminder_last_dismissed_delta"
-    private static let adaptiveReminderEnabledKey = "pillie_adaptive_reminder_enabled"
     private static let reviewPromptPermanentlySuppressedKey = "pillie_review_prompt_permanently_suppressed"
     private static let reviewPromptLastSoftDismissalKey = "pillie_review_prompt_last_soft_dismissal"
     private static let reviewPromptSoftDismissalCountKey = "pillie_review_prompt_soft_dismissal_count"
@@ -704,50 +671,13 @@ class PillStore {
         return statuses
     }
 
-    // MARK: - Adaptive Reminder Time Suggestion (#126)
-
-    /// A confident proposal to shift the primary reminder time toward when the user
-    /// actually logs, or `nil` when no such proposal exists (too few logs, high
-    /// variance, an active cooldown, or a previously-dismissed delta). Pillie never
-    /// acts on this automatically — the suggestion only surfaces a dismissible card,
-    /// and any change is applied through the normal reminder-time path on accept.
-    var adaptiveReminderSuggestion: AdaptiveReminderTimeAnalyzer.Suggestion? {
-        guard adaptiveReminderEnabled else { return nil }
-
-        let records = packs
-            .flatMap { $0.days }
-            .map { (date: $0.date, takenAt: $0.takenAt) }
-
-        let logs = AdaptiveReminderLogBuilder.logs(
-            from: records,
-            reminderHour: reminderHour,
-            reminderMinute: reminderMinute
-        )
-
-        return AdaptiveReminderTimeAnalyzer().suggestion(
-            logs: logs,
-            currentReminderHour: reminderHour,
-            currentReminderMinute: reminderMinute,
-            now: PillieClock.now,
-            lastDismissal: adaptiveReminderLastDismissal,
-            lastDismissedDelta: adaptiveReminderLastDismissedDelta
-        )
-    }
-
-    /// Hides the suggestion card and starts the cooldown. The dismissed delta is
-    /// recorded so the same delta is not re-pitched after a dismissal.
-    func dismissAdaptiveReminderSuggestion(delta: Int) {
-        adaptiveReminderLastDismissal = PillieClock.now
-        adaptiveReminderLastDismissedDelta = delta
-    }
-
     // MARK: - Home Review Prompt (#132)
 
     /// Whether the Home Review Prompt's Sentiment Gate card shows this pass, or why it is
-    /// suppressed. `higherPriorityCardShowing` is supplied by Home (whether the Refill,
-    /// Adaptive Reminder, or Blocking card would render) so the "one ask per visit" rule
-    /// stays a pure, tested branch rather than view logic. Streak basis is the active
-    /// pack's method, matching how `currentStreak` is counted.
+    /// suppressed. `higherPriorityCardShowing` is supplied by Home (whether the Refill
+    /// or Blocking card would render) so the "one ask per visit" rule stays a pure,
+    /// tested branch rather than view logic. Streak basis is the active pack's method,
+    /// matching how `currentStreak` is counted.
     func reviewPromptDecision(higherPriorityCardShowing: Bool) -> ReviewPromptEligibility.Decision {
         ReviewPromptEligibility.evaluate(
             for: ReviewPromptEligibility.State(
@@ -835,8 +765,7 @@ class PillStore {
             in: targetPack,
             day: day,
             status: .taken,
-            actionType: due.type,
-            takenAt: PillieClock.now
+            actionType: due.type
         )
 
         pinRingInsertionAnchorIfNeeded(for: targetPack)
@@ -855,8 +784,7 @@ class PillStore {
                     in: newPack,
                     day: newDay,
                     status: .taken,
-                    actionType: .ringReinsert,
-                    takenAt: nil
+                    actionType: .ringReinsert
                 )
             }
         }
@@ -870,12 +798,10 @@ class PillStore {
 
     /// Rewrites a past day's record from the History correction sheet.
     ///
-    /// Backdated `.taken` writes `takenAt = nil` so the adaptive reminder never
-    /// learns from a time the user did not actually take the dose. `.breakDay`
-    /// on a due day is a user-declared skip: it keeps the due action type but
-    /// is excluded from adherence and does not break a streak. `.unlogged`
-    /// writes an explicit `.missed` record so the day reads as missed even
-    /// where the schedule fallback would be `.noData`.
+    /// `.breakDay` on a due day is a user-declared skip: it keeps the due
+    /// action type but is excluded from adherence and does not break a streak.
+    /// `.unlogged` writes an explicit `.missed` record so the day reads as
+    /// missed even where the schedule fallback would be `.noData`.
     @discardableResult
     func correctPastDay(on date: Date, to outcome: DayCorrectionOutcome) -> Bool {
         let day = startOfDaySafe(date)
@@ -903,8 +829,7 @@ class PillStore {
             in: targetPack,
             day: day,
             status: status,
-            actionType: due.type,
-            takenAt: nil
+            actionType: due.type
         )
         if outcome == .taken {
             pinRingInsertionAnchorIfNeeded(for: targetPack)
@@ -1245,7 +1170,6 @@ class PillStore {
         // doesn't silently undo the day's check-in.
         let todayEpoch = epochDay(for: today)
         let todayRecord = dayRecord(forPackID: activePack.id, epochDay: todayEpoch)
-        let takenTodayAt: Date? = todayRecord?.status == .taken ? todayRecord?.takenAt : nil
         let hadTakenToday = todayRecord?.status == .taken
 
         // 1. Adjust the pack so today = safeCycleDay.
@@ -1285,15 +1209,11 @@ class PillStore {
         refreshPacks()
 
         // 7. Re-log today if it was already checked in before the adjustment and the
-        //    reshaped schedule still expects a user action today. The original
-        //    takenAt is restored so the adaptive-reminder signal is unchanged.
+        //    reshaped schedule still expects a user action today.
         if hadTakenToday,
            let snapshot = scheduleSnapshot(for: today),
            snapshot.dueAction?.type.requiresUserAction == true {
             markActionAsTaken(on: today)
-            if let restored = dayRecord(forPackID: snapshot.pack.id, epochDay: todayEpoch) {
-                restored.takenAt = takenTodayAt
-            }
             persist()
         }
 
@@ -1396,15 +1316,6 @@ class PillStore {
         self.customLastCallReminderTitle = defaults.string(forKey: Self.customLastCallReminderTitleKey) ?? ""
         self.customLastCallReminderBody = defaults.string(forKey: Self.customLastCallReminderBodyKey) ?? ""
 
-        if let storedDismissal = defaults.object(forKey: Self.adaptiveReminderLastDismissalKey) as? Date,
-           Self.isValidPersistedDate(storedDismissal) {
-            self.adaptiveReminderLastDismissal = storedDismissal
-        } else {
-            self.adaptiveReminderLastDismissal = nil
-        }
-        self.adaptiveReminderLastDismissedDelta = defaults.object(forKey: Self.adaptiveReminderLastDismissedDeltaKey) as? Int
-        // Default ON: Adaptive Reminder Time is a Pillie+ Smart Notifications perk (#126).
-        self.adaptiveReminderEnabled = defaults.object(forKey: Self.adaptiveReminderEnabledKey) as? Bool ?? true
         // Default off: set once a user answers the Review Prompt's Sentiment Gate (#133).
         self.reviewPromptPermanentlySuppressed = defaults.bool(forKey: Self.reviewPromptPermanentlySuppressedKey)
         // Home Review Prompt soft-dismiss lifecycle (#132) — default "never dismissed".
@@ -1583,15 +1494,11 @@ class PillStore {
                 to: startDate
             ) else { continue }
             let action: PillDay.ActionType = status == .breakDay ? .pillBreak : .pillActive
-            let takenAt = status == .taken
-                ? date.addingTimeInterval(9 * 3_600)
-                : nil
             modelContext.insert(
                 PillDay(
                     date: date,
                     status: status,
                     actionType: action,
-                    takenAt: takenAt,
                     pack: pack
                 )
             )
@@ -1602,33 +1509,6 @@ class PillStore {
         refreshPacks()
         rebuildReadIndexes()
         protocolChangeVersion &+= 1
-    }
-
-    /// Seeds a consistent late-logging history so the Adaptive Reminder Time Suggestion
-    /// card (#126) surfaces for simulator QA. Inserts `count` recent taken days whose
-    /// `takenAt` lands `offsetMinutes` after the current reminder time, and clears any
-    /// active dismissal cooldown. DEBUG-only QA shortcut — never compiled into release.
-    func seedAdaptiveReminderDebugLogs(count: Int = 12, offsetMinutes: Int = 45) {
-        guard let pack = activePack else { return }
-        let calendar = Calendar.current
-        let todayStart = calendar.startOfDay(for: PillieClock.now)
-
-        adaptiveReminderLastDismissal = nil
-        adaptiveReminderLastDismissedDelta = nil
-
-        for dayOffset in 1...count {
-            guard let day = calendar.date(byAdding: .day, value: -dayOffset, to: todayStart),
-                  let scheduled = calendar.date(bySettingHour: reminderHour, minute: reminderMinute, second: 0, of: day)
-            else { continue }
-            let takenAt = scheduled.addingTimeInterval(Double(offsetMinutes) * 60)
-            modelContext.insert(
-                PillDay(date: day, status: .taken, actionType: .pillActive, takenAt: takenAt, pack: pack)
-            )
-        }
-
-        try? modelContext.save()
-        refreshPacks()
-        rebuildReadIndexes()
     }
     #endif
 
@@ -1734,7 +1614,6 @@ class PillStore {
             // once so raw-record consumers agree with the schedule snapshot.
             if day.actionType.isBreakType, day.status == .taken {
                 day.status = .breakDay
-                day.takenAt = nil
                 didMutate = true
             }
         }
@@ -1803,22 +1682,19 @@ class PillStore {
         in pack: PillPack,
         day: Date,
         status: PillDay.Status,
-        actionType: PillDay.ActionType,
-        takenAt: Date?
+        actionType: PillDay.ActionType
     ) {
         let dayEpoch = epochDay(for: day)
         if let existing = existingDayRecord(in: pack, day: day, epochDay: dayEpoch) {
             existing.date = day
             existing.status = status
             existing.actionType = actionType
-            existing.takenAt = takenAt
             index(dayRecord: existing, forPackID: pack.id, epochDay: dayEpoch)
         } else {
             let newDay = PillDay(
                 date: day,
                 status: status,
                 actionType: actionType,
-                takenAt: takenAt,
                 pack: pack
             )
             modelContext.insert(newDay)
@@ -1830,7 +1706,6 @@ class PillStore {
     private func deleteDayRecord(in pack: PillPack, day: Date) {
         let dayEpoch = epochDay(for: day)
         guard let existing = existingDayRecord(in: pack, day: day, epochDay: dayEpoch) else { return }
-        existing.takenAt = nil
         modelContext.delete(existing)
         removeDayRecordIndex(forPackID: pack.id, epochDay: dayEpoch)
         noteDayRecordChange(packID: pack.id, epochDay: dayEpoch)
