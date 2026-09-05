@@ -241,6 +241,7 @@ struct PillieApp: App {
 
     private let container: ModelContainer
     @State private var store: PillStore
+    @State private var languagePreference = AppLanguagePreference()
     @State private var showFirstInterventionConfirmation = false
     private static var isRunningTests: Bool {
         ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
@@ -326,6 +327,8 @@ struct PillieApp: App {
         WindowGroup {
             ContentView()
                 .environment(store)
+                .environment(languagePreference)
+                .environment(\.locale, languagePreference.locale)
                 .modelContainer(container)
                 .preferredColorScheme(.light)
                 .alert(

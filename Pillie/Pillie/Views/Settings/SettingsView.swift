@@ -9,6 +9,7 @@ import FamilyControls
 
 struct SettingsView: View {
     @Environment(PillStore.self) var store
+    @Environment(AppLanguagePreference.self) private var languagePreference
     @Environment(\.locale) private var locale
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
@@ -28,6 +29,7 @@ struct SettingsView: View {
     @State private var showCustomRemindersEditor = false
     @State private var showCustomRemindersUpsell = false
     @State private var showPaywall = false
+    @State private var showLanguagePicker = false
     @State private var showManageSubscription = false
     @State private var showOpenLineMailFallback = false
     #if DEBUG
@@ -315,6 +317,35 @@ struct SettingsView: View {
                 }
                 .modifier(FadeInUp(appeared: appeared, delay: 0.3))
 
+                // MARK: - Preferences
+                sectionHeader(PillieLocalization.string(
+                    "settings.section.preferences",
+                    locale: locale
+                ))
+                    .modifier(FadeInUp(appeared: appeared, delay: 0.3))
+
+                VStack(alignment: .leading, spacing: 8) {
+                    settingsCard {
+                        Button {
+                            openSettingSheet { showLanguagePicker = true }
+                        } label: {
+                            settingsRow(
+                                PillieLocalization.string("settings.language.title", locale: locale),
+                                value: languageRowValue
+                            )
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityIdentifier("settingsLanguageRow")
+                    }
+
+                    Text(PillieLocalization.string("settings.language.helper", locale: locale))
+                        .font(.pillieCaption())
+                        .foregroundStyle(PillieTheme.textMuted)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .padding(.horizontal, 24)
+                }
+                .modifier(FadeInUp(appeared: appeared, delay: 0.3))
+
                 // MARK: - Support (Open Line, #152 / #153)
                 // Always-available, identical for free and Plus. The warm label is
                 // UI-only copy; the mailto subject and telemetry name are stable
@@ -395,6 +426,12 @@ struct SettingsView: View {
             withAnimation(PillieTheme.fadeInUpCurve) {
                 appeared = true
             }
+        }
+        .sheet(isPresented: $showLanguagePicker) {
+            LanguagePickerSheet()
+                .presentationDetents([.height(620)])
+                .presentationDragIndicator(.hidden)
+                .presentationBackground(PillieTheme.bg)
         }
         .sheet(isPresented: $showTimeEditor) {
             ReminderTimeEditor(store: store)
@@ -644,6 +681,15 @@ struct SettingsView: View {
     /// The Subscription row's value. `hasEntitlement` is deliberately false
     /// during a Reverse Trial (only `hasPlusAccess` includes it), so trial
     /// users need their own label instead of a misleading "Free Plan".
+    private var languageRowValue: String {
+        switch languagePreference.selection {
+        case .system:
+            return PillieLocalization.string("settings.language.system", locale: locale)
+        default:
+            return languagePreference.selection.nativeName
+        }
+    }
+
     private var subscriptionRowValue: String {
         let manager = SubscriptionManager.shared
         if manager.hasEntitlement { return "Pillie Plus" }
@@ -1411,4 +1457,5 @@ private struct CycleDayEditor: View {
 #Preview {
     SettingsView()
         .environment(PillStore.previewStore())
+        .environment(AppLanguagePreference())
 }

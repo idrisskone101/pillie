@@ -21,6 +21,30 @@
             "state": "translated",
             "value": "Die heutige Aktion ist in Pillie noch offen."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L'action Pillie du jour est encore en attente."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La acción de hoy en Pillie sigue pendiente."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A ação de hoje no Pillie ainda está aberta."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "De actie van vandaag staat in Pillie nog open."
+          }
         }
       }
     },
@@ -43,6 +67,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pillie öffnen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir Pillie"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abrir Pillie"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abrir Pillie"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie openen"
           }
         }
       }
@@ -67,6 +115,30 @@
             "state": "translated",
             "value": "Diese App wartet auf dich."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cette app t'attendra."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esta app te estará esperando."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Este app estará esperando."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deze app wacht op je."
+          }
         }
       }
     },
@@ -90,6 +162,30 @@
             "state": "translated",
             "value": "Protokolliere die heutige Aktion und kehre dann zu dieser App zurück."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inscris l'action du jour, puis reviens dans cette app."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registra la acción de hoy y vuelve a esta app."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registre a ação de hoje e volte a este app."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Houd de actie van vandaag bij en ga terug naar deze app."
+          }
         }
       }
     },
@@ -112,6 +208,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Zeit für einen kurzen Check-in"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "C'est l'heure d'un petit check-in"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hora de un check-in rápido"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hora de um check-in rápido"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tijd voor een snelle check-in"
           }
         }
       }

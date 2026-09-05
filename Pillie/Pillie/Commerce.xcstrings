@@ -21,6 +21,30 @@
             "state": "translated",
             "value": "Pillie Plus ist für dieses Konto aktiv. Richte die App-Pause ein, wenn du bereit bist."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus est actif sur ce compte. Configure la pause d'apps quand tu es prêt·e."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus está activo en esta cuenta. Configura el bloqueo de apps cuando estés listo."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O Pillie Plus está ativo nesta conta. Configure o bloqueio de apps quando quiser."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus is actief op dit account. Stel app-pauze in wanneer je er klaar voor bent."
+          }
         }
       }
     },
@@ -43,6 +67,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pillie-Plus-Zugang wird geprüft"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vérification de ton accès Pillie Plus"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verificando tu acceso a Pillie Plus"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verificando seu acesso ao Pillie Plus"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je Pillie Plus-toegang wordt gecontroleerd"
           }
         }
       }
@@ -67,6 +115,30 @@
             "state": "translated",
             "value": "Verbinde dich mit dem Internet, damit Pillie deine Käufe prüfen kann, bevor die App geöffnet wird."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connecte-toi à Internet pour que Pillie vérifie tes achats avant d'ouvrir l'app."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conéctate a internet para que Pillie verifique tus compras antes de abrir la app."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conecte-se à internet para o Pillie verificar suas compras antes de abrir o app."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maak verbinding met internet zodat Pillie je aankopen kan verifiëren voordat de app opent."
+          }
         }
       }
     },
@@ -89,6 +161,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dein Zugang konnte nicht geprüft werden. Prüfe die Verbindung, versuche es erneut oder stelle Käufe wieder her."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible de vérifier ton accès. Vérifie ta connexion, réessaie ou restaure tes achats."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No pudimos verificar tu acceso. Revisa tu conexión, inténtalo de nuevo o restaura compras."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não foi possível verificar seu acesso. Verifique a conexão, tente de novo ou restaure compras."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "We konden je toegang niet verifiëren. Controleer je verbinding, probeer opnieuw of herstel aankopen."
           }
         }
       }
@@ -113,6 +209,30 @@
             "state": "translated",
             "value": "App-Pause ist Plus. Setup nach dem Upgrade."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La pause d'apps est une fonctionnalité Pillie Plus que tu peux configurer après la mise à niveau."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El bloqueo de apps es una función de Pillie Plus que puedes configurar después de actualizar."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloqueio de apps é um recurso do Pillie Plus que você pode configurar após assinar."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App-pauze is een Pillie Plus-functie die je na upgraden kunt instellen."
+          }
         }
       }
     },
@@ -135,6 +255,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Wähle einen Monats-, Jahres- oder Lifetime-Tarif, um Pillie weiter zu nutzen."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisis Mensuel, Annuel ou à vie pour continuer à utiliser Pillie."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elige Mensual, Anual o de por vida para seguir usando Pillie."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escolha Mensal, Anual ou Vitalício para continuar usando o Pillie."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kies maandelijks, jaarlijks of lifetime om Pillie te blijven gebruiken."
           }
         }
       }
@@ -159,6 +303,30 @@
             "state": "translated",
             "value": "Tägliche Erinnerungen, Protokollierung und Verlauf sind im kostenlosen Tarif enthalten."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les rappels quotidiens, l'inscription et l'historique sont inclus dans l'offre gratuite."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Los recordatorios diarios, el registro y el historial están incluidos en el plan gratis."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lembretes diários, registro e histórico estão incluídos no plano grátis."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dagelijkse herinneringen, bijhouden en geschiedenis zitten in het gratis abonnement."
+          }
         }
       }
     },
@@ -181,6 +349,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Mehr als ein Ping mit Pillie Plus."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus qu'un ping avec Pillie Plus."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Más de un aviso con Pillie Plus."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mais de um ping com o Pillie Plus."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meer dan één ping met Pillie Plus."
           }
         }
       }
@@ -205,6 +397,30 @@
             "state": "translated",
             "value": "Plus pingt weiter und kann Apps pausieren."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus continue de ping jusqu'à ce que tu inscrives aujourd'hui, et peut mettre les apps en pause jusqu'au check-in."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus sigue avisando hasta que registres hoy, y puede pausar apps hasta que hagas el check-in."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O Pillie Plus continua enviando pings até você registrar hoje e pode pausar apps até o check-in."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus blijft pingen tot je vandaag bijhoudt, en kan apps pauzeren tot je incheckt."
+          }
         }
       }
     },
@@ -227,6 +443,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tägliche Erinnerungen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rappels quotidiens"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recordatorios diarios"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lembretes diários"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dagelijkse herinneringen"
           }
         }
       }
@@ -251,6 +491,30 @@
             "state": "translated",
             "value": "Smarte Erinnerungen"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rappels intelligents"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recordatorios inteligentes"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lembretes inteligentes"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slimme herinneringen"
+          }
         }
       }
     },
@@ -273,6 +537,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "App-Pause"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pause d'apps"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloqueo de apps"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloqueio de apps"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App-pauze"
           }
         }
       }
@@ -297,6 +585,30 @@
             "state": "translated",
             "value": "Schütteln zum Eintragen"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Secouer pour confirmer"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Agitar para confirmar"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Balançar para confirmar"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schudden om te bevestigen"
+          }
         }
       }
     },
@@ -319,6 +631,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Erinnerungstexte"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Messages de rappel"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mensajes de recordatorio"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mensagens de lembrete"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Herinneringsteksten"
           }
         }
       }
@@ -343,6 +679,30 @@
             "state": "translated",
             "value": "Was noch kommt"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Futures fonctionnalités"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Funciones futuras"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recursos futuros"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toekomstige functies"
+          }
         }
       }
     },
@@ -365,6 +725,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "App-Pause"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pause d'apps"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloqueo de apps"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloqueio de apps"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App-pauze"
           }
         }
       }
@@ -389,6 +773,30 @@
             "state": "translated",
             "value": "Erinnerungstexte"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Messages de rappel"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mensajes de recordatorio"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mensagens de lembrete"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Herinneringsteksten"
+          }
         }
       }
     },
@@ -411,6 +819,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Was noch kommt"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Futures fonctionnalités"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Funciones futuras"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recursos futuros"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toekomstige functies"
           }
         }
       }
@@ -435,6 +867,30 @@
             "state": "translated",
             "value": "Jährlich"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annuel"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anual"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anual"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jaarlijks"
+          }
         }
       }
     },
@@ -457,6 +913,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Monatlich"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mensuel"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mensual"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mensal"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maandelijks"
           }
         }
       }
@@ -481,6 +961,30 @@
             "state": "translated",
             "value": "Bestes Angebot"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meilleure offre"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mejor valor"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Melhor custo-benefício"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beste deal"
+          }
         }
       }
     },
@@ -503,6 +1007,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@ pro %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ par %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ por %@"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ por %@"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ per %@"
           }
         }
       }
@@ -527,6 +1055,30 @@
             "state": "translated",
             "value": "%@ alle %@"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ tous les %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ cada %@"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ a cada %@"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ elke %@"
+          }
         }
       }
     },
@@ -549,6 +1101,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Du kannst jederzeit in den Einstellungen verwalten oder kündigen."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu peux gérer ou annuler à tout moment dans les réglages."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Puedes administrar o cancelar cuando quieras en Ajustes."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Você pode gerenciar ou cancelar a qualquer momento em Ajustes."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je kunt altijd beheren of opzeggen in instellingen."
           }
         }
       }
@@ -573,6 +1149,30 @@
             "state": "translated",
             "value": "Jederzeit kündbar"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annulable à tout moment"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancela cuando quieras"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancele a qualquer momento"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Altijd opzegbaar"
+          }
         }
       }
     },
@@ -595,6 +1195,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pillie Plus holen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Obtenir Pillie Plus"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Obtener Pillie Plus"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Assinar Pillie Plus"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus nemen"
           }
         }
       }
@@ -619,6 +1243,30 @@
             "state": "translated",
             "value": "Käufe wiederherstellen"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restaurer les achats"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restaurar compras"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restaurar compras"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aankopen herstellen"
+          }
         }
       }
     },
@@ -641,6 +1289,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nutzungsbedingungen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conditions d'utilisation"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Términos de uso"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Termos de uso"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gebruiksvoorwaarden"
           }
         }
       }
@@ -665,6 +1337,30 @@
             "state": "translated",
             "value": "Datenschutz"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Politique de confidentialité"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Política de privacidad"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Política de privacidade"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Privacybeleid"
+          }
         }
       }
     },
@@ -687,6 +1383,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Im kostenlosen Tarif und in Plus enthalten"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inclus dans Gratuit et Plus"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Incluido en Gratis y Plus"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Incluído no Grátis e no Plus"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inbegrepen in Gratis en Plus"
           }
         }
       }
@@ -711,6 +1431,30 @@
             "state": "translated",
             "value": "Nur Plus"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus uniquement"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Solo Plus"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Somente Plus"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alleen Plus"
+          }
         }
       }
     },
@@ -733,6 +1477,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nur im kostenlosen Tarif"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gratuit uniquement"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Solo en el plan gratis"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Somente no plano grátis"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alleen in Gratis"
           }
         }
       }
@@ -757,6 +1525,30 @@
             "state": "translated",
             "value": "Nicht enthalten"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Non inclus"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No incluido"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não incluído"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niet inbegrepen"
+          }
         }
       }
     },
@@ -779,6 +1571,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tarife konnten nicht geladen werden. Tippe, um es erneut zu versuchen."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible de charger les offres. Tape pour réessayer."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudieron cargar los planes. Toca para reintentar."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não foi possível carregar os planos. Toque para tentar de novo."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abonnementen laden mislukt. Tik om opnieuw te proberen."
           }
         }
       }
@@ -803,6 +1619,30 @@
             "state": "translated",
             "value": "Fehler beim Kauf"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erreur d'achat"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Error de compra"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erro na compra"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aankoopfout"
+          }
         }
       }
     },
@@ -825,6 +1665,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Der Kauf wurde abgeschlossen, aber Pillie Plus wurde nicht aktiviert. Versuche es erneut oder stelle die Käufe wieder her."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L'achat est terminé, mais Pillie Plus n'a pas été activé. Réessaie ou restaure tes achats."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La compra se completó, pero Pillie Plus no se activó. Inténtalo de nuevo o restaura compras."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A compra foi concluída, mas o Pillie Plus não foi ativado. Tente de novo ou restaure compras."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "De aankoop is afgerond, maar Pillie Plus is niet geactiveerd. Probeer opnieuw of herstel aankopen."
           }
         }
       }
@@ -849,6 +1713,30 @@
             "state": "translated",
             "value": "Etwas ist schiefgelaufen. Bitte versuche es erneut."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un problème est survenu. Réessaie, s'il te plaît."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Algo salió mal. Inténtalo de nuevo."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Algo deu errado. Tente de novo."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Er ging iets mis. Probeer het opnieuw."
+          }
         }
       }
     },
@@ -871,6 +1759,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Fehler beim Wiederherstellen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erreur de restauration"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Error al restaurar"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erro ao restaurar"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Herstelfout"
           }
         }
       }
@@ -895,6 +1807,30 @@
             "state": "translated",
             "value": "Kein Abo gefunden"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun abonnement trouvé"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se encontró suscripción"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhuma assinatura encontrada"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geen abonnement gevonden"
+          }
         }
       }
     },
@@ -917,6 +1853,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Für dieses Konto wurde kein aktives Abo gefunden."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun abonnement actif n'a été trouvé pour ce compte."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se encontró una suscripción activa para esta cuenta."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhuma assinatura ativa foi encontrada para esta conta."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Er is geen actief abonnement gevonden voor dit account."
           }
         }
       }
@@ -941,6 +1901,30 @@
             "state": "translated",
             "value": "14 Tage gratis · keine Karte"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "14 jours gratuits · sans carte"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "14 días gratis · sin tarjeta"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "14 dias grátis · sem cartão"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "14 dagen gratis · geen kaart"
+          }
         }
       }
     },
@@ -963,6 +1947,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Deine nächsten zwei Wochen gehen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tes deux prochaines semaines,"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tus próximas dos semanas van"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suas próximas duas semanas são"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je komende twee weken zijn"
           }
         }
       }
@@ -987,6 +1995,30 @@
             "state": "translated",
             "value": "auf uns."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "c'est pour nous."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "por nuestra cuenta."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "por nossa conta."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "van ons."
+          }
         }
       }
     },
@@ -1009,6 +2041,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tag 12"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jour 12"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Día 12"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dia 12"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dag 12"
           }
         }
       }
@@ -1033,6 +2089,30 @@
             "state": "translated",
             "value": "Eine kurze Erinnerung"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un petit rappel"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un aviso amable"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Um aviso gentil"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Een vriendelijke heads-up"
+          }
         }
       }
     },
@@ -1055,6 +2135,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Bevor deine Testphase endet, geben wir dir rechtzeitig Bescheid. Ohne Überraschungen."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On te préviendra avant la fin de ton essai. Pas de surprise."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Te avisaremos antes de que termine tu prueba. Sin sorpresas."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vamos avisar antes do fim do período de teste. Sem surpresas."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "We herinneren je voordat je proefperiode eindigt. Geen verrassingen."
           }
         }
       }
@@ -1079,6 +2183,30 @@
             "state": "translated",
             "value": "Tag 14"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jour 14"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Día 14"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dia 14"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dag 14"
+          }
         }
       }
     },
@@ -1101,6 +2229,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Du entscheidest"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "C'est toi qui décides"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tú decides"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Você decide"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jij kiest"
           }
         }
       }
@@ -1125,6 +2277,30 @@
             "state": "translated",
             "value": "Erinnerungen bleiben kostenlos. Plus behältst du nur, wenn du möchtest."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les rappels restent gratuits, ou tu choisis si tu continues avec Plus."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Los recordatorios siguen gratis, o elige si continuar con Plus."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lembretes continuam grátis, ou escolha se quer continuar com o Plus."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Herinneringen blijven gratis. Plus houd je alleen als je wilt."
+          }
         }
       }
     },
@@ -1147,6 +2323,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Wähle einen Monats-, Jahres- oder Lifetime-Tarif, um Pillie weiter zu nutzen."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisis Mensuel, Annuel ou à vie pour continuer à utiliser Pillie."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elige Mensual, Anual o de por vida para seguir usando Pillie."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escolha Mensal, Anual ou Vitalício para continuar usando o Pillie."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kies maandelijks, jaarlijks of lifetime om Pillie te blijven gebruiken."
           }
         }
       }
@@ -1171,6 +2371,30 @@
             "state": "translated",
             "value": "Weiter zur App-Pause"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continuer vers la pause d'apps"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continuar al bloqueo de apps"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continuar para bloqueio de apps"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verder naar app-pauze"
+          }
         }
       }
     },
@@ -1193,6 +2417,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Deine nächsten zwei Wochen mit Pillie Plus"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tes deux prochaines semaines avec Pillie Plus"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tus próximas dos semanas con Pillie Plus"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suas próximas duas semanas com o Pillie Plus"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je komende twee weken met Pillie Plus"
           }
         }
       }
@@ -1217,6 +2465,30 @@
             "state": "translated",
             "value": "Dein Pillie Plus-Trial startet jetzt. Hier ist, was drin ist."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton essai Pillie Plus commence maintenant. Voici ce qui est inclus."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu prueba de Pillie Plus empieza ahora. Esto es lo que incluye."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seu período de teste do Pillie Plus começa agora. Veja o que está incluído."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je Pillie Plus-proefperiode start nu. Dit zit erin."
+          }
         }
       }
     },
@@ -1239,6 +2511,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "14 Tage gratis, keine Karte. App-Pause endet mit dem Trial. Erinnerungen bleiben frei."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "14 jours gratuits, sans carte. La pause d'apps s'arrête après l'essai. Les rappels restent gratuits."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "14 días gratis, sin tarjeta. El bloqueo de apps se desactiva al terminar la prueba. Los recordatorios siguen gratis."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "14 dias grátis, sem cartão. Bloqueio de apps desliga após o teste. Lembretes continuam grátis."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "14 dagen gratis, geen kaart nodig. App-pauze stopt na de proefperiode. Herinneringen blijven gratis."
           }
         }
       }
@@ -1263,6 +2559,30 @@
             "state": "translated",
             "value": "Dein Gratis-Trial dauert 14 Tage. Keine Karte nötig. Danach kannst du monatlich, jährlich oder lebenslang wählen, um Plus zu behalten."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton essai gratuit dure 14 jours. Pas de carte requise. Ensuite, choisis Mensuel, Annuel ou à vie pour garder Plus."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu prueba gratis dura 14 días. Sin tarjeta. Después, elige Mensual, Anual o de por vida para conservar Plus."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seu teste grátis dura 14 dias. Sem cartão. Depois, escolha Mensal, Anual ou Vitalício para manter o Plus."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je gratis proefperiode duurt 14 dagen. Geen kaart nodig. Daarna kun je maandelijks, jaarlijks of lifetime kiezen om Plus te houden."
+          }
         }
       }
     },
@@ -1285,6 +2605,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Heute"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aujourd'hui"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hoy"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hoje"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vandaag"
           }
         }
       }
@@ -1309,6 +2653,30 @@
             "state": "translated",
             "value": "Plus-Funktionen sind verfügbar"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les fonctionnalités Plus sont disponibles"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Las funciones Plus están disponibles"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recursos Plus disponíveis"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus-functies zijn beschikbaar"
+          }
         }
       }
     },
@@ -1331,6 +2699,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Vor dem Ende der Testphase"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avant la fin de l'essai"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Antes de que termine la prueba"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Antes do fim do teste"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voor het einde van de proefperiode"
           }
         }
       }
@@ -1355,6 +2747,30 @@
             "state": "translated",
             "value": "Entscheide, ob du weitermachen möchtest"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisis si tu continues"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elige si continuar"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Decida se quer continuar"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kies of je doorgaat"
+          }
         }
       }
     },
@@ -1377,6 +2793,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Probier deine Plus-Features."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Essaie tes fonctionnalités Plus."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prueba tus funciones Plus."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Experimente seus recursos Plus."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Probeer je Plus-functies."
           }
         }
       }
@@ -1401,6 +2841,30 @@
             "state": "translated",
             "value": "Testphase aktiv"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Essai actif"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prueba activa"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Teste ativo"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Proefperiode actief"
+          }
         }
       }
     },
@@ -1423,6 +2887,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dein Trial endet am %@."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton essai se termine le %@."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu prueba termina el %@."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seu teste termina em %@."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je proefperiode eindigt op %@."
           }
         }
       }
@@ -1447,6 +2935,30 @@
             "state": "translated",
             "value": "Wenn der Trial endet."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quand l'essai se termine."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cuando termine la prueba."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quando o teste terminar."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Als de proefperiode eindigt."
+          }
         }
       }
     },
@@ -1469,6 +2981,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Plus ist an · noch %lld Tage"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus est actif · encore %lld jours"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus activo · %lld días restantes"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus ativo · %lld dias restantes"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus staat aan · nog %lld dagen"
           }
         }
       }
@@ -1493,6 +3029,30 @@
             "state": "translated",
             "value": "Plus ist an · es endet heute Nacht."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus est actif · ça se termine ce soir."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus activo · termina esta noche."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus ativo · termina hoje à noite."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus staat aan · het eindigt vanavond."
+          }
         }
       }
     },
@@ -1515,6 +3075,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "App-Pause einrichten · noch %lld Tage"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configurer la pause d'apps · encore %lld jours"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configurar bloqueo de apps · %lld días restantes"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configurar bloqueio de apps · %lld dias restantes"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App-pauze instellen · nog %lld dagen"
           }
         }
       }
@@ -1539,6 +3123,30 @@
             "state": "translated",
             "value": "App-Pause einrichten · es endet heute Nacht."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configurer la pause d'apps · ça se termine ce soir."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configurar bloqueo de apps · termina esta noche."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configurar bloqueio de apps · termina hoje à noite."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App-pauze instellen · het eindigt vanavond."
+          }
         }
       }
     },
@@ -1561,6 +3169,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Die App-Pause wird deaktiviert"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La pause d'apps sera désactivée"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El bloqueo de apps se desactiva"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloqueio de apps será desligado"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App-pauze wordt uitgeschakeld"
           }
         }
       }
@@ -1585,6 +3217,30 @@
             "state": "translated",
             "value": "Der Pillie Plus-Zugang pausiert."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L'accès Pillie Plus sera suspendu."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El acceso a Pillie Plus se pausa."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acesso ao Pillie Plus pausa."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus-toegang pauzeert."
+          }
         }
       }
     },
@@ -1607,6 +3263,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Du kannst monatlich, jährlich oder lebenslang wählen, um weiterzumachen."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu pourras choisir Mensuel, Annuel ou à vie pour continuer."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Puedes elegir Mensual, Anual o de por vida para continuar."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Você pode escolher Mensal, Anual ou Vitalício para continuar."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je kunt maandelijks, jaarlijks of lifetime kiezen om door te gaan."
           }
         }
       }
@@ -1631,6 +3311,30 @@
             "state": "translated",
             "value": "Erinnerungen bleiben dauerhaft kostenlos"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les rappels restent gratuits, pour toujours"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Los recordatorios siguen gratis, para siempre"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lembretes continuam grátis, para sempre"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Herinneringen blijven gratis, voor altijd"
+          }
         }
       }
     },
@@ -1653,6 +3357,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dein App-Pause-Setup ist gespeichert."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ta config de pause d'apps est sauvegardée."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu configuración de bloqueo de apps está guardada."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sua configuração de bloqueio de apps está salva."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je app-pauze-instelling is bewaard."
           }
         }
       }
@@ -1677,6 +3405,30 @@
             "state": "translated",
             "value": "Pillie Plus behalten"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Garder Pillie Plus"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conservar Pillie Plus"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Manter Pillie Plus"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus houden"
+          }
         }
       }
     },
@@ -1699,6 +3451,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Deine 14 Tage"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tes 14 jours"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tus 14 días"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seus 14 dias"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je 14 dagen"
           }
         }
       }
@@ -1723,6 +3499,30 @@
             "state": "translated",
             "value": "Dein Pillie Plus-Trial ist vorbei."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton essai Pillie Plus est terminé."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu prueba de Pillie Plus terminó."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seu período de teste do Pillie Plus acabou."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je Pillie Plus-proefperiode is voorbij."
+          }
         }
       }
     },
@@ -1745,6 +3545,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Die App-Pause ist jetzt deaktiviert. Deine Standarderinnerungen bleiben verfügbar."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La pause d'apps est maintenant désactivée. Tes rappels standard restent disponibles."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El bloqueo de apps está desactivado. Tus recordatorios estándar siguen disponibles."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloqueio de apps agora está desligado. Seus lembretes padrão continuam disponíveis."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App-pauze staat nu uit. Je standaardherinneringen blijven beschikbaar."
           }
         }
       }
@@ -1769,6 +3593,30 @@
             "state": "translated",
             "value": "Apps pausiert"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apps en pause"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apps pausadas"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apps pausados"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apps gepauzeerd"
+          }
         }
       }
     },
@@ -1791,6 +3639,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Aktionen eingetragen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Actions inscrites"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acciones registradas"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ações registradas"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acties bijgehouden"
           }
         }
       }
@@ -1815,6 +3687,30 @@
             "state": "translated",
             "value": "Aktuelle Serie"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Série actuelle"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Racha actual"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sequência atual"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Huidige reeks"
+          }
         }
       }
     },
@@ -1837,6 +3733,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Erinnerungen bleiben da."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les rappels restent disponibles."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Los recordatorios siguen disponibles."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lembretes continuam disponíveis."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Herinneringen blijven beschikbaar."
           }
         }
       }
@@ -1861,6 +3781,30 @@
             "state": "translated",
             "value": "Pillie Plus ist aktiv: Die App-Pause ist für die heutige Erinnerung wieder eingeschaltet."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus est actif — la pause d'apps est de retour pour le rappel de ce soir."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus está activo — el bloqueo de apps vuelve a estar activo para el recordatorio de hoy."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus ativo — bloqueio de apps está de volta para o lembrete de hoje."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus is actief — app-pauze staat weer aan voor de herinnering van vanavond."
+          }
         }
       }
     },
@@ -1883,6 +3827,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pillie Plus ist an. Du kannst App-Pause einrichten, wann du soweit bist."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus est actif. Tu peux configurer la pause d'apps quand tu veux."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus está activo. Puedes configurar el bloqueo de apps cuando quieras."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus ativo. Você pode configurar bloqueio de apps quando quiser."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus staat aan. Je kunt app-pauze instellen wanneer je wilt."
           }
         }
       }
@@ -1907,6 +3875,30 @@
             "state": "translated",
             "value": "Pillie Plus ist wieder an."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus est de retour."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus está activo otra vez."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus ativo de novo."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus staat weer aan."
+          }
         }
       }
     },
@@ -1929,6 +3921,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Zurück zu heute"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retour à aujourd'hui"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Volver a hoy"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voltar para Hoje"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terug naar vandaag"
           }
         }
       }
@@ -1953,6 +3969,30 @@
             "state": "translated",
             "value": "Empfohlen"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recommandé"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recomendado"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recomendado"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aanbevolen"
+          }
         }
       }
     },
@@ -1975,6 +4015,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Einrichten"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configurer"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configurar"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configurar"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Instellen"
           }
         }
       }
@@ -1999,6 +4063,30 @@
             "state": "translated",
             "value": "Aktiv"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Actif"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activo"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ativo"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Actief"
+          }
         }
       }
     },
@@ -2021,6 +4109,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Automatisch aktiv"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Actif automatiquement"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activo automáticamente"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ativo automaticamente"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatisch actief"
           }
         }
       }
@@ -2045,6 +4157,30 @@
             "state": "translated",
             "value": "Personalisieren"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personnaliser"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personalizar"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personalizar"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personaliseren"
+          }
         }
       }
     },
@@ -2067,6 +4203,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Angepasst"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personnalisé"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personalizado"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personalizado"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aangepast"
           }
         }
       }
@@ -2091,6 +4251,30 @@
             "state": "translated",
             "value": "An"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activé"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Encendido"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ligado"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aan"
+          }
         }
       }
     },
@@ -2113,6 +4297,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Verwalten"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gérer"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Administrar"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gerenciar"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beheren"
           }
         }
       }
@@ -2137,6 +4345,30 @@
             "state": "translated",
             "value": "Einrichten"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configurer"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configurar"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configurar"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Instellen"
+          }
         }
       }
     },
@@ -2159,6 +4391,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Bearbeiten"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modifier"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Editar"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Editar"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bewerken"
           }
         }
       }
@@ -2183,6 +4439,30 @@
             "state": "translated",
             "value": "Personalisieren"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personnaliser"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personalizar"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personalizar"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personaliseren"
+          }
         }
       }
     },
@@ -2205,6 +4485,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Anpassen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personnaliser"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personalizar"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personalizar"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aanpassen"
           }
         }
       }
@@ -2229,6 +4533,30 @@
             "state": "translated",
             "value": "Eine kurze Frage."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Une petite question."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Una pregunta rápida."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uma pergunta rápida."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eén snelle vraag."
+          }
         }
       }
     },
@@ -2251,6 +4579,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Warum war Pillie Plus nicht das Richtige?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Qu'est-ce qui t'a fait penser que Pillie Plus n'était pas fait pour toi ?"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Qué hizo que Pillie Plus no fuera lo adecuado?"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O que fez o Pillie Plus não ser ideal para você?"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waarom was Pillie Plus niet de juiste match?"
           }
         }
       }
@@ -2275,6 +4627,30 @@
             "state": "translated",
             "value": "Das ist optional. Du kannst überspringen und Pillie weiter kostenlos nutzen."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "C'est optionnel. Tu peux passer et continuer à utiliser Pillie gratuitement."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Es opcional. Puedes omitir y seguir usando Pillie gratis."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Isso é opcional. Você pode pular e continuar usando o Pillie grátis."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dit is optioneel. Je kunt overslaan en Pillie gratis blijven gebruiken."
+          }
         }
       }
     },
@@ -2297,6 +4673,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Noch ein Hinweis (optional)"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajoute un détail (optionnel)"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Añade un detalle (opcional)"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adicione um detalhe (opcional)"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voeg wat detail toe (optioneel)"
           }
         }
       }
@@ -2321,6 +4721,30 @@
             "state": "translated",
             "value": "%lld von %lld Zeichen"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld sur %lld caractères"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld de %lld caracteres"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld de %lld caracteres"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld van %lld tekens"
+          }
         }
       }
     },
@@ -2343,6 +4767,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Was würde Pillie besser machen?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Qu'est-ce qui rendrait Pillie meilleur ?"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Qué haría mejor a Pillie?"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O que tornaria o Pillie melhor?"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wat zou Pillie beter maken?"
           }
         }
       }
@@ -2367,6 +4815,30 @@
             "state": "translated",
             "value": "Bitte gib keine persönlichen Gesundheitsdetails an."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Merci de ne pas inclure de détails de santé personnels."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No incluyas detalles personales de salud."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não inclua detalhes pessoais de saúde."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voeg geen persoonlijke gezondheidsdetails toe."
+          }
         }
       }
     },
@@ -2389,6 +4861,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Fertig"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terminé"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Listo"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Concluído"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Klaar"
           }
         }
       }
@@ -2413,6 +4909,30 @@
             "state": "translated",
             "value": "Zugriff auf Pillie Plus wiederhergestellt"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Accès Pillie Plus restauré"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acceso a Pillie Plus restaurado"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acesso ao Pillie Plus restaurado"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus-toegang hersteld"
+          }
         }
       }
     },
@@ -2435,6 +4955,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Erinnerungen weiter kostenlos"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Garder les rappels gratuits"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mantener recordatorios gratis"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Manter lembretes grátis"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Herinneringen gratis houden"
           }
         }
       }
@@ -2459,6 +5003,30 @@
             "state": "translated",
             "value": "Überspringen"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Passer"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Omitir"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pular"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Overslaan"
+          }
         }
       }
     },
@@ -2481,6 +5049,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Senden"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Envoyer"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enviar"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enviar"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Versturen"
           }
         }
       }
@@ -2505,6 +5097,30 @@
             "state": "translated",
             "value": "Zu teuer."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trop cher."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Muy caro."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Muito caro."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Te duur."
+          }
         }
       }
     },
@@ -2527,6 +5143,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ich nutze es nicht genug."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je ne m'en sers pas assez."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No lo uso lo suficiente."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não uso o suficiente."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ik gebruik het te weinig."
           }
         }
       }
@@ -2551,6 +5191,30 @@
             "state": "translated",
             "value": "Da fehlt eine Funktion."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il manque une fonctionnalité."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le falta una función."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Falta um recurso."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Er ontbreekt een functie."
+          }
         }
       }
     },
@@ -2573,6 +5237,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ich hab's nur ausprobiert."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je voulais juste essayer."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Solo lo estaba probando."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Só estava experimentando."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ik wilde het alleen proberen."
           }
         }
       }
@@ -2597,6 +5285,30 @@
             "state": "translated",
             "value": "Ich nutze was anderes."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "J'utilise autre chose."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uso otra cosa."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uso outra coisa."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ik gebruik iets anders."
+          }
         }
       }
     },
@@ -2619,6 +5331,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Irgendwas ist kaputtgegangen."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quelque chose a planté."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Algo falló."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Algo quebrou."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Er ging iets kapot."
           }
         }
       }
@@ -2643,6 +5379,30 @@
             "state": "translated",
             "value": "Sonstiges."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Autre."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otro."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Outro."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anders."
+          }
         }
       }
     },
@@ -2665,6 +5425,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Danke — dein Feedback hilft uns, Pillie zu verbessern."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Merci — ton retour nous aide à améliorer Pillie."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gracias — tus comentarios nos ayudan a mejorar Pillie."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seu feedback nos ajuda a melhorar o Pillie."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bedankt — je feedback helpt ons Pillie te verbeteren."
           }
         }
       }
@@ -2689,6 +5473,30 @@
             "state": "translated",
             "value": "Continua a mandare ping finché non registri oggi. Scegli ogni quanto, quanti, e l'ultimo ping."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continue de ping jusqu'à ce que tu inscrives aujourd'hui. Tu choisis la fréquence, le nombre et le dernier ping."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sigue avisando hasta que registres hoy. Tú eliges la frecuencia, cuántos y el último aviso."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continua enviando pings até você registrar hoje. Você escolhe a frequência, a quantidade e o último ping."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blijft pingen tot je vandaag bijhoudt. Jij kiest hoe vaak, hoeveel en de laatste ping."
+          }
         }
       }
     },
@@ -2711,6 +5519,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Le tue app vanno in pausa quando arriva il promemoria, finché non prendi la pillola."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tes apps sont en pause quand le rappel arrive, jusqu'à ce que tu prennes ta pilule."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tus apps se pausan cuando toca el recordatorio, hasta que tomes tu píldora."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seus apps pausam quando o lembrete chega, até você tomar sua pílula."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je apps pauzeren wanneer de herinnering klaarstaat, tot je je pil neemt."
           }
         }
       }
@@ -2735,6 +5567,30 @@
             "state": "translated",
             "value": "Le tue app vanno in pausa quando arriva il promemoria, finché non applichi il cerotto."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tes apps sont en pause quand le rappel arrive, jusqu'à ce que tu poses ton patch."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tus apps se pausan cuando toca el recordatorio, hasta que coloques tu parche."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seus apps pausam quando o lembrete chega, até você aplicar seu adesivo."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je apps pauzeren wanneer de herinnering klaarstaat, tot je je pleister plakt."
+          }
         }
       }
     },
@@ -2757,6 +5613,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Le tue app vanno in pausa quando arriva il promemoria, finché non cambi il cerotto."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tes apps sont en pause quand le rappel arrive, jusqu'à ce que tu changes ton patch."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tus apps se pausan cuando toca el recordatorio, hasta que cambies tu parche."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seus apps pausam quando o lembrete chega, até você trocar seu adesivo."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je apps pauzeren wanneer de herinnering klaarstaat, tot je je pleister wisselt."
           }
         }
       }
@@ -2781,6 +5661,30 @@
             "state": "translated",
             "value": "Le tue app vanno in pausa quando arriva il promemoria, finché non togli il cerotto."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tes apps sont en pause quand le rappel arrive, jusqu'à ce que tu retires ton patch."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tus apps se pausan cuando toca el recordatorio, hasta que quites tu parche."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seus apps pausam quando o lembrete chega, até você remover seu adesivo."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je apps pauzeren wanneer de herinnering klaarstaat, tot je je pleister verwijdert."
+          }
         }
       }
     },
@@ -2803,6 +5707,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Le tue app vanno in pausa quando arriva il promemoria, finché non inserisci l'anello."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tes apps sont en pause quand le rappel arrive, jusqu'à ce que tu insères ton anneau."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tus apps se pausan cuando toca el recordatorio, hasta que insertes tu anillo."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seus apps pausam quando o lembrete chega, até você inserir seu anel."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je apps pauzeren wanneer de herinnering klaarstaat, tot je je ring inbrengt."
           }
         }
       }
@@ -2827,6 +5755,30 @@
             "state": "translated",
             "value": "Le tue app vanno in pausa quando arriva il promemoria, finché non cambi l'anello."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tes apps sont en pause quand le rappel arrive, jusqu'à ce que tu changes ton anneau."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tus apps se pausan cuando toca el recordatorio, hasta que cambies tu anillo."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seus apps pausam quando o lembrete chega, até você trocar seu anel."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je apps pauzeren wanneer de herinnering klaarstaat, tot je je ring wisselt."
+          }
         }
       }
     },
@@ -2849,6 +5801,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Le tue app vanno in pausa quando arriva il promemoria, finché non togli l'anello."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tes apps sont en pause quand le rappel arrive, jusqu'à ce que tu retires ton anneau."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tus apps se pausan cuando toca el recordatorio, hasta que quites tu anillo."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seus apps pausam quando o lembrete chega, até você remover seu anel."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je apps pauzeren wanneer de herinnering klaarstaat, tot je je ring verwijdert."
           }
         }
       }
@@ -2873,6 +5849,30 @@
             "state": "translated",
             "value": "Pillie Plus a vita"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus à vie"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus de por vida"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus vitalício"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus levenslang"
+          }
         }
       }
     },
@@ -2895,6 +5895,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Hai avuto ping extra e app in pausa per 14 giorni. Tieni plus se vuoi che resti così."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu as eu des pings supplémentaires et des apps en pause pendant 14 jours. Garde Plus si tu veux que ça continue."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tuviste avisos extra y apps en pausa durante 14 días. Conserva Plus si quieres que siga activo."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Você teve pings extras e apps pausados por 14 dias. Mantenha o Plus se quiser que isso continue."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je had 14 dagen extra pings en gepauzeerde apps. Houd Plus als je dat wilt behouden."
           }
         }
       }
@@ -2919,6 +5943,30 @@
             "state": "translated",
             "value": "Hai avuto ping extra per 14 giorni. Tieni plus se vuoi che restino."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu as eu des pings supplémentaires pendant 14 jours. Garde Plus si tu veux que ça continue."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tuviste avisos extra durante 14 días. Conserva Plus si quieres que sigan activos."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Você teve pings extras por 14 dias. Mantenha o Plus se quiser que isso continue."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je had 14 dagen extra pings. Houd Plus als je die wilt behouden."
+          }
         }
       }
     },
@@ -2941,6 +5989,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "La prova Plus è finita."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton essai Plus vient de se terminer."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu prueba de Plus acaba de terminar."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seu teste do Plus acabou."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je Plus-proefperiode is net afgelopen."
           }
         }
       }
@@ -2965,6 +6037,30 @@
             "state": "translated",
             "value": "I tuoi 14 giorni sono finiti, quindi il blocco app è spento. I promemoria restano gratis per sempre."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tes 14 jours sont passés, donc la pause d'apps est désactivée. Les rappels restent gratuits pour toujours."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tus 14 días terminaron, así que el bloqueo de apps está desactivado. Los recordatorios siguen gratis para siempre."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seus 14 dias acabaram, então bloqueio de apps está desligado. Lembretes continuam grátis para sempre."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je 14 dagen zijn om, dus app-pauze staat uit. Herinneringen blijven gratis."
+          }
         }
       }
     },
@@ -2987,6 +6083,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Il tuo resoconto di 14 giorni"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton bilan sur 14 jours"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu registro de 14 días"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seu registro de 14 dias"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je 14-dagenoverzicht"
           }
         }
       }
@@ -3011,6 +6131,30 @@
             "state": "translated",
             "value": "Blocchi intercettati"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blocs interceptés"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloqueos interceptados"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloqueios interceptados"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apps gepauzeerd"
+          }
         }
       }
     },
@@ -3033,6 +6177,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Registrato in orario"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inscrit à l'heure"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registrado a tiempo"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registrados no horário"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Op tijd bijgehouden"
           }
         }
       }
@@ -3057,6 +6225,30 @@
             "state": "translated",
             "value": "Tieni Plus."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Garder Plus."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conservar Plus."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Manter Plus."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus houden."
+          }
         }
       }
     },
@@ -3079,6 +6271,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Vale la pena tenerlo, no?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu veux garder Plus ?"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Quieres conservar Plus?"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quer manter o Plus?"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus houden?"
           }
         }
       }
@@ -3103,6 +6319,30 @@
             "state": "translated",
             "value": "Hai avuto ping extra e app in pausa per 14 giorni. Tieni plus se vuoi che resti così."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu as eu des pings supplémentaires et des apps en pause pendant 14 jours. Garde Plus si tu veux que ça continue."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tuviste avisos extra y apps en pausa durante 14 días. Conserva Plus si quieres que siga activo."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Você teve pings extras e apps pausados por 14 dias. Mantenha o Plus se quiser que isso continue."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je had 14 dagen extra pings en gepauzeerde apps. Houd Plus als je dat wilt behouden."
+          }
         }
       }
     },
@@ -3125,6 +6365,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Hai avuto ping extra per 14 giorni. Tieni plus se vuoi che restino."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu as eu des pings supplémentaires pendant 14 jours. Garde Plus si tu veux que ça continue."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tuviste avisos extra durante 14 días. Conserva Plus si quieres que sigan activos."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Você teve pings extras por 14 dias. Mantenha o Plus se quiser que isso continue."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je had 14 dagen extra pings. Houd Plus als je die wilt behouden."
           }
         }
       }
@@ -3149,6 +6413,30 @@
             "state": "translated",
             "value": "Tieni Pillie Plus"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Garder Pillie Plus"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conservar Pillie Plus"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Manter Pillie Plus"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus houden"
+          }
         }
       }
     },
@@ -3171,6 +6459,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Il tuo resoconto di 14 giorni"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton bilan sur 14 jours"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu registro de 14 días"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seu registro de 14 dias"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je 14-dagenoverzicht"
           }
         }
       }
@@ -3195,6 +6507,30 @@
             "state": "translated",
             "value": "Blocchi intercettati"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blocs interceptés"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloqueos interceptados"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloqueios interceptados"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apps gepauzeerd"
+          }
         }
       }
     },
@@ -3217,6 +6553,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Registrato in orario"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inscrit à l'heure"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registrado a tiempo"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registrados no horário"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Op tijd bijgehouden"
           }
         }
       }
@@ -3241,6 +6601,30 @@
             "state": "translated",
             "value": "Vuoi tenere Plus?"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu veux garder Plus ?"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Quieres conservar Plus?"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quer manter o Plus?"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus houden?"
+          }
         }
       }
     },
@@ -3264,6 +6648,30 @@
             "state": "translated",
             "value": "Tieni Plus"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Garder Plus"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conservar Plus"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Manter Plus"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus houden"
+          }
         }
       }
     },
@@ -3286,6 +6694,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Scrivi il ping con le tue parole. Plus cambia quello giornaliero e l'ultimo."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Écris le ping avec tes mots. Plus te permet de modifier le quotidien et le dernier."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escribe el aviso con tus palabras. Plus te deja cambiar el diario y el último."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escreva o ping com suas palavras. O Plus permite alterar o diário e o último."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schrijf de ping in je eigen woorden. Met Plus pas je de dagelijkse en de laatste aan."
           }
         }
       }

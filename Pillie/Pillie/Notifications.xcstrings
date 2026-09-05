@@ -21,6 +21,30 @@
             "state": "translated",
             "value": "Als erledigt markieren"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marquer comme terminé"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marcar como completado"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marcar como concluído"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Markeer als gedaan"
+          }
         }
       }
     },
@@ -43,6 +67,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Später erinnern"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus tard"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Posponer"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adiar lembrete"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Later herinneren"
           }
         }
       }
@@ -67,6 +115,30 @@
             "state": "translated",
             "value": "Deine nächste Erinnerung für einen aktiven Tag folgt der ausgewählten Uhrzeit."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton prochain rappel de jour actif suit l'heure que tu as choisie."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu próximo recordatorio de día activo sigue la hora que seleccionaste."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seu próximo lembrete de dia ativo segue o horário que você selecionou."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je volgende herinnering op een actieve dag volgt het door jou gekozen tijdstip."
+          }
         }
       }
     },
@@ -89,6 +161,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Geplante Erinnerungen beginnen heute wieder"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les rappels programmés reprennent aujourd'hui"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Los recordatorios programados retoman hoy"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lembretes agendados retomam hoje"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geplande herinneringen hervatten vandaag"
           }
         }
       }
@@ -113,6 +209,30 @@
             "state": "translated",
             "value": "Geplante Pillenerinnerungen pausieren während deiner Pausentage."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les rappels de pilule programmés s'arrêtent pendant tes jours de pause."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Los recordatorios de píldora programados se pausan durante tus días de descanso."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lembretes de pílula agendados pausam durante seus dias de pausa."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geplande pilherinneringen pauzeren tijdens je pauzedagen."
+          }
         }
       }
     },
@@ -135,6 +255,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Geplante Pflastererinnerungen pausieren während deiner pflasterfreien Tage."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les rappels de patch programmés s'arrêtent pendant tes jours sans patch."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Los recordatorios de parche programados se pausan durante tus días sin parche."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lembretes de adesivo agendados pausam durante seus dias sem adesivo."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geplande pleisterherinneringen pauzeren tijdens je pleistervrije dagen."
           }
         }
       }
@@ -159,6 +303,30 @@
             "state": "translated",
             "value": "Geplante Ringerinnerungen pausieren während deiner ringfreien Tage."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les rappels d'anneau programmés s'arrêtent pendant tes jours sans anneau."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Los recordatorios de anillo programados se pausan durante tus días sin anillo."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lembretes de anel agendados pausam durante seus dias sem anel."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geplande ringherinneringen pauzeren tijdens je ringvrije dagen."
+          }
         }
       }
     },
@@ -181,6 +349,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Deine Pausentage beginnen heute"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les jours de pause commencent aujourd'hui"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Los días de pausa empiezan hoy"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dias de pausa começam hoje"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pauzedagen beginnen vandaag"
           }
         }
       }
@@ -205,6 +397,30 @@
             "state": "translated",
             "value": "Letzte Erinnerung: für heute noch kein Check-in."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dernier rappel : toujours pas de check-in pour aujourd'hui."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recordatorio final: aún no hay check-in para hoy."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lembrete final: ainda sem check-in para hoje."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Laatste herinnering: nog geen check-in voor vandaag."
+          }
         }
       }
     },
@@ -227,6 +443,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Der heutige Check-in ist noch offen."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le check-in d'aujourd'hui est encore en attente."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El check-in de hoy sigue pendiente."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O check-in de hoje ainda está aberto."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "De check-in van vandaag staat nog open."
           }
         }
       }
@@ -251,6 +491,30 @@
             "state": "translated",
             "value": "Dein geplanter Check-in ist fällig."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton check-in programmé est dû."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu check-in programado está pendiente."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seu check-in agendado está pendente."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je geplande check-in is aan de beurt."
+          }
         }
       }
     },
@@ -273,6 +537,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pillie-Check-in fällig"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Check-in Pillie dû"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Check-in de Pillie pendiente"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Check-in do Pillie pendente"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie-check-in aan de beurt"
           }
         }
       }
@@ -297,6 +585,30 @@
             "state": "translated",
             "value": "Letzter geplanter Check-in für heute."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dernier check-in programmé pour aujourd'hui."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Último check-in programado para hoy."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Último check-in agendado para hoje."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Laatste geplande check-in voor vandaag."
+          }
         }
       }
     },
@@ -319,6 +631,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Du kannst den Check-in machen, wenn du bereit bist."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu peux faire ton check-in quand tu es prêt·e."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Puedes hacer el check-in cuando estés listo."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Você pode fazer o check-in quando quiser."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je kunt inchecken wanneer je er klaar voor bent."
           }
         }
       }
@@ -343,6 +679,30 @@
             "state": "translated",
             "value": "Ein kurzer Check-in für deine heutige Routine."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un petit check-in pour ta routine du jour."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un check-in rápido para la rutina de hoy."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Um check-in rápido para a rotina de hoje."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Een snelle check-in voor je routine van vandaag."
+          }
         }
       }
     },
@@ -365,6 +725,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Du bleibst dran"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu restes régulier·ère"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sigues en racha"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Você está mantendo a consistência"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je blijft consistent"
           }
         }
       }
@@ -389,6 +773,30 @@
             "state": "translated",
             "value": "Für heute ist noch eine letzte Erinnerung geplant."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un dernier rappel est programmé pour aujourd'hui."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Queda un último recordatorio programado para hoy."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Um último lembrete está agendado para hoje."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nog één laatste herinnering gepland voor vandaag."
+          }
         }
       }
     },
@@ -411,6 +819,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Wenn du bereit bist, denk daran, heute einzuchecken."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quand tu es prêt·e, pense à faire ton check-in aujourd'hui."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cuando estés listo, recuerda hacer el check-in hoy."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quando quiser, lembre de fazer o check-in hoje."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Als je er klaar voor bent, denk eraan vandaag in te checken."
           }
         }
       }
@@ -435,6 +867,30 @@
             "state": "translated",
             "value": "Eine sanfte Erinnerung an deine Routine."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un rappel discret pour ta routine."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un recordatorio suave para tu rutina."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Um lembrete suave para sua rotina."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Een zachte herinnering voor je routine."
+          }
         }
       }
     },
@@ -457,6 +913,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Eine sanfte Erinnerung"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un rappel discret"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un recordatorio suave"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Um lembrete suave"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Een zachte herinnering"
           }
         }
       }
@@ -481,6 +961,30 @@
             "state": "translated",
             "value": "Letzte Pillie-Erinnerung für heute."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dernier rappel Pillie pour aujourd'hui."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Último recordatorio de Pillie para hoy."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Último lembrete do Pillie para hoje."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Laatste Pillie-herinnering voor vandaag."
+          }
         }
       }
     },
@@ -503,6 +1007,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dein Pillie-Check-in ist noch offen."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton check-in Pillie est encore en attente."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu check-in de Pillie sigue pendiente."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seu check-in do Pillie ainda está aberto."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je Pillie-check-in staat nog open."
           }
         }
       }
@@ -527,6 +1055,30 @@
             "state": "translated",
             "value": "Pillie-Erinnerung"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rappel Pillie"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recordatorio de Pillie"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lembrete do Pillie"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie-herinnering"
+          }
         }
       }
     },
@@ -549,6 +1101,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Zeit für deinen Check-in"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "C'est l'heure de ton check-in"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hora de tu check-in"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hora do check-in"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tijd voor je check-in"
           }
         }
       }
@@ -573,6 +1149,30 @@
             "state": "translated",
             "value": "Für heute noch kein Check-in."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toujours pas de check-in pour aujourd'hui."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aún no hay check-in para hoy."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ainda sem check-in para hoje."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nog geen check-in voor vandaag."
+          }
         }
       }
     },
@@ -595,6 +1195,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Letzte geplante Erinnerung"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dernier rappel programmé"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Último recordatorio programado"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Último lembrete agendado"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Laatste geplande herinnering"
           }
         }
       }
@@ -619,6 +1243,30 @@
             "state": "translated",
             "value": "Hey, der kurze Check-in ist noch offen. Check-in, wenn du soweit bist"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hey, le petit check-in est encore en attente. Fais-le quand tu es prêt·e"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oye, el check-in rápido sigue pendiente. Haz el check-in cuando estés listo"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ei, o check-in rápido ainda está aberto. Faça o check-in quando quiser"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hey, de snelle check-in staat nog open. Check in wanneer je klaar bent"
+          }
         }
       }
     },
@@ -641,6 +1289,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Folgeerinnerung"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rappel de suivi"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recordatorio de seguimiento"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lembrete de acompanhamento"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vervolgherinnering"
           }
         }
       }
@@ -665,6 +1337,30 @@
             "state": "translated",
             "value": "Dein aktueller Vorrat könnte bald zur Neige gehen. Prüfe ihn bei Gelegenheit."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton stock actuel est peut-être bas. Vérifie quand tu peux."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu suministro actual podría estar bajo. Revísalo cuando te convenga."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seu estoque atual pode estar acabando. Verifique quando for conveniente."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je huidige voorraad raakt mogelijk op. Controleer het wanneer het uitkomt."
+          }
         }
       }
     },
@@ -687,6 +1383,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dein Pflastervorrat könnte bald zur Neige gehen. Prüfe ihn bei Gelegenheit."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton stock de patch est peut-être bas. Vérifie quand tu peux."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu suministro de parches podría estar bajo. Revísalo cuando te convenga."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seu estoque de adesivos pode estar acabando. Verifique quando for conveniente."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je pleistervoorraad raakt mogelijk op. Controleer het wanneer het uitkomt."
           }
         }
       }
@@ -711,6 +1431,30 @@
             "state": "translated",
             "value": "Erinnerung an den Pflastervorrat"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rappel de stock de patch"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recordatorio de parches"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lembrete de estoque de adesivos"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Herinnering pleistervoorraad"
+          }
         }
       }
     },
@@ -733,6 +1477,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dein Ringvorrat könnte bald zur Neige gehen. Prüfe ihn bei Gelegenheit."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton stock d'anneau est peut-être bas. Vérifie quand tu peux."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu suministro de anillos podría estar bajo. Revísalo cuando te convenga."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seu estoque de anéis pode estar acabando. Verifique quando for conveniente."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je ringvoorraad raakt mogelijk op. Controleer het wanneer het uitkomt."
           }
         }
       }
@@ -757,6 +1525,30 @@
             "state": "translated",
             "value": "Erinnerung an den Ringvorrat"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rappel de stock d'anneau"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recordatorio de anillos"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lembrete de estoque de anéis"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Herinnering ringvoorraad"
+          }
         }
       }
     },
@@ -779,6 +1571,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Erinnerung an den Pillenvorrat"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rappel de stock de pilules"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recordatorio de píldoras"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lembrete de estoque de pílulas"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Herinnering pilvoorraad"
           }
         }
       }
@@ -803,6 +1619,30 @@
             "state": "translated",
             "value": "Pillie-Zeit!"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "C'est l'heure Pillie !"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¡Hora de Pillie!"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hora do Pillie!"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie-tijd!"
+          }
         }
       }
     },
@@ -825,6 +1665,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Hey, kurzer Check-in. Trag deine Pille ein, wenn du fertig bist"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hey, petit check-in. Inscris ta pilule quand tu as fini"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oye, check-in rápido. Registra tu píldora cuando termines"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ei, check-in rápido. Registre sua pílula quando terminar"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hey, snelle check-in. Houd je pil bij wanneer je klaar bent"
           }
         }
       }
@@ -849,6 +1713,30 @@
             "state": "translated",
             "value": "Pillie-Zeit!"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "C'est l'heure Pillie !"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¡Hora de Pillie!"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hora do Pillie!"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie-tijd!"
+          }
         }
       }
     },
@@ -871,6 +1759,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pillie-Zeit!"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "C'est l'heure Pillie !"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¡Hora de Pillie!"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hora do Pillie!"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie-tijd!"
           }
         }
       }
@@ -895,6 +1807,30 @@
             "state": "translated",
             "value": "Die App-Pause wird am Ende der Testphase deaktiviert."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La pause d'apps sera désactivée à la fin de l'essai."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El bloqueo de apps se desactivará cuando termine la prueba."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloqueio de apps será desligado quando o teste terminar."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App-pauze wordt uitgeschakeld wanneer de proefperiode eindigt."
+          }
         }
       }
     },
@@ -917,6 +1853,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Deine Pillie-Plus-Testphase endet bald"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton essai Pillie Plus se termine bientôt"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu prueba de Pillie Plus termina pronto"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seu teste do Pillie Plus está acabando"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je Pillie Plus-proefperiode eindigt binnenkort"
           }
         }
       }
@@ -941,6 +1901,30 @@
             "state": "translated",
             "value": "Die App-Pause wird in 5 Tagen deaktiviert."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La pause d'apps sera désactivée dans 5 jours."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El bloqueo de apps se desactiva en 5 días."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloqueio de apps desliga em 5 dias."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App-pauze wordt over 5 dagen uitgeschakeld."
+          }
         }
       }
     },
@@ -963,6 +1947,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Deine Plus-Testphase endet bald"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton essai Plus se termine bientôt"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu prueba de Plus termina pronto"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seu teste do Plus acaba em breve"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je Plus-proefperiode eindigt binnenkort"
           }
         }
       }
@@ -987,6 +1995,30 @@
             "state": "translated",
             "value": "Die App-Pause wird morgen Abend deaktiviert."
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La pause d'apps sera désactivée demain soir."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El bloqueo de apps se desactiva mañana por la noche."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloqueio de apps desliga amanhã à noite."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App-pauze wordt morgenavond uitgeschakeld."
+          }
         }
       }
     },
@@ -1009,6 +2041,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Deine Plus-Testphase ist fast vorbei"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton essai Plus est presque terminé"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu prueba de Plus casi termina"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seu teste do Plus está quase acabando"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je Plus-proefperiode is bijna voorbij"
           }
         }
       }
@@ -1033,6 +2089,30 @@
             "state": "translated",
             "value": "Ehi, check-in veloce. Applica il cerotto quando hai finito"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hey, petit check-in. Pose ton patch quand tu as fini"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oye, check-in rápido. Coloca tu parche cuando termines"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ei, check-in rápido. Aplique seu adesivo quando terminar"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hey, snelle check-in. Plak je pleister wanneer je klaar bent"
+          }
         }
       }
     },
@@ -1055,6 +2135,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ehi, check-in veloce. Cambia il cerotto quando hai finito"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hey, petit check-in. Change ton patch quand tu as fini"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oye, check-in rápido. Cambia tu parche cuando termines"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ei, check-in rápido. Troque seu adesivo quando terminar"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hey, snelle check-in. Wissel je pleister wanneer je klaar bent"
           }
         }
       }
@@ -1079,6 +2183,30 @@
             "state": "translated",
             "value": "Ehi, check-in veloce. Togli il cerotto quando hai finito"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hey, petit check-in. Retire ton patch quand tu as fini"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oye, check-in rápido. Quita tu parche cuando termines"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ei, check-in rápido. Remova seu adesivo quando terminar"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hey, snelle check-in. Verwijder je pleister wanneer je klaar bent"
+          }
         }
       }
     },
@@ -1101,6 +2229,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ehi, check-in veloce. Inserisci l'anello quando hai finito"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hey, petit check-in. Insère ton anneau quand tu as fini"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oye, check-in rápido. Inserta tu anillo cuando termines"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ei, check-in rápido. Insira seu anel quando terminar"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hey, snelle check-in. Breng je ring in wanneer je klaar bent"
           }
         }
       }
@@ -1125,6 +2277,30 @@
             "state": "translated",
             "value": "Ehi, check-in veloce. Cambia l'anello quando hai finito"
           }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hey, petit check-in. Change ton anneau quand tu as fini"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oye, check-in rápido. Cambia tu anillo cuando termines"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ei, check-in rápido. Troque seu anel quando terminar"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hey, snelle check-in. Wissel je ring wanneer je klaar bent"
+          }
         }
       }
     },
@@ -1147,6 +2323,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ehi, check-in veloce. Togli l'anello quando hai finito"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hey, petit check-in. Retire ton anneau quand tu as fini"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oye, check-in rápido. Quita tu anillo cuando termines"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ei, check-in rápido. Remova seu anel quando terminar"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hey, snelle check-in. Verwijder je ring wanneer je klaar bent"
           }
         }
       }
