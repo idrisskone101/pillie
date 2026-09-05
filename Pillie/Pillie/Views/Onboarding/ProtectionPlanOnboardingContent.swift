@@ -10,6 +10,21 @@
 
 import SwiftUI
 
+/// Shared demo clock for the welcome card and the daily-flow diagram.
+/// Most people take the pill at night, so both screens show 9:00 PM.
+private enum OnboardingDemoClock {
+    static let hour = 21
+    static let fallback = "21:00"
+
+    static func formatted(locale: Locale) -> String {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.locale = locale
+        return calendar.date(
+            from: DateComponents(year: 2001, month: 1, day: 1, hour: hour, minute: 0)
+        )?.formatted(Date.FormatStyle().hour().minute().locale(locale)) ?? fallback
+    }
+}
+
 /// Copy for the Protection Plan Welcome screen.
 struct ProtectionPlanWelcomeContent {
     /// Accessibility description of the hero "moment" panel.
@@ -40,11 +55,7 @@ struct ProtectionPlanWelcomeContent {
     static var `default`: ProtectionPlanWelcomeContent { localized() }
 
     static func localized(locale: Locale = .current) -> ProtectionPlanWelcomeContent {
-        var calendar = Calendar(identifier: .gregorian)
-        calendar.locale = locale
-        let sampleTime = calendar.date(
-            from: DateComponents(year: 2001, month: 1, day: 1, hour: 14, minute: 0)
-        )?.formatted(Date.FormatStyle().hour().minute().locale(locale)) ?? "14:00"
+        let sampleTime = OnboardingDemoClock.formatted(locale: locale)
 
         return ProtectionPlanWelcomeContent(
             eyebrow: PillieLocalization.string("onboarding.welcome.eyebrow", locale: locale),
@@ -146,11 +157,7 @@ struct ProtectionPlanEarlyValueProofContent {
     static func localized(locale: Locale = .current) -> ProtectionPlanEarlyValueProofContent {
         let title = PillieLocalization.string("onboarding.blocking_demo.title", locale: locale)
         let body = PillieLocalization.string("onboarding.blocking_demo.body", locale: locale)
-        var calendar = Calendar(identifier: .gregorian)
-        calendar.locale = locale
-        let sampleTime = calendar.date(
-            from: DateComponents(year: 2001, month: 1, day: 1, hour: 14, minute: 0)
-        )?.formatted(Date.FormatStyle().hour().minute().locale(locale)) ?? "14:00"
+        let sampleTime = OnboardingDemoClock.formatted(locale: locale)
         return ProtectionPlanEarlyValueProofContent(
             eyebrow: PillieLocalization.string("onboarding.demo.title", locale: locale),
             title: title,
@@ -327,13 +334,17 @@ struct ProtectionPlanRiskWindowContent {
             + choices.flatMap { [$0.title, $0.subtitle] }
     }
 
-    static let `default` = ProtectionPlanRiskWindowContent(
-        title: "Timing is everything",
-        subtitle: "When are you most likely to drift into another app?",
-        footnote: "This shapes your plan — we don't use it to schedule alarms.",
-        primaryCTA: "Continue",
-        choices: RiskWindow.allCases
-    )
+    static var `default`: ProtectionPlanRiskWindowContent { localized() }
+
+    static func localized(locale: Locale = .current) -> ProtectionPlanRiskWindowContent {
+        ProtectionPlanRiskWindowContent(
+            title: PillieLocalization.string("onboarding.risk_window.title", locale: locale),
+            subtitle: PillieLocalization.string("onboarding.risk_window.subtitle", locale: locale),
+            footnote: PillieLocalization.string("onboarding.plan.disclaimer", locale: locale),
+            primaryCTA: PillieLocalization.string("global.action.continue", locale: locale),
+            choices: RiskWindow.allCases
+        )
+    }
 }
 
 /// Copy for the Draft Blocked Apps screen (issue #76, Superdesign drafts f1c3b77e

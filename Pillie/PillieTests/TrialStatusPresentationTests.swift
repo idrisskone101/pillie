@@ -12,6 +12,20 @@ import XCTest
 @testable import Pillie
 
 final class TrialStatusPresentationTests: XCTestCase {
+    private let english = Locale(identifier: "en_US")
+
+    private func commerce(_ key: String) -> String {
+        PillieLocalization.string(key, table: "Commerce", locale: english)
+    }
+
+    private func commerce(_ key: String, days: Int) -> String {
+        PillieLocalization.formatted(
+            key,
+            table: "Commerce",
+            locale: english,
+            arguments: Int64(days)
+        )
+    }
 
     /// Fixed local calendar so boundary expectations are deterministic.
     private var calendar: Calendar = {
@@ -52,10 +66,14 @@ final class TrialStatusPresentationTests: XCTestCase {
             state: trialState(),
             protectionActive: true,
             calendar: calendar,
-            now: date(2026, 7, 2, 9, 0)
+            now: date(2026, 7, 2, 9, 0),
+            locale: english
         )
 
-        XCTAssertEqual(presentation?.indicatorLabel, "Protection active · 14 days left")
+        XCTAssertEqual(
+            presentation?.indicatorLabel,
+            commerce("trial.status.indicator.active", days: 14)
+        )
     }
 
     func testActiveTrialWithoutProtectionShowsTruthfulSetupStatus() {
@@ -63,10 +81,14 @@ final class TrialStatusPresentationTests: XCTestCase {
             state: trialState(),
             protectionActive: false,
             calendar: calendar,
-            now: date(2026, 7, 2, 9, 0)
+            now: date(2026, 7, 2, 9, 0),
+            locale: english
         )
 
-        XCTAssertEqual(presentation?.indicatorLabel, "Set up protection · 14 days left")
+        XCTAssertEqual(
+            presentation?.indicatorLabel,
+            commerce("trial.status.indicator.setup", days: 14)
+        )
     }
 
     // MARK: - Indicator label (day-count boundaries)
@@ -76,14 +98,15 @@ final class TrialStatusPresentationTests: XCTestCase {
             TrialStatusPresentation.make(
                 state: trialState(),
                 calendar: calendar,
-                now: date(2026, 7, 1 + day, 9, 0)
+                now: date(2026, 7, 1 + day, 9, 0),
+                locale: english
             )?.indicatorLabel
         }
 
         // Day 1 (first full day).
-        XCTAssertEqual(label(onDay: 1), "Set up protection · 14 days left")
+        XCTAssertEqual(label(onDay: 1), commerce("trial.status.indicator.setup", days: 14))
         // Day 13 (the day before the last protected day).
-        XCTAssertEqual(label(onDay: 13), "Set up protection · 2 days left")
+        XCTAssertEqual(label(onDay: 13), commerce("trial.status.indicator.setup", days: 2))
     }
 
     func testGrantDayLabelClampsToFourteenDays() {
@@ -92,10 +115,14 @@ final class TrialStatusPresentationTests: XCTestCase {
         let presentation = TrialStatusPresentation.make(
             state: trialState(),
             calendar: calendar,
-            now: date(2026, 7, 1, 10, 30)
+            now: date(2026, 7, 1, 10, 30),
+            locale: english
         )
 
-        XCTAssertEqual(presentation?.indicatorLabel, "Set up protection · 14 days left")
+        XCTAssertEqual(
+            presentation?.indicatorLabel,
+            commerce("trial.status.indicator.setup", days: 14)
+        )
     }
 
     func testFinalProtectedDayReadsEndsTonight() {
@@ -105,31 +132,40 @@ final class TrialStatusPresentationTests: XCTestCase {
         let presentation = TrialStatusPresentation.make(
             state: trialState(),
             calendar: calendar,
-            now: date(2026, 7, 15, 22, 0)
+            now: date(2026, 7, 15, 22, 0),
+            locale: english
         )
 
-        XCTAssertEqual(presentation?.indicatorLabel, "Set up protection · ends tonight")
+        XCTAssertEqual(
+            presentation?.indicatorLabel,
+            commerce("trial.status.indicator.setup_tonight")
+        )
         XCTAssertEqual(presentation?.endsTonight, true)
     }
 
     // MARK: - Status sheet content
 
     func testSheetContentExplainsRemainingTimeExpiryAndKeepPlusPath() {
+        let now = date(2026, 7, 2, 9, 0)
         let content = TrialStatusPresentation.make(
             state: trialState(),
             calendar: calendar,
-            now: date(2026, 7, 2, 9, 0)
+            now: now,
+            locale: english
         )?.sheetContent
 
-        XCTAssertEqual(content?.title, "14 days left in your Plus trial")
-        // What expiry changes: blocking off, reminders stay free, setup kept.
+        let expiry = ReverseTrialClock(grantDate: date(2026, 7, 1, 10, 0))
+            .expiryMoment(calendar: calendar)
+        XCTAssertEqual(
+            content?.title,
+            CommercePresentation.trialEndText(date: expiry, locale: english)
+        )
         XCTAssertEqual(content?.expiryRows.map(\.text), [
-            "App blocking turns off",
-            "Reminders stay free, forever",
-            "Your blocker setup is saved",
+            commerce("trial.status.after.blocking_off"),
+            commerce("trial.status.after.reminders_free"),
+            commerce("trial.status.after.setup_saved"),
         ])
-        // The quiet buy-early path into the existing purchase flow.
-        XCTAssertEqual(content?.ctaTitle, "Keep Pillie Plus")
+        XCTAssertEqual(content?.ctaTitle, commerce("trial.status.keep_plus"))
     }
 
     func testHardPaywallSheetExplainsThatPaidAccessIsRequiredAtExpiry() {
@@ -143,9 +179,9 @@ final class TrialStatusPresentationTests: XCTestCase {
         )?.sheetContent
 
         XCTAssertEqual(content?.expiryRows.map(\.text), [
-            "Pillie Plus access pauses",
-            "Choose monthly, annual, or lifetime to continue",
-            "Your blocker setup is saved",
+            commerce("trial.status.after.plus_pauses"),
+            commerce("trial.status.after.plan_required"),
+            commerce("trial.status.after.setup_saved"),
         ])
         XCTAssertEqual(content?.expiryRows.map(\.symbol), [
             "lock.fill",
@@ -165,13 +201,13 @@ final class TrialStatusPresentationTests: XCTestCase {
         )?.sheetContent.expiryRows
 
         XCTAssertEqual(rows, [
-            TrialExpiryRow(text: "Pillie Plus access pauses", symbol: "lock.fill"),
+            TrialExpiryRow(text: commerce("trial.status.after.plus_pauses"), symbol: "lock.fill"),
             TrialExpiryRow(
-                text: "Choose monthly, annual, or lifetime to continue",
+                text: commerce("trial.status.after.plan_required"),
                 symbol: "creditcard.fill"
             ),
             TrialExpiryRow(
-                text: "Your blocker setup is saved",
+                text: commerce("trial.status.after.setup_saved"),
                 symbol: "checkmark.circle.fill"
             ),
         ])
@@ -180,7 +216,10 @@ final class TrialStatusPresentationTests: XCTestCase {
     // MARK: - Activation hub (#219)
 
     func testUnconfiguredTrialRecommendsAppBlockingFirst() {
-        let content = TrialStatusPresentation(daysRemaining: 14).sheetContent(
+        let content = TrialStatusPresentation(
+            daysRemaining: 14,
+            locale: english
+        ).sheetContent(
             for: TrialActivationState(
                 appBlockingActive: false,
                 customMessagesCustomized: false,
@@ -191,31 +230,35 @@ final class TrialStatusPresentationTests: XCTestCase {
         XCTAssertEqual(content.activationItems, [
             TrialActivationItem(
                 feature: .appBlocking,
-                title: "App blocking",
+                title: commerce("paywall.feature.app_blocking.compact"),
                 status: .setUp,
                 action: .appBlocking,
-                isRecommended: true
+                isRecommended: true,
+                locale: english
             ),
             TrialActivationItem(
                 feature: .smartReminders,
-                title: "Smart Reminders",
+                title: commerce("paywall.feature.smart_reminders"),
                 status: .activeAutomatically,
                 action: .smartReminders,
-                isRecommended: false
+                isRecommended: false,
+                locale: english
             ),
             TrialActivationItem(
                 feature: .customMessages,
-                title: "Custom messages",
+                title: commerce("paywall.feature.custom_messages.compact"),
                 status: .personalize,
                 action: .customMessages,
-                isRecommended: false
+                isRecommended: false,
+                locale: english
             ),
             TrialActivationItem(
                 feature: .shakeToConfirm,
-                title: "Shake to confirm",
+                title: commerce("paywall.feature.shake"),
                 status: .on,
                 action: nil,
-                isRecommended: false
+                isRecommended: false,
+                locale: english
             ),
         ])
     }
@@ -272,10 +315,16 @@ final class TrialStatusPresentationTests: XCTestCase {
         let content = TrialStatusPresentation.make(
             state: trialState(),
             calendar: calendar,
-            now: date(2026, 7, 15, 22, 0)
+            now: date(2026, 7, 15, 22, 0),
+            locale: english
         )?.sheetContent
 
-        XCTAssertEqual(content?.title, "Your Plus trial ends tonight")
+        let expiry = ReverseTrialClock(grantDate: date(2026, 7, 1, 10, 0))
+            .expiryMoment(calendar: calendar)
+        XCTAssertEqual(
+            content?.title,
+            CommercePresentation.trialEndText(date: expiry, locale: english)
+        )
     }
 
     // MARK: - No indicator for entitled users, expired trials, or no trial

@@ -17,7 +17,7 @@ final class AppBlockingSetupContentTests: XCTestCase {
             .joined(separator: " ")
             .lowercased()
         XCTAssertTrue(explanation.contains("after a pillie reminder"))
-        XCTAssertTrue(explanation.contains("become available after you log the action"))
+        XCTAssertTrue(explanation.contains("come back after you check in"))
         XCTAssertEqual(content.changeSelectionCTA, "Edit")
         XCTAssertEqual(content.skipCTA, "Continue without app blocking")
     }
@@ -25,7 +25,7 @@ final class AppBlockingSetupContentTests: XCTestCase {
     func testTrialDisclosureIsClearAndDoesNotReplaceSkip() {
         XCTAssertEqual(
             content.trialDisclosure,
-            "Your free trial lasts 14 days. No card required. App blocking turns off when it ends, while reminders stay free."
+            "14 days free, no card needed. App blocking turns off after the trial. Reminders stay free."
         )
         XCTAssertTrue(content.visibleCopy.contains(content.trialDisclosure))
         XCTAssertEqual(content.skipCTA, "Continue without app blocking")
@@ -39,7 +39,7 @@ final class AppBlockingSetupContentTests: XCTestCase {
 
         XCTAssertEqual(
             hardPaywallContent.trialDisclosure,
-            "Your free trial lasts 14 days. No card required. After it ends, choose monthly, annual, or lifetime to keep using Pillie."
+            "Your free trial lasts 14 days. No card needed. After it ends, choose monthly, annual, or lifetime to keep Plus."
         )
     }
 
@@ -49,9 +49,9 @@ final class AppBlockingSetupContentTests: XCTestCase {
             trialEndTerms: .hardPaywall
         )
 
-        XCTAssertTrue(content.trialDisclosure.localizedCaseInsensitiveContains("no card required"))
+        XCTAssertTrue(content.trialDisclosure.localizedCaseInsensitiveContains("no card needed"))
         XCTAssertTrue(
-            hardPaywallContent.trialDisclosure.localizedCaseInsensitiveContains("no card required")
+            hardPaywallContent.trialDisclosure.localizedCaseInsensitiveContains("no card needed")
         )
     }
 
@@ -79,7 +79,7 @@ final class AppBlockingSetupContentTests: XCTestCase {
             hardPaywallContent.lockedDetail,
             "Choose monthly, annual, or lifetime to keep using Pillie."
         )
-        XCTAssertEqual(hardPaywallContent.lockedCTA, "Upgrade to Pillie Plus")
+        XCTAssertEqual(hardPaywallContent.lockedCTA, "Get Pillie Plus")
     }
 
     func testDeniedOrCancelledAuthorizationShowsRecoveryWithoutStrandingReminderOnly() {

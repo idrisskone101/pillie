@@ -142,6 +142,39 @@ struct HardPaywallPolicyTests {
         ))
 
         #expect(!content.allowsContinueFree)
+        #expect(content.subtitle == PillieLocalization.string(
+            "trial.end.hard.reminders",
+            table: "Commerce",
+            locale: Locale(identifier: "en_CA")
+        ))
+        #expect(!content.subtitle.localizedCaseInsensitiveContains("forever"))
+        #expect(!content.subtitle.localizedCaseInsensitiveContains("stay free"))
+    }
+
+    @Test func `Grandfathered trial end keeps reminders free forever copy`() throws {
+        let locale = Locale(identifier: "en_CA")
+        let content = try #require(TrialEndPaywallContent.make(
+            state: PlusAccessState(
+                hasEntitlement: false,
+                trialGrantDate: date(2026, 8, 20, 9, 0)
+            ),
+            blockerConfigSaved: true,
+            stats: .none,
+            calendar: montrealCalendar,
+            now: date(2026, 9, 5, 9, 0),
+            locale: locale,
+            hardPaywallEnabled: true,
+            termsCohort: .preCutover
+        ))
+
+        #expect(content.terms == .legacy)
+        #expect(content.allowsContinueFree)
+        #expect(content.subtitle == PillieLocalization.string(
+            "trial.end.legacy.subtitle",
+            table: "Commerce",
+            locale: locale
+        ))
+        #expect(content.subtitle.localizedCaseInsensitiveContains("forever"))
     }
 
     @Test func `Hard paywall debug scenario is post cutover and expired`() {

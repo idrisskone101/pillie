@@ -14,15 +14,19 @@ import XCTest
 @testable import Pillie
 
 final class TrialGrantedMomentContentTests: XCTestCase {
-    private let content = TrialGrantedMomentContent.default
+    private let english = Locale(identifier: "en_US")
+    private var content: TrialGrantedMomentContent {
+        TrialGrantedMomentContent.localized(locale: english)
+    }
+
+    private func commerce(_ key: String, locale: Locale? = nil) -> String {
+        PillieLocalization.string(key, table: "Commerce", locale: locale ?? english)
+    }
 
     // MARK: - App Review pre-trial disclosures (one plain line)
 
     func testDisclosureLineCarriesDurationWhatTurnsOffAndPostTrialPrice() {
-        XCTAssertEqual(
-            content.disclosure,
-            "Your free trial lasts 14 days. No card required. App blocking turns off when it ends, while reminders stay free."
-        )
+        XCTAssertEqual(content.disclosure, commerce("trial.granted.disclosure"))
     }
 
     func testDisclosureIsPartOfTheVisibleCopy() {
@@ -37,18 +41,18 @@ final class TrialGrantedMomentContentTests: XCTestCase {
 
         XCTAssertEqual(
             hardPaywallContent.laterDays.last?.detail,
-            "Choose monthly, annual, or lifetime to keep using Pillie."
+            commerce("trial.granted.choice.detail.hard_paywall")
         )
         XCTAssertEqual(
             hardPaywallContent.disclosure,
-            "Your free trial lasts 14 days. No card required. After it ends, choose monthly, annual, or lifetime to keep using Pillie."
+            commerce("trial.granted.disclosure.hard_paywall")
         )
     }
 
     // MARK: - Single continue action, nothing to buy
 
     func testTheOnlyActionIsTheSingleContinueCTA() {
-        XCTAssertEqual(content.primaryCTA, "Continue to app blocking")
+        XCTAssertEqual(content.primaryCTA, commerce("trial.granted.cta"))
     }
 
     func testCopyOffersNothingToBuyAndNoDeclinePath() {
@@ -63,46 +67,62 @@ final class TrialGrantedMomentContentTests: XCTestCase {
     // MARK: - Faithful 2a copy
 
     func testHeadlineAndBadgeMatchTheMappedWarmerDesign() {
-        XCTAssertEqual(content.badge, "14 days free · no card")
-        XCTAssertEqual(content.title, "Your next two weeks,")
-        XCTAssertEqual(content.titleAccent, "on us.")
-        XCTAssertEqual(content.subtitle, "A full trial of Pillie Plus starts now — here's how it goes.")
+        XCTAssertEqual(content.badge, commerce("trial.granted.badge"))
+        XCTAssertEqual(content.title, commerce("trial.granted.headline"))
+        XCTAssertEqual(content.titleAccent, commerce("trial.granted.headline_accent"))
+        XCTAssertEqual(content.subtitle, commerce("trial.granted.subtitle"))
     }
 
     func testTimelineMapsTodayHeadsUpAndDayFourteenChoice() {
-        XCTAssertEqual(content.today.label, "Today")
-        XCTAssertEqual(content.today.title, "Everything unlocks")
+        XCTAssertEqual(content.today.label, commerce("trial.timeline.today"))
+        XCTAssertEqual(content.today.title, commerce("trial.timeline.today_title"))
         XCTAssertEqual(content.today.perks.map(\.title), [
-            "App blocking", "Shake to confirm", "Smart Reminders", "Custom messages",
+            commerce("paywall.feature.app_blocking"),
+            commerce("paywall.feature.shake"),
+            commerce("paywall.feature.smart_reminders"),
+            commerce("paywall.feature.custom_messages"),
         ])
 
-        XCTAssertEqual(content.laterDays.map(\.label), ["Day 12", "Day 14"])
-        XCTAssertEqual(content.laterDays.map(\.title), ["A gentle heads-up", "You choose"])
+        XCTAssertEqual(content.laterDays.map(\.label), [
+            commerce("trial.granted.warning.label"),
+            commerce("trial.granted.choice.label"),
+        ])
+        XCTAssertEqual(content.laterDays.map(\.title), [
+            commerce("trial.granted.warning.title"),
+            commerce("trial.granted.choice.title"),
+        ])
         XCTAssertEqual(
             content.laterDays.map(\.detail),
             [
-                "We'll remind you before your trial ends. No surprises.",
-                "Keep reminders free, or choose whether to continue with Plus.",
+                commerce("trial.granted.warning.detail"),
+                commerce("trial.granted.choice.detail"),
             ]
         )
     }
 
     func testGermanTrialGrantedMomentUsesCompleteIdiomaticCopy() {
-        let german = TrialGrantedMomentContent.localized(locale: Locale(identifier: "de_DE"))
+        let germanLocale = Locale(identifier: "de_DE")
+        let german = TrialGrantedMomentContent.localized(locale: germanLocale)
 
-        XCTAssertEqual(german.badge, "14 Tage gratis · keine Karte")
-        XCTAssertEqual(german.title, "Deine nächsten zwei Wochen")
-        XCTAssertEqual(german.titleAccent, "gehen auf uns.")
-        XCTAssertEqual(german.laterDays.map(\.label), ["Tag 12", "Tag 14"])
-        XCTAssertEqual(german.laterDays.map(\.title), ["Eine kurze Erinnerung", "Du entscheidest"])
+        XCTAssertEqual(german.badge, commerce("trial.granted.badge", locale: germanLocale))
+        XCTAssertEqual(german.title, commerce("trial.granted.headline", locale: germanLocale))
+        XCTAssertEqual(german.titleAccent, commerce("trial.granted.headline_accent", locale: germanLocale))
+        XCTAssertEqual(german.laterDays.map(\.label), [
+            commerce("trial.granted.warning.label", locale: germanLocale),
+            commerce("trial.granted.choice.label", locale: germanLocale),
+        ])
+        XCTAssertEqual(german.laterDays.map(\.title), [
+            commerce("trial.granted.warning.title", locale: germanLocale),
+            commerce("trial.granted.choice.title", locale: germanLocale),
+        ])
         XCTAssertEqual(
             german.laterDays.map(\.detail),
             [
-                "Bevor deine Testphase endet, geben wir dir rechtzeitig Bescheid. Ohne Überraschungen.",
-                "Erinnerungen bleiben kostenlos. Plus behältst du nur, wenn du möchtest.",
+                commerce("trial.granted.warning.detail", locale: germanLocale),
+                commerce("trial.granted.choice.detail", locale: germanLocale),
             ]
         )
-        XCTAssertEqual(german.primaryCTA, "Weiter zur App-Pause")
+        XCTAssertEqual(german.primaryCTA, commerce("trial.granted.cta", locale: germanLocale))
     }
 
     // MARK: - Truthful copy (ADR 0002 rules stand)

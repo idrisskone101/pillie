@@ -191,19 +191,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Final reminder: no action is logged yet."
+            "value": "Final reminder: still no check-in for today."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Promemoria finale: non è ancora stata registrata alcuna azione."
+            "value": "Promemoria finale: per oggi non c'è ancora un check-in."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Letzte Erinnerung: Noch keine Aktion protokolliert."
+            "value": "Letzte Erinnerung: für heute noch kein Check-in."
           }
         }
       }
@@ -214,19 +214,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Today’s action is still open."
+            "value": "Today's check-in is still open."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "L’azione di oggi è ancora da registrare."
+            "value": "Il check-in di oggi è ancora da fare."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Die heutige Aktion ist noch offen."
+            "value": "Der heutige Check-in ist noch offen."
           }
         }
       }
@@ -237,19 +237,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your scheduled action is due."
+            "value": "Your scheduled check-in is due."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "È prevista l’azione programmata."
+            "value": "È previsto il check-in programmato."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Deine geplante Aktion ist fällig."
+            "value": "Dein geplanter Check-in ist fällig."
           }
         }
       }
@@ -306,19 +306,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "You can log today’s action when you’re ready."
+            "value": "You can check in when you're ready."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Puoi registrare l’azione di oggi quando vuoi."
+            "value": "Puoi fare il check-in quando vuoi."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Du kannst die heutige Aktion protokollieren, wenn du bereit bist."
+            "value": "Du kannst den Check-in machen, wenn du bereit bist."
           }
         }
       }
@@ -398,19 +398,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "When you’re ready, remember to log today’s action."
+            "value": "When you're ready, remember to check in today."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Quando vuoi, ricorda di registrare l’azione di oggi."
+            "value": "Quando vuoi, ricorda di fare il check-in oggi."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wenn du bereit bist, denk daran, die heutige Aktion zu protokollieren."
+            "value": "Wenn du bereit bist, denk daran, heute einzuchecken."
           }
         }
       }
@@ -559,19 +559,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "No action is logged yet for today."
+            "value": "Still no check-in for today."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Per oggi non è ancora stata registrata alcuna azione."
+            "value": "Per oggi non c'è ancora un check-in."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Für heute ist noch keine Aktion protokolliert."
+            "value": "Für heute noch kein Check-in."
           }
         }
       }
@@ -605,19 +605,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Today’s action is still open. Log it when you’re ready."
+            "value": "Hey, quick check-in is still open. Check in when you're ready"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "L’azione di oggi è ancora da registrare. Fallo quando vuoi."
+            "value": "Ehi, il check-in veloce è ancora aperto. Fai il check-in quando vuoi"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Die heutige Aktion ist noch offen. Protokolliere sie, wenn du bereit bist."
+            "value": "Hey, der kurze Check-in ist noch offen. Check-in, wenn du soweit bist"
           }
         }
       }
@@ -783,48 +783,25 @@
         }
       }
     },
-    "notification.reminder.patch.body": {
-      "comment": "Implementation should select change/remove/apply action [health]",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Your scheduled patch action is due. Log it when you’re done."
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "È prevista l’azione programmata per il cerotto. Registrala quando hai finito."
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Deine geplante Pflasteraktion ist fällig. Protokolliere sie danach."
-          }
-        }
-      }
-    },
     "notification.reminder.patch.title": {
       "comment": "Patch-specific title [health]",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Patch reminder"
+            "value": "Pillie time!"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Promemoria cerotto"
+            "value": "Pillie time!"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pflastererinnerung"
+            "value": "Pillie-Zeit!"
           }
         }
       }
@@ -835,19 +812,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "It’s time for your scheduled pill. Log it when you’re done."
+            "value": "Hey, quick check-in. Log your pill when you're done"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "È l’ora programmata per la pillola. Registrala quando hai finito."
+            "value": "Ehi, check-in veloce. Registrala quando hai finito"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Es ist Zeit für deine Pille. Protokolliere die Aktion danach."
+            "value": "Hey, kurzer Check-in. Trag deine Pille ein, wenn du fertig bist"
           }
         }
       }
@@ -858,42 +835,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pill reminder"
+            "value": "Pillie time!"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Promemoria pillola"
+            "value": "Pillie time!"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillenerinnerung"
-          }
-        }
-      }
-    },
-    "notification.reminder.ring.body": {
-      "comment": "Implementation should select insert/remove/reinsert action [health]",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Your scheduled ring action is due. Log it when you’re done."
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "È prevista l’azione programmata per l’anello. Registrala quando hai finito."
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Deine geplante Ringaktion ist fällig. Protokolliere sie danach."
+            "value": "Pillie-Zeit!"
           }
         }
       }
@@ -904,19 +858,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ring reminder"
+            "value": "Pillie time!"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Promemoria anello"
+            "value": "Pillie time!"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ringerinnerung"
+            "value": "Pillie-Zeit!"
           }
         }
       }
@@ -927,19 +881,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "App blocking will turn off when the trial ends. Standard reminders remain available."
+            "value": "App blocking will turn off when the trial ends."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Il blocco delle app si disattiverà al termine della prova. I promemoria standard resteranno disponibili."
+            "value": "Il blocco delle app si disattiverà al termine della prova."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Die App-Pause wird am Ende der Testphase deaktiviert. Standarderinnerungen bleiben verfügbar."
+            "value": "Die App-Pause wird am Ende der Testphase deaktiviert."
           }
         }
       }
@@ -973,19 +927,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "App blocking turns off in 5 days. Reminders stay free, forever."
+            "value": "App blocking turns off in 5 days."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Il blocco delle app si disattiverà tra 5 giorni. I promemoria resteranno gratuiti, per sempre."
+            "value": "Il blocco delle app si disattiverà tra 5 giorni."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Die App-Pause wird in 5 Tagen deaktiviert. Erinnerungen bleiben dauerhaft kostenlos."
+            "value": "Die App-Pause wird in 5 Tagen deaktiviert."
           }
         }
       }
@@ -1019,19 +973,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "App blocking turns off tomorrow night. Reminders stay free, forever."
+            "value": "App blocking turns off tomorrow night."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Il blocco delle app si disattiverà domani sera. I promemoria resteranno gratuiti, per sempre."
+            "value": "Il blocco delle app si disattiverà domani sera."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Die App-Pause wird morgen Abend deaktiviert. Erinnerungen bleiben dauerhaft kostenlos."
+            "value": "Die App-Pause wird morgen Abend deaktiviert."
           }
         }
       }
@@ -1055,6 +1009,144 @@
           "stringUnit": {
             "state": "translated",
             "value": "Deine Plus-Testphase ist fast vorbei"
+          }
+        }
+      }
+    },
+    "notification.reminder.patch.apply.body": {
+      "comment": "Notification copy [notification.reminder.patch.apply.body]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hey, quick check-in. Apply your patch when you're done"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hey, kurzer Check-in. Kleb dein Pflaster auf, wenn du fertig bist"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ehi, check-in veloce. Applica il cerotto quando hai finito"
+          }
+        }
+      }
+    },
+    "notification.reminder.patch.change.body": {
+      "comment": "Notification copy [notification.reminder.patch.change.body]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hey, quick check-in. Change your patch when you're done"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hey, kurzer Check-in. Wechsel dein Pflaster, wenn du fertig bist"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ehi, check-in veloce. Cambia il cerotto quando hai finito"
+          }
+        }
+      }
+    },
+    "notification.reminder.patch.remove.body": {
+      "comment": "Notification copy [notification.reminder.patch.remove.body]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hey, quick check-in. Remove your patch when you're done"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hey, kurzer Check-in. Nimm dein Pflaster ab, wenn du fertig bist"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ehi, check-in veloce. Togli il cerotto quando hai finito"
+          }
+        }
+      }
+    },
+    "notification.reminder.ring.insert.body": {
+      "comment": "Notification copy [notification.reminder.ring.insert.body]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hey, quick check-in. Insert your ring when you're done"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hey, kurzer Check-in. Setz deinen Ring ein, wenn du fertig bist"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ehi, check-in veloce. Inserisci l'anello quando hai finito"
+          }
+        }
+      }
+    },
+    "notification.reminder.ring.change.body": {
+      "comment": "Notification copy [notification.reminder.ring.change.body]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hey, quick check-in. Change your ring when you're done"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hey, kurzer Check-in. Wechsel deinen Ring, wenn du fertig bist"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ehi, check-in veloce. Cambia l'anello quando hai finito"
+          }
+        }
+      }
+    },
+    "notification.reminder.ring.remove.body": {
+      "comment": "Notification copy [notification.reminder.ring.remove.body]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hey, quick check-in. Remove your ring when you're done"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hey, kurzer Check-in. Nimm deinen Ring raus, wenn du fertig bist"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ehi, check-in veloce. Togli l'anello quando hai finito"
           }
         }
       }
