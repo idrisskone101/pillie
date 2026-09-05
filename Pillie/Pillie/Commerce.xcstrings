@@ -105,13 +105,13 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Il blocco delle app è una funzione di Pillie Plus configurabile dopo l’upgrade."
+            "value": "Il blocco è Plus. Setup dopo l’upgrade."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Die App-Pause ist eine Pillie-Plus-Funktion, die du nach dem Upgrade einrichten kannst."
+            "value": "App-Pause ist Plus. Setup nach dem Upgrade."
           }
         }
       }
@@ -197,13 +197,13 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus continua a mandare ping finché non registri oggi, e può mettere in pausa le app fino al check-in."
+            "value": "Plus continua a mandare ping e può pausare le app."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus pingt weiter, bis du heute einträgst, und kann Apps bis zum Check-in pausieren."
+            "value": "Plus pingt weiter und kann Apps pausieren."
           }
         }
       }
@@ -1232,13 +1232,13 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Il tuo trial gratis dura 14 giorni. Non serve la carta. Il blocco app si spegne quando finisce, e i promemoria restano gratis."
+            "value": "14 giorni gratis, niente carta. Il blocco finisce col trial. I promemoria restano gratis."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dein Gratis-Trial dauert 14 Tage. Keine Karte nötig. App-Pause geht aus, wenn er endet, und Erinnerungen bleiben kostenlos."
+            "value": "14 Tage gratis, keine Karte. App-Pause endet mit dem Trial. Erinnerungen bleiben frei."
           }
         }
       }
@@ -3055,7 +3055,7 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tieni plus."
+            "value": "Tieni Plus."
           }
         }
       }

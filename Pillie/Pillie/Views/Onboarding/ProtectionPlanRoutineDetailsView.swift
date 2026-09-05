@@ -169,8 +169,10 @@ private struct RoutineCyclePositionSection: View {
             onSelectPosition(position)
         } label: {
             VStack(spacing: 6) {
-                Image(systemName: position.symbolName)
-                    .font(.system(size: 15, weight: .semibold))
+                CyclePositionPackTrackIcon(
+                    activeIndex: position.packTrackActiveIndex,
+                    isSelected: isSelected
+                )
                 Text(position.title)
                     .font(.pillie(13, weight: .semibold))
                     .multilineTextAlignment(.center)
@@ -299,6 +301,31 @@ private struct RoutineCyclePositionSection: View {
         .buttonStyle(.plain)
         .accessibilityLabel(label)
         .accessibilityIdentifier(systemName == "plus" ? "routineCycleDayPlus" : "routineCycleDayMinus")
+    }
+}
+
+/// Three blister slots with one lit — place in the pack, not time of day.
+private struct CyclePositionPackTrackIcon: View {
+    let activeIndex: Int
+    let isSelected: Bool
+
+    var body: some View {
+        HStack(spacing: 3) {
+            ForEach(0..<3, id: \.self) { index in
+                RoundedRectangle(cornerRadius: 3, style: .continuous)
+                    .fill(slotColor(for: index))
+                    .frame(width: 10, height: 10)
+            }
+        }
+        .accessibilityHidden(true)
+    }
+
+    private func slotColor(for index: Int) -> Color {
+        let isActive = index == activeIndex
+        if isSelected {
+            return isActive ? PillieTheme.coral : PillieTheme.coral.opacity(0.28)
+        }
+        return isActive ? PillieTheme.textMuted : Color.black.opacity(0.08)
     }
 }
 

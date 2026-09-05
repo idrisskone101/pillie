@@ -37,7 +37,7 @@ final class ItalianLocalizationContractTests: XCTestCase {
 
         XCTAssertEqual(
             ProtectionPlanWelcomeContent.localized(locale: italian).title,
-            "La sveglia per la tua pillola."
+            "La sveglia per la tua pillola, ogni sera."
         )
         XCTAssertEqual(
             ProtectionPlanRoutineMethodContent.localized(locale: italian).title,
@@ -86,7 +86,7 @@ final class ItalianLocalizationContractTests: XCTestCase {
 
         XCTAssertEqual(
             PillieLocalization.string("onboarding.welcome.demo.reminder_title", locale: italian),
-            "Check-in del pomeriggio"
+            "Check-in serale"
         )
         XCTAssertEqual(
             PillieLocalization.formatted(
@@ -264,7 +264,7 @@ final class ItalianLocalizationContractTests: XCTestCase {
 
         XCTAssertEqual(
             content.trialDisclosure,
-            "Il tuo trial gratis dura 14 giorni. Non serve la carta. Il blocco app si spegne quando finisce, e i promemoria restano gratis."
+            "14 giorni gratis, niente carta. Il blocco finisce col trial. I promemoria restano gratis."
         )
         XCTAssertEqual(
             content.emptyDetail,

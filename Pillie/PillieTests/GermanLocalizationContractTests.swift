@@ -6,7 +6,7 @@ final class GermanLocalizationContractTests: XCTestCase {
     func testGermanOnboardingCompoundLabelsStayCompactForAccessibilityLayouts() {
         let german = Locale(identifier: "de_DE")
         let expectedByKey = [
-            "onboarding.personalise.pain.title": "Was kommt dir in die Quere?",
+            "onboarding.personalise.pain.title": "Was kommt dazwischen?",
             "onboarding.personalise.choice.snooze": "Ich wische Erinnerungen weg.",
             "onboarding.personalise.choice.busy": "Ich hab dann keine Zeit.",
             "onboarding.personalise.choice.forget": "Ich vergesse es einfach.",
@@ -24,11 +24,11 @@ final class GermanLocalizationContractTests: XCTestCase {
 
     func testRequiredSetupAndReminderKeysResolveInGermanWithoutEnglishFallback() {
         let expectedByKey = [
-            "onboarding.welcome.title": "Der Wecker für deine Pille.",
-            "onboarding.method.title": "Wähl deine Methode.",
+            "onboarding.welcome.title": "Der Wecker für deine Pille, jeden Abend.",
+            "onboarding.method.title": "Wähl die Methode.",
             "onboarding.regimen.21_7": "21 aktive Tage, 7 Pausentage",
             "onboarding.cycle_position.title": "Wo stehst du in deiner Routine?",
-            "onboarding.reminder_time.title": "Wähl eine Erinnerungszeit.",
+            "onboarding.reminder_time.title": "Wähl eine Zeit.",
             "onboarding.plan.title": "Dein Erinnerungsplan",
             "onboarding.permission.title": "Mitteilungen erlauben",
             "onboarding.blocking_setup.title": "Wähl Apps zum Pausieren",
@@ -154,7 +154,7 @@ final class GermanLocalizationContractTests: XCTestCase {
 
         XCTAssertEqual(
             TodayActionState.completed.localizedPrimaryLabel(locale: german),
-            "Das ist eingetragen. Tippe zum Rückgängig machen."
+            "Eingetragen. Zum Rückgängig tippen.",
         )
         XCTAssertEqual(
             HistoryPresentation.monthSummary(
@@ -266,7 +266,7 @@ final class GermanLocalizationContractTests: XCTestCase {
                 dueTitle: "Eine sanfte Erinnerung",
                 dueBody: "Eine sanfte Erinnerung an deine Routine.",
                 retryTitle: "Folgeerinnerung",
-                retryBody: "Wenn du bereit bist, denk daran, die heutige Aktion zu protokollieren.",
+                retryBody: "Wenn du bereit bist, denk daran, heute einzuchecken.",
                 lastCallTitle: "Letzte geplante Erinnerung",
                 lastCallBody: "Für heute ist noch eine letzte Erinnerung geplant."
             )
@@ -407,17 +407,17 @@ final class GermanLocalizationContractTests: XCTestCase {
             actions.map { $0.localizedReminderBody(locale: german) },
             [
                 "Hey, kurzer Check-in. Trag deine Pille ein, wenn du fertig bist",
-                "Hey, kurzer Check-in. Trag dein Pflaster ein, wenn du fertig bist",
-                "Hey, kurzer Check-in. Trag deinen Ring ein, wenn du fertig bist",
+                "Hey, kurzer Check-in. Kleb dein Pflaster auf, wenn du fertig bist",
+                "Hey, kurzer Check-in. Setz deinen Ring ein, wenn du fertig bist",
             ]
         )
         XCTAssertEqual(
             actions[0].localizedFollowUpBody(locale: german),
-            "Hey, der kurze Check-in ist noch offen. Trag's ein, wenn du soweit bist"
+            "Hey, der kurze Check-in ist noch offen. Check-in, wenn du soweit bist"
         )
         XCTAssertEqual(
             actions[0].localizedFinalBody(locale: german),
-            "Für heute ist noch keine Aktion protokolliert."
+            "Für heute noch kein Check-in."
         )
         XCTAssertEqual(
             PillieLocalization.string(

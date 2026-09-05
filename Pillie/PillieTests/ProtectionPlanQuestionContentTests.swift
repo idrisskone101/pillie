@@ -75,10 +75,10 @@ final class ProtectionPlanQuestionContentTests: XCTestCase {
 
     func testFailureFrequencyUsesNewLabelsOverTheExistingStorageBuckets() {
         let content = ProtectionPlanFailureFrequencyContent.default
-        XCTAssertEqual(content.title, "How often?")
+        XCTAssertEqual(content.title, "How often do you miss your pill?")
         XCTAssertEqual(
             content.subtitle,
-            "Your answer helps tailor the reminder support level."
+            "So we know how firm the reminders should be."
         )
         XCTAssertEqual(content.primaryCTA, "Continue")
 
@@ -103,8 +103,14 @@ final class ProtectionPlanQuestionContentTests: XCTestCase {
 
     func testRiskWindowContentMakesClearItDoesNotChangeTheSchedule() {
         let content = ProtectionPlanRiskWindowContent.default
-        XCTAssertEqual(content.title, "When do you usually drift?")
-        XCTAssertEqual(content.subtitle, "Choose the pattern that sounds most like you.")
+        XCTAssertEqual(
+            content.title,
+            "How soon do you usually take it after the reminder?"
+        )
+        XCTAssertEqual(
+            content.subtitle,
+            "Just a rough sense. You can change this later."
+        )
         XCTAssertEqual(
             content.footnote,
             "This reminder setup is based on your selections. You can change it later in Settings."

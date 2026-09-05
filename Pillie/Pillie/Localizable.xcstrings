@@ -1669,13 +1669,13 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus può mettere in pausa le app scelte quando è ora del promemoria. Tornano dopo che hai fatto il check-in."
+            "value": "Plus mette in pausa le app al promemoria. Tornano dopo il check-in."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus kann ausgewählte Apps pausieren, wenn eine Erinnerung fällig ist. Sie kommen zurück, nachdem du den Check-in gemacht hast."
+            "value": "Plus pausiert Apps bei einer Erinnerung. Nach dem Check-in sind sie wieder da."
           }
         }
       }
@@ -1853,7 +1853,7 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Le app restano in pausa fino al check-in."
+            "value": "App in pausa fino al check-in."
           }
         },
         "de": {
@@ -1876,13 +1876,13 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Le app scelte vanno in pausa dopo un promemoria Pillie. Tornano dopo che hai fatto il check-in."
+            "value": "Le app scelte vanno in pausa al promemoria. Tornano dopo il check-in."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ausgewählte Apps pausieren nach einer Pillie-Erinnerung. Sie kommen zurück, nachdem du den Check-in gemacht hast."
+            "value": "Ausgewählte Apps pausieren nach einer Erinnerung. Nach dem Check-in sind sie wieder da."
           }
         }
       }
@@ -2037,7 +2037,7 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Scegli le app da mettere in pausa"
+            "value": "Scegli le app da pausare"
           }
         },
         "de": {
@@ -2290,7 +2290,7 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie ti aiuta a fare il check-in e tiene la cronologia facile da rivedere."
+            "value": "Pillie ti aiuta a fare il check-in e a rivedere la cronologia."
           }
         },
         "de": {
@@ -2951,19 +2951,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your answer helps tailor the reminder support level."
+            "value": "So we know how firm the reminders should be."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "La risposta aiuta a personalizzare il livello di supporto dei promemoria."
+            "value": "Così sappiamo quanto devono essere insistenti i promemoria."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Deine Antwort hilft, die Unterstützung durch Erinnerungen anzupassen."
+            "value": "So wissen wir, wie fest die Erinnerungen sein sollen."
           }
         }
       }
@@ -2974,19 +2974,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "How often?"
+            "value": "How often do you miss your pill?"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Quanto spesso?"
+            "value": "Quanto spesso salti la pillola?"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wie oft?"
+            "value": "Wie oft verpasst du deine Pille?"
           }
         }
       }
@@ -3003,13 +3003,13 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cerotto · un piano per cambiare il cerotto"
+            "value": "Cerotto · un piano di cambio"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pflaster · ein Plan zum Wechseln deines Pflasters"
+            "value": "Pflaster · ein Wechselplan"
           }
         }
       }
@@ -3101,7 +3101,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wähl deine Methode."
+            "value": "Wähl die Methode."
           }
         }
       }
@@ -3906,7 +3906,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Was kommt dir in die Quere?"
+            "value": "Was kommt dazwischen?"
           }
         }
       }
@@ -4613,13 +4613,13 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Scegli un orario per il promemoria."
+            "value": "Scegli un orario."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wähl eine Erinnerungszeit."
+            "value": "Wähl eine Zeit."
           }
         }
       }
@@ -4745,19 +4745,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Choose the pattern that sounds most like you."
+            "value": "Just a rough sense. You can change this later."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Scegli lo schema che ti somiglia di più."
+            "value": "A occhio. Puoi cambiarlo dopo."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nimm das Muster, das am meisten nach dir klingt."
+            "value": "Nur grob. Du kannst das später ändern."
           }
         }
       }
@@ -4768,19 +4768,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "When do you usually drift?"
+            "value": "How soon do you usually take it after the reminder?"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Quando ti distrai di solito?"
+            "value": "Quanto dopo il promemoria la prendi di solito?"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wann schweifst du meistens ab?"
+            "value": "Wie bald nimmst du sie nach der Erinnerung?"
           }
         }
       }
@@ -4929,19 +4929,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Afternoon check-in"
+            "value": "Nightly check-in"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Check-in del pomeriggio"
+            "value": "Check-in serale"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Check-in am Nachmittag"
+            "value": "Check-in am Abend"
           }
         }
       }
@@ -4998,19 +4998,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "You can't swipe this reminder away."
+            "value": "You can't swipe this reminder away. It stays until you check in."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Non puoi scartarlo."
+            "value": "Non puoi scartarlo. Resta fino al check-in."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Du kannst sie nicht wegwischen."
+            "value": "Du kannst sie nicht wegwischen. Sie bleibt bis zum Check-in."
           }
         }
       }
@@ -5027,13 +5027,13 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "La sveglia per la tua pillola."
+            "value": "La sveglia per la tua pillola, ogni sera."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Der Wecker für deine Pille."
+            "value": "Der Wecker für deine Pille, jeden Abend."
           }
         }
       }
@@ -5148,7 +5148,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Das ist eingetragen. Tippe zum Rückgängig machen."
+            "value": "Eingetragen. Zum Rückgängig tippen."
           }
         }
       }
@@ -8362,13 +8362,13 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Erinnerungen laufen. Plus pausiert Apps bis zum Check-in."
+            "value": "Erinnerungen an. Plus pausiert Apps."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "I promemoria ci sono. Plus mette in pausa le app fino al check-in."
+            "value": "I promemoria restano. Plus può pausare le app."
           }
         }
       }
@@ -8385,13 +8385,13 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Erinnerungen laufen. Plus pausiert Apps bis zum Check-in."
+            "value": "Erinnerungen an. Plus pausiert Apps."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "I promemoria ci sono. Plus mette in pausa le app fino al check-in."
+            "value": "I promemoria restano. Plus può pausare le app."
           }
         }
       }
@@ -8408,13 +8408,13 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Erinnerungen laufen. Plus pausiert Apps bis zum Check-in."
+            "value": "Erinnerungen an. Plus pausiert Apps."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "I promemoria ci sono. Plus mette in pausa le app fino al check-in."
+            "value": "I promemoria restano. Plus può pausare le app."
           }
         }
       }
@@ -8431,13 +8431,13 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Erinnerungen laufen. Plus pausiert Apps bis zum Check-in."
+            "value": "Erinnerungen an. Plus pausiert Apps."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "I promemoria ci sono. Plus mette in pausa le app fino al check-in."
+            "value": "I promemoria restano. Plus può pausare le app."
           }
         }
       }
@@ -8454,13 +8454,13 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Erinnerungen laufen. Plus pausiert Apps bis zum Check-in."
+            "value": "Erinnerungen an. Plus pausiert Apps."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "I promemoria ci sono. Plus mette in pausa le app fino al check-in."
+            "value": "I promemoria restano. Plus può pausare le app."
           }
         }
       }
@@ -8477,13 +8477,13 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Erinnerungen laufen. Plus pausiert Apps bis zum Check-in."
+            "value": "Erinnerungen an. Plus pausiert Apps."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "I promemoria ci sono. Plus mette in pausa le app fino al check-in."
+            "value": "I promemoria restano. Plus può pausare le app."
           }
         }
       }
@@ -8500,13 +8500,13 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Erinnerungen laufen. Plus pausiert Apps bis zum Check-in."
+            "value": "Erinnerungen an. Plus pausiert Apps."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "I promemoria ci sono. Plus mette in pausa le app fino al check-in."
+            "value": "I promemoria restano. Plus può pausare le app."
           }
         }
       }

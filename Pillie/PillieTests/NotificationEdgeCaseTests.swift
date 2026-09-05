@@ -252,11 +252,12 @@ final class NotificationEdgeCaseTests: XCTestCase {
         let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
         let cases: [(method: ContraceptiveMethod, startOffsetDays: Int, expectedAction: PillDay.ActionType, expectedTitle: String, expectedBody: String)] = [
             (.pill, 0, .pillActive, "Pillie time!", "Hey, quick check-in. Log your pill when you're done"),
-            (.patch, 0, .patchChange, "Pillie time!", "Hey, quick check-in. Log your patch when you're done"),
-            (.patch, -21, .patchRemove, "Pillie time!", "Hey, quick check-in. Log your patch when you're done"),
-            (.ring, 0, .ringInsert, "Pillie time!", "Hey, quick check-in. Log your ring when you're done"),
-            (.ring, -21, .ringRemove, "Pillie time!", "Hey, quick check-in. Log your ring when you're done"),
-            (.ring, -28, .ringReinsert, "Pillie time!", "Hey, quick check-in. Log your ring when you're done")
+            (.patch, 0, .patchChange, "Pillie time!", "Hey, quick check-in. Apply your patch when you're done"),
+            (.patch, -7, .patchChange, "Pillie time!", "Hey, quick check-in. Change your patch when you're done"),
+            (.patch, -21, .patchRemove, "Pillie time!", "Hey, quick check-in. Remove your patch when you're done"),
+            (.ring, 0, .ringInsert, "Pillie time!", "Hey, quick check-in. Insert your ring when you're done"),
+            (.ring, -21, .ringRemove, "Pillie time!", "Hey, quick check-in. Remove your ring when you're done"),
+            (.ring, -28, .ringReinsert, "Pillie time!", "Hey, quick check-in. Change your ring when you're done")
         ]
 
         for testCase in cases {
@@ -298,7 +299,7 @@ final class NotificationEdgeCaseTests: XCTestCase {
         let retry = try XCTUnwrap(summaries.first { $0.requestKind == "retry" })
 
         XCTAssertEqual(retry.title, "Reminder follow-up")
-        XCTAssertEqual(retry.body, "Hey, quick check-in is still open. Log it when you're ready")
+        XCTAssertEqual(retry.body, "Hey, quick check-in is still open. Check in when you're ready")
         XCTAssertNotEqual(retry.title, primary.title)
         XCTAssertNotEqual(retry.body, primary.body)
         XCTAssertEqual(retry.categoryIdentifier, primary.categoryIdentifier)

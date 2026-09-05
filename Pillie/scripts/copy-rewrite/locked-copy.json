@@ -101,31 +101,17 @@
       "key": "notification.reminder.pill.body",
       "en": "Hey, quick check-in. Log your pill when you're done",
       "de": "Hey, kurzer Check-in. Trag deine Pille ein, wenn du fertig bist",
-      "it": "Ehi, check-in veloce. Registrala quando hai finito"
-    },
-    {
-      "issue": "ENG-58",
-      "table": "Notifications",
-      "key": "notification.reminder.patch.body",
-      "en": "Hey, quick check-in. Log your patch when you're done",
-      "de": "Hey, kurzer Check-in. Trag dein Pflaster ein, wenn du fertig bist",
-      "it": "Ehi, check-in veloce. Registralo quando hai finito"
-    },
-    {
-      "issue": "ENG-58",
-      "table": "Notifications",
-      "key": "notification.reminder.ring.body",
-      "en": "Hey, quick check-in. Log your ring when you're done",
-      "de": "Hey, kurzer Check-in. Trag deinen Ring ein, wenn du fertig bist",
-      "it": "Ehi, check-in veloce. Registralo quando hai finito"
+      "it": "Ehi, check-in veloce. Registrala quando hai finito",
+      "create": true
     },
     {
       "issue": "ENG-58",
       "table": "Notifications",
       "key": "notification.followup.body",
-      "en": "Hey, quick check-in is still open. Log it when you're ready",
-      "de": "Hey, der kurze Check-in ist noch offen. Trag's ein, wenn du soweit bist",
-      "it": "Ehi, il check-in veloce è ancora aperto. Registralo quando vuoi"
+      "en": "Hey, quick check-in is still open. Check in when you're ready",
+      "de": "Hey, der kurze Check-in ist noch offen. Check-in, wenn du soweit bist",
+      "it": "Ehi, il check-in veloce è ancora aperto. Fai il check-in quando vuoi",
+      "create": true
     },
     {
       "issue": "ENG-62",
@@ -214,8 +200,8 @@
       "create": true,
       "comment": "Today blocking card detail while reminders run, pill",
       "en": "Reminders stay on. Plus can pause apps.",
-      "de": "Erinnerungen laufen. Plus pausiert Apps bis zum Check-in.",
-      "it": "I promemoria ci sono. Plus mette in pausa le app fino al check-in."
+      "de": "Erinnerungen an. Plus pausiert Apps.",
+      "it": "I promemoria restano. Plus può pausare le app."
     },
     {
       "issue": "ENG-63",
@@ -224,8 +210,8 @@
       "create": true,
       "comment": "Today blocking card detail, apply patch",
       "en": "Reminders stay on. Plus can pause apps.",
-      "de": "Erinnerungen laufen. Plus pausiert Apps bis zum Check-in.",
-      "it": "I promemoria ci sono. Plus mette in pausa le app fino al check-in."
+      "de": "Erinnerungen an. Plus pausiert Apps.",
+      "it": "I promemoria restano. Plus può pausare le app."
     },
     {
       "issue": "ENG-63",
@@ -234,8 +220,8 @@
       "create": true,
       "comment": "Today blocking card detail, change patch",
       "en": "Reminders stay on. Plus can pause apps.",
-      "de": "Erinnerungen laufen. Plus pausiert Apps bis zum Check-in.",
-      "it": "I promemoria ci sono. Plus mette in pausa le app fino al check-in."
+      "de": "Erinnerungen an. Plus pausiert Apps.",
+      "it": "I promemoria restano. Plus può pausare le app."
     },
     {
       "issue": "ENG-63",
@@ -244,8 +230,8 @@
       "create": true,
       "comment": "Today blocking card detail, remove patch",
       "en": "Reminders stay on. Plus can pause apps.",
-      "de": "Erinnerungen laufen. Plus pausiert Apps bis zum Check-in.",
-      "it": "I promemoria ci sono. Plus mette in pausa le app fino al check-in."
+      "de": "Erinnerungen an. Plus pausiert Apps.",
+      "it": "I promemoria restano. Plus può pausare le app."
     },
     {
       "issue": "ENG-63",
@@ -254,8 +240,8 @@
       "create": true,
       "comment": "Today blocking card detail, insert ring",
       "en": "Reminders stay on. Plus can pause apps.",
-      "de": "Erinnerungen laufen. Plus pausiert Apps bis zum Check-in.",
-      "it": "I promemoria ci sono. Plus mette in pausa le app fino al check-in."
+      "de": "Erinnerungen an. Plus pausiert Apps.",
+      "it": "I promemoria restano. Plus può pausare le app."
     },
     {
       "issue": "ENG-63",
@@ -264,8 +250,8 @@
       "create": true,
       "comment": "Today blocking card detail, change ring",
       "en": "Reminders stay on. Plus can pause apps.",
-      "de": "Erinnerungen laufen. Plus pausiert Apps bis zum Check-in.",
-      "it": "I promemoria ci sono. Plus mette in pausa le app fino al check-in."
+      "de": "Erinnerungen an. Plus pausiert Apps.",
+      "it": "I promemoria restano. Plus può pausare le app."
     },
     {
       "issue": "ENG-63",
@@ -274,8 +260,8 @@
       "create": true,
       "comment": "Today blocking card detail, remove ring",
       "en": "Reminders stay on. Plus can pause apps.",
-      "de": "Erinnerungen laufen. Plus pausiert Apps bis zum Check-in.",
-      "it": "I promemoria ci sono. Plus mette in pausa le app fino al check-in."
+      "de": "Erinnerungen an. Plus pausiert Apps.",
+      "it": "I promemoria restano. Plus può pausare le app."
     },
     {
       "issue": "ENG-63",
@@ -737,8 +723,8 @@
       "table": "Commerce",
       "key": "paywall.subtitle",
       "en": "Pillie Plus keeps pinging until you log today, and can pause apps until you check in.",
-      "de": "Pillie Plus pingt weiter, bis du heute einträgst, und kann Apps bis zum Check-in pausieren.",
-      "it": "Pillie Plus continua a mandare ping finché non registri oggi, e può mettere in pausa le app fino al check-in."
+      "de": "Plus pingt weiter und kann Apps pausieren.",
+      "it": "Plus continua a mandare ping e può pausare le app."
     },
     {
       "issue": "ENG-68",
@@ -891,7 +877,7 @@
       "table": "Localizable",
       "key": "today.action.undo_complete",
       "en": "That's logged. Tap to undo.",
-      "de": "Das ist eingetragen. Tippe zum Rückgängig machen.",
+      "de": "Eingetragen. Zum Rückgängig tippen.",
       "it": "È registrato. Tocca per annullare."
     },
     {
@@ -1469,8 +1455,8 @@
       "table": "Commerce",
       "key": "trial.granted.disclosure",
       "en": "14 days free, no card needed. App blocking turns off after the trial. Reminders stay free.",
-      "de": "Dein Gratis-Trial dauert 14 Tage. Keine Karte nötig. App-Pause geht aus, wenn er endet, und Erinnerungen bleiben kostenlos.",
-      "it": "Il tuo trial gratis dura 14 giorni. Non serve la carta. Il blocco app si spegne quando finisce, e i promemoria restano gratis."
+      "de": "14 Tage gratis, keine Karte. App-Pause endet mit dem Trial. Erinnerungen bleiben frei.",
+      "it": "14 giorni gratis, niente carta. Il blocco finisce col trial. I promemoria restano gratis."
     },
     {
       "issue": "ENG-72",
@@ -1564,9 +1550,9 @@
       "issue": "ENG-73",
       "table": "Localizable",
       "key": "onboarding.welcome.demo.reminder_title",
-      "en": "Afternoon check-in",
-      "de": "Check-in am Nachmittag",
-      "it": "Check-in del pomeriggio"
+      "en": "Nightly check-in",
+      "de": "Check-in am Abend",
+      "it": "Check-in serale"
     },
     {
       "issue": "ENG-73",
@@ -1597,16 +1583,16 @@
       "table": "Localizable",
       "key": "onboarding.welcome.title",
       "en": "The alarm clock for your pill.",
-      "de": "Der Wecker für deine Pille.",
-      "it": "La sveglia per la tua pillola."
+      "de": "Der Wecker für deine Pille, jeden Abend.",
+      "it": "La sveglia per la tua pillola, ogni sera."
     },
     {
       "issue": "ENG-73",
       "table": "Localizable",
       "key": "onboarding.welcome.subtitle",
-      "en": "You can't swipe this reminder away.",
-      "de": "Du kannst sie nicht wegwischen.",
-      "it": "Non puoi scartarlo."
+      "en": "You can't swipe this reminder away. It stays until you check in.",
+      "de": "Du kannst sie nicht wegwischen. Sie bleibt bis zum Check-in.",
+      "it": "Non puoi scartarlo. Resta fino al check-in."
     },
     {
       "issue": "ENG-73",
@@ -1638,15 +1624,15 @@
       "key": "onboarding.blocking_demo.title",
       "en": "Apps pause until you check in.",
       "de": "Apps pausieren bis zum Check-in.",
-      "it": "Le app restano in pausa fino al check-in."
+      "it": "App in pausa fino al check-in."
     },
     {
       "issue": "ENG-73",
       "table": "Localizable",
       "key": "onboarding.blocking_demo.body",
       "en": "Pillie Plus can pause selected apps when a reminder is due. They come back after you check in.",
-      "de": "Pillie Plus kann ausgewählte Apps pausieren, wenn eine Erinnerung fällig ist. Sie kommen zurück, nachdem du den Check-in gemacht hast.",
-      "it": "Pillie Plus può mettere in pausa le app scelte quando è ora del promemoria. Tornano dopo che hai fatto il check-in."
+      "de": "Plus pausiert Apps bei einer Erinnerung. Nach dem Check-in sind sie wieder da.",
+      "it": "Plus mette in pausa le app al promemoria. Tornano dopo il check-in."
     },
     {
       "issue": "ENG-73",
@@ -1662,7 +1648,7 @@
       "key": "onboarding.demo.explainer",
       "en": "Pillie helps you check in and review your history.",
       "de": "Pillie hilft dir beim Check-in und hält deine Historie leicht nachschaubar.",
-      "it": "Pillie ti aiuta a fare il check-in e tiene la cronologia facile da rivedere."
+      "it": "Pillie ti aiuta a fare il check-in e a rivedere la cronologia."
     },
     {
       "issue": "ENG-73",
@@ -1765,8 +1751,8 @@
       "table": "Localizable",
       "key": "onboarding.method.patch.subtitle",
       "en": "Patch · a change schedule",
-      "de": "Pflaster · ein Plan zum Wechseln deines Pflasters",
-      "it": "Cerotto · un piano per cambiare il cerotto"
+      "de": "Pflaster · ein Wechselplan",
+      "it": "Cerotto · un piano di cambio"
     },
     {
       "issue": "ENG-73",
@@ -1813,8 +1799,8 @@
       "table": "Localizable",
       "key": "onboarding.blocking_setup.subtitle",
       "en": "Selected apps pause after a Pillie reminder. They come back after you check in.",
-      "de": "Ausgewählte Apps pausieren nach einer Pillie-Erinnerung. Sie kommen zurück, nachdem du den Check-in gemacht hast.",
-      "it": "Le app scelte vanno in pausa dopo un promemoria Pillie. Tornano dopo che hai fatto il check-in."
+      "de": "Ausgewählte Apps pausieren nach einer Erinnerung. Nach dem Check-in sind sie wieder da.",
+      "it": "Le app scelte vanno in pausa al promemoria. Tornano dopo il check-in."
     },
     {
       "issue": "ENG-73",
@@ -1822,7 +1808,7 @@
       "key": "onboarding.blocking_setup.title",
       "en": "Choose apps to pause",
       "de": "Wähl Apps zum Pausieren",
-      "it": "Scegli le app da mettere in pausa"
+      "it": "Scegli le app da pausare"
     },
     {
       "issue": "ENG-73",
@@ -1855,6 +1841,141 @@
       "en": "Continue to notification settings",
       "de": "Weiter zu den Mitteilungen",
       "it": "Continua alle notifiche"
+    },
+    {
+      "issue": "ENG-58",
+      "table": "Notifications",
+      "key": "notification.reminder.patch.apply.body",
+      "create": true,
+      "en": "Hey, quick check-in. Apply your patch when you're done",
+      "de": "Hey, kurzer Check-in. Kleb dein Pflaster auf, wenn du fertig bist",
+      "it": "Ehi, check-in veloce. Applica il cerotto quando hai finito"
+    },
+    {
+      "issue": "ENG-58",
+      "table": "Notifications",
+      "key": "notification.reminder.patch.change.body",
+      "create": true,
+      "en": "Hey, quick check-in. Change your patch when you're done",
+      "de": "Hey, kurzer Check-in. Wechsel dein Pflaster, wenn du fertig bist",
+      "it": "Ehi, check-in veloce. Cambia il cerotto quando hai finito"
+    },
+    {
+      "issue": "ENG-58",
+      "table": "Notifications",
+      "key": "notification.reminder.patch.remove.body",
+      "create": true,
+      "en": "Hey, quick check-in. Remove your patch when you're done",
+      "de": "Hey, kurzer Check-in. Nimm dein Pflaster ab, wenn du fertig bist",
+      "it": "Ehi, check-in veloce. Togli il cerotto quando hai finito"
+    },
+    {
+      "issue": "ENG-58",
+      "table": "Notifications",
+      "key": "notification.reminder.ring.insert.body",
+      "create": true,
+      "en": "Hey, quick check-in. Insert your ring when you're done",
+      "de": "Hey, kurzer Check-in. Setz deinen Ring ein, wenn du fertig bist",
+      "it": "Ehi, check-in veloce. Inserisci l'anello quando hai finito"
+    },
+    {
+      "issue": "ENG-58",
+      "table": "Notifications",
+      "key": "notification.reminder.ring.change.body",
+      "create": true,
+      "en": "Hey, quick check-in. Change your ring when you're done",
+      "de": "Hey, kurzer Check-in. Wechsel deinen Ring, wenn du fertig bist",
+      "it": "Ehi, check-in veloce. Cambia l'anello quando hai finito"
+    },
+    {
+      "issue": "ENG-58",
+      "table": "Notifications",
+      "key": "notification.reminder.ring.remove.body",
+      "create": true,
+      "en": "Hey, quick check-in. Remove your ring when you're done",
+      "de": "Hey, kurzer Check-in. Nimm deinen Ring raus, wenn du fertig bist",
+      "it": "Ehi, check-in veloce. Togli l'anello quando hai finito"
+    },
+    {
+      "issue": "ENG-58",
+      "table": "Notifications",
+      "key": "notification.final.body",
+      "create": true,
+      "en": "Still no check-in for today.",
+      "de": "Für heute noch kein Check-in.",
+      "it": "Per oggi non c'è ancora un check-in."
+    },
+    {
+      "issue": "ENG-58",
+      "table": "Notifications",
+      "key": "notification.trial_expiry.day10.body",
+      "create": true,
+      "en": "App blocking turns off in 5 days.",
+      "de": "Die App-Pause wird in 5 Tagen deaktiviert.",
+      "it": "Il blocco delle app si disattiverà tra 5 giorni."
+    },
+    {
+      "issue": "ENG-58",
+      "table": "Notifications",
+      "key": "notification.trial_expiry.day13.body",
+      "create": true,
+      "en": "App blocking turns off tomorrow night.",
+      "de": "Die App-Pause wird morgen Abend deaktiviert.",
+      "it": "Il blocco delle app si disattiverà domani sera."
+    },
+    {
+      "issue": "ENG-58",
+      "table": "Notifications",
+      "key": "notification.trial_ending.body",
+      "create": true,
+      "en": "App blocking will turn off when the trial ends.",
+      "de": "Die App-Pause wird am Ende der Testphase deaktiviert.",
+      "it": "Il blocco delle app si disattiverà al termine della prova."
+    },
+    {
+      "issue": "ENG-58",
+      "table": "Notifications",
+      "key": "notification.custom.direct.primary",
+      "create": true,
+      "en": "Your scheduled check-in is due.",
+      "de": "Dein geplanter Check-in ist fällig.",
+      "it": "È previsto il check-in programmato."
+    },
+    {
+      "issue": "ENG-58",
+      "table": "Notifications",
+      "key": "notification.custom.direct.followup",
+      "create": true,
+      "en": "Today's check-in is still open.",
+      "de": "Der heutige Check-in ist noch offen.",
+      "it": "Il check-in di oggi è ancora da fare."
+    },
+    {
+      "issue": "ENG-58",
+      "table": "Notifications",
+      "key": "notification.custom.direct.final",
+      "create": true,
+      "en": "Final reminder: still no check-in for today.",
+      "de": "Letzte Erinnerung: für heute noch kein Check-in.",
+      "it": "Promemoria finale: per oggi non c'è ancora un check-in."
+    },
+    {
+      "issue": "ENG-58",
+      "table": "Notifications",
+      "key": "notification.custom.encouraging.followup",
+      "create": true,
+      "en": "You can check in when you're ready.",
+      "de": "Du kannst den Check-in machen, wenn du bereit bist.",
+      "it": "Puoi fare il check-in quando vuoi."
+    },
+    {
+      "issue": "ENG-58",
+      "table": "Notifications",
+      "key": "notification.custom.gentle.followup",
+      "create": true,
+      "en": "When you're ready, remember to check in today.",
+      "de": "Wenn du bereit bist, denk daran, heute einzuchecken.",
+      "it": "Quando vuoi, ricorda di fare il check-in oggi."
     }
   ]
 }

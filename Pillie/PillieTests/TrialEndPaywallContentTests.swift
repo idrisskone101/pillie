@@ -148,6 +148,8 @@ final class TrialEndPaywallContentTests: XCTestCase {
         XCTAssertEqual(content?.title, commerce("trial.end.legacy.title"))
         XCTAssertEqual(content?.titleAccent, "")
         XCTAssertEqual(content?.handwrittenAside, commerce("trial.end.legacy.aside"))
+        XCTAssertEqual(content?.subtitle, commerce("trial.end.legacy.subtitle"))
+        XCTAssertTrue(content?.allowsContinueFree == true)
     }
 
     func testRecordCardCarriesAllThreeRowsWithRealStats() {
@@ -297,7 +299,7 @@ final class TrialEndPaywallContentTests: XCTestCase {
 
     // MARK: - Gain-framed cohort (design 2b)
 
-    func testReminderOnlyCohortGetsGainFramedPerksAndFreeForeverHeadline() {
+    func testReminderOnlyCohortGetsGainFramedPerksAndFreeAvailableHeadline() {
         let content = TrialEndPaywallContent.make(
             state: expiredState(),
             blockerConfigSaved: false,

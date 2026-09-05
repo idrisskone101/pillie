@@ -412,7 +412,7 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
                 dueTitle: "Un promemoria delicato",
                 dueBody: "Un promemoria delicato per la tua routine.",
                 retryTitle: "Promemoria successivo",
-                retryBody: "Quando vuoi, ricorda di registrare l’azione di oggi.",
+                retryBody: "Quando vuoi, ricorda di fare il check-in oggi.",
                 lastCallTitle: "Promemoria finale",
                 lastCallBody: "Per oggi è programmato un ultimo promemoria."
             )
@@ -421,11 +421,11 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
             CustomReminderPreset.direct.localizedMessages(locale: italian),
             CustomReminderMessages(
                 dueTitle: "Registrazione Pillie da completare",
-                dueBody: "È prevista l’azione programmata.",
+                dueBody: "È previsto il check-in programmato.",
                 retryTitle: "Promemoria successivo",
-                retryBody: "L’azione di oggi è ancora da registrare.",
+                retryBody: "Il check-in di oggi è ancora da fare.",
                 lastCallTitle: "Promemoria finale",
-                lastCallBody: "Promemoria finale: non è ancora stata registrata alcuna azione."
+                lastCallBody: "Promemoria finale: per oggi non c'è ancora un check-in."
             )
         )
         XCTAssertEqual(
@@ -434,7 +434,7 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
                 dueTitle: "Stai costruendo costanza",
                 dueBody: "Una breve registrazione per la routine di oggi.",
                 retryTitle: "Promemoria successivo",
-                retryBody: "Puoi registrare l’azione di oggi quando vuoi.",
+                retryBody: "Puoi fare il check-in quando vuoi.",
                 lastCallTitle: "Promemoria finale",
                 lastCallBody: "Ultima registrazione programmata per oggi."
             )
@@ -574,7 +574,7 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
         XCTAssertEqual(content.dismissCTA, "Non ora")
         XCTAssertEqual(
             content.disclosure,
-            "Il tuo trial gratis dura 14 giorni. Non serve la carta. Il blocco app si spegne quando finisce, e i promemoria restano gratis."
+            "14 giorni gratis, niente carta. Il blocco finisce col trial. I promemoria restano gratis."
         )
     }
 
