@@ -78,6 +78,28 @@ final class DayCorrectionPolicyTests: XCTestCase {
         XCTAssertFalse(snapshot.countsTowardAdherence)
     }
 
+    func testScheduledBreakTakenOrMissedOffersOnlyBreakWithActualCurrent() {
+        let taken = makeSnapshot(
+            method: .pill,
+            type: .pillBreak,
+            status: .taken,
+            relationDate: fixedDate("2026-06-01")
+        )
+        let takenOptions = DayCorrectionPolicy.options(for: taken, relation: .past)
+        XCTAssertEqual(takenOptions?.selectableOutcomes, [.breakDay])
+        XCTAssertEqual(takenOptions?.currentOutcome, .taken)
+
+        let missed = makeSnapshot(
+            method: .pill,
+            type: .pillBreak,
+            status: .missed,
+            relationDate: fixedDate("2026-06-01")
+        )
+        let missedOptions = DayCorrectionPolicy.options(for: missed, relation: .past)
+        XCTAssertEqual(missedOptions?.selectableOutcomes, [.breakDay])
+        XCTAssertEqual(missedOptions?.currentOutcome, .unlogged)
+    }
+
     func testTakenAndBreakCurrentOutcomesReflectSnapshotStatus() {
         let taken = makeSnapshot(
             method: .pill,

@@ -74,7 +74,6 @@ enum HistoryPresentation {
     }
 
     static func doseSubtitle(
-        snapshot: PillScheduleSnapshot,
         reminderHour: Int,
         reminderMinute: Int,
         method: ContraceptiveMethod,

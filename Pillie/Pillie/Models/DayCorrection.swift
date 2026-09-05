@@ -37,7 +37,7 @@ enum DayCorrectionPolicy {
             if snapshot.status == .taken || snapshot.status == .missed {
                 return DayCorrectionOptions(
                     selectableOutcomes: [.breakDay],
-                    currentOutcome: .breakDay
+                    currentOutcome: currentOutcome(for: snapshot.status)
                 )
             }
             return nil
@@ -45,30 +45,20 @@ enum DayCorrectionPolicy {
 
         guard snapshot.isDue else { return nil }
 
-        let current: DayCorrectionOutcome
-        switch snapshot.status {
-        case .taken:
-            current = .taken
-        case .breakDay:
-            current = .breakDay
-        default:
-            current = .unlogged
-        }
-
         return DayCorrectionOptions(
             selectableOutcomes: [.taken, .unlogged, .breakDay],
-            currentOutcome: current
+            currentOutcome: currentOutcome(for: snapshot.status)
         )
     }
-}
 
-struct DayCorrectionEvent: Equatable {
-    let sequence: Int
-    let date: Date
-    let monthStart: Date
-    let dayOfMonth: Int
-}
-
-enum HistoryDiscoveryAnnouncement {
-    static let storageKey = "historyDayCorrectionDiscoveryDismissed"
+    private static func currentOutcome(for status: PillDay.Status?) -> DayCorrectionOutcome {
+        switch status {
+        case .taken:
+            return .taken
+        case .breakDay:
+            return .breakDay
+        default:
+            return .unlogged
+        }
+    }
 }

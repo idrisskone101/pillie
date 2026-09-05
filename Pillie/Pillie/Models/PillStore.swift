@@ -15,8 +15,7 @@ import os.signpost
 class PillStore {
     private(set) var packs: [PillPack]
     var protocolChangeVersion: Int = 0
-    private(set) var lastDayCorrection: DayCorrectionEvent?
-    private var dayCorrectionSequence = 0
+    private(set) var dayRecordsRevision: Int = 0
 
     var pack: PillPack {
         if let current = activePack {
@@ -390,12 +389,11 @@ class PillStore {
                 continue
             }
 
-            switch snapshot.status {
-            case .taken:
+            if snapshot.status == .taken {
                 streak += 1
-            case .breakDay:
+            } else if snapshot.status == .breakDay {
                 continue
-            default:
+            } else {
                 break
             }
         }
@@ -827,30 +825,18 @@ class PillStore {
 
     func markActionAsTaken(on date: Date) {
         let day = startOfDaySafe(date)
-        let dayEpoch = epochDay(for: day)
         guard let snapshot = scheduleSnapshot(for: day),
               let due = snapshot.dueAction else { return }
         let targetPack = snapshot.pack
         let isToday = Calendar.current.isDateInToday(day)
 
-        if let existingDay = dayRecord(forPackID: targetPack.id, epochDay: dayEpoch)
-            ?? targetPack.days.first(where: { Calendar.current.isDate(Self.validatedDate($0.date, fallback: day), inSameDayAs: day) }) {
-            existingDay.date = day
-            existingDay.status = .taken
-            existingDay.actionType = due.type
-            existingDay.takenAt = PillieClock.now
-            index(dayRecord: existingDay, forPackID: targetPack.id, epochDay: dayEpoch)
-        } else {
-            let newDay = PillDay(
-                date: day,
-                status: .taken,
-                actionType: due.type,
-                takenAt: PillieClock.now,
-                pack: targetPack
-            )
-            modelContext.insert(newDay)
-            index(dayRecord: newDay, forPackID: targetPack.id, epochDay: dayEpoch)
-        }
+        upsertDayRecord(
+            in: targetPack,
+            day: day,
+            status: .taken,
+            actionType: due.type,
+            takenAt: PillieClock.now
+        )
 
         // Pin the ring insertion anchor on first check-in so future
         // cycle-day edits in Settings don't shift the removal date.
@@ -858,30 +844,23 @@ class PillStore {
             targetPack.ringInsertionDate = targetPack.startDate
         }
 
-        invalidateSnapshotCache(forPackID: targetPack.id, epochDay: dayEpoch)
-        scheduleStoreCommit()
-
         // Auto-start a new cycle when the ring is reinserted after
         // the 7-day ring-free interval.
         if due.type == .ringReinsert {
             startNewPack()
             // Mark new cycle's day 1 (ringInsert) as taken
             let newDay = startOfDaySafe(date)
-            let newDayEpoch = epochDay(for: newDay)
             if let newSnapshot = scheduleSnapshot(for: newDay),
                newSnapshot.dueAction?.type == .ringInsert {
                 let newPack = newSnapshot.pack
                 newPack.ringInsertionDate = newDay
-                let record = PillDay(
-                    date: newDay,
+                upsertDayRecord(
+                    in: newPack,
+                    day: newDay,
                     status: .taken,
                     actionType: .ringReinsert,
-                    pack: newPack
+                    takenAt: nil
                 )
-                modelContext.insert(record)
-                index(dayRecord: record, forPackID: newPack.id, epochDay: newDayEpoch)
-                invalidateSnapshotCache(forPackID: newPack.id, epochDay: newDayEpoch)
-                scheduleStoreCommit()
             }
         }
 
@@ -918,71 +897,28 @@ class PillStore {
         }
 
         let targetPack = snapshot.pack
-        let dayEpoch = epochDay(for: day)
 
         switch outcome {
         case .taken:
-            if let existingDay = dayRecord(forPackID: targetPack.id, epochDay: dayEpoch)
-                ?? targetPack.days.first(where: {
-                    Calendar.current.isDate(Self.validatedDate($0.date, fallback: day), inSameDayAs: day)
-                }) {
-                existingDay.date = day
-                existingDay.status = .taken
-                existingDay.actionType = due.type
-                existingDay.takenAt = nil
-                index(dayRecord: existingDay, forPackID: targetPack.id, epochDay: dayEpoch)
-            } else {
-                let newDay = PillDay(
-                    date: day,
-                    status: .taken,
-                    actionType: due.type,
-                    takenAt: nil,
-                    pack: targetPack
-                )
-                modelContext.insert(newDay)
-                index(dayRecord: newDay, forPackID: targetPack.id, epochDay: dayEpoch)
-            }
+            upsertDayRecord(
+                in: targetPack,
+                day: day,
+                status: .taken,
+                actionType: due.type,
+                takenAt: nil
+            )
         case .unlogged:
-            if let existingDay = dayRecord(forPackID: targetPack.id, epochDay: dayEpoch) {
-                modelContext.delete(existingDay)
-                removeDayRecordIndex(forPackID: targetPack.id, epochDay: dayEpoch)
-            }
+            deleteDayRecord(in: targetPack, day: day)
         case .breakDay:
-            if let existingDay = dayRecord(forPackID: targetPack.id, epochDay: dayEpoch)
-                ?? targetPack.days.first(where: {
-                    Calendar.current.isDate(Self.validatedDate($0.date, fallback: day), inSameDayAs: day)
-                }) {
-                existingDay.date = day
-                existingDay.status = .breakDay
-                existingDay.actionType = due.type
-                existingDay.takenAt = nil
-                index(dayRecord: existingDay, forPackID: targetPack.id, epochDay: dayEpoch)
-            } else {
-                let newDay = PillDay(
-                    date: day,
-                    status: .breakDay,
-                    actionType: due.type,
-                    takenAt: nil,
-                    pack: targetPack
-                )
-                modelContext.insert(newDay)
-                index(dayRecord: newDay, forPackID: targetPack.id, epochDay: dayEpoch)
-            }
+            upsertDayRecord(
+                in: targetPack,
+                day: day,
+                status: .breakDay,
+                actionType: due.type,
+                takenAt: nil
+            )
         }
 
-        invalidateSnapshotCache(forPackID: targetPack.id, epochDay: dayEpoch)
-        scheduleStoreCommit()
-
-        dayCorrectionSequence += 1
-        let calendar = Calendar.current
-        let monthStartComponents = calendar.dateComponents([.year, .month], from: day)
-        let monthStart = calendar.date(from: monthStartComponents) ?? day
-        lastDayCorrection = DayCorrectionEvent(
-            sequence: dayCorrectionSequence,
-            date: day,
-            monthStart: monthStart,
-            dayOfMonth: calendar.component(.day, from: day)
-        )
         return true
     }
 
@@ -992,7 +928,8 @@ class PillStore {
         guard let snapshot = scheduleSnapshot(for: day) else { return }
         let targetPack = snapshot.pack
 
-        guard let existingDay = dayRecord(forPackID: targetPack.id, epochDay: dayEpoch), existingDay.status == .taken else {
+        guard let existingDay = existingDayRecord(in: targetPack, day: day, epochDay: dayEpoch),
+              existingDay.status == .taken else {
             return
         }
 
@@ -1016,16 +953,12 @@ class PillStore {
                 packs = Self.fetchPacks(context: modelContext)
                 rebuildReadIndexes()
                 protocolChangeVersion &+= 1
+                dayRecordsRevision &+= 1
                 return
             }
         }
 
-        // Clear the adaptive-timing signal before removing the record.
-        existingDay.takenAt = nil
-        modelContext.delete(existingDay)
-        removeDayRecordIndex(forPackID: targetPack.id, epochDay: dayEpoch)
-        invalidateSnapshotCache(forPackID: targetPack.id, epochDay: dayEpoch)
-        scheduleStoreCommit()
+        deleteDayRecord(in: targetPack, day: day)
     }
 
     func dueAction(on date: Date) -> DoseScheduleAction? {
@@ -1861,6 +1794,65 @@ class PillStore {
 
     private func dayRecord(forPackID packID: UUID, epochDay: Int) -> PillDay? {
         dayRecordIndexByPackID[packID]?[epochDay]
+    }
+
+    private func existingDayRecord(in pack: PillPack, day: Date, epochDay: Int) -> PillDay? {
+        dayRecord(forPackID: pack.id, epochDay: epochDay)
+            ?? pack.days.first(where: {
+                Calendar.current.isDate(Self.validatedDate($0.date, fallback: day), inSameDayAs: day)
+            })
+    }
+
+    @discardableResult
+    private func upsertDayRecord(
+        in pack: PillPack,
+        day: Date,
+        status: PillDay.Status,
+        actionType: PillDay.ActionType,
+        takenAt: Date?
+    ) -> PillDay {
+        let dayEpoch = epochDay(for: day)
+        let record: PillDay
+        if let existing = existingDayRecord(in: pack, day: day, epochDay: dayEpoch) {
+            existing.date = day
+            existing.status = status
+            existing.actionType = actionType
+            existing.takenAt = takenAt
+            index(dayRecord: existing, forPackID: pack.id, epochDay: dayEpoch)
+            record = existing
+        } else {
+            let newDay = PillDay(
+                date: day,
+                status: status,
+                actionType: actionType,
+                takenAt: takenAt,
+                pack: pack
+            )
+            modelContext.insert(newDay)
+            index(dayRecord: newDay, forPackID: pack.id, epochDay: dayEpoch)
+            record = newDay
+        }
+        noteDayRecordChange(packID: pack.id, epochDay: dayEpoch)
+        return record
+    }
+
+    @discardableResult
+    private func deleteDayRecord(in pack: PillPack, day: Date) -> PillDay? {
+        let dayEpoch = epochDay(for: day)
+        guard let existing = existingDayRecord(in: pack, day: day, epochDay: dayEpoch) else {
+            return nil
+        }
+        existing.takenAt = nil
+        modelContext.delete(existing)
+        removeDayRecordIndex(forPackID: pack.id, epochDay: dayEpoch)
+        noteDayRecordChange(packID: pack.id, epochDay: dayEpoch)
+        return existing
+    }
+
+    private func noteDayRecordChange(packID: UUID, epochDay: Int) {
+        invalidateSnapshotCache(forPackID: packID, epochDay: epochDay)
+        dayRecordsRevision &+= 1
+        scheduleStoreCommit()
     }
 
     private func index(dayRecord: PillDay, forPackID packID: UUID, epochDay: Int) {

@@ -56,7 +56,6 @@ struct HistoryDayCorrectionSheet: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
 
                 Text(HistoryPresentation.doseSubtitle(
-                    snapshot: day.snapshot,
                     reminderHour: store.reminderHour,
                     reminderMinute: store.reminderMinute,
                     method: store.pack.method,

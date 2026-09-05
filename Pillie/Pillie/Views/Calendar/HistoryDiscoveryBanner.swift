@@ -5,6 +5,10 @@
 
 import SwiftUI
 
+enum HistoryDiscoveryAnnouncement {
+    static let storageKey = "historyDayCorrectionDiscoveryDismissed"
+}
+
 struct HistoryDiscoveryBanner: View {
     let onDismiss: () -> Void
 
