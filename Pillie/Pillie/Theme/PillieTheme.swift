@@ -45,6 +45,10 @@ enum PillieTheme {
     static let patchChangeRose = Color(hex: "E07A8F")
     static let ringReinsertCoral = Color(hex: "D4826A")
     static let cardWhite = Color.white
+    /// Neutral 1px borders and grab handles on white surfaces.
+    static let hairline = Color(hex: "E7E5E4")
+    /// Slightly darker hairline for unselected radio/check rings.
+    static let hairlineStrong = Color(hex: "D6D3D1")
 
     // Dark background (for CTA + pill pack)
     static let dark = Color(hex: "292524")

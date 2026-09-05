@@ -95,4 +95,30 @@ final class CorrectPastDayTests: XCTestCase {
         XCTAssertFalse(fixture.store.correctPastDay(on: today, to: .taken))
         XCTAssertEqual(fixture.store.dayRecordsRevision, 0)
     }
+
+    func testCorrectPastDayRejectsDisallowedOutcomeWithoutSideEffects() throws {
+        // Yesterday is a scheduled break with no record: not editable at all.
+        let today = InMemoryStoreFactory.fixedDate("2026-06-16")
+        let startDate = InMemoryStoreFactory.fixedDate("2026-05-25")
+        let breakDay = InMemoryStoreFactory.fixedDate("2026-06-15")
+        let fixture = try InMemoryStoreFactory.makeStore(now: today, startDate: startDate)
+        let store = fixture.store
+        XCTAssertEqual(store.scheduleSnapshot(for: breakDay)?.dueAction?.type, .pillBreak)
+
+        XCTAssertFalse(store.correctPastDay(on: breakDay, to: .taken))
+        XCTAssertEqual(store.dayRecordsRevision, 0)
+    }
+
+    func testBackdatedRingInsertPinsInsertionAnchorLikeLiveCheckIn() throws {
+        let today = InMemoryStoreFactory.fixedDate("2026-05-26")
+        let startDate = InMemoryStoreFactory.fixedDate("2026-05-24")
+        let fixture = try InMemoryStoreFactory.makeStore(now: today, method: .ring, startDate: startDate)
+        let store = fixture.store
+        XCTAssertNil(fixture.pack.ringInsertionDate)
+        XCTAssertEqual(store.scheduleSnapshot(for: startDate)?.dueAction?.type, .ringInsert)
+
+        XCTAssertTrue(store.correctPastDay(on: startDate, to: .taken))
+
+        XCTAssertEqual(fixture.pack.ringInsertionDate, fixture.pack.startDate)
+    }
 }

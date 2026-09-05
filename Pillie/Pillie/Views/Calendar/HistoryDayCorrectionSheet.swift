@@ -5,13 +5,9 @@
 
 import SwiftUI
 
-struct HistoryEditableDay: Identifiable {
-    var id: Date { date }
-    let date: Date
-    let snapshot: PillScheduleSnapshot
-    let options: DayCorrectionOptions
-}
-
+/// Bottom sheet that rewrites one past day's status. The sheet sizes itself
+/// from its measured content so Dynamic Type and wrapping locales never clip
+/// the last row.
 struct HistoryDayCorrectionSheet: View {
     let day: HistoryEditableDay
     let onSelect: (DayCorrectionOutcome) -> Void
@@ -19,31 +15,16 @@ struct HistoryDayCorrectionSheet: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.locale) private var locale
     @Environment(PillStore.self) private var store
-
-    private static let handleTopPadding: CGFloat = 12
-    private static let handleHeight: CGFloat = 4
-    private static let headerGap: CGFloat = 16
-    private static let titleSubtitleGap: CGFloat = 4
-    private static let rowSpacing: CGFloat = 8
-    private static let rowVerticalPadding: CGFloat = 12
-    private static let rowHeight: CGFloat = 68
-    private static let bottomPadding: CGFloat = 36
-    private static let horizontalPadding: CGFloat = 20
-
-    static func height(rowCount: Int) -> CGFloat {
-        let headerBlock: CGFloat = handleTopPadding + handleHeight + headerGap + 34 + titleSubtitleGap + 20 + headerGap
-        let rowsBlock = CGFloat(rowCount) * rowHeight + CGFloat(max(0, rowCount - 1)) * rowSpacing
-        return headerBlock + rowsBlock + bottomPadding
-    }
+    @State private var contentHeight: CGFloat = 320
 
     var body: some View {
-        VStack(spacing: Self.headerGap) {
+        VStack(spacing: 16) {
             Capsule()
-                .fill(Color(hex: "E7E5E4"))
-                .frame(width: 40, height: Self.handleHeight)
-                .padding(.top, Self.handleTopPadding)
+                .fill(PillieTheme.hairline)
+                .frame(width: 40, height: 4)
+                .padding(.top, 12)
 
-            VStack(spacing: Self.titleSubtitleGap) {
+            VStack(spacing: 4) {
                 Text(day.date.formatted(
                     Date.FormatStyle()
                         .weekday(.wide)
@@ -55,10 +36,13 @@ struct HistoryDayCorrectionSheet: View {
                 .foregroundStyle(PillieTheme.dark)
                 .frame(maxWidth: .infinity, alignment: .leading)
 
+                // The method comes from the day's own pack so a day logged under
+                // a previous method reads correctly. The reminder time is the
+                // current one: past reminder times are not stored.
                 Text(HistoryPresentation.doseSubtitle(
                     reminderHour: store.reminderHour,
                     reminderMinute: store.reminderMinute,
-                    method: store.pack.method,
+                    method: day.snapshot.pack.method,
                     locale: locale
                 ))
                 .font(.pillieBody())
@@ -66,16 +50,24 @@ struct HistoryDayCorrectionSheet: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
 
-            VStack(spacing: Self.rowSpacing) {
+            VStack(spacing: 8) {
                 ForEach(day.options.selectableOutcomes, id: \.self) { outcome in
                     correctionRow(outcome)
                 }
             }
         }
-        .padding(.horizontal, Self.horizontalPadding)
-        .padding(.bottom, Self.bottomPadding)
+        .padding(.horizontal, 20)
+        .padding(.bottom, 36)
         .frame(maxWidth: .infinity, alignment: .top)
-        .background(PillieTheme.cardWhite)
+        .onGeometryChange(for: CGFloat.self) { proxy in
+            proxy.size.height
+        } action: { height in
+            contentHeight = height
+        }
+        .presentationDetents([.height(contentHeight)])
+        .presentationDragIndicator(.hidden)
+        .presentationBackground(PillieTheme.cardWhite)
+        .presentationCornerRadius(PillieTheme.cardRadius)
     }
 
     @ViewBuilder
@@ -92,19 +84,20 @@ struct HistoryDayCorrectionSheet: View {
                     .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(outcomeTitle(outcome))
+                    Text(outcomeText(outcome, "title"))
                         .font(.pillie(16, weight: .semibold))
                         .foregroundStyle(PillieTheme.dark)
-                    Text(outcomeSubtitle(outcome))
+                    Text(outcomeText(outcome, "subtitle"))
                         .font(.pillie(13, weight: .regular))
                         .foregroundStyle(PillieTheme.textMuted)
                 }
+                .fixedSize(horizontal: false, vertical: true)
 
                 Spacer(minLength: 0)
 
                 selectionIndicator(isSelected: isSelected)
             }
-            .padding(.vertical, Self.rowVerticalPadding)
+            .padding(.vertical, 12)
             .padding(.horizontal, 14)
             .background(
                 RoundedRectangle(cornerRadius: 22, style: .continuous)
@@ -113,12 +106,14 @@ struct HistoryDayCorrectionSheet: View {
             .overlay(
                 RoundedRectangle(cornerRadius: 22, style: .continuous)
                     .strokeBorder(
-                        isSelected ? PillieTheme.coral : Color(hex: "E7E5E4"),
+                        isSelected ? PillieTheme.coral : PillieTheme.hairline,
                         lineWidth: isSelected ? 1.6 : 1
                     )
             )
         }
         .buttonStyle(.plain)
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
+        .accessibilityIdentifier("historyDayCorrection.\(outcome.rawValue)")
     }
 
     @ViewBuilder
@@ -151,7 +146,7 @@ struct HistoryDayCorrectionSheet: View {
     private func selectionIndicator(isSelected: Bool) -> some View {
         ZStack {
             Circle()
-                .strokeBorder(Color(hex: "D6D3D1"), lineWidth: 1.5)
+                .strokeBorder(PillieTheme.hairlineStrong, lineWidth: 1.5)
                 .frame(width: 22, height: 22)
             if isSelected {
                 Circle()
@@ -164,25 +159,10 @@ struct HistoryDayCorrectionSheet: View {
         }
     }
 
-    private func outcomeTitle(_ outcome: DayCorrectionOutcome) -> String {
-        switch outcome {
-        case .taken:
-            PillieLocalization.string("history.dayCorrection.taken.title", locale: locale)
-        case .unlogged:
-            PillieLocalization.string("history.dayCorrection.unlogged.title", locale: locale)
-        case .breakDay:
-            PillieLocalization.string("history.dayCorrection.break.title", locale: locale)
-        }
-    }
-
-    private func outcomeSubtitle(_ outcome: DayCorrectionOutcome) -> String {
-        switch outcome {
-        case .taken:
-            PillieLocalization.string("history.dayCorrection.taken.subtitle", locale: locale)
-        case .unlogged:
-            PillieLocalization.string("history.dayCorrection.unlogged.subtitle", locale: locale)
-        case .breakDay:
-            PillieLocalization.string("history.dayCorrection.break.subtitle", locale: locale)
-        }
+    private func outcomeText(_ outcome: DayCorrectionOutcome, _ field: String) -> String {
+        PillieLocalization.string(
+            "history.dayCorrection.\(outcome.localizationKey).\(field)",
+            locale: locale
+        )
     }
 }

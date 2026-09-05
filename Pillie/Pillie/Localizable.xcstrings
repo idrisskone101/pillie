@@ -5744,6 +5744,17 @@
         }
       }
     },
+    "history.dayCorrection.accessibilityHint": {
+      "comment": "VoiceOver hint on a tappable past day in History [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Double tap to update this day."
+          }
+        }
+      }
+    },
     "history.dayCorrection.taken.title": {
       "comment": "Day correction sheet row [health]",
       "localizations": {

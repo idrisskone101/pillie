@@ -838,11 +838,7 @@ class PillStore {
             takenAt: PillieClock.now
         )
 
-        // Pin the ring insertion anchor on first check-in so future
-        // cycle-day edits in Settings don't shift the removal date.
-        if targetPack.method == .ring && targetPack.ringInsertionDate == nil {
-            targetPack.ringInsertionDate = targetPack.startDate
-        }
+        pinRingInsertionAnchorIfNeeded(for: targetPack)
 
         // Auto-start a new cycle when the ring is reinserted after
         // the 7-day ring-free interval.
@@ -871,26 +867,19 @@ class PillStore {
         }
     }
 
-    func dayCorrectionOptions(for snapshot: PillScheduleSnapshot) -> DayCorrectionOptions? {
-        let calendar = Calendar.current
-        let day = calendar.startOfDay(for: snapshot.date)
-        let relation: CalendarDayRelation
-        if calendar.isDate(day, inSameDayAs: today) {
-            relation = .today
-        } else if day < today {
-            relation = .past
-        } else {
-            relation = .future
-        }
-        return DayCorrectionPolicy.options(for: snapshot, relation: relation)
-    }
-
+    /// Rewrites a past day's record from the History correction sheet.
+    ///
+    /// Backdated `.taken` writes `takenAt = nil` so the adaptive reminder never
+    /// learns from a time the user did not actually take the dose. `.breakDay`
+    /// on a due day is a user-declared skip: it keeps the due action type but
+    /// is excluded from adherence and does not break a streak. `.unlogged`
+    /// removes the record so the day reads as missed again.
     @discardableResult
     func correctPastDay(on date: Date, to outcome: DayCorrectionOutcome) -> Bool {
         let day = startOfDaySafe(date)
         guard day < today else { return false }
         guard let snapshot = scheduleSnapshot(for: day),
-              let options = dayCorrectionOptions(for: snapshot),
+              let options = DayCorrectionPolicy.options(for: snapshot, relation: .past),
               options.allows(outcome),
               let due = snapshot.dueAction else {
             return false
@@ -907,6 +896,7 @@ class PillStore {
                 actionType: due.type,
                 takenAt: nil
             )
+            pinRingInsertionAnchorIfNeeded(for: targetPack)
         case .unlogged:
             deleteDayRecord(in: targetPack, day: day)
         case .breakDay:
@@ -920,6 +910,14 @@ class PillStore {
         }
 
         return true
+    }
+
+    /// Pin the ring insertion anchor on the first taken record so future
+    /// cycle-day edits in Settings don't shift the removal date.
+    private func pinRingInsertionAnchorIfNeeded(for targetPack: PillPack) {
+        if targetPack.method == .ring && targetPack.ringInsertionDate == nil {
+            targetPack.ringInsertionDate = targetPack.startDate
+        }
     }
 
     func unmarkActionAsTaken(on date: Date) {

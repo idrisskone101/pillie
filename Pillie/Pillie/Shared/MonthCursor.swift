@@ -21,4 +21,11 @@ enum MonthCursor {
         }
         return monthStart(for: shifted, calendar: calendar)
     }
+
+    /// Stable `"YYYY-M"` key for a month, shared by every History cache and
+    /// preference that is keyed per month.
+    static func identity(for date: Date, calendar: Calendar = .current) -> String {
+        let components = calendar.dateComponents([.year, .month], from: date)
+        return "\(components.year ?? 0)-\(components.month ?? 0)"
+    }
 }

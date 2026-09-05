@@ -22,6 +22,9 @@ final class PillDay: Identifiable {
         case taken
         case missed
         case upcoming
+        /// Either a scheduled break (`actionType.isBreakType`) or, since History
+        /// day correction, a user-declared skip on a due day (`actionType` stays
+        /// the due action, e.g. `.pillActive`). Do not infer one from the other.
         case breakDay
         case noData
     }

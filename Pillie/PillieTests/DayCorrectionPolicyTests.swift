@@ -6,21 +6,12 @@
 import XCTest
 @testable import Pillie
 
+@MainActor
 final class DayCorrectionPolicyTests: XCTestCase {
-    private static var keepAlivePacks: [PillPack] = []
-
-    override func tearDown() {
-        Self.keepAlivePacks.removeAll(keepingCapacity: true)
-        super.tearDown()
-    }
+    private let anchor = InMemoryStoreFactory.fixedDate("2026-06-01")
 
     func testPastDueDayWithNoRecordOffersAllOutcomesWithUnloggedCurrent() {
-        let snapshot = makeSnapshot(
-            method: .pill,
-            type: .pillActive,
-            status: .missed,
-            relationDate: fixedDate("2026-06-01")
-        )
+        let snapshot = makeSnapshot(method: .pill, type: .pillActive, status: .missed)
 
         let options = DayCorrectionPolicy.options(for: snapshot, relation: .past)
 
@@ -29,127 +20,102 @@ final class DayCorrectionPolicyTests: XCTestCase {
     }
 
     func testTodayFutureNoDataAndPassiveActiveReturnNilOptions() {
-        let dueSnapshot = makeSnapshot(
-            method: .pill,
-            type: .pillActive,
-            status: .missed,
-            relationDate: fixedDate("2026-06-01")
-        )
+        let dueSnapshot = makeSnapshot(method: .pill, type: .pillActive, status: .missed)
         XCTAssertNil(DayCorrectionPolicy.options(for: dueSnapshot, relation: .today))
         XCTAssertNil(DayCorrectionPolicy.options(for: dueSnapshot, relation: .future))
 
-        let noDataSnapshot = makeSnapshot(
-            method: .pill,
-            type: .pillActive,
-            status: .noData,
-            relationDate: fixedDate("2026-06-01")
-        )
+        let noDataSnapshot = makeSnapshot(method: .pill, type: .pillActive, status: .noData)
         XCTAssertNil(DayCorrectionPolicy.options(for: noDataSnapshot, relation: .past))
 
-        let passiveSnapshot = makeSnapshot(
-            method: .patch,
-            type: .patchActive,
-            status: .taken,
-            relationDate: fixedDate("2026-06-01")
-        )
+        let passiveSnapshot = makeSnapshot(method: .patch, type: .patchActive, status: .taken)
         XCTAssertNil(DayCorrectionPolicy.options(for: passiveSnapshot, relation: .past))
     }
 
     func testScheduledBreakDayWithNoRecordIsNotEditable() {
-        let snapshot = makeSnapshot(
-            method: .pill,
-            type: .pillBreak,
-            status: .breakDay,
-            relationDate: fixedDate("2026-06-01")
-        )
+        let snapshot = makeSnapshot(method: .pill, type: .pillBreak, status: .breakDay)
 
         XCTAssertNil(DayCorrectionPolicy.options(for: snapshot, relation: .past))
     }
 
-    func testCountsTowardAdherenceIsFalseForBreakStatusOnDueDay() {
-        let snapshot = makeSnapshot(
-            method: .pill,
-            type: .pillActive,
-            status: .breakDay,
-            relationDate: fixedDate("2026-06-01")
+    func testRingReinsertDayIsNotEditable() {
+        // Reinsert starts a new cycle in `markActionAsTaken`; a single-day
+        // rewrite cannot reproduce that, so the day must stay read-only.
+        let missed = makeSnapshot(method: .ring, type: .ringReinsert, status: .missed)
+        XCTAssertNil(DayCorrectionPolicy.options(for: missed, relation: .past))
+
+        let taken = makeSnapshot(method: .ring, type: .ringReinsert, status: .taken)
+        XCTAssertNil(DayCorrectionPolicy.options(for: taken, relation: .past))
+    }
+
+    func testRingInsertDayIsEditable() {
+        let snapshot = makeSnapshot(method: .ring, type: .ringInsert, status: .missed)
+
+        XCTAssertEqual(
+            DayCorrectionPolicy.options(for: snapshot, relation: .past)?.selectableOutcomes,
+            [.taken, .unlogged, .breakDay]
         )
+    }
+
+    func testCountsTowardAdherenceIsFalseForBreakStatusOnDueDay() {
+        let snapshot = makeSnapshot(method: .pill, type: .pillActive, status: .breakDay)
 
         XCTAssertTrue(snapshot.isDue)
         XCTAssertFalse(snapshot.countsTowardAdherence)
     }
 
     func testScheduledBreakTakenOrMissedOffersOnlyBreakWithActualCurrent() {
-        let taken = makeSnapshot(
-            method: .pill,
-            type: .pillBreak,
-            status: .taken,
-            relationDate: fixedDate("2026-06-01")
-        )
+        let taken = makeSnapshot(method: .pill, type: .pillBreak, status: .taken)
         let takenOptions = DayCorrectionPolicy.options(for: taken, relation: .past)
         XCTAssertEqual(takenOptions?.selectableOutcomes, [.breakDay])
         XCTAssertEqual(takenOptions?.currentOutcome, .taken)
 
-        let missed = makeSnapshot(
-            method: .pill,
-            type: .pillBreak,
-            status: .missed,
-            relationDate: fixedDate("2026-06-01")
-        )
+        let missed = makeSnapshot(method: .pill, type: .pillBreak, status: .missed)
         let missedOptions = DayCorrectionPolicy.options(for: missed, relation: .past)
         XCTAssertEqual(missedOptions?.selectableOutcomes, [.breakDay])
         XCTAssertEqual(missedOptions?.currentOutcome, .unlogged)
     }
 
     func testTakenAndBreakCurrentOutcomesReflectSnapshotStatus() {
-        let taken = makeSnapshot(
-            method: .pill,
-            type: .pillActive,
-            status: .taken,
-            relationDate: fixedDate("2026-06-01")
-        )
+        let taken = makeSnapshot(method: .pill, type: .pillActive, status: .taken)
         XCTAssertEqual(
             DayCorrectionPolicy.options(for: taken, relation: .past)?.currentOutcome,
             .taken
         )
 
-        let breakDay = makeSnapshot(
-            method: .pill,
-            type: .pillActive,
-            status: .breakDay,
-            relationDate: fixedDate("2026-06-01")
-        )
+        let breakDay = makeSnapshot(method: .pill, type: .pillActive, status: .breakDay)
         XCTAssertEqual(
             DayCorrectionPolicy.options(for: breakDay, relation: .past)?.currentOutcome,
             .breakDay
         )
     }
 
-    private func fixedDate(_ value: String) -> Date {
-        var components = DateComponents()
-        components.year = Int(value.prefix(4))
-        components.month = Int(value.dropFirst(5).prefix(2))
-        components.day = Int(value.suffix(2))
-        return Calendar.current.date(from: components)!
+    func testOutcomeLocalizationKeysResolve() {
+        for outcome in [DayCorrectionOutcome.taken, .unlogged, .breakDay] {
+            for field in ["title", "subtitle"] {
+                let key = "history.dayCorrection.\(outcome.localizationKey).\(field)"
+                XCTAssertNotEqual(PillieLocalization.string(key, locale: Locale(identifier: "en")), key)
+            }
+        }
     }
 
+    // `PillScheduleSnapshot.pack` is a strong reference, so the snapshot keeps
+    // its pack alive for the duration of the assertion.
     private func makeSnapshot(
         method: ContraceptiveMethod,
         type: PillDay.ActionType,
-        status: PillDay.Status,
-        relationDate: Date
+        status: PillDay.Status
     ) -> PillScheduleSnapshot {
         let pack = PillPack(
             packType: .twentyOneSeven,
             method: method,
             pillRegimen: .twentyOneSeven,
-            startDate: relationDate,
+            startDate: anchor,
             packNumber: 1,
             isCurrent: true
         )
-        Self.keepAlivePacks.append(pack)
 
         let action = DoseScheduleAction(
-            date: relationDate,
+            date: anchor,
             type: type,
             method: method,
             cycleDay: 1,
@@ -157,7 +123,7 @@ final class DayCorrectionPolicyTests: XCTestCase {
         )
 
         return PillScheduleSnapshot(
-            date: relationDate,
+            date: anchor,
             pack: pack,
             cycleDayIndex: 0,
             dueAction: action,
