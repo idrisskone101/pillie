@@ -113,6 +113,25 @@ final class CalendarDayPresentationTests: XCTestCase {
         )
     }
 
+    func testUserDeclaredBreakOnPatchAndRingActiveDaysUsesOffWeekStyles() throws {
+        XCTAssertEqual(
+            CalendarDayPresentation.resolve(
+                snapshot: try snapshot(method: .patch, type: .patchActive, status: .breakDay),
+                fallbackMethod: .pill,
+                relation: .past
+            ).patchStyle,
+            .offWeek
+        )
+        XCTAssertEqual(
+            CalendarDayPresentation.resolve(
+                snapshot: try snapshot(method: .ring, type: .ringInsert, status: .breakDay),
+                fallbackMethod: .pill,
+                relation: .past
+            ).ringStyle,
+            .ringFree
+        )
+    }
+
     func testMissingSnapshotFallsBackToCurrentMethodWithoutScheduleContext() {
         let presentation = CalendarDayPresentation.resolve(
             snapshot: nil,

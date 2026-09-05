@@ -15,6 +15,7 @@ import os.signpost
 class PillStore {
     private(set) var packs: [PillPack]
     var protocolChangeVersion: Int = 0
+    private(set) var dayRecordsRevision: Int = 0
 
     var pack: PillPack {
         if let current = activePack {
@@ -354,6 +355,9 @@ class PillStore {
                snapshot.status == .upcoming {
                 continue
             }
+
+            // A user-declared skip neither extends nor ends the streak.
+            guard snapshot.countsTowardAdherence else { continue }
 
             if snapshot.status == .taken {
                 streak += 1
@@ -752,37 +756,19 @@ class PillStore {
 
     func markActionAsTaken(on date: Date) {
         let day = startOfDaySafe(date)
-        let dayEpoch = epochDay(for: day)
         guard let snapshot = scheduleSnapshot(for: day),
               let due = snapshot.dueAction else { return }
         let targetPack = snapshot.pack
         let isToday = Calendar.current.isDateInToday(day)
 
-        if let existingDay = dayRecord(forPackID: targetPack.id, epochDay: dayEpoch)
-            ?? targetPack.days.first(where: { Calendar.current.isDate(Self.validatedDate($0.date, fallback: day), inSameDayAs: day) }) {
-            existingDay.date = day
-            existingDay.status = .taken
-            existingDay.actionType = due.type
-            index(dayRecord: existingDay, forPackID: targetPack.id, epochDay: dayEpoch)
-        } else {
-            let newDay = PillDay(
-                date: day,
-                status: .taken,
-                actionType: due.type,
-                pack: targetPack
-            )
-            modelContext.insert(newDay)
-            index(dayRecord: newDay, forPackID: targetPack.id, epochDay: dayEpoch)
-        }
+        upsertDayRecord(
+            in: targetPack,
+            day: day,
+            status: .taken,
+            actionType: due.type
+        )
 
-        // Pin the ring insertion anchor on first check-in so future
-        // cycle-day edits in Settings don't shift the removal date.
-        if targetPack.method == .ring && targetPack.ringInsertionDate == nil {
-            targetPack.ringInsertionDate = targetPack.startDate
-        }
-
-        invalidateSnapshotCache(forPackID: targetPack.id, epochDay: dayEpoch)
-        scheduleStoreCommit()
+        pinRingInsertionAnchorIfNeeded(for: targetPack)
 
         // Auto-start a new cycle when the ring is reinserted after
         // the 7-day ring-free interval.
@@ -790,21 +776,16 @@ class PillStore {
             startNewPack()
             // Mark new cycle's day 1 (ringInsert) as taken
             let newDay = startOfDaySafe(date)
-            let newDayEpoch = epochDay(for: newDay)
             if let newSnapshot = scheduleSnapshot(for: newDay),
                newSnapshot.dueAction?.type == .ringInsert {
                 let newPack = newSnapshot.pack
                 newPack.ringInsertionDate = newDay
-                let record = PillDay(
-                    date: newDay,
+                upsertDayRecord(
+                    in: newPack,
+                    day: newDay,
                     status: .taken,
-                    actionType: .ringReinsert,
-                    pack: newPack
+                    actionType: .ringReinsert
                 )
-                modelContext.insert(record)
-                index(dayRecord: record, forPackID: newPack.id, epochDay: newDayEpoch)
-                invalidateSnapshotCache(forPackID: newPack.id, epochDay: newDayEpoch)
-                scheduleStoreCommit()
             }
         }
 
@@ -815,13 +796,64 @@ class PillStore {
         }
     }
 
+    /// Rewrites a past day's record from the History correction sheet.
+    ///
+    /// `.breakDay` on a due day is a user-declared skip: it keeps the due
+    /// action type but is excluded from adherence and does not break a streak.
+    /// `.unlogged` writes an explicit `.missed` record so the day reads as
+    /// missed even where the schedule fallback would be `.noData`.
+    @discardableResult
+    func correctPastDay(on date: Date, to outcome: DayCorrectionOutcome) -> Bool {
+        let day = startOfDaySafe(date)
+        guard day < today else { return false }
+        guard let snapshot = scheduleSnapshot(for: day),
+              let options = DayCorrectionPolicy.options(for: snapshot, relation: .past),
+              options.allows(outcome),
+              let due = snapshot.dueAction else {
+            return false
+        }
+
+        let targetPack = snapshot.pack
+
+        // Every outcome writes an explicit record, including `.unlogged`.
+        // Deleting the record instead would let the snapshot fall back to
+        // `.noData` on days before `appActivatedDate` (anyone who onboarded
+        // mid-cycle) or in a past cycle-end gap, which renders blank and is
+        // not editable again: a one-way door.
+        let status: PillDay.Status = switch outcome {
+        case .taken: .taken
+        case .unlogged: .missed
+        case .breakDay: .breakDay
+        }
+        upsertDayRecord(
+            in: targetPack,
+            day: day,
+            status: status,
+            actionType: due.type
+        )
+        if outcome == .taken {
+            pinRingInsertionAnchorIfNeeded(for: targetPack)
+        }
+
+        return true
+    }
+
+    /// Pin the ring insertion anchor on the first taken record so future
+    /// cycle-day edits in Settings don't shift the removal date.
+    private func pinRingInsertionAnchorIfNeeded(for targetPack: PillPack) {
+        if targetPack.method == .ring && targetPack.ringInsertionDate == nil {
+            targetPack.ringInsertionDate = targetPack.startDate
+        }
+    }
+
     func unmarkActionAsTaken(on date: Date) {
         let day = startOfDaySafe(date)
         let dayEpoch = epochDay(for: day)
         guard let snapshot = scheduleSnapshot(for: day) else { return }
         let targetPack = snapshot.pack
 
-        guard let existingDay = dayRecord(forPackID: targetPack.id, epochDay: dayEpoch), existingDay.status == .taken else {
+        guard let existingDay = existingDayRecord(in: targetPack, day: day, epochDay: dayEpoch),
+              existingDay.status == .taken else {
             return
         }
 
@@ -835,24 +867,19 @@ class PillStore {
                 modelContext.delete(targetPack)
                 // Restore previous pack and unmark its ringReinsert
                 previousPack.isCurrent = true
-                if let prevRecord = dayRecord(forPackID: previousPack.id, epochDay: dayEpoch),
-                   prevRecord.actionType == .ringReinsert {
-                    modelContext.delete(prevRecord)
-                    removeDayRecordIndex(forPackID: previousPack.id, epochDay: dayEpoch)
-                    invalidateSnapshotCache(forPackID: previousPack.id, epochDay: dayEpoch)
+                if dayRecord(forPackID: previousPack.id, epochDay: dayEpoch)?.actionType == .ringReinsert {
+                    deleteDayRecord(in: previousPack, day: day)
                 }
                 persist()
                 packs = Self.fetchPacks(context: modelContext)
                 rebuildReadIndexes()
                 protocolChangeVersion &+= 1
+                dayRecordsRevision &+= 1
                 return
             }
         }
 
-        modelContext.delete(existingDay)
-        removeDayRecordIndex(forPackID: targetPack.id, epochDay: dayEpoch)
-        invalidateSnapshotCache(forPackID: targetPack.id, epochDay: dayEpoch)
-        scheduleStoreCommit()
+        deleteDayRecord(in: targetPack, day: day)
     }
 
     func dueAction(on date: Date) -> DoseScheduleAction? {
@@ -892,7 +919,7 @@ class PillStore {
             }
 
             if snapshot.status == .noData { continue }
-            if snapshot.isDue {
+            if snapshot.countsTowardAdherence {
                 due += 1
                 if snapshot.status == .taken {
                     completed += 1
@@ -1642,6 +1669,52 @@ class PillStore {
 
     private func dayRecord(forPackID packID: UUID, epochDay: Int) -> PillDay? {
         dayRecordIndexByPackID[packID]?[epochDay]
+    }
+
+    private func existingDayRecord(in pack: PillPack, day: Date, epochDay: Int) -> PillDay? {
+        dayRecord(forPackID: pack.id, epochDay: epochDay)
+            ?? pack.days.first(where: {
+                Calendar.current.isDate(Self.validatedDate($0.date, fallback: day), inSameDayAs: day)
+            })
+    }
+
+    private func upsertDayRecord(
+        in pack: PillPack,
+        day: Date,
+        status: PillDay.Status,
+        actionType: PillDay.ActionType
+    ) {
+        let dayEpoch = epochDay(for: day)
+        if let existing = existingDayRecord(in: pack, day: day, epochDay: dayEpoch) {
+            existing.date = day
+            existing.status = status
+            existing.actionType = actionType
+            index(dayRecord: existing, forPackID: pack.id, epochDay: dayEpoch)
+        } else {
+            let newDay = PillDay(
+                date: day,
+                status: status,
+                actionType: actionType,
+                pack: pack
+            )
+            modelContext.insert(newDay)
+            index(dayRecord: newDay, forPackID: pack.id, epochDay: dayEpoch)
+        }
+        noteDayRecordChange(packID: pack.id, epochDay: dayEpoch)
+    }
+
+    private func deleteDayRecord(in pack: PillPack, day: Date) {
+        let dayEpoch = epochDay(for: day)
+        guard let existing = existingDayRecord(in: pack, day: day, epochDay: dayEpoch) else { return }
+        modelContext.delete(existing)
+        removeDayRecordIndex(forPackID: pack.id, epochDay: dayEpoch)
+        noteDayRecordChange(packID: pack.id, epochDay: dayEpoch)
+    }
+
+    private func noteDayRecordChange(packID: UUID, epochDay: Int) {
+        invalidateSnapshotCache(forPackID: packID, epochDay: epochDay)
+        dayRecordsRevision &+= 1
+        scheduleStoreCommit()
     }
 
     private func index(dayRecord: PillDay, forPackID packID: UUID, epochDay: Int) {

@@ -72,4 +72,28 @@ enum HistoryPresentation {
             PillieLocalization.string(statusKey, locale: locale)
         )
     }
+
+    static func doseSubtitle(
+        reminderHour: Int,
+        reminderMinute: Int,
+        method: ContraceptiveMethod,
+        locale: Locale = .current
+    ) -> String {
+        let timeKey: String
+        switch reminderHour {
+        case 5..<12:
+            timeKey = "history.dayCorrection.subtitle.morning"
+        case 12..<17:
+            timeKey = "history.dayCorrection.subtitle.afternoon"
+        default:
+            timeKey = "history.dayCorrection.subtitle.evening"
+        }
+
+        let methodNoun = PillieLocalization.string(
+            "history.dayCorrection.method.\(method.rawValue)",
+            locale: locale
+        )
+        let timeText = SettingsPresentation.time(hour: reminderHour, minute: reminderMinute, locale: locale)
+        return PillieLocalization.formatted(timeKey, locale: locale, arguments: methodNoun, timeText)
+    }
 }

@@ -121,7 +121,7 @@ struct PillPackCard: View {
                 .onChange(of: store.currentDayIndex) { _, _ in
                     refreshCycleSnapshots()
                 }
-                .onChange(of: store.isTodayTaken) { _, _ in
+                .onChange(of: store.dayRecordsRevision) { _, _ in
                     refreshCycleSnapshots()
                 }
                 .onDisappear {
@@ -258,11 +258,9 @@ struct PillPackCard: View {
                 Circle()
                     .strokeBorder(.white.opacity(0.25), style: StrokeStyle(lineWidth: 1.5, dash: [3, 3]))
 
-                if due?.type.isBreakType ?? false {
-                    Circle()
-                        .fill(PillieTheme.lavender.opacity(0.35))
-                        .frame(width: 12, height: 12)
-                }
+                Circle()
+                    .fill(PillieTheme.lavender.opacity(0.35))
+                    .frame(width: 12, height: 12)
             } else if due != nil && isPassive {
                 Circle()
                     .fill(.white.opacity(0.06))

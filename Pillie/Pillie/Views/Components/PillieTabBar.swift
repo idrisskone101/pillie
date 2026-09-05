@@ -33,6 +33,9 @@ enum PillieTab: Int, CaseIterable {
 
 struct PillieTabBar: View {
     @Binding var selectedTab: PillieTab
+    /// Tabs that show an unread pip on their icon. Owned by the caller so the
+    /// bar stays ignorant of which feature is being announced.
+    var badgedTabs: Set<PillieTab> = []
     @Environment(\.locale) private var locale
     @Namespace private var indicatorNamespace
 
@@ -46,6 +49,11 @@ struct PillieTabBar: View {
                     VStack(spacing: 4) {
                         Image(systemName: tab.icon)
                             .font(.system(size: 22))
+                            .overlay(alignment: .topTrailing) {
+                                if badgedTabs.contains(tab) {
+                                    badgePip
+                                }
+                            }
 
                         if selectedTab == tab {
                             Capsule()
@@ -90,11 +98,28 @@ struct PillieTabBar: View {
             }
         )
         .animation(PillieMotion.animation(for: .quick), value: selectedTab)
+        .animation(PillieMotion.animation(for: .quick), value: badgedTabs)
+    }
+
+    /// Sits on the icon's top-trailing corner, nudged outward so it reads as a
+    /// badge rather than part of the glyph.
+    private var badgePip: some View {
+        Circle()
+            .fill(PillieTheme.coral)
+            .overlay {
+                Circle()
+                    .strokeBorder(Color.white, lineWidth: 1.5)
+            }
+            .frame(width: 8, height: 8)
+            .offset(x: 4, y: -2)
+            .accessibilityHidden(true)
+            .transition(.opacity)
     }
 }
 
 struct MainTabView: View {
     @State private var selectedTab: PillieTab = .home
+    @AppStorage(HistoryDiscoveryAnnouncement.storageKey) private var historyDiscoveryDismissed = false
     @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
     @Environment(PillStore.self) private var store
     @Environment(\.modelContext) private var modelContext
@@ -116,7 +141,10 @@ struct MainTabView: View {
             // slide carries the status-bar band along with the content.
             .ignoresSafeArea()
 
-            PillieTabBar(selectedTab: tabBinding)
+            PillieTabBar(
+                selectedTab: tabBinding,
+                badgedTabs: historyDiscoveryDismissed ? [] : [.history]
+            )
         }
         .background(PillieTheme.bg.ignoresSafeArea())
         .ignoresSafeArea(.container, edges: .bottom)

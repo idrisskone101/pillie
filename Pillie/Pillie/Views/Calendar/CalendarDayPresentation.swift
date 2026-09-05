@@ -84,7 +84,7 @@ struct CalendarDayPresentation: Equatable {
             hasScheduleContext: snapshot?.hasScheduleContext ?? false,
             isActionDay: snapshot?.isDue ?? false,
             isPassiveActive: snapshot?.isPassiveActive ?? false,
-            isBreakDay: snapshot?.isBreak ?? false,
+            isBreakDay: snapshot?.isBreak == true || snapshot?.status == .breakDay,
             patchStyle: method == .patch ? patchSemanticStyle(snapshot: snapshot, relation: relation) : .invalid,
             ringStyle: method == .ring ? ringSemanticStyle(snapshot: snapshot, relation: relation) : .invalid
         )
@@ -114,6 +114,9 @@ struct CalendarDayPresentation: Equatable {
             }
 
         case .past, .today:
+            if snapshot.status == .breakDay {
+                return .offWeek
+            }
             switch actionType {
             case .some(.patchBreak):
                 return .offWeek
@@ -162,6 +165,9 @@ struct CalendarDayPresentation: Equatable {
             }
 
         case .past, .today:
+            if snapshot.status == .breakDay {
+                return .ringFree
+            }
             if snapshot.status == .missed {
                 return .missed
             }

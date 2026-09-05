@@ -36,4 +36,8 @@ struct PillScheduleSnapshot {
     var isBreak: Bool {
         dueAction?.isBreak ?? false
     }
+
+    var countsTowardAdherence: Bool {
+        isDue && status != .breakDay
+    }
 }

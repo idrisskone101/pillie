@@ -10,6 +10,9 @@ struct CalendarGrid: View {
     @Environment(\.locale) private var locale
     let displayedMonth: Date
     let monthSnapshots: [Int: PillScheduleSnapshot]
+    /// Called with the fully-resolved day when the user taps a past day that
+    /// `DayCorrectionPolicy` allows editing. Nil renders every cell inert.
+    var onEditableDayActivate: ((HistoryEditableDay) -> Void)?
 
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 4), count: 7)
 
@@ -51,9 +54,18 @@ struct CalendarGrid: View {
         return ((occupiedSlots + 6) / 7) * 7
     }
 
-    init(displayedMonth: Date, monthSnapshots: [Int: PillScheduleSnapshot] = [:]) {
+    init(
+        displayedMonth: Date,
+        monthSnapshots: [Int: PillScheduleSnapshot] = [:],
+        onEditableDayActivate: ((HistoryEditableDay) -> Void)? = nil
+    ) {
         self.displayedMonth = displayedMonth
         self.monthSnapshots = monthSnapshots
+        self.onEditableDayActivate = onEditableDayActivate
+    }
+
+    private var monthID: String {
+        MonthCursor.identity(for: displayedMonth, calendar: calendar)
     }
 
     var body: some View {
@@ -89,13 +101,15 @@ struct CalendarGrid: View {
     private func dayCell(day: Int) -> some View {
         let dayDate = dateForDay(day)
         let snapshot = monthSnapshots[day] ?? dayDate.flatMap { store.scheduleSnapshot(for: $0) }
+        let relation = relation(for: dayDate)
         let presentation = CalendarDayPresentation.resolve(
             snapshot: snapshot,
             fallbackMethod: store.pack.method,
-            relation: relation(for: dayDate)
+            relation: relation
         )
+        let editableDay = editableDay(date: dayDate, snapshot: snapshot, relation: relation)
 
-        VStack(spacing: 2) {
+        let cell = VStack(spacing: 2) {
             ZStack {
                 Circle()
                     .fill(
@@ -178,6 +192,33 @@ struct CalendarGrid: View {
             date: dayDate,
             presentation: presentation
         ))
+
+        if let editableDay, let onEditableDayActivate {
+            Button {
+                onEditableDayActivate(editableDay)
+            } label: {
+                cell
+            }
+            .buttonStyle(.plain)
+            .accessibilityHint(
+                PillieLocalization.string("history.dayCorrection.accessibilityHint", locale: locale)
+            )
+            .accessibilityIdentifier("historyEditableDay.\(monthID).\(day)")
+        } else {
+            cell
+        }
+    }
+
+    private func editableDay(
+        date: Date?,
+        snapshot: PillScheduleSnapshot?,
+        relation: CalendarDayRelation
+    ) -> HistoryEditableDay? {
+        guard let date, let snapshot,
+              let options = DayCorrectionPolicy.options(for: snapshot, relation: relation) else {
+            return nil
+        }
+        return HistoryEditableDay(date: date, method: snapshot.pack.method, options: options)
     }
 
     // MARK: - Status Lookup
@@ -216,7 +257,7 @@ struct CalendarGrid: View {
             )
         }
         let status: HistoryPresentation.DayStatus
-        if presentation.isBreakDay || presentation.status == .breakDay {
+        if presentation.isBreakDay {
             status = .breakDay
         } else if presentation.status == .taken {
             status = .completed

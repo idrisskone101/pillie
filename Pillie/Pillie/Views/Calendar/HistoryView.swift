@@ -27,6 +27,8 @@ struct HistoryView: View {
     @State private var suppressAdherenceValueAnimation = false
     @State private var calendarWidth: CGFloat = 0
     @State private var monthSnapshotCache: [String: [Int: PillScheduleSnapshot]] = [:]
+    @State private var correctionTarget: HistoryEditableDay?
+    @AppStorage(HistoryDiscoveryAnnouncement.storageKey) private var discoveryDismissed = false
 
     private let performanceTier = PerformanceTier.current
 
@@ -56,6 +58,16 @@ struct HistoryView: View {
                     .font(.pillieBody())
                     .foregroundStyle(PillieTheme.textMuted)
                     .modifier(FadeInUp(appeared: appeared, delay: 0))
+
+                if !discoveryDismissed {
+                    HistoryDiscoveryBanner {
+                        withAnimation(PillieMotion.animation(for: .quick)) {
+                            discoveryDismissed = true
+                        }
+                    }
+                    .transition(.opacity)
+                    .modifier(FadeInUp(appeared: appeared, delay: 0.05))
+                }
 
                 // Color legend
                 VStack(alignment: .leading, spacing: 6) {
@@ -132,6 +144,7 @@ struct HistoryView: View {
                         onEnded: endMonthDrag,
                         onCancelled: cancelMonthDrag
                     )
+                    .allowsHitTesting(false)
                     .accessibilityHidden(true)
                 }
                 .background {
@@ -168,15 +181,21 @@ struct HistoryView: View {
         .onAppear {
             guard !hasAnimatedIn else { return }
             hasAnimatedIn = true
-            warmMonthSnapshotCache(for: displayedMonth)
-            warmMonthSnapshotCache(for: MonthCursor.month(byAdding: -1, to: displayedMonth))
-            warmMonthSnapshotCache(for: MonthCursor.month(byAdding: 1, to: displayedMonth))
+            warmVisibleMonths()
             withAnimation(PillieTheme.fadeInUpCurve) {
                 appeared = true
             }
         }
         .onChange(of: store.protocolChangeVersion) { _, _ in
             resetToCurrentMonthForProtocolChange()
+        }
+        .onChange(of: store.dayRecordsRevision) { _, _ in
+            refreshCachedMonthSnapshots()
+        }
+        .sheet(item: $correctionTarget) { target in
+            HistoryDayCorrectionSheet(day: target) { outcome in
+                applyCorrection(outcome, to: target)
+            }
         }
     }
 
@@ -197,22 +216,15 @@ struct HistoryView: View {
     }
 
     private var monthIdentity: String {
-        Self.monthIdentity(for: displayedMonth)
+        MonthCursor.identity(for: displayedMonth)
     }
 
     private var slideDistance: CGFloat {
         max(calendarWidth, 320)
     }
 
-    private static func monthIdentity(for month: Date) -> String {
-        let components = Calendar.current.dateComponents([.year, .month], from: month)
-        let year = components.year ?? 0
-        let monthNumber = components.month ?? 0
-        return "\(year)-\(monthNumber)"
-    }
-
     private func snapshots(for month: Date) -> [Int: PillScheduleSnapshot] {
-        let key = Self.monthIdentity(for: month)
+        let key = MonthCursor.identity(for: month)
         return monthSnapshotCache[key] ?? store.monthSnapshots(for: month)
     }
 
@@ -220,8 +232,15 @@ struct HistoryView: View {
 
     @ViewBuilder
     private func monthGrid(for month: Date) -> some View {
-        let monthID = Self.monthIdentity(for: month)
-        CalendarGrid(displayedMonth: month, monthSnapshots: snapshots(for: month))
+        let monthID = MonthCursor.identity(for: month)
+        CalendarGrid(
+            displayedMonth: month,
+            monthSnapshots: snapshots(for: month),
+            onEditableDayActivate: { day in
+                guard !isDragging, !isAnimatingTransition else { return }
+                correctionTarget = day
+            }
+        )
             .background {
                 GeometryReader { proxy in
                     Color.clear.preference(
@@ -233,6 +252,32 @@ struct HistoryView: View {
             .onAppear {
                 warmMonthSnapshotCache(for: month)
             }
+    }
+
+    // MARK: - Day Correction
+
+    private func applyCorrection(_ outcome: DayCorrectionOutcome, to day: HistoryEditableDay) {
+        guard store.correctPastDay(on: day.date, to: outcome) else { return }
+        InteractionFeedback.live.perform(.meaningfulCommit)
+        // Using the feature is the strongest possible acknowledgement; the
+        // announcement has nothing left to teach once a day has been corrected.
+        discoveryDismissed = true
+    }
+
+    private func refreshCachedMonthSnapshots() {
+        monthSnapshotCache.removeAll(keepingCapacity: true)
+        warmVisibleMonths()
+        if let adjacentMonth {
+            warmMonthSnapshotCache(for: adjacentMonth)
+        }
+    }
+
+    /// Warms the displayed month plus its neighbours so a drag in either
+    /// direction never renders from an empty cache.
+    private func warmVisibleMonths() {
+        warmMonthSnapshotCache(for: displayedMonth)
+        warmMonthSnapshotCache(for: MonthCursor.month(byAdding: -1, to: displayedMonth))
+        warmMonthSnapshotCache(for: MonthCursor.month(byAdding: 1, to: displayedMonth))
     }
 
     // MARK: - Drag Gesture
@@ -305,7 +350,7 @@ struct HistoryView: View {
             infoMonth = nextMonth
         }
 
-        let nextMonthID = Self.monthIdentity(for: nextMonth)
+        let nextMonthID = MonthCursor.identity(for: nextMonth)
         let targetOffset = -transitionDirection * slideDistance
         let nextMonthHeight = measuredMonthHeights[nextMonthID]
         suppressAdherenceValueAnimation = shouldSuppressAdherenceValueAnimation(nextMonthID: nextMonthID)
@@ -384,7 +429,7 @@ struct HistoryView: View {
         displayedMonth = currentMonth
         resetDragState()
 
-        let currentMonthID = Self.monthIdentity(for: currentMonth)
+        let currentMonthID = MonthCursor.identity(for: currentMonth)
         if let knownHeight = measuredMonthHeights[currentMonthID] {
             calendarContainerHeight = knownHeight
         } else {
@@ -393,16 +438,16 @@ struct HistoryView: View {
     }
 
     private func warmMonthSnapshotCache(for month: Date) {
-        let key = Self.monthIdentity(for: month)
+        let key = MonthCursor.identity(for: month)
         guard monthSnapshotCache[key] == nil else { return }
 
         monthSnapshotCache[key] = store.monthSnapshots(for: month)
 
         // Keep cache bounded to nearby months.
         let keep = Set([
-            Self.monthIdentity(for: displayedMonth),
-            Self.monthIdentity(for: MonthCursor.month(byAdding: -1, to: displayedMonth)),
-            Self.monthIdentity(for: MonthCursor.month(byAdding: 1, to: displayedMonth)),
+            MonthCursor.identity(for: displayedMonth),
+            MonthCursor.identity(for: MonthCursor.month(byAdding: -1, to: displayedMonth)),
+            MonthCursor.identity(for: MonthCursor.month(byAdding: 1, to: displayedMonth)),
             key
         ])
         monthSnapshotCache = monthSnapshotCache.filter { keep.contains($0.key) }
@@ -440,9 +485,13 @@ struct HistoryView: View {
     }
 }
 
-/// A horizontal-only pan surface that explicitly wins over the surrounding
-/// vertical scroll view. The ancestor waits for this recognizer to reject a
-/// vertical drag; horizontal drags therefore cannot move both axes at once.
+/// A horizontal-only month pan that explicitly wins over the surrounding
+/// vertical scroll view. The recognizer is installed on the ancestor
+/// `UIScrollView` (so it sees touches that land on SwiftUI day buttons) but
+/// only begins for horizontal drags that start inside this surface's bounds;
+/// the scroll view waits for it to fail before scrolling vertically, so a
+/// drag never moves both axes at once and a swipe on the adherence card does
+/// not change months.
 private struct HorizontalMonthDragSurface: UIViewRepresentable {
     var onChanged: (CGFloat) -> Void
     var onEnded: (_ translation: CGFloat, _ velocity: CGFloat) -> Void
@@ -460,19 +509,12 @@ private struct HorizontalMonthDragSurface: UIViewRepresentable {
         let view = MonthDragSurfaceView()
         view.backgroundColor = .clear
         view.isAccessibilityElement = false
+        view.isUserInteractionEnabled = false
 
-        let panGesture = UIPanGestureRecognizer(
-            target: context.coordinator,
-            action: #selector(Coordinator.handlePan(_:))
-        )
-        panGesture.delegate = context.coordinator
-        panGesture.cancelsTouchesInView = true
-        view.addGestureRecognizer(panGesture)
-
-        context.coordinator.panGesture = panGesture
+        context.coordinator.surfaceView = view
         view.didMoveToWindowHandler = { [weak view, weak coordinator = context.coordinator] in
             guard let view, let coordinator else { return }
-            coordinator.configureGesturePriority(from: view)
+            coordinator.attach(toScrollViewFrom: view)
         }
 
         return view
@@ -482,15 +524,24 @@ private struct HorizontalMonthDragSurface: UIViewRepresentable {
         context.coordinator.onChanged = onChanged
         context.coordinator.onEnded = onEnded
         context.coordinator.onCancelled = onCancelled
-        context.coordinator.configureGesturePriority(from: uiView)
+        context.coordinator.attach(toScrollViewFrom: uiView)
+    }
+
+    static func dismantleUIView(_ uiView: MonthDragSurfaceView, coordinator: Coordinator) {
+        coordinator.tearDown()
     }
 
     final class Coordinator: NSObject, UIGestureRecognizerDelegate {
         var onChanged: (CGFloat) -> Void
         var onEnded: (_ translation: CGFloat, _ velocity: CGFloat) -> Void
         var onCancelled: () -> Void
-        weak var panGesture: UIPanGestureRecognizer?
-        weak var configuredScrollView: UIScrollView?
+        /// The coordinator owns the recognizer: it must outlive the moment it is
+        /// added to the scroll view, which only happens once the surface is in
+        /// a window. `UIGestureRecognizer` retains its targets, so this is a
+        /// cycle until `tearDown()` removes the target.
+        let panGesture = UIPanGestureRecognizer()
+        weak var surfaceView: UIView?
+        private weak var configuredScrollView: UIScrollView?
 
         init(
             onChanged: @escaping (CGFloat) -> Void,
@@ -500,15 +551,19 @@ private struct HorizontalMonthDragSurface: UIViewRepresentable {
             self.onChanged = onChanged
             self.onEnded = onEnded
             self.onCancelled = onCancelled
+            super.init()
+            panGesture.addTarget(self, action: #selector(handlePan(_:)))
+            panGesture.delegate = self
+            panGesture.cancelsTouchesInView = true
         }
 
-        func configureGesturePriority(from view: UIView) {
-            guard let panGesture else { return }
-
+        func attach(toScrollViewFrom view: UIView) {
             var ancestor = view.superview
             while let candidate = ancestor {
                 if let scrollView = candidate as? UIScrollView {
                     guard configuredScrollView !== scrollView else { return }
+                    detach()
+                    scrollView.addGestureRecognizer(panGesture)
                     scrollView.panGestureRecognizer.require(toFail: panGesture)
                     configuredScrollView = scrollView
                     return
@@ -517,10 +572,23 @@ private struct HorizontalMonthDragSurface: UIViewRepresentable {
             }
         }
 
+        func detach() {
+            configuredScrollView?.removeGestureRecognizer(panGesture)
+            configuredScrollView = nil
+        }
+
+        func tearDown() {
+            detach()
+            panGesture.removeTarget(self, action: nil)
+        }
+
         func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-            guard let panGesture = gestureRecognizer as? UIPanGestureRecognizer else {
+            guard let panGesture = gestureRecognizer as? UIPanGestureRecognizer,
+                  let surfaceView else {
                 return false
             }
+            let startsOnCalendar = surfaceView.bounds.contains(panGesture.location(in: surfaceView))
+            guard startsOnCalendar else { return false }
             let velocity = panGesture.velocity(in: panGesture.view)
             return abs(velocity.x) > abs(velocity.y)
         }

@@ -246,12 +246,18 @@ struct PillieApp: App {
         ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
     }
 
+    /// True once the user has progressed through any onboarding step on this
+    /// device; false on a genuinely fresh install.
+    private static func hasExistingAppState(in defaults: UserDefaults) -> Bool {
+        defaults.object(forKey: OnboardingFlow.stepStorageKey) != nil
+            || defaults.bool(forKey: OnboardingTelemetry.onboardingStartedEmittedKey)
+    }
+
     private static func recordInstallCohortIfNeeded(at date: Date = Date()) {
         let defaults = UserDefaults.standard
         let assignment = TrialInstallCohort.recordAssignment(
             at: date,
-            hasExistingAppState: defaults.object(forKey: OnboardingFlow.stepStorageKey) != nil
-                || defaults.bool(forKey: OnboardingTelemetry.onboardingStartedEmittedKey),
+            hasExistingAppState: hasExistingAppState(in: defaults),
             store: KeychainTrialGrantStore(),
             fallbackAssignment: TrialInstallCohort.storedAssignment(in: defaults)
         )
@@ -263,6 +269,9 @@ struct PillieApp: App {
 
         if !Self.isRunningTests {
             Self.recordInstallCohortIfNeeded()
+            HistoryDiscoveryAnnouncement.seedForFreshInstallIfNeeded(
+                hasExistingAppState: Self.hasExistingAppState(in: .standard)
+            )
         }
 
         let schema = Schema([PillPack.self, PillDay.self])
