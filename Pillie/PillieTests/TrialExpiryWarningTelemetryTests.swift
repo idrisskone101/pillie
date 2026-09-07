@@ -105,8 +105,6 @@ private final class TrialWarningAnalyticsRecorder: AnalyticsTracking {
         bodyCustomized: Bool?,
         retryTitleCustomized: Bool?,
         retryBodyCustomized: Bool?,
-        lastCallTitleCustomized: Bool?,
-        lastCallBodyCustomized: Bool?
     ) {
         events.append(Event(event: event, trialWarningDay: trialWarningDay))
     }

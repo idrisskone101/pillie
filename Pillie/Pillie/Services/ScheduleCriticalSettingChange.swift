@@ -83,21 +83,6 @@ enum ScheduleCriticalSettingChange {
         ProductAnalyticsTelemetry.live.autoReminderRetryLimitSaved()
     }
 
-    /// Saves the Last Call Reminder on/off state and time, then reschedules so the
-    /// end-of-day backstop is (re)planned. Timing is gated again at build time via the
-    /// `pillie_plus` entitlement; the stored values are never mutated by the gate.
-    static func saveSettingsLastCallReminder(
-        store: PillStore,
-        enabled: Bool,
-        hour: Int,
-        minute: Int
-    ) {
-        store.lastCallReminderEnabled = enabled
-        store.lastCallReminderHour = hour
-        store.lastCallReminderMinute = minute
-        NotificationManager.shared.requestReschedule(from: store, reason: "settings-last-call")
-    }
-
     static func saveSettingsSupplyReminderThreshold(
         store: PillStore,
         threshold: Int
@@ -111,19 +96,17 @@ enum ScheduleCriticalSettingChange {
         ProductAnalyticsTelemetry.live.supplyReminderSaved()
     }
 
-    /// Saves the Custom Reminder Message copy (Pillie+) for the Due Action Reminder, the
-    /// Auto-Reminder Retry, and the Last Call Reminder, then reschedules so the new words
-    /// take effect on the next build. Words never affect timing, snooze, retry cadence, or
-    /// supply scheduling — only the title/body strings. The save event carries only six
-    /// coarse customization booleans plus preset attribution, never the strings.
+    /// Saves the Custom Reminder Message copy (Pillie+) for the Due Action Reminder and
+    /// the Auto-Reminder Retry, then reschedules so the new words take effect on the next
+    /// build. Words never affect timing, snooze, retry cadence, or supply scheduling —
+    /// only the title/body strings. The save event carries only four coarse customization
+    /// booleans plus preset attribution, never the strings.
     static func saveSettingsCustomReminders(
         store: PillStore,
         title: String,
         body: String,
         retryTitle: String,
         retryBody: String,
-        lastCallTitle: String,
-        lastCallBody: String,
         preset: CustomReminderPreset? = nil,
         editedAfterPreset: Bool = false
     ) {
@@ -131,16 +114,12 @@ enum ScheduleCriticalSettingChange {
         store.customDueReminderBody = body
         store.customRetryReminderTitle = retryTitle
         store.customRetryReminderBody = retryBody
-        store.customLastCallReminderTitle = lastCallTitle
-        store.customLastCallReminderBody = lastCallBody
         NotificationManager.shared.requestReschedule(from: store, reason: "settings-custom-reminders")
         ProductAnalyticsTelemetry.live.customRemindersSaved(
             titleCustomized: CustomReminderCopy.isCustomized(title),
             bodyCustomized: CustomReminderCopy.isCustomized(body),
             retryTitleCustomized: CustomReminderCopy.isCustomized(retryTitle),
             retryBodyCustomized: CustomReminderCopy.isCustomized(retryBody),
-            lastCallTitleCustomized: CustomReminderCopy.isCustomized(lastCallTitle),
-            lastCallBodyCustomized: CustomReminderCopy.isCustomized(lastCallBody),
             preset: preset,
             editedAfterPreset: editedAfterPreset
         )

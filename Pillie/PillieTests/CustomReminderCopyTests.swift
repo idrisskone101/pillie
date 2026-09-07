@@ -22,8 +22,6 @@ final class CustomReminderCopyTests: XCTestCase {
                 dueBody: "It’s time to check in with Pillie.",
                 retryTitle: "Still time to check in",
                 retryBody: "Open Pillie when you’re ready.",
-                lastCallTitle: "One last reminder",
-                lastCallBody: "Open Pillie to update today’s status."
             )
         )
     }
@@ -36,8 +34,6 @@ final class CustomReminderCopyTests: XCTestCase {
                 dueBody: "Open Pillie to mark today’s pill.",
                 retryTitle: "Pillie check-in waiting",
                 retryBody: "Open Pillie to update your status.",
-                lastCallTitle: "Final Pillie reminder",
-                lastCallBody: "Open Pillie to complete or update today’s check-in."
             )
         )
     }
@@ -50,8 +46,6 @@ final class CustomReminderCopyTests: XCTestCase {
                 dueBody: "Open Pillie for today’s check-in.",
                 retryTitle: "Keep your routine moving",
                 retryBody: "Open Pillie to update today’s status.",
-                lastCallTitle: "Finish today’s check-in",
-                lastCallBody: "Open Pillie for one final check-in."
             )
         )
     }
@@ -64,8 +58,6 @@ final class CustomReminderCopyTests: XCTestCase {
                 dueBody: "Open Pillie when convenient.",
                 retryTitle: "Check-in still pending",
                 retryBody: "Open Pillie when convenient.",
-                lastCallTitle: "Final check-in reminder",
-                lastCallBody: "Open Pillie to update your status."
             )
         )
     }
@@ -79,8 +71,6 @@ final class CustomReminderCopyTests: XCTestCase {
             dueBody: "My own follow-up",
             retryTitle: gentle.retryTitle,
             retryBody: gentle.retryBody,
-            lastCallTitle: gentle.lastCallTitle,
-            lastCallBody: gentle.lastCallBody
         )
         XCTAssertNil(CustomReminderPreset.matching(edited))
     }
@@ -98,8 +88,6 @@ final class CustomReminderCopyTests: XCTestCase {
             dueBody: "My message",
             retryTitle: "Retry title",
             retryBody: "Retry message",
-            lastCallTitle: "Last title",
-            lastCallBody: "Last message"
         )
 
         XCTAssertEqual(CustomReminderDraft(messages: existing).messages, existing)

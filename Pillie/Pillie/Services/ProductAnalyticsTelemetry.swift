@@ -846,8 +846,6 @@ struct ProductAnalyticsTelemetry {
     bodyCustomized: Bool,
     retryTitleCustomized: Bool,
     retryBodyCustomized: Bool,
-    lastCallTitleCustomized: Bool,
-    lastCallBodyCustomized: Bool,
     preset: CustomReminderPreset?,
     editedAfterPreset: Bool
   ) {
@@ -857,8 +855,6 @@ struct ProductAnalyticsTelemetry {
       bodyCustomized: bodyCustomized,
       retryTitleCustomized: retryTitleCustomized,
       retryBodyCustomized: retryBodyCustomized,
-      lastCallTitleCustomized: lastCallTitleCustomized,
-      lastCallBodyCustomized: lastCallBodyCustomized,
       preset: preset,
       editedAfterPreset: editedAfterPreset
     )
@@ -983,8 +979,6 @@ struct ProductAnalyticsTelemetry {
     bodyCustomized: Bool? = nil,
     retryTitleCustomized: Bool? = nil,
     retryBodyCustomized: Bool? = nil,
-    lastCallTitleCustomized: Bool? = nil,
-    lastCallBodyCustomized: Bool? = nil
   ) {
     analytics.track(
       event,
@@ -1006,8 +1000,6 @@ struct ProductAnalyticsTelemetry {
       bodyCustomized: bodyCustomized,
       retryTitleCustomized: retryTitleCustomized,
       retryBodyCustomized: retryBodyCustomized,
-      lastCallTitleCustomized: lastCallTitleCustomized,
-      lastCallBodyCustomized: lastCallBodyCustomized
     )
   }
 }
