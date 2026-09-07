@@ -601,11 +601,8 @@ struct PillieApp: App {
             store.customDueReminderBody = ""
             store.customRetryReminderTitle = ""
             store.customRetryReminderBody = ""
-            store.customLastCallReminderTitle = ""
-            store.customLastCallReminderBody = ""
             store.autoReminderIntervalMinutes = fullyConfigured ? 30 : 10
             store.autoReminderRetryLimit = 3
-            store.lastCallReminderEnabled = false
             reconcileScreenTimeState()
         case "/trial-age":
             // QA control (#160): age the existing (or a fresh) trial back by

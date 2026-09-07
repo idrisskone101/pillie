@@ -80,8 +80,6 @@ private final class UpdateTrialGrantAnalyticsRecorder: AnalyticsTracking {
         bodyCustomized: Bool?,
         retryTitleCustomized: Bool?,
         retryBodyCustomized: Bool?,
-        lastCallTitleCustomized: Bool?,
-        lastCallBodyCustomized: Bool?
     ) {
         events.append(Event(event: event, source: source))
     }

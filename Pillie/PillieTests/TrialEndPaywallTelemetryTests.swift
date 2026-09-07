@@ -308,8 +308,6 @@ private final class TrialDeclineFeedbackAnalyticsRecorder: AnalyticsTracking {
         bodyCustomized: Bool?,
         retryTitleCustomized: Bool?,
         retryBodyCustomized: Bool?,
-        lastCallTitleCustomized: Bool?,
-        lastCallBodyCustomized: Bool?
     ) {}
 
     func track(

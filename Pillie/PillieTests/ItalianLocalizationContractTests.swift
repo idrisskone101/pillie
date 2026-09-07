@@ -322,7 +322,7 @@ final class ItalianLocalizationContractTests: XCTestCase {
             Array(repeating: "Promemoria successivo", count: 3)
         )
         XCTAssertEqual(
-            actions.map { $0.localizedFinalTitle(locale: italian) },
+            Array(repeating: PillieLocalization.string("notification.final.title", locale: italian), count: 3),
             Array(repeating: "Promemoria finale", count: 3)
         )
         XCTAssertEqual(

@@ -56,8 +56,6 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
             "settings.reminder_time.title",
             "settings.followup.title",
             "settings.followup.interval",
-            "settings.final_reminder.title",
-            "settings.final_reminder.body",
             "settings.break_notice.title",
             "settings.break_notice.body",
             "settings.method.title",
@@ -364,10 +362,6 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
             "Promemoria aggiuntivi finché l’azione di oggi resta da registrare."
         )
         XCTAssertEqual(
-            PillieLocalization.string("settings.final_reminder.title", locale: italian),
-            "Ultimo ping"
-        )
-        XCTAssertEqual(
             PillieLocalization.string("settings.support.suggestion", locale: italian),
             "Condividi un'idea"
         )
@@ -411,8 +405,6 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
                 dueBody: "Un promemoria delicato per la tua routine.",
                 retryTitle: "Promemoria successivo",
                 retryBody: "Quando vuoi, ricorda di fare il check-in oggi.",
-                lastCallTitle: "Promemoria finale",
-                lastCallBody: "Per oggi è programmato un ultimo promemoria."
             )
         )
         XCTAssertEqual(
@@ -422,8 +414,6 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
                 dueBody: "È previsto il check-in programmato.",
                 retryTitle: "Promemoria successivo",
                 retryBody: "Il check-in di oggi è ancora da fare.",
-                lastCallTitle: "Promemoria finale",
-                lastCallBody: "Promemoria finale: per oggi non c'è ancora un check-in."
             )
         )
         XCTAssertEqual(
@@ -433,8 +423,6 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
                 dueBody: "Una breve registrazione per la routine di oggi.",
                 retryTitle: "Promemoria successivo",
                 retryBody: "Puoi fare il check-in quando vuoi.",
-                lastCallTitle: "Promemoria finale",
-                lastCallBody: "Ultima registrazione programmata per oggi."
             )
         )
         XCTAssertEqual(
@@ -444,8 +432,6 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
                 dueBody: "Promemoria Pillie",
                 retryTitle: "Promemoria successivo",
                 retryBody: "La registrazione di Pillie è ancora aperta.",
-                lastCallTitle: "Promemoria finale",
-                lastCallBody: "Ultimo promemoria Pillie per oggi."
             )
         )
 
@@ -454,8 +440,6 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
             dueBody: "Non cambiare — byte per byte\nseconda riga",
             retryTitle: "Retry: 12:34",
             retryBody: "apostrofo ' e accento è",
-            lastCallTitle: "FINAL_custom",
-            lastCallBody: "🌙"
         )
         XCTAssertEqual(CustomReminderDraft(messages: authored).messages, authored)
     }

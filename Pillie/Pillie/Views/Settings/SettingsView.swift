@@ -18,7 +18,6 @@ struct SettingsView: View {
     @State private var showTimeEditor = false
     @State private var showIntervalEditor = false
     @State private var showRetryLimitEditor = false
-    @State private var showLastCallEditor = false
     @State private var showRefillReminderEditor = false
     @State private var showProtocolEditor = false
     @State private var showCycleDayEditor = false
@@ -160,22 +159,6 @@ struct SettingsView: View {
                             ), value: store.autoReminderRetryLimit.formatted(.number.locale(locale)))
                         }
                         .buttonStyle(.plain)
-                        divider
-                        Button {
-                            openSettingSheet { showLastCallEditor = true }
-                        } label: {
-                            settingsRow(PillieLocalization.string(
-                                "settings.final_reminder.title",
-                                locale: locale
-                            ), value: store.lastCallReminderEnabled
-                                ? SettingsPresentation.time(
-                                    hour: store.lastCallReminderHour,
-                                    minute: store.lastCallReminderMinute,
-                                    locale: locale
-                                )
-                                : PillieLocalization.string("global.status.off", locale: locale))
-                        }
-                        .buttonStyle(.plain)
                     } else {
                         Button {
                             openSettingSheet { showSmartRemindersUpsell = true }
@@ -192,16 +175,6 @@ struct SettingsView: View {
                         } label: {
                             settingsRow(PillieLocalization.string(
                                 "settings.followup.retry_limit_title",
-                                locale: locale
-                            ), value: "Pillie+", valueColor: PillieTheme.coral, showLock: true)
-                        }
-                        .buttonStyle(.plain)
-                        divider
-                        Button {
-                            openSettingSheet { showSmartRemindersUpsell = true }
-                        } label: {
-                            settingsRow(PillieLocalization.string(
-                                "settings.final_reminder.title",
                                 locale: locale
                             ), value: "Pillie+", valueColor: PillieTheme.coral, showLock: true)
                         }
@@ -411,12 +384,6 @@ struct SettingsView: View {
         .sheet(isPresented: $showRetryLimitEditor) {
             AutoReminderRetryLimitEditor(store: store)
                 .presentationDetents([.height(500)])
-                .presentationDragIndicator(.hidden)
-                .presentationBackground(PillieTheme.bg)
-        }
-        .sheet(isPresented: $showLastCallEditor) {
-            LastCallReminderEditor(store: store)
-                .presentationDetents([.height(440)])
                 .presentationDragIndicator(.hidden)
                 .presentationBackground(PillieTheme.bg)
         }
@@ -1044,91 +1011,6 @@ private struct ReminderTimeEditor: View {
             store: store,
             hour: selection.hour ?? store.reminderHour,
             minute: selection.minute ?? store.reminderMinute
-        )
-    }
-}
-
-// MARK: - Last Call Reminder Editor
-
-private struct LastCallReminderEditor: View {
-    @Bindable var store: PillStore
-    @Environment(\.dismiss) private var dismiss
-    @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
-    @Environment(\.locale) private var locale
-
-    @State private var isEnabled: Bool = false
-    @State private var selectedTime = Date()
-
-    private let settingsFeedback = SettingsInteractionFeedback()
-
-    var body: some View {
-        SettingsSheetContainer(
-            title: PillieLocalization.string("settings.final_reminder.title", locale: locale),
-            bottomPadding: 0
-        ) {
-            VStack(spacing: 20) {
-                Text(PillieLocalization.string("settings.final_reminder.body", locale: locale))
-                    .font(.pillieCaption())
-                    .foregroundStyle(PillieTheme.textMuted)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, 28)
-
-                Toggle(
-                    PillieLocalization.string("settings.final_reminder.title", locale: locale),
-                    isOn: $isEnabled
-                )
-                    .toggleStyle(SwitchToggleStyle(tint: PillieTheme.coral))
-                    .font(.pillieBodyBold())
-                    .foregroundStyle(PillieTheme.textPrimary)
-                    .padding(.horizontal, 28)
-
-                DatePicker(
-                    "",
-                    selection: $selectedTime,
-                    displayedComponents: .hourAndMinute
-                )
-                .datePickerStyle(.wheel)
-                .labelsHidden()
-                .environment(\.locale, locale)
-                .frame(height: 150)
-                .opacity(isEnabled ? 1 : 0.4)
-                .disabled(!isEnabled)
-            }
-
-            Button {
-                settingsFeedback.commitScheduleSave(accessibilityReduceMotion: accessibilityReduceMotion)
-                saveLastCallReminder()
-                dismiss()
-            } label: {
-                Text(PillieLocalization.string("global.action.save", locale: locale))
-            }
-            .buttonStyle(.pillieDark)
-            .padding(.horizontal, 28)
-        }
-        .onAppear { seedFromStore() }
-    }
-
-    private func seedFromStore() {
-        isEnabled = store.lastCallReminderEnabled
-        selectedTime = Calendar.current.date(
-            from: DateComponents(
-                year: 2001,
-                month: 1,
-                day: 1,
-                hour: store.lastCallReminderHour,
-                minute: store.lastCallReminderMinute
-            )
-        ) ?? Date()
-    }
-
-    private func saveLastCallReminder() {
-        let selection = Calendar.current.dateComponents([.hour, .minute], from: selectedTime)
-        ScheduleCriticalSettingChange.saveSettingsLastCallReminder(
-            store: store,
-            enabled: isEnabled,
-            hour: selection.hour ?? store.lastCallReminderHour,
-            minute: selection.minute ?? store.lastCallReminderMinute
         )
     }
 }

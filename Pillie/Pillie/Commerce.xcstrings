@@ -2675,19 +2675,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Keeps pinging until you log today. You pick how often, how many, and the last ping."
+            "value": "Keeps pinging until you log today. You pick how often and how many."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pingt weiter, bis du heute einträgst. Du wählst wie oft, wie viele, und den letzten Ping."
+            "value": "Pingt weiter, bis du heute einträgst. Du wählst wie oft und wie viele."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Continua a mandare ping finché non registri oggi. Scegli ogni quanto, quanti, e l'ultimo ping."
+            "value": "Continua a mandare ping finché non registri oggi. Scegli ogni quanto e quanti."
           }
         }
       }
@@ -3273,19 +3273,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Write the ping in your own words. Plus lets you change the daily one and the last one."
+            "value": "Write the ping in your own words. Plus lets you change the daily one and the follow-up."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Schreib den Ping in deinen Worten. Plus ändert den täglichen und den letzten."
+            "value": "Schreib den Ping in deinen Worten. Plus ändert den täglichen und den Folge-Ping."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Scrivi il ping con le tue parole. Plus cambia quello giornaliero e l'ultimo."
+            "value": "Scrivi il ping con le tue parole. Plus cambia quello giornaliero e il follow-up."
           }
         }
       }

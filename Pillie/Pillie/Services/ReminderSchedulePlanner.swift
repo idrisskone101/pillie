@@ -10,27 +10,19 @@ struct ReminderSchedulePlanner {
     static let baseReminderCount = 7
     static let dueScanLimit = 120
     static let catchupDelayMinutes = 1
-    /// Minimum spacing between the day's first Due Action Reminder and the Last Call
-    /// re-fire. If the configured Last Call time is closer than this to the reminder
-    /// time, the Last Call is suppressed for that day so it stays a meaningful backstop.
-    static let lastCallMinimumGapMinutes = 60
-    /// An Auto-Reminder Retry firing within this window of the Last Call is dropped so
-    /// the two never arrive back-to-back.
-    static let lastCallRetryGuardMinutes = 15
     /// Reverse Trial expiry warnings (#168 / ADR 0007) fire on these trial days,
     /// counting the grant day as day 0 — the same clock as `ReverseTrialClock`,
     /// whose expiry lands at the local-day rollover after day 14.
     static let trialWarningDays = [10, 13]
-    /// Local hour the trial expiry warnings fire at: early evening, decoupled from
-    /// the user's Due Action Reminder time and ahead of the 9 PM Last Call default
-    /// so the informational nudge never stacks on an action reminder.
-    static let trialWarningHour = 19
+    /// Local hour the trial expiry warnings fire at: 8 PM local, decoupled from the
+    /// user's Due Action Reminder time so the informational nudge never stacks on an
+    /// action reminder.
+    static let trialWarningHour = 20
 
     enum DueReminderKind: String {
         case base
         case retry
         case snooze
-        case lastCall
     }
 
     struct SnoozeOverride {
@@ -62,14 +54,6 @@ struct ReminderSchedulePlanner {
         /// informational notice and is deliberately independent of
         /// `smartRemindersEnabled`.
         let cycleTransitionEnabled: Bool
-        /// Whether the Last Call Reminder (a single end-of-day re-fire of the Due Action
-        /// Reminder, fired only while the action is still untaken) is enabled. Like the
-        /// rest of Smart Reminders it is gated by `smartRemindersEnabled`: forced off for
-        /// free users (ADR 0004). Fires independently of the Auto-Reminder Retry cadence.
-        let lastCallEnabled: Bool
-        /// Configured Last Call time-of-day (local). Default 9:00 PM.
-        let lastCallHour: Int
-        let lastCallMinute: Int
         /// The Reverse Trial grant moment, if any (ADR 0007). Drives the day-10/13
         /// expiry warnings (#168); `nil` when no trial was ever granted.
         let trialGrantDate: Date?
@@ -137,9 +121,6 @@ struct ReminderSchedulePlanner {
         // mutated (ADR 0004).
         let effectiveRetryLimit = input.smartRemindersEnabled ? input.autoReminderRetryLimit : 0
         let effectiveSnoozeOverride = input.smartRemindersEnabled ? input.snoozeOverride : nil
-        // Last Call is a Smart Reminders perk: forced off for free users (ADR 0004),
-        // independent of the retry limit.
-        let lastCallEnabled = input.smartRemindersEnabled && input.lastCallEnabled
 
         let supplyIntent = planSupplyReminder(input)
         // The Cycle Transition Notice is free and not gated by `smartRemindersEnabled`.
@@ -168,10 +149,7 @@ struct ReminderSchedulePlanner {
         let baseDueActions = Array(dueActions.prefix(min(Self.baseReminderCount, dueReminderBudget)))
 
         var dueIntents: [DueReminderIntent] = []
-        var lastCallIntents: [DueReminderIntent] = []
-        var firstReminderByEpoch: [Int: Date] = [:]
         var retryAnchorByEpoch: [Int: Date] = [:]
-        var lastCallByEpoch: [Int: Date] = [:]
 
         for due in baseDueActions {
             let dueDay = input.calendar.startOfDay(for: due.date)
@@ -206,35 +184,12 @@ struct ReminderSchedulePlanner {
                         kind: firstKind
                     )
                 )
-                firstReminderByEpoch[dueEpoch] = firstReminderDate
             }
 
-            retryAnchorByEpoch[dueEpoch] = firstReminderByEpoch[dueEpoch] ?? anchor
-
-            // At most one Last Call per untaken due-action day, only when it sits at
-            // least `lastCallMinimumGapMinutes` after the day's first reminder.
-            if lastCallEnabled,
-               let lastCallDate = lastCallDateForDueDay(
-                   dueDay: dueDay,
-                   firstReminderDate: anchor,
-                   now: input.now,
-                   lastCallHour: input.lastCallHour,
-                   lastCallMinute: input.lastCallMinute,
-                   calendar: input.calendar
-               ) {
-                lastCallByEpoch[dueEpoch] = lastCallDate
-                lastCallIntents.append(
-                    DueReminderIntent(
-                        action: due,
-                        fireDate: lastCallDate,
-                        dueDayEpoch: dueEpoch,
-                        kind: .lastCall
-                    )
-                )
-            }
+            retryAnchorByEpoch[dueEpoch] = dueIntents.last(where: { $0.dueDayEpoch == dueEpoch })?.fireDate ?? anchor
         }
 
-        var plannedIntents = dueIntents + lastCallIntents
+        var plannedIntents = dueIntents
 
         let remainingBudget = max(0, dueReminderBudget - plannedIntents.count)
         if remainingBudget > 0,
@@ -248,14 +203,7 @@ struct ReminderSchedulePlanner {
                 budget: remainingBudget,
                 calendar: input.calendar
             )
-            // Drop any retry that would land within the guard window of the Last Call so
-            // the two never arrive back-to-back.
-            let guardInterval = TimeInterval(Self.lastCallRetryGuardMinutes * 60)
-            let deduped = retries.filter { retry in
-                guard let lastCall = lastCallByEpoch[retry.dueDayEpoch] else { return true }
-                return abs(retry.fireDate.timeIntervalSince(lastCall)) > guardInterval
-            }
-            plannedIntents.append(contentsOf: deduped)
+            plannedIntents.append(contentsOf: retries)
         }
 
         var intents = Array(plannedIntents.prefix(dueReminderBudget)).map(Intent.due)
@@ -500,8 +448,8 @@ struct ReminderSchedulePlanner {
         return now.addingTimeInterval(TimeInterval(Self.catchupDelayMinutes * 60))
     }
 
-    /// The day's original first-reminder moment, anchoring retry cadence and the
-    /// Last Call gap. Outside catch-up territory this is the configured time.
+    /// The day's original first-reminder moment, anchoring retry cadence. Outside
+    /// catch-up territory this is the configured time.
     private func originalFirstReminderDate(
         dueDay: Date,
         now: Date,
@@ -541,32 +489,6 @@ struct ReminderSchedulePlanner {
             servedBaseFireDate: nil,
             calendar: calendar
         )
-    }
-
-    /// The Last Call fire date for a due-action day, or nil when it should be suppressed.
-    /// Suppressed when the configured time is in the past, falls outside the due day, or
-    /// is less than `lastCallMinimumGapMinutes` after the day's first reminder.
-    private func lastCallDateForDueDay(
-        dueDay: Date,
-        firstReminderDate: Date,
-        now: Date,
-        lastCallHour: Int,
-        lastCallMinute: Int,
-        calendar: Calendar
-    ) -> Date? {
-        let configured = reminderDate(on: dueDay, hour: lastCallHour, minute: lastCallMinute, calendar: calendar)
-
-        guard configured > now,
-              configured < endOfDayExclusive(for: dueDay, calendar: calendar) else {
-            return nil
-        }
-
-        let minimumGap = TimeInterval(Self.lastCallMinimumGapMinutes * 60)
-        guard configured.timeIntervalSince(firstReminderDate) >= minimumGap else {
-            return nil
-        }
-
-        return configured
     }
 
     private func reminderDate(on day: Date, hour: Int, minute: Int, calendar: Calendar) -> Date {

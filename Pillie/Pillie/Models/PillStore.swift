@@ -29,10 +29,16 @@ class PillStore {
     }
 
     var reminderHour: Int {
-        didSet { UserDefaults.standard.set(reminderHour, forKey: Self.reminderHourKey) }
+        didSet {
+            UserDefaults.standard.set(reminderHour, forKey: Self.reminderHourKey)
+            handleReminderTimeChange()
+        }
     }
     var reminderMinute: Int {
-        didSet { UserDefaults.standard.set(reminderMinute, forKey: Self.reminderMinuteKey) }
+        didSet {
+            UserDefaults.standard.set(reminderMinute, forKey: Self.reminderMinuteKey)
+            handleReminderTimeChange()
+        }
     }
     var autoReminderIntervalMinutes: Int {
         didSet {
@@ -83,20 +89,6 @@ class PillStore {
     var contraceptiveMethod: ContraceptiveMethod {
         didSet { UserDefaults.standard.set(contraceptiveMethod.rawValue, forKey: Self.contraceptiveMethodKey) }
     }
-    /// Whether the Last Call Reminder — a single end-of-day re-fire of the Due Action
-    /// Reminder that fires only while the action is still untaken — is enabled. A Smart
-    /// Reminders perk: stored even for free users but gated off at notification build time
-    /// via the `pillie_plus` entitlement (ADR 0004). Default off.
-    var lastCallReminderEnabled: Bool {
-        didSet { UserDefaults.standard.set(lastCallReminderEnabled, forKey: Self.lastCallReminderEnabledKey) }
-    }
-    /// Configured Last Call time-of-day (24h). Default 21:00 (9:00 PM local).
-    var lastCallReminderHour: Int {
-        didSet { UserDefaults.standard.set(lastCallReminderHour, forKey: Self.lastCallReminderHourKey) }
-    }
-    var lastCallReminderMinute: Int {
-        didSet { UserDefaults.standard.set(lastCallReminderMinute, forKey: Self.lastCallReminderMinuteKey) }
-    }
     /// Raw custom Due Action Reminder title (Pillie+ perk). A Personalization Setting,
     /// not Tracking Data: it survives a contraception method change and a Tracking Data
     /// Reset, and is retained — but ignored — when Plus lapses (build-time gate lives in
@@ -116,15 +108,6 @@ class PillStore {
     /// Raw custom Auto-Reminder Retry body (Pillie+ perk). See `customRetryReminderTitle`.
     var customRetryReminderBody: String {
         didSet { UserDefaults.standard.set(customRetryReminderBody, forKey: Self.customRetryReminderBodyKey) }
-    }
-    /// Raw custom Last Call Reminder title (Pillie+ perk). Same Personalization-Setting
-    /// semantics as `customDueReminderTitle`; empty means "use the default Last Call copy".
-    var customLastCallReminderTitle: String {
-        didSet { UserDefaults.standard.set(customLastCallReminderTitle, forKey: Self.customLastCallReminderTitleKey) }
-    }
-    /// Raw custom Last Call Reminder body (Pillie+ perk). See `customLastCallReminderTitle`.
-    var customLastCallReminderBody: String {
-        didSet { UserDefaults.standard.set(customLastCallReminderBody, forKey: Self.customLastCallReminderBodyKey) }
     }
     /// Whether the Home Review Prompt's Sentiment Gate has been permanently answered
     /// (PRD #132 / ADR 0005). A positive OR negative response sets this once and the card
@@ -217,11 +200,12 @@ class PillStore {
     private var snapshotCacheByPackID: [UUID: [Int: PillScheduleSnapshot]] = [:]
     private var packTimeline: [PackTimelineEntry] = []
 
-    /// Epoch day the cached read model was last computed against. Snapshot statuses
-    /// are relative to `today` (upcoming vs missed, passive auto-taken, cycle-end
-    /// gaps), so crossing midnight with the app resident must invalidate the caches.
-    @ObservationIgnored private var lastKnownEpochDay: Int = 0
+    /// Dose-window token the cached read model was last computed against.
+    /// Status for action days is relative to the next reminder, so crossing
+    /// midnight or today's reminder time must invalidate the caches.
+    @ObservationIgnored private var lastKnownDoseContextToken: Int = 0
     @ObservationIgnored private var dayContextObservers: [NSObjectProtocol] = []
+    @ObservationIgnored private var doseWindowTimer: Timer?
 
     // MARK: - UserDefaults keys (settings only)
 
@@ -233,15 +217,10 @@ class PillStore {
     private static let patchRestockReminderThresholdPatchesKey = "pillie_patch_restock_threshold_patches"
     private static let contraceptiveMethodKey = "pillie_contraceptive_method"
     private static let cycleTransitionNoticeEnabledKey = "pillie_cycle_transition_notice_enabled"
-    private static let lastCallReminderEnabledKey = "pillie_last_call_reminder_enabled"
-    private static let lastCallReminderHourKey = "pillie_last_call_reminder_hour"
-    private static let lastCallReminderMinuteKey = "pillie_last_call_reminder_minute"
     private static let customDueReminderTitleKey = "pillie_custom_due_reminder_title"
     private static let customDueReminderBodyKey = "pillie_custom_due_reminder_body"
     private static let customRetryReminderTitleKey = "pillie_custom_retry_reminder_title"
     private static let customRetryReminderBodyKey = "pillie_custom_retry_reminder_body"
-    private static let customLastCallReminderTitleKey = "pillie_custom_last_call_reminder_title"
-    private static let customLastCallReminderBodyKey = "pillie_custom_last_call_reminder_body"
     private static let reviewPromptPermanentlySuppressedKey = "pillie_review_prompt_permanently_suppressed"
     private static let reviewPromptLastSoftDismissalKey = "pillie_review_prompt_last_soft_dismissal"
     private static let reviewPromptSoftDismissalCountKey = "pillie_review_prompt_soft_dismissal_count"
@@ -273,6 +252,18 @@ class PillStore {
         startOfDaySafe(PillieClock.now)
     }
 
+    /// Calendar day whose 24-hour reminder window is still the live check-in.
+    var activeDoseDate: Date {
+        DoseWindow.activeDoseDate(
+            now: PillieClock.now,
+            hour: reminderHour,
+            minute: reminderMinute
+        ) { yesterday in
+            guard let snapshot = scheduleSnapshot(for: yesterday) else { return false }
+            return snapshot.isDue && snapshot.status != .taken && snapshot.status != .breakDay
+        }
+    }
+
     var activePack: PillPack? {
         if let current = packs.first(where: { $0.isCurrent }) {
             return current
@@ -281,7 +272,7 @@ class PillStore {
     }
 
     var currentDayIndex: Int {
-        pack.cycleDayIndex(on: today)
+        pack.cycleDayIndex(on: activeDoseDate)
     }
 
     var daysOnCurrentPack: Int {
@@ -430,25 +421,13 @@ class PillStore {
         "\(refillReminderThresholdDays) days before end"
     }
 
-    var lastCallReminderTimeDisplay: String {
-        let h = lastCallReminderHour
-        let m = lastCallReminderMinute
-        let period = h >= 12 ? "PM" : "AM"
-        let displayHour = h == 0 ? 12 : (h > 12 ? h - 12 : h)
-        return String(format: "%d:%02d %@", displayHour, m, period)
-    }
-
-    var lastCallReminderDisplay: String {
-        lastCallReminderEnabled ? lastCallReminderTimeDisplay : "Off"
-    }
-
     var patchRestockReminderThresholdDisplay: String {
         let patches = patchRestockReminderThresholdPatches
         return patches == 1 ? "1 patch left" : "\(patches) patches left"
     }
 
     var isTodayTaken: Bool {
-        statusForDate(today) == .taken
+        statusForDate(activeDoseDate) == .taken
     }
 
     /// Whether today requires no blocking — either taken, passive active, or a break day.
@@ -457,7 +436,7 @@ class PillStore {
     }
 
     var isTodayPassiveOrBreak: Bool {
-        guard let snapshot = scheduleSnapshot(for: today) else { return false }
+        guard let snapshot = scheduleSnapshot(for: activeDoseDate) else { return false }
         return snapshot.isPassiveActive || snapshot.isBreak
     }
 
@@ -495,7 +474,7 @@ class PillStore {
 
     var todayDueAction: DoseScheduleAction? {
         guard !isRefillDue else { return nil }
-        guard let action = dueAction(on: today) else { return nil }
+        guard let action = dueAction(on: activeDoseDate) else { return nil }
         return action.type.requiresUserAction ? action : nil
     }
 
@@ -526,7 +505,7 @@ class PillStore {
 
     var alarmAction: DoseScheduleAction? {
         guard !isRefillDue else { return nil }
-        return nextUntakenDueAction(from: today)
+        return nextUntakenDueAction(from: activeDoseDate)
     }
 
     var alarmBadge: String {
@@ -710,7 +689,7 @@ class PillStore {
 
     func markTodayAsTaken() {
         let wasTodayHandled = isTodayHandled
-        markActionAsTaken(on: today)
+        markActionAsTaken(on: activeDoseDate)
         if !wasTodayHandled && isTodayHandled {
             protocolChangeVersion &+= 1
         }
@@ -721,7 +700,7 @@ class PillStore {
 
     func unmarkTodayAsTaken() {
         let wasTodayHandled = isTodayHandled
-        unmarkActionAsTaken(on: today)
+        unmarkActionAsTaken(on: activeDoseDate)
         if wasTodayHandled && !isTodayHandled {
             protocolChangeVersion &+= 1
         }
@@ -1288,8 +1267,10 @@ class PillStore {
         self.packs = resolvedPacks
 
         // Load settings from UserDefaults
-        self.reminderHour = defaults.object(forKey: Self.reminderHourKey) as? Int ?? 8
-        self.reminderMinute = defaults.object(forKey: Self.reminderMinuteKey) as? Int ?? 0
+        let loadedReminderHour = defaults.object(forKey: Self.reminderHourKey) as? Int ?? 8
+        let loadedReminderMinute = defaults.object(forKey: Self.reminderMinuteKey) as? Int ?? 0
+        self.reminderHour = loadedReminderHour
+        self.reminderMinute = loadedReminderMinute
         self.autoReminderIntervalMinutes = Self.normalizedAutoReminderInterval(
             defaults.object(forKey: Self.autoReminderIntervalKey) as? Int ?? 10
         )
@@ -1305,16 +1286,11 @@ class PillStore {
 
         // Default ON: the Cycle Transition Notice is a free clarity aid (#123).
         self.cycleTransitionNoticeEnabled = defaults.object(forKey: Self.cycleTransitionNoticeEnabledKey) as? Bool ?? true
-        self.lastCallReminderEnabled = defaults.object(forKey: Self.lastCallReminderEnabledKey) as? Bool ?? false
-        self.lastCallReminderHour = defaults.object(forKey: Self.lastCallReminderHourKey) as? Int ?? 21
-        self.lastCallReminderMinute = defaults.object(forKey: Self.lastCallReminderMinuteKey) as? Int ?? 0
 
         self.customDueReminderTitle = defaults.string(forKey: Self.customDueReminderTitleKey) ?? ""
         self.customDueReminderBody = defaults.string(forKey: Self.customDueReminderBodyKey) ?? ""
         self.customRetryReminderTitle = defaults.string(forKey: Self.customRetryReminderTitleKey) ?? ""
         self.customRetryReminderBody = defaults.string(forKey: Self.customRetryReminderBodyKey) ?? ""
-        self.customLastCallReminderTitle = defaults.string(forKey: Self.customLastCallReminderTitleKey) ?? ""
-        self.customLastCallReminderBody = defaults.string(forKey: Self.customLastCallReminderBodyKey) ?? ""
 
         // Default off: set once a user answers the Review Prompt's Sentiment Gate (#133).
         self.reviewPromptPermanentlySuppressed = defaults.bool(forKey: Self.reviewPromptPermanentlySuppressedKey)
@@ -1377,7 +1353,8 @@ class PillStore {
 
         rebuildReadIndexes()
 
-        lastKnownEpochDay = epochDay(for: PillieClock.now)
+        lastKnownDoseContextToken = doseContextToken()
+        scheduleDoseWindowRefresh()
         dayContextObservers.append(
             NotificationCenter.default.addObserver(
                 forName: .NSCalendarDayChanged, object: nil, queue: .main
@@ -1395,6 +1372,7 @@ class PillStore {
     }
 
     deinit {
+        doseWindowTimer?.invalidate()
         for observer in dayContextObservers {
             NotificationCenter.default.removeObserver(observer)
         }
@@ -1402,23 +1380,68 @@ class PillStore {
 
     // MARK: - Day Rollover
 
-    /// Drops the day-relative read model when the calendar day changed while the app
-    /// stayed resident (midnight rollover, long suspension). Without this, yesterday's
-    /// untaken day keeps rendering as "upcoming" and Home/Calendar never advance until
-    /// the next cold launch. Cheap no-op while the day is unchanged.
+    /// Drops the day-relative read model when the dose window changed while the
+    /// app stayed resident (midnight, reminder-time close, long suspension).
     func refreshDayContextIfNeeded() {
         refreshDayContext(force: false)
     }
 
     private func refreshDayContext(force: Bool) {
-        let currentEpochDay = epochDay(for: PillieClock.now)
-        guard force || currentEpochDay != lastKnownEpochDay else { return }
-        lastKnownEpochDay = currentEpochDay
+        let currentToken = doseContextToken()
+        guard force || currentToken != lastKnownDoseContextToken else { return }
+        lastKnownDoseContextToken = currentToken
         invalidateAllSnapshotCaches()
-        // Observable nudge: HistoryView resets to the current month and the cycle
-        // strip recenters on the new day.
         protocolChangeVersion &+= 1
         syncTodayTakenToAppGroup()
+        scheduleDoseWindowRefresh()
+    }
+
+    private func doseContextToken() -> Int {
+        DoseWindow.contextToken(
+            now: PillieClock.now,
+            hour: reminderHour,
+            minute: reminderMinute
+        )
+    }
+
+    private func handleReminderTimeChange() {
+        invalidateAllSnapshotCaches()
+        lastKnownDoseContextToken = doseContextToken()
+        scheduleDoseWindowRefresh()
+    }
+
+    private func scheduleDoseWindowRefresh() {
+        doseWindowTimer?.invalidate()
+        let now = PillieClock.now
+        let calendar = Calendar.current
+        let start = calendar.startOfDay(for: now)
+        guard
+            let reminder = calendar.date(
+                bySettingHour: reminderHour,
+                minute: reminderMinute,
+                second: 0,
+                of: start
+            ),
+            reminder > now
+        else {
+            doseWindowTimer = nil
+            return
+        }
+        doseWindowTimer = Timer.scheduledTimer(
+            withTimeInterval: reminder.timeIntervalSince(now),
+            repeats: false
+        ) { [weak self] _ in
+            self?.refreshDayContext(force: true)
+        }
+    }
+
+    private func isDoseWindowOpen(for day: Date) -> Bool {
+        DoseWindow.isOpen(
+            day: day,
+            now: PillieClock.now,
+            hour: reminderHour,
+            minute: reminderMinute
+        )
     }
 
     #if DEBUG
@@ -1816,7 +1839,7 @@ class PillStore {
                     resolvedStatus = hasNoTrackingContext ? .noData : .breakDay
                 } else if due.type.isPassiveActive {
                     resolvedStatus = hasNoTrackingContext ? .noData : (day < today ? .taken : .upcoming)
-                } else if day < today {
+                } else if !isDoseWindowOpen(for: day) {
                     resolvedStatus = hasNoTrackingContext ? .noData : .missed
                 } else {
                     resolvedStatus = .upcoming
@@ -1829,7 +1852,7 @@ class PillStore {
                 resolvedStatus = hasNoTrackingContext ? .noData : .breakDay
             } else if due.type.isPassiveActive {
                 resolvedStatus = hasNoTrackingContext ? .noData : (day < today ? .taken : .upcoming)
-            } else if day < today {
+            } else if !isDoseWindowOpen(for: day) {
                 resolvedStatus = hasNoTrackingContext ? .noData : .missed
             } else {
                 resolvedStatus = .upcoming

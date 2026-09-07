@@ -78,8 +78,6 @@ private final class InterventionAnalyticsRecorder: AnalyticsTracking {
         bodyCustomized: Bool?,
         retryTitleCustomized: Bool?,
         retryBodyCustomized: Bool?,
-        lastCallTitleCustomized: Bool?,
-        lastCallBodyCustomized: Bool?
     ) {
         events.append(Event(event: event, interventionCount: interventionCount, isPlus: isPlus))
     }
