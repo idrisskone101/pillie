@@ -161,4 +161,31 @@ enum ScreenTimeSharedState {
             defaults?.synchronize()
         }
     }
+
+    static var blockingSnoozeIntervalMinutes: Int {
+        get {
+            let raw = defaults?.object(forKey: AppGroupKeys.blockingSnoozeIntervalMinutes) as? Int
+                ?? BlockingSnoozePolicy.defaultIntervalMinutes
+            return BlockingSnoozePolicy.normalizedInterval(raw)
+        }
+        set {
+            defaults?.set(
+                BlockingSnoozePolicy.normalizedInterval(newValue),
+                forKey: AppGroupKeys.blockingSnoozeIntervalMinutes
+            )
+            defaults?.synchronize()
+        }
+    }
+
+    static var blockingDueDayEpoch: Int? {
+        get { defaults?.object(forKey: AppGroupKeys.blockingDueDayEpoch) as? Int }
+        set {
+            if let newValue {
+                defaults?.set(newValue, forKey: AppGroupKeys.blockingDueDayEpoch)
+            } else {
+                defaults?.removeObject(forKey: AppGroupKeys.blockingDueDayEpoch)
+            }
+            defaults?.synchronize()
+        }
+    }
 }

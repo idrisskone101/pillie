@@ -296,7 +296,7 @@ final class NotificationManager {
         if AppBlockingManager.shared.isEffectivelyOn {
             switch AppBlockingManager.shared.performBlockingSnooze(
                 dueDayEpoch: dueEpoch,
-                intervalMinutes: store.autoReminderIntervalMinutes
+                intervalMinutes: store.blockingSnoozeIntervalMinutes
             ) {
             case .accepted(let until, _):
                 rescheduleAfterSnooze(store: store, dueDayEpoch: dueEpoch, firstFireDate: until)

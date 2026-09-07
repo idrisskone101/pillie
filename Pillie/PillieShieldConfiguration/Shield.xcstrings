@@ -70,6 +70,29 @@
         }
       }
     },
+    "shield.secondary_action": {
+      "comment": "Extension snooze button; uses the Settings blocking interval [shield]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Snooze for %lld minutes"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Posponi di %lld minuti"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld Minuten pausieren"
+          }
+        }
+      }
+    },
     "shield.subtitle": {
       "comment": "Extension subtitle; method-neutral [shield]",
       "localizations": {

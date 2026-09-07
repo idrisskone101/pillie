@@ -33,6 +33,17 @@ enum SettingsPresentation {
         )
     }
 
+    static func blockingSnoozeInterval(
+        minutes: Int,
+        locale: Locale = .current
+    ) -> String {
+        PillieLocalization.formatted(
+            "settings.blocking.snooze_value",
+            locale: locale,
+            arguments: Int64(minutes)
+        )
+    }
+
     static func cycleDay(
         day: Int,
         total: Int,

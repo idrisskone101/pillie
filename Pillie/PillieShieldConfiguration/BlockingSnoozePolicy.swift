@@ -1,6 +1,6 @@
 //
 //  BlockingSnoozePolicy.swift
-//  Pillie
+//  Keep byte-identical with Pillie/Services/BlockingSnoozePolicy.swift
 //
 //  One blocking snooze per due-day instance, three per calendar month.
 //

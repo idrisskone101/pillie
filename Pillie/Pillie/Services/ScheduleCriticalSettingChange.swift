@@ -74,6 +74,13 @@ enum ScheduleCriticalSettingChange {
         ProductAnalyticsTelemetry.live.autoReminderIntervalSaved()
     }
 
+    static func saveSettingsBlockingSnoozeInterval(
+        store: PillStore,
+        intervalMinutes: Int
+    ) {
+        store.blockingSnoozeIntervalMinutes = intervalMinutes
+    }
+
     static func saveSettingsAutoReminderRetryLimit(
         store: PillStore,
         retryLimit: Int

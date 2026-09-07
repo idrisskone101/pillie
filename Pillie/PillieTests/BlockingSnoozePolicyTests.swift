@@ -109,6 +109,12 @@ struct BlockingSnoozePolicyTests {
         #expect(remaining == 2)
     }
 
+    @Test func `Unknown interval falls back to thirty minutes`() {
+        #expect(BlockingSnoozePolicy.normalizedInterval(10) == 30)
+        #expect(BlockingSnoozePolicy.normalizedInterval(15) == 15)
+        #expect(BlockingSnoozePolicy.normalizedInterval(60) == 60)
+    }
+
     @Test func `Hold is active only before the until date`() {
         let until = date(2026, 9, 6, hour: 8, minute: 15)
         #expect(BlockingSnoozePolicy.isHoldActive(until: until, now: date(2026, 9, 6, hour: 8, minute: 14)))

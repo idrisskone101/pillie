@@ -820,7 +820,7 @@ struct HomeView: View {
         guard let dueDayEpoch = blockingSnoozeDueDayEpoch else { return }
         let attempt = blockingManager.performBlockingSnooze(
             dueDayEpoch: dueDayEpoch,
-            intervalMinutes: store.autoReminderIntervalMinutes
+            intervalMinutes: store.blockingSnoozeIntervalMinutes
         )
         guard case .accepted(let until, _) = attempt else { return }
         NotificationManager.shared.rescheduleAfterSnooze(
