@@ -234,8 +234,6 @@ final class GermanLocalizationContractTests: XCTestCase {
             dueBody: "Nicht ändern — Byte für Byte\nzweite Zeile",
             retryTitle: "Retry: 12:34",
             retryBody: "Apostroph ' und Umlaut ü",
-            lastCallTitle: "FINAL_custom",
-            lastCallBody: "🌙"
         )
         XCTAssertEqual(CustomReminderDraft(messages: authored).messages, authored)
     }
@@ -279,8 +277,6 @@ final class GermanLocalizationContractTests: XCTestCase {
                 dueBody: "Eine sanfte Erinnerung an deine Routine.",
                 retryTitle: "Folgeerinnerung",
                 retryBody: "Wenn du bereit bist, denk daran, heute einzuchecken.",
-                lastCallTitle: "Letzte geplante Erinnerung",
-                lastCallBody: "Für heute ist noch eine letzte Erinnerung geplant."
             )
         )
 
@@ -289,8 +285,6 @@ final class GermanLocalizationContractTests: XCTestCase {
             dueBody: "Unverändert\nzweite Zeile",
             retryTitle: "Benutzerdefiniert",
             retryBody: "Text ' mit Umlaut ü",
-            lastCallTitle: "FINAL_custom",
-            lastCallBody: "🌙"
         )
         XCTAssertEqual(CustomReminderDraft(messages: authored).messages, authored)
     }
@@ -428,7 +422,7 @@ final class GermanLocalizationContractTests: XCTestCase {
             "Hey, der kurze Check-in ist noch offen. Check-in, wenn du soweit bist"
         )
         XCTAssertEqual(
-            actions[0].localizedFinalBody(locale: german),
+            PillieLocalization.string("notification.final.body", locale: german),
             "Für heute noch kein Check-in."
         )
         XCTAssertEqual(

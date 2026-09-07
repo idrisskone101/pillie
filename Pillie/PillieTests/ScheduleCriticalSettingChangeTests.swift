@@ -43,6 +43,7 @@ final class ScheduleCriticalSettingChangeTests: XCTestCase {
         XCTAssertEqual(fixture.store.reminderMinute, 15)
     }
 
+
     func testSettingsAutoReminderIntervalSaveMutatesRetryCadence() throws {
         let fixture = try InMemoryStoreFactory.makeStore(
             now: InMemoryStoreFactory.fixedDate("2026-06-03")
@@ -114,8 +115,6 @@ final class ScheduleCriticalSettingChangeTests: XCTestCase {
             body: messages.dueBody,
             retryTitle: messages.retryTitle,
             retryBody: messages.retryBody,
-            lastCallTitle: messages.lastCallTitle,
-            lastCallBody: messages.lastCallBody,
             preset: .direct,
             editedAfterPreset: false
         )
@@ -124,7 +123,5 @@ final class ScheduleCriticalSettingChangeTests: XCTestCase {
         XCTAssertEqual(fixture.store.customDueReminderBody, messages.dueBody)
         XCTAssertEqual(fixture.store.customRetryReminderTitle, messages.retryTitle)
         XCTAssertEqual(fixture.store.customRetryReminderBody, messages.retryBody)
-        XCTAssertEqual(fixture.store.customLastCallReminderTitle, messages.lastCallTitle)
-        XCTAssertEqual(fixture.store.customLastCallReminderBody, messages.lastCallBody)
     }
 }

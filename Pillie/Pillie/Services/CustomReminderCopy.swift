@@ -10,8 +10,6 @@ struct CustomReminderMessages: Equatable {
     var dueBody: String
     var retryTitle: String
     var retryBody: String
-    var lastCallTitle: String
-    var lastCallBody: String
 }
 
 struct CustomReminderDraft: Equatable {
@@ -107,9 +105,7 @@ enum CustomReminderPreset: String, CaseIterable, Identifiable {
             ),
             dueBody: PillieLocalization.string("\(stem).primary", locale: locale),
             retryTitle: PillieLocalization.string("notification.followup.title", locale: locale),
-            retryBody: PillieLocalization.string("\(stem).followup", locale: locale),
-            lastCallTitle: PillieLocalization.string("notification.final.title", locale: locale),
-            lastCallBody: PillieLocalization.string("\(stem).final", locale: locale)
+            retryBody: PillieLocalization.string("\(stem).followup", locale: locale)
         )
     }
 
@@ -121,8 +117,6 @@ enum CustomReminderPreset: String, CaseIterable, Identifiable {
                 dueBody: "It’s time to check in with Pillie.",
                 retryTitle: "Still time to check in",
                 retryBody: "Open Pillie when you’re ready.",
-                lastCallTitle: "One last reminder",
-                lastCallBody: "Open Pillie to update today’s status."
             )
         case .direct:
             CustomReminderMessages(
@@ -130,8 +124,6 @@ enum CustomReminderPreset: String, CaseIterable, Identifiable {
                 dueBody: "Open Pillie to mark today’s pill.",
                 retryTitle: "Pillie check-in waiting",
                 retryBody: "Open Pillie to update your status.",
-                lastCallTitle: "Final Pillie reminder",
-                lastCallBody: "Open Pillie to complete or update today’s check-in."
             )
         case .encouraging:
             CustomReminderMessages(
@@ -139,8 +131,6 @@ enum CustomReminderPreset: String, CaseIterable, Identifiable {
                 dueBody: "Open Pillie for today’s check-in.",
                 retryTitle: "Keep your routine moving",
                 retryBody: "Open Pillie to update today’s status.",
-                lastCallTitle: "Finish today’s check-in",
-                lastCallBody: "Open Pillie for one final check-in."
             )
         case .privateDiscreet:
             CustomReminderMessages(
@@ -148,8 +138,6 @@ enum CustomReminderPreset: String, CaseIterable, Identifiable {
                 dueBody: "Open Pillie when convenient.",
                 retryTitle: "Check-in still pending",
                 retryBody: "Open Pillie when convenient.",
-                lastCallTitle: "Final check-in reminder",
-                lastCallBody: "Open Pillie to update your status."
             )
         }
     }

@@ -120,26 +120,6 @@ struct DoseScheduleAction: Hashable {
     func localizedFollowUpBody(locale: Locale = .current) -> String {
         PillieLocalization.string("notification.followup.body", locale: locale)
     }
-
-    func localizedFinalTitle(locale: Locale = .current) -> String {
-        PillieLocalization.string("notification.final.title", locale: locale)
-    }
-
-    func localizedFinalBody(locale: Locale = .current) -> String {
-        PillieLocalization.string("notification.final.body", locale: locale)
-    }
-
-    /// Title for the end-of-day Last Call backstop. Pillie-authored, single title across
-    /// methods; the body carries the method-specific action.
-    var lastCallReminderTitle: String {
-        localizedFinalTitle()
-    }
-
-    /// Method-aware body for the Last Call backstop. Obeys the medical-claims copy rules
-    /// — no "never miss", no "protect", no efficacy framing.
-    var lastCallReminderBody: String {
-        localizedFinalBody()
-    }
 }
 
 enum DoseScheduleEngine {

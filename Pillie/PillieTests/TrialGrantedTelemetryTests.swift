@@ -83,8 +83,6 @@ private final class TrialGrantedAnalyticsRecorder: AnalyticsTracking {
         bodyCustomized: Bool?,
         retryTitleCustomized: Bool?,
         retryBodyCustomized: Bool?,
-        lastCallTitleCustomized: Bool?,
-        lastCallBodyCustomized: Bool?
     ) {
         events.append(Event(event: event, source: source, step: step))
     }

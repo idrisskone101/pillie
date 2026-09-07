@@ -202,8 +202,6 @@ protocol AnalyticsTracking {
     bodyCustomized: Bool?,
     retryTitleCustomized: Bool?,
     retryBodyCustomized: Bool?,
-    lastCallTitleCustomized: Bool?,
-    lastCallBodyCustomized: Bool?
   )
 
   func trackCustomReminderSave(
@@ -212,8 +210,6 @@ protocol AnalyticsTracking {
     bodyCustomized: Bool,
     retryTitleCustomized: Bool,
     retryBodyCustomized: Bool,
-    lastCallTitleCustomized: Bool,
-    lastCallBodyCustomized: Bool,
     preset: CustomReminderPreset?,
     editedAfterPreset: Bool
   )
@@ -318,8 +314,6 @@ extension AnalyticsTracking {
     bodyCustomized: Bool,
     retryTitleCustomized: Bool,
     retryBodyCustomized: Bool,
-    lastCallTitleCustomized: Bool,
-    lastCallBodyCustomized: Bool,
     preset: CustomReminderPreset?,
     editedAfterPreset: Bool
   ) {
@@ -343,8 +337,6 @@ extension AnalyticsTracking {
       bodyCustomized: bodyCustomized,
       retryTitleCustomized: retryTitleCustomized,
       retryBodyCustomized: retryBodyCustomized,
-      lastCallTitleCustomized: lastCallTitleCustomized,
-      lastCallBodyCustomized: lastCallBodyCustomized
     )
   }
 
@@ -490,8 +482,6 @@ extension AnalyticsTracking {
       bodyCustomized: nil,
       retryTitleCustomized: nil,
       retryBodyCustomized: nil,
-      lastCallTitleCustomized: nil,
-      lastCallBodyCustomized: nil
     )
   }
 
@@ -827,8 +817,6 @@ struct AnalyticsPayload {
   let bodyCustomized: Bool?
   let retryTitleCustomized: Bool?
   let retryBodyCustomized: Bool?
-  let lastCallTitleCustomized: Bool?
-  let lastCallBodyCustomized: Bool?
   let reminderPreset: CustomReminderPreset?
   let reminderPresetEdited: Bool?
 
@@ -862,8 +850,6 @@ struct AnalyticsPayload {
     bodyCustomized: Bool? = nil,
     retryTitleCustomized: Bool? = nil,
     retryBodyCustomized: Bool? = nil,
-    lastCallTitleCustomized: Bool? = nil,
-    lastCallBodyCustomized: Bool? = nil,
     reminderPreset: CustomReminderPreset? = nil,
     reminderPresetEdited: Bool? = nil
   ) {
@@ -896,8 +882,6 @@ struct AnalyticsPayload {
     self.bodyCustomized = bodyCustomized
     self.retryTitleCustomized = retryTitleCustomized
     self.retryBodyCustomized = retryBodyCustomized
-    self.lastCallTitleCustomized = lastCallTitleCustomized
-    self.lastCallBodyCustomized = lastCallBodyCustomized
     self.reminderPreset = reminderPreset
     self.reminderPresetEdited = reminderPresetEdited
   }
@@ -975,12 +959,6 @@ struct AnalyticsPayload {
     }
     if let retryBodyCustomized {
       properties["retry_body_customized"] = .bool(retryBodyCustomized)
-    }
-    if let lastCallTitleCustomized {
-      properties["last_call_title_customized"] = .bool(lastCallTitleCustomized)
-    }
-    if let lastCallBodyCustomized {
-      properties["last_call_body_customized"] = .bool(lastCallBodyCustomized)
     }
     if let reminderPreset {
       properties["reminder_preset"] = .string(reminderPreset.rawValue)
@@ -1101,8 +1079,6 @@ final class AnalyticsManager: AnalyticsTracking {
     bodyCustomized: Bool? = nil,
     retryTitleCustomized: Bool? = nil,
     retryBodyCustomized: Bool? = nil,
-    lastCallTitleCustomized: Bool? = nil,
-    lastCallBodyCustomized: Bool? = nil
   ) {
     let payload = AnalyticsPayload(
       source: source,
@@ -1123,8 +1099,6 @@ final class AnalyticsManager: AnalyticsTracking {
       bodyCustomized: bodyCustomized,
       retryTitleCustomized: retryTitleCustomized,
       retryBodyCustomized: retryBodyCustomized,
-      lastCallTitleCustomized: lastCallTitleCustomized,
-      lastCallBodyCustomized: lastCallBodyCustomized
     )
 
     capture(event, payload: payload, source: source, step: step)
@@ -1136,8 +1110,6 @@ final class AnalyticsManager: AnalyticsTracking {
     bodyCustomized: Bool,
     retryTitleCustomized: Bool,
     retryBodyCustomized: Bool,
-    lastCallTitleCustomized: Bool,
-    lastCallBodyCustomized: Bool,
     preset: CustomReminderPreset?,
     editedAfterPreset: Bool
   ) {
@@ -1149,8 +1121,6 @@ final class AnalyticsManager: AnalyticsTracking {
       bodyCustomized: bodyCustomized,
       retryTitleCustomized: retryTitleCustomized,
       retryBodyCustomized: retryBodyCustomized,
-      lastCallTitleCustomized: lastCallTitleCustomized,
-      lastCallBodyCustomized: lastCallBodyCustomized,
       reminderPreset: preset,
       reminderPresetEdited: preset == nil ? nil : editedAfterPreset
     )

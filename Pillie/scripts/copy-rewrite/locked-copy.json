@@ -594,9 +594,9 @@
       "key": "paywall.upsell.smart_reminders.body",
       "create": true,
       "comment": "Smart Reminders plus-gate body. Not the blocking body.",
-      "en": "Keeps pinging until you log today. You pick how often, how many, and the last ping.",
-      "de": "Pingt weiter, bis du heute einträgst. Du wählst wie oft, wie viele, und den letzten Ping.",
-      "it": "Continua a mandare ping finché non registri oggi. Scegli ogni quanto, quanti, e l'ultimo ping."
+      "en": "Keeps pinging until you log today. You pick how often and how many.",
+      "de": "Pingt weiter, bis du heute einträgst. Du wählst wie oft und wie viele.",
+      "it": "Continua a mandare ping finché non registri oggi. Scegli ogni quanto e quanti."
     },
     {
       "issue": "ENG-67",
@@ -604,9 +604,9 @@
       "key": "paywall.upsell.custom_messages.body",
       "create": true,
       "comment": "Custom reminder messages plus-gate body",
-      "en": "Write the ping in your own words. Plus lets you change the daily one and the last one.",
-      "de": "Schreib den Ping in deinen Worten. Plus ändert den täglichen und den letzten.",
-      "it": "Scrivi il ping con le tue parole. Plus cambia quello giornaliero e l'ultimo."
+      "en": "Write the ping in your own words. Plus lets you change the daily one and the follow-up.",
+      "de": "Schreib den Ping in deinen Worten. Plus ändert den täglichen und den Folge-Ping.",
+      "it": "Scrivi il ping con le tue parole. Plus cambia quello giornaliero e il follow-up."
     },
     {
       "issue": "ENG-66",
