@@ -1422,6 +1422,9 @@ class PillStore {
                 self?.refreshDayContext(force: true)
             }
         )
+
+        // didSet does not run during init; the shield reads this App Group value.
+        ScreenTimeSharedState.blockingSnoozeIntervalMinutes = blockingSnoozeIntervalMinutes
     }
 
     deinit {

@@ -37,10 +37,21 @@ enum SettingsPresentation {
         minutes: Int,
         locale: Locale = .current
     ) -> String {
-        PillieLocalization.formatted(
-            "settings.blocking.snooze_value",
-            locale: locale,
-            arguments: Int64(minutes)
+        BlockingSnoozePolicy.formattedDuration(
+            minutes: minutes,
+            minutesFormat: PillieLocalization.string(
+                "settings.blocking.snooze_value",
+                locale: locale
+            ),
+            hour: PillieLocalization.string(
+                "settings.blocking.snooze_value.hour",
+                locale: locale
+            ),
+            hoursFormat: PillieLocalization.string(
+                "settings.blocking.snooze_value.hours",
+                locale: locale
+            ),
+            locale: locale
         )
     }
 

@@ -26,11 +26,32 @@ enum BlockingSnoozeAttempt: Equatable, Sendable {
 
 enum BlockingSnoozePolicy {
     static let monthlyLimit = 3
-    static let intervalOptions = [15, 30, 60]
+    static let intervalOptions = [30, 60, 120, 180]
     static let defaultIntervalMinutes = 30
 
     static func normalizedInterval(_ value: Int) -> Int {
         intervalOptions.contains(value) ? value : defaultIntervalMinutes
+    }
+
+    static func hourCount(fromMinutes minutes: Int) -> Int? {
+        guard minutes >= 60, minutes % 60 == 0 else { return nil }
+        return minutes / 60
+    }
+
+    /// Duration words for Settings and the shield button. Callers pass their
+    /// own localized templates so "2 hours" stays identical on both surfaces.
+    static func formattedDuration(
+        minutes: Int,
+        minutesFormat: String,
+        hour: String,
+        hoursFormat: String,
+        locale: Locale = .current
+    ) -> String {
+        if let hours = hourCount(fromMinutes: minutes) {
+            if hours == 1 { return hour }
+            return String(format: hoursFormat, locale: locale, Int64(hours))
+        }
+        return String(format: minutesFormat, locale: locale, Int64(minutes))
     }
 
     static func monthStartEpochDay(for now: Date, calendar: Calendar = .current) -> Int {

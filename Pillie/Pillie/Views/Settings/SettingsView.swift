@@ -461,7 +461,7 @@ struct SettingsView: View {
         }
         .sheet(isPresented: $showBlockingSnoozeEditor) {
             BlockingSnoozeIntervalEditor(store: store)
-                .presentationDetents([.height(420)])
+                .presentationDetents([.height(500)])
                 .presentationDragIndicator(.hidden)
                 .presentationBackground(PillieTheme.bg)
         }

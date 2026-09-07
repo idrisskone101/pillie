@@ -184,6 +184,14 @@ final class GermanLocalizationContractTests: XCTestCase {
             "30 Minuten"
         )
         XCTAssertEqual(
+            SettingsPresentation.blockingSnoozeInterval(minutes: 60, locale: german),
+            "1 Stunde"
+        )
+        XCTAssertEqual(
+            SettingsPresentation.blockingSnoozeInterval(minutes: 180, locale: german),
+            "3 Stunden"
+        )
+        XCTAssertEqual(
             SettingsPresentation.cycleDay(day: 3, total: 28, locale: german),
             "Tag 3 von 28"
         )

@@ -49,12 +49,9 @@ class PillieShieldActionExtension: ShieldActionDelegate {
     }
 
     private nonisolated func performBlockingSnooze() -> ShieldActionResponse {
-        guard let dueDayEpoch = BlockingSnoozeAppGroup.dueDayEpoch else {
-            return .none
-        }
         let outcome = BlockingSnoozePolicy.attempt(
             ledger: BlockingSnoozeAppGroup.ledger,
-            dueDayEpoch: dueDayEpoch,
+            dueDayEpoch: BlockingSnoozeAppGroup.resolvedDueDayEpoch,
             now: Date(),
             intervalMinutes: BlockingSnoozeAppGroup.intervalMinutes
         )

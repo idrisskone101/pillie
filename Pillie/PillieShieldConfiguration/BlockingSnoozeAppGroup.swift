@@ -21,6 +21,10 @@ enum BlockingSnoozeAppGroup {
         defaults?.object(forKey: AppGroupKeys.blockingDueDayEpoch) as? Int
     }
 
+    static var resolvedDueDayEpoch: Int {
+        dueDayEpoch ?? Int(Calendar.current.startOfDay(for: Date()).timeIntervalSince1970)
+    }
+
     static var ledger: BlockingSnoozeLedger {
         get {
             guard let data = defaults?.data(forKey: AppGroupKeys.blockingSnoozeLedger),

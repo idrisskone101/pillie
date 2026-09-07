@@ -79,6 +79,7 @@ enum ScheduleCriticalSettingChange {
         intervalMinutes: Int
     ) {
         store.blockingSnoozeIntervalMinutes = intervalMinutes
+        ScreenTimeSharedState.blockingSnoozeIntervalMinutes = store.blockingSnoozeIntervalMinutes
     }
 
     static func saveSettingsAutoReminderRetryLimit(

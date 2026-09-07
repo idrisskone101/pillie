@@ -64,10 +64,10 @@ final class ScheduleCriticalSettingChangeTests: XCTestCase {
 
         ScheduleCriticalSettingChange.saveSettingsBlockingSnoozeInterval(
             store: fixture.store,
-            intervalMinutes: 60
+            intervalMinutes: 180
         )
 
-        XCTAssertEqual(fixture.store.blockingSnoozeIntervalMinutes, 60)
+        XCTAssertEqual(fixture.store.blockingSnoozeIntervalMinutes, 180)
         XCTAssertEqual(fixture.store.autoReminderIntervalMinutes, 10)
     }
 

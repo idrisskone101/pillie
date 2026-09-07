@@ -111,8 +111,39 @@ struct BlockingSnoozePolicyTests {
 
     @Test func `Unknown interval falls back to thirty minutes`() {
         #expect(BlockingSnoozePolicy.normalizedInterval(10) == 30)
-        #expect(BlockingSnoozePolicy.normalizedInterval(15) == 15)
+        #expect(BlockingSnoozePolicy.normalizedInterval(15) == 30)
         #expect(BlockingSnoozePolicy.normalizedInterval(60) == 60)
+        #expect(BlockingSnoozePolicy.normalizedInterval(180) == 180)
+        #expect(BlockingSnoozePolicy.hourCount(fromMinutes: 30) == nil)
+        #expect(BlockingSnoozePolicy.hourCount(fromMinutes: 60) == 1)
+        #expect(BlockingSnoozePolicy.hourCount(fromMinutes: 180) == 3)
+        #expect(
+            BlockingSnoozePolicy.formattedDuration(
+                minutes: 30,
+                minutesFormat: "%lld minutes",
+                hour: "1 hour",
+                hoursFormat: "%lld hours",
+                locale: Locale(identifier: "en")
+            ) == "30 minutes"
+        )
+        #expect(
+            BlockingSnoozePolicy.formattedDuration(
+                minutes: 60,
+                minutesFormat: "%lld minutes",
+                hour: "1 hour",
+                hoursFormat: "%lld hours",
+                locale: Locale(identifier: "en")
+            ) == "1 hour"
+        )
+        #expect(
+            BlockingSnoozePolicy.formattedDuration(
+                minutes: 120,
+                minutesFormat: "%lld minutes",
+                hour: "1 hour",
+                hoursFormat: "%lld hours",
+                locale: Locale(identifier: "en")
+            ) == "2 hours"
+        )
     }
 
     @Test func `Hold is active only before the until date`() {

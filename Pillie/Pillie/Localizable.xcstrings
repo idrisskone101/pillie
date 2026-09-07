@@ -7377,7 +7377,7 @@
       }
     },
     "settings.blocking.snooze_value": {
-      "comment": "Settings value for blocking snooze duration [standard]",
+      "comment": "Settings value for blocking snooze duration in minutes [standard]",
       "localizations": {
         "en": {
           "stringUnit": {
@@ -7395,6 +7395,52 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld Minuten"
+          }
+        }
+      }
+    },
+    "settings.blocking.snooze_value.hour": {
+      "comment": "Settings value for a one-hour blocking snooze [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 hour"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 ora"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 Stunde"
+          }
+        }
+      }
+    },
+    "settings.blocking.snooze_value.hours": {
+      "comment": "Settings value for a multi-hour blocking snooze [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld hours"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld ore"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld Stunden"
           }
         }
       }
