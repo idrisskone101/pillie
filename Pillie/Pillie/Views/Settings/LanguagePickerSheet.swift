@@ -10,27 +10,33 @@ struct LanguagePickerSheet: View {
             title: PillieLocalization.string("settings.language.title", locale: locale),
             bottomPadding: 8
         ) {
-            VStack(spacing: 0) {
-                ForEach(Array(AppLanguage.allCases.enumerated()), id: \.element.id) { index, language in
-                    if index > 0 {
-                        Rectangle()
-                            .fill(PillieTheme.textMuted.opacity(0.12))
-                            .frame(height: 1)
-                            .padding(.horizontal, 20)
+            ScrollView {
+                VStack(spacing: 24) {
+                    VStack(spacing: 0) {
+                        ForEach(Array(AppLanguage.pickerOrder.enumerated()), id: \.element.id) { index, language in
+                            if index > 0 {
+                                Rectangle()
+                                    .fill(PillieTheme.textMuted.opacity(0.12))
+                                    .frame(height: 1)
+                                    .padding(.horizontal, 20)
+                            }
+                            languageRow(language)
+                        }
                     }
-                    languageRow(language)
+                    .background(PillieTheme.cardWhite)
+                    .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
+                    .padding(.horizontal, 20)
+
+                    Text(PillieLocalization.string("settings.language.helper", locale: locale))
+                        .font(.pillieCaption())
+                        .foregroundStyle(PillieTheme.textMuted)
+                        .multilineTextAlignment(.center)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .padding(.horizontal, 28)
+                        .padding(.bottom, 24)
                 }
             }
-            .background(PillieTheme.cardWhite)
-            .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
-            .padding(.horizontal, 20)
-
-            Text(PillieLocalization.string("settings.language.helper", locale: locale))
-                .font(.pillieCaption())
-                .foregroundStyle(PillieTheme.textMuted)
-                .multilineTextAlignment(.center)
-                .fixedSize(horizontal: false, vertical: true)
-                .padding(.horizontal, 28)
+            .scrollIndicators(.hidden)
         }
     }
 

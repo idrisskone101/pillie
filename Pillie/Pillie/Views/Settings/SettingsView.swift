@@ -429,7 +429,7 @@ struct SettingsView: View {
         }
         .sheet(isPresented: $showLanguagePicker) {
             LanguagePickerSheet()
-                .presentationDetents([.height(620)])
+                .presentationDetents([.large])
                 .presentationDragIndicator(.hidden)
                 .presentationBackground(PillieTheme.bg)
         }
