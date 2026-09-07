@@ -127,4 +127,38 @@ enum ScreenTimeSharedState {
             epochDay: defaults?.object(forKey: AppGroupKeys.todayTakenEpochDay) as? Int
         )
     }
+
+    // MARK: - Blocking Snooze
+
+    static var blockingSnoozeUntil: Date? {
+        get {
+            guard let epoch = defaults?.object(forKey: AppGroupKeys.blockingSnoozeUntil) as? Double else {
+                return nil
+            }
+            return Date(timeIntervalSince1970: epoch)
+        }
+        set {
+            if let newValue {
+                defaults?.set(newValue.timeIntervalSince1970, forKey: AppGroupKeys.blockingSnoozeUntil)
+            } else {
+                defaults?.removeObject(forKey: AppGroupKeys.blockingSnoozeUntil)
+            }
+            defaults?.synchronize()
+        }
+    }
+
+    static var blockingSnoozeLedger: BlockingSnoozeLedger {
+        get {
+            guard let data = defaults?.data(forKey: AppGroupKeys.blockingSnoozeLedger),
+                  let ledger = try? JSONDecoder().decode(BlockingSnoozeLedger.self, from: data) else {
+                return .empty
+            }
+            return ledger
+        }
+        set {
+            guard let data = try? JSONEncoder().encode(newValue) else { return }
+            defaults?.set(data, forKey: AppGroupKeys.blockingSnoozeLedger)
+            defaults?.synchronize()
+        }
+    }
 }

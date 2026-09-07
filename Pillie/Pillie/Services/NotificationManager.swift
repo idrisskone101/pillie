@@ -268,6 +268,7 @@ final class NotificationManager {
         let dueEpoch = Int(Calendar.current.startOfDay(for: dueDate).timeIntervalSince1970)
 
         store.markActionAsTaken(on: dueDate)
+        AppBlockingManager.shared.clearBlockingSnoozeHold()
         AppBlockingManager.shared.removeBlocking()
         var ledger = ServedBaseReminderLedger.load()
         ledger.clearServedRecordWhenTaken(dueDayEpoch: dueEpoch)
@@ -292,11 +293,34 @@ final class NotificationManager {
             return
         }
 
-        clearReminders(forDueDayEpoch: dueEpoch)
+        if AppBlockingManager.shared.isEffectivelyOn {
+            switch AppBlockingManager.shared.performBlockingSnooze(
+                dueDayEpoch: dueEpoch,
+                intervalMinutes: store.autoReminderIntervalMinutes
+            ) {
+            case .accepted(let until, _):
+                rescheduleAfterSnooze(store: store, dueDayEpoch: dueEpoch, firstFireDate: until)
+            case .rejected:
+                break
+            }
+            return
+        }
+
         let snoozeStart = Date().addingTimeInterval(TimeInterval(store.autoReminderIntervalMinutes * 60))
+        rescheduleAfterSnooze(store: store, dueDayEpoch: dueEpoch, firstFireDate: snoozeStart)
+    }
+
+    func rescheduleAfterSnooze(store: PillStore, dueDayEpoch: Int, firstFireDate: Date) {
+        guard !isRunningTests else { return }
+        pendingRescheduleWorkItem?.cancel()
+        pendingRescheduleWorkItem = nil
+        clearReminders(forDueDayEpoch: dueDayEpoch)
         rescheduleFromStore(
             store,
-            snoozeOverride: ReminderSchedulePlanner.SnoozeOverride(dueDayEpoch: dueEpoch, firstFireDate: snoozeStart),
+            snoozeOverride: ReminderSchedulePlanner.SnoozeOverride(
+                dueDayEpoch: dueDayEpoch,
+                firstFireDate: firstFireDate
+            ),
             reason: "snooze"
         )
     }

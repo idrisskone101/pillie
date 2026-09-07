@@ -20,4 +20,6 @@ enum AppGroupKeys {
     static let interventionUnflushedCount = "pillie_intervention_unflushed_count"
     static let interventionLifetimeTotal = "pillie_intervention_lifetime_total"
     static let plusAccessValidUntil = "pillie_plus_access_valid_until"
+    static let blockingSnoozeUntil = "pillie_blocking_snooze_until"
+    static let blockingSnoozeLedger = "pillie_blocking_snooze_ledger"
 }

@@ -715,6 +715,7 @@ class PillStore {
             protocolChangeVersion &+= 1
         }
         syncTodayTakenToAppGroup()
+        AppBlockingManager.shared.clearBlockingSnoozeHold()
         AppBlockingManager.shared.removeBlocking()
         scheduleNotificationResync()
     }
@@ -792,6 +793,7 @@ class PillStore {
         // Sync app group state when marking today
         if isToday {
             syncTodayTakenToAppGroup()
+            AppBlockingManager.shared.clearBlockingSnoozeHold()
             AppBlockingManager.shared.removeBlocking()
         }
     }
