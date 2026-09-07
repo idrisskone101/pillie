@@ -85,8 +85,12 @@ enum BlockingInterventionPolicy {
         schedule: BlockingScheduleMirror?,
         handledStamp: TodayTakenStamp,
         now: Date,
-        calendar: Calendar = .current
+        calendar: Calendar = .current,
+        snoozeUntil: Date? = nil
     ) -> BlockingInterventionDecision {
+        if let snoozeUntil, now < snoozeUntil {
+            return .clearShields
+        }
         if let schedule, !schedule.requiresAction(on: now, calendar: calendar) {
             return .clearShields
         }

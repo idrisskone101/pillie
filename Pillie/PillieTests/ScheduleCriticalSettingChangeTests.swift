@@ -56,6 +56,21 @@ final class ScheduleCriticalSettingChangeTests: XCTestCase {
         XCTAssertEqual(fixture.store.autoReminderIntervalMinutes, 30)
     }
 
+    func testSettingsBlockingSnoozeIntervalDoesNotChangeSmartRemindersCadence() throws {
+        let fixture = try InMemoryStoreFactory.makeStore(
+            now: InMemoryStoreFactory.fixedDate("2026-06-03")
+        )
+        fixture.store.autoReminderIntervalMinutes = 10
+
+        ScheduleCriticalSettingChange.saveSettingsBlockingSnoozeInterval(
+            store: fixture.store,
+            intervalMinutes: 180
+        )
+
+        XCTAssertEqual(fixture.store.blockingSnoozeIntervalMinutes, 180)
+        XCTAssertEqual(fixture.store.autoReminderIntervalMinutes, 10)
+    }
+
     func testSettingsAutoReminderRetryLimitSaveMutatesRetryLimit() throws {
         let fixture = try InMemoryStoreFactory.makeStore(
             now: InMemoryStoreFactory.fixedDate("2026-06-03")

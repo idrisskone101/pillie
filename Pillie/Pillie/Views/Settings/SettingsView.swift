@@ -23,6 +23,7 @@ struct SettingsView: View {
     @State private var showProtocolEditor = false
     @State private var showCycleDayEditor = false
     @State private var showBlockedAppsEditor = false
+    @State private var showBlockingSnoozeEditor = false
     @State private var showBlockingUpsell = false
     @State private var showSmartRemindersUpsell = false
     @State private var showCustomRemindersEditor = false
@@ -264,6 +265,19 @@ struct SettingsView: View {
                             ), value: blockingStatusSummary)
                         }
                         .buttonStyle(.plain)
+                        divider
+                        Button {
+                            openSettingSheet { showBlockingSnoozeEditor = true }
+                        } label: {
+                            settingsRow(PillieLocalization.string(
+                                "settings.blocking.snooze_title",
+                                locale: locale
+                            ), value: SettingsPresentation.blockingSnoozeInterval(
+                                minutes: store.blockingSnoozeIntervalMinutes,
+                                locale: locale
+                            ))
+                        }
+                        .buttonStyle(.plain)
                     } else {
                         Button {
                             openSensitiveSetting { showBlockingUpsell = true }
@@ -442,6 +456,12 @@ struct SettingsView: View {
         .sheet(isPresented: $showBlockedAppsEditor) {
             BlockedAppsEditor()
                 .presentationDetents([.height(430)])
+                .presentationDragIndicator(.hidden)
+                .presentationBackground(PillieTheme.bg)
+        }
+        .sheet(isPresented: $showBlockingSnoozeEditor) {
+            BlockingSnoozeIntervalEditor(store: store)
+                .presentationDetents([.height(500)])
                 .presentationDragIndicator(.hidden)
                 .presentationBackground(PillieTheme.bg)
         }
@@ -1191,6 +1211,73 @@ struct AutoReminderIntervalEditor: View {
         }
         .onAppear {
             selectedInterval = store.autoReminderIntervalMinutes
+        }
+    }
+}
+
+// MARK: - Blocking Snooze Interval Editor
+
+private struct BlockingSnoozeIntervalEditor: View {
+    @Bindable var store: PillStore
+    @Environment(\.dismiss) private var dismiss
+    @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
+    @Environment(\.locale) private var locale
+
+    @State private var selectedInterval: Int = BlockingSnoozePolicy.defaultIntervalMinutes
+
+    private let settingsFeedback = SettingsInteractionFeedback()
+
+    var body: some View {
+        SettingsSheetContainer(
+            title: PillieLocalization.string("settings.blocking.snooze_title", locale: locale),
+            bottomPadding: 0
+        ) {
+            Text(PillieLocalization.string("settings.blocking.snooze_hint", locale: locale))
+                .font(.pillieCaption())
+                .foregroundStyle(PillieTheme.textMuted)
+                .padding(.horizontal, 20)
+
+            VStack(spacing: 16) {
+                ForEach(PillStore.blockingSnoozeIntervalOptions, id: \.self) { option in
+                    Button {
+                        selectedInterval = option
+                    } label: {
+                        HStack {
+                            Text(SettingsPresentation.blockingSnoozeInterval(minutes: option, locale: locale))
+                                .font(.pillieBodyBold())
+                                .foregroundStyle(PillieTheme.textPrimary)
+                            Spacer()
+                            Image(systemName: selectedInterval == option ? "checkmark.circle.fill" : "circle")
+                                .foregroundStyle(selectedInterval == option ? PillieTheme.coral : PillieTheme.textMuted)
+                        }
+                        .padding(14)
+                        .background(PillieTheme.cardWhite)
+                        .clipShape(RoundedRectangle(cornerRadius: 14))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 14)
+                                .stroke(PillieTheme.sageHalf, lineWidth: 1)
+                        )
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+            .padding(.horizontal, 20)
+
+            Button {
+                settingsFeedback.commitScheduleSave(accessibilityReduceMotion: accessibilityReduceMotion)
+                ScheduleCriticalSettingChange.saveSettingsBlockingSnoozeInterval(
+                    store: store,
+                    intervalMinutes: selectedInterval
+                )
+                dismiss()
+            } label: {
+                Text(PillieLocalization.string("global.action.save", locale: locale))
+            }
+            .buttonStyle(.pillieDark)
+            .padding(.horizontal, 28)
+        }
+        .onAppear {
+            selectedInterval = store.blockingSnoozeIntervalMinutes
         }
     }
 }

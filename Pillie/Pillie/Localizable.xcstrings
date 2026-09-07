@@ -7353,6 +7353,121 @@
         }
       }
     },
+    "settings.blocking.snooze_title": {
+      "comment": "Settings row and editor title for blocking snooze duration [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Snooze time"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Durata dello snooze"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Snooze-Dauer"
+          }
+        }
+      }
+    },
+    "settings.blocking.snooze_value": {
+      "comment": "Settings value for blocking snooze duration in minutes [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld minutes"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld minuti"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld Minuten"
+          }
+        }
+      }
+    },
+    "settings.blocking.snooze_value.hour": {
+      "comment": "Settings value for a one-hour blocking snooze [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 hour"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 ora"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 Stunde"
+          }
+        }
+      }
+    },
+    "settings.blocking.snooze_value.hours": {
+      "comment": "Settings value for a multi-hour blocking snooze [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld hours"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld ore"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld Stunden"
+          }
+        }
+      }
+    },
+    "settings.blocking.snooze_hint": {
+      "comment": "Editor hint: blocking snooze is separate from Smart Reminders [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How long apps stay unblocked when you snooze from the shield or a reminder."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Per quanto tempo le app restano sbloccate se posticipi dallo scudo o da un promemoria."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "So lange bleiben Apps entsperrt, wenn du vom Schutzschild oder einer Erinnerung aus snoozest."
+          }
+        }
+      }
+    },
     "settings.subscription.title": {
       "comment": "Subscription row [paywall]",
       "localizations": {
