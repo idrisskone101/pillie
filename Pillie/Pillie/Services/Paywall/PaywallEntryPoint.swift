@@ -13,3 +13,16 @@ enum PaywallEntryPoint: Equatable {
     case plusUpsell
     case trialEndAutoPresent
 }
+
+extension AnalyticsPaywallSurface {
+    var paywallEntry: PaywallEntryPoint {
+        switch self {
+        case .trialStatus: .trialStatus
+        case .settingsSubscription: .settingsSubscription
+        case .homeBlockingCard: .homeBlockingCard
+        case .protectionOffCard: .protectionOffCard
+        case .plusUpsell: .plusUpsell
+        case .trialEnd: .trialEndAutoPresent
+        }
+    }
+}

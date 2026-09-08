@@ -220,15 +220,10 @@ struct PlusUpsellSheet: View {
             Text(restoreError ?? "")
         }
         .fullScreenCover(isPresented: $showPaywall) {
-            PremiumPaywallView(
-                isFromOnboarding: false,
-                paywallSurface: paywallSurface,
-                onBack: { showPaywall = false },
-                onContinue: {
-                    showPaywall = false
-                    dismiss()
-                },
-                onSkip: {
+            HonestPaywallHost(
+                entry: paywallSurface.paywallEntry,
+                surface: paywallSurface,
+                onDismiss: {
                     showPaywall = false
                     dismiss()
                 }

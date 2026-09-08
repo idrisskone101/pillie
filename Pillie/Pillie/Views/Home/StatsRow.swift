@@ -73,12 +73,10 @@ struct StatsRow: View {
             }
         }
         .fullScreenCover(isPresented: $showPaywall) {
-            PremiumPaywallView(
-                isFromOnboarding: false,
-                paywallSurface: .homeBlockingCard,
-                onBack: { showPaywall = false },
-                onContinue: { showPaywall = false },
-                onSkip: { showPaywall = false }
+            HonestPaywallHost(
+                entry: .homeBlockingCard,
+                surface: .homeBlockingCard,
+                onDismiss: { showPaywall = false }
             )
         }
     }

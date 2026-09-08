@@ -706,7 +706,7 @@ struct PillieApp: App {
             if queryItems?.first(where: { $0.name == "success" })?.value == "1" {
                 // Render the post-purchase success state (sandbox purchases are
                 // unreachable from simctl launches).
-                UserDefaults.standard.set(true, forKey: TrialEndPaywallView.debugSuccessStateKey)
+                UserDefaults.standard.set(true, forKey: HonestPaywallScreen.debugSuccessStateKey)
             }
             SubscriptionManager.shared.setPlusForTesting(subscriber)
             let scenario = TrialEndPaywallDebugScenario.make(

@@ -56,7 +56,15 @@ struct HonestPaywallScreen: View {
         .interactiveDismissDisabled(!board.chrome.allowsInteractiveDismiss)
         .animation(PillieTheme.fadeInUpCurve, value: purchaseSucceeded)
         .animation(PillieTheme.fadeInUpCurve, value: showDeclineFeedback)
-        .onAppear(perform: trackViewed)
+        .onAppear {
+            trackViewed()
+            #if DEBUG
+            if UserDefaults.standard.bool(forKey: Self.debugSuccessStateKey) {
+                UserDefaults.standard.removeObject(forKey: Self.debugSuccessStateKey)
+                purchaseSucceeded = true
+            }
+            #endif
+        }
         .task {
             subscriptionManager.configure()
             async let offeringsLoaded: Void = loadOfferings()

@@ -509,12 +509,10 @@ struct SettingsView: View {
                 .presentationBackground(PillieTheme.bg)
         }
         .fullScreenCover(isPresented: $showPaywall) {
-            PremiumPaywallView(
-                isFromOnboarding: false,
-                paywallSurface: .settingsSubscription,
-                onBack: { showPaywall = false },
-                onContinue: { showPaywall = false },
-                onSkip: { showPaywall = false }
+            HonestPaywallHost(
+                entry: .settingsSubscription,
+                surface: .settingsSubscription,
+                onDismiss: { showPaywall = false }
             )
         }
         .manageSubscriptionsSheet(isPresented: $showManageSubscription)
