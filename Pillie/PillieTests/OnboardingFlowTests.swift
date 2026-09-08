@@ -425,8 +425,7 @@ final class OnboardingFlowTests: XCTestCase {
     func testOnboardingLaunchStillConfiguresRevenueCat() {
         XCTAssertTrue(
             SubscriptionLaunchPolicy.shouldConfigureRevenueCat(
-                isRunningTests: false,
-                isOnboardingActive: true
+                isRunningTests: false
             )
         )
     }

@@ -1798,17 +1798,17 @@
       "issue": "ENG-73",
       "table": "Localizable",
       "key": "onboarding.blocking_setup.subtitle",
-      "en": "Selected apps pause after a Pillie reminder. They come back after you check in.",
-      "de": "Ausgewählte Apps pausieren nach einer Erinnerung. Nach dem Check-in sind sie wieder da.",
-      "it": "Le app scelte vanno in pausa al promemoria. Tornano dopo il check-in."
+      "en": "The apps you pick pause after a reminder. They come back when you check in.",
+      "de": "Die Apps, die du wählst, pausieren nach einer Erinnerung. Nach dem Check-in sind sie wieder da.",
+      "it": "Le app che scegli vanno in pausa al promemoria. Tornano dopo il check-in."
     },
     {
       "issue": "ENG-73",
       "table": "Localizable",
       "key": "onboarding.blocking_setup.title",
-      "en": "Choose apps to pause",
+      "en": "Pick the apps to pause",
       "de": "Wähl Apps zum Pausieren",
-      "it": "Scegli le app da pausare"
+      "it": "Scegli le app da mettere in pausa"
     },
     {
       "issue": "ENG-73",
@@ -1822,9 +1822,49 @@
       "issue": "ENG-73",
       "table": "Localizable",
       "key": "onboarding.blocking_setup.skip",
-      "en": "Continue without app blocking",
-      "de": "Weiter ohne App-Pause",
-      "it": "Continua senza blocco app"
+      "en": "Not now",
+      "de": "Nicht jetzt",
+      "it": "Non ora"
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Localizable",
+      "key": "onboarding.blocking_setup.empty_detail",
+      "en": "Next, Apple asks for Screen Time so the apps can pause. Tap Continue.",
+      "de": "Als Nächstes fragt Apple nach Bildschirmzeit, damit die Apps pausieren können. Tippe auf Weiter.",
+      "it": "Poi Apple chiede Tempo di utilizzo così le app possono andare in pausa. Tocca Continua."
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Localizable",
+      "key": "onboarding.blocking_setup.allow_pausing",
+      "en": "Allow pausing",
+      "de": "Pausieren erlauben",
+      "it": "Consenti la pausa"
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Localizable",
+      "key": "onboarding.blocking_setup.paused_app",
+      "en": "This app is paused",
+      "de": "Diese App ist pausiert",
+      "it": "Questa app è in pausa"
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Localizable",
+      "key": "onboarding.blocking_setup.unlock_hint",
+      "en": "Take your %@ pill to unlock.",
+      "de": "Nimm deine Pille um %@, um sie zu entsperren.",
+      "it": "Prendi la pillola delle %@ per sbloccare."
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Localizable",
+      "key": "onboarding.blocking_setup.mark_taken",
+      "en": "Mark as taken",
+      "de": "Als genommen markieren",
+      "it": "Segna come presa"
     },
     {
       "issue": "ENG-73",

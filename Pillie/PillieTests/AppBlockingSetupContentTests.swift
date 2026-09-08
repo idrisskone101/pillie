@@ -1,229 +1,275 @@
-import XCTest
+import Foundation
+import Testing
 
 @testable import Pillie
 
-final class AppBlockingSetupContentTests: XCTestCase {
-    private let content = AppBlockingSetupContent.localized(
-        locale: Locale(identifier: "en_US")
-    )
-
-    // MARK: - Reversible pill-time framing (#218)
-
-    func testSetupCopyExplainsPillTimePauseMedicationUnlockAndReversibility() {
-        XCTAssertEqual(content.badge, "Pillie Plus")
-        XCTAssertEqual(content.chooseAppsCTA, "Choose apps to pause")
-
-        let explanation = [content.subtitle, content.emptyDetail]
-            .joined(separator: " ")
-            .lowercased()
-        XCTAssertTrue(explanation.contains("after a pillie reminder"))
-        XCTAssertTrue(explanation.contains("come back after you check in"))
-        XCTAssertEqual(content.changeSelectionCTA, "Edit")
-        XCTAssertEqual(content.skipCTA, "Continue without app blocking")
+struct AppBlockingSetupContentTests {
+    private var content: AppBlockingSetupContent {
+        AppBlockingSetupContent.localized(locale: Locale(identifier: "en_US"))
     }
 
-    func testTrialDisclosureIsClearAndDoesNotReplaceSkip() {
-        XCTAssertEqual(
-            content.trialDisclosure,
-            "14 days free, no card needed. App blocking turns off after the trial. Reminders stay free."
-        )
-        XCTAssertTrue(content.visibleCopy.contains(content.trialDisclosure))
-        XCTAssertEqual(content.skipCTA, "Continue without app blocking")
+    @Test func setupCopyExplainsPauseAfterReminderAndCheckIn() {
+        #expect(content.titleLead == "Pick the apps to pause")
+        #expect(content.chooseAppsCTA == "Allow pausing")
+        #expect(content.subtitle.lowercased().contains("pause after a reminder"))
+        #expect(content.subtitle.lowercased().contains("check in"))
+        #expect(content.changeSelectionCTA == "Edit")
+        #expect(content.skipCTA == "Not now")
     }
 
-    func testHardPaywallTrialDisclosureRequiresAPlanAfterFourteenDays() {
+    @Test func hardPaywallLockedFallbackOffersUpgradeInsteadOfAFreeExit() {
         let hardPaywallContent = AppBlockingSetupContent.localized(
             locale: Locale(identifier: "en_US"),
             trialEndTerms: .hardPaywall
         )
 
-        XCTAssertEqual(
-            hardPaywallContent.trialDisclosure,
-            "Your free trial lasts 14 days. No card needed. After it ends, choose monthly, annual, or lifetime to keep Plus."
+        #expect(
+            hardPaywallContent.lockedDetail
+                == "Choose monthly, annual, or lifetime to keep using Pillie."
         )
+        #expect(hardPaywallContent.lockedCTA == "Get Pillie Plus")
     }
 
-    func testEveryTrialDisclosureStatesThatNoCardIsRequired() {
-        let hardPaywallContent = AppBlockingSetupContent.localized(
-            locale: Locale(identifier: "en_US"),
-            trialEndTerms: .hardPaywall
-        )
-
-        XCTAssertTrue(content.trialDisclosure.localizedCaseInsensitiveContains("no card needed"))
-        XCTAssertTrue(
-            hardPaywallContent.trialDisclosure.localizedCaseInsensitiveContains("no card needed")
-        )
-    }
-
-    func testPaidSubscriberDisclosureDoesNotPromiseAReverseTrial() {
-        let subscriberContent = AppBlockingSetupContent.localized(
-            locale: Locale(identifier: "en_US"),
-            trialEndTerms: .hardPaywall,
-            isPaidSubscriber: true
-        )
-
-        XCTAssertEqual(
-            subscriberContent.trialDisclosure,
-            "Pillie Plus is active on this account. Set up app blocking whenever you’re ready."
-        )
-        XCTAssertFalse(subscriberContent.trialDisclosure.contains("14 days"))
-    }
-
-    func testHardPaywallLockedFallbackOffersUpgradeInsteadOfAFreeExit() {
-        let hardPaywallContent = AppBlockingSetupContent.localized(
-            locale: Locale(identifier: "en_US"),
-            trialEndTerms: .hardPaywall
-        )
-
-        XCTAssertEqual(
-            hardPaywallContent.lockedDetail,
-            "Choose monthly, annual, or lifetime to keep using Pillie."
-        )
-        XCTAssertEqual(hardPaywallContent.lockedCTA, "Get Pillie Plus")
-    }
-
-    func testDeniedOrCancelledAuthorizationShowsRecoveryWithoutStrandingReminderOnly() {
+    @Test func deniedOrCancelledAuthorizationShowsRecoveryWithoutStrandingReminderOnly() {
         var permission = AppBlockingSetupPermissionState()
 
-        XCTAssertTrue(permission.beginRequest())
-        XCTAssertEqual(
-            permission.completeRequest(isAuthorized: false),
-            .showRecovery
-        )
-        XCTAssertTrue(permission.isRecoveryVisible)
-        XCTAssertEqual(content.retryAuthorizationCTA, "Try Again")
-        XCTAssertEqual(content.skipCTA, "Continue without app blocking")
+        let started = permission.beginRequest()
+        let resolution = permission.completeRequest(isAuthorized: false)
+        #expect(started)
+        #expect(resolution == .showRecovery)
+        #expect(permission.isRecoveryVisible)
+        #expect(content.retryAuthorizationCTA == "Try Again")
+        #expect(content.skipCTA == "Not now")
     }
 
-    func testRecoveryRetryStartsANewExplicitAuthorizationRequest() {
+    @Test func recoveryRetryStartsANewExplicitAuthorizationRequest() {
         var permission = AppBlockingSetupPermissionState()
-        XCTAssertTrue(permission.beginRequest())
-        XCTAssertEqual(permission.completeRequest(isAuthorized: false), .showRecovery)
-
-        XCTAssertTrue(permission.beginRequest())
-        XCTAssertTrue(permission.isRequesting)
+        let firstStart = permission.beginRequest()
+        let firstResolution = permission.completeRequest(isAuthorized: false)
+        let retryStart = permission.beginRequest()
+        #expect(firstStart)
+        #expect(firstResolution == .showRecovery)
+        #expect(retryStart)
+        #expect(permission.isRequesting)
     }
 
-    func testSavedSelectionWithoutAuthorizationRequestsPermissionBeforeSaving() {
-        XCTAssertEqual(
+    @Test func savedSelectionWithoutAuthorizationRequestsPermissionBeforeSaving() {
+        #expect(
             AppBlockingSetupPrimaryAction.resolve(
                 hasSelection: true,
                 isAuthorized: false
-            ),
-            .requestAuthorization
+            ) == .requestAuthorization
         )
     }
 
-    func testDebugRecoverySeamRendersTheSameDeniedStateUsedByAuthorizationFailure() {
+    @Test func debugRecoverySeamRendersTheSameDeniedStateUsedByAuthorizationFailure() {
         var permission = AppBlockingSetupPermissionState()
-
         permission.showRecoveryForDebug()
-
-        XCTAssertTrue(permission.isRecoveryVisible)
+        #expect(permission.isRecoveryVisible)
     }
 
-    // MARK: - Empty state (AC3 honest empty state)
-
-    func testEmptyStateExplainsScreenTimePickerAndCountOnlyStorage() {
-        XCTAssertFalse(content.emptyTitle.isEmpty)
-        XCTAssertTrue(content.emptyDetail.contains("Screen Time"))
-        XCTAssertTrue(content.privacyNote.lowercased().contains("number"))
-        XCTAssertEqual(content.emptyDetail, "Use Apple Screen Time to choose categories or apps.")
-        XCTAssertEqual(content.chooseAppsCTA, "Choose apps to pause")
+    @Test func emptyStateExplainsScreenTimePickerAndUnlock() {
+        #expect(content.emptyTitle == "This app is paused")
+        #expect(content.emptyMarkTaken == "Mark as taken")
+        #expect(
+            content.emptyDetail
+                == "Next, Apple asks for Screen Time so the apps can pause. Tap Continue."
+        )
+        #expect(content.chooseAppsCTA == "Allow pausing")
+        #expect(content.emptyUnlockFormat.contains("%@"))
+        #expect(content.emptyUnlockFormat.lowercased().contains("unlock"))
     }
 
-    func testEmptyStateCardOffersChooseAppsActionWhenIdle() {
-        XCTAssertEqual(
-            AppBlockingSetupEmptyCardAction.resolve(
-                hasSelection: false,
-                isRequesting: false
-            ),
-            .chooseApps
+    @Test func formattedEmptyUnlockInsertsTheReminderClock() {
+        let formatted = AppBlockingSetupContent.formattedEmptyUnlock(
+            format: content.emptyUnlockFormat,
+            reminderHour: 21,
+            reminderMinute: 0,
+            locale: Locale(identifier: "en_US")
+        )
+        let normalized = formatted
+            .replacingOccurrences(of: "\u{202F}", with: " ")
+            .replacingOccurrences(of: "\u{00A0}", with: " ")
+        #expect(normalized == "Take your 9:00 PM pill to unlock.")
+    }
+
+    @Test func phaseIsEmptyWhenEntitledAndIdle() {
+        #expect(
+            AppBlockingSetupPhase.resolve(
+                canSetUpBlocking: true,
+                isEmpty: true,
+                isRecoveryVisible: false
+            ) == .empty
         )
     }
 
-    func testCategoryHintsAreGenericCategoriesNotAppNames() {
-        XCTAssertEqual(
-            content.categoryHints.map(\.name),
-            ["Social media", "Short videos", "Games", "Other"]
+    @Test func phaseIsRecoveryWhenAuthorizationFailed() {
+        #expect(
+            AppBlockingSetupPhase.resolve(
+                canSetUpBlocking: true,
+                isEmpty: true,
+                isRecoveryVisible: true
+            ) == .recovery
         )
     }
 
-    // MARK: - Selected state (AC5 privacy-safe summary)
+    @Test func phaseIsSelectedWhenAppsAreChosen() {
+        #expect(
+            AppBlockingSetupPhase.resolve(
+                canSetUpBlocking: true,
+                isEmpty: false,
+                isRecoveryVisible: false
+            ) == .selected
+        )
+    }
 
-    func testSelectedStateCopyReassuresPrivacy() {
-        XCTAssertEqual(content.changeSelectionCTA, "Edit")
+    @Test func phaseIsLockedWithoutPlusAccess() {
+        #expect(
+            AppBlockingSetupPhase.resolve(
+                canSetUpBlocking: false,
+                isEmpty: true,
+                isRecoveryVisible: false
+            ) == .locked
+        )
+    }
+
+    @Test func selectedStateCopyReassuresPrivacy() {
+        #expect(content.changeSelectionCTA == "Edit")
         let note = content.selectedPrivacyNote.lowercased()
-        // Pillie stores only a count; it never learns which apps were chosen.
-        XCTAssertTrue(note.contains("number"))
-        XCTAssertTrue(note.contains("device"))
+        #expect(note.contains("number"))
+        #expect(note.contains("device"))
     }
 
-    func testSelectedSummaryLabelIsGenericAndNamesNoApps() {
-        // The selected state shows only a count + this label — no category chips,
-        // icons, or app names.
-        XCTAssertEqual(content.selectedSummaryLabel, "Apps selected")
+    @Test func selectedSummaryLabelIsGenericAndNamesNoApps() {
+        #expect(content.selectedSummaryLabel == "Apps selected")
         let label = content.selectedSummaryLabel.lowercased()
         for name in ["tiktok", "instagram", "youtube", "snapchat"] {
-            XCTAssertFalse(label.contains(name))
+            #expect(!label.contains(name))
         }
     }
 
-    // MARK: - Footer
-
-    func testFooterUsesFinishAndSkipCopy() {
-        XCTAssertEqual(content.finishCTA, "Continue")
-        XCTAssertEqual(content.skipCTA, "Continue without app blocking")
+    @Test func footerUsesFinishAndSkipCopy() {
+        #expect(content.finishCTA == "Continue")
+        #expect(content.skipCTA == "Not now")
     }
 
-    // MARK: - Invariants preserved from the prior screen
-
-    func testVisibleCopyKeepsPlusScreenTimeAndOnDeviceAndExcludesAds() {
+    @Test func visibleCopyNamesScreenTimeAndExcludesAds() {
         let visibleCopy = content.visibleCopy.joined(separator: " ").lowercased()
-        XCTAssertTrue(visibleCopy.contains("pillie plus"))
-        XCTAssertTrue(visibleCopy.contains("screen time"))
-        XCTAssertTrue(visibleCopy.contains("device"))
-        XCTAssertFalse(visibleCopy.contains("pillie+"))
-        XCTAssertFalse(visibleCopy.contains("ad blocking"))
-        XCTAssertFalse(visibleCopy.contains("ads"))
+        #expect(visibleCopy.contains("screen time"))
+        #expect(visibleCopy.contains("device"))
+        #expect(!visibleCopy.contains("pillie+"))
+        #expect(!visibleCopy.contains("ad blocking"))
+        #expect(!visibleCopy.contains("ads"))
     }
 
-    // MARK: - Permission-state VoiceOver labels (#84 QA)
-
-    func testEmptyPermissionStateExposesOneClearVoiceOverLabel() {
-        // The empty permission card reads as a single coherent element instead of
-        // scattered Text/chip fragments — same treatment as the selected card.
-        let label = content.emptyStateAccessibilityLabel
-        XCTAssertTrue(label.contains(content.emptyTitle))
-        XCTAssertTrue(label.contains("Screen Time"))
-        XCTAssertTrue(label.lowercased().contains("number"))
-        XCTAssertGreaterThan(label.count, content.emptyTitle.count)
+    @Test func emptyPermissionStateExposesOneClearVoiceOverLabel() {
+        let unlockHint = AppBlockingSetupContent.formattedEmptyUnlock(
+            format: content.emptyUnlockFormat,
+            reminderHour: 21,
+            reminderMinute: 0,
+            locale: Locale(identifier: "en_US")
+        )
+        let label = content.emptyStateAccessibilityLabel(unlockHint: unlockHint)
+        #expect(label.contains(content.emptyTitle))
+        #expect(label.contains(unlockHint))
+        #expect(label.count > content.emptyTitle.count)
     }
 
-    func testLockedPermissionStateExposesOneClearVoiceOverLabel() {
+    @Test func lockedPermissionStateExposesOneClearVoiceOverLabel() {
         let label = content.lockedAccessibilityLabel
-        XCTAssertTrue(label.contains(content.lockedTitle))
-        XCTAssertTrue(label.contains(content.lockedDetail))
+        #expect(label.contains(content.lockedTitle))
+        #expect(label.contains(content.lockedDetail))
     }
 
-    func testLockedPermissionVoiceOverLabelDoesNotDoubleSentencePunctuation() {
-        XCTAssertFalse(content.lockedAccessibilityLabel.contains(".."))
+    @Test func lockedPermissionVoiceOverLabelDoesNotDoubleSentencePunctuation() {
+        #expect(!content.lockedAccessibilityLabel.contains(".."))
     }
 
-    func testPermissionStateAccessibilityLabelsNameNoRealApps() {
-        let combined = (content.emptyStateAccessibilityLabel + " " + content.lockedAccessibilityLabel).lowercased()
+    @Test func permissionStateAccessibilityLabelsNameNoRealApps() {
+        let combined = (
+            content.emptyStateAccessibilityLabel(unlockHint: "Take your 9:00 PM pill to unlock.")
+                + " "
+                + content.lockedAccessibilityLabel
+        ).lowercased()
         for name in ["tiktok", "instagram", "youtube", "snapchat", "facebook", "reddit"] {
-            XCTAssertFalse(combined.contains(name), "VoiceOver label must not name a real app: \(name)")
+            #expect(!combined.contains(name), "VoiceOver label must not name a real app: \(name)")
         }
     }
 
-    // MARK: - AC5: copy must never name real third-party apps
-
-    func testVisibleCopyNeverNamesRealThirdPartyApps() {
+    @Test func visibleCopyNeverNamesRealThirdPartyApps() {
         let visibleCopy = content.visibleCopy.joined(separator: " ").lowercased()
         let realAppNames = ["tiktok", "instagram", "youtube", "snapchat", "facebook", "reddit", "twitter"]
         for name in realAppNames {
-            XCTAssertFalse(visibleCopy.contains(name), "Copy must not name a real app: \(name)")
+            #expect(!visibleCopy.contains(name), "Copy must not name a real app: \(name)")
         }
     }
+
+    @Test func pauseCopyIsTranslatedForEveryShippedCatalog() {
+        let keys = [
+            "onboarding.blocking_setup.title",
+            "onboarding.blocking_setup.subtitle",
+            "onboarding.blocking_setup.empty_detail",
+            "onboarding.blocking_setup.skip",
+            "onboarding.blocking_setup.allow_pausing",
+            "onboarding.blocking_setup.paused_app",
+            "onboarding.blocking_setup.unlock_hint",
+            "onboarding.blocking_setup.mark_taken",
+        ]
+        let english = Locale(identifier: AppLanguage.english.rawValue)
+        let englishByKey = Dictionary(
+            uniqueKeysWithValues: keys.map { ($0, PillieLocalization.string($0, locale: english)) }
+        )
+        let catalogs = AppLanguage.allCases.compactMap(\.catalogIdentifier)
+
+        for identifier in catalogs where identifier != AppLanguage.english.rawValue {
+            let locale = Locale(identifier: identifier)
+            for key in keys {
+                let value = PillieLocalization.string(key, locale: locale)
+                #expect(
+                    value != englishByKey[key],
+                    "\(identifier) still uses English for \(key)"
+                )
+                #expect(!value.isEmpty, "\(identifier) is empty for \(key)")
+                if key == "onboarding.blocking_setup.unlock_hint" {
+                    #expect(
+                        value.components(separatedBy: "%@").count == 2,
+                        "\(identifier) unlock hint must keep one %@"
+                    )
+                }
+            }
+        }
+    }
+
+    @Test func phoneHaloSitsAboveTheBezel() {
+        #expect(PausedPhoneStageLayout.designCircleBottomInset == 102)
+        #expect(PausedPhoneStageLayout.designCircleTop == 30)
+        #expect(PausedPhoneStageLayout.designPhone == CGSize(width: 232, height: 300))
+    }
+
+    @Test func designCanvasFitsOneToOne() {
+        let layout = PausedPhoneStageLayout.fitted(in: CGSize(width: 390, height: 442))
+        #expect(layout.scale == 1)
+    }
+
+    @Test func tallerHoleKeepsCanvasWidthAndDoesNotStretchTheHalo() {
+        let layout = PausedPhoneStageLayout.fitted(in: CGSize(width: 390, height: 600))
+        #expect(layout.scale == 1)
+    }
+
+    #if DEBUG
+    @Test func selectionOverrideFeedsCountAndHasAppsSelected() {
+        let manager = AppBlockingManager.shared
+        let previousOverride = manager.debugSelectionCountOverride
+        let previousConfigured = manager.debugBlockerConfiguredOverride
+        defer {
+            manager.debugSelectionCountOverride = previousOverride
+            manager.debugBlockerConfiguredOverride = previousConfigured
+        }
+        manager.debugBlockerConfiguredOverride = nil
+        manager.debugSelectionCountOverride = 4
+        #expect(manager.selectionState.selectedCount == 4)
+        #expect(manager.hasAppsSelected)
+        #expect(manager.selectedCount == 4)
+    }
+    #endif
 }

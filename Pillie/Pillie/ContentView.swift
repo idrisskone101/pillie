@@ -623,7 +623,6 @@ struct ContentView: View {
     } else {
       AppBlockingSetupView(
         trialEndTerms: onboardingTrialEndTerms,
-        isPaidSubscriber: onboardingTrialActivationRoute == .subscriber,
         onBack: {
           if let previousStep = OnboardingFlow.previousStep(before: .appBlocking) {
             lowRiskTransition(to: previousStep)

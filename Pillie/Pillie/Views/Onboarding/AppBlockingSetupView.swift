@@ -2,57 +2,32 @@
 //  AppBlockingSetupView.swift
 //  Pillie
 //
-//  Issue #82 — Native App Selection And Blocker Config Save (design Option B).
-//
-//  The post-authorization wrapper for the native Screen Time picker. There is no
-//  separate primer: the pill-time CTA requests Screen Time authorization
-//  inline (if needed) and goes straight into the system FamilyActivityPicker.
-//  A denial stays on this screen with an explicit retry route. An honest
-//  reminder-only path remains available, a valid selection saves the blocker config
-//  and fires `blocker_config_saved`, and the summary is privacy-safe — Pillie only
-//  ever knows the count (see BlockerSelectionState).
-//
 
 import SwiftUI
 import FamilyControls
 
 struct AppBlockingSetupContent {
-    /// A generic category hint shown in the empty state — illustrative only, never
-    /// the user's real selection (which is opaque tokens Pillie cannot read).
-    struct CategoryHint: Equatable {
-        let name: String
-        let symbol: String
-    }
-
-    // Hero
-    let badge: String
     let titleLead: String
-    let titleAccent: String
     let subtitle: String
-    let trialDisclosure: String
 
-    // Empty state
     let emptyTitle: String
+    let emptyUnlockFormat: String
+    let emptyMarkTaken: String
     let emptyDetail: String
-    let categoryHints: [CategoryHint]
     let chooseAppsCTA: String
 
-    // Authorization recovery
     let authorizationDeniedTitle: String
     let authorizationDeniedDetail: String
     let retryAuthorizationCTA: String
 
-    // Selected state
     let selectedSummaryLabel: String
     let selectedPrivacyNote: String
     let changeSelectionCTA: String
 
-    // Shared privacy + footer
     let privacyNote: String
     let finishCTA: String
     let skipCTA: String
 
-    // Locked fallback (reached only if entitlement drops underneath the screen)
     let lockedTitle: String
     let lockedSubtitle: String
     let lockedDetail: String
@@ -60,26 +35,18 @@ struct AppBlockingSetupContent {
 
     var visibleCopy: [String] {
         [
-            badge, titleLead, titleAccent, subtitle, trialDisclosure,
-            emptyTitle, emptyDetail,
-            authorizationDeniedTitle, authorizationDeniedDetail, retryAuthorizationCTA
-        ]
-        + categoryHints.map(\.name)
-        + [
+            titleLead, subtitle,
+            emptyTitle, emptyUnlockFormat, emptyMarkTaken, emptyDetail,
+            authorizationDeniedTitle, authorizationDeniedDetail, retryAuthorizationCTA,
             chooseAppsCTA, selectedSummaryLabel, selectedPrivacyNote, changeSelectionCTA,
             privacyNote, finishCTA, skipCTA, lockedTitle, lockedSubtitle, lockedDetail, lockedCTA
         ]
     }
 
-    /// One combined VoiceOver label for the empty permission card, so it reads as
-    /// a single coherent element (title → what happens → privacy) rather than a
-    /// run of separate Text + category-chip fragments.
-    var emptyStateAccessibilityLabel: String {
-        "\(emptyTitle). \(emptyDetail) \(privacyNote)"
+    func emptyStateAccessibilityLabel(unlockHint: String) -> String {
+        "\(emptyTitle). \(unlockHint)"
     }
 
-    /// One combined VoiceOver label for the locked (entitlement-dropped) fallback
-    /// card, mirroring the empty/selected cards' single-element treatment.
     var lockedAccessibilityLabel: String {
         let separator = lockedTitle.last.map { ".!?…".contains($0) } == true ? " " : ". "
         return "\(lockedTitle)\(separator)\(lockedDetail)"
@@ -89,72 +56,70 @@ struct AppBlockingSetupContent {
 
     static func localized(
         locale: Locale = .current,
-        trialEndTerms: TrialEndAccessTerms = .legacy,
-        isPaidSubscriber: Bool = false
+        trialEndTerms: TrialEndAccessTerms = .legacy
     ) -> AppBlockingSetupContent {
         AppBlockingSetupContent(
-        badge: "Pillie Plus",
-        titleLead: PillieLocalization.string("onboarding.blocking_setup.title", locale: locale),
-        titleAccent: "",
-        subtitle: PillieLocalization.string("onboarding.blocking_setup.subtitle", locale: locale),
-        trialDisclosure: PillieLocalization.string(
-            isPaidSubscriber
-                ? "onboarding.blocking_setup.subscriber_disclosure"
-                : trialEndTerms == .hardPaywall
-                    ? "trial.granted.disclosure.hard_paywall"
-                    : "trial.granted.disclosure",
-            table: "Commerce",
-            locale: locale
-        ),
-        emptyTitle: PillieLocalization.string("onboarding.blocking_setup.title", locale: locale),
-        emptyDetail: PillieLocalization.string(
-            "onboarding.blocking_setup.empty_detail",
-            locale: locale
-        ),
-        categoryHints: [
-            CategoryHint(name: PillieLocalization.string("onboarding.personalise.distraction.social", locale: locale), symbol: "bubble.left.and.bubble.right.fill"),
-            CategoryHint(name: PillieLocalization.string("onboarding.personalise.distraction.video", locale: locale), symbol: "play.rectangle.fill"),
-            CategoryHint(name: PillieLocalization.string("onboarding.personalise.distraction.games", locale: locale), symbol: "gamecontroller.fill"),
-            CategoryHint(name: PillieLocalization.string("onboarding.personalise.distraction.other", locale: locale), symbol: "bag.fill")
-        ],
-        chooseAppsCTA: PillieLocalization.string("onboarding.blocking_setup.title", locale: locale),
-        authorizationDeniedTitle: PillieLocalization.string("error.screen_time.title", locale: locale),
-        authorizationDeniedDetail: PillieLocalization.string("error.screen_time.body", locale: locale),
-        retryAuthorizationCTA: PillieLocalization.string("global.action.retry", locale: locale),
-        selectedSummaryLabel: PillieLocalization.string(
-            "onboarding.blocking_setup.selected_summary",
-            locale: locale
-        ),
-        selectedPrivacyNote: PillieLocalization.string(
-            "onboarding.blocking_setup.privacy",
-            locale: locale
-        ),
-        changeSelectionCTA: PillieLocalization.string("global.action.edit", locale: locale),
-        privacyNote: PillieLocalization.string("onboarding.blocking_setup.privacy", locale: locale),
-        finishCTA: PillieLocalization.string("global.action.continue", locale: locale),
-        skipCTA: PillieLocalization.string("onboarding.blocking_setup.skip", locale: locale),
-        lockedTitle: PillieLocalization.string("onboarding.blocking_setup.plus_locked", locale: locale),
-        lockedSubtitle: PillieLocalization.string("onboarding.blocking_setup.plus_locked", locale: locale),
-        lockedDetail: PillieLocalization.string(
-            trialEndTerms == .hardPaywall
-                ? "onboarding.blocking_setup.hard_paywall_locked_detail"
-                : "onboarding.demo.free_body",
-            table: "Commerce",
-            locale: locale
-        ),
-        lockedCTA: PillieLocalization.string(
-            trialEndTerms == .hardPaywall
-                ? "paywall.action.upgrade"
-                : "global.action.continue",
-            table: trialEndTerms == .hardPaywall ? "Commerce" : nil,
+            titleLead: PillieLocalization.string("onboarding.blocking_setup.title", locale: locale),
+            subtitle: PillieLocalization.string("onboarding.blocking_setup.subtitle", locale: locale),
+            emptyTitle: PillieLocalization.string("onboarding.blocking_setup.paused_app", locale: locale),
+            emptyUnlockFormat: PillieLocalization.string("onboarding.blocking_setup.unlock_hint", locale: locale),
+            emptyMarkTaken: PillieLocalization.string("onboarding.blocking_setup.mark_taken", locale: locale),
+            emptyDetail: PillieLocalization.string(
+                "onboarding.blocking_setup.empty_detail",
+                locale: locale
+            ),
+            chooseAppsCTA: PillieLocalization.string("onboarding.blocking_setup.allow_pausing", locale: locale),
+            authorizationDeniedTitle: PillieLocalization.string("error.screen_time.title", locale: locale),
+            authorizationDeniedDetail: PillieLocalization.string("error.screen_time.body", locale: locale),
+            retryAuthorizationCTA: PillieLocalization.string("global.action.retry", locale: locale),
+            selectedSummaryLabel: PillieLocalization.string(
+                "onboarding.blocking_setup.selected_summary",
+                locale: locale
+            ),
+            selectedPrivacyNote: PillieLocalization.string(
+                "onboarding.blocking_setup.privacy",
+                locale: locale
+            ),
+            changeSelectionCTA: PillieLocalization.string("global.action.edit", locale: locale),
+            privacyNote: PillieLocalization.string("onboarding.blocking_setup.privacy", locale: locale),
+            finishCTA: PillieLocalization.string("global.action.continue", locale: locale),
+            skipCTA: PillieLocalization.string("onboarding.blocking_setup.skip", locale: locale),
+            lockedTitle: PillieLocalization.string("onboarding.blocking_setup.plus_locked", locale: locale),
+            lockedSubtitle: PillieLocalization.string("onboarding.blocking_setup.plus_locked", locale: locale),
+            lockedDetail: PillieLocalization.string(
+                trialEndTerms == .hardPaywall
+                    ? "onboarding.blocking_setup.hard_paywall_locked_detail"
+                    : "onboarding.demo.free_body",
+                table: "Commerce",
+                locale: locale
+            ),
+            lockedCTA: PillieLocalization.string(
+                trialEndTerms == .hardPaywall
+                    ? "paywall.action.upgrade"
+                    : "global.action.continue",
+                table: trialEndTerms == .hardPaywall ? "Commerce" : nil,
+                locale: locale
+            )
+        )
+    }
+
+    static func formattedEmptyUnlock(
+        format: String,
+        reminderHour: Int,
+        reminderMinute: Int,
+        locale: Locale = .current
+    ) -> String {
+        let twelve = ReminderTimeConverter.toTwelveHour(hour24: reminderHour, minute: reminderMinute)
+        let time = ProtectionPlanRoutineSummary.clockText(
+            hour12: twelve.hour,
+            minute: twelve.minute,
+            isPM: twelve.period == 1,
             locale: locale
         )
-        )
+        return String(format: format, locale: locale, arguments: [time as CVarArg])
     }
 }
 
-/// Observable permission-request behavior kept separate from the opaque Screen Time
-/// authorization API so denial, retry, and picker presentation stay deterministic.
 struct AppBlockingSetupPermissionState: Equatable {
     enum Phase: Equatable {
         case ready
@@ -172,8 +137,6 @@ struct AppBlockingSetupPermissionState: Equatable {
     var isRequesting: Bool { phase == .requesting }
     var isRecoveryVisible: Bool { phase == .recovery }
 
-    /// The initial CTA and recovery retry each begin an explicit Apple request.
-    /// Repeated taps while a request is already in flight are ignored.
     mutating func beginRequest() -> Bool {
         guard !isRequesting else { return false }
         phase = .requesting
@@ -197,9 +160,23 @@ struct AppBlockingSetupPermissionState: Equatable {
     }
 }
 
-/// The primary CTA may save only when Screen Time is currently authorized.
-/// Keeping this decision value-based prevents a retained selection from skipping
-/// the authorization recovery path.
+enum AppBlockingSetupPhase: Equatable {
+    case empty
+    case recovery
+    case selected
+    case locked
+
+    static func resolve(
+        canSetUpBlocking: Bool,
+        isEmpty: Bool,
+        isRecoveryVisible: Bool
+    ) -> Self {
+        guard canSetUpBlocking else { return .locked }
+        if isRecoveryVisible { return .recovery }
+        return isEmpty ? .empty : .selected
+    }
+}
+
 enum AppBlockingSetupPrimaryAction: Equatable {
     case requestAuthorization
     case finishSetup
@@ -209,55 +186,39 @@ enum AppBlockingSetupPrimaryAction: Equatable {
     }
 }
 
-enum AppBlockingSetupEmptyCardAction: Equatable {
-    case chooseApps
-
-    static func resolve(hasSelection: Bool, isRequesting: Bool) -> Self? {
-        guard !hasSelection, !isRequesting else { return nil }
-        return .chooseApps
-    }
-}
-
 struct AppBlockingSetupView: View {
     @Environment(PillStore.self) private var store
     @Environment(\.locale) private var locale
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @AppStorage(OnboardingFlow.selectedFreePlanStorageKey) private var onboardingSelectedFreePlan = false
 
     @State private var animateIn = false
-    @State private var blobPhase: CGFloat = 0
     @State private var showPicker = false
     @State private var permissionState = AppBlockingSetupPermissionState()
     #if DEBUG
     @AppStorage("pillie_debug_app_blocking_authorization_recovery")
     private var debugAuthorizationRecovery = false
     #endif
-    private let performanceTier = PerformanceTier.current
     private let onboardingTelemetry = OnboardingTelemetry()
     private var content: AppBlockingSetupContent {
         AppBlockingSetupContent.localized(
             locale: locale,
-            trialEndTerms: trialEndTerms,
-            isPaidSubscriber: isPaidSubscriber
+            trialEndTerms: trialEndTerms
         )
     }
 
     let trialEndTerms: TrialEndAccessTerms
-    let isPaidSubscriber: Bool
     let onBack: () -> Void
     let onContinue: () -> Void
     let onSkip: () -> Void
 
     init(
         trialEndTerms: TrialEndAccessTerms = .legacy,
-        isPaidSubscriber: Bool = false,
         onBack: @escaping () -> Void,
         onContinue: @escaping () -> Void,
         onSkip: @escaping () -> Void
     ) {
         self.trialEndTerms = trialEndTerms
-        self.isPaidSubscriber = isPaidSubscriber
         self.onBack = onBack
         self.onContinue = onContinue
         self.onSkip = onSkip
@@ -269,53 +230,50 @@ struct AppBlockingSetupView: View {
         SubscriptionManager.shared.hasPlusAccess && !onboardingSelectedFreePlan
     }
 
-    /// Count-only view of the live selection — the deep, testable core.
     private var selection: BlockerSelectionState {
-        BlockerSelectionState(
-            applicationCount: blockingManager.activitySelection.applicationTokens.count,
-            categoryCount: blockingManager.activitySelection.categoryTokens.count
+        blockingManager.selectionState
+    }
+
+    private var phase: AppBlockingSetupPhase {
+        AppBlockingSetupPhase.resolve(
+            canSetUpBlocking: canSetUpBlocking,
+            isEmpty: selection.isEmpty,
+            isRecoveryVisible: permissionState.isRecoveryVisible
         )
     }
 
     var body: some View {
         ZStack {
-            OnboardingBackground(blobPhase: blobPhase, tier: performanceTier)
+            PillieTheme.bg.ignoresSafeArea()
 
             VStack(spacing: 0) {
                 header
                     .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger1))
                     .padding(.horizontal, PillieTheme.screenHorizontalPadding)
-                    .padding(.top, 28)
+                    .padding(.top, 8)
+                    .padding(.bottom, 12)
 
-                ScrollView(showsIndicators: false) {
-                    VStack(alignment: .leading, spacing: 22) {
-                        heroSection
-                            .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger2))
-
-                        if canSetUpBlocking {
-                            Group {
-                                if permissionState.isRecoveryVisible {
-                                    authorizationRecoveryCard
-                                } else if selection.isEmpty {
-                                    emptyStateCard
-                                } else {
-                                    selectedStateCard
-                                }
-                            }
-                            .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger3))
-                        } else {
-                            lockedSection
-                                .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger3))
-                        }
-                    }
+                heroSection
+                    .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger2))
                     .padding(.horizontal, PillieTheme.screenHorizontalPadding)
-                    .padding(.top, 18)
-                    .padding(.bottom, 16)
+                    .padding(.top, 22)
+
+                if phase == .empty {
+                    emptyStateCard
+                        .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger3))
+                } else {
+                    ScrollView(showsIndicators: false) {
+                        phaseCard
+                            .padding(.horizontal, PillieTheme.screenHorizontalPadding)
+                            .padding(.top, 18)
+                            .padding(.bottom, 16)
+                    }
                 }
 
                 footer
                     .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger4))
                     .padding(.horizontal, PillieTheme.screenHorizontalPadding)
+                    .padding(.top, 16)
                     .padding(.bottom, PillieTheme.onboardingCTABottomPadding)
             }
         }
@@ -330,18 +288,6 @@ struct AppBlockingSetupView: View {
                 permissionState.showRecoveryForDebug()
             }
             #endif
-            // The looping background blob is purely decorative — suppress it for
-            // Reduce Motion users and on constrained devices (shared gate).
-            guard PillieMotion.decorativeMotionEnabled(
-                accessibilityReduceMotion: reduceMotion,
-                performanceTier: performanceTier
-            ) else {
-                blobPhase = 0
-                return
-            }
-            withAnimation(.easeInOut(duration: 8).repeatForever(autoreverses: true)) {
-                blobPhase = 1
-            }
         }
         #if DEBUG
         .onChange(of: debugAuthorizationRecovery) { _, isRecoveryVisible in
@@ -355,10 +301,8 @@ struct AppBlockingSetupView: View {
     // MARK: - Header
 
     private var header: some View {
-        let progress = ProtectionPlanProgressIndex.progress(for: .appBlocking)
-        return PersonalizationOnboardingHeader(
-            appeared: animateIn,
-            progress: progress,
+        ProtectionPlanProgressHeader(
+            progress: ProtectionPlanProgressIndex.progress(for: .appBlocking),
             onBack: onBack
         )
     }
@@ -366,113 +310,57 @@ struct AppBlockingSetupView: View {
     // MARK: - Hero
 
     private var heroSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text(content.badge)
-                .font(.pillie(10, weight: .black))
-                .foregroundStyle(PillieTheme.textMuted)
-                .tracking(1.4)
-                .textCase(.uppercase)
-                .padding(.horizontal, 12)
-                .padding(.vertical, 7)
-                .background(PillieTheme.coralLight, in: Capsule())
-                .overlay {
-                    Capsule().stroke(Color.black.opacity(0.06), lineWidth: 1)
-                }
-
-            (Text(content.titleLead + (content.titleAccent.isEmpty ? "" : "\n"))
-                .foregroundColor(PillieTheme.textPrimary)
-                + Text(content.titleAccent).foregroundColor(PillieTheme.coral))
+        VStack(alignment: .leading, spacing: 6) {
+            Text(content.titleLead)
                 .font(.pillie(34, weight: .bold))
-                .lineLimit(dynamicTypeSize.isAccessibilitySize ? 3 : 1)
-                .minimumScaleFactor(dynamicTypeSize.isAccessibilitySize ? 1 : 0.68)
-                .allowsTightening(true)
-
-            Text(canSetUpBlocking ? content.subtitle : content.lockedSubtitle)
-                .font(.pillieBodyLarge())
-                .foregroundStyle(PillieTheme.textMuted)
+                .foregroundStyle(PillieTheme.textPrimary)
+                .tracking(-0.85)
+                .lineSpacing(4)
                 .fixedSize(horizontal: false, vertical: true)
 
-            TrialUnlockDisclosure(text: content.trialDisclosure)
+            Text(phase == .locked ? content.lockedSubtitle : content.subtitle)
+                .font(.pillie(15, weight: .regular))
+                .foregroundStyle(PillieTheme.textMuted)
+                .lineSpacing(6)
+                .fixedSize(horizontal: false, vertical: true)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 
-    // MARK: - Empty State
+    private var emptyUnlockText: String {
+        AppBlockingSetupContent.formattedEmptyUnlock(
+            format: content.emptyUnlockFormat,
+            reminderHour: store.reminderHour,
+            reminderMinute: store.reminderMinute,
+            locale: locale
+        )
+    }
+
+    // MARK: - Phase cards
 
     private var emptyStateCard: some View {
-        Button(action: chooseApps) {
-            VStack(spacing: 12) {
-                ZStack {
-                    Circle()
-                        .strokeBorder(PillieTheme.coral, style: StrokeStyle(lineWidth: 2, dash: [6, 5]))
-                        .frame(width: 60, height: 60)
-                    Image(systemName: "pause.fill")
-                        .font(.system(size: 22, weight: .semibold))
-                        .foregroundStyle(PillieTheme.coral)
-                }
-
-                Text(content.emptyTitle)
-                    .font(.pillieBodyBold())
-                    .foregroundStyle(PillieTheme.textPrimary)
-                    .lineLimit(dynamicTypeSize.isAccessibilitySize ? 2 : 1)
-                    .minimumScaleFactor(dynamicTypeSize.isAccessibilitySize ? 1 : 0.75)
-                    .allowsTightening(true)
-
-                Text(content.emptyDetail)
-                    .font(.pillieBody())
-                    .foregroundStyle(PillieTheme.textMuted)
-                    .multilineTextAlignment(.center)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .padding(.horizontal, 6)
-
-                ProtectionPlanFlowLayout(horizontalSpacing: 8, verticalSpacing: 8) {
-                    ForEach(content.categoryHints, id: \.name) { hint in
-                        hintChip(hint)
-                    }
-                }
-                .padding(.top, 2)
-
-                HStack(spacing: 8) {
-                    Image(systemName: "lock.fill")
-                        .font(.system(size: 12, weight: .semibold))
-                        .foregroundStyle(PillieTheme.textMuted)
-                    Text(content.privacyNote)
-                        .font(.pillie(13, weight: .medium))
-                        .foregroundStyle(PillieTheme.textMuted)
-                }
-                .padding(.top, 4)
-            }
-            .padding(22)
-            .frame(maxWidth: .infinity)
-            .contentShape(Rectangle())
-        }
-        .buttonStyle(.plain)
-        .disabled(
-            AppBlockingSetupEmptyCardAction.resolve(
-                hasSelection: selection.hasSelection,
-                isRequesting: permissionState.isRequesting
-            ) == nil
+        PausedPhoneIllustration(
+            title: content.emptyTitle,
+            unlockHint: emptyUnlockText,
+            markTaken: content.emptyMarkTaken
         )
-        .modifier(BlockerCardSurface())
-        // Read the card as one coherent element; the category chips are
-        // illustrative decoration, so they fold into the combined label.
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(content.emptyStateAccessibilityLabel)
+        .accessibilityLabel(content.emptyStateAccessibilityLabel(unlockHint: emptyUnlockText))
         .accessibilityIdentifier("appBlockingEmptyStateCard")
     }
 
-    private func hintChip(_ hint: AppBlockingSetupContent.CategoryHint) -> some View {
-        HStack(spacing: 6) {
-            Image(systemName: hint.symbol)
-                .font(.system(size: 12, weight: .semibold))
-            Text(hint.name)
-                .font(.pillie(12, weight: .semibold))
+    @ViewBuilder
+    private var phaseCard: some View {
+        switch phase {
+        case .empty:
+            EmptyView()
+        case .recovery:
+            authorizationRecoveryCard
+        case .selected:
+            selectedStateCard
+        case .locked:
+            lockedSection
         }
-        .foregroundStyle(PillieTheme.textMuted)
-        .padding(.horizontal, 12)
-        .padding(.vertical, 7)
-        .background(PillieTheme.bg, in: Capsule())
-        .overlay { Capsule().stroke(Color.black.opacity(0.06), lineWidth: 1) }
     }
 
     private var authorizationRecoveryCard: some View {
@@ -501,12 +389,8 @@ struct AppBlockingSetupView: View {
         .accessibilityIdentifier("appBlockingAuthorizationRecovery")
     }
 
-    // MARK: - Selected State
-
     private var selectedStateCard: some View {
         VStack(alignment: .leading, spacing: 18) {
-            // Count-only summary — no category icons/names, just how many are
-            // blocked. Pillie never learns which apps (AC5).
             HStack(spacing: 16) {
                 Text(selection.countText)
                     .font(.pillie(40, weight: .bold))
@@ -552,8 +436,6 @@ struct AppBlockingSetupView: View {
         .modifier(BlockerCardSurface())
     }
 
-    // MARK: - Locked fallback
-
     private var lockedSection: some View {
         VStack(spacing: 16) {
             Image(systemName: "lock.fill")
@@ -577,40 +459,49 @@ struct AppBlockingSetupView: View {
     }
 
     // MARK: - Footer
-    //
-    // A single bottom-anchored primary CTA at the shared onboarding baseline. It
-    // morphs the pill-time CTA → "Finish Setup" once a selection exists, so
-    // the dark CTA never competes with a second dark button (the in-card action is
-    // the lavender "Change selection"). "Skip for now" keeps the reminder-only path.
 
     private var footer: some View {
         VStack(spacing: 12) {
-            if canSetUpBlocking {
-                primaryCTA
-                skipButton
-            } else {
+            if phase == .locked {
                 Button(action: onContinue) {
                     Text(content.lockedCTA)
                 }
                 .buttonStyle(.pillieDark)
+            } else {
+                if phase == .empty {
+                    emptyCoachLine
+                }
+                primaryCTA
+                skipButton
             }
         }
     }
 
+    private var emptyCoachLine: some View {
+        HStack(alignment: .center, spacing: 5) {
+            Image(systemName: "lock")
+                .font(.system(size: 13, weight: .medium))
+                .foregroundStyle(PillieTheme.textMuted)
+                .frame(width: 14, height: 16)
+            Text(content.emptyDetail)
+                .font(.pillie(13, weight: .medium))
+                .foregroundStyle(PillieTheme.textMuted)
+                .lineLimit(1)
+                .minimumScaleFactor(0.62)
+                .allowsTightening(true)
+                .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .accessibilityElement(children: .combine)
+    }
+
     private var primaryCTA: some View {
-        // No primer: when empty, the CTA requests Screen Time authorization inline
-        // and opens the system picker; once apps are chosen it saves and continues.
         Button(action: performPrimaryAction) {
-            HStack(spacing: 8) {
+            Group {
                 if permissionState.isRequesting {
                     ProgressView().tint(.white)
-                } else if !selection.hasSelection {
-                    Image(systemName: "shield.fill")
-                        .font(.system(size: 17, weight: .semibold))
+                } else {
+                    Text(primaryActionTitle)
                 }
-                Text(primaryActionTitle)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.55)
             }
         }
         .buttonStyle(.pillieDark)
@@ -642,13 +533,13 @@ struct AppBlockingSetupView: View {
     private var skipButton: some View {
         Button(action: onSkip) {
             Text(content.skipCTA)
-                .font(.pillie(16, weight: .medium))
+                .font(.pillie(15, weight: .medium))
                 .foregroundStyle(PillieTheme.textMuted)
                 .lineLimit(dynamicTypeSize.isAccessibilitySize ? 2 : 1)
                 .minimumScaleFactor(dynamicTypeSize.isAccessibilitySize ? 1 : 0.72)
                 .allowsTightening(true)
                 .frame(maxWidth: .infinity)
-                .frame(minHeight: 42)
+                .frame(height: 40)
                 .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
@@ -676,7 +567,6 @@ struct AppBlockingSetupView: View {
     }
 
     private func finishSetup() {
-        // AC2: never save an empty configuration (the CTA is also disabled when empty).
         guard selection.canSaveBlockerConfig else { return }
         blockingManager.saveSelectionAndReconcile(routine: appBlockingRoutine)
         ProductAnalyticsTelemetry.live.onboardingBlockerConfigSaved(
@@ -693,29 +583,6 @@ struct AppBlockingSetupView: View {
             method: store.pack.method,
             blockingSchedule: store.blockingScheduleMirror
         )
-    }
-}
-
-private struct TrialUnlockDisclosure: View {
-    let text: String
-
-    var body: some View {
-        HStack(alignment: .top, spacing: 9) {
-            Image(systemName: "checkmark.seal.fill")
-                .font(.pillie(15, weight: .semibold))
-                .foregroundStyle(PillieTheme.coral)
-
-            Text(text)
-                .font(.pillie(14, weight: .semibold))
-                .foregroundStyle(PillieTheme.textPrimary)
-                .fixedSize(horizontal: false, vertical: true)
-        }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 10)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(PillieTheme.coralLight, in: RoundedRectangle(cornerRadius: 14))
-        .accessibilityElement(children: .combine)
-        .accessibilityIdentifier("appBlockingTrialDisclosure")
     }
 }
 

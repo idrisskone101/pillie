@@ -204,7 +204,7 @@ final class ProtectionPlanDiagnosisTests: XCTestCase {
     }
 
     func testLockMechanismSummaryIsGenericAndMethodAware() {
-        let summary = "Selected apps pause after a Pillie reminder. They come back after you check in."
+        let summary = "The apps you pick pause after a reminder. They come back when you check in."
         let pill = diagnosis(primary: .app(.tiktok), method: .pill).lockMechanismSummary
         XCTAssertEqual(pill, summary)
         XCTAssertFalse(pill.contains("TikTok"), "Summary must not name a specific app: \(pill)")
@@ -293,7 +293,7 @@ final class ProtectionPlanDiagnosisTests: XCTestCase {
         XCTAssertEqual(points[0], "Built from the routine you selected.")
         XCTAssertEqual(
             points[1],
-            "Selected apps pause after a Pillie reminder. They come back after you check in."
+            "The apps you pick pause after a reminder. They come back when you check in."
         )
         for brand in ["TikTok", "Instagram", "Snapchat", "YouTube"] {
             XCTAssertFalse(points[1].contains(brand), "Strategy copy must not name a brand: \(points[1])")
@@ -304,7 +304,7 @@ final class ProtectionPlanDiagnosisTests: XCTestCase {
         let points = diagnosis(method: .pill, riskWindow: .rightAfterAlarm).strategyPoints
         XCTAssertEqual(
             points[1],
-            "Selected apps pause after a Pillie reminder. They come back after you check in."
+            "The apps you pick pause after a reminder. They come back when you check in."
         )
     }
 

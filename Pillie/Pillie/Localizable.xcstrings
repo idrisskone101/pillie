@@ -22277,551 +22277,551 @@
       }
     },
     "onboarding.blocking_setup.subtitle": {
-      "comment": "Method-neutral [health]",
+      "comment": "Hero subtitle explaining pause-after-reminder flow [health]",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Selected apps pause after a Pillie reminder. They come back after you check in."
+            "value": "The apps you pick pause after a reminder. They come back when you check in."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Le app scelte vanno in pausa al promemoria. Tornano dopo il check-in."
+            "value": "Le app che scegli vanno in pausa al promemoria. Tornano dopo il check-in."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ausgewählte Apps pausieren nach einer Erinnerung. Nach dem Check-in sind sie wieder da."
+            "value": "Die Apps, die du wählst, pausieren nach einer Erinnerung. Nach dem Check-in sind sie wieder da."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Les apps sélectionnées sont mises en pause après un rappel Pillie. Elles reviennent après ton check-in."
+            "value": "Les apps que tu choisis se mettent en pause après un rappel. Elles reviennent après ton check-in."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Las apps seleccionadas se pausan tras un recordatorio de Pillie. Vuelven después del check-in."
+            "value": "Las apps que elijas se pausan tras un recordatorio. Vuelven cuando hagas el check-in."
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Apps selecionados pausam após um lembrete do Pillie. Eles voltam depois do check-in."
+            "value": "Os apps que você escolher pausam após um lembrete. Eles voltam quando você fizer o check-in."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Geselecteerde apps pauzeren na een Pillie-herinnering. Ze komen terug na je check-in."
+            "value": "De apps die je kiest, pauzeren na een herinnering. Ze komen terug na je check-in."
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Valda appar pausas efter en påminnelse från Pillie. De kommer tillbaka när du har checkat in."
+            "value": "Apparna du väljer pausas efter en påminnelse. De kommer tillbaka när du checkat in."
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Valgte apps sættes på pause efter en påmindelse fra Pillie. De kommer tilbage, når du har tjekket ind."
+            "value": "De apps, du vælger, sættes på pause efter en påmindelse. De kommer tilbage, når du tjekker ind."
           }
         },
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "Valgte apper pauses etter en Pillie-påminnelse. De kommer tilbake etter at du har sjekket inn."
+            "value": "Appene du velger, pauses etter en påminnelse. De kommer tilbake etter at du har sjekket inn."
           }
         },
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Valitut sovellukset menevät tauolle Pillie-muistutuksen jälkeen. Ne palaavat, kun olet kuitannut."
+            "value": "Valitsemasi sovellukset menevät tauolle muistutuksen jälkeen. Ne palaavat, kun olet kuitannut."
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "translated",
-            "value": "As apps selecionadas ficam em pausa depois de um lembrete Pillie. Voltam depois de registares."
+            "value": "As apps que escolheres ficam em pausa após um lembrete. Voltam depois do check-in."
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "Les apps seleccionades es pausen després d’un recordatori de Pillie. Tornen quan registres."
+            "value": "Les apps que triïs es posen en pausa després d'un recordatori. Tornen quan facis el check-in."
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wybrane aplikacje wstrzymują się po przypomnieniu Pillie. Wracają po potwierdzeniu."
+            "value": "Wybrane aplikacje wstrzymują się po przypomnieniu. Wracają po check-inie."
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vybrané aplikace se po připomínce Pillie pozastaví. Po potvrzení se vrátí."
+            "value": "Vybrané aplikace se po připomínce pozastaví. Po check-inu se vrátí."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Выбранные приложения ставятся на паузу после напоминания Pillie. После отметки они снова доступны."
+            "value": "Выбранные приложения ставятся на паузу после напоминания. После отметки они снова доступны."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Вибрані застосунки стають на паузу після нагадування Pillie. Після відмітки вони знову доступні."
+            "value": "Вибрані застосунки стають на паузу після нагадування. Після відмітки вони знову доступні."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillieのリマインダーの後、選んだアプリが一時停止します。チェックインすると元に戻ります。"
+            "value": "選んだアプリはリマインダーの後に一時停止します。チェックインすると元に戻ります。"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie 알림이 온 뒤 선택한 앱이 일시 중지돼요. 체크인하면 다시 돌아와요."
+            "value": "선택한 앱은 알림 후 일시 중지됩니다. 체크인하면 다시 돌아옵니다."
           }
         },
         "ms": {
           "stringUnit": {
             "state": "translated",
-            "value": "Apl terpilih dijeda selepas peringatan Pillie. Apl itu kembali selepas kamu sahkan."
+            "value": "Apl yang anda pilih dijeda selepas peringatan. Apl itu kembali selepas anda check-in."
           }
         },
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "Aplicațiile selectate intră în pauză după un memento Pillie. Revin după ce confirmi."
+            "value": "Aplicațiile pe care le alegi intră în pauză după un memento. Revin după check-in."
           }
         },
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vybrané aplikácie sa po pripomienke Pillie pozastavia. Po potvrdení sú zase späť."
+            "value": "Vybrané aplikácie sa po pripomienke pozastavia. Po check-ine sa vrátia."
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "แอปที่เลือกจะพักหลังการแจ้งเตือนจาก Pillie และกลับมาหลังคุณเช็กอิน"
+            "value": "แอปที่คุณเลือกจะหยุดชั่วคราวหลังการแจ้งเตือน และกลับมาหลังคุณเช็กอิน"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie 提醒后，所选应用会暂停。完成打卡后它们就会恢复。"
+            "value": "你选择的应用会在提醒后暂停。完成打卡后它们就会恢复。"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie रिमाइंडर के बाद चुने हुए ऐप्स रुक जाते हैं। चेक-इन के बाद वे वापस आ जाते हैं।"
+            "value": "आपके चुने हुए ऐप्स रिमाइंडर के बाद रुक जाते हैं। चेक-इन के बाद वे वापस आ जाते हैं।"
           }
         },
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Odabrane aplikacije se pauziraju nakon Pillie podsjetnika. Vraćaju se nakon što potvrdiš."
+            "value": "Odabrane aplikacije se pauziraju nakon podsjetnika. Vraćaju se nakon check-ina."
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "A kijelölt appok egy Pillie-emlékeztető után szünetelnek. A bejelölés után visszatérnek."
+            "value": "A kiválasztott appok emlékeztető után szünetelnek. Check-in után visszatérnek."
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Seçili uygulamalar bir Pillie hatırlatmasından sonra duraklar. Kaydını yaptıktan sonra geri gelirler."
+            "value": "Seçtiğin uygulamalar bir hatırlatmadan sonra duraklar. Check-in yaptığında geri gelirler."
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie நினைவூட்டலுக்குப் பிறகு தேர்ந்தெடுத்த ஆப்ஸ் இடைநிறுத்தப்படும். செக்-இன் செய்தபின் அவை திரும்பும்."
+            "value": "நீங்கள் தேர்ந்தெடுத்த ஆப்ஸ் நினைவூட்டலுக்குப் பிறகு இடைநிறுத்தப்படும். செக்-இன் செய்த பின் அவை திரும்பும்."
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Aplikasi terpilih dijeda setelah pengingat Pillie. Aplikasi kembali setelah kamu check-in."
+            "value": "Aplikasi yang kamu pilih dijeda setelah pengingat. Aplikasi kembali setelah kamu check-in."
           }
         },
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "تتوقف التطبيقات المحددة مؤقتًا بعد تذكير Pillie. وتعود بعد التسجيل."
+            "value": "تتوقف التطبيقات التي تختارينها مؤقتًا بعد التذكير. وتعود بعد التسجيل."
           }
         },
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "האפליקציות שנבחרו מושהות אחרי תזכורת של Pillie. הן חוזרות אחרי הדיווח."
+            "value": "האפליקציות שבחרת מושהות אחרי תזכורת. הן חוזרות אחרי check-in."
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Các ứng dụng đã chọn sẽ tạm dừng sau lời nhắc của Pillie. Chúng sẽ trở lại sau khi bạn điểm danh."
+            "value": "Các ứng dụng bạn chọn sẽ tạm dừng sau lời nhắc. Chúng trở lại sau khi bạn check-in."
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie রিমাইন্ডারের পরে বেছে নেওয়া অ্যাপগুলো পজ হয়। চেক-ইন করলে সেগুলো ফিরে আসে।"
+            "value": "যে অ্যাপগুলো বেছে নেবে সেগুলো রিমাইন্ডারের পর পজ হবে। চেক-ইন করলে ফিরে আসবে।"
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie کی یاد دہانی کے بعد چُنی ہوئی ایپس رک جاتی ہیں۔ چیک اِن کے بعد وہ واپس آ جاتی ہیں۔"
+            "value": "جو ایپس تم چنو گی وہ یاددہانی کے بعد رک جائیں گی۔ چیک اِن کے بعد واپس آ جائیں گی۔"
           }
         },
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Izbrane aplikacije se po opomniku Pillie ustavijo. Po potrditvi so spet na voljo."
+            "value": "Aplikacije, ki jih izbereš, se po opomniku ustavijo. Vrnejo se, ko potrdiš."
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Οι επιλεγμένες εφαρμογές μπαίνουν σε παύση μετά από μια υπενθύμιση Pillie. Επανέρχονται μόλις επιβεβαιώσεις."
+            "value": "Οι εφαρμογές που διαλέγεις μπαίνουν σε παύση μετά από υπενθύμιση. Επιστρέφουν όταν κάνεις check-in."
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie రిమైండర్ తర్వాత ఎంచుకున్న యాప్‌లు పాజ్ అవుతాయి. నువ్వు చెక్-ఇన్ చేశాక అవి తిరిగి వస్తాయి."
+            "value": "నువ్వు ఎంచుకున్న యాప్‌లు రిమైండర్ తర్వాత పాజ్ అవుతాయి. చెక్-ఇన్ చేస్తే తిరిగి వస్తాయి."
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie 提醒後，所選的應用程式會暫停。完成打卡後它們就會恢復。"
+            "value": "你選的應用程式會在提醒後暫停。打卡後就會恢復。"
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie રિમાઇંડર કે પછી ચુને હુએ ઍપ્સ રુક જાતે છે। ચેક-ઇન કે પછી વે વાપસ આ જાતે છે।"
+            "value": "તમે પસંદ કરેલી ઍપ્સ રિમાઇન્ડર પછી થોભે છે. ચેક-ઇન પછી પાછી આવે છે."
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie ಜ್ಞಾಪನೆ ತರ್ವಾತ ಆರಿಸಿದ ಆ್ಯಾಪ್‌ಗಳು ಪಾಜ್ ಅವುತಾಯಿ. ನೀನು ಚೆಕ್-ಇನ್ ಚೇಶಾಕ ಅವಿ ತಿರಿಗಿ ಸಿಗುತ್ತವೆ."
+            "value": "ನೀವು ಆರಿಸಿದ ಆ್ಯಾಪ್‌ಗಳು ಜ್ಞಾಪನೆಯ ನಂತರ ವಿರಾಮಕ್ಕೆ ಹೋಗುತ್ತವೆ. ಚೆಕ್-ಇನ್ ಮಾಡಿದ ನಂತರ ಹಿಂತಿರುಗುತ್ತವೆ."
           }
         },
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie റിമൈൻഡറിന് ശേഷം തിരഞ്ഞെടുത്ത ആപ്പുകൾ പോസ് ആകും. ചെക്ക്-ഇൻ കഴിഞ്ഞാൽ അവ തിരികെ വരും."
+            "value": "നിങ്ങൾ തിരഞ്ഞെടുക്കുന്ന ആപ്പുകൾ ഓർമ്മപ്പെടുത്തലിന് ശേഷം പോസ് ആകും. ചെക്ക്-ഇൻ ചെയ്താൽ തിരികെ വരും."
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie आठवणीनंतर निवडलेले अॅप्स थांबतात. नोंदीनंतर परत येतात."
+            "value": "तुम्ही निवडलेली अॅप्स रिमाइंडरनंतर थांबतात. चेक-इन केल्यावर परत येतात."
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie ରିମାଇଣ୍ଡର୍ ପରେ ବଛା ଆପ୍ ବିରାମ ହୁଏ। ଚେକ୍-ଇନ୍ ପରେ ସେଗୁଡ଼ିକ ଫେରିଆସେ।"
+            "value": "ଆପଣ ବାଛିଥିବା ଆପ୍ ରିମାଇଣ୍ଡର ପରେ ବିରାମ ନେବେ। ଚେକ୍-ଇନ୍ ପରେ ଫେରିବେ।"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie ਰਿਮਾਇਂਡਰ ਦੇ ਬਾਅਦ ਚੁਨੇ ਹੁਏ ਐਪਾਂ ਰੁਕ ਜਾਂਦੀਆਂ ਹਨ। ਚੇਕ-ਇਨ ਦੇ ਬਾਅਦ ਵੇ ਵਾਪਸ ਆ ਜਾਂਦੀਆਂ ਹਨ।"
+            "value": "ਜੋ ਐਪਾਂ ਤੁਸੀਂ ਚੁਣੋਗੇ ਉਹ ਯਾਦ-ਦਿਹਾਵਨੀ ਤੋਂ ਬਾਅਦ ਰੁਕਣਗੀਆਂ। ਚੈੱਕ-ਇਨ ਤੋਂ ਬਾਅਦ ਵਾਪਸ ਆਉਣਗੀਆਂ।"
           }
         }
       }
     },
     "onboarding.blocking_setup.empty_detail": {
-      "comment": "Explains the native Screen Time picker before authorization [standard]",
+      "comment": "Footer coach line before Screen Time authorization [standard]",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Use Apple Screen Time to choose categories or apps."
+            "value": "Next, Apple asks for Screen Time so the apps can pause. Tap Continue."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Usa Tempo di utilizzo di Apple per scegliere categorie o app."
+            "value": "Poi Apple chiede Tempo di utilizzo così le app possono andare in pausa. Tocca Continua."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wähle über die Apple-Bildschirmzeit Kategorien oder Apps aus."
+            "value": "Als Nächstes fragt Apple nach Bildschirmzeit, damit die Apps pausieren können. Tippe auf Weiter."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Utilise Temps d'écran d'Apple pour choisir des catégories ou des apps."
+            "value": "Ensuite, Apple demande Temps d'écran pour que les apps puissent se mettre en pause. Appuie sur Continuer."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Usa Tiempo en pantalla de Apple para elegir categorías o apps."
+            "value": "Después, Apple pide Tiempo en pantalla para que las apps puedan pausarse. Toca Continuar."
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Use o Tempo de Uso da Apple para escolher categorias ou apps."
+            "value": "Em seguida, a Apple pede Tempo de Uso para que os apps possam pausar. Toque em Continuar."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Gebruik Apple Schermtijd om categorieën of apps te kiezen."
+            "value": "Daarna vraagt Apple om Schermtijd zodat apps kunnen pauzeren. Tik op Doorgaan."
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Välj kategorier eller appar via Apples Skärmtid."
+            "value": "Sedan ber Apple om Skärmtid så att apparna kan pausas. Tryck på Fortsätt."
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Brug Apples Skærmtid til at vælge kategorier eller apps."
+            "value": "Derefter beder Apple om Skærmtid, så apps kan sættes på pause. Tryk på Fortsæt."
           }
         },
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bruk Apples Skjermtid til å velge kategorier eller apper."
+            "value": "Deretter ber Apple om Skjermtid slik at appene kan pauses. Trykk på Fortsett."
           }
         },
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Valitse luokat tai sovellukset Applen Käyttöajalla."
+            "value": "Seuraavaksi Apple pyytää Ruutuaikaa, jotta sovellukset voivat mennä tauolle. Napauta Jatka."
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "translated",
-            "value": "Usa o Tempo de Ecrã da Apple para escolher categorias ou apps."
+            "value": "A seguir, a Apple pede Tempo de Ecrã para as apps poderem pausar. Toca em Continuar."
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "Fes servir el Temps d’ús d’Apple per triar categories o apps."
+            "value": "Després, Apple demana Temps d'ús perquè les apps es puguin posar en pausa. Toca Continua."
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wybierz kategorie lub aplikacje w Czasie przed ekranem Apple."
+            "value": "Potem Apple poprosi o Czas ekranowy, aby aplikacje mogły się wstrzymać. Stuknij Kontynuuj."
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kategorie nebo aplikace vyber přes Čas u obrazovky od Apple."
+            "value": "Poté Apple požádá o Čas u obrazovky, aby se aplikace mohly pozastavit. Klepni na Pokračovat."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Выбери категории или приложения через Экранное время Apple."
+            "value": "Далее Apple запросит Экранное время, чтобы приложения могли ставиться на паузу. Нажми «Продолжить»."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Вибери категорії або застосунки через Екранний час Apple."
+            "value": "Далі Apple попросить Екранний час, щоб застосунки могли ставати на паузу. Торкнись «Продовжити»."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Appleのスクリーンタイムでカテゴリやアプリを選びます。"
+            "value": "次に、Appleがスクリーンタイムを求め、アプリを一時停止できるようになります。「続ける」をタップしてください。"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "Apple 스크린 타임으로 카테고리나 앱을 선택하세요."
+            "value": "다음으로 Apple이 스크린 타임을 요청해 앱을 일시 중지할 수 있습니다. 계속을 탭하세요."
           }
         },
         "ms": {
           "stringUnit": {
             "state": "translated",
-            "value": "Gunakan Masa Skrin Apple untuk memilih kategori atau apl."
+            "value": "Seterusnya, Apple meminta Masa Skrin supaya apl boleh dijeda. Ketik Teruskan."
           }
         },
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "Folosește Timp de utilizare de la Apple pentru a alege categorii sau aplicații."
+            "value": "Apoi Apple cere Timp de utilizare ca aplicațiile să poată intra în pauză. Atinge Continuă."
           }
         },
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kategórie alebo aplikácie vyber cez Čas pred obrazovkou od Apple."
+            "value": "Potom Apple požiada o Čas pri obrazovke, aby sa aplikácie mohli pozastaviť. Klepni na Pokračovať."
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "ใช้เวลาหน้าจอของ Apple เพื่อเลือกหมวดหมู่หรือแอป"
+            "value": "จากนั้น Apple จะขอเวลาหน้าจอเพื่อให้แอปหยุดชั่วคราวได้ แตะ ดำเนินการต่อ"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "使用 Apple 屏幕使用时间来选择类别或应用。"
+            "value": "接下来，Apple 会请求屏幕使用时间，以便应用可以暂停。轻点“继续”。"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "श्रेणियाँ या ऐप्स चुनने के लिए Apple स्क्रीन टाइम का इस्तेमाल करो।"
+            "value": "इसके बाद Apple स्क्रीन टाइम माँगेगा ताकि ऐप्स रुक सकें। जारी रखें पर टैप करें।"
           }
         },
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pomoću Appleova Vremena uporabe odaberi kategorije ili aplikacije."
+            "value": "Zatim Apple traži Vrijeme na zaslonu kako bi se aplikacije mogle pauzirati. Dodirni Nastavi."
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "Az Apple Képernyőidővel válassz kategóriákat vagy appokat."
+            "value": "Ezután az Apple Képernyőidőt kér, hogy az appok szünetelhessenek. Koppints a Folytatásra."
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kategori veya uygulama seçmek için Apple Ekran Süresi'ni kullan."
+            "value": "Ardından Apple, uygulamaların duraklayabilmesi için Ekran Süresi ister. Devam Et'e dokun."
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "Apple ஸ்கிரீன் டைம் மூலம் வகைகள் அல்லது ஆப்ஸைத் தேர்ந்தெடு."
+            "value": "அடுத்து, ஆப்ஸை இடைநிறுத்த Apple திரை நேரத்தைக் கேட்கும். தொடரவும் என்பதைத் தட்டவும்."
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Gunakan Durasi Layar Apple untuk memilih kategori atau aplikasi."
+            "value": "Berikutnya, Apple meminta Waktu Layar agar aplikasi bisa dijeda. Ketuk Lanjutkan."
           }
         },
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "استخدمي مدة استخدام الجهاز من Apple لاختيار الفئات أو التطبيقات."
+            "value": "بعدها تطلب Apple وقت الشاشة حتى يمكن إيقاف التطبيقات مؤقتًا. اضغطي متابعة."
           }
         },
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "בחרי קטגוריות או אפליקציות דרך זמן מסך של Apple."
+            "value": "אחר כך Apple תבקש זמן מסך כדי שאפשר יהיה להשהות את האפליקציות. הקשי על המשך."
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dùng Thời gian sử dụng của Apple để chọn danh mục hoặc ứng dụng."
+            "value": "Tiếp theo, Apple sẽ yêu cầu Thời gian sử dụng để các ứng dụng có thể tạm dừng. Nhấn Tiếp tục."
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ক্যাটাগরি বা অ্যাপ বেছে নিতে Apple স্ক্রিন টাইম ব্যবহার করো।"
+            "value": "এরপর অ্যাপ পজ করতে Apple স্ক্রিন টাইম চাইবে। চালিয়ে যাও-তে ট্যাপ করো।"
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "زمرے یا ایپس چُننے کے لیے Apple اسکرین ٹائم استعمال کرو۔"
+            "value": "اگلا قدم: ایپس روکنے کے لیے Apple اسکرین ٹائم مانگے گا۔ آگے بڑھو دباؤ۔"
           }
         },
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Z Applovim Časom uporabe izberi kategorije ali aplikacije."
+            "value": "Nato Apple zahteva Čas pred zaslonom, da se aplikacije lahko ustavijo. Tapni Nadaljuj."
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Χρησιμοποίησε τον Χρόνο Χρήσης της Apple για να διαλέξεις κατηγορίες ή εφαρμογές."
+            "value": "Μετά η Apple ζητά Χρόνο οθόνης για να μπουν οι εφαρμογές σε παύση. Πάτα Συνέχεια."
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "Apple స్క్రీన్ టైమ్ ద్వారా వర్గాలు లేదా యాప్‌లను ఎంచుకో."
+            "value": "తర్వాత యాప్‌లను పాజ్ చేయడానికి Apple స్క్రీన్ టైమ్ అడుగుతుంది. కొనసాగించు నొక్కండి."
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "使用 Apple 螢幕使用時間來選擇類別或應用程式。"
+            "value": "接下來，Apple 會要求「螢幕使用時間」，才能暫停 App。點「繼續」。"
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "શ્રેણિયાઁ યા ઍપ્સ પસંદ કરવા માટે Apple સ્ક્રીન ટાઇમ કા ઇસ્તેમાલ કર।"
+            "value": "પછી ઍપ્સ થોભાવવા Apple સ્ક્રીન ટાઇમ માગશે. આગળ વધ ટેપ કરો."
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "Apple ಸ್ಕ್ರೀನ್ ಟೈಮ್ ದ್ವಾರಾ ವರ್ಗಾಲು ಲೇದಾ ಆ್ಯಾಪ್ನು ಎಂಚುಕೋ."
+            "value": "ಮುಂದೆ ಆ್ಯಾಪ್‌ಗಳನ್ನು ವಿರಾಮಕ್ಕೆ ಇಡಲು Apple ಸ್ಕ್ರೀನ್ ಟೈಮ್ ಕೇಳುತ್ತದೆ. ಮುಂದುವರಿಸಿ ಟ್ಯಾಪ್ ಮಾಡಿ."
           }
         },
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "വിഭാഗങ്ങളോ ആപ്പുകളോ തിരഞ്ഞെടുക്കാൻ Apple സ്ക്രീൻ ടൈം ഉപയോഗിക്കൂ."
+            "value": "അടുത്തതായി ആപ്പുകൾ പോസ് ചെയ്യാൻ ആപ്പിൾ സ്ക്രീൻ ടൈം ചോദിക്കും. തുടരുക ടാപ്പ് ചെയ്യുക."
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "वर्ग किंवा अॅप्स निवडायला Apple Screen Time वापर."
+            "value": "नंतर अॅप्स थांबवण्यासाठी Apple स्क्रीन टाइम विचारेल. पुढे जा टॅप करा."
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ବର୍ଗ ବା ଆପ୍ ବାଛିବାକୁ Apple Screen Time ବ୍ୟବହାର କର।"
+            "value": "ପରେ ଆପ୍ ବିରାମ ପାଇଁ Apple ସ୍କ୍ରିନ୍ ଟାଇମ୍ ମାଗିବ। ଆଗକୁ ବଢ଼ ଟ୍ୟାପ୍ କର।"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਸ਼੍ਰੇਣਿਯਾਁ ਯਾ ਐਪਾਂ ਚੁਨਨੇ ਲਈ Apple ਸ੍ਕ੍ਰੀਨ ਟਾਇਮ ਦਾ ਵਰਤੋਂ ਕਰ।"
+            "value": "ਫਿਰ ਐਪਾਂ ਰੋਕਣ ਲਈ Apple ਸਕ੍ਰੀਨ ਟਾਈਮ ਮੰਗੇਗਾ। ਜਾਰੀ ਰੱਖ ਟੈਪ ਕਰੋ।"
           }
         }
       }
@@ -23927,293 +23927,293 @@
       }
     },
     "onboarding.blocking_setup.skip": {
-      "comment": "Reminder-only onboarding path [standard]",
+      "comment": "Skip app blocking setup during onboarding [standard]",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Continue without app blocking"
+            "value": "Not now"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Continua senza blocco app"
+            "value": "Non ora"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Weiter ohne App-Pause"
+            "value": "Nicht jetzt"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Continuer sans pause d'apps"
+            "value": "Pas maintenant"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Continuar sin bloqueo de apps"
+            "value": "Ahora no"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Continuar sem bloqueio de apps"
+            "value": "Agora não"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Verder zonder app-pauze"
+            "value": "Niet nu"
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Fortsätt utan appblockering"
+            "value": "Inte nu"
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Fortsæt uden appblokering"
+            "value": "Ikke nu"
           }
         },
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "Fortsett uten app-pause"
+            "value": "Ikke nå"
           }
         },
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Jatka ilman sovellustaukoa"
+            "value": "Ei nyt"
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "translated",
-            "value": "Continuar sem pausa de apps"
+            "value": "Agora não"
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "Continuar sense pausa d’apps"
+            "value": "Ara no"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dalej bez blokowania aplikacji"
+            "value": "Nie teraz"
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pokračovat bez blokování aplikací"
+            "value": "Teď ne"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Продолжить без блокировки приложений"
+            "value": "Не сейчас"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Продовжити без блокування застосунків"
+            "value": "Не зараз"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "アプリブロックなしで続ける"
+            "value": "今はしない"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "앱 차단 없이 계속"
+            "value": "나중에"
           }
         },
         "ms": {
           "stringUnit": {
             "state": "translated",
-            "value": "Teruskan tanpa jeda apl"
+            "value": "Bukan sekarang"
           }
         },
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "Continuă fără blocarea aplicațiilor"
+            "value": "Nu acum"
           }
         },
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pokračovať bez blokovania aplikácií"
+            "value": "Teraz nie"
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "ไปต่อโดยไม่พักแอป"
+            "value": "ไว้ทีหลัง"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "不启用应用暂停，继续"
+            "value": "以后再说"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "ऐप ब्लॉकिंग के बिना जारी रखो"
+            "value": "अभी नहीं"
           }
         },
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nastavi bez blokiranja aplikacija"
+            "value": "Ne sada"
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tovább appblokkolás nélkül"
+            "value": "Most nem"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Uygulama duraklatma olmadan devam et"
+            "value": "Şimdi değil"
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "ஆப் இடைநிறுத்தம் இல்லாமல் தொடர்"
+            "value": "இப்போது வேண்டாம்"
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Lanjut tanpa jeda aplikasi"
+            "value": "Nanti saja"
           }
         },
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "المتابعة بدون إيقاف التطبيقات"
+            "value": "ليس الآن"
           }
         },
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "המשך בלי השהיית אפליקציות"
+            "value": "לא עכשיו"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tiếp tục mà không chặn ứng dụng"
+            "value": "Để sau"
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "অ্যাপ ব্লকিং ছাড়াই চালিয়ে যাও"
+            "value": "এখন না"
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "ایپ بلاکنگ کے بغیر آگے بڑھو"
+            "value": "ابھی نہیں"
           }
         },
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Naprej brez blokiranja aplikacij"
+            "value": "Ne zdaj"
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Συνέχεια χωρίς παύση εφαρμογών"
+            "value": "Όχι τώρα"
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "యాప్ పాజ్ లేకుండా కొనసాగించు"
+            "value": "ఇప్పుడు కాదు"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "不啟用應用程式暫停，繼續"
+            "value": "暫時不要"
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "ઍપ બ્લૉકિંગ કે બિના જારી રખો"
+            "value": "હમણાં નહીં"
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ಯಾಪ್ ಪಾಜ್ ಲೇಕುಂಡಾ ಮುಂದೆ"
+            "value": "ಈಗ ಬೇಡ"
           }
         },
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "ആപ്പ് ബ്ലോക്കിംഗ് ഇല്ലാതെ തുടരൂ"
+            "value": "ഇപ്പോൾ വേണ്ട"
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "अॅप थांबवल्याशिवाय पुढे"
+            "value": "आत्ता नाही"
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ଆପ୍ ବିରାମ ବିନା ଆଗକୁ ବଢ଼"
+            "value": "ଏବେ ନୁହେଁ"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਐਪ ਬ੍ਲਾਕਿਂਗ ਦੇ ਬਿਨਾ ਜਾਰੀ ਰੱਖ"
+            "value": "ਹੁਣ ਨਹੀਂ"
           }
         }
       }
     },
     "onboarding.blocking_setup.title": {
-      "comment": "Screen Time setup [standard]",
+      "comment": "Hero title for Screen Time app picker setup [standard]",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Choose apps to pause"
+            "value": "Pick the apps to pause"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Scegli le app da pausare"
+            "value": "Scegli le app da mettere in pausa"
           }
         },
         "de": {
@@ -24231,55 +24231,55 @@
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Elige apps para pausar"
+            "value": "Elige las apps que quieres pausar"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Escolha apps para pausar"
+            "value": "Escolha os apps para pausar"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kies apps om te pauzeren"
+            "value": "Kies de apps die je wilt pauzeren"
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Välj appar att pausa"
+            "value": "Välj apparna du vill pausa"
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vælg apps, der skal på pause"
+            "value": "Vælg de apps, du vil sætte på pause"
           }
         },
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "Velg apper som skal pauses"
+            "value": "Velg appene du vil sette på pause"
           }
         },
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Valitse tauolle laitettavat sovellukset"
+            "value": "Valitse pysäytettävät sovellukset"
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "translated",
-            "value": "Escolhe as apps a pausar"
+            "value": "Escolhe as apps para pausar"
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tria les apps a pausar"
+            "value": "Tria les apps per posar en pausa"
           }
         },
         "pl": {
@@ -24303,7 +24303,7 @@
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Вибери застосунки для паузи"
+            "value": "Обери застосунки для паузи"
           }
         },
         "ja": {
@@ -24315,7 +24315,7 @@
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "일시 중지할 앱 선택"
+            "value": "일시 중지할 앱을 선택하세요"
           }
         },
         "ms": {
@@ -24339,7 +24339,7 @@
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "เลือกแอปที่จะพัก"
+            "value": "เลือกแอปที่จะหยุดชั่วคราว"
           }
         },
         "zh-Hans": {
@@ -24351,13 +24351,13 @@
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "रोकने के लिए ऐप्स चुनो"
+            "value": "रोकने के लिए ऐप चुनें"
           }
         },
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Odaberi aplikacije za pauziranje"
+            "value": "Odaberi aplikacije za pauzu"
           }
         },
         "hu": {
@@ -24375,7 +24375,7 @@
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "இடைநிறுத்த ஆப்ஸைத் தேர்ந்தெடு"
+            "value": "இடைநிறுத்த வேண்டிய ஆப்ஸைத் தேர்ந்தெடு"
           }
         },
         "id": {
@@ -24447,7 +24447,7 @@
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ಪಾಜ್ ಚೇಯಾಲ್ಸಿನ ಆ್ಯಾಪ್ನು ಎಂಚುಕೋ"
+            "value": "ವಿರಾಮಕ್ಕೆ ಆ್ಯಾಪ್‌ಗಳನ್ನು ಆರಿಸಿ"
           }
         },
         "ml": {
@@ -24459,7 +24459,7 @@
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "थांबवायचे अॅप्स निवड"
+            "value": "थांबवायचे अॅप्स निवडा"
           }
         },
         "or": {
@@ -24471,7 +24471,7 @@
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਰੋਕਨੇ ਲਈ ਐਪਾਂ ਚੁਣ"
+            "value": "ਰੋਕਣ ਲਈ ਐਪਾਂ ਚੁਣ"
           }
         }
       }
@@ -109837,6 +109837,1106 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pillie భాష మాత్రమే మారుతుంది. నోటిఫికేషన్లు సిస్టమ్ భాషలోనే ఉంటాయి."
+          }
+        }
+      }
+    },
+    "onboarding.blocking_setup.paused_app": {
+      "comment": "Empty-state phone mock title for a paused generic app [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This app is paused"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Questa app è in pausa"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diese App ist pausiert"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cette app est en pause"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esta app está en pausa"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Este app está pausado"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deze app is gepauzeerd"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Den här appen är pausad"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Denne app er sat på pause"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Denne appen er satt på pause"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tämä sovellus on tauolla"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esta app está em pausa"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aquesta app està en pausa"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ta aplikacja jest wstrzymana"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tato aplikace je pozastavená"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Это приложение на паузе"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Цей застосунок на паузі"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "このアプリは一時停止中"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 앱은 일시 중지됨"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apl ini dijeda"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Această aplicație este în pauză"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Táto aplikácia je pozastavená"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "แอปนี้หยุดชั่วคราว"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "此应用已暂停"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "यह ऐप रुका हुआ है"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ova aplikacija je pauzirana"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ez az app szünetel"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu uygulama duraklatıldı"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "இந்த ஆப் இடைநிறுத்தப்பட்டுள்ளது"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aplikasi ini dijeda"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "هذا التطبيق متوقف مؤقتًا"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "האפליקציה הזו מושהית"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ứng dụng này đang tạm dừng"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "এই অ্যাপ পজ আছে"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "یہ ایپ رک گئی ہے"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ta aplikacija je v premoru"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Αυτή η εφαρμογή είναι σε παύση"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ఈ యాప్ పాజ్ అయింది"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "此 App 已暫停"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "આ ઍપ થોભી છે"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ಈ ಆ್ಯಾಪ್ ವಿರಾಮದಲ್ಲಿದೆ"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ഈ ആപ്പ് പോസ് ആണ്"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "हे अॅप थांबले आहे"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ଏହି ଆପ୍ ବିରାମରେ ଅଛି"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਇਹ ਐਪ ਰੁਕੀ ਹੋਈ ਹੈ"
+          }
+        }
+      }
+    },
+    "onboarding.blocking_setup.unlock_hint": {
+      "comment": "Empty-state unlock line with reminder time placeholder [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Take your %@ pill to unlock."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prendi la pillola delle %@ per sbloccare."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nimm deine Pille um %@, um sie zu entsperren."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prends ta pilule à %@ pour déverrouiller."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toma tu píldora a las %@ para desbloquear."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tome seu comprimido às %@ para desbloquear."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neem je pil om %@ om te ontgrendelen."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ta din piller kl. %@ för att låsa upp."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tag din pille kl. %@ for at låse op."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ta pillen kl. %@ for å låse opp."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ota pillerisi klo %@ avataksesi."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toma o teu comprimido às %@ para desbloquear."
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pren la teva pastilla a les %@ per desbloquejar."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weź tabletkę o %@, aby odblokować."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vezmi si pilulku v %@ a odemkni."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Прими таблетку в %@, чтобы разблокировать."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Прийми таблетку о %@, щоб розблокувати."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ のピルを飲んでロック解除。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@에 알약을 복용하면 잠금 해제됩니다."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ambil pil %@ anda untuk buka kunci."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ia pastila la %@ pentru a debloca."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vezmi si tabletu o %@ a odomkni."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ทานยาเวลา %@ เพื่อปลดล็อก"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在 %@ 服用药片即可解锁。"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ पर अपनी गोली लें और अनलॉक करें।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uzmi tabletu u %@ za otključavanje."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vedd be a tablettát %@-kor a feloldáshoz."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kilidi açmak için %@'de ilacını al."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ அன்று மாத்திரை எடுத்து திறக்கவும்."
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Minum pil pukul %@ untuk membuka kunci."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "خذي حبتك في %@ لفتح القفل."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "קחי את הגלולה ב-%@ כדי לפתוח."
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uống thuốc lúc %@ để mở khóa."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "আনলক করতে %@-এর বড়ি নাও।"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ان لاک کے لیے %@ کی گولی لو۔"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vzemi tableto ob %@ za odklep."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Πάρε το χάπι σου στις %@ για ξεκλείδωμα."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "అన్‌లాక్ చేయడానికి %@ మాత్ర తీసుకోండి."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "服用 %@ 的藥即可解鎖。"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "અનલોક કરવા %@ની ગોળી લો."
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ಅನ್‌ಲಾಕ್ ಮಾಡಲು %@ ಗೊಳಿಯನ್ನು ತೆಗೆದುಕೊಳ್ಳಿ."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "അൺലോക്ക് ചെയ്യാൻ %@-യിലെ ഗുളിക എടുക്കുക."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "अनलॉक करण्यासाठी %@ ची गोळी घ्या."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ଅନଲକ୍ ପାଇଁ %@ ଔଷଧ ନିଅ।"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਅਣਲਾਕ ਲਈ %@ ਦੀ ਗੋਲੀ ਲਵੋ।"
+          }
+        }
+      }
+    },
+    "onboarding.blocking_setup.allow_pausing": {
+      "comment": "Primary CTA to open Screen Time app picker [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow pausing"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consenti la pausa"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pausieren erlauben"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Autoriser la pause"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Permitir pausa"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Permitir pausa"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pauzeren toestaan"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tillåt paus"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tillad pause"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tillat pause"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salli tauko"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Permitir pausa"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Permetre pausa"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zezwól na wstrzymanie"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Povolit pozastavení"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Разрешить паузу"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Дозволити паузу"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "一時停止を許可"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "일시 중지 허용"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Benarkan jeda"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Permite pauza"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Povoliť pozastavenie"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "อนุญาตให้หยุดชั่วคราว"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "允许暂停"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "रोकने की अनुमति दें"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dopusti pauzu"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Szünet engedélyezése"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Duraklatmaya izin ver"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "இடைநிறுத்த அனுமதி"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Izinkan jeda"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "السماح بالإيقاف المؤقت"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "אשרי השהיה"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cho phép tạm dừng"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "পজ করার অনুমতি দাও"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "روکنے کی اجازت دو"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dovoli premor"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Επίτρεψε την παύση"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "పాజ్‌ను అనుమతించు"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "允許暫停"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "થોભાવવાની મંજૂરી આપો"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ವಿರಾಮಕ್ಕೆ ಅನುಮತಿಸಿ"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "പോസ് അനുവദിക്കൂ"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "थांबवण्यास परवानगी द्या"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ବିରାମ ଅନୁମତି ଦିଅ"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਰੋਕਣ ਦੀ ਇਜਾਜ਼ਤ ਦਿਓ"
+          }
+        }
+      }
+    },
+    "onboarding.blocking_setup.mark_taken": {
+      "comment": "Decorative check-in button inside the paused-app phone mock [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mark as taken"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Segna come presa"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Als genommen markieren"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marquer comme prise"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marcar como tomada"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marcar como tomada"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Markeer als ingenomen"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Markera som tagen"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Markér som taget"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Merk som tatt"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Merkitse otetuksi"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marcar como tomada"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marcar com a presa"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oznacz jako wziętą"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Označit jako užitou"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Отметить как принятую"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Позначити як прийняту"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "服用済みにする"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "복용 완료로 표시"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tandai sebagai diambil"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marchează ca luată"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Označiť ako užitú"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ทำเครื่องหมายว่ากินแล้ว"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "标记为已服用"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "लिया हुआ चिह्नित करें"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Označi kao uzeto"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Megjelölés bevettként"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alındı olarak işaretle"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "எடுக்கப்பட்டதாகக் குறி"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tandai sudah diminum"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ضعي علامة أنها أُخذت"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "סמני כנלקחה"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Đánh dấu đã uống"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "নেওয়া হয়েছে বলে চিহ্নিত করো"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لیا ہوا نشان زد کرو"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Označi kot vzeto"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Σήμανε ως ληφθείσα"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "తీసుకున్నట్లు గుర్తించు"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "標記為已服用"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "લીધેલ તરીકે ચિહ્નિત કરો"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ತೆಗೆದುಕೊಂಡಂತೆ ಗುರುತಿಸಿ"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "എടുത്തതായി അടയാളപ്പെടുത്തൂ"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "घेतल्याचे चिन्हांकित करा"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ନିଆଯାଇଛି ବୋଲି ଚିହ୍ନିତ କର"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਲਿਆ ਹੋਇਆ ਨਿਸ਼ਾਨਬੱਧ ਕਰੋ"
           }
         }
       }

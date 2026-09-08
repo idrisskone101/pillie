@@ -95,7 +95,7 @@ final class NotificationManager {
 
     init(
         center: any NotificationCenterScheduling = UNUserNotificationCenter.current(),
-        isRunningTests: Bool = ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil,
+        isRunningTests: Bool = TestLaunchDetection.isRunningTests(),
         scheduleDeviceActivityBlock: @escaping (_ hour: Int, _ minute: Int) -> Void = { hour, minute in
             AppBlockingManager.shared.scheduleDeviceActivityBlock(hour: hour, minute: minute)
         },

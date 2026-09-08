@@ -262,13 +262,11 @@ final class ItalianLocalizationContractTests: XCTestCase {
             locale: Locale(identifier: "it_IT")
         )
 
-        XCTAssertEqual(
-            content.trialDisclosure,
-            "14 giorni gratis, niente carta. Il blocco finisce col trial. I promemoria restano gratis."
-        )
+        XCTAssertEqual(content.titleLead, "Scegli le app da mettere in pausa")
+        XCTAssertEqual(content.chooseAppsCTA, "Consenti la pausa")
         XCTAssertEqual(
             content.emptyDetail,
-            "Usa Tempo di utilizzo di Apple per scegliere categorie o app."
+            "Poi Apple chiede Tempo di utilizzo così le app possono andare in pausa. Tocca Continua."
         )
         XCTAssertEqual(
             content.authorizationDeniedTitle,
@@ -283,7 +281,7 @@ final class ItalianLocalizationContractTests: XCTestCase {
             content.selectedPrivacyNote,
             "Pillie riceve solo il numero di elementi selezionati. La selezione resta su questo dispositivo."
         )
-        XCTAssertEqual(content.skipCTA, "Continua senza blocco app")
+        XCTAssertEqual(content.skipCTA, "Non ora")
     }
 
     func testMethodAwareNotificationsAndCategoryActionsResolveInItalian() {

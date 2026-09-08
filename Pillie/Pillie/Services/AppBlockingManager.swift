@@ -33,17 +33,34 @@ final class AppBlockingManager {
     /// loss-framed Trial-End Paywall) is unreachable there without this.
     /// Set via `pillie://debug/trial-end-paywall?cohort=blocker`.
     var debugBlockerConfiguredOverride: Bool?
+
+    /// QA seam: the onboarding selected-apps card reads token counts, which
+    /// FamilyControls cannot fabricate on the simulator. Set via
+    /// `pillie://debug/plus-app-blocking-setup?selected=4`.
+    var debugSelectionCountOverride: Int?
     #endif
+
+    var selectionState: BlockerSelectionState {
+        #if DEBUG
+        if let count = debugSelectionCountOverride, count > 0 {
+            return BlockerSelectionState(applicationCount: count, categoryCount: 0)
+        }
+        #endif
+        return BlockerSelectionState(
+            applicationCount: activitySelection.applicationTokens.count,
+            categoryCount: activitySelection.categoryTokens.count
+        )
+    }
 
     var hasAppsSelected: Bool {
         #if DEBUG
         if let debugBlockerConfiguredOverride { return debugBlockerConfiguredOverride }
         #endif
-        return !activitySelection.applicationTokens.isEmpty || !activitySelection.categoryTokens.isEmpty
+        return selectionState.hasSelection
     }
 
     var selectedCount: Int {
-        activitySelection.applicationTokens.count + activitySelection.categoryTokens.count
+        selectionState.selectedCount
     }
 
     struct RoutineState {
