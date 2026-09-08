@@ -146,21 +146,12 @@ struct PaywallCheckoutChrome: View {
     }
 
     private var footerRow: some View {
-        HStack(spacing: 8) {
+        Button(action: onRestore) {
             Text(checkout.footer.reassurance)
                 .font(.pillie(12, weight: .semibold))
                 .foregroundStyle(PillieTheme.textMuted)
-
-            Text("·")
-                .foregroundStyle(PillieTheme.textMuted.opacity(0.5))
-
-            Button(action: onRestore) {
-                Text(checkout.footer.restoreActionLabel)
-                    .font(.pillie(12, weight: .semibold))
-                    .foregroundStyle(PillieTheme.textMuted)
-            }
-            .buttonStyle(.plain)
         }
+        .buttonStyle(.plain)
         .frame(maxWidth: .infinity, alignment: .center)
     }
 }
