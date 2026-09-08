@@ -82,7 +82,31 @@ final class PillieShieldConfigurationExtension: ShieldConfigurationDataSource {
                 text: localized("shield.primary_action"),
                 color: .white
             ),
-            primaryButtonBackgroundColor: Palette.primaryBtnBg
+            primaryButtonBackgroundColor: Palette.primaryBtnBg,
+            secondaryButtonLabel: snoozeButtonLabel()
         )
+    }
+
+    private nonisolated func snoozeButtonLabel() -> ShieldConfiguration.Label? {
+        let dueDayEpoch = BlockingSnoozeAppGroup.resolvedDueDayEpoch
+        guard BlockingSnoozePolicy.canAccept(
+            ledger: BlockingSnoozeAppGroup.ledger,
+            dueDayEpoch: dueDayEpoch,
+            now: Date()
+        ) else {
+            return nil
+        }
+        let duration = BlockingSnoozePolicy.formattedDuration(
+            minutes: BlockingSnoozeAppGroup.intervalMinutes,
+            minutesFormat: localized("shield.duration.minutes"),
+            hour: localized("shield.duration.hour"),
+            hoursFormat: localized("shield.duration.hours")
+        )
+        let title = String(
+            format: localized("shield.secondary_action"),
+            locale: Locale.current,
+            duration
+        )
+        return ShieldConfiguration.Label(text: title, color: Palette.title)
     }
 }

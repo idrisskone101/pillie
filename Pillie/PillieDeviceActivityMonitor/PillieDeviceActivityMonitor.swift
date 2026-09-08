@@ -64,11 +64,18 @@ class PillieDeviceActivityMonitor: DeviceActivityMonitor {
             isTaken: defaults?.bool(forKey: AppGroupKeys.isTodayTaken) ?? false,
             epochDay: defaults?.object(forKey: AppGroupKeys.todayTakenEpochDay) as? Int
         )
+        let snoozeUntil: Date? = {
+            guard let epoch = defaults?.object(forKey: AppGroupKeys.blockingSnoozeUntil) as? Double else {
+                return nil
+            }
+            return Date(timeIntervalSince1970: epoch)
+        }()
 
         switch BlockingInterventionPolicy.decision(
             schedule: blockingSchedule,
             handledStamp: stamp,
-            now: now
+            now: now,
+            snoozeUntil: snoozeUntil
         ) {
         case .clearShields:
             if blockingSchedule?.requiresAction(on: now) == false {

@@ -85,6 +85,11 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
             "settings.tone.private",
             "settings.blocked_apps.title",
             "settings.blocked_apps.edit",
+            "settings.blocking.snooze_title",
+            "settings.blocking.snooze_hint",
+            "settings.blocking.snooze_value",
+            "settings.blocking.snooze_value.hour",
+            "settings.blocking.snooze_value.hours",
             "settings.subscription.manage",
             "settings.restore.title",
             "settings.support.email",
@@ -296,6 +301,18 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
         XCTAssertEqual(
             SettingsPresentation.interval(minutes: 10, locale: italian),
             "Ogni 10 minuti"
+        )
+        XCTAssertEqual(
+            SettingsPresentation.blockingSnoozeInterval(minutes: 30, locale: italian),
+            "30 minuti"
+        )
+        XCTAssertEqual(
+            SettingsPresentation.blockingSnoozeInterval(minutes: 60, locale: italian),
+            "1 ora"
+        )
+        XCTAssertEqual(
+            SettingsPresentation.blockingSnoozeInterval(minutes: 120, locale: italian),
+            "2 ore"
         )
         XCTAssertEqual(
             SettingsPresentation.cycleDay(day: 3, total: 28, locale: italian),

@@ -71,6 +71,7 @@ final class AppBlockingManager {
     private let store = ManagedSettingsStore()
     private let center = DeviceActivityCenter()
     private static let activityName = DeviceActivityName("pillie.reminder.block")
+    private static let snoozeResumeActivityName = DeviceActivityName("pillie.blocking.snooze.resume")
 
     /// Locally tracked so @Observable fires UI updates.
     /// Kept in sync with ScreenTimeSharedState (App Group defaults).
@@ -148,6 +149,7 @@ final class AppBlockingManager {
     func applyBlocking(reason: String) {
         guard SubscriptionManager.shared.hasPlusAccess else { return }
         guard hasAppsSelected else { return }
+        guard !isBlockingSnoozeHoldActive() else { return }
 
         #if !targetEnvironment(simulator)
         store.shield.applications = activitySelection.applicationTokens.isEmpty
@@ -178,6 +180,58 @@ final class AppBlockingManager {
         blockingActive = false
     }
 
+    func isBlockingSnoozeHoldActive(now: Date = Date()) -> Bool {
+        BlockingSnoozePolicy.isHoldActive(
+            until: ScreenTimeSharedState.blockingSnoozeUntil,
+            now: now
+        )
+    }
+
+    func canSnoozeBlocking(
+        dueDayEpoch: Int,
+        now: Date = Date(),
+        calendar: Calendar = .current
+    ) -> Bool {
+        guard isEffectivelyOn, blockingActive else { return false }
+        return BlockingSnoozePolicy.canAccept(
+            ledger: ScreenTimeSharedState.blockingSnoozeLedger,
+            dueDayEpoch: dueDayEpoch,
+            now: now,
+            calendar: calendar
+        )
+    }
+
+    @discardableResult
+    func performBlockingSnooze(
+        dueDayEpoch: Int,
+        intervalMinutes: Int,
+        now: Date = Date(),
+        calendar: Calendar = .current
+    ) -> BlockingSnoozeAttempt {
+        let outcome = BlockingSnoozePolicy.attempt(
+            ledger: ScreenTimeSharedState.blockingSnoozeLedger,
+            dueDayEpoch: dueDayEpoch,
+            now: now,
+            intervalMinutes: intervalMinutes,
+            calendar: calendar
+        )
+        switch outcome.result {
+        case .accepted(let until, _):
+            ScreenTimeSharedState.blockingSnoozeLedger = outcome.ledger
+            ScreenTimeSharedState.blockingSnoozeUntil = until
+            removeBlocking()
+            scheduleSnoozeResume(at: until)
+        case .rejected:
+            break
+        }
+        return outcome.result
+    }
+
+    func clearBlockingSnoozeHold() {
+        ScreenTimeSharedState.blockingSnoozeUntil = nil
+        stopSnoozeResumeMonitoring()
+    }
+
     /// Reconciles blocking state: applies shields after reminder time only when
     /// today's action is still pending, and removes them when today is handled
     /// (completed, passive, or a break day).
@@ -197,6 +251,12 @@ final class AppBlockingManager {
         }
 
         if isTodayHandled {
+            clearBlockingSnoozeHold()
+            removeBlocking()
+            return
+        }
+
+        if isBlockingSnoozeHoldActive() {
             removeBlocking()
             return
         }
@@ -214,6 +274,7 @@ final class AppBlockingManager {
         }
 
         // Past reminder time + not taken = apply blocking
+        clearBlockingSnoozeHold()
         applyBlocking(reason: method.blockingReasonText)
     }
 
@@ -278,7 +339,33 @@ final class AppBlockingManager {
 
     func stopMonitoring() {
         #if !targetEnvironment(simulator)
-        center.stopMonitoring([Self.activityName])
+        center.stopMonitoring([Self.activityName, Self.snoozeResumeActivityName])
+        #endif
+    }
+
+    private func scheduleSnoozeResume(at until: Date) {
+        #if targetEnvironment(simulator)
+        return
+        #else
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.hour, .minute], from: until)
+        center.stopMonitoring([Self.snoozeResumeActivityName])
+        let schedule = DeviceActivitySchedule(
+            intervalStart: DateComponents(hour: components.hour, minute: components.minute),
+            intervalEnd: DateComponents(hour: 23, minute: 59),
+            repeats: false
+        )
+        do {
+            try center.startMonitoring(Self.snoozeResumeActivityName, during: schedule)
+        } catch {
+            Self.logger.error("scheduleSnoozeResume: failed — \(error.localizedDescription)")
+        }
+        #endif
+    }
+
+    private func stopSnoozeResumeMonitoring() {
+        #if !targetEnvironment(simulator)
+        center.stopMonitoring([Self.snoozeResumeActivityName])
         #endif
     }
 

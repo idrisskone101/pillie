@@ -114,6 +114,7 @@ enum InMemoryStoreFactory {
             "pillie_reminder_hour",
             "pillie_reminder_minute",
             "pillie_auto_reminder_interval_minutes",
+            "pillie_blocking_snooze_interval_minutes",
             "pillie_auto_reminder_retry_limit",
             "pillie_refill_reminder_threshold_days",
             "pillie_patch_restock_threshold_patches",
