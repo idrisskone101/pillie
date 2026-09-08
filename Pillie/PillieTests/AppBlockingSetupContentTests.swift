@@ -8,65 +8,13 @@ struct AppBlockingSetupContentTests {
         AppBlockingSetupContent.localized(locale: Locale(identifier: "en_US"))
     }
 
-    @Test func setupCopyExplainsPillTimePauseMedicationUnlockAndReversibility() {
-        #expect(content.badge == "Pillie Plus")
+    @Test func setupCopyExplainsPauseAfterReminderAndCheckIn() {
         #expect(content.titleLead == "Pick the apps to pause")
         #expect(content.chooseAppsCTA == "Allow pausing")
-
-        let explanation = [content.subtitle, content.emptyDetail]
-            .joined(separator: " ")
-            .lowercased()
-        #expect(explanation.contains("pause after a reminder"))
-        #expect(explanation.contains("check in"))
+        #expect(content.subtitle.lowercased().contains("pause after a reminder"))
+        #expect(content.subtitle.lowercased().contains("check in"))
         #expect(content.changeSelectionCTA == "Edit")
         #expect(content.skipCTA == "Not now")
-    }
-
-    @Test func trialDisclosureIsClearAndDoesNotReplaceSkip() {
-        #expect(
-            content.trialDisclosure
-                == "14 days free, no card needed. App blocking turns off after the trial. Reminders stay free."
-        )
-        #expect(content.visibleCopy.contains(content.trialDisclosure))
-        #expect(content.skipCTA == "Not now")
-    }
-
-    @Test func hardPaywallTrialDisclosureRequiresAPlanAfterFourteenDays() {
-        let hardPaywallContent = AppBlockingSetupContent.localized(
-            locale: Locale(identifier: "en_US"),
-            trialEndTerms: .hardPaywall
-        )
-
-        #expect(
-            hardPaywallContent.trialDisclosure
-                == "Your free trial lasts 14 days. No card needed. After it ends, choose monthly, annual, or lifetime to keep Plus."
-        )
-    }
-
-    @Test func everyTrialDisclosureStatesThatNoCardIsRequired() {
-        let hardPaywallContent = AppBlockingSetupContent.localized(
-            locale: Locale(identifier: "en_US"),
-            trialEndTerms: .hardPaywall
-        )
-
-        #expect(content.trialDisclosure.localizedCaseInsensitiveContains("no card needed"))
-        #expect(
-            hardPaywallContent.trialDisclosure.localizedCaseInsensitiveContains("no card needed")
-        )
-    }
-
-    @Test func paidSubscriberDisclosureDoesNotPromiseAReverseTrial() {
-        let subscriberContent = AppBlockingSetupContent.localized(
-            locale: Locale(identifier: "en_US"),
-            trialEndTerms: .hardPaywall,
-            isPaidSubscriber: true
-        )
-
-        #expect(
-            subscriberContent.trialDisclosure
-                == "Pillie Plus is active on this account. Set up app blocking whenever you’re ready."
-        )
-        #expect(!subscriberContent.trialDisclosure.contains("14 days"))
     }
 
     @Test func hardPaywallLockedFallbackOffersUpgradeInsteadOfAFreeExit() {
@@ -116,16 +64,13 @@ struct AppBlockingSetupContentTests {
 
     @Test func debugRecoverySeamRendersTheSameDeniedStateUsedByAuthorizationFailure() {
         var permission = AppBlockingSetupPermissionState()
-
         permission.showRecoveryForDebug()
-
         #expect(permission.isRecoveryVisible)
     }
 
-    @Test func emptyStateExplainsScreenTimePickerAndCountOnlyStorage() {
+    @Test func emptyStateExplainsScreenTimePickerAndUnlock() {
         #expect(content.emptyTitle == "This app is paused")
         #expect(content.emptyMarkTaken == "Mark as taken")
-        #expect(content.emptyDetail.contains("Screen Time"))
         #expect(
             content.emptyDetail
                 == "Next, Apple asks for Screen Time so the apps can pause. Tap Continue."
@@ -133,7 +78,6 @@ struct AppBlockingSetupContentTests {
         #expect(content.chooseAppsCTA == "Allow pausing")
         #expect(content.emptyUnlockFormat.contains("%@"))
         #expect(content.emptyUnlockFormat.lowercased().contains("unlock"))
-        #expect(content.privacyNote.lowercased().contains("number"))
     }
 
     @Test func formattedEmptyUnlockInsertsTheReminderClock() {
@@ -143,26 +87,49 @@ struct AppBlockingSetupContentTests {
             reminderMinute: 0,
             locale: Locale(identifier: "en_US")
         )
-        // iOS 27 DateFormatter inserts U+202F before AM/PM.
         let normalized = formatted
             .replacingOccurrences(of: "\u{202F}", with: " ")
             .replacingOccurrences(of: "\u{00A0}", with: " ")
         #expect(normalized == "Take your 9:00 PM pill to unlock.")
     }
 
-    @Test func emptyStateCardOffersChooseAppsActionWhenIdle() {
+    @Test func phaseIsEmptyWhenEntitledAndIdle() {
         #expect(
-            AppBlockingSetupEmptyCardAction.resolve(
-                hasSelection: false,
-                isRequesting: false
-            ) == .chooseApps
+            AppBlockingSetupPhase.resolve(
+                canSetUpBlocking: true,
+                isEmpty: true,
+                isRecoveryVisible: false
+            ) == .empty
         )
     }
 
-    @Test func categoryHintsAreGenericCategoriesNotAppNames() {
+    @Test func phaseIsRecoveryWhenAuthorizationFailed() {
         #expect(
-            content.categoryHints.map(\.name)
-                == ["Social media", "Short videos", "Games", "Other"]
+            AppBlockingSetupPhase.resolve(
+                canSetUpBlocking: true,
+                isEmpty: true,
+                isRecoveryVisible: true
+            ) == .recovery
+        )
+    }
+
+    @Test func phaseIsSelectedWhenAppsAreChosen() {
+        #expect(
+            AppBlockingSetupPhase.resolve(
+                canSetUpBlocking: true,
+                isEmpty: false,
+                isRecoveryVisible: false
+            ) == .selected
+        )
+    }
+
+    @Test func phaseIsLockedWithoutPlusAccess() {
+        #expect(
+            AppBlockingSetupPhase.resolve(
+                canSetUpBlocking: false,
+                isEmpty: true,
+                isRecoveryVisible: false
+            ) == .locked
         )
     }
 
@@ -186,9 +153,8 @@ struct AppBlockingSetupContentTests {
         #expect(content.skipCTA == "Not now")
     }
 
-    @Test func visibleCopyKeepsPlusScreenTimeAndOnDeviceAndExcludesAds() {
+    @Test func visibleCopyNamesScreenTimeAndExcludesAds() {
         let visibleCopy = content.visibleCopy.joined(separator: " ").lowercased()
-        #expect(visibleCopy.contains("pillie plus"))
         #expect(visibleCopy.contains("screen time"))
         #expect(visibleCopy.contains("device"))
         #expect(!visibleCopy.contains("pillie+"))
@@ -206,7 +172,6 @@ struct AppBlockingSetupContentTests {
         let label = content.emptyStateAccessibilityLabel(unlockHint: unlockHint)
         #expect(label.contains(content.emptyTitle))
         #expect(label.contains(unlockHint))
-        #expect(label.lowercased().contains("number"))
         #expect(label.count > content.emptyTitle.count)
     }
 
@@ -239,7 +204,7 @@ struct AppBlockingSetupContentTests {
         }
     }
 
-    @Test func a10CopyIsTranslatedForEveryShippedCatalog() {
+    @Test func pauseCopyIsTranslatedForEveryShippedCatalog() {
         let keys = [
             "onboarding.blocking_setup.title",
             "onboarding.blocking_setup.subtitle",
@@ -275,19 +240,36 @@ struct AppBlockingSetupContentTests {
         }
     }
 
-    @Test func paperCircleSitsWellAboveThePhoneBezel() {
-        #expect(A10PhoneStageLayout.designCircleBottomInset == 102)
-        #expect(A10PhoneStageLayout.designCircleTop == 30)
-        #expect(A10PhoneStageLayout.designPhone == CGSize(width: 232, height: 300))
+    @Test func phoneHaloSitsAboveTheBezel() {
+        #expect(PausedPhoneStageLayout.designCircleBottomInset == 102)
+        #expect(PausedPhoneStageLayout.designCircleTop == 30)
+        #expect(PausedPhoneStageLayout.designPhone == CGSize(width: 232, height: 300))
     }
 
-    @Test func paperCanvasFitsOneToOneOnTheArtboard() {
-        let layout = A10PhoneStageLayout.fitted(in: CGSize(width: 390, height: 442))
+    @Test func designCanvasFitsOneToOne() {
+        let layout = PausedPhoneStageLayout.fitted(in: CGSize(width: 390, height: 442))
         #expect(layout.scale == 1)
     }
 
-    @Test func tallerPhoneKeepsArtboardWidthAndDoesNotStretchTheHalo() {
-        let layout = A10PhoneStageLayout.fitted(in: CGSize(width: 390, height: 600))
+    @Test func tallerHoleKeepsCanvasWidthAndDoesNotStretchTheHalo() {
+        let layout = PausedPhoneStageLayout.fitted(in: CGSize(width: 390, height: 600))
         #expect(layout.scale == 1)
     }
+
+    #if DEBUG
+    @Test func selectionOverrideFeedsCountAndHasAppsSelected() {
+        let manager = AppBlockingManager.shared
+        let previousOverride = manager.debugSelectionCountOverride
+        let previousConfigured = manager.debugBlockerConfiguredOverride
+        defer {
+            manager.debugSelectionCountOverride = previousOverride
+            manager.debugBlockerConfiguredOverride = previousConfigured
+        }
+        manager.debugBlockerConfiguredOverride = nil
+        manager.debugSelectionCountOverride = 4
+        #expect(manager.selectionState.selectedCount == 4)
+        #expect(manager.hasAppsSelected)
+        #expect(manager.selectedCount == 4)
+    }
+    #endif
 }

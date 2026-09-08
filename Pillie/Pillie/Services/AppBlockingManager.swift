@@ -40,15 +40,27 @@ final class AppBlockingManager {
     var debugSelectionCountOverride: Int?
     #endif
 
+    var selectionState: BlockerSelectionState {
+        #if DEBUG
+        if let count = debugSelectionCountOverride, count > 0 {
+            return BlockerSelectionState(applicationCount: count, categoryCount: 0)
+        }
+        #endif
+        return BlockerSelectionState(
+            applicationCount: activitySelection.applicationTokens.count,
+            categoryCount: activitySelection.categoryTokens.count
+        )
+    }
+
     var hasAppsSelected: Bool {
         #if DEBUG
         if let debugBlockerConfiguredOverride { return debugBlockerConfiguredOverride }
         #endif
-        return !activitySelection.applicationTokens.isEmpty || !activitySelection.categoryTokens.isEmpty
+        return selectionState.hasSelection
     }
 
     var selectedCount: Int {
-        activitySelection.applicationTokens.count + activitySelection.categoryTokens.count
+        selectionState.selectedCount
     }
 
     struct RoutineState {

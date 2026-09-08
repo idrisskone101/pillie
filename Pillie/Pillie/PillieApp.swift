@@ -15,10 +15,7 @@ import RevenueCat
 import os
 
 enum SubscriptionLaunchPolicy {
-    static func shouldConfigureRevenueCat(
-        isRunningTests: Bool,
-        isOnboardingActive: Bool
-    ) -> Bool {
+    static func shouldConfigureRevenueCat(isRunningTests: Bool) -> Bool {
         !isRunningTests
     }
 }
@@ -308,8 +305,7 @@ struct PillieApp: App {
                 }
             }
             if SubscriptionLaunchPolicy.shouldConfigureRevenueCat(
-                isRunningTests: Self.isRunningTests,
-                isOnboardingActive: Self.isOnboardingActive
+                isRunningTests: Self.isRunningTests
             ) {
                 // RevenueCat must resolve paid access and issue #257's remote
                 // hard-wall switch even while onboarding is active. Otherwise a

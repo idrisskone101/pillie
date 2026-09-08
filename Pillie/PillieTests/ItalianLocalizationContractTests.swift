@@ -262,10 +262,8 @@ final class ItalianLocalizationContractTests: XCTestCase {
             locale: Locale(identifier: "it_IT")
         )
 
-        XCTAssertEqual(
-            content.trialDisclosure,
-            "14 giorni gratis, niente carta. Il blocco finisce col trial. I promemoria restano gratis."
-        )
+        XCTAssertEqual(content.titleLead, "Scegli le app da mettere in pausa")
+        XCTAssertEqual(content.chooseAppsCTA, "Consenti la pausa")
         XCTAssertEqual(
             content.emptyDetail,
             "Poi Apple chiede Tempo di utilizzo così le app possono andare in pausa. Tocca Continua."

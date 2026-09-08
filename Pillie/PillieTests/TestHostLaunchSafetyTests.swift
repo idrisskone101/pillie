@@ -33,12 +33,7 @@ struct TestHostLaunchSafetyTests {
     }
 
     @Test func hostedTestsMustNotConfigureRevenueCat() {
-        #expect(
-            !SubscriptionLaunchPolicy.shouldConfigureRevenueCat(
-                isRunningTests: true,
-                isOnboardingActive: true
-            )
-        )
+        #expect(!SubscriptionLaunchPolicy.shouldConfigureRevenueCat(isRunningTests: true))
     }
 
     @Test func refreshCommerceStateDoesNotTrapWhenRevenueCatIsUnconfigured() async {
@@ -46,10 +41,12 @@ struct TestHostLaunchSafetyTests {
     }
 
     @Test func setPlusForTestingResolvesCommerceSoSetupIsNotBlocked() {
-        SubscriptionManager.shared.setPlusForTesting(true)
-        #expect(SubscriptionManager.shared.hasResolvedEntitlement)
-        #expect(SubscriptionManager.shared.hasResolvedHardPaywallConfiguration)
-        #expect(SubscriptionManager.shared.hasPlusAccess)
+        let manager = SubscriptionManager.shared
+        manager.setPlusForTesting(true)
+        defer { manager.setPlusForTesting(false) }
+        #expect(manager.hasResolvedEntitlement)
+        #expect(manager.hasResolvedHardPaywallConfiguration)
+        #expect(manager.hasPlusAccess)
         #expect(
             OnboardingTrialActivationRoute.resolve(
                 hasEntitlement: true,
@@ -57,6 +54,5 @@ struct TestHostLaunchSafetyTests {
                 configurationResolved: true
             ) == .subscriber
         )
-        SubscriptionManager.shared.setPlusForTesting(false)
     }
 }

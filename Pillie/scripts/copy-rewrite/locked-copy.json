@@ -1829,6 +1829,46 @@
     {
       "issue": "ENG-73",
       "table": "Localizable",
+      "key": "onboarding.blocking_setup.empty_detail",
+      "en": "Next, Apple asks for Screen Time so the apps can pause. Tap Continue.",
+      "de": "Als Nächstes fragt Apple nach Bildschirmzeit, damit die Apps pausieren können. Tippe auf Weiter.",
+      "it": "Poi Apple chiede Tempo di utilizzo così le app possono andare in pausa. Tocca Continua."
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Localizable",
+      "key": "onboarding.blocking_setup.allow_pausing",
+      "en": "Allow pausing",
+      "de": "Pausieren erlauben",
+      "it": "Consenti la pausa"
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Localizable",
+      "key": "onboarding.blocking_setup.paused_app",
+      "en": "This app is paused",
+      "de": "Diese App ist pausiert",
+      "it": "Questa app è in pausa"
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Localizable",
+      "key": "onboarding.blocking_setup.unlock_hint",
+      "en": "Take your %@ pill to unlock.",
+      "de": "Nimm deine Pille um %@, um sie zu entsperren.",
+      "it": "Prendi la pillola delle %@ per sbloccare."
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Localizable",
+      "key": "onboarding.blocking_setup.mark_taken",
+      "en": "Mark as taken",
+      "de": "Als genommen markieren",
+      "it": "Segna come presa"
+    },
+    {
+      "issue": "ENG-73",
+      "table": "Localizable",
       "key": "onboarding.welcome.next_action",
       "en": "Next",
       "de": "Als Nächstes",
