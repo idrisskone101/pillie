@@ -872,6 +872,7 @@ struct ContentView: View {
 #Preview {
   ContentView()
     .environment(PillStore.previewStore())
+    .environment(AppLanguagePreference())
 }
 
 private struct CommerceAccessVerificationView: View {

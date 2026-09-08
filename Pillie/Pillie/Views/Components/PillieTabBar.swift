@@ -237,5 +237,6 @@ private extension PillieTab {
 #Preview {
     MainTabView()
         .environment(PillStore.previewStore())
+        .environment(AppLanguagePreference())
         .modelContainer(PillStore.previewContainer)
 }
