@@ -29,7 +29,7 @@ struct PaywallCheckoutBuilderTests {
             recurrence: .year,
             locale: english
         )
-        #expect(checkout.primaryCTA.contains("$39.99"))
+        #expect(checkout.primaryCTA == "Keep Pillie Plus · $39.99 billed yearly")
         #expect(checkout.isPurchaseEnabled)
     }
 

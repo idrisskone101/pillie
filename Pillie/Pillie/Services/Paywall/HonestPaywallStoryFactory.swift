@@ -22,11 +22,10 @@ enum HonestPaywallStoryFactory {
                 locale: locale
             ),
             daysRemaining: daysRemaining,
-            daysStampText: PillieLocalization.formatted(
+            daysStampText: PillieLocalization.string(
                 "paywall.story.trial_active.stamp",
                 table: "Commerce",
-                locale: locale,
-                arguments: Int64(daysRemaining)
+                locale: locale
             ),
             benefitChips: [
                 PaywallBenefitChip(
@@ -67,11 +66,13 @@ enum HonestPaywallStoryFactory {
                 return "\(taken)/\(due)"
             }
             return "\(taken)"
-        } ?? "—"
+        } ?? "-"
 
-        let streakValue = stats.currentStreak.map { "\($0)" } ?? "—"
+        let streakValue = stats.currentStreak.map { "\($0)" } ?? "-"
 
-        let lossCount = stats.dosesTaken ?? stats.currentStreak ?? stats.blocksIntercepted ?? 0
+        let lossCount = [stats.dosesTaken, stats.currentStreak, stats.blocksIntercepted]
+            .compactMap { $0 }
+            .first { $0 > 0 }
 
         let hardChrome = HonestPaywallChrome(
             showsClose: false,
@@ -113,12 +114,14 @@ enum HonestPaywallStoryFactory {
                 value: streakValue,
                 background: .ink
             ),
-            handwrittenLossLine: PillieLocalization.formatted(
-                "paywall.story.trial_ended.aside",
-                table: "Commerce",
-                locale: locale,
-                arguments: Int64(lossCount)
-            ),
+            handwrittenLossLine: lossCount.map { count in
+                PillieLocalization.formatted(
+                    "paywall.story.trial_ended.aside",
+                    table: "Commerce",
+                    locale: locale,
+                    arguments: Int64(count)
+                )
+            } ?? "",
             chrome: terms == .hardPaywall ? hardChrome : legacyChrome
         )
     }

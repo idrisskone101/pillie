@@ -22,6 +22,7 @@ enum PaywallCheckoutBuilder {
         )
         let monthlyEquivalentDisplay = monthlyEquivalentDisplay(
             comparison: comparison,
+            currencyCode: offerings.currencyCode,
             locale: locale
         )
 
@@ -29,7 +30,7 @@ enum PaywallCheckoutBuilder {
             "paywall.stack.year.primary_line",
             table: "Commerce",
             locale: locale,
-            arguments: monthlyEquivalentDisplay ?? "—",
+            arguments: monthlyEquivalentDisplay ?? "-",
             offerings.annualDisplay
         )
 
@@ -146,7 +147,7 @@ enum PaywallCheckoutBuilder {
         recurrence: PaywallRecurrence,
         locale: Locale
     ) -> PaywallCheckoutSheet {
-        let dash = "—"
+        let dash = "-"
         let yearTile = PaywallStackTile(
             title: PillieLocalization.string(
                 "paywall.stack.year.title",
@@ -211,11 +212,15 @@ enum PaywallCheckoutBuilder {
 
     private static func monthlyEquivalentDisplay(
         comparison: PaywallPriceComparison,
+        currencyCode: String?,
         locale: Locale
     ) -> String? {
         let formatter = NumberFormatter()
         formatter.numberStyle = .currency
         formatter.locale = locale
+        if let currencyCode {
+            formatter.currencyCode = currencyCode
+        }
         guard let value = comparison.monthlyEquivalentString(using: formatter) else {
             return nil
         }

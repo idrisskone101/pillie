@@ -143,4 +143,50 @@ struct HonestPaywallBoardResolverTests {
         )
         #expect(freeBoard?.ctaVerb == .get)
     }
+
+    @Test func `C1 and C3 chrome omit continue free`() {
+        let trialBoard = HonestPaywallBoardResolver.resolve(
+            access: PlusAccessState(hasEntitlement: false, trialGrantDate: date(2026, 7, 10, 9)),
+            entry: .settingsSubscription,
+            stats: nil,
+            calendar: calendar,
+            now: date(2026, 7, 20),
+            locale: english,
+            hardPaywallEnabled: true,
+            termsCohort: nil
+        )
+        #expect(trialBoard?.chrome.showsContinueFree == false)
+        #expect(trialBoard?.chrome.showsClose == true)
+
+        let freeBoard = HonestPaywallBoardResolver.resolve(
+            access: PlusAccessState(hasEntitlement: false, trialGrantDate: nil),
+            entry: .settingsSubscription,
+            stats: nil,
+            calendar: calendar,
+            now: date(2026, 7, 20),
+            locale: english,
+            hardPaywallEnabled: true,
+            termsCohort: nil
+        )
+        #expect(freeBoard?.chrome.showsContinueFree == false)
+    }
+
+    @Test func `Protection off with expired grant resolves to C2`() {
+        let expiredGrant = date(2026, 8, 14, 0)
+        let board = HonestPaywallBoardResolver.resolve(
+            access: PlusAccessState(hasEntitlement: false, trialGrantDate: expiredGrant),
+            entry: .protectionOffCard,
+            stats: .none,
+            calendar: calendar,
+            now: date(2026, 8, 29),
+            locale: english,
+            hardPaywallEnabled: true,
+            termsCohort: .postCutover
+        )
+        guard case .trialEnded(let story) = board else {
+            Issue.record("Expected trialEnded board for Protection Off after trial")
+            return
+        }
+        #expect(!story.chrome.showsClose)
+    }
 }

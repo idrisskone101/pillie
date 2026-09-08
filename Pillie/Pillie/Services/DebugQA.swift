@@ -358,5 +358,6 @@ enum DebugQA {
 
 extension Notification.Name {
     static let pillieDebugQADidApply = Notification.Name("pillieDebugQADidApply")
+    static let pillieDebugPresentHonestPaywall = Notification.Name("pillieDebugPresentHonestPaywall")
 }
 #endif

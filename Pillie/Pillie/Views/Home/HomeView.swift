@@ -650,6 +650,17 @@ struct HomeView: View {
                 autoPresentTrialEndPaywallIfNeeded()
             }
         }
+        .onReceive(NotificationCenter.default.publisher(for: .pillieDebugPresentHonestPaywall)) { note in
+            switch note.object as? String {
+            case "c1":
+                showTrialKeepPlusPaywall = true
+            case "c3":
+                blockingPaywallSurface = .homeBlockingCard
+                showBlockingPaywall = true
+            default:
+                break
+            }
+        }
         #endif
     }
 

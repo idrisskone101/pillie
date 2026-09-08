@@ -23,20 +23,14 @@ enum HonestPaywallBoard: Equatable {
 
     var chrome: HonestPaywallChrome {
         switch self {
-        case .duringTrial:
+        case .duringTrial, .settingsFree:
             HonestPaywallChrome(
                 showsClose: true,
                 allowsInteractiveDismiss: true,
-                showsContinueFree: true
+                showsContinueFree: false
             )
         case .trialEnded(let story):
             story.chrome
-        case .settingsFree:
-            HonestPaywallChrome(
-                showsClose: true,
-                allowsInteractiveDismiss: true,
-                showsContinueFree: true
-            )
         }
     }
 

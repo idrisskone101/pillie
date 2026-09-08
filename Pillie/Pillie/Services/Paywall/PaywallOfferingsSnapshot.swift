@@ -13,6 +13,7 @@ struct PaywallOfferingsSnapshot: Equatable {
     let annualDisplay: String
     let monthlyDisplay: String
     let lifetimeDisplay: String?
+    let currencyCode: String?
 
     static func parse(_ offerings: Offerings?) -> PaywallOfferingsSnapshot? {
         guard let offering = offerings?.current else { return nil }
@@ -47,7 +48,8 @@ struct PaywallOfferingsSnapshot: Equatable {
             lifetimePrice: lifetimePackage?.storeProduct.price,
             annualDisplay: annualProduct.localizedPriceString,
             monthlyDisplay: monthlyProduct.localizedPriceString,
-            lifetimeDisplay: lifetimePackage?.storeProduct.localizedPriceString
+            lifetimeDisplay: lifetimePackage?.storeProduct.localizedPriceString,
+            currencyCode: annualProduct.currencyCode
         )
     }
 
@@ -65,7 +67,8 @@ struct PaywallOfferingsSnapshot: Equatable {
             lifetimePrice: lifetime,
             annualDisplay: annualDisplay,
             monthlyDisplay: monthlyDisplay,
-            lifetimeDisplay: lifetimeDisplay
+            lifetimeDisplay: lifetimeDisplay,
+            currencyCode: "USD"
         )
     }
 }

@@ -680,6 +680,31 @@ struct PillieApp: App {
             UserDefaults.standard.removeObject(forKey: ExistingUserTrialGrant.handledStorageKey)
             UserDefaults.standard.set(false, forKey: OnboardingFlow.selectedFreePlanStorageKey)
             UserDefaults.standard.set(OnboardingFlow.Step.complete.rawValue, forKey: OnboardingFlow.stepStorageKey)
+        case "/honest-paywall":
+            let board = URLComponents(url: url, resolvingAgainstBaseURL: false)?
+                .queryItems?
+                .first(where: { $0.name == "board" })?
+                .value
+            switch board {
+            case "c1":
+                DebugQA.apply(.trialActive, store: store)
+                DispatchQueue.main.async {
+                    NotificationCenter.default.post(
+                        name: .pillieDebugPresentHonestPaywall,
+                        object: "c1"
+                    )
+                }
+            case "c3":
+                DebugQA.apply(.existingUserTrialAnnouncement, store: store)
+                DispatchQueue.main.async {
+                    NotificationCenter.default.post(
+                        name: .pillieDebugPresentHonestPaywall,
+                        object: "c3"
+                    )
+                }
+            default:
+                break
+            }
         case "/trial-end-paywall":
             // QA shortcut (#169): land on Home with a trial aged past expiry and
             // the one-shot auto-present window reopened, so the Trial-End

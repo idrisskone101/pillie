@@ -2109,9 +2109,9 @@
       "table": "Commerce",
       "key": "paywall.story.trial_active.stamp",
       "create": true,
-      "en": "%lld days left on Pillie Plus",
-      "de": "Noch %lld Tage Pillie Plus",
-      "it": "Ancora %lld giorni di Pillie Plus"
+      "en": "days left on Pillie Plus",
+      "de": "Tage Pillie Plus noch",
+      "it": "giorni di Pillie Plus"
     },
     {
       "issue": "honest-paywall",

@@ -30,7 +30,7 @@ enum HonestPaywallBoardResolver {
             )
         }
 
-        if access.trialGrantDate != nil, entry == .trialEndAutoPresent {
+        if access.trialGrantDate != nil, Self.showsTrialEndedBoard(entry) {
             let cohort = termsCohort
                 ?? access.trialGrantDate.map(HardPaywallPolicy.cohort(forTrialGrantedAt:))
                 ?? .postCutover
@@ -50,6 +50,15 @@ enum HonestPaywallBoardResolver {
         return .settingsFree(
             HonestPaywallStoryFactory.settingsFree(locale: locale)
         )
+    }
+
+    private static func showsTrialEndedBoard(_ entry: PaywallEntryPoint) -> Bool {
+        switch entry {
+        case .trialEndAutoPresent, .protectionOffCard:
+            true
+        case .trialStatus, .settingsSubscription, .homeBlockingCard, .plusUpsell:
+            false
+        }
     }
 }
 
