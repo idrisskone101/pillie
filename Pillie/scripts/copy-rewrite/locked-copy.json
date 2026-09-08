@@ -2163,18 +2163,18 @@
       "table": "Commerce",
       "key": "paywall.story.trial_ended.tile.doses",
       "create": true,
-      "en": "Doses logged",
-      "de": "Dosen erfasst",
-      "it": "Dosi registrate"
+      "en": "doses taken",
+      "de": "Dosen genommen",
+      "it": "dosi prese"
     },
     {
       "issue": "honest-paywall",
       "table": "Commerce",
       "key": "paywall.story.trial_ended.tile.streak",
       "create": true,
-      "en": "Day streak",
+      "en": "day streak",
       "de": "Tage in Folge",
-      "it": "Giorni di fila"
+      "it": "giorni di fila"
     },
     {
       "issue": "honest-paywall",

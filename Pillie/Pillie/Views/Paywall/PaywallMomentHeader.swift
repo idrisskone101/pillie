@@ -21,124 +21,129 @@ struct PaywallMomentHeader: View {
 
     @ViewBuilder
     private func trialActiveHeader(_ story: HonestPaywallTrialActiveStory) -> some View {
-        VStack(alignment: .leading, spacing: 16) {
-            VStack(alignment: .leading, spacing: 8) {
-                Text(story.title)
-                    .font(.pillie(28, weight: .black))
-                    .foregroundStyle(PillieTheme.textPrimary)
-                Text(story.subtitle)
-                    .font(.pillie(14, weight: .medium))
-                    .foregroundStyle(PillieTheme.textMuted)
-            }
+        VStack(alignment: .leading, spacing: 0) {
+            titleBlock(title: story.title, subtitle: story.subtitle)
 
-            HStack(alignment: .center, spacing: 14) {
-                Text("\(story.daysRemaining)")
-                    .font(.pillie(36, weight: .black))
-                    .foregroundStyle(PillieTheme.dark)
-                    .frame(width: 72, height: 72)
-                    .background(PillieTheme.coral, in: RoundedRectangle(cornerRadius: 28))
-                    .rotationEffect(.degrees(-6))
+            VStack(alignment: .leading, spacing: 12) {
+                HStack(alignment: .bottom, spacing: 10) {
+                    Text("\(story.daysRemaining)")
+                        .font(.pillie(40, weight: .black))
+                        .tracking(-0.8)
+                        .foregroundStyle(PillieTheme.dark)
+                        .frame(width: 72, height: 72)
+                        .background(PillieTheme.coral, in: RoundedRectangle(cornerRadius: 28))
+                        .rotationEffect(.degrees(-6))
 
-                Text(story.daysStampText)
-                    .font(.pillieHandwriting(size: 26))
-                    .foregroundStyle(PillieTheme.patchChangeRose)
-                    .rotationEffect(.degrees(-6))
-            }
-            .accessibilityElement(children: .combine)
+                    Text(story.daysStampText)
+                        .font(.pillieHandwriting(size: 28))
+                        .foregroundStyle(PillieTheme.dark)
+                        .padding(.bottom, 4)
+                }
+                .accessibilityElement(children: .combine)
 
-            VStack(alignment: .leading, spacing: 8) {
-                ForEach(story.benefitChips, id: \.label) { chip in
-                    Text(chip.label)
-                        .font(.pillie(13, weight: .semibold))
-                        .foregroundStyle(PillieTheme.textPrimary)
-                        .padding(.horizontal, 14)
-                        .padding(.vertical, 8)
-                        .background(chipColor(chip.tint), in: Capsule())
+                VStack(alignment: .leading, spacing: 8) {
+                    ForEach(story.benefitChips, id: \.label) { chip in
+                        Text(chip.label)
+                            .font(.pillie(15, weight: .bold))
+                            .foregroundStyle(PillieTheme.dark)
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 12)
+                            .background(chipColor(chip.tint), in: RoundedRectangle(cornerRadius: 20))
+                    }
                 }
             }
+            .padding(.top, 16)
+            .padding(.horizontal, 24)
+            .frame(minHeight: 248, alignment: .topLeading)
         }
     }
 
     @ViewBuilder
     private func trialEndedHeader(_ story: HonestPaywallTrialEndedStory) -> some View {
-        VStack(alignment: .leading, spacing: 16) {
-            VStack(alignment: .leading, spacing: 8) {
-                Text(story.title)
-                    .font(.pillie(28, weight: .black))
-                    .foregroundStyle(PillieTheme.textPrimary)
-                Text(story.subtitle)
-                    .font(.pillie(14, weight: .medium))
-                    .foregroundStyle(PillieTheme.textMuted)
-            }
+        VStack(alignment: .leading, spacing: 0) {
+            titleBlock(title: story.title, subtitle: story.subtitle)
 
-            HStack(spacing: 10) {
+            HStack(alignment: .top, spacing: 10) {
                 statTile(story.doseTile)
                 statTile(story.streakTile)
             }
+            .padding(.top, 16)
+            .padding(.horizontal, 24)
 
             if !story.handwrittenLossLine.isEmpty {
                 Text(story.handwrittenLossLine)
                     .font(.pillieHandwriting(size: 26))
-                    .foregroundStyle(PillieTheme.patchChangeRose)
+                    .foregroundStyle(PillieTheme.dark)
                     .rotationEffect(.degrees(-3))
+                    .padding(.top, 8)
+                    .padding(.leading, 24)
             }
         }
     }
 
     @ViewBuilder
     private func settingsFreeHeader(_ story: HonestPaywallSettingsStory) -> some View {
-        VStack(alignment: .leading, spacing: 16) {
-            VStack(alignment: .leading, spacing: 8) {
-                Text(story.title)
-                    .font(.pillie(28, weight: .black))
-                    .foregroundStyle(PillieTheme.textPrimary)
-                Text(story.subtitle)
-                    .font(.pillie(14, weight: .medium))
-                    .foregroundStyle(PillieTheme.textMuted)
-            }
+        VStack(alignment: .leading, spacing: 0) {
+            titleBlock(title: story.title, subtitle: story.subtitle)
 
             HStack(alignment: .top, spacing: 10) {
                 comparisonCard(story.freeCard)
                 comparisonCard(story.plusCard)
             }
+            .padding(.top, 16)
+            .padding(.horizontal, 24)
         }
     }
 
+    private func titleBlock(title: String, subtitle: String) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(title)
+                .font(.pillie(28, weight: .black))
+                .tracking(-0.56)
+                .lineSpacing(0)
+                .foregroundStyle(PillieTheme.dark)
+            Text(subtitle)
+                .font(.pillie(14, weight: .medium))
+                .foregroundStyle(PillieTheme.textMuted)
+        }
+        .padding(.top, 8)
+        .padding(.horizontal, 24)
+        .frame(minHeight: 68, alignment: .topLeading)
+    }
+
     private func statTile(_ tile: PaywallStatTile) -> some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text(tile.label)
-                .font(.pillie(12, weight: .semibold))
-                .foregroundStyle(tile.background == .ink ? Color.white.opacity(0.7) : PillieTheme.textMuted)
+        VStack(alignment: .leading, spacing: 4) {
             Text(tile.value)
-                .font(.pillie(32, weight: .black))
-                .foregroundStyle(tile.background == .ink ? PillieTheme.coral : PillieTheme.textPrimary)
+                .font(.pillie(40, weight: .black))
+                .tracking(-0.8)
+                .foregroundStyle(tile.background == .ink ? PillieTheme.coral : PillieTheme.dark)
+            Text(tile.label)
+                .font(.pillie(13, weight: .semibold))
+                .foregroundStyle(tile.background == .ink ? PillieTheme.bg : PillieTheme.textMuted)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(16)
+        .frame(minHeight: 92, alignment: .topLeading)
         .background(tileBackground(tile.background), in: RoundedRectangle(cornerRadius: 28))
     }
 
     private func comparisonCard(_ card: PaywallComparisonCard) -> some View {
         VStack(alignment: .leading, spacing: 10) {
             Text(card.tierLabel)
-                .font(.pillie(11, weight: .black))
-                .tracking(1)
+                .font(.pillie(12, weight: .bold))
+                .tracking(0.96)
                 .textCase(.uppercase)
-                .foregroundStyle(PillieTheme.textMuted)
+                .foregroundStyle(card.background == .coralSoft ? PillieTheme.dark : PillieTheme.textMuted)
 
             ForEach(card.bullets, id: \.self) { bullet in
-                HStack(spacing: 6) {
-                    Image(systemName: "checkmark")
-                        .font(.system(size: 11, weight: .bold))
-                        .foregroundStyle(PillieTheme.verifiedGreen)
-                    Text(bullet)
-                        .font(.pillie(13, weight: .semibold))
-                        .foregroundStyle(PillieTheme.textPrimary)
-                }
+                Text(bullet)
+                    .font(.pillie(15, weight: .bold))
+                    .foregroundStyle(PillieTheme.dark)
             }
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .frame(maxWidth: .infinity, alignment: .topLeading)
         .padding(16)
+        .frame(minHeight: 138, alignment: .topLeading)
         .background(tileBackground(card.background), in: RoundedRectangle(cornerRadius: 28))
     }
 

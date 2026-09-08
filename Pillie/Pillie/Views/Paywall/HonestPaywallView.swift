@@ -15,37 +15,42 @@ struct HonestPaywallView: View {
     let onContinueFree: (() -> Void)?
 
     var body: some View {
-        ZStack(alignment: .topTrailing) {
+        GeometryReader { proxy in
             ScrollView(showsIndicators: false) {
-                VStack(alignment: .leading, spacing: 24) {
+                VStack(spacing: 0) {
+                    if scene.board.chrome.showsClose {
+                        closeRow
+                    }
+
                     PaywallMomentHeader(board: scene.board)
+
                     PaywallCheckoutChrome(
                         checkout: scene.checkout,
                         isPurchasing: isPurchasing,
+                        section: .stack,
+                        onRecurrenceChange: onRecurrenceChange,
+                        onPurchase: onPurchase,
+                        onRestore: onRestore,
+                        onLifetime: { onPurchase(.lifetime) }
+                    )
+
+                    Spacer(minLength: 16)
+
+                    PaywallCheckoutChrome(
+                        checkout: scene.checkout,
+                        isPurchasing: isPurchasing,
+                        section: .footer,
                         onRecurrenceChange: onRecurrenceChange,
                         onPurchase: onPurchase,
                         onRestore: onRestore,
                         onLifetime: { onPurchase(.lifetime) }
                     )
                 }
-                .padding(.horizontal, 24)
-                .padding(.top, scene.board.chrome.showsClose ? 8 : 24)
-                .padding(.bottom, 32)
-            }
-
-            if scene.board.chrome.showsClose {
-                Button(action: onDismiss) {
-                    Image(systemName: "xmark")
-                        .font(.system(size: 13, weight: .semibold))
-                        .foregroundStyle(PillieTheme.textPrimary)
-                        .frame(width: 32, height: 32)
-                        .background(PillieTheme.sage, in: Circle())
-                }
-                .padding(.trailing, 20)
-                .padding(.top, 12)
-                .accessibilityLabel(PillieLocalization.string("global.action.close"))
+                .frame(minHeight: proxy.size.height, alignment: .top)
             }
         }
+        // Paper's footer sits 28pt from the physical bottom, including the home-indicator band.
+        .ignoresSafeArea(edges: .bottom)
         .safeAreaInset(edge: .bottom, spacing: 0) {
             if let onContinueFree, scene.board.chrome.showsContinueFree {
                 Button(action: onContinueFree) {
@@ -58,5 +63,21 @@ struct HonestPaywallView: View {
                 .padding(.bottom, 8)
             }
         }
+    }
+
+    private var closeRow: some View {
+        HStack {
+            Spacer()
+            Button(action: onDismiss) {
+                Image(systemName: "xmark")
+                    .font(.system(size: 10, weight: .semibold))
+                    .foregroundStyle(PillieTheme.textPrimary)
+                    .frame(width: 32, height: 32)
+                    .background(PillieTheme.sage, in: Circle())
+            }
+            .accessibilityLabel(PillieLocalization.string("global.action.close"))
+        }
+        .frame(height: 32)
+        .padding(.horizontal, 24)
     }
 }

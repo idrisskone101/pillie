@@ -124,12 +124,16 @@ struct HonestPaywallScreen: View {
     }
 
     private var coralWash: some View {
-        Circle()
+        let alignment: Alignment = {
+            if case .trialEnded = board { return .topLeading }
+            return .topTrailing
+        }()
+        return Circle()
             .fill(PillieTheme.coral.opacity(0.28))
-            .frame(width: 260, height: 260)
+            .frame(width: 240, height: 220)
             .blur(radius: 60)
-            .offset(x: 120, y: -80)
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
+            .offset(x: alignment == .topLeading ? -80 : 80, y: -40)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: alignment)
             .ignoresSafeArea()
             .accessibilityHidden(true)
     }

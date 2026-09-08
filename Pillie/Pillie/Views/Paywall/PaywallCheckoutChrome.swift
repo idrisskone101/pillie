@@ -5,6 +5,11 @@
 
 import SwiftUI
 
+enum PaywallCheckoutSection {
+    case stack
+    case footer
+}
+
 private enum HonestPaywallLayout {
     static let ctaHeight: CGFloat = 56
     static let stackTileRadius: CGFloat = 24
@@ -12,30 +17,41 @@ private enum HonestPaywallLayout {
 }
 
 struct PaywallCheckoutChrome: View {
-    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
-    @Environment(\.locale) private var locale
-
     let checkout: PaywallCheckoutSheet
     let isPurchasing: Bool
+    var section: PaywallCheckoutSection = .stack
     let onRecurrenceChange: (PaywallRecurrence) -> Void
     let onPurchase: (PaywallPurchaseIntent) -> Void
     let onRestore: () -> Void
     let onLifetime: () -> Void
 
     var body: some View {
-        VStack(spacing: 16) {
-            VStack(spacing: 12) {
-                stackTile(checkout.yearTile, recurrence: .year)
-                stackTile(checkout.monthTile, recurrence: .month)
-            }
+        switch section {
+        case .stack:
+            stackBlock
+        case .footer:
+            footerBlock
+        }
+    }
 
+    private var stackBlock: some View {
+        VStack(spacing: 10) {
+            stackTile(checkout.yearTile, recurrence: .year)
+            stackTile(checkout.monthTile, recurrence: .month)
+        }
+        .padding(.top, 16)
+        .padding(.horizontal, 24)
+    }
+
+    private var footerBlock: some View {
+        VStack(spacing: 10) {
             purchaseButton
 
             if let lifetimeLink = checkout.lifetimeLink {
                 Button(action: onLifetime) {
                     Text(lifetimeLink.text)
-                        .font(.pillie(14, weight: .semibold))
-                        .foregroundStyle(PillieTheme.textMuted)
+                        .font(.pillie(13, weight: .semibold))
+                        .foregroundStyle(PillieTheme.textPrimary)
                         .multilineTextAlignment(.center)
                 }
                 .buttonStyle(.plain)
@@ -44,6 +60,9 @@ struct PaywallCheckoutChrome: View {
 
             footerRow
         }
+        .padding(.top, 20)
+        .padding(.bottom, 28)
+        .padding(.horizontal, 24)
     }
 
     private func stackTile(_ tile: PaywallStackTile, recurrence: PaywallRecurrence) -> some View {
@@ -53,21 +72,30 @@ struct PaywallCheckoutChrome: View {
             HStack(alignment: .center, spacing: 12) {
                 radioCircle(selected: tile.isSelected)
 
-                VStack(alignment: .leading, spacing: 4) {
+                VStack(alignment: .leading, spacing: 2) {
                     Text(tile.title)
-                        .font(.pillie(15, weight: .bold))
+                        .font(.pillie(16, weight: .bold))
                         .foregroundStyle(PillieTheme.textPrimary)
 
                     Text(tile.primaryLine)
-                        .font(.pillie(14, weight: .medium))
+                        .font(.pillie(13, weight: .medium))
                         .foregroundStyle(PillieTheme.textMuted)
                         .multilineTextAlignment(.leading)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
 
-                if let trailing = tile.trailingPrice {
+                if let badge = tile.savingsBadge {
+                    Text(badge.label)
+                        .font(.pillie(11, weight: .extraBold))
+                        .tracking(0.44)
+                        .textCase(.uppercase)
+                        .foregroundStyle(PillieTheme.dark)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                        .background(PillieTheme.coral, in: Capsule())
+                } else if let trailing = tile.trailingPrice {
                     Text(trailing)
-                        .font(.pillie(16, weight: .bold))
+                        .font(.pillie(16, weight: .extraBold))
                         .foregroundStyle(PillieTheme.textPrimary)
                 }
             }
@@ -80,19 +108,6 @@ struct PaywallCheckoutChrome: View {
                         lineWidth: tile.isSelected ? 2 : 1
                     )
             }
-            .overlay(alignment: .topTrailing) {
-                if let badge = tile.savingsBadge {
-                    Text(badge.label)
-                        .font(.pillie(10, weight: .black))
-                        .tracking(0.6)
-                        .textCase(.uppercase)
-                        .foregroundStyle(PillieTheme.dark)
-                        .padding(.horizontal, 10)
-                        .padding(.vertical, 4)
-                        .background(PillieTheme.coral, in: Capsule())
-                        .offset(x: -12, y: -10)
-                }
-            }
         }
         .buttonStyle(.plain)
         .accessibilityElement(children: .ignore)
@@ -103,7 +118,7 @@ struct PaywallCheckoutChrome: View {
     private func radioCircle(selected: Bool) -> some View {
         ZStack {
             Circle()
-                .stroke(selected ? PillieTheme.dark : PillieTheme.sage, lineWidth: selected ? 0 : 1.5)
+                .stroke(selected ? PillieTheme.dark : Color(hex: "C4C0BA"), lineWidth: selected ? 0 : 2)
                 .frame(width: 22, height: 22)
 
             if selected {
@@ -130,7 +145,7 @@ struct PaywallCheckoutChrome: View {
                         .tint(.white)
                 } else {
                     Text(checkout.primaryCTA)
-                        .font(.pillie(17, weight: .bold))
+                        .font(.pillie(16, weight: .bold))
                         .lineLimit(1)
                         .minimumScaleFactor(0.6)
                 }
@@ -140,7 +155,6 @@ struct PaywallCheckoutChrome: View {
             .frame(height: HonestPaywallLayout.ctaHeight)
             .background(checkout.isPurchaseEnabled ? PillieTheme.dark : PillieTheme.textMuted)
             .clipShape(Capsule())
-            .shadow(color: PillieTheme.dark.opacity(0.35), radius: 10, y: 5)
         }
         .disabled(!checkout.isPurchaseEnabled || isPurchasing)
     }
@@ -148,7 +162,7 @@ struct PaywallCheckoutChrome: View {
     private var footerRow: some View {
         Button(action: onRestore) {
             Text(checkout.footer.reassurance)
-                .font(.pillie(12, weight: .semibold))
+                .font(.pillie(12, weight: .medium))
                 .foregroundStyle(PillieTheme.textMuted)
         }
         .buttonStyle(.plain)

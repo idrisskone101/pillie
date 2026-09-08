@@ -61,12 +61,7 @@ enum HonestPaywallStoryFactory {
         terms: TrialEndAccessTerms,
         locale: Locale
     ) -> HonestPaywallTrialEndedStory {
-        let doseValue = stats.dosesTaken.map { taken in
-            if let due = stats.dosesDue, due > 0 {
-                return "\(taken)/\(due)"
-            }
-            return "\(taken)"
-        } ?? "-"
+        let doseValue = stats.dosesTaken.map { "\($0)" } ?? "-"
 
         let streakValue = stats.currentStreak.map { "\($0)" } ?? "-"
 
