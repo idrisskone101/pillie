@@ -34,6 +34,18 @@ struct PaywallPriceComparison: Equatable {
         return free > 0 ? free : nil
     }
 
+    /// Annual-vs-twelve-months savings as a whole percent for the Paper SAVE badge.
+    /// `nil` when there is no honest saving to show.
+    var savingsPercent: Int? {
+        guard monthlyPrice > 0, annualPrice > 0 else { return nil }
+        let annual = (annualPrice as NSDecimalNumber).doubleValue
+        let monthly = (monthlyPrice as NSDecimalNumber).doubleValue
+        let fullYearMonthly = monthly * 12
+        guard fullYearMonthly > annual else { return nil }
+        let percent = Int(((1 - annual / fullYearMonthly) * 100).rounded())
+        return percent > 0 ? percent : nil
+    }
+
     /// The "$X/mo" string for the annual plan's monthly equivalent, formatted with the
     /// store-provided currency formatter so it matches the user's locale and currency.
     func monthlyEquivalentString(using formatter: NumberFormatter) -> String? {
