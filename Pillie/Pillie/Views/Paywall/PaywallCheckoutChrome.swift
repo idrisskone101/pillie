@@ -10,7 +10,8 @@ enum PaywallCheckoutSection {
     case footer
 }
 
-private enum HonestPaywallLayout {
+enum HonestPaywallLayout {
+    static let horizontalInset: CGFloat = 24
     static let ctaHeight: CGFloat = 56
     static let stackTileRadius: CGFloat = 24
     static let stackTilePadding: CGFloat = 16
@@ -40,7 +41,7 @@ struct PaywallCheckoutChrome: View {
             stackTile(checkout.monthTile, recurrence: .month)
         }
         .padding(.top, 16)
-        .padding(.horizontal, 24)
+        .frame(maxWidth: .infinity)
     }
 
     private var footerBlock: some View {
@@ -62,7 +63,7 @@ struct PaywallCheckoutChrome: View {
         }
         .padding(.top, 20)
         .padding(.bottom, 28)
-        .padding(.horizontal, 24)
+        .padding(.horizontal, HonestPaywallLayout.horizontalInset)
     }
 
     private func stackTile(_ tile: PaywallStackTile, recurrence: PaywallRecurrence) -> some View {
@@ -103,13 +104,14 @@ struct PaywallCheckoutChrome: View {
             .background(PillieTheme.cardWhite, in: RoundedRectangle(cornerRadius: HonestPaywallLayout.stackTileRadius))
             .overlay {
                 RoundedRectangle(cornerRadius: HonestPaywallLayout.stackTileRadius)
-                    .stroke(
+                    .strokeBorder(
                         tile.isSelected ? PillieTheme.dark : PillieTheme.sage,
                         lineWidth: tile.isSelected ? 2 : 1
                     )
             }
         }
         .buttonStyle(.plain)
+        .frame(maxWidth: .infinity)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(tile.accessibilityLabel)
         .accessibilityAddTraits(tile.isSelected ? [.isButton, .isSelected] : .isButton)

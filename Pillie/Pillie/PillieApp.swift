@@ -487,6 +487,7 @@ struct PillieApp: App {
     #if DEBUG
     private func handleDebugDeepLink(_ url: URL) {
         guard url.scheme == "pillie", url.host == "debug" else { return }
+        applyDebugLanguage(from: url)
 
         switch url.path {
         case "/posthog-smoke":
@@ -753,6 +754,16 @@ struct PillieApp: App {
         default:
             return
         }
+    }
+
+    private func applyDebugLanguage(from url: URL) {
+        guard let lang = URLComponents(url: url, resolvingAgainstBaseURL: false)?
+            .queryItems?
+            .first(where: { $0.name == "lang" })?
+            .value,
+              let language = AppLanguage(rawValue: lang)
+        else { return }
+        languagePreference.selection = language
     }
     #endif
 }

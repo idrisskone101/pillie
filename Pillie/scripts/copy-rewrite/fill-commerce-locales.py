@@ -71,7 +71,7 @@ def fill_catalog(keys: list[str], dry_run: bool) -> int:
             continue
         for lang in FILL_LANGS:
             current = localization_value(entry, lang)
-            if current == english:
+            if current:
                 continue
             set_localization(entry, lang, english)
             changed += 1

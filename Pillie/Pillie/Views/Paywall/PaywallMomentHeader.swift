@@ -38,23 +38,25 @@ struct PaywallMomentHeader: View {
                         .font(.pillieHandwriting(size: 28))
                         .foregroundStyle(PillieTheme.dark)
                         .padding(.bottom, 4)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
                 .accessibilityElement(children: .combine)
 
-                VStack(alignment: .leading, spacing: 8) {
+                VStack(spacing: 8) {
                     ForEach(story.benefitChips, id: \.label) { chip in
                         Text(chip.label)
                             .font(.pillie(15, weight: .bold))
                             .foregroundStyle(PillieTheme.dark)
                             .padding(.horizontal, 16)
                             .padding(.vertical, 12)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                             .background(chipColor(chip.tint), in: RoundedRectangle(cornerRadius: 20))
                     }
                 }
             }
             .padding(.top, 16)
-            .padding(.horizontal, 24)
-            .frame(minHeight: 248, alignment: .topLeading)
+            .frame(maxWidth: .infinity, minHeight: 248, alignment: .topLeading)
         }
     }
 
@@ -68,7 +70,6 @@ struct PaywallMomentHeader: View {
                 statTile(story.streakTile)
             }
             .padding(.top, 16)
-            .padding(.horizontal, 24)
 
             if !story.handwrittenLossLine.isEmpty {
                 Text(story.handwrittenLossLine)
@@ -76,7 +77,6 @@ struct PaywallMomentHeader: View {
                     .foregroundStyle(PillieTheme.dark)
                     .rotationEffect(.degrees(-3))
                     .padding(.top, 8)
-                    .padding(.leading, 24)
             }
         }
     }
@@ -91,7 +91,6 @@ struct PaywallMomentHeader: View {
                 comparisonCard(story.plusCard)
             }
             .padding(.top, 16)
-            .padding(.horizontal, 24)
         }
     }
 
@@ -107,8 +106,7 @@ struct PaywallMomentHeader: View {
                 .foregroundStyle(PillieTheme.textMuted)
         }
         .padding(.top, 8)
-        .padding(.horizontal, 24)
-        .frame(minHeight: 68, alignment: .topLeading)
+        .frame(maxWidth: .infinity, minHeight: 68, alignment: .topLeading)
     }
 
     private func statTile(_ tile: PaywallStatTile) -> some View {

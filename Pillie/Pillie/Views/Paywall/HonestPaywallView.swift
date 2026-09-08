@@ -22,17 +22,20 @@ struct HonestPaywallView: View {
                         closeRow
                     }
 
-                    PaywallMomentHeader(board: scene.board)
+                    VStack(spacing: 0) {
+                        PaywallMomentHeader(board: scene.board)
 
-                    PaywallCheckoutChrome(
-                        checkout: scene.checkout,
-                        isPurchasing: isPurchasing,
-                        section: .stack,
-                        onRecurrenceChange: onRecurrenceChange,
-                        onPurchase: onPurchase,
-                        onRestore: onRestore,
-                        onLifetime: { onPurchase(.lifetime) }
-                    )
+                        PaywallCheckoutChrome(
+                            checkout: scene.checkout,
+                            isPurchasing: isPurchasing,
+                            section: .stack,
+                            onRecurrenceChange: onRecurrenceChange,
+                            onPurchase: onPurchase,
+                            onRestore: onRestore,
+                            onLifetime: { onPurchase(.lifetime) }
+                        )
+                    }
+                    .padding(.horizontal, HonestPaywallLayout.horizontalInset)
 
                     Spacer(minLength: 16)
 
@@ -78,6 +81,6 @@ struct HonestPaywallView: View {
             .accessibilityLabel(PillieLocalization.string("global.action.close"))
         }
         .frame(height: 32)
-        .padding(.horizontal, 24)
+        .padding(.horizontal, HonestPaywallLayout.horizontalInset)
     }
 }
