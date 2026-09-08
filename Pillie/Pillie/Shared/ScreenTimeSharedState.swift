@@ -107,18 +107,29 @@ enum ScreenTimeSharedState {
 
     // MARK: - Today Handled Stamp (Legacy Taken Key)
 
-    /// Writes the handled state (taken or no action scheduled) together with
-    /// the day it describes. The
-    /// DeviceActivityMonitor extension rejects the flag when the stamp isn't
-    /// today's, so yesterday's true can't cancel today's blocking when the
-    /// app never ran overnight.
-    static func setTodayTaken(_ isTaken: Bool, now: Date = Date()) {
+    /// Writes the handled state together with the live dose day it describes.
+    /// The extension rejects the flag when the stamp isn't that live day, so a
+    /// previous window's true can't cancel the next dose's blocking.
+    static func setTodayTaken(_ isTaken: Bool, day: Date) {
         defaults?.set(isTaken, forKey: AppGroupKeys.isTodayTaken)
         defaults?.set(
-            TodayTakenStamp.epochDay(for: now),
+            TodayTakenStamp.epochDay(for: day),
             forKey: AppGroupKeys.todayTakenEpochDay
         )
         defaults?.synchronize()
+    }
+
+    static func setReminderTime(hour: Int, minute: Int) {
+        defaults?.set(hour, forKey: AppGroupKeys.reminderHour)
+        defaults?.set(minute, forKey: AppGroupKeys.reminderMinute)
+        defaults?.synchronize()
+    }
+
+    static func reminderTime(defaultHour: Int = 8, defaultMinute: Int = 0) -> (hour: Int, minute: Int) {
+        (
+            defaults?.object(forKey: AppGroupKeys.reminderHour) as? Int ?? defaultHour,
+            defaults?.object(forKey: AppGroupKeys.reminderMinute) as? Int ?? defaultMinute
+        )
     }
 
     static var todayTakenStamp: TodayTakenStamp {

@@ -292,8 +292,6 @@ struct HomeView: View {
             store.customDueReminderBody,
             store.customRetryReminderTitle,
             store.customRetryReminderBody,
-            store.customLastCallReminderTitle,
-            store.customLastCallReminderBody,
         ].contains(where: CustomReminderCopy.isCustomized)
 
         return TrialActivationState(
@@ -302,7 +300,6 @@ struct HomeView: View {
             customMessagesCustomized: customMessagesCustomized,
             smartRemindersCustomized: store.autoReminderIntervalMinutes != 10
                 || store.autoReminderRetryLimit != 3
-                || store.lastCallReminderEnabled
         )
     }
 

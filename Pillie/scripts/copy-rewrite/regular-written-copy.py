@@ -32,7 +32,7 @@ SPECIAL_DE: dict[tuple[str, str], str] = {
         "App-Pause ist Plus. Setup nach dem Upgrade."
     ),
     ("Commerce", "paywall.upsell.custom_messages.body"): (
-        "Schreib den Ping in deinen Worten. Plus ändert den täglichen und den letzten."
+        "Schreib den Ping in deinen Worten. Plus ändert den täglichen und den Folge-Ping."
     ),
     ("Localizable", "onboarding.welcome.title"): "Der Wecker für deine Pille, jeden Abend.",
     ("Localizable", "onboarding.welcome.subtitle"): (
@@ -147,7 +147,6 @@ SPECIAL_DE: dict[tuple[str, str], str] = {
     ("Notifications", "notification.followup.body"): (
         "Hey, der kurze Check-in ist noch offen. Check-in, wenn du soweit bist"
     ),
-    ("Notifications", "notification.final.body"): "Für heute noch kein Check-in.",
     ("Notifications", "notification.trial_expiry.day10.body"): (
         "Die App-Pause wird in 5 Tagen deaktiviert."
     ),
@@ -193,7 +192,7 @@ SPECIAL_IT: dict[tuple[str, str], str] = {
     ),
     ("Commerce", "trial.end.legacy.keep"): "Tieni Plus.",
     ("Commerce", "paywall.upsell.custom_messages.body"): (
-        "Scrivi il ping con le tue parole. Plus cambia quello giornaliero e l'ultimo."
+        "Scrivi il ping con le tue parole. Plus cambia quello giornaliero e il follow-up."
     ),
     ("Localizable", "onboarding.welcome.title"): "La sveglia per la tua pillola, ogni sera.",
     ("Localizable", "onboarding.welcome.subtitle"): (
@@ -309,7 +308,6 @@ SPECIAL_IT: dict[tuple[str, str], str] = {
     ("Notifications", "notification.followup.body"): (
         "Ehi, il check-in veloce è ancora aperto. Fai il check-in quando vuoi"
     ),
-    ("Notifications", "notification.final.body"): "Per oggi non c'è ancora un check-in.",
     ("Notifications", "notification.trial_expiry.day10.body"): (
         "Il blocco delle app si disattiverà tra 5 giorni."
     ),
@@ -350,10 +348,10 @@ SPECIAL_EN: dict[tuple[str, str], str] = {
     ),
     ("Commerce", "paywall.plan.lifetime"): "Pillie Plus lifetime",
     ("Commerce", "paywall.upsell.smart_reminders.body"): (
-        "Keeps pinging until you log today. You pick how often, how many, and the last ping."
+        "Keeps pinging until you log today. You pick how often and how many."
     ),
     ("Commerce", "paywall.upsell.custom_messages.body"): (
-        "Write the ping in your own words. Plus lets you change the daily one and the last one."
+        "Write the ping in your own words. Plus lets you change the daily one and the follow-up."
     ),
     ("Commerce", "trial.granted.headline"): "Your next two weeks are",
     ("Commerce", "trial.granted.headline_accent"): "on us.",
@@ -533,7 +531,6 @@ SPECIAL_EN: dict[tuple[str, str], str] = {
     ("Notifications", "notification.followup.body"): (
         "Hey, quick check-in is still open. Check in when you're ready"
     ),
-    ("Notifications", "notification.final.body"): "Still no check-in for today.",
     ("Notifications", "notification.trial_expiry.day10.body"): (
         "App blocking turns off in 5 days."
     ),

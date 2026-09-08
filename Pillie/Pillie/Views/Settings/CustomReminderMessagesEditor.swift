@@ -6,9 +6,9 @@
 import SwiftUI
 
 /// Editor for the Custom Reminder Message perk (Pillie+). Lets a subscriber write the
-/// title and body of the daily Due Action Reminder, the Auto-Reminder Retry, and the
-/// end-of-day Last Call Reminder. What they type is exactly what fires (WYSIWYG); a
-/// blank field falls back to the default copy at fire time (see `CustomReminderCopy`).
+/// title and body of the daily Due Action Reminder and the Auto-Reminder Retry. What
+/// they type is exactly what fires (WYSIWYG); a blank field falls back to the default
+/// copy at fire time (see `CustomReminderCopy`).
 /// Hard caps are enforced as the user types, with a live character counter. Words never
 /// change reminder timing, snooze, retry cadence, or supply scheduling.
 struct CustomReminderMessagesEditor: View {
@@ -22,9 +22,7 @@ struct CustomReminderMessagesEditor: View {
             dueTitle: "",
             dueBody: "",
             retryTitle: "",
-            retryBody: "",
-            lastCallTitle: "",
-            lastCallBody: ""
+            retryBody: ""
         )
     )
 
@@ -35,8 +33,6 @@ struct CustomReminderMessagesEditor: View {
         case dailyBody = "daily-body"
         case retryTitle = "retry-title"
         case retryBody = "retry-body"
-        case lastCallTitle = "last-call-title"
-        case lastCallBody = "last-call-body"
     }
 
     @FocusState private var focusedField: Field?
@@ -57,16 +53,12 @@ struct CustomReminderMessagesEditor: View {
     private var defaultBody: String { CustomReminderPreview.defaultDailyBody(method: method) }
     private var defaultRetryTitle: String { NotificationManager.defaultRetryTitle }
     private var defaultRetryBody: String { NotificationManager.defaultRetryBody }
-    private var defaultLastCallTitle: String { CustomReminderPreview.defaultLastCallTitle(method: method) }
-    private var defaultLastCallBody: String { CustomReminderPreview.defaultLastCallBody(method: method) }
     private var defaultMessages: CustomReminderMessages {
         CustomReminderMessages(
             dueTitle: defaultTitle,
             dueBody: defaultBody,
             retryTitle: defaultRetryTitle,
             retryBody: defaultRetryBody,
-            lastCallTitle: defaultLastCallTitle,
-            lastCallBody: defaultLastCallBody
         )
     }
 
@@ -152,27 +144,6 @@ struct CustomReminderMessagesEditor: View {
                         previewIdentifier: "reminder-preview-followup"
                     )
 
-                    group(
-                        index: 3,
-                        header: PillieLocalization.string(
-                            "settings.final_reminder.title",
-                            locale: locale
-                        ),
-                        subtitle: PillieLocalization.string(
-                            "settings.final_reminder.body",
-                            locale: locale
-                        ),
-                        titleBinding: $draft.messages.lastCallTitle,
-                        titleCount: draft.messages.lastCallTitle.count,
-                        bodyBinding: $draft.messages.lastCallBody,
-                        bodyCount: draft.messages.lastCallBody.count,
-                        titleField: .lastCallTitle,
-                        bodyField: .lastCallBody,
-                        previewTitle: CustomReminderPreview.lastCallTitle(custom: draft.messages.lastCallTitle, method: method, isPlus: isPlus),
-                        previewBody: CustomReminderPreview.lastCallBody(custom: draft.messages.lastCallBody, method: method, isPlus: isPlus),
-                        previewIdentifier: "reminder-preview-lastcall"
-                    )
-
                     Button(PillieLocalization.string(
                         "settings.custom_messages.restore",
                         locale: locale
@@ -205,8 +176,6 @@ struct CustomReminderMessagesEditor: View {
                             body: normalized(draft.messages.dueBody, default: defaultBody),
                             retryTitle: normalized(draft.messages.retryTitle, default: defaultRetryTitle),
                             retryBody: normalized(draft.messages.retryBody, default: defaultRetryBody),
-                            lastCallTitle: normalized(draft.messages.lastCallTitle, default: defaultLastCallTitle),
-                            lastCallBody: normalized(draft.messages.lastCallBody, default: defaultLastCallBody),
                             preset: draft.appliedPreset,
                             editedAfterPreset: draft.wasEditedAfterPreset
                         )
@@ -252,8 +221,6 @@ struct CustomReminderMessagesEditor: View {
                     dueBody: prefilled(store.customDueReminderBody, default: defaultBody),
                     retryTitle: prefilled(store.customRetryReminderTitle, default: defaultRetryTitle),
                     retryBody: prefilled(store.customRetryReminderBody, default: defaultRetryBody),
-                    lastCallTitle: prefilled(store.customLastCallReminderTitle, default: defaultLastCallTitle),
-                    lastCallBody: prefilled(store.customLastCallReminderBody, default: defaultLastCallBody)
                 )
             )
             ProductAnalyticsTelemetry.live.customRemindersSettingsOpened()
@@ -302,8 +269,8 @@ struct CustomReminderMessagesEditor: View {
         }
     }
 
-    /// A numbered, two-line header so the three reminders read as an ordered sequence
-    /// (daily → follow-up → last call) and each one clearly states what it does.
+    /// A numbered, two-line header so the two reminders read as an ordered sequence
+    /// (daily → follow-up) and each one clearly states what it does.
     @ViewBuilder
     private func sectionHeader(index: Int, header: String, subtitle: String) -> some View {
         HStack(alignment: .center, spacing: 12) {

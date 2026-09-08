@@ -1,5 +1,7 @@
 # Last Call Reminder is a distinct end-of-day Smart Reminders sub-feature
 
+> **Superseded by [ADR 0009](0009-dose-window-is-today.md).** Last Call / Last ping was removed. The 24-hour Due Action Window is now `today`; Interval and Repeats are the only follow-up path. Read the decisions below as historical.
+
 We are adding a **Last Call Reminder**: a single same-day end-of-day re-fire of a Due Action Reminder that fires only when the due action is still untaken, as a final backstop before the day rolls over and the action becomes `.missed` at midnight. It is a Pillie Plus feature under the [[Smart Reminders]] umbrella, but it is modeled as its own concept with its own on/off toggle, **not** as a configuration of the existing Auto-Reminder Retry cadence. It fires at a configurable time (default 9:00 PM local) and adds a title+body pair to the Custom Reminder Message perk (now six fields total).
 
 ## Considered Options

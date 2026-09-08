@@ -51,6 +51,7 @@ final class CycleTransitionNoticeTests: XCTestCase {
         planner.planReminders(
             ReminderSchedulePlanner.Input(
                 now: now,
+                scheduleDay: calendar.startOfDay(for: now),
                 pack: pack,
                 reminderHour: reminderHour,
                 reminderMinute: 0,
@@ -63,9 +64,6 @@ final class CycleTransitionNoticeTests: XCTestCase {
                 snoozeOverride: nil,
                 smartRemindersEnabled: smartRemindersEnabled,
                 cycleTransitionEnabled: cycleTransitionEnabled,
-                lastCallEnabled: false,
-                lastCallHour: 21,
-                lastCallMinute: 0,
                 trialGrantDate: nil,
                 hasEntitlement: false,
                 servedBaseFireDateByDueDayEpoch: [:],

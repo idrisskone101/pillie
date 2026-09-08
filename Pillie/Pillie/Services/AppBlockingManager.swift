@@ -65,6 +65,7 @@ final class AppBlockingManager {
 
     struct RoutineState {
         let isTodayHandled: Bool
+        let liveDay: Date
         let reminderHour: Int
         let reminderMinute: Int
         let method: ContraceptiveMethod
@@ -254,6 +255,7 @@ final class AppBlockingManager {
     /// (completed, passive, or a break day).
     func reconcileBlockingState(
         isTodayHandled: Bool,
+        liveDay: Date,
         reminderHour: Int,
         reminderMinute: Int,
         method: ContraceptiveMethod
@@ -278,15 +280,14 @@ final class AppBlockingManager {
             return
         }
 
-        // Check if we're past the reminder time today
-        let now = Date()
+        let now = PillieClock.now
         let calendar = Calendar.current
-        guard let reminderToday = calendar.date(
+        guard let liveReminder = calendar.date(
             bySettingHour: reminderHour,
             minute: reminderMinute,
             second: 0,
-            of: now
-        ), now >= reminderToday else {
+            of: liveDay
+        ), now >= liveReminder else {
             return
         }
 
@@ -301,6 +302,7 @@ final class AppBlockingManager {
         scheduleDeviceActivityBlock(hour: routine.reminderHour, minute: routine.reminderMinute)
         reconcileBlockingState(
             isTodayHandled: routine.isTodayHandled,
+            liveDay: routine.liveDay,
             reminderHour: routine.reminderHour,
             reminderMinute: routine.reminderMinute,
             method: routine.method
@@ -311,6 +313,7 @@ final class AppBlockingManager {
         ScreenTimeSharedState.setBlockingScheduleMirror(routine.blockingSchedule)
         reconcileBlockingState(
             isTodayHandled: routine.isTodayHandled,
+            liveDay: routine.liveDay,
             reminderHour: routine.reminderHour,
             reminderMinute: routine.reminderMinute,
             method: routine.method
@@ -331,14 +334,17 @@ final class AppBlockingManager {
         Self.logger.debug("scheduleDeviceActivityBlock: skipped on simulator (hour: \(hour), minute: \(minute))")
         return
         #else
-        Self.logger.info("scheduleDeviceActivityBlock: scheduling \(hour):\(minute) → 23:59")
+        let intervalEnd = DoseWindow.blockingIntervalEnd(hour: hour, minute: minute)
+        Self.logger.info(
+            "scheduleDeviceActivityBlock: scheduling \(hour):\(minute) → \(intervalEnd.hour):\(intervalEnd.minute)"
+        )
 
         // Stop existing monitoring before re-scheduling
         center.stopMonitoring([Self.activityName])
 
         let schedule = DeviceActivitySchedule(
             intervalStart: DateComponents(hour: hour, minute: minute),
-            intervalEnd: DateComponents(hour: 23, minute: 59),
+            intervalEnd: DateComponents(hour: intervalEnd.hour, minute: intervalEnd.minute),
             repeats: true
         )
 

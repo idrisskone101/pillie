@@ -66,7 +66,7 @@ final class SmartRemindersUpsellTests: XCTestCase {
         XCTAssertEqual(commerce(content.localizedFeatureKey), "Reminder messages")
         XCTAssertEqual(
             commerce(content.subtitleKey),
-            "Write the ping in your own words. Plus lets you change the daily one and the last one."
+            "Write the ping in your own words. Plus lets you change the daily one and the follow-up."
         )
         XCTAssertNotEqual(content.subtitleKey, content.localizedFeatureKey)
     }
@@ -123,7 +123,5 @@ private struct NoOpTracker: AnalyticsTracking {
         bodyCustomized: Bool?,
         retryTitleCustomized: Bool?,
         retryBodyCustomized: Bool?,
-        lastCallTitleCustomized: Bool?,
-        lastCallBodyCustomized: Bool?
     ) {}
 }

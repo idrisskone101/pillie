@@ -155,8 +155,6 @@ private final class ErrorRecordingTracker: AnalyticsTracking {
     bodyCustomized: Bool?,
     retryTitleCustomized: Bool?,
     retryBodyCustomized: Bool?,
-    lastCallTitleCustomized: Bool?,
-    lastCallBodyCustomized: Bool?
   ) {}
 
   func trackError(

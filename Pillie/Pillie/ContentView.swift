@@ -464,7 +464,9 @@ struct ContentView: View {
       withAnimation(.easeOut(duration: 0.5)) {
         iconScale = 1.0
       }
-      try? await Task.sleep(for: .seconds(1.5))
+      if !ProcessRuntime.isRunningTests {
+        try? await Task.sleep(for: .seconds(1.5))
+      }
       withAnimation(.easeInOut(duration: 0.4)) {
         isLoading = false
       }

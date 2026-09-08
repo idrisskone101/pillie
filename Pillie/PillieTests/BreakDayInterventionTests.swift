@@ -71,6 +71,7 @@ final class BreakDayInterventionTests: XCTestCase {
         let intents = ReminderSchedulePlanner().planReminders(
             ReminderSchedulePlanner.Input(
                 now: day27,
+                scheduleDay: Calendar.current.startOfDay(for: day27),
                 pack: pack,
                 reminderHour: 8,
                 reminderMinute: 0,
@@ -86,9 +87,6 @@ final class BreakDayInterventionTests: XCTestCase {
                 ),
                 smartRemindersEnabled: true,
                 cycleTransitionEnabled: false,
-                lastCallEnabled: true,
-                lastCallHour: 21,
-                lastCallMinute: 0,
                 trialGrantDate: nil,
                 hasEntitlement: false,
                 servedBaseFireDateByDueDayEpoch: [:],

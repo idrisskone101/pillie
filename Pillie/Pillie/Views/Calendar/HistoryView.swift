@@ -181,6 +181,9 @@ struct HistoryView: View {
         .onAppear {
             guard !hasAnimatedIn else { return }
             hasAnimatedIn = true
+            let currentMonth = MonthCursor.monthStart(for: store.today)
+            displayedMonth = currentMonth
+            infoMonth = currentMonth
             warmVisibleMonths()
             withAnimation(PillieTheme.fadeInUpCurve) {
                 appeared = true
@@ -419,7 +422,7 @@ struct HistoryView: View {
     }
 
     private func resetToCurrentMonthForProtocolChange() {
-        let currentMonth = MonthCursor.monthStart(for: Date())
+        let currentMonth = MonthCursor.monthStart(for: store.today)
         withAnimation(infoTransition) {
             infoMonth = currentMonth
         }

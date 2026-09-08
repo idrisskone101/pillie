@@ -340,178 +340,6 @@ final class ReminderSchedulePlannerTests: XCTestCase {
         DoseScheduleEngine.dueAction(on: date, pack: pack, calendar: calendar)?.isBreak ?? false
     }
 
-    // MARK: - Last Call Reminder
-
-    func testSchedulesLastCallOnUntakenDay() throws {
-        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
-        let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
-        let todayEpoch = epochDay(for: now)
-
-        let todayIntents = dueIntents(for: fixture.store, now: now, lastCallEnabled: true)
-            .filter { $0.dueDayEpoch == todayEpoch }
-
-        XCTAssertEqual(todayIntents.filter { $0.kind == .lastCall }.count, 1)
-        XCTAssertEqual(todayIntents.filter { $0.kind == .base }.count, 1)
-    }
-
-    func testDoesNotScheduleLastCallWhenDisabled() throws {
-        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
-        let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
-
-        let intents = dueIntents(for: fixture.store, now: now, lastCallEnabled: false)
-
-        XCTAssertTrue(intents.filter { $0.kind == .lastCall }.isEmpty)
-    }
-
-    func testFiresLastCallEvenWhenRetryLimitIsZero() throws {
-        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
-        let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
-        let todayEpoch = epochDay(for: now)
-
-        let todayIntents = dueIntents(
-            for: fixture.store,
-            now: now,
-            autoReminderRetryLimit: 0,
-            lastCallEnabled: true
-        )
-        .filter { $0.dueDayEpoch == todayEpoch }
-
-        XCTAssertEqual(todayIntents.filter { $0.kind == .lastCall }.count, 1)
-        XCTAssertEqual(todayIntents.filter { $0.kind == .retry }.count, 0)
-    }
-
-    func testSuppressesLastCallUnderSixtyMinuteGap() throws {
-        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
-        let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
-        fixture.store.reminderHour = 8
-        fixture.store.reminderMinute = 0
-        let todayEpoch = epochDay(for: now)
-
-        // Last Call at 8:30 is only 30 minutes after the 8:00 reminder — suppressed.
-        let todayIntents = dueIntents(
-            for: fixture.store,
-            now: now,
-            lastCallEnabled: true,
-            lastCallHour: 8,
-            lastCallMinute: 30
-        )
-        .filter { $0.dueDayEpoch == todayEpoch }
-
-        XCTAssertTrue(todayIntents.filter { $0.kind == .lastCall }.isEmpty)
-        XCTAssertEqual(todayIntents.filter { $0.kind == .base }.count, 1)
-    }
-
-    func testSchedulesLastCallAtExactlySixtyMinuteGap() throws {
-        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
-        let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
-        fixture.store.reminderHour = 8
-        fixture.store.reminderMinute = 0
-        let todayEpoch = epochDay(for: now)
-
-        // Exactly 60 minutes after the 8:00 reminder — allowed.
-        let todayIntents = dueIntents(
-            for: fixture.store,
-            now: now,
-            lastCallEnabled: true,
-            lastCallHour: 9,
-            lastCallMinute: 0
-        )
-        .filter { $0.dueDayEpoch == todayEpoch }
-
-        XCTAssertEqual(todayIntents.filter { $0.kind == .lastCall }.count, 1)
-    }
-
-    func testSuppressesLastCallOnTakenDay() throws {
-        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
-        let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
-        let todayEpoch = epochDay(for: now)
-
-        let intents = dueIntents(
-            for: fixture.store,
-            now: now,
-            statusOverrides: [todayEpoch: .taken],
-            lastCallEnabled: true
-        )
-
-        XCTAssertFalse(intents.contains { $0.dueDayEpoch == todayEpoch && $0.kind == .lastCall })
-        // The feature is still active for other untaken days.
-        XCTAssertTrue(intents.contains { $0.kind == .lastCall })
-    }
-
-    func testFreeUserGetsNoLastCall() throws {
-        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
-        let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
-
-        let intents = dueIntents(
-            for: fixture.store,
-            now: now,
-            lastCallEnabled: true,
-            lastCallHour: 21,
-            lastCallMinute: 0
-        )
-
-        // smartRemindersEnabled defaults to true in the helper; override to false here.
-        let freeIntents = dueIntents(
-            for: fixture.store,
-            now: now,
-            smartRemindersEnabled: false,
-            lastCallEnabled: true
-        )
-
-        XCTAssertTrue(intents.contains { $0.kind == .lastCall })
-        XCTAssertTrue(freeIntents.filter { $0.kind == .lastCall }.isEmpty)
-    }
-
-    func testDropsRetryWithinGuardWindowOfLastCall() throws {
-        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
-        let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
-        let todayEpoch = epochDay(for: now)
-        let guardWindow: TimeInterval = TimeInterval(ReminderSchedulePlanner.lastCallRetryGuardMinutes * 60)
-
-        // 30-minute cadence from an 8:00 reminder puts a retry exactly on the 21:00 Last Call.
-        let withLastCall = dueIntents(
-            for: fixture.store,
-            now: now,
-            autoReminderIntervalMinutes: 30,
-            autoReminderRetryLimit: 100,
-            lastCallEnabled: true,
-            lastCallHour: 21,
-            lastCallMinute: 0
-        )
-        .filter { $0.dueDayEpoch == todayEpoch }
-
-        let lastCall = try XCTUnwrap(withLastCall.first { $0.kind == .lastCall })
-        XCTAssertFalse(withLastCall.contains {
-            $0.kind == .retry && abs($0.fireDate.timeIntervalSince(lastCall.fireDate)) <= guardWindow
-        })
-
-        // Without the Last Call, a retry does land in that window — proving the dedupe acted.
-        let withoutLastCall = dueIntents(
-            for: fixture.store,
-            now: now,
-            autoReminderIntervalMinutes: 30,
-            autoReminderRetryLimit: 100,
-            lastCallEnabled: false
-        )
-        .filter { $0.dueDayEpoch == todayEpoch }
-
-        XCTAssertTrue(withoutLastCall.contains {
-            $0.kind == .retry && abs($0.fireDate.timeIntervalSince(lastCall.fireDate)) <= guardWindow
-        })
-    }
-
-    func testPreSchedulesAtMostOneLastCallPerDayAcrossHorizon() throws {
-        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
-        let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
-
-        let lastCalls = dueIntents(for: fixture.store, now: now, lastCallEnabled: true)
-            .filter { $0.kind == .lastCall }
-        let distinctDays = Set(lastCalls.map(\.dueDayEpoch))
-
-        XCTAssertGreaterThanOrEqual(distinctDays.count, 2)
-        XCTAssertEqual(lastCalls.count, distinctDays.count) // at most one per day
-    }
-
     // MARK: - Served-base catch-up re-fire regression
 
     func testDoesNotRearmBaseAfterServedMomentPassed() throws {
@@ -616,27 +444,6 @@ final class ReminderSchedulePlannerTests: XCTestCase {
         XCTAssertEqual(retries.first?.fireDate, servedAt.addingTimeInterval(30 * 60))
     }
 
-    func testLastCallPlansWhenBaseSuppressedAfterServed() throws {
-        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 10, minute: 5)
-        let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
-        fixture.store.reminderHour = 8
-        fixture.store.reminderMinute = 0
-        let todayEpoch = epochDay(for: now)
-        let servedAt = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 8, minute: 0)
-
-        let todayIntents = dueIntents(
-            for: fixture.store,
-            now: now,
-            lastCallEnabled: true,
-            lastCallHour: 21,
-            lastCallMinute: 0,
-            servedBaseFireDateByDueDayEpoch: [todayEpoch: servedAt]
-        )
-        .filter { $0.dueDayEpoch == todayEpoch }
-
-        XCTAssertEqual(todayIntents.filter { $0.kind == .base }.count, 0)
-        XCTAssertEqual(todayIntents.filter { $0.kind == .lastCall }.count, 1)
-    }
 
     func testFreeUserNoBaseOrRetryAfterServed() throws {
         let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 21, minute: 17)
@@ -726,23 +533,34 @@ final class ReminderSchedulePlannerTests: XCTestCase {
         XCTAssertEqual(firstBase.first?.fireDate, servedAt)
     }
 
-    func testSchedulesLastCallForAllMethods() throws {
-        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+    func testRetriesContinueAfterMidnightUntilNextReminder() throws {
+        let reminderDay = InMemoryStoreFactory.fixedDate("2026-06-10", hour: 21)
+        let afterMidnight = InMemoryStoreFactory.fixedDate("2026-06-11", hour: 1)
+        let fixture = try InMemoryStoreFactory.makeStore(now: reminderDay, startDate: reminderDay)
+        fixture.store.reminderHour = 21
+        fixture.store.reminderMinute = 0
 
-        let pillFixture = try InMemoryStoreFactory.makeStore(now: now, method: .pill, startDate: now)
-        let patchFixture = try InMemoryStoreFactory.makeStore(now: now, method: .patch, startDate: now)
-        let ringFixture = try InMemoryStoreFactory.makeStore(
-            now: now,
-            method: .ring,
-            startDate: now,
-            ringInsertionDate: now
+        PillieClock.setFixedNowForTesting(afterMidnight)
+        fixture.store.refreshDayContextIfNeeded()
+
+        let liveEpoch = epochDay(for: fixture.store.today)
+        XCTAssertEqual(liveEpoch, epochDay(for: reminderDay))
+
+        let liveIntents = dueIntents(
+            for: fixture.store,
+            now: afterMidnight,
+            autoReminderIntervalMinutes: 60,
+            autoReminderRetryLimit: 3
         )
+        .filter { $0.dueDayEpoch == liveEpoch }
 
-        for store in [pillFixture.store, patchFixture.store, ringFixture.store] {
-            let lastCalls = dueIntents(for: store, now: now, lastCallEnabled: true)
-                .filter { $0.kind == .lastCall }
-            XCTAssertFalse(lastCalls.isEmpty, "Expected a Last Call for method \(store.pack.method)")
-        }
+        XCTAssertEqual(liveIntents.filter { $0.kind == .base }.count, 1)
+        XCTAssertEqual(liveIntents.filter { $0.kind == .retry }.count, 3)
+        XCTAssertTrue(liveIntents.allSatisfy { $0.fireDate > afterMidnight })
+        let nextReminder = try XCTUnwrap(
+            Calendar.current.date(bySettingHour: 21, minute: 0, second: 0, of: afterMidnight)
+        )
+        XCTAssertTrue(liveIntents.allSatisfy { $0.fireDate < nextReminder })
     }
 
     private func plan(
@@ -754,14 +572,11 @@ final class ReminderSchedulePlannerTests: XCTestCase {
         snoozeOverride: ReminderSchedulePlanner.SnoozeOverride? = nil,
         smartRemindersEnabled: Bool = true,
         cycleTransitionEnabled: Bool = true,
-        lastCallEnabled: Bool = false,
-        lastCallHour: Int = 21,
-        lastCallMinute: Int = 0,
         servedBaseFireDateByDueDayEpoch: [Int: Date] = [:]
     ) -> [ReminderSchedulePlanner.Intent] {
         let calendar = Calendar.current
         let candidateDueActions = DoseScheduleEngine.nextDueActions(
-            from: now,
+            from: store.today,
             limit: ReminderSchedulePlanner.dueScanLimit,
             pack: store.pack
         )
@@ -771,6 +586,7 @@ final class ReminderSchedulePlannerTests: XCTestCase {
         return planner.planReminders(
             ReminderSchedulePlanner.Input(
                 now: now,
+                scheduleDay: store.today,
                 pack: store.pack,
                 reminderHour: store.reminderHour,
                 reminderMinute: store.reminderMinute,
@@ -783,9 +599,6 @@ final class ReminderSchedulePlannerTests: XCTestCase {
                 snoozeOverride: snoozeOverride,
                 smartRemindersEnabled: smartRemindersEnabled,
                 cycleTransitionEnabled: cycleTransitionEnabled,
-                lastCallEnabled: lastCallEnabled,
-                lastCallHour: lastCallHour,
-                lastCallMinute: lastCallMinute,
                 trialGrantDate: nil,
                 hasEntitlement: false,
                 servedBaseFireDateByDueDayEpoch: servedBaseFireDateByDueDayEpoch,
@@ -802,9 +615,6 @@ final class ReminderSchedulePlannerTests: XCTestCase {
         statusOverrides: [Int: PillDay.Status] = [:],
         snoozeOverride: ReminderSchedulePlanner.SnoozeOverride? = nil,
         smartRemindersEnabled: Bool = true,
-        lastCallEnabled: Bool = false,
-        lastCallHour: Int = 21,
-        lastCallMinute: Int = 0,
         servedBaseFireDateByDueDayEpoch: [Int: Date] = [:]
     ) -> [ReminderSchedulePlanner.DueReminderIntent] {
         plan(
@@ -815,9 +625,6 @@ final class ReminderSchedulePlannerTests: XCTestCase {
             statusOverrides: statusOverrides,
             snoozeOverride: snoozeOverride,
             smartRemindersEnabled: smartRemindersEnabled,
-            lastCallEnabled: lastCallEnabled,
-            lastCallHour: lastCallHour,
-            lastCallMinute: lastCallMinute,
             servedBaseFireDateByDueDayEpoch: servedBaseFireDateByDueDayEpoch
         )
         .compactMap { intent in
