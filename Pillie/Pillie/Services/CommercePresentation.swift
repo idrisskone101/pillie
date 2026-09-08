@@ -160,6 +160,10 @@ enum CommercePresentation {
         genericErrorMessage(locale: locale)
     }
 
+    static func offeringsUnavailableMessage(locale: Locale = .current) -> String {
+        genericErrorMessage(locale: locale)
+    }
+
     private static func genericErrorMessage(locale: Locale) -> String {
         PillieLocalization.string(
             "paywall.error.generic_body",

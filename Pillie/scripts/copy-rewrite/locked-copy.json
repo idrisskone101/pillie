@@ -2016,6 +2016,241 @@
       "en": "When you're ready, remember to check in today.",
       "de": "Wenn du bereit bist, denk daran, heute einzuchecken.",
       "it": "Quando vuoi, ricorda di fare il check-in oggi."
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.cta.keep_plus.billed_yearly",
+      "create": true,
+      "comment": "Honest paywall CTA with live annual price during trial or after trial",
+      "en": "Keep Pillie Plus · %@ billed yearly",
+      "de": "Pillie Plus behalten · %@ jährlich",
+      "it": "Tieni Pillie Plus · %@ all'anno"
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.cta.keep_plus.billed_monthly",
+      "create": true,
+      "en": "Keep Pillie Plus · %@ billed monthly",
+      "de": "Pillie Plus behalten · %@ monatlich",
+      "it": "Tieni Pillie Plus · %@ al mese"
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.cta.get_plus.billed_yearly",
+      "create": true,
+      "en": "Get Pillie Plus · %@ billed yearly",
+      "de": "Pillie Plus holen · %@ jährlich",
+      "it": "Ottieni Pillie Plus · %@ all'anno"
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.cta.get_plus.billed_monthly",
+      "create": true,
+      "en": "Get Pillie Plus · %@ billed monthly",
+      "de": "Pillie Plus holen · %@ monatlich",
+      "it": "Ottieni Pillie Plus · %@ al mese"
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.stack.year.title",
+      "create": true,
+      "en": "Year",
+      "de": "Jahr",
+      "it": "Anno"
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.stack.year.primary_line",
+      "create": true,
+      "en": "%@ · billed %@/year",
+      "de": "%@ · %@/Jahr",
+      "it": "%@ · %@/anno"
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.stack.month.title",
+      "create": true,
+      "en": "Month",
+      "de": "Monat",
+      "it": "Mese"
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.stack.month.primary_line",
+      "create": true,
+      "en": "Cancel anytime",
+      "de": "Jederzeit kündbar",
+      "it": "Annulla quando vuoi"
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.stack.save_badge",
+      "create": true,
+      "en": "SAVE %lld%%",
+      "de": "SPARE %lld%%",
+      "it": "RISPARMI %lld%%"
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.stack.lifetime_link",
+      "create": true,
+      "en": "or pay once, %@ lifetime",
+      "de": "oder einmalig %@ fürs Leben",
+      "it": "oppure %@ una tantum a vita"
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.stack.footer.reassurance",
+      "create": true,
+      "en": "Cancel anytime · Restore",
+      "de": "Jederzeit kündbar · Wiederherstellen",
+      "it": "Annulla quando vuoi · Ripristina"
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.stack.monthly_equivalent",
+      "create": true,
+      "en": "%@/mo",
+      "de": "%@/Mo.",
+      "it": "%@/mese"
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.story.trial_active.title",
+      "create": true,
+      "en": "You still have Pillie Plus.",
+      "de": "Du hast noch Pillie Plus.",
+      "it": "Hai ancora Pillie Plus."
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.story.trial_active.subtitle",
+      "create": true,
+      "en": "Keep it if you want that to stay on.",
+      "de": "Behalte es, wenn du das behalten willst.",
+      "it": "Tienilo se vuoi che resti attivo."
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.story.trial_active.stamp",
+      "create": true,
+      "en": "days left on Pillie Plus",
+      "de": "Tage Pillie Plus noch",
+      "it": "giorni di Pillie Plus"
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.story.trial_active.chip.reminders",
+      "create": true,
+      "en": "Reminders stay on",
+      "de": "Erinnerungen bleiben an",
+      "it": "I promemoria restano attivi"
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.story.trial_active.chip.blocking",
+      "create": true,
+      "en": "Blocking stays on",
+      "de": "Blockieren bleibt an",
+      "it": "Il blocco resta attivo"
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.story.trial_active.chip.history",
+      "create": true,
+      "en": "Your history stays here",
+      "de": "Dein Verlauf bleibt hier",
+      "it": "La tua cronologia resta qui"
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.story.trial_ended.title",
+      "create": true,
+      "en": "Your Pillie Plus trial is over.",
+      "de": "Deine Pillie-Plus-Testphase ist vorbei.",
+      "it": "La prova di Pillie Plus è finita."
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.story.trial_ended.subtitle",
+      "create": true,
+      "en": "Keep Pillie Plus if you want that to stay on.",
+      "de": "Behalte Pillie Plus, wenn du das behalten willst.",
+      "it": "Tieni Pillie Plus se vuoi che resti attivo."
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.story.trial_ended.tile.doses",
+      "create": true,
+      "en": "doses taken",
+      "de": "Dosen genommen",
+      "it": "dosi prese"
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.story.trial_ended.tile.streak",
+      "create": true,
+      "en": "day streak",
+      "de": "Tage in Folge",
+      "it": "giorni di fila"
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.story.trial_ended.aside",
+      "create": true,
+      "en": "don't lose the %lld",
+      "de": "verlier nicht die %lld",
+      "it": "non perdere le %lld"
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.story.settings_free.title",
+      "create": true,
+      "en": "Daily reminders are free.",
+      "de": "Tägliche Erinnerungen sind gratis.",
+      "it": "I promemoria giornalieri sono gratis."
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.story.settings_free.subtitle",
+      "create": true,
+      "en": "Pillie Plus is smart reminders and app blocking.",
+      "de": "Pillie Plus ist smarte Erinnerungen und App-Blockieren.",
+      "it": "Pillie Plus sono promemoria smart e blocco app."
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.story.settings_free.plus_label",
+      "create": true,
+      "en": "PILLIE PLUS",
+      "de": "PILLIE PLUS",
+      "it": "PILLIE PLUS"
     }
   ]
 }

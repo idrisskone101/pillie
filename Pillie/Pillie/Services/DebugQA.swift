@@ -254,7 +254,7 @@ enum DebugQA {
             UserDefaults.standard.removeObject(forKey: TrialExpiredEvent.firedStorageKey)
             UserDefaults.standard.removeObject(forKey: TrialExpiryWarningDelivery.sentDaysStorageKey)
             UserDefaults.standard.removeObject(forKey: TrialEndPaywallAutoPresentation.shownStorageKey)
-            UserDefaults.standard.removeObject(forKey: TrialEndPaywallView.debugSuccessStateKey)
+            UserDefaults.standard.removeObject(forKey: HonestPaywallScreen.debugSuccessStateKey)
             SubscriptionManager.shared.debugOverrideTrialGrantDate(nil)
             SubscriptionManager.shared.debugSetHardPaywallEnabled(nil)
         }
@@ -279,7 +279,7 @@ enum DebugQA {
         UserDefaults.standard.removeObject(forKey: TrialExpiryWarningDelivery.sentDaysStorageKey)
         UserDefaults.standard.removeObject(forKey: TrialEndPaywallAutoPresentation.shownStorageKey)
         UserDefaults.standard.removeObject(forKey: TrialEndPaywallAutoPresentation.rollbackShownStorageKey)
-        UserDefaults.standard.removeObject(forKey: TrialEndPaywallView.debugSuccessStateKey)
+        UserDefaults.standard.removeObject(forKey: HonestPaywallScreen.debugSuccessStateKey)
     }
 
     private static func persistInstallCohort(_ cohort: TrialTermsCohort) {
@@ -340,7 +340,7 @@ enum DebugQA {
         AppBlockingManager.shared.debugBlockerConfiguredOverride = blockerConfigured
         AppBlockingManager.shared.blockingEnabled = blockerConfigured
         if success {
-            UserDefaults.standard.set(true, forKey: TrialEndPaywallView.debugSuccessStateKey)
+            UserDefaults.standard.set(true, forKey: HonestPaywallScreen.debugSuccessStateKey)
         }
     }
 
@@ -358,5 +358,6 @@ enum DebugQA {
 
 extension Notification.Name {
     static let pillieDebugQADidApply = Notification.Name("pillieDebugQADidApply")
+    static let pillieDebugPresentHonestPaywall = Notification.Name("pillieDebugPresentHonestPaywall")
 }
 #endif

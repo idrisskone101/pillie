@@ -483,6 +483,7 @@ struct PillieApp: App {
     #if DEBUG
     private func handleDebugDeepLink(_ url: URL) {
         guard url.scheme == "pillie", url.host == "debug" else { return }
+        applyDebugLanguage(from: url)
 
         switch url.path {
         case "/posthog-smoke":
@@ -682,6 +683,31 @@ struct PillieApp: App {
             UserDefaults.standard.removeObject(forKey: ExistingUserTrialGrant.handledStorageKey)
             UserDefaults.standard.set(false, forKey: OnboardingFlow.selectedFreePlanStorageKey)
             UserDefaults.standard.set(OnboardingFlow.Step.complete.rawValue, forKey: OnboardingFlow.stepStorageKey)
+        case "/honest-paywall":
+            let board = URLComponents(url: url, resolvingAgainstBaseURL: false)?
+                .queryItems?
+                .first(where: { $0.name == "board" })?
+                .value
+            switch board {
+            case "duringTrial", "c1":
+                DebugQA.apply(.trialActive, store: store)
+                DispatchQueue.main.async {
+                    NotificationCenter.default.post(
+                        name: .pillieDebugPresentHonestPaywall,
+                        object: "duringTrial"
+                    )
+                }
+            case "settingsFree", "c3":
+                DebugQA.apply(.existingUserTrialAnnouncement, store: store)
+                DispatchQueue.main.async {
+                    NotificationCenter.default.post(
+                        name: .pillieDebugPresentHonestPaywall,
+                        object: "settingsFree"
+                    )
+                }
+            default:
+                break
+            }
         case "/trial-end-paywall":
             // QA shortcut (#169): land on Home with a trial aged past expiry and
             // the one-shot auto-present window reopened, so the Trial-End
@@ -708,7 +734,7 @@ struct PillieApp: App {
             if queryItems?.first(where: { $0.name == "success" })?.value == "1" {
                 // Render the post-purchase success state (sandbox purchases are
                 // unreachable from simctl launches).
-                UserDefaults.standard.set(true, forKey: TrialEndPaywallView.debugSuccessStateKey)
+                UserDefaults.standard.set(true, forKey: HonestPaywallScreen.debugSuccessStateKey)
             }
             SubscriptionManager.shared.setPlusForTesting(subscriber)
             let scenario = TrialEndPaywallDebugScenario.make(
@@ -730,6 +756,16 @@ struct PillieApp: App {
         default:
             return
         }
+    }
+
+    private func applyDebugLanguage(from url: URL) {
+        guard let lang = URLComponents(url: url, resolvingAgainstBaseURL: false)?
+            .queryItems?
+            .first(where: { $0.name == "lang" })?
+            .value,
+              let language = AppLanguage(rawValue: lang)
+        else { return }
+        languagePreference.selection = language
     }
     #endif
 }

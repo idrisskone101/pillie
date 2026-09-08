@@ -40,6 +40,11 @@ final class PaywallPriceComparisonTests: XCTestCase {
         XCTAssertNil(PaywallPriceComparison(annualPrice: 0, monthlyPrice: 4.99).monthsFree)
     }
 
+    func testSavingsPercentMatchesAnnualVsTwelveMonths() {
+        let comparison = PaywallPriceComparison(annualPrice: 39.99, monthlyPrice: 4.99)
+        XCTAssertEqual(comparison.savingsPercent, 33)
+    }
+
     func testMonthlyEquivalentStringUsesTheProvidedCurrencyFormatter() {
         let comparison = PaywallPriceComparison(annualPrice: 49.99, monthlyPrice: 9.99)
         let formatter = NumberFormatter()

@@ -563,12 +563,10 @@ struct HomeView: View {
                 .presentationBackground(PillieTheme.bg)
         }
         .fullScreenCover(isPresented: $showBlockingPaywall) {
-            PremiumPaywallView(
-                isFromOnboarding: false,
-                paywallSurface: blockingPaywallSurface,
-                onBack: { showBlockingPaywall = false },
-                onContinue: { showBlockingPaywall = false },
-                onSkip: { showBlockingPaywall = false }
+            HonestPaywallHost(
+                entry: blockingPaywallSurface.paywallEntry,
+                surface: blockingPaywallSurface,
+                onDismiss: { showBlockingPaywall = false }
             )
         }
         .sheet(
@@ -610,22 +608,22 @@ struct HomeView: View {
         .fullScreenCover(
             item: trialEndPaywallItem,
             onDismiss: { trialEndPaywallPresentation.dismiss() }
-        ) { content in
-            TrialEndPaywallView(
-                content: content,
+        ) { _ in
+            HonestPaywallHost(
+                entry: .trialEndAutoPresent,
+                surface: .trialEnd,
+                trialStats: trialEndOwnStats,
                 declineFeedbackContent: .make(locale: locale),
                 routeContinueFree: routeTrialDeclineFeedback,
                 onDismiss: { trialEndPaywallPresentation.dismiss() },
-                onFeedbackResolved: resolveTrialDeclineFeedback
+                onResolved: resolveTrialDeclineFeedback
             )
         }
         .fullScreenCover(isPresented: $showTrialKeepPlusPaywall) {
-            PremiumPaywallView(
-                isFromOnboarding: false,
-                paywallSurface: .trialStatus,
-                onBack: { showTrialKeepPlusPaywall = false },
-                onContinue: { showTrialKeepPlusPaywall = false },
-                onSkip: { showTrialKeepPlusPaywall = false }
+            HonestPaywallHost(
+                entry: .trialStatus,
+                surface: .trialStatus,
+                onDismiss: { showTrialKeepPlusPaywall = false }
             )
         }
         .fullScreenCover(isPresented: $showShakeConfirm) {
@@ -650,6 +648,17 @@ struct HomeView: View {
             trialEndPaywallPresentation.dismiss()
             DispatchQueue.main.async {
                 autoPresentTrialEndPaywallIfNeeded()
+            }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .pillieDebugPresentHonestPaywall)) { note in
+            switch note.object as? String {
+            case "duringTrial", "c1":
+                showTrialKeepPlusPaywall = true
+            case "settingsFree", "c3":
+                blockingPaywallSurface = .homeBlockingCard
+                showBlockingPaywall = true
+            default:
+                break
             }
         }
         #endif
