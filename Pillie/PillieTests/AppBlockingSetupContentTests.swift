@@ -11,15 +11,16 @@ final class AppBlockingSetupContentTests: XCTestCase {
 
     func testSetupCopyExplainsPillTimePauseMedicationUnlockAndReversibility() {
         XCTAssertEqual(content.badge, "Pillie Plus")
-        XCTAssertEqual(content.chooseAppsCTA, "Choose apps to pause")
+        XCTAssertEqual(content.titleLead, "Pick the apps to pause")
+        XCTAssertEqual(content.chooseAppsCTA, "Allow pausing")
 
         let explanation = [content.subtitle, content.emptyDetail]
             .joined(separator: " ")
             .lowercased()
-        XCTAssertTrue(explanation.contains("after a pillie reminder"))
-        XCTAssertTrue(explanation.contains("come back after you check in"))
+        XCTAssertTrue(explanation.contains("pause after a reminder"))
+        XCTAssertTrue(explanation.contains("check in"))
         XCTAssertEqual(content.changeSelectionCTA, "Edit")
-        XCTAssertEqual(content.skipCTA, "Continue without app blocking")
+        XCTAssertEqual(content.skipCTA, "Not now")
     }
 
     func testTrialDisclosureIsClearAndDoesNotReplaceSkip() {
@@ -28,7 +29,7 @@ final class AppBlockingSetupContentTests: XCTestCase {
             "14 days free, no card needed. App blocking turns off after the trial. Reminders stay free."
         )
         XCTAssertTrue(content.visibleCopy.contains(content.trialDisclosure))
-        XCTAssertEqual(content.skipCTA, "Continue without app blocking")
+        XCTAssertEqual(content.skipCTA, "Not now")
     }
 
     func testHardPaywallTrialDisclosureRequiresAPlanAfterFourteenDays() {
@@ -92,7 +93,7 @@ final class AppBlockingSetupContentTests: XCTestCase {
         )
         XCTAssertTrue(permission.isRecoveryVisible)
         XCTAssertEqual(content.retryAuthorizationCTA, "Try Again")
-        XCTAssertEqual(content.skipCTA, "Continue without app blocking")
+        XCTAssertEqual(content.skipCTA, "Not now")
     }
 
     func testRecoveryRetryStartsANewExplicitAuthorizationRequest() {
@@ -125,11 +126,16 @@ final class AppBlockingSetupContentTests: XCTestCase {
     // MARK: - Empty state (AC3 honest empty state)
 
     func testEmptyStateExplainsScreenTimePickerAndCountOnlyStorage() {
-        XCTAssertFalse(content.emptyTitle.isEmpty)
+        XCTAssertEqual(content.emptyTitle, "This app is paused")
         XCTAssertTrue(content.emptyDetail.contains("Screen Time"))
+        XCTAssertEqual(
+            content.emptyDetail,
+            "Next, Apple asks for Screen Time so the apps can pause. Tap Continue."
+        )
+        XCTAssertEqual(content.chooseAppsCTA, "Allow pausing")
+        XCTAssertTrue(content.emptyUnlockFormat.contains("%@"))
+        XCTAssertTrue(content.emptyUnlockFormat.lowercased().contains("unlock"))
         XCTAssertTrue(content.privacyNote.lowercased().contains("number"))
-        XCTAssertEqual(content.emptyDetail, "Use Apple Screen Time to choose categories or apps.")
-        XCTAssertEqual(content.chooseAppsCTA, "Choose apps to pause")
     }
 
     func testEmptyStateCardOffersChooseAppsActionWhenIdle() {
@@ -173,7 +179,7 @@ final class AppBlockingSetupContentTests: XCTestCase {
 
     func testFooterUsesFinishAndSkipCopy() {
         XCTAssertEqual(content.finishCTA, "Continue")
-        XCTAssertEqual(content.skipCTA, "Continue without app blocking")
+        XCTAssertEqual(content.skipCTA, "Not now")
     }
 
     // MARK: - Invariants preserved from the prior screen
@@ -224,6 +230,43 @@ final class AppBlockingSetupContentTests: XCTestCase {
         let realAppNames = ["tiktok", "instagram", "youtube", "snapchat", "facebook", "reddit", "twitter"]
         for name in realAppNames {
             XCTAssertFalse(visibleCopy.contains(name), "Copy must not name a real app: \(name)")
+        }
+    }
+
+    func testA10CopyIsTranslatedForEveryShippedCatalog() {
+        let keys = [
+            "onboarding.blocking_setup.title",
+            "onboarding.blocking_setup.subtitle",
+            "onboarding.blocking_setup.empty_detail",
+            "onboarding.blocking_setup.skip",
+            "onboarding.blocking_setup.allow_pausing",
+            "onboarding.blocking_setup.paused_app",
+            "onboarding.blocking_setup.unlock_hint",
+        ]
+        let english = Locale(identifier: AppLanguage.english.rawValue)
+        let englishByKey = Dictionary(
+            uniqueKeysWithValues: keys.map { ($0, PillieLocalization.string($0, locale: english)) }
+        )
+        let catalogs = AppLanguage.allCases.compactMap(\.catalogIdentifier)
+
+        for identifier in catalogs where identifier != AppLanguage.english.rawValue {
+            let locale = Locale(identifier: identifier)
+            for key in keys {
+                let value = PillieLocalization.string(key, locale: locale)
+                XCTAssertNotEqual(
+                    value,
+                    englishByKey[key],
+                    "\(identifier) still uses English for \(key)"
+                )
+                XCTAssertFalse(value.isEmpty, "\(identifier) is empty for \(key)")
+                if key == "onboarding.blocking_setup.unlock_hint" {
+                    XCTAssertEqual(
+                        value.components(separatedBy: "%@").count,
+                        2,
+                        "\(identifier) unlock hint must keep one %@"
+                    )
+                }
+            }
         }
     }
 }

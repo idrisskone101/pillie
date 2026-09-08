@@ -33,6 +33,7 @@ struct AppBlockingSetupContent {
 
     // Empty state
     let emptyTitle: String
+    let emptyUnlockFormat: String
     let emptyDetail: String
     let categoryHints: [CategoryHint]
     let chooseAppsCTA: String
@@ -71,9 +72,7 @@ struct AppBlockingSetupContent {
         ]
     }
 
-    /// One combined VoiceOver label for the empty permission card, so it reads as
-    /// a single coherent element (title → what happens → privacy) rather than a
-    /// run of separate Text + category-chip fragments.
+    /// One combined VoiceOver label for the empty permission card.
     var emptyStateAccessibilityLabel: String {
         "\(emptyTitle). \(emptyDetail) \(privacyNote)"
     }
@@ -106,7 +105,8 @@ struct AppBlockingSetupContent {
             table: "Commerce",
             locale: locale
         ),
-        emptyTitle: PillieLocalization.string("onboarding.blocking_setup.title", locale: locale),
+        emptyTitle: PillieLocalization.string("onboarding.blocking_setup.paused_app", locale: locale),
+        emptyUnlockFormat: PillieLocalization.string("onboarding.blocking_setup.unlock_hint", locale: locale),
         emptyDetail: PillieLocalization.string(
             "onboarding.blocking_setup.empty_detail",
             locale: locale
@@ -117,7 +117,7 @@ struct AppBlockingSetupContent {
             CategoryHint(name: PillieLocalization.string("onboarding.personalise.distraction.games", locale: locale), symbol: "gamecontroller.fill"),
             CategoryHint(name: PillieLocalization.string("onboarding.personalise.distraction.other", locale: locale), symbol: "bag.fill")
         ],
-        chooseAppsCTA: PillieLocalization.string("onboarding.blocking_setup.title", locale: locale),
+        chooseAppsCTA: PillieLocalization.string("onboarding.blocking_setup.allow_pausing", locale: locale),
         authorizationDeniedTitle: PillieLocalization.string("error.screen_time.title", locale: locale),
         authorizationDeniedDetail: PillieLocalization.string("error.screen_time.body", locale: locale),
         retryAuthorizationCTA: PillieLocalization.string("global.action.retry", locale: locale),
@@ -150,6 +150,21 @@ struct AppBlockingSetupContent {
             locale: locale
         )
         )
+    }
+
+    static func formattedEmptyUnlock(
+        format: String,
+        reminderHour: Int,
+        reminderMinute: Int,
+        locale: Locale = .current
+    ) -> String {
+        let twelve = ReminderTimeConverter.toTwelveHour(hour24: reminderHour, minute: reminderMinute)
+        let time = ProtectionPlanRoutineSummary.clockText(
+            hour12: twelve.hour,
+            minute: twelve.minute,
+            isPM: twelve.period == 1
+        )
+        return String(format: format, locale: locale, arguments: [time as CVarArg])
     }
 }
 
@@ -397,82 +412,113 @@ struct AppBlockingSetupView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 
+    private var emptyUnlockText: String {
+        AppBlockingSetupContent.formattedEmptyUnlock(
+            format: content.emptyUnlockFormat,
+            reminderHour: store.reminderHour,
+            reminderMinute: store.reminderMinute,
+            locale: locale
+        )
+    }
+
+    private var markCompleteDecorLabel: String {
+        PillieLocalization.string("today.action.mark_complete", locale: locale)
+    }
+
     // MARK: - Empty State
 
     private var emptyStateCard: some View {
-        Button(action: chooseApps) {
-            VStack(spacing: 12) {
-                ZStack {
-                    Circle()
-                        .strokeBorder(PillieTheme.coral, style: StrokeStyle(lineWidth: 2, dash: [6, 5]))
-                        .frame(width: 60, height: 60)
-                    Image(systemName: "pause.fill")
-                        .font(.system(size: 22, weight: .semibold))
-                        .foregroundStyle(PillieTheme.coral)
-                }
-
-                Text(content.emptyTitle)
-                    .font(.pillieBodyBold())
-                    .foregroundStyle(PillieTheme.textPrimary)
-                    .lineLimit(dynamicTypeSize.isAccessibilitySize ? 2 : 1)
-                    .minimumScaleFactor(dynamicTypeSize.isAccessibilitySize ? 1 : 0.75)
-                    .allowsTightening(true)
-
-                Text(content.emptyDetail)
-                    .font(.pillieBody())
-                    .foregroundStyle(PillieTheme.textMuted)
-                    .multilineTextAlignment(.center)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .padding(.horizontal, 6)
-
-                ProtectionPlanFlowLayout(horizontalSpacing: 8, verticalSpacing: 8) {
-                    ForEach(content.categoryHints, id: \.name) { hint in
-                        hintChip(hint)
-                    }
-                }
-                .padding(.top, 2)
-
-                HStack(spacing: 8) {
-                    Image(systemName: "lock.fill")
-                        .font(.system(size: 12, weight: .semibold))
-                        .foregroundStyle(PillieTheme.textMuted)
-                    Text(content.privacyNote)
-                        .font(.pillie(13, weight: .medium))
-                        .foregroundStyle(PillieTheme.textMuted)
-                }
-                .padding(.top, 4)
-            }
-            .padding(22)
-            .frame(maxWidth: .infinity)
-            .contentShape(Rectangle())
+        VStack(spacing: 0) {
+            phonePauseIllustration
         }
-        .buttonStyle(.plain)
-        .disabled(
-            AppBlockingSetupEmptyCardAction.resolve(
-                hasSelection: selection.hasSelection,
-                isRequesting: permissionState.isRequesting
-            ) == nil
-        )
+        .padding(22)
+        .frame(maxWidth: .infinity)
         .modifier(BlockerCardSurface())
-        // Read the card as one coherent element; the category chips are
-        // illustrative decoration, so they fold into the combined label.
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(content.emptyStateAccessibilityLabel)
         .accessibilityIdentifier("appBlockingEmptyStateCard")
     }
 
-    private func hintChip(_ hint: AppBlockingSetupContent.CategoryHint) -> some View {
-        HStack(spacing: 6) {
-            Image(systemName: hint.symbol)
-                .font(.system(size: 12, weight: .semibold))
-            Text(hint.name)
-                .font(.pillie(12, weight: .semibold))
+    private var phonePauseIllustration: some View {
+        VStack(spacing: 0) {
+            RoundedRectangle(cornerRadius: 36, style: .continuous)
+                .fill(PillieTheme.bg)
+                .overlay {
+                    RoundedRectangle(cornerRadius: 36, style: .continuous)
+                        .stroke(Color.black.opacity(0.08), lineWidth: 1.5)
+                }
+                .overlay(alignment: .top) {
+                    Capsule()
+                        .fill(Color.black.opacity(0.12))
+                        .frame(width: 56, height: 5)
+                        .padding(.top, 10)
+                }
+                .overlay {
+                    VStack(spacing: 14) {
+                        genericPausedAppTile
+
+                        Text(content.emptyTitle)
+                            .font(.pillieBodyBold())
+                            .foregroundStyle(PillieTheme.textPrimary)
+                            .multilineTextAlignment(.center)
+                            .lineLimit(dynamicTypeSize.isAccessibilitySize ? 2 : 1)
+                            .minimumScaleFactor(dynamicTypeSize.isAccessibilitySize ? 1 : 0.75)
+                            .allowsTightening(true)
+
+                        Text(emptyUnlockText)
+                            .font(.pillie(13, weight: .medium))
+                            .foregroundStyle(PillieTheme.textMuted)
+                            .multilineTextAlignment(.center)
+                            .fixedSize(horizontal: false, vertical: true)
+
+                        Text(markCompleteDecorLabel)
+                            .font(.pillie(14, weight: .semibold))
+                            .foregroundStyle(.white)
+                            .padding(.horizontal, 18)
+                            .padding(.vertical, 10)
+                            .background(PillieTheme.coral, in: Capsule())
+                            .allowsHitTesting(false)
+                            .accessibilityHidden(true)
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.top, 28)
+                    .padding(.bottom, 24)
+                }
+                .frame(maxWidth: 220)
+                .frame(height: 268)
         }
-        .foregroundStyle(PillieTheme.textMuted)
-        .padding(.horizontal, 12)
-        .padding(.vertical, 7)
-        .background(PillieTheme.bg, in: Capsule())
-        .overlay { Capsule().stroke(Color.black.opacity(0.06), lineWidth: 1) }
+        .frame(maxWidth: .infinity)
+    }
+
+    private var genericPausedAppTile: some View {
+        ZStack(alignment: .bottomTrailing) {
+            RoundedRectangle(cornerRadius: 18, style: .continuous)
+                .fill(PillieTheme.lavender)
+                .frame(width: 72, height: 72)
+                .overlay {
+                    LazyVGrid(
+                        columns: [GridItem(.fixed(14), spacing: 4), GridItem(.fixed(14), spacing: 4)],
+                        spacing: 4
+                    ) {
+                        ForEach(0..<4, id: \.self) { _ in
+                            RoundedRectangle(cornerRadius: 3, style: .continuous)
+                                .fill(Color.black.opacity(0.08))
+                                .frame(width: 14, height: 14)
+                        }
+                    }
+                }
+
+            ZStack {
+                Circle()
+                    .fill(PillieTheme.coral)
+                    .frame(width: 28, height: 28)
+                Image(systemName: "pause.fill")
+                    .font(.system(size: 11, weight: .bold))
+                    .foregroundStyle(.white)
+            }
+            .offset(x: 6, y: 6)
+        }
+        .accessibilityHidden(true)
     }
 
     private var authorizationRecoveryCard: some View {
@@ -586,6 +632,9 @@ struct AppBlockingSetupView: View {
     private var footer: some View {
         VStack(spacing: 12) {
             if canSetUpBlocking {
+                if showsEmptyCoachLine {
+                    emptyCoachLine
+                }
                 primaryCTA
                 skipButton
             } else {
@@ -595,6 +644,25 @@ struct AppBlockingSetupView: View {
                 .buttonStyle(.pillieDark)
             }
         }
+    }
+
+    private var showsEmptyCoachLine: Bool {
+        selection.isEmpty && !permissionState.isRecoveryVisible
+    }
+
+    private var emptyCoachLine: some View {
+        HStack(alignment: .top, spacing: 8) {
+            Image(systemName: "lock.fill")
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(PillieTheme.textMuted)
+                .padding(.top, 2)
+            Text(content.emptyDetail)
+                .font(.pillie(13, weight: .medium))
+                .foregroundStyle(PillieTheme.textMuted)
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .accessibilityElement(children: .combine)
     }
 
     private var primaryCTA: some View {

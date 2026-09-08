@@ -1798,17 +1798,17 @@
       "issue": "ENG-73",
       "table": "Localizable",
       "key": "onboarding.blocking_setup.subtitle",
-      "en": "Selected apps pause after a Pillie reminder. They come back after you check in.",
-      "de": "Ausgewählte Apps pausieren nach einer Erinnerung. Nach dem Check-in sind sie wieder da.",
-      "it": "Le app scelte vanno in pausa al promemoria. Tornano dopo il check-in."
+      "en": "The apps you pick pause after a reminder. They come back when you check in.",
+      "de": "Die Apps, die du wählst, pausieren nach einer Erinnerung. Nach dem Check-in sind sie wieder da.",
+      "it": "Le app che scegli vanno in pausa al promemoria. Tornano dopo il check-in."
     },
     {
       "issue": "ENG-73",
       "table": "Localizable",
       "key": "onboarding.blocking_setup.title",
-      "en": "Choose apps to pause",
+      "en": "Pick the apps to pause",
       "de": "Wähl Apps zum Pausieren",
-      "it": "Scegli le app da pausare"
+      "it": "Scegli le app da mettere in pausa"
     },
     {
       "issue": "ENG-73",
@@ -1822,9 +1822,9 @@
       "issue": "ENG-73",
       "table": "Localizable",
       "key": "onboarding.blocking_setup.skip",
-      "en": "Continue without app blocking",
-      "de": "Weiter ohne App-Pause",
-      "it": "Continua senza blocco app"
+      "en": "Not now",
+      "de": "Nicht jetzt",
+      "it": "Non ora"
     },
     {
       "issue": "ENG-73",

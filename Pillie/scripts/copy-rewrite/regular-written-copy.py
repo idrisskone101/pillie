@@ -61,7 +61,7 @@ SPECIAL_DE: dict[tuple[str, str], str] = {
         "Erinnerungen an. Plus pausiert Apps."
     ),
     ("Localizable", "onboarding.blocking_setup.subtitle"): (
-        "Ausgewählte Apps pausieren nach einer Erinnerung. Nach dem Check-in sind sie wieder da."
+        "Die Apps, die du wählst, pausieren nach einer Erinnerung. Nach dem Check-in sind sie wieder da."
     ),
     ("Localizable", "today.protection.setup.detail.pill"): (
         "Tägliche Erinnerungen laufen schon. Richte es zu Ende ein, wenn Apps bis zum Check-in pausieren sollen."
@@ -213,7 +213,7 @@ SPECIAL_IT: dict[tuple[str, str], str] = {
         "I promemoria restano. Plus può pausare le app."
     ),
     ("Localizable", "onboarding.blocking_setup.subtitle"): (
-        "Le app scelte vanno in pausa al promemoria. Tornano dopo il check-in."
+        "Le app che scegli vanno in pausa al promemoria. Tornano dopo il check-in."
     ),
     ("Localizable", "today.protection.setup.detail.pill"): (
         "I promemoria giornalieri funzionano già. Finisci il setup se vuoi che le app vadano in pausa fino al check-in."
@@ -258,7 +258,7 @@ SPECIAL_IT: dict[tuple[str, str], str] = {
     ),
     ("Localizable", "onboarding.reminder_time.title"): "Scegli un orario.",
     ("Localizable", "onboarding.method.patch.subtitle"): "Cerotto · un piano di cambio",
-    ("Localizable", "onboarding.blocking_setup.title"): "Scegli le app da pausare",
+    ("Localizable", "onboarding.blocking_setup.title"): "Scegli le app da mettere in pausa",
     ("Localizable", "onboarding.mechanism.unlocked"): "Fatto. Le tue app sono di nuovo disponibili.",
     ("Localizable", "onboarding.method.title"): "Scegli il metodo.",
     ("Commerce", "trial.end.legacy.title"): "La prova Plus è finita.",
@@ -423,7 +423,7 @@ SPECIAL_EN: dict[tuple[str, str], str] = {
     ),
     ("Localizable", "onboarding.blocking_demo.drag_title"): "Drag this onto your apps.",
     ("Localizable", "onboarding.blocking_setup.subtitle"): (
-        "Selected apps pause after a Pillie reminder. They come back after you check in."
+        "The apps you pick pause after a reminder. They come back when you check in."
     ),
     ("Localizable", "onboarding.demo.title"): "Your daily flow",
     ("Localizable", "onboarding.demo.explainer"): "Pillie helps you check in and review your history.",
