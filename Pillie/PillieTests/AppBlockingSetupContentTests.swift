@@ -138,6 +138,18 @@ final class AppBlockingSetupContentTests: XCTestCase {
         XCTAssertTrue(content.privacyNote.lowercased().contains("number"))
     }
 
+    func testFormattedEmptyUnlockInsertsTheReminderClock() {
+        XCTAssertEqual(
+            AppBlockingSetupContent.formattedEmptyUnlock(
+                format: content.emptyUnlockFormat,
+                reminderHour: 21,
+                reminderMinute: 0,
+                locale: Locale(identifier: "en_US")
+            ),
+            "Take your 9:00 PM pill to unlock."
+        )
+    }
+
     func testEmptyStateCardOffersChooseAppsActionWhenIdle() {
         XCTAssertEqual(
             AppBlockingSetupEmptyCardAction.resolve(
@@ -199,9 +211,15 @@ final class AppBlockingSetupContentTests: XCTestCase {
     func testEmptyPermissionStateExposesOneClearVoiceOverLabel() {
         // The empty permission card reads as a single coherent element instead of
         // scattered Text/chip fragments — same treatment as the selected card.
-        let label = content.emptyStateAccessibilityLabel
+        let unlockHint = AppBlockingSetupContent.formattedEmptyUnlock(
+            format: content.emptyUnlockFormat,
+            reminderHour: 21,
+            reminderMinute: 0,
+            locale: Locale(identifier: "en_US")
+        )
+        let label = content.emptyStateAccessibilityLabel(unlockHint: unlockHint)
         XCTAssertTrue(label.contains(content.emptyTitle))
-        XCTAssertTrue(label.contains("Screen Time"))
+        XCTAssertTrue(label.contains(unlockHint))
         XCTAssertTrue(label.lowercased().contains("number"))
         XCTAssertGreaterThan(label.count, content.emptyTitle.count)
     }
@@ -217,7 +235,11 @@ final class AppBlockingSetupContentTests: XCTestCase {
     }
 
     func testPermissionStateAccessibilityLabelsNameNoRealApps() {
-        let combined = (content.emptyStateAccessibilityLabel + " " + content.lockedAccessibilityLabel).lowercased()
+        let combined = (
+            content.emptyStateAccessibilityLabel(unlockHint: "Take your 9:00 PM pill to unlock.")
+                + " "
+                + content.lockedAccessibilityLabel
+        ).lowercased()
         for name in ["tiktok", "instagram", "youtube", "snapchat", "facebook", "reddit"] {
             XCTAssertFalse(combined.contains(name), "VoiceOver label must not name a real app: \(name)")
         }

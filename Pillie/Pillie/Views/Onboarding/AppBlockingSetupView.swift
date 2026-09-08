@@ -62,7 +62,7 @@ struct AppBlockingSetupContent {
     var visibleCopy: [String] {
         [
             badge, titleLead, titleAccent, subtitle, trialDisclosure,
-            emptyTitle, emptyDetail,
+            emptyTitle, emptyUnlockFormat, emptyDetail,
             authorizationDeniedTitle, authorizationDeniedDetail, retryAuthorizationCTA
         ]
         + categoryHints.map(\.name)
@@ -72,9 +72,8 @@ struct AppBlockingSetupContent {
         ]
     }
 
-    /// One combined VoiceOver label for the empty permission card.
-    var emptyStateAccessibilityLabel: String {
-        "\(emptyTitle). \(emptyDetail) \(privacyNote)"
+    func emptyStateAccessibilityLabel(unlockHint: String) -> String {
+        "\(emptyTitle). \(unlockHint) \(privacyNote)"
     }
 
     /// One combined VoiceOver label for the locked (entitlement-dropped) fallback
@@ -162,7 +161,8 @@ struct AppBlockingSetupContent {
         let time = ProtectionPlanRoutineSummary.clockText(
             hour12: twelve.hour,
             minute: twelve.minute,
-            isPM: twelve.period == 1
+            isPM: twelve.period == 1,
+            locale: locale
         )
         return String(format: format, locale: locale, arguments: [time as CVarArg])
     }
@@ -428,33 +428,33 @@ struct AppBlockingSetupView: View {
     // MARK: - Empty State
 
     private var emptyStateCard: some View {
-        VStack(spacing: 0) {
-            phonePauseIllustration
-        }
-        .padding(22)
-        .frame(maxWidth: .infinity)
-        .modifier(BlockerCardSurface())
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel(content.emptyStateAccessibilityLabel)
-        .accessibilityIdentifier("appBlockingEmptyStateCard")
+        phonePauseIllustration
+            .frame(maxWidth: .infinity)
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(content.emptyStateAccessibilityLabel(unlockHint: emptyUnlockText))
+            .accessibilityIdentifier("appBlockingEmptyStateCard")
     }
 
     private var phonePauseIllustration: some View {
-        VStack(spacing: 0) {
-            RoundedRectangle(cornerRadius: 36, style: .continuous)
+        ZStack {
+            Ellipse()
+                .fill(PillieTheme.coral.opacity(0.16))
+                .frame(width: 292, height: 236)
+
+            RoundedRectangle(cornerRadius: 32, style: .continuous)
                 .fill(PillieTheme.bg)
                 .overlay {
-                    RoundedRectangle(cornerRadius: 36, style: .continuous)
+                    RoundedRectangle(cornerRadius: 32, style: .continuous)
                         .stroke(Color.black.opacity(0.08), lineWidth: 1.5)
                 }
                 .overlay(alignment: .top) {
                     Capsule()
                         .fill(Color.black.opacity(0.12))
-                        .frame(width: 56, height: 5)
-                        .padding(.top, 10)
+                        .frame(width: 48, height: 5)
+                        .padding(.top, 9)
                 }
                 .overlay {
-                    VStack(spacing: 14) {
+                    VStack(spacing: 10) {
                         genericPausedAppTile
 
                         Text(content.emptyTitle)
@@ -472,29 +472,28 @@ struct AppBlockingSetupView: View {
                             .fixedSize(horizontal: false, vertical: true)
 
                         Text(markCompleteDecorLabel)
-                            .font(.pillie(14, weight: .semibold))
+                            .font(.pillie(13, weight: .semibold))
                             .foregroundStyle(.white)
-                            .padding(.horizontal, 18)
-                            .padding(.vertical, 10)
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 8)
                             .background(PillieTheme.coral, in: Capsule())
                             .allowsHitTesting(false)
                             .accessibilityHidden(true)
                     }
-                    .padding(.horizontal, 20)
-                    .padding(.top, 28)
-                    .padding(.bottom, 24)
+                    .padding(.horizontal, 16)
+                    .padding(.top, 24)
+                    .padding(.bottom, 18)
                 }
-                .frame(maxWidth: 220)
-                .frame(height: 268)
+                .frame(width: 196, height: 228)
         }
-        .frame(maxWidth: .infinity)
+        .frame(height: 236)
     }
 
     private var genericPausedAppTile: some View {
         ZStack(alignment: .bottomTrailing) {
-            RoundedRectangle(cornerRadius: 18, style: .continuous)
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
                 .fill(PillieTheme.lavender)
-                .frame(width: 72, height: 72)
+                .frame(width: 64, height: 64)
                 .overlay {
                     LazyVGrid(
                         columns: [GridItem(.fixed(14), spacing: 4), GridItem(.fixed(14), spacing: 4)],
@@ -623,11 +622,6 @@ struct AppBlockingSetupView: View {
     }
 
     // MARK: - Footer
-    //
-    // A single bottom-anchored primary CTA at the shared onboarding baseline. It
-    // morphs the pill-time CTA → "Finish Setup" once a selection exists, so
-    // the dark CTA never competes with a second dark button (the in-card action is
-    // the lavender "Change selection"). "Skip for now" keeps the reminder-only path.
 
     private var footer: some View {
         VStack(spacing: 12) {
