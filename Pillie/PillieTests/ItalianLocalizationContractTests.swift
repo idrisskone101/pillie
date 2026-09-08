@@ -320,10 +320,6 @@ final class ItalianLocalizationContractTests: XCTestCase {
             Array(repeating: "Promemoria successivo", count: 3)
         )
         XCTAssertEqual(
-            Array(repeating: PillieLocalization.string("notification.final.title", locale: italian), count: 3),
-            Array(repeating: "Promemoria finale", count: 3)
-        )
-        XCTAssertEqual(
             NotificationManager.shared.reminderCategoryActionTitlesForTesting(
                 isPlus: true,
                 locale: italian
@@ -371,7 +367,6 @@ final class ItalianLocalizationContractTests: XCTestCase {
                 + ProtectionPlanEarlyValueProofContent.localized(locale: locale).visibleCopy
                 + [
                     PillieLocalization.string("notification.followup.body", locale: locale),
-                    PillieLocalization.string("notification.final.body", locale: locale),
                     PillieLocalization.string("shield.blocking_reason", locale: locale),
                 ]
 

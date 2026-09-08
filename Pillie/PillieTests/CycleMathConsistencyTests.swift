@@ -187,23 +187,22 @@ final class CycleMathConsistencyTests: XCTestCase {
 
     // MARK: - Day rollover invalidates today-relative statuses
 
-    func testDayRolloverRefreshRecomputesYesterdayAsMissed() throws {
+    func testDayRolloverRefreshRecomputesYesterdayAsMissedAfterWindowCloses() throws {
         let today = InMemoryStoreFactory.fixedDate("2026-06-10")
         let fixture = try InMemoryStoreFactory.makeStore(now: today, startDate: today)
         let store = fixture.store
 
-        // Cache today's snapshot while it is still "today".
+        // Cache today's snapshot while it is still "today". Factory reminder is 8:00,
+        // so a noon→noon jump is already past the next reminder.
         XCTAssertEqual(store.statusForDate(today), .upcoming)
 
-        // Cross midnight without any store mutation.
         PillieClock.setFixedNowForTesting(InMemoryStoreFactory.fixedDate("2026-06-11"))
         let versionBefore = store.protocolChangeVersion
         store.refreshDayContextIfNeeded()
 
-        XCTAssertEqual(store.statusForDate(today), .missed, "Yesterday's untaken pill must become missed after rollover")
+        XCTAssertEqual(store.statusForDate(today), .missed, "Yesterday's untaken pill must become missed after the next reminder")
         XCTAssertGreaterThan(store.protocolChangeVersion, versionBefore)
 
-        // A second call on the same day is a no-op.
         let versionAfter = store.protocolChangeVersion
         store.refreshDayContextIfNeeded()
         XCTAssertEqual(store.protocolChangeVersion, versionAfter)

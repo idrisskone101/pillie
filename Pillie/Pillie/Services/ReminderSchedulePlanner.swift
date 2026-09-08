@@ -32,6 +32,9 @@ struct ReminderSchedulePlanner {
 
     struct Input {
         let now: Date
+        /// Live dose day (24-hour reminder window). Supply and cycle-transition
+        /// planning, and due-action catch-up, use this — not civil midnight.
+        let scheduleDay: Date
         let pack: PillPack
         let reminderHour: Int
         let reminderMinute: Int
@@ -161,6 +164,7 @@ struct ReminderSchedulePlanner {
                 reminderHour: input.reminderHour,
                 reminderMinute: input.reminderMinute,
                 servedBaseFireDate: served,
+                scheduleDay: input.scheduleDay,
                 calendar: input.calendar
             )
             let firstReminderDate = firstBaseReminderDateForDueAction(
@@ -170,11 +174,18 @@ struct ReminderSchedulePlanner {
                 reminderMinute: input.reminderMinute,
                 snoozeOverride: effectiveSnoozeOverride,
                 servedBaseFireDate: served,
+                scheduleDay: input.scheduleDay,
                 calendar: input.calendar
             )
 
             if let firstReminderDate,
-               firstReminderDate < endOfDayExclusive(for: dueDay, calendar: input.calendar) {
+               DoseWindow.isOpen(
+                day: dueDay,
+                now: firstReminderDate,
+                hour: input.reminderHour,
+                minute: input.reminderMinute,
+                calendar: input.calendar
+               ) {
                 let firstKind: DueReminderKind = (effectiveSnoozeOverride?.dueDayEpoch == dueEpoch) ? .snooze : .base
                 dueIntents.append(
                     DueReminderIntent(
@@ -200,6 +211,8 @@ struct ReminderSchedulePlanner {
                 now: input.now,
                 intervalMinutes: input.autoReminderIntervalMinutes,
                 retryLimit: effectiveRetryLimit,
+                reminderHour: input.reminderHour,
+                reminderMinute: input.reminderMinute,
                 budget: remainingBudget,
                 calendar: input.calendar
             )
@@ -245,6 +258,8 @@ struct ReminderSchedulePlanner {
         now: Date,
         intervalMinutes: Int,
         retryLimit: Int,
+        reminderHour: Int,
+        reminderMinute: Int,
         budget: Int,
         calendar: Calendar
     ) -> [DueReminderIntent] {
@@ -258,12 +273,17 @@ struct ReminderSchedulePlanner {
             return []
         }
 
-        let dayEnd = endOfDayExclusive(for: dueDay, calendar: calendar)
+        let windowEnd = DoseWindow.deadline(
+            for: dueDay,
+            hour: reminderHour,
+            minute: reminderMinute,
+            calendar: calendar
+        ) ?? endOfDayExclusive(for: dueDay, calendar: calendar)
         let interval = TimeInterval(max(1, intervalMinutes) * 60)
         var nextFire = anchor.addingTimeInterval(interval)
 
         var intents: [DueReminderIntent] = []
-        while intents.count < cappedBudget && nextFire < dayEnd {
+        while intents.count < cappedBudget && nextFire < windowEnd {
             if nextFire > now {
                 intents.append(
                     DueReminderIntent(
@@ -281,7 +301,7 @@ struct ReminderSchedulePlanner {
     }
 
     private func planSupplyReminder(_ input: Input) -> SupplyReminderIntent? {
-        let today = input.calendar.startOfDay(for: input.now)
+        let today = input.calendar.startOfDay(for: input.scheduleDay)
         let cycleLength = max(1, input.pack.cycleLength)
         let currentDayIndex = input.pack.cycleDayIndex(on: today, calendar: input.calendar)
 
@@ -307,15 +327,23 @@ struct ReminderSchedulePlanner {
             return nil
         }
 
-        guard let fireDate = firstReminderDateForDueAction(
+        guard let fireDate = firstBaseReminderDateForDueAction(
             dueDay: triggerDay,
             now: input.now,
             reminderHour: input.reminderHour,
             reminderMinute: input.reminderMinute,
             snoozeOverride: nil,
+            servedBaseFireDate: nil,
+            scheduleDay: input.scheduleDay,
             calendar: input.calendar
         ),
-        fireDate < endOfDayExclusive(for: triggerDay, calendar: input.calendar) else {
+        DoseWindow.isOpen(
+            day: triggerDay,
+            now: fireDate,
+            hour: input.reminderHour,
+            minute: input.reminderMinute,
+            calendar: input.calendar
+        ) else {
             return nil
         }
 
@@ -343,7 +371,7 @@ struct ReminderSchedulePlanner {
 
         let calendar = input.calendar
         let cycleLength = max(1, input.pack.cycleLength)
-        let today = calendar.startOfDay(for: input.now)
+        let today = calendar.startOfDay(for: input.scheduleDay)
 
         // Look up to ~two cycles ahead so the boundary is always reachable regardless of
         // where in the cycle "today" falls.
@@ -423,6 +451,7 @@ struct ReminderSchedulePlanner {
         reminderMinute: Int,
         snoozeOverride: SnoozeOverride?,
         servedBaseFireDate: Date?,
+        scheduleDay: Date,
         calendar: Calendar
     ) -> Date? {
         let dueEpoch = Int(dueDay.timeIntervalSince1970)
@@ -433,15 +462,26 @@ struct ReminderSchedulePlanner {
         }
 
         let configured = reminderDate(on: dueDay, hour: reminderHour, minute: reminderMinute, calendar: calendar)
-        let endOfDay = endOfDayExclusive(for: dueDay, calendar: calendar)
+        let windowEnd = DoseWindow.deadline(
+            for: dueDay,
+            hour: reminderHour,
+            minute: reminderMinute,
+            calendar: calendar
+        ) ?? endOfDayExclusive(for: dueDay, calendar: calendar)
 
-        guard isCatchUpTerritory(dueDay: dueDay, now: now, configuredFireDate: configured, calendar: calendar) else {
+        guard isCatchUpTerritory(
+            dueDay: dueDay,
+            now: now,
+            configuredFireDate: configured,
+            scheduleDay: scheduleDay,
+            calendar: calendar
+        ) else {
             return configured
         }
 
         if let served = servedBaseFireDate {
             if served <= now { return nil }
-            if served < endOfDay { return served }
+            if served < windowEnd { return served }
             return nil
         }
 
@@ -456,39 +496,32 @@ struct ReminderSchedulePlanner {
         reminderHour: Int,
         reminderMinute: Int,
         servedBaseFireDate: Date?,
+        scheduleDay: Date,
         calendar: Calendar
     ) -> Date {
         let configured = reminderDate(on: dueDay, hour: reminderHour, minute: reminderMinute, calendar: calendar)
         if let servedBaseFireDate,
-           isCatchUpTerritory(dueDay: dueDay, now: now, configuredFireDate: configured, calendar: calendar) {
+           isCatchUpTerritory(
+            dueDay: dueDay,
+            now: now,
+            configuredFireDate: configured,
+            scheduleDay: scheduleDay,
+            calendar: calendar
+           ) {
             return servedBaseFireDate
         }
         return configured
     }
 
-    /// Catch-up territory is today after the configured reminder time has passed:
-    /// the only place a served record may suppress or freeze the base reminder.
-    private func isCatchUpTerritory(dueDay: Date, now: Date, configuredFireDate: Date, calendar: Calendar) -> Bool {
-        calendar.isDate(dueDay, inSameDayAs: now) && configuredFireDate <= now
-    }
-
-    private func firstReminderDateForDueAction(
+    /// Catch-up territory is the live dose day after that day's reminder has passed.
+    private func isCatchUpTerritory(
         dueDay: Date,
         now: Date,
-        reminderHour: Int,
-        reminderMinute: Int,
-        snoozeOverride: SnoozeOverride?,
+        configuredFireDate: Date,
+        scheduleDay: Date,
         calendar: Calendar
-    ) -> Date? {
-        firstBaseReminderDateForDueAction(
-            dueDay: dueDay,
-            now: now,
-            reminderHour: reminderHour,
-            reminderMinute: reminderMinute,
-            snoozeOverride: snoozeOverride,
-            servedBaseFireDate: nil,
-            calendar: calendar
-        )
+    ) -> Bool {
+        calendar.isDate(dueDay, inSameDayAs: scheduleDay) && configuredFireDate <= now
     }
 
     private func reminderDate(on day: Date, hour: Int, minute: Int, calendar: Calendar) -> Date {

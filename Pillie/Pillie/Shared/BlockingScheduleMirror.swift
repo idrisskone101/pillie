@@ -81,20 +81,50 @@ enum BlockingInterventionDecision: Equatable {
 }
 
 enum BlockingInterventionPolicy {
+    static func liveDay(
+        now: Date,
+        reminderHour: Int,
+        reminderMinute: Int,
+        calendar: Calendar = .current
+    ) -> Date {
+        let today = calendar.startOfDay(for: now)
+        guard
+            let reminder = calendar.date(
+                bySettingHour: reminderHour,
+                minute: reminderMinute,
+                second: 0,
+                of: today
+            ),
+            now < reminder,
+            let yesterday = calendar.date(byAdding: .day, value: -1, to: today)
+        else {
+            return today
+        }
+        return yesterday
+    }
+
     static func decision(
         schedule: BlockingScheduleMirror?,
         handledStamp: TodayTakenStamp,
         now: Date,
+        reminderHour: Int = 8,
+        reminderMinute: Int = 0,
         calendar: Calendar = .current,
         snoozeUntil: Date? = nil
     ) -> BlockingInterventionDecision {
         if let snoozeUntil, now < snoozeUntil {
             return .clearShields
         }
-        if let schedule, !schedule.requiresAction(on: now, calendar: calendar) {
+        let day = liveDay(
+            now: now,
+            reminderHour: reminderHour,
+            reminderMinute: reminderMinute,
+            calendar: calendar
+        )
+        if let schedule, !schedule.requiresAction(on: day, calendar: calendar) {
             return .clearShields
         }
-        if handledStamp.isTakenToday(now: now, calendar: calendar) {
+        if handledStamp.isTaken(on: day, calendar: calendar) {
             return .clearShields
         }
         return .applyShields

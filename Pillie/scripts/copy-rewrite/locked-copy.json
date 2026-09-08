@@ -415,14 +415,6 @@
     {
       "issue": "ENG-64",
       "table": "Localizable",
-      "key": "settings.final_reminder.title",
-      "en": "Last ping",
-      "de": "Letzter Ping",
-      "it": "Ultimo ping"
-    },
-    {
-      "issue": "ENG-64",
-      "table": "Localizable",
       "key": "settings.section.cycle",
       "en": "Routine",
       "de": "Routine",
@@ -1935,15 +1927,6 @@
       "en": "Hey, quick check-in. Remove your ring when you're done",
       "de": "Hey, kurzer Check-in. Nimm deinen Ring raus, wenn du fertig bist",
       "it": "Ehi, check-in veloce. Togli l'anello quando hai finito"
-    },
-    {
-      "issue": "ENG-58",
-      "table": "Notifications",
-      "key": "notification.final.body",
-      "create": true,
-      "en": "Still no check-in for today.",
-      "de": "Für heute noch kein Check-in.",
-      "it": "Per oggi non c'è ancora un check-in."
     },
     {
       "issue": "ENG-58",

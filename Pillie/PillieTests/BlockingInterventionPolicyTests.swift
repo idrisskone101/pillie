@@ -208,6 +208,45 @@ final class BlockingInterventionPolicyTests: XCTestCase {
         XCTAssertTrue(schedule.requiresAction(on: target, calendar: limaCalendar))
     }
 
+    func testLateWindowKeepsYesterdayAsTheLiveBlockingDay() throws {
+        let cycleStart = date(2026, 7, 1)
+        let afterMidnight = try XCTUnwrap(calendar.date(byAdding: .hour, value: 25, to: cycleStart))
+        let schedule = BlockingScheduleMirror(
+            anchorDate: cycleStart,
+            anchorCycleDayIndex: 0,
+            cycleLength: 28,
+            actionDayIndices: Array(0..<21)
+        )
+
+        XCTAssertEqual(
+            BlockingInterventionPolicy.decision(
+                schedule: schedule,
+                handledStamp: TodayTakenStamp(isTaken: false, epochDay: nil),
+                now: afterMidnight,
+                reminderHour: 21,
+                reminderMinute: 0,
+                calendar: calendar
+            ),
+            .applyShields
+        )
+
+        let handledYesterday = TodayTakenStamp(
+            isTaken: true,
+            epochDay: TodayTakenStamp.epochDay(for: cycleStart, calendar: calendar)
+        )
+        XCTAssertEqual(
+            BlockingInterventionPolicy.decision(
+                schedule: schedule,
+                handledStamp: handledYesterday,
+                now: afterMidnight,
+                reminderHour: 21,
+                reminderMinute: 0,
+                calendar: calendar
+            ),
+            .clearShields
+        )
+    }
+
     func testAppAndMonitorPolicySourcesStayByteIdentical() throws {
         let projectDirectory = URL(fileURLWithPath: #filePath)
             .deletingLastPathComponent()

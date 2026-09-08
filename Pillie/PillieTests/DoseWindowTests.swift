@@ -33,6 +33,12 @@ struct DoseWindowMathTests {
         #expect(!DoseWindow.isOpen(day: day, now: nextNoon, hour: 8, minute: 0, calendar: calendar))
     }
 
+    @Test func blockingIntervalEndWrapsPastMidnight() {
+        #expect(DoseWindow.blockingIntervalEnd(hour: 21, minute: 0) == (20, 59))
+        #expect(DoseWindow.blockingIntervalEnd(hour: 0, minute: 0) == (23, 59))
+        #expect(DoseWindow.blockingIntervalEnd(hour: 8, minute: 30) == (8, 29))
+    }
+
     @Test func contextTokenChangesAtReminderNotOnlyMidnight() {
         let before = date("2026-06-11", hour: 20, minute: 59)
         let after = date("2026-06-11", hour: 21)
@@ -76,6 +82,31 @@ struct DoseWindowStoreTests {
         PillieClock.setFixedNowForTesting(nextReminder)
         fixture.store.refreshDayContextIfNeeded()
 
+        #expect(fixture.store.statusForDate(doseDay) == .missed)
+    }
+
+    @Test func afterMidnightTodayIsTheOpenDoseEverywhere() throws {
+        defer { InMemoryStoreFactory.resetClockAndDefaults() }
+
+        let reminderDay = InMemoryStoreFactory.fixedDate("2026-06-10", hour: 21)
+        let afterMidnight = InMemoryStoreFactory.fixedDate("2026-06-11", hour: 1)
+        let fixture = try InMemoryStoreFactory.makeStore(now: reminderDay, startDate: reminderDay)
+        fixture.store.reminderHour = 21
+        fixture.store.reminderMinute = 0
+        let doseDay = Calendar.current.startOfDay(for: reminderDay)
+        let streakBefore = fixture.store.currentStreak
+
+        PillieClock.setFixedNowForTesting(afterMidnight)
+        fixture.store.refreshDayContextIfNeeded()
+
+        #expect(Calendar.current.isDate(fixture.store.today, inSameDayAs: doseDay))
+        #expect(fixture.store.currentDayIndex == fixture.store.pack.cycleDayIndex(on: doseDay))
+        #expect(fixture.store.currentStreak == streakBefore)
+        #expect(fixture.store.statusForDate(doseDay) == .upcoming)
+
+        let versionBefore = fixture.store.protocolChangeVersion
+        fixture.store.reminderHour = 0
+        #expect(fixture.store.protocolChangeVersion > versionBefore)
         #expect(fixture.store.statusForDate(doseDay) == .missed)
     }
 }

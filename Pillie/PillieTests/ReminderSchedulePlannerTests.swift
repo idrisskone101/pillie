@@ -533,6 +533,35 @@ final class ReminderSchedulePlannerTests: XCTestCase {
         XCTAssertEqual(firstBase.first?.fireDate, servedAt)
     }
 
+    func testRetriesContinueAfterMidnightUntilNextReminder() throws {
+        let reminderDay = InMemoryStoreFactory.fixedDate("2026-06-10", hour: 21)
+        let afterMidnight = InMemoryStoreFactory.fixedDate("2026-06-11", hour: 1)
+        let fixture = try InMemoryStoreFactory.makeStore(now: reminderDay, startDate: reminderDay)
+        fixture.store.reminderHour = 21
+        fixture.store.reminderMinute = 0
+
+        PillieClock.setFixedNowForTesting(afterMidnight)
+        fixture.store.refreshDayContextIfNeeded()
+
+        let liveEpoch = epochDay(for: fixture.store.today)
+        XCTAssertEqual(liveEpoch, epochDay(for: reminderDay))
+
+        let liveIntents = dueIntents(
+            for: fixture.store,
+            now: afterMidnight,
+            autoReminderIntervalMinutes: 60,
+            autoReminderRetryLimit: 3
+        )
+        .filter { $0.dueDayEpoch == liveEpoch }
+
+        XCTAssertEqual(liveIntents.filter { $0.kind == .base }.count, 1)
+        XCTAssertEqual(liveIntents.filter { $0.kind == .retry }.count, 3)
+        XCTAssertTrue(liveIntents.allSatisfy { $0.fireDate > afterMidnight })
+        let nextReminder = try XCTUnwrap(
+            Calendar.current.date(bySettingHour: 21, minute: 0, second: 0, of: afterMidnight)
+        )
+        XCTAssertTrue(liveIntents.allSatisfy { $0.fireDate < nextReminder })
+    }
 
     private func plan(
         for store: PillStore,
@@ -547,7 +576,7 @@ final class ReminderSchedulePlannerTests: XCTestCase {
     ) -> [ReminderSchedulePlanner.Intent] {
         let calendar = Calendar.current
         let candidateDueActions = DoseScheduleEngine.nextDueActions(
-            from: now,
+            from: store.today,
             limit: ReminderSchedulePlanner.dueScanLimit,
             pack: store.pack
         )
@@ -557,6 +586,7 @@ final class ReminderSchedulePlannerTests: XCTestCase {
         return planner.planReminders(
             ReminderSchedulePlanner.Input(
                 now: now,
+                scheduleDay: store.today,
                 pack: store.pack,
                 reminderHour: store.reminderHour,
                 reminderMinute: store.reminderMinute,

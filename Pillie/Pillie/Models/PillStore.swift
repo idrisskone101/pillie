@@ -264,20 +264,37 @@ class PillStore {
 
     // MARK: - Computed
 
+    /// The live day: last reminder through the next one, not civil midnight.
     var today: Date {
-        startOfDaySafe(PillieClock.now)
+        liveDoseDate
     }
 
-    /// Calendar day whose 24-hour reminder window is still the live check-in.
+    /// Same day as `today`. Kept so call sites and tests can name the window.
     var activeDoseDate: Date {
+        liveDoseDate
+    }
+
+    private var liveDoseDate: Date {
         DoseWindow.activeDoseDate(
             now: PillieClock.now,
             hour: reminderHour,
             minute: reminderMinute
         ) { yesterday in
-            guard let snapshot = scheduleSnapshot(for: yesterday) else { return false }
-            return snapshot.isDue && snapshot.status != .taken && snapshot.status != .breakDay
+            isLiveCheckIn(yesterday)
         }
+    }
+
+    /// Snapshot-free: `today` cannot ask `scheduleSnapshot`, which reads `today`.
+    private func isLiveCheckIn(_ day: Date) -> Bool {
+        guard let targetPack = pack(for: day) ?? activePack else { return false }
+        guard let due = DoseScheduleEngine.dueAction(on: day, pack: targetPack),
+              due.type.requiresUserAction else {
+            return false
+        }
+        if let record = dayRecord(forPackID: targetPack.id, epochDay: epochDay(for: day)) {
+            return record.status != .taken && record.status != .breakDay
+        }
+        return true
     }
 
     var activePack: PillPack? {
@@ -288,7 +305,7 @@ class PillStore {
     }
 
     var currentDayIndex: Int {
-        pack.cycleDayIndex(on: activeDoseDate)
+        pack.cycleDayIndex(on: today)
     }
 
     var daysOnCurrentPack: Int {
@@ -443,7 +460,7 @@ class PillStore {
     }
 
     var isTodayTaken: Bool {
-        statusForDate(activeDoseDate) == .taken
+        statusForDate(today) == .taken
     }
 
     /// Whether today requires no blocking — either taken, passive active, or a break day.
@@ -452,7 +469,7 @@ class PillStore {
     }
 
     var isTodayPassiveOrBreak: Bool {
-        guard let snapshot = scheduleSnapshot(for: activeDoseDate) else { return false }
+        guard let snapshot = scheduleSnapshot(for: today) else { return false }
         return snapshot.isPassiveActive || snapshot.isBreak
     }
 
@@ -490,7 +507,7 @@ class PillStore {
 
     var todayDueAction: DoseScheduleAction? {
         guard !isRefillDue else { return nil }
-        guard let action = dueAction(on: activeDoseDate) else { return nil }
+        guard let action = dueAction(on: today) else { return nil }
         return action.type.requiresUserAction ? action : nil
     }
 
@@ -521,7 +538,7 @@ class PillStore {
 
     var alarmAction: DoseScheduleAction? {
         guard !isRefillDue else { return nil }
-        return nextUntakenDueAction(from: activeDoseDate)
+        return nextUntakenDueAction(from: today)
     }
 
     var alarmBadge: String {
@@ -705,7 +722,7 @@ class PillStore {
 
     func markTodayAsTaken() {
         let wasTodayHandled = isTodayHandled
-        markActionAsTaken(on: activeDoseDate)
+        markActionAsTaken(on: today)
         if !wasTodayHandled && isTodayHandled {
             protocolChangeVersion &+= 1
         }
@@ -717,23 +734,28 @@ class PillStore {
 
     func unmarkTodayAsTaken() {
         let wasTodayHandled = isTodayHandled
-        unmarkActionAsTaken(on: activeDoseDate)
+        unmarkActionAsTaken(on: today)
         if wasTodayHandled && !isTodayHandled {
             protocolChangeVersion &+= 1
         }
         syncTodayTakenToAppGroup()
-        // Re-apply blocking if past reminder time and now untaken
-        let now = Date()
+        let now = PillieClock.now
         let calendar = Calendar.current
-        let reminderToday = calendar.date(bySettingHour: reminderHour, minute: reminderMinute, second: 0, of: now)
-        if let reminderToday, now >= reminderToday, !isTodayHandled {
+        let liveReminder = calendar.date(
+            bySettingHour: reminderHour,
+            minute: reminderMinute,
+            second: 0,
+            of: today
+        )
+        if let liveReminder, now >= liveReminder, !isTodayHandled {
             AppBlockingManager.shared.applyBlocking(reason: pack.method.blockingReasonText)
         }
         scheduleNotificationResync()
     }
 
     func syncTodayTakenToAppGroup() {
-        ScreenTimeSharedState.setTodayTaken(isTodayHandled, now: PillieClock.now)
+        ScreenTimeSharedState.setTodayTaken(isTodayHandled, day: today)
+        ScreenTimeSharedState.setReminderTime(hour: reminderHour, minute: reminderMinute)
         ScreenTimeSharedState.setBlockingScheduleMirror(blockingScheduleMirror)
         if let due = todayDueAction {
             ScreenTimeSharedState.blockingDueDayEpoch = Int(
@@ -752,6 +774,7 @@ class PillStore {
         syncTodayTakenToAppGroup()
         AppBlockingManager.shared.reconcileBlockingState(
             isTodayHandled: isTodayHandled,
+            liveDay: today,
             reminderHour: reminderHour,
             reminderMinute: reminderMinute,
             method: pack.method
@@ -763,7 +786,8 @@ class PillStore {
         guard let snapshot = scheduleSnapshot(for: day),
               let due = snapshot.dueAction else { return }
         let targetPack = snapshot.pack
-        let isToday = Calendar.current.isDateInToday(day)
+        let liveDay = today
+        let isToday = Calendar.current.isDate(day, inSameDayAs: liveDay)
 
         upsertDayRecord(
             in: targetPack,
@@ -1438,9 +1462,7 @@ class PillStore {
     }
 
     private func handleReminderTimeChange() {
-        invalidateAllSnapshotCaches()
-        lastKnownDoseContextToken = doseContextToken()
-        scheduleDoseWindowRefresh()
+        refreshDayContext(force: true)
     }
 
     private func scheduleDoseWindowRefresh() {
@@ -1871,7 +1893,7 @@ class PillStore {
                 if due.type.isBreakType {
                     resolvedStatus = hasNoTrackingContext ? .noData : .breakDay
                 } else if due.type.isPassiveActive {
-                    resolvedStatus = hasNoTrackingContext ? .noData : (day < today ? .taken : .upcoming)
+                    resolvedStatus = hasNoTrackingContext ? .noData : (isDoseWindowOpen(for: day) ? .upcoming : .taken)
                 } else if !isDoseWindowOpen(for: day) {
                     resolvedStatus = hasNoTrackingContext ? .noData : .missed
                 } else {
@@ -1884,7 +1906,7 @@ class PillStore {
             if due.type.isBreakType {
                 resolvedStatus = hasNoTrackingContext ? .noData : .breakDay
             } else if due.type.isPassiveActive {
-                resolvedStatus = hasNoTrackingContext ? .noData : (day < today ? .taken : .upcoming)
+                resolvedStatus = hasNoTrackingContext ? .noData : (isDoseWindowOpen(for: day) ? .upcoming : .taken)
             } else if !isDoseWindowOpen(for: day) {
                 resolvedStatus = hasNoTrackingContext ? .noData : .missed
             } else {

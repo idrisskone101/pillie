@@ -70,15 +70,25 @@ class PillieDeviceActivityMonitor: DeviceActivityMonitor {
             }
             return Date(timeIntervalSince1970: epoch)
         }()
+        let reminderHour = defaults?.object(forKey: AppGroupKeys.reminderHour) as? Int ?? 8
+        let reminderMinute = defaults?.object(forKey: AppGroupKeys.reminderMinute) as? Int ?? 0
 
         switch BlockingInterventionPolicy.decision(
             schedule: blockingSchedule,
             handledStamp: stamp,
             now: now,
+            reminderHour: reminderHour,
+            reminderMinute: reminderMinute,
             snoozeUntil: snoozeUntil
         ) {
         case .clearShields:
-            if blockingSchedule?.requiresAction(on: now) == false {
+            if blockingSchedule?.requiresAction(
+                on: BlockingInterventionPolicy.liveDay(
+                    now: now,
+                    reminderHour: reminderHour,
+                    reminderMinute: reminderMinute
+                )
+            ) == false {
                 Self.logger.info("Skipping — no user action scheduled today; clearing stale shields")
             } else {
                 Self.logger.info("Skipping — action already handled today; clearing stale shields")
@@ -128,7 +138,7 @@ class PillieDeviceActivityMonitor: DeviceActivityMonitor {
         super.intervalDidEnd(for: activity)
         Self.logger.info("intervalDidEnd fired for activity: \(activity.rawValue)")
 
-        // End-of-day cleanup: remove all shields
+        // Window close: the interval ends one minute before the next reminder.
         clearShieldsAndState()
 
         Self.logger.info("Shields removed and state cleared")

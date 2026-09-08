@@ -9,6 +9,7 @@ import RevenueCat
 enum SubscriptionPurchaseError: Error, Equatable, LocalizedError {
     case userCancelled
     case missingPlusEntitlement
+    case storefrontUnavailable
 
     var errorDescription: String? {
         switch self {
@@ -16,6 +17,8 @@ enum SubscriptionPurchaseError: Error, Equatable, LocalizedError {
             return "Purchase cancelled."
         case .missingPlusEntitlement:
             return "The purchase finished, but Pillie Plus was not activated. Please try again or restore purchases."
+        case .storefrontUnavailable:
+            return "Purchases is not available."
         }
     }
 }
@@ -175,6 +178,9 @@ final class SubscriptionManager: NSObject {
             trialTermsCohort = HardPaywallPolicy.cohort(forTrialGrantedAt: trialGrantDate)
         }
         hasPlusAccess = plusAccessState.hasPlusAccess(calendar: .current, now: Date())
+        if ProcessRuntime.isRunningTests {
+            resolveStorefrontWithoutPurchases()
+        }
     }
 
     private var plusAccessState: PlusAccessState {
@@ -244,6 +250,10 @@ final class SubscriptionManager: NSObject {
     // MARK: - Configure (call once at app launch)
 
     func configure() {
+        guard !ProcessRuntime.isRunningTests else {
+            resolveStorefrontWithoutPurchases()
+            return
+        }
         guard !isConfigured else { return }
         Purchases.logLevel = .warn
         Purchases.configure(withAPIKey: Self.apiKey)
@@ -274,6 +284,20 @@ final class SubscriptionManager: NSObject {
             async let paywallConfigurationRefresh: Void = refreshHardPaywallConfiguration()
             await entitlementRefresh
             await paywallConfigurationRefresh
+        }
+    }
+
+    /// Hosted tests skip `Purchases.configure`. Mark commerce resolved so the
+    /// launch gate never calls `Purchases.shared` and crash the test process.
+    private func resolveStorefrontWithoutPurchases() {
+        hasResolvedEntitlement = true
+        hasResolvedHardPaywallConfiguration = true
+    }
+
+    private func requireConfiguredPurchases() throws {
+        guard Purchases.isConfigured else {
+            resolveStorefrontWithoutPurchases()
+            throw SubscriptionPurchaseError.storefrontUnavailable
         }
     }
 
@@ -320,6 +344,7 @@ final class SubscriptionManager: NSObject {
 
     @discardableResult
     func purchase(_ package: Package) async throws -> PurchaseOutcome {
+        try requireConfiguredPurchases()
         isLoading = true
         defer { isLoading = false }
 
@@ -392,6 +417,7 @@ final class SubscriptionManager: NSObject {
     // MARK: - Restore
 
     func restore() async throws {
+        try requireConfiguredPurchases()
         isLoading = true
         defer { isLoading = false }
 
@@ -411,6 +437,7 @@ final class SubscriptionManager: NSObject {
     // MARK: - Fetch Offerings
 
     func fetchOfferings() async throws -> Offerings {
+        try requireConfiguredPurchases()
         let offerings = try await Purchases.shared.offerings()
         let configuration = HardPaywallRemoteConfiguration(
             offeringMetadata: offerings.current?.metadata ?? [:]
@@ -450,7 +477,10 @@ final class SubscriptionManager: NSObject {
     // MARK: - Refresh
 
     func refreshStatus() async {
-        guard isConfigured else { return }
+        guard isConfigured else {
+            resolveStorefrontWithoutPurchases()
+            return
+        }
         #if DEBUG
         if let debugEntitlementOverride {
             setEntitlement(debugEntitlementOverride)

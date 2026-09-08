@@ -58,7 +58,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
 
     private static let bgTaskID = "com.idrisskone.pillie.screentime-reconcile"
     private static var isRunningTests: Bool {
-        TestLaunchDetection.isRunningTests()
+        ProcessRuntime.isRunningTests
     }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
@@ -207,6 +207,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         store.syncTodayTakenToAppGroup()
         AppBlockingManager.shared.reconcileBlockingState(
             isTodayHandled: store.isTodayHandled,
+            liveDay: store.today,
             reminderHour: store.reminderHour,
             reminderMinute: store.reminderMinute,
             method: store.pack.method
@@ -241,7 +242,7 @@ struct PillieApp: App {
     @State private var languagePreference = AppLanguagePreference()
     @State private var showFirstInterventionConfirmation = false
     private static var isRunningTests: Bool {
-        TestLaunchDetection.isRunningTests()
+        ProcessRuntime.isRunningTests
     }
 
     /// True once the user has progressed through any onboarding step on this
@@ -468,6 +469,7 @@ struct PillieApp: App {
         store.syncTodayTakenToAppGroup()
         AppBlockingManager.shared.reconcileBlockingState(
             isTodayHandled: store.isTodayHandled,
+            liveDay: store.today,
             reminderHour: store.reminderHour,
             reminderMinute: store.reminderMinute,
             method: store.pack.method

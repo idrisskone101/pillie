@@ -422,10 +422,6 @@ final class GermanLocalizationContractTests: XCTestCase {
             "Hey, der kurze Check-in ist noch offen. Check-in, wenn du soweit bist"
         )
         XCTAssertEqual(
-            PillieLocalization.string("notification.final.body", locale: german),
-            "Für heute noch kein Check-in."
-        )
-        XCTAssertEqual(
             PillieLocalization.string(
                 "notification.refill.patch.title",
                 table: "Notifications",
@@ -516,7 +512,6 @@ final class GermanLocalizationContractTests: XCTestCase {
             ("Localizable", "shield.blocking_reason"),
             ("Notifications", "notification.reminder.pill.body"),
             ("Notifications", "notification.followup.body"),
-            ("Notifications", "notification.final.body"),
             ("Commerce", "paywall.title"),
             ("Commerce", "paywall.subtitle"),
             ("Commerce", "trial.end.subtitle"),

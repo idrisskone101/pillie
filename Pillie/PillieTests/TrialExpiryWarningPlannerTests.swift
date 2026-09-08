@@ -34,7 +34,8 @@ final class TrialExpiryWarningPlannerTests: XCTestCase {
             )
             XCTAssertEqual(calendar.startOfDay(for: warning.fireDate), expected)
             let components = calendar.dateComponents([.hour, .minute], from: warning.fireDate)
-            XCTAssertEqual(components.hour, ReminderSchedulePlanner.trialWarningHour)
+            XCTAssertEqual(ReminderSchedulePlanner.trialWarningHour, 20)
+            XCTAssertEqual(components.hour, 20)
             XCTAssertEqual(components.minute, 0)
         }
     }
@@ -156,6 +157,7 @@ final class TrialExpiryWarningPlannerTests: XCTestCase {
         return planner.planReminders(
             ReminderSchedulePlanner.Input(
                 now: now,
+                scheduleDay: store.today,
                 pack: store.pack,
                 reminderHour: store.reminderHour,
                 reminderMinute: store.reminderMinute,

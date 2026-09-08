@@ -51,6 +51,7 @@ final class CycleTransitionNoticeTests: XCTestCase {
         planner.planReminders(
             ReminderSchedulePlanner.Input(
                 now: now,
+                scheduleDay: calendar.startOfDay(for: now),
                 pack: pack,
                 reminderHour: reminderHour,
                 reminderMinute: 0,

@@ -147,7 +147,6 @@ SPECIAL_DE: dict[tuple[str, str], str] = {
     ("Notifications", "notification.followup.body"): (
         "Hey, der kurze Check-in ist noch offen. Check-in, wenn du soweit bist"
     ),
-    ("Notifications", "notification.final.body"): "Für heute noch kein Check-in.",
     ("Notifications", "notification.trial_expiry.day10.body"): (
         "Die App-Pause wird in 5 Tagen deaktiviert."
     ),
@@ -309,7 +308,6 @@ SPECIAL_IT: dict[tuple[str, str], str] = {
     ("Notifications", "notification.followup.body"): (
         "Ehi, il check-in veloce è ancora aperto. Fai il check-in quando vuoi"
     ),
-    ("Notifications", "notification.final.body"): "Per oggi non c'è ancora un check-in.",
     ("Notifications", "notification.trial_expiry.day10.body"): (
         "Il blocco delle app si disattiverà tra 5 giorni."
     ),
@@ -533,7 +531,6 @@ SPECIAL_EN: dict[tuple[str, str], str] = {
     ("Notifications", "notification.followup.body"): (
         "Hey, quick check-in is still open. Check in when you're ready"
     ),
-    ("Notifications", "notification.final.body"): "Still no check-in for today.",
     ("Notifications", "notification.trial_expiry.day10.body"): (
         "App blocking turns off in 5 days."
     ),

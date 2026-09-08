@@ -95,7 +95,7 @@ final class NotificationManager {
 
     init(
         center: any NotificationCenterScheduling = UNUserNotificationCenter.current(),
-        isRunningTests: Bool = TestLaunchDetection.isRunningTests(),
+        isRunningTests: Bool = ProcessRuntime.isRunningTests,
         scheduleDeviceActivityBlock: @escaping (_ hour: Int, _ minute: Int) -> Void = { hour, minute in
             AppBlockingManager.shared.scheduleDeviceActivityBlock(hour: hour, minute: minute)
         },
@@ -262,9 +262,8 @@ final class NotificationManager {
     // MARK: - Action Handling
 
     func handleMarkTakenAction(store: PillStore, response: UNNotificationResponse) {
-        let now = Date()
         let dueDate = dueDateFromPayload(userInfo: response.notification.request.content.userInfo)
-            ?? Calendar.current.startOfDay(for: now)
+            ?? store.today
         let dueEpoch = Int(Calendar.current.startOfDay(for: dueDate).timeIntervalSince1970)
 
         store.markActionAsTaken(on: dueDate)
@@ -342,13 +341,14 @@ final class NotificationManager {
     ) -> [UNNotificationRequest] {
         let calendar = Calendar.current
         let candidateDueActions = DoseScheduleEngine.nextDueActions(
-            from: now,
+            from: store.today,
             limit: ReminderSchedulePlanner.dueScanLimit,
             pack: store.pack
         )
         let intents = schedulePlanner.planReminders(
             ReminderSchedulePlanner.Input(
                 now: now,
+                scheduleDay: store.today,
                 pack: store.pack,
                 reminderHour: store.reminderHour,
                 reminderMinute: store.reminderMinute,
@@ -679,7 +679,7 @@ final class NotificationManager {
                         )
                         ledgerBox.ledger.prune(
                             takenDueDayEpochs: takenEpochs,
-                            todayStart: calendar.startOfDay(for: Date()),
+                            todayStart: calendar.startOfDay(for: store.today),
                             calendar: calendar
                         )
                         ledgerBox.ledger.save()

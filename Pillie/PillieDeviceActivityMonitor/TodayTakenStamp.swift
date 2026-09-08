@@ -20,10 +20,14 @@ struct TodayTakenStamp: Equatable {
         Int(calendar.startOfDay(for: date).timeIntervalSince1970)
     }
 
-    /// True only when the handled flag is set AND was written today. A missing or
-    /// mismatched stamp fails toward blocking: a dismissible shield beats
-    /// silently skipped protection.
+    /// True only when the handled flag is set AND was written for `day`.
+    func isTaken(on day: Date, calendar: Calendar = .current) -> Bool {
+        isTaken && epochDay == Self.epochDay(for: day, calendar: calendar)
+    }
+
+    /// True only when the handled flag is set AND was written for the live
+    /// dose day of `now`. A missing or mismatched stamp fails toward blocking.
     func isTakenToday(now: Date, calendar: Calendar = .current) -> Bool {
-        isTaken && epochDay == Self.epochDay(for: now, calendar: calendar)
+        isTaken(on: calendar.startOfDay(for: now), calendar: calendar)
     }
 }

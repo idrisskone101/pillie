@@ -6,6 +6,7 @@
 import Foundation
 
 /// A due action stays completable until the next reminder, not calendar midnight.
+/// PillStore.today and every schedule surface use this window as "today."
 enum DoseWindow {
     static func deadline(
         for day: Date,
@@ -64,5 +65,17 @@ enum DoseWindow {
             return today
         }
         return yesterday
+    }
+
+    /// DeviceActivity interval end: one minute before the next reminder, wrapping
+    /// past midnight so shields stay up through the late window.
+    static func blockingIntervalEnd(hour: Int, minute: Int) -> (hour: Int, minute: Int) {
+        if minute > 0 {
+            return (hour, minute - 1)
+        }
+        if hour > 0 {
+            return (hour - 1, 59)
+        }
+        return (23, 59)
     }
 }

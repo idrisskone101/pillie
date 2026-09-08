@@ -349,6 +349,7 @@ enum DebugQA {
         store.syncTodayTakenToAppGroup()
         AppBlockingManager.shared.reconcileBlockingState(
             isTodayHandled: store.isTodayHandled,
+            liveDay: store.today,
             reminderHour: store.reminderHour,
             reminderMinute: store.reminderMinute,
             method: store.pack.method
