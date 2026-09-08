@@ -2,58 +2,40 @@
 //  AppBlockingSetupView.swift
 //  Pillie
 //
-//  Issue #82 — Native App Selection And Blocker Config Save (design Option B).
-//
-//  The post-authorization wrapper for the native Screen Time picker. There is no
-//  separate primer: the pill-time CTA requests Screen Time authorization
-//  inline (if needed) and goes straight into the system FamilyActivityPicker.
-//  A denial stays on this screen with an explicit retry route. An honest
-//  reminder-only path remains available, a valid selection saves the blocker config
-//  and fires `blocker_config_saved`, and the summary is privacy-safe — Pillie only
-//  ever knows the count (see BlockerSelectionState).
-//
 
 import SwiftUI
 import FamilyControls
 
 struct AppBlockingSetupContent {
-    /// A generic category hint shown in the empty state — illustrative only, never
-    /// the user's real selection (which is opaque tokens Pillie cannot read).
     struct CategoryHint: Equatable {
         let name: String
         let symbol: String
     }
 
-    // Hero
     let badge: String
     let titleLead: String
     let titleAccent: String
     let subtitle: String
     let trialDisclosure: String
 
-    // Empty state
     let emptyTitle: String
     let emptyUnlockFormat: String
     let emptyDetail: String
     let categoryHints: [CategoryHint]
     let chooseAppsCTA: String
 
-    // Authorization recovery
     let authorizationDeniedTitle: String
     let authorizationDeniedDetail: String
     let retryAuthorizationCTA: String
 
-    // Selected state
     let selectedSummaryLabel: String
     let selectedPrivacyNote: String
     let changeSelectionCTA: String
 
-    // Shared privacy + footer
     let privacyNote: String
     let finishCTA: String
     let skipCTA: String
 
-    // Locked fallback (reached only if entitlement drops underneath the screen)
     let lockedTitle: String
     let lockedSubtitle: String
     let lockedDetail: String
@@ -76,8 +58,6 @@ struct AppBlockingSetupContent {
         "\(emptyTitle). \(unlockHint) \(privacyNote)"
     }
 
-    /// One combined VoiceOver label for the locked (entitlement-dropped) fallback
-    /// card, mirroring the empty/selected cards' single-element treatment.
     var lockedAccessibilityLabel: String {
         let separator = lockedTitle.last.map { ".!?…".contains($0) } == true ? " " : ". "
         return "\(lockedTitle)\(separator)\(lockedDetail)"
@@ -168,8 +148,6 @@ struct AppBlockingSetupContent {
     }
 }
 
-/// Observable permission-request behavior kept separate from the opaque Screen Time
-/// authorization API so denial, retry, and picker presentation stay deterministic.
 struct AppBlockingSetupPermissionState: Equatable {
     enum Phase: Equatable {
         case ready
@@ -187,8 +165,6 @@ struct AppBlockingSetupPermissionState: Equatable {
     var isRequesting: Bool { phase == .requesting }
     var isRecoveryVisible: Bool { phase == .recovery }
 
-    /// The initial CTA and recovery retry each begin an explicit Apple request.
-    /// Repeated taps while a request is already in flight are ignored.
     mutating func beginRequest() -> Bool {
         guard !isRequesting else { return false }
         phase = .requesting
@@ -212,9 +188,6 @@ struct AppBlockingSetupPermissionState: Equatable {
     }
 }
 
-/// The primary CTA may save only when Screen Time is currently authorized.
-/// Keeping this decision value-based prevents a retained selection from skipping
-/// the authorization recovery path.
 enum AppBlockingSetupPrimaryAction: Equatable {
     case requestAuthorization
     case finishSetup
@@ -284,7 +257,6 @@ struct AppBlockingSetupView: View {
         SubscriptionManager.shared.hasPlusAccess && !onboardingSelectedFreePlan
     }
 
-    /// Count-only view of the live selection — the deep, testable core.
     private var selection: BlockerSelectionState {
         BlockerSelectionState(
             applicationCount: blockingManager.activitySelection.applicationTokens.count,
@@ -345,8 +317,6 @@ struct AppBlockingSetupView: View {
                 permissionState.showRecoveryForDebug()
             }
             #endif
-            // The looping background blob is purely decorative — suppress it for
-            // Reduce Motion users and on constrained devices (shared gate).
             guard PillieMotion.decorativeMotionEnabled(
                 accessibilityReduceMotion: reduceMotion,
                 performanceTier: performanceTier
@@ -550,8 +520,6 @@ struct AppBlockingSetupView: View {
 
     private var selectedStateCard: some View {
         VStack(alignment: .leading, spacing: 18) {
-            // Count-only summary — no category icons/names, just how many are
-            // blocked. Pillie never learns which apps (AC5).
             HStack(spacing: 16) {
                 Text(selection.countText)
                     .font(.pillie(40, weight: .bold))
@@ -660,8 +628,6 @@ struct AppBlockingSetupView: View {
     }
 
     private var primaryCTA: some View {
-        // No primer: when empty, the CTA requests Screen Time authorization inline
-        // and opens the system picker; once apps are chosen it saves and continues.
         Button(action: performPrimaryAction) {
             HStack(spacing: 8) {
                 if permissionState.isRequesting {
@@ -738,7 +704,6 @@ struct AppBlockingSetupView: View {
     }
 
     private func finishSetup() {
-        // AC2: never save an empty configuration (the CTA is also disabled when empty).
         guard selection.canSaveBlockerConfig else { return }
         blockingManager.saveSelectionAndReconcile(routine: appBlockingRoutine)
         ProductAnalyticsTelemetry.live.onboardingBlockerConfigSaved(

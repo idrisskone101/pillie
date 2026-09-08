@@ -7,7 +7,7 @@ final class AppBlockingSetupContentTests: XCTestCase {
         locale: Locale(identifier: "en_US")
     )
 
-    // MARK: - Reversible pill-time framing (#218)
+    // MARK: - Reversible pill-time framing
 
     func testSetupCopyExplainsPillTimePauseMedicationUnlockAndReversibility() {
         XCTAssertEqual(content.badge, "Pillie Plus")
@@ -123,7 +123,7 @@ final class AppBlockingSetupContentTests: XCTestCase {
         XCTAssertTrue(permission.isRecoveryVisible)
     }
 
-    // MARK: - Empty state (AC3 honest empty state)
+    // MARK: - Empty state
 
     func testEmptyStateExplainsScreenTimePickerAndCountOnlyStorage() {
         XCTAssertEqual(content.emptyTitle, "This app is paused")
@@ -167,19 +167,16 @@ final class AppBlockingSetupContentTests: XCTestCase {
         )
     }
 
-    // MARK: - Selected state (AC5 privacy-safe summary)
+    // MARK: - Selected state
 
     func testSelectedStateCopyReassuresPrivacy() {
         XCTAssertEqual(content.changeSelectionCTA, "Edit")
         let note = content.selectedPrivacyNote.lowercased()
-        // Pillie stores only a count; it never learns which apps were chosen.
         XCTAssertTrue(note.contains("number"))
         XCTAssertTrue(note.contains("device"))
     }
 
     func testSelectedSummaryLabelIsGenericAndNamesNoApps() {
-        // The selected state shows only a count + this label — no category chips,
-        // icons, or app names.
         XCTAssertEqual(content.selectedSummaryLabel, "Apps selected")
         let label = content.selectedSummaryLabel.lowercased()
         for name in ["tiktok", "instagram", "youtube", "snapchat"] {
@@ -206,11 +203,9 @@ final class AppBlockingSetupContentTests: XCTestCase {
         XCTAssertFalse(visibleCopy.contains("ads"))
     }
 
-    // MARK: - Permission-state VoiceOver labels (#84 QA)
+    // MARK: - Permission-state VoiceOver labels
 
     func testEmptyPermissionStateExposesOneClearVoiceOverLabel() {
-        // The empty permission card reads as a single coherent element instead of
-        // scattered Text/chip fragments — same treatment as the selected card.
         let unlockHint = AppBlockingSetupContent.formattedEmptyUnlock(
             format: content.emptyUnlockFormat,
             reminderHour: 21,
@@ -245,7 +240,7 @@ final class AppBlockingSetupContentTests: XCTestCase {
         }
     }
 
-    // MARK: - AC5: copy must never name real third-party apps
+    // MARK: - Copy must never name real third-party apps
 
     func testVisibleCopyNeverNamesRealThirdPartyApps() {
         let visibleCopy = content.visibleCopy.joined(separator: " ").lowercased()
