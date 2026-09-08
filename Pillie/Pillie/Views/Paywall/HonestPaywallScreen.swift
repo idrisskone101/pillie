@@ -20,7 +20,6 @@ struct HonestPaywallScreen: View {
 
     @State private var recurrence: PaywallRecurrence = .year
     @State private var offerings: Offerings?
-    @State private var offeringsError = false
     @State private var purchaseError: String?
     @State private var isPurchasing = false
     @State private var isRestoring = false
@@ -142,16 +141,27 @@ struct HonestPaywallScreen: View {
         withAnimation(.easeInOut(duration: 0.2)) {
             recurrence = value
         }
-        telemetry.paywallPlanSelected(
-            plan: value == .year ? .annual : .monthly,
-            isFromOnboarding: false,
-            surface: surface
-        )
+        let plan: AnalyticsPlan = value == .year ? .annual : .monthly
+        switch telemetryMode {
+        case .trialEnd(let content):
+            telemetry.trialEndPlanSelected(
+                plan: plan,
+                cohort: content.cohort,
+                terms: content.terms,
+                termsCohort: content.termsCohort
+            )
+        case .surface:
+            telemetry.paywallPlanSelected(
+                plan: plan,
+                isFromOnboarding: false,
+                surface: surface
+            )
+        }
     }
 
     private func purchase(_ intent: PaywallPurchaseIntent) {
         guard let package = PaywallPurchaseBridge.package(for: intent, offerings: offerings) else {
-            offeringsError = true
+            purchaseError = CommercePresentation.offeringsUnavailableMessage(locale: locale)
             return
         }
         let plan = intent.pilliePlusPlan
@@ -237,9 +247,7 @@ struct HonestPaywallScreen: View {
     private func loadOfferings() async {
         do {
             offerings = try await subscriptionManager.fetchOfferings()
-            offeringsError = false
         } catch {
-            offeringsError = true
             telemetry.trackError(.offerings, error: error)
         }
     }
@@ -295,6 +303,13 @@ struct HonestPaywallScreen: View {
         }
     }
 
+    private var telemetryMode: HonestPaywallTelemetryMode {
+        HonestPaywallTelemetry.mode(
+            board: board,
+            trialEndContent: trialEndTelemetryContent
+        )
+    }
+
     private var trialEndTelemetryContent: TrialEndPaywallContent? {
         TrialEndPaywallContent.make(
             state: PlusAccessState(
@@ -314,26 +329,28 @@ struct HonestPaywallScreen: View {
     // MARK: - Telemetry
 
     private func trackViewed() {
-        if let content = trialEndTelemetryContent {
+        switch telemetryMode {
+        case .trialEnd(let content):
             telemetry.trialEndPaywallViewed(
                 cohort: content.cohort,
                 terms: content.terms,
                 termsCohort: content.termsCohort
             )
-        } else {
+        case .surface:
             telemetry.paywallViewed(surface: surface)
         }
     }
 
     private func trackPurchaseStarted(plan: PilliePlusPlan) {
-        if let content = trialEndTelemetryContent {
+        switch telemetryMode {
+        case .trialEnd(let content):
             telemetry.trialEndPurchaseStarted(
                 plan: plan.analyticsPlan,
                 cohort: content.cohort,
                 terms: content.terms,
                 termsCohort: content.termsCohort
             )
-        } else {
+        case .surface:
             telemetry.purchaseStarted(
                 plan: plan.analyticsPlan,
                 isFromOnboarding: false,
@@ -343,7 +360,8 @@ struct HonestPaywallScreen: View {
     }
 
     private func trackPurchaseCompleted(plan: PilliePlusPlan, outcome: PurchaseOutcome) {
-        if let content = trialEndTelemetryContent {
+        switch telemetryMode {
+        case .trialEnd(let content):
             switch outcome.conversionEvent {
             case .trialStarted:
                 telemetry.trialEndTrialStarted(
@@ -362,30 +380,33 @@ struct HonestPaywallScreen: View {
             case nil:
                 break
             }
-        } else if outcome.conversionEvent == .purchaseCompleted {
-            telemetry.purchaseCompleted(
-                plan: plan.analyticsPlan,
-                isFromOnboarding: false,
-                surface: surface
-            )
-        } else if outcome.conversionEvent == .trialStarted {
-            telemetry.trialStarted(
-                plan: plan.analyticsPlan,
-                isFromOnboarding: false,
-                surface: surface
-            )
+        case .surface:
+            if outcome.conversionEvent == .purchaseCompleted {
+                telemetry.purchaseCompleted(
+                    plan: plan.analyticsPlan,
+                    isFromOnboarding: false,
+                    surface: surface
+                )
+            } else if outcome.conversionEvent == .trialStarted {
+                telemetry.trialStarted(
+                    plan: plan.analyticsPlan,
+                    isFromOnboarding: false,
+                    surface: surface
+                )
+            }
         }
     }
 
     private func trackPurchaseCancelled(plan: PilliePlusPlan) {
-        if let content = trialEndTelemetryContent {
+        switch telemetryMode {
+        case .trialEnd(let content):
             telemetry.trialEndPurchaseCancelled(
                 plan: plan.analyticsPlan,
                 cohort: content.cohort,
                 terms: content.terms,
                 termsCohort: content.termsCohort
             )
-        } else {
+        case .surface:
             telemetry.purchaseCancelled(
                 plan: plan.analyticsPlan,
                 isFromOnboarding: false,
@@ -395,14 +416,15 @@ struct HonestPaywallScreen: View {
     }
 
     private func trackPurchaseFailed(plan: PilliePlusPlan, error: Error) {
-        if let content = trialEndTelemetryContent {
+        switch telemetryMode {
+        case .trialEnd(let content):
             telemetry.trialEndPurchaseFailed(
                 plan: plan.analyticsPlan,
                 cohort: content.cohort,
                 terms: content.terms,
                 termsCohort: content.termsCohort
             )
-        } else {
+        case .surface:
             telemetry.purchaseFailed(
                 plan: plan.analyticsPlan,
                 isFromOnboarding: false,
@@ -413,37 +435,40 @@ struct HonestPaywallScreen: View {
     }
 
     private func trackRestoreStarted() {
-        if let content = trialEndTelemetryContent {
+        switch telemetryMode {
+        case .trialEnd(let content):
             telemetry.trialEndRestoreStarted(
                 cohort: content.cohort,
                 terms: content.terms,
                 termsCohort: content.termsCohort
             )
-        } else {
+        case .surface:
             telemetry.restoreStarted(isFromOnboarding: false, surface: surface)
         }
     }
 
     private func trackRestoreCompleted() {
-        if let content = trialEndTelemetryContent {
+        switch telemetryMode {
+        case .trialEnd(let content):
             telemetry.trialEndRestoreCompleted(
                 cohort: content.cohort,
                 terms: content.terms,
                 termsCohort: content.termsCohort
             )
-        } else {
+        case .surface:
             telemetry.restoreCompleted(isFromOnboarding: false, surface: surface)
         }
     }
 
     private func trackRestoreFailed(error: Error? = nil) {
-        if let content = trialEndTelemetryContent {
+        switch telemetryMode {
+        case .trialEnd(let content):
             telemetry.trialEndRestoreFailed(
                 cohort: content.cohort,
                 terms: content.terms,
                 termsCohort: content.termsCohort
             )
-        } else {
+        case .surface:
             telemetry.restoreFailed(isFromOnboarding: false, surface: surface)
         }
         if let error {
@@ -452,7 +477,7 @@ struct HonestPaywallScreen: View {
     }
 
     private func trackContinueFree() {
-        guard let content = trialEndTelemetryContent else { return }
+        guard case .trialEnd(let content) = telemetryMode else { return }
         telemetry.trialEndContinueFreeSelected(
             cohort: content.cohort,
             terms: content.terms,

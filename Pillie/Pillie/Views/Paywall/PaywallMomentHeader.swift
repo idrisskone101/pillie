@@ -65,11 +65,17 @@ struct PaywallMomentHeader: View {
         VStack(alignment: .leading, spacing: 0) {
             titleBlock(title: story.title, subtitle: story.subtitle)
 
-            HStack(alignment: .top, spacing: 10) {
-                statTile(story.doseTile)
-                statTile(story.streakTile)
+            if story.doseTile != nil || story.streakTile != nil {
+                HStack(alignment: .top, spacing: 10) {
+                    if let doseTile = story.doseTile {
+                        statTile(doseTile)
+                    }
+                    if let streakTile = story.streakTile {
+                        statTile(streakTile)
+                    }
+                }
+                .padding(.top, 16)
             }
-            .padding(.top, 16)
 
             if !story.handwrittenLossLine.isEmpty {
                 Text(story.handwrittenLossLine)

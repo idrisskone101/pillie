@@ -61,9 +61,18 @@ enum HonestPaywallStoryFactory {
         terms: TrialEndAccessTerms,
         locale: Locale
     ) -> HonestPaywallTrialEndedStory {
-        let doseValue = stats.dosesTaken.map { "\($0)" } ?? "-"
-
-        let streakValue = stats.currentStreak.map { "\($0)" } ?? "-"
+        let doseTile = Self.statTile(
+            value: stats.dosesTaken,
+            labelKey: "paywall.story.trial_ended.tile.doses",
+            background: .coralSoft,
+            locale: locale
+        )
+        let streakTile = Self.statTile(
+            value: stats.currentStreak,
+            labelKey: "paywall.story.trial_ended.tile.streak",
+            background: .ink,
+            locale: locale
+        )
 
         let lossCount = [stats.dosesTaken, stats.currentStreak, stats.blocksIntercepted]
             .compactMap { $0 }
@@ -91,24 +100,8 @@ enum HonestPaywallStoryFactory {
                 table: "Commerce",
                 locale: locale
             ),
-            doseTile: PaywallStatTile(
-                label: PillieLocalization.string(
-                    "paywall.story.trial_ended.tile.doses",
-                    table: "Commerce",
-                    locale: locale
-                ),
-                value: doseValue,
-                background: .coralSoft
-            ),
-            streakTile: PaywallStatTile(
-                label: PillieLocalization.string(
-                    "paywall.story.trial_ended.tile.streak",
-                    table: "Commerce",
-                    locale: locale
-                ),
-                value: streakValue,
-                background: .ink
-            ),
+            doseTile: doseTile,
+            streakTile: streakTile,
             handwrittenLossLine: lossCount.map { count in
                 PillieLocalization.formatted(
                     "paywall.story.trial_ended.aside",
@@ -172,6 +165,20 @@ enum HonestPaywallStoryFactory {
                 ],
                 background: .coralSoft
             )
+        )
+    }
+
+    private static func statTile(
+        value: Int?,
+        labelKey: String,
+        background: PaywallTileBackground,
+        locale: Locale
+    ) -> PaywallStatTile? {
+        guard let value, value > 0 else { return nil }
+        return PaywallStatTile(
+            label: PillieLocalization.string(labelKey, table: "Commerce", locale: locale),
+            value: "\(value)",
+            background: background
         )
     }
 }

@@ -53,8 +53,8 @@ struct HonestPaywallTrialActiveStory: Equatable {
 struct HonestPaywallTrialEndedStory: Equatable {
     let title: String
     let subtitle: String
-    let doseTile: PaywallStatTile
-    let streakTile: PaywallStatTile
+    let doseTile: PaywallStatTile?
+    let streakTile: PaywallStatTile?
     let handwrittenLossLine: String
     let chrome: HonestPaywallChrome
 }

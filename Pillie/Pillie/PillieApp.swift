@@ -687,20 +687,20 @@ struct PillieApp: App {
                 .first(where: { $0.name == "board" })?
                 .value
             switch board {
-            case "c1":
+            case "duringTrial", "c1":
                 DebugQA.apply(.trialActive, store: store)
                 DispatchQueue.main.async {
                     NotificationCenter.default.post(
                         name: .pillieDebugPresentHonestPaywall,
-                        object: "c1"
+                        object: "duringTrial"
                     )
                 }
-            case "c3":
+            case "settingsFree", "c3":
                 DebugQA.apply(.existingUserTrialAnnouncement, store: store)
                 DispatchQueue.main.async {
                     NotificationCenter.default.post(
                         name: .pillieDebugPresentHonestPaywall,
-                        object: "c3"
+                        object: "settingsFree"
                     )
                 }
             default:

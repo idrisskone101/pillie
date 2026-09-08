@@ -6,6 +6,8 @@
 import SwiftUI
 
 struct HonestPaywallView: View {
+    @Environment(\.locale) private var locale
+
     let scene: HonestPaywallScene
     let isPurchasing: Bool
     let onRecurrenceChange: (PaywallRecurrence) -> Void
@@ -25,29 +27,13 @@ struct HonestPaywallView: View {
                     VStack(spacing: 0) {
                         PaywallMomentHeader(board: scene.board)
 
-                        PaywallCheckoutChrome(
-                            checkout: scene.checkout,
-                            isPurchasing: isPurchasing,
-                            section: .stack,
-                            onRecurrenceChange: onRecurrenceChange,
-                            onPurchase: onPurchase,
-                            onRestore: onRestore,
-                            onLifetime: { onPurchase(.lifetime) }
-                        )
+                        checkoutChrome(section: .stack)
                     }
                     .padding(.horizontal, HonestPaywallLayout.horizontalInset)
 
                     Spacer(minLength: 16)
 
-                    PaywallCheckoutChrome(
-                        checkout: scene.checkout,
-                        isPurchasing: isPurchasing,
-                        section: .footer,
-                        onRecurrenceChange: onRecurrenceChange,
-                        onPurchase: onPurchase,
-                        onRestore: onRestore,
-                        onLifetime: { onPurchase(.lifetime) }
-                    )
+                    checkoutChrome(section: .footer)
                 }
                 .frame(minHeight: proxy.size.height, alignment: .top)
             }
@@ -57,7 +43,11 @@ struct HonestPaywallView: View {
         .safeAreaInset(edge: .bottom, spacing: 0) {
             if let onContinueFree, scene.board.chrome.showsContinueFree {
                 Button(action: onContinueFree) {
-                    Text(PillieLocalization.string("trial.end.continue_free", table: "Commerce"))
+                    Text(PillieLocalization.string(
+                        "trial.end.continue_free",
+                        table: "Commerce",
+                        locale: locale
+                    ))
                         .font(.pillie(14, weight: .semibold))
                         .foregroundStyle(PillieTheme.textMuted)
                 }
@@ -78,9 +68,24 @@ struct HonestPaywallView: View {
                     .frame(width: 32, height: 32)
                     .background(PillieTheme.sage, in: Circle())
             }
-            .accessibilityLabel(PillieLocalization.string("global.action.close"))
+            .accessibilityLabel(PillieLocalization.string(
+                "global.action.close",
+                locale: locale
+            ))
         }
         .frame(height: 32)
         .padding(.horizontal, HonestPaywallLayout.horizontalInset)
+    }
+
+    private func checkoutChrome(section: PaywallCheckoutSection) -> PaywallCheckoutChrome {
+        PaywallCheckoutChrome(
+            checkout: scene.checkout,
+            isPurchasing: isPurchasing,
+            section: section,
+            onRecurrenceChange: onRecurrenceChange,
+            onPurchase: onPurchase,
+            onRestore: onRestore,
+            onLifetime: { onPurchase(.lifetime) }
+        )
     }
 }

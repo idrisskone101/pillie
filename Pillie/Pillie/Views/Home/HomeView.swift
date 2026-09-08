@@ -652,9 +652,9 @@ struct HomeView: View {
         }
         .onReceive(NotificationCenter.default.publisher(for: .pillieDebugPresentHonestPaywall)) { note in
             switch note.object as? String {
-            case "c1":
+            case "duringTrial", "c1":
                 showTrialKeepPlusPaywall = true
-            case "c3":
+            case "settingsFree", "c3":
                 blockingPaywallSurface = .homeBlockingCard
                 showBlockingPaywall = true
             default:
