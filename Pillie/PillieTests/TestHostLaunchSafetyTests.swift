@@ -1,0 +1,62 @@
+import Foundation
+import Testing
+
+@testable import Pillie
+
+struct TestHostLaunchSafetyTests {
+    @Test func xcode27SessionIdentifierCountsAsATestLaunch() {
+        #expect(
+            TestLaunchDetection.isRunningTests(
+                environment: ["XCTestSessionIdentifier": "session"]
+            )
+        )
+    }
+
+    @Test func xcode27BundlePathCountsAsATestLaunch() {
+        #expect(
+            TestLaunchDetection.isRunningTests(
+                environment: ["XCTestBundlePath": "/tmp/PillieTests.xctest"]
+            )
+        )
+    }
+
+    @Test func configurationFilePathStillCountsAsATestLaunch() {
+        #expect(
+            TestLaunchDetection.isRunningTests(
+                environment: ["XCTestConfigurationFilePath": "/tmp/config"]
+            )
+        )
+    }
+
+    @Test func aNormalLaunchIsNotATest() {
+        #expect(!TestLaunchDetection.isRunningTests(environment: [:]))
+    }
+
+    @Test func hostedTestsMustNotConfigureRevenueCat() {
+        #expect(
+            !SubscriptionLaunchPolicy.shouldConfigureRevenueCat(
+                isRunningTests: true,
+                isOnboardingActive: true
+            )
+        )
+    }
+
+    @Test func refreshCommerceStateDoesNotTrapWhenRevenueCatIsUnconfigured() async {
+        await SubscriptionManager.shared.refreshCommerceState()
+    }
+
+    @Test func setPlusForTestingResolvesCommerceSoSetupIsNotBlocked() {
+        SubscriptionManager.shared.setPlusForTesting(true)
+        #expect(SubscriptionManager.shared.hasResolvedEntitlement)
+        #expect(SubscriptionManager.shared.hasResolvedHardPaywallConfiguration)
+        #expect(SubscriptionManager.shared.hasPlusAccess)
+        #expect(
+            OnboardingTrialActivationRoute.resolve(
+                hasEntitlement: true,
+                entitlementResolved: true,
+                configurationResolved: true
+            ) == .subscriber
+        )
+        SubscriptionManager.shared.setPlusForTesting(false)
+    }
+}

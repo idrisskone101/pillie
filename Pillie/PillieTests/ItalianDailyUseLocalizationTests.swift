@@ -111,6 +111,7 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
             "onboarding.blocking_setup.allow_pausing",
             "onboarding.blocking_setup.paused_app",
             "onboarding.blocking_setup.unlock_hint",
+            "onboarding.blocking_setup.mark_taken",
             "empty.history.title",
             "empty.history.body",
             "empty.blocked_apps.title",

@@ -20,6 +20,7 @@ struct AppBlockingSetupContent {
 
     let emptyTitle: String
     let emptyUnlockFormat: String
+    let emptyMarkTaken: String
     let emptyDetail: String
     let categoryHints: [CategoryHint]
     let chooseAppsCTA: String
@@ -44,7 +45,7 @@ struct AppBlockingSetupContent {
     var visibleCopy: [String] {
         [
             badge, titleLead, titleAccent, subtitle, trialDisclosure,
-            emptyTitle, emptyUnlockFormat, emptyDetail,
+            emptyTitle, emptyUnlockFormat, emptyMarkTaken, emptyDetail,
             authorizationDeniedTitle, authorizationDeniedDetail, retryAuthorizationCTA
         ]
         + categoryHints.map(\.name)
@@ -86,6 +87,7 @@ struct AppBlockingSetupContent {
         ),
         emptyTitle: PillieLocalization.string("onboarding.blocking_setup.paused_app", locale: locale),
         emptyUnlockFormat: PillieLocalization.string("onboarding.blocking_setup.unlock_hint", locale: locale),
+        emptyMarkTaken: PillieLocalization.string("onboarding.blocking_setup.mark_taken", locale: locale),
         emptyDetail: PillieLocalization.string(
             "onboarding.blocking_setup.empty_detail",
             locale: locale
@@ -210,19 +212,17 @@ struct AppBlockingSetupView: View {
     @Environment(PillStore.self) private var store
     @Environment(\.locale) private var locale
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @AppStorage(OnboardingFlow.selectedFreePlanStorageKey) private var onboardingSelectedFreePlan = false
 
     @State private var animateIn = false
-    @State private var blobPhase: CGFloat = 0
     @State private var showPicker = false
     @State private var permissionState = AppBlockingSetupPermissionState()
     #if DEBUG
     @AppStorage("pillie_debug_app_blocking_authorization_recovery")
     private var debugAuthorizationRecovery = false
     #endif
-    private let performanceTier = PerformanceTier.current
     private let onboardingTelemetry = OnboardingTelemetry()
+    private let a10Gutter: CGFloat = 24
     private var content: AppBlockingSetupContent {
         AppBlockingSetupContent.localized(
             locale: locale,
@@ -258,7 +258,12 @@ struct AppBlockingSetupView: View {
     }
 
     private var selection: BlockerSelectionState {
-        BlockerSelectionState(
+        #if DEBUG
+        if let count = blockingManager.debugSelectionCountOverride, count > 0 {
+            return BlockerSelectionState(applicationCount: count, categoryCount: 0)
+        }
+        #endif
+        return BlockerSelectionState(
             applicationCount: blockingManager.activitySelection.applicationTokens.count,
             categoryCount: blockingManager.activitySelection.categoryTokens.count
         )
@@ -266,43 +271,46 @@ struct AppBlockingSetupView: View {
 
     var body: some View {
         ZStack {
-            OnboardingBackground(blobPhase: blobPhase, tier: performanceTier)
+            PillieTheme.bg.ignoresSafeArea()
 
             VStack(spacing: 0) {
                 header
                     .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger1))
                     .padding(.horizontal, PillieTheme.screenHorizontalPadding)
-                    .padding(.top, 28)
+                    .padding(.top, 8)
+                    .padding(.bottom, 12)
 
-                ScrollView(showsIndicators: false) {
-                    VStack(alignment: .leading, spacing: 22) {
-                        heroSection
-                            .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger2))
+                heroSection
+                    .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger2))
+                    .padding(.horizontal, a10Gutter)
+                    .padding(.top, 22)
 
-                        if canSetUpBlocking {
-                            Group {
+                if showsA10EmptyLayout {
+                    emptyStateCard
+                        .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger3))
+                } else {
+                    ScrollView(showsIndicators: false) {
+                        Group {
+                            if canSetUpBlocking {
                                 if permissionState.isRecoveryVisible {
                                     authorizationRecoveryCard
-                                } else if selection.isEmpty {
-                                    emptyStateCard
                                 } else {
                                     selectedStateCard
                                 }
+                            } else {
+                                lockedSection
                             }
-                            .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger3))
-                        } else {
-                            lockedSection
-                                .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger3))
                         }
+                        .padding(.horizontal, a10Gutter)
+                        .padding(.top, 18)
+                        .padding(.bottom, 16)
                     }
-                    .padding(.horizontal, PillieTheme.screenHorizontalPadding)
-                    .padding(.top, 18)
-                    .padding(.bottom, 16)
                 }
 
                 footer
                     .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger4))
-                    .padding(.horizontal, PillieTheme.screenHorizontalPadding)
+                    .padding(.horizontal, a10Gutter)
+                    .padding(.top, 16)
                     .padding(.bottom, PillieTheme.onboardingCTABottomPadding)
             }
         }
@@ -317,16 +325,6 @@ struct AppBlockingSetupView: View {
                 permissionState.showRecoveryForDebug()
             }
             #endif
-            guard PillieMotion.decorativeMotionEnabled(
-                accessibilityReduceMotion: reduceMotion,
-                performanceTier: performanceTier
-            ) else {
-                blobPhase = 0
-                return
-            }
-            withAnimation(.easeInOut(duration: 8).repeatForever(autoreverses: true)) {
-                blobPhase = 1
-            }
         }
         #if DEBUG
         .onChange(of: debugAuthorizationRecovery) { _, isRecoveryVisible in
@@ -337,13 +335,15 @@ struct AppBlockingSetupView: View {
         #endif
     }
 
+    private var showsA10EmptyLayout: Bool {
+        canSetUpBlocking && selection.isEmpty && !permissionState.isRecoveryVisible
+    }
+
     // MARK: - Header
 
     private var header: some View {
-        let progress = ProtectionPlanProgressIndex.progress(for: .appBlocking)
-        return PersonalizationOnboardingHeader(
-            appeared: animateIn,
-            progress: progress,
+        ProtectionPlanProgressHeader(
+            progress: ProtectionPlanProgressIndex.progress(for: .appBlocking),
             onBack: onBack
         )
     }
@@ -351,33 +351,19 @@ struct AppBlockingSetupView: View {
     // MARK: - Hero
 
     private var heroSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text(content.badge)
-                .font(.pillie(10, weight: .black))
-                .foregroundStyle(PillieTheme.textMuted)
-                .tracking(1.4)
-                .textCase(.uppercase)
-                .padding(.horizontal, 12)
-                .padding(.vertical, 7)
-                .background(PillieTheme.coralLight, in: Capsule())
-                .overlay {
-                    Capsule().stroke(Color.black.opacity(0.06), lineWidth: 1)
-                }
-
-            (Text(content.titleLead + (content.titleAccent.isEmpty ? "" : "\n"))
-                .foregroundColor(PillieTheme.textPrimary)
-                + Text(content.titleAccent).foregroundColor(PillieTheme.coral))
+        VStack(alignment: .leading, spacing: 6) {
+            Text(content.titleLead)
                 .font(.pillie(34, weight: .bold))
-                .lineLimit(dynamicTypeSize.isAccessibilitySize ? 3 : 1)
-                .minimumScaleFactor(dynamicTypeSize.isAccessibilitySize ? 1 : 0.68)
-                .allowsTightening(true)
-
-            Text(canSetUpBlocking ? content.subtitle : content.lockedSubtitle)
-                .font(.pillieBodyLarge())
-                .foregroundStyle(PillieTheme.textMuted)
+                .foregroundStyle(PillieTheme.textPrimary)
+                .tracking(-0.85)
+                .lineSpacing(4)
                 .fixedSize(horizontal: false, vertical: true)
 
-            TrialUnlockDisclosure(text: content.trialDisclosure)
+            Text(canSetUpBlocking ? content.subtitle : content.lockedSubtitle)
+                .font(.pillie(15, weight: .regular))
+                .foregroundStyle(PillieTheme.textMuted)
+                .lineSpacing(6)
+                .fixedSize(horizontal: false, vertical: true)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
@@ -391,103 +377,17 @@ struct AppBlockingSetupView: View {
         )
     }
 
-    private var markCompleteDecorLabel: String {
-        PillieLocalization.string("today.action.mark_complete", locale: locale)
-    }
-
     // MARK: - Empty State
 
     private var emptyStateCard: some View {
-        phonePauseIllustration
-            .frame(maxWidth: .infinity)
-            .accessibilityElement(children: .ignore)
-            .accessibilityLabel(content.emptyStateAccessibilityLabel(unlockHint: emptyUnlockText))
-            .accessibilityIdentifier("appBlockingEmptyStateCard")
-    }
-
-    private var phonePauseIllustration: some View {
-        ZStack {
-            Ellipse()
-                .fill(PillieTheme.coral.opacity(0.16))
-                .frame(width: 292, height: 236)
-
-            RoundedRectangle(cornerRadius: 32, style: .continuous)
-                .fill(PillieTheme.bg)
-                .overlay {
-                    RoundedRectangle(cornerRadius: 32, style: .continuous)
-                        .stroke(Color.black.opacity(0.08), lineWidth: 1.5)
-                }
-                .overlay(alignment: .top) {
-                    Capsule()
-                        .fill(Color.black.opacity(0.12))
-                        .frame(width: 48, height: 5)
-                        .padding(.top, 9)
-                }
-                .overlay {
-                    VStack(spacing: 10) {
-                        genericPausedAppTile
-
-                        Text(content.emptyTitle)
-                            .font(.pillieBodyBold())
-                            .foregroundStyle(PillieTheme.textPrimary)
-                            .multilineTextAlignment(.center)
-                            .lineLimit(dynamicTypeSize.isAccessibilitySize ? 2 : 1)
-                            .minimumScaleFactor(dynamicTypeSize.isAccessibilitySize ? 1 : 0.75)
-                            .allowsTightening(true)
-
-                        Text(emptyUnlockText)
-                            .font(.pillie(13, weight: .medium))
-                            .foregroundStyle(PillieTheme.textMuted)
-                            .multilineTextAlignment(.center)
-                            .fixedSize(horizontal: false, vertical: true)
-
-                        Text(markCompleteDecorLabel)
-                            .font(.pillie(13, weight: .semibold))
-                            .foregroundStyle(.white)
-                            .padding(.horizontal, 16)
-                            .padding(.vertical, 8)
-                            .background(PillieTheme.coral, in: Capsule())
-                            .allowsHitTesting(false)
-                            .accessibilityHidden(true)
-                    }
-                    .padding(.horizontal, 16)
-                    .padding(.top, 24)
-                    .padding(.bottom, 18)
-                }
-                .frame(width: 196, height: 228)
-        }
-        .frame(height: 236)
-    }
-
-    private var genericPausedAppTile: some View {
-        ZStack(alignment: .bottomTrailing) {
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .fill(PillieTheme.lavender)
-                .frame(width: 64, height: 64)
-                .overlay {
-                    LazyVGrid(
-                        columns: [GridItem(.fixed(14), spacing: 4), GridItem(.fixed(14), spacing: 4)],
-                        spacing: 4
-                    ) {
-                        ForEach(0..<4, id: \.self) { _ in
-                            RoundedRectangle(cornerRadius: 3, style: .continuous)
-                                .fill(Color.black.opacity(0.08))
-                                .frame(width: 14, height: 14)
-                        }
-                    }
-                }
-
-            ZStack {
-                Circle()
-                    .fill(PillieTheme.coral)
-                    .frame(width: 28, height: 28)
-                Image(systemName: "pause.fill")
-                    .font(.system(size: 11, weight: .bold))
-                    .foregroundStyle(.white)
-            }
-            .offset(x: 6, y: 6)
-        }
-        .accessibilityHidden(true)
+        AppBlockingA10EmptyStage(
+            title: content.emptyTitle,
+            unlockHint: emptyUnlockText,
+            markTaken: content.emptyMarkTaken
+        )
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(content.emptyStateAccessibilityLabel(unlockHint: emptyUnlockText))
+        .accessibilityIdentifier("appBlockingEmptyStateCard")
     }
 
     private var authorizationRecoveryCard: some View {
@@ -613,15 +513,17 @@ struct AppBlockingSetupView: View {
     }
 
     private var emptyCoachLine: some View {
-        HStack(alignment: .top, spacing: 8) {
-            Image(systemName: "lock.fill")
-                .font(.system(size: 12, weight: .semibold))
+        HStack(alignment: .center, spacing: 5) {
+            Image(systemName: "lock")
+                .font(.system(size: 13, weight: .medium))
                 .foregroundStyle(PillieTheme.textMuted)
-                .padding(.top, 2)
+                .frame(width: 14, height: 16)
             Text(content.emptyDetail)
                 .font(.pillie(13, weight: .medium))
                 .foregroundStyle(PillieTheme.textMuted)
-                .fixedSize(horizontal: false, vertical: true)
+                .lineLimit(1)
+                .minimumScaleFactor(0.62)
+                .allowsTightening(true)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
         .accessibilityElement(children: .combine)
@@ -629,19 +531,22 @@ struct AppBlockingSetupView: View {
 
     private var primaryCTA: some View {
         Button(action: performPrimaryAction) {
-            HStack(spacing: 8) {
+            Group {
                 if permissionState.isRequesting {
                     ProgressView().tint(.white)
-                } else if !selection.hasSelection {
-                    Image(systemName: "shield.fill")
-                        .font(.system(size: 17, weight: .semibold))
+                } else {
+                    Text(primaryActionTitle)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.55)
                 }
-                Text(primaryActionTitle)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.55)
             }
+            .font(.pillie(17, weight: .semibold))
+            .foregroundStyle(.white)
+            .frame(maxWidth: .infinity)
+            .frame(height: 56)
+            .background(PillieTheme.dark, in: Capsule())
         }
-        .buttonStyle(.pillieDark)
+        .buttonStyle(.plain)
         .disabled(permissionState.isRequesting)
     }
 
@@ -670,13 +575,13 @@ struct AppBlockingSetupView: View {
     private var skipButton: some View {
         Button(action: onSkip) {
             Text(content.skipCTA)
-                .font(.pillie(16, weight: .medium))
-                .foregroundStyle(PillieTheme.textMuted)
+                .font(.pillie(15, weight: .medium))
+                .foregroundStyle(Color(hex: "A8A29E"))
                 .lineLimit(dynamicTypeSize.isAccessibilitySize ? 2 : 1)
                 .minimumScaleFactor(dynamicTypeSize.isAccessibilitySize ? 1 : 0.72)
                 .allowsTightening(true)
                 .frame(maxWidth: .infinity)
-                .frame(minHeight: 42)
+                .frame(height: 40)
                 .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
@@ -723,26 +628,171 @@ struct AppBlockingSetupView: View {
     }
 }
 
-private struct TrialUnlockDisclosure: View {
-    let text: String
+// MARK: - A10 empty stage
+
+/// Paper A10 middle stage is 390×442: a 310 circle at y=30 and a 232×300
+/// phone sitting on the footer. Scale that canvas to the live hole so the
+/// halo stays high behind the phone instead of hugging its bottom edge.
+struct A10PhoneStageLayout: Equatable {
+    static let designCanvas = CGSize(width: 390, height: 442)
+    static let designCircle: CGFloat = 310
+    static let designCircleTop: CGFloat = 30
+    static let designPhone = CGSize(width: 232, height: 300)
+
+    static var designCircleBottomInset: CGFloat {
+        designCanvas.height - (designCircleTop + designCircle)
+    }
+
+    let scale: CGFloat
+
+    static func fitted(in size: CGSize) -> Self {
+        guard size.width > 0, size.height > 0 else { return Self(scale: 1) }
+        return Self(
+            scale: min(
+                size.width / designCanvas.width,
+                size.height / designCanvas.height
+            )
+        )
+    }
+}
+
+private struct AppBlockingA10EmptyStage: View {
+    let title: String
+    let unlockHint: String
+    let markTaken: String
 
     var body: some View {
-        HStack(alignment: .top, spacing: 9) {
-            Image(systemName: "checkmark.seal.fill")
-                .font(.pillie(15, weight: .semibold))
-                .foregroundStyle(PillieTheme.coral)
+        GeometryReader { geo in
+            let layout = A10PhoneStageLayout.fitted(in: geo.size)
+            ZStack(alignment: .bottom) {
+                Circle()
+                    .fill(PillieTheme.coralLight)
+                    .frame(
+                        width: A10PhoneStageLayout.designCircle,
+                        height: A10PhoneStageLayout.designCircle
+                    )
+                    .offset(y: -A10PhoneStageLayout.designCircleBottomInset)
 
-            Text(text)
-                .font(.pillie(14, weight: .semibold))
-                .foregroundStyle(PillieTheme.textPrimary)
-                .fixedSize(horizontal: false, vertical: true)
+                AppBlockingPausedPhoneMock(
+                    title: title,
+                    unlockHint: unlockHint,
+                    markTaken: markTaken
+                )
+            }
+            .frame(
+                width: A10PhoneStageLayout.designCanvas.width,
+                height: A10PhoneStageLayout.designCanvas.height,
+                alignment: .bottom
+            )
+            .scaleEffect(layout.scale, anchor: .bottom)
+            .frame(width: geo.size.width, height: geo.size.height, alignment: .bottom)
         }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 10)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(PillieTheme.coralLight, in: RoundedRectangle(cornerRadius: 14))
-        .accessibilityElement(children: .combine)
-        .accessibilityIdentifier("appBlockingTrialDisclosure")
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .clipped()
+    }
+}
+
+private struct AppBlockingPausedPhoneMock: View {
+    let title: String
+    let unlockHint: String
+    let markTaken: String
+
+    private var phoneBezel: UnevenRoundedRectangle {
+        UnevenRoundedRectangle(
+            topLeadingRadius: 36,
+            bottomLeadingRadius: 0,
+            bottomTrailingRadius: 0,
+            topTrailingRadius: 36,
+            style: .continuous
+        )
+    }
+
+    var body: some View {
+        VStack(spacing: 14) {
+            genericPausedAppTile
+
+            Text(title)
+                .font(.pillie(18, weight: .bold))
+                .tracking(-0.18)
+                .foregroundStyle(PillieTheme.textPrimary)
+                .multilineTextAlignment(.center)
+
+            Text(unlockHint)
+                .font(.pillie(13, weight: .regular))
+                .foregroundStyle(PillieTheme.textMuted)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
+
+            Text(markTaken)
+                .font(.pillie(13, weight: .semibold))
+                .foregroundStyle(.white)
+                .frame(maxWidth: .infinity)
+                .frame(height: 40)
+                .background(PillieTheme.dark, in: Capsule())
+                .allowsHitTesting(false)
+                .accessibilityHidden(true)
+        }
+        .padding(.horizontal, 22)
+        .padding(.top, 44)
+        .frame(
+            width: A10PhoneStageLayout.designPhone.width,
+            height: A10PhoneStageLayout.designPhone.height,
+            alignment: .top
+        )
+        .background(Color.white)
+        .clipShape(phoneBezel)
+        .overlay {
+            phoneBezel.stroke(PillieTheme.dark, lineWidth: 6)
+        }
+        .overlay(alignment: .top) {
+            Capsule()
+                .fill(PillieTheme.dark)
+                .frame(width: 70, height: 20)
+                .padding(.top, 12)
+        }
+        .shadow(color: PillieTheme.dark.opacity(0.1), radius: 20, y: -6)
+    }
+
+    private var genericPausedAppTile: some View {
+        ZStack(alignment: .bottomTrailing) {
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .fill(PillieTheme.lavender)
+                .frame(width: 58, height: 58)
+                .overlay {
+                    VStack(spacing: 3) {
+                        HStack(spacing: 3) {
+                            appGlyph(opacity: 0.35)
+                            appGlyph(opacity: 0.18)
+                        }
+                        HStack(spacing: 3) {
+                            appGlyph(opacity: 0.18)
+                            appGlyph(opacity: 0.35)
+                        }
+                    }
+                }
+
+            ZStack {
+                Circle()
+                    .fill(PillieTheme.coral)
+                    .frame(width: 22, height: 22)
+                HStack(spacing: 2.5) {
+                    Capsule()
+                        .fill(PillieTheme.dark)
+                        .frame(width: 2.5, height: 8)
+                    Capsule()
+                        .fill(PillieTheme.dark)
+                        .frame(width: 2.5, height: 8)
+                }
+            }
+            .offset(x: 6, y: 6)
+        }
+        .accessibilityHidden(true)
+    }
+
+    private func appGlyph(opacity: Double) -> some View {
+        RoundedRectangle(cornerRadius: 2, style: .continuous)
+            .fill(PillieTheme.dark.opacity(opacity))
+            .frame(width: 8, height: 8)
     }
 }
 

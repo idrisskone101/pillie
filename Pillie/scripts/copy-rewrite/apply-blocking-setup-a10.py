@@ -22,6 +22,7 @@ A10_KEYS = (
     "onboarding.blocking_setup.allow_pausing",
     "onboarding.blocking_setup.paused_app",
     "onboarding.blocking_setup.unlock_hint",
+    "onboarding.blocking_setup.mark_taken",
 )
 
 REPL = "\ufffd"
@@ -73,7 +74,11 @@ def apply() -> int:
     for key, langs in source_keys().items():
         entry = strings.get(key)
         if entry is None:
-            raise SystemExit(f"missing catalog key {key}")
+            entry = {
+                "comment": json.loads(SOURCE.read_text())["keys"][key].get("comment", ""),
+                "localizations": {},
+            }
+            strings[key] = entry
         for lang, value in langs.items():
             if set_value(entry, lang, value):
                 changed += 1

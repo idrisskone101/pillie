@@ -156,6 +156,16 @@ final class SubscriptionManager: NSObject {
     static let lifetimeProductID = "com.idrisskone.pillie.plus.lifetime"
     private var isConfigured = false
 
+    /// False until `configure()` runs. Test hosts and pre-configure UI must not
+    /// touch `Purchases.shared` — the SDK traps if it is read first.
+    var isRevenueCatConfigured: Bool { isConfigured }
+
+    #if DEBUG
+    /// When set, customer-info refreshes keep the QA entitlement instead of
+    /// letting a live RevenueCat fetch overwrite `setPlusForTesting`.
+    private var debugEntitlementOverride: Bool?
+    #endif
+
     private override init() {
         super.init()
         trialGrantDate = trialGrantStore.loadGrantDate()
@@ -422,6 +432,7 @@ final class SubscriptionManager: NSObject {
     /// ratified default enabled; the next successful launch fetch can still roll
     /// post-cutover cohorts back without an app update.
     private func refreshHardPaywallConfiguration() async {
+        guard isConfigured else { return }
         _ = try? await fetchOfferings()
         hasResolvedHardPaywallConfiguration = true
     }
@@ -439,6 +450,13 @@ final class SubscriptionManager: NSObject {
     // MARK: - Refresh
 
     func refreshStatus() async {
+        guard isConfigured else { return }
+        #if DEBUG
+        if let debugEntitlementOverride {
+            setEntitlement(debugEntitlementOverride)
+            return
+        }
+        #endif
         guard let customerInfo = try? await Purchases.shared.customerInfo() else { return }
         setEntitlement(customerInfo.entitlements[Self.entitlementID]?.isActive == true)
     }
@@ -447,6 +465,7 @@ final class SubscriptionManager: NSObject {
     /// Keeping them in one awaited operation prevents onboarding or the root gate
     /// from retrying customer info while silently leaving the kill switch pending.
     func refreshCommerceState() async {
+        guard isConfigured else { return }
         async let entitlementRefresh: Void = refreshStatus()
         async let configurationRefresh: Void = refreshHardPaywallConfiguration()
         _ = await (entitlementRefresh, configurationRefresh)
@@ -457,7 +476,9 @@ final class SubscriptionManager: NSObject {
     private var debugHardPaywallEnabledOverride: Bool?
 
     func setPlusForTesting(_ isPlus: Bool) {
+        debugEntitlementOverride = isPlus
         setEntitlement(isPlus)
+        hasResolvedHardPaywallConfiguration = true
     }
 
     /// Simulator QA: pin the dashboard kill switch so `fetchOfferings()` cannot

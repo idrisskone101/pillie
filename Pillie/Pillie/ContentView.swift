@@ -450,7 +450,9 @@ struct ContentView: View {
     }
     #if DEBUG
     .overlay(alignment: .bottomTrailing) {
-      if !isLoading, OnboardingFlow.isOnboardingActive(rawStep: onboardingStep) {
+      if !isLoading,
+         OnboardingFlow.isOnboardingActive(rawStep: onboardingStep),
+         onboardingStep != OnboardingFlow.Step.appBlocking.rawValue {
         DeveloperMenuEntryButton()
           .padding(.trailing, 16)
           .padding(.bottom, 28)
@@ -690,6 +692,7 @@ struct ContentView: View {
   }
 
   private func resolveOnboardingAccess() async {
+    guard subscriptionManager.isRevenueCatConfigured else { return }
     guard !isResolvingOnboardingAccess else { return }
     isResolvingOnboardingAccess = true
     onboardingAccessResolutionFailed = false
@@ -768,6 +771,7 @@ struct ContentView: View {
   }
 
   private func resolveRootCommerceAccess() async {
+    guard subscriptionManager.isRevenueCatConfigured else { return }
     guard !isResolvingRootCommerce else { return }
     isResolvingRootCommerce = true
     rootCommerceResolutionFailed = false

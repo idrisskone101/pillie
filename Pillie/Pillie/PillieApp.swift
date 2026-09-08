@@ -61,7 +61,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
 
     private static let bgTaskID = "com.idrisskone.pillie.screentime-reconcile"
     private static var isRunningTests: Bool {
-        ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
+        TestLaunchDetection.isRunningTests()
     }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
@@ -244,7 +244,7 @@ struct PillieApp: App {
     @State private var languagePreference = AppLanguagePreference()
     @State private var showFirstInterventionConfirmation = false
     private static var isRunningTests: Bool {
-        ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
+        TestLaunchDetection.isRunningTests()
     }
 
     /// True once the user has progressed through any onboarding step on this
@@ -530,12 +530,18 @@ struct PillieApp: App {
                 false,
                 forKey: "pillie_debug_app_blocking_authorization_recovery"
             )
+            let selectedCount = queryItems?
+                .first(where: { $0.name == "selected" })?.value
+                .flatMap(Int.init)
+            AppBlockingManager.shared.debugSelectionCountOverride =
+                (selectedCount ?? 0) > 0 ? selectedCount : nil
             UserDefaults.standard.set(OnboardingFlow.Step.appBlocking.rawValue, forKey: OnboardingFlow.stepStorageKey)
         case "/plus-app-blocking-recovery":
             // Simulator FamilyControls authorization auto-approves. This QA-only
             // route renders the same recovery state a real denied/cancelled request
             // reaches, without changing persisted selection or authorization.
             SubscriptionManager.shared.setPlusForTesting(true)
+            AppBlockingManager.shared.debugSelectionCountOverride = nil
             UserDefaults.standard.set(false, forKey: OnboardingFlow.selectedFreePlanStorageKey)
             UserDefaults.standard.set(
                 true,

@@ -33,6 +33,11 @@ final class AppBlockingManager {
     /// loss-framed Trial-End Paywall) is unreachable there without this.
     /// Set via `pillie://debug/trial-end-paywall?cohort=blocker`.
     var debugBlockerConfiguredOverride: Bool?
+
+    /// QA seam: the onboarding selected-apps card reads token counts, which
+    /// FamilyControls cannot fabricate on the simulator. Set via
+    /// `pillie://debug/plus-app-blocking-setup?selected=4`.
+    var debugSelectionCountOverride: Int?
     #endif
 
     var hasAppsSelected: Bool {
