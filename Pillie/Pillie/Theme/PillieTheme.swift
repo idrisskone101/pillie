@@ -72,7 +72,6 @@ enum PillieTheme {
     static let stagger4: Double = 0.20
     static let stagger5: Double = 0.25
 
-    // Secondary button height
     static let secondaryButtonHeight: CGFloat = 56
     static let quietButtonHeight: CGFloat = 40
 
