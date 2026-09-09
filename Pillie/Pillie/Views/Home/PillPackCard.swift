@@ -112,7 +112,6 @@ struct PillPackCard: View {
                 }
                 .onChange(of: store.protocolChangeVersion) { _, _ in
                     refreshCycleSnapshots()
-                    resetAndRecenterPillStrip(with: proxy)
                 }
                 .onChange(of: store.pack.id) { _, _ in
                     refreshCycleSnapshots()
@@ -120,6 +119,11 @@ struct PillPackCard: View {
                 }
                 .onChange(of: store.currentDayIndex) { _, _ in
                     refreshCycleSnapshots()
+                    resetAndRecenterPillStrip(with: proxy)
+                }
+                .onChange(of: store.pack.cycleLength) { _, _ in
+                    refreshCycleSnapshots()
+                    resetAndRecenterPillStrip(with: proxy)
                 }
                 .onChange(of: store.dayRecordsRevision) { _, _ in
                     refreshCycleSnapshots()
