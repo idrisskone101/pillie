@@ -5,6 +5,7 @@
 
 import SwiftUI
 import SwiftData
+import UIKit
 
 enum PillieTab: Int, CaseIterable {
     case home
@@ -38,7 +39,6 @@ struct PillieTabBar: View {
     var badgedTabs: Set<PillieTab> = []
     var transitionDuration: TimeInterval = 0.25
     @Environment(\.locale) private var locale
-    @Namespace private var tabIndicator
 
     var body: some View {
         HStack(spacing: 0) {
@@ -56,25 +56,34 @@ struct PillieTabBar: View {
                                 }
                             }
 
-                        ZStack {
-                            Color.clear
-                                .frame(width: 20, height: 5)
-                            if selectedTab == tab {
-                                Capsule()
-                                    .fill(PillieTheme.coral)
-                                    .frame(width: 20, height: 5)
-                                    .matchedGeometryEffect(id: "pillieTabIndicator", in: tabIndicator)
+                        Color.clear
+                            .frame(width: 20, height: 5)
+                            .anchorPreference(key: TabIndicatorSlotKey.self, value: .bounds) {
+                                [tab: $0]
                             }
-                        }
 
                         Text(tab.label(locale: locale))
                             .font(.pillie(10, weight: selectedTab == tab ? .bold : .medium))
                     }
                     .frame(maxWidth: .infinity)
                     .foregroundStyle(selectedTab == tab ? PillieTheme.coral : PillieTheme.textMuted.opacity(0.5))
+                    // Color only — wrapping the bar would delay the UIKit capsule.
+                    .animation(.easeInOut(duration: transitionDuration), value: selectedTab)
                 }
                 .buttonStyle(.plain)
             }
+        }
+        .overlayPreferenceValue(TabIndicatorSlotKey.self) { anchors in
+            GeometryReader { geo in
+                TabIndicatorCapsule(
+                    selectedIndex: selectedTab.rawValue,
+                    slots: PillieTab.allCases.map { tab in
+                        anchors[tab].map { geo[$0] } ?? .zero
+                    },
+                    duration: transitionDuration
+                )
+            }
+            .allowsHitTesting(false)
         }
         .padding(.horizontal, 24)
         .padding(.top, 16)
@@ -97,7 +106,6 @@ struct PillieTabBar: View {
                 }
             }
         )
-        .animation(.easeInOut(duration: transitionDuration), value: selectedTab)
         .animation(PillieMotion.animation(for: .quick), value: badgedTabs)
     }
 
@@ -114,6 +122,102 @@ struct PillieTabBar: View {
             .offset(x: 4, y: -2)
             .accessibilityHidden(true)
             .transition(.opacity)
+    }
+}
+
+/// Each tab reports the 20×5 slot under its icon so the capsule can sit on
+/// the real layout instead of assuming equal-width thirds.
+private struct TabIndicatorSlotKey: PreferenceKey {
+    static var defaultValue: [PillieTab: Anchor<CGRect>] = [:]
+
+    static func reduce(
+        value: inout [PillieTab: Anchor<CGRect>],
+        nextValue: () -> [PillieTab: Anchor<CGRect>]
+    ) {
+        value.merge(nextValue(), uniquingKeysWith: { $1 })
+    }
+}
+
+/// Same `UIViewPropertyAnimator` duration and curve as `TabPaneContainer`, so
+/// the capsule travels with the sliding pane instead of a slower SwiftUI morph.
+private struct TabIndicatorCapsule: UIViewRepresentable {
+    var selectedIndex: Int
+    var slots: [CGRect]
+    var duration: TimeInterval
+
+    func makeUIView(context: Context) -> TabIndicatorView {
+        TabIndicatorView()
+    }
+
+    func updateUIView(_ view: TabIndicatorView, context: Context) {
+        view.select(index: selectedIndex, slots: slots, duration: duration)
+    }
+}
+
+private final class TabIndicatorView: UIView {
+    private let capsule = UIView()
+    private var selectedIndex = 0
+    private var slots: [CGRect] = []
+    private var animator: UIViewPropertyAnimator?
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        isUserInteractionEnabled = false
+        backgroundColor = .clear
+        capsule.backgroundColor = UIColor(PillieTheme.coral)
+        capsule.layer.cornerRadius = 2.5
+        addSubview(capsule)
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("TabIndicatorView is code-only")
+    }
+
+    func select(index: Int, slots: [CGRect], duration: TimeInterval) {
+        let indexChanged = index != selectedIndex
+        selectedIndex = index
+        self.slots = slots
+
+        guard let target = slotFrame(at: index) else { return }
+
+        if !indexChanged {
+            if animator?.state != .active {
+                capsule.frame = target
+            }
+            return
+        }
+
+        if capsule.bounds.isEmpty {
+            capsule.frame = target
+            return
+        }
+
+        if let animator {
+            animator.stopAnimation(false)
+            animator.finishAnimation(at: .end)
+        }
+
+        let next = UIViewPropertyAnimator(duration: duration, curve: .easeInOut) { [capsule] in
+            capsule.frame = target
+        }
+        next.addCompletion { [weak self] _ in
+            self?.animator = nil
+        }
+        next.startAnimation()
+        animator = next
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        guard animator?.state != .active, let target = slotFrame(at: selectedIndex) else { return }
+        capsule.frame = target
+    }
+
+    private func slotFrame(at index: Int) -> CGRect? {
+        guard slots.indices.contains(index) else { return nil }
+        let frame = slots[index]
+        return frame.isEmpty ? nil : frame
     }
 }
 
