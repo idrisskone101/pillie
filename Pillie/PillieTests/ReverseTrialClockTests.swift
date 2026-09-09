@@ -71,26 +71,6 @@ final class ReverseTrialClockTests: XCTestCase {
         XCTAssertEqual(clock.daysRemaining(calendar: calendar, now: date(2026, 8, 20, 12, 0)), 0)
     }
 
-    func testDisplayedDaysRemainingNeverReadsAboveTheFourteenDayPromise() {
-        let clock = ReverseTrialClock(grantDate: date(2026, 7, 1, 23, 59))
-
-        XCTAssertEqual(
-            clock.displayedDaysRemaining(calendar: calendar, now: date(2026, 7, 1, 23, 59)),
-            14
-        )
-        XCTAssertEqual(
-            clock.displayedDaysRemaining(calendar: calendar, now: date(2026, 7, 2, 9, 0)),
-            14
-        )
-        XCTAssertEqual(
-            clock.displayedDaysRemaining(calendar: calendar, now: date(2026, 7, 15, 22, 0)),
-            1
-        )
-        XCTAssertEqual(ReverseTrialClock.displayedDaysRemaining(15), 14)
-        XCTAssertEqual(ReverseTrialClock.displayedDaysRemaining(0), 0)
-        XCTAssertEqual(ReverseTrialClock.displayedDaysRemaining(-1), 0)
-    }
-
     // MARK: - DST transitions (expiry stays at local midnight, not +N×86400s)
 
     func testExpiryStaysAtLocalMidnightAcrossSpringForward() {

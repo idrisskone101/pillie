@@ -34,10 +34,10 @@ struct TrialStatusPresentation: Equatable {
         self.trialEndTerms = trialEndTerms
     }
 
-    /// Day count as shown to the user. Same clamp as the paywall stamp so
-    /// the home badge and Plus screen never disagree.
+    /// Day count as shown to the user: the trial promises "14 days free", so
+    /// the partial grant day (15 rollovers left) never reads above the promise.
     var displayedDaysRemaining: Int {
-        ReverseTrialClock.displayedDaysRemaining(daysRemaining)
+        min(daysRemaining, ReverseTrialClock.fullDays)
     }
 
     /// Whether the trial expires at tonight's local-day rollover — the whole

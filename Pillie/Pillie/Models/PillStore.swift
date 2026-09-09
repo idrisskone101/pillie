@@ -50,20 +50,6 @@ class PillStore {
             UserDefaults.standard.set(normalized, forKey: Self.autoReminderIntervalKey)
         }
     }
-    /// How long Screen Time shields stay down after a blocking snooze. Separate
-    /// from Smart Reminders follow-up cadence; the shield secondary button uses
-    /// this value without opening Settings.
-    var blockingSnoozeIntervalMinutes: Int {
-        didSet {
-            let normalized = Self.normalizedBlockingSnoozeInterval(blockingSnoozeIntervalMinutes)
-            if normalized != blockingSnoozeIntervalMinutes {
-                blockingSnoozeIntervalMinutes = normalized
-                return
-            }
-            UserDefaults.standard.set(normalized, forKey: Self.blockingSnoozeIntervalKey)
-            ScreenTimeSharedState.blockingSnoozeIntervalMinutes = normalized
-        }
-    }
     var autoReminderRetryLimit: Int {
         didSet {
             let normalized = Self.normalizedAutoReminderRetryLimit(autoReminderRetryLimit)
@@ -226,7 +212,6 @@ class PillStore {
     private static let reminderHourKey = "pillie_reminder_hour"
     private static let reminderMinuteKey = "pillie_reminder_minute"
     private static let autoReminderIntervalKey = "pillie_auto_reminder_interval_minutes"
-    private static let blockingSnoozeIntervalKey = "pillie_blocking_snooze_interval_minutes"
     private static let autoReminderRetryLimitKey = "pillie_auto_reminder_retry_limit"
     private static let refillReminderThresholdDaysKey = "pillie_refill_reminder_threshold_days"
     private static let patchRestockReminderThresholdPatchesKey = "pillie_patch_restock_threshold_patches"
@@ -252,7 +237,6 @@ class PillStore {
     private static let perfLog = OSLog(subsystem: Bundle.main.bundleIdentifier ?? "com.idrisskone.pillie", category: "PillStorePerf")
 
     static let autoReminderIntervalOptions: [Int] = [5, 10, 15, 30]
-    static let blockingSnoozeIntervalOptions = BlockingSnoozePolicy.intervalOptions
     static let autoReminderRetryLimitOptions: [Int] = [0, 1, 2, 3, 5]
     static let refillReminderThresholdOptions: [Int] = [3, 5, 7]
     static let patchRestockReminderThresholdOptions: [Int] = [1, 2]
@@ -727,7 +711,6 @@ class PillStore {
             protocolChangeVersion &+= 1
         }
         syncTodayTakenToAppGroup()
-        AppBlockingManager.shared.clearBlockingSnoozeHold()
         AppBlockingManager.shared.removeBlocking()
         scheduleNotificationResync()
     }
@@ -757,14 +740,6 @@ class PillStore {
         ScreenTimeSharedState.setTodayTaken(isTodayHandled, day: today)
         ScreenTimeSharedState.setReminderTime(hour: reminderHour, minute: reminderMinute)
         ScreenTimeSharedState.setBlockingScheduleMirror(blockingScheduleMirror)
-        if let due = todayDueAction {
-            ScreenTimeSharedState.blockingDueDayEpoch = Int(
-                Calendar.current.startOfDay(for: due.date).timeIntervalSince1970
-            )
-        } else {
-            ScreenTimeSharedState.blockingDueDayEpoch = nil
-        }
-        ScreenTimeSharedState.blockingSnoozeIntervalMinutes = blockingSnoozeIntervalMinutes
     }
 
     /// Schedule mutations cannot wait for the debounced notification rebuild:
@@ -820,7 +795,6 @@ class PillStore {
         // Sync app group state when marking today
         if isToday {
             syncTodayTakenToAppGroup()
-            AppBlockingManager.shared.clearBlockingSnoozeHold()
             AppBlockingManager.shared.removeBlocking()
         }
     }
@@ -1324,10 +1298,6 @@ class PillStore {
         self.autoReminderIntervalMinutes = Self.normalizedAutoReminderInterval(
             defaults.object(forKey: Self.autoReminderIntervalKey) as? Int ?? 10
         )
-        self.blockingSnoozeIntervalMinutes = Self.normalizedBlockingSnoozeInterval(
-            defaults.object(forKey: Self.blockingSnoozeIntervalKey) as? Int
-                ?? BlockingSnoozePolicy.defaultIntervalMinutes
-        )
         self.autoReminderRetryLimit = Self.normalizedAutoReminderRetryLimit(
             defaults.object(forKey: Self.autoReminderRetryLimitKey) as? Int ?? 3
         )
@@ -1424,8 +1394,7 @@ class PillStore {
             }
         )
 
-        // didSet does not run during init; the shield reads this App Group value.
-        ScreenTimeSharedState.blockingSnoozeIntervalMinutes = blockingSnoozeIntervalMinutes
+        refreshDayContext(force: true)
     }
 
     deinit {
@@ -2008,10 +1977,6 @@ class PillStore {
 
     private static func normalizedAutoReminderInterval(_ value: Int) -> Int {
         autoReminderIntervalOptions.contains(value) ? value : 10
-    }
-
-    private static func normalizedBlockingSnoozeInterval(_ value: Int) -> Int {
-        BlockingSnoozePolicy.normalizedInterval(value)
     }
 
     private static func normalizedAutoReminderRetryLimit(_ value: Int) -> Int {

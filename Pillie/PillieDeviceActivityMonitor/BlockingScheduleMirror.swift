@@ -109,12 +109,8 @@ enum BlockingInterventionPolicy {
         now: Date,
         reminderHour: Int = 8,
         reminderMinute: Int = 0,
-        calendar: Calendar = .current,
-        snoozeUntil: Date? = nil
+        calendar: Calendar = .current
     ) -> BlockingInterventionDecision {
-        if let snoozeUntil, now < snoozeUntil {
-            return .clearShields
-        }
         let day = liveDay(
             now: now,
             reminderHour: reminderHour,

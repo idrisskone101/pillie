@@ -742,45 +742,35 @@ struct HomeView: View {
                 .allowsHitTesting(false)
                 .transition(ctaStateTransition)
             case .dueAction(_, let requiresShakeConfirm):
-                VStack(spacing: showsBlockingSnooze ? 4 : 0) {
-                    Button {
-                        ProductAnalyticsTelemetry.live.todayActionStarted()
-                        if requiresShakeConfirm {
-                            showShakeConfirm = true
+                Button {
+                    ProductAnalyticsTelemetry.live.todayActionStarted()
+                    if requiresShakeConfirm {
+                        showShakeConfirm = true
+                    } else {
+                        completeTodayAction()
+                    }
+                } label: {
+                    Group {
+                        if dynamicTypeSize.isAccessibilitySize {
+                            accessibilityFloatingButtonLabel(
+                                state.localizedPrimaryLabel(locale: locale)
+                            )
                         } else {
-                            completeTodayAction()
-                        }
-                    } label: {
-                        Group {
-                            if dynamicTypeSize.isAccessibilitySize {
-                                accessibilityFloatingButtonLabel(
-                                    state.localizedPrimaryLabel(locale: locale)
-                                )
-                            } else {
-                                HStack(spacing: 8) {
-                                    Circle()
-                                        .fill(.white.opacity(0.2))
-                                        .frame(width: 32, height: 32)
-                                        .overlay(
-                                            Image(systemName: "checkmark")
-                                                .font(.system(size: 14, weight: .semibold))
-                                                .foregroundStyle(.white)
-                                        )
-                                    Text(state.localizedPrimaryLabel(locale: locale))
-                                }
+                            HStack(spacing: 8) {
+                                Circle()
+                                    .fill(.white.opacity(0.2))
+                                    .frame(width: 32, height: 32)
+                                    .overlay(
+                                        Image(systemName: "checkmark")
+                                            .font(.system(size: 14, weight: .semibold))
+                                            .foregroundStyle(.white)
+                                    )
+                                Text(state.localizedPrimaryLabel(locale: locale))
                             }
                         }
                     }
-                    .buttonStyle(.pillieDark)
-
-                    if showsBlockingSnooze {
-                        Button(action: snoozeBlockingAlarm) {
-                            Text(PillieLocalization.string("today.action.snooze", locale: locale))
-                        }
-                        .buttonStyle(.pillieQuiet)
-                        .accessibilityIdentifier("homeBlockingSnooze")
-                    }
                 }
+                .buttonStyle(.pillieDark)
                 .transition(ctaStateTransition)
             }
         }
@@ -813,30 +803,6 @@ struct HomeView: View {
         CycleNounPresentation.startNewConfirmation(
             for: store.pack.method,
             locale: locale
-        )
-    }
-
-    private var blockingSnoozeDueDayEpoch: Int? {
-        guard let due = store.todayDueAction else { return nil }
-        return Int(Calendar.current.startOfDay(for: due.date).timeIntervalSince1970)
-    }
-
-    private var showsBlockingSnooze: Bool {
-        guard let dueDayEpoch = blockingSnoozeDueDayEpoch else { return false }
-        return blockingManager.canSnoozeBlocking(dueDayEpoch: dueDayEpoch)
-    }
-
-    private func snoozeBlockingAlarm() {
-        guard let dueDayEpoch = blockingSnoozeDueDayEpoch else { return }
-        let attempt = blockingManager.performBlockingSnooze(
-            dueDayEpoch: dueDayEpoch,
-            intervalMinutes: store.blockingSnoozeIntervalMinutes
-        )
-        guard case .accepted(let until, _) = attempt else { return }
-        NotificationManager.shared.rescheduleAfterSnooze(
-            store: store,
-            dueDayEpoch: dueDayEpoch,
-            firstFireDate: until
         )
     }
 
