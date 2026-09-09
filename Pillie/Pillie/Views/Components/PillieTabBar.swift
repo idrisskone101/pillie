@@ -41,7 +41,8 @@ struct PillieTabBar: View {
     @Environment(\.locale) private var locale
 
     var body: some View {
-        HStack {
+        // No default HStack gaps: the capsule centers on equal width/tabCount slots.
+        HStack(spacing: 0) {
             ForEach(PillieTab.allCases, id: \.rawValue) { tab in
                 Button {
                     guard selectedTab != tab else { return }
