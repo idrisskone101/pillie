@@ -267,7 +267,6 @@ final class NotificationManager {
         let dueEpoch = Int(Calendar.current.startOfDay(for: dueDate).timeIntervalSince1970)
 
         store.markActionAsTaken(on: dueDate)
-        AppBlockingManager.shared.clearBlockingSnoozeHold()
         AppBlockingManager.shared.removeBlocking()
         var ledger = ServedBaseReminderLedger.load()
         ledger.clearServedRecordWhenTaken(dueDayEpoch: dueEpoch)
@@ -289,19 +288,6 @@ final class NotificationManager {
         // If it was already confirmed, just rebuild future reminders.
         if store.statusForDate(dueDay) == .taken {
             rescheduleFromStore(store)
-            return
-        }
-
-        if AppBlockingManager.shared.isEffectivelyOn {
-            switch AppBlockingManager.shared.performBlockingSnooze(
-                dueDayEpoch: dueEpoch,
-                intervalMinutes: store.blockingSnoozeIntervalMinutes
-            ) {
-            case .accepted(let until, _):
-                rescheduleAfterSnooze(store: store, dueDayEpoch: dueEpoch, firstFireDate: until)
-            case .rejected:
-                break
-            }
             return
         }
 

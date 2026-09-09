@@ -64,12 +64,6 @@ class PillieDeviceActivityMonitor: DeviceActivityMonitor {
             isTaken: defaults?.bool(forKey: AppGroupKeys.isTodayTaken) ?? false,
             epochDay: defaults?.object(forKey: AppGroupKeys.todayTakenEpochDay) as? Int
         )
-        let snoozeUntil: Date? = {
-            guard let epoch = defaults?.object(forKey: AppGroupKeys.blockingSnoozeUntil) as? Double else {
-                return nil
-            }
-            return Date(timeIntervalSince1970: epoch)
-        }()
         let reminderHour = defaults?.object(forKey: AppGroupKeys.reminderHour) as? Int ?? 8
         let reminderMinute = defaults?.object(forKey: AppGroupKeys.reminderMinute) as? Int ?? 0
 
@@ -78,8 +72,7 @@ class PillieDeviceActivityMonitor: DeviceActivityMonitor {
             handledStamp: stamp,
             now: now,
             reminderHour: reminderHour,
-            reminderMinute: reminderMinute,
-            snoozeUntil: snoozeUntil
+            reminderMinute: reminderMinute
         ) {
         case .clearShields:
             if blockingSchedule?.requiresAction(
