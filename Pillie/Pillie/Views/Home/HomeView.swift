@@ -100,8 +100,6 @@ struct HomeView: View {
         }
     }
 
-    /// Screen Time's system sheets crash when stacked on the 430pt editor.
-    /// Authorize on Home first, then present the editor.
     private func presentBlockedAppsEditor() {
         Task { @MainActor in
             await AppBlockingManager.shared.authorizeIfNeededForEditor()

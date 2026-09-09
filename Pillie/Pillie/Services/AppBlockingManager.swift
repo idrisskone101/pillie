@@ -137,9 +137,6 @@ final class AppBlockingManager {
         #endif
     }
 
-    /// Ask FamilyControls for Screen Time access if needed, then return whether
-    /// the picker is legal to present. Call this from a full-screen presenter
-    /// before opening `BlockedAppsEditor`.
     @MainActor
     func ensureAuthorized() async -> Bool {
         updateAuthorizationStatus()

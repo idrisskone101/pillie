@@ -1,7 +1,5 @@
 import Foundation
 
-/// Order for opening the Settings-style blocker editor.
-///
 /// FamilyControls presents its own system sheets. Those crash or bounce when
 /// they stack on Pillie's 430pt `BlockedAppsEditor` sheet. Authorization has
 /// to finish on a full-screen presenter first.

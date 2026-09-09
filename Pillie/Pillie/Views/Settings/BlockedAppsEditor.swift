@@ -81,10 +81,7 @@ struct BlockedAppsEditor: View {
         )
     }
 
-    // Reverse-trial users can reach this editor without ever passing onboarding's
-    // blocker step, so Settings must be able to request Screen Time authorization
-    // itself — previously the picker just opened unauthorized. Mirrors
-    // AppBlockingSetupView.chooseApps(), with source=settings telemetry (#163).
+    // source=settings telemetry (#163)
     private func chooseApps() {
         Task { @MainActor in
             if BlockedAppsLaunch.make(isAuthorized: blockingManager.isAuthorized)
