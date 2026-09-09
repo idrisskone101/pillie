@@ -2265,6 +2265,15 @@
     {
       "issue": "returning-expired-paywall",
       "table": "Commerce",
+      "key": "paywall.story.trial_ended.returning.hard.chip.history",
+      "create": true,
+      "en": "Your history comes back",
+      "de": "Dein Verlauf kommt zurück",
+      "it": "La tua cronologia torna"
+    },
+    {
+      "issue": "returning-expired-paywall",
+      "table": "Commerce",
       "key": "paywall.story.trial_ended.returning.hard.aside",
       "create": true,
       "en": "this time it stays on",

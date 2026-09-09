@@ -17,16 +17,20 @@ enum HonestPaywallLayout {
     static let stackTilePadding: CGFloat = 16
 }
 
+struct PaywallContinueFreeAction {
+    let title: String
+    let action: () -> Void
+}
+
 struct PaywallCheckoutChrome: View {
     let checkout: PaywallCheckoutSheet
     let isPurchasing: Bool
     var section: PaywallCheckoutSection = .stack
-    var continueFreeTitle: String? = nil
+    var continueFree: PaywallContinueFreeAction? = nil
     let onRecurrenceChange: (PaywallRecurrence) -> Void
     let onPurchase: (PaywallPurchaseIntent) -> Void
     let onRestore: () -> Void
     let onLifetime: () -> Void
-    var onContinueFree: (() -> Void)? = nil
 
     var body: some View {
         switch section {
@@ -61,9 +65,9 @@ struct PaywallCheckoutChrome: View {
                 .accessibilityLabel(lifetimeLink.accessibilityLabel)
             }
 
-            if let continueFreeTitle, let onContinueFree {
-                Button(action: onContinueFree) {
-                    Text(continueFreeTitle)
+            if let continueFree {
+                Button(action: continueFree.action) {
+                    Text(continueFree.title)
                         .font(.pillie(14, weight: .semibold))
                         .foregroundStyle(PillieTheme.textMuted)
                         .multilineTextAlignment(.center)

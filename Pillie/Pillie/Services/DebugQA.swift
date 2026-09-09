@@ -254,7 +254,7 @@ enum DebugQA {
                 hardPaywallEnabled: true,
                 blockerConfigured: false,
                 success: false,
-                seedHistory: false
+                pack: .freshReinstall()
             )
         case .trialExpiredGrandfatherReturning:
             applyExpiredPaywall(
@@ -263,7 +263,7 @@ enum DebugQA {
                 hardPaywallEnabled: true,
                 blockerConfigured: false,
                 success: false,
-                seedHistory: false
+                pack: .freshReinstall()
             )
         case .plusSubscriber:
             completeOnboarding()
@@ -359,13 +359,13 @@ enum DebugQA {
         hardPaywallEnabled: Bool,
         blockerConfigured: Bool,
         success: Bool,
-        seedHistory: Bool = true
+        pack: DebugPackHistoryPlan = .marketingScreenshot()
     ) {
         completeOnboarding()
         persistInstallCohort(cohort)
-        store.replacePack(with: seedHistory ? .marketingScreenshot() : .freshReinstall())
+        store.replacePack(with: pack)
         resetTrialPresentationFlags()
-        seedInterventionStats(blockerConfigured: seedHistory && blockerConfigured)
+        seedInterventionStats(blockerConfigured: !pack.pastStatuses.isEmpty && blockerConfigured)
         SubscriptionManager.shared.setPlusForTesting(false)
         SubscriptionManager.shared.debugSetHardPaywallEnabled(hardPaywallEnabled)
         SubscriptionManager.shared.debugApplyTrialEndPaywallScenario(

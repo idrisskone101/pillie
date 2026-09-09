@@ -46614,6 +46614,29 @@
         }
       }
     },
+    "paywall.story.trial_ended.returning.hard.chip.history": {
+      "comment": "Returning expired-trial paywall",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your history comes back"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dein Verlauf kommt zurück"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La tua cronologia torna"
+          }
+        }
+      }
+    },
     "paywall.story.trial_ended.returning.hard.aside": {
       "comment": "Returning expired-trial paywall",
       "localizations": {

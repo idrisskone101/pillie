@@ -43,17 +43,7 @@ struct PaywallMomentHeader: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .accessibilityElement(children: .combine)
 
-                VStack(spacing: 8) {
-                    ForEach(story.benefitChips, id: \.label) { chip in
-                        Text(chip.label)
-                            .font(.pillie(15, weight: .bold))
-                            .foregroundStyle(PillieTheme.dark)
-                            .padding(.horizontal, 16)
-                            .padding(.vertical, 12)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .background(chipColor(chip.tint), in: RoundedRectangle(cornerRadius: 20))
-                    }
-                }
+                benefitChipStack(story.benefitChips)
             }
             .padding(.top, 16)
             .frame(maxWidth: .infinity, minHeight: 248, alignment: .topLeading)
@@ -65,52 +55,27 @@ struct PaywallMomentHeader: View {
         VStack(alignment: .leading, spacing: 0) {
             titleBlock(title: story.title, subtitle: story.subtitle)
 
-            if let fallback = story.fallback {
-                trialEndedFallback(fallback)
-            } else if story.doseTile != nil || story.streakTile != nil {
-                HStack(alignment: .top, spacing: 10) {
-                    if let doseTile = story.doseTile {
-                        statTile(doseTile)
+            switch story.body {
+            case .stats(let doseTile, let streakTile, let lossLine):
+                if doseTile != nil || streakTile != nil {
+                    HStack(alignment: .top, spacing: 10) {
+                        if let doseTile {
+                            statTile(doseTile)
+                        }
+                        if let streakTile {
+                            statTile(streakTile)
+                        }
                     }
-                    if let streakTile = story.streakTile {
-                        statTile(streakTile)
-                    }
+                    .padding(.top, 16)
                 }
-                .padding(.top, 16)
+                handwrittenAside(lossLine)
+            case .comparison(let freeCard, let plusCard):
+                comparisonRow(free: freeCard, plus: plusCard)
+            case .chips(let chips, let aside):
+                benefitChipStack(chips)
+                    .padding(.top, 16)
+                handwrittenAside(aside)
             }
-
-            if !story.handwrittenLossLine.isEmpty {
-                Text(story.handwrittenLossLine)
-                    .font(.pillieHandwriting(size: 26))
-                    .foregroundStyle(PillieTheme.dark)
-                    .rotationEffect(.degrees(-3))
-                    .padding(.top, 8)
-            }
-        }
-    }
-
-    @ViewBuilder
-    private func trialEndedFallback(_ fallback: HonestPaywallTrialEndedFallback) -> some View {
-        switch fallback {
-        case .comparison(let freeCard, let plusCard):
-            HStack(alignment: .top, spacing: 10) {
-                comparisonCard(freeCard)
-                comparisonCard(plusCard)
-            }
-            .padding(.top, 16)
-        case .chips(let chips):
-            VStack(spacing: 8) {
-                ForEach(chips, id: \.label) { chip in
-                    Text(chip.label)
-                        .font(.pillie(15, weight: .bold))
-                        .foregroundStyle(PillieTheme.dark)
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 12)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(chipColor(chip.tint), in: RoundedRectangle(cornerRadius: 20))
-                }
-            }
-            .padding(.top, 16)
         }
     }
 
@@ -118,12 +83,40 @@ struct PaywallMomentHeader: View {
     private func settingsFreeHeader(_ story: HonestPaywallSettingsStory) -> some View {
         VStack(alignment: .leading, spacing: 0) {
             titleBlock(title: story.title, subtitle: story.subtitle)
+            comparisonRow(free: story.freeCard, plus: story.plusCard)
+        }
+    }
 
-            HStack(alignment: .top, spacing: 10) {
-                comparisonCard(story.freeCard)
-                comparisonCard(story.plusCard)
+    private func benefitChipStack(_ chips: [PaywallBenefitChip]) -> some View {
+        VStack(spacing: 8) {
+            ForEach(chips, id: \.label) { chip in
+                Text(chip.label)
+                    .font(.pillie(15, weight: .bold))
+                    .foregroundStyle(PillieTheme.dark)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(chipColor(chip.tint), in: RoundedRectangle(cornerRadius: 20))
             }
-            .padding(.top, 16)
+        }
+    }
+
+    private func comparisonRow(free: PaywallComparisonCard, plus: PaywallComparisonCard) -> some View {
+        HStack(alignment: .top, spacing: 10) {
+            comparisonCard(free)
+            comparisonCard(plus)
+        }
+        .padding(.top, 16)
+    }
+
+    @ViewBuilder
+    private func handwrittenAside(_ line: String) -> some View {
+        if !line.isEmpty {
+            Text(line)
+                .font(.pillieHandwriting(size: 26))
+                .foregroundStyle(PillieTheme.dark)
+                .rotationEffect(.degrees(-3))
+                .padding(.top, 8)
         }
     }
 

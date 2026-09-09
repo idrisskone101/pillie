@@ -66,21 +66,23 @@ struct HonestPaywallView: View {
             checkout: scene.checkout,
             isPurchasing: isPurchasing,
             section: section,
-            continueFreeTitle: continueFreeTitle,
+            continueFree: continueFree,
             onRecurrenceChange: onRecurrenceChange,
             onPurchase: onPurchase,
             onRestore: onRestore,
-            onLifetime: { onPurchase(.lifetime) },
-            onContinueFree: onContinueFree
+            onLifetime: { onPurchase(.lifetime) }
         )
     }
 
-    private var continueFreeTitle: String? {
-        guard onContinueFree != nil, scene.board.chrome.showsContinueFree else { return nil }
-        return PillieLocalization.string(
-            "trial.end.continue_free",
-            table: "Commerce",
-            locale: locale
+    private var continueFree: PaywallContinueFreeAction? {
+        guard let onContinueFree, scene.board.chrome.showsContinueFree else { return nil }
+        return PaywallContinueFreeAction(
+            title: PillieLocalization.string(
+                "trial.end.continue_free",
+                table: "Commerce",
+                locale: locale
+            ),
+            action: onContinueFree
         )
     }
 }
