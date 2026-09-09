@@ -34,6 +34,13 @@ struct DebugPackHistoryPlanTests {
         #expect(!plan.pastStatuses.contains(.breakDay))
     }
 
+    @Test func freshReinstallHasNoPastDays() {
+        let plan = DebugPackHistoryPlan.freshReinstall()
+
+        #expect(plan.startDaysAgo == 0)
+        #expect(plan.pastStatuses.isEmpty)
+    }
+
     @Test func expiredScenarioPinsGrandfatherGrantBeforeCutover() {
         let scenario = TrialEndPaywallDebugScenario.expired(termsCohort: .preCutover)
 

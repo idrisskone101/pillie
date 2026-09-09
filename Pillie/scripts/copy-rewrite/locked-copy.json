@@ -2209,6 +2209,78 @@
       "it": "non perdere le %lld"
     },
     {
+      "issue": "returning-expired-paywall",
+      "table": "Commerce",
+      "key": "paywall.story.trial_ended.returning.legacy.title",
+      "create": true,
+      "en": "Welcome back.",
+      "de": "Willkommen zurück.",
+      "it": "Bentornato."
+    },
+    {
+      "issue": "returning-expired-paywall",
+      "table": "Commerce",
+      "key": "paywall.story.trial_ended.returning.legacy.subtitle",
+      "create": true,
+      "en": "Your trial ended. Daily reminders stay free.",
+      "de": "Deine Testphase ist vorbei. Tägliche Erinnerungen bleiben kostenlos.",
+      "it": "La prova è finita. I promemoria giornalieri restano gratis."
+    },
+    {
+      "issue": "returning-expired-paywall",
+      "table": "Commerce",
+      "key": "paywall.story.trial_ended.returning.hard.title",
+      "create": true,
+      "en": "Your trial already ended.",
+      "de": "Deine Testphase ist schon vorbei.",
+      "it": "La prova è già finita."
+    },
+    {
+      "issue": "returning-expired-paywall",
+      "table": "Commerce",
+      "key": "paywall.story.trial_ended.returning.hard.subtitle",
+      "create": true,
+      "en": "Blocking and smart reminders stay off until Plus is back on.",
+      "de": "App-Pause und smarte Erinnerungen bleiben aus, bis Plus wieder an ist.",
+      "it": "Il blocco e i promemoria smart restano spenti finché Plus non è di nuovo attivo."
+    },
+    {
+      "issue": "returning-expired-paywall",
+      "table": "Commerce",
+      "key": "paywall.story.trial_ended.returning.hard.chip.blocking",
+      "create": true,
+      "en": "App blocking turns back on",
+      "de": "App-Pause geht wieder an",
+      "it": "Il blocco app si riaccende"
+    },
+    {
+      "issue": "returning-expired-paywall",
+      "table": "Commerce",
+      "key": "paywall.story.trial_ended.returning.hard.chip.reminders",
+      "create": true,
+      "en": "Smart reminders come back",
+      "de": "Smarte Erinnerungen kommen zurück",
+      "it": "I promemoria smart tornano"
+    },
+    {
+      "issue": "returning-expired-paywall",
+      "table": "Commerce",
+      "key": "paywall.story.trial_ended.returning.hard.chip.history",
+      "create": true,
+      "en": "Your history comes back",
+      "de": "Dein Verlauf kommt zurück",
+      "it": "La tua cronologia torna"
+    },
+    {
+      "issue": "returning-expired-paywall",
+      "table": "Commerce",
+      "key": "paywall.story.trial_ended.returning.hard.aside",
+      "create": true,
+      "en": "this time it stays on",
+      "de": "diesmal bleibt es an",
+      "it": "stavolta resta acceso"
+    },
+    {
       "issue": "honest-paywall",
       "table": "Commerce",
       "key": "paywall.story.settings_free.title",
