@@ -229,10 +229,13 @@ struct SettingsView: View {
                 settingsCard {
                     if SubscriptionManager.shared.hasPlusAccess {
                         Button {
-                            openSensitiveSetting { showBlockedAppsEditor = true }
-                            ProductAnalyticsTelemetry.live.blockedAppsSettingsOpened(
-                                hasSelection: AppBlockingManager.shared.hasAppsSelected
-                            )
+                            Task { @MainActor in
+                                _ = await AppBlockingManager.shared.ensureAuthorized()
+                                openSensitiveSetting { showBlockedAppsEditor = true }
+                                ProductAnalyticsTelemetry.live.blockedAppsSettingsOpened(
+                                    hasSelection: AppBlockingManager.shared.hasAppsSelected
+                                )
+                            }
                         } label: {
                             settingsRow(PillieLocalization.string(
                                 "settings.blocked_apps.title",

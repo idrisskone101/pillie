@@ -32,6 +32,8 @@ enum DebugQAScenario: String, CaseIterable, Identifiable {
     case trialExpiredNewUserRollback
     case trialExpiredGrandfatherBlocker
     case trialExpiredGrandfatherReminder
+    case trialExpiredNewUserReturning
+    case trialExpiredGrandfatherReturning
     case plusSubscriber
     case existingUserTrialAnnouncement
     case reviewPrompt
@@ -45,9 +47,10 @@ enum DebugQAScenario: String, CaseIterable, Identifiable {
             return .pack
         case .trialActive, .trialLastDay, .trialExpiredNewUserBlocker,
              .trialExpiredNewUserReminder, .trialExpiredNewUserSuccess,
-             .trialExpiredNewUserRollback:
+             .trialExpiredNewUserRollback, .trialExpiredNewUserReturning:
             return .trialNewUser
-        case .trialExpiredGrandfatherBlocker, .trialExpiredGrandfatherReminder:
+        case .trialExpiredGrandfatherBlocker, .trialExpiredGrandfatherReminder,
+             .trialExpiredGrandfatherReturning:
             return .trialGrandfather
         case .plusSubscriber, .existingUserTrialAnnouncement, .reviewPrompt, .clearTrial:
             return .other
@@ -67,6 +70,8 @@ enum DebugQAScenario: String, CaseIterable, Identifiable {
         case .trialExpiredNewUserRollback: return "Expired legacy rollback (kill switch off)"
         case .trialExpiredGrandfatherBlocker: return "Expired dismissible paywall (blocker)"
         case .trialExpiredGrandfatherReminder: return "Expired dismissible paywall (reminders)"
+        case .trialExpiredNewUserReturning: return "Expired hard paywall (returning)"
+        case .trialExpiredGrandfatherReturning: return "Expired dismissible paywall (returning)"
         case .plusSubscriber: return "Plus subscriber home"
         case .existingUserTrialAnnouncement: return "Existing-user trial announcement"
         case .reviewPrompt: return "Review prompt card"
@@ -98,6 +103,10 @@ enum DebugQAScenario: String, CaseIterable, Identifiable {
             return "Pre-cutover terms, dismissible loss-framed sheet."
         case .trialExpiredGrandfatherReminder:
             return "Pre-cutover terms, dismissible reminder-only sheet."
+        case .trialExpiredNewUserReturning:
+            return "Post-cutover hard wall after reinstall, no leftover trial stats."
+        case .trialExpiredGrandfatherReturning:
+            return "Pre-cutover dismissible offer after reinstall, no leftover trial stats."
         case .plusSubscriber:
             return "Paid Plus, onboarding complete."
         case .existingUserTrialAnnouncement:
@@ -151,6 +160,12 @@ struct DebugPackHistoryPlan: Equatable {
             .taken, .taken
         ]
         return DebugPackHistoryPlan(startDaysAgo: pattern.count, pastStatuses: pattern)
+    }
+
+    /// A pack that starts today with no past days, so an expired grant has no
+    /// leftover dose or streak record. Matches a delete-and-reinstall.
+    static func freshReinstall() -> DebugPackHistoryPlan {
+        DebugPackHistoryPlan(startDaysAgo: 0, pastStatuses: [])
     }
 }
 
@@ -231,6 +246,24 @@ enum DebugQA {
                 hardPaywallEnabled: true,
                 blockerConfigured: false,
                 success: false
+            )
+        case .trialExpiredNewUserReturning:
+            applyExpiredPaywall(
+                store: store,
+                cohort: .postCutover,
+                hardPaywallEnabled: true,
+                blockerConfigured: false,
+                success: false,
+                pack: .freshReinstall()
+            )
+        case .trialExpiredGrandfatherReturning:
+            applyExpiredPaywall(
+                store: store,
+                cohort: .preCutover,
+                hardPaywallEnabled: true,
+                blockerConfigured: false,
+                success: false,
+                pack: .freshReinstall()
             )
         case .plusSubscriber:
             completeOnboarding()
@@ -325,13 +358,14 @@ enum DebugQA {
         cohort: TrialTermsCohort,
         hardPaywallEnabled: Bool,
         blockerConfigured: Bool,
-        success: Bool
+        success: Bool,
+        pack: DebugPackHistoryPlan = .marketingScreenshot()
     ) {
         completeOnboarding()
         persistInstallCohort(cohort)
-        store.replacePack(with: .marketingScreenshot())
+        store.replacePack(with: pack)
         resetTrialPresentationFlags()
-        seedInterventionStats(blockerConfigured: blockerConfigured)
+        seedInterventionStats(blockerConfigured: !pack.pastStatuses.isEmpty && blockerConfigured)
         SubscriptionManager.shared.setPlusForTesting(false)
         SubscriptionManager.shared.debugSetHardPaywallEnabled(hardPaywallEnabled)
         SubscriptionManager.shared.debugApplyTrialEndPaywallScenario(

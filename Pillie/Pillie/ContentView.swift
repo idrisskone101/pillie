@@ -393,7 +393,10 @@ struct ContentView: View {
 	                // while the first is still up is dropped by SwiftUI.
 	                if updateTrialWantsBlockerSetup {
 	                  updateTrialWantsBlockerSetup = false
-	                  showUpdateTrialBlockerSetup = true
+	                  Task { @MainActor in
+	                    _ = await AppBlockingManager.shared.ensureAuthorized()
+	                    showUpdateTrialBlockerSetup = true
+	                  }
 	                }
 	              }
 	            ) {

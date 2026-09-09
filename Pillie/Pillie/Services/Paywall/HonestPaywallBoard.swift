@@ -50,12 +50,16 @@ struct HonestPaywallTrialActiveStory: Equatable {
     let benefitChips: [PaywallBenefitChip]
 }
 
+enum HonestPaywallTrialEndedBody: Equatable {
+    case stats(dose: PaywallStatTile?, streak: PaywallStatTile?, lossLine: String)
+    case comparison(free: PaywallComparisonCard, plus: PaywallComparisonCard)
+    case chips([PaywallBenefitChip], aside: String)
+}
+
 struct HonestPaywallTrialEndedStory: Equatable {
     let title: String
     let subtitle: String
-    let doseTile: PaywallStatTile?
-    let streakTile: PaywallStatTile?
-    let handwrittenLossLine: String
+    let body: HonestPaywallTrialEndedBody
     let chrome: HonestPaywallChrome
 }
 

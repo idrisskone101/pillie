@@ -92,8 +92,10 @@ struct HomeView: View {
 
     private func handleBlockingCardAction() {
         if SubscriptionManager.shared.hasPlusAccess {
-            // Entitled but reminder-only: finish Screen Time setup directly.
-            showBlockingSetup = true
+            Task { @MainActor in
+                _ = await AppBlockingManager.shared.ensureAuthorized()
+                showBlockingSetup = true
+            }
         } else {
             // Free: go straight to the paywall (it reports paywallViewed itself).
             blockingPaywallSurface = .homeBlockingCard
@@ -319,7 +321,10 @@ struct HomeView: View {
         pendingTrialActivationAction = nil
         switch action {
         case .appBlocking:
-            showBlockingSetup = true
+            Task { @MainActor in
+                _ = await AppBlockingManager.shared.ensureAuthorized()
+                showBlockingSetup = true
+            }
         case .customMessages:
             showTrialCustomMessagesEditor = true
         case .smartReminders:
@@ -737,7 +742,7 @@ struct HomeView: View {
                 .allowsHitTesting(false)
                 .transition(ctaStateTransition)
             case .dueAction(_, let requiresShakeConfirm):
-                VStack(spacing: 12) {
+                VStack(spacing: showsBlockingSnooze ? 4 : 0) {
                     Button {
                         ProductAnalyticsTelemetry.live.todayActionStarted()
                         if requiresShakeConfirm {
@@ -771,9 +776,8 @@ struct HomeView: View {
                     if showsBlockingSnooze {
                         Button(action: snoozeBlockingAlarm) {
                             Text(PillieLocalization.string("today.action.snooze", locale: locale))
-                                .frame(maxWidth: .infinity)
                         }
-                        .buttonStyle(.pillieSecondary)
+                        .buttonStyle(.pillieQuiet)
                         .accessibilityIdentifier("homeBlockingSnooze")
                     }
                 }

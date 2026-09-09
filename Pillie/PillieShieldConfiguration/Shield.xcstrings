@@ -901,13 +901,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Snooze for %@"
+            "value": "Snooze %@"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Posponi di %@"
+            "value": "Posponi %@"
           }
         },
         "de": {

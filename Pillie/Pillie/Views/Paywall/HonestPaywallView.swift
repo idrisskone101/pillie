@@ -40,22 +40,6 @@ struct HonestPaywallView: View {
         }
         // Paper's footer sits 28pt from the physical bottom, including the home-indicator band.
         .ignoresSafeArea(edges: .bottom)
-        .safeAreaInset(edge: .bottom, spacing: 0) {
-            if let onContinueFree, scene.board.chrome.showsContinueFree {
-                Button(action: onContinueFree) {
-                    Text(PillieLocalization.string(
-                        "trial.end.continue_free",
-                        table: "Commerce",
-                        locale: locale
-                    ))
-                        .font(.pillie(14, weight: .semibold))
-                        .foregroundStyle(PillieTheme.textMuted)
-                }
-                .buttonStyle(.plain)
-                .frame(maxWidth: .infinity)
-                .padding(.bottom, 8)
-            }
-        }
     }
 
     private var closeRow: some View {
@@ -82,10 +66,23 @@ struct HonestPaywallView: View {
             checkout: scene.checkout,
             isPurchasing: isPurchasing,
             section: section,
+            continueFree: continueFree,
             onRecurrenceChange: onRecurrenceChange,
             onPurchase: onPurchase,
             onRestore: onRestore,
             onLifetime: { onPurchase(.lifetime) }
+        )
+    }
+
+    private var continueFree: PaywallContinueFreeAction? {
+        guard let onContinueFree, scene.board.chrome.showsContinueFree else { return nil }
+        return PaywallContinueFreeAction(
+            title: PillieLocalization.string(
+                "trial.end.continue_free",
+                table: "Commerce",
+                locale: locale
+            ),
+            action: onContinueFree
         )
     }
 }
