@@ -21,7 +21,7 @@ enum HonestPaywallStoryFactory {
                 table: "Commerce",
                 locale: locale
             ),
-            daysRemaining: daysRemaining,
+            daysRemaining: ReverseTrialClock.displayedDaysRemaining(daysRemaining),
             daysStampText: PillieLocalization.string(
                 "paywall.story.trial_active.stamp",
                 table: "Commerce",

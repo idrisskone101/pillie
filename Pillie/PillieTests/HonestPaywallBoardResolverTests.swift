@@ -40,6 +40,36 @@ struct HonestPaywallBoardResolverTests {
         #expect(board == nil)
     }
 
+    @Test func `Grant-day paywall stamp matches the home badge at 14`() {
+        let grant = date(2026, 7, 1, 10)
+        let now = date(2026, 7, 1, 10)
+        let access = PlusAccessState(hasEntitlement: false, trialGrantDate: grant)
+        let board = HonestPaywallBoardResolver.resolve(
+            access: access,
+            entry: .trialStatus,
+            stats: nil,
+            calendar: calendar,
+            now: now,
+            locale: english,
+            hardPaywallEnabled: true,
+            termsCohort: nil
+        )
+        let presentation = TrialStatusPresentation.make(
+            state: access,
+            calendar: calendar,
+            now: now,
+            locale: english
+        )
+
+        guard case .duringTrial(let story) = board else {
+            Issue.record("Expected duringTrial board on the grant day")
+            return
+        }
+        #expect(story.daysRemaining == 14)
+        #expect(story.daysRemaining == presentation?.displayedDaysRemaining)
+        #expect(ReverseTrialClock(grantDate: grant).daysRemaining(calendar: calendar, now: now) == 15)
+    }
+
     @Test func `Settings during trial resolves to C1`() {
         let grant = date(2026, 7, 10, 9)
         let board = HonestPaywallBoardResolver.resolve(
