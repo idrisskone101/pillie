@@ -21,7 +21,7 @@ enum HonestPaywallBoardResolver {
         if access.trialActive(calendar: calendar, now: now) {
             let grantDate = access.trialGrantDate ?? now
             let daysRemaining = ReverseTrialClock(grantDate: grantDate)
-                .displayedDaysRemaining(calendar: calendar, now: now)
+                .daysRemaining(calendar: calendar, now: now)
             return .duringTrial(
                 HonestPaywallStoryFactory.duringTrial(
                     daysRemaining: daysRemaining,
