@@ -86,19 +86,22 @@ struct BlockedAppsEditor: View {
     // itself — previously the picker just opened unauthorized. Mirrors
     // AppBlockingSetupView.chooseApps(), with source=settings telemetry (#163).
     private func chooseApps() {
-        Task {
-            if !blockingManager.isAuthorized {
+        Task { @MainActor in
+            if BlockedAppsLaunch.make(isAuthorized: blockingManager.isAuthorized)
+                == .authorizeThenPresentEditor
+            {
                 isRequestingAuth = true
                 ProductAnalyticsTelemetry.live.settingsScreenTimePermissionRequested()
-                await blockingManager.requestAuthorization()
+                await blockingManager.authorizeIfNeededForEditor()
                 ProductAnalyticsTelemetry.live.settingsScreenTimePermissionCompleted(
                     isAuthorized: blockingManager.isAuthorized
                 )
                 isRequestingAuth = false
             }
-            if blockingManager.isAuthorized {
-                showPicker = true
-            }
+            guard BlockedAppsPickerGate.make(isAuthorized: blockingManager.isAuthorized)
+                == .presentPicker
+            else { return }
+            showPicker = true
         }
     }
 

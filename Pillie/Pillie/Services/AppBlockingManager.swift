@@ -124,11 +124,7 @@ final class AppBlockingManager {
         #else
         do {
             try await AuthorizationCenter.shared.requestAuthorization(for: .individual)
-            isAuthorized = true
-            authorizationStatus = .approved
         } catch {
-            isAuthorized = false
-            authorizationStatus = .denied
             Self.logger.error("Screen Time auth error: \(error.localizedDescription)")
             // `warning`, not `error`: this catch also fires when the user declines
             // the system dialog, which is a choice rather than a malfunction.
@@ -137,7 +133,28 @@ final class AppBlockingManager {
                 context: ["operation": "authorization"], severity: .warning
             )
         }
+        updateAuthorizationStatus()
         #endif
+    }
+
+    /// Ask FamilyControls for Screen Time access if needed, then return whether
+    /// the picker is legal to present. Call this from a full-screen presenter
+    /// before opening `BlockedAppsEditor`.
+    @MainActor
+    func ensureAuthorized() async -> Bool {
+        updateAuthorizationStatus()
+        if isAuthorized { return true }
+        await requestAuthorization()
+        updateAuthorizationStatus()
+        return isAuthorized
+    }
+
+    @MainActor
+    func authorizeIfNeededForEditor() async {
+        guard BlockedAppsLaunch.make(isAuthorized: isAuthorized) == .authorizeThenPresentEditor else {
+            return
+        }
+        _ = await ensureAuthorized()
     }
 
     func updateAuthorizationStatus() {

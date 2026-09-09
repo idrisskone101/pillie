@@ -393,7 +393,7 @@ struct ContentView: View {
 	                // while the first is still up is dropped by SwiftUI.
 	                if updateTrialWantsBlockerSetup {
 	                  updateTrialWantsBlockerSetup = false
-	                  showUpdateTrialBlockerSetup = true
+	                  presentBlockedAppsEditor()
 	                }
 	              }
 	            ) {
@@ -521,6 +521,13 @@ struct ContentView: View {
       ProductAnalyticsTelemetry.live.updateTrialGranted()
     }
     showUpdateTrialAnnouncement = true
+  }
+
+  private func presentBlockedAppsEditor() {
+    Task { @MainActor in
+      await AppBlockingManager.shared.authorizeIfNeededForEditor()
+      showUpdateTrialBlockerSetup = true
+    }
   }
 
   /// Hands off from the new Protection Plan intro into the existing onboarding

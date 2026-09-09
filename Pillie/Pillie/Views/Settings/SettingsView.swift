@@ -229,7 +229,7 @@ struct SettingsView: View {
                 settingsCard {
                     if SubscriptionManager.shared.hasPlusAccess {
                         Button {
-                            openSensitiveSetting { showBlockedAppsEditor = true }
+                            presentBlockedAppsEditor()
                             ProductAnalyticsTelemetry.live.blockedAppsSettingsOpened(
                                 hasSelection: AppBlockingManager.shared.hasAppsSelected
                             )
@@ -536,6 +536,13 @@ struct SettingsView: View {
         let response = settingsFeedback.sensitiveOrDestructiveChange(accessibilityReduceMotion: accessibilityReduceMotion)
         withAnimation(response.motionProfile.animation) {
             update()
+        }
+    }
+
+    private func presentBlockedAppsEditor() {
+        Task { @MainActor in
+            await AppBlockingManager.shared.authorizeIfNeededForEditor()
+            openSensitiveSetting { showBlockedAppsEditor = true }
         }
     }
 

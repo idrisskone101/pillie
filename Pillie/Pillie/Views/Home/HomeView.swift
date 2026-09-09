@@ -92,12 +92,20 @@ struct HomeView: View {
 
     private func handleBlockingCardAction() {
         if SubscriptionManager.shared.hasPlusAccess {
-            // Entitled but reminder-only: finish Screen Time setup directly.
-            showBlockingSetup = true
+            presentBlockedAppsEditor()
         } else {
             // Free: go straight to the paywall (it reports paywallViewed itself).
             blockingPaywallSurface = .homeBlockingCard
             showBlockingPaywall = true
+        }
+    }
+
+    /// Screen Time's system sheets crash when stacked on the 430pt editor.
+    /// Authorize on Home first, then present the editor.
+    private func presentBlockedAppsEditor() {
+        Task { @MainActor in
+            await AppBlockingManager.shared.authorizeIfNeededForEditor()
+            showBlockingSetup = true
         }
     }
 
@@ -319,7 +327,7 @@ struct HomeView: View {
         pendingTrialActivationAction = nil
         switch action {
         case .appBlocking:
-            showBlockingSetup = true
+            presentBlockedAppsEditor()
         case .customMessages:
             showTrialCustomMessagesEditor = true
         case .smartReminders:
