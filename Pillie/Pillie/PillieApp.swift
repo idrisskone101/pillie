@@ -704,6 +704,10 @@ struct PillieApp: App {
                         object: "settingsFree"
                     )
                 }
+            case "trialEndedReturningHard", "c2c":
+                DebugQA.apply(.trialExpiredNewUserReturning, store: store)
+            case "trialEndedReturningLegacy", "c2b":
+                DebugQA.apply(.trialExpiredGrandfatherReturning, store: store)
             default:
                 break
             }

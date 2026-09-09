@@ -19,7 +19,6 @@ struct HonestPaywallStoryFactoryTests {
         )
         #expect(story.doseTile == nil)
         #expect(story.streakTile == nil)
-        #expect(story.handwrittenLossLine.isEmpty)
     }
 
     @Test func `Zero C2 stats omit tiles`() {
@@ -50,6 +49,46 @@ struct HonestPaywallStoryFactoryTests {
         )
         #expect(story.doseTile?.value == "11")
         #expect(story.streakTile?.value == "3")
+        #expect(story.fallback == nil)
         #expect(!story.handwrittenLossLine.isEmpty)
+    }
+
+    @Test func `Empty stats on hard terms use the locked returning story`() {
+        let story = HonestPaywallStoryFactory.trialEnded(
+            stats: .none,
+            terms: .hardPaywall,
+            locale: english
+        )
+        #expect(story.title == commerce("paywall.story.trial_ended.returning.hard.title"))
+        #expect(story.subtitle == commerce("paywall.story.trial_ended.returning.hard.subtitle"))
+        #expect(!story.chrome.showsClose)
+        #expect(!story.chrome.showsContinueFree)
+        guard case .chips(let chips) = story.fallback else {
+            Issue.record("Expected returning hard chips")
+            return
+        }
+        #expect(chips.count == 3)
+        #expect(story.handwrittenLossLine == commerce("paywall.story.trial_ended.returning.hard.aside"))
+    }
+
+    @Test func `Empty stats on legacy terms use the dismissible returning story`() {
+        let story = HonestPaywallStoryFactory.trialEnded(
+            stats: .none,
+            terms: .legacy,
+            locale: english
+        )
+        #expect(story.title == commerce("paywall.story.trial_ended.returning.legacy.title"))
+        #expect(story.subtitle == commerce("paywall.story.trial_ended.returning.legacy.subtitle"))
+        #expect(story.chrome.showsClose)
+        #expect(story.chrome.showsContinueFree)
+        #expect(story.handwrittenLossLine.isEmpty)
+        guard case .comparison = story.fallback else {
+            Issue.record("Expected returning legacy comparison")
+            return
+        }
+    }
+
+    private func commerce(_ key: String) -> String {
+        PillieLocalization.string(key, table: "Commerce", locale: english)
     }
 }

@@ -73,6 +73,7 @@ enum HonestPaywallStoryFactory {
             background: .ink,
             locale: locale
         )
+        let hasOwnRecord = doseTile != nil || streakTile != nil
 
         let lossCount = [stats.dosesTaken, stats.currentStreak, stats.blocksIntercepted]
             .compactMap { $0 }
@@ -89,28 +90,99 @@ enum HonestPaywallStoryFactory {
             showsContinueFree: true
         )
 
+        if hasOwnRecord {
+            return HonestPaywallTrialEndedStory(
+                title: PillieLocalization.string(
+                    "paywall.story.trial_ended.title",
+                    table: "Commerce",
+                    locale: locale
+                ),
+                subtitle: PillieLocalization.string(
+                    "paywall.story.trial_ended.subtitle",
+                    table: "Commerce",
+                    locale: locale
+                ),
+                doseTile: doseTile,
+                streakTile: streakTile,
+                fallback: nil,
+                handwrittenLossLine: lossCount.map { count in
+                    PillieLocalization.formatted(
+                        "paywall.story.trial_ended.aside",
+                        table: "Commerce",
+                        locale: locale,
+                        arguments: Int64(count)
+                    )
+                } ?? "",
+                chrome: terms == .hardPaywall ? hardChrome : legacyChrome
+            )
+        }
+
+        if terms == .legacy {
+            let settings = settingsFree(locale: locale)
+            return HonestPaywallTrialEndedStory(
+                title: PillieLocalization.string(
+                    "paywall.story.trial_ended.returning.legacy.title",
+                    table: "Commerce",
+                    locale: locale
+                ),
+                subtitle: PillieLocalization.string(
+                    "paywall.story.trial_ended.returning.legacy.subtitle",
+                    table: "Commerce",
+                    locale: locale
+                ),
+                doseTile: nil,
+                streakTile: nil,
+                fallback: .comparison(free: settings.freeCard, plus: settings.plusCard),
+                handwrittenLossLine: "",
+                chrome: legacyChrome
+            )
+        }
+
         return HonestPaywallTrialEndedStory(
             title: PillieLocalization.string(
-                "paywall.story.trial_ended.title",
+                "paywall.story.trial_ended.returning.hard.title",
                 table: "Commerce",
                 locale: locale
             ),
             subtitle: PillieLocalization.string(
-                "paywall.story.trial_ended.subtitle",
+                "paywall.story.trial_ended.returning.hard.subtitle",
                 table: "Commerce",
                 locale: locale
             ),
-            doseTile: doseTile,
-            streakTile: streakTile,
-            handwrittenLossLine: lossCount.map { count in
-                PillieLocalization.formatted(
-                    "paywall.story.trial_ended.aside",
-                    table: "Commerce",
-                    locale: locale,
-                    arguments: Int64(count)
-                )
-            } ?? "",
-            chrome: terms == .hardPaywall ? hardChrome : legacyChrome
+            doseTile: nil,
+            streakTile: nil,
+            fallback: .chips([
+                PaywallBenefitChip(
+                    label: PillieLocalization.string(
+                        "paywall.story.trial_ended.returning.hard.chip.blocking",
+                        table: "Commerce",
+                        locale: locale
+                    ),
+                    tint: .sage
+                ),
+                PaywallBenefitChip(
+                    label: PillieLocalization.string(
+                        "paywall.story.trial_ended.returning.hard.chip.reminders",
+                        table: "Commerce",
+                        locale: locale
+                    ),
+                    tint: .lavender
+                ),
+                PaywallBenefitChip(
+                    label: PillieLocalization.string(
+                        "paywall.story.trial_active.chip.history",
+                        table: "Commerce",
+                        locale: locale
+                    ),
+                    tint: .coralSoft
+                ),
+            ]),
+            handwrittenLossLine: PillieLocalization.string(
+                "paywall.story.trial_ended.returning.hard.aside",
+                table: "Commerce",
+                locale: locale
+            ),
+            chrome: hardChrome
         )
     }
 

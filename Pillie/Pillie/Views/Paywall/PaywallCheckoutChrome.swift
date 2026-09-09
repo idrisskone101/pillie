@@ -21,10 +21,12 @@ struct PaywallCheckoutChrome: View {
     let checkout: PaywallCheckoutSheet
     let isPurchasing: Bool
     var section: PaywallCheckoutSection = .stack
+    var continueFreeTitle: String? = nil
     let onRecurrenceChange: (PaywallRecurrence) -> Void
     let onPurchase: (PaywallPurchaseIntent) -> Void
     let onRestore: () -> Void
     let onLifetime: () -> Void
+    var onContinueFree: (() -> Void)? = nil
 
     var body: some View {
         switch section {
@@ -57,6 +59,16 @@ struct PaywallCheckoutChrome: View {
                 }
                 .buttonStyle(.plain)
                 .accessibilityLabel(lifetimeLink.accessibilityLabel)
+            }
+
+            if let continueFreeTitle, let onContinueFree {
+                Button(action: onContinueFree) {
+                    Text(continueFreeTitle)
+                        .font(.pillie(14, weight: .semibold))
+                        .foregroundStyle(PillieTheme.textMuted)
+                        .multilineTextAlignment(.center)
+                }
+                .buttonStyle(.plain)
             }
 
             footerRow

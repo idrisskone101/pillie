@@ -65,7 +65,9 @@ struct PaywallMomentHeader: View {
         VStack(alignment: .leading, spacing: 0) {
             titleBlock(title: story.title, subtitle: story.subtitle)
 
-            if story.doseTile != nil || story.streakTile != nil {
+            if let fallback = story.fallback {
+                trialEndedFallback(fallback)
+            } else if story.doseTile != nil || story.streakTile != nil {
                 HStack(alignment: .top, spacing: 10) {
                     if let doseTile = story.doseTile {
                         statTile(doseTile)
@@ -84,6 +86,31 @@ struct PaywallMomentHeader: View {
                     .rotationEffect(.degrees(-3))
                     .padding(.top, 8)
             }
+        }
+    }
+
+    @ViewBuilder
+    private func trialEndedFallback(_ fallback: HonestPaywallTrialEndedFallback) -> some View {
+        switch fallback {
+        case .comparison(let freeCard, let plusCard):
+            HStack(alignment: .top, spacing: 10) {
+                comparisonCard(freeCard)
+                comparisonCard(plusCard)
+            }
+            .padding(.top, 16)
+        case .chips(let chips):
+            VStack(spacing: 8) {
+                ForEach(chips, id: \.label) { chip in
+                    Text(chip.label)
+                        .font(.pillie(15, weight: .bold))
+                        .foregroundStyle(PillieTheme.dark)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 12)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(chipColor(chip.tint), in: RoundedRectangle(cornerRadius: 20))
+                }
+            }
+            .padding(.top, 16)
         }
     }
 

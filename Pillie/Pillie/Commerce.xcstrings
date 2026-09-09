@@ -46475,6 +46475,167 @@
           }
         }
       }
+    },
+    "paywall.story.trial_ended.returning.legacy.title": {
+      "comment": "Returning expired-trial paywall",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Welcome back."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Willkommen zurück."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bentornato."
+          }
+        }
+      }
+    },
+    "paywall.story.trial_ended.returning.legacy.subtitle": {
+      "comment": "Returning expired-trial paywall",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your trial ended. Daily reminders stay free."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine Testphase ist vorbei. Tägliche Erinnerungen bleiben kostenlos."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La prova è finita. I promemoria giornalieri restano gratis."
+          }
+        }
+      }
+    },
+    "paywall.story.trial_ended.returning.hard.title": {
+      "comment": "Returning expired-trial paywall",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your trial already ended."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine Testphase ist schon vorbei."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La prova è già finita."
+          }
+        }
+      }
+    },
+    "paywall.story.trial_ended.returning.hard.subtitle": {
+      "comment": "Returning expired-trial paywall",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blocking and smart reminders stay off until Plus is back on."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App-Pause und smarte Erinnerungen bleiben aus, bis Plus wieder an ist."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il blocco e i promemoria smart restano spenti finché Plus non è di nuovo attivo."
+          }
+        }
+      }
+    },
+    "paywall.story.trial_ended.returning.hard.chip.blocking": {
+      "comment": "Returning expired-trial paywall",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App blocking turns back on"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App-Pause geht wieder an"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il blocco app si riaccende"
+          }
+        }
+      }
+    },
+    "paywall.story.trial_ended.returning.hard.chip.reminders": {
+      "comment": "Returning expired-trial paywall",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Smart reminders come back"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Smarte Erinnerungen kommen zurück"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I promemoria smart tornano"
+          }
+        }
+      }
+    },
+    "paywall.story.trial_ended.returning.hard.aside": {
+      "comment": "Returning expired-trial paywall",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "this time it stays on"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "diesmal bleibt es an"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "stavolta resta acceso"
+          }
+        }
+      }
     }
   },
   "version": "1.0"
