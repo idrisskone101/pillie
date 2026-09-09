@@ -19,6 +19,13 @@ struct PillPackCard: View {
     private var currentCycleDay: Int {
         store.currentDayIndex + 1
     }
+    private var pillStripGeometry: PillStripGeometry {
+        PillStripGeometry(
+            packID: store.pack.id,
+            currentDayIndex: store.currentDayIndex,
+            cycleLength: cycleLength
+        )
+    }
     private var stripEntranceAnimation: Animation {
         .easeInOut(duration: 1.05)
     }
@@ -112,14 +119,10 @@ struct PillPackCard: View {
                 }
                 .onChange(of: store.protocolChangeVersion) { _, _ in
                     refreshCycleSnapshots()
-                    resetAndRecenterPillStrip(with: proxy)
                 }
-                .onChange(of: store.pack.id) { _, _ in
+                .onChange(of: pillStripGeometry) { _, _ in
                     refreshCycleSnapshots()
                     resetAndRecenterPillStrip(with: proxy)
-                }
-                .onChange(of: store.currentDayIndex) { _, _ in
-                    refreshCycleSnapshots()
                 }
                 .onChange(of: store.dayRecordsRevision) { _, _ in
                     refreshCycleSnapshots()
@@ -332,6 +335,12 @@ struct PillPackCard: View {
     private func refreshCycleSnapshots() {
         cachedCycleSnapshots = store.cycleSnapshots(for: displayedIndices, in: store.pack)
     }
+}
+
+private struct PillStripGeometry: Equatable {
+    let packID: UUID
+    let currentDayIndex: Int
+    let cycleLength: Int
 }
 
 #Preview {
