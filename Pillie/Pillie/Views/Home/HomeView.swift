@@ -92,18 +92,14 @@ struct HomeView: View {
 
     private func handleBlockingCardAction() {
         if SubscriptionManager.shared.hasPlusAccess {
-            presentBlockedAppsEditor()
+            Task { @MainActor in
+                _ = await AppBlockingManager.shared.ensureAuthorized()
+                showBlockingSetup = true
+            }
         } else {
             // Free: go straight to the paywall (it reports paywallViewed itself).
             blockingPaywallSurface = .homeBlockingCard
             showBlockingPaywall = true
-        }
-    }
-
-    private func presentBlockedAppsEditor() {
-        Task { @MainActor in
-            await AppBlockingManager.shared.authorizeIfNeededForEditor()
-            showBlockingSetup = true
         }
     }
 
@@ -325,7 +321,10 @@ struct HomeView: View {
         pendingTrialActivationAction = nil
         switch action {
         case .appBlocking:
-            presentBlockedAppsEditor()
+            Task { @MainActor in
+                _ = await AppBlockingManager.shared.ensureAuthorized()
+                showBlockingSetup = true
+            }
         case .customMessages:
             showTrialCustomMessagesEditor = true
         case .smartReminders:

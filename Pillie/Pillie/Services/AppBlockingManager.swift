@@ -137,21 +137,21 @@ final class AppBlockingManager {
         #endif
     }
 
+    /// Editor-entry path: refresh, request if needed, return the live status.
+    /// Onboarding calls `requestAuthorization()` itself from a full-screen step.
+    /// #163 settings Screen Time events fire here because Home, Settings, and
+    /// the update-trial CTA all present the same Settings editor after this.
     @MainActor
     func ensureAuthorized() async -> Bool {
         updateAuthorizationStatus()
         if isAuthorized { return true }
+        ProductAnalyticsTelemetry.live.settingsScreenTimePermissionRequested()
         await requestAuthorization()
         updateAuthorizationStatus()
+        ProductAnalyticsTelemetry.live.settingsScreenTimePermissionCompleted(
+            isAuthorized: isAuthorized
+        )
         return isAuthorized
-    }
-
-    @MainActor
-    func authorizeIfNeededForEditor() async {
-        guard BlockedAppsLaunch.make(isAuthorized: isAuthorized) == .authorizeThenPresentEditor else {
-            return
-        }
-        _ = await ensureAuthorized()
     }
 
     func updateAuthorizationStatus() {

@@ -229,10 +229,13 @@ struct SettingsView: View {
                 settingsCard {
                     if SubscriptionManager.shared.hasPlusAccess {
                         Button {
-                            presentBlockedAppsEditor()
-                            ProductAnalyticsTelemetry.live.blockedAppsSettingsOpened(
-                                hasSelection: AppBlockingManager.shared.hasAppsSelected
-                            )
+                            Task { @MainActor in
+                                _ = await AppBlockingManager.shared.ensureAuthorized()
+                                openSensitiveSetting { showBlockedAppsEditor = true }
+                                ProductAnalyticsTelemetry.live.blockedAppsSettingsOpened(
+                                    hasSelection: AppBlockingManager.shared.hasAppsSelected
+                                )
+                            }
                         } label: {
                             settingsRow(PillieLocalization.string(
                                 "settings.blocked_apps.title",
@@ -536,13 +539,6 @@ struct SettingsView: View {
         let response = settingsFeedback.sensitiveOrDestructiveChange(accessibilityReduceMotion: accessibilityReduceMotion)
         withAnimation(response.motionProfile.animation) {
             update()
-        }
-    }
-
-    private func presentBlockedAppsEditor() {
-        Task { @MainActor in
-            await AppBlockingManager.shared.authorizeIfNeededForEditor()
-            openSensitiveSetting { showBlockedAppsEditor = true }
         }
     }
 
