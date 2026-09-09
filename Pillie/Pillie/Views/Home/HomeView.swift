@@ -773,7 +773,7 @@ struct HomeView: View {
                             Text(PillieLocalization.string("today.action.snooze", locale: locale))
                                 .frame(maxWidth: .infinity)
                         }
-                        .buttonStyle(PillieTakenButtonStyle())
+                        .buttonStyle(.pillieSecondary)
                         .accessibilityIdentifier("homeBlockingSnooze")
                     }
                 }

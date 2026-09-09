@@ -107,6 +107,6 @@ final class PillieShieldConfigurationExtension: ShieldConfigurationDataSource {
             locale: Locale.current,
             duration
         )
-        return ShieldConfiguration.Label(text: title, color: Palette.title)
+        return ShieldConfiguration.Label(text: title, color: Palette.subtitle)
     }
 }
