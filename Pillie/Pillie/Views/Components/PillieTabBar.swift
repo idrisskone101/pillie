@@ -37,7 +37,6 @@ struct PillieTabBar: View {
     /// Tabs that show an unread pip on their icon. Owned by the caller so the
     /// bar stays ignorant of which feature is being announced.
     var badgedTabs: Set<PillieTab> = []
-    /// Same duration as the UIKit pane slide so the capsule tracks the page.
     var transitionDuration: TimeInterval = 0.25
     @Environment(\.locale) private var locale
 
@@ -118,9 +117,6 @@ struct PillieTabBar: View {
     }
 }
 
-/// Core Animation capsule so the indicator starts in the same update as the
-/// UIKit pane slide. A SwiftUI `.animation` on `selectedTab` scheduled the
-/// capsule a beat after `UIViewPropertyAnimator.startAnimation()`.
 private struct TabIndicatorCapsule: UIViewRepresentable {
     var selectedIndex: Int
     var tabCount: Int
