@@ -5,7 +5,6 @@
 
 import SwiftUI
 import SwiftData
-import UIKit
 
 enum PillieTab: Int, CaseIterable {
     case home
@@ -39,9 +38,10 @@ struct PillieTabBar: View {
     var badgedTabs: Set<PillieTab> = []
     var transitionDuration: TimeInterval = 0.25
     @Environment(\.locale) private var locale
+    @Namespace private var tabIndicator
 
     var body: some View {
-        HStack {
+        HStack(spacing: 0) {
             ForEach(PillieTab.allCases, id: \.rawValue) { tab in
                 Button {
                     guard selectedTab != tab else { return }
@@ -56,8 +56,16 @@ struct PillieTabBar: View {
                                 }
                             }
 
-                        Color.clear
-                            .frame(width: 20, height: 5)
+                        ZStack {
+                            Color.clear
+                                .frame(width: 20, height: 5)
+                            if selectedTab == tab {
+                                Capsule()
+                                    .fill(PillieTheme.coral)
+                                    .frame(width: 20, height: 5)
+                                    .matchedGeometryEffect(id: "pillieTabIndicator", in: tabIndicator)
+                            }
+                        }
 
                         Text(tab.label(locale: locale))
                             .font(.pillie(10, weight: selectedTab == tab ? .bold : .medium))
@@ -67,14 +75,6 @@ struct PillieTabBar: View {
                 }
                 .buttonStyle(.plain)
             }
-        }
-        .overlay {
-            TabIndicatorCapsule(
-                selectedIndex: selectedTab.rawValue,
-                tabCount: PillieTab.allCases.count,
-                duration: transitionDuration
-            )
-            .allowsHitTesting(false)
         }
         .padding(.horizontal, 24)
         .padding(.top, 16)
@@ -114,88 +114,6 @@ struct PillieTabBar: View {
             .offset(x: 4, y: -2)
             .accessibilityHidden(true)
             .transition(.opacity)
-    }
-}
-
-private struct TabIndicatorCapsule: UIViewRepresentable {
-    var selectedIndex: Int
-    var tabCount: Int
-    var duration: TimeInterval
-
-    func makeUIView(context: Context) -> TabIndicatorView {
-        TabIndicatorView(tabCount: tabCount)
-    }
-
-    func updateUIView(_ view: TabIndicatorView, context: Context) {
-        view.tabCount = tabCount
-        view.select(index: selectedIndex, duration: duration)
-    }
-}
-
-private final class TabIndicatorView: UIView {
-    private let capsule = UIView()
-    private var selectedIndex = 0
-    private var animator: UIViewPropertyAnimator?
-    var tabCount: Int
-
-    private static let capsuleSize = CGSize(width: 20, height: 5)
-    private static let iconPointSize: CGFloat = 22
-    private static let iconToCapsuleSpacing: CGFloat = 4
-
-    init(tabCount: Int) {
-        self.tabCount = tabCount
-        super.init(frame: .zero)
-        isUserInteractionEnabled = false
-        backgroundColor = .clear
-        capsule.backgroundColor = UIColor(PillieTheme.coral)
-        capsule.layer.cornerRadius = Self.capsuleSize.height / 2
-        addSubview(capsule)
-    }
-
-    @available(*, unavailable)
-    required init?(coder: NSCoder) {
-        fatalError("TabIndicatorView is code-only")
-    }
-
-    func select(index: Int, duration: TimeInterval) {
-        let changed = index != selectedIndex
-        selectedIndex = index
-        guard bounds.width > 0 else { return }
-        let target = capsuleFrame(for: index)
-        if !changed {
-            if animator?.state != .active {
-                capsule.frame = target
-            }
-            return
-        }
-        if let animator {
-            animator.stopAnimation(false)
-            animator.finishAnimation(at: .end)
-        }
-        let next = UIViewPropertyAnimator(duration: duration, curve: .easeInOut) { [capsule] in
-            capsule.frame = target
-        }
-        next.addCompletion { [weak self] _ in
-            self?.animator = nil
-        }
-        next.startAnimation()
-        animator = next
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        let running = animator?.state == .active
-        if !running {
-            capsule.frame = capsuleFrame(for: selectedIndex)
-        }
-    }
-
-    private func capsuleFrame(for index: Int) -> CGRect {
-        let slotWidth = bounds.width / CGFloat(tabCount)
-        let size = Self.capsuleSize
-        let x = slotWidth * (CGFloat(index) + 0.5) - size.width / 2
-        let y = Self.iconPointSize + Self.iconToCapsuleSpacing
-        return CGRect(x: x, y: y, width: size.width, height: size.height)
     }
 }
 
