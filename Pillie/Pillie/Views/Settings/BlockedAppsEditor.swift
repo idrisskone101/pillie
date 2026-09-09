@@ -13,7 +13,6 @@ struct BlockedAppsEditor: View {
     @Environment(\.locale) private var locale
     @Environment(PillStore.self) private var store
     @State private var showPicker = false
-    @State private var isRequestingAuth = false
 
     @Bindable private var blockingManager = AppBlockingManager.shared
 
@@ -31,12 +30,8 @@ struct BlockedAppsEditor: View {
             // Choose apps button
             Button(action: chooseApps) {
                 HStack(spacing: 8) {
-                    if isRequestingAuth {
-                        ProgressView().tint(PillieTheme.coral)
-                    } else {
-                        Image(systemName: blockingManager.hasAppsSelected ? "pencil" : "plus")
-                            .font(.system(size: 16, weight: .semibold))
-                    }
+                    Image(systemName: blockingManager.hasAppsSelected ? "pencil" : "plus")
+                        .font(.system(size: 16, weight: .semibold))
                     Text(PillieLocalization.string(
                         "settings.blocked_apps.edit",
                         locale: locale
@@ -52,7 +47,6 @@ struct BlockedAppsEditor: View {
                 )
             }
             .buttonStyle(.plain)
-            .disabled(isRequestingAuth)
             .padding(.horizontal, 20)
 
             Button {
@@ -81,25 +75,9 @@ struct BlockedAppsEditor: View {
         )
     }
 
-    // Reverse-trial users can reach this editor without ever passing onboarding's
-    // blocker step, so Settings must be able to request Screen Time authorization
-    // itself — previously the picker just opened unauthorized. Mirrors
-    // AppBlockingSetupView.chooseApps(), with source=settings telemetry (#163).
     private func chooseApps() {
-        Task {
-            if !blockingManager.isAuthorized {
-                isRequestingAuth = true
-                ProductAnalyticsTelemetry.live.settingsScreenTimePermissionRequested()
-                await blockingManager.requestAuthorization()
-                ProductAnalyticsTelemetry.live.settingsScreenTimePermissionCompleted(
-                    isAuthorized: blockingManager.isAuthorized
-                )
-                isRequestingAuth = false
-            }
-            if blockingManager.isAuthorized {
-                showPicker = true
-            }
-        }
+        guard blockingManager.isAuthorized else { return }
+        showPicker = true
     }
 
     private var statusCard: some View {

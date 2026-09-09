@@ -124,11 +124,7 @@ final class AppBlockingManager {
         #else
         do {
             try await AuthorizationCenter.shared.requestAuthorization(for: .individual)
-            isAuthorized = true
-            authorizationStatus = .approved
         } catch {
-            isAuthorized = false
-            authorizationStatus = .denied
             Self.logger.error("Screen Time auth error: \(error.localizedDescription)")
             // `warning`, not `error`: this catch also fires when the user declines
             // the system dialog, which is a choice rather than a malfunction.
@@ -137,7 +133,25 @@ final class AppBlockingManager {
                 context: ["operation": "authorization"], severity: .warning
             )
         }
+        updateAuthorizationStatus()
         #endif
+    }
+
+    /// Editor-entry path: refresh, request if needed, return the live status.
+    /// Onboarding calls `requestAuthorization()` itself from a full-screen step.
+    /// #163 settings Screen Time events fire here because Home, Settings, and
+    /// the update-trial CTA all present the same Settings editor after this.
+    @MainActor
+    func ensureAuthorized() async -> Bool {
+        updateAuthorizationStatus()
+        if isAuthorized { return true }
+        ProductAnalyticsTelemetry.live.settingsScreenTimePermissionRequested()
+        await requestAuthorization()
+        updateAuthorizationStatus()
+        ProductAnalyticsTelemetry.live.settingsScreenTimePermissionCompleted(
+            isAuthorized: isAuthorized
+        )
+        return isAuthorized
     }
 
     func updateAuthorizationStatus() {

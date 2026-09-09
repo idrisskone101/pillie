@@ -92,8 +92,10 @@ struct HomeView: View {
 
     private func handleBlockingCardAction() {
         if SubscriptionManager.shared.hasPlusAccess {
-            // Entitled but reminder-only: finish Screen Time setup directly.
-            showBlockingSetup = true
+            Task { @MainActor in
+                _ = await AppBlockingManager.shared.ensureAuthorized()
+                showBlockingSetup = true
+            }
         } else {
             // Free: go straight to the paywall (it reports paywallViewed itself).
             blockingPaywallSurface = .homeBlockingCard
@@ -319,7 +321,10 @@ struct HomeView: View {
         pendingTrialActivationAction = nil
         switch action {
         case .appBlocking:
-            showBlockingSetup = true
+            Task { @MainActor in
+                _ = await AppBlockingManager.shared.ensureAuthorized()
+                showBlockingSetup = true
+            }
         case .customMessages:
             showTrialCustomMessagesEditor = true
         case .smartReminders:
