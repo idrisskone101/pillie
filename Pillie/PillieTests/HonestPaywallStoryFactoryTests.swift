@@ -11,6 +11,14 @@ import Testing
 struct HonestPaywallStoryFactoryTests {
     private let english = Locale(identifier: "en_US")
 
+    @Test func `Grant-day rollover count is clamped to the 14-day promise`() {
+        let story = HonestPaywallStoryFactory.duringTrial(
+            daysRemaining: 15,
+            locale: english
+        )
+        #expect(story.daysRemaining == 14)
+    }
+
     @Test func `Known C2 stats become tiles`() {
         let story = HonestPaywallStoryFactory.trialEnded(
             stats: TrialEndOwnStats(
