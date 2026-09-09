@@ -74,6 +74,7 @@ enum PillieTheme {
 
     // Secondary button height
     static let secondaryButtonHeight: CGFloat = 56
+    static let quietButtonHeight: CGFloat = 40
 
     // Layout constants
     static let scrollBottomPaddingWithCTA: CGFloat = 180

@@ -44,10 +44,32 @@ struct PillieSecondaryButtonStyle: ButtonStyle {
     }
 }
 
+struct PillieQuietButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(.pillie(16, weight: .medium))
+            .lineLimit(1)
+            .minimumScaleFactor(0.6)
+            .foregroundStyle(PillieTheme.textMuted)
+            .frame(maxWidth: .infinity)
+            .frame(height: PillieTheme.quietButtonHeight)
+            .background(
+                Capsule()
+                    .fill(configuration.isPressed ? PillieTheme.lavender.opacity(0.5) : Color.clear)
+            )
+            .scaleEffect(configuration.isPressed ? 0.96 : 1.0)
+            .animation(.easeInOut(duration: 0.15), value: configuration.isPressed)
+    }
+}
+
 extension ButtonStyle where Self == PillieDarkButtonStyle {
     static var pillieDark: PillieDarkButtonStyle { PillieDarkButtonStyle() }
 }
 
 extension ButtonStyle where Self == PillieSecondaryButtonStyle {
     static var pillieSecondary: PillieSecondaryButtonStyle { PillieSecondaryButtonStyle() }
+}
+
+extension ButtonStyle where Self == PillieQuietButtonStyle {
+    static var pillieQuiet: PillieQuietButtonStyle { PillieQuietButtonStyle() }
 }

@@ -737,7 +737,7 @@ struct HomeView: View {
                 .allowsHitTesting(false)
                 .transition(ctaStateTransition)
             case .dueAction(_, let requiresShakeConfirm):
-                VStack(spacing: 12) {
+                VStack(spacing: showsBlockingSnooze ? 4 : 0) {
                     Button {
                         ProductAnalyticsTelemetry.live.todayActionStarted()
                         if requiresShakeConfirm {
@@ -771,9 +771,8 @@ struct HomeView: View {
                     if showsBlockingSnooze {
                         Button(action: snoozeBlockingAlarm) {
                             Text(PillieLocalization.string("today.action.snooze", locale: locale))
-                                .frame(maxWidth: .infinity)
                         }
-                        .buttonStyle(PillieTakenButtonStyle())
+                        .buttonStyle(.pillieQuiet)
                         .accessibilityIdentifier("homeBlockingSnooze")
                     }
                 }
