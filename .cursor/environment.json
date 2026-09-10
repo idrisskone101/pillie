@@ -1,0 +1,4 @@
+{
+  "name": "Pillie iOS – Cloud Agent (Linux tooling)",
+  "install": "npm ci && (command -v ruby >/dev/null 2>&1 || (sudo apt-get update -qq && sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq ruby)) && chmod +x Pillie/scripts/*.sh"
+}
