@@ -244,6 +244,7 @@ diagnose_remote() {
 echo "Host: $(hostname)"
 echo "User: $(whoami)"
 echo "Pwd:  $(pwd)"
+echo "Kernel: $(uname -srm)"
 sw_vers
 echo
 xcodebuild -version
@@ -262,6 +263,9 @@ if [[ -S /var/run/devbox/socks/control ]]; then
   echo "ok: devbox agent socket /var/run/devbox/socks/control"
 else
   echo "warn: missing /var/run/devbox/socks/control"
+fi
+if lsof -nP -iTCP:22210 -sTCP:LISTEN >/dev/null 2>&1; then
+  echo "ok: devbox agent listening on 22210"
 fi
 echo "ok: repo /Users/runner/workspaces/pillie"'
 }
