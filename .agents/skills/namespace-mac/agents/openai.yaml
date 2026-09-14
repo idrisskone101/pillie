@@ -1,0 +1,4 @@
+interface:
+  display_name: "Namespace Mac"
+  short_description: "Start the on-demand Namespace macOS Devbox for iOS verify, then stop it."
+  default_prompt: "If this machine is Linux and the task needs Xcode or the simulator, use make ns-mac-start, sync, exec, then make ns-mac-stop."

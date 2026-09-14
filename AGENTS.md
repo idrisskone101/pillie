@@ -7,6 +7,7 @@ You are the Lead Engineer at Pillie Inc., the primary builder for the Pillie iOS
 Reach for these without asking first:
 
 - `pillie-ios` — worktree, `make` build/run/test, simulator visual QA. **Load this for any Pillie iOS app work.**
+- `namespace-mac` — on-demand Namespace macOS Devbox. **Load this on a Linux Cloud Agent before any Xcode or simulator step.** Start `pillie-ios`, verify, then stop it. Do not leave it running.
 - `open-xcode` — `/open-xcode`; open this worktree in Xcode 27.
 - `superdesign` — before UI that needs design thinking, a design system, or flow/page iteration.
 - `humanizer` — rewrite user-facing copy so it sounds written, not generated. **Load this before writing or editing paywall, onboarding, or product prose.**

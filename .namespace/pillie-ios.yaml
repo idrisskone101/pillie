@@ -1,0 +1,9 @@
+# Canonical Namespace macOS Devbox for Pillie iOS verify.
+# Workspace Personal allows one Devbox per user. Do not create a second.
+name: pillie-ios
+image: goldengate
+size: m
+access_mode: private
+auto_stop_idle_timeout: 30m
+repository:
+  url: github.com/idrisskone101/pillie

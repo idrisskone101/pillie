@@ -9,6 +9,10 @@ The agent API is the repo-root Makefile. It wraps `Pillie/scripts`, `/tmp` Deriv
 
 `make diagnose` prints paths, UDID, DerivedData, and toolchain. `make help` lists targets. Script `--help` is the flag source of truth.
 
+## Linux Cloud Agents
+
+If `uname` is Linux, do not run `xcodebuild` or `simctl` on this VM. Load `namespace-mac`, then `make ns-mac-start`, `make ns-mac-sync`, `make ns-mac-exec CMD='make …'`, and `make ns-mac-stop`. The Cloud Agent stays on Linux; `pillie-ios` is the only Namespace Mac.
+
 ## Loop
 
 1. **Worktree.** App edits go in a feature worktree, not the orchestration checkout `/Users/idrisskone/Developer/Pillie`. See [worktrees.md](references/worktrees.md).

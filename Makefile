@@ -19,8 +19,12 @@ endif
 
 .DEFAULT_GOAL := help
 
+CMD ?=
+REF ?=
+
 .PHONY: help diagnose build run build-and-run test screenshot console \
-	worktree agent-verify udid
+	worktree agent-verify udid \
+	ns-mac-status ns-mac-start ns-mac-stop ns-mac-sync ns-mac-diagnose ns-mac-exec
 
 help:
 	@printf "%s\n" \
@@ -34,7 +38,13 @@ help:
 		"  make console                  Blocking app console" \
 		"  make worktree BRANCH=codex/x  Feature worktree from this checkout" \
 		"  make agent-verify             Build; test too if TESTS is set" \
-		"  make udid                     Print the resolved iPhone 17 Pro UDID"
+		"  make udid                     Print the resolved iPhone 17 Pro UDID" \
+		"  make ns-mac-status            Namespace Mac Devbox status" \
+		"  make ns-mac-start             Start the on-demand Namespace Mac" \
+		"  make ns-mac-stop              Stop the Namespace Mac" \
+		"  make ns-mac-sync              Checkout this SHA on the Mac" \
+		"  make ns-mac-diagnose          Remote uname / Xcode / repo check" \
+		"  make ns-mac-exec CMD='make x' Run a command on the Namespace Mac"
 
 diagnose:
 	@$(SCRIPTS)/diagnose.sh
@@ -76,3 +86,25 @@ worktree:
 
 agent-verify: build
 	@if [ -n "$(TESTS)" ]; then $(MAKE) test TESTS="$(TESTS)"; fi
+
+ns-mac-status:
+	@$(SCRIPTS)/namespace-mac.sh status
+
+ns-mac-start:
+	@$(SCRIPTS)/namespace-mac.sh start
+
+ns-mac-stop:
+	@$(SCRIPTS)/namespace-mac.sh stop
+
+ns-mac-sync:
+	@$(SCRIPTS)/namespace-mac.sh sync "$(REF)"
+
+ns-mac-diagnose:
+	@$(SCRIPTS)/namespace-mac.sh diagnose
+
+ns-mac-exec:
+	@if [ -z "$(CMD)" ]; then \
+		echo "Pass CMD='make build' (or another remote command)." >&2; \
+		exit 64; \
+	fi
+	@$(SCRIPTS)/namespace-mac.sh exec -- /bin/bash -lc "$(CMD)"
