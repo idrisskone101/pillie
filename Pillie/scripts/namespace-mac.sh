@@ -114,7 +114,23 @@ auth_check() {
 }
 
 list_json() {
-  devbox list --show-all -o json
+  python3 - <<'PY'
+import json, subprocess, sys
+
+proc = subprocess.run(
+    ["devbox", "list", "--show-all", "-o", "json"],
+    capture_output=True,
+    text=True,
+)
+text = ((proc.stdout or "") + (proc.stderr or "")).strip()
+data = []
+for index, char in enumerate(text):
+    if char in "[{":
+        data = json.loads(text[index:])
+        break
+json.dump(data, sys.stdout)
+sys.stdout.write("\n")
+PY
 }
 
 devbox_exists() {
