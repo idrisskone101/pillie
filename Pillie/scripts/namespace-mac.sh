@@ -76,6 +76,10 @@ hydrate_auth() {
     echo "missing: NSC_TOKEN (Cursor Cloud Agent secret). iOS verify on Namespace cannot start." >&2
     return 0
   fi
+  if [[ "$raw" == tok_* || ${#raw} -lt 80 ]]; then
+    echo "error: NSC_TOKEN looks like a Namespace token id, not the bearer token. Paste the long secret value, not tok_…" >&2
+    return 1
+  fi
   if [[ "$raw" == \{* ]]; then
     printf '%s\n' "$raw" >"$TOKEN_PATH"
   else
