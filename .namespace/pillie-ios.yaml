@@ -1,10 +1,15 @@
 # Canonical Namespace macOS Devbox for Pillie iOS verify.
 # Workspace Personal allows one Devbox per user. Do not create a second.
-# Cost: size M is the smallest macOS shape. Idle 15m is the platform minimum.
-# Volume 100 GiB stays in one 100 GB storage block; the default 150 GiB is two.
-# DerivedData stays in /tmp on the Mac, so the volume only needs the checkout.
+# The live box is os: macos + selector macos.version=27.x (not goldengate,
+# not macos.purpose=githubrunner). Cloud Agents start/stop it through
+# Pillie/scripts/namespace-mac.sh (Connect JSON + native SSH), not the
+# `devbox` CLI. Cost: size M is the smallest macOS shape. Idle 15m is the
+# platform minimum; live busyEnsureMinimumDuration may be longer, so always
+# Stop. Volume 100 GiB stays in one 100 GB storage block; the default
+# 150 GiB is two. DerivedData stays in /tmp on the Mac.
 name: pillie-ios
-image: goldengate
+os: macos
+macos_version: "27.x"
 size: m
 access_mode: private
 auto_stop_idle_timeout: 15m

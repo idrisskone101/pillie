@@ -3,6 +3,7 @@
 # Usage:
 #   Pillie/scripts/namespace-mac.sh install-cli
 #   Pillie/scripts/namespace-mac.sh hydrate-auth
+#   Pillie/scripts/namespace-mac.sh auth-check
 #   Pillie/scripts/namespace-mac.sh status
 #   Pillie/scripts/namespace-mac.sh ensure
 #   Pillie/scripts/namespace-mac.sh start
@@ -10,30 +11,33 @@
 #   Pillie/scripts/namespace-mac.sh exec -- <command...>
 #   Pillie/scripts/namespace-mac.sh sync [ref]
 #   Pillie/scripts/namespace-mac.sh diagnose
+#   Pillie/scripts/namespace-mac.sh screenshot
 #   Pillie/scripts/namespace-mac.sh verify -- <command...>
-# Linux Cloud Agents stay on Linux. Prefer `verify` for a single iOS job.
-# For a batch, `start`, then sync/exec, then `stop`. Do not leave it running.
-# One-shot exec/sync/diagnose stop the Mac if they had to start it.
-# KEEP=1 / NS_MAC_KEEP=1 leaves it up. Idle auto-stop is 15m (backstop).
+#
+# Linux Cloud Agents stay on Linux. Exec is native SSH (GetSSHConfig),
+# not `devbox exec`, `nsc ssh`, or `nsc proxy`. Prefer `verify` for one
+# iOS job. For a batch, `start`, then sync/exec, then `stop`.
+# One-shot exec/sync/diagnose/screenshot stop the Mac if they had to start it.
+# KEEP=1 / NS_MAC_KEEP=1 leaves it up. Always Stop; never Expire.
 
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+API="$SCRIPT_DIR/namespace-mac-api.py"
 
 DEVBOX_NAME="${PILLIE_NS_DEVBOX_NAME:-pillie-ios}"
-DEVBOX_IMAGE="${PILLIE_NS_DEVBOX_IMAGE:-goldengate}"
-DEVBOX_SIZE="${PILLIE_NS_DEVBOX_SIZE:-m}"
-DEVBOX_IDLE="${PILLIE_NS_DEVBOX_IDLE:-15m}"
-DEVBOX_VOLUME_GB="${PILLIE_NS_DEVBOX_VOLUME_GB:-100}"
-DEVBOX_REPO="${PILLIE_NS_DEVBOX_REPO:-github.com/idrisskone101/pillie}"
 REMOTE_DIR="${PILLIE_NS_REMOTE_DIR:-/Users/runner/workspaces/pillie}"
+SSH_DIR="${PILLIE_NS_SSH_DIR:-$HOME/.namespace/ssh}"
+SSH_HOST="${PILLIE_NS_SSH_HOST:-pillie-ios}"
+SSH_CONFIG="$SSH_DIR/${SSH_HOST}.config"
+ARTIFACT_DIR="${PILLIE_NS_ARTIFACT_DIR:-/opt/cursor/artifacts}"
 TOKEN_PATH="${NSC_TOKEN_FILE:-$HOME/.config/ns/token.json}"
 
 export PATH="$HOME/.local/bin:/usr/local/bin:$PATH"
 
 usage() {
-  sed -n '2,17p' "$0" | sed 's/^# \{0,1\}//'
+  sed -n '2,22p' "$0" | sed 's/^# \{0,1\}//'
 }
 
 need_cmd() {
@@ -51,20 +55,17 @@ install_cli() {
   if ! command -v nsc >/dev/null 2>&1; then
     curl -fsSL https://get.namespace.so/cloud/install.sh | sh
   fi
-  if ! command -v devbox >/dev/null 2>&1; then
-    curl -fsSL https://get.namespace.so/devbox/install.sh | bash
-  fi
   export PATH="$HOME/.local/bin:/usr/local/bin:$PATH"
   command -v nsc >/dev/null 2>&1 || {
     echo "error: nsc did not install onto PATH" >&2
     exit 1
   }
-  command -v devbox >/dev/null 2>&1 || {
-    echo "error: devbox did not install onto PATH" >&2
+  command -v curl >/dev/null 2>&1 || {
+    echo "error: curl is required for DevBoxService RPCs" >&2
     exit 1
   }
   echo "ok: nsc $(nsc version 2>/dev/null | head -1)"
-  echo "ok: devbox $(devbox version 2>/dev/null | head -1)"
+  echo "ok: skipping the devbox CLI (this Cloud Agent token cannot log it in)"
 }
 
 hydrate_auth() {
@@ -105,155 +106,100 @@ PY
 
 auth_check() {
   need_cmd nsc
-  need_cmd devbox
+  need_cmd curl
   hydrate_auth
+  if [[ ! -f "${NSC_TOKEN_FILE:-$TOKEN_PATH}" ]]; then
+    echo "error: not logged into Namespace. Add the NSC_TOKEN Cloud Agent secret." >&2
+    exit 1
+  fi
   if ! nsc auth check-login >/dev/null 2>&1; then
-    echo "error: not logged into Namespace. Add the NSC_TOKEN Cloud Agent secret, or run nsc login." >&2
+    echo "error: nsc auth check-login failed. Add the NSC_TOKEN Cloud Agent secret." >&2
     exit 1
   fi
 }
 
-list_json() {
-  python3 - <<'PY'
-import json, subprocess, sys
-
-proc = subprocess.run(
-    ["devbox", "list", "--show-all", "-o", "json"],
-    capture_output=True,
-    text=True,
-)
-text = ((proc.stdout or "") + (proc.stderr or "")).strip()
-data = []
-for index, char in enumerate(text):
-    if char in "[{":
-        data = json.loads(text[index:])
-        break
-json.dump(data, sys.stdout)
-sys.stdout.write("\n")
-PY
-}
-
-devbox_exists() {
-  list_json | python3 -c '
-import json, sys
-name = sys.argv[1]
-items = json.load(sys.stdin) or []
-sys.exit(0 if any(item.get("name") == name for item in items) else 1)
-' "$DEVBOX_NAME"
-}
-
-macos_names() {
-  list_json | python3 -c '
-import json, sys
-items = json.load(sys.stdin) or []
-for item in items:
-    shape = item.get("instance_shape") or {}
-    if shape.get("os") == "macos":
-        print(item.get("name", ""))
-'
+api() {
+  python3 "$API" "$@"
 }
 
 is_running() {
-  nsc list --all -o json | python3 -c '
-import json, sys
-data = json.load(sys.stdin)
-sys.exit(0 if data not in (None, [], {}) else 1)
-'
+  api instance >/dev/null 2>&1
 }
 
-create_devbox() {
-  devbox create \
-    --name "$DEVBOX_NAME" \
-    --platform macos \
-    --size "$DEVBOX_SIZE" \
-    --image "$DEVBOX_IMAGE" \
-    --checkout "$DEVBOX_REPO" \
-    --auto_stop_idle_timeout "$DEVBOX_IDLE" \
-    --activate=false \
-    --purpose "On-demand Xcode / iOS simulator for Cursor Cloud Agents" \
-    --access_mode private \
-    "$@"
+ssh_cmd() {
+  if [[ ! -f "$SSH_CONFIG" ]]; then
+    echo "error: missing $SSH_CONFIG. Run start first." >&2
+    exit 1
+  fi
+  ssh -F "$SSH_CONFIG" "$SSH_HOST" "$@"
+}
+
+wait_for_ssh() {
+  local tries=0
+  while (( tries < 60 )); do
+    if ssh -F "$SSH_CONFIG" -o ConnectTimeout=10 "$SSH_HOST" -- /usr/bin/uname -m >/dev/null 2>&1; then
+      return 0
+    fi
+    tries=$((tries + 1))
+    sleep 5
+  done
+  echo "error: SSH to $DEVBOX_NAME did not accept the instance key" >&2
+  exit 1
+}
+
+close_ssh_master() {
+  if [[ -S "$SSH_DIR/${SSH_HOST}.ctl" || -S "$SSH_DIR/${SSH_HOST}.ctl=D" ]]; then
+    ssh -F "$SSH_CONFIG" -O exit "$SSH_HOST" >/dev/null 2>&1 || true
+  fi
+  rm -f "$SSH_DIR/${SSH_HOST}.ctl" "$SSH_DIR/${SSH_HOST}.ctl="* 2>/dev/null || true
 }
 
 ensure() {
   auth_check
-  if devbox_exists; then
-    echo "ok: $DEVBOX_NAME exists"
-    return 0
-  fi
-  local extras
-  extras="$(macos_names)"
-  if [[ -n "$extras" ]]; then
-    echo "error: found other macOS Devboxes ($extras). Keep exactly one: $DEVBOX_NAME." >&2
-    exit 1
-  fi
-  echo "creating $DEVBOX_NAME (stopped, idle ${DEVBOX_IDLE}, ${DEVBOX_VOLUME_GB} GiB)..."
-  if [[ -n "$DEVBOX_VOLUME_GB" ]]; then
-    if create_devbox --volume_size_gb "$DEVBOX_VOLUME_GB"; then
-      return 0
-    fi
-    echo "warn: volume_size_gb=$DEVBOX_VOLUME_GB rejected; creating with the platform default" >&2
-  fi
-  create_devbox
+  api ensure
 }
 
-print_live_spec() {
-  list_json | python3 -c '
-import json, sys
-name, want_idle, want_vol = sys.argv[1], sys.argv[2], sys.argv[3]
-items = json.load(sys.stdin) or []
-item = next((row for row in items if row.get("name") == name), None)
-if item is None:
-    print("live: missing")
-    raise SystemExit(0)
-idle = item.get("busy_ensure_minimum_duration", "?")
-vol = item.get("volume_size_gb", "?")
-print(f"live idle: {idle} (spec {want_idle})")
-print(f"live volume: {vol} GiB (spec {want_vol} GiB)")
-if idle not in ("900s", "15m") and want_idle == "15m":
-    print("warn: live idle is above the 15m minimum. Recreate the stopped Devbox to apply.")
-' "$DEVBOX_NAME" "$DEVBOX_IDLE" "$DEVBOX_VOLUME_GB"
+print_running_instances() {
+  # `nsc list --all` wants a TTY. Plain `nsc list -o json` is enough.
+  local raw
+  raw="$(nsc list -o json 2>/dev/null || true)"
+  if [[ -z "$raw" || "$raw" == "null" ]]; then
+    echo "none"
+    return 0
+  fi
+  printf '%s\n' "$raw"
 }
 
 status() {
   auth_check
   echo "Devbox: $DEVBOX_NAME"
-  echo "Workspace:"
-  nsc workspace describe 2>/dev/null || true
   echo
-  echo "Devboxes:"
-  devbox list --show-all
+  api status
   echo
   echo "Running instances:"
-  nsc list --all
+  print_running_instances
   echo
-  print_live_spec
   if is_running; then
     echo "compute: running — stop with make ns-mac-stop when verify is done"
   else
     echo "compute: stopped"
   fi
   echo "cost: macOS M is \$0.06/min while running. Stopped compute is free. Prefer make ns-mac-verify."
+  echo "exec: native SSH via GetSSHConfig. Do not use the devbox CLI, nsc ssh, or nsc proxy."
 }
 
 start() {
   ensure
-  echo "starting $DEVBOX_NAME..."
-  devbox exec "$DEVBOX_NAME" -- /usr/bin/uname -a
-  echo "ok: $DEVBOX_NAME is up. Stop it with make ns-mac-stop when verify is done."
+  api activate
+  api write-ssh >/dev/null
+  wait_for_ssh
+  echo "ok: $DEVBOX_NAME is up over native SSH. Stop it with make ns-mac-stop when verify is done."
 }
 
 stop() {
   auth_check
-  if ! devbox_exists; then
-    echo "ok: $DEVBOX_NAME is not present"
-    return 0
-  fi
-  if ! is_running; then
-    echo "ok: $DEVBOX_NAME is already stopped"
-    return 0
-  fi
-  devbox shutdown "$DEVBOX_NAME" --force
+  close_ssh_master
+  api stop
 }
 
 maybe_stop() {
@@ -270,12 +216,17 @@ maybe_stop() {
 }
 
 exec_remote() {
-  ensure
   if [[ $# -eq 0 ]]; then
     echo "error: pass a command after --" >&2
     exit 64
   fi
-  devbox exec "$DEVBOX_NAME" -- "$@"
+  if ! is_running; then
+    start
+  elif [[ ! -f "$SSH_CONFIG" ]]; then
+    api write-ssh >/dev/null
+    wait_for_ssh
+  fi
+  ssh_cmd -- "$@"
 }
 
 sync_ref() {
@@ -283,16 +234,12 @@ sync_ref() {
   if [[ -z "$ref" ]]; then
     ref="$(git -C "$REPO_ROOT" rev-parse HEAD)"
   fi
-  ensure
   echo "syncing $REMOTE_DIR to $ref"
-  devbox exec "$DEVBOX_NAME" -- /bin/bash -lc \
+  exec_remote /bin/bash -lc \
     "set -euo pipefail; cd '$REMOTE_DIR'; git fetch --all --tags; git checkout --detach '$ref'"
 }
 
 diagnose_remote() {
-  start
-  echo
-  # Single-quoted remote script so hostname/whoami/pwd run on the Mac.
   exec_remote /bin/bash -lc 'set -euo pipefail
 echo "Host: $(hostname)"
 echo "User: $(whoami)"
@@ -303,11 +250,48 @@ xcodebuild -version
 echo
 xcode-select -p
 echo
+echo "Xcode apps:"
+ls /Applications | grep -i xcode || true
+echo
 cd /Users/runner/workspaces/pillie
-git rev-parse --abbrev-ref HEAD
+git rev-parse --abbrev-ref HEAD || true
 git rev-parse --short HEAD
 ls Pillie >/dev/null
+echo
+if [[ -S /var/run/devbox/socks/control ]]; then
+  echo "ok: devbox agent socket /var/run/devbox/socks/control"
+else
+  echo "warn: missing /var/run/devbox/socks/control"
+fi
 echo "ok: repo /Users/runner/workspaces/pillie"'
+}
+
+remote_screenshot_script() {
+  cat <<'REMOTE'
+set -euo pipefail
+cd /Users/runner/workspaces/pillie
+UDID="$(make -s udid)"
+xcrun simctl boot "$UDID" || true
+xcrun simctl bootstatus "$UDID" -b
+make build-and-run
+if command -v magick >/dev/null 2>&1; then
+  make screenshot
+else
+  echo "warn: magick missing; using sips for the 1x screenshot"
+  xcrun simctl io "$UDID" screenshot /tmp/sim_screenshot.png
+  sips -Z 430 /tmp/sim_screenshot.png --out /tmp/sim_screenshot_1x.png >/dev/null
+  echo "Wrote /tmp/sim_screenshot_1x.png"
+fi
+REMOTE
+}
+
+screenshot_remote() {
+  mkdir -p "$ARTIFACT_DIR"
+  sync_ref "${REF:-}"
+  exec_remote /bin/bash -lc "$(remote_screenshot_script)"
+  scp -F "$SSH_CONFIG" "$SSH_HOST:/tmp/sim_screenshot.png" "$ARTIFACT_DIR/pillie_simulator.png" || true
+  scp -F "$SSH_CONFIG" "$SSH_HOST:/tmp/sim_screenshot_1x.png" "$ARTIFACT_DIR/pillie_simulator_1x.png"
+  echo "ok: $ARTIFACT_DIR/pillie_simulator_1x.png"
 }
 
 run_oneshot() {
@@ -366,6 +350,7 @@ case "$cmd" in
     ;;
   sync) run_oneshot sync_ref "${1:-}" ;;
   diagnose) run_oneshot diagnose_remote ;;
+  screenshot) run_oneshot screenshot_remote ;;
   verify)
     if [[ "${1:-}" == "--" ]]; then
       shift

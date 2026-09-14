@@ -2,7 +2,7 @@
 
 Done when: a 1x screenshot shows the changed UI, and `axe describe-ui` contains the expected labels (or a named focused test passed).
 
-1. `make build-and-run` (or `make run` if already built).
+1. Boot the simulator, then `make build-and-run` (or `make run` if already built). `build-and-run` does not boot; install fails with `SimError 405 Shutdown` until `xcrun simctl boot "$UDID"` and `bootstatus -b` succeed. On a Linux Cloud Agent, `make ns-mac-screenshot` does this on `pillie-ios`.
 2. `UDID=$(make -s udid)` then `axe describe-ui --udid "$UDID"`.
 3. `make screenshot` and inspect `/tmp/sim_screenshot_1x.png`.
 4. Navigate with accessibility identifiers or labels. Coordinate taps only after the 1x image (points, not pixels).
