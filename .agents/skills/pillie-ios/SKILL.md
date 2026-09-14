@@ -11,7 +11,7 @@ The agent API is the repo-root Makefile. It wraps `Pillie/scripts`, `/tmp` Deriv
 
 ## Linux Cloud Agents
 
-If `uname` is Linux, do not run `xcodebuild` or `simctl` on this VM. Load `namespace-mac`, then `make ns-mac-start`, `make ns-mac-sync`, `make ns-mac-exec CMD='make …'`, and `make ns-mac-stop`. The Cloud Agent stays on Linux; `pillie-ios` is the only Namespace Mac.
+If `uname` is Linux, do not run `xcodebuild` or `simctl` on this VM. Load `namespace-mac`, then prefer `make ns-mac-verify CMD='make …'`. For a batch, `make ns-mac-start`, `make ns-mac-sync`, `make ns-mac-exec CMD='make …'`, and `make ns-mac-stop`. The Cloud Agent stays on Linux; `pillie-ios` is the only Namespace Mac.
 
 ## Loop
 

@@ -10,9 +10,11 @@
 #   Pillie/scripts/namespace-mac.sh exec -- <command...>
 #   Pillie/scripts/namespace-mac.sh sync [ref]
 #   Pillie/scripts/namespace-mac.sh diagnose
-#
-# Linux Cloud Agents stay on Linux. Start this Mac only for Xcode / simulator
-# work, then stop it. Do not leave it running.
+#   Pillie/scripts/namespace-mac.sh verify -- <command...>
+# Linux Cloud Agents stay on Linux. Prefer `verify` for a single iOS job.
+# For a batch, `start`, then sync/exec, then `stop`. Do not leave it running.
+# One-shot exec/sync/diagnose stop the Mac if they had to start it.
+# KEEP=1 / NS_MAC_KEEP=1 leaves it up. Idle auto-stop is 15m (backstop).
 
 set -euo pipefail
 
@@ -22,7 +24,8 @@ REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 DEVBOX_NAME="${PILLIE_NS_DEVBOX_NAME:-pillie-ios}"
 DEVBOX_IMAGE="${PILLIE_NS_DEVBOX_IMAGE:-goldengate}"
 DEVBOX_SIZE="${PILLIE_NS_DEVBOX_SIZE:-m}"
-DEVBOX_IDLE="${PILLIE_NS_DEVBOX_IDLE:-30m}"
+DEVBOX_IDLE="${PILLIE_NS_DEVBOX_IDLE:-15m}"
+DEVBOX_VOLUME_GB="${PILLIE_NS_DEVBOX_VOLUME_GB:-100}"
 DEVBOX_REPO="${PILLIE_NS_DEVBOX_REPO:-github.com/idrisskone101/pillie}"
 REMOTE_DIR="${PILLIE_NS_REMOTE_DIR:-/Users/runner/workspaces/pillie}"
 TOKEN_PATH="${NSC_TOKEN_FILE:-$HOME/.config/ns/token.json}"
@@ -30,7 +33,7 @@ TOKEN_PATH="${NSC_TOKEN_FILE:-$HOME/.config/ns/token.json}"
 export PATH="$HOME/.local/bin:/usr/local/bin:$PATH"
 
 usage() {
-  sed -n '2,16p' "$0" | sed 's/^# //'
+  sed -n '2,17p' "$0" | sed 's/^# \{0,1\}//'
 }
 
 need_cmd() {
@@ -38,6 +41,10 @@ need_cmd() {
     echo "error: missing $1. Run: $0 install-cli" >&2
     exit 1
   fi
+}
+
+keep_requested() {
+  [[ "${NS_MAC_KEEP:-${KEEP:-0}}" == "1" ]]
 }
 
 install_cli() {
@@ -130,6 +137,28 @@ for item in items:
 '
 }
 
+is_running() {
+  nsc list --all -o json | python3 -c '
+import json, sys
+data = json.load(sys.stdin)
+sys.exit(0 if data not in (None, [], {}) else 1)
+'
+}
+
+create_devbox() {
+  devbox create \
+    --name "$DEVBOX_NAME" \
+    --platform macos \
+    --size "$DEVBOX_SIZE" \
+    --image "$DEVBOX_IMAGE" \
+    --checkout "$DEVBOX_REPO" \
+    --auto_stop_idle_timeout "$DEVBOX_IDLE" \
+    --activate=false \
+    --purpose "On-demand Xcode / iOS simulator for Cursor Cloud Agents" \
+    --access_mode private \
+    "$@"
+}
+
 ensure() {
   auth_check
   if devbox_exists; then
@@ -142,17 +171,32 @@ ensure() {
     echo "error: found other macOS Devboxes ($extras). Keep exactly one: $DEVBOX_NAME." >&2
     exit 1
   fi
-  echo "creating $DEVBOX_NAME (stopped)..."
-  devbox create \
-    --name "$DEVBOX_NAME" \
-    --platform macos \
-    --size "$DEVBOX_SIZE" \
-    --image "$DEVBOX_IMAGE" \
-    --checkout "$DEVBOX_REPO" \
-    --auto_stop_idle_timeout "$DEVBOX_IDLE" \
-    --activate=false \
-    --purpose "On-demand Xcode / iOS simulator for Cursor Cloud Agents" \
-    --access_mode private
+  echo "creating $DEVBOX_NAME (stopped, idle ${DEVBOX_IDLE}, ${DEVBOX_VOLUME_GB} GiB)..."
+  if [[ -n "$DEVBOX_VOLUME_GB" ]]; then
+    if create_devbox --volume_size_gb "$DEVBOX_VOLUME_GB"; then
+      return 0
+    fi
+    echo "warn: volume_size_gb=$DEVBOX_VOLUME_GB rejected; creating with the platform default" >&2
+  fi
+  create_devbox
+}
+
+print_live_spec() {
+  list_json | python3 -c '
+import json, sys
+name, want_idle, want_vol = sys.argv[1], sys.argv[2], sys.argv[3]
+items = json.load(sys.stdin) or []
+item = next((row for row in items if row.get("name") == name), None)
+if item is None:
+    print("live: missing")
+    raise SystemExit(0)
+idle = item.get("busy_ensure_minimum_duration", "?")
+vol = item.get("volume_size_gb", "?")
+print(f"live idle: {idle} (spec {want_idle})")
+print(f"live volume: {vol} GiB (spec {want_vol} GiB)")
+if idle not in ("900s", "15m") and want_idle == "15m":
+    print("warn: live idle is above the 15m minimum. Recreate the stopped Devbox to apply.")
+' "$DEVBOX_NAME" "$DEVBOX_IDLE" "$DEVBOX_VOLUME_GB"
 }
 
 status() {
@@ -166,12 +210,21 @@ status() {
   echo
   echo "Running instances:"
   nsc list --all
+  echo
+  print_live_spec
+  if is_running; then
+    echo "compute: running — stop with make ns-mac-stop when verify is done"
+  else
+    echo "compute: stopped"
+  fi
+  echo "cost: macOS M is \$0.06/min while running. Stopped compute is free. Prefer make ns-mac-verify."
 }
 
 start() {
   ensure
   echo "starting $DEVBOX_NAME..."
   devbox exec "$DEVBOX_NAME" -- /usr/bin/uname -a
+  echo "ok: $DEVBOX_NAME is up. Stop it with make ns-mac-stop when verify is done."
 }
 
 stop() {
@@ -180,7 +233,24 @@ stop() {
     echo "ok: $DEVBOX_NAME is not present"
     return 0
   fi
+  if ! is_running; then
+    echo "ok: $DEVBOX_NAME is already stopped"
+    return 0
+  fi
   devbox shutdown "$DEVBOX_NAME" --force
+}
+
+maybe_stop() {
+  local was="${1:-0}"
+  if keep_requested; then
+    echo "ok: leaving $DEVBOX_NAME running (KEEP=1)"
+    return 0
+  fi
+  if [[ "$was" == "1" ]]; then
+    return 0
+  fi
+  echo "ok: stopping $DEVBOX_NAME (started for this command; KEEP=1 to leave it up)"
+  stop
 }
 
 exec_remote() {
@@ -224,6 +294,40 @@ ls Pillie >/dev/null
 echo "ok: repo /Users/runner/workspaces/pillie"'
 }
 
+run_oneshot() {
+  local was=0
+  if is_running; then
+    was=1
+  fi
+  local rc=0
+  "$@" || rc=$?
+  maybe_stop "$was" || true
+  return "$rc"
+}
+
+verify_remote() {
+  if [[ $# -eq 0 ]]; then
+    echo "error: pass a command after --" >&2
+    exit 64
+  fi
+  local ref="${REF:-}"
+  local rc=0
+  start || rc=$?
+  if [[ $rc -eq 0 ]]; then
+    sync_ref "$ref" || rc=$?
+  fi
+  if [[ $rc -eq 0 ]]; then
+    exec_remote "$@" || rc=$?
+  fi
+  if keep_requested; then
+    echo "ok: leaving $DEVBOX_NAME running (KEEP=1)"
+  else
+    echo "ok: stopping $DEVBOX_NAME after verify"
+    stop || true
+  fi
+  return "$rc"
+}
+
 cmd="${1:-}"
 if [[ $# -gt 0 ]]; then
   shift
@@ -242,10 +346,16 @@ case "$cmd" in
     if [[ "${1:-}" == "--" ]]; then
       shift
     fi
-    exec_remote "$@"
+    run_oneshot exec_remote "$@"
     ;;
-  sync) sync_ref "${1:-}" ;;
-  diagnose) diagnose_remote ;;
+  sync) run_oneshot sync_ref "${1:-}" ;;
+  diagnose) run_oneshot diagnose_remote ;;
+  verify)
+    if [[ "${1:-}" == "--" ]]; then
+      shift
+    fi
+    verify_remote "$@"
+    ;;
   *)
     echo "Unknown argument: $cmd" >&2
     usage >&2

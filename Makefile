@@ -21,10 +21,12 @@ endif
 
 CMD ?=
 REF ?=
+KEEP ?=
 
 .PHONY: help diagnose build run build-and-run test screenshot console \
 	worktree agent-verify udid \
-	ns-mac-status ns-mac-start ns-mac-stop ns-mac-sync ns-mac-diagnose ns-mac-exec
+	ns-mac-status ns-mac-start ns-mac-stop ns-mac-sync ns-mac-diagnose \
+	ns-mac-exec ns-mac-verify
 
 help:
 	@printf "%s\n" \
@@ -40,6 +42,7 @@ help:
 		"  make agent-verify             Build; test too if TESTS is set" \
 		"  make udid                     Print the resolved iPhone 17 Pro UDID" \
 		"  make ns-mac-status            Namespace Mac Devbox status" \
+		"  make ns-mac-verify CMD='make x' Start, sync, run, stop (preferred)" \
 		"  make ns-mac-start             Start the on-demand Namespace Mac" \
 		"  make ns-mac-stop              Stop the Namespace Mac" \
 		"  make ns-mac-sync              Checkout this SHA on the Mac" \
@@ -97,14 +100,21 @@ ns-mac-stop:
 	@$(SCRIPTS)/namespace-mac.sh stop
 
 ns-mac-sync:
-	@$(SCRIPTS)/namespace-mac.sh sync "$(REF)"
+	@KEEP="$(KEEP)" $(SCRIPTS)/namespace-mac.sh sync "$(REF)"
 
 ns-mac-diagnose:
-	@$(SCRIPTS)/namespace-mac.sh diagnose
+	@KEEP="$(KEEP)" $(SCRIPTS)/namespace-mac.sh diagnose
 
 ns-mac-exec:
 	@if [ -z "$(CMD)" ]; then \
 		echo "Pass CMD='make build' (or another remote command)." >&2; \
 		exit 64; \
 	fi
-	@$(SCRIPTS)/namespace-mac.sh exec -- /bin/bash -lc "$(CMD)"
+	@KEEP="$(KEEP)" $(SCRIPTS)/namespace-mac.sh exec -- /bin/bash -lc "$(CMD)"
+
+ns-mac-verify:
+	@if [ -z "$(CMD)" ]; then \
+		echo "Pass CMD='make build' (or another remote command)." >&2; \
+		exit 64; \
+	fi
+	@KEEP="$(KEEP)" REF="$(REF)" $(SCRIPTS)/namespace-mac.sh verify -- /bin/bash -lc "$(CMD)"
