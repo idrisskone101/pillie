@@ -20,7 +20,6 @@ if [[ $# -gt 1 ]]; then
   exit 64
 fi
 
-UDID="${PILLIE_SIMULATOR_UDID:-124DC75F-0771-4C81-841D-F13655138260}"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 if [[ $# -eq 1 ]]; then
@@ -56,6 +55,7 @@ BRANCH="${BRANCH:-detached}"
 . "$SCRIPT_DIR/xcode-env.sh"
 
 pillie_select_developer_dir
+UDID="$(pillie_default_simulator_udid)"
 
 XCODE_APP="$(pillie_xcode_app_path)"
 

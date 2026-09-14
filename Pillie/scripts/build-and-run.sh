@@ -9,7 +9,6 @@
 
 set -euo pipefail
 
-UDID="${PILLIE_SIMULATOR_UDID:-124DC75F-0771-4C81-841D-F13655138260}"
 SCHEME="Pillie"
 PROJECT="Pillie.xcodeproj"
 BUNDLE_ID="com.idrisskone.pillie"
@@ -17,6 +16,8 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_DIR="$SCRIPT_DIR/.."
 REPO_ROOT="$(cd "$PROJECT_DIR/.." && pwd)"
 . "$SCRIPT_DIR/xcode-env.sh"
+pillie_select_developer_dir
+UDID="$(pillie_default_simulator_udid)"
 DERIVED_DATA="$(pillie_derived_data_for_repo_root "$REPO_ROOT")"
 
 APP_PATH="$DERIVED_DATA/Build/Products/Debug-iphonesimulator/Pillie.app"
@@ -86,7 +87,7 @@ build() {
     -derivedDataPath "$DERIVED_DATA" \
     -configuration Debug \
     -jobs "$jobs" \
-    build 2>&1 | xcsift
+    build 2>&1 | pillie_filter_xcodebuild
 }
 
 install_app() {
@@ -104,7 +105,6 @@ launch_app() {
   fi
 }
 
-pillie_select_developer_dir
 pillie_shutdown_extra_simulators "$UDID"
 
 if [[ "$BUILD" == "1" ]]; then

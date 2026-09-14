@@ -5,8 +5,31 @@
 # installed so terminal, MCP, Codex actions, and Xcode-open workflows do not
 # silently drift back to the globally selected Xcode 26.x toolchain.
 
+# Laptop Device Hub pin. Used when that UDID exists; otherwise scripts pick a
+# local iPhone 17 Pro so Cloud Agents / Namespace Macs do not fail.
+PILLIE_PINNED_SIMULATOR_UDID="124DC75F-0771-4C81-841D-F13655138260"
+
 pillie_default_developer_dir() {
-  printf "%s" "${PILLIE_XCODE27_DEVELOPER_DIR:-/Applications/Xcode-beta.app/Contents/Developer}"
+  local candidate ver
+  if [[ -n "${PILLIE_XCODE27_DEVELOPER_DIR:-}" ]]; then
+    printf "%s" "$PILLIE_XCODE27_DEVELOPER_DIR"
+    return
+  fi
+  for candidate in \
+    /Applications/Xcode-beta.app/Contents/Developer \
+    /Applications/Xcode_27-RC.app/Contents/Developer \
+    /Applications/Xcode_27.app/Contents/Developer \
+    /Applications/Xcode.app/Contents/Developer
+  do
+    if [[ -d "$candidate" ]]; then
+      ver="$(pillie_developer_dir_version "$candidate" || true)"
+      if [[ "$ver" == 27* ]]; then
+        printf "%s" "$candidate"
+        return
+      fi
+    fi
+  done
+  printf "%s" "/Applications/Xcode-beta.app/Contents/Developer"
 }
 
 pillie_developer_dir_version() {
@@ -59,8 +82,103 @@ pillie_xcode_app_path() {
   fi
 }
 
+pillie_simulator_available() {
+  local udid="$1"
+  PILLIE_CHECK_UDID="$udid" python3 - <<'PY'
+import json, os, subprocess, sys
+udid = os.environ["PILLIE_CHECK_UDID"]
+try:
+    raw = subprocess.check_output(
+        ["xcrun", "simctl", "list", "devices", "-j"],
+        stderr=subprocess.DEVNULL,
+    )
+except subprocess.CalledProcessError:
+    sys.exit(1)
+data = json.loads(raw)
+for devices in data.get("devices", {}).values():
+    for device in devices:
+        if device.get("udid") != udid:
+            continue
+        if device.get("isAvailable") is False:
+            sys.exit(1)
+        availability = str(device.get("availability") or "")
+        if "unavailable" in availability.lower():
+            sys.exit(1)
+        sys.exit(0)
+sys.exit(1)
+PY
+}
+
+pillie_pick_local_iphone_17_pro() {
+  python3 - <<'PY'
+import json, re, subprocess, sys
+try:
+    raw = subprocess.check_output(
+        ["xcrun", "simctl", "list", "devices", "-j"],
+        stderr=subprocess.DEVNULL,
+    )
+except subprocess.CalledProcessError:
+    sys.exit(1)
+data = json.loads(raw)
+candidates = []
+for runtime, devices in data.get("devices", {}).items():
+    match = re.search(r"iOS-(\d+)-(\d+)", runtime)
+    major = int(match.group(1)) if match else 0
+    minor = int(match.group(2)) if match else 0
+    for device in devices:
+        if device.get("name") != "iPhone 17 Pro":
+            continue
+        if device.get("isAvailable") is False:
+            continue
+        availability = str(device.get("availability") or "")
+        if "unavailable" in availability.lower():
+            continue
+        booted = 1 if device.get("state") == "Booted" else 0
+        candidates.append((major, minor, booted, device["udid"]))
+if not candidates:
+    sys.exit(1)
+candidates.sort(reverse=True)
+print(candidates[0][3], end="")
+PY
+}
+
+# Prefer an explicit env UDID, then the laptop pin, then any local iPhone 17 Pro.
 pillie_default_simulator_udid() {
-  printf "%s" "${PILLIE_SIMULATOR_UDID:-124DC75F-0771-4C81-841D-F13655138260}"
+  local requested pin picked
+  requested="${PILLIE_SIMULATOR_UDID:-}"
+  pin="$PILLIE_PINNED_SIMULATOR_UDID"
+
+  if [[ -n "$requested" ]]; then
+    if pillie_simulator_available "$requested"; then
+      printf "%s" "$requested"
+      return
+    fi
+    echo "warning: PILLIE_SIMULATOR_UDID=$requested is not on this Mac; picking a local iPhone 17 Pro." >&2
+  elif pillie_simulator_available "$pin"; then
+    printf "%s" "$pin"
+    return
+  fi
+
+  picked="$(pillie_pick_local_iphone_17_pro || true)"
+  if [[ -n "$picked" ]]; then
+    if [[ -z "$requested" ]]; then
+      echo "warning: pinned simulator $pin is not on this Mac; using local iPhone 17 Pro $picked." >&2
+    fi
+    printf "%s" "$picked"
+    return
+  fi
+
+  echo "error: no iPhone 17 Pro simulator is available. Set PILLIE_SIMULATOR_UDID to a local device." >&2
+  return 1
+}
+
+# xcsift is optional. Cloud / Namespace images often lack it; xcodebuild still works.
+pillie_filter_xcodebuild() {
+  if command -v xcsift >/dev/null 2>&1; then
+    xcsift
+  else
+    cat
+  fi
 }
 
 pillie_safe_name() {

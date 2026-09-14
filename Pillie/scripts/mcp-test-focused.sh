@@ -7,7 +7,6 @@
 
 set -euo pipefail
 
-UDID="${PILLIE_SIMULATOR_UDID:-124DC75F-0771-4C81-841D-F13655138260}"
 SCHEME="Pillie"
 CONFIGURATION="Debug"
 TEST_TARGET="PillieTests"
@@ -16,6 +15,8 @@ PROJECT_DIR="$SCRIPT_DIR/.."
 REPO_ROOT="$(cd "$PROJECT_DIR/.." && pwd)"
 PROJECT_PATH="$PROJECT_DIR/Pillie.xcodeproj"
 . "$SCRIPT_DIR/xcode-env.sh"
+pillie_select_developer_dir
+UDID="$(pillie_default_simulator_udid)"
 
 usage() {
   cat <<'USAGE'
@@ -54,8 +55,6 @@ if [[ $# -eq 0 || "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
   fi
   exit 0
 fi
-
-pillie_select_developer_dir
 
 if ! command -v xcodebuildmcp >/dev/null 2>&1; then
   echo "xcodebuildmcp is not installed or not on PATH." >&2

@@ -5,7 +5,7 @@ description: Pillie iOS loop — worktree, make diagnose/build/run/test, simulat
 
 # Pillie iOS
 
-The agent API is the repo-root Makefile. It wraps `Pillie/scripts` and keeps the pinned simulator plus `/tmp` DerivedData. Prefer `make` over raw `xcodebuild`. If `xcodebuildmcp` is on PATH, build and test use the MCP wrappers; otherwise the shell scripts.
+The agent API is the repo-root Makefile. It wraps `Pillie/scripts`, `/tmp` DerivedData, and an iPhone 17 Pro: the laptop pin if that UDID exists, otherwise a local device (Namespace / Cloud Agent Macs). Prefer `make` over raw `xcodebuild`. If `xcodebuildmcp` is on PATH, build and test use the MCP wrappers; otherwise the shell scripts. `xcsift` is optional.
 
 `make diagnose` prints paths, UDID, DerivedData, and toolchain. `make help` lists targets. Script `--help` is the flag source of truth.
 
@@ -14,7 +14,7 @@ The agent API is the repo-root Makefile. It wraps `Pillie/scripts` and keeps the
 1. **Worktree.** App edits go in a feature worktree, not the orchestration checkout `/Users/idrisskone/Developer/Pillie`. See [worktrees.md](references/worktrees.md).
    Done when: cwd is that worktree, or the user asked to work on `main`.
 2. **Diagnose** if the toolchain or simulator is unclear: `make diagnose`.
-   Done when: Xcode 27 is selected and the pinned simulator is listed.
+   Done when: Xcode 27 is selected and an iPhone 17 Pro UDID is listed.
 3. **Build / run.** `make build` to compile. `make build-and-run` to install and launch headlessly. `make run` if the app is already built.
    Done when: the build succeeded and `simctl` printed the app PID.
 4. **Verify.** UI: [visual-qa.md](references/visual-qa.md). Named tests: `make test TESTS=ClassName`. Skip hosted XCTest when compile + simulator UI proof is enough.

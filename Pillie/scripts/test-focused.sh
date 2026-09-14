@@ -8,7 +8,6 @@
 
 set -euo pipefail
 
-UDID="${PILLIE_SIMULATOR_UDID:-124DC75F-0771-4C81-841D-F13655138260}"
 SCHEME="Pillie"
 PROJECT="Pillie.xcodeproj"
 TEST_TARGET="PillieTests"
@@ -16,6 +15,8 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_DIR="$SCRIPT_DIR/.."
 REPO_ROOT="$(cd "$PROJECT_DIR/.." && pwd)"
 . "$SCRIPT_DIR/xcode-env.sh"
+pillie_select_developer_dir
+UDID="$(pillie_default_simulator_udid)"
 
 usage() {
   cat <<'USAGE'
@@ -69,7 +70,6 @@ echo "> DerivedData: $DERIVED_DATA"
 echo "> Simulator: $UDID"
 echo "> Jobs: $JOBS (PILLIE_BUILD_JOBS to override)"
 echo "> Parallel testing: $PARALLEL_TESTING (PILLIE_TEST_PARALLEL=YES re-enables simulator cloning)"
-pillie_select_developer_dir
 pillie_shutdown_extra_simulators "$UDID"
 if [[ -n "${DEVELOPER_DIR:-}" ]]; then
   echo "> DeveloperDir: $DEVELOPER_DIR"
@@ -92,4 +92,4 @@ XCODEBUILD_ARGS=(
 XCODEBUILD_ARGS+=("${ONLY_TESTING_ARGS[@]}")
 
 cd "$PROJECT_DIR"
-xcodebuild "${XCODEBUILD_ARGS[@]}" 2>&1 | xcsift
+xcodebuild "${XCODEBUILD_ARGS[@]}" 2>&1 | pillie_filter_xcodebuild

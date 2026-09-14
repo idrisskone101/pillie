@@ -6,7 +6,10 @@
 
 set -euo pipefail
 
-SIM="${PILLIE_SIMULATOR_UDID:-124DC75F-0771-4C81-841D-F13655138260}"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+. "$SCRIPT_DIR/xcode-env.sh"
+pillie_select_developer_dir
+SIM="$(pillie_default_simulator_udid)"
 
 usage() {
   sed -n '2,5p' "$0" | sed 's/^# //'
