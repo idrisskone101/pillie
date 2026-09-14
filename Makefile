@@ -3,10 +3,6 @@
 
 ROOT := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
 SCRIPTS := $(ROOT)/Pillie/scripts
-UDID ?= $(PILLIE_SIMULATOR_UDID)
-ifeq ($(UDID),)
-UDID := 124DC75F-0771-4C81-841D-F13655138260
-endif
 SCREENSHOT ?= /tmp/sim_screenshot.png
 SCREENSHOT_1X ?= /tmp/sim_screenshot_1x.png
 SCALE ?= 33.33%
@@ -38,7 +34,7 @@ help:
 		"  make console                  Blocking app console" \
 		"  make worktree BRANCH=codex/x  Feature worktree from this checkout" \
 		"  make agent-verify             Build; test too if TESTS is set" \
-		"  make udid                     Print the pinned simulator UDID"
+		"  make udid                     Print the resolved iPhone 17 Pro UDID"
 
 diagnose:
 	@$(SCRIPTS)/diagnose.sh
@@ -63,9 +59,10 @@ test:
 	@$(TEST_CMD) $(TESTS)
 
 screenshot:
-	xcrun simctl io "$(UDID)" screenshot "$(SCREENSHOT)"
-	magick "$(SCREENSHOT)" -resize "$(SCALE)" "$(SCREENSHOT_1X)"
-	@echo "Wrote $(SCREENSHOT_1X)"
+	@udid="$$($(SCRIPTS)/diagnose.sh --udid)"; \
+	xcrun simctl io "$$udid" screenshot "$(SCREENSHOT)"; \
+	magick "$(SCREENSHOT)" -resize "$(SCALE)" "$(SCREENSHOT_1X)"; \
+	echo "Wrote $(SCREENSHOT_1X)"
 
 console:
 	@$(SCRIPTS)/build-and-run.sh --run-only --console
