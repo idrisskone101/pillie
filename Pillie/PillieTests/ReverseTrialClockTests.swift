@@ -283,7 +283,9 @@ final class ReverseTrialClockTests: XCTestCase {
     func testPatchGrantOnRemoveDayConsumesThenPausesOffWeek() {
         // Pack is patch 21/7. Grant 2026-07-01 10:00 is cycle day 22 (index 21).
         // `isBreakDay(21)` is true; engine `isBreak` is false. Off-week is
-        // July 2-7 (days 23-28). Fourteen full actives start July 8.
+        // July 2-7 (days 23-28). Fourteen full actives are July 8-21.
+        // Expiry is 2026-07-22 00:00 — one calendar day earlier than a pill
+        // grant on day 21, because the off-week is six days, not seven.
         let schedule = ActiveDaySchedule(
             anchorDate: date(2026, 7, 1, 10, 0),
             anchorDayIndex: 21,
@@ -295,7 +297,7 @@ final class ReverseTrialClockTests: XCTestCase {
             schedule: schedule
         )
 
-        XCTAssertEqual(clock.expiryMoment(calendar: calendar), date(2026, 7, 23, 0, 0))
+        XCTAssertEqual(clock.expiryMoment(calendar: calendar), date(2026, 7, 22, 0, 0))
         XCTAssertTrue(schedule.isActiveDay(date(2026, 7, 1, 10, 0), calendar: calendar))
         XCTAssertFalse(schedule.isActiveDay(date(2026, 7, 2), calendar: calendar))
 
@@ -316,8 +318,13 @@ final class ReverseTrialClockTests: XCTestCase {
         )
         assertClock(
             clock,
-            now: date(2026, 7, 22, 23, 59),
+            now: date(2026, 7, 21, 23, 59),
             isActive: true, daysRemaining: 1, displayed: 1, endsTonight: true
+        )
+        assertClock(
+            clock,
+            now: date(2026, 7, 22, 0, 0),
+            isActive: false, daysRemaining: 0, displayed: 0, endsTonight: false
         )
     }
 
