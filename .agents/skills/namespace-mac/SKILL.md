@@ -9,7 +9,7 @@ Linux Cloud Agents cannot run Xcode. Pillie keeps **one** Namespace Devbox named
 
 This Linux VM is the agent. The Mac is a remote builder. Do not treat Idriss's MacBook or a Cursor self-hosted worker as the Devbox.
 
-Compute is **$0.06/min** while the Mac is up. Stopped compute is free. Always Stop when the iOS step is done. Idle auto-stop on the live box may be hours (`busyEnsureMinimumDuration` has been `14400s`); that is a backstop, not the shutdown plan.
+Compute is **$0.06/min** while the Mac is up. Stopped compute is free. Always Stop when the iOS step is done. `ensure` applies idle `900s` via `DevBoxService.Update` (do not send `15m`; protobuf Duration rejects it). That is a backstop, not the shutdown plan.
 
 ## When to use
 
@@ -78,7 +78,9 @@ If you `exec` a custom UI command, boot the simulator yourself before install or
 {"bearer_token": "<NSC_TOKEN>"}
 ```
 
-`hydrate-auth` writes that file. Default path is `~/.config/ns/token.json`. Cloud Agents often already have `/tmp/nsc-auth/token.json`. `nsc auth check-login` works with that file. `nsc workspace describe` is flaky; ignore it. `nsc list --all` can fail without a TTY; use `nsc list -o json` or `make ns-mac-status`.
+`hydrate-auth` writes that file. If `NSC_TOKEN` is set, it overwrites the file so a snapshot-baked `token.json` cannot outrank a rotated Cloud Agent secret. Default path is `~/.config/ns/token.json`. Cloud Agents often already have `/tmp/nsc-auth/token.json`. `environment.json` `start` runs hydrate on every pod. `nsc auth check-login` works with that file. `nsc workspace describe` is flaky; ignore it. `nsc list --all` can fail without a TTY; use `nsc list -o json` or `make ns-mac-status`.
+
+This token can `Activate` / `GetSSHConfig` / native SSH. It cannot `nsc ssh`, `devbox exec`, or grant `instance:dial_host` / `ingress:access`. Do not try to mint those from the Cloud Agent token.
 
 ## Exec path
 

@@ -5,3 +5,5 @@ node_modules/
 Pillie/Config/Secrets.xcconfig
 .nsc-token.json
 .namespace-token.json
+__pycache__/
+*.pyc

@@ -4,7 +4,7 @@
 # not macos.purpose=githubrunner). Cloud Agents start/stop it through
 # Pillie/scripts/namespace-mac.sh (Connect JSON + native SSH), not the
 # `devbox` CLI. Cost: size M is the smallest macOS shape. Idle 15m is the
-# platform minimum; live busyEnsureMinimumDuration may be longer, so always
+# platform minimum. `ensure` applies 900s via Update (not Expire). Always
 # Stop. Volume 100 GiB stays in one 100 GB storage block; the default
 # 150 GiB is two. DerivedData stays in /tmp on the Mac.
 name: pillie-ios
