@@ -1,4 +1,5 @@
 {
   "name": "Pillie iOS – Cloud Agent (Linux tooling)",
-  "install": "npm ci && (command -v ruby >/dev/null 2>&1 || (sudo apt-get update -qq && sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq ruby)) && chmod +x Pillie/scripts/*.sh Pillie/scripts/*.py && Pillie/scripts/namespace-mac.sh install-cli && Pillie/scripts/namespace-mac.sh hydrate-auth"
+  "install": "npm ci && (command -v ruby >/dev/null 2>&1 || (sudo apt-get update -qq && sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq ruby)) && chmod +x Pillie/scripts/*.sh Pillie/scripts/*.py && Pillie/scripts/namespace-mac.sh install-cli && Pillie/scripts/namespace-mac.sh hydrate-auth",
+  "start": "Pillie/scripts/namespace-mac.sh hydrate-auth"
 }

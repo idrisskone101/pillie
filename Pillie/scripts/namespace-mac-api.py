@@ -35,8 +35,21 @@ MACOS_SHAPE = {
     "selectors": [{"name": "macos.version", "value": "27.x"}],
 }
 ACTIVATE_TIMEOUT = int(os.environ.get("PILLIE_NS_ACTIVATE_TIMEOUT", "900"))
+SPEC_IDLE = os.environ.get("PILLIE_NS_DEVBOX_IDLE", "900s")
 SSH_DIR = Path(os.environ.get("PILLIE_NS_SSH_DIR", os.path.expanduser("~/.namespace/ssh")))
 SSH_HOST = os.environ.get("PILLIE_NS_SSH_HOST", "pillie-ios")
+
+
+def normalize_idle(value: str) -> str:
+    """Protobuf Duration for Update. `15m` is invalid; the platform minimum is 900s."""
+    text = (value or "").strip()
+    if text in {"15m", "900s", "900.0s"}:
+        return "900s"
+    return text or "900s"
+
+
+def idle_matches_spec(live: str, spec: str = SPEC_IDLE) -> bool:
+    return normalize_idle(live) == normalize_idle(spec)
 
 
 def token_path() -> Path:
@@ -194,6 +207,19 @@ def cmd_fetch(_args: argparse.Namespace) -> int:
     return 0
 
 
+def apply_idle(devbox: dict) -> dict:
+    live = str(devbox.get("busyEnsureMinimumDuration") or "")
+    want = normalize_idle(SPEC_IDLE)
+    if idle_matches_spec(live, want):
+        return devbox
+    print(f"applying idle {want} (live {live or '?'})")
+    updated = devbox_rpc(
+        "Update",
+        {"name": DEVBOX_NAME, "busyEnsureMinimumDuration": want},
+    )
+    return updated or devbox
+
+
 def cmd_ensure(_args: argparse.Namespace) -> int:
     boxes = list_devboxes()
     names = [item.get("name") for item in boxes]
@@ -219,8 +245,12 @@ def cmd_ensure(_args: argparse.Namespace) -> int:
         dump(devbox_rpc("Update", {"name": DEVBOX_NAME, "instanceShape": MACOS_SHAPE}))
         payload = fetch()
         devbox = payload.get("devbox") or {}
+    devbox = apply_idle(devbox)
+    payload = fetch()
+    devbox = payload.get("devbox") or {}
     instance_id = payload.get("instanceId") or ""
-    print(f"ok: {DEVBOX_NAME} exists id={devbox.get('id')} instance={instance_id or 'stopped'}")
+    idle = devbox.get("busyEnsureMinimumDuration") or "?"
+    print(f"ok: {DEVBOX_NAME} exists id={devbox.get('id')} instance={instance_id or 'stopped'} idle={idle}")
     return 0
 
 

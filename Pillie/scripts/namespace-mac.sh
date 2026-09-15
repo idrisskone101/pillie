@@ -68,30 +68,14 @@ install_cli() {
   echo "ok: skipping the devbox CLI (this Cloud Agent token cannot log it in)"
 }
 
-hydrate_auth() {
-  mkdir -p "$(dirname "$TOKEN_PATH")"
-  if [[ -n "${NSC_TOKEN_FILE:-}" && -f "$NSC_TOKEN_FILE" ]]; then
-    echo "ok: using NSC_TOKEN_FILE"
-    return 0
-  fi
-  if [[ -f "$HOME/.config/ns/token.json" ]]; then
-    export NSC_TOKEN_FILE="${NSC_TOKEN_FILE:-$HOME/.config/ns/token.json}"
-    echo "ok: using existing Namespace login"
-    return 0
-  fi
-  local raw="${NSC_TOKEN:-${NAMESPACE_TOKEN:-}}"
-  if [[ -z "$raw" ]]; then
-    echo "missing: NSC_TOKEN (Cursor Cloud Agent secret). iOS verify on Namespace cannot start." >&2
-    return 0
-  fi
-  if [[ "$raw" == tok_* || ${#raw} -lt 80 ]]; then
-    echo "error: NSC_TOKEN looks like a Namespace token id, not the bearer token. Paste the long secret value, not tok_…" >&2
-    return 1
-  fi
+write_token_file() {
+  local dest="$1"
+  local raw="$2"
+  mkdir -p "$(dirname "$dest")"
   if [[ "$raw" == \{* ]]; then
-    printf '%s\n' "$raw" >"$TOKEN_PATH"
+    printf '%s\n' "$raw" >"$dest"
   else
-    python3 - "$TOKEN_PATH" "$raw" <<'PY'
+    python3 - "$dest" "$raw" <<'PY'
 import json, sys
 path, token = sys.argv[1], sys.argv[2]
 with open(path, "w", encoding="utf-8") as fh:
@@ -99,9 +83,37 @@ with open(path, "w", encoding="utf-8") as fh:
     fh.write("\n")
 PY
   fi
-  chmod 600 "$TOKEN_PATH"
-  export NSC_TOKEN_FILE="$TOKEN_PATH"
-  echo "ok: wrote Namespace token file"
+  chmod 600 "$dest"
+  export NSC_TOKEN_FILE="$dest"
+}
+
+hydrate_auth() {
+  mkdir -p "$(dirname "$TOKEN_PATH")"
+  local dest="${NSC_TOKEN_FILE:-$TOKEN_PATH}"
+  local raw="${NSC_TOKEN:-${NAMESPACE_TOKEN:-}}"
+  # Cloud Agent secrets are injected per pod. A snapshot-baked token.json
+  # must not win over a rotated NSC_TOKEN.
+  if [[ -n "$raw" ]]; then
+    if [[ "$raw" == tok_* || ${#raw} -lt 80 ]]; then
+      echo "error: NSC_TOKEN looks like a Namespace token id, not the bearer token. Paste the long secret value, not tok_…" >&2
+      return 1
+    fi
+    write_token_file "$dest" "$raw"
+    echo "ok: wrote Namespace token file from NSC_TOKEN"
+    return 0
+  fi
+  if [[ -f "$dest" ]]; then
+    export NSC_TOKEN_FILE="$dest"
+    echo "ok: using NSC_TOKEN_FILE"
+    return 0
+  fi
+  if [[ -f "$HOME/.config/ns/token.json" ]]; then
+    export NSC_TOKEN_FILE="$HOME/.config/ns/token.json"
+    echo "ok: using existing Namespace login"
+    return 0
+  fi
+  echo "missing: NSC_TOKEN (Cursor Cloud Agent secret). iOS verify on Namespace cannot start." >&2
+  return 0
 }
 
 auth_check() {

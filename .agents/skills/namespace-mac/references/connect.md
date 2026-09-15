@@ -24,13 +24,13 @@ Service: `namespace.private.devbox.v1beta.DevBoxService`
 | --- | --- |
 | `List` | `{}` |
 | `Fetch` | `{"name":"pillie-ios","includeSshCredentials":true,"returnActivatedInstance":true}` |
-| `Update` | `{"name":"pillie-ios","instanceShape":{"os":"macos","machineArch":"arm64","virtualCpu":6,"memoryMegabytes":14336,"selectors":[{"name":"macos.version","value":"27.x"}]}}` |
+| `Update` | `{"name":"pillie-ios","busyEnsureMinimumDuration":"900s"}` or `{"name":"pillie-ios","instanceShape":{"os":"macos","machineArch":"arm64","virtualCpu":6,"memoryMegabytes":14336,"selectors":[{"name":"macos.version","value":"27.x"}]}}` |
 | `Activate` | `{"name":"pillie-ios","includeSshCredentials":true,"waitForReadiness":true}` (15 min timeout) |
 | `Stop` | `{"name":"pillie-ios"}` |
 
 `Fetch` without a running instance has no `instanceId`. That is stopped, not missing. The Devbox record stays after Stop.
 
-If `instanceShape.selectors` includes `macos.purpose=githubrunner`, `Update` the shape above **before** Activate. That image is a GitHub runner, not this Devbox.
+If `instanceShape.selectors` includes `macos.purpose=githubrunner`, `Update` `instanceShape` to macos.version=27.x **before** Activate. That image is a GitHub runner, not this Devbox. If `busyEnsureMinimumDuration` is not `900s`, `Update` it to `"900s"` (`15m` is not a valid protobuf Duration).
 
 Do not call `Expire`. Do not `Create` a second Devbox.
 
