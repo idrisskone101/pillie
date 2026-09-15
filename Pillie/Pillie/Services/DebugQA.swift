@@ -25,6 +25,7 @@ enum DebugQAScenario: String, CaseIterable, Identifiable {
     case packComplete
     case marketingCalendar
     case trialActive
+    case trialMidBreak
     case trialLastDay
     case trialExpiredNewUserBlocker
     case trialExpiredNewUserReminder
@@ -45,7 +46,7 @@ enum DebugQAScenario: String, CaseIterable, Identifiable {
         switch self {
         case .missedRecentDays, .packComplete, .marketingCalendar:
             return .pack
-        case .trialActive, .trialLastDay, .trialExpiredNewUserBlocker,
+        case .trialActive, .trialMidBreak, .trialLastDay, .trialExpiredNewUserBlocker,
              .trialExpiredNewUserReminder, .trialExpiredNewUserSuccess,
              .trialExpiredNewUserRollback, .trialExpiredNewUserReturning:
             return .trialNewUser
@@ -63,6 +64,7 @@ enum DebugQAScenario: String, CaseIterable, Identifiable {
         case .packComplete: return "Pack finished — start a new pack"
         case .marketingCalendar: return "Marketing calendar (mixed usage)"
         case .trialActive: return "Active Reverse Trial (day 3)"
+        case .trialMidBreak: return "Trial during break week"
         case .trialLastDay: return "Last day of trial"
         case .trialExpiredNewUserBlocker: return "Expired hard paywall (blocker)"
         case .trialExpiredNewUserReminder: return "Expired hard paywall (reminders)"
@@ -89,6 +91,8 @@ enum DebugQAScenario: String, CaseIterable, Identifiable {
             return "Realistic taken/missed mix for screenshots."
         case .trialActive:
             return "Onboarded new-user cohort, 12 days left."
+        case .trialMidBreak:
+            return "Granted on last active day. Today is a break day. Badge stays at 14."
         case .trialLastDay:
             return "Onboarded new-user cohort, expires tonight."
         case .trialExpiredNewUserBlocker:
@@ -190,6 +194,8 @@ enum DebugQA {
                 blockerConfigured: true,
                 subscriber: false
             )
+        case .trialMidBreak:
+            applyTrialDuringBreak(store: store)
         case .trialLastDay:
             applyTrial(
                 store: store,
@@ -330,6 +336,25 @@ enum DebugQA {
             forKey: AppGroupKeys.interventionLifetimeTotal
         )
         defaults.synchronize()
+    }
+
+    /// Grant on the last hormone-active day, land on the last break day.
+    /// Old calendar clock would read 8 days left. Active-day clock freezes at 14.
+    private static func applyTrialDuringBreak(store: PillStore) {
+        completeOnboarding()
+        persistInstallCohort(.postCutover)
+        store.replacePack(with: .freshReinstall())
+        store.updateCycleDay(28)
+        resetTrialPresentationFlags()
+        seedInterventionStats(blockerConfigured: true)
+        SubscriptionManager.shared.setPlusForTesting(false)
+        SubscriptionManager.shared.debugSetHardPaywallEnabled(true)
+        let calendar = Calendar.current
+        let grant = calendar.date(byAdding: .day, value: -7, to: Date()) ?? Date()
+        SubscriptionManager.shared.updateActiveDaySchedule(pack: store.activePack)
+        SubscriptionManager.shared.debugOverrideTrialGrantDate(grant, termsCohort: .postCutover)
+        AppBlockingManager.shared.debugBlockerConfiguredOverride = true
+        AppBlockingManager.shared.blockingEnabled = true
     }
 
     private static func applyTrial(

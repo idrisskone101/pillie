@@ -565,6 +565,9 @@ struct PillieApp: App {
             SubscriptionManager.shared.debugOverrideTrialGrantDate(nil)
             UserDefaults.standard.set(false, forKey: OnboardingFlow.selectedFreePlanStorageKey)
             UserDefaults.standard.set(OnboardingFlow.Step.trialGranted.rawValue, forKey: OnboardingFlow.stepStorageKey)
+        case "/trial-break-week":
+            DebugQA.apply(.trialMidBreak, store: store)
+            reconcileScreenTimeState()
         case "/trial-grant":
             // QA control (#160): start a Reverse Trial now — every Plus feature
             // should unlock exactly as if the entitlement flipped on. A fresh
