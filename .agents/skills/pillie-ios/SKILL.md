@@ -40,6 +40,10 @@ Hand work back after step 4. Logs: [logging.md](references/logging.md). Shipping
 
 `make test` without `TESTS` is refused. Launch is already headless; there is no `clean` target — leave `/tmp/PillieDerivedData*`.
 
+## Copy
+
+A copy change is not done until every `AppLanguage` catalog has the new wording. Update `Commerce.xcstrings` / `Localizable.xcstrings` / `Notifications.xcstrings` plus `locked-copy.json` (`en`/`de`/`it`) and `honest-paywall-locales.json` when those files own the key. Run `python3 Pillie/scripts/copy-rewrite/check-translated-copy.py`. See `AGENTS.md` (§ Copy and locales).
+
 ## Invariants
 
 Keep DerivedData in `/tmp` (iCloud xattrs break codesign). One booted simulator (the wrappers shut extras down). Headless launch with `--terminate-running-process` (the scripts already do this). Destination in Xcode.app is iPhone 17 Pro, not My Mac. Prefer existing Swift/SwiftUI patterns; scope the diff to the task.

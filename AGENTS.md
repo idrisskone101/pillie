@@ -29,6 +29,16 @@ Pillie targets the Xcode 27 / iOS 27 SDK. Consult the matching skill before writ
 
 Own technical execution: ship features, fix bugs, keep the app shippable. Prefer existing Swift, SwiftUI, service, and view-model patterns. Scope the diff to the task.
 
+## Copy and locales
+
+When you change user-facing copy, update every shipped locale in the same change. English-only is not done.
+
+- Write the new English, then the same meaning in every `AppLanguage` catalog identifier (`en` through `zh-Hant`).
+- Edit the string catalog that owns the key: `Commerce.xcstrings`, `Localizable.xcstrings`, `Notifications.xcstrings`, or a Shield catalog.
+- Keep `Pillie/scripts/copy-rewrite/locked-copy.json` in sync for `en` / `de` / `it`. Keep `honest-paywall-locales.json` in sync for the other honest-paywall keys.
+- For hormone-active trial time, reuse the pack-regimen wording already in `onboarding.regimen.21_7`. Calendar-relative lines stay calendar-relative (`ends tonight`, `ends on %@`, `in 5 days`).
+- Run `python3 Pillie/scripts/copy-rewrite/check-translated-copy.py` before you hand the copy change back.
+
 ## Worktrees
 
 Treat `/Users/idrisskone/Developer/Pillie` as the orchestration checkout. App edits go in a feature worktree; the loop is in `pillie-ios`. Edit this checkout directly only for `AGENTS.md`, `.agents/skills`, `opencode.json`, or worktree helper scripts, unless the user asks to work on `main`.
