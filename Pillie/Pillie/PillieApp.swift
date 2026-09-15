@@ -565,6 +565,9 @@ struct PillieApp: App {
             SubscriptionManager.shared.debugOverrideTrialGrantDate(nil)
             UserDefaults.standard.set(false, forKey: OnboardingFlow.selectedFreePlanStorageKey)
             UserDefaults.standard.set(OnboardingFlow.Step.trialGranted.rawValue, forKey: OnboardingFlow.stepStorageKey)
+        case "/trial-eve-of-break":
+            DebugQA.apply(.trialEveOfBreak, store: store)
+            reconcileScreenTimeState()
         case "/trial-break-week":
             DebugQA.apply(.trialMidBreak, store: store)
             reconcileScreenTimeState()
