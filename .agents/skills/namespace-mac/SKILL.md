@@ -9,7 +9,7 @@ Linux Cloud Agents cannot run Xcode. Pillie keeps **one** Namespace Devbox named
 
 This Linux VM is the agent. The Mac is a remote builder. Do not treat Idriss's MacBook or a Cursor self-hosted worker as the Devbox.
 
-Compute is **$0.06/min** while the Mac is up. Stopped compute is free. Always Stop when the iOS step is done. `ensure` applies idle `900s` via `DevBoxService.Update` (do not send `15m`; protobuf Duration rejects it). That is a backstop, not the shutdown plan.
+Compute is **$0.06/min** while the Mac is up. Stopped compute is free. **Do not stop the Mac unless the user asked.** `make ns-mac-stop` is user-gated. The Makefile defaults `KEEP=1`, so `verify` / `exec` / `screenshot` leave it running. `ensure` applies idle `900s` via `DevBoxService.Update` (do not send `15m`; protobuf Duration rejects it). Idle is a backstop if the box sits unused, not permission to Stop.
 
 ## When to use
 
@@ -26,13 +26,13 @@ Do not start the Mac for Swift-only edits, copy, planning, or Linux work.
 2. **Push.** Push the branch so the Mac can check it out.
    Done when: `git push -u origin HEAD` succeeded.
 3. **One job.** `make ns-mac-verify CMD='make build'` (or `build-and-run` / a focused test). For a screenshot, `make ns-mac-screenshot`.
-   Done when: the remote command finished and the Mac is stopped (`make ns-mac-status` shows `instance: stopped`).
-4. **A batch.** If you need several remote commands, `make ns-mac-start`, `make ns-mac-sync`, then each `make ns-mac-exec CMD='…'`, then `make ns-mac-stop`.
-   Done when: `make ns-mac-status` shows `instance: stopped`.
+   Done when: the remote command finished. The Mac stays up.
+4. **A batch.** If you need several remote commands, `make ns-mac-start`, `make ns-mac-sync`, then each `make ns-mac-exec CMD='…'`.
+   Done when: the last remote command finished. The Mac stays up.
 
-Prefer step 3. `verify` starts, syncs, runs, and stops in one shot. One-shot `exec` / `sync` / `diagnose` / `screenshot` also stop the Mac if they had to start it. `KEEP=1` leaves it up.
+Prefer `start` once, then `exec`. Two separate Activate calls each pay a boot. Pass `KEEP=0` only if the user asked to stop after this command.
 
-Never leave the Mac running after the iOS step.
+**Stop only on request.** Run `make ns-mac-stop` when the user says to stop, shut down, or tear down the Mac. Do not Stop at the end of a screenshot, verify, or turn.
 
 ## Simulator screenshot
 
@@ -46,7 +46,7 @@ That command, on the Mac:
 
 1. `UDID=$(make -s udid)` — local iPhone 17 Pro. The laptop pin UDID is not on this box; that warning is expected.
 2. `xcrun simctl boot "$UDID" || true` then `xcrun simctl bootstatus "$UDID" -b`
-3. `make build-and-run`
+3. `make build-and-run`, then a short wait so the first frame is not the launch screen
 4. `make screenshot` if `magick` is installed, otherwise `sips` writes `/tmp/sim_screenshot_1x.png`
 5. Copies the 1x PNG to `/opt/cursor/artifacts/pillie_simulator_1x.png`
 
@@ -66,7 +66,7 @@ If you `exec` a custom UI command, boot the simulator yourself before install or
 - Do not use `devbox configure-ssh` ProxyCommand (`hsvc.unixsocket?name=agent`). Native SSH with the instance key from `GetSSHConfig` is the exec path.
 - Do not print `NSC_TOKEN`, token files, or SSH private keys.
 - `make build` on Linux is the wrong tool. Use `make ns-mac-verify` or `make ns-mac-exec`.
-- Batch remote work. Two separate one-shots each pay a boot. One `start` … `stop` session is cheaper for several commands.
+- Do not `make ns-mac-stop` unless the user asked. `KEEP=0` is the same as asking to auto-stop after this one-shot.
 - Size stays `M`. Do not recreate as `L`. Do not use an ephemeral compute instance (cold Xcode each time costs more).
 - `PILLIE_BUILD_JOBS=6` is fine on size M. DerivedData stays `/tmp/PillieDerivedData-pillie`.
 
@@ -99,12 +99,13 @@ If the helper is missing and you must recover by hand, see [connect.md](referenc
 ## Targets
 
 - `make ns-mac-status`
-- `make ns-mac-verify CMD='make …'` — preferred one-shot
-- `make ns-mac-screenshot` — boot, build-and-run, 1x screenshot, copy, stop
-- `make ns-mac-start` / `make ns-mac-stop`
+- `make ns-mac-verify CMD='make …'` — start, sync, run; leaves the Mac up
+- `make ns-mac-screenshot` — boot, build-and-run, 1x PNG, copy; leaves the Mac up
+- `make ns-mac-start`
+- `make ns-mac-stop` — only when the user asked
 - `make ns-mac-sync` / `make ns-mac-sync REF=<sha>`
 - `make ns-mac-diagnose`
 - `make ns-mac-exec CMD='make …'`
-- `KEEP=1 make ns-mac-exec CMD='…'` — leave the Mac up
+- `KEEP=0 make ns-mac-exec CMD='…'` — stop after this command if this session started it
 
 Script `--help` is the flag source of truth: `Pillie/scripts/namespace-mac.sh`.
