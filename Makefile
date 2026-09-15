@@ -21,7 +21,7 @@ endif
 
 CMD ?=
 REF ?=
-KEEP ?=
+KEEP ?= 1
 
 .PHONY: help diagnose build run build-and-run test screenshot console \
 	worktree agent-verify udid \
@@ -42,10 +42,10 @@ help:
 		"  make agent-verify             Build; test too if TESTS is set" \
 		"  make udid                     Print the resolved iPhone 17 Pro UDID" \
 		"  make ns-mac-status            Namespace Mac Devbox status" \
-		"  make ns-mac-verify CMD='make x' Start, sync, run, stop (preferred)" \
-		"  make ns-mac-screenshot         Boot sim, build-and-run, 1x PNG, stop" \
+		"  make ns-mac-verify CMD='make x' Start, sync, run; KEEP=1 by default" \
+		"  make ns-mac-screenshot         Boot sim, build-and-run, 1x PNG" \
 		"  make ns-mac-start             Start the on-demand Namespace Mac" \
-		"  make ns-mac-stop              Stop the Namespace Mac" \
+		"  make ns-mac-stop              Stop the Namespace Mac (user-gated)" \
 		"  make ns-mac-sync              Checkout this SHA on the Mac" \
 		"  make ns-mac-diagnose          Remote uname / Xcode / repo check" \
 		"  make ns-mac-exec CMD='make x' Run a command on the Namespace Mac"

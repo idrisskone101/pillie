@@ -16,9 +16,9 @@
 #
 # Linux Cloud Agents stay on Linux. Exec is native SSH (GetSSHConfig),
 # not `devbox exec`, `nsc ssh`, or `nsc proxy`. Prefer `verify` for one
-# iOS job. For a batch, `start`, then sync/exec, then `stop`.
-# One-shot exec/sync/diagnose/screenshot stop the Mac if they had to start it.
-# KEEP=1 / NS_MAC_KEEP=1 leaves it up. Always Stop; never Expire.
+# iOS job. For a batch, `start`, then sync/exec. Do not Stop unless the
+# user asked. KEEP=1 / NS_MAC_KEEP=1 is the default. KEEP=0 stops a
+# one-shot if this session started the instance. Never Expire.
 
 set -euo pipefail
 
@@ -48,7 +48,7 @@ need_cmd() {
 }
 
 keep_requested() {
-  [[ "${NS_MAC_KEEP:-${KEEP:-0}}" == "1" ]]
+  [[ "${NS_MAC_KEEP:-${KEEP:-1}}" == "1" ]]
 }
 
 install_cli() {
@@ -192,7 +192,7 @@ status() {
   print_running_instances
   echo
   if is_running; then
-    echo "compute: running — stop with make ns-mac-stop when verify is done"
+    echo "compute: running — leave it up until the user asks to stop"
   else
     echo "compute: stopped"
   fi
@@ -205,7 +205,7 @@ start() {
   api activate
   api write-ssh >/dev/null
   wait_for_ssh
-  echo "ok: $DEVBOX_NAME is up over native SSH. Stop it with make ns-mac-stop when verify is done."
+  echo "ok: $DEVBOX_NAME is up over native SSH. Leave it running until the user asks to stop."
 }
 
 stop() {
@@ -217,13 +217,13 @@ stop() {
 maybe_stop() {
   local was="${1:-0}"
   if keep_requested; then
-    echo "ok: leaving $DEVBOX_NAME running (KEEP=1)"
+    echo "ok: leaving $DEVBOX_NAME running (KEEP=${NS_MAC_KEEP:-${KEEP:-1}})"
     return 0
   fi
   if [[ "$was" == "1" ]]; then
     return 0
   fi
-  echo "ok: stopping $DEVBOX_NAME (started for this command; KEEP=1 to leave it up)"
+  echo "ok: stopping $DEVBOX_NAME (KEEP=0 and this command started it)"
   stop
 }
 
@@ -290,6 +290,7 @@ UDID="$(make -s udid)"
 xcrun simctl boot "$UDID" || true
 xcrun simctl bootstatus "$UDID" -b
 make build-and-run
+sleep 8
 if command -v magick >/dev/null 2>&1; then
   make screenshot
 else
@@ -336,9 +337,9 @@ verify_remote() {
     exec_remote "$@" || rc=$?
   fi
   if keep_requested; then
-    echo "ok: leaving $DEVBOX_NAME running (KEEP=1)"
+    echo "ok: leaving $DEVBOX_NAME running (KEEP=${NS_MAC_KEEP:-${KEEP:-1}})"
   else
-    echo "ok: stopping $DEVBOX_NAME after verify"
+    echo "ok: stopping $DEVBOX_NAME after verify (KEEP=0)"
     stop || true
   fi
   return "$rc"
