@@ -13,6 +13,10 @@ import XCTest
 
 final class ReverseTrialClockTests: XCTestCase {
 
+    // Bare SwiftData models can deallocate inside the hosted XCTest
+    // invocation on the Xcode 27 beta. Keep the pack for the process.
+    private static var retainedPacks: [PillPack] = []
+
     /// Fixed local calendar so boundary expectations are deterministic.
     private var calendar: Calendar = {
         var cal = Calendar(identifier: .gregorian)
@@ -160,6 +164,72 @@ final class ReverseTrialClockTests: XCTestCase {
             clock,
             now: date(2026, 7, 8, 12, 0),
             isActive: true, daysRemaining: 14, displayed: 14, endsTonight: false
+        )
+        assertClock(
+            clock,
+            now: date(2026, 7, 9, 9, 0),
+            isActive: true, daysRemaining: 14, displayed: 14, endsTonight: false
+        )
+        assertClock(
+            clock,
+            now: date(2026, 7, 22, 23, 59),
+            isActive: true, daysRemaining: 1, displayed: 1, endsTonight: true
+        )
+        assertClock(
+            clock,
+            now: date(2026, 7, 23, 0, 0),
+            isActive: false, daysRemaining: 0, displayed: 0, endsTonight: false
+        )
+    }
+
+    func testPackGrantOneDayBeforeBreakWeekSkipsEveryPlaceboDay() {
+        // 21/7 pill. Grant on pack day 21 (index 20). Engine `isBreak` is the
+        // hormone-active predicate, not `PillPack.isBreakDay`.
+        let grant = date(2026, 7, 1, 10, 0)
+        let pack = PillPack(
+            packType: .twentyOneSeven,
+            method: .pill,
+            pillRegimen: .twentyOneSeven,
+            startDate: grant,
+            cycleDayAnchorIndex: 20,
+            packNumber: 1,
+            isCurrent: true
+        )
+        Self.retainedPacks.append(pack)
+
+        XCTAssertEqual(pack.cycleDayIndex(on: grant, calendar: calendar), 20)
+        XCTAssertEqual(
+            DoseScheduleEngine.dueAction(on: grant, pack: pack, calendar: calendar)?.isBreak,
+            false
+        )
+
+        let clock = ReverseTrialClock(
+            grantDate: grant,
+            schedule: ActiveDaySchedule(pack: pack, calendar: calendar)
+        )
+        let calendarOnly = ReverseTrialClock(grantDate: grant)
+
+        XCTAssertEqual(calendarOnly.expiryMoment(calendar: calendar), date(2026, 7, 16, 0, 0))
+        XCTAssertEqual(clock.expiryMoment(calendar: calendar), date(2026, 7, 23, 0, 0))
+
+        for day in 2...8 {
+            let now = date(2026, 7, day, 12, 0)
+            XCTAssertEqual(
+                DoseScheduleEngine.dueAction(on: now, pack: pack, calendar: calendar)?.isBreak,
+                true,
+                "July \(day) must be a placebo day"
+            )
+            assertClock(
+                clock,
+                now: now,
+                isActive: true, daysRemaining: 14, displayed: 14, endsTonight: false
+            )
+        }
+
+        assertClock(
+            calendarOnly,
+            now: date(2026, 7, 8, 12, 0),
+            isActive: true, daysRemaining: 8, displayed: 8, endsTonight: false
         )
         assertClock(
             clock,

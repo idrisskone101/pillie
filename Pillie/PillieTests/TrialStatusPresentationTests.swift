@@ -109,6 +109,54 @@ final class TrialStatusPresentationTests: XCTestCase {
         XCTAssertEqual(label(onDay: 13), commerce("trial.status.indicator.setup", days: 2))
     }
 
+    func testEveOfBreakWeekBadgeStaysFourteenThroughEveryPlaceboDay() {
+        let grant = date(2026, 7, 1, 10, 0)
+        let state = PlusAccessState(
+            hasEntitlement: false,
+            trialGrantDate: grant,
+            schedule: ActiveDaySchedule(
+                anchorDate: grant,
+                anchorDayIndex: 20,
+                activeDays: 21,
+                cycleLength: 28
+            )
+        )
+        let calendarOnly = PlusAccessState(
+            hasEntitlement: false,
+            trialGrantDate: grant
+        )
+
+        for day in 2...8 {
+            let now = date(2026, 7, day, 12, 0)
+            let presentation = TrialStatusPresentation.make(
+                state: state,
+                protectionActive: true,
+                calendar: calendar,
+                now: now,
+                locale: english
+            )
+            XCTAssertEqual(presentation?.displayedDaysRemaining, 14)
+            XCTAssertEqual(
+                presentation?.indicatorLabel,
+                commerce("trial.status.indicator.active", days: 14)
+            )
+            XCTAssertEqual(presentation?.endsTonight, false)
+        }
+
+        let burned = TrialStatusPresentation.make(
+            state: calendarOnly,
+            protectionActive: true,
+            calendar: calendar,
+            now: date(2026, 7, 8, 12, 0),
+            locale: english
+        )
+        XCTAssertEqual(burned?.displayedDaysRemaining, 8)
+        XCTAssertEqual(
+            burned?.indicatorLabel,
+            commerce("trial.status.indicator.active", days: 8)
+        )
+    }
+
     func testGrantDayLabelClampsToFourteenDays() {
         // The partial grant day has 15 rollovers left, but the trial promises
         // "14 active days free" — never show a count above the promise.
