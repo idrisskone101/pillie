@@ -118,6 +118,7 @@ SPECIAL_DE: dict[tuple[str, str], str] = {
     ("Localizable", "onboarding.reminder_time.title"): "Wähl eine Zeit.",
     ("Localizable", "today.action.undo_complete"): "Eingetragen. Zum Rückgängig tippen.",
     ("Commerce", "trial.end.legacy.title"): "Deine Plus-Testphase ist vorbei.",
+    ("Commerce", "trial.end.legacy.record"): "Dein Stand nach 14 aktiven Tagen",
     ("Commerce", "trial.end.worth_keeping"): "Plus behalten?",
     ("Commerce", "trial.granted.headline_accent"): "auf uns.",
     ("Notifications", "notification.reminder.pill.title"): "Pillie-Zeit!",
@@ -279,6 +280,7 @@ SPECIAL_IT: dict[tuple[str, str], str] = {
     ("Localizable", "onboarding.mechanism.unlocked"): "Fatto. Le tue app sono di nuovo disponibili.",
     ("Localizable", "onboarding.method.title"): "Scegli il metodo.",
     ("Commerce", "trial.end.legacy.title"): "La prova Plus è finita.",
+    ("Commerce", "trial.end.legacy.record"): "Il tuo resoconto di 14 giorni attivi",
     ("Commerce", "trial.end.worth_keeping"): "Vuoi tenere Plus?",
     ("Commerce", "trial.granted.headline_accent"): "offerta nostra.",
     ("Notifications", "notification.reminder.pill.title"): "Pillie time!",
@@ -380,6 +382,7 @@ SPECIAL_EN: dict[tuple[str, str], str] = {
         "Your 14 active days ended, so app blocking is off. Reminders stay free forever."
     ),
     ("Commerce", "trial.end.legacy.title"): "Your Plus trial just ended.",
+    ("Commerce", "trial.end.legacy.record"): "Your 14 active-day record",
     ("Commerce", "trial.end.worth_keeping"): "Want to keep Plus?",
     ("Commerce", "trial.end.legacy.aside"): "Want to keep Plus?",
     ("Commerce", "trial.decline_feedback.title"): "One quick question.",

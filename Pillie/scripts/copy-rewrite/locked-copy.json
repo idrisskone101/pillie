@@ -1187,6 +1187,16 @@
     {
       "issue": "ENG-71",
       "table": "Commerce",
+      "key": "trial.end.legacy.record",
+      "create": true,
+      "comment": "Legacy trial-end record kicker",
+      "en": "Your 14 active-day record",
+      "de": "Dein Stand nach 14 aktiven Tagen",
+      "it": "Il tuo resoconto di 14 giorni attivi"
+    },
+    {
+      "issue": "ENG-71",
+      "table": "Commerce",
       "key": "trial.end.record",
       "create": true,
       "comment": "Legacy 14-day record heading",

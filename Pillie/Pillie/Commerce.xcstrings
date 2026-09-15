@@ -35482,145 +35482,145 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your 14-day record"
+            "value": "Your 14 active-day record"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dein 14-Tage-Stand"
+            "value": "Dein Stand nach 14 aktiven Tagen"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Il tuo resoconto di 14 giorni"
+            "value": "Il tuo resoconto di 14 giorni attivi"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ton bilan sur 14 jours"
+            "value": "Ton bilan sur 14 jours actifs"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tu registro de 14 días"
+            "value": "Tu registro de 14 días activos"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Seu registro de 14 dias"
+            "value": "Seu registro de 14 dias ativos"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Je 14-dagenoverzicht"
+            "value": "Je 14-actieve-dagenoverzicht"
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ditt 14-dagarsresultat"
+            "value": "Ditt 14 aktiva dagars resultat"
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dit 14-dages resultat"
+            "value": "Dit 14 aktive dages resultat"
           }
         },
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dine 14 dager i tall"
+            "value": "Dine 14 aktive dager i tall"
           }
         },
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "14 päiväsi lukuina"
+            "value": "14 aktiivista päivääsi lukuina"
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "translated",
-            "value": "O teu registo de 14 dias"
+            "value": "O teu registo de 14 dias ativos"
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "El teu registre de 14 dies"
+            "value": "El teu registre de 14 dies actius"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Twój bilans 14 dni"
+            "value": "Twój bilans 14 dni aktywnych"
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tvoje bilance za 14 dní"
+            "value": "Tvoje bilance za 14 aktivních dní"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Твои итоги за 14 дней"
+            "value": "Твои итоги за 14 активных дней"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Твої підсумки за 14 днів"
+            "value": "Твої підсумки за 14 активних днів"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "あなたの14日間の記録"
+            "value": "あなたの服用14日間の記録"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "나의 14일 기록"
+            "value": "나의 복용 14일 기록"
           }
         },
         "ms": {
           "stringUnit": {
             "state": "translated",
-            "value": "Rekod 14 hari kamu"
+            "value": "Rekod 14 hari aktif kamu"
           }
         },
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bilanțul tău pe 14 zile"
+            "value": "Bilanțul tău pe 14 zile active"
           }
         },
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tvoj 14-dňový prehľad"
+            "value": "Tvoj 14-aktívny prehľad"
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "สถิติ 14 วันของคุณ"
+            "value": "สถิติ 14 วันกินยาของคุณ"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "你的 14 天成绩"
+            "value": "你的 14 个服药日成绩"
           }
         },
         "hi": {
@@ -35632,19 +35632,19 @@
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tvoj rezultat u 14 dana"
+            "value": "Tvoj rezultat u 14 aktivnih dana"
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "A 14 napos mérleged"
+            "value": "A 14 aktív napos mérleged"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "14 günlük özetin"
+            "value": "14 aktif günlük özetin"
           }
         },
         "ta": {
@@ -35656,7 +35656,7 @@
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Catatan 14 harimu"
+            "value": "Catatan 14 hari aktifmu"
           }
         },
         "ar": {
@@ -35674,7 +35674,7 @@
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kỷ lục 14 ngày của bạn"
+            "value": "Kỷ lục 14 ngày uống của bạn"
           }
         },
         "bn": {
@@ -35692,13 +35692,13 @@
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tvojih 14 dni v številkah"
+            "value": "Tvojih 14 aktivnih dni v številkah"
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Το 14ήμερο ρεκόρ σου"
+            "value": "Το 14 ενεργές ημέρες ρεκόρ σου"
           }
         },
         "te": {
@@ -35710,7 +35710,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "你的 14 天成果"
+            "value": "你的 14 個服藥日成果"
           }
         },
         "gu": {
