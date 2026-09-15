@@ -148,14 +148,18 @@ ssh_cmd() {
   if [[ "${1:-}" == "--" ]]; then
     shift
   fi
-  # Non-login remote bash does not load Homebrew. Keep axe on PATH for every exec.
+  # Join into one remote string so `bash -lc '…'` stays one -c argument.
+  # Non-login remote bash does not load Homebrew; keep axe on PATH.
+  local quoted
+  quoted="$(printf '%q ' "$@")"
   ssh -F "$SSH_CONFIG" "$SSH_HOST" -- \
-    /usr/bin/env HOME="$GUEST_HOME" PATH="$GUEST_PATH" \
-    "$@"
+    "/usr/bin/env HOME=${GUEST_HOME} PATH=${GUEST_PATH} ${quoted}"
 }
 
 provision_remote_axe() {
-  ssh_cmd -- /bin/bash -lc "$(cat <<'REMOTE'
+  # stdin script: do not put the installer in `bash -lc`, which SSH word-splits.
+  ssh -F "$SSH_CONFIG" "$SSH_HOST" -- \
+    "/usr/bin/env HOME=${GUEST_HOME} PATH=${GUEST_PATH} /bin/bash -s" <<'REMOTE'
 set -euo pipefail
 export HOME="${HOME:-/Users/runner}"
 export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:${PATH:-}"
@@ -180,7 +184,6 @@ if ! command -v axe >/dev/null 2>&1; then
 fi
 echo "ok: axe $(axe --version 2>/dev/null | head -1)"
 REMOTE
-)"
 }
 
 wait_for_ssh() {

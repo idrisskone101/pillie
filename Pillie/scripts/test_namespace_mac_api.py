@@ -87,6 +87,8 @@ class ProvisionAxeTest(unittest.TestCase):
         self.assertIn("cameroncooke/axe/axe", text)
         self.assertIn("/opt/homebrew/bin", text)
         self.assertIn("command -v axe", text)
+        self.assertIn("/bin/bash -s", text)
+        self.assertIn("printf '%q '", text)
         start = text.index("\nstart() {")
         exec_remote = text.index("\nexec_remote() {")
         diagnose = text.index("\ndiagnose_remote() {")
