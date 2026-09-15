@@ -11,15 +11,17 @@ import Foundation
 /// grant date so the clock cannot drift from persisted state.
 ///
 /// The grant local day is a bonus counted day, active or break. After that,
-/// only active-phase days consume the 14 full days. Expiry is local midnight
-/// after the 14th full counted active-phase day.
+/// only hormone-active days consume the 14 full days. Expiry is local midnight
+/// after the 14th full counted hormone-active day. Break weeks freeze the
+/// badge and leave Plus Access on.
 struct ReverseTrialClock: Equatable {
-    /// The number of full active-phase days a Reverse Trial covers after grant day.
+    /// The number of full hormone-active days a Reverse Trial covers after grant day.
     static let fullDays = 14
 
-    /// Bound on the local-day walk. A zero-active-days schedule never reaches
-    /// `fullDays`, so without a cap this search would not halt.
-    private static let maxWalkDays = 400
+    /// Worst legal custom is 1 active / 7 break. Fourteen full actives then
+    /// fit in `fullDays * 8` local days. Bound the walk so a bad snapshot
+    /// cannot hang.
+    static let maximumWalkDays = fullDays * 8 + 2
 
     let grantDate: Date
     let schedule: ActiveDaySchedule
@@ -29,36 +31,38 @@ struct ReverseTrialClock: Equatable {
         self.schedule = schedule
     }
 
-    /// Local midnight after the 14th full active-phase day following grant day.
-    /// If those 14 days cannot be found within `maxWalkDays` (all-break pack),
-    /// expiry is the local start of the cap day so Plus Access cannot stay on
-    /// forever.
+    /// Local midnight after the 14th full hormone-active day following grant day.
+    /// Grant local day is never one of the 14, active or break. If those 14
+    /// days cannot be found within `maximumWalkDays`, fall back to today's
+    /// calendar-day expiry so Plus Access cannot stay on forever.
     func expiryMoment(calendar: Calendar) -> Date {
         let grantDay = calendar.startOfDay(for: grantDate)
-        var cursor = grantDay
+        guard var cursor = calendar.date(byAdding: .day, value: 1, to: grantDay) else {
+            return grantDay
+        }
         var fullActiveDays = 0
 
-        for _ in 0..<Self.maxWalkDays {
-            guard let next = calendar.date(byAdding: .day, value: 1, to: cursor) else {
-                return cursor
-            }
-            cursor = next
+        for _ in 0..<Self.maximumWalkDays {
             if schedule.isActiveDay(cursor, calendar: calendar) {
                 fullActiveDays += 1
                 if fullActiveDays == Self.fullDays {
                     return calendar.date(byAdding: .day, value: 1, to: cursor) ?? cursor
                 }
             }
+            guard let next = calendar.date(byAdding: .day, value: 1, to: cursor) else {
+                break
+            }
+            cursor = next
         }
 
-        return cursor
+        return calendar.date(byAdding: .day, value: Self.fullDays + 1, to: grantDay) ?? grantDay
     }
 
     func isActive(calendar: Calendar, now: Date) -> Bool {
         now < expiryMoment(calendar: calendar)
     }
 
-    /// Count of remaining counted days (grant local day or active-phase) in
+    /// Count of remaining counted days (grant local day or hormone-active) in
     /// `[startOfDay(now), expiryMoment)`. Break days are skipped so the badge
     /// freezes across a break.
     func daysRemaining(calendar: Calendar, now: Date) -> Int {
@@ -69,7 +73,7 @@ struct ReverseTrialClock: Equatable {
         var cursor = nowDay
         var remaining = 0
         var walked = 0
-        while cursor < expiry && walked < Self.maxWalkDays {
+        while cursor < expiry && walked < Self.maximumWalkDays + Self.fullDays {
             if isCountedDay(cursor, calendar: calendar) {
                 remaining += 1
             }
@@ -95,11 +99,38 @@ struct ReverseTrialClock: Equatable {
     /// True when expiry is the next local midnight. A break day with one
     /// counted day still ahead is not tonight.
     func endsTonight(calendar: Calendar, now: Date) -> Bool {
+        guard isActive(calendar: calendar, now: now) else { return false }
         let today = calendar.startOfDay(for: now)
         guard let tomorrow = calendar.date(byAdding: .day, value: 1, to: today) else {
             return false
         }
         return expiryMoment(calendar: calendar) == tomorrow
+    }
+
+    /// Grant noon on the local day such that `now`'s local day is the 14th
+    /// full hormone-active day. Nil if `now` is a break day.
+    static func grantDatePlacingLastCountedDay(
+        now: Date,
+        calendar: Calendar,
+        schedule: ActiveDaySchedule
+    ) -> Date? {
+        let lastFull = calendar.startOfDay(for: now)
+        guard schedule.isActiveDay(lastFull, calendar: calendar) else { return nil }
+        var found = 1
+        var cursor = lastFull
+        while found < fullDays {
+            guard let previous = calendar.date(byAdding: .day, value: -1, to: cursor) else {
+                return nil
+            }
+            cursor = previous
+            if schedule.isActiveDay(cursor, calendar: calendar) {
+                found += 1
+            }
+        }
+        guard let grantDay = calendar.date(byAdding: .day, value: -1, to: cursor) else {
+            return nil
+        }
+        return calendar.date(bySettingHour: 12, minute: 0, second: 0, of: grantDay) ?? grantDay
     }
 
     private func isCountedDay(_ date: Date, calendar: Calendar) -> Bool {

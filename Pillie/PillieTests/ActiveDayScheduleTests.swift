@@ -59,7 +59,7 @@ final class ActiveDayScheduleTests: XCTestCase {
         XCTAssertTrue(schedule.isActiveDay(date(2026, 7, 9), calendar: calendar))
     }
 
-    func testNormalizationClampsLengthActiveDaysAndAnchorIndex() {
+    func testNormalizationAndEmptySetFailsTowardCountingEveryIndex() {
         let zeroLength = ActiveDaySchedule(
             anchorDate: date(2026, 7, 1),
             anchorDayIndex: 3,
@@ -67,7 +67,7 @@ final class ActiveDayScheduleTests: XCTestCase {
             cycleLength: 0
         )
         XCTAssertEqual(zeroLength.cycleLength, 1)
-        XCTAssertEqual(zeroLength.activeDays, 1)
+        XCTAssertEqual(zeroLength.hormoneActiveIndices, [0])
         XCTAssertEqual(zeroLength.anchorDayIndex, 0)
 
         let overActive = ActiveDaySchedule(
@@ -76,7 +76,7 @@ final class ActiveDayScheduleTests: XCTestCase {
             activeDays: 99,
             cycleLength: 28
         )
-        XCTAssertEqual(overActive.activeDays, 28)
+        XCTAssertEqual(overActive.hormoneActiveIndices, Set(0..<28))
 
         let negativeAnchor = ActiveDaySchedule(
             anchorDate: date(2026, 7, 1),
@@ -86,14 +86,14 @@ final class ActiveDayScheduleTests: XCTestCase {
         )
         XCTAssertEqual(negativeAnchor.anchorDayIndex, 27)
 
-        let allBreak = ActiveDaySchedule(
+        let empty = ActiveDaySchedule(
             anchorDate: date(2026, 7, 1),
             anchorDayIndex: 0,
-            activeDays: 0,
-            cycleLength: 7
+            cycleLength: 7,
+            hormoneActiveIndices: []
         )
-        XCTAssertEqual(allBreak.activeDays, 0)
-        XCTAssertFalse(allBreak.isActiveDay(date(2026, 7, 1), calendar: calendar))
+        XCTAssertEqual(empty.hormoneActiveIndices, Set(0..<7))
+        XCTAssertTrue(empty.isActiveDay(date(2026, 7, 1), calendar: calendar))
     }
 
     func testPackSnapshotMatchesResolvedCycleAnchor() {
@@ -108,9 +108,9 @@ final class ActiveDayScheduleTests: XCTestCase {
             isCurrent: true
         )
         Self.retainedPacks.append(pack)
-        let schedule = ActiveDaySchedule(pack: pack)
+        let schedule = ActiveDaySchedule(pack: pack, calendar: calendar)
 
-        XCTAssertEqual(schedule.activeDays, 21)
+        XCTAssertEqual(schedule.hormoneActiveIndices, Set(0..<21))
         XCTAssertEqual(schedule.cycleLength, 28)
         XCTAssertEqual(
             schedule.cycleDayIndex(on: start, calendar: calendar),
@@ -122,5 +122,35 @@ final class ActiveDayScheduleTests: XCTestCase {
         )
         XCTAssertEqual(schedule.cycleDayIndex(on: start, calendar: calendar), 20)
         XCTAssertEqual(schedule.cycleDayIndex(on: date(2026, 7, 9), calendar: calendar), 0)
+    }
+
+    func testPatchRemoveDayIsHormoneActive() {
+        let start = date(2026, 7, 1, 10, 0)
+        let pack = PillPack(
+            packType: .twentyOneSeven,
+            method: .patch,
+            startDate: start,
+            cycleDayAnchorIndex: 21,
+            packNumber: 1,
+            isCurrent: true
+        )
+        Self.retainedPacks.append(pack)
+
+        XCTAssertTrue(pack.isBreakDay(dayIndex: 21))
+        XCTAssertEqual(
+            DoseScheduleEngine.dueAction(on: start, pack: pack, calendar: calendar)?.isBreak,
+            false
+        )
+
+        let schedule = ActiveDaySchedule(pack: pack, calendar: calendar)
+        XCTAssertEqual(schedule.hormoneActiveIndices, Set(0..<22))
+        XCTAssertTrue(schedule.isActiveDay(start, calendar: calendar))
+        XCTAssertFalse(schedule.isActiveDay(date(2026, 7, 2), calendar: calendar))
+        XCTAssertTrue(schedule.isActiveDay(date(2026, 7, 8), calendar: calendar))
+    }
+
+    func testMissingPackIsEveryCalendarDay() {
+        let schedule = ActiveDaySchedule(pack: nil, calendar: calendar)
+        XCTAssertEqual(schedule, .everyCalendarDay)
     }
 }

@@ -261,24 +261,102 @@ final class ReverseTrialClockTests: XCTestCase {
         XCTAssertTrue(clock.endsTonight(calendar: calendar, now: date(2026, 7, 22, 12, 0)))
     }
 
-    func testZeroActiveDaysExpiresAtWalkCap() {
+    func testEmptyHormoneSetFailsTowardCalendarExpiry() {
         let grant = date(2026, 7, 1, 10, 0)
         let clock = ReverseTrialClock(
             grantDate: grant,
             schedule: ActiveDaySchedule(
                 anchorDate: date(2026, 7, 1, 10, 0),
                 anchorDayIndex: 0,
-                activeDays: 0,
-                cycleLength: 7
+                cycleLength: 7,
+                hormoneActiveIndices: []
             )
         )
 
-        XCTAssertEqual(clock.expiryMoment(calendar: calendar), date(2027, 8, 5, 0, 0))
+        XCTAssertEqual(clock.expiryMoment(calendar: calendar), date(2026, 7, 16, 0, 0))
         XCTAssertTrue(clock.isActive(calendar: calendar, now: grant))
-        XCTAssertEqual(clock.daysRemaining(calendar: calendar, now: grant), 1)
-        XCTAssertEqual(clock.daysRemaining(calendar: calendar, now: date(2026, 7, 2, 12, 0)), 0)
-        XCTAssertTrue(clock.isActive(calendar: calendar, now: date(2026, 7, 2, 12, 0)))
-        XCTAssertFalse(clock.isActive(calendar: calendar, now: date(2027, 8, 5, 0, 0)))
+        XCTAssertFalse(clock.isActive(calendar: calendar, now: date(2026, 7, 16, 0, 0)))
+    }
+
+    // MARK: - Patch remove day is hormone-active
+
+    func testPatchGrantOnRemoveDayConsumesThenPausesOffWeek() {
+        // Pack is patch 21/7. Grant 2026-07-01 10:00 is cycle day 22 (index 21).
+        // `isBreakDay(21)` is true; engine `isBreak` is false. Off-week is
+        // July 2-7 (days 23-28). Fourteen full actives start July 8.
+        let schedule = ActiveDaySchedule(
+            anchorDate: date(2026, 7, 1, 10, 0),
+            anchorDayIndex: 21,
+            cycleLength: 28,
+            hormoneActiveIndices: Set(0..<22)
+        )
+        let clock = ReverseTrialClock(
+            grantDate: date(2026, 7, 1, 10, 0),
+            schedule: schedule
+        )
+
+        XCTAssertEqual(clock.expiryMoment(calendar: calendar), date(2026, 7, 23, 0, 0))
+        XCTAssertTrue(schedule.isActiveDay(date(2026, 7, 1, 10, 0), calendar: calendar))
+        XCTAssertFalse(schedule.isActiveDay(date(2026, 7, 2), calendar: calendar))
+
+        assertClock(
+            clock,
+            now: date(2026, 7, 1, 10, 0),
+            isActive: true, daysRemaining: 15, displayed: 14, endsTonight: false
+        )
+        assertClock(
+            clock,
+            now: date(2026, 7, 2, 12, 0),
+            isActive: true, daysRemaining: 14, displayed: 14, endsTonight: false
+        )
+        assertClock(
+            clock,
+            now: date(2026, 7, 7, 12, 0),
+            isActive: true, daysRemaining: 14, displayed: 14, endsTonight: false
+        )
+        assertClock(
+            clock,
+            now: date(2026, 7, 22, 23, 59),
+            isActive: true, daysRemaining: 1, displayed: 1, endsTonight: true
+        )
+    }
+
+    func testCycleEditRecomputesExpiryFromSameGrant() {
+        let grant = date(2026, 7, 1, 10, 0)
+        let lastActive = ReverseTrialClock(
+            grantDate: grant,
+            schedule: twentyOneSeven(anchorDayIndex: 20, anchorDate: grant)
+        )
+        let dayOne = ReverseTrialClock(
+            grantDate: grant,
+            schedule: twentyOneSeven(anchorDayIndex: 0, anchorDate: date(2026, 7, 2))
+        )
+
+        XCTAssertEqual(lastActive.expiryMoment(calendar: calendar), date(2026, 7, 23, 0, 0))
+        XCTAssertEqual(dayOne.expiryMoment(calendar: calendar), date(2026, 7, 16, 0, 0))
+    }
+
+    func testGrantDatePlacingLastCountedDaySkipsBreakDays() {
+        let now = date(2026, 7, 22, 18, 0)
+        let schedule = twentyOneSeven(anchorDayIndex: 20, anchorDate: date(2026, 7, 1, 10, 0))
+        let grant = ReverseTrialClock.grantDatePlacingLastCountedDay(
+            now: now,
+            calendar: calendar,
+            schedule: schedule
+        )
+
+        // Fourteen full actives ending today are July 9-22; grant is the day
+        // before that block (July 8, a break day). Plus still ends tonight.
+        XCTAssertEqual(calendar.startOfDay(for: grant!), date(2026, 7, 8, 0, 0))
+        let clock = ReverseTrialClock(grantDate: grant!, schedule: schedule)
+        XCTAssertTrue(clock.endsTonight(calendar: calendar, now: now))
+        XCTAssertNil(
+            ReverseTrialClock.grantDatePlacingLastCountedDay(
+                now: date(2026, 7, 8, 12, 0),
+                calendar: calendar,
+                schedule: schedule
+            )
+        )
     }
 
     private func twentyOneSeven(anchorDayIndex: Int, anchorDate: Date) -> ActiveDaySchedule {
