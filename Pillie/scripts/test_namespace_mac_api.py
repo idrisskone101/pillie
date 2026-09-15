@@ -80,5 +80,23 @@ class HydrateAuthTest(unittest.TestCase):
             self.assertEqual(stat.S_IMODE(dest.stat().st_mode), 0o600)
 
 
+class ProvisionAxeTest(unittest.TestCase):
+    def test_script_installs_axe_on_start_and_exec(self) -> None:
+        text = SCRIPT.read_text(encoding="utf-8")
+        self.assertIn("provision_remote_axe", text)
+        self.assertIn("cameroncooke/axe/axe", text)
+        self.assertIn("/opt/homebrew/bin", text)
+        self.assertIn("command -v axe", text)
+        start = text.index("\nstart() {")
+        exec_remote = text.index("\nexec_remote() {")
+        diagnose = text.index("\ndiagnose_remote() {")
+        self.assertIn("provision_remote_axe", text[start:exec_remote])
+        self.assertIn("provision_remote_axe", text[exec_remote:diagnose])
+        self.assertIn("ok: axe", text[diagnose:])
+
+    def test_script_syntax(self) -> None:
+        subprocess.run(["bash", "-n", str(SCRIPT)], check=True)
+
+
 if __name__ == "__main__":
     unittest.main()
