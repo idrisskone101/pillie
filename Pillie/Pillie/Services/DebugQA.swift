@@ -347,7 +347,21 @@ enum DebugQA {
         seedInterventionStats(blockerConfigured: blockerConfigured)
         SubscriptionManager.shared.setPlusForTesting(subscriber)
         SubscriptionManager.shared.debugSetHardPaywallEnabled(hardPaywallEnabled)
-        let grant = Calendar.current.date(byAdding: .day, value: -daysAgo, to: Date()) ?? Date()
+        let schedule = ActiveDaySchedule(pack: store.activePack)
+        SubscriptionManager.shared.updateActiveDaySchedule(schedule)
+        let calendar = Calendar.current
+        let now = Date()
+        let grant: Date
+        if daysAgo == ReverseTrialClock.fullDays,
+           let placed = ReverseTrialClock.grantDatePlacingLastCountedDay(
+               now: now,
+               calendar: calendar,
+               schedule: schedule
+           ) {
+            grant = placed
+        } else {
+            grant = calendar.date(byAdding: .day, value: -daysAgo, to: now) ?? now
+        }
         SubscriptionManager.shared.debugOverrideTrialGrantDate(grant, termsCohort: cohort)
         AppBlockingManager.shared.debugBlockerConfiguredOverride = blockerConfigured
         AppBlockingManager.shared.blockingEnabled = blockerConfigured
@@ -366,6 +380,7 @@ enum DebugQA {
         store.replacePack(with: pack)
         resetTrialPresentationFlags()
         seedInterventionStats(blockerConfigured: !pack.pastStatuses.isEmpty && blockerConfigured)
+        SubscriptionManager.shared.updateActiveDaySchedule(pack: store.activePack)
         SubscriptionManager.shared.setPlusForTesting(false)
         SubscriptionManager.shared.debugSetHardPaywallEnabled(hardPaywallEnabled)
         SubscriptionManager.shared.debugApplyTrialEndPaywallScenario(

@@ -362,4 +362,30 @@ final class TrialStatusPresentationTests: XCTestCase {
             now: date(2026, 7, 2, 9, 0)
         ))
     }
+
+    func testBreakDayWithOneCountedDayLeftDoesNotSayEndsTonight() {
+        let state = PlusAccessState(
+            hasEntitlement: false,
+            trialGrantDate: date(2026, 7, 1, 9, 0),
+            schedule: ActiveDaySchedule(
+                anchorDate: date(2026, 7, 1, 9, 0),
+                anchorDayIndex: 7,
+                activeDays: 21,
+                cycleLength: 28
+            )
+        )
+        let presentation = TrialStatusPresentation.make(
+            state: state,
+            calendar: calendar,
+            now: date(2026, 7, 15, 12, 0),
+            locale: english
+        )
+
+        XCTAssertEqual(presentation?.daysRemaining, 1)
+        XCTAssertEqual(presentation?.endsTonight, false)
+        XCTAssertEqual(
+            presentation?.indicatorLabel,
+            commerce("trial.status.indicator.setup", days: 1)
+        )
+    }
 }

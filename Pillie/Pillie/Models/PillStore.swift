@@ -747,6 +747,7 @@ class PillStore {
     /// active shield must be cleared immediately when today becomes a no-action day.
     private func reconcileBlockingAfterScheduleChange() {
         syncTodayTakenToAppGroup()
+        SubscriptionManager.shared.updateActiveDaySchedule(pack: activePack)
         AppBlockingManager.shared.reconcileBlockingState(
             isTodayHandled: isTodayHandled,
             liveDay: today,

@@ -312,10 +312,7 @@ struct HonestPaywallScreen: View {
 
     private var trialEndTelemetryContent: TrialEndPaywallContent? {
         TrialEndPaywallContent.make(
-            state: PlusAccessState(
-                hasEntitlement: subscriptionManager.hasEntitlement,
-                trialGrantDate: subscriptionManager.trialGrantDate
-            ),
+            state: subscriptionManager.plusAccessState,
             blockerConfigSaved: AppBlockingManager.shared.hasAppsSelected,
             stats: trialStats ?? .none,
             calendar: .current,

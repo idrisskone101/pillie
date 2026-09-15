@@ -19,19 +19,23 @@ struct TrialStatusPresentation: Equatable {
     let trialEndDate: Date?
     let locale: Locale
     let trialEndTerms: TrialEndAccessTerms
+    /// Clock question: expiry is the next local midnight. Not `daysRemaining == 1`.
+    private let expiresTonight: Bool
 
     init(
         daysRemaining: Int,
         protectionActive: Bool = false,
         trialEndDate: Date? = nil,
         locale: Locale = .current,
-        trialEndTerms: TrialEndAccessTerms = .legacy
+        trialEndTerms: TrialEndAccessTerms = .legacy,
+        expiresTonight: Bool? = nil
     ) {
         self.daysRemaining = daysRemaining
         self.protectionActive = protectionActive
         self.trialEndDate = trialEndDate
         self.locale = locale
         self.trialEndTerms = trialEndTerms
+        self.expiresTonight = expiresTonight ?? (daysRemaining == 1)
     }
 
     /// Day count as shown to the user. Same clamp as the paywall stamp so
@@ -43,9 +47,7 @@ struct TrialStatusPresentation: Equatable {
     /// Whether the trial expires at tonight's local-day rollover — the whole
     /// last day is still protected, so copy says "ends tonight", never "0 days
     /// left" (misleading while active) or "1 days left".
-    var endsTonight: Bool {
-        daysRemaining == 1
-    }
+    var endsTonight: Bool { expiresTonight }
 
     /// The persistent indicator distinguishes active protection from setup
     /// still being needed while preserving the trial countdown.
@@ -139,7 +141,7 @@ struct TrialStatusPresentation: Equatable {
         // Entitlement wins over a still-running trial clock: a mid-trial
         // purchase removes the indicator immediately.
         guard !state.hasEntitlement, let grantDate = state.trialGrantDate else { return nil }
-        let clock = ReverseTrialClock(grantDate: grantDate)
+        let clock = ReverseTrialClock(grantDate: grantDate, schedule: state.schedule)
         guard clock.isActive(calendar: calendar, now: now) else { return nil }
         let assignedTermsCohort = termsCohort
             ?? HardPaywallPolicy.cohort(forTrialGrantedAt: grantDate)
@@ -151,7 +153,8 @@ struct TrialStatusPresentation: Equatable {
             trialEndTerms: HardPaywallPolicy.terms(
                 for: assignedTermsCohort,
                 hardPaywallEnabled: hardPaywallEnabled
-            )
+            ),
+            expiresTonight: clock.endsTonight(calendar: calendar, now: now)
         )
     }
 }

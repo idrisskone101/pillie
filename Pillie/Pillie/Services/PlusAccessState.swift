@@ -15,11 +15,14 @@ struct PlusAccessState: Equatable {
     var hasEntitlement: Bool
     /// The persisted Reverse Trial grant moment, if one was ever granted.
     var trialGrantDate: Date?
+    /// Pack rhythm the clock walks. Calendar-day fixtures pass
+    /// `.everyCalendarDay`. Production state carries the last pack snapshot.
+    var schedule: ActiveDaySchedule = .everyCalendarDay
 
     /// Derived, never stored (ADR 0007): whether the Reverse Trial covers `now`.
     func trialActive(calendar: Calendar, now: Date) -> Bool {
         guard let trialGrantDate else { return false }
-        return ReverseTrialClock(grantDate: trialGrantDate)
+        return ReverseTrialClock(grantDate: trialGrantDate, schedule: schedule)
             .isActive(calendar: calendar, now: now)
     }
 

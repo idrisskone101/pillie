@@ -10,10 +10,14 @@ struct ReminderSchedulePlanner {
     static let baseReminderCount = 7
     static let dueScanLimit = 120
     static let catchupDelayMinutes = 1
-    /// Reverse Trial expiry warnings (#168 / ADR 0007) fire on these trial days,
-    /// counting the grant day as day 0 — the same clock as `ReverseTrialClock`,
-    /// whose expiry lands at the local-day rollover after day 14.
+    /// Reverse Trial expiry warnings (#168 / ADR 0007) keep day-10 / day-13
+    /// request ids and copy. Fire times are 5 and 2 local calendar days before
+    /// `ReverseTrialClock.expiryMoment`, at 8 PM — not grant+10 / grant+13.
     static let trialWarningDays = [10, 13]
+    static let trialWarningLeads: [(templateDay: Int, calendarDaysBeforeExpiry: Int)] = [
+        (10, 5),
+        (13, 2),
+    ]
     /// Local hour the trial expiry warnings fire at: 8 PM local, decoupled from the
     /// user's Due Action Reminder time so the informational nudge never stacks on an
     /// action reminder.
@@ -231,24 +235,37 @@ struct ReminderSchedulePlanner {
     }
 
     /// Plans the Reverse Trial day-10/13 expiry warnings (#168 / ADR 0007):
-    /// scheduled at grant, anchored to the grant day (day 0) so the fire days
-    /// agree with `ReverseTrialClock`'s midnight-after-day-14 expiry.
+    /// fire at expiry minus 5 and 2 local days, 20:00, so copy ("in 5 days",
+    /// "tomorrow night") stays true when a break slides expiry.
     private func planTrialExpiryWarnings(_ input: Input) -> [TrialExpiryWarningIntent] {
         // Entitled users never see expiry pressure: a mid-trial purchase replans
         // and both pending warnings fall out of the managed set as stale.
         guard !input.hasEntitlement, let grantDate = input.trialGrantDate else { return [] }
 
-        let grantDayStart = input.calendar.startOfDay(for: grantDate)
-        return Self.trialWarningDays.compactMap { day in
-            guard let warningDay = input.calendar.date(byAdding: .day, value: day, to: grantDayStart) else {
+        let clock = ReverseTrialClock(
+            grantDate: grantDate,
+            schedule: ActiveDaySchedule(pack: input.pack, calendar: input.calendar)
+        )
+        let expiry = clock.expiryMoment(calendar: input.calendar)
+        return Self.trialWarningLeads.compactMap { lead in
+            guard let warningDay = input.calendar.date(
+                byAdding: .day,
+                value: -lead.calendarDaysBeforeExpiry,
+                to: expiry
+            ) else {
                 return nil
             }
-            let fireDate = reminderDate(on: warningDay, hour: Self.trialWarningHour, minute: 0, calendar: input.calendar)
+            let fireDate = reminderDate(
+                on: warningDay,
+                hour: Self.trialWarningHour,
+                minute: 0,
+                calendar: input.calendar
+            )
             // A warning whose moment already passed is never scheduled — an aged
             // or expired trial keeps only warnings still ahead of it. (A past
             // calendar trigger would otherwise fire immediately.)
             guard fireDate > input.now else { return nil }
-            return TrialExpiryWarningIntent(day: day, fireDate: fireDate)
+            return TrialExpiryWarningIntent(day: lead.templateDay, fireDate: fireDate)
         }
     }
 
