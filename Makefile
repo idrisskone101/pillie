@@ -26,7 +26,7 @@ KEEP ?=
 .PHONY: help diagnose build run build-and-run test screenshot console \
 	worktree agent-verify udid \
 	ns-mac-status ns-mac-start ns-mac-stop ns-mac-sync ns-mac-diagnose \
-	ns-mac-exec ns-mac-verify
+	ns-mac-exec ns-mac-verify ns-mac-screenshot
 
 help:
 	@printf "%s\n" \
@@ -43,6 +43,7 @@ help:
 		"  make udid                     Print the resolved iPhone 17 Pro UDID" \
 		"  make ns-mac-status            Namespace Mac Devbox status" \
 		"  make ns-mac-verify CMD='make x' Start, sync, run, stop (preferred)" \
+		"  make ns-mac-screenshot         Boot sim, build-and-run, 1x PNG, stop" \
 		"  make ns-mac-start             Start the on-demand Namespace Mac" \
 		"  make ns-mac-stop              Stop the Namespace Mac" \
 		"  make ns-mac-sync              Checkout this SHA on the Mac" \
@@ -118,3 +119,6 @@ ns-mac-verify:
 		exit 64; \
 	fi
 	@KEEP="$(KEEP)" REF="$(REF)" $(SCRIPTS)/namespace-mac.sh verify -- /bin/bash -lc "$(CMD)"
+
+ns-mac-screenshot:
+	@KEEP="$(KEEP)" REF="$(REF)" $(SCRIPTS)/namespace-mac.sh screenshot
