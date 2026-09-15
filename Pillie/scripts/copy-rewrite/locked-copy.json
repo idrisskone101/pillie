@@ -1076,9 +1076,9 @@
       "key": "trial.end.subtitle.hard",
       "create": true,
       "comment": "Hard trial-end subtitle with blocking",
-      "en": "You had extra pings and paused apps for 14 days. Keep Plus if you want that to stay on.",
-      "de": "Du hattest extra Pings und pausierte Apps für 14 Tage. Behalt Plus, wenn das so bleiben soll.",
-      "it": "Hai avuto ping extra e app in pausa per 14 giorni. Tieni plus se vuoi che resti così."
+      "en": "You had extra pings and paused apps for 14 active days. Keep Plus if you want that to stay on.",
+      "de": "Du hattest extra Pings und pausierte Apps für 14 aktive Tage. Behalt Plus, wenn das so bleiben soll.",
+      "it": "Hai avuto ping extra e app in pausa per 14 giorni attivi. Tieni plus se vuoi che resti così."
     },
     {
       "issue": "ENG-71",
@@ -1086,17 +1086,17 @@
       "key": "trial.end.subtitle.reminders",
       "create": true,
       "comment": "Hard trial-end subtitle reminders only",
-      "en": "You had extra pings for 14 days. Keep Plus if you want those to stay on.",
-      "de": "Du hattest extra Pings für 14 Tage. Behalt Plus, wenn die so bleiben sollen.",
-      "it": "Hai avuto ping extra per 14 giorni. Tieni plus se vuoi che restino."
+      "en": "You had extra pings for 14 active days. Keep Plus if you want those to stay on.",
+      "de": "Du hattest extra Pings für 14 aktive Tage. Behalt Plus, wenn die so bleiben sollen.",
+      "it": "Hai avuto ping extra per 14 giorni attivi. Tieni plus se vuoi che restino."
     },
     {
       "issue": "ENG-71",
       "table": "Commerce",
       "key": "trial.end.kicker",
-      "en": "Your 14 days",
-      "de": "Deine 14 Tage",
-      "it": "I tuoi 14 giorni"
+      "en": "Your 14 active days",
+      "de": "Deine 14 aktiven Tage",
+      "it": "I tuoi 14 giorni attivi"
     },
     {
       "issue": "ENG-71",
@@ -1180,9 +1180,9 @@
       "key": "trial.end.legacy.subtitle",
       "create": true,
       "comment": "Legacy trial-end subtitle",
-      "en": "Your 14 days ended, so app blocking is off. Reminders stay free forever.",
-      "de": "Deine 14 Tage sind um, also ist App-Pause aus. Erinnerungen bleiben für immer kostenlos.",
-      "it": "I tuoi 14 giorni sono finiti, quindi il blocco app è spento. I promemoria restano gratis per sempre."
+      "en": "Your 14 active days ended, so app blocking is off. Reminders stay free forever.",
+      "de": "Deine 14 aktiven Tage sind um, also ist App-Pause aus. Erinnerungen bleiben für immer kostenlos.",
+      "it": "I tuoi 14 giorni attivi sono finiti, quindi il blocco app è spento. I promemoria restano gratis per sempre."
     },
     {
       "issue": "ENG-71",
@@ -1190,9 +1190,9 @@
       "key": "trial.end.record",
       "create": true,
       "comment": "Legacy 14-day record heading",
-      "en": "Your 14-day record",
-      "de": "Dein 14-Tage-Stand",
-      "it": "Il tuo resoconto di 14 giorni"
+      "en": "Your 14 active-day record",
+      "de": "Dein Stand nach 14 aktiven Tagen",
+      "it": "Il tuo resoconto di 14 giorni attivi"
     },
     {
       "issue": "ENG-71",
@@ -1254,9 +1254,9 @@
       "issue": "ENG-72",
       "table": "Commerce",
       "key": "trial.status.indicator.active",
-      "en": "Plus is on · %lld days left",
-      "de": "Plus ist an · noch %lld Tage",
-      "it": "Plus è attivo · %lld giorni rimasti"
+      "en": "Plus is on · %lld active days left",
+      "de": "Plus ist an · noch %lld aktive Tage",
+      "it": "Plus è attivo · %lld giorni attivi rimasti"
     },
     {
       "issue": "ENG-72",
@@ -1270,9 +1270,9 @@
       "issue": "ENG-72",
       "table": "Commerce",
       "key": "trial.status.indicator.setup",
-      "en": "Set up app blocking · %lld days left",
-      "de": "App-Pause einrichten · noch %lld Tage",
-      "it": "Imposta il blocco app · %lld giorni rimasti"
+      "en": "Set up app blocking · %lld active days left",
+      "de": "App-Pause einrichten · noch %lld aktive Tage",
+      "it": "Imposta il blocco app · %lld giorni attivi rimasti"
     },
     {
       "issue": "ENG-72",
@@ -1421,6 +1421,16 @@
     {
       "issue": "ENG-72",
       "table": "Commerce",
+      "key": "trial.granted.badge",
+      "create": true,
+      "comment": "Trial duration badge names hormone-active days",
+      "en": "14 active days free · no card",
+      "de": "14 aktive Tage gratis · keine Karte",
+      "it": "14 giorni attivi gratis · nessuna carta"
+    },
+    {
+      "issue": "ENG-72",
+      "table": "Commerce",
       "key": "trial.granted.headline",
       "en": "Your next two weeks are",
       "de": "Deine nächsten zwei Wochen gehen",
@@ -1446,9 +1456,9 @@
       "issue": "ENG-72",
       "table": "Commerce",
       "key": "trial.granted.disclosure",
-      "en": "14 days free, no card needed. App blocking turns off after the trial. Reminders stay free.",
-      "de": "14 Tage gratis, keine Karte. App-Pause endet mit dem Trial. Erinnerungen bleiben frei.",
-      "it": "14 giorni gratis, niente carta. Il blocco finisce col trial. I promemoria restano gratis."
+      "en": "14 active days free, no card needed. App blocking turns off after the trial. Reminders stay free.",
+      "de": "14 aktive Tage gratis, keine Karte. App-Pause endet mit dem Trial. Erinnerungen bleiben frei.",
+      "it": "14 giorni attivi gratis, niente carta. Il blocco finisce col trial. I promemoria restano gratis."
     },
     {
       "issue": "ENG-72",
@@ -1806,9 +1816,9 @@
       "issue": "ENG-73",
       "table": "Commerce",
       "key": "trial.granted.disclosure.hard_paywall",
-      "en": "Your free trial lasts 14 days. No card needed. After it ends, choose monthly, annual, or lifetime to keep Plus.",
-      "de": "Dein Gratis-Trial dauert 14 Tage. Keine Karte nötig. Danach kannst du monatlich, jährlich oder lebenslang wählen, um Plus zu behalten.",
-      "it": "Il tuo trial gratis dura 14 giorni. Non serve la carta. Dopo puoi scegliere mensile, annuale o a vita per tenere plus."
+      "en": "Your free trial lasts 14 active days. No card needed. After it ends, choose monthly, annual, or lifetime to keep Plus.",
+      "de": "Dein Gratis-Trial dauert 14 aktive Tage. Keine Karte nötig. Danach kannst du monatlich, jährlich oder lebenslang wählen, um Plus zu behalten.",
+      "it": "Il tuo trial gratis dura 14 giorni attivi. Non serve la carta. Dopo puoi scegliere mensile, annuale o a vita per tenere plus."
     },
     {
       "issue": "ENG-73",
@@ -2132,9 +2142,9 @@
       "table": "Commerce",
       "key": "paywall.story.trial_active.stamp",
       "create": true,
-      "en": "days left on Pillie Plus",
-      "de": "Tage Pillie Plus noch",
-      "it": "giorni di Pillie Plus"
+      "en": "active days left on Pillie Plus",
+      "de": "aktive Tage Pillie Plus noch",
+      "it": "giorni attivi di Pillie Plus"
     },
     {
       "issue": "honest-paywall",

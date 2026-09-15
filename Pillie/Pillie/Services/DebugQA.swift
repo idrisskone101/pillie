@@ -90,7 +90,7 @@ enum DebugQAScenario: String, CaseIterable, Identifiable {
         case .marketingCalendar:
             return "Realistic taken/missed mix for screenshots."
         case .trialActive:
-            return "Onboarded new-user cohort, 12 days left."
+            return "Onboarded new-user cohort, 12 active days left."
         case .trialMidBreak:
             return "Granted on last active day. Today is a break day. Badge stays at 14."
         case .trialLastDay:

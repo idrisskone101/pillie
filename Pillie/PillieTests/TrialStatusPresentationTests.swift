@@ -111,7 +111,7 @@ final class TrialStatusPresentationTests: XCTestCase {
 
     func testGrantDayLabelClampsToFourteenDays() {
         // The partial grant day has 15 rollovers left, but the trial promises
-        // "14 days free" — never show a count above the promise.
+        // "14 active days free" — never show a count above the promise.
         let presentation = TrialStatusPresentation.make(
             state: trialState(),
             calendar: calendar,

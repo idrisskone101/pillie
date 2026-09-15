@@ -5,7 +5,7 @@
 //  Issue #164 — Trial Granted Moment (ADR 0007). Replaces the retired onboarding
 //  paywall: a non-purchase announcement that the Reverse Trial has started.
 //  Faithful to the Claude Design "Mapped, warmer" variant 2a: a coral
-//  "14 days free · no card" badge, the "Your next two weeks, on us." headline,
+//  "14 active days free · no card" badge, the "Your next two weeks, on us." headline,
 //  a two-week timeline card (Today glowing coral with inline perk chips →
 //  Day 12 heads-up → Day 14 choice), the one-line App Review pre-trial
 //  disclosure, and a single continue action. It offers nothing to buy and has

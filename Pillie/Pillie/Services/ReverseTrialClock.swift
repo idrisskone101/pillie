@@ -86,7 +86,7 @@ struct ReverseTrialClock: Equatable {
         return remaining
     }
 
-    /// User-facing day count. The trial promises "14 days free", so the
+    /// User-facing day count. The trial promises "14 active days free", so the
     /// partial grant day (15 counted days left) never reads above the promise.
     static func displayedDaysRemaining(_ daysRemaining: Int) -> Int {
         min(max(0, daysRemaining), fullDays)
