@@ -844,10 +844,14 @@ class PillStore {
 
     /// Pin the ring insertion anchor on the first taken record so future
     /// cycle-day edits in Settings don't shift the removal date.
+    ///
+    /// Pinning moves `resolvedCycleAnchor` for a pack that started mid-cycle,
+    /// which reshapes the active-day rhythm the Reverse Trial clock walks, so
+    /// the manager has to adopt the new snapshot in the same turn.
     private func pinRingInsertionAnchorIfNeeded(for targetPack: PillPack) {
-        if targetPack.method == .ring && targetPack.ringInsertionDate == nil {
-            targetPack.ringInsertionDate = targetPack.startDate
-        }
+        guard targetPack.method == .ring, targetPack.ringInsertionDate == nil else { return }
+        targetPack.ringInsertionDate = targetPack.startDate
+        SubscriptionManager.shared.updateActiveDaySchedule(pack: activePack)
     }
 
     func unmarkActionAsTaken(on date: Date) {
