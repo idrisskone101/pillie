@@ -253,6 +253,9 @@ maybe_stop() {
   stop
 }
 
+# OpenSSH runs the guest login shell with -c and joins argv with spaces.
+# `ssh host bash -lc "cd x && y"` becomes `zsh -c "bash -lc cd x && y"`.
+# Send one script on stdin instead.
 exec_remote() {
   if [[ $# -eq 0 ]]; then
     echo "error: pass a command after --" >&2
@@ -261,7 +264,17 @@ exec_remote() {
   if ! ssh_ready; then
     start
   fi
-  ssh_cmd -- "$@"
+  local script
+  if [[ $# -ge 3 && "$1" == /bin/bash && "$2" == -lc ]]; then
+    script="$3"
+  else
+    script="$*"
+  fi
+  ssh -F "$SSH_CONFIG" "$SSH_HOST" -- bash --login -s <<EOF
+set -euo pipefail
+cd '$REMOTE_DIR'
+${script}
+EOF
 }
 
 check_sync() {
@@ -297,10 +310,7 @@ sync_ref() {
   fi
   check_sync "$ref"
   echo "syncing $REMOTE_DIR to $ref"
-  exec_remote /bin/bash -lc \
-    "set -euo pipefail
-cd '$REMOTE_DIR'
-git fetch --prune origin
+  exec_remote "git fetch --prune origin
 if ! git cat-file -e ${ref}^{commit} 2>/dev/null; then
   git fetch origin '$ref'
 fi
@@ -378,7 +388,7 @@ qa_remote() {
   check_sync "${REF:-}"
   start
   sync_ref "${REF:-}"
-  exec_remote /bin/bash -lc "cd '$REMOTE_DIR' && Pillie/scripts/sim-qa.sh $(remote_qa_args)"
+  exec_remote "Pillie/scripts/sim-qa.sh $(remote_qa_args)"
   pull_qa_artifacts
 }
 

@@ -198,6 +198,7 @@ class ScriptContractTest(unittest.TestCase):
         self.assertIn("check_sync", text)
         self.assertIn("git reset --hard", text)
         self.assertIn("sim-qa.sh", text)
+        self.assertIn("bash --login -s", text)
         self.assertNotIn("git checkout --detach", text)
 
     def test_verify_pillie_skill_points_at_ns_mac_qa(self) -> None:
