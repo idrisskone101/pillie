@@ -126,12 +126,20 @@ struct ProtectionPlanReminderTimeView: View {
             HStack(spacing: 0) {
                 quickToggle(title: PillieLocalization.string("onboarding.reminder_time.morning"), icon: "sun.max.fill", isSelected: selectedHour < 12) {
                     withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
-                        selectedTime = date(hour: 8, minute: 0)
+                        selectedTime = ReminderTimeConverter.dateForPicker(
+                            hour: 8,
+                            minute: 0,
+                            now: selectedTime
+                        )
                     }
                 }
                 quickToggle(title: PillieLocalization.string("onboarding.reminder_time.evening"), icon: "moon.fill", isSelected: selectedHour >= 12) {
                     withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
-                        selectedTime = date(hour: 20, minute: 0)
+                        selectedTime = ReminderTimeConverter.dateForPicker(
+                            hour: 20,
+                            minute: 0,
+                            now: selectedTime
+                        )
                     }
                 }
             }
@@ -187,16 +195,7 @@ struct ProtectionPlanReminderTimeView: View {
     }
 
     private var selectedHour: Int {
-        Calendar.current.component(.hour, from: selectedTime)
-    }
-
-    private func date(hour: Int, minute: Int) -> Date {
-        Calendar.current.date(
-            bySettingHour: hour,
-            minute: minute,
-            second: 0,
-            of: selectedTime
-        ) ?? selectedTime
+        ReminderTimeConverter.hourAndMinute(from: selectedTime).hour
     }
 }
 
