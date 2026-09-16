@@ -75,6 +75,10 @@ fi
 if ! have axe; then
   echo "install: axe via cameroncooke/axe"
   brew tap cameroncooke/axe
+  # Homebrew 5+ refuses formulae from a tap until it is trusted.
+  if brew help trust >/dev/null 2>&1; then
+    brew trust cameroncooke/axe
+  fi
   brew install axe
 fi
 

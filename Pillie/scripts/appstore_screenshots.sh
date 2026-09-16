@@ -76,6 +76,9 @@ install_axe_if_missing() {
   require_command brew
   log "Installing axe via Homebrew tap cameroncooke/axe"
   brew tap cameroncooke/axe
+  if brew help trust >/dev/null 2>&1; then
+    brew trust cameroncooke/axe
+  fi
   brew install axe
   command -v axe >/dev/null 2>&1 || die "axe install failed; ensure 'cameroncooke/axe' tap is reachable"
 }

@@ -245,6 +245,12 @@ class ScriptContractTest(unittest.TestCase):
         text = SIM_QA.read_text(encoding="utf-8")
         self.assertIn("ensure-qa-tools.sh", text)
 
+    def test_ensure_qa_tools_trusts_axe_tap(self) -> None:
+        text = ENSURE_TOOLS.read_text(encoding="utf-8")
+        self.assertIn("brew tap cameroncooke/axe", text)
+        self.assertIn("brew trust cameroncooke/axe", text)
+        self.assertIn("brew install imagemagick", text)
+
     def test_verify_pillie_skill_points_at_ns_mac_qa(self) -> None:
         text = VERIFY_SKILL.read_text(encoding="utf-8")
         self.assertIn("name: verify-pillie", text)

@@ -65,5 +65,6 @@ So the repo owns the tools:
 ```bash
 export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
 brew tap cameroncooke/axe
+brew help trust >/dev/null 2>&1 && brew trust cameroncooke/axe
 brew install axe imagemagick
 ```
