@@ -12,6 +12,7 @@
 #   Pillie/scripts/namespace-mac.sh check-sync [ref]
 #   Pillie/scripts/namespace-mac.sh sync [ref]
 #   Pillie/scripts/namespace-mac.sh diagnose
+#   Pillie/scripts/namespace-mac.sh ensure-tools
 #   Pillie/scripts/namespace-mac.sh qa
 #   Pillie/scripts/namespace-mac.sh screenshot
 #   Pillie/scripts/namespace-mac.sh verify -- <command...>
@@ -39,7 +40,7 @@ TOKEN_PATH="${NSC_TOKEN_FILE:-$HOME/.config/ns/token.json}"
 export PATH="$HOME/.local/bin:/usr/local/bin:$PATH"
 
 usage() {
-  sed -n '2,25p' "$0" | sed 's/^# \{0,1\}//'
+  sed -n '2,26p' "$0" | sed 's/^# \{0,1\}//'
 }
 
 need_cmd() {
@@ -272,9 +273,17 @@ exec_remote() {
   fi
   ssh -F "$SSH_CONFIG" "$SSH_HOST" -- bash --login -s <<EOF
 set -euo pipefail
+export PATH="/opt/homebrew/bin:/usr/local/bin:\$PATH"
 cd '$REMOTE_DIR'
 ${script}
 EOF
+}
+
+ensure_tools_remote() {
+  check_sync "${REF:-}"
+  start
+  sync_ref "${REF:-}"
+  exec_remote "Pillie/scripts/ensure-qa-tools.sh"
 }
 
 check_sync() {
@@ -351,6 +360,9 @@ if lsof -nP -iTCP:22210 -sTCP:LISTEN >/dev/null 2>&1; then
   echo "ok: devbox agent listening on 22210"
 fi
 echo "tools: axe=$(command -v axe || echo missing) magick=$(command -v magick || echo missing)"
+if [[ -x /Users/runner/workspaces/pillie/Pillie/scripts/ensure-qa-tools.sh ]]; then
+  /Users/runner/workspaces/pillie/Pillie/scripts/ensure-qa-tools.sh --check || true
+fi
 echo "ok: repo /Users/runner/workspaces/pillie"'
 }
 
@@ -388,6 +400,7 @@ qa_remote() {
   check_sync "${REF:-}"
   start
   sync_ref "${REF:-}"
+  exec_remote "Pillie/scripts/ensure-qa-tools.sh"
   exec_remote "Pillie/scripts/sim-qa.sh $(remote_qa_args)"
   pull_qa_artifacts
 }
@@ -420,6 +433,9 @@ verify_remote() {
   fi
   if [[ $rc -eq 0 ]]; then
     sync_ref "$ref" || rc=$?
+  fi
+  if [[ $rc -eq 0 ]]; then
+    exec_remote "Pillie/scripts/ensure-qa-tools.sh" || rc=$?
   fi
   if [[ $rc -eq 0 ]]; then
     exec_remote "$@" || rc=$?
@@ -456,6 +472,7 @@ case "$cmd" in
   check-sync) check_sync "${1:-}" ;;
   sync) run_oneshot sync_ref "${1:-}" ;;
   diagnose) run_oneshot diagnose_remote ;;
+  ensure-tools) run_oneshot ensure_tools_remote ;;
   qa) run_oneshot qa_remote ;;
   screenshot) run_oneshot screenshot_remote ;;
   verify)

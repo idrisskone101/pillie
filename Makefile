@@ -29,7 +29,8 @@ FORCE_BUILD ?= 0
 .PHONY: help diagnose build run build-and-run test screenshot console \
 	worktree agent-verify udid qa \
 	ns-mac-status ns-mac-start ns-mac-stop ns-mac-sync ns-mac-diagnose \
-	ns-mac-exec ns-mac-verify ns-mac-screenshot ns-mac-qa ns-mac-check-sync
+	ns-mac-exec ns-mac-verify ns-mac-screenshot ns-mac-qa ns-mac-check-sync \
+	ns-mac-ensure-tools ensure-qa-tools
 
 help:
 	@printf "%s\n" \
@@ -54,7 +55,9 @@ help:
 		"  make ns-mac-stop              Stop the Namespace Mac (user-gated)" \
 		"  make ns-mac-sync              Checkout this SHA on the Mac" \
 		"  make ns-mac-diagnose          Remote uname / Xcode / repo check" \
-		"  make ns-mac-exec CMD='make x' Run a command on the Namespace Mac"
+		"  make ns-mac-exec CMD='make x' Run a command on the Namespace Mac" \
+		"  make ensure-qa-tools          Install axe and ImageMagick if missing" \
+		"  make ns-mac-ensure-tools      Same, on the Namespace Mac"
 
 diagnose:
 	@$(SCRIPTS)/diagnose.sh
@@ -116,6 +119,12 @@ ns-mac-check-sync:
 
 ns-mac-diagnose:
 	@KEEP="$(KEEP)" $(SCRIPTS)/namespace-mac.sh diagnose
+
+ensure-qa-tools:
+	@$(SCRIPTS)/ensure-qa-tools.sh
+
+ns-mac-ensure-tools:
+	@KEEP="$(KEEP)" REF="$(REF)" $(SCRIPTS)/namespace-mac.sh ensure-tools
 
 ns-mac-exec:
 	@if [ -z "$(CMD)" ]; then \

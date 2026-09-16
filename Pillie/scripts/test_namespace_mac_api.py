@@ -16,6 +16,7 @@ from pathlib import Path
 API_PATH = Path(__file__).resolve().parent / "namespace-mac-api.py"
 SCRIPT = Path(__file__).resolve().parent / "namespace-mac.sh"
 SIM_QA = Path(__file__).resolve().parent / "sim-qa.sh"
+ENSURE_TOOLS = Path(__file__).resolve().parent / "ensure-qa-tools.sh"
 MAKEFILE = Path(__file__).resolve().parents[2] / "Makefile"
 REPO_ROOT = Path(__file__).resolve().parents[2]
 VERIFY_SKILL = REPO_ROOT / ".agents" / "skills" / "verify-pillie" / "SKILL.md"
@@ -176,8 +177,40 @@ class CheckSyncTest(unittest.TestCase):
 
 class ScriptContractTest(unittest.TestCase):
     def test_scripts_parse(self) -> None:
-        for path in (SCRIPT, SIM_QA, Path(__file__).resolve().parent / "build-and-run.sh"):
+        for path in (SCRIPT, SIM_QA, ENSURE_TOOLS, Path(__file__).resolve().parent / "build-and-run.sh"):
             subprocess.run(["bash", "-n", str(path)], check=True)
+
+    def test_ensure_qa_tools_check_ok_when_stubs_on_path(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            bindir = Path(tmp) / "bin"
+            bindir.mkdir()
+            for name in ("axe", "magick"):
+                stub = bindir / name
+                stub.write_text("#!/bin/sh\nexit 0\n", encoding="utf-8")
+                stub.chmod(0o755)
+            env = os.environ.copy()
+            env["PATH"] = f"{bindir}:/usr/bin:/bin"
+            proc = subprocess.run(
+                ["bash", str(ENSURE_TOOLS), "--check"],
+                check=True,
+                capture_output=True,
+                text=True,
+                env=env,
+            )
+            self.assertIn("already on PATH", proc.stdout)
+            self.assertNotIn("install:", proc.stdout)
+
+    def test_ensure_qa_tools_check_fails_when_missing(self) -> None:
+        env = os.environ.copy()
+        env["PATH"] = "/usr/bin:/bin"
+        proc = subprocess.run(
+            ["bash", str(ENSURE_TOOLS), "--check"],
+            capture_output=True,
+            text=True,
+            env=env,
+        )
+        self.assertNotEqual(proc.returncode, 0)
+        self.assertIn("missing:", proc.stdout)
 
     def test_sim_qa_sips_uses_1x_height(self) -> None:
         text = SIM_QA.read_text(encoding="utf-8")
@@ -196,6 +229,7 @@ class ScriptContractTest(unittest.TestCase):
         text = MAKEFILE.read_text(encoding="utf-8")
         self.assertIn("ns-mac-qa", text)
         self.assertIn("ns-mac-check-sync", text)
+        self.assertIn("ns-mac-ensure-tools", text)
         self.assertIn("sim-qa.sh --capture-only", text)
 
     def test_namespace_mac_prefers_qa(self) -> None:
@@ -203,8 +237,13 @@ class ScriptContractTest(unittest.TestCase):
         self.assertIn("check_sync", text)
         self.assertIn("git reset --hard", text)
         self.assertIn("sim-qa.sh", text)
+        self.assertIn("ensure-qa-tools.sh", text)
         self.assertIn("bash --login -s", text)
         self.assertNotIn("git checkout --detach", text)
+
+    def test_sim_qa_ensures_tools(self) -> None:
+        text = SIM_QA.read_text(encoding="utf-8")
+        self.assertIn("ensure-qa-tools.sh", text)
 
     def test_verify_pillie_skill_points_at_ns_mac_qa(self) -> None:
         text = VERIFY_SKILL.read_text(encoding="utf-8")

@@ -55,10 +55,11 @@ This token can `Activate` / `GetSSHConfig` / native SSH. It cannot `nsc ssh` or 
 
 ## Targets
 
-- `make ns-mac-qa` — check-sync, start, sync, boot, build-and-run, wait for UI, 1x PNG, axe dump
+- `make ns-mac-qa` — check-sync, start, sync, ensure axe/magick, boot, build-and-run, wait for UI, 1x PNG, axe dump
 - `make ns-mac-verify` — same as qa when `CMD` is empty
 - `make ns-mac-screenshot` — same as qa
 - `make ns-mac-check-sync` — dirty / unpushed HEAD fails here, before Activate
+- `make ns-mac-ensure-tools` — install axe and ImageMagick on the Mac if they are missing
 - `make ns-mac-status` / `make ns-mac-start` / `make ns-mac-stop`
 - `make ns-mac-sync` / `make ns-mac-diagnose` / `make ns-mac-exec CMD='…'`
 - `SKIP_BUILD=1 make ns-mac-qa` — relaunch + recapture

@@ -9,6 +9,10 @@
 # local iPhone 17 Pro so Cloud Agents / Namespace Macs do not fail.
 PILLIE_PINNED_SIMULATOR_UDID="124DC75F-0771-4C81-841D-F13655138260"
 
+# Homebrew on Namespace macOS lives on the persistent volume. Login shells
+# sometimes omit it, so axe and magick would look missing after Stop/Start.
+export PATH="/opt/homebrew/bin:/usr/local/bin:${PATH}"
+
 pillie_default_developer_dir() {
   local candidate ver
   if [[ -n "${PILLIE_XCODE27_DEVELOPER_DIR:-}" ]]; then

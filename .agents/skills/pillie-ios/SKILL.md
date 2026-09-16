@@ -34,7 +34,8 @@ Hand work back after step 4. Logs: [logging.md](references/logging.md). Shipping
 - `make build-and-run`
 - `make test TESTS=ClassName`
 - `make screenshot`
-- `make qa` — boot, build-and-run, wait, 1x PNG, axe dump
+- `make qa` — ensure axe/magick, boot, build-and-run, wait, 1x PNG, axe dump
+- `make ensure-qa-tools` — install axe and ImageMagick if they are missing
 - `make console`
 - `make worktree BRANCH=codex/<slug>`
 - `make agent-verify` — build; also test if `TESTS` is set

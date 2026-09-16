@@ -104,6 +104,7 @@ Leave the simulator and the Namespace Mac up. Do not `make ns-mac-stop` unless t
 
 - `make ns-mac-qa` — Linux golden path (`Pillie/scripts/namespace-mac.sh qa`)
 - `make qa` — Mac golden path (`Pillie/scripts/sim-qa.sh`)
+- `make ns-mac-ensure-tools` / `make ensure-qa-tools` — install axe and ImageMagick if missing
 - `make ns-mac-check-sync` — fail before Activate if HEAD is dirty or unpushed
 - `make ns-mac-exec CMD='…'` — one remote command after the Mac is up
 - `Pillie/scripts/sim-qa.sh --skip-build` / `--capture-only` / `--force-build`

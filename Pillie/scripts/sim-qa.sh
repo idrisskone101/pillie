@@ -16,6 +16,7 @@ PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 REPO_ROOT="$(cd "$PROJECT_DIR/.." && pwd)"
 . "$SCRIPT_DIR/xcode-env.sh"
 pillie_select_developer_dir
+"$SCRIPT_DIR/ensure-qa-tools.sh"
 
 SCREENSHOT="${SCREENSHOT:-/tmp/sim_screenshot.png}"
 SCREENSHOT_1X="${SCREENSHOT_1X:-/tmp/sim_screenshot_1x.png}"

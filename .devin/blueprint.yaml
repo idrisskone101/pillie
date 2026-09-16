@@ -41,6 +41,10 @@ initialize:
       xcodebuild -runFirstLaunch || true
   - name: imagemagick for `make screenshot`
     run: brew install imagemagick || brew upgrade imagemagick
+  - name: axe for simulator UI dumps
+    run: |
+      brew tap cameroncooke/axe
+      brew install axe || brew upgrade axe
 maintenance: |
   npm install
 knowledge:
