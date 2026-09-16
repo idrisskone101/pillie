@@ -1041,23 +1041,18 @@ private struct ReminderTimeEditor: View {
     }
 
     private func seedFromStore() {
-        selectedTime = Calendar.current.date(
-            from: DateComponents(
-                year: 2001,
-                month: 1,
-                day: 1,
-                hour: store.reminderHour,
-                minute: store.reminderMinute
-            )
-        ) ?? Date()
+        selectedTime = ReminderTimeConverter.dateForPicker(
+            hour: store.reminderHour,
+            minute: store.reminderMinute
+        )
     }
 
     private func saveReminderTime() {
-        let selection = Calendar.current.dateComponents([.hour, .minute], from: selectedTime)
+        let selection = ReminderTimeConverter.hourAndMinute(from: selectedTime)
         ScheduleCriticalSettingChange.saveSettingsReminderTime(
             store: store,
-            hour: selection.hour ?? store.reminderHour,
-            minute: selection.minute ?? store.reminderMinute
+            hour: selection.hour,
+            minute: selection.minute
         )
     }
 }

@@ -126,12 +126,20 @@ struct ProtectionPlanReminderTimeView: View {
             HStack(spacing: 0) {
                 quickToggle(title: PillieLocalization.string("onboarding.reminder_time.morning"), icon: "sun.max.fill", isSelected: selectedHour < 12) {
                     withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
-                        selectedTime = date(hour: 8, minute: 0)
+                        selectedTime = ReminderTimeConverter.dateForPicker(
+                            hour: 8,
+                            minute: 0,
+                            now: selectedTime
+                        )
                     }
                 }
                 quickToggle(title: PillieLocalization.string("onboarding.reminder_time.evening"), icon: "moon.fill", isSelected: selectedHour >= 12) {
                     withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
-                        selectedTime = date(hour: 20, minute: 0)
+                        selectedTime = ReminderTimeConverter.dateForPicker(
+                            hour: 20,
+                            minute: 0,
+                            now: selectedTime
+                        )
                     }
                 }
             }
@@ -170,29 +178,24 @@ struct ProtectionPlanReminderTimeView: View {
     private func commit() {
         guard !isCommitting else { return }
         isCommitting = true
-        let selection = Calendar.current.dateComponents([.hour, .minute], from: selectedTime)
+        let selection = ReminderTimeConverter.hourAndMinute(from: selectedTime)
         OnboardingReminderCommit.live(store: store, telemetry: onboardingTelemetry)
-            .run(hour: selection.hour ?? 8, minute: selection.minute ?? 0) {
+            .run(hour: selection.hour, minute: selection.minute) {
                 isCommitting = false
                 onContinue()
             }
     }
 
     private func seedFromStore() {
-        selectedTime = date(hour: store.reminderHour, minute: store.reminderMinute)
+        selectedTime = ReminderTimeConverter.dateForPicker(
+            hour: store.reminderHour,
+            minute: store.reminderMinute,
+            now: selectedTime
+        )
     }
 
     private var selectedHour: Int {
-        Calendar.current.component(.hour, from: selectedTime)
-    }
-
-    private func date(hour: Int, minute: Int) -> Date {
-        Calendar.current.date(
-            bySettingHour: hour,
-            minute: minute,
-            second: 0,
-            of: selectedTime
-        ) ?? selectedTime
+        ReminderTimeConverter.hourAndMinute(from: selectedTime).hour
     }
 }
 
