@@ -1,0 +1,30 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "shield.open_notification.title" : {
+      "comment" : "Local notification title posted when the shield's Open Pillie button is tapped [shield]",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Open Pillie" } },
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Pillie öffnen" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Abrir Pillie" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Ouvrir Pillie" } },
+        "it" : { "stringUnit" : { "state" : "translated", "value" : "Apri Pillie" } },
+        "nl" : { "stringUnit" : { "state" : "translated", "value" : "Pillie openen" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Abrir o Pillie" } }
+      }
+    },
+    "shield.open_notification.body" : {
+      "comment" : "Local notification body posted when the shield's Open Pillie button is tapped [shield]",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Tap to log today’s action and unblock your apps." } },
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Tippe, um die heutige Aktion zu protokollieren und deine Apps freizugeben." } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Toca para registrar la acción de hoy y desbloquear tus apps." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Touchez pour enregistrer l’action du jour et débloquer vos apps." } },
+        "it" : { "stringUnit" : { "state" : "translated", "value" : "Tocca per registrare l’azione di oggi e sbloccare le tue app." } },
+        "nl" : { "stringUnit" : { "state" : "translated", "value" : "Tik om de actie van vandaag te loggen en je apps te deblokkeren." } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Toque para registrar a ação de hoje e desbloquear seus apps." } }
+      }
+    }
+  },
+  "version" : "1.0"
+}
