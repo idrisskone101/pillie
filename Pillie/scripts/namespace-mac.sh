@@ -28,6 +28,8 @@ API="$SCRIPT_DIR/namespace-mac-api.py"
 
 DEVBOX_NAME="${PILLIE_NS_DEVBOX_NAME:-pillie-ios}"
 REMOTE_DIR="${PILLIE_NS_REMOTE_DIR:-/Users/runner/workspaces/pillie}"
+GUEST_HOME="${PILLIE_NS_REMOTE_HOME:-/Users/runner}"
+GUEST_PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 SSH_DIR="${PILLIE_NS_SSH_DIR:-$HOME/.namespace/ssh}"
 SSH_HOST="${PILLIE_NS_SSH_HOST:-pillie-ios}"
 SSH_CONFIG="$SSH_DIR/${SSH_HOST}.config"
@@ -143,7 +145,45 @@ ssh_cmd() {
     echo "error: missing $SSH_CONFIG. Run start first." >&2
     exit 1
   fi
-  ssh -F "$SSH_CONFIG" "$SSH_HOST" "$@"
+  if [[ "${1:-}" == "--" ]]; then
+    shift
+  fi
+  # Join into one remote string so `bash -lc '…'` stays one -c argument.
+  # Non-login remote bash does not load Homebrew; keep axe on PATH.
+  local quoted
+  quoted="$(printf '%q ' "$@")"
+  ssh -F "$SSH_CONFIG" "$SSH_HOST" -- \
+    "/usr/bin/env HOME=${GUEST_HOME} PATH=${GUEST_PATH} ${quoted}"
+}
+
+provision_remote_axe() {
+  # stdin script: do not put the installer in `bash -lc`, which SSH word-splits.
+  ssh -F "$SSH_CONFIG" "$SSH_HOST" -- \
+    "/usr/bin/env HOME=${GUEST_HOME} PATH=${GUEST_PATH} /bin/bash -s" <<'REMOTE'
+set -euo pipefail
+export HOME="${HOME:-/Users/runner}"
+export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:${PATH:-}"
+export HOMEBREW_NO_AUTO_UPDATE=1
+export HOMEBREW_NO_ANALYTICS=1
+export NONINTERACTIVE=1
+if command -v axe >/dev/null 2>&1; then
+  echo "ok: axe $(axe --version 2>/dev/null | head -1)"
+  exit 0
+fi
+if ! command -v brew >/dev/null 2>&1; then
+  echo "error: Homebrew is missing on the Namespace Mac; cannot install axe" >&2
+  exit 1
+fi
+echo "installing axe (cameroncooke/axe)"
+brew trust cameroncooke/axe >/dev/null 2>&1 || true
+brew tap cameroncooke/axe
+brew install cameroncooke/axe/axe
+if ! command -v axe >/dev/null 2>&1; then
+  echo "error: axe install finished but axe is not on PATH" >&2
+  exit 1
+fi
+echo "ok: axe $(axe --version 2>/dev/null | head -1)"
+REMOTE
 }
 
 wait_for_ssh() {
@@ -205,6 +245,7 @@ start() {
   api activate
   api write-ssh >/dev/null
   wait_for_ssh
+  provision_remote_axe
   echo "ok: $DEVBOX_NAME is up over native SSH. Leave it running until the user asks to stop."
 }
 
@@ -234,9 +275,12 @@ exec_remote() {
   fi
   if ! is_running; then
     start
-  elif [[ ! -f "$SSH_CONFIG" ]]; then
-    api write-ssh >/dev/null
-    wait_for_ssh
+  else
+    if [[ ! -f "$SSH_CONFIG" ]]; then
+      api write-ssh >/dev/null
+      wait_for_ssh
+    fi
+    provision_remote_axe
   fi
   ssh_cmd -- "$@"
 }
@@ -265,6 +309,12 @@ xcode-select -p
 echo
 echo "Xcode apps:"
 ls /Applications | grep -i xcode || true
+echo
+if command -v axe >/dev/null 2>&1; then
+  echo "ok: axe $(axe --version 2>/dev/null | head -1) ($(command -v axe))"
+else
+  echo "missing: axe"
+fi
 echo
 cd /Users/runner/workspaces/pillie
 git rev-parse --abbrev-ref HEAD || true

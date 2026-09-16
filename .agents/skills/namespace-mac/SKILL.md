@@ -94,6 +94,8 @@ SSH user is the **instance id**, not `runner`. Host is typically `ssh.iad4.names
 
 Guest checkout: `/Users/runner/workspaces/pillie`. Guest user: `runner`. In-guest agent listens on TCP `*:22210` with sockets under `/var/run/devbox/socks/`. You do not need to talk to that agent; native SSH is enough.
 
+`start` and `exec` install [AXe](https://github.com/cameroncooke/AXe) on the Mac if it is missing (`brew install cameroncooke/axe/axe`). Remote SSH commands get Homebrew on PATH (`/opt/homebrew/bin`), including non-login `bash`. `diagnose` prints the axe version. Do not skip axe because `command -v axe` failed on a fresh box — start already puts it there.
+
 If the helper is missing and you must recover by hand, see [connect.md](references/connect.md).
 
 ## Targets
