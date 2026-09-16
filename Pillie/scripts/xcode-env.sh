@@ -9,6 +9,10 @@
 # local iPhone 17 Pro so Cloud Agents / Namespace Macs do not fail.
 PILLIE_PINNED_SIMULATOR_UDID="124DC75F-0771-4C81-841D-F13655138260"
 
+# Homebrew on Namespace macOS lives on the persistent volume. Login shells
+# sometimes omit it, so axe and magick would look missing after Stop/Start.
+export PATH="/opt/homebrew/bin:/usr/local/bin:${PATH}"
+
 pillie_default_developer_dir() {
   local candidate ver
   if [[ -n "${PILLIE_XCODE27_DEVELOPER_DIR:-}" ]]; then
@@ -222,6 +226,18 @@ pillie_build_jobs() {
 # destinations clone one iPhone 17 Pro per CPU core.
 pillie_parallel_testing_enabled() {
   printf "%s" "${PILLIE_TEST_PARALLEL:-NO}"
+}
+
+# Boot is idempotent. `simctl install` fails with SimError 405 until the
+# device is up, so callers must boot before install, launch, or screenshot.
+pillie_boot_simulator() {
+  local udid="${1:-}"
+  if [[ -z "$udid" ]]; then
+    echo "error: pillie_boot_simulator needs a UDID" >&2
+    return 1
+  fi
+  xcrun simctl boot "$udid" >/dev/null 2>&1 || true
+  xcrun simctl bootstatus "$udid" -b
 }
 
 # Keep a single booted simulator. Each extra iPhone 17 Pro in Device Hub adds

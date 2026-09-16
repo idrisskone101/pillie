@@ -1,0 +1,16 @@
+---
+description: Potato / poteto-mode iOS proof uses verify-pillie and ns-mac-qa
+alwaysApply: true
+---
+
+# Poteto-mode verifies Pillie through verify-pillie
+
+When `/poteto-mode`, poteto-mode, potato mode, or `poteto-agent` runs Feature step 5, Shipping, or any "prove it works" check on Pillie iOS, load `.agents/skills/verify-pillie/SKILL.md` and follow it.
+
+`make build` and `make ns-mac-verify CMD='make build'` are not done.
+
+On a Linux Cloud Agent the command is `make ns-mac-qa`. That push-checks, starts `pillie-ios` if needed, syncs HEAD, boots the simulator, launches Pillie, waits for UI, and writes `/opt/cursor/artifacts/pillie_simulator_1x.png` plus `pillie_ax.txt` and `pillie_qa.json`.
+
+On a Mac the command is `make qa`.
+
+Do not treat a compile log as visual QA. Do not start Idriss's MacBook. Do not `make ns-mac-stop` unless the user asked.

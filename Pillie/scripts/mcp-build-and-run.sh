@@ -60,6 +60,11 @@ DERIVED_DATA="$(pillie_derived_data_for_repo_root "$REPO_ROOT")"
 
 JOBS="$(pillie_build_jobs)"
 pillie_shutdown_extra_simulators "$UDID"
+if [[ "$BUILD_ONLY" != "1" ]]; then
+  echo "> Booting simulator $UDID"
+  pillie_boot_simulator "$UDID" &
+  BOOT_PID=$!
+fi
 
 COMMON_ARGS=(
   --project-path "$PROJECT_PATH"
@@ -84,4 +89,7 @@ if [[ "$BUILD_ONLY" == "1" ]]; then
   xcodebuildmcp simulator build "${COMMON_ARGS[@]}"
 else
   xcodebuildmcp simulator build-and-run "${COMMON_ARGS[@]}"
+  if [[ -n "${BOOT_PID:-}" ]]; then
+    wait "$BOOT_PID" || true
+  fi
 fi
