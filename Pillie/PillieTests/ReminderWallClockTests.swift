@@ -56,19 +56,19 @@ struct ReminderWallClockTests {
         #expect(SettingsPresentation.time(hour: 18, minute: 0, locale: Locale(identifier: "en_US")) == "6:00 PM")
     }
 
-    @Test func fourAMIsStillYesterdayWhenReminderIsSix() throws {
+    @Test func fourPMIsStillYesterdayWhenReminderIsSixPM() throws {
         let calendar = try calendar(in: "America/New_York")
-        let fourAM = try #require(calendar.date(from: DateComponents(
+        let fourPM = try #require(calendar.date(from: DateComponents(
             calendar: calendar,
             timeZone: calendar.timeZone,
             year: 2026,
             month: 9,
             day: 16,
-            hour: 4
+            hour: 16
         )))
         let liveDay = BlockingInterventionPolicy.liveDay(
-            now: fourAM,
-            reminderHour: 6,
+            now: fourPM,
+            reminderHour: 18,
             reminderMinute: 0,
             calendar: calendar
         )
