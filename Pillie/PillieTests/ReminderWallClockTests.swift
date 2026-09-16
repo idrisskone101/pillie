@@ -4,10 +4,6 @@ import Testing
 
 @testable import Pillie
 
-/// Settings used to seed the reminder DatePicker on 2001-01-01. That civil
-/// day is standard time in most DST zones, so saving the wheel in September
-/// shifted the stored hour. DeviceActivity then received DateComponents
-/// without a time zone, which some iOS versions read as GMT.
 struct ReminderWallClockTests {
     @Test(arguments: [
         (zone: "America/New_York", hour: 6, minute: 0),

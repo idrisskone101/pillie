@@ -295,7 +295,6 @@ final class AppBlockingManager {
             "scheduleDeviceActivityBlock: scheduling \(hour):\(minute) → \(bounds.end.hour ?? 0):\(bounds.end.minute ?? 0)"
         )
 
-        // Stop existing monitoring before re-scheduling
         center.stopMonitoring([Self.activityName])
 
         let schedule = DeviceActivitySchedule(
