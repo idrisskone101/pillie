@@ -179,6 +179,11 @@ class ScriptContractTest(unittest.TestCase):
         for path in (SCRIPT, SIM_QA, Path(__file__).resolve().parent / "build-and-run.sh"):
             subprocess.run(["bash", "-n", str(path)], check=True)
 
+    def test_sim_qa_sips_uses_1x_height(self) -> None:
+        text = SIM_QA.read_text(encoding="utf-8")
+        self.assertIn("sips -Z 874", text)
+        self.assertNotIn("sips -Z 402", text)
+
     def test_build_and_run_boots_simulator(self) -> None:
         text = (Path(__file__).resolve().parent / "build-and-run.sh").read_text(encoding="utf-8")
         self.assertIn("pillie_boot_simulator", text)

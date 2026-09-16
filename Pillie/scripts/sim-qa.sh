@@ -64,7 +64,7 @@ write_1x() {
     magick "$SCREENSHOT" -resize "$SCALE" "$SCREENSHOT_1X"
   else
     echo "warn: magick missing; using sips for the 1x screenshot"
-    sips -Z 402 "$SCREENSHOT" --out "$SCREENSHOT_1X" >/dev/null
+    sips -Z 874 "$SCREENSHOT" --out "$SCREENSHOT_1X" >/dev/null
   fi
 }
 
