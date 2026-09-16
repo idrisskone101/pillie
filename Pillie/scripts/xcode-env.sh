@@ -224,6 +224,18 @@ pillie_parallel_testing_enabled() {
   printf "%s" "${PILLIE_TEST_PARALLEL:-NO}"
 }
 
+# Boot is idempotent. `simctl install` fails with SimError 405 until the
+# device is up, so callers must boot before install, launch, or screenshot.
+pillie_boot_simulator() {
+  local udid="${1:-}"
+  if [[ -z "$udid" ]]; then
+    echo "error: pillie_boot_simulator needs a UDID" >&2
+    return 1
+  fi
+  xcrun simctl boot "$udid" >/dev/null 2>&1 || true
+  xcrun simctl bootstatus "$udid" -b
+}
+
 # Keep a single booted simulator. Each extra iPhone 17 Pro in Device Hub adds
 # SpringBoard plus several SimMetalHost processes. Skip with
 # PILLIE_KEEP_EXTRA_SIMS=YES when two canvases are intentional.

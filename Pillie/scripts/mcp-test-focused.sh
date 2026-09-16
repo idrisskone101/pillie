@@ -71,6 +71,8 @@ done
 PARALLEL_TESTING="$(pillie_parallel_testing_enabled)"
 JOBS="$(pillie_build_jobs)"
 pillie_shutdown_extra_simulators "$UDID"
+echo "> Booting simulator $UDID"
+pillie_boot_simulator "$UDID"
 
 echo "> XcodeBuildMCP focused Pillie tests"
 echo "> Project: $PROJECT_PATH"

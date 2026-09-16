@@ -1,0 +1,4 @@
+interface:
+  display_name: "Verify Pillie"
+  short_description: "Prove Pillie iOS on the simulator. Potato mode uses this for Feature step 5."
+  default_prompt: "Load verify-pillie before you call a UI change done. On Linux run make ns-mac-qa. On a Mac run make qa. Compile-only is not done."

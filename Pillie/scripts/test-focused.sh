@@ -71,6 +71,8 @@ echo "> Simulator: $UDID"
 echo "> Jobs: $JOBS (PILLIE_BUILD_JOBS to override)"
 echo "> Parallel testing: $PARALLEL_TESTING (PILLIE_TEST_PARALLEL=YES re-enables simulator cloning)"
 pillie_shutdown_extra_simulators "$UDID"
+echo "> Booting simulator $UDID"
+pillie_boot_simulator "$UDID"
 if [[ -n "${DEVELOPER_DIR:-}" ]]; then
   echo "> DeveloperDir: $DEVELOPER_DIR"
 fi

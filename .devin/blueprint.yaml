@@ -15,7 +15,7 @@ maintenance: |
 knowledge:
   - name: ios-builds
     contents: |
-      No local Xcode on Linux. Load the namespace-mac skill; prefer `make ns-mac-verify CMD='make build'` or `make ns-mac-screenshot`. Requires the NSC_TOKEN secret for Pillie/scripts/namespace-mac.sh hydrate-auth.
+      No local Xcode on Linux. Load verify-pillie and namespace-mac; the proof command is `make ns-mac-qa`. Requires the NSC_TOKEN secret for Pillie/scripts/namespace-mac.sh hydrate-auth.
 ---
 runs-on: macos
 initialize:
@@ -49,7 +49,7 @@ knowledge:
       `make build` compiles for the pinned iPhone 17 Pro sim; `make diagnose` prints toolchain/UDID/DerivedData. Xcode 27 is pre-selected — do not xcode-select back to Xcode.app (26.6). Skills in .agents/skills (pillie-ios etc.) auto-load.
   - name: run
     contents: |
-      Boot the sim first (`xcrun simctl boot "$(make -s udid | tail -1)"` or `open -a Simulator`), then `make build-and-run` (install + headless launch). `make screenshot` writes /tmp/sim_screenshot_1x.png.
+      `make qa` boots the sim, builds, launches, waits for UI, and writes /tmp/sim_screenshot_1x.png plus /tmp/pillie_ax.txt. `make build-and-run` now boots before install.
   - name: test
     contents: |
       `make test TESTS=ClassName` (TESTS required; full-suite run is refused).

@@ -15,6 +15,11 @@ from pathlib import Path
 
 API_PATH = Path(__file__).resolve().parent / "namespace-mac-api.py"
 SCRIPT = Path(__file__).resolve().parent / "namespace-mac.sh"
+SIM_QA = Path(__file__).resolve().parent / "sim-qa.sh"
+MAKEFILE = Path(__file__).resolve().parents[2] / "Makefile"
+REPO_ROOT = Path(__file__).resolve().parents[2]
+VERIFY_SKILL = REPO_ROOT / ".agents" / "skills" / "verify-pillie" / "SKILL.md"
+POTETO_RULE = REPO_ROOT / ".cursor" / "rules" / "poteto-verify-pillie.mdc"
 
 
 def load_api():
@@ -80,5 +85,136 @@ class HydrateAuthTest(unittest.TestCase):
             self.assertEqual(stat.S_IMODE(dest.stat().st_mode), 0o600)
 
 
+def _git(cwd: Path, *args: str, check: bool = True) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        ["git", *args],
+        cwd=cwd,
+        check=check,
+        capture_output=True,
+        text=True,
+    )
+
+
+def _init_repo(path: Path) -> None:
+    path.mkdir(parents=True, exist_ok=True)
+    _git(path, "init")
+    _git(path, "config", "user.email", "qa@example.com")
+    _git(path, "config", "user.name", "QA")
+    (path / "README").write_text("ok\n", encoding="utf-8")
+    _git(path, "add", "README")
+    _git(path, "commit", "-m", "init")
+
+
+class WriteSshConfigTest(unittest.TestCase):
+    def test_control_persist_is_thirty_minutes(self) -> None:
+        api = load_api()
+        with tempfile.TemporaryDirectory() as tmp:
+            api.SSH_DIR = Path(tmp)
+            api.SSH_HOST = "pillie-ios"
+            key = b"-----BEGIN OPENSSH PRIVATE KEY-----\nAAA\n-----END OPENSSH PRIVATE KEY-----\n"
+            path = api.write_ssh_files("inst-1", "ssh.iad4.namespace.so", key)
+            text = path.read_text(encoding="utf-8")
+        self.assertIn("ControlPersist 1800", text)
+        self.assertIn("User inst-1", text)
+        self.assertNotIn("ControlPersist 60", text)
+
+
+class CheckSyncTest(unittest.TestCase):
+    def test_rejects_dirty_head(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp) / "app"
+            _init_repo(repo)
+            (repo / "README").write_text("dirty\n", encoding="utf-8")
+            env = os.environ.copy()
+            env["PILLIE_NS_REPO_ROOT"] = str(repo)
+            proc = subprocess.run(
+                ["bash", str(SCRIPT), "check-sync"],
+                cwd=repo,
+                env=env,
+                capture_output=True,
+                text=True,
+            )
+            self.assertNotEqual(proc.returncode, 0)
+            self.assertIn("uncommitted changes", proc.stderr)
+
+    def test_rejects_unpushed_head(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp) / "app"
+            _init_repo(repo)
+            env = os.environ.copy()
+            env["PILLIE_NS_REPO_ROOT"] = str(repo)
+            proc = subprocess.run(
+                ["bash", str(SCRIPT), "check-sync"],
+                cwd=repo,
+                env=env,
+                capture_output=True,
+                text=True,
+            )
+            self.assertNotEqual(proc.returncode, 0)
+            self.assertIn("not on a remote", proc.stderr)
+
+    def test_accepts_pushed_head(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            remote = Path(tmp) / "remote.git"
+            repo = Path(tmp) / "app"
+            _git(Path(tmp), "init", "--bare", str(remote))
+            _init_repo(repo)
+            _git(repo, "remote", "add", "origin", str(remote))
+            _git(repo, "push", "-u", "origin", "HEAD")
+            env = os.environ.copy()
+            env["PILLIE_NS_REPO_ROOT"] = str(repo)
+            proc = subprocess.run(
+                ["bash", str(SCRIPT), "check-sync"],
+                cwd=repo,
+                env=env,
+                capture_output=True,
+                text=True,
+            )
+            self.assertEqual(proc.returncode, 0, proc.stderr)
+            self.assertIn("is on a remote", proc.stdout)
+
+
+class ScriptContractTest(unittest.TestCase):
+    def test_scripts_parse(self) -> None:
+        for path in (SCRIPT, SIM_QA, Path(__file__).resolve().parent / "build-and-run.sh"):
+            subprocess.run(["bash", "-n", str(path)], check=True)
+
+    def test_build_and_run_boots_simulator(self) -> None:
+        text = (Path(__file__).resolve().parent / "build-and-run.sh").read_text(encoding="utf-8")
+        self.assertIn("pillie_boot_simulator", text)
+
+    def test_xcode_env_defines_boot(self) -> None:
+        text = (Path(__file__).resolve().parent / "xcode-env.sh").read_text(encoding="utf-8")
+        self.assertIn("pillie_boot_simulator()", text)
+
+    def test_makefile_has_qa_targets(self) -> None:
+        text = MAKEFILE.read_text(encoding="utf-8")
+        self.assertIn("ns-mac-qa", text)
+        self.assertIn("ns-mac-check-sync", text)
+        self.assertIn("sim-qa.sh --capture-only", text)
+
+    def test_namespace_mac_prefers_qa(self) -> None:
+        text = SCRIPT.read_text(encoding="utf-8")
+        self.assertIn("check_sync", text)
+        self.assertIn("git reset --hard", text)
+        self.assertIn("sim-qa.sh", text)
+        self.assertNotIn("git checkout --detach", text)
+
+    def test_verify_pillie_skill_points_at_ns_mac_qa(self) -> None:
+        text = VERIFY_SKILL.read_text(encoding="utf-8")
+        self.assertIn("name: verify-pillie", text)
+        self.assertIn("make ns-mac-qa", text)
+        self.assertIn("/poteto-mode", text)
+        for name in ("today.md", "history.md", "settings.md", "soft-paywall.md"):
+            self.assertTrue((VERIFY_SKILL.parent / "features" / name).is_file())
+
+    def test_poteto_rule_loads_verify_pillie(self) -> None:
+        text = POTETO_RULE.read_text(encoding="utf-8")
+        self.assertIn("alwaysApply: true", text)
+        self.assertIn("verify-pillie", text)
+        self.assertIn("make ns-mac-qa", text)
+
+
 if __name__ == "__main__":
     unittest.main()
+

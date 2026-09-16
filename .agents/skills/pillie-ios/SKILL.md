@@ -11,7 +11,7 @@ The agent API is the repo-root Makefile. It wraps `Pillie/scripts`, `/tmp` Deriv
 
 ## Linux Cloud Agents
 
-If `uname` is Linux, do not run `xcodebuild` or `simctl` on this VM. Load `namespace-mac`. Prefer `make ns-mac-verify CMD='make …'` or `make ns-mac-screenshot`. For a batch, `make ns-mac-start`, `make ns-mac-sync`, and `make ns-mac-exec CMD='make …'`. Do not `make ns-mac-stop` unless the user asked. Boot the simulator before install or screenshot (`ns-mac-screenshot` already does). The Cloud Agent stays on Linux; `pillie-ios` is the only Namespace Mac. Do not use Idriss's MacBook, the `devbox` CLI, `nsc ssh`, or Expire.
+If `uname` is Linux, do not run `xcodebuild` or `simctl` on this VM. Load `verify-pillie` and `namespace-mac`. The proof command is `make ns-mac-qa`. Potato / `/poteto-mode` uses the same skill. Do not `make ns-mac-stop` unless the user asked. The Cloud Agent stays on Linux; `pillie-ios` is the only Namespace Mac. Do not use Idriss's MacBook, the `devbox` CLI, `nsc ssh`, or Expire.
 
 ## Loop
 
@@ -21,8 +21,8 @@ If `uname` is Linux, do not run `xcodebuild` or `simctl` on this VM. Load `names
    Done when: Xcode 27 is selected and an iPhone 17 Pro UDID is listed.
 3. **Build / run.** `make build` to compile. `make build-and-run` to install and launch headlessly. `make run` if the app is already built.
    Done when: the build succeeded and `simctl` printed the app PID.
-4. **Verify.** UI: [visual-qa.md](references/visual-qa.md). Named tests: `make test TESTS=ClassName`. Skip hosted XCTest when compile + simulator UI proof is enough.
-   Done when: the 1x screenshot shows the change, or the named tests passed.
+4. **Verify.** Load `verify-pillie`. UI: [visual-qa.md](references/visual-qa.md). Named tests: `make test TESTS=ClassName`. Skip hosted XCTest when `make qa` (or `make ns-mac-qa` on Linux) is enough.
+   Done when: the 1x screenshot shows the change and the axe dump contains the expected labels.
 
 Hand work back after step 4. Logs: [logging.md](references/logging.md). Shipping a build: [versioning.md](references/versioning.md). Open this worktree in Xcode 27 with the `open-xcode` skill.
 
@@ -34,6 +34,7 @@ Hand work back after step 4. Logs: [logging.md](references/logging.md). Shipping
 - `make build-and-run`
 - `make test TESTS=ClassName`
 - `make screenshot`
+- `make qa` — boot, build-and-run, wait, 1x PNG, axe dump
 - `make console`
 - `make worktree BRANCH=codex/<slug>`
 - `make agent-verify` — build; also test if `TESTS` is set

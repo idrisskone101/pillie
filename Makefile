@@ -22,11 +22,14 @@ endif
 CMD ?=
 REF ?=
 KEEP ?= 1
+SKIP_BUILD ?= 0
+CAPTURE_ONLY ?= 0
+FORCE_BUILD ?= 0
 
 .PHONY: help diagnose build run build-and-run test screenshot console \
-	worktree agent-verify udid \
+	worktree agent-verify udid qa \
 	ns-mac-status ns-mac-start ns-mac-stop ns-mac-sync ns-mac-diagnose \
-	ns-mac-exec ns-mac-verify ns-mac-screenshot
+	ns-mac-exec ns-mac-verify ns-mac-screenshot ns-mac-qa ns-mac-check-sync
 
 help:
 	@printf "%s\n" \
@@ -40,10 +43,13 @@ help:
 		"  make console                  Blocking app console" \
 		"  make worktree BRANCH=codex/x  Feature worktree from this checkout" \
 		"  make agent-verify             Build; test too if TESTS is set" \
+		"  make qa                       Boot, build-and-run, wait, 1x PNG, axe" \
 		"  make udid                     Print the resolved iPhone 17 Pro UDID" \
 		"  make ns-mac-status            Namespace Mac Devbox status" \
-		"  make ns-mac-verify CMD='make x' Start, sync, run; KEEP=1 by default" \
-		"  make ns-mac-screenshot         Boot sim, build-and-run, 1x PNG" \
+		"  make ns-mac-qa                Golden path: sync, boot, run, 1x PNG, axe" \
+		"  make ns-mac-verify CMD='make x' Custom remote job; no CMD runs qa" \
+		"  make ns-mac-screenshot         Same as ns-mac-qa" \
+		"  make ns-mac-check-sync        Fail if HEAD is dirty or unpushed" \
 		"  make ns-mac-start             Start the on-demand Namespace Mac" \
 		"  make ns-mac-stop              Stop the Namespace Mac (user-gated)" \
 		"  make ns-mac-sync              Checkout this SHA on the Mac" \
@@ -73,10 +79,12 @@ test:
 	@$(TEST_CMD) $(TESTS)
 
 screenshot:
-	@udid="$$($(SCRIPTS)/diagnose.sh --udid)"; \
-	xcrun simctl io "$$udid" screenshot "$(SCREENSHOT)"; \
-	magick "$(SCREENSHOT)" -resize "$(SCALE)" "$(SCREENSHOT_1X)"; \
-	echo "Wrote $(SCREENSHOT_1X)"
+	@SCREENSHOT="$(SCREENSHOT)" SCREENSHOT_1X="$(SCREENSHOT_1X)" SCALE="$(SCALE)" \
+		$(SCRIPTS)/sim-qa.sh --capture-only
+
+qa:
+	@SCREENSHOT="$(SCREENSHOT)" SCREENSHOT_1X="$(SCREENSHOT_1X)" SCALE="$(SCALE)" \
+		$(SCRIPTS)/sim-qa.sh
 
 console:
 	@$(SCRIPTS)/build-and-run.sh --run-only --console
@@ -103,6 +111,9 @@ ns-mac-stop:
 ns-mac-sync:
 	@KEEP="$(KEEP)" $(SCRIPTS)/namespace-mac.sh sync "$(REF)"
 
+ns-mac-check-sync:
+	@$(SCRIPTS)/namespace-mac.sh check-sync "$(REF)"
+
 ns-mac-diagnose:
 	@KEEP="$(KEEP)" $(SCRIPTS)/namespace-mac.sh diagnose
 
@@ -113,12 +124,21 @@ ns-mac-exec:
 	fi
 	@KEEP="$(KEEP)" $(SCRIPTS)/namespace-mac.sh exec -- /bin/bash -lc "$(CMD)"
 
+ns-mac-qa:
+	@KEEP="$(KEEP)" REF="$(REF)" SKIP_BUILD="$(SKIP_BUILD)" \
+		CAPTURE_ONLY="$(CAPTURE_ONLY)" FORCE_BUILD="$(FORCE_BUILD)" \
+		$(SCRIPTS)/namespace-mac.sh qa
+
 ns-mac-verify:
 	@if [ -z "$(CMD)" ]; then \
-		echo "Pass CMD='make build' (or another remote command)." >&2; \
-		exit 64; \
+		KEEP="$(KEEP)" REF="$(REF)" SKIP_BUILD="$(SKIP_BUILD)" \
+			CAPTURE_ONLY="$(CAPTURE_ONLY)" FORCE_BUILD="$(FORCE_BUILD)" \
+			$(SCRIPTS)/namespace-mac.sh qa; \
+	else \
+		KEEP="$(KEEP)" REF="$(REF)" $(SCRIPTS)/namespace-mac.sh verify -- /bin/bash -lc "$(CMD)"; \
 	fi
-	@KEEP="$(KEEP)" REF="$(REF)" $(SCRIPTS)/namespace-mac.sh verify -- /bin/bash -lc "$(CMD)"
 
 ns-mac-screenshot:
-	@KEEP="$(KEEP)" REF="$(REF)" $(SCRIPTS)/namespace-mac.sh screenshot
+	@KEEP="$(KEEP)" REF="$(REF)" SKIP_BUILD="$(SKIP_BUILD)" \
+		CAPTURE_ONLY="$(CAPTURE_ONLY)" FORCE_BUILD="$(FORCE_BUILD)" \
+		$(SCRIPTS)/namespace-mac.sh qa

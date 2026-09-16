@@ -380,7 +380,7 @@ def write_ssh_files(instance_id: str, endpoint: str, key: bytes) -> Path:
                 "  ServerAliveCountMax 10",
                 f"  ControlMaster auto",
                 f"  ControlPath {SSH_DIR}/{SSH_HOST}.ctl",
-                "  ControlPersist 60",
+                "  ControlPersist 1800",
                 "",
             ]
         ),

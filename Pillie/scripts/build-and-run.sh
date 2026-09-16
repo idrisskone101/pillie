@@ -107,11 +107,22 @@ launch_app() {
 
 pillie_shutdown_extra_simulators "$UDID"
 
+BOOT_PID=""
+if [[ "$RUN" == "1" ]]; then
+  echo "▸ Booting simulator $UDID..."
+  pillie_boot_simulator "$UDID" &
+  BOOT_PID=$!
+fi
+
 if [[ "$BUILD" == "1" ]]; then
   build
 fi
 
 if [[ "$RUN" == "1" ]]; then
+  if [[ -n "$BOOT_PID" ]] && ! wait "$BOOT_PID"; then
+    echo "▸ Simulator boot retry"
+    pillie_boot_simulator "$UDID"
+  fi
   install_app
   launch_app
 fi
