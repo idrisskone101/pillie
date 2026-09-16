@@ -331,8 +331,11 @@ final class PillStoreEdgeCaseTests: XCTestCase {
     }
 
     func testPastRingCorrectionHandsTheNewAnchorToTheTrialClock() throws {
-        let today = InMemoryStoreFactory.fixedDate("2026-07-05")
+        let today = InMemoryStoreFactory.fixedDate("2026-07-15")
         let cycleStart = InMemoryStoreFactory.fixedDate("2026-07-01")
+        // Cycle day 22 with the day-11 anchor: the removal day is the first
+        // past day History lets the user correct on a ring pack.
+        let removalDay = InMemoryStoreFactory.fixedDate("2026-07-12")
         let fixture = try InMemoryStoreFactory.makeStore(
             now: today,
             method: .ring,
@@ -343,8 +346,9 @@ final class PillStoreEdgeCaseTests: XCTestCase {
 
         SubscriptionManager.shared.updateActiveDaySchedule(pack: fixture.store.activePack)
         let scheduleBeforePinning = SubscriptionManager.shared.plusAccessState.schedule
+        XCTAssertEqual(scheduleBeforePinning.anchorDayIndex, 10)
 
-        XCTAssertTrue(fixture.store.correctPastDay(on: cycleStart, to: .taken))
+        XCTAssertTrue(fixture.store.correctPastDay(on: removalDay, to: .taken))
 
         XCTAssertEqual(fixture.pack.ringInsertionDate, fixture.pack.startDate)
         XCTAssertEqual(
