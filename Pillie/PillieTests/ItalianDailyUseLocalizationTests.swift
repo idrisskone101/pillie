@@ -505,7 +505,7 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
         XCTAssertEqual(commerce("paywall.plan.best_value"), "Conviene di più")
         XCTAssertEqual(commerce("trial.activation.recommended"), "Consigliato")
         XCTAssertEqual(commerce("paywall.plan.cancel_anytime_short"), "Disdici quando vuoi")
-        XCTAssertEqual(commerce("trial.end.kicker"), "I tuoi 14 giorni")
+        XCTAssertEqual(commerce("trial.end.kicker"), "I tuoi 14 giorni attivi")
         XCTAssertEqual(commerce("trial.end.welcome_back"), "Pillie Plus è di nuovo attivo.")
         XCTAssertEqual(commerce("trial.status.active_short"), "Prova attiva")
 
@@ -559,7 +559,7 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
         XCTAssertEqual(content.dismissCTA, "Non ora")
         XCTAssertEqual(
             content.disclosure,
-            "14 giorni gratis, niente carta. Il blocco finisce col trial. I promemoria restano gratis."
+            "14 giorni attivi gratis, niente carta. Il blocco finisce col trial. I promemoria restano gratis."
         )
     }
 
@@ -577,7 +577,7 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
             trialEndDate: trialEnd,
             locale: italian
         )
-        XCTAssertEqual(active.indicatorLabel, "Plus è attivo · 7 giorni rimasti")
+        XCTAssertEqual(active.indicatorLabel, "Plus è attivo · 7 giorni attivi rimasti")
         XCTAssertEqual(
             active.sheetContent.expiryRows.map(\.text),
             [
@@ -601,7 +601,7 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
             protectionActive: false,
             locale: italian
         )
-        XCTAssertEqual(setup.indicatorLabel, "Imposta il blocco app · 7 giorni rimasti")
+        XCTAssertEqual(setup.indicatorLabel, "Imposta il blocco app · 7 giorni attivi rimasti")
     }
 
     func testHomeRecommendationCardsUseItalianRuntimeCopy() throws {

@@ -133,10 +133,7 @@ struct HomeView: View {
     /// the sheet can never outlive a purchase or show mid-trial.
     private var trialEndPaywallContent: TrialEndPaywallContent? {
         TrialEndPaywallContent.make(
-            state: PlusAccessState(
-                hasEntitlement: SubscriptionManager.shared.hasEntitlement,
-                trialGrantDate: SubscriptionManager.shared.trialGrantDate
-            ),
+            state: SubscriptionManager.shared.plusAccessState,
             blockerConfigSaved: AppBlockingManager.shared.hasAppsSelected,
             stats: trialEndOwnStats,
             calendar: Calendar.current,
@@ -162,7 +159,10 @@ struct HomeView: View {
     private var trialEndOwnStats: TrialEndOwnStats {
         guard let grantDate = SubscriptionManager.shared.trialGrantDate else { return .none }
         let calendar = Calendar.current
-        let expiry = ReverseTrialClock(grantDate: grantDate).expiryMoment(calendar: calendar)
+        let expiry = ReverseTrialClock(
+            grantDate: grantDate,
+            schedule: SubscriptionManager.shared.plusAccessState.schedule
+        ).expiryMoment(calendar: calendar)
         let lastProtectedDay = calendar.date(byAdding: .day, value: -1, to: expiry) ?? expiry
         let record = store.doseRecord(from: grantDate, to: lastProtectedDay)
         return TrialEndOwnStats(
@@ -180,10 +180,7 @@ struct HomeView: View {
     private func autoPresentTrialEndPaywallIfNeeded() {
         let manager = SubscriptionManager.shared
         guard TrialEndPaywallAutoPresentation.shouldPresent(
-            state: PlusAccessState(
-                hasEntitlement: manager.hasEntitlement,
-                trialGrantDate: manager.trialGrantDate
-            ),
+            state: manager.plusAccessState,
             terms: trialEndPaywallContent?.terms ?? .legacy,
             termsCohort: trialEndPaywallContent?.termsCohort ?? .preCutover,
             entitlementResolved: manager.hasResolvedEntitlement,
@@ -223,10 +220,7 @@ struct HomeView: View {
         let manager = SubscriptionManager.shared
         return TrialDeclineFeedbackRoute.evaluate(
             action: .continueFree,
-            state: PlusAccessState(
-                hasEntitlement: manager.hasEntitlement,
-                trialGrantDate: manager.trialGrantDate
-            ),
+            state: manager.plusAccessState,
             entitlementResolved: manager.hasResolvedEntitlement,
             questionnaireResolved: trialDeclineFeedbackStore.isResolved(),
             calendar: Calendar.current,
@@ -273,10 +267,7 @@ struct HomeView: View {
     /// and expiry can never drift from the Reverse Trial clock.
     private var trialPresentation: TrialStatusPresentation? {
         TrialStatusPresentation.make(
-            state: PlusAccessState(
-                hasEntitlement: SubscriptionManager.shared.hasEntitlement,
-                trialGrantDate: SubscriptionManager.shared.trialGrantDate
-            ),
+            state: SubscriptionManager.shared.plusAccessState,
             protectionActive: trialActivationState.appBlockingActive,
             calendar: Calendar.current,
             now: Date(),

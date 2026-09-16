@@ -56,8 +56,8 @@ final class TrialExpiryWarningPlannerTests: XCTestCase {
 
     func testPastWarningDatesAreDropped() throws {
         let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 9)
-        let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
         let grantDate = try XCTUnwrap(Calendar.current.date(byAdding: .day, value: -11, to: now))
+        let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: grantDate)
 
         let warnings = warningIntents(for: fixture.store, now: now, trialGrantDate: grantDate)
 
@@ -67,8 +67,8 @@ final class TrialExpiryWarningPlannerTests: XCTestCase {
 
     func testExpiredTrialGetsNoWarnings() throws {
         let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 9)
-        let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
         let grantDate = try XCTUnwrap(Calendar.current.date(byAdding: .day, value: -20, to: now))
+        let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: grantDate)
 
         let warnings = warningIntents(for: fixture.store, now: now, trialGrantDate: grantDate)
 
@@ -99,6 +99,34 @@ final class TrialExpiryWarningPlannerTests: XCTestCase {
                 XCTAssertFalse(copy.lowercased().contains(banned), "copy contains banned term: \(banned)")
             }
         }
+    }
+
+    func testWarningsFireFromExpiryNotGrantWhenBreakSlidesTheClock() throws {
+        // Grant on last pill-active day. Warnings must follow expiry, not
+        // grant+10 / grant+13 (those land in or just after the break).
+        let grant = InMemoryStoreFactory.fixedDate("2026-07-01", hour: 10)
+        let fixture = try InMemoryStoreFactory.makeStore(now: grant, startDate: grant)
+        fixture.store.pack.cycleDayAnchorIndex = 20
+
+        let calendar = Calendar.current
+        let clock = ReverseTrialClock(
+            grantDate: grant,
+            schedule: ActiveDaySchedule(pack: fixture.store.pack, calendar: calendar)
+        )
+        let expiry = clock.expiryMoment(calendar: calendar)
+        let grantPlusTen = try XCTUnwrap(calendar.date(byAdding: .day, value: 10, to: calendar.startOfDay(for: grant)))
+
+        let warnings = warningIntents(for: fixture.store, now: grant, trialGrantDate: grant)
+        XCTAssertEqual(warnings.map(\.day), [10, 13])
+
+        let day10 = try XCTUnwrap(warnings.first { $0.day == 10 })
+        let day13 = try XCTUnwrap(warnings.first { $0.day == 13 })
+        let expected10 = try XCTUnwrap(calendar.date(byAdding: .day, value: -5, to: expiry))
+        let expected13 = try XCTUnwrap(calendar.date(byAdding: .day, value: -2, to: expiry))
+        XCTAssertEqual(calendar.startOfDay(for: day10.fireDate), calendar.startOfDay(for: expected10))
+        XCTAssertEqual(calendar.startOfDay(for: day13.fireDate), calendar.startOfDay(for: expected13))
+        XCTAssertNotEqual(calendar.startOfDay(for: day10.fireDate), grantPlusTen)
+        XCTAssertGreaterThan(expiry.timeIntervalSince1970, grantPlusTen.timeIntervalSince1970)
     }
 
     func testWarningsReserveSlotsUnderPendingCap() throws {

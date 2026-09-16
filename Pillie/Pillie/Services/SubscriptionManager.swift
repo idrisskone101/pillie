@@ -110,6 +110,11 @@ final class SubscriptionManager: NSObject {
     /// The persisted Reverse Trial grant moment, if any (Keychain-backed).
     private(set) var trialGrantDate: Date?
 
+    /// Last pack rhythm the Reverse Trial clock should walk. Not persisted —
+    /// SwiftData is the source. Defaults to every calendar day until the shell
+    /// pushes a snapshot from the live pack.
+    private var activeDaySchedule: ActiveDaySchedule = .everyCalendarDay
+
     /// The immutable pre/post-cutover assignment persisted with the grant. It
     /// normally follows the grant instant, with a pre-cutover override for an
     /// existing installation that is explicitly grandfathered by issue #257.
@@ -183,8 +188,23 @@ final class SubscriptionManager: NSObject {
         }
     }
 
-    private var plusAccessState: PlusAccessState {
-        PlusAccessState(hasEntitlement: hasEntitlement, trialGrantDate: trialGrantDate)
+    var plusAccessState: PlusAccessState {
+        PlusAccessState(
+            hasEntitlement: hasEntitlement,
+            trialGrantDate: trialGrantDate,
+            schedule: activeDaySchedule
+        )
+    }
+
+    /// Adopts the current pack rhythm and rewrites Plus Access / `validUntil`.
+    /// Call this before or with grant, and on every pack or cycle edit.
+    func updateActiveDaySchedule(_ schedule: ActiveDaySchedule, now: Date = Date()) {
+        activeDaySchedule = schedule
+        refreshPlusAccess(now: now)
+    }
+
+    func updateActiveDaySchedule(pack: PillPack?, now: Date = Date()) {
+        updateActiveDaySchedule(ActiveDaySchedule(pack: pack), now: now)
     }
 
     /// Single funnel for every entitlement mutation; Plus Access is re-derived
@@ -524,6 +544,7 @@ final class SubscriptionManager: NSObject {
     /// Test seam: swap the Keychain store for an in-memory double and re-sync
     /// trial state from it.
     func setTrialGrantStoreForTesting(_ store: TrialGrantStoring) {
+        activeDaySchedule = .everyCalendarDay
         trialGrantStore = store
         trialGrantDate = store.loadGrantDate()
         if let storedCohort = store.loadTermsCohort() {

@@ -42,10 +42,10 @@ struct UpdateTrialAnnouncementContent {
     }
 
     static let `default` = UpdateTrialAnnouncementContent(
-        badge: "14 days free · no card",
+        badge: "14 active days free · no card",
         title: "Pillie Plus is now",
         titleAccent: "free for you.",
-        subtitle: "This update starts your full 14-day Plus trial — everything unlocks now.",
+        subtitle: "This update starts your full 14 active-day Plus trial. Everything unlocks now.",
         perks: [
             Perk(title: "App blocking", symbolName: "nosign"),
             Perk(title: "Shake to confirm", symbolName: "iphone.radiowaves.left.and.right"),

@@ -263,6 +263,7 @@ struct TrialEndPaywallContent: Equatable {
             terms: terms,
             termsCohort: assignedTermsCohort,
             grantDate: grantDate,
+            schedule: state.schedule,
             stats: stats,
             calendar: calendar,
             locale: locale
@@ -274,6 +275,7 @@ struct TrialEndPaywallContent: Equatable {
         terms: TrialEndAccessTerms,
         termsCohort: TrialTermsCohort,
         grantDate: Date,
+        schedule: ActiveDaySchedule,
         stats: TrialEndOwnStats,
         calendar: Calendar,
         locale: Locale
@@ -332,6 +334,7 @@ struct TrialEndPaywallContent: Equatable {
                 ),
                 dateRange: localizedRecordDateRange(
                     grantDate: grantDate,
+                    schedule: schedule,
                     calendar: calendar,
                     locale: locale
                 ),
@@ -374,10 +377,12 @@ struct TrialEndPaywallContent: Equatable {
 
     private static func localizedRecordDateRange(
         grantDate: Date,
+        schedule: ActiveDaySchedule,
         calendar: Calendar,
         locale: Locale
     ) -> String {
-        let expiry = ReverseTrialClock(grantDate: grantDate).expiryMoment(calendar: calendar)
+        let expiry = ReverseTrialClock(grantDate: grantDate, schedule: schedule)
+            .expiryMoment(calendar: calendar)
         let lastDay = calendar.date(byAdding: .day, value: -1, to: expiry) ?? expiry
         let formatter = DateFormatter()
         formatter.calendar = calendar

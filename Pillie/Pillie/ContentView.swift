@@ -52,10 +52,7 @@ struct ContentView: View {
         forTrialGrantedAt: subscriptionManager.trialGrantDate ?? now
       )
     return RootCommerceGate.resolve(
-      state: PlusAccessState(
-        hasEntitlement: subscriptionManager.hasEntitlement,
-        trialGrantDate: subscriptionManager.trialGrantDate
-      ),
+      state: subscriptionManager.plusAccessState,
       termsCohort: termsCohort,
       hardPaywallEnabled: subscriptionManager.hardPaywallEnabled,
       entitlementResolved: subscriptionManager.hasResolvedEntitlement,
@@ -520,6 +517,7 @@ struct ContentView: View {
 
     // Same once-only contract as the Trial Granted Moment: the event fires iff
     // the grant was actually written.
+    subscriptionManager.updateActiveDaySchedule(pack: store.activePack)
     if subscriptionManager.grantReverseTrial(termsCohort: termsCohort) {
       ProductAnalyticsTelemetry.live.updateTrialGranted()
     }
@@ -681,6 +679,7 @@ struct ContentView: View {
     let grantDate = Date()
     let termsCohort = TrialInstallCohort.storedAssignment()
       ?? HardPaywallPolicy.cohort(forTrialGrantedAt: grantDate)
+    subscriptionManager.updateActiveDaySchedule(pack: store.activePack, now: grantDate)
     if subscriptionManager.grantReverseTrial(
       now: grantDate,
       termsCohort: termsCohort
@@ -734,10 +733,7 @@ struct ContentView: View {
         forTrialGrantedAt: subscriptionManager.trialGrantDate ?? now
       )
     return OnboardingCompletionRoute.resolve(
-      state: PlusAccessState(
-        hasEntitlement: subscriptionManager.hasEntitlement,
-        trialGrantDate: subscriptionManager.trialGrantDate
-      ),
+      state: subscriptionManager.plusAccessState,
       termsCohort: termsCohort,
       hardPaywallEnabled: subscriptionManager.hardPaywallEnabled,
       entitlementResolved: subscriptionManager.hasResolvedEntitlement,
