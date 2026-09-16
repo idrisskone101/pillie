@@ -78,4 +78,18 @@ enum DoseWindow {
         }
         return (23, 59)
     }
+
+    /// DeviceActivity hour/minute bounds. Callers must pass these through
+    /// `startMonitoring` so the extension fires on the stored local hour.
+    static func deviceActivityBounds(
+        hour: Int,
+        minute: Int,
+        calendar: Calendar = .current
+    ) -> (start: DateComponents, end: DateComponents) {
+        let end = blockingIntervalEnd(hour: hour, minute: minute)
+        return (
+            DateComponents(hour: hour, minute: minute),
+            DateComponents(hour: end.hour, minute: end.minute)
+        )
+    }
 }

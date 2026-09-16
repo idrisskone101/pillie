@@ -290,17 +290,17 @@ final class AppBlockingManager {
         Self.logger.debug("scheduleDeviceActivityBlock: skipped on simulator (hour: \(hour), minute: \(minute))")
         return
         #else
-        let intervalEnd = DoseWindow.blockingIntervalEnd(hour: hour, minute: minute)
+        let bounds = DoseWindow.deviceActivityBounds(hour: hour, minute: minute)
         Self.logger.info(
-            "scheduleDeviceActivityBlock: scheduling \(hour):\(minute) → \(intervalEnd.hour):\(intervalEnd.minute)"
+            "scheduleDeviceActivityBlock: scheduling \(hour):\(minute) → \(bounds.end.hour ?? 0):\(bounds.end.minute ?? 0)"
         )
 
         // Stop existing monitoring before re-scheduling
         center.stopMonitoring([Self.activityName])
 
         let schedule = DeviceActivitySchedule(
-            intervalStart: DateComponents(hour: hour, minute: minute),
-            intervalEnd: DateComponents(hour: intervalEnd.hour, minute: intervalEnd.minute),
+            intervalStart: bounds.start,
+            intervalEnd: bounds.end,
             repeats: true
         )
 

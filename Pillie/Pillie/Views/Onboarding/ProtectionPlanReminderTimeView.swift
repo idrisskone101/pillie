@@ -170,9 +170,9 @@ struct ProtectionPlanReminderTimeView: View {
     private func commit() {
         guard !isCommitting else { return }
         isCommitting = true
-        let selection = Calendar.current.dateComponents([.hour, .minute], from: selectedTime)
+        let selection = ReminderTimeConverter.hourAndMinute(from: selectedTime)
         OnboardingReminderCommit.live(store: store, telemetry: onboardingTelemetry)
-            .run(hour: selection.hour ?? 8, minute: selection.minute ?? 0) {
+            .run(hour: selection.hour, minute: selection.minute) {
                 isCommitting = false
                 onContinue()
             }
