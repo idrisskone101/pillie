@@ -1,0 +1,55 @@
+# Devin environment blueprint for Pillie.
+# https://docs.devin.ai/onboard-devin/environment-yaml
+#
+# Linux fallback — mirrors .cursor/environment.json: no local Xcode, so iOS
+# work remotes into the Namespace macOS devbox (needs an NSC_TOKEN repo/org secret).
+initialize:
+  - name: namespace-mac remote toolchain
+    run: |
+      chmod +x Pillie/scripts/*.sh Pillie/scripts/*.py || true
+      command -v ruby >/dev/null 2>&1 || (sudo apt-get update -qq && sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq ruby)
+      Pillie/scripts/namespace-mac.sh install-cli
+      Pillie/scripts/namespace-mac.sh hydrate-auth
+maintenance: |
+  npm install
+knowledge:
+  - name: ios-builds
+    contents: |
+      No local Xcode on Linux. Load the namespace-mac skill; prefer `make ns-mac-verify CMD='make build'` or `make ns-mac-screenshot`. Requires the NSC_TOKEN secret for Pillie/scripts/namespace-mac.sh hydrate-auth.
+---
+runs-on: macos
+initialize:
+  - name: select Xcode 27 toolchain
+    run: |
+      # Repo scripts expect a stable Xcode_27.app path; point it at whichever
+      # installed bundle reports a 27.x version, then select it globally.
+      for app in /Applications/Xcode*.app; do
+        ver="$(defaults read "$app/Contents/Info.plist" CFBundleShortVersionString 2>/dev/null || true)"
+        if [[ "$ver" == 27* ]]; then
+          sudo ln -sfn "$app" /Applications/Xcode_27.app
+          break
+        fi
+      done
+      sudo xcode-select -s /Applications/Xcode_27.app/Contents/Developer
+      # Image PATH puts Xcode.app/Contents/Developer/usr/bin ahead of /usr/bin, which
+      # resolves xcodebuild straight into that bundle and ignores xcode-select and
+      # DEVELOPER_DIR. Shadow them with the xcselect shims so repo scripts see 27.
+      mkdir -p "$HOME/.devin/package/custom_binaries"
+      ln -sfn /usr/bin/xcodebuild "$HOME/.devin/package/custom_binaries/xcodebuild"
+      ln -sfn /usr/bin/xcrun "$HOME/.devin/package/custom_binaries/xcrun"
+      sudo xcodebuild -license accept || true
+      xcodebuild -runFirstLaunch || true
+  - name: imagemagick for `make screenshot`
+    run: brew install imagemagick || brew upgrade imagemagick
+maintenance: |
+  npm install
+knowledge:
+  - name: build
+    contents: |
+      `make build` compiles for the pinned iPhone 17 Pro sim; `make diagnose` prints toolchain/UDID/DerivedData. Xcode 27 is pre-selected — do not xcode-select back to Xcode.app (26.6). Skills in .agents/skills (pillie-ios etc.) auto-load.
+  - name: run
+    contents: |
+      Boot the sim first (`xcrun simctl boot "$(make -s udid | tail -1)"` or `open -a Simulator`), then `make build-and-run` (install + headless launch). `make screenshot` writes /tmp/sim_screenshot_1x.png.
+  - name: test
+    contents: |
+      `make test TESTS=ClassName` (TESTS required; full-suite run is refused).
