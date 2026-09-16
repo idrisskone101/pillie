@@ -41,13 +41,10 @@ enum ReminderTimeConverter {
         calendar: Calendar = .current
     ) -> Date {
         calendar.date(
-            from: DateComponents(
-                year: 2001,
-                month: 1,
-                day: 1,
-                hour: hour,
-                minute: minute
-            )
+            bySettingHour: hour,
+            minute: minute,
+            second: 0,
+            of: now
         ) ?? now
     }
 

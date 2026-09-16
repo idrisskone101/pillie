@@ -179,7 +179,11 @@ struct ProtectionPlanReminderTimeView: View {
     }
 
     private func seedFromStore() {
-        selectedTime = date(hour: store.reminderHour, minute: store.reminderMinute)
+        selectedTime = ReminderTimeConverter.dateForPicker(
+            hour: store.reminderHour,
+            minute: store.reminderMinute,
+            now: selectedTime
+        )
     }
 
     private var selectedHour: Int {

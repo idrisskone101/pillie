@@ -8,12 +8,24 @@ enum SettingsPresentation {
     ) -> String {
         var calendar = Calendar(identifier: .gregorian)
         calendar.locale = locale
+        calendar.timeZone = TimeZone(secondsFromGMT: 0) ?? .gmt
         let date = calendar.date(
-            from: DateComponents(year: 2001, month: 1, day: 1, hour: hour, minute: minute)
+            from: DateComponents(
+                timeZone: calendar.timeZone,
+                year: 2001,
+                month: 1,
+                day: 1,
+                hour: hour,
+                minute: minute
+            )
         ) ?? Date()
-        return date.formatted(
-            Date.FormatStyle().hour().minute().locale(locale)
-        )
+        let formatter = DateFormatter()
+        formatter.locale = locale
+        formatter.calendar = calendar
+        formatter.timeZone = calendar.timeZone
+        formatter.dateStyle = .none
+        formatter.timeStyle = .short
+        return formatter.string(from: date)
     }
 
     static func interval(
