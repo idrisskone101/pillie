@@ -173,7 +173,6 @@ struct HonestPaywallScreen: View {
 
     #if DEBUG
     private var experimentQALabel: some View {
-        let _ = flagsRevision
         Text(
             verbatim: ExperimentQAOverlay.label(
                 assignment: experimentAssignment,
@@ -192,6 +191,7 @@ struct HonestPaywallScreen: View {
         .padding(.top, 8)
         .accessibilityIdentifier("experimentQALabel")
         .allowsHitTesting(false)
+        .opacity(flagsRevision >= 0 ? 1 : 1)
     }
     #endif
 
