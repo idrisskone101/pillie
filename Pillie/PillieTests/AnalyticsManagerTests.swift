@@ -565,7 +565,7 @@ private final class RecordingAnalyticsClient: ProductAnalyticsClient {
     personProperties: [String: AnalyticsPropertyValue]
   )] = []
   private(set) var flushCount = 0
-  var featureFlags: [String: String] = []
+  var featureFlags: [String: String] = [:]
 
   func configure(_ configuration: ProductAnalyticsConfiguration) {
     configurations.append(configuration)
