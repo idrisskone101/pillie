@@ -139,6 +139,26 @@ enum PaywallPresentationPolicy {
     }
 }
 
+enum ExperimentQAOverlay {
+    static func label(
+        assignment: ExperimentAssignment,
+        engine: PaywallEngine,
+        offering: CommerceOfferingIdentifier,
+        distinctId: String? = nil
+    ) -> String {
+        var parts = [
+            "QA \(assignment.variant.rawValue)",
+            engine.rawValue,
+            offering.rawValue,
+            assignment.source.rawValue,
+        ]
+        if let suffix = distinctId.map({ String($0.suffix(6)) }), !suffix.isEmpty {
+            parts.append(suffix)
+        }
+        return parts.joined(separator: " · ")
+    }
+}
+
 enum HostedPaywallAvailability {
     static func isPresent(hasLegacyPaywall: Bool, hasComponents: Bool) -> Bool {
         hasLegacyPaywall || hasComponents
@@ -215,4 +235,8 @@ enum ExperimentOverrideStore {
     static func storageKey(for key: ExperimentKey) -> String {
         variantPrefix + key.rawValue
     }
+}
+
+extension Notification.Name {
+    static let pillieFeatureFlagsDidChange = Notification.Name("pillieFeatureFlagsDidChange")
 }

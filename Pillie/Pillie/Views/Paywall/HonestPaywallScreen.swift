@@ -27,6 +27,7 @@ struct HonestPaywallScreen: View {
     @State private var purchaseSucceeded = false
     @State private var successOutcome: TrialEndSuccessOutcome = .purchased(.annual)
     @State private var showDeclineFeedback = false
+    @State private var flagsRevision = 0
 
     private let subscriptionManager = SubscriptionManager.shared
     private let telemetry = ProductAnalyticsTelemetry.live
@@ -73,6 +74,9 @@ struct HonestPaywallScreen: View {
         .interactiveDismissDisabled(!board.chrome.allowsInteractiveDismiss)
         .animation(PillieTheme.fadeInUpCurve, value: purchaseSucceeded)
         .animation(PillieTheme.fadeInUpCurve, value: showDeclineFeedback)
+        .onReceive(NotificationCenter.default.publisher(for: .pillieFeatureFlagsDidChange)) { _ in
+            flagsRevision += 1
+        }
         .onAppear {
             trackViewed()
             #if DEBUG
@@ -169,8 +173,16 @@ struct HonestPaywallScreen: View {
 
     #if DEBUG
     private var experimentQALabel: some View {
+        let _ = flagsRevision
         Text(
-            verbatim: "QA \(experimentAssignment.variant.rawValue) · \(presentationEngine.rawValue) · \(assignedOffering.map { CommerceOfferingIdentifier.parse($0.identifier).rawValue } ?? "unknown")"
+            verbatim: ExperimentQAOverlay.label(
+                assignment: experimentAssignment,
+                engine: presentationEngine,
+                offering: assignedOffering.map {
+                    CommerceOfferingIdentifier.parse($0.identifier)
+                } ?? .unknown,
+                distinctId: AnalyticsManager.shared.distinctId
+            )
         )
         .font(.system(size: 11, weight: .semibold))
         .foregroundStyle(PillieTheme.textMuted)

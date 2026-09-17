@@ -74,6 +74,9 @@ protocol ProductAnalyticsClient: AnyObject {
   /// Multivariate flag value after `preloadFeatureFlags`. `nil` before the SDK
   /// has a value, or when the client does not evaluate flags.
   func featureFlagValue(forKey key: String) -> String?
+  /// Closed person properties included on the next `/decide` request.
+  func prepareFlagEvaluation(personProperties: [String: String])
+  func reloadFeatureFlags()
   func flush()
 }
 
@@ -108,6 +111,8 @@ enum AppErrorSeverity: String {
 extension ProductAnalyticsClient {
   func captureException(_ error: Error, properties: [String: AnalyticsPropertyValue]) {}
   func featureFlagValue(forKey key: String) -> String? { nil }
+  func prepareFlagEvaluation(personProperties: [String: String]) {}
+  func reloadFeatureFlags() {}
 }
 
 final class PostHogAnalyticsClient: ProductAnalyticsClient {
@@ -147,7 +152,18 @@ final class PostHogAnalyticsClient: ProductAnalyticsClient {
     #endif
 
     PostHogSDK.shared.setup(config)
+    if flagsObserver == nil {
+      flagsObserver = NotificationCenter.default.addObserver(
+        forName: PostHogSDK.didReceiveFeatureFlags,
+        object: nil,
+        queue: .main
+      ) { _ in
+        NotificationCenter.default.post(name: .pillieFeatureFlagsDidChange, object: nil)
+      }
+    }
   }
+
+  private var flagsObserver: NSObjectProtocol?
 
   func capture(
     event: String,
@@ -187,6 +203,16 @@ final class PostHogAnalyticsClient: ProductAnalyticsClient {
       return flag ? "true" : "false"
     }
     return String(describing: value)
+  }
+
+  func prepareFlagEvaluation(personProperties: [String: String]) {
+    PostHogSDK.shared.setPersonPropertiesForFlags(personProperties)
+  }
+
+  func reloadFeatureFlags() {
+    PostHogSDK.shared.reloadFeatureFlags {
+      NotificationCenter.default.post(name: .pillieFeatureFlagsDidChange, object: nil)
+    }
   }
 
   func flush() {
@@ -1069,6 +1095,15 @@ final class AnalyticsManager: AnalyticsTracking {
         captureExceptions: true
       ))
     isConfigured = true
+    #if DEBUG
+    client.prepareFlagEvaluation(personProperties: ["debug_build": "true"])
+    client.reloadFeatureFlags()
+    #endif
+  }
+
+  func reloadFeatureFlags() {
+    guard isConfigured else { return }
+    client.reloadFeatureFlags()
   }
 
   /// The PostHog anonymous distinct id, exposed so RevenueCat can tag the subscriber
@@ -1359,8 +1394,8 @@ final class AnalyticsManager: AnalyticsTracking {
     }
 
     #if DEBUG
-      // Debug builds ship without a PostHog token, so the PII-free event mirror
-      // is the simulator verification surface.
+      // OSLog mirror stays even with a Debug token so axe/console QA can
+      // read the same capture without opening PostHog.
       Logger(subsystem: "com.idrisskone.pillie", category: "analytics")
         .debug(
           "Pillie analytics capture: \(event.rawValue, privacy: .public) \(properties.map { "\($0.key)=\($0.value.postHogValue)" }.sorted().joined(separator: " "), privacy: .public)"
@@ -1408,8 +1443,7 @@ final class AnalyticsManager: AnalyticsTracking {
     properties["code"] = .int((error as NSError).code)
 
     #if DEBUG
-      // Same OSLog mirror as track(): debug builds have no PostHog token, so this
-      // is the only way simulator QA can see the error capture.
+      // Same OSLog mirror as track() so simulator QA can see the error capture.
       Logger(subsystem: "com.idrisskone.pillie", category: "analytics")
         .debug(
           "Pillie analytics capture: \(AnalyticsEvent.appError.rawValue, privacy: .public) \(properties.map { "\($0.key)=\($0.value.postHogValue)" }.sorted().joined(separator: " "), privacy: .public)"
@@ -1434,8 +1468,9 @@ final class AnalyticsManager: AnalyticsTracking {
   /// no-opped, and no one noticed until the funnel looked broken. Make it loud: flag
   /// it for observability (tests, in-app diagnostics) and fault-log it so a tokenless
   /// Release build is visible in Console instead of silently dropping every event.
-  /// Debug builds intentionally ship without a token (no dev analytics, no prod
-  /// pollution), so this stays a log + flag rather than a crash.
+  /// Debug now ships the same write-only ingestion key as Release so
+  /// experiment QA can evaluate flags. A missing token still stays a log
+  /// + flag rather than a crash.
   private func reportConfigurationFailure() {
     didFailConfiguration = true
     os_log(

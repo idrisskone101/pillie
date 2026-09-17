@@ -750,19 +750,23 @@ struct PillieApp: App {
             reconcileScreenTimeState()
         case "/experiment":
             let queryItems = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems
-            let variant = ExperimentVariant.parse(
-                queryItems?.first(where: { $0.name == "variant" })?.value
-            )
-            DebugQA.apply(
-                variant == .test ? .hostedPaywall : .honestPaywall,
-                store: store
-            )
-            if let offering = queryItems?
-                .first(where: { $0.name == "offering" })?
-                .value
-                .map(CommerceOfferingIdentifier.parse),
-               offering != .unknown {
-                ExperimentOverrideStore.setPreferredOffering(offering)
+            let rawVariant = queryItems?.first(where: { $0.name == "variant" })?.value
+            let source = queryItems?.first(where: { $0.name == "source" })?.value
+            if rawVariant == "live" || source == "posthog" {
+                DebugQA.apply(.livePostHogPaywall, store: store)
+            } else {
+                let variant = ExperimentVariant.parse(rawVariant)
+                DebugQA.apply(
+                    variant == .test ? .hostedPaywall : .honestPaywall,
+                    store: store
+                )
+                if let offering = queryItems?
+                    .first(where: { $0.name == "offering" })?
+                    .value
+                    .map(CommerceOfferingIdentifier.parse),
+                   offering != .unknown {
+                    ExperimentOverrideStore.setPreferredOffering(offering)
+                }
             }
         case "/review-prompt":
             // QA shortcut (#133): land on Home with an unbroken Streak past the pill

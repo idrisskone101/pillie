@@ -174,6 +174,31 @@ struct ExperimentAssignmentTests {
         )
     }
 
+    @Test func qaOverlayShowsPostHogSourceAndDistinctSuffix() {
+        let assignment = ExperimentAssignment(
+            key: .paywallPresentation,
+            variant: .test,
+            source: .posthog
+        )
+
+        #expect(
+            ExperimentQAOverlay.label(
+                assignment: assignment,
+                engine: .hosted,
+                offering: .paywallTest,
+                distinctId: "abc123def456"
+            ) == "QA test · hosted · paywall_test · posthog · def456"
+        )
+        #expect(
+            ExperimentQAOverlay.label(
+                assignment: assignment,
+                engine: .hosted,
+                offering: .paywallTest,
+                distinctId: nil
+            ) == "QA test · hosted · paywall_test · posthog"
+        )
+    }
+
     @Test func overrideStoreRoundTripsVariantAndOffering() {
         let defaults = UserDefaults(suiteName: "ExperimentOverrideStoreTests-\(UUID().uuidString)")!
 
