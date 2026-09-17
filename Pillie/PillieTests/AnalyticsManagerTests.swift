@@ -60,8 +60,9 @@ final class AnalyticsManagerTests: XCTestCase {
     // Swizzling stays enabled solely because PostHogReplayIntegration requires it;
     // the capture-feature flags above are all false, so nothing else auto-captures.
     XCTAssertTrue(configuration.enableSwizzling)
-    XCTAssertFalse(configuration.sendFeatureFlagEvent)
-    XCTAssertFalse(configuration.preloadFeatureFlags)
+    // Feature flags stay on so `$feature_flag_called` can power experiments.
+    XCTAssertTrue(configuration.sendFeatureFlagEvent)
+    XCTAssertTrue(configuration.preloadFeatureFlags)
     XCTAssertFalse(configuration.setDefaultPersonProperties)
     XCTAssertFalse(configuration.surveys)
     // Analytics is collected for everyone, so configure opts in (never opted out).
@@ -474,6 +475,47 @@ final class AnalyticsManagerTests: XCTestCase {
     }
   }
 
+  func testAssignmentUsesRemoteFlagUntilADebugOverrideWins() {
+    let client = RecordingAnalyticsClient()
+    client.featureFlags[ExperimentKey.paywallPresentation.rawValue] = "test"
+    let manager = makeManager(client: client, token: "phc_test_token")
+    manager.configure()
+
+    XCTAssertEqual(manager.assignment(for: .paywallPresentation).variant, .test)
+    XCTAssertEqual(manager.assignment(for: .paywallPresentation).source, .posthog)
+
+    ExperimentOverrideStore.setVariant(.control, for: .paywallPresentation, defaults: defaults)
+
+    XCTAssertEqual(manager.assignment(for: .paywallPresentation).variant, .control)
+    XCTAssertEqual(manager.assignment(for: .paywallPresentation).source, .debugOverride)
+  }
+
+  func testPaywallCaptureMergesClosedExperimentContext() throws {
+    let client = RecordingAnalyticsClient()
+    let manager = AnalyticsManager(
+      defaults: defaults,
+      client: client,
+      infoDictionary: [
+        "PostHogProjectToken": "phc_test_token",
+        "PostHogHost": "https://us.i.posthog.com",
+      ],
+      offeringAssignment: {
+        CommerceOfferingAssignment(identifier: .paywallTest, hasHostedPaywall: true)
+      }
+    )
+    Self.keptObjects.append(manager)
+    ExperimentOverrideStore.setVariant(.test, for: .paywallPresentation, defaults: defaults)
+    manager.configure()
+    manager.track(.paywallViewed, source: .settings, isPlus: false)
+
+    let properties = try XCTUnwrap(client.captures.first?.properties)
+    XCTAssertEqual(properties["experiment_key"], .string("paywall-presentation"))
+    XCTAssertEqual(properties["experiment_variant"], .string("test"))
+    XCTAssertEqual(properties["rc_offering"], .string("paywall_test"))
+    XCTAssertEqual(properties["paywall_engine"], .string("hosted"))
+    XCTAssertEqual(properties["source"], .string("settings"))
+  }
+
   func testFlushOnlyRunsWhenConfigured() {
     let configuredClient = RecordingAnalyticsClient()
     let configuredManager = makeManager(client: configuredClient, token: "phc_test_token")
@@ -523,6 +565,7 @@ private final class RecordingAnalyticsClient: ProductAnalyticsClient {
     personProperties: [String: AnalyticsPropertyValue]
   )] = []
   private(set) var flushCount = 0
+  var featureFlags: [String: String] = []
 
   func configure(_ configuration: ProductAnalyticsConfiguration) {
     configurations.append(configuration)
@@ -537,6 +580,10 @@ private final class RecordingAnalyticsClient: ProductAnalyticsClient {
   }
 
   func distinctId() -> String? { "test-distinct-id" }
+
+  func featureFlagValue(forKey key: String) -> String? {
+    featureFlags[key]
+  }
 
   func flush() {
     flushCount += 1
