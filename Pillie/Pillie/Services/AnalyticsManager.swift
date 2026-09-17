@@ -71,6 +71,12 @@ protocol ProductAnalyticsClient: AnyObject {
   /// The current anonymous distinct id, used to join server-side RevenueCat events
   /// to the same PostHog person. `nil` before the SDK is configured.
   func distinctId() -> String?
+  /// Multivariate flag value after `preloadFeatureFlags`. `nil` before the SDK
+  /// has a value, or when the client does not evaluate flags.
+  func featureFlagValue(forKey key: String) -> String?
+  /// Closed person properties included on the next `/decide` request.
+  func prepareFlagEvaluation(personProperties: [String: String])
+  func reloadFeatureFlags()
   func flush()
 }
 
@@ -104,6 +110,9 @@ enum AppErrorSeverity: String {
 // test spies compiling. `PostHogAnalyticsClient` overrides it for real capture.
 extension ProductAnalyticsClient {
   func captureException(_ error: Error, properties: [String: AnalyticsPropertyValue]) {}
+  func featureFlagValue(forKey key: String) -> String? { nil }
+  func prepareFlagEvaluation(personProperties: [String: String]) {}
+  func reloadFeatureFlags() {}
 }
 
 final class PostHogAnalyticsClient: ProductAnalyticsClient {
@@ -143,7 +152,18 @@ final class PostHogAnalyticsClient: ProductAnalyticsClient {
     #endif
 
     PostHogSDK.shared.setup(config)
+    if flagsObserver == nil {
+      flagsObserver = NotificationCenter.default.addObserver(
+        forName: PostHogSDK.didReceiveFeatureFlags,
+        object: nil,
+        queue: .main
+      ) { _ in
+        NotificationCenter.default.post(name: .pillieFeatureFlagsDidChange, object: nil)
+      }
+    }
   }
+
+  private var flagsObserver: NSObjectProtocol?
 
   func capture(
     event: String,
@@ -172,6 +192,27 @@ final class PostHogAnalyticsClient: ProductAnalyticsClient {
 
   func distinctId() -> String? {
     PostHogSDK.shared.getDistinctId()
+  }
+
+  func featureFlagValue(forKey key: String) -> String? {
+    guard let value = PostHogSDK.shared.getFeatureFlag(key) else { return nil }
+    if let string = value as? String {
+      return string
+    }
+    if let flag = value as? Bool {
+      return flag ? "true" : "false"
+    }
+    return String(describing: value)
+  }
+
+  func prepareFlagEvaluation(personProperties: [String: String]) {
+    PostHogSDK.shared.setPersonPropertiesForFlags(personProperties)
+  }
+
+  func reloadFeatureFlags() {
+    PostHogSDK.shared.reloadFeatureFlags {
+      NotificationCenter.default.post(name: .pillieFeatureFlagsDidChange, object: nil)
+    }
   }
 
   func flush() {
@@ -990,6 +1031,7 @@ final class AnalyticsManager: AnalyticsTracking {
   private let client: ProductAnalyticsClient
   private let infoDictionary: [String: Any]?
   private let sessionID: String
+  private let offeringAssignmentProvider: () -> CommerceOfferingAssignment
 
   /// `true` when `configure()` ran but found no usable `PostHogProjectToken`, so the
   /// SDK was never set up and every event is dropped. Surfaced (not silent) because a
@@ -1001,12 +1043,16 @@ final class AnalyticsManager: AnalyticsTracking {
     defaults: UserDefaults = .standard,
     client: ProductAnalyticsClient = PostHogAnalyticsClient(),
     infoDictionary: [String: Any]? = nil,
-    sessionID: String = UUID().uuidString
+    sessionID: String = UUID().uuidString,
+    offeringAssignment: @escaping () -> CommerceOfferingAssignment = {
+      SubscriptionManager.shared.offeringAssignment
+    }
   ) {
     self.defaults = defaults
     self.client = client
     self.infoDictionary = infoDictionary
     self.sessionID = sessionID
+    self.offeringAssignmentProvider = offeringAssignment
   }
 
   // Product analytics is collected for everyone — there is no consent gate or
@@ -1035,8 +1081,8 @@ final class AnalyticsManager: AnalyticsTracking {
         // Auto-capture stays off regardless: lifecycle/screen-view/element/survey
         // flags below are what actually enable the other swizzling integrations.
         enableSwizzling: true,
-        sendFeatureFlagEvent: false,
-        preloadFeatureFlags: false,
+        sendFeatureFlagEvent: true,
+        preloadFeatureFlags: true,
         setDefaultPersonProperties: false,
         sessionReplay: true,
         sessionReplayScreenshotMode: true,
@@ -1049,6 +1095,15 @@ final class AnalyticsManager: AnalyticsTracking {
         captureExceptions: true
       ))
     isConfigured = true
+    #if DEBUG
+    client.prepareFlagEvaluation(personProperties: ["debug_build": "true"])
+    client.reloadFeatureFlags()
+    #endif
+  }
+
+  func reloadFeatureFlags() {
+    guard isConfigured else { return }
+    client.reloadFeatureFlags()
   }
 
   /// The PostHog anonymous distinct id, exposed so RevenueCat can tag the subscriber
@@ -1057,6 +1112,22 @@ final class AnalyticsManager: AnalyticsTracking {
   var distinctId: String? {
     guard isConfigured else { return nil }
     return client.distinctId()
+  }
+
+  func assignment(for key: ExperimentKey) -> ExperimentAssignment {
+    let remoteValue = isConfigured ? client.featureFlagValue(forKey: key.rawValue) : nil
+    return ExperimentResolver.assignment(
+      key: key,
+      remoteValue: remoteValue,
+      overrideValue: ExperimentOverrideStore.variantRawValue(for: key, defaults: defaults)
+    )
+  }
+
+  func experimentTelemetryContext() -> ExperimentTelemetryContext {
+    ExperimentTelemetryContext.make(
+      assignment: assignment(for: .paywallPresentation),
+      offering: offeringAssignmentProvider()
+    )
   }
 
   func track(
@@ -1316,10 +1387,15 @@ final class AnalyticsManager: AnalyticsTracking {
       properties["app_build"] = .string(infoDictionaryString("CFBundleVersion") ?? "unknown")
       properties["session_id"] = .string(sessionID)
     }
+    if event.carriesExperimentContext {
+      for (key, value) in experimentTelemetryContext().properties {
+        properties[key] = value
+      }
+    }
 
     #if DEBUG
-      // Debug builds ship without a PostHog token, so the PII-free event mirror
-      // is the simulator verification surface.
+      // OSLog mirror stays even with a Debug token so axe/console QA can
+      // read the same capture without opening PostHog.
       Logger(subsystem: "com.idrisskone.pillie", category: "analytics")
         .debug(
           "Pillie analytics capture: \(event.rawValue, privacy: .public) \(properties.map { "\($0.key)=\($0.value.postHogValue)" }.sorted().joined(separator: " "), privacy: .public)"
@@ -1367,8 +1443,7 @@ final class AnalyticsManager: AnalyticsTracking {
     properties["code"] = .int((error as NSError).code)
 
     #if DEBUG
-      // Same OSLog mirror as track(): debug builds have no PostHog token, so this
-      // is the only way simulator QA can see the error capture.
+      // Same OSLog mirror as track() so simulator QA can see the error capture.
       Logger(subsystem: "com.idrisskone.pillie", category: "analytics")
         .debug(
           "Pillie analytics capture: \(AnalyticsEvent.appError.rawValue, privacy: .public) \(properties.map { "\($0.key)=\($0.value.postHogValue)" }.sorted().joined(separator: " "), privacy: .public)"
@@ -1393,8 +1468,9 @@ final class AnalyticsManager: AnalyticsTracking {
   /// no-opped, and no one noticed until the funnel looked broken. Make it loud: flag
   /// it for observability (tests, in-app diagnostics) and fault-log it so a tokenless
   /// Release build is visible in Console instead of silently dropping every event.
-  /// Debug builds intentionally ship without a token (no dev analytics, no prod
-  /// pollution), so this stays a log + flag rather than a crash.
+  /// Debug now ships the same write-only ingestion key as Release so
+  /// experiment QA can evaluate flags. A missing token still stays a log
+  /// + flag rather than a crash.
   private func reportConfigurationFailure() {
     didFailConfiguration = true
     os_log(
@@ -1427,6 +1503,25 @@ private extension AnalyticsEvent {
          .blockerSetupSkipped,
          .reminderOnlyCompletion,
          .protectionPlanActivated:
+      return true
+    default:
+      return false
+    }
+  }
+
+  var carriesExperimentContext: Bool {
+    switch self {
+    case .paywallViewed,
+      .paywallPlanSelected,
+      .purchaseStarted,
+      .trialStarted,
+      .purchaseCompleted,
+      .purchaseFailed,
+      .purchaseCancelled,
+      .restoreStarted,
+      .restoreCompleted,
+      .restoreFailed,
+      .continueFreeSelected:
       return true
     default:
       return false

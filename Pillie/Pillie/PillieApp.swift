@@ -748,6 +748,26 @@ struct PillieApp: App {
             UserDefaults.standard.set(OnboardingFlow.Step.complete.rawValue, forKey: OnboardingFlow.stepStorageKey)
             SubscriptionManager.shared.debugApplyTrialEndPaywallScenario(scenario)
             reconcileScreenTimeState()
+        case "/experiment":
+            let queryItems = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems
+            let rawVariant = queryItems?.first(where: { $0.name == "variant" })?.value
+            let source = queryItems?.first(where: { $0.name == "source" })?.value
+            if rawVariant == "live" || source == "posthog" {
+                DebugQA.apply(.livePostHogPaywall, store: store)
+            } else {
+                let variant = ExperimentVariant.parse(rawVariant)
+                DebugQA.apply(
+                    variant == .test ? .hostedPaywall : .honestPaywall,
+                    store: store
+                )
+                if let offering = queryItems?
+                    .first(where: { $0.name == "offering" })?
+                    .value
+                    .map(CommerceOfferingIdentifier.parse),
+                   offering != .unknown {
+                    ExperimentOverrideStore.setPreferredOffering(offering)
+                }
+            }
         case "/review-prompt":
             // QA shortcut (#133): land on Home with an unbroken Streak past the pill
             // threshold so the Review Prompt's Sentiment Gate card surfaces and the

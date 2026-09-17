@@ -15,8 +15,11 @@ struct PaywallOfferingsSnapshot: Equatable {
     let lifetimeDisplay: String?
     let currencyCode: String?
 
-    static func parse(_ offerings: Offerings?) -> PaywallOfferingsSnapshot? {
-        guard let offering = offerings?.current else { return nil }
+    static func parse(
+        _ offerings: Offerings?,
+        selectedOffering: Offering? = nil
+    ) -> PaywallOfferingsSnapshot? {
+        guard let offering = selectedOffering ?? offerings?.current else { return nil }
 
         guard let annualPackage = PilliePlusPackageResolver.resolve(
             plan: .annual,

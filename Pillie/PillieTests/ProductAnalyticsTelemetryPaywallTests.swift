@@ -39,7 +39,11 @@ final class ProductAnalyticsTelemetryPaywallTests: XCTestCase {
         XCTAssertEqual(client.events.first?.properties["source"], .string("onboarding"))
         XCTAssertEqual(client.events.first?.properties["plan"], .string("annual"))
         XCTAssertEqual(client.events.first?.properties["is_plus"], .bool(false))
-        XCTAssertEqual(client.events.first?.properties.count, 3)
+        XCTAssertEqual(client.events.first?.properties["experiment_key"], .string("paywall-presentation"))
+        XCTAssertEqual(client.events.first?.properties["experiment_variant"], .string("control"))
+        XCTAssertEqual(client.events.first?.properties["rc_offering"], .string("unknown"))
+        XCTAssertEqual(client.events.first?.properties["paywall_engine"], .string("honest"))
+        XCTAssertEqual(client.events.first?.properties.count, 7)
         XCTAssertNotNil(client.events.first?.properties["source"])
         XCTAssertNotNil(client.events.first?.properties["plan"])
         XCTAssertNotNil(client.events.first?.properties["is_plus"])
@@ -119,7 +123,8 @@ final class ProductAnalyticsTelemetryPaywallTests: XCTestCase {
         XCTAssertEqual(client.events.first?.properties["source"], .string("home"))
         XCTAssertEqual(client.events.first?.properties["surface"], .string("trial_status"))
         XCTAssertEqual(client.events.first?.properties["is_plus"], .bool(true))
-        XCTAssertEqual(client.events.first?.properties.count, 3)
+        XCTAssertEqual(client.events.first?.properties["experiment_key"], .string("paywall-presentation"))
+        XCTAssertEqual(client.events.first?.properties.count, 7)
     }
 
     func testOrdinaryPaywallViewCarriesPostCutoverTrialTermsCohort() {
