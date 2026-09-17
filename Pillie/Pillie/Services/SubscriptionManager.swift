@@ -130,6 +130,10 @@ final class SubscriptionManager: NSObject {
     /// switch cannot briefly show the hard wall before RevenueCat responds.
     private(set) var hasResolvedHardPaywallConfiguration = false
 
+    /// Closed offering label plus whether that offering actually has a hosted
+    /// RevenueCat paywall. Paywall telemetry reads this at capture time.
+    private(set) var offeringAssignment = CommerceOfferingAssignment.unresolved
+
     private(set) var isLoading = false
 
     /// Fired whenever Plus Access actually flips (purchase, churn, trial grant,
@@ -292,6 +296,7 @@ final class SubscriptionManager: NSObject {
     private func resolveStorefrontWithoutPurchases() {
         hasResolvedEntitlement = true
         hasResolvedHardPaywallConfiguration = true
+        offeringAssignment = .unresolved
     }
 
     private func requireConfiguredPurchases() throws {
@@ -452,7 +457,37 @@ final class SubscriptionManager: NSObject {
         hardPaywallEnabled = configuration.isEnabled
         #endif
         hasResolvedHardPaywallConfiguration = true
+        recordOfferingAssignment(from: offerings)
         return offerings
+    }
+
+    /// The offering the paywall should buy from: debug override, then the
+    /// `paywall_test` offering for the test variant, otherwise `current`.
+    func assignedOffering(from offerings: Offerings?) -> Offering? {
+        guard let offerings else { return nil }
+        let experiment = AnalyticsManager.shared.assignment(for: .paywallPresentation)
+        let preferred = PaywallPresentationPolicy.preferredOfferingIdentifier(
+            assignment: experiment,
+            override: ExperimentOverrideStore.preferredOffering()
+        )
+        let available = Set(offerings.all.keys.map(CommerceOfferingIdentifier.parse))
+        let selected = CommerceOfferingResolver.selectedIdentifier(
+            preferred: preferred,
+            available: available,
+            current: CommerceOfferingIdentifier.parse(offerings.current?.identifier)
+        )
+        if selected != .unknown {
+            return offerings.offering(identifier: selected.rawValue) ?? offerings.current
+        }
+        return offerings.current
+    }
+
+    func recordOfferingAssignment(from offerings: Offerings) {
+        let offering = assignedOffering(from: offerings)
+        offeringAssignment = CommerceOfferingAssignment(
+            identifier: .parse(offering?.identifier),
+            hasHostedPaywall: HostedPaywallPresence.isPresent(on: offering)
+        )
     }
 
     /// Refreshes the dashboard kill switch on launch. A failed fetch keeps the

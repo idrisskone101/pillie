@@ -6,6 +6,7 @@ enum DebugQASection: String, CaseIterable, Identifiable {
     case pack
     case trialNewUser
     case trialGrandfather
+    case experiments
     case other
 
     var id: String { rawValue }
@@ -15,6 +16,7 @@ enum DebugQASection: String, CaseIterable, Identifiable {
         case .pack: return "Pack & calendar"
         case .trialNewUser: return "Trial — new users"
         case .trialGrandfather: return "Trial — grandfathered"
+        case .experiments: return "Experiments"
         case .other: return "Other"
         }
     }
@@ -38,6 +40,9 @@ enum DebugQAScenario: String, CaseIterable, Identifiable {
     case existingUserTrialAnnouncement
     case reviewPrompt
     case clearTrial
+    case hostedPaywall
+    case honestPaywall
+    case clearExperimentOverrides
 
     var id: String { rawValue }
 
@@ -54,6 +59,8 @@ enum DebugQAScenario: String, CaseIterable, Identifiable {
             return .trialGrandfather
         case .plusSubscriber, .existingUserTrialAnnouncement, .reviewPrompt, .clearTrial:
             return .other
+        case .hostedPaywall, .honestPaywall, .clearExperimentOverrides:
+            return .experiments
         }
     }
 
@@ -76,6 +83,9 @@ enum DebugQAScenario: String, CaseIterable, Identifiable {
         case .existingUserTrialAnnouncement: return "Existing-user trial announcement"
         case .reviewPrompt: return "Review prompt card"
         case .clearTrial: return "Clear trial grant"
+        case .hostedPaywall: return "Hosted paywall (test)"
+        case .honestPaywall: return "Honest paywall (control)"
+        case .clearExperimentOverrides: return "Clear experiment overrides"
         }
     }
 
@@ -115,6 +125,12 @@ enum DebugQAScenario: String, CaseIterable, Identifiable {
             return "Unbroken streak so the Home review card appears."
         case .clearTrial:
             return "Remove Keychain grant and expiry flags."
+        case .hostedPaywall:
+            return "Force paywall-presentation=test and open the expired hard wall."
+        case .honestPaywall:
+            return "Force paywall-presentation=control and open the expired hard wall."
+        case .clearExperimentOverrides:
+            return "Remove debug experiment and offering overrides."
         }
     }
 
@@ -290,6 +306,29 @@ enum DebugQA {
             UserDefaults.standard.removeObject(forKey: HonestPaywallScreen.debugSuccessStateKey)
             SubscriptionManager.shared.debugOverrideTrialGrantDate(nil)
             SubscriptionManager.shared.debugSetHardPaywallEnabled(nil)
+            ExperimentOverrideStore.clear()
+        case .hostedPaywall:
+            ExperimentOverrideStore.setVariant(.test, for: .paywallPresentation)
+            ExperimentOverrideStore.setPreferredOffering(.paywallTest)
+            applyExpiredPaywall(
+                store: store,
+                cohort: .postCutover,
+                hardPaywallEnabled: true,
+                blockerConfigured: true,
+                success: false
+            )
+        case .honestPaywall:
+            ExperimentOverrideStore.setVariant(.control, for: .paywallPresentation)
+            ExperimentOverrideStore.setPreferredOffering(nil)
+            applyExpiredPaywall(
+                store: store,
+                cohort: .postCutover,
+                hardPaywallEnabled: true,
+                blockerConfigured: true,
+                success: false
+            )
+        case .clearExperimentOverrides:
+            ExperimentOverrideStore.clear()
         }
 
         reconcile(store: store)

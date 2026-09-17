@@ -32,10 +32,28 @@ struct HonestPaywallScreen: View {
     private let telemetry = ProductAnalyticsTelemetry.live
     private let plusFeedback = PlusPaywallInteractionFeedback(performanceTier: PerformanceTier.current)
 
+    private var assignedOffering: Offering? {
+        subscriptionManager.assignedOffering(from: offerings)
+    }
+
+    private var experimentAssignment: ExperimentAssignment {
+        AnalyticsManager.shared.assignment(for: .paywallPresentation)
+    }
+
+    private var presentationEngine: PaywallEngine {
+        PaywallPresentationPolicy.engine(
+            assignment: experimentAssignment,
+            offeringHasHostedPaywall: HostedPaywallPresence.isPresent(on: assignedOffering)
+        )
+    }
+
     private var scene: HonestPaywallScene {
         HonestPaywallSceneBuilder.build(
             board: board,
-            offerings: offerings.flatMap(PaywallOfferingsSnapshot.parse),
+            offerings: PaywallOfferingsSnapshot.parse(
+                offerings,
+                selectedOffering: assignedOffering
+            ),
             recurrence: recurrence,
             locale: locale
         )
@@ -108,19 +126,62 @@ struct HonestPaywallScreen: View {
         } else if purchaseSucceeded && isTrialEnd {
             trialEndSuccessState
                 .transition(.opacity)
+        } else if presentationEngine == .hosted, let offering = assignedOffering {
+            hostedPaywall(offering)
+                .transition(.opacity)
         } else {
-            HonestPaywallView(
-                scene: scene,
-                isPurchasing: isPurchasing,
-                onRecurrenceChange: selectRecurrence,
-                onPurchase: purchase,
-                onRestore: restorePurchases,
-                onDismiss: onDismiss,
-                onContinueFree: board.chrome.showsContinueFree ? { continueFree() } : nil
-            )
-            .transition(.opacity)
+            honestPaywall
+                .transition(.opacity)
         }
     }
+
+    private var honestPaywall: some View {
+        HonestPaywallView(
+            scene: scene,
+            isPurchasing: isPurchasing,
+            onRecurrenceChange: selectRecurrence,
+            onPurchase: purchase,
+            onRestore: restorePurchases,
+            onDismiss: onDismiss,
+            onContinueFree: board.chrome.showsContinueFree ? { continueFree() } : nil
+        )
+        .accessibilityIdentifier("experimentPaywallEngine.honest")
+        #if DEBUG
+        .overlay(alignment: .top) { experimentQALabel }
+        #endif
+    }
+
+    private func hostedPaywall(_ offering: Offering) -> some View {
+        HostedPaywallScreen(
+            offering: offering,
+            displayCloseButton: board.chrome.showsClose,
+            onPurchaseCompleted: handleHostedPurchase,
+            onRestoreCompleted: handleHostedRestore,
+            onDismiss: {
+                if isTrialEnd, purchaseSucceeded { return }
+                onDismiss()
+            }
+        )
+        #if DEBUG
+        .overlay(alignment: .top) { experimentQALabel }
+        #endif
+    }
+
+    #if DEBUG
+    private var experimentQALabel: some View {
+        Text(
+            verbatim: "QA \(experimentAssignment.variant.rawValue) · \(presentationEngine.rawValue) · \(assignedOffering.map { CommerceOfferingIdentifier.parse($0.identifier).rawValue } ?? "unknown")"
+        )
+        .font(.system(size: 11, weight: .semibold))
+        .foregroundStyle(PillieTheme.textMuted)
+        .padding(.horizontal, 10)
+        .padding(.vertical, 4)
+        .background(PillieTheme.cardWhite.opacity(0.92), in: Capsule())
+        .padding(.top, 8)
+        .accessibilityIdentifier("experimentQALabel")
+        .allowsHitTesting(false)
+    }
+    #endif
 
     private var coralWash: some View {
         let alignment: Alignment = {
@@ -160,7 +221,11 @@ struct HonestPaywallScreen: View {
     }
 
     private func purchase(_ intent: PaywallPurchaseIntent) {
-        guard let package = PaywallPurchaseBridge.package(for: intent, offerings: offerings) else {
+        guard let package = PaywallPurchaseBridge.package(
+            for: intent,
+            offerings: offerings,
+            selectedOffering: assignedOffering
+        ) else {
             purchaseError = CommercePresentation.offeringsUnavailableMessage(locale: locale)
             return
         }
@@ -226,6 +291,50 @@ struct HonestPaywallScreen: View {
             }
             withAnimation(response.motionProfile.animation) { isRestoring = false }
         }
+    }
+
+    private func handleHostedPurchase(_ customerInfo: CustomerInfo) {
+        Task {
+            await subscriptionManager.refreshStatus()
+            if let plan = pilliePlusPlan(from: customerInfo) {
+                let entitlement = customerInfo.entitlements[SubscriptionManager.entitlementID]
+                trackPurchaseCompleted(
+                    plan: plan,
+                    outcome: PurchaseOutcome(
+                        isTrial: entitlement?.periodType == .trial,
+                        isSandbox: entitlement?.isSandbox ?? false
+                    )
+                )
+            }
+            finishHostedSuccess(plan: pilliePlusPlan(from: customerInfo))
+        }
+    }
+
+    private func handleHostedRestore(_ customerInfo: CustomerInfo) {
+        Task {
+            await subscriptionManager.refreshStatus()
+            if subscriptionManager.hasEntitlement {
+                trackRestoreCompleted()
+                finishHostedSuccess(plan: nil)
+            } else {
+                trackRestoreFailed()
+                showNoSubscriptionAlert = true
+            }
+        }
+    }
+
+    private func finishHostedSuccess(plan: PilliePlusPlan?) {
+        if isTrialEnd {
+            successOutcome = plan.map { .purchased($0) } ?? .restored
+            purchaseSucceeded = true
+        } else {
+            onDismiss()
+        }
+    }
+
+    private func pilliePlusPlan(from customerInfo: CustomerInfo) -> PilliePlusPlan? {
+        let productID = customerInfo.entitlements[SubscriptionManager.entitlementID]?.productIdentifier
+        return PilliePlusPlan.allCases.first { $0.productID == productID }
     }
 
     private func continueFree() {

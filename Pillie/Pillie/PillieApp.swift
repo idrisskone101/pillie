@@ -748,6 +748,22 @@ struct PillieApp: App {
             UserDefaults.standard.set(OnboardingFlow.Step.complete.rawValue, forKey: OnboardingFlow.stepStorageKey)
             SubscriptionManager.shared.debugApplyTrialEndPaywallScenario(scenario)
             reconcileScreenTimeState()
+        case "/experiment":
+            let queryItems = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems
+            let variant = ExperimentVariant.parse(
+                queryItems?.first(where: { $0.name == "variant" })?.value
+            )
+            DebugQA.apply(
+                variant == .test ? .hostedPaywall : .honestPaywall,
+                store: store
+            )
+            if let offering = queryItems?
+                .first(where: { $0.name == "offering" })?
+                .value
+                .map(CommerceOfferingIdentifier.parse),
+               offering != .unknown {
+                ExperimentOverrideStore.setPreferredOffering(offering)
+            }
         case "/review-prompt":
             // QA shortcut (#133): land on Home with an unbroken Streak past the pill
             // threshold so the Review Prompt's Sentiment Gate card surfaces and the
