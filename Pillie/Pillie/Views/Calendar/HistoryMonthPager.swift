@@ -199,11 +199,6 @@ final class HistoryMonthPagerViewController: UIViewController {
             self?.finishTransition(delta: commitDelta)
         }
         animator.startAnimation()
-        if let keys = strip.layer.animationKeys() {
-            for key in keys {
-                strip.layer.animation(forKey: key)?.preferredFrameRateRange = PillieFrameRate.promotional
-            }
-        }
         self.animator = animator
     }
 
