@@ -200,8 +200,11 @@ final class HistoryMonthPagerViewController: UIViewController {
             self?.animator = nil
             self?.finishTransition(delta: commitDelta)
         }
-        animator.startAnimation()
         self.animator = animator
+        if commitDelta != 0, months.indices.contains(1) {
+            onCommit?(MonthCursor.month(byAdding: commitDelta, to: months[1]))
+        }
+        animator.startAnimation()
     }
 
     private func finishTransition(delta: Int) {
@@ -225,7 +228,6 @@ final class HistoryMonthPagerViewController: UIViewController {
         }
         resetStrip()
         layoutStrip(preservingOffset: false)
-        onCommit?(months[1])
 
         let expected = months[1]
         let work = DispatchWorkItem { [weak self] in

@@ -6,13 +6,11 @@
 import SwiftUI
 import UIKit
 
-/// Owns month snapshots and chrome. The strip itself lives in UIKit so a swipe
-/// does not rebuild History's title, legend, or adherence card.
+/// Owns month snapshots, chrome, and the month card. The strip itself lives
+/// in UIKit so a drag does not rebuild History's title, legend, or card.
 struct HistoryMonthSlideHost: View {
     @Environment(PillStore.self) private var store
     @Environment(\.locale) private var locale
-    @Binding var infoMonth: Date
-    @Binding var suppressAdherenceValueAnimation: Bool
     var onEditableDayActivate: (HistoryEditableDay) -> Void
 
     @State private var displayedMonth: Date = MonthCursor.monthStart(for: Date())
@@ -27,14 +25,19 @@ struct HistoryMonthSlideHost: View {
     }
 
     var body: some View {
-        VStack(spacing: 0) {
-            monthChrome
-            monthPages
+        VStack(spacing: 16) {
+            VStack(spacing: 0) {
+                monthChrome
+                monthPages
+            }
+            AdherenceCard(
+                displayedMonth: displayedMonth,
+                animatesValueChanges: true
+            )
         }
         .onAppear {
             let currentMonth = MonthCursor.monthStart(for: store.today)
             displayedMonth = currentMonth
-            infoMonth = currentMonth
             warmVisibleMonths()
         }
         .onChange(of: store.protocolChangeVersion) { _, _ in
@@ -143,12 +146,6 @@ struct HistoryMonthSlideHost: View {
         }
         #endif
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
-            var commit = Transaction()
-            commit.disablesAnimations = true
-            withTransaction(commit) {
-                infoMonth = nextMonth
-                suppressAdherenceValueAnimation = false
-            }
             warmVisibleMonths()
         }
     }
@@ -179,9 +176,6 @@ struct HistoryMonthSlideHost: View {
 
     private func resetToCurrentMonthForProtocolChange() {
         let currentMonth = MonthCursor.monthStart(for: store.today)
-        withAnimation(infoTransition) {
-            infoMonth = currentMonth
-        }
         monthSnapshotCache.removeAll(keepingCapacity: true)
         displayedMonth = currentMonth
         warmMonthSnapshotCache(for: currentMonth)

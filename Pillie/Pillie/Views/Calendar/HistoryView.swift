@@ -10,10 +10,8 @@ struct HistoryView: View {
     @Environment(PillStore.self) private var store
     @Environment(\.locale) private var locale
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
-    @State private var infoMonth: Date = MonthCursor.monthStart(for: Date())
     @State private var appeared = false
     @State private var hasAnimatedIn = false
-    @State private var suppressAdherenceValueAnimation = false
     @State private var correctionTarget: HistoryEditableDay?
     @AppStorage(HistoryDiscoveryAnnouncement.storageKey) private var discoveryDismissed = false
 
@@ -66,17 +64,9 @@ struct HistoryView: View {
                 .modifier(FadeInUp(appeared: appeared, delay: 0.1))
 
                 HistoryMonthSlideHost(
-                    infoMonth: $infoMonth,
-                    suppressAdherenceValueAnimation: $suppressAdherenceValueAnimation,
                     onEditableDayActivate: { correctionTarget = $0 }
                 )
                 .modifier(FadeInUp(appeared: appeared, delay: 0.2))
-
-                AdherenceCard(
-                    displayedMonth: infoMonth,
-                    animatesValueChanges: !suppressAdherenceValueAnimation
-                )
-                .modifier(FadeInUp(appeared: appeared, delay: 0.3))
             }
             .padding(.horizontal, PillieTheme.screenHorizontalPadding)
             .padding(.top, PillieTheme.scrollTopPadding)
@@ -86,7 +76,6 @@ struct HistoryView: View {
         .onAppear {
             guard !hasAnimatedIn else { return }
             hasAnimatedIn = true
-            infoMonth = MonthCursor.monthStart(for: store.today)
             withAnimation(PillieTheme.fadeInUpCurve) {
                 appeared = true
             }
