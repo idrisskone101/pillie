@@ -14,6 +14,7 @@ struct HistoryMonthSlideHost: View {
     var onEditableDayActivate: (HistoryEditableDay) -> Void
 
     @State private var displayedMonth: Date = MonthCursor.monthStart(for: Date())
+    @State private var committedAdherence = MonthAdherence(completed: 0, due: 0, percentage: 0)
     @State private var pageCache = HistoryMonthPageCache()
     @State private var calendarContainerHeight: CGFloat?
     @State private var pagerControl = HistoryMonthPagerControl()
@@ -36,6 +37,7 @@ struct HistoryMonthSlideHost: View {
             let currentMonth = MonthCursor.monthStart(for: store.today)
             displayedMonth = currentMonth
             warmVisibleMonths()
+            publishCommittedAdherence(for: currentMonth)
         }
         .onChange(of: store.protocolChangeVersion) { _, _ in
             resetToCurrentMonthForProtocolChange()
@@ -87,15 +89,15 @@ struct HistoryMonthSlideHost: View {
     }
 
     private var monthCard: some View {
-        let stats = pageCache.adherence(for: displayedMonth, store: store)
-        return AdherenceCard(
+        AdherenceCard(
             displayedMonth: displayedMonth,
-            completed: stats.completed,
-            due: stats.due,
-            percentage: stats.percentage
+            completed: committedAdherence.completed,
+            due: committedAdherence.due,
+            percentage: committedAdherence.percentage
         )
         .equatable()
         .animation(infoTransition, value: displayedMonth)
+        .animation(infoTransition, value: committedAdherence)
     }
 
     private var monthPages: some View {
@@ -144,6 +146,7 @@ struct HistoryMonthSlideHost: View {
 
     private func commitMonth(_ nextMonth: Date) {
         displayedMonth = nextMonth
+        publishCommittedAdherence(for: nextMonth)
         #if DEBUG || PILLIE_FRAME_PROBE
         if let height = calendarContainerHeight {
             TabSwitchFrameProbe.shared.recordLayout(
@@ -156,6 +159,10 @@ struct HistoryMonthSlideHost: View {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
             warmVisibleMonths()
         }
+    }
+
+    private func publishCommittedAdherence(for month: Date) {
+        committedAdherence = pageCache.adherence(for: month, store: store)
     }
 
     private func freezeCalendarHeight(_ height: CGFloat) {
@@ -174,6 +181,7 @@ struct HistoryMonthSlideHost: View {
     private func refreshCachedMonthSnapshots() {
         pageCache.reset()
         warmVisibleMonths()
+        publishCommittedAdherence(for: displayedMonth)
     }
 
     private func warmVisibleMonths() {
@@ -188,6 +196,7 @@ struct HistoryMonthSlideHost: View {
         pageCache.reset()
         displayedMonth = currentMonth
         pageCache.warm(currentMonth, store: store)
+        publishCommittedAdherence(for: currentMonth)
         calendarContainerHeight = nil
     }
 }
