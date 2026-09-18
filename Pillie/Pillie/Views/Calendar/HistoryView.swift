@@ -21,7 +21,6 @@ struct HistoryView: View {
     // Unified transition state
     @State private var dragOffset: CGFloat = 0
     @State private var isDragging = false
-    @State private var adjacentMonth: Date?
     @State private var transitionDirection: CGFloat = 0
     @State private var isAnimatingTransition = false
     @State private var suppressAdherenceValueAnimation = false
@@ -125,17 +124,12 @@ struct HistoryView: View {
 
                 // Calendar grid
                 ZStack(alignment: .top) {
-                    if let adjacentMonth {
-                        monthGrid(for: adjacentMonth)
-                            .offset(x: transitionDirection * slideDistance + dragOffset)
-                            .transition(.identity)
-                            .zIndex(0)
+                    ForEach(visibleMonthPages) { page in
+                        monthGrid(for: page.month)
+                            .offset(x: page.shift * slideDistance + dragOffset)
+                            .allowsHitTesting(page.shift == 0)
+                            .zIndex(page.shift == 0 ? 1 : 0)
                     }
-
-                    monthGrid(for: displayedMonth)
-                        .offset(x: dragOffset)
-                        .transition(.identity)
-                        .zIndex(1)
                 }
                 .contentShape(Rectangle())
                 .overlay {
@@ -232,6 +226,15 @@ struct HistoryView: View {
         max(calendarWidth, 320)
     }
 
+    private var visibleMonthPages: [HistoryMonthPage] {
+        (-1...1).map { shift in
+            HistoryMonthPage(
+                month: MonthCursor.month(byAdding: shift, to: displayedMonth),
+                shift: CGFloat(shift)
+            )
+        }
+    }
+
     private func snapshots(for month: Date) -> [Int: PillScheduleSnapshot] {
         let key = MonthCursor.identity(for: month)
         return monthSnapshotCache[key] ?? store.monthSnapshots(for: month)
@@ -245,11 +248,14 @@ struct HistoryView: View {
         CalendarGrid(
             displayedMonth: month,
             monthSnapshots: snapshots(for: month),
+            recordsRevision: store.dayRecordsRevision,
+            protocolChangeVersion: store.protocolChangeVersion,
             onEditableDayActivate: { day in
                 guard !isDragging, !isAnimatingTransition else { return }
                 correctionTarget = day
             }
         )
+            .equatable()
             .background {
                 GeometryReader { proxy in
                     Color.clear.preference(
@@ -276,17 +282,14 @@ struct HistoryView: View {
     private func refreshCachedMonthSnapshots() {
         monthSnapshotCache.removeAll(keepingCapacity: true)
         warmVisibleMonths()
-        if let adjacentMonth {
-            warmMonthSnapshotCache(for: adjacentMonth)
-        }
     }
 
     /// Warms the displayed month plus its neighbours so a drag in either
     /// direction never renders from an empty cache.
     private func warmVisibleMonths() {
-        warmMonthSnapshotCache(for: displayedMonth)
-        warmMonthSnapshotCache(for: MonthCursor.month(byAdding: -1, to: displayedMonth))
-        warmMonthSnapshotCache(for: MonthCursor.month(byAdding: 1, to: displayedMonth))
+        for offset in -2...2 {
+            warmMonthSnapshotCache(for: MonthCursor.month(byAdding: offset, to: displayedMonth))
+        }
     }
 
     // MARK: - Drag Gesture
@@ -296,14 +299,10 @@ struct HistoryView: View {
 
         isDragging = true
         dragOffset = translation
-
-        let direction: CGFloat = translation < 0 ? 1 : -1
-        if adjacentMonth == nil || transitionDirection != direction {
-            transitionDirection = direction
-            let month = MonthCursor.month(byAdding: Int(direction), to: displayedMonth)
-            adjacentMonth = month
-            warmMonthSnapshotCache(for: month)
-        }
+        transitionDirection = translation < 0 ? 1 : -1
+        warmMonthSnapshotCache(
+            for: MonthCursor.month(byAdding: Int(transitionDirection), to: displayedMonth)
+        )
     }
 
     private func endMonthDrag(translation: CGFloat, velocity: CGFloat) {
@@ -336,45 +335,36 @@ struct HistoryView: View {
     private func navigateMonth(by value: Int) {
         guard !isAnimatingTransition, !isDragging else { return }
         isAnimatingTransition = true
-
-        let dir: CGFloat = value >= 0 ? 1 : -1
-        transitionDirection = dir
-        let month = MonthCursor.month(byAdding: value, to: displayedMonth)
-        adjacentMonth = month
-        warmMonthSnapshotCache(for: month)
-        dragOffset = 0
-
+        transitionDirection = value >= 0 ? 1 : -1
+        warmMonthSnapshotCache(
+            for: MonthCursor.month(byAdding: value, to: displayedMonth)
+        )
         completeMonthTransition()
     }
 
     // MARK: - Transition Completion / Cancellation
 
     private func completeMonthTransition() {
-        guard let nextMonth = adjacentMonth else {
-            resetDragState()
-            return
-        }
+        let nextMonth = MonthCursor.month(byAdding: Int(transitionDirection), to: displayedMonth)
         isAnimatingTransition = true
-        withAnimation(infoTransition) {
-            infoMonth = nextMonth
-        }
-
-        let nextMonthID = MonthCursor.identity(for: nextMonth)
         let targetOffset = -transitionDirection * slideDistance
-        let nextMonthHeight = measuredMonthHeights[nextMonthID]
-        suppressAdherenceValueAnimation = shouldSuppressAdherenceValueAnimation(nextMonthID: nextMonthID)
+        suppressAdherenceValueAnimation = true
 
         withAnimation(transitionAnimation, completionCriteria: .logicallyComplete) {
             dragOffset = targetOffset
         } completion: {
-            displayedMonth = nextMonth
-            warmMonthSnapshotCache(for: nextMonth)
-            resetDragState()
-            if let nextMonthHeight {
-                withAnimation(transitionAnimation) {
-                    calendarContainerHeight = nextMonthHeight
-                }
+            var commit = Transaction()
+            commit.disablesAnimations = true
+            withTransaction(commit) {
+                displayedMonth = nextMonth
+                infoMonth = nextMonth
+                dragOffset = 0
+                isDragging = false
+                transitionDirection = 0
+                isAnimatingTransition = false
+                suppressAdherenceValueAnimation = false
             }
+            warmVisibleMonths()
         }
     }
 
@@ -389,7 +379,6 @@ struct HistoryView: View {
     private func resetDragState() {
         dragOffset = 0
         isDragging = false
-        adjacentMonth = nil
         transitionDirection = 0
         isAnimatingTransition = false
         suppressAdherenceValueAnimation = false
@@ -415,23 +404,9 @@ struct HistoryView: View {
         )
         #endif
 
-        // Skip height updates during active transitions to prevent fighting
+        guard calendarContainerHeight == nil else { return }
         guard !isAnimatingTransition, !isDragging else { return }
-        if let currentHeight = calendarContainerHeight, abs(currentHeight - targetHeight) < 0.5 {
-            return
-        }
-
-        withAnimation(transitionAnimation) {
-            calendarContainerHeight = targetHeight
-        }
-    }
-
-    private func shouldSuppressAdherenceValueAnimation(nextMonthID: String) -> Bool {
-        let currentHeight = measuredMonthHeights[monthIdentity] ?? calendarContainerHeight
-        let nextHeight = measuredMonthHeights[nextMonthID]
-
-        guard let currentHeight, let nextHeight else { return false }
-        return abs(currentHeight - nextHeight) > 0.5
+        calendarContainerHeight = targetHeight
     }
 
     private func resetToCurrentMonthForProtocolChange() {
@@ -460,12 +435,9 @@ struct HistoryView: View {
         monthSnapshotCache[key] = store.monthSnapshots(for: month)
 
         // Keep cache bounded to nearby months.
-        let keep = Set([
-            MonthCursor.identity(for: displayedMonth),
-            MonthCursor.identity(for: MonthCursor.month(byAdding: -1, to: displayedMonth)),
-            MonthCursor.identity(for: MonthCursor.month(byAdding: 1, to: displayedMonth)),
-            key
-        ])
+        let keep = Set((-2...2).map { offset in
+            MonthCursor.identity(for: MonthCursor.month(byAdding: offset, to: displayedMonth))
+        } + [key])
         monthSnapshotCache = monthSnapshotCache.filter { keep.contains($0.key) }
     }
 
@@ -499,6 +471,13 @@ struct HistoryView: View {
                 .fixedSize(horizontal: false, vertical: true)
         }
     }
+}
+
+private struct HistoryMonthPage: Identifiable {
+    let month: Date
+    let shift: CGFloat
+
+    var id: String { MonthCursor.identity(for: month) }
 }
 
 /// A horizontal-only month pan that explicitly wins over the surrounding
