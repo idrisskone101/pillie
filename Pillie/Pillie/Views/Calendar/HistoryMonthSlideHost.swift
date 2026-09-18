@@ -6,8 +6,8 @@
 import SwiftUI
 import UIKit
 
-/// Owns month-swipe state so History's title, legend, and adherence card do
-/// not rebuild on every `dragOffset` frame.
+/// Owns month snapshots and chrome. The strip itself lives in UIKit so a swipe
+/// does not rebuild History's title, legend, or adherence card.
 struct HistoryMonthSlideHost: View {
     @Environment(PillStore.self) private var store
     @Environment(\.locale) private var locale
@@ -16,22 +16,11 @@ struct HistoryMonthSlideHost: View {
     var onEditableDayActivate: (HistoryEditableDay) -> Void
 
     @State private var displayedMonth: Date = MonthCursor.monthStart(for: Date())
-    @State private var dragOffset: CGFloat = 0
-    @State private var isDragging = false
-    @State private var transitionDirection: CGFloat = 0
-    @State private var isAnimatingTransition = false
-    @State private var calendarWidth: CGFloat = 0
     @State private var monthSnapshotCache: [String: [Int: PillScheduleSnapshot]] = [:]
-    @State private var measuredMonthHeights: [String: CGFloat] = [:]
     @State private var calendarContainerHeight: CGFloat?
+    @State private var pagerControl = HistoryMonthPagerControl()
 
     private let performanceTier = PerformanceTier.current
-
-    private var transitionAnimation: Animation {
-        performanceTier == .constrained
-            ? .easeInOut(duration: 0.2)
-            : .spring(response: 0.4, dampingFraction: 0.86)
-    }
 
     private var infoTransition: Animation {
         .easeInOut(duration: performanceTier == .constrained ? 0.14 : 0.2)
@@ -57,7 +46,7 @@ struct HistoryMonthSlideHost: View {
         #if DEBUG || PILLIE_FRAME_PROBE
         .onReceive(NotificationCenter.default.publisher(for: .pillieMeasureNavigateMonth)) { note in
             guard let delta = note.userInfo?["delta"] as? Int else { return }
-            navigateMonth(by: delta)
+            pagerControl.navigate(by: delta)
         }
         #endif
     }
@@ -68,32 +57,14 @@ struct HistoryMonthSlideHost: View {
         )
     }
 
-    private var monthIdentity: String {
-        MonthCursor.identity(for: displayedMonth)
-    }
-
-    private var slideDistance: CGFloat {
-        max(calendarWidth, 320)
-    }
-
-    private var visibleMonthPages: [HistoryMonthPage] {
-        (-1...1).map { shift in
-            HistoryMonthPage(
-                month: MonthCursor.month(byAdding: shift, to: displayedMonth),
-                shift: CGFloat(shift)
-            )
-        }
-    }
-
     private var monthChrome: some View {
         HStack {
             Button {
-                navigateMonth(by: -1)
+                pagerControl.navigate(by: -1)
             } label: {
                 Image(systemName: "chevron.left")
                     .foregroundStyle(PillieTheme.textMuted)
             }
-            .disabled(isAnimatingTransition)
 
             Spacer()
 
@@ -106,52 +77,53 @@ struct HistoryMonthSlideHost: View {
             Spacer()
 
             Button {
-                navigateMonth(by: 1)
+                pagerControl.navigate(by: 1)
             } label: {
                 Image(systemName: "chevron.right")
                     .foregroundStyle(PillieTheme.textMuted)
             }
-            .disabled(isAnimatingTransition)
         }
         .padding(.vertical, 8)
     }
 
     private var monthPages: some View {
-        ZStack(alignment: .top) {
-            ForEach(visibleMonthPages) { page in
-                monthGrid(for: page.month)
-                    .offset(x: page.shift * slideDistance + dragOffset)
-                    .allowsHitTesting(page.shift == 0)
-                    .zIndex(page.shift == 0 ? 1 : 0)
-            }
-        }
+        HistoryMonthPager(
+            displayedMonth: displayedMonth,
+            recordsRevision: store.dayRecordsRevision,
+            protocolChangeVersion: store.protocolChangeVersion,
+            makePage: pageView(for:),
+            control: pagerControl,
+            onCommit: commitMonth,
+            onMeasuredHeight: freezeCalendarHeight,
+            constrainedMotion: performanceTier == .constrained
+        )
+        .frame(height: calendarContainerHeight ?? 360, alignment: .top)
+        .clipped()
         .contentShape(Rectangle())
         .overlay {
             HorizontalMonthDragSurface(
-                onChanged: updateMonthDrag,
-                onEnded: endMonthDrag,
-                onCancelled: cancelMonthDrag
+                onChanged: { pagerControl.updateDrag($0) },
+                onEnded: { pagerControl.endDrag(translation: $0, velocity: $1) },
+                onCancelled: { pagerControl.cancelDrag() }
             )
             .allowsHitTesting(false)
             .accessibilityHidden(true)
         }
-        .background {
-            GeometryReader { proxy in
-                Color.clear.preference(
-                    key: CalendarMonthWidthPreferenceKey.self,
-                    value: proxy.size.width
-                )
-            }
-        }
-        .frame(height: calendarContainerHeight, alignment: .top)
-        .clipped()
-        .onPreferenceChange(CalendarMonthHeightPreferenceKey.self) { heights in
-            updateCalendarHeight(with: heights)
-        }
-        .onPreferenceChange(CalendarMonthWidthPreferenceKey.self) { width in
-            guard width > 0 else { return }
-            calendarWidth = width
-        }
+    }
+
+    private func pageView(for month: Date) -> AnyView {
+        AnyView(
+            CalendarGrid(
+                displayedMonth: month,
+                monthSnapshots: snapshots(for: month),
+                recordsRevision: store.dayRecordsRevision,
+                protocolChangeVersion: store.protocolChangeVersion,
+                onEditableDayActivate: onEditableDayActivate
+            )
+            .equatable()
+            .environment(store)
+            .environment(\.locale, locale)
+        )
     }
 
     private func snapshots(for month: Date) -> [Int: PillScheduleSnapshot] {
@@ -159,31 +131,37 @@ struct HistoryMonthSlideHost: View {
         return monthSnapshotCache[key] ?? store.monthSnapshots(for: month)
     }
 
-    @ViewBuilder
-    private func monthGrid(for month: Date) -> some View {
-        let monthID = MonthCursor.identity(for: month)
-        CalendarGrid(
-            displayedMonth: month,
-            monthSnapshots: snapshots(for: month),
-            recordsRevision: store.dayRecordsRevision,
-            protocolChangeVersion: store.protocolChangeVersion,
-            onEditableDayActivate: { day in
-                guard !isDragging, !isAnimatingTransition else { return }
-                onEditableDayActivate(day)
-            }
+    private func commitMonth(_ nextMonth: Date) {
+        var commit = Transaction()
+        commit.disablesAnimations = true
+        withTransaction(commit) {
+            displayedMonth = nextMonth
+            infoMonth = nextMonth
+            suppressAdherenceValueAnimation = false
+        }
+        warmVisibleMonths()
+        #if DEBUG || PILLIE_FRAME_PROBE
+        if let height = calendarContainerHeight {
+            TabSwitchFrameProbe.shared.recordLayout(
+                name: "calendar",
+                key: MonthCursor.identity(for: nextMonth),
+                value: height
+            )
+        }
+        #endif
+    }
+
+    private func freezeCalendarHeight(_ height: CGFloat) {
+        guard height > 0 else { return }
+        #if DEBUG || PILLIE_FRAME_PROBE
+        TabSwitchFrameProbe.shared.recordLayout(
+            name: "calendar",
+            key: MonthCursor.identity(for: displayedMonth),
+            value: height
         )
-        .equatable()
-        .background {
-            GeometryReader { proxy in
-                Color.clear.preference(
-                    key: CalendarMonthHeightPreferenceKey.self,
-                    value: [monthID: proxy.size.height]
-                )
-            }
-        }
-        .onAppear {
-            warmMonthSnapshotCache(for: month)
-        }
+        #endif
+        guard calendarContainerHeight == nil else { return }
+        calendarContainerHeight = height
     }
 
     private func refreshCachedMonthSnapshots() {
@@ -197,132 +175,15 @@ struct HistoryMonthSlideHost: View {
         }
     }
 
-    private func updateMonthDrag(_ translation: CGFloat) {
-        guard !isAnimatingTransition else { return }
-
-        isDragging = true
-        dragOffset = translation
-        transitionDirection = translation < 0 ? 1 : -1
-        warmMonthSnapshotCache(
-            for: MonthCursor.month(byAdding: Int(transitionDirection), to: displayedMonth)
-        )
-    }
-
-    private func endMonthDrag(translation: CGFloat, velocity: CGFloat) {
-        guard isDragging else {
-            resetDragState()
-            return
-        }
-
-        let threshold = slideDistance * 0.25
-        let matchingVelocity = (translation < 0 && velocity < -200)
-            || (translation > 0 && velocity > 200)
-
-        if abs(translation) > threshold || matchingVelocity {
-            completeMonthTransition()
-        } else {
-            cancelMonthTransition()
-        }
-    }
-
-    private func cancelMonthDrag() {
-        guard isDragging else {
-            resetDragState()
-            return
-        }
-        cancelMonthTransition()
-    }
-
-    private func navigateMonth(by value: Int) {
-        guard !isAnimatingTransition, !isDragging else { return }
-        isAnimatingTransition = true
-        transitionDirection = value >= 0 ? 1 : -1
-        warmMonthSnapshotCache(
-            for: MonthCursor.month(byAdding: value, to: displayedMonth)
-        )
-        completeMonthTransition()
-    }
-
-    private func completeMonthTransition() {
-        let nextMonth = MonthCursor.month(byAdding: Int(transitionDirection), to: displayedMonth)
-        isAnimatingTransition = true
-        let targetOffset = -transitionDirection * slideDistance
-        suppressAdherenceValueAnimation = true
-
-        withAnimation(transitionAnimation, completionCriteria: .logicallyComplete) {
-            dragOffset = targetOffset
-        } completion: {
-            var commit = Transaction()
-            commit.disablesAnimations = true
-            withTransaction(commit) {
-                displayedMonth = nextMonth
-                infoMonth = nextMonth
-                dragOffset = 0
-                isDragging = false
-                transitionDirection = 0
-                isAnimatingTransition = false
-                suppressAdherenceValueAnimation = false
-            }
-            warmVisibleMonths()
-        }
-    }
-
-    private func cancelMonthTransition() {
-        withAnimation(transitionAnimation, completionCriteria: .logicallyComplete) {
-            dragOffset = 0
-        } completion: {
-            resetDragState()
-        }
-    }
-
-    private func resetDragState() {
-        dragOffset = 0
-        isDragging = false
-        transitionDirection = 0
-        isAnimatingTransition = false
-        suppressAdherenceValueAnimation = false
-    }
-
-    private func updateCalendarHeight(with heights: [String: CGFloat]) {
-        guard !heights.isEmpty else { return }
-
-        var merged = measuredMonthHeights
-        for (monthID, height) in heights where height > 0 {
-            merged[monthID] = height
-        }
-        measuredMonthHeights = merged
-
-        guard let targetHeight = merged[monthIdentity] else { return }
-        #if DEBUG || PILLIE_FRAME_PROBE
-        TabSwitchFrameProbe.shared.recordLayout(
-            name: "calendar",
-            key: monthIdentity,
-            value: targetHeight
-        )
-        #endif
-
-        guard calendarContainerHeight == nil else { return }
-        guard !isAnimatingTransition, !isDragging else { return }
-        calendarContainerHeight = targetHeight
-    }
-
     private func resetToCurrentMonthForProtocolChange() {
         let currentMonth = MonthCursor.monthStart(for: store.today)
         withAnimation(infoTransition) {
             infoMonth = currentMonth
         }
-
         monthSnapshotCache.removeAll(keepingCapacity: true)
-        warmMonthSnapshotCache(for: currentMonth)
         displayedMonth = currentMonth
-        resetDragState()
-
-        let currentMonthID = MonthCursor.identity(for: currentMonth)
-        if let knownHeight = measuredMonthHeights[currentMonthID] {
-            calendarContainerHeight = knownHeight
-        } else {
-            calendarContainerHeight = nil
-        }
+        warmMonthSnapshotCache(for: currentMonth)
+        calendarContainerHeight = nil
     }
 
     private func warmMonthSnapshotCache(for month: Date) {
@@ -336,13 +197,6 @@ struct HistoryMonthSlideHost: View {
         } + [key])
         monthSnapshotCache = monthSnapshotCache.filter { keep.contains($0.key) }
     }
-}
-
-private struct HistoryMonthPage: Identifiable {
-    let month: Date
-    let shift: CGFloat
-
-    var id: String { MonthCursor.identity(for: month) }
 }
 
 /// A horizontal-only month pan that explicitly wins over the surrounding
@@ -395,10 +249,6 @@ private struct HorizontalMonthDragSurface: UIViewRepresentable {
         var onChanged: (CGFloat) -> Void
         var onEnded: (_ translation: CGFloat, _ velocity: CGFloat) -> Void
         var onCancelled: () -> Void
-        /// The coordinator owns the recognizer: it must outlive the moment it is
-        /// added to the scroll view, which only happens once the surface is in
-        /// a window. `UIGestureRecognizer` retains its targets, so this is a
-        /// cycle until `tearDown()` removes the target.
         let panGesture = UIPanGestureRecognizer()
         weak var surfaceView: UIView?
         private weak var configuredScrollView: UIScrollView?
@@ -488,21 +338,5 @@ private final class MonthDragSurfaceView: UIView {
     override func didMoveToWindow() {
         super.didMoveToWindow()
         didMoveToWindowHandler?()
-    }
-}
-
-private struct CalendarMonthHeightPreferenceKey: PreferenceKey {
-    static var defaultValue: [String: CGFloat] = [:]
-
-    static func reduce(value: inout [String: CGFloat], nextValue: () -> [String: CGFloat]) {
-        value.merge(nextValue(), uniquingKeysWith: { _, latest in latest })
-    }
-}
-
-private struct CalendarMonthWidthPreferenceKey: PreferenceKey {
-    static var defaultValue: CGFloat = 0
-
-    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
-        value = max(value, nextValue())
     }
 }
