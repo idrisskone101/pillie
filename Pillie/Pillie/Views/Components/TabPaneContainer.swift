@@ -69,6 +69,7 @@ final class TabPaneContainerViewController: UIViewController {
             child.view.isHidden = true
             view.addSubview(child.view)
             child.didMove(toParent: self)
+            child.view.layoutIfNeeded()
         }
 
         // A plain pan with an edge-zone check rather than UIScreenEdgePanGestureRecognizer,
