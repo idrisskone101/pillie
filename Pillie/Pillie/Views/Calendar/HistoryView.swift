@@ -200,6 +200,12 @@ struct HistoryView: View {
                 applyCorrection(outcome, to: target)
             }
         }
+        #if DEBUG || PILLIE_FRAME_PROBE
+        .onReceive(NotificationCenter.default.publisher(for: .pillieMeasureNavigateMonth)) { note in
+            guard let delta = note.userInfo?["delta"] as? Int else { return }
+            navigateMonth(by: delta)
+        }
+        #endif
     }
 
     // MARK: - Computed Properties
@@ -400,10 +406,17 @@ struct HistoryView: View {
         }
         measuredMonthHeights = merged
 
+        guard let targetHeight = merged[monthIdentity] else { return }
+        #if DEBUG || PILLIE_FRAME_PROBE
+        TabSwitchFrameProbe.shared.recordLayout(
+            name: "calendar",
+            key: monthIdentity,
+            value: targetHeight
+        )
+        #endif
+
         // Skip height updates during active transitions to prevent fighting
         guard !isAnimatingTransition, !isDragging else { return }
-
-        guard let targetHeight = merged[monthIdentity] else { return }
         if let currentHeight = calendarContainerHeight, abs(currentHeight - targetHeight) < 0.5 {
             return
         }

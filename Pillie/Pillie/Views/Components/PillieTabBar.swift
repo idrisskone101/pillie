@@ -255,8 +255,26 @@ struct MainTabView: View {
         .ignoresSafeArea(.container, edges: .bottom)
         #if DEBUG || PILLIE_FRAME_PROBE
         .task {
-            guard TabSwitchFrameProbe.isLoopRequested else { return }
-            await TabSwitchFrameProbe.shared.runLoop { switchTab(to: $0) }
+            if TabSwitchFrameProbe.isLoopRequested {
+                await TabSwitchFrameProbe.shared.runLoop { switchTab(to: $0) }
+                return
+            }
+            if TabSwitchFrameProbe.isCalendarLoopRequested {
+                try? await Task.sleep(for: .seconds(2))
+                switchTab(to: .history)
+                try? await Task.sleep(for: .seconds(1))
+                await TabSwitchFrameProbe.shared.runCalendarLoop { delta in
+                    NotificationCenter.default.post(
+                        name: .pillieMeasureNavigateMonth,
+                        object: nil,
+                        userInfo: ["delta": delta]
+                    )
+                }
+                return
+            }
+            if TabSwitchFrameProbe.isIdleProbeRequested {
+                await TabSwitchFrameProbe.shared.runIdleWindow()
+            }
         }
         #endif
     }
