@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-"""Unit tests for parse_frame_metrics.py. No simulator."""
 
 from __future__ import annotations
 

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-"""Parse PILLIE_FRAMES / PILLIE_LAYOUT / PILLIE_FRAMES_JSON log lines."""
 
 from __future__ import annotations
 

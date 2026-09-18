@@ -12,22 +12,6 @@ extension Notification.Name {
     static let pillieMeasureNavigateMonth = Notification.Name("pillieMeasureNavigateMonth")
 }
 
-/// Measures the main-thread frame cadence of tab transitions, calendar month
-/// swipes, and idle windows. Launch arguments drive scripted loops so the
-/// numbers are reproducible on a simulator or a device without touch automation:
-///
-///   `-PillieTabSwitchLoop 1`
-///   `-PillieCalendarSwipeLoop 1`
-///   `-PillieIdleFrameProbe 1`
-///
-/// Compiled only for DEBUG or the explicit `PILLIE_FRAME_PROBE` condition, so
-/// Release builds carry none of it.
-///
-/// Read the results from the process console or the `frames` OSLog category:
-///   `PILLIE_FRAMES <label> frames=<n> dropped=<n> worst=<ms>ms`
-///   `PILLIE_LAYOUT calendar key=<month> value=<pt>`
-///   `PILLIE_FRAMES SUMMARY transitions=<n> clean=<n> dropped=<n> worst=<ms>ms`
-///   `PILLIE_FRAMES_JSON {...}`
 @MainActor
 final class TabSwitchFrameProbe: NSObject {
     static let shared = TabSwitchFrameProbe()
@@ -61,9 +45,8 @@ final class TabSwitchFrameProbe: NSObject {
     private var label = ""
     private var results: [Result] = []
     private var layoutSamples: [String: [Double]] = [:]
+    private static let settleTail: TimeInterval = 0.1
 
-    /// Opens a measurement window covering the transition plus a short tail so
-    /// the settle frames are counted too.
     func beginTransition(label: String, duration: TimeInterval) {
         if windowEnd > 0 {
             finishWindow()
@@ -81,7 +64,7 @@ final class TabSwitchFrameProbe: NSObject {
         dropped = 0
         worstGapMs = 0
         lastTimestamp = 0
-        windowEnd = CACurrentMediaTime() + duration + 0.1
+        windowEnd = CACurrentMediaTime() + duration + Self.settleTail
     }
 
     func recordLayout(name: String, key: String, value: Double) {
@@ -153,10 +136,6 @@ final class TabSwitchFrameProbe: NSObject {
         logger.notice("\(line, privacy: .public)")
     }
 
-    // MARK: - Scripted loops
-
-    /// Home → History → Settings → History → Home → Settings → Home, repeated,
-    /// so every adjacent and skip-a-tab direction is exercised.
     private static let loopSequence: [PillieTab] = [
         .history, .settings, .history, .home, .settings, .home,
     ]
@@ -164,7 +143,6 @@ final class TabSwitchFrameProbe: NSObject {
     func runLoop(rounds: Int = 3, switchTo: @escaping (PillieTab) -> Void) async {
         results.removeAll()
         layoutSamples.removeAll()
-        // Let the launch splash clear and the first frame settle.
         try? await Task.sleep(for: .seconds(3))
         for _ in 0..<rounds {
             for tab in Self.loopSequence {
@@ -179,8 +157,6 @@ final class TabSwitchFrameProbe: NSObject {
         emitSummary()
     }
 
-    /// Forward and back month changes, repeated, after the caller has already
-    /// switched to History so the grid is on screen.
     func runCalendarLoop(rounds: Int = 3, swipe: @escaping (Int) -> Void) async {
         results.removeAll()
         layoutSamples.removeAll()
