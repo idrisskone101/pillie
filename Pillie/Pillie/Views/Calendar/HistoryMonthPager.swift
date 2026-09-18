@@ -84,6 +84,8 @@ final class HistoryMonthPagerViewController: UIViewController {
     private var animator: UIViewPropertyAnimator?
     private var isDragging = false
     private var didReportHeight = false
+    private var pendingIncoming: (index: Int, month: Date)?
+    private var incomingFillWork: DispatchWorkItem?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -204,19 +206,42 @@ final class HistoryMonthPagerViewController: UIViewController {
 
     private func finishTransition(delta: Int) {
         isDragging = false
-        guard delta != 0, months.indices.contains(1) else {
+        guard delta != 0, months.count == 3, hosts.count == 3 else {
             resetStrip()
             return
         }
-        let next = MonthCursor.month(byAdding: delta, to: months[1])
-        months = [
-            MonthCursor.month(byAdding: -1, to: next),
-            next,
-            MonthCursor.month(byAdding: 1, to: next),
-        ]
-        refreshHosts()
+
+        incomingFillWork?.cancel()
+        if delta > 0 {
+            let incoming = MonthCursor.month(byAdding: 2, to: months[1])
+            months = [months[1], months[2], incoming]
+            hosts = [hosts[1], hosts[2], hosts[0]]
+            pendingIncoming = (2, incoming)
+        } else {
+            let incoming = MonthCursor.month(byAdding: -2, to: months[1])
+            months = [incoming, months[0], months[1]]
+            hosts = [hosts[2], hosts[0], hosts[1]]
+            pendingIncoming = (0, incoming)
+        }
         resetStrip()
-        onCommit?(next)
+        layoutStrip(preservingOffset: false)
+        onCommit?(months[1])
+
+        let expected = months[1]
+        let work = DispatchWorkItem { [weak self] in
+            self?.fillPendingIncoming(expectedCurrent: expected)
+        }
+        incomingFillWork = work
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.35, execute: work)
+    }
+
+    private func fillPendingIncoming(expectedCurrent: Date) {
+        guard months.indices.contains(1), months[1] == expectedCurrent,
+              let pending = pendingIncoming, hosts.indices.contains(pending.index) else {
+            return
+        }
+        pendingIncoming = nil
+        hosts[pending.index].rootView = makePage(pending.month)
     }
 
     private func refreshHosts() {

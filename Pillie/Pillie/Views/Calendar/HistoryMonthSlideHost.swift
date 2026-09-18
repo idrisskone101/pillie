@@ -52,7 +52,7 @@ struct HistoryMonthSlideHost: View {
     }
 
     private var monthYearString: String {
-        infoMonth.formatted(
+        displayedMonth.formatted(
             Date.FormatStyle().month(.wide).year().locale(locale)
         )
     }
@@ -72,7 +72,7 @@ struct HistoryMonthSlideHost: View {
                 .font(.pillieBodyBold())
                 .foregroundStyle(PillieTheme.textPrimary)
                 .contentTransition(.opacity)
-                .animation(infoTransition, value: infoMonth)
+                .animation(infoTransition, value: displayedMonth)
 
             Spacer()
 
@@ -132,14 +132,7 @@ struct HistoryMonthSlideHost: View {
     }
 
     private func commitMonth(_ nextMonth: Date) {
-        var commit = Transaction()
-        commit.disablesAnimations = true
-        withTransaction(commit) {
-            displayedMonth = nextMonth
-            infoMonth = nextMonth
-            suppressAdherenceValueAnimation = false
-        }
-        warmVisibleMonths()
+        displayedMonth = nextMonth
         #if DEBUG || PILLIE_FRAME_PROBE
         if let height = calendarContainerHeight {
             TabSwitchFrameProbe.shared.recordLayout(
@@ -149,6 +142,15 @@ struct HistoryMonthSlideHost: View {
             )
         }
         #endif
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
+            var commit = Transaction()
+            commit.disablesAnimations = true
+            withTransaction(commit) {
+                infoMonth = nextMonth
+                suppressAdherenceValueAnimation = false
+            }
+            warmVisibleMonths()
+        }
     }
 
     private func freezeCalendarHeight(_ height: CGFloat) {
