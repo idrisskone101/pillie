@@ -90,7 +90,6 @@ final class HistoryMonthPagerViewController: UIViewController {
         view.backgroundColor = .clear
         view.clipsToBounds = true
         strip.backgroundColor = .clear
-        strip.layer.preferredFrameRateRange = PillieFrameRate.promotional
         view.addSubview(strip)
 
         hosts = (0..<3).map { _ in
@@ -98,7 +97,6 @@ final class HistoryMonthPagerViewController: UIViewController {
             host.safeAreaRegions = []
             host.view.backgroundColor = .clear
             host.view.isOpaque = false
-            host.view.layer.preferredFrameRateRange = PillieFrameRate.promotional
             addChild(host)
             strip.addSubview(host.view)
             host.didMove(toParent: self)
@@ -147,7 +145,6 @@ final class HistoryMonthPagerViewController: UIViewController {
     func updateDrag(_ translation: CGFloat) {
         guard animator == nil else { return }
         isDragging = true
-        strip.layer.preferredFrameRateRange = PillieFrameRate.promotional
         strip.transform = CGAffineTransform(translationX: translation, y: 0)
     }
 
@@ -201,8 +198,12 @@ final class HistoryMonthPagerViewController: UIViewController {
             self?.animator = nil
             self?.finishTransition(delta: commitDelta)
         }
-        strip.layer.preferredFrameRateRange = PillieFrameRate.promotional
         animator.startAnimation()
+        if let keys = strip.layer.animationKeys() {
+            for key in keys {
+                strip.layer.animation(forKey: key)?.preferredFrameRateRange = PillieFrameRate.promotional
+            }
+        }
         self.animator = animator
     }
 
