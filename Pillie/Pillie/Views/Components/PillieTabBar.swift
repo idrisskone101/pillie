@@ -32,12 +32,22 @@ enum PillieTab: Int, CaseIterable {
     }
 }
 
+@MainActor
+final class TabIndicatorControl {
+    weak var view: TabIndicatorView?
+
+    func select(index: Int, tabCount: Int, duration: TimeInterval, animated: Bool) {
+        view?.select(index: index, tabCount: tabCount, duration: duration, animated: animated)
+    }
+}
+
 struct PillieTabBar: View {
     @Binding var selectedTab: PillieTab
     /// Tabs that show an unread pip on their icon. Owned by the caller so the
     /// bar stays ignorant of which feature is being announced.
     var badgedTabs: Set<PillieTab> = []
     var transitionDuration: TimeInterval = 0.25
+    var indicator: TabIndicatorControl
     @Environment(\.locale) private var locale
 
     var body: some View {
@@ -58,9 +68,6 @@ struct PillieTabBar: View {
 
                         Color.clear
                             .frame(width: 20, height: 5)
-                            .anchorPreference(key: TabIndicatorSlotKey.self, value: .bounds) {
-                                [tab: $0]
-                            }
 
                         Text(tab.label(locale: locale))
                             .font(.pillie(10, weight: selectedTab == tab ? .bold : .medium))
@@ -73,16 +80,15 @@ struct PillieTabBar: View {
                 .buttonStyle(.plain)
             }
         }
-        .overlayPreferenceValue(TabIndicatorSlotKey.self) { anchors in
-            GeometryReader { geo in
-                TabIndicatorCapsule(
-                    selectedIndex: selectedTab.rawValue,
-                    slots: PillieTab.allCases.map { tab in
-                        anchors[tab].map { geo[$0] } ?? .zero
-                    },
-                    duration: transitionDuration
-                )
-            }
+        .overlay(alignment: .top) {
+            TabIndicatorCapsule(
+                selectedIndex: selectedTab.rawValue,
+                tabCount: PillieTab.allCases.count,
+                duration: transitionDuration,
+                control: indicator
+            )
+            .frame(height: 5)
+            .padding(.top, 26)
             .allowsHitTesting(false)
         }
         .padding(.horizontal, 24)
@@ -125,40 +131,35 @@ struct PillieTabBar: View {
     }
 }
 
-/// Each tab reports the 20×5 slot under its icon so the capsule can sit on
-/// the real layout instead of assuming equal-width thirds.
-private struct TabIndicatorSlotKey: PreferenceKey {
-    static var defaultValue: [PillieTab: Anchor<CGRect>] = [:]
-
-    static func reduce(
-        value: inout [PillieTab: Anchor<CGRect>],
-        nextValue: () -> [PillieTab: Anchor<CGRect>]
-    ) {
-        value.merge(nextValue(), uniquingKeysWith: { $1 })
-    }
-}
-
-/// Same `UIViewPropertyAnimator` duration and curve as `TabPaneContainer`, so
-/// the capsule travels with the sliding pane instead of a slower SwiftUI morph.
+/// Slots are equal-width. The pane container starts this capsule in the same
+/// turn as the slide so the pink mark does not wait on a later SwiftUI pass.
 private struct TabIndicatorCapsule: UIViewRepresentable {
     var selectedIndex: Int
-    var slots: [CGRect]
+    var tabCount: Int
     var duration: TimeInterval
+    var control: TabIndicatorControl
 
     func makeUIView(context: Context) -> TabIndicatorView {
-        TabIndicatorView()
+        let view = TabIndicatorView()
+        control.view = view
+        view.adopt(tabCount: tabCount, duration: duration)
+        view.place(at: selectedIndex, animated: false)
+        return view
     }
 
     func updateUIView(_ view: TabIndicatorView, context: Context) {
-        view.select(index: selectedIndex, slots: slots, duration: duration)
+        control.view = view
+        view.adopt(tabCount: tabCount, duration: duration)
     }
 }
 
-private final class TabIndicatorView: UIView {
+final class TabIndicatorView: UIView {
     private let capsule = UIView()
     private var selectedIndex = 0
-    private var slots: [CGRect] = []
+    private var tabCount = 1
+    private var duration: TimeInterval = 0.25
     private var animator: UIViewPropertyAnimator?
+    private var pendingAnimated = false
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -174,21 +175,35 @@ private final class TabIndicatorView: UIView {
         fatalError("TabIndicatorView is code-only")
     }
 
-    func select(index: Int, slots: [CGRect], duration: TimeInterval) {
+    func adopt(tabCount: Int, duration: TimeInterval) {
+        self.tabCount = max(tabCount, 1)
+        self.duration = duration
+    }
+
+    func place(at index: Int, animated: Bool) {
+        select(index: index, tabCount: tabCount, duration: duration, animated: animated)
+    }
+
+    func select(index: Int, tabCount: Int, duration: TimeInterval, animated: Bool) {
+        adopt(tabCount: tabCount, duration: duration)
         let indexChanged = index != selectedIndex
         selectedIndex = index
-        self.slots = slots
-
-        guard let target = slotFrame(at: index) else { return }
-
-        if !indexChanged {
-            if animator?.state != .active {
-                capsule.frame = target
-            }
+        let shouldAnimate = animated && indexChanged
+        guard bounds.width > 0 else {
+            pendingAnimated = shouldAnimate
             return
         }
+        moveCapsule(animated: shouldAnimate)
+    }
 
-        if capsule.bounds.isEmpty {
+    private func moveCapsule(animated: Bool) {
+        pendingAnimated = false
+        let target = slotFrame(at: selectedIndex)
+        if !animated || capsule.bounds.isEmpty {
+            if let animator {
+                animator.stopAnimation(true)
+                self.animator = nil
+            }
             capsule.frame = target
             return
         }
@@ -210,19 +225,29 @@ private final class TabIndicatorView: UIView {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        guard animator?.state != .active, let target = slotFrame(at: selectedIndex) else { return }
-        capsule.frame = target
+        guard bounds.width > 0 else { return }
+        if pendingAnimated {
+            moveCapsule(animated: true)
+            return
+        }
+        if animator?.state == .active {
+            return
+        }
+        capsule.frame = slotFrame(at: selectedIndex)
     }
 
-    private func slotFrame(at index: Int) -> CGRect? {
-        guard slots.indices.contains(index) else { return nil }
-        let frame = slots[index]
-        return frame.isEmpty ? nil : frame
+    private func slotFrame(at index: Int) -> CGRect {
+        let count = CGFloat(tabCount)
+        let tabWidth = bounds.width / count
+        let width: CGFloat = 20
+        let x = tabWidth * (CGFloat(index) + 0.5) - width / 2
+        return CGRect(x: x, y: 0, width: width, height: bounds.height)
     }
 }
 
 struct MainTabView: View {
     @State private var selectedTab: PillieTab = .home
+    @State private var tabIndicator = TabIndicatorControl()
     @AppStorage(HistoryDiscoveryAnnouncement.storageKey) private var historyDiscoveryDismissed = false
     @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
     @Environment(PillStore.self) private var store
@@ -239,6 +264,14 @@ struct MainTabView: View {
                 crossfades: crossfadesTabs,
                 duration: tabTransitionDuration,
                 onEdgeSwipe: navigateTab(by:),
+                onTransitionStart: { tab, duration, animated in
+                    tabIndicator.select(
+                        index: tab.rawValue,
+                        tabCount: PillieTab.allCases.count,
+                        duration: duration,
+                        animated: animated
+                    )
+                },
                 makePane: pane(for:)
             )
             // Full-bleed so UIKit hands each pane its real safe-area insets and the
@@ -248,7 +281,8 @@ struct MainTabView: View {
             PillieTabBar(
                 selectedTab: tabBinding,
                 badgedTabs: historyDiscoveryDismissed ? [] : [.history],
-                transitionDuration: tabTransitionDuration
+                transitionDuration: tabTransitionDuration,
+                indicator: tabIndicator
             )
         }
         .background(PillieTheme.bg.ignoresSafeArea())

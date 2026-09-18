@@ -50,7 +50,7 @@ struct AdherenceCard: View, Equatable {
             Text(summary.completedCount)
                 .font(.pillieHuge())
                 .foregroundStyle(PillieTheme.textPrimary)
-                .contentTransition(.opacity)
+                .contentTransition(.numericText())
 
             Text(summary.completedBody)
                 .font(.pillieBody())
@@ -60,13 +60,13 @@ struct AdherenceCard: View, Equatable {
                 Text(summary.percentage)
                     .font(.pillieSubtitleBold())
                     .foregroundStyle(PillieTheme.coral)
-                    .contentTransition(.opacity)
+                    .contentTransition(.numericText())
 
                 Text(due > 0 ? "\(completed)/\(due)" : "")
                     .font(.pillieHandwriting())
                     .foregroundStyle(PillieTheme.textMuted)
                     .rotationEffect(.degrees(-5))
-                    .contentTransition(.opacity)
+                    .contentTransition(.numericText())
             }
 
             GeometryReader { geo in
