@@ -5,16 +5,23 @@
 
 import SwiftUI
 
-struct CalendarGrid: View {
+struct CalendarGrid: View, Equatable {
     @Environment(PillStore.self) private var store
     @Environment(\.locale) private var locale
     let displayedMonth: Date
     let monthSnapshots: [Int: PillScheduleSnapshot]
+    let recordsRevision: Int
+    let protocolChangeVersion: Int
     /// Called with the fully-resolved day when the user taps a past day that
     /// `DayCorrectionPolicy` allows editing. Nil renders every cell inert.
     var onEditableDayActivate: ((HistoryEditableDay) -> Void)?
 
-    private let columns = Array(repeating: GridItem(.flexible(), spacing: 4), count: 7)
+    static func == (lhs: CalendarGrid, rhs: CalendarGrid) -> Bool {
+        lhs.displayedMonth == rhs.displayedMonth
+            && lhs.recordsRevision == rhs.recordsRevision
+            && lhs.protocolChangeVersion == rhs.protocolChangeVersion
+            && lhs.monthSnapshots.count == rhs.monthSnapshots.count
+    }
 
     private var calendar: Calendar {
         var value = Calendar.current
@@ -50,17 +57,20 @@ struct CalendarGrid: View {
     }
 
     private var totalGridSlots: Int {
-        let occupiedSlots = firstWeekdayOffset + daysInMonth
-        return ((occupiedSlots + 6) / 7) * 7
+        CalendarMonthLayout.reservedSlotCount
     }
 
     init(
         displayedMonth: Date,
         monthSnapshots: [Int: PillScheduleSnapshot] = [:],
+        recordsRevision: Int = 0,
+        protocolChangeVersion: Int = 0,
         onEditableDayActivate: ((HistoryEditableDay) -> Void)? = nil
     ) {
         self.displayedMonth = displayedMonth
         self.monthSnapshots = monthSnapshots
+        self.recordsRevision = recordsRevision
+        self.protocolChangeVersion = protocolChangeVersion
         self.onEditableDayActivate = onEditableDayActivate
     }
 
@@ -82,13 +92,17 @@ struct CalendarGrid: View {
                 }
             }
 
-            // Day grid
-            LazyVGrid(columns: columns, spacing: 6) {
-                ForEach(0..<totalGridSlots, id: \.self) { slot in
-                    if let day = dayForSlot(slot) {
-                        dayCell(day: day)
-                    } else {
-                        emptyCell
+            VStack(spacing: 6) {
+                ForEach(0..<CalendarMonthLayout.reservedWeekCount, id: \.self) { week in
+                    HStack(spacing: 4) {
+                        ForEach(0..<CalendarMonthLayout.daysInWeek, id: \.self) { weekday in
+                            let slot = week * CalendarMonthLayout.daysInWeek + weekday
+                            if let day = dayForSlot(slot) {
+                                dayCell(day: day)
+                            } else {
+                                emptyCell
+                            }
+                        }
                     }
                 }
             }

@@ -26,8 +26,10 @@ SKIP_BUILD ?= 0
 CAPTURE_ONLY ?= 0
 FORCE_BUILD ?= 0
 
+WORKLOAD ?= all
+
 .PHONY: help diagnose build run build-and-run test screenshot console \
-	worktree agent-verify udid qa \
+	worktree agent-verify udid qa measure-frames \
 	ns-mac-status ns-mac-start ns-mac-stop ns-mac-sync ns-mac-diagnose \
 	ns-mac-exec ns-mac-verify ns-mac-screenshot ns-mac-qa ns-mac-check-sync \
 	ns-mac-ensure-tools ensure-qa-tools
@@ -45,6 +47,7 @@ help:
 		"  make worktree BRANCH=codex/x  Feature worktree from this checkout" \
 		"  make agent-verify             Build; test too if TESTS is set" \
 		"  make qa                       Boot, build-and-run, wait, 1x PNG, axe" \
+		"  make measure-frames           Scripted frame probe JSON (WORKLOAD=all)" \
 		"  make udid                     Print the resolved iPhone 17 Pro UDID" \
 		"  make ns-mac-status            Namespace Mac Devbox status" \
 		"  make ns-mac-qa                Golden path: sync, boot, run, 1x PNG, axe" \
@@ -88,6 +91,9 @@ screenshot:
 qa:
 	@SCREENSHOT="$(SCREENSHOT)" SCREENSHOT_1X="$(SCREENSHOT_1X)" SCALE="$(SCALE)" \
 		$(SCRIPTS)/sim-qa.sh
+
+measure-frames:
+	@WORKLOAD="$(WORKLOAD)" $(SCRIPTS)/measure-frames.sh "$(WORKLOAD)"
 
 console:
 	@$(SCRIPTS)/build-and-run.sh --run-only --console
