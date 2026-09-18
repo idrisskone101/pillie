@@ -14,7 +14,7 @@ struct HistoryMonthSlideHost: View {
     var onEditableDayActivate: (HistoryEditableDay) -> Void
 
     @State private var displayedMonth: Date = MonthCursor.monthStart(for: Date())
-    @State private var monthSnapshotCache: [String: [Int: PillScheduleSnapshot]] = [:]
+    @State private var pageCache = HistoryMonthPageCache()
     @State private var calendarContainerHeight: CGFloat?
     @State private var pagerControl = HistoryMonthPagerControl()
 
@@ -30,10 +30,7 @@ struct HistoryMonthSlideHost: View {
                 monthChrome
                 monthPages
             }
-            AdherenceCard(
-                displayedMonth: displayedMonth,
-                animatesValueChanges: true
-            )
+            monthCard
         }
         .onAppear {
             let currentMonth = MonthCursor.monthStart(for: store.today)
@@ -89,6 +86,18 @@ struct HistoryMonthSlideHost: View {
         .padding(.vertical, 8)
     }
 
+    private var monthCard: some View {
+        let stats = pageCache.adherence(for: displayedMonth, store: store)
+        return AdherenceCard(
+            displayedMonth: displayedMonth,
+            completed: stats.completed,
+            due: stats.due,
+            percentage: stats.percentage
+        )
+        .equatable()
+        .animation(infoTransition, value: displayedMonth)
+    }
+
     private var monthPages: some View {
         HistoryMonthPager(
             displayedMonth: displayedMonth,
@@ -130,8 +139,7 @@ struct HistoryMonthSlideHost: View {
     }
 
     private func snapshots(for month: Date) -> [Int: PillScheduleSnapshot] {
-        let key = MonthCursor.identity(for: month)
-        return monthSnapshotCache[key] ?? store.monthSnapshots(for: month)
+        pageCache.snapshots(for: month, store: store)
     }
 
     private func commitMonth(_ nextMonth: Date) {
@@ -164,34 +172,77 @@ struct HistoryMonthSlideHost: View {
     }
 
     private func refreshCachedMonthSnapshots() {
-        monthSnapshotCache.removeAll(keepingCapacity: true)
+        pageCache.reset()
         warmVisibleMonths()
     }
 
     private func warmVisibleMonths() {
         for offset in -2...2 {
-            warmMonthSnapshotCache(for: MonthCursor.month(byAdding: offset, to: displayedMonth))
+            pageCache.warm(MonthCursor.month(byAdding: offset, to: displayedMonth), store: store)
         }
+        pageCache.trim(around: displayedMonth)
     }
 
     private func resetToCurrentMonthForProtocolChange() {
         let currentMonth = MonthCursor.monthStart(for: store.today)
-        monthSnapshotCache.removeAll(keepingCapacity: true)
+        pageCache.reset()
         displayedMonth = currentMonth
-        warmMonthSnapshotCache(for: currentMonth)
+        pageCache.warm(currentMonth, store: store)
         calendarContainerHeight = nil
     }
+}
 
-    private func warmMonthSnapshotCache(for month: Date) {
+private struct MonthAdherence: Equatable {
+    var completed: Int
+    var due: Int
+    var percentage: Int
+}
+
+private final class HistoryMonthPageCache {
+    private var snapshotsByMonth: [String: [Int: PillScheduleSnapshot]] = [:]
+    private var adherenceByMonth: [String: MonthAdherence] = [:]
+
+    func snapshots(for month: Date, store: PillStore) -> [Int: PillScheduleSnapshot] {
         let key = MonthCursor.identity(for: month)
-        guard monthSnapshotCache[key] == nil else { return }
+        if let cached = snapshotsByMonth[key] {
+            return cached
+        }
+        let value = store.monthSnapshots(for: month)
+        snapshotsByMonth[key] = value
+        return value
+    }
 
-        monthSnapshotCache[key] = store.monthSnapshots(for: month)
+    func adherence(for month: Date, store: PillStore) -> MonthAdherence {
+        let key = MonthCursor.identity(for: month)
+        if let cached = adherenceByMonth[key] {
+            return cached
+        }
+        let stats = store.monthAdherence(for: month)
+        let value = MonthAdherence(
+            completed: stats.completed,
+            due: stats.due,
+            percentage: stats.percentage
+        )
+        adherenceByMonth[key] = value
+        return value
+    }
 
+    func warm(_ month: Date, store: PillStore) {
+        _ = snapshots(for: month, store: store)
+        _ = adherence(for: month, store: store)
+    }
+
+    func reset() {
+        snapshotsByMonth.removeAll(keepingCapacity: true)
+        adherenceByMonth.removeAll(keepingCapacity: true)
+    }
+
+    func trim(around month: Date) {
         let keep = Set((-2...2).map { offset in
-            MonthCursor.identity(for: MonthCursor.month(byAdding: offset, to: displayedMonth))
-        } + [key])
-        monthSnapshotCache = monthSnapshotCache.filter { keep.contains($0.key) }
+            MonthCursor.identity(for: MonthCursor.month(byAdding: offset, to: month))
+        })
+        snapshotsByMonth = snapshotsByMonth.filter { keep.contains($0.key) }
+        adherenceByMonth = adherenceByMonth.filter { keep.contains($0.key) }
     }
 }
 

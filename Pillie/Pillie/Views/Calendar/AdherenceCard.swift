@@ -5,40 +5,31 @@
 
 import SwiftUI
 
-struct AdherenceCard: View {
-    @Environment(PillStore.self) private var store
+struct AdherenceCard: View, Equatable {
     @Environment(\.locale) private var locale
     let displayedMonth: Date
-    let animatesValueChanges: Bool
-    private let valueChangeAnimation = Animation.spring(response: 0.24, dampingFraction: 0.78)
-    private let valuePopTransition = AnyTransition.asymmetric(
-        insertion: .scale(scale: 0.92).combined(with: .opacity),
-        removal: .scale(scale: 1.06).combined(with: .opacity)
-    )
+    let completed: Int
+    let due: Int
+    let percentage: Int
 
-    private var stats: (completed: Int, due: Int, percentage: Int) {
-        store.monthAdherence(for: displayedMonth)
+    static func == (lhs: AdherenceCard, rhs: AdherenceCard) -> Bool {
+        lhs.completed == rhs.completed
+            && lhs.due == rhs.due
+            && lhs.percentage == rhs.percentage
+            && MonthCursor.identity(for: lhs.displayedMonth) == MonthCursor.identity(for: rhs.displayedMonth)
     }
 
     private var summary: HistoryPresentation.MonthSummary {
         HistoryPresentation.monthSummary(
-            completed: stats.completed,
-            percentage: stats.percentage,
+            completed: completed,
+            percentage: percentage,
             displayedMonth: displayedMonth,
             locale: locale
         )
     }
 
-    private var monthAnimationKey: String {
-        let components = Calendar.current.dateComponents([.year, .month], from: displayedMonth)
-        let year = components.year ?? 0
-        let month = components.month ?? 0
-        return "\(year)-\(month)"
-    }
-
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            // Header
             HStack {
                 Text(summary.title)
                     .font(.pillieBodyBold())
@@ -53,43 +44,31 @@ struct AdherenceCard: View {
                     .padding(.vertical, 6)
                     .background(PillieTheme.coralLight)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .contentTransition(.opacity)
             }
 
-            // Large number
-            if animatesValueChanges {
-                Text(summary.completedCount)
-                    .id("checkins-\(monthAnimationKey)")
-                    .font(.pillieHuge())
-                    .foregroundStyle(PillieTheme.textPrimary)
-                    .transition(valuePopTransition)
-            } else {
-                Text(summary.completedCount)
-                    .font(.pillieHuge())
-                    .foregroundStyle(PillieTheme.textPrimary)
-            }
+            Text(summary.completedCount)
+                .font(.pillieHuge())
+                .foregroundStyle(PillieTheme.textPrimary)
+                .contentTransition(.opacity)
 
-            // Subtitle
             Text(summary.completedBody)
                 .font(.pillieBody())
                 .foregroundStyle(PillieTheme.textMuted)
 
-            // Consistency row
             HStack(spacing: 8) {
                 Text(summary.percentage)
                     .font(.pillieSubtitleBold())
                     .foregroundStyle(PillieTheme.coral)
                     .contentTransition(.opacity)
-                    .animation(animatesValueChanges ? valueChangeAnimation : nil, value: displayedMonth)
 
-                Text(stats.due > 0 ? "\(stats.completed)/\(stats.due)" : "")
+                Text(due > 0 ? "\(completed)/\(due)" : "")
                     .font(.pillieHandwriting())
                     .foregroundStyle(PillieTheme.textMuted)
                     .rotationEffect(.degrees(-5))
                     .contentTransition(.opacity)
-                    .animation(animatesValueChanges ? valueChangeAnimation : nil, value: displayedMonth)
             }
 
-            // Progress bar
             GeometryReader { geo in
                 ZStack(alignment: .leading) {
                     RoundedRectangle(cornerRadius: 4)
@@ -98,7 +77,7 @@ struct AdherenceCard: View {
 
                     RoundedRectangle(cornerRadius: 4)
                         .fill(PillieTheme.coral)
-                        .frame(width: geo.size.width * CGFloat(stats.percentage) / 100, height: 8)
+                        .frame(width: geo.size.width * CGFloat(percentage) / 100, height: 8)
                 }
             }
             .frame(height: 8)
@@ -107,13 +86,11 @@ struct AdherenceCard: View {
         .background(PillieTheme.cardWhite)
         .clipShape(RoundedRectangle(cornerRadius: PillieTheme.cardRadius))
         .shadow(color: PillieTheme.cardShadow, radius: PillieTheme.cardShadowRadius, y: PillieTheme.cardShadowY)
-        .animation(animatesValueChanges ? valueChangeAnimation : nil, value: monthAnimationKey)
     }
 }
 
 #Preview {
-    AdherenceCard(displayedMonth: Date(), animatesValueChanges: true)
+    AdherenceCard(displayedMonth: Date(), completed: 0, due: 0, percentage: 0)
         .padding()
         .background(PillieTheme.bg)
-        .environment(PillStore.previewStore())
 }
