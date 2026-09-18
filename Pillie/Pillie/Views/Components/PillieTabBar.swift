@@ -41,6 +41,15 @@ final class TabIndicatorControl {
     }
 }
 
+private enum TabIndicatorLayout {
+    static let iconSize: CGFloat = 22
+    static let iconSpacing: CGFloat = 8
+    static let size = CGSize(width: 20, height: 5)
+    static let labelSpacing: CGFloat = 4
+
+    static var topInset: CGFloat { iconSize + iconSpacing }
+}
+
 struct PillieTabBar: View {
     @Binding var selectedTab: PillieTab
     /// Tabs that show an unread pip on their icon. Owned by the caller so the
@@ -57,9 +66,13 @@ struct PillieTabBar: View {
                     guard selectedTab != tab else { return }
                     selectedTab = tab
                 } label: {
-                    VStack(spacing: 4) {
+                    VStack(spacing: 0) {
                         Image(systemName: tab.icon)
-                            .font(.system(size: 22))
+                            .font(.system(size: TabIndicatorLayout.iconSize))
+                            .frame(
+                                width: TabIndicatorLayout.iconSize,
+                                height: TabIndicatorLayout.iconSize
+                            )
                             .overlay(alignment: .topTrailing) {
                                 if badgedTabs.contains(tab) {
                                     badgePip
@@ -67,7 +80,16 @@ struct PillieTabBar: View {
                             }
 
                         Color.clear
-                            .frame(width: 20, height: 5)
+                            .frame(height: TabIndicatorLayout.iconSpacing)
+
+                        Color.clear
+                            .frame(
+                                width: TabIndicatorLayout.size.width,
+                                height: TabIndicatorLayout.size.height
+                            )
+
+                        Color.clear
+                            .frame(height: TabIndicatorLayout.labelSpacing)
 
                         Text(tab.label(locale: locale))
                             .font(.pillie(10, weight: selectedTab == tab ? .bold : .medium))
@@ -87,8 +109,8 @@ struct PillieTabBar: View {
                 duration: transitionDuration,
                 control: indicator
             )
-            .frame(height: 5)
-            .padding(.top, 26)
+            .frame(height: TabIndicatorLayout.size.height)
+            .padding(.top, TabIndicatorLayout.topInset)
             .allowsHitTesting(false)
         }
         .padding(.horizontal, 24)
@@ -239,7 +261,7 @@ final class TabIndicatorView: UIView {
     private func slotFrame(at index: Int) -> CGRect {
         let count = CGFloat(tabCount)
         let tabWidth = bounds.width / count
-        let width: CGFloat = 20
+        let width = TabIndicatorLayout.size.width
         let x = tabWidth * (CGFloat(index) + 0.5) - width / 2
         return CGRect(x: x, y: 0, width: width, height: bounds.height)
     }
