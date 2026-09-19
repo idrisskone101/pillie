@@ -29,6 +29,50 @@ final class HistoryMonthPagerControl {
     }
 }
 
+/// Three-page window after a settle. The recycled incoming host still shows
+/// whatever month it had before the rotate, so a fast second swipe can put
+/// that stale grid in the center.
+struct HistoryMonthRecyclePlan: Equatable {
+    var months: [Date]
+    var boundMonths: [Date?]
+    var incomingIndex: Int
+    var incomingMonth: Date
+
+    var centerNeedsBind: Bool {
+        guard months.indices.contains(1), boundMonths.indices.contains(1) else {
+            return true
+        }
+        return boundMonths[1] != months[1]
+    }
+
+    static func apply(
+        delta: Int,
+        months: [Date],
+        boundMonths: [Date?],
+        calendar: Calendar = .current
+    ) -> HistoryMonthRecyclePlan {
+        let bounds = boundMonths.count == 3
+            ? boundMonths
+            : [Date?](repeating: nil, count: 3)
+        if delta > 0 {
+            let incoming = MonthCursor.month(byAdding: 2, to: months[1], calendar: calendar)
+            return HistoryMonthRecyclePlan(
+                months: [months[1], months[2], incoming],
+                boundMonths: [bounds[1], bounds[2], bounds[0]],
+                incomingIndex: 2,
+                incomingMonth: incoming
+            )
+        }
+        let incoming = MonthCursor.month(byAdding: -2, to: months[1], calendar: calendar)
+        return HistoryMonthRecyclePlan(
+            months: [incoming, months[0], months[1]],
+            boundMonths: [bounds[2], bounds[0], bounds[1]],
+            incomingIndex: 0,
+            incomingMonth: incoming
+        )
+    }
+}
+
 struct HistoryMonthPager: UIViewControllerRepresentable {
     var displayedMonth: Date
     var recordsRevision: Int
@@ -86,6 +130,7 @@ final class HistoryMonthPagerViewController: UIViewController {
     private var didReportHeight = false
     private var pendingIncoming: (index: Int, month: Date)?
     private var incomingFillWork: DispatchWorkItem?
+    private var boundMonths: [Date?] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -104,6 +149,7 @@ final class HistoryMonthPagerViewController: UIViewController {
             host.didMove(toParent: self)
             return host
         }
+        boundMonths = Array(repeating: nil, count: hosts.count)
 
         if months.count == 3 {
             refreshHosts()
@@ -215,19 +261,25 @@ final class HistoryMonthPagerViewController: UIViewController {
         }
 
         incomingFillWork?.cancel()
+        let plan = HistoryMonthRecyclePlan.apply(
+            delta: delta,
+            months: months,
+            boundMonths: boundMonths
+        )
         if delta > 0 {
-            let incoming = MonthCursor.month(byAdding: 2, to: months[1])
-            months = [months[1], months[2], incoming]
             hosts = [hosts[1], hosts[2], hosts[0]]
-            pendingIncoming = (2, incoming)
         } else {
-            let incoming = MonthCursor.month(byAdding: -2, to: months[1])
-            months = [incoming, months[0], months[1]]
             hosts = [hosts[2], hosts[0], hosts[1]]
-            pendingIncoming = (0, incoming)
         }
+        months = plan.months
+        boundMonths = plan.boundMonths
+        pendingIncoming = (plan.incomingIndex, plan.incomingMonth)
         resetStrip()
         layoutStrip(preservingOffset: false)
+        if plan.centerNeedsBind {
+            bindHost(at: 1, to: months[1])
+        }
+        concealPendingIncoming()
 
         let expected = months[1]
         let work = DispatchWorkItem { [weak self] in
@@ -243,14 +295,36 @@ final class HistoryMonthPagerViewController: UIViewController {
             return
         }
         pendingIncoming = nil
-        hosts[pending.index].rootView = makePage(pending.month)
+        bindHost(at: pending.index, to: pending.month)
     }
 
     private func refreshHosts() {
         guard hosts.count == 3, months.count == 3 else { return }
-        for (index, month) in months.enumerated() {
-            hosts[index].rootView = makePage(month)
+        if boundMonths.count != hosts.count {
+            boundMonths = Array(repeating: nil, count: hosts.count)
         }
+        for (index, month) in months.enumerated() {
+            bindHost(at: index, to: month)
+        }
+    }
+
+    private func bindHost(at index: Int, to month: Date) {
+        guard hosts.indices.contains(index) else { return }
+        hosts[index].rootView = makePage(month)
+        if boundMonths.indices.contains(index) {
+            boundMonths[index] = month
+        }
+        hosts[index].view.alpha = 1
+    }
+
+    private func concealPendingIncoming() {
+        guard let pending = pendingIncoming, hosts.indices.contains(pending.index) else { return }
+        guard !boundMonths.indices.contains(pending.index)
+                || boundMonths[pending.index] != pending.month else {
+            hosts[pending.index].view.alpha = 1
+            return
+        }
+        hosts[pending.index].view.alpha = 0
     }
 
     private func layoutStrip(preservingOffset: Bool) {
