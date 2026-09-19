@@ -279,9 +279,7 @@ final class HistoryMonthPagerViewController: UIViewController {
         pendingIncoming = (plan.incomingIndex, plan.incomingMonth)
         resetStrip()
         layoutStrip(preservingOffset: false)
-        concealPendingIncoming()
         if plan.centerNeedsBind {
-            hosts[1].view.alpha = 0
             let center = months[1]
             DispatchQueue.main.async { [weak self] in
                 guard let self, self.months.indices.contains(1), self.months[1] == center else {
@@ -321,24 +319,12 @@ final class HistoryMonthPagerViewController: UIViewController {
     private func bindHost(at index: Int, to month: Date) {
         guard hosts.indices.contains(index) else { return }
         if boundMonths.indices.contains(index), boundMonths[index] == month {
-            hosts[index].view.alpha = 1
             return
         }
         hosts[index].rootView = makePage(month)
         if boundMonths.indices.contains(index) {
             boundMonths[index] = month
         }
-        hosts[index].view.alpha = 1
-    }
-
-    private func concealPendingIncoming() {
-        guard let pending = pendingIncoming, hosts.indices.contains(pending.index) else { return }
-        guard !boundMonths.indices.contains(pending.index)
-                || boundMonths[pending.index] != pending.month else {
-            hosts[pending.index].view.alpha = 1
-            return
-        }
-        hosts[pending.index].view.alpha = 0
     }
 
     private func layoutStrip(preservingOffset: Bool) {
