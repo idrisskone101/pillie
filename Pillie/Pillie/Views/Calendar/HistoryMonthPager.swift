@@ -185,9 +185,12 @@ final class HistoryMonthPagerViewController: UIViewController {
             return
         }
         months = pages
-        refreshHosts()
-        layoutStrip(preservingOffset: false)
-        reportHeightIfNeeded()
+        DispatchQueue.main.async { [weak self] in
+            guard let self, self.animator == nil, !self.isDragging else { return }
+            self.refreshHosts()
+            self.layoutStrip(preservingOffset: false)
+            self.reportHeightIfNeeded()
+        }
     }
 
     func updateDrag(_ translation: CGFloat) {
@@ -276,10 +279,17 @@ final class HistoryMonthPagerViewController: UIViewController {
         pendingIncoming = (plan.incomingIndex, plan.incomingMonth)
         resetStrip()
         layoutStrip(preservingOffset: false)
-        if plan.centerNeedsBind {
-            bindHost(at: 1, to: months[1])
-        }
         concealPendingIncoming()
+        if plan.centerNeedsBind {
+            hosts[1].view.alpha = 0
+            let center = months[1]
+            DispatchQueue.main.async { [weak self] in
+                guard let self, self.months.indices.contains(1), self.months[1] == center else {
+                    return
+                }
+                self.bindHost(at: 1, to: center)
+            }
+        }
 
         let expected = months[1]
         let work = DispatchWorkItem { [weak self] in
@@ -310,6 +320,10 @@ final class HistoryMonthPagerViewController: UIViewController {
 
     private func bindHost(at index: Int, to month: Date) {
         guard hosts.indices.contains(index) else { return }
+        if boundMonths.indices.contains(index), boundMonths[index] == month {
+            hosts[index].view.alpha = 1
+            return
+        }
         hosts[index].rootView = makePage(month)
         if boundMonths.indices.contains(index) {
             boundMonths[index] = month
@@ -354,6 +368,9 @@ final class HistoryMonthPagerViewController: UIViewController {
         )
         guard size.height > 0 else { return }
         didReportHeight = true
-        onMeasuredHeight?(size.height)
+        let height = size.height
+        DispatchQueue.main.async { [weak self] in
+            self?.onMeasuredHeight?(height)
+        }
     }
 }
