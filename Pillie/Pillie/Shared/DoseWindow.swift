@@ -78,4 +78,26 @@ enum DoseWindow {
         }
         return (23, 59)
     }
+
+    static func deviceActivityBounds(
+        hour: Int,
+        minute: Int,
+        calendar: Calendar = .current
+    ) -> (start: DateComponents, end: DateComponents) {
+        let end = blockingIntervalEnd(hour: hour, minute: minute)
+        return (
+            DateComponents(
+                calendar: calendar,
+                timeZone: calendar.timeZone,
+                hour: hour,
+                minute: minute
+            ),
+            DateComponents(
+                calendar: calendar,
+                timeZone: calendar.timeZone,
+                hour: end.hour,
+                minute: end.minute
+            )
+        )
+    }
 }

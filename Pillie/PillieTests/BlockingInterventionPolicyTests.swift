@@ -208,6 +208,68 @@ final class BlockingInterventionPolicyTests: XCTestCase {
         XCTAssertTrue(schedule.requiresAction(on: target, calendar: limaCalendar))
     }
 
+    func testFourPMStillBlocksWhenYesterdaysSixPMDoseIsOpen() throws {
+        let yesterdayStart = try XCTUnwrap(calendar.date(from: DateComponents(
+            calendar: calendar,
+            timeZone: calendar.timeZone,
+            year: 2026,
+            month: 9,
+            day: 15,
+            hour: 18
+        )))
+        let fourPM = try XCTUnwrap(calendar.date(from: DateComponents(
+            calendar: calendar,
+            timeZone: calendar.timeZone,
+            year: 2026,
+            month: 9,
+            day: 16,
+            hour: 16
+        )))
+        let schedule = BlockingScheduleMirror(
+            anchorDate: yesterdayStart,
+            anchorCycleDayIndex: 0,
+            cycleLength: 28,
+            actionDayIndices: Array(0..<21)
+        )
+
+        XCTAssertEqual(
+            calendar.startOfDay(for: BlockingInterventionPolicy.liveDay(
+                now: fourPM,
+                reminderHour: 18,
+                reminderMinute: 0,
+                calendar: calendar
+            )),
+            calendar.startOfDay(for: yesterdayStart)
+        )
+        XCTAssertEqual(
+            BlockingInterventionPolicy.decision(
+                schedule: schedule,
+                handledStamp: TodayTakenStamp(isTaken: false, epochDay: nil),
+                now: fourPM,
+                reminderHour: 18,
+                reminderMinute: 0,
+                calendar: calendar
+            ),
+            .applyShields
+        )
+
+        let loggedYesterday = TodayTakenStamp(
+            isTaken: true,
+            epochDay: TodayTakenStamp.epochDay(for: yesterdayStart, calendar: calendar)
+        )
+        XCTAssertEqual(
+            BlockingInterventionPolicy.decision(
+                schedule: schedule,
+                handledStamp: loggedYesterday,
+                now: fourPM,
+                reminderHour: 18,
+                reminderMinute: 0,
+                calendar: calendar
+            ),
+            .clearShields
+        )
+    }
+
     func testLateWindowKeepsYesterdayAsTheLiveBlockingDay() throws {
         let cycleStart = date(2026, 7, 1)
         let afterMidnight = try XCTUnwrap(calendar.date(byAdding: .hour, value: 25, to: cycleStart))

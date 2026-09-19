@@ -33,4 +33,26 @@ enum ReminderTimeConverter {
         }
         return (hour24, safeMinute)
     }
+
+    static func dateForPicker(
+        hour: Int,
+        minute: Int,
+        now: Date = Date(),
+        calendar: Calendar = .current
+    ) -> Date {
+        calendar.date(
+            bySettingHour: hour,
+            minute: minute,
+            second: 0,
+            of: now
+        ) ?? now
+    }
+
+    static func hourAndMinute(
+        from date: Date,
+        calendar: Calendar = .current
+    ) -> (hour: Int, minute: Int) {
+        let parts = calendar.dateComponents([.hour, .minute], from: date)
+        return (parts.hour ?? 0, parts.minute ?? 0)
+    }
 }
