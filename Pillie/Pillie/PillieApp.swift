@@ -338,6 +338,7 @@ struct PillieApp: App {
                 }
                 .onAppear {
                     AppDelegate.store = store
+                    SubscriptionManager.shared.updateActiveDaySchedule(pack: store.activePack)
                 }
                 #if DEBUG
                 .onOpenURL { url in
@@ -360,7 +361,9 @@ struct PillieApp: App {
                         let shouldRunPostOnboardingWork = TrialAccessLifecycle.handleForeground(
                             isOnboardingActive: Self.isOnboardingActive,
                             refreshAccess: {
-                                SubscriptionManager.shared.refreshPlusAccess()
+                                SubscriptionManager.shared.updateActiveDaySchedule(
+                                    pack: store.activePack
+                                )
                                 // First open at-or-after expiry records `trial_expired`
                                 // exactly once (#167), after access re-evaluation.
                                 recordTrialExpiredIfNeeded()
@@ -396,7 +399,9 @@ struct PillieApp: App {
                             // A trial can expire while Pillie remains foregrounded
                             // across local midnight. Reconcile immediately so Home's
                             // existing access-change observer presents the hard wall.
-                            SubscriptionManager.shared.refreshPlusAccess()
+                            SubscriptionManager.shared.updateActiveDaySchedule(
+                                pack: store.activePack
+                            )
                             recordTrialExpiredIfNeeded()
                         },
                         reconcileProtection: reconcileScreenTimeState
@@ -413,7 +418,9 @@ struct PillieApp: App {
                         refreshAccess: {
                             // Clock and time-zone changes can cross the trial's
                             // local-day expiry boundary without changing scene phase.
-                            SubscriptionManager.shared.refreshPlusAccess()
+                            SubscriptionManager.shared.updateActiveDaySchedule(
+                                pack: store.activePack
+                            )
                             recordTrialExpiredIfNeeded()
                         },
                         reconcileProtection: reconcileScreenTimeState
@@ -429,10 +436,7 @@ struct PillieApp: App {
     private func recordTrialExpiredIfNeeded() {
         let manager = SubscriptionManager.shared
         guard TrialExpiredEvent.shouldFire(
-            state: PlusAccessState(
-                hasEntitlement: manager.hasEntitlement,
-                trialGrantDate: manager.trialGrantDate
-            ),
+            state: manager.plusAccessState,
             entitlementResolved: manager.hasResolvedEntitlement,
             alreadyFired: UserDefaults.standard.bool(forKey: TrialExpiredEvent.firedStorageKey),
             calendar: .current,
@@ -451,10 +455,7 @@ struct PillieApp: App {
         let defaults = UserDefaults.standard
         guard FirstInterventionConfirmation.shouldPresent(
             flushedCount: count,
-            state: PlusAccessState(
-                hasEntitlement: manager.hasEntitlement,
-                trialGrantDate: manager.trialGrantDate
-            ),
+            state: manager.plusAccessState,
             alreadyShown: defaults.bool(forKey: FirstInterventionConfirmation.shownStorageKey),
             calendar: .current,
             now: Date()
@@ -564,6 +565,12 @@ struct PillieApp: App {
             SubscriptionManager.shared.debugOverrideTrialGrantDate(nil)
             UserDefaults.standard.set(false, forKey: OnboardingFlow.selectedFreePlanStorageKey)
             UserDefaults.standard.set(OnboardingFlow.Step.trialGranted.rawValue, forKey: OnboardingFlow.stepStorageKey)
+        case "/trial-eve-of-break":
+            DebugQA.apply(.trialEveOfBreak, store: store)
+            reconcileScreenTimeState()
+        case "/trial-break-week":
+            DebugQA.apply(.trialMidBreak, store: store)
+            reconcileScreenTimeState()
         case "/trial-grant":
             // QA control (#160): start a Reverse Trial now — every Plus feature
             // should unlock exactly as if the entitlement flipped on. A fresh
@@ -573,6 +580,7 @@ struct PillieApp: App {
             UserDefaults.standard.removeObject(forKey: TrialExpiredEvent.firedStorageKey)
             UserDefaults.standard.removeObject(forKey: TrialExpiryWarningDelivery.sentDaysStorageKey)
             UserDefaults.standard.removeObject(forKey: TrialEndPaywallAutoPresentation.shownStorageKey)
+            SubscriptionManager.shared.updateActiveDaySchedule(pack: store.activePack)
             SubscriptionManager.shared.grantReverseTrial()
             reconcileScreenTimeState()
         case "/trial-activation-hub":

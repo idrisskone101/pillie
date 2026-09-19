@@ -44,12 +44,12 @@ final class UpdateTrialAnnouncementContentTests: XCTestCase {
     // MARK: - Announcement copy
 
     func testHeadlineAnnouncesPlusIsNowFreeForFourteenDays() {
-        XCTAssertEqual(content.badge, "14 days free · no card")
+        XCTAssertEqual(content.badge, "14 active days free · no card")
         XCTAssertEqual(content.title, "Pillie Plus is now")
         XCTAssertEqual(content.titleAccent, "free for you.")
         XCTAssertEqual(
             content.subtitle,
-            "This update starts your full 14-day Plus trial — everything unlocks now."
+            "This update starts your full 14 active-day Plus trial. Everything unlocks now."
         )
         XCTAssertEqual(content.perks.map(\.title), [
             "App blocking", "Shake to confirm", "Smart Reminders", "Custom messages",

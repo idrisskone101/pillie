@@ -302,6 +302,65 @@ final class PillStoreEdgeCaseTests: XCTestCase {
         XCTAssertTrue(mirror.requiresAction(on: nextInsertionDay))
     }
 
+    func testFirstRingCheckInHandsTheNewAnchorToTheTrialClock() throws {
+        let cycleStart = InMemoryStoreFactory.fixedDate("2026-07-01")
+        let fixture = try InMemoryStoreFactory.makeStore(
+            now: cycleStart,
+            method: .ring,
+            startDate: cycleStart
+        )
+        // Mid-cycle switch to the ring: today is cycle day 11, nothing pinned yet.
+        fixture.pack.cycleDayAnchorIndex = 10
+        try fixture.context.save()
+
+        SubscriptionManager.shared.updateActiveDaySchedule(pack: fixture.store.activePack)
+        let scheduleBeforePinning = SubscriptionManager.shared.plusAccessState.schedule
+        XCTAssertEqual(scheduleBeforePinning.anchorDayIndex, 10)
+
+        fixture.store.markActionAsTaken(on: cycleStart)
+
+        XCTAssertEqual(fixture.pack.ringInsertionDate, fixture.pack.startDate)
+        XCTAssertEqual(
+            SubscriptionManager.shared.plusAccessState.schedule,
+            ActiveDaySchedule(pack: fixture.pack)
+        )
+        XCTAssertNotEqual(
+            SubscriptionManager.shared.plusAccessState.schedule,
+            scheduleBeforePinning
+        )
+    }
+
+    func testPastRingCorrectionHandsTheNewAnchorToTheTrialClock() throws {
+        let today = InMemoryStoreFactory.fixedDate("2026-07-15")
+        let cycleStart = InMemoryStoreFactory.fixedDate("2026-07-01")
+        // Cycle day 22 with the day-11 anchor: the removal day is the first
+        // past day History lets the user correct on a ring pack.
+        let removalDay = InMemoryStoreFactory.fixedDate("2026-07-12")
+        let fixture = try InMemoryStoreFactory.makeStore(
+            now: today,
+            method: .ring,
+            startDate: cycleStart
+        )
+        fixture.pack.cycleDayAnchorIndex = 10
+        try fixture.context.save()
+
+        SubscriptionManager.shared.updateActiveDaySchedule(pack: fixture.store.activePack)
+        let scheduleBeforePinning = SubscriptionManager.shared.plusAccessState.schedule
+        XCTAssertEqual(scheduleBeforePinning.anchorDayIndex, 10)
+
+        XCTAssertTrue(fixture.store.correctPastDay(on: removalDay, to: .taken))
+
+        XCTAssertEqual(fixture.pack.ringInsertionDate, fixture.pack.startDate)
+        XCTAssertEqual(
+            SubscriptionManager.shared.plusAccessState.schedule,
+            ActiveDaySchedule(pack: fixture.pack)
+        )
+        XCTAssertNotEqual(
+            SubscriptionManager.shared.plusAccessState.schedule,
+            scheduleBeforePinning
+        )
+    }
+
     func testStoreMirrorSurvivesAppGroupWriterAndExtensionReadPath() throws {
         let cycleStart = InMemoryStoreFactory.fixedDate("2026-07-01")
         let fixture = try InMemoryStoreFactory.makeStore(

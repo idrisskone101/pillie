@@ -39,10 +39,7 @@ struct HonestPaywallHost: View {
 
     private var resolvedBoard: HonestPaywallBoard? {
         HonestPaywallBoardResolver.resolve(
-            access: PlusAccessState(
-                hasEntitlement: subscriptionManager.hasEntitlement,
-                trialGrantDate: subscriptionManager.trialGrantDate
-            ),
+            access: subscriptionManager.plusAccessState,
             entry: entry,
             stats: trialStats,
             calendar: .current,

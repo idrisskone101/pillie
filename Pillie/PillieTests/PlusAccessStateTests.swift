@@ -77,4 +77,40 @@ final class PlusAccessStateTests: XCTestCase {
         let ungranted = PlusAccessState(hasEntitlement: false, trialGrantDate: nil)
         XCTAssertFalse(ungranted.trialActive(calendar: calendar, now: now))
     }
+
+    func testBreakWeekKeepsPlusAccessAfterCalendarFourteenDays() {
+        // Grant on last pill-active day. Old calendar clock expires 2026-07-16.
+        // Active-day clock expires 2026-07-23. Mid-break July 16 still has Plus.
+        let grant = calendar.date(from: DateComponents(
+            year: 2026, month: 7, day: 1, hour: 10
+        ))!
+        let schedule = ActiveDaySchedule(
+            anchorDate: grant,
+            anchorDayIndex: 20,
+            activeDays: 21,
+            cycleLength: 28
+        )
+        let state = PlusAccessState(
+            hasEntitlement: false,
+            trialGrantDate: grant,
+            schedule: schedule
+        )
+        let midBreak = calendar.date(from: DateComponents(
+            year: 2026, month: 7, day: 16, hour: 12
+        ))!
+        let calendarOnly = PlusAccessState(
+            hasEntitlement: false,
+            trialGrantDate: grant,
+            schedule: .everyCalendarDay
+        )
+
+        XCTAssertTrue(state.hasPlusAccess(calendar: calendar, now: midBreak))
+        XCTAssertFalse(calendarOnly.hasPlusAccess(calendar: calendar, now: midBreak))
+        XCTAssertFalse(state.hasPlusAccess(
+            calendar: calendar,
+            now: calendar.date(from: DateComponents(
+                year: 2026, month: 7, day: 23, hour: 0
+            ))!
+        ))
+    }
 }

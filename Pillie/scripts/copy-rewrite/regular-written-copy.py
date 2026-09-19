@@ -26,7 +26,7 @@ SPECIAL_DE: dict[tuple[str, str], str] = {
         "Plus pingt weiter und kann Apps pausieren."
     ),
     ("Commerce", "trial.granted.disclosure"): (
-        "14 Tage gratis, keine Karte. App-Pause endet mit dem Trial. Erinnerungen bleiben frei."
+        "14 aktive Tage gratis, keine Karte. App-Pause endet mit dem Trial. Erinnerungen bleiben frei."
     ),
     ("Commerce", "onboarding.blocking_setup.plus_locked"): (
         "App-Pause ist Plus. Setup nach dem Upgrade."
@@ -118,6 +118,7 @@ SPECIAL_DE: dict[tuple[str, str], str] = {
     ("Localizable", "onboarding.reminder_time.title"): "Wähl eine Zeit.",
     ("Localizable", "today.action.undo_complete"): "Eingetragen. Zum Rückgängig tippen.",
     ("Commerce", "trial.end.legacy.title"): "Deine Plus-Testphase ist vorbei.",
+    ("Commerce", "trial.end.legacy.record"): "Dein Stand nach 14 aktiven Tagen",
     ("Commerce", "trial.end.worth_keeping"): "Plus behalten?",
     ("Commerce", "trial.granted.headline_accent"): "auf uns.",
     ("Notifications", "notification.reminder.pill.title"): "Pillie-Zeit!",
@@ -185,7 +186,7 @@ SPECIAL_IT: dict[tuple[str, str], str] = {
         "Plus continua a mandare ping e può pausare le app."
     ),
     ("Commerce", "trial.granted.disclosure"): (
-        "14 giorni gratis, niente carta. Il blocco finisce col trial. I promemoria restano gratis."
+        "14 giorni attivi gratis, niente carta. Il blocco finisce col trial. I promemoria restano gratis."
     ),
     ("Commerce", "onboarding.blocking_setup.plus_locked"): (
         "Il blocco è Plus. Setup dopo l’upgrade."
@@ -279,6 +280,7 @@ SPECIAL_IT: dict[tuple[str, str], str] = {
     ("Localizable", "onboarding.mechanism.unlocked"): "Fatto. Le tue app sono di nuovo disponibili.",
     ("Localizable", "onboarding.method.title"): "Scegli il metodo.",
     ("Commerce", "trial.end.legacy.title"): "La prova Plus è finita.",
+    ("Commerce", "trial.end.legacy.record"): "Il tuo resoconto di 14 giorni attivi",
     ("Commerce", "trial.end.worth_keeping"): "Vuoi tenere Plus?",
     ("Commerce", "trial.granted.headline_accent"): "offerta nostra.",
     ("Notifications", "notification.reminder.pill.title"): "Pillie time!",
@@ -357,29 +359,30 @@ SPECIAL_EN: dict[tuple[str, str], str] = {
     ("Commerce", "trial.granted.headline_accent"): "on us.",
     ("Commerce", "trial.granted.subtitle"): "Your Pillie Plus trial starts now. Here's what's included.",
     ("Commerce", "trial.granted.disclosure"): (
-        "14 days free, no card needed. App blocking turns off after the trial. Reminders stay free."
+        "14 active days free, no card needed. App blocking turns off after the trial. Reminders stay free."
     ),
     ("Commerce", "trial.granted.disclosure.hard_paywall"): (
-        "Your free trial lasts 14 days. No card needed. "
+        "Your free trial lasts 14 active days. No card needed. "
         "After it ends, choose monthly, annual, or lifetime to keep Plus."
     ),
     ("Commerce", "trial.end.title"): "Your Pillie Plus trial is over.",
     ("Commerce", "trial.end.hard.blocker"): (
-        "You had extra pings and paused apps for 14 days. Keep Plus if you want that to stay on."
+        "You had extra pings and paused apps for 14 active days. Keep Plus if you want that to stay on."
     ),
     ("Commerce", "trial.end.hard.reminders"): (
-        "You had extra pings for 14 days. Keep Plus if you want those to stay on."
+        "You had extra pings for 14 active days. Keep Plus if you want those to stay on."
     ),
     ("Commerce", "trial.end.subtitle.hard"): (
-        "You had extra pings and paused apps for 14 days. Keep Plus if you want that to stay on."
+        "You had extra pings and paused apps for 14 active days. Keep Plus if you want that to stay on."
     ),
     ("Commerce", "trial.end.subtitle.reminders"): (
-        "You had extra pings for 14 days. Keep Plus if you want those to stay on."
+        "You had extra pings for 14 active days. Keep Plus if you want those to stay on."
     ),
     ("Commerce", "trial.end.legacy.subtitle"): (
-        "Your 14 days ended, so app blocking is off. Reminders stay free forever."
+        "Your 14 active days ended, so app blocking is off. Reminders stay free forever."
     ),
     ("Commerce", "trial.end.legacy.title"): "Your Plus trial just ended.",
+    ("Commerce", "trial.end.legacy.record"): "Your 14 active-day record",
     ("Commerce", "trial.end.worth_keeping"): "Want to keep Plus?",
     ("Commerce", "trial.end.legacy.aside"): "Want to keep Plus?",
     ("Commerce", "trial.decline_feedback.title"): "One quick question.",

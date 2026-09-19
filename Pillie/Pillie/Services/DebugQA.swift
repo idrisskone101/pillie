@@ -25,6 +25,8 @@ enum DebugQAScenario: String, CaseIterable, Identifiable {
     case packComplete
     case marketingCalendar
     case trialActive
+    case trialEveOfBreak
+    case trialMidBreak
     case trialLastDay
     case trialExpiredNewUserBlocker
     case trialExpiredNewUserReminder
@@ -45,7 +47,7 @@ enum DebugQAScenario: String, CaseIterable, Identifiable {
         switch self {
         case .missedRecentDays, .packComplete, .marketingCalendar:
             return .pack
-        case .trialActive, .trialLastDay, .trialExpiredNewUserBlocker,
+        case .trialActive, .trialEveOfBreak, .trialMidBreak, .trialLastDay, .trialExpiredNewUserBlocker,
              .trialExpiredNewUserReminder, .trialExpiredNewUserSuccess,
              .trialExpiredNewUserRollback, .trialExpiredNewUserReturning:
             return .trialNewUser
@@ -63,6 +65,8 @@ enum DebugQAScenario: String, CaseIterable, Identifiable {
         case .packComplete: return "Pack finished — start a new pack"
         case .marketingCalendar: return "Marketing calendar (mixed usage)"
         case .trialActive: return "Active Reverse Trial (day 3)"
+        case .trialEveOfBreak: return "Trial the day before break week"
+        case .trialMidBreak: return "Trial during break week"
         case .trialLastDay: return "Last day of trial"
         case .trialExpiredNewUserBlocker: return "Expired hard paywall (blocker)"
         case .trialExpiredNewUserReminder: return "Expired hard paywall (reminders)"
@@ -88,7 +92,11 @@ enum DebugQAScenario: String, CaseIterable, Identifiable {
         case .marketingCalendar:
             return "Realistic taken/missed mix for screenshots."
         case .trialActive:
-            return "Onboarded new-user cohort, 12 days left."
+            return "Onboarded new-user cohort, 12 active days left."
+        case .trialEveOfBreak:
+            return "Granted today on pack day 21. Break starts tomorrow. Badge is 14 active days."
+        case .trialMidBreak:
+            return "Granted on last active day. Today is a break day. Badge stays at 14."
         case .trialLastDay:
             return "Onboarded new-user cohort, expires tonight."
         case .trialExpiredNewUserBlocker:
@@ -190,6 +198,10 @@ enum DebugQA {
                 blockerConfigured: true,
                 subscriber: false
             )
+        case .trialEveOfBreak:
+            applyTrialEveOfBreak(store: store)
+        case .trialMidBreak:
+            applyTrialDuringBreak(store: store)
         case .trialLastDay:
             applyTrial(
                 store: store,
@@ -332,6 +344,41 @@ enum DebugQA {
         defaults.synchronize()
     }
 
+    /// Grant today on pack day 21. Tomorrow is the first placebo day.
+    private static func applyTrialEveOfBreak(store: PillStore) {
+        completeOnboarding()
+        persistInstallCohort(.postCutover)
+        store.replacePack(with: .freshReinstall())
+        store.updateCycleDay(21)
+        resetTrialPresentationFlags()
+        seedInterventionStats(blockerConfigured: true)
+        SubscriptionManager.shared.setPlusForTesting(false)
+        SubscriptionManager.shared.debugSetHardPaywallEnabled(true)
+        SubscriptionManager.shared.updateActiveDaySchedule(pack: store.activePack)
+        SubscriptionManager.shared.debugOverrideTrialGrantDate(Date(), termsCohort: .postCutover)
+        AppBlockingManager.shared.debugBlockerConfiguredOverride = true
+        AppBlockingManager.shared.blockingEnabled = true
+    }
+
+    /// Grant on the last hormone-active day, land on the last break day.
+    /// Old calendar clock would read 8 days left. Active-day clock freezes at 14.
+    private static func applyTrialDuringBreak(store: PillStore) {
+        completeOnboarding()
+        persistInstallCohort(.postCutover)
+        store.replacePack(with: .freshReinstall())
+        store.updateCycleDay(28)
+        resetTrialPresentationFlags()
+        seedInterventionStats(blockerConfigured: true)
+        SubscriptionManager.shared.setPlusForTesting(false)
+        SubscriptionManager.shared.debugSetHardPaywallEnabled(true)
+        let calendar = Calendar.current
+        let grant = calendar.date(byAdding: .day, value: -7, to: Date()) ?? Date()
+        SubscriptionManager.shared.updateActiveDaySchedule(pack: store.activePack)
+        SubscriptionManager.shared.debugOverrideTrialGrantDate(grant, termsCohort: .postCutover)
+        AppBlockingManager.shared.debugBlockerConfiguredOverride = true
+        AppBlockingManager.shared.blockingEnabled = true
+    }
+
     private static func applyTrial(
         store: PillStore,
         daysAgo: Int,
@@ -347,7 +394,21 @@ enum DebugQA {
         seedInterventionStats(blockerConfigured: blockerConfigured)
         SubscriptionManager.shared.setPlusForTesting(subscriber)
         SubscriptionManager.shared.debugSetHardPaywallEnabled(hardPaywallEnabled)
-        let grant = Calendar.current.date(byAdding: .day, value: -daysAgo, to: Date()) ?? Date()
+        let schedule = ActiveDaySchedule(pack: store.activePack)
+        SubscriptionManager.shared.updateActiveDaySchedule(schedule)
+        let calendar = Calendar.current
+        let now = Date()
+        let grant: Date
+        if daysAgo == ReverseTrialClock.fullDays,
+           let placed = ReverseTrialClock.grantDatePlacingLastCountedDay(
+               now: now,
+               calendar: calendar,
+               schedule: schedule
+           ) {
+            grant = placed
+        } else {
+            grant = calendar.date(byAdding: .day, value: -daysAgo, to: now) ?? now
+        }
         SubscriptionManager.shared.debugOverrideTrialGrantDate(grant, termsCohort: cohort)
         AppBlockingManager.shared.debugBlockerConfiguredOverride = blockerConfigured
         AppBlockingManager.shared.blockingEnabled = blockerConfigured
@@ -366,6 +427,7 @@ enum DebugQA {
         store.replacePack(with: pack)
         resetTrialPresentationFlags()
         seedInterventionStats(blockerConfigured: !pack.pastStatuses.isEmpty && blockerConfigured)
+        SubscriptionManager.shared.updateActiveDaySchedule(pack: store.activePack)
         SubscriptionManager.shared.setPlusForTesting(false)
         SubscriptionManager.shared.debugSetHardPaywallEnabled(hardPaywallEnabled)
         SubscriptionManager.shared.debugApplyTrialEndPaywallScenario(

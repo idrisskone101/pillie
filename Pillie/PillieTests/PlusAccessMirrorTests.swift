@@ -120,6 +120,31 @@ final class PlusAccessMirrorTests: XCTestCase {
         ))
     }
 
+    func testTrialMirrorUsesActiveDayExpiryDuringBreak() {
+        let grant = date(2026, 7, 1, 10, 0)
+        let state = PlusAccessState(
+            hasEntitlement: false,
+            trialGrantDate: grant,
+            schedule: ActiveDaySchedule(
+                anchorDate: grant,
+                anchorDayIndex: 20,
+                activeDays: 21,
+                cycleLength: 28
+            )
+        )
+        let mirrored = PlusAccessMirror.validUntil(state: state, calendar: calendar)
+
+        XCTAssertEqual(mirrored, date(2026, 7, 23, 0, 0))
+        XCTAssertTrue(PlusAccessMirror.allowsBlocking(
+            validUntilEpochSeconds: mirrored.timeIntervalSince1970,
+            now: date(2026, 7, 16, 12, 0)
+        ))
+        XCTAssertFalse(PlusAccessMirror.allowsBlocking(
+            validUntilEpochSeconds: mirrored.timeIntervalSince1970,
+            now: date(2026, 7, 23, 0, 0)
+        ))
+    }
+
     func testMissingMirrorFailsTowardBlocking() {
         // A legacy install that predates the mirror has no key yet: the main app
         // writes it on the next open, and until then the pre-#167 behavior holds.

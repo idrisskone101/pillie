@@ -106,6 +106,7 @@ enum InMemoryStoreFactory {
     static func resetClockAndDefaults() {
         PillieClock.setFixedNowForTesting(nil)
         resetDefaults()
+        SubscriptionManager.shared.updateActiveDaySchedule(.everyCalendarDay)
     }
 
     private static func resetDefaults() {
