@@ -12,6 +12,7 @@ Reach for these without asking first:
 - `open-xcode` — `/open-xcode`; open this worktree in Xcode 27.
 - `superdesign` — before UI that needs design thinking, a design system, or flow/page iteration.
 - `humanizer` — rewrite user-facing copy so it sounds written, not generated. **Load this before writing or editing paywall, onboarding, or product prose.**
+- `swift-taste` — Swift/iOS structure bar: colocate state, shrink APIs, no deps bags, feature folders, error railway. **Load this before writing or reviewing Swift layout.** CI: `make swift-taste`.
 - `xcodebuildmcp-cli` — Apple platform MCP CLI. `pillie-ios` prefers the repo Makefile, which pins the simulator and `/tmp` DerivedData.
 
 ### Apple Xcode 27 skills

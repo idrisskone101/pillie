@@ -1,0 +1,13 @@
+# Pre-existing Swift taste findings. New findings fail CI.
+# Each data line is: rule<TAB>repo-relative-path<TAB>signature
+#
+# Refresh after paying down debt or changing a heuristic (own commit):
+#   python3 Pillie/scripts/check-swift-taste.py --write-allowlist
+#
+# Do not add a new smell to this file to land a feature. Fix the smell
+# or put the file in a feature folder instead.
+#
+# Rules: empty-catch, deps-bag, dump-folder, view-exported-type
+
+# (none — HEAD is clean for the static heuristics)
+

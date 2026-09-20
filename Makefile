@@ -32,7 +32,7 @@ WORKLOAD ?= all
 	worktree agent-verify udid qa measure-frames \
 	ns-mac-status ns-mac-start ns-mac-stop ns-mac-sync ns-mac-diagnose \
 	ns-mac-exec ns-mac-verify ns-mac-screenshot ns-mac-qa ns-mac-check-sync \
-	ns-mac-ensure-tools ensure-qa-tools
+	ns-mac-ensure-tools ensure-qa-tools swift-taste swift-taste-selftest
 
 help:
 	@printf "%s\n" \
@@ -60,7 +60,9 @@ help:
 		"  make ns-mac-diagnose          Remote uname / Xcode / repo check" \
 		"  make ns-mac-exec CMD='make x' Run a command on the Namespace Mac" \
 		"  make ensure-qa-tools          Install axe and ImageMagick if missing" \
-		"  make ns-mac-ensure-tools      Same, on the Namespace Mac"
+		"  make ns-mac-ensure-tools      Same, on the Namespace Mac" \
+		"  make swift-taste              Linux Swift structure gate (allowlist)" \
+		"  make swift-taste-selftest     Fixture proof for the Swift taste checker"
 
 diagnose:
 	@$(SCRIPTS)/diagnose.sh
@@ -157,3 +159,9 @@ ns-mac-screenshot:
 	@KEEP="$(KEEP)" REF="$(REF)" SKIP_BUILD="$(SKIP_BUILD)" \
 		CAPTURE_ONLY="$(CAPTURE_ONLY)" FORCE_BUILD="$(FORCE_BUILD)" \
 		$(SCRIPTS)/namespace-mac.sh qa
+
+swift-taste:
+	@$(SCRIPTS)/check-swift-taste.sh
+
+swift-taste-selftest:
+	@$(SCRIPTS)/check-swift-taste-selftest.sh
