@@ -1,0 +1,4 @@
+interface:
+  display_name: "Swift taste"
+  short_description: "Swift/iOS structure bar: colocate state, no deps bags, feature folders."
+  default_prompt: "Follow swift-taste when writing or reviewing Swift layout. Run make swift-taste. Do not call UI done on compile-only."
