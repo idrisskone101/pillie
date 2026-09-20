@@ -177,7 +177,13 @@ class CheckSyncTest(unittest.TestCase):
 
 class ScriptContractTest(unittest.TestCase):
     def test_scripts_parse(self) -> None:
-        for path in (SCRIPT, SIM_QA, ENSURE_TOOLS, Path(__file__).resolve().parent / "build-and-run.sh"):
+        for path in (
+            SCRIPT,
+            SIM_QA,
+            ENSURE_TOOLS,
+            Path(__file__).resolve().parent / "build-and-run.sh",
+            Path(__file__).resolve().parent / "measure-frames.sh",
+        ):
             subprocess.run(["bash", "-n", str(path)], check=True)
 
     def test_ensure_qa_tools_check_ok_when_stubs_on_path(self) -> None:
@@ -231,6 +237,7 @@ class ScriptContractTest(unittest.TestCase):
         self.assertIn("ns-mac-check-sync", text)
         self.assertIn("ns-mac-ensure-tools", text)
         self.assertIn("sim-qa.sh --capture-only", text)
+        self.assertIn("measure-frames", text)
 
     def test_namespace_mac_prefers_qa(self) -> None:
         text = SCRIPT.read_text(encoding="utf-8")

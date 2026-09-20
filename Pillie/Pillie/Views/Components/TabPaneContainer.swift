@@ -18,6 +18,7 @@ struct TabPaneContainer: UIViewControllerRepresentable {
     let crossfades: Bool
     let duration: TimeInterval
     let onEdgeSwipe: (_ offset: Int) -> Void
+    var onTransitionStart: ((_ tab: PillieTab, _ duration: TimeInterval, _ animated: Bool) -> Void)?
     let makePane: (PillieTab) -> AnyView
 
     func makeUIViewController(context: Context) -> TabPaneContainerViewController {
@@ -27,18 +28,21 @@ struct TabPaneContainer: UIViewControllerRepresentable {
             }
         )
         controller.onEdgeSwipe = onEdgeSwipe
+        controller.onTransitionStart = onTransitionStart
         controller.select(selectedTab, animated: false, crossfades: crossfades, duration: duration)
         return controller
     }
 
     func updateUIViewController(_ controller: TabPaneContainerViewController, context: Context) {
         controller.onEdgeSwipe = onEdgeSwipe
+        controller.onTransitionStart = onTransitionStart
         controller.select(selectedTab, animated: true, crossfades: crossfades, duration: duration)
     }
 }
 
 final class TabPaneContainerViewController: UIViewController {
     var onEdgeSwipe: ((Int) -> Void)?
+    var onTransitionStart: ((PillieTab, TimeInterval, Bool) -> Void)?
 
     private let panes: [(tab: PillieTab, controller: UIViewController)]
     private var selectedTab: PillieTab?
@@ -69,6 +73,7 @@ final class TabPaneContainerViewController: UIViewController {
             child.view.isHidden = true
             view.addSubview(child.view)
             child.didMove(toParent: self)
+            child.view.layoutIfNeeded()
         }
 
         // A plain pan with an edge-zone check rather than UIScreenEdgePanGestureRecognizer,
@@ -107,6 +112,7 @@ final class TabPaneContainerViewController: UIViewController {
         view.bringSubviewToFront(incoming)
 
         guard animated, let outgoing, let previousTab, outgoing !== incoming, view.bounds.width > 0 else {
+            onTransitionStart?(tab, duration, false)
             settlePanes()
             return
         }
@@ -132,6 +138,7 @@ final class TabPaneContainerViewController: UIViewController {
             self?.animator = nil
             self?.settlePanes()
         }
+        onTransitionStart?(tab, duration, true)
         animator.startAnimation()
         self.animator = animator
     }

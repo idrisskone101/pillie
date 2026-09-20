@@ -197,6 +197,8 @@ class PillStore {
     }
 
     private var dayRecordIndexByPackID: [UUID: [Int: PillDay]] = [:]
+    /// Memoization only. Observing a fill during layout aborts AttributeGraph.
+    @ObservationIgnored
     private var snapshotCacheByPackID: [UUID: [Int: PillScheduleSnapshot]] = [:]
     private var packTimeline: [PackTimelineEntry] = []
 
