@@ -48,6 +48,50 @@ struct HistoryMonthRecycleTests {
         #expect(second.boundMonths[1].map { MonthCursor.identity(for: $0, calendar: calendar) } == "2026-7")
     }
 
+    @Test func prebindingOutgoingKeepsSecondSwipeCenterBound() {
+        let window = seededWindow()
+        let firstIncoming = HistoryMonthRecyclePlan.incomingMonth(
+            delta: 1,
+            center: window.months[1],
+            calendar: calendar
+        )
+        #expect(MonthCursor.identity(for: firstIncoming, calendar: calendar) == "2026-10")
+
+        let first = HistoryMonthRecyclePlan.apply(
+            delta: 1,
+            months: window.months,
+            boundMonths: HistoryMonthRecyclePlan.prebindOutgoing(
+                delta: 1,
+                boundMonths: window.bound,
+                incomingMonth: firstIncoming
+            ),
+            calendar: calendar
+        )
+        #expect(first.centerNeedsBind == false)
+        #expect(first.boundMonths[2].map { MonthCursor.identity(for: $0, calendar: calendar) } == "2026-10")
+
+        let secondIncoming = HistoryMonthRecyclePlan.incomingMonth(
+            delta: 1,
+            center: first.months[1],
+            calendar: calendar
+        )
+        #expect(MonthCursor.identity(for: secondIncoming, calendar: calendar) == "2026-11")
+
+        let second = HistoryMonthRecyclePlan.apply(
+            delta: 1,
+            months: first.months,
+            boundMonths: HistoryMonthRecyclePlan.prebindOutgoing(
+                delta: 1,
+                boundMonths: first.boundMonths,
+                incomingMonth: secondIncoming
+            ),
+            calendar: calendar
+        )
+        #expect(second.centerNeedsBind == false)
+        #expect(MonthCursor.identity(for: second.months[1], calendar: calendar) == "2026-10")
+        #expect(second.boundMonths[1].map { MonthCursor.identity(for: $0, calendar: calendar) } == "2026-10")
+    }
+
     @Test func bindingCenterClearsTheStaleFlag() {
         let window = seededWindow()
         let first = HistoryMonthRecyclePlan.apply(

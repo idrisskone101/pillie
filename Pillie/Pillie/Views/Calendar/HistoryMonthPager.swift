@@ -29,9 +29,8 @@ final class HistoryMonthPagerControl {
     }
 }
 
-/// Three-page window after a settle. The recycled incoming host still shows
-/// whatever month it had before the rotate, so a fast second swipe can put
-/// that stale grid in the center.
+/// Three-page window after a settle. The host sliding off-screen is rebound
+/// to the month two steps ahead so the next swipe already has that grid.
 struct HistoryMonthRecyclePlan: Equatable {
     var months: [Date]
     var boundMonths: [Date?]
@@ -45,6 +44,32 @@ struct HistoryMonthRecyclePlan: Equatable {
         return boundMonths[1] != months[1]
     }
 
+    static func outgoingIndex(for delta: Int) -> Int {
+        delta > 0 ? 0 : 2
+    }
+
+    static func incomingMonth(
+        delta: Int,
+        center: Date,
+        calendar: Calendar = .current
+    ) -> Date {
+        MonthCursor.month(byAdding: delta > 0 ? 2 : -2, to: center, calendar: calendar)
+    }
+
+    static func prebindOutgoing(
+        delta: Int,
+        boundMonths: [Date?],
+        incomingMonth: Date
+    ) -> [Date?] {
+        var bounds = boundMonths.count == 3
+            ? boundMonths
+            : [Date?](repeating: nil, count: 3)
+        let index = outgoingIndex(for: delta)
+        guard bounds.indices.contains(index) else { return bounds }
+        bounds[index] = incomingMonth
+        return bounds
+    }
+
     static func apply(
         delta: Int,
         months: [Date],
@@ -55,7 +80,7 @@ struct HistoryMonthRecyclePlan: Equatable {
             ? boundMonths
             : [Date?](repeating: nil, count: 3)
         if delta > 0 {
-            let incoming = MonthCursor.month(byAdding: 2, to: months[1], calendar: calendar)
+            let incoming = incomingMonth(delta: delta, center: months[1], calendar: calendar)
             return HistoryMonthRecyclePlan(
                 months: [months[1], months[2], incoming],
                 boundMonths: [bounds[1], bounds[2], bounds[0]],
@@ -63,7 +88,7 @@ struct HistoryMonthRecyclePlan: Equatable {
                 incomingMonth: incoming
             )
         }
-        let incoming = MonthCursor.month(byAdding: -2, to: months[1], calendar: calendar)
+        let incoming = incomingMonth(delta: delta, center: months[1], calendar: calendar)
         return HistoryMonthRecyclePlan(
             months: [incoming, months[0], months[1]],
             boundMonths: [bounds[2], bounds[0], bounds[1]],
@@ -129,7 +154,6 @@ final class HistoryMonthPagerViewController: UIViewController {
     private var isDragging = false
     private var didReportHeight = false
     private var pendingIncoming: (index: Int, month: Date)?
-    private var incomingFillWork: DispatchWorkItem?
     private var boundMonths: [Date?] = []
 
     override func viewDidLoad() {
@@ -195,6 +219,9 @@ final class HistoryMonthPagerViewController: UIViewController {
 
     func updateDrag(_ translation: CGFloat) {
         guard animator == nil else { return }
+        if !isDragging {
+            ensureNeighborsBound()
+        }
         isDragging = true
         strip.transform = CGAffineTransform(translationX: translation, y: 0)
     }
@@ -227,6 +254,7 @@ final class HistoryMonthPagerViewController: UIViewController {
 
     func navigate(by delta: Int) {
         guard animator == nil, !isDragging, delta != 0 else { return }
+        ensureNeighborsBound()
         let width = max(view.bounds.width, 1)
         let step = delta > 0 ? 1 : -1
         animateStrip(to: -CGFloat(step) * width, commitDelta: step)
@@ -252,8 +280,26 @@ final class HistoryMonthPagerViewController: UIViewController {
         self.animator = animator
         if commitDelta != 0, months.indices.contains(1) {
             onCommit?(MonthCursor.month(byAdding: commitDelta, to: months[1]))
+            prepareIncoming(for: commitDelta)
         }
         animator.startAnimation()
+    }
+
+    private func prepareIncoming(for delta: Int) {
+        pendingIncoming = nil
+        let incoming = HistoryMonthRecyclePlan.incomingMonth(delta: delta, center: months[1])
+        bindHost(at: HistoryMonthRecyclePlan.outgoingIndex(for: delta), to: incoming)
+        boundMonths = HistoryMonthRecyclePlan.prebindOutgoing(
+            delta: delta,
+            boundMonths: boundMonths,
+            incomingMonth: incoming
+        )
+    }
+
+    private func ensureNeighborsBound() {
+        guard months.count == 3, hosts.count == 3 else { return }
+        bindHost(at: 0, to: months[0])
+        bindHost(at: 2, to: months[2])
     }
 
     private func finishTransition(delta: Int) {
@@ -263,7 +309,6 @@ final class HistoryMonthPagerViewController: UIViewController {
             return
         }
 
-        incomingFillWork?.cancel()
         let plan = HistoryMonthRecyclePlan.apply(
             delta: delta,
             months: months,
@@ -279,22 +324,18 @@ final class HistoryMonthPagerViewController: UIViewController {
         pendingIncoming = (plan.incomingIndex, plan.incomingMonth)
         resetStrip()
         layoutStrip(preservingOffset: false)
-        if plan.centerNeedsBind {
-            let center = months[1]
-            DispatchQueue.main.async { [weak self] in
-                guard let self, self.months.indices.contains(1), self.months[1] == center else {
-                    return
-                }
-                self.bindHost(at: 1, to: center)
-            }
-        }
 
         let expected = months[1]
-        let work = DispatchWorkItem { [weak self] in
-            self?.fillPendingIncoming(expectedCurrent: expected)
+        let needsCenter = plan.centerNeedsBind
+        DispatchQueue.main.async { [weak self] in
+            guard let self, self.months.indices.contains(1), self.months[1] == expected else {
+                return
+            }
+            if needsCenter {
+                self.bindHost(at: 1, to: expected)
+            }
+            self.fillPendingIncoming(expectedCurrent: expected)
         }
-        incomingFillWork = work
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.35, execute: work)
     }
 
     private func fillPendingIncoming(expectedCurrent: Date) {

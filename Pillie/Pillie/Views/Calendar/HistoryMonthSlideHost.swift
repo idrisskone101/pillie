@@ -156,9 +156,7 @@ struct HistoryMonthSlideHost: View {
             )
         }
         #endif
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
-            warmVisibleMonths()
-        }
+        warmVisibleMonths()
     }
 
     private func publishCommittedAdherence(for month: Date) {
