@@ -23,3 +23,9 @@ ts	phase	decision	why	evidence	result
 2026-09-21T05:04:00Z	subtract	deleted unused Shared formatters and PillStore refill copy	no Swift callers; tests still use daysOverdue	commit 40d6a91	open
 2026-09-21T05:06:00Z	home	moved trial-decline feedback types beside Home	Paywall only consumes the route and copy	commit eeada98	open
 2026-09-21T05:07:00Z	calendar	moved History discovery announcement beside History	Tab bar and app only seed the storage key	commit 40ec261	open
+2026-09-21T05:20:00Z	qa	e8a6a30 compiled and launched on Namespace Mac	BUILD SUCCEEDED, first recapture was splash over persisted Today	/opt/cursor/artifacts/e8a6a30_splash_today_1x.png	need recapture
+2026-09-21T05:22:00Z	qa	e8a6a30 settled Today held	trialIndicator homeBlockingStatusCard developerMenuAvatarButton	/opt/cursor/artifacts/e8a6a30_today_1x.png	VERIFIED
+2026-09-21T05:23:00Z	qa	e8a6a30 History tab held	historyEditableDay.* September 2026 grid	/opt/cursor/artifacts/e8a6a30_history_1x.png	VERIFIED
+2026-09-21T05:24:00Z	qa	e8a6a30 Settings tab held	settingsLanguageRow settingsDeveloperMenuRow	/opt/cursor/artifacts/e8a6a30_settings_1x.png	VERIFIED
+2026-09-21T05:26:00Z	qa	e8a6a30 fresh-install welcome pin held	protectionPlanPrimaryCTA developerMenuButton; 0 missing 0 extra	/opt/cursor/artifacts/e8a6a30_settled_welcome_1x.png	VERIFIED
+2026-09-21T05:27:00Z	predicate	taste green, dump-folder 0, welcome pin, Today History Settings reachable	245 files, 0 findings, pin-axe 0 missing	make ns-mac-qa e8a6a30	done
