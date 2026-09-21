@@ -21,11 +21,13 @@ IDENTIFIER_PATTERNS = (
     re.compile(r'AXIdentifier\s*[:=]\s*"([^"]+)"', re.IGNORECASE),
     re.compile(r'"identifier"\s*:\s*"([^"]+)"', re.IGNORECASE),
     re.compile(r'"axIdentifier"\s*:\s*"([^"]+)"', re.IGNORECASE),
+    re.compile(r'"AXUniqueId"\s*:\s*"([^"]+)"'),
 )
 
 LABEL_PATTERNS = (
     re.compile(r'\blabel\s*[:=]\s*"([^"]+)"', re.IGNORECASE),
     re.compile(r'"label"\s*:\s*"([^"]+)"', re.IGNORECASE),
+    re.compile(r'"AXLabel"\s*:\s*"([^"]+)"'),
 )
 
 SKIP_IDENTIFIERS = frozenset(
@@ -35,6 +37,7 @@ SKIP_IDENTIFIERS = frozenset(
         "nil",
     }
 )
+SF_SYMBOL = re.compile(r"^[a-z0-9]+(?:[._][a-z0-9]+)+$")
 
 
 def extract_identifiers(text: str) -> list[str]:
@@ -42,7 +45,7 @@ def extract_identifiers(text: str) -> list[str]:
     for pattern in IDENTIFIER_PATTERNS:
         for match in pattern.finditer(text):
             value = match.group(1).strip()
-            if value and value not in SKIP_IDENTIFIERS:
+            if value and value not in SKIP_IDENTIFIERS and not SF_SYMBOL.match(value):
                 found.add(value)
     return sorted(found)
 

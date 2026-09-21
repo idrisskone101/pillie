@@ -26,6 +26,8 @@ class PinAxeIdentifiersTest(unittest.TestCase):
         Button label: "Today" identifier: "homeBlockingStatusCard"
         {"identifier": "settingsLanguageRow", "label": "Language"}
         AXIdentifier="commerceAccessRetryButton"
+        "AXUniqueId" : "protectionPlanPrimaryCTA"
+        "AXUniqueId" : "alarm.fill"
         """
         ids = self.pin.extract_identifiers(dump)
         self.assertEqual(
@@ -33,6 +35,7 @@ class PinAxeIdentifiersTest(unittest.TestCase):
             [
                 "commerceAccessRetryButton",
                 "homeBlockingStatusCard",
+                "protectionPlanPrimaryCTA",
                 "settingsLanguageRow",
             ],
         )
