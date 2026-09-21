@@ -1,5 +1,5 @@
 //
-//  ProtectionOffPresentation.swift
+//  ProtectionOffCardContent.swift
 //  Pillie
 //
 //  Drives the Protection Off State Home card (issue #167 / ADR 0007 /
