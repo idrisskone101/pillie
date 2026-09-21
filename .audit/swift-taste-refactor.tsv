@@ -1,0 +1,12 @@
+ts	phase	decision	why	evidence	result
+2026-09-21T03:55:07Z	frame	will apply Swift taste without a rewrite	a full rewrite of 195 files overnight would change behavior; the layout is already feature-foldered	git HEAD e17857c, 195 swift files	open
+2026-09-21T03:56:00Z	predicate	done means taste gate green, no dump files, baseline axe ids still present, Today History Settings reachable, ns-mac-qa ready	user asked for clean reusable code with no regressions and a before snapshot	verify-pillie features/today.md history.md settings.md	open
+2026-09-21T03:57:00Zharnessstarting baseline ns-mac-qa on e17857c before any structure moveneed old-vs-new screenshots and axe idsmake ns-mac-qarunning
+2026-09-21T03:59:00Z	harness	saved welcome baseline from e17857c ns-mac-qa	fresh simulator lands on Protection Plan welcome, not Today	/opt/cursor/artifacts/baseline_welcome_1x.png, baseline_welcome_ids.txt	ready=true
+2026-09-21T04:05:00Z	settings	moved six Settings editors into sibling files	SettingsView was 1339 lines with extra editor types; now 729	commit dd16f16	pending Mac proof
+2026-09-21T04:05:00Z	settings	welcome pin held after Settings split	protectionPlanPrimaryCTA and developerMenuButton still present; first recapture was splash	/opt/cursor/artifacts/after_settings_welcome_1x.png	VERIFIED
+2026-09-21T04:10:00Z	developer	split debug menu into entry/section/row files	developerMenuButton and developerScenario.* stay	commit b93bb54	open
+2026-09-21T04:12:00Z	order	moved 7 leading types so named views are first	inventory main-symbol-not-first 7 -> 0	commits 140f5b5 efa6593	open
+2026-09-21T04:14:00Z	paywall	moved PlusUpsellSheet from Components to Paywall	commerce surface belongs with HonestPaywall	commits 71b258a dd6b9d6	open
+2026-09-21T04:15:00Z	extras	moved leftover helpers out of *View.swift	extras 54 -> 2 nested Mechanism Proof types	commit 498348c	open
+2026-09-21T04:16:00Z	qa	efa6593 ns-mac-qa ready=true was splash again	axe dump still had protectionPlanPrimaryCTA under overlay	/opt/cursor/artifacts/efa6593_splash_1x.png	need recapture
