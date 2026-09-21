@@ -843,43 +843,6 @@ struct HomeView: View {
     }
 }
 
-// MARK: - Taken Button Style
-
-private struct PillieTakenButtonStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .font(.pillie(18, weight: .semibold))
-            .foregroundStyle(PillieTheme.textPrimary)
-            .pillieAdaptiveLineLimit(minimumScaleFactor: 0.65)
-            .frame(maxWidth: .infinity)
-            .frame(height: PillieTheme.ctaHeight)
-            .background(PillieTheme.sage)
-            .clipShape(Capsule())
-    }
-}
-
-private struct TrialDeclineThankYouBanner: View {
-    let message: String
-
-    var body: some View {
-        HStack(spacing: 10) {
-            Image(systemName: "checkmark.circle.fill")
-                .foregroundStyle(PillieTheme.verifiedGreen)
-                .accessibilityHidden(true)
-            Text(message)
-                .font(.system(.subheadline, design: .rounded, weight: .semibold))
-                .foregroundStyle(.white)
-                .fixedSize(horizontal: false, vertical: true)
-        }
-        .padding(.horizontal, 18)
-        .padding(.vertical, 14)
-        .background(PillieTheme.dark, in: Capsule())
-        .shadow(color: PillieTheme.dark.opacity(0.22), radius: 12, y: 6)
-        .accessibilityElement(children: .combine)
-        .accessibilityIdentifier("trialDeclineFeedbackThankYou")
-    }
-}
-
 #Preview {
     HomeView()
         .environment(PillStore.previewStore())
