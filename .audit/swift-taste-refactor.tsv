@@ -10,3 +10,7 @@ ts	phase	decision	why	evidence	result
 2026-09-21T04:14:00Z	paywall	moved PlusUpsellSheet from Components to Paywall	commerce surface belongs with HonestPaywall	commits 71b258a dd6b9d6	open
 2026-09-21T04:15:00Z	extras	moved leftover helpers out of *View.swift	extras 54 -> 2 nested Mechanism Proof types	commit 498348c	open
 2026-09-21T04:16:00Z	qa	efa6593 ns-mac-qa ready=true was splash again	axe dump still had protectionPlanPrimaryCTA under overlay	/opt/cursor/artifacts/efa6593_splash_1x.png	need recapture
+2026-09-21T04:21:00Z	qa	132209e settled welcome pin held	protectionPlanPrimaryCTA and developerMenuButton present after splash	/opt/cursor/artifacts/132209e_settled_welcome_1x.png	VERIFIED
+2026-09-21T04:22:00Z	qa	trialActive DebugQA reaches Today	home chrome, tab bar, plus trial badge	/opt/cursor/artifacts/132209e_today_trial_active_1x.png	VERIFIED
+2026-09-21T04:23:00Z	qa	History tab opens from Today	September 2026 calendar chrome	/opt/cursor/artifacts/132209e_history_1x.png	VERIFIED
+2026-09-21T04:24:00Z	qa	Settings tab opens; language and developer rows present	settingsLanguageRow settingsDeveloperMenuRow	/opt/cursor/artifacts/132209e_settings_1x.png	VERIFIED
