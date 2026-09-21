@@ -39,9 +39,12 @@ final class TrialEndPaywallTelemetryTests: XCTestCase {
             .string("blocker_configured")
         )
         XCTAssertEqual(client.events[1].properties["paywall_variant"], .string("reminder_only"))
-        // Only approved coarse values: source, surface, legacy cohort, terms cohort,
-        // explicit variant alias, and is_plus.
-        XCTAssertEqual(client.events[0].properties.count, 6)
+        // Approved coarse values plus the closed experiment envelope.
+        XCTAssertEqual(client.events[0].properties["experiment_key"], .string("paywall-presentation"))
+        XCTAssertEqual(client.events[0].properties["experiment_variant"], .string("control"))
+        XCTAssertEqual(client.events[0].properties["rc_offering"], .string("unknown"))
+        XCTAssertEqual(client.events[0].properties["paywall_engine"], .string("honest"))
+        XCTAssertEqual(client.events[0].properties.count, 10)
     }
 
     func testKillSwitchRollbackKeepsPostCutoverCohortAndLegacyVariantKey() {
