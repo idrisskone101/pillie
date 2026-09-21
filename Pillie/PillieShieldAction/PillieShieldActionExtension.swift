@@ -4,9 +4,10 @@
 //
 //  Handles button taps on the shield.
 //
-//  Shield action extensions cannot launch other apps or open URLs, so
-//  "Open Pillie" posts an immediate local notification whose tap launches
-//  the app. The notification lands under the shielded app's dismissed screen.
+//  iOS 26.5 opens the FamilyControls host with
+//  `ShieldActionResponse.openParentalControlsApp`. Older systems still
+//  cannot launch from this extension, so they post a local notification
+//  whose tap opens Pillie.
 //
 
 import ManagedSettings
@@ -48,12 +49,22 @@ class PillieShieldActionExtension: ShieldActionDelegate {
     ) {
         switch action {
         case .primaryButtonPressed:
-            postOpenAppNotification { completionHandler(.close) }
+            openHostApp(completionHandler)
         case .secondaryButtonPressed:
             completionHandler(.close)
         @unknown default:
             completionHandler(.close)
         }
+    }
+
+    private nonisolated func openHostApp(
+        _ completionHandler: @escaping (ShieldActionResponse) -> Void
+    ) {
+        if #available(iOS 26.5, *) {
+            completionHandler(.openParentalControlsApp)
+            return
+        }
+        postOpenAppNotification { completionHandler(.close) }
     }
 
     private nonisolated func postOpenAppNotification(completion: @escaping () -> Void) {
