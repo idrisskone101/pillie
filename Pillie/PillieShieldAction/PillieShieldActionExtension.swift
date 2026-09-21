@@ -50,9 +50,7 @@ class PillieShieldActionExtension: ShieldActionDelegate {
         switch action {
         case .primaryButtonPressed:
             openHostApp(completionHandler)
-        case .secondaryButtonPressed:
-            completionHandler(.close)
-        @unknown default:
+        default:
             completionHandler(.close)
         }
     }
