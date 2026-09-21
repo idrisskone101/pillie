@@ -186,11 +186,8 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         case NotificationManager.shared.snoozeAction:
             NotificationManager.shared.handleSnoozeAction(store: store, response: response)
         case UNNotificationDefaultActionIdentifier:
-            // Shield "Open Pillie" taps arrive as a local notification; blocking
-            // is already live, so just land the user in the app.
-            let isShieldOpen = response.notification.request.content.userInfo["pillie_request_kind"] as? String == "shield_open"
             // User tapped the notification banner — apply blocking immediately
-            if !isShieldOpen, !store.isTodayHandled {
+            if !store.isTodayHandled {
                 AppBlockingManager.shared.applyBlocking(reason: store.pack.method.blockingReasonText)
             }
         default:
