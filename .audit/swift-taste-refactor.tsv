@@ -15,4 +15,11 @@ ts	phase	decision	why	evidence	result
 2026-09-21T04:23:00Z	qa	History tab opens from Today	September 2026 calendar chrome	/opt/cursor/artifacts/132209e_history_1x.png	VERIFIED
 2026-09-21T04:24:00Z	qa	Settings tab opens; language and developer rows present	settingsLanguageRow settingsDeveloperMenuRow	/opt/cursor/artifacts/132209e_settings_1x.png	VERIFIED
 2026-09-21T04:29:00Z	qa	7118f04 analytics split Today/History/Settings held	build succeeded; tabs still work after catalog extract	/opt/cursor/artifacts/7118f04_today_1x.png	VERIFIED
-2026-09-21T04:31:00Z	notifications	moved NotificationCenterScheduling beside manager	NotificationManager starts with the class	commit pending	open
+2026-09-21T04:31:00Z	notifications	moved NotificationCenterScheduling beside manager	NotificationManager starts with the class	commit 40d6a91	open
+2026-09-21T05:00:00Z	home	moved Home presentation types beside Home views	feature-owned Services/Components types	commit d5522a0	open
+2026-09-21T05:01:00Z	calendar	moved History layout types beside Calendar	MonthCursor CalendarMonthLayout HistoryPresentation unused by Shield	commit 6345217	open
+2026-09-21T05:02:00Z	settings	moved CustomReminderPreview beside Settings	CustomReminderCopy stays with notifications	commit 316f8fa	open
+2026-09-21T05:03:00Z	onboarding	moved EarlyValueProofDemoState beside proof view	one owner ProtectionPlanEarlyValueProofView	commit 940c74c	open
+2026-09-21T05:04:00Z	subtract	deleted unused Shared formatters and PillStore refill copy	no Swift callers; tests still use daysOverdue	commit 40d6a91	open
+2026-09-21T05:06:00Z	home	moved trial-decline feedback types beside Home	Paywall only consumes the route and copy	commit eeada98	open
+2026-09-21T05:07:00Z	calendar	moved History discovery announcement beside History	Tab bar and app only seed the storage key	commit 40ec261	open
