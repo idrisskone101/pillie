@@ -36,10 +36,11 @@ class PillieShieldActionExtension: ShieldActionDelegate {
     private nonisolated func response(for action: ShieldAction) -> ShieldActionResponse {
         switch action {
         case .primaryButtonPressed:
+            if #available(iOS 26.5, *) {
+                return .openParentalControlsApp
+            }
             return .close
-        case .secondaryButtonPressed:
-            return .close
-        @unknown default:
+        default:
             return .close
         }
     }
