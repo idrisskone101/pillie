@@ -425,27 +425,8 @@ struct ContentView: View {
       }
       .font(.pillieBody())
 
-      // Splash screen overlay
       if isLoading {
-        ZStack {
-          PillieTheme.coral
-            .ignoresSafeArea()
-
-          Image("SplashIcon")
-            .resizable()
-            .scaledToFit()
-            .frame(width: 120, height: 120)
-            .clipShape(Circle())
-            .overlay(
-              Circle()
-                .stroke(Color.white.opacity(0.6), lineWidth: 3)
-            )
-            .shadow(color: Color.black.opacity(0.15), radius: 20, y: 8)
-            .scaleEffect(iconScale)
-        }
-        .transition(.opacity)
-        .zIndex(1)
-        .allowsHitTesting(false)
+        LaunchSplashView(iconScale: iconScale)
       }
     }
     #if DEBUG
