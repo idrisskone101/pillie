@@ -27,12 +27,15 @@ CAPTURE_ONLY ?= 0
 FORCE_BUILD ?= 0
 
 WORKLOAD ?= all
+BASELINE ?=
+CURRENT ?=
 
 .PHONY: help diagnose build run build-and-run test screenshot console \
 	worktree agent-verify udid qa measure-frames \
 	ns-mac-status ns-mac-start ns-mac-stop ns-mac-sync ns-mac-diagnose \
 	ns-mac-exec ns-mac-verify ns-mac-screenshot ns-mac-qa ns-mac-check-sync \
-	ns-mac-ensure-tools ensure-qa-tools swift-taste swift-taste-selftest
+	ns-mac-ensure-tools ensure-qa-tools swift-taste swift-taste-selftest \
+	swift-layout pin-axe
 
 help:
 	@printf "%s\n" \
@@ -62,7 +65,9 @@ help:
 		"  make ensure-qa-tools          Install axe and ImageMagick if missing" \
 		"  make ns-mac-ensure-tools      Same, on the Namespace Mac" \
 		"  make swift-taste              Linux Swift structure gate (allowlist)" \
-		"  make swift-taste-selftest     Fixture proof for the Swift taste checker"
+		"  make swift-taste-selftest     Fixture proof for the Swift taste checker" \
+		"  make swift-layout             Inventory layout debt (report only)" \
+		"  make pin-axe                 Compare an axe dump to a baseline id list"
 
 diagnose:
 	@$(SCRIPTS)/diagnose.sh
@@ -165,3 +170,13 @@ swift-taste:
 
 swift-taste-selftest:
 	@$(SCRIPTS)/check-swift-taste-selftest.sh
+
+swift-layout:
+	@python3 $(SCRIPTS)/inventory-swift-layout.py
+
+pin-axe:
+	@if [ -z "$(BASELINE)" ] || [ -z "$(CURRENT)" ]; then \
+		echo "usage: make pin-axe BASELINE=path CURRENT=path" >&2; \
+		exit 2; \
+	fi
+	@python3 $(SCRIPTS)/pin-axe-identifiers.py compare "$(BASELINE)" "$(CURRENT)"
