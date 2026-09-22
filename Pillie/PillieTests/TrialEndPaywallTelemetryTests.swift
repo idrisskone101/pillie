@@ -288,43 +288,22 @@ private final class TrialDeclineFeedbackAnalyticsRecorder: AnalyticsTracking {
         Self.keepAlive.append(self)
     }
 
-    func track(
-        _ event: AnalyticsEvent,
-        source: AnalyticsSource?,
-        step: AnalyticsStep?,
-        stepIndex: Int?,
-        screen: AnalyticsScreen?,
-        plan: AnalyticsPlan?,
-        result: AnalyticsResult?,
-        setting: AnalyticsSetting?,
-        acquisitionSource: AcquisitionSource?,
-        isPlus: Bool?,
-        hasBlockingSelection: Bool?,
-        interventionCount: Int?,
-        shakeCount: Int?,
-        trialWarningDay: Int?,
-        trialEndCohort: TrialEndPaywallCohort?,
-        titleCustomized: Bool?,
-        bodyCustomized: Bool?,
-        retryTitleCustomized: Bool?,
-        retryBodyCustomized: Bool?,
-    ) {}
-
-    func track(
-        _ event: AnalyticsEvent,
-        declineFeedbackOutcome: AnalyticsTrialDeclineFeedbackOutcome?,
-        declineFeedbackReason: TrialDeclineFeedbackReason?,
-        declineFeedbackHasText: Bool?,
-        isPlus: Bool?
-    ) {
+    func track(_ event: AnalyticsEvent, payload: AnalyticsPayload) {
         events.append(Event(
             event: event,
-            outcome: declineFeedbackOutcome,
-            reason: declineFeedbackReason,
-            hasText: declineFeedbackHasText,
-            isPlus: isPlus
+            outcome: payload.declineFeedbackOutcome,
+            reason: payload.declineFeedbackReason,
+            hasText: payload.declineFeedbackHasText,
+            isPlus: payload.isPlus
         ))
     }
+
+    func trackError(
+        _ domain: AppErrorDomain,
+        error: Error,
+        context: [String: String],
+        severity: AppErrorSeverity
+    ) {}
 }
 
 private final class TrialEndAnalyticsClientSpy: ProductAnalyticsClient {

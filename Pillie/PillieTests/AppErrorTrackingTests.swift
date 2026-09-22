@@ -135,27 +135,7 @@ private final class ErrorRecordingTracker: AnalyticsTracking {
     severity: AppErrorSeverity
   )] = []
 
-  func track(
-    _ event: AnalyticsEvent,
-    source: AnalyticsSource?,
-    step: AnalyticsStep?,
-    stepIndex: Int?,
-    screen: AnalyticsScreen?,
-    plan: AnalyticsPlan?,
-    result: AnalyticsResult?,
-    setting: AnalyticsSetting?,
-    acquisitionSource: AcquisitionSource?,
-    isPlus: Bool?,
-    hasBlockingSelection: Bool?,
-    interventionCount: Int?,
-    shakeCount: Int?,
-    trialWarningDay: Int?,
-    trialEndCohort: TrialEndPaywallCohort?,
-    titleCustomized: Bool?,
-    bodyCustomized: Bool?,
-    retryTitleCustomized: Bool?,
-    retryBodyCustomized: Bool?,
-  ) {}
+  func track(_ event: AnalyticsEvent, payload: AnalyticsPayload) {}
 
   func trackError(
     _ domain: AppErrorDomain,

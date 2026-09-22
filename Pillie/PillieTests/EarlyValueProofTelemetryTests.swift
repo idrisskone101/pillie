@@ -112,30 +112,17 @@ final class DemoFunnelRecorder: AnalyticsTracking {
 
   private(set) var events: [Event] = []
 
-  func track(
-    _ event: AnalyticsEvent,
-    source: AnalyticsSource?,
-    step: AnalyticsStep?,
-    stepIndex: Int?,
-    screen: AnalyticsScreen?,
-    plan: AnalyticsPlan?,
-    result: AnalyticsResult?,
-    setting: AnalyticsSetting?,
-    acquisitionSource: AcquisitionSource?,
-    isPlus: Bool?,
-    hasBlockingSelection: Bool?,
-    interventionCount: Int?,
-    shakeCount: Int?,
-    trialWarningDay: Int?,
-    trialEndCohort: TrialEndPaywallCohort?,
-    titleCustomized: Bool?,
-    bodyCustomized: Bool?,
-    retryTitleCustomized: Bool?,
-    retryBodyCustomized: Bool?,
-  ) {
+  func track(_ event: AnalyticsEvent, payload: AnalyticsPayload) {
     events.append(
       Event(
-        event: event, source: source, step: step, stepIndex: stepIndex, result: result,
-        shakeCount: shakeCount))
+        event: event, source: payload.source, step: payload.step, stepIndex: payload.stepIndex, result: payload.result,
+        shakeCount: payload.shakeCount))
   }
+
+  func trackError(
+    _ domain: AppErrorDomain,
+    error: Error,
+    context: [String: String],
+    severity: AppErrorSeverity
+  ) {}
 }

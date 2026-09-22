@@ -239,10 +239,12 @@ struct ProductAnalyticsTelemetry {
   func blockerSetupSkipped(authorizationState: AnalyticsAuthorizationState) {
     analytics.track(
       .blockerSetupSkipped,
-      source: .onboarding,
-      step: .appBlocking,
-      authorizationState: authorizationState,
-      isPlus: isPlus()
+      payload: AnalyticsPayload(
+        source: .onboarding,
+        step: .appBlocking,
+        isPlus: isPlus(),
+        authorizationState: authorizationState
+      )
     )
   }
 
@@ -264,12 +266,7 @@ struct ProductAnalyticsTelemetry {
   func trialExpired() {
     analytics.track(
       .trialExpired,
-      source: nil,
-      surface: nil,
-      plan: nil,
-      result: nil,
-      trialTermsCohort: trialTermsCohort(),
-      isPlus: isPlus()
+      payload: AnalyticsPayload(isPlus: isPlus(), trialTermsCohort: trialTermsCohort())
     )
   }
 
@@ -288,11 +285,13 @@ struct ProductAnalyticsTelemetry {
   ) {
     analytics.track(
       .trialStatusFeatureTapped,
-      source: .home,
-      trialStatusFeature: feature,
-      trialActivationStatus: status,
-      isRecommended: isRecommended,
-      isPlus: isPlus()
+      payload: AnalyticsPayload(
+        source: .home,
+        isPlus: isPlus(),
+        trialStatusFeature: feature,
+        trialActivationStatus: status,
+        isRecommended: isRecommended
+      )
     )
   }
 
@@ -300,8 +299,7 @@ struct ProductAnalyticsTelemetry {
     guard count > 0 else { return }
     analytics.track(
       .smartReminderRetryScheduled,
-      retryCount: count,
-      isPlus: isPlus()
+      payload: AnalyticsPayload(isPlus: isPlus(), retryCount: count)
     )
   }
 
@@ -312,8 +310,7 @@ struct ProductAnalyticsTelemetry {
   func smartReminderOutcome(_ outcome: AnalyticsSmartReminderOutcome) {
     analytics.track(
       .smartReminderOutcome,
-      smartReminderOutcome: outcome,
-      isPlus: isPlus()
+      payload: AnalyticsPayload(isPlus: isPlus(), smartReminderOutcome: outcome)
     )
   }
 
@@ -337,14 +334,7 @@ struct ProductAnalyticsTelemetry {
     terms: TrialEndAccessTerms,
     termsCohort: TrialTermsCohort? = nil
   ) {
-    analytics.track(
-      .paywallViewed,
-      source: .trialEnd,
-      surface: .trialEnd,
-      trialTermsCohort: termsCohort ?? TrialTermsCohort(terms: terms),
-      trialEndCohort: cohort,
-      isPlus: isPlus()
-    )
+    trackTrialEndPaywall(.paywallViewed, cohort: cohort, terms: terms, termsCohort: termsCohort)
   }
 
   func trialEndPlanSelected(
@@ -489,13 +479,15 @@ struct ProductAnalyticsTelemetry {
   ) {
     analytics.track(
       event,
-      source: .trialEnd,
-      surface: .trialEnd,
-      plan: plan,
-      result: result,
-      trialTermsCohort: termsCohort ?? TrialTermsCohort(terms: terms),
-      trialEndCohort: cohort,
-      isPlus: isPlus()
+      payload: AnalyticsPayload(
+        source: .trialEnd,
+        plan: plan,
+        result: result,
+        isPlus: isPlus(),
+        trialEndCohort: cohort,
+        trialTermsCohort: termsCohort ?? TrialTermsCohort(terms: terms),
+        paywallSurface: .trialEnd
+      )
     )
   }
 
@@ -532,10 +524,13 @@ struct ProductAnalyticsTelemetry {
   private func trackTrialDeclineFeedback(_ event: TrialDeclineFeedbackTelemetryEvent) {
     analytics.track(
       event.analyticsEvent,
-      declineFeedbackOutcome: event.outcome,
-      declineFeedbackReason: event.reason,
-      declineFeedbackHasText: event.hasText,
-      isPlus: isPlus()
+      payload: AnalyticsPayload(
+        source: .trialEnd,
+        isPlus: isPlus(),
+        declineFeedbackOutcome: event.outcome,
+        declineFeedbackReason: event.reason,
+        declineFeedbackHasText: event.hasText
+      )
     )
   }
 
@@ -548,15 +543,7 @@ struct ProductAnalyticsTelemetry {
   }
 
   func paywallViewed(surface: AnalyticsPaywallSurface) {
-    analytics.track(
-      .paywallViewed,
-      source: source(for: surface),
-      surface: surface,
-      plan: nil,
-      result: nil,
-      trialTermsCohort: trialTermsCohort(),
-      isPlus: isPlus()
-    )
+    trackSurfacePaywall(.paywallViewed, surface: surface)
   }
 
   func paywallPlanSelected(
@@ -708,14 +695,25 @@ struct ProductAnalyticsTelemetry {
       )
       return
     }
+    trackSurfacePaywall(event, surface: surface, plan: plan, result: result)
+  }
+
+  private func trackSurfacePaywall(
+    _ event: AnalyticsEvent,
+    surface: AnalyticsPaywallSurface,
+    plan: AnalyticsPlan? = nil,
+    result: AnalyticsResult? = nil
+  ) {
     analytics.track(
       event,
-      source: source(for: surface),
-      surface: surface,
-      plan: plan,
-      result: result,
-      trialTermsCohort: trialTermsCohort(),
-      isPlus: isPlus()
+      payload: AnalyticsPayload(
+        source: source(for: surface),
+        plan: plan,
+        result: result,
+        isPlus: isPlus(),
+        trialTermsCohort: trialTermsCohort(),
+        paywallSurface: surface
+      )
     )
   }
 
@@ -747,11 +745,7 @@ struct ProductAnalyticsTelemetry {
   private func trackPlusUpsell(_ event: AnalyticsEvent) {
     analytics.track(
       event,
-      source: .upsell,
-      surface: .plusUpsell,
-      plan: nil,
-      result: nil,
-      isPlus: isPlus()
+      payload: AnalyticsPayload(source: .upsell, isPlus: isPlus(), paywallSurface: .plusUpsell)
     )
   }
 
@@ -849,14 +843,19 @@ struct ProductAnalyticsTelemetry {
     preset: CustomReminderPreset?,
     editedAfterPreset: Bool
   ) {
-    analytics.trackCustomReminderSave(
-      isPlus: isPlus(),
-      titleCustomized: titleCustomized,
-      bodyCustomized: bodyCustomized,
-      retryTitleCustomized: retryTitleCustomized,
-      retryBodyCustomized: retryBodyCustomized,
-      preset: preset,
-      editedAfterPreset: editedAfterPreset
+    analytics.track(
+      .settingsChangeSaved,
+      payload: AnalyticsPayload(
+        source: .settings,
+        setting: .customReminders,
+        isPlus: isPlus(),
+        titleCustomized: titleCustomized,
+        bodyCustomized: bodyCustomized,
+        retryTitleCustomized: retryTitleCustomized,
+        retryBodyCustomized: retryBodyCustomized,
+        reminderPreset: preset,
+        reminderPresetEdited: preset == nil ? nil : editedAfterPreset
+      )
     )
   }
 
@@ -982,24 +981,26 @@ struct ProductAnalyticsTelemetry {
   ) {
     analytics.track(
       event,
-      source: source,
-      step: step,
-      stepIndex: stepIndex,
-      screen: screen,
-      plan: plan,
-      result: result,
-      setting: setting,
-      acquisitionSource: acquisitionSource,
-      isPlus: isPlus(),
-      hasBlockingSelection: hasBlockingSelection,
-      interventionCount: interventionCount,
-      shakeCount: shakeCount,
-      trialWarningDay: trialWarningDay,
-      trialEndCohort: trialEndCohort,
-      titleCustomized: titleCustomized,
-      bodyCustomized: bodyCustomized,
-      retryTitleCustomized: retryTitleCustomized,
-      retryBodyCustomized: retryBodyCustomized,
+      payload: AnalyticsPayload(
+        source: source,
+        step: step,
+        stepIndex: stepIndex,
+        screen: screen,
+        plan: plan,
+        result: result,
+        setting: setting,
+        acquisitionSource: acquisitionSource,
+        isPlus: isPlus(),
+        hasBlockingSelection: hasBlockingSelection,
+        interventionCount: interventionCount,
+        shakeCount: shakeCount,
+        trialWarningDay: trialWarningDay,
+        trialEndCohort: trialEndCohort,
+        titleCustomized: titleCustomized,
+        bodyCustomized: bodyCustomized,
+        retryTitleCustomized: retryTitleCustomized,
+        retryBodyCustomized: retryBodyCustomized
+      )
     )
   }
 }
