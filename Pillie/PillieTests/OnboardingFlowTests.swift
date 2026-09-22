@@ -422,14 +422,6 @@ final class OnboardingFlowTests: XCTestCase {
         XCTAssertFalse(OnboardingFlow.isOnboardingActive(rawStep: OnboardingFlow.Step.complete.rawValue))
     }
 
-    func testOnboardingLaunchStillConfiguresRevenueCat() {
-        XCTAssertTrue(
-            SubscriptionLaunchPolicy.shouldConfigureRevenueCat(
-                isRunningTests: false
-            )
-        )
-    }
-
     func testExpiredPostCutoverOnboardingRoutesToHardPaywall() {
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = TimeZone(identifier: "America/Montreal")!

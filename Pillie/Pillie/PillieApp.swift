@@ -87,15 +87,11 @@ struct PillieApp: App {
                     NotificationManager.shared.requestReschedule(from: store, reason: "entitlement-change")
                 }
             }
-            if SubscriptionLaunchPolicy.shouldConfigureRevenueCat(
-                isRunningTests: Self.isRunningTests
-            ) {
-                // RevenueCat must resolve paid access and issue #257's remote
-                // hard-wall switch even while onboarding is active. Otherwise a
-                // user who resumes onboarding after trial expiry can reach Home
-                // with both commerce states unresolved and bypass the wall.
-                SubscriptionManager.shared.configure()
-            }
+            // RevenueCat must resolve paid access and issue #257's remote
+            // hard-wall switch even while onboarding is active. Otherwise a
+            // user who resumes onboarding after trial expiry can reach Home
+            // with both commerce states unresolved and bypass the wall.
+            SubscriptionManager.shared.configure()
             // For returning users, RevenueCat configuration synchronously applies
             // cached entitlement state first, so `is_plus` is resolved at capture.
             ProductAnalyticsTelemetry.live.appLaunched()
@@ -137,31 +133,16 @@ struct PillieApp: App {
                         store.refreshDayContextIfNeeded()
                         // A Reverse Trial can expire while suspended (local midnight
                         // after day 14). Re-derive Plus Access before the consumers
-                        // below read it — a flip fires onEntitlementChange, and the
-                        // Screen Time reconcile drops blocking (ADR 0007: blocking
-                        // must never outlive Plus Access).
-                        let shouldRunPostOnboardingWork = TrialAccessLifecycle.handleForeground(
-                            isOnboardingActive: Self.isOnboardingActive,
-                            refreshAccess: {
-                                SubscriptionManager.shared.updateActiveDaySchedule(
-                                    pack: store.activePack
-                                )
-                                // First open at-or-after expiry records `trial_expired`
-                                // exactly once (#167), after access re-evaluation.
-                                recordTrialExpiredIfNeeded()
-                            },
-                            // A saved onboarding selection can already have applied
-                            // shields. Remove them at expiry even if the user remains
-                            // on protectionPlanReady; only reminder work stays gated.
-                            reconcileProtection: reconcileScreenTimeState
-                        )
+                        // below read it. This runs during onboarding too: a saved
+                        // onboarding selection can already have applied shields.
+                        refreshTrialAccess()
                         ProductAnalyticsTelemetry.live.appBecameActive()
                         // Shield intercepts accumulated while we weren't running
                         // (#161): flush the App Group delta as one aggregated
                         // blocker_intervention_fired. Before the onboarding guard —
                         // blocking fires for any user whose Protection Plan is live.
                         flushBlockerInterventions()
-                        guard shouldRunPostOnboardingWork else { return }
+                        guard !Self.isOnboardingActive else { return }
                         NotificationManager.shared.requestReschedule(from: store, reason: "app-became-active")
                     } else if newPhase == .background {
                         // Flush buffered analytics before the app is suspended/killed.
@@ -173,42 +154,34 @@ struct PillieApp: App {
                         AppDelegate.scheduleScreenTimeReconcileTask()
                     }
                 }
+                // A trial can expire while Pillie stays foregrounded across local
+                // midnight. Refresh immediately so Home's access-change observer
+                // presents the hard wall.
                 .onReceive(NotificationCenter.default.publisher(for: .NSCalendarDayChanged)) { _ in
                     guard !Self.isRunningTests else { return }
-                    TrialAccessLifecycle.handle(
-                        .calendarDayChanged,
-                        refreshAccess: {
-                            // A trial can expire while Pillie remains foregrounded
-                            // across local midnight. Reconcile immediately so Home's
-                            // existing access-change observer presents the hard wall.
-                            SubscriptionManager.shared.updateActiveDaySchedule(
-                                pack: store.activePack
-                            )
-                            recordTrialExpiredIfNeeded()
-                        },
-                        reconcileProtection: reconcileScreenTimeState
-                    )
+                    refreshTrialAccess()
                 }
+                // Clock and time-zone changes can cross the trial's local-day
+                // expiry boundary without changing scene phase.
                 .onReceive(
                     NotificationCenter.default.publisher(
                         for: UIApplication.significantTimeChangeNotification
                     )
                 ) { _ in
                     guard !Self.isRunningTests else { return }
-                    TrialAccessLifecycle.handle(
-                        .significantTimeChanged,
-                        refreshAccess: {
-                            // Clock and time-zone changes can cross the trial's
-                            // local-day expiry boundary without changing scene phase.
-                            SubscriptionManager.shared.updateActiveDaySchedule(
-                                pack: store.activePack
-                            )
-                            recordTrialExpiredIfNeeded()
-                        },
-                        reconcileProtection: reconcileScreenTimeState
-                    )
+                    refreshTrialAccess()
                 }
         }
+    }
+
+    /// Plus Access must be re-derived before the Screen Time reconcile reads it:
+    /// a flip fires onEntitlementChange, and the reconcile drops blocking
+    /// (ADR 0007: blocking must never outlive Plus Access). `trial_expired`
+    /// records exactly once (#167), after access re-evaluation.
+    private func refreshTrialAccess() {
+        SubscriptionManager.shared.updateActiveDaySchedule(pack: store.activePack)
+        recordTrialExpiredIfNeeded()
+        reconcileScreenTimeState()
     }
 
     /// Records `trial_expired` on the first app open at-or-after Reverse Trial

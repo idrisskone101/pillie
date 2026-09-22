@@ -64,11 +64,8 @@ struct RoutineCyclePositionSection: View {
 
     private var exactDayDisclosure: some View {
         Button {
-            let action = RoutineExactDayCardAction.resolve(
-                isEditingExactDay: isEditingExactDay
-            )
             withAnimation(.easeInOut(duration: 0.2)) {
-                isEditingExactDay = action == .expand
+                isEditingExactDay.toggle()
             }
         } label: {
             HStack(spacing: 12) {
