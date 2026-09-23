@@ -15,24 +15,10 @@ struct SettingsView: View {
     @Environment(\.openURL) private var openURL
     @State private var appeared = false
     @State private var hasAnimatedIn = false
-    @State private var showTimeEditor = false
-    @State private var showIntervalEditor = false
-    @State private var showRetryLimitEditor = false
-    @State private var showRefillReminderEditor = false
-    @State private var showProtocolEditor = false
-    @State private var showCycleDayEditor = false
-    @State private var showBlockedAppsEditor = false
-    @State private var showBlockingUpsell = false
-    @State private var showSmartRemindersUpsell = false
-    @State private var showCustomRemindersEditor = false
-    @State private var showCustomRemindersUpsell = false
+    @State private var activeSheet: SettingsSheet?
     @State private var showPaywall = false
-    @State private var showLanguagePicker = false
     @State private var showManageSubscription = false
     @State private var showOpenLineMailFallback = false
-    #if DEBUG
-    @State private var showDeveloperMenu = false
-    #endif
 
     private let settingsFeedback = SettingsInteractionFeedback()
 
@@ -59,7 +45,7 @@ struct SettingsView: View {
 
                 settingsCard {
                     Button {
-                        openSettingSheet { showProtocolEditor = true }
+                        openSettingSheet { activeSheet = .protocolEditor }
                         ProductAnalyticsTelemetry.live.protocolSettingsOpened()
                     } label: {
                         settingsRow(
@@ -70,7 +56,7 @@ struct SettingsView: View {
                     .buttonStyle(.plain)
                     divider
                     Button {
-                        openSettingSheet { showTimeEditor = true }
+                        openSettingSheet { activeSheet = .reminderTime }
                         ProductAnalyticsTelemetry.live.reminderTimeSettingsOpened()
                     } label: {
                         settingsRow(
@@ -89,7 +75,7 @@ struct SettingsView: View {
                     divider
                     if SubscriptionManager.shared.hasPlusAccess {
                         Button {
-                            openSettingSheet { showCustomRemindersEditor = true }
+                            openSettingSheet { activeSheet = .customReminders }
                         } label: {
                             settingsRow(PillieLocalization.string(
                                 "settings.custom_messages.title",
@@ -99,7 +85,7 @@ struct SettingsView: View {
                         .buttonStyle(.plain)
                     } else {
                         Button {
-                            openSettingSheet { showCustomRemindersUpsell = true }
+                            openSettingSheet { activeSheet = .customRemindersUpsell }
                         } label: {
                             settingsRow(PillieLocalization.string(
                                 "settings.custom_messages.title",
@@ -107,17 +93,11 @@ struct SettingsView: View {
                             ), value: "Pillie+", valueColor: PillieTheme.coral, showLock: true)
                         }
                         .buttonStyle(.plain)
-                        .sheet(isPresented: $showCustomRemindersUpsell) {
-                            PlusUpsellSheet.customReminders()
-                                .presentationDetents([.height(PlusUpsellSheet.compactPresentationHeight)])
-                                .presentationDragIndicator(.hidden)
-                                .presentationBackground(PillieTheme.bg)
-                        }
                     }
                     if store.pack.method != .ring {
                         divider
                         Button {
-                            openSettingSheet { showRefillReminderEditor = true }
+                            openSettingSheet { activeSheet = .refillReminder }
                             ProductAnalyticsTelemetry.live.supplyReminderSettingsOpened()
                         } label: {
                             settingsRow(supplyReminderTitle, value: supplyReminderValue)
@@ -137,7 +117,7 @@ struct SettingsView: View {
                 settingsCard {
                     if SubscriptionManager.shared.hasPlusAccess {
                         Button {
-                            openSettingSheet { showIntervalEditor = true }
+                            openSettingSheet { activeSheet = .autoReminderInterval }
                             ProductAnalyticsTelemetry.live.autoReminderIntervalSettingsOpened()
                         } label: {
                             settingsRow(PillieLocalization.string(
@@ -151,7 +131,7 @@ struct SettingsView: View {
                         .buttonStyle(.plain)
                         divider
                         Button {
-                            openSettingSheet { showRetryLimitEditor = true }
+                            openSettingSheet { activeSheet = .autoReminderRetryLimit }
                             ProductAnalyticsTelemetry.live.autoReminderRetryLimitSettingsOpened()
                         } label: {
                             settingsRow(PillieLocalization.string(
@@ -162,7 +142,7 @@ struct SettingsView: View {
                         .buttonStyle(.plain)
                     } else {
                         Button {
-                            openSettingSheet { showSmartRemindersUpsell = true }
+                            openSettingSheet { activeSheet = .smartRemindersUpsell }
                         } label: {
                             settingsRow(PillieLocalization.string(
                                 "settings.followup.interval_title",
@@ -172,7 +152,7 @@ struct SettingsView: View {
                         .buttonStyle(.plain)
                         divider
                         Button {
-                            openSettingSheet { showSmartRemindersUpsell = true }
+                            openSettingSheet { activeSheet = .smartRemindersUpsell }
                         } label: {
                             settingsRow(PillieLocalization.string(
                                 "settings.followup.retry_limit_title",
@@ -180,12 +160,6 @@ struct SettingsView: View {
                             ), value: "Pillie+", valueColor: PillieTheme.coral, showLock: true)
                         }
                         .buttonStyle(.plain)
-                        .sheet(isPresented: $showSmartRemindersUpsell) {
-                            PlusUpsellSheet.smartReminders()
-                                .presentationDetents([.height(PlusUpsellSheet.compactPresentationHeight)])
-                                .presentationDragIndicator(.hidden)
-                                .presentationBackground(PillieTheme.bg)
-                        }
                     }
                 }
                 .modifier(FadeInUp(appeared: appeared, delay: 0.12))
@@ -199,7 +173,7 @@ struct SettingsView: View {
 
                 settingsCard {
                     Button {
-                        openSettingSheet { showCycleDayEditor = true }
+                        openSettingSheet { activeSheet = .cycleDay }
                         ProductAnalyticsTelemetry.live.cycleDaySettingsOpened()
                     } label: {
                         settingsRow(PillieLocalization.string(
@@ -229,7 +203,7 @@ struct SettingsView: View {
                         Button {
                             Task { @MainActor in
                                 _ = await AppBlockingManager.shared.ensureAuthorized()
-                                openSensitiveSetting { showBlockedAppsEditor = true }
+                                openSensitiveSetting { activeSheet = .blockedApps }
                                 ProductAnalyticsTelemetry.live.blockedAppsSettingsOpened(
                                     hasSelection: AppBlockingManager.shared.hasAppsSelected
                                 )
@@ -243,7 +217,7 @@ struct SettingsView: View {
                         .buttonStyle(.plain)
                     } else {
                         Button {
-                            openSensitiveSetting { showBlockingUpsell = true }
+                            openSensitiveSetting { activeSheet = .blockingUpsell }
                         } label: {
                             settingsRow(PillieLocalization.string(
                                 "settings.blocked_apps.title",
@@ -251,15 +225,6 @@ struct SettingsView: View {
                             ), value: "Pillie+", valueColor: PillieTheme.coral, showLock: true)
                         }
                         .buttonStyle(.plain)
-                        .sheet(isPresented: $showBlockingUpsell) {
-                            PlusUpsellSheet.appBlocking(
-                                action: store.dueAction(on: store.today),
-                                method: store.pack.method
-                            )
-                                .presentationDetents([.height(PlusUpsellSheet.compactPresentationHeight)])
-                                .presentationDragIndicator(.hidden)
-                                .presentationBackground(PillieTheme.bg)
-                        }
                     }
                 }
                 .modifier(FadeInUp(appeared: appeared, delay: 0.2))
@@ -302,7 +267,7 @@ struct SettingsView: View {
                 VStack(alignment: .leading, spacing: 8) {
                     settingsCard {
                         Button {
-                            openSettingSheet { showLanguagePicker = true }
+                            openSettingSheet { activeSheet = .language }
                         } label: {
                             settingsRow(
                                 PillieLocalization.string("settings.language.title", locale: locale),
@@ -368,7 +333,7 @@ struct SettingsView: View {
 
                 settingsCard {
                     Button {
-                        showDeveloperMenu = true
+                        activeSheet = .developerMenu
                     } label: {
                         settingsRow("Jump to a QA state", value: "Simulator only")
                     }
@@ -376,9 +341,6 @@ struct SettingsView: View {
                     .accessibilityIdentifier("settingsDeveloperMenuRow")
                 }
                 .modifier(FadeInUp(appeared: appeared, delay: 0.3))
-                .sheet(isPresented: $showDeveloperMenu) {
-                    DeveloperMenuView()
-                }
                 #endif
 
                 // Handwriting accent
@@ -402,60 +364,8 @@ struct SettingsView: View {
                 appeared = true
             }
         }
-        .sheet(isPresented: $showLanguagePicker) {
-            LanguagePickerSheet()
-                .presentationDetents([.large])
-                .presentationDragIndicator(.hidden)
-                .presentationBackground(PillieTheme.bg)
-        }
-        .sheet(isPresented: $showTimeEditor) {
-            ReminderTimeEditor(store: store)
-                .presentationDetents([.height(320)])
-                .presentationDragIndicator(.hidden)
-                .presentationBackground(PillieTheme.bg)
-        }
-        .sheet(isPresented: $showIntervalEditor) {
-            AutoReminderIntervalEditor(store: store)
-                .presentationDetents([.height(440)])
-                .presentationDragIndicator(.hidden)
-                .presentationBackground(PillieTheme.bg)
-        }
-        .sheet(isPresented: $showRetryLimitEditor) {
-            AutoReminderRetryLimitEditor(store: store)
-                .presentationDetents([.height(500)])
-                .presentationDragIndicator(.hidden)
-                .presentationBackground(PillieTheme.bg)
-        }
-        .sheet(isPresented: $showRefillReminderEditor) {
-            RefillReminderThresholdEditor(store: store)
-                .presentationDetents([.height(410)])
-                .presentationDragIndicator(.hidden)
-                .presentationBackground(PillieTheme.bg)
-        }
-        .sheet(isPresented: $showProtocolEditor) {
-            ProtocolEditor(store: store)
-                .presentationDetents([.large])
-                .presentationDragIndicator(.hidden)
-        }
-        .sheet(isPresented: $showCycleDayEditor) {
-            CycleDayEditor(store: store)
-                .presentationDetents([
-                    dynamicTypeSize.isAccessibilitySize ? .large : .height(400)
-                ])
-                .presentationDragIndicator(.hidden)
-                .presentationBackground(PillieTheme.bg)
-        }
-        .sheet(isPresented: $showBlockedAppsEditor) {
-            BlockedAppsEditor()
-                .presentationDetents([.height(430)])
-                .presentationDragIndicator(.hidden)
-                .presentationBackground(PillieTheme.bg)
-        }
-        .sheet(isPresented: $showCustomRemindersEditor) {
-            CustomReminderMessagesEditor(store: store)
-                .presentationDetents([.large])
-                .presentationDragIndicator(.hidden)
-                .presentationBackground(PillieTheme.bg)
+        .sheet(item: $activeSheet) { sheet in
+            sheetContent(sheet)
         }
         .fullScreenCover(isPresented: $showPaywall) {
             HonestPaywallHost(
@@ -482,6 +392,56 @@ struct SettingsView: View {
                 locale: locale,
                 arguments: OpenLine.MailFallback.addressToCopy
             ))
+        }
+    }
+
+    @ViewBuilder
+    private func sheetContent(_ sheet: SettingsSheet) -> some View {
+        switch sheet {
+        case .protocolEditor:
+            ProtocolEditor(store: store)
+                .presentationDetents([.large])
+                .presentationDragIndicator(.hidden)
+        case .reminderTime:
+            ReminderTimeEditor(store: store)
+                .settingsSheetPresentation(.height(320))
+        case .customReminders:
+            CustomReminderMessagesEditor(store: store)
+                .settingsSheetPresentation(.large)
+        case .customRemindersUpsell:
+            PlusUpsellSheet.customReminders()
+                .settingsSheetPresentation(.height(PlusUpsellSheet.compactPresentationHeight))
+        case .refillReminder:
+            RefillReminderThresholdEditor(store: store)
+                .settingsSheetPresentation(.height(410))
+        case .autoReminderInterval:
+            AutoReminderIntervalEditor(store: store)
+                .settingsSheetPresentation(.height(440))
+        case .autoReminderRetryLimit:
+            AutoReminderRetryLimitEditor(store: store)
+                .settingsSheetPresentation(.height(500))
+        case .smartRemindersUpsell:
+            PlusUpsellSheet.smartReminders()
+                .settingsSheetPresentation(.height(PlusUpsellSheet.compactPresentationHeight))
+        case .cycleDay:
+            CycleDayEditor(store: store)
+                .settingsSheetPresentation(dynamicTypeSize.isAccessibilitySize ? .large : .height(400))
+        case .blockedApps:
+            BlockedAppsEditor()
+                .settingsSheetPresentation(.height(430))
+        case .blockingUpsell:
+            PlusUpsellSheet.appBlocking(
+                action: store.dueAction(on: store.today),
+                method: store.pack.method
+            )
+                .settingsSheetPresentation(.height(PlusUpsellSheet.compactPresentationHeight))
+        case .language:
+            LanguagePickerSheet()
+                .settingsSheetPresentation(.large)
+        #if DEBUG
+        case .developerMenu:
+            DeveloperMenuView()
+        #endif
         }
     }
 
@@ -719,6 +679,14 @@ struct SettingsView: View {
         case .pill, .ring:
             return store.refillReminderThresholdDays.formatted(.number.locale(locale))
         }
+    }
+}
+
+private extension View {
+    func settingsSheetPresentation(_ detent: PresentationDetent) -> some View {
+        presentationDetents([detent])
+            .presentationDragIndicator(.hidden)
+            .presentationBackground(PillieTheme.bg)
     }
 }
 
