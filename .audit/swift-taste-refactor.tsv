@@ -29,3 +29,12 @@ ts	phase	decision	why	evidence	result
 2026-09-21T05:24:00Z	qa	e8a6a30 Settings tab held	settingsLanguageRow settingsDeveloperMenuRow	/opt/cursor/artifacts/e8a6a30_settings_1x.png	VERIFIED
 2026-09-21T05:26:00Z	qa	e8a6a30 fresh-install welcome pin held	protectionPlanPrimaryCTA developerMenuButton; 0 missing 0 extra	/opt/cursor/artifacts/e8a6a30_settled_welcome_1x.png	VERIFIED
 2026-09-21T05:27:00Z	predicate	taste green, dump-folder 0, welcome pin, Today History Settings reachable	245 files, 0 findings, pin-axe 0 missing	make ns-mac-qa e8a6a30	done
+2026-09-22T23:58:00Z	analytics	collapsed AnalyticsTracking to track(_:payload:) plus trackError	defaults silently dropped surface cohort outcome retry fields; manager reads source/step off payload	commit 9637d53	open
+2026-09-22T23:59:00Z	app	inlined SubscriptionLaunchPolicy TrialAccessLifecycle RoutineExactDayCardAction	identity wrappers; one refreshTrialAccess keeps refresh before reconcile	commit e5fdff3	open
+2026-09-23T00:00:00Z	settings	13 sheet flags to one SettingsSheet destination	each case keeps original detent; paywall cover, manage sheet, mail alert stay separate	commit cd8207b	open
+2026-09-23T00:08:00Z	qa	cd8207b compiled on Namespace Mac	BUILD SUCCEEDED ready=1	/opt/cursor/artifacts/pillie_simulator_1x.png	VERIFIED
+2026-09-23T00:22:00Z	tests	focused unit tests on Namespace Mac	153 XCTest + 6 Swift Testing, 0 failures across all touched suites	/tmp/ns-tests2-cd8207b.log	VERIFIED
+2026-09-23T00:33:00Z	qa	fresh-install onboarding to Today	welcome, demo drag+shake, choices, frequency, source, method, exact-day toggle, notifications, plan, blocking skip	/opt/cursor/artifacts/walk/22_step_1x.png	VERIFIED
+2026-09-23T00:41:00Z	qa	all 13 Settings sheets plus paywall cover open and dismiss	trial user editors and free user upsells; detents unchanged	/opt/cursor/artifacts/walk	VERIFIED
+2026-09-23T00:42:00Z	qa	foreground refreshTrialAccess after clearing trial	Today shows free state, streak persisted	/opt/cursor/artifacts/walk/51_today_after_foreground_1x.png	VERIFIED
+2026-09-23T00:47:00Z	qa	recorded full walkthrough from fresh install	165s simulator recording	/opt/cursor/artifacts/pillie_full_app_walkthrough.mp4	VERIFIED
