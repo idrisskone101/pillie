@@ -110713,7 +110713,7 @@
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "A következő holnap %@.kor."
+            "value": "A következő holnap %@-kor."
           }
         },
         "tr": {
