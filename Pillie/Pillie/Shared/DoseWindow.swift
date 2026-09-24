@@ -48,7 +48,6 @@ enum DoseWindow {
         return epoch &* 2 &+ (pastReminder ? 1 : 0)
     }
 
-    /// Yesterday stays the live day until today's reminder, taken or not.
     static func activeDoseDate(
         now: Date,
         hour: Int,
