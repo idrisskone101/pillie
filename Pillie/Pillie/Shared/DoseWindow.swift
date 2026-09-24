@@ -48,19 +48,18 @@ enum DoseWindow {
         return epoch &* 2 &+ (pastReminder ? 1 : 0)
     }
 
+    /// Yesterday stays the live day until today's reminder, taken or not.
     static func activeDoseDate(
         now: Date,
         hour: Int,
         minute: Int,
-        calendar: Calendar = .current,
-        isYesterdayStillDue: (Date) -> Bool
+        calendar: Calendar = .current
     ) -> Date {
         let today = calendar.startOfDay(for: now)
         guard
             let reminderToday = calendar.date(bySettingHour: hour, minute: minute, second: 0, of: today),
             now < reminderToday,
-            let yesterday = calendar.date(byAdding: .day, value: -1, to: today),
-            isYesterdayStillDue(yesterday)
+            let yesterday = calendar.date(byAdding: .day, value: -1, to: today)
         else {
             return today
         }

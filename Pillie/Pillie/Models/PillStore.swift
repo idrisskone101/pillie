@@ -265,22 +265,7 @@ class PillStore {
             now: PillieClock.now,
             hour: reminderHour,
             minute: reminderMinute
-        ) { yesterday in
-            isLiveCheckIn(yesterday)
-        }
-    }
-
-    /// Snapshot-free: `today` cannot ask `scheduleSnapshot`, which reads `today`.
-    private func isLiveCheckIn(_ day: Date) -> Bool {
-        guard let targetPack = pack(for: day) ?? activePack else { return false }
-        guard let due = DoseScheduleEngine.dueAction(on: day, pack: targetPack),
-              due.type.requiresUserAction else {
-            return false
-        }
-        if let record = dayRecord(forPackID: targetPack.id, epochDay: epochDay(for: day)) {
-            return record.status != .taken && record.status != .breakDay
-        }
-        return true
+        )
     }
 
     var activePack: PillPack? {

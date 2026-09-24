@@ -16,6 +16,6 @@ A due action stays completable until the next Due Action Reminder, not civil mid
 
 ## Consequences
 
-- After midnight and before the next reminder, Settings cycle day, the pack strip, and History's "today" ring can show yesterday when that dose is still open.
+- After midnight and before the next reminder, Settings cycle day, the pack strip, and History's "today" ring stay on yesterday. Logging that dose does not open the next civil day. Take pill and shields for the next day wait until the reminder.
 - Changing reminder time uses the same refresh as crossing the window (`refreshDayContext(force: true)`).
 - Civil midnight remains an implementation detail of window math (`DoseWindow`) and of fire-date construction. It is not product today.

@@ -55,7 +55,7 @@ struct DoseWindowMathTests {
             hour: 8,
             minute: 0,
             calendar: calendar
-        ) { _ in false }
+        )
         #expect(calendar.isDate(live, inSameDayAs: wednesday))
     }
 }
