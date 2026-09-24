@@ -639,6 +639,17 @@ struct PillieApp: App {
             UserDefaults.standard.removeObject(forKey: TrialEndPaywallAutoPresentation.shownStorageKey)
             SubscriptionManager.shared.debugOverrideTrialGrantDate(nil)
             reconcileScreenTimeState()
+        case "/fixed-now":
+            let raw = URLComponents(url: url, resolvingAgainstBaseURL: false)?
+                .queryItems?
+                .first(where: { $0.name == "at" })?
+                .value
+            if let raw, let date = ISO8601DateFormatter().date(from: raw) {
+                PillieClock.setFixedNowForTesting(date)
+            } else {
+                PillieClock.setFixedNowForTesting(nil)
+            }
+            store.refreshDayContextIfNeeded()
         case "/plus-home":
             // QA shortcut: land on the onboarded main app as a Plus subscriber so the
             // Plus-gated Settings surfaces (e.g. Reminder Messages) are reachable.

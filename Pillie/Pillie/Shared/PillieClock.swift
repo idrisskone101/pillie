@@ -26,6 +26,10 @@ enum PillieClock {
         if let fixedNow {
             return fixedNow
         }
+        if let override = ProcessInfo.processInfo.environment["PILLIE_FIXED_NOW"],
+           let date = ISO8601DateFormatter().date(from: override) {
+            return date
+        }
         #endif
         return Date()
     }
