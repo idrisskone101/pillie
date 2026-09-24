@@ -108,6 +108,9 @@ struct StatusCard: View {
         reminderTime: String
     ) -> String {
         if isTodayPassiveOrBreak && !isTodayTaken {
+            if let alarmAction, !Calendar.current.isDate(alarmAction.date, inSameDayAs: store.today) {
+                return nextDoseTitle(for: alarmAction, reminderTime: reminderTime)
+            }
             return PillieLocalization.string("today.empty.title", locale: locale)
         }
 
@@ -122,18 +125,55 @@ struct StatusCard: View {
         if calendar.isDate(alarmAction.date, inSameDayAs: store.today) {
             return PillieLocalization.string("global.status.completed", locale: locale)
         }
+        return nextDoseTitle(for: alarmAction, reminderTime: reminderTime)
+    }
+
+    private func nextDoseTitle(for alarmAction: DoseScheduleAction, reminderTime: String) -> String {
         let weekday = alarmAction.date.formatted(
             Date.FormatStyle()
                 .weekday(.wide)
                 .locale(locale)
         )
-        return PillieLocalization.formatted(
-            "today.next_action.date",
-            locale: locale,
-            arguments: weekday, reminderTime
-        )
+        switch NextDoseDayPhrase.resolve(today: store.today, next: alarmAction.date) {
+        case .tomorrow:
+            return PillieLocalization.formatted(
+                "today.next_action.tomorrow",
+                locale: locale,
+                arguments: reminderTime
+            )
+        case .weekday:
+            return PillieLocalization.formatted(
+                "today.next_action.date",
+                locale: locale,
+                arguments: weekday, reminderTime
+            )
+        case .nextWeek:
+            return PillieLocalization.formatted(
+                "today.next_action.next_week",
+                locale: locale,
+                arguments: weekday, reminderTime
+            )
+        }
     }
 
+}
+
+enum NextDoseDayPhrase: Equatable {
+    case tomorrow
+    case weekday
+    case nextWeek
+
+    static func resolve(today: Date, next: Date, calendar: Calendar = .current) -> NextDoseDayPhrase {
+        let start = calendar.startOfDay(for: today)
+        let target = calendar.startOfDay(for: next)
+        let days = calendar.dateComponents([.day], from: start, to: target).day ?? 0
+        if days <= 1 {
+            return .tomorrow
+        }
+        let sameWeek = calendar.component(.weekOfYear, from: start) == calendar.component(.weekOfYear, from: target)
+            && calendar.component(.yearForWeekOfYear, from: start) == calendar.component(.yearForWeekOfYear, from: target)
+        return sameWeek ? .weekday : .nextWeek
+    }
 }
 
 #Preview {

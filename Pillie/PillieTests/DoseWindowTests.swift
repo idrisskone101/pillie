@@ -237,4 +237,26 @@ struct DoseWindowStoreTests {
         #expect(fixture.store.currentDayIndex == fixture.store.pack.cycleDayIndex(on: thursday))
     }
 }
+
+struct NextDoseDayPhraseTests {
+    private var calendar: Calendar {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(secondsFromGMT: 0)!
+        calendar.firstWeekday = 1
+        return calendar
+    }
+
+    private func day(_ year: Int, _ month: Int, _ day: Int) -> Date {
+        calendar.date(from: DateComponents(year: year, month: month, day: day))!
+    }
+
+    @Test func thursdayBreakOpensNextMonday() {
+        #expect(NextDoseDayPhrase.resolve(today: day(2026, 9, 24), next: day(2026, 9, 28), calendar: calendar) == .nextWeek)
+    }
+
+    @Test func fridayThisWeekStaysAWeekday() {
+        #expect(NextDoseDayPhrase.resolve(today: day(2026, 9, 24), next: day(2026, 9, 25), calendar: calendar) == .tomorrow)
+        #expect(NextDoseDayPhrase.resolve(today: day(2026, 9, 21), next: day(2026, 9, 25), calendar: calendar) == .weekday)
+    }
+}
 #endif

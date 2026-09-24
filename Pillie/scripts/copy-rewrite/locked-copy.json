@@ -867,6 +867,22 @@
     {
       "issue": "ENG-70",
       "table": "Localizable",
+      "key": "today.next_action.tomorrow",
+      "en": "Your next one is tomorrow at %@.",
+      "de": "Deine nächste ist morgen um %@.",
+      "it": "La prossima è domani alle %@."
+    },
+    {
+      "issue": "ENG-70",
+      "table": "Localizable",
+      "key": "today.next_action.next_week",
+      "en": "Your next due date is next %1$@ at %2$@.",
+      "de": "Dein nächster Termin ist nächsten %1$@ um %2$@.",
+      "it": "La prossima data è %1$@ prossimo alle %2$@."
+    },
+    {
+      "issue": "ENG-70",
+      "table": "Localizable",
       "key": "today.action.undo_complete",
       "en": "That's logged. Tap to undo.",
       "de": "Eingetragen. Zum Rückgängig tippen.",
