@@ -46,6 +46,18 @@ struct DoseWindowMathTests {
         let afterToken = DoseWindow.contextToken(now: after, hour: 21, minute: 0, calendar: calendar)
         #expect(beforeToken != afterToken)
     }
+
+    @Test func loggedWindowStaysYesterdayUntilTheReminder() {
+        let wednesday = date("2026-09-23", hour: 0)
+        let thursdaySix = date("2026-09-24", hour: 6)
+        let live = DoseWindow.activeDoseDate(
+            now: thursdaySix,
+            hour: 8,
+            minute: 0,
+            calendar: calendar
+        ) { _ in false }
+        #expect(calendar.isDate(live, inSameDayAs: wednesday))
+    }
 }
 
 @MainActor
@@ -108,6 +120,107 @@ struct DoseWindowStoreTests {
         fixture.store.reminderHour = 0
         #expect(fixture.store.protocolChangeVersion > versionBefore)
         #expect(fixture.store.statusForDate(doseDay) == .missed)
+    }
+
+    @Test func takenWednesdayStaysWednesdayAtThursdaySixAM() throws {
+        defer { InMemoryStoreFactory.resetClockAndDefaults() }
+
+        let wednesdayEvening = InMemoryStoreFactory.fixedDate("2026-09-23", hour: 20)
+        let thursdaySix = InMemoryStoreFactory.fixedDate("2026-09-24", hour: 6)
+        let wednesday = Calendar.current.startOfDay(for: wednesdayEvening)
+        let thursday = Calendar.current.startOfDay(for: thursdaySix)
+        let fixture = try InMemoryStoreFactory.makeStore(
+            now: wednesdayEvening,
+            startDate: wednesday
+        )
+        fixture.store.reminderHour = 8
+        fixture.store.reminderMinute = 0
+        fixture.store.markTodayAsTaken()
+        let streakAfterWednesday = fixture.store.currentStreak
+        let wednesdayCycleDay = fixture.store.currentDayIndex
+
+        PillieClock.setFixedNowForTesting(thursdaySix)
+        fixture.store.refreshDayContextIfNeeded()
+
+        #expect(Calendar.current.isDate(fixture.store.today, inSameDayAs: wednesday))
+        #expect(fixture.store.isTodayTaken)
+        #expect(fixture.store.statusForDate(wednesday) == .taken)
+        #expect(fixture.store.statusForDate(thursday) != .taken)
+        #expect(fixture.store.currentStreak == streakAfterWednesday)
+        #expect(fixture.store.currentDayIndex == wednesdayCycleDay)
+        let nextOpen = try #require(fixture.store.alarmAction)
+        #expect(Calendar.current.isDate(nextOpen.date, inSameDayAs: thursday))
+        #expect(Calendar.current.isDate(
+            BlockingInterventionPolicy.liveDay(
+                now: thursdaySix,
+                reminderHour: 8,
+                reminderMinute: 0,
+                calendar: Calendar.current
+            ),
+            inSameDayAs: fixture.store.today
+        ))
+        let loggedWednesday = TodayTakenStamp(
+            isTaken: true,
+            epochDay: TodayTakenStamp.epochDay(for: wednesday, calendar: Calendar.current)
+        )
+        #expect(
+            BlockingInterventionPolicy.decision(
+                schedule: fixture.store.blockingScheduleMirror,
+                handledStamp: loggedWednesday,
+                now: thursdaySix,
+                reminderHour: 8,
+                reminderMinute: 0,
+                calendar: Calendar.current
+            ) == .clearShields
+        )
+    }
+
+    @Test func openWednesdayAtThursdaySixAMStillLogsWednesday() throws {
+        defer { InMemoryStoreFactory.resetClockAndDefaults() }
+
+        let wednesdayEvening = InMemoryStoreFactory.fixedDate("2026-09-23", hour: 20)
+        let thursdaySix = InMemoryStoreFactory.fixedDate("2026-09-24", hour: 6)
+        let wednesday = Calendar.current.startOfDay(for: wednesdayEvening)
+        let thursday = Calendar.current.startOfDay(for: thursdaySix)
+        let fixture = try InMemoryStoreFactory.makeStore(
+            now: wednesdayEvening,
+            startDate: wednesday
+        )
+        fixture.store.reminderHour = 8
+        fixture.store.reminderMinute = 0
+
+        PillieClock.setFixedNowForTesting(thursdaySix)
+        fixture.store.refreshDayContextIfNeeded()
+        fixture.store.markTodayAsTaken()
+
+        #expect(Calendar.current.isDate(fixture.store.today, inSameDayAs: wednesday))
+        #expect(fixture.store.statusForDate(wednesday) == .taken)
+        #expect(fixture.store.statusForDate(thursday) != .taken)
+    }
+
+    @Test func thursdayReminderOpensThursdayAfterWednesdayWasTaken() throws {
+        defer { InMemoryStoreFactory.resetClockAndDefaults() }
+
+        let wednesdayEvening = InMemoryStoreFactory.fixedDate("2026-09-23", hour: 20)
+        let thursdayEight = InMemoryStoreFactory.fixedDate("2026-09-24", hour: 8)
+        let wednesday = Calendar.current.startOfDay(for: wednesdayEvening)
+        let thursday = Calendar.current.startOfDay(for: thursdayEight)
+        let fixture = try InMemoryStoreFactory.makeStore(
+            now: wednesdayEvening,
+            startDate: wednesday
+        )
+        fixture.store.reminderHour = 8
+        fixture.store.reminderMinute = 0
+        fixture.store.markTodayAsTaken()
+
+        PillieClock.setFixedNowForTesting(thursdayEight)
+        fixture.store.refreshDayContextIfNeeded()
+
+        #expect(Calendar.current.isDate(fixture.store.today, inSameDayAs: thursday))
+        #expect(!fixture.store.isTodayTaken)
+        let takeThursday = try #require(fixture.store.alarmAction)
+        #expect(Calendar.current.isDate(takeThursday.date, inSameDayAs: thursday))
+        #expect(fixture.store.currentDayIndex == fixture.store.pack.cycleDayIndex(on: thursday))
     }
 }
 #endif
