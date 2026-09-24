@@ -122,17 +122,15 @@ struct StatusCard: View {
         if calendar.isDate(alarmAction.date, inSameDayAs: store.today) {
             return PillieLocalization.string("global.status.completed", locale: locale)
         }
-        let dateText = alarmAction.date.formatted(
+        let weekday = alarmAction.date.formatted(
             Date.FormatStyle()
                 .weekday(.wide)
-                .day()
-                .month(.wide)
                 .locale(locale)
         )
         return PillieLocalization.formatted(
             "today.next_action.date",
             locale: locale,
-            arguments: dateText
+            arguments: weekday, reminderTime
         )
     }
 

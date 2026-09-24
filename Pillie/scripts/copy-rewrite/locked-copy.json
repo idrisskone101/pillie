@@ -860,9 +860,9 @@
       "issue": "ENG-70",
       "table": "Localizable",
       "key": "today.next_action.date",
-      "en": "Your next one is on %@.",
-      "de": "Deine nächste ist am %@.",
-      "it": "La prossima è il %@."
+      "en": "Your next one is on %1$@ at %2$@.",
+      "de": "Deine nächste ist am %1$@ um %2$@.",
+      "it": "La prossima è %1$@ alle %2$@."
     },
     {
       "issue": "ENG-70",
