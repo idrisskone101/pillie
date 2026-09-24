@@ -349,9 +349,7 @@ final class HistoryMonthPagerViewController: UIViewController {
 
     private func refreshHosts() {
         guard hosts.count == 3, months.count == 3 else { return }
-        if boundMonths.count != hosts.count {
-            boundMonths = Array(repeating: nil, count: hosts.count)
-        }
+        boundMonths = Array(repeating: nil, count: hosts.count)
         for (index, month) in months.enumerated() {
             bindHost(at: index, to: month)
         }
