@@ -644,7 +644,7 @@ struct PillieApp: App {
                 .queryItems?
                 .first(where: { $0.name == "at" })?
                 .value
-            if let raw, let date = ISO8601DateFormatter().date(from: raw) {
+            if let raw, let date = PillieClock.debugDate(from: raw) {
                 PillieClock.setFixedNowForTesting(date)
             } else {
                 PillieClock.setFixedNowForTesting(nil)
