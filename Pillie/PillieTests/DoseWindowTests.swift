@@ -62,11 +62,25 @@ struct DoseWindowMathTests {
 
 @MainActor
 struct DoseWindowStoreTests {
+    /// Instants in `Calendar.current`. The store reads that calendar, and the
+    /// simulator zone is not Toronto.
+    private func local(year: Int, month: Int, day: Int, hour: Int, minute: Int = 0) -> Date {
+        let calendar = Calendar.current
+        return calendar.date(from: DateComponents(
+            calendar: calendar,
+            year: year,
+            month: month,
+            day: day,
+            hour: hour,
+            minute: minute
+        ))!
+    }
+
     @Test func eveningReminderStaysOpenAfterMidnight() throws {
         defer { InMemoryStoreFactory.resetClockAndDefaults() }
 
-        let reminderDay = InMemoryStoreFactory.fixedDate("2026-06-10", hour: 21)
-        let afterMidnight = InMemoryStoreFactory.fixedDate("2026-06-11", hour: 1)
+        let reminderDay = local(year: 2026, month: 6, day: 10, hour: 21)
+        let afterMidnight = local(year: 2026, month: 6, day: 11, hour: 1)
         let fixture = try InMemoryStoreFactory.makeStore(now: reminderDay, startDate: reminderDay)
         fixture.store.reminderHour = 21
         fixture.store.reminderMinute = 0
@@ -84,8 +98,8 @@ struct DoseWindowStoreTests {
     @Test func eveningReminderClosesAtNextReminder() throws {
         defer { InMemoryStoreFactory.resetClockAndDefaults() }
 
-        let reminderDay = InMemoryStoreFactory.fixedDate("2026-06-10", hour: 21)
-        let nextReminder = InMemoryStoreFactory.fixedDate("2026-06-11", hour: 21)
+        let reminderDay = local(year: 2026, month: 6, day: 10, hour: 21)
+        let nextReminder = local(year: 2026, month: 6, day: 11, hour: 21)
         let fixture = try InMemoryStoreFactory.makeStore(now: reminderDay, startDate: reminderDay)
         fixture.store.reminderHour = 21
         fixture.store.reminderMinute = 0
@@ -100,8 +114,8 @@ struct DoseWindowStoreTests {
     @Test func afterMidnightTodayIsTheOpenDoseEverywhere() throws {
         defer { InMemoryStoreFactory.resetClockAndDefaults() }
 
-        let reminderDay = InMemoryStoreFactory.fixedDate("2026-06-10", hour: 21)
-        let afterMidnight = InMemoryStoreFactory.fixedDate("2026-06-11", hour: 1)
+        let reminderDay = local(year: 2026, month: 6, day: 10, hour: 21)
+        let afterMidnight = local(year: 2026, month: 6, day: 11, hour: 1)
         let fixture = try InMemoryStoreFactory.makeStore(now: reminderDay, startDate: reminderDay)
         fixture.store.reminderHour = 21
         fixture.store.reminderMinute = 0
@@ -125,8 +139,8 @@ struct DoseWindowStoreTests {
     @Test func takenWednesdayStaysWednesdayAtThursdaySixAM() throws {
         defer { InMemoryStoreFactory.resetClockAndDefaults() }
 
-        let wednesdayEvening = InMemoryStoreFactory.fixedDate("2026-09-23", hour: 20)
-        let thursdaySix = InMemoryStoreFactory.fixedDate("2026-09-24", hour: 6)
+        let wednesdayEvening = local(year: 2026, month: 9, day: 23, hour: 20)
+        let thursdaySix = local(year: 2026, month: 9, day: 24, hour: 6)
         let wednesday = Calendar.current.startOfDay(for: wednesdayEvening)
         let thursday = Calendar.current.startOfDay(for: thursdaySix)
         let fixture = try InMemoryStoreFactory.makeStore(
@@ -178,8 +192,8 @@ struct DoseWindowStoreTests {
     @Test func openWednesdayAtThursdaySixAMStillLogsWednesday() throws {
         defer { InMemoryStoreFactory.resetClockAndDefaults() }
 
-        let wednesdayEvening = InMemoryStoreFactory.fixedDate("2026-09-23", hour: 20)
-        let thursdaySix = InMemoryStoreFactory.fixedDate("2026-09-24", hour: 6)
+        let wednesdayEvening = local(year: 2026, month: 9, day: 23, hour: 20)
+        let thursdaySix = local(year: 2026, month: 9, day: 24, hour: 6)
         let wednesday = Calendar.current.startOfDay(for: wednesdayEvening)
         let thursday = Calendar.current.startOfDay(for: thursdaySix)
         let fixture = try InMemoryStoreFactory.makeStore(
@@ -201,8 +215,8 @@ struct DoseWindowStoreTests {
     @Test func thursdayReminderOpensThursdayAfterWednesdayWasTaken() throws {
         defer { InMemoryStoreFactory.resetClockAndDefaults() }
 
-        let wednesdayEvening = InMemoryStoreFactory.fixedDate("2026-09-23", hour: 20)
-        let thursdayEight = InMemoryStoreFactory.fixedDate("2026-09-24", hour: 8)
+        let wednesdayEvening = local(year: 2026, month: 9, day: 23, hour: 20)
+        let thursdayEight = local(year: 2026, month: 9, day: 24, hour: 8)
         let wednesday = Calendar.current.startOfDay(for: wednesdayEvening)
         let thursday = Calendar.current.startOfDay(for: thursdayEight)
         let fixture = try InMemoryStoreFactory.makeStore(
