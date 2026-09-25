@@ -11,6 +11,7 @@ struct StatusCard: View {
     private let valueChangeAnimation = Animation.easeInOut(duration: 0.28)
 
     var body: some View {
+        let _ = store.protocolChangeVersion
         let isTodayTaken = store.isTodayTaken
         let isTodayPassiveOrBreak = store.isTodayPassiveOrBreak
         let alarmAction = store.alarmAction
