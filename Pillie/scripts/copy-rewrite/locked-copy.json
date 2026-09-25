@@ -859,10 +859,42 @@
     {
       "issue": "ENG-70",
       "table": "Localizable",
+      "key": "today.next_action.weekday",
+      "en": "Your next one is on %1$@ at %2$@.",
+      "de": "Deine nächste ist am %1$@ um %2$@.",
+      "it": "La prossima è %1$@ alle %2$@."
+    },
+    {
+      "issue": "ENG-70",
+      "table": "Localizable",
       "key": "today.next_action.date",
-      "en": "Your next one is on %@.",
-      "de": "Deine nächste ist am %@.",
-      "it": "La prossima è il %@."
+      "en": "Your next one is on %1$@ at %2$@.",
+      "de": "Deine nächste ist am %1$@ um %2$@.",
+      "it": "La prossima: %1$@ alle %2$@."
+    },
+    {
+      "issue": "ENG-70",
+      "table": "Localizable",
+      "key": "today.next_action.today",
+      "en": "Your next one is today at %@.",
+      "de": "Deine nächste ist heute um %@.",
+      "it": "La prossima è oggi alle %@."
+    },
+    {
+      "issue": "ENG-70",
+      "table": "Localizable",
+      "key": "today.next_action.tomorrow",
+      "en": "Your next one is tomorrow at %@.",
+      "de": "Deine nächste ist morgen um %@.",
+      "it": "La prossima è domani alle %@."
+    },
+    {
+      "issue": "ENG-70",
+      "table": "Localizable",
+      "key": "today.next_action.next_week",
+      "en": "Your next due date is next %1$@ at %2$@.",
+      "de": "Dein nächster Termin ist nächsten %1$@ um %2$@.",
+      "it": "La prossima è %1$@ della settimana prossima alle %2$@."
     },
     {
       "issue": "ENG-70",

@@ -15,6 +15,9 @@ import os.signpost
 class PillStore {
     private(set) var packs: [PillPack]
     var protocolChangeVersion: Int = 0
+    /// Wall-clock date. Copy that says "today" or "tomorrow" reads this so it
+    /// redraws at midnight, which does not move the live dose day.
+    private(set) var civilDay: Date = Calendar.current.startOfDay(for: PillieClock.now)
     private(set) var dayRecordsRevision: Int = 0
 
     var pack: PillPack {
@@ -241,12 +244,6 @@ class PillStore {
     static let autoReminderRetryLimitOptions: [Int] = [0, 1, 2, 3, 5]
     static let refillReminderThresholdOptions: [Int] = [3, 5, 7]
     static let patchRestockReminderThresholdOptions: [Int] = [1, 2]
-    private static let alarmDayLabelFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "EEE, MMM d"
-        return formatter
-    }()
-
     // MARK: - Computed
 
     /// The live day: last reminder through the next one, not civil midnight.
@@ -506,36 +503,8 @@ class PillStore {
         alarmAction?.badgeLabel ?? "NONE"
     }
 
-    private var alarmDayLabel: String? {
-        guard let alarmAction else { return nil }
-        let calendar = Calendar.current
-
-        if calendar.isDate(alarmAction.date, inSameDayAs: today) {
-            return nil
-        }
-
-        if let tomorrow = calendar.date(byAdding: .day, value: 1, to: today),
-           calendar.isDate(alarmAction.date, inSameDayAs: tomorrow) {
-            return "Tomorrow"
-        }
-
-        return Self.alarmDayLabelFormatter.string(from: alarmAction.date)
-    }
-
     var alarmDisplayTime: String {
         nextReminderTime
-    }
-
-    var alarmSubtitle: String {
-        guard let alarmAction else { return "No action due" }
-        guard isTodayTaken else { return alarmAction.actionTitle }
-
-        let nextAction = alarmAction.badgeLabel.lowercased()
-        if let dayLabel = alarmDayLabel {
-            let normalizedDayLabel = dayLabel == "Tomorrow" ? "tomorrow" : dayLabel
-            return "Taken today. Next \(nextAction) \(normalizedDayLabel) at \(nextReminderTime)."
-        }
-        return "Taken today. Next \(nextAction) at \(nextReminderTime)."
     }
 
     var todayCTA: String {
@@ -1358,6 +1327,13 @@ class PillStore {
                 self?.refreshDayContext(force: true)
             }
         )
+        dayContextObservers.append(
+            NotificationCenter.default.addObserver(
+                forName: .NSCalendarDayChanged, object: nil, queue: .main
+            ) { [weak self] _ in
+                self?.refreshDayContext(force: false)
+            }
+        )
 
         refreshDayContext(force: true)
     }
@@ -1378,6 +1354,8 @@ class PillStore {
     }
 
     private func refreshDayContext(force: Bool) {
+        let wallClockDay = Calendar.current.startOfDay(for: PillieClock.now)
+        if wallClockDay != civilDay { civilDay = wallClockDay }
         let liveDay = today
         guard force || liveDay != lastKnownLiveDay else { return }
         lastKnownLiveDay = liveDay

@@ -64076,277 +64076,552 @@
         }
       }
     },
-    "today.next_action.date": {
-      "comment": "Locale-aware date [health]",
+    "today.next_action.weekday": {
+      "comment": "Next dose falls later this calendar week; %1$@ is the bare weekday name, %2$@ the reminder time [health]",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your next one is on %@."
+            "value": "Your next one is on %1$@ at %2$@."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "La prossima è il %@."
+            "value": "La prossima è %1$@ alle %2$@."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Deine nächste ist am %@."
+            "value": "Deine nächste ist am %1$@ um %2$@."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "La prochaine, c'est le %@."
+            "value": "La prochaine, c'est %1$@ à %2$@."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "La próxima es el %@."
+            "value": "La próxima es el %1$@ a las %2$@."
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "A próxima é em %@."
+            "value": "A próxima é %1$@ às %2$@."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Je volgende is op %@."
+            "value": "Je volgende is op %1$@ om %2$@."
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Din nästa är den %@."
+            "value": "Din nästa är på %1$@ kl. %2$@."
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Din næste er den %@."
+            "value": "Din næste er %1$@ kl. %2$@."
           }
         },
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "Den neste er %@."
+            "value": "Den neste er %1$@ kl. %2$@."
           }
         },
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Seuraava on %@."
+            "value": "Seuraava: %1$@ klo %2$@."
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "translated",
-            "value": "A próxima é a %@."
+            "value": "A próxima é %1$@ às %2$@."
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "La següent és el %@."
+            "value": "La següent és %1$@ a les %2$@."
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Następna przypada %@."
+            "value": "Następna: %1$@, godz. %2$@."
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Další máš %@."
+            "value": "Další: %1$@ v %2$@."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Следующее — %@."
+            "value": "Следующее — %1$@ в %2$@."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Наступна — %@."
+            "value": "Наступна — %1$@ о %2$@."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "次は%@です。"
+            "value": "次は%1$@の%2$@です。"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "다음은 %@이에요."
+            "value": "다음은 %1$@ %2$@에 있어요."
           }
         },
         "ms": {
           "stringUnit": {
             "state": "translated",
-            "value": "Yang seterusnya pada %@."
+            "value": "Yang seterusnya pada %1$@ pukul %2$@."
           }
         },
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "Următoarea e pe %@."
+            "value": "Următoarea e %1$@ la %2$@."
           }
         },
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ďalšia je %@."
+            "value": "Ďalšia je %1$@ o %2$@."
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "ครั้งถัดไปของคุณคือวันที่ %@"
+            "value": "ครั้งถัดไปของคุณคือ%1$@ เวลา %2$@"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "你的下一次在 %@。"
+            "value": "你的下一次在%1$@ %2$@。"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "तुम्हारा अगला %@ को है।"
+            "value": "तुम्हारा अगला %1$@ को %2$@ पर है।"
           }
         },
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sljedeća ti je %@."
+            "value": "Sljedeća ti je %1$@ u %2$@."
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "A következő: %@."
+            "value": "A következő: %1$@, %2$@-kor."
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bir sonraki %@ tarihinde."
+            "value": "Bir sonraki %1$@ günü saat %2$@."
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "உன் அடுத்தது %@ அன்று."
+            "value": "உன் அடுத்தது %1$@ %2$@க்கு."
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Yang berikutnya pada %@."
+            "value": "Yang berikutnya %1$@ pukul %2$@."
           }
         },
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "موعدك التالي في %@."
+            "value": "موعدك التالي يوم %1$@ الساعة %2$@."
           }
         },
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "הפעולה הבאה שלך ב-%@."
+            "value": "הפעולה הבאה שלך ב%1$@ בשעה %2$@."
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Lần tiếp theo của bạn là ngày %@."
+            "value": "Lần tiếp theo của bạn là %1$@ lúc %2$@."
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "তোমার পরেরটি %@ তারিখে।"
+            "value": "তোমার পরেরটি %1$@ %2$@-এ।"
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "تمہارا اگلا %@ کو ہے۔"
+            "value": "تمہارا اگلا %1$@ کو %2$@ بجے ہے۔"
           }
         },
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Naslednje je na vrsti %@."
+            "value": "Naslednje je %1$@ ob %2$@."
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Η επόμενη είναι στις %@."
+            "value": "Η επόμενη είναι %1$@ στις %2$@."
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "నీ తర్వాతిది %@న."
+            "value": "నీ తర్వాతిది %1$@ %2$@కి."
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "你的下一次在 %@。"
+            "value": "你的下一次在%1$@ %2$@。"
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "તારા અગલા %@ કો છે।"
+            "value": "તારું આગલું %1$@ના રોજ %2$@ વાગ્યે છે."
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ನಿನ್ನ ತರ್ವಾತಿದಿ %@ನ."
+            "value": "ನಿನ್ನ ಮುಂದಿನದು %1$@ %2$@ ಗಂಟೆಗೆ."
           }
         },
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "അടുത്തത് %@-ന് ആണ്."
+            "value": "അടുത്തത് %1$@ %2$@-ന് ആണ്."
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "तुझा अगला %@ ला आहे."
+            "value": "तुझा पुढचा %1$@ रोजी %2$@ वाजता आहे."
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ତୁମର ପରବର୍ତ୍ତୀଟି %@ ରେ।"
+            "value": "ତୁମର ପରବର୍ତ୍ତୀଟି %1$@ ଦିନ %2$@ରେ।"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਤੇਰਾ ਅਗਲਾ %@ ਕੋ ਹੈ।"
+            "value": "ਤੇਰਾ ਅਗਲਾ %1$@ ਨੂੰ %2$@ ਵਜੇ ਹੈ।"
+          }
+        }
+      }
+    },
+    "today.next_action.date": {
+      "comment": "Next dose is two or more weeks out; %1$@ is month and day, %2$@ the reminder time [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your next one is on %1$@ at %2$@."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La prossima: %1$@ alle %2$@."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine nächste ist am %1$@ um %2$@."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La prochaine, c'est le %1$@ à %2$@."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La próxima es el %1$@ a las %2$@."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A próxima é no dia %1$@ às %2$@."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je volgende is op %1$@ om %2$@."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Din nästa är den %1$@ kl. %2$@."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Din næste er den %1$@ kl. %2$@."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Den neste er den %1$@ kl. %2$@."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seuraava on %1$@ klo %2$@."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A próxima é a %1$@ às %2$@."
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La següent: %1$@ a les %2$@."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Następna: %1$@, godz. %2$@."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Další: %1$@ v %2$@."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Следующее — %1$@ в %2$@."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Наступна — %1$@ о %2$@."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "次は%1$@の%2$@です。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "다음은 %1$@ %2$@에 있어요."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yang seterusnya pada %1$@ pukul %2$@."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Următoarea e pe %1$@ la %2$@."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ďalšia je %1$@ o %2$@."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ครั้งถัดไปของคุณคือวันที่ %1$@ เวลา %2$@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的下一次在%1$@ %2$@。"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "तुम्हारा अगला %1$@ को %2$@ पर है।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sljedeća ti je %1$@ u %2$@."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A következő: %1$@, %2$@-kor."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bir sonraki %1$@ saat %2$@."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "உன் அடுத்தது %1$@ %2$@க்கு."
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yang berikutnya tanggal %1$@ pukul %2$@."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "موعدك التالي في %1$@ الساعة %2$@."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "הפעולה הבאה שלך: %1$@ בשעה %2$@."
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lần tiếp theo của bạn là ngày %1$@ lúc %2$@."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "তোমার পরেরটি %1$@ %2$@-এ।"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تمہارا اگلا %1$@ کو %2$@ بجے ہے۔"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Naslednje je %1$@ ob %2$@."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Η επόμενη είναι %1$@, στις %2$@."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "నీ తర్వాతిది %1$@ %2$@కి."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的下一次在%1$@ %2$@。"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "તારું આગલું %1$@ના રોજ %2$@ વાગ્યે છે."
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ನಿನ್ನ ಮುಂದಿನದು %1$@ ರಂದು %2$@ ಗಂಟೆಗೆ."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "അടുത്തത് %1$@ %2$@-ന് ആണ്."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "तुझा पुढचा %1$@ रोजी %2$@ वाजता आहे."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ତୁମର ପରବର୍ତ୍ତୀଟି %1$@ %2$@ରେ।"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਤੇਰਾ ਅਗਲਾ %1$@ ਨੂੰ %2$@ ਵਜੇ ਹੈ।"
           }
         }
       }
@@ -110547,6 +110822,831 @@
           "stringUnit": {
             "state": "translated",
             "value": "ਲਿਆ ਹੋਇਆ ਨਿਸ਼ਾਨਬੱਧ ਕਰੋ"
+          }
+        }
+      }
+    },
+    "today.next_action.today": {
+      "comment": "Next dose is later today, after a dose logged before the reminder; %@ is the reminder time [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your next one is today at %@."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La prossima è oggi alle %@."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine nächste ist heute um %@."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La prochaine, c'est aujourd'hui à %@."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La próxima es hoy a las %@."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A próxima é hoje às %@."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je volgende is vandaag om %@."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Din nästa är i dag kl. %@."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Din næste er i dag kl. %@."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Den neste er i dag kl. %@."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seuraava on tänään klo %@."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A próxima é hoje às %@."
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La següent és avui a les %@."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Następna jest dziś o %@."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Další máš dnes v %@."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Следующее — сегодня в %@."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Наступна — сьогодні о %@."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "次は今日の%@です。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "다음은 오늘 %@에 있어요."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yang seterusnya hari ini pukul %@."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Următoarea e azi la %@."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ďalšia je dnes o %@."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ครั้งถัดไปของคุณคือวันนี้ เวลา %@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的下一次在今天 %@。"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "तुम्हारा अगला आज %@ पर है।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sljedeća ti je danas u %@."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A következő ma %@-kor."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bir sonraki bugün saat %@."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "உன் அடுத்தது இன்று %@க்கு."
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yang berikutnya hari ini pukul %@."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "موعدك التالي اليوم الساعة %@."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "הפעולה הבאה שלך היום בשעה %@."
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lần tiếp theo của bạn là hôm nay lúc %@."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "তোমার পরেরটি আজ %@-এ।"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تمہارا اگلا آج %@ بجے ہے۔"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Naslednje je danes ob %@."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Η επόμενη είναι σήμερα στις %@."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "నీ తర్వాతిది ఈరోజు %@కి."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的下一次在今天 %@。"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "તારું આગલું આજે %@ વાગ્યે છે."
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ನಿನ್ನ ಮುಂದಿನದು ಇಂದು %@ ಗಂಟೆಗೆ."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "അടുത്തത് ഇന്ന് %@-ന് ആണ്."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "तुझा पुढचा आज %@ वाजता आहे."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ତୁମର ପରବର୍ତ୍ତୀଟି ଆଜି %@ରେ।"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਤੇਰਾ ਅਗਲਾ ਅੱਜ %@ ਵਜੇ ਹੈ।"
+          }
+        }
+      }
+    },
+    "today.next_action.tomorrow": {
+      "comment": "Next dose is tomorrow at the reminder time [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your next one is tomorrow at %@."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La prossima è domani alle %@."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine nächste ist morgen um %@."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La prochaine, c'est demain à %@."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La próxima es mañana a las %@."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A próxima é amanhã às %@."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je volgende is morgen om %@."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Din nästa är i morgon kl. %@."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Din næste er i morgen kl. %@."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Den neste er i morgen kl. %@."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seuraava on huomenna klo %@."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A próxima é amanhã às %@."
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La següent és demà a les %@."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Następna jest jutro o %@."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Další máš zítra v %@."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Следующее — завтра в %@."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Наступна — завтра о %@."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "次は明日の%@です。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "다음은 내일 %@에 있어요."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yang seterusnya esok pukul %@."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Următoarea e mâine la %@."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ďalšia je zajtra o %@."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ครั้งถัดไปของคุณคือพรุ่งนี้ เวลา %@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的下一次在明天 %@。"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "तुम्हारा अगला कल %@ पर है।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sljedeća ti je sutra u %@."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A következő holnap %@-kor."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bir sonraki yarın saat %@."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "உன் அடுத்தது நாளை %@க்கு."
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yang berikutnya besok pukul %@."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "موعدك التالي غدًا الساعة %@."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "הפעולה הבאה שלך מחר בשעה %@."
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lần tiếp theo của bạn là ngày mai lúc %@."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "তোমার পরেরটি আগামীকাল %@-এ।"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تمہارا اگلا کل %@ بجے ہے۔"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Naslednje je jutri ob %@."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Η επόμενη είναι αύριο στις %@."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "నీ తర్వాతిది రేపు %@కి."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的下一次在明天 %@。"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "તારું આગલું આવતીકાલે %@ વાગ્યે છે."
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ನಿನ್ನ ಮುಂದಿನದು ನಾಳೆ %@ ಗಂಟೆಗೆ."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "അടുത്തത് നാളെ %@-ന് ആണ്."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "तुझा पुढचा उद्या %@ वाजता आहे."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ତୁମର ପରବର୍ତ୍ତୀଟି ଆସନ୍ତାକାଲି %@ରେ।"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਤੇਰਾ ਅਗਲਾ ਕੱਲ੍ਹ %@ ਵਜੇ ਹੈ।"
+          }
+        }
+      }
+    },
+    "today.next_action.next_week": {
+      "comment": "Next dose falls in the following calendar week; %1$@ is the bare weekday name, %2$@ the reminder time [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your next due date is next %1$@ at %2$@."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La prossima è %1$@ della settimana prossima alle %2$@."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dein nächster Termin ist nächsten %1$@ um %2$@."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La prochaine date, c'est %1$@ prochain à %2$@."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu próxima fecha es el próximo %1$@ a las %2$@."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sua próxima data é %1$@ que vem às %2$@."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je volgende datum is volgende week %1$@ om %2$@."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ditt nästa datum är nästa %1$@ kl. %2$@."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Din næste dato er næste %1$@ kl. %2$@."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neste dato er neste %1$@ kl. %2$@."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seuraava: ensi viikon %1$@ klo %2$@."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A próxima data é %1$@ que vem às %2$@."
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La propera data és %1$@ que ve a les %2$@."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Następna: %1$@ w przyszłym tygodniu, godz. %2$@."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Další: %1$@ příští týden v %2$@."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Следующее — %1$@ на следующей неделе, в %2$@."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Наступна — %1$@ наступного тижня, о %2$@."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "次は来週の%1$@の%2$@です。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "다음은 다음 주 %1$@ %2$@에 있어요."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tarikh seterusnya ialah %1$@ depan pukul %2$@."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Următoarea e %1$@ săptămâna viitoare, la %2$@."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ďalšia je %1$@ budúci týždeň o %2$@."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "วันครบกำหนดถัดไปของคุณคือ%1$@หน้า เวลา %2$@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的下一次在下%1$@ %2$@。"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "तुम्हारी अगली तारीख अगले %1$@ को %2$@ पर है।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sljedeća ti je %1$@ sljedeći tjedan u %2$@."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A következő: jövő hét %1$@, %2$@-kor."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bir sonraki tarihin gelecek %1$@ saat %2$@."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "உன் அடுத்த தேதி அடுத்த %1$@ %2$@க்கு."
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tanggal berikutnya %1$@ depan pukul %2$@."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "موعدك التالي يوم %1$@ القادم الساعة %2$@."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "התאריך הבא שלך הוא %1$@ הבא בשעה %2$@."
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ngày tiếp theo của bạn là %1$@ tới lúc %2$@."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "তোমার পরের তারিখ আগামী %1$@ %2$@-এ।"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تمہاری اگلی تاریخ اگلے %1$@ کو %2$@ بجے ہے۔"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Naslednje je %1$@ naslednji teden ob %2$@."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Η επόμενη είναι %1$@ της επόμενης εβδομάδας, στις %2$@."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "నీ తర్వాతి తేదీ వచ్చే %1$@ %2$@కి."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的下一次在下%1$@ %2$@。"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "તારી આગલી તારીખ આવતા %1$@ના રોજ %2$@ વાગ્યે છે."
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ನಿನ್ನ ಮುಂದಿನ ದಿನಾಂಕ ಮುಂದಿನ %1$@ %2$@ ಗಂಟೆಗೆ."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "അടുത്ത തീയതി അടുത്ത %1$@ %2$@-ന് ആണ്."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "तुझी पुढची तारीख पुढच्या आठवड्यात %1$@ रोजी %2$@ वाजता आहे."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ତୁମର ପରବର୍ତ୍ତୀ ତାରିଖ ଆସନ୍ତା %1$@ ଦିନ %2$@ରେ।"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਤੇਰੀ ਅਗਲੀ ਤਾਰੀਖ ਅਗਲੇ %1$@ ਨੂੰ %2$@ ਵਜੇ ਹੈ।"
           }
         }
       }

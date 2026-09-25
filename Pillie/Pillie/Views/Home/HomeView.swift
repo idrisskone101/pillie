@@ -782,7 +782,7 @@ struct HomeView: View {
     // MARK: - Helpers
 
     private var dateString: String {
-        Date().formatted(
+        store.civilDay.formatted(
             Date.FormatStyle()
                 .weekday(.wide)
                 .day()

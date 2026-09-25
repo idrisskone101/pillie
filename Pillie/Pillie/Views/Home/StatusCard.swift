@@ -22,13 +22,13 @@ struct StatusCard: View {
             locale: locale
         )
         let iconName = iconName(for: isTodayPassiveOrBreak ? todayAction : alarmAction, isTodayTaken: isTodayTaken)
-        let actionTitle = actionTitle(
-            for: alarmAction,
-            todayAction: todayAction,
+        let actionTitle = StatusCardTitle.resolve(
+            alarmAction: alarmAction,
+            liveDay: store.today,
+            now: store.civilDay,
             isTodayTaken: isTodayTaken,
-            isTodayPassiveOrBreak: isTodayPassiveOrBreak,
-            reminderTime: reminderTime
-        )
+            isTodayPassiveOrBreak: isTodayPassiveOrBreak
+        ).localized(reminderTime: reminderTime, locale: locale)
         statusMainContent(
             iconName: iconName,
             reminderTime: reminderTime,
@@ -77,7 +77,7 @@ struct StatusCard: View {
                 Text(actionTitle)
                     .font(.pillieBody())
                     .foregroundStyle(isTodayTaken ? PillieTheme.textPrimary : PillieTheme.textMuted)
-                    .pillieAdaptiveLineLimit(minimumScaleFactor: 0.72)
+                    .pillieAdaptiveLineLimit(regular: 2, minimumScaleFactor: 0.72)
                     .layoutPriority(1)
                     .contentTransition(.opacity)
                     .animation(valueChangeAnimation, value: actionTitle)
@@ -100,43 +100,6 @@ struct StatusCard: View {
             return "circle.grid.cross"
         }
     }
-
-    private func actionTitle(
-        for alarmAction: DoseScheduleAction?,
-        todayAction: DoseScheduleAction?,
-        isTodayTaken: Bool,
-        isTodayPassiveOrBreak: Bool,
-        reminderTime: String
-    ) -> String {
-        if isTodayPassiveOrBreak && !isTodayTaken {
-            return PillieLocalization.string("today.empty.title", locale: locale)
-        }
-
-        guard let alarmAction else {
-            return PillieLocalization.string("today.empty.title", locale: locale)
-        }
-        guard isTodayTaken else {
-            return DueActionCopy.localizedLabel(for: alarmAction, locale: locale)
-        }
-
-        let calendar = Calendar.current
-        if calendar.isDate(alarmAction.date, inSameDayAs: store.today) {
-            return PillieLocalization.string("global.status.completed", locale: locale)
-        }
-        let dateText = alarmAction.date.formatted(
-            Date.FormatStyle()
-                .weekday(.wide)
-                .day()
-                .month(.wide)
-                .locale(locale)
-        )
-        return PillieLocalization.formatted(
-            "today.next_action.date",
-            locale: locale,
-            arguments: dateText
-        )
-    }
-
 }
 
 #Preview {
