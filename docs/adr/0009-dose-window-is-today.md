@@ -6,7 +6,7 @@ A due action stays completable until the next Due Action Reminder, not civil mid
 
 ## Decisions and reasons
 
-**One clock.** `PillStore.today` is the open dose day. Remapping only Home while leaving cycle identity, streak, and History on midnight created two clocks and a silent cycle-day shift. The window is the definition of today, not a special case on top of the calendar.
+**One clock.** `PillStore.today` is the open dose day, read from `LiveDoseDay`, which the Screen Time extension compiles too. Remapping only Home while leaving cycle identity, streak, and History on midnight created two clocks and a silent cycle-day shift. The window is the definition of today, not a special case on top of the calendar.
 
 **Missed at the next reminder.** Yesterday becomes `.missed` when the next reminder arrives still untaken. Passive days use the same close rule.
 
@@ -16,6 +16,6 @@ A due action stays completable until the next Due Action Reminder, not civil mid
 
 ## Consequences
 
-- After midnight and before the next reminder, Settings cycle day, the pack strip, and History's "today" ring can show yesterday when that dose is still open.
+- After midnight and before the next reminder, Settings cycle day, the pack strip, and History's "today" ring stay on yesterday. Logging that dose does not open the next civil day. Take pill and shields for the next day wait until the reminder.
 - Changing reminder time uses the same refresh as crossing the window (`refreshDayContext(force: true)`).
-- Civil midnight remains an implementation detail of window math (`DoseWindow`) and of fire-date construction. It is not product today.
+- Civil midnight remains an implementation detail of window math (`LiveDoseDay`, `DoseWindow`) and of fire-date construction. It is not product today.
