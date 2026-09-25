@@ -77,7 +77,7 @@ struct StatusCard: View {
                 Text(actionTitle)
                     .font(.pillieBody())
                     .foregroundStyle(isTodayTaken ? PillieTheme.textPrimary : PillieTheme.textMuted)
-                    .pillieAdaptiveLineLimit(minimumScaleFactor: 0.72)
+                    .pillieAdaptiveLineLimit(regular: 2, minimumScaleFactor: 0.72)
                     .layoutPriority(1)
                     .contentTransition(.opacity)
                     .animation(valueChangeAnimation, value: actionTitle)
