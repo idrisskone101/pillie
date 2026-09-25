@@ -233,8 +233,8 @@ final class BlockingInterventionPolicyTests: XCTestCase {
         )
 
         XCTAssertEqual(
-            calendar.startOfDay(for: BlockingInterventionPolicy.liveDay(
-                now: fourPM,
+            calendar.startOfDay(for: LiveDoseDay.on(
+                fourPM,
                 reminderHour: 18,
                 reminderMinute: 0,
                 calendar: calendar

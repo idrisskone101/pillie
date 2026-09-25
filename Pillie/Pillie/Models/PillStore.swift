@@ -202,10 +202,9 @@ class PillStore {
     private var snapshotCacheByPackID: [UUID: [Int: PillScheduleSnapshot]] = [:]
     private var packTimeline: [PackTimelineEntry] = []
 
-    /// Dose-window token the cached read model was last computed against.
-    /// Status for action days is relative to the next reminder, so crossing
-    /// midnight or today's reminder time must invalidate the caches.
-    @ObservationIgnored private var lastKnownDoseContextToken: Int = 0
+    /// Live day the cached read model was last computed against. Status is
+    /// relative to the next reminder, so only crossing it invalidates the caches.
+    @ObservationIgnored private var lastKnownLiveDay: Date?
     @ObservationIgnored private var dayContextObservers: [NSObjectProtocol] = []
     @ObservationIgnored private var doseWindowTimer: Timer?
 
@@ -252,19 +251,10 @@ class PillStore {
 
     /// The live day: last reminder through the next one, not civil midnight.
     var today: Date {
-        liveDoseDate
-    }
-
-    /// Same day as `today`. Kept so call sites and tests can name the window.
-    var activeDoseDate: Date {
-        liveDoseDate
-    }
-
-    private var liveDoseDate: Date {
-        DoseWindow.activeDoseDate(
-            now: PillieClock.now,
-            hour: reminderHour,
-            minute: reminderMinute
+        LiveDoseDay.on(
+            PillieClock.now,
+            reminderHour: reminderHour,
+            reminderMinute: reminderMinute
         )
     }
 
@@ -709,15 +699,7 @@ class PillStore {
             protocolChangeVersion &+= 1
         }
         syncTodayTakenToAppGroup()
-        let now = PillieClock.now
-        let calendar = Calendar.current
-        let liveReminder = calendar.date(
-            bySettingHour: reminderHour,
-            minute: reminderMinute,
-            second: 0,
-            of: today
-        )
-        if let liveReminder, now >= liveReminder, !isTodayHandled {
+        if !isTodayHandled {
             AppBlockingManager.shared.applyBlocking(reason: pack.method.blockingReasonText)
         }
         scheduleNotificationResync()
@@ -1369,15 +1351,6 @@ class PillStore {
 
         rebuildReadIndexes()
 
-        lastKnownDoseContextToken = doseContextToken()
-        scheduleDoseWindowRefresh()
-        dayContextObservers.append(
-            NotificationCenter.default.addObserver(
-                forName: .NSCalendarDayChanged, object: nil, queue: .main
-            ) { [weak self] _ in
-                self?.refreshDayContextIfNeeded()
-            }
-        )
         dayContextObservers.append(
             NotificationCenter.default.addObserver(
                 forName: UIApplication.significantTimeChangeNotification, object: nil, queue: .main
@@ -1398,56 +1371,39 @@ class PillStore {
 
     // MARK: - Day Rollover
 
-    /// Drops the day-relative read model when the dose window changed while the
-    /// app stayed resident (midnight, reminder-time close, long suspension).
+    /// Drops the day-relative read model when the live day moved while the app
+    /// stayed resident or suspended past a reminder.
     func refreshDayContextIfNeeded() {
         refreshDayContext(force: false)
     }
 
     private func refreshDayContext(force: Bool) {
-        let currentToken = doseContextToken()
-        guard force || currentToken != lastKnownDoseContextToken else { return }
-        lastKnownDoseContextToken = currentToken
+        let liveDay = today
+        guard force || liveDay != lastKnownLiveDay else { return }
+        lastKnownLiveDay = liveDay
         invalidateAllSnapshotCaches()
         protocolChangeVersion &+= 1
         syncTodayTakenToAppGroup()
-        scheduleDoseWindowRefresh()
-    }
-
-    private func doseContextToken() -> Int {
-        DoseWindow.contextToken(
-            now: PillieClock.now,
-            hour: reminderHour,
-            minute: reminderMinute
-        )
+        scheduleDoseWindowRefresh(after: liveDay)
     }
 
     private func handleReminderTimeChange() {
         refreshDayContext(force: true)
     }
 
-    private func scheduleDoseWindowRefresh() {
+    private func scheduleDoseWindowRefresh(after liveDay: Date) {
         doseWindowTimer?.invalidate()
-        let now = PillieClock.now
-        let calendar = Calendar.current
-        let start = calendar.startOfDay(for: now)
-        guard
-            let reminder = calendar.date(
-                bySettingHour: reminderHour,
-                minute: reminderMinute,
-                second: 0,
-                of: start
-            ),
-            reminder > now
-        else {
-            doseWindowTimer = nil
-            return
-        }
+        doseWindowTimer = nil
+        guard let deadline = DoseWindow.deadline(
+            for: liveDay,
+            hour: reminderHour,
+            minute: reminderMinute
+        ) else { return }
         doseWindowTimer = Timer.scheduledTimer(
-            withTimeInterval: reminder.timeIntervalSince(now),
+            withTimeInterval: max(0, deadline.timeIntervalSince(PillieClock.now)),
             repeats: false
         ) { [weak self] _ in
-            self?.refreshDayContext(force: true)
+            self?.refreshDayContext(force: false)
         }
     }
 

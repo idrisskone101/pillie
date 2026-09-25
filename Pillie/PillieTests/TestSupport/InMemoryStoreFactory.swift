@@ -56,6 +56,27 @@ enum InMemoryStoreFactory {
         ))!
     }
 
+    /// An instant in `Calendar.current`, the calendar the store reads. Use this
+    /// when a store assertion depends on the hour; the simulator is not in Toronto.
+    static func localDate(
+        _ isoDate: String,
+        hour: Int,
+        minute: Int = 0
+    ) -> Date {
+        let calendar = Calendar.current
+        let parts = isoDate.split(separator: "-").compactMap { Int($0) }
+        precondition(parts.count == 3, "Use YYYY-MM-DD dates in tests.")
+
+        return calendar.date(from: DateComponents(
+            calendar: calendar,
+            year: parts[0],
+            month: parts[1],
+            day: parts[2],
+            hour: hour,
+            minute: minute
+        ))!
+    }
+
     static func makeStore(
         now: Date,
         method: ContraceptiveMethod = .pill,

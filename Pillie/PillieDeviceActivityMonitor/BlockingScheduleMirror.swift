@@ -80,9 +80,11 @@ enum BlockingInterventionDecision: Equatable {
     case clearShields
 }
 
-enum BlockingInterventionPolicy {
-    static func liveDay(
-        now: Date,
+/// The day a due action belongs to: from one reminder to the next, not civil
+/// midnight. The app, History, streak, and shields all read this one clock.
+enum LiveDoseDay {
+    static func on(
+        _ now: Date,
         reminderHour: Int,
         reminderMinute: Int,
         calendar: Calendar = .current
@@ -102,7 +104,9 @@ enum BlockingInterventionPolicy {
         }
         return yesterday
     }
+}
 
+enum BlockingInterventionPolicy {
     static func decision(
         schedule: BlockingScheduleMirror?,
         handledStamp: TodayTakenStamp,
@@ -111,8 +115,8 @@ enum BlockingInterventionPolicy {
         reminderMinute: Int = 0,
         calendar: Calendar = .current
     ) -> BlockingInterventionDecision {
-        let day = liveDay(
-            now: now,
+        let day = LiveDoseDay.on(
+            now,
             reminderHour: reminderHour,
             reminderMinute: reminderMinute,
             calendar: calendar

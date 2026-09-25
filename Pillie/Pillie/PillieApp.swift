@@ -348,9 +348,8 @@ struct PillieApp: App {
                 .onChange(of: scenePhase) { _, newPhase in
                     guard !Self.isRunningTests else { return }
                     if newPhase == .active {
-                        // Returning to the foreground may cross a day boundary the
-                        // NSCalendarDayChanged observer missed while suspended —
-                        // refresh the day-relative read model before anything below
+                        // Returning to the foreground may cross a reminder the
+                        // store's timer missed while suspended — refresh the day-relative read model before anything below
                         // (Screen Time reconcile, reminder replan) consumes it.
                         store.refreshDayContextIfNeeded()
                         // A Reverse Trial can expire while suspended (local midnight
@@ -484,6 +483,13 @@ struct PillieApp: App {
     }
 
     #if DEBUG
+    private static func debugFixedNow(from raw: String) -> Date? {
+        if let seconds = TimeInterval(raw) {
+            return Date(timeIntervalSince1970: seconds)
+        }
+        return try? Date(raw, strategy: .iso8601)
+    }
+
     private func handleDebugDeepLink(_ url: URL) {
         guard url.scheme == "pillie", url.host == "debug" else { return }
         applyDebugLanguage(from: url)
@@ -640,14 +646,20 @@ struct PillieApp: App {
             SubscriptionManager.shared.debugOverrideTrialGrantDate(nil)
             reconcileScreenTimeState()
         case "/fixed-now":
+            // QA control: pin the dose clock. `at` is unix seconds or ISO 8601;
+            // `at=off` returns to the real clock.
             let raw = URLComponents(url: url, resolvingAgainstBaseURL: false)?
                 .queryItems?
                 .first(where: { $0.name == "at" })?
                 .value
-            if let raw, let date = PillieClock.debugDate(from: raw) {
+            if raw == "off" {
+                PillieClock.setFixedNowForTesting(nil)
+            } else if let raw, let date = Self.debugFixedNow(from: raw) {
                 PillieClock.setFixedNowForTesting(date)
             } else {
-                PillieClock.setFixedNowForTesting(nil)
+                os.Logger(subsystem: "com.idrisskone.pillie", category: "qa")
+                    .error("Pillie QA fixed-now ignored unreadable at=\(raw ?? "nil", privacy: .public)")
+                return
             }
             store.refreshDayContextIfNeeded()
         case "/plus-home":
