@@ -23,6 +23,8 @@ struct CalendarGrid: View, Equatable {
             && lhs.monthSnapshots.count == rhs.monthSnapshots.count
     }
 
+    private static let columnSpacing: CGFloat = 4
+
     private var calendar: Calendar {
         var value = Calendar.current
         value.locale = locale
@@ -81,7 +83,7 @@ struct CalendarGrid: View, Equatable {
     var body: some View {
         VStack(spacing: 8) {
             // Weekday headers
-            HStack {
+            HStack(spacing: Self.columnSpacing) {
                 // Localized initials can repeat; the fixed weekday position is the stable identity.
                 ForEach(weekdays.indices, id: \.self) { index in
                     Text(weekdays[index])
@@ -94,14 +96,19 @@ struct CalendarGrid: View, Equatable {
 
             VStack(spacing: 6) {
                 ForEach(0..<CalendarMonthLayout.reservedWeekCount, id: \.self) { week in
-                    HStack(spacing: 4) {
+                    HStack(spacing: Self.columnSpacing) {
                         ForEach(0..<CalendarMonthLayout.daysInWeek, id: \.self) { weekday in
                             let slot = week * CalendarMonthLayout.daysInWeek + weekday
-                            if let day = dayForSlot(slot) {
-                                dayCell(day: day)
-                            } else {
-                                emptyCell
+                            // The pager can bound the page height, which shrinks the square
+                            // cells; the column slot must stay full width to line up with the header.
+                            Group {
+                                if let day = dayForSlot(slot) {
+                                    dayCell(day: day)
+                                } else {
+                                    emptyCell
+                                }
                             }
+                            .frame(maxWidth: .infinity)
                         }
                     }
                 }
