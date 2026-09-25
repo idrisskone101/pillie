@@ -336,6 +336,7 @@ struct HomeView: View {
     }
 
     var body: some View {
+        let _ = store.protocolChangeVersion
         ZStack(alignment: .bottom) {
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 16) {
