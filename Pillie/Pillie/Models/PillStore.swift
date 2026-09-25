@@ -15,6 +15,9 @@ import os.signpost
 class PillStore {
     private(set) var packs: [PillPack]
     var protocolChangeVersion: Int = 0
+    /// Wall-clock date. Copy that says "today" or "tomorrow" reads this so it
+    /// redraws at midnight, which does not move the live dose day.
+    private(set) var civilDay: Date = Calendar.current.startOfDay(for: PillieClock.now)
     private(set) var dayRecordsRevision: Int = 0
 
     var pack: PillPack {
@@ -1324,6 +1327,13 @@ class PillStore {
                 self?.refreshDayContext(force: true)
             }
         )
+        dayContextObservers.append(
+            NotificationCenter.default.addObserver(
+                forName: .NSCalendarDayChanged, object: nil, queue: .main
+            ) { [weak self] _ in
+                self?.refreshDayContext(force: false)
+            }
+        )
 
         refreshDayContext(force: true)
     }
@@ -1344,6 +1354,8 @@ class PillStore {
     }
 
     private func refreshDayContext(force: Bool) {
+        let wallClockDay = Calendar.current.startOfDay(for: PillieClock.now)
+        if wallClockDay != civilDay { civilDay = wallClockDay }
         let liveDay = today
         guard force || liveDay != lastKnownLiveDay else { return }
         lastKnownLiveDay = liveDay

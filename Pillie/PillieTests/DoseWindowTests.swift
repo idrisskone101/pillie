@@ -139,6 +139,27 @@ struct DoseWindowStoreTests {
         #expect(Calendar.current.isDate(fixture.store.today, inSameDayAs: thursdayEight))
     }
 
+    @Test func midnightMovesTheCivilDayButNotTheLiveDay() throws {
+        defer { InMemoryStoreFactory.resetClockAndDefaults() }
+
+        let wednesdayEvening = InMemoryStoreFactory.localDate("2026-09-23", hour: 20)
+        let thursdaySix = InMemoryStoreFactory.localDate("2026-09-24", hour: 6)
+        let fixture = try InMemoryStoreFactory.makeStore(
+            now: wednesdayEvening,
+            startDate: Calendar.current.startOfDay(for: wednesdayEvening)
+        )
+        fixture.store.reminderHour = 8
+        fixture.store.reminderMinute = 0
+        let versionAtWednesday = fixture.store.protocolChangeVersion
+
+        PillieClock.setFixedNowForTesting(thursdaySix)
+        fixture.store.refreshDayContextIfNeeded()
+
+        #expect(fixture.store.civilDay == Calendar.current.startOfDay(for: thursdaySix))
+        #expect(Calendar.current.isDate(fixture.store.today, inSameDayAs: wednesdayEvening))
+        #expect(fixture.store.protocolChangeVersion == versionAtWednesday)
+    }
+
     @Test func takenWednesdayStaysWednesdayAtThursdaySixAM() throws {
         defer { InMemoryStoreFactory.resetClockAndDefaults() }
 
