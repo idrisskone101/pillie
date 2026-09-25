@@ -203,6 +203,10 @@ final class HistoryMonthPagerViewController: UIViewController {
             || self.protocolChangeVersion != protocolChangeVersion
         self.recordsRevision = recordsRevision
         self.protocolChangeVersion = protocolChangeVersion
+        if dataChanged {
+            // A bound page is only current for the data it was built from.
+            boundMonths = [Date?](repeating: nil, count: 3)
+        }
 
         guard animator == nil, !isDragging else { return }
         guard monthsChanged || dataChanged || hosts.contains(where: { $0.view.superview == nil }) else {
@@ -306,6 +310,7 @@ final class HistoryMonthPagerViewController: UIViewController {
         isDragging = false
         guard delta != 0, months.count == 3, hosts.count == 3 else {
             resetStrip()
+            refreshHosts()
             return
         }
 
@@ -349,7 +354,6 @@ final class HistoryMonthPagerViewController: UIViewController {
 
     private func refreshHosts() {
         guard hosts.count == 3, months.count == 3 else { return }
-        boundMonths = Array(repeating: nil, count: hosts.count)
         for (index, month) in months.enumerated() {
             bindHost(at: index, to: month)
         }
