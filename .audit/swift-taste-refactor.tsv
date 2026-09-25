@@ -1,0 +1,40 @@
+ts	phase	decision	why	evidence	result
+2026-09-21T03:55:07Z	frame	will apply Swift taste without a rewrite	a full rewrite of 195 files overnight would change behavior; the layout is already feature-foldered	git HEAD e17857c, 195 swift files	open
+2026-09-21T03:56:00Z	predicate	done means taste gate green, no dump files, baseline axe ids still present, Today History Settings reachable, ns-mac-qa ready	user asked for clean reusable code with no regressions and a before snapshot	verify-pillie features/today.md history.md settings.md	open
+2026-09-21T03:57:00Zharnessstarting baseline ns-mac-qa on e17857c before any structure moveneed old-vs-new screenshots and axe idsmake ns-mac-qarunning
+2026-09-21T03:59:00Z	harness	saved welcome baseline from e17857c ns-mac-qa	fresh simulator lands on Protection Plan welcome, not Today	/opt/cursor/artifacts/baseline_welcome_1x.png, baseline_welcome_ids.txt	ready=true
+2026-09-21T04:05:00Z	settings	moved six Settings editors into sibling files	SettingsView was 1339 lines with extra editor types; now 729	commit dd16f16	pending Mac proof
+2026-09-21T04:05:00Z	settings	welcome pin held after Settings split	protectionPlanPrimaryCTA and developerMenuButton still present; first recapture was splash	/opt/cursor/artifacts/after_settings_welcome_1x.png	VERIFIED
+2026-09-21T04:10:00Z	developer	split debug menu into entry/section/row files	developerMenuButton and developerScenario.* stay	commit b93bb54	open
+2026-09-21T04:12:00Z	order	moved 7 leading types so named views are first	inventory main-symbol-not-first 7 -> 0	commits 140f5b5 efa6593	open
+2026-09-21T04:14:00Z	paywall	moved PlusUpsellSheet from Components to Paywall	commerce surface belongs with HonestPaywall	commits 71b258a dd6b9d6	open
+2026-09-21T04:15:00Z	extras	moved leftover helpers out of *View.swift	extras 54 -> 2 nested Mechanism Proof types	commit 498348c	open
+2026-09-21T04:16:00Z	qa	efa6593 ns-mac-qa ready=true was splash again	axe dump still had protectionPlanPrimaryCTA under overlay	/opt/cursor/artifacts/efa6593_splash_1x.png	need recapture
+2026-09-21T04:21:00Z	qa	132209e settled welcome pin held	protectionPlanPrimaryCTA and developerMenuButton present after splash	/opt/cursor/artifacts/132209e_settled_welcome_1x.png	VERIFIED
+2026-09-21T04:22:00Z	qa	trialActive DebugQA reaches Today	home chrome, tab bar, plus trial badge	/opt/cursor/artifacts/132209e_today_trial_active_1x.png	VERIFIED
+2026-09-21T04:23:00Z	qa	History tab opens from Today	September 2026 calendar chrome	/opt/cursor/artifacts/132209e_history_1x.png	VERIFIED
+2026-09-21T04:24:00Z	qa	Settings tab opens; language and developer rows present	settingsLanguageRow settingsDeveloperMenuRow	/opt/cursor/artifacts/132209e_settings_1x.png	VERIFIED
+2026-09-21T04:29:00Z	qa	7118f04 analytics split Today/History/Settings held	build succeeded; tabs still work after catalog extract	/opt/cursor/artifacts/7118f04_today_1x.png	VERIFIED
+2026-09-21T04:31:00Z	notifications	moved NotificationCenterScheduling beside manager	NotificationManager starts with the class	commit 40d6a91	open
+2026-09-21T05:00:00Z	home	moved Home presentation types beside Home views	feature-owned Services/Components types	commit d5522a0	open
+2026-09-21T05:01:00Z	calendar	moved History layout types beside Calendar	MonthCursor CalendarMonthLayout HistoryPresentation unused by Shield	commit 6345217	open
+2026-09-21T05:02:00Z	settings	moved CustomReminderPreview beside Settings	CustomReminderCopy stays with notifications	commit 316f8fa	open
+2026-09-21T05:03:00Z	onboarding	moved EarlyValueProofDemoState beside proof view	one owner ProtectionPlanEarlyValueProofView	commit 940c74c	open
+2026-09-21T05:04:00Z	subtract	deleted unused Shared formatters and PillStore refill copy	no Swift callers; tests still use daysOverdue	commit 40d6a91	open
+2026-09-21T05:06:00Z	home	moved trial-decline feedback types beside Home	Paywall only consumes the route and copy	commit eeada98	open
+2026-09-21T05:07:00Z	calendar	moved History discovery announcement beside History	Tab bar and app only seed the storage key	commit 40ec261	open
+2026-09-21T05:20:00Z	qa	e8a6a30 compiled and launched on Namespace Mac	BUILD SUCCEEDED, first recapture was splash over persisted Today	/opt/cursor/artifacts/e8a6a30_splash_today_1x.png	need recapture
+2026-09-21T05:22:00Z	qa	e8a6a30 settled Today held	trialIndicator homeBlockingStatusCard developerMenuAvatarButton	/opt/cursor/artifacts/e8a6a30_today_1x.png	VERIFIED
+2026-09-21T05:23:00Z	qa	e8a6a30 History tab held	historyEditableDay.* September 2026 grid	/opt/cursor/artifacts/e8a6a30_history_1x.png	VERIFIED
+2026-09-21T05:24:00Z	qa	e8a6a30 Settings tab held	settingsLanguageRow settingsDeveloperMenuRow	/opt/cursor/artifacts/e8a6a30_settings_1x.png	VERIFIED
+2026-09-21T05:26:00Z	qa	e8a6a30 fresh-install welcome pin held	protectionPlanPrimaryCTA developerMenuButton; 0 missing 0 extra	/opt/cursor/artifacts/e8a6a30_settled_welcome_1x.png	VERIFIED
+2026-09-21T05:27:00Z	predicate	taste green, dump-folder 0, welcome pin, Today History Settings reachable	245 files, 0 findings, pin-axe 0 missing	make ns-mac-qa e8a6a30	done
+2026-09-22T23:58:00Z	analytics	collapsed AnalyticsTracking to track(_:payload:) plus trackError	defaults silently dropped surface cohort outcome retry fields; manager reads source/step off payload	commit 9637d53	open
+2026-09-22T23:59:00Z	app	inlined SubscriptionLaunchPolicy TrialAccessLifecycle RoutineExactDayCardAction	identity wrappers; one refreshTrialAccess keeps refresh before reconcile	commit e5fdff3	open
+2026-09-23T00:00:00Z	settings	13 sheet flags to one SettingsSheet destination	each case keeps original detent; paywall cover, manage sheet, mail alert stay separate	commit cd8207b	open
+2026-09-23T00:08:00Z	qa	cd8207b compiled on Namespace Mac	BUILD SUCCEEDED ready=1	/opt/cursor/artifacts/pillie_simulator_1x.png	VERIFIED
+2026-09-23T00:22:00Z	tests	focused unit tests on Namespace Mac	153 XCTest + 6 Swift Testing, 0 failures across all touched suites	/tmp/ns-tests2-cd8207b.log	VERIFIED
+2026-09-23T00:33:00Z	qa	fresh-install onboarding to Today	welcome, demo drag+shake, choices, frequency, source, method, exact-day toggle, notifications, plan, blocking skip	/opt/cursor/artifacts/walk/22_step_1x.png	VERIFIED
+2026-09-23T00:41:00Z	qa	all 13 Settings sheets plus paywall cover open and dismiss	trial user editors and free user upsells; detents unchanged	/opt/cursor/artifacts/walk	VERIFIED
+2026-09-23T00:42:00Z	qa	foreground refreshTrialAccess after clearing trial	Today shows free state, streak persisted	/opt/cursor/artifacts/walk/51_today_after_foreground_1x.png	VERIFIED
+2026-09-23T00:47:00Z	qa	recorded full walkthrough from fresh install	165s simulator recording	/opt/cursor/artifacts/pillie_full_app_walkthrough.mp4	VERIFIED

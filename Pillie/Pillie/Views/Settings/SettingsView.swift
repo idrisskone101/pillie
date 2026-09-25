@@ -5,7 +5,6 @@
 
 import SwiftUI
 import StoreKit
-import FamilyControls
 
 struct SettingsView: View {
     @Environment(PillStore.self) var store
@@ -16,24 +15,10 @@ struct SettingsView: View {
     @Environment(\.openURL) private var openURL
     @State private var appeared = false
     @State private var hasAnimatedIn = false
-    @State private var showTimeEditor = false
-    @State private var showIntervalEditor = false
-    @State private var showRetryLimitEditor = false
-    @State private var showRefillReminderEditor = false
-    @State private var showProtocolEditor = false
-    @State private var showCycleDayEditor = false
-    @State private var showBlockedAppsEditor = false
-    @State private var showBlockingUpsell = false
-    @State private var showSmartRemindersUpsell = false
-    @State private var showCustomRemindersEditor = false
-    @State private var showCustomRemindersUpsell = false
+    @State private var activeSheet: SettingsSheet?
     @State private var showPaywall = false
-    @State private var showLanguagePicker = false
     @State private var showManageSubscription = false
     @State private var showOpenLineMailFallback = false
-    #if DEBUG
-    @State private var showDeveloperMenu = false
-    #endif
 
     private let settingsFeedback = SettingsInteractionFeedback()
 
@@ -60,7 +45,7 @@ struct SettingsView: View {
 
                 settingsCard {
                     Button {
-                        openSettingSheet { showProtocolEditor = true }
+                        openSettingSheet { activeSheet = .protocolEditor }
                         ProductAnalyticsTelemetry.live.protocolSettingsOpened()
                     } label: {
                         settingsRow(
@@ -71,7 +56,7 @@ struct SettingsView: View {
                     .buttonStyle(.plain)
                     divider
                     Button {
-                        openSettingSheet { showTimeEditor = true }
+                        openSettingSheet { activeSheet = .reminderTime }
                         ProductAnalyticsTelemetry.live.reminderTimeSettingsOpened()
                     } label: {
                         settingsRow(
@@ -90,7 +75,7 @@ struct SettingsView: View {
                     divider
                     if SubscriptionManager.shared.hasPlusAccess {
                         Button {
-                            openSettingSheet { showCustomRemindersEditor = true }
+                            openSettingSheet { activeSheet = .customReminders }
                         } label: {
                             settingsRow(PillieLocalization.string(
                                 "settings.custom_messages.title",
@@ -100,7 +85,7 @@ struct SettingsView: View {
                         .buttonStyle(.plain)
                     } else {
                         Button {
-                            openSettingSheet { showCustomRemindersUpsell = true }
+                            openSettingSheet { activeSheet = .customRemindersUpsell }
                         } label: {
                             settingsRow(PillieLocalization.string(
                                 "settings.custom_messages.title",
@@ -108,17 +93,11 @@ struct SettingsView: View {
                             ), value: "Pillie+", valueColor: PillieTheme.coral, showLock: true)
                         }
                         .buttonStyle(.plain)
-                        .sheet(isPresented: $showCustomRemindersUpsell) {
-                            PlusUpsellSheet.customReminders()
-                                .presentationDetents([.height(PlusUpsellSheet.compactPresentationHeight)])
-                                .presentationDragIndicator(.hidden)
-                                .presentationBackground(PillieTheme.bg)
-                        }
                     }
                     if store.pack.method != .ring {
                         divider
                         Button {
-                            openSettingSheet { showRefillReminderEditor = true }
+                            openSettingSheet { activeSheet = .refillReminder }
                             ProductAnalyticsTelemetry.live.supplyReminderSettingsOpened()
                         } label: {
                             settingsRow(supplyReminderTitle, value: supplyReminderValue)
@@ -138,7 +117,7 @@ struct SettingsView: View {
                 settingsCard {
                     if SubscriptionManager.shared.hasPlusAccess {
                         Button {
-                            openSettingSheet { showIntervalEditor = true }
+                            openSettingSheet { activeSheet = .autoReminderInterval }
                             ProductAnalyticsTelemetry.live.autoReminderIntervalSettingsOpened()
                         } label: {
                             settingsRow(PillieLocalization.string(
@@ -152,7 +131,7 @@ struct SettingsView: View {
                         .buttonStyle(.plain)
                         divider
                         Button {
-                            openSettingSheet { showRetryLimitEditor = true }
+                            openSettingSheet { activeSheet = .autoReminderRetryLimit }
                             ProductAnalyticsTelemetry.live.autoReminderRetryLimitSettingsOpened()
                         } label: {
                             settingsRow(PillieLocalization.string(
@@ -163,7 +142,7 @@ struct SettingsView: View {
                         .buttonStyle(.plain)
                     } else {
                         Button {
-                            openSettingSheet { showSmartRemindersUpsell = true }
+                            openSettingSheet { activeSheet = .smartRemindersUpsell }
                         } label: {
                             settingsRow(PillieLocalization.string(
                                 "settings.followup.interval_title",
@@ -173,7 +152,7 @@ struct SettingsView: View {
                         .buttonStyle(.plain)
                         divider
                         Button {
-                            openSettingSheet { showSmartRemindersUpsell = true }
+                            openSettingSheet { activeSheet = .smartRemindersUpsell }
                         } label: {
                             settingsRow(PillieLocalization.string(
                                 "settings.followup.retry_limit_title",
@@ -181,12 +160,6 @@ struct SettingsView: View {
                             ), value: "Pillie+", valueColor: PillieTheme.coral, showLock: true)
                         }
                         .buttonStyle(.plain)
-                        .sheet(isPresented: $showSmartRemindersUpsell) {
-                            PlusUpsellSheet.smartReminders()
-                                .presentationDetents([.height(PlusUpsellSheet.compactPresentationHeight)])
-                                .presentationDragIndicator(.hidden)
-                                .presentationBackground(PillieTheme.bg)
-                        }
                     }
                 }
                 .modifier(FadeInUp(appeared: appeared, delay: 0.12))
@@ -200,7 +173,7 @@ struct SettingsView: View {
 
                 settingsCard {
                     Button {
-                        openSettingSheet { showCycleDayEditor = true }
+                        openSettingSheet { activeSheet = .cycleDay }
                         ProductAnalyticsTelemetry.live.cycleDaySettingsOpened()
                     } label: {
                         settingsRow(PillieLocalization.string(
@@ -230,7 +203,7 @@ struct SettingsView: View {
                         Button {
                             Task { @MainActor in
                                 _ = await AppBlockingManager.shared.ensureAuthorized()
-                                openSensitiveSetting { showBlockedAppsEditor = true }
+                                openSensitiveSetting { activeSheet = .blockedApps }
                                 ProductAnalyticsTelemetry.live.blockedAppsSettingsOpened(
                                     hasSelection: AppBlockingManager.shared.hasAppsSelected
                                 )
@@ -244,7 +217,7 @@ struct SettingsView: View {
                         .buttonStyle(.plain)
                     } else {
                         Button {
-                            openSensitiveSetting { showBlockingUpsell = true }
+                            openSensitiveSetting { activeSheet = .blockingUpsell }
                         } label: {
                             settingsRow(PillieLocalization.string(
                                 "settings.blocked_apps.title",
@@ -252,15 +225,6 @@ struct SettingsView: View {
                             ), value: "Pillie+", valueColor: PillieTheme.coral, showLock: true)
                         }
                         .buttonStyle(.plain)
-                        .sheet(isPresented: $showBlockingUpsell) {
-                            PlusUpsellSheet.appBlocking(
-                                action: store.dueAction(on: store.today),
-                                method: store.pack.method
-                            )
-                                .presentationDetents([.height(PlusUpsellSheet.compactPresentationHeight)])
-                                .presentationDragIndicator(.hidden)
-                                .presentationBackground(PillieTheme.bg)
-                        }
                     }
                 }
                 .modifier(FadeInUp(appeared: appeared, delay: 0.2))
@@ -303,7 +267,7 @@ struct SettingsView: View {
                 VStack(alignment: .leading, spacing: 8) {
                     settingsCard {
                         Button {
-                            openSettingSheet { showLanguagePicker = true }
+                            openSettingSheet { activeSheet = .language }
                         } label: {
                             settingsRow(
                                 PillieLocalization.string("settings.language.title", locale: locale),
@@ -369,7 +333,7 @@ struct SettingsView: View {
 
                 settingsCard {
                     Button {
-                        showDeveloperMenu = true
+                        activeSheet = .developerMenu
                     } label: {
                         settingsRow("Jump to a QA state", value: "Simulator only")
                     }
@@ -377,9 +341,6 @@ struct SettingsView: View {
                     .accessibilityIdentifier("settingsDeveloperMenuRow")
                 }
                 .modifier(FadeInUp(appeared: appeared, delay: 0.3))
-                .sheet(isPresented: $showDeveloperMenu) {
-                    DeveloperMenuView()
-                }
                 #endif
 
                 // Handwriting accent
@@ -403,60 +364,8 @@ struct SettingsView: View {
                 appeared = true
             }
         }
-        .sheet(isPresented: $showLanguagePicker) {
-            LanguagePickerSheet()
-                .presentationDetents([.large])
-                .presentationDragIndicator(.hidden)
-                .presentationBackground(PillieTheme.bg)
-        }
-        .sheet(isPresented: $showTimeEditor) {
-            ReminderTimeEditor(store: store)
-                .presentationDetents([.height(320)])
-                .presentationDragIndicator(.hidden)
-                .presentationBackground(PillieTheme.bg)
-        }
-        .sheet(isPresented: $showIntervalEditor) {
-            AutoReminderIntervalEditor(store: store)
-                .presentationDetents([.height(440)])
-                .presentationDragIndicator(.hidden)
-                .presentationBackground(PillieTheme.bg)
-        }
-        .sheet(isPresented: $showRetryLimitEditor) {
-            AutoReminderRetryLimitEditor(store: store)
-                .presentationDetents([.height(500)])
-                .presentationDragIndicator(.hidden)
-                .presentationBackground(PillieTheme.bg)
-        }
-        .sheet(isPresented: $showRefillReminderEditor) {
-            RefillReminderThresholdEditor(store: store)
-                .presentationDetents([.height(410)])
-                .presentationDragIndicator(.hidden)
-                .presentationBackground(PillieTheme.bg)
-        }
-        .sheet(isPresented: $showProtocolEditor) {
-            ProtocolEditor(store: store)
-                .presentationDetents([.large])
-                .presentationDragIndicator(.hidden)
-        }
-        .sheet(isPresented: $showCycleDayEditor) {
-            CycleDayEditor(store: store)
-                .presentationDetents([
-                    dynamicTypeSize.isAccessibilitySize ? .large : .height(400)
-                ])
-                .presentationDragIndicator(.hidden)
-                .presentationBackground(PillieTheme.bg)
-        }
-        .sheet(isPresented: $showBlockedAppsEditor) {
-            BlockedAppsEditor()
-                .presentationDetents([.height(430)])
-                .presentationDragIndicator(.hidden)
-                .presentationBackground(PillieTheme.bg)
-        }
-        .sheet(isPresented: $showCustomRemindersEditor) {
-            CustomReminderMessagesEditor(store: store)
-                .presentationDetents([.large])
-                .presentationDragIndicator(.hidden)
-                .presentationBackground(PillieTheme.bg)
+        .sheet(item: $activeSheet) { sheet in
+            sheetContent(sheet)
         }
         .fullScreenCover(isPresented: $showPaywall) {
             HonestPaywallHost(
@@ -483,6 +392,56 @@ struct SettingsView: View {
                 locale: locale,
                 arguments: OpenLine.MailFallback.addressToCopy
             ))
+        }
+    }
+
+    @ViewBuilder
+    private func sheetContent(_ sheet: SettingsSheet) -> some View {
+        switch sheet {
+        case .protocolEditor:
+            ProtocolEditor(store: store)
+                .presentationDetents([.large])
+                .presentationDragIndicator(.hidden)
+        case .reminderTime:
+            ReminderTimeEditor(store: store)
+                .settingsSheetPresentation(.height(320))
+        case .customReminders:
+            CustomReminderMessagesEditor(store: store)
+                .settingsSheetPresentation(.large)
+        case .customRemindersUpsell:
+            PlusUpsellSheet.customReminders()
+                .settingsSheetPresentation(.height(PlusUpsellSheet.compactPresentationHeight))
+        case .refillReminder:
+            RefillReminderThresholdEditor(store: store)
+                .settingsSheetPresentation(.height(410))
+        case .autoReminderInterval:
+            AutoReminderIntervalEditor(store: store)
+                .settingsSheetPresentation(.height(440))
+        case .autoReminderRetryLimit:
+            AutoReminderRetryLimitEditor(store: store)
+                .settingsSheetPresentation(.height(500))
+        case .smartRemindersUpsell:
+            PlusUpsellSheet.smartReminders()
+                .settingsSheetPresentation(.height(PlusUpsellSheet.compactPresentationHeight))
+        case .cycleDay:
+            CycleDayEditor(store: store)
+                .settingsSheetPresentation(dynamicTypeSize.isAccessibilitySize ? .large : .height(400))
+        case .blockedApps:
+            BlockedAppsEditor()
+                .settingsSheetPresentation(.height(430))
+        case .blockingUpsell:
+            PlusUpsellSheet.appBlocking(
+                action: store.dueAction(on: store.today),
+                method: store.pack.method
+            )
+                .settingsSheetPresentation(.height(PlusUpsellSheet.compactPresentationHeight))
+        case .language:
+            LanguagePickerSheet()
+                .settingsSheetPresentation(.large)
+        #if DEBUG
+        case .developerMenu:
+            DeveloperMenuView()
+        #endif
         }
     }
 
@@ -723,612 +682,11 @@ struct SettingsView: View {
     }
 }
 
-// MARK: - Protocol Editor
-
-private struct ProtocolEditor: View {
-    @Bindable var store: PillStore
-    @Environment(\.dismiss) private var dismiss
-    @Environment(\.locale) private var locale
-    @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
-
-    @State private var selectedMethod: ContraceptiveMethod = .pill
-    @State private var selectedRegimen: PillPack.PillRegimenPreset = .twentyOneSeven
-    @State private var customActiveDaysText: String = "21"
-    @State private var customBreakDaysText: String = "7"
-    @State private var selectedCycleDay: Int = 1
-    @State private var showResetConfirmation = false
-
-    private let settingsFeedback = SettingsInteractionFeedback()
-
-    private var customActiveDays: Int {
-        let raw = Int(customActiveDaysText) ?? 21
-        return min(max(raw, PillPack.customActiveRange.lowerBound), PillPack.customActiveRange.upperBound)
-    }
-
-    private var customBreakDays: Int {
-        let raw = Int(customBreakDaysText) ?? 7
-        return min(max(raw, PillPack.customBreakRange.lowerBound), PillPack.customBreakRange.upperBound)
-    }
-
-    private var cycleLength: Int {
-        switch selectedMethod {
-        case .pill:
-            if selectedRegimen == .custom {
-                return customActiveDays + customBreakDays
-            }
-            return selectedRegimen.cycleLength
-        case .patch, .ring:
-            return 28
-        }
-    }
-
-    private var resetConfirmation: ScheduleCriticalSettingChange.Confirmation {
-        ScheduleCriticalSettingChange.confirmation(
-            cycleDay: selectedCycleDay,
-            locale: locale
-        )
-    }
-
-    var body: some View {
-        let protocolPresentation = ProtocolEditorPresentation.localized(
-            method: selectedMethod,
-            locale: locale
-        )
-
-        VStack(spacing: 0) {
-            SettingsSheetHeader(title: PillieLocalization.string(
-                "settings.schedule.title",
-                locale: locale
-            ))
-
-            ScrollView {
-                VStack(alignment: .leading, spacing: 20) {
-                    Text(PillieLocalization.string("settings.method.title", locale: locale))
-                        .font(.pillieCaptionMedium())
-                        .foregroundStyle(PillieTheme.textMuted)
-                        .tracking(2)
-
-                    Picker(PillieLocalization.string(
-                        "settings.method.title",
-                        locale: locale
-                    ), selection: $selectedMethod) {
-                        ForEach(ContraceptiveMethod.allCases, id: \.self) { method in
-                            Text(method.localizedTitle(locale: locale)).tag(method)
-                        }
-                    }
-                    .pickerStyle(.segmented)
-
-                    if selectedMethod == .pill {
-                        Text(PillieLocalization.string("settings.regimen.title", locale: locale))
-                            .font(.pillieCaptionMedium())
-                            .foregroundStyle(PillieTheme.textMuted)
-                            .tracking(2)
-
-                        VStack(spacing: 10) {
-                            ForEach(PillPack.PillRegimenPreset.allCases, id: \.rawValue) { regimen in
-                                Button {
-                                    selectedRegimen = regimen
-                                } label: {
-                                    HStack {
-                                        VStack(alignment: .leading, spacing: 4) {
-                                            Text(regimen.localizedRoutineDisplayName(locale: locale))
-                                                .font(.pillieBodyBold())
-                                                .foregroundStyle(PillieTheme.textPrimary)
-                                            Text(regimen.localizedScheduleSubtitle(locale: locale))
-                                                .font(.pillieBody())
-                                                .foregroundStyle(PillieTheme.textMuted)
-                                        }
-                                        Spacer()
-                                        Image(systemName: selectedRegimen == regimen ? "checkmark.circle.fill" : "circle")
-                                            .foregroundStyle(selectedRegimen == regimen ? PillieTheme.coral : PillieTheme.textMuted)
-                                    }
-                                    .padding(14)
-                                    .background(PillieTheme.cardWhite)
-                                    .clipShape(RoundedRectangle(cornerRadius: PillieTheme.cardRadius))
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: PillieTheme.cardRadius)
-                                            .stroke(PillieTheme.sageHalf, lineWidth: 1)
-                                    )
-                                }
-                                .buttonStyle(.plain)
-                            }
-                        }
-
-                        if selectedRegimen == .custom {
-                            HStack(spacing: 12) {
-                                customInputCard(
-                                    title: protocolPresentation.customDayLabels[0],
-                                    text: $customActiveDaysText
-                                )
-                                customInputCard(
-                                    title: protocolPresentation.customDayLabels[1],
-                                    text: $customBreakDaysText
-                                )
-                            }
-                        }
-                    } else {
-                        Text(PillieLocalization.string("settings.schedule.title", locale: locale))
-                            .font(.pillieCaptionMedium())
-                            .foregroundStyle(PillieTheme.textMuted)
-                            .tracking(2)
-
-                        VStack(alignment: .leading, spacing: 10) {
-                            Text(protocolPresentation.scheduleTitle)
-                                .font(.pillieBodyBold())
-                                .foregroundStyle(PillieTheme.textPrimary)
-                                .pillieAdaptiveLineLimit(minimumScaleFactor: 0.8)
-
-                            ForEach(protocolPresentation.scheduleLines, id: \.self) { line in
-                                HStack(alignment: .firstTextBaseline, spacing: 8) {
-                                    Text("•")
-                                        .accessibilityHidden(true)
-                                    Text(line)
-                                        .font(.pillieBody())
-                                        .foregroundStyle(PillieTheme.textPrimary)
-                                        .fixedSize(horizontal: false, vertical: true)
-                                }
-                            }
-                        }
-                            .padding(16)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .background(PillieTheme.cardWhite)
-                            .clipShape(RoundedRectangle(cornerRadius: PillieTheme.cardRadius))
-                            .overlay(
-                                RoundedRectangle(cornerRadius: PillieTheme.cardRadius)
-                                    .stroke(PillieTheme.sageHalf, lineWidth: 1)
-                            )
-                    }
-
-                    Text(PillieLocalization.string("settings.cycle_day.title", locale: locale))
-                        .font(.pillieCaptionMedium())
-                        .foregroundStyle(PillieTheme.textMuted)
-                        .tracking(2)
-
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text(SettingsPresentation.cycleDay(
-                            day: selectedCycleDay,
-                            total: cycleLength,
-                            locale: locale
-                        ))
-                            .font(.pillieBodyBold())
-                            .foregroundStyle(PillieTheme.textPrimary)
-
-                        Stepper(value: $selectedCycleDay, in: 1...max(1, cycleLength)) {
-                            Text(PillieLocalization.string(
-                                "settings.cycle_day.adjust",
-                                locale: locale
-                            ))
-                                .font(.pillieBody())
-                                .foregroundStyle(PillieTheme.textMuted)
-                        }
-
-                        Text(PillieLocalization.string(
-                            "settings.cycle_day.history_note",
-                            locale: locale
-                        ))
-                            .font(.pillieCaption())
-                            .foregroundStyle(PillieTheme.textMuted)
-                    }
-                    .padding(16)
-                    .background(PillieTheme.cardWhite)
-                    .clipShape(RoundedRectangle(cornerRadius: PillieTheme.cardRadius))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: PillieTheme.cardRadius)
-                            .stroke(PillieTheme.sageHalf, lineWidth: 1)
-                    )
-                }
-                .padding(20)
-            }
-
-            VStack(spacing: 12) {
-                Button {
-                    showResetConfirmation = true
-                } label: {
-                    Text(PillieLocalization.string("global.action.save", locale: locale))
-                }
-                .buttonStyle(.pillieDark)
-                .padding(.horizontal, 28)
-
-                Button {
-                    ProductAnalyticsTelemetry.live.protocolChangeCancelled()
-                    dismiss()
-                } label: {
-                    Text(PillieLocalization.string("global.action.cancel", locale: locale))
-                }
-                .buttonStyle(.pillieSecondary)
-                .padding(.horizontal, 28)
-            }
-            .padding(.bottom, 20)
-        }
-        .background(PillieTheme.bg.ignoresSafeArea())
-        .alert(resetConfirmation.title, isPresented: $showResetConfirmation) {
-            Button(resetConfirmation.cancelTitle, role: .cancel) { }
-            Button(resetConfirmation.confirmTitle, role: .destructive) {
-                settingsFeedback.sensitiveOrDestructiveChange(accessibilityReduceMotion: accessibilityReduceMotion)
-                store.resetAndStartFresh(
-                    method: selectedMethod,
-                    regimen: selectedMethod == .pill ? selectedRegimen : .twentyOneSeven,
-                    customActiveDays: selectedMethod == .pill && selectedRegimen == .custom ? customActiveDays : nil,
-                    customBreakDays: selectedMethod == .pill && selectedRegimen == .custom ? customBreakDays : nil,
-                    cycleDay: min(max(1, selectedCycleDay), cycleLength)
-                )
-                ProductAnalyticsTelemetry.live.protocolChangeSaved()
-                dismiss()
-            }
-        } message: {
-            Text(resetConfirmation.body)
-        }
-        .onAppear(perform: seedFromStore)
-        .onChange(of: selectedMethod) { _, _ in clampCycleDay() }
-        .onChange(of: selectedRegimen) { _, _ in clampCycleDay() }
-        .onChange(of: customActiveDaysText) { _, _ in clampCycleDay() }
-        .onChange(of: customBreakDaysText) { _, _ in clampCycleDay() }
-    }
-
-    private func customInputCard(title: String, text: Binding<String>) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(title)
-                .font(.pillieCaption())
-                .foregroundStyle(PillieTheme.textMuted)
-            TextField("0", text: text)
-                .keyboardType(.numberPad)
-                .font(.pillieBodyBold())
-                .foregroundStyle(PillieTheme.textPrimary)
-                .padding(.horizontal, 12)
-                .frame(height: 44)
-                .background(PillieTheme.cardWhite)
-                .clipShape(RoundedRectangle(cornerRadius: 12))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(PillieTheme.sageHalf, lineWidth: 1)
-                )
-        }
-        .frame(maxWidth: .infinity)
-    }
-
-    private func seedFromStore() {
-        selectedMethod = store.pack.method
-        selectedRegimen = store.pack.pillRegimen
-        customActiveDaysText = "\(store.pack.customActiveDays ?? 21)"
-        customBreakDaysText = "\(store.pack.customBreakDays ?? 7)"
-        selectedCycleDay = store.currentDayIndex + 1
-        clampCycleDay()
-    }
-
-    private func clampCycleDay() {
-        selectedCycleDay = min(max(1, selectedCycleDay), max(1, cycleLength))
-    }
-}
-
-// MARK: - Reminder Time Editor
-
-private struct ReminderTimeEditor: View {
-    @Bindable var store: PillStore
-    @Environment(\.dismiss) private var dismiss
-    @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
-    @Environment(\.locale) private var locale
-
-    @State private var selectedTime = Date()
-
-    private let settingsFeedback = SettingsInteractionFeedback()
-
-    var body: some View {
-        SettingsSheetContainer(
-            title: PillieLocalization.string("settings.reminder_time.title", locale: locale),
-            bottomPadding: 0
-        ) {
-            DatePicker(
-                "",
-                selection: $selectedTime,
-                displayedComponents: .hourAndMinute
-            )
-            .datePickerStyle(.wheel)
-            .labelsHidden()
-            .environment(\.locale, locale)
-            .frame(height: 170)
-
-            Button {
-                settingsFeedback.commitScheduleSave(accessibilityReduceMotion: accessibilityReduceMotion)
-                saveReminderTime()
-                dismiss()
-            } label: {
-                Text(PillieLocalization.string("global.action.save", locale: locale))
-            }
-            .buttonStyle(.pillieDark)
-            .padding(.horizontal, 28)
-        }
-        .onAppear { seedFromStore() }
-    }
-
-    private func seedFromStore() {
-        selectedTime = ReminderTimeConverter.dateForPicker(
-            hour: store.reminderHour,
-            minute: store.reminderMinute
-        )
-    }
-
-    private func saveReminderTime() {
-        let selection = ReminderTimeConverter.hourAndMinute(from: selectedTime)
-        ScheduleCriticalSettingChange.saveSettingsReminderTime(
-            store: store,
-            hour: selection.hour,
-            minute: selection.minute
-        )
-    }
-}
-
-// MARK: - Auto Reminder Interval Editor
-
-struct AutoReminderIntervalEditor: View {
-    @Bindable var store: PillStore
-    @Environment(\.dismiss) private var dismiss
-    @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
-    @Environment(\.locale) private var locale
-
-    @State private var selectedInterval: Int = 10
-
-    private let settingsFeedback = SettingsInteractionFeedback()
-
-    var body: some View {
-        SettingsSheetContainer(
-            title: PillieLocalization.string("settings.followup.interval_title", locale: locale),
-            bottomPadding: 0
-        ) {
-            VStack(spacing: 16) {
-                ForEach(PillStore.autoReminderIntervalOptions, id: \.self) { option in
-                    Button {
-                        selectedInterval = option
-                    } label: {
-                        HStack {
-                            Text(SettingsPresentation.interval(minutes: option, locale: locale))
-                                .font(.pillieBodyBold())
-                                .foregroundStyle(PillieTheme.textPrimary)
-                            Spacer()
-                            Image(systemName: selectedInterval == option ? "checkmark.circle.fill" : "circle")
-                                .foregroundStyle(selectedInterval == option ? PillieTheme.coral : PillieTheme.textMuted)
-                        }
-                        .padding(14)
-                        .background(PillieTheme.cardWhite)
-                        .clipShape(RoundedRectangle(cornerRadius: 14))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 14)
-                                .stroke(PillieTheme.sageHalf, lineWidth: 1)
-                        )
-                    }
-                    .buttonStyle(.plain)
-                }
-            }
-            .padding(.horizontal, 20)
-
-            Button {
-                settingsFeedback.commitScheduleSave(accessibilityReduceMotion: accessibilityReduceMotion)
-                ScheduleCriticalSettingChange.saveSettingsAutoReminderInterval(
-                    store: store,
-                    intervalMinutes: selectedInterval
-                )
-                dismiss()
-            } label: {
-                Text(PillieLocalization.string("global.action.save", locale: locale))
-            }
-            .buttonStyle(.pillieDark)
-            .padding(.horizontal, 28)
-        }
-        .onAppear {
-            selectedInterval = store.autoReminderIntervalMinutes
-        }
-    }
-}
-
-// MARK: - Auto Reminder Retry Limit Editor
-
-private struct AutoReminderRetryLimitEditor: View {
-    @Bindable var store: PillStore
-    @Environment(\.dismiss) private var dismiss
-    @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
-    @Environment(\.locale) private var locale
-
-    @State private var selectedLimit: Int = 3
-
-    private let settingsFeedback = SettingsInteractionFeedback()
-
-    var body: some View {
-        SettingsSheetContainer(
-            title: PillieLocalization.string("settings.followup.retry_limit_title", locale: locale),
-            bottomPadding: 0
-        ) {
-            VStack(spacing: 16) {
-                ForEach(PillStore.autoReminderRetryLimitOptions, id: \.self) { option in
-                    Button {
-                        selectedLimit = option
-                    } label: {
-                        HStack {
-                            Text(optionLabel(for: option))
-                                .font(.pillieBodyBold())
-                                .foregroundStyle(PillieTheme.textPrimary)
-                            Spacer()
-                            Image(systemName: selectedLimit == option ? "checkmark.circle.fill" : "circle")
-                                .foregroundStyle(selectedLimit == option ? PillieTheme.coral : PillieTheme.textMuted)
-                        }
-                        .padding(14)
-                        .background(PillieTheme.cardWhite)
-                        .clipShape(RoundedRectangle(cornerRadius: 14))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 14)
-                                .stroke(PillieTheme.sageHalf, lineWidth: 1)
-                        )
-                    }
-                    .buttonStyle(.plain)
-                }
-            }
-            .padding(.horizontal, 20)
-
-            Button {
-                settingsFeedback.commitScheduleSave(accessibilityReduceMotion: accessibilityReduceMotion)
-                ScheduleCriticalSettingChange.saveSettingsAutoReminderRetryLimit(
-                    store: store,
-                    retryLimit: selectedLimit
-                )
-                dismiss()
-            } label: {
-                Text(PillieLocalization.string("global.action.save", locale: locale))
-            }
-            .buttonStyle(.pillieDark)
-            .padding(.horizontal, 28)
-        }
-        .onAppear {
-            selectedLimit = store.autoReminderRetryLimit
-        }
-    }
-
-    private func optionLabel(for option: Int) -> String {
-        switch option {
-        case 0:
-            return PillieLocalization.string("global.status.off", locale: locale)
-        default:
-            return option.formatted(.number.locale(locale))
-        }
-    }
-}
-
-// MARK: - Refill Reminder Threshold Editor
-
-private struct RefillReminderThresholdEditor: View {
-    @Bindable var store: PillStore
-    @Environment(\.dismiss) private var dismiss
-    @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
-    @Environment(\.locale) private var locale
-
-    @State private var selectedThreshold: Int = 5
-
-    private let settingsFeedback = SettingsInteractionFeedback()
-
-    private var isPatchMethod: Bool {
-        store.pack.method == .patch
-    }
-
-    private var editorTitle: String {
-        SettingsPresentation.supplyReminderTitle(
-            method: store.pack.method,
-            locale: locale
-        )
-    }
-
-    private var thresholdOptions: [Int] {
-        isPatchMethod ? PillStore.patchRestockReminderThresholdOptions : PillStore.refillReminderThresholdOptions
-    }
-
-    var body: some View {
-        SettingsSheetContainer(title: editorTitle, bottomPadding: 0) {
-            VStack(spacing: 16) {
-                ForEach(thresholdOptions, id: \.self) { option in
-                    Button {
-                        selectedThreshold = option
-                    } label: {
-                        HStack {
-                            Text(thresholdLabel(for: option))
-                                .font(.pillieBodyBold())
-                                .foregroundStyle(PillieTheme.textPrimary)
-                            Spacer()
-                            Image(systemName: selectedThreshold == option ? "checkmark.circle.fill" : "circle")
-                                .foregroundStyle(selectedThreshold == option ? PillieTheme.coral : PillieTheme.textMuted)
-                        }
-                        .padding(14)
-                        .background(PillieTheme.cardWhite)
-                        .clipShape(RoundedRectangle(cornerRadius: 14))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 14)
-                                .stroke(PillieTheme.sageHalf, lineWidth: 1)
-                        )
-                    }
-                    .buttonStyle(.plain)
-                }
-            }
-            .padding(.horizontal, 20)
-
-            Button {
-                settingsFeedback.commitScheduleSave(accessibilityReduceMotion: accessibilityReduceMotion)
-                ScheduleCriticalSettingChange.saveSettingsSupplyReminderThreshold(
-                    store: store,
-                    threshold: selectedThreshold
-                )
-                dismiss()
-            } label: {
-                Text(PillieLocalization.string("global.action.save", locale: locale))
-            }
-            .buttonStyle(.pillieDark)
-            .padding(.horizontal, 28)
-        }
-        .onAppear {
-            selectedThreshold = isPatchMethod
-                ? store.patchRestockReminderThresholdPatches
-                : store.refillReminderThresholdDays
-        }
-    }
-
-    private func thresholdLabel(for option: Int) -> String {
-        option.formatted(.number.locale(locale))
-    }
-}
-
-// MARK: - Cycle Day Editor
-
-private struct CycleDayEditor: View {
-    @Bindable var store: PillStore
-    @Environment(\.dismiss) private var dismiss
-    @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
-    @Environment(\.locale) private var locale
-
-    @State private var selectedCycleDay: Int = 1
-
-    private let settingsFeedback = SettingsInteractionFeedback()
-
-    private var cycleLength: Int {
-        max(1, store.pack.cycleLength)
-    }
-
-    var body: some View {
-        SettingsSheetContainer(
-            title: PillieLocalization.string("settings.cycle_day.title", locale: locale),
-            bottomPadding: 0
-        ) {
-            Text(SettingsPresentation.cycleDay(
-                day: selectedCycleDay,
-                total: cycleLength,
-                locale: locale
-            ))
-                .font(.pillieHeadline())
-                .foregroundStyle(PillieTheme.textPrimary)
-
-            Stepper(
-                value: $selectedCycleDay,
-                in: 1...cycleLength
-            ) {
-                Text(PillieLocalization.string("settings.cycle_day.adjust", locale: locale))
-                    .font(.pillieBody())
-                    .foregroundStyle(PillieTheme.textMuted)
-            }
-            .padding(.horizontal, 20)
-
-            Text(PillieLocalization.string("settings.cycle_day.history_note", locale: locale))
-                .font(.pillieCaption())
-                .foregroundStyle(PillieTheme.textMuted)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 20)
-
-            Button {
-                settingsFeedback.commitScheduleSave(accessibilityReduceMotion: accessibilityReduceMotion)
-                store.updateCycleDay(selectedCycleDay)
-                ProductAnalyticsTelemetry.live.cycleDaySaved()
-                dismiss()
-            } label: {
-                Text(PillieLocalization.string("global.action.save", locale: locale))
-            }
-            .buttonStyle(.pillieDark)
-            .padding(.horizontal, 28)
-        }
-        .onAppear {
-            selectedCycleDay = store.currentDayIndex + 1
-        }
+private extension View {
+    func settingsSheetPresentation(_ detent: PresentationDetent) -> some View {
+        presentationDetents([detent])
+            .presentationDragIndicator(.hidden)
+            .presentationBackground(PillieTheme.bg)
     }
 }
 

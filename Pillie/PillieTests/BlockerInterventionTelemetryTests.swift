@@ -58,27 +58,14 @@ private final class InterventionAnalyticsRecorder: AnalyticsTracking {
 
     private(set) var events: [Event] = []
 
-    func track(
-        _ event: AnalyticsEvent,
-        source: AnalyticsSource?,
-        step: AnalyticsStep?,
-        stepIndex: Int?,
-        screen: AnalyticsScreen?,
-        plan: AnalyticsPlan?,
-        result: AnalyticsResult?,
-        setting: AnalyticsSetting?,
-        acquisitionSource: AcquisitionSource?,
-        isPlus: Bool?,
-        hasBlockingSelection: Bool?,
-        interventionCount: Int?,
-        shakeCount: Int?,
-        trialWarningDay: Int?,
-        trialEndCohort: TrialEndPaywallCohort?,
-        titleCustomized: Bool?,
-        bodyCustomized: Bool?,
-        retryTitleCustomized: Bool?,
-        retryBodyCustomized: Bool?,
-    ) {
-        events.append(Event(event: event, interventionCount: interventionCount, isPlus: isPlus))
+    func track(_ event: AnalyticsEvent, payload: AnalyticsPayload) {
+        events.append(Event(event: event, interventionCount: payload.interventionCount, isPlus: payload.isPlus))
     }
+
+    func trackError(
+        _ domain: AppErrorDomain,
+        error: Error,
+        context: [String: String],
+        severity: AppErrorSeverity
+    ) {}
 }

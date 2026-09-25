@@ -32,10 +32,6 @@ struct TestHostLaunchSafetyTests {
         #expect(!TestLaunchDetection.isRunningTests(environment: [:]))
     }
 
-    @Test func hostedTestsMustNotConfigureRevenueCat() {
-        #expect(!SubscriptionLaunchPolicy.shouldConfigureRevenueCat(isRunningTests: true))
-    }
-
     @Test func refreshCommerceStateDoesNotTrapWhenRevenueCatIsUnconfigured() async {
         await SubscriptionManager.shared.refreshCommerceState()
     }

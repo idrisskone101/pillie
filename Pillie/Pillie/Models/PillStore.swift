@@ -286,35 +286,6 @@ class PillStore {
         max(0, pack.elapsedCycleDays(on: today) - pack.cycleLength)
     }
 
-    var refillCTALabel: String {
-        pack.method == .pill ? "Start New Pack" : "Start New Cycle"
-    }
-
-    var refillBannerTitle: String {
-        pack.method == .pill ? "Pack Complete!" : "Cycle Complete!"
-    }
-
-    var refillBannerSubtitle: String {
-        let n = pack.packNumber
-        let overdue = daysOverdue
-        if pack.method == .pill {
-            if overdue > 1 {
-                return "Your pack ended \(overdue) days ago. Start a new pack to continue tracking."
-            } else if overdue == 1 {
-                return "Your pack ended 1 day ago. Start a new pack to continue tracking."
-            }
-            return "You've finished Pack \(n). Start a new pack to keep tracking."
-        } else {
-            let methodName = pack.method == .patch ? "patch" : "ring"
-            if overdue > 1 {
-                return "Your \(methodName) cycle ended \(overdue) days ago. Start a new cycle to continue tracking."
-            } else if overdue == 1 {
-                return "Your \(methodName) cycle ended 1 day ago. Start a new cycle to continue tracking."
-            }
-            return "You've completed Cycle \(n). Start a new cycle to keep tracking."
-        }
-    }
-
     var currentStreak: Int {
         guard let targetPack = activePack else { return 0 }
 

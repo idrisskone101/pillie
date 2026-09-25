@@ -497,45 +497,17 @@ private final class AnalyticsRecorder: AnalyticsTracking {
         isPlus: Bool?
     )] = []
 
-    func track(
-        _ event: AnalyticsEvent,
-        source: AnalyticsSource?,
-        step: AnalyticsStep?,
-        stepIndex: Int?,
-        screen: AnalyticsScreen?,
-        plan: AnalyticsPlan?,
-        result: AnalyticsResult?,
-        setting: AnalyticsSetting?,
-        acquisitionSource: AcquisitionSource?,
-        isPlus: Bool?,
-        hasBlockingSelection: Bool?,
-        interventionCount: Int?,
-        shakeCount: Int?,
-        trialWarningDay: Int?,
-        trialEndCohort: TrialEndPaywallCohort?,
-        titleCustomized: Bool?,
-        bodyCustomized: Bool?,
-        retryTitleCustomized: Bool?,
-        retryBodyCustomized: Bool?,
-    ) {
-        events.append(Event(event: event, source: source, step: step, plan: plan, result: result, isPlus: isPlus))
+    func track(_ event: AnalyticsEvent, payload: AnalyticsPayload) {
+        events.append(Event(event: event, source: payload.source, step: payload.step, plan: payload.plan, result: payload.result, isPlus: payload.isPlus))
+        if let surface = payload.paywallSurface {
+            surfaceEvents.append((payload.source, surface, payload.isPlus))
+        }
     }
 
-    func track(
-        _ event: AnalyticsEvent,
-        source: AnalyticsSource?,
-        surface: AnalyticsPaywallSurface?,
-        plan: AnalyticsPlan?,
-        result: AnalyticsResult?,
-        isPlus: Bool?
-    ) {
-        events.append(Event(
-            event: event,
-            source: source,
-            plan: plan,
-            result: result,
-            isPlus: isPlus
-        ))
-        surfaceEvents.append((source, surface, isPlus))
-    }
+    func trackError(
+        _ domain: AppErrorDomain,
+        error: Error,
+        context: [String: String],
+        severity: AppErrorSeverity
+    ) {}
 }

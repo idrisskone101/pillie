@@ -39,7 +39,7 @@ final class AnalyticsManagerTests: XCTestCase {
     let manager = makeManager(client: client, token: "   ")
 
     manager.configure()
-    manager.track(.appLaunched, source: .home, isPlus: false)
+    manager.track(.appLaunched, payload: AnalyticsPayload(source: .home, isPlus: false))
 
     XCTAssertTrue(client.configurations.isEmpty)
     XCTAssertTrue(client.captures.isEmpty)
@@ -75,9 +75,9 @@ final class AnalyticsManagerTests: XCTestCase {
     // Analytics is collected for everyone — every event flows from launch, with no
     // consent gate to drop the early ones.
     manager.configure()
-    manager.track(.appLaunched, source: .home, isPlus: false)
-    manager.track(.onboardingStepViewed, source: .onboarding, step: .welcome, isPlus: false)
-    manager.track(.onboardingStepViewed, source: .onboarding, step: .painPoints, isPlus: false)
+    manager.track(.appLaunched, payload: AnalyticsPayload(source: .home, isPlus: false))
+    manager.track(.onboardingStepViewed, payload: AnalyticsPayload(source: .onboarding, step: .welcome, isPlus: false))
+    manager.track(.onboardingStepViewed, payload: AnalyticsPayload(source: .onboarding, step: .painPoints, isPlus: false))
 
     XCTAssertEqual(client.captures.count, 3)
     XCTAssertEqual(client.captures.last?.event, "onboarding_step_viewed")
@@ -97,14 +97,16 @@ final class AnalyticsManagerTests: XCTestCase {
     manager.configure()
     manager.track(
       .settingsChangeSaved,
-      source: .settings,
-      step: .reminderTime,
-      screen: .settings,
-      plan: .annual,
-      result: .completed,
-      setting: .reminderTime,
-      isPlus: true,
-      hasBlockingSelection: false
+      payload: AnalyticsPayload(
+        source: .settings,
+        step: .reminderTime,
+        screen: .settings,
+        plan: .annual,
+        result: .completed,
+        setting: .reminderTime,
+        isPlus: true,
+        hasBlockingSelection: false
+      )
     )
 
     let capture = try XCTUnwrap(client.captures.first)
@@ -141,9 +143,7 @@ final class AnalyticsManagerTests: XCTestCase {
     manager.configure()
     manager.track(
       .coreOnboardingCompleted,
-      source: .onboarding,
-      step: .reminderPlan,
-      isPlus: false
+      payload: AnalyticsPayload(source: .onboarding, step: .reminderPlan, isPlus: false)
     )
 
     let properties = try XCTUnwrap(client.captures.first?.properties)
@@ -159,20 +159,22 @@ final class AnalyticsManagerTests: XCTestCase {
     let manager = makeManager(client: client, token: "phc_test_token")
 
     manager.configure()
-    manager.track(.onboardingStepViewed, source: .onboarding, step: .welcome, isPlus: false)
-    manager.track(.onboardingStepCompleted, source: .onboarding, step: .reminderTime, isPlus: false)
-    manager.track(.onboardingBackTapped, source: .onboarding, step: .method, isPlus: false)
-    manager.track(.onboardingCompleted, source: .onboarding, isPlus: false)
+    manager.track(.onboardingStepViewed, payload: AnalyticsPayload(source: .onboarding, step: .welcome, isPlus: false))
+    manager.track(.onboardingStepCompleted, payload: AnalyticsPayload(source: .onboarding, step: .reminderTime, isPlus: false))
+    manager.track(.onboardingBackTapped, payload: AnalyticsPayload(source: .onboarding, step: .method, isPlus: false))
+    manager.track(.onboardingCompleted, payload: AnalyticsPayload(source: .onboarding, isPlus: false))
     manager.track(
-      .notificationPermissionRequested, source: .onboarding, step: .reminderTime, isPlus: false)
+      .notificationPermissionRequested,
+      payload: AnalyticsPayload(source: .onboarding, step: .reminderTime, isPlus: false))
     manager.track(
-      .screenTimePermissionRequested, source: .onboarding, step: .appBlocking, isPlus: true)
+      .screenTimePermissionRequested,
+      payload: AnalyticsPayload(source: .onboarding, step: .appBlocking, isPlus: true))
     manager.track(
-      .screenTimePermissionCompleted, source: .onboarding, step: .appBlocking, result: .granted,
-      isPlus: true)
+      .screenTimePermissionCompleted,
+      payload: AnalyticsPayload(source: .onboarding, step: .appBlocking, result: .granted, isPlus: true))
     manager.track(
-      .screenTimePermissionCompleted, source: .onboarding, step: .appBlocking, result: .denied,
-      isPlus: true)
+      .screenTimePermissionCompleted,
+      payload: AnalyticsPayload(source: .onboarding, step: .appBlocking, result: .denied, isPlus: true))
 
     XCTAssertEqual(
       client.captures.map(\.event),
@@ -219,10 +221,12 @@ final class AnalyticsManagerTests: XCTestCase {
     manager.configure()
     manager.track(
       .onboardingStepCompleted,
-      source: .onboarding,
-      step: .acquisitionSource,
-      acquisitionSource: .reddit,
-      isPlus: false
+      payload: AnalyticsPayload(
+        source: .onboarding,
+        step: .acquisitionSource,
+        acquisitionSource: .reddit,
+        isPlus: false
+      )
     )
 
     let capture = try XCTUnwrap(client.captures.first)
@@ -243,13 +247,15 @@ final class AnalyticsManagerTests: XCTestCase {
     let manager = makeManager(client: client, token: "phc_test_token")
 
     manager.configure()
-    manager.track(.appLaunched, source: .home, isPlus: false)
+    manager.track(.appLaunched, payload: AnalyticsPayload(source: .home, isPlus: false))
     manager.track(
       .onboardingStepCompleted,
-      source: .onboarding,
-      step: .acquisitionSource,
-      acquisitionSource: .reddit,
-      isPlus: false
+      payload: AnalyticsPayload(
+        source: .onboarding,
+        step: .acquisitionSource,
+        acquisitionSource: .reddit,
+        isPlus: false
+      )
     )
 
     // app_launched carries no acquisition source, so it sets no person properties.
@@ -563,37 +569,24 @@ private final class RecordingAnalyticsTracker: AnalyticsTracking {
   private(set) var titleCustomizedValues: [Bool?] = []
   private(set) var bodyCustomizedValues: [Bool?] = []
 
-  func track(
-    _ event: AnalyticsEvent,
-    source: AnalyticsSource?,
-    step: AnalyticsStep?,
-    stepIndex: Int?,
-    screen: AnalyticsScreen?,
-    plan: AnalyticsPlan?,
-    result: AnalyticsResult?,
-    setting: AnalyticsSetting?,
-    acquisitionSource: AcquisitionSource?,
-    isPlus: Bool?,
-    hasBlockingSelection: Bool?,
-    interventionCount: Int?,
-    shakeCount: Int?,
-    trialWarningDay: Int?,
-    trialEndCohort: TrialEndPaywallCohort?,
-    titleCustomized: Bool?,
-    bodyCustomized: Bool?,
-    retryTitleCustomized: Bool?,
-    retryBodyCustomized: Bool?,
-  ) {
+  func track(_ event: AnalyticsEvent, payload: AnalyticsPayload) {
     events.append(event)
-    sources.append(source)
-    steps.append(step)
-    stepIndices.append(stepIndex)
-    screens.append(screen)
-    settings.append(setting)
-    acquisitionSources.append(acquisitionSource)
-    isPlusValues.append(isPlus)
-    hasBlockingSelectionValues.append(hasBlockingSelection)
-    titleCustomizedValues.append(titleCustomized)
-    bodyCustomizedValues.append(bodyCustomized)
+    sources.append(payload.source)
+    steps.append(payload.step)
+    stepIndices.append(payload.stepIndex)
+    screens.append(payload.screen)
+    settings.append(payload.setting)
+    acquisitionSources.append(payload.acquisitionSource)
+    isPlusValues.append(payload.isPlus)
+    hasBlockingSelectionValues.append(payload.hasBlockingSelection)
+    titleCustomizedValues.append(payload.titleCustomized)
+    bodyCustomizedValues.append(payload.bodyCustomized)
   }
+
+  func trackError(
+    _ domain: AppErrorDomain,
+    error: Error,
+    context: [String: String],
+    severity: AppErrorSeverity
+  ) {}
 }

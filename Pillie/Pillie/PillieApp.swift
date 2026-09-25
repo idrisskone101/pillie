@@ -14,224 +14,6 @@ import BackgroundTasks
 import RevenueCat
 import os
 
-enum SubscriptionLaunchPolicy {
-    static func shouldConfigureRevenueCat(isRunningTests: Bool) -> Bool {
-        !isRunningTests
-    }
-}
-
-enum TrialAccessLifecycle {
-    enum Event {
-        case calendarDayChanged
-        case significantTimeChanged
-    }
-
-    static func handle(
-        _ event: Event,
-        refreshAccess: () -> Void,
-        reconcileProtection: () -> Void
-    ) {
-        switch event {
-        case .calendarDayChanged, .significantTimeChanged:
-            refreshAccess()
-            reconcileProtection()
-        }
-    }
-
-    @discardableResult
-    static func handleForeground(
-        isOnboardingActive: Bool,
-        refreshAccess: () -> Void,
-        reconcileProtection: () -> Void
-    ) -> Bool {
-        refreshAccess()
-        reconcileProtection()
-        return !isOnboardingActive
-    }
-}
-
-class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate {
-    static var store: PillStore?
-    #if DEBUG
-    private var memoryWarningObserver: NSObjectProtocol?
-    #endif
-
-    private static let bgTaskID = "com.idrisskone.pillie.screentime-reconcile"
-    private static var isRunningTests: Bool {
-        ProcessRuntime.isRunningTests
-    }
-
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
-        UNUserNotificationCenter.current().delegate = self
-
-        // Register BGAppRefreshTask as fallback for Screen Time reconciliation
-        if !Self.isRunningTests {
-            BGTaskScheduler.shared.register(forTaskWithIdentifier: Self.bgTaskID, using: nil) { task in
-                guard let refreshTask = task as? BGAppRefreshTask else { return }
-                self.handleScreenTimeReconcileTask(refreshTask)
-            }
-        }
-
-        #if DEBUG
-        memoryWarningObserver = NotificationCenter.default.addObserver(
-            forName: UIApplication.didReceiveMemoryWarningNotification,
-            object: nil,
-            queue: .main
-        ) { _ in
-            let uptime = String(format: "%.1f", ProcessInfo.processInfo.systemUptime)
-            print("Pillie DEBUG memory warning received at uptime \(uptime)s")
-        }
-        #endif
-
-        // Configure AppsFlyer attribution. Keys/delegate are set here so they are in
-        // place before the first didBecomeActive; configure() registers the observer
-        // that sends the launch. Skipped during XCTest (no network in tests; avoids
-        // the @MainActor deinit instability on the Xcode 27 beta).
-        if !Self.isRunningTests {
-            AppsFlyerManager.shared.configure()
-        }
-
-        return true
-    }
-
-    deinit {
-        #if DEBUG
-        if let memoryWarningObserver {
-            NotificationCenter.default.removeObserver(memoryWarningObserver)
-        }
-        #endif
-    }
-
-    // Show notifications even when the app is in the foreground
-    func userNotificationCenter(
-        _ center: UNUserNotificationCenter,
-        willPresent notification: UNNotification,
-        withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
-    ) {
-        recordTrialWarningDeliveryIfNeeded(userInfo: notification.request.content.userInfo)
-        recordSmartReminderFireIfNeeded(request: notification.request)
-        // Foreground fallback: apply blocking when reminder fires while app is open
-        if let store = Self.store, !store.isTodayHandled {
-            AppBlockingManager.shared.applyBlocking(reason: store.pack.method.blockingReasonText)
-        }
-        completionHandler([.banner, .sound])
-    }
-
-    /// Records `trial_expiry_warning_sent` with `day: 10 | 13` when a trial
-    /// expiry warning is delivered (foreground) or handled (tapped) — at most
-    /// once per day value, so a banner later tapped never double-counts (#168).
-    private func recordTrialWarningDeliveryIfNeeded(userInfo: [AnyHashable: Any]) {
-        let defaults = UserDefaults.standard
-        let sentDays = defaults.array(forKey: TrialExpiryWarningDelivery.sentDaysStorageKey) as? [Int] ?? []
-        guard let day = TrialExpiryWarningDelivery.day(fromUserInfo: userInfo, alreadySentDays: sentDays) else {
-            return
-        }
-        defaults.set(sentDays + [day], forKey: TrialExpiryWarningDelivery.sentDaysStorageKey)
-        ProductAnalyticsTelemetry.live.trialExpiryWarningSent(day: day)
-    }
-
-    private func recordSmartReminderFireIfNeeded(request: UNNotificationRequest) {
-        let defaults = UserDefaults.standard
-        let recordedIdentifiers = defaults.stringArray(
-            forKey: SmartReminderDelivery.firedRequestIdentifiersStorageKey
-        ) ?? []
-        let requestKind = request.content.userInfo[SmartReminderDelivery.requestKindKey] as? String
-        guard SmartReminderDelivery.shouldRecordFire(
-            requestIdentifier: request.identifier,
-            requestKind: requestKind,
-            alreadyRecordedRequestIdentifiers: recordedIdentifiers
-        ) else { return }
-
-        // Request ids contain only Pillie's own kind/day/timestamp tokens. Keep a
-        // small rolling dedupe window locally; the identifier is never captured.
-        defaults.set(
-            Array((recordedIdentifiers + [request.identifier]).suffix(64)),
-            forKey: SmartReminderDelivery.firedRequestIdentifiersStorageKey
-        )
-        ProductAnalyticsTelemetry.live.smartReminderRetryFired()
-    }
-
-    private func recordSmartReminderOutcomeIfNeeded(response: UNNotificationResponse) {
-        let requestKind = response.notification.request.content.userInfo[
-            SmartReminderDelivery.requestKindKey
-        ] as? String
-        guard let outcome = SmartReminderDelivery.outcome(
-            requestKind: requestKind,
-            actionIdentifier: response.actionIdentifier,
-            markTakenActionIdentifier: NotificationManager.shared.markTakenAction,
-            snoozeActionIdentifier: NotificationManager.shared.snoozeAction,
-            defaultActionIdentifier: UNNotificationDefaultActionIdentifier
-        ) else { return }
-        ProductAnalyticsTelemetry.live.smartReminderOutcome(outcome)
-    }
-
-    // Handle notification action buttons
-    func userNotificationCenter(
-        _ center: UNUserNotificationCenter,
-        didReceive response: UNNotificationResponse,
-        withCompletionHandler completionHandler: @escaping () -> Void
-    ) {
-        recordTrialWarningDeliveryIfNeeded(userInfo: response.notification.request.content.userInfo)
-        recordSmartReminderFireIfNeeded(request: response.notification.request)
-        recordSmartReminderOutcomeIfNeeded(response: response)
-
-        guard let store = Self.store else {
-            completionHandler()
-            return
-        }
-
-        switch response.actionIdentifier {
-        case NotificationManager.shared.markTakenAction:
-            NotificationManager.shared.handleMarkTakenAction(store: store, response: response)
-        case NotificationManager.shared.snoozeAction:
-            NotificationManager.shared.handleSnoozeAction(store: store, response: response)
-        case UNNotificationDefaultActionIdentifier:
-            // User tapped the notification banner — apply blocking immediately
-            if !store.isTodayHandled {
-                AppBlockingManager.shared.applyBlocking(reason: store.pack.method.blockingReasonText)
-            }
-        default:
-            break
-        }
-        completionHandler()
-    }
-
-    // MARK: - BGAppRefreshTask
-
-    private func handleScreenTimeReconcileTask(_ task: BGAppRefreshTask) {
-        guard let store = Self.store else {
-            task.setTaskCompleted(success: false)
-            return
-        }
-
-        store.syncTodayTakenToAppGroup()
-        AppBlockingManager.shared.reconcileBlockingState(
-            isTodayHandled: store.isTodayHandled,
-            liveDay: store.today,
-            reminderHour: store.reminderHour,
-            reminderMinute: store.reminderMinute,
-            method: store.pack.method
-        )
-        NotificationManager.shared.rescheduleFromStore(store)
-
-        task.setTaskCompleted(success: true)
-
-        // Re-schedule for next opportunity
-        Self.scheduleScreenTimeReconcileTask()
-    }
-
-    static func scheduleScreenTimeReconcileTask() {
-        guard !isRunningTests else { return }
-        let request = BGAppRefreshTaskRequest(identifier: bgTaskID)
-        request.earliestBeginDate = Date(timeIntervalSinceNow: 15 * 60) // 15 min
-        do {
-            try BGTaskScheduler.shared.submit(request)
-        } catch {
-            os_log(.error, "Pillie BGTask schedule error: %{public}@", error.localizedDescription)
-        }
-    }
-}
-
 @main
 struct PillieApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
@@ -305,15 +87,11 @@ struct PillieApp: App {
                     NotificationManager.shared.requestReschedule(from: store, reason: "entitlement-change")
                 }
             }
-            if SubscriptionLaunchPolicy.shouldConfigureRevenueCat(
-                isRunningTests: Self.isRunningTests
-            ) {
-                // RevenueCat must resolve paid access and issue #257's remote
-                // hard-wall switch even while onboarding is active. Otherwise a
-                // user who resumes onboarding after trial expiry can reach Home
-                // with both commerce states unresolved and bypass the wall.
-                SubscriptionManager.shared.configure()
-            }
+            // RevenueCat must resolve paid access and issue #257's remote
+            // hard-wall switch even while onboarding is active. Otherwise a
+            // user who resumes onboarding after trial expiry can reach Home
+            // with both commerce states unresolved and bypass the wall.
+            SubscriptionManager.shared.configure()
             // For returning users, RevenueCat configuration synchronously applies
             // cached entitlement state first, so `is_plus` is resolved at capture.
             ProductAnalyticsTelemetry.live.appLaunched()
@@ -354,31 +132,16 @@ struct PillieApp: App {
                         store.refreshDayContextIfNeeded()
                         // A Reverse Trial can expire while suspended (local midnight
                         // after day 14). Re-derive Plus Access before the consumers
-                        // below read it — a flip fires onEntitlementChange, and the
-                        // Screen Time reconcile drops blocking (ADR 0007: blocking
-                        // must never outlive Plus Access).
-                        let shouldRunPostOnboardingWork = TrialAccessLifecycle.handleForeground(
-                            isOnboardingActive: Self.isOnboardingActive,
-                            refreshAccess: {
-                                SubscriptionManager.shared.updateActiveDaySchedule(
-                                    pack: store.activePack
-                                )
-                                // First open at-or-after expiry records `trial_expired`
-                                // exactly once (#167), after access re-evaluation.
-                                recordTrialExpiredIfNeeded()
-                            },
-                            // A saved onboarding selection can already have applied
-                            // shields. Remove them at expiry even if the user remains
-                            // on protectionPlanReady; only reminder work stays gated.
-                            reconcileProtection: reconcileScreenTimeState
-                        )
+                        // below read it. This runs during onboarding too: a saved
+                        // onboarding selection can already have applied shields.
+                        refreshTrialAccess()
                         ProductAnalyticsTelemetry.live.appBecameActive()
                         // Shield intercepts accumulated while we weren't running
                         // (#161): flush the App Group delta as one aggregated
                         // blocker_intervention_fired. Before the onboarding guard —
                         // blocking fires for any user whose Protection Plan is live.
                         flushBlockerInterventions()
-                        guard shouldRunPostOnboardingWork else { return }
+                        guard !Self.isOnboardingActive else { return }
                         NotificationManager.shared.requestReschedule(from: store, reason: "app-became-active")
                     } else if newPhase == .background {
                         // Flush buffered analytics before the app is suspended/killed.
@@ -390,42 +153,34 @@ struct PillieApp: App {
                         AppDelegate.scheduleScreenTimeReconcileTask()
                     }
                 }
+                // A trial can expire while Pillie stays foregrounded across local
+                // midnight. Refresh immediately so Home's access-change observer
+                // presents the hard wall.
                 .onReceive(NotificationCenter.default.publisher(for: .NSCalendarDayChanged)) { _ in
                     guard !Self.isRunningTests else { return }
-                    TrialAccessLifecycle.handle(
-                        .calendarDayChanged,
-                        refreshAccess: {
-                            // A trial can expire while Pillie remains foregrounded
-                            // across local midnight. Reconcile immediately so Home's
-                            // existing access-change observer presents the hard wall.
-                            SubscriptionManager.shared.updateActiveDaySchedule(
-                                pack: store.activePack
-                            )
-                            recordTrialExpiredIfNeeded()
-                        },
-                        reconcileProtection: reconcileScreenTimeState
-                    )
+                    refreshTrialAccess()
                 }
+                // Clock and time-zone changes can cross the trial's local-day
+                // expiry boundary without changing scene phase.
                 .onReceive(
                     NotificationCenter.default.publisher(
                         for: UIApplication.significantTimeChangeNotification
                     )
                 ) { _ in
                     guard !Self.isRunningTests else { return }
-                    TrialAccessLifecycle.handle(
-                        .significantTimeChanged,
-                        refreshAccess: {
-                            // Clock and time-zone changes can cross the trial's
-                            // local-day expiry boundary without changing scene phase.
-                            SubscriptionManager.shared.updateActiveDaySchedule(
-                                pack: store.activePack
-                            )
-                            recordTrialExpiredIfNeeded()
-                        },
-                        reconcileProtection: reconcileScreenTimeState
-                    )
+                    refreshTrialAccess()
                 }
         }
+    }
+
+    /// Plus Access must be re-derived before the Screen Time reconcile reads it:
+    /// a flip fires onEntitlementChange, and the reconcile drops blocking
+    /// (ADR 0007: blocking must never outlive Plus Access). `trial_expired`
+    /// records exactly once (#167), after access re-evaluation.
+    private func refreshTrialAccess() {
+        SubscriptionManager.shared.updateActiveDaySchedule(pack: store.activePack)
+        recordTrialExpiredIfNeeded()
+        reconcileScreenTimeState()
     }
 
     /// Records `trial_expired` on the first app open at-or-after Reverse Trial
