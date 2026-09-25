@@ -241,12 +241,6 @@ class PillStore {
     static let autoReminderRetryLimitOptions: [Int] = [0, 1, 2, 3, 5]
     static let refillReminderThresholdOptions: [Int] = [3, 5, 7]
     static let patchRestockReminderThresholdOptions: [Int] = [1, 2]
-    private static let alarmDayLabelFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "EEE, MMM d"
-        return formatter
-    }()
-
     // MARK: - Computed
 
     /// The live day: last reminder through the next one, not civil midnight.
@@ -506,36 +500,8 @@ class PillStore {
         alarmAction?.badgeLabel ?? "NONE"
     }
 
-    private var alarmDayLabel: String? {
-        guard let alarmAction else { return nil }
-        let calendar = Calendar.current
-
-        if calendar.isDate(alarmAction.date, inSameDayAs: today) {
-            return nil
-        }
-
-        if let tomorrow = calendar.date(byAdding: .day, value: 1, to: today),
-           calendar.isDate(alarmAction.date, inSameDayAs: tomorrow) {
-            return "Tomorrow"
-        }
-
-        return Self.alarmDayLabelFormatter.string(from: alarmAction.date)
-    }
-
     var alarmDisplayTime: String {
         nextReminderTime
-    }
-
-    var alarmSubtitle: String {
-        guard let alarmAction else { return "No action due" }
-        guard isTodayTaken else { return alarmAction.actionTitle }
-
-        let nextAction = alarmAction.badgeLabel.lowercased()
-        if let dayLabel = alarmDayLabel {
-            let normalizedDayLabel = dayLabel == "Tomorrow" ? "tomorrow" : dayLabel
-            return "Taken today. Next \(nextAction) \(normalizedDayLabel) at \(nextReminderTime)."
-        }
-        return "Taken today. Next \(nextAction) at \(nextReminderTime)."
     }
 
     var todayCTA: String {
