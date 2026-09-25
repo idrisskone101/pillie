@@ -859,10 +859,18 @@
     {
       "issue": "ENG-70",
       "table": "Localizable",
-      "key": "today.next_action.date",
+      "key": "today.next_action.weekday",
       "en": "Your next one is on %1$@ at %2$@.",
       "de": "Deine nächste ist am %1$@ um %2$@.",
       "it": "La prossima è %1$@ alle %2$@."
+    },
+    {
+      "issue": "ENG-70",
+      "table": "Localizable",
+      "key": "today.next_action.date",
+      "en": "Your next one is on %1$@ at %2$@.",
+      "de": "Deine nächste ist am %1$@ um %2$@.",
+      "it": "La prossima: %1$@ alle %2$@."
     },
     {
       "issue": "ENG-70",
@@ -878,7 +886,7 @@
       "key": "today.next_action.next_week",
       "en": "Your next due date is next %1$@ at %2$@.",
       "de": "Dein nächster Termin ist nächsten %1$@ um %2$@.",
-      "it": "La prossima data è %1$@ prossimo alle %2$@."
+      "it": "La prossima è %1$@ della settimana prossima alle %2$@."
     },
     {
       "issue": "ENG-70",
