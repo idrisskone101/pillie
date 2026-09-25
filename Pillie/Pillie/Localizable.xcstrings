@@ -64142,7 +64142,7 @@
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Seuraava on %1$@ klo %2$@."
+            "value": "Seuraava: %1$@ klo %2$@."
           }
         },
         "pt-PT": {
@@ -64190,7 +64190,7 @@
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "다음은 %1$@ %2$@이에요."
+            "value": "다음은 %1$@ %2$@에 있어요."
           }
         },
         "ms": {
@@ -64238,7 +64238,7 @@
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "A következő %1$@ %2$@-kor."
+            "value": "A következő: %1$@, %2$@-kor."
           }
         },
         "tr": {
@@ -64316,13 +64316,13 @@
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "તારા અગલા %1$@ના %2$@ કો છે."
+            "value": "તારું આગલું %1$@ના રોજ %2$@ વાગ્યે છે."
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ನಿನ್ನ ತರ್ವಾತಿದಿ %1$@ %2$@ಕ್ಕೆ."
+            "value": "ನಿನ್ನ ಮುಂದಿನದು %1$@ %2$@ ಗಂಟೆಗೆ."
           }
         },
         "ml": {
@@ -64334,7 +64334,7 @@
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "तुझा अगला %1$@ ला %2$@ वाजता आहे."
+            "value": "तुझा पुढचा %1$@ रोजी %2$@ वाजता आहे."
           }
         },
         "or": {
@@ -64429,7 +64429,7 @@
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "La següent és el %1$@ a les %2$@."
+            "value": "La següent: %1$@ a les %2$@."
           }
         },
         "pl": {
@@ -64465,7 +64465,7 @@
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "다음은 %1$@ %2$@이에요."
+            "value": "다음은 %1$@ %2$@에 있어요."
           }
         },
         "ms": {
@@ -64513,7 +64513,7 @@
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "A következő %1$@ %2$@-kor."
+            "value": "A következő: %1$@, %2$@-kor."
           }
         },
         "tr": {
@@ -64591,13 +64591,13 @@
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "તારા અગલા %1$@ના %2$@ કો છે."
+            "value": "તારું આગલું %1$@ના રોજ %2$@ વાગ્યે છે."
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ನಿನ್ನ ತರ್ವಾತಿದಿ %1$@ %2$@ಕ್ಕೆ."
+            "value": "ನಿನ್ನ ಮುಂದಿನದು %1$@ ರಂದು %2$@ ಗಂಟೆಗೆ."
           }
         },
         "ml": {
@@ -64609,7 +64609,7 @@
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "तुझा अगला %1$@ ला %2$@ वाजता आहे."
+            "value": "तुझा पुढचा %1$@ रोजी %2$@ वाजता आहे."
           }
         },
         "or": {
@@ -110940,7 +110940,7 @@
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "다음은 오늘 %@이에요."
+            "value": "다음은 오늘 %@에 있어요."
           }
         },
         "ms": {
@@ -111066,13 +111066,13 @@
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "તારા અગલા આજે %@ કો છે."
+            "value": "તારું આગલું આજે %@ વાગ્યે છે."
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ನಿನ್ನ ತರ್ವಾತಿದಿ ಇಂದು %@ಕ್ಕೆ."
+            "value": "ನಿನ್ನ ಮುಂದಿನದು ಇಂದು %@ ಗಂಟೆಗೆ."
           }
         },
         "ml": {
@@ -111084,7 +111084,7 @@
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "तुझा अगला आज %@ वाजता आहे."
+            "value": "तुझा पुढचा आज %@ वाजता आहे."
           }
         },
         "or": {
@@ -111215,7 +111215,7 @@
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "다음은 내일 %@이에요."
+            "value": "다음은 내일 %@에 있어요."
           }
         },
         "ms": {
@@ -111341,13 +111341,13 @@
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "તારા અગલા આવતીકાલે %@ કો છે."
+            "value": "તારું આગલું આવતીકાલે %@ વાગ્યે છે."
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ನಿನ್ನ ತರ್ವಾತಿದಿ ನಾಳೆ %@ಕ್ಕೆ."
+            "value": "ನಿನ್ನ ಮುಂದಿನದು ನಾಳೆ %@ ಗಂಟೆಗೆ."
           }
         },
         "ml": {
@@ -111359,7 +111359,7 @@
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "तुझा अगला उद्या %@ वाजता आहे."
+            "value": "तुझा पुढचा उद्या %@ वाजता आहे."
           }
         },
         "or": {
@@ -111442,7 +111442,7 @@
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Seuraava päivä on ensi %1$@ klo %2$@."
+            "value": "Seuraava: ensi viikon %1$@ klo %2$@."
           }
         },
         "pt-PT": {
@@ -111490,7 +111490,7 @@
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "다음은 다음 주 %1$@ %2$@이에요."
+            "value": "다음은 다음 주 %1$@ %2$@에 있어요."
           }
         },
         "ms": {
@@ -111538,7 +111538,7 @@
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "A következő időpont jövő %1$@ %2$@-kor."
+            "value": "A következő: jövő hét %1$@, %2$@-kor."
           }
         },
         "tr": {
@@ -111616,13 +111616,13 @@
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "તારી અગલી તારીખ આવતા %1$@ના %2$@ કો છે."
+            "value": "તારી આગલી તારીખ આવતા %1$@ના રોજ %2$@ વાગ્યે છે."
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ನಿನ್ನ ಮುಂದಿನ ದಿನಾಂಕ ಮುಂದಿನ %1$@ %2$@ಕ್ಕೆ."
+            "value": "ನಿನ್ನ ಮುಂದಿನ ದಿನಾಂಕ ಮುಂದಿನ %1$@ %2$@ ಗಂಟೆಗೆ."
           }
         },
         "ml": {
@@ -111634,7 +111634,7 @@
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "तुझी पुढची तारीख पुढच्या %1$@ ला %2$@ वाजता आहे."
+            "value": "तुझी पुढची तारीख पुढच्या आठवड्यात %1$@ रोजी %2$@ वाजता आहे."
           }
         },
         "or": {
