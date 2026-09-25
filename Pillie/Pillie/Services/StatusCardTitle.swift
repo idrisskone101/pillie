@@ -12,22 +12,27 @@ enum StatusCardTitle: Equatable {
     case completed
     case next(on: Date, NextDoseDay)
 
-    /// `alarmAction` is the next untaken due action from the live day.
+    /// `alarmAction` is the next untaken due action from the live day. The live
+    /// day decides what is due; `now` decides how the next dose is phrased, so
+    /// a dose logged before the reminder reads "today at", not "tomorrow at".
     static func resolve(
         alarmAction: DoseScheduleAction?,
-        today: Date,
+        liveDay: Date,
+        now: Date,
         isTodayTaken: Bool,
         isTodayPassiveOrBreak: Bool,
         calendar: Calendar = .current
     ) -> StatusCardTitle {
         guard let alarmAction else { return .nothingDue }
-        let day = NextDoseDay.resolve(today: today, next: alarmAction.date, calendar: calendar)
-        if day == .today {
+        if calendar.isDate(alarmAction.date, inSameDayAs: liveDay) {
             if isTodayTaken { return .completed }
             return isTodayPassiveOrBreak ? .nothingDue : .due(alarmAction)
         }
         guard isTodayTaken || isTodayPassiveOrBreak else { return .due(alarmAction) }
-        return .next(on: alarmAction.date, day)
+        return .next(
+            on: alarmAction.date,
+            NextDoseDay.resolve(from: now, to: alarmAction.date, calendar: calendar)
+        )
     }
 
     func localized(reminderTime: String, locale: Locale) -> String {
@@ -44,7 +49,7 @@ enum StatusCardTitle: Equatable {
     }
 }
 
-/// Where the next dose falls relative to the live day, in calendar weeks.
+/// Where the next dose falls relative to the calendar date, in calendar weeks.
 enum NextDoseDay: Equatable {
     case today
     case tomorrow
@@ -54,8 +59,8 @@ enum NextDoseDay: Equatable {
     /// Anything the named-day phrases cannot say truthfully.
     case onDate
 
-    static func resolve(today: Date, next: Date, calendar: Calendar = .current) -> NextDoseDay {
-        let start = calendar.startOfDay(for: today)
+    static func resolve(from now: Date, to next: Date, calendar: Calendar = .current) -> NextDoseDay {
+        let start = calendar.startOfDay(for: now)
         let target = calendar.startOfDay(for: next)
         guard let days = calendar.dateComponents([.day], from: start, to: target).day else {
             return .onDate
@@ -86,6 +91,12 @@ enum NextDoseDay: Equatable {
     func localizedLine(for date: Date, reminderTime: String, locale: Locale) -> String {
         let weekday = date.formatted(Date.FormatStyle().weekday(.wide).locale(locale))
         switch self {
+        case .today:
+            return PillieLocalization.formatted(
+                "today.next_action.today",
+                locale: locale,
+                arguments: reminderTime
+            )
         case .tomorrow:
             return PillieLocalization.formatted(
                 "today.next_action.tomorrow",
@@ -104,7 +115,7 @@ enum NextDoseDay: Equatable {
                 locale: locale,
                 arguments: weekday, reminderTime
             )
-        case .today, .onDate:
+        case .onDate:
             let day = date.formatted(Date.FormatStyle().month(.wide).day().locale(locale))
             return PillieLocalization.formatted(
                 "today.next_action.date",

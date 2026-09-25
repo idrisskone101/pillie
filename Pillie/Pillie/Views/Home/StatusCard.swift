@@ -23,7 +23,8 @@ struct StatusCard: View {
         let iconName = iconName(for: isTodayPassiveOrBreak ? todayAction : alarmAction, isTodayTaken: isTodayTaken)
         let actionTitle = StatusCardTitle.resolve(
             alarmAction: alarmAction,
-            today: store.today,
+            liveDay: store.today,
+            now: PillieClock.now,
             isTodayTaken: isTodayTaken,
             isTodayPassiveOrBreak: isTodayPassiveOrBreak
         ).localized(reminderTime: reminderTime, locale: locale)

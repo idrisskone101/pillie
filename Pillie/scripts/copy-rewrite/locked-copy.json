@@ -875,6 +875,14 @@
     {
       "issue": "ENG-70",
       "table": "Localizable",
+      "key": "today.next_action.today",
+      "en": "Your next one is today at %@.",
+      "de": "Deine nächste ist heute um %@.",
+      "it": "La prossima è oggi alle %@."
+    },
+    {
+      "issue": "ENG-70",
+      "table": "Localizable",
       "key": "today.next_action.tomorrow",
       "en": "Your next one is tomorrow at %@.",
       "de": "Deine nächste ist morgen um %@.",
