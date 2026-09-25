@@ -66,8 +66,8 @@ struct ReminderWallClockTests {
             day: 16,
             hour: 16
         )))
-        let liveDay = BlockingInterventionPolicy.liveDay(
-            now: fourPM,
+        let liveDay = LiveDoseDay.on(
+            fourPM,
             reminderHour: 18,
             reminderMinute: 0,
             calendar: calendar

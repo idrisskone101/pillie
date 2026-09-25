@@ -76,8 +76,8 @@ class PillieDeviceActivityMonitor: DeviceActivityMonitor {
         ) {
         case .clearShields:
             if blockingSchedule?.requiresAction(
-                on: BlockingInterventionPolicy.liveDay(
-                    now: now,
+                on: LiveDoseDay.on(
+                    now,
                     reminderHour: reminderHour,
                     reminderMinute: reminderMinute
                 )
