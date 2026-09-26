@@ -135,7 +135,17 @@ def is_all_caps(value: str) -> bool:
 
 
 def placeholders(value: str) -> list[str]:
-    return sorted(PLACEHOLDER.findall(value))
+    """Argument types in argument order, so `%2$@ %1$lld` reads as ["lld", "@"]."""
+    args, literal_percents, position = {}, 0, 0
+    for match in PLACEHOLDER.finditer(value):
+        token = match.group(0)
+        if token == "%%":
+            literal_percents += 1
+            continue
+        index = re.match(r"%(\d+)\$", token)
+        position = int(index.group(1)) if index else position + 1
+        args[position] = re.sub(r"^%(\d+\$)?", "", token)
+    return [args[i] for i in sorted(args)] + ["%"] * literal_percents
 
 
 def check(plans: dict[str, dict[str, str]], catalogs: Catalogs) -> list[str]:
