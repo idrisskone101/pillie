@@ -92,6 +92,12 @@ T0="$(python3 -c 'import time; print(time.time())')"
 
 now_ms() { python3 -c 'import time; print(int(time.time()*1000))'; }
 
+# tokens LINE -> NUL-separated words. shlex, not eval: a flow line is data, `&`
+# in a URL stays literal, and `#` starts a comment only outside quotes.
+tokens() {
+  python3 -c 'import shlex, sys; sys.stdout.write("".join(t + "\0" for t in shlex.split(sys.argv[1], comments=True)))' "$1"
+}
+
 record_step() {
   # record_step LINE OK MS [ARTIFACT] [DETAIL]
   python3 - "$STEPS" "$@" <<'PY'
@@ -114,22 +120,32 @@ dump() {
 }
 
 present() {
-  # present KIND VALUE [DUMP]
-  local file="${3:-$OUT/.probe.json}"
-  [[ -n "${3:-}" ]] || dump "$file" || return 1
-  "$OUTLINE" "$file" --has "$1" "$2"
+  # present KIND VALUE -> 0 on screen, 1 absent from a Pillie tree, 2 no usable tree
+  # (axe failed, or SpringBoard/an alert owns the screen). Only 1 proves absence.
+  local file="$OUT/.probe.json" rc=0
+  dump "$file" || return 2
+  "$OUTLINE" "$file" --has "$1" "$2" && return 0
+  "$OUTLINE" "$file" --has root Pillie || return 2
+  return 1
+}
+
+check_selector() {
+  # check_selector KIND VALUE [SECONDS]
+  [[ "$1" =~ ^(id|label|text)$ ]] || { echo "kind must be id, label, or text (got '$1')"; return 2; }
+  [[ -n "${2:-}" ]] || { echo "missing value to match"; return 2; }
+  [[ -z "${3:-}" || "$3" =~ ^[0-9]+$ ]] || { echo "seconds must be a whole number (got '$3'); quote multi-word text"; return 2; }
 }
 
 poll_for() {
   # poll_for want|gone KIND VALUE SECONDS
-  local mode="$1" kind="$2" value="$3" secs="$4"
+  local mode="$1" kind="$2" value="$3" secs="$4" rc
+  check_selector "$kind" "$value" "$secs" || return 2
   local deadline=$((SECONDS + secs))
   while :; do
-    if present "$kind" "$value"; then
-      [[ "$mode" == want ]] && return 0
-    else
-      [[ "$mode" == gone ]] && return 0
-    fi
+    rc=0
+    present "$kind" "$value" || rc=$?
+    [[ "$mode" == want && $rc == 0 ]] && return 0
+    [[ "$mode" == gone && $rc == 1 ]] && return 0
     (( SECONDS >= deadline )) && return 1
     sleep 0.25
   done
@@ -160,8 +176,8 @@ shot() {
   SEQ=$((SEQ + 1))
   local base
   base="$(printf '%02d-%s' "$SEQ" "$1")"
-  xcrun simctl io "$UDID" screenshot "$OUT/.full.png" >/dev/null 2>&1
-  magick "$OUT/.full.png" -resize "$SCALE" "$OUT/$base.png"
+  xcrun simctl io "$UDID" screenshot "$OUT/.full.png" >/dev/null 2>&1 || { echo "screenshot failed"; return 1; }
+  magick "$OUT/.full.png" -resize "$SCALE" "$OUT/$base.png" || { echo "resize failed"; return 1; }
   dump "$OUT/$base.ax.json" || true
   "$OUTLINE" "$OUT/$base.ax.json" >"$OUT/$base.ax.txt" 2>/dev/null || true
   LAST_ARTIFACT="$base.png"
@@ -173,8 +189,7 @@ shot() {
 select_tap() {
   local line="$1" kind="" value="" etype="" xy t
   local toks=()
-  while IFS= read -r -d '' tok; do toks+=("$tok"); done < <(
-    python3 -c 'import shlex, sys; sys.stdout.write("".join(t + "\0" for t in shlex.split(sys.argv[1])))' "$line")
+  while IFS= read -r -d '' tok; do toks+=("$tok"); done < <(tokens "$line")
   local i
   for ((i = 1; i < ${#toks[@]}; i++)); do
     case "${toks[$i]}" in
@@ -205,7 +220,11 @@ select_tap() {
     fi
     sleep 0.25
   done
-  axe tap --udid "$UDID" -x "${xy% *}" -y "${xy#* }" >/dev/null 2>&1
+  if ! axe tap --udid "$UDID" -x "${xy% *}" -y "${xy#* }" >/dev/null 2>&1; then
+    record_step "$line" 0 $(( $(now_ms) - t )) "" "axe tap at $xy failed"
+    echo "FAIL $line: axe tap at $xy failed"
+    return 1
+  fi
   record_step "$line" 1 $(( $(now_ms) - t )) "" "at $xy"
   echo "ok   $line @ $xy ($(( $(now_ms) - t ))ms)"
 }
@@ -230,7 +249,7 @@ flush_batch() {
 
 launch_app() {
   xcrun simctl terminate "$UDID" "$BUNDLE_ID" >/dev/null 2>&1 || true
-  xcrun simctl launch --terminate-running-process "$UDID" "$BUNDLE_ID" "$@" >/dev/null
+  xcrun simctl launch --terminate-running-process "$UDID" "$BUNDLE_ID" "$@" >/dev/null || return 1
   settle 30
 }
 
@@ -240,9 +259,9 @@ perf_launch() {
     xcrun simctl terminate "$UDID" "$BUNDLE_ID" >/dev/null 2>&1 || true
     sleep 1
     t="$(now_ms)"
-    xcrun simctl launch "$UDID" "$BUNDLE_ID" >/dev/null
+    xcrun simctl launch "$UDID" "$BUNDLE_ID" >/dev/null || { echo "launch $i failed"; return 1; }
     until dump "$OUT/.probe.json" && (( $(wc -c <"$OUT/.probe.json") > 400 )); do
-      (( $(now_ms) - t > 30000 )) && break
+      (( $(now_ms) - t > 30000 )) && { echo "launch $i: no UI after 30s"; return 1; }
       sleep 0.05
     done
     samples+=($(( $(now_ms) - t )))
@@ -267,11 +286,11 @@ run_pseudo() {
       [[ -d "$APP_PATH" ]] || { echo "no built app at $APP_PATH; run make qa first"; return 1; }
       # The store and shared defaults live in the App Group container, which
       # outlives `simctl uninstall`. Empty it so this is a real first launch.
+      xcrun simctl terminate "$UDID" "$BUNDLE_ID" >/dev/null 2>&1 || true
       local group
       while IFS=$'\t' read -r _ group; do
         [[ -d "$group" ]] && find "$group" -mindepth 1 -maxdepth 1 -exec rm -rf {} +
       done < <(xcrun simctl get_app_container "$UDID" "$BUNDLE_ID" groups 2>/dev/null || true)
-      xcrun simctl terminate "$UDID" "$BUNDLE_ID" >/dev/null 2>&1 || true
       # TrialGrantStore and TrialDeclineFeedbackResolutionStore use the keychain,
       # which also outlives uninstall.
       xcrun simctl keychain "$UDID" reset >/dev/null 2>&1 || true
@@ -279,11 +298,11 @@ run_pseudo() {
       # `simctl spawn defaults write` (measure-frames.sh seeds onboardingStep)
       # lands in a device-wide domain that uninstall keeps and the app still reads.
       xcrun simctl spawn "$UDID" defaults delete "$BUNDLE_ID" >/dev/null 2>&1 || true
-      xcrun simctl install "$UDID" "$APP_PATH"
+      xcrun simctl install "$UDID" "$APP_PATH" || return 1
       ;;
     defaults) xcrun simctl spawn "$UDID" defaults write "$BUNDLE_ID" "$@" ;;
     openurl)
-      xcrun simctl openurl "$UDID" "$1"
+      xcrun simctl openurl "$UDID" "$1" || return 1
       # Safari-style "Open in “Pillie”?" confirmation on every simctl openurl.
       # The tap can land while the alert is still animating in, so retry until it is gone.
       local tries=0
@@ -296,10 +315,15 @@ run_pseudo() {
       ! present text "Open in “Pillie”?" || { echo "openurl confirmation stuck"; return 1; }
       settle 10 || true
       ;;
-    wait) poll_for want "$1" "$2" "${3:-$WAIT}" ;;
-    gone) poll_for gone "$1" "$2" "${3:-$WAIT}" ;;
-    expect) present "$1" "$2" ;;
-    expect-not) ! present "$1" "$2" ;;
+    wait) poll_for want "${1:-}" "${2:-}" "${3:-$WAIT}" ;;
+    gone) poll_for gone "${1:-}" "${2:-}" "${3:-$WAIT}" ;;
+    expect) check_selector "$1" "${2:-}" && present "$1" "$2" ;;
+    expect-not)
+      check_selector "$1" "${2:-}" || return 2
+      local r=0
+      present "$1" "$2" || r=$?
+      (( r == 1 )) || { echo "not provably absent (present or no Pillie tree)"; return 1; }
+      ;;
     shot) shot "$1" ;;
     appearance) xcrun simctl ui "$UDID" appearance "$1" ;;
     statusbar)
@@ -311,7 +335,7 @@ run_pseudo() {
       fi
       ;;
     privacy) xcrun simctl privacy "$UDID" "$1" "$2" "$BUNDLE_ID" ;;
-    push) xcrun simctl push "$UDID" "$BUNDLE_ID" "$REPO_ROOT/$1" ;;
+    push) xcrun simctl push "$UDID" "$BUNDLE_ID" "$REPO_ROOT/${1#/}" ;;  # repo-relative, pushed
     record)
       if [[ "$1" == start ]]; then
         SEQ=$((SEQ + 1))
@@ -338,8 +362,9 @@ run_pseudo() {
       ;;
     perf-launch) perf_launch "${1:-3}" ;;
     frames)
-      "$SCRIPT_DIR/measure-frames.sh" "${1:-all}" >"$OUT/frames.log" 2>&1
-      cp /tmp/pillie_frames.json "$OUT/frames.json"
+      rm -f /tmp/pillie_frames.json
+      "$SCRIPT_DIR/measure-frames.sh" "${1:-all}" >"$OUT/frames.log" 2>&1 || { tail -5 "$OUT/frames.log"; return 1; }
+      cp /tmp/pillie_frames.json "$OUT/frames.json" || return 1
       cat "$OUT/frames.json"
       ;;
     note) : ;;
@@ -356,8 +381,15 @@ trap cleanup EXIT
 
 echo "▸ sim-flow $NAME udid=$UDID app=${BUILT_SHA:0:12} out=$OUT"
 while IFS= read -r raw || [[ -n "$raw" ]]; do
-  line="${raw%%#*}"
-  line="$(printf '%s' "$line" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+  # Re-join the tokens: drops comments (outside quotes) and trims. A line shlex
+  # cannot parse (an unbalanced quote) fails the flow instead of vanishing.
+  if ! line="$(python3 -c 'import shlex, sys; print(shlex.join(shlex.split(sys.argv[1], comments=True)))' "$raw" 2>&1)"; then
+    record_step "$raw" 0 0 "" "cannot parse: $(printf '%s' "$line" | tail -1)"
+    echo "FAIL cannot parse: $raw"
+    FLOW_OK=0
+    FAILED_LINE="$raw"
+    break
+  fi
   [[ -z "$line" ]] && continue
   # axe's scroll presets flick too fast for the UIKit-hosted tab panes; a 0.6s
   # swipe scrolls them (proven on Settings).
@@ -384,10 +416,8 @@ while IFS= read -r raw || [[ -n "$raw" ]]; do
   LAST_ARTIFACT=""
   t="$(now_ms)"
   rc=0
-  # shlex, not eval: a flow line is data, and `&` in a URL must stay literal.
   args=()
-  while IFS= read -r -d '' tok; do args+=("$tok"); done < <(
-    python3 -c 'import shlex, sys; sys.stdout.write("".join(t + "\0" for t in shlex.split(sys.argv[1])))' "$line")
+  while IFS= read -r -d '' tok; do args+=("$tok"); done < <(tokens "$line")
   set -- "${args[@]:1}"
   run_pseudo "$verb" "$@" >"$OUT/.step.log" 2>&1 || rc=$?
   out="$(cat "$OUT/.step.log")"

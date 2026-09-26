@@ -8,6 +8,8 @@
 # the pack. /plus-home only flips onboarding-complete + Plus; it never
 # touches the pack (PillieApp.swift:665-670).
 fresh
+launch
+wait text "Get started" 15
 openurl "pillie://debug/plus-home?lang=en"
 wait text "Today" 15
 shot today-home

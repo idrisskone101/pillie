@@ -6,6 +6,7 @@ Usage:
   Pillie/scripts/ax-outline.py DUMP.json --has id X # exit 0 if AXUniqueId X exists
   Pillie/scripts/ax-outline.py DUMP.json --has label X
   Pillie/scripts/ax-outline.py DUMP.json --has text X  # substring of any label/value
+  Pillie/scripts/ax-outline.py DUMP.json --has root Pillie  # the tree belongs to the app
   Pillie/scripts/ax-outline.py DUMP.json --center id|label|value X [--type Button]
                                   # "x y" of an on-screen match (Buttons first), exit 1 if none
 
@@ -89,6 +90,11 @@ def main():
         return 0
     if len(sys.argv) >= 5 and sys.argv[2] == "--has":
         kind, want = sys.argv[3], sys.argv[4]
+        if kind == "root":
+            return 0 if tree and norm(tree[0].get("AXLabel")) == norm(want) else 1
+        if kind not in ("id", "label", "text"):
+            print(f"error: unknown kind {kind}", file=sys.stderr)
+            return 2
         for n in nodes:
             if kind == "id" and n.get("AXUniqueId") == want:
                 return 0

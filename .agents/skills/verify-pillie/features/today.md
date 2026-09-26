@@ -89,4 +89,4 @@ blocking/trial status surfaces, and (when eligible) the review ask.
 - Never tap `#trialKeepPlus` or any other purchase/subscribe control — they
   open `HonestPaywallHost`/StoreKit, which the simulator cannot complete.
 - A fresh install's default pack lands on its break day ("Day 28 of 28", "There's nothing due today."). `today-home.flow` pins the clock and applies the `missedRecentDays` scenario to get a due pill. Verified live.
-- Developer-menu row ids leak onto the row's child texts and icon, so `tap --id developerScenario.<name>` matches 3 elements. Tap the row title (`tap --label "Missed the last 2 days"`).
+- Developer-menu row ids leak onto the row's child texts and icon. The runner taps the first on-screen match, so `tap --id developerScenario.<name>` works in a flow; raw `axe tap --id` would see 3 matches.

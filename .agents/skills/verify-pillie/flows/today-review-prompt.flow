@@ -7,6 +7,8 @@
 # Clearing it first is the only deterministic way to reach the review card
 # regardless of what a previous flow left behind.
 fresh
+launch
+wait text "Get started" 15
 
 # PillieApp.swift:782-789: Plus off, free plan selected, onboarding
 # complete, seeds an eligible unbroken Streak (PillStore.swift:1402-1432).

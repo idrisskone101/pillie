@@ -29,7 +29,7 @@ FORCE_BUILD ?= 0
 WORKLOAD ?= all
 FLOW ?=
 FLOWS_DIR := $(ROOT)/.agents/skills/verify-pillie/flows
-# FLOW=today, FLOW="today history", FLOW=path/to/x.flow, or FLOW=all.
+# FLOW=today-home, FLOW="today-home history-calendar", FLOW=path/to/x.flow, or FLOW=all.
 flow_files = $(if $(filter all,$(FLOW)),$(sort $(wildcard $(FLOWS_DIR)/*.flow)),$(foreach f,$(FLOW),$(if $(wildcard $(f)),$(f),$(FLOWS_DIR)/$(f).flow)))
 
 .PHONY: help diagnose build run build-and-run test screenshot console \
@@ -52,7 +52,7 @@ help:
 		"  make agent-verify             Build; test too if TESTS is set" \
 		"  make qa                       Boot, build-and-run, wait, 1x PNG, axe" \
 		"  make measure-frames           Scripted frame probe JSON (WORKLOAD=all)" \
-		"  make flow FLOW=today          Run a verify-pillie flow on this Mac" \
+		"  make flow FLOW=today-home     Run a verify-pillie flow on this Mac" \
 		"  make udid                     Print the resolved iPhone 17 Pro UDID" \
 		"  make ns-mac-status            Namespace Mac Devbox status" \
 		"  make ns-mac-qa                Golden path: sync, boot, run, 1x PNG, axe" \
@@ -64,7 +64,7 @@ help:
 		"  make ns-mac-sync              Checkout this SHA on the Mac" \
 		"  make ns-mac-diagnose          Remote uname / Xcode / repo check" \
 		"  make ns-mac-exec CMD='make x' Run a command on the Namespace Mac" \
-		"  make ns-mac-flow FLOW=today   Run flows on the Namespace Mac, pull the results" \
+		"  make ns-mac-flow FLOW=today-home Run flows on the Namespace Mac, pull the results" \
 		"  make verify-flows             Check flows and feature docs against source" \
 		"  make ensure-qa-tools          Install axe and ImageMagick if missing" \
 		"  make ns-mac-ensure-tools      Same, on the Namespace Mac" \
@@ -105,7 +105,7 @@ measure-frames:
 	@WORKLOAD="$(WORKLOAD)" $(SCRIPTS)/measure-frames.sh "$(WORKLOAD)"
 
 flow:
-	@if [ -z "$(FLOW)" ]; then echo "Pass FLOW=today (see $(FLOWS_DIR))." >&2; exit 64; fi
+	@if [ -z "$(FLOW)" ]; then echo "Pass FLOW=today-home (see $(FLOWS_DIR))." >&2; exit 64; fi
 	@rc=0; for f in $(flow_files); do $(SCRIPTS)/sim-flow.sh "$$f" || rc=1; done; exit $$rc
 
 console:
@@ -155,7 +155,7 @@ ns-mac-exec:
 	@KEEP="$(KEEP)" $(SCRIPTS)/namespace-mac.sh exec -- /bin/bash -lc "$$NS_MAC_CMD"
 
 ns-mac-flow:
-	@if [ -z "$(FLOW)" ]; then echo "Pass FLOW=today (see $(FLOWS_DIR))." >&2; exit 64; fi
+	@if [ -z "$(FLOW)" ]; then echo "Pass FLOW=today-home (see $(FLOWS_DIR))." >&2; exit 64; fi
 	@KEEP="$(KEEP)" $(SCRIPTS)/namespace-mac.sh flow $(flow_files)
 
 ns-mac-qa:

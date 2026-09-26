@@ -498,26 +498,43 @@ flow_remote() {
     ship+="printf '%s' '$(base64 -w0 <"$f")' | base64 --decode >$stage/$name.flow
 "
   done
+  local unsynced="exit 3"
+  [[ "${NS_MAC_ALLOW_UNSYNCED:-0}" == "1" ]] && unsynced="echo 'warn: running the Mac'\''s older runner'"
   local rc=0
-  NS_MAC_POLL="${NS_MAC_POLL:-0.5}" exec_remote "if [ \"\$(git rev-parse HEAD)\" != '$sha' ]; then
-  { git fetch --quiet origin && git reset --quiet --hard '$sha'; } || echo 'warn: scripts not synced to ${sha:0:12} (push first)'
+  NS_MAC_POLL="${NS_MAC_POLL:-0.5}" exec_remote "rm -rf $stage $stage.tgz && mkdir -p $stage
+if [ \"\$(git rev-parse HEAD)\" != '$sha' ]; then
+  if ! { git fetch --quiet origin && git reset --quiet --hard '$sha'; }; then
+    echo 'error: the Mac cannot check out ${sha:0:12}; push first (the runner and its helpers come from HEAD)' >&2
+    $unsynced
+  fi
 fi
-rm -rf $stage && mkdir -p $stage
 ${ship}rc=0
 for n in ${names[*]}; do Pillie/scripts/sim-flow.sh $stage/\$n.flow $stage/\$n || rc=1; done
 tar -C $stage -czf $stage.tgz --exclude '*.flow' .
 exit \$rc" || rc=$?
+  (( rc == 3 )) && return 3
   mkdir -p "$ARTIFACT_DIR/flows"
   for name in "${names[@]}"; do rm -rf "${ARTIFACT_DIR:?}/flows/$name"; done
+  local pulled=0
   if [[ "$(transport)" == https ]]; then
-    api download "$stage.tgz" "$ARTIFACT_DIR/flows/.last.tgz" >/dev/null
+    api download "$stage.tgz" "$ARTIFACT_DIR/flows/.last.tgz" >/dev/null && pulled=1
   else
-    scp -q -F "$SSH_CONFIG" "$SSH_HOST:$stage.tgz" "$ARTIFACT_DIR/flows/.last.tgz"
+    scp -q -F "$SSH_CONFIG" "$SSH_HOST:$stage.tgz" "$ARTIFACT_DIR/flows/.last.tgz" && pulled=1
   fi
-  tar -C "$ARTIFACT_DIR/flows" -xzf "$ARTIFACT_DIR/flows/.last.tgz"
+  if (( pulled == 0 )) || ! tar -C "$ARTIFACT_DIR/flows" -xzf "$ARTIFACT_DIR/flows/.last.tgz"; then
+    echo "error: no results came back from the Mac" >&2
+    return 1
+  fi
   rm -f "$ARTIFACT_DIR/flows/.last.tgz"
+  # The verdict is each report's own ok field, not whether a file arrived.
   for name in "${names[@]}"; do
-    echo "ok: $ARTIFACT_DIR/flows/$name/report.json"
+    if python3 -c 'import json, sys; sys.exit(0 if json.load(open(sys.argv[1]))["ok"] else 1)' \
+      "$ARTIFACT_DIR/flows/$name/report.json" 2>/dev/null; then
+      echo "ok:   $ARTIFACT_DIR/flows/$name/report.json"
+    else
+      echo "FAIL: $ARTIFACT_DIR/flows/$name/report.json"
+      rc=1
+    fi
   done
   return "$rc"
 }

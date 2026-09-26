@@ -2,7 +2,6 @@
 # previous month and back. Pins the clock so the month header is
 # deterministic instead of depending on the run date.
 launch
-shot launch
 openurl pillie://debug/fixed-now?at=2026-09-15T15:00:00Z
 # Pins PillieClock.now to 2026-09-15 15:00 UTC and refreshes the store's day
 # context. PillieApp.swift:648-664 (case "/fixed-now").
