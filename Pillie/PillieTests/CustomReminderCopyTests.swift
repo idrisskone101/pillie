@@ -110,7 +110,7 @@ final class CustomReminderCopyTests: XCTestCase {
 
         draft.apply(.direct)
 
-        XCTAssertEqual(draft.messages, CustomReminderPreset.direct.messages)
+        XCTAssertEqual(draft.messages, CustomReminderPreset.direct.localizedMessages())
         XCTAssertEqual(draft.appliedPreset, .direct)
         XCTAssertFalse(draft.wasEditedAfterPreset)
     }

@@ -165,7 +165,7 @@ final class GermanLocalizationContractTests: XCTestCase {
             HistoryPresentation.MonthSummary(
                 title: "Dieser Monat",
                 month: "Juli 2026",
-                completedCount: "3 Check-ins",
+                completedCount: "3 Häkchen",
                 completedBody: "Häkchen bisher",
                 percentage: PillieLocalization.formatted(
                     "history.month.on_track",
@@ -240,7 +240,7 @@ final class GermanLocalizationContractTests: XCTestCase {
                 displayedMonth: date,
                 locale: german
             ).completedCount,
-            "1 Check-in"
+            "1 Häkchen"
         )
         XCTAssertEqual(
             SettingsPresentation.interval(minutes: 1, locale: german),
@@ -468,7 +468,7 @@ final class GermanLocalizationContractTests: XCTestCase {
                 status: .unlogged,
                 locale: german
             ),
-            "15. Juli 2026: Nicht eingetragen"
+            "15. Juli 2026: Nicht abgehakt"
         )
 
         let confirmation = ScheduleCriticalSettingChange.confirmation(
@@ -478,7 +478,7 @@ final class GermanLocalizationContractTests: XCTestCase {
         XCTAssertEqual(confirmation.title, "Deinen Verlauf löschen?")
         XCTAssertEqual(
             confirmation.body,
-            "Wenn du den Zeitplan änderst, wird der gesamte Protokollverlauf zurückgesetzt und bei Tag 8 neu begonnen. Dies kann nicht rückgängig gemacht werden."
+            "Wenn du deinen Zeitplan änderst, wird dein ganzer Verlauf gelöscht und du startest bei Tag 8. Das lässt sich nicht rückgängig machen."
         )
         XCTAssertEqual(confirmation.confirmTitle, "Löschen und speichern")
         XCTAssertEqual(confirmation.cancelTitle, "Abbrechen")

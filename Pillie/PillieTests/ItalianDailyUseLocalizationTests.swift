@@ -212,9 +212,9 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
             HistoryPresentation.MonthSummary(
                 title: "Questo mese",
                 month: "luglio 2026",
-                completedCount: "3 check-in",
+                completedCount: "3 conferme",
                 completedBody: "Conferme finora",
-                percentage: "75% registrato"
+                percentage: "75% confermato"
             )
         )
         XCTAssertEqual(
@@ -231,7 +231,7 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
                 status: .unlogged,
                 locale: italian
             ),
-            "15 luglio 2026: Non registrato"
+            "15 luglio 2026: Non confermato"
         )
         XCTAssertEqual(
             HistoryPresentation.dayAccessibilityLabel(
@@ -252,7 +252,7 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
         XCTAssertEqual(confirmation.title, "Cancellare la cronologia?")
         XCTAssertEqual(
             confirmation.body,
-            "La modifica del programma reimposta tutta la cronologia e riparte dal giorno 8. L’operazione non può essere annullata."
+            "Se cambi il programma, cancelli tutta la cronologia e riparti dal giorno 8. Non puoi annullare questa operazione."
         )
         XCTAssertEqual(confirmation.confirmTitle, "Cancella e salva")
         XCTAssertEqual(confirmation.cancelTitle, "Annulla")
@@ -612,7 +612,7 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
             "Pillie — Issue Report"
         )
         let body = try XCTUnwrap(issue.localizedBody(locale: italian))
-        XCTAssertTrue(body.contains("Raccontaci che cosa non ha funzionato"))
+        XCTAssertTrue(body.contains("Raccontaci cosa non ha funzionato"))
         XCTAssertTrue(body.contains("Dispositivo: iPhone17,1"))
         XCTAssertFalse(body.contains("Device:"))
     }

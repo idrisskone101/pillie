@@ -137,6 +137,6 @@ struct StatusCardTitleTests {
         #expect(StatusCardTitle.next(on: local(9, 27), .nextWeek).localized(reminderTime: "8:00", locale: Locale(identifier: "it"))
             == "La prossima è domenica della settimana prossima alle 8:00.")
         #expect(StatusCardTitle.next(on: local(9, 23), .nextWeek).localized(reminderTime: "8:00", locale: Locale(identifier: "ru"))
-            == "Следующее — среда на следующей неделе, в 8:00.")
+            == "Следующий раз: среда на следующей неделе, в 8:00.")
     }
 }

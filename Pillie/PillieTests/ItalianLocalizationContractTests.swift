@@ -170,7 +170,7 @@ final class ItalianLocalizationContractTests: XCTestCase {
 
         XCTAssertEqual(
             content.analyzingAccessibilityLabel(signals: ["Messaggi", "21:05"]),
-            "Il tuo piano promemoria. Rilevati: Messaggi, 21:05."
+            "Il tuo piano promemoria. In base alle tue risposte: Messaggi, 21:05."
         )
         XCTAssertEqual(
             DistractionApp.messages.localizedDisplayName(locale: italian),
