@@ -30,7 +30,7 @@ struct CustomReminderDraft: Equatable {
         return messages != appliedPresetMessages
     }
 
-    mutating func apply(_ preset: CustomReminderPreset, locale: Locale = .current) {
+    mutating func apply(_ preset: CustomReminderPreset, locale: Locale) {
         let localizedMessages = preset.localizedMessages(locale: locale)
         messages = localizedMessages
         appliedPreset = preset
@@ -79,14 +79,14 @@ enum CustomReminderPreset: String, CaseIterable, Identifiable {
 
     static func matching(
         _ messages: CustomReminderMessages,
-        locale: Locale = .current
+        locale: Locale
     ) -> Self? {
         allCases.first {
-            $0.messages == messages || $0.localizedMessages(locale: locale) == messages
+            $0.legacyEnglishMessages == messages || $0.localizedMessages(locale: locale) == messages
         }
     }
 
-    func localizedMessages(locale: Locale = .current) -> CustomReminderMessages {
+    func localizedMessages(locale: Locale) -> CustomReminderMessages {
         let stem = switch self {
         case .gentle: "notification.custom.gentle"
         case .direct: "notification.custom.direct"
@@ -104,9 +104,7 @@ enum CustomReminderPreset: String, CaseIterable, Identifiable {
         )
     }
 
-    /// The English preset text from before presets came from the string catalog.
-    /// `matching` still recognizes a draft that was saved from one of these.
-    var messages: CustomReminderMessages {
+    var legacyEnglishMessages: CustomReminderMessages {
         switch self {
         case .gentle:
             CustomReminderMessages(

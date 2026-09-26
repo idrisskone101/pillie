@@ -18,19 +18,24 @@ import re
 import sys
 from collections import Counter
 from pathlib import Path
+from typing import NamedTuple
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPT_DIR.parents[2]
 APP_ROOT = REPO_ROOT / "Pillie"
-# Each table lists every copy of its catalog; the first one is read, all are written.
+class CatalogFiles(NamedTuple):
+    source: Path
+    mirrors: tuple[Path, ...] = ()
+
+
 CATALOGS = {
-    "Localizable": [APP_ROOT / "Pillie" / "Localizable.xcstrings"],
-    "Commerce": [APP_ROOT / "Pillie" / "Commerce.xcstrings"],
-    "Notifications": [APP_ROOT / "Pillie" / "Notifications.xcstrings"],
-    "Shield": [
+    "Localizable": CatalogFiles(APP_ROOT / "Pillie" / "Localizable.xcstrings"),
+    "Commerce": CatalogFiles(APP_ROOT / "Pillie" / "Commerce.xcstrings"),
+    "Notifications": CatalogFiles(APP_ROOT / "Pillie" / "Notifications.xcstrings"),
+    "Shield": CatalogFiles(
         APP_ROOT / "PillieShieldConfiguration" / "Shield.xcstrings",
-        APP_ROOT / "PillieDeviceActivityMonitor" / "Shield.xcstrings",
-    ],
+        (APP_ROOT / "PillieDeviceActivityMonitor" / "Shield.xcstrings",),
+    ),
 }
 SOURCE_DIRS = [
     APP_ROOT / "Pillie",
@@ -122,8 +127,8 @@ def info_plist_rows() -> list[dict]:
 def rows() -> list[dict]:
     sources = swift_sources()
     out = info_plist_rows()
-    for table, paths in CATALOGS.items():
-        catalog = json.loads(paths[0].read_text())
+    for table, files in CATALOGS.items():
+        catalog = json.loads(files.source.read_text())
         for key, entry in sorted((catalog.get("strings") or {}).items()):
             english = value_of(entry, "en") or key
             present = [lang for lang in APP_LANGUAGE_CODES if value_of(entry, lang)]

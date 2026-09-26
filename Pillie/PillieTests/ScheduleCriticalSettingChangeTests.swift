@@ -93,7 +93,7 @@ final class ScheduleCriticalSettingChangeTests: XCTestCase {
         let fixture = try InMemoryStoreFactory.makeStore(
             now: InMemoryStoreFactory.fixedDate("2026-06-03")
         )
-        let messages = CustomReminderPreset.direct.messages
+        let messages = CustomReminderPreset.direct.legacyEnglishMessages
 
         ScheduleCriticalSettingChange.saveSettingsCustomReminders(
             store: fixture.store,

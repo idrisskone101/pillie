@@ -69,7 +69,7 @@ def load_plans() -> dict[str, dict[str, str]]:
 
 class Catalogs:
     def __init__(self) -> None:
-        self.data = {table: read_json(paths[0]) for table, paths in inventory.CATALOGS.items()}
+        self.data = {table: read_json(files.source) for table, files in inventory.CATALOGS.items()}
         self.info_plist_text = INFO_PLIST.read_text()
         self.info_plist = plistlib.loads(self.info_plist_text.encode())
         self.info_strings = {
@@ -120,8 +120,8 @@ class Catalogs:
         self.data[table]["strings"].pop(key, None)
 
     def save(self) -> None:
-        for table, paths in inventory.CATALOGS.items():
-            for path in paths:
+        for table, files in inventory.CATALOGS.items():
+            for path in (files.source, *files.mirrors):
                 write_json(path, self.data[table])
         INFO_PLIST.write_text(self.info_plist_text)
         for lang, text in self.info_strings.items():
@@ -129,7 +129,6 @@ class Catalogs:
 
 
 def foreign_script(lang: str, value: str) -> str | None:
-    """Name a non-Latin script that doesn't belong to this locale, e.g. Telugu letters in Kannada."""
     own = SCRIPTS.get(lang)
     for char in value:
         block = unicodedata.name(char, "").split(" ")[0] if char.isalpha() else ""
@@ -143,8 +142,7 @@ def is_all_caps(value: str) -> bool:
     return len(letters) >= 3 and all(c.isupper() for c in letters)
 
 
-def placeholders(value: str) -> list[str]:
-    """Argument types in argument order, so `%2$@ %1$lld` reads as ["lld", "@"]."""
+def argument_types(value: str) -> list[str]:
     args, literal_percents, position = {}, 0, 0
     for match in PLACEHOLDER.finditer(value):
         token = match.group(0)
@@ -169,8 +167,8 @@ def check(plans: dict[str, dict[str, str]], catalogs: Catalogs) -> list[str]:
             if ref not in known:
                 errors.append(f"{lang} {ref}: no such key")
                 continue
-            if placeholders(value) != placeholders(english[ref]):
-                errors.append(f"{lang} {ref}: placeholders {placeholders(value)} != English {placeholders(english[ref])}")
+            if argument_types(value) != argument_types(english[ref]):
+                errors.append(f"{lang} {ref}: placeholders {argument_types(value)} != English {argument_types(english[ref])}")
             if lang == "en":
                 errors += [f"en {ref}: {hit}" for hit in lint.findings(value)]
                 continue
@@ -188,7 +186,6 @@ def swift_literal(value: str) -> str:
 
 
 def rewrite_literals(changes: list[tuple[str, str, str, str]], catalogs: Catalogs) -> list[str]:
-    """Swap pinned old values for new ones in tests and flows, when the swap is unambiguous."""
     targets: dict[str, set[str]] = defaultdict(set)
     for _lang, _ref, old, new in changes:
         targets[swift_literal(old)].add(swift_literal(new))

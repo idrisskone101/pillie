@@ -45,8 +45,6 @@ done
 export PILLIE_NS_ARTIFACT_DIR="$REPO_ROOT/.qa-artifacts"
 make -C "$REPO_ROOT" ns-mac-flow FLOW="${flows[*]}" && exit 0
 
-# One retry for locales whose report is not ok: a single flaky axe call
-# should not cost a locale its 34 shots.
 retry=()
 for lang in "${langs[@]}"; do
   report="$PILLIE_NS_ARTIFACT_DIR/flows/screen-tour-$lang/report.json"

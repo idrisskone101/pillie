@@ -16,7 +16,7 @@ final class CustomReminderCopyTests: XCTestCase {
 
     func testGentlePresetPopulatesEveryReminderMessage() {
         XCTAssertEqual(
-            CustomReminderPreset.gentle.messages,
+            CustomReminderPreset.gentle.legacyEnglishMessages,
             CustomReminderMessages(
                 dueTitle: "A gentle reminder",
                 dueBody: "It’s time to check in with Pillie.",
@@ -28,7 +28,7 @@ final class CustomReminderCopyTests: XCTestCase {
 
     func testDirectPresetPopulatesEveryReminderMessage() {
         XCTAssertEqual(
-            CustomReminderPreset.direct.messages,
+            CustomReminderPreset.direct.legacyEnglishMessages,
             CustomReminderMessages(
                 dueTitle: "Pillie check-in due",
                 dueBody: "Open Pillie to mark today’s pill.",
@@ -52,7 +52,7 @@ final class CustomReminderCopyTests: XCTestCase {
 
     func testEncouragingPresetPopulatesEveryReminderMessage() {
         XCTAssertEqual(
-            CustomReminderPreset.encouraging.messages,
+            CustomReminderPreset.encouraging.legacyEnglishMessages,
             CustomReminderMessages(
                 dueTitle: "You’re building consistency",
                 dueBody: "Open Pillie for today’s check-in.",
@@ -64,7 +64,7 @@ final class CustomReminderCopyTests: XCTestCase {
 
     func testPrivateDiscreetPresetPopulatesEveryReminderMessage() {
         XCTAssertEqual(
-            CustomReminderPreset.privateDiscreet.messages,
+            CustomReminderPreset.privateDiscreet.legacyEnglishMessages,
             CustomReminderMessages(
                 dueTitle: "Time for your check-in",
                 dueBody: "Open Pillie when convenient.",
@@ -75,8 +75,8 @@ final class CustomReminderCopyTests: XCTestCase {
     }
 
     func testPresetMatchingDistinguishesAnUneditedPresetFromManualCopy() {
-        let gentle = CustomReminderPreset.gentle.messages
-        XCTAssertEqual(CustomReminderPreset.matching(gentle), .gentle)
+        let gentle = CustomReminderPreset.gentle.legacyEnglishMessages
+        XCTAssertEqual(CustomReminderPreset.matching(gentle, locale: Locale(identifier: "en_US")), .gentle)
 
         let edited = CustomReminderMessages(
             dueTitle: gentle.dueTitle,
@@ -84,7 +84,7 @@ final class CustomReminderCopyTests: XCTestCase {
             retryTitle: gentle.retryTitle,
             retryBody: gentle.retryBody,
         )
-        XCTAssertNil(CustomReminderPreset.matching(edited))
+        XCTAssertNil(CustomReminderPreset.matching(edited, locale: Locale(identifier: "en_US")))
     }
 
     func testPresetDisplayNamesMatchTheApprovedProductNames() {
@@ -106,17 +106,17 @@ final class CustomReminderCopyTests: XCTestCase {
     }
 
     func testApplyingPresetReplacesTheDraftWithoutSavingEarly() {
-        var draft = CustomReminderDraft(messages: CustomReminderPreset.gentle.messages)
+        var draft = CustomReminderDraft(messages: CustomReminderPreset.gentle.legacyEnglishMessages)
 
-        draft.apply(.direct)
+        draft.apply(.direct, locale: Locale(identifier: "en_US"))
 
-        XCTAssertEqual(draft.messages, CustomReminderPreset.direct.localizedMessages())
+        XCTAssertEqual(draft.messages, CustomReminderPreset.direct.localizedMessages(locale: Locale(identifier: "en_US")))
         XCTAssertEqual(draft.appliedPreset, .direct)
         XCTAssertFalse(draft.wasEditedAfterPreset)
     }
 
     func testApplyingItalianPresetIsNotReportedAsAManualEdit() {
-        var draft = CustomReminderDraft(messages: CustomReminderPreset.gentle.messages)
+        var draft = CustomReminderDraft(messages: CustomReminderPreset.gentle.legacyEnglishMessages)
 
         draft.apply(.direct, locale: Locale(identifier: "it_IT"))
 
@@ -129,8 +129,8 @@ final class CustomReminderCopyTests: XCTestCase {
     }
 
     func testManualEditAfterPresetIsDistinguishableWithoutLosingPresetIdentity() {
-        var draft = CustomReminderDraft(messages: CustomReminderPreset.gentle.messages)
-        draft.apply(.gentle)
+        var draft = CustomReminderDraft(messages: CustomReminderPreset.gentle.legacyEnglishMessages)
+        draft.apply(.gentle, locale: Locale(identifier: "en_US"))
 
         draft.messages.dueBody = "My private wording"
 
@@ -139,9 +139,9 @@ final class CustomReminderCopyTests: XCTestCase {
     }
 
     func testRestoreDefaultsReplacesDraftAndClearsPresetAttribution() {
-        var draft = CustomReminderDraft(messages: CustomReminderPreset.direct.messages)
-        draft.apply(.direct)
-        let defaults = CustomReminderPreset.gentle.messages
+        var draft = CustomReminderDraft(messages: CustomReminderPreset.direct.legacyEnglishMessages)
+        draft.apply(.direct, locale: Locale(identifier: "en_US"))
+        let defaults = CustomReminderPreset.gentle.legacyEnglishMessages
 
         draft.restoreDefaults(defaults)
 
@@ -151,9 +151,9 @@ final class CustomReminderCopyTests: XCTestCase {
     }
 
     func testCancellingDiscardsPresetChangesAndRestoresTheOpenedCopy() {
-        let existing = CustomReminderPreset.gentle.messages
+        let existing = CustomReminderPreset.gentle.legacyEnglishMessages
         var draft = CustomReminderDraft(messages: existing)
-        draft.apply(.direct)
+        draft.apply(.direct, locale: Locale(identifier: "en_US"))
 
         draft.discardChanges()
 
