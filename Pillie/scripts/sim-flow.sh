@@ -221,7 +221,14 @@ run_pseudo() {
       xcrun simctl install "$UDID" "$APP_PATH"
       ;;
     defaults) xcrun simctl spawn "$UDID" defaults write "$BUNDLE_ID" "$@" ;;
-    openurl) xcrun simctl openurl "$UDID" "$1"; settle 10 || true ;;
+    openurl)
+      xcrun simctl openurl "$UDID" "$1"
+      # Safari-style "Open in “Pillie”?" confirmation on every simctl openurl.
+      if poll_for want text "Open in “Pillie”?" 3; then
+        axe tap --udid "$UDID" --label Open --element-type Button --wait-timeout 3 >/dev/null
+      fi
+      settle 10 || true
+      ;;
     wait) poll_for want "$1" "$2" "${3:-$WAIT}" ;;
     gone) poll_for gone "$1" "$2" "${3:-$WAIT}" ;;
     expect) present "$1" "$2" ;;
@@ -276,7 +283,7 @@ run_pseudo() {
 cleanup() {
   [[ -n "$RECORD_PID" ]] && kill -INT "$RECORD_PID" 2>/dev/null || true
   [[ -n "$LOG_PID" ]] && kill "$LOG_PID" 2>/dev/null || true
-  rm -f "$OUT/.probe.json" "$OUT/.full.png" "$BATCH"
+  rm -f "$OUT/.probe.json" "$OUT/.full.png" "$OUT/.step.log" "$BATCH"
 }
 trap cleanup EXIT
 
@@ -302,7 +309,8 @@ while IFS= read -r raw || [[ -n "$raw" ]]; do
   rc=0
   eval "set -- $line"
   shift
-  out="$(run_pseudo "$verb" "$@" 2>&1)" || rc=$?
+  run_pseudo "$verb" "$@" >"$OUT/.step.log" 2>&1 || rc=$?
+  out="$(cat "$OUT/.step.log")"
   ms=$(( $(now_ms) - t ))
   if (( rc == 0 )); then
     record_step "$line" 1 "$ms" "$LAST_ARTIFACT" "$(printf '%s' "$out" | tail -1)"
