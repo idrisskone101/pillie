@@ -35,4 +35,4 @@ This is the contract for anyone, person or agent, who writes a Pillie locale. Re
 
 ## Review
 
-A second reader translates each changed string back into English without seeing `en`, then compares. Any string whose back-translation changes the meaning gets fixed. German, Italian, French, and Spanish also go to a native speaker before release.
+A second reader translates each changed string back into English without seeing `en`, then compares. Any string whose back-translation changes the meaning gets fixed.

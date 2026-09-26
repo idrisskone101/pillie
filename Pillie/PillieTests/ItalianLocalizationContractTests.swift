@@ -343,7 +343,7 @@ final class ItalianLocalizationContractTests: XCTestCase {
         for method in ContraceptiveMethod.allCases {
             XCTAssertEqual(
                 method.blockingReasonText(locale: italian),
-                "Oggi non hai ancora confermato su Pillie."
+                "Oggi non hai ancora confermato in Pillie."
             )
         }
     }

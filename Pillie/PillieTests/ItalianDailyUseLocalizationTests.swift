@@ -482,7 +482,7 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
             SoftPaywallContent.localized(locale: italian).rows.map(\.title),
             [
                 "Promemoria giornalieri",
-                "Promemoria successivi",
+                "Promemoria ripetuti",
                 "Blocco app",
                 "Scuoti per confermare",
                 "Testi dei promemoria",
@@ -493,7 +493,7 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
             TrialActivationItem.make(for: .unconfigured, locale: italian).map(\.title),
             [
                 "Blocco app",
-                "Promemoria successivi",
+                "Promemoria ripetuti",
                 "Testi dei promemoria",
                 "Scuoti per confermare",
             ]
@@ -516,7 +516,7 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
             [
                 "Blocco app",
                 "Scuoti per confermare",
-                "Promemoria successivi",
+                "Promemoria ripetuti",
                 PillieLocalization.string(
                     "paywall.feature.custom_messages",
                     table: "Commerce",

@@ -25,12 +25,12 @@ final class GermanLocalizationContractTests: XCTestCase {
     func testRequiredSetupAndReminderKeysResolveInGermanWithoutEnglishFallback() {
         let expectedByKey = [
             "onboarding.welcome.title": "Der Wecker für deine Pille.",
-            "onboarding.method.title": "Wähl deine Methode.",
+            "onboarding.method.title": "Wähle deine Methode.",
             "onboarding.regimen.21_7": "21 aktive Tage, 7 Pausentage",
             "onboarding.cycle_position.title": "Wo stehst du in deiner Routine?",
-            "onboarding.reminder_time.title": "Wähl eine Zeit.",
+            "onboarding.reminder_time.title": "Wähle eine Zeit.",
             "onboarding.plan.title": "Dein Erinnerungsplan",
-            "onboarding.blocking_setup.title": "Wähl Apps zum Pausieren",
+            "onboarding.blocking_setup.title": "Wähle Apps zum Pausieren",
             "onboarding.ready.title": "Alles bereit.",
             "notification.reminder.pill.title": "Zeit für deine Pille",
             "notification.reminder.patch.title": "Zeit für dein Pflaster",
@@ -399,14 +399,14 @@ final class GermanLocalizationContractTests: XCTestCase {
         XCTAssertEqual(
             actions.map { $0.localizedReminderBody(locale: german) },
             [
-                "Nimm sie, dann tipp hier zum Abhaken.",
-                "Kleb dein Pflaster auf, dann tipp hier zum Abhaken.",
-                "Setz deinen Ring ein, dann tipp hier zum Abhaken.",
+                "Nimm sie, dann tippe hier zum Abhaken.",
+                "Klebe dein Pflaster auf, dann tippe hier zum Abhaken.",
+                "Setze deinen Ring ein, dann tippe hier zum Abhaken.",
             ]
         )
         XCTAssertEqual(
             actions[0].localizedFollowUpBody(locale: german),
-            "Du hast noch nicht abgehakt. Tipp hier, wenn du fertig bist."
+            "Du hast noch nicht abgehakt. Tippe hier, wenn du fertig bist."
         )
         XCTAssertEqual(
             PillieLocalization.string(

@@ -2488,7 +2488,7 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Promemoria successivi"
+            "value": "Promemoria ripetuti"
           }
         },
         "de": {
@@ -13494,7 +13494,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Probier deine Plus-Funktionen aus."
+            "value": "Probiere deine Plus-Funktionen aus."
           }
         },
         "fr": {
@@ -30819,7 +30819,7 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Per 14 giorni attivi hai avuto promemoria successivi e blocco app. Tieni Plus per continuare ad averli entrambi."
+            "value": "Per 14 giorni attivi hai avuto promemoria ripetuti e blocco app. Tieni Plus per continuare ad averli entrambi."
           }
         },
         "fr": {
@@ -31094,7 +31094,7 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Per 14 giorni attivi hai avuto promemoria successivi. Tieni Plus per continuare ad averli."
+            "value": "Per 14 giorni attivi hai avuto promemoria ripetuti. Tieni Plus per continuare ad averli."
           }
         },
         "fr": {
@@ -33288,7 +33288,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Schreib deine Erinnerungen in deinen eigenen Worten. Mit Plus kannst du die tägliche Erinnerung und die Folgeerinnerung ändern."
+            "value": "Schreibe deine Erinnerungen mit deinen eigenen Worten. Mit Plus kannst du die tägliche Erinnerung und die Folgeerinnerung ändern."
           }
         },
         "it": {
@@ -37144,7 +37144,7 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tieni Plus per avere promemoria successivi e blocco app anche dopo la prova."
+            "value": "Tieni Plus per avere promemoria ripetuti e blocco app anche dopo la prova."
           }
         },
         "ar": {
@@ -37694,7 +37694,7 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "I promemoria successivi restano attivi"
+            "value": "I promemoria ripetuti restano attivi"
           }
         },
         "ar": {
@@ -38788,13 +38788,13 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bleib bei Pillie Plus, um Folgeerinnerungen und die App-Sperre zu behalten."
+            "value": "Bleibe bei Pillie Plus, um Folgeerinnerungen und die App-Sperre zu behalten."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Resta su Pillie Plus per tenere i promemoria successivi e il blocco app."
+            "value": "Resta su Pillie Plus per tenere i promemoria ripetuti e il blocco app."
           }
         },
         "ar": {
@@ -38848,7 +38848,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reste sur Pillie Plus pour garder les rappels de relance et le blocage d’apps."
+            "value": "Garde Pillie Plus pour conserver les rappels de relance et le blocage d’apps."
           }
         },
         "gu": {
@@ -40169,7 +40169,7 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus aggiunge i promemoria successivi e il blocco app."
+            "value": "Pillie Plus aggiunge i promemoria ripetuti e il blocco app."
           }
         },
         "ar": {
@@ -41544,7 +41544,7 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Il blocco app e i promemoria successivi restano disattivati finché non riattivi Plus."
+            "value": "Il blocco app e i promemoria ripetuti restano disattivati finché non riattivi Plus."
           }
         },
         "ar": {
@@ -42094,7 +42094,7 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "I promemoria successivi tornano"
+            "value": "I promemoria ripetuti tornano"
           }
         },
         "ar": {

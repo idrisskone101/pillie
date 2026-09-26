@@ -13,7 +13,7 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Oggi non hai ancora confermato su Pillie."
+            "value": "Oggi non hai ancora confermato in Pillie."
           }
         },
         "de": {
@@ -25,7 +25,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tu n’as pas encore validé sur Pillie aujourd’hui."
+            "value": "Tu n’as pas encore validé dans Pillie aujourd’hui."
           }
         },
         "es": {
@@ -838,19 +838,19 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Conferma su Pillie e questa app si riapre."
+            "value": "Conferma in Pillie e questa app si riapre."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Hak in Pillie ab, dann öffnet sich diese App wieder."
+            "value": "Hake in Pillie ab, dann öffnet sich diese App wieder."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Valide sur Pillie et cette app redevient accessible."
+            "value": "Valide dans Pillie et cette app redevient accessible."
           }
         },
         "es": {

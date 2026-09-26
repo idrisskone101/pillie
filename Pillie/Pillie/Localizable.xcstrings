@@ -2769,7 +2769,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zu deiner Erinnerungszeit schickt Pillie eine Erinnerung und pausiert die Apps, die du gewählt hast. Hak ab, um sie wieder zu öffnen."
+            "value": "Zu deiner Erinnerungszeit schickt Pillie eine Erinnerung und pausiert die Apps, die du gewählt hast. Hake ab, um sie wieder zu öffnen."
           }
         },
         "fr": {
@@ -7444,7 +7444,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mach deinen Plan persönlich."
+            "value": "Mache deinen Plan persönlich."
           }
         },
         "fr": {
@@ -19269,7 +19269,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Probier mal, zum Abhaken zu schütteln"
+            "value": "Probiere das Schütteln zum Abhaken"
           }
         },
         "fr": {
@@ -19544,7 +19544,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zieh das auf deine Apps."
+            "value": "Ziehe das auf deine Apps."
           }
         },
         "fr": {
@@ -22294,7 +22294,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wähl Apps zum Pausieren"
+            "value": "Wähle Apps zum Pausieren"
           }
         },
         "fr": {
@@ -24769,7 +24769,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wähl aus, an welchem Tag du heute bist."
+            "value": "Wähle aus, an welchem Tag du heute bist."
           }
         },
         "fr": {
@@ -34944,7 +34944,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wähl deine Methode."
+            "value": "Wähle deine Methode."
           }
         },
         "fr": {
@@ -37694,7 +37694,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wähl die Arten von Apps oder einzelne Apps, die dich meistens ablenken."
+            "value": "Wähle die Arten von Apps oder einzelne Apps, die dich meistens ablenken."
           }
         },
         "fr": {
@@ -39619,7 +39619,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Such dir aus, was du dir von Pillie wünschst."
+            "value": "Suche dir aus, was du dir von Pillie wünschst."
           }
         },
         "fr": {
@@ -47319,7 +47319,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wähl deinen Pillenplan."
+            "value": "Wähle deinen Pillenplan."
           }
         },
         "fr": {
@@ -48694,7 +48694,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wähl eine Zeit."
+            "value": "Wähle eine Zeit."
           }
         },
         "fr": {
@@ -53088,7 +53088,7 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Oggi non hai ancora confermato su Pillie."
+            "value": "Oggi non hai ancora confermato in Pillie."
           }
         },
         "de": {
@@ -53100,7 +53100,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tu n’as pas encore validé sur Pillie aujourd’hui."
+            "value": "Tu n’as pas encore validé dans Pillie aujourd’hui."
           }
         },
         "es": {
@@ -53638,13 +53638,13 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ci sei ancora"
+            "value": "Sempre costante"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Du bist weiter da"
+            "value": "Du bleibst dran"
           }
         },
         "fr": {
@@ -53656,7 +53656,7 @@
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sigues al pie del cañón"
+            "value": "Sigues con constancia"
           }
         },
         "pt-BR": {
@@ -70688,7 +70688,7 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Promemoria successivi"
+            "value": "Promemoria ripetuti"
           }
         },
         "de": {
@@ -74556,7 +74556,7 @@
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cambiar tu horario borra todo tu historial y te pone en el día %lld. No se puede deshacer."
+            "value": "Cambiar tu horario borra todo tu historial y empiezas en el día %lld. No se puede deshacer."
           }
         },
         "pt-BR": {
@@ -82244,7 +82244,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Beschreib, was nicht funktioniert hat. Je mehr Details, desto besser. Schreib über dieser Zeile."
+            "value": "Beschreibe, was nicht funktioniert hat. Je mehr Details, desto besser. Schreibe über dieser Zeile."
           }
         },
         "fr": {
@@ -90763,7 +90763,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tägliche Erinnerungen sind schon an. Schließ die Einrichtung ab, wenn Apps pausieren sollen, bis du abhakst."
+            "value": "Tägliche Erinnerungen sind schon an. Schließe die Einrichtung ab, wenn Apps pausieren sollen, bis du abhakst."
           }
         },
         "it": {
@@ -91038,7 +91038,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tägliche Erinnerungen sind schon an. Schließ die Einrichtung ab, wenn Apps pausieren sollen, bis du abhakst."
+            "value": "Tägliche Erinnerungen sind schon an. Schließe die Einrichtung ab, wenn Apps pausieren sollen, bis du abhakst."
           }
         },
         "it": {
@@ -91313,7 +91313,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tägliche Erinnerungen sind schon an. Schließ die Einrichtung ab, wenn Apps pausieren sollen, bis du abhakst."
+            "value": "Tägliche Erinnerungen sind schon an. Schließe die Einrichtung ab, wenn Apps pausieren sollen, bis du abhakst."
           }
         },
         "it": {
@@ -91588,7 +91588,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tägliche Erinnerungen sind schon an. Schließ die Einrichtung ab, wenn Apps pausieren sollen, bis du abhakst."
+            "value": "Tägliche Erinnerungen sind schon an. Schließe die Einrichtung ab, wenn Apps pausieren sollen, bis du abhakst."
           }
         },
         "it": {
@@ -91863,7 +91863,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tägliche Erinnerungen sind schon an. Schließ die Einrichtung ab, wenn Apps pausieren sollen, bis du abhakst."
+            "value": "Tägliche Erinnerungen sind schon an. Schließe die Einrichtung ab, wenn Apps pausieren sollen, bis du abhakst."
           }
         },
         "it": {
@@ -92138,7 +92138,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tägliche Erinnerungen sind schon an. Schließ die Einrichtung ab, wenn Apps pausieren sollen, bis du abhakst."
+            "value": "Tägliche Erinnerungen sind schon an. Schließe die Einrichtung ab, wenn Apps pausieren sollen, bis du abhakst."
           }
         },
         "it": {
@@ -92413,7 +92413,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tägliche Erinnerungen sind schon an. Schließ die Einrichtung ab, wenn Apps pausieren sollen, bis du abhakst."
+            "value": "Tägliche Erinnerungen sind schon an. Schließe die Einrichtung ab, wenn Apps pausieren sollen, bis du abhakst."
           }
         },
         "it": {

@@ -55,7 +55,7 @@ Rewrite each locale from the new English meaning, not from the old translation.
 - Translate "check in" as a native verb. Don't borrow the English word unless that locale's users say it.
 - Keep `%@`, `%lld`, and `%1$@` placeholders and their order rules intact.
 - `onboarding.regimen.21_7` owns the wording for active days in each locale.
-- A native speaker reviews German, Italian, French, and Spanish before release. Other locales get a back-translation check.
+- Every locale gets a blind back-translation check by a second writer. No native-speaker review is planned; German and Italian are the first to send to one if that changes.
 
 ## Tools
 
