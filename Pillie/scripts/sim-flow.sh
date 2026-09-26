@@ -205,7 +205,7 @@ perf_launch() {
 import json, statistics, sys
 path, *vals = sys.argv[1:]
 ms = sorted(int(v) for v in vals)
-out = {"what": "simctl launch to first non-empty ax tree (ms, includes axe poll)",
+out = {"what": "terminate, then simctl launch until the ax tree is non-empty (ms; warm caches; includes one axe poll)",
        "samples_ms": ms, "median_ms": int(statistics.median(ms)), "max_ms": ms[-1]}
 json.dump(out, open(path, "w"), indent=2)
 print(json.dumps(out))
