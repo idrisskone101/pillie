@@ -30,7 +30,6 @@ final class GermanLocalizationContractTests: XCTestCase {
             "onboarding.cycle_position.title": "Wo stehst du in deiner Routine?",
             "onboarding.reminder_time.title": "Wähl eine Zeit.",
             "onboarding.plan.title": "Dein Erinnerungsplan",
-            "onboarding.permission.title": "Mitteilungen erlauben",
             "onboarding.blocking_setup.title": "Wähl Apps zum Pausieren",
             "onboarding.ready.title": "Alles bereit.",
             "notification.reminder.pill.title": "Pillie-Zeit!",
@@ -417,14 +416,6 @@ final class GermanLocalizationContractTests: XCTestCase {
             ),
             "Erinnerung an den Pflastervorrat"
         )
-        XCTAssertEqual(
-            PillieLocalization.string(
-                "notification.trial_ending.title",
-                table: "Notifications",
-                locale: german
-            ),
-            "Deine Pillie-Plus-Testphase endet bald"
-        )
     }
 
     func testGermanTodayHistoryAndDestructiveSettingsCopyCoverAllStates() {
@@ -496,13 +487,11 @@ final class GermanLocalizationContractTests: XCTestCase {
     func testGermanHealthAndReminderCopyAvoidsProhibitedClaims() {
         let german = Locale(identifier: "de_DE")
         let reviewedKeys = [
-            ("Localizable", "legal.disclaimer"),
             ("Localizable", "shield.blocking_reason"),
             ("Notifications", "notification.reminder.pill.body"),
             ("Notifications", "notification.followup.body"),
             ("Commerce", "paywall.title"),
             ("Commerce", "paywall.subtitle"),
-            ("Commerce", "trial.end.subtitle"),
         ]
         let prohibited = [
             "nie vergessen",

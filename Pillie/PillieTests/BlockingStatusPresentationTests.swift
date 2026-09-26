@@ -91,7 +91,7 @@ final class BlockingStatusPresentationTests: XCTestCase {
         )
         XCTAssertEqual(
             card.ctaTitle,
-            PillieLocalization.string("today.protection.off.cta", locale: english)
+            PillieLocalization.string("today.protection.add", locale: english)
         )
         XCTAssertTrue(card.detail.lowercased().contains("plus"))
         XCTAssertTrue(card.isLocked)

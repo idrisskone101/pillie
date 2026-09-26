@@ -276,15 +276,6 @@
     {
       "issue": "ENG-63",
       "table": "Localizable",
-      "key": "today.protection.off.cta",
-      "comment": "Free user CTA on the Today blocking card",
-      "en": "Add app blocking",
-      "de": "App-Pause dazunehmen",
-      "it": "Aggiungi il blocco"
-    },
-    {
-      "issue": "ENG-63",
-      "table": "Localizable",
       "key": "today.pack.title",
       "en": "This cycle",
       "de": "Dieser Zyklus",
@@ -305,16 +296,6 @@
       "en": "Start new",
       "de": "Neu starten",
       "it": "Inizia nuovo"
-    },
-    {
-      "issue": "ENG-63",
-      "table": "Localizable",
-      "key": "today.stats.streak",
-      "create": true,
-      "comment": "Today streak card label, not the trial-end stat",
-      "en": "Your streak",
-      "de": "Dein Streak",
-      "it": "La tua streak"
     },
     {
       "issue": "ENG-63",
@@ -761,14 +742,6 @@
     {
       "issue": "ENG-68",
       "table": "Commerce",
-      "key": "paywall.feature.future",
-      "en": "Future features",
-      "de": "Was noch kommt",
-      "it": "Il resto dopo"
-    },
-    {
-      "issue": "ENG-68",
-      "table": "Commerce",
       "key": "paywall.feature.future.compact",
       "en": "Future features",
       "de": "Was noch kommt",
@@ -785,14 +758,6 @@
     {
       "issue": "ENG-68",
       "table": "Commerce",
-      "key": "paywall.plan.best_value",
-      "en": "Best value",
-      "de": "Bestes Angebot",
-      "it": "Conviene di più"
-    },
-    {
-      "issue": "ENG-68",
-      "table": "Commerce",
       "key": "paywall.plan.monthly",
       "en": "Monthly",
       "de": "Monatlich",
@@ -801,36 +766,10 @@
     {
       "issue": "ENG-68",
       "table": "Commerce",
-      "key": "paywall.plan.lifetime",
-      "create": true,
-      "comment": "Lifetime plan row when Store title is missing",
-      "en": "Pillie Plus lifetime",
-      "de": "Pillie Plus lebenslang",
-      "it": "Pillie Plus a vita"
-    },
-    {
-      "issue": "ENG-68",
-      "table": "Commerce",
       "key": "paywall.plan.cancel_anytime_short",
       "en": "Cancel anytime",
       "de": "Jederzeit kündbar",
       "it": "Disdici quando vuoi"
-    },
-    {
-      "issue": "ENG-68",
-      "table": "Commerce",
-      "key": "paywall.action.terms",
-      "en": "Terms of Use",
-      "de": "Nutzungsbedingungen",
-      "it": "Termini di utilizzo"
-    },
-    {
-      "issue": "ENG-68",
-      "table": "Commerce",
-      "key": "paywall.action.privacy",
-      "en": "Privacy Policy",
-      "de": "Datenschutz",
-      "it": "Privacy"
     },
     {
       "issue": "ENG-69",
@@ -927,30 +866,6 @@
       "en": "This starts a new cycle today. Your old history stays.",
       "de": "Das startet heute einen neuen Zyklus. Deine alte Historie bleibt.",
       "it": "Questo inizia oggi un nuovo ciclo. La cronologia vecchia resta."
-    },
-    {
-      "issue": "ENG-70",
-      "table": "Localizable",
-      "key": "today.adaptive_reminder.headline",
-      "en": "You usually log around %@.",
-      "de": "Du trägst meist gegen %@ ein.",
-      "it": "Di solito registri verso le %@."
-    },
-    {
-      "issue": "ENG-70",
-      "table": "Localizable",
-      "key": "today.adaptive_reminder.body",
-      "en": "Want to move your daily reminder to %@ so it shows up when you usually log?",
-      "de": "Willst du die tägliche Erinnerung auf %@ legen, damit sie kommt, wenn du meist einträgst?",
-      "it": "Vuoi spostare il promemoria giornaliero alle %@, così arriva quando registri di solito?"
-    },
-    {
-      "issue": "ENG-70",
-      "table": "Localizable",
-      "key": "today.adaptive_reminder.accept",
-      "en": "Move the reminder to %@",
-      "de": "Erinnerung auf %@ legen",
-      "it": "Sposta il promemoria alle %@"
     },
     {
       "issue": "ENG-70",
@@ -1105,26 +1020,6 @@
     {
       "issue": "ENG-71",
       "table": "Commerce",
-      "key": "trial.end.subtitle.hard",
-      "create": true,
-      "comment": "Hard trial-end subtitle with blocking",
-      "en": "You had extra pings and paused apps for 14 active days. Keep Plus if you want that to stay on.",
-      "de": "Du hattest extra Pings und pausierte Apps für 14 aktive Tage. Behalt Plus, wenn das so bleiben soll.",
-      "it": "Hai avuto ping extra e app in pausa per 14 giorni attivi. Tieni plus se vuoi che resti così."
-    },
-    {
-      "issue": "ENG-71",
-      "table": "Commerce",
-      "key": "trial.end.subtitle.reminders",
-      "create": true,
-      "comment": "Hard trial-end subtitle reminders only",
-      "en": "You had extra pings for 14 active days. Keep Plus if you want those to stay on.",
-      "de": "Du hattest extra Pings für 14 aktive Tage. Behalt Plus, wenn die so bleiben sollen.",
-      "it": "Hai avuto ping extra per 14 giorni attivi. Tieni plus se vuoi che restino."
-    },
-    {
-      "issue": "ENG-71",
-      "table": "Commerce",
       "key": "trial.end.kicker",
       "en": "Your 14 active days",
       "de": "Deine 14 aktiven Tage",
@@ -1153,24 +1048,6 @@
       "en": "Current streak",
       "de": "Aktuelle Serie",
       "it": "Streak attuale"
-    },
-    {
-      "issue": "ENG-71",
-      "table": "Commerce",
-      "key": "trial.end.keep_plus",
-      "create": true,
-      "comment": "Hard trial-end CTA",
-      "en": "Keep Pillie Plus",
-      "de": "Pillie Plus behalten",
-      "it": "Tieni Pillie Plus"
-    },
-    {
-      "issue": "ENG-71",
-      "table": "Commerce",
-      "key": "paywall.plan.cancel_anytime",
-      "en": "You can manage or cancel anytime in settings.",
-      "de": "Du kannst jederzeit in den Einstellungen verwalten oder kündigen.",
-      "it": "Puoi gestire o disdire quando vuoi dalle impostazioni."
     },
     {
       "issue": "ENG-71",
@@ -1225,56 +1102,6 @@
       "en": "Your 14 active-day record",
       "de": "Dein Stand nach 14 aktiven Tagen",
       "it": "Il tuo resoconto di 14 giorni attivi"
-    },
-    {
-      "issue": "ENG-71",
-      "table": "Commerce",
-      "key": "trial.end.record",
-      "create": true,
-      "comment": "Legacy 14-day record heading",
-      "en": "Your 14 active-day record",
-      "de": "Dein Stand nach 14 aktiven Tagen",
-      "it": "Il tuo resoconto di 14 giorni attivi"
-    },
-    {
-      "issue": "ENG-71",
-      "table": "Commerce",
-      "key": "trial.end.blocks_intercepted",
-      "create": true,
-      "comment": "Legacy blocks intercepted stat",
-      "en": "Blocks intercepted",
-      "de": "Blocks abgefangen",
-      "it": "Blocchi intercettati"
-    },
-    {
-      "issue": "ENG-71",
-      "table": "Commerce",
-      "key": "trial.end.logged_on_time",
-      "create": true,
-      "comment": "Legacy logged on time stat",
-      "en": "Logged on time",
-      "de": "Rechtzeitig eingetragen",
-      "it": "Registrato in orario"
-    },
-    {
-      "issue": "ENG-71",
-      "table": "Commerce",
-      "key": "trial.end.worth_keeping",
-      "create": true,
-      "comment": "Legacy trial-end closer",
-      "en": "Want to keep Plus?",
-      "de": "Plus behalten?",
-      "it": "Vuoi tenere Plus?"
-    },
-    {
-      "issue": "ENG-71",
-      "table": "Commerce",
-      "key": "trial.end.keep_plus_short",
-      "create": true,
-      "comment": "Legacy keep plus CTA",
-      "en": "Keep Plus",
-      "de": "Plus behalten",
-      "it": "Tieni Plus"
     },
     {
       "issue": "ENG-71",
@@ -1997,15 +1824,6 @@
       "en": "App blocking turns off tomorrow night.",
       "de": "Die App-Pause wird morgen Abend deaktiviert.",
       "it": "Il blocco delle app si disattiverà domani sera."
-    },
-    {
-      "issue": "ENG-58",
-      "table": "Notifications",
-      "key": "notification.trial_ending.body",
-      "create": true,
-      "en": "App blocking will turn off when the trial ends.",
-      "de": "Die App-Pause wird am Ende der Testphase deaktiviert.",
-      "it": "Il blocco delle app si disattiverà al termine della prova."
     },
     {
       "issue": "ENG-58",

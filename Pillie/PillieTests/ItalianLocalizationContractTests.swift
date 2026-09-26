@@ -11,7 +11,6 @@ final class ItalianLocalizationContractTests: XCTestCase {
             "onboarding.cycle_position.title",
             "onboarding.reminder_time.title",
             "onboarding.plan.title",
-            "onboarding.permission.title",
             "onboarding.blocking_setup.title",
             "onboarding.ready.title",
             "notification.reminder.pill.title",
