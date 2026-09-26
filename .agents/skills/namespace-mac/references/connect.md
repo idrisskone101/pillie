@@ -65,6 +65,8 @@ Base: same as ComputeService. Service: `namespace.cloud.compute.v1beta.CommandSe
 
 The response has `stdout` and `stderr` as base64 bytes, plus `exitCode`. Omit `targetContainerName` so the command runs in the macOS guest. Use this where port 22 is blocked. The script wraps it as `namespace-mac-api.py exec`.
 
+Commands run with an empty `PATH` and without `NAMESPACE_DEVBOX_TASKS_DIR`. HTTPS commands do not count as Devbox activity. A job longer than the 900s idle timeout needs a file under `/var/run/devbox/tasks`, which `exec --stream` creates and removes. `ls /var/run/devbox/tasks` shows what is holding the Mac awake.
+
 ## Identity
 
 - Name: `pillie-ios`

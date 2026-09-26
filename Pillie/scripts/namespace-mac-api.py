@@ -441,52 +441,144 @@ def run_sync(
 
 # RunCommandSync kills the command's process group when it returns, so a
 # long job runs in its own session and is polled through its log file.
-STREAM_LAUNCHER = """
-import json, os, subprocess
-waiter = '''
-import json, os, subprocess
+#
+# Namespace idle-stops a Devbox that has no SSH connection, no recent
+# session, and no file under $NAMESPACE_DEVBOX_TASKS_DIR. HTTPS commands
+# count as none of those, so the waiter holds a task marker for the life of
+# the job. The waiter also enforces the deadline on the Mac itself, so a
+# hung job cannot pin the Devbox awake after this client goes away.
+STREAM_WAITER = r"""
+import os, signal, subprocess, time, json
 base = os.environ["NSX_BASE"]
-with open(base + ".log", "wb") as log:
-    rc = subprocess.call(json.loads(os.environ["NSX_ARGV"]), stdin=subprocess.DEVNULL, stdout=log, stderr=subprocess.STDOUT)
-with open(base + ".rc.tmp", "w") as fh:
-    fh.write(str(rc))
-os.rename(base + ".rc.tmp", base + ".rc")
-'''
-subprocess.Popen(["/usr/bin/python3", "-c", waiter], start_new_session=True,
+marker = os.path.join(os.environ["NSX_TASKS"], "nsx-" + os.path.basename(base))
+deadline = time.monotonic() + float(os.environ["NSX_TIMEOUT"])
+try:
+    os.makedirs(os.path.dirname(marker), exist_ok=True)
+    with open(marker, "w") as fh:
+        fh.write("%d\n%s\n" % (os.getpid(), os.environ.get("NSX_BOOT", "")))
+except OSError:
+    marker = None
+rc = 125
+try:
+    with open(base + ".log", "wb") as log:
+        child = subprocess.Popen(json.loads(os.environ["NSX_ARGV"]), stdin=subprocess.DEVNULL,
+                                 stdout=log, stderr=subprocess.STDOUT, start_new_session=True)
+        with open(base + ".pid", "w") as fh:
+            fh.write(str(child.pid))
+        while True:
+            try:
+                rc = child.wait(timeout=max(0.1, min(5.0, deadline - time.monotonic())))
+                break
+            except subprocess.TimeoutExpired:
+                if time.monotonic() < deadline:
+                    continue
+                for sig, grace in ((signal.SIGTERM, 30), (signal.SIGKILL, None)):
+                    try:
+                        os.killpg(child.pid, sig)
+                    except OSError:
+                        pass
+                    try:
+                        child.wait(timeout=grace)
+                        break
+                    except subprocess.TimeoutExpired:
+                        pass
+                log.write(b"\nnsx: killed after %ss deadline\n" % os.environ["NSX_TIMEOUT"].encode())
+                rc = 124
+                break
+    if rc < 0:
+        rc = 128 - rc
+finally:
+    if marker:
+        try:
+            os.remove(marker)
+        except OSError:
+            pass
+    for suffix in (".pid",):
+        try:
+            os.remove(base + suffix)
+        except OSError:
+            pass
+    with open(base + ".rc.tmp", "w") as fh:
+        fh.write(str(rc))
+    os.rename(base + ".rc.tmp", base + ".rc")
+"""
+
+STREAM_LAUNCHER = r"""
+import os, subprocess, sys
+tasks = os.environ.get("NAMESPACE_DEVBOX_TASKS_DIR") or "/var/run/devbox/tasks"
+try:
+    boot = subprocess.run(["/usr/sbin/sysctl", "-n", "kern.boottime"],
+                          capture_output=True, text=True).stdout.strip()
+except OSError:
+    boot = ""
+# Drop markers from waiters that died or ran before the last boot. A marker
+# never expires on its own, and one left behind disables idle stop.
+for name in (os.listdir(tasks) if os.path.isdir(tasks) else []):
+    if not name.startswith("nsx-"):
+        continue
+    path = os.path.join(tasks, name)
+    try:
+        pid, marker_boot = open(path).read().split("\n")[:2]
+        os.kill(int(pid), 0)
+        alive = marker_boot == boot
+    except (OSError, ValueError):
+        alive = False
+    if not alive:
+        try:
+            os.remove(path)
+        except OSError:
+            pass
+env = dict(os.environ, NSX_TASKS=tasks, NSX_BOOT=boot)
+subprocess.Popen([sys.executable, "-c", env["NSX_WAITER"]], env=env, start_new_session=True,
                  stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 """
 
 # Read .rc before the log: once .rc exists the log is complete.
 STREAM_POLL = 'cat "$NSX_BASE.rc" >&2 2>/dev/null; tail -c +"$((NSX_OFFSET + 1))" "$NSX_BASE.log" 2>/dev/null; true'
+STREAM_CANCEL = 'p=$(cat "$NSX_BASE.pid" 2>/dev/null) && kill -TERM -- "-$p"; true'
+
+
+def stream_env(base: str, argv: list[str], cwd: str, timeout: int) -> dict[str, str]:
+    if cwd:
+        argv = ["/bin/bash", "-c", 'cd "$1" && shift && exec "$@"', "nsx", cwd, *argv]
+    return {
+        "NSX_BASE": base,
+        "NSX_ARGV": json.dumps(argv),
+        "NSX_TIMEOUT": str(timeout),
+        "NSX_WAITER": STREAM_WAITER,
+    }
 
 
 def run_streamed(instance_id: str, argv: list[str], timeout: int, cwd: str, poll: float) -> int:
     base = f"/tmp/nsx-{int(time.time())}-{os.getpid()}"
-    env = {"NSX_BASE": base, "NSX_ARGV": json.dumps(argv)}
-    if cwd:
-        env["NSX_ARGV"] = json.dumps(["/bin/bash", "-c", 'cd "$1" && shift && exec "$@"', "nsx", cwd, *argv])
+    env = stream_env(base, argv, cwd, timeout)
     _, err, rc = run_sync(instance_id, ["/usr/bin/python3", "-c", STREAM_LAUNCHER], 60, env=env)
     if rc != 0:
         sys.stderr.buffer.write(err)
         raise SystemExit(f"error: could not start remote job (exit {rc})")
     offset = 0
-    deadline = time.monotonic() + timeout
-    while True:
-        out, err, _ = run_sync(
-            instance_id, ["/bin/bash", "-c", STREAM_POLL], 120,
-            env={"NSX_BASE": base, "NSX_OFFSET": str(offset)},
-        )
-        if out:
-            sys.stdout.buffer.write(out)
-            sys.stdout.flush()
-            offset += len(out)
-        done = err.decode("utf-8", "replace").strip()
-        if done:
-            run_sync(instance_id, ["/bin/rm", "-f", f"{base}.log", f"{base}.rc"], 60)
-            return int(done)
-        if time.monotonic() > deadline:
-            raise SystemExit(f"error: remote job still running after {timeout}s (log {base}.log)")
-        time.sleep(poll)
+    # The waiter kills the job at `timeout`; allow it time to report back.
+    deadline = time.monotonic() + timeout + 120
+    try:
+        while True:
+            out, err, _ = run_sync(
+                instance_id, ["/bin/bash", "-c", STREAM_POLL], 120,
+                env={"NSX_BASE": base, "NSX_OFFSET": str(offset)},
+            )
+            if out:
+                sys.stdout.buffer.write(out)
+                sys.stdout.flush()
+                offset += len(out)
+            done = err.decode("utf-8", "replace").strip()
+            if done:
+                run_sync(instance_id, ["/bin/rm", "-f", f"{base}.log", f"{base}.rc"], 60)
+                return int(done)
+            if time.monotonic() > deadline:
+                raise SystemExit(f"error: remote job did not report back (log {base}.log)")
+            time.sleep(poll)
+    except KeyboardInterrupt:
+        run_sync(instance_id, ["/bin/bash", "-c", STREAM_CANCEL], 60, env={"NSX_BASE": base})
+        raise
 
 
 def cmd_exec(args: argparse.Namespace) -> int:

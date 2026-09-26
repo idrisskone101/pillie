@@ -9,6 +9,7 @@ import os
 import stat
 import subprocess
 import tempfile
+import time
 import unittest
 import unittest.mock
 from pathlib import Path
@@ -271,6 +272,66 @@ class ScriptContractTest(unittest.TestCase):
         self.assertIn("alwaysApply: true", text)
         self.assertIn("verify-pillie", text)
         self.assertIn("make ns-mac-qa", text)
+
+
+class StreamWaiterTest(unittest.TestCase):
+    """Runs the remote launcher and waiter locally against a temp tasks dir."""
+
+    def setUp(self) -> None:
+        self.api = load_api()
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.tasks = Path(self.tmp.name) / "tasks"
+        self.tasks.mkdir()
+        self.base = str(Path(self.tmp.name) / "nsx-job")
+
+    def launch(self, script: str, timeout: int = 30) -> None:
+        env = dict(
+            os.environ,
+            NAMESPACE_DEVBOX_TASKS_DIR=str(self.tasks),
+            **self.api.stream_env(self.base, ["/bin/bash", "-c", script], "", timeout),
+        )
+        subprocess.run(["python3", "-c", self.api.STREAM_LAUNCHER], env=env, check=True)
+
+    def wait_rc(self, limit: float = 60) -> int:
+        rc_path = Path(self.base + ".rc")
+        deadline = time.monotonic() + limit
+        while not rc_path.exists():
+            self.assertLess(time.monotonic(), deadline, "waiter never wrote .rc")
+            time.sleep(0.1)
+        return int(rc_path.read_text())
+
+    def markers(self) -> list[str]:
+        return sorted(p.name for p in self.tasks.iterdir())
+
+    def test_marker_held_while_running_and_removed_after(self) -> None:
+        self.launch("sleep 1; echo done; exit 3")
+        deadline = time.monotonic() + 10
+        while not self.markers():
+            self.assertLess(time.monotonic(), deadline, "marker never appeared")
+            time.sleep(0.05)
+        self.assertEqual(self.markers(), ["nsx-nsx-job"])
+        self.assertEqual(self.wait_rc(), 3)
+        self.assertEqual(self.markers(), [])
+        self.assertEqual(Path(self.base + ".log").read_text(), "done\n")
+
+    def test_deadline_kills_job_and_clears_marker(self) -> None:
+        self.launch("sleep 60", timeout=1)
+        self.assertEqual(self.wait_rc(limit=45), 124)
+        self.assertEqual(self.markers(), [])
+        self.assertIn("killed after 1s deadline", Path(self.base + ".log").read_text())
+
+    def test_launcher_clears_stale_marker(self) -> None:
+        dead = subprocess.Popen(["true"])
+        dead.wait()
+        stale = self.tasks / "nsx-old"
+        stale.write_text(f"{dead.pid}\n\n")
+        foreign = self.tasks / "someone-else"
+        foreign.write_text("keep")
+        self.launch("true")
+        self.assertEqual(self.wait_rc(), 0)
+        self.assertFalse(stale.exists())
+        self.assertTrue(foreign.exists())
 
 
 if __name__ == "__main__":
