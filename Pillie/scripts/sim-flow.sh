@@ -11,8 +11,8 @@
 #
 # Flow file: one step per line, `#` comments. Consecutive axe interaction lines
 # (swipe, gesture, touch, type, button, key, sleep, coordinate taps) run as one
-# `axe batch`. A tap by --id/--label/--value runs alone with --wait-timeout, so
-# it waits for its element on a fresh tree instead of needing sleeps.
+# `axe batch`. A tap by --id/--label/--value waits (up to FLOW_WAIT s) for an
+# on-screen match in describe-ui and taps its center, so no sleeps are needed.
 
 set -euo pipefail
 
@@ -167,13 +167,11 @@ shot() {
   LAST_ARTIFACT="$base.png"
 }
 
-# axe's own --label/--id matcher misses elements after a sheet has been shown,
-# though describe-ui still reports them. Resolve the selector from describe-ui
-# and tap its center. Only on-screen matches count, so an off-screen row fails
-# loudly instead of eating a tap.
-fallback_tap() {
-  local line="$1" kind value etype="" xy
-  [[ "$line" =~ ^tap\  && "$line" != *";"* ]] || return 1
+# Selector taps resolve here, not in axe: poll describe-ui until the element is
+# on screen, then tap its center. This folds iOS narrow spaces ("8:00\u202fAM")
+# and refuses off-screen rows, which axe would "tap" without effect.
+select_tap() {
+  local line="$1" kind="" value="" etype="" xy t
   local toks=()
   while IFS= read -r -d '' tok; do toks+=("$tok"); done < <(
     python3 -c 'import shlex, sys; sys.stdout.write("".join(t + "\0" for t in shlex.split(sys.argv[1])))' "$line")
@@ -184,14 +182,28 @@ fallback_tap() {
       --element-type) etype="${toks[$((i + 1))]}" ;;
     esac
   done
-  [[ -n "${kind:-}" ]] || return 1
-  dump "$OUT/.probe.json" || return 1
-  if [[ -n "$etype" ]]; then
-    xy="$("$OUTLINE" "$OUT/.probe.json" --center "$kind" "$value" --type "$etype")" || return 1
-  else
-    xy="$("$OUTLINE" "$OUT/.probe.json" --center "$kind" "$value")" || return 1
-  fi
+  t="$(now_ms)"
+  local deadline=$((SECONDS + WAIT))
+  while :; do
+    if dump "$OUT/.probe.json"; then
+      if [[ -n "$etype" ]]; then
+        xy="$("$OUTLINE" "$OUT/.probe.json" --center "$kind" "$value" --type "$etype")" && break
+      else
+        xy="$("$OUTLINE" "$OUT/.probe.json" --center "$kind" "$value")" && break
+      fi
+    fi
+    if (( SECONDS >= deadline )); then
+      local why="no on-screen element with $kind '$value'"
+      "$OUTLINE" "$OUT/.probe.json" --has "$kind" "$value" 2>/dev/null && why="$kind '$value' exists but is off screen; scroll first"
+      record_step "$line" 0 $(( $(now_ms) - t )) "" "$why"
+      echo "FAIL $line: $why"
+      return 1
+    fi
+    sleep 0.25
+  done
   axe tap --udid "$UDID" -x "${xy% *}" -y "${xy#* }" >/dev/null 2>&1
+  record_step "$line" 1 $(( $(now_ms) - t )) "" "at $xy"
+  echo "ok   $line @ $xy ($(( $(now_ms) - t ))ms)"
 }
 
 flush_batch() {
@@ -203,10 +215,6 @@ flush_batch() {
   local steps
   steps="$(paste -sd ';' "$BATCH")"
   : >"$BATCH"
-  if (( rc != 0 )) && [[ "$err" == *"No accessibility element matched"* ]] && fallback_tap "$steps"; then
-    rc=0
-    err="fallback: tapped the on-screen match from describe-ui"
-  fi
   if (( rc != 0 )); then
     record_step "batch: $steps" 0 $(( $(now_ms) - t )) "" "$(printf '%s' "$err" | tail -3 | tr '\n' ' ')"
     echo "FAIL batch: $steps $(printf '%s' "$err" | tail -3 | tr '\n' ' ')"
@@ -350,12 +358,8 @@ while IFS= read -r raw || [[ -n "$raw" ]]; do
   verb="${line%% *}"
   case "$verb" in
     tap|swipe|gesture|touch|type|button|key|key-sequence|key-combo|sleep)
-      # A selector tap gets its own batch. Inside one batch, axe cannot find an
-      # element that only appears after an earlier step (a sheet closing, a scroll).
       if [[ "$verb" == tap && "$line" =~ --(id|label|value)[[:space:]] ]]; then
-        flush_batch || { FLOW_OK=0; FAILED_LINE="$(tail -1 "$STEPS")"; break; }
-        printf '%s\n' "$line" >>"$BATCH"
-        flush_batch || { FLOW_OK=0; FAILED_LINE="$(tail -1 "$STEPS")"; break; }
+        flush_batch && select_tap "$line" || { FLOW_OK=0; FAILED_LINE="$line"; break; }
         continue
       fi
       printf '%s\n' "$line" >>"$BATCH"
