@@ -151,6 +151,7 @@ struct ProtectionPlanMechanismProofView: View {
             Text(content.eyebrow)
                 .font(.pillie(12, weight: .bold))
                 .tracking(1.6)
+                .textCase(.uppercase)
                 .foregroundStyle(PillieTheme.coral)
 
             Text(content.headline)
@@ -406,6 +407,7 @@ struct ProtectionPlanMechanismProofView: View {
                 Text(step.phase)
                     .font(.pillie(10, weight: .bold))
                     .tracking(1.2)
+                    .textCase(.uppercase)
                     .foregroundStyle(PillieTheme.coral.opacity(0.9))
                 Text(step.title)
                     .font(.pillie(15, weight: .bold))

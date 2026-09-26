@@ -42,6 +42,7 @@ CATALOG_FILES = {
 LITERAL_GLOBS = [
     (APP_ROOT / "PillieTests", "*.swift"),
     (REPO_ROOT / ".agents" / "skills" / "verify-pillie" / "flows", "*.flow"),
+    (REPO_ROOT / ".agents" / "skills" / "verify-pillie" / "features", "*.md"),
 ]
 PLACEHOLDER = re.compile(r"%(?:\d+\$)?(?:lld|ld|d|@|%)")
 
@@ -128,6 +129,11 @@ class Catalogs:
             (APP_ROOT / "Pillie" / f"{lang}.lproj" / "InfoPlist.strings").write_text(text)
 
 
+def is_all_caps(value: str) -> bool:
+    letters = [c for c in PLACEHOLDER.sub("", value) if c.isalpha() and c.lower() != c.upper()]
+    return len(letters) >= 3 and all(c.isupper() for c in letters)
+
+
 def placeholders(value: str) -> list[str]:
     return sorted(PLACEHOLDER.findall(value))
 
@@ -136,7 +142,10 @@ def check(plans: dict[str, dict[str, str]], catalogs: Catalogs) -> list[str]:
     errors = []
     known = catalogs.keys()
     english = {ref: plans.get("en", {}).get(ref) or catalogs.get(ref, "en") or "" for ref in known}
+    live = {f"{r['table']}:{r['key']}" for r in inventory.rows() if r["swift_ref"] != "none"}
     for lang, plan in plans.items():
+        if lang != "en":
+            errors += [f"{lang} {ref}: missing from plan" for ref in sorted(live - set(plan))]
         for ref, value in plan.items():
             if ref not in known:
                 errors.append(f"{lang} {ref}: no such key")
@@ -145,6 +154,8 @@ def check(plans: dict[str, dict[str, str]], catalogs: Catalogs) -> list[str]:
                 errors.append(f"{lang} {ref}: placeholders {placeholders(value)} != English {placeholders(english[ref])}")
             if "—" in value:
                 errors.append(f"{lang} {ref}: em dash")
+            if is_all_caps(value) and not is_all_caps(english[ref]):
+                errors.append(f"{lang} {ref}: all caps, let SwiftUI uppercase it")
             if lang == "en":
                 errors += [f"en {ref}: {hit}" for hit in lint.findings(value)]
     return errors
@@ -202,7 +213,10 @@ def sync_locked(plans: dict[str, dict[str, str]]) -> None:
 
 def apply(plans: dict[str, dict[str, str]], catalogs: Catalogs) -> None:
     changes = []
+    live = {f"{r['table']}:{r['key']}" for r in inventory.rows() if r["swift_ref"] != "none"}
     for lang, plan in plans.items():
+        if lang != "en":
+            errors += [f"{lang} {ref}: missing from plan" for ref in sorted(live - set(plan))]
         for ref, value in plan.items():
             old = catalogs.get(ref, lang)
             if old != value:

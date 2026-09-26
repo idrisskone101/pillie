@@ -7,7 +7,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your apps become available again right away."
+            "value": "Your apps open again right away."
           }
         },
         "it": {
@@ -282,7 +282,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "PAUSED"
+            "value": "Paused"
           }
         },
         "it": {
@@ -2207,7 +2207,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Done. Your apps are available again."
+            "value": "Done. Your apps are open again."
           }
         },
         "it": {
@@ -2482,7 +2482,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plays the app-pause demonstration again."
+            "value": "Plays the app blocking demo again."
           }
         },
         "it": {
@@ -2757,7 +2757,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "At your chosen time, Pillie sends a reminder and pauses distracting apps. Log today’s action to make them available again."
+            "value": "At your reminder time, Pillie sends a reminder and pauses the apps you chose. Check in to open them again."
           }
         },
         "it": {
@@ -3032,7 +3032,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "HOW IT WORKS"
+            "value": "How it works"
           }
         },
         "it": {
@@ -3307,7 +3307,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your apps become available again as soon as you log today’s action."
+            "value": "Your apps open again as soon as you check in."
           }
         },
         "it": {
@@ -3582,7 +3582,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "REMINDER"
+            "value": "Reminder"
           }
         },
         "it": {
@@ -3857,7 +3857,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reminder rings"
+            "value": "Your reminder goes off"
           }
         },
         "it": {
@@ -4407,7 +4407,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "APP PAUSE"
+            "value": "App blocking"
           }
         },
         "it": {
@@ -4957,7 +4957,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Selected apps stay paused until you log the action."
+            "value": "The apps you chose stay paused until you check in."
           }
         },
         "it": {
@@ -5232,7 +5232,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "CONTINUE"
+            "value": "Check in"
           }
         },
         "it": {
@@ -5507,7 +5507,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Log the action"
+            "value": "Tap to check in"
           }
         },
         "it": {
@@ -12107,7 +12107,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Try Again"
+            "value": "Try again"
           }
         },
         "it": {
@@ -16782,7 +16782,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Selected apps pause"
+            "value": "Your chosen apps pause"
           }
         },
         "it": {
@@ -17057,7 +17057,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Selected apps wait until you confirm."
+            "value": "They stay paused until you check in."
           }
         },
         "it": {
@@ -17332,7 +17332,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Apps are available again"
+            "value": "You’re checked in"
           }
         },
         "it": {
@@ -17607,7 +17607,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Action logged. Continue with your day."
+            "value": "Your apps are open again."
           }
         },
         "it": {
@@ -17882,7 +17882,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus can pause selected apps when a reminder is due. They come back after you check in."
+            "value": "Pillie Plus can pause the apps you choose when a reminder goes off. They open again once you check in."
           }
         },
         "it": {
@@ -18157,7 +18157,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Shake your phone now, or tap this card in Simulator."
+            "value": "Shake your phone now, or tap this card."
           }
         },
         "it": {
@@ -19257,7 +19257,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Try Shake to Confirm"
+            "value": "Try shaking to check in"
           }
         },
         "it": {
@@ -21182,7 +21182,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "1 Selected"
+            "value": "1 selected"
           }
         },
         "it": {
@@ -21457,7 +21457,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie only receives the number of items selected. Your selection stays on this device."
+            "value": "Pillie only sees how many you picked. The apps themselves stay private on this device."
           }
         },
         "it": {
@@ -22557,7 +22557,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Calculated from your position"
+            "value": "Based on the day you picked"
           }
         },
         "it": {
@@ -24757,7 +24757,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Choose your current cycle day."
+            "value": "Pick the day you’re on today."
           }
         },
         "it": {
@@ -25307,7 +25307,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie helps you check in and review your history."
+            "value": "Pillie reminds you, you check in, and your history fills in."
           }
         },
         "it": {
@@ -25582,7 +25582,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Every check-in updates your streak and cycle timeline so you can review it later."
+            "value": "Every check-in adds to your streak and your cycle history."
           }
         },
         "it": {
@@ -26132,7 +26132,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Get reminded. Log your action."
+            "value": "Get a reminder. Check in."
           }
         },
         "it": {
@@ -26682,7 +26682,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Log"
+            "value": "Check in"
           }
         },
         "it": {
@@ -27232,7 +27232,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your daily flow"
+            "value": "Your day with Pillie"
           }
         },
         "it": {
@@ -27507,7 +27507,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "MON"
+            "value": "Mon"
           }
         },
         "it": {
@@ -27782,7 +27782,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "TUE"
+            "value": "Tue"
           }
         },
         "it": {
@@ -28057,7 +28057,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "WED"
+            "value": "Wed"
           }
         },
         "it": {
@@ -31082,7 +31082,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "I need stronger reminder support"
+            "value": "I could use more help"
           }
         },
         "it": {
@@ -33282,7 +33282,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "So we know how firm the reminders should be."
+            "value": "This helps Pillie decide how firm your reminders should be."
           }
         },
         "it": {
@@ -33832,7 +33832,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Patch · a change schedule"
+            "value": "Patch · weekly changes"
           }
         },
         "it": {
@@ -34107,7 +34107,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pill · a daily pill schedule"
+            "value": "Pill · one a day"
           }
         },
         "it": {
@@ -34382,7 +34382,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ring · a ring schedule"
+            "value": "Ring · three weeks in, one week out"
           }
         },
         "it": {
@@ -35482,7 +35482,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "I'm busy then."
+            "value": "I’m busy then."
           }
         },
         "it": {
@@ -36857,7 +36857,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "I dismiss reminders."
+            "value": "I swipe reminders away."
           }
         },
         "it": {
@@ -37682,7 +37682,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Choose categories or specific apps for your draft blocklist."
+            "value": "Pick the kinds of apps, or specific ones, that usually pull you away."
           }
         },
         "it": {
@@ -39607,7 +39607,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Choose the support you want from Pillie."
+            "value": "Choose what you want from Pillie."
           }
         },
         "it": {
@@ -39882,7 +39882,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "What would help more?"
+            "value": "What would help most?"
           }
         },
         "it": {
@@ -40432,7 +40432,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "What's in the way?"
+            "value": "What’s in the way?"
           }
         },
         "it": {
@@ -41257,7 +41257,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "This reminder setup is based on your selections. You can change it later in Settings."
+            "value": "This plan comes from your answers. You can change it anytime in Settings."
           }
         },
         "it": {
@@ -42082,7 +42082,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Built from the routine you selected."
+            "value": "Based on the routine you picked."
           }
         },
         "it": {
@@ -42632,7 +42632,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@. Detected: %@."
+            "value": "%@. Based on your answers: %@."
           }
         },
         "it": {
@@ -42907,7 +42907,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Protected apps"
+            "value": "Apps to pause"
           }
         },
         "it": {
@@ -43457,7 +43457,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reminder support"
+            "value": "Reminders"
           }
         },
         "it": {
@@ -44282,7 +44282,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie will follow the schedule you picked. You can change it anytime."
+            "value": "Pillie follows the schedule you picked. You can change it anytime."
           }
         },
         "it": {
@@ -44557,7 +44557,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "You're all set."
+            "value": "You’re all set."
           }
         },
         "it": {
@@ -51982,7 +51982,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Here's how it works"
+            "value": "Here’s how it works"
           }
         },
         "it": {
@@ -52532,7 +52532,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "You can't swipe this reminder away. It stays until you check in."
+            "value": "Swipe the reminder away and your apps stay paused until you check in."
           }
         },
         "it": {
@@ -53082,7 +53082,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Today’s Pillie action is still open."
+            "value": "You haven’t checked in on Pillie yet today."
           }
         },
         "it": {
@@ -53907,7 +53907,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "That's logged. Tap to undo."
+            "value": "Checked in. Tap to undo."
           }
         },
         "it": {
@@ -54457,7 +54457,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "How's it going for you so far?"
+            "value": "How’s it going for you so far?"
           }
         },
         "it": {
@@ -54732,7 +54732,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Yes, I'm enjoying it"
+            "value": "Yes, I’m enjoying it"
           }
         },
         "it": {
@@ -55282,7 +55282,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Shake to Confirm"
+            "value": "Shake to check in"
           }
         },
         "it": {
@@ -55557,7 +55557,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tap to Confirm Instead"
+            "value": "Tap to check in instead"
           }
         },
         "it": {
@@ -55832,7 +55832,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "There's nothing due today."
+            "value": "Nothing to do today."
           }
         },
         "it": {
@@ -60782,7 +60782,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "App blocking stepped in"
+            "value": "An app stayed paused"
           }
         },
         "it": {
@@ -61057,7 +61057,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "A selected app was opened while today’s action was still open."
+            "value": "You opened a paused app before checking in today."
           }
         },
         "it": {
@@ -67382,7 +67382,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Days are tappable now. Tap a day to update it."
+            "value": "You can now tap a day to update it."
           }
         },
         "fr": {
@@ -70682,7 +70682,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Follow-up Reminders"
+            "value": "Follow-up reminders"
           }
         },
         "it": {
@@ -71507,7 +71507,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Additional reminders while today’s action is still open."
+            "value": "More reminders until you check in today."
           }
         },
         "it": {
@@ -72057,7 +72057,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Break-week ping"
+            "value": "Break-week notice"
           }
         },
         "it": {
@@ -72332,7 +72332,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "A ping when reminders pause for your break week."
+            "value": "A reminder when your break week starts, so you know why reminders pause."
           }
         },
         "it": {
@@ -74257,7 +74257,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reset Tracking Data?"
+            "value": "Clear your history?"
           }
         },
         "it": {
@@ -74532,7 +74532,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Changing the schedule resets all tracking history and starts at day %lld. This cannot be undone."
+            "value": "Changing your schedule clears all your history and starts you on day %lld. You can’t undo this."
           }
         },
         "it": {
@@ -74807,7 +74807,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reset & Save"
+            "value": "Clear and save"
           }
         },
         "it": {
@@ -75907,7 +75907,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Advanced Editor"
+            "value": "Advanced editor"
           }
         },
         "it": {
@@ -77282,7 +77282,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Restore Pillie Defaults"
+            "value": "Restore Pillie defaults"
           }
         },
         "it": {
@@ -80582,7 +80582,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Choose Apps"
+            "value": "Choose apps"
           }
         },
         "it": {
@@ -81682,7 +81682,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "We couldn't open the mail app."
+            "value": "We couldn’t open the mail app."
           }
         },
         "it": {
@@ -82232,7 +82232,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tell us what went wrong — the more detail, the better. Type above this line."
+            "value": "Tell us what went wrong. The more detail, the better. Type above this line."
           }
         },
         "it": {
@@ -82782,7 +82782,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "App Blocking Needs Permission"
+            "value": "App blocking needs Screen Time"
           }
         },
         "it": {
@@ -83057,7 +83057,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Allow Screen Time access to select and pause apps."
+            "value": "Allow Screen Time access so Pillie can pause the apps you pick."
           }
         },
         "it": {
@@ -87732,7 +87732,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reminders stay on. Plus can pause apps."
+            "value": "Your reminders are on. With Plus, apps can pause until you check in."
           }
         },
         "de": {
@@ -88007,7 +88007,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reminders stay on. Plus can pause apps."
+            "value": "Your reminders are on. With Plus, apps can pause until you check in."
           }
         },
         "de": {
@@ -88282,7 +88282,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reminders stay on. Plus can pause apps."
+            "value": "Your reminders are on. With Plus, apps can pause until you check in."
           }
         },
         "de": {
@@ -88557,7 +88557,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reminders stay on. Plus can pause apps."
+            "value": "Your reminders are on. With Plus, apps can pause until you check in."
           }
         },
         "de": {
@@ -88832,7 +88832,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reminders stay on. Plus can pause apps."
+            "value": "Your reminders are on. With Plus, apps can pause until you check in."
           }
         },
         "de": {
@@ -89107,7 +89107,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reminders stay on. Plus can pause apps."
+            "value": "Your reminders are on. With Plus, apps can pause until you check in."
           }
         },
         "de": {
@@ -89382,7 +89382,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reminders stay on. Plus can pause apps."
+            "value": "Your reminders are on. With Plus, apps can pause until you check in."
           }
         },
         "de": {
@@ -89657,7 +89657,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your Plus access ended, so your apps aren't paused. Your setup is saved. Turn Plus back on and it picks up where you left off."
+            "value": "Your Plus access ended, so your apps aren’t paused. Your setup is saved. Turn Plus back on and it picks up where you left off."
           }
         },
         "de": {
@@ -90207,7 +90207,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "You haven't set up app blocking yet."
+            "value": "You haven’t set up app blocking yet."
           }
         },
         "de": {
@@ -94332,7 +94332,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Take your %@ pill to unlock."
+            "value": "Take your %@ pill to open it again."
           }
         },
         "it": {
@@ -94882,7 +94882,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mark as taken"
+            "value": "I took my pill"
           }
         },
         "it": {

@@ -32,9 +32,9 @@ final class ProtectionPlanQuestionContentTests: XCTestCase {
 
     func testDistractionChoicesContentMatchesDraftAndIsMultiSelectWithOther() {
         let content = ProtectionPlanDistractionChoicesContent.default
-        XCTAssertEqual(content.title, "What's in the way?")
+        XCTAssertEqual(content.title, "What’s in the way?")
         XCTAssertEqual(content.subtitle, "Choose the answer that feels closest.")
-        XCTAssertEqual(content.helper, "Choose categories or specific apps for your draft blocklist.")
+        XCTAssertEqual(content.helper, "Pick the kinds of apps, or specific ones, that usually pull you away.")
         XCTAssertEqual(content.primaryCTA, "Continue")
         XCTAssertTrue(content.helper.lowercased().contains("blocklist"))
         XCTAssertEqual(content.choices, DistractionChoice.allCases)
@@ -78,7 +78,7 @@ final class ProtectionPlanQuestionContentTests: XCTestCase {
         XCTAssertEqual(content.title, "How often do you miss your pill?")
         XCTAssertEqual(
             content.subtitle,
-            "So we know how firm the reminders should be."
+            "This helps Pillie decide how firm your reminders should be."
         )
         XCTAssertEqual(content.primaryCTA, "Continue")
 
@@ -113,7 +113,7 @@ final class ProtectionPlanQuestionContentTests: XCTestCase {
         )
         XCTAssertEqual(
             content.footnote,
-            "This reminder setup is based on your selections. You can change it later in Settings."
+            "This plan comes from your answers. You can change it anytime in Settings."
         )
         XCTAssertEqual(content.primaryCTA, "Continue")
         XCTAssertEqual(content.choices, RiskWindow.allCases)

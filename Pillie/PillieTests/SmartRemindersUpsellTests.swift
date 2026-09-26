@@ -14,7 +14,7 @@ final class SmartRemindersUpsellTests: XCTestCase {
         let title = commerce(content.localizedFeatureKey)
         let description = commerce(content.subtitleKey)
 
-        XCTAssertEqual(title, "Smart reminders")
+        XCTAssertEqual(title, "Follow-up reminders")
         XCTAssertTrue(
             description.contains("until you log"),
             "Upsell must frame Smart Reminders as repeating until the user logs."
@@ -57,7 +57,7 @@ final class SmartRemindersUpsellTests: XCTestCase {
         XCTAssertEqual(commerce(content.localizedFeatureKey), "App blocking")
         XCTAssertEqual(
             commerce(content.subtitleKey),
-            "Your apps pause when the reminder is due, until you take your pill."
+            "When your reminder goes off, your apps pause until you take your pill."
         )
     }
 
@@ -66,7 +66,7 @@ final class SmartRemindersUpsellTests: XCTestCase {
         XCTAssertEqual(commerce(content.localizedFeatureKey), "Reminder messages")
         XCTAssertEqual(
             commerce(content.subtitleKey),
-            "Write the ping in your own words. Plus lets you change the daily one and the follow-up."
+            "Write your reminders in your own words. With Plus you can change the daily reminder and the follow-up."
         )
         XCTAssertNotEqual(content.subtitleKey, content.localizedFeatureKey)
     }

@@ -42,7 +42,7 @@ tap --label "Not now" --element-type Button  # the screen id leaks onto every ch
 # ProtectionPlanOnboarding.swift:30-31). Title: onboarding.personalise.pain.title.
 # Chip labels: onboarding.personalise.choice.tiktok ("TikTok"),
 # onboarding.personalise.outcome.simple ("A simpler routine").
-wait text "What's in the way?"
+wait text "What’s in the way?"
 shot pain-points
 tap --label TikTok
 tap --label "A simpler routine"

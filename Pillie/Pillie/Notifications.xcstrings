@@ -7,7 +7,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mark as Completed"
+            "value": "Check in"
           }
         },
         "it": {
@@ -282,7 +282,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Remind Me Later"
+            "value": "Remind me later"
           }
         },
         "it": {
@@ -557,7 +557,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Scheduled pill reminders pause during your break days."
+            "value": "No pill reminders during your break days. They start again with your next pack."
           }
         },
         "it": {
@@ -832,7 +832,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Scheduled patch reminders pause during your patch-free days."
+            "value": "No patch reminders during your patch-free days. They start again with your next patch."
           }
         },
         "it": {
@@ -1107,7 +1107,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Scheduled ring reminders pause during your ring-free days."
+            "value": "No ring reminders during your ring-free days. They start again when it’s time to insert your ring."
           }
         },
         "it": {
@@ -1382,7 +1382,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Break days begin today"
+            "value": "Your break starts today"
           }
         },
         "it": {
@@ -1657,7 +1657,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Final reminder: still no check-in for today."
+            "value": "Last reminder today. You haven’t checked in yet."
           }
         },
         "it": {
@@ -1932,7 +1932,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Today's check-in is still open."
+            "value": "You haven’t checked in yet today."
           }
         },
         "it": {
@@ -2207,7 +2207,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your scheduled check-in is due."
+            "value": "It’s time to check in."
           }
         },
         "it": {
@@ -2482,7 +2482,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie check-in due"
+            "value": "Time to check in"
           }
         },
         "it": {
@@ -2757,7 +2757,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Last scheduled check-in for today."
+            "value": "Last reminder for today. You’ve got this."
           }
         },
         "it": {
@@ -3032,7 +3032,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "You can check in when you're ready."
+            "value": "You can check in when you’re ready."
           }
         },
         "it": {
@@ -3582,7 +3582,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "You’re building consistency"
+            "value": "You’re building a habit"
           }
         },
         "it": {
@@ -3857,7 +3857,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "One last reminder is scheduled for today."
+            "value": "One last reminder for today."
           }
         },
         "it": {
@@ -4132,7 +4132,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "When you're ready, remember to check in today."
+            "value": "When you’re ready, remember to check in today."
           }
         },
         "it": {
@@ -4957,7 +4957,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Final Pillie reminder for today."
+            "value": "Last Pillie reminder for today."
           }
         },
         "it": {
@@ -5232,7 +5232,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your Pillie check-in is still open."
+            "value": "Your Pillie check-in is waiting."
           }
         },
         "it": {
@@ -6057,7 +6057,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Hey, quick check-in is still open. Check in when you're ready"
+            "value": "You haven’t checked in yet. Tap here when you’re done."
           }
         },
         "it": {
@@ -6332,7 +6332,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reminder follow-up"
+            "value": "Still to do today"
           }
         },
         "it": {
@@ -6607,7 +6607,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your current supply may be running low. Check it when convenient."
+            "value": "Your pill supply is getting low. Time to plan a refill."
           }
         },
         "it": {
@@ -6882,7 +6882,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your current patch supply may be running low. Check it when convenient."
+            "value": "Your patch supply is getting low. Time to plan a refill."
           }
         },
         "it": {
@@ -7432,7 +7432,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your current ring supply may be running low. Check it when convenient."
+            "value": "Your ring supply is getting low. Time to plan a refill."
           }
         },
         "it": {
@@ -8257,7 +8257,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie time!"
+            "value": "Time for your patch"
           }
         },
         "it": {
@@ -8532,7 +8532,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Hey, quick check-in. Log your pill when you're done"
+            "value": "Take it, then tap here to check in."
           }
         },
         "it": {
@@ -8807,7 +8807,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie time!"
+            "value": "Time for your pill"
           }
         },
         "it": {
@@ -9082,7 +9082,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie time!"
+            "value": "Time for your ring"
           }
         },
         "it": {
@@ -9357,7 +9357,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "App blocking turns off in 5 days."
+            "value": "App blocking turns off in 5 days. Your daily reminders stay free."
           }
         },
         "it": {
@@ -9907,7 +9907,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "App blocking turns off tomorrow night."
+            "value": "App blocking turns off tomorrow night. Your daily reminders stay free."
           }
         },
         "it": {
@@ -10457,7 +10457,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Hey, quick check-in. Apply your patch when you're done"
+            "value": "Apply your patch, then tap here to check in."
           }
         },
         "de": {
@@ -10732,7 +10732,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Hey, quick check-in. Change your patch when you're done"
+            "value": "Change your patch, then tap here to check in."
           }
         },
         "de": {
@@ -11007,7 +11007,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Hey, quick check-in. Remove your patch when you're done"
+            "value": "Remove your patch, then tap here to check in."
           }
         },
         "de": {
@@ -11282,7 +11282,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Hey, quick check-in. Insert your ring when you're done"
+            "value": "Insert your ring, then tap here to check in."
           }
         },
         "de": {
@@ -11557,7 +11557,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Hey, quick check-in. Change your ring when you're done"
+            "value": "Change your ring, then tap here to check in."
           }
         },
         "de": {
@@ -11832,7 +11832,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Hey, quick check-in. Remove your ring when you're done"
+            "value": "Remove your ring, then tap here to check in."
           }
         },
         "de": {

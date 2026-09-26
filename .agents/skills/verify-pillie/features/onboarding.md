@@ -23,7 +23,7 @@ The first-launch flow from Welcome to Home. Steps are `OnboardingFlow.Step` (`Se
 - Fresh install. Tap "Get started", then either drag the demo or tap "Not now".
 - Answer the two consolidated question screens (pick one distraction + one desired outcome; one miss-frequency + one risk window), then Where did you find Pillie? (or "Not now"), method, schedule, reminder time (allow or deny the real notification prompt), then the reminder-plan reveal.
 - Pick apps to pause (or "Not now" to skip blocking) — a real device shows the FamilyControls picker here; the simulator cannot pick real apps (see Gotchas).
-- If a valid blocker config saves, "You're all set." → "Go to Today" lands on Home. Skipping blocking goes straight to Home instead.
+- If a valid blocker config saves, "You’re all set." → "Go to Today" lands on Home. Skipping blocking goes straight to Home instead.
 
 ## Driving it with flows
 

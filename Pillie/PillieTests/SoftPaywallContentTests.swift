@@ -75,7 +75,7 @@ final class SoftPaywallContentTests: XCTestCase {
             "Daily reminders",
             "Smart Reminders",
             "Block distracting apps",
-            "Shake to confirm",
+            "Shake to check in",
             "Custom reminder messages",
             "New perks as they launch"
         ])

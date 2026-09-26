@@ -8,7 +8,7 @@ blocking/trial status surfaces, and (when eligible) the review ask.
 - `today-open` shows the home tab after launch, with the due action
   reflected in the status card and the floating CTA.
 - `today-status-card` shows the reminder time and the due-action line; it
-  goes coral and reads "That's logged. Tap to undo." once taken.
+  goes coral and reads "Checked in. Tap to undo." once taken.
 - `today-pill-pack-card` shows this cycle's pill strip and the "This cycle"
   header.
 - `today-mark-taken` is the real user path: tap the floating CTA, then
@@ -32,9 +32,9 @@ blocking/trial status surfaces, and (when eligible) the review ask.
 
 - Launch the app. Today is the default tab.
 - Tap the floating action button to log today's dose. Plus users confirm
-  with a physical shake, or its "Tap to Confirm Instead" fallback for
+  with a physical shake, or its "Tap to check in instead" fallback for
   accessibility.
-- Tap "That's logged. Tap to undo." to undo a mistaken tap.
+- Tap "Checked in. Tap to undo." to undo a mistaken tap.
 - Tap the small trial chip near the top (only visible during an active
   Reverse Trial) to open its status sheet; its own "Keep Plus" button is a
   real, quiet buy-early entry point.
@@ -75,7 +75,7 @@ blocking/trial status surfaces, and (when eligible) the review ask.
   Today/History/Settings tab labels, so `tap --label` still resolves to the
   CTA.
 - Shake detection cannot be driven on the simulator. Always use
-  `#shakeTapToConfirmFallback` ("Tap to Confirm Instead").
+  `#shakeTapToConfirmFallback` ("Tap to check in instead").
 - `homeBlockingStatusCardDismissed` is a persistent `@AppStorage` flag that
   survives `launch`. Start a flow from `fresh` whenever it needs the
   blocking card in its default (not dismissed) state.
@@ -88,5 +88,5 @@ blocking/trial status surfaces, and (when eligible) the review ask.
 - `developerMenuAvatarButton` is debug-only. Do not treat it as a user path.
 - Never tap `#trialKeepPlus` or any other purchase/subscribe control — they
   open `HonestPaywallHost`/StoreKit, which the simulator cannot complete.
-- A fresh install's default pack lands on its break day ("Day 28 of 28", "There's nothing due today."). `today-home.flow` pins the clock and applies the `missedRecentDays` scenario to get a due pill. Verified live.
+- A fresh install's default pack lands on its break day ("Day 28 of 28", "Nothing to do today."). `today-home.flow` pins the clock and applies the `missedRecentDays` scenario to get a due pill. Verified live.
 - Developer-menu row ids leak onto the row's child texts and icon. The runner taps the first on-screen match, so `tap --id developerScenario.<name>` works in a flow; raw `axe tap --id` would see 3 matches.

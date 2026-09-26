@@ -52,7 +52,7 @@ final class ReviewPromptCardContentTests: XCTestCase {
         let content = ReviewPromptCardContent.make(decision: .show)
         XCTAssertEqual(content?.headline, "Enjoying Pillie?")
         XCTAssertEqual(content?.body, "We'd love to hear how it's going for you.")
-        XCTAssertEqual(content?.positiveTitle, "Yes, I'm enjoying it")
+        XCTAssertEqual(content?.positiveTitle, "Yes, I’m enjoying it")
         XCTAssertEqual(content?.negativeTitle, "Not really")
     }
 

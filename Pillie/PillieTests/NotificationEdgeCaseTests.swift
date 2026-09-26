@@ -251,13 +251,13 @@ final class NotificationEdgeCaseTests: XCTestCase {
     func testPrimaryDueReminderCopyIsWarmAndDiscreetForEachDueAction() throws {
         let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
         let cases: [(method: ContraceptiveMethod, startOffsetDays: Int, expectedAction: PillDay.ActionType, expectedTitle: String, expectedBody: String)] = [
-            (.pill, 0, .pillActive, "Pillie time!", "Hey, quick check-in. Log your pill when you're done"),
-            (.patch, 0, .patchChange, "Pillie time!", "Hey, quick check-in. Apply your patch when you're done"),
-            (.patch, -7, .patchChange, "Pillie time!", "Hey, quick check-in. Change your patch when you're done"),
-            (.patch, -21, .patchRemove, "Pillie time!", "Hey, quick check-in. Remove your patch when you're done"),
-            (.ring, 0, .ringInsert, "Pillie time!", "Hey, quick check-in. Insert your ring when you're done"),
-            (.ring, -21, .ringRemove, "Pillie time!", "Hey, quick check-in. Remove your ring when you're done"),
-            (.ring, -28, .ringReinsert, "Pillie time!", "Hey, quick check-in. Change your ring when you're done")
+            (.pill, 0, .pillActive, "Time for your pill", "Take it, then tap here to check in."),
+            (.patch, 0, .patchChange, "Time for your patch", "Apply your patch, then tap here to check in."),
+            (.patch, -7, .patchChange, "Time for your patch", "Change your patch, then tap here to check in."),
+            (.patch, -21, .patchRemove, "Time for your patch", "Remove your patch, then tap here to check in."),
+            (.ring, 0, .ringInsert, "Time for your ring", "Insert your ring, then tap here to check in."),
+            (.ring, -21, .ringRemove, "Time for your ring", "Remove your ring, then tap here to check in."),
+            (.ring, -28, .ringReinsert, "Time for your ring", "Change your ring, then tap here to check in.")
         ]
 
         for testCase in cases {
@@ -298,8 +298,8 @@ final class NotificationEdgeCaseTests: XCTestCase {
         let primary = try XCTUnwrap(summaries.first { $0.requestKind == "base" })
         let retry = try XCTUnwrap(summaries.first { $0.requestKind == "retry" })
 
-        XCTAssertEqual(retry.title, "Reminder follow-up")
-        XCTAssertEqual(retry.body, "Hey, quick check-in is still open. Check in when you're ready")
+        XCTAssertEqual(retry.title, "Still to do today")
+        XCTAssertEqual(retry.body, "You haven’t checked in yet. Tap here when you’re done.")
         XCTAssertNotEqual(retry.title, primary.title)
         XCTAssertNotEqual(retry.body, primary.body)
         XCTAssertEqual(retry.categoryIdentifier, primary.categoryIdentifier)
@@ -326,9 +326,9 @@ final class NotificationEdgeCaseTests: XCTestCase {
         let ringSummaries = NotificationManager.shared.managedRequestSummariesForTesting(store: ringFixture.store, now: now)
 
         XCTAssertEqual(pillRefill.title, "Pill supply reminder")
-        XCTAssertEqual(pillRefill.body, "Your current supply may be running low. Check it when convenient.")
+        XCTAssertEqual(pillRefill.body, "Your pill supply is getting low. Time to plan a refill.")
         XCTAssertEqual(patchRestock.title, "Patch supply reminder")
-        XCTAssertEqual(patchRestock.body, "Your current patch supply may be running low. Check it when convenient.")
+        XCTAssertEqual(patchRestock.body, "Your patch supply is getting low. Time to plan a refill.")
         XCTAssertFalse(ringSummaries.contains { $0.identifier.hasPrefix("pillie_refill_reminder_") })
         XCTAssertFalse(pillRefill.body.localizedCaseInsensitiveContains("cycle day"))
         XCTAssertFalse(patchRestock.body.localizedCaseInsensitiveContains("cycle day"))

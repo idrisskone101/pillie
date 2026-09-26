@@ -7,7 +7,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Today’s Pillie action is still open."
+            "value": "You haven’t checked in on Pillie yet today."
           }
         },
         "it": {
@@ -832,7 +832,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Log today’s action, then return to this app."
+            "value": "Check in on Pillie and this app opens again."
           }
         },
         "it": {
@@ -1107,7 +1107,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Time for a quick check-in"
+            "value": "Paused until you check in"
           }
         },
         "it": {

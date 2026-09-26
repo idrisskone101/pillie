@@ -1382,7 +1382,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Daily reminders, logging and history are included in the free plan."
+            "value": "Daily reminders, check-ins, and history are free."
           }
         },
         "it": {
@@ -1657,7 +1657,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "More than one ping with Pillie Plus."
+            "value": "A little extra help with Pillie Plus"
           }
         },
         "it": {
@@ -1932,7 +1932,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus keeps pinging until you log today, and can pause apps until you check in."
+            "value": "Plus keeps reminding you until you check in, and can pause the apps that distract you."
           }
         },
         "it": {
@@ -2482,7 +2482,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Smart reminders"
+            "value": "Follow-up reminders"
           }
         },
         "it": {
@@ -3032,7 +3032,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Shake to confirm"
+            "value": "Shake to check in"
           }
         },
         "it": {
@@ -7432,7 +7432,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Purchase Error"
+            "value": "There was a problem with your purchase"
           }
         },
         "it": {
@@ -7707,7 +7707,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The purchase finished, but Pillie Plus was not activated. Please try again or restore purchases."
+            "value": "Your purchase went through, but Pillie Plus didn’t turn on. Try again, or restore purchases."
           }
         },
         "it": {
@@ -7982,7 +7982,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Something went wrong. Please try again."
+            "value": "Something went wrong. Try again in a moment."
           }
         },
         "it": {
@@ -8257,7 +8257,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Restore Error"
+            "value": "Couldn’t restore your purchases"
           }
         },
         "it": {
@@ -8532,7 +8532,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "No Subscription Found"
+            "value": "No subscription found"
           }
         },
         "it": {
@@ -8807,7 +8807,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "No active subscription was found for this account."
+            "value": "We couldn’t find an active subscription for this Apple Account."
           }
         },
         "it": {
@@ -9357,7 +9357,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your next two weeks are"
+            "value": "Your first 14 active days"
           }
         },
         "it": {
@@ -9632,7 +9632,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "on us."
+            "value": "are on us."
           }
         },
         "it": {
@@ -10457,7 +10457,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "We'll remind you before your trial ends. No surprises."
+            "value": "We’ll remind you before your trial ends. No surprises."
           }
         },
         "it": {
@@ -12107,7 +12107,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your Pillie Plus trial starts now. Here's what's included."
+            "value": "Your Pillie Plus trial starts now. Here’s what’s included."
           }
         },
         "it": {
@@ -18157,7 +18157,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Actions logged"
+            "value": "Check-ins"
           }
         },
         "it": {
@@ -18707,7 +18707,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reminders stay available."
+            "value": "Your daily reminders stay free."
           }
         },
         "it": {
@@ -18982,7 +18982,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus is active — app blocking is back on for tonight's reminder."
+            "value": "Pillie Plus is on. App blocking is back for your next reminder."
           }
         },
         "it": {
@@ -19257,7 +19257,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus is on. You can set up app blocking whenever you're ready."
+            "value": "Pillie Plus is on. You can set up app blocking whenever you’re ready."
           }
         },
         "it": {
@@ -23657,7 +23657,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "What made Pillie Plus not the right fit?"
+            "value": "Why wasn’t Pillie Plus right for you?"
           }
         },
         "it": {
@@ -25582,7 +25582,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Keep reminders free"
+            "value": "Continue with free reminders"
           }
         },
         "it": {
@@ -26682,7 +26682,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "I don't use it enough."
+            "value": "I don’t use it enough."
           }
         },
         "it": {
@@ -26957,7 +26957,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "It's missing a feature."
+            "value": "It’s missing a feature."
           }
         },
         "it": {
@@ -28332,7 +28332,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Thanks — your feedback helps us improve Pillie."
+            "value": "Thanks. Your feedback helps us make Pillie better."
           }
         },
         "it": {
@@ -28607,7 +28607,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Keeps pinging until you log today. You pick how often and how many."
+            "value": "Pillie keeps reminding you until you check in. You pick how often and how many times."
           }
         },
         "de": {
@@ -28882,7 +28882,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your apps pause when the reminder is due, until you take your pill."
+            "value": "When your reminder goes off, your apps pause until you take your pill."
           }
         },
         "de": {
@@ -29157,7 +29157,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your apps pause when the reminder is due, until you apply your patch."
+            "value": "When your reminder goes off, your apps pause until you apply your patch."
           }
         },
         "de": {
@@ -29432,7 +29432,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your apps pause when the reminder is due, until you change your patch."
+            "value": "When your reminder goes off, your apps pause until you change your patch."
           }
         },
         "de": {
@@ -29707,7 +29707,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your apps pause when the reminder is due, until you remove your patch."
+            "value": "When your reminder goes off, your apps pause until you remove your patch."
           }
         },
         "de": {
@@ -29982,7 +29982,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your apps pause when the reminder is due, until you insert your ring."
+            "value": "When your reminder goes off, your apps pause until you insert your ring."
           }
         },
         "de": {
@@ -30257,7 +30257,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your apps pause when the reminder is due, until you change your ring."
+            "value": "When your reminder goes off, your apps pause until you change your ring."
           }
         },
         "de": {
@@ -30532,7 +30532,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your apps pause when the reminder is due, until you remove your ring."
+            "value": "When your reminder goes off, your apps pause until you remove your ring."
           }
         },
         "de": {
@@ -30807,7 +30807,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "You had extra pings and paused apps for 14 active days. Keep Plus if you want that to stay on."
+            "value": "For 14 active days you had follow-up reminders and app blocking. Keep Plus to hold on to both."
           }
         },
         "de": {
@@ -31082,7 +31082,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "You had extra pings for 14 active days. Keep Plus if you want those to stay on."
+            "value": "For 14 active days you had follow-up reminders. Keep Plus to hold on to them."
           }
         },
         "de": {
@@ -32182,7 +32182,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Blocks intercepted"
+            "value": "Times an app stayed paused"
           }
         },
         "de": {
@@ -33282,7 +33282,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Write the ping in your own words. Plus lets you change the daily one and the follow-up."
+            "value": "Write your reminders in your own words. With Plus you can change the daily reminder and the follow-up."
           }
         },
         "de": {
@@ -35757,7 +35757,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "SAVE %lld%%"
+            "value": "Save %lld%%"
           }
         },
         "de": {
@@ -37132,7 +37132,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Keep it if you want that to stay on."
+            "value": "Keep Plus to have follow-up reminders and app blocking after your trial."
           }
         },
         "de": {
@@ -37682,7 +37682,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reminders stay on"
+            "value": "Follow-up reminders stay on"
           }
         },
         "de": {
@@ -37957,7 +37957,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Blocking stays on"
+            "value": "App blocking stays on"
           }
         },
         "de": {
@@ -38782,7 +38782,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Keep Pillie Plus if you want that to stay on."
+            "value": "Stay on Pillie Plus to keep follow-up reminders and app blocking."
           }
         },
         "de": {
@@ -39607,7 +39607,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "don't lose the %lld"
+            "value": "keep your %lld going"
           }
         },
         "de": {
@@ -40157,7 +40157,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus is smart reminders and app blocking."
+            "value": "Pillie Plus adds follow-up reminders and app blocking."
           }
         },
         "de": {
@@ -40432,7 +40432,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "PILLIE PLUS"
+            "value": "Pillie Plus"
           }
         },
         "de": {
@@ -41257,7 +41257,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your trial already ended."
+            "value": "Your trial has ended."
           }
         },
         "de": {
@@ -41532,7 +41532,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Blocking and smart reminders stay off until Plus is back on."
+            "value": "App blocking and follow-up reminders stay off until you turn Plus back on."
           }
         },
         "de": {
@@ -42082,7 +42082,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Smart reminders come back"
+            "value": "Follow-up reminders come back"
           }
         },
         "de": {
@@ -42632,7 +42632,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "this time it stays on"
+            "value": "pick up where you left off"
           }
         },
         "de": {

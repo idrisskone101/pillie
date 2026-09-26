@@ -30,7 +30,7 @@ final class CustomReminderCopyTests: XCTestCase {
         XCTAssertEqual(
             CustomReminderPreset.direct.messages,
             CustomReminderMessages(
-                dueTitle: "Pillie check-in due",
+                dueTitle: "Time to check in",
                 dueBody: "Open Pillie to mark today’s pill.",
                 retryTitle: "Pillie check-in waiting",
                 retryBody: "Open Pillie to update your status.",
@@ -42,7 +42,7 @@ final class CustomReminderCopyTests: XCTestCase {
         XCTAssertEqual(
             CustomReminderPreset.encouraging.messages,
             CustomReminderMessages(
-                dueTitle: "You’re building consistency",
+                dueTitle: "You’re building a habit",
                 dueBody: "Open Pillie for today’s check-in.",
                 retryTitle: "Keep your routine moving",
                 retryBody: "Open Pillie to update today’s status.",

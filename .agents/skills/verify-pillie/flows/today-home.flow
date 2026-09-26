@@ -47,9 +47,9 @@ shot today-status-due
 tap --label "Take pill"
 
 # Plus (from /plus-home) requires shake confirm: HomeView.swift:299 (Plus &&
-# !reduceMotion) -> ShakeConfirmView. Headline "Shake to Confirm":
+# !reduceMotion) -> ShakeConfirmView. Headline "Shake to check in":
 # ShakeConfirmView.swift:90; Localizable.xcstrings:62704 today.action.shake.
-wait text "Shake to Confirm" 10
+wait text "Shake to check in" 10
 shot today-shake-confirm
 
 # Simulator cannot shake the device — use the accessibility fallback.
@@ -60,11 +60,11 @@ tap --id shakeTapToConfirmFallback
 # Completion runs a ~1.2s celebration before dismissing
 # (ShakeConfirmView.swift:220-237), then the floating CTA becomes the undo
 # control. TodayActionState.swift:45-46 today.action.undo_complete;
-# Localizable.xcstrings:61329, value "That's logged. Tap to undo."
-wait text "That's logged. Tap to undo." 15
+# Localizable.xcstrings:61329, value "Checked in. Tap to undo."
+wait text "Checked in. Tap to undo." 15
 shot today-taken
 
 # Undo path: HomeView.swift:689-698 calls store.unmarkTodayAsTaken().
-tap --label "That's logged. Tap to undo."
+tap --label "Checked in. Tap to undo."
 wait text "Take pill" 10
 shot today-undone

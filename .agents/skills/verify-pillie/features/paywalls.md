@@ -29,7 +29,7 @@ CTAs change often; this file names the mechanism, not the wording.
     ended." **Not dismissible** — no Close row, purchase/restore is the only
     way out.
   - `trialEndedReturningLegacy` (pre-cutover terms): "Welcome back." —
-    dismissible, and also shows a "Keep reminders free" continue-free CTA.
+    dismissible, and also shows a "Continue with free reminders" continue-free CTA.
   `HonestPaywallStoryFactory.swift` `trialEnded(...)`, `chrome(for:)`;
   `Services/DebugQA.swift` `trialExpiredNewUserReturning` /
   `trialExpiredGrandfatherReturning`.

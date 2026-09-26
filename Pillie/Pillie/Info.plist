@@ -34,7 +34,7 @@
 		<string>com.idrisskone.pillie.screentime-reconcile</string>
 	</array>
 	<key>NSMotionUsageDescription</key>
-	<string>Pillie uses motion to detect shakes for the fun dose confirmation mini-game.</string>
+	<string>Pillie uses motion to notice when you shake your phone to check in.</string>
 	<key>NSUserTrackingUsageDescription</key>
 	<string>Allow tracking so Pillie can measure which channels brought you here and improve the app. We never sell your personal data.</string>
 	<key>PostHogHost</key>
