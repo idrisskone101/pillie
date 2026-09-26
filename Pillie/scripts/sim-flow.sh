@@ -32,7 +32,7 @@ help_steps() {
 Flow steps (one per line):
 
   launch [ARGS...]          terminate, launch with ARGS (e.g. -AppleLanguages "(it)"), wait for UI
-  fresh                     uninstall + reinstall the built app: first-launch state
+  fresh                     empty the App Group, uninstall + reinstall: a real first launch
   defaults KEY TYPE VALUE   write app defaults (TYPE: -bool -int -string -float), before `launch`
   openurl URL               open a URL or deep link in the simulator
   wait id|label|text X [S]  poll the ax tree until X appears (default 10s)
@@ -219,6 +219,13 @@ run_pseudo() {
     launch) launch_app "$@" ;;
     fresh)
       [[ -d "$APP_PATH" ]] || { echo "no built app at $APP_PATH; run make qa first"; return 1; }
+      # The store and shared defaults live in the App Group container, which
+      # outlives `simctl uninstall`. Empty it so this is a real first launch.
+      local group
+      while IFS=$'\t' read -r _ group; do
+        [[ -d "$group" ]] && find "$group" -mindepth 1 -maxdepth 1 -exec rm -rf {} +
+      done < <(xcrun simctl get_app_container "$UDID" "$BUNDLE_ID" groups 2>/dev/null || true)
+      xcrun simctl terminate "$UDID" "$BUNDLE_ID" >/dev/null 2>&1 || true
       xcrun simctl uninstall "$UDID" "$BUNDLE_ID" >/dev/null 2>&1 || true
       xcrun simctl install "$UDID" "$APP_PATH"
       ;;
