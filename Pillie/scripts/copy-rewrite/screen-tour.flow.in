@@ -1,0 +1,165 @@
+# Screen tour: one shot per user-facing screen, in the locale {{lang}}.
+# Rendered and run by screen-tour.sh. Every wait and tap uses an accessibility
+# id, an SF Symbol id, a debug deep link, or a coordinate, never app copy, so
+# the same steps pass in every AppLanguage.
+
+# ---- onboarding: fresh install through Home
+fresh
+privacy grant notifications
+defaults pillie.appLanguage -string {{lang}}
+launch
+wait id protectionPlanPrimaryCTA 15
+shot onboarding-01-welcome
+tap --id protectionPlanPrimaryCTA
+wait id earlyValueProofDragLane
+shot onboarding-02-early-value-proof
+openurl "pillie://debug/onboarding-personalization-intent?lang={{lang}}"
+gone id earlyValueProofDragLane
+wait id protectionPlanPrimaryCTA
+shot onboarding-03-pain-points
+openurl "pillie://debug/onboarding-personalization-timing?lang={{lang}}"
+sleep 1
+shot onboarding-04-miss-frequency
+defaults onboardingStep -int 8
+launch
+wait id acquisitionSource.tiktok 15
+shot onboarding-05-acquisition-source
+tap --id acquisitionSource.tiktok
+tap --id protectionPlanPrimaryCTA
+gone id acquisitionSource.tiktok
+wait id pills.fill
+shot onboarding-06-method
+tap --id protectionPlanPrimaryCTA
+wait id routineEditExactDay
+shot onboarding-07-routine
+tap --id protectionPlanPrimaryCTA
+wait id sun.max.fill
+shot onboarding-08-reminder-time
+tap --id protectionPlanPrimaryCTA
+wait id protectionPlanBackButton 15
+wait id sparkles 15
+shot onboarding-09-reminder-plan
+tap --id protectionPlanPrimaryCTA
+wait id appBlockingEmptyStateCard 15
+shot onboarding-10-app-blocking-empty
+openurl "pillie://debug/plus-app-blocking-setup?selected=3&lang={{lang}}"
+wait id pencil
+shot onboarding-11-app-blocking-selected
+tap -x 201 -y 740
+wait id protectionPlanReadyStartButton 15
+shot onboarding-12-ready
+tap --id protectionPlanReadyStartButton
+wait id developerMenuAvatarButton 15
+shot onboarding-13-home
+
+# ---- home, check-in, history
+fresh
+defaults pillie.appLanguage -string {{lang}}
+launch
+wait id protectionPlanPrimaryCTA 15
+openurl "pillie://debug/plus-home?lang={{lang}}"
+openurl "pillie://debug/trial-grant?lang={{lang}}"
+openurl "pillie://debug/fixed-now?at=2026-09-15T15:00:00Z"
+tap --id developerMenuAvatarButton
+tap --id developerScenario.missedRecentDays
+gone id developerScenario.missedRecentDays
+wait id homeBlockingStatusCard
+shot home-due
+gesture scroll-down
+shot home-scrolled
+gesture scroll-up
+tap -x 201 -y 742
+wait id shakeTapToConfirmFallback
+shot home-shake-check-in
+tap --id shakeTapToConfirmFallback
+gone id shakeTapToConfirmFallback 15
+sleep 1
+shot home-checked-in
+tap --id calendar
+wait id historyEditableDay.2026-9.14
+shot history-month
+tap --id historyEditableDay.2026-9.14
+wait id historyDayCorrection.taken
+shot history-day-correction
+tap --id historyDayCorrection.taken
+gone id historyDayCorrection.taken
+
+# ---- settings
+launch
+openurl "pillie://debug/plus-home?lang={{lang}}"
+wait id developerMenuAvatarButton 15
+tap --id gearshape
+wait id settingsLanguageRow
+shot settings-top
+tap -x 201 -y 395
+wait id reminder-preset-gentle
+shot settings-reminder-messages
+swipe --start-x 200 --start-y 200 --end-x 200 --end-y 860 --duration 0.4
+gone id reminder-preset-gentle
+tap -x 201 -y 269
+wait id Increment
+shot settings-schedule-editor
+tap -x 201 -y 720
+sleep 1.5
+shot settings-schedule-reset-alert
+launch
+openurl "pillie://debug/plus-home?lang={{lang}}"
+wait id developerMenuAvatarButton 15
+tap --id gearshape
+wait id settingsLanguageRow
+gesture scroll-down
+gesture scroll-down
+shot settings-scrolled
+tap --id settingsLanguageRow
+wait label Deutsch
+shot settings-language-picker
+swipe --start-x 200 --start-y 200 --end-x 200 --end-y 860 --duration 0.4
+gone label Deutsch
+
+# ---- paywall boards
+launch
+wait id developerMenuAvatarButton 15
+openurl "pillie://debug/honest-paywall?board=duringTrial&lang={{lang}}"
+wait text "$4.99" 10
+shot paywall-during-trial
+launch
+wait id developerMenuAvatarButton 15
+openurl "pillie://debug/honest-paywall?board=settingsFree&lang={{lang}}"
+sleep 2
+shot paywall-settings-free
+launch
+wait id developerMenuAvatarButton 15
+openurl "pillie://debug/honest-paywall?board=trialEndedReturningLegacy&lang={{lang}}"
+wait text "$4.99" 10
+shot paywall-trial-ended-returning-legacy
+launch
+wait id developerMenuAvatarButton 15
+openurl "pillie://debug/honest-paywall?board=trialEndedReturningHard&lang={{lang}}"
+wait text "$4.99" 10
+shot paywall-trial-ended-returning-hard
+
+# ---- trial surfaces
+launch
+wait id developerMenuAvatarButton 15
+openurl "pillie://debug/trial-activation-hub?state=unconfigured&lang={{lang}}"
+wait id trialIndicator 15
+tap --id trialIndicator
+wait id trialKeepPlus
+shot trial-activation-hub
+launch
+wait id developerMenuAvatarButton 15
+openurl "pillie://debug/trial-end-paywall?cohort=blocker&terms=hard&lang={{lang}}"
+wait text "$4.99" 10
+shot trial-end-paywall
+openurl "pillie://debug/update-trial-announcement?lang={{lang}}"
+launch
+wait id iphone.radiowaves.left.and.right 15
+shot update-trial-announcement
+
+# ---- review prompt
+defaults homeBlockingStatusCardDismissed -bool true
+launch
+wait id developerMenuAvatarButton 15
+openurl "pillie://debug/review-prompt?lang={{lang}}"
+wait id homeReviewPromptCard 15
+shot home-review-prompt
