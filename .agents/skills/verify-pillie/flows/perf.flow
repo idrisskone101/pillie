@@ -1,0 +1,6 @@
+# Launch time on Plus Home, then the app's own frame probes (TabSwitchFrameProbe.swift).
+launch
+openurl pillie://debug/plus-home?lang=en
+wait text Today 15
+perf-launch 5
+frames all
