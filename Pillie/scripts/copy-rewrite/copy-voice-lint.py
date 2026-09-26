@@ -28,6 +28,7 @@ PROPER_NOUNS = {
 
 GLOSSARY = [
     (r"\bpings?\b|\bpinging\b", "say reminder, not ping"),
+    (r"\bsmart reminders?\b", "the Plus feature is follow-up reminders"),
     (r"\bblock(list|s intercepted)\b|\bintercept", "apps pause, they are not intercepted or blocklisted"),
     (r"\bprotect(ed|ion)\b", "no protection wording, it reads as a contraceptive claim"),
     (r"\b(today.s|the|log the|pillie) action\b|\baction logged\b|\bstill open\b", "name the real step (take your pill, check in), not an action"),
