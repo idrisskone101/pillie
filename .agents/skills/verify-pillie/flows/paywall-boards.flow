@@ -7,6 +7,7 @@
 # restore control.
 
 launch
+wait text Today 15  # the link rebuilds Home, then posts; an early post is lost
 openurl pillie://debug/honest-paywall?board=duringTrial&lang=en
 wait text "You still have Pillie Plus." 10
 # paywall.story.trial_active.title (en), Commerce.xcstrings.
@@ -21,6 +22,7 @@ tap --id xmark --element-type Button  # paywall close; a review-prompt "Close" c
 # global.action.close -> "Close". HonestPaywallView.swift:46-63.
 
 launch
+wait text Today 15  # the link rebuilds Home, then posts; an early post is lost
 openurl pillie://debug/honest-paywall?board=settingsFree&lang=en
 wait text "Daily reminders are free." 10
 # paywall.story.settings_free.title (en). PillieApp.swift case
@@ -33,6 +35,7 @@ tap --id xmark --element-type Button  # paywall close; a review-prompt "Close" c
 # :26-31.
 
 launch
+wait text Today 15  # the link rebuilds Home, then posts; an early post is lost
 openurl pillie://debug/honest-paywall?board=trialEndedReturningLegacy&lang=en
 wait text "Welcome back." 10
 # paywall.story.trial_ended.returning.legacy.title (en). PillieApp.swift
@@ -49,6 +52,7 @@ tap --id xmark --element-type Button  # paywall close; a review-prompt "Close" c
 # HonestPaywallStoryFactory.swift chrome(for:).
 
 launch
+wait text Today 15  # the link rebuilds Home, then posts; an early post is lost
 openurl pillie://debug/honest-paywall?board=trialEndedReturningHard&lang=en
 wait text "Your trial already ended." 10
 # paywall.story.trial_ended.returning.hard.title (en). PillieApp.swift case

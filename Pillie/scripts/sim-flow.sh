@@ -32,7 +32,7 @@ help_steps() {
 Flow steps (one per line):
 
   launch [ARGS...]          terminate, launch with ARGS (e.g. -AppleLanguages "(it)"), wait for UI
-  fresh                     empty the App Group, uninstall + reinstall: a real first launch
+  fresh                     empty the App Group and keychain, reinstall: a real first launch
   defaults KEY TYPE VALUE   write app defaults (TYPE: -bool -int -string -float), before `launch`
   openurl URL               open a URL or deep link in the simulator
   wait id|label|text X [S]  poll the ax tree until X appears (default 10s)
@@ -272,6 +272,9 @@ run_pseudo() {
         [[ -d "$group" ]] && find "$group" -mindepth 1 -maxdepth 1 -exec rm -rf {} +
       done < <(xcrun simctl get_app_container "$UDID" "$BUNDLE_ID" groups 2>/dev/null || true)
       xcrun simctl terminate "$UDID" "$BUNDLE_ID" >/dev/null 2>&1 || true
+      # TrialGrantStore and TrialDeclineFeedbackResolutionStore use the keychain,
+      # which also outlives uninstall.
+      xcrun simctl keychain "$UDID" reset >/dev/null 2>&1 || true
       xcrun simctl uninstall "$UDID" "$BUNDLE_ID" >/dev/null 2>&1 || true
       xcrun simctl install "$UDID" "$APP_PATH"
       ;;

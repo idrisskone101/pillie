@@ -27,7 +27,7 @@ wait id settingsLanguageRow 10
 # Confirms we're back on Settings (the developer sheet is gone) before
 # switching tabs.
 tap --label Today
-wait text "Start new" 10
+wait label "21" 10  # streak after a fully elapsed 21/7 pack (DebugQA packComplete); "Start new" is only the confirm dialog button
 # today.pack.start_new.confirm (en), Localizable.xcstrings.
 # TodayActionState.swift:9,21-24,42-43: a fully-elapsed pack makes
 # store.isRefillDue true, TodayActionState.resolve returns .refillDue, and
