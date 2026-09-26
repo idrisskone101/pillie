@@ -30,10 +30,22 @@ final class CustomReminderCopyTests: XCTestCase {
         XCTAssertEqual(
             CustomReminderPreset.direct.messages,
             CustomReminderMessages(
-                dueTitle: "Time to check in",
+                dueTitle: "Pillie check-in due",
                 dueBody: "Open Pillie to mark today’s pill.",
                 retryTitle: "Pillie check-in waiting",
                 retryBody: "Open Pillie to update your status.",
+            )
+        )
+    }
+
+    func testPresetsReadTheCatalogOutsideGermanAndItalian() {
+        XCTAssertEqual(
+            CustomReminderPreset.direct.localizedMessages(locale: Locale(identifier: "en_US")),
+            CustomReminderMessages(
+                dueTitle: "Time to check in",
+                dueBody: "It’s time to check in.",
+                retryTitle: "Still to do today",
+                retryBody: "You haven’t checked in yet today.",
             )
         )
     }
@@ -42,7 +54,7 @@ final class CustomReminderCopyTests: XCTestCase {
         XCTAssertEqual(
             CustomReminderPreset.encouraging.messages,
             CustomReminderMessages(
-                dueTitle: "You’re building a habit",
+                dueTitle: "You’re building consistency",
                 dueBody: "Open Pillie for today’s check-in.",
                 retryTitle: "Keep your routine moving",
                 retryBody: "Open Pillie to update today’s status.",

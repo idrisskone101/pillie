@@ -87,11 +87,6 @@ enum CustomReminderPreset: String, CaseIterable, Identifiable {
     }
 
     func localizedMessages(locale: Locale = .current) -> CustomReminderMessages {
-        let localizedPresetLanguages = ["de", "it"]
-        guard let languageCode = locale.language.languageCode?.identifier,
-              localizedPresetLanguages.contains(languageCode) else {
-            return messages
-        }
         let stem = switch self {
         case .gentle: "notification.custom.gentle"
         case .direct: "notification.custom.direct"
@@ -109,6 +104,8 @@ enum CustomReminderPreset: String, CaseIterable, Identifiable {
         )
     }
 
+    /// The English preset text from before presets came from the string catalog.
+    /// `matching` still recognizes a draft that was saved from one of these.
     var messages: CustomReminderMessages {
         switch self {
         case .gentle:

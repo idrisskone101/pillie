@@ -107,7 +107,7 @@ struct StatsRow: View {
                 .font(.system(size: 24))
                 .foregroundStyle(PillieTheme.textMuted)
 
-            Text("Pillie+")
+            Text("Plus")
                 .font(.pillie(24, weight: .bold))
                 .foregroundStyle(PillieTheme.textPrimary)
 

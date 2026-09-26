@@ -1846,15 +1846,6 @@
     {
       "issue": "ENG-58",
       "table": "Notifications",
-      "key": "notification.custom.direct.final",
-      "create": true,
-      "en": "Last reminder today. You haven’t checked in yet.",
-      "de": "Letzte Erinnerung: für heute noch kein Check-in.",
-      "it": "Promemoria finale: per oggi non c'è ancora un check-in."
-    },
-    {
-      "issue": "ENG-58",
-      "table": "Notifications",
       "key": "notification.custom.encouraging.followup",
       "create": true,
       "en": "You can check in when you’re ready.",

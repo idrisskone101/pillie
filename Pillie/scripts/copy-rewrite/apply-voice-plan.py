@@ -251,12 +251,16 @@ def prune(catalogs: Catalogs) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("command", choices=["check", "apply", "prune"])
+    parser.add_argument("--only", help="comma-separated locales to load, plus en")
     args = parser.parse_args()
     catalogs = Catalogs()
     if args.command == "prune":
         prune(catalogs)
         return 0
     plans = load_plans()
+    if args.only:
+        keep = {"en", *args.only.split(",")}
+        plans = {lang: plan for lang, plan in plans.items() if lang in keep}
     errors = check(plans, catalogs)
     if errors:
         print("\n".join(errors))

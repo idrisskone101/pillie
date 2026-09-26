@@ -105,7 +105,7 @@ struct SettingsView: View {
                             settingsRow(PillieLocalization.string(
                                 "settings.custom_messages.title",
                                 locale: locale
-                            ), value: "Pillie+", valueColor: PillieTheme.coral, showLock: true)
+                            ), value: "Plus", valueColor: PillieTheme.coral, showLock: true)
                         }
                         .buttonStyle(.plain)
                         .sheet(isPresented: $showCustomRemindersUpsell) {
@@ -168,7 +168,7 @@ struct SettingsView: View {
                             settingsRow(PillieLocalization.string(
                                 "settings.followup.interval_title",
                                 locale: locale
-                            ), value: "Pillie+", valueColor: PillieTheme.coral, showLock: true)
+                            ), value: "Plus", valueColor: PillieTheme.coral, showLock: true)
                         }
                         .buttonStyle(.plain)
                         divider
@@ -178,7 +178,7 @@ struct SettingsView: View {
                             settingsRow(PillieLocalization.string(
                                 "settings.followup.retry_limit_title",
                                 locale: locale
-                            ), value: "Pillie+", valueColor: PillieTheme.coral, showLock: true)
+                            ), value: "Plus", valueColor: PillieTheme.coral, showLock: true)
                         }
                         .buttonStyle(.plain)
                         .sheet(isPresented: $showSmartRemindersUpsell) {
@@ -249,7 +249,7 @@ struct SettingsView: View {
                             settingsRow(PillieLocalization.string(
                                 "settings.blocked_apps.title",
                                 locale: locale
-                            ), value: "Pillie+", valueColor: PillieTheme.coral, showLock: true)
+                            ), value: "Plus", valueColor: PillieTheme.coral, showLock: true)
                         }
                         .buttonStyle(.plain)
                         .sheet(isPresented: $showBlockingUpsell) {
