@@ -38,7 +38,16 @@
       }
     ]
   },
-  "enabledPlugins": {},
-  "extraKnownMarketplaces": {},
+  "enabledPlugins": {
+    "pstack-cc@pstack-cc": true
+  },
+  "extraKnownMarketplaces": {
+    "pstack-cc": {
+      "source": {
+        "source": "github",
+        "repo": "idrisskone101/pstack-cc"
+      }
+    }
+  },
   "effortLevel": "high"
 }
