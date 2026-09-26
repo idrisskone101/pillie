@@ -23,7 +23,7 @@ day the user can still correct — a bottom sheet to rewrite that day's status.
   `Views/Calendar/HistoryDiscoveryBanner.swift`,
   `Services/HistoryDiscoveryAnnouncement.swift`.
 - `history-day-correction` — tapping a past day that `DayCorrectionPolicy`
-  allows editing opens a sheet to rewrite it to Taken / Unlogged / Break.
+  allows editing opens a sheet to rewrite it to Taken / Not checked in / Break.
   `Views/Calendar/CalendarGrid.swift:217-243`,
   `Views/Calendar/HistoryDayCorrectionSheet.swift`, `Models/DayCorrection.swift`.
   Only past days with a due, non-break action and no ring-reinsert record are
@@ -35,7 +35,7 @@ day the user can still correct — a bottom sheet to rewrite that day's status.
 - Swipe the month grid left/right, or tap a chevron next to the month name,
   to change months.
 - Tap a past day cell that shows a colored dot: a sheet opens to say what
-  really happened that day. Pick Taken, Unlogged, or Break; the sheet closes
+  really happened that day. Pick Taken, Not checked in, or Break; the sheet closes
   and the cell's color and dot update immediately.
 - A first-time coral banner above the legend explains the day-tap gesture
   until dismissed with its X.
@@ -52,7 +52,7 @@ day the user can still correct — a bottom sheet to rewrite that day's status.
   the two most recent due days missed, opens the day-correction sheet for one
   of those days (`historyEditableDay.<monthID>.<day>`), picks
   `historyDayCorrection.taken`, and proves the day's accessibility label
-  changed from "...: Not logged" to "...: Done" — the calendar actually
+  changed from "...: Not checked in" to "...: Done" — the calendar actually
   changed, not just that the sheet closed.
 - `monthID` is `MonthCursor.identity(for:)` — `"\(year)-\(month)"`, no
   zero-padding (`Shared/MonthCursor.swift:27-30`), e.g. `2026-9` for

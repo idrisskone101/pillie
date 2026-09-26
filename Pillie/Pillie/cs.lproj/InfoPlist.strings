@@ -1,2 +1,2 @@
-"NSMotionUsageDescription" = "Pillie využívá pohybová data k rozpoznání zatřesení při potvrzování akce.";
-"NSUserTrackingUsageDescription" = "Povol sledování, aby Pillie zjistila, které kanály tě sem přivedly. Tvoje osobní údaje nikdy neprodáváme.";
+"NSMotionUsageDescription" = "Pillie používá pohybové senzory, aby poznala, kdy zatřeseš telefonem a odškrtneš si den.";
+"NSUserTrackingUsageDescription" = "Povol sledování, aby Pillie zjistila, které kanály tě sem přivedly, a mohla aplikaci zlepšovat. Tvoje osobní údaje nikdy neprodáváme.";

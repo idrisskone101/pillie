@@ -1,2 +1,2 @@
-"NSMotionUsageDescription" = "Pillie usa el movimiento para detectar sacudidas cuando confirmas una acción.";
-"NSUserTrackingUsageDescription" = "Permite el seguimiento para que Pillie sepa por qué canales nos encontraste y mejorar la app. Nunca vendemos tus datos personales.";
+"NSMotionUsageDescription" = "Pillie usa el movimiento para saber cuándo agitas el teléfono para marcar lo de hoy.";
+"NSUserTrackingUsageDescription" = "Permite el rastreo para que Pillie sepa por qué canales llegaste y pueda mejorar la app. Nunca vendemos tus datos personales.";

@@ -11,7 +11,7 @@ final class ItalianCommerceRuntimeLocalizationTests: XCTestCase {
                 cohort: .blockerConfigured,
                 locale: italian
             ),
-            "Pillie Plus è attivo: il blocco delle app è di nuovo attivo per il promemoria di stasera."
+            "Pillie Plus è attivo. Il blocco app torna dal prossimo promemoria."
         )
         XCTAssertEqual(
             CommercePresentation.trialEndSuccessSubtitle(
@@ -27,7 +27,7 @@ final class ItalianCommerceRuntimeLocalizationTests: XCTestCase {
                 plusIncluded: true,
                 locale: italian
             ),
-            "Disponibilità: Free e Plus"
+            "Incluso in Free e Plus"
         )
         XCTAssertEqual(
             CommercePresentation.comparisonTierLabel(
@@ -35,7 +35,7 @@ final class ItalianCommerceRuntimeLocalizationTests: XCTestCase {
                 plusIncluded: true,
                 locale: italian
             ),
-            "Disponibilità: solo Plus"
+            "Solo Plus"
         )
         XCTAssertEqual(
             CommercePresentation.comparisonTierLabel(
@@ -43,7 +43,7 @@ final class ItalianCommerceRuntimeLocalizationTests: XCTestCase {
                 plusIncluded: false,
                 locale: italian
             ),
-            "Disponibilità: solo Free"
+            "Solo Free"
         )
         XCTAssertEqual(
             CommercePresentation.comparisonTierLabel(
@@ -51,7 +51,7 @@ final class ItalianCommerceRuntimeLocalizationTests: XCTestCase {
                 plusIncluded: false,
                 locale: italian
             ),
-            "Disponibilità: nessuna"
+            "Non incluso"
         )
 
         XCTAssertEqual(
@@ -59,7 +59,7 @@ final class ItalianCommerceRuntimeLocalizationTests: XCTestCase {
                 SubscriptionPurchaseError.missingPlusEntitlement,
                 locale: italian
             ),
-            "L’acquisto è stato completato, ma Pillie Plus non è stato attivato. Riprova o ripristina gli acquisti."
+            "L’acquisto è andato a buon fine, ma Pillie Plus non si è attivato. Riprova o ripristina gli acquisti."
         )
         let untranslatedStoreError = NSError(
             domain: "Store",
@@ -68,11 +68,11 @@ final class ItalianCommerceRuntimeLocalizationTests: XCTestCase {
         )
         XCTAssertEqual(
             CommercePresentation.purchaseErrorMessage(untranslatedStoreError, locale: italian),
-            "Qualcosa è andato storto. Riprova."
+            "Qualcosa è andato storto. Riprova tra un momento."
         )
         XCTAssertEqual(
             CommercePresentation.restoreErrorMessage(untranslatedStoreError, locale: italian),
-            "Qualcosa è andato storto. Riprova."
+            "Qualcosa è andato storto. Riprova tra un momento."
         )
         XCTAssertEqual(
             CommercePresentation.trialEndPerkSymbols,

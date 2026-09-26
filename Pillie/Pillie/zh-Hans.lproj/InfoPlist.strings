@@ -1,2 +1,2 @@
-"NSMotionUsageDescription" = "Pillie 使用运动数据来检测你确认操作时的摇动。";
-"NSUserTrackingUsageDescription" = "允许跟踪，让 Pillie 了解你是通过哪些渠道找到我们的。我们绝不会出售你的个人数据。";
+"NSMotionUsageDescription" = "Pillie 会使用运动数据，识别你摇一摇手机来打卡的动作。";
+"NSUserTrackingUsageDescription" = "允许跟踪，让 Pillie 了解你是通过哪些渠道找到我们的，并借此改进应用。我们绝不会出售你的个人数据。";

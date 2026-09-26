@@ -36,7 +36,7 @@ final class ItalianLocalizationContractTests: XCTestCase {
 
         XCTAssertEqual(
             ProtectionPlanWelcomeContent.localized(locale: italian).title,
-            "La sveglia per la tua pillola, ogni sera."
+            "La sveglia per la tua pillola."
         )
         XCTAssertEqual(
             ProtectionPlanRoutineMethodContent.localized(locale: italian).title,
@@ -85,7 +85,7 @@ final class ItalianLocalizationContractTests: XCTestCase {
 
         XCTAssertEqual(
             PillieLocalization.string("onboarding.welcome.demo.reminder_title", locale: italian),
-            "Check-in serale"
+            "Conferma serale"
         )
         XCTAssertEqual(
             PillieLocalization.formatted(
@@ -101,7 +101,7 @@ final class ItalianLocalizationContractTests: XCTestCase {
         )
         XCTAssertEqual(
             PillieLocalization.string("onboarding.welcome.demo.apps_locked", locale: italian),
-            "In pausa finché non fai il check-in"
+            "In pausa finché non confermi"
         )
         XCTAssertEqual(
             PillieLocalization.string("onboarding.welcome.demo.apps_open", locale: italian),
@@ -122,7 +122,7 @@ final class ItalianLocalizationContractTests: XCTestCase {
         )
         XCTAssertEqual(
             PillieLocalization.string("onboarding.blocking_demo.shake_title", locale: italian),
-            "Scuoti per confermare"
+            "Prova a scuotere per confermare"
         )
         XCTAssertEqual(
             PillieLocalization.string("onboarding.blocking_demo.drag_title", locale: italian),
@@ -130,7 +130,7 @@ final class ItalianLocalizationContractTests: XCTestCase {
         )
         XCTAssertEqual(
             PillieLocalization.string("onboarding.blocking_demo.shake_body", locale: italian),
-            "Scuoti ora il telefono oppure tocca questa scheda nel simulatore."
+            "Scuoti ora il telefono oppure tocca questa scheda."
         )
         XCTAssertEqual(
             PillieLocalization.string("today.action.shake", locale: italian),
@@ -184,7 +184,7 @@ final class ItalianLocalizationContractTests: XCTestCase {
         XCTAssertEqual(
             BlockerSelectionState(applicationCount: 1, categoryCount: 0)
                 .localizedAccessibilitySummary(locale: italian),
-            "1 Elemento selezionato"
+            "1 elemento selezionato"
         )
 
         let genericDiagnosis = ProtectionPlanDiagnosis(
@@ -207,7 +207,7 @@ final class ItalianLocalizationContractTests: XCTestCase {
         let routine = ProtectionPlanRoutineSummary(locale: italian)
 
         XCTAssertEqual(routine.cardLabel, "Il tuo piano")
-        XCTAssertEqual(diagnosis.protectedAppsHeader, "App in pausa")
+        XCTAssertEqual(diagnosis.protectedAppsHeader, "App da mettere in pausa")
         XCTAssertEqual(
             ProtectionPlanRoutineSummary(method: .pill, locale: italian)
                 .accessibilityHeadings,
@@ -269,16 +269,16 @@ final class ItalianLocalizationContractTests: XCTestCase {
         )
         XCTAssertEqual(
             content.authorizationDeniedTitle,
-            "Il blocco delle app richiede l’autorizzazione"
+            "Il blocco app richiede Tempo di utilizzo"
         )
         XCTAssertEqual(
             content.authorizationDeniedDetail,
-            "Consenti l’accesso a Tempo di utilizzo per scegliere e mettere in pausa le app."
+            "Consenti l’accesso a Tempo di utilizzo così Pillie può mettere in pausa le app che scegli."
         )
         XCTAssertEqual(content.selectedSummaryLabel, "App selezionate")
         XCTAssertEqual(
             content.selectedPrivacyNote,
-            "Pillie riceve solo il numero di elementi selezionati. La selezione resta su questo dispositivo."
+            "Pillie vede solo quante ne hai scelte. Le app restano private su questo dispositivo."
         )
         XCTAssertEqual(content.skipCTA, "Non ora")
     }
@@ -312,18 +312,18 @@ final class ItalianLocalizationContractTests: XCTestCase {
 
         XCTAssertEqual(
             actions.map { $0.localizedReminderTitle(locale: italian) },
-            ["Pillie time!", "Pillie time!", "Pillie time!"]
+            ["È ora della pillola", "È ora del cerotto", "È ora dell’anello"]
         )
         XCTAssertEqual(
             actions.map { $0.localizedFollowUpTitle(locale: italian) },
-            Array(repeating: "Promemoria successivo", count: 3)
+            Array(repeating: "Ancora da fare oggi", count: 3)
         )
         XCTAssertEqual(
             NotificationManager.shared.reminderCategoryActionTitlesForTesting(
                 isPlus: true,
                 locale: italian
             ),
-            ["Registra ora", "Ricordamelo più tardi"]
+            ["Conferma", "Ricordamelo più tardi"]
         )
 
         XCTAssertEqual(
@@ -343,7 +343,7 @@ final class ItalianLocalizationContractTests: XCTestCase {
         for method in ContraceptiveMethod.allCases {
             XCTAssertEqual(
                 method.blockingReasonText(locale: italian),
-                "L’azione Pillie di oggi è ancora da registrare."
+                "Oggi non hai ancora confermato su Pillie."
             )
         }
     }

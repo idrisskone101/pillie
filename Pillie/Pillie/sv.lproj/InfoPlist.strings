@@ -1,2 +1,2 @@
-"NSMotionUsageDescription" = "Pillie använder rörelsedata för att känna av skakningar när du bekräftar en åtgärd.";
-"NSUserTrackingUsageDescription" = "Tillåt spårning så att Pillie kan lära sig vilka kanaler som ledde dig hit. Vi säljer aldrig dina personuppgifter.";
+"NSMotionUsageDescription" = "Pillie använder rörelsedata för att märka när du skakar telefonen för att bocka av.";
+"NSUserTrackingUsageDescription" = "Tillåt spårning så att Pillie kan se vilka kanaler som ledde dig hit och göra appen bättre. Vi säljer aldrig dina personuppgifter.";

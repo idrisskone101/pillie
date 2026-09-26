@@ -13,265 +13,265 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "L’azione Pillie di oggi è ancora da registrare."
+            "value": "Oggi non hai ancora confermato su Pillie."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Die heutige Aktion ist in Pillie noch offen."
+            "value": "Du hast heute in Pillie noch nicht abgehakt."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "L'action Pillie du jour est encore en attente."
+            "value": "Tu n’as pas encore validé sur Pillie aujourd’hui."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "La acción de hoy en Pillie sigue pendiente."
+            "value": "Aún no has marcado lo de hoy en Pillie."
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "A ação de hoje no Pillie ainda está aberta."
+            "value": "Você ainda não registrou no Pillie hoje."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "De actie van vandaag staat in Pillie nog open."
+            "value": "Je hebt vandaag nog niet afgevinkt in Pillie."
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dagens åtgärd i Pillie är fortfarande öppen."
+            "value": "Du har inte bockat av i Pillie i dag än."
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dagens handling i Pillie er stadig åben."
+            "value": "Du har ikke krydset af i Pillie i dag endnu."
           }
         },
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dagens handling i Pillie er fortsatt åpen."
+            "value": "Du har ikke krysset av i Pillie ennå i dag."
           }
         },
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Päivän Pillie-toimenpide on yhä avoinna."
+            "value": "Et ole vielä kuitannut Pilliessä tänään."
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "translated",
-            "value": "A ação de hoje no Pillie ainda está em aberto."
+            "value": "Ainda não registaste no Pillie hoje."
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "L’acció d’avui a Pillie encara està pendent."
+            "value": "Encara no has confirmat avui a Pillie."
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dzisiejsza czynność w Pillie wciąż czeka."
+            "value": "Dzisiejszy dzień w Pillie czeka jeszcze na odhaczenie."
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dnešní akce v Pillie je stále otevřená."
+            "value": "Dnešek v Pillie ještě není odškrtnutý."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Сегодняшнее действие в Pillie ещё не отмечено."
+            "value": "Ты ещё не отметилась в Pillie сегодня."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Сьогоднішню дію в Pillie ще не відмічено."
+            "value": "Ти ще не відмітилася в Pillie сьогодні."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "今日のPillieのアクションがまだ完了していません。"
+            "value": "今日はまだPillieで記録していません。"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "오늘의 Pillie 행동이 아직 완료되지 않았어요."
+            "value": "오늘 아직 Pillie에서 체크하지 않았어요."
           }
         },
         "ms": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tindakan Pillie hari ini masih belum selesai."
+            "value": "Kamu belum sahkan di Pillie hari ini."
           }
         },
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "Acțiunea Pillie de azi e încă deschisă."
+            "value": "Încă n-ai bifat ziua de azi în Pillie."
           }
         },
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dnešná akcia v Pillie je stále otvorená."
+            "value": "Dnešok v Pillie ešte nie je odškrtnutý."
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "กิจกรรม Pillie ของวันนี้ยังค้างอยู่"
+            "value": "วันนี้คุณยังไม่ได้เช็กอินใน Pillie"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "今天的 Pillie 操作还没完成。"
+            "value": "你今天还没在 Pillie 打卡。"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "आज का Pillie काम अभी बाक़ी है।"
+            "value": "आज आपने Pillie पर अभी दर्ज नहीं किया है।"
           }
         },
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Današnja Pillie radnja još je otvorena."
+            "value": "U Pillie danas još nema tvog javljanja."
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "A mai Pillie-teendő még nyitva van."
+            "value": "Ma még nem pipáltad ki a Pillie-ben."
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bugünkü Pillie işlemi hâlâ açık."
+            "value": "Bugün Pillie’de henüz işaretlemedin."
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "இன்றைய Pillie செயல் இன்னும் நிலுவையில் உள்ளது."
+            "value": "இன்று நீங்கள் இன்னும் Pillie-இல் பதிவு செய்யவில்லை."
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tindakan Pillie hari ini masih belum selesai."
+            "value": "Kamu belum check-in di Pillie hari ini."
           }
         },
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "إجراء اليوم في Pillie ما زال مفتوحًا."
+            "value": "لم تسجّلي في Pillie اليوم بعد."
           }
         },
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "הפעולה של היום ב-Pillie עדיין פתוחה."
+            "value": "עוד לא סימנת היום ב-Pillie."
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Việc hôm nay trong Pillie vẫn chưa xong."
+            "value": "Hôm nay bạn chưa điểm danh trên Pillie."
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "আজকের Pillie কাজটি এখনো বাকি।"
+            "value": "আপনি আজ এখনো Pillie-এ টিক দেননি।"
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "آج کا Pillie کام ابھی باقی ہے۔"
+            "value": "آج آپ نے Pillie پر ابھی درج نہیں کیا۔"
           }
         },
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Današnje dejanje v Pillie je še odprto."
+            "value": "V Pillie danes še ni tvoje kljukice."
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Η σημερινή ενέργεια στο Pillie είναι ακόμα ανοιχτή."
+            "value": "Δεν το έχεις σημειώσει ακόμα σήμερα στο Pillie."
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "ఈరోజు Pillie చర్య ఇంకా పెండింగ్‌లో ఉంది."
+            "value": "ఈరోజు మీరు Pillieలో ఇంకా నమోదు చేయలేదు."
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "今天的 Pillie 動作還沒完成。"
+            "value": "你今天還沒在 Pillie 打卡。"
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "આજ કા Pillie કામ હમણાં બાક઼ી છે।"
+            "value": "તમે આજે હજુ Pillie પર નોંધ કરી નથી."
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ಈರೋಜು Pillie ಕೆಲಸ ಇಂಕಾ ಪೆಂಡಿಂಗ್‌ಲೋ ಉಂದಿ."
+            "value": "ಇಂದು ನೀವು ಇನ್ನೂ Pillie ನಲ್ಲಿ ದಾಖಲಿಸಿಲ್ಲ."
           }
         },
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "ഇന്നത്തെ Pillie ആക്ഷൻ ഇപ്പോഴും ബാക്കിയാണ്."
+            "value": "ഇന്ന് നിങ്ങൾ ഇതുവരെ Pillie-യിൽ രേഖപ്പെടുത്തിയിട്ടില്ല."
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "आजची Pillie कृती अजून उघडी आहे."
+            "value": "आज तुम्ही Pillie वर अजून नोंद केलेली नाही."
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ଆଜିର Pillie କାମ ଏବେ ବି ବାକି।"
+            "value": "ଆପଣ ଆଜି ଏପର୍ଯ୍ୟନ୍ତ Pillie ରେ ଦର୍ଜ କରିନାହାଁନ୍ତି।"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਅੱਜ ਦਾ Pillie ਕਾਮ ਅਭੀ ਬਾਕ਼ੀ ਹੈ।"
+            "value": "ਤੁਸੀਂ ਅੱਜ ਅਜੇ Pillie ’ਤੇ ਦਰਜ ਨਹੀਂ ਕੀਤਾ।"
           }
         }
       }
@@ -426,7 +426,7 @@
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie खोलो"
+            "value": "Pillie खोलें"
           }
         },
         "hr": {
@@ -444,13 +444,13 @@
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie'yi aç"
+            "value": "Pillie’yi aç"
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie-ஐத் திற"
+            "value": "Pillie-ஐத் திறக்கவும்"
           }
         },
         "id": {
@@ -480,13 +480,13 @@
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie খোলো"
+            "value": "Pillie খুলুন"
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie کھولو"
+            "value": "Pillie کھولیں"
           }
         },
         "sl": {
@@ -504,7 +504,7 @@
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie తెరువు"
+            "value": "Pillie తెరవండి"
           }
         },
         "zh-Hant": {
@@ -522,7 +522,7 @@
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie ತೆರುವು"
+            "value": "Pillie ತೆರೆಯಿರಿ"
           }
         },
         "ml": {
@@ -534,19 +534,19 @@
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie उघड"
+            "value": "Pillie उघडा"
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie ଖୋଲ"
+            "value": "Pillie ଖୋଲନ୍ତୁ"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie ਖੋਲ੍ਹ"
+            "value": "Pillie ਖੋਲ੍ਹੋ"
           }
         }
       }
@@ -575,7 +575,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cette app t'attendra."
+            "value": "Cette app t’attendra."
           }
         },
         "es": {
@@ -683,7 +683,7 @@
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Táto apka na teba počká."
+            "value": "Táto aplikácia na teba počká."
           }
         },
         "th": {
@@ -725,7 +725,7 @@
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "இந்த ஆப் உனக்காகக் காத்திருக்கும்."
+            "value": "இந்த ஆப் உங்களுக்காகக் காத்திருக்கும்."
           }
         },
         "id": {
@@ -755,7 +755,7 @@
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "এই অ্যাপ অপেক্ষা করবে।"
+            "value": "এই অ্যাপটি অপেক্ষা করবে।"
           }
         },
         "ur": {
@@ -779,49 +779,49 @@
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "ఈ యాప్ నీకోసం వేచి ఉంటుంది."
+            "value": "ఈ యాప్ మీ కోసం వేచి ఉంటుంది."
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "這個應用程式 會等你回來。"
+            "value": "這個 App 會等你回來。"
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "આ ઍપ રાહ કરેગા।"
+            "value": "આ ઍપ તમારી રાહ જોશે."
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ಈ ಯಾಪ್ ನೀಕೋಸಂ ವೇಚಿ ಉಂಟುಂದಿ."
+            "value": "ಈ ಆ್ಯಪ್ ನಿಮಗಾಗಿ ಕಾಯುತ್ತಿರುತ್ತದೆ."
           }
         },
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "കാത്തിരിക്കും"
+            "value": "ഈ ആപ്പ് നിങ്ങൾക്കായി കാത്തിരിക്കും."
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "हा अॅप वाट पाहेल."
+            "value": "हे ॲप तुमची वाट पाहील."
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ଏହି ଆପ୍ ଅପେକ୍ଷା କରିବ।"
+            "value": "ଏହି ଆପ୍ ଆପଣଙ୍କୁ ଅପେକ୍ଷା କରିବ।"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਯਹ ਐਪ ਇਂਤਜ਼ਾਰ ਕਰੇਗਾ।"
+            "value": "ਇਹ ਐਪ ਤੁਹਾਡੀ ਉਡੀਕ ਕਰੇਗੀ।"
           }
         }
       }
@@ -838,265 +838,265 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Registra l’azione di oggi, poi torna a questa app."
+            "value": "Conferma su Pillie e questa app si riapre."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Protokolliere die heutige Aktion und kehre dann zu dieser App zurück."
+            "value": "Hak in Pillie ab, dann öffnet sich diese App wieder."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Inscris l'action du jour, puis reviens dans cette app."
+            "value": "Valide sur Pillie et cette app redevient accessible."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Registra la acción de hoy y vuelve a esta app."
+            "value": "Marca lo de hoy en Pillie y podrás volver a abrir esta app."
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Registre a ação de hoje e volte a este app."
+            "value": "Registre no Pillie e este app abre de novo."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Houd de actie van vandaag bij en ga terug naar deze app."
+            "value": "Vink af in Pillie en deze app gaat weer open."
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Logga dagens åtgärd och kom sedan tillbaka till den här appen."
+            "value": "Bocka av i Pillie så öppnas appen igen."
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Log dagens handling, og vend så tilbage til denne app."
+            "value": "Kryds af i Pillie, så åbner denne app igen."
           }
         },
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "Logg dagens handling, og gå så tilbake til denne appen."
+            "value": "Kryss av i Pillie, så åpnes denne appen igjen."
           }
         },
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kirjaa päivän toimenpide ja palaa sitten tähän sovellukseen."
+            "value": "Kuittaa Pilliessä, niin tämä sovellus aukeaa taas."
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "translated",
-            "value": "Regista a ação de hoje e depois volta a esta app."
+            "value": "Regista no Pillie e esta app volta a abrir."
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "Registra l’acció d’avui i després torna a aquesta app."
+            "value": "Confirma a Pillie i aquesta app es tornarà a obrir."
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zapisz dzisiejszą czynność, a potem wróć do tej aplikacji."
+            "value": "Odhacz dzień w Pillie, a ta aplikacja znów się otworzy."
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zaznamenej dnešní akci a pak se sem vrať."
+            "value": "Odškrtni dnešek v Pillie a tahle aplikace se zase otevře."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Отметь сегодняшнее действие и возвращайся в это приложение."
+            "value": "Отметься в Pillie, и это приложение снова откроется."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Відміть сьогоднішню дію й повертайся до цього застосунку."
+            "value": "Відміться в Pillie, і цей застосунок знову відкриється."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "今日のアクションを記録してから、このアプリに戻ってください。"
+            "value": "Pillieで記録すると、このアプリがまた開けるようになります。"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "오늘의 행동을 기록한 뒤 이 앱으로 돌아오세요."
+            "value": "Pillie에서 체크하면 이 앱을 다시 열 수 있어요."
           }
         },
         "ms": {
           "stringUnit": {
             "state": "translated",
-            "value": "Rekod tindakan hari ini, kemudian kembali ke apl ini."
+            "value": "Sahkan di Pillie dan apl ini dibuka semula."
           }
         },
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "Înregistrează acțiunea de azi, apoi revino la această aplicație."
+            "value": "Bifează ziua în Pillie și aplicația se deschide din nou."
           }
         },
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zaznamenaj dnešnú akciu a potom sa vráť do tejto apky."
+            "value": "Odškrtni dnešok v Pillie a táto aplikácia sa znova otvorí."
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "บันทึกกิจกรรมของวันนี้ แล้วกลับมาที่แอปนี้"
+            "value": "เช็กอินใน Pillie แล้วแอปนี้จะเปิดได้อีกครั้ง"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "记录今天的操作，然后再回到这个应用。"
+            "value": "在 Pillie 打卡后，这个应用就能重新打开。"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "आज का काम लॉग करो, फिर इस ऐप पर वापस आओ।"
+            "value": "Pillie पर दर्ज करें, और यह ऐप फिर से खुल जाएगा।"
           }
         },
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zabilježi današnju radnju, zatim se vrati u ovu aplikaciju."
+            "value": "Javi se u Pillie i ova se aplikacija ponovno otvara."
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "Rögzítsd a mai teendőt, majd térj vissza ebbe az appba."
+            "value": "Pipáld ki a Pillie-ben, és ez az app újra megnyílik."
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bugünkü işlemi kaydet, sonra bu uygulamaya dön."
+            "value": "Pillie’de işaretlediğinde bu uygulama yeniden açılır."
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "இன்றைய செயலைப் பதிவு செய்து, பிறகு இந்த ஆப்பிற்குத் திரும்பு."
+            "value": "Pillie-இல் பதிவு செய்யுங்கள், இந்த ஆப் மீண்டும் திறக்கும்."
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Catat tindakan hari ini, lalu kembali ke aplikasi ini."
+            "value": "Check-in di Pillie dan aplikasi ini terbuka lagi."
           }
         },
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "سجّلي إجراء اليوم، ثم عودي إلى هذا التطبيق."
+            "value": "سجّلي في Pillie وسيُفتح هذا التطبيق من جديد."
           }
         },
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "רשמי את הפעולה של היום, ואז חזרי לאפליקציה הזו."
+            "value": "סמני ב-Pillie והאפליקציה הזו תיפתח שוב."
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ghi lại việc hôm nay, rồi quay lại ứng dụng này."
+            "value": "Điểm danh trên Pillie và ứng dụng này sẽ mở lại."
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "আজকের কাজ লগ করো, তারপর এই অ্যাপে ফিরে এসো।"
+            "value": "Pillie-এ টিক দিলেই এই অ্যাপটি আবার খুলবে।"
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "آج کا کام لاگ کرو، پھر اس ایپ پر واپس آؤ۔"
+            "value": "Pillie پر درج کریں، اور یہ ایپ دوبارہ کھل جائے گی۔"
           }
         },
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zabeleži današnje dejanje, nato se vrni v to aplikacijo."
+            "value": "Odkljukaj v Pillie in ta aplikacija se spet odpre."
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Καταγράψε τη σημερινή ενέργεια και μετά γύρνα σε αυτή την εφαρμογή."
+            "value": "Σημείωσέ το στο Pillie και αυτή η εφαρμογή ανοίγει ξανά."
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "ఈరోజు చర్యను నమోదు చేసి, ఆ తర్వాత ఈ యాప్‌కు తిరిగి రా."
+            "value": "Pillieలో నమోదు చేయండి, ఈ యాప్ మళ్లీ తెరుచుకుంటుంది."
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "記錄今天的動作，然後再回到這個應用程式。"
+            "value": "在 Pillie 打卡後，這個 App 就能再次開啟。"
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "આજ કા કામ લૉગ કર, ફિર ઇસ ઍપ પર વાપસ આઓ।"
+            "value": "Pillie પર નોંધ કરો એટલે આ ઍપ ફરી ખૂલશે."
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ಈರೋಜು ಕೆಲಸನು ನೋಂದಣಿ ಚೇಸಿ, ಆ ತರ್ವಾತ ಈ ಯಾಪ್‌ಕು ತಿರಿಗಿ ರಾ."
+            "value": "Pillie ನಲ್ಲಿ ದಾಖಲಿಸಿ, ಈ ಆ್ಯಪ್ ಮತ್ತೆ ತೆರೆಯುತ್ತದೆ."
           }
         },
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "ആക്ഷൻ രേഖപ്പെടുത്തുക, ഈ ആപ്പിലേക്ക്."
+            "value": "Pillie-യിൽ രേഖപ്പെടുത്തൂ, ഈ ആപ്പ് വീണ്ടും തുറക്കും."
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "आजची कृती नोंद, मग या अॅपवर परत."
+            "value": "Pillie वर नोंद करा, आणि हे ॲप पुन्हा उघडेल."
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ଆଜିର କାମ ଲଗ୍ କର, ତାପରେ ଏହି ଆପ୍‌କୁ ଫେର।"
+            "value": "Pillie ରେ ଦର୍ଜ କରନ୍ତୁ, ଏହି ଆପ୍ ପୁଣି ଖୋଲିବ।"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਅੱਜ ਦਾ ਕਾਮ ਲਾਗ ਕਰ, ਫਿਰ ਇਸ ਐਪ ਪਰ ਵਾਪਸ ਆਓ।"
+            "value": "Pillie ’ਤੇ ਦਰਜ ਕਰੋ, ਅਤੇ ਇਹ ਐਪ ਮੁੜ ਖੁੱਲ੍ਹ ਜਾਵੇਗੀ।"
           }
         }
       }
@@ -1113,265 +1113,265 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "È il momento di registrare"
+            "value": "In pausa finché non confermi"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zeit für einen kurzen Check-in"
+            "value": "Pausiert, bis du abhakst"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "C'est l'heure d'un petit check-in"
+            "value": "En pause jusqu’à ce que tu valides"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Hora de un check-in rápido"
+            "value": "En pausa hasta que marques lo de hoy"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Hora de um check-in rápido"
+            "value": "Pausado até você registrar"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tijd voor een snelle check-in"
+            "value": "Gepauzeerd tot je afvinkt"
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dags för en snabb incheckning"
+            "value": "Pausad tills du bockar av"
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tid til en hurtig indtjekning"
+            "value": "På pause, indtil du krydser af"
           }
         },
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tid for en rask innsjekk"
+            "value": "Pauset til du krysser av"
           }
         },
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nopean kuittauksen aika"
+            "value": "Tauolla, kunnes kuittaat"
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "translated",
-            "value": "Hora de um registo rápido"
+            "value": "Em pausa até registares"
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "És l’hora d’un registre ràpid"
+            "value": "En pausa fins que confirmis"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Czas na krótkie potwierdzenie"
+            "value": "Wstrzymane, aż odhaczysz dzień"
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Čas na rychlé potvrzení"
+            "value": "Pozastaveno, dokud neodškrtneš dnešek"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Время быстро отметиться"
+            "value": "На паузе, пока ты не отметишься"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Час швидко відмітитися"
+            "value": "На паузі, доки ти не відмітишся"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "さっとチェックインの時間です"
+            "value": "記録するまで一時停止"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "짧은 체크인 시간이에요"
+            "value": "체크할 때까지 일시 중지"
           }
         },
         "ms": {
           "stringUnit": {
             "state": "translated",
-            "value": "Masa untuk pengesahan ringkas"
+            "value": "Dijeda sehingga kamu sahkan"
           }
         },
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "E timpul pentru o confirmare rapidă"
+            "value": "Pe pauză până bifezi ziua"
           }
         },
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Čas na rýchle potvrdenie"
+            "value": "Pozastavené, kým neodškrtneš dnešok"
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "ได้เวลาเช็กอินสั้น ๆ แล้ว"
+            "value": "หยุดชั่วคราวจนกว่าคุณจะเช็กอิน"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "该快速打卡了"
+            "value": "暂停中，直到你打卡"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "झटपट चेक-इन का समय"
+            "value": "दर्ज करने तक रुका हुआ"
           }
         },
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vrijeme je za kratku potvrdu"
+            "value": "Pauzirano dok se ne javiš"
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ideje egy gyors bejelölésnek"
+            "value": "Szünetel, amíg ki nem pipálod"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kısa bir kayıt zamanı"
+            "value": "İşaretleyene kadar duraklatıldı"
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "ஒரு விரைவு செக்-இன் நேரம்"
+            "value": "நீங்கள் பதிவு செய்யும் வரை இடைநிறுத்தப்பட்டுள்ளது"
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Waktunya check-in singkat"
+            "value": "Dijeda sampai kamu check-in"
           }
         },
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "وقت تسجيل سريع"
+            "value": "متوقف مؤقتًا حتى تسجّلي"
           }
         },
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "זמן לדיווח קצר"
+            "value": "מושהית עד שתסמני"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Đến giờ điểm danh nhanh"
+            "value": "Tạm dừng đến khi bạn điểm danh"
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "একটি ছোট চেক-ইনের সময়"
+            "value": "টিক না দেওয়া পর্যন্ত পজ"
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "ایک فوری چیک اِن کا وقت"
+            "value": "درج کرنے تک رکی ہوئی"
           }
         },
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Čas za hitro potrditev"
+            "value": "Zaustavljeno, dokler ne odkljukaš"
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ώρα για μια γρήγορη επιβεβαίωση"
+            "value": "Σε παύση μέχρι να το σημειώσεις"
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "ఒక త్వరిత చెక్-ఇన్ సమయం"
+            "value": "మీరు నమోదు చేసే వరకు పాజ్‌లో ఉంది"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "該快速打卡了"
+            "value": "暫停中，直到你打卡"
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "ઝટપટ ચેક-ઇન કા સમય"
+            "value": "નોંધ ન કરો ત્યાં સુધી થોભેલી"
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ಒಕ ತ್ವರಿತ ಚೆಕ್-ಇನ್ ಸಮಯಂ"
+            "value": "ನೀವು ದಾಖಲಿಸುವವರೆಗೆ ತಡೆಹಿಡಿಯಲಾಗಿದೆ"
           }
         },
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "ചെറിയ രേഖ സമയം"
+            "value": "നിങ്ങൾ രേഖപ്പെടുത്തുന്നതുവരെ പോസ് ആണ്"
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "छोट्या नोंदीची वेळ"
+            "value": "नोंद करेपर्यंत थांबलेले"
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ଛୋଟ ଚେକ୍-ଇନ୍ ସମୟ"
+            "value": "ଦର୍ଜ କରିବା ପର୍ଯ୍ୟନ୍ତ ବିରାମରେ"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਝਟਪਟ ਚੇਕ-ਇਨ ਦਾ ਸਮਯ"
+            "value": "ਦਰਜ ਕਰਨ ਤੱਕ ਰੁਕੀ ਹੋਈ"
           }
         }
       }

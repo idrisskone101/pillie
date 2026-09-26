@@ -14,6 +14,7 @@ Table is Localizable, Commerce, Notifications, Shield, or InfoPlist.
 from __future__ import annotations
 
 import argparse
+import unicodedata
 import json
 import plistlib
 import re
@@ -44,6 +45,12 @@ LITERAL_GLOBS = [
     (REPO_ROOT / ".agents" / "skills" / "verify-pillie" / "flows", "*.flow"),
     (REPO_ROOT / ".agents" / "skills" / "verify-pillie" / "features", "*.md"),
 ]
+SCRIPTS = {
+    "hi": "DEVANAGARI", "mr": "DEVANAGARI", "bn": "BENGALI", "gu": "GUJARATI", "pa": "GURMUKHI",
+    "or": "ORIYA", "ta": "TAMIL", "te": "TELUGU", "kn": "KANNADA", "ml": "MALAYALAM",
+    "ar": "ARABIC", "ur": "ARABIC", "he": "HEBREW", "th": "THAI", "el": "GREEK",
+    "ru": "CYRILLIC", "uk": "CYRILLIC",
+}
 PLACEHOLDER = re.compile(r"%(?:\d+\$)?(?:lld|ld|d|@|%)")
 
 sys.path.insert(0, str(SCRIPT_DIR))
@@ -129,6 +136,16 @@ class Catalogs:
             (APP_ROOT / "Pillie" / f"{lang}.lproj" / "InfoPlist.strings").write_text(text)
 
 
+def foreign_script(lang: str, value: str) -> str | None:
+    """Name a non-Latin script that doesn't belong to this locale, e.g. Telugu letters in Kannada."""
+    own = SCRIPTS.get(lang)
+    for char in value:
+        block = unicodedata.name(char, "").split(" ")[0] if char.isalpha() else ""
+        if block in SCRIPTS.values() and block != own:
+            return block
+    return None
+
+
 def is_all_caps(value: str) -> bool:
     letters = [c for c in PLACEHOLDER.sub("", value) if c.isalpha() and c.lower() != c.upper()]
     return len(letters) >= 3 and all(c.isupper() for c in letters)
@@ -164,6 +181,8 @@ def check(plans: dict[str, dict[str, str]], catalogs: Catalogs) -> list[str]:
                 errors.append(f"{lang} {ref}: placeholders {placeholders(value)} != English {placeholders(english[ref])}")
             if "—" in value:
                 errors.append(f"{lang} {ref}: em dash")
+            if lang != "en" and (block := foreign_script(lang, value)):
+                errors.append(f"{lang} {ref}: {block} letters in a {lang} string")
             if is_all_caps(value) and not is_all_caps(english[ref]):
                 errors.append(f"{lang} {ref}: all caps, let SwiftUI uppercase it")
             if lang == "en":

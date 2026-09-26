@@ -18,7 +18,7 @@ final class ItalianTrialExpiryWarningLocalizationTests: XCTestCase {
 
         XCTAssertEqual(
             TrialExpiryWarningCopy.title(day: 10, locale: italian),
-            "La prova di Pillie Plus terminerà presto"
+            "La tua prova Plus finisce presto"
         )
         XCTAssertEqual(
             TrialExpiryWarningCopy.body(day: 10, locale: italian),
@@ -26,7 +26,7 @@ final class ItalianTrialExpiryWarningLocalizationTests: XCTestCase {
         )
         XCTAssertEqual(
             TrialExpiryWarningCopy.title(day: 13, locale: italian),
-            "La prova di Pillie Plus sta per terminare"
+            "La tua prova Plus sta per finire"
         )
         XCTAssertEqual(
             TrialExpiryWarningCopy.body(day: 13, locale: italian),
@@ -61,8 +61,8 @@ final class ItalianTrialExpiryWarningLocalizationTests: XCTestCase {
         XCTAssertEqual(
             warnings.map(\.title),
             [
-                "La prova di Pillie Plus terminerà presto",
-                "La prova di Pillie Plus sta per terminare",
+                "La tua prova Plus finisce presto",
+                "La tua prova Plus sta per finire",
             ]
         )
         XCTAssertEqual(

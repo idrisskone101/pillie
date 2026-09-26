@@ -196,20 +196,20 @@ final class ProtectionPlanOnboardingContentTests: XCTestCase {
         let german = Locale(identifier: "de_DE")
         let content = ProtectionPlanMechanismProofContent(method: .pill, locale: german)
 
-        XCTAssertEqual(content.eyebrow, "SO FUNKTIONIERT’S")
+        XCTAssertEqual(content.eyebrow, "So funktioniert’s")
         XCTAssertEqual(
             content.headline,
-            "Deine Apps werden wieder verfügbar, sobald du die heutige Aktion protokollierst."
+            "Deine Apps sind wieder offen, sobald du abhakst."
         )
         XCTAssertEqual(
             content.steps.map { [$0.phase, $0.title, $0.detail] },
             [
-                ["ERINNERUNG", "Erinnerung klingelt", "Eine sanfte Erinnerung zur gewählten Zeit."],
-                ["APP-PAUSE", "Ablenkende Apps pausieren", "Ausgewählte Apps bleiben pausiert, bis du die Aktion protokollierst."],
-                ["WEITER", "Aktion protokollieren", "Danach sind deine Apps sofort wieder verfügbar."],
+                ["Erinnerung", "Deine Erinnerung klingelt", "Eine sanfte Erinnerung zur gewählten Zeit."],
+                ["App-Sperre", "Ablenkende Apps pausieren", "Die Apps, die du gewählt hast, bleiben pausiert, bis du abhakst."],
+                ["Abhaken", "Zum Abhaken tippen", "Deine Apps sind sofort wieder offen."],
             ]
         )
-        XCTAssertEqual(content.lockedLabel, "PAUSIERT")
+        XCTAssertEqual(content.lockedLabel, "Pausiert")
         XCTAssertEqual(content.markTakenCTA, "Ich habe meine Pille genommen")
         XCTAssertEqual(
             ProtectionPlanMechanismProofContent(method: .patch, locale: german).markTakenCTA,
@@ -224,11 +224,11 @@ final class ProtectionPlanOnboardingContentTests: XCTestCase {
         XCTAssertEqual(content.footer, "Teil deines Pillie-Erinnerungsplans.")
         XCTAssertEqual(
             content.unlockedConfirmation,
-            "Erledigt. Deine Apps sind wieder da."
+            "Erledigt. Deine Apps sind wieder offen."
         )
         XCTAssertEqual(
             content.replayAccessibilityHint,
-            "Spielt die Demonstration der App-Pause erneut ab."
+            "Spielt die Demo der App-Sperre noch einmal ab."
         )
         XCTAssertFalse(content.visibleCopy.joined(separator: " ").contains("How it works"))
     }

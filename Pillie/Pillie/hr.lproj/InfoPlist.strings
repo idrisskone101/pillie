@@ -1,2 +1,2 @@
-"NSMotionUsageDescription" = "Pillie koristi senzore pokreta za prepoznavanje potresanja kad potvrđuješ radnju.";
-"NSUserTrackingUsageDescription" = "Dopusti praćenje da Pillie sazna koji su te kanali doveli ovamo. Nikad ne prodajemo tvoje osobne podatke.";
+"NSMotionUsageDescription" = "Pillie koristi senzor pokreta da prepozna protresanje telefona kad se javljaš.";
+"NSUserTrackingUsageDescription" = "Dopusti praćenje da Pillie sazna koji su te kanali doveli ovamo i poboljša aplikaciju. Nikad ne prodajemo tvoje osobne podatke.";
