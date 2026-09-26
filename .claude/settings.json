@@ -1,5 +1,4 @@
 {
-  "effortLevel": "high",
   "permissions": {
     "allow": [
       "Bash(xcodebuild:*)",
@@ -26,5 +25,20 @@
       "WebFetch(domain:raw.githubusercontent.com)",
       "mcp__XcodeBuildMCP"
     ]
-  }
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ \"$CLAUDE_CODE_REMOTE\" != \"true\" ] || command -v bun >/dev/null 2>&1 || npm install -g bun >/dev/null 2>&1 || true"
+          }
+        ]
+      }
+    ]
+  },
+  "enabledPlugins": {},
+  "extraKnownMarketplaces": {},
+  "effortLevel": "high"
 }
