@@ -37,6 +37,8 @@ struct SettingsView: View {
 
     private let settingsFeedback = SettingsInteractionFeedback()
 
+    private var greeting: String { PillieLocalization.string("today.greeting", locale: locale) }
+
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
             VStack(alignment: .leading, spacing: 24) {
@@ -383,8 +385,8 @@ struct SettingsView: View {
                 #endif
 
                 // Handwriting accent
-                Text(PillieLocalization.string("today.greeting", locale: locale))
-                    .font(.pillieHandwriting())
+                Text(greeting)
+                    .font(.pillieHandwriting(for: greeting))
                     .foregroundStyle(PillieTheme.textMuted)
                     .frame(maxWidth: .infinity)
                     .rotationEffect(.degrees(-2))

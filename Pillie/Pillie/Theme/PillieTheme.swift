@@ -5,6 +5,7 @@
 
 import SwiftUI
 #if os(iOS)
+import CoreText
 import UIKit
 #endif
 
@@ -158,13 +159,31 @@ extension Font {
         )
     }
 
-    static func pillieHandwriting(size: CGFloat = 24) -> Font {
-        pillieCustomFont(
-            "ReenieBeanie",
+    /// Pass `text` for localized copy: Reenie Beanie only has Latin glyphs, so
+    /// other scripts get the app face at a matching size instead of an oversized system fallback.
+    static func pillieHandwriting(size: CGFloat = 24, for text: String? = nil) -> Font {
+        if let text, !handwritingDraws(text, size: size) {
+            return .pillie((size * 0.65).rounded(), weight: .semibold)
+        }
+        return pillieCustomFont(
+            handwritingFontName,
             size: size,
             fallbackWeight: .regular,
             fallbackDesign: .serif
         )
+    }
+
+    private static let handwritingFontName = "ReenieBeanie"
+
+    private static func handwritingDraws(_ text: String, size: CGFloat) -> Bool {
+        #if os(iOS)
+        guard let font = UIFont(name: handwritingFontName, size: size) else { return false }
+        let characters = Array(text.utf16)
+        var glyphs = [CGGlyph](repeating: 0, count: characters.count)
+        return CTFontGetGlyphsForCharacters(font as CTFont, characters, &glyphs, characters.count)
+        #else
+        return true
+        #endif
     }
 
     static func pillieTitle() -> Font {

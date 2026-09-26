@@ -335,6 +335,8 @@ struct HomeView: View {
         )
     }
 
+    private var greeting: String { PillieLocalization.string("today.greeting", locale: locale) }
+
     var body: some View {
         let _ = store.protocolChangeVersion
         ZStack(alignment: .bottom) {
@@ -468,8 +470,8 @@ struct HomeView: View {
                     }
 
                     // Handwriting motivation
-                    Text(PillieLocalization.string("today.greeting", locale: locale))
-                        .font(.pillieHandwriting())
+                    Text(greeting)
+                        .font(.pillieHandwriting(for: greeting))
                         .foregroundStyle(PillieTheme.textMuted)
                         .frame(maxWidth: .infinity)
                         .rotationEffect(.degrees(-2))
