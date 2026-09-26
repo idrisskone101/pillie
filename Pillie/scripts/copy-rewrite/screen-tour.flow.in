@@ -1,13 +1,15 @@
 # Screen tour: one shot per user-facing screen, in the locale {{lang}}.
 # Rendered and run by screen-tour.sh. Every wait and tap uses an accessibility
 # id, an SF Symbol id, a debug deep link, or a coordinate, never app copy, so
-# the same steps pass in every AppLanguage.
+# the same steps pass in every AppLanguage. Coordinates come from en shots and
+# are chosen where RTL mirroring and longer copy do not move the target.
+# Every launch also sets -AppleLanguages: the onboarding screens from welcome
+# through reminder time follow the process language, not pillie.appLanguage.
 
 # ---- onboarding: fresh install through Home
 fresh
-privacy grant notifications
 defaults pillie.appLanguage -string {{lang}}
-launch
+launch -AppleLanguages "({{lang}})"
 wait id protectionPlanPrimaryCTA 15
 shot onboarding-01-welcome
 tap --id protectionPlanPrimaryCTA
@@ -18,10 +20,14 @@ gone id earlyValueProofDragLane
 wait id protectionPlanPrimaryCTA
 shot onboarding-03-pain-points
 openurl "pillie://debug/onboarding-personalization-timing?lang={{lang}}"
-sleep 1
+sleep 1  # same ids as pain points; openurl already waited for the tree to settle
 shot onboarding-04-miss-frequency
+# Miss frequency gates Continue on unlabeled chips. Jump past it to
+# acquisitionSource. simctl defaults only win over an empty app container.
+fresh
+defaults pillie.appLanguage -string {{lang}}
 defaults onboardingStep -int 8
-launch
+launch -AppleLanguages "({{lang}})"
 wait id acquisitionSource.tiktok 15
 shot onboarding-05-acquisition-source
 tap --id acquisitionSource.tiktok
@@ -36,16 +42,19 @@ tap --id protectionPlanPrimaryCTA
 wait id sun.max.fill
 shot onboarding-08-reminder-time
 tap --id protectionPlanPrimaryCTA
+tap --label Allow  # iOS notification alert, in the simulator's language, not the app's
 wait id protectionPlanBackButton 15
 wait id sparkles 15
 shot onboarding-09-reminder-plan
+gesture scroll-down
+shot onboarding-09-reminder-plan-scrolled
 tap --id protectionPlanPrimaryCTA
 wait id appBlockingEmptyStateCard 15
 shot onboarding-10-app-blocking-empty
 openurl "pillie://debug/plus-app-blocking-setup?selected=3&lang={{lang}}"
 wait id pencil
 shot onboarding-11-app-blocking-selected
-tap -x 201 -y 740
+tap -x 201 -y 740  # Continue on the selected phase has no id
 wait id protectionPlanReadyStartButton 15
 shot onboarding-12-ready
 tap --id protectionPlanReadyStartButton
@@ -55,7 +64,7 @@ shot onboarding-13-home
 # ---- home, check-in, history
 fresh
 defaults pillie.appLanguage -string {{lang}}
-launch
+launch -AppleLanguages "({{lang}})"
 wait id protectionPlanPrimaryCTA 15
 openurl "pillie://debug/plus-home?lang={{lang}}"
 openurl "pillie://debug/trial-grant?lang={{lang}}"
@@ -68,7 +77,7 @@ shot home-due
 gesture scroll-down
 shot home-scrolled
 gesture scroll-up
-tap -x 201 -y 742
+tap -x 201 -y 742  # floating Take pill button has no id
 wait id shakeTapToConfirmFallback
 shot home-shake-check-in
 tap --id shakeTapToConfirmFallback
@@ -85,81 +94,97 @@ tap --id historyDayCorrection.taken
 gone id historyDayCorrection.taken
 
 # ---- settings
-launch
+launch -AppleLanguages "({{lang}})"
 openurl "pillie://debug/plus-home?lang={{lang}}"
 wait id developerMenuAvatarButton 15
 tap --id gearshape
 wait id settingsLanguageRow
 shot settings-top
-tap -x 201 -y 395
+tap -x 201 -y 395  # Reminder messages row, low in the row so taller rows above still land
 wait id reminder-preset-gentle
 shot settings-reminder-messages
 swipe --start-x 200 --start-y 200 --end-x 200 --end-y 860 --duration 0.4
 gone id reminder-preset-gentle
-tap -x 201 -y 269
+tap -x 201 -y 269  # Method row
 wait id Increment
 shot settings-schedule-editor
-tap -x 201 -y 720
+tap -x 201 -y 720  # Save; the alert is shot, never confirmed
 sleep 1.5
 shot settings-schedule-reset-alert
-launch
+launch -AppleLanguages "({{lang}})"
 openurl "pillie://debug/plus-home?lang={{lang}}"
 wait id developerMenuAvatarButton 15
 tap --id gearshape
 wait id settingsLanguageRow
-gesture scroll-down
-gesture scroll-down
+# One long swipe: a second swipe while the list still coasts can time out in axe.
+swipe --start-x 200 --start-y 760 --end-x 200 --end-y 80 --duration 0.8
+wait id settingsDeveloperMenuRow
 shot settings-scrolled
 tap --id settingsLanguageRow
-wait label Deutsch
+wait id checkmark  # the selected row; Settings itself has no checkmark
 shot settings-language-picker
 swipe --start-x 200 --start-y 200 --end-x 200 --end-y 860 --duration 0.4
-gone label Deutsch
+gone id checkmark
 
-# ---- paywall boards
-launch
-wait id developerMenuAvatarButton 15
-openurl "pillie://debug/honest-paywall?board=duringTrial&lang={{lang}}"
-wait text "$4.99" 10
-shot paywall-during-trial
-launch
-wait id developerMenuAvatarButton 15
-openurl "pillie://debug/honest-paywall?board=settingsFree&lang={{lang}}"
-sleep 2
-shot paywall-settings-free
-launch
-wait id developerMenuAvatarButton 15
-openurl "pillie://debug/honest-paywall?board=trialEndedReturningLegacy&lang={{lang}}"
-wait text "$4.99" 10
-shot paywall-trial-ended-returning-legacy
-launch
-wait id developerMenuAvatarButton 15
-openurl "pillie://debug/honest-paywall?board=trialEndedReturningHard&lang={{lang}}"
-wait text "$4.99" 10
-shot paywall-trial-ended-returning-hard
-
-# ---- trial surfaces
-launch
+# ---- trial activation hub (Plus from the settings section keeps the paywall away at launch)
+launch -AppleLanguages "({{lang}})"
 wait id developerMenuAvatarButton 15
 openurl "pillie://debug/trial-activation-hub?state=unconfigured&lang={{lang}}"
 wait id trialIndicator 15
 tap --id trialIndicator
 wait id trialKeepPlus
 shot trial-activation-hub
-launch
-wait id developerMenuAvatarButton 15
-openurl "pillie://debug/trial-end-paywall?cohort=blocker&terms=hard&lang={{lang}}"
-wait text "$4.99" 10
-shot trial-end-paywall
-openurl "pillie://debug/update-trial-announcement?lang={{lang}}"
-launch
-wait id iphone.radiowaves.left.and.right 15
-shot update-trial-announcement
 
-# ---- review prompt
+# ---- review prompt card
 defaults homeBlockingStatusCardDismissed -bool true
-launch
+launch -AppleLanguages "({{lang}})"
 wait id developerMenuAvatarButton 15
 openurl "pillie://debug/review-prompt?lang={{lang}}"
 wait id homeReviewPromptCard 15
+gesture scroll-down
 shot home-review-prompt
+
+# ---- paywall boards and trial announcements. Prices come from StoreKit, not
+# the string catalogs, so "$4.99" marks a paywall in every locale.
+defaults homeBlockingStatusCardDismissed -bool false
+launch -AppleLanguages "({{lang}})"
+wait id developerMenuAvatarButton 15
+openurl "pillie://debug/honest-paywall?board=duringTrial&lang={{lang}}"
+wait text "$4.99" 10
+shot paywall-during-trial
+# The settingsFree link's first open seeds a free, no-grant user; the second
+# makes ContentView grant the update trial and show the announcement.
+launch -AppleLanguages "({{lang}})"
+wait id developerMenuAvatarButton 15
+openurl "pillie://debug/honest-paywall?board=settingsFree&lang={{lang}}"
+openurl "pillie://debug/honest-paywall?board=settingsFree&lang={{lang}}"
+wait id iphone.radiowaves.left.and.right 15
+shot update-trial-announcement
+launch -AppleLanguages "({{lang}})"
+wait id developerMenuAvatarButton 15
+openurl "pillie://debug/honest-paywall?board=trialEndedReturningLegacy&lang={{lang}}"
+wait text "$4.99" 10
+shot paywall-trial-ended-returning-legacy
+# An expired trial opened from the Home blocking card resolves to the
+# settingsFree board (HonestPaywallBoardResolver), which its own link cannot show.
+tap --id xmark --element-type Button
+gone text "$4.99"
+tap --id homeBlockingStatusCardCTA
+wait text "$4.99" 10
+shot paywall-settings-free
+# Not dismissible; the next launch leaves it.
+launch -AppleLanguages "({{lang}})"
+wait id developerMenuAvatarButton 15
+openurl "pillie://debug/honest-paywall?board=trialEndedReturningHard&lang={{lang}}"
+wait text "$4.99" 10
+shot paywall-trial-ended-returning-hard
+# Trial-end paywall with own stats: clear the hard board with Plus, seed a
+# streak and shield intercepts, then let Home auto-present it. A relaunch in this
+# seeded state sometimes crashes in PillStore.scheduleSnapshot, so none follows.
+openurl "pillie://debug/plus-home?lang={{lang}}"
+gone text "$4.99"
+openurl "pillie://debug/review-prompt?lang={{lang}}"
+openurl "pillie://debug/intervention-seed?count=6"
+openurl "pillie://debug/trial-end-paywall?cohort=blocker&terms=hard&lang={{lang}}"
+wait text "$4.99" 15
+shot trial-end-paywall
