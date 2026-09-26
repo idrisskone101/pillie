@@ -3,6 +3,7 @@
 //  Pillie
 //
 
+import CoreText
 import SwiftUI
 
 struct PaywallMomentHeader: View {
@@ -113,11 +114,19 @@ struct PaywallMomentHeader: View {
     private func handwrittenAside(_ line: String) -> some View {
         if !line.isEmpty {
             Text(line)
-                .font(.pillieHandwriting(size: 26))
+                .font(Self.handwritingDraws(line) ? .pillieHandwriting(size: 26) : .pillie(17, weight: .semibold))
                 .foregroundStyle(PillieTheme.dark)
                 .rotationEffect(.degrees(-3))
                 .padding(.top, 8)
         }
+    }
+
+    /// Reenie Beanie only has Latin glyphs; other scripts would fall back to an oversized system face.
+    private static func handwritingDraws(_ text: String) -> Bool {
+        guard let font = UIFont(name: "ReenieBeanie", size: 26) else { return false }
+        let characters = Array(text.utf16)
+        var glyphs = [CGGlyph](repeating: 0, count: characters.count)
+        return CTFontGetGlyphsForCharacters(font as CTFont, characters, &glyphs, characters.count)
     }
 
     private func titleBlock(title: String, subtitle: String) -> some View {

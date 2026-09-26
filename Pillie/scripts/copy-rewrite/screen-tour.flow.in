@@ -3,13 +3,15 @@
 # id, an SF Symbol id, a debug deep link, or a coordinate, never app copy, so
 # the same steps pass in every AppLanguage. Coordinates come from en shots and
 # are chosen where RTL mirroring and longer copy do not move the target.
-# Every launch also sets -AppleLanguages: the onboarding screens from welcome
-# through reminder time follow the process language, not pillie.appLanguage.
+# Every launch also sets -AppleLanguages and -AppleLocale: the onboarding
+# screens from welcome through reminder time follow the process language, and
+# notification defaults (shown in the reminder messages editor) follow
+# Locale.current, not pillie.appLanguage.
 
 # ---- onboarding: fresh install through Home
 fresh
 defaults pillie.appLanguage -string {{lang}}
-launch -AppleLanguages "({{lang}})"
+launch -AppleLanguages "({{lang}})" -AppleLocale {{lang}}
 wait id protectionPlanPrimaryCTA 15
 shot onboarding-01-welcome
 tap --id protectionPlanPrimaryCTA
@@ -27,7 +29,7 @@ shot onboarding-04-miss-frequency
 fresh
 defaults pillie.appLanguage -string {{lang}}
 defaults onboardingStep -int 8
-launch -AppleLanguages "({{lang}})"
+launch -AppleLanguages "({{lang}})" -AppleLocale {{lang}}
 wait id acquisitionSource.tiktok 15
 shot onboarding-05-acquisition-source
 tap --id acquisitionSource.tiktok
@@ -64,7 +66,7 @@ shot onboarding-13-home
 # ---- home, check-in, history
 fresh
 defaults pillie.appLanguage -string {{lang}}
-launch -AppleLanguages "({{lang}})"
+launch -AppleLanguages "({{lang}})" -AppleLocale {{lang}}
 wait id protectionPlanPrimaryCTA 15
 openurl "pillie://debug/plus-home?lang={{lang}}"
 openurl "pillie://debug/trial-grant?lang={{lang}}"
@@ -94,7 +96,7 @@ tap --id historyDayCorrection.taken
 gone id historyDayCorrection.taken
 
 # ---- settings
-launch -AppleLanguages "({{lang}})"
+launch -AppleLanguages "({{lang}})" -AppleLocale {{lang}}
 openurl "pillie://debug/plus-home?lang={{lang}}"
 wait id developerMenuAvatarButton 15
 tap --id gearshape
@@ -111,7 +113,7 @@ shot settings-schedule-editor
 tap -x 201 -y 720  # Save; the alert is shot, never confirmed
 sleep 1.5
 shot settings-schedule-reset-alert
-launch -AppleLanguages "({{lang}})"
+launch -AppleLanguages "({{lang}})" -AppleLocale {{lang}}
 openurl "pillie://debug/plus-home?lang={{lang}}"
 wait id developerMenuAvatarButton 15
 tap --id gearshape
@@ -127,7 +129,7 @@ swipe --start-x 200 --start-y 200 --end-x 200 --end-y 860 --duration 0.4
 gone id checkmark
 
 # ---- trial activation hub (Plus from the settings section keeps the paywall away at launch)
-launch -AppleLanguages "({{lang}})"
+launch -AppleLanguages "({{lang}})" -AppleLocale {{lang}}
 wait id developerMenuAvatarButton 15
 openurl "pillie://debug/trial-activation-hub?state=unconfigured&lang={{lang}}"
 wait id trialIndicator 15
@@ -137,7 +139,7 @@ shot trial-activation-hub
 
 # ---- review prompt card
 defaults homeBlockingStatusCardDismissed -bool true
-launch -AppleLanguages "({{lang}})"
+launch -AppleLanguages "({{lang}})" -AppleLocale {{lang}}
 wait id developerMenuAvatarButton 15
 openurl "pillie://debug/review-prompt?lang={{lang}}"
 wait id homeReviewPromptCard 15
@@ -147,20 +149,20 @@ shot home-review-prompt
 # ---- paywall boards and trial announcements. Prices come from StoreKit, not
 # the string catalogs, so "$4.99" marks a paywall in every locale.
 defaults homeBlockingStatusCardDismissed -bool false
-launch -AppleLanguages "({{lang}})"
+launch -AppleLanguages "({{lang}})" -AppleLocale {{lang}}
 wait id developerMenuAvatarButton 15
 openurl "pillie://debug/honest-paywall?board=duringTrial&lang={{lang}}"
 wait text "$4.99" 10
 shot paywall-during-trial
 # The settingsFree link's first open seeds a free, no-grant user; the second
 # makes ContentView grant the update trial and show the announcement.
-launch -AppleLanguages "({{lang}})"
+launch -AppleLanguages "({{lang}})" -AppleLocale {{lang}}
 wait id developerMenuAvatarButton 15
 openurl "pillie://debug/honest-paywall?board=settingsFree&lang={{lang}}"
 openurl "pillie://debug/honest-paywall?board=settingsFree&lang={{lang}}"
 wait id iphone.radiowaves.left.and.right 15
 shot update-trial-announcement
-launch -AppleLanguages "({{lang}})"
+launch -AppleLanguages "({{lang}})" -AppleLocale {{lang}}
 wait id developerMenuAvatarButton 15
 openurl "pillie://debug/honest-paywall?board=trialEndedReturningLegacy&lang={{lang}}"
 wait text "$4.99" 10
@@ -173,7 +175,7 @@ tap --id homeBlockingStatusCardCTA
 wait text "$4.99" 10
 shot paywall-settings-free
 # Not dismissible; the next launch leaves it.
-launch -AppleLanguages "({{lang}})"
+launch -AppleLanguages "({{lang}})" -AppleLocale {{lang}}
 wait id developerMenuAvatarButton 15
 openurl "pillie://debug/honest-paywall?board=trialEndedReturningHard&lang={{lang}}"
 wait text "$4.99" 10
