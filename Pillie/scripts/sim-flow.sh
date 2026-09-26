@@ -183,15 +183,19 @@ select_tap() {
     esac
   done
   t="$(now_ms)"
-  local deadline=$((SECONDS + WAIT))
+  local deadline=$((SECONDS + WAIT)) last=""
   while :; do
+    xy=""
     if dump "$OUT/.probe.json"; then
       if [[ -n "$etype" ]]; then
-        xy="$("$OUTLINE" "$OUT/.probe.json" --center "$kind" "$value" --type "$etype")" && break
+        xy="$("$OUTLINE" "$OUT/.probe.json" --center "$kind" "$value" --type "$etype")" || xy=""
       else
-        xy="$("$OUTLINE" "$OUT/.probe.json" --center "$kind" "$value")" && break
+        xy="$("$OUTLINE" "$OUT/.probe.json" --center "$kind" "$value")" || xy=""
       fi
     fi
+    # Same spot twice in a row: a sheet sliding in has stopped moving.
+    [[ -n "$xy" && "$xy" == "$last" ]] && break
+    last="$xy"
     if (( SECONDS >= deadline )); then
       local why="no on-screen element with $kind '$value'"
       "$OUTLINE" "$OUT/.probe.json" --has "$kind" "$value" 2>/dev/null && why="$kind '$value' exists but is off screen; scroll first"

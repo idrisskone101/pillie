@@ -7,7 +7,7 @@ Usage:
   Pillie/scripts/ax-outline.py DUMP.json --has label X
   Pillie/scripts/ax-outline.py DUMP.json --has text X  # substring of any label/value
   Pillie/scripts/ax-outline.py DUMP.json --center id|label|value X [--type Button]
-                                  # print "x y" of the first on-screen match, exit 1 if none
+                                  # "x y" of an on-screen match (Buttons first), exit 1 if none
 
 Outline line: `Type  #id  "label"  =value  @x,y wxh` (points, top-left origin).
 Narrow and no-break spaces print as \u202f etc.; --has and --center fold them to
@@ -73,15 +73,20 @@ def main():
         key = {"id": "AXUniqueId", "label": "AXLabel", "value": "AXValue"}[kind]
         screen = (tree[0].get("frame") or {}) if tree else {}
         width, height = screen.get("width", 10000), screen.get("height", 10000)
+        hits = []
         for n in nodes:
             f = n.get("frame") or {}
             if norm(n.get(key)) != norm(want) or (etype and n.get("type") != etype):
                 continue
             x, y = f.get("x", 0) + f.get("width", 0) / 2, f.get("y", 0) + f.get("height", 0) / 2
             if 0 <= x <= width and 0 <= y <= height:
-                print(f"{x:.0f} {y:.0f}")
-                return 0
-        return 1
+                hits.append((n.get("type") != "Button", x, y))
+        if not hits:
+            return 1
+        # A label often matches a Button and the StaticText inside another card; tap the Button.
+        _, x, y = min(hits, key=lambda h: h[0])
+        print(f"{x:.0f} {y:.0f}")
+        return 0
     if len(sys.argv) >= 5 and sys.argv[2] == "--has":
         kind, want = sys.argv[3], sys.argv[4]
         for n in nodes:

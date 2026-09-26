@@ -31,16 +31,18 @@ One step per line; `#` starts a comment. `Pillie/scripts/sim-flow.sh --help-step
 launch
 openurl pillie://debug/plus-home?lang=en     # deterministic start: Plus Home, English
 wait text Today 15
-tap --label Settings                         # axe step; waits up to 10s for the element
+tap --label Settings                         # waits up to 10s for it on screen
 wait id settingsLanguageRow
 shot settings                                # 1x PNG + ax JSON + outline, numbered
 ```
 
-- Start every flow from a known state: `launch` plus a debug deep link, or `fresh` for first launch. [references/state-setup.md](references/state-setup.md) lists every deep link, developer-menu scenario, and defaults key.
-- Put a `wait` before every `shot`. The wait is the assertion; the shot is the record.
-- Target `id` first (`.accessibilityIdentifier`), then exact English text from source. Coordinates only from a fresh shot, in points.
-- Consecutive axe steps (`tap`, `swipe`, `gesture`, `type`, `button`, `key`, `sleep`) run as one `axe batch`. Selector taps wait for their element, so a `sleep` before a tap is a smell.
-- Scroll is content direction: `gesture scroll-down` reveals rows below the fold.
+- Start every flow from a known state: `launch` plus a debug deep link, or `fresh` for a real first launch (it also empties the App Group container, where the store lives and which `simctl uninstall` keeps). [references/state-setup.md](references/state-setup.md) lists every deep link, developer-menu scenario, and defaults key.
+- Put a `wait` before every `shot`, and make the wait specific to the new state. `wait text Language` after opening the language picker proves nothing, because the Settings row already says "Language". Pick a string only the new screen has, and after closing a sheet `gone` one of its strings.
+- Target `id` first (`.accessibilityIdentifier`), then an exact `label` from the outline, then `text` (substring). Coordinates only from a fresh shot, in points.
+- A tap by `--id`/`--label`/`--value` waits up to 10 s for an on-screen match and taps its center. An element that exists only below the fold fails with "off screen; scroll first", so `gesture scroll-down` before it. Other axe steps (`swipe`, `gesture`, `type`, `button`, `key`, `sleep`, coordinate taps) run together as one `axe batch`.
+- If a label matches more than once, add `--element-type Button`. Developer-menu row ids leak onto their child texts, so tap those rows by title.
+- iOS puts narrow no-break spaces in times ("8:00\u202fAM"); the outline prints them as `\u202f`. Type a plain space in the flow; the runner folds them.
+- Scroll is content direction: `gesture scroll-down` reveals rows below the fold. The runner turns it into a 0.6 s swipe, because axe's preset flicks too fast for the UIKit tab panes.
 - A failing step stops the flow and saves a `fail` shot. Read its outline before you guess.
 
 Save a flow you will reuse under `flows/`, name it in the feature's doc, and run `make verify-flows`. That check fails on unknown steps, deep links the app does not handle, ids that are not in Swift source, and flows no feature doc names. CI runs it.

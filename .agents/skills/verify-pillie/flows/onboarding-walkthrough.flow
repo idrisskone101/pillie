@@ -35,7 +35,7 @@ tap --id protectionPlanPrimaryCTA
 # :242-245 (skipDemo calls onContinue).
 wait id protectionPlanEarlyValueProofView
 shot early-value-proof
-tap --id protectionPlanSecondaryCTA
+tap --label "Not now" --element-type Button  # the screen id leaks onto every child; SecondaryCTA id is not on this screen
 
 # painPoints — ProtectionPlanDistractionChoicesView. Needs one distraction choice
 # AND one desired outcome before primaryCTA enables (canContinue,
