@@ -38,7 +38,9 @@ SOURCE_DIRS = [
 sys.path.insert(0, str(SCRIPT_DIR))
 from importlib import import_module  # noqa: E402
 
-APP_LANGUAGE_CODES: list[str] = import_module("check-translated-copy").APP_LANGUAGE_CODES
+_translated = import_module("check-translated-copy")
+APP_LANGUAGE_CODES: list[str] = _translated.APP_LANGUAGE_CODES
+value_of = _translated.localization_value
 
 SURFACES = [
     ("paywall", "Paywall"),
@@ -55,12 +57,6 @@ SURFACES = [
     ("blocking", "App blocking"),
     ("review", "Review prompt"),
 ]
-
-
-def value_of(entry: dict, lang: str) -> str | None:
-    unit = (entry.get("localizations") or {}).get(lang, {}).get("stringUnit") or {}
-    value = unit.get("value")
-    return value if isinstance(value, str) else None
 
 
 def surface_of(table: str, key: str) -> str:

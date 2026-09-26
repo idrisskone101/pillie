@@ -38,21 +38,9 @@ GLOSSARY = [
     (r"\bmay be running low\b|\bwhen convenient\b", "hedged and cold, say what to check"),
 ]
 
-RULES = {
-    "dash": "no em or en dash in prose (ranges like 23–28 are fine)",
-    "title_case": "sentence case, not Title Case",
-    "all_caps": "write sentence case and uppercase in SwiftUI with .textCase(.uppercase)",
-    "straight_apostrophe": "use the typographic apostrophe ’",
-    "unfinished_sentence": "a multi-sentence line ends with punctuation",
-}
 
-
-def title_case(text: str) -> bool:
-    return any(title_case_segment(part) for part in text.split(" · "))
-
-
-def title_case_segment(text: str) -> bool:
-    words = re.findall(r"[A-Za-z][A-Za-z’']*", text)
+def title_case(segment: str) -> bool:
+    words = re.findall(r"[A-Za-z][A-Za-z’']*", segment)
     if len(words) < 2:
         return False
     capped = [w for w in words[1:] if w[0].isupper() and w not in PROPER_NOUNS and not w.isupper()]
@@ -64,17 +52,17 @@ def findings(text: str) -> list[str]:
     for pattern, message in GLOSSARY:
         if re.search(pattern, text, re.IGNORECASE):
             out.append(f"glossary: {message}")
-    if re.search(r"[—]|(?<!\d)–|–(?!\d)", text):
-        out.append(RULES["dash"])
-    if title_case(text):
-        out.append(RULES["title_case"])
+    if "—" in text or re.search(r"(?<!\d)–|–(?!\d)", text):
+        out.append("no em or en dash in prose (ranges like 23–28 are fine)")
+    if any(title_case(part) for part in text.split(" · ")):
+        out.append("sentence case, not Title Case")
     letters = re.sub(r"%\S+|[^A-Za-z]", "", text)
     if len(letters) >= 3 and letters.isupper():
-        out.append(RULES["all_caps"])
+        out.append("write sentence case and uppercase in SwiftUI with .textCase(.uppercase)")
     if re.search(r"[A-Za-z]'[A-Za-z]", text):
-        out.append(RULES["straight_apostrophe"])
+        out.append("use the typographic apostrophe ’")
     if ". " in text and not re.search(r"[.!?…:)]$", text.strip()):
-        out.append(RULES["unfinished_sentence"])
+        out.append("a multi-sentence line ends with punctuation")
     return out
 
 
