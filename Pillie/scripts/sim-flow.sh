@@ -193,11 +193,16 @@ select_tap() {
   local i
   for ((i = 1; i < ${#toks[@]}; i++)); do
     case "${toks[$i]}" in
-      --id|--label|--value) kind="${toks[$i]#--}"; value="${toks[$((i + 1))]}" ;;
-      --element-type) etype="${toks[$((i + 1))]}" ;;
+      --id|--label|--value) kind="${toks[$i]#--}"; value="${toks[$((i + 1))]:-}" ;;
+      --element-type) etype="${toks[$((i + 1))]:-}" ;;
     esac
   done
   t="$(now_ms)"
+  if [[ -z "$value" ]]; then
+    record_step "$line" 0 0 "" "--$kind needs a value"
+    echo "FAIL $line: --$kind needs a value"
+    return 1
+  fi
   local deadline=$((SECONDS + WAIT)) last=""
   while :; do
     xy=""
@@ -278,8 +283,14 @@ PY
 }
 
 run_pseudo() {
-  local verb="$1"
+  local verb="$1" need=0
   shift
+  # set -u would kill the runner on a missing $1 before any report is written.
+  case "$verb" in
+    shot|appearance|statusbar|openurl|push|record|log|expect|expect-not) need=1 ;;
+    privacy) need=2 ;;
+  esac
+  (( $# >= need )) || { echo "$verb needs $need argument(s), got $#"; return 2; }
   case "$verb" in
     launch) launch_app "$@" ;;
     fresh)
@@ -373,8 +384,15 @@ run_pseudo() {
 }
 
 cleanup() {
-  [[ -n "$RECORD_PID" ]] && kill -INT "$RECORD_PID" 2>/dev/null || true
-  [[ -n "$LOG_PID" ]] && kill "$LOG_PID" 2>/dev/null || true
+  # Wait for the recorder to finish writing, or a failed flow leaves a truncated mp4.
+  if [[ -n "$RECORD_PID" ]]; then
+    kill -INT "$RECORD_PID" 2>/dev/null || true
+    wait "$RECORD_PID" 2>/dev/null || true
+  fi
+  if [[ -n "$LOG_PID" ]]; then
+    kill "$LOG_PID" 2>/dev/null || true
+    wait "$LOG_PID" 2>/dev/null || true
+  fi
   rm -f "$OUT/.probe.json" "$OUT/.full.png" "$OUT/.step.log" "$BATCH"
 }
 trap cleanup EXIT
@@ -449,7 +467,7 @@ out, name, udid, sha, ok, t0 = sys.argv[1:]
 steps = [json.loads(l) for l in open(os.path.join(out, "steps.jsonl"), encoding="utf-8") if l.strip()]
 report = {"flow": name, "ok": ok == "1", "udid": udid, "app_sha": sha,
           "duration_s": round(time.time() - float(t0), 1),
-          "shots": sorted(f for f in os.listdir(out) if f.endswith(".png")),
+          "shots": sorted(f for f in os.listdir(out) if f.endswith(".png") and not f.startswith(".")),
           "steps": steps}
 json.dump(report, open(os.path.join(out, "report.json"), "w"), indent=2, ensure_ascii=False)
 print(f"{'ok' if report['ok'] else 'FAIL'}: flow {name} {len(steps)} steps {report['duration_s']}s -> {out}")

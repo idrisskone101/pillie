@@ -4,7 +4,7 @@
 Usage: Pillie/scripts/check-verify-flows.py [--quiet]
 
 Fails when a flow line does not parse, uses an unknown step, gives wait/gone/
-expect the wrong arguments, opens a pillie://debug path the app does not
+expect the wrong arguments, gives a step fewer arguments than it reads, opens a pillie://debug path the app does not
 handle, or names an id that is neither an accessibilityIdentifier literal nor
 an SF Symbol name in app source;
 when a flow is not named by any feature doc; or when a feature doc is missing
@@ -23,6 +23,10 @@ FEATURES = SKILL / "features"
 SWIFT_ROOT = ROOT / "Pillie"
 APP = ROOT / "Pillie/Pillie/PillieApp.swift"
 RUNNER = ROOT / "Pillie/scripts/sim-flow.sh"
+
+# Steps whose runner branch reads positional args; fewer args crash it under set -u.
+MIN_ARGS = {"shot": 1, "appearance": 1, "statusbar": 1, "openurl": 1, "push": 1,
+            "record": 1, "log": 1, "privacy": 2, "defaults": 3}
 
 AXE_STEPS = {"tap", "swipe", "gesture", "touch", "type", "button", "key", "key-sequence", "key-combo", "sleep"}
 
@@ -79,6 +83,12 @@ def main():
                     errors.append(f"{where}: `{verb} id|label|text VALUE{' [SECONDS]' if most == 3 else ''}`, got {len(rest)} args; quote multi-word text")
                 elif len(rest) == 3 and not rest[2].isdigit():
                     errors.append(f"{where}: seconds must be a whole number, got `{rest[2]}`")
+            if len(rest) < MIN_ARGS.get(verb, 0):
+                errors.append(f"{where}: `{verb}` needs {MIN_ARGS[verb]} argument(s), got {len(rest)}")
+            if verb == "tap":
+                for i, w in enumerate(rest):
+                    if w in ("--id", "--label", "--value", "--element-type") and (i + 1 >= len(rest) or rest[i + 1].startswith("--")):
+                        errors.append(f"{where}: `tap {w}` needs a value")
             for path in re.findall(r"pillie://debug(/[\w-]+)", line):
                 if path not in deep_links:
                     errors.append(f"{where}: PillieApp.swift has no deep link `{path}`")
