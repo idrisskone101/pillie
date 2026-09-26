@@ -16,6 +16,7 @@
 #   Pillie/scripts/namespace-mac.sh qa
 #   Pillie/scripts/namespace-mac.sh screenshot
 #   Pillie/scripts/namespace-mac.sh verify -- <command...>
+#   Pillie/scripts/namespace-mac.sh flow FLOW_FILE...
 #
 # Linux Cloud Agents stay on Linux. Exec is native SSH (GetSSHConfig) when
 # port 22 is reachable, else HTTPS (CommandService via namespace-mac-api.py
@@ -36,7 +37,12 @@ REMOTE_DIR="${PILLIE_NS_REMOTE_DIR:-/Users/runner/workspaces/pillie}"
 SSH_DIR="${PILLIE_NS_SSH_DIR:-$HOME/.namespace/ssh}"
 SSH_HOST="${PILLIE_NS_SSH_HOST:-pillie-ios}"
 SSH_CONFIG="$SSH_DIR/${SSH_HOST}.config"
-ARTIFACT_DIR="${PILLIE_NS_ARTIFACT_DIR:-/opt/cursor/artifacts}"
+# Cursor shows /opt/cursor/artifacts. Elsewhere (Claude Code cloud) the repo's
+# gitignored .qa-artifacts is the folder the user can open.
+if [[ -z "${PILLIE_NS_ARTIFACT_DIR:-}" && -d /opt/cursor ]]; then
+  PILLIE_NS_ARTIFACT_DIR=/opt/cursor/artifacts
+fi
+ARTIFACT_DIR="${PILLIE_NS_ARTIFACT_DIR:-$REPO_ROOT/.qa-artifacts}"
 TOKEN_PATH="${NSC_TOKEN_FILE:-$HOME/.config/ns/token.json}"
 
 export PATH="$HOME/.local/bin:/usr/local/bin:$PATH"
@@ -336,7 +342,8 @@ export PATH=\"/opt/homebrew/bin:/usr/local/bin:\$PATH\"
 cd '$REMOTE_DIR'
 ${script}"
   if [[ "$(transport)" == https ]]; then
-    api exec --stream --timeout "${NS_MAC_EXEC_TIMEOUT:-5400}" -- /bin/bash --login -c "$body"
+    api exec --stream --poll "${NS_MAC_POLL:-5}" --timeout "${NS_MAC_EXEC_TIMEOUT:-5400}" \
+      -- /bin/bash --login -c "$body"
     return
   fi
   ssh -F "$SSH_CONFIG" "$SSH_HOST" -- bash --login -s <<<"$body"
@@ -475,6 +482,46 @@ qa_remote() {
   pull_qa_artifacts
 }
 
+# Ship flow files, run them in one remote job, pull one archive back.
+# The Mac checkout follows HEAD for scripts only; the app stays as last built.
+flow_remote() {
+  if [[ $# -eq 0 ]]; then
+    echo "error: pass one or more .flow files" >&2
+    exit 64
+  fi
+  local sha stage=/tmp/pillie-flow ship="" names=() f name
+  sha="$(git -C "$REPO_ROOT" rev-parse HEAD)"
+  for f in "$@"; do
+    [[ -f "$f" ]] || { echo "error: missing flow $f" >&2; exit 2; }
+    name="$(basename "$f" .flow)"
+    names+=("$name")
+    ship+="printf '%s' '$(base64 -w0 <"$f")' | base64 --decode >$stage/$name.flow
+"
+  done
+  local rc=0
+  NS_MAC_POLL="${NS_MAC_POLL:-0.5}" exec_remote "if [ \"\$(git rev-parse HEAD)\" != '$sha' ]; then
+  { git fetch --quiet origin && git reset --quiet --hard '$sha'; } || echo 'warn: scripts not synced to ${sha:0:12} (push first)'
+fi
+rm -rf $stage && mkdir -p $stage
+${ship}rc=0
+for n in ${names[*]}; do Pillie/scripts/sim-flow.sh $stage/\$n.flow $stage/\$n || rc=1; done
+tar -C $stage -czf $stage.tgz --exclude '*.flow' .
+exit \$rc" || rc=$?
+  mkdir -p "$ARTIFACT_DIR/flows"
+  for name in "${names[@]}"; do rm -rf "${ARTIFACT_DIR:?}/flows/$name"; done
+  if [[ "$(transport)" == https ]]; then
+    api download "$stage.tgz" "$ARTIFACT_DIR/flows/.last.tgz" >/dev/null
+  else
+    scp -q -F "$SSH_CONFIG" "$SSH_HOST:$stage.tgz" "$ARTIFACT_DIR/flows/.last.tgz"
+  fi
+  tar -C "$ARTIFACT_DIR/flows" -xzf "$ARTIFACT_DIR/flows/.last.tgz"
+  rm -f "$ARTIFACT_DIR/flows/.last.tgz"
+  for name in "${names[@]}"; do
+    echo "ok: $ARTIFACT_DIR/flows/$name/report.json"
+  done
+  return "$rc"
+}
+
 screenshot_remote() {
   qa_remote
 }
@@ -547,6 +594,7 @@ case "$cmd" in
   ensure-tools) run_oneshot ensure_tools_remote ;;
   qa) run_oneshot qa_remote ;;
   screenshot) run_oneshot screenshot_remote ;;
+  flow) run_oneshot flow_remote "$@" ;;
   verify)
     if [[ "${1:-}" == "--" ]]; then
       shift

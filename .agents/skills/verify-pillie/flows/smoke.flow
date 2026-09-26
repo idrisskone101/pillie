@@ -1,0 +1,9 @@
+# Launch state, then Plus Home via the debug deep link, then each tab.
+launch
+shot launch
+openurl pillie://debug/plus-home?lang=en
+wait text Today 15
+shot today
+tap --label Settings
+wait id settingsLanguageRow
+shot settings

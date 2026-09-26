@@ -27,9 +27,13 @@ CAPTURE_ONLY ?= 0
 FORCE_BUILD ?= 0
 
 WORKLOAD ?= all
+FLOW ?=
+FLOWS_DIR := $(ROOT)/.agents/skills/verify-pillie/flows
+# FLOW=today, FLOW="today history", FLOW=path/to/x.flow, or FLOW=all.
+flow_files = $(if $(filter all,$(FLOW)),$(sort $(wildcard $(FLOWS_DIR)/*.flow)),$(foreach f,$(FLOW),$(if $(wildcard $(f)),$(f),$(FLOWS_DIR)/$(f).flow)))
 
 .PHONY: help diagnose build run build-and-run test screenshot console \
-	worktree agent-verify udid qa measure-frames \
+	worktree agent-verify udid qa measure-frames flow ns-mac-flow \
 	ns-mac-status ns-mac-start ns-mac-stop ns-mac-sync ns-mac-diagnose \
 	ns-mac-exec ns-mac-verify ns-mac-screenshot ns-mac-qa ns-mac-check-sync \
 	ns-mac-ensure-tools ensure-qa-tools swift-taste swift-taste-selftest
@@ -48,6 +52,7 @@ help:
 		"  make agent-verify             Build; test too if TESTS is set" \
 		"  make qa                       Boot, build-and-run, wait, 1x PNG, axe" \
 		"  make measure-frames           Scripted frame probe JSON (WORKLOAD=all)" \
+		"  make flow FLOW=today          Run a verify-pillie flow on this Mac" \
 		"  make udid                     Print the resolved iPhone 17 Pro UDID" \
 		"  make ns-mac-status            Namespace Mac Devbox status" \
 		"  make ns-mac-qa                Golden path: sync, boot, run, 1x PNG, axe" \
@@ -59,6 +64,7 @@ help:
 		"  make ns-mac-sync              Checkout this SHA on the Mac" \
 		"  make ns-mac-diagnose          Remote uname / Xcode / repo check" \
 		"  make ns-mac-exec CMD='make x' Run a command on the Namespace Mac" \
+		"  make ns-mac-flow FLOW=today   Run flows on the Namespace Mac, pull the results" \
 		"  make ensure-qa-tools          Install axe and ImageMagick if missing" \
 		"  make ns-mac-ensure-tools      Same, on the Namespace Mac" \
 		"  make swift-taste              Linux Swift structure gate (allowlist)" \
@@ -97,6 +103,10 @@ qa:
 measure-frames:
 	@WORKLOAD="$(WORKLOAD)" $(SCRIPTS)/measure-frames.sh "$(WORKLOAD)"
 
+flow:
+	@if [ -z "$(FLOW)" ]; then echo "Pass FLOW=today (see $(FLOWS_DIR))." >&2; exit 64; fi
+	@rc=0; for f in $(flow_files); do $(SCRIPTS)/sim-flow.sh "$$f" || rc=1; done; exit $$rc
+
 console:
 	@$(SCRIPTS)/build-and-run.sh --run-only --console
 
@@ -134,12 +144,18 @@ ensure-qa-tools:
 ns-mac-ensure-tools:
 	@KEEP="$(KEEP)" REF="$(REF)" $(SCRIPTS)/namespace-mac.sh ensure-tools
 
+ns-mac-exec ns-mac-verify: export NS_MAC_CMD = $(value CMD)
+
 ns-mac-exec:
-	@if [ -z "$(CMD)" ]; then \
+	@if [ -z "$$NS_MAC_CMD" ]; then \
 		echo "Pass CMD='make build' (or another remote command)." >&2; \
 		exit 64; \
 	fi
-	@KEEP="$(KEEP)" $(SCRIPTS)/namespace-mac.sh exec -- /bin/bash -lc "$(CMD)"
+	@KEEP="$(KEEP)" $(SCRIPTS)/namespace-mac.sh exec -- /bin/bash -lc "$$NS_MAC_CMD"
+
+ns-mac-flow:
+	@if [ -z "$(FLOW)" ]; then echo "Pass FLOW=today (see $(FLOWS_DIR))." >&2; exit 64; fi
+	@KEEP="$(KEEP)" $(SCRIPTS)/namespace-mac.sh flow $(flow_files)
 
 ns-mac-qa:
 	@KEEP="$(KEEP)" REF="$(REF)" SKIP_BUILD="$(SKIP_BUILD)" \
@@ -147,12 +163,12 @@ ns-mac-qa:
 		$(SCRIPTS)/namespace-mac.sh qa
 
 ns-mac-verify:
-	@if [ -z "$(CMD)" ]; then \
+	@if [ -z "$$NS_MAC_CMD" ]; then \
 		KEEP="$(KEEP)" REF="$(REF)" SKIP_BUILD="$(SKIP_BUILD)" \
 			CAPTURE_ONLY="$(CAPTURE_ONLY)" FORCE_BUILD="$(FORCE_BUILD)" \
 			$(SCRIPTS)/namespace-mac.sh qa; \
 	else \
-		KEEP="$(KEEP)" REF="$(REF)" $(SCRIPTS)/namespace-mac.sh verify -- /bin/bash -lc "$(CMD)"; \
+		KEEP="$(KEEP)" REF="$(REF)" $(SCRIPTS)/namespace-mac.sh verify -- /bin/bash -lc "$$NS_MAC_CMD"; \
 	fi
 
 ns-mac-screenshot:
