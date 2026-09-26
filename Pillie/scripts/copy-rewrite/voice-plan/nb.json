@@ -95,7 +95,7 @@
   "Localizable:onboarding.blocking_setup.skip": "Ikke nå",
   "Localizable:onboarding.blocking_setup.subtitle": "Appene du velger, pauses etter en påminnelse. De kommer tilbake når du krysser av.",
   "Localizable:onboarding.blocking_setup.title": "Velg appene du vil sette på pause",
-  "Localizable:onboarding.blocking_setup.unlock_hint": "Ta pillen kl. %@ for å åpne den igjen.",
+  "Localizable:onboarding.blocking_setup.unlock_hint": "Ta pillen kl. %@ for å åpne appen igjen.",
   "Localizable:onboarding.cycle_position.calculated": "Basert på dagen du valgte",
   "Localizable:onboarding.cycle_position.day": "Dag %lld",
   "Localizable:onboarding.cycle_position.day_of_total": "Dag %lld av %lld",
