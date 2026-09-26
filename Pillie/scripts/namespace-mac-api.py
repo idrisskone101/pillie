@@ -23,6 +23,7 @@ DEVBOX_API = "https://private-api.global.namespaceapis.com"
 DEVBOX_SERVICE = "namespace.private.devbox.v1beta.DevBoxService"
 COMPUTE_SERVICE = "namespace.cloud.compute.v1beta.ComputeService"
 COMMAND_SERVICE = "namespace.cloud.compute.v1beta.CommandService"
+REMOTE_PATH = "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 COMPUTE_ENDPOINTS = (
     "https://us.compute.namespaceapis.com",
     "https://private-api.global.namespaceapis.com",
@@ -412,39 +413,128 @@ def cmd_instance(_args: argparse.Namespace) -> int:
     return 0
 
 
+def running_instance_id() -> str:
+    instance_id = fetch().get("instanceId") or ""
+    if not instance_id:
+        raise SystemExit(f"error: {DEVBOX_NAME} is stopped; run activate first")
+    return instance_id
+
+
+def run_sync(
+    instance_id: str, argv: list[str], timeout: int, cwd: str = "", env: dict[str, str] | None = None
+) -> tuple[bytes, bytes, int]:
+    command: dict = {"command": argv}
+    if cwd:
+        command["cwd"] = cwd
+    # The command agent starts commands with an empty PATH.
+    env = {"PATH": REMOTE_PATH, **(env or {})}
+    command["envVars"] = [{"name": k, "value": v} for k, v in env.items()]
+    payload = compute_command_rpc(
+        "RunCommandSync", {"instanceId": instance_id, "command": command}, timeout=timeout
+    )
+    return (
+        base64.b64decode(payload.get("stdout") or ""),
+        base64.b64decode(payload.get("stderr") or ""),
+        int(payload.get("exitCode") or 0),
+    )
+
+
+# RunCommandSync kills the command's process group when it returns, so a
+# long job runs in its own session and is polled through its log file.
+STREAM_LAUNCHER = """
+import json, os, subprocess
+waiter = '''
+import json, os, subprocess
+base = os.environ["NSX_BASE"]
+with open(base + ".log", "wb") as log:
+    rc = subprocess.call(json.loads(os.environ["NSX_ARGV"]), stdin=subprocess.DEVNULL, stdout=log, stderr=subprocess.STDOUT)
+with open(base + ".rc.tmp", "w") as fh:
+    fh.write(str(rc))
+os.rename(base + ".rc.tmp", base + ".rc")
+'''
+subprocess.Popen(["/usr/bin/python3", "-c", waiter], start_new_session=True,
+                 stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+"""
+
+# Read .rc before the log: once .rc exists the log is complete.
+STREAM_POLL = 'cat "$NSX_BASE.rc" >&2 2>/dev/null; tail -c +"$((NSX_OFFSET + 1))" "$NSX_BASE.log" 2>/dev/null; true'
+
+
+def run_streamed(instance_id: str, argv: list[str], timeout: int, cwd: str, poll: float) -> int:
+    base = f"/tmp/nsx-{int(time.time())}-{os.getpid()}"
+    env = {"NSX_BASE": base, "NSX_ARGV": json.dumps(argv)}
+    if cwd:
+        env["NSX_ARGV"] = json.dumps(["/bin/bash", "-c", 'cd "$1" && shift && exec "$@"', "nsx", cwd, *argv])
+    _, err, rc = run_sync(instance_id, ["/usr/bin/python3", "-c", STREAM_LAUNCHER], 60, env=env)
+    if rc != 0:
+        sys.stderr.buffer.write(err)
+        raise SystemExit(f"error: could not start remote job (exit {rc})")
+    offset = 0
+    deadline = time.monotonic() + timeout
+    while True:
+        out, err, _ = run_sync(
+            instance_id, ["/bin/bash", "-c", STREAM_POLL], 120,
+            env={"NSX_BASE": base, "NSX_OFFSET": str(offset)},
+        )
+        if out:
+            sys.stdout.buffer.write(out)
+            sys.stdout.flush()
+            offset += len(out)
+        done = err.decode("utf-8", "replace").strip()
+        if done:
+            run_sync(instance_id, ["/bin/rm", "-f", f"{base}.log", f"{base}.rc"], 60)
+            return int(done)
+        if time.monotonic() > deadline:
+            raise SystemExit(f"error: remote job still running after {timeout}s (log {base}.log)")
+        time.sleep(poll)
+
+
 def cmd_exec(args: argparse.Namespace) -> int:
     """Run argv in the macOS guest over HTTPS (CommandService.RunCommandSync).
 
     Cloud Agent sandboxes block outbound port 22, so this is the exec path
     when SSH cannot connect. Wrap shell syntax in `/bin/bash -lc '…'`.
+    --stream runs the job detached and tails its output, for builds that
+    outlive one RPC.
     """
     argv = args.argv[1:] if args.argv[:1] == ["--"] else args.argv
     if not argv:
         raise SystemExit("error: exec needs a command, e.g. exec -- /bin/bash -lc 'sw_vers'")
-    instance_id = fetch().get("instanceId") or ""
-    if not instance_id:
-        raise SystemExit(f"error: {DEVBOX_NAME} is stopped; run activate first")
-    command: dict = {"command": argv}
-    if args.cwd:
-        command["cwd"] = args.cwd
-    body = {"instanceId": instance_id, "command": command}
-    payload = compute_command_rpc("RunCommandSync", body, timeout=args.timeout)
-    sys.stdout.buffer.write(base64.b64decode(payload.get("stdout") or ""))
+    instance_id = running_instance_id()
+    if args.stream:
+        return run_streamed(instance_id, argv, args.timeout, args.cwd, args.poll)
+    out, err, rc = run_sync(instance_id, argv, args.timeout, cwd=args.cwd)
+    sys.stdout.buffer.write(out)
     sys.stdout.flush()
-    sys.stderr.buffer.write(base64.b64decode(payload.get("stderr") or ""))
+    sys.stderr.buffer.write(err)
     sys.stderr.flush()
-    return int(payload.get("exitCode") or 0)
+    return rc
+
+
+def cmd_download(args: argparse.Namespace) -> int:
+    out, err, rc = run_sync(running_instance_id(), ["/usr/bin/base64", "-i", args.remote], 300)
+    if rc != 0:
+        if args.optional:
+            return 0
+        sys.stderr.buffer.write(err)
+        raise SystemExit(f"error: could not read {args.remote} on {DEVBOX_NAME}")
+    dest = Path(args.local)
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    dest.write_bytes(base64.b64decode(b"".join(out.split())))
+    print(f"ok: {dest}")
+    return 0
 
 
 def compute_command_rpc(method: str, body: dict, timeout: int) -> dict:
-    last_error = ""
+    errors = []
     for base in COMPUTE_ENDPOINTS:
         url = f"{base}/{COMMAND_SERVICE}/{method}"
         status, payload = curl_json(url, body, timeout)
         if status >= 200 and status < 300 and isinstance(payload, dict):
             return payload
-        last_error = f"{url} HTTP {status}: {payload if isinstance(payload, str) else json.dumps(payload)[:400]}"
-    raise SystemExit(f"error: CommandService.{method} failed. {last_error}")
+        snippet = payload if isinstance(payload, str) else json.dumps(payload)
+        errors.append(f"{base} HTTP {status}: {' '.join(snippet.split())[:300]}")
+    raise SystemExit(f"error: CommandService.{method} failed.\n  " + "\n  ".join(errors))
 
 
 def main() -> int:
@@ -461,8 +551,15 @@ def main() -> int:
     exec_parser = sub.add_parser("exec", help="run a command on the Mac over HTTPS, no SSH")
     exec_parser.add_argument("--cwd", default="")
     exec_parser.add_argument("--timeout", type=int, default=600)
+    exec_parser.add_argument("--stream", action="store_true", help="run detached and tail output")
+    exec_parser.add_argument("--poll", type=float, default=5.0)
     exec_parser.add_argument("argv", nargs=argparse.REMAINDER)
     exec_parser.set_defaults(func=cmd_exec)
+    download = sub.add_parser("download", help="copy a file from the Mac over HTTPS")
+    download.add_argument("--optional", action="store_true", help="skip quietly if missing")
+    download.add_argument("remote")
+    download.add_argument("local")
+    download.set_defaults(func=cmd_download)
     args = parser.parse_args()
     return args.func(args)
 

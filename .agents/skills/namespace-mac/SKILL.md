@@ -37,13 +37,13 @@ Do not start the Mac for Swift-only edits, copy, planning, or Linux work.
 
 Details and failure table: [verify-loop.md](references/verify-loop.md). Connect fallback: [connect.md](references/connect.md).
 
-**No SSH (Claude Code cloud sandbox).** Outbound port 22 is blocked there, even on Full network access, and the `make ns-mac-*` targets that SSH fail with "did not accept the instance key". Start the Mac with `python3 Pillie/scripts/namespace-mac-api.py activate`, then run commands over HTTPS:
+**No SSH (Claude Code cloud sandbox).** Outbound port 22 is blocked there, even on Full network access. `namespace-mac.sh` probes port 22 and falls back to HTTPS by itself, so `make ns-mac-qa` and the other targets work unchanged. Set `NS_MAC_TRANSPORT=ssh|https` to force one. A one-off command:
 
 ```bash
 python3 Pillie/scripts/namespace-mac-api.py exec -- /bin/bash -lc 'sw_vers; xcodebuild -version'
 ```
 
-`exec` calls `CommandService.RunCommandSync`, prints the remote stdout and stderr, and exits with the remote exit code.
+`exec` calls `CommandService.RunCommandSync` and exits with the remote exit code. `exec --stream` runs the job detached and tails its log, because one RPC kills its process group when it returns. `download REMOTE LOCAL` pulls a file. Commands start with an empty `PATH`, so the helper sets one.
 
 ## Rules
 

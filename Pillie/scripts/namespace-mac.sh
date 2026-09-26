@@ -17,8 +17,10 @@
 #   Pillie/scripts/namespace-mac.sh screenshot
 #   Pillie/scripts/namespace-mac.sh verify -- <command...>
 #
-# Linux Cloud Agents stay on Linux. Exec is native SSH (GetSSHConfig),
-# not `devbox exec`, `nsc ssh`, or `nsc proxy`. Prefer `qa` for iOS
+# Linux Cloud Agents stay on Linux. Exec is native SSH (GetSSHConfig) when
+# port 22 is reachable, else HTTPS (CommandService via namespace-mac-api.py
+# exec). NS_MAC_TRANSPORT=ssh|https forces one. Never `devbox exec`,
+# `nsc ssh`, or `nsc proxy`. Prefer `qa` for iOS
 # proof. `verify` with no command is `qa`. For a custom remote job,
 # `verify -- make test TESTS=Class`. Do not Stop unless the user asked.
 # KEEP=1 / NS_MAC_KEEP=1 is the default. Never Expire.
@@ -141,6 +143,52 @@ is_running() {
   api instance >/dev/null 2>&1
 }
 
+# Claude Code cloud sandboxes block outbound port 22 even on full network
+# access. There, everything goes over HTTPS instead.
+TRANSPORT=""
+transport() {
+  if [[ -z "$TRANSPORT" ]]; then
+    TRANSPORT="${NS_MAC_TRANSPORT:-}"
+    if [[ -z "$TRANSPORT" ]]; then
+      if command -v ssh >/dev/null 2>&1 \
+        && timeout 5 bash -c 'exec 3<>/dev/tcp/ssh.iad4.namespace.so/22' 2>/dev/null; then
+        TRANSPORT=ssh
+      else
+        TRANSPORT=https
+      fi
+    fi
+  fi
+  printf '%s' "$TRANSPORT"
+}
+
+https_ready() {
+  is_running && api exec --timeout 60 -- /usr/bin/true >/dev/null 2>&1
+}
+
+wait_for_https() {
+  local tries=0
+  while (( tries < 60 )); do
+    if api exec --timeout 30 -- /usr/bin/true >/dev/null 2>&1; then
+      return 0
+    fi
+    tries=$((tries + 1))
+    if (( tries % 6 == 0 )); then
+      echo "waiting for the command agent on $DEVBOX_NAME (${tries}/60)"
+    fi
+    sleep 5
+  done
+  echo "error: $DEVBOX_NAME did not accept HTTPS commands" >&2
+  exit 1
+}
+
+remote_ready() {
+  if [[ "$(transport)" == https ]]; then
+    https_ready
+  else
+    ssh_ready
+  fi
+}
+
 ssh_ready() {
   [[ -f "$SSH_CONFIG" ]] || return 1
   ssh -F "$SSH_CONFIG" -o ConnectTimeout=8 "$SSH_HOST" -- /usr/bin/uname -m >/dev/null 2>&1
@@ -218,11 +266,22 @@ status() {
     echo "compute: stopped"
   fi
   echo "cost: macOS M is \$0.06/min while running. Stopped compute is free. Prefer make ns-mac-qa."
-  echo "exec: native SSH via GetSSHConfig. Do not use the devbox CLI, nsc ssh, or nsc proxy."
+  echo "exec: $(transport) (native SSH via GetSSHConfig, or HTTPS CommandService). Do not use the devbox CLI, nsc ssh, or nsc proxy."
 }
 
 start() {
   auth_check
+  if [[ "$(transport)" == https ]]; then
+    if https_ready; then
+      echo "ok: $DEVBOX_NAME already reachable over HTTPS. Leave it running until the user asks to stop."
+      return 0
+    fi
+    ensure
+    api activate
+    wait_for_https
+    echo "ok: $DEVBOX_NAME is up over HTTPS exec. Leave it running until the user asks to stop."
+    return 0
+  fi
   if ssh_ready; then
     echo "ok: $DEVBOX_NAME already reachable over SSH. Leave it running until the user asks to stop."
     return 0
@@ -262,7 +321,7 @@ exec_remote() {
     echo "error: pass a command after --" >&2
     exit 64
   fi
-  if ! ssh_ready; then
+  if ! remote_ready; then
     start
   fi
   local script
@@ -271,12 +330,16 @@ exec_remote() {
   else
     script="$*"
   fi
-  ssh -F "$SSH_CONFIG" "$SSH_HOST" -- bash --login -s <<EOF
-set -euo pipefail
-export PATH="/opt/homebrew/bin:/usr/local/bin:\$PATH"
+  local body
+  body="set -euo pipefail
+export PATH=\"/opt/homebrew/bin:/usr/local/bin:\$PATH\"
 cd '$REMOTE_DIR'
-${script}
-EOF
+${script}"
+  if [[ "$(transport)" == https ]]; then
+    api exec --stream --timeout "${NS_MAC_EXEC_TIMEOUT:-5400}" -- /bin/bash --login -c "$body"
+    return
+  fi
+  ssh -F "$SSH_CONFIG" "$SSH_HOST" -- bash --login -s <<<"$body"
 }
 
 ensure_tools_remote() {
@@ -368,6 +431,13 @@ echo "ok: repo /Users/runner/workspaces/pillie"'
 
 pull_qa_artifacts() {
   mkdir -p "$ARTIFACT_DIR"
+  if [[ "$(transport)" == https ]]; then
+    api download --optional /tmp/sim_screenshot.png "$ARTIFACT_DIR/pillie_simulator.png"
+    api download /tmp/sim_screenshot_1x.png "$ARTIFACT_DIR/pillie_simulator_1x.png"
+    api download --optional /tmp/pillie_ax.txt "$ARTIFACT_DIR/pillie_ax.txt"
+    api download --optional /tmp/pillie_qa.json "$ARTIFACT_DIR/pillie_qa.json"
+    return 0
+  fi
   scp -F "$SSH_CONFIG" "$SSH_HOST:/tmp/sim_screenshot.png" "$ARTIFACT_DIR/pillie_simulator.png" || true
   scp -F "$SSH_CONFIG" "$SSH_HOST:/tmp/sim_screenshot_1x.png" "$ARTIFACT_DIR/pillie_simulator_1x.png"
   scp -F "$SSH_CONFIG" "$SSH_HOST:/tmp/pillie_ax.txt" "$ARTIFACT_DIR/pillie_ax.txt" || true
@@ -411,7 +481,7 @@ screenshot_remote() {
 
 run_oneshot() {
   local was=0
-  if ssh_ready || is_running; then
+  if is_running; then
     was=1
   fi
   local rc=0
@@ -453,6 +523,8 @@ cmd="${1:-}"
 if [[ $# -gt 0 ]]; then
   shift
 fi
+# Resolve once here, not in a $(…) subshell, so the port 22 probe runs once.
+transport >/dev/null
 
 case "$cmd" in
   ""|-h|--help) usage ;;
