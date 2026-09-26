@@ -22,6 +22,8 @@ DEVBOX_NAME = os.environ.get("PILLIE_NS_DEVBOX_NAME", "pillie-ios")
 DEVBOX_API = "https://private-api.global.namespaceapis.com"
 DEVBOX_SERVICE = "namespace.private.devbox.v1beta.DevBoxService"
 COMPUTE_SERVICE = "namespace.cloud.compute.v1beta.ComputeService"
+COMMAND_SERVICE = "namespace.cloud.compute.v1beta.CommandService"
+REMOTE_PATH = "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 COMPUTE_ENDPOINTS = (
     "https://us.compute.namespaceapis.com",
     "https://private-api.global.namespaceapis.com",
@@ -411,6 +413,222 @@ def cmd_instance(_args: argparse.Namespace) -> int:
     return 0
 
 
+def running_instance_id() -> str:
+    instance_id = fetch().get("instanceId") or ""
+    if not instance_id:
+        raise SystemExit(f"error: {DEVBOX_NAME} is stopped; run activate first")
+    return instance_id
+
+
+def run_sync(
+    instance_id: str, argv: list[str], timeout: int, cwd: str = "", env: dict[str, str] | None = None
+) -> tuple[bytes, bytes, int]:
+    command: dict = {"command": argv}
+    if cwd:
+        command["cwd"] = cwd
+    # The command agent starts commands with an empty PATH.
+    env = {"PATH": REMOTE_PATH, **(env or {})}
+    command["envVars"] = [{"name": k, "value": v} for k, v in env.items()]
+    payload = compute_command_rpc(
+        "RunCommandSync", {"instanceId": instance_id, "command": command}, timeout=timeout
+    )
+    return (
+        base64.b64decode(payload.get("stdout") or ""),
+        base64.b64decode(payload.get("stderr") or ""),
+        int(payload.get("exitCode") or 0),
+    )
+
+
+# RunCommandSync kills the command's process group when it returns, so a
+# long job runs in its own session and is polled through its log file.
+#
+# Namespace idle-stops a Devbox that has no SSH connection, no recent
+# session, and no file under $NAMESPACE_DEVBOX_TASKS_DIR. HTTPS commands
+# count as none of those, so the waiter holds a task marker for the life of
+# the job. The waiter also enforces the deadline on the Mac itself, so a
+# hung job cannot pin the Devbox awake after this client goes away.
+STREAM_WAITER = r"""
+import os, signal, subprocess, time, json
+base = os.environ["NSX_BASE"]
+marker = os.path.join(os.environ["NSX_TASKS"], "nsx-" + os.path.basename(base))
+deadline = time.monotonic() + float(os.environ["NSX_TIMEOUT"])
+try:
+    os.makedirs(os.path.dirname(marker), exist_ok=True)
+    with open(marker, "w") as fh:
+        fh.write("%d\n%s\n" % (os.getpid(), os.environ.get("NSX_BOOT", "")))
+except OSError:
+    marker = None
+rc = 125
+try:
+    with open(base + ".log", "wb") as log:
+        child = subprocess.Popen(json.loads(os.environ["NSX_ARGV"]), stdin=subprocess.DEVNULL,
+                                 stdout=log, stderr=subprocess.STDOUT, start_new_session=True)
+        with open(base + ".pid", "w") as fh:
+            fh.write(str(child.pid))
+        while True:
+            try:
+                rc = child.wait(timeout=max(0.1, min(5.0, deadline - time.monotonic())))
+                break
+            except subprocess.TimeoutExpired:
+                if time.monotonic() < deadline:
+                    continue
+                for sig, grace in ((signal.SIGTERM, 30), (signal.SIGKILL, None)):
+                    try:
+                        os.killpg(child.pid, sig)
+                    except OSError:
+                        pass
+                    try:
+                        child.wait(timeout=grace)
+                        break
+                    except subprocess.TimeoutExpired:
+                        pass
+                log.write(b"\nnsx: killed after %ss deadline\n" % os.environ["NSX_TIMEOUT"].encode())
+                rc = 124
+                break
+    if rc < 0:
+        rc = 128 - rc
+finally:
+    if marker:
+        try:
+            os.remove(marker)
+        except OSError:
+            pass
+    for suffix in (".pid",):
+        try:
+            os.remove(base + suffix)
+        except OSError:
+            pass
+    with open(base + ".rc.tmp", "w") as fh:
+        fh.write(str(rc))
+    os.rename(base + ".rc.tmp", base + ".rc")
+"""
+
+STREAM_LAUNCHER = r"""
+import os, subprocess, sys
+tasks = os.environ.get("NAMESPACE_DEVBOX_TASKS_DIR") or "/var/run/devbox/tasks"
+try:
+    boot = subprocess.run(["/usr/sbin/sysctl", "-n", "kern.boottime"],
+                          capture_output=True, text=True).stdout.strip()
+except OSError:
+    boot = ""
+# Drop markers from waiters that died or ran before the last boot. A marker
+# never expires on its own, and one left behind disables idle stop.
+for name in (os.listdir(tasks) if os.path.isdir(tasks) else []):
+    if not name.startswith("nsx-"):
+        continue
+    path = os.path.join(tasks, name)
+    try:
+        pid, marker_boot = open(path).read().split("\n")[:2]
+        os.kill(int(pid), 0)
+        alive = marker_boot == boot
+    except (OSError, ValueError):
+        alive = False
+    if not alive:
+        try:
+            os.remove(path)
+        except OSError:
+            pass
+env = dict(os.environ, NSX_TASKS=tasks, NSX_BOOT=boot)
+subprocess.Popen([sys.executable, "-c", env["NSX_WAITER"]], env=env, start_new_session=True,
+                 stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+"""
+
+# Read .rc before the log: once .rc exists the log is complete.
+STREAM_POLL = 'cat "$NSX_BASE.rc" >&2 2>/dev/null; tail -c +"$((NSX_OFFSET + 1))" "$NSX_BASE.log" 2>/dev/null; true'
+STREAM_CANCEL = 'p=$(cat "$NSX_BASE.pid" 2>/dev/null) && kill -TERM -- "-$p"; true'
+
+
+def stream_env(base: str, argv: list[str], cwd: str, timeout: int) -> dict[str, str]:
+    if cwd:
+        argv = ["/bin/bash", "-c", 'cd "$1" && shift && exec "$@"', "nsx", cwd, *argv]
+    return {
+        "NSX_BASE": base,
+        "NSX_ARGV": json.dumps(argv),
+        "NSX_TIMEOUT": str(timeout),
+        "NSX_WAITER": STREAM_WAITER,
+    }
+
+
+def run_streamed(instance_id: str, argv: list[str], timeout: int, cwd: str, poll: float) -> int:
+    base = f"/tmp/nsx-{int(time.time())}-{os.getpid()}"
+    env = stream_env(base, argv, cwd, timeout)
+    _, err, rc = run_sync(instance_id, ["/usr/bin/python3", "-c", STREAM_LAUNCHER], 60, env=env)
+    if rc != 0:
+        sys.stderr.buffer.write(err)
+        raise SystemExit(f"error: could not start remote job (exit {rc})")
+    offset = 0
+    # The waiter kills the job at `timeout`; allow it time to report back.
+    deadline = time.monotonic() + timeout + 120
+    try:
+        while True:
+            out, err, _ = run_sync(
+                instance_id, ["/bin/bash", "-c", STREAM_POLL], 120,
+                env={"NSX_BASE": base, "NSX_OFFSET": str(offset)},
+            )
+            if out:
+                sys.stdout.buffer.write(out)
+                sys.stdout.flush()
+                offset += len(out)
+            done = err.decode("utf-8", "replace").strip()
+            if done:
+                run_sync(instance_id, ["/bin/rm", "-f", f"{base}.log", f"{base}.rc"], 60)
+                return int(done)
+            if time.monotonic() > deadline:
+                raise SystemExit(f"error: remote job did not report back (log {base}.log)")
+            time.sleep(poll)
+    except KeyboardInterrupt:
+        run_sync(instance_id, ["/bin/bash", "-c", STREAM_CANCEL], 60, env={"NSX_BASE": base})
+        raise
+
+
+def cmd_exec(args: argparse.Namespace) -> int:
+    """Run argv in the macOS guest over HTTPS (CommandService.RunCommandSync).
+
+    Cloud Agent sandboxes block outbound port 22, so this is the exec path
+    when SSH cannot connect. Wrap shell syntax in `/bin/bash -lc '…'`.
+    --stream runs the job detached and tails its output, for builds that
+    outlive one RPC.
+    """
+    argv = args.argv[1:] if args.argv[:1] == ["--"] else args.argv
+    if not argv:
+        raise SystemExit("error: exec needs a command, e.g. exec -- /bin/bash -lc 'sw_vers'")
+    instance_id = running_instance_id()
+    if args.stream:
+        return run_streamed(instance_id, argv, args.timeout, args.cwd, args.poll)
+    out, err, rc = run_sync(instance_id, argv, args.timeout, cwd=args.cwd)
+    sys.stdout.buffer.write(out)
+    sys.stdout.flush()
+    sys.stderr.buffer.write(err)
+    sys.stderr.flush()
+    return rc
+
+
+def cmd_download(args: argparse.Namespace) -> int:
+    out, err, rc = run_sync(running_instance_id(), ["/usr/bin/base64", "-i", args.remote], 300)
+    if rc != 0:
+        if args.optional:
+            return 0
+        sys.stderr.buffer.write(err)
+        raise SystemExit(f"error: could not read {args.remote} on {DEVBOX_NAME}")
+    dest = Path(args.local)
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    dest.write_bytes(base64.b64decode(b"".join(out.split())))
+    print(f"ok: {dest}")
+    return 0
+
+
+def compute_command_rpc(method: str, body: dict, timeout: int) -> dict:
+    errors = []
+    for base in COMPUTE_ENDPOINTS:
+        url = f"{base}/{COMMAND_SERVICE}/{method}"
+        status, payload = curl_json(url, body, timeout)
+        if status >= 200 and status < 300 and isinstance(payload, dict):
+            return payload
+        snippet = payload if isinstance(payload, str) else json.dumps(payload)
+        errors.append(f"{base} HTTP {status}: {' '.join(snippet.split())[:300]}")
+    raise SystemExit(f"error: CommandService.{method} failed.\n  " + "\n  ".join(errors))
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest="cmd", required=True)
@@ -422,6 +640,18 @@ def main() -> int:
     sub.add_parser("stop").set_defaults(func=cmd_stop)
     sub.add_parser("write-ssh").set_defaults(func=cmd_write_ssh)
     sub.add_parser("instance").set_defaults(func=cmd_instance)
+    exec_parser = sub.add_parser("exec", help="run a command on the Mac over HTTPS, no SSH")
+    exec_parser.add_argument("--cwd", default="")
+    exec_parser.add_argument("--timeout", type=int, default=600)
+    exec_parser.add_argument("--stream", action="store_true", help="run detached and tail output")
+    exec_parser.add_argument("--poll", type=float, default=5.0)
+    exec_parser.add_argument("argv", nargs=argparse.REMAINDER)
+    exec_parser.set_defaults(func=cmd_exec)
+    download = sub.add_parser("download", help="copy a file from the Mac over HTTPS")
+    download.add_argument("--optional", action="store_true", help="skip quietly if missing")
+    download.add_argument("remote")
+    download.add_argument("local")
+    download.set_defaults(func=cmd_download)
     args = parser.parse_args()
     return args.func(args)
 

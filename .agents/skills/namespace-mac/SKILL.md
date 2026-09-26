@@ -37,6 +37,16 @@ Do not start the Mac for Swift-only edits, copy, planning, or Linux work.
 
 Details and failure table: [verify-loop.md](references/verify-loop.md). Connect fallback: [connect.md](references/connect.md).
 
+**No SSH (Claude Code cloud sandbox).** Outbound port 22 is blocked there, even on Full network access. `namespace-mac.sh` probes port 22 and falls back to HTTPS by itself, so `make ns-mac-qa` and the other targets work unchanged. Set `NS_MAC_TRANSPORT=ssh|https` to force one. A one-off command:
+
+```bash
+python3 Pillie/scripts/namespace-mac-api.py exec -- /bin/bash -lc 'sw_vers; xcodebuild -version'
+```
+
+`exec` calls `CommandService.RunCommandSync` and exits with the remote exit code. `exec --stream` runs the job detached and tails its log, because one RPC kills its process group when it returns. `download REMOTE LOCAL` pulls a file. Commands start with an empty `PATH`, so the helper sets one.
+
+**Long builds over HTTPS.** Idle stop only counts SSH connections, sessions from the last 15 minutes, and files under `$NAMESPACE_DEVBOX_TASKS_DIR` (`/var/run/devbox/tasks`). HTTPS commands count as none of these. Each `exec --stream` job holds an `nsx-*` marker there, so the Mac stays up for the whole job. On the Mac, the job is killed at `NS_MAC_EXEC_TIMEOUT` seconds (default 5400), which also drops the marker. That is the cost ceiling if the agent goes away. Ctrl-C kills the remote job. The next launch clears markers from dead jobs or earlier boots. Leave the 900s idle timeout alone.
+
 ## Rules
 
 - One Devbox only: `pillie-ios` (id `2jr7kuslpli14`, site `iad`). Do not create another.
