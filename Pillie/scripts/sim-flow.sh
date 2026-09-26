@@ -175,9 +175,11 @@ flush_batch() {
   : >"$BATCH"
   if (( rc != 0 )); then
     record_step "batch: $steps" 0 $(( $(now_ms) - t )) "" "$(printf '%s' "$err" | tail -3 | tr '\n' ' ')"
+    echo "FAIL batch: $steps $(printf '%s' "$err" | tail -3 | tr '\n' ' ')"
     return 1
   fi
   record_step "batch: $steps" 1 $(( $(now_ms) - t ))
+  echo "ok   batch: $steps ($(( $(now_ms) - t ))ms)"
 }
 
 launch_app() {
