@@ -67,7 +67,7 @@ Check `app_sha` in `report.json` against the commit you meant to prove. Flows ru
 
 Compare against the same flow on `main` before you claim a perf change. `Pillie/PERF_CHECKLIST.md` holds the Instruments gates that need a real device or Xcode.
 
-Other tools in a flow: `appearance dark`, `statusbar clean`, `record start` / `record stop` (MP4), `log start` / `log stop` (app OSLog to `app.log`), `privacy grant notifications`, `push file.apns`.
+Other tools in a flow: `statusbar clean`, `record start` / `record stop` (MP4), `log start` / `log stop` (app OSLog to `app.log`), `privacy grant notifications`, `push file.apns`. `appearance dark` only changes system UI; the app forces light mode (`PillieApp.swift` `.preferredColorScheme(.light)`).
 
 ## Doctor
 

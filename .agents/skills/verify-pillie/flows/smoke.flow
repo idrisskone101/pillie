@@ -12,10 +12,7 @@ tap --label Settings
 wait id settingsLanguageRow
 gone id developerMenuAvatarButton 5
 shot settings
-appearance dark
-shot settings-dark
-appearance light
 record stop
-log stop
 openurl pillie://debug/dump-pending-notifications
+log stop
 statusbar clear
