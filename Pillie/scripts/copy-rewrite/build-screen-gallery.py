@@ -17,6 +17,8 @@ import re
 import sys
 from pathlib import Path
 
+from importlib import import_module
+
 from PIL import Image
 
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -25,6 +27,9 @@ FLOWS = REPO_ROOT / ".qa-artifacts" / "flows"
 LANGUAGE_SOURCE = REPO_ROOT / "Pillie" / "Pillie" / "Localization" / "AppLanguagePreference.swift"
 TEMPLATE = SCRIPT_DIR / "screen-gallery.html.in"
 SHOT_SIZE = (402, 874)
+
+sys.path.insert(0, str(SCRIPT_DIR))
+APP_LANGUAGE_CODES: list[str] = import_module("check-translated-copy").APP_LANGUAGE_CODES
 
 ENGLISH_NAMES = {
     "en": "English", "ar": "Arabic", "bn": "Bengali", "ca": "Catalan", "cs": "Czech", "da": "Danish",
@@ -67,7 +72,7 @@ def main() -> int:
 
     natives = native_names()
     locales = []
-    for code in ENGLISH_NAMES:
+    for code in ["en", *(c for c in APP_LANGUAGE_CODES if c != "en")]:
         folder = FLOWS / f"screen-tour-{code}"
         shots = [folder / f"{stem}.png" for stem in stems]
         missing = [s.name for s in shots if not s.exists()]
@@ -84,8 +89,8 @@ def main() -> int:
         report = json.loads((folder / "report.json").read_text()) if (folder / "report.json").exists() else {}
         locales.append({
             "code": code,
-            "native": natives.get(code, ENGLISH_NAMES[code]),
-            "english": ENGLISH_NAMES[code],
+            "native": natives.get(code, code),
+            "english": ENGLISH_NAMES.get(code, code),
             "rtl": code in RTL,
             "sha": str(report.get("app_sha", ""))[:7],
         })

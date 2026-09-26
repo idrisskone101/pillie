@@ -31,15 +31,6 @@ LOCKED_PATH = SCRIPT_DIR / "locked-copy.json"
 HONEST_PATH = SCRIPT_DIR / "honest-paywall-locales.json"
 LOCKED_LANGS = ("en", "de", "it")
 INFO_PLIST = APP_ROOT / "Pillie" / "Info.plist"
-CATALOG_FILES = {
-    "Localizable": [APP_ROOT / "Pillie" / "Localizable.xcstrings"],
-    "Commerce": [APP_ROOT / "Pillie" / "Commerce.xcstrings"],
-    "Notifications": [APP_ROOT / "Pillie" / "Notifications.xcstrings"],
-    "Shield": [
-        APP_ROOT / "PillieShieldConfiguration" / "Shield.xcstrings",
-        APP_ROOT / "PillieDeviceActivityMonitor" / "Shield.xcstrings",
-    ],
-}
 LITERAL_GLOBS = [
     (APP_ROOT / "PillieTests", "*.swift"),
     (REPO_ROOT / ".agents" / "skills" / "verify-pillie" / "flows", "*.flow"),
@@ -51,6 +42,7 @@ SCRIPTS = {
     "ar": "ARABIC", "ur": "ARABIC", "he": "HEBREW", "th": "THAI", "el": "GREEK",
     "ru": "CYRILLIC", "uk": "CYRILLIC",
 }
+SWIFT_STRING = re.compile(r'"(?:[^"\\\n]|\\.)*"')
 PLACEHOLDER = re.compile(r"%(?:\d+\$)?(?:lld|ld|d|@|%)")
 
 sys.path.insert(0, str(SCRIPT_DIR))
@@ -77,7 +69,7 @@ def load_plans() -> dict[str, dict[str, str]]:
 
 class Catalogs:
     def __init__(self) -> None:
-        self.data = {table: read_json(paths[0]) for table, paths in CATALOG_FILES.items()}
+        self.data = {table: read_json(paths[0]) for table, paths in inventory.CATALOGS.items()}
         self.info_plist_text = INFO_PLIST.read_text()
         self.info_plist = plistlib.loads(self.info_plist_text.encode())
         self.info_strings = {
@@ -128,7 +120,7 @@ class Catalogs:
         self.data[table]["strings"].pop(key, None)
 
     def save(self) -> None:
-        for table, paths in CATALOG_FILES.items():
+        for table, paths in inventory.CATALOGS.items():
             for path in paths:
                 write_json(path, self.data[table])
         INFO_PLIST.write_text(self.info_plist_text)
@@ -179,14 +171,15 @@ def check(plans: dict[str, dict[str, str]], catalogs: Catalogs) -> list[str]:
                 continue
             if placeholders(value) != placeholders(english[ref]):
                 errors.append(f"{lang} {ref}: placeholders {placeholders(value)} != English {placeholders(english[ref])}")
+            if lang == "en":
+                errors += [f"en {ref}: {hit}" for hit in lint.findings(value)]
+                continue
             if "—" in value:
                 errors.append(f"{lang} {ref}: em dash")
-            if lang != "en" and (block := foreign_script(lang, value)):
+            if block := foreign_script(lang, value):
                 errors.append(f"{lang} {ref}: {block} letters in a {lang} string")
             if is_all_caps(value) and not is_all_caps(english[ref]):
                 errors.append(f"{lang} {ref}: all caps, let SwiftUI uppercase it")
-            if lang == "en":
-                errors += [f"en {ref}: {hit}" for hit in lint.findings(value)]
     return errors
 
 
@@ -198,30 +191,27 @@ def rewrite_literals(changes: list[tuple[str, str, str, str]], catalogs: Catalog
     """Swap pinned old values for new ones in tests and flows, when the swap is unambiguous."""
     targets: dict[str, set[str]] = defaultdict(set)
     for _lang, _ref, old, new in changes:
-        targets[old].add(new)
+        targets[swift_literal(old)].add(swift_literal(new))
     kept = {
-        catalogs.get(ref, lang)
+        swift_literal(value)
         for ref in catalogs.keys()
         for lang in APP_LANGUAGE_CODES
+        if (value := catalogs.get(ref, lang))
     }
     notes = []
-    files = [p for root, pattern in LITERAL_GLOBS for p in root.glob(pattern)]
-    for path in files:
+    for path in (p for root, pattern in LITERAL_GLOBS for p in root.glob(pattern)):
         text = path.read_text()
-        original = text
-        for old, news in targets.items():
-            literal = swift_literal(old)
-            if literal not in text:
-                continue
-            if len(news) > 1 or old in kept:
+        found = set(SWIFT_STRING.findall(text)) & targets.keys()
+        swaps = {}
+        for literal in sorted(found):
+            if len(targets[literal]) > 1 or literal in kept:
                 notes.append(f"{path.relative_to(REPO_ROOT)}: {literal} is ambiguous, fix by hand")
-                continue
-            text = text.replace(literal, swift_literal(next(iter(news))))
-        if text != original:
-            path.write_text(text)
+            else:
+                swaps[literal] = next(iter(targets[literal]))
+        if swaps:
+            path.write_text(SWIFT_STRING.sub(lambda m: swaps.get(m.group(0), m.group(0)), text))
             notes.append(f"{path.relative_to(REPO_ROOT)}: rewrote pinned copy")
     return notes
-
 
 def sync_locked(plans: dict[str, dict[str, str]]) -> None:
     locked = read_json(LOCKED_PATH)
@@ -260,16 +250,14 @@ def prune(catalogs: Catalogs) -> None:
     for ref in dead:
         catalogs.delete(ref)
     catalogs.save()
-    dead_keys = {tuple(ref.split(":", 1)) for ref in dead}
-    locked = read_json(LOCKED_PATH)
     live = catalogs.keys()
+    locked = read_json(LOCKED_PATH)
     locked["entries"] = [e for e in locked["entries"] if f"{e['table']}:{e['key']}" in live]
     write_json(LOCKED_PATH, locked)
     honest = read_json(HONEST_PATH)
     for table in honest.values():
-        for table_name, key in dead_keys:
-            if table_name == "Commerce":
-                table.pop(key, None)
+        for key in [k for k in table if f"Commerce:{k}" not in live]:
+            del table[key]
     write_json(HONEST_PATH, honest)
     print(f"pruned {len(dead)} keys no Swift code reads")
 
