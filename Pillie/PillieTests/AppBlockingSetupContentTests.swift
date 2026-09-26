@@ -77,7 +77,7 @@ struct AppBlockingSetupContentTests {
         )
         #expect(content.chooseAppsCTA == "Allow pausing")
         #expect(content.emptyUnlockFormat.contains("%@"))
-        #expect(content.emptyUnlockFormat.lowercased().contains("open it again"))
+        #expect(content.emptyUnlockFormat.lowercased().contains("open this app again"))
     }
 
     @Test func formattedEmptyUnlockInsertsTheReminderClock() {
@@ -90,7 +90,7 @@ struct AppBlockingSetupContentTests {
         let normalized = formatted
             .replacingOccurrences(of: "\u{202F}", with: " ")
             .replacingOccurrences(of: "\u{00A0}", with: " ")
-        #expect(normalized == "Take your 9:00 PM pill to open it again.")
+        #expect(normalized == "Take your 9:00 PM pill to open this app again.")
     }
 
     @Test func phaseIsEmptyWhenEntitledAndIdle() {
