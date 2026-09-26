@@ -37,6 +37,14 @@ Do not start the Mac for Swift-only edits, copy, planning, or Linux work.
 
 Details and failure table: [verify-loop.md](references/verify-loop.md). Connect fallback: [connect.md](references/connect.md).
 
+**No SSH (Claude Code cloud sandbox).** Outbound port 22 is blocked there, even on Full network access, and the `make ns-mac-*` targets that SSH fail with "did not accept the instance key". Start the Mac with `python3 Pillie/scripts/namespace-mac-api.py activate`, then run commands over HTTPS:
+
+```bash
+python3 Pillie/scripts/namespace-mac-api.py exec -- /bin/bash -lc 'sw_vers; xcodebuild -version'
+```
+
+`exec` calls `CommandService.RunCommandSync`, prints the remote stdout and stderr, and exits with the remote exit code.
+
 ## Rules
 
 - One Devbox only: `pillie-ios` (id `2jr7kuslpli14`, site `iad`). Do not create another.

@@ -55,6 +55,16 @@ ssh -i <key> -o IdentitiesOnly=yes -o StrictHostKeyChecking=no \
 
 Do not use `nsc ssh`, `nsc proxy`, or a `ProxyCommand` to `hsvc.unixsocket?name=agent`.
 
+## CommandService (HTTPS exec, no SSH)
+
+Base: same as ComputeService. Service: `namespace.cloud.compute.v1beta.CommandService`
+
+| Method | Body |
+| --- | --- |
+| `RunCommandSync` | `{"instanceId":"<id>","command":{"command":["/bin/bash","-lc","sw_vers"],"cwd":"/Users/runner"}}` |
+
+The response has `stdout` and `stderr` as base64 bytes, plus `exitCode`. Omit `targetContainerName` so the command runs in the macOS guest. Use this where port 22 is blocked. The script wraps it as `namespace-mac-api.py exec`.
+
 ## Identity
 
 - Name: `pillie-ios`

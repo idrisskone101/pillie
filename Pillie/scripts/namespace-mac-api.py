@@ -22,6 +22,7 @@ DEVBOX_NAME = os.environ.get("PILLIE_NS_DEVBOX_NAME", "pillie-ios")
 DEVBOX_API = "https://private-api.global.namespaceapis.com"
 DEVBOX_SERVICE = "namespace.private.devbox.v1beta.DevBoxService"
 COMPUTE_SERVICE = "namespace.cloud.compute.v1beta.ComputeService"
+COMMAND_SERVICE = "namespace.cloud.compute.v1beta.CommandService"
 COMPUTE_ENDPOINTS = (
     "https://us.compute.namespaceapis.com",
     "https://private-api.global.namespaceapis.com",
@@ -411,6 +412,41 @@ def cmd_instance(_args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_exec(args: argparse.Namespace) -> int:
+    """Run argv in the macOS guest over HTTPS (CommandService.RunCommandSync).
+
+    Cloud Agent sandboxes block outbound port 22, so this is the exec path
+    when SSH cannot connect. Wrap shell syntax in `/bin/bash -lc '…'`.
+    """
+    argv = args.argv[1:] if args.argv[:1] == ["--"] else args.argv
+    if not argv:
+        raise SystemExit("error: exec needs a command, e.g. exec -- /bin/bash -lc 'sw_vers'")
+    instance_id = fetch().get("instanceId") or ""
+    if not instance_id:
+        raise SystemExit(f"error: {DEVBOX_NAME} is stopped; run activate first")
+    command: dict = {"command": argv}
+    if args.cwd:
+        command["cwd"] = args.cwd
+    body = {"instanceId": instance_id, "command": command}
+    payload = compute_command_rpc("RunCommandSync", body, timeout=args.timeout)
+    sys.stdout.buffer.write(base64.b64decode(payload.get("stdout") or ""))
+    sys.stdout.flush()
+    sys.stderr.buffer.write(base64.b64decode(payload.get("stderr") or ""))
+    sys.stderr.flush()
+    return int(payload.get("exitCode") or 0)
+
+
+def compute_command_rpc(method: str, body: dict, timeout: int) -> dict:
+    last_error = ""
+    for base in COMPUTE_ENDPOINTS:
+        url = f"{base}/{COMMAND_SERVICE}/{method}"
+        status, payload = curl_json(url, body, timeout)
+        if status >= 200 and status < 300 and isinstance(payload, dict):
+            return payload
+        last_error = f"{url} HTTP {status}: {payload if isinstance(payload, str) else json.dumps(payload)[:400]}"
+    raise SystemExit(f"error: CommandService.{method} failed. {last_error}")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest="cmd", required=True)
@@ -422,6 +458,11 @@ def main() -> int:
     sub.add_parser("stop").set_defaults(func=cmd_stop)
     sub.add_parser("write-ssh").set_defaults(func=cmd_write_ssh)
     sub.add_parser("instance").set_defaults(func=cmd_instance)
+    exec_parser = sub.add_parser("exec", help="run a command on the Mac over HTTPS, no SSH")
+    exec_parser.add_argument("--cwd", default="")
+    exec_parser.add_argument("--timeout", type=int, default=600)
+    exec_parser.add_argument("argv", nargs=argparse.REMAINDER)
+    exec_parser.set_defaults(func=cmd_exec)
     args = parser.parse_args()
     return args.func(args)
 

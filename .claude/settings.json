@@ -22,6 +22,7 @@
       "Bash(Pillie/scripts/test-focused.sh:*)",
       "Bash(Pillie/scripts/diagnose.sh:*)",
       "Bash(Pillie/scripts/create-worktree.sh:*)",
+      "Bash(python3 Pillie/scripts/namespace-mac-api.py exec:*)",
       "WebFetch(domain:raw.githubusercontent.com)",
       "mcp__XcodeBuildMCP"
     ]
