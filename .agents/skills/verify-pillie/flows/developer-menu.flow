@@ -2,6 +2,7 @@
 # harmless scenario (packComplete — rewrites local pack history only; it
 # doesn't touch trial/subscription state), and prove it actually changed
 # Home, not just that the sheet closed.
+fresh  # the scenario result depends on the pack state; start clean
 launch
 openurl pillie://debug/plus-home?lang=en
 wait text Today 15

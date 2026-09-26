@@ -33,6 +33,9 @@ shot today-pill-pack-card
 # A new install's default pack lands on its break day (Day 28 of 28, nothing
 # due). Pin the clock and seed a pack whose today is due (DebugQA.swift
 # missedRecentDays; proven in history-correction.flow).
+# Plus users confirm with a shake (HomeView.swift: Plus && !reduceMotion); a
+# free user logs on tap. fresh resets the keychain trial, so grant one.
+openurl pillie://debug/trial-grant?lang=en
 openurl pillie://debug/fixed-now?at=2026-09-15T15:00:00Z
 tap --id developerMenuAvatarButton
 wait text "PACK & CALENDAR" 10
