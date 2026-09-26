@@ -1,33 +1,29 @@
 # Pillie verification map
 
-Read this index before you drive the app. Then open the matching feature file.
+One file per user-facing area. Each names the flows that drive it and the state they start from. Read the file before you drive that area; run its flows with `make ns-mac-flow FLOW=<name>` (Linux) or `make flow FLOW=<name>` (Mac).
 
-## Baseline preconditions
+## Before any flow
 
-- Linux Cloud Agent: HEAD is committed and pushed. `make ns-mac-qa` has finished. Artifacts are under `/opt/cursor/artifacts/`.
-- Mac: `make qa` has finished. Artifacts are under `/tmp/`.
-- Doctor has passed. The 1x PNG shows Pillie, not SpringBoard.
-- One iPhone 17 Pro. Do not boot a second simulator.
-- Drive with `axe` and the identifiers in each feature file. Do not drive Idriss's laptop from a Cloud Agent.
-
-## Driving conventions
-
-- Start from the launched app. `make ns-mac-qa` / `make qa` already built and launched it.
-- Prefer accessibility identifiers, then visible labels. Coordinates only from a fresh 1x PNG.
-- On Linux, wrap axe in `make ns-mac-exec CMD='…'`.
-- After a mutation, recapture with `SKIP_BUILD=1 make ns-mac-qa` or `SKIP_BUILD=1 make qa`.
-- Keep the Mac running.
+- The build you want to prove is installed: `make ns-mac-qa` / `make qa` finished with `"ready": true` and your SHA.
+- Flows start from their own state (`launch` + a debug deep link, or `fresh`). They do not depend on each other and can run in any order, or all at once with `FLOW=all`.
+- `make verify-flows` passes.
 
 ## Proof and skip reporting
 
-- Capture the tap and the resulting screen. A launch PNG alone is not a feature proof.
-- UI proof is the 1x PNG plus the axe dump that contains the claimed label.
-- Report an unreachable path with the command you ran and the precondition that failed.
-- Do not report a skipped entry point as verified through a different path.
+- A shot proves a state only right after a `wait` for that state. A launch shot alone proves nothing about a feature.
+- Report an unreachable path with the flow, the failing step, and the missing prerequisite. Each feature file lists what a simulator cannot reach.
+- Do not report a feature verified through a different entry point than the one you changed.
 
 ## Features
 
-- [Today](./today.md) is the home tab, due action, and blocking status card.
-- [History](./history.md) is the calendar tab.
-- [Settings](./settings.md) is language, developer menu, and Plus entry points.
-- [Soft paywall](./soft-paywall.md) is the onboarding / Settings paywall.
+- [Onboarding](./onboarding.md) is first launch through Home: every onboarding step and the app-blocking setup.
+- [Today](./today.md) is the home tab: status and pack cards, marking the pill taken, trial states, the review prompt.
+- [History](./history.md) is the calendar tab: month paging and correcting a past day.
+- [Settings](./settings.md) is every settings editor and the in-app language switch.
+- [Paywalls](./paywalls.md) is the four honest-paywall boards, Plus upsells, and the commerce verification states.
+- [Developer menu](./developer-menu.md) is the debug-only QA scenario sheet.
+
+## Harness flows
+
+- `smoke.flow` exercises every runner step. Run it after changing `Pillie/scripts/sim-flow.sh`.
+- `perf.flow` measures relaunch time and the app's frame probes. See the Perf section of the skill.

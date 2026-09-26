@@ -169,7 +169,8 @@ flush_batch() {
   [[ -s "$BATCH" ]] || return 0
   local t rc=0 err
   t="$(now_ms)"
-  err="$(axe batch --udid "$UDID" --wait-timeout "$WAIT" --file "$BATCH" 2>&1 >/dev/null)" || rc=$?
+  # perStep: a tap that opens or closes a sheet changes the tree the next step searches.
+  err="$(axe batch --udid "$UDID" --ax-cache perStep --wait-timeout "$WAIT" --file "$BATCH" 2>&1 >/dev/null)" || rc=$?
   local steps
   steps="$(paste -sd ';' "$BATCH")"
   : >"$BATCH"
@@ -322,8 +323,11 @@ while IFS= read -r raw || [[ -n "$raw" ]]; do
   LAST_ARTIFACT=""
   t="$(now_ms)"
   rc=0
-  eval "set -- $line"
-  shift
+  # shlex, not eval: a flow line is data, and `&` in a URL must stay literal.
+  args=()
+  while IFS= read -r -d '' tok; do args+=("$tok"); done < <(
+    python3 -c 'import shlex, sys; sys.stdout.write("".join(t + "\0" for t in shlex.split(sys.argv[1])))' "$line")
+  set -- "${args[@]:1}"
   run_pseudo "$verb" "$@" >"$OUT/.step.log" 2>&1 || rc=$?
   out="$(cat "$OUT/.step.log")"
   ms=$(( $(now_ms) - t ))

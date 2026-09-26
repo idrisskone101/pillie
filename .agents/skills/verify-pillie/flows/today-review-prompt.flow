@@ -1,0 +1,31 @@
+# Today: the /review-prompt Sentiment Gate card, visible then dismissed.
+#
+# `fresh` guarantees homeBlockingStatusCardDismissed defaults to false
+# (HomeView.swift:51 @AppStorage) and no blocker config is saved, so the
+# Blocking card always renders first and outranks the review ask
+# (HomeView.swift:248-262 higherPriorityCardShowing / reviewPromptContent).
+# Clearing it first is the only deterministic way to reach the review card
+# regardless of what a previous flow left behind.
+fresh
+
+# PillieApp.swift:782-789: Plus off, free plan selected, onboarding
+# complete, seeds an eligible unbroken Streak (PillStore.swift:1402-1432).
+openurl "pillie://debug/review-prompt?lang=en"
+
+# BlockingStatusCard.swift:57,79. Dismissing sets
+# homeBlockingStatusCardDismissed = true (HomeView.swift:421-431), which is
+# the only thing standing between this scenario and the review card.
+wait id homeBlockingStatusCard 15
+tap --id homeBlockingStatusCardDismiss
+gone id homeBlockingStatusCard 10
+
+# ReviewPromptCard.swift:63.
+wait id homeReviewPromptCard 15
+shot review-prompt-visible
+
+# ReviewPromptCard.swift:85 homeReviewPromptCardDismiss -> soft-dismiss
+# (HomeView.swift:454-459 store.softDismissReviewPrompt()), not the
+# permanent positive/negative answer.
+tap --id homeReviewPromptCardDismiss
+gone id homeReviewPromptCard 10
+shot review-prompt-dismissed
