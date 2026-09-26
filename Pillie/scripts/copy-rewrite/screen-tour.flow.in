@@ -29,6 +29,7 @@ shot onboarding-04-miss-frequency
 fresh
 defaults pillie.appLanguage -string {{lang}}
 defaults onboardingStep -int 8
+privacy grant notifications  # granted up front, so no system alert in the simulator's language
 launch -AppleLanguages "({{lang}})" -AppleLocale {{lang}}
 wait id acquisitionSource.tiktok 15
 shot onboarding-05-acquisition-source
@@ -44,7 +45,6 @@ tap --id protectionPlanPrimaryCTA
 wait id sun.max.fill
 shot onboarding-08-reminder-time
 tap --id protectionPlanPrimaryCTA
-tap --label Allow  # iOS notification alert, in the simulator's language, not the app's
 wait id protectionPlanBackButton 15
 wait id sparkles 15
 shot onboarding-09-reminder-plan
