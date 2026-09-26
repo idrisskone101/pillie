@@ -1,0 +1,36 @@
+# The app-blocking onboarding step (AppBlockingSetupView) on its own: empty,
+# selected, and recovery phases, all via debug deep links. FamilyControls tokens
+# cannot be picked on the simulator, so "selected" and "recovery" are QA seams,
+# not real interactions — see features/onboarding.md Gotchas.
+launch
+
+# Jumps straight to the appBlocking step: sets Plus true, no selection override,
+# clears the recovery flag. PillieApp.swift:515-544.
+openurl "pillie://debug/plus-app-blocking-setup?lang=en"
+
+# Empty phase. appBlockingEmptyStateCard: AppBlockingSetupView.swift:349.
+# Title onboarding.blocking_setup.title ("Pick the apps to pause").
+wait id appBlockingEmptyStateCard 15
+shot app-blocking-empty
+
+# Fakes a 4-app FamilyControls selection (the exact example from the source
+# comment). AppBlockingManager.swift:36-40 debugSelectionCountOverride;
+# PillieApp.swift:539-543 reads the `selected` query item.
+openurl "pillie://debug/plus-app-blocking-setup?selected=4&lang=en"
+
+# Selected phase. selectedSummaryLabel text "Apps selected"
+# (onboarding.blocking_setup.selected_summary). No accessibility id on this
+# card; AppBlockingSetupView.swift:392-437.
+wait text "Apps selected"
+shot app-blocking-selected
+
+# Simulator FamilyControls authorization auto-approves, so a real denial can
+# never be reached there. This route renders the same recovery state a real
+# denied/cancelled request would, without touching selection or authorization.
+# PillieApp.swift:545-556; card id appBlockingAuthorizationRecovery
+# (AppBlockingSetupView.swift:389). Also clears the selection override, so this
+# is independent of the `selected=4` step above.
+openurl "pillie://debug/plus-app-blocking-recovery?lang=en"
+
+wait id appBlockingAuthorizationRecovery 15
+shot app-blocking-recovery

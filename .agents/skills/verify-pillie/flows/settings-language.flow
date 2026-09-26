@@ -1,0 +1,20 @@
+# Switch the app language to German in the picker, prove German chrome, switch back.
+# Picker: LanguagePickerSheet.swift; rows are Buttons labeled with native names.
+launch
+openurl pillie://debug/plus-home?lang=en
+wait text Today 15
+tap --label Settings
+wait id settingsLanguageRow
+gesture scroll-down
+gesture scroll-down
+tap --id settingsLanguageRow          # below the fold until scrolled (y=1121 unscrolled)
+wait label Deutsch
+shot language-picker-english
+tap --label Deutsch --element-type Button
+wait label Einstellungen              # tab bar, Localizable.xcstrings de
+shot settings-german
+tap --id settingsLanguageRow
+wait label English
+tap --label English --element-type Button
+wait label Settings
+shot settings-english-restored

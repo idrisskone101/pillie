@@ -1,0 +1,18 @@
+# Harness self-test: every runner step on a cheap path. Run it after changing sim-flow.sh.
+launch
+statusbar clean
+log start
+record start
+openurl pillie://debug/plus-home?lang=en
+wait text Today 15
+expect id developerMenuAvatarButton
+expect-not id settingsLanguageRow
+shot today
+tap --label Settings
+wait id settingsLanguageRow
+gone id developerMenuAvatarButton 5
+shot settings
+record stop
+openurl pillie://debug/dump-pending-notifications
+log stop
+statusbar clear

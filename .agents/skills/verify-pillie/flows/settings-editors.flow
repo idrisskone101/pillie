@@ -1,0 +1,56 @@
+# Settings: open every editor from its row, prove its sheet, close it; then one
+# real edit (interval) that must persist on the row. Markers come from a live
+# explore run; row labels are "<title>, <value>" (SettingsView.swift rows).
+# Close = drag the sheet down (no sheet here disables interactive dismiss).
+fresh
+launch
+openurl pillie://debug/plus-home?lang=en
+wait text Today 15
+tap --label Settings
+wait id settingsLanguageRow
+shot settings-open
+
+tap --label "Method, Pill (Standard)"
+wait label "Continuous, 365 active days, no break"
+shot editor-method
+tap --label Cancel
+gone label "Continuous, 365 active days, no break"
+
+tap --label "Reminder time, 8:00 AM"            # runner folds the   in "8:00 AM"
+wait label Save
+shot editor-reminder-time
+swipe --start-x 200 --start-y 200 --end-x 200 --end-y 860 --duration 0.4
+gone label Save
+
+tap --label "Reminder messages, Default"
+wait id reminder-preset-gentle                  # CustomReminderMessagesEditor.swift
+shot editor-reminder-messages
+swipe --start-x 200 --start-y 200 --end-x 200 --end-y 860 --duration 0.4
+gone id reminder-preset-gentle
+
+tap --label "Pill supply reminder, 5"
+wait label Save
+shot editor-supply-reminder
+swipe --start-x 200 --start-y 200 --end-x 200 --end-y 860 --duration 0.4
+gone label Save
+
+tap --label "Repeats, 3"
+wait label Off
+shot editor-repeats
+swipe --start-x 200 --start-y 200 --end-x 200 --end-y 860 --duration 0.4
+gone label Save
+
+# The edit: interval 10 -> 15 minutes, saved, visible on the row.
+tap --label "Interval, Every 10 minutes"
+wait label "Every 15 minutes"
+shot editor-interval
+tap --label "Every 15 minutes"
+tap --label Save
+wait label "Interval, Every 15 minutes"
+shot interval-saved
+
+gesture scroll-down
+wait label "Your apps, Off"
+tap --label "Your apps, Off"
+wait id blockedAppsEnabledToggle                # BlockedAppsEditor.swift:104
+shot editor-blocked-apps

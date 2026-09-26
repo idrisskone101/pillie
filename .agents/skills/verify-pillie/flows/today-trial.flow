@@ -1,0 +1,45 @@
+# Today: the in-trial indicator + its TrialStatusSheet, in two trial states
+# (eve of the pack's break week, and mid-trial). Never taps #trialKeepPlus —
+# it opens a real purchase flow (HonestPaywallHost / StoreKit).
+launch
+
+# /trial-eve-of-break completes onboarding itself and sets everything up in
+# one shot: fresh 21/7 pack pinned to cycle day 21 (the last hormone-active
+# day), Plus off, a trial granted `now`, hard-paywall terms.
+# PillieApp.swift:574-576; DebugQA.swift:348-361 applyTrialEveOfBreak.
+openurl "pillie://debug/trial-eve-of-break?lang=en"
+
+# TrialIndicatorBadge id. TrialStatusSheet.swift:37.
+wait id trialIndicator 15
+shot trial-eve-of-break-indicator
+
+# Opens the sheet: HomeView.swift:377-387 onTap -> showTrialStatusSheet.
+tap --id trialIndicator
+
+# TrialStatusFooter's quiet buy-early CTA: TrialStatusSheet.swift:255-259.
+# Present on screen but never tapped in this flow.
+wait id trialKeepPlus 10
+shot trial-eve-of-break-sheet
+note "trialKeepPlus is on screen here but never tapped - it opens HonestPaywallHost/StoreKit"
+
+# Dismiss button label "Done": Localizable.xcstrings:11004
+# global.action.done; TrialStatusSheet.swift:261-262.
+tap --label "Done"
+gone id trialKeepPlus 10
+
+# Rebuild a mid-trial state deterministically, independent of whatever the
+# eve-of-break step above left behind: clear any grant (PillieApp.swift:639-647
+# /trial-clear), grant a fresh one now (PillieApp.swift:580-591 /trial-grant),
+# then back-date it 5 days (PillieApp.swift:629-638 /trial-age?days=N) so the
+# indicator reads a mid-trial day count instead of day 0.
+openurl "pillie://debug/trial-clear?lang=en"
+openurl "pillie://debug/trial-grant?lang=en"
+openurl "pillie://debug/trial-age?days=5&lang=en"
+
+wait id trialIndicator 15
+shot trial-mid-indicator
+tap --id trialIndicator
+wait id trialKeepPlus 10
+shot trial-mid-sheet
+tap --label "Done"
+gone id trialKeepPlus 10

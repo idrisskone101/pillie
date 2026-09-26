@@ -1,0 +1,61 @@
+# Every /honest-paywall board, one launch each so state never carries over
+# between them. Each deep link's DebugQA scenario calls completeOnboarding()
+# itself (Services/DebugQA.swift), so no /plus-home landing step is needed
+# first — @AppStorage(OnboardingFlow.stepStorageKey) in ContentView.swift:11
+# observes the UserDefaults write and switches straight to MainTabView.
+# Never tap a purchase CTA (paywall.action.upgrade, "Get Pillie Plus") or a
+# restore control.
+
+launch
+wait text Today 15  # the link rebuilds Home, then posts; an early post is lost
+openurl pillie://debug/honest-paywall?board=duringTrial&lang=en
+wait text "You still have Pillie Plus." 10
+# paywall.story.trial_active.title (en), Commerce.xcstrings.
+# HonestPaywallStoryFactory.swift duringTrial(...). PillieApp.swift case
+# "/honest-paywall" -> "duringTrial": DebugQA.apply(.trialActive) then posts
+# .pillieDebugPresentHonestPaywall(object: "duringTrial"), observed by
+# HomeView.swift:644-654, which sets showTrialKeepPlusPaywall = true.
+shot paywall-during-trial
+tap --id xmark --element-type Button  # paywall close; a review-prompt "Close" can sit behind it
+# HonestPaywallBoard.chrome for .duringTrial has showsClose: true.
+# HonestPaywallBoard.swift:26-31. Close's accessibilityLabel is
+# global.action.close -> "Close". HonestPaywallView.swift:46-63.
+
+# settingsFree is not driven here: its link applies existingUserTrialAnnouncement,
+# whose one-shot announcement sheet blocks the paywall cover (PillieApp.swift
+# /honest-paywall, HomeView.swift onReceive). Reach it from Settings > Pillie
+# Plus on a free user instead. See features/paywalls.md.
+# .settingsFree chrome also has showsClose: true. HonestPaywallBoard.swift
+# :26-31.
+
+launch
+wait text Today 15  # the link rebuilds Home, then posts; an early post is lost
+openurl pillie://debug/honest-paywall?board=trialEndedReturningLegacy&lang=en
+wait text "Welcome back." 10
+# paywall.story.trial_ended.returning.legacy.title (en). PillieApp.swift
+# case "trialEndedReturningLegacy": DebugQA.apply
+# (.trialExpiredGrandfatherReturning) -> applyExpiredPaywall(...,
+# pack: .freshReinstall()), which completes onboarding and clears the
+# one-shot auto-present flag (DebugQA.swift:311-327), so HomeView's
+# autoPresentTrialEndPaywallIfNeeded (HomeView.swift:180-201,511) presents it
+# once Home appears.
+shot paywall-trial-ended-legacy
+tap --id xmark --element-type Button  # paywall close; a review-prompt "Close" can sit behind it
+# terms .legacy -> HonestPaywallChrome(showsClose: true,
+# allowsInteractiveDismiss: true, showsContinueFree: true).
+# HonestPaywallStoryFactory.swift chrome(for:).
+
+launch
+wait text Today 15  # the link rebuilds Home, then posts; an early post is lost
+openurl pillie://debug/honest-paywall?board=trialEndedReturningHard&lang=en
+wait text "Your trial already ended." 10
+# paywall.story.trial_ended.returning.hard.title (en). PillieApp.swift case
+# "trialEndedReturningHard": DebugQA.apply(.trialExpiredNewUserReturning).
+shot paywall-trial-ended-hard
+# Not dismissible on purpose: terms .hardPaywall -> showsClose: false,
+# allowsInteractiveDismiss: false (HonestPaywallStoryFactory.swift
+# chrome(for:); HonestPaywallScreen.swift:55
+# .interactiveDismissDisabled(!chrome.allowsInteractiveDismiss)). No Close
+# tap here — the only exits are Restore/purchase, which this skill never
+# taps. A later flow's own `launch` starts over instead of leaving this
+# screen.

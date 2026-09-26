@@ -1,0 +1,123 @@
+# Fresh install, then every reachable onboarding step to Home with each step's real
+# CTA. Longer than ~25 steps by necessity: a dozen-plus onboarding states, each
+# proved with a wait + shot, plus the taps a choice screen needs before its CTA
+# enables.
+#
+# `productDemo` / `plusBlockingDemo` are skipped on purpose: ContentView.swift's
+# switch cases for them are dead code on a fresh install (see features/onboarding.md
+# Gotchas) — the real welcome screen (ProtectionPlanWelcomeView) hands off straight
+# to painPoints.
+#
+# `trialGranted` is also skipped on purpose: OnboardingFlow.visibleStep migrates it
+# to `.appBlocking` unconditionally (OnboardingFlow.swift:316-326), so ContentView's
+# `.trialGranted` switch case can never run — not on the real reminderPlan -> next
+# transition, and not even through its own debug deep link (see
+# features/onboarding.md Gotchas). reminderPlan's real CTA already lands on
+# appBlocking directly.
+#
+# appBlocking's "selected" phase needs FamilyControls token counts, which the
+# simulator cannot fabricate by picking real apps — reached via the
+# `plus-app-blocking-setup?selected=` QA seam (AppBlockingManager.swift:36-40),
+# then that screen's real "Continue" CTA.
+
+fresh
+launch
+
+# welcome — ProtectionPlanWelcomeView. protectionPlanPrimaryCTA "Get started".
+# ProtectionPlanScaffold.swift:219; content.primaryCTA = global.action.get_started.
+wait id protectionPlanPrimaryCTA
+shot welcome
+tap --id protectionPlanPrimaryCTA
+
+# early value proof — ProtectionPlanEarlyValueProofView. Skip the drag demo with
+# the real secondary CTA ("Not now"), which calls onContinue() directly.
+# ProtectionPlanEarlyValueProofView.swift:152 (view id), :128-129 (secondary),
+# :242-245 (skipDemo calls onContinue).
+wait id protectionPlanEarlyValueProofView
+shot early-value-proof
+tap --label "Not now" --element-type Button  # the screen id leaks onto every child; SecondaryCTA id is not on this screen
+
+# painPoints — ProtectionPlanDistractionChoicesView. Needs one distraction choice
+# AND one desired outcome before primaryCTA enables (canContinue,
+# ProtectionPlanOnboarding.swift:30-31). Title: onboarding.personalise.pain.title.
+# Chip labels: onboarding.personalise.choice.tiktok ("TikTok"),
+# onboarding.personalise.outcome.simple ("A simpler routine").
+wait text "What's in the way?"
+shot pain-points
+tap --label TikTok
+tap --label "A simpler routine"
+tap --id protectionPlanPrimaryCTA
+
+# missFrequency — ProtectionPlanFailureFrequencyView. Needs one frequency AND one
+# risk window before primaryCTA enables (canContinue, ProtectionPlanOnboarding.swift
+# :60-61). Title: onboarding.frequency.title. Labels: onboarding.frequency.rarely
+# .title ("Rarely"), onboarding.risk_window.right_after ("Right after the reminder").
+wait text "How often do you miss your pill?"
+shot miss-frequency
+tap --label Rarely
+tap --label "Right after the reminder"
+tap --id protectionPlanPrimaryCTA
+
+# acquisitionSource — ProtectionPlanAcquisitionSourceView. Row id pattern
+# acquisitionSource.<rawValue> (ProtectionPlanAcquisitionSourceView.swift:68).
+# Title: onboarding.acquisition.title.
+wait text "Where did you find Pillie?"
+shot acquisition-source
+tap --id acquisitionSource.tiktok
+tap --id protectionPlanPrimaryCTA
+
+# method — ProtectionPlanRoutineMethodView. Defaults to .pill, isPrimaryEnabled
+# is always true (ProtectionPlanRoutineMethodView.swift:39), so no row tap needed.
+# Title: onboarding.method.title.
+wait text "Pick your method."
+shot method
+tap --id protectionPlanPrimaryCTA
+
+# schedule — ProtectionPlanRoutineDetailsView. isPrimaryEnabled always true
+# (ProtectionPlanRoutineDetailsView.swift:65). Title: onboarding.cycle_position.title.
+wait text "Where are you in your routine?"
+shot schedule
+tap --id protectionPlanPrimaryCTA
+
+# reminderTime — ProtectionPlanReminderTimeView. Title: onboarding.reminder_time
+# .title. CTA "Continue to notification settings" requests real notification
+# authorization (OnboardingReminderCommit.swift; ProtectionPlanReminderTimeView
+# .swift:178-187) — a real iOS system alert follows, unlike the FamilyControls
+# request later, which is simulator-auto-approved. Confirm the button text live.
+wait text "Pick a time."
+shot reminder-time
+tap --id protectionPlanPrimaryCTA
+tap --label Allow  # UNVERIFIED: iOS system notification-permission alert, not Pillie copy
+
+# reminderPlan — ProtectionPlanDiagnosisView. The CTA is held back until the
+# analyze-then-reveal beat finishes (ProtectionPlanDiagnosisView.swift:100-119),
+# so wait on the id with a longer timeout, not the title (present during the
+# analyzing beat too). Its real CTA lands directly on appBlocking
+# (OnboardingFlow.nextStep(after: .reminderPlan), OnboardingFlow.swift:221-250) —
+# trialGranted is not in between; see the header comment.
+wait id protectionPlanPrimaryCTA 15
+shot reminder-plan
+tap --id protectionPlanPrimaryCTA
+
+# appBlocking (empty phase) — AppBlockingSetupView. No selection yet.
+# appBlockingEmptyStateCard: AppBlockingSetupView.swift:349.
+wait id appBlockingEmptyStateCard 15
+shot app-blocking-empty
+
+# appBlocking (selected phase) — fake a FamilyControls selection via the QA seam
+# (AppBlockingManager.swift:36-40), then use the screen's real "Continue" (no
+# accessibility id on this button; global.action.continue).
+openurl "pillie://debug/plus-app-blocking-setup?selected=3&lang=en"
+wait text "Apps selected"
+shot app-blocking-selected
+tap --label Continue
+
+# protectionPlanReady — ProtectionPlanReadyView. protectionPlanReadyStartButton
+# (ProtectionPlanReadyView.swift:217), label "Go to Today" (onboarding.ready.cta).
+wait id protectionPlanReadyStartButton
+shot protection-plan-ready
+tap --id protectionPlanReadyStartButton
+
+# Home
+wait text Today 15
+shot home

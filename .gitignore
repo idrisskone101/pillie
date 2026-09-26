@@ -7,3 +7,4 @@ Pillie/Config/Secrets.xcconfig
 .namespace-token.json
 __pycache__/
 *.pyc
+.qa-artifacts/

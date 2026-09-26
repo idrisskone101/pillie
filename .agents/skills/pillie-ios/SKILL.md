@@ -11,7 +11,7 @@ The agent API is the repo-root Makefile. It wraps `Pillie/scripts`, `/tmp` Deriv
 
 ## Linux Cloud Agents
 
-If `uname` is Linux, do not run `xcodebuild` or `simctl` on this VM. Load `verify-pillie` and `namespace-mac`. The proof command is `make ns-mac-qa`. Potato / `/poteto-mode` uses the same skill. Do not `make ns-mac-stop` unless the user asked. The Cloud Agent stays on Linux; `pillie-ios` is the only Namespace Mac. Do not use Idriss's MacBook, the `devbox` CLI, `nsc ssh`, or Expire.
+If `uname` is Linux, do not run `xcodebuild` or `simctl` on this VM. Load `verify-pillie` and `namespace-mac`. Build with `make ns-mac-qa`, then drive with `make ns-mac-flow FLOW=…`. Potato / `/poteto-mode` uses the same skill. Do not `make ns-mac-stop` unless the user asked. The Cloud Agent stays on Linux; `pillie-ios` is the only Namespace Mac. Do not use Idriss's MacBook, the `devbox` CLI, `nsc ssh`, or Expire.
 
 ## Loop
 
@@ -35,6 +35,7 @@ Hand work back after step 4. Logs: [logging.md](references/logging.md). Shipping
 - `make test TESTS=ClassName`
 - `make screenshot`
 - `make qa` — ensure axe/magick, boot, build-and-run, wait, 1x PNG, axe dump
+- `make flow FLOW=today-home` — run a `verify-pillie` flow (shots, outlines, report.json)
 - `make ensure-qa-tools` — install axe and ImageMagick if they are missing
 - `make console`
 - `make worktree BRANCH=codex/<slug>`

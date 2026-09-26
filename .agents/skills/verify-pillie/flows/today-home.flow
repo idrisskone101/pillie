@@ -1,0 +1,70 @@
+# Today: status card, pill pack card, blocking card, then the real
+# mark-taken path (floating CTA -> Shake to Confirm -> its tap fallback),
+# proving the taken state and undoing it.
+#
+# `fresh` (not `launch`) so PillStore seeds a brand-new pack: packNumber 1,
+# .twentyOneSeven, day 1, nothing taken yet (PillStore.swift:1205-1223). That
+# guarantees a due, untaken pill regardless of what a previous flow left on
+# the pack. /plus-home only flips onboarding-complete + Plus; it never
+# touches the pack (PillieApp.swift:665-670).
+fresh
+launch
+wait text "Get started" 15
+openurl "pillie://debug/plus-home?lang=en"
+wait text "Today" 15
+shot today-home
+
+# Blocking is never configured on a fresh install (no FamilyControls
+# selection), so the enable-later card always renders here.
+# BlockingStatusCard.swift:57; CTA text "Set up app blocking":
+# Localizable.xcstrings:105604 today.protection.setup.cta.
+wait id homeBlockingStatusCard 10
+shot today-blocking-card
+
+# PillPackCard.swift:33-34,66; Localizable.xcstrings:64629 today.pack.title
+# = "This cycle".
+wait text "This cycle" 10
+shot today-pill-pack-card
+
+# Due-action CTA label. DueActionCopy.swift:6-7 today.action.take_pill;
+# Localizable.xcstrings:100654, value "Take pill". The identical string also
+# renders as the (non-interactive) StatusCard subtitle at the same time
+# (StatusCardTitle.swift:42-43) — only the floating Button answers hit
+# testing, the same shape already proven for the Today/History/Settings tab
+# labels in smoke.flow, so `tap --label` still resolves to the CTA.
+# A new install's default pack lands on its break day (Day 28 of 28, nothing
+# due). Pin the clock and seed a pack whose today is due (DebugQA.swift
+# missedRecentDays; proven in history-correction.flow).
+# Plus users confirm with a shake (HomeView.swift: Plus && !reduceMotion); a
+# free user logs on tap. fresh resets the keychain trial, so grant one.
+openurl pillie://debug/trial-grant?lang=en
+openurl pillie://debug/fixed-now?at=2026-09-15T15:00:00Z
+tap --id developerMenuAvatarButton
+wait text "PACK & CALENDAR" 10
+tap --label "Missed the last 2 days"  # row id leaks onto its children (DeveloperMenuView.swift:114)
+wait text "Take pill" 10
+shot today-status-due
+tap --label "Take pill"
+
+# Plus (from /plus-home) requires shake confirm: HomeView.swift:299 (Plus &&
+# !reduceMotion) -> ShakeConfirmView. Headline "Shake to Confirm":
+# ShakeConfirmView.swift:90; Localizable.xcstrings:62704 today.action.shake.
+wait text "Shake to Confirm" 10
+shot today-shake-confirm
+
+# Simulator cannot shake the device — use the accessibility fallback.
+# ShakeConfirmView.swift:169 shakeTapToConfirmFallback; label "Tap to
+# Confirm Instead": Localizable.xcstrings:62979 today.action.tap_instead.
+tap --id shakeTapToConfirmFallback
+
+# Completion runs a ~1.2s celebration before dismissing
+# (ShakeConfirmView.swift:220-237), then the floating CTA becomes the undo
+# control. TodayActionState.swift:45-46 today.action.undo_complete;
+# Localizable.xcstrings:61329, value "That's logged. Tap to undo."
+wait text "That's logged. Tap to undo." 15
+shot today-taken
+
+# Undo path: HomeView.swift:689-698 calls store.unmarkTodayAsTaken().
+tap --label "That's logged. Tap to undo."
+wait text "Take pill" 10
+shot today-undone

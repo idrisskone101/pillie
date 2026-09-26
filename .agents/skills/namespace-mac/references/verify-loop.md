@@ -9,14 +9,15 @@
 3. `git fetch` + `git reset --hard <sha>` on `/Users/runner/workspaces/pillie`.
 4. Remote `Pillie/scripts/ensure-qa-tools.sh`: install `axe` and ImageMagick if they are missing.
 5. Remote `Pillie/scripts/sim-qa.sh`: boot the iPhone 17 Pro, `make build-and-run` (or `make run` when this SHA is already built), wait until `axe describe-ui` looks settled, write the 1x PNG and axe dump.
-6. Copy artifacts to `/opt/cursor/artifacts/`.
+6. Copy artifacts to the artifact dir: `$PILLIE_NS_ARTIFACT_DIR`, else `/opt/cursor/artifacts` when `/opt/cursor` exists, else the repo's `.qa-artifacts/`.
 7. Leave the Mac running.
 
 ## Artifacts
 
-- `/opt/cursor/artifacts/pillie_simulator_1x.png`
-- `/opt/cursor/artifacts/pillie_ax.txt`
-- `/opt/cursor/artifacts/pillie_qa.json`
+- `pillie_simulator_1x.png`
+- `pillie_ax.txt` (raw axe JSON; `Pillie/scripts/ax-outline.py` flattens it)
+- `pillie_qa.json`
+- `flows/<name>/` after `make ns-mac-flow`
 
 `pillie_qa.json` has `sha`, `udid`, `ready`, `axe`, and `duration_s`. `ready=false` still wrote a screenshot. Read the PNG and the axe dump before you call the run done.
 
@@ -29,7 +30,8 @@
 | Install axe / magick only | `make ns-mac-ensure-tools` |
 | Force a rebuild of the same SHA | `FORCE_BUILD=1 make ns-mac-qa` |
 | Focused XCTest | `make ns-mac-verify CMD='make test TESTS=ClassName'` |
-| Axe after qa | `make ns-mac-exec CMD='axe describe-ui --udid "$(make -s udid)"'` |
+| Drive after qa | `make ns-mac-flow FLOW=<name>` (see `verify-pillie`) |
+| One axe call | `make ns-mac-exec CMD='axe describe-ui --udid "$(make -s udid)"'` |
 
 On a Mac, `make qa` is the same capture path without Namespace.
 
@@ -45,6 +47,9 @@ On a Mac, `make qa` is the same capture path without Namespace.
 | `axe` / `magick` missing after Stop/Start | They live on the persistent volume. `ensure-qa-tools` reinstalls if the volume was wiped. |
 | Second Activate on an already-up Mac | `start` returns when SSH already works. |
 | SSH `Permission denied` after a new instance | Exec refreshes `GetSSHConfig` and retries once. |
+| `$(…)` inside `CMD=` eaten by make | `CMD` reaches the Mac through the environment, unexpanded. |
+| 2.5 MB of xcodebuild output per qa | The build log stays in `/tmp/pillie_build.log` on the Mac; errors and the tail come back on failure. `PILLIE_QA_VERBOSE=1` streams it. |
+| One exec (about 7 s) per tap | `make ns-mac-flow` runs a whole flow in one job; a tap costs about 0.9 s. |
 
 `NS_MAC_ALLOW_DIRTY=1` skips the working-tree check. The Mac still syncs HEAD, not your dirty files.
 

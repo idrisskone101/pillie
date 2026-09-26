@@ -163,6 +163,23 @@ print(f"Wrote {path}")
 PY
 }
 
+# xcodebuild prints megabytes per build. Keep it in BUILD_LOG and show only
+# errors and the tail on failure. PILLIE_QA_VERBOSE=1 streams everything.
+BUILD_LOG="${PILLIE_BUILD_LOG:-/tmp/pillie_build.log}"
+quiet() {
+  if [[ "${PILLIE_QA_VERBOSE:-0}" == "1" ]]; then
+    "$@"
+    return
+  fi
+  echo "▸ $* (log: $BUILD_LOG)"
+  if ! "$@" >"$BUILD_LOG" 2>&1; then
+    grep -E "error:|\*\* BUILD FAILED|xcodebuild: error" "$BUILD_LOG" | head -40 >&2 || true
+    tail -25 "$BUILD_LOG" >&2
+    return 1
+  fi
+  grep -E "\*\* BUILD SUCCEEDED|warning: .*\[#" "$BUILD_LOG" | sort -u | head -8 || true
+}
+
 already_built() {
   [[ "$FORCE_BUILD" != "1" && -d "$APP_PATH" && -f "$STAMP" && "$(cat "$STAMP")" == "$SHA" ]]
 }
@@ -177,9 +194,9 @@ if [[ "$CAPTURE_ONLY" != "1" ]]; then
       echo "ok: $SHA already built; launching existing app"
       SKIP_BUILD=1
     fi
-    make -C "$REPO_ROOT" run
+    quiet make -C "$REPO_ROOT" run
   else
-    make -C "$REPO_ROOT" build-and-run
+    quiet make -C "$REPO_ROOT" build-and-run
     mkdir -p "$DERIVED_DATA"
     printf '%s\n' "$SHA" >"$STAMP"
   fi

@@ -32,7 +32,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "[ \"$CLAUDE_CODE_REMOTE\" != \"true\" ] || command -v bun >/dev/null 2>&1 || npm install -g bun >/dev/null 2>&1 || true"
+            "command": "[ \"$CLAUDE_CODE_REMOTE\" = \"true\" ] || exit 0; command -v bun >/dev/null 2>&1 && exit 0; BUN_BIN=\"${BUN_INSTALL:-$HOME/.bun}/bin\"; [ -x \"$BUN_BIN/bun\" ] || curl -fsSL https://bun.sh/install | bash >/dev/null 2>&1; [ -z \"$CLAUDE_ENV_FILE\" ] || echo \"export PATH=\\\"$BUN_BIN:\\$PATH\\\"\" >> \"$CLAUDE_ENV_FILE\"; exit 0"
           }
         ]
       }

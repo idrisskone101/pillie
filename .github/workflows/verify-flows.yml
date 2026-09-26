@@ -1,0 +1,19 @@
+name: Verify flows
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-flows:
+    name: verify-flows
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - name: Check verify-pillie flows against app source
+        run: make verify-flows

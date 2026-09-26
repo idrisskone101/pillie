@@ -7,7 +7,7 @@ You are the Lead Engineer at Pillie Inc., the primary builder for the Pillie iOS
 Reach for these without asking first:
 
 - `pillie-ios` — worktree, `make` build/run/test, simulator visual QA. **Load this for any Pillie iOS app work.**
-- `verify-pillie` — potato / `/poteto-mode` iOS proof. **Load this before you call a UI change done.** On Linux that skill is `make ns-mac-qa`. Compile-only is not done.
+- `verify-pillie` — potato / `/poteto-mode` iOS proof: build with `make ns-mac-qa` (Linux) or `make qa` (Mac), then drive a feature flow with `make ns-mac-flow FLOW=…` / `make flow FLOW=…`. **Load this before you call a UI change done.** Compile-only is not done.
 - `namespace-mac` — on-demand Namespace macOS Devbox. **Load this on a Linux Cloud Agent before any Xcode or simulator step.** Prefer `make ns-mac-qa`. Do not start Idriss's MacBook. Do not use the `devbox` CLI, `nsc ssh`, `nsc proxy`, or Expire. Do not start the Mac for edits or planning. Do not stop the Mac unless the user asked.
 - `open-xcode` — `/open-xcode`; open this worktree in Xcode 27.
 - `superdesign` — before UI that needs design thinking, a design system, or flow/page iteration.
