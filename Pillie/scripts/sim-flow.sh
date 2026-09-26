@@ -136,8 +136,9 @@ poll_for() {
 }
 
 settle() {
-  # Wait until the ax tree has content and stops changing.
-  local last="" cur="" stable=0 deadline=$((SECONDS + ${1:-20}))
+  # Wait until the ax tree has content and stops changing. An animating screen
+  # never repeats its size, so after 8s any non-empty tree counts as settled.
+  local last="" cur="" stable=0 start=$SECONDS deadline=$((SECONDS + ${1:-20}))
   while (( SECONDS < deadline )); do
     if dump "$OUT/.probe.json"; then
       cur="$(wc -c <"$OUT/.probe.json" | tr -d ' ')"
@@ -147,6 +148,7 @@ settle() {
       else
         stable=0
       fi
+      (( cur > 400 && SECONDS - start >= 8 )) && return 0
       last="$cur"
     fi
     sleep 0.25
@@ -308,6 +310,12 @@ while IFS= read -r raw || [[ -n "$raw" ]]; do
   line="${raw%%#*}"
   line="$(printf '%s' "$line" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
   [[ -z "$line" ]] && continue
+  # axe's scroll presets flick too fast for the UIKit-hosted tab panes; a 0.6s
+  # swipe scrolls them (proven on Settings).
+  case "$line" in
+    "gesture scroll-down") line="swipe --start-x 200 --start-y 650 --end-x 200 --end-y 250 --duration 0.6" ;;
+    "gesture scroll-up") line="swipe --start-x 200 --start-y 250 --end-x 200 --end-y 650 --duration 0.6" ;;
+  esac
   verb="${line%% *}"
   case "$verb" in
     tap|swipe|gesture|touch|type|button|key|key-sequence|key-combo|sleep)
