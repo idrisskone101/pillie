@@ -1,0 +1,36 @@
+# Developer menu: open it from Settings (debug builds only), apply one
+# harmless scenario (packComplete — rewrites local pack history only; it
+# doesn't touch trial/subscription state), and prove it actually changed
+# Home, not just that the sheet closed.
+launch
+openurl pillie://debug/plus-home?lang=en
+wait text Today 15
+tap --label Settings
+wait id settingsDeveloperMenuRow
+# SettingsView.swift:370-378 (button + accessibilityIdentifier). Row title
+# "Jump to a QA state" is a plain literal, not localized.
+# SettingsView.swift:374.
+gesture scroll-down
+gesture scroll-down
+tap --id settingsDeveloperMenuRow  # at y=1438 in the unscrolled tree; axe taps off-screen points silently
+wait id developerScenario.packComplete 10
+# DeveloperMenuView.swift:1-48 (the sheet), :89-116 (row id
+# "developerScenario.<rawValue>"). DebugQAScenario.packComplete,
+# DebugQA.swift:24,63,90.
+shot developer-menu
+tap --id developerScenario.packComplete
+# DeveloperMenuView.swift:44-47: apply() runs DebugQA.apply(.packComplete,
+# store:) — store.replacePack(with: .completedTwentyOneSevenPack())
+# (DebugQA.swift:189-190) — then calls dismiss() immediately. No confirm
+# step; the sheet just closes.
+wait id settingsLanguageRow 10
+# Confirms we're back on Settings (the developer sheet is gone) before
+# switching tabs.
+tap --label Today
+wait text "Start new" 10
+# today.pack.start_new.confirm (en), Localizable.xcstrings.
+# TodayActionState.swift:9,21-24,42-43: a fully-elapsed pack makes
+# store.isRefillDue true, TodayActionState.resolve returns .refillDue, and
+# its localizedPrimaryLabel is this key. HomeView.swift's floating button
+# renders that label for .refillDue (HomeView.swift:665-686).
+shot today-pack-complete
