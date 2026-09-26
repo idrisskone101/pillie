@@ -224,9 +224,15 @@ run_pseudo() {
     openurl)
       xcrun simctl openurl "$UDID" "$1"
       # Safari-style "Open in “Pillie”?" confirmation on every simctl openurl.
-      if poll_for want text "Open in “Pillie”?" 3; then
-        axe tap --udid "$UDID" --label Open --element-type Button --wait-timeout 3 >/dev/null
-      fi
+      # The tap can land while the alert is still animating in, so retry until it is gone.
+      local tries=0
+      while poll_for want text "Open in “Pillie”?" 3 && (( tries < 3 )); do
+        sleep 0.5
+        axe tap --udid "$UDID" --label Open --element-type Button --wait-timeout 3 >/dev/null 2>&1 || true
+        tries=$((tries + 1))
+        poll_for gone text "Open in “Pillie”?" 2 && break
+      done
+      ! present text "Open in “Pillie”?" || { echo "openurl confirmation stuck"; return 1; }
       settle 10 || true
       ;;
     wait) poll_for want "$1" "$2" "${3:-$WAIT}" ;;
