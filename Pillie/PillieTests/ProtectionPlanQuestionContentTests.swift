@@ -36,7 +36,7 @@ final class ProtectionPlanQuestionContentTests: XCTestCase {
         XCTAssertEqual(content.subtitle, "Choose the answer that feels closest.")
         XCTAssertEqual(content.helper, "Pick the kinds of apps, or specific ones, that usually pull you away.")
         XCTAssertEqual(content.primaryCTA, "Continue")
-        XCTAssertTrue(content.helper.lowercased().contains("blocklist"))
+        XCTAssertTrue(content.helper.lowercased().contains("apps"))
         XCTAssertEqual(content.choices, DistractionChoice.allCases)
         XCTAssertTrue(content.choices.contains(.other))
     }

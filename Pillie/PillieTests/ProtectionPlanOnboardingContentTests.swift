@@ -47,17 +47,17 @@ final class ProtectionPlanOnboardingContentTests: XCTestCase {
         // Beat 1 — the reminder arrives and asks for the action to be logged.
         let first = (content.drift.title + " " + content.drift.detail).lowercased()
         XCTAssertTrue(first.contains("reminder"), "Beat 1 must name the reminder.")
-        XCTAssertTrue(first.contains("log"), "Beat 1 must explain the check-in action.")
+        XCTAssertTrue(first.contains("check in"), "Beat 1 must explain the check-in action.")
 
         // Beat 2 — selected apps pause until the user confirms.
         let second = (content.checkpoint.title + " " + content.checkpoint.detail).lowercased()
         XCTAssertTrue(second.contains("pause"), "Beat 2 must show the selected apps pausing.")
-        XCTAssertTrue(second.contains("confirm"), "Beat 2 must explain how the pause ends.")
+        XCTAssertTrue(second.contains("check in"), "Beat 2 must explain how the pause ends.")
 
         // Beat 3 — logging the action makes the apps available again.
         let third = (content.resolved.title + " " + content.resolved.detail).lowercased()
-        XCTAssertTrue(third.contains("available"), "Beat 3 must make the apps available again.")
-        XCTAssertTrue(third.contains("logged"), "Beat 3 must follow a logged action.")
+        XCTAssertTrue(third.contains("open again"), "Beat 3 must make the apps available again.")
+        XCTAssertTrue(third.contains("checked in"), "Beat 3 must follow a check-in.")
     }
 
     func testEarlyValueProofCopyAvoidsConfusingJargon() {
@@ -115,8 +115,8 @@ final class ProtectionPlanOnboardingContentTests: XCTestCase {
         XCTAssertTrue(content.shakeCue.lowercased().contains("phone"))
         XCTAssertEqual(content.shakeToTakeCTA, "Try shaking to check in")
         // The static / VoiceOver narrative still explains the pause-and-log loop.
-        XCTAssertTrue(content.resolved.detail.lowercased().contains("logged"))
-        XCTAssertTrue(content.resolved.title.lowercased().contains("available"))
+        XCTAssertTrue(content.resolved.detail.lowercased().contains("open again"))
+        XCTAssertTrue(content.resolved.title.lowercased().contains("checked in"))
         XCTAssertTrue(content.accessibilitySummary.lowercased().contains("check"))
     }
 
@@ -173,7 +173,7 @@ final class ProtectionPlanOnboardingContentTests: XCTestCase {
         // Beat 1 rings, beat 2 locks, beat 3 unlocks — the cause/effect loop.
         XCTAssertEqual(content.trigger.title, "Your reminder goes off")
         XCTAssertTrue(content.enforce.title.lowercased().contains("pause"))
-        XCTAssertTrue(content.release.title.lowercased().contains("log"))
+        XCTAssertTrue(content.release.title.lowercased().contains("check in"))
         XCTAssertEqual(content.replayCTA, "Replay")
         XCTAssertEqual(content.continueCTA, "Continue")
     }

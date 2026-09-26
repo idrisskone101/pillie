@@ -90,7 +90,7 @@ struct AppBlockingSetupContentTests {
         let normalized = formatted
             .replacingOccurrences(of: "\u{202F}", with: " ")
             .replacingOccurrences(of: "\u{00A0}", with: " ")
-        #expect(normalized == "Take your 9:00 PM pill to unlock.")
+        #expect(normalized == "Take your 9:00 PM pill to open it again.")
     }
 
     @Test func phaseIsEmptyWhenEntitledAndIdle() {

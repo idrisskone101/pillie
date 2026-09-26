@@ -16,8 +16,8 @@ final class SmartRemindersUpsellTests: XCTestCase {
 
         XCTAssertEqual(title, "Follow-up reminders")
         XCTAssertTrue(
-            description.contains("until you log"),
-            "Upsell must frame Smart Reminders as repeating until the user logs."
+            description.contains("until you check in"),
+            "Upsell must frame follow-up reminders as repeating until the user checks in."
         )
         XCTAssertTrue(
             description.contains("keeps pinging") || description.contains("how often"),

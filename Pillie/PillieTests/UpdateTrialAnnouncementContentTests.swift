@@ -52,7 +52,7 @@ final class UpdateTrialAnnouncementContentTests: XCTestCase {
             "This update starts your full 14 active-day Plus trial. Everything unlocks now."
         )
         XCTAssertEqual(content.perks.map(\.title), [
-            "App blocking", "Shake to check in", "Smart Reminders", "Custom messages",
+            "App blocking", "Shake to confirm", "Smart Reminders", "Custom messages",
         ])
     }
 
