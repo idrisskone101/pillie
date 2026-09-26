@@ -1,0 +1,62 @@
+# History: seed a missed day via the developer menu, open the day-correction
+# sheet for that past day, mark it Taken, and prove the calendar cell's
+# accessible state changed from "not logged" to "done".
+launch
+openurl pillie://debug/fixed-now?at=2026-09-15T15:00:00Z
+# Pins PillieClock.now to 2026-09-15 15:00 UTC so the seeded scenario's missed
+# days land on known dates. PillieApp.swift:648-664.
+openurl pillie://debug/plus-home?lang=en
+# Onboarded Plus Home, English. PillieApp.swift:665-670.
+wait text Today 15
+shot today
+tap --id developerMenuAvatarButton
+# HomeView.swift:360-367, opens DeveloperMenuView (HomeView.swift:638-640).
+wait text "PACK & CALENDAR" 10
+# DeveloperMenuSectionView renders section.title.uppercased(), verbatim (not
+# localized, debug-only screen). DebugQASection.pack.title = "Pack & calendar"
+# -> "PACK & CALENDAR". DeveloperMenuView.swift:15,55-59.
+shot developer-menu
+tap --label "Missed the last 2 days"  # row title; the row id leaks onto its children (DeveloperMenuView.swift:114), so --id matches 3
+# DeveloperMenuRowView id "developerScenario.<rawValue>".
+# DeveloperMenuView.swift:114. Scenario: DebugQA.swift:24,64,88-90 ->
+# store.replacePack(with: .missedRecentDays()) (DebugQA.swift:183-185), a
+# 10-day pack where the last 2 due days are missed (DebugQA.swift:140-150).
+# With PillieClock pinned to 2026-09-15, that seeds 2026-09-13 and 2026-09-14
+# as missed.
+wait text Today 15
+# DeveloperMenuView.apply() calls dismiss() after DebugQA.apply().
+# DeveloperMenuView.swift:44-47.
+shot home-seeded
+tap --label History
+# PillieTabBar.swift:19-20, "history.navigation.title" -> "History".
+wait text "Your month so far" 10
+# HistoryView.swift:29, "history.title" -> "Your month so far".
+shot history-seeded
+wait text "September 14, 2026: Not logged" 10
+# Verified live: exact date rendering of Date.FormatStyle().day().month(.wide)
+# .year() for locale en (assumes "September 14, 2026"). The accessibility
+# label on the day button is built from this date text plus the day's
+# status: CalendarGrid.swift:212-215,270-293 (dayAccessibilityLabel) calls
+# HistoryPresentation.dayAccessibilityLabel (HistoryPresentation.swift:51-74),
+# format key "history.accessibility.day" = "%@: %@". A missed day maps to
+# status .unlogged (CalendarGrid.swift:283-287), key "history.legend.unlogged"
+# -> "Not logged". 2026-09-14 is the more recent of the two missed days seeded
+# above (today - 1 under the pinned clock).
+tap --id historyEditableDay.2026-9.14
+# CalendarGrid.swift:217-230. monthID = MonthCursor.identity(for:) ->
+# "\(year)-\(month)" (MonthCursor.swift:27-30), no zero-padding -> "2026-9".
+wait id historyDayCorrection.taken 10
+# HistoryDayCorrectionSheet.swift:129, id "historyDayCorrection.<rawValue>".
+# DayCorrectionOutcome.taken rawValue "taken". DayCorrection.swift:8-11.
+shot correction-sheet
+tap --id historyDayCorrection.taken
+gone id historyDayCorrection.taken 10
+# The row's action calls onSelect then dismiss().
+# HistoryDayCorrectionSheet.swift:87-92.
+wait text "September 14, 2026: Done" 10
+# Verified live: same date-format assumption as above. HistoryView.applyCorrection
+# (HistoryView.swift:98-102) calls store.correctPastDay (PillStore.swift:748),
+# which rewrites the day's status to .taken. The cell's accessibility label
+# then maps to status .completed (CalendarGrid.swift:283-287), key
+# "history.legend.completed" -> "Done".
+shot correction-applied

@@ -1,0 +1,41 @@
+# History: open the calendar tab, prove the month grid renders, page to the
+# previous month and back. Pins the clock so the month header is
+# deterministic instead of depending on the run date.
+launch
+shot launch
+openurl pillie://debug/fixed-now?at=2026-09-15T15:00:00Z
+# Pins PillieClock.now to 2026-09-15 15:00 UTC and refreshes the store's day
+# context. PillieApp.swift:648-664 (case "/fixed-now").
+openurl pillie://debug/plus-home?lang=en
+# Onboarded Plus Home, English. PillieApp.swift:665-670 (case "/plus-home").
+wait text Today 15
+shot today
+tap --label History
+# Tab label = PillieTab.history.label() = "history.navigation.title" ->
+# "History". PillieTabBar.swift:19-20; Localizable.xcstrings.
+wait text "Your month so far" 10
+# HistoryView.swift:29, key "history.title" -> "Your month so far".
+shot history-open
+wait text "September 2026" 10
+# Verified live: exact rendering of displayedMonth.formatted(.month(.wide).year())
+# for locale en. Assumes "September 2026" word order. HistoryMonthSlideHost
+# .swift:56-60,73 (monthYearString). With the clock pinned above, the
+# starting displayed month is MonthCursor.monthStart(for: store.today), i.e.
+# September 2026 (HistoryMonthSlideHost.swift:16,36-41).
+shot history-month-current
+swipe --start-x 70 --start-y 480 --end-x 340 --end-y 480
+# Verified live (y=480 is inside the grid): dragging right (end-x > start-x) gives a positive
+# translation, which HistoryMonthPagerViewController.endDrag maps to
+# commitDelta -1, i.e. the previous month. HistoryMonthPager.swift:233-249,
+# 283-289. y=480 is a guess for where the month grid sits under History's
+# title/subtitle/legend/chrome; confirm against the history-open shot above
+# and adjust start-y/end-y if the drag lands outside HorizontalMonthDragSurface
+# (HistoryMonthSlideHost.swift:103-126, 263-358).
+wait text "August 2026" 10
+# Verified live: same month-format assumption as above, one month back.
+shot history-month-previous
+swipe --start-x 340 --start-y 480 --end-x 70 --end-y 480
+# Dragging left (end-x < start-x) gives commitDelta +1, i.e. forward one
+# month, back to the month the flow started on. HistoryMonthPager.swift:233-249.
+wait text "September 2026" 10
+shot history-month-back
