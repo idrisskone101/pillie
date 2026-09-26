@@ -116,3 +116,5 @@ CTAs change often; this file names the mechanism, not the wording.
   here are the `en` values in `Commerce.xcstrings` at the time of writing;
   re-read the dump before trusting them for another locale or after a copy
   change.
+- `pillie://debug/honest-paywall?board=settingsFree` is unreliable: it applies `existingUserTrialAnnouncement`, whose one-shot announcement sheet ("Your next two weeks are on us.") can cover the paywall, and after the first run the sheet no longer shows either. `paywall-boards.flow` skips that board. Verified live 2026-09-26.
+- The duringTrial post can land before Home subscribes. `paywall-boards.flow` waits for `Today` after every `launch`, before the link.

@@ -21,16 +21,10 @@ tap --id xmark --element-type Button  # paywall close; a review-prompt "Close" c
 # HonestPaywallBoard.swift:26-31. Close's accessibilityLabel is
 # global.action.close -> "Close". HonestPaywallView.swift:46-63.
 
-launch
-wait text Today 15  # the link rebuilds Home, then posts; an early post is lost
-openurl pillie://debug/honest-paywall?board=settingsFree&lang=en
-wait text "Daily reminders are free." 10
-# paywall.story.settings_free.title (en). PillieApp.swift case
-# "settingsFree": DebugQA.apply(.existingUserTrialAnnouncement) then posts
-# the same notification with object "settingsFree", which HomeView.swift
-# :644-654 turns into showBlockingPaywall = true (surface .homeBlockingCard).
-shot paywall-settings-free
-tap --id xmark --element-type Button  # paywall close; a review-prompt "Close" can sit behind it
+# settingsFree is not driven here: its link applies existingUserTrialAnnouncement,
+# whose one-shot announcement sheet blocks the paywall cover (PillieApp.swift
+# /honest-paywall, HomeView.swift onReceive). Reach it from Settings > Pillie
+# Plus on a free user instead. See features/paywalls.md.
 # .settingsFree chrome also has showsClose: true. HonestPaywallBoard.swift
 # :26-31.
 
