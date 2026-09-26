@@ -36,7 +36,7 @@ flow_files = $(if $(filter all,$(FLOW)),$(sort $(wildcard $(FLOWS_DIR)/*.flow)),
 	worktree agent-verify udid qa measure-frames flow ns-mac-flow \
 	ns-mac-status ns-mac-start ns-mac-stop ns-mac-sync ns-mac-diagnose \
 	ns-mac-exec ns-mac-verify ns-mac-screenshot ns-mac-qa ns-mac-check-sync \
-	ns-mac-ensure-tools ensure-qa-tools swift-taste swift-taste-selftest
+	ns-mac-ensure-tools ensure-qa-tools swift-taste swift-taste-selftest verify-flows
 
 help:
 	@printf "%s\n" \
@@ -65,6 +65,7 @@ help:
 		"  make ns-mac-diagnose          Remote uname / Xcode / repo check" \
 		"  make ns-mac-exec CMD='make x' Run a command on the Namespace Mac" \
 		"  make ns-mac-flow FLOW=today   Run flows on the Namespace Mac, pull the results" \
+		"  make verify-flows             Check flows and feature docs against source" \
 		"  make ensure-qa-tools          Install axe and ImageMagick if missing" \
 		"  make ns-mac-ensure-tools      Same, on the Namespace Mac" \
 		"  make swift-taste              Linux Swift structure gate (allowlist)" \
@@ -175,6 +176,9 @@ ns-mac-screenshot:
 	@KEEP="$(KEEP)" REF="$(REF)" SKIP_BUILD="$(SKIP_BUILD)" \
 		CAPTURE_ONLY="$(CAPTURE_ONLY)" FORCE_BUILD="$(FORCE_BUILD)" \
 		$(SCRIPTS)/namespace-mac.sh qa
+
+verify-flows:
+	@python3 $(SCRIPTS)/check-verify-flows.py
 
 swift-taste:
 	@$(SCRIPTS)/check-swift-taste.sh

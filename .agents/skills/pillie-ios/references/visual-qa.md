@@ -2,11 +2,9 @@
 
 Done when: a 1x screenshot shows the changed UI, and `axe describe-ui` contains the expected labels (or a named focused test passed). Follow `verify-pillie` for the potato / `/poteto-mode` path.
 
-1. `make qa` on a Mac, or `make ns-mac-qa` on a Linux Cloud Agent. Both boot the simulator, build-and-run, wait for a settled UI, and write the 1x PNG plus an axe dump. `build-and-run` now boots first, so install should not fail with `SimError 405 Shutdown`.
-2. Read `/tmp/sim_screenshot_1x.png` and `/tmp/pillie_ax.txt` (Linux copies them to `/opt/cursor/artifacts/`).
-3. Navigate with accessibility identifiers or labels. Coordinate taps only after the 1x image (points, not pixels).
-4. Recapture with `SKIP_BUILD=1 make qa` or `SKIP_BUILD=1 make ns-mac-qa`.
-5. Repeat until the bound above is met.
+1. `make qa` on a Mac, or `make ns-mac-qa` on a Linux cloud agent. Both boot the simulator, build-and-run, wait for a settled UI, and write the 1x PNG plus an axe dump.
+2. Drive with a flow: `make flow FLOW=<name>` on a Mac, `make ns-mac-flow FLOW=<name>` on Linux. `verify-pillie` owns flows, the feature map, and where the evidence lands.
+3. Navigate with accessibility identifiers or labels. Coordinate taps only after a fresh 1x image (points, not pixels).
 
 `axe --help` is the command catalog. Pass `--udid` every time. Scroll is content-direction: `scroll-down` reveals content below the fold.
 

@@ -1,11 +1,11 @@
 ---
 name: namespace-mac
-description: On-demand Namespace macOS Devbox for iOS builds and simulator QA from a Linux Cursor Cloud Agent. Use when the agent is not on macOS and must compile Pillie, boot the simulator, screenshot, or run focused tests.
+description: On-demand Namespace macOS Devbox for iOS builds and simulator QA from a Linux cloud agent (Cursor or Claude Code). Use when the agent is not on macOS and must compile Pillie, boot the simulator, drive a flow, screenshot, or run focused tests.
 ---
 
 # Namespace Mac
 
-Linux Cloud Agents cannot run Xcode. Pillie keeps **one** Namespace Devbox named `pillie-ios` (macOS 27.x, Apple Silicon size M). Start it only for iOS verify.
+Linux cloud agents cannot run Xcode. Pillie keeps **one** Namespace Devbox named `pillie-ios` (macOS 27.x, Apple Silicon size M). Start it only for iOS verify.
 
 This Linux VM is the agent. The Mac is a remote builder. Do not treat Idriss's MacBook or a Cursor self-hosted worker as the Devbox.
 
@@ -27,9 +27,9 @@ Do not start the Mac for Swift-only edits, copy, planning, or Linux work.
    Done when: it prints `ok: Namespace auth`. If it asks for `NSC_TOKEN`, stop and tell the user to add that Cloud Agent secret (raw `nsrt_…` bearer, not a `tok_…` id).
 2. **Push.** Commit and `git push -u origin HEAD`. `qa` refuses a dirty or unpushed HEAD.
    Done when: `git push` succeeded.
-3. **Proof.** `make ns-mac-qa`.
-   Done when: `/opt/cursor/artifacts/pillie_simulator_1x.png` and `/opt/cursor/artifacts/pillie_qa.json` exist. The Mac stays up.
-4. **More UI.** After qa, `make ns-mac-exec CMD='axe …'` or `SKIP_BUILD=1 make ns-mac-qa` to recapture. Custom compile or test: `make ns-mac-verify CMD='make test TESTS=ClassName'`.
+3. **Build.** `make ns-mac-qa`.
+   Done when: `pillie_simulator_1x.png` and `pillie_qa.json` exist in the artifact dir it prints (`$PILLIE_NS_ARTIFACT_DIR`, else `/opt/cursor/artifacts` on Cursor, else `.qa-artifacts/`). The Mac stays up.
+4. **Drive.** `make ns-mac-flow FLOW=<name>` runs a `verify-pillie` flow in one remote job and pulls its folder back. Custom compile or test: `make ns-mac-verify CMD='make test TESTS=ClassName'`. One command: `make ns-mac-exec CMD='…'` (about 7 s per call).
 
 `make ns-mac-screenshot` and `make ns-mac-verify` with no `CMD` are the same as `make ns-mac-qa`.
 
@@ -37,7 +37,7 @@ Do not start the Mac for Swift-only edits, copy, planning, or Linux work.
 
 Details and failure table: [verify-loop.md](references/verify-loop.md). Connect fallback: [connect.md](references/connect.md).
 
-**No SSH (Claude Code cloud sandbox).** Outbound port 22 is blocked there, even on Full network access. `namespace-mac.sh` probes port 22 and falls back to HTTPS by itself, so `make ns-mac-qa` and the other targets work unchanged. Set `NS_MAC_TRANSPORT=ssh|https` to force one. A one-off command:
+**No SSH (Claude Code cloud sandbox).** Outbound port 22 is blocked there, even on Full network access. `namespace-mac.sh` probes port 22 and falls back to HTTPS by itself, so `make ns-mac-qa` and the other targets work unchanged. Streamed jobs poll every `NS_MAC_POLL` seconds (5 by default, 0.5 for flows). Set `NS_MAC_TRANSPORT=ssh|https` to force one. A one-off command:
 
 ```bash
 python3 Pillie/scripts/namespace-mac-api.py exec -- /bin/bash -lc 'sw_vers; xcodebuild -version'
@@ -66,6 +66,7 @@ This token can `Activate` / `GetSSHConfig` / native SSH. It cannot `nsc ssh` or 
 ## Targets
 
 - `make ns-mac-qa` — check-sync, start, sync, ensure axe/magick, boot, build-and-run, wait for UI, 1x PNG, axe dump
+- `make ns-mac-flow FLOW=…` — ship flow files, run them in one job, pull `flows/<name>/` back
 - `make ns-mac-verify` — same as qa when `CMD` is empty
 - `make ns-mac-screenshot` — same as qa
 - `make ns-mac-check-sync` — dirty / unpushed HEAD fails here, before Activate
