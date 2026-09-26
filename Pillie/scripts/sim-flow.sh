@@ -10,9 +10,9 @@
 # (outline), steps.jsonl, and report.json. Exit 0 only if every step passed.
 #
 # Flow file: one step per line, `#` comments. Consecutive axe interaction lines
-# (tap, swipe, gesture, touch, type, button, key, key-sequence, key-combo,
-# sleep) run as one `axe batch` with --wait-timeout, so selector taps wait for
-# their element instead of needing sleeps. See --help-steps.
+# (swipe, gesture, touch, type, button, key, sleep, coordinate taps) run as one
+# `axe batch`. A tap by --id/--label/--value runs alone with --wait-timeout, so
+# it waits for its element on a fresh tree instead of needing sleeps.
 
 set -euo pipefail
 
@@ -311,6 +311,14 @@ while IFS= read -r raw || [[ -n "$raw" ]]; do
   verb="${line%% *}"
   case "$verb" in
     tap|swipe|gesture|touch|type|button|key|key-sequence|key-combo|sleep)
+      # A selector tap gets its own batch. Inside one batch, axe cannot find an
+      # element that only appears after an earlier step (a sheet closing, a scroll).
+      if [[ "$verb" == tap && "$line" =~ --(id|label|value)[[:space:]] ]]; then
+        flush_batch || { FLOW_OK=0; FAILED_LINE="$(tail -1 "$STEPS")"; break; }
+        printf '%s\n' "$line" >>"$BATCH"
+        flush_batch || { FLOW_OK=0; FAILED_LINE="$(tail -1 "$STEPS")"; break; }
+        continue
+      fi
       printf '%s\n' "$line" >>"$BATCH"
       continue
       ;;
