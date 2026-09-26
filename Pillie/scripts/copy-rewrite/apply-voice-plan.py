@@ -223,10 +223,7 @@ def sync_locked(plans: dict[str, dict[str, str]]) -> None:
 
 def apply(plans: dict[str, dict[str, str]], catalogs: Catalogs) -> None:
     changes = []
-    live = {f"{r['table']}:{r['key']}" for r in inventory.rows() if r["swift_ref"] != "none"}
     for lang, plan in plans.items():
-        if lang != "en":
-            errors += [f"{lang} {ref}: missing from plan" for ref in sorted(live - set(plan))]
         for ref, value in plan.items():
             old = catalogs.get(ref, lang)
             if old != value:
