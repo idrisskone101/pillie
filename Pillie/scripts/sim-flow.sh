@@ -167,6 +167,33 @@ shot() {
   LAST_ARTIFACT="$base.png"
 }
 
+# axe's own --label/--id matcher misses elements after a sheet has been shown,
+# though describe-ui still reports them. Resolve the selector from describe-ui
+# and tap its center. Only on-screen matches count, so an off-screen row fails
+# loudly instead of eating a tap.
+fallback_tap() {
+  local line="$1" kind value etype="" xy
+  [[ "$line" =~ ^tap\  && "$line" != *";"* ]] || return 1
+  local toks=()
+  while IFS= read -r -d '' tok; do toks+=("$tok"); done < <(
+    python3 -c 'import shlex, sys; sys.stdout.write("".join(t + "\0" for t in shlex.split(sys.argv[1])))' "$line")
+  local i
+  for ((i = 1; i < ${#toks[@]}; i++)); do
+    case "${toks[$i]}" in
+      --id|--label|--value) kind="${toks[$i]#--}"; value="${toks[$((i + 1))]}" ;;
+      --element-type) etype="${toks[$((i + 1))]}" ;;
+    esac
+  done
+  [[ -n "${kind:-}" ]] || return 1
+  dump "$OUT/.probe.json" || return 1
+  if [[ -n "$etype" ]]; then
+    xy="$("$OUTLINE" "$OUT/.probe.json" --center "$kind" "$value" --type "$etype")" || return 1
+  else
+    xy="$("$OUTLINE" "$OUT/.probe.json" --center "$kind" "$value")" || return 1
+  fi
+  axe tap --udid "$UDID" -x "${xy% *}" -y "${xy#* }" >/dev/null 2>&1
+}
+
 flush_batch() {
   [[ -s "$BATCH" ]] || return 0
   local t rc=0 err
@@ -176,6 +203,10 @@ flush_batch() {
   local steps
   steps="$(paste -sd ';' "$BATCH")"
   : >"$BATCH"
+  if (( rc != 0 )) && [[ "$err" == *"No accessibility element matched"* ]] && fallback_tap "$steps"; then
+    rc=0
+    err="fallback: tapped the on-screen match from describe-ui"
+  fi
   if (( rc != 0 )); then
     record_step "batch: $steps" 0 $(( $(now_ms) - t )) "" "$(printf '%s' "$err" | tail -3 | tr '\n' ' ')"
     echo "FAIL batch: $steps $(printf '%s' "$err" | tail -3 | tr '\n' ' ')"
