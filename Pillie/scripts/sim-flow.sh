@@ -32,7 +32,7 @@ help_steps() {
 Flow steps (one per line):
 
   launch [ARGS...]          terminate, launch with ARGS (e.g. -AppleLanguages "(it)"), wait for UI
-  fresh                     empty the App Group and keychain, reinstall: a real first launch
+  fresh                     wipe app data, App Group, keychain, spawned defaults; reinstall
   defaults KEY TYPE VALUE   write app defaults (TYPE: -bool -int -string -float), before `launch`
   openurl URL               open a URL or deep link in the simulator
   wait id|label|text X [S]  poll the ax tree until X appears (default 10s)
@@ -276,6 +276,9 @@ run_pseudo() {
       # which also outlives uninstall.
       xcrun simctl keychain "$UDID" reset >/dev/null 2>&1 || true
       xcrun simctl uninstall "$UDID" "$BUNDLE_ID" >/dev/null 2>&1 || true
+      # `simctl spawn defaults write` (measure-frames.sh seeds onboardingStep)
+      # lands in a device-wide domain that uninstall keeps and the app still reads.
+      xcrun simctl spawn "$UDID" defaults delete "$BUNDLE_ID" >/dev/null 2>&1 || true
       xcrun simctl install "$UDID" "$APP_PATH"
       ;;
     defaults) xcrun simctl spawn "$UDID" defaults write "$BUNDLE_ID" "$@" ;;
