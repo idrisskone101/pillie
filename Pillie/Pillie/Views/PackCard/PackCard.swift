@@ -5,14 +5,18 @@
 
 import SwiftUI
 
-/// Display-only pill pack: a 7-column blister grid, paged four weeks at a time for long packs.
+/// A pill pack: a 7-column blister grid, paged four weeks at a time for long packs.
 /// Callers change `todayIndex` / `marks` and the card plays the pop cascade. Haptics are the caller's.
+/// Tiles are tappable only when `onSelectDay` is set.
 struct PackCard<Header: View>: View {
     let regimen: PackRegimen
     /// Calendar weekday (1 = Sunday) of day index 0.
     let dayOneWeekday: Int
     let todayIndex: Int?
     let marks: [Int: PackTileMark]
+    /// Day index that carries the numbered flag.
+    let flagIndex: Int?
+    let onSelectDay: ((Int) -> Void)?
     let header: Header
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -32,12 +36,16 @@ struct PackCard<Header: View>: View {
         dayOneWeekday: Int,
         todayIndex: Int?,
         marks: [Int: PackTileMark] = [:],
+        flagIndex: Int? = nil,
+        onSelectDay: ((Int) -> Void)? = nil,
         @ViewBuilder header: () -> Header
     ) {
         self.regimen = regimen
         self.dayOneWeekday = dayOneWeekday
         self.todayIndex = todayIndex
         self.marks = marks
+        self.flagIndex = flagIndex
+        self.onSelectDay = onSelectDay
         self.header = header()
     }
 
@@ -155,20 +163,62 @@ struct PackCard<Header: View>: View {
         .padding(16)
         .clipped()
         .padding(-16)
+        // Outside the clip: a flag on the first row rises above the grid.
+        .overlay {
+            flag(layout: layout)
+                .animation(reduceMotion ? .easeInOut(duration: 0.2) : .spring(duration: 0.35, bounce: 0.2), value: flagIndex)
+        }
         .contentShape(Rectangle())
         .simultaneousGesture(pageSwipe, including: layout.showsPager ? .all : .subviews)
     }
 
+    @ViewBuilder
     private func tile(at index: Int, state: PackTileState) -> some View {
         let day = regimen.day(atIndex: index)
-        return PackTile(kind: day.kind, state: state, isCrunching: crunching.contains(index))
+        let face = PackTile(kind: day.kind, state: state, isCrunching: crunching.contains(index))
             .scaleEffect(tileSide / PackTile.designSide)
             .frame(width: tileSide, height: tileSide)
-            .contentShape(.accessibility, Rectangle())
-            .accessibilityElement(children: .ignore)
-            .accessibilityLabel(accessibilityLabel(for: day))
-            .accessibilityValue(accessibilityValue(for: day.kind, state: state))
+        if let onSelectDay {
+            Button {
+                onSelectDay(index)
+            } label: {
+                face
+            }
+            .buttonStyle(PackTilePressStyle(reduceMotion: reduceMotion))
+            .contentShape(Rectangle().inset(by: -max(0, (Self.minimumHitSide - tileSide) / 2)))
+            .tileAccessibility(label: accessibilityLabel(for: day), value: accessibilityValue(for: day.kind, state: state))
+            .accessibilityAddTraits(.isButton)
+            .accessibilityIdentifier("packTile.\(day.pillNumber ?? day.number)")
+        } else {
+            face
+                .tileAccessibility(label: accessibilityLabel(for: day), value: accessibilityValue(for: day.kind, state: state))
+        }
     }
+
+    private static var minimumHitSide: CGFloat { 44 }
+
+    // MARK: Flag
+
+    @ViewBuilder
+    private func flag(layout: PackCardLayout) -> some View {
+        if let flagIndex, layout.dayIndices(onPage: viewedPage).contains(flagIndex) {
+            let slot = flagIndex - viewedPage * PackCardLayout.daysPerPage
+            let column = CGFloat(slot % PackCardLayout.daysPerWeek)
+            let row = CGFloat(slot / PackCardLayout.daysPerWeek)
+            let day = regimen.day(atIndex: flagIndex)
+            PackFlag(number: day.pillNumber ?? day.number)
+                .position(
+                    x: column * (tileSide + Self.columnGap) + tileSide / 2,
+                    y: row * (tileSide + Self.rowGap) - Self.flagLift - PackFlag.height / 2
+                )
+                .transition(.offset(y: reduceMotion ? 0 : -8).combined(with: .opacity))
+                .allowsHitTesting(false)
+                .accessibilityHidden(true)
+        }
+    }
+
+    /// Gap between the flag's pointer and the top of its tile.
+    private static var flagLift: CGFloat { 7 }
 
     // MARK: Paging
 
@@ -254,6 +304,64 @@ struct PackCard<Header: View>: View {
         case .missed: "pack_card.tile.state.missed"
         }
         return PillieLocalization.string(key, locale: locale)
+    }
+}
+
+private extension View {
+    func tileAccessibility(label: String, value: String) -> some View {
+        contentShape(.accessibility, Rectangle())
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(label)
+            .accessibilityValue(value)
+    }
+}
+
+private struct PackTilePressStyle: ButtonStyle {
+    let reduceMotion: Bool
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed && !reduceMotion ? 0.94 : 1)
+            .animation(.spring(duration: 0.3, bounce: 0.4), value: configuration.isPressed)
+    }
+}
+
+/// The black numbered capsule that marks the tapped tile.
+private struct PackFlag: View {
+    static let height: CGFloat = 29
+
+    let number: Int
+
+    var body: some View {
+        VStack(spacing: 0) {
+            Text(verbatim: "\(number)")
+                .font(.pillie(13, weight: .bold))
+                .monospacedDigit()
+                .foregroundStyle(.white)
+                .lineLimit(1)
+                .minimumScaleFactor(0.6)
+                .padding(.horizontal, 9)
+                .frame(minWidth: 24)
+                .frame(height: 24)
+                .background(Capsule().fill(PillieTheme.textPrimary))
+                .contentTransition(.numericText())
+            FlagPointer()
+                .fill(PillieTheme.textPrimary)
+                .frame(width: 10, height: 5)
+        }
+        .fixedSize()
+        .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
+    }
+}
+
+private struct FlagPointer: Shape {
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        path.move(to: CGPoint(x: rect.minX, y: rect.minY))
+        path.addLine(to: CGPoint(x: rect.maxX, y: rect.minY))
+        path.addLine(to: CGPoint(x: rect.midX, y: rect.maxY))
+        path.closeSubpath()
+        return path
     }
 }
 

@@ -54,7 +54,12 @@ private struct InteractivePackCard: View {
                 regimen: PackRegimen(activeDays: 21, breakDays: 7),
                 dayOneWeekday: 2,
                 todayIndex: todayIndex,
-                marks: marks
+                marks: marks,
+                flagIndex: todayIndex,
+                onSelectDay: { index in
+                    marks = [:]
+                    todayIndex = index
+                }
             ) {
                 GalleryTitle(text: "Interactive 21+7")
             }
