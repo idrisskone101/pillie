@@ -30,6 +30,26 @@ enum ContraceptiveMethod: String, CaseIterable, Codable {
         }
     }
 
+    /// Quiver 3D icon asset name (Assets.xcassets/MethodIcons). Single source of
+    /// truth for the method row icon on the onboarding method step (ENG-138); other
+    /// screens that still hardcode their own SF Symbol are untouched.
+    var iconImageName: String {
+        switch self {
+        case .pill: return "MethodIconPill"
+        case .patch: return "MethodIconPatch"
+        case .ring: return "MethodIconRing"
+        }
+    }
+
+    /// Paper spec: pill renders at 32x32pt, patch and ring at 36x36pt, inside the
+    /// same 44x44pt tile.
+    var iconImageSize: CGFloat {
+        switch self {
+        case .pill: return 32
+        case .patch, .ring: return 36
+        }
+    }
+
     var blockingReasonText: String {
         blockingReasonText()
     }

@@ -48,7 +48,8 @@ struct ProtectionPlanRoutineMethodView: View {
                         ProtectionPlanSelectableRow(
                             title: method.title,
                             subtitle: method.routineDescriptor,
-                            symbolName: symbol(for: method),
+                            iconImageName: method.iconImageName,
+                            iconImageSize: method.iconImageSize,
                             isSelected: selected == method,
                             style: .radio
                         ) {
@@ -73,14 +74,6 @@ struct ProtectionPlanRoutineMethodView: View {
         .onAppear {
             selected = initialMethod
             appeared = true
-        }
-    }
-
-    private func symbol(for method: ContraceptiveMethod) -> String {
-        switch method {
-        case .pill: return "pills.fill"
-        case .patch: return "square.on.square"
-        case .ring: return "circle.circle"
         }
     }
 
