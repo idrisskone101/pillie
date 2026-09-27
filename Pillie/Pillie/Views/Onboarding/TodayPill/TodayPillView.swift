@@ -21,11 +21,12 @@ struct TodayPillView: View {
     @State private var selection = TodayPillSelection(regimen: .twentyOneSeven)
     @State private var showsQuestion = false
     @State private var revealTask: Task<Void, Never>?
+    // Bumped only by the pop cascade; the tap and taken haptics run imperatively
+    // through `feedback` instead, so there is no shared equivalent to move to.
     @State private var cascadeTicks = 0
-    // Haptic triggers bumped only by the person's taps, so seeding from a draft is silent.
-    @State private var tapTicks = 0
-    @State private var takenTicks = 0
     @State private var appeared = false
+
+    private let feedback = OnboardingInteractionFeedback()
 
     private static let questionDelay: Duration = .milliseconds(600)
 
@@ -95,9 +96,7 @@ struct TodayPillView: View {
             .animation(reduceMotion ? .easeInOut(duration: 0.2) : .spring(duration: 0.4, bounce: 0.15), value: showsQuestion)
             .animation(reduceMotion ? nil : .spring(duration: 0.35, bounce: 0.2), value: selection.answer)
         }
-        .sensoryFeedback(.selection, trigger: tapTicks)
         .sensoryFeedback(.impact(weight: .light, intensity: 0.5), trigger: cascadeTicks)
-        .sensoryFeedback(.success, trigger: takenTicks)
         .onAppear {
             seed()
             appeared = true
@@ -122,7 +121,7 @@ struct TodayPillView: View {
         let previous = selection.pillIndex
         guard index != previous else { return }
         selection.tap(index)
-        tapTicks += 1
+        feedback.selectChoice(accessibilityReduceMotion: reduceMotion)
         revealTask?.cancel()
         guard selection.asksQuestion else {
             showsQuestion = false
@@ -151,7 +150,7 @@ struct TodayPillView: View {
     private func record(_ answer: TodayPillPick.Answer) {
         guard selection.answer != answer else { return }
         selection.record(answer)
-        if answer == .taken { takenTicks += 1 }
+        if answer == .taken { feedback.markDueActionTaken(accessibilityReduceMotion: reduceMotion) }
     }
 
     private func changeRegimen(_ regimen: PillPack.PillRegimenPreset) {
