@@ -111925,6 +111925,3581 @@
           }
         }
       }
+    },
+    "pack_card.pager.weeks_range": {
+      "comment": "PackCard pager label, multi-week page, e.g. \"Weeks 5 to 8 of 13\"",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weeks %1$lld to %2$lld of %3$lld"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settimane %1$lld-%2$lld di %3$lld"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wochen %1$lld bis %2$lld von %3$lld"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Semaines %1$lld à %2$lld sur %3$lld"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Semanas %1$lld a %2$lld de %3$lld"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Semanas %1$lld a %2$lld de %3$lld"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Week %1$lld tot %2$lld van %3$lld"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vecka %1$lld till %2$lld av %3$lld"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uge %1$lld til %2$lld af %3$lld"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uke %1$lld til %2$lld av %3$lld"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Viikot %1$lld–%2$lld/%3$lld"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Semanas %1$lld a %2$lld de %3$lld"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Setmanes %1$lld a %2$lld de %3$lld"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tygodnie %1$lld do %2$lld z %3$lld"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Týdny %1$lld až %2$lld z %3$lld"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Недели %1$lld–%2$lld из %3$lld"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Тижні %1$lld–%2$lld з %3$lld"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld～%2$lld週目 / 全%3$lld週"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld~%2$lld주 / 총 %3$lld주"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Minggu %1$lld hingga %2$lld daripada %3$lld"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Săptămânile %1$lld până la %2$lld din %3$lld"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Týždne %1$lld až %2$lld z %3$lld"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "สัปดาห์ %1$lld ถึง %2$lld จาก %3$lld"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "第 %1$lld-%2$lld 周，共 %3$lld 周"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%3$lld में से सप्ताह %1$lld से %2$lld"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tjedni %1$lld do %2$lld od %3$lld"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld–%2$lld. hét, összesen %3$lld"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hafta %1$lld-%2$lld / %3$lld"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "வாரங்கள் %1$lld–%2$lld / %3$lld"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Minggu %1$lld sampai %2$lld dari %3$lld"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الأسابيع من %1$lld إلى %2$lld من %3$lld"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "שבועות %1$lld עד %2$lld מתוך %3$lld"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tuần %1$lld đến %2$lld trong %3$lld"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "সপ্তাহ %1$lld–%2$lld/%3$lld"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%3$lld میں سے ہفتہ %1$lld تا %2$lld"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tedni %1$lld do %2$lld od %3$lld"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Εβδομάδες %1$lld έως %2$lld από %3$lld"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "వారాలు %1$lld–%2$lld / %3$lld"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "第 %1$lld-%2$lld 週，共 %3$lld 週"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%3$lld માંથી અઠવાડિયા %1$lld થી %2$lld"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ವಾರಗಳು %1$lld–%2$lld / %3$lld"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ആഴ്ചകൾ %1$lld–%2$lld / %3$lld"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "आठवडे %1$lld–%2$lld / %3$lld"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%3$lld ମଧ୍ୟରୁ ସପ୍ତାହ %1$lld ରୁ %2$lld"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%3$lld ਵਿੱਚੋਂ ਹਫ਼ਤੇ %1$lld ਤੋਂ %2$lld"
+          }
+        }
+      }
+    },
+    "pack_card.pager.week_single": {
+      "comment": "PackCard pager label, single-week page, e.g. \"Week 13 of 13\"",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Week %1$lld of %2$lld"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settimana %1$lld di %2$lld"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Woche %1$lld von %2$lld"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Semaine %1$lld sur %2$lld"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Semana %1$lld de %2$lld"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Semana %1$lld de %2$lld"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Week %1$lld van %2$lld"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vecka %1$lld av %2$lld"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uge %1$lld af %2$lld"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uke %1$lld av %2$lld"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Viikko %1$lld/%2$lld"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Semana %1$lld de %2$lld"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Setmana %1$lld de %2$lld"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tydzień %1$lld z %2$lld"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Týden %1$lld z %2$lld"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Неделя %1$lld из %2$lld"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Тиждень %1$lld з %2$lld"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld週目 / 全%2$lld週"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld주 / 총 %2$lld주"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Minggu %1$lld daripada %2$lld"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Săptămâna %1$lld din %2$lld"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Týždeň %1$lld z %2$lld"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "สัปดาห์ %1$lld จาก %2$lld"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "第 %1$lld 周，共 %2$lld 周"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%2$lld में से सप्ताह %1$lld"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tjedan %1$lld od %2$lld"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld. hét / %2$lld"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hafta %1$lld / %2$lld"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "வாரம் %1$lld / %2$lld"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Minggu %1$lld dari %2$lld"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الأسبوع %1$lld من %2$lld"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "שבוע %1$lld מתוך %2$lld"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tuần %1$lld trong %2$lld"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "সপ্তাহ %1$lld/%2$lld"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%2$lld میں سے ہفتہ %1$lld"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Teden %1$lld od %2$lld"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Εβδομάδα %1$lld από %2$lld"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "వారం %1$lld / %2$lld"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "第 %1$lld 週，共 %2$lld 週"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%2$lld માંથી અઠવાડિયું %1$lld"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ವಾರ %1$lld / %2$lld"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ആഴ്ച %1$lld / %2$lld"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "आठवडा %1$lld / %2$lld"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%2$lld ମଧ୍ୟରୁ ସପ୍ତାହ %1$lld"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%2$lld ਵਿੱਚੋਂ ਹਫ਼ਤਾ %1$lld"
+          }
+        }
+      }
+    },
+    "pack_card.pager.previous": {
+      "comment": "PackCard pager previous-weeks button, VoiceOver label",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Previous weeks"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settimane precedenti"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vorherige Wochen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Semaines précédentes"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Semanas anteriores"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Semanas anteriores"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vorige weken"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Föregående veckor"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tidligere uger"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Forrige uker"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edelliset viikot"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Semanas anteriores"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Setmanes anteriors"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Poprzednie tygodnie"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Předchozí týdny"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Предыдущие недели"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Попередні тижні"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "前の週"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이전 주"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Minggu sebelumnya"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Săptămânile anterioare"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Predchádzajúce týždne"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "สัปดาห์ก่อนหน้า"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "上几周"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "पिछले सप्ताह"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prethodni tjedni"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Korábbi hetek"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Önceki haftalar"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "முந்தைய வாரங்கள்"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Minggu sebelumnya"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الأسابيع السابقة"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "השבועות הקודמים"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tuần trước"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "আগের সপ্তাহ"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "پچھلے ہفتے"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prejšnji tedni"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Προηγούμενες εβδομάδες"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "మునుపటి వారాలు"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "上幾週"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "પાછલા અઠવાડિયા"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ಹಿಂದಿನ ವಾರಗಳು"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "മുൻ ആഴ്ചകൾ"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "मागील आठवडे"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ପୂର୍ବ ସପ୍ତାହ"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਪਿਛਲੇ ਹਫ਼ਤੇ"
+          }
+        }
+      }
+    },
+    "pack_card.pager.next": {
+      "comment": "PackCard pager next-weeks button, VoiceOver label",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next weeks"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settimane successive"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nächste Wochen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Semaines suivantes"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Semanas siguientes"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Próximas semanas"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Volgende weken"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nästa veckor"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Næste uger"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neste uker"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seuraavat viikot"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Próximas semanas"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Setmanes següents"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Następne tygodnie"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Další týdny"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Следующие недели"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Наступні тижні"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "次の週"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "다음 주"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Minggu seterusnya"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Săptămânile următoare"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ďalšie týždne"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "สัปดาห์ถัดไป"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "下几周"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "अगले सप्ताह"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sljedeći tjedni"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Következő hetek"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sonraki haftalar"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "அடுத்த வாரங்கள்"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Minggu selanjutnya"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الأسابيع التالية"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "השבועות הבאים"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tuần sau"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "পরের সপ্তাহ"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "اگلے ہفتے"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Naslednji tedni"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Επόμενες εβδομάδες"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "తర్వాత వారాలు"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "下幾週"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "આગલા અઠવાડિયા"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ಮುಂದಿನ ವಾರಗಳು"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "അടുത്ത ആഴ്ചകൾ"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "पुढील आठवडे"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ପରବର୍ତ୍ତୀ ସପ୍ତାହ"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਅਗਲੇ ਹਫ਼ਤੇ"
+          }
+        }
+      }
+    },
+    "pack_card.tile.pill": {
+      "comment": "PackCard tile VoiceOver label, active pill day, e.g. \"Pill 12\"",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pill %lld"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillola %lld"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pille %lld"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pilule %lld"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Píldora %lld"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pílula %lld"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pil %lld"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "P-piller %lld"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "P-pille %lld"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "P-pille %lld"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pilleri %lld"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pílula %lld"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Píndola %lld"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tabletka %lld"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pilulka %lld"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Таблетка %lld"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Таблетка %lld"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld錠目"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld번째 알약"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pil %lld"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pilulă %lld"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tabletka %lld"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ยาคุมเม็ดที่ %lld"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "第 %lld 片"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "गोली %lld"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pilula %lld"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld. tabletta"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld. hap"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "மாத்திரை %lld"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pil %lld"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الحبة %lld"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "גלולה %lld"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Viên thuốc %lld"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "পিল %lld"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "گولی %lld"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tabletka %lld"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Χάπι %lld"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "మాత్ర %lld"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "第 %lld 顆"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ગોળી %lld"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ಮಾತ್ರೆ %lld"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ഗുളിക %lld"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "गोळी %lld"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ପିଲ୍ %lld"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਗੋਲੀ %lld"
+          }
+        }
+      }
+    },
+    "pack_card.tile.sugar_pill": {
+      "comment": "PackCard tile VoiceOver label, placebo/reminder pill day, e.g. \"Sugar pill 24\"",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sugar pill %lld"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillola placebo %lld"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zuckerpille %lld"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pilule placebo %lld"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Píldora de azúcar %lld"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pílula de placebo %lld"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Placebopil %lld"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sockerpiller %lld"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sukkerpille %lld"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sukkerpille %lld"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sokeripilleri %lld"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pílula de placebo %lld"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Píndola de sucre %lld"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cukrowa tabletka %lld"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cukrová pilulka %lld"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Таблетка плацебо %lld"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Таблетка плацебо %lld"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "プラセボ%lld錠目"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "위약 %lld"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pil plasebo %lld"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pilulă placebo %lld"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cukrová tabletka %lld"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ยาหลอกเม็ดที่ %lld"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "第 %lld 片安慰剂"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "शुगर गोली %lld"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Šećerna pilula %lld"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld. cukortabletta"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld. şeker hapı"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "சர்க்கரை மாத்திரை %lld"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pil plasebo %lld"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حبة وهمية %lld"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "גלולת פלצבו %lld"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Viên giả dược %lld"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "সুগার পিল %lld"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "شوگر گولی %lld"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sladkorna tabletka %lld"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Εικονικό χάπι %lld"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "షుగర్ మాత్ర %lld"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "第 %lld 顆安慰劑"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "સુગર ગોળી %lld"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ಸಕ್ಕರೆ ಮಾತ್ರೆ %lld"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "പഞ്ചസാര ഗുളിക %lld"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "साखर गोळी %lld"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ସୁଗାର ପିଲ୍ %lld"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਸ਼ੂਗਰ ਗੋਲੀ %lld"
+          }
+        }
+      }
+    },
+    "pack_card.tile.break_day": {
+      "comment": "PackCard tile VoiceOver label, pill-free break day, e.g. \"Break day 2\"",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Break day %lld"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Giorno di pausa %lld"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pausentag %lld"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jour de pause %lld"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Día de pausa %lld"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dia de pausa %lld"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pauzedag %lld"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pausdag %lld"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pausedag %lld"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pausedag %lld"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Taukopäivä %lld"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dia de pausa %lld"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dia de pausa %lld"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dzień przerwy %lld"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Den pauzy %lld"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "День перерыва %lld"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "День перерви %lld"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "休薬%lld日目"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "휴약일 %lld"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hari rehat %lld"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zi de pauză %lld"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deň pauzy %lld"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "วันพัก %lld"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "停药第 %lld 天"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ब्रेक का दिन %lld"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dan pauze %lld"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld. szünetnap"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld. ara günü"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "இடைவெளி நாள் %lld"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hari jeda %lld"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يوم استراحة %lld"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "יום הפסקה %lld"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ngày nghỉ %lld"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "বিরতির দিন %lld"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "وقفے کا دن %lld"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dan premora %lld"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ημέρα διαλείμματος %lld"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "విరామ రోజు %lld"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "停藥第 %lld 天"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "વિરામ દિવસ %lld"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ವಿರಾಮ ದಿನ %lld"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ഇടവേള ദിനം %lld"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "विश्रांती दिवस %lld"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ବିରତି ଦିନ %lld"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਬ੍ਰੇਕ ਦਾ ਦਿਨ %lld"
+          }
+        }
+      }
+    },
+    "pack_card.tile.state.sealed": {
+      "comment": "PackCard tile VoiceOver value, pill still sealed in the blister",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In the pack"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nella confezione"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In der Packung"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dans la plaquette"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En el blíster"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Na cartela"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In de strip"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I kartan"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I pakken"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I brettet"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Liuskassa"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Na embalagem"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Al blíster"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "W opakowaniu"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "V balení"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "В упаковке"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "В упаковці"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "シート内"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "포장 안"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dalam pek"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "În folie"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "V balení"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "อยู่ในแผง"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在药板中"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "पैक में"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "U pakiranju"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A csomagolásban"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pakette"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "பேக்கில்"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dalam strip"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "في الشريط"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "בחפיסה"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trong vỉ"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "প্যাকে আছে"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "پیک میں"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "V škatlici"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Στη συσκευασία"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ప్యాక్‌లో"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在藥盒中"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "પૈકમાં"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ಪ್ಯಾಕ್‌ನಲ್ಲಿ"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "പാക്കിൽ"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "पॅकमध्ये"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ପ୍ୟାକରେ"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਪੈਕ ਵਿੱਚ"
+          }
+        }
+      }
+    },
+    "pack_card.tile.state.taken": {
+      "comment": "PackCard tile VoiceOver value, past pill popped/taken",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Taken"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Presa"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eingenommen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prise"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tomada"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tomada"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ingenomen"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Taget"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Taget"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tatt"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otettu"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tomada"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Presa"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Przyjęto"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vzato"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Принято"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Прийнято"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "服用済み"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "복용함"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diambil"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Luată"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Užité"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "กินแล้ว"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已服用"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ले ली"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uzeto"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bevéve"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alındı"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "எடுத்தது"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diminum"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تم الأخذ"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "נלקח"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Đã uống"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "নেওয়া হয়েছে"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لے لی"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vzeto"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ελήφθη"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "తీసుకున్నా"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已服用"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "લીધી"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ತೆಗೆದಿದೆ"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "കഴിച്ചു"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ले ली"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ନିଆଯାଇଛି"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਲਈ"
+          }
+        }
+      }
+    },
+    "pack_card.tile.state.today": {
+      "comment": "PackCard tile VoiceOver value, today's tile before logging",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oggi"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heute"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aujourd'hui"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hoy"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hoje"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vandaag"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Idag"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I dag"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I dag"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tänään"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hoje"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avui"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dziś"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dnes"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сегодня"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сьогодні"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "今日"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "오늘"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hari Ini"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Azi"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dnes"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "วันนี้"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "今天"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "आज"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Danas"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ma"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bugün"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "இன்று"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hari Ini"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "اليوم"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "היום"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hôm nay"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "আজ"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "آج"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Danes"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Σήμερα"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ఈరోజు"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "今天"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "આજ"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ಇಂದು"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ഇന്ന്"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "आज"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ଆଜି"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਅੱਜ"
+          }
+        }
+      }
+    },
+    "pack_card.tile.state.taken_today": {
+      "comment": "PackCard tile VoiceOver value, today's pill logged as taken",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Taken today"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Presa oggi"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heute eingenommen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prise aujourd'hui"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tomada hoy"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tomada hoje"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vandaag ingenomen"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Taget idag"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Taget i dag"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tatt i dag"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otettu tänään"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tomada hoje"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Presa avui"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Przyjęto dzisiaj"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dnes vzato"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Принято сегодня"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Прийнято сьогодні"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "本日服用済み"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "오늘 복용함"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diambil hari ini"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Luată azi"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dnes užité"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "กินแล้ววันนี้"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "今天已服用"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "आज ले ली"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uzeto danas"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ma bevéve"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bugün alındı"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "இன்று எடுத்தது"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diminum hari ini"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تم الأخذ اليوم"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "נלקח היום"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Đã uống hôm nay"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "আজ নেওয়া হয়েছে"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "آج لے لی"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Danes vzeto"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ελήφθη σήμερα"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ఈరోజు తీసుకున్నా"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "今天已服用"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "આજ લીધી"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ಇಂದು ತೆಗೆದಿದೆ"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ഇന്ന് കഴിച്ചു"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "आज ले ली"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ଆଜି ନିଆଯାଇଛି"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਅੱਜ ਲਈ"
+          }
+        }
+      }
+    },
+    "pack_card.tile.state.late": {
+      "comment": "PackCard tile VoiceOver value, today's pill logged late",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Late"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In ritardo"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verspätet"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En retard"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tarde"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Atrasada"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Te laat"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sent"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sent"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sent"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Myöhässä"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Atrasada"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tard"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Późno"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pozdě"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Опоздание"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Запізнення"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "遅れ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "지연"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lewat"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Întârziată"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neskoro"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "สาย"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "延迟"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "देर से"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kasno"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Késve"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gecikti"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "தாமதம்"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terlambat"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "متأخر"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "באיחור"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Muộn"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "দেরি"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تاخیر"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zamuda"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Αργά"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ఆలస్యం"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "延遲"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "મોડું"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ತಡ"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "വൈകി"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "उशीर"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ବିଳମ୍ବ"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਲੇਟ"
+          }
+        }
+      }
+    },
+    "pack_card.tile.state.missed": {
+      "comment": "PackCard tile VoiceOver value, past pill missed",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Missed"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saltata"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verpasst"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oubliée"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Olvidada"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esquecida"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gemist"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Missat"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Glemt"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Glemt"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unohtunut"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esquecida"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oblidada"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pominięto"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vynecháno"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пропущено"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пропущено"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "飲み忘れ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "놓침"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terlepas"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Omisă"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vynechané"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ลืมกิน"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "漏服"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "छूट गई"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Propušteno"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kihagyva"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Atlandı"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "தவறியது"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terlewat"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "فائت"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "פוספס"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bỏ lỡ"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "মিস হয়েছে"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "چھوٹ گئی"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Izpuščeno"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Παραλείφθηκε"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "మిస్ అయింది"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "漏服"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ચૂકી ગયા"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ತಪ್ಪಿದೆ"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "വിട്ടുപോയി"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "चुकले"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ଛାଡ଼ି ଦିଆଯାଇଛି"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਖੁੰਝ ਗਈ"
+          }
+        }
+      }
     }
   },
   "version": "1.0"
