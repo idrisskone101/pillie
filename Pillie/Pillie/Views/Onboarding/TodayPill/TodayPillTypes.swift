@@ -1,3 +1,8 @@
+//
+//  TodayPillTypes.swift
+//  Pillie
+//
+
 import Foundation
 
 struct TodayPillSelection: Equatable {

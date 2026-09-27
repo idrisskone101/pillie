@@ -1,3 +1,8 @@
+//
+//  TodayPillPlan.swift
+//  Pillie
+//
+
 import Foundation
 
 struct TodayPillPlan: Equatable {

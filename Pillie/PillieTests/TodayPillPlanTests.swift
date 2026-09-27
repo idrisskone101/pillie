@@ -1,3 +1,8 @@
+//
+//  TodayPillPlanTests.swift
+//  PillieTests
+//
+
 // Value types only, so the Xcode 27 beta @MainActor deinit crash cannot fire.
 
 import XCTest
