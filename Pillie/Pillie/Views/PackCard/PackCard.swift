@@ -14,8 +14,6 @@ struct PackCard<Header: View>: View {
     let dayOneWeekday: Int
     let todayIndex: Int?
     let marks: [Int: PackTileMark]
-    /// Day index that carries the numbered flag.
-    let flagIndex: Int?
     let onSelectDay: ((Int) -> Void)?
     let header: Header
 
@@ -36,7 +34,6 @@ struct PackCard<Header: View>: View {
         dayOneWeekday: Int,
         todayIndex: Int?,
         marks: [Int: PackTileMark] = [:],
-        flagIndex: Int? = nil,
         onSelectDay: ((Int) -> Void)? = nil,
         @ViewBuilder header: () -> Header
     ) {
@@ -44,9 +41,14 @@ struct PackCard<Header: View>: View {
         self.dayOneWeekday = dayOneWeekday
         self.todayIndex = todayIndex
         self.marks = marks
-        self.flagIndex = flagIndex
         self.onSelectDay = onSelectDay
         self.header = header()
+    }
+
+    /// The numbered flag only makes sense on a tappable card: it marks the tile the
+    /// person just chose. Non-interactive cards (Home, the gallery) show no flag.
+    private var flagIndex: Int? {
+        onSelectDay != nil ? todayIndex : nil
     }
 
     private var layout: PackCardLayout {

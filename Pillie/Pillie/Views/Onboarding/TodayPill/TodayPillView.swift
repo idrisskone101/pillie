@@ -75,7 +75,6 @@ struct TodayPillView: View {
                     dayOneWeekday: dayOneWeekday,
                     todayIndex: selection.pillIndex,
                     marks: marks,
-                    flagIndex: selection.pillIndex,
                     onSelectDay: tap
                 ) {
                     TodayPillPackHeader(regimen: selection.regimen, onChange: changeRegimen)

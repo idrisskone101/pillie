@@ -55,7 +55,6 @@ private struct InteractivePackCard: View {
                 dayOneWeekday: 2,
                 todayIndex: todayIndex,
                 marks: marks,
-                flagIndex: todayIndex,
                 onSelectDay: { index in
                     marks = [:]
                     todayIndex = index
