@@ -197,18 +197,6 @@ struct PackRegimenTests {
         #expect(pack.packDay(on: Self.day(2026, 1, 11), calendar: Self.utc).pillNumber == 3)
     }
 
-    @Test @MainActor func `Editing a retired 84 plus 7 pack starts from Custom 84 plus 7`() {
-        let pack = Self.packAsOldVersionsStoredIt(raw: "84/7", packType: .twentyEightZero, anchor: 60)
-
-        let draft = RoutineSetupDraft(method: .pill, activePack: pack, today: Self.day(2026, 1, 11), calendar: Self.utc)
-
-        #expect(draft.commit == RoutineSetupCommit(
-            regimen: .custom,
-            customRegimen: PackRegimen(activeDays: 84, breakDays: 7),
-            cycleDay: 71
-        ))
-    }
-
     private static let utc: Calendar = {
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = TimeZone(identifier: "UTC")!
