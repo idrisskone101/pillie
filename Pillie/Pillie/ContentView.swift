@@ -62,6 +62,10 @@ struct ContentView: View {
     )
   }
 
+  private var needsTodayPill: Bool {
+    store.contraceptiveMethod == .pill && TodayPillPick.load() == nil
+  }
+
   private var onboardingTrialActivationRoute: OnboardingTrialActivationRoute {
     OnboardingTrialActivationRoute.resolve(
       hasEntitlement: subscriptionManager.hasEntitlement,
@@ -86,7 +90,8 @@ struct ContentView: View {
 	        switch OnboardingFlow.visibleStep(
             for: onboardingStep,
             isPlus: subscriptionManager.hasPlusAccess,
-            selectedFreePlan: onboardingSelectedFreePlan
+            selectedFreePlan: onboardingSelectedFreePlan,
+            needsTodayPill: needsTodayPill
           ) {
 	        case .welcome:
 	          WelcomeView {
@@ -228,6 +233,24 @@ struct ContentView: View {
               removal: .move(edge: .trailing)
             ))
 
+	        case .schedule where store.contraceptiveMethod == .pill:
+	          TodayPillView(
+	            progress: ProtectionPlanProgressIndex.progress(for: .schedule),
+	            onBack: {
+                lowRiskTransition(to: .method)
+	            },
+            onContinue: { pick in
+              // Saved before the step changes: `visibleStep` reads it.
+              pick.save()
+              continueSetupStep(to: .reminderTime)
+	            }
+          )
+          .transition(
+            .asymmetric(
+              insertion: .move(edge: .trailing),
+              removal: .move(edge: .trailing)
+            ))
+
 	        case .schedule:
 	          ProtectionPlanRoutineDetailsView(
 	            progress: ProtectionPlanProgressIndex.progress(for: .schedule),
@@ -257,6 +280,7 @@ struct ContentView: View {
 	        case .reminderTime:
 	          ProtectionPlanReminderTimeView(
 	            progress: ProtectionPlanProgressIndex.progress(for: .reminderTime),
+	            todayPillPick: store.contraceptiveMethod == .pill ? TodayPillPick.load() : nil,
 	            onBack: {
                 lowRiskTransition(to: .schedule)
 	            },
@@ -548,6 +572,7 @@ struct ContentView: View {
       ProductAnalyticsTelemetry.live.onboardingOutcomeClassified(
         ProtectionPlanCompletion.outcome(for: currentCompletionState)
       )
+      TodayPillCommit.clear()
     }
 
     onboardingStep = nextStep
@@ -595,7 +620,8 @@ struct ContentView: View {
     guard let visibleStep = OnboardingFlow.visibleStep(
       for: onboardingStep,
       isPlus: subscriptionManager.hasPlusAccess,
-      selectedFreePlan: onboardingSelectedFreePlan
+      selectedFreePlan: onboardingSelectedFreePlan,
+      needsTodayPill: needsTodayPill
     ),
     visibleStep.rawValue != onboardingStep else { return }
 

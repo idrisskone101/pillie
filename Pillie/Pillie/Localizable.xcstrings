@@ -115500,6 +115500,138 @@
           }
         }
       }
+    },
+    "onboarding.today_pill.title": {
+      "comment": "Onboarding step 7 title: tap today's pill in the pack drawing [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap the pill you're on today."
+          }
+        }
+      }
+    },
+    "onboarding.today_pill.subtitle": {
+      "comment": "Onboarding step 7 subtitle under the pack drawing [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your pack, just as it looks in your hand."
+          }
+        }
+      }
+    },
+    "onboarding.today_pill.question": {
+      "comment": "Onboarding step 7 question. %@ is the pill number, drawn as a black chip. Keep exactly one %@ [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Have you taken pill %@ yet?"
+          }
+        }
+      }
+    },
+    "onboarding.today_pill.yes": {
+      "comment": "Onboarding step 7 answer: today's pill is already taken [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yes, I took it"
+          }
+        }
+      }
+    },
+    "onboarding.today_pill.not_yet": {
+      "comment": "Onboarding step 7 answer: today's pill is not taken yet [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not yet"
+          }
+        }
+      }
+    },
+    "onboarding.today_pill.logged": {
+      "comment": "Onboarding step 7 confirmation after answering yes [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Logged. Day 1 of your streak."
+          }
+        }
+      }
+    },
+    "onboarding.today_pill.change": {
+      "comment": "Onboarding step 7 button that opens the pack type menu [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Change"
+          }
+        }
+      }
+    },
+    "onboarding.today_pill.plan.pill_taken": {
+      "comment": "Onboarding plan card row value: the tapped pill number, already taken [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pill %lld · taken"
+          }
+        }
+      }
+    },
+    "onboarding.today_pill.plan.pill_not_yet": {
+      "comment": "Onboarding plan card row value: the tapped pill number, not taken yet [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pill %lld · not yet"
+          }
+        }
+      }
+    },
+    "onboarding.today_pill.plan.next_reminder": {
+      "comment": "Onboarding plan card row label [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next reminder"
+          }
+        }
+      }
+    },
+    "onboarding.today_pill.plan.today_at": {
+      "comment": "Onboarding plan card next reminder. %@ is a time like 8:00 PM [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today, %@"
+          }
+        }
+      }
+    },
+    "onboarding.today_pill.plan.tomorrow_at": {
+      "comment": "Onboarding plan card next reminder. %@ is a time like 8:00 PM [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tomorrow, %@"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

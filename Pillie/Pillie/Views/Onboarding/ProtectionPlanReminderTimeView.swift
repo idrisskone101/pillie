@@ -13,6 +13,8 @@ import SwiftUI
 
 struct ProtectionPlanReminderTimeView: View {
     let progress: ProtectionPlanProgress
+    /// The pill path's step 7 pick, committed with the chosen time. nil for patch and ring.
+    let todayPillPick: TodayPillPick?
     let onBack: () -> Void
     let onContinue: () -> Void
 
@@ -179,7 +181,7 @@ struct ProtectionPlanReminderTimeView: View {
         guard !isCommitting else { return }
         isCommitting = true
         let selection = ReminderTimeConverter.hourAndMinute(from: selectedTime)
-        OnboardingReminderCommit.live(store: store, telemetry: onboardingTelemetry)
+        OnboardingReminderCommit.live(store: store, telemetry: onboardingTelemetry, todayPillPick: todayPillPick)
             .run(hour: selection.hour, minute: selection.minute) {
                 isCommitting = false
                 onContinue()
@@ -202,6 +204,7 @@ struct ProtectionPlanReminderTimeView: View {
 #Preview {
     ProtectionPlanReminderTimeView(
         progress: ProtectionPlanProgressIndex.progress(for: .reminderTime),
+        todayPillPick: TodayPillPick(regimen: .twentyOneSeven, pillIndex: 11, answer: .taken),
         onBack: {},
         onContinue: {}
     )

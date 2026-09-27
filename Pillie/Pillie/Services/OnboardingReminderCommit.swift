@@ -16,6 +16,8 @@ import Foundation
 
 struct OnboardingReminderCommit {
     let saveReminderTime: (_ hour: Int, _ minute: Int) -> Void
+    /// Builds the pill pack from the step 7 pick, which needs the saved time.
+    var commitRoutine: () -> Void = {}
     let trackPermissionRequested: () -> Void
     let requestAuthorization: (_ completion: @escaping (_ granted: Bool) -> Void) -> Void
     let trackPermissionCompleted: (_ granted: Bool) -> Void
@@ -23,6 +25,7 @@ struct OnboardingReminderCommit {
 
     func run(hour: Int, minute: Int, completion: @escaping () -> Void) {
         saveReminderTime(hour, minute)
+        commitRoutine()
         trackPermissionRequested()
         requestAuthorization { granted in
             trackPermissionCompleted(granted)
@@ -36,10 +39,19 @@ struct OnboardingReminderCommit {
     /// Production wiring: persists through `ScheduleCriticalSettingChange`,
     /// resolves authorization through `NotificationManager` (which delivers the
     /// outcome on the main queue), and schedules only after a grant.
-    static func live(store: PillStore, telemetry: OnboardingTelemetry) -> OnboardingReminderCommit {
+    static func live(
+        store: PillStore,
+        telemetry: OnboardingTelemetry,
+        todayPillPick: TodayPillPick?
+    ) -> OnboardingReminderCommit {
         OnboardingReminderCommit(
             saveReminderTime: { hour, minute in
                 ScheduleCriticalSettingChange.saveOnboardingReminderTime(store: store, hour: hour, minute: minute)
+            },
+            commitRoutine: {
+                if let todayPillPick {
+                    TodayPillCommit.run(todayPillPick, store: store)
+                }
             },
             trackPermissionRequested: { telemetry.notificationPermissionRequested() },
             requestAuthorization: { completion in

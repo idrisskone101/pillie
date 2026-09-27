@@ -4,8 +4,7 @@
 //
 //  Routine Basics — Method (issue #77, Superdesign draft c8d8749d). The first routine
 //  screen: the user names which contraception routine Pillie should protect. The
-//  chosen method is written to the existing production model (`PillStore`), and the
-//  live plan card begins assembling so the routine setup reads as one building plan.
+//  chosen method is written to the existing production model (`PillStore`).
 //  Pill, Patch, and Ring are method-aware from here on via `MethodActionLanguage`.
 //
 
@@ -61,14 +60,6 @@ struct ProtectionPlanRoutineMethodView: View {
                 .opacity(appeared ? 1 : 0)
                 .offset(y: revealOffset)
                 .animation(reveal(delay: PillieTheme.stagger2), value: appeared)
-
-                ProtectionPlanRoutineCard(
-                    summary: ProtectionPlanRoutineSummary(method: selected),
-                    animationsEnabled: animationsEnabled
-                )
-                .opacity(appeared ? 1 : 0)
-                .offset(y: revealOffset)
-                .animation(reveal(delay: PillieTheme.stagger3), value: appeared)
 
                 Text(content.footnote)
                     .font(.pillie(13, weight: .regular))
