@@ -73,9 +73,9 @@ gone id shakeTapToConfirmFallback 15
 sleep 1
 shot home-checked-in
 tap --id calendar
-wait id historyEditableDay.2026-9.14
+wait id historyEditableDay.{{year}}-9.14
 shot history-month
-tap --id historyEditableDay.2026-9.14
+tap --id historyEditableDay.{{year}}-9.14
 wait id historyDayCorrection.taken
 shot history-day-correction
 tap --id historyDayCorrection.taken

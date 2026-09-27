@@ -38,7 +38,9 @@ stage="$(mktemp -d "${TMPDIR:-/tmp}/screen-tour.XXXXXX")"
 trap 'rm -rf "$stage"' EXIT
 flows=()
 for lang in "${langs[@]}"; do
-  sed "s/{{lang}}/$lang/g" "$TEMPLATE" >"$stage/screen-tour-$lang.flow"
+  year=2026
+  [[ "$lang" == th ]] && year=2569  # History ids use the locale calendar; Thai is Buddhist era.
+  sed -e "s/{{lang}}/$lang/g" -e "s/{{year}}/$year/g" "$TEMPLATE" >"$stage/screen-tour-$lang.flow"
   flows+=("$stage/screen-tour-$lang.flow")
 done
 
