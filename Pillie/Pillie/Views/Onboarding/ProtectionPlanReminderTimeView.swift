@@ -51,7 +51,18 @@ struct ProtectionPlanReminderTimeView: View {
     }
 
     private var summary: ProtectionPlanRoutineSummary {
-        ProtectionPlanRoutineSummary(
+        if let todayPillPick {
+            let selection = ReminderTimeConverter.hourAndMinute(from: selectedTime)
+            return ProtectionPlanRoutineSummary(
+                method: .pill,
+                todayPill: TodayPillPlan(
+                    pick: todayPillPick,
+                    reminderHour: selection.hour,
+                    reminderMinute: selection.minute
+                )
+            )
+        }
+        return ProtectionPlanRoutineSummary(
             method: store.contraceptiveMethod,
             scheduleSummary: scheduleSummaryText,
             cycleDay: store.pack.cycleDayIndex(on: store.today) + 1,
