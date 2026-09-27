@@ -1,0 +1,27 @@
+# Tab bar in Arabic: SwiftUI mirrors the row (Today on the right), and the
+# UIKit indicator, pane slide, and edge swipe must follow the same order
+# (PillieTabBar.swift TabIndicatorView, TabPaneContainer.swift).
+# In every shot the pink capsule sits under the pink selected icon.
+launch -AppleLanguages "(ar)" -AppleLocale ar
+openurl "pillie://debug/plus-home?lang=ar"
+wait id developerMenuAvatarButton 15
+shot ar-today
+tap --label السجل
+gone id developerMenuAvatarButton 5
+sleep 1
+shot ar-history
+tap --label الإعدادات
+wait id settingsLanguageRow 10
+sleep 1
+shot ar-settings
+# Settings is the leftmost tab. A drag in from the right edge brings in the
+# tab on its right (History); the old left-to-right handler did nothing here.
+# Edge swipes need a slow drag that starts inside the 30 pt zone.
+swipe --start-x 385 --start-y 450 --end-x 150 --end-y 450 --duration 0.6
+gone id settingsLanguageRow 5
+sleep 1
+shot ar-swipe-from-right-edge
+swipe --start-x 17 --start-y 450 --end-x 250 --end-y 450 --duration 0.6
+wait id settingsLanguageRow 10
+sleep 1
+shot ar-swipe-from-left-edge

@@ -59,6 +59,9 @@ blocking/trial status surfaces, and (when eligible) the review ask.
   `homeReviewPromptCard`, then dismisses it.
 - `flows/smoke.flow` covers the plain tab bar (Today/History/Settings) with
   `/plus-home`.
+- `flows/tab-bar-rtl.flow` — the same tab bar in Arabic: taps and edge
+  swipes land on the tab in the mirrored order, and each shot shows the pink
+  indicator under the selected tab.
 - Not covered by an authored flow, and why: `ProtectionOffCard` needs an
   expired trial with a saved blocker config (reachable by combining
   `/trial-eve-of-break` with a larger `/trial-age?days=N`, past the 14-day
