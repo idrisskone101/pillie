@@ -337,17 +337,7 @@ private struct PackFlag: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            Text(verbatim: "\(number)")
-                .font(.pillie(13, weight: .bold))
-                .monospacedDigit()
-                .foregroundStyle(.white)
-                .lineLimit(1)
-                .minimumScaleFactor(0.6)
-                .padding(.horizontal, 9)
-                .frame(minWidth: 24)
-                .frame(height: 24)
-                .background(Capsule().fill(PillieTheme.textPrimary))
-                .contentTransition(.numericText())
+            PackNumberChip(number: number, size: .flag)
             FlagPointer()
                 .fill(PillieTheme.textPrimary)
                 .frame(width: 10, height: 5)

@@ -380,14 +380,7 @@ private struct TodayPillQuestionLine: View {
     }
 
     private var chip: some View {
-        Text(verbatim: "\(pillNumber)")
-            .font(.pillie(14, weight: .bold))
-            .monospacedDigit()
-            .foregroundStyle(.white)
-            .contentTransition(.numericText())
-            .padding(.horizontal, 10)
-            .frame(minWidth: 26, minHeight: 26)
-            .background(Capsule().fill(PillieTheme.textPrimary))
+        PackNumberChip(number: pillNumber, size: .question)
             .animation(.snappy, value: pillNumber)
     }
 
