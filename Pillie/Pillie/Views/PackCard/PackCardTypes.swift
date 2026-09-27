@@ -57,7 +57,7 @@ struct PackCardLayout: Hashable, Sendable {
         (regimen.weekCount + Self.weeksPerPage - 1) / Self.weeksPerPage
     }
 
-    var showsPager: Bool { totalDays > Self.daysPerPage }
+    var showsPager: Bool { pageCount > 1 }
 
     var todayPage: Int {
         guard let todayIndex else { return 0 }
@@ -143,7 +143,8 @@ enum PackPopSequence {
         let changed = displayed.indices.filter { displayed[$0] != target[$0] }
         let pops = changed.filter { !displayed[$0].isPillOut && target[$0].isPillOut }
         let reseals = changed.filter { displayed[$0].isPillOut && !target[$0].isPillOut }
-        let instant = changed.filter { !pops.contains($0) && !reseals.contains($0) }
+        let moving = Set(pops).union(reseals)
+        let instant = changed.filter { !moving.contains($0) }
 
         var steps = instant.map { Step(at: .zero, index: $0, change: .settle(target[$0])) }
         for (order, index) in pops.enumerated() {
@@ -158,8 +159,6 @@ enum PackPopSequence {
         for (order, index) in reseals.reversed().enumerated() {
             steps.append(Step(at: popStagger * order, index: index, change: .settle(target[index])))
         }
-        return steps.enumerated()
-            .sorted { ($0.element.at, $0.offset) < ($1.element.at, $1.offset) }
-            .map(\.element)
+        return steps.sorted { $0.at < $1.at }
     }
 }

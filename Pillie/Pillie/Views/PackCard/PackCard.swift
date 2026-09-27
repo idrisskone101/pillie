@@ -50,7 +50,8 @@ struct PackCard<Header: View>: View {
     }
 
     private var tileSide: CGFloat {
-        (gridWidth - Self.columnGap * 6) / 7
+        let columns = CGFloat(PackCardLayout.daysPerWeek)
+        return (gridWidth - Self.columnGap * (columns - 1)) / columns
     }
 
     private var pageHeight: CGFloat {
@@ -63,7 +64,6 @@ struct PackCard<Header: View>: View {
 
     var body: some View {
         let layout = layout
-        let target = layout.states
         VStack(spacing: Self.rowGap) {
             header
                 .padding(.top, 2)
@@ -82,7 +82,7 @@ struct PackCard<Header: View>: View {
 
             weekdayRow
 
-            grid(layout: layout, states: displayed ?? target)
+            grid(layout: layout, states: displayed ?? layout.states)
         }
         .padding(.top, 16)
         .padding(.horizontal, 16)
@@ -92,8 +92,8 @@ struct PackCard<Header: View>: View {
                 .fill(PillieTheme.cardWhite)
                 .shadow(color: PillieTheme.cardShadow, radius: PillieTheme.cardShadowRadius, y: PillieTheme.cardShadowY)
         )
-        .task(id: target) {
-            await play(to: target)
+        .task(id: layout) {
+            await play(to: layout.states)
         }
         .onChange(of: layout.todayPage) {
             chosenPage = nil
@@ -107,8 +107,8 @@ struct PackCard<Header: View>: View {
         calendar.locale = locale
         let symbols = calendar.shortStandaloneWeekdaySymbols
         return HStack(spacing: Self.columnGap) {
-            ForEach(0..<7, id: \.self) { column in
-                Text(symbols[(dayOneWeekday - 1 + column) % 7].uppercased(with: locale))
+            ForEach(0..<PackCardLayout.daysPerWeek, id: \.self) { column in
+                Text(symbols[(dayOneWeekday - 1 + column) % PackCardLayout.daysPerWeek].uppercased(with: locale))
                     .font(.pillie(11, weight: .semibold))
                     .tracking(11 * 0.06)
                     .foregroundStyle(PackCardColor.weekday)
@@ -130,7 +130,7 @@ struct PackCard<Header: View>: View {
             VStack(spacing: Self.rowGap) {
                 ForEach(layout.rows(onPage: viewedPage), id: \.lowerBound) { row in
                     HStack(spacing: Self.columnGap) {
-                        ForEach(0..<7, id: \.self) { column in
+                        ForEach(0..<PackCardLayout.daysPerWeek, id: \.self) { column in
                             let index = row.lowerBound + column
                             if row.contains(index) {
                                 tile(at: index, state: states[index])
