@@ -20,6 +20,12 @@ struct ProtectionPlanSelectableRow: View {
     let title: String
     var subtitle: String? = nil
     var symbolName: String? = nil
+    /// Asset catalog image name, for rows that need a full-color icon instead of an
+    /// SF Symbol glyph (the onboarding method step's Quiver icons, ENG-138).
+    var iconImageName: String? = nil
+    /// Aspect-fit size for `iconImageName`, inside the same 44x44pt tile as
+    /// `symbolName`.
+    var iconImageSize: CGFloat = 32
     let isSelected: Bool
     let style: Style
     let action: () -> Void
@@ -35,15 +41,10 @@ struct ProtectionPlanSelectableRow: View {
             }
         } label: {
             HStack(spacing: 14) {
-                if let symbolName {
-                    Image(systemName: symbolName)
-                        .font(.system(size: 19, weight: .semibold))
-                        .foregroundStyle(isSelected ? PillieTheme.coral : PillieTheme.textMuted)
+                if symbolName != nil || iconImageName != nil {
+                    icon
                         .frame(width: 44, height: 44)
-                        .background(
-                            (isSelected ? PillieTheme.coral : PillieTheme.textMuted).opacity(0.12),
-                            in: RoundedRectangle(cornerRadius: 14)
-                        )
+                        .background(iconTileFill, in: RoundedRectangle(cornerRadius: 14))
                 }
 
                 VStack(alignment: .leading, spacing: 3) {
@@ -99,6 +100,29 @@ struct ProtectionPlanSelectableRow: View {
             return isSelected
                 ? PillieLocalization.string("accessibility.selection.selected")
                 : PillieLocalization.string("accessibility.selection.choose")
+        }
+    }
+
+    /// The Quiver method icons (`iconImageName`) sit on Paper's own white/`F5F5F4`
+    /// tile fills; SF Symbol rows (`symbolName`) keep the tinted coral/muted tile.
+    private var iconTileFill: Color {
+        guard iconImageName != nil else {
+            return (isSelected ? PillieTheme.coral : PillieTheme.textMuted).opacity(0.12)
+        }
+        return isSelected ? PillieTheme.cardWhite : Color(hex: "F5F5F4")
+    }
+
+    @ViewBuilder
+    private var icon: some View {
+        if let symbolName {
+            Image(systemName: symbolName)
+                .font(.system(size: 19, weight: .semibold))
+                .foregroundStyle(isSelected ? PillieTheme.coral : PillieTheme.textMuted)
+        } else if let iconImageName {
+            Image(iconImageName)
+                .resizable()
+                .scaledToFit()
+                .frame(width: iconImageSize, height: iconImageSize)
         }
     }
 

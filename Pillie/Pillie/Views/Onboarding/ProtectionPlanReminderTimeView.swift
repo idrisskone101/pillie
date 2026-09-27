@@ -13,6 +13,7 @@ import SwiftUI
 
 struct ProtectionPlanReminderTimeView: View {
     let progress: ProtectionPlanProgress
+    let todayPillPick: TodayPillPick?
     let onBack: () -> Void
     let onContinue: () -> Void
 
@@ -49,7 +50,18 @@ struct ProtectionPlanReminderTimeView: View {
     }
 
     private var summary: ProtectionPlanRoutineSummary {
-        ProtectionPlanRoutineSummary(
+        if let todayPillPick {
+            let selection = ReminderTimeConverter.hourAndMinute(from: selectedTime)
+            return ProtectionPlanRoutineSummary(
+                method: .pill,
+                todayPill: TodayPillPlan(
+                    pick: todayPillPick,
+                    reminderHour: selection.hour,
+                    reminderMinute: selection.minute
+                )
+            )
+        }
+        return ProtectionPlanRoutineSummary(
             method: store.contraceptiveMethod,
             scheduleSummary: scheduleSummaryText,
             cycleDay: store.pack.cycleDayIndex(on: store.today) + 1,
@@ -179,7 +191,7 @@ struct ProtectionPlanReminderTimeView: View {
         guard !isCommitting else { return }
         isCommitting = true
         let selection = ReminderTimeConverter.hourAndMinute(from: selectedTime)
-        OnboardingReminderCommit.live(store: store, telemetry: onboardingTelemetry)
+        OnboardingReminderCommit.live(store: store, telemetry: onboardingTelemetry, todayPillPick: todayPillPick)
             .run(hour: selection.hour, minute: selection.minute) {
                 isCommitting = false
                 onContinue()
@@ -202,6 +214,7 @@ struct ProtectionPlanReminderTimeView: View {
 #Preview {
     ProtectionPlanReminderTimeView(
         progress: ProtectionPlanProgressIndex.progress(for: .reminderTime),
+        todayPillPick: TodayPillPick(regimen: .twentyOneSeven, dayIndex: 11, answer: .taken),
         onBack: {},
         onContinue: {}
     )

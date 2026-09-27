@@ -5,14 +5,15 @@
 
 import SwiftUI
 
-/// Display-only pill pack: a 7-column blister grid, paged four weeks at a time for long packs.
 /// Callers change `todayIndex` / `marks` and the card plays the pop cascade. Haptics are the caller's.
 struct PackCard<Header: View>: View {
     let regimen: PackRegimen
-    /// Calendar weekday (1 = Sunday) of day index 0.
-    let dayOneWeekday: Int
+    /// Calendar weekday (1 = Sunday) of day index 0. nil while the start day is unknown,
+    /// which keeps the weekday row's space but shows no names.
+    let dayOneWeekday: Int?
     let todayIndex: Int?
     let marks: [Int: PackTileMark]
+    let onSelectDay: ((Int) -> Void)?
     let header: Header
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -29,16 +30,22 @@ struct PackCard<Header: View>: View {
 
     init(
         regimen: PackRegimen,
-        dayOneWeekday: Int,
+        dayOneWeekday: Int?,
         todayIndex: Int?,
         marks: [Int: PackTileMark] = [:],
+        onSelectDay: ((Int) -> Void)? = nil,
         @ViewBuilder header: () -> Header
     ) {
         self.regimen = regimen
         self.dayOneWeekday = dayOneWeekday
         self.todayIndex = todayIndex
         self.marks = marks
+        self.onSelectDay = onSelectDay
         self.header = header()
+    }
+
+    private var flagIndex: Int? {
+        onSelectDay != nil ? todayIndex : nil
     }
 
     private var layout: PackCardLayout {
@@ -108,7 +115,8 @@ struct PackCard<Header: View>: View {
         let symbols = calendar.shortStandaloneWeekdaySymbols
         return HStack(spacing: Self.columnGap) {
             ForEach(0..<PackCardLayout.daysPerWeek, id: \.self) { column in
-                Text(symbols[(dayOneWeekday - 1 + column) % PackCardLayout.daysPerWeek].uppercased(with: locale))
+                Text(symbols[((dayOneWeekday ?? 1) - 1 + column) % PackCardLayout.daysPerWeek].uppercased(with: locale))
+                    .contentTransition(.opacity)
                     .font(.pillie(11, weight: .semibold))
                     .tracking(11 * 0.06)
                     .foregroundStyle(PackCardColor.weekday)
@@ -119,6 +127,8 @@ struct PackCard<Header: View>: View {
         }
         .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
         .padding(.bottom, 2)
+        .opacity(dayOneWeekday == nil ? 0 : 1)
+        .animation(reduceMotion ? nil : .easeOut(duration: 0.25), value: dayOneWeekday)
         .accessibilityHidden(true)
     }
 
@@ -155,20 +165,59 @@ struct PackCard<Header: View>: View {
         .padding(16)
         .clipped()
         .padding(-16)
+        .overlay {
+            flag(layout: layout)
+                .animation(reduceMotion ? .easeInOut(duration: 0.2) : .spring(duration: 0.35, bounce: 0.2), value: flagIndex)
+        }
         .contentShape(Rectangle())
         .simultaneousGesture(pageSwipe, including: layout.showsPager ? .all : .subviews)
     }
 
+    @ViewBuilder
     private func tile(at index: Int, state: PackTileState) -> some View {
         let day = regimen.day(atIndex: index)
-        return PackTile(kind: day.kind, state: state, isCrunching: crunching.contains(index))
+        let face = PackTile(kind: day.kind, state: state, isCrunching: crunching.contains(index))
             .scaleEffect(tileSide / PackTile.designSide)
             .frame(width: tileSide, height: tileSide)
-            .contentShape(.accessibility, Rectangle())
-            .accessibilityElement(children: .ignore)
-            .accessibilityLabel(accessibilityLabel(for: day))
-            .accessibilityValue(accessibilityValue(for: day.kind, state: state))
+        if let onSelectDay {
+            Button {
+                onSelectDay(index)
+            } label: {
+                face
+            }
+            .buttonStyle(PackTilePressStyle(reduceMotion: reduceMotion))
+            .contentShape(Rectangle().inset(by: -max(0, (Self.minimumHitSide - tileSide) / 2)))
+            .tileAccessibility(label: accessibilityLabel(for: day), value: accessibilityValue(for: day.kind, state: state))
+            .accessibilityAddTraits(index == flagIndex ? [.isButton, .isSelected] : .isButton)
+            .accessibilityAction { onSelectDay(index) }
+            .accessibilityIdentifier("packTile.\(day.pillNumber ?? day.number)")
+        } else {
+            face
+                .tileAccessibility(label: accessibilityLabel(for: day), value: accessibilityValue(for: day.kind, state: state))
+        }
     }
+
+    private static var minimumHitSide: CGFloat { 44 }
+
+    @ViewBuilder
+    private func flag(layout: PackCardLayout) -> some View {
+        if let flagIndex, layout.dayIndices(onPage: viewedPage).contains(flagIndex) {
+            let slot = flagIndex - viewedPage * PackCardLayout.daysPerPage
+            let column = CGFloat(slot % PackCardLayout.daysPerWeek)
+            let row = CGFloat(slot / PackCardLayout.daysPerWeek)
+            let day = regimen.day(atIndex: flagIndex)
+            PackFlag(number: day.pillNumber ?? day.number)
+                .position(
+                    x: column * (tileSide + Self.columnGap) + tileSide / 2,
+                    y: row * (tileSide + Self.rowGap) - Self.flagLift - PackFlag.height / 2
+                )
+                .transition(.offset(y: reduceMotion ? 0 : -8).combined(with: .opacity))
+                .allowsHitTesting(false)
+                .accessibilityHidden(true)
+        }
+    }
+
+    private static var flagLift: CGFloat { 7 }
 
     // MARK: Paging
 
@@ -254,6 +303,53 @@ struct PackCard<Header: View>: View {
         case .missed: "pack_card.tile.state.missed"
         }
         return PillieLocalization.string(key, locale: locale)
+    }
+}
+
+private extension View {
+    func tileAccessibility(label: String, value: String) -> some View {
+        contentShape(.accessibility, Rectangle())
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(label)
+            .accessibilityValue(value)
+    }
+}
+
+private struct PackTilePressStyle: ButtonStyle {
+    let reduceMotion: Bool
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed && !reduceMotion ? 0.94 : 1)
+            .animation(.spring(duration: 0.3, bounce: 0.4), value: configuration.isPressed)
+    }
+}
+
+private struct PackFlag: View {
+    static let height: CGFloat = 29
+
+    let number: Int
+
+    var body: some View {
+        VStack(spacing: 0) {
+            PackNumberChip(number: number, size: .flag)
+            FlagPointer()
+                .fill(PillieTheme.textPrimary)
+                .frame(width: 10, height: 5)
+        }
+        .fixedSize()
+        .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
+    }
+}
+
+private struct FlagPointer: Shape {
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        path.move(to: CGPoint(x: rect.minX, y: rect.minY))
+        path.addLine(to: CGPoint(x: rect.maxX, y: rect.minY))
+        path.addLine(to: CGPoint(x: rect.midX, y: rect.maxY))
+        path.closeSubpath()
+        return path
     }
 }
 

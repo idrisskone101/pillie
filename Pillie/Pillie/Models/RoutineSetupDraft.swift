@@ -9,11 +9,6 @@
 
 import Foundation
 
-enum RoutineCustomDayField {
-    case active
-    case breakDays
-}
-
 struct RoutineSetupCommit: Equatable {
     let regimen: PillPack.PillRegimenPreset
     let customRegimen: PackRegimen?
@@ -40,79 +35,15 @@ struct RoutineSetupDraft: Equatable {
         calendar: Calendar = .current
     ) {
         self.method = method
-        if method == .pill, activePack.method == .pill {
-            self.selectedRegimen = activePack.pillRegimen
-            self.customRegimen = activePack.pillRegimen == .custom
-                ? activePack.regimen
-                : PillPack.defaultCustomRegimen
-        } else {
-            self.selectedRegimen = .twentyOneSeven
-            self.customRegimen = PillPack.defaultCustomRegimen
-        }
+        self.selectedRegimen = .twentyOneSeven
+        self.customRegimen = PillPack.defaultCustomRegimen
         self.cycleDay = activePack.method == method
             ? activePack.cycleDayIndex(on: today, calendar: calendar) + 1
             : 1
         clampCycleDay()
     }
 
-    var cycleLength: Int {
-        switch method {
-        case .pill:
-            return selectedRegimen.resolvedRegimen(custom: customRegimen).totalDays
-        case .patch, .ring:
-            return 28
-        }
-    }
-
-    var section: RoutineDetailsSection {
-        RoutineDetailsSection(method: method)
-    }
-
-    var visibleCommonRegimens: [PillPack.PillRegimenPreset] {
-        method == .pill ? RoutineRegimenCatalog.common : []
-    }
-
-    var requiresMoreOptions: Bool {
-        RoutineRegimenCatalog.more.contains(selectedRegimen)
-    }
-
-    subscript(customDays field: RoutineCustomDayField) -> Int {
-        get {
-            switch field {
-            case .active: customRegimen.activeDays
-            case .breakDays: customRegimen.breakDays
-            }
-        }
-        set {
-            switch field {
-            case .active: setCustomActiveDays(newValue)
-            case .breakDays: setCustomBreakDays(newValue)
-            }
-        }
-    }
-
-    mutating func selectRegimen(_ regimen: PillPack.PillRegimenPreset) {
-        selectedRegimen = regimen
-        clampCycleDay()
-    }
-
-    mutating func setCustomActiveDays(_ days: Int) {
-        customRegimen = PackRegimen(
-            activeDays: days,
-            breakDays: customRegimen.breakDays,
-            breakKind: customRegimen.breakKind
-        )
-        clampCycleDay()
-    }
-
-    mutating func setCustomBreakDays(_ days: Int) {
-        customRegimen = PackRegimen(
-            activeDays: customRegimen.activeDays,
-            breakDays: days,
-            breakKind: customRegimen.breakKind
-        )
-        clampCycleDay()
-    }
+    var cycleLength: Int { 28 }
 
     mutating func selectPosition(_ position: CyclePosition) {
         cycleDay = position.cycleDay(in: cycleLength)

@@ -399,6 +399,7 @@ final class AnalyticsManagerTests: XCTestCase {
     telemetry.onboardingBlockerConfigSaved(hasSelection: true)
     telemetry.mainTabSelected(.history)
     telemetry.todayActionCompleted()
+    telemetry.todayActionCompleted(source: .onboarding)
     telemetry.onboardingAcquisitionSourceCompleted(.reddit)
 
     XCTAssertEqual(
@@ -409,18 +410,19 @@ final class AnalyticsManagerTests: XCTestCase {
         .blockerConfigSaved,
         .tabSelected,
         .todayActionCompleted,
+        .todayActionCompleted,
         .onboardingStepCompleted,
       ])
-    XCTAssertEqual(recorder.sources, [.settings, .settings, .onboarding, nil, .home, .onboarding])
-    XCTAssertEqual(recorder.steps, [nil, nil, .appBlocking, nil, nil, .acquisitionSource])
-    XCTAssertEqual(recorder.screens, [nil, nil, nil, .calendar, nil, nil])
+    XCTAssertEqual(recorder.sources, [.settings, .settings, .onboarding, nil, .home, .onboarding, .onboarding])
+    XCTAssertEqual(recorder.steps, [nil, nil, .appBlocking, nil, nil, nil, .acquisitionSource])
+    XCTAssertEqual(recorder.screens, [nil, nil, nil, .calendar, nil, nil, nil])
     // The onboarding blocker save fires the dedicated event, so it carries no
     // `setting` (the event itself means "blocked apps saved"); the Settings-side
     // save still reuses settings_change_saved with setting=blocked_apps.
-    XCTAssertEqual(recorder.settings, [.blockedApps, .blockedApps, nil, nil, nil, nil])
-    XCTAssertEqual(recorder.acquisitionSources, [nil, nil, nil, nil, nil, .reddit])
-    XCTAssertEqual(recorder.isPlusValues, [true, true, true, true, true, true])
-    XCTAssertEqual(recorder.hasBlockingSelectionValues, [false, true, true, nil, nil, nil])
+    XCTAssertEqual(recorder.settings, [.blockedApps, .blockedApps, nil, nil, nil, nil, nil])
+    XCTAssertEqual(recorder.acquisitionSources, [nil, nil, nil, nil, nil, nil, .reddit])
+    XCTAssertEqual(recorder.isPlusValues, [true, true, true, true, true, true, true])
+    XCTAssertEqual(recorder.hasBlockingSelectionValues, [false, true, true, nil, nil, nil, nil])
   }
 
   func testOnboardingBlockerConfigSaveFiresDedicatedCoarseEvent() {

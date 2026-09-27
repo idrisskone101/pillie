@@ -263,7 +263,16 @@ class PillStore {
     }
 
     var currentDayIndex: Int {
-        pack.cycleDayIndex(on: today)
+        guard !liveDayPrecedesFirstPack else { return 0 }
+        return pack.cycleDayIndex(on: today)
+    }
+
+    /// Whether the live day falls before this pack's own anchor, so there is no
+    /// cycle-day index and nothing due yet. Onboarding can compute `today` (the
+    /// reminder-relative live day) a calendar day earlier than the pack it just
+    /// created.
+    private var liveDayPrecedesFirstPack: Bool {
+        pack.elapsedCycleDays(on: today) < 0
     }
 
     var daysOnCurrentPack: Int {
@@ -423,7 +432,8 @@ class PillStore {
 
     /// Whether today requires no blocking — either taken, passive active, or a break day.
     var isTodayHandled: Bool {
-        isTodayTaken || isTodayPassiveOrBreak
+        guard !liveDayPrecedesFirstPack else { return true }
+        return isTodayTaken || isTodayPassiveOrBreak
     }
 
     var isTodayPassiveOrBreak: Bool {
@@ -884,7 +894,8 @@ class PillStore {
         customRegimen: PackRegimen?,
         cycleDay: Int,
         preserveHistory: Bool,
-        cycleDayWasExplicitlyConfirmedForMethodSwitch: Bool = true
+        cycleDayWasExplicitlyConfirmedForMethodSwitch: Bool = true,
+        anchorDay: Date? = nil
     ) -> Bool {
         let normalizedCycleLength = cycleLengthFor(
             method: method,
@@ -898,11 +909,12 @@ class PillStore {
             return false
         }
         let useTodayAsStartDate = preserveHistory && methodChanged
+        let anchor = anchorDay.map { startOfDaySafe($0) } ?? today
         let startDate: Date = {
             if useTodayAsStartDate {
-                return today
+                return anchor
             }
-            return Calendar.current.date(byAdding: .day, value: -(safeCycleDay - 1), to: today) ?? today
+            return Calendar.current.date(byAdding: .day, value: -(safeCycleDay - 1), to: anchor) ?? anchor
         }()
         let cycleDayAnchorIndex = useTodayAsStartDate ? (safeCycleDay - 1) : 0
 
@@ -928,7 +940,7 @@ class PillStore {
             // don't surface as missed, and keep the streak honest.
             if !useTodayAsStartDate && safeCycleDay > 1 {
                 backfillPriorDays(from: startDate, count: safeCycleDay - 1, pack: nextPack, calendar: Calendar.current)
-                streakResetDate = today
+                streakResetDate = anchor
             }
         } else if let activePack {
             activePack.method = method
@@ -943,15 +955,11 @@ class PillStore {
                 existing.isCurrent = false
             }
 
-            // Backfill prior days as taken for onboarding mid-cycle
-            if safeCycleDay > 1 {
-                let existingDays = Array(activePack.days)
-                for day in existingDays {
-                    modelContext.delete(day)
-                }
-                backfillPriorDays(from: startDate, count: safeCycleDay - 1, pack: activePack, calendar: Calendar.current)
-                streakResetDate = today
+            for day in Array(activePack.days) {
+                modelContext.delete(day)
             }
+            backfillPriorDays(from: startDate, count: safeCycleDay - 1, pack: activePack, calendar: Calendar.current)
+            streakResetDate = anchor
             appActivatedDate = today
         } else {
             let nextPackNumber = (packs.map(\.packNumber).max() ?? 0) + 1
@@ -966,11 +974,8 @@ class PillStore {
             )
             modelContext.insert(nextPack)
 
-            // Backfill prior days as taken for onboarding mid-cycle
-            if safeCycleDay > 1 {
-                backfillPriorDays(from: startDate, count: safeCycleDay - 1, pack: nextPack, calendar: Calendar.current)
-                streakResetDate = today
-            }
+            backfillPriorDays(from: startDate, count: safeCycleDay - 1, pack: nextPack, calendar: Calendar.current)
+            streakResetDate = anchor
             appActivatedDate = today
         }
 
