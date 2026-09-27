@@ -53,6 +53,11 @@ struct PackCard<Header: View>: View {
         (gridWidth - Self.columnGap * 6) / 7
     }
 
+    private var pageHeight: CGFloat {
+        let rows = CGFloat(PackCardLayout.weeksPerPage)
+        return tileSide * rows + Self.rowGap * (rows - 1)
+    }
+
     private static var columnGap: CGFloat { 6 }
     private static var rowGap: CGFloat { 7 }
 
@@ -139,7 +144,12 @@ struct PackCard<Header: View>: View {
             .id(viewedPage)
             .transition(.push(from: pageForward == (layoutDirection == .leftToRight) ? .trailing : .leading))
         }
-        .frame(maxWidth: .infinity)
+        // A short last page keeps the full page height so paging never shifts the screen below the card.
+        .frame(
+            maxWidth: .infinity,
+            minHeight: layout.showsPager ? pageHeight : nil,
+            alignment: .top
+        )
         .onGeometryChange(for: CGFloat.self, of: \.size.width) { gridWidth = $0 }
         // Clip at the card edge, not the grid edge, so rings, badges, and glows keep their overflow.
         .padding(16)
