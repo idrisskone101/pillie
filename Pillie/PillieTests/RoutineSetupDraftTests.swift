@@ -15,8 +15,7 @@ final class RoutineSetupDraftTests: XCTestCase {
             draft.commit,
             RoutineSetupCommit(
                 regimen: .twentyOneSeven,
-                customActiveDays: nil,
-                customBreakDays: nil,
+                customRegimen: nil,
                 cycleDay: 1
             )
         )
@@ -34,8 +33,7 @@ final class RoutineSetupDraftTests: XCTestCase {
             draft.commit,
             RoutineSetupCommit(
                 regimen: .custom,
-                customActiveDays: 42,
-                customBreakDays: 3,
+                customRegimen: PackRegimen(activeDays: 42, breakDays: 3),
                 cycleDay: 23
             )
         )
@@ -49,8 +47,7 @@ final class RoutineSetupDraftTests: XCTestCase {
         XCTAssertEqual(draft.section, .fixedSchedule)
         XCTAssertEqual(draft.cycleLength, 28)
         XCTAssertEqual(draft.commit.cycleDay, 14)
-        XCTAssertNil(draft.commit.customActiveDays)
-        XCTAssertNil(draft.commit.customBreakDays)
+        XCTAssertNil(draft.commit.customRegimen)
     }
 
     func testRingSetupNeedsNoPillRegimenControls() {
@@ -69,8 +66,7 @@ final class RoutineSetupDraftTests: XCTestCase {
         let savedPack = PillPack(
             method: .pill,
             pillRegimen: .custom,
-            customActiveDays: 30,
-            customBreakDays: 5,
+            customRegimen: PackRegimen(activeDays: 30, breakDays: 5, breakKind: .noPills),
             startDate: today,
             cycleDayAnchorIndex: 11,
             packNumber: 1
@@ -82,8 +78,7 @@ final class RoutineSetupDraftTests: XCTestCase {
             draft.commit,
             RoutineSetupCommit(
                 regimen: .custom,
-                customActiveDays: 30,
-                customBreakDays: 5,
+                customRegimen: PackRegimen(activeDays: 30, breakDays: 5, breakKind: .noPills),
                 cycleDay: 12
             )
         )

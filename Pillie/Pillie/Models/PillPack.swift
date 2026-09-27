@@ -18,6 +18,7 @@ final class PillPack {
     var pillRegimenRaw: String = PillRegimenPreset.twentyOneSeven.rawValue
     var customActiveDays: Int?
     var customBreakDays: Int?
+    var customBreakHasPills: Bool?
     var startDate: Date
     var cycleDayAnchorIndex: Int = 0
     var packNumber: Int
@@ -34,154 +35,120 @@ final class PillPack {
         case twentyOneSeven = "21/7"
         case twentyFourFour = "24/4"
         case twentyEightZero = "28/0"
-
-        var activeDays: Int {
-            switch self {
-            case .twentyOneSeven: return 21
-            case .twentyFourFour: return 24
-            case .twentyEightZero: return 28
-            }
-        }
-
-        var totalDays: Int { 28 }
-
-        var breakDays: Int { totalDays - activeDays }
-
-        var label: String { rawValue + " CYCLE" }
     }
 
     enum PillRegimenPreset: String, Codable, CaseIterable {
         case twentyOneSeven = "21/7"
+        case twentyOneOnly = "21-ONLY"
         case twentyFourFour = "24/4"
         case twentySixTwo = "26/2"
-        case twentyEightZero = "28/0"
-        case eightyFourSeven = "84/7"
-        case threeSixtyFiveZero = "365/0"
+        case everyDay = "28/0"
+        case twentyOneFour = "21/4"
         case custom = "CUSTOM"
 
-        var title: String {
+        var regimen: PackRegimen? {
             switch self {
-            case .custom:
-                return "Custom"
-            default:
-                return rawValue
+            case .twentyOneSeven: return PackRegimen(activeDays: 21, breakDays: 7)
+            case .twentyOneOnly: return PackRegimen(activeDays: 21, breakDays: 7, breakKind: .noPills)
+            case .twentyFourFour: return PackRegimen(activeDays: 24, breakDays: 4)
+            case .twentySixTwo: return PackRegimen(activeDays: 26, breakDays: 2)
+            case .everyDay: return PackRegimen(activeDays: 28, breakDays: 0)
+            case .twentyOneFour: return PackRegimen(activeDays: 21, breakDays: 4, breakKind: .noPills)
+            case .custom: return nil
             }
         }
 
-        var activeDays: Int {
-            switch self {
-            case .twentyOneSeven: return 21
-            case .twentyFourFour: return 24
-            case .twentySixTwo: return 26
-            case .twentyEightZero: return 28
-            case .eightyFourSeven: return 84
-            case .threeSixtyFiveZero: return 365
-            case .custom: return 21
-            }
+        func resolvedRegimen(custom: PackRegimen?) -> PackRegimen {
+            regimen ?? custom ?? PillPack.defaultCustomRegimen
         }
 
-        var breakDays: Int {
+        var legacyPackType: PackType {
             switch self {
-            case .twentyOneSeven: return 7
-            case .twentyFourFour: return 4
-            case .twentySixTwo: return 2
-            case .twentyEightZero: return 0
-            case .eightyFourSeven: return 7
-            case .threeSixtyFiveZero: return 0
-            case .custom: return 7
+            case .twentyOneSeven, .twentyOneOnly: return .twentyOneSeven
+            case .twentyFourFour: return .twentyFourFour
+            case .twentySixTwo, .everyDay, .twentyOneFour, .custom: return .twentyEightZero
             }
         }
-
-        var cycleLength: Int { activeDays + breakDays }
     }
 
-    static let customActiveRange = 1...365
-    // Break = the hormone-free / placebo interval. 7 days is the standard maximum used
-    // by every real combined-pill regimen (21/7, 24/4, 26/2, 28/0, 84/7, 365/0 all have
-    // breaks ≤ 7); extending it past 7 isn't an alternative schedule, it just reduces
-    // contraceptive efficacy. So the cap is 7, not an arbitrary one-month value.
-    static let customBreakRange = 0...7
+    static let defaultCustomRegimen = PackRegimen(activeDays: 21, breakDays: 7)
+    private static let patchOrRingRegimen = PackRegimen(activeDays: 21, breakDays: 7, breakKind: .noPills)
+
+    // Presets retired from the picker. Their rows keep the raw value and read back
+    // as the same-length Custom pack, so the pill number does not move.
+    private static let retiredPresetRegimens: [String: PackRegimen] = [
+        "84/7": PackRegimen(activeDays: 84, breakDays: 7),
+        "365/0": PackRegimen(activeDays: 365, breakDays: 0),
+    ]
+
+    /// The only reader of the persisted regimen columns. Rows are never rewritten
+    /// on upgrade; decoding here is the migration.
+    static func decodeRegimen(
+        raw: String,
+        customActiveDays: Int?,
+        customBreakDays: Int?,
+        customBreakHasPills: Bool?,
+        legacyPackType: PackType
+    ) -> (preset: PillRegimenPreset, regimen: PackRegimen) {
+        if let retired = retiredPresetRegimens[raw] {
+            return (.custom, retired)
+        }
+        let preset = PillRegimenPreset(rawValue: raw) ?? fallbackPreset(for: legacyPackType)
+        if let regimen = preset.regimen {
+            return (preset, regimen)
+        }
+        let custom = PackRegimen(
+            activeDays: customActiveDays ?? defaultCustomRegimen.activeDays,
+            breakDays: customBreakDays ?? defaultCustomRegimen.breakDays,
+            breakKind: customBreakHasPills == false ? .noPills : .sugarPills
+        )
+        return (.custom, custom)
+    }
+
+    private static func fallbackPreset(for packType: PackType) -> PillRegimenPreset {
+        switch packType {
+        case .twentyOneSeven: return .twentyOneSeven
+        case .twentyFourFour: return .twentyFourFour
+        case .twentyEightZero: return .everyDay
+        }
+    }
 
     var method: ContraceptiveMethod {
         get { ContraceptiveMethod(rawValue: methodRaw) ?? .pill }
         set { methodRaw = newValue.rawValue }
     }
 
-    var pillRegimen: PillRegimenPreset {
-        get {
-            if let regimen = PillRegimenPreset(rawValue: pillRegimenRaw) {
-                return regimen
-            }
-            switch packType {
-            case .twentyOneSeven: return .twentyOneSeven
-            case .twentyFourFour: return .twentyFourFour
-            case .twentyEightZero: return .twentyEightZero
-            }
-        }
-        set {
-            pillRegimenRaw = newValue.rawValue
-            if newValue != .custom {
-                customActiveDays = nil
-                customBreakDays = nil
-            }
-            // Keep legacy value roughly aligned for compatibility.
-            switch newValue {
-            case .twentyOneSeven:
-                packType = .twentyOneSeven
-            case .twentyFourFour:
-                packType = .twentyFourFour
-            case .twentyEightZero, .twentySixTwo, .eightyFourSeven, .threeSixtyFiveZero, .custom:
-                packType = .twentyEightZero
-            }
-        }
+    private var decodedRegimen: (preset: PillRegimenPreset, regimen: PackRegimen) {
+        Self.decodeRegimen(
+            raw: pillRegimenRaw,
+            customActiveDays: customActiveDays,
+            customBreakDays: customBreakDays,
+            customBreakHasPills: customBreakHasPills,
+            legacyPackType: packType
+        )
     }
 
-    var activeDays: Int {
+    var pillRegimen: PillRegimenPreset { decodedRegimen.preset }
+
+    var regimen: PackRegimen {
         switch method {
-        case .pill:
-            if pillRegimen == .custom {
-                let normalized = Self.normalizedCustomValues(active: customActiveDays, breakDays: customBreakDays)
-                return normalized.active
-            }
-            return pillRegimen.activeDays
-        case .patch:
-            return 21
-        case .ring:
-            return 21
+        case .pill: return decodedRegimen.regimen
+        case .patch, .ring: return Self.patchOrRingRegimen
         }
     }
 
-    var breakDays: Int {
-        switch method {
-        case .pill:
-            if pillRegimen == .custom {
-                let normalized = Self.normalizedCustomValues(active: customActiveDays, breakDays: customBreakDays)
-                return normalized.breakDays
-            }
-            return pillRegimen.breakDays
-        case .patch:
-            return 7
-        case .ring:
-            return 7
-        }
+    func setPillRegimen(_ preset: PillRegimenPreset, customRegimen: PackRegimen?) {
+        pillRegimenRaw = preset.rawValue
+        packType = preset.legacyPackType
+        let custom = preset == .custom ? preset.resolvedRegimen(custom: customRegimen) : nil
+        customActiveDays = custom?.activeDays
+        customBreakDays = custom?.breakDays
+        customBreakHasPills = custom.map { $0.breakKind == .sugarPills }
     }
 
-    var cycleLength: Int { max(1, activeDays + breakDays) }
-    var totalDays: Int { cycleLength }
-
-    var regimenLabel: String {
-        switch method {
-        case .pill:
-            if pillRegimen == .custom {
-                return "\(activeDays)/\(breakDays) CYCLE"
-            }
-            return "\(pillRegimen.title) CYCLE"
-        case .patch:
-            return "PATCH 3/1 CYCLE"
-        case .ring:
-            return "RING 21/7 CYCLE"
-        }
-    }
+    var activeDays: Int { regimen.activeDays }
+    var breakDays: Int { regimen.breakDays }
+    var cycleLength: Int { regimen.totalDays }
 
     var methodTitle: String {
         switch method {
@@ -226,46 +193,34 @@ final class PillPack {
     }
 
     func cycleDayIndex(on date: Date, calendar: Calendar = .current) -> Int {
-        let modulo = elapsedCycleDays(on: date, calendar: calendar) % cycleLength
-        return modulo >= 0 ? modulo : (modulo + cycleLength)
+        let length = cycleLength
+        let modulo = elapsedCycleDays(on: date, calendar: calendar) % length
+        return modulo >= 0 ? modulo : (modulo + length)
     }
 
-    func weekNumber(for dayIndex: Int) -> Int {
-        (dayIndex / 7) + 1
+    func packDay(on date: Date, calendar: Calendar = .current) -> PackDay {
+        regimen.day(atIndex: cycleDayIndex(on: date, calendar: calendar))
     }
 
     init(
-        packType: PackType = .twentyOneSeven,
         method: ContraceptiveMethod = .pill,
         pillRegimen: PillRegimenPreset = .twentyOneSeven,
-        customActiveDays: Int? = nil,
-        customBreakDays: Int? = nil,
+        customRegimen: PackRegimen? = nil,
         startDate: Date,
         cycleDayAnchorIndex: Int = 0,
         packNumber: Int,
         isCurrent: Bool = true
     ) {
-        let normalized = Self.normalizedCustomValues(active: customActiveDays, breakDays: customBreakDays)
-        self.packType = packType
+        self.packType = pillRegimen.legacyPackType
         self.methodRaw = method.rawValue
-        self.pillRegimenRaw = pillRegimen.rawValue
-        self.customActiveDays = pillRegimen == .custom ? normalized.active : nil
-        self.customBreakDays = pillRegimen == .custom ? normalized.breakDays : nil
         self.startDate = startDate
-        self.cycleDayAnchorIndex = cycleDayAnchorIndex
         self.packNumber = packNumber
         self.isCurrent = isCurrent
-
+        setPillRegimen(pillRegimen, customRegimen: customRegimen)
         self.cycleDayAnchorIndex = Self.normalizedCycleDayAnchorIndex(
-            self.cycleDayAnchorIndex,
+            cycleDayAnchorIndex,
             cycleLength: self.cycleLength
         )
-    }
-
-    static func normalizedCustomValues(active: Int?, breakDays: Int?) -> (active: Int, breakDays: Int) {
-        let a = min(max(active ?? 21, customActiveRange.lowerBound), customActiveRange.upperBound)
-        let b = min(max(breakDays ?? 7, customBreakRange.lowerBound), customBreakRange.upperBound)
-        return (a, b)
     }
 
     static func normalizedCycleDayAnchorIndex(_ value: Int, cycleLength: Int) -> Int {

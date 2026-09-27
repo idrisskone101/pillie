@@ -161,7 +161,6 @@ final class CalendarDayPresentationTests: XCTestCase {
         // PillStore or ModelContainer needed (both crash the beta host when they
         // deallocate inside the test invocation).
         let pack = PillPack(
-            packType: .twentyOneSeven,
             method: method,
             pillRegimen: .twentyOneSeven,
             startDate: now,

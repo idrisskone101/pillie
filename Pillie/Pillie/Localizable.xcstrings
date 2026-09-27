@@ -52801,277 +52801,552 @@
         }
       }
     },
-    "onboarding.regimen.name.continuous": {
+    "onboarding.regimen.name.21_only": {
       "comment": "Issue #233 runtime setup option",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Continuous"
+            "value": "21 only"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Continuo"
+            "value": "Solo 21"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Durchgehend"
+            "value": "Nur 21"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Continu"
+            "value": "21 seulement"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Continuo"
+            "value": "Solo 21"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Contínuo"
+            "value": "Só 21"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Doorlopend"
+            "value": "Alleen 21"
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kontinuerlig"
+            "value": "Endast 21"
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kontinuerlig"
+            "value": "Kun 21"
           }
         },
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kontinuerlig"
+            "value": "Kun 21"
           }
         },
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Jatkuva"
+            "value": "Vain 21"
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "translated",
-            "value": "Contínuo"
+            "value": "Só 21"
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "Continu"
+            "value": "Només 21"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ciągły"
+            "value": "Tylko 21"
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nepřetržitý"
+            "value": "Jen 21"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Непрерывный"
+            "value": "Только 21"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Безперервний"
+            "value": "Лише 21"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "連続"
+            "value": "21のみ"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "연속 복용"
+            "value": "21만"
           }
         },
         "ms": {
           "stringUnit": {
             "state": "translated",
-            "value": "Berterusan"
+            "value": "21 sahaja"
           }
         },
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "Continuu"
+            "value": "Doar 21"
           }
         },
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nepretržitý"
+            "value": "Len 21"
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "ต่อเนื่อง"
+            "value": "21 เท่านั้น"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "连续服用"
+            "value": "仅21"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "लगातार"
+            "value": "केवल 21"
           }
         },
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kontinuirano"
+            "value": "Samo 21"
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "Folyamatos"
+            "value": "Csak 21"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sürekli"
+            "value": "Sadece 21"
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "தொடர்ச்சியானது"
+            "value": "21 மட்டும்"
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Berkelanjutan"
+            "value": "Hanya 21"
           }
         },
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "متواصل"
+            "value": "21 فقط"
           }
         },
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "רציף"
+            "value": "21 בלבד"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Liên tục"
+            "value": "Chỉ 21"
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "টানা"
+            "value": "শুধু 21"
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "مسلسل"
+            "value": "صرف 21"
           }
         },
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Neprekinjeno"
+            "value": "Samo 21"
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Συνεχές"
+            "value": "Μόνο 21"
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "నిరంతరం"
+            "value": "21 మాత్రమే"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "連續服用"
+            "value": "僅21"
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "લગાતાર"
+            "value": "ફક્ત 21"
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ನಿರಂತರಂ"
+            "value": "21 ಮಾತ್ರ"
           }
         },
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "തുടർച്ചയായി"
+            "value": "21 മാത്രം"
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "लगातार"
+            "value": "फक्त 21"
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ନିରନ୍ତର"
+            "value": "କେବଳ 21"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਲਗਾਤਾਰ"
+            "value": "ਸਿਰਫ਼ 21"
+          }
+        }
+      }
+    },
+    "onboarding.regimen.name.every_day": {
+      "comment": "Issue #233 runtime setup option",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Every day"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ogni giorno"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jeden Tag"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tous les jours"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Todos los días"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Todos os dias"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elke dag"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Varje dag"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hver dag"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hver dag"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Joka päivä"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Todos os dias"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cada dia"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Codziennie"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Každý den"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Каждый день"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Щодня"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "毎日"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "매일"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Setiap hari"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "În fiecare zi"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Každý deň"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ทุกวัน"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "每天"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "हर दिन"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Svaki dan"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Minden nap"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Her gün"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "தினமும்"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Setiap hari"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "كل يوم"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "כל יום"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mỗi ngày"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "প্রতিদিন"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ہر روز"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vsak dan"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Κάθε μέρα"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ప్రతిరోజు"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "每天"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "દરરોજ"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ಪ್ರತಿದಿನ"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "എല്ലാ ദിവസവും"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "दररोज"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ପ୍ରତିଦିନ"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਹਰ ਰੋਜ਼"
           }
         }
       }
@@ -99551,552 +99826,552 @@
         }
       }
     },
-    "onboarding.regimen.84_7": {
-      "comment": "Pill regimen with 84 active days and 7 break days.",
+    "onboarding.regimen.21_only": {
+      "comment": "Regimen option [health]",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "84 active days, 7 break days"
+            "value": "21 active days, 7 pill-free days"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "84 giorni attivi, 7 giorni di pausa"
+            "value": "21 giorni attivi, 7 giorni senza pillola"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "84 aktive Tage, 7 Pausentage"
+            "value": "21 aktive Tage, 7 pillenfreie Tage"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "84 jours actifs, 7 jours de pause"
+            "value": "21 jours actifs, 7 jours sans pilule"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "84 días activos, 7 de pausa"
+            "value": "21 días activos, 7 sin píldora"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "84 dias ativos, 7 dias de pausa"
+            "value": "21 dias ativos, 7 dias sem pílula"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "84 actieve dagen, 7 pauzedagen"
+            "value": "21 actieve dagen, 7 pilvrije dagen"
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "84 aktiva dagar, 7 pausdagar"
+            "value": "21 aktiva dagar, 7 pillerfria dagar"
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "84 aktive dage, 7 pausedage"
+            "value": "21 aktive dage, 7 pillefrie dage"
           }
         },
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "84 aktive dager, 7 pausedager"
+            "value": "21 aktive dager, 7 pillefrie dager"
           }
         },
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "84 aktiivista päivää, 7 taukopäivää"
+            "value": "21 aktiivista päivää, 7 pilleritöntä päivää"
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "translated",
-            "value": "84 dias ativos, 7 dias de pausa"
+            "value": "21 dias ativos, 7 dias sem pílula"
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "84 dies actius, 7 dies de pausa"
+            "value": "21 dies actius, 7 dies sense píndola"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "84 dni aktywne, 7 dni przerwy"
+            "value": "21 dni aktywnych, 7 dni bez tabletki"
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "84 aktivních dní, 7 dní pauzy"
+            "value": "21 aktivních dní, 7 dní bez pilulky"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "84 активных дня, 7 дней перерыва"
+            "value": "21 активный день, 7 дней без таблеток"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "84 активні дні, 7 днів перерви"
+            "value": "21 активний день, 7 днів без таблеток"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "服用84日、休薬7日"
+            "value": "服用21日、ピルなし7日"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "복용 84일, 휴약 7일"
+            "value": "복용 21일, 피임약 없는 7일"
           }
         },
         "ms": {
           "stringUnit": {
             "state": "translated",
-            "value": "84 hari aktif, 7 hari rehat"
+            "value": "21 hari aktif, 7 hari tanpa pil"
           }
         },
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "84 zile active, 7 zile de pauză"
+            "value": "21 zile active, 7 zile fără pilulă"
           }
         },
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "84 aktívnych dní, 7 dní pauzy"
+            "value": "21 aktívnych dní, 7 dní bez tabletky"
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "กิน 84 วัน พัก 7 วัน"
+            "value": "กิน 21 วัน เว้นยา 7 วัน"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "84 天服药，7 天停药"
+            "value": "21 天服药，7 天无药片"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "84 सक्रिय दिन, 7 ब्रेक दिन"
+            "value": "21 सक्रिय दिन, 7 गोली-मुक्त दिन"
           }
         },
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "84 aktivna dana, 7 dana pauze"
+            "value": "21 aktivni dan, 7 dana bez pilule"
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "84 aktív nap, 7 szünetnap"
+            "value": "21 aktív nap, 7 tablettamentes nap"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "84 aktif gün, 7 ara günü"
+            "value": "21 aktif gün, 7 hapsız gün"
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "84 செயல் நாட்கள், 7 இடைவெளி நாட்கள்"
+            "value": "21 செயல் நாட்கள், 7 மாத்திரை இல்லாத நாட்கள்"
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "84 hari aktif, 7 hari jeda"
+            "value": "21 hari aktif, 7 hari tanpa pil"
           }
         },
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "84 يومًا نشطًا، 7 أيام استراحة"
+            "value": "21 يومًا نشطًا، 7 أيام بدون حبوب"
           }
         },
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "84 ימים פעילים, 7 ימי הפסקה"
+            "value": "21 ימים פעילים, 7 ימים ללא גלולה"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "84 ngày uống, 7 ngày nghỉ"
+            "value": "21 ngày uống, 7 ngày không thuốc"
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "84 সক্রিয় দিন, 7 বিরতির দিন"
+            "value": "21 সক্রিয় দিন, 7 পিলবিহীন দিন"
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "84 فعال دن، 7 وقفے کے دن"
+            "value": "21 فعال دن، 7 گولی کے بغیر دن"
           }
         },
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "84 aktivnih dni, 7 dni premora"
+            "value": "21 aktivnih dni, 7 dni brez tablete"
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "84 ενεργές ημέρες, 7 ημέρες διαλείμματος"
+            "value": "21 ενεργές ημέρες, 7 ημέρες χωρίς χάπι"
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "84 యాక్టివ్ రోజులు, 7 విరామ రోజులు"
+            "value": "21 యాక్టివ్ రోజులు, 7 మాత్ర లేని రోజులు"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "84 天服藥，7 天停藥"
+            "value": "21 天服藥，7 天無藥片"
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "84 સક્રિય દિન, 7 બ્રેક દિન"
+            "value": "21 સક્રિય દિન, 7 ગોળી વગરના દિન"
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "84 ಯಾಕ್ಟಿವ್ ರೋಜುಲು, 7 ವಿರಾಮ ರೋಜುಲು"
+            "value": "21 ಸಕ್ರಿಯ ದಿನಗಳು, 7 ಮಾತ್ರೆ ಇಲ್ಲದ ದಿನಗಳು"
           }
         },
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "84 സജീവ ദിനങ്ങൾ, 7 ഇടവേള ദിനങ്ങൾ"
+            "value": "21 സജീവ ദിനങ്ങൾ, 7 ഗുളിക ഇല്ലാത്ത ദിനങ്ങൾ"
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "84 सक्रिय दिन, 7 ब्रेक दिन"
+            "value": "21 सक्रिय दिन, 7 गोळी-मुक्त दिन"
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "84 ସକ୍ରିୟ ଦିନ, 7 ବିରତି ଦିନ"
+            "value": "21 ସକ୍ରିୟ ଦିନ, 7 ପିଲ୍ ବିନା ଦିନ"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "84 ਸਕ੍ਰਿਯ ਦਿਨ, 7 ਬ੍ਰੇਕ ਦਿਨ"
+            "value": "21 ਸਕ੍ਰਿਯ ਦਿਨ, 7 ਗੋਲੀ ਤੋਂ ਬਿਨਾਂ ਦਿਨ"
           }
         }
       }
     },
-    "onboarding.regimen.365_0": {
-      "comment": "Continuous pill regimen with 365 active days and no break.",
+    "onboarding.regimen.21_4": {
+      "comment": "Regimen option [health]",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "365 active days, no break"
+            "value": "21 active days, 4 pill-free days"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "365 giorni attivi, nessuna pausa"
+            "value": "21 giorni attivi, 4 giorni senza pillola"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "365 aktive Tage, keine Pause"
+            "value": "21 aktive Tage, 4 pillenfreie Tage"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "365 jours actifs, pas de pause"
+            "value": "21 jours actifs, 4 jours sans pilule"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "365 días activos, sin pausa"
+            "value": "21 días activos, 4 sin píldora"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "365 dias ativos, sem pausa"
+            "value": "21 dias ativos, 4 dias sem pílula"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "365 actieve dagen, geen pauze"
+            "value": "21 actieve dagen, 4 pilvrije dagen"
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "365 aktiva dagar, ingen paus"
+            "value": "21 aktiva dagar, 4 pillerfria dagar"
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "365 aktive dage, ingen pause"
+            "value": "21 aktive dage, 4 pillefrie dage"
           }
         },
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "365 aktive dager, ingen pause"
+            "value": "21 aktive dager, 4 pillefrie dager"
           }
         },
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "365 aktiivista päivää, ei taukoa"
+            "value": "21 aktiivista päivää, 4 pilleritöntä päivää"
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "translated",
-            "value": "365 dias ativos, sem pausa"
+            "value": "21 dias ativos, 4 dias sem pílula"
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "365 dies actius, sense pausa"
+            "value": "21 dies actius, 4 dies sense píndola"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "365 dni aktywnych, bez przerwy"
+            "value": "21 dni aktywnych, 4 dni bez tabletki"
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "365 aktivních dní, bez pauzy"
+            "value": "21 aktivních dní, 4 dny bez pilulky"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "365 активных дней, без перерыва"
+            "value": "21 активный день, 4 дня без таблеток"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "365 активних днів, без перерви"
+            "value": "21 активний день, 4 дні без таблеток"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "服用365日、休薬なし"
+            "value": "服用21日、ピルなし4日"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "복용 365일, 휴약 없음"
+            "value": "복용 21일, 피임약 없는 4일"
           }
         },
         "ms": {
           "stringUnit": {
             "state": "translated",
-            "value": "365 hari aktif, tiada rehat"
+            "value": "21 hari aktif, 4 hari tanpa pil"
           }
         },
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "365 zile active, fără pauză"
+            "value": "21 zile active, 4 zile fără pilulă"
           }
         },
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "365 aktívnych dní, bez pauzy"
+            "value": "21 aktívnych dní, 4 dni bez tabletky"
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "กิน 365 วัน ไม่มีวันพัก"
+            "value": "กิน 21 วัน เว้นยา 4 วัน"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "365 天服药，无停药"
+            "value": "21 天服药，4 天无药片"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "365 सक्रिय दिन, कोई ब्रेक नहीं"
+            "value": "21 सक्रिय दिन, 4 गोली-मुक्त दिन"
           }
         },
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "365 aktivnih dana, bez pauze"
+            "value": "21 aktivni dan, 4 dana bez pilule"
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "365 aktív nap, szünet nélkül"
+            "value": "21 aktív nap, 4 tablettamentes nap"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "365 aktif gün, ara yok"
+            "value": "21 aktif gün, 4 hapsız gün"
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "365 செயல் நாட்கள், இடைவெளி இல்லை"
+            "value": "21 செயல் நாட்கள், 4 மாத்திரை இல்லாத நாட்கள்"
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "365 hari aktif, tanpa jeda"
+            "value": "21 hari aktif, 4 hari tanpa pil"
           }
         },
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "365 يومًا نشطًا، بدون استراحة"
+            "value": "21 يومًا نشطًا، 4 أيام بدون حبوب"
           }
         },
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "365 ימים פעילים, בלי הפסקה"
+            "value": "21 ימים פעילים, 4 ימים ללא גלולה"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "365 ngày uống, không nghỉ"
+            "value": "21 ngày uống, 4 ngày không thuốc"
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "365 সক্রিয় দিন, বিরতি নেই"
+            "value": "21 সক্রিয় দিন, 4 পিলবিহীন দিন"
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "365 فعال دن، کوئی وقفہ نہیں"
+            "value": "21 فعال دن، 4 گولی کے بغیر دن"
           }
         },
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "365 aktivnih dni, brez premora"
+            "value": "21 aktivnih dni, 4 dnevi brez tablete"
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "365 ενεργές ημέρες, χωρίς διάλειμμα"
+            "value": "21 ενεργές ημέρες, 4 ημέρες χωρίς χάπι"
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "365 యాక్టివ్ రోజులు, విరామం లేదు"
+            "value": "21 యాక్టివ్ రోజులు, 4 మాత్ర లేని రోజులు"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "365 天服藥，不停藥"
+            "value": "21 天服藥，4 天無藥片"
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "365 સક્રિય દિન, કોઈ બ્રેક નહીં"
+            "value": "21 સક્રિય દિન, 4 ગોળી વગરના દિન"
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "365 ಯಾಕ್ಟಿವ್ ರೋಜುಲು, ವಿರಾಮಂ ಲೇದು"
+            "value": "21 ಸಕ್ರಿಯ ದಿನಗಳು, 4 ಮಾತ್ರೆ ಇಲ್ಲದ ದಿನಗಳು"
           }
         },
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "365 സജീവ ദിനങ്ങൾ, ഇടവേള ഇല്ല"
+            "value": "21 സജീവ ദിനങ്ങൾ, 4 ഗുളിക ഇല്ലാത്ത ദിനങ്ങൾ"
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "365 सक्रिय दिन, कोई ब्रेक नाही"
+            "value": "21 सक्रिय दिन, 4 गोळी-मुक्त दिन"
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "365 ସକ୍ରିୟ ଦିନ, ବିରତି ନାହିଁ"
+            "value": "21 ସକ୍ରିୟ ଦିନ, 4 ପିଲ୍ ବିନା ଦିନ"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "365 ਸਕ੍ਰਿਯ ਦਿਨ, ਕੋਈ ਬ੍ਰੇਕ ਨਹੀਂ"
+            "value": "21 ਸਕ੍ਰਿਯ ਦਿਨ, 4 ਗੋਲੀ ਤੋਂ ਬਿਨਾਂ ਦਿਨ"
           }
         }
       }

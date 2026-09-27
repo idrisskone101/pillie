@@ -234,13 +234,12 @@ struct ContentView: View {
 	            onBack: {
                 lowRiskTransition(to: .method)
 	            },
-            onContinue: { regimen, customActive, customBreak, cycleDay in
+            onContinue: { setup in
               store.startNewProtocol(
                 method: store.contraceptiveMethod,
-                regimen: regimen,
-                customActiveDays: customActive,
-                customBreakDays: customBreak,
-                cycleDay: cycleDay,
+                regimen: setup.regimen,
+                customRegimen: setup.customRegimen,
+                cycleDay: setup.cycleDay,
                 preserveHistory: false
               )
               if store.appActivatedDate == nil {

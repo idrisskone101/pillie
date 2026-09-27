@@ -150,12 +150,11 @@ struct DebugPackHistoryPlan: Equatable {
     }
 
     static func completedTwentyOneSevenPack() -> DebugPackHistoryPlan {
-        let cycleLength = PillPack.PillRegimenPreset.twentyOneSeven.cycleLength
-        let activeDays = PillPack.PillRegimenPreset.twentyOneSeven.activeDays
-        let statuses: [PillDay.Status] = (0..<cycleLength).map { offset in
-            offset < activeDays ? .taken : .breakDay
+        let regimen = PackRegimen(activeDays: 21, breakDays: 7)
+        let statuses: [PillDay.Status] = (0..<regimen.totalDays).map { index in
+            regimen.day(atIndex: index).kind == .active ? .taken : .breakDay
         }
-        return DebugPackHistoryPlan(startDaysAgo: cycleLength, pastStatuses: statuses)
+        return DebugPackHistoryPlan(startDaysAgo: regimen.totalDays, pastStatuses: statuses)
     }
 
     static func marketingScreenshot() -> DebugPackHistoryPlan {

@@ -81,8 +81,7 @@ enum InMemoryStoreFactory {
         now: Date,
         method: ContraceptiveMethod = .pill,
         regimen: PillPack.PillRegimenPreset = .twentyOneSeven,
-        customActiveDays: Int? = nil,
-        customBreakDays: Int? = nil,
+        customRegimen: PackRegimen? = nil,
         startDate: Date? = nil,
         ringInsertionDate: Date? = nil
     ) throws -> InMemoryStoreFixture {
@@ -95,11 +94,9 @@ enum InMemoryStoreFactory {
         let context = container.mainContext
 
         let pack = PillPack(
-            packType: .twentyOneSeven,
             method: method,
             pillRegimen: method == .pill ? regimen : .twentyOneSeven,
-            customActiveDays: customActiveDays,
-            customBreakDays: customBreakDays,
+            customRegimen: customRegimen,
             startDate: startDate ?? PillieClock.today,
             packNumber: 1,
             isCurrent: true

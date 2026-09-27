@@ -72,8 +72,7 @@ final class PersonalizationOnboardingTests: XCTestCase {
         pillFixture.store.startNewProtocol(
             method: .pill,
             regimen: .twentyFourFour,
-            customActiveDays: nil,
-            customBreakDays: nil,
+            customRegimen: nil,
             cycleDay: 12,
             preserveHistory: false
         )
@@ -87,8 +86,7 @@ final class PersonalizationOnboardingTests: XCTestCase {
         patchFixture.store.startNewProtocol(
             method: .patch,
             regimen: .twentyOneSeven,
-            customActiveDays: nil,
-            customBreakDays: nil,
+            customRegimen: nil,
             cycleDay: 8,
             preserveHistory: false
         )
@@ -103,8 +101,7 @@ final class PersonalizationOnboardingTests: XCTestCase {
         ringFixture.store.startNewProtocol(
             method: .ring,
             regimen: .twentyOneSeven,
-            customActiveDays: nil,
-            customBreakDays: nil,
+            customRegimen: nil,
             cycleDay: 22,
             preserveHistory: false
         )
@@ -124,8 +121,7 @@ final class PersonalizationOnboardingTests: XCTestCase {
         store.startNewProtocol(
             method: .pill,
             regimen: .twentyFourFour,
-            customActiveDays: nil,
-            customBreakDays: nil,
+            customRegimen: nil,
             cycleDay: 12,
             preserveHistory: false
         )
@@ -153,8 +149,7 @@ final class PersonalizationOnboardingTests: XCTestCase {
         fixture.store.startNewProtocol(
             method: .pill,
             regimen: .twentyFourFour,
-            customActiveDays: nil,
-            customBreakDays: nil,
+            customRegimen: nil,
             cycleDay: 12,
             preserveHistory: false
         )
