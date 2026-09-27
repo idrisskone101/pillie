@@ -187,7 +187,6 @@ final class ReverseTrialClockTests: XCTestCase {
         // hormone-active predicate, not `PillPack.isBreakDay`.
         let grant = date(2026, 7, 1, 10, 0)
         let pack = PillPack(
-            packType: .twentyOneSeven,
             method: .pill,
             pillRegimen: .twentyOneSeven,
             startDate: grant,

@@ -881,8 +881,7 @@ class PillStore {
     func startNewProtocol(
         method: ContraceptiveMethod,
         regimen: PillPack.PillRegimenPreset,
-        customActiveDays: Int?,
-        customBreakDays: Int?,
+        customRegimen: PackRegimen?,
         cycleDay: Int,
         preserveHistory: Bool,
         cycleDayWasExplicitlyConfirmedForMethodSwitch: Bool = true
@@ -890,8 +889,7 @@ class PillStore {
         let normalizedCycleLength = cycleLengthFor(
             method: method,
             regimen: regimen,
-            customActiveDays: customActiveDays,
-            customBreakDays: customBreakDays
+            customRegimen: customRegimen
         )
         let safeCycleDay = max(1, min(cycleDay, normalizedCycleLength))
         let previousMethod = activePack?.method ?? pack.method
@@ -914,11 +912,9 @@ class PillStore {
             }
             let nextPackNumber = (packs.map(\.packNumber).max() ?? 0) + 1
             let nextPack = PillPack(
-                packType: legacyPackType(for: regimen),
                 method: method,
                 pillRegimen: method == .pill ? regimen : .twentyOneSeven,
-                customActiveDays: method == .pill ? customActiveDays : nil,
-                customBreakDays: method == .pill ? customBreakDays : nil,
+                customRegimen: customRegimen,
                 startDate: startDate,
                 cycleDayAnchorIndex: cycleDayAnchorIndex,
                 packNumber: nextPackNumber,
@@ -936,21 +932,12 @@ class PillStore {
             }
         } else if let activePack {
             activePack.method = method
-            activePack.pillRegimen = method == .pill ? regimen : .twentyOneSeven
-            if method == .pill && regimen == .custom {
-                let normalized = PillPack.normalizedCustomValues(active: customActiveDays, breakDays: customBreakDays)
-                activePack.customActiveDays = normalized.active
-                activePack.customBreakDays = normalized.breakDays
-            } else {
-                activePack.customActiveDays = nil
-                activePack.customBreakDays = nil
-            }
+            activePack.setPillRegimen(method == .pill ? regimen : .twentyOneSeven, customRegimen: customRegimen)
             activePack.startDate = startDate
             activePack.cycleDayAnchorIndex = PillPack.normalizedCycleDayAnchorIndex(
                 cycleDayAnchorIndex,
                 cycleLength: activePack.cycleLength
             )
-            activePack.packType = legacyPackType(for: regimen)
             activePack.isCurrent = true
             for existing in packs where existing.id != activePack.id {
                 existing.isCurrent = false
@@ -969,11 +956,9 @@ class PillStore {
         } else {
             let nextPackNumber = (packs.map(\.packNumber).max() ?? 0) + 1
             let nextPack = PillPack(
-                packType: legacyPackType(for: regimen),
                 method: method,
                 pillRegimen: method == .pill ? regimen : .twentyOneSeven,
-                customActiveDays: method == .pill ? customActiveDays : nil,
-                customBreakDays: method == .pill ? customBreakDays : nil,
+                customRegimen: customRegimen,
                 startDate: startDate,
                 cycleDayAnchorIndex: cycleDayAnchorIndex,
                 packNumber: nextPackNumber,
@@ -1007,16 +992,14 @@ class PillStore {
     func resetAndStartFresh(
         method: ContraceptiveMethod,
         regimen: PillPack.PillRegimenPreset,
-        customActiveDays: Int?,
-        customBreakDays: Int?,
+        customRegimen: PackRegimen?,
         cycleDay: Int
     ) {
         let calendar = Calendar.current
         let normalizedCycleLength = cycleLengthFor(
             method: method,
             regimen: regimen,
-            customActiveDays: customActiveDays,
-            customBreakDays: customBreakDays
+            customRegimen: customRegimen
         )
         let safeCycleDay = max(1, min(cycleDay, normalizedCycleLength))
 
@@ -1029,11 +1012,9 @@ class PillStore {
 
         // 3. Create a fresh pack
         let freshPack = PillPack(
-            packType: legacyPackType(for: regimen),
             method: method,
             pillRegimen: method == .pill ? regimen : .twentyOneSeven,
-            customActiveDays: method == .pill && regimen == .custom ? customActiveDays : nil,
-            customBreakDays: method == .pill && regimen == .custom ? customBreakDays : nil,
+            customRegimen: customRegimen,
             startDate: startDate,
             cycleDayAnchorIndex: 0,
             packNumber: 1,
@@ -1179,11 +1160,9 @@ class PillStore {
         // 2. Create new pack with same settings, day 1, today
         let nextPackNumber = (packs.map(\.packNumber).max() ?? 0) + 1
         let newPack = PillPack(
-            packType: currentPack.packType,
             method: currentPack.method,
             pillRegimen: currentPack.method == .pill ? currentPack.pillRegimen : .twentyOneSeven,
-            customActiveDays: currentPack.method == .pill ? currentPack.customActiveDays : nil,
-            customBreakDays: currentPack.method == .pill ? currentPack.customBreakDays : nil,
+            customRegimen: currentPack.regimen,
             startDate: today,
             cycleDayAnchorIndex: 0,
             packNumber: nextPackNumber,
@@ -1210,7 +1189,6 @@ class PillStore {
         var resolvedPacks: [PillPack] = loadedPacks
         if resolvedPacks.isEmpty {
             let defaultPack = PillPack(
-                packType: .twentyOneSeven,
                 method: .pill,
                 pillRegimen: .twentyOneSeven,
                 startDate: PillieClock.today,
@@ -1408,7 +1386,6 @@ class PillStore {
         let startDate = calendar.date(byAdding: .day, value: -days, to: today) ?? today
 
         let pack = PillPack(
-            packType: .twentyOneSeven,
             method: .pill,
             pillRegimen: .twentyOneSeven,
             startDate: startDate,
@@ -1451,7 +1428,6 @@ class PillStore {
         ) ?? today
 
         let pack = PillPack(
-            packType: .twentyOneSeven,
             method: .pill,
             pillRegimen: .twentyOneSeven,
             startDate: startDate,
@@ -1506,7 +1482,6 @@ class PillStore {
         let startDate = cal.date(byAdding: .day, value: -15, to: today) ?? today
 
         let pack = PillPack(
-            packType: .twentyOneSeven,
             method: .pill,
             pillRegimen: .twentyOneSeven,
             startDate: startDate,
@@ -1875,29 +1850,13 @@ class PillStore {
     private func cycleLengthFor(
         method: ContraceptiveMethod,
         regimen: PillPack.PillRegimenPreset,
-        customActiveDays: Int?,
-        customBreakDays: Int?
+        customRegimen: PackRegimen?
     ) -> Int {
         switch method {
         case .pill:
-            if regimen == .custom {
-                let normalized = PillPack.normalizedCustomValues(active: customActiveDays, breakDays: customBreakDays)
-                return normalized.active + normalized.breakDays
-            }
-            return regimen.cycleLength
+            return (regimen.regimen ?? customRegimen ?? PillPack.defaultCustomRegimen).totalDays
         case .patch, .ring:
             return 28
-        }
-    }
-
-    private func legacyPackType(for regimen: PillPack.PillRegimenPreset) -> PillPack.PackType {
-        switch regimen {
-        case .twentyOneSeven:
-            return .twentyOneSeven
-        case .twentyFourFour:
-            return .twentyFourFour
-        case .twentySixTwo, .twentyEightZero, .eightyFourSeven, .threeSixtyFiveZero, .custom:
-            return .twentyEightZero
         }
     }
 

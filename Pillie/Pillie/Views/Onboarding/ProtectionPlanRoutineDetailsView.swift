@@ -21,7 +21,7 @@ enum RoutineExactDayCardAction: Equatable {
 struct ProtectionPlanRoutineDetailsView: View {
     let progress: ProtectionPlanProgress
     let onBack: () -> Void
-    let onContinue: (PillPack.PillRegimenPreset, Int?, Int?, Int) -> Void
+    let onContinue: (RoutineSetupCommit) -> Void
 
     @Environment(PillStore.self) private var store
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -63,7 +63,7 @@ struct ProtectionPlanRoutineDetailsView: View {
             onBack: onBack,
             primaryTitle: content.primaryCTA,
             isPrimaryEnabled: true,
-            onPrimary: commit
+            onPrimary: { onContinue(draft.commit) }
         ) {
             VStack(alignment: .leading, spacing: 22) {
                 ProtectionPlanQuestionHeader(title: content.title, subtitle: content.subtitle)
@@ -122,15 +122,6 @@ struct ProtectionPlanRoutineDetailsView: View {
         }
     }
 
-    private func commit() {
-        let output = draft.commit
-        onContinue(
-            output.regimen,
-            output.customActiveDays,
-            output.customBreakDays,
-            output.cycleDay
-        )
-    }
 }
 
 private struct RoutineCyclePositionSection: View {
@@ -379,12 +370,12 @@ private struct RoutinePillRegimenSection: View {
                         customWheel(
                             title: PillieLocalization.string("onboarding.regimen.active_days"),
                             selection: $customActiveDays,
-                            range: PillPack.customActiveRange
+                            range: PackRegimen.activeDayRange
                         )
                         customWheel(
                             title: PillieLocalization.string("onboarding.regimen.break_days"),
                             selection: $customBreakDays,
-                            range: PillPack.customBreakRange
+                            range: 0...PackRegimen.maxBreakDays
                         )
                     }
                     .padding(.top, 2)
@@ -512,7 +503,7 @@ private struct RoutineSectionHeader: View {
     ProtectionPlanRoutineDetailsView(
         progress: ProtectionPlanProgressIndex.progress(for: .schedule),
         onBack: {},
-        onContinue: { _, _, _, _ in }
+        onContinue: { _ in }
     )
     .environment(PillStore.previewStore())
 }

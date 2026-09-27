@@ -106,7 +106,6 @@ final class DayCorrectionPolicyTests: XCTestCase {
         status: PillDay.Status
     ) -> PillScheduleSnapshot {
         let pack = PillPack(
-            packType: .twentyOneSeven,
             method: method,
             pillRegimen: .twentyOneSeven,
             startDate: anchor,

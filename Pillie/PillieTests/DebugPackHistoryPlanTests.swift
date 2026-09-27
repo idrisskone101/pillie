@@ -16,13 +16,11 @@ struct DebugPackHistoryPlanTests {
 
     @Test func completedPackSpansAFullTwentyOneSevenCycle() {
         let plan = DebugPackHistoryPlan.completedTwentyOneSevenPack()
-        let cycleLength = PillPack.PillRegimenPreset.twentyOneSeven.cycleLength
-        let activeDays = PillPack.PillRegimenPreset.twentyOneSeven.activeDays
 
-        #expect(plan.startDaysAgo == cycleLength)
-        #expect(plan.pastStatuses.count == cycleLength)
-        #expect(plan.pastStatuses.prefix(activeDays).allSatisfy { $0 == .taken })
-        #expect(plan.pastStatuses.dropFirst(activeDays).allSatisfy { $0 == .breakDay })
+        #expect(plan.startDaysAgo == 28)
+        #expect(plan.pastStatuses.count == 28)
+        #expect(plan.pastStatuses.prefix(21).allSatisfy { $0 == .taken })
+        #expect(plan.pastStatuses.dropFirst(21).allSatisfy { $0 == .breakDay })
     }
 
     @Test func marketingCalendarMixesTakenAndMissedDays() {

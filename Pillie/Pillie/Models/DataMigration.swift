@@ -57,21 +57,13 @@ enum DataMigration {
             // Migrate PillPack
             if let data = defaults.data(forKey: packKey),
                let legacy = try? decoder.decode(LegacyPillPack.self, from: data) {
-                let packType: PillPack.PackType
                 let regimen: PillPack.PillRegimenPreset
                 switch legacy.packType {
-                case .twentyOneSeven:
-                    packType = .twentyOneSeven
-                    regimen = .twentyOneSeven
-                case .twentyFourFour:
-                    packType = .twentyFourFour
-                    regimen = .twentyFourFour
-                case .twentyEightZero:
-                    packType = .twentyEightZero
-                    regimen = .twentyEightZero
+                case .twentyOneSeven: regimen = .twentyOneSeven
+                case .twentyFourFour: regimen = .twentyFourFour
+                case .twentyEightZero: regimen = .twentyEightZero
                 }
                 let pack = PillPack(
-                    packType: packType,
                     method: .pill,
                     pillRegimen: regimen,
                     startDate: legacy.startDate,
@@ -130,7 +122,6 @@ enum DataMigration {
         } else {
             let defaultStartDate = Calendar.current.startOfDay(for: Date())
             let defaultPack = PillPack(
-                packType: .twentyOneSeven,
                 method: .pill,
                 pillRegimen: .twentyOneSeven,
                 startDate: defaultStartDate,
@@ -169,26 +160,6 @@ enum DataMigration {
         for pack in packs {
             if ContraceptiveMethod(rawValue: pack.methodRaw) == nil {
                 pack.methodRaw = ContraceptiveMethod.pill.rawValue
-            }
-
-            if PillPack.PillRegimenPreset(rawValue: pack.pillRegimenRaw) == nil {
-                switch pack.packType {
-                case .twentyOneSeven:
-                    pack.pillRegimenRaw = PillPack.PillRegimenPreset.twentyOneSeven.rawValue
-                case .twentyFourFour:
-                    pack.pillRegimenRaw = PillPack.PillRegimenPreset.twentyFourFour.rawValue
-                case .twentyEightZero:
-                    pack.pillRegimenRaw = PillPack.PillRegimenPreset.twentyEightZero.rawValue
-                }
-            }
-
-            if pack.pillRegimen == .custom {
-                let normalized = PillPack.normalizedCustomValues(
-                    active: pack.customActiveDays,
-                    breakDays: pack.customBreakDays
-                )
-                pack.customActiveDays = normalized.active
-                pack.customBreakDays = normalized.breakDays
             }
         }
 
