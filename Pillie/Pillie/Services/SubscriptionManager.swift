@@ -157,7 +157,14 @@ final class SubscriptionManager: NSObject {
 
     // MARK: - Constants
 
+    /// Debug builds (simulators, cloud QA Macs, Xcode device runs) talk to
+    /// RevenueCat's Test Store app, so every fresh simulator no longer counts as
+    /// a new customer in the App Store app's charts.
+    #if DEBUG
+    static let apiKey = "test_fBRbjQtUuDEIUjaRvtCapTZwOXh"
+    #else
     static let apiKey = "appl_jAqXDkTjrIxXrqrDsPQInTuIsdp"
+    #endif
     nonisolated static let entitlementID = "pillie_plus"
     static let monthlyProductID = "com.idrisskone.pillie.plus.monthly"
     static let annualProductID = "com.idrisskone.pillie.plus.annual"
