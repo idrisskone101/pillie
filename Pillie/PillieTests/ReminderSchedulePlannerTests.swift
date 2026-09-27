@@ -45,12 +45,16 @@ final class ReminderSchedulePlannerTests: XCTestCase {
     }
 
     func testCapsPlanAtPendingLimitAndReservesSupplySlot() throws {
-        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        // After the 08:00 reminder, so the live dose day is today and its retry window
+        // runs a full 24 hours (ADR 0009). Before 08:00 the live dose is yesterday's,
+        // whose window closes at 08:00, and the retries never reach the cap.
+        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 9)
         let fixture = try InMemoryStoreFactory.makeStore(
             now: now,
             regimen: .threeSixtyFiveZero,
             startDate: now
         )
+        XCTAssertEqual(epochDay(for: fixture.store.today), epochDay(for: now))
 
         let intents = plan(
             for: fixture.store,

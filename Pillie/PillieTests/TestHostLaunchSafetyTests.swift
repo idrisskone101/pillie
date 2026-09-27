@@ -36,6 +36,11 @@ struct TestHostLaunchSafetyTests {
         #expect(!SubscriptionLaunchPolicy.shouldConfigureRevenueCat(isRunningTests: true))
     }
 
+    @Test func hostedTestsMustNotReadTheKeychainTrialGrant() {
+        #expect(SubscriptionLaunchPolicy.trialGrantStore(isRunningTests: true) is InMemoryTrialGrantStore)
+        #expect(SubscriptionLaunchPolicy.trialGrantStore(isRunningTests: false) is KeychainTrialGrantStore)
+    }
+
     @Test func refreshCommerceStateDoesNotTrapWhenRevenueCatIsUnconfigured() async {
         await SubscriptionManager.shared.refreshCommerceState()
     }

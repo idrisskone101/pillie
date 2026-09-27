@@ -146,7 +146,9 @@ final class SubscriptionManager: NSObject {
     var onEntitlementChange: ((Bool) -> Void)?
 
     @ObservationIgnored
-    private var trialGrantStore: TrialGrantStoring = KeychainTrialGrantStore()
+    private var trialGrantStore: TrialGrantStoring = SubscriptionLaunchPolicy.trialGrantStore(
+        isRunningTests: ProcessRuntime.isRunningTests
+    )
 
     /// The live RevenueCat attribution surface, set by `configure()` once
     /// `Purchases.configure(...)` has run and nil before it — which is what

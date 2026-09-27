@@ -198,22 +198,25 @@ final class CycleTransitionNoticeTests: XCTestCase {
         XCTAssertTrue(notices(pack: pack, now: start).isEmpty)
     }
 
-    // MARK: - Copy is method-aware and names the resume date
+    // MARK: - Copy explains the pause per method
 
-    func testCopyIsMethodAwareAndNamesResumeDate() {
+    /// The catalog copy from #239 (carried into every locale since): one shared title,
+    /// a method-aware body that explains the reminder pause.
+    func testCopyExplainsThePausePerMethod() {
         let resume = day(2026, 6, 23)
 
-        let titles = [
-            CycleTransitionCopy.title(for: .pill),
-            CycleTransitionCopy.title(for: .patch),
-            CycleTransitionCopy.title(for: .ring)
-        ]
-        XCTAssertEqual(Set(titles).count, 3, "Titles should be method-aware")
+        for method in ContraceptiveMethod.allCases {
+            XCTAssertEqual(CycleTransitionCopy.title(for: method), "Break days begin today")
+        }
 
+        let expectedBodies: [ContraceptiveMethod: String] = [
+            .pill: "Scheduled pill reminders pause during your break days.",
+            .patch: "Scheduled patch reminders pause during your patch-free days.",
+            .ring: "Scheduled ring reminders pause during your ring-free days."
+        ]
         for method in ContraceptiveMethod.allCases {
             let body = CycleTransitionCopy.body(for: method, resumeDate: resume, calendar: calendar)
-            XCTAssertFalse(body.isEmpty)
-            XCTAssertTrue(body.contains("expected"), "Body should reassure the pause is expected")
+            XCTAssertEqual(body, expectedBodies[method])
             // No medical claims: never speaks to protection / safety / efficacy.
             let lowered = body.lowercased()
             for banned in ["protect", "safe", "effective", "efficacy"] {

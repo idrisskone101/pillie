@@ -161,7 +161,7 @@ final class PersonalizationOnboardingTests: XCTestCase {
 
         let summary = ReminderPlanSummary(store: fixture.store)
 
-        XCTAssertEqual(summary.methodValue, "The Pill")
+        XCTAssertEqual(summary.methodValue, "Pill")
         XCTAssertEqual(summary.methodDetail, "24 active / 4 break days")
         XCTAssertEqual(summary.cyclePositionValue, "Day 12 of 28")
         XCTAssertEqual(summary.cyclePositionDetail, "Current routine position")
