@@ -57,39 +57,49 @@ struct TodayPillView: View {
                 onContinue(pick)
             }
         ) {
-            VStack(alignment: .leading, spacing: 0) {
-                ProtectionPlanQuestionHeader(
-                    title: PillieLocalization.string("onboarding.today_pill.title"),
-                    subtitle: PillieLocalization.string("onboarding.today_pill.subtitle")
-                )
-                .padding(.top, 4)
-                .padding(.bottom, 20)
-                .planBuilderReveal(appeared, animationsEnabled, delay: PillieTheme.stagger1)
-
-                PackCard(
-                    regimen: selection.packRegimen,
-                    dayOneWeekday: dayOneWeekday,
-                    todayIndex: selection.dayIndex,
-                    marks: marks,
-                    onSelectDay: tap
-                ) {
-                    TodayPillPackHeader(regimen: selection.regimen, onChange: changeRegimen)
-                }
-                .planBuilderReveal(appeared, animationsEnabled, delay: PillieTheme.stagger2)
-
-                if showsQuestion, let tappedDay {
-                    TodayPillQuestion(
-                        pillNumber: tappedDay.pillNumber ?? tappedDay.number,
-                        answer: selection.answer,
-                        showsLoggedRow: selection.pick?.logsADose ?? false,
-                        onAnswer: record
+            ScrollViewReader { scroll in
+                VStack(alignment: .leading, spacing: 0) {
+                    ProtectionPlanQuestionHeader(
+                        title: PillieLocalization.string("onboarding.today_pill.title"),
+                        subtitle: PillieLocalization.string("onboarding.today_pill.subtitle")
                     )
-                    .padding(.top, 22)
-                    .transition(.offset(y: 12).combined(with: .opacity))
+                    .padding(.top, 4)
+                    .padding(.bottom, 20)
+                    .planBuilderReveal(appeared, animationsEnabled, delay: PillieTheme.stagger1)
+
+                    PackCard(
+                        regimen: selection.packRegimen,
+                        dayOneWeekday: dayOneWeekday,
+                        todayIndex: selection.dayIndex,
+                        marks: marks,
+                        onSelectDay: tap
+                    ) {
+                        TodayPillPackHeader(regimen: selection.regimen, onChange: changeRegimen)
+                    }
+                    .planBuilderReveal(appeared, animationsEnabled, delay: PillieTheme.stagger2)
+
+                    if showsQuestion, let tappedDay {
+                        TodayPillQuestion(
+                            pillNumber: tappedDay.pillNumber ?? tappedDay.number,
+                            answer: selection.answer,
+                            showsLoggedRow: selection.pick?.logsADose ?? false,
+                            onAnswer: record
+                        )
+                        .padding(.top, 22)
+                        .transition(.offset(y: 12).combined(with: .opacity))
+                    }
+
+                    // Scrolled to when the question or the logged row appears, so the last
+                    // line keeps this gap above the CTA on screens the step overflows.
+                    Color.clear
+                        .frame(height: Self.bottomGap)
+                        .id(Self.bottomAnchor)
                 }
+                .animation(reduceMotion ? .easeInOut(duration: 0.2) : .spring(duration: 0.4, bounce: 0.15), value: showsQuestion)
+                .animation(reduceMotion ? nil : .spring(duration: 0.35, bounce: 0.2), value: selection.answer)
+                .onChange(of: showsQuestion) { reveal(in: scroll) }
+                .onChange(of: selection.answer) { reveal(in: scroll) }
             }
-            .animation(reduceMotion ? .easeInOut(duration: 0.2) : .spring(duration: 0.4, bounce: 0.15), value: showsQuestion)
-            .animation(reduceMotion ? nil : .spring(duration: 0.35, bounce: 0.2), value: selection.answer)
         }
         .sensoryFeedback(.impact(weight: .light, intensity: 0.5), trigger: cascadeTicks)
         .onAppear {
@@ -98,6 +108,15 @@ struct TodayPillView: View {
         }
         .onDisappear {
             revealTask?.cancel()
+        }
+    }
+
+    private static let bottomAnchor = "todayPillBottom"
+    private static let bottomGap: CGFloat = 24
+
+    private func reveal(in scroll: ScrollViewProxy) {
+        withAnimation(reduceMotion ? nil : .spring(duration: 0.4, bounce: 0.1)) {
+            scroll.scrollTo(Self.bottomAnchor, anchor: .bottom)
         }
     }
 
