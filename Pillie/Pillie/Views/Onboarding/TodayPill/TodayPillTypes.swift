@@ -37,7 +37,9 @@ struct TodayPillSelection: Equatable {
         return TodayPillPick(regimen: regimen, pillIndex: pillIndex, answer: answer)
     }
 
+    /// A different pill resets the answer. Tapping the flagged pill again keeps it.
     mutating func tap(_ index: Int) {
+        guard index != pillIndex else { return }
         pillIndex = index
         answer = nil
     }

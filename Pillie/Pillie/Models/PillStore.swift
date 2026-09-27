@@ -263,7 +263,10 @@ class PillStore {
     }
 
     var currentDayIndex: Int {
-        pack.cycleDayIndex(on: today)
+        // A live day before the pack starts (pill 1 not yet taken, before the first
+        // reminder) would otherwise wrap to the last day of the pack.
+        guard pack.elapsedCycleDays(on: today) >= 0 else { return 0 }
+        return pack.cycleDayIndex(on: today)
     }
 
     var daysOnCurrentPack: Int {

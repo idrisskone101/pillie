@@ -54,6 +54,24 @@ final class TodayPillSelectionTests: XCTestCase {
         XCTAssertNil(shorter.pick)
     }
 
+    func testTappingTheFlaggedPillAgainKeepsTheAnswer() {
+        var selection = TodayPillSelection(regimen: .twentyOneSeven)
+        selection.tap(11)
+        selection.record(.taken)
+        selection.tap(11)
+        XCTAssertEqual(selection.pick, pick(11, .taken))
+    }
+
+    func testAPillFreeDayThatBecomesASugarPillAsksAgain() {
+        var selection = TodayPillSelection(regimen: .twentyOneOnly)
+        selection.tap(23)
+        XCTAssertNotNil(selection.pick)
+
+        selection.changeRegimen(.twentyOneSeven)
+        XCTAssertTrue(selection.asksQuestion)
+        XCTAssertNil(selection.pick)
+    }
+
     func testSelectionRestoresFromADraft() {
         let selection = TodayPillSelection(restoring: pick(11, .taken, .twentyFourFour))
         XCTAssertEqual(selection.regimen, .twentyFourFour)

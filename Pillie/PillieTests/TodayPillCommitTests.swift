@@ -136,6 +136,7 @@ final class TodayPillCommitTests: XCTestCase {
             XCTAssertEqual(store.pack.startDate, day(0, from: now), "\(regimen)")
             XCTAssertNil(store.scheduleSnapshot(for: store.today), "\(regimen)")
             XCTAssertNil(store.todayDueAction, "\(regimen)")
+            XCTAssertEqual(store.currentDayIndex + 1, 1, "Home must not wrap to the last day of the pack")
             XCTAssertFalse(store.isTodayTaken, "\(regimen)")
             XCTAssertTrue(store.isTodayHandled, "\(regimen)")
             XCTAssertEqual(store.currentStreak, 0, "\(regimen)")
@@ -187,6 +188,23 @@ final class TodayPillCommitTests: XCTestCase {
         harness.commit(pick(11, .taken))
         XCTAssertTrue(store.isTodayTaken)
         XCTAssertEqual(store.currentStreak, 1)
+        XCTAssertEqual(harness.recorder.completions, [.onboarding])
+    }
+
+    func testASecondPassWithANewReminderTimeMovesTheAnchorButReportsOnce() throws {
+        let now = InMemoryStoreFactory.localDate("2026-09-27", hour: 12, minute: 24)
+        let harness = try makeHarness(now: now, reminderHour: 20)
+        let store = harness.store
+
+        harness.commit(pick(11, .taken))
+        XCTAssertEqual(store.today, day(-1, from: now))
+
+        store.reminderHour = 9
+        harness.commit(pick(11, .taken))
+
+        XCTAssertEqual(store.today, day(0, from: now))
+        XCTAssertEqual(store.currentDayIndex + 1, 12)
+        XCTAssertTrue(store.isTodayTaken)
         XCTAssertEqual(harness.recorder.completions, [.onboarding])
     }
 }

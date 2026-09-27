@@ -187,7 +187,8 @@ struct PackCard<Header: View>: View {
             .buttonStyle(PackTilePressStyle(reduceMotion: reduceMotion))
             .contentShape(Rectangle().inset(by: -max(0, (Self.minimumHitSide - tileSide) / 2)))
             .tileAccessibility(label: accessibilityLabel(for: day), value: accessibilityValue(for: day.kind, state: state))
-            .accessibilityAddTraits(.isButton)
+            .accessibilityAddTraits(index == flagIndex ? [.isButton, .isSelected] : .isButton)
+            .accessibilityAction { onSelectDay(index) }
             .accessibilityIdentifier("packTile.\(day.pillNumber ?? day.number)")
         } else {
             face

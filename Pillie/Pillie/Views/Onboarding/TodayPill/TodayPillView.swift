@@ -22,6 +22,9 @@ struct TodayPillView: View {
     @State private var showsQuestion = false
     @State private var revealTask: Task<Void, Never>?
     @State private var cascadeTicks = 0
+    // Haptic triggers bumped only by the person's taps, so seeding from a draft is silent.
+    @State private var tapTicks = 0
+    @State private var takenTicks = 0
     @State private var appeared = false
 
     private static let questionDelay: Duration = .milliseconds(600)
@@ -93,11 +96,9 @@ struct TodayPillView: View {
             .animation(reduceMotion ? .easeInOut(duration: 0.2) : .spring(duration: 0.4, bounce: 0.15), value: showsQuestion)
             .animation(reduceMotion ? nil : .spring(duration: 0.35, bounce: 0.2), value: selection.answer)
         }
-        .sensoryFeedback(.selection, trigger: selection.pillIndex)
+        .sensoryFeedback(.selection, trigger: tapTicks)
         .sensoryFeedback(.impact(weight: .light, intensity: 0.5), trigger: cascadeTicks)
-        .sensoryFeedback(trigger: selection.answer) { _, answer in
-            answer == .taken ? .success : nil
-        }
+        .sensoryFeedback(.success, trigger: takenTicks)
         .onAppear {
             seed()
             appeared = true
@@ -120,7 +121,9 @@ struct TodayPillView: View {
 
     private func tap(_ index: Int) {
         let previous = selection.pillIndex
+        guard index != previous else { return }
         selection.tap(index)
+        tapTicks += 1
         revealTask?.cancel()
         guard selection.asksQuestion else {
             showsQuestion = false
@@ -147,15 +150,16 @@ struct TodayPillView: View {
     }
 
     private func record(_ answer: TodayPillPick.Answer) {
+        guard selection.answer != answer else { return }
         selection.record(answer)
+        if answer == .taken { takenTicks += 1 }
     }
 
     private func changeRegimen(_ regimen: PillPack.PillRegimenPreset) {
         selection.changeRegimen(regimen)
-        if !selection.asksQuestion {
-            revealTask?.cancel()
-            showsQuestion = false
-        }
+        revealTask?.cancel()
+        // The tapped day can gain or lose its pill (a pill-free day becomes a sugar pill).
+        showsQuestion = selection.asksQuestion
     }
 }
 
@@ -338,22 +342,30 @@ private struct TodayPillQuestionLine: View {
         PillieLocalization.string("onboarding.today_pill.question")
     }
 
-    private var parts: (prefix: String, suffix: String) {
+    /// The text on each side of the chip, and whether the template puts a space there.
+    /// "¿Ya tomaste la píldora %@?" keeps its "?" against the chip.
+    private var parts: (prefix: String, prefixSpaced: Bool, suffix: String, suffixSpaced: Bool) {
         let pieces = template.components(separatedBy: "%@")
-        guard pieces.count == 2 else { return (template, "") }
+        guard pieces.count == 2 else { return (template, true, "", false) }
         return (
             pieces[0].trimmingCharacters(in: .whitespaces),
-            pieces[1].trimmingCharacters(in: .whitespaces)
+            pieces[0].last?.isWhitespace ?? false,
+            pieces[1].trimmingCharacters(in: .whitespaces),
+            pieces[1].first?.isWhitespace ?? false
         )
     }
 
     var body: some View {
         let parts = parts
         ViewThatFits(in: .horizontal) {
-            HStack(spacing: 6) {
-                if !parts.prefix.isEmpty { Text(parts.prefix) }
+            HStack(spacing: 0) {
+                if !parts.prefix.isEmpty {
+                    Text(parts.prefix).padding(.trailing, parts.prefixSpaced ? 6 : 2)
+                }
                 chip
-                if !parts.suffix.isEmpty { Text(parts.suffix) }
+                if !parts.suffix.isEmpty {
+                    Text(parts.suffix).padding(.leading, parts.suffixSpaced ? 6 : 2)
+                }
             }
             .fixedSize()
 
@@ -384,9 +396,9 @@ private struct TodayPillQuestionLine: View {
         let parts = parts
         var number = AttributedString("\(pillNumber)")
         number.font = .pillie(18, weight: .black)
-        return AttributedString(parts.prefix.isEmpty ? "" : parts.prefix + " ")
+        return AttributedString(parts.prefix + (parts.prefixSpaced ? " " : ""))
             + number
-            + AttributedString(parts.suffix.isEmpty ? "" : " " + parts.suffix)
+            + AttributedString((parts.suffixSpaced ? " " : "") + parts.suffix)
     }
 }
 
