@@ -8,3 +8,6 @@ Pillie/Config/Secrets.xcconfig
 __pycache__/
 *.pyc
 .qa-artifacts/
+
+# Per-user Xcode state (scheme order, window layout)
+xcuserdata/
