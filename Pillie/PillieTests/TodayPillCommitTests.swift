@@ -48,7 +48,7 @@ final class TodayPillCommitTests: XCTestCase {
     }
 
     private func pick(_ index: Int, _ answer: TodayPillPick.Answer?, _ regimen: PillPack.PillRegimenPreset = .twentyOneSeven) -> TodayPillPick {
-        TodayPillPick(regimen: regimen, pillIndex: index, answer: answer)!
+        TodayPillPick(regimen: regimen, dayIndex: index, answer: answer)!
     }
 
     private func day(_ offset: Int, from date: Date) -> Date {

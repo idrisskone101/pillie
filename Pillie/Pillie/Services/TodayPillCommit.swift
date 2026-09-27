@@ -24,7 +24,7 @@ enum TodayPillCommit {
             method: .pill,
             regimen: pick.regimen,
             customRegimen: nil,
-            cycleDay: pick.pillIndex + 1,
+            cycleDay: pick.dayIndex + 1,
             preserveHistory: false,
             anchorDay: anchorDay
         )
@@ -32,7 +32,7 @@ enum TodayPillCommit {
             store.appActivatedDate = store.today
         }
 
-        guard pick.answer == .taken, pick.day.kind == .active else { return }
+        guard pick.logsADose else { return }
         store.markTodayAsTaken()
 
         guard !defaults.bool(forKey: reportedStorageKey) else { return }

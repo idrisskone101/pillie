@@ -22,7 +22,7 @@ final class TodayPillPlanTests: XCTestCase {
     }
 
     private func pick(_ index: Int, _ answer: TodayPillPick.Answer?, _ regimen: PillPack.PillRegimenPreset = .twentyOneSeven) -> TodayPillPick {
-        TodayPillPick(regimen: regimen, pillIndex: index, answer: answer)!
+        TodayPillPick(regimen: regimen, dayIndex: index, answer: answer)!
     }
 
     func testNextReminderIsTheNextOccurrenceStrictlyAfterNow() {

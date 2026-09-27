@@ -23,6 +23,7 @@ struct TodayPillView: View {
     private let feedback = OnboardingInteractionFeedback()
 
     private static let questionDelay: Duration = .milliseconds(600)
+    private static let cascadeTickEvery = 3
 
     private var animationsEnabled: Bool {
         PerformanceTier.current == .standard && !reduceMotion
@@ -31,17 +32,17 @@ struct TodayPillView: View {
     private var dayOneWeekday: Int {
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: PillieClock.now)
-        let dayOne = calendar.date(byAdding: .day, value: -(selection.pillIndex ?? 0), to: today) ?? today
+        let dayOne = calendar.date(byAdding: .day, value: -(selection.dayIndex ?? 0), to: today) ?? today
         return calendar.component(.weekday, from: dayOne)
     }
 
     private var tappedDay: PackDay? {
-        selection.pillIndex.map { selection.packRegimen.day(atIndex: $0) }
+        selection.dayIndex.map { selection.packRegimen.day(atIndex: $0) }
     }
 
     private var marks: [Int: PackTileMark] {
-        guard let pillIndex = selection.pillIndex, selection.answer == .taken else { return [:] }
-        return [pillIndex: .taken]
+        guard let dayIndex = selection.dayIndex, selection.answer == .taken else { return [:] }
+        return [dayIndex: .taken]
     }
 
     var body: some View {
@@ -67,7 +68,7 @@ struct TodayPillView: View {
                 PackCard(
                     regimen: selection.packRegimen,
                     dayOneWeekday: dayOneWeekday,
-                    todayIndex: selection.pillIndex,
+                    todayIndex: selection.dayIndex,
                     marks: marks,
                     onSelectDay: tap
                 ) {
@@ -79,7 +80,7 @@ struct TodayPillView: View {
                     TodayPillQuestion(
                         pillNumber: tappedDay.pillNumber ?? tappedDay.number,
                         answer: selection.answer,
-                        showsLoggedRow: selection.answer == .taken && tappedDay.kind == .active,
+                        showsLoggedRow: selection.pick?.logsADose ?? false,
                         onAnswer: record
                     )
                     .padding(.top, 22)
@@ -111,7 +112,7 @@ struct TodayPillView: View {
     }
 
     private func tap(_ index: Int) {
-        let previous = selection.pillIndex
+        let previous = selection.dayIndex
         guard index != previous else { return }
         selection.tap(index)
         feedback.selectChoice(accessibilityReduceMotion: reduceMotion)
@@ -124,12 +125,12 @@ struct TodayPillView: View {
         let popped = index - (previous ?? 0)
         revealTask = Task { @MainActor in
             if !reduceMotion {
-                for _ in stride(from: 3, through: popped, by: 3) {
-                    try? await Task.sleep(for: PackPopSequence.popStagger * 3)
+                for _ in stride(from: Self.cascadeTickEvery, through: popped, by: Self.cascadeTickEvery) {
+                    try? await Task.sleep(for: PackPopSequence.popStagger * Self.cascadeTickEvery)
                     guard !Task.isCancelled else { return }
                     cascadeTicks += 1
                 }
-                let elapsed = PackPopSequence.popStagger * 3 * max(0, popped / 3)
+                let elapsed = PackPopSequence.popStagger * Self.cascadeTickEvery * max(0, popped / Self.cascadeTickEvery)
                 if elapsed < Self.questionDelay {
                     try? await Task.sleep(for: Self.questionDelay - elapsed)
                 }
@@ -325,14 +326,7 @@ private struct TodayPillQuestionLine: View {
     }
 
     private var parts: (prefix: String, prefixSpaced: Bool, suffix: String, suffixSpaced: Bool) {
-        let pieces = template.components(separatedBy: "%@")
-        guard pieces.count == 2 else { return (template, true, "", false) }
-        return (
-            pieces[0].trimmingCharacters(in: .whitespaces),
-            pieces[0].last?.isWhitespace ?? false,
-            pieces[1].trimmingCharacters(in: .whitespaces),
-            pieces[1].first?.isWhitespace ?? false
-        )
+        TodayPillQuestionTemplate.split(template)
     }
 
     var body: some View {

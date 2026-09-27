@@ -263,8 +263,16 @@ class PillStore {
     }
 
     var currentDayIndex: Int {
-        guard pack.elapsedCycleDays(on: today) >= 0 else { return 0 }
+        guard !liveDayPrecedesFirstPack else { return 0 }
         return pack.cycleDayIndex(on: today)
+    }
+
+    /// Whether the live day falls before this pack's own anchor, so there is no
+    /// cycle-day index and nothing due yet. Onboarding can compute `today` (the
+    /// reminder-relative live day) a calendar day earlier than the pack it just
+    /// created.
+    private var liveDayPrecedesFirstPack: Bool {
+        pack.elapsedCycleDays(on: today) < 0
     }
 
     var daysOnCurrentPack: Int {
@@ -424,7 +432,7 @@ class PillStore {
 
     /// Whether today requires no blocking — either taken, passive active, or a break day.
     var isTodayHandled: Bool {
-        guard scheduleSnapshot(for: today) != nil else { return true }
+        guard !liveDayPrecedesFirstPack else { return true }
         return isTodayTaken || isTodayPassiveOrBreak
     }
 

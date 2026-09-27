@@ -13,21 +13,27 @@ struct TodayPillPick: Codable, Equatable {
     }
 
     let regimen: PillPack.PillRegimenPreset
-    let pillIndex: Int
+    let dayIndex: Int
     let answer: Answer?
 
-    init?(regimen: PillPack.PillRegimenPreset, pillIndex: Int, answer: Answer?) {
+    init?(regimen: PillPack.PillRegimenPreset, dayIndex: Int, answer: Answer?) {
         guard let packRegimen = regimen.regimen,
-              (0..<packRegimen.totalDays).contains(pillIndex) else { return nil }
-        let isPillFree = packRegimen.day(atIndex: pillIndex).kind == .noPill
+              (0..<packRegimen.totalDays).contains(dayIndex) else { return nil }
+        let isPillFree = packRegimen.day(atIndex: dayIndex).kind == .noPill
         guard isPillFree ? answer == nil : answer != nil else { return nil }
         self.regimen = regimen
-        self.pillIndex = pillIndex
+        self.dayIndex = dayIndex
         self.answer = answer
     }
 
     var day: PackDay {
-        regimen.resolvedRegimen(custom: nil).day(atIndex: pillIndex)
+        regimen.resolvedRegimen(custom: nil).day(atIndex: dayIndex)
+    }
+
+    /// Whether committing this pick logs a taken dose: a "taken" answer on an
+    /// active pill day. A pill-free day and a "not yet" answer never log one.
+    var logsADose: Bool {
+        answer == .taken && day.kind == .active
     }
 
     func anchorDay(
@@ -51,7 +57,7 @@ struct TodayPillPick: Codable, Equatable {
         guard let data = defaults.data(forKey: storageKey) else { return nil }
         do {
             let stored = try JSONDecoder().decode(TodayPillPick.self, from: data)
-            return TodayPillPick(regimen: stored.regimen, pillIndex: stored.pillIndex, answer: stored.answer)
+            return TodayPillPick(regimen: stored.regimen, dayIndex: stored.dayIndex, answer: stored.answer)
         } catch {
             Self.logger.error("today_pill_pick.load failed: \(error.localizedDescription, privacy: .public)")
             return nil

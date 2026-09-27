@@ -22,7 +22,7 @@ final class TodayPillPickTests: XCTestCase {
     }
 
     private func pick(_ index: Int, _ answer: TodayPillPick.Answer?, _ regimen: PillPack.PillRegimenPreset = .twentyOneSeven) -> TodayPillPick {
-        TodayPillPick(regimen: regimen, pillIndex: index, answer: answer)!
+        TodayPillPick(regimen: regimen, dayIndex: index, answer: answer)!
     }
 
     private func anchor(_ pick: TodayPillPick, now: Date, reminderHour: Int) -> Date {
@@ -72,12 +72,12 @@ final class TodayPillPickTests: XCTestCase {
     }
 
     func testPickRefusesStatesThePackCannotHold() {
-        XCTAssertNil(TodayPillPick(regimen: .twentyOneSeven, pillIndex: 11, answer: nil))
-        XCTAssertNil(TodayPillPick(regimen: .twentyOneOnly, pillIndex: 23, answer: .taken))
-        XCTAssertNil(TodayPillPick(regimen: .twentyOneSeven, pillIndex: 28, answer: .taken))
-        XCTAssertNil(TodayPillPick(regimen: .custom, pillIndex: 0, answer: .taken))
-        XCTAssertNotNil(TodayPillPick(regimen: .twentyOneSeven, pillIndex: 23, answer: .notYet))
-        XCTAssertNotNil(TodayPillPick(regimen: .twentyOneOnly, pillIndex: 23, answer: nil))
+        XCTAssertNil(TodayPillPick(regimen: .twentyOneSeven, dayIndex: 11, answer: nil))
+        XCTAssertNil(TodayPillPick(regimen: .twentyOneOnly, dayIndex: 23, answer: .taken))
+        XCTAssertNil(TodayPillPick(regimen: .twentyOneSeven, dayIndex: 28, answer: .taken))
+        XCTAssertNil(TodayPillPick(regimen: .custom, dayIndex: 0, answer: .taken))
+        XCTAssertNotNil(TodayPillPick(regimen: .twentyOneSeven, dayIndex: 23, answer: .notYet))
+        XCTAssertNotNil(TodayPillPick(regimen: .twentyOneOnly, dayIndex: 23, answer: nil))
     }
 
     func testDraftRoundTripsThroughDefaultsAndClears() throws {
@@ -94,7 +94,7 @@ final class TodayPillPickTests: XCTestCase {
 
     func testDraftThatNoLongerFitsItsPackLoadsAsNil() throws {
         let defaults = try XCTUnwrap(UserDefaults(suiteName: "TodayPillPickTests.corrupt"))
-        defaults.set(Data(#"{"regimen":"21/7","pillIndex":40,"answer":"taken"}"#.utf8), forKey: TodayPillPick.storageKey)
+        defaults.set(Data(#"{"regimen":"21/7","dayIndex":40,"answer":"taken"}"#.utf8), forKey: TodayPillPick.storageKey)
 
         XCTAssertNil(TodayPillPick.load(from: defaults))
         defaults.removePersistentDomain(forName: "TodayPillPickTests.corrupt")

@@ -12,7 +12,7 @@ import XCTest
 @MainActor
 final class TodayPillSelectionTests: XCTestCase {
     private func pick(_ index: Int, _ answer: TodayPillPick.Answer?, _ regimen: PillPack.PillRegimenPreset = .twentyOneSeven) -> TodayPillPick {
-        TodayPillPick(regimen: regimen, pillIndex: index, answer: answer)!
+        TodayPillPick(regimen: regimen, dayIndex: index, answer: answer)!
     }
 
     func testTappingAPillResetsTheAnswerAndPillFreeDaysNeedNone() {
@@ -47,7 +47,7 @@ final class TodayPillSelectionTests: XCTestCase {
         shorter.tap(27)
         shorter.record(.taken)
         shorter.changeRegimen(.twentyOneFour)
-        XCTAssertNil(shorter.pillIndex)
+        XCTAssertNil(shorter.dayIndex)
         XCTAssertNil(shorter.pick)
     }
 
