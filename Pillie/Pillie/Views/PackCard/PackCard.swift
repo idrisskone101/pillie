@@ -8,8 +8,9 @@ import SwiftUI
 /// Callers change `todayIndex` / `marks` and the card plays the pop cascade. Haptics are the caller's.
 struct PackCard<Header: View>: View {
     let regimen: PackRegimen
-    /// Calendar weekday (1 = Sunday) of day index 0.
-    let dayOneWeekday: Int
+    /// Calendar weekday (1 = Sunday) of day index 0. nil while the start day is unknown,
+    /// which keeps the weekday row's space but shows no names.
+    let dayOneWeekday: Int?
     let todayIndex: Int?
     let marks: [Int: PackTileMark]
     let onSelectDay: ((Int) -> Void)?
@@ -29,7 +30,7 @@ struct PackCard<Header: View>: View {
 
     init(
         regimen: PackRegimen,
-        dayOneWeekday: Int,
+        dayOneWeekday: Int?,
         todayIndex: Int?,
         marks: [Int: PackTileMark] = [:],
         onSelectDay: ((Int) -> Void)? = nil,
@@ -114,7 +115,8 @@ struct PackCard<Header: View>: View {
         let symbols = calendar.shortStandaloneWeekdaySymbols
         return HStack(spacing: Self.columnGap) {
             ForEach(0..<PackCardLayout.daysPerWeek, id: \.self) { column in
-                Text(symbols[(dayOneWeekday - 1 + column) % PackCardLayout.daysPerWeek].uppercased(with: locale))
+                Text(symbols[((dayOneWeekday ?? 1) - 1 + column) % PackCardLayout.daysPerWeek].uppercased(with: locale))
+                    .contentTransition(.opacity)
                     .font(.pillie(11, weight: .semibold))
                     .tracking(11 * 0.06)
                     .foregroundStyle(PackCardColor.weekday)
@@ -125,6 +127,8 @@ struct PackCard<Header: View>: View {
         }
         .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
         .padding(.bottom, 2)
+        .opacity(dayOneWeekday == nil ? 0 : 1)
+        .animation(reduceMotion ? nil : .easeOut(duration: 0.25), value: dayOneWeekday)
         .accessibilityHidden(true)
     }
 

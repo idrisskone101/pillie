@@ -29,10 +29,11 @@ struct TodayPillView: View {
         PerformanceTier.current == .standard && !reduceMotion
     }
 
-    private var dayOneWeekday: Int {
+    private var dayOneWeekday: Int? {
+        guard let dayIndex = selection.dayIndex else { return nil }
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: PillieClock.now)
-        let dayOne = calendar.date(byAdding: .day, value: -(selection.dayIndex ?? 0), to: today) ?? today
+        let dayOne = calendar.date(byAdding: .day, value: -dayIndex, to: today) ?? today
         return calendar.component(.weekday, from: dayOne)
     }
 
