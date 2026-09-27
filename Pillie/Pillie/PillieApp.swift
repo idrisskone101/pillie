@@ -241,6 +241,9 @@ struct PillieApp: App {
     @State private var store: PillStore
     @State private var languagePreference = AppLanguagePreference()
     @State private var showFirstInterventionConfirmation = false
+    #if DEBUG
+    @State private var showsPackCardGallery = false
+    #endif
     private static var isRunningTests: Bool {
         ProcessRuntime.isRunningTests
     }
@@ -343,6 +346,9 @@ struct PillieApp: App {
                 #if DEBUG
                 .onOpenURL { url in
                     handleDebugDeepLink(url)
+                }
+                .fullScreenCover(isPresented: $showsPackCardGallery) {
+                    PackCardGalleryView()
                 }
                 #endif
                 .onChange(of: scenePhase) { _, newPhase in
@@ -779,6 +785,8 @@ struct PillieApp: App {
             UserDefaults.standard.set(OnboardingFlow.Step.complete.rawValue, forKey: OnboardingFlow.stepStorageKey)
             SubscriptionManager.shared.debugApplyTrialEndPaywallScenario(scenario)
             reconcileScreenTimeState()
+        case "/pack-card":
+            showsPackCardGallery = true
         case "/review-prompt":
             // QA shortcut (#133): land on Home with an unbroken Streak past the pill
             // threshold so the Review Prompt's Sentiment Gate card surfaces and the
