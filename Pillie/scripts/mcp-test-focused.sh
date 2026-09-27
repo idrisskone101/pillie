@@ -93,14 +93,10 @@ MCP_ARGS=(
   --configuration "$CONFIGURATION"
   --simulator-id "$UDID"
   --derived-data-path "$DERIVED_DATA"
-  "--extra-args=-parallel-testing-enabled"
-  "--extra-args=$PARALLEL_TESTING"
-  "--extra-args=-jobs"
-  "--extra-args=$JOBS"
+  --json "$(pillie_mcp_extra_args_json \
+    -parallel-testing-enabled "$PARALLEL_TESTING" \
+    -jobs "$JOBS" \
+    "${ONLY_TESTING_ARGS[@]}")"
 )
-
-for arg in "${ONLY_TESTING_ARGS[@]}"; do
-  MCP_ARGS+=("--extra-args=$arg")
-done
 
 xcodebuildmcp simulator test "${MCP_ARGS[@]}"
