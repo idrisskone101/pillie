@@ -53,37 +53,43 @@ final class PillPack {
 
     enum PillRegimenPreset: String, Codable, CaseIterable {
         case twentyOneSeven = "21/7"
+        case twentyOneOnly = "21-ONLY"
         case twentyFourFour = "24/4"
         case twentySixTwo = "26/2"
-        case twentyEightZero = "28/0"
-        case eightyFourSeven = "84/7"
-        case threeSixtyFiveZero = "365/0"
+        case everyDay = "28/0"
+        case twentyOneFour = "21/4"
         case custom = "CUSTOM"
 
         var regimen: PackRegimen? {
             switch self {
             case .twentyOneSeven: return PackRegimen(activeDays: 21, breakDays: 7)
+            case .twentyOneOnly: return PackRegimen(activeDays: 21, breakDays: 7, breakKind: .noPills)
             case .twentyFourFour: return PackRegimen(activeDays: 24, breakDays: 4)
             case .twentySixTwo: return PackRegimen(activeDays: 26, breakDays: 2)
-            case .twentyEightZero: return PackRegimen(activeDays: 28, breakDays: 0)
-            case .eightyFourSeven: return PackRegimen(activeDays: 84, breakDays: 7)
-            case .threeSixtyFiveZero: return PackRegimen(activeDays: 365, breakDays: 0)
+            case .everyDay: return PackRegimen(activeDays: 28, breakDays: 0)
+            case .twentyOneFour: return PackRegimen(activeDays: 21, breakDays: 4, breakKind: .noPills)
             case .custom: return nil
             }
         }
 
         var legacyPackType: PackType {
             switch self {
-            case .twentyOneSeven: return .twentyOneSeven
+            case .twentyOneSeven, .twentyOneOnly: return .twentyOneSeven
             case .twentyFourFour: return .twentyFourFour
-            case .twentySixTwo, .twentyEightZero, .eightyFourSeven, .threeSixtyFiveZero, .custom:
-                return .twentyEightZero
+            case .twentySixTwo, .everyDay, .twentyOneFour, .custom: return .twentyEightZero
             }
         }
     }
 
     static let defaultCustomRegimen = PackRegimen(activeDays: 21, breakDays: 7)
     private static let patchOrRingRegimen = PackRegimen(activeDays: 21, breakDays: 7, breakKind: .noPills)
+
+    // Presets retired from the picker. Their rows keep the raw value and read back
+    // as the same-length Custom pack, so the pill number does not move.
+    private static let retiredPresetRegimens: [String: PackRegimen] = [
+        "84/7": PackRegimen(activeDays: 84, breakDays: 7),
+        "365/0": PackRegimen(activeDays: 365, breakDays: 0),
+    ]
 
     /// The only reader of the persisted regimen columns. Rows are never rewritten
     /// on upgrade; decoding here is the migration.
@@ -94,6 +100,9 @@ final class PillPack {
         customBreakHasPills: Bool?,
         legacyPackType: PackType
     ) -> (preset: PillRegimenPreset, regimen: PackRegimen) {
+        if let retired = retiredPresetRegimens[raw] {
+            return (.custom, retired)
+        }
         let preset = PillRegimenPreset(rawValue: raw) ?? fallbackPreset(for: legacyPackType)
         if let regimen = preset.regimen {
             return (preset, regimen)
@@ -110,7 +119,7 @@ final class PillPack {
         switch packType {
         case .twentyOneSeven: return .twentyOneSeven
         case .twentyFourFour: return .twentyFourFour
-        case .twentyEightZero: return .twentyEightZero
+        case .twentyEightZero: return .everyDay
         }
     }
 

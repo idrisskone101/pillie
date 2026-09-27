@@ -61,7 +61,7 @@ enum DataMigration {
                 switch legacy.packType {
                 case .twentyOneSeven: regimen = .twentyOneSeven
                 case .twentyFourFour: regimen = .twentyFourFour
-                case .twentyEightZero: regimen = .twentyEightZero
+                case .twentyEightZero: regimen = .everyDay
                 }
                 let pack = PillPack(
                     method: .pill,
