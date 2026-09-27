@@ -29,6 +29,7 @@ struct TabPaneContainer: UIViewControllerRepresentable {
         )
         controller.onEdgeSwipe = onEdgeSwipe
         controller.onTransitionStart = onTransitionStart
+        controller.isRightToLeft = context.environment.layoutDirection == .rightToLeft
         controller.select(selectedTab, animated: false, crossfades: crossfades, duration: duration)
         return controller
     }
@@ -36,6 +37,7 @@ struct TabPaneContainer: UIViewControllerRepresentable {
     func updateUIViewController(_ controller: TabPaneContainerViewController, context: Context) {
         controller.onEdgeSwipe = onEdgeSwipe
         controller.onTransitionStart = onTransitionStart
+        controller.isRightToLeft = context.environment.layoutDirection == .rightToLeft
         controller.select(selectedTab, animated: true, crossfades: crossfades, duration: duration)
     }
 }
@@ -43,6 +45,9 @@ struct TabPaneContainer: UIViewControllerRepresentable {
 final class TabPaneContainerViewController: UIViewController {
     var onEdgeSwipe: ((Int) -> Void)?
     var onTransitionStart: ((PillieTab, TimeInterval, Bool) -> Void)?
+    /// The tab bar mirrors in right-to-left languages, so later tabs sit to the
+    /// left: slides and edge swipes follow that order.
+    var isRightToLeft = false
 
     private let panes: [(tab: PillieTab, controller: UIViewController)]
     private var selectedTab: PillieTab?
@@ -118,7 +123,8 @@ final class TabPaneContainerViewController: UIViewController {
         }
 
         let width = view.bounds.width
-        let direction: CGFloat = tab.rawValue > previousTab.rawValue ? 1 : -1
+        let forward: CGFloat = tab.rawValue > previousTab.rawValue ? 1 : -1
+        let direction = isRightToLeft ? -forward : forward
         if crossfades {
             incoming.alpha = 0
         } else {
@@ -161,10 +167,11 @@ final class TabPaneContainerViewController: UIViewController {
     @objc private func handleEdgePan(_ gesture: UIPanGestureRecognizer) {
         guard gesture.state == .ended, let edge = startedEdge(of: gesture) else { return }
         let translation = gesture.translation(in: view).x
+        let rightwardTab = isRightToLeft ? -1 : 1
         if edge == .left, translation > Self.swipeThreshold {
-            onEdgeSwipe?(-1)
+            onEdgeSwipe?(-rightwardTab)
         } else if edge == .right, translation < -Self.swipeThreshold {
-            onEdgeSwipe?(1)
+            onEdgeSwipe?(rightwardTab)
         }
     }
 }

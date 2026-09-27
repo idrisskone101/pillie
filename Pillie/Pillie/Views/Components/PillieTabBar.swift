@@ -164,6 +164,7 @@ private struct TabIndicatorCapsule: UIViewRepresentable {
     func makeUIView(context: Context) -> TabIndicatorView {
         let view = TabIndicatorView()
         control.view = view
+        view.isRightToLeft = context.environment.layoutDirection == .rightToLeft
         view.adopt(tabCount: tabCount, duration: duration)
         view.place(at: selectedIndex, animated: false)
         return view
@@ -171,6 +172,7 @@ private struct TabIndicatorCapsule: UIViewRepresentable {
 
     func updateUIView(_ view: TabIndicatorView, context: Context) {
         control.view = view
+        view.isRightToLeft = context.environment.layoutDirection == .rightToLeft
         view.adopt(tabCount: tabCount, duration: duration)
     }
 }
@@ -182,6 +184,13 @@ final class TabIndicatorView: UIView {
     private var duration: TimeInterval = 0.25
     private var animator: UIViewPropertyAnimator?
     private var pendingAnimated = false
+    /// SwiftUI mirrors the tab row in right-to-left languages, but this UIKit
+    /// view does not, so slots are counted from the trailing edge here.
+    var isRightToLeft = false {
+        didSet {
+            if isRightToLeft != oldValue { setNeedsLayout() }
+        }
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -262,7 +271,8 @@ final class TabIndicatorView: UIView {
         let count = CGFloat(tabCount)
         let tabWidth = bounds.width / count
         let width = TabIndicatorLayout.size.width
-        let x = tabWidth * (CGFloat(index) + 0.5) - width / 2
+        let slot = isRightToLeft ? tabCount - 1 - index : index
+        let x = tabWidth * (CGFloat(slot) + 0.5) - width / 2
         return CGRect(x: x, y: 0, width: width, height: bounds.height)
     }
 }
