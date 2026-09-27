@@ -72,8 +72,7 @@ COMMON_ARGS=(
   --configuration "$CONFIGURATION"
   --simulator-id "$UDID"
   --derived-data-path "$DERIVED_DATA"
-  "--extra-args=-jobs"
-  "--extra-args=$JOBS"
+  --json "$(pillie_mcp_extra_args_json -jobs "$JOBS")"
 )
 
 echo "> XcodeBuildMCP Pillie build"

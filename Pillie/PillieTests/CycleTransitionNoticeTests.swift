@@ -28,12 +28,14 @@ final class CycleTransitionNoticeTests: XCTestCase {
     private func pack(
         method: ContraceptiveMethod,
         regimen: PillPack.PillRegimenPreset = .twentyOneSeven,
+        customRegimen: PackRegimen? = nil,
         startDate: Date,
         ringInsertionDate: Date? = nil
     ) -> PillPack {
         let pack = PillPack(
             method: method,
             pillRegimen: method == .pill ? regimen : .twentyOneSeven,
+            customRegimen: customRegimen,
             startDate: startDate,
             packNumber: 1
         )
@@ -194,7 +196,12 @@ final class CycleTransitionNoticeTests: XCTestCase {
 
     func testNoNoticeForContinuousRegimenWithoutBreakWeek() {
         let start = day(2026, 5, 26)
-        let pack = pack(method: .pill, regimen: .threeSixtyFiveZero, startDate: start)
+        let pack = pack(
+            method: .pill,
+            regimen: .custom,
+            customRegimen: PackRegimen(activeDays: 365, breakDays: 0),
+            startDate: start
+        )
         XCTAssertTrue(notices(pack: pack, now: start).isEmpty)
     }
 

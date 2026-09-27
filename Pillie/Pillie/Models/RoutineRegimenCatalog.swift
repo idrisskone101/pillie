@@ -17,28 +17,15 @@ enum RoutineRegimenCatalog {
     static let common: [PillPack.PillRegimenPreset] = [
         .twentyOneSeven,
         .twentyFourFour,
-        .threeSixtyFiveZero,
+        .everyDay,
     ]
 
     /// The remaining regimens, revealed via the "More options" disclosure. Together
     /// with `common`, this is exactly the full set of presets.
     static let more: [PillPack.PillRegimenPreset] = [
+        .twentyOneOnly,
         .twentySixTwo,
-        .twentyEightZero,
-        .eightyFourSeven,
+        .twentyOneFour,
         .custom,
     ]
-}
-
-extension PillPack.PillRegimenPreset {
-    /// Friendly label for the Routine Details rows. The two most common shapes read
-    /// more clearly as words; everything else keeps its familiar ratio label.
-    var routineDisplayName: String {
-        switch self {
-        case .twentyOneSeven: return "Standard"
-        case .threeSixtyFiveZero: return "Continuous"
-        case .custom: return "Custom"
-        default: return rawValue
-        }
-    }
 }
