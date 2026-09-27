@@ -60,15 +60,6 @@ struct ProtectionPlanRoutineMethodView: View {
                 .opacity(appeared ? 1 : 0)
                 .offset(y: revealOffset)
                 .animation(reveal(delay: PillieTheme.stagger2), value: appeared)
-
-                Text(content.footnote)
-                    .font(.pillie(13, weight: .regular))
-                    .foregroundStyle(PillieTheme.textMuted.opacity(0.8))
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .multilineTextAlignment(.center)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .opacity(appeared ? 1 : 0)
-                    .animation(reveal(delay: PillieTheme.stagger4), value: appeared)
             }
         }
         .onAppear {

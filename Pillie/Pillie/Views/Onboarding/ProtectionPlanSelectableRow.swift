@@ -44,10 +44,7 @@ struct ProtectionPlanSelectableRow: View {
                 if symbolName != nil || iconImageName != nil {
                     icon
                         .frame(width: 44, height: 44)
-                        .background(
-                            (isSelected ? PillieTheme.coral : PillieTheme.textMuted).opacity(0.12),
-                            in: RoundedRectangle(cornerRadius: 14)
-                        )
+                        .background(iconTileFill, in: RoundedRectangle(cornerRadius: 14))
                 }
 
                 VStack(alignment: .leading, spacing: 3) {
@@ -104,6 +101,15 @@ struct ProtectionPlanSelectableRow: View {
                 ? PillieLocalization.string("accessibility.selection.selected")
                 : PillieLocalization.string("accessibility.selection.choose")
         }
+    }
+
+    /// The Quiver method icons (`iconImageName`) sit on Paper's own white/`F5F5F4`
+    /// tile fills; SF Symbol rows (`symbolName`) keep the tinted coral/muted tile.
+    private var iconTileFill: Color {
+        guard iconImageName != nil else {
+            return (isSelected ? PillieTheme.coral : PillieTheme.textMuted).opacity(0.12)
+        }
+        return isSelected ? PillieTheme.cardWhite : Color(hex: "F5F5F4")
     }
 
     @ViewBuilder
