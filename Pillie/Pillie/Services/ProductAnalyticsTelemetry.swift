@@ -864,8 +864,8 @@ struct ProductAnalyticsTelemetry {
     track(.todayActionStarted, source: .home)
   }
 
-  func todayActionCompleted() {
-    track(.todayActionCompleted, source: .home)
+  func todayActionCompleted(source: AnalyticsSource = .home) {
+    track(.todayActionCompleted, source: source)
   }
 
   func todayActionUndone() {
