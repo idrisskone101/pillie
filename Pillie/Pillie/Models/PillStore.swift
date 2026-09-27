@@ -263,8 +263,6 @@ class PillStore {
     }
 
     var currentDayIndex: Int {
-        // A live day before the pack starts (pill 1 not yet taken, before the first
-        // reminder) would otherwise wrap to the last day of the pack.
         guard pack.elapsedCycleDays(on: today) >= 0 else { return 0 }
         return pack.cycleDayIndex(on: today)
     }
@@ -426,7 +424,6 @@ class PillStore {
 
     /// Whether today requires no blocking — either taken, passive active, or a break day.
     var isTodayHandled: Bool {
-        // A live day before the first pack starts has nothing due.
         guard scheduleSnapshot(for: today) != nil else { return true }
         return isTodayTaken || isTodayPassiveOrBreak
     }
@@ -904,8 +901,6 @@ class PillStore {
             return false
         }
         let useTodayAsStartDate = preserveHistory && methodChanged
-        // The day that is `cycleDay`. Onboarding passes it because an untaken pill
-        // belongs to the window opening at today's reminder, not the live day.
         let anchor = anchorDay.map { startOfDaySafe($0) } ?? today
         let startDate: Date = {
             if useTodayAsStartDate {
@@ -952,12 +947,9 @@ class PillStore {
                 existing.isCurrent = false
             }
 
-            // Records on the old anchor belong to other cycle days. Dropping them
-            // for every cycle day keeps a repeated onboarding commit convergent.
             for day in Array(activePack.days) {
                 modelContext.delete(day)
             }
-            // Backfill prior days as taken for onboarding mid-cycle
             backfillPriorDays(from: startDate, count: safeCycleDay - 1, pack: activePack, calendar: Calendar.current)
             streakResetDate = anchor
             appActivatedDate = today
@@ -974,7 +966,6 @@ class PillStore {
             )
             modelContext.insert(nextPack)
 
-            // Backfill prior days as taken for onboarding mid-cycle
             backfillPriorDays(from: startDate, count: safeCycleDay - 1, pack: nextPack, calendar: Calendar.current)
             streakResetDate = anchor
             appActivatedDate = today

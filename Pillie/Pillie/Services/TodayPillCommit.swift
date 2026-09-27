@@ -1,14 +1,5 @@
-//
-//  TodayPillCommit.swift
-//  Pillie
-//
-
 import Foundation
 
-/// Turns the onboarding pill pick into the pill pack once the reminder time is final.
-/// Safe to repeat: the pack is rebuilt from the pick, the pill is logged at most once,
-/// and `today_action_completed` fires once per onboarding, even when a second pass
-/// moves the anchor by changing the reminder time.
 enum TodayPillCommit {
     static let reportedStorageKey = "pillie_onboarding_today_pill_reported"
 
@@ -36,7 +27,6 @@ enum TodayPillCommit {
             store.appActivatedDate = store.today
         }
 
-        // A sugar pill is not a due action, so there is nothing to log.
         guard pick.answer == .taken, pick.day.kind == .active else { return }
         store.markTodayAsTaken()
 

@@ -1,14 +1,6 @@
-//
-//  TodayPillPick.swift
-//  Pillie
-//
-
 import Foundation
 import os
 
-/// The pill a new user tapped during onboarding, and whether it is already taken.
-/// Onboarding holds it as a draft until the reminder time is final, then commits it
-/// with `TodayPillCommit`, because the live dose day depends on that time.
 struct TodayPillPick: Codable, Equatable {
     enum Answer: String, Codable {
         case taken
@@ -16,13 +8,9 @@ struct TodayPillPick: Codable, Equatable {
     }
 
     let regimen: PillPack.PillRegimenPreset
-    /// 0-based day index in the pack.
     let pillIndex: Int
-    /// nil only on a pill-free day, where there is nothing to take.
     let answer: Answer?
 
-    /// Refuses a pick the pack cannot hold: custom packs, an index past the end, or
-    /// a missing answer on a day that has a pill.
     init?(regimen: PillPack.PillRegimenPreset, pillIndex: Int, answer: Answer?) {
         guard let packRegimen = regimen.regimen,
               (0..<packRegimen.totalDays).contains(pillIndex) else { return nil }
@@ -37,10 +25,6 @@ struct TodayPillPick: Codable, Equatable {
         regimen.resolvedRegimen(custom: nil).day(atIndex: pillIndex)
     }
 
-    /// The day pill N belongs to. A taken pill is the currently open dose window, so
-    /// the next reminder opens pill N+1. An untaken pill, or a pill-free day, is the
-    /// next dose owed: the window that opens at today's reminder, or the one already
-    /// open when that reminder has passed.
     func anchorDay(
         now: Date,
         reminderHour: Int,
@@ -54,8 +38,6 @@ struct TodayPillPick: Codable, Equatable {
             return calendar.startOfDay(for: now)
         }
     }
-
-    // MARK: Draft storage
 
     static let storageKey = "pillie_onboarding_today_pill_pick"
     private static let logger = Logger(subsystem: "com.idrisskone.pillie", category: "TodayPillPick")

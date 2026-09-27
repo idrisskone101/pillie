@@ -16,7 +16,6 @@ import Foundation
 
 struct OnboardingReminderCommit {
     let saveReminderTime: (_ hour: Int, _ minute: Int) -> Void
-    /// Builds the pill pack from the step 7 pick, which needs the saved time.
     var commitRoutine: () -> Void = {}
     let trackPermissionRequested: () -> Void
     let requestAuthorization: (_ completion: @escaping (_ granted: Bool) -> Void) -> Void

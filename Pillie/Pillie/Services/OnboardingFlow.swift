@@ -292,8 +292,6 @@ enum OnboardingFlow {
     ) -> Step? {
         guard let step = step(for: rawValue) else { return nil }
 
-        // The reminder time commits the pill picked on the schedule step (ENG-138).
-        // A pill user resumed there without that pick goes back to make it.
         if step == .reminderTime && needsTodayPill {
             return .schedule
         }

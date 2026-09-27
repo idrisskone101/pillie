@@ -1,11 +1,5 @@
-//
-//  TodayPillTypes.swift
-//  Pillie
-//
-
 import Foundation
 
-/// What step 7 holds while the person taps: a pack, maybe a tapped pill, maybe an answer.
 struct TodayPillSelection: Equatable {
     private(set) var regimen: PillPack.PillRegimenPreset
     private(set) var pillIndex: Int?
@@ -25,19 +19,16 @@ struct TodayPillSelection: Equatable {
         regimen.resolvedRegimen(custom: nil)
     }
 
-    /// A pill-free day has nothing to take, so it skips the question.
     var asksQuestion: Bool {
         guard let pillIndex else { return false }
         return packRegimen.day(atIndex: pillIndex).kind != .noPill
     }
 
-    /// Ready to continue: nil until a pill is tapped and, when it has a pill, answered.
     var pick: TodayPillPick? {
         guard let pillIndex else { return nil }
         return TodayPillPick(regimen: regimen, pillIndex: pillIndex, answer: answer)
     }
 
-    /// A different pill resets the answer. Tapping the flagged pill again keeps it.
     mutating func tap(_ index: Int) {
         guard index != pillIndex else { return }
         pillIndex = index

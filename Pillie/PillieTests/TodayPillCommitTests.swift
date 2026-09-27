@@ -1,10 +1,3 @@
-//
-//  TodayPillCommitTests.swift
-//  PillieTests
-//
-//  ENG-138: committing the onboarding pill pick with the final reminder time.
-//
-
 import XCTest
 
 @testable import Pillie
@@ -57,8 +50,6 @@ final class TodayPillCommitTests: XCTestCase {
         Calendar.current.date(byAdding: .day, value: offset, to: Calendar.current.startOfDay(for: date))!
     }
 
-    // MARK: Taken
-
     func testTakenBeforeAnEveningReminderLogsTheTappedPillInTheOpenWindow() throws {
         let now = InMemoryStoreFactory.localDate("2026-09-27", hour: 12, minute: 24)
         let harness = try makeHarness(now: now, reminderHour: 20)
@@ -89,8 +80,6 @@ final class TodayPillCommitTests: XCTestCase {
         XCTAssertTrue(harness.store.isTodayTaken)
         XCTAssertEqual(harness.store.currentStreak, 1)
     }
-
-    // MARK: Not yet
 
     func testNotYetBeforeAnEveningReminderMakesTonightsWindowTheTappedPill() throws {
         let now = InMemoryStoreFactory.localDate("2026-09-27", hour: 12, minute: 24)
@@ -123,8 +112,6 @@ final class TodayPillCommitTests: XCTestCase {
         XCTAssertEqual(harness.store.currentStreak, 0)
     }
 
-    /// Before today's reminder the live day is yesterday, which precedes pill 1.
-    /// Home must show nothing due, and blocking must treat that day as handled.
     func testFirstPillNotYetBeforeTheReminderLeavesNothingDueInTheOpenWindow() throws {
         for regimen in [PillPack.PillRegimenPreset.twentyOneSeven, .everyDay] {
             let now = InMemoryStoreFactory.localDate("2026-09-27", hour: 12, minute: 24)
@@ -142,8 +129,6 @@ final class TodayPillCommitTests: XCTestCase {
             XCTAssertEqual(store.currentStreak, 0, "\(regimen)")
         }
     }
-
-    // MARK: Pill-free and sugar days
 
     func testPillFreeDayAnchorsOnTodayWithoutLogging() throws {
         let now = InMemoryStoreFactory.localDate("2026-09-27", hour: 12, minute: 24)
@@ -165,8 +150,6 @@ final class TodayPillCommitTests: XCTestCase {
         XCTAssertEqual(harness.store.currentDayIndex + 1, 24)
         XCTAssertTrue(harness.recorder.completions.isEmpty)
     }
-
-    // MARK: Idempotency
 
     func testRepeatedCommitsConvergeAndReportTheDoseOnce() throws {
         let now = InMemoryStoreFactory.localDate("2026-09-27", hour: 12, minute: 24)
@@ -209,7 +192,6 @@ final class TodayPillCommitTests: XCTestCase {
     }
 }
 
-/// Records `today_action_completed` sources.
 private final class CompletionRecorder: AnalyticsTracking {
     private(set) var completions: [AnalyticsSource?] = []
 

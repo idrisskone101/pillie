@@ -1,10 +1,4 @@
-//
-//  TodayPillPickTests.swift
-//  PillieTests
-//
-//  ENG-138: the onboarding pill pick and its anchor rule.
-//  Value types only, so the Xcode 27 beta @MainActor deinit crash cannot fire.
-//
+// Value types only, so the Xcode 27 beta @MainActor deinit crash cannot fire.
 
 import XCTest
 
@@ -29,8 +23,6 @@ final class TodayPillPickTests: XCTestCase {
     private func anchor(_ pick: TodayPillPick, now: Date, reminderHour: Int) -> Date {
         pick.anchorDay(now: now, reminderHour: reminderHour, reminderMinute: 0, calendar: Self.calendar)
     }
-
-    // MARK: Anchor rule
 
     func testTakenBeforeAnEveningReminderAnchorsOnTheOpenWindowFromYesterday() {
         XCTAssertEqual(anchor(pick(11, .taken), now: date(27, 12, 24), reminderHour: 20), date(26, 0))
@@ -73,8 +65,6 @@ final class TodayPillPickTests: XCTestCase {
         XCTAssertEqual(anchor(pick(0, .taken), now: date(27, 12, 24), reminderHour: 20), date(26, 0))
         XCTAssertEqual(anchor(pick(0, .notYet), now: date(27, 12, 24), reminderHour: 20), date(27, 0))
     }
-
-    // MARK: Validation + draft storage
 
     func testPickRefusesStatesThePackCannotHold() {
         XCTAssertNil(TodayPillPick(regimen: .twentyOneSeven, pillIndex: 11, answer: nil))

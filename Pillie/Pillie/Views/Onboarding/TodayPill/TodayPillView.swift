@@ -1,12 +1,3 @@
-//
-//  TodayPillView.swift
-//  Pillie
-//
-//  Onboarding step 7 for pill users (ENG-138): tap the pill you are on today, then
-//  say whether it is taken. Nothing is written to PillStore here. The pick is a
-//  draft that step 8 commits once the reminder time is final.
-//
-
 import SwiftUI
 
 struct TodayPillView: View {
@@ -21,8 +12,6 @@ struct TodayPillView: View {
     @State private var selection = TodayPillSelection(regimen: .twentyOneSeven)
     @State private var showsQuestion = false
     @State private var revealTask: Task<Void, Never>?
-    // Bumped only by the pop cascade; the tap and taken haptics run imperatively
-    // through `feedback` instead, so there is no shared equivalent to move to.
     @State private var cascadeTicks = 0
     @State private var appeared = false
 
@@ -34,7 +23,6 @@ struct TodayPillView: View {
         PerformanceTier.current == .standard && !reduceMotion
     }
 
-    /// Today's weekday sits under the tapped pill, as on a pack's day strip.
     private var dayOneWeekday: Int {
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: PillieClock.now)
@@ -131,7 +119,6 @@ struct TodayPillView: View {
         let popped = index - (previous ?? 0)
         revealTask = Task { @MainActor in
             if !reduceMotion {
-                // One soft tick every third pill of the cascade.
                 for _ in stride(from: 3, through: popped, by: 3) {
                     try? await Task.sleep(for: PackPopSequence.popStagger * 3)
                     guard !Task.isCancelled else { return }
@@ -156,12 +143,9 @@ struct TodayPillView: View {
     private func changeRegimen(_ regimen: PillPack.PillRegimenPreset) {
         selection.changeRegimen(regimen)
         revealTask?.cancel()
-        // The tapped day can gain or lose its pill (a pill-free day becomes a sugar pill).
         showsQuestion = selection.asksQuestion
     }
 }
-
-// MARK: - Pack header
 
 private struct TodayPillPackHeader: View {
     let regimen: PillPack.PillRegimenPreset
@@ -225,7 +209,6 @@ private struct TodayPillPackHeader: View {
     }
 }
 
-/// A 44pt thumbnail of the pack: one dot per day, rose for active pills, sage for sugar pills.
 private struct PackGlyph: View {
     let regimen: PackRegimen
 
@@ -263,8 +246,6 @@ private struct PackGlyph: View {
         static let sugar = Color(hex: "C3D3C0")
     }
 }
-
-// MARK: - Question
 
 private struct TodayPillQuestion: View {
     let pillNumber: Int
@@ -331,8 +312,6 @@ private struct TodayPillQuestion: View {
     }
 }
 
-/// "Have you taken pill [12] yet?" with the number as a black chip. Falls back to plain
-/// text with a bold number when the chip row does not fit on one line.
 private struct TodayPillQuestionLine: View {
     let pillNumber: Int
 
@@ -340,8 +319,6 @@ private struct TodayPillQuestionLine: View {
         PillieLocalization.string("onboarding.today_pill.question")
     }
 
-    /// The text on each side of the chip, and whether the template puts a space there.
-    /// "¿Ya tomaste la píldora %@?" keeps its "?" against the chip.
     private var parts: (prefix: String, prefixSpaced: Bool, suffix: String, suffixSpaced: Bool) {
         let pieces = template.components(separatedBy: "%@")
         guard pieces.count == 2 else { return (template, true, "", false) }

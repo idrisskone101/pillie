@@ -3,8 +3,7 @@
 //  Pillie
 //
 //  Routine Basics — Method (issue #77, Superdesign draft c8d8749d). The first routine
-//  screen: the user names which contraception routine Pillie should protect. The
-//  chosen method is written to the existing production model (`PillStore`).
+//  screen: the user names which contraception routine Pillie should protect.
 //  Pill, Patch, and Ring are method-aware from here on via `MethodActionLanguage`.
 //
 

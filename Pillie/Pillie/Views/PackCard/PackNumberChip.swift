@@ -1,13 +1,5 @@
-//
-//  PackNumberChip.swift
-//  Pillie
-//
-
 import SwiftUI
 
-/// The black numbered capsule shared by the pack card's flag (`PackFlag`) and the
-/// onboarding "have you taken pill N" question line (`TodayPillQuestionLine`). The
-/// two spots render it at different sizes.
 struct PackNumberChip: View {
     enum Size {
         case flag

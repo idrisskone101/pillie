@@ -5,9 +5,7 @@
 
 import SwiftUI
 
-/// A pill pack: a 7-column blister grid, paged four weeks at a time for long packs.
 /// Callers change `todayIndex` / `marks` and the card plays the pop cascade. Haptics are the caller's.
-/// Tiles are tappable only when `onSelectDay` is set.
 struct PackCard<Header: View>: View {
     let regimen: PackRegimen
     /// Calendar weekday (1 = Sunday) of day index 0.
@@ -45,8 +43,6 @@ struct PackCard<Header: View>: View {
         self.header = header()
     }
 
-    /// The numbered flag only makes sense on a tappable card: it marks the tile the
-    /// person just chose. Non-interactive cards (Home, the gallery) show no flag.
     private var flagIndex: Int? {
         onSelectDay != nil ? todayIndex : nil
     }
@@ -165,7 +161,6 @@ struct PackCard<Header: View>: View {
         .padding(16)
         .clipped()
         .padding(-16)
-        // Outside the clip: a flag on the first row rises above the grid.
         .overlay {
             flag(layout: layout)
                 .animation(reduceMotion ? .easeInOut(duration: 0.2) : .spring(duration: 0.35, bounce: 0.2), value: flagIndex)
@@ -200,8 +195,6 @@ struct PackCard<Header: View>: View {
 
     private static var minimumHitSide: CGFloat { 44 }
 
-    // MARK: Flag
-
     @ViewBuilder
     private func flag(layout: PackCardLayout) -> some View {
         if let flagIndex, layout.dayIndices(onPage: viewedPage).contains(flagIndex) {
@@ -220,7 +213,6 @@ struct PackCard<Header: View>: View {
         }
     }
 
-    /// Gap between the flag's pointer and the top of its tile.
     private static var flagLift: CGFloat { 7 }
 
     // MARK: Paging
@@ -329,7 +321,6 @@ private struct PackTilePressStyle: ButtonStyle {
     }
 }
 
-/// The black numbered capsule that marks the tapped tile.
 private struct PackFlag: View {
     static let height: CGFloat = 29
 

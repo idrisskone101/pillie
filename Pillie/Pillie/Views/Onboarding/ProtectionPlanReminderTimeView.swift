@@ -13,7 +13,6 @@ import SwiftUI
 
 struct ProtectionPlanReminderTimeView: View {
     let progress: ProtectionPlanProgress
-    /// The pill path's step 7 pick, committed with the chosen time. nil for patch and ring.
     let todayPillPick: TodayPillPick?
     let onBack: () -> Void
     let onContinue: () -> Void

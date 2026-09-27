@@ -1,10 +1,4 @@
-//
-//  TodayPillPlanTests.swift
-//  PillieTests
-//
-//  ENG-138: the step 8 plan card rows for the pill path.
-//  Value types only, so the Xcode 27 beta @MainActor deinit crash cannot fire.
-//
+// Value types only, so the Xcode 27 beta @MainActor deinit crash cannot fire.
 
 import XCTest
 
@@ -25,8 +19,6 @@ final class TodayPillPlanTests: XCTestCase {
     private func pick(_ index: Int, _ answer: TodayPillPick.Answer?, _ regimen: PillPack.PillRegimenPreset = .twentyOneSeven) -> TodayPillPick {
         TodayPillPick(regimen: regimen, pillIndex: index, answer: answer)!
     }
-
-    // MARK: Step 8 plan card
 
     func testNextReminderIsTheNextOccurrenceStrictlyAfterNow() {
         let before = TodayPillPlan.nextReminder(hour: 20, minute: 0, now: date(27, 12, 24), calendar: Self.calendar)

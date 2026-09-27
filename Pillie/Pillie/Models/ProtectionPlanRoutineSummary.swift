@@ -22,7 +22,6 @@ struct ProtectionPlanRoutineSummary: Equatable {
     var cycleDay: Int?
     /// Formatted reminder time, e.g. "9:30 AM". Nil before the reminder-time screen.
     var reminderTimeText: String?
-    /// The pill path's rows from the tapped pill. Replaces the rows above when set.
     var todayPill: TodayPillPlan?
     var locale: Locale = .current
 

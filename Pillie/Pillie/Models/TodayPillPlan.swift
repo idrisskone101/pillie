@@ -1,12 +1,5 @@
-//
-//  TodayPillPlan.swift
-//  Pillie
-//
-
 import Foundation
 
-/// The step 8 plan card for the pill path: the pack, the pill tapped on step 7, and when
-/// the next reminder fires for the time on the wheel.
 struct TodayPillPlan: Equatable {
     enum NextReminder: Equatable {
         case today(Date)

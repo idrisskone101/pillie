@@ -34,8 +34,6 @@ struct RoutineSetupDraft: Equatable {
         today: Date,
         calendar: Calendar = .current
     ) {
-        // This screen only renders for Patch/Ring (ContentView routes Pill to
-        // TodayPillView), so there is no pill pack to restore a regimen from.
         self.method = method
         self.selectedRegimen = .twentyOneSeven
         self.customRegimen = PillPack.defaultCustomRegimen
@@ -45,7 +43,6 @@ struct RoutineSetupDraft: Equatable {
         clampCycleDay()
     }
 
-    /// Patch and Ring both run a fixed 28-day cycle.
     var cycleLength: Int { 28 }
 
     mutating func selectPosition(_ position: CyclePosition) {

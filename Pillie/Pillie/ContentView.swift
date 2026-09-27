@@ -240,7 +240,6 @@ struct ContentView: View {
                 lowRiskTransition(to: .method)
 	            },
             onContinue: { pick in
-              // Saved before the step changes: `visibleStep` reads it.
               pick.save()
               continueSetupStep(to: .reminderTime)
 	            }

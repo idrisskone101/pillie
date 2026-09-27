@@ -1,10 +1,4 @@
-//
-//  TodayPillSelectionTests.swift
-//  PillieTests
-//
-//  ENG-138: what step 7 holds while the person taps.
-//  Value types only, so the Xcode 27 beta @MainActor deinit crash cannot fire.
-//
+// Value types only, so the Xcode 27 beta @MainActor deinit crash cannot fire.
 
 import XCTest
 
@@ -15,8 +9,6 @@ final class TodayPillSelectionTests: XCTestCase {
     private func pick(_ index: Int, _ answer: TodayPillPick.Answer?, _ regimen: PillPack.PillRegimenPreset = .twentyOneSeven) -> TodayPillPick {
         TodayPillPick(regimen: regimen, pillIndex: index, answer: answer)!
     }
-
-    // MARK: Step 7 selection
 
     func testTappingAPillResetsTheAnswerAndPillFreeDaysNeedNone() {
         var selection = TodayPillSelection(regimen: .twentyOneOnly)
