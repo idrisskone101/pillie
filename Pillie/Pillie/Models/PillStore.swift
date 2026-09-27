@@ -1854,7 +1854,7 @@ class PillStore {
     ) -> Int {
         switch method {
         case .pill:
-            return (regimen.regimen ?? customRegimen ?? PillPack.defaultCustomRegimen).totalDays
+            return regimen.resolvedRegimen(custom: customRegimen).totalDays
         case .patch, .ring:
             return 28
         }

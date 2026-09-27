@@ -35,20 +35,6 @@ final class PillPack {
         case twentyOneSeven = "21/7"
         case twentyFourFour = "24/4"
         case twentyEightZero = "28/0"
-
-        var activeDays: Int {
-            switch self {
-            case .twentyOneSeven: return 21
-            case .twentyFourFour: return 24
-            case .twentyEightZero: return 28
-            }
-        }
-
-        var totalDays: Int { 28 }
-
-        var breakDays: Int { totalDays - activeDays }
-
-        var label: String { rawValue + " CYCLE" }
     }
 
     enum PillRegimenPreset: String, Codable, CaseIterable {
@@ -70,6 +56,10 @@ final class PillPack {
             case .twentyOneFour: return PackRegimen(activeDays: 21, breakDays: 4, breakKind: .noPills)
             case .custom: return nil
             }
+        }
+
+        func resolvedRegimen(custom: PackRegimen?) -> PackRegimen {
+            regimen ?? custom ?? PillPack.defaultCustomRegimen
         }
 
         var legacyPackType: PackType {
@@ -150,7 +140,7 @@ final class PillPack {
     func setPillRegimen(_ preset: PillRegimenPreset, customRegimen: PackRegimen?) {
         pillRegimenRaw = preset.rawValue
         packType = preset.legacyPackType
-        let custom = preset == .custom ? (customRegimen ?? Self.defaultCustomRegimen) : nil
+        let custom = preset == .custom ? preset.resolvedRegimen(custom: customRegimen) : nil
         customActiveDays = custom?.activeDays
         customBreakDays = custom?.breakDays
         customBreakHasPills = custom.map { $0.breakKind == .sugarPills }
@@ -159,7 +149,6 @@ final class PillPack {
     var activeDays: Int { regimen.activeDays }
     var breakDays: Int { regimen.breakDays }
     var cycleLength: Int { regimen.totalDays }
-    var totalDays: Int { cycleLength }
 
     var methodTitle: String {
         switch method {
@@ -204,8 +193,9 @@ final class PillPack {
     }
 
     func cycleDayIndex(on date: Date, calendar: Calendar = .current) -> Int {
-        let modulo = elapsedCycleDays(on: date, calendar: calendar) % cycleLength
-        return modulo >= 0 ? modulo : (modulo + cycleLength)
+        let length = cycleLength
+        let modulo = elapsedCycleDays(on: date, calendar: calendar) % length
+        return modulo >= 0 ? modulo : (modulo + length)
     }
 
     func packDay(on date: Date, calendar: Calendar = .current) -> PackDay {

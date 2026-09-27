@@ -58,7 +58,7 @@ struct RoutineSetupDraft: Equatable {
     var cycleLength: Int {
         switch method {
         case .pill:
-            return (selectedRegimen.regimen ?? customRegimen).totalDays
+            return selectedRegimen.resolvedRegimen(custom: customRegimen).totalDays
         case .patch, .ring:
             return 28
         }

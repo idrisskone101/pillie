@@ -752,7 +752,7 @@ private struct ProtocolEditor: View {
     private var cycleLength: Int {
         switch selectedMethod {
         case .pill:
-            return (selectedRegimen.regimen ?? customRegimen).totalDays
+            return selectedRegimen.resolvedRegimen(custom: customRegimen).totalDays
         case .patch, .ring:
             return 28
         }
