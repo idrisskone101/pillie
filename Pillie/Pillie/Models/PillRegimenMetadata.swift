@@ -28,29 +28,23 @@ extension PillPack.PillRegimenPreset {
     }
 
     func localizedRoutineDisplayName(locale: Locale = .current) -> String {
-        let key: String?
+        let key: String
         switch self {
         case .twentyOneSeven:
             key = "onboarding.regimen.name.standard"
+        case .twentyOneOnly:
+            key = "onboarding.regimen.name.21_only"
         case .everyDay:
-            key = "onboarding.regimen.name.continuous"
+            key = "onboarding.regimen.name.every_day"
         case .custom:
             key = "onboarding.regimen.name.custom"
-        default:
-            key = nil
+        case .twentyFourFour, .twentySixTwo, .twentyOneFour:
+            return rawValue
         }
-        return key.map { PillieLocalization.string($0, locale: locale) } ?? ratioLabel
+        return PillieLocalization.string(key, locale: locale)
     }
 
     func localizedScheduleSubtitle(locale: Locale = .current) -> String {
         localizedScheduleSummary(locale: locale)
-    }
-
-    // Raw values are persisted identities, so "21-ONLY" must not reach the UI.
-    private var ratioLabel: String {
-        switch self {
-        case .twentyOneOnly: return "21"
-        default: return rawValue
-        }
     }
 }

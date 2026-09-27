@@ -25,7 +25,7 @@ struct RoutineRegimenCatalogTests {
 
         #expect(
             PillPack.PillRegimenPreset.allCases.map { $0.localizedRoutineDisplayName(locale: english) }
-                == ["Standard", "21", "24/4", "26/2", "Continuous", "21/4", "Custom cycle"]
+                == ["Standard", "21 only", "24/4", "26/2", "Every day", "21/4", "Custom cycle"]
         )
     }
 }

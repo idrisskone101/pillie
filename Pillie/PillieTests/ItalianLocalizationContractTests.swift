@@ -77,7 +77,7 @@ final class ItalianLocalizationContractTests: XCTestCase {
         )
         XCTAssertEqual(
             PillPack.PillRegimenPreset.everyDay.localizedRoutineDisplayName(locale: italian),
-            "Continuo"
+            "Ogni giorno"
         )
     }
 
