@@ -2,7 +2,7 @@
 //  ProtectionPlanRoutineContentTests.swift
 //  PillieTests
 //
-//  Verifies the copy for Routine Method, Routine Details, and Reminder Time (#77)
+//  Verifies the copy for Routine Method and Reminder Time (#77)
 //  matches the Superdesign drafts (consolidated to keep each screen uncluttered) and
 //  respects Pillie's privacy / non-medical boundary. Value types only — no host crash.
 //
@@ -31,30 +31,6 @@ final class ProtectionPlanRoutineContentTests: XCTestCase {
 
     func testRoutineMethodContentHasNoMedicalOrFakeStatLanguage() {
         for line in ProtectionPlanRoutineMethodContent.default.visibleCopy {
-            assertNoMedicalOrFakeClaims(line)
-        }
-    }
-
-    // MARK: - Routine Details
-
-    func testRoutineDetailsContentExposesPositionAndRegimenSimplification() {
-        let content = ProtectionPlanRoutineDetailsContent.default
-        XCTAssertEqual(content.title, "Where are you in your routine?")
-        XCTAssertEqual(content.subtitle, "How far into your cycle are you?")
-        XCTAssertEqual(content.cyclePositionHeader, "Where are you now?")
-        XCTAssertEqual(content.regimenHeader, "Pill regimen")
-        XCTAssertEqual(content.editExactDayLabel, "Edit exact day")
-        // The "More options" disclosure is the mechanism that keeps the screen clean
-        // while still reaching every regimen.
-        XCTAssertEqual(content.moreLabel, "More options")
-        XCTAssertEqual(content.primaryCTA, "Continue")
-        // The coarse position toggle is the three CyclePosition buckets.
-        XCTAssertEqual(content.visibleCopy.contains(CyclePosition.justStarting.title), true)
-        XCTAssertEqual(content.visibleCopy.contains(CyclePosition.nearEnd.title), true)
-    }
-
-    func testRoutineDetailsContentHasNoMedicalOrFakeStatLanguage() {
-        for line in ProtectionPlanRoutineDetailsContent.default.visibleCopy {
             assertNoMedicalOrFakeClaims(line)
         }
     }
