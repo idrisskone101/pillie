@@ -946,6 +946,7 @@ class PillStore {
             activePack.method = method
             activePack.setPillRegimen(method == .pill ? regimen : .twentyOneSeven, customRegimen: customRegimen)
             activePack.startDate = startDate
+            activePack.ringInsertionDate = nil
             activePack.cycleDayAnchorIndex = PillPack.normalizedCycleDayAnchorIndex(
                 cycleDayAnchorIndex,
                 cycleLength: activePack.cycleLength

@@ -449,44 +449,6 @@ struct ProtectionPlanRoutineMethodContent {
     }
 }
 
-/// Copy for the Routine Basics Details screen (issue #77, Superdesign draft
-/// b9b281e6). Replaces the legacy seven-card regimen form: a coarse cycle-position
-/// toggle anchors the exact day, and only the common regimens show up front with the
-/// rest behind "More options". The view chooses the method-specific section (pill
-/// regimen picker vs. patch/ring schedule rules); this struct holds the shared copy.
-struct ProtectionPlanRoutineDetailsContent {
-    let title: String
-    let subtitle: String
-    let cyclePositionHeader: String
-    let regimenHeader: String
-    /// Disclosure that reveals the optional exact cycle-day adjustment.
-    let editExactDayLabel: String
-    /// Label for the disclosure that reveals the less common regimens.
-    let moreLabel: String
-    let footnote: String
-    let primaryCTA: String
-
-    var visibleCopy: [String] {
-        [title, subtitle, cyclePositionHeader, regimenHeader, editExactDayLabel, moreLabel, footnote, primaryCTA]
-            + CyclePosition.allCases.map(\.title)
-    }
-
-    static var `default`: ProtectionPlanRoutineDetailsContent { localized() }
-
-    static func localized(locale: Locale = .current) -> ProtectionPlanRoutineDetailsContent {
-        ProtectionPlanRoutineDetailsContent(
-            title: PillieLocalization.string("onboarding.cycle_position.title", locale: locale),
-            subtitle: PillieLocalization.string("onboarding.cycle_position.subtitle", locale: locale),
-            cyclePositionHeader: PillieLocalization.string("onboarding.cycle_position.title", locale: locale),
-            regimenHeader: PillieLocalization.string("onboarding.regimen.title", locale: locale),
-            editExactDayLabel: PillieLocalization.string("global.action.edit", locale: locale),
-            moreLabel: PillieLocalization.string("onboarding.regimen.custom", locale: locale),
-            footnote: PillieLocalization.string("onboarding.plan.disclaimer", locale: locale),
-            primaryCTA: PillieLocalization.string("global.action.continue", locale: locale)
-        )
-    }
-}
-
 /// Copy for the Reminder Time screen (issue #77, Superdesign draft ec61e147). Picks
 /// the Due Action Time through the existing production reminder model, kept lean —
 /// the screen leads with the picker and a single method-aware line.

@@ -77,7 +77,7 @@ tap --id protectionPlanPrimaryCTA
 # schedule, pill path — TodayPillView (ENG-138). Sealed pack, CTA disabled until a
 # pill is tapped and answered. packTile.<n> ids come from PackCard's onSelectDay;
 # todayPillQuestion / todayPillYes / todayPillLogged from TodayPillView. Title:
-# onboarding.today_pill.title. Patch and ring still get ProtectionPlanRoutineDetailsView.
+# onboarding.today_pill.title. Patch and ring get RoutineDialView (onboarding-dial.flow).
 wait text "Tap the pill you're on today."
 shot today-pill
 tap --id packTile.12
