@@ -1,0 +1,68 @@
+# Ring users' V4 countdown card (HomeCountdownCard, ENG-149) through one
+# cycle and the day-29 rollover. /routine-day seeds an established ring
+# routine (DebugQA.applyRoutineDay). Midday EDT is past the 8:00 AM reminder.
+fresh
+launch
+wait text "Get started" 15
+openurl "pillie://debug/plus-home?lang=en"
+openurl pillie://debug/fixed-now?at=2026-09-28T16:00:00Z
+
+openurl "pillie://debug/routine-day?method=ring&day=10&lang=en"
+# The app-blocking card sits above the countdown card on a fresh install; close it so the card is fully in view.
+tap --id homeBlockingStatusCardDismiss
+gone id homeBlockingStatusCard 10
+wait text "until it comes out" 10
+expect text "Ring in"
+expect text "Day 10 of 28"
+shot wearing
+
+openurl "pillie://debug/routine-day?method=ring&day=22&lang=en"
+wait text "Take your ring out" 10
+expect text "Until tomorrow 8:00 AM"
+shot late-out
+
+tap --label "Remove ring"
+wait id shakeTapToConfirmFallback 10
+tap --id shakeTapToConfirmFallback
+wait text "Out today" 15
+expect text "until it goes back in"
+shot logged-out
+
+openurl "pillie://debug/routine-day?method=ring&day=25&lang=en"
+wait text "Ring-free week" 10
+shot ring-free-week
+
+# Day 29: the reinsert stays loggable (DoseScheduleEngine ringReinsert) and is late past the reminder.
+openurl "pillie://debug/routine-day?method=ring&day=28&lang=en"
+wait text "until it goes back in" 10
+openurl pillie://debug/fixed-now?at=2026-09-29T16:00:00Z
+wait text "Put a new ring in" 10
+expect text "Day 29 · new cycle"
+shot late-back-in
+
+# Logging the reinsert starts the next cycle with the ring in.
+tap --label "Change ring"
+wait id shakeTapToConfirmFallback 10
+tap --id shakeTapToConfirmFallback
+wait text "In today" 15
+expect text "until it comes out"
+shot logged-back-in
+
+# Day 30 without a reinsert: the engine reads day 29 as no data and asks for a new cycle.
+openurl pillie://debug/fixed-now?at=2026-09-28T16:00:00Z
+openurl "pillie://debug/routine-day?method=ring&day=28&lang=en"
+wait text "until it goes back in" 10
+openurl pillie://debug/fixed-now?at=2026-09-30T16:00:00Z
+wait text "Day 30 · new cycle" 10
+expect text "New ring"
+shot new-cycle-due
+
+# The day after an unlogged insertion reads missed.
+openurl pillie://debug/fixed-now?at=2026-09-28T16:00:00Z
+openurl "pillie://debug/routine-day?method=ring&day=1&lang=en"
+wait text "Put your ring in" 10
+openurl pillie://debug/fixed-now?at=2026-09-29T16:00:00Z
+wait text "Put your ring in now" 10
+expect text "Was due yesterday"
+shot missed-in
+openurl pillie://debug/fixed-now?at=off

@@ -1445,6 +1445,16 @@ class PillStore {
         rebuildReadIndexes()
     }
 
+    /// Starts a fresh 21 + 7 patch or ring routine on `cycleDay` today, like onboarding, but as an
+    /// established routine: no start-day grace, so an untaken task past its reminder reads late.
+    func seedRoutineDay(method: ContraceptiveMethod, cycleDay: Int) {
+        resetAndStartFresh(method: method, regimen: .twentyOneSeven, customRegimen: nil, cycleDay: cycleDay)
+        activePack?.startedAt = nil
+        persist()
+        rebuildReadIndexes()
+        protocolChangeVersion &+= 1
+    }
+
     /// Replaces the live pack with a DEBUG history plan (missed days, finished
     /// pack, marketing calendar). Sets `appActivatedDate` to the pack start so
     /// unmarked past due days resolve as missed instead of no-data.

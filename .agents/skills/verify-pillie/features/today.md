@@ -14,8 +14,13 @@ blocking/trial status surfaces, and (when eligible) the review ask.
   ringed, an untaken pill past its reminder late (amber) and missed once the
   next reminder fires (ENG-148), "…" menu (`#homePackOptions`) with Change pack type
   (`#homePackChangeType`, the onboarding pack sheet) and Start new. A log pops today's
-  tile once Home is visible again. Patch and ring users still get the dark
-  "This cycle" strip (`PillPackCard`).
+  tile once Home is visible again.
+- `today-countdown-card` shows the V4 countdown card for patch and ring
+  users (`HomeCountdownCard`, ENG-149): gauge with the patch, sachet or ring
+  art, a day countdown or "Today" / "Late" / "Missed", and the milestone
+  track (Patch 1, Patch 2, Patch 3, Off, New pack; or In, Out, Back in).
+  States come from `HomeCountdownProgress`. The "…" menu
+  (`#homeCountdownOptions`) starts a new cycle. It has no log button.
 - `today-mark-taken` is the real user path: tap the floating CTA, then
   Shake to Confirm (or its tap-to-confirm fallback), which marks today taken
   — and the same button undoes it.
@@ -74,6 +79,17 @@ blocking/trial status surfaces, and (when eligible) the review ask.
 - `flows/today-change-pack.flow` — the "…" menu's Change pack type opens
   the pack sheet, then the Settings "Reset Tracking Data?" confirmation.
   Cancel keeps the pack; Reset & Save starts the new pack at pill 1 today.
+- `flows/today-patch-countdown.flow` — `/routine-day?method=patch&day=N`
+  plus `/fixed-now` walks the patch card: wearing (day 10), late change
+  (day 15), logged through the real CTA ("On today"), missed the next day
+  (Home's button reads "nothing due today"), late off day, patch-free week,
+  day 29 new cycle due, and "Start new" from the card menu (patch 1 due under
+  the start-day grace).
+- `flows/today-ring-countdown.flow` — the same for the ring: wearing, late
+  out, logged out, ring-free week, the day-29 reinsert (late, then logged,
+  which starts the next cycle), day 30 new cycle due, and a missed insertion.
+- `pillie://debug/countdown-card` opens a gallery of the 16 Paper lifecycle
+  cards built from fixed `HomeCountdownProgress` values.
 - `flows/today-long-pack.flow` — onboarding picks a Custom 88 + 3 pack, then
   Home opens its card on the page with today ("Weeks 5 to 8 of 13").
 - `flows/today-sugar-pill.flow` — a 21 + 7 sugar day is due ("Take pill"),
