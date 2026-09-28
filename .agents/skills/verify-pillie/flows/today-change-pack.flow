@@ -1,41 +1,37 @@
-# Change the pack type from the Home pack card's "…" menu (HomePackCard,
-# PillStore.changePackRegimen). Two days into a 21 + 7 sugar week, switching
-# to 24 + 4 keeps today's pill number, records yesterday, now a hormone day, as a
-# skip (no taken claim, no missed dose), and leaves the streak as it was.
+# Change the pack type from the Home pack card's "…" menu (HomePackCard). It
+# runs the same reset as the Settings schedule editor: "Reset Tracking Data?"
+# (ScheduleCriticalSettingChange, day 1), then PillStore.resetAndStartFresh, so
+# the new pack starts at pill 1 today and history clears.
 fresh
 launch
 wait text "Get started" 15
 openurl "pillie://debug/plus-home?lang=en"
 openurl pillie://debug/trial-grant?lang=en
-openurl pillie://debug/fixed-now?at=2026-09-28T20:00:00Z
 openurl pillie://debug/trial-eve-of-break?lang=en
 wait text "Last hormone pill" 10
-tap --label "Take pill"
-wait text "Shake to Confirm" 10
-tap --id shakeTapToConfirmFallback
-wait text "Taken today" 15
-openurl pillie://debug/fixed-now?at=2026-09-30T20:00:00Z
-wait text "Sugar pill 2 of 7" 10
-expect text "Pill 23 of 28 · new pack Tuesday"
 shot before
+
+# Cancel keeps the pack as it was.
 tap --id homePackOptions
 wait id homePackChangeType 5
 tap --id homePackChangeType
 wait id packSheet.custom 10
 shot sheet
 tap --id packSheet.24_4
-gone id packSheet.custom 10
-wait text "Pill 23 of 28" 10
-expect text "24/4 · due 8:00 AM"
-expect text "Take pill"
+wait text "Reset Tracking Data?" 10
+shot reset-confirmation
+tap --label Cancel
+gone text "Reset Tracking Data?" 5
+expect text "Pill 21 of 28"
+
+# Confirm starts the 24 + 4 pack at pill 1 today.
+tap --id homePackOptions
+wait id homePackChangeType 5
+tap --id homePackChangeType
+wait id packSheet.custom 10
+tap --id packSheet.24_4
+wait text "Reset Tracking Data?" 10
+tap --label "Reset & Save"
+wait text "Pill 1 of 28" 10
+expect text "New pack · 24/4"
 shot after-24-4
-# Day 22 was an unlogged sugar pill; under 24 + 4 it is a pill day recorded as a
-# skip, so History shows no missed dose and the streak neither grows nor breaks.
-gesture scroll-down
-wait text "Your streak" 5
-shot streak
-tap --label History
-wait text "Your month so far" 10
-shot history
-tap --label Today
-openurl pillie://debug/fixed-now?at=off

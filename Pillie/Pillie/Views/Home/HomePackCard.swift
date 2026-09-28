@@ -16,6 +16,8 @@ struct HomePackCard: View {
     @Environment(\.scenePhase) private var scenePhase
     @State private var showsNewPackConfirmation = false
     @State private var showsPackSheet = false
+    @State private var pickedPack: PackChoice?
+    @State private var showsResetConfirmation = false
     @State private var heldTaken: Bool?
     private let homeFeedback = HomeActionInteractionFeedback()
 
@@ -52,8 +54,10 @@ struct HomePackCard: View {
                 onStartNew: { showsNewPackConfirmation = true }
             )
         }
-        .sheet(isPresented: $showsPackSheet) {
-            PackTypeSheet(current: PackChoice(pack.regimen), onPick: changePack)
+        .sheet(isPresented: $showsPackSheet, onDismiss: {
+            showsResetConfirmation = pickedPack != nil
+        }) {
+            PackTypeSheet(current: PackChoice(pack.regimen)) { pickedPack = $0 }
         }
         .onChange(of: holdsTodayLog || scenePhase != .active, initial: true) { _, holds in
             heldTaken = holds ? store.isTodayTaken : nil
@@ -71,18 +75,34 @@ struct HomePackCard: View {
         } message: {
             Text(startNewConfirmation.body)
         }
+        .alert(resetConfirmation.title, isPresented: $showsResetConfirmation) {
+            Button(resetConfirmation.cancelTitle, role: .cancel) { pickedPack = nil }
+            Button(resetConfirmation.confirmTitle, role: .destructive) { startOver() }
+        } message: {
+            Text(resetConfirmation.body)
+        }
     }
 
-    private func changePack(_ choice: PackChoice) {
+    /// The same reset Settings runs when the schedule changes: history clears and the new pack starts at pill 1 today.
+    private var resetConfirmation: ScheduleCriticalSettingChange.Confirmation {
+        ScheduleCriticalSettingChange.confirmation(cycleDay: 1, locale: locale)
+    }
+
+    private func startOver() {
+        guard let choice = pickedPack else { return }
+        pickedPack = nil
         let feedbackResponse = homeFeedback.commitNewPackOrCycle(
             accessibilityReduceMotion: accessibilityReduceMotion
         )
-        let changed = withAnimation(feedbackResponse.motionProfile.animation) {
-            store.changePackRegimen(to: choice)
+        withAnimation(feedbackResponse.motionProfile.animation) {
+            store.resetAndStartFresh(
+                method: .pill,
+                regimen: choice.preset,
+                customRegimen: choice.preset == .custom ? choice.regimen : nil,
+                cycleDay: 1
+            )
         }
-        if changed {
-            ProductAnalyticsTelemetry.live.protocolChangeSaved()
-        }
+        ProductAnalyticsTelemetry.live.protocolChangeSaved()
     }
 
     private var startNewConfirmation: CycleNounPresentation.StartNewConfirmation {
