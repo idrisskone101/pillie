@@ -21,7 +21,7 @@ struct StatusCard: View {
             minute: store.reminderMinute,
             locale: locale
         )
-        let iconName = iconName(for: isTodayPassiveOrBreak ? todayAction : alarmAction, isTodayTaken: isTodayTaken)
+        let method = (isTodayPassiveOrBreak ? todayAction : alarmAction)?.method ?? store.pack.method
         let actionTitle = StatusCardTitle.resolve(
             alarmAction: alarmAction,
             liveDay: store.today,
@@ -30,7 +30,7 @@ struct StatusCard: View {
             isTodayPassiveOrBreak: isTodayPassiveOrBreak
         ).localized(reminderTime: reminderTime, locale: locale)
         statusMainContent(
-            iconName: iconName,
+            method: method,
             reminderTime: reminderTime,
             actionTitle: actionTitle,
             isTodayTaken: isTodayTaken
@@ -48,7 +48,7 @@ struct StatusCard: View {
     }
 
     private func statusMainContent(
-        iconName: String,
+        method: ContraceptiveMethod,
         reminderTime: String,
         actionTitle: String,
         isTodayTaken: Bool
@@ -57,13 +57,23 @@ struct StatusCard: View {
             Circle()
                 .fill(isTodayTaken ? PillieTheme.coral : PillieTheme.lavender)
                 .frame(width: 48, height: 48)
-                .overlay(
-                    Image(systemName: iconName)
-                        .font(.system(size: 20))
-                        .foregroundStyle(PillieTheme.textPrimary)
-                        .contentTransition(.opacity)
-                        .animation(valueChangeAnimation, value: iconName)
-                )
+                .overlay {
+                    Group {
+                        if isTodayTaken {
+                            Image(systemName: "checkmark")
+                                .font(.system(size: 20))
+                                .foregroundStyle(PillieTheme.textPrimary)
+                        } else {
+                            Image(method.iconImageName)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 32, height: 32)
+                        }
+                    }
+                    .transition(.opacity)
+                    .animation(valueChangeAnimation, value: isTodayTaken)
+                    .accessibilityHidden(true)
+                }
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(reminderTime)
@@ -82,22 +92,6 @@ struct StatusCard: View {
                     .contentTransition(.opacity)
                     .animation(valueChangeAnimation, value: actionTitle)
             }
-        }
-    }
-
-    private func iconName(for alarmAction: DoseScheduleAction?, isTodayTaken: Bool) -> String {
-        if isTodayTaken {
-            return "checkmark"
-        }
-
-        let method = alarmAction?.method ?? store.pack.method
-        switch method {
-        case .pill:
-            return "pills.fill"
-        case .patch:
-            return "square.fill.on.square.fill"
-        case .ring:
-            return "circle.grid.cross"
         }
     }
 }

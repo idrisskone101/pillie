@@ -438,7 +438,13 @@ struct HomeView: View {
                         .modifier(FadeInUp(appeared: appeared, delay: 0.15))
                     }
 
-                    PillPackCard()
+                    Group {
+                        if store.pack.method == .pill {
+                            HomePackCard()
+                        } else {
+                            PillPackCard()
+                        }
+                    }
                         .modifier(FadeInUp(appeared: appeared, delay: 0.2))
                         .animation(unifiedStateTransition, value: store.isTodayTaken)
 
