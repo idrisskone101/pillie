@@ -10,7 +10,7 @@ struct RoutineDialSelection: Equatable {
     private(set) var cycleDay: Int
     private(set) var answer: TodayPillPick.Answer?
 
-    static let patchSegmentCount = RoutineDialDay.cycleLength / RoutineDialDay.daysPerPatch
+    static let patchSegmentCount = RoutineDialDay.patchCount + 1
 
     init(method: RoutineDialMethod, cycleDay: Int = 1) {
         self.method = method

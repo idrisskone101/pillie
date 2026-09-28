@@ -42,9 +42,7 @@ struct ProtectionPlanReminderTimeView: View {
         switch pack.method {
         case .pill:
             return pack.pillRegimen.localizedScheduleSummary()
-        case .patch:
-            return pack.method.routineDescriptor
-        case .ring:
+        case .patch, .ring:
             return pack.method.routineDescriptor
         }
     }
@@ -63,22 +61,28 @@ struct ProtectionPlanReminderTimeView: View {
             )
         case .dial(let pick):
             // The store is written only when this step commits, so the day comes from the pick.
-            return ProtectionPlanRoutineSummary(
+            return routineSummary(
                 method: pick.method.contraceptiveMethod,
                 scheduleSummary: pick.method.contraceptiveMethod.routineDescriptor,
-                cycleDay: pick.cycleDay,
-                reminderTimeText: liveTimeText,
-                locale: .current
+                cycleDay: pick.cycleDay
             )
         case nil:
-            return ProtectionPlanRoutineSummary(
+            return routineSummary(
                 method: store.contraceptiveMethod,
                 scheduleSummary: scheduleSummaryText,
-                cycleDay: store.pack.cycleDayIndex(on: store.today) + 1,
-                reminderTimeText: liveTimeText,
-                locale: .current
+                cycleDay: store.pack.cycleDayIndex(on: store.today) + 1
             )
         }
+    }
+
+    private func routineSummary(method: ContraceptiveMethod, scheduleSummary: String, cycleDay: Int) -> ProtectionPlanRoutineSummary {
+        ProtectionPlanRoutineSummary(
+            method: method,
+            scheduleSummary: scheduleSummary,
+            cycleDay: cycleDay,
+            reminderTimeText: liveTimeText,
+            locale: .current
+        )
     }
 
     private var protectionLine: String {
