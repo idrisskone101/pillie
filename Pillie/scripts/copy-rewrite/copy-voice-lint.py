@@ -38,6 +38,8 @@ GLOSSARY = [
     (r"^hey\b", "no Hey opener, lead with the step"),
     (r"\btwo weeks\b", "the trial counts active days, say 14 active days"),
     (r"\bmay be running low\b|\bwhen convenient\b", "hedged and cold, say what to check"),
+    (r"\bplacebo\b", "say sugar pill or break days, not placebo"),
+    (r"\boff[- ](weeks?|days?)\b|\brest days?\b", "say break days or break week"),
 ]
 
 

@@ -42,6 +42,9 @@ One word per idea. Translate each term once per locale, then reuse that translat
 | Pillie Plus, then Plus | the paid plan | premium, pro |
 | active days | days with a hormone step; trial length | two weeks, trial days |
 | break days, break week | placebo or patch-free or ring-free days | off days, rest days |
+| sugar pill | a placebo pill in the pack | placebo, reminder pill, inactive pill |
+| break days with no pills | a break with no pills in the pack (21-pill packs) | pill-free days |
+| not checked in | a past day with no check-in | missed |
 | streak | consecutive completed check-ins | daily streak |
 
 ## Locales

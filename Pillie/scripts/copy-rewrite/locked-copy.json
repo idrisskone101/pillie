@@ -2174,7 +2174,7 @@
       "key": "onboarding.today_pill.title",
       "create": true,
       "comment": "Onboarding step 7 title: tap today's pill in the pack drawing [standard]",
-      "en": "Tap the pill you're on today.",
+      "en": "Tap the pill you’re on today.",
       "de": "Tipp auf die Pille, die du heute nimmst.",
       "it": "Tocca la pillola che prendi oggi."
     },
@@ -2185,8 +2185,8 @@
       "create": true,
       "comment": "Onboarding step 7 subtitle under the pack drawing [standard]",
       "en": "Your pack, just as it looks in your hand.",
-      "de": "Dein Blister, genau wie er in deiner Hand aussieht.",
-      "it": "Il tuo blister, esattamente come lo vedi in mano."
+      "de": "Deine Packung, genau so, wie sie in deiner Hand aussieht.",
+      "it": "La tua confezione, proprio come la vedi in mano."
     },
     {
       "issue": "ENG-138",
@@ -2206,7 +2206,7 @@
       "comment": "Onboarding step 7 answer: today's pill is already taken [health]",
       "en": "Yes, I took it",
       "de": "Ja, ich hab sie genommen",
-      "it": "Sì, l'ho presa"
+      "it": "Sì, l’ho presa"
     },
     {
       "issue": "ENG-138",
@@ -2224,9 +2224,9 @@
       "key": "onboarding.today_pill.logged",
       "create": true,
       "comment": "Onboarding step 7 confirmation after answering yes [standard]",
-      "en": "Logged. Day 1 of your streak.",
-      "de": "Gespeichert. Tag 1 deiner Serie.",
-      "it": "Registrato. Giorno 1 della tua serie."
+      "en": "Checked in. Day 1 of your streak.",
+      "de": "Abgehakt. Tag 1 deiner Serie.",
+      "it": "Confermato. Giorno 1 della tua serie."
     },
     {
       "issue": "ENG-138",
@@ -2245,7 +2245,7 @@
       "create": true,
       "comment": "Onboarding plan card row value: the tapped pill number, already taken [health]",
       "en": "Pill %lld · taken",
-      "de": "Pille %lld · genommen",
+      "de": "Pille %lld · eingenommen",
       "it": "Pillola %lld · presa"
     },
     {

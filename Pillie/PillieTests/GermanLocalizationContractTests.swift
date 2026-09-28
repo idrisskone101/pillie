@@ -285,11 +285,11 @@ final class GermanLocalizationContractTests: XCTestCase {
             },
             [
                 "21 aktive Tage, 7 Pausentage",
-                "21 aktive Tage, 7 pillenfreie Tage",
+                "21 aktive Tage, 7 Pausentage ohne Pillen",
                 "24 aktive Tage, 4 Pausentage",
                 "26 aktive Tage, 2 Pausentage",
                 "28 aktive Tage, keine Pause",
-                "21 aktive Tage, 4 pillenfreie Tage",
+                "21 aktive Tage, 4 Pausentage ohne Pillen",
                 "Eigene",
             ]
         )

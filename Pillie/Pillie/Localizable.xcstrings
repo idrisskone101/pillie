@@ -44952,7 +44952,7 @@
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 zile active, 7 zile de pauză"
+            "value": "21 de zile active, 7 zile de pauză"
           }
         },
         "sk": {
@@ -45227,7 +45227,7 @@
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "24 zile active, 4 zile de pauză"
+            "value": "24 de zile active, 4 zile de pauză"
           }
         },
         "sk": {
@@ -45502,7 +45502,7 @@
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "28 zile active, fără pauză"
+            "value": "28 de zile active, fără pauză"
           }
         },
         "sk": {
@@ -46482,271 +46482,271 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 only"
+            "value": "21-pill pack"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Solo 21"
+            "value": "Confezione da 21 pillole"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nur 21"
+            "value": "21er-Packung"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 seulement"
+            "value": "Plaquette de 21 pilules"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Solo 21"
+            "value": "Blíster de 21 píldoras"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Só 21"
+            "value": "Cartela de 21 pílulas"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Alleen 21"
+            "value": "Strip met 21 pillen"
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Endast 21"
+            "value": "Karta med 21 piller"
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kun 21"
+            "value": "Pakke med 21 piller"
           }
         },
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kun 21"
+            "value": "Brett med 21 piller"
           }
         },
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vain 21"
+            "value": "21 pillerin liuska"
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "translated",
-            "value": "Só 21"
+            "value": "Embalagem de 21 pílulas"
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "Només 21"
+            "value": "Envàs de 21 píndoles"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tylko 21"
+            "value": "Opakowanie 21 tabletek"
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Jen 21"
+            "value": "Balení s 21 pilulkami"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Только 21"
+            "value": "Упаковка на 21 таблетку"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Лише 21"
+            "value": "Упаковка на 21 таблетку"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "21のみ"
+            "value": "21錠タイプ"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "21만"
+            "value": "21정 팩"
           }
         },
         "ms": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 sahaja"
+            "value": "Pek 21 pil"
           }
         },
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "Doar 21"
+            "value": "Folie cu 21 de pilule"
           }
         },
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Len 21"
+            "value": "Balenie s 21 tabletkami"
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 เท่านั้น"
+            "value": "แผง 21 เม็ด"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "仅21"
+            "value": "21 片装"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "केवल 21"
+            "value": "21 गोलियों वाला पैक"
           }
         },
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Samo 21"
+            "value": "Pakiranje od 21 pilule"
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "Csak 21"
+            "value": "21 tablettás levél"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sadece 21"
+            "value": "21 haplık paket"
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 மட்டும்"
+            "value": "21 மாத்திரைகள் உள்ள பேக்"
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Hanya 21"
+            "value": "Kemasan 21 pil"
           }
         },
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 فقط"
+            "value": "شريط من 21 حبة"
           }
         },
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 בלבד"
+            "value": "חפיסה של 21 גלולות"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Chỉ 21"
+            "value": "Vỉ 21 viên"
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "শুধু 21"
+            "value": "21 পিলের প্যাক"
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "صرف 21"
+            "value": "21 گولیوں کا پیک"
           }
         },
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Samo 21"
+            "value": "Zavitek z 21 tabletkami"
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Μόνο 21"
+            "value": "Συσκευασία 21 χαπιών"
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 మాత్రమే"
+            "value": "21 మాత్రల ప్యాక్"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "僅21"
+            "value": "21 顆裝"
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "ફક્ત 21"
+            "value": "21 ગોળીનું પેક"
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 ಮಾತ್ರ"
+            "value": "21 ಮಾತ್ರೆಗಳ ಪ್ಯಾಕ್"
           }
         },
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 മാത്രം"
+            "value": "21 ഗുളികകളുള്ള പാക്ക്"
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "फक्त 21"
+            "value": "21 गोळ्यांचे पॅक"
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "କେବଳ 21"
+            "value": "21 ପିଲ୍‌ର ପ୍ୟାକ୍"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਸਿਰਫ਼ 21"
+            "value": "21 ਗੋਲੀਆਂ ਵਾਲਾ ਪੈਕ"
           }
         }
       }
@@ -65732,271 +65732,271 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Placebo or off-week"
+            "value": "Sugar pill or break day"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Placebo ou semaine d’arrêt"
+            "value": "Pilule de sucre ou jour d’arrêt"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Placebo o semana de descanso"
+            "value": "Píldora de azúcar o día de descanso"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Placebo ou semana de intervalo"
+            "value": "Pílula de açúcar ou dia de intervalo"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Placebo of stopweek"
+            "value": "Suikerpil of pauzedag"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Placebo oder Pausenwoche"
+            "value": "Zuckerpille oder Pausentag"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Placebo o settimana di pausa"
+            "value": "Pillola di zucchero o giorno di pausa"
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Placebo eller pausvecka"
+            "value": "Sockerpiller eller pausdag"
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Placebo eller pauseuge"
+            "value": "Sukkerpille eller pausedag"
           }
         },
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "Placebo eller pauseuke"
+            "value": "Sukkerpille eller pausedag"
           }
         },
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Lume- tai taukoviikko"
+            "value": "Sokeripilleri tai taukopäivä"
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "translated",
-            "value": "Placebo ou semana de intervalo"
+            "value": "Pílula de açúcar ou dia de intervalo"
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "Placebo o setmana de pausa"
+            "value": "Píndola de sucre o dia de pausa"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Placebo lub tydzień przerwy"
+            "value": "Tabletka bez hormonów lub dzień przerwy"
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Placebo nebo týden pauzy"
+            "value": "Pilulka bez hormonů nebo den pauzy"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Плацебо или неделя перерыва"
+            "value": "Таблетка-пустышка или день перерыва"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Плацебо або тиждень перерви"
+            "value": "Таблетка-пустушка або день перерви"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "プラセボまたは休薬週"
+            "value": "偽薬または休薬日"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "위약 또는 휴약 주"
+            "value": "위약 또는 휴약일"
           }
         },
         "ms": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plasebo atau minggu rehat"
+            "value": "Pil plasebo atau hari rehat"
           }
         },
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "Placebo sau săptămână de pauză"
+            "value": "Pilulă fără hormoni sau zi de pauză"
           }
         },
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Placebo alebo týždeň pauzy"
+            "value": "Tabletka bez hormónov alebo deň pauzy"
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "ยาหลอกหรือสัปดาห์เว้น"
+            "value": "เม็ดแป้งหรือวันพัก"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "安慰剂或停药周"
+            "value": "空白片或停药日"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "प्लेसीबो या ब्रेक हफ़्ता"
+            "value": "बिना हार्मोन की गोली या ब्रेक का दिन"
           }
         },
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Placebo ili tjedan pauze"
+            "value": "Pilula bez hormona ili dan pauze"
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "Placebo vagy szünethét"
+            "value": "Hormonmentes tabletta vagy szünetnap"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plasebo veya ara haftası"
+            "value": "Hormonsuz hap veya ara günü"
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "பிளாசிபோ அல்லது இடைவெளி வாரம்"
+            "value": "ஹார்மோன் இல்லாத மாத்திரை அல்லது இடைவெளி நாள்"
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plasebo atau minggu istirahat"
+            "value": "Pil plasebo atau hari istirahat"
           }
         },
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "دواء وهمي أو أسبوع الاستراحة"
+            "value": "حبة وهمية أو يوم استراحة"
           }
         },
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "פלצבו או שבוע הפסקה"
+            "value": "גלולת דמה או יום הפסקה"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Giả dược hoặc tuần nghỉ"
+            "value": "Viên giả dược hoặc ngày nghỉ"
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "প্লাসিবো বা বিরতির সপ্তাহ"
+            "value": "হরমোন ছাড়া পিল বা বিরতির দিন"
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "پلیسبو یا وقفے کا ہفتہ"
+            "value": "بغیر ہارمون کی گولی یا وقفے کا دن"
           }
         },
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Placebo ali teden premora"
+            "value": "Tabletka brez hormonov ali dan premora"
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Πλασέμπο ή εβδομάδα διαλείμματος"
+            "value": "Χάπι χωρίς ορμόνες ή ημέρα διαλείμματος"
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "ప్లేసిబో లేదా విరామ వారం"
+            "value": "హార్మోన్ లేని మాత్ర లేదా విరామ రోజు"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "安慰劑或停藥週"
+            "value": "空白錠或停藥日"
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "પ્લેસિબો અથવા બ્રેક અઠવાડિયું"
+            "value": "હોર્મોન વગરની ગોળી અથવા બ્રેક દિવસ"
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ಪ್ಲಸೀಬೊ ಅಥವಾ ವಿರಾಮ ವಾರ"
+            "value": "ಹಾರ್ಮೋನ್ ಇಲ್ಲದ ಮಾತ್ರೆ ಅಥವಾ ವಿರಾಮ ದಿನ"
           }
         },
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "പ്ലാസിബോ അല്ലെങ്കിൽ ഇടവേള ആഴ്ച"
+            "value": "ഹോർമോൺ ഇല്ലാത്ത ഗുളിക അല്ലെങ്കിൽ ഇടവേള ദിനം"
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "प्लेसिबो किंवा ब्रेकचा आठवडा"
+            "value": "हार्मोन नसलेली गोळी किंवा ब्रेकचा दिवस"
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ପ୍ଲାସିବୋ ବା ବିରତି ସପ୍ତାହ"
+            "value": "ହରମୋନ୍ ବିନା ପିଲ୍ ବା ବିରତି ଦିନ"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਪਲੇਸੀਬੋ ਜਾਂ ਬ੍ਰੇਕ ਹਫ਼ਤਾ"
+            "value": "ਹਾਰਮੋਨ ਤੋਂ ਬਿਨਾਂ ਗੋਲੀ ਜਾਂ ਬ੍ਰੇਕ ਦਾ ਦਿਨ"
           }
         }
       }
@@ -84552,7 +84552,7 @@
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "26 zile active, 2 zile de pauză"
+            "value": "26 de zile active, 2 zile de pauză"
           }
         },
         "sk": {
@@ -84707,271 +84707,271 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 active days, 7 pill-free days"
+            "value": "21 active days, 7 break days with no pills"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 giorni attivi, 7 giorni senza pillola"
+            "value": "21 giorni attivi, 7 giorni di pausa senza pillole"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 aktive Tage, 7 pillenfreie Tage"
+            "value": "21 aktive Tage, 7 Pausentage ohne Pillen"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 jours actifs, 7 jours sans pilule"
+            "value": "21 jours actifs, 7 jours d’arrêt sans pilule"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 días activos, 7 sin píldora"
+            "value": "21 días activos, 7 de descanso sin píldoras"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 dias ativos, 7 dias sem pílula"
+            "value": "21 dias ativos, 7 dias de intervalo sem pílulas"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 actieve dagen, 7 pilvrije dagen"
+            "value": "21 actieve dagen, 7 pauzedagen zonder pillen"
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 aktiva dagar, 7 pillerfria dagar"
+            "value": "21 aktiva dagar, 7 pausdagar utan piller"
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 aktive dage, 7 pillefrie dage"
+            "value": "21 aktive dage, 7 pausedage uden piller"
           }
         },
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 aktive dager, 7 pillefrie dager"
+            "value": "21 aktive dager, 7 pausedager uten piller"
           }
         },
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 aktiivista päivää, 7 pilleritöntä päivää"
+            "value": "21 aktiivista päivää, 7 taukopäivää ilman pillereitä"
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 dias ativos, 7 dias sem pílula"
+            "value": "21 dias ativos, 7 dias de intervalo sem pílulas"
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 dies actius, 7 dies sense píndola"
+            "value": "21 dies actius, 7 dies de pausa sense píndoles"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 dni aktywnych, 7 dni bez tabletki"
+            "value": "21 dni aktywnych, 7 dni przerwy bez tabletek"
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 aktivních dní, 7 dní bez pilulky"
+            "value": "21 aktivních dní, 7 dní pauzy bez pilulek"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 активный день, 7 дней без таблеток"
+            "value": "21 активный день, 7 дней перерыва без таблеток"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 активний день, 7 днів без таблеток"
+            "value": "21 активний день, 7 днів перерви без таблеток"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "服用21日、ピルなし7日"
+            "value": "服用21日、ピルなしの休薬7日"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "복용 21일, 피임약 없는 7일"
+            "value": "복용 21일, 약 없는 휴약 7일"
           }
         },
         "ms": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 hari aktif, 7 hari tanpa pil"
+            "value": "21 hari aktif, 7 hari rehat tanpa pil"
           }
         },
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 zile active, 7 zile fără pilulă"
+            "value": "21 de zile active, 7 zile de pauză fără pilule"
           }
         },
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 aktívnych dní, 7 dní bez tabletky"
+            "value": "21 aktívnych dní, 7 dní pauzy bez tabletiek"
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "กิน 21 วัน เว้นยา 7 วัน"
+            "value": "กิน 21 วัน พัก 7 วันโดยไม่มียา"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 天服药，7 天无药片"
+            "value": "21 天服药，7 天停药（无药片）"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 सक्रिय दिन, 7 गोली-मुक्त दिन"
+            "value": "21 सक्रिय दिन, बिना गोली के 7 ब्रेक दिन"
           }
         },
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 aktivni dan, 7 dana bez pilule"
+            "value": "21 aktivni dan, 7 dana pauze bez pilula"
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 aktív nap, 7 tablettamentes nap"
+            "value": "21 aktív nap, 7 szünetnap tabletta nélkül"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 aktif gün, 7 hapsız gün"
+            "value": "21 aktif gün, 7 hapsız ara günü"
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 செயல் நாட்கள், 7 மாத்திரை இல்லாத நாட்கள்"
+            "value": "21 செயல் நாட்கள், மாத்திரை இல்லாத 7 இடைவெளி நாட்கள்"
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 hari aktif, 7 hari tanpa pil"
+            "value": "21 hari aktif, 7 hari istirahat tanpa pil"
           }
         },
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 يومًا نشطًا، 7 أيام بدون حبوب"
+            "value": "21 يومًا نشطًا، 7 أيام استراحة بلا حبوب"
           }
         },
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 ימים פעילים, 7 ימים ללא גלולה"
+            "value": "21 ימים פעילים, 7 ימי הפסקה בלי גלולות"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 ngày uống, 7 ngày không thuốc"
+            "value": "21 ngày uống, 7 ngày nghỉ không có thuốc"
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 সক্রিয় দিন, 7 পিলবিহীন দিন"
+            "value": "21 সক্রিয় দিন, পিল ছাড়া 7 বিরতির দিন"
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 فعال دن، 7 گولی کے بغیر دن"
+            "value": "21 فعال دن، 7 وقفے کے دن جن میں گولی نہیں"
           }
         },
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 aktivnih dni, 7 dni brez tablete"
+            "value": "21 aktivnih dni, 7 dni premora brez tabletk"
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 ενεργές ημέρες, 7 ημέρες χωρίς χάπι"
+            "value": "21 ενεργές ημέρες, 7 ημέρες διαλείμματος χωρίς χάπια"
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 యాక్టివ్ రోజులు, 7 మాత్ర లేని రోజులు"
+            "value": "21 యాక్టివ్ రోజులు, మాత్రలు లేని 7 విరామ రోజులు"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 天服藥，7 天無藥片"
+            "value": "21 天服藥，7 天停藥（無藥錠）"
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 સક્રિય દિન, 7 ગોળી વગરના દિન"
+            "value": "21 સક્રિય દિવસ, ગોળી વગરના 7 બ્રેક દિવસ"
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 ಸಕ್ರಿಯ ದಿನಗಳು, 7 ಮಾತ್ರೆ ಇಲ್ಲದ ದಿನಗಳು"
+            "value": "21 ಸಕ್ರಿಯ ದಿನಗಳು, ಮಾತ್ರೆ ಇಲ್ಲದ 7 ವಿರಾಮ ದಿನಗಳು"
           }
         },
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 സജീവ ദിനങ്ങൾ, 7 ഗുളിക ഇല്ലാത്ത ദിനങ്ങൾ"
+            "value": "21 സജീവ ദിനങ്ങൾ, ഗുളിക ഇല്ലാത്ത 7 ഇടവേള ദിനങ്ങൾ"
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 सक्रिय दिन, 7 गोळी-मुक्त दिन"
+            "value": "21 सक्रिय दिवस, गोळीशिवाय 7 ब्रेकचे दिवस"
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 ସକ୍ରିୟ ଦିନ, 7 ପିଲ୍ ବିନା ଦିନ"
+            "value": "21 ସକ୍ରିୟ ଦିନ, ପିଲ୍ ବିନା 7 ବିରତି ଦିନ"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 ਸਕ੍ਰਿਯ ਦਿਨ, 7 ਗੋਲੀ ਤੋਂ ਬਿਨਾਂ ਦਿਨ"
+            "value": "21 ਸਰਗਰਮ ਦਿਨ, ਬਿਨਾਂ ਗੋਲੀ ਦੇ 7 ਬ੍ਰੇਕ ਦਿਨ"
           }
         }
       }
@@ -84982,271 +84982,271 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 active days, 4 pill-free days"
+            "value": "21 active days, 4 break days with no pills"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 giorni attivi, 4 giorni senza pillola"
+            "value": "21 giorni attivi, 4 giorni di pausa senza pillole"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 aktive Tage, 4 pillenfreie Tage"
+            "value": "21 aktive Tage, 4 Pausentage ohne Pillen"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 jours actifs, 4 jours sans pilule"
+            "value": "21 jours actifs, 4 jours d’arrêt sans pilule"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 días activos, 4 sin píldora"
+            "value": "21 días activos, 4 de descanso sin píldoras"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 dias ativos, 4 dias sem pílula"
+            "value": "21 dias ativos, 4 dias de intervalo sem pílulas"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 actieve dagen, 4 pilvrije dagen"
+            "value": "21 actieve dagen, 4 pauzedagen zonder pillen"
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 aktiva dagar, 4 pillerfria dagar"
+            "value": "21 aktiva dagar, 4 pausdagar utan piller"
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 aktive dage, 4 pillefrie dage"
+            "value": "21 aktive dage, 4 pausedage uden piller"
           }
         },
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 aktive dager, 4 pillefrie dager"
+            "value": "21 aktive dager, 4 pausedager uten piller"
           }
         },
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 aktiivista päivää, 4 pilleritöntä päivää"
+            "value": "21 aktiivista päivää, 4 taukopäivää ilman pillereitä"
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 dias ativos, 4 dias sem pílula"
+            "value": "21 dias ativos, 4 dias de intervalo sem pílulas"
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 dies actius, 4 dies sense píndola"
+            "value": "21 dies actius, 4 dies de pausa sense píndoles"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 dni aktywnych, 4 dni bez tabletki"
+            "value": "21 dni aktywnych, 4 dni przerwy bez tabletek"
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 aktivních dní, 4 dny bez pilulky"
+            "value": "21 aktivních dní, 4 dny pauzy bez pilulek"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 активный день, 4 дня без таблеток"
+            "value": "21 активный день, 4 дня перерыва без таблеток"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 активний день, 4 дні без таблеток"
+            "value": "21 активний день, 4 дні перерви без таблеток"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "服用21日、ピルなし4日"
+            "value": "服用21日、ピルなしの休薬4日"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "복용 21일, 피임약 없는 4일"
+            "value": "복용 21일, 약 없는 휴약 4일"
           }
         },
         "ms": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 hari aktif, 4 hari tanpa pil"
+            "value": "21 hari aktif, 4 hari rehat tanpa pil"
           }
         },
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 zile active, 4 zile fără pilulă"
+            "value": "21 de zile active, 4 zile de pauză fără pilule"
           }
         },
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 aktívnych dní, 4 dni bez tabletky"
+            "value": "21 aktívnych dní, 4 dni pauzy bez tabletiek"
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "กิน 21 วัน เว้นยา 4 วัน"
+            "value": "กิน 21 วัน พัก 4 วันโดยไม่มียา"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 天服药，4 天无药片"
+            "value": "21 天服药，4 天停药（无药片）"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 सक्रिय दिन, 4 गोली-मुक्त दिन"
+            "value": "21 सक्रिय दिन, बिना गोली के 4 ब्रेक दिन"
           }
         },
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 aktivni dan, 4 dana bez pilule"
+            "value": "21 aktivni dan, 4 dana pauze bez pilula"
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 aktív nap, 4 tablettamentes nap"
+            "value": "21 aktív nap, 4 szünetnap tabletta nélkül"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 aktif gün, 4 hapsız gün"
+            "value": "21 aktif gün, 4 hapsız ara günü"
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 செயல் நாட்கள், 4 மாத்திரை இல்லாத நாட்கள்"
+            "value": "21 செயல் நாட்கள், மாத்திரை இல்லாத 4 இடைவெளி நாட்கள்"
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 hari aktif, 4 hari tanpa pil"
+            "value": "21 hari aktif, 4 hari istirahat tanpa pil"
           }
         },
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 يومًا نشطًا، 4 أيام بدون حبوب"
+            "value": "21 يومًا نشطًا، 4 أيام استراحة بلا حبوب"
           }
         },
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 ימים פעילים, 4 ימים ללא גלולה"
+            "value": "21 ימים פעילים, 4 ימי הפסקה בלי גלולות"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 ngày uống, 4 ngày không thuốc"
+            "value": "21 ngày uống, 4 ngày nghỉ không có thuốc"
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 সক্রিয় দিন, 4 পিলবিহীন দিন"
+            "value": "21 সক্রিয় দিন, পিল ছাড়া 4 বিরতির দিন"
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 فعال دن، 4 گولی کے بغیر دن"
+            "value": "21 فعال دن، 4 وقفے کے دن جن میں گولی نہیں"
           }
         },
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 aktivnih dni, 4 dnevi brez tablete"
+            "value": "21 aktivnih dni, 4 dnevi premora brez tabletk"
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 ενεργές ημέρες, 4 ημέρες χωρίς χάπι"
+            "value": "21 ενεργές ημέρες, 4 ημέρες διαλείμματος χωρίς χάπια"
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 యాక్టివ్ రోజులు, 4 మాత్ర లేని రోజులు"
+            "value": "21 యాక్టివ్ రోజులు, మాత్రలు లేని 4 విరామ రోజులు"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 天服藥，4 天無藥片"
+            "value": "21 天服藥，4 天停藥（無藥錠）"
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 સક્રિય દિન, 4 ગોળી વગરના દિન"
+            "value": "21 સક્રિય દિવસ, ગોળી વગરના 4 બ્રેક દિવસ"
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 ಸಕ್ರಿಯ ದಿನಗಳು, 4 ಮಾತ್ರೆ ಇಲ್ಲದ ದಿನಗಳು"
+            "value": "21 ಸಕ್ರಿಯ ದಿನಗಳು, ಮಾತ್ರೆ ಇಲ್ಲದ 4 ವಿರಾಮ ದಿನಗಳು"
           }
         },
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 സജീവ ദിനങ്ങൾ, 4 ഗുളിക ഇല്ലാത്ത ദിനങ്ങൾ"
+            "value": "21 സജീവ ദിനങ്ങൾ, ഗുളിക ഇല്ലാത്ത 4 ഇടവേള ദിനങ്ങൾ"
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 सक्रिय दिन, 4 गोळी-मुक्त दिन"
+            "value": "21 सक्रिय दिवस, गोळीशिवाय 4 ब्रेकचे दिवस"
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 ସକ୍ରିୟ ଦିନ, 4 ପିଲ୍ ବିନା ଦିନ"
+            "value": "21 ସକ୍ରିୟ ଦିନ, ପିଲ୍ ବିନା 4 ବିରତି ଦିନ"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "21 ਸਕ੍ਰਿਯ ਦਿਨ, 4 ਗੋਲੀ ਤੋਂ ਬਿਨਾਂ ਦਿਨ"
+            "value": "21 ਸਰਗਰਮ ਦਿਨ, ਬਿਨਾਂ ਗੋਲੀ ਦੇ 4 ਬ੍ਰੇਕ ਦਿਨ"
           }
         }
       }
@@ -96263,7 +96263,7 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Settimane %1$lld-%2$lld di %3$lld"
+            "value": "Settimane da %1$lld a %2$lld di %3$lld"
           }
         },
         "de": {
@@ -96293,7 +96293,7 @@
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Week %1$lld tot %2$lld van %3$lld"
+            "value": "Week %1$lld tot en met %2$lld van %3$lld"
           }
         },
         "sv": {
@@ -96335,7 +96335,7 @@
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tygodnie %1$lld do %2$lld z %3$lld"
+            "value": "Tygodnie od %1$lld do %2$lld z %3$lld"
           }
         },
         "cs": {
@@ -96347,13 +96347,13 @@
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Недели %1$lld–%2$lld из %3$lld"
+            "value": "Недели с %1$lld по %2$lld из %3$lld"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Тижні %1$lld–%2$lld з %3$lld"
+            "value": "Тижні від %1$lld до %2$lld з %3$lld"
           }
         },
         "ja": {
@@ -96395,13 +96395,13 @@
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "第 %1$lld-%2$lld 周，共 %3$lld 周"
+            "value": "第 %1$lld 至 %2$lld 周，共 %3$lld 周"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "%3$lld में से सप्ताह %1$lld से %2$lld"
+            "value": "%3$lld में से हफ़्ते %1$lld से %2$lld"
           }
         },
         "hr": {
@@ -96419,13 +96419,13 @@
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Hafta %1$lld-%2$lld / %3$lld"
+            "value": "Hafta %1$lld–%2$lld / %3$lld"
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "வாரங்கள் %1$lld–%2$lld / %3$lld"
+            "value": "%3$lld வாரங்களில் வாரம் %1$lld முதல் %2$lld வரை"
           }
         },
         "id": {
@@ -96449,19 +96449,19 @@
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tuần %1$lld đến %2$lld trong %3$lld"
+            "value": "Tuần %1$lld đến %2$lld trên %3$lld"
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "সপ্তাহ %1$lld–%2$lld/%3$lld"
+            "value": "%3$lld-এর মধ্যে সপ্তাহ %1$lld থেকে %2$lld"
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "%3$lld میں سے ہفتہ %1$lld تا %2$lld"
+            "value": "%3$lld میں سے ہفتے %1$lld تا %2$lld"
           }
         },
         "sl": {
@@ -96479,37 +96479,37 @@
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "వారాలు %1$lld–%2$lld / %3$lld"
+            "value": "%3$lld వారాల్లో %1$lld నుండి %2$lld వారాలు"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "第 %1$lld-%2$lld 週，共 %3$lld 週"
+            "value": "第 %1$lld 至 %2$lld 週，共 %3$lld 週"
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "%3$lld માંથી અઠવાડિયા %1$lld થી %2$lld"
+            "value": "%3$lld માંથી અઠવાડિયાં %1$lld થી %2$lld"
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ವಾರಗಳು %1$lld–%2$lld / %3$lld"
+            "value": "%3$lld ವಾರಗಳಲ್ಲಿ %1$lld ರಿಂದ %2$lldನೇ ವಾರಗಳು"
           }
         },
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "ആഴ്ചകൾ %1$lld–%2$lld / %3$lld"
+            "value": "%3$lld ആഴ്ചയിൽ %1$lld മുതൽ %2$lld വരെ ആഴ്ചകൾ"
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "आठवडे %1$lld–%2$lld / %3$lld"
+            "value": "%3$lld पैकी आठवडे %1$lld ते %2$lld"
           }
         },
         "or": {
@@ -96676,7 +96676,7 @@
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "%2$lld में से सप्ताह %1$lld"
+            "value": "%2$lld में से हफ़्ता %1$lld"
           }
         },
         "hr": {
@@ -96688,7 +96688,7 @@
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "%1$lld. hét / %2$lld"
+            "value": "%1$lld. hét, összesen %2$lld"
           }
         },
         "tr": {
@@ -96700,7 +96700,7 @@
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "வாரம் %1$lld / %2$lld"
+            "value": "%2$lld வாரங்களில் %1$lld-ஆம் வாரம்"
           }
         },
         "id": {
@@ -96724,13 +96724,13 @@
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tuần %1$lld trong %2$lld"
+            "value": "Tuần %1$lld trên %2$lld"
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "সপ্তাহ %1$lld/%2$lld"
+            "value": "%2$lld-এর মধ্যে সপ্তাহ %1$lld"
           }
         },
         "ur": {
@@ -96754,7 +96754,7 @@
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "వారం %1$lld / %2$lld"
+            "value": "%2$lld వారాల్లో %1$lldవ వారం"
           }
         },
         "zh-Hant": {
@@ -96772,19 +96772,19 @@
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ವಾರ %1$lld / %2$lld"
+            "value": "%2$lld ವಾರಗಳಲ್ಲಿ %1$lldನೇ ವಾರ"
           }
         },
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "ആഴ്ച %1$lld / %2$lld"
+            "value": "%2$lld ആഴ്ചയിൽ %1$lld-ാം ആഴ്ച"
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "आठवडा %1$lld / %2$lld"
+            "value": "%2$lld पैकी आठवडा %1$lld"
           }
         },
         "or": {
@@ -96807,7 +96807,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Previous weeks"
+            "value": "Earlier weeks"
           }
         },
         "it": {
@@ -96819,7 +96819,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vorherige Wochen"
+            "value": "Frühere Wochen"
           }
         },
         "fr": {
@@ -96843,13 +96843,13 @@
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vorige weken"
+            "value": "Eerdere weken"
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Föregående veckor"
+            "value": "Tidigare veckor"
           }
         },
         "da": {
@@ -96861,13 +96861,13 @@
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "Forrige uker"
+            "value": "Tidligere uker"
           }
         },
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Edelliset viikot"
+            "value": "Aiemmat viikot"
           }
         },
         "pt-PT": {
@@ -96885,13 +96885,13 @@
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Poprzednie tygodnie"
+            "value": "Wcześniejsze tygodnie"
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Předchozí týdny"
+            "value": "Dřívější týdny"
           }
         },
         "ru": {
@@ -96909,19 +96909,19 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "前の週"
+            "value": "以前の週"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "이전 주"
+            "value": "이전 주차"
           }
         },
         "ms": {
           "stringUnit": {
             "state": "translated",
-            "value": "Minggu sebelumnya"
+            "value": "Minggu-minggu sebelumnya"
           }
         },
         "ro": {
@@ -96933,7 +96933,7 @@
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Predchádzajúce týždne"
+            "value": "Skoršie týždne"
           }
         },
         "th": {
@@ -96945,19 +96945,19 @@
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "上几周"
+            "value": "之前的几周"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "पिछले सप्ताह"
+            "value": "पहले के हफ़्ते"
           }
         },
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Prethodni tjedni"
+            "value": "Raniji tjedni"
           }
         },
         "hu": {
@@ -96981,7 +96981,7 @@
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Minggu sebelumnya"
+            "value": "Minggu-minggu sebelumnya"
           }
         },
         "ar": {
@@ -96993,25 +96993,25 @@
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "השבועות הקודמים"
+            "value": "שבועות מוקדמים יותר"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tuần trước"
+            "value": "Các tuần trước"
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "আগের সপ্তাহ"
+            "value": "আগের সপ্তাহগুলো"
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "پچھلے ہفتے"
+            "value": "پہلے کے ہفتے"
           }
         },
         "sl": {
@@ -97035,13 +97035,13 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "上幾週"
+            "value": "之前的幾週"
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "પાછલા અઠવાડિયા"
+            "value": "પહેલાંનાં અઠવાડિયાં"
           }
         },
         "kn": {
@@ -97059,19 +97059,19 @@
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "मागील आठवडे"
+            "value": "आधीचे आठवडे"
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ପୂର୍ବ ସପ୍ତାହ"
+            "value": "ପୂର୍ବର ସପ୍ତାହଗୁଡ଼ିକ"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਪਿਛਲੇ ਹਫ਼ਤੇ"
+            "value": "ਪਹਿਲਾਂ ਦੇ ਹਫ਼ਤੇ"
           }
         }
       }
@@ -97082,7 +97082,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Next weeks"
+            "value": "Later weeks"
           }
         },
         "it": {
@@ -97094,7 +97094,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nächste Wochen"
+            "value": "Spätere Wochen"
           }
         },
         "fr": {
@@ -97106,67 +97106,67 @@
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Semanas siguientes"
+            "value": "Semanas posteriores"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Próximas semanas"
+            "value": "Semanas seguintes"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Volgende weken"
+            "value": "Latere weken"
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nästa veckor"
+            "value": "Senare veckor"
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Næste uger"
+            "value": "Senere uger"
           }
         },
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "Neste uker"
+            "value": "Senere uker"
           }
         },
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Seuraavat viikot"
+            "value": "Myöhemmät viikot"
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "translated",
-            "value": "Próximas semanas"
+            "value": "Semanas seguintes"
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "Setmanes següents"
+            "value": "Setmanes posteriors"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Następne tygodnie"
+            "value": "Późniejsze tygodnie"
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Další týdny"
+            "value": "Pozdější týdny"
           }
         },
         "ru": {
@@ -97184,19 +97184,19 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "次の週"
+            "value": "以降の週"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "다음 주"
+            "value": "이후 주차"
           }
         },
         "ms": {
           "stringUnit": {
             "state": "translated",
-            "value": "Minggu seterusnya"
+            "value": "Minggu-minggu seterusnya"
           }
         },
         "ro": {
@@ -97208,37 +97208,37 @@
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ďalšie týždne"
+            "value": "Neskoršie týždne"
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "สัปดาห์ถัดไป"
+            "value": "สัปดาห์ต่อๆ ไป"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "下几周"
+            "value": "之后的几周"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "अगले सप्ताह"
+            "value": "बाद के हफ़्ते"
           }
         },
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sljedeći tjedni"
+            "value": "Kasniji tjedni"
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "Következő hetek"
+            "value": "Későbbi hetek"
           }
         },
         "tr": {
@@ -97250,49 +97250,49 @@
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "அடுத்த வாரங்கள்"
+            "value": "பிந்தைய வாரங்கள்"
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Minggu selanjutnya"
+            "value": "Minggu-minggu berikutnya"
           }
         },
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "الأسابيع التالية"
+            "value": "الأسابيع اللاحقة"
           }
         },
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "השבועות הבאים"
+            "value": "שבועות מאוחרים יותר"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tuần sau"
+            "value": "Các tuần sau"
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "পরের সপ্তাহ"
+            "value": "পরের সপ্তাহগুলো"
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "اگلے ہفتے"
+            "value": "بعد کے ہفتے"
           }
         },
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Naslednji tedni"
+            "value": "Poznejši tedni"
           }
         },
         "el": {
@@ -97304,49 +97304,49 @@
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "తర్వాత వారాలు"
+            "value": "తర్వాతి వారాలు"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "下幾週"
+            "value": "之後的幾週"
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "આગલા અઠવાડિયા"
+            "value": "પછીનાં અઠવાડિયાં"
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ಮುಂದಿನ ವಾರಗಳು"
+            "value": "ನಂತರದ ವಾರಗಳು"
           }
         },
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "അടുത്ത ആഴ്ചകൾ"
+            "value": "പിന്നീടുള്ള ആഴ്ചകൾ"
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "पुढील आठवडे"
+            "value": "नंतरचे आठवडे"
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ପରବର୍ତ୍ତୀ ସପ୍ତାହ"
+            "value": "ପରବର୍ତ୍ତୀ ସପ୍ତାହଗୁଡ଼ିକ"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਅਗਲੇ ਹਫ਼ਤੇ"
+            "value": "ਬਾਅਦ ਦੇ ਹਫ਼ਤੇ"
           }
         }
       }
@@ -97477,7 +97477,7 @@
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pilulă %lld"
+            "value": "Pilula %lld"
           }
         },
         "sk": {
@@ -97638,7 +97638,7 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillola placebo %lld"
+            "value": "Pillola di zucchero %lld"
           }
         },
         "de": {
@@ -97650,7 +97650,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pilule placebo %lld"
+            "value": "Pilule de sucre %lld"
           }
         },
         "es": {
@@ -97662,13 +97662,13 @@
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pílula de placebo %lld"
+            "value": "Pílula de açúcar %lld"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Placebopil %lld"
+            "value": "Suikerpil %lld"
           }
         },
         "sv": {
@@ -97698,7 +97698,7 @@
         "pt-PT": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pílula de placebo %lld"
+            "value": "Pílula de açúcar %lld"
           }
         },
         "ca": {
@@ -97710,31 +97710,31 @@
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cukrowa tabletka %lld"
+            "value": "Tabletka bez hormonów %lld"
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cukrová pilulka %lld"
+            "value": "Pilulka bez hormonů %lld"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Таблетка плацебо %lld"
+            "value": "Таблетка-пустышка %lld"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Таблетка плацебо %lld"
+            "value": "Таблетка-пустушка %lld"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "プラセボ%lld錠目"
+            "value": "偽薬%lld錠目"
           }
         },
         "ko": {
@@ -97752,55 +97752,55 @@
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pilulă placebo %lld"
+            "value": "Pilula fără hormoni %lld"
           }
         },
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cukrová tabletka %lld"
+            "value": "Tabletka bez hormónov %lld"
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "ยาหลอกเม็ดที่ %lld"
+            "value": "เม็ดแป้ง เม็ดที่ %lld"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "第 %lld 片安慰剂"
+            "value": "第 %lld 片空白片"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "शुगर गोली %lld"
+            "value": "बिना हार्मोन की गोली %lld"
           }
         },
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Šećerna pilula %lld"
+            "value": "Pilula bez hormona %lld"
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld. cukortabletta"
+            "value": "%lld. hormonmentes tabletta"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld. şeker hapı"
+            "value": "%lld. hormonsuz hap"
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "சர்க்கரை மாத்திரை %lld"
+            "value": "ஹார்மோன் இல்லாத மாத்திரை %lld"
           }
         },
         "id": {
@@ -97818,7 +97818,7 @@
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "גלולת פלצבו %lld"
+            "value": "גלולת דמה %lld"
           }
         },
         "vi": {
@@ -97830,73 +97830,73 @@
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "সুগার পিল %lld"
+            "value": "হরমোন ছাড়া পিল %lld"
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "شوگر گولی %lld"
+            "value": "بغیر ہارمون کی گولی %lld"
           }
         },
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sladkorna tabletka %lld"
+            "value": "Tabletka brez hormonov %lld"
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Εικονικό χάπι %lld"
+            "value": "Χάπι χωρίς ορμόνες %lld"
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "షుగర్ మాత్ర %lld"
+            "value": "హార్మోన్ లేని మాత్ర %lld"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "第 %lld 顆安慰劑"
+            "value": "第 %lld 顆空白錠"
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "સુગર ગોળી %lld"
+            "value": "હોર્મોન વગરની ગોળી %lld"
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ಸಕ್ಕರೆ ಮಾತ್ರೆ %lld"
+            "value": "ಹಾರ್ಮೋನ್ ಇಲ್ಲದ ಮಾತ್ರೆ %lld"
           }
         },
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "പഞ്ചസാര ഗുളിക %lld"
+            "value": "ഹോർമോൺ ഇല്ലാത്ത ഗുളിക %lld"
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "साखर गोळी %lld"
+            "value": "हार्मोन नसलेली गोळी %lld"
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ସୁଗାର ପିଲ୍ %lld"
+            "value": "ହରମୋନ୍ ବିନା ପିଲ୍ %lld"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਸ਼ੂਗਰ ਗੋਲੀ %lld"
+            "value": "ਹਾਰਮੋਨ ਤੋਂ ਬਿਨਾਂ ਗੋਲੀ %lld"
           }
         }
       }
@@ -97925,19 +97925,19 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Jour de pause %lld"
+            "value": "Jour d’arrêt %lld"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Día de pausa %lld"
+            "value": "Día de descanso %lld"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dia de pausa %lld"
+            "value": "Dia de intervalo %lld"
           }
         },
         "nl": {
@@ -97973,7 +97973,7 @@
         "pt-PT": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dia de pausa %lld"
+            "value": "Dia de intervalo %lld"
           }
         },
         "ca": {
@@ -98027,7 +98027,7 @@
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zi de pauză %lld"
+            "value": "Ziua de pauză %lld"
           }
         },
         "sk": {
@@ -98081,7 +98081,7 @@
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Hari jeda %lld"
+            "value": "Hari istirahat %lld"
           }
         },
         "ar": {
@@ -98141,7 +98141,7 @@
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "વિરામ દિવસ %lld"
+            "value": "બ્રેક દિવસ %lld"
           }
         },
         "kn": {
@@ -98159,7 +98159,7 @@
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "विश्रांती दिवस %lld"
+            "value": "ब्रेकचा दिवस %lld"
           }
         },
         "or": {
@@ -98254,7 +98254,7 @@
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "Al blíster"
+            "value": "A l’envàs"
           }
         },
         "pl": {
@@ -98290,7 +98290,7 @@
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "포장 안"
+            "value": "팩 안"
           }
         },
         "ms": {
@@ -98338,7 +98338,7 @@
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "A csomagolásban"
+            "value": "A levélben"
           }
         },
         "tr": {
@@ -98356,7 +98356,7 @@
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dalam strip"
+            "value": "Dalam kemasan"
           }
         },
         "ar": {
@@ -98392,7 +98392,7 @@
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "V škatlici"
+            "value": "V zavitku"
           }
         },
         "el": {
@@ -98410,13 +98410,13 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "在藥盒中"
+            "value": "在藥板中"
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "પૈકમાં"
+            "value": "પેકમાં"
           }
         },
         "kn": {
@@ -98625,7 +98625,7 @@
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "எடுத்தது"
+            "value": "எடுக்கப்பட்டது"
           }
         },
         "id": {
@@ -98679,7 +98679,7 @@
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "తీసుకున్నా"
+            "value": "తీసుకోబడింది"
           }
         },
         "zh-Hant": {
@@ -98691,13 +98691,13 @@
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "લીધી"
+            "value": "લીધેલ"
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ತೆಗೆದಿದೆ"
+            "value": "ತೆಗೆದುಕೊಳ್ಳಲಾಗಿದೆ"
           }
         },
         "ml": {
@@ -98709,7 +98709,7 @@
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "ले ली"
+            "value": "घेतली"
           }
         },
         "or": {
@@ -98721,7 +98721,7 @@
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਲਈ"
+            "value": "ਲਈ ਗਈ"
           }
         }
       }
@@ -98750,7 +98750,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Aujourd'hui"
+            "value": "Aujourd’hui"
           }
         },
         "es": {
@@ -98774,7 +98774,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Idag"
+            "value": "I dag"
           }
         },
         "da": {
@@ -98966,7 +98966,7 @@
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "આજ"
+            "value": "આજે"
           }
         },
         "kn": {
@@ -99025,7 +99025,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Prise aujourd'hui"
+            "value": "Prise aujourd’hui"
           }
         },
         "es": {
@@ -99049,7 +99049,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Taget idag"
+            "value": "Taget i dag"
           }
         },
         "da": {
@@ -99109,7 +99109,7 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "本日服用済み"
+            "value": "今日服用済み"
           }
         },
         "ko": {
@@ -99175,7 +99175,7 @@
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "இன்று எடுத்தது"
+            "value": "இன்று எடுக்கப்பட்டது"
           }
         },
         "id": {
@@ -99229,7 +99229,7 @@
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "ఈరోజు తీసుకున్నా"
+            "value": "ఈరోజు తీసుకోబడింది"
           }
         },
         "zh-Hant": {
@@ -99241,13 +99241,13 @@
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "આજ લીધી"
+            "value": "આજે લીધેલ"
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ಇಂದು ತೆಗೆದಿದೆ"
+            "value": "ಇಂದು ತೆಗೆದುಕೊಳ್ಳಲಾಗಿದೆ"
           }
         },
         "ml": {
@@ -99259,7 +99259,7 @@
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "आज ले ली"
+            "value": "आज घेतली"
           }
         },
         "or": {
@@ -99271,7 +99271,7 @@
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਅੱਜ ਲਈ"
+            "value": "ਅੱਜ ਲਈ ਗਈ"
           }
         }
       }
@@ -99282,271 +99282,271 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Late"
+            "value": "Taken late"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "In ritardo"
+            "value": "Presa in ritardo"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Verspätet"
+            "value": "Verspätet eingenommen"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "En retard"
+            "value": "Prise en retard"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tarde"
+            "value": "Tomada tarde"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Atrasada"
+            "value": "Tomada com atraso"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Te laat"
+            "value": "Laat ingenomen"
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sent"
+            "value": "Taget sent"
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sent"
+            "value": "Taget sent"
           }
         },
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sent"
+            "value": "Tatt sent"
           }
         },
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Myöhässä"
+            "value": "Otettu myöhässä"
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "translated",
-            "value": "Atrasada"
+            "value": "Tomada com atraso"
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tard"
+            "value": "Presa tard"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Późno"
+            "value": "Przyjęto z opóźnieniem"
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pozdě"
+            "value": "Vzato pozdě"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Опоздание"
+            "value": "Принято с опозданием"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Запізнення"
+            "value": "Прийнято із запізненням"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "遅れ"
+            "value": "遅れて服用"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "지연"
+            "value": "늦게 복용함"
           }
         },
         "ms": {
           "stringUnit": {
             "state": "translated",
-            "value": "Lewat"
+            "value": "Diambil lewat"
           }
         },
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "Întârziată"
+            "value": "Luată cu întârziere"
           }
         },
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Neskoro"
+            "value": "Užité neskoro"
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "สาย"
+            "value": "กินช้ากว่าเวลา"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "延迟"
+            "value": "延迟服用"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "देर से"
+            "value": "देर से ली"
           }
         },
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kasno"
+            "value": "Uzeto kasno"
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "Késve"
+            "value": "Későn bevéve"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Gecikti"
+            "value": "Geç alındı"
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "தாமதம்"
+            "value": "தாமதமாக எடுக்கப்பட்டது"
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Terlambat"
+            "value": "Diminum terlambat"
           }
         },
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "متأخر"
+            "value": "تم الأخذ متأخرًا"
           }
         },
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "באיחור"
+            "value": "נלקח באיחור"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Muộn"
+            "value": "Đã uống muộn"
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "দেরি"
+            "value": "দেরিতে নেওয়া হয়েছে"
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "تاخیر"
+            "value": "دیر سے لی"
           }
         },
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zamuda"
+            "value": "Vzeto z zamudo"
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Αργά"
+            "value": "Ελήφθη με καθυστέρηση"
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "ఆలస్యం"
+            "value": "ఆలస్యంగా తీసుకోబడింది"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "延遲"
+            "value": "延遲服用"
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "મોડું"
+            "value": "મોડેથી લીધેલ"
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ತಡ"
+            "value": "ತಡವಾಗಿ ತೆಗೆದುಕೊಳ್ಳಲಾಗಿದೆ"
           }
         },
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "വൈകി"
+            "value": "വൈകി കഴിച്ചു"
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "उशीर"
+            "value": "उशिरा घेतली"
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ବିଳମ୍ବ"
+            "value": "ବିଳମ୍ବରେ ନିଆଯାଇଛି"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਲੇਟ"
+            "value": "ਦੇਰੀ ਨਾਲ ਲਈ ਗਈ"
           }
         }
       }
@@ -99557,271 +99557,271 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Missed"
+            "value": "Not checked in"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Saltata"
+            "value": "Non confermato"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Verpasst"
+            "value": "Nicht abgehakt"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Oubliée"
+            "value": "Non validé"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Olvidada"
+            "value": "Sin marcar"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Esquecida"
+            "value": "Sem registro"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Gemist"
+            "value": "Niet afgevinkt"
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Missat"
+            "value": "Inte avbockat"
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Glemt"
+            "value": "Ikke krydset af"
           }
         },
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "Glemt"
+            "value": "Ikke krysset av"
           }
         },
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Unohtunut"
+            "value": "Ei kuitattu"
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "translated",
-            "value": "Esquecida"
+            "value": "Sem registo"
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "Oblidada"
+            "value": "Sense confirmar"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pominięto"
+            "value": "Nieodhaczone"
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vynecháno"
+            "value": "Neodškrtnuto"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Пропущено"
+            "value": "Не отмечено"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Пропущено"
+            "value": "Не відмічено"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "飲み忘れ"
+            "value": "記録なし"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "놓침"
+            "value": "체크 안 함"
           }
         },
         "ms": {
           "stringUnit": {
             "state": "translated",
-            "value": "Terlepas"
+            "value": "Belum disahkan"
           }
         },
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "Omisă"
+            "value": "Nebifată"
           }
         },
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vynechané"
+            "value": "Neodškrtnuté"
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "ลืมกิน"
+            "value": "ไม่ได้เช็กอิน"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "漏服"
+            "value": "未打卡"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "छूट गई"
+            "value": "दर्ज नहीं"
           }
         },
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Propušteno"
+            "value": "Nije javljeno"
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kihagyva"
+            "value": "Nincs kipipálva"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Atlandı"
+            "value": "İşaretlenmedi"
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "தவறியது"
+            "value": "பதிவில்லை"
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Terlewat"
+            "value": "Belum check-in"
           }
         },
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "فائت"
+            "value": "غير مسجّل"
           }
         },
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "פוספס"
+            "value": "לא סומן"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bỏ lỡ"
+            "value": "Chưa điểm danh"
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "মিস হয়েছে"
+            "value": "টিক দেওয়া হয়নি"
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "چھوٹ گئی"
+            "value": "درج نہیں"
           }
         },
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Izpuščeno"
+            "value": "Ni odkljukano"
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Παραλείφθηκε"
+            "value": "Δεν σημειώθηκε"
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "మిస్ అయింది"
+            "value": "నమోదు కాలేదు"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "漏服"
+            "value": "未打卡"
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "ચૂકી ગયા"
+            "value": "નોંધાયેલ નથી"
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ತಪ್ಪಿದೆ"
+            "value": "ದಾಖಲಾಗಿಲ್ಲ"
           }
         },
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "വിട്ടുപോയി"
+            "value": "രേഖപ്പെടുത്തിയിട്ടില്ല"
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "चुकले"
+            "value": "नोंद नाही"
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ଛାଡ଼ି ଦିଆଯାଇଛି"
+            "value": "ଦର୍ଜ ହୋଇନାହିଁ"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਖੁੰਝ ਗਈ"
+            "value": "ਦਰਜ ਨਹੀਂ"
           }
         }
       }
@@ -99832,19 +99832,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tap the pill you're on today."
+            "value": "Tap the pill you’re on today."
           }
         },
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "اضغطي على الحبة التي عليها اليوم."
+            "value": "انقري على الحبة التي وصلتِ إليها اليوم."
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "আজ তুমি যে পিলটা খাচ্ছো, তাতে ট্যাপ করো।"
+            "value": "আজকের পিলে ট্যাপ করুন।"
           }
         },
         "ca": {
@@ -99892,31 +99892,31 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Touche la pilule que tu prends aujourd'hui."
+            "value": "Touche la pilule que tu prends aujourd’hui."
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "આજે તું જે ગોળી લે છે તેને ટૅપ કર."
+            "value": "આજની ગોળી પર ટૅપ કરો."
           }
         },
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "הקישי על הגלולה שאת בה היום."
+            "value": "הקישי על הגלולה שהגעת אליה היום."
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "आज जो गोली ले रही हो, उस पर टैप करो।"
+            "value": "आज की गोली पर टैप करें।"
           }
         },
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dotakni pilulu koju uzimaš danas."
+            "value": "Dodirni pilulu koju danas uzimaš."
           }
         },
         "hu": {
@@ -99940,13 +99940,13 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "今日の錠をタップしてください。"
+            "value": "今日のピルをタップしてください。"
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ಇಂದು ನೀನು ತೆಗೆದುಕೊಳ್ಳುವ ಮಾತ್ರೆಯನ್ನು ಟ್ಯಾಪ್ ಮಾಡು."
+            "value": "ಇಂದಿನ ಮಾತ್ರೆಯನ್ನು ಟ್ಯಾಪ್ ಮಾಡಿ."
           }
         },
         "ko": {
@@ -99958,13 +99958,13 @@
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "ഇന്ന് നീ എടുക്കുന്ന ഗുളിക ടാപ്പ് ചെയ്യൂ."
+            "value": "ഇന്നത്തെ ഗുളികയിൽ ടാപ്പ് ചെയ്യൂ."
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "आज तू घेत असलेल्या गोळीवर टॅप कर."
+            "value": "आजच्या गोळीवर टॅप करा."
           }
         },
         "ms": {
@@ -99988,13 +99988,13 @@
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ଆଜି ତୁମେ ଖାଉଥିବା ପିଲ୍‌କୁ ଟାପ୍ କର।"
+            "value": "ଆଜିର ପିଲ୍‌ରେ ଟ୍ୟାପ୍ କରନ୍ତୁ।"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਅੱਜ ਜਿਹੜੀ ਗੋਲੀ ਤੂੰ ਲੈ ਰਹੀ ਹੈਂ, ਉਸ ਉੱਤੇ ਟੈਪ ਕਰ।"
+            "value": "ਅੱਜ ਦੀ ਗੋਲੀ ’ਤੇ ਟੈਪ ਕਰੋ।"
           }
         },
         "pl": {
@@ -100018,19 +100018,19 @@
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "Apasă pe pilula pe care o iei azi."
+            "value": "Atinge pilula pe care o iei azi."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Нажми на таблетку, которую принимаешь сегодня."
+            "value": "Коснись таблетки, которую принимаешь сегодня."
           }
         },
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ťukni na tabletku, ktorú berieš dnes."
+            "value": "Ťukni na tabletku, ktorú dnes užívaš."
           }
         },
         "sl": {
@@ -100042,19 +100042,19 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tryck på pillret du tar idag."
+            "value": "Tryck på pillret du tar i dag."
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "இன்று நீ எடுக்கும் மாத்திரையைத் தட்டு."
+            "value": "இன்றைய மாத்திரையைத் தட்டுங்கள்."
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "ఈరోజు నువ్వు తీసుకునే మాత్రను నొక్కు."
+            "value": "ఈరోజు మాత్రను నొక్కండి."
           }
         },
         "th": {
@@ -100072,13 +100072,13 @@
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Натисни на таблетку, яку приймаєш сьогодні."
+            "value": "Торкнись таблетки, яку приймаєш сьогодні."
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "آج والی گولی پر ٹیپ کرو۔"
+            "value": "آج جس گولی پر آپ ہیں، اس پر ٹیپ کریں۔"
           }
         },
         "vi": {
@@ -100090,13 +100090,13 @@
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "点击你今天要吃的那一片。"
+            "value": "点按你今天要吃的那一片。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "點選你今天要吃的那顆。"
+            "value": "點一下你今天要吃的那顆。"
           }
         }
       }
@@ -100119,37 +100119,37 @@
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "তোমার প্যাক, হাতে ঠিক যেমন দেখায় তেমনই।"
+            "value": "আপনার প্যাক, হাতে ঠিক যেমন দেখায় তেমনই।"
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "El teu blíster, tal com es veu a la mà."
+            "value": "El teu envàs, tal com el veus a la mà."
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tvůj blistr, přesně jak v ruce."
+            "value": "Tvoje balení, přesně jak ho vidíš v ruce."
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Din pakning, lige som den ser ud i hånden."
+            "value": "Din pakke, lige som den ser ud i hånden."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dein Blister, genau wie er in deiner Hand aussieht."
+            "value": "Deine Packung, genau so, wie sie in deiner Hand aussieht."
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Το πακέτο σου, ακριβώς όπως το βλέπεις στο χέρι σου."
+            "value": "Η συσκευασία σου, ακριβώς όπως τη βλέπεις στο χέρι σου."
           }
         },
         "es": {
@@ -100167,13 +100167,13 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ta plaquette, telle qu'elle est dans ta main."
+            "value": "Ta plaquette, telle que tu la vois dans ta main."
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "તારું પેક, હાથમાં દેખાય છે એવું જ."
+            "value": "તમારું પેક, હાથમાં જેવું દેખાય છે એવું જ."
           }
         },
         "he": {
@@ -100185,7 +100185,7 @@
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "तुम्हारा पैक, ठीक वैसा ही जैसे हाथ में दिखता है।"
+            "value": "आपका पैक, ठीक वैसा ही जैसा हाथ में दिखता है।"
           }
         },
         "hr": {
@@ -100197,7 +100197,7 @@
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "A csomagod, pont úgy, ahogy a kezedben van."
+            "value": "A leveled, pont úgy, ahogy a kezedben tartod."
           }
         },
         "id": {
@@ -100209,49 +100209,49 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Il tuo blister, esattamente come lo vedi in mano."
+            "value": "La tua confezione, proprio come la vedi in mano."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "手に持ったときそのままのシートです。"
+            "value": "手に持ったときと同じ見え方のシートです。"
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ನಿನ್ನ ಪ್ಯಾಕ್, ಕೈಯಲ್ಲಿ ಇರುವಂತೆಯೇ."
+            "value": "ನಿಮ್ಮ ಪ್ಯಾಕ್, ಕೈಯಲ್ಲಿ ಕಾಣುವಂತೆಯೇ."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "손에 있는 모습 그대로의 약 패키지예요."
+            "value": "손에 들었을 때 보이는 그대로의 팩이에요."
           }
         },
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "നിന്റെ പായ്ക്ക്, കയ്യിൽ കാണുന്നത് പോലെ തന്നെ."
+            "value": "നിങ്ങളുടെ പാക്ക്, കയ്യിൽ കാണുന്നതുപോലെ തന്നെ."
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "तुझं पॅक, हातात दिसतं तसंच."
+            "value": "तुमचं पॅक, हातात दिसतं अगदी तसंच."
           }
         },
         "ms": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bungkusan kamu, sama seperti yang kamu lihat di tangan."
+            "value": "Pek kamu, sama seperti yang ada di tangan kamu."
           }
         },
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pakningen din, akkurat som den ser ut i hånden."
+            "value": "Brettet ditt, akkurat som det ser ut i hånden."
           }
         },
         "nl": {
@@ -100263,13 +100263,13 @@
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ତୁମର ପାକ୍, ହାତରେ ଦେଖାଯାଉଥିବା ପରି ହିଁ।"
+            "value": "ଆପଣଙ୍କ ପ୍ୟାକ୍, ହାତରେ ଯେମିତି ଦେଖାଯାଏ ଠିକ୍ ସେମିତି।"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਤੇਰਾ ਪੈਕ, ਹੱਥ ਵਿੱਚ ਜਿਵੇਂ ਦਿਸਦਾ ਹੈ ਉਵੇਂ ਹੀ।"
+            "value": "ਤੁਹਾਡਾ ਪੈਕ, ਹੱਥ ਵਿੱਚ ਜਿਵੇਂ ਦਿਸਦਾ ਹੈ ਉਵੇਂ ਹੀ।"
           }
         },
         "pl": {
@@ -100287,55 +100287,55 @@
         "pt-PT": {
           "stringUnit": {
             "state": "translated",
-            "value": "A tua cartela, exatamente como a vês na mão."
+            "value": "A tua embalagem, tal como a vês na mão."
           }
         },
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pachetul tău, exact cum e în mâna ta."
+            "value": "Folia ta, exact cum o ții în mână."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Твоя упаковка, точно как в руке."
+            "value": "Твоя упаковка, такая же, как у тебя в руке."
           }
         },
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tvoj blister, presne ako v ruke."
+            "value": "Tvoje balenie, presne ako ho vidíš v ruke."
           }
         },
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tvoje pakiranje, natanko tako, kot je v roki."
+            "value": "Tvoj zavitek, natanko tak, kot ga držiš v roki."
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Din förpackning, precis som den ser ut i handen."
+            "value": "Din karta, precis som den ser ut i handen."
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "உன் பாக், கையில் இருப்பது போலவே."
+            "value": "உங்கள் பேக், கையில் இருப்பது போலவே."
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "నీ ప్యాక్, చేతిలో ఉన్నట్టుగానే."
+            "value": "మీ ప్యాక్, చేతిలో ఎలా కనిపిస్తుందో అచ్చం అలాగే."
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "แผงยาของคุณ เหมือนที่เห็นในมือเป๊ะ"
+            "value": "แผงยาของคุณ หน้าตาเหมือนที่ถืออยู่ในมือเลย"
           }
         },
         "tr": {
@@ -100347,13 +100347,13 @@
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Твоя упаковка, точно як у руці."
+            "value": "Твоя упаковка, така сама, як у тебе в руці."
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "تمہارا پیک، ہاتھ میں بالکل ویسا ہی۔"
+            "value": "آپ کا پیک، بالکل ویسا جیسا آپ کے ہاتھ میں دکھتا ہے۔"
           }
         },
         "vi": {
@@ -100394,7 +100394,7 @@
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "তুমি কি পিল %@ খেয়েছো?"
+            "value": "আপনি কি পিল %@ খেয়ে নিয়েছেন?"
           }
         },
         "ca": {
@@ -100406,7 +100406,7 @@
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vzala jsi už pilulku %@?"
+            "value": "Vzala sis už pilulku %@?"
           }
         },
         "da": {
@@ -100442,13 +100442,13 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tu as déjà pris la pilule %@ ?"
+            "value": "Tu as déjà pris la pilule %@ ?"
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "તેં ગોળી %@ પહેલેથી લીધી છે?"
+            "value": "શું તમે ગોળી %@ લઈ લીધી છે?"
           }
         },
         "he": {
@@ -100460,7 +100460,7 @@
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "क्या तुम गोली %@ ले चुकी हो?"
+            "value": "क्या आपने गोली %@ ले ली है?"
           }
         },
         "hr": {
@@ -100472,7 +100472,7 @@
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bevetted már a %@. tablettát?"
+            "value": "Bevetted már a mai %@. tablettát?"
           }
         },
         "id": {
@@ -100496,7 +100496,7 @@
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ಮಾತ್ರೆ %@ ಈಗಾಗಲೇ ತೆಗೆದುಕೊಂಡಿದ್ದೀಯಾ?"
+            "value": "ನೀವು ಮಾತ್ರೆ %@ ಅನ್ನು ಈಗಾಗಲೇ ತೆಗೆದುಕೊಂಡಿದ್ದೀರಾ?"
           }
         },
         "ko": {
@@ -100508,13 +100508,13 @@
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "ഗുളിക %@ ഇതിനകം കഴിച്ചോ?"
+            "value": "ഗുളിക %@ നിങ്ങൾ ഇതിനകം കഴിച്ചോ?"
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "तू गोळी %@ आधीच घेतली आहेस का?"
+            "value": "तुम्ही गोळी %@ घेतली आहे का?"
           }
         },
         "ms": {
@@ -100538,13 +100538,13 @@
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ତୁମେ ପିଲ୍ %@ ପୂର୍ବରୁ ଖାଇଛ କି?"
+            "value": "ଆପଣ ପିଲ୍ %@ ଖାଇସାରିଲେଣି କି?"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਕੀ ਤੂੰ ਗੋਲੀ %@ ਲੈ ਲਈ ਹੈ?"
+            "value": "ਕੀ ਤੁਸੀਂ ਗੋਲੀ %@ ਲੈ ਲਈ ਹੈ?"
           }
         },
         "pl": {
@@ -100580,7 +100580,7 @@
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vzala si už tabletku %@?"
+            "value": "Užila si už tabletku %@?"
           }
         },
         "sl": {
@@ -100598,13 +100598,13 @@
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "மாத்திரை %@ ஏற்கனவே எடுத்துவிட்டாயா?"
+            "value": "மாத்திரை %@ ஏற்கனவே எடுத்துவிட்டீர்களா?"
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "మాత్ర %@ ఇప్పటికే తీసుకున్నావా?"
+            "value": "మీరు మాత్ర %@ ఇప్పటికే తీసుకున్నారా?"
           }
         },
         "th": {
@@ -100616,7 +100616,7 @@
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@. hapı henüz aldın mı?"
+            "value": "%@. hapı aldın mı?"
           }
         },
         "uk": {
@@ -100628,7 +100628,7 @@
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "کیا تم گولی %@ لے چکی ہو؟"
+            "value": "کیا آپ گولی %@ لے چکی ہیں؟"
           }
         },
         "vi": {
@@ -100675,13 +100675,13 @@
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sí, ja l'he presa"
+            "value": "Sí, ja l’he presa"
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ano, vzala jsem"
+            "value": "Ano, vzala jsem si ji"
           }
         },
         "da": {
@@ -100717,7 +100717,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Oui, je l'ai prise"
+            "value": "Oui, je l’ai prise"
           }
         },
         "gu": {
@@ -100735,7 +100735,7 @@
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "हां, ले ली"
+            "value": "हाँ, ले ली"
           }
         },
         "hr": {
@@ -100753,13 +100753,13 @@
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sudah, aku minum"
+            "value": "Ya, sudah aku minum"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sì, l'ho presa"
+            "value": "Sì, l’ho presa"
           }
         },
         "ja": {
@@ -100855,7 +100855,7 @@
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Áno, vzala som"
+            "value": "Áno, užila som ju"
           }
         },
         "sl": {
@@ -101207,7 +101207,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Logged. Day 1 of your streak."
+            "value": "Checked in. Day 1 of your streak."
           }
         },
         "ar": {
@@ -101219,97 +101219,97 @@
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "লগ হয়েছে। তোমার স্ট্রিকের ১ম দিন।"
+            "value": "টিক দেওয়া হয়েছে। আপনার স্ট্রিকের প্রথম দিন।"
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "Registrat. Dia 1 de la teva ratxa."
+            "value": "Confirmat. Dia 1 de la teva ratxa."
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zaznamenáno. 1. den tvé série."
+            "value": "Odškrtnuto. 1. den tvé série."
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Registreret. Dag 1 af din stribe."
+            "value": "Krydset af. Dag 1 af din stime."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Gespeichert. Tag 1 deiner Serie."
+            "value": "Abgehakt. Tag 1 deiner Serie."
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Καταγράφηκε. 1η μέρα της σειράς σου."
+            "value": "Σημειώθηκε. Ημέρα 1 του σερί σου."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Registrado. Día 1 de tu racha."
+            "value": "Marcado. Día 1 de tu racha."
           }
         },
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tallennettu. Sarjasi 1. päivä."
+            "value": "Kuitattu. Putkesi 1. päivä."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Enregistré. Jour 1 de ta série."
+            "value": "Validé. Jour 1 de ta série."
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "નોંધાયું. તારી સ્ટ્રીકનો દિવસ 1."
+            "value": "નોંધ થઈ ગઈ. તમારી સ્ટ્રીકનો પહેલો દિવસ."
           }
         },
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "נרשם. יום 1 ברצף שלך."
+            "value": "סומן. יום 1 ברצף שלך."
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "दर्ज हो गया। तुम्हारी स्ट्रीक का दिन 1।"
+            "value": "दर्ज हो गया। आपके सिलसिले का पहला दिन।"
           }
         },
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zabilježeno. 1. dan niza."
+            "value": "Javljeno. 1. dan tvog niza."
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "Rögzítve. Sorozatod 1. napja."
+            "value": "Kipipálva. A sorozatod 1. napja."
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tercatat. Hari 1 dari rentetanmu."
+            "value": "Sudah check-in. Hari pertama rentetanmu."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Registrato. Giorno 1 della tua serie."
+            "value": "Confermato. Giorno 1 della tua serie."
           }
         },
         "ja": {
@@ -101321,61 +101321,61 @@
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ದಾಖಲಾಗಿದೆ. ನಿನ್ನ ಸರಣಿಯ 1ನೇ ದಿನ."
+            "value": "ದಾಖಲಿಸಲಾಗಿದೆ. ನಿಮ್ಮ ಸರಣಿಯ ಮೊದಲ ದಿನ."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "기록했어요. 연속 기록 1일차예요."
+            "value": "체크했어요. 연속 기록 1일째예요."
           }
         },
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "രേഖപ്പെടുത്തി. നിന്റെ തുടർച്ചയുടെ ദിവസം 1."
+            "value": "രേഖപ്പെടുത്തി. നിങ്ങളുടെ സ്ട്രീക്കിന്റെ ആദ്യ ദിവസം."
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "नोंद झाली. तुझ्या स्ट्रीकचा दिवस 1."
+            "value": "नोंद झाली. तुमच्या सलग मालिकेचा पहिला दिवस."
           }
         },
         "ms": {
           "stringUnit": {
             "state": "translated",
-            "value": "Direkodkan. Hari 1 rentetan kamu."
+            "value": "Sudah disahkan. Hari pertama rentetan kamu."
           }
         },
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "Registrert. Dag 1 av rekka din."
+            "value": "Krysset av. Dag 1 av rekken din."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Genoteerd. Dag 1 van je reeks."
+            "value": "Afgevinkt. Dag 1 van je reeks."
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ଲଗ୍ ହେଲା। ତୁମର ସ୍ଟ୍ରିକ୍‌ର ଦିନ 1।"
+            "value": "ଦର୍ଜ ହୋଇଗଲା। ଆପଣଙ୍କ ଧାରାର ପ୍ରଥମ ଦିନ।"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਦਰਜ ਹੋ ਗਿਆ। ਤੇਰੀ ਸਟ੍ਰੀਕ ਦਾ ਦਿਨ 1।"
+            "value": "ਦਰਜ ਹੋ ਗਿਆ। ਤੁਹਾਡੀ ਸਟ੍ਰੀਕ ਦਾ ਪਹਿਲਾ ਦਿਨ।"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zapisano. 1. dzień serii."
+            "value": "Odhaczone. Dzień 1 twojej serii."
           }
         },
         "pt-BR": {
@@ -101393,85 +101393,85 @@
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "Înregistrat. Ziua 1 din serie."
+            "value": "Bifat. Ziua 1 din seria ta."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Записано. 1-й день серии."
+            "value": "Отмечено. День 1 твоей серии."
           }
         },
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zaznamenané. 1. deň tvojej série."
+            "value": "Odškrtnuté. 1. deň tvojej série."
           }
         },
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zabeleženo. 1. dan niza."
+            "value": "Odkljukano. 1. dan tvojega niza."
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sparat. Dag 1 av din serie."
+            "value": "Avbockat. Dag 1 av din svit."
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "பதிவு செய்யப்பட்டது. உன் தொடர்ச்சியின் நாள் 1."
+            "value": "பதிவு செய்யப்பட்டது. உங்கள் தொடர்ச்சியின் முதல் நாள்."
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "నమోదైంది. నీ వరుసలో 1వ రోజు."
+            "value": "నమోదు అయింది. మీ స్ట్రీక్‌లో మొదటి రోజు."
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "บันทึกแล้ว วันที่ 1 ของสถิติต่อเนื่อง"
+            "value": "เช็กอินแล้ว วันที่ 1 ของสตรีคของคุณ"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaydedildi. Serinin 1. günü."
+            "value": "İşaretlendi. Serinin 1. günü."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Записано. 1-й день серії."
+            "value": "Відмічено. День 1 твоєї серії."
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "درج ہو گیا۔ تمہاری اسٹریک کا دن 1۔"
+            "value": "درج ہو گیا۔ آپ کے سلسلے کا پہلا دن۔"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Đã ghi nhận. Ngày 1 của chuỗi ngày liên tiếp."
+            "value": "Đã điểm danh. Ngày 1 trong chuỗi của bạn."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "已记录。连续记录第 1 天。"
+            "value": "已打卡。连续打卡第 1 天。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "已記錄。連續記錄第 1 天。"
+            "value": "已打卡。連續打卡第 1 天。"
           }
         }
       }
@@ -101494,7 +101494,7 @@
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "পরিবর্তন করো"
+            "value": "বদলান"
           }
         },
         "ca": {
@@ -101596,7 +101596,7 @@
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ಬದಲಾಯಿಸು"
+            "value": "ಬದಲಿಸಿ"
           }
         },
         "ko": {
@@ -101608,7 +101608,7 @@
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "മാറ്റുക"
+            "value": "മാറ്റൂ"
           }
         },
         "mr": {
@@ -101638,7 +101638,7 @@
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ବଦଳାଅ"
+            "value": "ବଦଳାନ୍ତୁ"
           }
         },
         "pa": {
@@ -101698,13 +101698,13 @@
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "மாற்று"
+            "value": "மாற்றுங்கள்"
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "మార్చు"
+            "value": "మార్చండి"
           }
         },
         "th": {
@@ -101763,13 +101763,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "الحبة %lld · مأخوذة"
+            "value": "الحبة %lld · تم الأخذ"
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "পিল %lld · খাওয়া হয়েছে"
+            "value": "পিল %lld · নেওয়া হয়েছে"
           }
         },
         "ca": {
@@ -101793,13 +101793,13 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pille %lld · genommen"
+            "value": "Pille %lld · eingenommen"
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Χάπι %lld · λήφθηκε"
+            "value": "Χάπι %lld · ελήφθη"
           }
         },
         "es": {
@@ -101823,7 +101823,7 @@
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "ગોળી %lld · લેવાઈ"
+            "value": "ગોળી %lld · લીધેલ"
           }
         },
         "he": {
@@ -101835,7 +101835,7 @@
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "गोली %lld · ली गई"
+            "value": "गोली %lld · ले ली"
           }
         },
         "hr": {
@@ -101865,7 +101865,7 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld錠目・服用済み"
+            "value": "%lld錠目 · 服用済み"
           }
         },
         "kn": {
@@ -101913,7 +101913,7 @@
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ପିଲ୍ %lld · ଖିଆଗଲା"
+            "value": "ପିଲ୍ %lld · ନିଆଯାଇଛି"
           }
         },
         "pa": {
@@ -101925,7 +101925,7 @@
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tabletka %lld · wzięta"
+            "value": "Tabletka %lld · przyjęta"
           }
         },
         "pt-BR": {
@@ -101955,7 +101955,7 @@
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tabletka %lld · vzatá"
+            "value": "Tabletka %lld · užitá"
           }
         },
         "sl": {
@@ -102003,7 +102003,7 @@
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "گولی %lld · لی گئی"
+            "value": "گولی %lld · لے لی"
           }
         },
         "vi": {
@@ -102140,7 +102140,7 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld錠目・未服用"
+            "value": "%lld錠目 · 未服用"
           }
         },
         "kn": {
@@ -102224,7 +102224,7 @@
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Таблетка %lld · пока нет"
+            "value": "Таблетка %lld · ещё нет"
           }
         },
         "sk": {
@@ -102331,7 +102331,7 @@
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Další připomenutí"
+            "value": "Další připomínka"
           }
         },
         "da": {
@@ -102373,7 +102373,7 @@
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "પછીનું રિમાઇન્ડર"
+            "value": "હવે પછીનું રિમાઇન્ડર"
           }
         },
         "he": {
@@ -102433,13 +102433,13 @@
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "അടുത്ത ഓർമ്മപ്പെടുത്തൽ"
+            "value": "അടുത്ത റിമൈൻഡർ"
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "पुढील स्मरणपत्र"
+            "value": "पुढचा रिमाइंडर"
           }
         },
         "ms": {
@@ -102493,7 +102493,7 @@
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "Următoarea reamintire"
+            "value": "Următorul memento"
           }
         },
         "ru": {
@@ -102511,7 +102511,7 @@
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Naslednje opozorilo"
+            "value": "Naslednji opomnik"
           }
         },
         "sv": {
@@ -102642,7 +102642,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Aujourd'hui, %@"
+            "value": "Aujourd’hui, %@"
           }
         },
         "gu": {
@@ -102792,7 +102792,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Idag, %@"
+            "value": "I dag, %@"
           }
         },
         "ta": {
@@ -103067,7 +103067,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Imorgon, %@"
+            "value": "I morgon, %@"
           }
         },
         "ta": {

@@ -25,8 +25,19 @@ gone id acquisitionSource.tiktok
 wait id pills.fill
 shot onboarding-06-method
 tap --id protectionPlanPrimaryCTA
-wait id routineEditExactDay
-shot onboarding-07-routine
+wait id packTile.12
+shot onboarding-07-today-pill
+tap --id todayPillChangeButton
+sleep 1
+shot onboarding-07-pack-types
+tap -x 201 -y 110
+sleep 1
+tap --id packTile.12
+wait id todayPillQuestion
+shot onboarding-07-today-pill-question
+tap --id todayPillYes
+wait id todayPillLogged
+shot onboarding-07-today-pill-taken
 tap --id protectionPlanPrimaryCTA
 wait id sun.max.fill
 shot onboarding-08-reminder-time
