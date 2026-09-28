@@ -146,14 +146,16 @@ final class TodayPillCommitTests: XCTestCase {
         XCTAssertTrue(harness.recorder.completions.isEmpty)
     }
 
-    func testTakenSugarPillAnchorsOnTheOpenWindowWithoutLogging() throws {
+    func testTakenSugarPillLogsTheDoseWithoutStartingAStreak() throws {
         let now = InMemoryStoreFactory.localDate("2026-09-27", hour: 12, minute: 24)
         let harness = try makeHarness(now: now, reminderHour: 20)
 
         harness.commit(pick(23, .taken))
 
         XCTAssertEqual(harness.store.currentDayIndex + 1, 24)
-        XCTAssertTrue(harness.recorder.completions.isEmpty)
+        XCTAssertTrue(harness.store.isTodayTaken)
+        XCTAssertEqual(harness.store.currentStreak, 0)
+        XCTAssertEqual(harness.recorder.completions, [.onboarding])
     }
 
     func testRepeatedCommitsConvergeAndReportTheDoseOnce() throws {
