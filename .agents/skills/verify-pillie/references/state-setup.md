@@ -25,6 +25,7 @@ In a flow: `openurl pillie://debug/<path>?lang=en`. The runner accepts the iOS "
 | `/intervention-seed?count=N` | N fake shield intercepts (the shield itself never shows on a simulator) |
 | `/fixed-now?at=<epoch\|ISO8601\|off>` | Pins the app clock. Use it to make calendar ids and "due" state deterministic. |
 | `/request-notification-permission` | The system notification prompt |
+| `/notification-complete` | Runs the reminder's Complete action for today (`NotificationManager.completeReminder`), as if tapped while the app is open |
 | `/dump-pending-notifications` | Pending local notifications written to OSLog (pair with `log start` / `log stop`) |
 | `/posthog-smoke` / `/error-tracking-smoke` | Analytics and error-tracking smoke events |
 

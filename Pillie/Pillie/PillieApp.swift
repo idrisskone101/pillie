@@ -668,6 +668,9 @@ struct PillieApp: App {
                 return
             }
             store.refreshDayContextIfNeeded()
+        case "/notification-complete":
+            // QA control: run the reminder's Complete action for today while Home is open.
+            NotificationManager.shared.completeReminder(store: store, dueDate: store.today)
         case "/plus-home":
             // QA shortcut: land on the onboarded main app as a Plus subscriber so the
             // Plus-gated Settings surfaces (e.g. Reminder Messages) are reachable.

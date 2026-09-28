@@ -665,23 +665,14 @@ class PillStore {
     // MARK: - Actions
 
     func markTodayAsTaken() {
-        let wasTodayTaken = isTodayTaken
         markActionAsTaken(on: today)
-        // A sugar pill is handled before it is logged, so the taken flip, not the handled one, redraws Home.
-        if !wasTodayTaken && isTodayTaken {
-            protocolChangeVersion &+= 1
-        }
         syncTodayTakenToAppGroup()
         AppBlockingManager.shared.removeBlocking()
         scheduleNotificationResync()
     }
 
     func unmarkTodayAsTaken() {
-        let wasTodayTaken = isTodayTaken
         unmarkActionAsTaken(on: today)
-        if wasTodayTaken && !isTodayTaken {
-            protocolChangeVersion &+= 1
-        }
         syncTodayTakenToAppGroup()
         if !isTodayHandled {
             AppBlockingManager.shared.applyBlocking(reason: pack.method.blockingReasonText)
@@ -717,6 +708,8 @@ class PillStore {
         let targetPack = snapshot.pack
         let liveDay = today
         let isToday = Calendar.current.isDate(day, inSameDayAs: liveDay)
+        let wasTodayTaken = isTodayTaken
+        defer { noteTodayTakenChange(from: wasTodayTaken) }
 
         upsertDayRecord(
             in: targetPack,
@@ -812,6 +805,7 @@ class PillStore {
         let dayEpoch = epochDay(for: day)
         guard let snapshot = scheduleSnapshot(for: day) else { return }
         let targetPack = snapshot.pack
+        let wasTodayTaken = isTodayTaken
 
         guard let existingDay = existingDayRecord(in: targetPack, day: day, epochDay: dayEpoch),
               existingDay.status == .taken else {
@@ -841,6 +835,16 @@ class PillStore {
         }
 
         deleteDayRecord(in: targetPack, day: day)
+        noteTodayTakenChange(from: wasTodayTaken)
+    }
+
+    /// Home redraws on `protocolChangeVersion`. Every log and undo, from Home, a notification
+    /// action or a schedule edit, bumps it here when today's taken state flips. A sugar pill is
+    /// handled before it is logged, so the handled state can't be the signal.
+    private func noteTodayTakenChange(from wasTodayTaken: Bool) {
+        if isTodayTaken != wasTodayTaken {
+            protocolChangeVersion &+= 1
+        }
     }
 
     func dueAction(on date: Date) -> DoseScheduleAction? {

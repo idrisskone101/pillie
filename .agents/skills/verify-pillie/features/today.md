@@ -73,6 +73,9 @@ blocking/trial status surfaces, and (when eligible) the review ask.
   logs, undoes and logs again without moving the streak; History reads the
   open sugar day as "Not logged" (never "Break") and as "Done" once taken; a
   21 only pill-free day stays "Nothing to take".
+- `flows/today-notification-complete.flow` — `/notification-complete` runs
+  the reminder's Complete action while Home is open; the status card, CTA and
+  pack card all flip to taken.
 - `flows/smoke.flow` covers the plain tab bar (Today/History/Settings) with
   `/plus-home`.
 - Not covered by an authored flow, and why: `ProtectionOffCard` needs an
