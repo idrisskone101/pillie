@@ -1,0 +1,32 @@
+# Change the pack type from the Home pack card's "…" menu (HomePackCard,
+# PillStore.changePackRegimen). Two days into a 21 + 7 sugar week, switching
+# to 24 + 4 keeps today's pill number, makes yesterday a hormone day counted
+# taken (like updateCycleDay), and keeps the streak.
+fresh
+launch
+wait text "Get started" 15
+openurl "pillie://debug/plus-home?lang=en"
+openurl pillie://debug/trial-grant?lang=en
+openurl pillie://debug/fixed-now?at=2026-09-28T20:00:00Z
+openurl pillie://debug/trial-eve-of-break?lang=en
+wait text "Last hormone pill" 10
+tap --label "Take pill"
+wait text "Shake to Confirm" 10
+tap --id shakeTapToConfirmFallback
+wait text "Taken today" 15
+openurl pillie://debug/fixed-now?at=2026-09-30T20:00:00Z
+wait text "Sugar pill 2 of 7" 10
+expect text "Pill 23 of 28 · new pack Tuesday"
+shot before
+tap --id homePackOptions
+wait id homePackChangeType 5
+tap --id homePackChangeType
+wait id packSheet.custom 10
+shot sheet
+tap --id packSheet.24_4
+gone id packSheet.custom 10
+wait text "Pill 23 of 28" 10
+expect text "24/4 · due 8:00 AM"
+expect text "Take pill"
+shot after-24-4
+openurl pillie://debug/fixed-now?at=off

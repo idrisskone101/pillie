@@ -1190,6 +1190,14 @@ class PillStore {
     @discardableResult
     func changePackRegimen(to choice: PackChoice) -> Bool {
         guard let activePack, activePack.method == .pill else { return false }
+        let calendar = Calendar.current
+        let elapsedDays = activePack.elapsedCycleDays(on: today)
+        let pastDays: [Date] = (0..<max(0, min(elapsedDays, activePack.cycleLength))).compactMap {
+            calendar.date(byAdding: .day, value: -($0 + 1), to: today)
+        }
+        let wasDue = Set(pastDays.filter {
+            DoseScheduleEngine.dueAction(on: $0, pack: activePack, calendar: calendar)?.type.requiresUserAction ?? false
+        })
         let change = PackRegimenChange.resolve(
             from: activePack.regimen,
             to: choice.regimen,
@@ -1205,6 +1213,16 @@ class PillStore {
             activePack.setPillRegimen(choice.preset, customRegimen: choice.regimen)
             activePack.startDate = Calendar.current.date(byAdding: .day, value: -index, to: today) ?? today
             activePack.cycleDayAnchorIndex = 0
+        }
+
+        // A break day that the new pack makes a pill day was never logged. Like updateCycleDay,
+        // count it taken rather than let a pack correction read as a missed dose.
+        for day in pastDays where !wasDue.contains(day) && day >= activePack.startDate {
+            guard let due = DoseScheduleEngine.dueAction(on: day, pack: activePack, calendar: calendar),
+                  due.type.requiresUserAction,
+                  existingDayRecord(in: activePack, day: day, epochDay: epochDay(for: day)) == nil
+            else { continue }
+            modelContext.insert(PillDay(date: day, status: .taken, actionType: due.type, pack: activePack))
         }
 
         persist()
