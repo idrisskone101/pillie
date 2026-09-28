@@ -861,6 +861,7 @@ class PillStore {
             action: snapshot.dueAction?.type,
             status: status,
             day: snapshot.date,
+            packStartedAt: snapshot.pack.startedAt,
             now: PillieClock.now,
             reminderHour: reminderHour,
             reminderMinute: reminderMinute
@@ -951,7 +952,8 @@ class PillStore {
                 startDate: startDate,
                 cycleDayAnchorIndex: cycleDayAnchorIndex,
                 packNumber: nextPackNumber,
-                isCurrent: true
+                isCurrent: true,
+                startedAt: PillieClock.now
             )
             modelContext.insert(nextPack)
 
@@ -967,6 +969,7 @@ class PillStore {
             activePack.method = method
             activePack.setPillRegimen(method == .pill ? regimen : .twentyOneSeven, customRegimen: customRegimen)
             activePack.startDate = startDate
+            activePack.startedAt = PillieClock.now
             activePack.ringInsertionDate = nil
             activePack.cycleDayAnchorIndex = PillPack.normalizedCycleDayAnchorIndex(
                 cycleDayAnchorIndex,
@@ -992,7 +995,8 @@ class PillStore {
                 startDate: startDate,
                 cycleDayAnchorIndex: cycleDayAnchorIndex,
                 packNumber: nextPackNumber,
-                isCurrent: true
+                isCurrent: true,
+                startedAt: PillieClock.now
             )
             modelContext.insert(nextPack)
 
@@ -1045,7 +1049,8 @@ class PillStore {
             startDate: startDate,
             cycleDayAnchorIndex: 0,
             packNumber: 1,
-            isCurrent: true
+            isCurrent: true,
+            startedAt: PillieClock.now
         )
         modelContext.insert(freshPack)
 
@@ -1193,7 +1198,8 @@ class PillStore {
             startDate: today,
             cycleDayAnchorIndex: 0,
             packNumber: nextPackNumber,
-            isCurrent: true
+            isCurrent: true,
+            startedAt: PillieClock.now
         )
         modelContext.insert(newPack)
 

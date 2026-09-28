@@ -15,6 +15,7 @@ enum DoseStanding: Hashable, Sendable {
         action: PillDay.ActionType?,
         status: PillDay.Status,
         day: Date,
+        packStartedAt: Date? = nil,
         now: Date,
         reminderHour: Int,
         reminderMinute: Int,
@@ -37,6 +38,10 @@ enum DoseStanding: Hashable, Sendable {
                     for: day, hour: reminderHour, minute: reminderMinute, calendar: calendar
                 )
             else { return nil }
+            // A pack started after its first day's reminder never missed that reminder.
+            if let packStartedAt, packStartedAt >= reminder, calendar.isDate(packStartedAt, inSameDayAs: day) {
+                return .upcoming
+            }
             return now < reminder ? .upcoming : .late(until: deadline)
         }
     }
