@@ -85,7 +85,7 @@ struct CustomPackKeypad: View {
             .accessibilityLabel("\(digit)")
             .accessibilityIdentifier("customPackKey\(digit)")
         case .delete:
-            KeypadKeyButton {
+            KeypadKeyButton(filled: false) {
                 feedback.lightTap(accessibilityReduceMotion: reduceMotion)
                 onDelete()
             } label: {
@@ -101,6 +101,7 @@ struct CustomPackKeypad: View {
 }
 
 private struct KeypadKeyButton<Label: View>: View {
+    var filled = true
     let action: () -> Void
     @ViewBuilder let label: () -> Label
 
@@ -109,7 +110,7 @@ private struct KeypadKeyButton<Label: View>: View {
             label()
                 .frame(maxWidth: .infinity)
                 .frame(height: 46)
-                .background(RoundedRectangle(cornerRadius: 8, style: .continuous).fill(Color.white))
+                .background(RoundedRectangle(cornerRadius: 8, style: .continuous).fill(filled ? Color.white : Color.clear))
                 .contentShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
         }
         .buttonStyle(KeypadKeyButtonStyle())
@@ -122,8 +123,7 @@ private struct KeypadKeyButtonStyle: ButtonStyle {
     }
 }
 
-/// The Paper keypad's backspace glyph: a page-with-folded-corner outline and
-/// an X, drawn as a path since it isn't an SF Symbol.
+/// The Paper keypad's backspace glyph; `delete.left` draws a different outline.
 private struct BackspaceGlyph: View {
     var body: some View {
         ZStack {

@@ -46,9 +46,7 @@ struct CustomPackEditor: View {
             }
             .scrollBounceBehavior(.basedOnSize)
             .safeAreaInset(edge: .bottom) { useButton }
-            // Tapping any empty space (not a button, which handles its own tap)
-            // commits typing and dismisses the pad, same as losing focus did
-            // when this was a system-keyboard TextField.
+            // A tap outside the pad commits the typed number and closes the pad.
             .contentShape(Rectangle())
             .onTapGesture { commitTyping() }
 
@@ -151,9 +149,6 @@ struct CustomPackEditor: View {
         .background(EditorShape.card.fill(PillieTheme.cardWhite).shadow(color: .black.opacity(0.05), radius: 7, y: 6))
     }
 
-    /// The typing box is a display, not a `TextField`: the keypad drives it.
-    /// Empty shows the pre-typing value as a placeholder, per the old
-    /// `TextField`'s placeholder behavior.
     private func activeField(_ text: String) -> some View {
         HStack(spacing: 2) {
             if text.isEmpty {
