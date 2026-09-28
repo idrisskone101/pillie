@@ -1,0 +1,78 @@
+# Onboarding step 7 (TodayPillView): the pack sheet's Custom row opens the custom
+# pack editor (CustomPackEditor, ENG-147) in the same sheet. Steppers and a typed
+# number drive a live preview; Use hands the pack back to the card, which pages it.
+#
+# onboardingStep 10 is OnboardingFlow.Step.schedule; a fresh store defaults the
+# method to pill, so the step renders TodayPillView.
+
+fresh
+defaults onboardingStep -int 10
+launch
+wait id todayPillChangeButton 15
+
+tap --id packTile.12
+wait id todayPillQuestion
+
+tap --id todayPillChangeButton
+wait id packSheet.custom
+shot sheet
+
+tap --id packSheet.custom
+wait id customPackTitle
+wait text "28-day pack · starts again every 4 weeks"
+shot editor-21-7
+
+tap --id customPackActivePlus
+wait text "29-day pack · then a new pack starts"
+
+tap --id customPackActiveValue
+wait id customPackActiveField
+type 88
+wait text "95-day pack · about 14 weeks"
+tap --label Done
+wait text "Tap the number to type it"
+gone id customPackActiveField
+tap --id customPackBreakMinus
+tap --id customPackBreakMinus
+tap --id customPackBreakMinus
+tap --id customPackBreakMinus
+wait text "91-day pack · 13 weeks, one column per week"
+expect text "Use 88 + 3"
+shot map-88-3
+
+tap --id customPackActiveValue
+wait id customPackActiveField
+type 100
+wait text "103-day pack · about 15 weeks"
+wait text "Typing · up to 365"
+shot typing-100
+
+# Clear the field, then retype 88 so the card below shows 88 + 3.
+key 42
+key 42
+key 42
+type 88
+wait text "91-day pack · 13 weeks, one column per week"
+tap --label Done
+gone id customPackActiveField
+tap --id customPackUse
+gone id customPackTitle
+wait text "88 + 3"
+expect id todayPillQuestion
+shot card-88-3
+
+tap --id todayPillChangeButton
+wait id packSheet.custom
+wait text "Custom, 88 + 3"
+shot sheet-custom-selected
+tap --id packSheet.custom
+wait id customPackTitle
+expect text "Use 88 + 3"
+tap --id customPackUse
+gone id customPackTitle
+
+tap --id packTile.20
+wait id todayPillQuestion
+tap --id todayPillYes
+wait id todayPillLogged
+shot card-88-3-answered
