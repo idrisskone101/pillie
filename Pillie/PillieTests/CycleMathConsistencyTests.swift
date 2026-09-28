@@ -161,8 +161,7 @@ final class CycleMathConsistencyTests: XCTestCase {
         let accepted = store.startNewProtocol(
             method: .patch,
             regimen: .twentyOneSeven,
-            customActiveDays: nil,
-            customBreakDays: nil,
+            customRegimen: nil,
             cycleDay: 11,
             preserveHistory: true
         )

@@ -228,6 +228,12 @@ pillie_parallel_testing_enabled() {
   printf "%s" "${PILLIE_TEST_PARALLEL:-NO}"
 }
 
+# xcodebuildmcp's CLI parses `--extra-args=4` as a number, then rejects it
+# (extraArgs must be strings). Pass extraArgs through `--json` instead.
+pillie_mcp_extra_args_json() {
+  python3 -c 'import json, sys; print(json.dumps({"extraArgs": sys.argv[1:]}))' "$@"
+}
+
 # Boot is idempotent. `simctl install` fails with SimError 405 until the
 # device is up, so callers must boot before install, launch, or screenshot.
 pillie_boot_simulator() {

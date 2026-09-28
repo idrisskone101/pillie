@@ -142,9 +142,6 @@ struct ReminderPlanSummary {
     private static func methodDetailText(for pack: PillPack) -> String {
         switch pack.method {
         case .pill:
-            if pack.pillRegimen == .custom, let active = pack.customActiveDays, let breakDays = pack.customBreakDays {
-                return "\(active) active / \(breakDays) break days"
-            }
             return "\(pack.activeDays) active / \(pack.breakDays) break days"
         case .patch:
             return "Weekly change rhythm"

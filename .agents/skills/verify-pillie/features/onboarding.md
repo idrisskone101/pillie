@@ -10,8 +10,9 @@ The first-launch flow from Welcome to Home. Steps are `OnboardingFlow.Step` (`Se
 - `onboarding-miss-frequency` — `ProtectionPlanFailureFrequencyView` (frequency + risk window, both required).
 - `onboarding-acquisition-source` — `ProtectionPlanAcquisitionSourceView`, single choice or skip.
 - `onboarding-method` — `ProtectionPlanRoutineMethodView`, pill/patch/ring, defaults to pill.
-- `onboarding-schedule` — `ProtectionPlanRoutineDetailsView`, cycle position + regimen, has valid defaults.
-- `onboarding-reminder-time` — `ProtectionPlanReminderTimeView`; its CTA requests real notification authorization.
+- `onboarding-today-pill` — pill users only: `TodayPillView` (`Views/Onboarding/TodayPill/`) on the `.schedule` step. Tap today's pill in a `PackCard`, answer "Have you taken pill N yet?", Continue. Writes only a `TodayPillPick` draft to UserDefaults; step 8 commits it (`TodayPillCommit`).
+- `onboarding-schedule` — patch and ring only: `ProtectionPlanRoutineDetailsView`, cycle position + regimen, has valid defaults.
+- `onboarding-reminder-time` — `ProtectionPlanReminderTimeView`; its CTA saves the time, commits the pill pick with it, then requests real notification authorization. The pill path's plan card reads Pack / Today ("Pill 12 · taken") / Next reminder.
 - `onboarding-reminder-plan` — `ProtectionPlanDiagnosisView`, an analyze-then-reveal animation before the CTA appears.
 - `onboarding-trial-granted` — `TrialGrantedMomentView`. Dead code: unreachable by any real path or debug deep link (see Gotchas).
 - `onboarding-app-blocking` — `AppBlockingSetupView`, empty / selected / recovery / locked phases.
@@ -21,7 +22,7 @@ The first-launch flow from Welcome to Home. Steps are `OnboardingFlow.Step` (`Se
 ## How to get to it (user POV)
 
 - Fresh install. Tap "Get started", then either drag the demo or tap "Not now".
-- Answer the two consolidated question screens (pick one distraction + one desired outcome; one miss-frequency + one risk window), then Where did you find Pillie? (or "Not now"), method, schedule, reminder time (allow or deny the real notification prompt), then the reminder-plan reveal.
+- Answer the two consolidated question screens (pick one distraction + one desired outcome; one miss-frequency + one risk window), then Where did you find Pillie? (or "Not now"), method, then tap today's pill and answer (pill) or the schedule screen (patch/ring), reminder time (allow or deny the real notification prompt), then the reminder-plan reveal.
 - Pick apps to pause (or "Not now" to skip blocking) — a real device shows the FamilyControls picker here; the simulator cannot pick real apps (see Gotchas).
 - If a valid blocker config saves, "You’re all set." → "Go to Today" lands on Home. Skipping blocking goes straight to Home instead.
 
@@ -33,6 +34,9 @@ The first-launch flow from Welcome to Home. Steps are `OnboardingFlow.Step` (`Se
 - Unreachable, not covered by either flow, and not a gap in either flow's coverage: `trialGranted` (dead code — see Gotchas), the `.locked` app-blocking phase (needs Plus actually withheld), and the analyzing (pre-reveal) beat of the diagnosis screen (timing-dependent, and the finished plan is the state worth proving).
 
 ## Gotchas
+
+- **The pill path writes nothing to PillStore until the reminder-time CTA.** `TodayPillView` saves a `TodayPillPick` draft (`pillie_onboarding_today_pill_pick`); `OnboardingReminderCommit` commits it after saving the hour/minute and before the permission request, so the tapped pill lands on the right dose window. A pill user resumed on `reminderTime` without a draft is sent back to `.schedule` (`OnboardingFlow.visibleStep(needsTodayPill:)`). With an evening reminder, "Not yet" before 8 PM shows the previous pill logged on Home until the reminder opens pill N (ADR 0009's live day).
+- **Tap the welcome CTA only after the splash clears.** `launch` returns while the splash is fading and the first tap can be dropped; the walkthrough sleeps 2 s first. If every tap in a flow is ignored (even Done on a debug sheet), reboot the simulator: axe's HID connection goes stale.
 
 - **`welcome`, `productDemo`, and `plusBlockingDemo` in `ContentView.swift`'s switch (~91-129) are dead code.** A fresh install's `onboardingStep` starts at 0, and while it is `< OnboardingFlow.Step.productDemo.rawValue` (2), `ContentView` renders `ProtectionPlanOnboardingShell` instead of that switch (`ContentView.swift:77-84`). The shell owns its own `ProtectionPlanStep` model (`Services/ProtectionPlanOnboarding.swift:78-112`) with only `.welcome` and `.earlyValueProof`, and hands off straight to `.painPoints` (`ContentView.swift:531-536`) — the raw value never reaches 2 or 3. Do not use `WelcomeView.swift` / `ProductDemoMomentView.swift` / `PlusBlockingDemoView.swift`'s identifiers (`productDemoContinueButton`, `plusBlockingDemoContinueButton`) for the real fresh-install path; the real welcome screen is `ProtectionPlanWelcomeView`, and its CTA is the shared `protectionPlanPrimaryCTA`.
 - **Most plan-builder screens share two identifiers**, set once in `ProtectionPlanScaffold.swift:198,219`: `protectionPlanPrimaryCTA` (Continue) and `protectionPlanSecondaryCTA` (Skip/Not now, where present). Per-choice rows/chips usually have no id — tap by their exact English label (from the xcstrings key cited in code) unless the screen sets one explicitly, as `ProtectionPlanAcquisitionSourceView.swift:68` does with `acquisitionSource.<rawValue>` (e.g. `acquisitionSource.tiktok`).

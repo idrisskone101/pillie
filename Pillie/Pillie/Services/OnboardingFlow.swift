@@ -284,8 +284,17 @@ enum OnboardingFlow {
         step == .appBlocking
     }
 
-    static func visibleStep(for rawValue: Int, isPlus: Bool, selectedFreePlan: Bool) -> Step? {
+    static func visibleStep(
+        for rawValue: Int,
+        isPlus: Bool,
+        selectedFreePlan: Bool,
+        needsTodayPill: Bool = false
+    ) -> Step? {
         guard let step = step(for: rawValue) else { return nil }
+
+        if step == .reminderTime && needsTodayPill {
+            return .schedule
+        }
 
         // The review request was retired. Anyone persisted on the old step (or handed
         // off to it) is migrated forward to the first question so they never land on

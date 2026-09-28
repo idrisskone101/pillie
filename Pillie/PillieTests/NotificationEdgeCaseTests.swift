@@ -136,7 +136,8 @@ final class NotificationEdgeCaseTests: XCTestCase {
         let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
         let fixture = try InMemoryStoreFactory.makeStore(
             now: now,
-            regimen: .threeSixtyFiveZero,
+            regimen: .custom,
+            customRegimen: PackRegimen(activeDays: 365, breakDays: 0),
             startDate: now
         )
         fixture.store.autoReminderIntervalMinutes = 5

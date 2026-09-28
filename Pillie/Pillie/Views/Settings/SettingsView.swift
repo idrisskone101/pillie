@@ -737,28 +737,24 @@ private struct ProtocolEditor: View {
     @State private var selectedRegimen: PillPack.PillRegimenPreset = .twentyOneSeven
     @State private var customActiveDaysText: String = "21"
     @State private var customBreakDaysText: String = "7"
+    @State private var customBreakKind: PackRegimen.BreakKind = .sugarPills
     @State private var selectedCycleDay: Int = 1
     @State private var showResetConfirmation = false
 
     private let settingsFeedback = SettingsInteractionFeedback()
 
-    private var customActiveDays: Int {
-        let raw = Int(customActiveDaysText) ?? 21
-        return min(max(raw, PillPack.customActiveRange.lowerBound), PillPack.customActiveRange.upperBound)
-    }
-
-    private var customBreakDays: Int {
-        let raw = Int(customBreakDaysText) ?? 7
-        return min(max(raw, PillPack.customBreakRange.lowerBound), PillPack.customBreakRange.upperBound)
+    private var customRegimen: PackRegimen {
+        PackRegimen(
+            activeDays: Int(customActiveDaysText) ?? PillPack.defaultCustomRegimen.activeDays,
+            breakDays: Int(customBreakDaysText) ?? PillPack.defaultCustomRegimen.breakDays,
+            breakKind: customBreakKind
+        )
     }
 
     private var cycleLength: Int {
         switch selectedMethod {
         case .pill:
-            if selectedRegimen == .custom {
-                return customActiveDays + customBreakDays
-            }
-            return selectedRegimen.cycleLength
+            return selectedRegimen.resolvedRegimen(custom: customRegimen).totalDays
         case .patch, .ring:
             return 28
         }
@@ -950,8 +946,7 @@ private struct ProtocolEditor: View {
                 store.resetAndStartFresh(
                     method: selectedMethod,
                     regimen: selectedMethod == .pill ? selectedRegimen : .twentyOneSeven,
-                    customActiveDays: selectedMethod == .pill && selectedRegimen == .custom ? customActiveDays : nil,
-                    customBreakDays: selectedMethod == .pill && selectedRegimen == .custom ? customBreakDays : nil,
+                    customRegimen: selectedMethod == .pill && selectedRegimen == .custom ? customRegimen : nil,
                     cycleDay: min(max(1, selectedCycleDay), cycleLength)
                 )
                 ProductAnalyticsTelemetry.live.protocolChangeSaved()
@@ -991,8 +986,10 @@ private struct ProtocolEditor: View {
     private func seedFromStore() {
         selectedMethod = store.pack.method
         selectedRegimen = store.pack.pillRegimen
-        customActiveDaysText = "\(store.pack.customActiveDays ?? 21)"
-        customBreakDaysText = "\(store.pack.customBreakDays ?? 7)"
+        let seededCustom = store.pack.pillRegimen == .custom ? store.pack.regimen : PillPack.defaultCustomRegimen
+        customActiveDaysText = "\(seededCustom.activeDays)"
+        customBreakDaysText = "\(seededCustom.breakDays)"
+        customBreakKind = seededCustom.breakKind
         selectedCycleDay = store.currentDayIndex + 1
         clampCycleDay()
     }

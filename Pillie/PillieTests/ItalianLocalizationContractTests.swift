@@ -75,8 +75,8 @@ final class ItalianLocalizationContractTests: XCTestCase {
             "21 giorni attivi, 7 giorni di pausa"
         )
         XCTAssertEqual(
-            PillPack.PillRegimenPreset.threeSixtyFiveZero.localizedRoutineDisplayName(locale: italian),
-            "Continuo"
+            PillPack.PillRegimenPreset.everyDay.localizedRoutineDisplayName(locale: italian),
+            "Ogni giorno"
         )
     }
 

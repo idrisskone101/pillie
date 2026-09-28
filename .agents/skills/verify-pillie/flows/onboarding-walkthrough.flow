@@ -22,6 +22,7 @@
 
 fresh
 launch
+sleep 2  # the welcome CTA ignores taps while the splash fades
 
 # welcome — ProtectionPlanWelcomeView. protectionPlanPrimaryCTA "Get started".
 # ProtectionPlanScaffold.swift:219; content.primaryCTA = global.action.get_started.
@@ -73,10 +74,18 @@ wait text "Pick your method."
 shot method
 tap --id protectionPlanPrimaryCTA
 
-# schedule — ProtectionPlanRoutineDetailsView. isPrimaryEnabled always true
-# (ProtectionPlanRoutineDetailsView.swift:65). Title: onboarding.cycle_position.title.
-wait text "Where are you in your routine?"
-shot schedule
+# schedule, pill path — TodayPillView (ENG-138). Sealed pack, CTA disabled until a
+# pill is tapped and answered. packTile.<n> ids come from PackCard's onSelectDay;
+# todayPillQuestion / todayPillYes / todayPillLogged from TodayPillView. Title:
+# onboarding.today_pill.title. Patch and ring still get ProtectionPlanRoutineDetailsView.
+wait text "Tap the pill you're on today."
+shot today-pill
+tap --id packTile.12
+wait id todayPillQuestion
+shot today-pill-tapped
+tap --id todayPillYes
+wait id todayPillLogged
+shot today-pill-taken
 tap --id protectionPlanPrimaryCTA
 
 # reminderTime — ProtectionPlanReminderTimeView. Title: onboarding.reminder_time
@@ -85,6 +94,8 @@ tap --id protectionPlanPrimaryCTA
 # .swift:178-187) — a real iOS system alert follows, unlike the FamilyControls
 # request later, which is simulator-auto-approved. Confirm the button text live.
 wait text "Pick a time."
+tap --label Evening
+wait text "Pill 12 · taken"
 shot reminder-time
 tap --id protectionPlanPrimaryCTA
 tap --label Allow  # UNVERIFIED: iOS system notification-permission alert, not Pillie copy
@@ -118,6 +129,6 @@ wait id protectionPlanReadyStartButton
 shot protection-plan-ready
 tap --id protectionPlanReadyStartButton
 
-# Home
-wait text Today 15
+# Home — pill 12 logged from the step 7 answer, streak 1.
+wait text "Day 12 of 28" 15
 shot home

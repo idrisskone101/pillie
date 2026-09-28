@@ -99,7 +99,6 @@ final class ActiveDayScheduleTests: XCTestCase {
     func testPackSnapshotMatchesResolvedCycleAnchor() {
         let start = date(2026, 7, 1, 10, 0)
         let pack = PillPack(
-            packType: .twentyOneSeven,
             method: .pill,
             pillRegimen: .twentyOneSeven,
             startDate: start,
@@ -127,7 +126,6 @@ final class ActiveDayScheduleTests: XCTestCase {
     func testPatchRemoveDayIsHormoneActive() {
         let start = date(2026, 7, 1, 10, 0)
         let pack = PillPack(
-            packType: .twentyOneSeven,
             method: .patch,
             startDate: start,
             cycleDayAnchorIndex: 21,

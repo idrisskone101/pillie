@@ -21,7 +21,7 @@ enum RoutineExactDayCardAction: Equatable {
 struct ProtectionPlanRoutineDetailsView: View {
     let progress: ProtectionPlanProgress
     let onBack: () -> Void
-    let onContinue: (PillPack.PillRegimenPreset, Int?, Int?, Int) -> Void
+    let onContinue: (RoutineSetupCommit) -> Void
 
     @Environment(PillStore.self) private var store
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -31,8 +31,7 @@ struct ProtectionPlanRoutineDetailsView: View {
 
     // Seeded from the production pack in onAppear so Back restores committed values
     // without a custom init (important for the SDK 27 @State macro).
-    @State private var draft = RoutineSetupDraft(method: .pill)
-    @State private var showMore = false
+    @State private var draft = RoutineSetupDraft(method: .patch)
     @State private var showExactDay = false
     @State private var appeared = false
 
@@ -40,19 +39,10 @@ struct ProtectionPlanRoutineDetailsView: View {
         performanceTier == .standard && !reduceMotion
     }
 
-    private var scheduleSummaryText: String {
-        switch draft.section {
-        case .pillRegimen:
-            return draft.selectedRegimen.localizedScheduleSummary()
-        case .fixedSchedule:
-            return draft.method.routineDescriptor
-        }
-    }
-
     private var summary: ProtectionPlanRoutineSummary {
         ProtectionPlanRoutineSummary(
             method: draft.method,
-            scheduleSummary: scheduleSummaryText,
+            scheduleSummary: draft.method.routineDescriptor,
             cycleDay: draft.cycleDay
         )
     }
@@ -63,7 +53,7 @@ struct ProtectionPlanRoutineDetailsView: View {
             onBack: onBack,
             primaryTitle: content.primaryCTA,
             isPrimaryEnabled: true,
-            onPrimary: commit
+            onPrimary: { onContinue(draft.commit) }
         ) {
             VStack(alignment: .leading, spacing: 22) {
                 ProtectionPlanQuestionHeader(title: content.title, subtitle: content.subtitle)
@@ -84,23 +74,8 @@ struct ProtectionPlanRoutineDetailsView: View {
                 )
                 .planBuilderReveal(appeared, animationsEnabled, delay: PillieTheme.stagger2)
 
-                switch draft.section {
-                case .pillRegimen:
-                    RoutinePillRegimenSection(
-                        header: content.regimenHeader,
-                        moreLabel: content.moreLabel,
-                        commonRegimens: draft.visibleCommonRegimens,
-                        selectedRegimen: draft.selectedRegimen,
-                        showMore: $showMore,
-                        customActiveDays: $draft[customDays: .active],
-                        customBreakDays: $draft[customDays: .breakDays],
-                        onSelectRegimen: { draft.selectRegimen($0) }
-                    )
+                RoutineFixedScheduleSection(method: draft.method)
                     .planBuilderReveal(appeared, animationsEnabled, delay: PillieTheme.stagger3)
-                case .fixedSchedule:
-                    RoutineFixedScheduleSection(method: draft.method)
-                        .planBuilderReveal(appeared, animationsEnabled, delay: PillieTheme.stagger3)
-                }
 
                 ProtectionPlanRoutineCard(summary: summary, animationsEnabled: animationsEnabled)
                     .planBuilderReveal(appeared, animationsEnabled, delay: PillieTheme.stagger4)
@@ -116,21 +91,11 @@ struct ProtectionPlanRoutineDetailsView: View {
         }
         .onAppear {
             draft = RoutineSetupDraft(method: store.contraceptiveMethod, activePack: store.pack, today: store.today)
-            showMore = draft.requiresMoreOptions
             showExactDay = false
             appeared = true
         }
     }
 
-    private func commit() {
-        let output = draft.commit
-        onContinue(
-            output.regimen,
-            output.customActiveDays,
-            output.customBreakDays,
-            output.cycleDay
-        )
-    }
 }
 
 private struct RoutineCyclePositionSection: View {
@@ -329,113 +294,6 @@ private struct CyclePositionPackTrackIcon: View {
     }
 }
 
-private struct RoutinePillRegimenSection: View {
-    let header: String
-    let moreLabel: String
-    let commonRegimens: [PillPack.PillRegimenPreset]
-    let selectedRegimen: PillPack.PillRegimenPreset
-    @Binding var showMore: Bool
-    @Binding var customActiveDays: Int
-    @Binding var customBreakDays: Int
-    let onSelectRegimen: (PillPack.PillRegimenPreset) -> Void
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            RoutineSectionHeader(text: header)
-
-            VStack(spacing: 10) {
-                ForEach(commonRegimens, id: \.self) { regimen in
-                    regimenRow(regimen)
-                }
-
-                DisclosureGroup(isExpanded: $showMore) {
-                    VStack(spacing: 10) {
-                        ForEach(RoutineRegimenCatalog.more, id: \.self) { regimen in
-                            regimenRow(regimen)
-                        }
-                    }
-                    .padding(.top, 10)
-                } label: {
-                    Text(moreLabel)
-                        .font(.pillie(14, weight: .bold))
-                        .foregroundStyle(PillieTheme.textMuted)
-                        .frame(maxWidth: .infinity)
-                        .multilineTextAlignment(.center)
-                }
-                .tint(PillieTheme.textMuted)
-                .padding(.horizontal, 16)
-                .padding(.vertical, 12)
-                .background(RoundedRectangle(cornerRadius: 16).fill(Color.white.opacity(0.6)))
-                .overlay { RoundedRectangle(cornerRadius: 16).stroke(Color.black.opacity(0.06), lineWidth: 1) }
-                .accessibilityIdentifier("routineMoreRegimens")
-                .accessibilityValue(
-                    PillieLocalization.string(
-                        showMore ? "accessibility.expanded" : "accessibility.collapsed"
-                    )
-                )
-
-                if selectedRegimen == .custom {
-                    HStack(spacing: 12) {
-                        customWheel(
-                            title: PillieLocalization.string("onboarding.regimen.active_days"),
-                            selection: $customActiveDays,
-                            range: PillPack.customActiveRange
-                        )
-                        customWheel(
-                            title: PillieLocalization.string("onboarding.regimen.break_days"),
-                            selection: $customBreakDays,
-                            range: PillPack.customBreakRange
-                        )
-                    }
-                    .padding(.top, 2)
-                }
-            }
-        }
-    }
-
-    private func regimenRow(_ regimen: PillPack.PillRegimenPreset) -> some View {
-        ProtectionPlanSelectableRow(
-            title: regimen.localizedRoutineDisplayName(),
-            subtitle: regimen.localizedScheduleSubtitle(),
-            isSelected: selectedRegimen == regimen,
-            style: .radio
-        ) {
-            var transaction = Transaction()
-            transaction.animation = nil
-            withTransaction(transaction) { onSelectRegimen(regimen) }
-        }
-    }
-
-    private func customWheel(
-        title: String,
-        selection: Binding<Int>,
-        range: ClosedRange<Int>
-    ) -> some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text(title.uppercased())
-                .font(.pillie(11, weight: .bold))
-                .tracking(1)
-                .foregroundStyle(PillieTheme.textMuted)
-            Picker(title, selection: selection) {
-                ForEach(Array(range), id: \.self) { value in
-                    Text("\(value)")
-                        .font(.pillie(16, weight: .bold))
-                        .tag(value)
-                }
-            }
-            .pickerStyle(.wheel)
-            .frame(height: 112)
-            .frame(maxWidth: .infinity)
-            .background(.white, in: RoundedRectangle(cornerRadius: 12))
-            .overlay { RoundedRectangle(cornerRadius: 12).stroke(Color.black.opacity(0.08), lineWidth: 1) }
-            .clipped()
-            .accessibilityLabel(title)
-            .accessibilityValue("\(selection.wrappedValue)")
-        }
-        .frame(maxWidth: .infinity)
-    }
-}
-
 private struct RoutineFixedScheduleSection: View {
     let method: ContraceptiveMethod
 
@@ -512,7 +370,7 @@ private struct RoutineSectionHeader: View {
     ProtectionPlanRoutineDetailsView(
         progress: ProtectionPlanProgressIndex.progress(for: .schedule),
         onBack: {},
-        onContinue: { _, _, _, _ in }
+        onContinue: { _ in }
     )
     .environment(PillStore.previewStore())
 }

@@ -18,7 +18,7 @@ final class ProtectionPlanRoutineContentTests: XCTestCase {
         let content = ProtectionPlanRoutineMethodContent.default
         XCTAssertEqual(content.title, "The core of it")
         XCTAssertEqual(content.subtitle, "What routine should Pillie protect?")
-        XCTAssertEqual(content.footnote, "Your plan adapts to how you take it. You can change this anytime.")
+        XCTAssertEqual(content.footnote, "This reminder setup is based on your selections. You can change it later in Settings.")
         XCTAssertEqual(content.primaryCTA, "Continue")
         XCTAssertEqual(content.choices, ContraceptiveMethod.allCases)
     }
