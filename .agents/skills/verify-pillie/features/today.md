@@ -11,7 +11,8 @@ blocking/trial status surfaces, and (when eligible) the review ask.
   goes coral and reads "That's logged. Tap to undo." once taken.
 - `today-pill-pack-card` shows the V1 pack card for pill users
   (`HomePackCard`, ENG-145): "Pill 12 of 28" header, weekdays, grid, today
-  ringed, "…" menu (`#homePackOptions`) with Change pack type
+  ringed, an untaken pill past its reminder late (amber) and missed once the
+  next reminder fires (ENG-148), "…" menu (`#homePackOptions`) with Change pack type
   (`#homePackChangeType`, the onboarding pack sheet) and Start new. A log pops today's
   tile once Home is visible again. Patch and ring users still get the dark
   "This cycle" strip (`PillPackCard`).
@@ -64,6 +65,12 @@ blocking/trial status surfaces, and (when eligible) the review ask.
 - `flows/today-pack-card.flow` — the pack card's last hormone pill, sugar
   week, and finished pack headers via `/trial-eve-of-break`,
   `/trial-break-week`, and `/fixed-now` one day later.
+- `flows/today-late-missed.flow` — pins the clock to midday, then
+  `/trial-eve-of-break` leaves pill 21 untaken past its reminder: the tile is
+  late and the header reads "Late · still time until 8:00 AM tomorrow". One
+  live day later (`/fixed-now`) pill 21 is missed ("Pill 21 missed
+  yesterday"), its tile `#packTile.21` opens the History day sheet, and
+  marking it taken redraws the card.
 - `flows/today-change-pack.flow` — the "…" menu's Change pack type opens
   the pack sheet, then the Settings "Reset Tracking Data?" confirmation.
   Cancel keeps the pack; Reset & Save starts the new pack at pill 1 today.

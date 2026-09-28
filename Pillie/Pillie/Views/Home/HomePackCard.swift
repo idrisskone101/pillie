@@ -19,25 +19,34 @@ struct HomePackCard: View {
     @State private var pickedPack: PackChoice?
     @State private var showsResetConfirmation = false
     @State private var heldTaken: Bool?
+    @State private var correctionTarget: HistoryEditableDay?
     private let homeFeedback = HomeActionInteractionFeedback()
 
     var body: some View {
         let _ = store.protocolChangeVersion
         let _ = store.dayRecordsRevision
+        let _ = store.civilDay
         let pack = store.pack
         let today = store.today
+        let elapsedDays = pack.elapsedCycleDays(on: today)
         let progress = HomePackProgress(
             regimen: pack.regimen,
-            elapsedDays: pack.elapsedCycleDays(on: today),
+            elapsedDays: elapsedDays,
             isTodayTaken: heldTaken ?? store.isTodayTaken,
+            missedDays: missedDays(elapsedDays: elapsedDays, totalDays: pack.regimen.totalDays, today: today),
+            lateUntil: lateUntil(today: today),
             today: today,
+            now: PillieClock.now,
             calendar: .current
         )
         PackCard(
             regimen: progress.regimen,
             dayOneWeekday: progress.dayOneWeekday,
             todayIndex: progress.todayIndex,
-            marks: progress.marks
+            marks: progress.marks,
+            onSelectMissedDay: { index in
+                correctionTarget = editableDay(atIndex: index, elapsedDays: elapsedDays, today: today)
+            }
         ) {
             HomePackHeader(
                 title: progress.title(locale: locale),
@@ -49,7 +58,7 @@ struct HomePackCard: View {
                     ),
                     locale: locale
                 ),
-                isTakenToday: progress.status == .taken,
+                subtitleColor: subtitleColor(for: progress.status),
                 onChangeType: { showsPackSheet = true },
                 onStartNew: { showsNewPackConfirmation = true }
             )
@@ -58,6 +67,12 @@ struct HomePackCard: View {
             showsResetConfirmation = pickedPack != nil
         }) {
             PackTypeSheet(current: PackChoice(pack.regimen)) { pickedPack = $0 }
+        }
+        .sheet(item: $correctionTarget) { target in
+            HistoryDayCorrectionSheet(day: target) { outcome in
+                guard store.correctPastDay(on: target.date, to: outcome) else { return }
+                InteractionFeedback.live.perform(.meaningfulCommit)
+            }
         }
         .onChange(of: holdsTodayLog || scenePhase != .active, initial: true) { _, holds in
             heldTaken = holds ? store.isTodayTaken : nil
@@ -80,6 +95,40 @@ struct HomePackCard: View {
             Button(resetConfirmation.confirmTitle, role: .destructive) { startOver() }
         } message: {
             Text(resetConfirmation.body)
+        }
+    }
+
+    private func lateUntil(today: Date) -> Date? {
+        guard case .late(let until)? = store.doseStanding(on: today) else { return nil }
+        return until
+    }
+
+    private func date(ofIndex index: Int, elapsedDays: Int, today: Date) -> Date? {
+        Calendar.current.date(byAdding: .day, value: index - elapsedDays, to: today)
+    }
+
+    private func missedDays(elapsedDays: Int, totalDays: Int, today: Date) -> Set<Int> {
+        let pastDays = max(0, min(elapsedDays, totalDays))
+        guard pastDays > 0, var day = date(ofIndex: 0, elapsedDays: elapsedDays, today: today) else { return [] }
+        var missed: Set<Int> = []
+        for index in 0..<pastDays {
+            if store.statusForDate(day) == .missed { missed.insert(index) }
+            day = Calendar.current.date(byAdding: .day, value: 1, to: day) ?? day
+        }
+        return missed
+    }
+
+    private func editableDay(atIndex index: Int, elapsedDays: Int, today: Date) -> HistoryEditableDay? {
+        guard let day = date(ofIndex: index, elapsedDays: elapsedDays, today: today),
+              let snapshot = store.scheduleSnapshot(for: day) else { return nil }
+        return HistoryEditableDay(snapshot: snapshot, relation: .past)
+    }
+
+    private func subtitleColor(for status: HomePackProgress.Status) -> Color {
+        switch status {
+        case .taken: PillieTheme.verifiedGreen
+        case .late, .missedYesterday: PillieTheme.amberText
+        default: PillieTheme.textMuted
         }
     }
 
@@ -113,7 +162,7 @@ struct HomePackCard: View {
 private struct HomePackHeader: View {
     let title: String
     let subtitle: String
-    let isTakenToday: Bool
+    let subtitleColor: Color
     let onChangeType: () -> Void
     let onStartNew: () -> Void
 
@@ -129,7 +178,7 @@ private struct HomePackHeader: View {
                     .minimumScaleFactor(0.8)
                 Text(subtitle)
                     .font(.pillie(13))
-                    .foregroundStyle(isTakenToday ? PillieTheme.verifiedGreen : PillieTheme.textMuted)
+                    .foregroundStyle(subtitleColor)
                     .lineLimit(2)
                     .minimumScaleFactor(0.85)
                     .fixedSize(horizontal: false, vertical: true)

@@ -25,8 +25,32 @@ struct HomePackProgressTests {
         calendar.date(from: DateComponents(year: 2026, month: 9, day: 28, hour: 10))!
     }
 
-    private func progress(_ regimen: PackRegimen, elapsed: Int, taken: Bool = false) -> HomePackProgress {
-        HomePackProgress(regimen: regimen, elapsedDays: elapsed, isTodayTaken: taken, today: monday, calendar: calendar)
+    private var mondayEvening: Date {
+        calendar.date(from: DateComponents(year: 2026, month: 9, day: 28, hour: 22))!
+    }
+
+    private var deadline: Date {
+        calendar.date(from: DateComponents(year: 2026, month: 9, day: 29, hour: 21))!
+    }
+
+    private func progress(
+        _ regimen: PackRegimen,
+        elapsed: Int,
+        taken: Bool = false,
+        missed: Set<Int> = [],
+        lateUntil: Date? = nil,
+        now: Date? = nil
+    ) -> HomePackProgress {
+        HomePackProgress(
+            regimen: regimen,
+            elapsedDays: elapsed,
+            isTodayTaken: taken,
+            missedDays: missed,
+            lateUntil: lateUntil,
+            today: monday,
+            now: now ?? monday,
+            calendar: calendar
+        )
     }
 
     private func header(_ progress: HomePackProgress) -> [String] {
@@ -77,7 +101,70 @@ struct HomePackProgressTests {
         #expect(header(progress(twentyFourFour, elapsed: 11)) == ["Pill 12 of 28", "24/4 · due 9:00 PM"])
     }
 
+    @Test func `A late pill keeps its title and says the window closes tomorrow before midnight`() {
+        let late = progress(twentyOneSeven, elapsed: 11, lateUntil: deadline, now: mondayEvening)
+
+        #expect(late.status == .late(endsTomorrow: true))
+        #expect(header(late) == ["Pill 12 of 28", "Late · still time until 9:00 PM tomorrow"])
+    }
+
+    @Test func `A late pill says today once midnight has passed`() {
+        let pastMidnight = calendar.date(from: DateComponents(year: 2026, month: 9, day: 29, hour: 1))!
+        let late = progress(twentyOneSeven, elapsed: 11, lateUntil: deadline, now: pastMidnight)
+
+        #expect(header(late) == ["Pill 12 of 28", "Late · still time until 9:00 PM today"])
+    }
+
+    @Test func `Late overrides the first and last pill lines`() {
+        #expect(header(progress(twentyOneSeven, elapsed: 0, lateUntil: deadline, now: mondayEvening))
+            == ["Pill 1 of 28", "Late · still time until 9:00 PM tomorrow"])
+        #expect(header(progress(twentyOneSeven, elapsed: 20, lateUntil: deadline, now: mondayEvening))
+            == ["Pill 21 of 28", "Late · still time until 9:00 PM tomorrow"])
+    }
+
+    @Test func `A pill missed yesterday names it under the live day's title`() {
+        #expect(header(progress(twentyOneSeven, elapsed: 11, missed: [10])) == ["Pill 12 of 28", "Pill 11 missed yesterday"])
+    }
+
+    @Test func `Missed yesterday outranks today's late line`() {
+        let both = progress(twentyOneSeven, elapsed: 11, missed: [10], lateUntil: deadline, now: mondayEvening)
+
+        #expect(both.status == .missedYesterday(pillNumber: 11))
+        #expect(both.marks == [10: .missed, 11: .late])
+    }
+
+    @Test func `Taken today outranks missed yesterday`() {
+        #expect(header(progress(twentyOneSeven, elapsed: 11, taken: true, missed: [10])) == ["Pill 12 of 28", "Taken today"])
+    }
+
+    @Test func `An older miss leaves the header on the live pill`() {
+        #expect(header(progress(twentyOneSeven, elapsed: 11, missed: [4])) == ["Pill 12 of 28", "Standard · due 9:00 PM"])
+    }
+
     // MARK: Card inputs
+
+    @Test func `Missed days and a late today draw as missed and late tiles`() {
+        let card = progress(twentyOneSeven, elapsed: 11, missed: [3, 9], lateUntil: deadline, now: mondayEvening)
+        let layout = PackCardLayout(regimen: twentyOneSeven, todayIndex: card.todayIndex, marks: card.marks)
+
+        #expect(card.marks == [3: .missed, 9: .missed, 11: .late])
+        #expect([2, 3, 9, 10, 11, 12].map(layout.state(at:)) == [.popped, .missed, .missed, .popped, .late, .sealed])
+    }
+
+    @Test func `A sugar pill left unlogged yesterday draws popped`() {
+        let card = progress(twentyOneSeven, elapsed: 23)
+        let layout = PackCardLayout(regimen: twentyOneSeven, todayIndex: card.todayIndex, marks: card.marks)
+
+        #expect(card.marks == [:])
+        #expect(layout.state(at: 22) == .popped)
+    }
+
+    @Test func `A finished pack keeps its missed pills`() {
+        let finished = progress(twentyOneSeven, elapsed: 28, missed: [5], lateUntil: deadline, now: mondayEvening)
+
+        #expect(finished.status == .finished)
+        #expect(finished.marks == [5: .missed])
+    }
 
     @Test func `The live day is ringed, and marked only once it is taken`() {
         let open = progress(twentyOneSeven, elapsed: 11)

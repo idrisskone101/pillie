@@ -9,7 +9,8 @@ openurl pillie://debug/trial-grant?lang=en
 
 # DebugQA.trialEveOfBreak: today is pill 21 of a 21/7 pack.
 openurl pillie://debug/trial-eve-of-break?lang=en
-wait text "Last hormone pill · sugar pills next" 10
+wait text "Late · still time until" 10
+expect text "Pill 21 of 28"
 shot last-hormone-pill
 
 # DebugQA.trialMidBreak: today is the pack's last sugar pill.

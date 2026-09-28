@@ -10,6 +10,8 @@ struct HomePackProgress: Hashable, Sendable {
     enum Status: Hashable, Sendable {
         case finished
         case taken
+        case missedYesterday(pillNumber: Int)
+        case late(endsTomorrow: Bool)
         case breakDay
         case sugarPill(PackDay)
         case firstPill
@@ -21,13 +23,26 @@ struct HomePackProgress: Hashable, Sendable {
     /// Days since the pack's day 1: negative before it, `totalDays` or more once the pack is finished.
     let elapsedDays: Int
     let isTodayTaken: Bool
+    let missedDays: Set<Int>
+    let lateEndsTomorrow: Bool?
     /// Calendar weekday (1 = Sunday) of the pack's day 1.
     let dayOneWeekday: Int
 
-    init(regimen: PackRegimen, elapsedDays: Int, isTodayTaken: Bool, today: Date, calendar: Calendar) {
+    init(
+        regimen: PackRegimen,
+        elapsedDays: Int,
+        isTodayTaken: Bool,
+        missedDays: Set<Int> = [],
+        lateUntil: Date? = nil,
+        today: Date,
+        now: Date,
+        calendar: Calendar
+    ) {
         self.regimen = regimen
         self.elapsedDays = elapsedDays
         self.isTodayTaken = isTodayTaken
+        self.missedDays = missedDays
+        lateEndsTomorrow = lateUntil.map { !calendar.isDate($0, inSameDayAs: now) }
         let dayOne = calendar.date(byAdding: .day, value: -elapsedDays, to: calendar.startOfDay(for: today)) ?? today
         dayOneWeekday = calendar.component(.weekday, from: dayOne)
     }
@@ -40,14 +55,24 @@ struct HomePackProgress: Hashable, Sendable {
     }
 
     var marks: [Int: PackTileMark] {
-        guard isTodayTaken, !isFinished, let todayIndex else { return [:] }
-        return [todayIndex: .taken]
+        var marks = Dictionary(uniqueKeysWithValues: missedDays.map { ($0, PackTileMark.missed) })
+        guard !isFinished, let todayIndex else { return marks }
+        if isTodayTaken {
+            marks[todayIndex] = .taken
+        } else if lateEndsTomorrow != nil {
+            marks[todayIndex] = .late
+        }
+        return marks
     }
 
     var status: Status {
         if isFinished { return .finished }
         let day = regimen.day(atIndex: max(elapsedDays, 0))
         if isTodayTaken { return .taken }
+        if missedDays.contains(elapsedDays - 1) {
+            return .missedYesterday(pillNumber: regimen.day(atIndex: elapsedDays - 1).number)
+        }
+        if let lateEndsTomorrow { return .late(endsTomorrow: lateEndsTomorrow) }
         switch day.kind {
         case .noPill: return .breakDay
         case .sugarPill: return .sugarPill(day)
@@ -89,6 +114,13 @@ struct HomePackProgress: Hashable, Sendable {
             return PillieLocalization.string("home.pack.subtitle.finished", locale: locale)
         case .taken:
             return PillieLocalization.string("home.pack.subtitle.taken", locale: locale)
+        case .missedYesterday(let pillNumber):
+            return PillieLocalization.formatted(
+                "home.pack.subtitle.missed_yesterday", locale: locale, arguments: pillNumber
+            )
+        case .late(let endsTomorrow):
+            let key = endsTomorrow ? "home.pack.subtitle.late_tomorrow" : "home.pack.subtitle.late_today"
+            return PillieLocalization.formatted(key, locale: locale, arguments: reminderTime)
         case .breakDay:
             return PillieLocalization.formatted(
                 "home.pack.subtitle.break_day", locale: locale, arguments: nextPackWeekdayName(locale: locale)

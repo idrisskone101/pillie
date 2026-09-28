@@ -8,7 +8,7 @@ wait text "Get started" 15
 openurl "pillie://debug/plus-home?lang=en"
 openurl pillie://debug/trial-grant?lang=en
 openurl pillie://debug/trial-eve-of-break?lang=en
-wait text "Last hormone pill" 10
+wait text "Pill 21 of 28" 10
 shot before
 
 # Cancel keeps the pack as it was.
@@ -33,5 +33,5 @@ tap --id packSheet.24_4
 wait text "Reset Tracking Data?" 10
 tap --label "Reset & Save"
 wait text "Pill 1 of 28" 10
-expect text "New pack · 24/4"
+expect text "Late · still time until"
 shot after-24-4
