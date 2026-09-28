@@ -264,6 +264,12 @@ final class NotificationManager {
     func handleMarkTakenAction(store: PillStore, response: UNNotificationResponse) {
         let dueDate = dueDateFromPayload(userInfo: response.notification.request.content.userInfo)
             ?? store.today
+        completeReminder(store: store, dueDate: dueDate)
+    }
+
+    /// The reminder's Complete action once its payload is read. DEBUG's
+    /// `pillie://debug/notification-complete` calls it too, since the simulator can't tap the action.
+    func completeReminder(store: PillStore, dueDate: Date) {
         let dueEpoch = Int(Calendar.current.startOfDay(for: dueDate).timeIntervalSince1970)
 
         store.markActionAsTaken(on: dueDate)

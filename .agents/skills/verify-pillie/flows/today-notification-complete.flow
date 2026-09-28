@@ -1,0 +1,20 @@
+# The reminder's Complete action while Home is open (NotificationManager
+# completeReminder, the code a Complete tap runs after reading its payload).
+# The simulator can't tap a notification action, so pillie://debug/notification-complete
+# calls it for today. Home must redraw: the status card turns to taken, the CTA
+# becomes undo, and the pack card pops today's tile.
+fresh
+launch
+wait text "Get started" 15
+openurl "pillie://debug/plus-home?lang=en"
+openurl pillie://debug/trial-grant?lang=en
+# DebugQA.trialEveOfBreak: today is pill 21, due and untaken.
+openurl pillie://debug/trial-eve-of-break?lang=en
+wait text "Last hormone pill · sugar pills next" 10
+wait text "Take pill" 10
+shot due
+openurl pillie://debug/notification-complete?lang=en
+wait text "That's logged. Tap to undo." 10
+wait text "Taken today" 10
+gone text "Take pill" 5
+shot completed
