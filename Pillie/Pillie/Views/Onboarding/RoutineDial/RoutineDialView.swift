@@ -159,7 +159,7 @@ struct RoutineDialView: View {
                 Image(method.contraceptiveMethod.iconImageName)
                     .resizable()
                     .scaledToFit()
-                    .frame(width: method == .patch ? 80 : 84, height: method == .patch ? 80 : 84)
+                    .frame(width: method == .patch ? 74 : 84, height: method == .patch ? 74 : 84)
                     .opacity(selection.day.phase == .free ? 0.4 : 1)
                     .accessibilityHidden(true)
                 Text(copy.dayLabel)
@@ -173,9 +173,11 @@ struct RoutineDialView: View {
                     .multilineTextAlignment(.center)
                     .lineLimit(2)
                     .minimumScaleFactor(0.85)
+                    // The subtitle sits low in the circle, where the chord is narrower.
+                    .frame(maxWidth: metrics.radius * 1.2)
             }
             .frame(width: metrics.radius * 2 - 40)
-            .padding(.top, method == .patch ? 52 : 58)
+            .padding(.top, method == .patch ? 46 : 58)
             .allowsHitTesting(false)
             .accessibilityElement(children: .combine)
             .accessibilityIdentifier("routineDialDayLabel")
