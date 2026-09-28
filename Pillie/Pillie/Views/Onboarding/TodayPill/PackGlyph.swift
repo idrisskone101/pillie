@@ -9,11 +9,13 @@ struct PackGlyph: View {
     enum Size {
         case compact
         case tile
+        case preview
 
         fileprivate var dot: CGFloat {
             switch self {
             case .compact: 3.6
             case .tile: 8.9
+            case .preview: 18
             }
         }
 
@@ -21,6 +23,7 @@ struct PackGlyph: View {
             switch self {
             case .compact: 1.4
             case .tile: 3.6
+            case .preview: 6
             }
         }
 
@@ -28,6 +31,7 @@ struct PackGlyph: View {
             switch self {
             case .compact: StrokeStyle(lineWidth: 0.8)
             case .tile: StrokeStyle(lineWidth: 1.4, dash: [2.2, 1.95])
+            case .preview: StrokeStyle(lineWidth: 1.8, dash: [3.2, 2.8])
             }
         }
     }
@@ -59,7 +63,7 @@ struct PackGlyph: View {
         }
     }
 
-    private enum GlyphColor {
+    enum GlyphColor {
         static let active = Color(hex: "F4A6A0")
         static let sugar = Color(hex: "C3D3C0")
         static let noPill = Color(hex: "CFCBC7")
