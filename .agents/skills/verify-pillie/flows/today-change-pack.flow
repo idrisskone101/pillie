@@ -1,7 +1,7 @@
 # Change the pack type from the Home pack card's "…" menu (HomePackCard,
 # PillStore.changePackRegimen). Two days into a 21 + 7 sugar week, switching
-# to 24 + 4 keeps today's pill number, makes yesterday a hormone day counted
-# taken (like updateCycleDay), and keeps the streak.
+# to 24 + 4 keeps today's pill number, records yesterday, now a hormone day, as a
+# skip (no taken claim, no missed dose), and leaves the streak as it was.
 fresh
 launch
 wait text "Get started" 15
@@ -29,4 +29,13 @@ wait text "Pill 23 of 28" 10
 expect text "24/4 · due 8:00 AM"
 expect text "Take pill"
 shot after-24-4
+# Day 22 was an unlogged sugar pill; under 24 + 4 it is a pill day recorded as a
+# skip, so History shows no missed dose and the streak neither grows nor breaks.
+gesture scroll-down
+wait text "Your streak" 5
+shot streak
+tap --label History
+wait text "Your month so far" 10
+shot history
+tap --label Today
 openurl pillie://debug/fixed-now?at=off
