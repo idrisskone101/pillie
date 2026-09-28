@@ -276,19 +276,24 @@ private struct CustomPackPreviewCard: View {
 
     var body: some View {
         VStack(spacing: 12) {
-            switch draft.layout {
-            case .grid:
-                PackGlyph(regimen: draft.regimen, size: .preview)
-                    .accessibilityHidden(true)
-            case .map:
-                CustomPackDotMap(regimen: draft.regimen)
+            Group {
+                switch draft.layout {
+                case .grid:
+                    PackGlyph(regimen: draft.regimen, size: .preview)
+                        .accessibilityHidden(true)
+                case .map:
+                    CustomPackDotMap(regimen: draft.regimen)
+                }
             }
+            .frame(maxWidth: .infinity)
+            .frame(height: CustomPackMapMetrics.boxHeight)
 
             Text(draft.caption())
                 .font(.pillie(14, weight: .medium))
                 .foregroundStyle(PillieTheme.textMuted)
                 .multilineTextAlignment(.center)
-                .fixedSize(horizontal: false, vertical: true)
+                .lineLimit(1)
+                .minimumScaleFactor(0.75)
                 .contentTransition(.numericText())
                 .accessibilityIdentifier("customPackCaption")
         }
@@ -305,14 +310,8 @@ private struct CustomPackDotMap: View {
 
     @State private var availableWidth: CGFloat = 300
 
-    private static let labelWidth: CGFloat = 10
-    private static let labelGap: CGFloat = 10
-
     private var metrics: CustomPackMapMetrics {
-        CustomPackMapMetrics(
-            columns: regimen.weekCount,
-            availableWidth: availableWidth - Self.labelWidth - Self.labelGap
-        )
+        CustomPackMapMetrics(weeks: regimen.weekCount, availableWidth: availableWidth)
     }
 
     private var weekdayLabels: [String] {
@@ -324,26 +323,23 @@ private struct CustomPackDotMap: View {
 
     var body: some View {
         let metrics = metrics
-        HStack(alignment: .top, spacing: Self.labelGap) {
-            VStack(spacing: 0) {
-                ForEach(Array(weekdayLabels.enumerated()), id: \.offset) { _, label in
-                    Text(label)
-                        .font(.pillie(10, weight: .semibold))
-                        .foregroundStyle(EditorColor.weekday)
-                        .frame(width: Self.labelWidth, height: metrics.dot)
-                        .padding(.bottom, metrics.pitch - metrics.dot)
+        HStack(alignment: .top, spacing: CustomPackMapMetrics.labelGap) {
+            if metrics.showsLabels {
+                VStack(spacing: 0) {
+                    ForEach(Array(weekdayLabels.enumerated()), id: \.offset) { _, label in
+                        Text(label)
+                            .font(.pillie(10, weight: .semibold))
+                            .foregroundStyle(EditorColor.weekday)
+                            .frame(width: CustomPackMapMetrics.labelWidth, height: metrics.dot)
+                            .padding(.bottom, metrics.pitch - metrics.dot)
+                    }
                 }
+                .frame(height: metrics.size.height, alignment: .top)
             }
-            .frame(height: metrics.size.height, alignment: .top)
 
             Canvas { context, _ in
                 for index in 0..<regimen.totalDays {
-                    let rect = CGRect(
-                        x: CGFloat(index / CustomPackMapMetrics.rows) * metrics.pitch,
-                        y: CGFloat(index % CustomPackMapMetrics.rows) * metrics.pitch,
-                        width: metrics.dot,
-                        height: metrics.dot
-                    )
+                    let rect = CGRect(origin: metrics.origin(ofDay: index), size: CGSize(width: metrics.dot, height: metrics.dot))
                     let circle = Path(ellipseIn: rect)
                     switch regimen.day(atIndex: index).kind {
                     case .active:
@@ -359,7 +355,9 @@ private struct CustomPackDotMap: View {
             .frame(width: metrics.size.width, height: metrics.size.height)
         }
         .frame(maxWidth: .infinity)
-        .onGeometryChange(for: CGFloat.self, of: \.size.width) { availableWidth = $0 }
+        .background {
+            Color.clear.onGeometryChange(for: CGFloat.self, of: \.size.width) { availableWidth = $0 }
+        }
         .accessibilityHidden(true)
     }
 }
@@ -461,7 +459,8 @@ private struct CustomPackStepperValue: View {
             .foregroundStyle(PillieTheme.textPrimary)
             .contentTransition(.numericText(value: Double(value)))
             .monospacedDigit()
-            .frame(minWidth: 28)
+            // The typing box's width, so neither a third digit nor typing moves the ± buttons.
+            .frame(width: 62)
     }
 }
 

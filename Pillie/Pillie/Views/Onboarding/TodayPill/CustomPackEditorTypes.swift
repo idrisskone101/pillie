@@ -113,26 +113,76 @@ struct CustomPackDraft: Equatable {
     }
 }
 
-/// Dot map geometry for long packs: one column per week, seven rows, shrunk
-/// uniformly so the widest pack still fits the card.
+/// Dot map geometry for long packs: one column per week, seven rows. The map always
+/// fits a fixed box, so typing a longer pack never changes the preview's height. Weeks
+/// wrap into up to three bands, picking whichever split draws the biggest dots.
 struct CustomPackMapMetrics: Equatable {
     static let maxDot: CGFloat = 15
     static let maxGap: CGFloat = 5.2
     static let rows = 7
+    static let boxHeight: CGFloat = 136.2
+    static let bandGap: CGFloat = 10
+    static let labelWidth: CGFloat = 10
+    static let labelGap: CGFloat = 10
+    // Below this a 10 pt weekday letter no longer fits its row.
+    static let labelMinPitch: CGFloat = 13
+    private static let maxBands = 3
 
-    let columns: Int
+    let bands: Int
+    let columnsPerBand: Int
     let pitch: CGFloat
+    let showsLabels: Bool
 
-    init(columns: Int, availableWidth: CGFloat) {
-        self.columns = max(columns, 1)
-        let widest = availableWidth / CGFloat(self.columns)
-        pitch = min(Self.maxDot + Self.maxGap, widest)
+    init(weeks: Int, availableWidth: CGFloat) {
+        let weeks = max(weeks, 1)
+        let candidates = (1...Self.maxBands).map { bands in
+            Self.fit(weeks: weeks, bands: bands, availableWidth: availableWidth)
+        }
+        self = candidates.max { $0.pitch < $1.pitch } ?? candidates[0]
+    }
+
+    private init(bands: Int, columnsPerBand: Int, pitch: CGFloat, showsLabels: Bool) {
+        self.bands = bands
+        self.columnsPerBand = columnsPerBand
+        self.pitch = pitch
+        self.showsLabels = showsLabels
+    }
+
+    private static func fit(weeks: Int, bands: Int, availableWidth: CGFloat) -> CustomPackMapMetrics {
+        let columns = (weeks + bands - 1) / bands
+        let bandHeightPerPitch = CGFloat(rows) - maxGap / (maxDot + maxGap)
+        let byHeight = (boxHeight - CGFloat(bands - 1) * bandGap) / (CGFloat(bands) * bandHeightPerPitch)
+        let cap = min(maxDot + maxGap, byHeight)
+        let labelled = min(cap, (availableWidth - labelWidth - labelGap) / CGFloat(columns))
+        if bands == 1, labelled >= labelMinPitch {
+            return CustomPackMapMetrics(bands: bands, columnsPerBand: columns, pitch: labelled, showsLabels: true)
+        }
+        return CustomPackMapMetrics(
+            bands: bands,
+            columnsPerBand: columns,
+            pitch: min(cap, availableWidth / CGFloat(columns)),
+            showsLabels: false
+        )
     }
 
     var dot: CGFloat { pitch * Self.maxDot / (Self.maxDot + Self.maxGap) }
 
+    var bandHeight: CGFloat { pitch * CGFloat(Self.rows) - (pitch - dot) }
+
     var size: CGSize {
-        CGSize(width: pitch * CGFloat(columns) - (pitch - dot), height: pitch * CGFloat(Self.rows) - (pitch - dot))
+        CGSize(
+            width: pitch * CGFloat(columnsPerBand) - (pitch - dot),
+            height: bandHeight * CGFloat(bands) + Self.bandGap * CGFloat(bands - 1)
+        )
+    }
+
+    func origin(ofDay index: Int) -> CGPoint {
+        let week = index / Self.rows
+        let band = week / columnsPerBand
+        return CGPoint(
+            x: CGFloat(week % columnsPerBand) * pitch,
+            y: CGFloat(band) * (bandHeight + Self.bandGap) + CGFloat(index % Self.rows) * pitch
+        )
     }
 }
 

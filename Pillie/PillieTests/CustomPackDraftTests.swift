@@ -115,13 +115,35 @@ struct CustomPackDraftTests {
         #expect(draft(100, 3).caption(locale: en) == "103-day pack · about 15 weeks")
     }
 
-    @Test func `the map shrinks only when 53 weeks would overflow`() {
-        let short = CustomPackMapMetrics(columns: 13, availableWidth: 300)
-        #expect(short.pitch == 20.2)
-        #expect(short.dot == 15)
+    @Test func `a 13-week map keeps full-size dots and weekday labels in one band`() {
+        let map = CustomPackMapMetrics(weeks: 13, availableWidth: 330)
+        #expect(map.bands == 1)
+        #expect(map.showsLabels)
+        #expect(abs(map.dot - 15) < 0.05)
+    }
 
-        let widest = CustomPackMapMetrics(columns: 53, availableWidth: 318)
-        #expect(widest.pitch == 6)
-        #expect(abs(widest.size.width - 316.46) < 0.01)
+    @Test func `a year-long pack wraps into two bands and drops the labels`() {
+        let map = CustomPackMapMetrics(weeks: 53, availableWidth: 330)
+        #expect(map.bands == 2)
+        #expect(map.columnsPerBand == 27)
+        #expect(!map.showsLabels)
+        #expect(map.dot > 6.5)
+    }
+
+    @Test func `every map fits the fixed preview box`() {
+        for weeks in 6...53 {
+            let map = CustomPackMapMetrics(weeks: weeks, availableWidth: 330)
+            #expect(map.size.height <= CustomPackMapMetrics.boxHeight + 0.01)
+            let labelSpace = map.showsLabels ? CustomPackMapMetrics.labelWidth + CustomPackMapMetrics.labelGap : 0
+            #expect(map.size.width + labelSpace <= 330 + 0.01)
+        }
+    }
+
+    @Test func `week 28 of a two-band map starts the second band`() {
+        let map = CustomPackMapMetrics(weeks: 53, availableWidth: 330)
+        let first = map.origin(ofDay: 0)
+        let wrapped = map.origin(ofDay: 27 * 7)
+        #expect(wrapped.x == first.x)
+        #expect(abs(wrapped.y - (map.bandHeight + CustomPackMapMetrics.bandGap)) < 0.01)
     }
 }
