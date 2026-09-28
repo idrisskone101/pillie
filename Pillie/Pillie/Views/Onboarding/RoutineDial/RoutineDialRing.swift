@@ -11,8 +11,8 @@ struct RoutineDialRing: View {
         let radius: CGFloat
         let gapDegrees: Double
 
-        static let patch = Metrics(size: 236, radius: 96, gapDegrees: 2)
-        static let ring = Metrics(size: 256, radius: 106, gapDegrees: 0.8)
+        static let patch = Metrics(size: 224, radius: 96, gapDegrees: 2)
+        static let ring = Metrics(size: 244, radius: 106, gapDegrees: 0.8)
     }
 
     struct Knob {
@@ -27,6 +27,8 @@ struct RoutineDialRing: View {
     let animatesKnob: Bool
     let onSelect: (Int) -> Void
     @Binding var isScrubbing: Bool
+
+    @State private var dragDegrees: Double?
 
     private static let lineWidth: CGFloat = 14
     private static let knobRadius: CGFloat = 15
@@ -56,8 +58,7 @@ struct RoutineDialRing: View {
                     .fill(knob.dot)
                     .frame(width: Self.dotRadius * 2, height: Self.dotRadius * 2)
             }
-            .modifier(OrbitEffect(degrees: Double(position) * segmentDegrees, radius: metrics.radius))
-            .animation(animatesKnob ? .spring(duration: 0.3, bounce: 0.15) : nil, value: position)
+            .modifier(OrbitEffect(degrees: dragDegrees ?? Double(position) * segmentDegrees, radius: metrics.radius))
         }
         .frame(width: metrics.size, height: metrics.size)
         .contentShape(
@@ -70,27 +71,40 @@ struct RoutineDialRing: View {
     private var scrub: some Gesture {
         DragGesture(minimumDistance: 0)
             .onChanged { value in
-                if !isScrubbing { isScrubbing = true }
-                select(at: value.location, continuing: value.translation != .zero)
+                let touch = angle(of: value.location)
+                guard let current = dragDegrees else {
+                    isScrubbing = true
+                    withAnimation(animatesKnob ? .spring(duration: 0.25, bounce: 0) : nil) {
+                        dragDegrees = touch
+                    }
+                    selectDay(at: touch)
+                    return
+                }
+                // Unwrapped, so crossing twelve o'clock pins the knob instead of jumping ends.
+                let next = min(max(current + remainder(touch - current, 360), 0), 360)
+                var instant = Transaction()
+                instant.disablesAnimations = true
+                withTransaction(instant) {
+                    dragDegrees = next
+                    selectDay(at: next)
+                }
             }
-            .onEnded { value in
-                select(at: value.location, continuing: true)
+            .onEnded { _ in
                 isScrubbing = false
+                withAnimation(animatesKnob ? .spring(duration: 0.5, bounce: 0.4) : nil) {
+                    dragDegrees = nil
+                }
             }
     }
 
-    private func select(at location: CGPoint, continuing: Bool) {
+    private func angle(of location: CGPoint) -> Double {
         let center = metrics.size / 2
-        let dx = location.x - center
-        let dy = location.y - center
-        var degrees = atan2(dx, -dy) * 180 / .pi
-        if degrees < 0 { degrees += 360 }
-        var day = min(max(Int((degrees / segmentDegrees).rounded(.up)), 1), count)
-        if continuing {
-            let quarter = max(1, count / 4)
-            if position > count - quarter && day <= quarter { day = count }
-            if position <= quarter && day > count - quarter { day = 1 }
-        }
+        let degrees = atan2(location.x - center, center - location.y) * 180 / .pi
+        return degrees < 0 ? degrees + 360 : degrees
+    }
+
+    private func selectDay(at degrees: Double) {
+        let day = min(max(Int((degrees / segmentDegrees).rounded(.up)), 1), count)
         guard day != position else { return }
         onSelect(day)
     }

@@ -56,15 +56,6 @@ struct RoutineDialView: View {
                     card(copy)
                         .planBuilderReveal(appeared, animationsEnabled, delay: PillieTheme.stagger2)
 
-                    if !selection.asksQuestion {
-                        Text(copy.hint)
-                            .font(.pillie(13, weight: .regular))
-                            .foregroundStyle(PillieTheme.textMuted)
-                            .multilineTextAlignment(.center)
-                            .frame(maxWidth: .infinity)
-                            .padding(.top, 14)
-                            .transition(.opacity)
-                    }
 
                     Color.clear
                         .frame(height: Self.bottomGap)
@@ -73,7 +64,7 @@ struct RoutineDialView: View {
                 .animation(reduceMotion ? .easeInOut(duration: 0.2) : .spring(duration: 0.4, bounce: 0.15), value: showsQuestion)
                 .animation(reduceMotion ? nil : .spring(duration: 0.35, bounce: 0.2), value: selection.answer)
                 .onChange(of: showsQuestion) { if showsQuestion { reveal(in: scroll) } }
-                .onChange(of: selection.answer) { reveal(in: scroll) }
+                .onChange(of: selection.answer) { if selection.answer != nil { reveal(in: scroll) } }
             }
         }
         .sensoryFeedback(.selection, trigger: moves)
@@ -84,10 +75,10 @@ struct RoutineDialView: View {
     }
 
     private static let bottomAnchor = "routineDialBottom"
-    private static let bottomGap: CGFloat = 24
+    private static let bottomGap: CGFloat = 16
 
     private func card(_ copy: RoutineDialCopy) -> some View {
-        VStack(alignment: .leading, spacing: method == .patch ? 16 : 14) {
+        VStack(alignment: .leading, spacing: 12) {
             if method == .patch {
                 RoutineDialSegments(
                     titles: copy.segmentTitles,
@@ -103,24 +94,49 @@ struct RoutineDialView: View {
                 RoutineDialLegend()
             }
 
-            if showsQuestion, let question = copy.question {
+            ZStack {
                 RoutineDialQuestion(
-                    question: question,
+                    question: copy.sizingQuestion,
                     yesTitle: copy.yesTitle,
                     notYetTitle: copy.notYetTitle,
-                    answer: selection.answer,
-                    status: copy.status,
-                    statusDot: palette.accent,
-                    onAnswer: record
+                    answer: nil,
+                    status: .logged(copy.sizingStatus),
+                    statusDot: .clear,
+                    onAnswer: { _ in }
                 )
-                .transition(.offset(y: 12).combined(with: .opacity))
-            } else if let row = copy.resultRow {
-                RoutineDialResultRow(row: row, dot: palette.accent)
+                .opacity(0)
+                .allowsHitTesting(false)
+                .accessibilityHidden(true)
+
+                if showsQuestion, let question = copy.question {
+                    RoutineDialQuestion(
+                        question: question,
+                        yesTitle: copy.yesTitle,
+                        notYetTitle: copy.notYetTitle,
+                        answer: selection.answer,
+                        status: copy.status,
+                        statusDot: palette.accent,
+                        onAnswer: record
+                    )
+                    .frame(maxHeight: .infinity, alignment: .top)
+                    .transition(.offset(y: 12).combined(with: .opacity))
+                } else if let row = copy.resultRow {
+                    VStack(spacing: 14) {
+                        RoutineDialResultRow(row: row, dot: palette.accent)
+                        Text(copy.hint)
+                            .font(.pillie(13, weight: .regular))
+                            .foregroundStyle(PillieTheme.textMuted)
+                            .multilineTextAlignment(.center)
+                            .frame(maxWidth: .infinity)
+                    }
+                    .frame(maxHeight: .infinity, alignment: .top)
+                    .transition(.opacity)
+                }
             }
         }
         .padding(.horizontal, 16)
         .padding(.top, 16)
-        .padding(.bottom, 18)
+        .padding(.bottom, 16)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(.white, in: RoundedRectangle(cornerRadius: PillieTheme.cardRadius, style: .continuous))
         .overlay {
@@ -176,7 +192,7 @@ struct RoutineDialView: View {
                     .frame(maxWidth: metrics.radius * 1.2)
             }
             .frame(width: metrics.radius * 2 - 40)
-            .padding(.top, method == .patch ? 46 : 58)
+            .padding(.top, method == .patch ? 40 : 52)
             .allowsHitTesting(false)
             .accessibilityElement(children: .combine)
             .accessibilityIdentifier("routineDialDayLabel")
@@ -348,14 +364,17 @@ private struct RoutineDialResultRow: View {
                 .frame(width: 10, height: 10)
                 .accessibilityHidden(true)
             VStack(alignment: .leading, spacing: 1) {
-                Text(row.title)
-                    .font(.pillie(15, weight: .bold))
-                    .foregroundStyle(PillieTheme.textPrimary)
+                ViewThatFits(in: .horizontal) {
+                    title(row.title)
+                    title(row.compactTitle)
+                        .minimumScaleFactor(0.8)
+                }
                 Text(row.detail)
                     .font(.pillie(13, weight: .regular))
                     .foregroundStyle(PillieTheme.textMuted)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.85)
             }
-            .fixedSize(horizontal: false, vertical: true)
             Spacer(minLength: 0)
         }
         .padding(.vertical, 12)
@@ -363,6 +382,13 @@ private struct RoutineDialResultRow: View {
         .background(Self.surface, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
         .accessibilityElement(children: .combine)
         .accessibilityIdentifier("routineDialResult")
+    }
+
+    private func title(_ text: String) -> some View {
+        Text(text)
+            .font(.pillie(15, weight: .bold))
+            .foregroundStyle(PillieTheme.textPrimary)
+            .lineLimit(1)
     }
 }
 
@@ -376,7 +402,7 @@ private struct RoutineDialQuestion: View {
     let onAnswer: (TodayPillPick.Answer) -> Void
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 10) {
             Text(question)
                 .font(.pillie(18, weight: .bold))
                 .foregroundStyle(PillieTheme.textPrimary)

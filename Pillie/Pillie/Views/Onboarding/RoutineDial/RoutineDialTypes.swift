@@ -86,6 +86,7 @@ struct RoutineDialCopy {
 
     struct ResultRow: Equatable {
         let title: String
+        let compactTitle: String
         let detail: String
     }
 
@@ -152,29 +153,49 @@ struct RoutineDialCopy {
             let change = patchNumber * RoutineDialDay.daysPerPatch + 1
             return ResultRow(
                 title: formatted("onboarding.dial.patch.next_change", longDate(change)),
+                compactTitle: formatted("onboarding.dial.patch.next_change", shortDate(change)),
                 detail: formatted("onboarding.dial.patch.next_change_detail", weekday(change))
             )
         case (.patch, .wearing):
             return ResultRow(
                 title: formatted("onboarding.dial.patch.comes_off", longDate(Self.removeDay)),
+                compactTitle: formatted("onboarding.dial.patch.comes_off", shortDate(Self.removeDay)),
                 detail: string("onboarding.dial.patch.comes_off_detail")
             )
         case (.patch, .free):
             return ResultRow(
                 title: formatted("onboarding.dial.patch.goes_on", longDate(Self.nextCycleDay)),
+                compactTitle: formatted("onboarding.dial.patch.goes_on", shortDate(Self.nextCycleDay)),
                 detail: string("onboarding.dial.patch.goes_on_detail")
             )
         case (.ring, .wearing):
             return ResultRow(
                 title: formatted("onboarding.dial.ring.comes_out", longDate(Self.removeDay)),
+                compactTitle: formatted("onboarding.dial.ring.comes_out", shortDate(Self.removeDay)),
                 detail: formatted("onboarding.dial.ring.back_in", longDate(Self.nextCycleDay))
             )
         case (.ring, .free):
             return ResultRow(
                 title: formatted("onboarding.dial.ring.goes_in", longDate(Self.nextCycleDay)),
+                compactTitle: formatted("onboarding.dial.ring.goes_in", shortDate(Self.nextCycleDay)),
                 detail: formatted("onboarding.dial.ring.free_day", day.cycleDay - RoutineDialDay.wearingDays)
             )
         }
+    }
+
+    /// The tallest question block this method can show, so the card keeps one height.
+    var sizingQuestion: String {
+        let questions = method == .patch
+            ? [formatted("onboarding.dial.patch.question_on", RoutineDialDay.patchCount), string("onboarding.dial.patch.question_off")]
+            : [string("onboarding.dial.ring.question_in"), string("onboarding.dial.ring.question_out")]
+        return questions.max { $0.count < $1.count } ?? ""
+    }
+
+    var sizingStatus: String {
+        let lines = method == .patch
+            ? [formatted("onboarding.dial.logged.next_change", longDate(Self.nextCycleDay)), formatted("onboarding.dial.logged.patch_goes_on", longDate(Self.nextCycleDay))]
+            : [formatted("onboarding.dial.logged.ring_comes_out", longDate(Self.removeDay)), formatted("onboarding.dial.logged.ring_goes_in", longDate(Self.nextCycleDay))]
+        return (lines + [string("onboarding.dial.not_yet_status")]).max { $0.count < $1.count } ?? ""
     }
 
     var question: String? {
