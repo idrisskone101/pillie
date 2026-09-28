@@ -32,7 +32,7 @@ struct CustomPackEditor: View {
                 steppers
                 breakKindPicker
             }
-            .padding(.top, 10)
+            .padding(.top, 31)
             .padding(.horizontal, PillieTheme.screenHorizontalPadding)
             .padding(.bottom, 14)
         }
