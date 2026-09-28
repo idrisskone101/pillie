@@ -120,8 +120,10 @@ struct PackCardLayout: Hashable, Sendable {
 
 /// The stop-motion timeline that walks displayed tile states to a new target.
 enum PackPopSequence {
-    /// Gap between neighbouring tiles in a cascade. Callers time their haptic ticks to it.
+    /// Gap between neighbouring tiles in a short cascade. Callers time their haptic ticks to `stagger(pops:)`.
     static let popStagger: Duration = .milliseconds(45)
+    /// A long cascade tightens its stagger so its last tile starts by this point.
+    static let maxCascade: Duration = .milliseconds(500)
     static let crunchHold: Duration = .milliseconds(90)
 
     enum Change: Hashable, Sendable {
@@ -135,20 +137,29 @@ enum PackPopSequence {
         let change: Change
     }
 
+    static func stagger(pops count: Int) -> Duration {
+        guard count > 1 else { return popStagger }
+        return min(popStagger, maxCascade / (count - 1))
+    }
+
+    /// Tiles outside `visible` settle at once: nobody watches an off-page cascade.
     static func steps(
         from displayed: [PackTileState],
         to target: [PackTileState],
-        regimen: PackRegimen
+        regimen: PackRegimen,
+        visible: Range<Int>? = nil
     ) -> [Step] {
         let changed = displayed.indices.filter { displayed[$0] != target[$0] }
-        let pops = changed.filter { !displayed[$0].isPillOut && target[$0].isPillOut }
-        let reseals = changed.filter { displayed[$0].isPillOut && !target[$0].isPillOut }
+        let onScreen = changed.filter { visible?.contains($0) ?? true }
+        let pops = onScreen.filter { !displayed[$0].isPillOut && target[$0].isPillOut }
+        let reseals = onScreen.filter { displayed[$0].isPillOut && !target[$0].isPillOut }
         let moving = Set(pops).union(reseals)
         let instant = changed.filter { !moving.contains($0) }
 
         var steps = instant.map { Step(at: .zero, index: $0, change: .settle(target[$0])) }
+        let popGap = stagger(pops: pops.count)
         for (order, index) in pops.enumerated() {
-            let start = popStagger * order
+            let start = popGap * order
             if regimen.day(atIndex: index).kind == .active {
                 steps.append(Step(at: start, index: index, change: .crunch))
                 steps.append(Step(at: start + crunchHold, index: index, change: .settle(target[index])))
@@ -156,8 +167,9 @@ enum PackPopSequence {
                 steps.append(Step(at: start, index: index, change: .settle(target[index])))
             }
         }
+        let resealGap = stagger(pops: reseals.count)
         for (order, index) in reseals.reversed().enumerated() {
-            steps.append(Step(at: popStagger * order, index: index, change: .settle(target[index])))
+            steps.append(Step(at: resealGap * order, index: index, change: .settle(target[index])))
         }
         return steps.sorted { $0.at < $1.at }
     }

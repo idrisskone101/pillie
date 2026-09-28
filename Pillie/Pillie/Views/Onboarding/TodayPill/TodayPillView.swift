@@ -145,15 +145,18 @@ struct TodayPillView: View {
             return
         }
         guard !showsQuestion else { return }
-        let popped = index - (previous ?? 0)
+        // Only the tapped pill's page cascades; the card pops earlier pages at once.
+        let pageStart = index / PackCardLayout.daysPerPage * PackCardLayout.daysPerPage
+        let popped = index - max(previous ?? 0, pageStart)
+        let tickGap = PackPopSequence.stagger(pops: popped) * Self.cascadeTickEvery
         revealTask = Task { @MainActor in
             if !reduceMotion {
                 for _ in stride(from: Self.cascadeTickEvery, through: popped, by: Self.cascadeTickEvery) {
-                    try? await Task.sleep(for: PackPopSequence.popStagger * Self.cascadeTickEvery)
+                    try? await Task.sleep(for: tickGap)
                     guard !Task.isCancelled else { return }
                     cascadeTicks += 1
                 }
-                let elapsed = PackPopSequence.popStagger * Self.cascadeTickEvery * max(0, popped / Self.cascadeTickEvery)
+                let elapsed = tickGap * max(0, popped / Self.cascadeTickEvery)
                 if elapsed < Self.questionDelay {
                     try? await Task.sleep(for: Self.questionDelay - elapsed)
                 }
