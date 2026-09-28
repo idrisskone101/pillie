@@ -665,9 +665,10 @@ class PillStore {
     // MARK: - Actions
 
     func markTodayAsTaken() {
-        let wasTodayHandled = isTodayHandled
+        let wasTodayTaken = isTodayTaken
         markActionAsTaken(on: today)
-        if !wasTodayHandled && isTodayHandled {
+        // A sugar pill is handled before it is logged, so the taken flip, not the handled one, redraws Home.
+        if !wasTodayTaken && isTodayTaken {
             protocolChangeVersion &+= 1
         }
         syncTodayTakenToAppGroup()
@@ -676,9 +677,9 @@ class PillStore {
     }
 
     func unmarkTodayAsTaken() {
-        let wasTodayHandled = isTodayHandled
+        let wasTodayTaken = isTodayTaken
         unmarkActionAsTaken(on: today)
-        if wasTodayHandled && !isTodayHandled {
+        if wasTodayTaken && !isTodayTaken {
             protocolChangeVersion &+= 1
         }
         syncTodayTakenToAppGroup()
