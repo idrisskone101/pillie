@@ -3,7 +3,7 @@ import Foundation
 enum DueActionCopy {
     static func key(for action: DoseScheduleAction) -> String {
         switch action.type {
-        case .pillActive:
+        case .pillActive, .pillSugar:
             "today.action.take_pill"
         case .patchChange:
             action.cycleDay == 1 ? "today.action.apply_patch" : "today.action.change_patch"

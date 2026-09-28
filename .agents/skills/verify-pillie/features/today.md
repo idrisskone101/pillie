@@ -69,6 +69,9 @@ blocking/trial status surfaces, and (when eligible) the review ask.
   Cancel keeps the pack; Reset & Save starts the new pack at pill 1 today.
 - `flows/today-long-pack.flow` — onboarding picks a Custom 88 + 3 pack, then
   Home opens its card on the page with today ("Weeks 5 to 8 of 13").
+- `flows/today-sugar-pill.flow` — a 21 + 7 sugar day is due ("Take pill"),
+  logs, undoes and logs again without moving the streak; a 21 only pill-free
+  day stays "Nothing to take".
 - `flows/smoke.flow` covers the plain tab bar (Today/History/Settings) with
   `/plus-home`.
 - Not covered by an authored flow, and why: `ProtectionOffCard` needs an

@@ -44,10 +44,10 @@ struct TodayPillPick: Codable, Equatable {
         pack.regimen.day(atIndex: dayIndex)
     }
 
-    /// Whether committing this pick logs a taken dose: a "taken" answer on an
-    /// active pill day. A pill-free day and a "not yet" answer never log one.
+    /// Whether committing this pick logs a taken dose: a "taken" answer on a
+    /// hormone or sugar pill day. A pill-free day and a "not yet" answer never log one.
     var logsADose: Bool {
-        answer == .taken && day.kind == .active
+        answer == .taken && day.kind != .noPill
     }
 
     func anchorDay(

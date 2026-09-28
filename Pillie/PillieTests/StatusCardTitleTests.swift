@@ -76,7 +76,7 @@ struct StatusCardTitleTests {
             liveDay: local(9, 24),
             now: local(9, 24),
             isTodayTaken: taken,
-            isTodayPassiveOrBreak: breakDay
+            isTodayNothingDue: breakDay
         )
     }
 
@@ -99,7 +99,7 @@ struct StatusCardTitleTests {
             liveDay: wednesday,
             now: thursdaySix,
             isTodayTaken: true,
-            isTodayPassiveOrBreak: false
+            isTodayNothingDue: false
         )
         #expect(title == .next(on: local(9, 24), .today))
         #expect(title.localized(reminderTime: "8:00 AM", locale: Locale(identifier: "en"))

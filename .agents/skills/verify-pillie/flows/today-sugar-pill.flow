@@ -1,0 +1,44 @@
+# Sugar pills are a due dose (PillDay.ActionType.pillSugar): on a 21 + 7 sugar
+# day Home shows "Take pill", logging pops the tile and turns the status card to
+# taken, undo brings the CTA back, and the streak does not move. A 21 only pack's
+# pill-free break stays "Nothing to take" with nothing due.
+fresh
+launch
+wait text "Get started" 15
+openurl "pillie://debug/plus-home?lang=en"
+openurl pillie://debug/trial-grant?lang=en
+openurl pillie://debug/fixed-now?at=2026-09-28T20:00:00Z
+openurl pillie://debug/trial-break-week?lang=en
+wait text "Sugar pill 7 of 7" 10
+wait text "Take pill" 10
+shot sugar-due
+tap --label "Take pill"
+wait text "Shake to Confirm" 10
+tap --id shakeTapToConfirmFallback
+wait text "Taken today" 15
+gone text "Take pill" 5
+shot sugar-taken
+tap --label "That's logged. Tap to undo."
+wait text "Take pill" 10
+gone text "Taken today" 5
+shot sugar-undone
+tap --label "Take pill"
+wait text "Shake to Confirm" 10
+tap --id shakeTapToConfirmFallback
+wait text "Taken today" 15
+tap --label History
+wait text "Your month so far" 10
+shot history
+tap --label Today
+tap --id homePackOptions
+wait id homePackChangeType 5
+tap --id homePackChangeType
+wait id packSheet.21_only 10
+tap --id packSheet.21_only
+wait text "Reset Tracking Data?" 10
+tap --label "Reset & Save"
+wait text "Pill 1 of 28" 10
+openurl pillie://debug/fixed-now?at=2026-10-20T20:00:00Z
+wait text "Nothing to take" 10
+shot no-pill-break
+openurl pillie://debug/fixed-now?at=off

@@ -37,7 +37,7 @@ Retired (ADR 0004). The onboarding consent step and the Settings opt-out were re
 _Avoid_: Tracking permission, ATT prompt, required consent
 
 **Streak**:
-The count of consecutive completed due actions, not consecutive calendar days. Passive active days and break or off-week days do not require user action and should not inflate or break the streak.
+The count of consecutive completed due actions, not consecutive calendar days. Passive active days and break or off-week days do not require user action and should not inflate or break the streak. A sugar pill is due and can be logged, but it is not a hormone dose: logging it does not extend the streak, and skipping it does not break it.
 _Avoid_: Daily streak, calendar-day streak
 
 **Due Action Reminder**:
@@ -69,7 +69,7 @@ A local reminder about remaining contraception supply: pill refills or patch res
 _Avoid_: Due action reminder, ring refill reminder
 
 **Cycle Transition Notice**:
-A free, informational local notification fired at the start of a break/off week — the placebo week for pills, the patch-free or ring-free week for those methods — that explains the upcoming silence and names the date the active phase resumes. It exists to remove the "did the app break?" confusion when expected due actions stop for several days, and fires at the user's reminder time on the first break day, filling the slot a Due Action Reminder would otherwise occupy. It is not a member of [[Smart Reminders]] and is not gated by Pillie Plus, because it is not a same-day re-fire of a due action; it is a one-per-transition clarity notice, not a nudge escalation. It only covers the break-week start, not the new-pack/active-phase start, which is already a Due Action. Its default copy is Pillie-authored and obeys the medical-claims copy rules; it is not part of the Custom Reminder Message perk and is not user-customizable in v1.
+A free, informational local notification fired at the start of a break/off week — the pill-free week for a pack without sugar pills, the patch-free or ring-free week for those methods — that explains the upcoming silence and names the date the active phase resumes. It exists to remove the "did the app break?" confusion when expected due actions stop for several days, and fires at the user's reminder time on the first break day, filling the slot a Due Action Reminder would otherwise occupy. It is not a member of [[Smart Reminders]] and is not gated by Pillie Plus, because it is not a same-day re-fire of a due action; it is a one-per-transition clarity notice, not a nudge escalation. It only covers the break-week start, not the new-pack/active-phase start, which is already a Due Action. A pack with sugar pills gets no notice: each sugar pill is its own Due Action Reminder, so there is no silence to explain. Its default copy is Pillie-authored and obeys the medical-claims copy rules; it is not part of the Custom Reminder Message perk and is not user-customizable in v1.
 _Avoid_: Smart reminder, due action reminder, new-pack reminder, supply reminder, missed-dose alert
 
 **Custom Reminder Message**:
@@ -93,7 +93,7 @@ An optional onboarding answer for how the user heard about Pillie, stored locall
 _Avoid_: Tracking source, ad identifier, referral identity
 
 **Plus App Blocking**:
-The Pillie Plus feature that blocks selected apps after a due action remains untaken. Users should not be led to believe app blocking is active without [[Plus Access]], and setup controls should only appear for users with Plus Access (a Plus entitlement or an active [[Reverse Trial]]).
+The Pillie Plus feature that blocks selected apps after a due action remains untaken. A sugar pill is a due action that never blocks. Users should not be led to believe app blocking is active without [[Plus Access]], and setup controls should only appear for users with Plus Access (a Plus entitlement or an active [[Reverse Trial]]).
 _Avoid_: Free app blocking, enabled blocking for free users
 
 **Soft Onboarding Paywall**:
@@ -181,7 +181,7 @@ Pillie's always-available two-way support channel: two warm-labeled rows in a Se
 _Avoid_: Feedback Escape Hatch, feedback form, in-app ticket system, server-side inbox, shake to report, logging message text
 
 **Reverse Trial**:
-A 14-day period of full [[Plus Access]] granted automatically and without payment details to every user who lacks a Plus entitlement: new users when Plus App Blocking setup appears during onboarding (the clock starts there, not at onboarding completion — setup therefore runs under real Plus Access), existing free users on first launch after the update that introduces it. It is a Pillie product state, not a StoreKit introductory offer — no purchase, card, or App Store sheet is involved in starting it. Fourteen days is deliberate: it covers at least two due actions for every Supported Contraception Method, so patch and ring users also feel Plus App Blocking before being asked to pay. The trial covers 14 full hormone-active days after the grant local day (a bonus counted day, active or break). Scheduled break / off-week days do not consume the 14; Plus Access stays on and the remaining-day badge freezes and says how many active days are left until the next hormone-active day. Hormone-active follows the dose engine (`dueAction.isBreak == false`), so patch and ring remove days count. The trial expires at the local-day rollover after that 14th full active day — never mid-blocking-window, so the last trial day is fully protected and expiry copy can honestly say "tonight." Blocking must never outlive Plus Access, even if the app is not opened after expiry. At expiry the user keeps their saved configuration (blocker selection, custom reminder text) but the Plus features gate off; nothing the user set up is deleted.
+A 14-day period of full [[Plus Access]] granted automatically and without payment details to every user who lacks a Plus entitlement: new users when Plus App Blocking setup appears during onboarding (the clock starts there, not at onboarding completion — setup therefore runs under real Plus Access), existing free users on first launch after the update that introduces it. It is a Pillie product state, not a StoreKit introductory offer — no purchase, card, or App Store sheet is involved in starting it. Fourteen days is deliberate: it covers at least two due actions for every Supported Contraception Method, so patch and ring users also feel Plus App Blocking before being asked to pay. The trial covers 14 full hormone-active days after the grant local day (a bonus counted day, active or break). Scheduled break / off-week days, sugar-pill days included, do not consume the 14; Plus Access stays on and the remaining-day badge freezes and says how many active days are left until the next hormone-active day. Hormone-active follows the dose engine (`dueAction.isBreak == false`), so patch and ring remove days count. The trial expires at the local-day rollover after that 14th full active day — never mid-blocking-window, so the last trial day is fully protected and expiry copy can honestly say "tonight." Blocking must never outlive Plus Access, even if the app is not opened after expiry. At expiry the user keeps their saved configuration (blocker selection, custom reminder text) but the Plus features gate off; nothing the user set up is deleted.
 _Avoid_: Free trial (StoreKit sense), intro offer, 7-day trial, blocker-only trial, config wipe at expiry
 
 **Trial-End Paywall**:
@@ -232,7 +232,7 @@ Domain Expert: "There is no consent screen — analytics is always on and begins
 
 Dev: "Does a ring-free day count toward the streak?"
 
-Domain Expert: "No. The Streak counts consecutive completed due actions, so passive days and break days are neutral."
+Domain Expert: "No. The Streak counts consecutive completed due actions, so passive days and break days are neutral. A sugar pill is neutral too, even when she logs it."
 
 Dev: "If a user changes the auto-reminder interval, did they change the morning reminder time?"
 

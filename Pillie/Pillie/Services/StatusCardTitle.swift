@@ -20,15 +20,15 @@ enum StatusCardTitle: Equatable {
         liveDay: Date,
         now: Date,
         isTodayTaken: Bool,
-        isTodayPassiveOrBreak: Bool,
+        isTodayNothingDue: Bool,
         calendar: Calendar = .current
     ) -> StatusCardTitle {
         guard let alarmAction else { return .nothingDue }
         if calendar.isDate(alarmAction.date, inSameDayAs: liveDay) {
             if isTodayTaken { return .completed }
-            return isTodayPassiveOrBreak ? .nothingDue : .due(alarmAction)
+            return isTodayNothingDue ? .nothingDue : .due(alarmAction)
         }
-        guard isTodayTaken || isTodayPassiveOrBreak else { return .due(alarmAction) }
+        guard isTodayTaken || isTodayNothingDue else { return .due(alarmAction) }
         return .next(
             on: alarmAction.date,
             NextDoseDay.resolve(from: now, to: alarmAction.date, calendar: calendar)

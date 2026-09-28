@@ -278,10 +278,10 @@ struct CalendarGrid: View, Equatable {
             )
         }
         let status: HistoryPresentation.DayStatus
-        if presentation.isBreakDay {
-            status = .breakDay
-        } else if presentation.status == .taken {
+        if presentation.status == .taken {
             status = .completed
+        } else if presentation.isBreakDay {
+            status = .breakDay
         } else {
             status = .unlogged
         }
@@ -574,7 +574,7 @@ struct CalendarGrid: View, Equatable {
         switch actionType {
         case .pillActive:
             return PillieTheme.coral
-        case .pillBreak:
+        case .pillSugar, .pillBreak:
             return PillieTheme.lavender
         case .patchChange, .patchRemove:
             return PillieTheme.sage
