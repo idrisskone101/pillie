@@ -441,10 +441,10 @@ struct HomeView: View {
                     }
 
                     Group {
-                        if store.pack.method == .pill {
-                            HomePackCard(holdsTodayLog: holdsPackCardLog)
+                        if let method = RoutineDialMethod(store.pack.method) {
+                            HomeCountdownCard(method: method, holdsTodayLog: holdsPackCardLog)
                         } else {
-                            PillPackCard()
+                            HomePackCard(holdsTodayLog: holdsPackCardLog)
                         }
                     }
                         .modifier(FadeInUp(appeared: appeared, delay: 0.2))
