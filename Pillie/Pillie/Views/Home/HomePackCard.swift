@@ -15,6 +15,7 @@ struct HomePackCard: View {
     @Environment(\.locale) private var locale
     @Environment(\.scenePhase) private var scenePhase
     @State private var showsNewPackConfirmation = false
+    @State private var showsPackSheet = false
     @State private var heldTaken: Bool?
     private let homeFeedback = HomeActionInteractionFeedback()
 
@@ -47,8 +48,12 @@ struct HomePackCard: View {
                     locale: locale
                 ),
                 isTakenToday: progress.status == .taken,
+                onChangeType: { showsPackSheet = true },
                 onStartNew: { showsNewPackConfirmation = true }
             )
+        }
+        .sheet(isPresented: $showsPackSheet) {
+            PackTypeSheet(current: PackChoice(pack.regimen), onPick: changePack)
         }
         .onChange(of: holdsTodayLog || scenePhase != .active, initial: true) { _, holds in
             heldTaken = holds ? store.isTodayTaken : nil
@@ -68,6 +73,18 @@ struct HomePackCard: View {
         }
     }
 
+    private func changePack(_ choice: PackChoice) {
+        let feedbackResponse = homeFeedback.commitNewPackOrCycle(
+            accessibilityReduceMotion: accessibilityReduceMotion
+        )
+        let changed = withAnimation(feedbackResponse.motionProfile.animation) {
+            store.changePackRegimen(to: choice)
+        }
+        if changed {
+            ProductAnalyticsTelemetry.live.protocolChangeSaved()
+        }
+    }
+
     private var startNewConfirmation: CycleNounPresentation.StartNewConfirmation {
         CycleNounPresentation.startNewConfirmation(for: store.pack.method, locale: locale)
     }
@@ -77,6 +94,7 @@ private struct HomePackHeader: View {
     let title: String
     let subtitle: String
     let isTakenToday: Bool
+    let onChangeType: () -> Void
     let onStartNew: () -> Void
 
     @Environment(\.locale) private var locale
@@ -101,6 +119,13 @@ private struct HomePackHeader: View {
             .accessibilityElement(children: .combine)
 
             Menu {
+                Button(action: onChangeType) {
+                    Label(
+                        PillieLocalization.string("home.pack.change_type", locale: locale),
+                        systemImage: "pills"
+                    )
+                }
+                .accessibilityIdentifier("homePackChangeType")
                 Button(action: onStartNew) {
                     Label(
                         PillieLocalization.string("today.pack.start_new.confirm", locale: locale),

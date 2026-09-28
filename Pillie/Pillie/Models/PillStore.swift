@@ -1185,6 +1185,36 @@ class PillStore {
         NotificationManager.shared.requestReschedule(from: self, reason: "refill-new-pack")
     }
 
+    /// Switches the running pill pack to `choice` in place. Day records and the streak stay;
+    /// today keeps its pill number unless the new pack is too short, then today is its last day.
+    @discardableResult
+    func changePackRegimen(to choice: PackChoice) -> Bool {
+        guard let activePack, activePack.method == .pill else { return false }
+        let change = PackRegimenChange.resolve(
+            from: activePack.regimen,
+            to: choice.regimen,
+            elapsedDays: activePack.elapsedCycleDays(on: today),
+            anchorIndex: activePack.resolvedCycleAnchor().dayIndex
+        )
+        switch change {
+        case .unchanged:
+            return false
+        case .keepAnchor:
+            activePack.setPillRegimen(choice.preset, customRegimen: choice.regimen)
+        case .moveToday(let index):
+            activePack.setPillRegimen(choice.preset, customRegimen: choice.regimen)
+            activePack.startDate = Calendar.current.date(byAdding: .day, value: -index, to: today) ?? today
+            activePack.cycleDayAnchorIndex = 0
+        }
+
+        persist()
+        refreshPacks()
+        protocolChangeVersion &+= 1
+        reconcileBlockingAfterScheduleChange()
+        NotificationManager.shared.requestReschedule(from: self, reason: "pack-regimen-change")
+        return true
+    }
+
     // MARK: - Init
 
     init(modelContext: ModelContext) {
