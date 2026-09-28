@@ -6,8 +6,8 @@
 import SwiftUI
 
 struct PackTypeSheet: View {
-    let current: PillPack.PillRegimenPreset
-    let onPick: (PillPack.PillRegimenPreset) -> Void
+    let current: PackChoice
+    let onPick: (PackChoice) -> Void
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -41,7 +41,7 @@ struct PackTypeSheet: View {
                     ForEach(Self.tileRows, id: \.first?.preset) { row in
                         GridRow {
                             ForEach(row, id: \.preset) { tile in
-                                PackTypeTile(tile: tile, isSelected: tile.preset == current) {
+                                PackTypeTile(tile: tile, isSelected: tile.preset == current.preset) {
                                     pick(tile.preset)
                                 }
                             }
@@ -71,7 +71,8 @@ struct PackTypeSheet: View {
 
     private func pick(_ preset: PillPack.PillRegimenPreset) {
         feedback.selectChoice(accessibilityReduceMotion: reduceMotion)
-        if preset != current { onPick(preset) }
+        let choice = PackChoice(preset: preset)
+        if choice != current { onPick(choice) }
         dismiss()
     }
 }

@@ -12,22 +12,21 @@ struct TodayPillPick: Codable, Equatable {
         case notYet
     }
 
-    let regimen: PillPack.PillRegimenPreset
+    let pack: PackChoice
     let dayIndex: Int
     let answer: Answer?
 
-    init?(regimen: PillPack.PillRegimenPreset, dayIndex: Int, answer: Answer?) {
-        guard let packRegimen = regimen.regimen,
-              (0..<packRegimen.totalDays).contains(dayIndex) else { return nil }
-        let isPillFree = packRegimen.day(atIndex: dayIndex).kind == .noPill
+    init?(pack: PackChoice, dayIndex: Int, answer: Answer?) {
+        guard (0..<pack.regimen.totalDays).contains(dayIndex) else { return nil }
+        let isPillFree = pack.regimen.day(atIndex: dayIndex).kind == .noPill
         guard isPillFree ? answer == nil : answer != nil else { return nil }
-        self.regimen = regimen
+        self.pack = pack
         self.dayIndex = dayIndex
         self.answer = answer
     }
 
     var day: PackDay {
-        regimen.resolvedRegimen(custom: nil).day(atIndex: dayIndex)
+        pack.regimen.day(atIndex: dayIndex)
     }
 
     /// Whether committing this pick logs a taken dose: a "taken" answer on an
@@ -56,8 +55,7 @@ struct TodayPillPick: Codable, Equatable {
     static func load(from defaults: UserDefaults = .standard) -> TodayPillPick? {
         guard let data = defaults.data(forKey: storageKey) else { return nil }
         do {
-            let stored = try JSONDecoder().decode(TodayPillPick.self, from: data)
-            return TodayPillPick(regimen: stored.regimen, dayIndex: stored.dayIndex, answer: stored.answer)
+            return try JSONDecoder().decode(TodayPillPick.self, from: data)
         } catch {
             Self.logger.error("today_pill_pick.load failed: \(error.localizedDescription, privacy: .public)")
             return nil
@@ -74,5 +72,42 @@ struct TodayPillPick: Codable, Equatable {
 
     static func clear(from defaults: UserDefaults = .standard) {
         defaults.removeObject(forKey: storageKey)
+    }
+
+    // "regimen" keeps the preset raw value the ENG-138/144 drafts were saved with;
+    // "custom" is written only for a custom pack.
+    private enum CodingKeys: String, CodingKey {
+        case regimen
+        case custom
+        case dayIndex
+        case answer
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let preset = try container.decode(PillPack.PillRegimenPreset.self, forKey: .regimen)
+        let pack = preset == .custom
+            ? PackChoice(try container.decode(PackRegimen.self, forKey: .custom))
+            : PackChoice(preset: preset)
+        guard let pick = TodayPillPick(
+            pack: pack,
+            dayIndex: try container.decode(Int.self, forKey: .dayIndex),
+            answer: try container.decodeIfPresent(Answer.self, forKey: .answer)
+        ) else {
+            throw DecodingError.dataCorrupted(
+                DecodingError.Context(codingPath: container.codingPath, debugDescription: "pick does not fit its pack")
+            )
+        }
+        self = pick
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(pack.preset, forKey: .regimen)
+        if pack.preset == .custom {
+            try container.encode(pack.regimen, forKey: .custom)
+        }
+        try container.encode(dayIndex, forKey: .dayIndex)
+        try container.encodeIfPresent(answer, forKey: .answer)
     }
 }

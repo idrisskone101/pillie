@@ -12,11 +12,11 @@ import XCTest
 @MainActor
 final class TodayPillSelectionTests: XCTestCase {
     private func pick(_ index: Int, _ answer: TodayPillPick.Answer?, _ regimen: PillPack.PillRegimenPreset = .twentyOneSeven) -> TodayPillPick {
-        TodayPillPick(regimen: regimen, dayIndex: index, answer: answer)!
+        TodayPillPick(pack: PackChoice(preset: regimen), dayIndex: index, answer: answer)!
     }
 
     func testTappingAPillResetsTheAnswerAndPillFreeDaysNeedNone() {
-        var selection = TodayPillSelection(regimen: .twentyOneOnly)
+        var selection = TodayPillSelection(pack: PackChoice(preset: .twentyOneOnly))
         XCTAssertNil(selection.pick)
 
         selection.tap(11)
@@ -33,26 +33,37 @@ final class TodayPillSelectionTests: XCTestCase {
     }
 
     func testChangingThePackKeepsTheTappedPillOnlyWhenItStillExists() {
-        var selection = TodayPillSelection(regimen: .twentyOneSeven)
+        var selection = TodayPillSelection(pack: PackChoice(preset: .twentyOneSeven))
         selection.tap(26)
         selection.record(.notYet)
 
-        selection.changeRegimen(.twentySixTwo)
+        selection.changePack(PackChoice(preset: .twentySixTwo))
         XCTAssertEqual(selection.pick, pick(26, .notYet, .twentySixTwo))
 
-        selection.changeRegimen(.twentyOneOnly)
+        selection.changePack(PackChoice(preset: .twentyOneOnly))
         XCTAssertEqual(selection.pick, pick(26, nil, .twentyOneOnly))
 
-        var shorter = TodayPillSelection(regimen: .twentyOneSeven)
+        var shorter = TodayPillSelection(pack: PackChoice(preset: .twentyOneSeven))
         shorter.tap(27)
         shorter.record(.taken)
-        shorter.changeRegimen(.twentyOneFour)
+        shorter.changePack(PackChoice(preset: .twentyOneFour))
         XCTAssertNil(shorter.dayIndex)
         XCTAssertNil(shorter.pick)
     }
 
+    func testSwitchingToALongerCustomPackKeepsTheTappedPill() throws {
+        var selection = TodayPillSelection(pack: PackChoice(preset: .twentyOneSeven))
+        selection.tap(26)
+        selection.record(.notYet)
+
+        let custom = PackChoice(PackRegimen(activeDays: 88, breakDays: 3))
+        selection.changePack(custom)
+        XCTAssertEqual(selection.pick, TodayPillPick(pack: custom, dayIndex: 26, answer: .notYet))
+        XCTAssertEqual(selection.packRegimen.totalDays, 91)
+    }
+
     func testTappingTheFlaggedPillAgainKeepsTheAnswer() {
-        var selection = TodayPillSelection(regimen: .twentyOneSeven)
+        var selection = TodayPillSelection(pack: PackChoice(preset: .twentyOneSeven))
         selection.tap(11)
         selection.record(.taken)
         selection.tap(11)
@@ -60,18 +71,18 @@ final class TodayPillSelectionTests: XCTestCase {
     }
 
     func testAPillFreeDayThatBecomesASugarPillAsksAgain() {
-        var selection = TodayPillSelection(regimen: .twentyOneOnly)
+        var selection = TodayPillSelection(pack: PackChoice(preset: .twentyOneOnly))
         selection.tap(23)
         XCTAssertNotNil(selection.pick)
 
-        selection.changeRegimen(.twentyOneSeven)
+        selection.changePack(PackChoice(preset: .twentyOneSeven))
         XCTAssertTrue(selection.asksQuestion)
         XCTAssertNil(selection.pick)
     }
 
     func testSelectionRestoresFromADraft() {
         let selection = TodayPillSelection(restoring: pick(11, .taken, .twentyFourFour))
-        XCTAssertEqual(selection.regimen, .twentyFourFour)
+        XCTAssertEqual(selection.pack, PackChoice(preset: .twentyFourFour))
         XCTAssertEqual(selection.pick, pick(11, .taken, .twentyFourFour))
     }
 }

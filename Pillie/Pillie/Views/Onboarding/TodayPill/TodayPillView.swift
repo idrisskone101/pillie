@@ -14,7 +14,7 @@ struct TodayPillView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     // Seeded in onAppear, not a custom init, so the SDK 27 @State macro stays well-behaved.
-    @State private var selection = TodayPillSelection(regimen: .twentyOneSeven)
+    @State private var selection = TodayPillSelection(pack: PackChoice(preset: .twentyOneSeven))
     @State private var showsQuestion = false
     @State private var revealTask: Task<Void, Never>?
     @State private var cascadeTicks = 0
@@ -75,7 +75,7 @@ struct TodayPillView: View {
                         marks: marks,
                         onSelectDay: tap
                     ) {
-                        TodayPillPackHeader(regimen: selection.regimen) { showsPackSheet = true }
+                        TodayPillPackHeader(pack: selection.pack) { showsPackSheet = true }
                     }
                     .planBuilderReveal(appeared, animationsEnabled, delay: PillieTheme.stagger2)
 
@@ -104,7 +104,7 @@ struct TodayPillView: View {
         }
         .sensoryFeedback(.impact(weight: .light, intensity: 0.5), trigger: cascadeTicks)
         .sheet(isPresented: $showsPackSheet) {
-            PackTypeSheet(current: selection.regimen, onPick: changeRegimen)
+            PackTypeSheet(current: selection.pack, onPick: changePack)
         }
         .onAppear {
             seed()
@@ -131,8 +131,7 @@ struct TodayPillView: View {
             return
         }
         let pack = store.pack
-        let storedRegimen = pack.method == .pill ? pack.pillRegimen : .twentyOneSeven
-        selection = TodayPillSelection(regimen: storedRegimen == .custom ? .twentyOneSeven : storedRegimen)
+        selection = TodayPillSelection(pack: pack.method == .pill ? PackChoice(pack.regimen) : PackChoice(preset: .twentyOneSeven))
     }
 
     private func tap(_ index: Int) {
@@ -170,31 +169,41 @@ struct TodayPillView: View {
         if answer == .taken { feedback.markDueActionTaken(accessibilityReduceMotion: reduceMotion) }
     }
 
-    private func changeRegimen(_ regimen: PillPack.PillRegimenPreset) {
-        selection.changeRegimen(regimen)
+    private func changePack(_ pack: PackChoice) {
+        selection.changePack(pack)
         revealTask?.cancel()
         showsQuestion = selection.asksQuestion
     }
 }
 
 private struct TodayPillPackHeader: View {
-    let regimen: PillPack.PillRegimenPreset
+    let pack: PackChoice
     let onChange: () -> Void
+
+    // A glyph wider than five weeks would overflow the 44 pt box.
+    private static let glyphMaxDays = 35
 
     var body: some View {
         HStack(spacing: 12) {
-            PackGlyph(regimen: regimen.resolvedRegimen(custom: nil))
+            Group {
+                if pack.regimen.totalDays <= Self.glyphMaxDays {
+                    PackGlyph(regimen: pack.regimen)
+                } else {
+                    SlidersIcon()
+                        .frame(width: 24, height: 24)
+                }
+            }
                 .frame(width: 44, height: 44)
                 .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(PillieTheme.coralLight))
                 .accessibilityHidden(true)
 
             VStack(alignment: .leading, spacing: 2) {
-                Text(regimen.localizedRoutineDisplayName())
+                Text(pack.displayName())
                     .font(.pillie(17, weight: .bold))
                     .foregroundStyle(PillieTheme.textPrimary)
                     .lineLimit(1)
                     .minimumScaleFactor(0.8)
-                Text(regimen.localizedScheduleSummary())
+                Text(pack.scheduleSummary())
                     .font(.pillie(13, weight: .regular))
                     .foregroundStyle(PillieTheme.textMuted)
                     .lineLimit(2)
