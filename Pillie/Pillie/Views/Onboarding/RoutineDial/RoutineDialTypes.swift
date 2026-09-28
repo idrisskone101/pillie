@@ -1,3 +1,8 @@
+//
+//  RoutineDialTypes.swift
+//  Pillie
+//
+
 import Foundation
 
 struct RoutineDialSelection: Equatable {

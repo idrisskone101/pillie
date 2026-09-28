@@ -1,3 +1,8 @@
+//
+//  RoutineDialDay.swift
+//  Pillie
+//
+
 import Foundation
 
 enum RoutineDialMethod: String, Codable, CaseIterable {

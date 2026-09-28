@@ -1,3 +1,8 @@
+//
+//  OnboardingTodayPick.swift
+//  Pillie
+//
+
 import Foundation
 
 enum OnboardingTodayPick: Equatable {
