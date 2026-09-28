@@ -1,6 +1,8 @@
 # Onboarding step 7 (TodayPillView): the pack sheet's Custom row opens the custom
 # pack editor (CustomPackEditor, ENG-147) in the same sheet. Steppers and a typed
 # number drive a live preview; Use hands the pack back to the card, which pages it.
+# Typing uses the in-sheet keypad (CustomPackKeypad, ENG-147), not the system
+# keyboard, so digits are entered by tapping key ids instead of `type`.
 #
 # onboardingStep 10 is OnboardingFlow.Step.schedule; a fresh store defaults the
 # method to pill, so the step renders TodayPillView.
@@ -27,9 +29,10 @@ wait text "29-day pack · then a new pack starts"
 
 tap --id customPackActiveValue
 wait id customPackActiveField
-type 88
+tap --id customPackKey8
+tap --id customPackKey8
 wait text "95-day pack · about 14 weeks"
-tap --label Done
+tap --id customPackKeypadDone
 wait text "Tap the number to type it"
 gone id customPackActiveField
 tap --id customPackBreakMinus
@@ -42,18 +45,21 @@ shot map-88-3
 
 tap --id customPackActiveValue
 wait id customPackActiveField
-type 100
+tap --id customPackKey1
+tap --id customPackKey0
+tap --id customPackKey0
 wait text "103-day pack · about 15 weeks"
 wait text "Typing · up to 365"
 shot typing-100
 
 # Clear the field, then retype 88 so the card below shows 88 + 3.
-key 42
-key 42
-key 42
-type 88
+tap --id customPackKeyDelete
+tap --id customPackKeyDelete
+tap --id customPackKeyDelete
+tap --id customPackKey8
+tap --id customPackKey8
 wait text "91-day pack · 13 weeks, one column per week"
-tap --label Done
+tap --id customPackKeypadDone
 gone id customPackActiveField
 tap --id customPackUse
 gone id customPackTitle

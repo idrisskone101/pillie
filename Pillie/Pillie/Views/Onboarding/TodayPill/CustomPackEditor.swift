@@ -16,7 +16,6 @@ struct CustomPackEditor: View {
     @State private var draft = CustomPackDraft(PillPack.defaultCustomRegimen)
     @State private var typed: String?
     @State private var typingStartValue = 0
-    @FocusState private var fieldFocused: Bool
 
     private let feedback = OnboardingInteractionFeedback()
 
@@ -24,44 +23,57 @@ struct CustomPackEditor: View {
         reduceMotion ? nil : .spring(duration: 0.35, bounce: 0.2)
     }
 
+    private var keypadAnimation: Animation {
+        reduceMotion ? .easeInOut(duration: 0.2) : .spring(duration: 0.4, bounce: 0.2)
+    }
+
+    private var keypadTransition: AnyTransition {
+        reduceMotion ? .opacity : .move(edge: .bottom).combined(with: .opacity)
+    }
+
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 14) {
-                header
-                CustomPackPreviewCard(draft: draft)
-                steppers
-                breakKindPicker
+        ZStack(alignment: .bottom) {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 14) {
+                    header
+                    CustomPackPreviewCard(draft: draft)
+                    steppers
+                    breakKindPicker
+                }
+                .padding(.top, 31)
+                .padding(.horizontal, PillieTheme.screenHorizontalPadding)
+                .padding(.bottom, 14)
             }
-            .padding(.top, 31)
-            .padding(.horizontal, PillieTheme.screenHorizontalPadding)
-            .padding(.bottom, 14)
+            .scrollBounceBehavior(.basedOnSize)
+            .safeAreaInset(edge: .bottom) { useButton }
+            // Tapping any empty space (not a button, which handles its own tap)
+            // commits typing and dismisses the pad, same as losing focus did
+            // when this was a system-keyboard TextField.
+            .contentShape(Rectangle())
+            .onTapGesture { commitTyping() }
+
+            if typed != nil {
+                CustomPackKeypad(
+                    feedback: feedback,
+                    reduceMotion: reduceMotion,
+                    onDigit: appendDigit,
+                    onDelete: deleteDigit,
+                    onDone: commitTyping
+                )
+                .transition(keypadTransition)
+            }
         }
-        .scrollBounceBehavior(.basedOnSize)
-        .safeAreaInset(edge: .bottom) { useButton }
-        .ignoresSafeArea(.keyboard, edges: .bottom)
         .background(PillieTheme.bg)
         .animation(countAnimation, value: draft)
         .onAppear { draft = CustomPackDraft(seed) }
-        .onChange(of: fieldFocused) { _, focused in
-            if !focused { commitTyping() }
-        }
-        .toolbar {
-            ToolbarItemGroup(placement: .keyboard) {
-                Text(PillieLocalization.string("custom_pack.active.title"))
-                    .font(.pillie(14, weight: .regular))
-                    .foregroundStyle(PillieTheme.textMuted)
-                    .fixedSize()
-                Spacer()
-                Button(PillieLocalization.string("global.action.done")) { fieldFocused = false }
-                    .font(.pillie(16, weight: .bold))
-                    .foregroundStyle(EditorColor.done)
-            }
-        }
     }
 
     private var header: some View {
         HStack(spacing: 12) {
-            Button(action: onBack) {
+            Button(action: {
+                commitTyping()
+                onBack()
+            }) {
                 Image(systemName: "chevron.left")
                     .font(.system(size: 16, weight: .heavy))
                     .foregroundStyle(PillieTheme.textPrimary)
@@ -139,18 +151,26 @@ struct CustomPackEditor: View {
         .background(EditorShape.card.fill(PillieTheme.cardWhite).shadow(color: .black.opacity(0.05), radius: 7, y: 6))
     }
 
+    /// The typing box is a display, not a `TextField`: the keypad drives it.
+    /// Empty shows the pre-typing value as a placeholder, per the old
+    /// `TextField`'s placeholder behavior.
     private func activeField(_ text: String) -> some View {
-        TextField(String(typingStartValue), text: Binding(get: { typed ?? text }, set: updateTyping))
-            .keyboardType(.numberPad)
-            .focused($fieldFocused)
-            .multilineTextAlignment(.center)
-            .font(.pillie(22, weight: .bold))
-            .foregroundStyle(PillieTheme.textPrimary)
-            .frame(width: 62, height: 40)
-            .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(PillieTheme.coralLight))
-            .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).strokeBorder(PillieTheme.coral, lineWidth: 2))
-            .accessibilityLabel(PillieLocalization.string("custom_pack.active.title"))
-            .accessibilityIdentifier("customPackActiveField")
+        HStack(spacing: 2) {
+            if text.isEmpty {
+                Text(String(typingStartValue))
+                    .foregroundStyle(PillieTheme.textMuted)
+            } else {
+                Text(text)
+                    .foregroundStyle(PillieTheme.textPrimary)
+            }
+            CustomPackCaret(reduceMotion: reduceMotion)
+        }
+        .font(.pillie(22, weight: .bold))
+        .frame(width: 62, height: 40)
+        .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(PillieTheme.coralLight))
+        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).strokeBorder(PillieTheme.coral, lineWidth: 2))
+        .accessibilityLabel(PillieLocalization.string("custom_pack.active.title"))
+        .accessibilityIdentifier("customPackActiveField")
     }
 
     private var breakKindPicker: some View {
@@ -163,6 +183,7 @@ struct CustomPackEditor: View {
                 .padding(.top, 4)
 
             CustomPackBreakKindPicker(selection: draft.breakKind) { kind in
+                commitTyping()
                 feedback.selectChoice(accessibilityReduceMotion: reduceMotion)
                 draft.setBreakKind(kind)
             }
@@ -209,21 +230,49 @@ struct CustomPackEditor: View {
     private func startTyping() {
         guard typed == nil else { return }
         typingStartValue = draft.activeDays
-        typed = ""
-        fieldFocused = true
+        withAnimation(keypadAnimation) { typed = "" }
     }
 
-    private func updateTyping(_ text: String) {
-        let sanitized = CustomPackDraft.sanitizedTyping(text)
+    private func appendDigit(_ digit: Int) {
+        guard let text = typed else { return }
+        setTyping(CustomPackDraft.typingByAppending(digit, to: text))
+    }
+
+    private func deleteDigit() {
+        guard let text = typed else { return }
+        setTyping(CustomPackDraft.typingByDeletingLastDigit(from: text))
+    }
+
+    private func setTyping(_ sanitized: String) {
         typed = sanitized
         draft.setActiveDays(typed: Int(sanitized).flatMap { $0 > 0 ? $0 : nil } ?? typingStartValue)
     }
 
     private func commitTyping() {
         guard let text = typed else { return }
-        typed = nil
-        fieldFocused = false
-        draft.setActiveDays(typed: Int(text) ?? typingStartValue)
+        withAnimation(keypadAnimation) { typed = nil }
+        draft.setActiveDays(typed: CustomPackDraft.commitTyping(text, previousValue: typingStartValue))
+    }
+}
+
+/// A blinking text-input caret, drawn since there's no real text cursor
+/// without a `TextField`. Solid (no blink) under Reduce Motion.
+private struct CustomPackCaret: View {
+    let reduceMotion: Bool
+
+    @State private var visible = true
+
+    var body: some View {
+        RoundedRectangle(cornerRadius: 1, style: .continuous)
+            .fill(EditorColor.done)
+            .frame(width: 2, height: 22)
+            .opacity(reduceMotion || visible ? 1 : 0)
+            .onAppear {
+                guard !reduceMotion else { return }
+                withAnimation(.easeInOut(duration: 0.5).repeatForever(autoreverses: true)) {
+                    visible = false
+                }
+            }
     }
 }
 

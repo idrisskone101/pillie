@@ -76,6 +76,24 @@ struct CustomPackDraftTests {
         #expect(CustomPackDraft.sanitizedTyping("") == "")
     }
 
+    @Test func `keypad digits append and re-clamp on overshoot`() {
+        #expect(CustomPackDraft.typingByAppending(8, to: "") == "8")
+        #expect(CustomPackDraft.typingByAppending(8, to: "8") == "88")
+        #expect(CustomPackDraft.typingByAppending(7, to: "36") == "365")
+        #expect(CustomPackDraft.typingByAppending(9, to: "99") == "365")
+    }
+
+    @Test func `keypad backspace deletes the last digit and stops at empty`() {
+        #expect(CustomPackDraft.typingByDeletingLastDigit(from: "88") == "8")
+        #expect(CustomPackDraft.typingByDeletingLastDigit(from: "") == "")
+    }
+
+    @Test func `keypad done commits a clamped value or reverts when empty`() {
+        #expect(CustomPackDraft.commitTyping("", previousValue: 24) == 24)
+        #expect(CustomPackDraft.commitTyping("0", previousValue: 24) == 1)
+        #expect(CustomPackDraft.commitTyping("88", previousValue: 24) == 88)
+    }
+
     @Test func `a draft equal to a preset comes back as that preset`() {
         var pack = draft(88, 3)
         #expect(pack.choice.preset == .custom)

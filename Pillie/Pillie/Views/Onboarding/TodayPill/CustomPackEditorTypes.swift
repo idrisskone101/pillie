@@ -93,6 +93,24 @@ struct CustomPackDraft: Equatable {
         guard let value = Int(digits), value > activeRange.upperBound else { return digits }
         return String(activeRange.upperBound)
     }
+
+    /// A keypad digit tap: append then re-sanitize, so an overshoot still clamps.
+    static func typingByAppending(_ digit: Int, to typed: String) -> String {
+        sanitizedTyping(typed + String(digit))
+    }
+
+    /// A keypad backspace tap. Deleting from an empty string stays empty.
+    static func typingByDeletingLastDigit(from typed: String) -> String {
+        String(typed.dropLast())
+    }
+
+    /// Done on the keypad: a parseable entry clamps into range (so "0" becomes
+    /// the floor, not a revert); an empty entry reverts to the value typing
+    /// started from.
+    static func commitTyping(_ typed: String, previousValue: Int) -> Int {
+        guard let value = Int(typed) else { return previousValue }
+        return value.clamped(to: activeRange)
+    }
 }
 
 /// Dot map geometry for long packs: one column per week, seven rows, shrunk
