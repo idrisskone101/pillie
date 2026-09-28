@@ -19,6 +19,7 @@ struct TodayPillView: View {
     @State private var revealTask: Task<Void, Never>?
     @State private var cascadeTicks = 0
     @State private var appeared = false
+    @State private var showsPackSheet = false
 
     private let feedback = OnboardingInteractionFeedback()
 
@@ -74,7 +75,7 @@ struct TodayPillView: View {
                         marks: marks,
                         onSelectDay: tap
                     ) {
-                        TodayPillPackHeader(regimen: selection.regimen, onChange: changeRegimen)
+                        TodayPillPackHeader(regimen: selection.regimen) { showsPackSheet = true }
                     }
                     .planBuilderReveal(appeared, animationsEnabled, delay: PillieTheme.stagger2)
 
@@ -102,6 +103,9 @@ struct TodayPillView: View {
             }
         }
         .sensoryFeedback(.impact(weight: .light, intensity: 0.5), trigger: cascadeTicks)
+        .sheet(isPresented: $showsPackSheet) {
+            PackTypeSheet(current: selection.regimen, onPick: changeRegimen)
+        }
         .onAppear {
             seed()
             appeared = true
@@ -175,13 +179,13 @@ struct TodayPillView: View {
 
 private struct TodayPillPackHeader: View {
     let regimen: PillPack.PillRegimenPreset
-    let onChange: (PillPack.PillRegimenPreset) -> Void
-
-    private static let presets = (RoutineRegimenCatalog.common + RoutineRegimenCatalog.more).filter { $0 != .custom }
+    let onChange: () -> Void
 
     var body: some View {
         HStack(spacing: 12) {
             PackGlyph(regimen: regimen.resolvedRegimen(custom: nil))
+                .frame(width: 44, height: 44)
+                .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(PillieTheme.coralLight))
                 .accessibilityHidden(true)
 
             VStack(alignment: .leading, spacing: 2) {
@@ -200,20 +204,7 @@ private struct TodayPillPackHeader: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .accessibilityElement(children: .combine)
 
-            Menu {
-                ForEach(Self.presets, id: \.self) { preset in
-                    Button {
-                        onChange(preset)
-                    } label: {
-                        if preset == regimen {
-                            Label(preset.localizedRoutineDisplayName(), systemImage: "checkmark")
-                        } else {
-                            Text(preset.localizedRoutineDisplayName())
-                        }
-                        Text(preset.localizedScheduleSummary())
-                    }
-                }
-            } label: {
+            Button(action: onChange) {
                 HStack(spacing: 5) {
                     Text(PillieLocalization.string("onboarding.today_pill.change"))
                         .font(.pillie(13, weight: .bold))
@@ -229,47 +220,10 @@ private struct TodayPillPackHeader: View {
                 .overlay(Capsule().strokeBorder(PillieTheme.coral, lineWidth: 1.5))
                 .contentShape(Capsule())
             }
+            .buttonStyle(.plain)
             .fixedSize()
             .accessibilityIdentifier("todayPillChangeButton")
         }
-    }
-}
-
-private struct PackGlyph: View {
-    let regimen: PackRegimen
-
-    private static let dot: CGFloat = 3.6
-    private static let gap: CGFloat = 1.4
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: Self.gap) {
-            ForEach(0..<regimen.weekCount, id: \.self) { week in
-                HStack(spacing: Self.gap) {
-                    ForEach(week * 7..<min(week * 7 + 7, regimen.totalDays), id: \.self) { index in
-                        dot(regimen.day(atIndex: index).kind)
-                    }
-                }
-            }
-        }
-        .frame(width: 44, height: 44)
-        .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(PillieTheme.coralLight))
-    }
-
-    @ViewBuilder
-    private func dot(_ kind: PackDay.Kind) -> some View {
-        switch kind {
-        case .active:
-            Circle().fill(GlyphColor.active).frame(width: Self.dot, height: Self.dot)
-        case .sugarPill:
-            Circle().fill(GlyphColor.sugar).frame(width: Self.dot, height: Self.dot)
-        case .noPill:
-            Circle().strokeBorder(GlyphColor.sugar, lineWidth: 0.8).frame(width: Self.dot, height: Self.dot)
-        }
-    }
-
-    private enum GlyphColor {
-        static let active = Color(hex: "F4A6A0")
-        static let sugar = Color(hex: "C3D3C0")
     }
 }
 
