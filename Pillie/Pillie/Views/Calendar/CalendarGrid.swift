@@ -235,11 +235,8 @@ struct CalendarGrid: View, Equatable {
         snapshot: PillScheduleSnapshot?,
         relation: CalendarDayRelation
     ) -> HistoryEditableDay? {
-        guard let date, let snapshot,
-              let options = DayCorrectionPolicy.options(for: snapshot, relation: relation) else {
-            return nil
-        }
-        return HistoryEditableDay(date: date, method: snapshot.pack.method, options: options)
+        guard date != nil, let snapshot else { return nil }
+        return HistoryEditableDay(snapshot: snapshot, relation: relation)
     }
 
     // MARK: - Status Lookup

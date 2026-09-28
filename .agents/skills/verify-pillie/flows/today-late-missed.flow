@@ -1,0 +1,26 @@
+fresh
+launch
+wait text "Get started" 15
+openurl "pillie://debug/plus-home?lang=en"
+openurl pillie://debug/trial-grant?lang=en
+openurl pillie://debug/fixed-now?at=2026-09-28T16:00:00Z
+
+openurl pillie://debug/trial-eve-of-break?lang=en
+wait text "Late · still time until 8:00 AM tomorrow" 10
+expect text "Pill 21 of 28"
+shot late
+
+openurl pillie://debug/fixed-now?at=2026-09-29T16:00:00Z
+wait text "Pill 21 missed yesterday" 10
+expect text "Sugar pill 1 of 7"
+shot missed
+
+tap --id packTile.21
+wait id historyDayCorrection.taken 10
+shot missed-day-sheet
+
+tap --id historyDayCorrection.taken
+gone id historyDayCorrection.taken 10
+gone text "missed yesterday" 10
+shot corrected
+openurl pillie://debug/fixed-now?at=off

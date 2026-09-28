@@ -122376,6 +122376,831 @@
         }
       }
     },
+    "home.pack.subtitle.late_tomorrow": {
+      "comment": "Home pack card subtitle when today's pill is late but can still be taken until the next reminder tomorrow; %@ is that clock time, e.g. \"Late · still time until 8:00 PM tomorrow\". Calm, never scolding.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Late · still time until %@ tomorrow"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "متأخر · لا يزال هناك وقت حتى %@ غدًا"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "দেরি · আগামীকাল %@ পর্যন্ত এখনও সময় আছে"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tard · encara hi ets a temps fins demà a les %@"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pozdě · ještě je čas zítra do %@"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sent · der er stadig tid til i morgen kl. %@"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verspätet · noch Zeit bis morgen um %@"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Αργά · υπάρχει ακόμη χρόνος ως αύριο στις %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tarde · aún hay tiempo hasta mañana a las %@"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Myöhässä · vielä ehdit huomenna klo %@ asti"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En retard · encore le temps jusqu'à %@ demain"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "મોડું · આવતીકાલે %@ સુધી હજુ સમય છે"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "באיחור · עוד יש זמן עד %@ מחר"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "देर से · कल %@ बजे तक अभी समय है"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kasno · još ima vremena sutra do %@"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Késve · még van idő, holnap %@-ig"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terlambat · masih sempat sampai besok pukul %@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In ritardo · c'è ancora tempo fino alle %@ di domani"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "遅れ · 明日%@まで間に合います"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ತಡ · ನಾಳೆ %@ ವರೆಗೆ ಇನ್ನೂ ಸಮಯವಿದೆ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "지연 · 내일 %@까지 복용 가능"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "വൈകി · നാളെ %@ വരെ ഇനിയും സമയമുണ്ട്"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "उशीर · उद्या %@ पर्यंत अजून वेळ आहे"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lewat · masih sempat hingga %@ esok"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sent · fortsatt tid til i morgen kl. %@"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Te laat · nog tijd tot morgen om %@"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ବିଳମ୍ବ · କାଲି %@ ପର୍ଯ୍ୟନ୍ତ ଏବେ ବି ସମୟ ଅଛି"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਲੇਟ · ਕੱਲ੍ਹ %@ ਤੱਕ ਅਜੇ ਸਮਾਂ ਹੈ"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Późno · jeszcze zdążysz jutro do %@"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Atrasada · ainda dá tempo até amanhã às %@"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Atrasada · ainda vai a tempo até amanhã às %@"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Întârziată · mai e timp până mâine la %@"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Опоздание · ещё можно принять до %@ завтра"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neskoro · ešte je čas zajtra do %@"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zamuda · še je čas jutri do %@"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sent · fortfarande tid till kl. %@ i morgon"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "தாமதம் · நாளை %@ வரை இன்னும் நேரம் இருக்கிறது"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ఆలస్యం · రేపు %@ వరకు ఇంకా సమయం ఉంది"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "สาย · ยังทันจนถึง %@ พรุ่งนี้"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gecikti · yarın %@ saatine kadar hâlâ vakit var"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Запізнення · ще можна прийняти до %@ завтра"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تاخیر · کل %@ تک ابھی وقت ہے"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Muộn · vẫn kịp đến %@ ngày mai"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "延迟 · 明天%@前服用仍来得及"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "延遲 · 明天%@前服用仍來得及"
+          }
+        }
+      }
+    },
+    "home.pack.subtitle.late_today": {
+      "comment": "Home pack card subtitle after midnight when the late pill can still be taken until a reminder later the same calendar day; %@ is that clock time, e.g. \"Late · still time until 8:00 PM today\". Calm, never scolding.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Late · still time until %@ today"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "متأخر · لا يزال هناك وقت حتى %@ اليوم"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "দেরি · আজ %@ পর্যন্ত এখনও সময় আছে"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tard · encara hi ets a temps fins avui a les %@"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pozdě · ještě je čas dnes do %@"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sent · der er stadig tid til i dag kl. %@"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verspätet · noch Zeit bis heute um %@"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Αργά · υπάρχει ακόμη χρόνος ως σήμερα στις %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tarde · aún hay tiempo hasta hoy a las %@"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Myöhässä · vielä ehdit tänään klo %@ asti"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En retard · encore le temps jusqu'à %@ aujourd'hui"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "મોડું · આજે %@ સુધી હજુ સમય છે"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "באיחור · עוד יש זמן עד %@ היום"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "देर से · आज %@ बजे तक अभी समय है"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kasno · još ima vremena danas do %@"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Késve · még van idő, ma %@-ig"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terlambat · masih sempat sampai hari ini pukul %@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In ritardo · c'è ancora tempo fino alle %@ di oggi"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "遅れ · 今日%@まで間に合います"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ತಡ · ಇಂದು %@ ವರೆಗೆ ಇನ್ನೂ ಸಮಯವಿದೆ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "지연 · 오늘 %@까지 복용 가능"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "വൈകി · ഇന്ന് %@ വരെ ഇനിയും സമയമുണ്ട്"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "उशीर · आज %@ पर्यंत अजून वेळ आहे"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lewat · masih sempat hingga %@ hari ini"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sent · fortsatt tid til i dag kl. %@"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Te laat · nog tijd tot vandaag om %@"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ବିଳମ୍ବ · ଆଜି %@ ପର୍ଯ୍ୟନ୍ତ ଏବେ ବି ସମୟ ଅଛି"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਲੇਟ · ਅੱਜ %@ ਤੱਕ ਅਜੇ ਸਮਾਂ ਹੈ"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Późno · jeszcze zdążysz dzisiaj do %@"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Atrasada · ainda dá tempo até hoje às %@"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Atrasada · ainda vai a tempo até hoje às %@"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Întârziată · mai e timp până azi la %@"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Опоздание · ещё можно принять до %@ сегодня"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neskoro · ešte je čas dnes do %@"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zamuda · še je čas danes do %@"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sent · fortfarande tid till kl. %@ idag"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "தாமதம் · இன்று %@ வரை இன்னும் நேரம் இருக்கிறது"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ఆలస్యం · ఈరోజు %@ వరకు ఇంకా సమయం ఉంది"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "สาย · ยังทันจนถึง %@ วันนี้"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gecikti · bugün %@ saatine kadar hâlâ vakit var"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Запізнення · ще можна прийняти до %@ сьогодні"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تاخیر · آج %@ تک ابھی وقت ہے"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Muộn · vẫn kịp đến %@ hôm nay"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "延迟 · 今天%@前服用仍来得及"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "延遲 · 今天%@前服用仍來得及"
+          }
+        }
+      }
+    },
+    "home.pack.subtitle.missed_yesterday": {
+      "comment": "Home pack card subtitle when yesterday's pill was missed; %lld is the pill number in the pack, e.g. \"Pill 11 missed yesterday\". Calm, never scolding.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pill %lld missed yesterday"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "فاتت الحبة %lld أمس"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "পিল %lld গতকাল মিস হয়েছে"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Píndola %lld oblidada ahir"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pilulka %lld včera vynechána"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "P-pille %lld glemt i går"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pille %lld gestern verpasst"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Το χάπι %lld παραλείφθηκε χθες"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Píldora %lld olvidada ayer"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pilleri %lld unohtui eilen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pilule %lld oubliée hier"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ગોળી %lld ગઈકાલે ચૂકી ગયા"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "גלולה %lld פוספסה אתמול"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "गोली %lld कल छूट गई"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pilula %lld propuštena jučer"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld. tabletta: tegnap kimaradt"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pil %lld terlewat kemarin"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillola %lld saltata ieri"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "昨日%lld錠目を飲み忘れ"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ಮಾತ್ರೆ %lld ನಿನ್ನೆ ತಪ್ಪಿದೆ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "어제 %lld번째 알약 놓침"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ഗുളിക %lld ഇന്നലെ വിട്ടുപോയി"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "गोळी %lld काल चुकली"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pil %lld terlepas semalam"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "P-pille %lld glemt i går"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pil %lld gisteren gemist"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ପିଲ୍ %lld ଗତକାଲି ଛାଡ଼ି ଦିଆଯାଇଛି"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਗੋਲੀ %lld ਕੱਲ੍ਹ ਖੁੰਝ ਗਈ"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tabletka %lld pominięta wczoraj"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pílula %lld esquecida ontem"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pílula %lld esquecida ontem"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pilula %lld omisă ieri"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Таблетка %lld пропущена вчера"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tabletka %lld včera vynechaná"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tabletka %lld včeraj izpuščena"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "P-piller %lld missades i går"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "மாத்திரை %lld நேற்று தவறியது"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "మాత్ర %lld నిన్న మిస్ అయింది"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ลืมกินเม็ดที่ %lld เมื่อวาน"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hap %lld dün atlandı"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Таблетку %lld пропущено вчора"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "گولی %lld کل چھوٹ گئی"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bỏ lỡ viên %lld hôm qua"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "昨天漏服第 %lld 片"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "昨天漏服第 %lld 顆"
+          }
+        }
+      }
+    },
     "home.pack.options": {
       "comment": "VoiceOver label for the three-dot menu on Home's pack card",
       "localizations": {

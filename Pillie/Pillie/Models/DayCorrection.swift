@@ -41,6 +41,13 @@ struct HistoryEditableDay: Identifiable, Equatable {
     let options: DayCorrectionOptions
 }
 
+extension HistoryEditableDay {
+    init?(snapshot: PillScheduleSnapshot, relation: CalendarDayRelation) {
+        guard let options = DayCorrectionPolicy.options(for: snapshot, relation: relation) else { return nil }
+        self.init(date: snapshot.date, method: snapshot.pack.method, options: options)
+    }
+}
+
 enum DayCorrectionPolicy {
     /// Which outcomes a day can be corrected to, or nil when the day is inert.
     static func options(
