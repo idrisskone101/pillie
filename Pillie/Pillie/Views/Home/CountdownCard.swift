@@ -414,6 +414,8 @@ private struct MilestoneTrack: View {
     let todayTick: Tick?
     let methodColor: Color
 
+    @Environment(\.layoutDirection) private var layoutDirection
+
     /// Paper's track runs from x 12 to 12 pt short of the tray's inner edge.
     private static let inset: CGFloat = 12
 
@@ -421,7 +423,8 @@ private struct MilestoneTrack: View {
         GeometryReader { proxy in
             let width = proxy.size.width
             let span = width - Self.inset * 2
-            let x = { (position: Double) in Self.inset + span * position }
+            let isRightToLeft = layoutDirection == .rightToLeft
+            let x = { (position: Double) in Self.inset + span * (isRightToLeft ? 1 - position : position) }
             ZStack(alignment: .topLeading) {
                 Path { path in
                     path.move(to: CGPoint(x: x(0), y: 10))
