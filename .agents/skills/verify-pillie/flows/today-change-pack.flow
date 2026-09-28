@@ -1,0 +1,37 @@
+# Change the pack type from the Home pack card's "…" menu (HomePackCard). It
+# runs the same reset as the Settings schedule editor: "Reset Tracking Data?"
+# (ScheduleCriticalSettingChange, day 1), then PillStore.resetAndStartFresh, so
+# the new pack starts at pill 1 today and history clears.
+fresh
+launch
+wait text "Get started" 15
+openurl "pillie://debug/plus-home?lang=en"
+openurl pillie://debug/trial-grant?lang=en
+openurl pillie://debug/trial-eve-of-break?lang=en
+wait text "Last hormone pill" 10
+shot before
+
+# Cancel keeps the pack as it was.
+tap --id homePackOptions
+wait id homePackChangeType 5
+tap --id homePackChangeType
+wait id packSheet.custom 10
+shot sheet
+tap --id packSheet.24_4
+wait text "Reset Tracking Data?" 10
+shot reset-confirmation
+tap --label Cancel
+gone text "Reset Tracking Data?" 5
+expect text "Pill 21 of 28"
+
+# Confirm starts the 24 + 4 pack at pill 1 today.
+tap --id homePackOptions
+wait id homePackChangeType 5
+tap --id homePackChangeType
+wait id packSheet.custom 10
+tap --id packSheet.24_4
+wait text "Reset Tracking Data?" 10
+tap --label "Reset & Save"
+wait text "Pill 1 of 28" 10
+expect text "New pack · 24/4"
+shot after-24-4

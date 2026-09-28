@@ -19,6 +19,8 @@ struct HomeView: View {
     @State private var hasAnimatedIn = false
     @State private var showRefillConfirmation = false
     @State private var showShakeConfirm = false
+    /// Holds the pack card's pop until the shake cover has slid away, so the log is seen landing.
+    @State private var holdsPackCardLog = false
     @State private var showBlockingSetup = false
     @State private var showBlockingPaywall = false
     @State private var blockingPaywallSurface: AnalyticsPaywallSurface = .homeBlockingCard
@@ -438,7 +440,13 @@ struct HomeView: View {
                         .modifier(FadeInUp(appeared: appeared, delay: 0.15))
                     }
 
-                    PillPackCard()
+                    Group {
+                        if store.pack.method == .pill {
+                            HomePackCard(holdsTodayLog: holdsPackCardLog)
+                        } else {
+                            PillPackCard()
+                        }
+                    }
                         .modifier(FadeInUp(appeared: appeared, delay: 0.2))
                         .animation(unifiedStateTransition, value: store.isTodayTaken)
 
@@ -620,7 +628,7 @@ struct HomeView: View {
                 onDismiss: { showTrialKeepPlusPaywall = false }
             )
         }
-        .fullScreenCover(isPresented: $showShakeConfirm) {
+        .fullScreenCover(isPresented: $showShakeConfirm, onDismiss: { holdsPackCardLog = false }) {
             if let action = store.todayDueAction {
                 ShakeConfirmView(
                     action: action,
@@ -737,6 +745,7 @@ struct HomeView: View {
                 Button {
                     ProductAnalyticsTelemetry.live.todayActionStarted()
                     if requiresShakeConfirm {
+                        holdsPackCardLog = true
                         showShakeConfirm = true
                     } else {
                         completeTodayAction()

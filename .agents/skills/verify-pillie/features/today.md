@@ -9,8 +9,12 @@ blocking/trial status surfaces, and (when eligible) the review ask.
   reflected in the status card and the floating CTA.
 - `today-status-card` shows the reminder time and the due-action line; it
   goes coral and reads "That's logged. Tap to undo." once taken.
-- `today-pill-pack-card` shows this cycle's pill strip and the "This cycle"
-  header.
+- `today-pill-pack-card` shows the V1 pack card for pill users
+  (`HomePackCard`, ENG-145): "Pill 12 of 28" header, weekdays, grid, today
+  ringed, "…" menu (`#homePackOptions`) with Change pack type
+  (`#homePackChangeType`, the onboarding pack sheet) and Start new. A log pops today's
+  tile once Home is visible again. Patch and ring users still get the dark
+  "This cycle" strip (`PillPackCard`).
 - `today-mark-taken` is the real user path: tap the floating CTA, then
   Shake to Confirm (or its tap-to-confirm fallback), which marks today taken
   — and the same button undoes it.
@@ -57,6 +61,14 @@ blocking/trial status surfaces, and (when eligible) the review ask.
   Streak. The flow dismisses the blocking card first (it always renders on
   a fresh, unconfigured pack and outranks the review ask) before proving
   `homeReviewPromptCard`, then dismisses it.
+- `flows/today-pack-card.flow` — the pack card's last hormone pill, sugar
+  week, and finished pack headers via `/trial-eve-of-break`,
+  `/trial-break-week`, and `/fixed-now` one day later.
+- `flows/today-change-pack.flow` — the "…" menu's Change pack type opens
+  the pack sheet, then the Settings "Reset Tracking Data?" confirmation.
+  Cancel keeps the pack; Reset & Save starts the new pack at pill 1 today.
+- `flows/today-long-pack.flow` — onboarding picks a Custom 88 + 3 pack, then
+  Home opens its card on the page with today ("Weeks 5 to 8 of 13").
 - `flows/smoke.flow` covers the plain tab bar (Today/History/Settings) with
   `/plus-home`.
 - Not covered by an authored flow, and why: `ProtectionOffCard` needs an
