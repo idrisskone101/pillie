@@ -199,6 +199,50 @@ struct SugarPillStoreTests {
         #expect(store.monthAdherence(for: sugarDay).due == 21)
     }
 
+    @Test func historyReadsTodaysSugarPillAsDueUntilItsWindowCloses() throws {
+        defer { InMemoryStoreFactory.resetClockAndDefaults() }
+        let store = try store(regimen: .twentyFourFour, now: InMemoryStoreFactory.localDate("2026-05-24", hour: 12))
+        let hormoneDay = InMemoryStoreFactory.localDate("2026-05-24", hour: 0)
+        let sugarDay = InMemoryStoreFactory.localDate("2026-05-25", hour: 0)
+        func history(_ date: Date, _ relation: CalendarDayRelation) -> (PillDay.Status?, HistoryPresentation.DayStatus) {
+            let snapshot = store.scheduleSnapshot(for: date)
+            let presentation = CalendarDayPresentation.resolve(snapshot: snapshot, fallbackMethod: .pill, relation: relation)
+            return (snapshot?.status, presentation.historyStatus)
+        }
+
+        let hormoneToday = history(hormoneDay, .today)
+        #expect(hormoneToday.0 == .upcoming)
+        #expect(hormoneToday.1 == .unlogged)
+
+        PillieClock.setFixedNowForTesting(InMemoryStoreFactory.localDate("2026-05-25", hour: 12))
+        store.refreshDayContextIfNeeded()
+        #expect(store.todayDueAction?.type == .pillSugar)
+        let sugarToday = history(sugarDay, .today)
+        #expect(sugarToday.0 == .upcoming)
+        #expect(sugarToday.1 == .unlogged)
+
+        PillieClock.setFixedNowForTesting(InMemoryStoreFactory.localDate("2026-05-26", hour: 12))
+        store.refreshDayContextIfNeeded()
+        let sugarClosed = history(sugarDay, .past)
+        #expect(sugarClosed.0 == .breakDay)
+        #expect(sugarClosed.1 == .breakDay)
+
+        store.markTodayAsTaken()
+        let sugarLogged = history(InMemoryStoreFactory.localDate("2026-05-26", hour: 0), .today)
+        #expect(sugarLogged.0 == .taken)
+        #expect(sugarLogged.1 == .completed)
+    }
+
+    @Test func historyReadsAPillFreeDayAsABreak() throws {
+        defer { InMemoryStoreFactory.resetClockAndDefaults() }
+        let store = try store(regimen: .twentyOneOnly, now: InMemoryStoreFactory.localDate("2026-05-23", hour: 12))
+        let snapshot = store.scheduleSnapshot(for: store.today)
+        let presentation = CalendarDayPresentation.resolve(snapshot: snapshot, fallbackMethod: .pill, relation: .today)
+
+        #expect(snapshot?.status == .breakDay)
+        #expect(presentation.historyStatus == .breakDay)
+    }
+
     @Test func sugarDaysDoNotConsumeTrialDays() throws {
         defer { InMemoryStoreFactory.resetClockAndDefaults() }
         let store = try store(regimen: .twentyOneSeven, now: InMemoryStoreFactory.localDate("2026-05-23", hour: 12))
