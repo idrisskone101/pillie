@@ -44,7 +44,8 @@ struct PackTypeSheet: View {
                 .transition(reduceMotion ? .opacity : .move(edge: .trailing).combined(with: .opacity))
             }
         }
-        .presentationDetents(page == .presets ? [.height(contentHeight)] : [.large])
+        // Both pages share the preset list's height, so switching pages never resizes the sheet.
+        .presentationDetents([.height(contentHeight)])
         .presentationDragIndicator(.visible)
         .presentationCornerRadius(32)
         .presentationBackground(PillieTheme.bg)
