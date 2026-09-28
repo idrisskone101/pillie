@@ -214,7 +214,7 @@ struct ProtectionPlanReminderTimeView: View {
 #Preview {
     ProtectionPlanReminderTimeView(
         progress: ProtectionPlanProgressIndex.progress(for: .reminderTime),
-        todayPillPick: TodayPillPick(regimen: .twentyOneSeven, dayIndex: 11, answer: .taken),
+        todayPillPick: TodayPillPick(pack: PackChoice(preset: .twentyOneSeven), dayIndex: 11, answer: .taken),
         onBack: {},
         onContinue: {}
     )

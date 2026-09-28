@@ -22,7 +22,7 @@ final class TodayPillPlanTests: XCTestCase {
     }
 
     private func pick(_ index: Int, _ answer: TodayPillPick.Answer?, _ regimen: PillPack.PillRegimenPreset = .twentyOneSeven) -> TodayPillPick {
-        TodayPillPick(regimen: regimen, dayIndex: index, answer: answer)!
+        TodayPillPick(pack: PackChoice(preset: regimen), dayIndex: index, answer: answer)!
     }
 
     func testNextReminderIsTheNextOccurrenceStrictlyAfterNow() {
@@ -50,5 +50,9 @@ final class TodayPillPlanTests: XCTestCase {
 
         let breakDay = TodayPillPlan(pick: pick(23, nil, .twentyOneOnly), reminderHour: 20, reminderMinute: 0, now: date(27, 12, 24), calendar: calendar, locale: locale)
         XCTAssertEqual(breakDay.rows[1].value, "Break day 3")
+
+        let customPick = TodayPillPick(pack: PackChoice(PackRegimen(activeDays: 88, breakDays: 3, breakKind: .noPills)), dayIndex: 89, answer: nil)!
+        let custom = TodayPillPlan(pick: customPick, reminderHour: 20, reminderMinute: 0, now: date(27, 12, 24), calendar: calendar, locale: locale)
+        XCTAssertEqual(custom.rows.map(\.value), ["88 + 3", "Break day 2", "Today, 8:00\u{202F}PM"])
     }
 }

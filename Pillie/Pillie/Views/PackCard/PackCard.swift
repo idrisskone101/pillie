@@ -253,7 +253,7 @@ struct PackCard<Header: View>: View {
             return
         }
         var elapsed = Duration.zero
-        for step in PackPopSequence.steps(from: current, to: target, regimen: regimen) {
+        for step in PackPopSequence.steps(from: current, to: target, regimen: regimen, visible: layout.dayIndices(onPage: viewedPage)) {
             if step.at > elapsed {
                 try? await Task.sleep(for: step.at - elapsed)
                 elapsed = step.at

@@ -5,8 +5,8 @@
 
 import Foundation
 
-struct PackRegimen: Hashable, Sendable {
-    enum BreakKind: Hashable, Sendable {
+struct PackRegimen: Hashable, Sendable, Codable {
+    enum BreakKind: String, Hashable, Sendable, Codable {
         case sugarPills
         case noPills
     }
@@ -30,6 +30,22 @@ struct PackRegimen: Hashable, Sendable {
         self.activeDays = active
         self.breakDays = breakLength
         self.breakKind = breakLength == 0 ? .sugarPills : breakKind
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case activeDays
+        case breakDays
+        case breakKind
+    }
+
+    // Stored drafts are external data, so decoding goes through the clamping init.
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.init(
+            activeDays: try container.decode(Int.self, forKey: .activeDays),
+            breakDays: try container.decode(Int.self, forKey: .breakDays),
+            breakKind: try container.decode(BreakKind.self, forKey: .breakKind)
+        )
     }
 
     var totalDays: Int { activeDays + breakDays }

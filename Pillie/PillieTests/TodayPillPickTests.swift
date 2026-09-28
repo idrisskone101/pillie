@@ -22,7 +22,7 @@ final class TodayPillPickTests: XCTestCase {
     }
 
     private func pick(_ index: Int, _ answer: TodayPillPick.Answer?, _ regimen: PillPack.PillRegimenPreset = .twentyOneSeven) -> TodayPillPick {
-        TodayPillPick(regimen: regimen, dayIndex: index, answer: answer)!
+        TodayPillPick(pack: PackChoice(preset: regimen), dayIndex: index, answer: answer)!
     }
 
     private func anchor(_ pick: TodayPillPick, now: Date, reminderHour: Int) -> Date {
@@ -72,12 +72,11 @@ final class TodayPillPickTests: XCTestCase {
     }
 
     func testPickRefusesStatesThePackCannotHold() {
-        XCTAssertNil(TodayPillPick(regimen: .twentyOneSeven, dayIndex: 11, answer: nil))
-        XCTAssertNil(TodayPillPick(regimen: .twentyOneOnly, dayIndex: 23, answer: .taken))
-        XCTAssertNil(TodayPillPick(regimen: .twentyOneSeven, dayIndex: 28, answer: .taken))
-        XCTAssertNil(TodayPillPick(regimen: .custom, dayIndex: 0, answer: .taken))
-        XCTAssertNotNil(TodayPillPick(regimen: .twentyOneSeven, dayIndex: 23, answer: .notYet))
-        XCTAssertNotNil(TodayPillPick(regimen: .twentyOneOnly, dayIndex: 23, answer: nil))
+        XCTAssertNil(TodayPillPick(pack: PackChoice(preset: .twentyOneSeven), dayIndex: 11, answer: nil))
+        XCTAssertNil(TodayPillPick(pack: PackChoice(preset: .twentyOneOnly), dayIndex: 23, answer: .taken))
+        XCTAssertNil(TodayPillPick(pack: PackChoice(preset: .twentyOneSeven), dayIndex: 28, answer: .taken))
+        XCTAssertNotNil(TodayPillPick(pack: PackChoice(preset: .twentyOneSeven), dayIndex: 23, answer: .notYet))
+        XCTAssertNotNil(TodayPillPick(pack: PackChoice(preset: .twentyOneOnly), dayIndex: 23, answer: nil))
     }
 
     func testDraftRoundTripsThroughDefaultsAndClears() throws {
@@ -90,6 +89,44 @@ final class TodayPillPickTests: XCTestCase {
 
         TodayPillPick.clear(from: defaults)
         XCTAssertNil(TodayPillPick.load(from: defaults))
+    }
+
+    func testCustomPackPickFollowsTheCustomRegimen() {
+        let pack = PackChoice(PackRegimen(activeDays: 88, breakDays: 3, breakKind: .noPills))
+        XCTAssertNotNil(TodayPillPick(pack: pack, dayIndex: 87, answer: .taken))
+        XCTAssertNotNil(TodayPillPick(pack: pack, dayIndex: 89, answer: nil))
+        XCTAssertNil(TodayPillPick(pack: pack, dayIndex: 89, answer: .taken))
+        XCTAssertNil(TodayPillPick(pack: pack, dayIndex: 91, answer: nil))
+    }
+
+    func testDraftSavedBeforeCustomPacksStillLoads() throws {
+        let defaults = try XCTUnwrap(UserDefaults(suiteName: "TodayPillPickTests.legacy"))
+        defaults.set(Data(#"{"regimen":"24/4","dayIndex":11,"answer":"taken"}"#.utf8), forKey: TodayPillPick.storageKey)
+
+        XCTAssertEqual(TodayPillPick.load(from: defaults), pick(11, .taken, .twentyFourFour))
+        defaults.removePersistentDomain(forName: "TodayPillPickTests.legacy")
+    }
+
+    func testCustomDraftRoundTripsWithItsRegimen() throws {
+        let defaults = try XCTUnwrap(UserDefaults(suiteName: "TodayPillPickTests.custom"))
+        defaults.removePersistentDomain(forName: "TodayPillPickTests.custom")
+        let custom = try XCTUnwrap(TodayPillPick(pack: PackChoice(PackRegimen(activeDays: 88, breakDays: 3)), dayIndex: 89, answer: .notYet))
+
+        custom.save(to: defaults)
+        let loaded = try XCTUnwrap(TodayPillPick.load(from: defaults))
+        XCTAssertEqual(loaded.pack.preset, .custom)
+        XCTAssertEqual(loaded.pack.regimen, PackRegimen(activeDays: 88, breakDays: 3))
+        XCTAssertEqual(loaded.dayIndex, 89)
+        XCTAssertEqual(loaded.answer, .notYet)
+        defaults.removePersistentDomain(forName: "TodayPillPickTests.custom")
+    }
+
+    func testCustomDraftWithoutItsRegimenLoadsAsNil() throws {
+        let defaults = try XCTUnwrap(UserDefaults(suiteName: "TodayPillPickTests.customMissing"))
+        defaults.set(Data(#"{"regimen":"CUSTOM","dayIndex":3,"answer":"taken"}"#.utf8), forKey: TodayPillPick.storageKey)
+
+        XCTAssertNil(TodayPillPick.load(from: defaults))
+        defaults.removePersistentDomain(forName: "TodayPillPickTests.customMissing")
     }
 
     func testDraftThatNoLongerFitsItsPackLoadsAsNil() throws {

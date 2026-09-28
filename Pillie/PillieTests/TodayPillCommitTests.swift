@@ -48,7 +48,7 @@ final class TodayPillCommitTests: XCTestCase {
     }
 
     private func pick(_ index: Int, _ answer: TodayPillPick.Answer?, _ regimen: PillPack.PillRegimenPreset = .twentyOneSeven) -> TodayPillPick {
-        TodayPillPick(regimen: regimen, dayIndex: index, answer: answer)!
+        TodayPillPick(pack: PackChoice(preset: regimen), dayIndex: index, answer: answer)!
     }
 
     private func day(_ offset: Int, from date: Date) -> Date {
@@ -215,6 +215,18 @@ final class TodayPillCommitTests: XCTestCase {
             XCTAssertEqual(harness.store.pack.pillRegimen, preset, "\(preset)")
             XCTAssertEqual(harness.store.pack.regimen, regimen, "\(preset)")
         }
+    }
+
+    func testCustomPackSavesItsOwnRegimenIntoTheSchedule() throws {
+        let now = InMemoryStoreFactory.localDate("2026-09-27", hour: 12, minute: 24)
+        let harness = try makeHarness(now: now, reminderHour: 20)
+        let custom = PackChoice(PackRegimen(activeDays: 88, breakDays: 3))
+
+        harness.commit(try XCTUnwrap(TodayPillPick(pack: custom, dayIndex: 60, answer: .notYet)))
+
+        XCTAssertEqual(harness.store.pack.pillRegimen, .custom)
+        XCTAssertEqual(harness.store.pack.regimen, PackRegimen(activeDays: 88, breakDays: 3))
+        XCTAssertEqual(harness.store.pack.cycleDayIndex(on: now), 60)
     }
 }
 

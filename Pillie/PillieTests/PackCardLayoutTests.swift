@@ -150,4 +150,33 @@ struct PackCardLayoutTests {
             .init(at: .milliseconds(45), index: 1, change: .settle(.today)),
         ])
     }
+
+    @Test func `A long cascade tightens its stagger so the last pop starts by the cap`() {
+        #expect(PackPopSequence.stagger(pops: 12) == .milliseconds(45))
+        #expect(PackPopSequence.stagger(pops: 27) == .milliseconds(500) / 26)
+
+        let from = [PackTileState](repeating: .sealed, count: 28)
+        let to = [PackTileState](repeating: .popped, count: 27) + [.today]
+        let starts = PackPopSequence.steps(from: from, to: to, regimen: twentyOneSeven)
+            .filter { $0.change == .crunch }
+            .map(\.at)
+        #expect(starts.count == 21)
+        #expect(starts.last == .milliseconds(500) / 26 * 20)
+    }
+
+    @Test func `Tiles off the viewed page settle at once`() {
+        let from: [PackTileState] = [.sealed, .sealed, .sealed, .sealed]
+        let to: [PackTileState] = [.popped, .popped, .popped, .today]
+        let regimen = PackRegimen(activeDays: 4, breakDays: 0)
+
+        let steps = PackPopSequence.steps(from: from, to: to, regimen: regimen, visible: 2..<4)
+
+        #expect(steps == [
+            .init(at: .zero, index: 0, change: .settle(.popped)),
+            .init(at: .zero, index: 1, change: .settle(.popped)),
+            .init(at: .zero, index: 3, change: .settle(.today)),
+            .init(at: .zero, index: 2, change: .crunch),
+            .init(at: .milliseconds(90), index: 2, change: .settle(.popped)),
+        ])
+    }
 }

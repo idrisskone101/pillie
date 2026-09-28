@@ -22,8 +22,8 @@ enum TodayPillCommit {
         )
         store.startNewProtocol(
             method: .pill,
-            regimen: pick.regimen,
-            customRegimen: nil,
+            regimen: pick.pack.preset,
+            customRegimen: pick.pack.regimen,
             cycleDay: pick.dayIndex + 1,
             preserveHistory: false,
             anchorDay: anchorDay

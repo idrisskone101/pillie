@@ -33,7 +33,7 @@ struct TodayPillPlan: Equatable {
             ProtectionPlanRoutineSummary.Row(
                 symbol: "pills.fill",
                 label: PillieLocalization.string("today.pack.noun.pill", locale: locale),
-                value: pick.regimen.localizedRoutineDisplayName(locale: locale)
+                value: pick.pack.displayName(locale: locale)
             ),
             ProtectionPlanRoutineSummary.Row(
                 symbol: "number",
@@ -56,7 +56,7 @@ struct TodayPillPlan: Equatable {
         case .notYet:
             return PillieLocalization.formatted("onboarding.today_pill.plan.pill_not_yet", locale: locale, arguments: day.number)
         case nil:
-            let breakDay = day.number - pick.regimen.resolvedRegimen(custom: nil).activeDays
+            let breakDay = day.number - pick.pack.regimen.activeDays
             return PillieLocalization.formatted("pack_card.tile.break_day", locale: locale, arguments: breakDay)
         }
     }
