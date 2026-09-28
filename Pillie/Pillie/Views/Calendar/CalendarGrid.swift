@@ -277,17 +277,9 @@ struct CalendarGrid: View, Equatable {
                 Date.FormatStyle().day().month(.wide).year().locale(locale)
             )
         }
-        let status: HistoryPresentation.DayStatus
-        if presentation.status == .taken {
-            status = .completed
-        } else if presentation.isBreakDay {
-            status = .breakDay
-        } else {
-            status = .unlogged
-        }
         return HistoryPresentation.dayAccessibilityLabel(
             date: date,
-            status: status,
+            status: presentation.historyStatus,
             locale: locale
         )
     }
