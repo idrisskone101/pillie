@@ -60,6 +60,14 @@ enum DayCorrectionPolicy {
         // but whose record was written as `.ringReinsert`.
         guard due.type != .ringReinsert, snapshot.actionType != .ringReinsert else { return nil }
 
+        if due.type.isBreakType && due.type.requiresUserAction {
+            // A sugar pill is logged or not; it is never missed.
+            return DayCorrectionOptions(
+                selectableOutcomes: [.taken, .breakDay],
+                currentOutcome: currentOutcome(for: snapshot.status)
+            )
+        }
+
         switch (due.type.isBreakType, snapshot.status) {
         case (true, .taken), (true, .missed):
             // A stale record on a day that later became a scheduled break

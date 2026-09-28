@@ -430,15 +430,19 @@ class PillStore {
         statusForDate(today) == .taken
     }
 
-    /// Whether today requires no blocking — either taken, passive active, or a break day.
+    /// Whether today requires no blocking: taken, or no hormone dose is due.
+    /// An untaken sugar pill is handled.
     var isTodayHandled: Bool {
         guard !liveDayPrecedesFirstPack else { return true }
-        return isTodayTaken || isTodayPassiveOrBreak
+        if isTodayTaken { return true }
+        guard let due = dueAction(on: today) else { return false }
+        return !due.type.enforcesAdherence
     }
 
-    var isTodayPassiveOrBreak: Bool {
-        guard let snapshot = scheduleSnapshot(for: today) else { return false }
-        return snapshot.isPassiveActive || snapshot.isBreak
+    /// Whether today has nothing to log: a passive wearing day or a no-pill break.
+    var isTodayNothingDue: Bool {
+        guard let due = dueAction(on: today) else { return false }
+        return !due.type.requiresUserAction
     }
 
     /// Periodic action-day rule mirrored to the DeviceActivity extension. The
@@ -459,7 +463,7 @@ class PillStore {
                     pack: activePack,
                     calendar: calendar
                   ),
-                  action.type.requiresUserAction else {
+                  action.type.enforcesAdherence else {
                 continue
             }
             actionDayIndices.insert(action.cycleDay - 1)
@@ -1566,7 +1570,7 @@ class PillStore {
             // Cycle-day adjustment builds from older releases could persist
             // no-action break records as completed. Repair that invalid state
             // once so raw-record consumers agree with the schedule snapshot.
-            if day.actionType.isBreakType, day.status == .taken {
+            if day.actionType.isBreakType, !day.actionType.requiresUserAction, day.status == .taken {
                 day.status = .breakDay
                 didMutate = true
             }
@@ -1755,39 +1759,10 @@ class PillStore {
         let hasNoTrackingContext = isBeforeActivation || isPastCycleEndGap
 
         let resolvedStatus: PillDay.Status?
-        if let record = dayRecord {
-            // Cycle-day adjustment builds explicit historical records. Older
-            // versions could persist `.taken` for a break-action record, which
-            // rendered the no-action day green. The action semantic is
-            // authoritative, so repair those records at the read boundary too.
-            if actionType?.isBreakType == true {
-                resolvedStatus = .breakDay
-            // Upcoming is non-terminal; recompute fallback state for past dates.
-            } else if record.status != .upcoming {
-                resolvedStatus = record.status
-            } else if let due {
-                if due.type.isBreakType {
-                    resolvedStatus = hasNoTrackingContext ? .noData : .breakDay
-                } else if due.type.isPassiveActive {
-                    resolvedStatus = hasNoTrackingContext ? .noData : (isDoseWindowOpen(for: day) ? .upcoming : .taken)
-                } else if !isDoseWindowOpen(for: day) {
-                    resolvedStatus = hasNoTrackingContext ? .noData : .missed
-                } else {
-                    resolvedStatus = .upcoming
-                }
-            } else {
-                resolvedStatus = nil
-            }
+        if let record = dayRecord, let recorded = Self.recordedStatus(record.status, actionType: actionType) {
+            resolvedStatus = recorded
         } else if let due {
-            if due.type.isBreakType {
-                resolvedStatus = hasNoTrackingContext ? .noData : .breakDay
-            } else if due.type.isPassiveActive {
-                resolvedStatus = hasNoTrackingContext ? .noData : (isDoseWindowOpen(for: day) ? .upcoming : .taken)
-            } else if !isDoseWindowOpen(for: day) {
-                resolvedStatus = hasNoTrackingContext ? .noData : .missed
-            } else {
-                resolvedStatus = .upcoming
-            }
+            resolvedStatus = scheduledStatus(for: due.type, on: day, hasNoTrackingContext: hasNoTrackingContext)
         } else {
             resolvedStatus = nil
         }
@@ -1805,6 +1780,41 @@ class PillStore {
         return snapshot
     }
 
+    /// The status a stored record pins, or nil when the schedule decides.
+    /// Older builds could persist `.taken` for a break record, which rendered
+    /// the no-action day green; the action semantic is authoritative, so a
+    /// no-pill break always reads as a break. A sugar pill reads taken once
+    /// logged and is otherwise a break, never a miss.
+    private static func recordedStatus(_ status: PillDay.Status, actionType: PillDay.ActionType?) -> PillDay.Status? {
+        guard let actionType, actionType.isBreakType else {
+            return status == .upcoming ? nil : status
+        }
+        guard actionType.requiresUserAction else { return .breakDay }
+        switch status {
+        case .taken: return .taken
+        case .upcoming: return nil
+        case .missed, .breakDay, .noData: return .breakDay
+        }
+    }
+
+    /// The status of a day with no deciding record. A sugar pill is due while
+    /// its dose window is open and closes as a break day, never as missed.
+    private func scheduledStatus(
+        for type: PillDay.ActionType,
+        on day: Date,
+        hasNoTrackingContext: Bool
+    ) -> PillDay.Status {
+        if type.isBreakType && !type.requiresUserAction {
+            return hasNoTrackingContext ? .noData : .breakDay
+        }
+        if type.isPassiveActive {
+            return hasNoTrackingContext ? .noData : (isDoseWindowOpen(for: day) ? .upcoming : .taken)
+        }
+        if isDoseWindowOpen(for: day) { return .upcoming }
+        if hasNoTrackingContext { return .noData }
+        return type.isBreakType ? .breakDay : .missed
+    }
+
     private func dueDatesBackwards(from date: Date, pack: PillPack, maxDueActions: Int) -> [Date] {
         guard maxDueActions > 0 else { return [] }
 
@@ -1816,7 +1826,7 @@ class PillStore {
 
         while dueDates.count < maxDueActions && scannedDays < scanLimitDays {
             if let action = DoseScheduleEngine.dueAction(on: cursor, pack: pack),
-               action.type.requiresUserAction {
+               action.type.enforcesAdherence {
                 dueDates.append(cursor)
             }
 

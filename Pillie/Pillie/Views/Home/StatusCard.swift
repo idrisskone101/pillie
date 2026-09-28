@@ -13,7 +13,7 @@ struct StatusCard: View {
     var body: some View {
         let _ = store.protocolChangeVersion
         let isTodayTaken = store.isTodayTaken
-        let isTodayPassiveOrBreak = store.isTodayPassiveOrBreak
+        let isTodayNothingDue = store.isTodayNothingDue
         let alarmAction = store.alarmAction
         let todayAction = store.dueAction(on: store.today)
         let reminderTime = SettingsPresentation.time(
@@ -21,13 +21,13 @@ struct StatusCard: View {
             minute: store.reminderMinute,
             locale: locale
         )
-        let method = (isTodayPassiveOrBreak ? todayAction : alarmAction)?.method ?? store.pack.method
+        let method = (isTodayNothingDue ? todayAction : alarmAction)?.method ?? store.pack.method
         let actionTitle = StatusCardTitle.resolve(
             alarmAction: alarmAction,
             liveDay: store.today,
             now: store.civilDay,
             isTodayTaken: isTodayTaken,
-            isTodayPassiveOrBreak: isTodayPassiveOrBreak
+            isTodayNothingDue: isTodayNothingDue
         ).localized(reminderTime: reminderTime, locale: locale)
         statusMainContent(
             method: method,

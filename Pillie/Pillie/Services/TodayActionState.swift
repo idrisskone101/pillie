@@ -28,7 +28,7 @@ enum TodayActionState: Equatable {
             return .completed
         }
 
-        guard let todayDueAction = input.todayDueAction, !todayDueAction.isBreak else {
+        guard let todayDueAction = input.todayDueAction, todayDueAction.type.requiresUserAction else {
             return .noActionDue
         }
 
