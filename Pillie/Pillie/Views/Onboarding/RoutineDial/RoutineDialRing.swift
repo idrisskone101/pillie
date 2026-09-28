@@ -15,13 +15,18 @@ struct RoutineDialRing: View {
         static let ring = Metrics(size: 244, radius: 106, gapDegrees: 0.8)
     }
 
+    struct SegmentColors {
+        let fill: Color
+        let track: Color
+    }
+
     struct Knob {
         let halo: Color
         let dot: Color
     }
 
     let metrics: Metrics
-    let segmentColors: [Color]
+    let segments: [SegmentColors]
     let position: Int
     let knob: Knob
     let animatesKnob: Bool
@@ -35,18 +40,19 @@ struct RoutineDialRing: View {
     private static let dotRadius: CGFloat = 5
     private static let knobStroke: CGFloat = 3
 
-    private var count: Int { segmentColors.count }
+    private var count: Int { segments.count }
+    private var knobDegrees: Double { dragDegrees ?? Double(position) * segmentDegrees }
     private var segmentDegrees: Double { 360 / Double(count) }
 
     var body: some View {
         ZStack {
-            ForEach(segmentColors.indices, id: \.self) { index in
-                RingSegment(
-                    start: Double(index) * segmentDegrees + metrics.gapDegrees,
-                    end: Double(index + 1) * segmentDegrees - metrics.gapDegrees,
-                    radius: metrics.radius
-                )
-                .stroke(segmentColors[index], lineWidth: Self.lineWidth)
+            ForEach(segments.indices, id: \.self) { index in
+                let start = Double(index) * segmentDegrees + metrics.gapDegrees
+                let end = Double(index + 1) * segmentDegrees - metrics.gapDegrees
+                RingSegment(start: start, end: end, fill: end, radius: metrics.radius)
+                    .stroke(segments[index].track, lineWidth: Self.lineWidth)
+                RingSegment(start: start, end: end, fill: knobDegrees, radius: metrics.radius)
+                    .stroke(segments[index].fill, lineWidth: Self.lineWidth)
             }
 
             ZStack {
@@ -58,7 +64,7 @@ struct RoutineDialRing: View {
                     .fill(knob.dot)
                     .frame(width: Self.dotRadius * 2, height: Self.dotRadius * 2)
             }
-            .modifier(OrbitEffect(degrees: dragDegrees ?? Double(position) * segmentDegrees, radius: metrics.radius))
+            .modifier(OrbitEffect(degrees: knobDegrees, radius: metrics.radius))
         }
         .frame(width: metrics.size, height: metrics.size)
         .contentShape(
@@ -110,18 +116,27 @@ struct RoutineDialRing: View {
     }
 }
 
+/// One segment's arc, drawn up to `fill` degrees so the fill tracks the knob.
 private struct RingSegment: Shape {
     let start: Double
     let end: Double
+    var fill: Double
     let radius: CGFloat
+
+    var animatableData: Double {
+        get { fill }
+        set { fill = newValue }
+    }
 
     func path(in rect: CGRect) -> Path {
         var path = Path()
+        let stop = min(end, fill)
+        guard stop > start else { return path }
         path.addArc(
             center: CGPoint(x: rect.midX, y: rect.midY),
             radius: radius,
             startAngle: .degrees(start - 90),
-            endAngle: .degrees(end - 90),
+            endAngle: .degrees(stop - 90),
             clockwise: false
         )
         return path

@@ -151,7 +151,7 @@ struct RoutineDialView: View {
         return ZStack(alignment: .top) {
             RoutineDialRing(
                 metrics: metrics,
-                segmentColors: palette.segments(count: selection.dialCount, position: selection.dialDay),
+                segments: palette.segments(count: selection.dialCount),
                 position: selection.dialDay,
                 knob: palette.knob(answer: selection.answer),
                 animatesKnob: animationsEnabled,
@@ -188,8 +188,8 @@ struct RoutineDialView: View {
                     .foregroundStyle(PillieTheme.textMuted)
                     .multilineTextAlignment(.center)
                     .lineLimit(1)
-                    .minimumScaleFactor(0.8)
-                    .frame(maxWidth: metrics.radius * 1.4)
+                    .minimumScaleFactor(0.7)
+                    .frame(maxWidth: metrics.radius * 1.25)
             }
             .frame(width: metrics.radius * 2 - 40)
             .padding(.top, method == .patch ? 36 : 44)
@@ -257,18 +257,17 @@ private struct RoutineDialPalette {
         phase == .free ? PillieTheme.verifiedGreen : methodColor
     }
 
-    func segments(count: Int, position: Int) -> [Color] {
+    func segments(count: Int) -> [RoutineDialRing.SegmentColors] {
         (1...count).map { segment in
-            let filled = segment <= position
             switch method {
             case .patch where phase == .free:
-                return filled ? PillieTheme.verifiedGreen : PillieTheme.sage
+                RoutineDialRing.SegmentColors(fill: PillieTheme.verifiedGreen, track: PillieTheme.sage)
             case .patch:
-                return filled ? methodColor : Self.patchEmpty
+                RoutineDialRing.SegmentColors(fill: methodColor, track: Self.patchEmpty)
             case .ring where segment <= RoutineDialDay.wearingDays:
-                return filled ? methodColor : Self.ringEmpty
+                RoutineDialRing.SegmentColors(fill: methodColor, track: Self.ringEmpty)
             case .ring:
-                return filled ? PillieTheme.verifiedGreen : Self.ringOutEmpty
+                RoutineDialRing.SegmentColors(fill: PillieTheme.verifiedGreen, track: Self.ringOutEmpty)
             }
         }
     }
