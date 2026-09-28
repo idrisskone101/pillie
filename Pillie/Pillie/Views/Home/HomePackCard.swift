@@ -7,10 +7,15 @@ import SwiftUI
 
 /// Home's pill pack. Logging today flips its mark, and PackCard pops the tile, wherever the log came from.
 struct HomePackCard: View {
+    /// A log made while Home is covered or in the background waits here, so its pop plays once Home is seen.
+    let holdsTodayLog: Bool
+
     @Environment(PillStore.self) private var store
     @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
     @Environment(\.locale) private var locale
+    @Environment(\.scenePhase) private var scenePhase
     @State private var showsNewPackConfirmation = false
+    @State private var heldTaken: Bool?
     private let homeFeedback = HomeActionInteractionFeedback()
 
     var body: some View {
@@ -21,7 +26,7 @@ struct HomePackCard: View {
         let progress = HomePackProgress(
             regimen: pack.regimen,
             elapsedDays: pack.elapsedCycleDays(on: today),
-            isTodayTaken: store.isTodayTaken,
+            isTodayTaken: heldTaken ?? store.isTodayTaken,
             today: today,
             calendar: .current
         )
@@ -44,6 +49,9 @@ struct HomePackCard: View {
                 isTakenToday: progress.status == .taken,
                 onStartNew: { showsNewPackConfirmation = true }
             )
+        }
+        .onChange(of: holdsTodayLog || scenePhase != .active, initial: true) { _, holds in
+            heldTaken = holds ? store.isTodayTaken : nil
         }
         .alert(startNewConfirmation.title, isPresented: $showsNewPackConfirmation) {
             Button(PillieLocalization.string("today.pack.start_new.confirm", locale: locale)) {
@@ -117,7 +125,7 @@ private struct HomePackHeader: View {
 }
 
 #Preview {
-    HomePackCard()
+    HomePackCard(holdsTodayLog: false)
         .padding()
         .background(PillieTheme.bg)
         .environment(PillStore.previewStore())
