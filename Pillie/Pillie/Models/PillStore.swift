@@ -855,6 +855,18 @@ class PillStore {
         scheduleSnapshot(for: date)?.status
     }
 
+    func doseStanding(on day: Date) -> DoseStanding? {
+        guard let snapshot = scheduleSnapshot(for: day), let status = snapshot.status else { return nil }
+        return DoseStanding.resolve(
+            action: snapshot.dueAction?.type,
+            status: status,
+            day: snapshot.date,
+            now: PillieClock.now,
+            reminderHour: reminderHour,
+            reminderMinute: reminderMinute
+        )
+    }
+
     func actionTypeForDate(_ date: Date) -> PillDay.ActionType? {
         scheduleSnapshot(for: date)?.actionType
     }
