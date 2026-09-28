@@ -195,6 +195,27 @@ final class TodayPillCommitTests: XCTestCase {
         XCTAssertTrue(store.isTodayTaken)
         XCTAssertEqual(harness.recorder.completions, [.onboarding])
     }
+
+    func testEveryPackSheetPresetSavesIntoTheSchedule() throws {
+        let now = InMemoryStoreFactory.localDate("2026-09-27", hour: 12, minute: 24)
+        let expected: [(PillPack.PillRegimenPreset, PackRegimen)] = [
+            (.twentyOneSeven, PackRegimen(activeDays: 21, breakDays: 7)),
+            (.twentyOneOnly, PackRegimen(activeDays: 21, breakDays: 7, breakKind: .noPills)),
+            (.twentyFourFour, PackRegimen(activeDays: 24, breakDays: 4)),
+            (.twentySixTwo, PackRegimen(activeDays: 26, breakDays: 2)),
+            (.everyDay, PackRegimen(activeDays: 28, breakDays: 0)),
+            (.twentyOneFour, PackRegimen(activeDays: 21, breakDays: 4, breakKind: .noPills)),
+        ]
+
+        for (preset, regimen) in expected {
+            let harness = try makeHarness(now: now, reminderHour: 20, name: "\(#function).\(preset.rawValue)")
+
+            harness.commit(pick(0, .notYet, preset))
+
+            XCTAssertEqual(harness.store.pack.pillRegimen, preset, "\(preset)")
+            XCTAssertEqual(harness.store.pack.regimen, regimen, "\(preset)")
+        }
+    }
 }
 
 private final class CompletionRecorder: AnalyticsTracking {

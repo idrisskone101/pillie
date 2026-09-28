@@ -118800,6 +118800,2481 @@
           }
         }
       }
+    },
+    "onboarding.pack_sheet.title": {
+      "comment": "Onboarding pack type sheet title [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Which pack looks like yours?"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أي شريط يشبه شريطك؟"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "কোন প্যাকটা তোমারটার মতো দেখতে?"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quin blíster s'assembla al teu?"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Který blistr vypadá jako ten tvůj?"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hvilken pakning ligner din?"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Welcher Blister sieht aus wie deiner?"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ποιο πακέτο μοιάζει με το δικό σου;"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Qué blíster se parece al tuyo?"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mikä liuska näyttää sinun liuskaltasi?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quelle plaquette ressemble à la tienne ?"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "કયું પેક તારા પેક જેવું લાગે છે?"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "איזו חפיסה נראית כמו שלך?"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "कौन-सा पैक तुम्हारे पैक जैसा दिखता है?"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Koje pakiranje izgleda kao tvoje?"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Melyik csomag hasonlít a tiédre?"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kemasan mana yang mirip punyamu?"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quale blister somiglia al tuo?"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "あなたのシートに近いのはどれですか？"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ಯಾವ ಪ್ಯಾಕ್ ನಿನ್ನದರಂತೆ ಕಾಣುತ್ತದೆ?"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "내 약 패키지와 비슷한 건 어느 것인가요?"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ഏത് പായ്ക്കാണ് നിന്റേത് പോലെ?"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "कोणतं पॅक तुझ्या पॅकसारखं दिसतं?"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bungkusan mana yang mirip bungkusan kamu?"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hvilken pakning ligner din?"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Welke strip lijkt op die van jou?"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "କେଉଁ ପାକ୍ ତୁମ ପାକ୍ ପରି ଦେଖାଯାଏ?"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਕਿਹੜਾ ਪੈਕ ਤੇਰੇ ਪੈਕ ਵਰਗਾ ਲੱਗਦਾ ਹੈ?"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Które opakowanie wygląda jak twoje?"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Qual cartela parece com a sua?"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Que cartela se parece com a tua?"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Care pachet seamănă cu al tău?"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Какая упаковка похожа на твою?"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ktorý blister vyzerá ako ten tvoj?"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Katero pakiranje je podobno tvojemu?"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vilken förpackning liknar din?"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "எந்த பாக் உன்னுடையதைப் போல் இருக்கிறது?"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ఏ ప్యాక్ నీ ప్యాక్‌లా ఉంది?"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "แผงยาแบบไหนเหมือนของคุณ"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hangi paket seninkine benziyor?"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Яка упаковка схожа на твою?"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "کون سا پیک تمہارے پیک جیسا لگتا ہے؟"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vỉ nào giống vỉ của bạn?"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "哪种药板和你的一样？"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "哪種藥板和你的一樣？"
+          }
+        }
+      }
+    },
+    "onboarding.pack_sheet.subtitle": {
+      "comment": "Onboarding pack type sheet subtitle [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Match the rows of pills on your pack."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "طابقي صفوف الحبوب في شريطك."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "তোমার প্যাকের পিলের সারিগুলো মিলিয়ে নাও।"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Compara les files de píndoles del teu blíster."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Porovnej řady pilulek na svém blistru."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sammenlign rækkerne af piller på din pakning."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vergleich die Pillenreihen auf deinem Blister."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ταίριαξε τις σειρές με τα χάπια στο πακέτο σου."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fíjate en las filas de píldoras de tu blíster."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vertaa liuskasi pilleririvejä."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Compare les rangées de pilules de ta plaquette."
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "તારા પેક પરની ગોળીઓની હરોળ મેળવી જો."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "השווי את שורות הגלולות בחפיסה שלך."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "अपने पैक पर गोलियों की कतारें मिलाओ।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Usporedi redove pilula na svom pakiranju."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nézd meg a tablettasorokat a csomagodon."
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cocokkan baris pil di kemasanmu."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Confronta le file di pillole del tuo blister."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "シートの錠剤の並び方を見比べてください。"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ನಿನ್ನ ಪ್ಯಾಕ್‌ನಲ್ಲಿರುವ ಮಾತ್ರೆಗಳ ಸಾಲುಗಳನ್ನು ಹೋಲಿಸಿ ನೋಡು."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "패키지의 알약 줄 모양을 비교해 보세요."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "നിന്റെ പായ്ക്കിലെ ഗുളികകളുടെ വരികൾ ഒത്തുനോക്കൂ."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "तुझ्या पॅकवरच्या गोळ्यांच्या ओळी जुळवून बघ."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Padankan barisan pil pada bungkusan kamu."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sammenlign pillerekkene på pakningen din."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vergelijk de rijen pillen op je strip."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ତୁମ ପାକ୍‌ର ପିଲ୍ ଧାଡ଼ିଗୁଡ଼ିକୁ ମିଳାଇ ଦେଖ।"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਆਪਣੇ ਪੈਕ ਉੱਤੇ ਗੋਲੀਆਂ ਦੀਆਂ ਕਤਾਰਾਂ ਮਿਲਾ ਕੇ ਵੇਖ।"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Porównaj rzędy tabletek na swoim opakowaniu."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Compare as fileiras de pílulas da sua cartela."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Compara as filas de pílulas da tua cartela."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Compară rândurile de pilule de pe pachetul tău."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сравни ряды таблеток на своей упаковке."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Porovnaj rady tabletiek na svojom blistri."
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Primerjaj vrste tablet na svojem pakiranju."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jämför raderna med piller på din förpackning."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "உன் பாக்கில் உள்ள மாத்திரை வரிசைகளை ஒப்பிட்டுப் பார்."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "నీ ప్యాక్‌లో మాత్రల వరుసలను పోల్చి చూడు."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ดูแถวเม็ดยาบนแผงของคุณให้ตรงกัน"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paketindeki hap sıralarını karşılaştır."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Порівняй ряди таблеток на своїй упаковці."
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "اپنے پیک پر گولیوں کی قطاریں ملا کر دیکھو۔"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "So các hàng viên thuốc trên vỉ của bạn."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "对照你药板上的药片排数。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "對照你藥板上的藥片排數。"
+          }
+        }
+      }
+    },
+    "onboarding.pack_sheet.footer": {
+      "comment": "Onboarding pack type sheet footer hint [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not sure? The layout is printed on the back of the box."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لستِ متأكدة؟ الترتيب مطبوع على ظهر العلبة."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "নিশ্চিত নও? লেআউটটা বাক্সের পেছনে ছাপা আছে।"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No n'estàs segura? La distribució està impresa al dors de la capsa."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nevíš jistě? Rozložení je vytištěné na zadní straně krabičky."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I tvivl? Opsætningen står bag på æsken."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unsicher? Die Anordnung steht hinten auf der Packung."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Δεν είσαι σίγουρη; Η διάταξη είναι τυπωμένη πίσω στο κουτί."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿No estás segura? La distribución viene impresa detrás de la caja."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Etkö ole varma? Asettelu on painettu rasian takapuolelle."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas sûre ? La disposition est imprimée au dos de la boîte."
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ખાતરી નથી? લેઆઉટ બૉક્સની પાછળ છાપેલું છે."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "לא בטוחה? הסידור מודפס על גב הקופסה."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "पक्का नहीं पता? लेआउट डिब्बे के पीछे छपा होता है।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nisi sigurna? Raspored je otisnut na poleđini kutije."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nem vagy biztos benne? Az elrendezés a doboz hátulján van."
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Belum yakin? Susunannya tercetak di bagian belakang kotak."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Non sei sicura? Lo schema è stampato sul retro della scatola."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "わからないときは、箱の裏に並び方が印刷されています。"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ಖಚಿತವಿಲ್ಲವೇ? ವಿನ್ಯಾಸ ಪೆಟ್ಟಿಗೆಯ ಹಿಂಭಾಗದಲ್ಲಿ ಮುದ್ರಿತವಾಗಿದೆ."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "잘 모르겠다면 상자 뒷면에 배열이 인쇄되어 있어요."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ഉറപ്പില്ലേ? ലേഔട്ട് പെട്ടിയുടെ പിന്നിൽ അച്ചടിച്ചിട്ടുണ്ട്."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "खात्री नाही? मांडणी खोक्याच्या मागे छापलेली असते."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tak pasti? Susunannya tercetak di belakang kotak."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Usikker? Oppsettet står på baksiden av esken."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Twijfel je? De indeling staat op de achterkant van het doosje."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ନିଶ୍ଚିତ ନୁହଁ? ଲେଆଉଟ୍ ବାକ୍ସର ପଛପଟେ ଛପା ହୋଇଛି।"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਪੱਕਾ ਨਹੀਂ ਪਤਾ? ਲੇਆਉਟ ਡੱਬੇ ਦੇ ਪਿੱਛੇ ਛਪਿਆ ਹੁੰਦਾ ਹੈ।"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nie masz pewności? Układ jest wydrukowany z tyłu pudełka."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não tem certeza? O formato vem impresso no verso da caixa."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não tens a certeza? A disposição vem impressa no verso da caixa."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nu ești sigură? Aranjamentul e tipărit pe spatele cutiei."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не уверена? Схема напечатана на обороте коробки."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nie si si istá? Rozloženie je vytlačené na zadnej strane škatuľky."
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nisi prepričana? Razporeditev je natisnjena na hrbtni strani škatle."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Osäker? Uppställningen står på baksidan av kartongen."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "உறுதியாகத் தெரியவில்லையா? அமைப்பு பெட்டியின் பின்புறம் அச்சிடப்பட்டிருக்கும்."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ఖచ్చితంగా తెలియదా? లేఅవుట్ పెట్టె వెనుక ముద్రించి ఉంటుంది."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ไม่แน่ใจ ดูรูปแบบได้ที่ด้านหลังกล่อง"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Emin değil misin? Düzen kutunun arkasında yazar."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не впевнена? Схему надруковано на звороті коробки."
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "پکا یقین نہیں؟ ترتیب ڈبے کی پشت پر چھپی ہوتی ہے۔"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chưa chắc? Cách sắp xếp được in ở mặt sau hộp."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "不确定？药板排列印在药盒背面。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "不確定？藥板排列印在藥盒背面。"
+          }
+        }
+      }
+    },
+    "onboarding.pack_sheet.detail.21_7": {
+      "comment": "Pack type tile detail, ~143pt at 12pt, 2 lines max: 21 hormone pills then 7 placebo pills [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "21 pills, 7 sugar pills"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "21 حبة، 7 حبات وهمية"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "21টি পিল, 7টি সুগার পিল"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "21 píndoles, 7 de sucre"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "21 pilulek, 7 cukrových"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "21 piller, 7 sukkerpiller"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "21 Pillen, 7 Zuckerpillen"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "21 χάπια, 7 εικονικά"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "21 píldoras, 7 de azúcar"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "21 pilleriä, 7 sokeripilleriä"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "21 pilules, 7 placebos"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "21 ગોળી, 7 સુગર ગોળી"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "21 גלולות, 7 גלולות פלצבו"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "21 गोलियाँ, 7 शुगर गोलियाँ"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "21 pilula, 7 šećernih"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "21 tabletta, 7 cukortabletta"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "21 pil, 7 pil plasebo"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "21 pillole, 7 placebo"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "21錠、プラセボ7錠"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "21 ಮಾತ್ರೆಗಳು, 7 ಸಕ್ಕರೆ ಮಾತ್ರೆಗಳು"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "알약 21개, 위약 7개"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "21 ഗുളിക, 7 പഞ്ചസാര ഗുളിക"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "21 गोळ्या, 7 साखर गोळ्या"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "21 pil, 7 pil plasebo"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "21 piller, 7 sukkerpiller"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "21 pillen, 7 placebopillen"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "21 ପିଲ୍, 7 ସୁଗାର ପିଲ୍"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "21 ਗੋਲੀਆਂ, 7 ਸ਼ੂਗਰ ਗੋਲੀਆਂ"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "21 tabletek, 7 cukrowych"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "21 pílulas, 7 de placebo"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "21 pílulas, 7 de placebo"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "21 pilule, 7 placebo"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "21 таблетка, 7 плацебо"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "21 tabletiek, 7 cukrových"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "21 tablet, 7 sladkornih"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "21 piller, 7 sockerpiller"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "21 மாத்திரைகள், 7 சர்க்கரை மாத்திரைகள்"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "21 మాత్రలు, 7 షుగర్ మాత్రలు"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ยา 21 เม็ด ยาหลอก 7 เม็ด"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "21 hap, 7 şeker hapı"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "21 таблетка, 7 плацебо"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "21 گولیاں، 7 شوگر گولیاں"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "21 viên, 7 viên giả dược"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "21 片，7 片安慰剂"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "21 顆，7 顆安慰劑"
+          }
+        }
+      }
+    },
+    "onboarding.pack_sheet.detail.21_only": {
+      "comment": "Pack type tile detail, ~143pt at 12pt, 2 lines max: 21-pill pack, then a 7-day pill-free break [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Then 7 days with no pills"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ثم 7 أيام بدون حبوب"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "তারপর 7 দিন কোনো পিল নেই"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Després, 7 dies sense píndola"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pak 7 dní bez pilulky"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Så 7 dage uden piller"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Danach 7 Tage ohne Pille"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Μετά 7 μέρες χωρίς χάπι"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Luego 7 días sin píldora"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sitten 7 päivää ilman pillereitä"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Puis 7 jours sans pilule"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "પછી 7 દિવસ ગોળી વગર"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ואז 7 ימים בלי גלולות"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "फिर 7 दिन बिना गोली"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zatim 7 dana bez pilule"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Utána 7 nap tabletta nélkül"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lalu 7 hari tanpa pil"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Poi 7 giorni senza pillola"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "その後7日間はピルなし"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ನಂತರ 7 ದಿನ ಮಾತ್ರೆ ಇಲ್ಲ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이후 7일은 약 없이"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "പിന്നെ 7 ദിവസം ഗുളിക ഇല്ല"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "नंतर 7 दिवस गोळी नाही"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kemudian 7 hari tanpa pil"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Så 7 dager uten piller"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daarna 7 dagen zonder pil"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ତାପରେ 7 ଦିନ ପିଲ୍ ନାହିଁ"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਫਿਰ 7 ਦਿਨ ਬਿਨਾਂ ਗੋਲੀ"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Potem 7 dni bez tabletki"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Depois, 7 dias sem pílula"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Depois, 7 dias sem pílula"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apoi 7 zile fără pilulă"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Потом 7 дней без таблеток"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Potom 7 dní bez tabletky"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nato 7 dni brez tablete"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sedan 7 dagar utan piller"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "பிறகு 7 நாள் மாத்திரை இல்லை"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "తర్వాత 7 రోజులు మాత్ర లేదు"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "แล้วเว้นยา 7 วัน"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sonra 7 gün hapsız"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Потім 7 днів без таблеток"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "پھر 7 دن بغیر گولی"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sau đó 7 ngày không thuốc"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "之后 7 天无药片"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "之後 7 天無藥片"
+          }
+        }
+      }
+    },
+    "onboarding.pack_sheet.detail.24_4": {
+      "comment": "Pack type tile detail, ~143pt at 12pt, 2 lines max: 24 hormone pills then 4 placebo pills [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24 pills, 4 sugar pills"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24 حبة، 4 حبات وهمية"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24টি পিল, 4টি সুগার পিল"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24 píndoles, 4 de sucre"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24 pilulek, 4 cukrové"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24 piller, 4 sukkerpiller"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24 Pillen, 4 Zuckerpillen"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24 χάπια, 4 εικονικά"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24 píldoras, 4 de azúcar"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24 pilleriä, 4 sokeripilleriä"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24 pilules, 4 placebos"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24 ગોળી, 4 સુગર ગોળી"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24 גלולות, 4 גלולות פלצבו"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24 गोलियाँ, 4 शुगर गोलियाँ"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24 pilule, 4 šećerne"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24 tabletta, 4 cukortabletta"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24 pil, 4 pil plasebo"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24 pillole, 4 placebo"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24錠、プラセボ4錠"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24 ಮಾತ್ರೆಗಳು, 4 ಸಕ್ಕರೆ ಮಾತ್ರೆಗಳು"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "알약 24개, 위약 4개"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24 ഗുളിക, 4 പഞ്ചസാര ഗുളിക"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24 गोळ्या, 4 साखर गोळ्या"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24 pil, 4 pil plasebo"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24 piller, 4 sukkerpiller"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24 pillen, 4 placebopillen"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24 ପିଲ୍, 4 ସୁଗାର ପିଲ୍"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24 ਗੋਲੀਆਂ, 4 ਸ਼ੂਗਰ ਗੋਲੀਆਂ"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24 tabletki, 4 cukrowe"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24 pílulas, 4 de placebo"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24 pílulas, 4 de placebo"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24 pilule, 4 placebo"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24 таблетки, 4 плацебо"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24 tabletiek, 4 cukrové"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24 tablet, 4 sladkorne"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24 piller, 4 sockerpiller"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24 மாத்திரைகள், 4 சர்க்கரை மாத்திரைகள்"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24 మాత్రలు, 4 షుగర్ మాత్రలు"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ยา 24 เม็ด ยาหลอก 4 เม็ด"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24 hap, 4 şeker hapı"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24 таблетки, 4 плацебо"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24 گولیاں، 4 شوگر گولیاں"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24 viên, 4 viên giả dược"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24 片，4 片安慰剂"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24 顆，4 顆安慰劑"
+          }
+        }
+      }
+    },
+    "onboarding.pack_sheet.detail.26_2": {
+      "comment": "Pack type tile detail, ~143pt at 12pt, 2 lines max: 26 hormone pills then 2 placebo pills [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "26 pills, 2 sugar pills"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "26 حبة، حبتان وهميتان"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "26টি পিল, 2টি সুগার পিল"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "26 píndoles, 2 de sucre"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "26 pilulek, 2 cukrové"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "26 piller, 2 sukkerpiller"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "26 Pillen, 2 Zuckerpillen"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "26 χάπια, 2 εικονικά"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "26 píldoras, 2 de azúcar"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "26 pilleriä, 2 sokeripilleriä"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "26 pilules, 2 placebos"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "26 ગોળી, 2 સુગર ગોળી"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "26 גלולות, 2 גלולות פלצבו"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "26 गोलियाँ, 2 शुगर गोलियाँ"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "26 pilula, 2 šećerne"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "26 tabletta, 2 cukortabletta"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "26 pil, 2 pil plasebo"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "26 pillole, 2 placebo"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "26錠、プラセボ2錠"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "26 ಮಾತ್ರೆಗಳು, 2 ಸಕ್ಕರೆ ಮಾತ್ರೆಗಳು"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "알약 26개, 위약 2개"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "26 ഗുളിക, 2 പഞ്ചസാര ഗുളിക"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "26 गोळ्या, 2 साखर गोळ्या"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "26 pil, 2 pil plasebo"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "26 piller, 2 sukkerpiller"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "26 pillen, 2 placebopillen"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "26 ପିଲ୍, 2 ସୁଗାର ପିଲ୍"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "26 ਗੋਲੀਆਂ, 2 ਸ਼ੂਗਰ ਗੋਲੀਆਂ"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "26 tabletek, 2 cukrowe"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "26 pílulas, 2 de placebo"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "26 pílulas, 2 de placebo"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "26 pilule, 2 placebo"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "26 таблеток, 2 плацебо"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "26 tabletiek, 2 cukrové"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "26 tablet, 2 sladkorni"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "26 piller, 2 sockerpiller"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "26 மாத்திரைகள், 2 சர்க்கரை மாத்திரைகள்"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "26 మాత్రలు, 2 షుగర్ మాత్రలు"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ยา 26 เม็ด ยาหลอก 2 เม็ด"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "26 hap, 2 şeker hapı"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "26 таблеток, 2 плацебо"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "26 گولیاں، 2 شوگر گولیاں"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "26 viên, 2 viên giả dược"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "26 片，2 片安慰剂"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "26 顆，2 顆安慰劑"
+          }
+        }
+      }
+    },
+    "onboarding.pack_sheet.detail.28_0": {
+      "comment": "Pack type tile detail, ~143pt at 12pt, 2 lines max: 28 hormone (active) pills with no break. Describes the pack layout, not a pill type [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No break, 28 hormone pills"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "بدون استراحة، 28 حبة نشطة"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "বিরতি নেই, 28টি সক্রিয় পিল"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sense pausa, 28 píndoles actives"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bez pauzy, 28 aktivních pilulek"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ingen pause, 28 aktive piller"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ohne Pause, 28 aktive Pillen"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Χωρίς διάλειμμα, 28 ενεργά χάπια"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sin pausa, 28 píldoras activas"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ei taukoa, 28 aktiivista pilleriä"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sans pause, 28 pilules actives"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "બ્રેક નહીં, 28 સક્રિય ગોળી"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "בלי הפסקה, 28 גלולות פעילות"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "कोई ब्रेक नहीं, 28 सक्रिय गोलियाँ"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bez pauze, 28 aktivnih pilula"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Szünet nélkül, 28 aktív tabletta"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tanpa jeda, 28 pil aktif"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Senza pausa, 28 pillole attive"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "休薬なし、実薬28錠"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ವಿರಾಮ ಇಲ್ಲ, 28 ಸಕ್ರಿಯ ಮಾತ್ರೆಗಳು"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "휴약 없음, 호르몬 알약 28개"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ഇടവേള ഇല്ല, 28 സജീവ ഗുളിക"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ब्रेक नाही, 28 सक्रिय गोळ्या"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tiada rehat, 28 pil aktif"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ingen pause, 28 aktive piller"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geen pauze, 28 actieve pillen"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ବିରତି ନାହିଁ, 28 ସକ୍ରିୟ ପିଲ୍"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਕੋਈ ਬ੍ਰੇਕ ਨਹੀਂ, 28 ਸਕ੍ਰਿਯ ਗੋਲੀਆਂ"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bez przerwy, 28 aktywnych tabletek"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sem pausa, 28 pílulas ativas"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sem pausa, 28 pílulas ativas"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fără pauză, 28 de pilule active"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Без перерыва, 28 активных таблеток"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bez pauzy, 28 aktívnych tabletiek"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Brez premora, 28 aktivnih tablet"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ingen paus, 28 aktiva piller"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "இடைவெளி இல்லை, 28 செயல் மாத்திரைகள்"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "విరామం లేదు, 28 యాక్టివ్ మాత్రలు"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ไม่มีวันพัก ยาฮอร์โมน 28 เม็ด"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ara yok, 28 aktif hap"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Без перерви, 28 активних таблеток"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "کوئی وقفہ نہیں، 28 فعال گولیاں"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Không nghỉ, 28 viên hoạt chất"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "不停药，28 片含激素"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "不停藥，28 顆含激素"
+          }
+        }
+      }
+    },
+    "onboarding.pack_sheet.detail.21_4": {
+      "comment": "Pack type tile detail, ~143pt at 12pt, 2 lines max: 21 pills then a 4-day pill-free break [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shorter 4-day break"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "استراحة أقصر لمدة 4 أيام"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ছোট 4 দিনের বিরতি"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pausa més curta de 4 dies"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kratší pauza, 4 dny"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kortere pause på 4 dage"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kürzere Pause, 4 Tage"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Πιο σύντομο διάλειμμα 4 ημερών"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pausa más corta de 4 días"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lyhyempi 4 päivän tauko"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pause plus courte de 4 jours"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ટૂંકો 4 દિવસનો બ્રેક"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "הפסקה קצרה יותר, 4 ימים"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "छोटा 4 दिन का ब्रेक"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kraća pauza od 4 dana"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rövidebb, 4 napos szünet"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jeda lebih singkat, 4 hari"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pausa più breve di 4 giorni"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ピルなしは短めの4日間"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ಕಡಿಮೆ 4 ದಿನದ ವಿರಾಮ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "더 짧은 4일 휴약"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "കുറഞ്ഞ 4 ദിവസ ഇടവേള"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "छोटा 4 दिवसांचा ब्रेक"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rehat lebih singkat, 4 hari"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kortere pause på 4 dager"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kortere pauze van 4 dagen"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ଛୋଟ 4 ଦିନର ବିରତି"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਛੋਟੀ 4 ਦਿਨ ਦੀ ਬ੍ਰੇਕ"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Krótsza przerwa, 4 dni"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pausa mais curta de 4 dias"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pausa mais curta de 4 dias"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pauză mai scurtă, de 4 zile"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Короткий перерыв, 4 дня"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kratšia pauza, 4 dni"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Krajši premor, 4 dni"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kortare paus på 4 dagar"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "குறுகிய 4 நாள் இடைவெளி"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "తక్కువ 4 రోజుల విరామం"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "เว้นยาสั้นลงเหลือ 4 วัน"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daha kısa, 4 günlük ara"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Коротша перерва, 4 дні"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "چھوٹا 4 دن کا وقفہ"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nghỉ ngắn hơn, 4 ngày"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "较短的 4 天无药片期"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "較短的 4 天無藥片期"
+          }
+        }
+      }
     }
   },
   "version": "1.0"
