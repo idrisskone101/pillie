@@ -27,7 +27,7 @@ final class CycleTransitionNoticeTests: XCTestCase {
 
     private func pack(
         method: ContraceptiveMethod,
-        regimen: PillPack.PillRegimenPreset = .twentyOneSeven,
+        regimen: PillPack.PillRegimenPreset = .twentyOneOnly,
         customRegimen: PackRegimen? = nil,
         startDate: Date,
         ringInsertionDate: Date? = nil
@@ -94,13 +94,13 @@ final class CycleTransitionNoticeTests: XCTestCase {
 
     // MARK: - Fires on break-week start, per method
 
-    func testPillNoticeFiresOnFirstPlaceboDay() throws {
+    func testPillNoticeFiresOnFirstPillFreeDay() throws {
         let start = day(2026, 5, 26) // cycle day 1, active
         let pack = pack(method: .pill, startDate: start)
 
         let notice = try XCTUnwrap(notices(pack: pack, now: start).first)
         XCTAssertEqual(notice.method, .pill)
-        // 21/7: active days are 1...21, the placebo week starts on day 22 (start + 21).
+        // 21 only: active days are 1...21, the pill-free week starts on day 22 (start + 21).
         XCTAssertEqual(notice.transitionDayEpoch, Int(day(2026, 6, 16).timeIntervalSince1970))
         XCTAssertEqual(notice.fireDate, calendar.date(bySettingHour: 8, minute: 0, second: 0, of: day(2026, 6, 16)))
     }
@@ -124,6 +124,15 @@ final class CycleTransitionNoticeTests: XCTestCase {
         XCTAssertEqual(notice.method, .ring)
         // Ring: day 22 is removal; the silent off week begins day 23 (start + 22).
         XCTAssertEqual(notice.transitionDayEpoch, Int(day(2026, 6, 17).timeIntervalSince1970))
+    }
+
+    func testNoNoticeForSugarPillBreak() {
+        let start = day(2026, 5, 26)
+        let now = day(2026, 6, 10)
+        let counts = [PillPack.PillRegimenPreset.twentyOneSeven, .twentyFourFour, .twentyOneFour].map {
+            notices(pack: pack(method: .pill, regimen: $0, startDate: start), now: now).count
+        }
+        XCTAssertEqual(counts, [0, 0, 1])
     }
 
     // MARK: - Resume date

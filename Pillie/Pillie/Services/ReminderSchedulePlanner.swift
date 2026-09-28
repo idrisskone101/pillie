@@ -375,9 +375,10 @@ struct ReminderSchedulePlanner {
 
     /// Plans the free Cycle Transition Notice (#123) for the next break/off week.
     ///
-    /// Scans forward from today for the first active→break boundary (a day whose action
-    /// is a break type while the previous day is not), which lands on the first placebo
-    /// day for the pill and the first off-week day after removal for the patch/ring. The
+    /// Scans forward from today for the first active→break boundary (a silent break day
+    /// while the previous day is not), which lands on the first pill-free day for a
+    /// no-pill pack and the first off-week day after removal for the patch/ring. A
+    /// sugar-pill break keeps its daily reminder, so it gets no notice. The
     /// notice fires at the user's reminder time on that day and never coincides with an
     /// active-phase / new-pack start (those are active days, already covered by a Due
     /// Action Reminder). Continuous regimens with no break week (e.g. 28/0, 365/0) get
@@ -395,12 +396,12 @@ struct ReminderSchedulePlanner {
         let scanLimit = cycleLength * 2 + 2
 
         guard let yesterday = calendar.date(byAdding: .day, value: -1, to: today) else { return nil }
-        var previousIsBreak = isBreakDay(yesterday, pack: input.pack, calendar: calendar)
+        var previousIsBreak = isSilentBreakDay(yesterday, pack: input.pack, calendar: calendar)
 
         var cursor = today
         var transitionDay: Date?
         for _ in 0..<scanLimit {
-            let currentIsBreak = isBreakDay(cursor, pack: input.pack, calendar: calendar)
+            let currentIsBreak = isSilentBreakDay(cursor, pack: input.pack, calendar: calendar)
             if currentIsBreak && !previousIsBreak {
                 transitionDay = cursor
                 break
@@ -443,8 +444,11 @@ struct ReminderSchedulePlanner {
         )
     }
 
-    private func isBreakDay(_ date: Date, pack: PillPack, calendar: Calendar) -> Bool {
-        DoseScheduleEngine.dueAction(on: date, pack: pack, calendar: calendar)?.isBreak ?? false
+    /// A break day with nothing due. A sugar-pill day keeps its Due Action
+    /// Reminder, so a sugar break has no silence to explain.
+    private func isSilentBreakDay(_ date: Date, pack: PillPack, calendar: Calendar) -> Bool {
+        guard let action = DoseScheduleEngine.dueAction(on: date, pack: pack, calendar: calendar) else { return false }
+        return action.isBreak && !action.type.requiresUserAction
     }
 
     /// First non-break (active-phase) day strictly after `day`, i.e. the day the active
@@ -454,7 +458,7 @@ struct ReminderSchedulePlanner {
         for _ in 0..<max(0, withinDays) {
             guard let next = calendar.date(byAdding: .day, value: 1, to: cursor) else { return nil }
             cursor = next
-            if !isBreakDay(cursor, pack: pack, calendar: calendar) {
+            if !isSilentBreakDay(cursor, pack: pack, calendar: calendar) {
                 return cursor
             }
         }
