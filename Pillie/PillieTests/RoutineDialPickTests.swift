@@ -1,8 +1,3 @@
-//
-//  RoutineDialPickTests.swift
-//  PillieTests
-//
-
 // Value types only, so the Xcode 27 beta @MainActor deinit crash cannot fire.
 
 import XCTest
@@ -17,8 +12,6 @@ final class RoutineDialPickTests: XCTestCase {
         defaults.removePersistentDomain(forName: suite)
         return defaults
     }
-
-    // MARK: - Day table
 
     func testPatchTasksFallOnChangeDaysAndTheRemoveDay() {
         let tasks = (1...28).compactMap { day -> String? in
@@ -49,8 +42,6 @@ final class RoutineDialPickTests: XCTestCase {
         XCTAssertEqual(RoutineDialDay.day(28, method: .patch).phase, .free)
     }
 
-    // MARK: - Pick validation
-
     func testPickAsksForAnAnswerExactlyOnTaskDays() {
         XCTAssertNotNil(RoutineDialPick(method: .patch, cycleDay: 8, answer: .taken))
         XCTAssertNotNil(RoutineDialPick(method: .patch, cycleDay: 22, answer: .notYet))
@@ -72,8 +63,6 @@ final class RoutineDialPickTests: XCTestCase {
         XCTAssertEqual(RoutineDialPick(method: .ring, cycleDay: 1, answer: .notYet)?.logsAnAction, false)
         XCTAssertEqual(RoutineDialPick(method: .ring, cycleDay: 10, answer: nil)?.logsAnAction, false)
     }
-
-    // MARK: - Draft
 
     func testDraftRoundTripsThroughDefaultsAndClears() throws {
         let defaults = try defaults("draft")
@@ -105,8 +94,6 @@ final class RoutineDialPickTests: XCTestCase {
         XCTAssertNil(OnboardingTodayPick.load(method: .ring, from: defaults))
         XCTAssertEqual(OnboardingTodayPick.load(method: .pill, from: defaults), .pill(pill))
     }
-
-    // MARK: - Selection
 
     func testPatchSegmentKeepsTheDialDayAndClearsTheAnswer() {
         var selection = RoutineDialSelection(method: .patch, cycleDay: 8)

@@ -60,7 +60,6 @@ struct ProtectionPlanReminderTimeView: View {
                 )
             )
         case .dial(let pick):
-            // The store is written only when this step commits, so the day comes from the pick.
             return routineSummary(
                 method: pick.method.contraceptiveMethod,
                 scheduleSummary: pick.method.contraceptiveMethod.routineDescriptor,

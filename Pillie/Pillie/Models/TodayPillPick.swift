@@ -11,8 +11,6 @@ struct TodayPillPick: Codable, Equatable {
         case taken
         case notYet
 
-        /// A "taken" answer belongs to the dose window open now, which runs from the
-        /// last reminder; anything else anchors on the calendar day.
         static func anchorDay(
             for answer: Answer?,
             now: Date,

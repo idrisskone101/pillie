@@ -946,7 +946,6 @@ class PillStore {
             activePack.method = method
             activePack.setPillRegimen(method == .pill ? regimen : .twentyOneSeven, customRegimen: customRegimen)
             activePack.startDate = startDate
-            // A pinned ring anchor would keep the old schedule; the next taken record re-pins it.
             activePack.ringInsertionDate = nil
             activePack.cycleDayAnchorIndex = PillPack.normalizedCycleDayAnchorIndex(
                 cycleDayAnchorIndex,

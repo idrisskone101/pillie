@@ -1,8 +1,3 @@
-//
-//  RoutineDialDay.swift
-//  Pillie
-//
-
 import Foundation
 
 enum RoutineDialMethod: String, Codable, CaseIterable {
@@ -25,8 +20,6 @@ enum RoutineDialMethod: String, Codable, CaseIterable {
     }
 }
 
-/// One day of the fixed 28-day patch or ring cycle: 21 wearing days, then 7 free.
-/// The one table the dial step reads, kept in step with DoseScheduleEngine.
 struct RoutineDialDay: Equatable {
     enum Phase: Equatable {
         case wearing

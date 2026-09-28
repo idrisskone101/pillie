@@ -1,8 +1,3 @@
-//
-//  RoutineDialCommitTests.swift
-//  PillieTests
-//
-
 import XCTest
 
 @testable import Pillie
@@ -67,9 +62,6 @@ final class RoutineDialCommitTests: XCTestCase {
         }
     }
 
-    /// Commits every cycle day and reads back the day Home shows. A "Yes" belongs to
-    /// the window open now; any other pick belongs to today's window, which opens at
-    /// the reminder.
     private func assertEveryDialDayLandsOnHome(_ method: RoutineDialMethod, now: Date, answer: TodayPillPick.Answer) throws {
         let harness = try makeHarness(now: now, name: "\(method).\(now.timeIntervalSince1970).\(answer)")
         let store = harness.store

@@ -1,8 +1,3 @@
-//
-//  RoutineDialView.swift
-//  Pillie
-//
-
 import SwiftUI
 
 struct RoutineDialView: View {
@@ -173,7 +168,6 @@ struct RoutineDialView: View {
                     .multilineTextAlignment(.center)
                     .lineLimit(2)
                     .minimumScaleFactor(0.85)
-                    // The subtitle sits low in the circle, where the chord is narrower.
                     .frame(maxWidth: metrics.radius * 1.2)
             }
             .frame(width: metrics.radius * 2 - 40)
@@ -225,8 +219,6 @@ struct RoutineDialView: View {
     }
 }
 
-/// Paper's dial colors. The wearing weeks take the method color and the free week
-/// takes sage; a "Yes" turns the knob sage too.
 private struct RoutineDialPalette {
     let method: RoutineDialMethod
     let phase: RoutineDialDay.Phase

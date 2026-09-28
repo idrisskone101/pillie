@@ -1,8 +1,3 @@
-//
-//  RoutineDialTypes.swift
-//  Pillie
-//
-
 import Foundation
 
 struct RoutineDialSelection: Equatable {
@@ -35,7 +30,6 @@ struct RoutineDialSelection: Equatable {
         RoutineDialPick(method: method, cycleDay: cycleDay, answer: answer)
     }
 
-    /// Patch only: 0...3, where 3 is the off week.
     var patchSegment: Int {
         (cycleDay - 1) / RoutineDialDay.daysPerPatch
     }
@@ -47,7 +41,6 @@ struct RoutineDialSelection: Equatable {
         }
     }
 
-    /// Where the knob sits: the day within the patch segment, or the ring's cycle day.
     var dialDay: Int {
         switch method {
         case .patch: (cycleDay - 1) % RoutineDialDay.daysPerPatch + 1
@@ -80,8 +73,6 @@ struct RoutineDialSelection: Equatable {
     }
 }
 
-/// Every line the dial step shows, read off the selected day. Dates are calendar
-/// days counted from `today`, which is the selected cycle day.
 struct RoutineDialCopy {
     enum Status: Equatable {
         case logged(String)
@@ -240,7 +231,6 @@ struct RoutineDialCopy {
     private static let removeDay = RoutineDialDay.wearingDays + 1
     private static let nextCycleDay = RoutineDialDay.cycleLength + 1
 
-    /// The patch on the body, or the last one worn once the off week starts.
     private var patchNumber: Int {
         day.patchNumber ?? RoutineDialDay.patchCount
     }

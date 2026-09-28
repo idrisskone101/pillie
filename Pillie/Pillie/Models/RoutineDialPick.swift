@@ -1,8 +1,3 @@
-//
-//  RoutineDialPick.swift
-//  Pillie
-//
-
 import Foundation
 import os
 

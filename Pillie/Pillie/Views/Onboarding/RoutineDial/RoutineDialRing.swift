@@ -1,12 +1,5 @@
-//
-//  RoutineDialRing.swift
-//  Pillie
-//
-
 import SwiftUI
 
-/// A segmented ring with a knob at the end of the selected segment. Drag or tap
-/// anywhere on the ring to move the knob; segment 1 starts at twelve o'clock.
 struct RoutineDialRing: View {
     struct Metrics {
         let size: CGFloat
@@ -88,7 +81,6 @@ struct RoutineDialRing: View {
         var degrees = atan2(dx, -dy) * 180 / .pi
         if degrees < 0 { degrees += 360 }
         var day = min(max(Int((degrees / segmentDegrees).rounded(.up)), 1), count)
-        // A drag across twelve o'clock stops at the end instead of wrapping around.
         if continuing {
             let quarter = max(1, count / 4)
             if position > count - quarter && day <= quarter { day = count }
@@ -130,8 +122,6 @@ private struct RingBand: Shape {
     }
 }
 
-/// Moves the knob along the circle, so an animated jump follows the ring instead
-/// of cutting across it.
 private struct OrbitEffect: GeometryEffect {
     var degrees: Double
     let radius: CGFloat
