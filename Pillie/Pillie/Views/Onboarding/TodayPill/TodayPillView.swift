@@ -193,9 +193,9 @@ private struct TodayPillPackHeader: View {
                         .frame(width: 24, height: 24)
                 }
             }
-                .frame(width: 44, height: 44)
-                .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(PillieTheme.coralLight))
-                .accessibilityHidden(true)
+            .frame(width: 44, height: 44)
+            .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(PillieTheme.coralLight))
+            .accessibilityHidden(true)
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(pack.displayName())
