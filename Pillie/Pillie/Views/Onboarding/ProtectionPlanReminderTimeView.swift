@@ -13,7 +13,7 @@ import SwiftUI
 
 struct ProtectionPlanReminderTimeView: View {
     let progress: ProtectionPlanProgress
-    let todayPillPick: TodayPillPick?
+    let todayPick: OnboardingTodayPick?
     let onBack: () -> Void
     let onContinue: () -> Void
 
@@ -50,24 +50,35 @@ struct ProtectionPlanReminderTimeView: View {
     }
 
     private var summary: ProtectionPlanRoutineSummary {
-        if let todayPillPick {
+        switch todayPick {
+        case .pill(let pick):
             let selection = ReminderTimeConverter.hourAndMinute(from: selectedTime)
             return ProtectionPlanRoutineSummary(
                 method: .pill,
                 todayPill: TodayPillPlan(
-                    pick: todayPillPick,
+                    pick: pick,
                     reminderHour: selection.hour,
                     reminderMinute: selection.minute
                 )
             )
+        case .dial(let pick):
+            // The store is written only when this step commits, so the day comes from the pick.
+            return ProtectionPlanRoutineSummary(
+                method: pick.method.contraceptiveMethod,
+                scheduleSummary: pick.method.contraceptiveMethod.routineDescriptor,
+                cycleDay: pick.cycleDay,
+                reminderTimeText: liveTimeText,
+                locale: .current
+            )
+        case nil:
+            return ProtectionPlanRoutineSummary(
+                method: store.contraceptiveMethod,
+                scheduleSummary: scheduleSummaryText,
+                cycleDay: store.pack.cycleDayIndex(on: store.today) + 1,
+                reminderTimeText: liveTimeText,
+                locale: .current
+            )
         }
-        return ProtectionPlanRoutineSummary(
-            method: store.contraceptiveMethod,
-            scheduleSummary: scheduleSummaryText,
-            cycleDay: store.pack.cycleDayIndex(on: store.today) + 1,
-            reminderTimeText: liveTimeText,
-            locale: .current
-        )
     }
 
     private var protectionLine: String {
@@ -191,7 +202,7 @@ struct ProtectionPlanReminderTimeView: View {
         guard !isCommitting else { return }
         isCommitting = true
         let selection = ReminderTimeConverter.hourAndMinute(from: selectedTime)
-        OnboardingReminderCommit.live(store: store, telemetry: onboardingTelemetry, todayPillPick: todayPillPick)
+        OnboardingReminderCommit.live(store: store, telemetry: onboardingTelemetry, todayPick: todayPick)
             .run(hour: selection.hour, minute: selection.minute) {
                 isCommitting = false
                 onContinue()
@@ -214,7 +225,7 @@ struct ProtectionPlanReminderTimeView: View {
 #Preview {
     ProtectionPlanReminderTimeView(
         progress: ProtectionPlanProgressIndex.progress(for: .reminderTime),
-        todayPillPick: TodayPillPick(pack: PackChoice(preset: .twentyOneSeven), dayIndex: 11, answer: .taken),
+        todayPick: TodayPillPick(pack: PackChoice(preset: .twentyOneSeven), dayIndex: 11, answer: .taken).map(OnboardingTodayPick.pill),
         onBack: {},
         onContinue: {}
     )
