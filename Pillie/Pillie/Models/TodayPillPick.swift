@@ -10,6 +10,23 @@ struct TodayPillPick: Codable, Equatable {
     enum Answer: String, Codable {
         case taken
         case notYet
+
+        /// A "taken" answer belongs to the dose window open now, which runs from the
+        /// last reminder; anything else anchors on the calendar day.
+        static func anchorDay(
+            for answer: Answer?,
+            now: Date,
+            reminderHour: Int,
+            reminderMinute: Int,
+            calendar: Calendar = .current
+        ) -> Date {
+            switch answer {
+            case .taken:
+                return LiveDoseDay.on(now, reminderHour: reminderHour, reminderMinute: reminderMinute, calendar: calendar)
+            case .notYet, nil:
+                return calendar.startOfDay(for: now)
+            }
+        }
     }
 
     let pack: PackChoice
@@ -41,12 +58,7 @@ struct TodayPillPick: Codable, Equatable {
         reminderMinute: Int,
         calendar: Calendar = .current
     ) -> Date {
-        switch answer {
-        case .taken:
-            return LiveDoseDay.on(now, reminderHour: reminderHour, reminderMinute: reminderMinute, calendar: calendar)
-        case .notYet, nil:
-            return calendar.startOfDay(for: now)
-        }
+        Answer.anchorDay(for: answer, now: now, reminderHour: reminderHour, reminderMinute: reminderMinute, calendar: calendar)
     }
 
     static let storageKey = "pillie_onboarding_today_pill_pick"
