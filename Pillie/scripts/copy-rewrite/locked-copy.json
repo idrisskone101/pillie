@@ -2490,6 +2490,136 @@
       "en": "Tomorrow, %@",
       "de": "Morgen, %@",
       "it": "Domani, %@"
+    },
+    {
+      "issue": "ENG-150",
+      "table": "Localizable",
+      "key": "shake.streak.headline.start",
+      "create": true,
+      "comment": "Shake confirm headline before the first shake, when there is a streak to keep [standard]",
+      "en": "Shake to keep it going",
+      "de": "Schüttel für deinen Streak",
+      "it": "Scuoti per tenere la streak"
+    },
+    {
+      "issue": "ENG-150",
+      "table": "Localizable",
+      "key": "shake.streak.headline.keep_going",
+      "create": true,
+      "comment": "Shake confirm headline after the first shake [standard]",
+      "en": "Keep going",
+      "de": "Weiter so",
+      "it": "Continua così"
+    },
+    {
+      "issue": "ENG-150",
+      "table": "Localizable",
+      "key": "shake.streak.headline.almost",
+      "create": true,
+      "comment": "Shake confirm headline after the second shake [standard]",
+      "en": "Almost there",
+      "de": "Fast geschafft",
+      "it": "Ci sei quasi"
+    },
+    {
+      "issue": "ENG-150",
+      "table": "Localizable",
+      "key": "shake.streak.headline.kept",
+      "create": true,
+      "comment": "Shake confirm headline once the dose is logged and the streak grows [standard]",
+      "en": "Streak kept",
+      "de": "Streak gehalten",
+      "it": "Streak mantenuta"
+    },
+    {
+      "issue": "ENG-150",
+      "table": "Localizable",
+      "key": "shake.streak.headline.counting",
+      "create": true,
+      "comment": "Shake confirm headline after the first shake; the number is the current streak",
+      "en": "%lld and counting",
+      "de": "%lld und es geht weiter",
+      "it": "%lld e si continua"
+    },
+    {
+      "issue": "ENG-150",
+      "table": "Localizable",
+      "key": "shake.streak.headline.almost_count",
+      "create": true,
+      "comment": "Shake confirm headline after the second shake; the number is the streak it is about to reach",
+      "en": "Almost %lld",
+      "de": "Fast %lld",
+      "it": "Quasi %lld"
+    },
+    {
+      "issue": "ENG-150",
+      "table": "Localizable",
+      "key": "shake.logged.take_pill",
+      "create": true,
+      "comment": "Chip after a pill is logged from the shake confirm; pill number in the pack, then a short time like 8:02 PM",
+      "en": "Pill %1$lld logged at %2$@",
+      "de": "Pille %1$lld um %2$@ eingetragen",
+      "it": "Pillola %1$lld registrata alle %2$@"
+    },
+    {
+      "issue": "ENG-150",
+      "table": "Localizable",
+      "key": "shake.logged.apply_patch",
+      "create": true,
+      "comment": "Chip after the first patch of a cycle is logged; %@ is a short time",
+      "en": "Patch applied at %@",
+      "de": "Pflaster um %@ aufgeklebt",
+      "it": "Cerotto applicato alle %@"
+    },
+    {
+      "issue": "ENG-150",
+      "table": "Localizable",
+      "key": "shake.logged.change_patch",
+      "create": true,
+      "comment": "Chip after a patch change is logged; %@ is a short time",
+      "en": "Patch changed at %@",
+      "de": "Pflaster um %@ gewechselt",
+      "it": "Cerotto cambiato alle %@"
+    },
+    {
+      "issue": "ENG-150",
+      "table": "Localizable",
+      "key": "shake.logged.remove_patch",
+      "create": true,
+      "comment": "Chip after the patch is removed for the patch-free week; %@ is a short time",
+      "en": "Patch removed at %@",
+      "de": "Pflaster um %@ abgenommen",
+      "it": "Cerotto tolto alle %@"
+    },
+    {
+      "issue": "ENG-150",
+      "table": "Localizable",
+      "key": "shake.logged.insert_ring",
+      "create": true,
+      "comment": "Chip after the first ring is inserted; %@ is a short time",
+      "en": "Ring inserted at %@",
+      "de": "Ring um %@ eingesetzt",
+      "it": "Anello inserito alle %@"
+    },
+    {
+      "issue": "ENG-150",
+      "table": "Localizable",
+      "key": "shake.logged.change_ring",
+      "create": true,
+      "comment": "Chip after a new ring replaces the old one; %@ is a short time",
+      "en": "Ring changed at %@",
+      "de": "Ring um %@ gewechselt",
+      "it": "Anello cambiato alle %@"
+    },
+    {
+      "issue": "ENG-150",
+      "table": "Localizable",
+      "key": "shake.logged.remove_ring",
+      "create": true,
+      "comment": "Chip after the ring is removed for the ring-free week; %@ is a short time",
+      "en": "Ring removed at %@",
+      "de": "Ring um %@ rausgenommen",
+      "it": "Anello tolto alle %@"
     }
   ]
 }
