@@ -868,6 +868,58 @@ class PillStore {
         )
     }
 
+    // MARK: - Catch-up
+
+    /// The missed patch or ring task whose catch-up window covers today, logged late or not.
+    var catchUp: CatchUp? {
+        guard !isRefillDue, let method = RoutineDialMethod(pack.method) else { return nil }
+        let live = pack
+        let cycleDay = live.elapsedCycleDays(on: today) + 1
+        guard let taskDay = CatchUpWindow.taskDay(on: cycleDay, method: method),
+              let date = Calendar.current.date(byAdding: .day, value: taskDay - cycleDay, to: today),
+              let snapshot = scheduleSnapshot(for: date),
+              snapshot.pack.id == live.id,
+              snapshot.status == .missed,
+              let action = snapshot.dueAction,
+              action.type.enforcesAdherence else { return nil }
+        return CatchUp(action: action, caughtUpAt: caughtUpAt(on: date))
+    }
+
+    /// The missed task Home's button can still log today.
+    var openCatchUp: DoseScheduleAction? {
+        guard let catchUp, catchUp.caughtUpAt == nil else { return nil }
+        return catchUp.action
+    }
+
+    /// Whether the window's missed task was logged late during today's live day.
+    var isCaughtUpToday: Bool {
+        guard let caughtUpAt = catchUp?.caughtUpAt else { return false }
+        return isOnLiveDay(caughtUpAt)
+    }
+
+    func caughtUpAt(on date: Date) -> Date? {
+        let day = startOfDaySafe(date)
+        guard let snapshot = scheduleSnapshot(for: day) else { return nil }
+        return dayRecord(forPackID: snapshot.pack.id, epochDay: epochDay(for: day))?.caughtUpAt
+    }
+
+    func isOnLiveDay(_ instant: Date) -> Bool {
+        LiveDoseDay.on(instant, reminderHour: reminderHour, reminderMinute: reminderMinute) == today
+    }
+
+    /// Logs the missed task late. The day keeps `.missed`, written explicitly, so streak and adherence still count the miss.
+    func logCatchUp() {
+        guard let action = openCatchUp else { return }
+        upsertDayRecord(in: pack, day: action.date, status: .missed, actionType: action.type, caughtUpAt: PillieClock.now)
+        protocolChangeVersion &+= 1
+    }
+
+    func undoCatchUp() {
+        guard let catchUp, catchUp.caughtUpAt != nil else { return }
+        upsertDayRecord(in: pack, day: catchUp.action.date, status: .missed, actionType: catchUp.action.type)
+        protocolChangeVersion &+= 1
+    }
+
     func actionTypeForDate(_ date: Date) -> PillDay.ActionType? {
         scheduleSnapshot(for: date)?.actionType
     }
@@ -1669,17 +1721,20 @@ class PillStore {
             })
     }
 
+    /// Every write sets `caughtUpAt`, so a log or a History correction clears an earlier catch-up.
     private func upsertDayRecord(
         in pack: PillPack,
         day: Date,
         status: PillDay.Status,
-        actionType: PillDay.ActionType
+        actionType: PillDay.ActionType,
+        caughtUpAt: Date? = nil
     ) {
         let dayEpoch = epochDay(for: day)
         if let existing = existingDayRecord(in: pack, day: day, epochDay: dayEpoch) {
             existing.date = day
             existing.status = status
             existing.actionType = actionType
+            existing.caughtUpAt = caughtUpAt
             index(dayRecord: existing, forPackID: pack.id, epochDay: dayEpoch)
         } else {
             let newDay = PillDay(
@@ -1688,6 +1743,7 @@ class PillStore {
                 actionType: actionType,
                 pack: pack
             )
+            newDay.caughtUpAt = caughtUpAt
             modelContext.insert(newDay)
             index(dayRecord: newDay, forPackID: pack.id, epochDay: dayEpoch)
         }

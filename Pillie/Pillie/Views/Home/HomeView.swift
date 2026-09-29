@@ -19,6 +19,8 @@ struct HomeView: View {
     @State private var hasAnimatedIn = false
     @State private var showRefillConfirmation = false
     @State private var showShakeConfirm = false
+    /// The action the shake cover confirms, kept while it closes: a late log clears `openCatchUp` at once.
+    @State private var shakeAction: DoseScheduleAction?
     /// Holds the pack card's pop until the shake cover has slid away, so the log is seen landing.
     @State private var holdsPackCardLog = false
     @State private var showBlockingSetup = false
@@ -332,7 +334,9 @@ struct HomeView: View {
                 isTodayTaken: store.isTodayTaken,
                 todayDueAction: store.todayDueAction,
                 isPlus: SubscriptionManager.shared.hasPlusAccess,
-                reduceMotionEnabled: accessibilityReduceMotion
+                reduceMotionEnabled: accessibilityReduceMotion,
+                catchUp: store.openCatchUp,
+                isCaughtUpToday: store.isCaughtUpToday
             )
         )
     }
@@ -628,8 +632,11 @@ struct HomeView: View {
                 onDismiss: { showTrialKeepPlusPaywall = false }
             )
         }
-        .fullScreenCover(isPresented: $showShakeConfirm, onDismiss: { holdsPackCardLog = false }) {
-            if let action = store.todayDueAction {
+        .fullScreenCover(isPresented: $showShakeConfirm, onDismiss: {
+            holdsPackCardLog = false
+            shakeAction = nil
+        }) {
+            if let action = shakeAction ?? store.todayDueAction {
                 ShakeConfirmView(
                     action: action,
                     onConfirm: {
@@ -700,7 +707,11 @@ struct HomeView: View {
                         accessibilityReduceMotion: accessibilityReduceMotion
                     )
                     withAnimation(feedbackResponse.motionProfile.animation) {
-                        store.unmarkTodayAsTaken()
+                        if store.isTodayTaken {
+                            store.unmarkTodayAsTaken()
+                        } else {
+                            store.undoCatchUp()
+                        }
                     }
                     ProductAnalyticsTelemetry.live.todayActionUndone()
                 } label: {
@@ -741,10 +752,11 @@ struct HomeView: View {
                 .buttonStyle(PillieTakenButtonStyle())
                 .allowsHitTesting(false)
                 .transition(ctaStateTransition)
-            case .dueAction(_, let requiresShakeConfirm):
+            case .dueAction(let action, let requiresShakeConfirm):
                 Button {
                     ProductAnalyticsTelemetry.live.todayActionStarted()
                     if requiresShakeConfirm {
+                        shakeAction = action
                         holdsPackCardLog = true
                         showShakeConfirm = true
                     } else {
@@ -778,6 +790,7 @@ struct HomeView: View {
         .animation(unifiedStateTransition, value: store.isTodayTaken)
         .animation(unifiedStateTransition, value: store.isRefillDue)
         .animation(unifiedStateTransition, value: store.todayDueAction == nil)
+        .animation(unifiedStateTransition, value: store.openCatchUp == nil)
     }
 
     private func accessibilityFloatingButtonLabel(_ label: String) -> some View {
@@ -812,7 +825,11 @@ struct HomeView: View {
             accessibilityReduceMotion: accessibilityReduceMotion
         )
         withAnimation(feedbackResponse.motionProfile.animation) {
-            store.markTodayAsTaken()
+            if store.todayDueAction == nil, store.openCatchUp != nil {
+                store.logCatchUp()
+            } else {
+                store.markTodayAsTaken()
+            }
         }
         ProductAnalyticsTelemetry.live.todayActionCompleted()
     }
