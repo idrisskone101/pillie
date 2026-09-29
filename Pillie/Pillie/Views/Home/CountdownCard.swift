@@ -267,6 +267,9 @@ private struct CheckShape: Shape {
     let end: CGPoint
     let box: CGFloat
 
+    /// A check mark reads the same in right-to-left layouts; Shape mirrors by default.
+    var layoutDirectionBehavior: LayoutDirectionBehavior { .fixed }
+
     func path(in rect: CGRect) -> Path {
         let scale = min(rect.width, rect.height) / box
         func point(_ p: CGPoint) -> CGPoint {
@@ -383,6 +386,9 @@ private struct CountdownChip: View {
 
 /// Paper's 14 pt clock: a 5.4 pt circle and a hand from 12 o'clock bending to the right.
 private struct ClockGlyph: Shape {
+    /// Clock hands turn the same way in every layout direction.
+    var layoutDirectionBehavior: LayoutDirectionBehavior { .fixed }
+
     func path(in rect: CGRect) -> Path {
         let scale = min(rect.width, rect.height) / 14
         func point(_ x: CGFloat, _ y: CGFloat) -> CGPoint {
@@ -414,57 +420,55 @@ private struct MilestoneTrack: View {
     let todayTick: Tick?
     let methodColor: Color
 
-    @Environment(\.layoutDirection) private var layoutDirection
-
     /// Paper's track runs from x 12 to 12 pt short of the tray's inner edge.
-    private static let inset: CGFloat = 12
+    /// SwiftUI mirrors these coordinates in right-to-left layouts, so they stay left-to-right here.
+    static let inset: CGFloat = 12
 
     var body: some View {
-        GeometryReader { proxy in
-            let width = proxy.size.width
-            let span = width - Self.inset * 2
-            let isRightToLeft = layoutDirection == .rightToLeft
-            let x = { (position: Double) in Self.inset + span * (isRightToLeft ? 1 - position : position) }
-            ZStack(alignment: .topLeading) {
-                Path { path in
-                    path.move(to: CGPoint(x: x(0), y: 10))
-                    path.addLine(to: CGPoint(x: x(1), y: 10))
-                }
-                .stroke(CountdownColor.trackLine, style: StrokeStyle(lineWidth: 2.5, lineCap: .round))
-
-                ForEach(Array(lineSegments.enumerated()), id: \.offset) { _, segment in
+        VStack(spacing: 8) {
+            GeometryReader { proxy in
+                let span = proxy.size.width - Self.inset * 2
+                let x = { (position: Double) in Self.inset + span * position }
+                ZStack(alignment: .topLeading) {
                     Path { path in
-                        path.move(to: CGPoint(x: x(segment.from), y: 10))
-                        path.addLine(to: CGPoint(x: x(segment.to), y: 10))
+                        path.move(to: CGPoint(x: x(0), y: 10))
+                        path.addLine(to: CGPoint(x: x(1), y: 10))
                     }
-                    .stroke(color(segment.tint), style: StrokeStyle(lineWidth: 2.5, lineCap: .round))
-                }
+                    .stroke(CountdownColor.trackLine, style: StrokeStyle(lineWidth: 2.5, lineCap: .round))
 
-                if let todayTick {
-                    Capsule()
-                        .fill(color(todayTick.tint))
-                        .frame(width: 3, height: 16)
-                        .position(x: x(todayTick.position), y: 10)
-                }
+                    ForEach(Array(lineSegments.enumerated()), id: \.offset) { _, segment in
+                        Path { path in
+                            path.move(to: CGPoint(x: x(segment.from), y: 10))
+                            path.addLine(to: CGPoint(x: x(segment.to), y: 10))
+                        }
+                        .stroke(color(segment.tint), style: StrokeStyle(lineWidth: 2.5, lineCap: .round))
+                    }
 
+                    if let todayTick {
+                        Capsule()
+                            .fill(color(todayTick.tint))
+                            .frame(width: 3, height: 16)
+                            .position(x: x(todayTick.position), y: 10)
+                    }
+
+                    ForEach(milestones) { node in
+                        MilestoneNode(mark: node.milestone.mark, methodColor: methodColor)
+                            .position(x: x(node.milestone.position), y: 10)
+                            .accessibilityHidden(true)
+                    }
+                }
+            }
+            .frame(height: 20)
+
+            MilestoneLabelsLayout(positions: milestones.map(\.milestone.position)) {
                 ForEach(milestones) { node in
-                    MilestoneNode(mark: node.milestone.mark, methodColor: methodColor)
-                        .position(x: x(node.milestone.position), y: 10)
-                        .accessibilityHidden(true)
-
-                    Text(node.label)
-                        .font(.pillie(12, weight: node.milestone.isFocus ? .bold : .medium))
+                    MilestoneLabel(text: node.label, isFocus: node.milestone.isFocus)
                         .foregroundStyle(labelColor(node.milestone))
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.7)
-                        .frame(width: 64, height: 16)
-                        .position(x: x(node.milestone.position), y: 20 + 8 + 8)
                         .accessibilityIdentifier("countdownMilestone.\(node.milestone.cycleDay)")
                         .accessibilityValue(Text(verbatim: "\(node.milestone.mark)"))
                 }
             }
         }
-        .frame(height: 20 + 8 + 16)
         .padding(.top, 14)
         .padding(.bottom, 12)
         .padding(.horizontal, 16)
@@ -537,5 +541,62 @@ private extension HomeCountdownProgress.Object {
         case .sachet: "MethodIconSachet"
         case .ring: ContraceptiveMethod.ring.iconImageName
         }
+    }
+}
+
+/// Places each milestone label under its node without leaving the tray or touching a neighbour.
+private struct MilestoneLabelsLayout: Layout {
+    let positions: [Double]
+
+    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
+        let width = proposal.width ?? 290
+        let frames = frames(width: width, subviews: subviews)
+        let height = zip(subviews, frames).map { subview, frame in
+            subview.sizeThatFits(ProposedViewSize(width: frame.width, height: nil)).height
+        }.max() ?? 16
+        return CGSize(width: width, height: max(16, height))
+    }
+
+    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
+        for (subview, frame) in zip(subviews, frames(width: bounds.width, subviews: subviews)) {
+            subview.place(
+                at: CGPoint(x: bounds.minX + frame.x, y: bounds.minY),
+                proposal: ProposedViewSize(width: frame.width, height: nil)
+            )
+        }
+    }
+
+    private func frames(width: CGFloat, subviews: Subviews) -> [MilestoneLabelPlacement.Frame] {
+        let span = width - MilestoneTrack.inset * 2
+        return MilestoneLabelPlacement.frames(
+            centers: positions.map { MilestoneTrack.inset + span * $0 },
+            widths: subviews.map { ceil($0.sizeThatFits(.unspecified).width) },
+            trayWidth: width
+        )
+    }
+}
+
+/// One line when it fits, then two lines split at the last space, then two lines shrunk.
+/// A word is never broken across lines.
+private struct MilestoneLabel: View {
+    let text: String
+    let isFocus: Bool
+
+    var body: some View {
+        let stacked = text.lastIndex(of: " ").map { text.replacingCharacters(in: $0...$0, with: "\n") } ?? text
+        ViewThatFits(in: .horizontal) {
+            label(text).lineLimit(1)
+            label(stacked).lineLimit(2)
+            label(stacked).lineLimit(2).minimumScaleFactor(0.6)
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text(verbatim: text))
+    }
+
+    private func label(_ string: String) -> some View {
+        Text(verbatim: string)
+            .font(.pillie(12, weight: isFocus ? .bold : .medium))
+            .multilineTextAlignment(.center)
+            .fixedSize(horizontal: false, vertical: true)
     }
 }

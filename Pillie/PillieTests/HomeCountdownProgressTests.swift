@@ -309,3 +309,31 @@ struct HomeCountdownProgressTests {
         #expect(marks(missed) == [.missed, .upcoming, .upcoming])
     }
 }
+
+struct MilestoneLabelPlacementTests {
+    private let patchCenters: [CGFloat] = [12, 78.5, 145, 211.5, 278]
+
+    @Test func `Short labels center on their nodes, with the end labels pinned to the tray edges`() {
+        let frames = MilestoneLabelPlacement.frames(centers: patchCenters, widths: [38, 41, 40, 18, 52], trayWidth: 290)
+
+        #expect(frames == [
+            .init(x: 0, width: 38), .init(x: 58, width: 41), .init(x: 125, width: 40),
+            .init(x: 202.5, width: 18), .init(x: 238, width: 52),
+        ])
+    }
+
+    @Test func `Labels too wide for the tray share one cap and never overlap`() {
+        let frames = MilestoneLabelPlacement.frames(centers: patchCenters, widths: [86, 86, 86, 40, 60], trayWidth: 290)
+
+        #expect(frames == [
+            .init(x: 0, width: 56), .init(x: 62, width: 56), .init(x: 124, width: 56),
+            .init(x: 188, width: 40), .init(x: 234, width: 56),
+        ])
+    }
+
+    @Test func `A long last label pushes its neighbour inward instead of leaving the tray`() {
+        let frames = MilestoneLabelPlacement.frames(centers: [12, 211.5, 278], widths: [30, 50, 101], trayWidth: 290)
+
+        #expect(frames == [.init(x: 0, width: 30), .init(x: 133, width: 50), .init(x: 189, width: 101)])
+    }
+}
