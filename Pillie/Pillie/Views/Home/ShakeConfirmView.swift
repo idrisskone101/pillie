@@ -78,7 +78,7 @@ struct ShakeConfirmView: View {
         stage == .done && !isRevealed ? .torn : stage
     }
 
-    private var artwork: ShakeConfirmArtwork? { ShakeConfirmArtwork(action: action) }
+    private var clip: ShakeClip? { ShakeClip(action: action) }
     private var digits: StreakOdometerDigits {
         StreakOdometerDigits(from: streak.before, to: streak.after)
     }
@@ -89,12 +89,7 @@ struct ShakeConfirmView: View {
 
     private var eyebrow: String {
         guard action.method == .pill else {
-            let dayOfTotal = PillieLocalization.formatted(
-                "today.pack.day_of_total",
-                locale: locale,
-                arguments: Int64(action.cycleDay),
-                Int64(action.cycleLength)
-            )
+            let dayOfTotal = SettingsPresentation.cycleDay(day: action.cycleDay, total: action.cycleLength, locale: locale)
             return "\(DueActionCopy.localizedLabel(for: action, locale: locale)) · \(dayOfTotal)"
         }
         let regimen = store.pack.regimen
@@ -237,8 +232,8 @@ struct ShakeConfirmView: View {
                 .frame(width: Self.plinthDiameter, height: Self.plinthDiameter)
                 .shadow(color: PillieTheme.patchChangeRose.opacity(0.7), radius: 16, y: 16)
 
-            if let artwork {
-                ShakeStopMotionStage(clip: artwork.clip, stage: stage, onSettled: reveal(ifDone:))
+            if let clip {
+                ShakeStopMotionStage(clip: clip, stage: stage, onSettled: reveal(ifDone:))
             } else {
                 Text(action.method.emoji)
                     .font(.system(size: 96))
@@ -263,7 +258,7 @@ struct ShakeConfirmView: View {
         .padding(.leading, 16)
         .padding(.trailing, 22)
         .background(Color.white, in: RoundedRectangle(cornerRadius: PillieTheme.cardRadius))
-        .shadow(color: PillieTheme.cardShadow, radius: 7.5, y: 8)
+        .shadow(color: PillieTheme.cardShadow, radius: PillieTheme.cardShadowRadius, y: PillieTheme.cardShadowY)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(PillieLocalization.string("today.streak.title", locale: locale))
         .accessibilityValue("\(stage == .done ? streak.after : streak.before)")

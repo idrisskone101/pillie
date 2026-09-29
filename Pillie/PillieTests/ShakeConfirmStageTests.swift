@@ -72,25 +72,25 @@ struct ShakeLoggedNoteTests {
     }
 }
 
-struct ShakeConfirmArtworkTests {
+struct ShakeClipForActionTests {
     private func action(_ type: PillDay.ActionType, method: ContraceptiveMethod, cycleDay: Int = 5) -> DoseScheduleAction {
         DoseScheduleAction(date: .now, type: type, method: method, cycleDay: cycleDay, cycleLength: 28)
     }
 
     @Test func eachMethodStateOpensItsOwnWay() {
-        #expect(ShakeConfirmArtwork(action: action(.pillActive, method: .pill)) == .pillBlister)
-        #expect(ShakeConfirmArtwork(action: action(.patchChange, method: .patch, cycleDay: 1)) == .patchApply)
-        #expect(ShakeConfirmArtwork(action: action(.patchChange, method: .patch, cycleDay: 8)) == .patchChange)
-        #expect(ShakeConfirmArtwork(action: action(.patchRemove, method: .patch)) == .patchRemove)
-        #expect(ShakeConfirmArtwork(action: action(.ringInsert, method: .ring)) == .ringInsert)
-        #expect(ShakeConfirmArtwork(action: action(.ringReinsert, method: .ring)) == .ringInsert)
-        #expect(ShakeConfirmArtwork(action: action(.ringRemove, method: .ring)) == .ringRemove)
+        #expect(ShakeClip(action: action(.pillActive, method: .pill)) == .pill)
+        #expect(ShakeClip(action: action(.patchChange, method: .patch, cycleDay: 1)) == .patchApply)
+        #expect(ShakeClip(action: action(.patchChange, method: .patch, cycleDay: 8)) == .patchChange)
+        #expect(ShakeClip(action: action(.patchRemove, method: .patch)) == .patchRemove)
+        #expect(ShakeClip(action: action(.ringInsert, method: .ring)) == .ringInsert)
+        #expect(ShakeClip(action: action(.ringReinsert, method: .ring)) == .ringInsert)
+        #expect(ShakeClip(action: action(.ringRemove, method: .ring)) == .ringRemove)
     }
 
-    @Test func daysWithoutAPhysicalStepHaveNoArtwork() {
-        #expect(ShakeConfirmArtwork(action: action(.pillBreak, method: .pill)) == nil)
-        #expect(ShakeConfirmArtwork(action: action(.patchBreak, method: .patch)) == nil)
-        #expect(ShakeConfirmArtwork(action: action(.ringBreak, method: .ring)) == nil)
+    @Test func daysWithoutAPhysicalStepHaveNoClip() {
+        #expect(ShakeClip(action: action(.pillBreak, method: .pill)) == nil)
+        #expect(ShakeClip(action: action(.patchBreak, method: .patch)) == nil)
+        #expect(ShakeClip(action: action(.ringBreak, method: .ring)) == nil)
     }
 }
 
@@ -100,25 +100,24 @@ struct ShakeClipTests {
     }
 
     @Test(arguments: [
-        ShakeConfirmArtwork.pillBlister, .patchApply, .patchChange, .patchRemove, .ringInsert, .ringRemove,
+        ShakeClip.pill, .patchApply, .patchChange, .patchRemove, .ringInsert, .ringRemove,
     ])
-    func everyStageRestsOnAPoseInOrder(artwork: ShakeConfirmArtwork) {
-        let clip = artwork.clip
+    func everyStageRestsOnAPoseInOrder(clip: ShakeClip) {
         #expect(clip.stops.count == 4)
         #expect(clip.stops == clip.stops.sorted())
         #expect(clip.stops.allSatisfy(clip.poses.indices.contains))
     }
 
     @Test(arguments: [
-        (ShakeConfirmArtwork.pillBlister, 7),
+        (ShakeClip.pill, 7),
         (.patchApply, 11),
         (.patchChange, 11),
         (.patchRemove, 4),
         (.ringInsert, 4),
         (.ringRemove, 4),
     ])
-    func tappingThroughFromTheStartPlaysEveryLaterPose(artwork: ShakeConfirmArtwork, lastPose: Int) {
-        #expect(Array(artwork.clip.posesToPlay(from: 0, to: .done)) == Array(1...lastPose))
+    func tappingThroughFromTheStartPlaysEveryLaterPose(clip: ShakeClip, lastPose: Int) {
+        #expect(Array(clip.posesToPlay(from: 0, to: .done)) == Array(1...lastPose))
     }
 
     @Test func aShakeMidPlaybackCarriesOnFromThePoseOnScreen() {

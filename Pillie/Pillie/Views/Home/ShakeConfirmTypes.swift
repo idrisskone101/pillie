@@ -60,60 +60,19 @@ struct ShakeHeadline: Equatable {
     }
 }
 
-/// The line that replaces the counter once the dose is logged. Its key mirrors the
-/// `today.action.*` label Home showed for the same action.
+/// The line that replaces the counter once the dose is logged.
 struct ShakeLoggedNote: Equatable {
     let key: String
     let pillNumber: Int?
 
     init(action: DoseScheduleAction) {
-        key = DueActionCopy.key(for: action).replacingOccurrences(of: "today.action.", with: "shake.logged.")
+        key = DueActionCopy.loggedKey(for: action)
         pillNumber = action.method == .pill ? action.cycleDay : nil
     }
 
     func text(loggedAt time: String, locale: Locale) -> String {
         guard let pillNumber else { return PillieLocalization.formatted(key, locale: locale, arguments: time) }
         return PillieLocalization.formatted(key, locale: locale, arguments: Int64(pillNumber), time)
-    }
-}
-
-/// What the shake confirm opens for a dose. Each clip follows how the real
-/// method is opened (blister, patch pouch, resealable ring pouch).
-enum ShakeConfirmArtwork: Equatable {
-    case pillBlister
-    case patchApply
-    case patchChange
-    case patchRemove
-    case ringInsert
-    case ringRemove
-
-    /// Nil for actions with no physical step to show (break and active days).
-    init?(action: DoseScheduleAction) {
-        switch action.type {
-        case .pillActive, .pillSugar:
-            self = .pillBlister
-        case .patchChange:
-            self = action.cycleDay == 1 ? .patchApply : .patchChange
-        case .patchRemove:
-            self = .patchRemove
-        case .ringInsert, .ringReinsert:
-            self = .ringInsert
-        case .ringRemove:
-            self = .ringRemove
-        case .pillBreak, .patchActive, .patchBreak, .ringActive, .ringBreak:
-            return nil
-        }
-    }
-
-    var clip: ShakeClip {
-        switch self {
-        case .pillBlister: .pill
-        case .patchApply: .patchApply
-        case .patchChange: .patchChange
-        case .patchRemove: .patchRemove
-        case .ringInsert: .ringInsert
-        case .ringRemove: .ringRemove
-        }
     }
 }
 

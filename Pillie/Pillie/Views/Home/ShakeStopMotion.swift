@@ -8,7 +8,7 @@ import SwiftUI
 /// A stop-motion clip for the shake confirm: a list of poses that snap with no tween,
 /// and the pose each shake stage rests on. Methods without cut-out layers are clips
 /// whose poses are whole photos.
-struct ShakeClip {
+struct ShakeClip: Equatable {
     let poses: [StopMotionPose]
     /// The moving cut-out (pill or patch) drawn over the shell when a pose places it.
     let cutoutImage: String?
@@ -28,7 +28,7 @@ struct ShakeClip {
     }
 }
 
-struct LayerPose {
+struct LayerPose: Equatable {
     /// Offsets are fractions of the clip side so poses survive a resize.
     var x: CGFloat = 0
     var y: CGFloat = 0
@@ -36,7 +36,7 @@ struct LayerPose {
     var scale: CGFloat = 1
 }
 
-struct StopMotionPose {
+struct StopMotionPose: Equatable {
     var shell: String
     var squash: CGFloat = 1
     var cutout: LayerPose?
@@ -67,6 +67,25 @@ struct PouchOpening: Shape {
 }
 
 extension ShakeClip {
+    /// Each clip follows how the real method is opened (blister, patch pouch, resealable
+    /// ring pouch). Nil for actions with no physical step to show (break and active days).
+    init?(action: DoseScheduleAction) {
+        switch action.type {
+        case .pillActive, .pillSugar:
+            self = .pill
+        case .patchChange:
+            self = action.cycleDay == 1 ? .patchApply : .patchChange
+        case .patchRemove:
+            self = .patchRemove
+        case .ringInsert, .ringReinsert:
+            self = .ringInsert
+        case .ringRemove:
+            self = .ringRemove
+        case .pillBreak, .patchActive, .patchBreak, .ringActive, .ringBreak:
+            return nil
+        }
+    }
+
     /// Shake 1 presses and strains the foil, shake 2 seats the pill in the torn foil,
     /// shake 3 pops it before the counter takes the stage.
     static let pill = ShakeClip(
@@ -85,28 +104,17 @@ extension ShakeClip {
         stops: [0, 2, 3, 7]
     )
 
-    /// Shake 1 tears the pouch and the patch peeks out, shake 2 lays it flat on its liner.
-    static let patchApply = ShakeClip(
-        poses: patchTear(opening: "ShakeLayerPatchPouchSealed"),
-        cutoutImage: "ShakeLayerPatch",
-        side: 240,
-        stops: [0, 9, 11, 11]
-    )
-
+    static let patchApply = patchTear(opening: "ShakeLayerPatchPouchSealed")
     /// Opens on the old patch folded on the new pouch; the next pose is the bare pouch.
-    static let patchChange = ShakeClip(
-        poses: patchTear(opening: "ShakePatchFoldedOnPouch"),
-        cutoutImage: "ShakeLayerPatch",
-        side: 240,
-        stops: [0, 9, 11, 11]
-    )
+    static let patchChange = patchTear(opening: "ShakePatchFoldedOnPouch")
 
     static let patchRemove = frames("ShakePatchWorn", "ShakePatchPeeling", "ShakePatchFolded", side: 330)
     static let ringInsert = frames("ShakeRingPouchSealed", "ShakeRingPouchTorn", "ShakeRingOut", side: 240)
     static let ringRemove = frames("ShakeRingOut", "ShakeRingPouchTorn", "ShakeRingPouchResealed", side: 240)
 
-    private static func patchTear(opening: String) -> [StopMotionPose] {
-        [
+    /// Shake 1 tears the pouch and the patch peeks out, shake 2 lays it flat on its liner.
+    private static func patchTear(opening: String) -> ShakeClip {
+        ShakeClip(poses: [
             .init(shell: opening, hold: .milliseconds(350)),
             .init(shell: "ShakeLayerPatchPouchSealed", squash: 0.97, hold: .milliseconds(120)),
             .init(shell: "ShakeLayerPouchEmpty", flap: .init(), hold: .milliseconds(160)),
@@ -119,7 +127,7 @@ extension ShakeClip {
             .init(shell: "ShakeLayerPouchEmpty", cutout: .init(y: -0.06, angle: -4), cutoutInsidePouch: true, hold: .milliseconds(260)),
             .init(shell: "ShakeLayerPatchOnLiner", squash: 1.03, hold: .milliseconds(80)),
             .init(shell: "ShakeLayerPatchOnLiner", hold: .milliseconds(600)),
-        ]
+        ], cutoutImage: "ShakeLayerPatch", side: 240, stops: [0, 9, 11, 11])
     }
 
     /// Three whole photos with a squash beat into each new one, so they still read as stop-motion.

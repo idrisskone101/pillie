@@ -44,7 +44,6 @@ struct StreakOdometer: View {
         }
         .offset(y: wheel.rolls ? -cell.height * progress : -cell.height)
         .frame(width: cell.width, height: cell.height, alignment: .top)
-        .clipped()
         .background(PillieTheme.dark, in: RoundedRectangle(cornerRadius: size.cellRadius))
         .clipShape(RoundedRectangle(cornerRadius: size.cellRadius))
     }

@@ -2,21 +2,30 @@ import Foundation
 
 enum DueActionCopy {
     static func key(for action: DoseScheduleAction) -> String {
+        verb(for: action).map { "today.action.\($0)" } ?? "today.empty.title"
+    }
+
+    /// The shake confirm's "Patch changed at 8:02 PM" line for the same action.
+    static func loggedKey(for action: DoseScheduleAction) -> String {
+        verb(for: action).map { "shake.logged.\($0)" } ?? "global.status.completed"
+    }
+
+    private static func verb(for action: DoseScheduleAction) -> String? {
         switch action.type {
         case .pillActive, .pillSugar:
-            "today.action.take_pill"
+            "take_pill"
         case .patchChange:
-            action.cycleDay == 1 ? "today.action.apply_patch" : "today.action.change_patch"
+            action.cycleDay == 1 ? "apply_patch" : "change_patch"
         case .patchRemove:
-            "today.action.remove_patch"
+            "remove_patch"
         case .ringInsert:
-            "today.action.insert_ring"
+            "insert_ring"
         case .ringReinsert:
-            "today.action.change_ring"
+            "change_ring"
         case .ringRemove:
-            "today.action.remove_ring"
+            "remove_ring"
         case .pillBreak, .patchActive, .patchBreak, .ringActive, .ringBreak:
-            "today.empty.title"
+            nil
         }
     }
 
