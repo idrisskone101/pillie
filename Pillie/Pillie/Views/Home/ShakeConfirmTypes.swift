@@ -1,43 +1,46 @@
 import Foundation
 
-enum ShakeConfirmStage: Int, Equatable {
-    case sealed
-    case dented
-    case torn
-    case done
+struct ShakeProgress: Equatable {
+    let shakes: Int
+    let total: Int
 
-    init(shakeCount: Int, requiredShakes: Int) {
-        if shakeCount >= requiredShakes {
-            self = .done
-        } else if shakeCount <= 0 {
-            self = .sealed
-        } else if shakeCount * 2 < requiredShakes {
-            self = .dented
-        } else {
-            self = .torn
-        }
+    init(shakes: Int, total: Int) {
+        self.shakes = min(max(0, shakes), total)
+        self.total = total
     }
 
-    var odometerProgress: Double {
-        switch self {
-        case .sealed: 0
-        case .dented: 1.0 / 3.0
-        case .torn: 2.0 / 3.0
-        case .done: 1
-        }
+    var isDone: Bool { shakes >= total }
+    var isPastHalfway: Bool { shakes * 2 > total }
+    var fraction: Double { Double(shakes) / Double(total) }
+
+    /// The last shake's clip slice still plays before the reveal, so until then
+    /// a finished count reads as the step before it.
+    func shown(revealed: Bool) -> ShakeProgress {
+        revealed ? self : ShakeProgress(shakes: min(shakes, total - 1), total: total)
+    }
+
+    var halftoneIndex: Int {
+        if isDone { return 3 }
+        if shakes == 0 { return 0 }
+        return isPastHalfway ? 2 : 1
     }
 
     func headline(streak: StreakChange) -> ShakeHeadline {
-        switch (self, streak.isKept) {
-        case (.sealed, true): ShakeHeadline(key: "shake.streak.headline.start")
-        case (.sealed, false): ShakeHeadline(key: "today.action.shake")
-        case (.dented, true): ShakeHeadline(key: "shake.streak.headline.counting", number: streak.before)
-        case (.dented, false): ShakeHeadline(key: "shake.streak.headline.keep_going")
-        case (.torn, true): ShakeHeadline(key: "shake.streak.headline.almost_count", number: streak.after)
-        case (.torn, false): ShakeHeadline(key: "shake.streak.headline.almost")
-        case (.done, true): ShakeHeadline(key: "shake.streak.headline.kept")
-        case (.done, false): ShakeHeadline(key: "global.action.done")
+        let kept = streak.isKept
+        if isDone {
+            return ShakeHeadline(key: kept ? "shake.streak.headline.kept" : "global.action.done")
         }
+        if shakes == 0 {
+            return ShakeHeadline(key: kept ? "shake.streak.headline.start" : "today.action.shake")
+        }
+        if shakes == total - 1 {
+            return kept
+                ? ShakeHeadline(key: "shake.streak.headline.almost_count", number: streak.after)
+                : ShakeHeadline(key: "shake.streak.headline.almost")
+        }
+        return kept
+            ? ShakeHeadline(key: "shake.streak.headline.counting", number: streak.before)
+            : ShakeHeadline(key: "shake.streak.headline.keep_going")
     }
 }
 

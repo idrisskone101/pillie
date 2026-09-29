@@ -23,12 +23,15 @@ struct ShakeConfirmationInteractionFeedback {
     }
 
     @discardableResult
-    func shakeLanded(on stage: ShakeConfirmStage, accessibilityReduceMotion: Bool) -> Response {
-        let (intent, motion): (InteractionFeedback.Intent, PillieMotion.Semantic) = switch stage {
-        case .sealed, .dented: (.meaningfulCommit, .quick)
-        case .torn: (.rareHighEnergy, .quick)
-        case .done: (.success, .rewardSpring)
-        }
+    func shakeLanded(on progress: ShakeProgress, accessibilityReduceMotion: Bool) -> Response {
+        let (intent, motion): (InteractionFeedback.Intent, PillieMotion.Semantic) =
+            if progress.isDone {
+                (.success, .rewardSpring)
+            } else if progress.isPastHalfway {
+                (.rareHighEnergy, .quick)
+            } else {
+                (.meaningfulCommit, .quick)
+            }
         feedback.perform(intent)
         return Response(
             motion: motion,
@@ -50,7 +53,7 @@ struct ShakeConfirmView: View {
     @Environment(PillStore.self) private var store
     @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
     @Environment(\.locale) private var locale
-    @State private var shakeManager = ShakeDetectionManager()
+    @State private var shakeManager: ShakeDetectionManager
     @State private var appeared = false
     @State private var hasConfirmed = false
     @State private var revealedAt: Date?
@@ -59,19 +62,30 @@ struct ShakeConfirmView: View {
     private static let stageSize = CGSize(width: 402, height: 400)
     private static let plinthDiameter: CGFloat = 270
     private static let autoConfirmDelay: Duration = .seconds(1.6)
+    private static let shakesWithoutAClip = 3
 
-    private var stage: ShakeConfirmStage {
-        ShakeConfirmStage(
-            shakeCount: shakeManager.shakeCount,
-            requiredShakes: shakeManager.requiredShakes
+    init(
+        action: DoseScheduleAction,
+        streak: StreakChange,
+        onConfirm: @escaping () -> Void,
+        onDismiss: @escaping () -> Void
+    ) {
+        self.action = action
+        self.streak = streak
+        self.onConfirm = onConfirm
+        self.onDismiss = onDismiss
+        shakeManager = ShakeDetectionManager(
+            requiredShakes: ShakeClip(action: action)?.shakeCount ?? Self.shakesWithoutAClip
         )
+    }
+
+    private var progress: ShakeProgress {
+        ShakeProgress(shakes: shakeManager.shakeCount, total: shakeManager.requiredShakes)
     }
 
     private var isRevealed: Bool { revealedAt != nil }
 
-    private var shownStage: ShakeConfirmStage {
-        stage == .done && !isRevealed ? .torn : stage
-    }
+    private var shownProgress: ShakeProgress { progress.shown(revealed: isRevealed) }
 
     private var clip: ShakeClip? { ShakeClip(action: action) }
     private var digits: StreakOdometerDigits {
@@ -123,7 +137,7 @@ struct ShakeConfirmView: View {
             }
             .padding(.horizontal, PillieTheme.screenHorizontalPadding)
         }
-        .animation(stageAnimation, value: stage)
+        .animation(stageAnimation, value: progress)
         .animation(stageAnimation, value: isRevealed)
         .onAppear {
             shakeManager.startDetecting()
@@ -139,7 +153,7 @@ struct ShakeConfirmView: View {
             if shakeManager.isComplete {
                 shakeManager.stopDetecting()
             }
-            shakeFeedback.shakeLanded(on: stage, accessibilityReduceMotion: accessibilityReduceMotion)
+            shakeFeedback.shakeLanded(on: progress, accessibilityReduceMotion: accessibilityReduceMotion)
         }
         .task(id: isRevealed) {
             guard isRevealed else { return }
@@ -158,7 +172,7 @@ struct ShakeConfirmView: View {
                 .font(.pillie(14, weight: .medium))
                 .foregroundStyle(foreground.opacity(isRevealed ? 1 : 0.7))
 
-            Text(shownStage.headline(streak: streak).text(locale: locale))
+            Text(shownProgress.headline(streak: streak).text(locale: locale))
                 .font(.pillieHeadline())
                 .tracking(-0.64)
                 .foregroundStyle(foreground)
@@ -201,7 +215,7 @@ struct ShakeConfirmView: View {
 
     private var stageContent: some View {
         ZStack {
-            Image("ShakeHalftone\(shownStage.rawValue)")
+            Image("ShakeHalftone\(shownProgress.halftoneIndex)")
                 .resizable()
                 .frame(width: Self.stageSize.width, height: Self.stageSize.height)
                 .opacity(isRevealed ? 0.5 : 1)
@@ -226,11 +240,13 @@ struct ShakeConfirmView: View {
                 .shadow(color: PillieTheme.patchChangeRose.opacity(0.7), radius: 16, y: 16)
 
             if let clip {
-                ShakeStopMotionStage(clip: clip, stage: stage, onSettled: reveal(ifDone:))
+                ShakeStopMotionStage(clip: clip, shakes: progress.shakes, onFinished: reveal)
             } else {
                 Text(action.method.emoji)
                     .font(.system(size: 96))
-                    .task(id: stage) { reveal(ifDone: stage) }
+                    .task(id: progress.isDone) {
+                        if progress.isDone { reveal() }
+                    }
             }
         }
     }
@@ -239,7 +255,7 @@ struct ShakeConfirmView: View {
         HStack(spacing: 14) {
             flame(side: 30)
 
-            StreakOdometer(digits: digits, progress: stage.odometerProgress, size: .compact)
+            StreakOdometer(digits: digits, progress: progress.fraction, size: .compact)
 
             Text(PillieLocalization.string("today.streak.title", locale: locale))
                 .font(.pillie(15, weight: .bold))
@@ -254,7 +270,7 @@ struct ShakeConfirmView: View {
         .shadow(color: PillieTheme.cardShadow, radius: PillieTheme.cardShadowRadius, y: PillieTheme.cardShadowY)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(PillieLocalization.string("today.streak.title", locale: locale))
-        .accessibilityValue("\(stage == .done ? streak.after : streak.before)")
+        .accessibilityValue("\(progress.isDone ? streak.after : streak.before)")
     }
 
     private var heroCounter: some View {
@@ -326,14 +342,14 @@ struct ShakeConfirmView: View {
                 onDismiss()
             }
             .buttonStyle(.pillieQuiet)
-            .opacity(stage == .done ? 0 : 1)
-            .disabled(stage == .done)
+            .opacity(progress.isDone ? 0 : 1)
+            .disabled(progress.isDone)
         }
         .padding(.bottom, 12)
     }
 
-    private func reveal(ifDone settled: ShakeConfirmStage) {
-        guard settled == .done, revealedAt == nil else { return }
+    private func reveal() {
+        guard revealedAt == nil else { return }
         revealedAt = PillieClock.now
     }
 

@@ -73,20 +73,34 @@ final class InteractionFeedbackTests: XCTestCase {
         XCTAssertEqual(refill.motion, .commitSpring)
     }
 
-    func testEachShakeFiresTheHapticOfTheBoardItLandsOn() {
+    func testFiveShakesBuildFromCommitToRareToSuccess() {
         let feedbackRecorder = RecordingInteractionFeedbackPerformer()
-        let feedback = InteractionFeedback(performer: feedbackRecorder)
-        let shakeFeedback = ShakeConfirmationInteractionFeedback(feedback: feedback)
+        let shakeFeedback = ShakeConfirmationInteractionFeedback(feedback: InteractionFeedback(performer: feedbackRecorder))
 
-        let dented = shakeFeedback.shakeLanded(on: .dented, accessibilityReduceMotion: false)
-        let torn = shakeFeedback.shakeLanded(on: .torn, accessibilityReduceMotion: false)
-        let done = shakeFeedback.shakeLanded(on: .done, accessibilityReduceMotion: false)
+        let responses = (1...5).map {
+            shakeFeedback.shakeLanded(on: ShakeProgress(shakes: $0, total: 5), accessibilityReduceMotion: false)
+        }
 
-        XCTAssertEqual(feedbackRecorder.performedIntents, [.meaningfulCommit, .rareHighEnergy, .success])
-        XCTAssertEqual(dented.motion, .quick)
-        XCTAssertEqual(torn.motion, .quick)
-        XCTAssertEqual(done.motion, .rewardSpring)
-        XCTAssertFalse(done.motionProfile.usesCalmerSpatialMotion)
+        XCTAssertEqual(
+            feedbackRecorder.performedIntents,
+            [.meaningfulCommit, .meaningfulCommit, .rareHighEnergy, .rareHighEnergy, .success]
+        )
+        XCTAssertEqual(responses.map(\.motion), [.quick, .quick, .quick, .quick, .rewardSpring])
+        XCTAssertFalse(responses[4].motionProfile.usesCalmerSpatialMotion)
+    }
+
+    func testFourShakesBuildFromCommitToRareToSuccess() {
+        let feedbackRecorder = RecordingInteractionFeedbackPerformer()
+        let shakeFeedback = ShakeConfirmationInteractionFeedback(feedback: InteractionFeedback(performer: feedbackRecorder))
+
+        for shakes in 1...4 {
+            shakeFeedback.shakeLanded(on: ShakeProgress(shakes: shakes, total: 4), accessibilityReduceMotion: false)
+        }
+
+        XCTAssertEqual(
+            feedbackRecorder.performedIntents,
+            [.meaningfulCommit, .meaningfulCommit, .rareHighEnergy, .success]
+        )
     }
 
     func testTapToConfirmFiresOnlySuccessWithReducedMotionFallback() {
@@ -94,7 +108,10 @@ final class InteractionFeedbackTests: XCTestCase {
         let feedback = InteractionFeedback(performer: feedbackRecorder)
         let shakeFeedback = ShakeConfirmationInteractionFeedback(feedback: feedback)
 
-        let reduced = shakeFeedback.shakeLanded(on: .done, accessibilityReduceMotion: true)
+        let reduced = shakeFeedback.shakeLanded(
+            on: ShakeProgress(shakes: 5, total: 5),
+            accessibilityReduceMotion: true
+        )
 
         XCTAssertEqual(feedbackRecorder.performedIntents, [.success])
         XCTAssertEqual(reduced.motion, .rewardSpring)

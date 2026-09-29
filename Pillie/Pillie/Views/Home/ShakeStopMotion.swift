@@ -4,25 +4,16 @@ struct ShakeClip: Equatable {
     let poses: [StopMotionPose]
     let cutoutImage: String?
     let side: CGFloat
-    let stops: Stops
+    let stops: [Int]
 
-    struct Stops: Equatable {
-        let dented: Int
-        let torn: Int
-        let done: Int
+    var shakeCount: Int { stops.count }
+
+    func stop(afterShakes shakes: Int) -> Int {
+        shakes <= 0 ? 0 : stops[min(shakes, stops.count) - 1]
     }
 
-    func stop(for stage: ShakeConfirmStage) -> Int {
-        switch stage {
-        case .sealed: 0
-        case .dented: stops.dented
-        case .torn: stops.torn
-        case .done: stops.done
-        }
-    }
-
-    func posesToPlay(from shown: Int, to stage: ShakeConfirmStage) -> Range<Int> {
-        let forwardOnly = max(shown, stop(for: stage))
+    func posesToPlay(from shown: Int, afterShakes shakes: Int) -> Range<Int> {
+        let forwardOnly = max(shown, stop(afterShakes: shakes))
         return (shown + 1)..<(forwardOnly + 1)
     }
 }
@@ -85,27 +76,41 @@ extension ShakeClip {
             .init(shell: "ShakeLayerBlisterDented", squash: 0.97, hold: .milliseconds(120)),
             .init(shell: "ShakeLayerBlisterDented", squash: 0.94, hold: .milliseconds(220)),
             .init(shell: "ShakeLayerBlisterEmpty", cutout: .init(x: 0.02, y: 0.01, scale: 1.03), hold: .milliseconds(60)),
-            .init(shell: "ShakeLayerBlisterEmpty", cutout: .init(y: -0.12, angle: -10, scale: 1.10)),
-            .init(shell: "ShakeLayerBlisterEmpty", cutout: .init(y: -0.25, angle: -21, scale: 1.16), hold: .milliseconds(80)),
-            .init(shell: "ShakeLayerBlisterEmpty", cutout: .init(y: -0.30, angle: -26, scale: 1.19), hold: .milliseconds(140)),
-            .init(shell: "ShakeLayerBlisterEmpty", cutout: .init(y: -0.27, angle: -24, scale: 1.16), hold: .milliseconds(600)),
+            .init(shell: "ShakeLayerBlisterEmpty", cutout: .init(y: -0.03, scale: 1.03), hold: .milliseconds(80)),
+            .init(shell: "ShakeLayerBlisterEmpty", cutout: .init(y: -0.06, angle: -6, scale: 1.05)),
+            .init(shell: "ShakeLayerBlisterEmpty", cutout: .init(y: -0.13, angle: -12, scale: 1.10), hold: .milliseconds(80)),
+            .init(shell: "ShakeLayerBlisterEmpty", cutout: .init(y: -0.16, angle: -15, scale: 1.12)),
+            .init(shell: "ShakeLayerBlisterEmpty", cutout: .init(x: 0.10, y: -0.22, angle: -22, scale: 1.18), hold: .milliseconds(80)),
+            .init(shell: "ShakeLayerBlisterEmpty", cutout: .init(x: 0.21, y: -0.24, angle: -28, scale: 1.18), hold: .milliseconds(70)),
+            .init(shell: "ShakeLayerBlisterEmpty", cutout: .init(x: 0.21, y: -0.23, angle: -28, scale: 1.16), hold: .milliseconds(600)),
         ],
         cutoutImage: "ShakeLayerPill",
         side: 300,
-        stops: Stops(dented: 2, torn: 3, done: 7)
+        stops: [2, 3, 5, 7, 10]
     )
 
     static let patchApply = patchTear(opening: "ShakeLayerPatchPouchSealed")
     static let patchChange = patchTear(opening: "ShakePatchFoldedOnPouch")
 
-    static let patchRemove = frames("ShakePatchWorn", "ShakePatchPeeling", "ShakePatchFolded", side: 330)
-    static let ringInsert = frames("ShakeRingPouchSealed", "ShakeRingPouchTorn", "ShakeRingOut", side: 240)
-    static let ringRemove = frames("ShakeRingOut", "ShakeRingPouchTorn", "ShakeRingPouchResealed", side: 240)
+    static let patchRemove = frames(
+        "ShakePatchWorn", "ShakePatchPeeling", "ShakePatchHalfPeeled", "ShakePatchFolding", "ShakePatchFolded",
+        side: 330
+    )
+    static let ringInsert = frames(
+        "ShakeRingPouchSealed", "ShakeRingPouchNicked", "ShakeRingPouchTorn", "ShakeRingOut", "ShakeRingFullyOut",
+        "ShakeRingPinched",
+        side: 240
+    )
+    static let ringRemove = frames(
+        "ShakeRingFullyOut", "ShakeRingOut", "ShakeRingPouchTorn", "ShakeRingTuckedIn", "ShakeRingPouchResealed",
+        side: 240
+    )
 
     private static func patchTear(opening: String) -> ShakeClip {
         ShakeClip(poses: [
             .init(shell: opening, hold: .milliseconds(350)),
             .init(shell: "ShakeLayerPatchPouchSealed", squash: 0.97, hold: .milliseconds(120)),
+            .init(shell: "ShakePatchPouchNicked"),
             .init(shell: "ShakeLayerPouchEmpty", flap: .init(), hold: .milliseconds(160)),
             .init(shell: "ShakeLayerPouchEmpty", flap: .init(x: 0.02, y: -0.02, angle: -6), hold: .milliseconds(70)),
             .init(shell: "ShakeLayerPouchEmpty", flap: .init(x: 0.06, y: -0.06, angle: -18)),
@@ -113,24 +118,28 @@ extension ShakeClip {
             .init(shell: "ShakeLayerPouchEmpty", flap: .init(x: 0.36, y: -0.22, angle: -62), hold: .milliseconds(70)),
             .init(shell: "ShakeLayerPouchEmpty", cutout: .init(y: 0.12, angle: 2), cutoutInsidePouch: true, hold: .milliseconds(110)),
             .init(shell: "ShakeLayerPouchEmpty", cutout: .init(y: 0.0, angle: -3), cutoutInsidePouch: true),
+            .init(shell: "ShakeLayerPouchEmpty", cutout: .init(y: -0.04, angle: -4), cutoutInsidePouch: true),
             .init(shell: "ShakeLayerPouchEmpty", cutout: .init(y: -0.06, angle: -4), cutoutInsidePouch: true, hold: .milliseconds(260)),
+            .init(shell: "ShakePatchSlidingOut", squash: 0.96),
+            .init(shell: "ShakePatchSlidingOut"),
             .init(shell: "ShakeLayerPatchOnLiner", squash: 1.03, hold: .milliseconds(80)),
-            .init(shell: "ShakeLayerPatchOnLiner", hold: .milliseconds(600)),
-        ], cutoutImage: "ShakeLayerPatch", side: 240, stops: Stops(dented: 9, torn: 11, done: 11))
+            .init(shell: "ShakeLayerPatchOnLiner"),
+            .init(shell: "ShakePatchLinerHalfPeeled", squash: 0.96),
+            .init(shell: "ShakePatchLinerHalfPeeled", hold: .milliseconds(600)),
+        ], cutoutImage: "ShakeLayerPatch", side: 240, stops: [2, 11, 13, 15, 17])
     }
 
-    private static func frames(_ first: String, _ second: String, _ third: String, side: CGFloat) -> ShakeClip {
-        ShakeClip(
-            poses: [
-                .init(shell: first, hold: .milliseconds(350)),
-                .init(shell: second, squash: 0.94),
-                .init(shell: second),
-                .init(shell: third, squash: 0.94),
-                .init(shell: third),
-            ],
+    private static func frames(_ first: String, _ rest: String..., side: CGFloat) -> ShakeClip {
+        var poses: [StopMotionPose] = [.init(shell: first, hold: .milliseconds(350))]
+        for photo in rest {
+            poses += [.init(shell: photo, squash: 0.94), .init(shell: photo)]
+        }
+        poses[poses.count - 1].hold = .milliseconds(600)
+        return ShakeClip(
+            poses: poses,
             cutoutImage: nil,
             side: side,
-            stops: Stops(dented: 2, torn: 4, done: 4)
+            stops: rest.indices.map { 2 * ($0 + 1) }
         )
     }
 }

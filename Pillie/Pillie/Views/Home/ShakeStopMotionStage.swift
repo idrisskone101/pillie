@@ -2,8 +2,8 @@ import SwiftUI
 
 struct ShakeStopMotionStage: View {
     let clip: ShakeClip
-    let stage: ShakeConfirmStage
-    let onSettled: (ShakeConfirmStage) -> Void
+    let shakes: Int
+    let onFinished: () -> Void
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var shown = 0
@@ -42,7 +42,7 @@ struct ShakeStopMotionStage: View {
         .scaleEffect(x: reduceMotion ? 1 : 2 - pose.squash, y: reduceMotion ? 1 : pose.squash)
         .offset(reduceMotion ? .zero : Self.boil(shown))
         .transaction { $0.animation = nil }
-        .task(id: stage) { await play(to: stage) }
+        .task(id: shakes) { await play(afterShakes: shakes) }
     }
 
     private func layer(_ name: String) -> some View {
@@ -53,11 +53,11 @@ struct ShakeStopMotionStage: View {
             .accessibilityHidden(true)
     }
 
-    private func play(to stage: ShakeConfirmStage) async {
+    private func play(afterShakes shakes: Int) async {
         if reduceMotion {
-            shown = max(shown, clip.stop(for: stage))
+            shown = max(shown, clip.stop(afterShakes: shakes))
         } else {
-            for index in clip.posesToPlay(from: shown, to: stage) {
+            for index in clip.posesToPlay(from: shown, afterShakes: shakes) {
                 shown = index
                 do {
                     try await Task.sleep(for: clip.poses[index].hold)
@@ -66,7 +66,9 @@ struct ShakeStopMotionStage: View {
                 }
             }
         }
-        onSettled(stage)
+        if shakes >= clip.shakeCount {
+            onFinished()
+        }
     }
 
     private static func boil(_ index: Int) -> CGSize {
