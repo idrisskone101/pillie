@@ -148,6 +148,26 @@
     {
       "issue": "ENG-62",
       "table": "Localizable",
+      "key": "history.legend.patch_change",
+      "create": true,
+      "comment": "Legend, patch change day [health]",
+      "en": "Change day",
+      "de": "Wechseltag",
+      "it": "Giorno del cambio"
+    },
+    {
+      "issue": "ENG-62",
+      "table": "Localizable",
+      "key": "history.legend.ring_reinsert",
+      "create": true,
+      "comment": "Legend, ring reinsert day, when a new ring goes in [health]",
+      "en": "New ring day",
+      "de": "Tag des neuen Rings",
+      "it": "Giorno del nuovo anello"
+    },
+    {
+      "issue": "ENG-62",
+      "table": "Localizable",
       "key": "history.month.title",
       "en": "This month",
       "de": "Dieser Monat",
