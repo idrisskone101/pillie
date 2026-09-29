@@ -26,16 +26,49 @@ struct ShakeConfirmStageTests {
         #expect(ShakeConfirmStage.done.odometerProgress == 1)
     }
 
-    @Test func headlinesTalkAboutTheStreakOnlyWhenOneIsKept() {
-        #expect(ShakeConfirmStage.sealed.headlineKey(streakBefore: 11, streakAfter: 12) == "shake.streak.headline.start")
-        #expect(ShakeConfirmStage.done.headlineKey(streakBefore: 11, streakAfter: 12) == "shake.streak.headline.kept")
+    @Test func keptStreakHeadlinesCountUpToTheNewNumber() {
+        let streak = StreakChange(before: 11, after: 12)
+        #expect(ShakeConfirmStage.sealed.headline(streak: streak) == ShakeHeadline(key: "shake.streak.headline.start"))
+        #expect(ShakeConfirmStage.dented.headline(streak: streak) == ShakeHeadline(key: "shake.streak.headline.counting", number: 11))
+        #expect(ShakeConfirmStage.torn.headline(streak: streak) == ShakeHeadline(key: "shake.streak.headline.almost_count", number: 12))
+        #expect(ShakeConfirmStage.done.headline(streak: streak) == ShakeHeadline(key: "shake.streak.headline.kept"))
+    }
 
-        #expect(ShakeConfirmStage.sealed.headlineKey(streakBefore: 0, streakAfter: 1) == "today.action.shake")
-        #expect(ShakeConfirmStage.done.headlineKey(streakBefore: 0, streakAfter: 1) == "global.action.done")
-        #expect(ShakeConfirmStage.done.headlineKey(streakBefore: 5, streakAfter: 5) == "global.action.done")
+    @Test(arguments: [StreakChange(before: 0, after: 1), StreakChange(before: 5, after: 5)])
+    func headlinesSkipTheStreakWhenNoneIsKept(streak: StreakChange) {
+        #expect(ShakeConfirmStage.sealed.headline(streak: streak) == ShakeHeadline(key: "today.action.shake"))
+        #expect(ShakeConfirmStage.dented.headline(streak: streak) == ShakeHeadline(key: "shake.streak.headline.keep_going"))
+        #expect(ShakeConfirmStage.torn.headline(streak: streak) == ShakeHeadline(key: "shake.streak.headline.almost"))
+        #expect(ShakeConfirmStage.done.headline(streak: streak) == ShakeHeadline(key: "global.action.done"))
+    }
+}
 
-        #expect(ShakeConfirmStage.dented.headlineKey(streakBefore: 0, streakAfter: 1) == "shake.streak.headline.keep_going")
-        #expect(ShakeConfirmStage.torn.headlineKey(streakBefore: 0, streakAfter: 1) == "shake.streak.headline.almost")
+struct ShakeLoggedNoteTests {
+    private func action(_ type: PillDay.ActionType, method: ContraceptiveMethod, cycleDay: Int) -> DoseScheduleAction {
+        DoseScheduleAction(date: .now, type: type, method: method, cycleDay: cycleDay, cycleLength: 28)
+    }
+
+    @Test func pillNoteNamesThePillInThePack() {
+        let note = ShakeLoggedNote(action: action(.pillActive, method: .pill, cycleDay: 12))
+        #expect(note.key == "shake.logged.take_pill")
+        #expect(note.pillNumber == 12)
+        #expect(ShakeLoggedNote(action: action(.pillSugar, method: .pill, cycleDay: 24)).pillNumber == 24)
+    }
+
+    @Test(arguments: [
+        (PillDay.ActionType.patchChange, ContraceptiveMethod.patch, 1, "shake.logged.apply_patch"),
+        (.patchChange, .patch, 8, "shake.logged.change_patch"),
+        (.patchRemove, .patch, 22, "shake.logged.remove_patch"),
+        (.ringInsert, .ring, 1, "shake.logged.insert_ring"),
+        (.ringReinsert, .ring, 29, "shake.logged.change_ring"),
+        (.ringRemove, .ring, 22, "shake.logged.remove_ring"),
+    ])
+    func patchAndRingNotesMirrorTheHomeButton(
+        type: PillDay.ActionType, method: ContraceptiveMethod, cycleDay: Int, key: String
+    ) {
+        let note = ShakeLoggedNote(action: action(type, method: method, cycleDay: cycleDay))
+        #expect(note.key == key)
+        #expect(note.pillNumber == nil)
     }
 }
 

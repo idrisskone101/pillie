@@ -73,32 +73,30 @@ final class InteractionFeedbackTests: XCTestCase {
         XCTAssertEqual(refill.motion, .commitSpring)
     }
 
-    func testShakeProgressUsesRestrainedSharedFeedbackAndReducedMotionFallback() {
+    func testEachShakeFiresTheHapticOfTheBoardItLandsOn() {
         let feedbackRecorder = RecordingInteractionFeedbackPerformer()
         let feedback = InteractionFeedback(performer: feedbackRecorder)
         let shakeFeedback = ShakeConfirmationInteractionFeedback(feedback: feedback)
 
-        let standard = shakeFeedback.progressShake(accessibilityReduceMotion: false)
-        let reduced = shakeFeedback.progressShake(accessibilityReduceMotion: true)
+        let dented = shakeFeedback.shakeLanded(on: .dented, accessibilityReduceMotion: false)
+        let torn = shakeFeedback.shakeLanded(on: .torn, accessibilityReduceMotion: false)
+        let done = shakeFeedback.shakeLanded(on: .done, accessibilityReduceMotion: false)
 
-        XCTAssertEqual(feedbackRecorder.performedIntents, [.lowRiskTap, .lowRiskTap])
-        XCTAssertEqual(standard.motion, .quick)
-        XCTAssertFalse(standard.motionProfile.usesCalmerSpatialMotion)
-        XCTAssertEqual(reduced.motion, .quick)
-        XCTAssertTrue(reduced.motionProfile.usesCalmerSpatialMotion)
+        XCTAssertEqual(feedbackRecorder.performedIntents, [.meaningfulCommit, .rareHighEnergy, .success])
+        XCTAssertEqual(dented.motion, .quick)
+        XCTAssertEqual(torn.motion, .quick)
+        XCTAssertEqual(done.motion, .rewardSpring)
+        XCTAssertFalse(done.motionProfile.usesCalmerSpatialMotion)
     }
 
-    func testShakeCompletionUsesSuccessFeedbackAndRewardMotion() {
+    func testTapToConfirmFiresOnlySuccessWithReducedMotionFallback() {
         let feedbackRecorder = RecordingInteractionFeedbackPerformer()
         let feedback = InteractionFeedback(performer: feedbackRecorder)
         let shakeFeedback = ShakeConfirmationInteractionFeedback(feedback: feedback)
 
-        let standard = shakeFeedback.completion(accessibilityReduceMotion: false)
-        let reduced = shakeFeedback.completion(accessibilityReduceMotion: true)
+        let reduced = shakeFeedback.shakeLanded(on: .done, accessibilityReduceMotion: true)
 
-        XCTAssertEqual(feedbackRecorder.performedIntents, [.success, .success])
-        XCTAssertEqual(standard.motion, .rewardSpring)
-        XCTAssertFalse(standard.motionProfile.usesCalmerSpatialMotion)
+        XCTAssertEqual(feedbackRecorder.performedIntents, [.success])
         XCTAssertEqual(reduced.motion, .rewardSpring)
         XCTAssertTrue(reduced.motionProfile.usesCalmerSpatialMotion)
     }
@@ -218,7 +216,15 @@ final class InteractionFeedbackTests: XCTestCase {
 }
 
 private final class RecordingInteractionFeedbackPerformer: InteractionFeedbackPerforming {
+    // The Xcode 27 beta aborts hosted tests when a @MainActor class deallocates.
+    // Every recorder is parked for the process lifetime; drop this once the toolchain is fixed.
+    private static var parked: [RecordingInteractionFeedbackPerformer] = []
+
     private(set) var performedIntents: [InteractionFeedback.Intent] = []
+
+    init() {
+        Self.parked.append(self)
+    }
 
     func perform(_ intent: InteractionFeedback.Intent) {
         performedIntents.append(intent)

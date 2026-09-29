@@ -89,19 +89,23 @@ struct HomePackProgress: Hashable, Sendable {
         if isFinished {
             return PillieLocalization.string("home.pack.title.finished", locale: locale)
         }
-        let day = regimen.day(atIndex: max(elapsedDays, 0))
+        return Self.title(for: regimen.day(atIndex: max(elapsedDays, 0)), in: regimen, locale: locale)
+    }
+
+    /// "Pill 12 of 28", "Sugar pill 3 of 7": the name of one day in the pack.
+    static func title(for day: PackDay, in regimen: PackRegimen, locale: Locale) -> String {
         switch day.kind {
         case .active:
-            return PillieLocalization.formatted(
+            PillieLocalization.formatted(
                 "home.pack.title.pill", locale: locale, arguments: day.number, regimen.totalDays
             )
         case .sugarPill:
-            return PillieLocalization.formatted(
+            PillieLocalization.formatted(
                 "home.pack.title.sugar_pill", locale: locale,
                 arguments: day.number - regimen.activeDays, regimen.breakDays
             )
         case .noPill:
-            return PillieLocalization.formatted(
+            PillieLocalization.formatted(
                 "home.pack.title.break_day", locale: locale,
                 arguments: day.number - regimen.activeDays, regimen.breakDays
             )

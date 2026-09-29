@@ -35,27 +35,45 @@ enum ShakeConfirmStage: Int, Equatable {
         }
     }
 
-    var motionLineCount: Int {
-        switch self {
-        case .sealed, .done: 0
-        case .dented: 8
-        case .torn: 14
+    /// Only mention the streak when there is one to keep.
+    func headline(streak: StreakChange) -> ShakeHeadline {
+        switch (self, streak.isKept) {
+        case (.sealed, true): ShakeHeadline(key: "shake.streak.headline.start")
+        case (.sealed, false): ShakeHeadline(key: "today.action.shake")
+        case (.dented, true): ShakeHeadline(key: "shake.streak.headline.counting", number: streak.before)
+        case (.dented, false): ShakeHeadline(key: "shake.streak.headline.keep_going")
+        case (.torn, true): ShakeHeadline(key: "shake.streak.headline.almost_count", number: streak.after)
+        case (.torn, false): ShakeHeadline(key: "shake.streak.headline.almost")
+        case (.done, true): ShakeHeadline(key: "shake.streak.headline.kept")
+        case (.done, false): ShakeHeadline(key: "global.action.done")
         }
     }
+}
 
-    /// Only mention the streak when there is one to keep.
-    func headlineKey(streakBefore: Int, streakAfter: Int) -> String {
-        let keepsStreak = streakBefore > 0 && streakAfter > streakBefore
-        switch self {
-        case .sealed:
-            return keepsStreak ? "shake.streak.headline.start" : "today.action.shake"
-        case .dented:
-            return "shake.streak.headline.keep_going"
-        case .torn:
-            return "shake.streak.headline.almost"
-        case .done:
-            return keepsStreak ? "shake.streak.headline.kept" : "global.action.done"
-        }
+struct ShakeHeadline: Equatable {
+    let key: String
+    var number: Int?
+
+    func text(locale: Locale) -> String {
+        guard let number else { return PillieLocalization.string(key, locale: locale) }
+        return PillieLocalization.formatted(key, locale: locale, arguments: Int64(number))
+    }
+}
+
+/// The line that replaces the counter once the dose is logged. Its key mirrors the
+/// `today.action.*` label Home showed for the same action.
+struct ShakeLoggedNote: Equatable {
+    let key: String
+    let pillNumber: Int?
+
+    init(action: DoseScheduleAction) {
+        key = DueActionCopy.key(for: action).replacingOccurrences(of: "today.action.", with: "shake.logged.")
+        pillNumber = action.method == .pill ? action.cycleDay : nil
+    }
+
+    func text(loggedAt time: String, locale: Locale) -> String {
+        guard let pillNumber else { return PillieLocalization.formatted(key, locale: locale, arguments: time) }
+        return PillieLocalization.formatted(key, locale: locale, arguments: Int64(pillNumber), time)
     }
 }
 
@@ -106,6 +124,8 @@ struct StreakChange: Equatable {
     let after: Int
 
     static let none = StreakChange(before: 0, after: 0)
+
+    var isKept: Bool { before > 0 && after > before }
 }
 
 /// The digit wheels of the streak counter. Wheels whose digit changes roll from
