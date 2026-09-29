@@ -32,14 +32,14 @@ wait text "On today" 15
 expect text "until you take it off"
 shot logged-change
 
-# One live day after an unlogged change: missed, and Home's button has nothing to log.
+# One live day after an unlogged change: missed, and Home's button can still log it late.
 openurl "pillie://debug/routine-day?method=patch&day=15&lang=en"
 wait text "Change to patch 3" 10
 openurl pillie://debug/fixed-now?at=2026-09-29T16:00:00Z
 wait text "Change to patch 3 now" 10
 expect text "Was due yesterday"
 expect text "Day 16 of 28"
-expect text "nothing due today"
+expect text "Change patch"
 shot missed-change
 
 openurl pillie://debug/fixed-now?at=2026-09-28T16:00:00Z

@@ -64,5 +64,6 @@ wait text "Put your ring in" 10
 openurl pillie://debug/fixed-now?at=2026-09-29T16:00:00Z
 wait text "Put your ring in now" 10
 expect text "Was due yesterday"
+expect text "Insert ring"
 shot missed-in
 openurl pillie://debug/fixed-now?at=off

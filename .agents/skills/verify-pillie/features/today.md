@@ -82,12 +82,18 @@ blocking/trial status surfaces, and (when eligible) the review ask.
 - `flows/today-patch-countdown.flow` — `/routine-day?method=patch&day=N`
   plus `/fixed-now` walks the patch card: wearing (day 10), late change
   (day 15), logged through the real CTA ("On today"), missed the next day
-  (Home's button reads "nothing due today"), late off day, patch-free week,
+  (Home's button still reads "Change patch"), late off day, patch-free week,
   day 29 new cycle due, and "Start new" from the card menu (patch 1 due under
   the start-day grace).
 - `flows/today-ring-countdown.flow` — the same for the ring: wearing, late
   out, logged out, ring-free week, the day-29 reinsert (late, then logged,
   which starts the next cycle), day 30 new cycle due, and a missed insertion.
+- `flows/today-catch-up.flow` — a missed patch change stays loggable from
+  Home until the next task day: day 16 reads Missed with "Change patch" on
+  the button, the Shake fallback logs it late ("On today"), undo restores
+  Missed, day 17 shows "Was due Sep 28" and logs again, and the History
+  sheet for the missed day says "Logged 2 days late" (`#historyDayCatchUp`)
+  while the day stays "Not logged".
 - `pillie://debug/countdown-card` opens a gallery of the 16 Paper lifecycle
   cards built from fixed `HomeCountdownProgress` values.
 - `flows/today-long-pack.flow` — onboarding picks a Custom 88 + 3 pack, then
