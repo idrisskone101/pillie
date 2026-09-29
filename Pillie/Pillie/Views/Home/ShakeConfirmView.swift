@@ -59,6 +59,7 @@ struct ShakeConfirmationInteractionFeedback {
 
 struct ShakeConfirmView: View {
     let action: DoseScheduleAction
+    let streak: StreakChange
     let onConfirm: () -> Void
     let onDismiss: () -> Void
 
@@ -66,122 +67,71 @@ struct ShakeConfirmView: View {
     @Environment(\.locale) private var locale
     @State private var shakeManager = ShakeDetectionManager()
     @State private var appeared = false
-    @State private var celebrating = false
-    @State private var emojiOffset: CGFloat = 0
+    @State private var hasConfirmed = false
     private let shakeFeedback = ShakeConfirmationInteractionFeedback()
 
-    private var emoji: String { action.method.emoji }
-    private var progressAnimation: Animation {
-        PillieMotion.animation(for: .quick, accessibilityReduceMotion: accessibilityReduceMotion)
+    /// The stage is laid out at the design's phone size and scaled to fit.
+    private static let stageSize = CGSize(width: 402, height: 400)
+    private static let plinthDiameter: CGFloat = 270
+    private static let autoConfirmDelay: Duration = .seconds(1.6)
+
+    private var stage: ShakeConfirmStage {
+        ShakeConfirmStage(
+            shakeCount: shakeManager.shakeCount,
+            requiredShakes: shakeManager.requiredShakes
+        )
+    }
+
+    private var isDone: Bool { stage == .done }
+    private var artwork: ShakeConfirmArtwork? { ShakeConfirmArtwork(action: action) }
+    private var digits: StreakOdometerDigits {
+        StreakOdometerDigits(from: streak.before, to: streak.after)
+    }
+
+    private var stageAnimation: Animation {
+        PillieMotion.animation(for: .rewardSpring, accessibilityReduceMotion: accessibilityReduceMotion)
+    }
+
+    private var eyebrow: String {
+        let dayOfTotal = PillieLocalization.formatted(
+            "today.pack.day_of_total",
+            locale: locale,
+            arguments: Int64(action.cycleDay),
+            Int64(action.cycleLength)
+        )
+        return "\(DueActionCopy.localizedLabel(for: action, locale: locale)) · \(dayOfTotal)"
+    }
+
+    private var headline: String {
+        PillieLocalization.string(
+            stage.headlineKey(streakBefore: streak.before, streakAfter: streak.after),
+            locale: locale
+        )
     }
 
     var body: some View {
         ZStack {
-            PillieTheme.bg.ignoresSafeArea()
+            (isDone ? PillieTheme.patchChangeRose : PillieTheme.coral)
+                .ignoresSafeArea()
 
-            ConfettiView(isActive: celebrating && !accessibilityReduceMotion)
-
-            VStack(spacing: 32) {
-                Spacer()
-
-                // Headline
-                Text(celebrating
-                    ? PillieLocalization.string("global.action.done", locale: locale)
-                    : PillieLocalization.string("today.action.shake", locale: locale))
-                    .font(.pillieHeadline())
-                    .foregroundStyle(PillieTheme.textPrimary)
+            VStack(spacing: 24) {
+                header
                     .modifier(FadeInUp(appeared: appeared, delay: 0))
 
-                // Subtitle
-                Text(celebrating
-                    ? PillieLocalization.string("global.status.completed", locale: locale)
-                    : DueActionCopy.localizedLabel(for: action, locale: locale))
-                    .font(.pillieBody())
-                    .foregroundStyle(PillieTheme.textMuted)
-                    .multilineTextAlignment(.center)
+                stageArea
                     .modifier(FadeInUp(appeared: appeared, delay: 0.05))
 
-                // Progress ring + emoji
-                ZStack {
-                    Circle()
-                        .stroke(PillieTheme.sage, lineWidth: 6)
-                        .frame(width: 140, height: 140)
+                compactCounter
+                    .opacity(isDone ? 0 : 1)
+                    .modifier(FadeInUp(appeared: appeared, delay: 0.1))
 
-                    Circle()
-                        .trim(from: 0, to: shakeManager.progress)
-                        .stroke(
-                            PillieTheme.coral,
-                            style: StrokeStyle(lineWidth: 6, lineCap: .round)
-                        )
-                        .frame(width: 140, height: 140)
-                        .rotationEffect(.degrees(-90))
-                        .animation(progressAnimation, value: shakeManager.progress)
+                Spacer(minLength: 0)
 
-                    Text(emoji)
-                        .font(.system(size: 56))
-                        .offset(y: emojiOffset)
-                        .scaleEffect(accessibilityReduceMotion ? 1.0 : (celebrating ? 1.3 : 1.0))
-                        .opacity(celebrating ? 1.0 : 0.94)
-                        .animation(
-                            PillieMotion.animation(
-                                for: .rewardSpring,
-                                accessibilityReduceMotion: accessibilityReduceMotion
-                            ),
-                            value: celebrating
-                        )
-                }
-                .scaleEffect(accessibilityReduceMotion ? 1.0 : (emojiOffset != 0 ? 1.02 : 1.0))
-                .animation(progressAnimation, value: emojiOffset)
-                .modifier(FadeInUp(appeared: appeared, delay: 0.1))
-
-                // Shake counter
-                Text("\(shakeManager.shakeCount) / \(shakeManager.requiredShakes)")
-                    .font(.pillie(20, weight: .bold))
-                    .foregroundStyle(PillieTheme.textPrimary)
-                    .contentTransition(.numericText())
-                    .animation(progressAnimation, value: shakeManager.shakeCount)
-                    .modifier(FadeInUp(appeared: appeared, delay: 0.15))
-
-                Spacer()
-
-                if !celebrating {
-                    // Tap-to-confirm alternative (accessibility — WCAG 2.5.4)
-                    Button {
-                        completeShake()
-                    } label: {
-                        HStack(spacing: 8) {
-                            Image(systemName: "hand.tap")
-                                .font(.system(size: 16, weight: .semibold))
-                            Text(PillieLocalization.string(
-                                "today.action.tap_instead",
-                                locale: locale
-                            ))
-                        }
-                        .font(.pillie(18, weight: .semibold))
-                        .foregroundStyle(PillieTheme.textPrimary)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: PillieTheme.ctaHeight)
-                        .background(PillieTheme.sage)
-                        .clipShape(Capsule())
-                    }
-                    .padding(.horizontal, 24)
-                    .padding(.bottom, 8)
-                    .accessibilityIdentifier("shakeTapToConfirmFallback")
-
-                    // Cancel
-                    Button {
-                        shakeManager.stopDetecting()
-                        onDismiss()
-                    } label: {
-                        Text(PillieLocalization.string("global.action.cancel", locale: locale))
-                            .font(.pillie(16, weight: .semibold))
-                            .foregroundStyle(PillieTheme.textMuted)
-                    }
-                    .padding(.bottom, 40)
-                }
+                actions
             }
             .padding(.horizontal, PillieTheme.screenHorizontalPadding)
         }
+        .animation(stageAnimation, value: stage)
         .onAppear {
             shakeManager.startDetecting()
             withAnimation(PillieTheme.fadeInUpCurve) {
@@ -193,47 +143,211 @@ struct ShakeConfirmView: View {
         }
         .onChange(of: shakeManager.shakeCount) { oldValue, newValue in
             guard newValue > oldValue else { return }
-
             if shakeManager.isComplete {
-                completeShake()
+                shakeManager.stopDetecting()
+                shakeFeedback.completion(accessibilityReduceMotion: accessibilityReduceMotion)
             } else {
-                bounceEmoji()
                 shakeFeedback.progressShake(accessibilityReduceMotion: accessibilityReduceMotion)
             }
         }
+        .task(id: isDone) {
+            guard isDone else { return }
+            do {
+                try await Task.sleep(for: Self.autoConfirmDelay)
+            } catch {
+                return
+            }
+            confirm()
+        }
+    }
+
+    // MARK: - Sections
+
+    private var header: some View {
+        VStack(spacing: 8) {
+            Text(eyebrow)
+                .font(.pillie(14, weight: .medium))
+                .foregroundStyle(isDone ? Color.white : PillieTheme.textPrimary.opacity(0.7))
+
+            Text(headline)
+                .font(.pillieHeadline())
+                .foregroundStyle(isDone ? Color.white : PillieTheme.textPrimary)
+                .contentTransition(.opacity)
+        }
+        .multilineTextAlignment(.center)
+        .padding(.top, 28)
+    }
+
+    private var stageArea: some View {
+        GeometryReader { proxy in
+            let scale = min(
+                proxy.size.width / Self.stageSize.width,
+                proxy.size.height / Self.stageSize.height,
+                1
+            )
+            stageContent
+                .frame(width: Self.stageSize.width, height: Self.stageSize.height)
+                .scaleEffect(scale)
+                .frame(width: proxy.size.width, height: proxy.size.height)
+        }
+        .frame(maxHeight: Self.stageSize.height)
+        .contentShape(Rectangle())
+        .onTapGesture {
+            shakeManager.simulateShake()
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(PillieLocalization.string("today.action.shake", locale: locale))
+        .accessibilityValue(
+            PillieLocalization.formatted(
+                "accessibility.shake.progress",
+                locale: locale,
+                arguments: Int64(shakeManager.shakeCount),
+                Int64(shakeManager.requiredShakes)
+            )
+        )
+        .accessibilityAddTraits(.isButton)
+        .accessibilityIdentifier("shakeConfirmStage")
+    }
+
+    private var stageContent: some View {
+        ZStack {
+            ShakeHalftoneField(
+                intensity: Double(stage.rawValue),
+                motionLineCount: stage.motionLineCount
+            )
+            .opacity(isDone ? 0.5 : 1)
+
+            if isDone {
+                heroCounter
+                    .transition(.scale(scale: 0.6).combined(with: .opacity))
+            } else {
+                plinth
+                    .transition(.scale(scale: 0.5).combined(with: .opacity))
+            }
+        }
+        .keyframeAnimator(
+            initialValue: 1.0,
+            trigger: shakeManager.shakeCount
+        ) { content, squash in
+            content.scaleEffect(x: 2 - squash, y: squash)
+        } keyframes: { _ in
+            KeyframeTrack {
+                CubicKeyframe(accessibilityReduceMotion ? 1 : 0.9, duration: 0.08)
+                SpringKeyframe(1, duration: 0.35, spring: .bouncy)
+            }
+        }
+    }
+
+    private var plinth: some View {
+        ZStack {
+            Circle().fill(Color.white)
+            blister
+        }
+        .frame(width: Self.plinthDiameter, height: Self.plinthDiameter)
+        .clipShape(Circle())
+        .shadow(color: PillieTheme.patchChangeRose.opacity(0.7), radius: 16, y: 16)
+    }
+
+    @ViewBuilder
+    private var blister: some View {
+        if let artwork {
+            let imageName = artwork.imageName(for: stage)
+            Image(imageName)
+                .resizable()
+                .interpolation(.high)
+                .frame(width: artwork.imageSize, height: artwork.imageSize)
+                .id(imageName)
+                .transition(.opacity)
+                .accessibilityHidden(true)
+        } else {
+            Text(action.method.emoji)
+                .font(.system(size: 96))
+        }
+    }
+
+    private var compactCounter: some View {
+        HStack(spacing: 14) {
+            Image(systemName: "flame.fill")
+                .font(.system(size: 26, weight: .semibold))
+                .foregroundStyle(PillieTheme.patchChangeRose)
+
+            StreakOdometer(digits: digits, progress: stage.odometerProgress, size: .compact)
+
+            Text(PillieLocalization.string("today.streak.title", locale: locale))
+                .font(.pillie(15, weight: .bold))
+                .foregroundStyle(PillieTheme.textPrimary)
+                .lineLimit(2)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .padding(.vertical, 12)
+        .padding(.leading, 16)
+        .padding(.trailing, 22)
+        .background(Color.white, in: RoundedRectangle(cornerRadius: PillieTheme.cardRadius))
+        .shadow(color: PillieTheme.cardShadow, radius: PillieTheme.cardShadowRadius, y: PillieTheme.cardShadowY)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(PillieLocalization.string("today.streak.title", locale: locale))
+        .accessibilityValue("\(isDone ? streak.after : streak.before)")
+    }
+
+    private var heroCounter: some View {
+        VStack(spacing: 14) {
+            Image(systemName: "flame.fill")
+                .font(.system(size: 40, weight: .semibold))
+                .foregroundStyle(PillieTheme.patchChangeRose)
+
+            StreakOdometer(digits: digits, progress: 1, size: .hero)
+
+            Text(PillieLocalization.string("today.streak.title", locale: locale))
+                .font(.pillie(14, weight: .bold))
+                .textCase(.uppercase)
+                .tracking(1.6)
+                .foregroundStyle(PillieTheme.textPrimary)
+        }
+        .padding(28)
+        .background(Color.white, in: RoundedRectangle(cornerRadius: 40))
+        .shadow(color: PillieTheme.textPrimary.opacity(0.2), radius: 20, y: 20)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(PillieLocalization.string("today.streak.title", locale: locale))
+        .accessibilityValue("\(streak.after)")
+    }
+
+    private var actions: some View {
+        VStack(spacing: 8) {
+            Button {
+                if isDone {
+                    confirm()
+                } else {
+                    shakeManager.fillToComplete()
+                }
+            } label: {
+                HStack(spacing: 10) {
+                    Image(systemName: isDone ? "checkmark.circle" : "hand.tap")
+                        .font(.system(size: 18, weight: .semibold))
+                    Text(PillieLocalization.string(
+                        isDone ? "global.action.done" : "today.action.tap_instead",
+                        locale: locale
+                    ))
+                }
+            }
+            .buttonStyle(.pillieDark)
+            .accessibilityIdentifier("shakeTapToConfirmFallback")
+
+            Button(PillieLocalization.string("global.action.cancel", locale: locale)) {
+                shakeManager.stopDetecting()
+                onDismiss()
+            }
+            .buttonStyle(.pillieQuiet)
+            .opacity(isDone ? 0 : 1)
+            .disabled(isDone)
+        }
+        .padding(.bottom, 12)
     }
 
     // MARK: - Private
 
-    private func bounceEmoji() {
-        guard !accessibilityReduceMotion else { return }
-        withAnimation(progressAnimation) {
-            emojiOffset = -16
-        }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
-            withAnimation(progressAnimation) {
-                emojiOffset = 0
-            }
-        }
-    }
-
-    private func completeShake() {
-        guard !celebrating else { return }
-        shakeManager.stopDetecting()
-
-        // Fill progress if skipped via tap alternative
-        if !shakeManager.isComplete {
-            shakeManager.fillToComplete()
-        }
-
-        let feedbackResponse = shakeFeedback.completion(accessibilityReduceMotion: accessibilityReduceMotion)
-
-        withAnimation(feedbackResponse.motionProfile.animation) {
-            celebrating = true
-        }
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
-            onConfirm()
-        }
+    private func confirm() {
+        guard !hasConfirmed else { return }
+        hasConfirmed = true
+        onConfirm()
     }
 }

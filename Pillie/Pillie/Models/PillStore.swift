@@ -325,6 +325,16 @@ class PillStore {
     }
 
     var currentStreak: Int {
+        streak(countingTodayAsTaken: false)
+    }
+
+    /// The streak the moment today's due action is logged, so the shake confirm
+    /// can roll its counter to the real number before the store changes.
+    var streakAfterCompletingToday: Int {
+        streak(countingTodayAsTaken: true)
+    }
+
+    private func streak(countingTodayAsTaken: Bool) -> Int {
         guard let targetPack = activePack else { return 0 }
 
         let currentDay = today
@@ -344,6 +354,9 @@ class PillStore {
             if streak == 0,
                cal.isDate(dueDate, inSameDayAs: currentDay),
                snapshot.status == .upcoming {
+                if countingTodayAsTaken, snapshot.countsTowardAdherence {
+                    streak += 1
+                }
                 continue
             }
 
