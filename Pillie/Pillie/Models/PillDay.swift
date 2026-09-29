@@ -13,6 +13,8 @@ final class PillDay: Identifiable {
     var status: Status
     var actionTypeRaw: String = ActionType.pillActive.rawValue
     var pack: PillPack?
+    /// When a missed patch or ring task was logged late from Home. The day stays `.missed`.
+    var caughtUpAt: Date?
 
     enum Status: String, Codable, Hashable {
         case taken

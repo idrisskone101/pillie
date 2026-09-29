@@ -305,14 +305,6 @@
     {
       "issue": "ENG-63",
       "table": "Localizable",
-      "key": "today.pack.title",
-      "en": "This cycle",
-      "de": "Dieser Zyklus",
-      "it": "Questo ciclo"
-    },
-    {
-      "issue": "ENG-63",
-      "table": "Localizable",
       "key": "today.pack.day_of_total",
       "en": "Day %lld of %lld",
       "de": "Tag %lld von %lld",

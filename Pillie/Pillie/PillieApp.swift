@@ -243,6 +243,7 @@ struct PillieApp: App {
     @State private var showFirstInterventionConfirmation = false
     #if DEBUG
     @State private var showsPackCardGallery = false
+    @State private var showsCountdownCardGallery = false
     #endif
     private static var isRunningTests: Bool {
         ProcessRuntime.isRunningTests
@@ -349,6 +350,9 @@ struct PillieApp: App {
                 }
                 .fullScreenCover(isPresented: $showsPackCardGallery) {
                     PackCardGalleryView()
+                }
+                .fullScreenCover(isPresented: $showsCountdownCardGallery) {
+                    CountdownCardGalleryView()
                 }
                 #endif
                 .onChange(of: scenePhase) { _, newPhase in
@@ -790,6 +794,20 @@ struct PillieApp: App {
             reconcileScreenTimeState()
         case "/pack-card":
             showsPackCardGallery = true
+        case "/countdown-card":
+            showsCountdownCardGallery = true
+        case "/routine-day":
+            let query = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems ?? []
+            guard
+                let method = query.first(where: { $0.name == "method" })?.value.flatMap(RoutineDialMethod.init(rawValue:)),
+                let day = query.first(where: { $0.name == "day" })?.value.flatMap(Int.init)
+            else {
+                os.Logger(subsystem: "com.idrisskone.pillie", category: "qa")
+                    .error("Pillie QA routine-day ignored unreadable query \(url.query ?? "nil", privacy: .public)")
+                return
+            }
+            DebugQA.applyRoutineDay(method.contraceptiveMethod, cycleDay: day, store: store)
+            reconcileScreenTimeState()
         case "/review-prompt":
             // QA shortcut (#133): land on Home with an unbroken Streak past the pill
             // threshold so the Review Prompt's Sentiment Gate card surfaces and the

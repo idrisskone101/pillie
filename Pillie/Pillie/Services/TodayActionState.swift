@@ -17,6 +17,9 @@ enum TodayActionState: Equatable {
         let todayDueAction: DoseScheduleAction?
         let isPlus: Bool
         let reduceMotionEnabled: Bool
+        /// A missed patch or ring task Home can still log late.
+        var catchUp: DoseScheduleAction? = nil
+        var isCaughtUpToday = false
     }
 
     static func resolve(_ input: Input) -> TodayActionState {
@@ -24,16 +27,17 @@ enum TodayActionState: Equatable {
             return .refillDue
         }
 
-        if input.isTodayTaken {
+        if input.isTodayTaken || input.isCaughtUpToday {
             return .completed
         }
 
-        guard let todayDueAction = input.todayDueAction, todayDueAction.type.requiresUserAction else {
+        let todayDueAction = input.todayDueAction.flatMap { $0.type.requiresUserAction ? $0 : nil }
+        guard let action = todayDueAction ?? input.catchUp else {
             return .noActionDue
         }
 
         return .dueAction(
-            todayDueAction,
+            action,
             requiresShakeConfirm: input.isPlus && !input.reduceMotionEnabled
         )
     }

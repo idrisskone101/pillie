@@ -25,7 +25,15 @@ struct HistoryDayCorrectionSheet: View {
     /// Type; larger text scrolls inside the detent instead of growing it.
     private var presentationHeight: CGFloat {
         let rows = CGFloat(day.options.selectableOutcomes.count)
-        return 108 + rows * 78 + 48
+        return 108 + rows * 78 + 48 + (daysLate == nil ? 0 : 22)
+    }
+
+    /// Whole days between a missed patch or ring task and its late log from Home.
+    private var daysLate: Int? {
+        guard let caughtUpAt = store.caughtUpAt(on: day.date) else { return nil }
+        let loggedOn = LiveDoseDay.on(caughtUpAt, reminderHour: store.reminderHour, reminderMinute: store.reminderMinute)
+        let days = Calendar.current.dateComponents([.day], from: day.date, to: loggedOn).day ?? 0
+        return max(1, days)
     }
 
     var body: some View {
@@ -61,6 +69,15 @@ struct HistoryDayCorrectionSheet: View {
                     .foregroundStyle(PillieTheme.textMuted)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .fixedSize(horizontal: false, vertical: true)
+
+                    if let daysLate {
+                        Text(PillieLocalization.formatted("history.catch_up.logged_late", locale: locale, arguments: daysLate))
+                            .font(.pillieBody())
+                            .foregroundStyle(PillieTheme.amberText)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .accessibilityIdentifier("historyDayCatchUp")
+                    }
                 }
 
                 VStack(spacing: 8) {

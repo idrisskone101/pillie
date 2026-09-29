@@ -1,0 +1,53 @@
+# A missed patch change stays loggable from Home until the next task day
+# (ENG-149). The day stays missed; PillDay.caughtUpAt records the late log.
+# /routine-day seeds patch day 15 (Sep 28, EDT); the clock then moves to
+# day 16 and day 17, past the 8:00 AM reminder.
+fresh
+launch
+wait text "Get started" 15
+openurl "pillie://debug/plus-home?lang=en"
+openurl pillie://debug/fixed-now?at=2026-09-28T16:00:00Z
+openurl "pillie://debug/routine-day?method=patch&day=15&lang=en"
+tap --id homeBlockingStatusCardDismiss
+gone id homeBlockingStatusCard 10
+wait text "Change to patch 3" 10
+
+openurl pillie://debug/fixed-now?at=2026-09-29T16:00:00Z
+wait text "Change to patch 3 now" 10
+expect text "Was due yesterday"
+expect text "Change patch"
+shot missed-day-16
+
+tap --label "Change patch"
+wait id shakeTapToConfirmFallback 10
+tap --id shakeTapToConfirmFallback
+wait text "On today" 15
+expect text "until you take it off"
+expect text "That's logged. Tap to undo."
+shot caught-up-day-16
+
+tap --label "That's logged. Tap to undo."
+wait text "Change to patch 3 now" 10
+expect text "Change patch"
+shot undone-day-16
+
+openurl pillie://debug/fixed-now?at=2026-09-30T16:00:00Z
+wait text "Was due Sep 28" 10
+expect text "Day 17 of 28"
+expect text "Change patch"
+shot still-open-day-17
+
+tap --label "Change patch"
+wait id shakeTapToConfirmFallback 10
+tap --id shakeTapToConfirmFallback
+wait text "On today" 15
+shot caught-up-day-17
+
+# The missed day keeps its status in History and says it was logged late.
+tap --label History
+wait text "September 28, 2026: Not logged" 10
+tap --label "September 28, 2026: Not logged"
+wait id historyDayCatchUp 10
+expect text "Logged 2 days late"
+shot history-logged-late
+openurl pillie://debug/fixed-now?at=off

@@ -23,6 +23,8 @@ In a flow: `openurl pillie://debug/<path>?lang=en`. The runner accepts the iOS "
 | `/update-trial-announcement` | Onboarded free user; the next launch shows the trial announcement |
 | `/review-prompt` | Home with the review prompt card eligible |
 | `/intervention-seed?count=N` | N fake shield intercepts (the shield itself never shows on a simulator) |
+| `/routine-day?method=patch\|ring&day=N` | Onboarded Plus user on a fresh 21 + 7 patch or ring routine at cycle day N (1 to 28), earlier tasks logged, no start-day grace. Pair with `/fixed-now` to cross days. |
+| `/countdown-card` | Gallery of the 16 patch and ring countdown card states |
 | `/fixed-now?at=<epoch\|ISO8601\|off>` | Pins the app clock. Use it to make calendar ids and "due" state deterministic. |
 | `/request-notification-permission` | The system notification prompt |
 | `/notification-complete` | Runs the reminder's Complete action for today (`NotificationManager.completeReminder`), as if tapped while the app is open |
