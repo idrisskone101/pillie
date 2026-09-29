@@ -105,6 +105,11 @@ blocking/trial status surfaces, and (when eligible) the review ask.
 - `flows/today-notification-complete.flow` — `/notification-complete` runs
   the reminder's Complete action while Home is open; the status card, CTA and
   pack card all flip to taken.
+- `flows/shake-confirm-stages.flow` steps the shake confirm's stop-motion clip
+  for every method (pill with and without a streak, patch apply, change and
+  remove, ring insert and remove), one shot per shake, then the streak
+  reveal and its logged note. A tap on `#shakeConfirmStage` counts as one
+  shake.
 - `flows/smoke.flow` covers the plain tab bar (Today/History/Settings) with
   `/plus-home`.
 - Not covered by an authored flow, and why: `ProtectionOffCard` needs an
@@ -122,8 +127,9 @@ blocking/trial status surfaces, and (when eligible) the review ask.
   Button answers hit testing, the same shape already proven for the
   Today/History/Settings tab labels, so `tap --label` still resolves to the
   CTA.
-- Shake detection cannot be driven on the simulator. Always use
-  `#shakeTapToConfirmFallback` ("Tap to Confirm Instead").
+- Shake detection cannot be driven on the simulator. Tap
+  `#shakeConfirmStage` once per shake to step the stages, or
+  `#shakeTapToConfirmFallback` ("Tap to Confirm Instead") to finish at once.
 - `homeBlockingStatusCardDismissed` is a persistent `@AppStorage` flag that
   survives `launch`. Start a flow from `fresh` whenever it needs the
   blocking card in its default (not dismissed) state.

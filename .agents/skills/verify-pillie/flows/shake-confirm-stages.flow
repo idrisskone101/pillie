@@ -1,0 +1,139 @@
+# Shake confirm (ENG-150): every method's stop-motion clip, one shot per
+# shake, then the streak reveal. The simulator cannot shake, so a tap on
+# #shakeConfirmStage counts as one shake (ShakeConfirmView stage tap ->
+# ShakeDetectionManager.simulateShake). Sleeps cover each clip slice's
+# playback before the shot.
+fresh
+launch
+wait text "Get started" 15
+openurl "pillie://debug/plus-home?lang=en"
+openurl pillie://debug/trial-grant?lang=en
+
+# Pill, no streak yet: the headline stays generic and the counter rolls 0 to 1.
+openurl pillie://debug/fixed-now?at=2026-09-15T15:00:00Z
+tap --id developerMenuAvatarButton
+wait text "PACK & CALENDAR" 10
+tap --label "Missed the last 2 days"
+wait text "Take pill" 10
+tap --label "Take pill"
+wait id shakeConfirmStage 10
+expect text "Shake to Confirm"
+shot pill-first-open
+tap --id shakeTapToConfirmFallback
+wait id shakeStreakHero 10
+expect id shakeLoggedNote
+shot pill-first-done
+wait text "Taken today" 15
+
+# Pill, next day: a streak of 1 rolls to 2 across the three shakes.
+openurl pillie://debug/fixed-now?at=2026-09-16T15:00:00Z
+wait text "Take pill" 10
+tap --label "Take pill"
+wait text "Shake to keep it going" 10
+shot pill-open
+record start
+tap --id shakeConfirmStage
+wait text "1 and counting" 5
+sleep 1
+shot pill-shake-1
+tap --id shakeConfirmStage
+wait text "Almost 2" 5
+sleep 1
+shot pill-shake-2
+tap --id shakeConfirmStage
+wait id shakeStreakHero 10
+wait text "Streak kept" 5
+expect text "Pill 2 logged at"
+shot pill-done
+record stop
+wait text "Taken today" 15
+
+# Patch apply, day 1 of a new routine: pouch tears, patch peels flat.
+openurl pillie://debug/fixed-now?at=2026-09-28T16:00:00Z
+openurl "pillie://debug/routine-day?method=patch&day=1&lang=en"
+tap --id homeBlockingStatusCardDismiss
+gone id homeBlockingStatusCard 10
+tap --label "Apply patch"
+wait id shakeConfirmStage 10
+expect text "Apply patch · Day 1 of 28"
+shot patch-apply-open
+tap --id shakeConfirmStage
+sleep 2
+shot patch-apply-shake-1
+tap --id shakeConfirmStage
+sleep 1
+shot patch-apply-shake-2
+tap --id shakeConfirmStage
+wait id shakeStreakHero 10
+expect text "Patch applied at"
+shot patch-apply-done
+wait text "On today" 15
+
+# Patch change, day 8: the old patch folded on the new pouch, then the same tear.
+openurl "pillie://debug/routine-day?method=patch&day=8&lang=en"
+tap --label "Change patch"
+wait text "Shake to keep it going" 10
+shot patch-change-open
+tap --id shakeConfirmStage
+sleep 2
+shot patch-change-shake-1
+tap --id shakeConfirmStage
+sleep 1
+shot patch-change-shake-2
+tap --id shakeConfirmStage
+wait text "Streak kept" 10
+expect text "Patch changed at"
+shot patch-change-done
+wait text "On today" 15
+
+# Patch remove, day 22: the worn patch lifts at a corner and folds shut.
+openurl "pillie://debug/routine-day?method=patch&day=22&lang=en"
+tap --label "Remove patch"
+wait text "Shake to keep it going" 10
+shot patch-remove-open
+tap --id shakeConfirmStage
+sleep 1
+shot patch-remove-shake-1
+tap --id shakeConfirmStage
+sleep 1
+shot patch-remove-shake-2
+tap --id shakeConfirmStage
+wait text "Streak kept" 10
+expect text "Patch removed at"
+shot patch-remove-done
+wait text "Off today" 15
+
+# Ring insert, day 1.
+openurl "pillie://debug/routine-day?method=ring&day=1&lang=en"
+tap --label "Insert ring"
+wait id shakeConfirmStage 10
+shot ring-insert-open
+tap --id shakeConfirmStage
+sleep 1
+shot ring-insert-shake-1
+tap --id shakeConfirmStage
+sleep 1
+shot ring-insert-shake-2
+tap --id shakeConfirmStage
+wait id shakeStreakHero 10
+expect text "Ring inserted at"
+shot ring-insert-done
+wait text "In today" 15
+
+# Ring remove, day 22: insert played backwards.
+openurl "pillie://debug/routine-day?method=ring&day=22&lang=en"
+tap --label "Remove ring"
+wait text "Shake to keep it going" 10
+shot ring-remove-open
+tap --id shakeConfirmStage
+sleep 1
+shot ring-remove-shake-1
+tap --id shakeConfirmStage
+sleep 1
+shot ring-remove-shake-2
+tap --id shakeConfirmStage
+wait text "Streak kept" 10
+expect text "Ring removed at"
+shot ring-remove-done
+wait text "Out today" 15
+openurl pillie://debug/fixed-now?at=off
