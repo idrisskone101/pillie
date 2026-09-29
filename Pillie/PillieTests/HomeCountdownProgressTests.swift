@@ -29,6 +29,7 @@ struct HomeCountdownProgressTests {
         taken: Bool = false,
         late: Bool = false,
         missed: Set<Int> = [],
+        caughtUp: [Int: Bool] = [:],
         now: Date? = nil
     ) -> HomeCountdownProgress {
         HomeCountdownProgress(
@@ -36,7 +37,8 @@ struct HomeCountdownProgressTests {
             cycleDay: day,
             isTodayTaken: taken,
             standing: late ? .late(until: date(29, hour: 20)) : .upcoming,
-            missedTaskDays: missed,
+            misses: Dictionary(uniqueKeysWithValues: missed.map { ($0, .pending) })
+                .merging(caughtUp.mapValues { .caughtUp(onLiveDay: $0) }) { _, caught in caught },
             reminderHour: 20,
             reminderMinute: 0,
             today: date(28),
@@ -144,13 +146,51 @@ struct HomeCountdownProgressTests {
         #expect(missed.lineSegments == [.init(from: 0, to: 14.0 / 28.0, tint: .method)])
     }
 
-    @Test func `Two days after a missed change the countdown returns and the miss stays on the track`() {
-        let later = progress(.patch, day: 17, missed: [15])
-
-        #expect(later.state == .wearing)
-        #expect(card(later)[2] == "5 days")
-        #expect(card(later)[3] == "until you take it off")
+    @Test func `A missed change stays missed until the off day, with the due date after the first day`() {
+        for day in 16...21 {
+            #expect(progress(.patch, day: day, missed: [15]).state == .missed(.changePatch(3)), "day \(day)")
+        }
+        let later = progress(.patch, day: 18, missed: [15])
+        #expect(card(later) == ["Patch 3 of 3", "Day 18 of 28", "Missed", "Change to patch 3 now", "Was due Sep 25"])
         #expect(marks(later) == [.done, .done, .missed, .offDashed, .upcoming])
+        #expect(later.lineSegments == [.init(from: 0, to: 14.0 / 28.0, tint: .method)])
+
+        let offDay = progress(.patch, day: 22, late: true, missed: [15])
+        #expect(offDay.state == .late(.takeOffPatch, endsTomorrow: true))
+        #expect(marks(offDay) == [.done, .done, .missed, .late, .upcoming])
+    }
+
+    @Test func `A change logged late reads logged that day and wearing after`() {
+        let caughtUp = progress(.patch, day: 17, caughtUp: [15: true])
+        #expect(caughtUp.state == .logged(.changePatch(3)))
+        #expect(card(caughtUp) == ["Patch 3 of 3", "On today", "5 days", "until you take it off", "Oct 3 · 8:00 PM"])
+        #expect(marks(caughtUp) == [.done, .done, .done, .offDashed, .upcoming])
+
+        let nextDay = progress(.patch, day: 18, caughtUp: [15: false])
+        #expect(nextDay.state == .wearing)
+        #expect(card(nextDay) == ["Patch 3 of 3", "Day 18 of 28", "4 days", "until you take it off", "Oct 2 · 8:00 PM"])
+    }
+
+    @Test func `A missed ring removal stays missed through the ring-free week`() {
+        for day in 23...28 {
+            #expect(progress(.ring, day: day, missed: [22]).state == .missed(.ringOut), "day \(day)")
+        }
+        #expect(card(progress(.ring, day: 25, missed: [22])) == [
+            "Ring in", "Day 25 of 28", "Missed", "Take your ring out now", "Was due Sep 25",
+        ])
+        #expect(progress(.ring, day: 29, late: true, missed: [22]).state == .late(.newRingIn, endsTomorrow: true))
+    }
+
+    @Test func `The catch-up window runs from the day after a task to the day before the next`() {
+        #expect((1...30).map { CatchUpWindow.taskDay(on: $0, method: .patch) } == [
+            nil, 1, 1, 1, 1, 1, 1,
+            nil, 8, 8, 8, 8, 8, 8,
+            nil, 15, 15, 15, 15, 15, 15,
+            nil, 22, 22, 22, 22, 22, 22,
+            nil, nil,
+        ])
+        #expect((1...30).map { CatchUpWindow.taskDay(on: $0, method: .ring) } == [nil] + Array(repeating: 1, count: 20)
+            + [nil] + Array(repeating: 22, count: 6) + [nil, nil])
     }
 
     @Test func `The off day asks to take patch 3 off, then counts down to a new patch`() {

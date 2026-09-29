@@ -57,7 +57,7 @@ private struct GalleryCard: Identifiable {
         day: Int,
         taken: Bool = false,
         late: Bool = false,
-        missed: Set<Int> = []
+        misses: [Int: HomeCountdownProgress.Miss] = [:]
     ) -> GalleryCard {
         GalleryCard(
             id: id,
@@ -67,7 +67,7 @@ private struct GalleryCard: Identifiable {
                 cycleDay: day,
                 isTodayTaken: taken,
                 standing: late ? .late(until: deadline) : .upcoming,
-                missedTaskDays: missed,
+                misses: misses,
                 reminderHour: 20,
                 reminderMinute: 0,
                 today: today,
@@ -83,7 +83,9 @@ private struct GalleryCard: Identifiable {
         card("patch-wearing", "Patch 3 · Wearing", .patch, day: 10),
         card("patch-change", "Patch 4 · Change day", .patch, day: 15),
         card("patch-late", "Patch 5 · Late change", .patch, day: 15, late: true),
-        card("patch-missed", "Patch 6 · Missed change", .patch, day: 16, missed: [15]),
+        card("patch-missed", "Patch 6 · Missed change", .patch, day: 16, misses: [15: .pending]),
+        card("patch-missed-later", "Patch 6 · Missed change, still open on day 18", .patch, day: 18, misses: [15: .pending]),
+        card("patch-caught-up", "Patch 6 · Changed a day late", .patch, day: 17, misses: [15: .caughtUp(onLiveDay: true)]),
         card("patch-off", "Patch 7 · Off day", .patch, day: 22),
         card("patch-free", "Patch 8 · Patch-free week", .patch, day: 25),
         card("ring-put-in", "Ring 1 · Put it in", .ring, day: 1),

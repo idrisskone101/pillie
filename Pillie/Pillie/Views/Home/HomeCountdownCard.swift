@@ -15,7 +15,7 @@ struct HomeCountdownCard: View {
     @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
     @Environment(\.locale) private var locale
     @Environment(\.scenePhase) private var scenePhase
-    @State private var heldTaken: Bool?
+    @State private var held: Held?
     @State private var showsNewCycleConfirmation = false
     private let homeFeedback = HomeActionInteractionFeedback()
 
@@ -25,12 +25,13 @@ struct HomeCountdownCard: View {
         let _ = store.civilDay
         let today = store.today
         let cycleDay = store.pack.elapsedCycleDays(on: today) + 1
+        let live = held ?? Held(taken: store.isTodayTaken, misses: misses(before: cycleDay, today: today))
         let progress = HomeCountdownProgress(
             method: method,
             cycleDay: cycleDay,
-            isTodayTaken: heldTaken ?? store.isTodayTaken,
+            isTodayTaken: live.taken,
             standing: store.doseStanding(on: today),
-            missedTaskDays: missedTaskDays(before: cycleDay, today: today),
+            misses: live.misses,
             reminderHour: store.reminderHour,
             reminderMinute: store.reminderMinute,
             today: today,
@@ -62,7 +63,8 @@ struct HomeCountdownCard: View {
             .accessibilityIdentifier("homeCountdownOptions")
         }
         .onChange(of: holdsTodayLog || scenePhase != .active, initial: true) { _, holds in
-            heldTaken = holds ? store.isTodayTaken : nil
+            let cycleDay = store.pack.elapsedCycleDays(on: store.today) + 1
+            held = holds ? Held(taken: store.isTodayTaken, misses: misses(before: cycleDay, today: store.today)) : nil
         }
         .alert(startNewConfirmation.title, isPresented: $showsNewCycleConfirmation) {
             Button(PillieLocalization.string("today.pack.start_new.confirm", locale: locale)) {
@@ -79,17 +81,25 @@ struct HomeCountdownCard: View {
         }
     }
 
-    /// Cycle days before today whose task the store reads as missed.
-    private func missedTaskDays(before cycleDay: Int, today: Date) -> Set<Int> {
+    /// Tasks before today that the store reads as missed, and whether each was logged late.
+    private func misses(before cycleDay: Int, today: Date) -> [Int: HomeCountdownProgress.Miss] {
         let calendar = Calendar.current
-        let taskDays = HomeCountdownProgress.taskDays(for: method).filter { $0 < cycleDay }
-        return Set(taskDays.filter { day in
-            guard let date = calendar.date(byAdding: .day, value: day - cycleDay, to: today) else { return false }
-            return store.statusForDate(date) == .missed
-        })
+        var misses: [Int: HomeCountdownProgress.Miss] = [:]
+        for day in HomeCountdownProgress.taskDays(for: method) where day < cycleDay {
+            guard let date = calendar.date(byAdding: .day, value: day - cycleDay, to: today),
+                  store.statusForDate(date) == .missed else { continue }
+            misses[day] = store.caughtUpAt(on: date).map { .caughtUp(onLiveDay: store.isOnLiveDay($0)) } ?? .pending
+        }
+        return misses
     }
 
     private var startNewConfirmation: CycleNounPresentation.StartNewConfirmation {
         CycleNounPresentation.startNewConfirmation(for: method.contraceptiveMethod, locale: locale)
     }
+}
+
+/// What the card shows while a log waits behind the Shake cover or the background.
+private struct Held: Equatable {
+    let taken: Bool
+    let misses: [Int: HomeCountdownProgress.Miss]
 }

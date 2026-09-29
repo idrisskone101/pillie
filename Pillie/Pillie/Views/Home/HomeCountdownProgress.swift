@@ -78,6 +78,12 @@ struct HomeCountdownProgress: Hashable, Sendable {
         var position: Double { HomeCountdownProgress.position(ofCycleDay: cycleDay) }
     }
 
+    /// A past task the store reads as missed: still waiting for a late log, or logged late.
+    enum Miss: Hashable, Sendable {
+        case pending
+        case caughtUp(onLiveDay: Bool)
+    }
+
     struct LineSegment: Hashable, Sendable {
         let from: Double
         let to: Double
@@ -97,7 +103,6 @@ struct HomeCountdownProgress: Hashable, Sendable {
     let gaugeFraction: Double
     let milestones: [Milestone]
 
-    private let missedTaskDays: Set<Int>
     private let today: Date
     private let calendar: Calendar
 
@@ -106,7 +111,7 @@ struct HomeCountdownProgress: Hashable, Sendable {
         cycleDay: Int,
         isTodayTaken: Bool,
         standing: DoseStanding?,
-        missedTaskDays: Set<Int> = [],
+        misses: [Int: Miss] = [:],
         reminderHour: Int,
         reminderMinute: Int,
         today: Date,
@@ -116,7 +121,6 @@ struct HomeCountdownProgress: Hashable, Sendable {
         let cycleDay = max(1, cycleDay)
         self.method = method
         self.cycleDay = cycleDay
-        self.missedTaskDays = missedTaskDays
         self.today = calendar.startOfDay(for: today)
         self.calendar = calendar
 
@@ -125,7 +129,7 @@ struct HomeCountdownProgress: Hashable, Sendable {
             cycleDay: cycleDay,
             isTodayTaken: isTodayTaken,
             standing: standing,
-            missedTaskDays: missedTaskDays,
+            misses: misses,
             now: now,
             calendar: calendar
         )
@@ -155,7 +159,7 @@ struct HomeCountdownProgress: Hashable, Sendable {
             method: method,
             cycleDay: cycleDay,
             state: state,
-            missedTaskDays: missedTaskDays
+            misses: misses
         )
     }
 
@@ -293,18 +297,30 @@ struct HomeCountdownProgress: Hashable, Sendable {
             let key = endsTomorrow ? "home.countdown.chip.until_tomorrow" : "home.countdown.chip.until_today"
             return PillieLocalization.formatted(key, locale: locale, arguments: reminderTime)
         case .missed:
-            return PillieLocalization.string("home.countdown.chip.missed_yesterday", locale: locale)
+            let taskDay = CatchUpWindow.taskDay(on: cycleDay, method: method) ?? cycleDay - 1
+            guard cycleDay - taskDay > 1,
+                  let dueDay = calendar.date(byAdding: .day, value: taskDay - cycleDay, to: today) else {
+                return PillieLocalization.string("home.countdown.chip.missed_yesterday", locale: locale)
+            }
+            return PillieLocalization.formatted(
+                "home.countdown.chip.missed_on", locale: locale, arguments: shortDate(dueDay, locale: locale)
+            )
         case .newCycleDue:
             return nil
         case .logged, .wearing, .offWeek:
             guard let nextTaskDate else { return nil }
-            let date = nextTaskDate.formatted(
-                Date.FormatStyle(locale: locale, calendar: calendar, timeZone: calendar.timeZone)
-                    .month(.abbreviated)
-                    .day()
+            return PillieLocalization.formatted(
+                "home.countdown.chip.when", locale: locale, arguments: shortDate(nextTaskDate, locale: locale), reminderTime
             )
-            return PillieLocalization.formatted("home.countdown.chip.when", locale: locale, arguments: date, reminderTime)
         }
+    }
+
+    private func shortDate(_ date: Date, locale: Locale) -> String {
+        date.formatted(
+            Date.FormatStyle(locale: locale, calendar: calendar, timeZone: calendar.timeZone)
+                .month(.abbreviated)
+                .day()
+        )
     }
 
     func label(_ label: Milestone.Label, locale: Locale) -> String {
@@ -402,7 +418,7 @@ struct HomeCountdownProgress: Hashable, Sendable {
     // MARK: Rules
 
     static func taskDays(for method: RoutineDialMethod) -> [Int] {
-        (1...cycleLength).filter { RoutineDialDay.day($0, method: method).task != nil } + [cycleLength + 1]
+        RoutineDialDay.taskDays(method: method) + [cycleLength + 1]
     }
 
     static func task(onCycleDay day: Int, method: RoutineDialMethod) -> Task? {
@@ -422,7 +438,7 @@ struct HomeCountdownProgress: Hashable, Sendable {
         cycleDay: Int,
         isTodayTaken: Bool,
         standing: DoseStanding?,
-        missedTaskDays: Set<Int>,
+        misses: [Int: Miss],
         now: Date,
         calendar: Calendar
     ) -> State {
@@ -433,8 +449,14 @@ struct HomeCountdownProgress: Hashable, Sendable {
         }
         let todayTask = task(onCycleDay: cycleDay, method: method)
         if let todayTask, isTodayTaken { return .logged(todayTask) }
-        if missedTaskDays.contains(cycleDay - 1), let missed = task(onCycleDay: cycleDay - 1, method: method) {
-            return .missed(missed)
+        // A missed task stays open until the next task day; it wins over anything else that day.
+        if let taskDay = CatchUpWindow.taskDay(on: cycleDay, method: method),
+           let missed = task(onCycleDay: taskDay, method: method) {
+            switch misses[taskDay] {
+            case .pending?: return .missed(missed)
+            case .caughtUp(onLiveDay: true)?: return .logged(missed)
+            case .caughtUp(onLiveDay: false)?, nil: break
+            }
         }
         if let todayTask {
             if case .late(let until)? = standing {
@@ -449,14 +471,10 @@ struct HomeCountdownProgress: Hashable, Sendable {
         method: RoutineDialMethod,
         cycleDay: Int,
         state: State,
-        missedTaskDays: Set<Int>
+        misses: [Int: Miss]
     ) -> [Milestone] {
         let days = taskDays(for: method)
-        let focusDay: Int = if case .missed = state {
-            cycleDay - 1
-        } else {
-            days.last { $0 <= cycleDay } ?? 1
-        }
+        let focusDay = days.last { $0 <= cycleDay } ?? 1
         return days.map { day in
             let mark: Mark
             if day == focusDay {
@@ -464,10 +482,10 @@ struct HomeCountdownProgress: Hashable, Sendable {
                 case .due, .newCycleDue: .current
                 case .late: .late
                 case .missed: .missed
-                case .logged, .wearing, .offWeek: missedTaskDays.contains(day) ? .missed : .done
+                case .logged, .wearing, .offWeek: misses[day] == .pending ? .missed : .done
                 }
             } else if day < focusDay {
-                mark = missedTaskDays.contains(day) ? .missed : .done
+                mark = misses[day] == .pending ? .missed : .done
             } else {
                 mark = method == .patch && day == freeWeekStart ? .offDashed : .upcoming
             }
