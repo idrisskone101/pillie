@@ -2,7 +2,8 @@
 # shake, then the streak reveal. The simulator cannot shake, so a tap on
 # #shakeConfirmStage counts as one shake (ShakeConfirmView stage tap ->
 # ShakeDetectionManager.simulateShake). Sleeps cover each clip slice's
-# playback before the shot.
+# playback before the shot. The reveal auto-confirms 1.6 s after it lands,
+# so each method waits on its logged note and shoots straight away.
 fresh
 launch
 wait text "Get started" 15
@@ -20,8 +21,7 @@ wait id shakeConfirmStage 10
 expect text "Shake to Confirm"
 shot pill-first-open
 tap --id shakeTapToConfirmFallback
-wait id shakeStreakHero 10
-expect id shakeLoggedNote
+wait text "Pill 11 logged at" 10
 shot pill-first-done
 wait text "Taken today" 15
 
@@ -41,9 +41,7 @@ wait text "Almost 2" 5
 sleep 1
 shot pill-shake-2
 tap --id shakeConfirmStage
-wait id shakeStreakHero 10
-wait text "Streak kept" 5
-expect text "Pill 2 logged at"
+wait text "Pill 12 logged at" 10
 shot pill-done
 record stop
 wait text "Taken today" 15
@@ -64,13 +62,15 @@ tap --id shakeConfirmStage
 sleep 1
 shot patch-apply-shake-2
 tap --id shakeConfirmStage
-wait id shakeStreakHero 10
-expect text "Patch applied at"
+wait text "Patch applied at" 10
 shot patch-apply-done
 wait text "On today" 15
 
-# Patch change, day 8: the old patch folded on the new pouch, then the same tear.
-openurl "pillie://debug/routine-day?method=patch&day=8&lang=en"
+# Patch change, day 8 of the same routine. /routine-day seeds earlier tasks as
+# a backfill that the streak ignores, so cross days with the clock instead to
+# carry the streak from the apply above.
+# The old patch folded on the new pouch, then the same tear.
+openurl pillie://debug/fixed-now?at=2026-10-05T16:00:00Z
 tap --label "Change patch"
 wait text "Shake to keep it going" 10
 shot patch-change-open
@@ -81,15 +81,17 @@ tap --id shakeConfirmStage
 sleep 1
 shot patch-change-shake-2
 tap --id shakeConfirmStage
-wait text "Streak kept" 10
-expect text "Patch changed at"
+wait text "Patch changed at" 10
 shot patch-change-done
 wait text "On today" 15
 
 # Patch remove, day 22: the worn patch lifts at a corner and folds shut.
-openurl "pillie://debug/routine-day?method=patch&day=22&lang=en"
+# Day 15's change was never logged, so the streak is broken and the headline
+# stays generic.
+openurl pillie://debug/fixed-now?at=2026-10-19T16:00:00Z
 tap --label "Remove patch"
-wait text "Shake to keep it going" 10
+wait id shakeConfirmStage 10
+expect text "Shake to Confirm"
 shot patch-remove-open
 tap --id shakeConfirmStage
 sleep 1
@@ -98,12 +100,12 @@ tap --id shakeConfirmStage
 sleep 1
 shot patch-remove-shake-2
 tap --id shakeConfirmStage
-wait text "Streak kept" 10
-expect text "Patch removed at"
+wait text "Patch removed at" 10
 shot patch-remove-done
 wait text "Off today" 15
 
-# Ring insert, day 1.
+# Ring insert, day 1 of a new ring routine: no streak yet.
+openurl pillie://debug/fixed-now?at=2026-09-28T16:00:00Z
 openurl "pillie://debug/routine-day?method=ring&day=1&lang=en"
 tap --label "Insert ring"
 wait id shakeConfirmStage 10
@@ -115,13 +117,12 @@ tap --id shakeConfirmStage
 sleep 1
 shot ring-insert-shake-2
 tap --id shakeConfirmStage
-wait id shakeStreakHero 10
-expect text "Ring inserted at"
+wait text "Ring inserted at" 10
 shot ring-insert-done
 wait text "In today" 15
 
 # Ring remove, day 22: insert played backwards.
-openurl "pillie://debug/routine-day?method=ring&day=22&lang=en"
+openurl pillie://debug/fixed-now?at=2026-10-19T16:00:00Z
 tap --label "Remove ring"
 wait text "Shake to keep it going" 10
 shot ring-remove-open
@@ -132,8 +133,7 @@ tap --id shakeConfirmStage
 sleep 1
 shot ring-remove-shake-2
 tap --id shakeConfirmStage
-wait text "Streak kept" 10
-expect text "Ring removed at"
+wait text "Ring removed at" 10
 shot ring-remove-done
 wait text "Out today" 15
 openurl pillie://debug/fixed-now?at=off
