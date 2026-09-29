@@ -5,7 +5,6 @@ enum DueActionCopy {
         verb(for: action).map { "today.action.\($0)" } ?? "today.empty.title"
     }
 
-    /// The shake confirm's "Patch changed at 8:02 PM" line for the same action.
     static func loggedKey(for action: DoseScheduleAction) -> String {
         verb(for: action).map { "shake.logged.\($0)" } ?? "global.status.completed"
     }

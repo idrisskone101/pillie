@@ -1,12 +1,5 @@
-//
-//  ShakeConfirmTypes.swift
-//  Pillie
-//
-
 import Foundation
 
-/// Where the shake confirm is in its three-shake story: the blister dents, the
-/// foil tears, then the streak counter clicks over.
 enum ShakeConfirmStage: Int, Equatable {
     case sealed
     case dented
@@ -25,7 +18,6 @@ enum ShakeConfirmStage: Int, Equatable {
         }
     }
 
-    /// How far the counter's changing wheels have rolled toward the new streak.
     var odometerProgress: Double {
         switch self {
         case .sealed: 0
@@ -35,7 +27,6 @@ enum ShakeConfirmStage: Int, Equatable {
         }
     }
 
-    /// Only mention the streak when there is one to keep.
     func headline(streak: StreakChange) -> ShakeHeadline {
         switch (self, streak.isKept) {
         case (.sealed, true): ShakeHeadline(key: "shake.streak.headline.start")
@@ -60,7 +51,6 @@ struct ShakeHeadline: Equatable {
     }
 }
 
-/// The line that replaces the counter once the dose is logged.
 struct ShakeLoggedNote: Equatable {
     let key: String
     let pillNumber: Int?
@@ -76,8 +66,6 @@ struct ShakeLoggedNote: Equatable {
     }
 }
 
-/// The streak before and after today's dose, frozen when the shake confirm opens
-/// so the counter keeps its numbers while the store updates underneath it.
 struct StreakChange: Equatable {
     let before: Int
     let after: Int
@@ -87,9 +75,6 @@ struct StreakChange: Equatable {
     var isKept: Bool { before > 0 && after > before }
 }
 
-/// The digit wheels of the streak counter. Wheels whose digit changes roll from
-/// the old digit to the new one; a wheel that only exists in the new number
-/// (9 → 10) rolls in from blank.
 struct StreakOdometerDigits: Equatable {
     struct Wheel: Equatable {
         let from: Character?

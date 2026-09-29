@@ -1,12 +1,5 @@
-//
-//  StreakOdometer.swift
-//  Pillie
-//
-
 import SwiftUI
 
-/// Flip-counter streak: each changing wheel rolls from the old digit toward the
-/// new one as `progress` goes from 0 to 1.
 struct StreakOdometer: View {
     enum Size {
         case compact

@@ -217,7 +217,6 @@ final class InteractionFeedbackTests: XCTestCase {
 
 private final class RecordingInteractionFeedbackPerformer: InteractionFeedbackPerforming {
     // The Xcode 27 beta aborts hosted tests when a @MainActor class deallocates.
-    // Every recorder is parked for the process lifetime; drop this once the toolchain is fixed.
     private static var parked: [RecordingInteractionFeedbackPerformer] = []
 
     private(set) var performedIntents: [InteractionFeedback.Intent] = []

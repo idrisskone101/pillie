@@ -1,35 +1,33 @@
-//
-//  ShakeStopMotion.swift
-//  Pillie
-//
-
 import SwiftUI
 
-/// A stop-motion clip for the shake confirm: a list of poses that snap with no tween,
-/// and the pose each shake stage rests on. Methods without cut-out layers are clips
-/// whose poses are whole photos.
 struct ShakeClip: Equatable {
     let poses: [StopMotionPose]
-    /// The moving cut-out (pill or patch) drawn over the shell when a pose places it.
     let cutoutImage: String?
-    /// Side of the square photo on the board, in points.
     let side: CGFloat
-    /// The pose each `ShakeConfirmStage` rests on, indexed by its raw value.
-    let stops: [Int]
+    let stops: Stops
 
-    func stop(for stage: ShakeConfirmStage) -> Int {
-        stops[stage.rawValue]
+    struct Stops: Equatable {
+        let dented: Int
+        let torn: Int
+        let done: Int
     }
 
-    /// The poses after the one on screen, up to the stage's stop. Empty when the clip is
-    /// already there or past it: a late shake keeps going forward, it never rewinds.
+    func stop(for stage: ShakeConfirmStage) -> Int {
+        switch stage {
+        case .sealed: 0
+        case .dented: stops.dented
+        case .torn: stops.torn
+        case .done: stops.done
+        }
+    }
+
     func posesToPlay(from shown: Int, to stage: ShakeConfirmStage) -> Range<Int> {
-        (shown + 1)..<(max(shown, stop(for: stage)) + 1)
+        let forwardOnly = max(shown, stop(for: stage))
+        return (shown + 1)..<(forwardOnly + 1)
     }
 }
 
 struct LayerPose: Equatable {
-    /// Offsets are fractions of the clip side so poses survive a resize.
     var x: CGFloat = 0
     var y: CGFloat = 0
     var angle: Double = 0
@@ -45,9 +43,6 @@ struct StopMotionPose: Equatable {
     var hold: Duration = .milliseconds(90)
 }
 
-/// The torn mouth of the empty pouch shell, in unit coordinates of the clip.
-/// A patch masked by it only shows above the tear line, so it reads as inside the pouch.
-/// Matches `ShakeLayerPouchEmpty` and the `ShakeLayerFlap` cut: re-measure all three together.
 struct PouchOpening: Shape {
     static let tearHinge = UnitPoint(x: 0.82, y: 0.37)
     private static let points: [CGPoint] = [
@@ -67,8 +62,6 @@ struct PouchOpening: Shape {
 }
 
 extension ShakeClip {
-    /// Each clip follows how the real method is opened (blister, patch pouch, resealable
-    /// ring pouch). Nil for actions with no physical step to show (break and active days).
     init?(action: DoseScheduleAction) {
         switch action.type {
         case .pillActive, .pillSugar:
@@ -86,8 +79,6 @@ extension ShakeClip {
         }
     }
 
-    /// Shake 1 presses and strains the foil, shake 2 seats the pill in the torn foil,
-    /// shake 3 pops it before the counter takes the stage.
     static let pill = ShakeClip(
         poses: [
             .init(shell: "ShakeLayerBlisterSealed", hold: .milliseconds(350)),
@@ -101,18 +92,16 @@ extension ShakeClip {
         ],
         cutoutImage: "ShakeLayerPill",
         side: 300,
-        stops: [0, 2, 3, 7]
+        stops: Stops(dented: 2, torn: 3, done: 7)
     )
 
     static let patchApply = patchTear(opening: "ShakeLayerPatchPouchSealed")
-    /// Opens on the old patch folded on the new pouch; the next pose is the bare pouch.
     static let patchChange = patchTear(opening: "ShakePatchFoldedOnPouch")
 
     static let patchRemove = frames("ShakePatchWorn", "ShakePatchPeeling", "ShakePatchFolded", side: 330)
     static let ringInsert = frames("ShakeRingPouchSealed", "ShakeRingPouchTorn", "ShakeRingOut", side: 240)
     static let ringRemove = frames("ShakeRingOut", "ShakeRingPouchTorn", "ShakeRingPouchResealed", side: 240)
 
-    /// Shake 1 tears the pouch and the patch peeks out, shake 2 lays it flat on its liner.
     private static func patchTear(opening: String) -> ShakeClip {
         ShakeClip(poses: [
             .init(shell: opening, hold: .milliseconds(350)),
@@ -127,10 +116,9 @@ extension ShakeClip {
             .init(shell: "ShakeLayerPouchEmpty", cutout: .init(y: -0.06, angle: -4), cutoutInsidePouch: true, hold: .milliseconds(260)),
             .init(shell: "ShakeLayerPatchOnLiner", squash: 1.03, hold: .milliseconds(80)),
             .init(shell: "ShakeLayerPatchOnLiner", hold: .milliseconds(600)),
-        ], cutoutImage: "ShakeLayerPatch", side: 240, stops: [0, 9, 11, 11])
+        ], cutoutImage: "ShakeLayerPatch", side: 240, stops: Stops(dented: 9, torn: 11, done: 11))
     }
 
-    /// Three whole photos with a squash beat into each new one, so they still read as stop-motion.
     private static func frames(_ first: String, _ second: String, _ third: String, side: CGFloat) -> ShakeClip {
         ShakeClip(
             poses: [
@@ -142,7 +130,7 @@ extension ShakeClip {
             ],
             cutoutImage: nil,
             side: side,
-            stops: [0, 2, 4, 4]
+            stops: Stops(dented: 2, torn: 4, done: 4)
         )
     }
 }

@@ -22,8 +22,6 @@ struct ShakeConfirmationInteractionFeedback {
         self.performanceTier = performanceTier
     }
 
-    /// Each board's beat: rigid on the dent, heavier on the tear, success on the click.
-    /// Tap to confirm lands straight on `.done`, so it only fires success.
     @discardableResult
     func shakeLanded(on stage: ShakeConfirmStage, accessibilityReduceMotion: Bool) -> Response {
         let (intent, motion): (InteractionFeedback.Intent, PillieMotion.Semantic) = switch stage {
@@ -55,11 +53,9 @@ struct ShakeConfirmView: View {
     @State private var shakeManager = ShakeDetectionManager()
     @State private var appeared = false
     @State private var hasConfirmed = false
-    /// Set once the clip rests on its done pose: the screen turns rose and the note stamps this time.
     @State private var revealedAt: Date?
     private let shakeFeedback = ShakeConfirmationInteractionFeedback()
 
-    /// The stage is laid out at the design's phone size and scaled to fit.
     private static let stageSize = CGSize(width: 402, height: 400)
     private static let plinthDiameter: CGFloat = 270
     private static let autoConfirmDelay: Duration = .seconds(1.6)
@@ -73,7 +69,6 @@ struct ShakeConfirmView: View {
 
     private var isRevealed: Bool { revealedAt != nil }
 
-    /// What the header and board show: the last shake's clip plays out under the torn board.
     private var shownStage: ShakeConfirmStage {
         stage == .done && !isRevealed ? .torn : stage
     }
@@ -156,8 +151,6 @@ struct ShakeConfirmView: View {
             confirm()
         }
     }
-
-    // MARK: - Sections
 
     private var header: some View {
         VStack(spacing: 8) {
@@ -338,8 +331,6 @@ struct ShakeConfirmView: View {
         }
         .padding(.bottom, 12)
     }
-
-    // MARK: - Private
 
     private func reveal(ifDone settled: ShakeConfirmStage) {
         guard settled == .done, revealedAt == nil else { return }

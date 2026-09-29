@@ -92,7 +92,6 @@ struct HomePackProgress: Hashable, Sendable {
         return Self.title(for: regimen.day(atIndex: max(elapsedDays, 0)), in: regimen, locale: locale)
     }
 
-    /// "Pill 12 of 28", "Sugar pill 3 of 7": the name of one day in the pack.
     static func title(for day: PackDay, in regimen: PackRegimen, locale: Locale) -> String {
         switch day.kind {
         case .active:

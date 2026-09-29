@@ -1,12 +1,5 @@
-//
-//  ShakeStopMotionStage.swift
-//  Pillie
-//
-
 import SwiftUI
 
-/// Plays a `ShakeClip` up to the pose the current shake stage rests on. A shake that lands
-/// mid-playback carries on from the pose on screen. Reports each stop once it has held there.
 struct ShakeStopMotionStage: View {
     let clip: ShakeClip
     let stage: ShakeConfirmStage
@@ -20,7 +13,6 @@ struct ShakeStopMotionStage: View {
     var body: some View {
         let side = clip.side
         ZStack {
-            // The photos are shot on white; multiply drops the white onto the board.
             layer(pose.shell)
                 .blendMode(.multiply)
 
@@ -49,7 +41,6 @@ struct ShakeStopMotionStage: View {
         .frame(width: side, height: side)
         .scaleEffect(x: reduceMotion ? 1 : 2 - pose.squash, y: reduceMotion ? 1 : pose.squash)
         .offset(reduceMotion ? .zero : Self.boil(shown))
-        // Stop motion: poses snap. An ambient animation must not tween between them.
         .transaction { $0.animation = nil }
         .task(id: stage) { await play(to: stage) }
     }
@@ -78,7 +69,6 @@ struct ShakeStopMotionStage: View {
         onSettled(stage)
     }
 
-    /// Deterministic ±0.8pt jitter per pose, the "boil" of hand-shot frames.
     private static func boil(_ index: Int) -> CGSize {
         CGSize(width: Double((index * 7) % 3 - 1) * 0.8, height: Double((index * 5 + 1) % 3 - 1) * 0.8)
     }

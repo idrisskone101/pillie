@@ -328,8 +328,6 @@ class PillStore {
         streak(countingTodayAsTaken: false)
     }
 
-    /// The streak the moment today's due action is logged, so the shake confirm
-    /// can roll its counter to the real number before the store changes.
     var streakAfterCompletingToday: Int {
         streak(countingTodayAsTaken: true)
     }

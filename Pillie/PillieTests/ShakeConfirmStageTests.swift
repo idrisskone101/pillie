@@ -1,8 +1,3 @@
-//
-//  ShakeConfirmStageTests.swift
-//  PillieTests
-//
-
 import Foundation
 import Testing
 @testable import Pillie
@@ -103,9 +98,9 @@ struct ShakeClipTests {
         ShakeClip.pill, .patchApply, .patchChange, .patchRemove, .ringInsert, .ringRemove,
     ])
     func everyStageRestsOnAPoseInOrder(clip: ShakeClip) {
-        #expect(clip.stops.count == 4)
-        #expect(clip.stops == clip.stops.sorted())
-        #expect(clip.stops.allSatisfy(clip.poses.indices.contains))
+        let stops = [ShakeConfirmStage.sealed, .dented, .torn, .done].map(clip.stop(for:))
+        #expect(stops == stops.sorted())
+        #expect(stops.allSatisfy(clip.poses.indices.contains))
     }
 
     @Test(arguments: [
