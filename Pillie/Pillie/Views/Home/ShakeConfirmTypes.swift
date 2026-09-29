@@ -59,8 +59,7 @@ enum ShakeConfirmStage: Int, Equatable {
     }
 }
 
-/// The three photos the shake confirm steps through for a dose: one per
-/// stage until the counter takes over. Each sequence follows how the real
+/// What the shake confirm opens for a dose. Each clip follows how the real
 /// method is opened (blister, patch pouch, resealable ring pouch).
 enum ShakeConfirmArtwork: Equatable {
     case pillBlister
@@ -88,36 +87,15 @@ enum ShakeConfirmArtwork: Equatable {
         }
     }
 
-    /// Sealed, dented and torn frames, in shake order.
-    var imageNames: [String] {
+    var clip: ShakeClip {
         switch self {
-        case .pillBlister:
-            ["ShakeBlisterSealed", "ShakeBlisterDented", "ShakeBlisterCrunched"]
-        case .patchApply:
-            ["ShakePatchPouchSealed", "ShakePatchPouchTorn", "ShakePatchOnLiner"]
-        case .patchChange:
-            ["ShakePatchFoldedOnPouch", "ShakePatchPouchTorn", "ShakePatchOnLiner"]
-        case .patchRemove:
-            ["ShakePatchWorn", "ShakePatchPeeling", "ShakePatchFolded"]
-        case .ringInsert:
-            ["ShakeRingPouchSealed", "ShakeRingPouchTorn", "ShakeRingOut"]
-        case .ringRemove:
-            ["ShakeRingOut", "ShakeRingPouchTorn", "ShakeRingPouchResealed"]
+        case .pillBlister: .pill
+        case .patchApply: .patchApply
+        case .patchChange: .patchChange
+        case .patchRemove: .patchRemove
+        case .ringInsert: .ringInsert
+        case .ringRemove: .ringRemove
         }
-    }
-
-    /// Point size of the square photo inside the 270 pt plinth, so each
-    /// object fills the circle about as much as the pill blister does.
-    var imageSize: Double {
-        switch self {
-        case .pillBlister: 300
-        case .patchRemove: 330
-        case .patchApply, .patchChange, .ringInsert, .ringRemove: 240
-        }
-    }
-
-    func imageName(for stage: ShakeConfirmStage) -> String {
-        imageNames[min(stage.rawValue, imageNames.count - 1)]
     }
 }
 

@@ -59,15 +59,69 @@ struct ShakeConfirmArtworkTests {
         #expect(ShakeConfirmArtwork(action: action(.patchBreak, method: .patch)) == nil)
         #expect(ShakeConfirmArtwork(action: action(.ringBreak, method: .ring)) == nil)
     }
+}
 
-    @Test func ringRemovalPlaysInsertionBackwards() {
-        let insert = ShakeConfirmArtwork.ringInsert.imageNames
-        let remove = ShakeConfirmArtwork.ringRemove.imageNames
-        #expect(Array(remove.prefix(2)) == [insert[2], insert[1]])
+struct ShakeClipTests {
+    private func shell(_ clip: ShakeClip, restingOn stage: ShakeConfirmStage) -> String {
+        clip.poses[clip.stop(for: stage)].shell
+    }
+
+    @Test(arguments: [
+        ShakeConfirmArtwork.pillBlister, .patchApply, .patchChange, .patchRemove, .ringInsert, .ringRemove,
+    ])
+    func everyStageRestsOnAPoseInOrder(artwork: ShakeConfirmArtwork) {
+        let clip = artwork.clip
+        #expect(clip.stops.count == 4)
+        #expect(clip.stops == clip.stops.sorted())
+        #expect(clip.stops.allSatisfy(clip.poses.indices.contains))
+    }
+
+    @Test(arguments: [
+        (ShakeConfirmArtwork.pillBlister, 7),
+        (.patchApply, 11),
+        (.patchChange, 11),
+        (.patchRemove, 4),
+        (.ringInsert, 4),
+        (.ringRemove, 4),
+    ])
+    func tappingThroughFromTheStartPlaysEveryLaterPose(artwork: ShakeConfirmArtwork, lastPose: Int) {
+        #expect(Array(artwork.clip.posesToPlay(from: 0, to: .done)) == Array(1...lastPose))
+    }
+
+    @Test func aShakeMidPlaybackCarriesOnFromThePoseOnScreen() {
+        #expect(Array(ShakeClip.pill.posesToPlay(from: 1, to: .torn)) == [2, 3])
+        #expect(Array(ShakeClip.pill.posesToPlay(from: 5, to: .done)) == [6, 7])
+    }
+
+    @Test func aStageBehindThePoseOnScreenPlaysNothing() {
+        #expect(ShakeClip.pill.posesToPlay(from: 3, to: .dented).isEmpty)
+        #expect(ShakeClip.patchApply.posesToPlay(from: 11, to: .dented).isEmpty)
+        #expect(ShakeClip.patchApply.posesToPlay(from: 11, to: .done).isEmpty)
+        #expect(ShakeClip.ringInsert.posesToPlay(from: 2, to: .dented).isEmpty)
+    }
+
+    @Test func secondShakeSeatsThePillInTheTornFoil() {
+        let clip = ShakeClip.pill
+        #expect(shell(clip, restingOn: .torn) == "ShakeLayerBlisterEmpty")
+        #expect(clip.poses[clip.stop(for: .torn)].cutout != nil)
+        #expect(clip.cutoutImage == "ShakeLayerPill")
+    }
+
+    @Test func patchChangeOpensOnTheOldPatchThenTheBarePouch() {
+        let poses = ShakeClip.patchChange.poses
+        #expect(poses[0].shell == "ShakePatchFoldedOnPouch")
+        #expect(poses[1].shell == "ShakeLayerPatchPouchSealed")
+        #expect(ShakeClip.patchApply.poses[0].shell == "ShakeLayerPatchPouchSealed")
+    }
+
+    @Test func ringRemovalOpensOnTheRingItselfAndEndsResealed() {
+        let clip = ShakeClip.ringRemove
+        #expect(shell(clip, restingOn: .sealed) == "ShakeRingOut")
+        #expect(shell(clip, restingOn: .done) == "ShakeRingPouchResealed")
     }
 
     @Test func doneStageKeepsTheLastFrame() {
-        #expect(ShakeConfirmArtwork.patchRemove.imageName(for: .done) == "ShakePatchFolded")
+        #expect(shell(.patchRemove, restingOn: .done) == "ShakePatchFolded")
     }
 }
 

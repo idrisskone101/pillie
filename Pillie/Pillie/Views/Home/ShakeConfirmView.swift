@@ -225,43 +225,21 @@ struct ShakeConfirmView: View {
                     .transition(.scale(scale: 0.5).combined(with: .opacity))
             }
         }
-        .keyframeAnimator(
-            initialValue: 1.0,
-            trigger: shakeManager.shakeCount
-        ) { content, squash in
-            content.scaleEffect(x: 2 - squash, y: squash)
-        } keyframes: { _ in
-            KeyframeTrack {
-                CubicKeyframe(accessibilityReduceMotion ? 1 : 0.9, duration: 0.08)
-                SpringKeyframe(1, duration: 0.35, spring: .bouncy)
-            }
-        }
     }
 
     private var plinth: some View {
         ZStack {
-            Circle().fill(Color.white)
-            blister
-        }
-        .frame(width: Self.plinthDiameter, height: Self.plinthDiameter)
-        .clipShape(Circle())
-        .shadow(color: PillieTheme.patchChangeRose.opacity(0.7), radius: 16, y: 16)
-    }
+            Circle()
+                .fill(Color.white)
+                .frame(width: Self.plinthDiameter, height: Self.plinthDiameter)
+                .shadow(color: PillieTheme.patchChangeRose.opacity(0.7), radius: 16, y: 16)
 
-    @ViewBuilder
-    private var blister: some View {
-        if let artwork {
-            let imageName = artwork.imageName(for: stage)
-            Image(imageName)
-                .resizable()
-                .interpolation(.high)
-                .frame(width: artwork.imageSize, height: artwork.imageSize)
-                .id(imageName)
-                .transition(.opacity)
-                .accessibilityHidden(true)
-        } else {
-            Text(action.method.emoji)
-                .font(.system(size: 96))
+            if let artwork {
+                ShakeStopMotionStage(clip: artwork.clip, stage: stage, onSettled: { _ in })
+            } else {
+                Text(action.method.emoji)
+                    .font(.system(size: 96))
+            }
         }
     }
 
