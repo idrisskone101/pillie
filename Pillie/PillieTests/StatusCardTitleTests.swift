@@ -106,6 +106,20 @@ struct StatusCardTitleTests {
             == "Your next one is today at 8:00 AM.")
     }
 
+    @Test func anOpenCatchUpReadsAsTheMissedTask() {
+        let change = DoseScheduleAction(date: local(9, 22), type: .patchChange, method: .patch, cycleDay: 15, cycleLength: 28)
+        let title = StatusCardTitle.resolve(
+            alarmAction: pill(on: local(9, 29)),
+            liveDay: local(9, 24),
+            now: local(9, 24),
+            isTodayTaken: false,
+            isTodayNothingDue: true,
+            catchUp: change
+        )
+        #expect(title == .due(change))
+        #expect(title.localized(reminderTime: "8:00 AM", locale: Locale(identifier: "en")) == "Change patch")
+    }
+
     @Test func breakDayNamesTheNextDose() {
         #expect(resolve(alarmOn: local(9, 28), breakDay: true) == .next(on: local(9, 28), .nextWeek))
     }

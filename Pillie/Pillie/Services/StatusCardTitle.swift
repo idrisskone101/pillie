@@ -21,8 +21,11 @@ enum StatusCardTitle: Equatable {
         now: Date,
         isTodayTaken: Bool,
         isTodayNothingDue: Bool,
+        catchUp: DoseScheduleAction? = nil,
         calendar: Calendar = .current
     ) -> StatusCardTitle {
+        // A missed patch or ring task Home's button can still log reads like any due task.
+        if let catchUp { return .due(catchUp) }
         guard let alarmAction else { return .nothingDue }
         if calendar.isDate(alarmAction.date, inSameDayAs: liveDay) {
             if isTodayTaken { return .completed }

@@ -27,7 +27,8 @@ struct StatusCard: View {
             liveDay: store.today,
             now: store.civilDay,
             isTodayTaken: isTodayTaken,
-            isTodayNothingDue: isTodayNothingDue
+            isTodayNothingDue: isTodayNothingDue,
+            catchUp: store.openCatchUp
         ).localized(reminderTime: reminderTime, locale: locale)
         statusMainContent(
             method: method,
