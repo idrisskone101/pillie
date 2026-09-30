@@ -11,6 +11,7 @@ enum StatusCardTitle: Equatable {
     case due(DoseScheduleAction)
     case completed
     case next(on: Date, NextDoseDay)
+    case firstReminder(FirstReminderHandoff)
 
     /// `alarmAction` is the next untaken due action from the live day. The live
     /// day decides what is due; `now` decides how the next dose is phrased, so
@@ -22,11 +23,13 @@ enum StatusCardTitle: Equatable {
         isTodayTaken: Bool,
         isTodayNothingDue: Bool,
         catchUp: DoseScheduleAction? = nil,
+        firstReminder: FirstReminderHandoff? = nil,
         calendar: Calendar = .current
     ) -> StatusCardTitle {
         // A missed patch or ring task Home's button can still log reads like any due task.
         if let catchUp { return .due(catchUp) }
         guard let alarmAction else { return .nothingDue }
+        if let firstReminder, !isTodayNothingDue { return .firstReminder(firstReminder) }
         if calendar.isDate(alarmAction.date, inSameDayAs: liveDay) {
             if isTodayTaken { return .completed }
             return isTodayNothingDue ? .nothingDue : .due(alarmAction)
@@ -48,6 +51,8 @@ enum StatusCardTitle: Equatable {
             PillieLocalization.string("global.status.completed", locale: locale)
         case .next(let date, let day):
             day.localizedLine(for: date, reminderTime: reminderTime, locale: locale)
+        case .firstReminder(let handoff):
+            handoff.localizedLine(reminderTime: reminderTime, locale: locale)
         }
     }
 }

@@ -524,6 +524,19 @@ class PillStore {
         return nextUntakenDueAction(from: today)
     }
 
+    /// Set while Today waits on this install's first Due Action Reminder with
+    /// nothing logged. `isTodayTaken || isCaughtUpToday` stands in for "anything
+    /// logged": before the first reminder fires, only the open live day can hold one.
+    var firstReminderHandoff: FirstReminderHandoff? {
+        FirstReminderHandoff.resolve(
+            installedAt: FirstReminderInstall.date(),
+            reminderHour: reminderHour,
+            reminderMinute: reminderMinute,
+            now: PillieClock.now,
+            hasLoggedAnything: isTodayTaken || isCaughtUpToday
+        )
+    }
+
     var alarmBadge: String {
         alarmAction?.badgeLabel ?? "NONE"
     }
