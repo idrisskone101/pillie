@@ -84,17 +84,27 @@ enum TodayPillCommit {
         defaults: UserDefaults,
         telemetry: ProductAnalyticsTelemetry
     ) {
+        // A pick from an earlier day names an earlier pill, and its answer is about that pill.
+        let pickedDay = TodayPillPick.Answer.anchorDay(
+            for: start.answer,
+            now: start.pickedAt,
+            reminderHour: store.reminderHour,
+            reminderMinute: store.reminderMinute
+        )
         let anchorDay = TodayPillPick.Answer.anchorDay(
             for: start.answer,
             now: now,
             reminderHour: store.reminderHour,
             reminderMinute: store.reminderMinute
         )
+        let daysSincePick = max(0, Calendar.current.dateComponents([.day], from: pickedDay, to: anchorDay).day ?? 0)
+        let cycleDay = (start.cycleDay - 1 + daysSincePick) % start.cycleLength + 1
+
         store.startNewProtocol(
             method: start.method,
             regimen: start.regimen,
             customRegimen: start.customRegimen,
-            cycleDay: start.cycleDay,
+            cycleDay: cycleDay,
             preserveHistory: false,
             anchorDay: anchorDay
         )
@@ -102,7 +112,7 @@ enum TodayPillCommit {
             store.appActivatedDate = store.today
         }
 
-        guard start.logs else { return }
+        guard start.logs, daysSincePick == 0 else { return }
         store.markTodayAsTaken()
 
         guard !defaults.bool(forKey: reportedStorageKey) else { return }
