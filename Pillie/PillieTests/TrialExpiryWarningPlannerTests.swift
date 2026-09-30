@@ -2,9 +2,9 @@
 //  TrialExpiryWarningPlannerTests.swift
 //  PillieTests
 //
-//  The Reverse Trial's day-10/13 expiry warning notifications (issue #168 /
-//  ADR 0007): planned as intents in the reminder schedule planner so they are
-//  capped, cancelled, and tested like every other reminder intent.
+//  The Reverse Trial's day-10/13 expiry warnings and day-15 expiry-day notice
+//  (issue #168 / ADR 0007): planned as intents in the reminder schedule planner
+//  so they are capped, cancelled, and tested like every other reminder intent.
 //
 
 import XCTest
@@ -19,28 +19,35 @@ final class TrialExpiryWarningPlannerTests: XCTestCase {
         super.tearDown()
     }
 
-    func testSchedulesDay10AndDay13WarningsAtGrant() throws {
+    func testSchedulesAllThreeNoticesAtGrant() throws {
         let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 9)
         let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
 
         let warnings = warningIntents(for: fixture.store, now: now, trialGrantDate: now)
 
-        XCTAssertEqual(warnings.map(\.day), [10, 13])
+        XCTAssertEqual(warnings.map(\.day), [10, 13, 15])
 
         let calendar = Calendar.current
-        for warning in warnings {
-            let expected = try XCTUnwrap(
-                calendar.date(byAdding: .day, value: warning.day, to: calendar.startOfDay(for: now))
-            )
-            XCTAssertEqual(calendar.startOfDay(for: warning.fireDate), expected)
+        let grantDay = calendar.startOfDay(for: now)
+        for (warning, hour) in zip(warnings, [20, 20, 10]) {
+            let expectedDay = try XCTUnwrap(calendar.date(byAdding: .day, value: warning.day, to: grantDay))
+            XCTAssertEqual(calendar.startOfDay(for: warning.fireDate), expectedDay)
             let components = calendar.dateComponents([.hour, .minute], from: warning.fireDate)
-            XCTAssertEqual(ReminderSchedulePlanner.trialWarningHour, 20)
-            XCTAssertEqual(components.hour, 20)
+            XCTAssertEqual(components.hour, hour)
             XCTAssertEqual(components.minute, 0)
         }
+
+        let day15 = try XCTUnwrap(warnings.last)
+        let expectedDay15 = try XCTUnwrap(
+            calendar.date(
+                bySettingHour: 10, minute: 0, second: 0,
+                of: try XCTUnwrap(calendar.date(byAdding: .day, value: 15, to: grantDay))
+            )
+        )
+        XCTAssertEqual(day15.fireDate, expectedDay15)
     }
 
-    func testEntitledUserGetsNoWarnings() throws {
+    func testEntitledUserGetsNoNotices() throws {
         let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 9)
         let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
 
@@ -61,8 +68,70 @@ final class TrialExpiryWarningPlannerTests: XCTestCase {
 
         let warnings = warningIntents(for: fixture.store, now: now, trialGrantDate: grantDate)
 
-        XCTAssertEqual(warnings.map(\.day), [13])
-        XCTAssertGreaterThan(try XCTUnwrap(warnings.first).fireDate, now)
+        XCTAssertEqual(warnings.map(\.day), [13, 15])
+        for warning in warnings {
+            XCTAssertGreaterThan(warning.fireDate, now)
+        }
+    }
+
+    func testExpiryDayNoticeIsDroppedOnceItsFireTimeHasPassed() throws {
+        let grant = InMemoryStoreFactory.fixedDate("2026-05-11", hour: 9)
+        let fixture = try InMemoryStoreFactory.makeStore(now: grant, startDate: grant)
+        let calendar = Calendar.current
+        let clock = ReverseTrialClock(
+            grantDate: grant,
+            schedule: ActiveDaySchedule(pack: fixture.store.pack, calendar: calendar)
+        )
+        let expiryDay = calendar.startOfDay(for: clock.expiryMoment(calendar: calendar))
+        let beforeTenAM = try XCTUnwrap(calendar.date(bySettingHour: 9, minute: 0, second: 0, of: expiryDay))
+        let afterTenAM = try XCTUnwrap(calendar.date(bySettingHour: 11, minute: 0, second: 0, of: expiryDay))
+
+        let morning = warningIntents(for: fixture.store, now: beforeTenAM, trialGrantDate: grant)
+        let afternoon = warningIntents(for: fixture.store, now: afterTenAM, trialGrantDate: grant)
+
+        XCTAssertEqual(morning.map(\.day), [15])
+        XCTAssertTrue(afternoon.isEmpty)
+    }
+
+    func testIntentCohortFollowsInputCohort() throws {
+        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 9)
+        let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
+
+        let blocker = warningIntents(
+            for: fixture.store, now: now, trialGrantDate: now, trialCohort: .blockerConfigured
+        )
+        let remindersOnly = warningIntents(
+            for: fixture.store, now: now, trialGrantDate: now, trialCohort: .reminderOnly
+        )
+
+        XCTAssertEqual(blocker.map(\.cohort), [.blockerConfigured, .blockerConfigured, .blockerConfigured])
+        XCTAssertEqual(remindersOnly.map(\.cohort), [.reminderOnly, .reminderOnly, .reminderOnly])
+    }
+
+    func testFirstPlanRightAfterGrantHasFollowUpsAndAllTrialNotices() throws {
+        // The plan `onboardingTrialGranted` produces: trial granted, Plus access
+        // (Smart Reminders) on. The pre-fix plan was built before the grant.
+        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
+
+        let afterGrant = plan(
+            for: fixture.store,
+            now: now,
+            trialGrantDate: now,
+            autoReminderRetryLimit: 2
+        )
+        let beforeGrant = plan(
+            for: fixture.store,
+            now: now,
+            trialGrantDate: nil,
+            smartRemindersEnabled: false,
+            autoReminderRetryLimit: 2
+        )
+
+        XCTAssertGreaterThanOrEqual(afterGrant.filter(\.isRetry).count, 1)
+        XCTAssertEqual(afterGrant.filter(\.isTrialWarning).count, 3)
+        XCTAssertEqual(beforeGrant.filter(\.isRetry).count, 0)
+        XCTAssertEqual(beforeGrant.filter(\.isTrialWarning).count, 0)
     }
 
     func testExpiredTrialGetsNoWarnings() throws {
@@ -84,16 +153,17 @@ final class TrialExpiryWarningPlannerTests: XCTestCase {
 
         let day10Moment = try XCTUnwrap(calendar.date(byAdding: .day, value: 10, to: grantDate))
         XCTAssertEqual(clock.daysRemaining(calendar: calendar, now: day10Moment), 5)
-        XCTAssertTrue(TrialExpiryWarningCopy.body(day: 10).contains("in 5 days"))
+        XCTAssertTrue(TrialExpiryWarningCopy.body(day: 10, cohort: .blockerConfigured).contains("in 5 days"))
 
         let day13Moment = try XCTUnwrap(calendar.date(byAdding: .day, value: 13, to: grantDate))
         XCTAssertEqual(clock.daysRemaining(calendar: calendar, now: day13Moment), 2)
-        XCTAssertTrue(TrialExpiryWarningCopy.body(day: 13).contains("tomorrow night"))
+        XCTAssertTrue(TrialExpiryWarningCopy.body(day: 13, cohort: .blockerConfigured).contains("tomorrow night"))
 
         // Informational, blocking-scoped copy: names app blocking, never the
         // contraceptive method or any protection/effectiveness claim.
-        for day in ReminderSchedulePlanner.trialWarningDays {
-            let copy = TrialExpiryWarningCopy.title(day: day) + " " + TrialExpiryWarningCopy.body(day: day)
+        for day in [10, 13] {
+            let copy = TrialExpiryWarningCopy.title(day: day, cohort: .blockerConfigured)
+                + " " + TrialExpiryWarningCopy.body(day: day, cohort: .blockerConfigured)
             XCTAssertTrue(copy.contains("App blocking"))
             for banned in ["protect", "effective", "pregnan", "pill", "patch", "ring"] {
                 XCTAssertFalse(copy.lowercased().contains(banned), "copy contains banned term: \(banned)")
@@ -117,14 +187,19 @@ final class TrialExpiryWarningPlannerTests: XCTestCase {
         let grantPlusTen = try XCTUnwrap(calendar.date(byAdding: .day, value: 10, to: calendar.startOfDay(for: grant)))
 
         let warnings = warningIntents(for: fixture.store, now: grant, trialGrantDate: grant)
-        XCTAssertEqual(warnings.map(\.day), [10, 13])
+        XCTAssertEqual(warnings.map(\.day), [10, 13, 15])
 
         let day10 = try XCTUnwrap(warnings.first { $0.day == 10 })
         let day13 = try XCTUnwrap(warnings.first { $0.day == 13 })
+        let day15 = try XCTUnwrap(warnings.first { $0.day == 15 })
         let expected10 = try XCTUnwrap(calendar.date(byAdding: .day, value: -5, to: expiry))
         let expected13 = try XCTUnwrap(calendar.date(byAdding: .day, value: -2, to: expiry))
         XCTAssertEqual(calendar.startOfDay(for: day10.fireDate), calendar.startOfDay(for: expected10))
         XCTAssertEqual(calendar.startOfDay(for: day13.fireDate), calendar.startOfDay(for: expected13))
+        XCTAssertEqual(
+            day15.fireDate,
+            try XCTUnwrap(calendar.date(bySettingHour: 10, minute: 0, second: 0, of: calendar.startOfDay(for: expiry)))
+        )
         XCTAssertNotEqual(calendar.startOfDay(for: day10.fireDate), grantPlusTen)
         XCTAssertGreaterThan(expiry.timeIntervalSince1970, grantPlusTen.timeIntervalSince1970)
     }
@@ -147,9 +222,9 @@ final class TrialExpiryWarningPlannerTests: XCTestCase {
         )
 
         XCTAssertEqual(intents.count, ReminderSchedulePlanner.maxPendingReminders)
-        XCTAssertEqual(intents.filter(\.isTrialWarning).count, 2)
+        XCTAssertEqual(intents.filter(\.isTrialWarning).count, 3)
         XCTAssertEqual(intents.filter(\.isSupply).count, 1)
-        XCTAssertEqual(intents.filter(\.isDue).count, ReminderSchedulePlanner.maxPendingReminders - 3)
+        XCTAssertEqual(intents.filter(\.isDue).count, ReminderSchedulePlanner.maxPendingReminders - 4)
     }
 
     func testDueAndSupplyPlansAreUntouchedByTrialWarnings() throws {
@@ -163,7 +238,7 @@ final class TrialExpiryWarningPlannerTests: XCTestCase {
             withTrial.filter { !$0.isTrialWarning },
             withoutTrial
         )
-        XCTAssertEqual(withTrial.filter(\.isTrialWarning).count, 2)
+        XCTAssertEqual(withTrial.filter(\.isTrialWarning).count, 3)
     }
 
     // MARK: - Helpers
@@ -173,6 +248,8 @@ final class TrialExpiryWarningPlannerTests: XCTestCase {
         now: Date,
         trialGrantDate: Date?,
         hasEntitlement: Bool = false,
+        trialCohort: TrialEndPaywallCohort = .reminderOnly,
+        smartRemindersEnabled: Bool = true,
         autoReminderIntervalMinutes: Int? = nil,
         autoReminderRetryLimit: Int? = nil
     ) -> [ReminderSchedulePlanner.Intent] {
@@ -197,10 +274,11 @@ final class TrialExpiryWarningPlannerTests: XCTestCase {
                 candidateDueActions: candidateDueActions,
                 statusByEpochDay: store.statusesByEpochDay(for: candidateDueActions.map(\.date)),
                 snoozeOverride: nil,
-                smartRemindersEnabled: true,
+                smartRemindersEnabled: smartRemindersEnabled,
                 cycleTransitionEnabled: true,
                 trialGrantDate: trialGrantDate,
                 hasEntitlement: hasEntitlement,
+                trialCohort: trialCohort,
                 servedBaseFireDateByDueDayEpoch: [:],
                 calendar: calendar
             )
@@ -211,9 +289,16 @@ final class TrialExpiryWarningPlannerTests: XCTestCase {
         for store: PillStore,
         now: Date,
         trialGrantDate: Date?,
-        hasEntitlement: Bool = false
+        hasEntitlement: Bool = false,
+        trialCohort: TrialEndPaywallCohort = .reminderOnly
     ) -> [ReminderSchedulePlanner.TrialExpiryWarningIntent] {
-        plan(for: store, now: now, trialGrantDate: trialGrantDate, hasEntitlement: hasEntitlement)
+        plan(
+            for: store,
+            now: now,
+            trialGrantDate: trialGrantDate,
+            hasEntitlement: hasEntitlement,
+            trialCohort: trialCohort
+        )
             .compactMap { intent in
                 if case .trialExpiryWarning(let warning) = intent { return warning }
                 return nil
@@ -230,6 +315,11 @@ private extension ReminderSchedulePlanner.Intent {
 
     var isDue: Bool {
         if case .due = self { return true }
+        return false
+    }
+
+    var isRetry: Bool {
+        if case .due(let due) = self { return due.kind == .retry }
         return false
     }
 

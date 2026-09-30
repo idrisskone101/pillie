@@ -17,19 +17,19 @@ final class ItalianTrialExpiryWarningLocalizationTests: XCTestCase {
         let italian = Locale(identifier: "it_IT")
 
         XCTAssertEqual(
-            TrialExpiryWarningCopy.title(day: 10, locale: italian),
+            TrialExpiryWarningCopy.title(day: 10, cohort: .blockerConfigured, locale: italian),
             "La prova di Pillie Plus terminerà presto"
         )
         XCTAssertEqual(
-            TrialExpiryWarningCopy.body(day: 10, locale: italian),
+            TrialExpiryWarningCopy.body(day: 10, cohort: .blockerConfigured, locale: italian),
             "Il blocco delle app si disattiverà tra 5 giorni. I promemoria resteranno gratuiti, per sempre."
         )
         XCTAssertEqual(
-            TrialExpiryWarningCopy.title(day: 13, locale: italian),
+            TrialExpiryWarningCopy.title(day: 13, cohort: .blockerConfigured, locale: italian),
             "La prova di Pillie Plus sta per terminare"
         )
         XCTAssertEqual(
-            TrialExpiryWarningCopy.body(day: 13, locale: italian),
+            TrialExpiryWarningCopy.body(day: 13, cohort: .blockerConfigured, locale: italian),
             "Il blocco delle app si disattiverà domani sera. I promemoria resteranno gratuiti, per sempre."
         )
     }
@@ -49,12 +49,12 @@ final class ItalianTrialExpiryWarningLocalizationTests: XCTestCase {
         }
 
         let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
-        let warnings = NotificationManager.shared.managedRequestSummariesForTesting(
+        let warnings = KeptNotificationManager.make(hasBlockerSetup: { true }).managedRequestSummariesForTesting(
             store: fixture.store,
             now: now,
             locale: Locale(identifier: "it_IT")
         )
-        .filter { $0.requestKind == "trialExpiryWarning" }
+        .filter { $0.requestKind == "trialExpiryWarning" && $0.trialWarningDay != 15 }
         .sorted { ($0.trialWarningDay ?? 0) < ($1.trialWarningDay ?? 0) }
 
         XCTAssertEqual(warnings.map(\.trialWarningDay), [10, 13])
