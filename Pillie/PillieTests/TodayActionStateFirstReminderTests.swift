@@ -35,7 +35,7 @@ struct TodayActionStateFirstReminderTests {
     @Test func aDueDoseBeforeTheFirstReminderIsOfferedQuietly() {
         let state = TodayActionState.resolve(input(todayDueAction: action, awaitsFirstReminder: true))
         #expect(state == .dueActionAwaitingFirstReminder(action, requiresShakeConfirm: false))
-        #expect(state.localizedPrimaryLabel(locale: Locale(identifier: "en")) == "Already took one? Log it")
+        #expect(state.localizedPrimaryLabel(locale: Locale(identifier: "en")) == "Took it")
     }
 
     @Test func plusKeepsTheShakeConfirmOnTheQuietButton() {

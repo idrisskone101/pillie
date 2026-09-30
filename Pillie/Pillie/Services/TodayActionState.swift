@@ -11,7 +11,7 @@ enum TodayActionState: Equatable {
     case noActionDue
     case dueAction(DoseScheduleAction, requiresShakeConfirm: Bool)
     /// A dose is due but the first reminder has not fired: the reminder is the
-    /// prompt, so logging is offered quietly for someone who already took it.
+    /// prompt, so logging is a quiet "Took it" for someone who already did.
     case dueActionAwaitingFirstReminder(DoseScheduleAction, requiresShakeConfirm: Bool)
 
     struct Input {
@@ -58,7 +58,7 @@ enum TodayActionState: Equatable {
         case .dueAction(let action, _):
             DueActionCopy.localizedLabel(for: action, locale: locale)
         case .dueActionAwaitingFirstReminder:
-            PillieLocalization.string("today.first_reminder.log", locale: locale)
+            PillieLocalization.string("today.first_reminder.took_it", locale: locale)
         }
     }
 }

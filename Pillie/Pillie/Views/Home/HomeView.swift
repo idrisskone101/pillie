@@ -18,7 +18,6 @@ struct HomeView: View {
     @State private var appeared = false
     @State private var hasAnimatedIn = false
     @State private var showRefillConfirmation = false
-    @State private var showFirstReminderLogConfirm = false
     @State private var showShakeConfirm = false
     /// The action the shake cover confirms, kept while it closes: a late log clears `openCatchUp` at once.
     @State private var shakeAction: DoseScheduleAction?
@@ -55,6 +54,7 @@ struct HomeView: View {
     @State private var showTrialDeclineThankYou = false
     @State private var reviewPromptShownLogged = false
     @AppStorage("homeBlockingStatusCardDismissed") private var blockingCardDismissed = false
+    @AppStorage(FirstReminderLogStyle.defaultsKey) private var firstReminderLogStyle = FirstReminderLogStyle.split
     @Bindable private var blockingManager = AppBlockingManager.shared
     private let homeFeedback = HomeActionInteractionFeedback()
     private let trialDeclineFeedbackStore = KeychainTrialDeclineFeedbackResolutionStore()
@@ -333,6 +333,22 @@ struct HomeView: View {
         store.firstReminderHandoff?.localizedLine(locale: locale) ?? ""
     }
 
+    /// Patch and ring show a countdown, not pack tiles, so they fall back to the chip.
+    private var firstReminderLogSurface: FirstReminderLogStyle {
+        firstReminderLogStyle == .packTile && RoutineDialMethod(store.pack.method) != nil
+            ? .split
+            : firstReminderLogStyle
+    }
+
+    /// Logs today's dose from `surface` during the first-reminder hand-off; nil
+    /// outside it or when the prototype switch puts the log elsewhere.
+    private func logBeforeFirstReminder(on surface: FirstReminderLogStyle) -> (() -> Void)? {
+        guard firstReminderLogSurface == surface,
+              case .dueActionAwaitingFirstReminder(let action, let requiresShakeConfirm) = todayActionState
+        else { return nil }
+        return { startTodayAction(action, requiresShakeConfirm: requiresShakeConfirm) }
+    }
+
     private var todayActionState: TodayActionState {
         TodayActionState.resolve(
             TodayActionState.Input(
@@ -399,7 +415,7 @@ struct HomeView: View {
                         .transition(ctaStateTransition)
                     }
 
-                    StatusCard()
+                    StatusCard(onLogBeforeFirstReminder: logBeforeFirstReminder(on: .statusCard))
                         .modifier(FadeInUp(appeared: appeared, delay: 0.1))
 
                     // At Accessibility Dynamic Type sizes the primary action belongs
@@ -455,7 +471,10 @@ struct HomeView: View {
                         if let method = RoutineDialMethod(store.pack.method) {
                             HomeCountdownCard(method: method, holdsTodayLog: holdsPackCardLog)
                         } else {
-                            HomePackCard(holdsTodayLog: holdsPackCardLog)
+                            HomePackCard(
+                                holdsTodayLog: holdsPackCardLog,
+                                onLogToday: logBeforeFirstReminder(on: .packTile)
+                            )
                         }
                     }
                         .modifier(FadeInUp(appeared: appeared, delay: 0.2))
@@ -556,14 +575,6 @@ struct HomeView: View {
                 currentPlusAccess: current
             ) else { return }
             autoPresentTrialEndPaywallIfNeeded()
-        }
-        .confirmationDialog("", isPresented: $showFirstReminderLogConfirm, titleVisibility: .hidden) {
-            if case .dueActionAwaitingFirstReminder(let action, let requiresShakeConfirm) = todayActionState {
-                Button(TodayActionState.dueActionAwaitingFirstReminder(action, requiresShakeConfirm: requiresShakeConfirm)
-                    .localizedPrimaryLabel(locale: locale)) {
-                    startTodayAction(action, requiresShakeConfirm: requiresShakeConfirm)
-                }
-            }
         }
         .alert(startNewConfirmation.title, isPresented: $showRefillConfirmation) {
             Button(PillieLocalization.string(
@@ -795,9 +806,9 @@ struct HomeView: View {
                 .buttonStyle(.pillieDark)
                 .transition(ctaStateTransition)
             case .dueActionAwaitingFirstReminder:
-                Button {
-                    showFirstReminderLogConfirm = true
-                } label: {
+                // Information, not a button: the log lives on the chip, the pack tile,
+                // or the status card, per the ENG-140 prototype switch.
+                HStack(spacing: 8) {
                     Group {
                         if dynamicTypeSize.isAccessibilitySize {
                             accessibilityFloatingButtonLabel(firstReminderLabel)
@@ -809,8 +820,26 @@ struct HomeView: View {
                             }
                         }
                     }
+                    .accessibilityElement(children: .combine)
+
+                    if let log = logBeforeFirstReminder(on: .split) {
+                        Spacer(minLength: 0)
+                        Button(action: log) {
+                            Text(state.localizedPrimaryLabel(locale: locale))
+                                .font(.pillie(15, weight: .semibold))
+                                .foregroundStyle(.white)
+                                .padding(.horizontal, 18)
+                                .frame(height: PillieTheme.ctaHeight - 24)
+                                .background(PillieTheme.dark, in: Capsule())
+                        }
+                        .buttonStyle(.plain)
+                        .fixedSize()
+                        .accessibilityIdentifier("firstReminderTookIt")
+                    }
                 }
-                .buttonStyle(PillieTakenButtonStyle())
+                .padding(.leading, firstReminderLogSurface == .split ? 22 : 0)
+                .padding(.trailing, firstReminderLogSurface == .split ? 12 : 0)
+                .takenCapsule()
                 .transition(ctaStateTransition)
             }
         }
@@ -916,8 +945,13 @@ struct HomeView: View {
 
 private struct PillieTakenButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .font(.pillie(18, weight: .semibold))
+        configuration.label.takenCapsule()
+    }
+}
+
+private extension View {
+    func takenCapsule() -> some View {
+        font(.pillie(18, weight: .semibold))
             .foregroundStyle(PillieTheme.textPrimary)
             .pillieAdaptiveLineLimit(minimumScaleFactor: 0.65)
             .frame(maxWidth: .infinity)

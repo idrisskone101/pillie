@@ -9,6 +9,8 @@ import SwiftUI
 struct HomePackCard: View {
     /// A log made while Home is covered or in the background waits here, so its pop plays once Home is seen.
     let holdsTodayLog: Bool
+    /// Set only during the first-reminder hand-off in the pack-tile prototype (ENG-140).
+    let onLogToday: (() -> Void)?
 
     @Environment(PillStore.self) private var store
     @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
@@ -46,7 +48,8 @@ struct HomePackCard: View {
             marks: progress.marks,
             onSelectMissedDay: { index in
                 correctionTarget = editableDay(atIndex: index, elapsedDays: elapsedDays, today: today)
-            }
+            },
+            onSelectToday: onLogToday
         ) {
             HomePackHeader(
                 title: progress.title(locale: locale),
@@ -59,6 +62,9 @@ struct HomePackCard: View {
                     locale: locale
                 ),
                 subtitleColor: subtitleColor(for: progress.status),
+                hint: onLogToday == nil
+                    ? nil
+                    : PillieLocalization.string("today.first_reminder.tap_pill_hint", locale: locale),
                 onChangeType: { showsPackSheet = true },
                 onStartNew: { showsNewPackConfirmation = true }
             )
@@ -163,12 +169,27 @@ private struct HomePackHeader: View {
     let title: String
     let subtitle: String
     let subtitleColor: Color
+    let hint: String?
     let onChangeType: () -> Void
     let onStartNew: () -> Void
 
     @Environment(\.locale) private var locale
 
     var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            titleRow
+            if let hint {
+                Text(hint)
+                    .font(.pillie(13, weight: .semibold))
+                    .foregroundStyle(PillieTheme.textPrimary)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .transition(.opacity)
+                    .accessibilityIdentifier("firstReminderTapPillHint")
+            }
+        }
+    }
+
+    private var titleRow: some View {
         HStack(spacing: 12) {
             VStack(alignment: .leading, spacing: 1) {
                 Text(title)
@@ -219,7 +240,7 @@ private struct HomePackHeader: View {
 }
 
 #Preview {
-    HomePackCard(holdsTodayLog: false)
+    HomePackCard(holdsTodayLog: false, onLogToday: nil)
         .padding()
         .background(PillieTheme.bg)
         .environment(PillStore.previewStore())

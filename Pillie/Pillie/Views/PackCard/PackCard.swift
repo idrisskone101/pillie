@@ -15,6 +15,8 @@ struct PackCard<Header: View>: View {
     let marks: [Int: PackTileMark]
     let onSelectDay: ((Int) -> Void)?
     let onSelectMissedDay: ((Int) -> Void)?
+    /// Makes today's tile a pulsing log target (ENG-140 prototype).
+    let onSelectToday: (() -> Void)?
     let header: Header
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -36,6 +38,7 @@ struct PackCard<Header: View>: View {
         marks: [Int: PackTileMark] = [:],
         onSelectDay: ((Int) -> Void)? = nil,
         onSelectMissedDay: ((Int) -> Void)? = nil,
+        onSelectToday: (() -> Void)? = nil,
         @ViewBuilder header: () -> Header
     ) {
         self.regimen = regimen
@@ -44,6 +47,7 @@ struct PackCard<Header: View>: View {
         self.marks = marks
         self.onSelectDay = onSelectDay
         self.onSelectMissedDay = onSelectMissedDay
+        self.onSelectToday = onSelectToday
         self.header = header()
     }
 
@@ -185,9 +189,17 @@ struct PackCard<Header: View>: View {
         if let onSelectDay {
             tileButton(face, day: day, state: state) { onSelectDay(index) }
                 .accessibilityAddTraits(index == flagIndex ? .isSelected : [])
+                .accessibilityIdentifier("packTile.\(day.pillNumber ?? day.number)")
+        } else if index == todayIndex, let onSelectToday {
+            tileButton(face, day: day, state: state, action: onSelectToday)
+                .accessibilityIdentifier("firstReminderTodayTile")
+                .background {
+                    TodayPulseRing(cornerRadius: 14 * tileSide / PackTile.designSide, reduceMotion: reduceMotion)
+                }
         } else if state == .missed, let onSelectMissedDay {
             tileButton(face, day: day, state: state) { onSelectMissedDay(index) }
                 .accessibilityHint(PillieLocalization.string("history.dayCorrection.accessibilityHint", locale: locale))
+                .accessibilityIdentifier("packTile.\(day.pillNumber ?? day.number)")
         } else {
             face
                 .tileAccessibility(label: accessibilityLabel(for: day), value: accessibilityValue(for: day.kind, state: state))
@@ -205,7 +217,6 @@ struct PackCard<Header: View>: View {
             .tileAccessibility(label: accessibilityLabel(for: day), value: accessibilityValue(for: day.kind, state: state))
             .accessibilityAddTraits(.isButton)
             .accessibilityAction { action() }
-            .accessibilityIdentifier("packTile.\(day.pillNumber ?? day.number)")
     }
 
     @ViewBuilder
@@ -331,6 +342,27 @@ private struct PackTilePressStyle: ButtonStyle {
         configuration.label
             .scaleEffect(configuration.isPressed && !reduceMotion ? 0.94 : 1)
             .animation(.spring(duration: 0.3, bounce: 0.4), value: configuration.isPressed)
+    }
+}
+
+private struct TodayPulseRing: View {
+    let cornerRadius: CGFloat
+    let reduceMotion: Bool
+
+    @State private var expanded = false
+
+    var body: some View {
+        RoundedRectangle(cornerRadius: cornerRadius + 5, style: .continuous)
+            .strokeBorder(PillieTheme.coral, lineWidth: 2.5)
+            .padding(-5)
+            .scaleEffect(expanded ? 1.08 : 1)
+            .opacity(expanded ? 0.3 : 1)
+            .onAppear {
+                guard !reduceMotion else { return }
+                withAnimation(.easeInOut(duration: 1.1).repeatForever(autoreverses: true)) { expanded = true }
+            }
+            .allowsHitTesting(false)
+            .accessibilityHidden(true)
     }
 }
 

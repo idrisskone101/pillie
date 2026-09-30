@@ -963,22 +963,32 @@
     {
       "issue": "ENG-140",
       "table": "Localizable",
-      "key": "today.first_reminder.log",
-      "create": true,
-      "comment": "Soft log button on Home before the first reminder fires [standard]",
-      "en": "Already took one? Log it",
-      "de": "Schon genommen? Trag es ein",
-      "it": "Hai già assunto la dose? Registrala"
-    },
-    {
-      "issue": "ENG-140",
-      "table": "Localizable",
       "key": "today.first_reminder.card",
       "create": true,
       "comment": "Status card subtitle on Home before the first reminder fires [standard]",
       "en": "First reminder",
       "de": "Erste Erinnerung",
       "it": "Primo promemoria"
+    },
+    {
+      "issue": "ENG-140",
+      "table": "Localizable",
+      "key": "today.first_reminder.took_it",
+      "create": true,
+      "comment": "Log button on Home before the first reminder fires, for a dose already taken [standard]",
+      "en": "Took it",
+      "de": "Genommen",
+      "it": "Già presa"
+    },
+    {
+      "issue": "ENG-140",
+      "table": "Localizable",
+      "key": "today.first_reminder.tap_pill_hint",
+      "create": true,
+      "comment": "Pack card hint on Home before the first reminder fires: tapping today's pill logs it [standard]",
+      "en": "Already took it? Tap today's pill.",
+      "de": "Schon genommen? Tippe auf die Pille von heute.",
+      "it": "Già presa? Tocca la pillola di oggi."
     },
     {
       "issue": "ENG-70",
