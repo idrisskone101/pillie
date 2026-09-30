@@ -69,8 +69,7 @@ struct PlusUpsellSheet: View {
     @State private var showPaywall = false
     @State private var hasTrackedView = false
     @State private var isRestoring = false
-    @State private var showNoSubscriptionAlert = false
-    @State private var restoreError: String?
+    @State private var activeAlert: PaywallAlert?
     @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
     @Environment(\.dismiss) private var dismiss
     @Environment(\.locale) private var locale
@@ -135,35 +134,7 @@ struct PlusUpsellSheet: View {
                         .foregroundStyle(PillieTheme.textMuted)
                 }
 
-                Button {
-                    let response = plusFeedback.startRestore(accessibilityReduceMotion: accessibilityReduceMotion)
-                    withAnimation(response.motionProfile.animation) {
-                        isRestoring = true
-                    }
-                    telemetry.restoreStarted(surface: paywallSurface)
-                    Task {
-                        let outcome = await SubscriptionManager.shared.restore()
-                        telemetry.restoreFinished(outcome, surface: paywallSurface)
-                        switch outcome {
-                        case .restored:
-                            plusFeedback.successfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
-                            dismiss()
-                        case .noActivePurchase:
-                            let calmResponse = plusFeedback.unsuccessfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
-                            withAnimation(calmResponse.motionProfile.animation) {
-                                showNoSubscriptionAlert = true
-                            }
-                        case .failed:
-                            let calmResponse = plusFeedback.unsuccessfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
-                            withAnimation(calmResponse.motionProfile.animation) {
-                                restoreError = CommercePresentation.restoreErrorMessage(locale: locale)
-                            }
-                        }
-                        withAnimation(response.motionProfile.animation) {
-                            isRestoring = false
-                        }
-                    }
-                } label: {
+                Button(action: restorePurchases) {
                     if isRestoring {
                         ProgressView()
                             .tint(PillieTheme.textMuted)
@@ -185,33 +156,7 @@ struct PlusUpsellSheet: View {
         .padding(.bottom, 24)
         .frame(maxWidth: .infinity, alignment: .top)
         .background(PillieTheme.bg)
-        .alert(PillieLocalization.string(
-            "paywall.no_subscription.title",
-            table: "Commerce",
-            locale: locale
-        ), isPresented: $showNoSubscriptionAlert) {
-            Button(PillieLocalization.string("global.action.ok", locale: locale)) { }
-        } message: {
-            Text(PillieLocalization.string(
-                "paywall.no_subscription.body",
-                table: "Commerce",
-                locale: locale
-            ))
-        }
-        .alert(PillieLocalization.string(
-            "paywall.restore_error.title",
-            table: "Commerce",
-            locale: locale
-        ), isPresented: .init(
-            get: { restoreError != nil },
-            set: { if !$0 { restoreError = nil } }
-        )) {
-            Button(PillieLocalization.string("global.action.ok", locale: locale)) {
-                restoreError = nil
-            }
-        } message: {
-            Text(restoreError ?? "")
-        }
+        .paywallAlert($activeAlert, surface: paywallSurface, onRetryRestore: restorePurchases)
         .fullScreenCover(isPresented: $showPaywall) {
             HonestPaywallHost(
                 entry: paywallSurface.paywallEntry,
@@ -226,6 +171,37 @@ struct PlusUpsellSheet: View {
             guard !hasTrackedView else { return }
             hasTrackedView = true
             telemetry.plusUpsellViewed()
+        }
+    }
+
+    private func restorePurchases() {
+        let response = plusFeedback.startRestore(accessibilityReduceMotion: accessibilityReduceMotion)
+        withAnimation(response.motionProfile.animation) {
+            isRestoring = true
+        }
+        telemetry.restoreStarted(surface: paywallSurface)
+        Task {
+            let outcome = await SubscriptionManager.shared.restore()
+            telemetry.restoreFinished(outcome, surface: paywallSurface)
+            switch outcome {
+            case .restored:
+                plusFeedback.successfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
+                dismiss()
+            case .noActivePurchase:
+                showRestoreAlert(.noSubscription)
+            case .failed:
+                showRestoreAlert(.restoreError)
+            }
+            withAnimation(response.motionProfile.animation) {
+                isRestoring = false
+            }
+        }
+    }
+
+    private func showRestoreAlert(_ alert: PaywallAlert) {
+        let calmResponse = plusFeedback.unsuccessfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
+        withAnimation(calmResponse.motionProfile.animation) {
+            activeAlert = alert
         }
     }
 

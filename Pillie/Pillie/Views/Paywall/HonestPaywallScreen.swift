@@ -20,10 +20,9 @@ struct HonestPaywallScreen: View {
 
     @State private var recurrence: PaywallRecurrence = .year
     @State private var offerings: Offerings?
-    @State private var purchaseError: String?
+    @State private var activeAlert: PaywallAlert?
     @State private var isPurchasing = false
     @State private var isRestoring = false
-    @State private var showNoSubscriptionAlert = false
     @State private var purchaseSucceeded = false
     @State private var successOutcome: TrialEndSuccessOutcome = .purchased(.annual)
     @State private var showDeclineFeedback = false
@@ -70,31 +69,7 @@ struct HonestPaywallScreen: View {
             await subscriptionManager.refreshStatus()
             await offeringsLoaded
         }
-        .alert(
-            PillieLocalization.string("paywall.purchase_error.title", table: "Commerce", locale: locale),
-            isPresented: purchaseErrorPresented
-        ) {
-            Button(PillieLocalization.string("global.action.ok", locale: locale)) {
-                purchaseError = nil
-            }
-        } message: {
-            Text(purchaseError ?? "")
-        }
-        .alert(
-            PillieLocalization.string("paywall.no_subscription.title", table: "Commerce", locale: locale),
-            isPresented: $showNoSubscriptionAlert
-        ) {
-            Button(PillieLocalization.string("global.action.ok", locale: locale)) {}
-        } message: {
-            Text(PillieLocalization.string("paywall.no_subscription.body", table: "Commerce", locale: locale))
-        }
-    }
-
-    private var purchaseErrorPresented: Binding<Bool> {
-        Binding(
-            get: { purchaseError != nil },
-            set: { if !$0 { purchaseError = nil } }
-        )
+        .paywallAlert($activeAlert, surface: surface, onRetryRestore: restorePurchases)
     }
 
     @ViewBuilder
@@ -161,7 +136,7 @@ struct HonestPaywallScreen: View {
 
     private func purchase(_ intent: PaywallPurchaseIntent) {
         guard let package = PaywallPurchaseBridge.package(for: intent, offerings: offerings) else {
-            purchaseError = CommercePresentation.offeringsUnavailableMessage(locale: locale)
+            activeAlert = .purchaseError(CommercePresentation.offeringsUnavailableMessage(locale: locale))
             return
         }
         let plan = intent.pilliePlusPlan
@@ -190,7 +165,7 @@ struct HonestPaywallScreen: View {
                     await subscriptionManager.refreshStatus()
                 } else {
                     trackPurchaseFailed(plan: plan, error: error)
-                    purchaseError = CommercePresentation.purchaseErrorMessage(error, locale: locale)
+                    activeAlert = .purchaseError(CommercePresentation.purchaseErrorMessage(error, locale: locale))
                 }
             }
             withAnimation(response.motionProfile.animation) { isPurchasing = false }
@@ -216,10 +191,10 @@ struct HonestPaywallScreen: View {
                 }
             case .noActivePurchase:
                 withAnimation(response.motionProfile.animation) {
-                    showNoSubscriptionAlert = true
+                    activeAlert = .noSubscription
                 }
             case .failed:
-                purchaseError = CommercePresentation.restoreErrorMessage(locale: locale)
+                activeAlert = .restoreError
             }
             withAnimation(response.motionProfile.animation) { isRestoring = false }
         }

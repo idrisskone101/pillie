@@ -902,6 +902,19 @@ struct ProductAnalyticsTelemetry {
     track(.openLineIssueReportTapped, source: .settings)
   }
 
+  /// Contact support from a restore alert (ENG-74): the same issue-report tap,
+  /// attributed to the paywall surface that raised it.
+  func openLineRestoreIssueTapped(surface: AnalyticsPaywallSurface) {
+    analytics.track(
+      .openLineIssueReportTapped,
+      source: source(for: surface),
+      surface: surface,
+      plan: nil,
+      result: nil,
+      isPlus: isPlus()
+    )
+  }
+
   // MARK: - Error tracking (#179)
 
   /// Report a handled failure so it counts toward the founder dashboard's error

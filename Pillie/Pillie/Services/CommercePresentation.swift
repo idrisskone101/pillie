@@ -154,7 +154,11 @@ enum CommercePresentation {
     }
 
     static func restoreErrorMessage(locale: Locale = .current) -> String {
-        genericErrorMessage(locale: locale)
+        PillieLocalization.string(
+            "paywall.restore_error.body",
+            table: "Commerce",
+            locale: locale
+        )
     }
 
     static func offeringsUnavailableMessage(locale: Locale = .current) -> String {

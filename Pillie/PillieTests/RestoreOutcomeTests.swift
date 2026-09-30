@@ -204,3 +204,27 @@ struct RestoreTelemetryTests {
         return (telemetry, spy)
     }
 }
+
+@MainActor
+struct OpenLineRestoreIssueTests {
+    private let diagnostics = OpenLine.Diagnostics(
+        appVersion: "2.1.1",
+        build: "403",
+        systemVersion: "27.0",
+        deviceModel: "iPhone17,1"
+    )
+
+    @Test func `Restore issue mail has its own inbox subject and the issue report body`() throws {
+        let english = Locale(identifier: "en")
+        let url = try #require(OpenLine.mailURL(for: .restoreIssue(diagnostics), locale: english))
+        let items = try #require(URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems)
+
+        #expect(url.scheme == "mailto")
+        #expect(items.first { $0.name == "subject" }?.value == "Pillie — Restore Purchases")
+        #expect(
+            items.first { $0.name == "body" }?.value
+                == OpenLine.Intent.issueReport(diagnostics).localizedBody(locale: english)
+        )
+        #expect(items.first { $0.name == "body" }?.value?.contains("iPhone17,1") == true)
+    }
+}
