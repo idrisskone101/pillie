@@ -30,7 +30,11 @@ tap --label "Change ring"
 wait id shakeTapToConfirmFallback 10
 shot cover
 tap --id shakeTapToConfirmFallback
+wait id shakeStreakHero 10
+shot hero
 wait text "In today" 15
+# The undo toast covers the stats row; scroll it into view above the toast.
+gesture scroll-down
 expect label "3"
 shot home-after
 openurl pillie://debug/fixed-now?at=off
