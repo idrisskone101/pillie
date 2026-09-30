@@ -62,11 +62,18 @@ struct ShakeLoggedNoteTests {
         DoseScheduleAction(date: .now, type: type, method: method, cycleDay: cycleDay, cycleLength: 28)
     }
 
+    private let regimen = PackRegimen(activeDays: 21, breakDays: 7)
+
     @Test func pillNoteNamesThePillInThePack() {
-        let note = ShakeLoggedNote(action: action(.pillActive, method: .pill, cycleDay: 12))
+        let note = ShakeLoggedNote(action: action(.pillActive, method: .pill, cycleDay: 12), regimen: regimen)
         #expect(note.key == "shake.logged.take_pill")
         #expect(note.pillNumber == 12)
-        #expect(ShakeLoggedNote(action: action(.pillSugar, method: .pill, cycleDay: 24)).pillNumber == 24)
+    }
+
+    @Test func sugarPillNoteIsNumberedWithinTheBreak() {
+        let note = ShakeLoggedNote(action: action(.pillSugar, method: .pill, cycleDay: 24), regimen: regimen)
+        #expect(note.key == "shake.logged.sugar_pill")
+        #expect(note.pillNumber == 3)
     }
 
     @Test(arguments: [
@@ -80,7 +87,7 @@ struct ShakeLoggedNoteTests {
     func patchAndRingNotesMirrorTheHomeButton(
         type: PillDay.ActionType, method: ContraceptiveMethod, cycleDay: Int, key: String
     ) {
-        let note = ShakeLoggedNote(action: action(type, method: method, cycleDay: cycleDay))
+        let note = ShakeLoggedNote(action: action(type, method: method, cycleDay: cycleDay), regimen: regimen)
         #expect(note.key == key)
         #expect(note.pillNumber == nil)
     }
@@ -93,6 +100,7 @@ struct ShakeClipForActionTests {
 
     @Test func eachMethodStateOpensItsOwnWay() {
         #expect(ShakeClip(action: action(.pillActive, method: .pill)) == .pill)
+        #expect(ShakeClip(action: action(.pillSugar, method: .pill, cycleDay: 24)) == .sugarPill)
         #expect(ShakeClip(action: action(.patchChange, method: .patch, cycleDay: 1)) == .patchApply)
         #expect(ShakeClip(action: action(.patchChange, method: .patch, cycleDay: 8)) == .patchChange)
         #expect(ShakeClip(action: action(.patchRemove, method: .patch)) == .patchRemove)
@@ -111,6 +119,7 @@ struct ShakeClipForActionTests {
 struct ShakeClipTests {
     @Test(arguments: [
         (ShakeClip.pill, 5),
+        (.sugarPill, 5),
         (.patchApply, 5),
         (.patchChange, 5),
         (.patchRemove, 4),
@@ -126,7 +135,7 @@ struct ShakeClipTests {
     }
 
     @Test(arguments: [
-        ShakeClip.pill, .patchApply, .patchChange, .patchRemove, .ringInsert, .ringRemove,
+        ShakeClip.pill, .sugarPill, .patchApply, .patchChange, .patchRemove, .ringInsert, .ringRemove,
     ])
     func everyPoseHasItsArt(clip: ShakeClip) {
         let names = clip.poses.map(\.shell) + [clip.cutoutImage].compactMap { $0 }
@@ -135,6 +144,7 @@ struct ShakeClipTests {
 
     @Test(arguments: [
         (ShakeClip.pill, 10),
+        (.sugarPill, 10),
         (.patchApply, 17),
         (.patchChange, 17),
         (.patchRemove, 8),
@@ -165,6 +175,19 @@ struct ShakeClipTests {
         #expect(seated.cutout != nil)
         #expect(clip.poses[clip.stop(afterShakes: 1)].cutout == nil)
         #expect(clip.cutoutImage == "ShakeLayerPill")
+    }
+
+    @Test func sugarPillClipIsThePillClipInGreen() {
+        let sugar = ShakeClip.sugarPill
+        #expect(sugar.poses.map(\.shell) == [
+            "ShakeLayerSugarBlisterSealed", "ShakeLayerSugarBlisterDented", "ShakeLayerSugarBlisterDented",
+        ] + Array(repeating: "ShakeLayerBlisterEmpty", count: 8))
+        #expect(sugar.cutoutImage == "ShakeLayerSugarPill")
+        #expect(sugar.poses.map { $0.squash } == ShakeClip.pill.poses.map { $0.squash })
+        #expect(sugar.poses.map { $0.cutout } == ShakeClip.pill.poses.map { $0.cutout })
+        #expect(sugar.poses.map { $0.hold } == ShakeClip.pill.poses.map { $0.hold })
+        #expect(sugar.stops == ShakeClip.pill.stops)
+        #expect(sugar.side == ShakeClip.pill.side)
     }
 
     @Test func patchChangeOpensOnTheOldPatchThenTheBarePouch() {

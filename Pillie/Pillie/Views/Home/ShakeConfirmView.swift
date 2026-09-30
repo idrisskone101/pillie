@@ -297,7 +297,7 @@ struct ShakeConfirmView: View {
     }
 
     private func loggedNote(at date: Date) -> some View {
-        Text(ShakeLoggedNote(action: action).text(
+        Text(ShakeLoggedNote(action: action, regimen: store.pack.regimen).text(
             loggedAt: date.formatted(.dateTime.hour().minute().locale(locale)),
             locale: locale
         ))

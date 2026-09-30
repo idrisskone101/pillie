@@ -58,9 +58,13 @@ struct ShakeLoggedNote: Equatable {
     let key: String
     let pillNumber: Int?
 
-    init(action: DoseScheduleAction) {
+    init(action: DoseScheduleAction, regimen: PackRegimen) {
         key = DueActionCopy.loggedKey(for: action)
-        pillNumber = action.method == .pill ? action.cycleDay : nil
+        pillNumber = if action.type == .pillSugar {
+            regimen.day(atIndex: action.cycleDay - 1).number - regimen.activeDays
+        } else {
+            action.method == .pill ? action.cycleDay : nil
+        }
     }
 
     func text(loggedAt time: String, locale: Locale) -> String {
