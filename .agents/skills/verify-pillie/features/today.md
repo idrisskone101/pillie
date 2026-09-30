@@ -107,7 +107,7 @@ blocking/trial status surfaces, and (when eligible) the review ask.
   pack card all flip to taken.
 - `flows/shake-confirm-stages.flow` steps the shake confirm's stop-motion clip
   for every method (pill with and without a streak, patch apply, change and
-  remove, ring insert and remove), one shot per shake, then the streak
+  remove, ring insert and remove, sugar pill), one shot per shake, then the streak
   reveal and its logged note. A tap on `#shakeConfirmStage` counts as one
   shake.
 - `flows/smoke.flow` covers the plain tab bar (Today/History/Settings) with
