@@ -56,6 +56,14 @@ enum ScheduleCriticalSettingChange {
         NotificationManager.shared.requestReschedule(from: store, reason: "onboarding-reminder-time-authorized")
     }
 
+    /// The onboarding trial is granted after the reminder-time step already
+    /// planned a free-tier schedule, and the entitlement hook is not installed
+    /// during onboarding, so nothing else replans. Without this the first plan
+    /// has no Smart Reminder follow-ups and no trial notices.
+    static func onboardingTrialGranted(store: PillStore) {
+        NotificationManager.shared.requestReschedule(from: store, reason: "onboarding-trial-grant")
+    }
+
     static func saveSettingsReminderTime(
         store: PillStore,
         hour: Int,
