@@ -132,4 +132,51 @@ struct StartDayLiveDayTests {
         #expect(store.currentDayIndex == 1)
     }
 }
+
+/// QA flows pin the clock earlier than the pack the app created on launch, then
+/// seed a routine. Seeding and day rollover must not read the replaced pack.
+@MainActor
+struct DebugClockTimeTravelTests {
+    private static var retained: [Any] = []
+
+    private func at(_ isoDate: String, hour: Int) -> Date {
+        InMemoryStoreFactory.localDate(isoDate, hour: hour)
+    }
+
+    private func launchedStore(realNow: Date) throws -> PillStore {
+        let fixture = try InMemoryStoreFactory.makeStore(now: realNow)
+        Self.retained.append(fixture)
+        return fixture.store
+    }
+
+    @Test func `Seeding a routine day under an earlier pinned clock lands on that day`() throws {
+        defer { InMemoryStoreFactory.resetClockAndDefaults() }
+        let store = try launchedStore(realNow: at("2026-09-29", hour: 21))
+
+        PillieClock.setFixedNowForTesting(at("2026-09-28", hour: 12))
+        store.refreshDayContextIfNeeded()
+        store.seedRoutineDay(method: .patch, cycleDay: 10)
+
+        #expect(store.currentDayIndex + 1 == 10)
+        #expect(store.today == Calendar.current.startOfDay(for: at("2026-09-28", hour: 12)))
+    }
+
+    @Test func `A day logged as upcoming under an earlier pinned clock reads missed once the clock moves on`() throws {
+        defer { InMemoryStoreFactory.resetClockAndDefaults() }
+        let store = try launchedStore(realNow: at("2026-09-29", hour: 21))
+
+        PillieClock.setFixedNowForTesting(at("2026-09-28", hour: 12))
+        store.refreshDayContextIfNeeded()
+        store.replacePack(with: .freshReinstall())
+        store.updateCycleDay(21)
+        let pillTwentyOne = store.today
+        #expect(store.statusForDate(pillTwentyOne) == .upcoming)
+
+        PillieClock.setFixedNowForTesting(at("2026-09-29", hour: 12))
+        store.refreshDayContextIfNeeded()
+
+        #expect(store.currentDayIndex + 1 == 22)
+        #expect(store.statusForDate(pillTwentyOne) == .missed)
+    }
+}
 #endif
