@@ -791,7 +791,12 @@ struct HomeView: View {
                                 state.localizedPrimaryLabel(locale: locale)
                             )
                         } else {
+                            // Opaque chrome keeps the floating link from printing over card text.
                             Text(state.localizedPrimaryLabel(locale: locale))
+                                .padding(.horizontal, 20)
+                                .frame(height: PillieTheme.quietButtonHeight)
+                                .background(Capsule().fill(PillieTheme.cardWhite))
+                                .overlay(Capsule().stroke(PillieTheme.sageHalf, lineWidth: 1))
                         }
                     }
                 }
