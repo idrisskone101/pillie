@@ -158035,6 +158035,281 @@
         }
       }
     },
+    "shake.logged.sugar_pill": {
+      "comment": "Chip after a sugar (placebo) pill is logged from the shake confirm; the pill's number within the break week, then a short time like 8:02 PM",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تم تسجيل الحبة الوهمية %1$lld الساعة %2$@"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%2$@-এ সুগার পিল %1$lld লগ করা হয়েছে"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Píndola de sucre %1$lld registrada a les %2$@"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cukrová pilulka %1$lld zapsaná v %2$@"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sukkerpille %1$lld registreret kl. %2$@"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zuckerpille %1$lld um %2$@ eingetragen"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Το εικονικό χάπι %1$lld καταγράφηκε στις %2$@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sugar pill %1$lld logged at %2$@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Píldora de azúcar %1$lld registrada a las %2$@"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sokeripilleri %1$lld kirjattu klo %2$@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pilule placebo %1$lld notée à %2$@"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "સુગર ગોળી %1$lld %2$@ વાગ્યે નોંધાઈ"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "גלולת פלצבו %1$lld נרשמה ב-%2$@"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "शुगर गोली %1$lld %2$@ बजे दर्ज हुई"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Šećerna pilula %1$lld zabilježena u %2$@"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld. cukortabletta rögzítve: %2$@"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pil plasebo %1$lld dicatat pukul %2$@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillola placebo %1$lld registrata alle %2$@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%2$@にプラセボ%1$lld錠目を記録しました"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ಸಕ್ಕರೆ ಮಾತ್ರೆ %1$lld %2$@ಕ್ಕೆ ದಾಖಲಾಯಿತು"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%2$@에 위약 %1$lld 기록함"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "പഞ്ചസാര ഗുളിക %1$lld %2$@-ന് രേഖപ്പെടുത്തി"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "साखर गोळी %1$lld %2$@ वाजता नोंदवली"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pil plasebo %1$lld direkod pada %2$@"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sukkerpille %1$lld registrert kl. %2$@"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Placebopil %1$lld genoteerd om %2$@"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ସୁଗାର ପିଲ୍ %1$lld %2$@ରେ ଲଗ୍ ହେଲା"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਸ਼ੂਗਰ ਗੋਲੀ %1$lld %2$@ ਵਜੇ ਦਰਜ ਹੋਈ"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cukrowa tabletka %1$lld zapisana o %2$@"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pílula de placebo %1$lld registrada às %2$@"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pílula de placebo %1$lld registada às %2$@"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pilula placebo %1$lld înregistrată la %2$@"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Таблетка плацебо %1$lld отмечена в %2$@"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cukrová tabletka %1$lld zapísaná o %2$@"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sladkorna tabletka %1$lld zabeležena ob %2$@"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sockerpiller %1$lld registrerat kl. %2$@"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "சர்க்கரை மாத்திரை %1$lld %2$@-க்கு பதிவானது"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "షుగర్ మాత్ర %1$lld %2$@కి నమోదైంది"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "บันทึกยาหลอกเม็ดที่ %1$lld เมื่อ %2$@"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Şeker hapı %1$lld kaydedildi, saat %2$@"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Таблетку плацебо %1$lld відмічено о %2$@"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "شوگر گولی %1$lld %2$@ بجے درج ہوئی"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Đã ghi viên giả dược %1$lld lúc %2$@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%2$@ 已记录第 %1$lld 片安慰剂"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%2$@ 已記錄第 %1$lld 顆安慰劑"
+          }
+        }
+      }
+    },
     "shake.logged.apply_patch": {
       "comment": "Chip after the first patch of a cycle is logged; %@ is a short time",
       "localizations": {

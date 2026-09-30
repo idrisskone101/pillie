@@ -2564,6 +2564,16 @@
     {
       "issue": "ENG-150",
       "table": "Localizable",
+      "key": "shake.logged.sugar_pill",
+      "create": true,
+      "comment": "Chip after a sugar (placebo) pill is logged from the shake confirm; the pill's number within the break week, then a short time like 8:02 PM",
+      "en": "Sugar pill %1$lld logged at %2$@",
+      "de": "Zuckerpille %1$lld um %2$@ eingetragen",
+      "it": "Pillola placebo %1$lld registrata alle %2$@"
+    },
+    {
+      "issue": "ENG-150",
+      "table": "Localizable",
       "key": "shake.logged.apply_patch",
       "create": true,
       "comment": "Chip after the first patch of a cycle is logged; %@ is a short time",
