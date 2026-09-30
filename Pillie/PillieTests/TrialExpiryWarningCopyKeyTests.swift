@@ -17,11 +17,11 @@ struct TrialExpiryWarningCopyKeyTests {
     func `Blocker cohort reads the blocking bodies and the shared expiry-day copy`() {
         let cohort = TrialEndPaywallCohort.blockerConfigured
 
-        #expect(TrialExpiryWarningCopy.titleKey(day: 10, cohort: cohort) == "notification.trial_expiry.day10.title")
+        #expect(TrialExpiryWarningCopy.titleKey(day: 10) == "notification.trial_expiry.day10.title")
         #expect(TrialExpiryWarningCopy.bodyKey(day: 10, cohort: cohort) == "notification.trial_expiry.day10.body")
-        #expect(TrialExpiryWarningCopy.titleKey(day: 13, cohort: cohort) == "notification.trial_expiry.day13.title")
+        #expect(TrialExpiryWarningCopy.titleKey(day: 13) == "notification.trial_expiry.day13.title")
         #expect(TrialExpiryWarningCopy.bodyKey(day: 13, cohort: cohort) == "notification.trial_expiry.day13.body")
-        #expect(TrialExpiryWarningCopy.titleKey(day: 15, cohort: cohort) == "notification.trial_expiry.day15.title")
+        #expect(TrialExpiryWarningCopy.titleKey(day: 15) == "notification.trial_expiry.day15.title")
         #expect(TrialExpiryWarningCopy.bodyKey(day: 15, cohort: cohort) == "notification.trial_expiry.day15.body")
     }
 
@@ -29,11 +29,11 @@ struct TrialExpiryWarningCopyKeyTests {
     func `Reminder-only cohort reads the reminders bodies and the shared expiry-day copy`() {
         let cohort = TrialEndPaywallCohort.reminderOnly
 
-        #expect(TrialExpiryWarningCopy.titleKey(day: 10, cohort: cohort) == "notification.trial_expiry.day10.title")
+        #expect(TrialExpiryWarningCopy.titleKey(day: 10) == "notification.trial_expiry.day10.title")
         #expect(TrialExpiryWarningCopy.bodyKey(day: 10, cohort: cohort) == "notification.trial_expiry.day10.reminders.body")
-        #expect(TrialExpiryWarningCopy.titleKey(day: 13, cohort: cohort) == "notification.trial_expiry.day13.title")
+        #expect(TrialExpiryWarningCopy.titleKey(day: 13) == "notification.trial_expiry.day13.title")
         #expect(TrialExpiryWarningCopy.bodyKey(day: 13, cohort: cohort) == "notification.trial_expiry.day13.reminders.body")
-        #expect(TrialExpiryWarningCopy.titleKey(day: 15, cohort: cohort) == "notification.trial_expiry.day15.title")
+        #expect(TrialExpiryWarningCopy.titleKey(day: 15) == "notification.trial_expiry.day15.title")
         #expect(TrialExpiryWarningCopy.bodyKey(day: 15, cohort: cohort) == "notification.trial_expiry.day15.body")
     }
 

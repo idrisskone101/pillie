@@ -65,7 +65,7 @@ final class TrialExpiryWarningNotificationTests: XCTestCase {
         for warning in warnings {
             let day = try XCTUnwrap(warning.trialWarningDay)
             XCTAssertTrue(warning.identifier.hasPrefix("pillie_trial_warning_day_\(day)_blocker_configured_"))
-            XCTAssertEqual(warning.title, TrialExpiryWarningCopy.title(day: day, cohort: .blockerConfigured))
+            XCTAssertEqual(warning.title, TrialExpiryWarningCopy.title(day: day))
             XCTAssertEqual(warning.body, TrialExpiryWarningCopy.body(day: day, cohort: .blockerConfigured))
             // Informational: no reminder category, no Mark as Taken / Snooze.
             XCTAssertEqual(warning.categoryIdentifier, "")

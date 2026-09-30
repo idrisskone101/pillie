@@ -13,15 +13,15 @@
 import Foundation
 
 enum TrialExpiryWarningCopy {
-    static func title(day: Int, cohort: TrialEndPaywallCohort, locale: Locale = .current) -> String {
-        PillieLocalization.string(titleKey(day: day, cohort: cohort), table: "Notifications", locale: locale)
+    static func title(day: Int, locale: Locale = .current) -> String {
+        PillieLocalization.string(titleKey(day: day), table: "Notifications", locale: locale)
     }
 
     static func body(day: Int, cohort: TrialEndPaywallCohort, locale: Locale = .current) -> String {
         PillieLocalization.string(bodyKey(day: day, cohort: cohort), table: "Notifications", locale: locale)
     }
 
-    static func titleKey(day: Int, cohort: TrialEndPaywallCohort) -> String {
+    static func titleKey(day: Int) -> String {
         "\(keyPrefix(day: day)).title"
     }
 

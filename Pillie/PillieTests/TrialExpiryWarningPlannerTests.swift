@@ -162,7 +162,7 @@ final class TrialExpiryWarningPlannerTests: XCTestCase {
         // Informational, blocking-scoped copy: names app blocking, never the
         // contraceptive method or any protection/effectiveness claim.
         for day in [10, 13] {
-            let copy = TrialExpiryWarningCopy.title(day: day, cohort: .blockerConfigured)
+            let copy = TrialExpiryWarningCopy.title(day: day)
                 + " " + TrialExpiryWarningCopy.body(day: day, cohort: .blockerConfigured)
             XCTAssertTrue(copy.contains("App blocking"))
             for banned in ["protect", "effective", "pregnan", "pill", "patch", "ring"] {

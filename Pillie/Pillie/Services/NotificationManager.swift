@@ -409,7 +409,7 @@ final class NotificationManager {
         locale: Locale
     ) -> UNNotificationRequest {
         let content = UNMutableNotificationContent()
-        content.title = TrialExpiryWarningCopy.title(day: warning.day, cohort: warning.cohort, locale: locale)
+        content.title = TrialExpiryWarningCopy.title(day: warning.day, locale: locale)
         content.body = TrialExpiryWarningCopy.body(day: warning.day, cohort: warning.cohort, locale: locale)
         content.sound = .default
         content.userInfo = [
