@@ -1,0 +1,52 @@
+# Day-0 hand-off (ENG-140): finish real onboarding on pill 1 with "Not yet" at 12:30 PM
+# with an 8 PM reminder, so Today says the first reminder is tonight and offers only the
+# quiet "Already took one? Log it". Logging it takes the normal shake-confirm path.
+fresh
+launch
+sleep 2
+openurl pillie://debug/fixed-now?at=2026-09-15T12:30:00Z
+wait id protectionPlanPrimaryCTA
+tap --id protectionPlanPrimaryCTA
+wait id protectionPlanEarlyValueProofView
+tap --label "Not now" --element-type Button
+wait text "What's in the way?"
+tap --label TikTok
+tap --label "A simpler routine"
+tap --id protectionPlanPrimaryCTA
+wait text "How often do you miss your pill?"
+tap --label Rarely
+tap --label "Right after the reminder"
+tap --id protectionPlanPrimaryCTA
+wait text "Where did you find Pillie?"
+tap --id acquisitionSource.tiktok
+tap --id protectionPlanPrimaryCTA
+wait text "Pick your method."
+tap --id protectionPlanPrimaryCTA
+wait text "Tap the pill you're on today."
+tap --id packTile.1
+wait id todayPillQuestion
+tap --id todayPillNotYet
+shot not-yet
+tap --id protectionPlanPrimaryCTA
+wait text "Pick a time."
+tap --label Evening
+shot reminder-time
+tap --id protectionPlanPrimaryCTA
+tap --label Allow
+wait id protectionPlanPrimaryCTA 15
+tap --id protectionPlanPrimaryCTA
+wait id appBlockingEmptyStateCard 15
+openurl "pillie://debug/plus-app-blocking-setup?selected=3&lang=en"
+wait text "Apps selected"
+tap --label Continue
+wait id protectionPlanReadyStartButton
+tap --id protectionPlanReadyStartButton
+sleep 2
+shot first-reminder-home
+tap --label "Already took one? Log it"
+wait id shakeTapToConfirmFallback 10
+tap --id shakeTapToConfirmFallback
+wait text "That's logged. Tap to undo." 15
+wait text "Your next one is" 10
+shot logged
+openurl pillie://debug/fixed-now?at=off
