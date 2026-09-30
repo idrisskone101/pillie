@@ -2630,6 +2630,42 @@
       "en": "Ring removed at %@",
       "de": "Ring um %@ rausgenommen",
       "it": "Anello tolto alle %@"
+    },
+    {
+      "issue": "ENG-141",
+      "table": "Notifications",
+      "key": "notification.trial_expiry.day10.reminders.body",
+      "create": true,
+      "en": "Your follow-up reminders stop in 5 days.",
+      "de": "Deine Folgeerinnerungen enden in 5 Tagen.",
+      "it": "I tuoi promemoria successivi si fermano tra 5 giorni."
+    },
+    {
+      "issue": "ENG-141",
+      "table": "Notifications",
+      "key": "notification.trial_expiry.day13.reminders.body",
+      "create": true,
+      "en": "Your follow-up reminders stop tomorrow night.",
+      "de": "Deine Folgeerinnerungen enden morgen Abend.",
+      "it": "I tuoi promemoria successivi si fermano domani sera."
+    },
+    {
+      "issue": "ENG-141",
+      "table": "Notifications",
+      "key": "notification.trial_expiry.day15.title",
+      "create": true,
+      "en": "Your Plus trial has ended",
+      "de": "Deine Plus-Testphase ist beendet",
+      "it": "La prova di Pillie Plus è terminata"
+    },
+    {
+      "issue": "ENG-141",
+      "table": "Notifications",
+      "key": "notification.trial_expiry.day15.body",
+      "create": true,
+      "en": "Your routine is still set up and waiting. Open Pillie to keep it going.",
+      "de": "Deine Routine ist noch eingerichtet und wartet. Öffne Pillie, um weiterzumachen.",
+      "it": "La tua routine è ancora impostata e ti aspetta. Apri Pillie per continuare."
     }
   ]
 }

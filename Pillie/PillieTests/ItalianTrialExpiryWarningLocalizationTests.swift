@@ -3,8 +3,9 @@
 //  PillieTests
 //
 //  Italian runtime copy for the Reverse Trial day-10/day-13 warning
-//  notifications. The timing must stay aligned with ReverseTrialClock while
-//  keeping the health-neutral app-blocking language from ADR 0007.
+//  notifications and the day-15 expiry-day notice. The timing must stay
+//  aligned with ReverseTrialClock while keeping the health-neutral
+//  app-blocking language from ADR 0007.
 //
 
 import Foundation
@@ -17,21 +18,49 @@ final class ItalianTrialExpiryWarningLocalizationTests: XCTestCase {
         let italian = Locale(identifier: "it_IT")
 
         XCTAssertEqual(
-            TrialExpiryWarningCopy.title(day: 10, cohort: .blockerConfigured, locale: italian),
+            TrialExpiryWarningCopy.title(day: 10, locale: italian),
             "La prova di Pillie Plus terminerà presto"
         )
         XCTAssertEqual(
             TrialExpiryWarningCopy.body(day: 10, cohort: .blockerConfigured, locale: italian),
-            "Il blocco delle app si disattiverà tra 5 giorni. I promemoria resteranno gratuiti, per sempre."
+            "Il blocco delle app si disattiverà tra 5 giorni."
         )
         XCTAssertEqual(
-            TrialExpiryWarningCopy.title(day: 13, cohort: .blockerConfigured, locale: italian),
+            TrialExpiryWarningCopy.title(day: 13, locale: italian),
             "La prova di Pillie Plus sta per terminare"
         )
         XCTAssertEqual(
             TrialExpiryWarningCopy.body(day: 13, cohort: .blockerConfigured, locale: italian),
-            "Il blocco delle app si disattiverà domani sera. I promemoria resteranno gratuiti, per sempre."
+            "Il blocco delle app si disattiverà domani sera."
         )
+    }
+
+    func testItalianReminderOnlyWarningsNameFollowUpsNotBlocking() {
+        let italian = Locale(identifier: "it_IT")
+
+        XCTAssertEqual(
+            TrialExpiryWarningCopy.body(day: 10, cohort: .reminderOnly, locale: italian),
+            "I tuoi promemoria successivi si fermano tra 5 giorni."
+        )
+        XCTAssertEqual(
+            TrialExpiryWarningCopy.body(day: 13, cohort: .reminderOnly, locale: italian),
+            "I tuoi promemoria successivi si fermano domani sera."
+        )
+    }
+
+    func testItalianExpiryDayNoticeReadsTheSameForBothCohorts() {
+        let italian = Locale(identifier: "it_IT")
+
+        XCTAssertEqual(
+            TrialExpiryWarningCopy.title(day: 15, locale: italian),
+            "La prova di Pillie Plus è terminata"
+        )
+        for cohort in [TrialEndPaywallCohort.blockerConfigured, .reminderOnly] {
+            XCTAssertEqual(
+                TrialExpiryWarningCopy.body(day: 15, cohort: cohort, locale: italian),
+                "La tua routine è ancora impostata e ti aspetta. Apri Pillie per continuare."
+            )
+        }
     }
 
     @MainActor
@@ -68,8 +97,8 @@ final class ItalianTrialExpiryWarningLocalizationTests: XCTestCase {
         XCTAssertEqual(
             warnings.map(\.body),
             [
-                "Il blocco delle app si disattiverà tra 5 giorni. I promemoria resteranno gratuiti, per sempre.",
-                "Il blocco delle app si disattiverà domani sera. I promemoria resteranno gratuiti, per sempre.",
+                "Il blocco delle app si disattiverà tra 5 giorni.",
+                "Il blocco delle app si disattiverà domani sera.",
             ]
         )
     }
