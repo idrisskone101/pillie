@@ -88,6 +88,9 @@ blocking/trial status surfaces, and (when eligible) the review ask.
 - `flows/today-ring-countdown.flow` — the same for the ring: wearing, late
   out, logged out, ring-free week, the day-29 reinsert (late, then logged,
   which starts the next cycle), day 30 new cycle due, and a missed insertion.
+- `flows/today-ring-start-day.flow` onboards a ring routine answered "Not yet"
+  with an evening reminder and, before that reminder, logs the day-1 insert
+  from Home. The streak starts at 1.
 - `flows/today-catch-up.flow` — a missed patch change stays loggable from
   Home until the next task day: day 16 reads Missed with "Change patch" on
   the button, the Shake fallback logs it late ("On today"), undo restores
