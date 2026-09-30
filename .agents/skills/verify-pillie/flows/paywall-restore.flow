@@ -17,12 +17,12 @@ log start
 openurl pillie://debug/restore-outcome?result=error
 tap --label "Cancel anytime · Restore"
 wait text "Couldn't restore purchases" 10
-expect label "Try Again"
+expect label "Try again"
 expect label "Contact support"
 shot trial-end-restore-error
 
 openurl pillie://debug/restore-outcome?result=none
-tap --label "Try Again"
+tap --label "Try again"
 wait text "No Subscription Found" 10
 expect label "Contact support"
 shot trial-end-no-subscription

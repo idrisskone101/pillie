@@ -46,7 +46,7 @@ private struct PaywallAlertModifier: ViewModifier {
                 case .purchaseError:
                     Button(globalString("global.action.ok")) {}
                 case .restoreError:
-                    Button(globalString("global.action.retry"), action: onRetryRestore)
+                    Button(commerceString("paywall.action.try_again"), action: onRetryRestore)
                     contactSupportButton
                     Button(globalString("global.action.not_now"), role: .cancel) {}
                 case .noSubscription:

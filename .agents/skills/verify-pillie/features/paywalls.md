@@ -43,7 +43,7 @@ CTAs change often; this file names the mechanism, not the wording.
 - `paywall-restore` (ENG-74) — Restore on any honest paywall or the upsell
   sheet ends in one `RestoreOutcome`: restored (paywall dismisses, Plus on),
   no active purchase ("No Subscription Found" with Contact support and OK),
-  or failed ("Couldn't restore purchases" with Try Again, Contact support,
+  or failed ("Couldn't restore purchases" with Try again, Contact support,
   and Not now). Contact support opens the "Pillie — Restore Purchases" Open
   Line mail, or the copy-address fallback when Mail can't open. Analytics:
   `restore_succeeded`, `restore_completed` with `reason`, `restore_failed`
@@ -75,7 +75,7 @@ CTAs change often; this file names the mechanism, not the wording.
 
 - `flows/paywall-restore.flow` — every restore outcome without RevenueCat,
   through `pillie://debug/restore-outcome?result=error|none|restored|clear`.
-  On the hard trial-end board: error alert, then Try Again into the
+  On the hard trial-end board: error alert, then Try again into the
   no-subscription alert, then a restore that drops the wall. Then the
   Settings > Pillie Plus door: error alert and Contact support into the mail
   fallback. `log start` / `log stop` keep the analytics mirror in `app.log`;

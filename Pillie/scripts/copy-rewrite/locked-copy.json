@@ -2695,6 +2695,16 @@
       "en": "Contact support",
       "de": "Support kontaktieren",
       "it": "Contatta l’assistenza"
+    },
+    {
+      "issue": "ENG-74",
+      "table": "Commerce",
+      "key": "paywall.action.try_again",
+      "create": true,
+      "comment": "Restore error alert button that runs Restore Purchases again",
+      "en": "Try again",
+      "de": "Erneut versuchen",
+      "it": "Riprova"
     }
   ]
 }
