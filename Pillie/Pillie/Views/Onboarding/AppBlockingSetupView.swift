@@ -569,6 +569,7 @@ struct AppBlockingSetupView: View {
     private func finishSetup() {
         guard selection.canSaveBlockerConfig else { return }
         blockingManager.saveSelectionAndReconcile(routine: appBlockingRoutine)
+        ScheduleCriticalSettingChange.blockerSetupChanged(store: store)
         ProductAnalyticsTelemetry.live.onboardingBlockerConfigSaved(
             hasSelection: blockingManager.hasAppsSelected
         )

@@ -117,9 +117,10 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         completionHandler([.banner, .sound])
     }
 
-    /// Records `trial_expiry_warning_sent` with `day: 10 | 13` when a trial
-    /// expiry warning is delivered (foreground) or handled (tapped) — at most
-    /// once per day value, so a banner later tapped never double-counts (#168).
+    /// Records `trial_expiry_warning_sent` with `day: 10 | 13 | 15` (15 is the
+    /// expiry-day notice) when a trial notice is delivered (foreground) or
+    /// handled (tapped), at most once per day value, so a banner later tapped
+    /// never double-counts (#168).
     private func recordTrialWarningDeliveryIfNeeded(userInfo: [AnyHashable: Any]) {
         let defaults = UserDefaults.standard
         let sentDays = defaults.array(forKey: TrialExpiryWarningDelivery.sentDaysStorageKey) as? [Int] ?? []
@@ -592,7 +593,7 @@ struct PillieApp: App {
             // should unlock exactly as if the entitlement flipped on. A fresh
             // trial also re-opens the one-shot `trial_expired` window (#167) so
             // expiry stays demoable across repeated QA runs. The warning-sent
-            // dedupe resets with it so the day-10/13 events re-fire too (#168).
+            // dedupe resets with it so the day-10/13/15 events re-fire too (#168).
             UserDefaults.standard.removeObject(forKey: TrialExpiredEvent.firedStorageKey)
             UserDefaults.standard.removeObject(forKey: TrialExpiryWarningDelivery.sentDaysStorageKey)
             UserDefaults.standard.removeObject(forKey: TrialEndPaywallAutoPresentation.shownStorageKey)
@@ -702,7 +703,7 @@ struct PillieApp: App {
                 for request in requests.sorted(by: { $0.identifier < $1.identifier }) {
                     let fireDate = (request.trigger as? UNCalendarNotificationTrigger)?.nextTriggerDate()
                     logger.debug(
-                        "Pillie QA pending: \(request.identifier, privacy: .public) fire=\(fireDate?.description ?? "-", privacy: .public) title=\(request.content.title, privacy: .public)"
+                        "Pillie QA pending: \(request.identifier, privacy: .public) fire=\(fireDate?.description ?? "-", privacy: .public) title=\(request.content.title, privacy: .public) body=\(request.content.body, privacy: .public)"
                     )
                 }
             }

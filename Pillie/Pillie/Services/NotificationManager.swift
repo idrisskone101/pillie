@@ -69,6 +69,7 @@ final class NotificationManager {
     private let scheduleDeviceActivityBlock: (_ hour: Int, _ minute: Int) -> Void
     private let trackSchedulingError: (_ error: any Error) -> Void
     private let hasPlusAccess: () -> Bool
+    private let hasBlockerSetup: () -> Bool
     private let trackSmartReminderRetryScheduled: (_ count: Int) -> Void
 
     private var pendingRescheduleWorkItem: DispatchWorkItem?
@@ -106,6 +107,7 @@ final class NotificationManager {
             )
         },
         hasPlusAccess: @escaping () -> Bool = { SubscriptionManager.shared.hasPlusAccess },
+        hasBlockerSetup: @escaping () -> Bool = { AppBlockingManager.shared.hasAppsSelected },
         trackSmartReminderRetryScheduled: @escaping (_ count: Int) -> Void = {
             ProductAnalyticsTelemetry.live.smartReminderRetryScheduled(count: $0)
         }
@@ -115,6 +117,7 @@ final class NotificationManager {
         self.scheduleDeviceActivityBlock = scheduleDeviceActivityBlock
         self.trackSchedulingError = trackSchedulingError
         self.hasPlusAccess = hasPlusAccess
+        self.hasBlockerSetup = hasBlockerSetup
         self.trackSmartReminderRetryScheduled = trackSmartReminderRetryScheduled
         registerCategory(includeSnooze: hasPlusAccess())
     }
@@ -355,6 +358,7 @@ final class NotificationManager {
                 cycleTransitionEnabled: store.cycleTransitionNoticeEnabled,
                 trialGrantDate: SubscriptionManager.shared.trialGrantDate,
                 hasEntitlement: SubscriptionManager.shared.hasEntitlement,
+                trialCohort: hasBlockerSetup() ? .blockerConfigured : .reminderOnly,
                 servedBaseFireDateByDueDayEpoch: servedBaseFireDateByDueDayEpoch,
                 calendar: calendar
             )
@@ -396,8 +400,9 @@ final class NotificationManager {
         }
     }
 
-    /// Builds a Reverse Trial expiry warning (#168). Copy is Pillie-authored
-    /// (`TrialExpiryWarningCopy`) — informational, so no category/actions.
+    /// Builds a Reverse Trial notice (#168): a day-10/13 warning or the day-15
+    /// expiry-day notice. Copy is Pillie-authored (`TrialExpiryWarningCopy`),
+    /// informational, so no category/actions.
     private func makeTrialWarningRequest(
         for warning: ReminderSchedulePlanner.TrialExpiryWarningIntent,
         calendar: Calendar,
@@ -405,7 +410,7 @@ final class NotificationManager {
     ) -> UNNotificationRequest {
         let content = UNMutableNotificationContent()
         content.title = TrialExpiryWarningCopy.title(day: warning.day, locale: locale)
-        content.body = TrialExpiryWarningCopy.body(day: warning.day, locale: locale)
+        content.body = TrialExpiryWarningCopy.body(day: warning.day, cohort: warning.cohort, locale: locale)
         content.sound = .default
         content.userInfo = [
             PayloadKey.requestKind: TrialExpiryWarningDelivery.requestKindValue,
@@ -418,7 +423,7 @@ final class NotificationManager {
         }
 
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
-        let id = trialWarningIdentifier(day: warning.day, fireDate: warning.fireDate)
+        let id = trialWarningIdentifier(day: warning.day, cohort: warning.cohort, fireDate: warning.fireDate)
         return UNNotificationRequest(identifier: id, content: content, trigger: trigger)
     }
 
@@ -765,8 +770,11 @@ final class NotificationManager {
         "\(cycleTransitionPrefix)day_\(transitionDayEpoch)_\(Int(fireDate.timeIntervalSince1970))"
     }
 
-    private func trialWarningIdentifier(day: Int, fireDate: Date) -> String {
-        "\(trialWarningPrefix)day_\(day)_\(Int(fireDate.timeIntervalSince1970))"
+    /// The cohort is part of the id so a blocker setup change replaces the
+    /// pending request: the managed diff is by identifier, and an unchanged id
+    /// would keep the stale copy.
+    private func trialWarningIdentifier(day: Int, cohort: TrialEndPaywallCohort, fireDate: Date) -> String {
+        "\(trialWarningPrefix)day_\(day)_\(cohort.rawValue)_\(Int(fireDate.timeIntervalSince1970))"
     }
 
     private func isManagedReminderID(_ id: String) -> Bool {

@@ -10,18 +10,25 @@ struct ReminderSchedulePlanner {
     static let baseReminderCount = 7
     static let dueScanLimit = 120
     static let catchupDelayMinutes = 1
-    /// Reverse Trial expiry warnings (#168 / ADR 0007) keep day-10 / day-13
-    /// request ids and copy. Fire times are 5 and 2 local calendar days before
-    /// `ReverseTrialClock.expiryMoment`, at 8 PM — not grant+10 / grant+13.
-    static let trialWarningDays = [10, 13]
-    static let trialWarningLeads: [(templateDay: Int, calendarDaysBeforeExpiry: Int)] = [
-        (10, 5),
-        (13, 2),
+    /// One row per Reverse Trial notice (#168 / ADR 0007). `day` names the
+    /// request id, copy, and analytics value. Fire times are counted back from
+    /// `ReverseTrialClock.expiryMoment`, not forward from the grant, so a break
+    /// week that slides expiry moves the notices with it. Day 15 is the
+    /// expiry-day notice: expiry is local midnight starting the first day
+    /// without access, so 10:00 that day is the morning the wall appears. The
+    /// hours are decoupled from the user's Due Action Reminder time so an
+    /// informational notice never stacks on an action reminder.
+    struct TrialNoticeSlot {
+        let day: Int
+        let calendarDaysBeforeExpiry: Int
+        let hour: Int
+    }
+
+    static let trialNoticeSlots = [
+        TrialNoticeSlot(day: 10, calendarDaysBeforeExpiry: 5, hour: 20),
+        TrialNoticeSlot(day: 13, calendarDaysBeforeExpiry: 2, hour: 20),
+        TrialNoticeSlot(day: 15, calendarDaysBeforeExpiry: 0, hour: 10),
     ]
-    /// Local hour the trial expiry warnings fire at: 8 PM local, decoupled from the
-    /// user's Due Action Reminder time so the informational nudge never stacks on an
-    /// action reminder.
-    static let trialWarningHour = 20
 
     enum DueReminderKind: String {
         case base
@@ -62,12 +69,16 @@ struct ReminderSchedulePlanner {
         /// `smartRemindersEnabled`.
         let cycleTransitionEnabled: Bool
         /// The Reverse Trial grant moment, if any (ADR 0007). Drives the day-10/13
-        /// expiry warnings (#168); `nil` when no trial was ever granted.
+        /// expiry warnings and the day-15 expiry-day notice (#168); `nil` when no
+        /// trial was ever granted.
         let trialGrantDate: Date?
         /// The raw Plus entitlement — NOT `hasPlusAccess`, which is true during the
-        /// trial itself. Entitled users get no expiry warnings: a mid-trial purchase
-        /// replans and both pending warnings fall out as stale.
+        /// trial itself. Entitled users get no trial notices: a mid-trial purchase
+        /// replans and the pending notices fall out as stale.
         let hasEntitlement: Bool
+        /// Picks the trial notice copy: blocking-specific lines only make sense
+        /// once the user has chosen apps to block.
+        var trialCohort: TrialEndPaywallCohort = .reminderOnly
         /// For each untaken due day, the fire date of a base reminder already
         /// committed by NotificationManager (persisted, pending, or delivered).
         /// Empty → planner may emit first-time catch-up. Non-empty + fire <= now
@@ -105,13 +116,14 @@ struct ReminderSchedulePlanner {
         let resumeDate: Date
     }
 
-    /// A Reverse Trial expiry warning (#168): a plain informational local
-    /// notification on trial day 10 and day 13 saying when app blocking turns
-    /// off. Not a Smart Reminder — never gated by Plus, never a re-fire.
+    /// A Reverse Trial notice (#168): a plain informational local notification
+    /// on trial day 10, day 13, or day 15 (the expiry-day notice). Not a Smart
+    /// Reminder: never gated by Plus, never a re-fire.
     struct TrialExpiryWarningIntent: Hashable {
-        /// Trial day the warning fires on (10 or 13), grant day = day 0.
+        /// Trial day the notice belongs to (10, 13, or 15), grant day = day 0.
         let day: Int
         let fireDate: Date
+        let cohort: TrialEndPaywallCohort
     }
 
     enum Intent: Hashable {
@@ -234,12 +246,14 @@ struct ReminderSchedulePlanner {
         return Array(intents.prefix(Self.maxPendingReminders))
     }
 
-    /// Plans the Reverse Trial day-10/13 expiry warnings (#168 / ADR 0007):
-    /// fire at expiry minus 5 and 2 local days, 20:00, so copy ("in 5 days",
-    /// "tomorrow night") stays true when a break slides expiry.
+    /// Plans the Reverse Trial notices (#168 / ADR 0007) from
+    /// `trialNoticeSlots`: the day-10 and day-13 warnings at 20:00, 5 and 2
+    /// local days before expiry, so copy ("in 5 days", "tomorrow night") stays
+    /// true when a break slides expiry, plus the day-15 notice at 10:00 on the
+    /// expiry day itself.
     private func planTrialExpiryWarnings(_ input: Input) -> [TrialExpiryWarningIntent] {
         // Entitled users never see expiry pressure: a mid-trial purchase replans
-        // and both pending warnings fall out of the managed set as stale.
+        // and the pending notices fall out of the managed set as stale.
         guard !input.hasEntitlement, let grantDate = input.trialGrantDate else { return [] }
 
         let clock = ReverseTrialClock(
@@ -247,25 +261,25 @@ struct ReminderSchedulePlanner {
             schedule: ActiveDaySchedule(pack: input.pack, calendar: input.calendar)
         )
         let expiry = clock.expiryMoment(calendar: input.calendar)
-        return Self.trialWarningLeads.compactMap { lead in
-            guard let warningDay = input.calendar.date(
+        return Self.trialNoticeSlots.compactMap { slot in
+            guard let noticeDay = input.calendar.date(
                 byAdding: .day,
-                value: -lead.calendarDaysBeforeExpiry,
+                value: -slot.calendarDaysBeforeExpiry,
                 to: expiry
             ) else {
                 return nil
             }
             let fireDate = reminderDate(
-                on: warningDay,
-                hour: Self.trialWarningHour,
+                on: noticeDay,
+                hour: slot.hour,
                 minute: 0,
                 calendar: input.calendar
             )
-            // A warning whose moment already passed is never scheduled — an aged
-            // or expired trial keeps only warnings still ahead of it. (A past
+            // A notice whose moment already passed is never scheduled: an aged
+            // or expired trial keeps only notices still ahead of it. (A past
             // calendar trigger would otherwise fire immediately.)
             guard fireDate > input.now else { return nil }
-            return TrialExpiryWarningIntent(day: lead.templateDay, fireDate: fireDate)
+            return TrialExpiryWarningIntent(day: slot.day, fireDate: fireDate, cohort: input.trialCohort)
         }
     }
 
