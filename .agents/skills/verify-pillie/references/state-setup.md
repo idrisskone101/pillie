@@ -53,5 +53,5 @@ Home `#developerMenuAvatarButton`, or Settings `#settingsDeveloperMenuRow`, open
 - Real FamilyControls app picking and the shield UI. Authorization reports approved on a simulator (`AppBlockingManager.swift`). Use `/trial-activation-hub`, `selected=N`, and `/intervention-seed` instead.
 - DeviceActivity schedules. `PillieDeviceActivityMonitor` never fires on a simulator.
 - Real purchases. The scheme uses `Configuration.storekit`. Never tap a purchase CTA in a flow.
-- Shake. Use `#shakeTapToConfirmFallback`.
+- Shake. Tap `#shakeConfirmStage` once per shake, or `#shakeTapToConfirmFallback` to finish at once.
 - Remote push. The app only schedules local notifications.

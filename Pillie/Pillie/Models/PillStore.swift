@@ -246,8 +246,18 @@ class PillStore {
     static let patchRestockReminderThresholdOptions: [Int] = [1, 2]
     // MARK: - Computed
 
-    /// The live day: last reminder through the next one, not civil midnight.
+    /// The live day: last reminder through the next one, not civil midnight. It
+    /// never precedes the active pack's first day, so a routine started before
+    /// that day's reminder begins its first live day right away.
     var today: Date {
+        guard let activePack else { return liveDoseDay }
+        return max(liveDoseDay, startOfDaySafe(activePack.resolvedCycleAnchor().date))
+    }
+
+    /// The live day read from the clock alone. Code that replaces or re-anchors
+    /// the pack, and the rollover check, use it: `today` depends on the pack
+    /// being replaced, and on a pinned QA clock the clamp hides the clock moving.
+    private var liveDoseDay: Date {
         LiveDoseDay.on(
             PillieClock.now,
             reminderHour: reminderHour,
@@ -263,16 +273,7 @@ class PillStore {
     }
 
     var currentDayIndex: Int {
-        guard !liveDayPrecedesFirstPack else { return 0 }
-        return pack.cycleDayIndex(on: today)
-    }
-
-    /// Whether the live day falls before this pack's own anchor, so there is no
-    /// cycle-day index and nothing due yet. Onboarding can compute `today` (the
-    /// reminder-relative live day) a calendar day earlier than the pack it just
-    /// created.
-    private var liveDayPrecedesFirstPack: Bool {
-        pack.elapsedCycleDays(on: today) < 0
+        pack.cycleDayIndex(on: today)
     }
 
     var daysOnCurrentPack: Int {
@@ -325,6 +326,14 @@ class PillStore {
     }
 
     var currentStreak: Int {
+        streak(countingTodayAsTaken: false)
+    }
+
+    var streakAfterCompletingToday: Int {
+        streak(countingTodayAsTaken: true)
+    }
+
+    private func streak(countingTodayAsTaken: Bool) -> Int {
         guard let targetPack = activePack else { return 0 }
 
         let currentDay = today
@@ -344,6 +353,9 @@ class PillStore {
             if streak == 0,
                cal.isDate(dueDate, inSameDayAs: currentDay),
                snapshot.status == .upcoming {
+                if countingTodayAsTaken, snapshot.countsTowardAdherence {
+                    streak += 1
+                }
                 continue
             }
 
@@ -433,7 +445,6 @@ class PillStore {
     /// Whether today requires no blocking: taken, or no hormone dose is due.
     /// An untaken sugar pill is handled.
     var isTodayHandled: Bool {
-        guard !liveDayPrecedesFirstPack else { return true }
         if isTodayTaken { return true }
         guard let due = dueAction(on: today) else { return false }
         return !due.type.enforcesAdherence
@@ -983,7 +994,7 @@ class PillStore {
             return false
         }
         let useTodayAsStartDate = preserveHistory && methodChanged
-        let anchor = anchorDay.map { startOfDaySafe($0) } ?? today
+        let anchor = anchorDay.map { startOfDaySafe($0) } ?? liveDoseDay
         let startDate: Date = {
             if useTodayAsStartDate {
                 return anchor
@@ -1037,7 +1048,7 @@ class PillStore {
             }
             backfillPriorDays(from: startDate, count: safeCycleDay - 1, pack: activePack, calendar: Calendar.current)
             streakResetDate = anchor
-            appActivatedDate = today
+            appActivatedDate = liveDoseDay
         } else {
             let nextPackNumber = (packs.map(\.packNumber).max() ?? 0) + 1
             let nextPack = PillPack(
@@ -1054,7 +1065,7 @@ class PillStore {
 
             backfillPriorDays(from: startDate, count: safeCycleDay - 1, pack: nextPack, calendar: Calendar.current)
             streakResetDate = anchor
-            appActivatedDate = today
+            appActivatedDate = liveDoseDay
         }
 
         contraceptiveMethod = method
@@ -1091,7 +1102,7 @@ class PillStore {
         try? modelContext.delete(model: PillPack.self)
 
         // 2. Compute startDate so today aligns with safeCycleDay
-        let startDate = calendar.date(byAdding: .day, value: -(safeCycleDay - 1), to: today) ?? today
+        let startDate = calendar.date(byAdding: .day, value: -(safeCycleDay - 1), to: liveDoseDay) ?? liveDoseDay
 
         // 3. Create a fresh pack
         let freshPack = PillPack(
@@ -1110,13 +1121,13 @@ class PillStore {
         //    Prior action days → .taken; break days → .breakDay. Nothing is .missed.
         backfillPriorDays(from: startDate, count: safeCycleDay - 1, pack: freshPack, calendar: calendar)
         if safeCycleDay > 1 {
-            streakResetDate = today
+            streakResetDate = liveDoseDay
         }
 
         // 5. Set appActivatedDate to today so dates before our backfill
         //    range show as .noData (not .missed). Explicit PillDay records
         //    we created above always take precedence in the snapshot engine.
-        appActivatedDate = today
+        appActivatedDate = liveDoseDay
 
         // 6. Persist and rebuild
         contraceptiveMethod = method
@@ -1179,7 +1190,7 @@ class PillStore {
 
         // Remember whether today was already logged so a cycle-day adjustment
         // doesn't silently undo the day's check-in.
-        let todayEpoch = epochDay(for: today)
+        let todayEpoch = epochDay(for: liveDoseDay)
         let todayRecord = dayRecord(forPackID: activePack.id, epochDay: todayEpoch)
         let hadTakenToday = todayRecord?.status == .taken
 
@@ -1187,7 +1198,7 @@ class PillStore {
         //    All methods (pill, patch, ring) recompute startDate so the
         //    schedule engine anchors correctly and backfilled action types
         //    match the user's chosen cycle day.
-        let newStartDate = calendar.date(byAdding: .day, value: -(safeCycleDay - 1), to: today) ?? today
+        let newStartDate = calendar.date(byAdding: .day, value: -(safeCycleDay - 1), to: liveDoseDay) ?? liveDoseDay
         activePack.startDate = newStartDate
         activePack.cycleDayAnchorIndex = 0
         let backfillStart = newStartDate
@@ -1210,10 +1221,10 @@ class PillStore {
         // 4. Set appActivatedDate to today so dates before our backfill
         //    range show as .noData (not .missed). Explicit PillDay records
         //    we created above always take precedence in the snapshot engine.
-        appActivatedDate = today
+        appActivatedDate = liveDoseDay
 
         // 5. Reset streak so backfilled completed action records don't inflate it.
-        streakResetDate = today
+        streakResetDate = liveDoseDay
 
         // 6. Persist and rebuild
         persist()
@@ -1222,9 +1233,9 @@ class PillStore {
         // 7. Re-log today if it was already checked in before the adjustment and the
         //    reshaped schedule still expects a user action today.
         if hadTakenToday,
-           let snapshot = scheduleSnapshot(for: today),
+           let snapshot = scheduleSnapshot(for: liveDoseDay),
            snapshot.dueAction?.type.requiresUserAction == true {
-            markActionAsTaken(on: today)
+            markActionAsTaken(on: liveDoseDay)
             persist()
         }
 
@@ -1247,7 +1258,7 @@ class PillStore {
             method: currentPack.method,
             pillRegimen: currentPack.method == .pill ? currentPack.pillRegimen : .twentyOneSeven,
             customRegimen: currentPack.regimen,
-            startDate: today,
+            startDate: liveDoseDay,
             cycleDayAnchorIndex: 0,
             packNumber: nextPackNumber,
             isCurrent: true,
@@ -1419,7 +1430,7 @@ class PillStore {
     private func refreshDayContext(force: Bool) {
         let wallClockDay = Calendar.current.startOfDay(for: PillieClock.now)
         if wallClockDay != civilDay { civilDay = wallClockDay }
-        let liveDay = today
+        let liveDay = liveDoseDay
         guard force || liveDay != lastKnownLiveDay else { return }
         lastKnownLiveDay = liveDay
         invalidateAllSnapshotCaches()

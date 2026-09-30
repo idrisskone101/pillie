@@ -1,0 +1,35 @@
+# A new ring routine answered "Not yet", with an evening reminder, before that
+# reminder: the card says put the ring in today, so Home must let the insert be
+# logged now, and logging it starts the streak at 1.
+fresh
+defaults onboardingStep -int 10
+defaults pillie_contraceptive_method -string ring
+launch
+openurl pillie://debug/fixed-now?at=2026-09-28T16:00:00Z
+wait id routineDial 15
+wait id routineDialQuestion
+tap --id routineDialNotYet
+wait id routineDialStatus
+tap --id protectionPlanPrimaryCTA
+wait text "Pick a time."
+tap --label Evening
+tap --id protectionPlanPrimaryCTA
+tap --label Allow
+wait id protectionPlanPrimaryCTA 15
+tap --id protectionPlanPrimaryCTA
+wait id appBlockingEmptyStateCard 15
+openurl "pillie://debug/plus-app-blocking-setup?selected=3&lang=en"
+wait text "Apps selected"
+tap --label Continue
+wait id protectionPlanReadyStartButton
+tap --id protectionPlanReadyStartButton
+wait text "Put your ring in" 15
+wait text "Insert ring" 10
+shot start-day-due
+tap --label "Insert ring"
+wait id shakeTapToConfirmFallback 10
+tap --id shakeTapToConfirmFallback
+wait text "Ring inserted at" 10
+wait text "In today" 15
+shot start-day-logged
+openurl pillie://debug/fixed-now?at=off

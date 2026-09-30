@@ -23,6 +23,7 @@ struct HomeView: View {
     @State private var shakeAction: DoseScheduleAction?
     /// Holds the pack card's pop until the shake cover has slid away, so the log is seen landing.
     @State private var holdsPackCardLog = false
+    @State private var shakeStreakChange = StreakChange.none
     @State private var showBlockingSetup = false
     @State private var showBlockingPaywall = false
     @State private var blockingPaywallSurface: AnalyticsPaywallSurface = .homeBlockingCard
@@ -639,6 +640,7 @@ struct HomeView: View {
             if let action = shakeAction ?? store.todayDueAction {
                 ShakeConfirmView(
                     action: action,
+                    streak: shakeStreakChange,
                     onConfirm: {
                         completeTodayAction()
                         showShakeConfirm = false
@@ -758,6 +760,10 @@ struct HomeView: View {
                     if requiresShakeConfirm {
                         shakeAction = action
                         holdsPackCardLog = true
+                        shakeStreakChange = StreakChange(
+                            before: store.currentStreak,
+                            after: store.streakAfterCompletingToday
+                        )
                         showShakeConfirm = true
                     } else {
                         completeTodayAction()

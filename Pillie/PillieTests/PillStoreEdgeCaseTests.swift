@@ -28,6 +28,22 @@ final class PillStoreEdgeCaseTests: XCTestCase {
         XCTAssertEqual(store.currentStreak, 3)
     }
 
+    func testStreakAfterCompletingTodayCountsTodayBeforeItIsLogged() throws {
+        let today = InMemoryStoreFactory.fixedDate("2026-05-26")
+        let startDate = InMemoryStoreFactory.fixedDate("2026-05-24")
+        let fixture = try InMemoryStoreFactory.makeStore(now: today, startDate: startDate)
+        let store = fixture.store
+
+        store.markActionAsTaken(on: InMemoryStoreFactory.fixedDate("2026-05-24"))
+        store.markActionAsTaken(on: InMemoryStoreFactory.fixedDate("2026-05-25"))
+        XCTAssertEqual(store.currentStreak, 2)
+        XCTAssertEqual(store.streakAfterCompletingToday, 3)
+
+        store.markActionAsTaken(on: today)
+        XCTAssertEqual(store.currentStreak, 3)
+        XCTAssertEqual(store.streakAfterCompletingToday, 3)
+    }
+
     func testScheduledBreakWeekPreservesStreak() throws {
         let today = InMemoryStoreFactory.fixedDate("2026-05-28")
         let startDate = InMemoryStoreFactory.fixedDate("2026-05-01")
