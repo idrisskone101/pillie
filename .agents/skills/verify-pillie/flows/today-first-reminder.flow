@@ -44,7 +44,7 @@ wait id protectionPlanReadyStartButton
 tap --id protectionPlanReadyStartButton
 sleep 2
 shot first-reminder-home
-tap --label "Your first reminder is tonight at 8:00 PM." --element-type Button
+tap --label "Your first reminder is tonight" --element-type Button
 wait text "Already took one? Log it" 10
 shot log-confirm
 tap --label "Already took one? Log it"

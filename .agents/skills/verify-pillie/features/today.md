@@ -68,8 +68,8 @@ blocking/trial status surfaces, and (when eligible) the review ask.
   a fresh, unconfigured pack and outranks the review ask) before proving
   `homeReviewPromptCard`, then dismisses it.
 - `flows/today-first-reminder.flow` — real onboarding on pill 1 with "Not yet"
-  at a pinned 12:30 PM and an 8 PM reminder. Today's status card reads "Your
-  first reminder is tonight at 8:00 PM." and the floating button says the same;
+  at a pinned 12:30 PM and an 8 PM reminder. Today's status card reads "8:00 PM" over
+  "First reminder" and the floating button says "Your first reminder is tonight";
   tapping it offers "Already took one? Log it", which goes through shake confirm
   to the logged state.
 - `flows/today-pack-card.flow` — the pack card's last hormone pill, sugar
