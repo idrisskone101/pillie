@@ -10,6 +10,9 @@ enum TodayActionState: Equatable {
     case completed
     case noActionDue
     case dueAction(DoseScheduleAction, requiresShakeConfirm: Bool)
+    /// A dose is due but the first reminder has not fired: the reminder is the
+    /// prompt, so logging is offered quietly for someone who already took it.
+    case dueActionAwaitingFirstReminder(DoseScheduleAction, requiresShakeConfirm: Bool)
 
     struct Input {
         let isRefillDue: Bool
@@ -20,6 +23,7 @@ enum TodayActionState: Equatable {
         /// A missed patch or ring task Home can still log late.
         var catchUp: DoseScheduleAction? = nil
         var isCaughtUpToday = false
+        var awaitsFirstReminder = false
     }
 
     static func resolve(_ input: Input) -> TodayActionState {
@@ -36,10 +40,11 @@ enum TodayActionState: Equatable {
             return .noActionDue
         }
 
-        return .dueAction(
-            action,
-            requiresShakeConfirm: input.isPlus && !input.reduceMotionEnabled
-        )
+        let requiresShakeConfirm = input.isPlus && !input.reduceMotionEnabled
+        if input.awaitsFirstReminder, todayDueAction != nil {
+            return .dueActionAwaitingFirstReminder(action, requiresShakeConfirm: requiresShakeConfirm)
+        }
+        return .dueAction(action, requiresShakeConfirm: requiresShakeConfirm)
     }
 
     func localizedPrimaryLabel(locale: Locale = .current) -> String {
@@ -52,6 +57,8 @@ enum TodayActionState: Equatable {
             PillieLocalization.string("today.empty.title", locale: locale)
         case .dueAction(let action, _):
             DueActionCopy.localizedLabel(for: action, locale: locale)
+        case .dueActionAwaitingFirstReminder:
+            PillieLocalization.string("today.first_reminder.log", locale: locale)
         }
     }
 }

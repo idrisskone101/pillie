@@ -337,7 +337,8 @@ struct HomeView: View {
                 isPlus: SubscriptionManager.shared.hasPlusAccess,
                 reduceMotionEnabled: accessibilityReduceMotion,
                 catchUp: store.openCatchUp,
-                isCaughtUpToday: store.isCaughtUpToday
+                isCaughtUpToday: store.isCaughtUpToday,
+                awaitsFirstReminder: store.firstReminderHandoff != nil
             )
         )
     }
@@ -756,18 +757,7 @@ struct HomeView: View {
                 .transition(ctaStateTransition)
             case .dueAction(let action, let requiresShakeConfirm):
                 Button {
-                    ProductAnalyticsTelemetry.live.todayActionStarted()
-                    if requiresShakeConfirm {
-                        shakeAction = action
-                        holdsPackCardLog = true
-                        shakeStreakChange = StreakChange(
-                            before: store.currentStreak,
-                            after: store.streakAfterCompletingToday
-                        )
-                        showShakeConfirm = true
-                    } else {
-                        completeTodayAction()
-                    }
+                    startTodayAction(action, requiresShakeConfirm: requiresShakeConfirm)
                 } label: {
                     Group {
                         if dynamicTypeSize.isAccessibilitySize {
@@ -790,6 +780,22 @@ struct HomeView: View {
                     }
                 }
                 .buttonStyle(.pillieDark)
+                .transition(ctaStateTransition)
+            case .dueActionAwaitingFirstReminder(let action, let requiresShakeConfirm):
+                Button {
+                    startTodayAction(action, requiresShakeConfirm: requiresShakeConfirm)
+                } label: {
+                    Group {
+                        if dynamicTypeSize.isAccessibilitySize {
+                            accessibilityFloatingButtonLabel(
+                                state.localizedPrimaryLabel(locale: locale)
+                            )
+                        } else {
+                            Text(state.localizedPrimaryLabel(locale: locale))
+                        }
+                    }
+                }
+                .buttonStyle(.pillieQuiet)
                 .transition(ctaStateTransition)
             }
         }
@@ -824,6 +830,21 @@ struct HomeView: View {
             for: store.pack.method,
             locale: locale
         )
+    }
+
+    private func startTodayAction(_ action: DoseScheduleAction, requiresShakeConfirm: Bool) {
+        ProductAnalyticsTelemetry.live.todayActionStarted()
+        if requiresShakeConfirm {
+            shakeAction = action
+            holdsPackCardLog = true
+            shakeStreakChange = StreakChange(
+                before: store.currentStreak,
+                after: store.streakAfterCompletingToday
+            )
+            showShakeConfirm = true
+        } else {
+            completeTodayAction()
+        }
     }
 
     private func completeTodayAction() {
