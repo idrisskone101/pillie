@@ -93,6 +93,7 @@ enum TodayPillCommit {
         if store.appActivatedDate == nil {
             store.appActivatedDate = store.today
         }
+        FirstReminderInstall.record(at: now, in: defaults)
 
         guard start.logs else { return }
         store.markTodayAsTaken()

@@ -74,6 +74,21 @@ final class TodayPillCommitTests: XCTestCase {
         XCTAssertFalse(store.isTodayTaken)
     }
 
+    func testCommitRecordsTheInstallOnceAndKeepsTheFirstDate() throws {
+        let now = InMemoryStoreFactory.localDate("2026-09-27", hour: 12, minute: 24)
+        let harness = try makeHarness(now: now, reminderHour: 20)
+
+        harness.commit(pick(11, .notYet))
+        XCTAssertEqual(FirstReminderInstall.date(in: harness.defaults), now)
+
+        let later = InMemoryStoreFactory.localDate("2026-09-28", hour: 9, minute: 0)
+        FirstReminderInstall.record(at: later, in: harness.defaults)
+        XCTAssertEqual(FirstReminderInstall.date(in: harness.defaults), now)
+
+        TodayPillCommit.clear(from: harness.defaults)
+        XCTAssertEqual(FirstReminderInstall.date(in: harness.defaults), now, "Today reads it after onboarding clears its keys")
+    }
+
     func testTakenAfterAMorningReminderLogsTodayAndAsksForTheNextPillTomorrow() throws {
         let now = InMemoryStoreFactory.localDate("2026-09-27", hour: 12, minute: 24)
         let harness = try makeHarness(now: now, reminderHour: 8)
