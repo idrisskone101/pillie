@@ -328,6 +328,14 @@ struct HomeView: View {
         }
     }
 
+    /// Accessibility sizes, and the quiet pre-reminder link, read in the scroll flow
+    /// instead of floating over the cards below.
+    private var ctaSitsInScroll: Bool {
+        if dynamicTypeSize.isAccessibilitySize { return true }
+        if case .dueActionAwaitingFirstReminder = todayActionState { return true }
+        return false
+    }
+
     private var todayActionState: TodayActionState {
         TodayActionState.resolve(
             TodayActionState.Input(
@@ -401,7 +409,7 @@ struct HomeView: View {
                     // in the scroll flow. Keeping the regular floating treatment here
                     // would cover the expanded cards below it and squeeze the long
                     // localized label into the edge of the screen.
-                    if dynamicTypeSize.isAccessibilitySize {
+                    if ctaSitsInScroll {
                         floatingButton
                             .modifier(FadeInUp(appeared: appeared, delay: 0.12))
                     }
@@ -495,7 +503,7 @@ struct HomeView: View {
                 .padding(.top, PillieTheme.scrollTopPadding)
                 .padding(
                     .bottom,
-                    dynamicTypeSize.isAccessibilitySize
+                    ctaSitsInScroll
                         ? PillieTheme.scrollBottomPaddingDefault
                         : PillieTheme.scrollBottomPaddingWithCTA
                 )
@@ -503,7 +511,7 @@ struct HomeView: View {
 
             // The compact layout keeps the action persistently reachable. At large
             // accessibility sizes it is rendered above in document order instead.
-            if !dynamicTypeSize.isAccessibilitySize {
+            if !ctaSitsInScroll {
                 floatingButton
                     .padding(.horizontal, 24)
                     .padding(.bottom, 100)
@@ -791,12 +799,7 @@ struct HomeView: View {
                                 state.localizedPrimaryLabel(locale: locale)
                             )
                         } else {
-                            // Opaque chrome keeps the floating link from printing over card text.
                             Text(state.localizedPrimaryLabel(locale: locale))
-                                .padding(.horizontal, 20)
-                                .frame(height: PillieTheme.quietButtonHeight)
-                                .background(Capsule().fill(PillieTheme.cardWhite))
-                                .overlay(Capsule().stroke(PillieTheme.sageHalf, lineWidth: 1))
                         }
                     }
                 }
