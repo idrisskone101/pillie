@@ -703,7 +703,7 @@ struct PillieApp: App {
                 for request in requests.sorted(by: { $0.identifier < $1.identifier }) {
                     let fireDate = (request.trigger as? UNCalendarNotificationTrigger)?.nextTriggerDate()
                     logger.debug(
-                        "Pillie QA pending: \(request.identifier, privacy: .public) fire=\(fireDate?.description ?? "-", privacy: .public) title=\(request.content.title, privacy: .public)"
+                        "Pillie QA pending: \(request.identifier, privacy: .public) fire=\(fireDate?.description ?? "-", privacy: .public) title=\(request.content.title, privacy: .public) body=\(request.content.body, privacy: .public)"
                     )
                 }
             }
