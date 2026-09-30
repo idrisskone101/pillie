@@ -64,6 +64,14 @@ enum ScheduleCriticalSettingChange {
         NotificationManager.shared.requestReschedule(from: store, reason: "onboarding-trial-grant")
     }
 
+    /// The trial notice copy depends on whether the user has apps selected to
+    /// block, and `hasAppsSelected` changes when the selection is saved. During
+    /// onboarding the trial is granted before any apps are picked, so the
+    /// selection is what moves the plan to the blocking copy.
+    static func blockerSetupChanged(store: PillStore) {
+        NotificationManager.shared.requestReschedule(from: store, reason: "blocker-setup-changed")
+    }
+
     static func saveSettingsReminderTime(
         store: PillStore,
         hour: Int,
