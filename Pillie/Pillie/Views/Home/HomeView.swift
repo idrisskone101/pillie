@@ -18,6 +18,7 @@ struct HomeView: View {
     @State private var appeared = false
     @State private var hasAnimatedIn = false
     @State private var showRefillConfirmation = false
+    @State private var showFirstReminderLogConfirm = false
     @State private var showShakeConfirm = false
     /// The action the shake cover confirms, kept while it closes: a late log clears `openCatchUp` at once.
     @State private var shakeAction: DoseScheduleAction?
@@ -328,12 +329,15 @@ struct HomeView: View {
         }
     }
 
-    /// Accessibility sizes, and the quiet pre-reminder link, read in the scroll flow
-    /// instead of floating over the cards below.
-    private var ctaSitsInScroll: Bool {
-        if dynamicTypeSize.isAccessibilitySize { return true }
-        if case .dueActionAwaitingFirstReminder = todayActionState { return true }
-        return false
+    private var firstReminderLabel: String {
+        store.firstReminderHandoff?.localizedLine(
+            reminderTime: SettingsPresentation.time(
+                hour: store.reminderHour,
+                minute: store.reminderMinute,
+                locale: locale
+            ),
+            locale: locale
+        ) ?? ""
     }
 
     private var todayActionState: TodayActionState {
@@ -409,7 +413,7 @@ struct HomeView: View {
                     // in the scroll flow. Keeping the regular floating treatment here
                     // would cover the expanded cards below it and squeeze the long
                     // localized label into the edge of the screen.
-                    if ctaSitsInScroll {
+                    if dynamicTypeSize.isAccessibilitySize {
                         floatingButton
                             .modifier(FadeInUp(appeared: appeared, delay: 0.12))
                     }
@@ -503,7 +507,7 @@ struct HomeView: View {
                 .padding(.top, PillieTheme.scrollTopPadding)
                 .padding(
                     .bottom,
-                    ctaSitsInScroll
+                    dynamicTypeSize.isAccessibilitySize
                         ? PillieTheme.scrollBottomPaddingDefault
                         : PillieTheme.scrollBottomPaddingWithCTA
                 )
@@ -511,7 +515,7 @@ struct HomeView: View {
 
             // The compact layout keeps the action persistently reachable. At large
             // accessibility sizes it is rendered above in document order instead.
-            if !ctaSitsInScroll {
+            if !dynamicTypeSize.isAccessibilitySize {
                 floatingButton
                     .padding(.horizontal, 24)
                     .padding(.bottom, 100)
@@ -559,6 +563,14 @@ struct HomeView: View {
                 currentPlusAccess: current
             ) else { return }
             autoPresentTrialEndPaywallIfNeeded()
+        }
+        .confirmationDialog("", isPresented: $showFirstReminderLogConfirm, titleVisibility: .hidden) {
+            if case .dueActionAwaitingFirstReminder(let action, let requiresShakeConfirm) = todayActionState {
+                Button(TodayActionState.dueActionAwaitingFirstReminder(action, requiresShakeConfirm: requiresShakeConfirm)
+                    .localizedPrimaryLabel(locale: locale)) {
+                    startTodayAction(action, requiresShakeConfirm: requiresShakeConfirm)
+                }
+            }
         }
         .alert(startNewConfirmation.title, isPresented: $showRefillConfirmation) {
             Button(PillieLocalization.string(
@@ -789,21 +801,23 @@ struct HomeView: View {
                 }
                 .buttonStyle(.pillieDark)
                 .transition(ctaStateTransition)
-            case .dueActionAwaitingFirstReminder(let action, let requiresShakeConfirm):
+            case .dueActionAwaitingFirstReminder:
                 Button {
-                    startTodayAction(action, requiresShakeConfirm: requiresShakeConfirm)
+                    showFirstReminderLogConfirm = true
                 } label: {
                     Group {
                         if dynamicTypeSize.isAccessibilitySize {
-                            accessibilityFloatingButtonLabel(
-                                state.localizedPrimaryLabel(locale: locale)
-                            )
+                            accessibilityFloatingButtonLabel(firstReminderLabel)
                         } else {
-                            Text(state.localizedPrimaryLabel(locale: locale))
+                            HStack(spacing: 8) {
+                                Image(systemName: "bell")
+                                    .font(.system(size: 16, weight: .semibold))
+                                Text(firstReminderLabel)
+                            }
                         }
                     }
                 }
-                .buttonStyle(.pillieQuiet)
+                .buttonStyle(PillieTakenButtonStyle())
                 .transition(ctaStateTransition)
             }
         }

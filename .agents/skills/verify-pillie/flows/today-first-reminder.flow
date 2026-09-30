@@ -1,6 +1,7 @@
 # Day-0 hand-off (ENG-140): finish real onboarding on pill 1 with "Not yet" at 12:30 PM
 # with an 8 PM reminder, so Today says the first reminder is tonight and offers only the
-# quiet "Already took one? Log it". Logging it takes the normal shake-confirm path.
+# floating info button "Your first reminder is tonight…"; tapping it offers "Already took one? Log it",
+# which takes the normal shake-confirm path.
 fresh
 launch
 sleep 2
@@ -43,6 +44,9 @@ wait id protectionPlanReadyStartButton
 tap --id protectionPlanReadyStartButton
 sleep 2
 shot first-reminder-home
+tap --label "Your first reminder is tonight at 8:00 PM." --element-type Button
+wait text "Already took one? Log it" 10
+shot log-confirm
 tap --label "Already took one? Log it"
 wait id shakeTapToConfirmFallback 10
 tap --id shakeTapToConfirmFallback
