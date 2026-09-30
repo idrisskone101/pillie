@@ -70,16 +70,3 @@ struct FirstReminderHandoff: Equatable {
     }
 }
 
-/// Temporary prototype switch for ENG-140: which surface logs a dose taken
-/// before the first reminder. Delete it, and the variants that lose, once one
-/// is picked.
-enum FirstReminderLogStyle: String {
-    /// A "Took it" chip inside the floating info bar.
-    case split
-    /// Today's pack tile pulses and logs on tap.
-    case packTile
-    /// A "Took it" check target on the status card.
-    case statusCard
-
-    static let defaultsKey = "pillie.debug.firstReminderLogStyle"
-}

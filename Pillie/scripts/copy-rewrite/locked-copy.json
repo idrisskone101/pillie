@@ -981,16 +981,6 @@
       "it": "Già presa"
     },
     {
-      "issue": "ENG-140",
-      "table": "Localizable",
-      "key": "today.first_reminder.tap_pill_hint",
-      "create": true,
-      "comment": "Pack card hint on Home before the first reminder fires: tapping today's pill logs it [standard]",
-      "en": "Already took it? Tap today's pill.",
-      "de": "Schon genommen? Tippe auf die Pille von heute.",
-      "it": "Già presa? Tocca la pillola di oggi."
-    },
-    {
       "issue": "ENG-70",
       "table": "Localizable",
       "key": "today.next_action.next_week",

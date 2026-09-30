@@ -54,7 +54,6 @@ struct HomeView: View {
     @State private var showTrialDeclineThankYou = false
     @State private var reviewPromptShownLogged = false
     @AppStorage("homeBlockingStatusCardDismissed") private var blockingCardDismissed = false
-    @AppStorage(FirstReminderLogStyle.defaultsKey) private var firstReminderLogStyle = FirstReminderLogStyle.split
     @Bindable private var blockingManager = AppBlockingManager.shared
     private let homeFeedback = HomeActionInteractionFeedback()
     private let trialDeclineFeedbackStore = KeychainTrialDeclineFeedbackResolutionStore()
@@ -333,18 +332,9 @@ struct HomeView: View {
         store.firstReminderHandoff?.localizedLine(locale: locale) ?? ""
     }
 
-    /// Patch and ring show a countdown, not pack tiles, so they fall back to the chip.
-    private var firstReminderLogSurface: FirstReminderLogStyle {
-        firstReminderLogStyle == .packTile && RoutineDialMethod(store.pack.method) != nil
-            ? .split
-            : firstReminderLogStyle
-    }
-
-    /// Logs today's dose from `surface` during the first-reminder hand-off; nil
-    /// outside it or when the prototype switch puts the log elsewhere.
-    private func logBeforeFirstReminder(on surface: FirstReminderLogStyle) -> (() -> Void)? {
-        guard firstReminderLogSurface == surface,
-              case .dueActionAwaitingFirstReminder(let action, let requiresShakeConfirm) = todayActionState
+    /// The "Took it" chip's action while Today waits on the first reminder.
+    private var logBeforeFirstReminder: (() -> Void)? {
+        guard case .dueActionAwaitingFirstReminder(let action, let requiresShakeConfirm) = todayActionState
         else { return nil }
         return { startTodayAction(action, requiresShakeConfirm: requiresShakeConfirm) }
     }
@@ -415,7 +405,7 @@ struct HomeView: View {
                         .transition(ctaStateTransition)
                     }
 
-                    StatusCard(onLogBeforeFirstReminder: logBeforeFirstReminder(on: .statusCard))
+                    StatusCard()
                         .modifier(FadeInUp(appeared: appeared, delay: 0.1))
 
                     // At Accessibility Dynamic Type sizes the primary action belongs
@@ -471,10 +461,7 @@ struct HomeView: View {
                         if let method = RoutineDialMethod(store.pack.method) {
                             HomeCountdownCard(method: method, holdsTodayLog: holdsPackCardLog)
                         } else {
-                            HomePackCard(
-                                holdsTodayLog: holdsPackCardLog,
-                                onLogToday: logBeforeFirstReminder(on: .packTile)
-                            )
+HomePackCard(holdsTodayLog: holdsPackCardLog)
                         }
                     }
                         .modifier(FadeInUp(appeared: appeared, delay: 0.2))
@@ -806,8 +793,7 @@ struct HomeView: View {
                 .buttonStyle(.pillieDark)
                 .transition(ctaStateTransition)
             case .dueActionAwaitingFirstReminder:
-                // Information, not a button: the log lives on the chip, the pack tile,
-                // or the status card, per the ENG-140 prototype switch.
+                // The line is information; only the chip logs.
                 HStack(spacing: 8) {
                     Group {
                         if dynamicTypeSize.isAccessibilitySize {
@@ -822,7 +808,7 @@ struct HomeView: View {
                     }
                     .accessibilityElement(children: .combine)
 
-                    if let log = logBeforeFirstReminder(on: .split) {
+                    if let log = logBeforeFirstReminder {
                         Spacer(minLength: 0)
                         Button(action: log) {
                             Text(state.localizedPrimaryLabel(locale: locale))
@@ -837,8 +823,8 @@ struct HomeView: View {
                         .accessibilityIdentifier("firstReminderTookIt")
                     }
                 }
-                .padding(.leading, firstReminderLogSurface == .split ? 22 : 0)
-                .padding(.trailing, firstReminderLogSurface == .split ? 12 : 0)
+                .padding(.leading, 22)
+                .padding(.trailing, 12)
                 .takenCapsule()
                 .transition(ctaStateTransition)
             }

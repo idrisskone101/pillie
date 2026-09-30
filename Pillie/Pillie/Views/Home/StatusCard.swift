@@ -6,10 +6,7 @@
 import SwiftUI
 
 struct StatusCard: View {
-    /// Set only during the first-reminder hand-off in the status-card prototype (ENG-140).
-    let onLogBeforeFirstReminder: (() -> Void)?
-
-    @Environment(PillStore.self) private var store
+    @Environment(PillStore.self) var store
     @Environment(\.locale) private var locale
     private let valueChangeAnimation = Animation.easeInOut(duration: 0.28)
 
@@ -97,49 +94,12 @@ struct StatusCard: View {
                     .contentTransition(.opacity)
                     .animation(valueChangeAnimation, value: actionTitle)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-
-            if let onLogBeforeFirstReminder {
-                TookItCheckButton(action: onLogBeforeFirstReminder)
-                    .transition(.opacity)
-            }
         }
-    }
-}
-
-private struct TookItCheckButton: View {
-    let action: () -> Void
-
-    @Environment(\.locale) private var locale
-
-    var body: some View {
-        Button(action: action) {
-            VStack(spacing: 4) {
-                Circle()
-                    .strokeBorder(PillieTheme.textPrimary, lineWidth: 1.5)
-                    .frame(width: 36, height: 36)
-                    .overlay {
-                        Image(systemName: "checkmark")
-                            .font(.system(size: 14, weight: .semibold))
-                            .foregroundStyle(PillieTheme.textMuted)
-                    }
-                    .accessibilityHidden(true)
-                Text(PillieLocalization.string("today.first_reminder.took_it", locale: locale))
-                    .font(.pillie(12, weight: .semibold))
-                    .foregroundStyle(PillieTheme.textPrimary)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.7)
-            }
-            .frame(minWidth: 56)
-            .contentShape(Rectangle())
-        }
-        .buttonStyle(.plain)
-        .accessibilityIdentifier("firstReminderStatusTookIt")
     }
 }
 
 #Preview {
-    StatusCard(onLogBeforeFirstReminder: nil)
+    StatusCard()
         .padding()
         .background(PillieTheme.bg)
         .environment(PillStore.previewStore())
