@@ -182,19 +182,9 @@ struct HomePackProgressTests {
         #expect(finished.marks == [:])
     }
 
-    @Test func `A live day before the pack keeps it sealed and reads as pill 1`() {
-        let early = progress(twentyOneSeven, elapsed: -1, taken: true)
-
-        #expect(early.todayIndex == nil)
-        #expect(early.marks == [:])
-        #expect(early.status == .taken)
-        #expect(progress(twentyOneSeven, elapsed: -1).status == .firstPill)
-        #expect(early.title(locale: english) == "Pill 1 of 28")
-    }
-
     @Test func `Day 1's weekday counts back from the live day`() {
         #expect(progress(twentyOneSeven, elapsed: 11).dayOneWeekday == 5)
         #expect(progress(twentyOneSeven, elapsed: 30).dayOneWeekday == 7)
-        #expect(progress(twentyOneSeven, elapsed: -1).dayOneWeekday == 3)
+        #expect(progress(twentyOneSeven, elapsed: 0).dayOneWeekday == 2)
     }
 }

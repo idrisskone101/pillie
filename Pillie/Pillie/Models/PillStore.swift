@@ -246,13 +246,17 @@ class PillStore {
     static let patchRestockReminderThresholdOptions: [Int] = [1, 2]
     // MARK: - Computed
 
-    /// The live day: last reminder through the next one, not civil midnight.
+    /// The live day: last reminder through the next one, not civil midnight. It
+    /// never precedes the active pack's first day, so a routine started before
+    /// that day's reminder begins its first live day right away.
     var today: Date {
-        LiveDoseDay.on(
+        let live = LiveDoseDay.on(
             PillieClock.now,
             reminderHour: reminderHour,
             reminderMinute: reminderMinute
         )
+        guard let activePack else { return live }
+        return max(live, startOfDaySafe(activePack.resolvedCycleAnchor().date))
     }
 
     var activePack: PillPack? {
@@ -263,16 +267,7 @@ class PillStore {
     }
 
     var currentDayIndex: Int {
-        guard !liveDayPrecedesFirstPack else { return 0 }
-        return pack.cycleDayIndex(on: today)
-    }
-
-    /// Whether the live day falls before this pack's own anchor, so there is no
-    /// cycle-day index and nothing due yet. Onboarding can compute `today` (the
-    /// reminder-relative live day) a calendar day earlier than the pack it just
-    /// created.
-    private var liveDayPrecedesFirstPack: Bool {
-        pack.elapsedCycleDays(on: today) < 0
+        pack.cycleDayIndex(on: today)
     }
 
     var daysOnCurrentPack: Int {
@@ -444,7 +439,6 @@ class PillStore {
     /// Whether today requires no blocking: taken, or no hormone dose is due.
     /// An untaken sugar pill is handled.
     var isTodayHandled: Bool {
-        guard !liveDayPrecedesFirstPack else { return true }
         if isTodayTaken { return true }
         guard let due = dueAction(on: today) else { return false }
         return !due.type.enforcesAdherence

@@ -118,7 +118,6 @@ struct HomeCountdownProgress: Hashable, Sendable {
         now: Date,
         calendar: Calendar
     ) {
-        let cycleDay = max(1, cycleDay)
         self.method = method
         self.cycleDay = cycleDay
         self.today = calendar.startOfDay(for: today)

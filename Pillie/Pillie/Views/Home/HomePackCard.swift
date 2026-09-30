@@ -108,7 +108,7 @@ struct HomePackCard: View {
     }
 
     private func missedDays(elapsedDays: Int, totalDays: Int, today: Date) -> Set<Int> {
-        let pastDays = max(0, min(elapsedDays, totalDays))
+        let pastDays = min(elapsedDays, totalDays)
         guard pastDays > 0, var day = date(ofIndex: 0, elapsedDays: elapsedDays, today: today) else { return [] }
         var missed: Set<Int> = []
         for index in 0..<pastDays {
