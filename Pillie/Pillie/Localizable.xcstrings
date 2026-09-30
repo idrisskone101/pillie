@@ -115226,6 +115226,1656 @@
         }
       }
     },
+    "today.first_reminder.tonight": {
+      "comment": "First Due Action Reminder is later today, evening [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your first reminder is tonight at %@."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il tuo primo promemoria è stasera alle %@."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine erste Erinnerung ist heute Abend um %@."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton premier rappel est ce soir à %@."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu primer recordatorio es esta noche a las %@."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seu primeiro lembrete é hoje à noite às %@."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O teu primeiro lembrete é esta noite às %@."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je eerste herinnering is vanavond om %@."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Din första påminnelse är i kväll kl. %@."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Din første påmindelse er i aften kl. %@."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Din første påminnelse er i kveld kl. %@."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ensimmäinen muistutuksesi on tänä iltana klo %@."
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El teu primer recordatori és aquesta nit a les %@."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Twoje pierwsze przypomnienie jest dziś wieczorem o %@."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvoje první připomínka je dnes večer v %@."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Твоё первое напоминание — сегодня вечером в %@."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Твоє перше нагадування — сьогодні ввечері о %@."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最初のリマインダーは今夜%@です。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "첫 알림은 오늘 밤 %@에 있어요."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Peringatan pertama anda ialah malam ini pukul %@."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Primul tău memento e diseară la %@."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvoja prvá pripomienka je dnes večer o %@."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "การแจ้งเตือนแรกของคุณคือคืนนี้ เวลา %@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的第一次提醒在今晚 %@。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的第一次提醒在今晚 %@。"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "तुम्हारा पहला रिमाइंडर आज रात %@ पर है।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvoj prvi podsjetnik je večeras u %@."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Az első emlékeztetőd ma este %@-kor."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İlk hatırlatman bu akşam saat %@."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "உன் முதல் நினைவூட்டல் இன்று இரவு %@க்கு."
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pengingat pertamamu malam ini pukul %@."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تذكيرك الأول الليلة الساعة %@."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "התזכורת הראשונה שלך הערב בשעה %@."
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lời nhắc đầu tiên của bạn là tối nay lúc %@."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "তোমার প্রথম রিমাইন্ডার আজ রাত %@-এ।"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تمہاری پہلی یاد دہانی آج رات %@ بجے ہے۔"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvoj prvi opomnik je nocoj ob %@."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Η πρώτη σου υπενθύμιση είναι απόψε στις %@."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "నీ మొదటి రిమైండర్ ఈ రాత్రి %@కి."
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "તારું પહેલું રિમાઇંડર આજે રાત્રે %@ વાગ્યે છે."
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ನಿನ್ನ ಮೊದಲ ಜ್ಞಾಪನೆ ಇಂದು ರಾತ್ರಿ %@ ಗಂಟೆಗೆ."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "നിന്റെ ആദ്യ റിമൈൻഡർ ഇന്ന് രാത്രി %@-ന് ആണ്."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "तुझा पहिला रिमाइंडर आज रात्री %@ वाजता आहे."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ତୁମର ପ୍ରଥମ ରିମାଇଣ୍ଡର୍ ଆଜି ରାତି %@ରେ।"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਤੇਰਾ ਪਹਿਲਾ ਰਿਮਾਇਂਡਰ ਅੱਜ ਰਾਤ %@ ਵਜੇ ਹੈ।"
+          }
+        }
+      }
+    },
+    "today.first_reminder.this_morning": {
+      "comment": "First Due Action Reminder is this morning, before noon [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your first reminder is this morning at %@."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il tuo primo promemoria è stamattina alle %@."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine erste Erinnerung ist heute Morgen um %@."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton premier rappel est ce matin à %@."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu primer recordatorio es esta mañana a las %@."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seu primeiro lembrete é hoje de manhã às %@."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O teu primeiro lembrete é esta manhã às %@."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je eerste herinnering is vanochtend om %@."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Din första påminnelse är i morse kl. %@."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Din første påmindelse er i dag kl. %@."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Din første påminnelse er i dag kl. %@."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ensimmäinen muistutuksesi on tänä aamuna klo %@."
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El teu primer recordatori és aquest matí a les %@."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Twoje pierwsze przypomnienie jest dziś rano o %@."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvoje první připomínka je dnes ráno v %@."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Твоё первое напоминание — сегодня утром в %@."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Твоє перше нагадування — сьогодні вранці о %@."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最初のリマインダーは今朝%@です。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "첫 알림은 오늘 아침 %@에 있어요."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Peringatan pertama anda ialah pagi ini pukul %@."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Primul tău memento e azi-dimineață la %@."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvoja prvá pripomienka je dnes ráno o %@."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "การแจ้งเตือนแรกของคุณคือเช้านี้ เวลา %@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的第一次提醒在今天早上 %@。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的第一次提醒在今天早上 %@。"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "तुम्हारा पहला रिमाइंडर आज सुबह %@ पर है।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvoj prvi podsjetnik je jutros u %@."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Az első emlékeztetőd ma reggel %@-kor."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İlk hatırlatman bu sabah saat %@."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "உன் முதல் நினைவூட்டல் இன்று காலை %@க்கு."
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pengingat pertamamu pagi ini pukul %@."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تذكيرك الأول هذا الصباح الساعة %@."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "התזכורת הראשונה שלך הבוקר בשעה %@."
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lời nhắc đầu tiên của bạn là sáng nay lúc %@."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "তোমার প্রথম রিমাইন্ডার আজ সকাল %@-এ।"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تمہاری پہلی یاد دہانی آج صبح %@ بجے ہے۔"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvoj prvi opomnik je danes zjutraj ob %@."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Η πρώτη σου υπενθύμιση είναι σήμερα το πρωί στις %@."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "నీ మొదటి రిమైండర్ ఈ ఉదయం %@కి."
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "તારું પહેલું રિમાઇંડર આજે સવારે %@ વાગ્યે છે."
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ನಿನ್ನ ಮೊದಲ ಜ್ಞಾಪನೆ ಇಂದು ಬೆಳಿಗ್ಗೆ %@ ಗಂಟೆಗೆ."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "നിന്റെ ആദ്യ റിമൈൻഡർ ഇന്ന് രാവിലെ %@-ന് ആണ്."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "तुझा पहिला रिमाइंडर आज सकाळी %@ वाजता आहे."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ତୁମର ପ୍ରଥମ ରିମାଇଣ୍ଡର୍ ଆଜି ସକାଳ %@ରେ।"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਤੇਰਾ ਪਹਿਲਾ ਰਿਮਾਇਂਡਰ ਅੱਜ ਸਵੇਰੇ %@ ਵਜੇ ਹੈ।"
+          }
+        }
+      }
+    },
+    "today.first_reminder.today": {
+      "comment": "First Due Action Reminder is later today, afternoon [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your first reminder is today at %@."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il tuo primo promemoria è oggi alle %@."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine erste Erinnerung ist heute um %@."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton premier rappel est aujourd'hui à %@."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu primer recordatorio es hoy a las %@."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seu primeiro lembrete é hoje às %@."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O teu primeiro lembrete é hoje às %@."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je eerste herinnering is vandaag om %@."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Din första påminnelse är i dag kl. %@."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Din første påmindelse er i dag kl. %@."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Din første påminnelse er i dag kl. %@."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ensimmäinen muistutuksesi on tänään klo %@."
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El teu primer recordatori és avui a les %@."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Twoje pierwsze przypomnienie jest dziś o %@."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvoje první připomínka je dnes v %@."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Твоё первое напоминание — сегодня в %@."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Твоє перше нагадування — сьогодні о %@."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最初のリマインダーは今日の%@です。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "첫 알림은 오늘 %@에 있어요."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Peringatan pertama anda ialah hari ini pukul %@."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Primul tău memento e azi la %@."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvoja prvá pripomienka je dnes o %@."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "การแจ้งเตือนแรกของคุณคือวันนี้ เวลา %@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的第一次提醒在今天 %@。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的第一次提醒在今天 %@。"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "तुम्हारा पहला रिमाइंडर आज %@ पर है।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvoj prvi podsjetnik je danas u %@."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Az első emlékeztetőd ma %@-kor."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İlk hatırlatman bugün saat %@."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "உன் முதல் நினைவூட்டல் இன்று %@க்கு."
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pengingat pertamamu hari ini pukul %@."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تذكيرك الأول اليوم الساعة %@."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "התזכורת הראשונה שלך היום בשעה %@."
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lời nhắc đầu tiên của bạn là hôm nay lúc %@."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "তোমার প্রথম রিমাইন্ডার আজ %@-এ।"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تمہاری پہلی یاد دہانی آج %@ بجے ہے۔"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvoj prvi opomnik je danes ob %@."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Η πρώτη σου υπενθύμιση είναι σήμερα στις %@."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "నీ మొదటి రిమైండర్ ఈరోజు %@కి."
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "તારું પહેલું રિમાઇંડર આજે %@ વાગ્યે છે."
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ನಿನ್ನ ಮೊದಲ ಜ್ಞಾಪನೆ ಇಂದು %@ ಗಂಟೆಗೆ."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "നിന്റെ ആദ്യ റിമൈൻഡർ ഇന്ന് %@-ന് ആണ്."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "तुझा पहिला रिमाइंडर आज %@ वाजता आहे."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ତୁମର ପ୍ରଥମ ରିମାଇଣ୍ଡର୍ ଆଜି %@ରେ।"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਤੇਰਾ ਪਹਿਲਾ ਰਿਮਾਇਂਡਰ ਅੱਜ %@ ਵਜੇ ਹੈ।"
+          }
+        }
+      }
+    },
+    "today.first_reminder.tomorrow_morning": {
+      "comment": "First Due Action Reminder is tomorrow, before noon [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your first reminder is tomorrow morning at %@."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il tuo primo promemoria è domani mattina alle %@."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine erste Erinnerung ist morgen früh um %@."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton premier rappel est demain matin à %@."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu primer recordatorio es mañana por la mañana a las %@."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seu primeiro lembrete é amanhã de manhã às %@."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O teu primeiro lembrete é amanhã de manhã às %@."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je eerste herinnering is morgenochtend om %@."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Din första påminnelse är i morgon bitti kl. %@."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Din første påmindelse er i morgen tidlig kl. %@."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Din første påminnelse er i morgen tidlig kl. %@."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ensimmäinen muistutuksesi on huomenna aamulla klo %@."
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El teu primer recordatori és demà al matí a les %@."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Twoje pierwsze przypomnienie jest jutro rano o %@."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvoje první připomínka je zítra ráno v %@."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Твоё первое напоминание — завтра утром в %@."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Твоє перше нагадування — завтра вранці о %@."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最初のリマインダーは明日の朝%@です。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "첫 알림은 내일 아침 %@에 있어요."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Peringatan pertama anda ialah esok pagi pukul %@."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Primul tău memento e mâine dimineață la %@."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvoja prvá pripomienka je zajtra ráno o %@."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "การแจ้งเตือนแรกของคุณคือพรุ่งนี้เช้า เวลา %@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的第一次提醒在明天早上 %@。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的第一次提醒在明天早上 %@。"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "तुम्हारा पहला रिमाइंडर कल सुबह %@ पर है।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvoj prvi podsjetnik je sutra ujutro u %@."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Az első emlékeztetőd holnap reggel %@-kor."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İlk hatırlatman yarın sabah saat %@."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "உன் முதல் நினைவூட்டல் நாளை காலை %@க்கு."
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pengingat pertamamu besok pagi pukul %@."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تذكيرك الأول غدًا صباحًا الساعة %@."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "התזכורת הראשונה שלך מחר בבוקר בשעה %@."
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lời nhắc đầu tiên của bạn là sáng mai lúc %@."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "তোমার প্রথম রিমাইন্ডার আগামীকাল সকাল %@-এ।"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تمہاری پہلی یاد دہانی کل صبح %@ بجے ہے۔"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvoj prvi opomnik je jutri zjutraj ob %@."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Η πρώτη σου υπενθύμιση είναι αύριο το πρωί στις %@."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "నీ మొదటి రిమైండర్ రేపు ఉదయం %@కి."
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "તારું પહેલું રિમાઇંડર આવતીકાલે સવારે %@ વાગ્યે છે."
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ನಿನ್ನ ಮೊದಲ ಜ್ಞಾಪನೆ ನಾಳೆ ಬೆಳಿಗ್ಗೆ %@ ಗಂಟೆಗೆ."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "നിന്റെ ആദ്യ റിമൈൻഡർ നാളെ രാവിലെ %@-ന് ആണ്."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "तुझा पहिला रिमाइंडर उद्या सकाळी %@ वाजता आहे."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ତୁମର ପ୍ରଥମ ରିମାଇଣ୍ଡର୍ ଆସନ୍ତାକାଲି ସକାଳ %@ରେ।"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਤੇਰਾ ਪਹਿਲਾ ਰਿਮਾਇਂਡਰ ਕੱਲ੍ਹ ਸਵੇਰੇ %@ ਵਜੇ ਹੈ।"
+          }
+        }
+      }
+    },
+    "today.first_reminder.tomorrow": {
+      "comment": "First Due Action Reminder is tomorrow, noon or later [health]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your first reminder is tomorrow at %@."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il tuo primo promemoria è domani alle %@."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine erste Erinnerung ist morgen um %@."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton premier rappel est demain à %@."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu primer recordatorio es mañana a las %@."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seu primeiro lembrete é amanhã às %@."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O teu primeiro lembrete é amanhã às %@."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je eerste herinnering is morgen om %@."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Din första påminnelse är i morgon kl. %@."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Din første påmindelse er i morgen kl. %@."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Din første påminnelse er i morgen kl. %@."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ensimmäinen muistutuksesi on huomenna klo %@."
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El teu primer recordatori és demà a les %@."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Twoje pierwsze przypomnienie jest jutro o %@."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvoje první připomínka je zítra v %@."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Твоё первое напоминание — завтра в %@."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Твоє перше нагадування — завтра о %@."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最初のリマインダーは明日の%@です。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "첫 알림은 내일 %@에 있어요."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Peringatan pertama anda ialah esok pukul %@."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Primul tău memento e mâine la %@."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvoja prvá pripomienka je zajtra o %@."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "การแจ้งเตือนแรกของคุณคือพรุ่งนี้ เวลา %@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的第一次提醒在明天 %@。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的第一次提醒在明天 %@。"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "तुम्हारा पहला रिमाइंडर कल %@ पर है।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvoj prvi podsjetnik je sutra u %@."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Az első emlékeztetőd holnap %@-kor."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İlk hatırlatman yarın saat %@."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "உன் முதல் நினைவூட்டல் நாளை %@க்கு."
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pengingat pertamamu besok pukul %@."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تذكيرك الأول غدًا الساعة %@."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "התזכורת הראשונה שלך מחר בשעה %@."
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lời nhắc đầu tiên của bạn là ngày mai lúc %@."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "তোমার প্রথম রিমাইন্ডার আগামীকাল %@-এ।"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تمہاری پہلی یاد دہانی کل %@ بجے ہے۔"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvoj prvi opomnik je jutri ob %@."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Η πρώτη σου υπενθύμιση είναι αύριο στις %@."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "నీ మొదటి రిమైండర్ రేపు %@కి."
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "તારું પહેલું રિમાઇંડર આવતીકાલે %@ વાગ્યે છે."
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ನಿನ್ನ ಮೊದಲ ಜ್ಞಾಪನೆ ನಾಳೆ %@ ಗಂಟೆಗೆ."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "നിന്റെ ആദ്യ റിമൈൻഡർ നാളെ %@-ന് ആണ്."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "तुझा पहिला रिमाइंडर उद्या %@ वाजता आहे."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ତୁମର ପ୍ରଥମ ରିମାଇଣ୍ଡର୍ ଆସନ୍ତାକାଲି %@ରେ।"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਤੇਰਾ ਪਹਿਲਾ ਰਿਮਾਇਂਡਰ ਕੱਲ੍ਹ %@ ਵਜੇ ਹੈ।"
+          }
+        }
+      }
+    },
+    "today.first_reminder.log": {
+      "comment": "Soft log button on Home before the first reminder fires [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Already took one? Log it"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hai già assunto la dose? Registrala"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schon genommen? Trag es ein"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Déjà pris ? Enregistre-le"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Ya la tomaste? Regístrala"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Já tomou? Registre aqui"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Já tomaste? Regista aqui"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Al genomen? Log het"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Har du redan tagit den? Logga den"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allerede taget den? Log den"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allerede tatt den? Logg den"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oletko jo ottanut sen? Kirjaa se"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ja l'has pres? Registra-ho"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Już wzięte? Zapisz to"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Už hotovo? Zapiš to"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Уже принято? Отметь"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Уже прийнято? Познач"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "すでに済ませた？記録する"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이미 했나요? 기록하기"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sudah diambil? Catatkan"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ai luat deja? Înregistrează"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Už hotovo? Zaznamenaj to"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "กินแล้วหรือยัง? บันทึกเลย"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已经服用了？点此记录"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已經服用了？點此記錄"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "पहले ही ले ली? दर्ज करो"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Već uzeto? Zabilježi"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Már megvan? Rögzítsd"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zaten aldın mı? Kaydet"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ஏற்கனவே எடுத்துவிட்டாயா? பதிவு செய்"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sudah diambil? Catat"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أخذتها بالفعل؟ سجّلها"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "כבר נלקחה? לחצו לרישום"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bạn đã uống rồi? Ghi lại"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "আগেই নিয়ে ফেলেছ? লগ করো"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "پہلے ہی لے لی؟ درج کریں"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Že vzeto? Zabeleži"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Το πήρες ήδη; Κατάγραψέ το"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ఇప్పటికే తీసుకున్నావా? నమోదు చేయి"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "પહેલેથી લઈ લીધું? નોંધો"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ಈಗಾಗಲೇ ತೆಗೆದುಕೊಂಡಿದ್ದೀಯಾ? ದಾಖಲಿಸು"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ഇതിനകം എടുത്തോ? രേഖപ്പെടുത്തൂ"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "आधीच घेतलं? नोंद करा"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ଆଗରୁ ନେଇସାରିଛ? ଲଗ୍ କର"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਪਹਿਲਾਂ ਹੀ ਲੈ ਲਈ? ਦਰਜ ਕਰੋ"
+          }
+        }
+      }
+    },
     "today.next_action.next_week": {
       "comment": "Next dose falls in the following calendar week; %1$@ is the bare weekday name, %2$@ the reminder time [health]",
       "localizations": {

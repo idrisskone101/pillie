@@ -901,6 +901,66 @@
       "it": "La prossima è domani alle %@."
     },
     {
+      "issue": "ENG-140",
+      "table": "Localizable",
+      "key": "today.first_reminder.tonight",
+      "create": true,
+      "comment": "First Due Action Reminder is later today, evening [health]",
+      "en": "Your first reminder is tonight at %@.",
+      "de": "Deine erste Erinnerung ist heute Abend um %@.",
+      "it": "Il tuo primo promemoria è stasera alle %@."
+    },
+    {
+      "issue": "ENG-140",
+      "table": "Localizable",
+      "key": "today.first_reminder.this_morning",
+      "create": true,
+      "comment": "First Due Action Reminder is this morning, before noon [health]",
+      "en": "Your first reminder is this morning at %@.",
+      "de": "Deine erste Erinnerung ist heute Morgen um %@.",
+      "it": "Il tuo primo promemoria è stamattina alle %@."
+    },
+    {
+      "issue": "ENG-140",
+      "table": "Localizable",
+      "key": "today.first_reminder.today",
+      "create": true,
+      "comment": "First Due Action Reminder is later today, afternoon [health]",
+      "en": "Your first reminder is today at %@.",
+      "de": "Deine erste Erinnerung ist heute um %@.",
+      "it": "Il tuo primo promemoria è oggi alle %@."
+    },
+    {
+      "issue": "ENG-140",
+      "table": "Localizable",
+      "key": "today.first_reminder.tomorrow_morning",
+      "create": true,
+      "comment": "First Due Action Reminder is tomorrow, before noon [health]",
+      "en": "Your first reminder is tomorrow morning at %@.",
+      "de": "Deine erste Erinnerung ist morgen früh um %@.",
+      "it": "Il tuo primo promemoria è domani mattina alle %@."
+    },
+    {
+      "issue": "ENG-140",
+      "table": "Localizable",
+      "key": "today.first_reminder.tomorrow",
+      "create": true,
+      "comment": "First Due Action Reminder is tomorrow, noon or later [health]",
+      "en": "Your first reminder is tomorrow at %@.",
+      "de": "Deine erste Erinnerung ist morgen um %@.",
+      "it": "Il tuo primo promemoria è domani alle %@."
+    },
+    {
+      "issue": "ENG-140",
+      "table": "Localizable",
+      "key": "today.first_reminder.log",
+      "create": true,
+      "comment": "Soft log button on Home before the first reminder fires [standard]",
+      "en": "Already took one? Log it",
+      "de": "Schon genommen? Trag es ein",
+      "it": "Hai già assunto la dose? Registrala"
+    },
+    {
       "issue": "ENG-70",
       "table": "Localizable",
       "key": "today.next_action.next_week",
