@@ -31,12 +31,12 @@ struct FirstReminderHandoffTests {
         )
     }
 
-    @Test func middayInstallWithEveningReminderIsTonight() {
-        #expect(resolve(installedAt: date(24, 12, 30), reminderHour: 20)?.when == .tonight)
+    @Test func morningInstallWithEveningReminderIsTonight() {
+        #expect(resolve(installedAt: date(24, 9), reminderHour: 20)?.when == .tonight)
     }
 
-    @Test func afternoonReminderTheSameDayIsToday() {
-        #expect(resolve(installedAt: date(24, 9), reminderHour: 15)?.when == .today)
+    @Test func morningInstallWithAfternoonReminderIsThisAfternoon() {
+        #expect(resolve(installedAt: date(24, 10), reminderHour: 15)?.when == .thisAfternoon)
     }
 
     @Test func earlyMorningInstallBeforeAMorningReminderIsThisMorning() {
@@ -47,16 +47,20 @@ struct FirstReminderHandoffTests {
         #expect(resolve(installedAt: date(24, 22), reminderHour: 8)?.when == .tomorrowMorning)
     }
 
-    @Test func installAfterTheEveningReminderIsTomorrowAt() {
-        #expect(resolve(installedAt: date(24, 21), reminderHour: 20)?.when == .tomorrow)
+    @Test func nightInstallWithAfternoonReminderIsTomorrowAfternoon() {
+        #expect(resolve(installedAt: date(24, 22), reminderHour: 14)?.when == .tomorrowAfternoon)
+    }
+
+    @Test func installAfterTheEveningReminderIsTomorrowNight() {
+        #expect(resolve(installedAt: date(24, 21), reminderHour: 20)?.when == .tomorrowNight)
     }
 
     @Test func installAtTheReminderMinuteWaitsForTomorrow() {
-        #expect(resolve(installedAt: date(24, 20), reminderHour: 20)?.when == .tomorrow)
+        #expect(resolve(installedAt: date(24, 20), reminderHour: 20)?.when == .tomorrowNight)
     }
 
     @Test func minutesCountTowardTheFirstFire() {
-        #expect(resolve(installedAt: date(24, 20, 10), reminderHour: 20, reminderMinute: 5)?.when == .tomorrow)
+        #expect(resolve(installedAt: date(24, 20, 10), reminderHour: 20, reminderMinute: 5)?.when == .tomorrowNight)
         #expect(resolve(installedAt: date(24, 20, 10), reminderHour: 20, reminderMinute: 30)?.when == .tonight)
     }
 
@@ -82,21 +86,21 @@ struct FirstReminderHandoffTests {
 
     @Test func englishLines() {
         let en = Locale(identifier: "en")
-        #expect(FirstReminderHandoff(when: .tonight).localizedLine(locale: en)
-            == "Your first reminder is tonight")
-        #expect(FirstReminderHandoff(when: .thisMorning).localizedLine(locale: en)
-            == "Your first reminder is this morning")
-        #expect(FirstReminderHandoff(when: .today).localizedLine(locale: en)
-            == "Your first reminder is today")
-        #expect(FirstReminderHandoff(when: .tomorrowMorning).localizedLine(locale: en)
-            == "Your first reminder is tomorrow morning")
-        #expect(FirstReminderHandoff(when: .tomorrow).localizedLine(locale: en)
-            == "Your first reminder is tomorrow")
+        let line = { (when: FirstReminderHandoff.When) in FirstReminderHandoff(when: when).localizedLine(locale: en) }
+        #expect(line(.thisMorning) == "Your first reminder is this morning")
+        #expect(line(.thisAfternoon) == "Your first reminder is this afternoon")
+        #expect(line(.tonight) == "Your first reminder is tonight")
+        #expect(line(.tomorrowMorning) == "Your first reminder is tomorrow morning")
+        #expect(line(.tomorrowAfternoon) == "Your first reminder is tomorrow afternoon")
+        #expect(line(.tomorrowNight) == "Your first reminder is tomorrow night")
     }
 
     @Test func cardLineIsTheSameForEveryMoment() {
         let en = Locale(identifier: "en")
-        for when in [FirstReminderHandoff.When.thisMorning, .today, .tonight, .tomorrowMorning, .tomorrow] {
+        let moments: [FirstReminderHandoff.When] = [
+            .thisMorning, .thisAfternoon, .tonight, .tomorrowMorning, .tomorrowAfternoon, .tomorrowNight,
+        ]
+        for when in moments {
             #expect(FirstReminderHandoff(when: when).cardLine(locale: en) == "First reminder")
         }
     }
