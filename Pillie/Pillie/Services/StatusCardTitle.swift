@@ -52,7 +52,7 @@ enum StatusCardTitle: Equatable {
         case .next(let date, let day):
             day.localizedLine(for: date, reminderTime: reminderTime, locale: locale)
         case .firstReminder(let handoff):
-            handoff.localizedLine(reminderTime: reminderTime, locale: locale)
+            handoff.cardLine(locale: locale)
         }
     }
 }

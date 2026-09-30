@@ -118,7 +118,7 @@ struct StatusCardTitleTests {
         )
         #expect(title == .firstReminder(handoff))
         #expect(title.localized(reminderTime: "8:00 PM", locale: Locale(identifier: "en"))
-            == "Your first reminder is tonight at 8:00 PM.")
+            == "First reminder")
     }
 
     @Test func firstReminderHandoffYieldsOnANothingDueDay() {

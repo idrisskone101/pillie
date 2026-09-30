@@ -57,12 +57,14 @@ struct FirstReminderHandoff: Equatable {
         return FirstReminderHandoff(when: hour < 12 ? .tomorrowMorning : .tomorrow)
     }
 
-    func localizedLine(reminderTime: String, locale: Locale) -> String {
-        PillieLocalization.formatted(
-            when.stringKey,
-            locale: locale,
-            arguments: reminderTime
-        )
+    /// The floating button's line. The status card already shows the time.
+    func localizedLine(locale: Locale) -> String {
+        PillieLocalization.string(when.stringKey, locale: locale)
+    }
+
+    /// The status card's subtitle, under the reminder time.
+    func cardLine(locale: Locale) -> String {
+        PillieLocalization.string("today.first_reminder.card", locale: locale)
     }
 }
 

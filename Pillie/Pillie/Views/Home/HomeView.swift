@@ -330,14 +330,7 @@ struct HomeView: View {
     }
 
     private var firstReminderLabel: String {
-        store.firstReminderHandoff?.localizedLine(
-            reminderTime: SettingsPresentation.time(
-                hour: store.reminderHour,
-                minute: store.reminderMinute,
-                locale: locale
-            ),
-            locale: locale
-        ) ?? ""
+        store.firstReminderHandoff?.localizedLine(locale: locale) ?? ""
     }
 
     private var todayActionState: TodayActionState {

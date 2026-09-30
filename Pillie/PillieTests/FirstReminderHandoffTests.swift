@@ -82,15 +82,22 @@ struct FirstReminderHandoffTests {
 
     @Test func englishLines() {
         let en = Locale(identifier: "en")
-        #expect(FirstReminderHandoff(when: .tonight).localizedLine(reminderTime: "8:00 PM", locale: en)
-            == "Your first reminder is tonight at 8:00 PM.")
-        #expect(FirstReminderHandoff(when: .thisMorning).localizedLine(reminderTime: "8:00 AM", locale: en)
-            == "Your first reminder is this morning at 8:00 AM.")
-        #expect(FirstReminderHandoff(when: .today).localizedLine(reminderTime: "3:00 PM", locale: en)
-            == "Your first reminder is today at 3:00 PM.")
-        #expect(FirstReminderHandoff(when: .tomorrowMorning).localizedLine(reminderTime: "8:00 AM", locale: en)
-            == "Your first reminder is tomorrow morning at 8:00 AM.")
-        #expect(FirstReminderHandoff(when: .tomorrow).localizedLine(reminderTime: "8:00 PM", locale: en)
-            == "Your first reminder is tomorrow at 8:00 PM.")
+        #expect(FirstReminderHandoff(when: .tonight).localizedLine(locale: en)
+            == "Your first reminder is tonight")
+        #expect(FirstReminderHandoff(when: .thisMorning).localizedLine(locale: en)
+            == "Your first reminder is this morning")
+        #expect(FirstReminderHandoff(when: .today).localizedLine(locale: en)
+            == "Your first reminder is today")
+        #expect(FirstReminderHandoff(when: .tomorrowMorning).localizedLine(locale: en)
+            == "Your first reminder is tomorrow morning")
+        #expect(FirstReminderHandoff(when: .tomorrow).localizedLine(locale: en)
+            == "Your first reminder is tomorrow")
+    }
+
+    @Test func cardLineIsTheSameForEveryMoment() {
+        let en = Locale(identifier: "en")
+        for when in [FirstReminderHandoff.When.thisMorning, .today, .tonight, .tomorrowMorning, .tomorrow] {
+            #expect(FirstReminderHandoff(when: when).cardLine(locale: en) == "First reminder")
+        }
     }
 }
