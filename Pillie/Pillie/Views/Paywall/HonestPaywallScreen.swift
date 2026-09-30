@@ -175,11 +175,14 @@ struct HonestPaywallScreen: View {
     private func restorePurchases() {
         let response = plusFeedback.startRestore(accessibilityReduceMotion: accessibilityReduceMotion)
         withAnimation(response.motionProfile.animation) { isRestoring = true }
-        trackRestoreStarted()
+        // Captured before restoring: a restored entitlement ends the trial-end
+        // content, and the finished event must keep the cohort it started with.
+        let mode = telemetryMode
+        trackRestoreStarted(mode)
 
         Task {
             let outcome = await subscriptionManager.restore()
-            trackRestoreFinished(outcome)
+            trackRestoreFinished(outcome, mode: mode)
             switch outcome {
             case .restored:
                 plusFeedback.successfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
@@ -403,8 +406,8 @@ struct HonestPaywallScreen: View {
         telemetry.trackError(.purchase, error: error)
     }
 
-    private func trackRestoreStarted() {
-        switch telemetryMode {
+    private func trackRestoreStarted(_ mode: HonestPaywallTelemetryMode) {
+        switch mode {
         case .trialEnd(let content):
             telemetry.trialEndRestoreStarted(
                 cohort: content.cohort,
@@ -416,8 +419,8 @@ struct HonestPaywallScreen: View {
         }
     }
 
-    private func trackRestoreFinished(_ outcome: RestoreOutcome) {
-        switch telemetryMode {
+    private func trackRestoreFinished(_ outcome: RestoreOutcome, mode: HonestPaywallTelemetryMode) {
+        switch mode {
         case .trialEnd(let content):
             telemetry.trialEndRestoreFinished(
                 outcome,
