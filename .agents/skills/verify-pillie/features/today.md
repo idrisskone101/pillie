@@ -88,6 +88,9 @@ blocking/trial status surfaces, and (when eligible) the review ask.
 - `flows/today-ring-countdown.flow` — the same for the ring: wearing, late
   out, logged out, ring-free week, the day-29 reinsert (late, then logged,
   which starts the next cycle), day 30 new cycle due, and a missed insertion.
+- `flows/today-ring-new-cycle-streak.flow` — logs a ring insert and removal,
+  then the on-time day-29 change: Home's streak reads 2, the shake hero
+  (`#shakeStreakHero`) promises 3, and Home reads 3 once the new cycle starts.
 - `flows/today-ring-start-day.flow` onboards a ring routine answered "Not yet"
   with an evening reminder and, before that reminder, logs the day-1 insert
   from Home. The streak starts at 1.

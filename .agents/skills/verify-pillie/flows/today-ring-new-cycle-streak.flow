@@ -1,0 +1,40 @@
+# An on-time ring change on day 29 starts a new pack (PillStore.markActionAsTaken,
+# ringReinsert) and must keep the streak: Home reads 2 before, the shake hero
+# promises 3, and Home reads 3 after. Midday EDT is past the 8:00 AM reminder.
+fresh
+launch
+wait text "Get started" 15
+openurl "pillie://debug/plus-home?lang=en"
+openurl pillie://debug/trial-grant?lang=en
+openurl pillie://debug/fixed-now?at=2026-09-28T16:00:00Z
+openurl "pillie://debug/routine-day?method=ring&day=1&lang=en"
+tap --id homeBlockingStatusCardDismiss
+wait text "Insert ring" 10
+tap --label "Insert ring"
+wait id shakeTapToConfirmFallback 10
+tap --id shakeTapToConfirmFallback
+wait text "In today" 15
+
+openurl pillie://debug/fixed-now?at=2026-10-19T16:00:00Z
+tap --label "Remove ring"
+wait id shakeTapToConfirmFallback 10
+tap --id shakeTapToConfirmFallback
+wait text "Out today" 15
+
+openurl pillie://debug/fixed-now?at=2026-10-26T16:00:00Z
+wait text "Change ring" 10
+expect label "2"
+shot home-before
+
+tap --label "Change ring"
+wait id shakeTapToConfirmFallback 10
+shot cover
+tap --id shakeTapToConfirmFallback
+wait id shakeStreakHero 10
+shot hero
+wait text "In today" 15
+# The undo toast covers the stats row; scroll it into view above the toast.
+gesture scroll-down
+expect label "3"
+shot home-after
+openurl pillie://debug/fixed-now?at=off
