@@ -91,6 +91,9 @@ blocking/trial status surfaces, and (when eligible) the review ask.
 - `flows/today-ring-new-cycle-streak.flow` — logs a ring insert and removal,
   then the on-time day-29 change: Home's streak reads 2, the shake hero
   (`#shakeStreakHero`) promises 3, and Home reads 3 once the new cycle starts.
+- `flows/today-ring-start-day.flow` onboards a ring routine answered "Not yet"
+  with an evening reminder and, before that reminder, logs the day-1 insert
+  from Home. The streak starts at 1.
 - `flows/today-catch-up.flow` — a missed patch change stays loggable from
   Home until the next task day: day 16 reads Missed with "Change patch" on
   the button, the Shake fallback logs it late ("On today"), undo restores
@@ -110,7 +113,7 @@ blocking/trial status surfaces, and (when eligible) the review ask.
   pack card all flip to taken.
 - `flows/shake-confirm-stages.flow` steps the shake confirm's stop-motion clip
   for every method (pill with and without a streak, patch apply, change and
-  remove, ring insert and remove), one shot per shake, then the streak
+  remove, ring insert and remove, sugar pill), one shot per shake, then the streak
   reveal and its logged note. A tap on `#shakeConfirmStage` counts as one
   shake.
 - `flows/smoke.flow` covers the plain tab bar (Today/History/Settings) with

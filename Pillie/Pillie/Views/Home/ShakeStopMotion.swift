@@ -55,8 +55,10 @@ struct PouchOpening: Shape {
 extension ShakeClip {
     init?(action: DoseScheduleAction) {
         switch action.type {
-        case .pillActive, .pillSugar:
+        case .pillActive:
             self = .pill
+        case .pillSugar:
+            self = .sugarPill
         case .patchChange:
             self = action.cycleDay == 1 ? .patchApply : .patchChange
         case .patchRemove:
@@ -70,24 +72,33 @@ extension ShakeClip {
         }
     }
 
-    static let pill = ShakeClip(
-        poses: [
-            .init(shell: "ShakeLayerBlisterSealed", hold: .milliseconds(350)),
-            .init(shell: "ShakeLayerBlisterDented", squash: 0.97, hold: .milliseconds(120)),
-            .init(shell: "ShakeLayerBlisterDented", squash: 0.94, hold: .milliseconds(220)),
-            .init(shell: "ShakeLayerBlisterEmpty", cutout: .init(x: 0.02, y: 0.01, scale: 1.03), hold: .milliseconds(60)),
-            .init(shell: "ShakeLayerBlisterEmpty", cutout: .init(y: -0.03, scale: 1.03), hold: .milliseconds(80)),
-            .init(shell: "ShakeLayerBlisterEmpty", cutout: .init(y: -0.06, angle: -6, scale: 1.05)),
-            .init(shell: "ShakeLayerBlisterEmpty", cutout: .init(y: -0.13, angle: -12, scale: 1.10), hold: .milliseconds(80)),
-            .init(shell: "ShakeLayerBlisterEmpty", cutout: .init(y: -0.16, angle: -15, scale: 1.12)),
-            .init(shell: "ShakeLayerBlisterEmpty", cutout: .init(x: 0.10, y: -0.22, angle: -22, scale: 1.18), hold: .milliseconds(80)),
-            .init(shell: "ShakeLayerBlisterEmpty", cutout: .init(x: 0.21, y: -0.24, angle: -28, scale: 1.18), hold: .milliseconds(70)),
-            .init(shell: "ShakeLayerBlisterEmpty", cutout: .init(x: 0.21, y: -0.23, angle: -28, scale: 1.16), hold: .milliseconds(600)),
-        ],
-        cutoutImage: "ShakeLayerPill",
-        side: 300,
-        stops: [2, 3, 5, 7, 10]
+    static let pill = pillClip(
+        sealed: "ShakeLayerBlisterSealed", dented: "ShakeLayerBlisterDented", cutout: "ShakeLayerPill"
     )
+    static let sugarPill = pillClip(
+        sealed: "ShakeLayerSugarBlisterSealed", dented: "ShakeLayerSugarBlisterDented", cutout: "ShakeLayerSugarPill"
+    )
+
+    private static func pillClip(sealed: String, dented: String, cutout: String) -> ShakeClip {
+        ShakeClip(
+            poses: [
+                .init(shell: sealed, hold: .milliseconds(350)),
+                .init(shell: dented, squash: 0.97, hold: .milliseconds(120)),
+                .init(shell: dented, squash: 0.94, hold: .milliseconds(220)),
+                .init(shell: "ShakeLayerBlisterEmpty", cutout: .init(x: 0.02, y: 0.01, scale: 1.03), hold: .milliseconds(60)),
+                .init(shell: "ShakeLayerBlisterEmpty", cutout: .init(y: -0.03, scale: 1.03), hold: .milliseconds(80)),
+                .init(shell: "ShakeLayerBlisterEmpty", cutout: .init(y: -0.06, angle: -6, scale: 1.05)),
+                .init(shell: "ShakeLayerBlisterEmpty", cutout: .init(y: -0.13, angle: -12, scale: 1.10), hold: .milliseconds(80)),
+                .init(shell: "ShakeLayerBlisterEmpty", cutout: .init(y: -0.16, angle: -15, scale: 1.12)),
+                .init(shell: "ShakeLayerBlisterEmpty", cutout: .init(x: 0.10, y: -0.22, angle: -22, scale: 1.18), hold: .milliseconds(80)),
+                .init(shell: "ShakeLayerBlisterEmpty", cutout: .init(x: 0.21, y: -0.24, angle: -28, scale: 1.18), hold: .milliseconds(70)),
+                .init(shell: "ShakeLayerBlisterEmpty", cutout: .init(x: 0.21, y: -0.23, angle: -28, scale: 1.16), hold: .milliseconds(600)),
+            ],
+            cutoutImage: cutout,
+            side: 300,
+            stops: [2, 3, 5, 7, 10]
+        )
+    }
 
     static let patchApply = patchTear(opening: "ShakeLayerPatchPouchSealed")
     static let patchChange = patchTear(opening: "ShakePatchFoldedOnPouch")

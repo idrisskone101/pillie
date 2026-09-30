@@ -20,7 +20,7 @@ struct HomePackProgress: Hashable, Sendable {
     }
 
     let regimen: PackRegimen
-    /// Days since the pack's day 1: negative before it, `totalDays` or more once the pack is finished.
+    /// Days since the pack's day 1: `totalDays` or more once the pack is finished.
     let elapsedDays: Int
     let isTodayTaken: Bool
     let missedDays: Set<Int>
@@ -49,14 +49,14 @@ struct HomePackProgress: Hashable, Sendable {
 
     var isFinished: Bool { elapsedDays >= regimen.totalDays }
 
-    /// nil while the live day precedes the pack; `totalDays` once it is finished, so every tile is out.
-    var todayIndex: Int? {
-        elapsedDays < 0 ? nil : min(elapsedDays, regimen.totalDays)
+    /// `totalDays` once the pack is finished, so every tile is out.
+    var todayIndex: Int {
+        min(elapsedDays, regimen.totalDays)
     }
 
     var marks: [Int: PackTileMark] {
         var marks = Dictionary(uniqueKeysWithValues: missedDays.map { ($0, PackTileMark.missed) })
-        guard !isFinished, let todayIndex else { return marks }
+        guard !isFinished else { return marks }
         if isTodayTaken {
             marks[todayIndex] = .taken
         } else if lateEndsTomorrow != nil {
@@ -67,7 +67,7 @@ struct HomePackProgress: Hashable, Sendable {
 
     var status: Status {
         if isFinished { return .finished }
-        let day = regimen.day(atIndex: max(elapsedDays, 0))
+        let day = regimen.day(atIndex: elapsedDays)
         if isTodayTaken { return .taken }
         if missedDays.contains(elapsedDays - 1) {
             return .missedYesterday(pillNumber: regimen.day(atIndex: elapsedDays - 1).number)
@@ -89,7 +89,7 @@ struct HomePackProgress: Hashable, Sendable {
         if isFinished {
             return PillieLocalization.string("home.pack.title.finished", locale: locale)
         }
-        return Self.title(for: regimen.day(atIndex: max(elapsedDays, 0)), in: regimen, locale: locale)
+        return Self.title(for: regimen.day(atIndex: elapsedDays), in: regimen, locale: locale)
     }
 
     static func title(for day: PackDay, in regimen: PackRegimen, locale: Locale) -> String {

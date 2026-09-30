@@ -180,4 +180,32 @@ tap --id shakeConfirmStage
 wait text "Ring removed at" 10
 shot ring-remove-done
 wait text "Out today" 15
+
+# Sugar pill: the sage pill from the pack card, numbered within the break.
+# A sugar dose never moves the streak, so the headlines stay generic.
+openurl pillie://debug/fixed-now?at=2026-09-28T20:00:00Z
+openurl pillie://debug/trial-break-week?lang=en
+wait text "Sugar pill 7 of 7" 10
+tap --label "Take pill"
+wait id shakeConfirmStage 10
+expect text "Shake to Confirm"
+shot sugar-open
+tap --id shakeConfirmStage
+wait text "Keep going" 5
+sleep 1
+shot sugar-shake-1
+tap --id shakeConfirmStage
+sleep 1
+shot sugar-shake-2
+tap --id shakeConfirmStage
+sleep 1
+shot sugar-shake-3
+tap --id shakeConfirmStage
+wait text "Almost there" 5
+sleep 1
+shot sugar-shake-4
+tap --id shakeConfirmStage
+wait text "Sugar pill 7 logged at" 10
+shot sugar-done
+wait text "Taken today" 15
 openurl pillie://debug/fixed-now?at=off

@@ -117,7 +117,7 @@ final class TodayPillCommitTests: XCTestCase {
         XCTAssertEqual(harness.store.currentStreak, 0)
     }
 
-    func testFirstPillNotYetBeforeTheReminderLeavesNothingDueInTheOpenWindow() throws {
+    func testFirstPillNotYetBeforeTheReminderStartsTheFirstLiveDayNow() throws {
         for regimen in [PillPack.PillRegimenPreset.twentyOneSeven, .everyDay] {
             let now = InMemoryStoreFactory.localDate("2026-09-27", hour: 12, minute: 24)
             let harness = try makeHarness(now: now, reminderHour: 20, name: "firstPill.\(regimen.rawValue)")
@@ -126,11 +126,12 @@ final class TodayPillCommitTests: XCTestCase {
             harness.commit(pick(0, .notYet, regimen))
 
             XCTAssertEqual(store.pack.startDate, day(0, from: now), "\(regimen)")
-            XCTAssertNil(store.scheduleSnapshot(for: store.today), "\(regimen)")
-            XCTAssertNil(store.todayDueAction, "\(regimen)")
-            XCTAssertEqual(store.currentDayIndex + 1, 1, "Home must not wrap to the last day of the pack")
+            XCTAssertEqual(store.today, day(0, from: now), "\(regimen)")
+            XCTAssertNotNil(store.scheduleSnapshot(for: store.today), "\(regimen)")
+            XCTAssertEqual(store.todayDueAction?.cycleDay, 1, "\(regimen)")
+            XCTAssertEqual(store.currentDayIndex + 1, 1, "\(regimen)")
             XCTAssertFalse(store.isTodayTaken, "\(regimen)")
-            XCTAssertTrue(store.isTodayHandled, "\(regimen)")
+            XCTAssertFalse(store.isTodayHandled, "\(regimen)")
             XCTAssertEqual(store.currentStreak, 0, "\(regimen)")
         }
     }

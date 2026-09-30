@@ -6,7 +6,8 @@ enum DueActionCopy {
     }
 
     static func loggedKey(for action: DoseScheduleAction) -> String {
-        verb(for: action).map { "shake.logged.\($0)" } ?? "global.status.completed"
+        if action.type == .pillSugar { return "shake.logged.sugar_pill" }
+        return verb(for: action).map { "shake.logged.\($0)" } ?? "global.status.completed"
     }
 
     private static func verb(for action: DoseScheduleAction) -> String? {
