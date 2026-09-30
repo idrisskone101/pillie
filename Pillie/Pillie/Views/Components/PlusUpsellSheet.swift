@@ -140,30 +140,23 @@ struct PlusUpsellSheet: View {
                     withAnimation(response.motionProfile.animation) {
                         isRestoring = true
                     }
-                    telemetry.upsellRestoreStarted()
+                    telemetry.restoreStarted(surface: paywallSurface)
                     Task {
-                        do {
-                            try await SubscriptionManager.shared.restore()
-                            if SubscriptionManager.shared.hasEntitlement {
-                                telemetry.upsellRestoreCompleted()
-                                plusFeedback.successfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
-                                dismiss()
-                            } else {
-                                telemetry.upsellRestoreFailed()
-                                let calmResponse = plusFeedback.unsuccessfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
-                                withAnimation(calmResponse.motionProfile.animation) {
-                                    showNoSubscriptionAlert = true
-                                }
-                            }
-                        } catch {
-                            telemetry.upsellRestoreFailed()
-                            telemetry.trackError(.restore, error: error)
+                        let outcome = await SubscriptionManager.shared.restore()
+                        telemetry.restoreFinished(outcome, surface: paywallSurface)
+                        switch outcome {
+                        case .restored:
+                            plusFeedback.successfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
+                            dismiss()
+                        case .noActivePurchase:
                             let calmResponse = plusFeedback.unsuccessfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
                             withAnimation(calmResponse.motionProfile.animation) {
-                                restoreError = CommercePresentation.restoreErrorMessage(
-                                    error,
-                                    locale: locale
-                                )
+                                showNoSubscriptionAlert = true
+                            }
+                        case .failed:
+                            let calmResponse = plusFeedback.unsuccessfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
+                            withAnimation(calmResponse.motionProfile.animation) {
+                                restoreError = CommercePresentation.restoreErrorMessage(locale: locale)
                             }
                         }
                         withAnimation(response.motionProfile.animation) {

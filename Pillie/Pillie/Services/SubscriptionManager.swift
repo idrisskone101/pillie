@@ -23,15 +23,6 @@ enum SubscriptionPurchaseError: Error, Equatable, LocalizedError {
     }
 }
 
-enum RestoreAccessOutcome: Equatable {
-    case restored
-    case missingPurchase
-
-    static func resolve(hasEntitlement: Bool) -> RestoreAccessOutcome {
-        hasEntitlement ? .restored : .missingPurchase
-    }
-}
-
 /// The paid-conversion telemetry that a successful purchase should emit.
 enum SubscriptionConversionEvent: Equatable {
     /// A free trial began — its own funnel step, distinct from a paid charge.
@@ -443,22 +434,36 @@ final class SubscriptionManager: NSObject {
 
     // MARK: - Restore
 
-    func restore() async throws {
-        try requireConfiguredPurchases()
+    /// The restore boundary (ENG-74): catches and classifies every failure once,
+    /// so a completed restore that finds no purchase never reads as a failure.
+    func restore() async -> RestoreOutcome {
+        #if DEBUG
+        if let debugRestoreOutcome {
+            if case .restored = debugRestoreOutcome {
+                setPlusForTesting(true)
+            }
+            return debugRestoreOutcome
+        }
+        #endif
         isLoading = true
         defer { isLoading = false }
-
-        let customerInfo = try await Purchases.shared.restorePurchases()
-        applyRestoreResult(
-            isPlusEntitlementActive: customerInfo.entitlements[Self.entitlementID]?.isActive == true
-        )
+        do {
+            try requireConfiguredPurchases()
+            let customerInfo = try await Purchases.shared.restorePurchases()
+            return applyRestoreResult(
+                isPlusEntitlementActive: customerInfo.entitlements[Self.entitlementID]?.isActive == true
+            )
+        } catch {
+            return .failed(RestoreFailure(error: error))
+        }
     }
 
     /// Shared restore result funnel for subscriptions and the lifetime
     /// non-consumable: RevenueCat maps every product to `pillie_plus`, and the
     /// client restores that entitlement without branching on product duration.
-    func applyRestoreResult(isPlusEntitlementActive: Bool) {
+    func applyRestoreResult(isPlusEntitlementActive: Bool) -> RestoreOutcome {
         setEntitlement(isPlusEntitlementActive)
+        return isPlusEntitlementActive ? .restored : .noActivePurchase
     }
 
     // MARK: - Fetch Offerings
@@ -531,6 +536,11 @@ final class SubscriptionManager: NSObject {
     #if DEBUG
     private(set) var debugTrialEndEvaluationDate: Date?
     private var debugHardPaywallEnabledOverride: Bool?
+
+    /// Simulator QA fault injection: `restore()` returns this without calling
+    /// RevenueCat, so every restore outcome is reachable from a deep link.
+    @ObservationIgnored
+    var debugRestoreOutcome: RestoreOutcome?
 
     func setPlusForTesting(_ isPlus: Bool) {
         debugEntitlementOverride = isPlus

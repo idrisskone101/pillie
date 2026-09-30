@@ -71,7 +71,7 @@ final class ItalianCommerceRuntimeLocalizationTests: XCTestCase {
             "Qualcosa è andato storto. Riprova."
         )
         XCTAssertEqual(
-            CommercePresentation.restoreErrorMessage(untranslatedStoreError, locale: italian),
+            CommercePresentation.restoreErrorMessage(locale: italian),
             "Qualcosa è andato storto. Riprova."
         )
         XCTAssertEqual(

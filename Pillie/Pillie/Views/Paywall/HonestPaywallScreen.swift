@@ -203,26 +203,23 @@ struct HonestPaywallScreen: View {
         trackRestoreStarted()
 
         Task {
-            do {
-                try await subscriptionManager.restore()
-                if subscriptionManager.hasEntitlement {
-                    trackRestoreCompleted()
-                    plusFeedback.successfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
-                    if isTrialEnd {
-                        successOutcome = .restored
-                        purchaseSucceeded = true
-                    } else {
-                        onDismiss()
-                    }
+            let outcome = await subscriptionManager.restore()
+            trackRestoreFinished(outcome)
+            switch outcome {
+            case .restored:
+                plusFeedback.successfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
+                if isTrialEnd {
+                    successOutcome = .restored
+                    purchaseSucceeded = true
                 } else {
-                    trackRestoreFailed()
-                    withAnimation(response.motionProfile.animation) {
-                        showNoSubscriptionAlert = true
-                    }
+                    onDismiss()
                 }
-            } catch {
-                trackRestoreFailed(error: error)
-                purchaseError = CommercePresentation.restoreErrorMessage(error, locale: locale)
+            case .noActivePurchase:
+                withAnimation(response.motionProfile.animation) {
+                    showNoSubscriptionAlert = true
+                }
+            case .failed:
+                purchaseError = CommercePresentation.restoreErrorMessage(locale: locale)
             }
             withAnimation(response.motionProfile.animation) { isRestoring = false }
         }
@@ -440,36 +437,21 @@ struct HonestPaywallScreen: View {
                 termsCohort: content.termsCohort
             )
         case .surface:
-            telemetry.restoreStarted(isFromOnboarding: false, surface: surface)
+            telemetry.restoreStarted(surface: surface)
         }
     }
 
-    private func trackRestoreCompleted() {
+    private func trackRestoreFinished(_ outcome: RestoreOutcome) {
         switch telemetryMode {
         case .trialEnd(let content):
-            telemetry.trialEndRestoreCompleted(
+            telemetry.trialEndRestoreFinished(
+                outcome,
                 cohort: content.cohort,
                 terms: content.terms,
                 termsCohort: content.termsCohort
             )
         case .surface:
-            telemetry.restoreCompleted(isFromOnboarding: false, surface: surface)
-        }
-    }
-
-    private func trackRestoreFailed(error: Error? = nil) {
-        switch telemetryMode {
-        case .trialEnd(let content):
-            telemetry.trialEndRestoreFailed(
-                cohort: content.cohort,
-                terms: content.terms,
-                termsCohort: content.termsCohort
-            )
-        case .surface:
-            telemetry.restoreFailed(isFromOnboarding: false, surface: surface)
-        }
-        if let error {
-            telemetry.trackError(.restore, error: error)
+            telemetry.restoreFinished(outcome, surface: surface)
         }
     }
 

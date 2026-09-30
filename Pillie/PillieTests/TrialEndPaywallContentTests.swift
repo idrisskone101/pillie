@@ -13,17 +13,6 @@ import XCTest
 @testable import Pillie
 
 final class TrialEndPaywallContentTests: XCTestCase {
-    func testRestoreWithoutAnActiveEntitlementIsNotACompletedRestore() {
-        XCTAssertEqual(
-            RestoreAccessOutcome.resolve(hasEntitlement: false),
-            .missingPurchase
-        )
-        XCTAssertEqual(
-            RestoreAccessOutcome.resolve(hasEntitlement: true),
-            .restored
-        )
-    }
-
     func testCancellationNoteOnlyAppearsForSubscriptionPurchases() {
         XCTAssertTrue(TrialEndSuccessOutcome.purchased(.annual).showsCancellationNote)
         XCTAssertTrue(TrialEndSuccessOutcome.purchased(.monthly).showsCancellationNote)

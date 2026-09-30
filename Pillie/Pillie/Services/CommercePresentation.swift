@@ -153,10 +153,7 @@ enum CommercePresentation {
         return genericErrorMessage(locale: locale)
     }
 
-    static func restoreErrorMessage(
-        _ error: Error,
-        locale: Locale = .current
-    ) -> String {
+    static func restoreErrorMessage(locale: Locale = .current) -> String {
         genericErrorMessage(locale: locale)
     }
 

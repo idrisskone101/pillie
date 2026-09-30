@@ -262,6 +262,17 @@ protocol AnalyticsTracking {
     isPlus: Bool?
   )
 
+  /// Every restore event (ENG-74). `restoreOutcome` is `nil` for `restore_started`.
+  func track(
+    _ event: AnalyticsEvent,
+    source: AnalyticsSource?,
+    surface: AnalyticsPaywallSurface,
+    restoreOutcome: RestoreOutcome?,
+    trialTermsCohort: TrialTermsCohort?,
+    trialEndCohort: TrialEndPaywallCohort?,
+    isPlus: Bool?
+  )
+
   func track(
     _ event: AnalyticsEvent,
     source: AnalyticsSource?,
@@ -393,6 +404,26 @@ extension AnalyticsTracking {
     isPlus: Bool?
   ) {
     trackLegacy(event, source: source, isPlus: isPlus)
+  }
+
+  func track(
+    _ event: AnalyticsEvent,
+    source: AnalyticsSource?,
+    surface: AnalyticsPaywallSurface,
+    restoreOutcome: RestoreOutcome?,
+    trialTermsCohort: TrialTermsCohort?,
+    trialEndCohort: TrialEndPaywallCohort?,
+    isPlus: Bool?
+  ) {
+    track(
+      event,
+      source: source,
+      surface: surface,
+      plan: nil,
+      result: restoreOutcome?.analyticsResult,
+      trialTermsCohort: trialTermsCohort,
+      isPlus: isPlus
+    )
   }
 
   func track(
@@ -548,7 +579,12 @@ enum AnalyticsEvent: String, CaseIterable {
   case purchaseFailed = "purchase_failed"
   case purchaseCancelled = "purchase_cancelled"
   case restoreStarted = "restore_started"
+  /// A restore that confirmed an active Plus entitlement (ENG-74).
+  case restoreSucceeded = "restore_succeeded"
+  /// A restore that finished normally; carries `reason` (today only
+  /// `no_active_purchase`). Before ENG-74 this name meant success.
   case restoreCompleted = "restore_completed"
+  /// A restore that could not finish; carries `error_category`.
   case restoreFailed = "restore_failed"
   case continueFreeSelected = "continue_free_selected"
   case trialDeclineFeedbackViewed = "trial_decline_feedback_viewed"
@@ -616,6 +652,8 @@ enum AnalyticsPaywallSurface: String, CaseIterable {
   case homeBlockingCard = "home_blocking_card"
   case trialEnd = "trial_end"
   case plusUpsell = "plus_upsell"
+  /// The onboarding access-verification screen's Restore button (ENG-74).
+  case onboardingVerification = "onboarding_verification"
 }
 
 enum AnalyticsTrialStatusFeature: String, CaseIterable {
@@ -819,6 +857,7 @@ struct AnalyticsPayload {
   let retryBodyCustomized: Bool?
   let reminderPreset: CustomReminderPreset?
   let reminderPresetEdited: Bool?
+  let restoreOutcome: RestoreOutcome?
 
   init(
     source: AnalyticsSource? = nil,
@@ -851,7 +890,8 @@ struct AnalyticsPayload {
     retryTitleCustomized: Bool? = nil,
     retryBodyCustomized: Bool? = nil,
     reminderPreset: CustomReminderPreset? = nil,
-    reminderPresetEdited: Bool? = nil
+    reminderPresetEdited: Bool? = nil,
+    restoreOutcome: RestoreOutcome? = nil
   ) {
     self.source = source
     self.step = step
@@ -884,6 +924,7 @@ struct AnalyticsPayload {
     self.retryBodyCustomized = retryBodyCustomized
     self.reminderPreset = reminderPreset
     self.reminderPresetEdited = reminderPresetEdited
+    self.restoreOutcome = restoreOutcome
   }
 
   var properties: [String: AnalyticsPropertyValue] {
@@ -965,6 +1006,17 @@ struct AnalyticsPayload {
     }
     if let reminderPresetEdited {
       properties["reminder_preset_edited"] = .bool(reminderPresetEdited)
+    }
+    if let restoreOutcome {
+      properties["result"] = .string(restoreOutcome.analyticsResult.rawValue)
+      switch restoreOutcome {
+      case .restored:
+        break
+      case .noActivePurchase:
+        properties["reason"] = .string("no_active_purchase")
+      case .failed(let failure):
+        properties["error_category"] = .string(failure.category.rawValue)
+      }
     }
     return properties
   }
@@ -1231,6 +1283,27 @@ final class AnalyticsManager: AnalyticsTracking {
   func track(
     _ event: AnalyticsEvent,
     source: AnalyticsSource?,
+    surface: AnalyticsPaywallSurface,
+    restoreOutcome: RestoreOutcome?,
+    trialTermsCohort: TrialTermsCohort?,
+    trialEndCohort: TrialEndPaywallCohort?,
+    isPlus: Bool?
+  ) {
+    let payload = AnalyticsPayload(
+      source: source,
+      isPlus: isPlus,
+      trialEndCohort: trialEndCohort,
+      trialTermsCohort: trialTermsCohort,
+      paywallSurface: surface,
+      restoreOutcome: restoreOutcome
+    )
+
+    capture(event, payload: payload, source: source)
+  }
+
+  func track(
+    _ event: AnalyticsEvent,
+    source: AnalyticsSource?,
     step: AnalyticsStep?,
     authorizationState: AnalyticsAuthorizationState,
     isPlus: Bool?
@@ -1430,6 +1503,24 @@ private extension AnalyticsEvent {
       return true
     default:
       return false
+    }
+  }
+}
+
+extension RestoreOutcome {
+  /// The one event every restore surface records for this outcome (ENG-74).
+  var analyticsEvent: AnalyticsEvent {
+    switch self {
+    case .restored: return .restoreSucceeded
+    case .noActivePurchase: return .restoreCompleted
+    case .failed: return .restoreFailed
+    }
+  }
+
+  var analyticsResult: AnalyticsResult {
+    switch self {
+    case .restored, .noActivePurchase: return .completed
+    case .failed: return .failed
     }
   }
 }
