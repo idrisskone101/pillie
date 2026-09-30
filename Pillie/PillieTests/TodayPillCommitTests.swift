@@ -25,8 +25,14 @@ final class TodayPillCommitTests: XCTestCase {
         let telemetry: ProductAnalyticsTelemetry
         let now: Date
 
-        func commit(_ pick: TodayPillPick) {
-            TodayPillCommit.run(pick, store: store, now: now, defaults: defaults, telemetry: telemetry)
+        func commit(_ pick: TodayPillPick, pickedAt: Date? = nil) {
+            TodayPillCommit.run(
+                OnboardingDraft(pick: pick, pickedAt: pickedAt ?? now),
+                store: store,
+                now: now,
+                defaults: defaults,
+                telemetry: telemetry
+            )
         }
     }
 
@@ -218,6 +224,56 @@ final class TodayPillCommitTests: XCTestCase {
             XCTAssertEqual(harness.store.pack.pillRegimen, preset, "\(preset)")
             XCTAssertEqual(harness.store.pack.regimen, regimen, "\(preset)")
         }
+    }
+
+    func testATakenPickFromYesterdayCommitsTheNextPillUnlogged() throws {
+        let pickedAt = InMemoryStoreFactory.localDate("2026-09-27", hour: 12, minute: 24)
+        let now = InMemoryStoreFactory.localDate("2026-09-28", hour: 12, minute: 24)
+        let harness = try makeHarness(now: now, reminderHour: 8)
+
+        harness.commit(pick(11, .taken), pickedAt: pickedAt)
+
+        let store = harness.store
+        XCTAssertEqual(store.currentDayIndex + 1, 13)
+        XCTAssertFalse(store.isTodayTaken)
+        XCTAssertEqual(store.statusForDate(day(-1, from: now)), .taken)
+        XCTAssertTrue(harness.recorder.completions.isEmpty)
+    }
+
+    func testANotYetPickFromYesterdayMakesTonightTheNextPill() throws {
+        let pickedAt = InMemoryStoreFactory.localDate("2026-09-27", hour: 12, minute: 24)
+        let now = InMemoryStoreFactory.localDate("2026-09-28", hour: 12, minute: 24)
+        let harness = try makeHarness(now: now, reminderHour: 20)
+
+        harness.commit(pick(11, .notYet), pickedAt: pickedAt)
+
+        let store = harness.store
+        XCTAssertEqual(store.pack.cycleDayIndex(on: day(0, from: now)) + 1, 13)
+        XCTAssertEqual(store.statusForDate(day(-1, from: now)), .taken)
+        XCTAssertTrue(harness.recorder.completions.isEmpty)
+    }
+
+    func testCrossingTheReminderBeforeContinueMovesToTheNextPill() throws {
+        let pickedAt = InMemoryStoreFactory.localDate("2026-09-27", hour: 19, minute: 50)
+        let now = InMemoryStoreFactory.localDate("2026-09-27", hour: 20, minute: 10)
+        let harness = try makeHarness(now: now, reminderHour: 20)
+
+        harness.commit(pick(11, .taken), pickedAt: pickedAt)
+
+        let store = harness.store
+        XCTAssertEqual(store.currentDayIndex + 1, 13)
+        XCTAssertFalse(store.isTodayTaken)
+        XCTAssertTrue(harness.recorder.completions.isEmpty)
+    }
+
+    func testARollPastThePackEndStartsTheNextPack() throws {
+        let pickedAt = InMemoryStoreFactory.localDate("2026-09-27", hour: 12, minute: 24)
+        let now = InMemoryStoreFactory.localDate("2026-09-28", hour: 12, minute: 24)
+        let harness = try makeHarness(now: now, reminderHour: 8)
+
+        harness.commit(pick(27, .taken), pickedAt: pickedAt)
+
+        XCTAssertEqual(harness.store.currentDayIndex + 1, 1)
     }
 
     func testCustomPackSavesItsOwnRegimenIntoTheSchedule() throws {

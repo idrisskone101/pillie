@@ -90,14 +90,15 @@ final class RoutineDialPickTests: XCTestCase {
 
     func testOnboardingPickLoadsOnlyTheDraftForTheChosenMethod() throws {
         let defaults = try defaults("method")
+        let pickedAt = InMemoryStoreFactory.localDate("2026-09-27", hour: 12, minute: 24)
         let dial = try XCTUnwrap(RoutineDialPick(method: .patch, cycleDay: 3, answer: nil))
         let pill = try XCTUnwrap(TodayPillPick(pack: PackChoice(preset: .twentyOneSeven), dayIndex: 4, answer: .taken))
-        dial.save(to: defaults)
-        pill.save(to: defaults)
+        dial.save(to: defaults, at: pickedAt)
+        pill.save(to: defaults, at: pickedAt)
 
-        XCTAssertEqual(OnboardingTodayPick.load(method: .patch, from: defaults), .dial(dial))
+        XCTAssertEqual(OnboardingTodayPick.load(method: .patch, from: defaults), .dial(OnboardingDraft(pick: dial, pickedAt: pickedAt)))
         XCTAssertNil(OnboardingTodayPick.load(method: .ring, from: defaults))
-        XCTAssertEqual(OnboardingTodayPick.load(method: .pill, from: defaults), .pill(pill))
+        XCTAssertEqual(OnboardingTodayPick.load(method: .pill, from: defaults), .pill(OnboardingDraft(pick: pill, pickedAt: pickedAt)))
     }
 
     func testPatchSegmentKeepsTheDialDayAndClearsTheAnswer() {

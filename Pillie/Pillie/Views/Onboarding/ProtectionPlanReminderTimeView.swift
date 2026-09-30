@@ -49,21 +49,21 @@ struct ProtectionPlanReminderTimeView: View {
 
     private var summary: ProtectionPlanRoutineSummary {
         switch todayPick {
-        case .pill(let pick):
+        case .pill(let draft):
             let selection = ReminderTimeConverter.hourAndMinute(from: selectedTime)
             return ProtectionPlanRoutineSummary(
                 method: .pill,
                 todayPill: TodayPillPlan(
-                    pick: pick,
+                    pick: draft.pick,
                     reminderHour: selection.hour,
                     reminderMinute: selection.minute
                 )
             )
-        case .dial(let pick):
+        case .dial(let draft):
             return routineSummary(
-                method: pick.method.contraceptiveMethod,
-                scheduleSummary: pick.method.contraceptiveMethod.routineDescriptor,
-                cycleDay: pick.cycleDay
+                method: draft.pick.method.contraceptiveMethod,
+                scheduleSummary: draft.pick.method.contraceptiveMethod.routineDescriptor,
+                cycleDay: draft.pick.cycleDay
             )
         case nil:
             return routineSummary(
@@ -228,7 +228,9 @@ struct ProtectionPlanReminderTimeView: View {
 #Preview {
     ProtectionPlanReminderTimeView(
         progress: ProtectionPlanProgressIndex.progress(for: .reminderTime),
-        todayPick: TodayPillPick(pack: PackChoice(preset: .twentyOneSeven), dayIndex: 11, answer: .taken).map(OnboardingTodayPick.pill),
+        todayPick: TodayPillPick(pack: PackChoice(preset: .twentyOneSeven), dayIndex: 11, answer: .taken).map {
+            OnboardingTodayPick.pill(OnboardingDraft(pick: $0, pickedAt: .now))
+        },
         onBack: {},
         onContinue: {}
     )
