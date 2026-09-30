@@ -3,9 +3,10 @@
 //  Pillie
 //
 //  The `trial_expiry_warning_sent` delivery decision (#168 / ADR 0007): maps a
-//  notification's userInfo to the trial day to record, at most once per day
-//  value — a warning presented in the foreground and later tapped reports one
-//  event, not two. Pure value logic; the caller persists the sent-days list.
+//  notification's userInfo to the trial day to record (10, 13, or 15 for the
+//  expiry-day notice), at most once per day value: a notice presented in the
+//  foreground and later tapped reports one event, not two. Pure value logic;
+//  the caller persists the sent-days list.
 //
 
 import Foundation
