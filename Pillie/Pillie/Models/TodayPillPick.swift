@@ -4,9 +4,8 @@
 //
 
 import Foundation
-import os
 
-struct TodayPillPick: Codable, Equatable {
+struct TodayPillPick: OnboardingDraftPick {
     enum Answer: String, Codable {
         case taken
         case notYet
@@ -60,29 +59,6 @@ struct TodayPillPick: Codable, Equatable {
     }
 
     static let storageKey = "pillie_onboarding_today_pill_pick"
-    private static let logger = Logger(subsystem: "com.idrisskone.pillie", category: "TodayPillPick")
-
-    static func load(from defaults: UserDefaults = .standard) -> TodayPillPick? {
-        guard let data = defaults.data(forKey: storageKey) else { return nil }
-        do {
-            return try JSONDecoder().decode(TodayPillPick.self, from: data)
-        } catch {
-            Self.logger.error("today_pill_pick.load failed: \(error.localizedDescription, privacy: .public)")
-            return nil
-        }
-    }
-
-    func save(to defaults: UserDefaults = .standard) {
-        do {
-            defaults.set(try JSONEncoder().encode(self), forKey: Self.storageKey)
-        } catch {
-            Self.logger.error("today_pill_pick.save failed: \(error.localizedDescription, privacy: .public)")
-        }
-    }
-
-    static func clear(from defaults: UserDefaults = .standard) {
-        defaults.removeObject(forKey: storageKey)
-    }
 
     // "regimen" keeps the preset raw value the ENG-138/144 drafts were saved with;
     // "custom" is written only for a custom pack.

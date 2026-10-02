@@ -74,7 +74,11 @@ final class PillPack {
     }
 
     static let defaultCustomRegimen = PackRegimen(activeDays: 21, breakDays: 7)
-    private static let patchOrRingRegimen = PackRegimen(activeDays: 21, breakDays: 7, breakKind: .noPills)
+    private static let patchOrRingRegimen = PackRegimen(
+        activeDays: RoutineDialDay.wearingDays,
+        breakDays: RoutineDialDay.cycleLength - RoutineDialDay.wearingDays,
+        breakKind: .noPills
+    )
 
     // Presets retired from the picker. Their rows keep the raw value and read back
     // as the same-length Custom pack, so the pill number does not move.

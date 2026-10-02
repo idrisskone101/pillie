@@ -67,6 +67,11 @@ blocking/trial status surfaces, and (when eligible) the review ask.
   Streak. The flow dismisses the blocking card first (it always renders on
   a fresh, unconfigured pack and outranks the review ask) before proving
   `homeReviewPromptCard`, then dismisses it.
+- `flows/today-first-reminder.flow` — real onboarding on pill 1 with "Not yet"
+  at a pinned 12:30 PM and an 8 PM reminder. Today's status card reads "8:00 PM" over
+  "First reminder" and the floating bar says "Your first reminder is tonight"
+  with a `#firstReminderTookIt` chip, which goes through shake confirm to the
+  logged state. The bar itself is not a button.
 - `flows/today-pack-card.flow` — the pack card's last hormone pill, sugar
   week, and finished pack headers via `/trial-eve-of-break`,
   `/trial-break-week`, and `/fixed-now` one day later.

@@ -55,6 +55,7 @@ DERIVED_DATA="$(pillie_derived_data_for_repo_root "$REPO_ROOT")"
 APP_PATH="$DERIVED_DATA/Build/Products/Debug-iphonesimulator/Pillie.app"
 STAMP="$DERIVED_DATA/.pillie-qa-sha"
 SHA="$(git -C "$REPO_ROOT" rev-parse HEAD)"
+ASSETS="$PROJECT_DIR/Pillie/Assets.xcassets"
 READY=0
 AXE_OK=0
 APP_PID=""
@@ -180,8 +181,19 @@ quiet() {
   grep -E "\*\* BUILD SUCCEEDED|warning: .*\[#" "$BUILD_LOG" | sort -u | head -8 || true
 }
 
+# The stamp names HEAD, so it only describes the app when Pillie/ is clean.
+# A dirty build stamps "<sha>-dirty", which never matches. Strays outside
+# Pillie/ (old agent scripts on the Mac) are not build inputs.
+tree_clean() {
+  [[ -z "$(git -C "$REPO_ROOT" status --porcelain -- Pillie)" ]]
+}
+
 already_built() {
-  [[ "$FORCE_BUILD" != "1" && -d "$APP_PATH" && -f "$STAMP" && "$(cat "$STAMP")" == "$SHA" ]]
+  [[ "$FORCE_BUILD" != "1" && -d "$APP_PATH" && -f "$STAMP" && "$(cat "$STAMP")" == "$SHA" ]] && tree_clean
+}
+
+stale_asset() {
+  find "$ASSETS" -type f -newer "$APP_PATH/Assets.car" -print -quit
 }
 
 echo "▸ sim-qa UDID=$UDID sha=${SHA:0:12}"
@@ -196,9 +208,16 @@ if [[ "$CAPTURE_ONLY" != "1" ]]; then
     fi
     quiet make -C "$REPO_ROOT" run
   else
+    BUILT="$SHA"
+    tree_clean || BUILT="$SHA-dirty"
     quiet make -C "$REPO_ROOT" build-and-run
     mkdir -p "$DERIVED_DATA"
-    printf '%s\n' "$SHA" >"$STAMP"
+    printf '%s\n' "$BUILT" >"$STAMP"
+  fi
+  STALE="$(stale_asset)"
+  if [[ -n "$STALE" ]]; then
+    echo "error: installed Assets.car is older than $STALE. Drop SKIP_BUILD=1, or delete $DERIVED_DATA and rerun." >&2
+    exit 1
   fi
   APP_PID="$(xcrun simctl spawn "$UDID" launchctl print system 2>/dev/null | grep -F "$BUNDLE_ID" | head -1 || true)"
   wait_for_ui
