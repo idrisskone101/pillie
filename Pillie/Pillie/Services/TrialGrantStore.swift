@@ -105,3 +105,20 @@ nonisolated final class KeychainTrialGrantStore: TrialGrantStoring {
         SecItemDelete(cohortQuery as CFDictionary)
     }
 }
+
+/// Process-lifetime grant store. Hosted tests start from it so a trial left in the
+/// simulator Keychain by manual QA cannot turn a "free user" test into a trial user.
+/// `TrialGrantStoreTests` runs the same contract against the Keychain store.
+nonisolated final class InMemoryTrialGrantStore: TrialGrantStoring {
+    private(set) var grantDate: Date?
+    private(set) var termsCohort: TrialTermsCohort?
+
+    func loadGrantDate() -> Date? { grantDate }
+    func saveGrantDate(_ date: Date) { grantDate = date }
+    func loadTermsCohort() -> TrialTermsCohort? { termsCohort }
+    func saveTermsCohort(_ cohort: TrialTermsCohort) { termsCohort = cohort }
+    func clearGrantDate() {
+        grantDate = nil
+        termsCohort = nil
+    }
+}

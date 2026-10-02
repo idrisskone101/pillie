@@ -18,6 +18,12 @@ enum SubscriptionLaunchPolicy {
     static func shouldConfigureRevenueCat(isRunningTests: Bool) -> Bool {
         !isRunningTests
     }
+
+    /// Hosted tests never read the simulator Keychain: a Reverse Trial granted
+    /// during manual QA would otherwise leak Plus Access into free-user tests.
+    static func trialGrantStore(isRunningTests: Bool) -> TrialGrantStoring {
+        isRunningTests ? InMemoryTrialGrantStore() : KeychainTrialGrantStore()
+    }
 }
 
 enum TrialAccessLifecycle {
