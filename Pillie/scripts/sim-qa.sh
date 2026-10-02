@@ -181,10 +181,11 @@ quiet() {
   grep -E "\*\* BUILD SUCCEEDED|warning: .*\[#" "$BUILD_LOG" | sort -u | head -8 || true
 }
 
-# The stamp names HEAD, so it only describes the app when the tree is clean.
-# A dirty build stamps "<sha>-dirty", which never matches.
+# The stamp names HEAD, so it only describes the app when Pillie/ is clean.
+# A dirty build stamps "<sha>-dirty", which never matches. Strays outside
+# Pillie/ (old agent scripts on the Mac) are not build inputs.
 tree_clean() {
-  [[ -z "$(git -C "$REPO_ROOT" status --porcelain)" ]]
+  [[ -z "$(git -C "$REPO_ROOT" status --porcelain -- Pillie)" ]]
 }
 
 already_built() {

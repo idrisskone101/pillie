@@ -90,6 +90,9 @@ qa
 check "first run builds" ran build-and-run
 qa
 check "clean rerun at the same SHA skips the build" ran run
+: >"$WT/stray_agent_script.sh"
+qa
+check "an untracked file outside Pillie/ still skips the build" ran run
 
 touch_later sh -c "printf '<!-- selftest -->\n' >>'$SVG'"
 qa
