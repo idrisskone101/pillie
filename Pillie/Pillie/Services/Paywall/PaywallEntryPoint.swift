@@ -23,6 +23,9 @@ extension AnalyticsPaywallSurface {
         case .protectionOffCard: .protectionOffCard
         case .plusUpsell: .plusUpsell
         case .trialEnd: .trialEndAutoPresent
+        // Onboarding verification restores only; it never opens a board, and the
+        // gate it guards resolves into the trial-end wall.
+        case .onboardingVerification: .trialEndAutoPresent
         }
     }
 }

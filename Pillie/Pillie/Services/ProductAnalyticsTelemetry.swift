@@ -437,36 +437,33 @@ struct ProductAnalyticsTelemetry {
     terms: TrialEndAccessTerms,
     termsCohort: TrialTermsCohort? = nil
   ) {
-    trackTrialEndPaywall(
-      .restoreStarted, cohort: cohort, terms: terms, termsCohort: termsCohort)
+    analytics.track(
+      .restoreStarted,
+      source: .trialEnd,
+      surface: .trialEnd,
+      restoreOutcome: nil,
+      trialTermsCohort: termsCohort ?? TrialTermsCohort(terms: terms),
+      trialEndCohort: cohort,
+      isPlus: isPlus()
+    )
   }
 
-  func trialEndRestoreCompleted(
+  func trialEndRestoreFinished(
+    _ outcome: RestoreOutcome,
     cohort: TrialEndPaywallCohort,
     terms: TrialEndAccessTerms,
     termsCohort: TrialTermsCohort? = nil
   ) {
-    trackTrialEndPaywall(
-      .restoreCompleted,
-      result: .completed,
-      cohort: cohort,
-      terms: terms,
-      termsCohort: termsCohort
+    analytics.track(
+      outcome.analyticsEvent,
+      source: .trialEnd,
+      surface: .trialEnd,
+      restoreOutcome: outcome,
+      trialTermsCohort: termsCohort ?? TrialTermsCohort(terms: terms),
+      trialEndCohort: cohort,
+      isPlus: isPlus()
     )
-  }
-
-  func trialEndRestoreFailed(
-    cohort: TrialEndPaywallCohort,
-    terms: TrialEndAccessTerms,
-    termsCohort: TrialTermsCohort? = nil
-  ) {
-    trackTrialEndPaywall(
-      .restoreFailed,
-      result: .failed,
-      cohort: cohort,
-      terms: terms,
-      termsCohort: termsCohort
-    )
+    trackRestoreError(outcome)
   }
 
   /// The explicit non-purchase action on the Trial-End Paywall.
@@ -643,39 +640,34 @@ struct ProductAnalyticsTelemetry {
     )
   }
 
-  func restoreStarted(
-    isFromOnboarding: Bool,
-    surface: AnalyticsPaywallSurface? = nil
+  func restoreStarted(surface: AnalyticsPaywallSurface) {
+    trackRestore(.restoreStarted, surface: surface, outcome: nil)
+  }
+
+  func restoreFinished(_ outcome: RestoreOutcome, surface: AnalyticsPaywallSurface) {
+    trackRestore(outcome.analyticsEvent, surface: surface, outcome: outcome)
+    trackRestoreError(outcome)
+  }
+
+  private func trackRestore(
+    _ event: AnalyticsEvent,
+    surface: AnalyticsPaywallSurface,
+    outcome: RestoreOutcome?
   ) {
-    trackPaywall(
-      .restoreStarted,
-      isFromOnboarding: isFromOnboarding,
-      surface: surface
+    analytics.track(
+      event,
+      source: source(for: surface),
+      surface: surface,
+      restoreOutcome: outcome,
+      trialTermsCohort: trialTermsCohort(),
+      trialEndCohort: nil,
+      isPlus: isPlus()
     )
   }
 
-  func restoreCompleted(
-    isFromOnboarding: Bool,
-    surface: AnalyticsPaywallSurface? = nil
-  ) {
-    trackPaywall(
-      .restoreCompleted,
-      isFromOnboarding: isFromOnboarding,
-      surface: surface,
-      result: .completed
-    )
-  }
-
-  func restoreFailed(
-    isFromOnboarding: Bool,
-    surface: AnalyticsPaywallSurface? = nil
-  ) {
-    trackPaywall(
-      .restoreFailed,
-      isFromOnboarding: isFromOnboarding,
-      surface: surface,
-      result: .failed
-    )
+  private func trackRestoreError(_ outcome: RestoreOutcome) {
+    guard case .failed(let failure) = outcome else { return }
+    trackError(.restore, error: failure.error)
   }
 
   func continueFreeSelected(
@@ -729,6 +721,8 @@ struct ProductAnalyticsTelemetry {
       return .trialEnd
     case .plusUpsell:
       return .upsell
+    case .onboardingVerification:
+      return .onboarding
     }
   }
 
@@ -753,18 +747,6 @@ struct ProductAnalyticsTelemetry {
       result: nil,
       isPlus: isPlus()
     )
-  }
-
-  func upsellRestoreStarted() {
-    track(.restoreStarted, source: .upsell)
-  }
-
-  func upsellRestoreCompleted() {
-    track(.restoreCompleted, source: .upsell, result: .completed)
-  }
-
-  func upsellRestoreFailed() {
-    track(.restoreFailed, source: .upsell, result: .failed)
   }
 
   func mainTabSelected(_ tab: MainTab) {
@@ -918,6 +900,19 @@ struct ProductAnalyticsTelemetry {
 
   func openLineIssueReportTapped() {
     track(.openLineIssueReportTapped, source: .settings)
+  }
+
+  /// Contact support from a restore alert (ENG-74): the same issue-report tap,
+  /// attributed to the paywall surface that raised it.
+  func openLineRestoreIssueTapped(surface: AnalyticsPaywallSurface) {
+    analytics.track(
+      .openLineIssueReportTapped,
+      source: source(for: surface),
+      surface: surface,
+      plan: nil,
+      result: nil,
+      isPlus: isPlus()
+    )
   }
 
   // MARK: - Error tracking (#179)

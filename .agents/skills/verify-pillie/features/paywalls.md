@@ -38,7 +38,17 @@ CTAs change often; this file names the mechanism, not the wording.
   (Reminder messages / Interval & Repeats / Your apps) on a free account.
   Its own "Get Pillie Plus" opens the full paywall
   (`entry: paywallSurface.paywallEntry`); "Not now" just dismisses; "Restore"
-  runs a silent restore. `Views/Components/PlusUpsellSheet.swift`.
+  runs a restore with the same alerts as the honest paywall.
+  `Views/Components/PlusUpsellSheet.swift`.
+- `paywall-restore` (ENG-74) — Restore on any honest paywall or the upsell
+  sheet ends in one `RestoreOutcome`: restored (paywall dismisses, Plus on),
+  no active purchase ("No Subscription Found" with Contact support and OK),
+  or failed ("Couldn't restore purchases" with Try again, Contact support,
+  and Not now). Contact support opens the "Pillie — Restore Purchases" Open
+  Line mail, or the copy-address fallback when Mail can't open. Analytics:
+  `restore_succeeded`, `restore_completed` with `reason`, `restore_failed`
+  with `error_category`, all with `surface`. `Views/Paywall/PaywallAlert.swift`,
+  `Services/RestoreOutcome.swift`.
 - `paywall-commerce-access-verification` — a transient full-screen loading
   gate (`#commerceAccessVerification`) shown (a) at the app root right after
   onboarding, before `MainTabView`, while RevenueCat resolves, and (b) inside
@@ -63,6 +73,13 @@ CTAs change often; this file names the mechanism, not the wording.
 
 ## Driving it with flows
 
+- `flows/paywall-restore.flow` — every restore outcome without RevenueCat,
+  through `pillie://debug/restore-outcome?result=error|none|restored|clear`.
+  On the hard trial-end board: error alert, then Try again into the
+  no-subscription alert, then a restore that drops the wall. Then the
+  Settings > Pillie Plus door: error alert and Contact support into the mail
+  fallback. `log start` / `log stop` keep the analytics mirror in `app.log`;
+  grep it for `restore_` to see `surface`, `reason`, and `error_category`.
 - `flows/paywall-boards.flow` — for each of `duringTrial`, `settingsFree`,
   `trialEndedReturningLegacy`, `trialEndedReturningHard`: `launch`, open the
   debug deep link (each call completes onboarding and seeds its own
@@ -96,6 +113,16 @@ CTAs change often; this file names the mechanism, not the wording.
   `PlusUpsellSheet`'s "Restore" — the scheme's `Configuration.storekit` has
   real sandbox products, and a completed purchase/restore flips
   `SubscriptionManager.shared.hasEntitlement` for the rest of the run.
+  The one exception: after `pillie://debug/restore-outcome?result=…`, a
+  Restore tap never reaches RevenueCat until `result=clear` or a relaunch.
+- On a free Home the "Pillie+, App blocking" card (@206,816) overlaps the
+  Settings tab's center, and a center tap can open the paywall with its
+  purchase CTA under your next tap. `paywall-restore.flow` taps the tab at
+  `-x 319 -y 800`. If a "Test Store Purchase" sheet ever appears, tap its
+  Cancel.
+- An install that already holds the hard-board state does not re-present it
+  from the `board=trialEndedReturningHard` link alone; relaunch after the
+  link (`paywall-restore.flow` does).
 - `board=trialEndedReturningHard` resolves to
   `HonestPaywallChrome(showsClose: false, allowsInteractiveDismiss: false)`
   (`HonestPaywallStoryFactory.swift` `chrome(for:)`) — don't add a Close tap

@@ -799,6 +799,26 @@ struct PillieApp: App {
             UserDefaults.standard.set(OnboardingFlow.Step.complete.rawValue, forKey: OnboardingFlow.stepStorageKey)
             SubscriptionManager.shared.debugApplyTrialEndPaywallScenario(scenario)
             reconcileScreenTimeState()
+        case "/restore-outcome":
+            // QA fault injection (ENG-74): `restore()` returns this outcome
+            // without calling RevenueCat. `restored` also grants Plus.
+            let result = URLComponents(url: url, resolvingAgainstBaseURL: false)?
+                .queryItems?.first(where: { $0.name == "result" })?.value
+            switch result {
+            case "error":
+                SubscriptionManager.shared.debugRestoreOutcome = .failed(
+                    RestoreFailure(error: URLError(.notConnectedToInternet))
+                )
+            case "none":
+                SubscriptionManager.shared.debugRestoreOutcome = .noActivePurchase
+            case "restored":
+                SubscriptionManager.shared.debugRestoreOutcome = .restored
+            case "clear":
+                SubscriptionManager.shared.debugRestoreOutcome = nil
+            default:
+                os.Logger(subsystem: "com.idrisskone.pillie", category: "qa")
+                    .error("Pillie QA restore-outcome ignored unreadable result=\(result ?? "nil", privacy: .public)")
+            }
         case "/pack-card":
             showsPackCardGallery = true
         case "/countdown-card":

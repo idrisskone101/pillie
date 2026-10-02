@@ -70,6 +70,10 @@ enum OpenLine {
         /// `Diagnostics` values and nothing about the user's routine.
         case issueReport(Diagnostics)
 
+        /// Restore Purchases failed or found nothing, reached from a paywall
+        /// alert (ENG-74). Same invitation and diagnostics as an issue report.
+        case restoreIssue(Diagnostics)
+
         /// Subject seeded into the composer; mechanical and PII-free, with an
         /// em dash matching the developer's inbox filters.
         var subject: String {
@@ -78,6 +82,8 @@ enum OpenLine {
                 return "Pillie — Suggestion"
             case .issueReport:
                 return "Pillie — Issue Report"
+            case .restoreIssue:
+                return "Pillie — Restore Purchases"
             }
         }
 
@@ -98,7 +104,7 @@ enum OpenLine {
             switch self {
             case .suggestion:
                 return nil
-            case .issueReport(let diagnostics):
+            case .issueReport(let diagnostics), .restoreIssue(let diagnostics):
                 return """
                     \(OpenLine.localizedIssueInvitation(locale: locale))
 

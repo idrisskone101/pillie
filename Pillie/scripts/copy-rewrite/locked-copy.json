@@ -2722,6 +2722,45 @@
       "en": "Your routine is still set up and waiting. Open Pillie to keep it going.",
       "de": "Deine Routine ist noch eingerichtet und wartet. Öffne Pillie, um weiterzumachen.",
       "it": "La tua routine è ancora impostata e ti aspetta. Apri Pillie per continuare."
+    },
+    {
+      "issue": "ENG-74",
+      "table": "Commerce",
+      "key": "paywall.restore_error.title",
+      "comment": "Restore error alert title",
+      "en": "Couldn't restore purchases",
+      "de": "Käufe konnten nicht wiederhergestellt werden",
+      "it": "Impossibile ripristinare gli acquisti"
+    },
+    {
+      "issue": "ENG-74",
+      "table": "Commerce",
+      "key": "paywall.restore_error.body",
+      "create": true,
+      "comment": "Restore error alert body, above Try again / Contact support / Not now",
+      "en": "Pillie couldn't check your purchases with the App Store. Try again, or contact us and we'll sort it out.",
+      "de": "Pillie konnte deine Käufe nicht im App Store prüfen. Versuch es noch mal oder schreib uns, dann kümmern wir uns darum.",
+      "it": "Pillie non è riuscita a verificare i tuoi acquisti sull’App Store. Riprova oppure contattaci e sistemiamo tutto."
+    },
+    {
+      "issue": "ENG-74",
+      "table": "Commerce",
+      "key": "paywall.action.contact_support",
+      "create": true,
+      "comment": "Restore alert button that opens a support email",
+      "en": "Contact support",
+      "de": "Support kontaktieren",
+      "it": "Contatta l’assistenza"
+    },
+    {
+      "issue": "ENG-74",
+      "table": "Commerce",
+      "key": "paywall.action.try_again",
+      "create": true,
+      "comment": "Restore error alert button that runs Restore Purchases again",
+      "en": "Try again",
+      "de": "Erneut versuchen",
+      "it": "Riprova"
     }
   ]
 }

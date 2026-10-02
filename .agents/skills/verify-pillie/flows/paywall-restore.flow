@@ -1,0 +1,69 @@
+# ENG-74 restore outcomes on the honest paywalls. /restore-outcome makes
+# SubscriptionManager.restore() return a chosen outcome without RevenueCat,
+# so no real restore or purchase ever runs. app.log carries the analytics
+# mirror (AnalyticsManager capture) for restore_started / restore_failed /
+# restore_completed / restore_succeeded with surface, reason, error_category.
+
+launch
+wait text Today 15
+openurl pillie://debug/honest-paywall?board=trialEndedReturningHard&lang=en
+# Home only auto-presents on its own appear or on a Plus Access flip. When the
+# install already holds this expired state, the link flips nothing, so a
+# relaunch is what presents the hard wall.
+launch
+wait text "Your trial already ended." 20
+log start
+
+openurl pillie://debug/restore-outcome?result=error
+tap --label "Cancel anytime · Restore"
+wait text "Couldn't restore purchases" 10
+expect label "Try again"
+expect label "Contact support"
+shot trial-end-restore-error
+
+openurl pillie://debug/restore-outcome?result=none
+tap --label "Try again"
+wait text "No Subscription Found" 10
+expect label "Contact support"
+shot trial-end-no-subscription
+tap --label OK
+gone text "No Subscription Found"
+
+openurl pillie://debug/restore-outcome?result=restored
+tap --label "Cancel anytime · Restore"
+# restored turns Plus on; Home drops the hard wall and shows the Plus
+# blocking-setup card instead of the free "App blocking is off" card.
+gone text "Your trial already ended." 10
+wait text "You haven't set up app blocking yet." 10
+shot trial-end-restored
+
+# Drop the expired grant before relaunching. Otherwise Home auto-presents the
+# trial-end wall on launch, and its purchase CTA sits under the Settings tab.
+openurl pillie://debug/trial-clear
+launch
+wait text Today 15
+openurl pillie://debug/review-prompt?lang=en   # free user, Plus off, onboarding done
+wait label "That's logged. Tap to undo." 10     # the seeded streak logged today
+expect-not text "Keep Pillie Plus"
+openurl pillie://debug/restore-outcome?result=error
+# Settings tab by its top edge: on this Home the "Pillie+, App blocking" card
+# (@206,816) overlaps the tab's center and a center tap opens the paywall.
+tap -x 319 -y 800
+wait id settingsLanguageRow
+gesture scroll-down                             # the Account row sits below the fold
+tap --label "Pillie Plus, Free"
+wait text "Cancel anytime · Restore" 10
+tap --label "Cancel anytime · Restore"
+wait text "Couldn't restore purchases" 10
+expect label "Contact support"
+shot settings-restore-error
+tap --label "Contact support"
+# The simulator has no Mail account, so the Open Line copy-address fallback shows.
+wait text "We couldn't open the mail app." 10
+shot settings-contact-support-fallback
+tap -x 201 -y 525                               # the alert's Close; the paywall's xmark is also "Close"
+gone text "We couldn't open the mail app."
+tap --id xmark --element-type Button            # close the settings paywall
+gone text "Cancel anytime · Restore"
+openurl pillie://debug/restore-outcome?result=clear
+log stop

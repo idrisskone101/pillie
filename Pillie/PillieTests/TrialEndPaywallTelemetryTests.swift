@@ -69,8 +69,8 @@ final class TrialEndPaywallTelemetryTests: XCTestCase {
         telemetry.trialEndPurchaseFailed(plan: .monthly, cohort: .blockerConfigured, terms: .hardPaywall)
         telemetry.trialEndPurchaseCancelled(plan: .monthly, cohort: .blockerConfigured, terms: .hardPaywall)
         telemetry.trialEndRestoreStarted(cohort: .blockerConfigured, terms: .hardPaywall)
-        telemetry.trialEndRestoreCompleted(cohort: .blockerConfigured, terms: .hardPaywall)
-        telemetry.trialEndRestoreFailed(cohort: .blockerConfigured, terms: .hardPaywall)
+        telemetry.trialEndRestoreFinished(.restored, cohort: .blockerConfigured, terms: .hardPaywall)
+        telemetry.trialEndRestoreFinished(.noActivePurchase, cohort: .blockerConfigured, terms: .hardPaywall)
         telemetry.trialEndContinueFreeSelected(cohort: .reminderOnly, terms: .legacy)
 
         XCTAssertEqual(client.events.map(\.name), [
@@ -80,8 +80,8 @@ final class TrialEndPaywallTelemetryTests: XCTestCase {
             "purchase_failed",
             "purchase_cancelled",
             "restore_started",
+            "restore_succeeded",
             "restore_completed",
-            "restore_failed",
             "continue_free_selected",
         ])
         for event in client.events {

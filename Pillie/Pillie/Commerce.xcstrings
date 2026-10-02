@@ -10179,274 +10179,274 @@
     "paywall.restore_error.title": {
       "comment": "Alert title [paywall]",
       "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Restore Error"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Errore di ripristino"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fehler beim Wiederherstellen"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Erreur de restauration"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Error al restaurar"
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Erro ao restaurar"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Herstelfout"
-          }
-        },
-        "sv": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fel vid återställning"
-          }
-        },
-        "da": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fejl ved gendannelse"
-          }
-        },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Feil ved gjenoppretting"
-          }
-        },
-        "fi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Palautusvirhe"
-          }
-        },
-        "pt-PT": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Erro ao restaurar"
-          }
-        },
-        "ca": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Error al restaurar"
-          }
-        },
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Błąd przywracania"
-          }
-        },
-        "cs": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Chyba obnovení"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ошибка восстановления"
-          }
-        },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Помилка відновлення"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "復元エラー"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "복원 오류"
-          }
-        },
-        "ms": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ralat Pemulihan"
-          }
-        },
-        "ro": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Eroare la restabilire"
-          }
-        },
-        "sk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Chyba obnovenia"
-          }
-        },
-        "th": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "การกู้คืนผิดพลาด"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "恢复出错"
-          }
-        },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "बहाल करने में गड़बड़ी"
-          }
-        },
-        "hr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Greška pri obnovi"
-          }
-        },
-        "hu": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Visszaállítási hiba"
-          }
-        },
-        "tr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Geri Yükleme Hatası"
-          }
-        },
-        "ta": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "மீட்டெடுப்புப் பிழை"
-          }
-        },
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pemulihan Gagal"
-          }
-        },
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "خطأ في الاستعادة"
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "שגיאה בשחזור"
-          }
-        },
-        "vi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Lỗi khôi phục"
+            "value": "تعذّرت استعادة المشتريات"
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ফিরিয়ে আনায় ত্রুটি"
+            "value": "কেনাকাটা ফিরিয়ে আনা যায়নি"
           }
         },
-        "ur": {
+        "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "بحالی میں خرابی"
+            "value": "No s’han pogut restaurar les compres"
           }
         },
-        "sl": {
+        "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Napaka pri obnovitvi"
+            "value": "Nákupy se nepodařilo obnovit"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kunne ikke gendanne køb"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Käufe konnten nicht wiederhergestellt werden"
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Σφάλμα επαναφοράς"
+            "value": "Δεν ήταν δυνατή η επαναφορά αγορών"
           }
         },
-        "te": {
+        "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "పునరుద్ధరణ లోపం"
+            "value": "Couldn't restore purchases"
           }
         },
-        "zh-Hant": {
+        "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "恢復錯誤"
+            "value": "No se pudieron restaurar las compras"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ostoja ei voitu palauttaa"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible de restaurer les achats"
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "બહાલ કરને મેં ગડ઼બડ઼ી"
+            "value": "ખરીદી પુનઃસ્થાપિત થઈ શકી નહીં"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "לא הצלחנו לשחזר את הרכישות"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ख़रीदारी बहाल नहीं हो सकी"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kupnje nije moguće obnoviti"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nem sikerült visszaállítani a vásárlásokat"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pembelian Gagal Dipulihkan"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossibile ripristinare gli acquisti"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "購入を復元できませんでした"
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ಮರುಸ್ಥಾಪನೆ ದೋಷ"
+            "value": "ಖರೀದಿಗಳನ್ನು ಮರುಸ್ಥಾಪಿಸಲು ಆಗಲಿಲ್ಲ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "구매 항목을 복원할 수 없어요"
           }
         },
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "പുനഃസ്ഥാപിക്കൽ പിശക്"
+            "value": "വാങ്ങലുകൾ പുനഃസ്ഥാപിക്കാനായില്ല"
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "बहाल करने मध्ये गड़बड़ी"
+            "value": "खरेदी पुनर्संचयित करता आली नाही"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pembelian Tidak Dapat Dipulihkan"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kunne ikke gjenopprette kjøp"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aankopen herstellen mislukt"
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ପୁନରୁଦ୍ଧାର ତ୍ରୁଟି"
+            "value": "କ୍ରୟ ପୁନରୁଦ୍ଧାର ହୋଇପାରିଲା ନାହିଁ"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਬਹਾਲ ਕਰਨ ਵਿੱਚ ਗੜਬੜ"
+            "value": "ਖਰੀਦਾਰੀ ਬਹਾਲ ਨਹੀਂ ਹੋ ਸਕੀ"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nie udało się przywrócić zakupów"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não foi possível restaurar as compras"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não foi possível restaurar as compras"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Achizițiile nu au putut fi restabilite"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось восстановить покупки"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nákupy sa nepodarilo obnoviť"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nakupov ni bilo mogoče obnoviti"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Det gick inte att återställa köp"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "வாங்கியவற்றை மீட்டெடுக்க முடியவில்லை"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "కొనుగోళ్లను పునరుద్ధరించలేకపోయాం"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "กู้คืนการซื้อไม่ได้"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Satın Alımlar Geri Yüklenemedi"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не вдалося відновити покупки"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "خریداریاں بحال نہیں ہو سکیں"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Không thể khôi phục giao dịch"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法恢复购买"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "無法恢復購買"
           }
         }
       }
@@ -48672,6 +48672,831 @@
           "stringUnit": {
             "state": "translated",
             "value": "這次會一直開著"
+          }
+        }
+      }
+    },
+    "paywall.restore_error.body": {
+      "comment": "Alert message when Restore Purchases could not reach or finish with the App Store; buttons below are Try again, Contact support, Not now [paywall]",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لم يتمكن Pillie من التحقق من مشترياتك عبر App Store. أعيدي المحاولة، أو تواصلي معنا وسنحلّ الأمر."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie App Store-এ তোমার কেনাকাটা যাচাই করতে পারেনি। আবার চেষ্টা করো, অথবা আমাদের সাথে যোগাযোগ করো, আমরা ঠিক করে দেব।"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie no ha pogut comprovar les teves compres a l’App Store. Torna-ho a provar o escriu-nos i ho solucionarem."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie nemohla ověřit tvoje nákupy v App Storu. Zkus to znovu, nebo nám napiš a vyřešíme to."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie kunne ikke tjekke dine køb i App Store. Prøv igen, eller kontakt os, så finder vi ud af det."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie konnte deine Käufe nicht im App Store prüfen. Versuch es noch mal oder schreib uns, dann kümmern wir uns darum."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Το Pillie δεν μπόρεσε να ελέγξει τις αγορές σου στο App Store. Δοκίμασε ξανά ή επικοινώνησε μαζί μας και θα το λύσουμε."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie couldn't check your purchases with the App Store. Try again, or contact us and we'll sort it out."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie no pudo comprobar tus compras en App Store. Inténtalo de nuevo o escríbenos y lo resolvemos."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie ei voinut tarkistaa ostojasi App Storesta. Yritä uudelleen tai ota meihin yhteyttä, niin selvitämme asian."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie n'a pas pu vérifier tes achats auprès de l'App Store. Réessaie ou contacte-nous, on va régler ça."
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie App Store પર તારી ખરીદી તપાસી શક્યું નહીં. ફરી પ્રયાસ કર, અથવા અમારો સંપર્ક કર, અમે તેનો ઉકેલ લાવીશું."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie לא הצליחה לבדוק את הרכישות שלך ב-App Store. נסי שוב, או פני אלינו ונסדר את זה."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie App Store पर तुम्हारी ख़रीदारी की जाँच नहीं कर पाया। फिर कोशिश करो, या हमसे संपर्क करो, हम इसे ठीक कर देंगे।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie nije mogao provjeriti tvoje kupnje u App Storeu. Pokušaj ponovno ili nam se javi pa ćemo to riješiti."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A Pillie nem tudta ellenőrizni a vásárlásaidat az App Store-ban. Próbáld újra, vagy írj nekünk, és megoldjuk."
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie tidak bisa memeriksa pembelianmu di App Store. Coba lagi, atau hubungi kami dan kami akan membereskannya."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie non è riuscita a verificare i tuoi acquisti sull’App Store. Riprova oppure contattaci e sistemiamo tutto."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PillieがApp Storeで購入情報を確認できませんでした。もう一度お試しいただくか、サポートまでご連絡ください。こちらで対応します。"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie ಗೆ App Store ನಲ್ಲಿ ನಿನ್ನ ಖರೀದಿಗಳನ್ನು ಪರಿಶೀಲಿಸಲು ಆಗಲಿಲ್ಲ. ಮತ್ತೆ ಪ್ರಯತ್ನಿಸು, ಅಥವಾ ನಮ್ಮನ್ನು ಸಂಪರ್ಕಿಸು, ನಾವು ಸರಿಪಡಿಸುತ್ತೇವೆ."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie가 App Store에서 구매 내역을 확인하지 못했어요. 다시 시도하거나 저희에게 문의해 주시면 해결해 드릴게요."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App Store-ൽ നിങ്ങളുടെ വാങ്ങലുകൾ പരിശോധിക്കാൻ Pillie-ക്ക് കഴിഞ്ഞില്ല. വീണ്ടും ശ്രമിക്കൂ, അല്ലെങ്കിൽ ഞങ്ങളെ ബന്ധപ്പെടൂ, ഞങ്ങൾ ശരിയാക്കാം."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie ला App Store वर तुझी खरेदी तपासता आली नाही. पुन्हा प्रयत्न कर, किंवा आमच्याशी संपर्क कर, आम्ही ते सोडवू."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie tidak dapat menyemak pembelian kamu dengan App Store. Cuba lagi, atau hubungi kami dan kami akan selesaikannya."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie fikk ikke sjekket kjøpene dine i App Store. Prøv igjen, eller kontakt oss, så ordner vi det."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie kon je aankopen niet controleren bij de App Store. Probeer het opnieuw of neem contact met ons op, dan lossen we het op."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie App Store ରେ ତୁମର କ୍ରୟ ଯାଞ୍ଚ କରିପାରିଲା ନାହିଁ। ପୁଣି ଚେଷ୍ଟା କର, କିମ୍ବା ଆମ ସହ ଯୋଗାଯୋଗ କର, ଆମେ ଏହାର ସମାଧାନ କରିଦେବୁ।"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie App Store ਨਾਲ ਤੇਰੀ ਖਰੀਦਾਰੀ ਦੀ ਜਾਂਚ ਨਹੀਂ ਕਰ ਸਕਿਆ। ਫਿਰ ਕੋਸ਼ਿਸ਼ ਕਰ, ਜਾਂ ਸਾਡੇ ਨਾਲ ਸੰਪਰਕ ਕਰ, ਅਸੀਂ ਇਸਨੂੰ ਠੀਕ ਕਰ ਦੇਵਾਂਗੇ।"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie nie mogło sprawdzić twoich zakupów w App Store. Spróbuj ponownie albo napisz do nas, a wszystko wyjaśnimy."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O Pillie não conseguiu verificar suas compras na App Store. Tente de novo ou fale com a gente, que resolvemos para você."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O Pillie não conseguiu verificar as tuas compras na App Store. Tenta de novo ou contacta-nos e nós resolvemos."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie nu ți-a putut verifica achizițiile în App Store. Încearcă din nou sau scrie-ne și rezolvăm."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie не удалось проверить твои покупки в App Store. Попробуй ещё раз или напиши нам, и мы во всём разберёмся."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie nemohla overiť tvoje nákupy v App Store. Skús to znova alebo nám napíš a vyriešime to."
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie ne more preveriti tvojih nakupov v App Storu. Poskusi znova ali nam piši, pa bomo to uredili."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie kunde inte kontrollera dina köp i App Store. Försök igen eller kontakta oss så löser vi det."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App Store-இல் உன் கொள்முதல்களை Pillie-ஆல் சரிபார்க்க முடியவில்லை. மீண்டும் முயல், அல்லது எங்களைத் தொடர்புகொள், நாங்கள் சரிசெய்கிறோம்."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App Storeలో నీ కొనుగోళ్లను Pillie తనిఖీ చేయలేకపోయింది. మళ్లీ ప్రయత్నించు, లేదా మమ్మల్ని సంప్రదించు, మేము సరిచేస్తాం."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie ตรวจสอบการซื้อของคุณกับ App Store ไม่ได้ ลองอีกครั้ง หรือติดต่อเรา แล้วเราจะช่วยจัดการให้"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie, App Store'daki satın alımlarını kontrol edemedi. Tekrar dene ya da bize yaz, sorunu birlikte çözelim."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie не вдалося перевірити твої покупки в App Store. Спробуй ще раз або напиши нам, і ми все владнаємо."
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie، App Store پر تمہاری خریداریاں چیک نہیں کر سکا۔ دوبارہ کوشش کرو، یا ہم سے رابطہ کرو، ہم اسے ٹھیک کر دیں گے۔"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie không kiểm tra được giao dịch của bạn với App Store. Hãy thử lại, hoặc liên hệ với chúng mình để được hỗ trợ nhé."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie 无法通过 App Store 核实你的购买记录。请重试，或联系我们，我们会帮你解决。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie 無法透過 App Store 確認你的購買記錄。請再試一次，或聯絡我們，我們會幫你處理。"
+          }
+        }
+      }
+    },
+    "paywall.action.contact_support": {
+      "comment": "Alert button that opens an email to Pillie support from a restore alert [paywall]",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تواصلي مع الدعم"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "সাপোর্টে যোগাযোগ করো"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contacta amb el suport"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kontaktovat podporu"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kontakt support"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Support kontaktieren"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Επικοινωνία με υποστήριξη"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contact support"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contactar con soporte"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ota yhteyttä tukeen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contacter l'assistance"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "સપોર્ટનો સંપર્ક કર"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "פנייה לתמיכה"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "सपोर्ट से संपर्क करो"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kontaktiraj podršku"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Írj az ügyfélszolgálatnak"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hubungi Dukungan"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contatta l’assistenza"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "サポートに問い合わせ"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ಸಪೋರ್ಟ್ ಸಂಪರ್ಕಿಸು"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "지원팀에 문의"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "സപ്പോർട്ടുമായി ബന്ധപ്പെടൂ"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "सपोर्टशी संपर्क कर"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hubungi Sokongan"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kontakt support"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contact opnemen met support"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ସପୋର୍ଟ ସହ ଯୋଗାଯୋଗ କର"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਸਪੋਰਟ ਨਾਲ ਸੰਪਰਕ ਕਰ"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skontaktuj się z pomocą"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Falar com o suporte"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contactar o suporte"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contactează asistența"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Написать в поддержку"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kontaktovať podporu"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Obrni se na podporo"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kontakta support"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ஆதரவைத் தொடர்புகொள்"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "సపోర్ట్‌ను సంప్రదించు"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ติดต่อฝ่ายสนับสนุน"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Destekle İletişime Geç"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Написати в підтримку"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "سپورٹ سے رابطہ کرو"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Liên hệ hỗ trợ"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "联系客服"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "聯絡客服"
+          }
+        }
+      }
+    },
+    "paywall.action.try_again": {
+      "comment": "Restore error alert button that runs Restore Purchases again [paywall]",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أعيدي المحاولة"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "আবার চেষ্টা করো"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prova de nou"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zkusit znovu"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prøv igen"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erneut versuchen"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Δοκίμασε ξανά"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Try again"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reintentar"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yritä uudelleen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réessayer"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ફરી પ્રયાસ કર"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "נסי שוב"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "फिर कोशिश करो"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pokušaj ponovno"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Újra"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Coba Lagi"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Riprova"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "再試行"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ಮತ್ತೆ ಪ್ರಯತ್ನಿಸು"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "다시 시도"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "വീണ്ടും ശ്രമിക്കൂ"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "पुन्हा प्रयत्न"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cuba Lagi"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prøv igjen"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opnieuw proberen"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ପୁଣି ଚେଷ୍ଟା କର"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਫਿਰ ਕੋਸ਼ਿਸ਼ ਕਰ"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spróbuj ponownie"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tentar de novo"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tentar de novo"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Încearcă din nou"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Повторить"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skúsiť znova"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Poskusi znova"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Försök igen"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "மீண்டும் முயல்"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "మళ్లీ ప్రయత్నించు"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ลองอีกครั้ง"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tekrar Dene"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Спробувати ще"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "دوبارہ کوشش کرو"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thử lại"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "重试"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "再試一次"
           }
         }
       }
