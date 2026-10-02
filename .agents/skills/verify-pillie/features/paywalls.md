@@ -77,8 +77,10 @@ CTAs change often; this file names the mechanism, not the wording.
   board directly.
 - Debug-only, no clicking through: `pillie://debug/honest-paywall?board=
   duringTrial|settingsFree|trialEndedReturningHard|trialEndedReturningLegacy`
-  jumps straight to one board; `pillie://debug/trial-end-paywall?...` seeds
-  richer own-record trial-ended stats/cohort combinations instead.
+  jumps straight to one board; `pillie://debug/trial-end-paywall` opens the
+  real trial-end wall from Home with own-record stats (hard by default,
+  `terms=soft` for the closable wall). Don't relaunch after it: a relaunch
+  drops the debug clock that keeps the trial expired.
   `references/state-setup.md`.
 
 ## Driving it with flows
@@ -90,6 +92,8 @@ CTAs change often; this file names the mechanism, not the wording.
   Settings > Pillie Plus door: error alert and Contact support into the mail
   fallback. `log start` / `log stop` keep the analytics mirror in `app.log`;
   grep it for `restore_` to see `surface`, `reason`, and `error_category`.
+- `flows/paywall-trial-end-link.flow` opens the hard and the closable trial-end
+  walls from Home through `/trial-end-paywall`, with no developer menu.
 - `flows/paywall-lifetime-tile.flow` — on the hard trial-end board: three
   tiles with Year selected; a tap on "Cancel anytime" with a restore outcome
   armed raises no alert and logs no `restore_started`; the Lifetime tile
@@ -120,9 +124,8 @@ CTAs change often; this file names the mechanism, not the wording.
     it's still on screen after a `wait`.
   - `paywall-trial-ended`'s own-record stats/comparison/chips body (a trial
     that expired on this same device, as opposed to the "returning" no-stats
-    copy above) needs `/trial-end-paywall` with a real aged-out trial and
-    matching `cohort`/`terms` — out of this skill's four fixed boards; see
-    `references/state-setup.md` if a task needs it.
+    copy above) comes from `/trial-end-paywall` (`terms=soft`,
+    `cohort=blocker`); `flows/paywall-trial-end-link.flow` opens both walls.
 
 ## Gotchas
 
