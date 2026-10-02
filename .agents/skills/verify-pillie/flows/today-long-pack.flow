@@ -1,0 +1,52 @@
+# Home pack card on a long custom pack (88 + 3): onboarding picks it, Home opens
+# on the page that holds today with the pager (PackCard L1, ENG-145).
+# The keypad's Done key has no accessibility element, so it is tapped by point.
+fresh
+defaults onboardingStep -int 10
+launch
+wait id todayPillChangeButton 15
+tap --id todayPillChangeButton
+wait id packSheet.custom
+tap --id packSheet.custom
+wait id customPackTitle
+wait text "28-day pack · starts again every 4 weeks"
+tap --id customPackActivePlus
+wait text "29-day pack · then a new pack starts"
+tap --id customPackActiveValue
+wait id customPackActiveField
+tap --id customPackKey8
+tap --id customPackKey8
+wait text "95-day pack · about 14 weeks"
+tap -x 359 -y 606
+gone id customPackActiveField
+tap --id customPackBreakMinus
+tap --id customPackBreakMinus
+tap --id customPackBreakMinus
+tap --id customPackBreakMinus
+wait text "91-day pack · 13 weeks, one column per week"
+tap --id customPackUse
+gone id customPackTitle
+tap --label "Next weeks"
+wait text "Weeks 5 to 8 of 13"
+gesture scroll-down
+tap --id packTile.40
+wait id todayPillQuestion
+tap --id todayPillNotYet
+tap --id protectionPlanPrimaryCTA
+wait text "Pick a time."
+tap --label Evening
+tap --id protectionPlanPrimaryCTA
+tap --label Allow
+wait id protectionPlanPrimaryCTA 15
+tap --id protectionPlanPrimaryCTA
+wait id appBlockingEmptyStateCard 15
+openurl "pillie://debug/plus-app-blocking-setup?selected=3&lang=en"
+wait text "Apps selected"
+tap --label Continue
+wait id protectionPlanReadyStartButton
+tap --id protectionPlanReadyStartButton
+wait text "of 91" 15
+gesture scroll-down
+sleep 1
+expect text "Weeks 5 to 8 of 13"
+shot home-long-pack

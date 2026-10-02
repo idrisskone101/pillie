@@ -78,6 +78,8 @@ Run this when anything looks off.
 - Linux, before launch: `Pillie/scripts/namespace-mac.sh auth-check` prints `ok: Namespace auth`, `make ns-mac-check-sync` prints `ok:`, `make ns-mac-status` shows `pillie-ios`.
 - After launch: `pillie_qa.json` has your SHA and `"axe": true`; the 1x PNG shows Pillie, not SpringBoard or a white launch frame.
 - Mac: `make diagnose` shows Xcode 27 and an iPhone 17 Pro UDID.
+- New images missing after an asset edit: `sim-qa.sh` fails when the installed `Assets.car` is older than a file in `Pillie/Pillie/Assets.xcassets`. It rebuilds when anything under `Pillie/` is uncommitted and skips only when `Pillie/` is clean at an already-built SHA, so `SKIP_BUILD=1` after an edit is the usual cause.
+- Taps stop landing after the Code tab's simulator panel attaches: `xcrun simctl shutdown "$(make -s udid)"`, then `make qa` to reboot it.
 - A flow stuck on a SpringBoard alert: the `fail` outline shows `Sheet` elements outside the app. Add the tap that clears it (`tap --label Allow`) to the flow.
 
 ## One-off commands

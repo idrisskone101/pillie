@@ -153,7 +153,7 @@ final class CorrectPastDayTests: XCTestCase {
         let today = InMemoryStoreFactory.fixedDate("2026-06-16")
         let startDate = InMemoryStoreFactory.fixedDate("2026-05-25")
         let breakDay = InMemoryStoreFactory.fixedDate("2026-06-15")
-        let fixture = try InMemoryStoreFactory.makeStore(now: today, startDate: startDate)
+        let fixture = try InMemoryStoreFactory.makeStore(now: today, regimen: .twentyOneOnly, startDate: startDate)
         let store = fixture.store
         XCTAssertEqual(store.scheduleSnapshot(for: breakDay)?.dueAction?.type, .pillBreak)
 

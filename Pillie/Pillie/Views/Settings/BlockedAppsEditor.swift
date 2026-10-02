@@ -51,6 +51,7 @@ struct BlockedAppsEditor: View {
 
             Button {
                 blockingManager.saveSelectionAndReconcile(routine: appBlockingRoutine)
+                ScheduleCriticalSettingChange.blockerSetupChanged(store: store)
                 ProductAnalyticsTelemetry.live.blockedAppsSaved(hasSelection: blockingManager.hasAppsSelected)
                 // #163: the same dedicated event onboarding fires, with
                 // source=settings, so the day-1 activation metric can tell the

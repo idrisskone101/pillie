@@ -8,17 +8,25 @@ import Foundation
 /// A due action stays completable until the next reminder, not calendar midnight.
 /// The live day itself is `LiveDoseDay`, shared with the Screen Time extension.
 enum DoseWindow {
+    static func reminder(
+        for day: Date,
+        hour: Int,
+        minute: Int,
+        calendar: Calendar = .current
+    ) -> Date? {
+        calendar.date(bySettingHour: hour, minute: minute, second: 0, of: calendar.startOfDay(for: day))
+    }
+
     static func deadline(
         for day: Date,
         hour: Int,
         minute: Int,
         calendar: Calendar = .current
     ) -> Date? {
-        let start = calendar.startOfDay(for: day)
-        guard let nextDay = calendar.date(byAdding: .day, value: 1, to: start) else {
+        guard let nextDay = calendar.date(byAdding: .day, value: 1, to: calendar.startOfDay(for: day)) else {
             return nil
         }
-        return calendar.date(bySettingHour: hour, minute: minute, second: 0, of: nextDay)
+        return reminder(for: nextDay, hour: hour, minute: minute, calendar: calendar)
     }
 
     static func isOpen(

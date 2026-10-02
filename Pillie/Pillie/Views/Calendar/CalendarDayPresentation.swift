@@ -59,6 +59,12 @@ struct CalendarDayPresentation: Equatable {
         isToday || isActionDay || isBreakDay
     }
 
+    /// The status History's legend and VoiceOver name for a past or current day.
+    var historyStatus: HistoryPresentation.DayStatus {
+        if status == .taken { return .completed }
+        return isBreakDay ? .breakDay : .unlogged
+    }
+
     var defaultIndicatorOpacity: Double {
         guard showsDefaultIndicator else { return 0 }
         return isFutureDay ? 0.4 : 1
@@ -84,7 +90,11 @@ struct CalendarDayPresentation: Equatable {
             hasScheduleContext: snapshot?.hasScheduleContext ?? false,
             isActionDay: snapshot?.isDue ?? false,
             isPassiveActive: snapshot?.isPassiveActive ?? false,
-            isBreakDay: snapshot?.isBreak == true || snapshot?.status == .breakDay,
+            // A sugar pill is a break-type action, but while its dose window is
+            // open it is due like a hormone pill; it reads as a break only once
+            // the window closes.
+            isBreakDay: snapshot?.status == .breakDay
+                || (snapshot?.isBreak == true && snapshot?.status != .upcoming),
             patchStyle: method == .patch ? patchSemanticStyle(snapshot: snapshot, relation: relation) : .invalid,
             ringStyle: method == .ring ? ringSemanticStyle(snapshot: snapshot, relation: relation) : .invalid
         )

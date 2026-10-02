@@ -8,7 +8,7 @@
 2. Start `pillie-ios` if SSH is down. Skip Ensure/Activate when SSH already works.
 3. `git fetch` + `git reset --hard <sha>` on `/Users/runner/workspaces/pillie`.
 4. Remote `Pillie/scripts/ensure-qa-tools.sh`: install `axe` and ImageMagick if they are missing.
-5. Remote `Pillie/scripts/sim-qa.sh`: boot the iPhone 17 Pro, `make build-and-run` (or `make run` when this SHA is already built), wait until `axe describe-ui` looks settled, write the 1x PNG and axe dump.
+5. Remote `Pillie/scripts/sim-qa.sh`: boot the iPhone 17 Pro, `make build-and-run` (or `make run` when this SHA is already built and `Pillie/` is clean), wait until `axe describe-ui` looks settled, write the 1x PNG and axe dump.
 6. Copy artifacts to the artifact dir: `$PILLIE_NS_ARTIFACT_DIR`, else `/opt/cursor/artifacts` when `/opt/cursor` exists, else the repo's `.qa-artifacts/`.
 7. Leave the Mac running.
 

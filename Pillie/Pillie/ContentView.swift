@@ -701,6 +701,7 @@ struct ContentView: View {
       termsCohort: termsCohort
     ) {
       onboardingTelemetry.trialActivated()
+      ScheduleCriticalSettingChange.onboardingTrialGranted(store: store)
     }
   }
 

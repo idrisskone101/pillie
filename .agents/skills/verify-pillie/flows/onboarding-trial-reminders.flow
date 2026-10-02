@@ -1,0 +1,64 @@
+# ENG-141: the reminder plan a new trial user gets, read from the real pending
+# notification queue. Fresh install, walk onboarding to the app-blocking step (the
+# trial is granted when that screen appears, after reminders were first planned),
+# then dump pending notifications to OSLog with no apps chosen and read app.log:
+# the queue must already hold the smart follow-ups, the day-10/13 warnings with the
+# reminders-only body, and the day-15 expiry-day notice. Every `Pillie QA pending:`
+# line names id, fire time, title, and body.
+#
+# Not covered here: the blocking-cohort copy. It needs a real FamilyControls
+# selection, and the plus-app-blocking-setup seam that fakes one also forces Plus on,
+# which removes the trial notices. TrialExpiryWarningPlannerTests covers the swap.
+
+fresh
+launch
+sleep 6  # the welcome CTA ignores taps while the splash fades
+log start
+
+wait id protectionPlanPrimaryCTA
+shot welcome
+tap --id protectionPlanPrimaryCTA
+
+wait id protectionPlanEarlyValueProofView
+tap --label "Not now" --element-type Button
+
+wait text "What's in the way?"
+tap --label TikTok
+tap --label "A simpler routine"
+tap --id protectionPlanPrimaryCTA
+
+wait text "How often do you miss your pill?"
+tap --label Rarely
+tap --label "Right after the reminder"
+tap --id protectionPlanPrimaryCTA
+
+wait text "Where did you find Pillie?"
+tap --id acquisitionSource.tiktok
+tap --id protectionPlanPrimaryCTA
+
+wait text "Pick your method."
+tap --id protectionPlanPrimaryCTA
+
+wait text "Tap the pill you're on today."
+tap --id packTile.12
+wait id todayPillQuestion
+tap --id todayPillYes
+wait id todayPillLogged
+tap --id protectionPlanPrimaryCTA
+
+wait text "Pick a time."
+tap --label Evening
+wait text "Pill 12 · taken"
+tap --id protectionPlanPrimaryCTA
+tap --label Allow  # iOS notification permission alert
+
+wait id protectionPlanPrimaryCTA 15
+tap --id protectionPlanPrimaryCTA
+
+wait id appBlockingEmptyStateCard 15
+shot app-blocking-before-apps
+sleep 2  # let the 0.25 s reschedule debounce and the center writes finish
+openurl "pillie://debug/dump-pending-notifications"
+sleep 2
+
+log stop

@@ -22,7 +22,7 @@ struct DoseScheduleAction: Hashable {
 
     var ctaLabel: String {
         switch type {
-        case .pillActive:
+        case .pillActive, .pillSugar:
             return "Mark Pill as Taken"
         case .pillBreak:
             return "Log Break Day"
@@ -49,7 +49,7 @@ struct DoseScheduleAction: Hashable {
 
     var badgeLabel: String {
         switch type {
-        case .pillActive:
+        case .pillActive, .pillSugar:
             return "PILL"
         case .pillBreak, .patchBreak, .ringBreak:
             return "BREAK"
@@ -87,7 +87,7 @@ struct DoseScheduleAction: Hashable {
     func localizedReminderBody(locale: Locale = .current) -> String {
         let key: String
         switch type {
-        case .pillActive:
+        case .pillActive, .pillSugar:
             key = "notification.reminder.pill.body"
         case .patchChange:
             key = cycleDay == 1
@@ -129,7 +129,11 @@ enum DoseScheduleEngine {
         let cycleDay = pack.cycleDayIndex(on: date, calendar: calendar) + 1
         switch pack.method {
         case .pill:
-            let type: PillDay.ActionType = cycleDay <= pack.activeDays ? .pillActive : .pillBreak
+            let type: PillDay.ActionType = switch pack.regimen.day(atIndex: cycleDay - 1).kind {
+            case .active: .pillActive
+            case .sugarPill: .pillSugar
+            case .noPill: .pillBreak
+            }
             return DoseScheduleAction(
                 date: calendar.startOfDay(for: date),
                 type: type,
@@ -217,7 +221,10 @@ enum DoseScheduleEngine {
         let maxDaysToScan = max(365, pack.cycleLength * max(2, limit))
 
         while actions.count < limit && safetyCounter < maxDaysToScan {
-            if let due = dueAction(on: cursor, pack: pack, calendar: calendar),
+            // A day before the pack's first day has nothing due; `dueAction`
+            // would wrap it onto the pack's last day, a sugar pill on most packs.
+            if pack.elapsedCycleDays(on: cursor, calendar: calendar) >= 0,
+               let due = dueAction(on: cursor, pack: pack, calendar: calendar),
                due.type.requiresUserAction {
                 actions.append(due)
             }

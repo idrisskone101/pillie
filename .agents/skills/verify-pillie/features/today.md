@@ -9,8 +9,18 @@ blocking/trial status surfaces, and (when eligible) the review ask.
   reflected in the status card and the floating CTA.
 - `today-status-card` shows the reminder time and the due-action line; it
   goes coral and reads "That's logged. Tap to undo." once taken.
-- `today-pill-pack-card` shows this cycle's pill strip and the "This cycle"
-  header.
+- `today-pill-pack-card` shows the V1 pack card for pill users
+  (`HomePackCard`, ENG-145): "Pill 12 of 28" header, weekdays, grid, today
+  ringed, an untaken pill past its reminder late (amber) and missed once the
+  next reminder fires (ENG-148), "…" menu (`#homePackOptions`) with Change pack type
+  (`#homePackChangeType`, the onboarding pack sheet) and Start new. A log pops today's
+  tile once Home is visible again.
+- `today-countdown-card` shows the V4 countdown card for patch and ring
+  users (`HomeCountdownCard`, ENG-149): gauge with the patch, sachet or ring
+  art, a day countdown or "Today" / "Late" / "Missed", and the milestone
+  track (Patch 1, Patch 2, Patch 3, Off, New pack; or In, Out, Back in).
+  States come from `HomeCountdownProgress`. The "…" menu
+  (`#homeCountdownOptions`) starts a new cycle. It has no log button.
 - `today-mark-taken` is the real user path: tap the floating CTA, then
   Shake to Confirm (or its tap-to-confirm fallback), which marks today taken
   — and the same button undoes it.
@@ -57,6 +67,57 @@ blocking/trial status surfaces, and (when eligible) the review ask.
   Streak. The flow dismisses the blocking card first (it always renders on
   a fresh, unconfigured pack and outranks the review ask) before proving
   `homeReviewPromptCard`, then dismisses it.
+- `flows/today-first-reminder.flow` — real onboarding on pill 1 with "Not yet"
+  at a pinned 12:30 PM and an 8 PM reminder. Today's status card reads "8:00 PM" over
+  "First reminder" and the floating bar says "Your first reminder is tonight"
+  with a `#firstReminderTookIt` chip, which goes through shake confirm to the
+  logged state. The bar itself is not a button.
+- `flows/today-pack-card.flow` — the pack card's last hormone pill, sugar
+  week, and finished pack headers via `/trial-eve-of-break`,
+  `/trial-break-week`, and `/fixed-now` one day later.
+- `flows/today-late-missed.flow` — pins the clock to midday, then
+  `/trial-eve-of-break` leaves pill 21 untaken past its reminder: the tile is
+  late and the header reads "Late · still time until 8:00 AM tomorrow". One
+  live day later (`/fixed-now`) pill 21 is missed ("Pill 21 missed
+  yesterday"), its tile `#packTile.21` opens the History day sheet, and
+  marking it taken redraws the card.
+- `flows/today-change-pack.flow` — the "…" menu's Change pack type opens
+  the pack sheet, then the Settings "Reset Tracking Data?" confirmation.
+  Cancel keeps the pack; Reset & Save starts the new pack at pill 1 today.
+- `flows/today-patch-countdown.flow` — `/routine-day?method=patch&day=N`
+  plus `/fixed-now` walks the patch card: wearing (day 10), late change
+  (day 15), logged through the real CTA ("On today"), missed the next day
+  (Home's button still reads "Change patch"), late off day, patch-free week,
+  day 29 new cycle due, and "Start new" from the card menu (patch 1 due under
+  the start-day grace).
+- `flows/today-ring-countdown.flow` — the same for the ring: wearing, late
+  out, logged out, ring-free week, the day-29 reinsert (late, then logged,
+  which starts the next cycle), day 30 new cycle due, and a missed insertion.
+- `flows/today-ring-start-day.flow` onboards a ring routine answered "Not yet"
+  with an evening reminder and, before that reminder, logs the day-1 insert
+  from Home. The streak starts at 1.
+- `flows/today-catch-up.flow` — a missed patch change stays loggable from
+  Home until the next task day: day 16 reads Missed with "Change patch" on
+  the button, the Shake fallback logs it late ("On today"), undo restores
+  Missed, day 17 shows "Was due Sep 28" and logs again, and the History
+  sheet for the missed day says "Logged 2 days late" (`#historyDayCatchUp`)
+  while the day stays "Not logged".
+- `pillie://debug/countdown-card` opens a gallery of the 16 Paper lifecycle
+  cards built from fixed `HomeCountdownProgress` values.
+- `flows/today-long-pack.flow` — onboarding picks a Custom 88 + 3 pack, then
+  Home opens its card on the page with today ("Weeks 5 to 8 of 13").
+- `flows/today-sugar-pill.flow` — a 21 + 7 sugar day is due ("Take pill"),
+  logs, undoes and logs again without moving the streak; History reads the
+  open sugar day as "Not logged" (never "Break") and as "Done" once taken; a
+  21 only pill-free day stays "Nothing to take".
+- `flows/today-notification-complete.flow` — `/notification-complete` runs
+  the reminder's Complete action while Home is open; the status card, CTA and
+  pack card all flip to taken.
+- `flows/shake-confirm-stages.flow` steps the shake confirm's stop-motion clip
+  for every method (pill with and without a streak, patch apply, change and
+  remove, ring insert and remove, sugar pill), one shot per shake, then the streak
+  reveal and its logged note. A tap on `#shakeConfirmStage` counts as one
+  shake.
 - `flows/smoke.flow` covers the plain tab bar (Today/History/Settings) with
   `/plus-home`.
 - Not covered by an authored flow, and why: `ProtectionOffCard` needs an
@@ -74,8 +135,9 @@ blocking/trial status surfaces, and (when eligible) the review ask.
   Button answers hit testing, the same shape already proven for the
   Today/History/Settings tab labels, so `tap --label` still resolves to the
   CTA.
-- Shake detection cannot be driven on the simulator. Always use
-  `#shakeTapToConfirmFallback` ("Tap to Confirm Instead").
+- Shake detection cannot be driven on the simulator. Tap
+  `#shakeConfirmStage` once per shake to step the stages, or
+  `#shakeTapToConfirmFallback` ("Tap to Confirm Instead") to finish at once.
 - `homeBlockingStatusCardDismissed` is a persistent `@AppStorage` flag that
   survives `launch`. Start a flow from `fresh` whenever it needs the
   blocking card in its default (not dismissed) state.

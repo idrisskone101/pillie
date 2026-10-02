@@ -6,21 +6,21 @@
 import Foundation
 
 enum OnboardingTodayPick: Equatable {
-    case pill(TodayPillPick)
-    case dial(RoutineDialPick)
+    case pill(OnboardingDraft<TodayPillPick>)
+    case dial(OnboardingDraft<RoutineDialPick>)
 
     static func load(method: ContraceptiveMethod, from defaults: UserDefaults = .standard) -> OnboardingTodayPick? {
         guard let dialMethod = RoutineDialMethod(method) else {
-            return TodayPillPick.load(from: defaults).map(OnboardingTodayPick.pill)
+            return OnboardingDraft<TodayPillPick>.load(from: defaults).map(OnboardingTodayPick.pill)
         }
-        guard let pick = RoutineDialPick.load(from: defaults), pick.method == dialMethod else { return nil }
-        return .dial(pick)
+        guard let draft = OnboardingDraft<RoutineDialPick>.load(from: defaults), draft.pick.method == dialMethod else { return nil }
+        return .dial(draft)
     }
 
     func commit(to store: PillStore) {
         switch self {
-        case .pill(let pick): TodayPillCommit.run(pick, store: store)
-        case .dial(let pick): TodayPillCommit.run(pick, store: store)
+        case .pill(let draft): TodayPillCommit.run(draft, store: store)
+        case .dial(let draft): TodayPillCommit.run(draft, store: store)
         }
     }
 }

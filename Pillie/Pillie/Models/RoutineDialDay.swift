@@ -46,6 +46,11 @@ struct RoutineDialDay: Equatable {
     let patchNumber: Int?
     let task: Task?
 
+    /// Cycle days 1...28 that carry a task: 1, 8, 15, 22 for the patch; 1, 22 for the ring.
+    static func taskDays(method: RoutineDialMethod) -> [Int] {
+        (1...cycleLength).filter { day($0, method: method).task != nil }
+    }
+
     static func day(_ cycleDay: Int, method: RoutineDialMethod) -> RoutineDialDay {
         precondition((1...cycleLength).contains(cycleDay), "cycle day \(cycleDay) is outside 1...\(cycleLength)")
         let isWearing = cycleDay <= wearingDays

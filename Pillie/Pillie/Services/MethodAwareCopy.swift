@@ -29,7 +29,7 @@ enum MethodAwareCopy {
     ) -> String {
         if let action {
             switch action.type {
-            case .pillActive:
+            case .pillActive, .pillSugar:
                 return "pill"
             case .patchChange:
                 return action.cycleDay == 1 ? "patch.apply" : "patch.change"

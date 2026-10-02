@@ -117,9 +117,10 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         completionHandler([.banner, .sound])
     }
 
-    /// Records `trial_expiry_warning_sent` with `day: 10 | 13` when a trial
-    /// expiry warning is delivered (foreground) or handled (tapped) — at most
-    /// once per day value, so a banner later tapped never double-counts (#168).
+    /// Records `trial_expiry_warning_sent` with `day: 10 | 13 | 15` (15 is the
+    /// expiry-day notice) when a trial notice is delivered (foreground) or
+    /// handled (tapped), at most once per day value, so a banner later tapped
+    /// never double-counts (#168).
     private func recordTrialWarningDeliveryIfNeeded(userInfo: [AnyHashable: Any]) {
         let defaults = UserDefaults.standard
         let sentDays = defaults.array(forKey: TrialExpiryWarningDelivery.sentDaysStorageKey) as? [Int] ?? []
@@ -243,6 +244,7 @@ struct PillieApp: App {
     @State private var showFirstInterventionConfirmation = false
     #if DEBUG
     @State private var showsPackCardGallery = false
+    @State private var showsCountdownCardGallery = false
     #endif
     private static var isRunningTests: Bool {
         ProcessRuntime.isRunningTests
@@ -349,6 +351,9 @@ struct PillieApp: App {
                 }
                 .fullScreenCover(isPresented: $showsPackCardGallery) {
                     PackCardGalleryView()
+                }
+                .fullScreenCover(isPresented: $showsCountdownCardGallery) {
+                    CountdownCardGalleryView()
                 }
                 #endif
                 .onChange(of: scenePhase) { _, newPhase in
@@ -588,7 +593,7 @@ struct PillieApp: App {
             // should unlock exactly as if the entitlement flipped on. A fresh
             // trial also re-opens the one-shot `trial_expired` window (#167) so
             // expiry stays demoable across repeated QA runs. The warning-sent
-            // dedupe resets with it so the day-10/13 events re-fire too (#168).
+            // dedupe resets with it so the day-10/13/15 events re-fire too (#168).
             UserDefaults.standard.removeObject(forKey: TrialExpiredEvent.firedStorageKey)
             UserDefaults.standard.removeObject(forKey: TrialExpiryWarningDelivery.sentDaysStorageKey)
             UserDefaults.standard.removeObject(forKey: TrialEndPaywallAutoPresentation.shownStorageKey)
@@ -668,6 +673,9 @@ struct PillieApp: App {
                 return
             }
             store.refreshDayContextIfNeeded()
+        case "/notification-complete":
+            // QA control: run the reminder's Complete action for today while Home is open.
+            NotificationManager.shared.completeReminder(store: store, dueDate: store.today)
         case "/plus-home":
             // QA shortcut: land on the onboarded main app as a Plus subscriber so the
             // Plus-gated Settings surfaces (e.g. Reminder Messages) are reachable.
@@ -695,7 +703,7 @@ struct PillieApp: App {
                 for request in requests.sorted(by: { $0.identifier < $1.identifier }) {
                     let fireDate = (request.trigger as? UNCalendarNotificationTrigger)?.nextTriggerDate()
                     logger.debug(
-                        "Pillie QA pending: \(request.identifier, privacy: .public) fire=\(fireDate?.description ?? "-", privacy: .public) title=\(request.content.title, privacy: .public)"
+                        "Pillie QA pending: \(request.identifier, privacy: .public) fire=\(fireDate?.description ?? "-", privacy: .public) title=\(request.content.title, privacy: .public) body=\(request.content.body, privacy: .public)"
                     )
                 }
             }
@@ -787,6 +795,20 @@ struct PillieApp: App {
             reconcileScreenTimeState()
         case "/pack-card":
             showsPackCardGallery = true
+        case "/countdown-card":
+            showsCountdownCardGallery = true
+        case "/routine-day":
+            let query = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems ?? []
+            guard
+                let method = query.first(where: { $0.name == "method" })?.value.flatMap(RoutineDialMethod.init(rawValue:)),
+                let day = query.first(where: { $0.name == "day" })?.value.flatMap(Int.init)
+            else {
+                os.Logger(subsystem: "com.idrisskone.pillie", category: "qa")
+                    .error("Pillie QA routine-day ignored unreadable query \(url.query ?? "nil", privacy: .public)")
+                return
+            }
+            DebugQA.applyRoutineDay(method.contraceptiveMethod, cycleDay: day, store: store)
+            reconcileScreenTimeState()
         case "/review-prompt":
             // QA shortcut (#133): land on Home with an unbroken Streak past the pill
             // threshold so the Review Prompt's Sentiment Gate card surfaces and the

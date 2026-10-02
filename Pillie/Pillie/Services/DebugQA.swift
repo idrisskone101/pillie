@@ -307,6 +307,15 @@ enum DebugQA {
         NotificationCenter.default.post(name: .pillieDebugQADidApply, object: scenario)
     }
 
+    /// `pillie://debug/routine-day?method=patch|ring&day=N`: an onboarded Plus user on cycle day N.
+    static func applyRoutineDay(_ method: ContraceptiveMethod, cycleDay: Int, store: PillStore) {
+        completeOnboarding()
+        SubscriptionManager.shared.setPlusForTesting(true)
+        store.seedRoutineDay(method: method, cycleDay: cycleDay)
+        reconcile(store: store)
+        NotificationCenter.default.post(name: .pillieDebugQADidApply, object: nil)
+    }
+
     private static func completeOnboarding(selectedFreePlan: Bool = false) {
         UserDefaults.standard.set(
             OnboardingFlow.Step.complete.rawValue,

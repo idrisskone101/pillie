@@ -1,0 +1,211 @@
+# Shake confirm (ENG-150): every method's stop-motion clip, one shot per
+# shake, then the streak reveal. Each shake is one physical step: pill 5,
+# patch apply and change 5, patch remove 4, ring insert 5, ring remove 4.
+# The simulator cannot shake, so a tap on #shakeConfirmStage counts as one
+# shake (ShakeConfirmView stage tap -> ShakeDetectionManager.simulateShake).
+# Sleeps cover each clip slice's playback before the shot. The reveal
+# auto-confirms 1.6 s after it lands, so each method waits on its logged note
+# and shoots straight away.
+fresh
+launch
+wait text "Get started" 15
+openurl "pillie://debug/plus-home?lang=en"
+openurl pillie://debug/trial-grant?lang=en
+
+# Pill, no streak yet: the headline stays generic and the counter rolls 0 to 1.
+openurl pillie://debug/fixed-now?at=2026-09-15T15:00:00Z
+tap --id developerMenuAvatarButton
+wait text "PACK & CALENDAR" 10
+tap --label "Missed the last 2 days"
+wait text "Take pill" 10
+tap --label "Take pill"
+wait id shakeConfirmStage 10
+expect text "Shake to Confirm"
+shot pill-first-open
+tap --id shakeTapToConfirmFallback
+wait text "Pill 11 logged at" 10
+shot pill-first-done
+wait text "Taken today" 15
+
+# Pill, next day: a streak of 1 rolls to 2 across five shakes as the pill
+# dents, pops through the foil, and lifts out.
+openurl pillie://debug/fixed-now?at=2026-09-16T15:00:00Z
+wait text "Take pill" 10
+tap --label "Take pill"
+wait text "Shake to keep it going" 10
+shot pill-open
+record start
+tap --id shakeConfirmStage
+wait text "1 and counting" 5
+sleep 1
+shot pill-shake-1
+tap --id shakeConfirmStage
+sleep 1
+shot pill-shake-2
+tap --id shakeConfirmStage
+sleep 1
+shot pill-shake-3
+tap --id shakeConfirmStage
+wait text "Almost 2" 5
+sleep 1
+shot pill-shake-4
+tap --id shakeConfirmStage
+wait text "Pill 12 logged at" 10
+shot pill-done
+record stop
+wait text "Taken today" 15
+
+# Patch apply, day 1 of a new routine: the pouch nicks, tears, the patch
+# slides out onto its liner and the liner half peels.
+openurl pillie://debug/fixed-now?at=2026-09-28T16:00:00Z
+openurl "pillie://debug/routine-day?method=patch&day=1&lang=en"
+tap --id homeBlockingStatusCardDismiss
+gone id homeBlockingStatusCard 10
+tap --label "Apply patch"
+wait id shakeConfirmStage 10
+expect text "Apply patch · Day 1 of 28"
+shot patch-apply-open
+tap --id shakeConfirmStage
+wait text "Keep going" 5
+sleep 1
+shot patch-apply-shake-1
+tap --id shakeConfirmStage
+sleep 2
+shot patch-apply-shake-2
+tap --id shakeConfirmStage
+sleep 1
+shot patch-apply-shake-3
+tap --id shakeConfirmStage
+wait text "Almost there" 5
+sleep 1
+shot patch-apply-shake-4
+tap --id shakeConfirmStage
+wait text "Patch applied at" 10
+shot patch-apply-done
+wait text "On today" 15
+
+# Patch change, day 8 of the same routine. /routine-day seeds earlier tasks as
+# a backfill that the streak ignores, so cross days with the clock instead to
+# carry the streak from the apply above.
+# The old patch folded on the new pouch, then the same tear.
+openurl pillie://debug/fixed-now?at=2026-10-05T16:00:00Z
+tap --label "Change patch"
+wait text "Shake to keep it going" 10
+shot patch-change-open
+tap --id shakeConfirmStage
+wait text "1 and counting" 5
+sleep 1
+shot patch-change-shake-1
+tap --id shakeConfirmStage
+sleep 2
+shot patch-change-shake-2
+tap --id shakeConfirmStage
+sleep 1
+shot patch-change-shake-3
+tap --id shakeConfirmStage
+wait text "Almost 2" 5
+sleep 1
+shot patch-change-shake-4
+tap --id shakeConfirmStage
+wait text "Patch changed at" 10
+shot patch-change-done
+wait text "On today" 15
+
+# Patch remove, day 22: the worn patch peels, half peels, folds, and folds
+# shut. Day 15's change was never logged, so the streak is broken and the
+# headline stays generic.
+openurl pillie://debug/fixed-now?at=2026-10-19T16:00:00Z
+tap --label "Remove patch"
+wait id shakeConfirmStage 10
+expect text "Shake to Confirm"
+shot patch-remove-open
+tap --id shakeConfirmStage
+wait text "Keep going" 5
+sleep 1
+shot patch-remove-shake-1
+tap --id shakeConfirmStage
+sleep 1
+shot patch-remove-shake-2
+tap --id shakeConfirmStage
+wait text "Almost there" 5
+sleep 1
+shot patch-remove-shake-3
+tap --id shakeConfirmStage
+wait text "Patch removed at" 10
+shot patch-remove-done
+wait text "Off today" 15
+
+# Ring insert, day 1 of a new ring routine: no streak yet.
+openurl pillie://debug/fixed-now?at=2026-09-28T16:00:00Z
+openurl "pillie://debug/routine-day?method=ring&day=1&lang=en"
+tap --label "Insert ring"
+wait id shakeConfirmStage 10
+shot ring-insert-open
+tap --id shakeConfirmStage
+wait text "Keep going" 5
+sleep 1
+shot ring-insert-shake-1
+tap --id shakeConfirmStage
+sleep 1
+shot ring-insert-shake-2
+tap --id shakeConfirmStage
+sleep 1
+shot ring-insert-shake-3
+tap --id shakeConfirmStage
+wait text "Almost there" 5
+sleep 1
+shot ring-insert-shake-4
+tap --id shakeConfirmStage
+wait text "Ring inserted at" 10
+shot ring-insert-done
+wait text "In today" 15
+
+# Ring remove, day 22: the ring comes out and is tucked back into its pouch.
+openurl pillie://debug/fixed-now?at=2026-10-19T16:00:00Z
+tap --label "Remove ring"
+wait text "Shake to keep it going" 10
+shot ring-remove-open
+tap --id shakeConfirmStage
+wait text "1 and counting" 5
+sleep 1
+shot ring-remove-shake-1
+tap --id shakeConfirmStage
+sleep 1
+shot ring-remove-shake-2
+tap --id shakeConfirmStage
+wait text "Almost 2" 5
+sleep 1
+shot ring-remove-shake-3
+tap --id shakeConfirmStage
+wait text "Ring removed at" 10
+shot ring-remove-done
+wait text "Out today" 15
+
+# Sugar pill: the sage pill from the pack card, numbered within the break.
+# A sugar dose never moves the streak, so the headlines stay generic.
+openurl pillie://debug/fixed-now?at=2026-09-28T20:00:00Z
+openurl pillie://debug/trial-break-week?lang=en
+wait text "Sugar pill 7 of 7" 10
+tap --label "Take pill"
+wait id shakeConfirmStage 10
+expect text "Shake to Confirm"
+shot sugar-open
+tap --id shakeConfirmStage
+wait text "Keep going" 5
+sleep 1
+shot sugar-shake-1
+tap --id shakeConfirmStage
+sleep 1
+shot sugar-shake-2
+tap --id shakeConfirmStage
+sleep 1
+shot sugar-shake-3
+tap --id shakeConfirmStage
+wait text "Almost there" 5
+sleep 1
+shot sugar-shake-4
+tap --id shakeConfirmStage
+wait text "Sugar pill 7 logged at" 10
+shot sugar-done
+wait text "Taken today" 15
+openurl pillie://debug/fixed-now?at=off

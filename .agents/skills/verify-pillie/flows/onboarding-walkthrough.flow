@@ -130,5 +130,5 @@ shot protection-plan-ready
 tap --id protectionPlanReadyStartButton
 
 # Home — pill 12 logged from the step 7 answer, streak 1.
-wait text "Day 12 of 28" 15
+wait text "Pill 12 of 28" 15
 shot home
