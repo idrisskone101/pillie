@@ -23,7 +23,7 @@ wait text "Apps selected"
 tap --label Continue
 wait id protectionPlanReadyStartButton
 tap --id protectionPlanReadyStartButton
-wait text "Put your ring in" 15
+wait text "Insert your ring" 15
 wait text "Insert ring" 10
 shot start-day-due
 tap --label "Insert ring"

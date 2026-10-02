@@ -87457,7 +87457,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld of %lld movements completed"
+            "value": "%lld of %lld shakes done"
           }
         },
         "it": {
@@ -109182,7 +109182,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pill %lld missed yesterday"
+            "value": "Pill %lld not checked in yesterday"
           }
         },
         "ar": {
@@ -114957,7 +114957,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Off week"
+            "value": "Patch-free"
           }
         },
         "ar": {
@@ -122107,7 +122107,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Yes, it's on"
+            "value": "Yes, it’s on"
           }
         },
         "ar": {
@@ -122382,7 +122382,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Yes, it's off"
+            "value": "Yes, it’s off"
           }
         },
         "ar": {
@@ -122657,7 +122657,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Yes, it's in"
+            "value": "Yes, it’s in"
           }
         },
         "ar": {
@@ -122932,7 +122932,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Yes, it's out"
+            "value": "Yes, it’s out"
           }
         },
         "ar": {
@@ -123207,7 +123207,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Logged. Next change: %@."
+            "value": "Checked in. Next change: %@."
           }
         },
         "ar": {
@@ -123482,7 +123482,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Logged. It comes off %@."
+            "value": "Checked in. It comes off %@."
           }
         },
         "ar": {
@@ -123757,7 +123757,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Logged. New patch goes on %@."
+            "value": "Checked in. New patch goes on %@."
           }
         },
         "ar": {
@@ -124032,7 +124032,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Logged. It comes out %@."
+            "value": "Checked in. It comes out %@."
           }
         },
         "ar": {
@@ -124307,7 +124307,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Logged. New ring goes in %@."
+            "value": "Checked in. New ring goes in %@."
           }
         },
         "ar": {
@@ -124582,7 +124582,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "No log yet. We'll remind you today."
+            "value": "Not checked in yet. Pillie will remind you today."
           }
         },
         "ar": {
@@ -132924,7 +132924,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Missed"
+            "value": "Overdue"
           }
         },
         "ar": {
@@ -134574,7 +134574,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Put on patch %lld"
+            "value": "Apply patch %lld"
           }
         },
         "ar": {
@@ -135124,7 +135124,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Take patch %lld off"
+            "value": "Remove patch %lld"
           }
         },
         "ar": {
@@ -135399,7 +135399,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Put your ring in"
+            "value": "Insert your ring"
           }
         },
         "ar": {
@@ -135674,7 +135674,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Take your ring out"
+            "value": "Remove your ring"
           }
         },
         "ar": {
@@ -135949,7 +135949,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Put a new ring in"
+            "value": "Insert a new ring"
           }
         },
         "ar": {
@@ -136224,7 +136224,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Put on patch %lld now"
+            "value": "Apply patch %lld now"
           }
         },
         "ar": {
@@ -136774,7 +136774,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Take patch %lld off now"
+            "value": "Remove patch %lld now"
           }
         },
         "ar": {
@@ -137049,7 +137049,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Put your ring in now"
+            "value": "Insert your ring now"
           }
         },
         "ar": {
@@ -137324,7 +137324,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Take your ring out now"
+            "value": "Remove your ring now"
           }
         },
         "ar": {
@@ -137599,7 +137599,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Put a new ring in now"
+            "value": "Insert a new ring now"
           }
         },
         "ar": {
@@ -141452,13 +141452,13 @@
               "one": {
                 "stringUnit": {
                   "state": "translated",
-                  "value": "Logged %lld day late"
+                  "value": "Checked in %lld day late"
                 }
               },
               "other": {
                 "stringUnit": {
                   "state": "translated",
-                  "value": "Logged %lld days late"
+                  "value": "Checked in %lld days late"
                 }
               }
             }
@@ -143233,7 +143233,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Streak kept"
+            "value": "Your streak grows"
           }
         },
         "es": {
@@ -144058,7 +144058,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pill %1$lld logged at %2$@"
+            "value": "Pill %1$lld checked in at %2$@"
           }
         },
         "es": {
@@ -144333,7 +144333,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sugar pill %1$lld logged at %2$@"
+            "value": "Sugar pill %1$lld checked in at %2$@"
           }
         },
         "es": {

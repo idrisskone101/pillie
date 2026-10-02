@@ -3,6 +3,8 @@
 
 voice-plan/<lang>.json maps "Table:key" to the new value for that locale.
 Table is Localizable, Commerce, Notifications, Shield, or InfoPlist.
+A plural string's value is a map of CLDR categories to forms, e.g.
+{"one": "%lld day", "other": "%lld days"}; "other" is required.
 
     python3 Pillie/scripts/copy-rewrite/apply-voice-plan.py check    # validate plans, write nothing
     python3 Pillie/scripts/copy-rewrite/apply-voice-plan.py apply    # write catalogs, locked copy, tests, flows
@@ -44,6 +46,8 @@ SCRIPTS = {
 }
 SWIFT_STRING = re.compile(r'"(?:[^"\\\n]|\\.)*"')
 PLACEHOLDER = re.compile(r"%(?:\d+\$)?(?:lld|ld|d|@|%)")
+PLURAL_CATEGORIES = ("zero", "one", "two", "few", "many", "other")
+Value = str | dict[str, str]
 
 sys.path.insert(0, str(SCRIPT_DIR))
 inventory = import_module("copy-inventory")
@@ -59,7 +63,7 @@ def write_json(path: Path, data: dict) -> None:
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n")
 
 
-def load_plans() -> dict[str, dict[str, str]]:
+def load_plans() -> dict[str, dict[str, Value]]:
     plans = {path.stem: read_json(path) for path in sorted(PLAN_DIR.glob("*.json"))}
     unknown = sorted(set(plans) - set(APP_LANGUAGE_CODES))
     if unknown:
@@ -89,9 +93,12 @@ class Catalogs:
             match = re.search(rf'^"{key}"\s*=\s*"((?:[^"\\]|\\.)*)";', self.info_strings.get(lang, ""), re.M)
             return match and match.group(1).replace('\\"', '"')
         entry = self.data[table]["strings"].get(key) or {}
+        plural = entry.get("localizations", {}).get(lang, {}).get("variations", {}).get("plural")
+        if plural:
+            return {category: form["stringUnit"]["value"] for category, form in plural.items()}
         return inventory.value_of(entry, lang)
 
-    def set(self, ref: str, lang: str, value: str) -> None:
+    def set(self, ref: str, lang: str, value: Value) -> None:
         table, key = ref.split(":", 1)
         if table == "InfoPlist":
             if lang == "en":
@@ -113,7 +120,15 @@ class Catalogs:
             )
             return
         unit = self.data[table]["strings"][key].setdefault("localizations", {}).setdefault(lang, {})
-        unit["stringUnit"] = {"state": "translated", "value": value}
+        if isinstance(value, dict):
+            unit.pop("stringUnit", None)
+            unit["variations"] = {"plural": {
+                category: {"stringUnit": {"state": "translated", "value": value[category]}}
+                for category in PLURAL_CATEGORIES if category in value
+            }}
+        else:
+            unit.pop("variations", None)
+            unit["stringUnit"] = {"state": "translated", "value": value}
 
     def delete(self, ref: str) -> None:
         table, key = ref.split(":", 1)
@@ -155,7 +170,13 @@ def argument_types(value: str) -> list[str]:
     return [args[i] for i in sorted(args)] + ["%"] * literal_percents
 
 
-def check(plans: dict[str, dict[str, str]], catalogs: Catalogs) -> list[str]:
+def forms(value: Value) -> list[tuple[str, str]]:
+    if isinstance(value, dict):
+        return [(f" ({category})", form) for category, form in value.items()]
+    return [("", value)]
+
+
+def check(plans: dict[str, dict[str, Value]], catalogs: Catalogs) -> list[str]:
     errors = []
     known = catalogs.keys()
     english = {ref: plans.get("en", {}).get(ref) or catalogs.get(ref, "en") or "" for ref in known}
@@ -167,17 +188,24 @@ def check(plans: dict[str, dict[str, str]], catalogs: Catalogs) -> list[str]:
             if ref not in known:
                 errors.append(f"{lang} {ref}: no such key")
                 continue
-            if argument_types(value) != argument_types(english[ref]):
-                errors.append(f"{lang} {ref}: placeholders {argument_types(value)} != English {argument_types(english[ref])}")
-            if lang == "en":
-                errors += [f"en {ref}: {hit}" for hit in lint.findings(value)]
-                continue
-            if "—" in value:
-                errors.append(f"{lang} {ref}: em dash")
-            if block := foreign_script(lang, value):
-                errors.append(f"{lang} {ref}: {block} letters in a {lang} string")
-            if is_all_caps(value) and not is_all_caps(english[ref]):
-                errors.append(f"{lang} {ref}: all caps, let SwiftUI uppercase it")
+            source = english[ref]
+            if isinstance(source, dict):
+                source = source.get("other", "")
+            if isinstance(value, dict):
+                if "other" not in value or set(value) - set(PLURAL_CATEGORIES):
+                    errors.append(f"{lang} {ref}: plural forms {sorted(value)} need other and only CLDR categories")
+            for label, form in forms(value):
+                if argument_types(form) != argument_types(source):
+                    errors.append(f"{lang} {ref}{label}: placeholders {argument_types(form)} != English {argument_types(source)}")
+                if lang == "en":
+                    errors += [f"en {ref}{label}: {hit}" for hit in lint.findings(form)]
+                    continue
+                if "—" in form:
+                    errors.append(f"{lang} {ref}{label}: em dash")
+                if block := foreign_script(lang, form):
+                    errors.append(f"{lang} {ref}{label}: {block} letters in a {lang} string")
+                if is_all_caps(form) and not is_all_caps(source):
+                    errors.append(f"{lang} {ref}{label}: all caps, let SwiftUI uppercase it")
     return errors
 
 
@@ -188,12 +216,13 @@ def swift_literal(value: str) -> str:
 def rewrite_literals(changes: list[tuple[str, str, str, str]], catalogs: Catalogs) -> list[str]:
     targets: dict[str, set[str]] = defaultdict(set)
     for _lang, _ref, old, new in changes:
-        targets[swift_literal(old)].add(swift_literal(new))
+        if isinstance(old, str) and isinstance(new, str):
+            targets[swift_literal(old)].add(swift_literal(new))
     kept = {
         swift_literal(value)
         for ref in catalogs.keys()
         for lang in APP_LANGUAGE_CODES
-        if (value := catalogs.get(ref, lang))
+        if isinstance(value := catalogs.get(ref, lang), str)
     }
     notes = []
     for path in (p for root, pattern in LITERAL_GLOBS for p in root.glob(pattern)):
@@ -210,7 +239,7 @@ def rewrite_literals(changes: list[tuple[str, str, str, str]], catalogs: Catalog
             notes.append(f"{path.relative_to(REPO_ROOT)}: rewrote pinned copy")
     return notes
 
-def sync_locked(plans: dict[str, dict[str, str]]) -> None:
+def sync_locked(plans: dict[str, dict[str, Value]]) -> None:
     locked = read_json(LOCKED_PATH)
     for item in locked["entries"]:
         ref = f"{item['table']}:{item['key']}"
@@ -227,7 +256,7 @@ def sync_locked(plans: dict[str, dict[str, str]]) -> None:
     write_json(HONEST_PATH, honest)
 
 
-def apply(plans: dict[str, dict[str, str]], catalogs: Catalogs) -> None:
+def apply(plans: dict[str, dict[str, Value]], catalogs: Catalogs) -> None:
     changes = []
     for lang, plan in plans.items():
         for ref, value in plan.items():

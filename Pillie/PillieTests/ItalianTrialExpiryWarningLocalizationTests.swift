@@ -23,7 +23,7 @@ final class ItalianTrialExpiryWarningLocalizationTests: XCTestCase {
         )
         XCTAssertEqual(
             TrialExpiryWarningCopy.body(day: 10, cohort: .blockerConfigured, locale: italian),
-            "Il blocco delle app si disattiverà tra 5 giorni."
+            "Il blocco app si disattiva tra 5 giorni. I promemoria giornalieri restano gratis."
         )
         XCTAssertEqual(
             TrialExpiryWarningCopy.title(day: 13, locale: italian),
@@ -31,7 +31,7 @@ final class ItalianTrialExpiryWarningLocalizationTests: XCTestCase {
         )
         XCTAssertEqual(
             TrialExpiryWarningCopy.body(day: 13, cohort: .blockerConfigured, locale: italian),
-            "Il blocco delle app si disattiverà domani sera."
+            "Il blocco app si disattiva domani sera. I promemoria giornalieri restano gratis."
         )
     }
 
@@ -97,8 +97,8 @@ final class ItalianTrialExpiryWarningLocalizationTests: XCTestCase {
         XCTAssertEqual(
             warnings.map(\.body),
             [
-                "Il blocco delle app si disattiverà tra 5 giorni.",
-                "Il blocco delle app si disattiverà domani sera.",
+                "Il blocco app si disattiva tra 5 giorni. I promemoria giornalieri restano gratis.",
+                "Il blocco app si disattiva domani sera. I promemoria giornalieri restano gratis.",
             ]
         )
     }

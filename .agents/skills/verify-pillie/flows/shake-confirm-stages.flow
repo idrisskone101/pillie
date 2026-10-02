@@ -20,7 +20,7 @@ tap --label "Missed the last 2 days"
 wait text "Take pill" 10
 tap --label "Take pill"
 wait id shakeConfirmStage 10
-expect text "Shake to Confirm"
+expect text "Shake to check in"
 shot pill-first-open
 tap --id shakeTapToConfirmFallback
 wait text "Pill 11 logged at" 10
@@ -117,7 +117,7 @@ wait text "On today" 15
 openurl pillie://debug/fixed-now?at=2026-10-19T16:00:00Z
 tap --label "Remove patch"
 wait id shakeConfirmStage 10
-expect text "Shake to Confirm"
+expect text "Shake to check in"
 shot patch-remove-open
 tap --id shakeConfirmStage
 wait text "Keep going" 5
@@ -188,7 +188,7 @@ openurl pillie://debug/trial-break-week?lang=en
 wait text "Sugar pill 7 of 7" 10
 tap --label "Take pill"
 wait id shakeConfirmStage 10
-expect text "Shake to Confirm"
+expect text "Shake to check in"
 shot sugar-open
 tap --id shakeConfirmStage
 wait text "Keep going" 5

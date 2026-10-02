@@ -23,10 +23,10 @@ wait id shakeTapToConfirmFallback 10
 tap --id shakeTapToConfirmFallback
 wait text "On today" 15
 expect text "until you take it off"
-expect text "That's logged. Tap to undo."
+expect text "Checked in. Tap to undo."
 shot caught-up-day-16
 
-tap --label "That's logged. Tap to undo."
+tap --label "Checked in. Tap to undo."
 wait text "Change to patch 3 now" 10
 expect text "Change patch"
 shot undone-day-16
@@ -48,6 +48,6 @@ tap --label History
 wait text "September 28, 2026: Not logged" 10
 tap --label "September 28, 2026: Not logged"
 wait id historyDayCatchUp 10
-expect text "Logged 2 days late"
+expect text "Checked in 2 days late"
 shot history-logged-late
 openurl pillie://debug/fixed-now?at=off
