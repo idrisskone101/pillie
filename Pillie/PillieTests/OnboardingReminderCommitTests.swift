@@ -21,6 +21,7 @@ final class OnboardingReminderCommitTests: XCTestCase {
 
   private enum Step: Equatable {
     case save(hour: Int, minute: Int)
+    case commitRoutine
     case authorizationRequested
     case schedule
     case permissionRequestedTracked
@@ -100,6 +101,29 @@ final class OnboardingReminderCommitTests: XCTestCase {
       "A denial is product state, not an error — nothing may be scheduled, so no code-2003 storm is possible."
     )
     XCTAssertTrue(continued, "Onboarding must continue gracefully after a denial.")
+  }
+
+  func testRoutineCommitsWithTheSavedTimeBeforeAuthorizationIsRequested() {
+    var steps: [Step] = []
+    let commit = OnboardingReminderCommit(
+      saveReminderTime: { hour, minute in steps.append(.save(hour: hour, minute: minute)) },
+      commitRoutine: { steps.append(.commitRoutine) },
+      trackPermissionRequested: {},
+      requestAuthorization: { completion in
+        steps.append(.authorizationRequested)
+        completion(true)
+      },
+      trackPermissionCompleted: { _ in },
+      scheduleReminders: { steps.append(.schedule) }
+    )
+
+    commit.run(hour: 20, minute: 0, completion: {})
+
+    XCTAssertEqual(
+      steps,
+      [.save(hour: 20, minute: 0), .commitRoutine, .authorizationRequested, .schedule],
+      "The pill pick anchors on the saved reminder time (ENG-138), and nothing may schedule before authorization (#196)."
+    )
   }
 
   func testPermissionTelemetryBracketsTheAuthorizationRequest() {

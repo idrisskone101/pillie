@@ -35,6 +35,7 @@ enum PillieTheme {
     static let coralFaded = Color(hex: "FFB7B2").opacity(0.2)
     static let amber = Color(hex: "E8A87C")
     static let amberFaded = Color(hex: "E8A87C").opacity(0.2)
+    static let amberText = Color(hex: "B4713F")
     static let sage = Color(hex: "E8EFE8")
     static let sageHalf = Color(hex: "E8EFE8").opacity(0.5)
     /// The app's established muted green for positive/"verified" accents (also
@@ -144,6 +145,9 @@ extension Font {
     ) -> Font {
         #if os(iOS)
         if UIFont(name: name, size: size) != nil {
+            if let cjk = CJKFontCascade.font(name: name, size: size) {
+                return Font(cjk)
+            }
             return .custom(name, size: size)
         }
         #endif

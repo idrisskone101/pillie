@@ -56,6 +56,22 @@ enum ScheduleCriticalSettingChange {
         NotificationManager.shared.requestReschedule(from: store, reason: "onboarding-reminder-time-authorized")
     }
 
+    /// The onboarding trial is granted after the reminder-time step already
+    /// planned a free-tier schedule, and the entitlement hook is not installed
+    /// during onboarding, so nothing else replans. Without this the first plan
+    /// has no Smart Reminder follow-ups and no trial notices.
+    static func onboardingTrialGranted(store: PillStore) {
+        NotificationManager.shared.requestReschedule(from: store, reason: "onboarding-trial-grant")
+    }
+
+    /// The trial notice copy depends on whether the user has apps selected to
+    /// block, and `hasAppsSelected` changes when the selection is saved. During
+    /// onboarding the trial is granted before any apps are picked, so the
+    /// selection is what moves the plan to the blocking copy.
+    static func blockerSetupChanged(store: PillStore) {
+        NotificationManager.shared.requestReschedule(from: store, reason: "blocker-setup-changed")
+    }
+
     static func saveSettingsReminderTime(
         store: PillStore,
         hour: Int,

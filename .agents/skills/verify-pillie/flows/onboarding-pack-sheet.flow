@@ -1,0 +1,42 @@
+# Onboarding step 7 (TodayPillView): the pack card's Change button opens the pack
+# type sheet (PackTypeSheet, ENG-144). A pick keeps the tapped pill when it still
+# exists in the new pack and clears it when the new pack is shorter.
+#
+# onboardingStep 10 is OnboardingFlow.Step.schedule; a fresh store defaults the
+# method to pill, so the step renders TodayPillView.
+
+fresh
+defaults onboardingStep -int 10
+launch
+wait id todayPillChangeButton 15
+
+tap --id packTile.12
+wait id todayPillQuestion
+shot card-21-7
+
+tap --id todayPillChangeButton
+wait id packSheetTitle
+wait id packSheet.24_4
+shot sheet
+
+tap --id packSheet.24_4
+gone id packSheetTitle
+wait text "24/4"
+expect id todayPillQuestion
+shot card-24-4-kept
+
+# 26 + 2, tap pill 26, then 21 + 4 (25 days): pill 26 no longer exists.
+tap --id todayPillChangeButton
+wait id packSheet.26_2
+tap --id packSheet.26_2
+gone id packSheetTitle
+wait text "26/2"
+tap --id packTile.26
+wait id todayPillQuestion
+tap --id todayPillChangeButton
+wait id packSheet.21_4
+tap --id packSheet.21_4
+gone id packSheetTitle
+wait text "21/4"
+gone id todayPillQuestion
+shot card-21-4-cleared

@@ -79,6 +79,27 @@ final class OnboardingFlowTests: XCTestCase {
         }
     }
 
+    func testReminderTimeWithoutATodayPillPickResumesOnTheScheduleStep() {
+        let reminderTime = OnboardingFlow.Step.reminderTime.rawValue
+        XCTAssertEqual(
+            OnboardingFlow.visibleStep(for: reminderTime, isPlus: false, selectedFreePlan: false, needsTodayPick: true),
+            .schedule
+        )
+        XCTAssertEqual(
+            OnboardingFlow.visibleStep(for: reminderTime, isPlus: false, selectedFreePlan: false, needsTodayPick: false),
+            .reminderTime
+        )
+        XCTAssertEqual(
+            OnboardingFlow.visibleStep(
+                for: OnboardingFlow.Step.reminderPlan.rawValue,
+                isPlus: false,
+                selectedFreePlan: false,
+                needsTodayPick: true
+            ),
+            .reminderPlan
+        )
+    }
+
     func testPersonalizationUsesTwoScreensAndMigratesRetiredQuestionStepsForward() {
         let personalizationSteps = OnboardingFlow.displayOrder.filter {
             [.painPoints, .goal, .missFrequency, .riskWindow].contains($0)

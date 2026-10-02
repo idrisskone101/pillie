@@ -22,6 +22,7 @@ struct ProtectionPlanRoutineSummary: Equatable {
     var cycleDay: Int?
     /// Formatted reminder time, e.g. "9:30 AM". Nil before the reminder-time screen.
     var reminderTimeText: String?
+    var todayPill: TodayPillPlan?
     var locale: Locale = .current
 
     /// Fixed card title.
@@ -63,6 +64,9 @@ struct ProtectionPlanRoutineSummary: Equatable {
 
     /// Receipt rows, appearing in the order the user commits them.
     var rows: [Row] {
+        if let todayPill {
+            return todayPill.rows
+        }
         var rows: [Row] = []
         if let method {
             rows.append(

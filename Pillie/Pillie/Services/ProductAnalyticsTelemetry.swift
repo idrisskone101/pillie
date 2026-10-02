@@ -317,8 +317,8 @@ struct ProductAnalyticsTelemetry {
     )
   }
 
-  /// A day-10/13 trial expiry warning was delivered or handled (#168 /
-  /// ADR 0007). `day` is the trial day the warning belongs to (10 or 13);
+  /// A trial notice was delivered or handled (#168 / ADR 0007). `day` is the
+  /// trial day the notice belongs to (10, 13, or 15 for the expiry-day notice);
   /// the once-per-day dedupe lives in `TrialExpiryWarningDelivery`.
   func trialExpiryWarningSent(day: Int) {
     track(.trialExpiryWarningSent, trialWarningDay: day)
@@ -864,8 +864,8 @@ struct ProductAnalyticsTelemetry {
     track(.todayActionStarted, source: .home)
   }
 
-  func todayActionCompleted() {
-    track(.todayActionCompleted, source: .home)
+  func todayActionCompleted(source: AnalyticsSource = .home) {
+    track(.todayActionCompleted, source: source)
   }
 
   func todayActionUndone() {

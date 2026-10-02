@@ -47,7 +47,7 @@ struct HistoryView: View {
                         HStack(spacing: 16) {
                             legendItem(
                                 color: PillieTheme.patchChangeRose,
-                                label: legendLabels.active
+                                label: PillieLocalization.string("history.legend.patch_change", locale: locale)
                             )
                         }
                     }
@@ -55,7 +55,7 @@ struct HistoryView: View {
                         HStack(spacing: 16) {
                             legendItem(
                                 color: PillieTheme.ringReinsertCoral,
-                                label: legendLabels.active
+                                label: PillieLocalization.string("history.legend.ring_reinsert", locale: locale)
                             )
                         }
                     }

@@ -76,7 +76,7 @@ struct StatusCardTitleTests {
             liveDay: local(9, 24),
             now: local(9, 24),
             isTodayTaken: taken,
-            isTodayPassiveOrBreak: breakDay
+            isTodayNothingDue: breakDay
         )
     }
 
@@ -99,11 +99,64 @@ struct StatusCardTitleTests {
             liveDay: wednesday,
             now: thursdaySix,
             isTodayTaken: true,
-            isTodayPassiveOrBreak: false
+            isTodayNothingDue: false
         )
         #expect(title == .next(on: local(9, 24), .today))
         #expect(title.localized(reminderTime: "8:00 AM", locale: Locale(identifier: "en"))
             == "Your next one is today at 8:00 AM.")
+    }
+
+    @Test func firstReminderHandoffLeadsWhileADoseIsDue() {
+        let handoff = FirstReminderHandoff(when: .tonight)
+        let title = StatusCardTitle.resolve(
+            alarmAction: pill(on: local(9, 24)),
+            liveDay: local(9, 24),
+            now: local(9, 24),
+            isTodayTaken: false,
+            isTodayNothingDue: false,
+            firstReminder: handoff
+        )
+        #expect(title == .firstReminder(handoff))
+        #expect(title.localized(reminderTime: "8:00 PM", locale: Locale(identifier: "en"))
+            == "First reminder")
+    }
+
+    @Test func firstReminderHandoffYieldsOnANothingDueDay() {
+        let title = StatusCardTitle.resolve(
+            alarmAction: pill(on: local(9, 28)),
+            liveDay: local(9, 24),
+            now: local(9, 24),
+            isTodayTaken: false,
+            isTodayNothingDue: true,
+            firstReminder: FirstReminderHandoff(when: .tonight)
+        )
+        #expect(title == .next(on: local(9, 28), .nextWeek))
+    }
+
+    @Test func withoutAHandoffTheDueActionShows() {
+        let title = StatusCardTitle.resolve(
+            alarmAction: pill(on: local(9, 24)),
+            liveDay: local(9, 24),
+            now: local(9, 24),
+            isTodayTaken: false,
+            isTodayNothingDue: false,
+            firstReminder: nil
+        )
+        #expect(title == .due(pill(on: local(9, 24))))
+    }
+
+    @Test func anOpenCatchUpReadsAsTheMissedTask() {
+        let change = DoseScheduleAction(date: local(9, 22), type: .patchChange, method: .patch, cycleDay: 15, cycleLength: 28)
+        let title = StatusCardTitle.resolve(
+            alarmAction: pill(on: local(9, 29)),
+            liveDay: local(9, 24),
+            now: local(9, 24),
+            isTodayTaken: false,
+            isTodayNothingDue: true,
+            catchUp: change
+        )
+        #expect(title == .due(change))
+        #expect(title.localized(reminderTime: "8:00 AM", locale: Locale(identifier: "en")) == "Change patch")
     }
 
     @Test func breakDayNamesTheNextDose() {

@@ -1,0 +1,84 @@
+# Onboarding step 7 for patch and ring (RoutineDialView, ENG-146): drag the dial to
+# today. Task days (patch 1/8/15 on, 22 off; ring 1 in, 22 out) ask a question and
+# keep Continue disabled until it is answered; other days show a result row.
+#
+# onboardingStep 10 is OnboardingFlow.Step.schedule. The method lives under
+# pillie_contraceptive_method. A fresh store has no patch or ring pack, so the dial
+# seeds on cycle day 1. The -data drafts are RoutineDialPick JSON
+# (pillie_onboarding_routine_dial_pick): {"method":"patch","cycleDay":10} and
+# {"method":"ring","cycleDay":25}. Dragging the knob needs coordinates from a fresh
+# shot, so this flow moves the dial through the segment picker and drafts only.
+
+# Patch, fresh: cycle day 1 is patch 1's put-on day.
+fresh
+defaults onboardingStep -int 10
+defaults pillie_contraceptive_method -string patch
+launch
+wait id routineDial 15
+expect id routineDialSegment.1
+expect id routineDialSegment.4
+expect id routineDialDayLabel
+wait id routineDialQuestion
+expect id routineDialNotYet
+shot patch-change-day
+
+tap --id routineDialYes
+wait id routineDialStatus
+shot patch-change-logged
+
+# Off week keeps the dial day, so this lands on cycle day 22, the remove day.
+tap --id routineDialSegment.4
+gone id routineDialStatus
+wait id routineDialQuestion
+shot patch-remove-day
+
+tap --id routineDialNotYet
+wait id routineDialStatus
+shot patch-remove-not-yet
+
+# Patch, draft on patch 2 day 3: no task, so a result row and no question.
+fresh
+defaults onboardingStep -int 10
+defaults pillie_contraceptive_method -string patch
+defaults pillie_onboarding_routine_dial_pick -data 7b226d6574686f64223a227061746368222c226379636c65446179223a31307d
+launch
+wait id routineDialResult 15
+gone id routineDialQuestion
+shot patch-wearing
+
+tap --id routineDialSegment.4
+wait id routineDialResult
+gone id routineDialQuestion
+shot patch-off-week
+
+# Ring, fresh: cycle day 1 is the insert day.
+fresh
+defaults onboardingStep -int 10
+defaults pillie_contraceptive_method -string ring
+launch
+wait id routineDial 15
+gone id routineDialSegment.1
+expect id routineDialDayLabel
+wait id routineDialQuestion
+shot ring-insert-day
+
+tap --id routineDialNotYet
+wait id routineDialStatus
+shot ring-insert-not-yet
+
+# Ring, draft on day 25: ring-free, result row, then Continue to reminder time.
+fresh
+defaults onboardingStep -int 10
+defaults pillie_contraceptive_method -string ring
+defaults pillie_onboarding_routine_dial_pick -data 7b226d6574686f64223a2272696e67222c226379636c65446179223a32357d
+launch
+wait id routineDialResult 15
+gone id routineDialQuestion
+shot ring-free-week
+
+# The plan card reads the pick's cycle day, since the store is written only at step 8.
+tap --id protectionPlanPrimaryCTA
+wait text "Pick a time."
+gone id routineDial
+expect text "25"
+shot reminder-time

@@ -22,7 +22,7 @@ struct DoseScheduleAction: Hashable {
 
     var ctaLabel: String {
         switch type {
-        case .pillActive:
+        case .pillActive, .pillSugar:
             return "Mark Pill as Taken"
         case .pillBreak:
             return "Log Break Day"
@@ -49,7 +49,7 @@ struct DoseScheduleAction: Hashable {
 
     var badgeLabel: String {
         switch type {
-        case .pillActive:
+        case .pillActive, .pillSugar:
             return "PILL"
         case .pillBreak, .patchBreak, .ringBreak:
             return "BREAK"
@@ -87,7 +87,7 @@ struct DoseScheduleAction: Hashable {
     func localizedReminderBody(locale: Locale = .current) -> String {
         let key: String
         switch type {
-        case .pillActive:
+        case .pillActive, .pillSugar:
             key = "notification.reminder.pill.body"
         case .patchChange:
             key = cycleDay == 1
@@ -129,7 +129,11 @@ enum DoseScheduleEngine {
         let cycleDay = pack.cycleDayIndex(on: date, calendar: calendar) + 1
         switch pack.method {
         case .pill:
-            let type: PillDay.ActionType = cycleDay <= pack.activeDays ? .pillActive : .pillBreak
+            let type: PillDay.ActionType = switch pack.regimen.day(atIndex: cycleDay - 1).kind {
+            case .active: .pillActive
+            case .sugarPill: .pillSugar
+            case .noPill: .pillBreak
+            }
             return DoseScheduleAction(
                 date: calendar.startOfDay(for: date),
                 type: type,
@@ -143,24 +147,19 @@ enum DoseScheduleEngine {
             // calendar and cycle strip, so change/remove days honor a mid-cycle
             // start (cycleDayAnchorIndex > 0 after a method switch) instead of
             // silently restarting the 1/8/15 rhythm at the pack's startDate.
-            let scheduleDay = cycleDay
-
-            let type: PillDay.ActionType
-            if [1, 8, 15].contains(scheduleDay) {
-                type = .patchChange
-            } else if scheduleDay == pack.activeDays + 1 {
-                type = .patchRemove
-            } else if scheduleDay <= pack.activeDays {
-                type = .patchActive
-            } else {
-                type = .patchBreak
+            let day = RoutineDialDay.day(cycleDay, method: .patch)
+            let type: PillDay.ActionType = switch (day.task, day.phase) {
+            case (.putOn, _): .patchChange
+            case (.takeOff, _): .patchRemove
+            case (nil, .wearing): .patchActive
+            case (nil, .free): .patchBreak
             }
             return DoseScheduleAction(
                 date: calendar.startOfDay(for: date),
                 type: type,
                 method: .patch,
-                cycleDay: scheduleDay,
-                cycleLength: 28
+                cycleDay: cycleDay,
+                cycleLength: RoutineDialDay.cycleLength
             )
 
         case .ring:
@@ -169,28 +168,20 @@ enum DoseScheduleEngine {
             // the removal date. While unpinned this follows cycleDayIndex —
             // startDate plus the mid-cycle anchor — so the schedule and the
             // displayed cycle day always agree.
-            let ringDay = cycleDay
-            let elapsed = pack.elapsedCycleDays(on: date, calendar: calendar)
-
-            let type: PillDay.ActionType
-            switch ringDay {
-            case 1:
-                type = elapsed > 0 ? .ringReinsert : .ringInsert
-            case 2...21:
-                type = .ringActive
-            case 22:
-                type = .ringRemove
-            case 23...28:
-                type = .ringBreak
-            default:
-                type = .ringActive
+            let day = RoutineDialDay.day(cycleDay, method: .ring)
+            let type: PillDay.ActionType = switch (day.task, day.phase) {
+            case (.putOn, _):
+                pack.elapsedCycleDays(on: date, calendar: calendar) > 0 ? .ringReinsert : .ringInsert
+            case (.takeOff, _): .ringRemove
+            case (nil, .wearing): .ringActive
+            case (nil, .free): .ringBreak
             }
             return DoseScheduleAction(
                 date: calendar.startOfDay(for: date),
                 type: type,
                 method: .ring,
-                cycleDay: ringDay,
-                cycleLength: 28
+                cycleDay: cycleDay,
+                cycleLength: RoutineDialDay.cycleLength
             )
         }
     }
@@ -230,7 +221,10 @@ enum DoseScheduleEngine {
         let maxDaysToScan = max(365, pack.cycleLength * max(2, limit))
 
         while actions.count < limit && safetyCounter < maxDaysToScan {
-            if let due = dueAction(on: cursor, pack: pack, calendar: calendar),
+            // A day before the pack's first day has nothing due; `dueAction`
+            // would wrap it onto the pack's last day, a sugar pill on most packs.
+            if pack.elapsedCycleDays(on: cursor, calendar: calendar) >= 0,
+               let due = dueAction(on: cursor, pack: pack, calendar: calendar),
                due.type.requiresUserAction {
                 actions.append(due)
             }

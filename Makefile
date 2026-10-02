@@ -36,7 +36,7 @@ flow_files = $(if $(filter all,$(FLOW)),$(sort $(wildcard $(FLOWS_DIR)/*.flow)),
 	worktree agent-verify udid qa measure-frames flow ns-mac-flow \
 	ns-mac-status ns-mac-start ns-mac-stop ns-mac-sync ns-mac-diagnose \
 	ns-mac-exec ns-mac-verify ns-mac-screenshot ns-mac-qa ns-mac-check-sync \
-	ns-mac-ensure-tools ensure-qa-tools swift-taste swift-taste-selftest verify-flows
+	ns-mac-ensure-tools ensure-qa-tools swift-taste swift-taste-selftest verify-flows sim-qa-selftest
 
 help:
 	@printf "%s\n" \
@@ -69,7 +69,8 @@ help:
 		"  make ensure-qa-tools          Install axe and ImageMagick if missing" \
 		"  make ns-mac-ensure-tools      Same, on the Namespace Mac" \
 		"  make swift-taste              Linux Swift structure gate (allowlist)" \
-		"  make swift-taste-selftest     Fixture proof for the Swift taste checker"
+		"  make swift-taste-selftest     Fixture proof for the Swift taste checker" \
+		"  make sim-qa-selftest          Linux proof that qa never installs a stale Assets.car"
 
 diagnose:
 	@$(SCRIPTS)/diagnose.sh
@@ -185,3 +186,6 @@ swift-taste:
 
 swift-taste-selftest:
 	@$(SCRIPTS)/check-swift-taste-selftest.sh
+
+sim-qa-selftest:
+	@$(SCRIPTS)/sim-qa-selftest.sh

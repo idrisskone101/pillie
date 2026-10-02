@@ -27,6 +27,8 @@ final class PillPack {
     /// subsequent cycle-day edits in Settings don't shift the removal date.
     /// While nil the schedule engine falls back to `startDate`.
     var ringInsertionDate: Date?
+    /// When the user started this pack. nil on packs from older builds.
+    var startedAt: Date?
 
     @Relationship(deleteRule: .cascade, inverse: \PillDay.pack)
     var days: [PillDay] = []
@@ -72,7 +74,11 @@ final class PillPack {
     }
 
     static let defaultCustomRegimen = PackRegimen(activeDays: 21, breakDays: 7)
-    private static let patchOrRingRegimen = PackRegimen(activeDays: 21, breakDays: 7, breakKind: .noPills)
+    private static let patchOrRingRegimen = PackRegimen(
+        activeDays: RoutineDialDay.wearingDays,
+        breakDays: RoutineDialDay.cycleLength - RoutineDialDay.wearingDays,
+        breakKind: .noPills
+    )
 
     // Presets retired from the picker. Their rows keep the raw value and read back
     // as the same-length Custom pack, so the pill number does not move.
@@ -209,8 +215,10 @@ final class PillPack {
         startDate: Date,
         cycleDayAnchorIndex: Int = 0,
         packNumber: Int,
-        isCurrent: Bool = true
+        isCurrent: Bool = true,
+        startedAt: Date? = nil
     ) {
+        self.startedAt = startedAt
         self.packType = pillRegimen.legacyPackType
         self.methodRaw = method.rawValue
         self.startDate = startDate

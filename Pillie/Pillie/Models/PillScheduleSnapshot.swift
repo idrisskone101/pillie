@@ -20,8 +20,8 @@ struct PillScheduleSnapshot {
         dueAction != nil
     }
 
-    /// Whether this day requires explicit user action (check-in).
-    /// Passive active days and break days do NOT require action.
+    /// Whether this day requires explicit user action (check-in), a sugar pill
+    /// included. Passive active days and no-pill break days do NOT require action.
     var isDue: Bool {
         guard let action = dueAction else { return false }
         return action.type.requiresUserAction
@@ -38,6 +38,6 @@ struct PillScheduleSnapshot {
     }
 
     var countsTowardAdherence: Bool {
-        isDue && status != .breakDay
+        (dueAction?.type.enforcesAdherence ?? false) && status != .breakDay
     }
 }

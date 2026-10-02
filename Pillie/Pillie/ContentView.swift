@@ -62,6 +62,10 @@ struct ContentView: View {
     )
   }
 
+  private var needsTodayPick: Bool {
+    OnboardingTodayPick.load(method: store.contraceptiveMethod) == nil
+  }
+
   private var onboardingTrialActivationRoute: OnboardingTrialActivationRoute {
     OnboardingTrialActivationRoute.resolve(
       hasEntitlement: subscriptionManager.hasEntitlement,
@@ -86,7 +90,8 @@ struct ContentView: View {
 	        switch OnboardingFlow.visibleStep(
             for: onboardingStep,
             isPlus: subscriptionManager.hasPlusAccess,
-            selectedFreePlan: onboardingSelectedFreePlan
+            selectedFreePlan: onboardingSelectedFreePlan,
+            needsTodayPick: needsTodayPick
           ) {
 	        case .welcome:
 	          WelcomeView {
@@ -228,23 +233,32 @@ struct ContentView: View {
               removal: .move(edge: .trailing)
             ))
 
-	        case .schedule:
-	          ProtectionPlanRoutineDetailsView(
+	        case .schedule where store.contraceptiveMethod == .pill:
+	          TodayPillView(
 	            progress: ProtectionPlanProgressIndex.progress(for: .schedule),
 	            onBack: {
                 lowRiskTransition(to: .method)
 	            },
-            onContinue: { setup in
-              store.startNewProtocol(
-                method: store.contraceptiveMethod,
-                regimen: setup.regimen,
-                customRegimen: setup.customRegimen,
-                cycleDay: setup.cycleDay,
-                preserveHistory: false
-              )
-              if store.appActivatedDate == nil {
-                store.appActivatedDate = store.today
-	              }
+            onContinue: { pick in
+              pick.save()
+              continueSetupStep(to: .reminderTime)
+	            }
+          )
+          .transition(
+            .asymmetric(
+              insertion: .move(edge: .trailing),
+              removal: .move(edge: .trailing)
+            ))
+
+	        case .schedule:
+	          RoutineDialView(
+	            method: RoutineDialMethod(store.contraceptiveMethod) ?? .patch,
+	            progress: ProtectionPlanProgressIndex.progress(for: .schedule),
+	            onBack: {
+                lowRiskTransition(to: .method)
+	            },
+            onContinue: { pick in
+              pick.save()
               continueSetupStep(to: .reminderTime)
 	            }
           )
@@ -257,6 +271,7 @@ struct ContentView: View {
 	        case .reminderTime:
 	          ProtectionPlanReminderTimeView(
 	            progress: ProtectionPlanProgressIndex.progress(for: .reminderTime),
+	            todayPick: OnboardingTodayPick.load(method: store.contraceptiveMethod),
 	            onBack: {
                 lowRiskTransition(to: .schedule)
 	            },
@@ -548,6 +563,7 @@ struct ContentView: View {
       ProductAnalyticsTelemetry.live.onboardingOutcomeClassified(
         ProtectionPlanCompletion.outcome(for: currentCompletionState)
       )
+      TodayPillCommit.clear()
     }
 
     onboardingStep = nextStep
@@ -595,7 +611,8 @@ struct ContentView: View {
     guard let visibleStep = OnboardingFlow.visibleStep(
       for: onboardingStep,
       isPlus: subscriptionManager.hasPlusAccess,
-      selectedFreePlan: onboardingSelectedFreePlan
+      selectedFreePlan: onboardingSelectedFreePlan,
+      needsTodayPick: needsTodayPick
     ),
     visibleStep.rawValue != onboardingStep else { return }
 
@@ -684,6 +701,7 @@ struct ContentView: View {
       termsCohort: termsCohort
     ) {
       onboardingTelemetry.trialActivated()
+      ScheduleCriticalSettingChange.onboardingTrialGranted(store: store)
     }
   }
 

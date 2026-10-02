@@ -13,6 +13,8 @@ final class PillDay: Identifiable {
     var status: Status
     var actionTypeRaw: String = ActionType.pillActive.rawValue
     var pack: PillPack?
+    /// When a missed patch or ring task was logged late from Home. The day stays `.missed`.
+    var caughtUpAt: Date?
 
     enum Status: String, Codable, Hashable {
         case taken
@@ -27,6 +29,9 @@ final class PillDay: Identifiable {
 
     enum ActionType: String, Codable, Hashable, CaseIterable {
         case pillActive
+        /// A placebo pill in the break of a pack that has them. Loggable and
+        /// reminded, but it gates no blocking and never touches the streak.
+        case pillSugar
         case pillBreak
         case patchChange
         case patchRemove
@@ -40,7 +45,7 @@ final class PillDay: Identifiable {
 
         var title: String {
             switch self {
-            case .pillActive:
+            case .pillActive, .pillSugar:
                 return "Take Pill"
             case .pillBreak:
                 return "Break/Placebo"
@@ -68,7 +73,7 @@ final class PillDay: Identifiable {
         /// Whether this action type requires explicit user interaction (logging).
         var requiresUserAction: Bool {
             switch self {
-            case .pillActive, .patchChange, .patchRemove, .ringInsert, .ringRemove, .ringReinsert:
+            case .pillActive, .pillSugar, .patchChange, .patchRemove, .ringInsert, .ringRemove, .ringReinsert:
                 return true
             case .pillBreak, .patchBreak, .ringBreak, .patchActive, .ringActive:
                 return false
@@ -78,11 +83,17 @@ final class PillDay: Identifiable {
         /// Whether this represents a break/off-week day.
         var isBreakType: Bool {
             switch self {
-            case .pillBreak, .patchBreak, .ringBreak:
+            case .pillSugar, .pillBreak, .patchBreak, .ringBreak:
                 return true
             default:
                 return false
             }
+        }
+
+        /// A hormone dose: it gates app blocking and counts toward the streak
+        /// and adherence. A sugar pill is due but enforces none of that.
+        var enforcesAdherence: Bool {
+            requiresUserAction && !isBreakType
         }
 
         /// Whether this represents a passive wearing/active day (no user action needed).

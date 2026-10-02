@@ -540,9 +540,9 @@ enum AnalyticsEvent: String, CaseIterable {
   case smartReminderRetryScheduled = "smart_reminder_retry_scheduled"
   case smartReminderRetryFired = "smart_reminder_retry_fired"
   case smartReminderOutcome = "smart_reminder_outcome"
-  /// A day-10/13 trial expiry warning notification was delivered or handled
-  /// (#168 / ADR 0007). Carries `day: 10 | 13`; recorded at most once per day
-  /// value (`TrialExpiryWarningDelivery`).
+  /// A trial notice was delivered or handled (#168 / ADR 0007). Carries
+  /// `day: 10 | 13 | 15` (15 is the expiry-day notice); recorded at most once
+  /// per day value (`TrialExpiryWarningDelivery`).
   case trialExpiryWarningSent = "trial_expiry_warning_sent"
   case purchaseCompleted = "purchase_completed"
   case purchaseFailed = "purchase_failed"

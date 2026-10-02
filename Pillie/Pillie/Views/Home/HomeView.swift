@@ -19,6 +19,11 @@ struct HomeView: View {
     @State private var hasAnimatedIn = false
     @State private var showRefillConfirmation = false
     @State private var showShakeConfirm = false
+    /// The action the shake cover confirms, kept while it closes: a late log clears `openCatchUp` at once.
+    @State private var shakeAction: DoseScheduleAction?
+    /// Holds the pack card's pop until the shake cover has slid away, so the log is seen landing.
+    @State private var holdsPackCardLog = false
+    @State private var shakeStreakChange = StreakChange.none
     @State private var showBlockingSetup = false
     @State private var showBlockingPaywall = false
     @State private var blockingPaywallSurface: AnalyticsPaywallSurface = .homeBlockingCard
@@ -323,6 +328,17 @@ struct HomeView: View {
         }
     }
 
+    private var firstReminderLabel: String {
+        store.firstReminderHandoff?.localizedLine(locale: locale) ?? ""
+    }
+
+    /// The "Took it" chip's action while Today waits on the first reminder.
+    private var logBeforeFirstReminder: (() -> Void)? {
+        guard case .dueActionAwaitingFirstReminder(let action, let requiresShakeConfirm) = todayActionState
+        else { return nil }
+        return { startTodayAction(action, requiresShakeConfirm: requiresShakeConfirm) }
+    }
+
     private var todayActionState: TodayActionState {
         TodayActionState.resolve(
             TodayActionState.Input(
@@ -330,7 +346,10 @@ struct HomeView: View {
                 isTodayTaken: store.isTodayTaken,
                 todayDueAction: store.todayDueAction,
                 isPlus: SubscriptionManager.shared.hasPlusAccess,
-                reduceMotionEnabled: accessibilityReduceMotion
+                reduceMotionEnabled: accessibilityReduceMotion,
+                catchUp: store.openCatchUp,
+                isCaughtUpToday: store.isCaughtUpToday,
+                awaitsFirstReminder: store.firstReminderHandoff != nil
             )
         )
     }
@@ -438,7 +457,13 @@ struct HomeView: View {
                         .modifier(FadeInUp(appeared: appeared, delay: 0.15))
                     }
 
-                    PillPackCard()
+                    Group {
+                        if let method = RoutineDialMethod(store.pack.method) {
+                            HomeCountdownCard(method: method, holdsTodayLog: holdsPackCardLog)
+                        } else {
+HomePackCard(holdsTodayLog: holdsPackCardLog)
+                        }
+                    }
                         .modifier(FadeInUp(appeared: appeared, delay: 0.2))
                         .animation(unifiedStateTransition, value: store.isTodayTaken)
 
@@ -620,10 +645,14 @@ struct HomeView: View {
                 onDismiss: { showTrialKeepPlusPaywall = false }
             )
         }
-        .fullScreenCover(isPresented: $showShakeConfirm) {
-            if let action = store.todayDueAction {
+        .fullScreenCover(isPresented: $showShakeConfirm, onDismiss: {
+            holdsPackCardLog = false
+            shakeAction = nil
+        }) {
+            if let action = shakeAction ?? store.todayDueAction {
                 ShakeConfirmView(
                     action: action,
+                    streak: shakeStreakChange,
                     onConfirm: {
                         completeTodayAction()
                         showShakeConfirm = false
@@ -692,7 +721,11 @@ struct HomeView: View {
                         accessibilityReduceMotion: accessibilityReduceMotion
                     )
                     withAnimation(feedbackResponse.motionProfile.animation) {
-                        store.unmarkTodayAsTaken()
+                        if store.isTodayTaken {
+                            store.unmarkTodayAsTaken()
+                        } else {
+                            store.undoCatchUp()
+                        }
                     }
                     ProductAnalyticsTelemetry.live.todayActionUndone()
                 } label: {
@@ -733,14 +766,9 @@ struct HomeView: View {
                 .buttonStyle(PillieTakenButtonStyle())
                 .allowsHitTesting(false)
                 .transition(ctaStateTransition)
-            case .dueAction(_, let requiresShakeConfirm):
+            case .dueAction(let action, let requiresShakeConfirm):
                 Button {
-                    ProductAnalyticsTelemetry.live.todayActionStarted()
-                    if requiresShakeConfirm {
-                        showShakeConfirm = true
-                    } else {
-                        completeTodayAction()
-                    }
+                    startTodayAction(action, requiresShakeConfirm: requiresShakeConfirm)
                 } label: {
                     Group {
                         if dynamicTypeSize.isAccessibilitySize {
@@ -764,11 +792,47 @@ struct HomeView: View {
                 }
                 .buttonStyle(.pillieDark)
                 .transition(ctaStateTransition)
+            case .dueActionAwaitingFirstReminder:
+                // The line is information; only the chip logs.
+                HStack(spacing: 8) {
+                    Group {
+                        if dynamicTypeSize.isAccessibilitySize {
+                            accessibilityFloatingButtonLabel(firstReminderLabel)
+                        } else {
+                            HStack(spacing: 8) {
+                                Image(systemName: "bell")
+                                    .font(.system(size: 16, weight: .semibold))
+                                Text(firstReminderLabel)
+                            }
+                        }
+                    }
+                    .accessibilityElement(children: .combine)
+
+                    if let log = logBeforeFirstReminder {
+                        Spacer(minLength: 0)
+                        Button(action: log) {
+                            Text(state.localizedPrimaryLabel(locale: locale))
+                                .font(.pillie(15, weight: .semibold))
+                                .foregroundStyle(.white)
+                                .padding(.horizontal, 18)
+                                .frame(height: PillieTheme.ctaHeight - 24)
+                                .background(PillieTheme.dark, in: Capsule())
+                        }
+                        .buttonStyle(.plain)
+                        .fixedSize()
+                        .accessibilityIdentifier("firstReminderTookIt")
+                    }
+                }
+                .padding(.leading, 22)
+                .padding(.trailing, 12)
+                .takenCapsule()
+                .transition(ctaStateTransition)
             }
         }
         .animation(unifiedStateTransition, value: store.isTodayTaken)
         .animation(unifiedStateTransition, value: store.isRefillDue)
         .animation(unifiedStateTransition, value: store.todayDueAction == nil)
+        .animation(unifiedStateTransition, value: store.openCatchUp == nil)
     }
 
     private func accessibilityFloatingButtonLabel(_ label: String) -> some View {
@@ -798,12 +862,31 @@ struct HomeView: View {
         )
     }
 
+    private func startTodayAction(_ action: DoseScheduleAction, requiresShakeConfirm: Bool) {
+        ProductAnalyticsTelemetry.live.todayActionStarted()
+        if requiresShakeConfirm {
+            shakeAction = action
+            holdsPackCardLog = true
+            shakeStreakChange = StreakChange(
+                before: store.currentStreak,
+                after: store.streakAfterCompletingToday
+            )
+            showShakeConfirm = true
+        } else {
+            completeTodayAction()
+        }
+    }
+
     private func completeTodayAction() {
         let feedbackResponse = homeFeedback.commitTodayAction(
             accessibilityReduceMotion: accessibilityReduceMotion
         )
         withAnimation(feedbackResponse.motionProfile.animation) {
-            store.markTodayAsTaken()
+            if store.todayDueAction == nil, store.openCatchUp != nil {
+                store.logCatchUp()
+            } else {
+                store.markTodayAsTaken()
+            }
         }
         ProductAnalyticsTelemetry.live.todayActionCompleted()
     }
@@ -848,8 +931,13 @@ struct HomeView: View {
 
 private struct PillieTakenButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .font(.pillie(18, weight: .semibold))
+        configuration.label.takenCapsule()
+    }
+}
+
+private extension View {
+    func takenCapsule() -> some View {
+        font(.pillie(18, weight: .semibold))
             .foregroundStyle(PillieTheme.textPrimary)
             .pillieAdaptiveLineLimit(minimumScaleFactor: 0.65)
             .frame(maxWidth: .infinity)

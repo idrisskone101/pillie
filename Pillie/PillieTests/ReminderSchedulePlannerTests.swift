@@ -218,7 +218,7 @@ final class ReminderSchedulePlannerTests: XCTestCase {
         let calendar = Calendar.current
 
         let fixtures: [(ContraceptiveMethod, InMemoryStoreFixture)] = [
-            (.pill, try InMemoryStoreFactory.makeStore(now: now, method: .pill, startDate: now)),
+            (.pill, try InMemoryStoreFactory.makeStore(now: now, method: .pill, regimen: .twentyOneOnly, startDate: now)),
             (.patch, try InMemoryStoreFactory.makeStore(now: now, method: .patch, startDate: now)),
             (.ring, try InMemoryStoreFactory.makeStore(
                 now: now,
@@ -255,7 +255,7 @@ final class ReminderSchedulePlannerTests: XCTestCase {
     func testCycleTransitionNoticeCarriesNextActivePhaseResumeDate() throws {
         let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
         let calendar = Calendar.current
-        let fixture = try InMemoryStoreFactory.makeStore(now: now, method: .pill, startDate: now)
+        let fixture = try InMemoryStoreFactory.makeStore(now: now, method: .pill, regimen: .twentyOneOnly, startDate: now)
 
         let notice = try XCTUnwrap(cycleTransitionIntents(for: fixture.store, now: now).first)
         let transitionDay = Date(timeIntervalSince1970: TimeInterval(notice.transitionDayEpoch))
@@ -267,7 +267,7 @@ final class ReminderSchedulePlannerTests: XCTestCase {
         XCTAssertEqual(isBreakDay(dayBeforeResume, pack: fixture.store.pack, calendar: calendar), true)
         XCTAssertGreaterThan(notice.resumeDate, transitionDay)
 
-        // For a 21/7 pill cycle starting today (cycle day 1), the break starts on day 22
+        // For a 21-only pill cycle starting today (cycle day 1), the break starts on day 22
         // and the next pack starts on day 29 — i.e. cycleLength days after today.
         let expectedResume = calendar.date(
             byAdding: .day,
@@ -279,7 +279,7 @@ final class ReminderSchedulePlannerTests: XCTestCase {
 
     func testCycleTransitionNoticeIsNotGatedByEntitlement() throws {
         let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
-        let fixture = try InMemoryStoreFactory.makeStore(now: now, method: .pill, startDate: now)
+        let fixture = try InMemoryStoreFactory.makeStore(now: now, method: .pill, regimen: .twentyOneOnly, startDate: now)
 
         let freeNotices = plan(for: fixture.store, now: now, smartRemindersEnabled: false)
             .compactMap { intent -> ReminderSchedulePlanner.CycleTransitionIntent? in
@@ -294,7 +294,7 @@ final class ReminderSchedulePlannerTests: XCTestCase {
     func testCycleTransitionNoticeAbsentOnActivePhaseStart() throws {
         let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
         let calendar = Calendar.current
-        let fixture = try InMemoryStoreFactory.makeStore(now: now, method: .pill, startDate: now)
+        let fixture = try InMemoryStoreFactory.makeStore(now: now, method: .pill, regimen: .twentyOneOnly, startDate: now)
 
         // The only planned notice lands on a break day, never on an active-phase start, so
         // it never doubles up with the day-1 Due Action Reminder.
@@ -312,7 +312,7 @@ final class ReminderSchedulePlannerTests: XCTestCase {
 
     func testCycleTransitionNoticeAbsentWhenDisabled() throws {
         let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
-        let fixture = try InMemoryStoreFactory.makeStore(now: now, method: .pill, startDate: now)
+        let fixture = try InMemoryStoreFactory.makeStore(now: now, method: .pill, regimen: .twentyOneOnly, startDate: now)
 
         let notices = cycleTransitionIntents(for: fixture.store, now: now, cycleTransitionEnabled: false)
         XCTAssertTrue(notices.isEmpty)

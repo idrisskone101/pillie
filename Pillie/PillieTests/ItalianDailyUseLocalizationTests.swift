@@ -28,7 +28,6 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
             "today.next_action.today",
             "today.next_action.tomorrow",
             "today.next_action.next_week",
-            "today.pack.title",
             "today.pack.day_of_total",
             "today.pack.start_new.title",
             "today.pack.start_new.body",
