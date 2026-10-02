@@ -25,8 +25,14 @@ final class RoutineDialCommitTests: XCTestCase {
         let telemetry: ProductAnalyticsTelemetry
         let now: Date
 
-        func commit(_ pick: RoutineDialPick) {
-            TodayPillCommit.run(pick, store: store, now: now, defaults: defaults, telemetry: telemetry)
+        func commit(_ pick: RoutineDialPick, pickedAt: Date? = nil) {
+            TodayPillCommit.run(
+                OnboardingDraft(pick: pick, pickedAt: pickedAt ?? now),
+                store: store,
+                now: now,
+                defaults: defaults,
+                telemetry: telemetry
+            )
         }
     }
 
@@ -160,6 +166,17 @@ final class RoutineDialCommitTests: XCTestCase {
         XCTAssertEqual(harness.store.todayDueAction?.type, .ringRemove)
         XCTAssertFalse(harness.store.isTodayTaken)
         XCTAssertEqual(harness.store.currentStreak, 0)
+        XCTAssertEqual(harness.recorder.completions, [])
+    }
+
+    func testAPickFromYesterdayRollsToTodaysCycleDayUnlogged() throws {
+        let pickedAt = InMemoryStoreFactory.localDate("2026-09-26", hour: 12, minute: 24)
+        let harness = try makeHarness(now: Self.noon)
+
+        harness.commit(pick(.patch, 8, .taken), pickedAt: pickedAt)
+
+        XCTAssertEqual(harness.store.pack.cycleDayIndex(on: harness.store.today) + 1, 9)
+        XCTAssertFalse(harness.store.isTodayTaken)
         XCTAssertEqual(harness.recorder.completions, [])
     }
 
