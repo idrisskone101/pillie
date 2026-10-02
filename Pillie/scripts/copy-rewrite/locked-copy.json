@@ -1023,30 +1023,6 @@
     {
       "issue": "ENG-70",
       "table": "Localizable",
-      "key": "today.adaptive_reminder.headline",
-      "en": "You usually log around %@.",
-      "de": "Du trägst meist gegen %@ ein.",
-      "it": "Di solito registri verso le %@."
-    },
-    {
-      "issue": "ENG-70",
-      "table": "Localizable",
-      "key": "today.adaptive_reminder.body",
-      "en": "Want to move your daily reminder to %@ so it shows up when you usually log?",
-      "de": "Willst du die tägliche Erinnerung auf %@ legen, damit sie kommt, wenn du meist einträgst?",
-      "it": "Vuoi spostare il promemoria giornaliero alle %@, così arriva quando registri di solito?"
-    },
-    {
-      "issue": "ENG-70",
-      "table": "Localizable",
-      "key": "today.adaptive_reminder.accept",
-      "en": "Move the reminder to %@",
-      "de": "Erinnerung auf %@ legen",
-      "it": "Sposta il promemoria alle %@"
-    },
-    {
-      "issue": "ENG-70",
-      "table": "Localizable",
       "key": "today.review_prompt.title",
       "en": "Enjoying Pillie?",
       "de": "Magst du Pillie?",
