@@ -34,10 +34,20 @@ struct HonestPaywallScreen: View {
     private var scene: HonestPaywallScene {
         HonestPaywallSceneBuilder.build(
             board: board,
-            offerings: offerings.flatMap(PaywallOfferingsSnapshot.parse),
+            offerings: offeringsSnapshot,
             selection: selection,
             locale: locale
         )
+    }
+
+    private var offeringsSnapshot: PaywallOfferingsSnapshot? {
+        let snapshot = offerings.flatMap(PaywallOfferingsSnapshot.parse)
+        #if DEBUG
+        if let display = UserDefaults.standard.string(forKey: Self.debugLifetimeDisplayKey) {
+            return snapshot?.withLifetimeDisplay(display)
+        }
+        #endif
+        return snapshot
     }
 
     private var isTrialEnd: Bool {

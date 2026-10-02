@@ -813,6 +813,15 @@ struct PillieApp: App {
                 os.Logger(subsystem: "com.idrisskone.pillie", category: "qa")
                     .error("Pillie QA restore-outcome ignored unreadable result=\(result ?? "nil", privacy: .public)")
             }
+        case "/paywall-lifetime":
+            // QA (ENG-155): show a Lifetime tile at this price; `clear` removes it.
+            let price = URLComponents(url: url, resolvingAgainstBaseURL: false)?
+                .queryItems?.first(where: { $0.name == "price" })?.value
+            if let price, price != "clear" {
+                UserDefaults.standard.set(price, forKey: HonestPaywallScreen.debugLifetimeDisplayKey)
+            } else {
+                UserDefaults.standard.removeObject(forKey: HonestPaywallScreen.debugLifetimeDisplayKey)
+            }
         case "/pack-card":
             showsPackCardGallery = true
         case "/countdown-card":

@@ -19,6 +19,7 @@ In a flow: `openurl pillie://debug/<path>?lang=en`. The runner accepts the iOS "
 | `/trial-activation-hub?state=unconfigured\|partial\|full&terms=hard` | The three app-blocking acceptance states the simulator cannot reach for real |
 | `/trial-clear` | No trial grant, one-shot flags cleared |
 | `/trial-end-paywall?cohort=blocker&terms=hard&feedback=resolved\|unresolved&success=1&subscriber=1` | Home with the trial-end paywall auto-presenting |
+| `/paywall-lifetime?price=%2489.99\|clear` | The honest paywall shows a Lifetime tile at that price, because the RevenueCat Test Store offering has none. Stored in defaults, so it survives relaunch until `price=clear`. Display only: no package backs it. |
 | `/restore-outcome?result=error\|none\|restored\|clear` | Restore Purchases returns that outcome without calling RevenueCat: `error` is a network failure (`error_category=network`), `none` finds no active purchase, `restored` also turns Plus on, `clear` goes back to real RevenueCat. Lasts until relaunch. |
 | `/honest-paywall?board=duringTrial\|settingsFree\|trialEndedReturningHard\|trialEndedReturningLegacy` | One paywall board |
 | `/update-trial-announcement` | Onboarded free user; the next launch shows the trial announcement |

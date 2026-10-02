@@ -34,5 +34,8 @@ enum TrialEndSuccessOutcome: Equatable {
 #if DEBUG
 extension HonestPaywallScreen {
     static let debugSuccessStateKey = "trialEndPaywallDebugSuccessState"
+    /// The RevenueCat Test Store offering has no lifetime package; this price
+    /// stands in for one so simulator QA can see the Lifetime tile.
+    static let debugLifetimeDisplayKey = "honestPaywallDebugLifetimeDisplay"
 }
 #endif

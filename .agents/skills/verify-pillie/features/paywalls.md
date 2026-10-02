@@ -49,6 +49,16 @@ CTAs change often; this file names the mechanism, not the wording.
   `restore_succeeded`, `restore_completed` with `reason`, `restore_failed`
   with `error_category`, all with `surface`. `Views/Paywall/PaywallAlert.swift`,
   `Services/RestoreOutcome.swift`.
+- `paywall-checkout-stack` (ENG-155) — every honest paywall board shares one
+  plan stack: Year (`#paywallTile.annual`), Month (`#paywallTile.monthly`), and
+  Lifetime (`#paywallTile.lifetime`) only when the offering exposes a lifetime
+  package. The selected tile is what the CTA buys and fires
+  `paywall_plan_selected` with its `plan`. Under the CTA, the reassurance
+  (`#paywallReassurance`) is plain text: "Cancel anytime" for Year/Month,
+  "One payment. No renewal." for Lifetime. "Restore purchases"
+  (`#paywallRestoreButton`) is the only footer control that restores.
+  `Services/Paywall/PaywallCheckoutBuilder.swift`,
+  `Views/Paywall/PaywallCheckoutChrome.swift`.
 - `paywall-commerce-access-verification` — a transient full-screen loading
   gate (`#commerceAccessVerification`) shown (a) at the app root right after
   onboarding, before `MainTabView`, while RevenueCat resolves, and (b) inside
@@ -80,6 +90,14 @@ CTAs change often; this file names the mechanism, not the wording.
   Settings > Pillie Plus door: error alert and Contact support into the mail
   fallback. `log start` / `log stop` keep the analytics mirror in `app.log`;
   grep it for `restore_` to see `surface`, `reason`, and `error_category`.
+- `flows/paywall-lifetime-tile.flow` — on the hard trial-end board: three
+  tiles with Year selected; a tap on "Cancel anytime" with a restore outcome
+  armed raises no alert and logs no `restore_started`; the Lifetime tile
+  turns the CTA into "… once" with "One payment. No renewal." and logs
+  `paywall_plan_selected plan=lifetime`; Restore purchases raises "No
+  Subscription Found". Then the Settings > Pillie Plus door's three tiles.
+  The Test Store offering has no lifetime package, so the flow stands one in
+  with `pillie://debug/paywall-lifetime?price=…` and clears it at the end.
 - `flows/paywall-boards.flow` — for each of `duringTrial`, `settingsFree`,
   `trialEndedReturningLegacy`, `trialEndedReturningHard`: `launch`, open the
   debug deep link (each call completes onboarding and seeds its own
@@ -113,6 +131,9 @@ CTAs change often; this file names the mechanism, not the wording.
   `PlusUpsellSheet`'s "Restore" — the scheme's `Configuration.storekit` has
   real sandbox products, and a completed purchase/restore flips
   `SubscriptionManager.shared.hasEntitlement` for the rest of the run.
+  The CTA counts too, on every tile: it opens a RevenueCat Test Store
+  purchase sheet. With `/paywall-lifetime` set, a Lifetime CTA tap shows the
+  offerings-unavailable alert, since no real lifetime package backs it.
   The one exception: after `pillie://debug/restore-outcome?result=…`, a
   Restore tap never reaches RevenueCat until `result=clear` or a relaunch.
 - On a free Home the "Pillie+, App blocking" card (@206,816) overlaps the
