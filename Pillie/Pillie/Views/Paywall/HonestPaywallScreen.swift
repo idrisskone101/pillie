@@ -18,7 +18,7 @@ struct HonestPaywallScreen: View {
     var declineFeedbackContent: TrialDeclineFeedbackContent? = nil
     var routeContinueFree: (() -> TrialDeclineFeedbackRoute)? = nil
 
-    @State private var recurrence: PaywallRecurrence = .year
+    @State private var selection: PaywallPurchaseIntent = .subscribe(.year)
     @State private var offerings: Offerings?
     @State private var activeAlert: PaywallAlert?
     @State private var isPurchasing = false
@@ -35,7 +35,7 @@ struct HonestPaywallScreen: View {
         HonestPaywallSceneBuilder.build(
             board: board,
             offerings: offerings.flatMap(PaywallOfferingsSnapshot.parse),
-            recurrence: recurrence,
+            selection: selection,
             locale: locale
         )
     }
@@ -87,7 +87,7 @@ struct HonestPaywallScreen: View {
             HonestPaywallView(
                 scene: scene,
                 isPurchasing: isPurchasing,
-                onRecurrenceChange: selectRecurrence,
+                onSelect: selectPlan,
                 onPurchase: purchase,
                 onRestore: restorePurchases,
                 onDismiss: onDismiss,
@@ -112,11 +112,11 @@ struct HonestPaywallScreen: View {
             .accessibilityHidden(true)
     }
 
-    private func selectRecurrence(_ value: PaywallRecurrence) {
+    private func selectPlan(_ intent: PaywallPurchaseIntent) {
         withAnimation(.easeInOut(duration: 0.2)) {
-            recurrence = value
+            selection = intent
         }
-        let plan: AnalyticsPlan = value == .year ? .annual : .monthly
+        let plan = intent.pilliePlusPlan.analyticsPlan
         switch telemetryMode {
         case .trialEnd(let content):
             telemetry.trialEndPlanSelected(

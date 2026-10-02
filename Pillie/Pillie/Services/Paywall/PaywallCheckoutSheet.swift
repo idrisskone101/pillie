@@ -6,16 +6,15 @@
 import Foundation
 
 struct PaywallCheckoutSheet: Equatable {
-    let selectedRecurrence: PaywallRecurrence
-    let yearTile: PaywallStackTile
-    let monthTile: PaywallStackTile
-    let lifetimeLink: PaywallLifetimeLink?
+    let selectedIntent: PaywallPurchaseIntent
+    let tiles: [PaywallStackTile]
     let primaryCTA: String
     let isPurchaseEnabled: Bool
     let footer: PaywallFooter
 }
 
 struct PaywallStackTile: Equatable {
+    let intent: PaywallPurchaseIntent
     let title: String
     let primaryLine: String
     let trailingPrice: String?
@@ -27,11 +26,6 @@ struct PaywallStackTile: Equatable {
 struct PaywallSavingsBadge: Equatable {
     let percent: Int
     let label: String
-}
-
-struct PaywallLifetimeLink: Equatable {
-    let text: String
-    let accessibilityLabel: String
 }
 
 struct PaywallFooter: Equatable {
