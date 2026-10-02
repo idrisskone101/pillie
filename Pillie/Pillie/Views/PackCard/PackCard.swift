@@ -14,6 +14,7 @@ struct PackCard<Header: View>: View {
     let todayIndex: Int?
     let marks: [Int: PackTileMark]
     let onSelectDay: ((Int) -> Void)?
+    let onSelectMissedDay: ((Int) -> Void)?
     let header: Header
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -34,6 +35,7 @@ struct PackCard<Header: View>: View {
         todayIndex: Int?,
         marks: [Int: PackTileMark] = [:],
         onSelectDay: ((Int) -> Void)? = nil,
+        onSelectMissedDay: ((Int) -> Void)? = nil,
         @ViewBuilder header: () -> Header
     ) {
         self.regimen = regimen
@@ -41,6 +43,7 @@ struct PackCard<Header: View>: View {
         self.todayIndex = todayIndex
         self.marks = marks
         self.onSelectDay = onSelectDay
+        self.onSelectMissedDay = onSelectMissedDay
         self.header = header()
     }
 
@@ -180,17 +183,11 @@ struct PackCard<Header: View>: View {
             .scaleEffect(tileSide / PackTile.designSide)
             .frame(width: tileSide, height: tileSide)
         if let onSelectDay {
-            Button {
-                onSelectDay(index)
-            } label: {
-                face
-            }
-            .buttonStyle(PackTilePressStyle(reduceMotion: reduceMotion))
-            .contentShape(Rectangle().inset(by: -max(0, (Self.minimumHitSide - tileSide) / 2)))
-            .tileAccessibility(label: accessibilityLabel(for: day), value: accessibilityValue(for: day.kind, state: state))
-            .accessibilityAddTraits(index == flagIndex ? [.isButton, .isSelected] : .isButton)
-            .accessibilityAction { onSelectDay(index) }
-            .accessibilityIdentifier("packTile.\(day.pillNumber ?? day.number)")
+            tileButton(face, day: day, state: state) { onSelectDay(index) }
+                .accessibilityAddTraits(index == flagIndex ? .isSelected : [])
+        } else if state == .missed, let onSelectMissedDay {
+            tileButton(face, day: day, state: state) { onSelectMissedDay(index) }
+                .accessibilityHint(PillieLocalization.string("history.dayCorrection.accessibilityHint", locale: locale))
         } else {
             face
                 .tileAccessibility(label: accessibilityLabel(for: day), value: accessibilityValue(for: day.kind, state: state))
@@ -198,6 +195,18 @@ struct PackCard<Header: View>: View {
     }
 
     private static var minimumHitSide: CGFloat { 44 }
+
+    private func tileButton(
+        _ face: some View, day: PackDay, state: PackTileState, action: @escaping () -> Void
+    ) -> some View {
+        Button(action: action) { face }
+            .buttonStyle(PackTilePressStyle(reduceMotion: reduceMotion))
+            .contentShape(Rectangle().inset(by: -max(0, (Self.minimumHitSide - tileSide) / 2)))
+            .tileAccessibility(label: accessibilityLabel(for: day), value: accessibilityValue(for: day.kind, state: state))
+            .accessibilityAddTraits(.isButton)
+            .accessibilityAction { action() }
+            .accessibilityIdentifier("packTile.\(day.pillNumber ?? day.number)")
+    }
 
     @ViewBuilder
     private func flag(layout: PackCardLayout) -> some View {
@@ -253,7 +262,7 @@ struct PackCard<Header: View>: View {
             return
         }
         var elapsed = Duration.zero
-        for step in PackPopSequence.steps(from: current, to: target, regimen: regimen) {
+        for step in PackPopSequence.steps(from: current, to: target, regimen: regimen, visible: layout.dayIndices(onPage: viewedPage)) {
             if step.at > elapsed {
                 try? await Task.sleep(for: step.at - elapsed)
                 elapsed = step.at

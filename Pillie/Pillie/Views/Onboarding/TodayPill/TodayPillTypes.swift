@@ -6,22 +6,22 @@
 import Foundation
 
 struct TodayPillSelection: Equatable {
-    private(set) var regimen: PillPack.PillRegimenPreset
+    private(set) var pack: PackChoice
     private(set) var dayIndex: Int?
     private(set) var answer: TodayPillPick.Answer?
 
-    init(regimen: PillPack.PillRegimenPreset) {
-        self.regimen = regimen
+    init(pack: PackChoice) {
+        self.pack = pack
     }
 
     init(restoring pick: TodayPillPick) {
-        regimen = pick.regimen
+        pack = pick.pack
         dayIndex = pick.dayIndex
         answer = pick.answer
     }
 
     var packRegimen: PackRegimen {
-        regimen.resolvedRegimen(custom: nil)
+        pack.regimen
     }
 
     var asksQuestion: Bool {
@@ -31,7 +31,7 @@ struct TodayPillSelection: Equatable {
 
     var pick: TodayPillPick? {
         guard let dayIndex else { return nil }
-        return TodayPillPick(regimen: regimen, dayIndex: dayIndex, answer: answer)
+        return TodayPillPick(pack: pack, dayIndex: dayIndex, answer: answer)
     }
 
     mutating func tap(_ index: Int) {
@@ -45,8 +45,8 @@ struct TodayPillSelection: Equatable {
         self.answer = answer
     }
 
-    mutating func changeRegimen(_ regimen: PillPack.PillRegimenPreset) {
-        self.regimen = regimen
+    mutating func changePack(_ pack: PackChoice) {
+        self.pack = pack
         if let dayIndex, dayIndex >= packRegimen.totalDays {
             self.dayIndex = nil
         }

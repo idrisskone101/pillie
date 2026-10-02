@@ -62,8 +62,8 @@ struct ContentView: View {
     )
   }
 
-  private var needsTodayPill: Bool {
-    store.contraceptiveMethod == .pill && TodayPillPick.load() == nil
+  private var needsTodayPick: Bool {
+    OnboardingTodayPick.load(method: store.contraceptiveMethod) == nil
   }
 
   private var onboardingTrialActivationRoute: OnboardingTrialActivationRoute {
@@ -91,7 +91,7 @@ struct ContentView: View {
             for: onboardingStep,
             isPlus: subscriptionManager.hasPlusAccess,
             selectedFreePlan: onboardingSelectedFreePlan,
-            needsTodayPill: needsTodayPill
+            needsTodayPick: needsTodayPick
           ) {
 	        case .welcome:
 	          WelcomeView {
@@ -251,22 +251,14 @@ struct ContentView: View {
             ))
 
 	        case .schedule:
-	          ProtectionPlanRoutineDetailsView(
+	          RoutineDialView(
+	            method: RoutineDialMethod(store.contraceptiveMethod) ?? .patch,
 	            progress: ProtectionPlanProgressIndex.progress(for: .schedule),
 	            onBack: {
                 lowRiskTransition(to: .method)
 	            },
-            onContinue: { setup in
-              store.startNewProtocol(
-                method: store.contraceptiveMethod,
-                regimen: setup.regimen,
-                customRegimen: setup.customRegimen,
-                cycleDay: setup.cycleDay,
-                preserveHistory: false
-              )
-              if store.appActivatedDate == nil {
-                store.appActivatedDate = store.today
-	              }
+            onContinue: { pick in
+              pick.save()
               continueSetupStep(to: .reminderTime)
 	            }
           )
@@ -279,7 +271,7 @@ struct ContentView: View {
 	        case .reminderTime:
 	          ProtectionPlanReminderTimeView(
 	            progress: ProtectionPlanProgressIndex.progress(for: .reminderTime),
-	            todayPillPick: store.contraceptiveMethod == .pill ? TodayPillPick.load() : nil,
+	            todayPick: OnboardingTodayPick.load(method: store.contraceptiveMethod),
 	            onBack: {
                 lowRiskTransition(to: .schedule)
 	            },
@@ -620,7 +612,7 @@ struct ContentView: View {
       for: onboardingStep,
       isPlus: subscriptionManager.hasPlusAccess,
       selectedFreePlan: onboardingSelectedFreePlan,
-      needsTodayPill: needsTodayPill
+      needsTodayPick: needsTodayPick
     ),
     visibleStep.rawValue != onboardingStep else { return }
 
@@ -709,6 +701,7 @@ struct ContentView: View {
       termsCohort: termsCohort
     ) {
       onboardingTelemetry.trialActivated()
+      ScheduleCriticalSettingChange.onboardingTrialGranted(store: store)
     }
   }
 

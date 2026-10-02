@@ -235,11 +235,8 @@ struct CalendarGrid: View, Equatable {
         snapshot: PillScheduleSnapshot?,
         relation: CalendarDayRelation
     ) -> HistoryEditableDay? {
-        guard let date, let snapshot,
-              let options = DayCorrectionPolicy.options(for: snapshot, relation: relation) else {
-            return nil
-        }
-        return HistoryEditableDay(date: date, method: snapshot.pack.method, options: options)
+        guard date != nil, let snapshot else { return nil }
+        return HistoryEditableDay(snapshot: snapshot, relation: relation)
     }
 
     // MARK: - Status Lookup
@@ -277,17 +274,9 @@ struct CalendarGrid: View, Equatable {
                 Date.FormatStyle().day().month(.wide).year().locale(locale)
             )
         }
-        let status: HistoryPresentation.DayStatus
-        if presentation.isBreakDay {
-            status = .breakDay
-        } else if presentation.status == .taken {
-            status = .completed
-        } else {
-            status = .unlogged
-        }
         return HistoryPresentation.dayAccessibilityLabel(
             date: date,
-            status: status,
+            status: presentation.historyStatus,
             locale: locale
         )
     }
@@ -574,7 +563,7 @@ struct CalendarGrid: View, Equatable {
         switch actionType {
         case .pillActive:
             return PillieTheme.coral
-        case .pillBreak:
+        case .pillSugar, .pillBreak:
             return PillieTheme.lavender
         case .patchChange, .patchRemove:
             return PillieTheme.sage

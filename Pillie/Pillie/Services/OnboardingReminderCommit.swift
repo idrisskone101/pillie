@@ -41,17 +41,13 @@ struct OnboardingReminderCommit {
     static func live(
         store: PillStore,
         telemetry: OnboardingTelemetry,
-        todayPillPick: TodayPillPick?
+        todayPick: OnboardingTodayPick?
     ) -> OnboardingReminderCommit {
         OnboardingReminderCommit(
             saveReminderTime: { hour, minute in
                 ScheduleCriticalSettingChange.saveOnboardingReminderTime(store: store, hour: hour, minute: minute)
             },
-            commitRoutine: {
-                if let todayPillPick {
-                    TodayPillCommit.run(todayPillPick, store: store)
-                }
-            },
+            commitRoutine: { todayPick?.commit(to: store) },
             trackPermissionRequested: { telemetry.notificationPermissionRequested() },
             requestAuthorization: { completion in
                 NotificationManager.shared.requestAuthorization(completion: completion)

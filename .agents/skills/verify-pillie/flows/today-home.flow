@@ -21,9 +21,9 @@ shot today-home
 wait id homeBlockingStatusCard 10
 shot today-blocking-card
 
-# PillPackCard.swift:33-34,66; Localizable.xcstrings:64629 today.pack.title
-# = "This cycle".
-wait text "This cycle" 10
+# Pill users get the V1 pack card (HomePackCard.swift, ENG-145); its "…" menu
+# carries #homePackOptions. The dark "This cycle" strip is patch/ring only now.
+wait id homePackOptions 10
 shot today-pill-pack-card
 
 # Due-action CTA label. DueActionCopy.swift:6-7 today.action.take_pill;
@@ -62,6 +62,9 @@ tap --id shakeTapToConfirmFallback
 # control. TodayActionState.swift:45-46 today.action.undo_complete;
 # Localizable.xcstrings:61329, value "Checked in. Tap to undo."
 wait text "Checked in. Tap to undo." 15
+# The card holds the log until the shake cover is gone, then pops today's tile
+# and reads "Taken today" (HomePackCard.holdsTodayLog, home.pack.subtitle.taken).
+wait text "Taken today" 10
 shot today-taken
 
 # Undo path: HomeView.swift:689-698 calls store.unmarkTodayAsTaken().

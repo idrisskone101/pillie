@@ -13,7 +13,7 @@ import SwiftUI
 
 struct ProtectionPlanReminderTimeView: View {
     let progress: ProtectionPlanProgress
-    let todayPillPick: TodayPillPick?
+    let todayPick: OnboardingTodayPick?
     let onBack: () -> Void
     let onContinue: () -> Void
 
@@ -42,29 +42,43 @@ struct ProtectionPlanReminderTimeView: View {
         switch pack.method {
         case .pill:
             return pack.pillRegimen.localizedScheduleSummary()
-        case .patch:
-            return pack.method.routineDescriptor
-        case .ring:
+        case .patch, .ring:
             return pack.method.routineDescriptor
         }
     }
 
     private var summary: ProtectionPlanRoutineSummary {
-        if let todayPillPick {
+        switch todayPick {
+        case .pill(let draft):
             let selection = ReminderTimeConverter.hourAndMinute(from: selectedTime)
             return ProtectionPlanRoutineSummary(
                 method: .pill,
                 todayPill: TodayPillPlan(
-                    pick: todayPillPick,
+                    pick: draft.pick,
                     reminderHour: selection.hour,
                     reminderMinute: selection.minute
                 )
             )
+        case .dial(let draft):
+            return routineSummary(
+                method: draft.pick.method.contraceptiveMethod,
+                scheduleSummary: draft.pick.method.contraceptiveMethod.routineDescriptor,
+                cycleDay: draft.pick.cycleDay
+            )
+        case nil:
+            return routineSummary(
+                method: store.contraceptiveMethod,
+                scheduleSummary: scheduleSummaryText,
+                cycleDay: store.pack.cycleDayIndex(on: store.today) + 1
+            )
         }
-        return ProtectionPlanRoutineSummary(
-            method: store.contraceptiveMethod,
-            scheduleSummary: scheduleSummaryText,
-            cycleDay: store.pack.cycleDayIndex(on: store.today) + 1,
+    }
+
+    private func routineSummary(method: ContraceptiveMethod, scheduleSummary: String, cycleDay: Int) -> ProtectionPlanRoutineSummary {
+        ProtectionPlanRoutineSummary(
+            method: method,
+            scheduleSummary: scheduleSummary,
+            cycleDay: cycleDay,
             reminderTimeText: liveTimeText,
             locale: .current
         )
@@ -191,7 +205,7 @@ struct ProtectionPlanReminderTimeView: View {
         guard !isCommitting else { return }
         isCommitting = true
         let selection = ReminderTimeConverter.hourAndMinute(from: selectedTime)
-        OnboardingReminderCommit.live(store: store, telemetry: onboardingTelemetry, todayPillPick: todayPillPick)
+        OnboardingReminderCommit.live(store: store, telemetry: onboardingTelemetry, todayPick: todayPick)
             .run(hour: selection.hour, minute: selection.minute) {
                 isCommitting = false
                 onContinue()
@@ -214,7 +228,9 @@ struct ProtectionPlanReminderTimeView: View {
 #Preview {
     ProtectionPlanReminderTimeView(
         progress: ProtectionPlanProgressIndex.progress(for: .reminderTime),
-        todayPillPick: TodayPillPick(regimen: .twentyOneSeven, dayIndex: 11, answer: .taken),
+        todayPick: TodayPillPick(pack: PackChoice(preset: .twentyOneSeven), dayIndex: 11, answer: .taken).map {
+            OnboardingTodayPick.pill(OnboardingDraft(pick: $0, pickedAt: .now))
+        },
         onBack: {},
         onContinue: {}
     )

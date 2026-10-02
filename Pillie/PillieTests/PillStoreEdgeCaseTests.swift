@@ -28,6 +28,22 @@ final class PillStoreEdgeCaseTests: XCTestCase {
         XCTAssertEqual(store.currentStreak, 3)
     }
 
+    func testStreakAfterCompletingTodayCountsTodayBeforeItIsLogged() throws {
+        let today = InMemoryStoreFactory.fixedDate("2026-05-26")
+        let startDate = InMemoryStoreFactory.fixedDate("2026-05-24")
+        let fixture = try InMemoryStoreFactory.makeStore(now: today, startDate: startDate)
+        let store = fixture.store
+
+        store.markActionAsTaken(on: InMemoryStoreFactory.fixedDate("2026-05-24"))
+        store.markActionAsTaken(on: InMemoryStoreFactory.fixedDate("2026-05-25"))
+        XCTAssertEqual(store.currentStreak, 2)
+        XCTAssertEqual(store.streakAfterCompletingToday, 3)
+
+        store.markActionAsTaken(on: today)
+        XCTAssertEqual(store.currentStreak, 3)
+        XCTAssertEqual(store.streakAfterCompletingToday, 3)
+    }
+
     func testScheduledBreakWeekPreservesStreak() throws {
         let today = InMemoryStoreFactory.fixedDate("2026-05-28")
         let startDate = InMemoryStoreFactory.fixedDate("2026-05-01")
@@ -42,7 +58,8 @@ final class PillStoreEdgeCaseTests: XCTestCase {
         store.markActionAsTaken(on: InMemoryStoreFactory.fixedDate("2026-05-20"))
         store.markActionAsTaken(on: InMemoryStoreFactory.fixedDate("2026-05-21"))
 
-        XCTAssertEqual(store.scheduleSnapshot(for: today)?.status, .breakDay)
+        XCTAssertEqual(store.scheduleSnapshot(for: today)?.dueAction?.type, .pillSugar)
+        XCTAssertEqual(store.scheduleSnapshot(for: today)?.status, .upcoming)
         XCTAssertEqual(store.currentStreak, 3)
     }
 
@@ -80,16 +97,16 @@ final class PillStoreEdgeCaseTests: XCTestCase {
         for offset in -5 ... -1 {
             let breakDay = try XCTUnwrap(Calendar.current.date(byAdding: .day, value: offset, to: today))
             let snapshot = try XCTUnwrap(store.scheduleSnapshot(for: breakDay))
-            XCTAssertEqual(snapshot.actionType, .pillBreak)
+            XCTAssertEqual(snapshot.actionType, .pillSugar)
             XCTAssertEqual(snapshot.status, .breakDay, "Past cycle day \(27 + offset) must stay neutral.")
         }
 
         let persistedBreakRecords = try fixture.context.fetch(FetchDescriptor<PillDay>())
-            .filter { $0.actionType == .pillBreak }
+            .filter { $0.actionType == .pillSugar }
         XCTAssertEqual(persistedBreakRecords.count, 5)
         XCTAssertTrue(persistedBreakRecords.allSatisfy { $0.status == .breakDay })
 
-        XCTAssertEqual(store.scheduleSnapshot(for: today)?.status, .breakDay)
+        XCTAssertEqual(store.scheduleSnapshot(for: today)?.status, .upcoming)
     }
 
     func testCycleDayAdjustmentKeepsPatchOffWeekNeutral() throws {

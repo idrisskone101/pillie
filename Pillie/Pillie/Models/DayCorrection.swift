@@ -41,6 +41,13 @@ struct HistoryEditableDay: Identifiable, Equatable {
     let options: DayCorrectionOptions
 }
 
+extension HistoryEditableDay {
+    init?(snapshot: PillScheduleSnapshot, relation: CalendarDayRelation) {
+        guard let options = DayCorrectionPolicy.options(for: snapshot, relation: relation) else { return nil }
+        self.init(date: snapshot.date, method: snapshot.pack.method, options: options)
+    }
+}
+
 enum DayCorrectionPolicy {
     /// Which outcomes a day can be corrected to, or nil when the day is inert.
     static func options(
@@ -59,6 +66,14 @@ enum DayCorrectionPolicy {
         // and the auto-started pack's day 1, whose schedule says `.ringInsert`
         // but whose record was written as `.ringReinsert`.
         guard due.type != .ringReinsert, snapshot.actionType != .ringReinsert else { return nil }
+
+        if due.type.isBreakType && due.type.requiresUserAction {
+            // A sugar pill is logged or not; it is never missed.
+            return DayCorrectionOptions(
+                selectableOutcomes: [.taken, .breakDay],
+                currentOutcome: currentOutcome(for: snapshot.status)
+            )
+        }
 
         switch (due.type.isBreakType, snapshot.status) {
         case (true, .taken), (true, .missed):

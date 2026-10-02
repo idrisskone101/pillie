@@ -41,6 +41,17 @@ struct OnboardingInteractionFeedback {
         )
     }
 
+    /// A rapid, low-stakes repeated tap with no narrative weight of its own,
+    /// such as a custom keypad key.
+    @discardableResult
+    func lightTap(accessibilityReduceMotion: Bool) -> Response {
+        response(
+            feedbackIntent: .lowRiskTap,
+            motion: .standard,
+            accessibilityReduceMotion: accessibilityReduceMotion
+        )
+    }
+
     @discardableResult
     func continueDemoMoment(accessibilityReduceMotion: Bool) -> Response {
         response(

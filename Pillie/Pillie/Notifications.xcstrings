@@ -11000,6 +11000,1106 @@
           }
         }
       }
+    },
+    "notification.trial_expiry.day10.reminders.body": {
+      "comment": "Reverse Trial day-10 warning; reminder-only setup (no app blocking) [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your follow-up reminders stop in 5 days."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ستتوقف تذكيرات المتابعة خلال 5 أيام."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "তোমার ফলো-আপ রিমাইন্ডার 5 দিন পরে বন্ধ হয়ে যাবে।"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Els teus recordatoris de seguiment s’aturen d’aquí a 5 dies."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvoje následné připomínky se vypnou za 5 dní."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dine opfølgende påmindelser stopper om 5 dage."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine Folgeerinnerungen enden in 5 Tagen."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Οι υπενθυμίσεις συνέχειας σταματούν σε 5 ημέρες."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tus recordatorios de seguimiento se detienen en 5 días."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jatkomuistutuksesi päättyvät 5 päivän kuluttua."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tes rappels de suivi s'arrêtent dans 5 jours."
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "તારા ફૉલો-અપ રિમાઇન્ડર 5 દિવસમાં બંધ થઈ જશે."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "תזכורות ההמשך שלך יפסיקו בעוד 5 ימים."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "तुम्हारे फ़ॉलो-अप रिमाइंडर 5 दिन में बंद हो जाएँगे।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvoji naknadni podsjetnici prestaju za 5 dana."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Az ismételt emlékeztetőid 5 nap múlva leállnak."
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pengingat lanjutanmu berhenti dalam 5 hari."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I tuoi promemoria successivi si fermano tra 5 giorni."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "フォローアップのリマインダーは5日後に止まります。"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ನಿನ್ನ ಮರು ಜ್ಞಾಪನೆಗಳು 5 ದಿನಗಳಲ್ಲಿ ನಿಲ್ಲುತ್ತವೆ."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "후속 알림이 5일 후에 멈춰요."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "നിന്റെ ഫോളോ-അപ്പ് റിമൈൻഡറുകൾ 5 ദിവസത്തിനുള്ളിൽ നിലയ്ക്കും."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "तुझे फॉलो-अप रिमाइंडर 5 दिवसांत बंद होतील."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Peringatan susulan kamu berhenti dalam 5 hari."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oppfølgingspåminnelsene dine stopper om 5 dager."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je vervolgherinneringen stoppen over 5 dagen."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ତୁମର ଫଲୋ-ଅପ୍ ରିମାଇଣ୍ଡର୍ 5 ଦିନ ପରେ ବନ୍ଦ ହେବ।"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਤੇਰੇ ਫਾਲੋ-ਅੱਪ ਰਿਮਾਈਂਡਰ 5 ਦਿਨਾਂ ਵਿੱਚ ਬੰਦ ਹੋ ਜਾਣਗੇ।"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Twoje ponowne przypomnienia wyłączą się za 5 dni."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seus lembretes de acompanhamento param em 5 dias."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Os teus lembretes de seguimento param daqui a 5 dias."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mementourile tale repetate se opresc în 5 zile."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Твои повторные напоминания отключатся через 5 дней."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvoje následné pripomienky sa vypnú o 5 dní."
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvoji ponovni opomniki se ustavijo čez 5 dni."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dina uppföljningspåminnelser upphör om 5 dagar."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "உன் தொடர் நினைவூட்டல்கள் 5 நாட்களில் நின்றுவிடும்."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "నీ ఫాలో-అప్ రిమైండర్లు 5 రోజుల్లో ఆగిపోతాయి."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "การเตือนซ้ำของคุณจะหยุดในอีก 5 วัน"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Takip hatırlatmaların 5 gün içinde duracak."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Твої повторні нагадування вимкнуться через 5 днів."
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تمہاری فالو اپ یاد دہانیاں 5 دن میں بند ہو جائیں گی۔"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nhắc bổ sung của bạn sẽ dừng sau 5 ngày."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的后续提醒将在 5 天后停止。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的後續提醒將在 5 天後停止。"
+          }
+        }
+      }
+    },
+    "notification.trial_expiry.day13.reminders.body": {
+      "comment": "Reverse Trial day-13 warning; reminder-only setup (no app blocking) [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your follow-up reminders stop tomorrow night."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ستتوقف تذكيرات المتابعة ليلة الغد."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "তোমার ফলো-আপ রিমাইন্ডার আগামীকাল রাতে বন্ধ হয়ে যাবে।"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Els teus recordatoris de seguiment s’aturen demà a la nit."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvoje následné připomínky se vypnou zítra v noci."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dine opfølgende påmindelser stopper i morgen aften."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine Folgeerinnerungen enden morgen Abend."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Οι υπενθυμίσεις συνέχειας σταματούν αύριο το βράδυ."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tus recordatorios de seguimiento se detienen mañana por la noche."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jatkomuistutuksesi päättyvät huomisiltana."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tes rappels de suivi s'arrêtent demain soir."
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "તારા ફૉલો-અપ રિમાઇન્ડર કાલે રાત્રે બંધ થઈ જશે."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "תזכורות ההמשך שלך יפסיקו מחר בלילה."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "तुम्हारे फ़ॉलो-अप रिमाइंडर कल रात बंद हो जाएँगे।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvoji naknadni podsjetnici prestaju sutra navečer."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Az ismételt emlékeztetőid holnap este leállnak."
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pengingat lanjutanmu berhenti besok malam."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I tuoi promemoria successivi si fermano domani sera."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "フォローアップのリマインダーは明日の夜に止まります。"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ನಿನ್ನ ಮರು ಜ್ಞಾಪನೆಗಳು ನಾಳೆ ರಾತ್ರಿ ನಿಲ್ಲುತ್ತವೆ."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "후속 알림이 내일 밤에 멈춰요."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "നിന്റെ ഫോളോ-അപ്പ് റിമൈൻഡറുകൾ നാളെ രാത്രി നിലയ്ക്കും."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "तुझे फॉलो-अप रिमाइंडर उद्या रात्री बंद होतील."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Peringatan susulan kamu berhenti esok malam."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oppfølgingspåminnelsene dine stopper i morgen kveld."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je vervolgherinneringen stoppen morgenavond."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ତୁମର ଫଲୋ-ଅପ୍ ରିମାଇଣ୍ଡର୍ ଆସନ୍ତାକାଲି ରାତିରେ ବନ୍ଦ ହେବ।"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਤੇਰੇ ਫਾਲੋ-ਅੱਪ ਰਿਮਾਈਂਡਰ ਕੱਲ੍ਹ ਰਾਤ ਬੰਦ ਹੋ ਜਾਣਗੇ।"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Twoje ponowne przypomnienia wyłączą się jutro w nocy."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seus lembretes de acompanhamento param amanhã à noite."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Os teus lembretes de seguimento param amanhã à noite."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mementourile tale repetate se opresc mâine seară."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Твои повторные напоминания отключатся завтра ночью."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvoje následné pripomienky sa vypnú zajtra večer."
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvoji ponovni opomniki se ustavijo jutri zvečer."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dina uppföljningspåminnelser upphör imorgon kväll."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "உன் தொடர் நினைவூட்டல்கள் நாளை இரவு நின்றுவிடும்."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "నీ ఫాలో-అప్ రిమైండర్లు రేపు రాత్రి ఆగిపోతాయి."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "การเตือนซ้ำของคุณจะหยุดคืนพรุ่งนี้"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Takip hatırlatmaların yarın gece duracak."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Твої повторні нагадування вимкнуться завтра вночі."
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تمہاری فالو اپ یاد دہانیاں کل رات بند ہو جائیں گی۔"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nhắc bổ sung của bạn sẽ dừng vào tối mai."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的后续提醒将在明晚停止。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的後續提醒將在明天晚上停止。"
+          }
+        }
+      }
+    },
+    "notification.trial_expiry.day15.title": {
+      "comment": "Reverse Trial expiry-day notification title, morning the trial ends [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your Plus trial has ended"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "انتهت فترتك التجريبية في Plus"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "তোমার Plus ট্রায়াল শেষ হয়ে গেছে"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El teu període de prova del Plus ha acabat"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvoje zkušební období Plus skončilo"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Din Plus-prøveperiode er udløbet"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine Plus-Testphase ist beendet"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Η δοκιμή του Plus έληξε"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu prueba de Plus ha terminado"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus-kokeilusi on päättynyt"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton essai Plus est terminé"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "તારો Plus ટ્રાયલ પૂરો થઈ ગયો છે"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "תקופת הניסיון של Plus הסתיימה"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "तुम्हारा Plus ट्रायल ख़त्म हो गया है"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvoje Plus probno razdoblje je završilo"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A Plus próbaidőszakod lejárt"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uji coba Plus kamu telah berakhir"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La prova di Pillie Plus è terminata"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plusのトライアルは終了しました"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ನಿನ್ನ Plus ಟ್ರಯಲ್ ಮುಗಿದಿದೆ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus 체험이 끝났어요"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "നിന്റെ Plus ട്രയൽ അവസാനിച്ചു"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "तुझा Plus ट्रायल संपला आहे"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Percubaan Plus kamu telah tamat"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus-prøveperioden din er over"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je Plus-proefperiode is afgelopen"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ତୁମର Plus ଟ୍ରାୟାଲ୍ ଶେଷ ହୋଇଛି"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਤੇਰਾ Plus ਟ੍ਰਾਇਲ ਖ਼ਤਮ ਹੋ ਗਿਆ ਹੈ"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Twój okres próbny Plus dobiegł końca"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seu teste do Plus terminou"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O teu período de teste do Plus terminou"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Perioada ta de probă Plus s-a încheiat"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Твой пробный период Plus закончился"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvoje skúšobné obdobie Plus sa skončilo"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvoj preizkus Plus se je končal"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Din Plus-provperiod har tagit slut"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "உன் Plus சோதனைக் காலம் முடிந்துவிட்டது"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "నీ Plus ట్రయల్ ముగిసింది"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ช่วงทดลองใช้ Plus ของคุณสิ้นสุดแล้ว"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus deneme süren sona erdi"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Твій пробний період Plus завершився"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تمہارا Plus ٹرائل ختم ہو گیا ہے"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bản dùng thử Plus của bạn đã kết thúc"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的 Plus 试用已结束"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的 Plus 試用已結束"
+          }
+        }
+      }
+    },
+    "notification.trial_expiry.day15.body": {
+      "comment": "Reverse Trial expiry-day notification body; no numbers, safe at delivery [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your routine is still set up and waiting. Open Pillie to keep it going."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "روتينك ما زال جاهزًا في انتظارك. يمكنك فتح Pillie لمتابعته."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "তোমার রুটিন এখনও সেট করা আছে এবং অপেক্ষা করছে। চালিয়ে যেতে Pillie খোলো।"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La teva rutina continua configurada i t’espera. Obre Pillie per continuar."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvoje rutina je pořád nastavená a čeká. Otevři Pillie a pokračuj."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Din rutine er stadig sat op og venter. Åbn Pillie for at fortsætte."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine Routine ist noch eingerichtet und wartet. Öffne Pillie, um weiterzumachen."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Η ρουτίνα σου είναι ακόμα ρυθμισμένη και περιμένει. Άνοιξε το Pillie για να συνεχίσεις."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu rutina sigue configurada y te espera. Abre Pillie para continuar."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rutiinisi on yhä asetettu ja odottaa. Avaa Pillie ja jatka siitä."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ta routine est toujours en place et t'attend. Ouvre Pillie pour la poursuivre."
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "તારી રૂટીન હજુ સેટ છે અને રાહ જોઈ રહી છે. ચાલુ રાખવા Pillie ખોલ."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "השגרה שלך עדיין מוגדרת וממתינה. אפשר לפתוח את Pillie כדי להמשיך."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "तुम्हारी रूटीन अब भी सेट है और इंतज़ार कर रही है। जारी रखने के लिए Pillie खोलो।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvoja rutina je i dalje postavljena i čeka. Otvori Pillie da nastaviš."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A rutinod még be van állítva, és vár rád. Nyisd meg a Pillie-t a folytatáshoz."
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rutinitasmu masih tersimpan dan menunggu. Buka Pillie untuk melanjutkan."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La tua routine è ancora impostata e ti aspetta. Apri Pillie per continuare."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ルーティンの設定はそのまま残っています。Pillieを開いて続けましょう。"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ನಿನ್ನ ದಿನಚರಿ ಇನ್ನೂ ಸೆಟ್ ಆಗಿದೆ ಮತ್ತು ಕಾಯುತ್ತಿದೆ. ಮುಂದುವರಿಸಲು Pillie ತೆರೆ."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "루틴 설정은 그대로 있어요. Pillie를 열어 이어가요."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "നിന്റെ ദിനചര്യ ഇപ്പോഴും സജ്ജമാണ്, കാത്തിരിക്കുന്നു. തുടരാൻ Pillie തുറക്കൂ."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "तुझी दिनचर्या अजूनही सेट आहे आणि वाट पाहत आहे. पुढे चालू ठेवण्यासाठी Pillie उघड."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rutin kamu masih disediakan dan menunggu. Buka Pillie untuk teruskan."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rutinen din er fortsatt satt opp og venter. Åpne Pillie for å fortsette."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je routine staat nog klaar en wacht op je. Open Pillie om door te gaan."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ତୁମର ରୁଟିନ୍ ଏବେ ବି ସେଟ୍ ହୋଇ ଅପେକ୍ଷା କରୁଛି। ଜାରି ରଖିବାକୁ Pillie ଖୋଲ।"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਤੇਰੀ ਰੁਟੀਨ ਹਾਲੇ ਵੀ ਸੈੱਟ ਹੈ ਤੇ ਉਡੀਕ ਕਰ ਰਹੀ ਹੈ। ਜਾਰੀ ਰੱਖਣ ਲਈ Pillie ਖੋਲ੍ਹ।"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Twoja rutyna nadal jest ustawiona i czeka. Otwórz Pillie, aby kontynuować."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sua rotina continua configurada e esperando. Abra o Pillie para continuar."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A tua rotina continua configurada à tua espera. Abre o Pillie para continuar."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rutina ta e încă setată și te așteaptă. Deschide Pillie ca să continui."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Твоя рутина всё ещё настроена и ждёт. Открой Pillie, чтобы продолжить."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvoja rutina je stále nastavená a čaká. Otvor Pillie a pokračuj."
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvoja rutina je še vedno nastavljena in čaka. Odpri Pillie in nadaljuj."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Din rutin är fortfarande inställd och väntar. Öppna Pillie för att fortsätta."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "உன் வழக்கம் இன்னும் அமைக்கப்பட்டு காத்திருக்கிறது. தொடர Pillie-ஐத் திற."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "నీ రొటీన్ ఇంకా సెట్ అయి ఉంది, నీ కోసం వేచి ఉంది. కొనసాగడానికి Pillie తెరువు."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "รูทีนของคุณยังตั้งไว้และรออยู่ เปิด Pillie เพื่อทำต่อ"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rutinin hâlâ kurulu ve seni bekliyor. Devam etmek için Pillie'yi aç."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Твоя рутина досі налаштована й чекає. Відкрий Pillie, щоб продовжити."
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تمہارا روٹین اب بھی سیٹ ہے اور انتظار کر رہا ہے۔ جاری رکھنے کے لیے Pillie کھولو۔"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nhịp của bạn vẫn được thiết lập và đang chờ. Mở Pillie để tiếp tục."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的日常设置仍然保留。打开 Pillie 继续吧。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的日常設定仍然保留。打開 Pillie 繼續吧。"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

@@ -288,11 +288,11 @@ enum OnboardingFlow {
         for rawValue: Int,
         isPlus: Bool,
         selectedFreePlan: Bool,
-        needsTodayPill: Bool = false
+        needsTodayPick: Bool = false
     ) -> Step? {
         guard let step = step(for: rawValue) else { return nil }
 
-        if step == .reminderTime && needsTodayPill {
+        if step == .reminderTime && needsTodayPick {
             return .schedule
         }
 

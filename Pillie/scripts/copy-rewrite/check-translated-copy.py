@@ -7,6 +7,7 @@ Run this after any user-facing copy change. English-only is not done.
 from __future__ import annotations
 
 import json
+import subprocess
 import sys
 from pathlib import Path
 
@@ -59,11 +60,11 @@ ACTIVE_DAY_TOKENS: dict[str, tuple[str, ...]] = {
     "hi": ("सक्रिय",),
     "bn": ("সক্রিয়",),
     "gu": ("સક્રિય",),
-    "kn": ("ಸಕ್ರಿಯ", "ಯಾಕ್ಟಿವ್"),
+    "kn": ("ಸಕ್ರಿಯ",),
     "ml": ("സജീവ",),
     "mr": ("सक्रिय",),
     "or": ("ସକ୍ରିୟ",),
-    "pa": ("ਸਕ੍ਰਿਯ", "ਸਰਗਰਮ"),
+    "pa": ("ਸਰਗਰਮ",),
     "ta": ("செயல்",),
     "te": ("యాక్టివ్",),
     "ur": ("فعال",),
@@ -117,8 +118,8 @@ def main() -> int:
         print(f"checked {checked} English active-day keys")
         print("\n".join(errors))
         return 1
-    print(f"ok: {checked} English active-day keys have every locale")
-    return 0
+    print(f"ok: {checked} English active-day keys have every locale", flush=True)
+    return subprocess.run([sys.executable, str(SCRIPT_DIR / "check-script-leaks.py")]).returncode
 
 
 if __name__ == "__main__":

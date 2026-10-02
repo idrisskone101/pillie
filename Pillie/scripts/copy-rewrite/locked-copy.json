@@ -276,14 +276,6 @@
     {
       "issue": "ENG-63",
       "table": "Localizable",
-      "key": "today.pack.title",
-      "en": "This cycle",
-      "de": "Dieser Zyklus",
-      "it": "Questo ciclo"
-    },
-    {
-      "issue": "ENG-63",
-      "table": "Localizable",
       "key": "today.pack.day_of_total",
       "en": "Day %lld of %lld",
       "de": "Tag %lld von %lld",
@@ -2287,6 +2279,282 @@
       "en": "Tomorrow, %@",
       "de": "Morgen, %@",
       "it": "Domani, %@"
+    },
+    {
+      "issue": "ENG-62",
+      "table": "Localizable",
+      "key": "history.legend.patch_change",
+      "create": true,
+      "comment": "Legend, patch change day [health]",
+      "en": "Change day",
+      "de": "Wechseltag",
+      "it": "Giorno del cambio"
+    },
+    {
+      "issue": "ENG-62",
+      "table": "Localizable",
+      "key": "history.legend.ring_reinsert",
+      "create": true,
+      "comment": "Legend, ring reinsert day, when a new ring goes in [health]",
+      "en": "New ring day",
+      "de": "Tag des neuen Rings",
+      "it": "Giorno del nuovo anello"
+    },
+    {
+      "issue": "ENG-140",
+      "table": "Localizable",
+      "key": "today.first_reminder.tonight",
+      "create": true,
+      "comment": "First Due Action Reminder is later today, evening [health]",
+      "en": "Your first reminder is tonight",
+      "de": "Deine erste Erinnerung ist heute Abend",
+      "it": "Il tuo primo promemoria è stasera"
+    },
+    {
+      "issue": "ENG-140",
+      "table": "Localizable",
+      "key": "today.first_reminder.this_morning",
+      "create": true,
+      "comment": "First Due Action Reminder is this morning, before noon [health]",
+      "en": "Your first reminder is this morning",
+      "de": "Deine erste Erinnerung ist heute Morgen",
+      "it": "Il tuo primo promemoria è stamattina"
+    },
+    {
+      "issue": "ENG-140",
+      "table": "Localizable",
+      "key": "today.first_reminder.tomorrow_morning",
+      "create": true,
+      "comment": "First Due Action Reminder is tomorrow, before noon [health]",
+      "en": "Your first reminder is tomorrow morning",
+      "de": "Deine erste Erinnerung ist morgen früh",
+      "it": "Il tuo primo promemoria è domani mattina"
+    },
+    {
+      "issue": "ENG-140",
+      "table": "Localizable",
+      "key": "today.first_reminder.this_afternoon",
+      "create": true,
+      "comment": "First Due Action Reminder is later today, afternoon [health]",
+      "en": "Your first reminder is this afternoon",
+      "de": "Deine erste Erinnerung ist heute Nachmittag",
+      "it": "Il tuo primo promemoria è oggi pomeriggio"
+    },
+    {
+      "issue": "ENG-140",
+      "table": "Localizable",
+      "key": "today.first_reminder.tomorrow_afternoon",
+      "create": true,
+      "comment": "First Due Action Reminder is tomorrow, afternoon [health]",
+      "en": "Your first reminder is tomorrow afternoon",
+      "de": "Deine erste Erinnerung ist morgen Nachmittag",
+      "it": "Il tuo primo promemoria è domani pomeriggio"
+    },
+    {
+      "issue": "ENG-140",
+      "table": "Localizable",
+      "key": "today.first_reminder.tomorrow_night",
+      "create": true,
+      "comment": "First Due Action Reminder is tomorrow, evening [health]",
+      "en": "Your first reminder is tomorrow night",
+      "de": "Deine erste Erinnerung ist morgen Abend",
+      "it": "Il tuo primo promemoria è domani sera"
+    },
+    {
+      "issue": "ENG-140",
+      "table": "Localizable",
+      "key": "today.first_reminder.card",
+      "create": true,
+      "comment": "Status card subtitle on Home before the first reminder fires [standard]",
+      "en": "First reminder",
+      "de": "Erste Erinnerung",
+      "it": "Primo promemoria"
+    },
+    {
+      "issue": "ENG-140",
+      "table": "Localizable",
+      "key": "today.first_reminder.took_it",
+      "create": true,
+      "comment": "Log button on Home before the first reminder fires, for a dose already taken [standard]",
+      "en": "Took it",
+      "de": "Genommen",
+      "it": "Già presa"
+    },
+    {
+      "issue": "ENG-150",
+      "table": "Localizable",
+      "key": "shake.streak.headline.start",
+      "create": true,
+      "comment": "Shake confirm headline before the first shake, when there is a streak to keep [standard]",
+      "en": "Shake to keep it going",
+      "de": "Schüttel für deinen Streak",
+      "it": "Scuoti per tenere la streak"
+    },
+    {
+      "issue": "ENG-150",
+      "table": "Localizable",
+      "key": "shake.streak.headline.keep_going",
+      "create": true,
+      "comment": "Shake confirm headline after the first shake [standard]",
+      "en": "Keep going",
+      "de": "Weiter so",
+      "it": "Continua così"
+    },
+    {
+      "issue": "ENG-150",
+      "table": "Localizable",
+      "key": "shake.streak.headline.almost",
+      "create": true,
+      "comment": "Shake confirm headline after the second shake [standard]",
+      "en": "Almost there",
+      "de": "Fast geschafft",
+      "it": "Ci sei quasi"
+    },
+    {
+      "issue": "ENG-150",
+      "table": "Localizable",
+      "key": "shake.streak.headline.kept",
+      "create": true,
+      "comment": "Shake confirm headline once the dose is logged and the streak grows [standard]",
+      "en": "Streak kept",
+      "de": "Streak gehalten",
+      "it": "Streak mantenuta"
+    },
+    {
+      "issue": "ENG-150",
+      "table": "Localizable",
+      "key": "shake.streak.headline.counting",
+      "create": true,
+      "comment": "Shake confirm headline after the first shake; the number is the current streak",
+      "en": "%lld and counting",
+      "de": "%lld und es geht weiter",
+      "it": "%lld e si continua"
+    },
+    {
+      "issue": "ENG-150",
+      "table": "Localizable",
+      "key": "shake.streak.headline.almost_count",
+      "create": true,
+      "comment": "Shake confirm headline after the second shake; the number is the streak it is about to reach",
+      "en": "Almost %lld",
+      "de": "Fast %lld",
+      "it": "Quasi %lld"
+    },
+    {
+      "issue": "ENG-150",
+      "table": "Localizable",
+      "key": "shake.logged.take_pill",
+      "create": true,
+      "comment": "Chip after a pill is logged from the shake confirm; pill number in the pack, then a short time like 8:02 PM",
+      "en": "Pill %1$lld logged at %2$@",
+      "de": "Pille %1$lld um %2$@ eingetragen",
+      "it": "Pillola %1$lld registrata alle %2$@"
+    },
+    {
+      "issue": "ENG-150",
+      "table": "Localizable",
+      "key": "shake.logged.sugar_pill",
+      "create": true,
+      "comment": "Chip after a sugar (placebo) pill is logged from the shake confirm; the pill's number within the break week, then a short time like 8:02 PM",
+      "en": "Sugar pill %1$lld logged at %2$@",
+      "de": "Zuckerpille %1$lld um %2$@ eingetragen",
+      "it": "Pillola placebo %1$lld registrata alle %2$@"
+    },
+    {
+      "issue": "ENG-150",
+      "table": "Localizable",
+      "key": "shake.logged.apply_patch",
+      "create": true,
+      "comment": "Chip after the first patch of a cycle is logged; %@ is a short time",
+      "en": "Patch applied at %@",
+      "de": "Pflaster um %@ aufgeklebt",
+      "it": "Cerotto applicato alle %@"
+    },
+    {
+      "issue": "ENG-150",
+      "table": "Localizable",
+      "key": "shake.logged.change_patch",
+      "create": true,
+      "comment": "Chip after a patch change is logged; %@ is a short time",
+      "en": "Patch changed at %@",
+      "de": "Pflaster um %@ gewechselt",
+      "it": "Cerotto cambiato alle %@"
+    },
+    {
+      "issue": "ENG-150",
+      "table": "Localizable",
+      "key": "shake.logged.remove_patch",
+      "create": true,
+      "comment": "Chip after the patch is removed for the patch-free week; %@ is a short time",
+      "en": "Patch removed at %@",
+      "de": "Pflaster um %@ abgenommen",
+      "it": "Cerotto tolto alle %@"
+    },
+    {
+      "issue": "ENG-150",
+      "table": "Localizable",
+      "key": "shake.logged.insert_ring",
+      "create": true,
+      "comment": "Chip after the first ring is inserted; %@ is a short time",
+      "en": "Ring inserted at %@",
+      "de": "Ring um %@ eingesetzt",
+      "it": "Anello inserito alle %@"
+    },
+    {
+      "issue": "ENG-150",
+      "table": "Localizable",
+      "key": "shake.logged.change_ring",
+      "create": true,
+      "comment": "Chip after a new ring replaces the old one; %@ is a short time",
+      "en": "Ring changed at %@",
+      "de": "Ring um %@ gewechselt",
+      "it": "Anello cambiato alle %@"
+    },
+    {
+      "issue": "ENG-150",
+      "table": "Localizable",
+      "key": "shake.logged.remove_ring",
+      "create": true,
+      "comment": "Chip after the ring is removed for the ring-free week; %@ is a short time",
+      "en": "Ring removed at %@",
+      "de": "Ring um %@ rausgenommen",
+      "it": "Anello tolto alle %@"
+    },
+    {
+      "issue": "ENG-141",
+      "table": "Notifications",
+      "key": "notification.trial_expiry.day10.reminders.body",
+      "create": true,
+      "en": "Your follow-up reminders stop in 5 days.",
+      "de": "Deine Folgeerinnerungen enden in 5 Tagen.",
+      "it": "I tuoi promemoria successivi si fermano tra 5 giorni."
+    },
+    {
+      "issue": "ENG-141",
+      "table": "Notifications",
+      "key": "notification.trial_expiry.day13.reminders.body",
+      "create": true,
+      "en": "Your follow-up reminders stop tomorrow night.",
+      "de": "Deine Folgeerinnerungen enden morgen Abend.",
+      "it": "I tuoi promemoria successivi si fermano domani sera."
+    },
+    {
+      "issue": "ENG-141",
+      "table": "Notifications",
+      "key": "notification.trial_expiry.day15.title",
+      "create": true,
+      "en": "Your Plus trial has ended",
+      "de": "Deine Plus-Testphase ist beendet",
+      "it": "La prova di Pillie Plus è terminata"
+    },
+    {
+      "issue": "ENG-141",
+      "table": "Notifications",
+      "key": "notification.trial_expiry.day15.body",
+      "create": true,
+      "en": "Your routine is still set up and waiting. Open Pillie to keep it going.",
+      "de": "Deine Routine ist noch eingerichtet und wartet. Öffne Pillie, um weiterzumachen.",
+      "it": "La tua routine è ancora impostata e ti aspetta. Apri Pillie per continuare."
     }
   ]
 }

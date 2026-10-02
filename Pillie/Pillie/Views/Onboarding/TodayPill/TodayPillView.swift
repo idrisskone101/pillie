@@ -14,11 +14,12 @@ struct TodayPillView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     // Seeded in onAppear, not a custom init, so the SDK 27 @State macro stays well-behaved.
-    @State private var selection = TodayPillSelection(regimen: .twentyOneSeven)
+    @State private var selection = TodayPillSelection(pack: PackChoice(preset: .twentyOneSeven))
     @State private var showsQuestion = false
     @State private var revealTask: Task<Void, Never>?
     @State private var cascadeTicks = 0
     @State private var appeared = false
+    @State private var showsPackSheet = false
 
     private let feedback = OnboardingInteractionFeedback()
 
@@ -74,7 +75,7 @@ struct TodayPillView: View {
                         marks: marks,
                         onSelectDay: tap
                     ) {
-                        TodayPillPackHeader(regimen: selection.regimen, onChange: changeRegimen)
+                        TodayPillPackHeader(pack: selection.pack) { showsPackSheet = true }
                     }
                     .planBuilderReveal(appeared, animationsEnabled, delay: PillieTheme.stagger2)
 
@@ -102,6 +103,9 @@ struct TodayPillView: View {
             }
         }
         .sensoryFeedback(.impact(weight: .light, intensity: 0.5), trigger: cascadeTicks)
+        .sheet(isPresented: $showsPackSheet) {
+            PackTypeSheet(current: selection.pack, onPick: changePack)
+        }
         .onAppear {
             seed()
             appeared = true
@@ -127,8 +131,7 @@ struct TodayPillView: View {
             return
         }
         let pack = store.pack
-        let storedRegimen = pack.method == .pill ? pack.pillRegimen : .twentyOneSeven
-        selection = TodayPillSelection(regimen: storedRegimen == .custom ? .twentyOneSeven : storedRegimen)
+        selection = TodayPillSelection(pack: pack.method == .pill ? PackChoice(pack.regimen) : PackChoice(preset: .twentyOneSeven))
     }
 
     private func tap(_ index: Int) {
@@ -142,15 +145,18 @@ struct TodayPillView: View {
             return
         }
         guard !showsQuestion else { return }
-        let popped = index - (previous ?? 0)
+        // Only the tapped pill's page cascades; the card pops earlier pages at once.
+        let pageStart = index / PackCardLayout.daysPerPage * PackCardLayout.daysPerPage
+        let popped = index - max(previous ?? 0, pageStart)
+        let tickGap = PackPopSequence.stagger(pops: popped) * Self.cascadeTickEvery
         revealTask = Task { @MainActor in
             if !reduceMotion {
                 for _ in stride(from: Self.cascadeTickEvery, through: popped, by: Self.cascadeTickEvery) {
-                    try? await Task.sleep(for: PackPopSequence.popStagger * Self.cascadeTickEvery)
+                    try? await Task.sleep(for: tickGap)
                     guard !Task.isCancelled else { return }
                     cascadeTicks += 1
                 }
-                let elapsed = PackPopSequence.popStagger * Self.cascadeTickEvery * max(0, popped / Self.cascadeTickEvery)
+                let elapsed = tickGap * max(0, popped / Self.cascadeTickEvery)
                 if elapsed < Self.questionDelay {
                     try? await Task.sleep(for: Self.questionDelay - elapsed)
                 }
@@ -166,31 +172,41 @@ struct TodayPillView: View {
         if answer == .taken { feedback.markDueActionTaken(accessibilityReduceMotion: reduceMotion) }
     }
 
-    private func changeRegimen(_ regimen: PillPack.PillRegimenPreset) {
-        selection.changeRegimen(regimen)
+    private func changePack(_ pack: PackChoice) {
+        selection.changePack(pack)
         revealTask?.cancel()
         showsQuestion = selection.asksQuestion
     }
 }
 
 private struct TodayPillPackHeader: View {
-    let regimen: PillPack.PillRegimenPreset
-    let onChange: (PillPack.PillRegimenPreset) -> Void
+    let pack: PackChoice
+    let onChange: () -> Void
 
-    private static let presets = (RoutineRegimenCatalog.common + RoutineRegimenCatalog.more).filter { $0 != .custom }
+    // A glyph wider than five weeks would overflow the 44 pt box.
+    private static let glyphMaxDays = 35
 
     var body: some View {
         HStack(spacing: 12) {
-            PackGlyph(regimen: regimen.resolvedRegimen(custom: nil))
-                .accessibilityHidden(true)
+            Group {
+                if pack.regimen.totalDays <= Self.glyphMaxDays {
+                    PackGlyph(regimen: pack.regimen)
+                } else {
+                    SlidersIcon()
+                        .frame(width: 24, height: 24)
+                }
+            }
+            .frame(width: 44, height: 44)
+            .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(PillieTheme.coralLight))
+            .accessibilityHidden(true)
 
             VStack(alignment: .leading, spacing: 2) {
-                Text(regimen.localizedRoutineDisplayName())
+                Text(pack.displayName())
                     .font(.pillie(17, weight: .bold))
                     .foregroundStyle(PillieTheme.textPrimary)
                     .lineLimit(1)
                     .minimumScaleFactor(0.8)
-                Text(regimen.localizedScheduleSummary())
+                Text(pack.scheduleSummary())
                     .font(.pillie(13, weight: .regular))
                     .foregroundStyle(PillieTheme.textMuted)
                     .lineLimit(2)
@@ -200,20 +216,7 @@ private struct TodayPillPackHeader: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .accessibilityElement(children: .combine)
 
-            Menu {
-                ForEach(Self.presets, id: \.self) { preset in
-                    Button {
-                        onChange(preset)
-                    } label: {
-                        if preset == regimen {
-                            Label(preset.localizedRoutineDisplayName(), systemImage: "checkmark")
-                        } else {
-                            Text(preset.localizedRoutineDisplayName())
-                        }
-                        Text(preset.localizedScheduleSummary())
-                    }
-                }
-            } label: {
+            Button(action: onChange) {
                 HStack(spacing: 5) {
                     Text(PillieLocalization.string("onboarding.today_pill.change"))
                         .font(.pillie(13, weight: .bold))
@@ -229,47 +232,10 @@ private struct TodayPillPackHeader: View {
                 .overlay(Capsule().strokeBorder(PillieTheme.coral, lineWidth: 1.5))
                 .contentShape(Capsule())
             }
+            .buttonStyle(.plain)
             .fixedSize()
             .accessibilityIdentifier("todayPillChangeButton")
         }
-    }
-}
-
-private struct PackGlyph: View {
-    let regimen: PackRegimen
-
-    private static let dot: CGFloat = 3.6
-    private static let gap: CGFloat = 1.4
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: Self.gap) {
-            ForEach(0..<regimen.weekCount, id: \.self) { week in
-                HStack(spacing: Self.gap) {
-                    ForEach(week * 7..<min(week * 7 + 7, regimen.totalDays), id: \.self) { index in
-                        dot(regimen.day(atIndex: index).kind)
-                    }
-                }
-            }
-        }
-        .frame(width: 44, height: 44)
-        .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(PillieTheme.coralLight))
-    }
-
-    @ViewBuilder
-    private func dot(_ kind: PackDay.Kind) -> some View {
-        switch kind {
-        case .active:
-            Circle().fill(GlyphColor.active).frame(width: Self.dot, height: Self.dot)
-        case .sugarPill:
-            Circle().fill(GlyphColor.sugar).frame(width: Self.dot, height: Self.dot)
-        case .noPill:
-            Circle().strokeBorder(GlyphColor.sugar, lineWidth: 0.8).frame(width: Self.dot, height: Self.dot)
-        }
-    }
-
-    private enum GlyphColor {
-        static let active = Color(hex: "F4A6A0")
-        static let sugar = Color(hex: "C3D3C0")
     }
 }
 

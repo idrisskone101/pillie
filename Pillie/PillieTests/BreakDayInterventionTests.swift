@@ -60,7 +60,8 @@ final class BreakDayInterventionTests: XCTestCase {
         let nextCycleStart = try date(offset: 28, from: cycleStart)
         let fixture = try InMemoryStoreFactory.makeStore(
             now: day27,
-            regimen: .twentySixTwo,
+            regimen: .custom,
+            customRegimen: PackRegimen(activeDays: 26, breakDays: 2, breakKind: .noPills),
             startDate: cycleStart
         )
         let pack = fixture.store.pack
