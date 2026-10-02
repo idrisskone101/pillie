@@ -757,42 +757,36 @@ struct PillieApp: App {
                 break
             }
         case "/trial-end-paywall":
-            // QA shortcut (#169): land on Home with a trial aged past expiry and
-            // the one-shot auto-present window reopened, so the Trial-End
-            // Paywall appears on the next Home pass. `?cohort=blocker` forces
-            // the blocker-configured (loss-framed) cohort — FamilyControls
-            // tokens can never be selected on the simulator; anything else is
-            // the reminder-only (gain-framed) cohort. `?terms=hard` applies a
-            // deterministic post-cutover expired scenario for pre-cutover QA.
-            // Combine with
-            // /intervention-seed and /review-prompt-style seeded history for
-            // real-looking stats.
+            // QA shortcut (#169): Home with an expired trial, so the Trial-End
+            // Paywall auto-presents. Reuses the developer-menu scenarios, which
+            // age the trial by active pill days. `terms=soft` is the closable
+            // pre-cutover wall (anything else is the hard wall), `cohort=blocker`
+            // the loss-framed blocker cohort, `success=1` the post-purchase
+            // state, `subscriber=1` an active Plus entitlement.
             let queryItems = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems
-            let cohort = queryItems?.first(where: { $0.name == "cohort" })?.value
-            let forceHardPaywall = queryItems?.first(where: { $0.name == "terms" })?.value == "hard"
-            let feedback = queryItems?.first(where: { $0.name == "feedback" })?.value
-            let subscriber = queryItems?.first(where: { $0.name == "subscriber" })?.value == "1"
-            AppBlockingManager.shared.debugBlockerConfiguredOverride = (cohort == "blocker")
-            let feedbackStore = KeychainTrialDeclineFeedbackResolutionStore()
-            if feedback == "resolved" {
-                feedbackStore.markResolved()
-            } else if feedback == "unresolved" {
-                feedbackStore.clearResolution()
+            func query(_ name: String) -> String? {
+                queryItems?.first(where: { $0.name == name })?.value
             }
-            if queryItems?.first(where: { $0.name == "success" })?.value == "1" {
-                // Render the post-purchase success state (sandbox purchases are
-                // unreachable from simctl launches).
+            let feedbackStore = KeychainTrialDeclineFeedbackResolutionStore()
+            switch query("feedback") {
+            case "resolved": feedbackStore.markResolved()
+            case "unresolved": feedbackStore.clearResolution()
+            default: break
+            }
+            let blocker = query("cohort") == "blocker"
+            let scenario: DebugQAScenario = switch (query("terms") == "soft", blocker) {
+            case (false, true): .trialExpiredNewUserBlocker
+            case (false, false): .trialExpiredNewUserReminder
+            case (true, true): .trialExpiredGrandfatherBlocker
+            case (true, false): .trialExpiredGrandfatherReminder
+            }
+            DebugQA.apply(scenario, store: store)
+            if query("success") == "1" {
                 UserDefaults.standard.set(true, forKey: HonestPaywallScreen.debugSuccessStateKey)
             }
-            SubscriptionManager.shared.setPlusForTesting(subscriber)
-            let scenario = TrialEndPaywallDebugScenario.make(
-                forceHardPaywall: forceHardPaywall
-            )
-            UserDefaults.standard.removeObject(forKey: TrialEndPaywallAutoPresentation.shownStorageKey)
-            UserDefaults.standard.set(false, forKey: OnboardingFlow.selectedFreePlanStorageKey)
-            UserDefaults.standard.set(OnboardingFlow.Step.complete.rawValue, forKey: OnboardingFlow.stepStorageKey)
-            SubscriptionManager.shared.debugApplyTrialEndPaywallScenario(scenario)
-            reconcileScreenTimeState()
+            if query("subscriber") == "1" {
+                SubscriptionManager.shared.setPlusForTesting(true)
+            }
         case "/restore-outcome":
             // QA fault injection (ENG-74): `restore()` returns this outcome
             // without calling RevenueCat. `restored` also grants Plus.
