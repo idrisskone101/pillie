@@ -2,9 +2,8 @@
 //  ProtectionPlanRoutineContentTests.swift
 //  PillieTests
 //
-//  Verifies the copy for Routine Method and Reminder Time (#77)
-//  matches the Superdesign drafts (consolidated to keep each screen uncluttered) and
-//  respects Pillie's privacy / non-medical boundary. Value types only — no host crash.
+//  Verifies Routine Method and Reminder Time (#77) read their catalog keys and
+//  respect Pillie's privacy / non-medical boundary. Value types only — no host crash.
 //
 
 import XCTest
@@ -14,18 +13,22 @@ import XCTest
 final class ProtectionPlanRoutineContentTests: XCTestCase {
     // MARK: - Routine Method
 
-    func testRoutineMethodContentMatchesDraftAndOffersEveryMethod() {
-        let content = ProtectionPlanRoutineMethodContent.default
-        XCTAssertEqual(content.title, "The core of it")
-        XCTAssertEqual(content.subtitle, "What routine should Pillie protect?")
-        XCTAssertEqual(content.footnote, "This reminder setup is based on your selections. You can change it later in Settings.")
-        XCTAssertEqual(content.primaryCTA, "Continue")
-        XCTAssertEqual(content.choices, ContraceptiveMethod.allCases)
+    func testRoutineMethodContentReadsItsCatalogKeysAndOffersEveryMethod() {
+        let content = ProtectionPlanRoutineMethodContent.localized(locale: english)
+        XCTAssertEqual(content.title, catalog("onboarding.method.title"))
+        XCTAssertEqual(content.subtitle, catalog("onboarding.method.subtitle"))
+        XCTAssertEqual(content.footnote, catalog("onboarding.plan.disclaimer"))
+        XCTAssertEqual(content.primaryCTA, catalog("global.action.continue"))
+        XCTAssertEqual(content.choices, [.pill, .patch, .ring])
     }
 
     func testEachMethodHasADistinctPlainLanguageDescriptor() {
-        let descriptors = ContraceptiveMethod.allCases.map(\.routineDescriptor)
-        XCTAssertEqual(descriptors, ["Taken daily", "Changed weekly", "Monthly cycle"])
+        let descriptors = ContraceptiveMethod.allCases.map { $0.localizedRoutineDescriptor(locale: english) }
+        XCTAssertEqual(descriptors, [
+            catalog("onboarding.method.pill.subtitle"),
+            catalog("onboarding.method.patch.subtitle"),
+            catalog("onboarding.method.ring.subtitle"),
+        ])
         XCTAssertEqual(Set(descriptors).count, ContraceptiveMethod.allCases.count)
     }
 
@@ -37,14 +40,12 @@ final class ProtectionPlanRoutineContentTests: XCTestCase {
 
     // MARK: - Reminder Time
 
-    func testReminderTimeContentUsesDueActionFraming() {
-        let content = ProtectionPlanReminderTimeContent.default
-        XCTAssertEqual(content.title, "The golden hour")
-        XCTAssertEqual(content.subtitle, "When should Pillie step in?")
-        // The Due Action Time concept is named once, on the picker, rather than
-        // repeated in a redundant helper line — the screen stays uncluttered.
-        XCTAssertEqual(content.pickerLabel, "Due Action Time")
-        XCTAssertEqual(content.primaryCTA, "Set Reminder Time")
+    func testReminderTimeContentReadsItsCatalogKeys() {
+        let content = ProtectionPlanReminderTimeContent.localized(locale: english)
+        XCTAssertEqual(content.title, catalog("onboarding.reminder_time.title"))
+        XCTAssertEqual(content.subtitle, catalog("onboarding.reminder_time.subtitle"))
+        XCTAssertEqual(content.pickerLabel, catalog("onboarding.plan.schedule"))
+        XCTAssertEqual(content.primaryCTA, catalog("onboarding.permission.cta"))
     }
 
     func testReminderTimeContentHasNoMedicalOrFakeStatLanguage() {
@@ -54,6 +55,16 @@ final class ProtectionPlanRoutineContentTests: XCTestCase {
     }
 
     // MARK: - Helpers
+
+    private let english = Locale(identifier: "en")
+
+    /// Copy passes rewrite the English, so assert the key each field reads. A key
+    /// missing from the catalog resolves to itself, which this rejects.
+    private func catalog(_ key: String, file: StaticString = #filePath, line: UInt = #line) -> String {
+        let value = PillieLocalization.string(key, locale: english)
+        XCTAssertNotEqual(value, key, "Missing catalog key \(key)", file: file, line: line)
+        return value
+    }
 
     private func assertNoMedicalOrFakeClaims(
         _ line: String,
