@@ -52,9 +52,9 @@ final class ProductAnalyticsTelemetryPaywallTests: XCTestCase {
         telemetry(recorder, isPlus: true).purchaseCompleted(plan: .monthly, isFromOnboarding: true)
         telemetry(recorder, isPlus: false).purchaseFailed(plan: .monthly, isFromOnboarding: true)
         telemetry(recorder, isPlus: false).purchaseCancelled(plan: .monthly, isFromOnboarding: true)
-        telemetry(recorder, isPlus: false).upsellRestoreStarted()
-        telemetry(recorder, isPlus: true).upsellRestoreCompleted()
-        telemetry(recorder, isPlus: false).upsellRestoreFailed()
+        telemetry(recorder, isPlus: false).restoreStarted(surface: .plusUpsell)
+        telemetry(recorder, isPlus: true).restoreFinished(.restored, surface: .plusUpsell)
+        telemetry(recorder, isPlus: false).restoreFinished(.noActivePurchase, surface: .plusUpsell)
 
         XCTAssertEqual(recorder.events.map(\.event), [
             .purchaseStarted,
@@ -62,12 +62,12 @@ final class ProductAnalyticsTelemetryPaywallTests: XCTestCase {
             .purchaseFailed,
             .purchaseCancelled,
             .restoreStarted,
-            .restoreCompleted,
-            .restoreFailed
+            .restoreSucceeded,
+            .restoreCompleted
         ])
         XCTAssertEqual(recorder.events.map(\.source), [.onboarding, .onboarding, .onboarding, .onboarding, .upsell, .upsell, .upsell])
         XCTAssertEqual(recorder.events.map(\.plan), [.monthly, .monthly, .monthly, .monthly, nil, nil, nil])
-        XCTAssertEqual(recorder.events.map(\.result), [nil, .completed, .failed, .cancelled, nil, .completed, .failed])
+        XCTAssertEqual(recorder.events.map(\.result), [nil, .completed, .failed, .cancelled, nil, .completed, .completed])
         XCTAssertEqual(recorder.events.map(\.isPlus), [false, true, false, false, false, true, false])
     }
 
@@ -214,12 +214,9 @@ final class ProductAnalyticsTelemetryPaywallTests: XCTestCase {
         )
 
         analytics.configure()
-        telemetry.restoreCompleted(
-            isFromOnboarding: false,
-            surface: .settingsSubscription
-        )
+        telemetry.restoreFinished(.restored, surface: .settingsSubscription)
 
-        XCTAssertEqual(client.events.first?.name, "restore_completed")
+        XCTAssertEqual(client.events.first?.name, "restore_succeeded")
         XCTAssertEqual(client.events.first?.properties["surface"], .string("settings_subscription"))
         XCTAssertEqual(
             client.events.first?.properties["trial_terms_cohort"],
@@ -267,7 +264,8 @@ final class ProductAnalyticsTelemetryPaywallTests: XCTestCase {
                 .protectionOffCard,
                 .homeBlockingCard,
                 .trialEnd,
-                .plusUpsell
+                .plusUpsell,
+                .onboardingVerification
             ].map(\.rawValue)
         )
     }
@@ -398,9 +396,10 @@ final class ProductAnalyticsTelemetryPaywallTests: XCTestCase {
             .home,
             .home,
             .trialEnd,
-            .upsell
+            .upsell,
+            .onboarding
         ])
-        XCTAssertEqual(recorder.surfaceEvents.map { $0.isPlus }, Array(repeating: true, count: 6))
+        XCTAssertEqual(recorder.surfaceEvents.map { $0.isPlus }, Array(repeating: true, count: 7))
     }
 
     func testAppLaunchReadsResolvedPlusAccessAtCaptureTime() {

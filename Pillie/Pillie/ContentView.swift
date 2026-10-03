@@ -722,21 +722,11 @@ struct ContentView: View {
     guard !isResolvingOnboardingAccess else { return }
     isResolvingOnboardingAccess = true
     onboardingAccessResolutionFailed = false
-    ProductAnalyticsTelemetry.live.restoreStarted(isFromOnboarding: true)
+    ProductAnalyticsTelemetry.live.restoreStarted(surface: .onboardingVerification)
     Task {
-      do {
-        try await subscriptionManager.restore()
-        switch RestoreAccessOutcome.resolve(
-          hasEntitlement: subscriptionManager.hasEntitlement
-        ) {
-        case .restored:
-          ProductAnalyticsTelemetry.live.restoreCompleted(isFromOnboarding: true)
-        case .missingPurchase:
-          ProductAnalyticsTelemetry.live.restoreFailed(isFromOnboarding: true)
-        }
-      } catch {
-        ProductAnalyticsTelemetry.live.restoreFailed(isFromOnboarding: true)
-        ProductAnalyticsTelemetry.live.trackError(.restore, error: error)
+      let outcome = await subscriptionManager.restore()
+      ProductAnalyticsTelemetry.live.restoreFinished(outcome, surface: .onboardingVerification)
+      if case .failed = outcome {
         onboardingAccessResolutionFailed = true
       }
       isResolvingOnboardingAccess = false
@@ -806,32 +796,17 @@ struct ContentView: View {
       termsCohort: termsCohort
     )
     Task {
-      do {
-        try await subscriptionManager.restore()
-        switch RestoreAccessOutcome.resolve(
-          hasEntitlement: subscriptionManager.hasEntitlement
-        ) {
-        case .restored:
-          ProductAnalyticsTelemetry.live.trialEndRestoreCompleted(
-            cohort: cohort,
-            terms: terms,
-            termsCohort: termsCohort
-          )
-        case .missingPurchase:
-          ProductAnalyticsTelemetry.live.trialEndRestoreFailed(
-            cohort: cohort,
-            terms: terms,
-            termsCohort: termsCohort
-          )
-          rootCommerceResolutionFailed = true
-        }
-      } catch {
-        ProductAnalyticsTelemetry.live.trialEndRestoreFailed(
-          cohort: cohort,
-          terms: terms,
-          termsCohort: termsCohort
-        )
-        ProductAnalyticsTelemetry.live.trackError(.restore, error: error)
+      let outcome = await subscriptionManager.restore()
+      ProductAnalyticsTelemetry.live.trialEndRestoreFinished(
+        outcome,
+        cohort: cohort,
+        terms: terms,
+        termsCohort: termsCohort
+      )
+      switch outcome {
+      case .restored:
+        break
+      case .noActivePurchase, .failed:
         rootCommerceResolutionFailed = true
       }
       isResolvingRootCommerce = false

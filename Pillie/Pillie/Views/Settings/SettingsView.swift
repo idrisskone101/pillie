@@ -468,24 +468,7 @@ struct SettingsView: View {
             )
         }
         .manageSubscriptionsSheet(isPresented: $showManageSubscription)
-        .alert(PillieLocalization.string(
-            "support.mail_failed.title",
-            locale: locale
-        ), isPresented: $showOpenLineMailFallback) {
-            Button(OpenLine.MailFallback.addressToCopy) {
-                UIPasteboard.general.string = OpenLine.MailFallback.addressToCopy
-            }
-            Button(PillieLocalization.string(
-                "global.action.close",
-                locale: locale
-            ), role: .cancel) {}
-        } message: {
-            Text(PillieLocalization.formatted(
-                "support.mail_failed.body",
-                locale: locale,
-                arguments: OpenLine.MailFallback.addressToCopy
-            ))
-        }
+        .openLineMailFallbackAlert(isPresented: $showOpenLineMailFallback)
     }
 
     // MARK: - Components
@@ -524,18 +507,9 @@ struct SettingsView: View {
         }
     }
 
-    /// The Open Line's no-silent-no-op guarantee (#155): open the composer when
-    /// the device can route the mailto, otherwise present the copy-address
-    /// fallback alert — including when URL composition itself returned `nil`.
     private func openMailOrFallback(_ mailURL: URL?) {
-        guard let mailURL else {
+        openURL.openLineMail(mailURL) {
             showOpenLineMailFallback = true
-            return
-        }
-        openURL(mailURL) { accepted in
-            if !accepted {
-                showOpenLineMailFallback = true
-            }
         }
     }
 

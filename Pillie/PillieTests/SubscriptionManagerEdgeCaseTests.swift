@@ -104,10 +104,15 @@ final class SubscriptionManagerEdgeCaseTests: XCTestCase {
     func testLifetimeRestoreActivatesSharedPlusEntitlement() {
         SubscriptionManager.shared.setPlusForTesting(false)
 
-        SubscriptionManager.shared.applyRestoreResult(
+        let missing = SubscriptionManager.shared.applyRestoreResult(
+            isPlusEntitlementActive: false
+        )
+        let outcome = SubscriptionManager.shared.applyRestoreResult(
             isPlusEntitlementActive: true
         )
 
+        XCTAssertEqual(missing.analyticsEvent, .restoreCompleted)
+        XCTAssertEqual(outcome.analyticsEvent, .restoreSucceeded)
         XCTAssertEqual(PilliePlusPlan.lifetime.productID, SubscriptionManager.lifetimeProductID)
         XCTAssertTrue(SubscriptionManager.shared.hasEntitlement)
         XCTAssertTrue(SubscriptionManager.shared.hasPlusAccess)

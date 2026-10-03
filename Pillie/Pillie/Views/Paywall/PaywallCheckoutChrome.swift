@@ -27,10 +27,9 @@ struct PaywallCheckoutChrome: View {
     let isPurchasing: Bool
     var section: PaywallCheckoutSection = .stack
     var continueFree: PaywallContinueFreeAction? = nil
-    let onRecurrenceChange: (PaywallRecurrence) -> Void
+    let onSelect: (PaywallPurchaseIntent) -> Void
     let onPurchase: (PaywallPurchaseIntent) -> Void
     let onRestore: () -> Void
-    let onLifetime: () -> Void
 
     var body: some View {
         switch section {
@@ -43,8 +42,9 @@ struct PaywallCheckoutChrome: View {
 
     private var stackBlock: some View {
         VStack(spacing: 10) {
-            stackTile(checkout.yearTile, recurrence: .year)
-            stackTile(checkout.monthTile, recurrence: .month)
+            ForEach(checkout.tiles, id: \.intent) { tile in
+                stackTile(tile)
+            }
         }
         .padding(.top, 16)
         .frame(maxWidth: .infinity)
@@ -53,17 +53,6 @@ struct PaywallCheckoutChrome: View {
     private var footerBlock: some View {
         VStack(spacing: 10) {
             purchaseButton
-
-            if let lifetimeLink = checkout.lifetimeLink {
-                Button(action: onLifetime) {
-                    Text(lifetimeLink.text)
-                        .font(.pillie(13, weight: .semibold))
-                        .foregroundStyle(PillieTheme.textPrimary)
-                        .multilineTextAlignment(.center)
-                }
-                .buttonStyle(.plain)
-                .accessibilityLabel(lifetimeLink.accessibilityLabel)
-            }
 
             if let continueFree {
                 Button(action: continueFree.action) {
@@ -82,9 +71,9 @@ struct PaywallCheckoutChrome: View {
         .padding(.horizontal, HonestPaywallLayout.horizontalInset)
     }
 
-    private func stackTile(_ tile: PaywallStackTile, recurrence: PaywallRecurrence) -> some View {
+    private func stackTile(_ tile: PaywallStackTile) -> some View {
         Button {
-            onRecurrenceChange(recurrence)
+            onSelect(tile.intent)
         } label: {
             HStack(alignment: .center, spacing: 12) {
                 radioCircle(selected: tile.isSelected)
@@ -131,6 +120,7 @@ struct PaywallCheckoutChrome: View {
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(tile.accessibilityLabel)
         .accessibilityAddTraits(tile.isSelected ? [.isButton, .isSelected] : .isButton)
+        .accessibilityIdentifier("paywallTile.\(tile.intent.pilliePlusPlan.analyticsPlan.rawValue)")
     }
 
     private func radioCircle(selected: Bool) -> some View {
@@ -155,7 +145,7 @@ struct PaywallCheckoutChrome: View {
 
     private var purchaseButton: some View {
         Button {
-            onPurchase(.subscribe(checkout.selectedRecurrence))
+            onPurchase(checkout.selectedIntent)
         } label: {
             Group {
                 if isPurchasing {
@@ -178,12 +168,30 @@ struct PaywallCheckoutChrome: View {
     }
 
     private var footerRow: some View {
-        Button(action: onRestore) {
+        VStack(spacing: 2) {
             Text(checkout.footer.reassurance)
                 .font(.pillie(12, weight: .medium))
                 .foregroundStyle(PillieTheme.textMuted)
+                .multilineTextAlignment(.center)
+                // Restore's touch slop reaches into this line; claiming the
+                // tap keeps "Cancel anytime" from starting a restore.
+                .contentShape(Rectangle())
+                .onTapGesture {}
+                .accessibilityRespondsToUserInteraction(false)
+                .accessibilityIdentifier("paywallReassurance")
+
+            Button(action: onRestore) {
+                Text(checkout.footer.restoreActionLabel)
+                    .font(.pillie(13, weight: .semibold))
+                    .foregroundStyle(PillieTheme.textPrimary)
+                    .underline()
+                    .padding(.horizontal, 16)
+                    .frame(minHeight: 44)
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .accessibilityIdentifier("paywallRestoreButton")
         }
-        .buttonStyle(.plain)
         .frame(maxWidth: .infinity, alignment: .center)
     }
 }

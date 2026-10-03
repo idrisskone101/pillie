@@ -14,7 +14,7 @@ enum HonestPaywallSceneBuilder {
     static func build(
         board: HonestPaywallBoard,
         offerings: PaywallOfferingsSnapshot?,
-        recurrence: PaywallRecurrence,
+        selection: PaywallPurchaseIntent,
         locale: Locale
     ) -> HonestPaywallScene {
         HonestPaywallScene(
@@ -22,7 +22,7 @@ enum HonestPaywallSceneBuilder {
             checkout: PaywallCheckoutBuilder.build(
                 verb: board.ctaVerb,
                 offerings: offerings,
-                recurrence: recurrence,
+                selection: selection,
                 locale: locale
             )
         )
@@ -35,7 +35,7 @@ enum HonestPaywallSceneBuilder {
         build(
             board: board,
             offerings: nil,
-            recurrence: .year,
+            selection: .subscribe(.year),
             locale: locale
         )
     }

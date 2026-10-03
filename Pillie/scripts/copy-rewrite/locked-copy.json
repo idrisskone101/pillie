@@ -1938,24 +1938,6 @@
     {
       "issue": "honest-paywall",
       "table": "Commerce",
-      "key": "paywall.stack.lifetime_link",
-      "create": true,
-      "en": "or pay once, %@ lifetime",
-      "de": "oder einmalig %@ fürs Leben",
-      "it": "oppure paghi una volta sola, %@ a vita"
-    },
-    {
-      "issue": "honest-paywall",
-      "table": "Commerce",
-      "key": "paywall.stack.footer.reassurance",
-      "create": true,
-      "en": "Cancel anytime · Restore",
-      "de": "Jederzeit kündbar · Wiederherstellen",
-      "it": "Disdici quando vuoi · Ripristina"
-    },
-    {
-      "issue": "honest-paywall",
-      "table": "Commerce",
       "key": "paywall.stack.monthly_equivalent",
       "create": true,
       "en": "%@/mo",
@@ -2555,6 +2537,105 @@
       "en": "Your daily reminders stay free. Plus adds follow-up reminders and App blocking.",
       "de": "Deine täglichen Erinnerungen bleiben kostenlos. Mit Plus kommen Folgeerinnerungen und die App-Sperre dazu.",
       "it": "I promemoria giornalieri restano gratis. Plus aggiunge i promemoria successivi e il blocco app."
+    },
+    {
+      "issue": "ENG-74",
+      "table": "Commerce",
+      "key": "paywall.restore_error.title",
+      "comment": "Restore error alert title",
+      "en": "Couldn't restore purchases",
+      "de": "Käufe konnten nicht wiederhergestellt werden",
+      "it": "Impossibile ripristinare gli acquisti"
+    },
+    {
+      "issue": "ENG-74",
+      "table": "Commerce",
+      "key": "paywall.restore_error.body",
+      "create": true,
+      "comment": "Restore error alert body, above Try again / Contact support / Not now",
+      "en": "Pillie couldn't check your purchases with the App Store. Try again, or contact us and we'll sort it out.",
+      "de": "Pillie konnte deine Käufe nicht im App Store prüfen. Versuch es noch mal oder schreib uns, dann kümmern wir uns darum.",
+      "it": "Pillie non è riuscita a verificare i tuoi acquisti sull’App Store. Riprova oppure contattaci e sistemiamo tutto."
+    },
+    {
+      "issue": "ENG-74",
+      "table": "Commerce",
+      "key": "paywall.action.contact_support",
+      "create": true,
+      "comment": "Restore alert button that opens a support email",
+      "en": "Contact support",
+      "de": "Support kontaktieren",
+      "it": "Contatta l’assistenza"
+    },
+    {
+      "issue": "ENG-74",
+      "table": "Commerce",
+      "key": "paywall.action.try_again",
+      "create": true,
+      "comment": "Restore error alert button that runs Restore Purchases again",
+      "en": "Try again",
+      "de": "Erneut versuchen",
+      "it": "Riprova"
+    },
+    {
+      "issue": "ENG-155",
+      "table": "Commerce",
+      "key": "paywall.stack.lifetime.title",
+      "create": true,
+      "comment": "Honest paywall plan tile title for the one-time lifetime purchase, beside Year and Month",
+      "en": "Lifetime",
+      "de": "Lebenslang",
+      "it": "A vita"
+    },
+    {
+      "issue": "ENG-155",
+      "table": "Commerce",
+      "key": "paywall.stack.lifetime.primary_line",
+      "create": true,
+      "comment": "Honest paywall Lifetime tile subtitle",
+      "en": "Pay once, keep Plus for good",
+      "de": "Einmal zahlen, Plus für immer behalten",
+      "it": "Paghi una volta, Plus resta tuo per sempre"
+    },
+    {
+      "issue": "ENG-155",
+      "table": "Commerce",
+      "key": "paywall.cta.keep_plus.once",
+      "create": true,
+      "comment": "Honest paywall CTA with the live lifetime price when Lifetime is selected (keep verb)",
+      "en": "Keep Pillie Plus · %@ once",
+      "de": "Pillie Plus behalten · %@ einmalig",
+      "it": "Tieni Pillie Plus · %@ una tantum"
+    },
+    {
+      "issue": "ENG-155",
+      "table": "Commerce",
+      "key": "paywall.cta.get_plus.once",
+      "create": true,
+      "comment": "Honest paywall CTA with the live lifetime price when Lifetime is selected (get verb)",
+      "en": "Get Pillie Plus · %@ once",
+      "de": "Pillie Plus holen · %@ einmalig",
+      "it": "Ottieni Pillie Plus · %@ una tantum"
+    },
+    {
+      "issue": "ENG-155",
+      "table": "Commerce",
+      "key": "paywall.stack.footer.cancel_anytime",
+      "create": true,
+      "comment": "Honest paywall reassurance under the CTA when Year or Month is selected; plain text, not a button",
+      "en": "Cancel anytime",
+      "de": "Jederzeit kündbar",
+      "it": "Annulla quando vuoi"
+    },
+    {
+      "issue": "ENG-155",
+      "table": "Commerce",
+      "key": "paywall.stack.footer.one_payment",
+      "create": true,
+      "comment": "Honest paywall reassurance under the CTA when Lifetime is selected; plain text, not a button",
+      "en": "One payment. No renewal.",
+      "de": "Eine Zahlung. Keine Verlängerung.",
+      "it": "Un solo pagamento. Nessun rinnovo."
     }
   ]
 }

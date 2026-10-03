@@ -9,11 +9,11 @@ enum PaywallCheckoutBuilder {
     static func build(
         verb: PaywallCTAVerb,
         offerings: PaywallOfferingsSnapshot?,
-        recurrence: PaywallRecurrence,
+        selection: PaywallPurchaseIntent,
         locale: Locale
     ) -> PaywallCheckoutSheet {
         guard let offerings else {
-            return placeholder(recurrence: recurrence, locale: locale)
+            return placeholder(selection: selection, locale: locale)
         }
 
         let comparison = PaywallPriceComparison(
@@ -25,15 +25,6 @@ enum PaywallCheckoutBuilder {
             currencyCode: offerings.currencyCode,
             locale: locale
         )
-
-        let yearPrimaryLine = PillieLocalization.formatted(
-            "paywall.stack.year.primary_line",
-            table: "Commerce",
-            locale: locale,
-            arguments: monthlyEquivalentDisplay ?? "-",
-            offerings.annualDisplay
-        )
-
         let savingsBadge = comparison.savingsPercent.map { percent in
             PaywallSavingsBadge(
                 percent: percent,
@@ -46,168 +37,123 @@ enum PaywallCheckoutBuilder {
             )
         }
 
-        let yearTile = PaywallStackTile(
-            title: PillieLocalization.string(
-                "paywall.stack.year.title",
-                table: "Commerce",
-                locale: locale
-            ),
-            primaryLine: yearPrimaryLine,
-            trailingPrice: nil,
-            savingsBadge: savingsBadge,
-            isSelected: recurrence == .year,
-            accessibilityLabel: [
-                PillieLocalization.string(
-                    "paywall.stack.year.title",
+        var offers: [TileContent] = [
+            TileContent(
+                intent: .subscribe(.year),
+                title: commerce("paywall.stack.year.title", locale),
+                primaryLine: PillieLocalization.formatted(
+                    "paywall.stack.year.primary_line",
                     table: "Commerce",
-                    locale: locale
+                    locale: locale,
+                    arguments: monthlyEquivalentDisplay ?? "-",
+                    offerings.annualDisplay
                 ),
-                yearPrimaryLine,
-                savingsBadge?.label
-            ]
-            .compactMap { $0 }
-            .joined(separator: ", ")
-        )
-
-        let monthCancelLine = PillieLocalization.string(
-            "paywall.stack.month.primary_line",
-            table: "Commerce",
-            locale: locale
-        )
-
-        let monthTile = PaywallStackTile(
-            title: PillieLocalization.string(
-                "paywall.stack.month.title",
-                table: "Commerce",
-                locale: locale
+                trailingPrice: nil,
+                savingsBadge: savingsBadge,
+                ctaPrice: offerings.annualDisplay
             ),
-            primaryLine: monthCancelLine,
-            trailingPrice: offerings.monthlyDisplay,
-            savingsBadge: nil,
-            isSelected: recurrence == .month,
-            accessibilityLabel: [
-                PillieLocalization.string(
-                    "paywall.stack.month.title",
-                    table: "Commerce",
-                    locale: locale
-                ),
-                monthCancelLine,
-                offerings.monthlyDisplay
-            ]
-            .joined(separator: ", ")
-        )
-
-        let lifetimeLink = offerings.lifetimeDisplay.map { display in
-            let text = PillieLocalization.formatted(
-                "paywall.stack.lifetime_link",
-                table: "Commerce",
-                locale: locale,
-                arguments: display
+            TileContent(
+                intent: .subscribe(.month),
+                title: commerce("paywall.stack.month.title", locale),
+                primaryLine: commerce("paywall.stack.month.primary_line", locale),
+                trailingPrice: offerings.monthlyDisplay,
+                savingsBadge: nil,
+                ctaPrice: offerings.monthlyDisplay
             )
-            return PaywallLifetimeLink(text: text, accessibilityLabel: text)
+        ]
+        if let lifetimeDisplay = offerings.lifetimeDisplay {
+            offers.append(TileContent(
+                intent: .lifetime,
+                title: commerce("paywall.stack.lifetime.title", locale),
+                primaryLine: commerce("paywall.stack.lifetime.primary_line", locale),
+                trailingPrice: lifetimeDisplay,
+                savingsBadge: nil,
+                ctaPrice: lifetimeDisplay
+            ))
         }
 
-        let priceDisplay = recurrence == .year
-            ? offerings.annualDisplay
-            : offerings.monthlyDisplay
-
-        let ctaKey = ctaKey(verb: verb, recurrence: recurrence)
-        let primaryCTA = PillieLocalization.formatted(
-            ctaKey,
-            table: "Commerce",
-            locale: locale,
-            arguments: priceDisplay
-        )
-
-        let footer = PaywallFooter(
-            reassurance: PillieLocalization.string(
-                "paywall.stack.footer.reassurance",
-                table: "Commerce",
-                locale: locale
-            ),
-            restoreActionLabel: PillieLocalization.string(
-                "paywall.action.restore",
-                table: "Commerce",
-                locale: locale
-            )
-        )
+        // A lifetime selection can outlive offerings that stop exposing it.
+        let selected = offers.first { $0.intent == selection } ?? offers[0]
 
         return PaywallCheckoutSheet(
-            selectedRecurrence: recurrence,
-            yearTile: yearTile,
-            monthTile: monthTile,
-            lifetimeLink: lifetimeLink,
-            primaryCTA: primaryCTA,
+            selectedIntent: selected.intent,
+            tiles: offers.map { $0.tile(isSelected: $0.intent == selected.intent) },
+            primaryCTA: PillieLocalization.formatted(
+                ctaKey(verb: verb, intent: selected.intent),
+                table: "Commerce",
+                locale: locale,
+                arguments: selected.ctaPrice
+            ),
             isPurchaseEnabled: true,
-            footer: footer
+            footer: footer(for: selected.intent, locale: locale)
         )
     }
 
     private static func placeholder(
-        recurrence: PaywallRecurrence,
+        selection: PaywallPurchaseIntent,
         locale: Locale
     ) -> PaywallCheckoutSheet {
         let dash = "-"
-        let yearTile = PaywallStackTile(
-            title: PillieLocalization.string(
-                "paywall.stack.year.title",
-                table: "Commerce",
-                locale: locale
+        let offers = [
+            TileContent(
+                intent: .subscribe(.year),
+                title: commerce("paywall.stack.year.title", locale),
+                primaryLine: dash,
+                trailingPrice: nil,
+                savingsBadge: nil,
+                ctaPrice: dash,
+                accessibilityLabel: dash
             ),
-            primaryLine: dash,
-            trailingPrice: nil,
-            savingsBadge: nil,
-            isSelected: recurrence == .year,
-            accessibilityLabel: dash
-        )
-        let monthTile = PaywallStackTile(
-            title: PillieLocalization.string(
-                "paywall.stack.month.title",
-                table: "Commerce",
-                locale: locale
-            ),
-            primaryLine: PillieLocalization.string(
-                "paywall.stack.month.primary_line",
-                table: "Commerce",
-                locale: locale
-            ),
-            trailingPrice: dash,
-            savingsBadge: nil,
-            isSelected: recurrence == .month,
-            accessibilityLabel: dash
-        )
+            TileContent(
+                intent: .subscribe(.month),
+                title: commerce("paywall.stack.month.title", locale),
+                primaryLine: commerce("paywall.stack.month.primary_line", locale),
+                trailingPrice: dash,
+                savingsBadge: nil,
+                ctaPrice: dash,
+                accessibilityLabel: dash
+            )
+        ]
+        let selected = offers.first { $0.intent == selection }?.intent ?? .subscribe(.year)
         return PaywallCheckoutSheet(
-            selectedRecurrence: recurrence,
-            yearTile: yearTile,
-            monthTile: monthTile,
-            lifetimeLink: nil,
+            selectedIntent: selected,
+            tiles: offers.map { $0.tile(isSelected: $0.intent == selected) },
             primaryCTA: "",
             isPurchaseEnabled: false,
-            footer: PaywallFooter(
-                reassurance: PillieLocalization.string(
-                    "paywall.stack.footer.reassurance",
-                    table: "Commerce",
-                    locale: locale
-                ),
-                restoreActionLabel: PillieLocalization.string(
-                    "paywall.action.restore",
-                    table: "Commerce",
-                    locale: locale
-                )
-            )
+            footer: footer(for: selected, locale: locale)
+        )
+    }
+
+    private static func footer(
+        for intent: PaywallPurchaseIntent,
+        locale: Locale
+    ) -> PaywallFooter {
+        let reassuranceKey = switch intent {
+        case .subscribe: "paywall.stack.footer.cancel_anytime"
+        case .lifetime: "paywall.stack.footer.one_payment"
+        }
+        return PaywallFooter(
+            reassurance: commerce(reassuranceKey, locale),
+            restoreActionLabel: commerce("paywall.action.restore", locale)
         )
     }
 
     private static func ctaKey(
         verb: PaywallCTAVerb,
-        recurrence: PaywallRecurrence
+        intent: PaywallPurchaseIntent
     ) -> String {
-        switch (verb, recurrence) {
-        case (.keep, .year): "paywall.cta.keep_plus.billed_yearly"
-        case (.keep, .month): "paywall.cta.keep_plus.billed_monthly"
-        case (.get, .year): "paywall.cta.get_plus.billed_yearly"
-        case (.get, .month): "paywall.cta.get_plus.billed_monthly"
+        switch (verb, intent) {
+        case (.keep, .subscribe(.year)): "paywall.cta.keep_plus.billed_yearly"
+        case (.keep, .subscribe(.month)): "paywall.cta.keep_plus.billed_monthly"
+        case (.keep, .lifetime): "paywall.cta.keep_plus.once"
+        case (.get, .subscribe(.year)): "paywall.cta.get_plus.billed_yearly"
+        case (.get, .subscribe(.month)): "paywall.cta.get_plus.billed_monthly"
+        case (.get, .lifetime): "paywall.cta.get_plus.once"
         }
+    }
+
+    private static func commerce(_ key: String, _ locale: Locale) -> String {
+        PillieLocalization.string(key, table: "Commerce", locale: locale)
     }
 
     private static func monthlyEquivalentDisplay(
@@ -229,6 +175,31 @@ enum PaywallCheckoutBuilder {
             table: "Commerce",
             locale: locale,
             arguments: value
+        )
+    }
+}
+
+private struct TileContent {
+    let intent: PaywallPurchaseIntent
+    let title: String
+    let primaryLine: String
+    let trailingPrice: String?
+    let savingsBadge: PaywallSavingsBadge?
+    let ctaPrice: String
+    var accessibilityLabel: String?
+
+    func tile(isSelected: Bool) -> PaywallStackTile {
+        PaywallStackTile(
+            intent: intent,
+            title: title,
+            primaryLine: primaryLine,
+            trailingPrice: trailingPrice,
+            savingsBadge: savingsBadge,
+            isSelected: isSelected,
+            accessibilityLabel: accessibilityLabel
+                ?? [title, primaryLine, savingsBadge?.label ?? trailingPrice]
+                    .compactMap { $0 }
+                    .joined(separator: ", ")
         )
     }
 }

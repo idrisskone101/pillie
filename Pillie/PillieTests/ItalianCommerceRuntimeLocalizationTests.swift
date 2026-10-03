@@ -71,8 +71,8 @@ final class ItalianCommerceRuntimeLocalizationTests: XCTestCase {
             "Qualcosa è andato storto. Riprova tra un momento."
         )
         XCTAssertEqual(
-            CommercePresentation.restoreErrorMessage(untranslatedStoreError, locale: italian),
-            "Qualcosa è andato storto. Riprova tra un momento."
+            CommercePresentation.restoreErrorMessage(locale: italian),
+            "Pillie non è riuscita a verificare i tuoi acquisti sull’App Store. Riprova oppure contattaci e sistemiamo tutto."
         )
         XCTAssertEqual(
             CommercePresentation.trialEndPerkSymbols,

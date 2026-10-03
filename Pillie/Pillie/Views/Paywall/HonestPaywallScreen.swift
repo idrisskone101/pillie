@@ -18,12 +18,11 @@ struct HonestPaywallScreen: View {
     var declineFeedbackContent: TrialDeclineFeedbackContent? = nil
     var routeContinueFree: (() -> TrialDeclineFeedbackRoute)? = nil
 
-    @State private var recurrence: PaywallRecurrence = .year
+    @State private var selection: PaywallPurchaseIntent = .subscribe(.year)
     @State private var offerings: Offerings?
-    @State private var purchaseError: String?
+    @State private var activeAlert: PaywallAlert?
     @State private var isPurchasing = false
     @State private var isRestoring = false
-    @State private var showNoSubscriptionAlert = false
     @State private var purchaseSucceeded = false
     @State private var successOutcome: TrialEndSuccessOutcome = .purchased(.annual)
     @State private var showDeclineFeedback = false
@@ -35,10 +34,20 @@ struct HonestPaywallScreen: View {
     private var scene: HonestPaywallScene {
         HonestPaywallSceneBuilder.build(
             board: board,
-            offerings: offerings.flatMap(PaywallOfferingsSnapshot.parse),
-            recurrence: recurrence,
+            offerings: offeringsSnapshot,
+            selection: selection,
             locale: locale
         )
+    }
+
+    private var offeringsSnapshot: PaywallOfferingsSnapshot? {
+        let snapshot = offerings.flatMap(PaywallOfferingsSnapshot.parse)
+        #if DEBUG
+        if let display = UserDefaults.standard.string(forKey: Self.debugLifetimeDisplayKey) {
+            return snapshot?.withLifetimeDisplay(display)
+        }
+        #endif
+        return snapshot
     }
 
     private var isTrialEnd: Bool {
@@ -70,31 +79,7 @@ struct HonestPaywallScreen: View {
             await subscriptionManager.refreshStatus()
             await offeringsLoaded
         }
-        .alert(
-            PillieLocalization.string("paywall.purchase_error.title", table: "Commerce", locale: locale),
-            isPresented: purchaseErrorPresented
-        ) {
-            Button(PillieLocalization.string("global.action.ok", locale: locale)) {
-                purchaseError = nil
-            }
-        } message: {
-            Text(purchaseError ?? "")
-        }
-        .alert(
-            PillieLocalization.string("paywall.no_subscription.title", table: "Commerce", locale: locale),
-            isPresented: $showNoSubscriptionAlert
-        ) {
-            Button(PillieLocalization.string("global.action.ok", locale: locale)) {}
-        } message: {
-            Text(PillieLocalization.string("paywall.no_subscription.body", table: "Commerce", locale: locale))
-        }
-    }
-
-    private var purchaseErrorPresented: Binding<Bool> {
-        Binding(
-            get: { purchaseError != nil },
-            set: { if !$0 { purchaseError = nil } }
-        )
+        .paywallAlert($activeAlert, surface: surface, onRetryRestore: restorePurchases)
     }
 
     @ViewBuilder
@@ -112,7 +97,7 @@ struct HonestPaywallScreen: View {
             HonestPaywallView(
                 scene: scene,
                 isPurchasing: isPurchasing,
-                onRecurrenceChange: selectRecurrence,
+                onSelect: selectPlan,
                 onPurchase: purchase,
                 onRestore: restorePurchases,
                 onDismiss: onDismiss,
@@ -137,11 +122,11 @@ struct HonestPaywallScreen: View {
             .accessibilityHidden(true)
     }
 
-    private func selectRecurrence(_ value: PaywallRecurrence) {
+    private func selectPlan(_ intent: PaywallPurchaseIntent) {
         withAnimation(.easeInOut(duration: 0.2)) {
-            recurrence = value
+            selection = intent
         }
-        let plan: AnalyticsPlan = value == .year ? .annual : .monthly
+        let plan = intent.pilliePlusPlan.analyticsPlan
         switch telemetryMode {
         case .trialEnd(let content):
             telemetry.trialEndPlanSelected(
@@ -161,7 +146,7 @@ struct HonestPaywallScreen: View {
 
     private func purchase(_ intent: PaywallPurchaseIntent) {
         guard let package = PaywallPurchaseBridge.package(for: intent, offerings: offerings) else {
-            purchaseError = CommercePresentation.offeringsUnavailableMessage(locale: locale)
+            activeAlert = .purchaseError(CommercePresentation.offeringsUnavailableMessage(locale: locale))
             return
         }
         let plan = intent.pilliePlusPlan
@@ -169,13 +154,15 @@ struct HonestPaywallScreen: View {
             accessibilityReduceMotion: accessibilityReduceMotion
         )
         withAnimation(response.motionProfile.animation) { isPurchasing = true }
-
-        trackPurchaseStarted(plan: plan)
+        // Captured before purchasing, as restore does: an active entitlement
+        // ends the trial-end content and would drop the cohort.
+        let mode = telemetryMode
+        trackPurchaseStarted(plan: plan, mode: mode)
 
         Task {
             do {
                 let outcome = try await subscriptionManager.purchase(package)
-                trackPurchaseCompleted(plan: plan, outcome: outcome)
+                trackPurchaseCompleted(plan: plan, mode: mode, outcome: outcome)
                 plusFeedback.successfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
                 if isTrialEnd {
                     successOutcome = .purchased(plan)
@@ -186,11 +173,11 @@ struct HonestPaywallScreen: View {
             } catch {
                 plusFeedback.unsuccessfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
                 if error.honestPaywallIsCancelledPurchase {
-                    trackPurchaseCancelled(plan: plan)
+                    trackPurchaseCancelled(plan: plan, mode: mode)
                     await subscriptionManager.refreshStatus()
                 } else {
-                    trackPurchaseFailed(plan: plan, error: error)
-                    purchaseError = CommercePresentation.purchaseErrorMessage(error, locale: locale)
+                    trackPurchaseFailed(plan: plan, mode: mode, error: error)
+                    activeAlert = .purchaseError(CommercePresentation.purchaseErrorMessage(error, locale: locale))
                 }
             }
             withAnimation(response.motionProfile.animation) { isPurchasing = false }
@@ -198,31 +185,32 @@ struct HonestPaywallScreen: View {
     }
 
     private func restorePurchases() {
+        guard !isRestoring else { return }
         let response = plusFeedback.startRestore(accessibilityReduceMotion: accessibilityReduceMotion)
         withAnimation(response.motionProfile.animation) { isRestoring = true }
-        trackRestoreStarted()
+        // Captured before restoring: a restored entitlement ends the trial-end
+        // content, and the finished event must keep the cohort it started with.
+        let mode = telemetryMode
+        trackRestoreStarted(mode)
 
         Task {
-            do {
-                try await subscriptionManager.restore()
-                if subscriptionManager.hasEntitlement {
-                    trackRestoreCompleted()
-                    plusFeedback.successfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
-                    if isTrialEnd {
-                        successOutcome = .restored
-                        purchaseSucceeded = true
-                    } else {
-                        onDismiss()
-                    }
+            let outcome = await subscriptionManager.restore()
+            trackRestoreFinished(outcome, mode: mode)
+            switch outcome {
+            case .restored:
+                plusFeedback.successfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
+                if isTrialEnd {
+                    successOutcome = .restored
+                    purchaseSucceeded = true
                 } else {
-                    trackRestoreFailed()
-                    withAnimation(response.motionProfile.animation) {
-                        showNoSubscriptionAlert = true
-                    }
+                    onDismiss()
                 }
-            } catch {
-                trackRestoreFailed(error: error)
-                purchaseError = CommercePresentation.restoreErrorMessage(error, locale: locale)
+            case .noActivePurchase:
+                withAnimation(response.motionProfile.animation) {
+                    activeAlert = .noSubscription
+                }
+            case .failed:
+                activeAlert = .restoreError
             }
             withAnimation(response.motionProfile.animation) { isRestoring = false }
         }
@@ -338,8 +326,8 @@ struct HonestPaywallScreen: View {
         }
     }
 
-    private func trackPurchaseStarted(plan: PilliePlusPlan) {
-        switch telemetryMode {
+    private func trackPurchaseStarted(plan: PilliePlusPlan, mode: HonestPaywallTelemetryMode) {
+        switch mode {
         case .trialEnd(let content):
             telemetry.trialEndPurchaseStarted(
                 plan: plan.analyticsPlan,
@@ -356,8 +344,8 @@ struct HonestPaywallScreen: View {
         }
     }
 
-    private func trackPurchaseCompleted(plan: PilliePlusPlan, outcome: PurchaseOutcome) {
-        switch telemetryMode {
+    private func trackPurchaseCompleted(plan: PilliePlusPlan, mode: HonestPaywallTelemetryMode, outcome: PurchaseOutcome) {
+        switch mode {
         case .trialEnd(let content):
             switch outcome.conversionEvent {
             case .trialStarted:
@@ -394,8 +382,8 @@ struct HonestPaywallScreen: View {
         }
     }
 
-    private func trackPurchaseCancelled(plan: PilliePlusPlan) {
-        switch telemetryMode {
+    private func trackPurchaseCancelled(plan: PilliePlusPlan, mode: HonestPaywallTelemetryMode) {
+        switch mode {
         case .trialEnd(let content):
             telemetry.trialEndPurchaseCancelled(
                 plan: plan.analyticsPlan,
@@ -412,8 +400,8 @@ struct HonestPaywallScreen: View {
         }
     }
 
-    private func trackPurchaseFailed(plan: PilliePlusPlan, error: Error) {
-        switch telemetryMode {
+    private func trackPurchaseFailed(plan: PilliePlusPlan, mode: HonestPaywallTelemetryMode, error: Error) {
+        switch mode {
         case .trialEnd(let content):
             telemetry.trialEndPurchaseFailed(
                 plan: plan.analyticsPlan,
@@ -431,8 +419,8 @@ struct HonestPaywallScreen: View {
         telemetry.trackError(.purchase, error: error)
     }
 
-    private func trackRestoreStarted() {
-        switch telemetryMode {
+    private func trackRestoreStarted(_ mode: HonestPaywallTelemetryMode) {
+        switch mode {
         case .trialEnd(let content):
             telemetry.trialEndRestoreStarted(
                 cohort: content.cohort,
@@ -440,36 +428,21 @@ struct HonestPaywallScreen: View {
                 termsCohort: content.termsCohort
             )
         case .surface:
-            telemetry.restoreStarted(isFromOnboarding: false, surface: surface)
+            telemetry.restoreStarted(surface: surface)
         }
     }
 
-    private func trackRestoreCompleted() {
-        switch telemetryMode {
+    private func trackRestoreFinished(_ outcome: RestoreOutcome, mode: HonestPaywallTelemetryMode) {
+        switch mode {
         case .trialEnd(let content):
-            telemetry.trialEndRestoreCompleted(
+            telemetry.trialEndRestoreFinished(
+                outcome,
                 cohort: content.cohort,
                 terms: content.terms,
                 termsCohort: content.termsCohort
             )
         case .surface:
-            telemetry.restoreCompleted(isFromOnboarding: false, surface: surface)
-        }
-    }
-
-    private func trackRestoreFailed(error: Error? = nil) {
-        switch telemetryMode {
-        case .trialEnd(let content):
-            telemetry.trialEndRestoreFailed(
-                cohort: content.cohort,
-                terms: content.terms,
-                termsCohort: content.termsCohort
-            )
-        case .surface:
-            telemetry.restoreFailed(isFromOnboarding: false, surface: surface)
-        }
-        if let error {
-            telemetry.trackError(.restore, error: error)
+            telemetry.restoreFinished(outcome, surface: surface)
         }
     }
 
