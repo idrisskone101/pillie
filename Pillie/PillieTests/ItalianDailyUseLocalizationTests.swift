@@ -575,7 +575,6 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
         XCTAssertEqual(active.indicatorLabel, "Plus è attivo · 7 giorni attivi rimasti")
         XCTAssertEqual(active.sheetContent.ctaTitle, "Tieni Pillie Plus")
 
-        // ENG-135: tighten these to literal Italian once the it catalog lands.
         let countdown = TrialStatusPresentation(
             daysRemaining: 7,
             protectionActive: false,
@@ -583,17 +582,14 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
             locale: italian,
             calendar: calendar
         )
-        let english = TrialStatusPresentation(
-            daysRemaining: 7,
-            protectionActive: false,
-            trialEndDate: trialEnd,
-            locale: Locale(identifier: "en_US"),
-            calendar: calendar
-        )
-        XCTAssertNotEqual(countdown.indicatorLabel, english.indicatorLabel)
-        XCTAssertNotEqual(
+        XCTAssertEqual(countdown.indicatorLabel, "7 giorni attivi rimasti")
+        XCTAssertEqual(
             countdown.sheetContent.timeline.map(\.text),
-            english.sheetContent.timeline.map(\.text)
+            [
+                "Un avviso quando mancano cinque giorni.",
+                "Un ultimo promemoria prima della fine.",
+                "Il blocco delle app si disattiva. I promemoria restano gratuiti e tutto ciò che hai configurato resta salvato.",
+            ]
         )
     }
 

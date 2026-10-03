@@ -328,12 +328,9 @@ final class GermanLocalizationContractTests: XCTestCase {
             "Pillie Plus behalten"
         )
 
-        // ENG-135: tighten to the literal German once the de catalog lands.
-        let countdown = TrialStatusPresentation(daysRemaining: 7, locale: german)
-        XCTAssertNotEqual(
-            countdown.indicatorLabel,
-            TrialStatusPresentation(daysRemaining: 7, locale: Locale(identifier: "en_US"))
-                .indicatorLabel
+        XCTAssertEqual(
+            TrialStatusPresentation(daysRemaining: 7, locale: german).indicatorLabel,
+            "Noch 7 aktive Tage"
         )
     }
 
