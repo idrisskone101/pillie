@@ -34,9 +34,18 @@ blocking/trial status surfaces, and (when eligible) the review ask.
   clears the method-aware threshold and no higher-priority card is showing;
   it can be soft-dismissed.
 - `today-trial-indicator` shows `#trialIndicator` during an active Reverse
-  Trial and opens `TrialStatusSheet`.
-- `today-trial-sheet` shows the activation checklist, the "after trial"
-  rows, and the quiet `#trialKeepPlus` buy-early CTA.
+  Trial and opens `TrialStatusSheet`. It reads a plain countdown ("14 active
+  days left") until blocking is on, then "Plus is on · …".
+- `today-trial-sheet` is status and commerce only: countdown hero, expiry
+  date, a 14-day bar, a "What happens next" timeline (day-10 and day-13
+  notices, then the expiry day), and the quiet `#trialKeepPlus` buy-early CTA.
+- `today-plus-setup` shows `#plusSetupStrip` under the status card during
+  the trial until setup is complete or the sheet reaches Done. It opens the
+  Plus setup sheet: Blocking, Messages, Reminders (inline
+  `#plusSetupIntervalMenu` / `#plusSetupRepeatsMenu`), then Done. Steps carry
+  `#plusSetupStep_<name>`, buttons `#plusSetupSkip` / `#plusSetupPrimary`,
+  and Done `#plusSetupDone`. While the trial runs, the strip replaces the
+  "You haven't set up app blocking yet" card.
 
 ## How to get to it (user POV)
 
@@ -63,6 +72,11 @@ blocking/trial status surfaces, and (when eligible) the review ask.
   `/trial-age?days=5` for a deterministic mid-trial day. Proves
   `#trialIndicator` and `TrialStatusSheet` in both states. Never taps
   `#trialKeepPlus`.
+- `flows/today-plus-setup.flow` — `/trial-activation-hub?state=unconfigured`
+  for a 1/3 strip and countdown badge, then Skip through Blocking and
+  Messages, change the interval on Reminders, Save, prove Done, and prove the
+  strip is gone. FamilyActivityPicker never returns tokens on a simulator,
+  so Blocking is skipped, not completed.
 - `flows/today-review-prompt.flow` — `/review-prompt` seeds an eligible
   Streak. The flow dismisses the blocking card first (it always renders on
   a fresh, unconfigured pack and outranks the review ask) before proving

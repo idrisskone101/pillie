@@ -8,6 +8,8 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
             "global.action.save",
             "global.action.cancel",
             "global.status.completed",
+            "global.status.missed",
+            "global.status.break_day",
             "today.navigation.title",
             "today.action.take_pill",
             "today.action.apply_patch",
@@ -19,6 +21,8 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
             "today.action.undo_complete",
             "today.action.shake",
             "today.empty.title",
+            "today.empty.body",
+            "today.next_action.title",
             "today.next_action.date",
             "today.next_action.weekday",
             "today.next_action.today",
@@ -31,7 +35,9 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
             "today.refill.title",
             "today.refill.title.patch",
             "today.refill.title.ring",
+            "today.refill.body",
             "today.protection.status_title",
+            "today.protection.active",
             "today.protection.inactive",
             "today.intervention.alert.title",
             "today.intervention.alert.body",
@@ -79,8 +85,18 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
             "settings.tone.private",
             "settings.blocked_apps.title",
             "settings.blocked_apps.edit",
+            "settings.subscription.manage",
+            "settings.restore.title",
+            "settings.support.email",
+            "settings.support.privacy",
+            "settings.support.terms",
+            "settings.support.version",
             "support.mail_failed.title",
             "support.mail_failed.body",
+            "error.generic.title",
+            "error.generic.body",
+            "error.notifications_denied.title",
+            "error.notifications_denied.body",
             "error.screen_time.title",
             "error.screen_time.body",
             "onboarding.blocking_setup.privacy",
@@ -91,7 +107,14 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
             "onboarding.blocking_setup.paused_app",
             "onboarding.blocking_setup.unlock_hint",
             "onboarding.blocking_setup.mark_taken",
+            "empty.history.title",
+            "empty.history.body",
             "empty.blocked_apps.title",
+            "empty.blocked_apps.body",
+            "accessibility.shake.progress",
+            "accessibility.paywall.selected",
+            "accessibility.toggle.state",
+            "legal.disclaimer",
         ]
         let commerceKeys = [
             "paywall.title",
@@ -103,37 +126,49 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
             "paywall.feature.shake",
             "paywall.feature.custom_messages",
             "paywall.feature.custom_messages.compact",
+            "paywall.feature.future",
             "paywall.feature.future.compact",
             "paywall.plan.annual",
             "paywall.plan.monthly",
+            "paywall.plan.best_value",
             "paywall.plan.price_period",
+            "paywall.plan.cancel_anytime",
             "paywall.plan.cancel_anytime_short",
             "paywall.action.upgrade",
             "paywall.action.restore",
+            "paywall.action.terms",
+            "paywall.action.privacy",
+            "paywall.loading.failed",
             "paywall.purchase_error.title",
             "paywall.error.generic_body",
             "paywall.restore_error.title",
             "paywall.no_subscription.title",
             "paywall.no_subscription.body",
+            "trial.granted.title",
             "trial.granted.subtitle",
             "trial.granted.disclosure",
-            "trial.activation.recommended",
             "trial.timeline.today",
             "trial.timeline.today_title",
-            "trial.status.title",
+            "trial.timeline.warning",
+            "trial.timeline.choose",
             "trial.status.active_short",
             "trial.status.ends",
-            "trial.status.after_title",
             "trial.status.indicator.active",
             "trial.status.indicator.active_tonight",
-            "trial.status.indicator.setup",
-            "trial.status.indicator.setup_tonight",
-            "trial.status.after.blocking_off",
-            "trial.status.after.reminders_free",
-            "trial.status.after.setup_saved",
+            "trial.status.indicator.countdown",
+            "trial.status.indicator.countdown_tonight",
+            "trial.status.eyebrow",
+            "trial.status.until",
+            "trial.status.day_today",
+            "trial.status.timeline_title",
+            "trial.status.timeline.heads_up",
+            "trial.status.timeline.last_call",
+            "trial.status.timeline.plus_pauses",
+            "trial.status.timeline.blocking_off",
             "trial.status.keep_plus",
             "trial.end.title",
             "trial.end.kicker",
+            "trial.end.subtitle",
             "trial.end.blocks",
             "trial.end.actions",
             "trial.end.streak",
@@ -180,16 +215,16 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
         )
         XCTAssertEqual(
             TodayActionState.completed.localizedPrimaryLabel(locale: italian),
-            "Confermato. Tocca per annullare."
+            "È registrato. Tocca per annullare."
         )
         XCTAssertEqual(
             TodayActionState.dueAction(breakAction, requiresShakeConfirm: false)
                 .localizedPrimaryLabel(locale: italian),
-            "Oggi non c’è niente da fare."
+            "Oggi non c'è niente in programma."
         )
         XCTAssertEqual(
             TodayActionState.noActionDue.localizedPrimaryLabel(locale: italian),
-            "Oggi non c’è niente da fare."
+            "Oggi non c'è niente in programma."
         )
     }
 
@@ -211,9 +246,9 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
             HistoryPresentation.MonthSummary(
                 title: "Questo mese",
                 month: "luglio 2026",
-                completedCount: "3 conferme",
-                completedBody: "Conferme finora",
-                percentage: "75% confermato"
+                completedCount: "3 check-in",
+                completedBody: "Check-in finora",
+                percentage: "75% registrato"
             )
         )
         XCTAssertEqual(
@@ -230,7 +265,7 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
                 status: .unlogged,
                 locale: italian
             ),
-            "15 luglio 2026: Non confermato"
+            "15 luglio 2026: Non registrato"
         )
         XCTAssertEqual(
             HistoryPresentation.dayAccessibilityLabel(
@@ -248,12 +283,12 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
             locale: Locale(identifier: "it_IT")
         )
 
-        XCTAssertEqual(confirmation.title, "Cancellare la cronologia?")
+        XCTAssertEqual(confirmation.title, "Reimpostare i dati di monitoraggio?")
         XCTAssertEqual(
             confirmation.body,
-            "Se cambi il programma, cancelli tutta la cronologia e riparti dal giorno 8. Non puoi annullare questa operazione."
+            "La modifica del programma reimposta tutta la cronologia e riparte dal giorno 8. L’operazione non può essere annullata."
         )
-        XCTAssertEqual(confirmation.confirmTitle, "Cancella e salva")
+        XCTAssertEqual(confirmation.confirmTitle, "Reimposta e salva")
         XCTAssertEqual(confirmation.cancelTitle, "Annulla")
     }
 
@@ -274,15 +309,15 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
         )
         XCTAssertEqual(
             SettingsPresentation.supplyReminderTitle(method: .pill, locale: italian),
-            "Promemoria scorte pillola"
+            "Scorte pillola"
         )
         XCTAssertEqual(
             SettingsPresentation.supplyReminderTitle(method: .patch, locale: italian),
-            "Promemoria scorte cerotti"
+            "Scorte cerotto"
         )
         XCTAssertEqual(
             SettingsPresentation.supplyReminderTitle(method: .ring, locale: italian),
-            "Promemoria scorte anelli"
+            "Scorte anello"
         )
     }
 
@@ -312,7 +347,7 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
             ring.scheduleLines,
             [
                 "Giorno 1: inserisci l’anello",
-                "Giorni 2–21: l’anello resta dentro",
+                "Giorni 2–21: l'anello resta dentro",
                 "Giorno 22: rimuovi l’anello",
                 "Giorni 23–28: settimana senza anello",
             ]
@@ -332,11 +367,11 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
         )
         XCTAssertEqual(
             PillieLocalization.string("settings.followup.body", locale: italian),
-            "Altri promemoria finché non confermi oggi."
+            "Promemoria aggiuntivi finché l’azione di oggi resta da registrare."
         )
         XCTAssertEqual(
             PillieLocalization.string("settings.support.suggestion", locale: italian),
-            "Condividi un’idea"
+            "Condividi un'idea"
         )
         XCTAssertEqual(
             PillieLocalization.string("settings.support.issue_report", locale: italian),
@@ -376,35 +411,35 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
             CustomReminderMessages(
                 dueTitle: "Un promemoria delicato",
                 dueBody: "Un promemoria delicato per la tua routine.",
-                retryTitle: "Ancora da fare oggi",
-                retryBody: "Quando vuoi, ricordati di confermare oggi.",
+                retryTitle: "Promemoria successivo",
+                retryBody: "Quando vuoi, ricorda di fare il check-in oggi.",
             )
         )
         XCTAssertEqual(
             CustomReminderPreset.direct.localizedMessages(locale: italian),
             CustomReminderMessages(
-                dueTitle: "Ora di confermare",
-                dueBody: "È ora di confermare.",
-                retryTitle: "Ancora da fare oggi",
-                retryBody: "Oggi non hai ancora confermato.",
+                dueTitle: "Registrazione Pillie da completare",
+                dueBody: "È previsto il check-in programmato.",
+                retryTitle: "Promemoria successivo",
+                retryBody: "Il check-in di oggi è ancora da fare.",
             )
         )
         XCTAssertEqual(
             CustomReminderPreset.encouraging.localizedMessages(locale: italian),
             CustomReminderMessages(
-                dueTitle: "Stai creando un’abitudine",
-                dueBody: "Una conferma veloce per la routine di oggi.",
-                retryTitle: "Ancora da fare oggi",
-                retryBody: "Puoi confermare quando vuoi.",
+                dueTitle: "Stai costruendo costanza",
+                dueBody: "Una breve registrazione per la routine di oggi.",
+                retryTitle: "Promemoria successivo",
+                retryBody: "Puoi fare il check-in quando vuoi.",
             )
         )
         XCTAssertEqual(
             CustomReminderPreset.privateDiscreet.localizedMessages(locale: italian),
             CustomReminderMessages(
-                dueTitle: "È il momento della conferma",
+                dueTitle: "È il momento di registrare",
                 dueBody: "Promemoria Pillie",
-                retryTitle: "Ancora da fare oggi",
-                retryBody: "La tua conferma su Pillie ti aspetta.",
+                retryTitle: "Promemoria successivo",
+                retryBody: "La registrazione di Pillie è ancora aperta.",
             )
         )
 
@@ -469,9 +504,10 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
         XCTAssertEqual(commerce("paywall.feature.app_blocking"), "Blocco app")
         XCTAssertEqual(commerce("paywall.feature.app_blocking.compact"), "Blocco app")
         XCTAssertEqual(commerce("paywall.feature.custom_messages.compact"), "Testi dei promemoria")
-        XCTAssertEqual(commerce("paywall.feature.future.compact"), "Funzioni future")
-        XCTAssertEqual(commerce("paywall.feature.shake"), "Scuoti per confermare")
-        XCTAssertEqual(commerce("trial.activation.recommended"), "Consigliato")
+        XCTAssertEqual(commerce("paywall.feature.future"), "Il resto dopo")
+        XCTAssertEqual(commerce("paywall.feature.future.compact"), "Il resto dopo")
+        XCTAssertEqual(commerce("paywall.feature.shake"), "Scuoti per registrare")
+        XCTAssertEqual(commerce("paywall.plan.best_value"), "Conviene di più")
         XCTAssertEqual(commerce("paywall.plan.cancel_anytime_short"), "Disdici quando vuoi")
         XCTAssertEqual(commerce("trial.end.kicker"), "I tuoi 14 giorni attivi")
         XCTAssertEqual(commerce("trial.end.welcome_back"), "Pillie Plus è di nuovo attivo.")
@@ -481,20 +517,11 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
             SoftPaywallContent.localized(locale: italian).rows.map(\.title),
             [
                 "Promemoria giornalieri",
-                "Promemoria ripetuti",
+                "Promemoria smart",
                 "Blocco app",
-                "Scuoti per confermare",
+                "Scuoti per registrare",
                 "Testi dei promemoria",
-                "Funzioni future",
-            ]
-        )
-        XCTAssertEqual(
-            TrialActivationItem.make(for: .unconfigured, locale: italian).map(\.title),
-            [
-                "Blocco app",
-                "Promemoria ripetuti",
-                "Testi dei promemoria",
-                "Scuoti per confermare",
+                "Il resto dopo",
             ]
         )
     }
@@ -504,18 +531,18 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
             locale: Locale(identifier: "it_IT")
         )
 
-        XCTAssertEqual(content.title, "I tuoi primi 14 giorni attivi")
-        XCTAssertEqual(content.titleAccent, "li offriamo noi.")
+        XCTAssertEqual(content.title, "Le tue prossime due settimane sono")
+        XCTAssertEqual(content.titleAccent, "offerta nostra.")
         XCTAssertEqual(
             content.subtitle,
-            "La tua prova di Pillie Plus inizia ora. Ecco cosa include."
+            "Il tuo trial di Pillie Plus inizia ora. Ecco cosa c'è dentro."
         )
         XCTAssertEqual(
             content.perks.map(\.title),
             [
                 "Blocco app",
-                "Scuoti per confermare",
-                "Promemoria ripetuti",
+                "Scuoti per registrare",
+                "Promemoria smart",
                 PillieLocalization.string(
                     "paywall.feature.custom_messages",
                     table: "Commerce",
@@ -527,7 +554,7 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
         XCTAssertEqual(content.dismissCTA, "Non ora")
         XCTAssertEqual(
             content.disclosure,
-            "14 giorni attivi gratis, senza carta. Il blocco app si disattiva dopo la prova. I promemoria restano gratis."
+            "14 giorni attivi gratis, niente carta. Il blocco finisce col trial. I promemoria restano gratis."
         )
     }
 
@@ -546,30 +573,24 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
             locale: italian
         )
         XCTAssertEqual(active.indicatorLabel, "Plus è attivo · 7 giorni attivi rimasti")
-        XCTAssertEqual(
-            active.sheetContent.expiryRows.map(\.text),
-            [
-                PillieLocalization.string(
-                    "trial.status.after.blocking_off",
-                    table: "Commerce",
-                    locale: italian
-                ),
-                PillieLocalization.string(
-                    "trial.status.after.reminders_free",
-                    table: "Commerce",
-                    locale: italian
-                ),
-                "La tua configurazione del blocco app è salvata.",
-            ]
-        )
         XCTAssertEqual(active.sheetContent.ctaTitle, "Tieni Pillie Plus")
 
-        let setup = TrialStatusPresentation(
+        let countdown = TrialStatusPresentation(
             daysRemaining: 7,
             protectionActive: false,
-            locale: italian
+            trialEndDate: trialEnd,
+            locale: italian,
+            calendar: calendar
         )
-        XCTAssertEqual(setup.indicatorLabel, "Imposta il blocco app · 7 giorni attivi rimasti")
+        XCTAssertEqual(countdown.indicatorLabel, "7 giorni attivi rimasti")
+        XCTAssertEqual(
+            countdown.sheetContent.timeline.map(\.text),
+            [
+                "Ti ricorderemo che mancano 5 giorni.",
+                "Un ultimo promemoria prima che la tua prova finisca.",
+                "Il blocco delle app si disattiva. I promemoria restano gratuiti e la tua configurazione resta salvata.",
+            ]
+        )
     }
 
     func testHomeRecommendationCardsUseItalianRuntimeCopy() throws {
@@ -611,7 +632,7 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
             "Pillie — Issue Report"
         )
         let body = try XCTUnwrap(issue.localizedBody(locale: italian))
-        XCTAssertTrue(body.contains("Raccontaci cosa non ha funzionato"))
+        XCTAssertTrue(body.contains("Raccontaci che cosa non ha funzionato"))
         XCTAssertTrue(body.contains("Dispositivo: iPhone17,1"))
         XCTAssertFalse(body.contains("Device:"))
     }

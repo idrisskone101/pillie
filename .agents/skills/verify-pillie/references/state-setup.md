@@ -16,9 +16,9 @@ In a flow: `openurl pillie://debug/<path>?lang=en`. The runner accepts the iOS "
 | `/trial-grant` | A fresh reverse trial starting now |
 | `/trial-age?days=N` | The current trial aged back N days |
 | `/trial-eve-of-break` / `/trial-break-week` | Trial on the eve of, or during, the break week |
-| `/trial-activation-hub?state=unconfigured\|partial\|full&terms=hard` | The three app-blocking acceptance states the simulator cannot reach for real |
-| `/trial-clear` | No trial grant, one-shot flags cleared |
-| `/trial-end-paywall?terms=soft&cohort=blocker&feedback=resolved\|unresolved&success=1&subscriber=1` | Home with an expired trial, and the trial-end paywall presents without a relaunch (a relaunch drops the expired clock). Default is the hard wall; `terms=soft` is the closable pre-cutover wall with "Continue with free reminders". Same states as the developer menu's `trialExpired*` rows. |
+| `/trial-activation-hub?state=unconfigured\|partial\|full&terms=hard` | A fresh trial with Plus setup at 1/3 (`unconfigured`: reminders only), 2/3 (`partial`: plus blocking), or 3/3 (`full`: plus custom messages, strip hidden). Clears `plusSetupFinished` so the Today setup strip comes back. |
+| `/trial-clear` | No trial grant, one-shot flags and `plusSetupFinished` cleared |
+| `/trial-end-paywall?terms=soft&cohort=blocker&feedback=resolved\|unresolved&success=1&subscriber=1` | Home with an expired trial, and the trial-end paywall presents without a relaunch (a relaunch drops the expired clock). Default is the hard wall; `terms=soft` is the closable pre-cutover wall with "Keep reminders free". Same states as the developer menu's `trialExpired*` rows. |
 | `/paywall-lifetime?price=%2489.99\|clear` | The honest paywall shows a Lifetime tile at that price, because the RevenueCat Test Store offering has none. Stored in defaults, so it survives relaunch until `price=clear`. Display only: no package backs it. |
 | `/restore-outcome?result=error\|none\|restored\|clear` | Restore Purchases returns that outcome without calling RevenueCat: `error` is a network failure (`error_category=network`), `none` finds no active purchase, `restored` also turns Plus on, `clear` goes back to real RevenueCat. Lasts until relaunch. |
 | `/honest-paywall?board=duringTrial\|settingsFree\|trialEndedReturningHard\|trialEndedReturningLegacy` | One paywall board |
@@ -44,7 +44,7 @@ Home `#developerMenuAvatarButton`, or Settings `#settingsDeveloperMenuRow`, open
 
 ## Defaults before launch
 
-`defaults KEY TYPE VALUE` then `launch`. Keys: `onboardingStep` (raw `OnboardingFlow.Step` int, `Services/OnboardingFlow.swift`), `pillie.appLanguage` (an `AppLanguage` raw value), `trialInstallHardPaywallCohort` (`pre_cutover` or `post_cutover`), `homeBlockingStatusCardDismissed`.
+`defaults KEY TYPE VALUE` then `launch`. Keys: `onboardingStep` (raw `OnboardingFlow.Step` int, `Services/OnboardingFlow.swift`), `pillie.appLanguage` (an `AppLanguage` raw value), `trialInstallHardPaywallCohort` (`pre_cutover` or `post_cutover`), `homeBlockingStatusCardDismissed`, `plusSetupFinished` (bool; `true` hides the Today Plus setup strip).
 
 ## Fresh install
 

@@ -19,6 +19,7 @@ struct TrialStatusPresentation: Equatable {
     let trialEndDate: Date?
     let locale: Locale
     let trialEndTerms: TrialEndAccessTerms
+    let calendar: Calendar
     /// Clock question: expiry is the next local midnight. Not `daysRemaining == 1`.
     private let expiresTonight: Bool
 
@@ -28,6 +29,7 @@ struct TrialStatusPresentation: Equatable {
         trialEndDate: Date? = nil,
         locale: Locale = .current,
         trialEndTerms: TrialEndAccessTerms = .legacy,
+        calendar: Calendar = .current,
         expiresTonight: Bool? = nil
     ) {
         self.daysRemaining = daysRemaining
@@ -35,6 +37,7 @@ struct TrialStatusPresentation: Equatable {
         self.trialEndDate = trialEndDate
         self.locale = locale
         self.trialEndTerms = trialEndTerms
+        self.calendar = calendar
         self.expiresTonight = expiresTonight ?? (daysRemaining == 1)
     }
 
@@ -49,81 +52,107 @@ struct TrialStatusPresentation: Equatable {
     /// left" (misleading while active) or "1 days left".
     var endsTonight: Bool { expiresTonight }
 
-    /// The persistent indicator distinguishes active protection from setup
-    /// still being needed while preserving the trial countdown.
+    /// The persistent indicator. Once blocking is on it says Plus is on;
+    /// before that it is a plain countdown (the setup strip owns the ask).
     var indicatorLabel: String {
-        let key = switch (protectionActive, endsTonight) {
-        case (true, true): "trial.status.indicator.active_tonight"
-        case (true, false): "trial.status.indicator.active"
-        case (false, true): "trial.status.indicator.setup_tonight"
-        case (false, false): "trial.status.indicator.setup"
-        }
-        if endsTonight {
-            return PillieLocalization.string(key, table: "Commerce", locale: locale)
-        }
-        return PillieLocalization.formatted(
-            key,
-            table: "Commerce",
-            locale: locale,
-            arguments: Int64(displayedDaysRemaining)
-        )
+        protectionActive ? activeLabel : countdownLabel
     }
 
-    /// Copy for the trial status sheet behind the indicator.
+    /// "%lld active days left", or "Ends tonight" on the last protected day.
+    /// The badge and the sheet hero share it.
+    var countdownLabel: String {
+        endsTonight
+            ? commerce("trial.status.indicator.countdown_tonight")
+            : commerce("trial.status.indicator.countdown", Int64(displayedDaysRemaining))
+    }
+
+    private var activeLabel: String {
+        endsTonight
+            ? commerce("trial.status.indicator.active_tonight")
+            : commerce("trial.status.indicator.active", Int64(displayedDaysRemaining))
+    }
+
+    /// The counted day the user is on, 1 through 14. Pairs with the countdown
+    /// so "Day N" plus "M days left" always spans the 14 promised days.
+    var currentDay: Int {
+        min(max(1, ReverseTrialClock.fullDays + 1 - displayedDaysRemaining), ReverseTrialClock.fullDays)
+    }
+
+    /// Status and commerce only. Setup lives in the Today strip.
     var sheetContent: TrialStatusSheetContent {
-        sheetContent(for: .unconfigured)
+        TrialStatusSheetContent(
+            eyebrow: commerce("trial.status.eyebrow"),
+            headline: countdownLabel,
+            until: trialEndDate.map {
+                PillieLocalization.formatted(
+                    "trial.status.until",
+                    table: "Commerce",
+                    locale: locale,
+                    arguments: longDate($0)
+                )
+            },
+            progress: TrialProgress(
+                filledDays: currentDay,
+                totalDays: ReverseTrialClock.fullDays,
+                todayLabel: commerce("trial.status.day_today", Int64(currentDay)),
+                endLabel: trialEndDate.map { $0.formatted(dateStyle.day().month(.abbreviated)) }
+            ),
+            timelineTitle: commerce("trial.status.timeline_title"),
+            timeline: timeline,
+            ctaTitle: commerce("trial.status.keep_plus")
+        )
     }
 
-    func sheetContent(for activationState: TrialActivationState) -> TrialStatusSheetContent {
-        let title = trialEndDate.map {
-            CommercePresentation.trialEndText(date: $0, locale: locale)
-        } ?? PillieLocalization.string(
-            "trial.status.title",
-            table: "Commerce",
-            locale: locale
+    /// The notices the planner will send (`trialNoticeSlots` with days before
+    /// expiry), then the expiry day itself, all counted back from the real
+    /// `ReverseTrialClock` expiry so a break week moves every date together.
+    var timeline: [TrialTimelineRow] {
+        guard let expiry = trialEndDate else { return [] }
+        let warningKeys = [
+            10: "trial.status.timeline.heads_up",
+            13: "trial.status.timeline.last_call",
+        ]
+        let warnings = ReminderSchedulePlanner.trialNoticeSlots
+            .filter { $0.calendarDaysBeforeExpiry > 0 }
+            .compactMap { slot -> TrialTimelineRow? in
+                guard let key = warningKeys[slot.day],
+                      let date = calendar.date(
+                        byAdding: .day,
+                        value: -slot.calendarDaysBeforeExpiry,
+                        to: expiry
+                      )
+                else { return nil }
+                return row(date: date, key: key, symbol: "bell.fill")
+            }
+        let expiryKey = trialEndTerms == .hardPaywall
+            ? "trial.status.timeline.plus_pauses"
+            : "trial.status.timeline.blocking_off"
+        return warnings + [row(date: expiry, key: expiryKey, symbol: "lock.fill")]
+    }
+
+    private func row(date: Date, key: String, symbol: String) -> TrialTimelineRow {
+        TrialTimelineRow(
+            date: date,
+            dateText: longDate(date),
+            text: commerce(key),
+            symbol: symbol
         )
-        return TrialStatusSheetContent(
-            title: title,
-            expiryRows: [
-                TrialExpiryRow(
-                    text: PillieLocalization.string(
-                        trialEndTerms == .hardPaywall
-                            ? "trial.status.after.plus_pauses"
-                            : "trial.status.after.blocking_off",
-                        table: "Commerce",
-                        locale: locale
-                    ),
-                    symbol: trialEndTerms == .hardPaywall ? "lock.fill" : "nosign"
-                ),
-                TrialExpiryRow(
-                    text: PillieLocalization.string(
-                        trialEndTerms == .hardPaywall
-                            ? "trial.status.after.plan_required"
-                            : "trial.status.after.reminders_free",
-                        table: "Commerce",
-                        locale: locale
-                    ),
-                    symbol: trialEndTerms == .hardPaywall ? "creditcard.fill" : "bell.fill"
-                ),
-                TrialExpiryRow(
-                    text: PillieLocalization.string(
-                        "trial.status.after.setup_saved",
-                        table: "Commerce",
-                        locale: locale
-                    ),
-                    symbol: "checkmark.circle.fill"
-                ),
-            ],
-            ctaTitle: PillieLocalization.string(
-                "trial.status.keep_plus",
-                table: "Commerce",
-                locale: locale
-            ),
-            activationItems: TrialActivationItem.make(
-                for: activationState,
-                locale: locale
-            )
-        )
+    }
+
+    private var dateStyle: Date.FormatStyle {
+        Date.FormatStyle(locale: locale, calendar: calendar, timeZone: calendar.timeZone)
+    }
+
+    private func longDate(_ date: Date) -> String {
+        date.formatted(dateStyle.day().month(.wide))
+    }
+
+    private func commerce(_ key: String) -> String {
+        PillieLocalization.string(key, table: "Commerce", locale: locale)
+    }
+
+    private func commerce(_ key: String, _ count: Int64) -> String {
+        PillieLocalization.formatted(key, table: "Commerce", locale: locale, arguments: count)
     }
 
     /// The indicator + sheet surface, or `nil` when no indicator should exist:
@@ -154,145 +183,35 @@ struct TrialStatusPresentation: Equatable {
                 for: assignedTermsCohort,
                 hardPaywallEnabled: hardPaywallEnabled
             ),
+            calendar: calendar,
             expiresTonight: clock.endsTonight(calendar: calendar, now: now)
         )
     }
 }
 
-/// Copy for the trial status sheet: remaining time, what's unlocked, what
-/// expiry changes, and the quiet "Keep Plus" path into the existing purchase
-/// flow — the only in-trial purchase surface besides the Settings row.
+/// Copy for the status-only trial sheet: countdown, expiry, a 14-day bar,
+/// what happens next, and the quiet "Keep Plus" path into the existing
+/// purchase flow.
 struct TrialStatusSheetContent: Equatable {
-    let title: String
-    let expiryRows: [TrialExpiryRow]
+    let eyebrow: String
+    let headline: String
+    let until: String?
+    let progress: TrialProgress
+    let timelineTitle: String
+    let timeline: [TrialTimelineRow]
     let ctaTitle: String
-    let activationItems: [TrialActivationItem]
 }
 
-struct TrialExpiryRow: Equatable {
+struct TrialProgress: Equatable {
+    let filledDays: Int
+    let totalDays: Int
+    let todayLabel: String
+    let endLabel: String?
+}
+
+struct TrialTimelineRow: Equatable {
+    let date: Date
+    let dateText: String
     let text: String
     let symbol: String
-}
-
-struct TrialActivationState: Equatable {
-    let appBlockingActive: Bool
-    let customMessagesCustomized: Bool
-    let smartRemindersCustomized: Bool
-
-    static let unconfigured = TrialActivationState(
-        appBlockingActive: false,
-        customMessagesCustomized: false,
-        smartRemindersCustomized: false
-    )
-}
-
-enum TrialActivationAction: Equatable {
-    case appBlocking
-    case customMessages
-    case smartReminders
-}
-
-struct TrialActivationItem: Equatable {
-    let feature: AnalyticsTrialStatusFeature
-    let title: String
-    let status: AnalyticsTrialActivationStatus
-    let action: TrialActivationAction?
-    let isRecommended: Bool
-    var locale: Locale = .current
-
-    var statusTitle: String {
-        let key = switch status {
-        case .setUp: "trial.activation.status.setup"
-        case .active: "trial.activation.status.active"
-        case .activeAutomatically: "trial.activation.status.active_automatically"
-        case .personalize: "trial.activation.status.personalize"
-        case .customized: "trial.activation.status.customized"
-        case .on: "trial.activation.status.on"
-        }
-        return PillieLocalization.string(key, table: "Commerce", locale: locale)
-    }
-
-    var actionTitle: String? {
-        let key: String? = switch action {
-        case .appBlocking:
-            status == .active
-                ? "trial.activation.action.manage"
-                : "trial.activation.action.setup"
-        case .customMessages:
-            status == .customized
-                ? "trial.activation.action.edit"
-                : "trial.activation.action.personalize"
-        case .smartReminders:
-            "trial.activation.action.customize"
-        case nil:
-            nil
-        }
-        return key.map {
-            PillieLocalization.string($0, table: "Commerce", locale: locale)
-        }
-    }
-
-    var symbolName: String {
-        switch feature {
-        case .appBlocking: "nosign"
-        case .shakeToConfirm: "iphone.radiowaves.left.and.right"
-        case .smartReminders: "bell.fill"
-        case .customMessages: "text.bubble.fill"
-        }
-    }
-
-    static func make(
-        for state: TrialActivationState,
-        locale: Locale = .current
-    ) -> [TrialActivationItem] {
-        let recommendation: TrialActivationAction? = if !state.appBlockingActive {
-            .appBlocking
-        } else if !state.customMessagesCustomized {
-            .customMessages
-        } else if !state.smartRemindersCustomized {
-            .smartReminders
-        } else {
-            // All setup is complete. Smart Reminders remains the useful,
-            // adjustable control, so the hub still has exactly one next action.
-            .smartReminders
-        }
-
-        func title(_ key: String) -> String {
-            PillieLocalization.string(key, table: "Commerce", locale: locale)
-        }
-        return [
-            TrialActivationItem(
-                feature: .appBlocking,
-                title: title("paywall.feature.app_blocking.compact"),
-                status: state.appBlockingActive ? .active : .setUp,
-                action: .appBlocking,
-                isRecommended: recommendation == .appBlocking,
-                locale: locale
-            ),
-            TrialActivationItem(
-                feature: .smartReminders,
-                title: title("paywall.feature.smart_reminders"),
-                status: state.smartRemindersCustomized ? .customized : .activeAutomatically,
-                action: .smartReminders,
-                isRecommended: recommendation == .smartReminders,
-                locale: locale
-            ),
-            TrialActivationItem(
-                feature: .customMessages,
-                title: title("paywall.feature.custom_messages.compact"),
-                status: state.customMessagesCustomized ? .customized : .personalize,
-                action: .customMessages,
-                isRecommended: recommendation == .customMessages,
-                locale: locale
-            ),
-            TrialActivationItem(
-                feature: .shakeToConfirm,
-                title: title("paywall.feature.shake"),
-                status: .on,
-                action: nil,
-                isRecommended: false,
-                locale: locale
-            ),
-        ]
-    }
 }
