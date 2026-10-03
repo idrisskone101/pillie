@@ -5,7 +5,7 @@
 
 import Foundation
 
-enum PaywallPurchaseIntent: Equatable {
+enum PaywallPurchaseIntent: Hashable {
     case subscribe(PaywallRecurrence)
     case lifetime
 

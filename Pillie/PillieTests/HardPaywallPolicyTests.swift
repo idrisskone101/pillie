@@ -176,19 +176,4 @@ struct HardPaywallPolicyTests {
         ))
         #expect(content.subtitle.localizedCaseInsensitiveContains("forever"))
     }
-
-    @Test func `Hard paywall debug scenario is post cutover and expired`() {
-        let scenario = TrialEndPaywallDebugScenario.make(
-            forceHardPaywall: true,
-            now: date(2026, 8, 2, 9, 0),
-            calendar: montrealCalendar
-        )
-
-        #expect(scenario.termsCohort == .postCutover)
-        #expect(scenario.grantDate == HardPaywallPolicy.cutoverInstant)
-        #expect(!PlusAccessState(
-            hasEntitlement: false,
-            trialGrantDate: scenario.grantDate
-        ).trialActive(calendar: montrealCalendar, now: scenario.evaluationDate))
-    }
 }

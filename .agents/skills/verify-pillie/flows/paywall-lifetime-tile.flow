@@ -1,0 +1,67 @@
+# ENG-155 Lifetime tile and split Restore on the honest paywall. Never taps
+# the CTA: it opens a RevenueCat Test Store purchase sheet. Restore taps run
+# under /restore-outcome, so RevenueCat is never called. app.log carries the
+# analytics mirror: grep it for paywall_plan_selected and restore_started.
+
+launch
+wait text Today 15
+# The Test Store offering has no lifetime package; this stands one in until
+# price=clear at the end.
+openurl pillie://debug/paywall-lifetime?price=%2489.99
+openurl pillie://debug/honest-paywall?board=trialEndedReturningHard&lang=en
+# A relaunch presents the hard wall when the install already holds this state.
+launch
+wait text "Your trial already ended." 20
+wait id paywallTile.lifetime 10
+expect id paywallTile.annual
+expect id paywallTile.monthly
+expect text "billed yearly"
+expect label "Cancel anytime"
+expect id paywallReassurance
+expect id paywallRestoreButton
+shot hard-wall-year-three-tiles
+log start
+
+# The reassurance is plain text now. With a restore outcome armed, a tap that
+# still reached restore would raise "No Subscription Found".
+openurl pillie://debug/restore-outcome?result=none
+tap --id paywallReassurance
+sleep 3
+expect-not text "No Subscription Found"
+expect-not text "Couldn't restore purchases"
+expect text "Your trial already ended."
+note no restore alert 3s after tapping Cancel anytime
+shot cancel-anytime-tap-no-restore
+
+tap --id paywallTile.lifetime
+wait text "One payment. No renewal." 10
+expect text "once"
+shot lifetime-selected
+
+tap --id paywallRestoreButton
+wait text "No Subscription Found" 10
+shot restore-no-subscription
+tap --label OK
+gone text "No Subscription Found"
+
+# Settings > Pillie Plus door. Drop the expired grant first so Home does not
+# auto-present the trial-end wall on launch.
+openurl pillie://debug/restore-outcome?result=clear
+openurl pillie://debug/trial-clear
+launch
+wait text Today 15
+openurl pillie://debug/review-prompt?lang=en   # free user, Plus off, onboarding done
+wait label "That's logged. Tap to undo." 10
+# Settings tab by its top edge; see paywall-restore.flow for why.
+tap -x 319 -y 800
+wait id settingsLanguageRow
+gesture scroll-down
+tap --label "Pillie Plus, Free"
+wait id paywallTile.lifetime 10
+expect id paywallTile.annual
+expect id paywallTile.monthly
+shot settings-paywall-three-tiles
+tap --id xmark --element-type Button
+gone id paywallTile.lifetime
+openurl pillie://debug/paywall-lifetime?price=clear
+log stop

@@ -53,6 +53,20 @@ struct PaywallOfferingsSnapshot: Equatable {
         )
     }
 
+    #if DEBUG
+    func withLifetimeDisplay(_ display: String) -> PaywallOfferingsSnapshot {
+        PaywallOfferingsSnapshot(
+            annualPrice: annualPrice,
+            monthlyPrice: monthlyPrice,
+            lifetimePrice: lifetimePrice,
+            annualDisplay: annualDisplay,
+            monthlyDisplay: monthlyDisplay,
+            lifetimeDisplay: display,
+            currencyCode: currencyCode
+        )
+    }
+    #endif
+
     static func fixture(
         annualDisplay: String,
         monthlyDisplay: String,

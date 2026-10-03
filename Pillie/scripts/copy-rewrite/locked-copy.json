@@ -2205,24 +2205,6 @@
     {
       "issue": "honest-paywall",
       "table": "Commerce",
-      "key": "paywall.stack.lifetime_link",
-      "create": true,
-      "en": "or pay once, %@ lifetime",
-      "de": "oder einmalig %@ fürs Leben",
-      "it": "oppure %@ una tantum a vita"
-    },
-    {
-      "issue": "honest-paywall",
-      "table": "Commerce",
-      "key": "paywall.stack.footer.reassurance",
-      "create": true,
-      "en": "Cancel anytime · Restore",
-      "de": "Jederzeit kündbar · Wiederherstellen",
-      "it": "Annulla quando vuoi · Ripristina"
-    },
-    {
-      "issue": "honest-paywall",
-      "table": "Commerce",
       "key": "paywall.stack.monthly_equivalent",
       "create": true,
       "en": "%@/mo",
@@ -2761,6 +2743,66 @@
       "en": "Try again",
       "de": "Erneut versuchen",
       "it": "Riprova"
+    },
+    {
+      "issue": "ENG-155",
+      "table": "Commerce",
+      "key": "paywall.stack.lifetime.title",
+      "create": true,
+      "comment": "Honest paywall plan tile title for the one-time lifetime purchase, beside Year and Month",
+      "en": "Lifetime",
+      "de": "Lebenslang",
+      "it": "A vita"
+    },
+    {
+      "issue": "ENG-155",
+      "table": "Commerce",
+      "key": "paywall.stack.lifetime.primary_line",
+      "create": true,
+      "comment": "Honest paywall Lifetime tile subtitle",
+      "en": "Pay once, keep Plus for good",
+      "de": "Einmal zahlen, Plus für immer behalten",
+      "it": "Paghi una volta, Plus resta tuo per sempre"
+    },
+    {
+      "issue": "ENG-155",
+      "table": "Commerce",
+      "key": "paywall.cta.keep_plus.once",
+      "create": true,
+      "comment": "Honest paywall CTA with the live lifetime price when Lifetime is selected (keep verb)",
+      "en": "Keep Pillie Plus · %@ once",
+      "de": "Pillie Plus behalten · %@ einmalig",
+      "it": "Tieni Pillie Plus · %@ una tantum"
+    },
+    {
+      "issue": "ENG-155",
+      "table": "Commerce",
+      "key": "paywall.cta.get_plus.once",
+      "create": true,
+      "comment": "Honest paywall CTA with the live lifetime price when Lifetime is selected (get verb)",
+      "en": "Get Pillie Plus · %@ once",
+      "de": "Pillie Plus holen · %@ einmalig",
+      "it": "Ottieni Pillie Plus · %@ una tantum"
+    },
+    {
+      "issue": "ENG-155",
+      "table": "Commerce",
+      "key": "paywall.stack.footer.cancel_anytime",
+      "create": true,
+      "comment": "Honest paywall reassurance under the CTA when Year or Month is selected; plain text, not a button",
+      "en": "Cancel anytime",
+      "de": "Jederzeit kündbar",
+      "it": "Annulla quando vuoi"
+    },
+    {
+      "issue": "ENG-155",
+      "table": "Commerce",
+      "key": "paywall.stack.footer.one_payment",
+      "create": true,
+      "comment": "Honest paywall reassurance under the CTA when Lifetime is selected; plain text, not a button",
+      "en": "One payment. No renewal.",
+      "de": "Eine Zahlung. Keine Verlängerung.",
+      "it": "Un solo pagamento. Nessun rinnovo."
     }
   ]
 }

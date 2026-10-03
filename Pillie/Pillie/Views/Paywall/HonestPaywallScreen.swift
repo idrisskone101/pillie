@@ -18,7 +18,7 @@ struct HonestPaywallScreen: View {
     var declineFeedbackContent: TrialDeclineFeedbackContent? = nil
     var routeContinueFree: (() -> TrialDeclineFeedbackRoute)? = nil
 
-    @State private var recurrence: PaywallRecurrence = .year
+    @State private var selection: PaywallPurchaseIntent = .subscribe(.year)
     @State private var offerings: Offerings?
     @State private var activeAlert: PaywallAlert?
     @State private var isPurchasing = false
@@ -34,10 +34,20 @@ struct HonestPaywallScreen: View {
     private var scene: HonestPaywallScene {
         HonestPaywallSceneBuilder.build(
             board: board,
-            offerings: offerings.flatMap(PaywallOfferingsSnapshot.parse),
-            recurrence: recurrence,
+            offerings: offeringsSnapshot,
+            selection: selection,
             locale: locale
         )
+    }
+
+    private var offeringsSnapshot: PaywallOfferingsSnapshot? {
+        let snapshot = offerings.flatMap(PaywallOfferingsSnapshot.parse)
+        #if DEBUG
+        if let display = UserDefaults.standard.string(forKey: Self.debugLifetimeDisplayKey) {
+            return snapshot?.withLifetimeDisplay(display)
+        }
+        #endif
+        return snapshot
     }
 
     private var isTrialEnd: Bool {
@@ -87,7 +97,7 @@ struct HonestPaywallScreen: View {
             HonestPaywallView(
                 scene: scene,
                 isPurchasing: isPurchasing,
-                onRecurrenceChange: selectRecurrence,
+                onSelect: selectPlan,
                 onPurchase: purchase,
                 onRestore: restorePurchases,
                 onDismiss: onDismiss,
@@ -112,11 +122,11 @@ struct HonestPaywallScreen: View {
             .accessibilityHidden(true)
     }
 
-    private func selectRecurrence(_ value: PaywallRecurrence) {
+    private func selectPlan(_ intent: PaywallPurchaseIntent) {
         withAnimation(.easeInOut(duration: 0.2)) {
-            recurrence = value
+            selection = intent
         }
-        let plan: AnalyticsPlan = value == .year ? .annual : .monthly
+        let plan = intent.pilliePlusPlan.analyticsPlan
         switch telemetryMode {
         case .trialEnd(let content):
             telemetry.trialEndPlanSelected(
@@ -144,13 +154,15 @@ struct HonestPaywallScreen: View {
             accessibilityReduceMotion: accessibilityReduceMotion
         )
         withAnimation(response.motionProfile.animation) { isPurchasing = true }
-
-        trackPurchaseStarted(plan: plan)
+        // Captured before purchasing, as restore does: an active entitlement
+        // ends the trial-end content and would drop the cohort.
+        let mode = telemetryMode
+        trackPurchaseStarted(plan: plan, mode: mode)
 
         Task {
             do {
                 let outcome = try await subscriptionManager.purchase(package)
-                trackPurchaseCompleted(plan: plan, outcome: outcome)
+                trackPurchaseCompleted(plan: plan, mode: mode, outcome: outcome)
                 plusFeedback.successfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
                 if isTrialEnd {
                     successOutcome = .purchased(plan)
@@ -161,10 +173,10 @@ struct HonestPaywallScreen: View {
             } catch {
                 plusFeedback.unsuccessfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
                 if error.honestPaywallIsCancelledPurchase {
-                    trackPurchaseCancelled(plan: plan)
+                    trackPurchaseCancelled(plan: plan, mode: mode)
                     await subscriptionManager.refreshStatus()
                 } else {
-                    trackPurchaseFailed(plan: plan, error: error)
+                    trackPurchaseFailed(plan: plan, mode: mode, error: error)
                     activeAlert = .purchaseError(CommercePresentation.purchaseErrorMessage(error, locale: locale))
                 }
             }
@@ -173,6 +185,7 @@ struct HonestPaywallScreen: View {
     }
 
     private func restorePurchases() {
+        guard !isRestoring else { return }
         let response = plusFeedback.startRestore(accessibilityReduceMotion: accessibilityReduceMotion)
         withAnimation(response.motionProfile.animation) { isRestoring = true }
         // Captured before restoring: a restored entitlement ends the trial-end
@@ -313,8 +326,8 @@ struct HonestPaywallScreen: View {
         }
     }
 
-    private func trackPurchaseStarted(plan: PilliePlusPlan) {
-        switch telemetryMode {
+    private func trackPurchaseStarted(plan: PilliePlusPlan, mode: HonestPaywallTelemetryMode) {
+        switch mode {
         case .trialEnd(let content):
             telemetry.trialEndPurchaseStarted(
                 plan: plan.analyticsPlan,
@@ -331,8 +344,8 @@ struct HonestPaywallScreen: View {
         }
     }
 
-    private func trackPurchaseCompleted(plan: PilliePlusPlan, outcome: PurchaseOutcome) {
-        switch telemetryMode {
+    private func trackPurchaseCompleted(plan: PilliePlusPlan, mode: HonestPaywallTelemetryMode, outcome: PurchaseOutcome) {
+        switch mode {
         case .trialEnd(let content):
             switch outcome.conversionEvent {
             case .trialStarted:
@@ -369,8 +382,8 @@ struct HonestPaywallScreen: View {
         }
     }
 
-    private func trackPurchaseCancelled(plan: PilliePlusPlan) {
-        switch telemetryMode {
+    private func trackPurchaseCancelled(plan: PilliePlusPlan, mode: HonestPaywallTelemetryMode) {
+        switch mode {
         case .trialEnd(let content):
             telemetry.trialEndPurchaseCancelled(
                 plan: plan.analyticsPlan,
@@ -387,8 +400,8 @@ struct HonestPaywallScreen: View {
         }
     }
 
-    private func trackPurchaseFailed(plan: PilliePlusPlan, error: Error) {
-        switch telemetryMode {
+    private func trackPurchaseFailed(plan: PilliePlusPlan, mode: HonestPaywallTelemetryMode, error: Error) {
+        switch mode {
         case .trialEnd(let content):
             telemetry.trialEndPurchaseFailed(
                 plan: plan.analyticsPlan,

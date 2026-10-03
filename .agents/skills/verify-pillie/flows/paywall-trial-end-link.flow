@@ -1,0 +1,18 @@
+# /trial-end-paywall opens both trial-end walls straight from Home, with no
+# relaunch: a relaunch drops the debug clock that keeps the trial expired.
+launch
+wait text Today 15
+openurl pillie://debug/trial-end-paywall?lang=en
+wait text "Your Pillie Plus trial is over." 20
+expect id paywallRestoreButton
+expect-not text "Keep reminders free"
+shot hard-wall
+
+openurl pillie://debug/trial-clear
+launch
+wait text Today 15
+openurl pillie://debug/trial-end-paywall?terms=soft&lang=en
+wait text "Keep reminders free" 20
+expect id paywallRestoreButton
+shot soft-wall
+openurl pillie://debug/trial-clear

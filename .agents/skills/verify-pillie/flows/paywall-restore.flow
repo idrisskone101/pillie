@@ -15,7 +15,7 @@ wait text "Your trial already ended." 20
 log start
 
 openurl pillie://debug/restore-outcome?result=error
-tap --label "Cancel anytime · Restore"
+tap --label "Restore purchases"
 wait text "Couldn't restore purchases" 10
 expect label "Try again"
 expect label "Contact support"
@@ -30,7 +30,7 @@ tap --label OK
 gone text "No Subscription Found"
 
 openurl pillie://debug/restore-outcome?result=restored
-tap --label "Cancel anytime · Restore"
+tap --label "Restore purchases"
 # restored turns Plus on; Home drops the hard wall and shows the Plus
 # blocking-setup card instead of the free "App blocking is off" card.
 gone text "Your trial already ended." 10
@@ -52,8 +52,8 @@ tap -x 319 -y 800
 wait id settingsLanguageRow
 gesture scroll-down                             # the Account row sits below the fold
 tap --label "Pillie Plus, Free"
-wait text "Cancel anytime · Restore" 10
-tap --label "Cancel anytime · Restore"
+wait label "Restore purchases" 10
+tap --label "Restore purchases"
 wait text "Couldn't restore purchases" 10
 expect label "Contact support"
 shot settings-restore-error
@@ -64,6 +64,6 @@ shot settings-contact-support-fallback
 tap -x 201 -y 525                               # the alert's Close; the paywall's xmark is also "Close"
 gone text "We couldn't open the mail app."
 tap --id xmark --element-type Button            # close the settings paywall
-gone text "Cancel anytime · Restore"
+gone label "Restore purchases"
 openurl pillie://debug/restore-outcome?result=clear
 log stop

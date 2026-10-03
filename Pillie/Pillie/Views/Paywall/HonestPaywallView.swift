@@ -10,7 +10,7 @@ struct HonestPaywallView: View {
 
     let scene: HonestPaywallScene
     let isPurchasing: Bool
-    let onRecurrenceChange: (PaywallRecurrence) -> Void
+    let onSelect: (PaywallPurchaseIntent) -> Void
     let onPurchase: (PaywallPurchaseIntent) -> Void
     let onRestore: () -> Void
     let onDismiss: () -> Void
@@ -67,10 +67,9 @@ struct HonestPaywallView: View {
             isPurchasing: isPurchasing,
             section: section,
             continueFree: continueFree,
-            onRecurrenceChange: onRecurrenceChange,
+            onSelect: onSelect,
             onPurchase: onPurchase,
-            onRestore: onRestore,
-            onLifetime: { onPurchase(.lifetime) }
+            onRestore: onRestore
         )
     }
 

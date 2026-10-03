@@ -39876,6 +39876,281 @@
         }
       }
     },
+    "paywall.cta.keep_plus.once": {
+      "comment": "Honest paywall CTA with the live lifetime price when Lifetime is selected (keep verb)",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep Pillie Plus · %@ once"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus behalten · %@ einmalig"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tieni Pillie Plus · %@ una tantum"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أبقِ Pillie Plus · %@ مرة واحدة"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus রাখো · একবারে %@"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quedar-te Pillie Plus · %@ un cop"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nechat si Pillie Plus · %@ jednou"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Behold Pillie Plus · %@ én gang"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Κράτα το Pillie Plus · %@ μία φορά"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seguir con Pillie Plus · %@ una vez"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pidä Pillie Plus · %@ kertamaksuna"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Garder Pillie Plus · %@ une fois"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus રાખ · એક વાર %@"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "להשאיר את Pillie Plus · %@ פעם אחת"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus रखो · एक बार %@"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zadrži Pillie Plus · %@ jednokratno"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus megtartása · %@ egyszeri"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pertahankan Pillie Plus · %@ sekali"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plusを続ける · 買い切り%@"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus ಇಟ್ಟುಕೋ · %@ ಒಂದೇ ಬಾರಿ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus 유지 · 1회 %@"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus നിലനിർത്ത് · %@ ഒരിക്കൽ"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus ठेव · एकदाच %@"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kekalkan Pillie Plus · %@ sekali"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Behold Pillie Plus · %@ én gang"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus houden · %@ eenmalig"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus ରଖ · %@ ଥରେ"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus ਰੱਖ · %@ ਇੱਕ ਵਾਰ"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zostaw Pillie Plus · %@ jednorazowo"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Manter o Pillie Plus · %@ uma vez"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Manter o Pillie Plus · %@ uma vez"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Păstrează Pillie Plus · %@ o dată"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Оставить Pillie Plus · %@ один раз"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nechať si Pillie Plus · %@ raz"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Obdrži Pillie Plus · %@ enkratno"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Behåll Pillie Plus · %@ en gång"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus வை · ஒரு தடவை %@"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus ఉంచు · %@ ఒక్కసారి"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "เก็บ Pillie Plus · %@ ครั้งเดียว"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus'ı tut · tek seferde %@"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Залишити Pillie Plus · %@ один раз"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus رکھو · ایک بار %@"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Giữ Pillie Plus · %@ một lần"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "留下 Pillie Plus · 一次性 %@"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "留下 Pillie Plus · 一次性 %@"
+          }
+        }
+      }
+    },
     "paywall.cta.get_plus.billed_yearly": {
       "comment": "",
       "localizations": {
@@ -40422,6 +40697,281 @@
           "stringUnit": {
             "state": "translated",
             "value": "開通 Pillie Plus · 每月 %@"
+          }
+        }
+      }
+    },
+    "paywall.cta.get_plus.once": {
+      "comment": "Honest paywall CTA with the live lifetime price when Lifetime is selected (get verb)",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Get Pillie Plus · %@ once"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus holen · %@ einmalig"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ottieni Pillie Plus · %@ una tantum"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "خذ Pillie Plus · %@ مرة واحدة"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus নাও · একবারে %@"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Agafar Pillie Plus · %@ un cop"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vzít si Pillie Plus · %@ jednou"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Få Pillie Plus · %@ én gang"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Πάρε Pillie Plus · %@ μία φορά"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pedir Pillie Plus · %@ una vez"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ota Pillie Plus · %@ kertamaksuna"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prendre Pillie Plus · %@ une fois"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus લે · એક વાર %@"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "לקחת Pillie Plus · %@ פעם אחת"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus लो · एक बार %@"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uzmi Pillie Plus · %@ jednokratno"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus kérése · %@ egyszeri"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ambil Pillie Plus · %@ sekali"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plusにする · 買い切り%@"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus ತೆಗೆದುಕೋ · %@ ಒಂದೇ ಬಾರಿ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus 받기 · 1회 %@"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus എടുക്ക് · %@ ഒരിക്കൽ"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus घे · एकदाच %@"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ambil Pillie Plus · %@ sekali"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Få Pillie Plus · %@ én gang"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus nemen · %@ eenmalig"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus ନେ · %@ ଥରେ"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus ਲੈ · %@ ਇੱਕ ਵਾਰ"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weź Pillie Plus · %@ jednorazowo"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pegar o Pillie Plus · %@ uma vez"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Obter o Pillie Plus · %@ uma vez"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ia Pillie Plus · %@ o dată"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Взять Pillie Plus · %@ один раз"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zobrať si Pillie Plus · %@ raz"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vzemi Pillie Plus · %@ enkratno"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skaffa Pillie Plus · %@ en gång"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus எடு · ஒரு தடவை %@"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus తీసుకో · %@ ఒక్కసారి"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "เอา Pillie Plus · %@ ครั้งเดียว"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus al · tek seferde %@"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Взяти Pillie Plus · %@ один раз"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus لو · ایک بار %@"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lấy Pillie Plus · %@ một lần"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "开通 Pillie Plus · 一次性 %@"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "開通 Pillie Plus · 一次性 %@"
           }
         }
       }
@@ -41526,6 +42076,556 @@
         }
       }
     },
+    "paywall.stack.lifetime.title": {
+      "comment": "Honest paywall plan tile title for the one-time lifetime purchase, beside Year and Month",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lifetime"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lebenslang"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A vita"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مدى الحياة"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "লাইফটাইম"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vitalici"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Navždy"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Livstid"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Για πάντα"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "De por vida"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kertamaksu"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "À vie"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "આજીવન"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "לכל החיים"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "लाइफ़टाइम"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Doživotno"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Örökre"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seumur hidup"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "買い切り"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ಜೀವಿತಾವಧಿ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "평생"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ആജീവനാന്തം"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "आजीवन"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seumur hidup"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Livstid"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Levenslang"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ଆଜୀବନ"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਜੀਵਨ ਭਰ"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Na zawsze"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vitalício"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vitalício"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pe viață"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Навсегда"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Navždy"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trajno"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Livstid"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "வாழ்நாள்"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "జీవితకాలం"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ตลอดชีพ"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ömür boyu"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Назавжди"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لائف ٹائم"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trọn đời"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "终身"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "終身"
+          }
+        }
+      }
+    },
+    "paywall.stack.lifetime.primary_line": {
+      "comment": "Honest paywall Lifetime tile subtitle",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pay once, keep Plus for good"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Einmal zahlen, Plus für immer behalten"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paghi una volta, Plus resta tuo per sempre"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ادفع مرة واحدة واحتفظ بـ Plus للأبد"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "একবার টাকা দাও, Plus সারাজীবন তোমার"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paga un cop i queda't Plus per sempre"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zaplať jednou a Plus máš navždy"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Betal én gang, behold Plus for altid"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Πλήρωσε μία φορά, κράτα το Plus για πάντα"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paga una vez y quédate con Plus para siempre"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maksa kerran, Plus on sinun pysyvästi"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paie une fois, garde Plus pour de bon"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "એક વાર ચૂકવ, Plus હંમેશાં તારું"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "משלמים פעם אחת, ו־Plus נשאר לתמיד"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "एक बार पैसे दो, Plus हमेशा के लिए तुम्हारा"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plati jednom i Plus ostaje zauvijek"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Egyszer fizetsz, a Plus örökre a tiéd"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bayar sekali, Plus jadi milikmu selamanya"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "一度払えば、Plusがずっと使える"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ಒಮ್ಮೆ ಪಾವತಿಸು, Plus ಎಂದೆಂದಿಗೂ ನಿನ್ನದು"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "한 번 결제하고 Plus를 평생 쓰기"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ഒരിക്കൽ പണമടച്ചാൽ Plus എന്നും നിന്റേത്"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "एकदा पैसे भर, Plus कायमचा तुझा"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bayar sekali, simpan Plus selamanya"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Betal én gang, behold Plus for alltid"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eén keer betalen, Plus voor altijd"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ଥରେ ପଇସା ଦିଅ, Plus ସବୁଦିନ ପାଇଁ ତୁମର"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਇੱਕ ਵਾਰ ਭੁਗਤਾਨ ਕਰ, Plus ਹਮੇਸ਼ਾ ਤੇਰਾ"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Płacisz raz, Plus zostaje na zawsze"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pague uma vez e fique com o Plus pra sempre"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paga uma vez e fica com o Plus para sempre"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plătești o dată și păstrezi Plus pentru totdeauna"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Платишь один раз, и Plus остаётся навсегда"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zaplať raz a Plus máš navždy"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plačaj enkrat in Plus ostane za vedno"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Betala en gång, behåll Plus för alltid"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ஒரு தடவை கட்டு, Plus எப்போதும் உன்னிடம்"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ఒక్కసారి కట్టు, Plus ఎప్పటికీ నీదే"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "จ่ายครั้งเดียว ใช้ Plus ได้ตลอดไป"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bir kez öde, Plus hep senin olsun"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Платиш раз, і Plus залишається назавжди"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ایک بار پیسے دو، Plus ہمیشہ کے لیے تمہارا"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trả một lần, giữ Plus mãi mãi"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "一次付清，Plus 永久保留"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "一次付清，Plus 永久保留"
+          }
+        }
+      }
+    },
     "paywall.stack.save_badge": {
       "comment": "",
       "localizations": {
@@ -41801,552 +42901,552 @@
         }
       }
     },
-    "paywall.stack.lifetime_link": {
-      "comment": "",
+    "paywall.stack.footer.cancel_anytime": {
+      "comment": "Honest paywall reassurance under the CTA when Year or Month is selected; plain text, not a button",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "or pay once, %@ lifetime"
+            "value": "Cancel anytime"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "oder einmalig %@ fürs Leben"
+            "value": "Jederzeit kündbar"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "oppure %@ una tantum a vita"
+            "value": "Annulla quando vuoi"
           }
         },
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "أو مرة واحدة %@ مدى الحياة"
+            "value": "ألغِ متى شئت"
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "বা একবার %@, সারাজীবন"
+            "value": "যখন খুশি বাতিল করো"
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "o %@ un cop, per sempre"
+            "value": "Cancel·la quan vulguis"
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "nebo jednou %@, navždy"
+            "value": "Zruš kdykoli"
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "eller %@ én gang, for livet"
+            "value": "Opsig når som helst"
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "ή μία φορά %@, για πάντα"
+            "value": "Ακύρωσε όποτε θες"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "o %@ una vez, de por vida"
+            "value": "Cancela cuando quieras"
           }
         },
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "tai %@ kerran, ikuisesti"
+            "value": "Peru milloin vain"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "ou %@ une fois, à vie"
+            "value": "Annule quand tu veux"
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "કે એક વાર %@, આજીવન"
+            "value": "ગમે ત્યારે રદ કર"
           }
         },
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "או פעם אחת %@ לכל החיים"
+            "value": "ביטול בכל רגע"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "या एक बार %@, हमेशा के लिए"
+            "value": "जब चाहो रद्द करो"
           }
         },
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "ili jednom %@, zauvijek"
+            "value": "Otkaži kad hoćeš"
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "vagy egyszer %@, örökre"
+            "value": "Bármikor lemondható"
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "atau sekali %@, seumur hidup"
+            "value": "Batalkan kapan saja"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "または一度だけ%@、ずっと"
+            "value": "いつでも解約できる"
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ಅಥವಾ ಒಮ್ಮೆ ಪಾವತಿಸು, %@ ಜೀವಿತಾವಧಿ"
+            "value": "ಯಾವಾಗ ಬೇಕಾದರೂ ರದ್ದುಮಾಡಿ"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "또는 한 번 %@, 평생"
+            "value": "언제든 해지"
           }
         },
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "അല്ലെങ്കിൽ ഒരിക്കൽ %@, ആജീവനാന്തം"
+            "value": "എപ്പോൾ വേണമെങ്കിലും റദ്ദാക്കാം"
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "किंवा एकदा %@, आयुष्यभर"
+            "value": "केव्हाही रद्द कर"
           }
         },
         "ms": {
           "stringUnit": {
             "state": "translated",
-            "value": "atau sekali %@, seumur hidup"
+            "value": "Batal bila-bila masa"
           }
         },
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "eller %@ én gang, for livet"
+            "value": "Avslutt når du vil"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "of één keer %@, voor altijd"
+            "value": "Stop wanneer je wilt"
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "କିମ୍ବା ଥରେ %@, ଜୀବନବ୍ୟାପୀ"
+            "value": "ଯେତେବେଳେ ଚାହିଁବ ବାତିଲ କର"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਜਾਂ ਇੱਕ ਵਾਰ %@, ਜੀਵਨ ਭਰ"
+            "value": "ਜਦੋਂ ਮਰਜ਼ੀ ਰੱਦ ਕਰ"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "albo raz %@, na zawsze"
+            "value": "Anuluj kiedy chcesz"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "ou %@ uma vez, pra sempre"
+            "value": "Cancele quando quiser"
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "translated",
-            "value": "ou %@ uma vez, para sempre"
+            "value": "Cancela quando quiseres"
           }
         },
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "sau o dată %@, pe viață"
+            "value": "Anulează oricând"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "или один раз %@, навсегда"
+            "value": "Отмена в любой момент"
           }
         },
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "alebo raz %@, navždy"
+            "value": "Zruš kedykoľvek"
           }
         },
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "ali enkrat %@, za vedno"
+            "value": "Prekliči kadar koli"
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "eller %@ en gång, för livet"
+            "value": "Avsluta när du vill"
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "இல்ல ஒரு தடவை %@, வாழ்நாள்"
+            "value": "எப்போ வேணும்னாலும் ரத்து செய்"
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "లేదా ఒకసారి %@, జీవితకాలం"
+            "value": "ఎప్పుడైనా రద్దు చెయ్యి"
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "หรือจ่ายครั้งเดียว %@ ตลอดชีพ"
+            "value": "ยกเลิกเมื่อไหร่ก็ได้"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "ya da bir kez %@, ömür boyu"
+            "value": "İstediğin zaman iptal"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "або один раз %@, назавжди"
+            "value": "Скасуй коли хочеш"
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "یا ایک بار %@، ہمیشہ کے لیے"
+            "value": "جب چاہو منسوخ کرو"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "hoặc một lần %@, trọn đời"
+            "value": "Hủy lúc nào cũng được"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "或一次付清 %@，终身"
+            "value": "随时可取消"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "或一次付清 %@，終身"
+            "value": "隨時可取消"
           }
         }
       }
     },
-    "paywall.stack.footer.reassurance": {
-      "comment": "",
+    "paywall.stack.footer.one_payment": {
+      "comment": "Honest paywall reassurance under the CTA when Lifetime is selected; plain text, not a button",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cancel anytime · Restore"
+            "value": "One payment. No renewal."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Jederzeit kündbar · Wiederherstellen"
+            "value": "Eine Zahlung. Keine Verlängerung."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Annulla quando vuoi · Ripristina"
+            "value": "Un solo pagamento. Nessun rinnovo."
           }
         },
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "ألغِ متى شئت · استعادة"
+            "value": "دفعة واحدة. بلا تجديد."
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "যখন খুশি বাতিল করো · ফিরিয়ে আনো"
+            "value": "একবারই পেমেন্ট। কোনো রিনিউয়াল নেই।"
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cancel·la quan vulguis · Restaurar"
+            "value": "Un sol pagament. Sense renovació."
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zruš kdykoli · Obnovit"
+            "value": "Jedna platba. Žádné obnovení."
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Opsig når som helst · Gendan"
+            "value": "Én betaling. Ingen fornyelse."
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ακύρωσε όποτε θες · Επαναφορά"
+            "value": "Μία πληρωμή. Χωρίς ανανέωση."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cancela cuando quieras · Restaurar"
+            "value": "Un solo pago. Sin renovación."
           }
         },
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Peru milloin vain · Palauta"
+            "value": "Yksi maksu. Ei uusiutumista."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Annule quand tu veux · Restaurer"
+            "value": "Un seul paiement. Pas de renouvellement."
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "જ્યારે ગમે રદ કર · બહાલ કર"
+            "value": "એક જ ચુકવણી. કોઈ રિન્યૂઅલ નહીં."
           }
         },
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "ביטול בכל רגע · שחזור"
+            "value": "תשלום אחד. בלי חידוש."
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "जब चाहो रद्द करो · बहाल करो"
+            "value": "एक ही पेमेंट। कोई रिन्यूअल नहीं।"
           }
         },
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Otkaži kad hoćeš · Obnovi"
+            "value": "Jedno plaćanje. Bez obnove."
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bármikor lemondható · Visszaállítás"
+            "value": "Egyetlen fizetés. Nincs megújítás."
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Batalkan kapan saja · Pulihkan"
+            "value": "Sekali bayar. Tanpa perpanjangan."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "いつでも解約 · 復元"
+            "value": "支払いは一度だけ。更新はありません。"
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ಯಾವಾಗ ಬೇಕಾದರೂ ರದ್ದು · ಮರುಸ್ಥಾಪಿಸು"
+            "value": "ಒಂದೇ ಪಾವತಿ. ನವೀಕರಣ ಇಲ್ಲ."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "언제든 해지 · 복원"
+            "value": "한 번만 결제. 갱신 없음."
           }
         },
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "എപ്പോൾ വേണമെങ്കിലും റദ്ദാക്കാം · പുനഃസ്ഥാപിക്കുക"
+            "value": "ഒറ്റ പേയ്‌മെന്റ്. പുതുക്കൽ ഇല്ല."
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "केव्हाही रद्द कर · बहाल कर"
+            "value": "एकच पेमेंट. नूतनीकरण नाही."
           }
         },
         "ms": {
           "stringUnit": {
             "state": "translated",
-            "value": "Batal bila-bila masa · Pulihkan"
+            "value": "Satu bayaran. Tiada pembaharuan."
           }
         },
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "Avslutt når du vil · Gjenopprett"
+            "value": "Én betaling. Ingen fornyelse."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Stop wanneer je wilt · Herstellen"
+            "value": "Eén betaling. Geen verlenging."
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ଯେତେବେଳେ ଚାହିଁ ବାତିଲ · ପୁନଃସ୍ଥାପନ"
+            "value": "ଗୋଟିଏ ପେମେଣ୍ଟ। ନବୀକରଣ ନାହିଁ।"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਜਦੋਂ ਮਰਜ਼ੀ ਰੱਦ ਕਰ · ਬਹਾਲ"
+            "value": "ਇੱਕੋ ਭੁਗਤਾਨ। ਕੋਈ ਨਵੀਨੀਕਰਨ ਨਹੀਂ।"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Anuluj kiedy chcesz · Przywróć"
+            "value": "Jedna płatność. Bez odnawiania."
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cancele quando quiser · Restaurar"
+            "value": "Um pagamento só. Sem renovação."
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cancela quando quiseres · Restaurar"
+            "value": "Um só pagamento. Sem renovação."
           }
         },
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "Anulează oricând · Restabilește"
+            "value": "O singură plată. Fără reînnoire."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Отмена в любой момент · Восстановить"
+            "value": "Один платёж. Без продления."
           }
         },
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zruš kedykoľvek · Obnoviť"
+            "value": "Jedna platba. Žiadne obnovenie."
           }
         },
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Prekliči kadar koli · Obnovi"
+            "value": "Eno plačilo. Brez podaljšanja."
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Avsluta när du vill · Återställ"
+            "value": "En betalning. Ingen förnyelse."
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "எப்போ வேணும்னாலும் ரத்து · மீட்டெடு"
+            "value": "ஒரே கட்டணம். புதுப்பித்தல் இல்லை."
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "ఎప్పుడైనా రద్దు · పునరుద్ధరణ"
+            "value": "ఒకే చెల్లింపు. పునరుద్ధరణ లేదు."
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "ยกเลิกเมื่อไหร่ก็ได้ · กู้คืน"
+            "value": "จ่ายครั้งเดียว ไม่มีการต่ออายุ"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "İstediğin zaman iptal · Geri yükle"
+            "value": "Tek ödeme. Yenileme yok."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Скасуй коли хочеш · Відновити"
+            "value": "Один платіж. Без продовження."
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "جب چاہو منسوخ کرو · بحال کرو"
+            "value": "ایک ہی ادائیگی۔ کوئی تجدید نہیں۔"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Hủy lúc nào cũng được · Khôi phục"
+            "value": "Trả một lần. Không gia hạn."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "随时可取消 · 恢复"
+            "value": "只付一次。不会自动续费。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "隨時可取消 · 恢復"
+            "value": "只付一次。不會自動續訂。"
           }
         }
       }
