@@ -35,7 +35,7 @@ struct ProtectionPlanSelectableRow: View {
 
     var body: some View {
         Button {
-            #if DEBUG
+            #if DEBUG || PILLIE_FRAME_PROBE
             TabSwitchFrameProbe.shared.monitor("select-row", duration: 0.5, settle: 0)
             #endif
             let response = feedback.selectChoice(accessibilityReduceMotion: reduceMotion)

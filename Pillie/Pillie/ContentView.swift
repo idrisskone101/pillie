@@ -568,7 +568,7 @@ struct ContentView: View {
 
     onboardingStep = nextStep
     UserDefaults.standard.set(nextStep, forKey: OnboardingFlow.stepStorageKey)
-    #if DEBUG
+    #if DEBUG || PILLIE_FRAME_PROBE
     TabSwitchFrameProbe.shared.monitor("\(step)-\(store.contraceptiveMethod.rawValue)")
     #endif
   }

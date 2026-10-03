@@ -79,7 +79,7 @@ struct RoutineDialRing: View {
             .onChanged { value in
                 let touch = angle(of: value.location)
                 guard let current = dragDegrees else {
-                    #if DEBUG
+                    #if DEBUG || PILLIE_FRAME_PROBE
                     TabSwitchFrameProbe.shared.monitor("scrub", duration: 1.2, settle: 0)
                     #endif
                     isScrubbing = true
