@@ -33,7 +33,7 @@ Own technical execution: ship features, fix bugs, keep the app shippable. Prefer
 
 ## Copy and locales
 
-When you change user-facing copy, update every shipped locale in the same change. English-only is not done.
+Any user-facing copy you add or change ships translated into every shipped locale in the same change. That includes strings added by model or "no UI" issues, such as preset names and subtitles. English-only is not done.
 
 - Write the new English, then the same meaning in every `AppLanguage` catalog identifier (`en` through `zh-Hant`).
 - Edit the string catalog that owns the key: `Commerce.xcstrings`, `Localizable.xcstrings`, `Notifications.xcstrings`, or a Shield catalog.
