@@ -145,6 +145,9 @@ extension Font {
     ) -> Font {
         #if os(iOS)
         if UIFont(name: name, size: size) != nil {
+            if let cjk = CJKFontCascade.font(name: name, size: size) {
+                return Font(cjk)
+            }
             return .custom(name, size: size)
         }
         #endif

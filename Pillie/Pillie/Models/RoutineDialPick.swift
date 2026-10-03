@@ -4,9 +4,8 @@
 //
 
 import Foundation
-import os
 
-struct RoutineDialPick: Codable, Equatable {
+struct RoutineDialPick: OnboardingDraftPick {
     let method: RoutineDialMethod
     let cycleDay: Int
     let answer: TodayPillPick.Answer?
@@ -29,29 +28,6 @@ struct RoutineDialPick: Codable, Equatable {
     }
 
     static let storageKey = "pillie_onboarding_routine_dial_pick"
-    private static let logger = Logger(subsystem: "com.idrisskone.pillie", category: "RoutineDialPick")
-
-    static func load(from defaults: UserDefaults = .standard) -> RoutineDialPick? {
-        guard let data = defaults.data(forKey: storageKey) else { return nil }
-        do {
-            return try JSONDecoder().decode(RoutineDialPick.self, from: data)
-        } catch {
-            Self.logger.error("routine_dial_pick.load failed: \(error.localizedDescription, privacy: .public)")
-            return nil
-        }
-    }
-
-    func save(to defaults: UserDefaults = .standard) {
-        do {
-            defaults.set(try JSONEncoder().encode(self), forKey: Self.storageKey)
-        } catch {
-            Self.logger.error("routine_dial_pick.save failed: \(error.localizedDescription, privacy: .public)")
-        }
-    }
-
-    static func clear(from defaults: UserDefaults = .standard) {
-        defaults.removeObject(forKey: storageKey)
-    }
 
     private enum CodingKeys: String, CodingKey {
         case method

@@ -91,6 +91,20 @@ final class TodayPillPickTests: XCTestCase {
         XCTAssertNil(TodayPillPick.load(from: defaults))
     }
 
+    func testDraftEnvelopeRoundTripsWithThePickedAtTimestamp() throws {
+        let defaults = try XCTUnwrap(UserDefaults(suiteName: "TodayPillPickTests.envelope"))
+        defaults.removePersistentDomain(forName: "TodayPillPickTests.envelope")
+        let pickedAt = date(27, 12, 24)
+
+        pick(11, .taken).save(to: defaults, at: pickedAt)
+
+        XCTAssertEqual(
+            OnboardingDraft<TodayPillPick>.load(from: defaults),
+            OnboardingDraft(pick: pick(11, .taken), pickedAt: pickedAt)
+        )
+        defaults.removePersistentDomain(forName: "TodayPillPickTests.envelope")
+    }
+
     func testCustomPackPickFollowsTheCustomRegimen() {
         let pack = PackChoice(PackRegimen(activeDays: 88, breakDays: 3, breakKind: .noPills))
         XCTAssertNotNil(TodayPillPick(pack: pack, dayIndex: 87, answer: .taken))
@@ -99,11 +113,11 @@ final class TodayPillPickTests: XCTestCase {
         XCTAssertNil(TodayPillPick(pack: pack, dayIndex: 91, answer: nil))
     }
 
-    func testDraftSavedBeforeCustomPacksStillLoads() throws {
+    func testDraftFromBeforeTheEnvelopeLoadsAsNil() throws {
         let defaults = try XCTUnwrap(UserDefaults(suiteName: "TodayPillPickTests.legacy"))
         defaults.set(Data(#"{"regimen":"24/4","dayIndex":11,"answer":"taken"}"#.utf8), forKey: TodayPillPick.storageKey)
 
-        XCTAssertEqual(TodayPillPick.load(from: defaults), pick(11, .taken, .twentyFourFour))
+        XCTAssertNil(TodayPillPick.load(from: defaults))
         defaults.removePersistentDomain(forName: "TodayPillPickTests.legacy")
     }
 
