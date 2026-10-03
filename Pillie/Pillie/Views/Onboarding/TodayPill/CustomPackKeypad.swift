@@ -34,7 +34,6 @@ struct CustomPackKeypad: View {
             grid
         }
         .background(KeypadColor.background.ignoresSafeArea(edges: .bottom))
-        .accessibilityIdentifier("customPackKeypad")
     }
 
     private var topBar: some View {
