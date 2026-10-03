@@ -44,7 +44,8 @@ One word per idea. Translate each term once per locale, then reuse that translat
 | break days, break week | placebo or patch-free or ring-free days | off days, rest days |
 | sugar pill | a placebo pill in the pack | placebo, reminder pill, inactive pill |
 | break days with no pills | a break with no pills in the pack (21-pill packs) | pill-free days |
-| not checked in | a past day with no check-in | missed |
+| missed | a past day with no check-in, in History (calendar legend and the day sheet) | not checked in, not logged |
+| not checked in | a step on Home that hasn’t been checked in yet | missed |
 | streak | consecutive completed check-ins | daily streak |
 
 ## Locales

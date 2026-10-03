@@ -133,7 +133,7 @@
       "issue": "ENG-62",
       "table": "Localizable",
       "key": "history.legend.unlogged",
-      "en": "Not checked in",
+      "en": "Missed",
       "de": "Nicht abgehakt",
       "it": "Non confermato"
     },
