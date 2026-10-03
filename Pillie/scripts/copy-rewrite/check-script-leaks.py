@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """Fail if a locale holds a sibling language written in its script.
 
-Kannada and Telugu share a parallel Unicode layout, as do Gurmukhi and
-Devanagari, so a bad translation pass can emit Telugu in Kannada letters or
-Hindi in Gurmukhi letters. check-translated-copy.py cannot see that.
+Kannada and Telugu share a parallel Unicode layout, as do Gurmukhi, Gujarati,
+and Devanagari, so a bad translation pass can emit Telugu in Kannada letters or
+Hindi in Gurmukhi or Gujarati letters. Marathi shares Devanagari with Hindi, so
+there the leak is Hindi words and grammar. check-translated-copy.py cannot see
+any of that.
 """
 
 from __future__ import annotations
@@ -19,6 +21,8 @@ CATALOGS = sorted((REPO_ROOT / "Pillie").glob("*/*.xcstrings"))
 
 KN = "\u0C80-\u0CFF"
 PA = "\u0A00-\u0A7F"
+GU = "\u0A80-\u0AFF"
+MR = "\u0900-\u097F"
 
 
 def word(script: str, text: str) -> str:
@@ -49,7 +53,48 @@ PA_HINDI = re.compile("|".join([
     "\u0A4D(?![\u0A30\u0A39\u0A35])",
 ]))
 
-CHECKS = {"kn": KN_TELUGU, "pa": PA_HINDI}
+# Hindi words and Devanagari habits that Gujarati does not use.
+GU_HINDI = re.compile("|".join([
+    # Nukta, candrabindu, and danda: Gujarati writes none of them
+    # (ફ not ફ઼, પહોંચ not પહુઁચ, a full stop not ।).
+    "\u0ABC", "\u0A81", "\u0964",
+    # Hindi nasal plural and subjunctive endings (દિનોં, રુકેં). Gujarati
+    # તેં and મેં ("you", "I" in the past tense) are fine.
+    rf"\u0ACB\u0A82(?![{GU}])", rf"(?<![તમ])\u0AC7\u0A82(?![{GU}])",
+    "રહત", "સકત", "ચાહત", "ચાહિ", "કરને", "કરના", "હોને", "હોના", "હોત", "જાતા", "જાતી",
+    *(word(GU, w) for w in [
+        "સે", "કા", "કી", "કો", "કિ", "યા", "ફિર", "અગર", "હર", "દિન", "ભી",
+        "ઔર", "લેકિન", "અભી", "કભી", "ક્યા", "યહ", "વહ", "ઇસ", "ઉસ", "હૈ", "હુએ", "હુઆ",
+        "હુઈ", "કિએ", "ગએ", "દો", "રખો", "ચુનો", "બંદ", "છોટા", "છોટી", "છોટે", "રુક",
+        "પહલે", "ચાલૂ", "શુરૂ", "લગાઓ", "મૈનેજ", "કમ", "તક", "લિએ", "મિલા", "શામિલ",
+        "લિખો", "દિખાતા", "કૈસા", "ટૈપ", "સિર્ફ", "તાકિ", "જિસે", "બહાલ", "કોશિશ",
+        "વાપસ", "ઇસ્તેમાલ", "અગલે", "બેહતર", "આખિરી", "જલ્દ", "કલ", "મુઝે", "હમેં",
+        "જ્યાદા", "હફ્તા", "હફ્તે", "સુબહ", "દોપહર", "શામ", "નયા", "નઈ", "અબ", "મહીના",
+    ]),
+]))
+
+# Hindi words and grammar that Marathi does not use. Marathi is written in
+# Devanagari too, so only the vocabulary gives a leak away.
+MR_HINDI = re.compile("|".join([
+    # Nukta and danda: Marathi writes neither.
+    "\u093C", "\u0964",
+    # Hindi future and subjunctive endings (चलेगा, थांबलें).
+    rf"\u0947(?:गा|गी|ंगे)(?![{MR}])", rf"\u0947\u0902(?![{MR}])",
+    "रहत", "सकत", "चाहत", "चाहि", "करने", "करना", "होने", "होना",
+    *(word(MR, w) for w in [
+        "है", "हैं", "में", "के", "से", "को", "भी", "और", "लेकिन", "अगर", "हर", "पर",
+        "कि", "यह", "वह", "इस", "दिन", "दिनों", "कुछ", "कभी", "अभी", "कोई", "रहा", "रही",
+        "हुआ", "हुए", "हुई", "गया", "गए", "गई", "लिए", "तक", "बार", "नहीं", "करें",
+        "करो", "चुने", "चुनें", "चुनो", "शुरू", "पूरा", "बाद", "रोक", "खत्म", "मुफ्त",
+        "टैप", "किया", "किए", "कम", "सुबह", "दोपहर", "शाम", "लिखो", "दिखाता",
+        "पहुँच", "जाँच", "बहाल", "कोशिश", "शामिल", "इस्तेमाल", "सबसे", "अगले", "अगला", "दो",
+        "लेकिन", "तुमने", "याद", "तैयार", "नया", "नई", "पुराना", "पिछला", "लगभग", "आसान",
+        "मौजूदा", "क्या", "कब", "लगाओ", "बदलो", "हटाओ", "निकालो", "बताओ", "दिखाओ", "हिलाओ",
+        "जोडो", "पैक", "साइकल", "सलाह", "जगह",
+    ]),
+]))
+
+CHECKS = {"kn": KN_TELUGU, "pa": PA_HINDI, "gu": GU_HINDI, "mr": MR_HINDI}
 
 
 def values(localization: dict, path: str = ""):
@@ -83,9 +128,9 @@ def main() -> int:
                         errors.append(f"{label}:{key}{path} [{lang}] {found}: {value!r}")
     if errors:
         print("\n".join(errors))
-        print(f"{len(errors)} of {checked} kn/pa values read as Telugu or Hindi")
+        print(f"{len(errors)} of {checked} kn/pa/gu/mr values read as Telugu or Hindi")
         return 1
-    print(f"ok: {checked} kn/pa values are in their own language")
+    print(f"ok: {checked} kn/pa/gu/mr values are in their own language")
     return 0
 
 
