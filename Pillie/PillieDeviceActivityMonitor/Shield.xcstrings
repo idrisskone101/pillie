@@ -241,7 +241,7 @@
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "આજ કા Pillie કામ હમણાં બાક઼ી છે।"
+            "value": "આજનું Pillie કામ હજુ બાકી છે."
           }
         },
         "kn": {
@@ -516,7 +516,7 @@
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie ખોલો"
+            "value": "Pillie ખોલ"
           }
         },
         "kn": {
@@ -791,7 +791,7 @@
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "આ ઍપ રાહ કરેગા।"
+            "value": "આ ઍપ તારી રાહ જોશે."
           }
         },
         "kn": {
@@ -809,7 +809,7 @@
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "हा अॅप वाट पाहेल."
+            "value": "हे अॅप तुझी वाट पाहेल."
           }
         },
         "or": {
@@ -1066,7 +1066,7 @@
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "આજ કા કામ લૉગ કર, ફિર ઇસ ઍપ પર વાપસ આઓ।"
+            "value": "આજનું કામ નોંધી લે, પછી આ ઍપ ફરી ખોલ."
           }
         },
         "kn": {
@@ -1084,7 +1084,7 @@
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "आजची कृती नोंद, मग या अॅपवर परत."
+            "value": "आजची कृती नोंदव, मग या अॅपवर परत ये."
           }
         },
         "or": {
@@ -1341,7 +1341,7 @@
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "ઝટપટ ચેક-ઇન કા સમય"
+            "value": "ઝડપી ચેક-ઇનનો સમય"
           }
         },
         "kn": {
