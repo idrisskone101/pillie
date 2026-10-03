@@ -397,31 +397,22 @@ final class SubscriptionManager: NSObject {
     ///     is skipped.
     ///   • Each `transactionIdentifier` is logged at most once (persisted), so a
     ///     replayed/duplicate transaction never inflates revenue.
-    /// `af_start_trial` maps to the actual trial-began outcome — not the button-tap
-    /// `purchase_started` event, which also fires on cancel/failure.
+    /// Only a real paid charge reports from here. `af_start_trial` marks onboarding
+    /// blocker setup, not a StoreKit trial (ADR 0007).
     private func reportConversionToAppsFlyer(
         _ outcome: PurchaseOutcome,
         transaction: StoreTransaction?,
         product: StoreProduct
     ) {
-        guard let conversion = outcome.conversionEvent else { return }
+        guard outcome.conversionEvent == .purchaseCompleted else { return }
         guard let txID = transaction?.transactionIdentifier, !txID.isEmpty else { return }
         guard markTransactionLoggedIfNew(txID) else { return }
 
-        let currency = product.currencyCode ?? "USD"
-        switch conversion {
-        case .purchaseCompleted:
-            AppsFlyerManager.shared.logPurchase(
-                revenue: (product.price as NSDecimalNumber).doubleValue,
-                currency: currency,
-                productId: product.productIdentifier
-            )
-        case .trialStarted:
-            AppsFlyerManager.shared.logStartTrial(
-                currency: currency,
-                productId: product.productIdentifier
-            )
-        }
+        AppsFlyerManager.shared.logPurchase(
+            revenue: (product.price as NSDecimalNumber).doubleValue,
+            currency: product.currencyCode ?? "USD",
+            productId: product.productIdentifier
+        )
     }
 
     /// Records `transactionID` and returns `true` the first time it is seen; returns
