@@ -655,7 +655,7 @@
   "Commerce:trial.granted.warning.title": "Jemné upozornenie",
   "Commerce:trial.status.active_short": "Skúšobné obdobie aktívne",
   "Commerce:trial.status.ends": "Skúšobné obdobie sa končí %@.",
-  "Commerce:trial.status.indicator.active": "Plus je zapnuté · zostáva %lld aktívnych dní",
+  "Commerce:trial.status.indicator.active": "Plus je zapnuté · zostáva aktívnych dní: %lld",
   "Commerce:trial.status.indicator.active_tonight": "Plus je zapnuté · končí sa dnes v noci.",
   "Commerce:trial.status.keep_plus": "Nechať si Pillie Plus",
   "Commerce:trial.timeline.today": "Dnes",

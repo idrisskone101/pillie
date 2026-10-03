@@ -653,7 +653,7 @@
   "Commerce:trial.granted.warning.title": "Mala napomena",
   "Commerce:trial.status.active_short": "Proba aktivna",
   "Commerce:trial.status.ends": "Tvoje probno razdoblje završava %@.",
-  "Commerce:trial.status.indicator.active": "Plus je uključen · još %lld aktivnih dana",
+  "Commerce:trial.status.indicator.active": "Plus je uključen · preostalo aktivnih dana: %lld",
   "Commerce:trial.status.indicator.active_tonight": "Plus je uključen · završava večeras.",
   "Commerce:trial.status.keep_plus": "Zadrži Pillie Plus",
   "Commerce:trial.timeline.today": "Danas",

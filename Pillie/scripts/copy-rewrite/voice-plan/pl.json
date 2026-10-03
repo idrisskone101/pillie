@@ -655,7 +655,7 @@
   "Commerce:trial.granted.warning.title": "Drobne przypomnienie",
   "Commerce:trial.status.active_short": "Okres próbny aktywny",
   "Commerce:trial.status.ends": "Okres próbny kończy się %@.",
-  "Commerce:trial.status.indicator.active": "Plus włączony · zostało %lld dni aktywnych",
+  "Commerce:trial.status.indicator.active": "Plus włączony · zostało dni aktywnych: %lld",
   "Commerce:trial.status.indicator.active_tonight": "Plus włączony · kończy się dziś w nocy.",
   "Commerce:trial.status.keep_plus": "Zachowaj Pillie Plus",
   "Commerce:trial.timeline.today": "Dziś",
