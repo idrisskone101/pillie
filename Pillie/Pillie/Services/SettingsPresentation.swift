@@ -93,53 +93,6 @@ enum SettingsPresentation {
     }
 }
 
-struct ProtocolEditorPresentation: Equatable {
-    let customDayLabels: [String]
-    let scheduleTitle: String
-    let scheduleLines: [String]
-
-    static func localized(
-        method: ContraceptiveMethod,
-        locale: Locale = .current
-    ) -> ProtocolEditorPresentation {
-        let customDayLabels = [
-            PillieLocalization.string("onboarding.regimen.active_days", locale: locale),
-            PillieLocalization.string("onboarding.regimen.break_days", locale: locale),
-        ]
-
-        switch method {
-        case .pill:
-            return ProtocolEditorPresentation(
-                customDayLabels: customDayLabels,
-                scheduleTitle: PillieLocalization.string("settings.schedule.title", locale: locale),
-                scheduleLines: []
-            )
-        case .patch:
-            return ProtocolEditorPresentation(
-                customDayLabels: customDayLabels,
-                scheduleTitle: PillieLocalization.string("onboarding.fixed.patch.title", locale: locale),
-                scheduleLines: [
-                    PillieLocalization.string("onboarding.fixed.patch.day1", locale: locale),
-                    PillieLocalization.string("onboarding.fixed.patch.day8", locale: locale),
-                    PillieLocalization.string("onboarding.fixed.patch.day22", locale: locale),
-                    PillieLocalization.string("onboarding.fixed.patch.break", locale: locale),
-                ]
-            )
-        case .ring:
-            return ProtocolEditorPresentation(
-                customDayLabels: customDayLabels,
-                scheduleTitle: PillieLocalization.string("onboarding.fixed.ring.title", locale: locale),
-                scheduleLines: [
-                    PillieLocalization.string("onboarding.fixed.ring.day1", locale: locale),
-                    PillieLocalization.string("onboarding.fixed.ring.day2", locale: locale),
-                    PillieLocalization.string("onboarding.fixed.ring.day22", locale: locale),
-                    PillieLocalization.string("onboarding.fixed.ring.break", locale: locale),
-                ]
-            )
-        }
-    }
-}
-
 struct CustomReminderEditorContent: Equatable {
     let titleFieldLabel: String
     let messageFieldLabel: String

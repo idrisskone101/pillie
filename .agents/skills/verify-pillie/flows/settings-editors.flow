@@ -11,10 +11,10 @@ wait id settingsLanguageRow
 shot settings-open
 
 tap --label "Method, Pill (Standard)"
-wait label "Every day, 28 active days, no break"
+wait id todayPillChangeButton
 shot editor-method
 tap --label Cancel
-gone label "Every day, 28 active days, no break"
+gone id todayPillChangeButton
 
 tap --label "Reminder time, 8:00 AM"            # runner folds the   in "8:00 AM"
 wait label Save

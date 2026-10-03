@@ -4,10 +4,11 @@
 #
 # onboardingStep 10 is OnboardingFlow.Step.schedule. The method lives under
 # pillie_contraceptive_method. A fresh store has no patch or ring pack, so the dial
-# seeds on cycle day 1. The -data drafts are RoutineDialPick JSON
+# seeds on cycle day 1. The -data drafts wrap a RoutineDialPick
 # (pillie_onboarding_routine_dial_pick): {"method":"patch","cycleDay":10} and
 # {"method":"ring","cycleDay":25}. Dragging the knob needs coordinates from a fresh
 # shot, so this flow moves the dial through the segment picker and drafts only.
+# Drafts are OnboardingDraft JSON since ENG-151: {"pick":{...},"pickedAt":<seconds since 2001>}.
 
 # Patch, fresh: cycle day 1 is patch 1's put-on day.
 fresh
@@ -40,7 +41,7 @@ shot patch-remove-not-yet
 fresh
 defaults onboardingStep -int 10
 defaults pillie_contraceptive_method -string patch
-defaults pillie_onboarding_routine_dial_pick -data 7b226d6574686f64223a227061746368222c226379636c65446179223a31307d
+defaults pillie_onboarding_routine_dial_pick -data 7b227069636b223a7b226d6574686f64223a227061746368222c226379636c65446179223a31307d2c227069636b65644174223a3831323730303030307d
 launch
 wait id routineDialResult 15
 gone id routineDialQuestion
@@ -70,7 +71,7 @@ shot ring-insert-not-yet
 fresh
 defaults onboardingStep -int 10
 defaults pillie_contraceptive_method -string ring
-defaults pillie_onboarding_routine_dial_pick -data 7b226d6574686f64223a2272696e67222c226379636c65446179223a32357d
+defaults pillie_onboarding_routine_dial_pick -data 7b227069636b223a7b226d6574686f64223a2272696e67222c226379636c65446179223a32357d2c227069636b65644174223a3831323730303030307d
 launch
 wait id routineDialResult 15
 gone id routineDialQuestion
