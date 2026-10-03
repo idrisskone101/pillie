@@ -189,12 +189,15 @@ struct ProtectionPlanScaffold<Content: View>: View {
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 16)
             }
-            .background(Color.white.opacity(0.94), in: RoundedRectangle(cornerRadius: 22))
+            .background {
+                RoundedRectangle(cornerRadius: 22)
+                    .fill(Color.white.opacity(0.94))
+                    .shadow(color: PillieTheme.cardShadow, radius: 12, y: 6)
+            }
             .overlay {
                 RoundedRectangle(cornerRadius: 22)
                     .strokeBorder(PillieTheme.textMuted.opacity(0.12), lineWidth: 1)
             }
-            .shadow(color: PillieTheme.cardShadow, radius: 12, y: 6)
             .accessibilityIdentifier("protectionPlanSecondaryCTA")
         }
     }

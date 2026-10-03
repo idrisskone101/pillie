@@ -67,33 +67,11 @@ struct OnboardingBackground: View {
     private var animatedBackground: some View {
         GeometryReader { geo in
             ZStack {
-                PillieTheme.bg.ignoresSafeArea()
-
-                // Coral blob - top-left
-                BlobShape(phase: blobPhase, seed: 0)
-                    .fill(PillieTheme.coral)
-                    .frame(width: geo.size.width * 0.7, height: geo.size.height * 0.4)
-                    .blur(radius: 80)
-                    .opacity(0.4)
-                    .blendMode(.multiply)
-                    .offset(x: -geo.size.width * 0.25, y: -geo.size.height * 0.25)
-
-                // Lavender blob - top-right
-                BlobShape(phase: blobPhase, seed: 1)
-                    .fill(PillieTheme.lavender)
-                    .frame(width: geo.size.width * 0.6, height: geo.size.height * 0.4)
-                    .blur(radius: 80)
-                    .opacity(0.6)
-                    .offset(x: geo.size.width * 0.2, y: -geo.size.height * 0.1)
-
-                // Sage blob - bottom-center
-                BlobShape(phase: blobPhase, seed: 2)
-                    .fill(PillieTheme.sage)
-                    .frame(width: geo.size.width * 0.8, height: geo.size.height * 0.4)
-                    .blur(radius: 80)
-                    .opacity(0.4)
-                    .blendMode(.multiply)
-                    .offset(x: 0, y: geo.size.height * 0.25)
+                // One baked image: live 80 pt blurs and blends re-render on the GPU every frame.
+                Self.blobs(size: geo.size)
+                    .resizable()
+                    .scaleEffect(1.04 + 0.04 * blobPhase)
+                    .offset(x: -6 + 12 * blobPhase, y: 4 - 8 * blobPhase)
 
                 // Noise/grain overlay
                 Image(uiImage: Self.noiseImage)
@@ -104,6 +82,20 @@ struct OnboardingBackground: View {
                     .ignoresSafeArea()
             }
         }
+    }
+
+    @MainActor private static var bakedBlobs: [CGSize: Image] = [:]
+
+    /// The coral, lavender, and sage blobs over the page color, rendered once per size.
+    /// 1x is enough: an 80 pt blur leaves no detail to lose.
+    @MainActor private static func blobs(size: CGSize) -> Image {
+        if let image = bakedBlobs[size] { return image }
+        let renderer = ImageRenderer(content: BlobField(size: size))
+        renderer.scale = 1
+        renderer.isOpaque = true
+        let image = renderer.uiImage.map(Image.init(uiImage:)) ?? Image(uiImage: UIImage())
+        bakedBlobs[size] = image
+        return image
     }
 
     // MARK: - Noise Image (generated once)
@@ -139,32 +131,60 @@ struct OnboardingBackground: View {
     }()
 }
 
+// MARK: - BlobField
+
+private struct BlobField: View {
+    let size: CGSize
+
+    var body: some View {
+        ZStack {
+            PillieTheme.bg
+
+            // Coral blob - top-left
+            BlobShape(seed: 0)
+                .fill(PillieTheme.coral)
+                .frame(width: size.width * 0.7, height: size.height * 0.4)
+                .blur(radius: 80)
+                .opacity(0.4)
+                .blendMode(.multiply)
+                .offset(x: -size.width * 0.25, y: -size.height * 0.25)
+
+            // Lavender blob - top-right
+            BlobShape(seed: 1)
+                .fill(PillieTheme.lavender)
+                .frame(width: size.width * 0.6, height: size.height * 0.4)
+                .blur(radius: 80)
+                .opacity(0.6)
+                .offset(x: size.width * 0.2, y: -size.height * 0.1)
+
+            // Sage blob - bottom-center
+            BlobShape(seed: 2)
+                .fill(PillieTheme.sage)
+                .frame(width: size.width * 0.8, height: size.height * 0.4)
+                .blur(radius: 80)
+                .opacity(0.4)
+                .blendMode(.multiply)
+                .offset(x: 0, y: size.height * 0.25)
+        }
+        .frame(width: size.width, height: size.height)
+    }
+}
+
 // MARK: - BlobShape
 
 struct BlobShape: Shape {
-    var phase: CGFloat
     var seed: Int
-
-    var animatableData: CGFloat {
-        get { phase }
-        set { phase = newValue }
-    }
 
     func path(in rect: CGRect) -> Path {
         let cx = rect.midX
         let cy = rect.midY
         let baseRadius = min(rect.width, rect.height) / 2
+        let radii = Self.radii[seed % Self.radii.count]
 
-        let offsets0 = radiiForSeed(seed, variant: 0)
-        let offsets1 = radiiForSeed(seed, variant: 1)
-
-        var points: [CGPoint] = []
-        for i in 0..<8 {
+        let points = (0..<8).map { i in
             let angle = (CGFloat(i) / 8.0) * .pi * 2
-            let r0 = baseRadius * offsets0[i]
-            let r1 = baseRadius * offsets1[i]
-            let r = r0 + (r1 - r0) * phase
-            points.append(CGPoint(x: cx + cos(angle) * r, y: cy + sin(angle) * r))
+            let r = baseRadius * radii[i]
+            return CGPoint(x: cx + cos(angle) * r, y: cy + sin(angle) * r)
         }
 
         var path = Path()
@@ -182,20 +202,9 @@ struct BlobShape: Shape {
         return path
     }
 
-    private func radiiForSeed(_ seed: Int, variant: Int) -> [CGFloat] {
-        let table: [[[CGFloat]]] = [
-            // seed 0 (coral)
-            [[0.85, 1.0, 0.90, 1.05, 0.88, 0.95, 1.02, 0.92],
-             [0.92, 0.88, 1.05, 0.90, 1.0, 0.85, 0.95, 1.02]],
-            // seed 1 (lavender)
-            [[0.90, 0.95, 1.02, 0.88, 0.92, 1.05, 0.85, 1.0],
-             [1.0, 0.85, 0.92, 1.02, 0.88, 0.90, 1.05, 0.95]],
-            // seed 2 (sage)
-            [[1.02, 0.88, 0.95, 1.0, 0.85, 0.92, 0.90, 1.05],
-             [0.88, 1.05, 0.85, 0.95, 1.02, 1.0, 0.92, 0.90]],
-        ]
-        let s = seed % table.count
-        let v = variant % 2
-        return table[s][v]
-    }
+    private static let radii: [[CGFloat]] = [
+        [0.85, 1.0, 0.90, 1.05, 0.88, 0.95, 1.02, 0.92], // coral
+        [0.90, 0.95, 1.02, 0.88, 0.92, 1.05, 0.85, 1.0], // lavender
+        [1.02, 0.88, 0.95, 1.0, 0.85, 0.92, 0.90, 1.05], // sage
+    ]
 }

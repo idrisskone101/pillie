@@ -17,9 +17,12 @@ struct PillieDarkButtonStyle: ButtonStyle {
             .foregroundStyle(.white)
             .frame(maxWidth: .infinity)
             .frame(height: PillieTheme.ctaHeight)
-            .background(PillieTheme.dark)
-            .clipShape(Capsule())
-            .shadow(color: PillieTheme.dark.opacity(0.5), radius: 15, y: 8)
+            .background {
+                Capsule()
+                    .fill(PillieTheme.dark)
+                    .shadow(color: PillieTheme.dark.opacity(0.5), radius: 15, y: 8)
+            }
+            .contentShape(Capsule())
             .scaleEffect(configuration.isPressed ? 0.96 : 1.0)
             .animation(.easeInOut(duration: 0.15), value: configuration.isPressed)
     }

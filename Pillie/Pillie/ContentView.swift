@@ -568,6 +568,9 @@ struct ContentView: View {
 
     onboardingStep = nextStep
     UserDefaults.standard.set(nextStep, forKey: OnboardingFlow.stepStorageKey)
+    #if DEBUG || PILLIE_FRAME_PROBE
+    TabSwitchFrameProbe.shared.monitor("\(step)-\(store.contraceptiveMethod.rawValue)")
+    #endif
   }
 
   /// The blocker/entitlement state captured at the moment onboarding completes.

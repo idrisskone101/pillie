@@ -1,0 +1,38 @@
+# Render-server load on the questionnaire: painPoints <-> missFrequency six times, then
+# the settled screen. Pillie/scripts/render-server-load.sh samples the simulator's
+# backboardd from the "render-start" note for 20 s.
+fresh
+defaults onboardingStep -int 5
+launch
+wait text "What’s in the way?" 15
+tap --label TikTok
+tap --label "A simpler routine"
+sleep 1
+note render-start
+tap --id protectionPlanPrimaryCTA
+wait text "How often do you miss your pill?"
+tap --label Back --element-type Button
+wait text "What’s in the way?"
+tap --id protectionPlanPrimaryCTA
+wait text "How often do you miss your pill?"
+tap --label Back --element-type Button
+wait text "What’s in the way?"
+tap --id protectionPlanPrimaryCTA
+wait text "How often do you miss your pill?"
+tap --label Back --element-type Button
+wait text "What’s in the way?"
+tap --id protectionPlanPrimaryCTA
+wait text "How often do you miss your pill?"
+tap --label Back --element-type Button
+wait text "What’s in the way?"
+tap --id protectionPlanPrimaryCTA
+wait text "How often do you miss your pill?"
+tap --label Back --element-type Button
+wait text "What’s in the way?"
+tap --id protectionPlanPrimaryCTA
+wait text "How often do you miss your pill?"
+tap --label Back --element-type Button
+wait text "What’s in the way?"
+tap --id protectionPlanPrimaryCTA
+wait text "How often do you miss your pill?"
+sleep 6

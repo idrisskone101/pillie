@@ -22,6 +22,9 @@ struct ProtectionPlanSelectableChip: View {
 
     var body: some View {
         Button {
+            #if DEBUG || PILLIE_FRAME_PROBE
+            TabSwitchFrameProbe.shared.monitor("select-chip", duration: 0.5, settle: 0)
+            #endif
             let response = feedback.selectChoice(accessibilityReduceMotion: reduceMotion)
             withAnimation(response.motionProfile.animation) {
                 action()
@@ -43,6 +46,7 @@ struct ProtectionPlanSelectableChip: View {
             .background(
                 Capsule(style: .continuous)
                     .fill(isSelected ? PillieTheme.coral : .white)
+                    .shadow(color: Color.black.opacity(0.04), radius: 6, y: 3)
             )
             .overlay {
                 Capsule(style: .continuous)
@@ -51,7 +55,6 @@ struct ProtectionPlanSelectableChip: View {
                         lineWidth: isSelected ? 1.6 : 1
                     )
             }
-            .shadow(color: Color.black.opacity(0.04), radius: 6, y: 3)
         }
         .buttonStyle(.plain)
         .accessibilityElement(children: .ignore)

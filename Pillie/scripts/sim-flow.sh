@@ -75,7 +75,7 @@ mkdir -p "$OUT"
 
 UDID="$(pillie_default_simulator_udid)"
 DERIVED_DATA="$(pillie_derived_data_for_repo_root "$REPO_ROOT")"
-APP_PATH="$DERIVED_DATA/Build/Products/Debug-iphonesimulator/Pillie.app"
+APP_PATH="${PILLIE_APP_PATH:-$DERIVED_DATA/Build/Products/Debug-iphonesimulator/Pillie.app}"
 BUILT_SHA="$(cat "$DERIVED_DATA/.pillie-qa-sha" 2>/dev/null || echo unknown)"
 pillie_boot_simulator "$UDID" >/dev/null
 
