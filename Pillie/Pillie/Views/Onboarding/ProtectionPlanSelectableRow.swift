@@ -76,6 +76,7 @@ struct ProtectionPlanSelectableRow: View {
             .background(
                 RoundedRectangle(cornerRadius: 22)
                     .fill(isSelected ? PillieTheme.coralLight.opacity(0.8) : .white)
+                    .shadow(color: Color.black.opacity(0.05), radius: 10, y: 5)
             )
             .overlay {
                 RoundedRectangle(cornerRadius: 22)
@@ -84,7 +85,6 @@ struct ProtectionPlanSelectableRow: View {
                         lineWidth: isSelected ? 1.6 : 1
                     )
             }
-            .shadow(color: Color.black.opacity(0.05), radius: 10, y: 5)
         }
         .buttonStyle(.plain)
         .accessibilityElement(children: .ignore)

@@ -33,9 +33,12 @@ struct ProtectionPlanProgressHeader: View {
                 .font(.system(size: 20, weight: .semibold))
                 .foregroundStyle(PillieTheme.textMuted)
                 .frame(width: 52, height: 52)
-                .background(.white, in: Circle())
+                .background {
+                    Circle()
+                        .fill(.white)
+                        .shadow(color: Color.black.opacity(0.08), radius: 10, y: 4)
+                }
                 .overlay { Circle().stroke(Color.black.opacity(0.07), lineWidth: 1) }
-                .shadow(color: Color.black.opacity(0.08), radius: 10, y: 4)
         }
         .buttonStyle(.plain)
         .accessibilityLabel(PillieLocalization.string("global.action.back"))
