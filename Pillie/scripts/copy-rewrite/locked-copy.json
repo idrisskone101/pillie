@@ -2378,7 +2378,7 @@
       "comment": "Log button on Home before the first reminder fires, for a dose already taken [standard]",
       "en": "Took it",
       "de": "Genommen",
-      "it": "Già presa"
+      "it": "L’ho presa"
     },
     {
       "issue": "ENG-150",
@@ -2387,8 +2387,8 @@
       "create": true,
       "comment": "Shake confirm headline before the first shake, when there is a streak to keep [standard]",
       "en": "Shake to keep it going",
-      "de": "Schüttel für deinen Streak",
-      "it": "Scuoti per tenere la streak"
+      "de": "Schüttel, damit deine Serie weitergeht",
+      "it": "Scuoti per continuare la serie"
     },
     {
       "issue": "ENG-150",
@@ -2417,8 +2417,8 @@
       "create": true,
       "comment": "Shake confirm headline once the dose is logged and the streak grows [standard]",
       "en": "Your streak grows",
-      "de": "Streak gehalten",
-      "it": "Streak mantenuta"
+      "de": "Deine Serie wächst",
+      "it": "La tua serie cresce"
     },
     {
       "issue": "ENG-150",
@@ -2447,8 +2447,8 @@
       "create": true,
       "comment": "Chip after a pill is logged from the shake confirm; pill number in the pack, then a short time like 8:02 PM",
       "en": "Pill %1$lld checked in at %2$@",
-      "de": "Pille %1$lld um %2$@ eingetragen",
-      "it": "Pillola %1$lld registrata alle %2$@"
+      "de": "Pille %1$lld um %2$@ abgehakt",
+      "it": "Pillola %1$lld confermata alle %2$@"
     },
     {
       "issue": "ENG-150",
@@ -2457,8 +2457,8 @@
       "create": true,
       "comment": "Chip after a sugar (placebo) pill is logged from the shake confirm; the pill's number within the break week, then a short time like 8:02 PM",
       "en": "Sugar pill %1$lld checked in at %2$@",
-      "de": "Zuckerpille %1$lld um %2$@ eingetragen",
-      "it": "Pillola placebo %1$lld registrata alle %2$@"
+      "de": "Zuckerpille %1$lld um %2$@ abgehakt",
+      "it": "Pillola di zucchero %1$lld confermata alle %2$@"
     },
     {
       "issue": "ENG-150",
@@ -2544,8 +2544,8 @@
       "key": "notification.trial_expiry.day15.title",
       "create": true,
       "en": "Your Plus trial has ended",
-      "de": "Deine Plus-Testphase ist beendet",
-      "it": "La prova di Pillie Plus è terminata"
+      "de": "Deine Plus-Testphase ist vorbei",
+      "it": "La tua prova di Plus è finita"
     },
     {
       "issue": "ENG-141",
@@ -2553,8 +2553,8 @@
       "key": "notification.trial_expiry.day15.body",
       "create": true,
       "en": "Your daily reminders stay free. Plus adds follow-up reminders and App blocking.",
-      "de": "Deine Routine ist noch eingerichtet und wartet. Öffne Pillie, um weiterzumachen.",
-      "it": "La tua routine è ancora impostata e ti aspetta. Apri Pillie per continuare."
+      "de": "Deine täglichen Erinnerungen bleiben kostenlos. Mit Plus kommen Folgeerinnerungen und die App-Sperre dazu.",
+      "it": "I promemoria giornalieri restano gratis. Plus aggiunge i promemoria successivi e il blocco app."
     }
   ]
 }

@@ -53,12 +53,12 @@ final class ItalianTrialExpiryWarningLocalizationTests: XCTestCase {
 
         XCTAssertEqual(
             TrialExpiryWarningCopy.title(day: 15, locale: italian),
-            "La prova di Pillie Plus è terminata"
+            "La tua prova di Plus è finita"
         )
         for cohort in [TrialEndPaywallCohort.blockerConfigured, .reminderOnly] {
             XCTAssertEqual(
                 TrialExpiryWarningCopy.body(day: 15, cohort: cohort, locale: italian),
-                "La tua routine è ancora impostata e ti aspetta. Apri Pillie per continuare."
+                "I promemoria giornalieri restano gratis. Plus aggiunge i promemoria successivi e il blocco app."
             )
         }
     }
