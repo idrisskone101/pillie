@@ -31,14 +31,14 @@ enum ScheduleDraft: Equatable {
             let dayIndex = min(max(current.cycleDayIndex, 0), pack.regimen.totalDays - 1)
             let asksQuestion = pack.regimen.day(atIndex: dayIndex).kind != .noPill
             let pick = TodayPillPick(pack: pack, dayIndex: dayIndex, answer: asksQuestion ? answer : nil)
-            return .pill(pick.map(TodayPillSelection.init(restoring:)) ?? TodayPillSelection(pack: pack))
+            return .pill(pick.map { TodayPillSelection(restoring: $0) } ?? TodayPillSelection(pack: pack))
         }
 
         guard isCurrent else { return .dial(RoutineDialSelection(method: dialMethod)) }
         let cycleDay = min(max(current.cycleDayIndex + 1, 1), RoutineDialDay.cycleLength)
         let asksQuestion = RoutineDialDay.day(cycleDay, method: dialMethod).task != nil
         let pick = RoutineDialPick(method: dialMethod, cycleDay: cycleDay, answer: asksQuestion ? answer : nil)
-        return .dial(pick.map(RoutineDialSelection.init(restoring:)) ?? RoutineDialSelection(method: dialMethod, cycleDay: cycleDay))
+        return .dial(pick.map { RoutineDialSelection(restoring: $0) } ?? RoutineDialSelection(method: dialMethod, cycleDay: cycleDay))
     }
 
     var method: ContraceptiveMethod {

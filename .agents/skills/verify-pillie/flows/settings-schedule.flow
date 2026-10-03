@@ -9,7 +9,7 @@ openurl pillie://debug/plus-home?lang=en
 wait text Today 15
 tap --label Settings
 wait id settingsLanguageRow
-tap --text "Method, Pill"
+tap --label "Method, Pill (Standard)"
 wait id todayPillChangeButton
 expect id protocolEditorSave
 shot pill-seeded
@@ -55,7 +55,7 @@ shot saved-ring
 openurl "pillie://debug/routine-day?method=patch&day=10&lang=en"
 tap --label Settings
 wait id settingsLanguageRow
-tap --text "Method, Patch"
+tap --label "Method, Patch"
 wait id routineDialResult
 gone id routineDialQuestion
 shot patch-seeded-day-10
