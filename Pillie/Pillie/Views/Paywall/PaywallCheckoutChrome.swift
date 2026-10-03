@@ -177,6 +177,7 @@ struct PaywallCheckoutChrome: View {
                 // tap keeps "Cancel anytime" from starting a restore.
                 .contentShape(Rectangle())
                 .onTapGesture {}
+                .accessibilityRespondsToUserInteraction(false)
                 .accessibilityIdentifier("paywallReassurance")
 
             Button(action: onRestore) {
