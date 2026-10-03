@@ -11360,7 +11360,7 @@
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zostaw bezpłatne przypomnienia albo zdecyduj, czy zostajesz z Plus."
+            "value": "Korzystaj dalej z bezpłatnych przypomnień albo zdecyduj, czy zostajesz z Plus."
           }
         },
         "cs": {
@@ -33725,7 +33725,7 @@
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zostaw Pillie Plus · %@ rocznie"
+            "value": "Zachowaj Pillie Plus · %@ rocznie"
           }
         },
         "pt-BR": {
@@ -34000,7 +34000,7 @@
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zostaw Pillie Plus · %@ miesięcznie"
+            "value": "Zachowaj Pillie Plus · %@ miesięcznie"
           }
         },
         "pt-BR": {
@@ -34125,25 +34125,25 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "أبقِ Pillie Plus · %@ مرة واحدة"
+            "value": "احتفظي بـ Pillie Plus · %@ مرة واحدة"
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus রাখো · একবারে %@"
+            "value": "Pillie Plus রাখুন · এককালীন %@"
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "Quedar-te Pillie Plus · %@ un cop"
+            "value": "Conservar Pillie Plus · %@ un cop"
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nechat si Pillie Plus · %@ jednou"
+            "value": "Nechat si Pillie Plus · %@ jednorázově"
           }
         },
         "da": {
@@ -34179,7 +34179,7 @@
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus રાખ · એક વાર %@"
+            "value": "Pillie Plus રાખો · એક વાર %@"
           }
         },
         "he": {
@@ -34191,7 +34191,7 @@
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus रखो · एक बार %@"
+            "value": "Pillie Plus जारी रखें · %@ एक बार"
           }
         },
         "hr": {
@@ -34203,13 +34203,13 @@
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus megtartása · %@ egyszeri"
+            "value": "Pillie Plus megtartása · egyszeri %@"
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pertahankan Pillie Plus · %@ sekali"
+            "value": "Pertahankan Pillie Plus · %@ sekali bayar"
           }
         },
         "ja": {
@@ -34221,7 +34221,7 @@
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus ಇಟ್ಟುಕೋ · %@ ಒಂದೇ ಬಾರಿ"
+            "value": "Pillie Plus ಮುಂದುವರಿಸಿ · ಒಂದೇ ಬಾರಿ %@ ಶುಲ್ಕ"
           }
         },
         "ko": {
@@ -34233,19 +34233,19 @@
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus നിലനിർത്ത് · %@ ഒരിക്കൽ"
+            "value": "Pillie Plus തുടരൂ · ഒറ്റത്തവണ %@"
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus ठेव · एकदाच %@"
+            "value": "Pillie Plus सुरू ठेवा · एकदाच %@"
           }
         },
         "ms": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kekalkan Pillie Plus · %@ sekali"
+            "value": "Kekalkan Pillie Plus · %@ sekali bayar"
           }
         },
         "nb": {
@@ -34263,19 +34263,19 @@
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus ରଖ · %@ ଥରେ"
+            "value": "Pillie Plus ରଖନ୍ତୁ · ଏକକାଳୀନ %@"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus ਰੱਖ · %@ ਇੱਕ ਵਾਰ"
+            "value": "Pillie Plus ਰੱਖੋ · %@ ਇੱਕ ਵਾਰ"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zostaw Pillie Plus · %@ jednorazowo"
+            "value": "Zachowaj Pillie Plus · %@ jednorazowo"
           }
         },
         "pt-BR": {
@@ -34305,7 +34305,7 @@
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nechať si Pillie Plus · %@ raz"
+            "value": "Nechať si Pillie Plus · %@ jednorazovo"
           }
         },
         "sl": {
@@ -34323,25 +34323,25 @@
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus வை · ஒரு தடவை %@"
+            "value": "Pillie Plus-ஐத் தொடரவும் · ஒருமுறை %@ கட்டணம்"
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus ఉంచు · %@ ఒక్కసారి"
+            "value": "Pillie Plus కొనసాగించండి · ఒక్కసారి %@ చెల్లింపు"
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "เก็บ Pillie Plus · %@ ครั้งเดียว"
+            "value": "ใช้ Pillie Plus ต่อ · %@ จ่ายครั้งเดียว"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus'ı tut · tek seferde %@"
+            "value": "Pillie Plus ile devam et · tek seferde %@"
           }
         },
         "uk": {
@@ -34353,7 +34353,7 @@
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus رکھو · ایک بار %@"
+            "value": "Pillie Plus جاری رکھیں · %@ ایک بار"
           }
         },
         "vi": {
@@ -34365,13 +34365,13 @@
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "留下 Pillie Plus · 一次性 %@"
+            "value": "继续使用 Pillie Plus · 一次性 %@"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "留下 Pillie Plus · 一次性 %@"
+            "value": "繼續使用 Pillie Plus · 一次性 %@"
           }
         }
       }
@@ -34950,25 +34950,25 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "خذ Pillie Plus · %@ مرة واحدة"
+            "value": "احصلي على Pillie Plus · %@ مرة واحدة"
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus নাও · একবারে %@"
+            "value": "Pillie Plus নিন · এককালীন %@"
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "Agafar Pillie Plus · %@ un cop"
+            "value": "Obtenir Pillie Plus · %@ un cop"
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vzít si Pillie Plus · %@ jednou"
+            "value": "Vzít si Pillie Plus · %@ jednorázově"
           }
         },
         "da": {
@@ -34986,25 +34986,25 @@
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pedir Pillie Plus · %@ una vez"
+            "value": "Obtener Pillie Plus · %@ una vez"
           }
         },
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ota Pillie Plus · %@ kertamaksuna"
+            "value": "Hanki Pillie Plus · %@ kertamaksuna"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Prendre Pillie Plus · %@ une fois"
+            "value": "Obtenir Pillie Plus · %@ une fois"
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus લે · એક વાર %@"
+            "value": "Pillie Plus મેળવો · એક વાર %@"
           }
         },
         "he": {
@@ -35016,7 +35016,7 @@
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus लो · एक बार %@"
+            "value": "Pillie Plus लें · %@ एक बार"
           }
         },
         "hr": {
@@ -35028,49 +35028,49 @@
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus kérése · %@ egyszeri"
+            "value": "Pillie Plus megvétele · egyszeri %@"
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ambil Pillie Plus · %@ sekali"
+            "value": "Dapatkan Pillie Plus · %@ sekali bayar"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plusにする · 買い切り%@"
+            "value": "Pillie Plusを始める · 買い切り%@"
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus ತೆಗೆದುಕೋ · %@ ಒಂದೇ ಬಾರಿ"
+            "value": "Pillie Plus ಪಡೆಯಿರಿ · ಒಂದೇ ಬಾರಿ %@ ಶುಲ್ಕ"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus 받기 · 1회 %@"
+            "value": "Pillie Plus 시작하기 · 1회 %@"
           }
         },
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus എടുക്ക് · %@ ഒരിക്കൽ"
+            "value": "Pillie Plus നേടൂ · ഒറ്റത്തവണ %@"
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus घे · एकदाच %@"
+            "value": "Pillie Plus घ्या · एकदाच %@"
           }
         },
         "ms": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ambil Pillie Plus · %@ sekali"
+            "value": "Dapatkan Pillie Plus · %@ sekali bayar"
           }
         },
         "nb": {
@@ -35088,13 +35088,13 @@
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus ନେ · %@ ଥରେ"
+            "value": "Pillie Plus ନିଅନ୍ତୁ · ଏକକାଳୀନ %@"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus ਲੈ · %@ ਇੱਕ ਵਾਰ"
+            "value": "Pillie Plus ਲਓ · %@ ਇੱਕ ਵਾਰ"
           }
         },
         "pl": {
@@ -35106,7 +35106,7 @@
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pegar o Pillie Plus · %@ uma vez"
+            "value": "Obter o Pillie Plus · %@ uma vez"
           }
         },
         "pt-PT": {
@@ -35130,7 +35130,7 @@
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zobrať si Pillie Plus · %@ raz"
+            "value": "Zobrať si Pillie Plus · %@ jednorazovo"
           }
         },
         "sl": {
@@ -35148,19 +35148,19 @@
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus எடு · ஒரு தடவை %@"
+            "value": "Pillie Plus பெறவும் · ஒருமுறை %@ கட்டணம்"
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus తీసుకో · %@ ఒక్కసారి"
+            "value": "Pillie Plus పొందండి · ఒక్కసారి %@ చెల్లింపు"
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "เอา Pillie Plus · %@ ครั้งเดียว"
+            "value": "รับ Pillie Plus · %@ จ่ายครั้งเดียว"
           }
         },
         "tr": {
@@ -35178,13 +35178,13 @@
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus لو · ایک بار %@"
+            "value": "Pillie Plus لیں · %@ ایک بار"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Lấy Pillie Plus · %@ một lần"
+            "value": "Nhận Pillie Plus · %@ một lần"
           }
         },
         "zh-Hans": {
@@ -36313,7 +36313,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Lebenslang"
+            "value": "Lifetime"
           }
         },
         "it": {
@@ -36355,7 +36355,7 @@
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Για πάντα"
+            "value": "Εφ’ όρου ζωής"
           }
         },
         "es": {
@@ -36421,7 +36421,7 @@
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ಜೀವಿತಾವಧಿ"
+            "value": "ಜೀವಮಾನ"
           }
         },
         "ko": {
@@ -36457,7 +36457,7 @@
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Levenslang"
+            "value": "Lifetime"
           }
         },
         "or": {
@@ -36469,7 +36469,7 @@
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਜੀਵਨ ਭਰ"
+            "value": "ਲਾਈਫ਼ਟਾਈਮ"
           }
         },
         "pl": {
@@ -36600,19 +36600,19 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "ادفع مرة واحدة واحتفظ بـ Plus للأبد"
+            "value": "ادفعي مرة واحدة واحتفظي بـ Plus للأبد"
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "একবার টাকা দাও, Plus সারাজীবন তোমার"
+            "value": "একবার পেমেন্ট করুন, Plus সারাজীবন আপনার"
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "Paga un cop i queda't Plus per sempre"
+            "value": "Paga un cop i queda’t Plus per sempre"
           }
         },
         "cs": {
@@ -36654,7 +36654,7 @@
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "એક વાર ચૂકવ, Plus હંમેશાં તારું"
+            "value": "એક વાર ચૂકવો, Plus હંમેશાં તમારું"
           }
         },
         "he": {
@@ -36666,7 +36666,7 @@
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "एक बार पैसे दो, Plus हमेशा के लिए तुम्हारा"
+            "value": "एक बार भुगतान करें, Plus हमेशा के लिए आपका"
           }
         },
         "hr": {
@@ -36696,7 +36696,7 @@
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ಒಮ್ಮೆ ಪಾವತಿಸು, Plus ಎಂದೆಂದಿಗೂ ನಿನ್ನದು"
+            "value": "ಒಮ್ಮೆ ಪಾವತಿಸಿ, Plus ಎಂದೆಂದಿಗೂ ನಿಮ್ಮದು"
           }
         },
         "ko": {
@@ -36708,13 +36708,13 @@
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "ഒരിക്കൽ പണമടച്ചാൽ Plus എന്നും നിന്റേത്"
+            "value": "ഒരിക്കൽ പണമടച്ചാൽ Plus എന്നും നിങ്ങളുടേത്"
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "एकदा पैसे भर, Plus कायमचा तुझा"
+            "value": "एकदा पैसे भरा, Plus कायमचा तुमचा"
           }
         },
         "ms": {
@@ -36738,13 +36738,13 @@
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ଥରେ ପଇସା ଦିଅ, Plus ସବୁଦିନ ପାଇଁ ତୁମର"
+            "value": "ଥରେ ପଇସା ଦିଅନ୍ତୁ, Plus ସବୁଦିନ ପାଇଁ ଆପଣଙ୍କର"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਇੱਕ ਵਾਰ ਭੁਗਤਾਨ ਕਰ, Plus ਹਮੇਸ਼ਾ ਤੇਰਾ"
+            "value": "ਇੱਕ ਵਾਰ ਭੁਗਤਾਨ ਕਰੋ, Plus ਹਮੇਸ਼ਾ ਲਈ ਤੁਹਾਡਾ"
           }
         },
         "pl": {
@@ -36798,13 +36798,13 @@
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "ஒரு தடவை கட்டு, Plus எப்போதும் உன்னிடம்"
+            "value": "ஒருமுறை கட்டணம் செலுத்துங்கள், Plus என்றும் உங்களுடையது"
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "ఒక్కసారి కట్టు, Plus ఎప్పటికీ నీదే"
+            "value": "ఒక్కసారి చెల్లించండి, Plus ఎప్పటికీ మీదే"
           }
         },
         "th": {
@@ -36828,7 +36828,7 @@
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "ایک بار پیسے دو، Plus ہمیشہ کے لیے تمہارا"
+            "value": "ایک بار ادائیگی کریں، Plus ہمیشہ کے لیے آپ کا"
           }
         },
         "vi": {
@@ -37144,19 +37144,19 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Annulla quando vuoi"
+            "value": "Disdici quando vuoi"
           }
         },
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "ألغِ متى شئت"
+            "value": "ألغي في أي وقت"
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "যখন খুশি বাতিল করো"
+            "value": "যেকোনো সময় বাতিল করুন"
           }
         },
         "ca": {
@@ -37192,7 +37192,7 @@
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Peru milloin vain"
+            "value": "Peru milloin tahansa"
           }
         },
         "fr": {
@@ -37204,7 +37204,7 @@
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "ગમે ત્યારે રદ કર"
+            "value": "ગમે ત્યારે રદ કરો"
           }
         },
         "he": {
@@ -37216,7 +37216,7 @@
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "जब चाहो रद्द करो"
+            "value": "कभी भी रद्द करें"
           }
         },
         "hr": {
@@ -37246,7 +37246,7 @@
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ಯಾವಾಗ ಬೇಕಾದರೂ ರದ್ದುಮಾಡಿ"
+            "value": "ಯಾವಾಗ ಬೇಕಾದರೂ ರದ್ದುಮಾಡಬಹುದು"
           }
         },
         "ko": {
@@ -37264,7 +37264,7 @@
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "केव्हाही रद्द कर"
+            "value": "कधीही रद्द करा"
           }
         },
         "ms": {
@@ -37276,7 +37276,7 @@
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "Avslutt når du vil"
+            "value": "Si opp når som helst"
           }
         },
         "nl": {
@@ -37288,13 +37288,13 @@
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ଯେତେବେଳେ ଚାହିଁବ ବାତିଲ କର"
+            "value": "ଯେକୌଣସି ସମୟରେ ବାତିଲ୍ କରନ୍ତୁ"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਜਦੋਂ ਮਰਜ਼ੀ ਰੱਦ ਕਰ"
+            "value": "ਕਦੇ ਵੀ ਰੱਦ ਕਰੋ"
           }
         },
         "pl": {
@@ -37348,13 +37348,13 @@
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "எப்போ வேணும்னாலும் ரத்து செய்"
+            "value": "எப்போது வேண்டுமானாலும் ரத்துசெய்யலாம்"
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "ఎప్పుడైనా రద్దు చెయ్యి"
+            "value": "ఎప్పుడైనా రద్దు చేయవచ్చు"
           }
         },
         "th": {
@@ -37378,7 +37378,7 @@
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "جب چاہو منسوخ کرو"
+            "value": "کبھی بھی منسوخ کریں"
           }
         },
         "vi": {
@@ -37443,7 +37443,7 @@
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Jedna platba. Žádné obnovení."
+            "value": "Jedna platba. Bez prodlužování."
           }
         },
         "da": {
@@ -37497,7 +37497,7 @@
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Jedno plaćanje. Bez obnove."
+            "value": "Jedno plaćanje. Bez produljenja."
           }
         },
         "hu": {
@@ -37605,7 +37605,7 @@
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Jedna platba. Žiadne obnovenie."
+            "value": "Jedna platba. Bez predlžovania."
           }
         },
         "sl": {
@@ -37671,7 +37671,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "只付一次。不會自動續訂。"
+            "value": "只付一次。不會自動續費。"
           }
         }
       }
@@ -44013,7 +44013,7 @@
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie App Store-এ তোমার কেনাকাটা যাচাই করতে পারেনি। আবার চেষ্টা করো, অথবা আমাদের সাথে যোগাযোগ করো, আমরা ঠিক করে দেব।"
+            "value": "Pillie App Store-এ আপনার কেনাকাটা যাচাই করতে পারেনি। আবার চেষ্টা করুন, অথবা আমাদের সাথে যোগাযোগ করুন, আমরা ঠিক করে দেব।"
           }
         },
         "ca": {
@@ -44067,13 +44067,13 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie n'a pas pu vérifier tes achats auprès de l'App Store. Réessaie ou contacte-nous, on va régler ça."
+            "value": "Pillie n’a pas pu vérifier tes achats auprès de l’App Store. Réessaie ou contacte-nous, on va régler ça."
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie App Store પર તારી ખરીદી તપાસી શક્યું નહીં. ફરી પ્રયાસ કર, અથવા અમારો સંપર્ક કર, અમે તેનો ઉકેલ લાવીશું."
+            "value": "Pillie App Store પર તમારી ખરીદી તપાસી શક્યું નહીં. ફરી પ્રયાસ કરો, અથવા અમારો સંપર્ક કરો, અમે તેનો ઉકેલ લાવીશું."
           }
         },
         "he": {
@@ -44085,7 +44085,7 @@
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie App Store पर तुम्हारी ख़रीदारी की जाँच नहीं कर पाया। फिर कोशिश करो, या हमसे संपर्क करो, हम इसे ठीक कर देंगे।"
+            "value": "Pillie App Store पर आपकी ख़रीदारी की जाँच नहीं कर पाया। फिर से कोशिश करें, या हमसे संपर्क करें, हम इसे ठीक कर देंगे।"
           }
         },
         "hr": {
@@ -44121,7 +44121,7 @@
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie ಗೆ App Store ನಲ್ಲಿ ನಿನ್ನ ಖರೀದಿಗಳನ್ನು ಪರಿಶೀಲಿಸಲು ಆಗಲಿಲ್ಲ. ಮತ್ತೆ ಪ್ರಯತ್ನಿಸು, ಅಥವಾ ನಮ್ಮನ್ನು ಸಂಪರ್ಕಿಸು, ನಾವು ಸರಿಪಡಿಸುತ್ತೇವೆ."
+            "value": "Pillie ಗೆ App Store ನಲ್ಲಿ ನಿಮ್ಮ ಖರೀದಿಗಳನ್ನು ಪರಿಶೀಲಿಸಲು ಆಗಲಿಲ್ಲ. ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ, ಅಥವಾ ನಮ್ಮನ್ನು ಸಂಪರ್ಕಿಸಿ, ನಾವು ಸರಿಪಡಿಸುತ್ತೇವೆ."
           }
         },
         "ko": {
@@ -44139,7 +44139,7 @@
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie ला App Store वर तुझी खरेदी तपासता आली नाही. पुन्हा प्रयत्न कर, किंवा आमच्याशी संपर्क कर, आम्ही ते सोडवू."
+            "value": "Pillie ला App Store वर तुमची खरेदी तपासता आली नाही. पुन्हा प्रयत्न करा, किंवा आमच्याशी संपर्क करा, आम्ही ते सोडवू."
           }
         },
         "ms": {
@@ -44163,13 +44163,13 @@
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie App Store ରେ ତୁମର କ୍ରୟ ଯାଞ୍ଚ କରିପାରିଲା ନାହିଁ। ପୁଣି ଚେଷ୍ଟା କର, କିମ୍ବା ଆମ ସହ ଯୋଗାଯୋଗ କର, ଆମେ ଏହାର ସମାଧାନ କରିଦେବୁ।"
+            "value": "Pillie App Store ରେ ଆପଣଙ୍କ କ୍ରୟ ଯାଞ୍ଚ କରିପାରିଲା ନାହିଁ। ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ, କିମ୍ବା ଆମ ସହ ଯୋଗାଯୋଗ କରନ୍ତୁ, ଆମେ ଏହାର ସମାଧାନ କରିଦେବୁ।"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie App Store ਨਾਲ ਤੇਰੀ ਖਰੀਦਾਰੀ ਦੀ ਜਾਂਚ ਨਹੀਂ ਕਰ ਸਕਿਆ। ਫਿਰ ਕੋਸ਼ਿਸ਼ ਕਰ, ਜਾਂ ਸਾਡੇ ਨਾਲ ਸੰਪਰਕ ਕਰ, ਅਸੀਂ ਇਸਨੂੰ ਠੀਕ ਕਰ ਦੇਵਾਂਗੇ।"
+            "value": "Pillie App Store ਨਾਲ ਤੁਹਾਡੀਆਂ ਖ਼ਰੀਦਾਂ ਦੀ ਜਾਂਚ ਨਹੀਂ ਕਰ ਸਕਿਆ। ਫਿਰ ਕੋਸ਼ਿਸ਼ ਕਰੋ, ਜਾਂ ਸਾਡੇ ਨਾਲ ਸੰਪਰਕ ਕਰੋ, ਅਸੀਂ ਇਸਨੂੰ ਠੀਕ ਕਰ ਦੇਵਾਂਗੇ।"
           }
         },
         "pl": {
@@ -44223,13 +44223,13 @@
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "App Store-இல் உன் கொள்முதல்களை Pillie-ஆல் சரிபார்க்க முடியவில்லை. மீண்டும் முயல், அல்லது எங்களைத் தொடர்புகொள், நாங்கள் சரிசெய்கிறோம்."
+            "value": "App Store-இல் உங்கள் கொள்முதல்களை Pillie-ஆல் சரிபார்க்க முடியவில்லை. மீண்டும் முயலவும், அல்லது எங்களைத் தொடர்புகொள்ளவும், நாங்கள் சரிசெய்கிறோம்."
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "App Storeలో నీ కొనుగోళ్లను Pillie తనిఖీ చేయలేకపోయింది. మళ్లీ ప్రయత్నించు, లేదా మమ్మల్ని సంప్రదించు, మేము సరిచేస్తాం."
+            "value": "App Storeలో మీ కొనుగోళ్లను Pillie తనిఖీ చేయలేకపోయింది. మళ్లీ ప్రయత్నించండి, లేదా మమ్మల్ని సంప్రదించండి, మేము సరిచేస్తాం."
           }
         },
         "th": {
@@ -44241,7 +44241,7 @@
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie, App Store'daki satın alımlarını kontrol edemedi. Tekrar dene ya da bize yaz, sorunu birlikte çözelim."
+            "value": "Pillie, App Store’daki satın alımlarını kontrol edemedi. Tekrar dene ya da bize yaz, biz hallederiz."
           }
         },
         "uk": {
@@ -44253,7 +44253,7 @@
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie، App Store پر تمہاری خریداریاں چیک نہیں کر سکا۔ دوبارہ کوشش کرو، یا ہم سے رابطہ کرو، ہم اسے ٹھیک کر دیں گے۔"
+            "value": "Pillie، App Store پر آپ کی خریداریاں چیک نہیں کر سکا۔ دوبارہ کوشش کریں، یا ہم سے رابطہ کریں، ہم اسے ٹھیک کر دیں گے۔"
           }
         },
         "vi": {
@@ -44265,13 +44265,13 @@
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie 无法通过 App Store 核实你的购买记录。请重试，或联系我们，我们会帮你解决。"
+            "value": "Pillie 无法通过 App Store 核实你的购买记录。可以再试一次，或联系我们，我们会帮你解决。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie 無法透過 App Store 確認你的購買記錄。請再試一次，或聯絡我們，我們會幫你處理。"
+            "value": "Pillie 無法透過 App Store 確認你的購買記錄。可以再試一次，或聯絡我們，我們會幫你處理。"
           }
         }
       }
@@ -44288,7 +44288,7 @@
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "সাপোর্টে যোগাযোগ করো"
+            "value": "সাপোর্টে যোগাযোগ করুন"
           }
         },
         "ca": {
@@ -44318,7 +44318,7 @@
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Επικοινωνία με υποστήριξη"
+            "value": "Επικοινωνία με την υποστήριξη"
           }
         },
         "en": {
@@ -44342,13 +44342,13 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Contacter l'assistance"
+            "value": "Contacter l’assistance"
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "સપોર્ટનો સંપર્ક કર"
+            "value": "સપોર્ટનો સંપર્ક કરો"
           }
         },
         "he": {
@@ -44360,7 +44360,7 @@
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "सपोर्ट से संपर्क करो"
+            "value": "सपोर्ट से संपर्क करें"
           }
         },
         "hr": {
@@ -44378,7 +44378,7 @@
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Hubungi Dukungan"
+            "value": "Hubungi dukungan"
           }
         },
         "it": {
@@ -44396,7 +44396,7 @@
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ಸಪೋರ್ಟ್ ಸಂಪರ್ಕಿಸು"
+            "value": "ಸಪೋರ್ಟ್ ಸಂಪರ್ಕಿಸಿ"
           }
         },
         "ko": {
@@ -44414,13 +44414,13 @@
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "सपोर्टशी संपर्क कर"
+            "value": "सपोर्टशी संपर्क करा"
           }
         },
         "ms": {
           "stringUnit": {
             "state": "translated",
-            "value": "Hubungi Sokongan"
+            "value": "Hubungi sokongan"
           }
         },
         "nb": {
@@ -44438,13 +44438,13 @@
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ସପୋର୍ଟ ସହ ଯୋଗାଯୋଗ କର"
+            "value": "ସପୋର୍ଟ ସହ ଯୋଗାଯୋଗ କରନ୍ତୁ"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਸਪੋਰਟ ਨਾਲ ਸੰਪਰਕ ਕਰ"
+            "value": "ਸਪੋਰਟ ਨਾਲ ਸੰਪਰਕ ਕਰੋ"
           }
         },
         "pl": {
@@ -44498,13 +44498,13 @@
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "ஆதரவைத் தொடர்புகொள்"
+            "value": "ஆதரவைத் தொடர்புகொள்ளவும்"
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "సపోర్ట్‌ను సంప్రదించు"
+            "value": "సపోర్ట్‌ను సంప్రదించండి"
           }
         },
         "th": {
@@ -44516,7 +44516,7 @@
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Destekle İletişime Geç"
+            "value": "Destekle iletişime geç"
           }
         },
         "uk": {
@@ -44528,7 +44528,7 @@
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "سپورٹ سے رابطہ کرو"
+            "value": "سپورٹ سے رابطہ کریں"
           }
         },
         "vi": {
@@ -44563,13 +44563,13 @@
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "আবার চেষ্টা করো"
+            "value": "আবার চেষ্টা করুন"
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "Prova de nou"
+            "value": "Torna-ho a provar"
           }
         },
         "cs": {
@@ -44623,7 +44623,7 @@
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "ફરી પ્રયાસ કર"
+            "value": "ફરી પ્રયાસ કરો"
           }
         },
         "he": {
@@ -44635,7 +44635,7 @@
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "फिर कोशिश करो"
+            "value": "फिर से कोशिश करें"
           }
         },
         "hr": {
@@ -44647,13 +44647,13 @@
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "Újra"
+            "value": "Próbáld újra"
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Coba Lagi"
+            "value": "Coba lagi"
           }
         },
         "it": {
@@ -44671,7 +44671,7 @@
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ಮತ್ತೆ ಪ್ರಯತ್ನಿಸು"
+            "value": "ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ"
           }
         },
         "ko": {
@@ -44689,13 +44689,13 @@
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "पुन्हा प्रयत्न"
+            "value": "पुन्हा प्रयत्न करा"
           }
         },
         "ms": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cuba Lagi"
+            "value": "Cuba lagi"
           }
         },
         "nb": {
@@ -44713,13 +44713,13 @@
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ପୁଣି ଚେଷ୍ଟା କର"
+            "value": "ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਫਿਰ ਕੋਸ਼ਿਸ਼ ਕਰ"
+            "value": "ਫਿਰ ਕੋਸ਼ਿਸ਼ ਕਰੋ"
           }
         },
         "pl": {
@@ -44773,13 +44773,13 @@
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "மீண்டும் முயல்"
+            "value": "மீண்டும் முயலவும்"
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "మళ్లీ ప్రయత్నించు"
+            "value": "మళ్లీ ప్రయత్నించండి"
           }
         },
         "th": {
@@ -44791,19 +44791,19 @@
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tekrar Dene"
+            "value": "Tekrar dene"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Спробувати ще"
+            "value": "Спробувати ще раз"
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "دوبارہ کوشش کرو"
+            "value": "دوبارہ کوشش کریں"
           }
         },
         "vi": {

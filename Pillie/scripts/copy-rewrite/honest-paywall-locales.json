@@ -260,8 +260,8 @@
     "paywall.story.settings_free.plus_label": "Pillie Plus"
   },
   "pl": {
-    "paywall.cta.keep_plus.billed_yearly": "Zostaw Pillie Plus · %@ rocznie",
-    "paywall.cta.keep_plus.billed_monthly": "Zostaw Pillie Plus · %@ miesięcznie",
+    "paywall.cta.keep_plus.billed_yearly": "Zachowaj Pillie Plus · %@ rocznie",
+    "paywall.cta.keep_plus.billed_monthly": "Zachowaj Pillie Plus · %@ miesięcznie",
     "paywall.cta.get_plus.billed_yearly": "Weź Pillie Plus · %@ rocznie",
     "paywall.cta.get_plus.billed_monthly": "Weź Pillie Plus · %@ miesięcznie",
     "paywall.stack.year.title": "Rok",

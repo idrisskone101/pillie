@@ -2544,7 +2544,7 @@
       "key": "paywall.restore_error.title",
       "comment": "Restore error alert title",
       "en": "Couldn’t restore your purchases",
-      "de": "Käufe konnten nicht wiederhergestellt werden",
+      "de": "Deine Käufe konnten nicht wiederhergestellt werden",
       "it": "Impossibile ripristinare gli acquisti"
     },
     {
@@ -2584,7 +2584,7 @@
       "create": true,
       "comment": "Honest paywall plan tile title for the one-time lifetime purchase, beside Year and Month",
       "en": "Lifetime",
-      "de": "Lebenslang",
+      "de": "Lifetime",
       "it": "A vita"
     },
     {
@@ -2625,7 +2625,7 @@
       "comment": "Honest paywall reassurance under the CTA when Year or Month is selected; plain text, not a button",
       "en": "Cancel anytime",
       "de": "Jederzeit kündbar",
-      "it": "Annulla quando vuoi"
+      "it": "Disdici quando vuoi"
     },
     {
       "issue": "ENG-155",
