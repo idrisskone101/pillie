@@ -281,6 +281,26 @@ struct ProductAnalyticsTelemetry {
     track(.trialStatusSheetViewed, source: .home)
   }
 
+  func plusSetupStripTapped(completedCount: Int) {
+    analytics.track(
+      .plusSetupStripTapped,
+      plusSetupStep: nil,
+      plusSetupAction: nil,
+      completedCount: completedCount,
+      isPlus: isPlus()
+    )
+  }
+
+  func plusSetupStep(_ step: PlusSetupStep, action: AnalyticsPlusSetupAction) {
+    analytics.track(
+      .plusSetupStep,
+      plusSetupStep: step,
+      plusSetupAction: action,
+      completedCount: nil,
+      isPlus: isPlus()
+    )
+  }
+
   func smartReminderRetryScheduled(count: Int) {
     guard count > 0 else { return }
     analytics.track(

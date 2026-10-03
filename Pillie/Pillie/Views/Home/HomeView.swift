@@ -29,6 +29,7 @@ struct HomeView: View {
     @State private var blockingPaywallSurface: AnalyticsPaywallSurface = .homeBlockingCard
     @State private var showTrialStatusSheet = false
     @State private var showTrialKeepPlusPaywall = false
+    @State private var showPlusSetup = false
     @State private var trialEndPaywallPresentation = TrialEndPaywallPresentationState()
     #if DEBUG
     @State private var showDeveloperMenu = false
@@ -51,6 +52,7 @@ struct HomeView: View {
     @State private var showTrialDeclineThankYou = false
     @State private var reviewPromptShownLogged = false
     @AppStorage("homeBlockingStatusCardDismissed") private var blockingCardDismissed = false
+    @AppStorage(PlusSetupProgress.finishedStorageKey) private var plusSetupFinished = false
     @Bindable private var blockingManager = AppBlockingManager.shared
     private let homeFeedback = HomeActionInteractionFeedback()
     private let trialDeclineFeedbackStore = KeychainTrialDeclineFeedbackResolutionStore()
@@ -364,6 +366,20 @@ struct HomeView: View {
                     StatusCard()
                         .modifier(FadeInUp(appeared: appeared, delay: 0.1))
 
+                    if plusSetupProgress.showsStrip(
+                        inTrial: trialPresentation != nil,
+                        finished: plusSetupFinished
+                    ) {
+                        PlusSetupStrip(progress: plusSetupProgress) {
+                            ProductAnalyticsTelemetry.live.plusSetupStripTapped(
+                                completedCount: plusSetupProgress.completedCount
+                            )
+                            showPlusSetup = true
+                        }
+                        .modifier(FadeInUp(appeared: appeared, delay: 0.12))
+                        .transition(ctaStateTransition)
+                    }
+
                     // At Accessibility Dynamic Type sizes the primary action belongs
                     // in the scroll flow. Keeping the regular floating treatment here
                     // would cover the expanded cards below it and squeeze the long
@@ -576,6 +592,12 @@ HomePackCard(holdsTodayLog: holdsPackCardLog)
                 onDismiss: { trialEndPaywallPresentation.dismiss() },
                 onResolved: resolveTrialDeclineFeedback
             )
+        }
+        .sheet(isPresented: $showPlusSetup) {
+            PlusSetupSheet(opening: .opening(for: plusSetupProgress))
+                .presentationDragIndicator(.hidden)
+                .presentationBackground(PillieTheme.bg)
+                .presentationCornerRadius(PillieTheme.cardRadius)
         }
         .fullScreenCover(isPresented: $showTrialKeepPlusPaywall) {
             HonestPaywallHost(

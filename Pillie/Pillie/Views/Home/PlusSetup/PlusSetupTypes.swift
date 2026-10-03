@@ -6,7 +6,7 @@
 //  sheet read one derived progress value; the sheet walks a step machine.
 //
 
-import Foundation
+import SwiftUI
 
 /// The Plus features the trial asks a user to set up, in sheet order.
 enum PlusSetupStep: String, CaseIterable, Hashable {
@@ -74,7 +74,7 @@ struct PlusSetupProgress: Equatable {
 
 /// Where the setup sheet is. Every exit from a step (Skip, a finished editor,
 /// Save) goes through `next(after:)`, so the order lives in one place.
-enum PlusSetupSheetStep: Equatable {
+enum PlusSetupSheetStep: Hashable {
     case step(PlusSetupStep)
     case done
 
@@ -123,4 +123,13 @@ enum PlusSetupSentence {
         appendText(cursor..<format.endIndex)
         return parts
     }
+}
+
+enum PlusSetupPalette {
+    /// Paper's neutral fill for the segmented track, Skip, and quiet chips.
+    static let neutralFill = Color(hex: "F5F5F4")
+    /// Paper's "done" green for completed step labels.
+    static let doneText = Color(hex: "5E8A5C")
+    /// Paper's muted label for steps not yet reached.
+    static let pendingText = Color(hex: "A8A29E")
 }

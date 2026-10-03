@@ -630,6 +630,7 @@ struct PillieApp: App {
             UserDefaults.standard.removeObject(
                 forKey: FirstInterventionConfirmation.shownStorageKey
             )
+            UserDefaults.standard.removeObject(forKey: PlusSetupProgress.finishedStorageKey)
             UserDefaults.standard.set(false, forKey: OnboardingFlow.selectedFreePlanStorageKey)
             UserDefaults.standard.set(OnboardingFlow.Step.complete.rawValue, forKey: OnboardingFlow.stepStorageKey)
 
@@ -655,8 +656,9 @@ struct PillieApp: App {
             reconcileScreenTimeState()
         case "/trial-clear":
             // QA control (#160): remove the persisted grant entirely, including
-            // the one-shot `trial_expired` flag (#167) and the warning-sent
-            // dedupe (#168).
+            // the one-shot `trial_expired` flag (#167), the warning-sent
+            // dedupe (#168), and the finished Plus setup strip (ENG-135).
+            UserDefaults.standard.removeObject(forKey: PlusSetupProgress.finishedStorageKey)
             UserDefaults.standard.removeObject(forKey: TrialExpiredEvent.firedStorageKey)
             UserDefaults.standard.removeObject(forKey: TrialExpiryWarningDelivery.sentDaysStorageKey)
             UserDefaults.standard.removeObject(forKey: TrialEndPaywallAutoPresentation.shownStorageKey)

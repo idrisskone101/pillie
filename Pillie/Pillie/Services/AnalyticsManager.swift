@@ -278,6 +278,15 @@ protocol AnalyticsTracking {
     isPlus: Bool?
   )
 
+  /// The Today Plus setup strip and sheet (ENG-135).
+  func track(
+    _ event: AnalyticsEvent,
+    plusSetupStep: PlusSetupStep?,
+    plusSetupAction: AnalyticsPlusSetupAction?,
+    completedCount: Int?,
+    isPlus: Bool?
+  )
+
   func track(
     _ event: AnalyticsEvent,
     smartReminderOutcome: AnalyticsSmartReminderOutcome,
@@ -374,6 +383,16 @@ extension AnalyticsTracking {
     isPlus: Bool?
   ) {
     trackLegacy(event, isPlus: isPlus)
+  }
+
+  func track(
+    _ event: AnalyticsEvent,
+    plusSetupStep: PlusSetupStep?,
+    plusSetupAction: AnalyticsPlusSetupAction?,
+    completedCount: Int?,
+    isPlus: Bool?
+  ) {
+    trackLegacy(event, source: .home, isPlus: isPlus)
   }
 
   func track(
@@ -547,6 +566,8 @@ enum AnalyticsEvent: String, CaseIterable {
   case trialExpired = "trial_expired"
   case trialBadgeTapped = "trial_badge_tapped"
   case trialStatusSheetViewed = "trial_status_sheet_viewed"
+  case plusSetupStripTapped = "plus_setup_strip_tapped"
+  case plusSetupStep = "plus_setup_step"
   case smartReminderRetryScheduled = "smart_reminder_retry_scheduled"
   case smartReminderRetryFired = "smart_reminder_retry_fired"
   case smartReminderOutcome = "smart_reminder_outcome"
@@ -633,6 +654,12 @@ enum AnalyticsPaywallSurface: String, CaseIterable {
   case plusUpsell = "plus_upsell"
   /// The onboarding access-verification screen's Restore button (ENG-74).
   case onboardingVerification = "onboarding_verification"
+}
+
+enum AnalyticsPlusSetupAction: String, CaseIterable {
+  case viewed
+  case completed
+  case skipped
 }
 
 enum AnalyticsAuthorizationState: String, CaseIterable {
@@ -818,6 +845,9 @@ struct AnalyticsPayload {
   let reminderPreset: CustomReminderPreset?
   let reminderPresetEdited: Bool?
   let restoreOutcome: RestoreOutcome?
+  let plusSetupStep: PlusSetupStep?
+  let plusSetupAction: AnalyticsPlusSetupAction?
+  let completedCount: Int?
 
   init(
     source: AnalyticsSource? = nil,
@@ -848,7 +878,10 @@ struct AnalyticsPayload {
     retryBodyCustomized: Bool? = nil,
     reminderPreset: CustomReminderPreset? = nil,
     reminderPresetEdited: Bool? = nil,
-    restoreOutcome: RestoreOutcome? = nil
+    restoreOutcome: RestoreOutcome? = nil,
+    plusSetupStep: PlusSetupStep? = nil,
+    plusSetupAction: AnalyticsPlusSetupAction? = nil,
+    completedCount: Int? = nil
   ) {
     self.source = source
     self.step = step
@@ -879,6 +912,9 @@ struct AnalyticsPayload {
     self.reminderPreset = reminderPreset
     self.reminderPresetEdited = reminderPresetEdited
     self.restoreOutcome = restoreOutcome
+    self.plusSetupStep = plusSetupStep
+    self.plusSetupAction = plusSetupAction
+    self.completedCount = completedCount
   }
 
   var properties: [String: AnalyticsPropertyValue] {
@@ -951,6 +987,15 @@ struct AnalyticsPayload {
     }
     if let reminderPresetEdited {
       properties["reminder_preset_edited"] = .bool(reminderPresetEdited)
+    }
+    if let plusSetupStep {
+      properties["step"] = .string(plusSetupStep.rawValue)
+    }
+    if let plusSetupAction {
+      properties["action"] = .string(plusSetupAction.rawValue)
+    }
+    if let completedCount {
+      properties["completed_count"] = .int(completedCount)
     }
     if let restoreOutcome {
       properties["result"] = .string(restoreOutcome.analyticsResult.rawValue)
@@ -1255,6 +1300,24 @@ final class AnalyticsManager: AnalyticsTracking {
     )
 
     capture(event, payload: payload)
+  }
+
+  func track(
+    _ event: AnalyticsEvent,
+    plusSetupStep: PlusSetupStep?,
+    plusSetupAction: AnalyticsPlusSetupAction?,
+    completedCount: Int?,
+    isPlus: Bool?
+  ) {
+    let payload = AnalyticsPayload(
+      source: .home,
+      isPlus: isPlus,
+      plusSetupStep: plusSetupStep,
+      plusSetupAction: plusSetupAction,
+      completedCount: completedCount
+    )
+
+    capture(event, payload: payload, source: .home)
   }
 
   func track(

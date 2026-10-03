@@ -33,6 +33,35 @@ final class ReverseTrialAnalyticsTests: XCTestCase {
         XCTAssertEqual(client.events.first?.properties.count, 2)
     }
 
+    func testPlusSetupStripTapCarriesOnlyTheCompletedCount() {
+        let (telemetry, client) = makeTelemetry()
+
+        telemetry.plusSetupStripTapped(completedCount: 1)
+
+        XCTAssertEqual(client.events.count, 1)
+        XCTAssertEqual(client.events.first?.name, "plus_setup_strip_tapped")
+        XCTAssertEqual(client.events.first?.properties, [
+            "source": .string("home"),
+            "completed_count": .int(1),
+            "is_plus": .bool(true),
+        ])
+    }
+
+    func testPlusSetupStepCarriesStepAndAction() {
+        let (telemetry, client) = makeTelemetry()
+
+        telemetry.plusSetupStep(.messages, action: .skipped)
+
+        XCTAssertEqual(client.events.count, 1)
+        XCTAssertEqual(client.events.first?.name, "plus_setup_step")
+        XCTAssertEqual(client.events.first?.properties, [
+            "source": .string("home"),
+            "step": .string("messages"),
+            "action": .string("skipped"),
+            "is_plus": .bool(true),
+        ])
+    }
+
     func testBlockerSetupSkipCarriesAuthorizationStateWithoutSelectionData() {
         let (telemetry, client) = makeTelemetry()
 
