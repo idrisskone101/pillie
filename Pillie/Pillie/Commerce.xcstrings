@@ -50600,6 +50600,116 @@
           }
         }
       }
+    },
+    "trial.status.eyebrow": {
+      "comment": "Trial status sheet eyebrow above the countdown [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie Plus trial"
+          }
+        }
+      }
+    },
+    "trial.status.indicator.countdown": {
+      "comment": "Active-trial Home badge while Plus setup is unfinished; placeholder is active days remaining [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld active days left"
+          }
+        }
+      }
+    },
+    "trial.status.indicator.countdown_tonight": {
+      "comment": "Active-trial Home badge on the last protected day while Plus setup is unfinished [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ends tonight"
+          }
+        }
+      }
+    },
+    "trial.status.until": {
+      "comment": "Trial status sheet line under the countdown; placeholder is the expiry date [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Everything in Plus is yours until %@."
+          }
+        }
+      }
+    },
+    "trial.status.day_today": {
+      "comment": "Trial status progress bar label; placeholder is the current trial day number [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Day %lld, today"
+          }
+        }
+      }
+    },
+    "trial.status.timeline_title": {
+      "comment": "Trial status sheet section title above the expiry timeline [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What happens next"
+          }
+        }
+      }
+    },
+    "trial.status.timeline.heads_up": {
+      "comment": "Trial timeline row for the day-10 notice [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A heads-up that five days are left."
+          }
+        }
+      }
+    },
+    "trial.status.timeline.last_call": {
+      "comment": "Trial timeline row for the day-13 notice [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "One last reminder before it ends."
+          }
+        }
+      }
+    },
+    "trial.status.timeline.plus_pauses": {
+      "comment": "Trial timeline expiry row under hard-paywall terms [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus pauses until you pick a plan. Everything you set up stays saved."
+          }
+        }
+      }
+    },
+    "trial.status.timeline.blocking_off": {
+      "comment": "Trial timeline expiry row under legacy terms [paywall]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App blocking turns off. Reminders stay free, and everything you set up stays saved."
+          }
+        }
+      }
     }
   },
   "version": "1.0"

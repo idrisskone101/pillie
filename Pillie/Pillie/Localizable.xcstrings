@@ -162159,6 +162159,326 @@
           }
         }
       }
+    },
+    "plus_setup.strip.title": {
+      "comment": "Today strip title during the Reverse Trial; opens Plus setup [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set up your Plus features"
+          }
+        }
+      }
+    },
+    "plus_setup.strip.subtitle": {
+      "comment": "Today strip subtitle naming the three Plus setup steps [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blocking, messages, reminders"
+          }
+        }
+      }
+    },
+    "plus_setup.strip.progress": {
+      "comment": "Ring label on the Plus setup strip; completed steps / total steps [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld/%2$lld"
+          }
+        }
+      }
+    },
+    "plus_setup.strip.accessibility": {
+      "comment": "VoiceOver label for the Plus setup strip; completed steps, total steps [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set up your Plus features, %1$lld of %2$lld done"
+          }
+        }
+      }
+    },
+    "plus_setup.tab.blocking": {
+      "comment": "Plus setup sheet step tab: app blocking [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blocking"
+          }
+        }
+      }
+    },
+    "plus_setup.tab.messages": {
+      "comment": "Plus setup sheet step tab: custom reminder messages [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Messages"
+          }
+        }
+      }
+    },
+    "plus_setup.tab.reminders": {
+      "comment": "Plus setup sheet step tab: follow-up reminders [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reminders"
+          }
+        }
+      }
+    },
+    "plus_setup.tab.done_accessibility": {
+      "comment": "VoiceOver value for a finished Plus setup step; placeholder is the step name [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@, done"
+          }
+        }
+      }
+    },
+    "plus_setup.blocking.before": {
+      "comment": "Caption under the before image on the blocking setup step [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Before you check in"
+          }
+        }
+      }
+    },
+    "plus_setup.blocking.after": {
+      "comment": "Caption under the after image on the blocking setup step [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "After you check in"
+          }
+        }
+      }
+    },
+    "plus_setup.blocking.title": {
+      "comment": "Blocking setup step title [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Let your apps wait for you"
+          }
+        }
+      }
+    },
+    "plus_setup.blocking.body": {
+      "comment": "Blocking setup step body [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pick a few. Check in first, then everything opens like normal."
+          }
+        }
+      }
+    },
+    "plus_setup.blocking.action": {
+      "comment": "Blocking setup step primary button; opens the app picker [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pick apps"
+          }
+        }
+      }
+    },
+    "plus_setup.messages.before": {
+      "comment": "Caption under the before image on the messages setup step [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A plain reminder"
+          }
+        }
+      }
+    },
+    "plus_setup.messages.after": {
+      "comment": "Caption under the after image on the messages setup step [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "One in your words"
+          }
+        }
+      }
+    },
+    "plus_setup.messages.title": {
+      "comment": "Messages setup step title [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reminders in your words"
+          }
+        }
+      }
+    },
+    "plus_setup.messages.body": {
+      "comment": "Messages setup step body [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Write what each reminder says. You’ll see how it looks on your Lock Screen before you save."
+          }
+        }
+      }
+    },
+    "plus_setup.messages.action": {
+      "comment": "Messages setup step primary button; opens the message editor [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Write my messages"
+          }
+        }
+      }
+    },
+    "plus_setup.reminders.before": {
+      "comment": "Caption under the before image on the reminders setup step [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "One reminder, gone"
+          }
+        }
+      }
+    },
+    "plus_setup.reminders.after": {
+      "comment": "Caption under the after image on the reminders setup step [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie checks back"
+          }
+        }
+      }
+    },
+    "plus_setup.reminders.title": {
+      "comment": "Reminders setup step title [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reminders that don’t give up"
+          }
+        }
+      }
+    },
+    "plus_setup.reminders.sentence": {
+      "comment": "Reminders setup sentence. %1$@ is the interval chip (e.g. 10 min), %2$@ the repeat chip (e.g. 3 times). Reorder freely; keep both placeholders [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nudge me every %1$@ up to %2$@ until I check in."
+          }
+        }
+      }
+    },
+    "plus_setup.reminders.interval_chip": {
+      "comment": "Interval chip inside the reminders setup sentence; placeholder is minutes [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld min"
+          }
+        }
+      }
+    },
+    "plus_setup.reminders.repeats_chip": {
+      "comment": "Repeat-count chip inside the reminders setup sentence; placeholder is the number of follow-ups [standard]",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld time"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld times"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "plus_setup.skip": {
+      "comment": "Skip button on every Plus setup step [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skip"
+          }
+        }
+      }
+    },
+    "plus_setup.done.title": {
+      "comment": "Plus setup finished title [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You’re all set"
+          }
+        }
+      }
+    },
+    "plus_setup.done.body": {
+      "comment": "Plus setup finished body; placeholder is the daily reminder time [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie takes it from here. See you at %@."
+          }
+        }
+      }
+    },
+    "plus_setup.done.action": {
+      "comment": "Plus setup finished button; closes the sheet [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Back to Today"
+          }
+        }
+      }
     }
   },
   "version": "1.0"
