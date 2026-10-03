@@ -321,39 +321,6 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
         )
     }
 
-    func testProtocolEditorUsesItalianCopyForEveryMethod() {
-        let italian = Locale(identifier: "it_IT")
-
-        XCTAssertEqual(
-            ProtocolEditorPresentation.localized(method: .pill, locale: italian).customDayLabels,
-            ["Giorni attivi", "Giorni di pausa"]
-        )
-
-        let patch = ProtocolEditorPresentation.localized(method: .patch, locale: italian)
-        XCTAssertEqual(patch.scheduleTitle, "Piano cerotto")
-        XCTAssertEqual(
-            patch.scheduleLines,
-            [
-                "Giorno 1: applica il cerotto",
-                "Giorni 8 e 15: cambia il cerotto",
-                "Giorno 22: rimuovi il cerotto",
-                "Giorni 23–28: settimana senza cerotto",
-            ]
-        )
-
-        let ring = ProtocolEditorPresentation.localized(method: .ring, locale: italian)
-        XCTAssertEqual(ring.scheduleTitle, "Piano anello")
-        XCTAssertEqual(
-            ring.scheduleLines,
-            [
-                "Giorno 1: inserisci l’anello",
-                "Giorni 2–21: l’anello resta dentro",
-                "Giorno 22: rimuovi l’anello",
-                "Giorni 23–28: settimana senza anello",
-            ]
-        )
-    }
-
     func testSettingsEditorsUseDistinctCompactItalianLabels() {
         let italian = Locale(identifier: "it_IT")
 

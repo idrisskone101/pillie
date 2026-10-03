@@ -9,9 +9,14 @@ support mailto rows and (debug builds only) the developer menu.
 
 - `settings-open` selects the Settings tab; nav title `settings.navigation.title`
   -> "Settings" (`PillieTabBar.swift:13,22`; `SettingsView.swift:44-51`).
-- `settings-method` — "Method" row opens `ProtocolEditor`: contraceptive
-  method, pill regimen, and a cycle-day stepper, gated behind a destructive
-  confirm alert on Save. `SettingsView.swift:61-70,436-440,728-1001`.
+- `settings-method` — "Method" row opens `ProtocolEditor`
+  (`Views/Settings/ProtocolEditor.swift`): a segmented method picker over the
+  onboarding schedule modules. Pill shows `TodayPillCard` (the pack card, its
+  Change button and `PackTypeSheet`, then "Have you taken pill N yet?"); patch
+  and ring show `RoutineDialCard` (`routineDialSegment.N`, `routineDial`,
+  question or result row). It opens on today's position with the answer taken
+  from the store, so Save (`#protocolEditorSave`) works without a tap. Save is
+  gated behind a destructive confirm alert ("Clear and save").
 - `settings-reminder-time` — "Reminder time" row opens `ReminderTimeEditor`
   (wheel picker). `SettingsView.swift:73-89,412-417,1005-1058`.
 - `settings-reminder-messages` — "Reminder messages" row opens
@@ -59,6 +64,10 @@ support mailto rows and (debug builds only) the developer menu.
   Method, Reminder time, Reminder messages, Pill supply reminder, Interval,
   Repeats, Cycle day, and Your apps in turn, shooting each open sheet and
   closing it without saving.
+- `flows/settings-schedule.flow` — opens Method on a pill account, taps a
+  pill, swaps the pack through the Change sheet, switches to Patch and Ring,
+  saves the ring with the reset alert, then reopens on an established patch
+  routine (day 10) to prove the dial seeds on patch 2.
 - `flows/settings-language.flow` — opens the Language row, switches to
   German, proves German strings appear (nav title "Einstellungen", sheet
   header "Sprache"), then switches back to English.
