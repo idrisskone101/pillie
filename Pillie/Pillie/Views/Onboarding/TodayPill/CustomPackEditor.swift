@@ -6,18 +6,23 @@
 import SwiftUI
 
 struct CustomPackEditor: View {
-    let seed: PackRegimen
     let onBack: () -> Void
     let onUse: (PackChoice) -> Void
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
-    // Seeded in onAppear, not a custom init, so the SDK 27 @State macro stays well-behaved.
-    @State private var draft = CustomPackDraft(PillPack.defaultCustomRegimen)
+    // Seeded before the first frame, so the counts never spring in from the default pack.
+    @State private var draft: CustomPackDraft
     @State private var typed: String?
     @State private var typingStartValue = 0
 
     private let feedback = OnboardingInteractionFeedback()
+
+    init(seed: PackRegimen, onBack: @escaping () -> Void, onUse: @escaping (PackChoice) -> Void) {
+        self.onBack = onBack
+        self.onUse = onUse
+        _draft = State(initialValue: CustomPackDraft(seed))
+    }
 
     private var countAnimation: Animation? {
         reduceMotion ? nil : .spring(duration: 0.35, bounce: 0.2)
@@ -63,7 +68,6 @@ struct CustomPackEditor: View {
         }
         .background(PillieTheme.bg)
         .animation(countAnimation, value: draft)
-        .onAppear { draft = CustomPackDraft(seed) }
     }
 
     private var header: some View {

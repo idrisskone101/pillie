@@ -6,18 +6,30 @@
 import SwiftUI
 
 struct RoutineDialView: View {
-    let method: RoutineDialMethod
     let progress: ProtectionPlanProgress
     let onBack: () -> Void
     let onContinue: (RoutineDialPick) -> Void
 
-    @Environment(PillStore.self) private var store
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
-    // Seeded in onAppear, not a custom init, so the SDK 27 @State macro stays well-behaved.
-    @State private var selection = RoutineDialSelection(method: .patch)
+    // Seeded before the first frame. Seeding in onAppear rendered a patch dial first and
+    // cross-faded it into the ring during the reveal.
+    @State private var selection: RoutineDialSelection
     @State private var isScrubbing = false
     @State private var appeared = false
+
+    init(
+        method: RoutineDialMethod,
+        store: PillStore,
+        progress: ProtectionPlanProgress,
+        onBack: @escaping () -> Void,
+        onContinue: @escaping (RoutineDialPick) -> Void
+    ) {
+        self.progress = progress
+        self.onBack = onBack
+        self.onContinue = onContinue
+        _selection = State(initialValue: Self.seed(method: method, store: store))
+    }
 
     private var animationsEnabled: Bool {
         PerformanceTier.current == .standard && !reduceMotion
@@ -56,7 +68,6 @@ struct RoutineDialView: View {
             }
         }
         .onAppear {
-            seed()
             appeared = true
         }
     }
@@ -70,33 +81,32 @@ struct RoutineDialView: View {
         }
     }
 
-    private func seed() {
+    private static func seed(method: RoutineDialMethod, store: PillStore) -> RoutineDialSelection {
         if let draft = RoutineDialPick.load(), draft.method == method {
-            selection = RoutineDialSelection(restoring: draft)
-            return
+            return RoutineDialSelection(restoring: draft)
         }
         let pack = store.pack
         let cycleDay = RoutineDialMethod(pack.method) == method ? pack.cycleDayIndex(on: store.today) + 1 : 1
-        selection = RoutineDialSelection(method: method, cycleDay: cycleDay)
+        return RoutineDialSelection(method: method, cycleDay: cycleDay)
     }
 }
 
 #Preview("Patch") {
     RoutineDialView(
         method: .patch,
+        store: PillStore.previewStore(),
         progress: ProtectionPlanProgressIndex.progress(for: .schedule),
         onBack: {},
         onContinue: { _ in }
     )
-    .environment(PillStore.previewStore())
 }
 
 #Preview("Ring") {
     RoutineDialView(
         method: .ring,
+        store: PillStore.previewStore(),
         progress: ProtectionPlanProgressIndex.progress(for: .schedule),
         onBack: {},
         onContinue: { _ in }
     )
-    .environment(PillStore.previewStore())
 }

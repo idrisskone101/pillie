@@ -11,15 +11,13 @@ import SwiftUI
 
 struct ProtectionPlanRoutineMethodView: View {
     let progress: ProtectionPlanProgress
-    let initialMethod: ContraceptiveMethod
     let onBack: () -> Void
     let onContinue: (ContraceptiveMethod) -> Void
 
     private let content = ProtectionPlanRoutineMethodContent.default
 
-    // Plain @State seeded in `.onAppear` (no custom init) so the SDK-27 @State macro
-    // stays well-behaved and back navigation restores the committed method.
-    @State private var selected: ContraceptiveMethod = .pill
+    // Seeded before the first frame, so back navigation never flashes the Pill row.
+    @State private var selected: ContraceptiveMethod
     @State private var appeared = false
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -27,6 +25,18 @@ struct ProtectionPlanRoutineMethodView: View {
 
     private var animationsEnabled: Bool {
         performanceTier == .standard && !reduceMotion
+    }
+
+    init(
+        progress: ProtectionPlanProgress,
+        initialMethod: ContraceptiveMethod,
+        onBack: @escaping () -> Void,
+        onContinue: @escaping (ContraceptiveMethod) -> Void
+    ) {
+        self.progress = progress
+        self.onBack = onBack
+        self.onContinue = onContinue
+        _selected = State(initialValue: initialMethod)
     }
 
     var body: some View {
@@ -63,7 +73,6 @@ struct ProtectionPlanRoutineMethodView: View {
             }
         }
         .onAppear {
-            selected = initialMethod
             appeared = true
         }
     }

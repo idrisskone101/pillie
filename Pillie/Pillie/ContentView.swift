@@ -235,6 +235,7 @@ struct ContentView: View {
 
 	        case .schedule where store.contraceptiveMethod == .pill:
 	          TodayPillView(
+	            store: store,
 	            progress: ProtectionPlanProgressIndex.progress(for: .schedule),
 	            onBack: {
                 lowRiskTransition(to: .method)
@@ -253,6 +254,7 @@ struct ContentView: View {
 	        case .schedule:
 	          RoutineDialView(
 	            method: RoutineDialMethod(store.contraceptiveMethod) ?? .patch,
+	            store: store,
 	            progress: ProtectionPlanProgressIndex.progress(for: .schedule),
 	            onBack: {
                 lowRiskTransition(to: .method)
