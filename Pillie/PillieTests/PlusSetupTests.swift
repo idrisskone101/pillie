@@ -101,9 +101,9 @@ struct PlusSetupTests {
 
         #expect(PlusSetupSentence.parts(of: format) == [
             .text("Nudge me every"),
-            .interval,
+            .interval(trailing: ""),
             .text("up to"),
-            .repeats,
+            .repeats(trailing: ""),
             .text("until I check in."),
         ])
     }
@@ -111,18 +111,34 @@ struct PlusSetupTests {
     @Test func `reordered placeholders keep the locale word order`() {
         #expect(PlusSetupSentence.parts(of: "最大%2$@まで、%1$@ごとにお知らせします。") == [
             .text("最大"),
-            .repeats,
+            .repeats(trailing: ""),
             .text("まで、"),
-            .interval,
+            .interval(trailing: ""),
             .text("ごとにお知らせします。"),
         ])
     }
 
     @Test func `bare placeholders count up in reading order`() {
         #expect(PlusSetupSentence.parts(of: "%@ then %@") == [
-            .interval,
+            .interval(trailing: ""),
             .text("then"),
-            .repeats,
+            .repeats(trailing: ""),
+        ])
+    }
+
+    @Test func `punctuation after a chip stays flush with it`() {
+        #expect(PlusSetupSentence.parts(of: "Erinnere mich alle %1$@ bis zu %2$@, bis ich den Check-in mache.") == [
+            .text("Erinnere mich alle"),
+            .interval(trailing: ""),
+            .text("bis zu"),
+            .repeats(trailing: ","),
+            .text("bis ich den Check-in mache."),
+        ])
+        #expect(PlusSetupSentence.parts(of: "在我打卡前，每 %1$@ 提醒我一次，最多 %2$@。") == [
+            .text("在我打卡前，每"),
+            .interval(trailing: ""),
+            .text("提醒我一次，最多"),
+            .repeats(trailing: "。"),
         ])
     }
 }

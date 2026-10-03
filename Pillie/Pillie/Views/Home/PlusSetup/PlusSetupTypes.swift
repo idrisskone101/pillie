@@ -95,8 +95,10 @@ enum PlusSetupSheetStep: Hashable {
 /// menu chip fills.
 enum PlusSetupSentencePart: Equatable {
     case text(String)
-    case interval
-    case repeats
+    /// `trailing` is punctuation that sits flush against the chip, like the
+    /// comma in "%2$@, bis ich…", so it never starts a run of its own.
+    case interval(trailing: String)
+    case repeats(trailing: String)
 }
 
 enum PlusSetupSentence {
@@ -117,8 +119,13 @@ enum PlusSetupSentence {
             appendText(cursor..<match.range.lowerBound)
             let slot = match.output.1.flatMap { Int($0) } ?? nextImplicitSlot
             nextImplicitSlot = slot + 1
-            parts.append(slot == 1 ? .interval : .repeats)
             cursor = match.range.upperBound
+            let trailingEnd = format[cursor...].firstIndex {
+                !$0.unicodeScalars.allSatisfy(CharacterSet.punctuationCharacters.contains)
+            } ?? format.endIndex
+            let trailing = String(format[cursor..<trailingEnd])
+            cursor = trailingEnd
+            parts.append(slot == 1 ? .interval(trailing: trailing) : .repeats(trailing: trailing))
         }
         appendText(cursor..<format.endIndex)
         return parts

@@ -30,14 +30,25 @@ struct PlusSetupReminderSentence: View {
                     Text(words)
                         .font(.pillie(17, weight: .medium))
                         .foregroundStyle(PillieTheme.textMuted)
-                case .interval:
-                    intervalMenu
-                case .repeats:
-                    repeatsMenu
+                case .interval(let trailing):
+                    flush(intervalMenu, trailing: trailing)
+                case .repeats(let trailing):
+                    flush(repeatsMenu, trailing: trailing)
                 }
             }
         }
         .padding(.top, 2)
+    }
+
+    private func flush(_ chip: some View, trailing: String) -> some View {
+        HStack(spacing: 1) {
+            chip
+            if !trailing.isEmpty {
+                Text(trailing)
+                    .font(.pillie(17, weight: .medium))
+                    .foregroundStyle(PillieTheme.textMuted)
+            }
+        }
     }
 
     private var intervalMenu: some View {
