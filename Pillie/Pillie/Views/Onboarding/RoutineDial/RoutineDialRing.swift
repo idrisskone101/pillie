@@ -79,6 +79,9 @@ struct RoutineDialRing: View {
             .onChanged { value in
                 let touch = angle(of: value.location)
                 guard let current = dragDegrees else {
+                    #if DEBUG
+                    TabSwitchFrameProbe.shared.monitor("scrub", duration: 1.2, settle: 0)
+                    #endif
                     isScrubbing = true
                     withAnimation(animatesKnob ? .spring(duration: 0.25, bounce: 0) : nil) {
                         dragDegrees = touch

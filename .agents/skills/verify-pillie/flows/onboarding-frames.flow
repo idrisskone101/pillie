@@ -1,0 +1,72 @@
+# Frame timing for the onboarding questions, the method step, and the patch and
+# ring dials. PillieFrameMonitor makes TabSwitchFrameProbe log a labeled window for
+# every step transition ("go:<step>-<method>"), the settled screen after it
+# ("idle:<step>-<method>"), each row or chip tap, and each dial scrub.
+# Pillie/scripts/onboarding-frames.py app.log turns app.log into a per-label table.
+# Dial coordinates come from the routineDial frame in a 1x shot (ring @69,302 264x264,
+# patch @79,360 244x244 on iPhone 17 Pro).
+
+fresh
+defaults onboardingStep -int 5
+defaults PillieFrameMonitor -bool true
+log start
+launch
+wait text "What’s in the way?" 15
+sleep 2
+tap --label TikTok
+sleep 1
+tap --label "A simpler routine"
+sleep 1
+tap --id protectionPlanPrimaryCTA
+
+wait text "How often do you miss your pill?"
+sleep 2
+tap --label Rarely
+sleep 1
+tap --label "Right after the reminder"
+sleep 1
+tap --id protectionPlanPrimaryCTA
+
+wait text "Where did you find Pillie?"
+sleep 2
+tap --id acquisitionSource.tiktok
+sleep 1
+tap --id protectionPlanPrimaryCTA
+
+wait text "Pick your method."
+sleep 2
+tap --label "Ring, Ring · three weeks in, one week out"
+sleep 1
+tap --id protectionPlanPrimaryCTA
+wait id routineDial
+sleep 2
+swipe --start-x 307 --start-y 434 --end-x 201 --end-y 540 --duration 1
+sleep 1
+swipe --start-x 201 --start-y 540 --end-x 307 --end-y 434 --duration 1
+sleep 1
+swipe --start-x 307 --start-y 434 --end-x 201 --end-y 540 --duration 1
+sleep 1
+tap --label Back --element-type Button
+wait text "Pick your method."
+sleep 2
+tap --label "Patch, Patch · weekly changes"
+sleep 1
+tap --id protectionPlanPrimaryCTA
+wait id routineDial
+sleep 2
+swipe --start-x 297 --start-y 482 --end-x 201 --end-y 578 --duration 1
+sleep 1
+swipe --start-x 201 --start-y 578 --end-x 297 --end-y 482 --duration 1
+sleep 1
+swipe --start-x 297 --start-y 482 --end-x 201 --end-y 578 --duration 1
+sleep 1
+tap --label Back --element-type Button
+wait text "Pick your method."
+sleep 2
+tap --label "Ring, Ring · three weeks in, one week out"
+sleep 1
+tap --id protectionPlanPrimaryCTA
+wait id routineDial
+sleep 2
+shot ring-dial
+log stop

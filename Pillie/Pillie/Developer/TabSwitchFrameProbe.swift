@@ -28,6 +28,10 @@ final class TabSwitchFrameProbe: NSObject {
         UserDefaults.standard.bool(forKey: "PillieIdleFrameProbe")
     }
 
+    static var isMonitorRequested: Bool {
+        UserDefaults.standard.bool(forKey: "PillieFrameMonitor")
+    }
+
     private struct Result {
         let label: String
         let frames: Int
@@ -45,6 +49,7 @@ final class TabSwitchFrameProbe: NSObject {
     private var label = ""
     private var results: [Result] = []
     private var layoutSamples: [String: [Double]] = [:]
+    private var monitorGeneration = 0
     private static let settleTail: TimeInterval = 0.1
 
     func beginTransition(label: String, duration: TimeInterval) {
@@ -65,6 +70,20 @@ final class TabSwitchFrameProbe: NSObject {
         worstGapMs = 0
         lastTimestamp = 0
         windowEnd = CACurrentMediaTime() + duration + Self.settleTail
+    }
+
+    /// Measures a live interaction, then the settled screen after it, when `PillieFrameMonitor` is set.
+    func monitor(_ label: String, duration: TimeInterval = 0.6, settle: TimeInterval = 1.5) {
+        guard Self.isMonitorRequested else { return }
+        monitorGeneration += 1
+        let generation = monitorGeneration
+        beginTransition(label: "go:\(label)", duration: duration)
+        guard settle > 0 else { return }
+        Task { @MainActor in
+            try? await Task.sleep(for: .seconds(duration + Self.settleTail + 0.05))
+            guard generation == monitorGeneration else { return }
+            beginTransition(label: "idle:\(label)", duration: settle)
+        }
     }
 
     func recordLayout(name: String, key: String, value: Double) {
