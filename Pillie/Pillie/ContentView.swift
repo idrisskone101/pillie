@@ -253,6 +253,7 @@ struct ContentView: View {
 	        case .schedule:
 	          RoutineDialView(
 	            method: RoutineDialMethod(store.contraceptiveMethod) ?? .patch,
+	            store: store,
 	            progress: ProtectionPlanProgressIndex.progress(for: .schedule),
 	            onBack: {
                 lowRiskTransition(to: .method)
