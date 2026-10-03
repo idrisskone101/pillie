@@ -79,17 +79,17 @@ final class BlockingStatusPresentationTests: XCTestCase {
         XCTAssertFalse(card.visibleCopy.joined(separator: " ").lowercased().contains("blocking is on"))
     }
 
-    func testReverseTrialHidesOnlyTheEntitledSetupCard() throws {
+    func testPlusSetupHoldHidesOnlyTheEntitledSetupCard() throws {
         let english = Locale(identifier: "en_US")
 
         XCTAssertNil(BlockingStatusCardContent.make(
             for: .incompleteEntitled,
-            inReverseTrial: true,
+            heldForPlusSetup: true,
             locale: english
         ))
         let free = try XCTUnwrap(BlockingStatusCardContent.make(
             for: .incompleteFree,
-            inReverseTrial: true,
+            heldForPlusSetup: true,
             locale: english
         ))
         XCTAssertEqual(free.title, "App blocking is off")

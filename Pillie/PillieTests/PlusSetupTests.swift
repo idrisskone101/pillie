@@ -28,6 +28,15 @@ struct PlusSetupTests {
         #expect(progress.firstIncomplete == .blocking)
     }
 
+    @Test func `blocking card waits for finished setup and day three`() {
+        #expect(PlusSetupProgress.holdsBlockingCard(trialDay: 1, finished: false))
+        #expect(PlusSetupProgress.holdsBlockingCard(trialDay: 5, finished: false))
+        #expect(PlusSetupProgress.holdsBlockingCard(trialDay: 2, finished: true))
+        #expect(!PlusSetupProgress.holdsBlockingCard(trialDay: 3, finished: true))
+        #expect(!PlusSetupProgress.holdsBlockingCard(trialDay: 14, finished: true))
+        #expect(!PlusSetupProgress.holdsBlockingCard(trialDay: nil, finished: false))
+    }
+
     @Test func `retries off leaves reminders incomplete`() {
         let progress = PlusSetupProgress(
             blockingActive: true,

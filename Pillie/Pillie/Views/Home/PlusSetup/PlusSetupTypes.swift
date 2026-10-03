@@ -54,6 +54,17 @@ struct PlusSetupProgress: Equatable {
         inTrial && !finished && !isComplete
     }
 
+    /// The trial day from which Today's "set up app blocking" card may return.
+    static let blockingCardReturnDay = 3
+
+    /// While the strip is still up, or in the first couple of trial days, the
+    /// strip owns the blocking ask and Today's blocking card stays hidden.
+    /// `trialDay` is nil outside the trial.
+    static func holdsBlockingCard(trialDay: Int?, finished: Bool) -> Bool {
+        guard let trialDay else { return false }
+        return !finished || trialDay < blockingCardReturnDay
+    }
+
     static func live(
         store: PillStore,
         blocking: AppBlockingManager = .shared

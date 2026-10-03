@@ -113,7 +113,10 @@ struct HomeView: View {
         guard !blockingCardDismissed else { return nil }
         return BlockingStatusCardContent.make(
             for: blockingPresentation,
-            inReverseTrial: trialPresentation != nil,
+            heldForPlusSetup: PlusSetupProgress.holdsBlockingCard(
+                trialDay: trialPresentation?.currentDay,
+                finished: plusSetupFinished
+            ),
             method: store.pack.method,
             action: store.dueAction(on: store.today),
             locale: locale
