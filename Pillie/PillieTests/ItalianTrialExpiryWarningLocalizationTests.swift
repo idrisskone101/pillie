@@ -19,19 +19,19 @@ final class ItalianTrialExpiryWarningLocalizationTests: XCTestCase {
 
         XCTAssertEqual(
             TrialExpiryWarningCopy.title(day: 10, locale: italian),
-            "La prova di Pillie Plus terminerà presto"
+            "La tua prova Plus finisce presto"
         )
         XCTAssertEqual(
             TrialExpiryWarningCopy.body(day: 10, cohort: .blockerConfigured, locale: italian),
-            "Il blocco delle app si disattiverà tra 5 giorni."
+            "Il blocco app si disattiva tra 5 giorni. I promemoria giornalieri restano gratis."
         )
         XCTAssertEqual(
             TrialExpiryWarningCopy.title(day: 13, locale: italian),
-            "La prova di Pillie Plus sta per terminare"
+            "La tua prova Plus sta per finire"
         )
         XCTAssertEqual(
             TrialExpiryWarningCopy.body(day: 13, cohort: .blockerConfigured, locale: italian),
-            "Il blocco delle app si disattiverà domani sera."
+            "Il blocco app si disattiva domani sera. I promemoria giornalieri restano gratis."
         )
     }
 
@@ -53,12 +53,12 @@ final class ItalianTrialExpiryWarningLocalizationTests: XCTestCase {
 
         XCTAssertEqual(
             TrialExpiryWarningCopy.title(day: 15, locale: italian),
-            "La prova di Pillie Plus è terminata"
+            "La tua prova di Plus è finita"
         )
         for cohort in [TrialEndPaywallCohort.blockerConfigured, .reminderOnly] {
             XCTAssertEqual(
                 TrialExpiryWarningCopy.body(day: 15, cohort: cohort, locale: italian),
-                "La tua routine è ancora impostata e ti aspetta. Apri Pillie per continuare."
+                "I promemoria giornalieri restano gratis. Plus aggiunge i promemoria successivi e il blocco app."
             )
         }
     }
@@ -90,15 +90,15 @@ final class ItalianTrialExpiryWarningLocalizationTests: XCTestCase {
         XCTAssertEqual(
             warnings.map(\.title),
             [
-                "La prova di Pillie Plus terminerà presto",
-                "La prova di Pillie Plus sta per terminare",
+                "La tua prova Plus finisce presto",
+                "La tua prova Plus sta per finire",
             ]
         )
         XCTAssertEqual(
             warnings.map(\.body),
             [
-                "Il blocco delle app si disattiverà tra 5 giorni.",
-                "Il blocco delle app si disattiverà domani sera.",
+                "Il blocco app si disattiva tra 5 giorni. I promemoria giornalieri restano gratis.",
+                "Il blocco app si disattiva domani sera. I promemoria giornalieri restano gratis.",
             ]
         )
     }

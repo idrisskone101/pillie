@@ -35,7 +35,7 @@ struct PaywallMomentHeader: View {
                         .rotationEffect(.degrees(-6))
 
                     Text(story.daysStampText)
-                        .font(.pillieHandwriting(size: 28))
+                        .font(.pillieHandwriting(size: 28, for: story.daysStampText))
                         .foregroundStyle(PillieTheme.dark)
                         .padding(.bottom, 4)
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -113,7 +113,7 @@ struct PaywallMomentHeader: View {
     private func handwrittenAside(_ line: String) -> some View {
         if !line.isEmpty {
             Text(line)
-                .font(.pillieHandwriting(size: 26))
+                .font(.pillieHandwriting(size: 26, for: line))
                 .foregroundStyle(PillieTheme.dark)
                 .rotationEffect(.degrees(-3))
                 .padding(.top, 8)

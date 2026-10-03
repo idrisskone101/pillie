@@ -10,7 +10,7 @@ wait id protectionPlanPrimaryCTA
 tap --id protectionPlanPrimaryCTA
 wait id protectionPlanEarlyValueProofView
 tap --label "Not now" --element-type Button
-wait text "What's in the way?"
+wait text "What’s in the way?"
 tap --label TikTok
 tap --label "A simpler routine"
 tap --id protectionPlanPrimaryCTA
@@ -23,7 +23,7 @@ tap --id acquisitionSource.tiktok
 tap --id protectionPlanPrimaryCTA
 wait text "Pick your method."
 tap --id protectionPlanPrimaryCTA
-wait text "Tap the pill you're on today."
+wait text "Tap the pill you’re on today."
 tap --id packTile.1
 wait id todayPillQuestion
 tap --id todayPillNotYet
@@ -48,7 +48,7 @@ shot first-reminder-home
 tap --id firstReminderTookIt
 wait id shakeTapToConfirmFallback 10
 tap --id shakeTapToConfirmFallback
-wait text "That's logged. Tap to undo." 15
+wait text "Checked in. Tap to undo." 15
 wait text "Your next one is" 10
 shot logged
 openurl pillie://debug/fixed-now?at=off

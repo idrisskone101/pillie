@@ -177,17 +177,17 @@ final class ProtectionPlanDiagnosisTests: XCTestCase {
 
     func testDiagnosisLeadLineNamesThePrimaryDistractionAndDueActionTime() {
         let lead = diagnosis(primary: .app(.tiktok), method: .pill, time: "8:00 AM").leadLine
-        XCTAssertEqual(lead, "Built from the routine you selected.")
+        XCTAssertEqual(lead, "Based on the routine you picked.")
     }
 
     func testDiagnosisLeadLineIsMethodAwareForPatchAndRing() {
-        XCTAssertEqual(diagnosis(method: .patch).leadLine, "Built from the routine you selected.")
-        XCTAssertEqual(diagnosis(method: .ring).leadLine, "Built from the routine you selected.")
+        XCTAssertEqual(diagnosis(method: .patch).leadLine, "Based on the routine you picked.")
+        XCTAssertEqual(diagnosis(method: .ring).leadLine, "Based on the routine you picked.")
     }
 
     func testDiagnosisGenericLeadLineAvoidsNamingAnApp() {
         let lead = diagnosis(primary: .generic, protectedApps: [], method: .pill).leadLine
-        XCTAssertEqual(lead, "Built from the routine you selected.")
+        XCTAssertEqual(lead, "Based on the routine you picked.")
         XCTAssertFalse(lead.contains("TikTok"))
     }
 
@@ -217,7 +217,7 @@ final class ProtectionPlanDiagnosisTests: XCTestCase {
         let plan = diagnosis(primary: .app(.tiktok), protectedApps: [.tiktok, .instagram, .x], method: .pill, time: "8:00 AM")
         XCTAssertEqual(plan.mainRiskValue, "TikTok")
         XCTAssertEqual(plan.windowValue, "8:00 AM")
-        XCTAssertEqual(plan.protectionModeValue, "Reminder support")
+        XCTAssertEqual(plan.protectionModeValue, "Reminders")
         XCTAssertEqual(plan.protectedAppsLabel, "TikTok, Instagram, X")
     }
 
@@ -259,7 +259,7 @@ final class ProtectionPlanDiagnosisTests: XCTestCase {
                 "TikTok",
                 "9:30 PM",
                 "A few minutes later",
-                "I dismiss reminders.",
+                "I swipe reminders away.",
                 "I just forget.",
             ]
         )
@@ -290,7 +290,7 @@ final class ProtectionPlanDiagnosisTests: XCTestCase {
             time: "9:30 PM"
         ).strategyPoints
         XCTAssertEqual(points.count, 3)
-        XCTAssertEqual(points[0], "Built from the routine you selected.")
+        XCTAssertEqual(points[0], "Based on the routine you picked.")
         XCTAssertEqual(
             points[1],
             "The apps you pick pause after a reminder. They come back when you check in."
@@ -329,7 +329,7 @@ final class ProtectionPlanDiagnosisTests: XCTestCase {
 
     func testStrategyLockPointUsesGenericPhrasingWhenNoNamedApp() {
         let points = diagnosis(primary: .generic, protectedApps: [], method: .pill).strategyPoints
-        XCTAssertEqual(points[0], "Built from the routine you selected.")
+        XCTAssertEqual(points[0], "Based on the routine you picked.")
     }
 
     // MARK: - Safe-copy boundary (slice 6)

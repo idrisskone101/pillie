@@ -26,7 +26,7 @@ tap --id customPackBreakMinus
 wait text "91-day pack · 13 weeks, one column per week"
 tap --id customPackUse
 gone id customPackTitle
-tap --label "Next weeks"
+tap --label "Later weeks"
 wait text "Weeks 5 to 8 of 13"
 gesture scroll-down
 tap --id packTile.40

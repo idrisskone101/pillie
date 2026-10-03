@@ -1,2 +1,2 @@
-"NSMotionUsageDescription" = "Pillie משתמשת בחיישני התנועה כדי לזהות ניעור כשאת מאשרת פעולה.";
-"NSUserTrackingUsageDescription" = "אפשרי מעקב כדי ש-Pillie תוכל ללמוד אילו ערוצים הביאו אותך לכאן. לעולם לא נמכור את המידע האישי שלך.";
+"NSMotionUsageDescription" = "Pillie משתמשת בחיישני התנועה כדי לזהות ניעור של הטלפון לסימון.";
+"NSUserTrackingUsageDescription" = "אפשרי מעקב כדי ש-Pillie תוכל למדוד אילו ערוצים הביאו אותך לכאן ולשפר את האפליקציה. לעולם לא נמכור את המידע האישי שלך.";

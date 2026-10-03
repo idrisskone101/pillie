@@ -1,0 +1,150 @@
+<title>Pillie screens</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&display=swap">
+<style>
+:root{
+  --bg:#FDFCF8; --surface:#FFFFFF; --ink:#292524; --muted:#78716C; --line:#E7E2DA;
+  --coral:#FFB7B2; --coral-ink:#A8463F; --lav:#EFEDF4; --shadow:0 1px 3px rgba(41,37,36,.08),0 8px 24px rgba(41,37,36,.06);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#1B1917; --surface:#24211F; --ink:#F4F1EC; --muted:#A8A29E; --line:#3A3532;
+    --coral:#E8928C; --coral-ink:#FFB7B2; --lav:#2B2833; --shadow:0 1px 3px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#1B1917; --surface:#24211F; --ink:#F4F1EC; --muted:#A8A29E; --line:#3A3532;
+  --coral:#E8928C; --coral-ink:#FFB7B2; --lav:#2B2833; --shadow:0 1px 3px rgba(0,0,0,.4);
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 "Nunito Sans",system-ui,-apple-system,sans-serif;margin:0;padding-inline:16px;padding-block:20px 64px}
+main{max-width:1100px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+h1{font:800 clamp(1.7rem,4vw,2.3rem)/1.15 Nunito,"Nunito Sans",sans-serif;margin:0}
+.lede{color:var(--muted);margin:6px 0 0;max-width:64ch}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:3;background:var(--bg);border-bottom:1px solid var(--line);padding-block:10px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+label{font-weight:700;font-size:13px;color:var(--muted)}
+select{font:600 15px "Nunito Sans",sans-serif;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 10px;max-width:100%}
+.seg{display:flex;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.seg button{font:700 13px "Nunito Sans",sans-serif;background:var(--surface);color:var(--muted);border:0;padding:8px 12px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.nav{display:flex;gap:6px;margin-inline-start:auto}
+.nav button{font:700 13px "Nunito Sans",sans-serif;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:8px 10px;cursor:pointer}
+.meta{font-size:12px;color:var(--muted)}
+.rows{display:flex;flex-direction:column;gap:28px}
+.row h2{font:800 1rem Nunito,"Nunito Sans",sans-serif;margin:0 0 10px;display:flex;gap:8px;align-items:baseline}
+.row h2 span{font:600 12px "Nunito Sans",sans-serif;color:var(--muted);font-variant-numeric:tabular-nums}
+.pair{display:grid;grid-template-columns:repeat(2,minmax(0,300px));gap:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:18px}
+figure{margin:0;display:flex;flex-direction:column;gap:6px}
+figcaption{font-size:12px;color:var(--muted);font-weight:700}
+.shot{width:100%;aspect-ratio:402/874;border-radius:18px;background-color:var(--lav);background-repeat:no-repeat;box-shadow:var(--shadow);cursor:zoom-in;border:1px solid var(--line);padding:0}
+.shot:focus-visible,.nav button:focus-visible,.seg button:focus-visible,select:focus-visible{outline:2px solid var(--coral-ink);outline-offset:3px}
+dialog{border:0;padding:0;background:transparent;max-width:none;max-height:none}
+dialog::backdrop{background:rgba(20,18,17,.82)}
+.zoom{display:flex;gap:16px;align-items:flex-start;justify-content:center;flex-wrap:wrap;padding:16px}
+.zoom figure{width:min(402px,44vw)}
+.zoom figcaption{color:#F4F1EC}
+.zoom .shot{cursor:zoom-out;box-shadow:none}
+@media (max-width:560px){.pair{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.zoom figure{width:min(402px,90vw)}}
+</style>
+
+<main>
+  <header>
+    <h1>Pillie screens</h1>
+    <p class="lede">Every screen of the app in every language, shot on the iPhone 17 Pro simulator after the copy rewrite. Pick a language to see each screen beside English. Click any screen to see it larger.</p>
+  </header>
+
+  <div class="bar">
+    <label for="lang">Language</label>
+    <select id="lang"></select>
+    <div class="seg" role="group" aria-label="View">
+      <button type="button" data-view="compare" aria-pressed="true">Beside English</button>
+      <button type="button" data-view="grid" aria-pressed="false">All screens</button>
+    </div>
+    <div class="nav">
+      <button type="button" id="prev" aria-label="Previous language">←</button>
+      <button type="button" id="next" aria-label="Next language">→</button>
+    </div>
+  </div>
+  <p class="meta" id="meta"></p>
+
+  <div id="view"></div>
+</main>
+
+<dialog id="zoom" aria-label="Enlarged screen"><div class="zoom" id="zoomBody"></div></dialog>
+
+<script type="application/json" id="manifest">__MANIFEST__</script>
+<script>
+const M = JSON.parse(document.getElementById("manifest").textContent);
+const N = M.shots.length;
+const byCode = Object.fromEntries(M.locales.map(l => [l.code, l]));
+const others = M.locales.filter(l => l.code !== "en");
+let view = "compare";
+let lang = (() => {
+  const fromHash = location.hash.slice(1);
+  if (byCode[fromHash]) return fromHash;
+  try { const saved = localStorage.getItem("pillie-gallery-lang"); if (byCode[saved]) return saved; } catch {}
+  return (others[0] || M.locales[0]).code;
+})();
+
+const el = (tag, props = {}, ...kids) => { const n = document.createElement(tag); Object.assign(n, props); kids.forEach(k => n.append(k)); return n; };
+
+function shotButton(code, index, label) {
+  const b = el("button", { className: "shot", type: "button" });
+  b.style.backgroundImage = `url("strips/${code}.webp")`;
+  b.style.backgroundSize = `${N * 100}% 100%`;
+  b.style.backgroundPosition = `${N > 1 ? (index / (N - 1)) * 100 : 0}% 0`;
+  b.setAttribute("aria-label", `${label}, ${byCode[code].english}. Open larger.`);
+  b.onclick = () => openZoom(index);
+  return b;
+}
+
+function figure(code, index, caption) {
+  return el("figure", {}, shotButton(code, index, M.shots[index]), el("figcaption", { textContent: caption, lang: code, dir: byCode[code].rtl ? "rtl" : "auto" }));
+}
+
+function render() {
+  const current = byCode[lang];
+  document.getElementById("lang").value = lang;
+  document.querySelectorAll(".seg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.view === view)));
+  document.getElementById("meta").textContent = `${current.english} · ${N} screens${current.rtl ? " · right to left" : ""}${current.sha ? " · build " + current.sha : ""}`;
+  const root = document.getElementById("view");
+  if (view === "grid") {
+    root.replaceChildren(el("div", { className: "grid" }, ...M.shots.map((label, i) => figure(lang, i, label))));
+  } else {
+    root.replaceChildren(el("div", { className: "rows" }, ...M.shots.map((label, i) => {
+      const cells = [figure("en", i, "English")];
+      if (lang !== "en") cells.push(figure(lang, i, current.native));
+      return el("section", { className: "row" }, el("h2", {}, label, el("span", { textContent: `${i + 1} of ${N}` })), el("div", { className: "pair" }, ...cells));
+    })));
+  }
+  try { localStorage.setItem("pillie-gallery-lang", lang); } catch {}
+}
+
+function openZoom(index) {
+  const body = document.getElementById("zoomBody");
+  const cells = [figure("en", index, `English · ${M.shots[index]}`)];
+  if (lang !== "en") cells.push(figure(lang, index, `${byCode[lang].native} · ${M.shots[index]}`));
+  cells.forEach(c => c.querySelector(".shot").onclick = () => document.getElementById("zoom").close());
+  body.replaceChildren(...cells);
+  const d = document.getElementById("zoom");
+  d.showModal();
+}
+document.getElementById("zoom").addEventListener("click", e => { if (e.target.id === "zoom" || e.target.id === "zoomBody") e.currentTarget.close(); });
+
+const select = document.getElementById("lang");
+select.replaceChildren(...M.locales.map(l => el("option", { value: l.code, textContent: l.code === "en" ? "English" : `${l.native} · ${l.english}` })));
+select.onchange = () => { lang = select.value; render(); };
+document.querySelectorAll(".seg button").forEach(b => b.onclick = () => { view = b.dataset.view; render(); });
+function step(delta) {
+  const codes = M.locales.map(l => l.code);
+  lang = codes[(codes.indexOf(lang) + delta + codes.length) % codes.length];
+  render();
+}
+document.getElementById("prev").onclick = () => step(-1);
+document.getElementById("next").onclick = () => step(1);
+render();
+</script>

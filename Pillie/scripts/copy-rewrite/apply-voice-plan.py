@@ -1,0 +1,316 @@
+#!/usr/bin/env python3
+"""Apply the voice rewrite in voice-plan/ to every catalog, test, and flow.
+
+voice-plan/<lang>.json maps "Table:key" to the new value for that locale.
+Table is Localizable, Commerce, Notifications, Shield, or InfoPlist.
+A plural string's value is a map of CLDR categories to forms, e.g.
+{"one": "%lld day", "other": "%lld days"}; "other" is required.
+
+    python3 Pillie/scripts/copy-rewrite/apply-voice-plan.py check    # validate plans, write nothing
+    python3 Pillie/scripts/copy-rewrite/apply-voice-plan.py apply    # write catalogs, locked copy, tests, flows
+    python3 Pillie/scripts/copy-rewrite/apply-voice-plan.py prune    # delete keys no Swift code reads
+
+`apply` and `prune` are safe to rerun. A second run changes nothing.
+"""
+
+from __future__ import annotations
+
+import argparse
+import unicodedata
+import json
+import plistlib
+import re
+import sys
+from collections import defaultdict
+from importlib import import_module
+from pathlib import Path
+
+SCRIPT_DIR = Path(__file__).resolve().parent
+REPO_ROOT = SCRIPT_DIR.parents[2]
+APP_ROOT = REPO_ROOT / "Pillie"
+PLAN_DIR = SCRIPT_DIR / "voice-plan"
+LOCKED_PATH = SCRIPT_DIR / "locked-copy.json"
+HONEST_PATH = SCRIPT_DIR / "honest-paywall-locales.json"
+LOCKED_LANGS = ("en", "de", "it")
+INFO_PLIST = APP_ROOT / "Pillie" / "Info.plist"
+LITERAL_GLOBS = [
+    (APP_ROOT / "PillieTests", "*.swift"),
+    (REPO_ROOT / ".agents" / "skills" / "verify-pillie" / "flows", "*.flow"),
+    (REPO_ROOT / ".agents" / "skills" / "verify-pillie" / "features", "*.md"),
+]
+SCRIPTS = {
+    "hi": "DEVANAGARI", "mr": "DEVANAGARI", "bn": "BENGALI", "gu": "GUJARATI", "pa": "GURMUKHI",
+    "or": "ORIYA", "ta": "TAMIL", "te": "TELUGU", "kn": "KANNADA", "ml": "MALAYALAM",
+    "ar": "ARABIC", "ur": "ARABIC", "he": "HEBREW", "th": "THAI", "el": "GREEK",
+    "ru": "CYRILLIC", "uk": "CYRILLIC",
+}
+SWIFT_STRING = re.compile(r'"(?:[^"\\\n]|\\.)*"')
+PLACEHOLDER = re.compile(r"%(?:\d+\$)?(?:lld|ld|d|@|%)")
+PLURAL_CATEGORIES = ("zero", "one", "two", "few", "many", "other")
+Value = str | dict[str, str]
+
+sys.path.insert(0, str(SCRIPT_DIR))
+inventory = import_module("copy-inventory")
+lint = import_module("copy-voice-lint")
+APP_LANGUAGE_CODES = inventory.APP_LANGUAGE_CODES
+
+
+def read_json(path: Path) -> dict:
+    return json.loads(path.read_text())
+
+
+def write_json(path: Path, data: dict) -> None:
+    path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n")
+
+
+def load_plans() -> dict[str, dict[str, Value]]:
+    plans = {path.stem: read_json(path) for path in sorted(PLAN_DIR.glob("*.json"))}
+    unknown = sorted(set(plans) - set(APP_LANGUAGE_CODES))
+    if unknown:
+        raise SystemExit(f"plan files for unknown locales: {unknown}")
+    return plans
+
+
+class Catalogs:
+    def __init__(self) -> None:
+        self.data = {table: read_json(files.source) for table, files in inventory.CATALOGS.items()}
+        self.info_plist_text = INFO_PLIST.read_text()
+        self.info_plist = plistlib.loads(self.info_plist_text.encode())
+        self.info_strings = {
+            path.parent.stem: path.read_text()
+            for path in (APP_ROOT / "Pillie").glob("*.lproj/InfoPlist.strings")
+        }
+
+    def keys(self) -> set[str]:
+        refs = {f"{t}:{k}" for t, d in self.data.items() for k in d["strings"]}
+        return refs | {f"InfoPlist:{k}" for k in self.info_plist if k.endswith("UsageDescription")}
+
+    def get(self, ref: str, lang: str) -> str | None:
+        table, key = ref.split(":", 1)
+        if table == "InfoPlist":
+            if lang == "en":
+                return self.info_plist.get(key)
+            match = re.search(rf'^"{key}"\s*=\s*"((?:[^"\\]|\\.)*)";', self.info_strings.get(lang, ""), re.M)
+            return match and match.group(1).replace('\\"', '"')
+        entry = self.data[table]["strings"].get(key) or {}
+        plural = entry.get("localizations", {}).get(lang, {}).get("variations", {}).get("plural")
+        if plural:
+            return {category: form["stringUnit"]["value"] for category, form in plural.items()}
+        return inventory.value_of(entry, lang)
+
+    def set(self, ref: str, lang: str, value: Value) -> None:
+        table, key = ref.split(":", 1)
+        if table == "InfoPlist":
+            if lang == "en":
+                self.info_plist[key] = value
+                escaped = value.replace("&", "&amp;").replace("<", "&lt;")
+                self.info_plist_text = re.sub(
+                    rf"(<key>{key}</key>\s*<string>).*?(</string>)",
+                    lambda m: m.group(1) + escaped + m.group(2),
+                    self.info_plist_text,
+                    flags=re.S,
+                )
+                return
+            escaped = value.replace("\\", "\\\\").replace('"', '\\"')
+            self.info_strings[lang] = re.sub(
+                rf'^"{key}"\s*=\s*".*";$',
+                lambda _: f'"{key}" = "{escaped}";',
+                self.info_strings[lang],
+                flags=re.M,
+            )
+            return
+        unit = self.data[table]["strings"][key].setdefault("localizations", {}).setdefault(lang, {})
+        if isinstance(value, dict):
+            unit.pop("stringUnit", None)
+            unit["variations"] = {"plural": {
+                category: {"stringUnit": {"state": "translated", "value": value[category]}}
+                for category in PLURAL_CATEGORIES if category in value
+            }}
+        else:
+            unit.pop("variations", None)
+            unit["stringUnit"] = {"state": "translated", "value": value}
+
+    def delete(self, ref: str) -> None:
+        table, key = ref.split(":", 1)
+        self.data[table]["strings"].pop(key, None)
+
+    def save(self) -> None:
+        for table, files in inventory.CATALOGS.items():
+            for path in (files.source, *files.mirrors):
+                write_json(path, self.data[table])
+        INFO_PLIST.write_text(self.info_plist_text)
+        for lang, text in self.info_strings.items():
+            (APP_ROOT / "Pillie" / f"{lang}.lproj" / "InfoPlist.strings").write_text(text)
+
+
+def foreign_script(lang: str, value: str) -> str | None:
+    own = SCRIPTS.get(lang)
+    for char in value:
+        block = unicodedata.name(char, "").split(" ")[0] if char.isalpha() else ""
+        if block in SCRIPTS.values() and block != own:
+            return block
+    return None
+
+
+def is_all_caps(value: str) -> bool:
+    letters = [c for c in PLACEHOLDER.sub("", value) if c.isalpha() and c.lower() != c.upper()]
+    return len(letters) >= 3 and all(c.isupper() for c in letters)
+
+
+def argument_types(value: str) -> list[str]:
+    args, literal_percents, position = {}, 0, 0
+    for match in PLACEHOLDER.finditer(value):
+        token = match.group(0)
+        if token == "%%":
+            literal_percents += 1
+            continue
+        index = re.match(r"%(\d+)\$", token)
+        position = int(index.group(1)) if index else position + 1
+        args[position] = re.sub(r"^%(\d+\$)?", "", token)
+    return [args[i] for i in sorted(args)] + ["%"] * literal_percents
+
+
+def forms(value: Value) -> list[tuple[str, str]]:
+    if isinstance(value, dict):
+        return [(f" ({category})", form) for category, form in value.items()]
+    return [("", value)]
+
+
+def check(plans: dict[str, dict[str, Value]], catalogs: Catalogs) -> list[str]:
+    errors = []
+    known = catalogs.keys()
+    english = {ref: plans.get("en", {}).get(ref) or catalogs.get(ref, "en") or "" for ref in known}
+    live = {f"{r['table']}:{r['key']}" for r in inventory.rows() if r["swift_ref"] != "none"}
+    for lang, plan in plans.items():
+        if lang != "en":
+            errors += [f"{lang} {ref}: missing from plan" for ref in sorted(live - set(plan))]
+        for ref, value in plan.items():
+            if ref not in known:
+                errors.append(f"{lang} {ref}: no such key")
+                continue
+            source = english[ref]
+            if isinstance(source, dict):
+                source = source.get("other", "")
+            if isinstance(value, dict):
+                if "other" not in value or set(value) - set(PLURAL_CATEGORIES):
+                    errors.append(f"{lang} {ref}: plural forms {sorted(value)} need other and only CLDR categories")
+            for label, form in forms(value):
+                if argument_types(form) != argument_types(source):
+                    errors.append(f"{lang} {ref}{label}: placeholders {argument_types(form)} != English {argument_types(source)}")
+                if lang == "en":
+                    errors += [f"en {ref}{label}: {hit}" for hit in lint.findings(form)]
+                    continue
+                if "—" in form:
+                    errors.append(f"{lang} {ref}{label}: em dash")
+                if block := foreign_script(lang, form):
+                    errors.append(f"{lang} {ref}{label}: {block} letters in a {lang} string")
+                if is_all_caps(form) and not is_all_caps(source):
+                    errors.append(f"{lang} {ref}{label}: all caps, let SwiftUI uppercase it")
+    return errors
+
+
+def swift_literal(value: str) -> str:
+    return '"' + value.replace("\\", "\\\\").replace('"', '\\"').replace("\n", "\\n") + '"'
+
+
+def rewrite_literals(changes: list[tuple[str, str, str, str]], catalogs: Catalogs) -> list[str]:
+    targets: dict[str, set[str]] = defaultdict(set)
+    for _lang, _ref, old, new in changes:
+        if isinstance(old, str) and isinstance(new, str):
+            targets[swift_literal(old)].add(swift_literal(new))
+    kept = {
+        swift_literal(value)
+        for ref in catalogs.keys()
+        for lang in APP_LANGUAGE_CODES
+        if isinstance(value := catalogs.get(ref, lang), str)
+    }
+    notes = []
+    for path in (p for root, pattern in LITERAL_GLOBS for p in root.glob(pattern)):
+        text = path.read_text()
+        found = set(SWIFT_STRING.findall(text)) & targets.keys()
+        swaps = {}
+        for literal in sorted(found):
+            if len(targets[literal]) > 1 or literal in kept:
+                notes.append(f"{path.relative_to(REPO_ROOT)}: {literal} is ambiguous, fix by hand")
+            else:
+                swaps[literal] = next(iter(targets[literal]))
+        if swaps:
+            path.write_text(SWIFT_STRING.sub(lambda m: swaps.get(m.group(0), m.group(0)), text))
+            notes.append(f"{path.relative_to(REPO_ROOT)}: rewrote pinned copy")
+    return notes
+
+def sync_locked(plans: dict[str, dict[str, Value]]) -> None:
+    locked = read_json(LOCKED_PATH)
+    for item in locked["entries"]:
+        ref = f"{item['table']}:{item['key']}"
+        for lang in LOCKED_LANGS:
+            if ref in plans.get(lang, {}):
+                item[lang] = plans[lang][ref]
+    write_json(LOCKED_PATH, locked)
+    honest = read_json(HONEST_PATH)
+    for lang, table in honest.items():
+        for key in table:
+            ref = f"Commerce:{key}"
+            if ref in plans.get(lang, {}):
+                table[key] = plans[lang][ref]
+    write_json(HONEST_PATH, honest)
+
+
+def apply(plans: dict[str, dict[str, Value]], catalogs: Catalogs) -> None:
+    changes = []
+    for lang, plan in plans.items():
+        for ref, value in plan.items():
+            old = catalogs.get(ref, lang)
+            if old != value:
+                changes.append((lang, ref, old, value))
+                catalogs.set(ref, lang, value)
+    catalogs.save()
+    sync_locked(plans)
+    for note in rewrite_literals([c for c in changes if c[2]], catalogs):
+        print(note)
+    print(f"applied {len(changes)} values across {len(plans)} locales")
+
+
+def prune(catalogs: Catalogs) -> None:
+    dead = [f"{r['table']}:{r['key']}" for r in inventory.rows() if r["swift_ref"] == "none"]
+    for ref in dead:
+        catalogs.delete(ref)
+    catalogs.save()
+    live = catalogs.keys()
+    locked = read_json(LOCKED_PATH)
+    locked["entries"] = [e for e in locked["entries"] if f"{e['table']}:{e['key']}" in live]
+    write_json(LOCKED_PATH, locked)
+    honest = read_json(HONEST_PATH)
+    for table in honest.values():
+        for key in [k for k in table if f"Commerce:{k}" not in live]:
+            del table[key]
+    write_json(HONEST_PATH, honest)
+    print(f"pruned {len(dead)} keys no Swift code reads")
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("command", choices=["check", "apply", "prune"])
+    parser.add_argument("--only", help="comma-separated locales to load, plus en")
+    args = parser.parse_args()
+    catalogs = Catalogs()
+    if args.command == "prune":
+        prune(catalogs)
+        return 0
+    plans = load_plans()
+    if args.only:
+        keep = {"en", *args.only.split(",")}
+        plans = {lang: plan for lang, plan in plans.items() if lang in keep}
+    errors = check(plans, catalogs)
+    if errors:
+        print("\n".join(errors))
+        return 1
+    if args.command == "apply":
+        apply(plans, catalogs)
+    else:
+        print(f"ok: {sum(len(p) for p in plans.values())} values in {len(plans)} locales")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

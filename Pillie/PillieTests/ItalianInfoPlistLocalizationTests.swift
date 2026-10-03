@@ -19,7 +19,7 @@ final class ItalianInfoPlistLocalizationTests: XCTestCase {
 
         XCTAssertEqual(
             values["NSMotionUsageDescription"],
-            "Pillie usa il movimento per rilevare le scosse quando confermi una registrazione."
+            "Pillie usa il movimento per capire quando scuoti il telefono per confermare."
         )
         XCTAssertEqual(
             values["NSUserTrackingUsageDescription"],

@@ -17,7 +17,7 @@ expect text "Day 10 of 28"
 shot wearing
 
 openurl "pillie://debug/routine-day?method=ring&day=22&lang=en"
-wait text "Take your ring out" 10
+wait text "Remove your ring" 10
 expect text "Until tomorrow 8:00 AM"
 shot late-out
 
@@ -36,7 +36,7 @@ shot ring-free-week
 openurl "pillie://debug/routine-day?method=ring&day=28&lang=en"
 wait text "until it goes back in" 10
 openurl pillie://debug/fixed-now?at=2026-09-29T16:00:00Z
-wait text "Put a new ring in" 10
+wait text "Insert a new ring" 10
 expect text "Day 29 · new cycle"
 shot late-back-in
 
@@ -60,9 +60,9 @@ shot new-cycle-due
 # The day after an unlogged insertion reads missed.
 openurl pillie://debug/fixed-now?at=2026-09-28T16:00:00Z
 openurl "pillie://debug/routine-day?method=ring&day=1&lang=en"
-wait text "Put your ring in" 10
+wait text "Insert your ring" 10
 openurl pillie://debug/fixed-now?at=2026-09-29T16:00:00Z
-wait text "Put your ring in now" 10
+wait text "Insert your ring now" 10
 expect text "Was due yesterday"
 expect text "Insert ring"
 shot missed-in

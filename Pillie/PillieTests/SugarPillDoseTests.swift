@@ -65,7 +65,7 @@ struct SugarPillScheduleTests {
         let action = try #require(DoseScheduleEngine.dueAction(on: day(21), pack: pack(.twentyOneSeven), calendar: calendar))
         #expect(DueActionCopy.key(for: action) == "today.action.take_pill")
         #expect(action.badgeLabel == "PILL")
-        #expect(action.localizedReminderBody(locale: Locale(identifier: "en")) == "Hey, quick check-in. Log your pill when you're done")
+        #expect(action.localizedReminderBody(locale: Locale(identifier: "en")) == "Take it, then tap here to check in.")
     }
 
     @Test func sugarDayGetsDueRemindersAndNoTransitionNotice() {

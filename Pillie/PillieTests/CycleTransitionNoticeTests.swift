@@ -222,13 +222,13 @@ final class CycleTransitionNoticeTests: XCTestCase {
         let resume = day(2026, 6, 23)
 
         for method in ContraceptiveMethod.allCases {
-            XCTAssertEqual(CycleTransitionCopy.title(for: method), "Break days begin today")
+            XCTAssertEqual(CycleTransitionCopy.title(for: method), "Your break starts today")
         }
 
         let expectedBodies: [ContraceptiveMethod: String] = [
-            .pill: "Scheduled pill reminders pause during your break days.",
-            .patch: "Scheduled patch reminders pause during your patch-free days.",
-            .ring: "Scheduled ring reminders pause during your ring-free days."
+            .pill: "No pill reminders during your break days. They start again with your next pack.",
+            .patch: "No patch reminders during your patch-free days. They start again with your next patch.",
+            .ring: "No ring reminders during your ring-free days. They start again when it’s time to insert your ring."
         ]
         for method in ContraceptiveMethod.allCases {
             let body = CycleTransitionCopy.body(for: method, resumeDate: resume, calendar: calendar)

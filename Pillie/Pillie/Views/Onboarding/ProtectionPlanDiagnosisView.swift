@@ -512,7 +512,7 @@ struct ProtectionPlanDiagnosisView: View {
 
     private var handNote: some View {
         Text(content.handNote)
-            .font(.pillieHandwriting(size: 26))
+            .font(.pillieHandwriting(size: 26, for: content.handNote))
             .foregroundStyle(PillieTheme.coral)
             .rotationEffect(.degrees(-3))
             .padding(.top, 4)

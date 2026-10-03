@@ -1,2 +1,2 @@
-"NSMotionUsageDescription" = "Pillie bruger bevægelsesdata til at registrere rystelser, når du bekræfter en handling.";
-"NSUserTrackingUsageDescription" = "Tillad sporing, så Pillie kan lære, hvilke kanaler der førte dig hertil. Vi sælger aldrig dine personlige data.";
+"NSMotionUsageDescription" = "Pillie bruger bevægelsesdata til at mærke, når du ryster telefonen for at krydse af.";
+"NSUserTrackingUsageDescription" = "Tillad sporing, så Pillie kan se, hvilke kanaler der førte dig hertil, og gøre appen bedre. Vi sælger aldrig dine personlige data.";

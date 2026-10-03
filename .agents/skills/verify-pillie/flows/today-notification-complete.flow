@@ -15,7 +15,7 @@ expect text "Pill 21 of 28"
 wait text "Take pill" 10
 shot due
 openurl pillie://debug/notification-complete?lang=en
-wait text "That's logged. Tap to undo." 10
+wait text "Checked in. Tap to undo." 10
 wait text "Taken today" 10
 gone text "Take pill" 5
 shot completed

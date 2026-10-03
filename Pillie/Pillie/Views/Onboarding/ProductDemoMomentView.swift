@@ -193,6 +193,7 @@ struct ProductDemoMomentView: View {
     HStack(spacing: 12) {
       Text(day)
         .font(.pillie(10, weight: .black))
+        .textCase(.uppercase)
         .foregroundStyle(PillieTheme.textMuted)
         .frame(width: 34, alignment: .leading)
 

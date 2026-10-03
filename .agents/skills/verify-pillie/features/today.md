@@ -8,7 +8,7 @@ blocking/trial status surfaces, and (when eligible) the review ask.
 - `today-open` shows the home tab after launch, with the due action
   reflected in the status card and the floating CTA.
 - `today-status-card` shows the reminder time and the due-action line; it
-  goes coral and reads "That's logged. Tap to undo." once taken.
+  goes coral and reads "Checked in. Tap to undo." once taken.
 - `today-pill-pack-card` shows the V1 pack card for pill users
   (`HomePackCard`, ENG-145): "Pill 12 of 28" header, weekdays, grid, today
   ringed, an untaken pill past its reminder late (amber) and missed once the
@@ -17,7 +17,7 @@ blocking/trial status surfaces, and (when eligible) the review ask.
   tile once Home is visible again.
 - `today-countdown-card` shows the V4 countdown card for patch and ring
   users (`HomeCountdownCard`, ENG-149): gauge with the patch, sachet or ring
-  art, a day countdown or "Today" / "Late" / "Missed", and the milestone
+  art, a day countdown or "Today" / "Late" / "Overdue", and the milestone
   track (Patch 1, Patch 2, Patch 3, Off, New pack; or In, Out, Back in).
   States come from `HomeCountdownProgress`. The "…" menu
   (`#homeCountdownOptions`) starts a new cycle. It has no log button.
@@ -51,9 +51,9 @@ blocking/trial status surfaces, and (when eligible) the review ask.
 
 - Launch the app. Today is the default tab.
 - Tap the floating action button to log today's dose. Plus users confirm
-  with a physical shake, or its "Tap to Confirm Instead" fallback for
+  with a physical shake, or its "Tap to check in instead" fallback for
   accessibility.
-- Tap "That's logged. Tap to undo." to undo a mistaken tap.
+- Tap "Checked in. Tap to undo." to undo a mistaken tap.
 - Tap the small trial chip near the top (only visible during an active
   Reverse Trial) to open its status sheet; its own "Keep Plus" button is a
   real, quiet buy-early entry point.
@@ -96,7 +96,7 @@ blocking/trial status surfaces, and (when eligible) the review ask.
   yesterday"), its tile `#packTile.21` opens the History day sheet, and
   marking it taken redraws the card.
 - `flows/today-change-pack.flow` — the "…" menu's Change pack type opens
-  the pack sheet, then the Settings "Reset Tracking Data?" confirmation.
+  the pack sheet, then the Settings "Clear your history?" confirmation.
   Cancel keeps the pack; Reset & Save starts the new pack at pill 1 today.
 - `flows/today-patch-countdown.flow` — `/routine-day?method=patch&day=N`
   plus `/fixed-now` walks the patch card: wearing (day 10), late change
@@ -111,18 +111,18 @@ blocking/trial status surfaces, and (when eligible) the review ask.
   with an evening reminder and, before that reminder, logs the day-1 insert
   from Home. The streak starts at 1.
 - `flows/today-catch-up.flow` — a missed patch change stays loggable from
-  Home until the next task day: day 16 reads Missed with "Change patch" on
+  Home until the next task day: day 16 reads Overdue with "Change patch" on
   the button, the Shake fallback logs it late ("On today"), undo restores
-  Missed, day 17 shows "Was due Sep 28" and logs again, and the History
-  sheet for the missed day says "Logged 2 days late" (`#historyDayCatchUp`)
-  while the day stays "Not logged".
+  Overdue, day 17 shows "Was due Sep 28" and logs again, and the History
+  sheet for the missed day says "Checked in 2 days late" (`#historyDayCatchUp`)
+  while the day stays "Missed".
 - `pillie://debug/countdown-card` opens a gallery of the 16 Paper lifecycle
   cards built from fixed `HomeCountdownProgress` values.
 - `flows/today-long-pack.flow` — onboarding picks a Custom 88 + 3 pack, then
   Home opens its card on the page with today ("Weeks 5 to 8 of 13").
 - `flows/today-sugar-pill.flow` — a 21 + 7 sugar day is due ("Take pill"),
   logs, undoes and logs again without moving the streak; History reads the
-  open sugar day as "Not logged" (never "Break") and as "Done" once taken; a
+  open sugar day as "Missed" (never "Break") and as "Done" once taken; a
   21 only pill-free day stays "Nothing to take".
 - `flows/today-notification-complete.flow` — `/notification-complete` runs
   the reminder's Complete action while Home is open; the status card, CTA and
@@ -134,6 +134,9 @@ blocking/trial status surfaces, and (when eligible) the review ask.
   shake.
 - `flows/smoke.flow` covers the plain tab bar (Today/History/Settings) with
   `/plus-home`.
+- `flows/tab-bar-rtl.flow` — the same tab bar in Arabic: taps and edge
+  swipes land on the tab in the mirrored order, and each shot shows the pink
+  indicator under the selected tab.
 - Not covered by an authored flow, and why: `ProtectionOffCard` needs an
   expired trial with a saved blocker config (reachable by combining
   `/trial-eve-of-break` with a larger `/trial-age?days=N`, past the 14-day
@@ -151,7 +154,7 @@ blocking/trial status surfaces, and (when eligible) the review ask.
   CTA.
 - Shake detection cannot be driven on the simulator. Tap
   `#shakeConfirmStage` once per shake to step the stages, or
-  `#shakeTapToConfirmFallback` ("Tap to Confirm Instead") to finish at once.
+  `#shakeTapToConfirmFallback` ("Tap to check in instead") to finish at once.
 - `homeBlockingStatusCardDismissed` is a persistent `@AppStorage` flag that
   survives `launch`. Start a flow from `fresh` whenever it needs the
   blocking card in its default (not dismissed) state.
@@ -164,5 +167,5 @@ blocking/trial status surfaces, and (when eligible) the review ask.
 - `developerMenuAvatarButton` is debug-only. Do not treat it as a user path.
 - Never tap `#trialKeepPlus` or any other purchase/subscribe control — they
   open `HonestPaywallHost`/StoreKit, which the simulator cannot complete.
-- A fresh install's default pack lands on its break day ("Day 28 of 28", "There's nothing due today."). `today-home.flow` pins the clock and applies the `missedRecentDays` scenario to get a due pill. Verified live.
+- A fresh install's default pack lands on its break day ("Day 28 of 28", "Nothing to do today."). `today-home.flow` pins the clock and applies the `missedRecentDays` scenario to get a due pill. Verified live.
 - Developer-menu row ids leak onto the row's child texts and icon. The runner taps the first on-screen match, so `tap --id developerScenario.<name>` works in a flow; raw `axe tap --id` would see 3 matches.

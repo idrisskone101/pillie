@@ -265,9 +265,9 @@ final class TrialStatusPresentationTests: XCTestCase {
 
         XCTAssertEqual(rows.map(\.dateText), ["July 11", "July 14", "July 16"])
         XCTAssertEqual(rows.map(\.text), [
-            "We’ll remind you that 5 days are left.",
+            "Pillie reminds you when 5 active days are left.",
             "A last reminder before your trial ends.",
-            "App blocking turns off. Reminders stay free, and your setup stays saved.",
+            "App blocking turns off. Daily reminders stay free, and your setup stays saved.",
         ])
         XCTAssertEqual(rows.map(\.symbol), ["bell.fill", "bell.fill", "lock.fill"])
     }

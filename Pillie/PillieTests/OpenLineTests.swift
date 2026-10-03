@@ -50,7 +50,7 @@ final class OpenLineTests: XCTestCase {
         // above the footer, which sits at the bottom as a diagnostics rule.
         let body = try XCTUnwrap(OpenLine.Intent.issueReport(Self.sampleDiagnostics).body)
         XCTAssertTrue(
-            body.hasPrefix("Tell us what went wrong — the more detail, the better. Type above this line."),
+            body.hasPrefix("Tell us what went wrong. The more detail, the better. Type above this line."),
             body
         )
     }
@@ -61,7 +61,7 @@ final class OpenLineTests: XCTestCase {
         XCTAssertEqual(
             body,
             """
-            Tell us what went wrong — the more detail, the better. Type above this line.
+            Tell us what went wrong. The more detail, the better. Type above this line.
 
             ———
             App: 2.0.1 (42)
@@ -92,7 +92,7 @@ final class OpenLineTests: XCTestCase {
                 URLQueryItem(
                     name: "body",
                     value: """
-                    Tell us what went wrong — the more detail, the better. Type above this line.
+                    Tell us what went wrong. The more detail, the better. Type above this line.
 
                     ———
                     App: 2.0.1 (42)

@@ -441,14 +441,11 @@ private struct CustomReminderPresetPicker: View {
                     .fixedSize(horizontal: false, vertical: true)
             }
 
+            let selectedPreset = draft.appliedPreset
+                ?? CustomReminderPreset.matching(draft.messages, locale: locale)
             LazyVGrid(columns: columns, spacing: 10) {
                 ForEach(CustomReminderPreset.allCases) { preset in
-                    let isSelected = draft.appliedPreset == preset
-                        || (draft.appliedPreset == nil
-                            && CustomReminderPreset.matching(
-                                draft.messages,
-                                locale: locale
-                            ) == preset)
+                    let isSelected = selectedPreset == preset
 
                     Button {
                         feedback.openRow(accessibilityReduceMotion: accessibilityReduceMotion)

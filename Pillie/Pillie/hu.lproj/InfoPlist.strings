@@ -1,2 +1,2 @@
-"NSMotionUsageDescription" = "A Pillie a mozgásérzékelővel ismeri fel a rázást, amikor megerősítesz egy teendőt.";
-"NSUserTrackingUsageDescription" = "Engedélyezd a követést, hogy a Pillie megtudja, melyik csatornán találtál ránk. A személyes adataidat soha nem adjuk el.";
+"NSMotionUsageDescription" = "A Pillie a mozgásérzékelővel ismeri fel, amikor megrázod a telefont, hogy kipipáld a mai lépést.";
+"NSUserTrackingUsageDescription" = "Engedélyezd a követést, hogy a Pillie lássa, melyik csatornán találtál ránk, és jobbá tegye az appot. A személyes adataidat soha nem adjuk el.";

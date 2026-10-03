@@ -44,7 +44,7 @@ shot missed-change
 
 openurl pillie://debug/fixed-now?at=2026-09-28T16:00:00Z
 openurl "pillie://debug/routine-day?method=patch&day=22&lang=en"
-wait text "Take patch 3 off" 10
+wait text "Remove patch 3" 10
 shot late-off-day
 
 openurl "pillie://debug/routine-day?method=patch&day=25&lang=en"
@@ -67,7 +67,7 @@ wait text "Start a new cycle?" 10
 # The alert's "Start new" shares its label with the banner and CTA behind it; tap it by point.
 tap -x 275 -y 497
 gone text "Start a new cycle?" 10
-wait text "Put on patch 1" 10
+wait text "Apply patch 1" 10
 expect text "Due 8:00 AM"
 shot put-on-due
 openurl pillie://debug/fixed-now?at=off

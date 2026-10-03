@@ -43,7 +43,7 @@ tap --label "Not now" --element-type Button  # the screen id leaks onto every ch
 # ProtectionPlanOnboarding.swift:30-31). Title: onboarding.personalise.pain.title.
 # Chip labels: onboarding.personalise.choice.tiktok ("TikTok"),
 # onboarding.personalise.outcome.simple ("A simpler routine").
-wait text "What's in the way?"
+wait text "What’s in the way?"
 shot pain-points
 tap --label TikTok
 tap --label "A simpler routine"
@@ -78,7 +78,7 @@ tap --id protectionPlanPrimaryCTA
 # pill is tapped and answered. packTile.<n> ids come from PackCard's onSelectDay;
 # todayPillQuestion / todayPillYes / todayPillLogged from TodayPillView. Title:
 # onboarding.today_pill.title. Patch and ring get RoutineDialView (onboarding-dial.flow).
-wait text "Tap the pill you're on today."
+wait text "Tap the pill you’re on today."
 shot today-pill
 tap --id packTile.12
 wait id todayPillQuestion

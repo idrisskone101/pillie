@@ -1,2 +1,2 @@
-"NSMotionUsageDescription" = "Pillieは、アクションを確認するときのシェイクを検出するためにモーションを使用します。";
-"NSUserTrackingUsageDescription" = "トラッキングを許可すると、Pillieはどの経路であなたがここに来たかを知ることができます。個人データを販売することは決してありません。";
+"NSMotionUsageDescription" = "Pillieはモーションセンサーを使って、記録するためにスマートフォンを振ったことを検知します。";
+"NSUserTrackingUsageDescription" = "トラッキングを許可すると、PillieはどこでPillieを知ったかを測定し、アプリの改善に役立てます。個人データを販売することはありません。";

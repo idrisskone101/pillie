@@ -1,2 +1,2 @@
-"NSMotionUsageDescription" = "Pillie dùng cảm biến chuyển động để nhận biết khi bạn lắc máy xác nhận một việc.";
-"NSUserTrackingUsageDescription" = "Cho phép theo dõi để Pillie biết kênh nào đã đưa bạn đến đây. Chúng mình không bao giờ bán dữ liệu cá nhân của bạn.";
+"NSMotionUsageDescription" = "Pillie dùng cảm biến chuyển động để nhận biết khi bạn lắc điện thoại để điểm danh.";
+"NSUserTrackingUsageDescription" = "Cho phép theo dõi để Pillie đo được kênh nào đưa bạn đến đây và cải thiện ứng dụng. Chúng mình không bao giờ bán dữ liệu cá nhân của bạn.";

@@ -47,17 +47,17 @@ final class ProtectionPlanOnboardingContentTests: XCTestCase {
         // Beat 1 — the reminder arrives and asks for the action to be logged.
         let first = (content.drift.title + " " + content.drift.detail).lowercased()
         XCTAssertTrue(first.contains("reminder"), "Beat 1 must name the reminder.")
-        XCTAssertTrue(first.contains("log"), "Beat 1 must explain the check-in action.")
+        XCTAssertTrue(first.contains("check in"), "Beat 1 must explain the check-in action.")
 
         // Beat 2 — selected apps pause until the user confirms.
         let second = (content.checkpoint.title + " " + content.checkpoint.detail).lowercased()
         XCTAssertTrue(second.contains("pause"), "Beat 2 must show the selected apps pausing.")
-        XCTAssertTrue(second.contains("confirm"), "Beat 2 must explain how the pause ends.")
+        XCTAssertTrue(second.contains("check in"), "Beat 2 must explain how the pause ends.")
 
         // Beat 3 — logging the action makes the apps available again.
         let third = (content.resolved.title + " " + content.resolved.detail).lowercased()
-        XCTAssertTrue(third.contains("available"), "Beat 3 must make the apps available again.")
-        XCTAssertTrue(third.contains("logged"), "Beat 3 must follow a logged action.")
+        XCTAssertTrue(third.contains("open again"), "Beat 3 must make the apps available again.")
+        XCTAssertTrue(third.contains("checked in"), "Beat 3 must follow a check-in.")
     }
 
     func testEarlyValueProofCopyAvoidsConfusingJargon() {
@@ -113,10 +113,10 @@ final class ProtectionPlanOnboardingContentTests: XCTestCase {
         // The locked-state cue + CTA teach the real check-in gesture: a phone shake.
         XCTAssertTrue(content.shakeCue.lowercased().contains("shake"))
         XCTAssertTrue(content.shakeCue.lowercased().contains("phone"))
-        XCTAssertEqual(content.shakeToTakeCTA, "Try Shake to Confirm")
+        XCTAssertEqual(content.shakeToTakeCTA, "Try shaking to check in")
         // The static / VoiceOver narrative still explains the pause-and-log loop.
-        XCTAssertTrue(content.resolved.detail.lowercased().contains("logged"))
-        XCTAssertTrue(content.resolved.title.lowercased().contains("available"))
+        XCTAssertTrue(content.resolved.detail.lowercased().contains("open again"))
+        XCTAssertTrue(content.resolved.title.lowercased().contains("checked in"))
         XCTAssertTrue(content.accessibilitySummary.lowercased().contains("check"))
     }
 
@@ -149,8 +149,8 @@ final class ProtectionPlanOnboardingContentTests: XCTestCase {
         let content = ProtectionPlanDiagnosisContent.localized(locale: english)
         XCTAssertEqual(content.eyebrow, "Next")
         XCTAssertEqual(content.analyzingTitle, "Your reminder plan")
-        XCTAssertEqual(content.analyzingSubtitle, "Built from the routine you selected.")
-        XCTAssertEqual(content.protectedAppsHeader, "Protected apps")
+        XCTAssertEqual(content.analyzingSubtitle, "Based on the routine you picked.")
+        XCTAssertEqual(content.protectedAppsHeader, "Apps to pause")
         XCTAssertEqual(content.primaryCTA, "Continue")
         // The word "diagnosis" must never reach the user — the screen reveals a plan.
         for line in content.visibleCopy {
@@ -169,11 +169,11 @@ final class ProtectionPlanOnboardingContentTests: XCTestCase {
 
     func testMechanismProofShowsTheThreeStepLoopInOrder() {
         let content = ProtectionPlanMechanismProofContent(method: .pill, locale: english)
-        XCTAssertEqual(content.steps.map(\.phase), ["REMINDER", "APP PAUSE", "CONTINUE"])
+        XCTAssertEqual(content.steps.map(\.phase), ["Reminder", "App blocking", "Check in"])
         // Beat 1 rings, beat 2 locks, beat 3 unlocks — the cause/effect loop.
-        XCTAssertEqual(content.trigger.title, "Reminder rings")
+        XCTAssertEqual(content.trigger.title, "Your reminder goes off")
         XCTAssertTrue(content.enforce.title.lowercased().contains("pause"))
-        XCTAssertTrue(content.release.title.lowercased().contains("log"))
+        XCTAssertTrue(content.release.title.lowercased().contains("check in"))
         XCTAssertEqual(content.replayCTA, "Replay")
         XCTAssertEqual(content.continueCTA, "Continue")
     }
@@ -196,20 +196,20 @@ final class ProtectionPlanOnboardingContentTests: XCTestCase {
         let german = Locale(identifier: "de_DE")
         let content = ProtectionPlanMechanismProofContent(method: .pill, locale: german)
 
-        XCTAssertEqual(content.eyebrow, "SO FUNKTIONIERT’S")
+        XCTAssertEqual(content.eyebrow, "So funktioniert’s")
         XCTAssertEqual(
             content.headline,
-            "Deine Apps werden wieder verfügbar, sobald du die heutige Aktion protokollierst."
+            "Deine Apps sind wieder offen, sobald du abhakst."
         )
         XCTAssertEqual(
             content.steps.map { [$0.phase, $0.title, $0.detail] },
             [
-                ["ERINNERUNG", "Erinnerung klingelt", "Eine sanfte Erinnerung zur gewählten Zeit."],
-                ["APP-PAUSE", "Ablenkende Apps pausieren", "Ausgewählte Apps bleiben pausiert, bis du die Aktion protokollierst."],
-                ["WEITER", "Aktion protokollieren", "Danach sind deine Apps sofort wieder verfügbar."],
+                ["Erinnerung", "Deine Erinnerung klingelt", "Eine sanfte Erinnerung zur gewählten Zeit."],
+                ["App-Sperre", "Ablenkende Apps pausieren", "Die Apps, die du gewählt hast, bleiben pausiert, bis du abhakst."],
+                ["Abhaken", "Zum Abhaken tippen", "Deine Apps sind sofort wieder offen."],
             ]
         )
-        XCTAssertEqual(content.lockedLabel, "PAUSIERT")
+        XCTAssertEqual(content.lockedLabel, "Pausiert")
         XCTAssertEqual(content.markTakenCTA, "Ich habe meine Pille genommen")
         XCTAssertEqual(
             ProtectionPlanMechanismProofContent(method: .patch, locale: german).markTakenCTA,
@@ -224,13 +224,13 @@ final class ProtectionPlanOnboardingContentTests: XCTestCase {
         XCTAssertEqual(content.footer, "Teil deines Pillie-Erinnerungsplans.")
         XCTAssertEqual(
             content.unlockedConfirmation,
-            "Erledigt. Deine Apps sind wieder da."
+            "Erledigt. Deine Apps sind wieder offen."
         )
         XCTAssertEqual(
             content.replayAccessibilityHint,
-            "Spielt die Demonstration der App-Pause erneut ab."
+            "Spielt die Demo der App-Sperre noch einmal ab."
         )
-        XCTAssertFalse(content.visibleCopy.joined(separator: " ").contains("HOW IT WORKS"))
+        XCTAssertFalse(content.visibleCopy.joined(separator: " ").contains("How it works"))
     }
 
     func testMechanismProofNeverLeaksPillWordingForPatchOrRing() {

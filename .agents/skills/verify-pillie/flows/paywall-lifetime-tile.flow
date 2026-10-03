@@ -11,7 +11,7 @@ openurl pillie://debug/paywall-lifetime?price=%2489.99
 openurl pillie://debug/honest-paywall?board=trialEndedReturningHard&lang=en
 # A relaunch presents the hard wall when the install already holds this state.
 launch
-wait text "Your trial already ended." 20
+wait text "Your trial has ended." 20
 wait id paywallTile.lifetime 10
 expect id paywallTile.annual
 expect id paywallTile.monthly
@@ -23,13 +23,13 @@ shot hard-wall-year-three-tiles
 log start
 
 # The reassurance is plain text now. With a restore outcome armed, a tap that
-# still reached restore would raise "No Subscription Found".
+# still reached restore would raise "No subscription found".
 openurl pillie://debug/restore-outcome?result=none
 tap --id paywallReassurance
 sleep 3
-expect-not text "No Subscription Found"
-expect-not text "Couldn't restore purchases"
-expect text "Your trial already ended."
+expect-not text "No subscription found"
+expect-not text "Couldn’t restore your purchases"
+expect text "Your trial has ended."
 note no restore alert 3s after tapping Cancel anytime
 shot cancel-anytime-tap-no-restore
 
@@ -39,10 +39,10 @@ expect text "once"
 shot lifetime-selected
 
 tap --id paywallRestoreButton
-wait text "No Subscription Found" 10
+wait text "No subscription found" 10
 shot restore-no-subscription
 tap --label OK
-gone text "No Subscription Found"
+gone text "No subscription found"
 
 # Settings > Pillie Plus door. Drop the expired grant first so Home does not
 # auto-present the trial-end wall on launch.
@@ -51,7 +51,7 @@ openurl pillie://debug/trial-clear
 launch
 wait text Today 15
 openurl pillie://debug/review-prompt?lang=en   # free user, Plus off, onboarding done
-wait label "That's logged. Tap to undo." 10
+wait label "Checked in. Tap to undo." 10
 # Settings tab by its top edge; see paywall-restore.flow for why.
 tap -x 319 -y 800
 wait id settingsLanguageRow

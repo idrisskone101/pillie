@@ -48,7 +48,7 @@ tap --id xmark --element-type Button  # paywall close; a review-prompt "Close" c
 launch
 wait text Today 15  # the link rebuilds Home, then posts; an early post is lost
 openurl pillie://debug/honest-paywall?board=trialEndedReturningHard&lang=en
-wait text "Your trial already ended." 10
+wait text "Your trial has ended." 10
 # paywall.story.trial_ended.returning.hard.title (en). PillieApp.swift case
 # "trialEndedReturningHard": DebugQA.apply(.trialExpiredNewUserReturning).
 shot paywall-trial-ended-hard

@@ -57,7 +57,7 @@ The live day in Pillie is the 24-hour span from one Due Action Reminder to the n
 _Avoid_: Calendar today, midnight rollover, civil day as the check-in boundary
 
 **Smart Reminders**:
-The Pillie Plus feature covering every same-day re-fire of a Due Action Reminder after the first: the automatic Auto-Reminder Retry escalation and the user-initiated Snooze re-fire. Free users receive a single Due Action Reminder per due action with no retries and no Snooze action. Smart Reminders is a behavioral nudge enhancement; it does not change the primary reminder time and is not a medical or efficacy claim. The free-tier "Daily reminders" benefit refers only to the primary Due Action Reminder, not to Smart Reminders.
+The Pillie Plus feature covering every same-day re-fire of a Due Action Reminder after the first: the automatic Auto-Reminder Retry escalation and the user-initiated Snooze re-fire. Free users receive a single Due Action Reminder per due action with no retries and no Snooze action. Smart Reminders is a behavioral nudge enhancement; it does not change the primary reminder time and is not a medical or efficacy claim. The free-tier "Daily reminders" benefit refers only to the primary Due Action Reminder, not to Smart Reminders. User-facing copy calls this feature "Follow-up reminders" (see `docs/copy/voice.md`); Smart Reminders stays the internal domain term.
 _Avoid_: Daily reminders, smart notifications for free users, never-miss reminders, Last Call Reminder
 
 **Last Call Reminder**:

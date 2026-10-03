@@ -1,2 +1,2 @@
-"NSMotionUsageDescription" = "Pillie używa czujników ruchu, aby wykrywać potrząśnięcia, gdy potwierdzasz czynność.";
-"NSUserTrackingUsageDescription" = "Zezwól na śledzenie, aby Pillie mogło poznać, które kanały cię tu przywiodły. Nigdy nie sprzedajemy twoich danych osobowych.";
+"NSMotionUsageDescription" = "Pillie używa czujników ruchu, aby zauważyć, gdy potrząsasz telefonem, żeby odhaczyć dzień.";
+"NSUserTrackingUsageDescription" = "Zezwól na śledzenie, aby Pillie mogło sprawdzić, które kanały cię tu przywiodły, i ulepszać aplikację. Nigdy nie sprzedajemy twoich danych osobowych.";

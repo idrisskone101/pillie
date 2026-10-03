@@ -38,7 +38,7 @@ struct AppBlockingSetupContentTests {
         #expect(started)
         #expect(resolution == .showRecovery)
         #expect(permission.isRecoveryVisible)
-        #expect(content.retryAuthorizationCTA == "Try Again")
+        #expect(content.retryAuthorizationCTA == "Try again")
         #expect(content.skipCTA == "Not now")
     }
 
@@ -70,14 +70,14 @@ struct AppBlockingSetupContentTests {
 
     @Test func emptyStateExplainsScreenTimePickerAndUnlock() {
         #expect(content.emptyTitle == "This app is paused")
-        #expect(content.emptyMarkTaken == "Mark as taken")
+        #expect(content.emptyMarkTaken == "I took my pill")
         #expect(
             content.emptyDetail
                 == "Next, Apple asks for Screen Time so the apps can pause. Tap Continue."
         )
         #expect(content.chooseAppsCTA == "Allow pausing")
         #expect(content.emptyUnlockFormat.contains("%@"))
-        #expect(content.emptyUnlockFormat.lowercased().contains("unlock"))
+        #expect(content.emptyUnlockFormat.lowercased().contains("open this app again"))
     }
 
     @Test func formattedEmptyUnlockInsertsTheReminderClock() {
@@ -90,7 +90,7 @@ struct AppBlockingSetupContentTests {
         let normalized = formatted
             .replacingOccurrences(of: "\u{202F}", with: " ")
             .replacingOccurrences(of: "\u{00A0}", with: " ")
-        #expect(normalized == "Take your 9:00 PM pill to unlock.")
+        #expect(normalized == "Take your 9:00 PM pill to open this app again.")
     }
 
     @Test func phaseIsEmptyWhenEntitledAndIdle() {
@@ -136,7 +136,7 @@ struct AppBlockingSetupContentTests {
     @Test func selectedStateCopyReassuresPrivacy() {
         #expect(content.changeSelectionCTA == "Edit")
         let note = content.selectedPrivacyNote.lowercased()
-        #expect(note.contains("number"))
+        #expect(note.contains("how many"))
         #expect(note.contains("device"))
     }
 

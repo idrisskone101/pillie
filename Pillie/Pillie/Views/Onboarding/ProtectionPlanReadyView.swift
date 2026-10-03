@@ -201,7 +201,7 @@ struct ProtectionPlanReadyView: View {
 
     private var handNote: some View {
         Text(content.handNote)
-            .font(.pillieHandwriting(size: 27))
+            .font(.pillieHandwriting(size: 27, for: content.handNote))
             .foregroundStyle(PillieTheme.textMuted)
             .rotationEffect(.degrees(-3))
     }

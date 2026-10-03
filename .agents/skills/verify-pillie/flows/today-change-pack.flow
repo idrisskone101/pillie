@@ -1,5 +1,5 @@
 # Change the pack type from the Home pack card's "…" menu (HomePackCard). It
-# runs the same reset as the Settings schedule editor: "Reset Tracking Data?"
+# runs the same reset as the Settings schedule editor: "Clear your history?"
 # (ScheduleCriticalSettingChange, day 1), then PillStore.resetAndStartFresh, so
 # the new pack starts at pill 1 today and history clears.
 fresh
@@ -19,10 +19,10 @@ tap --id homePackChangeType
 wait id packSheet.custom 10
 shot sheet
 tap --id packSheet.24_4
-wait text "Reset Tracking Data?" 10
+wait text "Clear your history?" 10
 shot reset-confirmation
 tap --label Cancel
-gone text "Reset Tracking Data?" 5
+gone text "Clear your history?" 5
 expect text "Pill 21 of 28"
 
 # Confirm starts the 24 + 4 pack at pill 1 today.
@@ -31,8 +31,8 @@ wait id homePackChangeType 5
 tap --id homePackChangeType
 wait id packSheet.custom 10
 tap --id packSheet.24_4
-wait text "Reset Tracking Data?" 10
-tap --label "Reset & Save"
+wait text "Clear your history?" 10
+tap --label "Clear and save"
 wait text "Pill 1 of 28" 10
 expect text "New pack · 24/4"
 gone text "Late · still time until" 2
@@ -46,7 +46,7 @@ shot before-first-reminder
 
 # The first reminder closes pill 1's window unlogged.
 openurl pillie://debug/fixed-now?at=2026-09-29T13:00:00Z
-wait text "Pill 1 missed yesterday" 10
+wait text "Pill 1 not checked in yesterday" 10
 expect text "Pill 2 of 28"
 shot missed-at-first-reminder
 openurl pillie://debug/fixed-now?at=off

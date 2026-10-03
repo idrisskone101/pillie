@@ -26,7 +26,7 @@ support mailto rows and (debug builds only) the developer menu.
   accounts; a free account gets a `PlusUpsellSheet` on either row.
   `SettingsView.swift:138-192,418-429,1062-1191`.
 - `settings-cycle-day` — "Cycle day" row opens `CycleDayEditor`; the
-  "Break-week ping" toggle beside it is free for everyone (no lock).
+  "Break-week notice" toggle beside it is free for everyone (no lock).
   `SettingsView.swift:201-219,441-448,1275-1333`.
 - `settings-blocking` — "Your apps" row opens `BlockedAppsEditor` for Plus
   accounts (status toggle + FamilyActivityPicker); a free account gets a

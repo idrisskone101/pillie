@@ -19,7 +19,7 @@ final class GermanInfoPlistLocalizationTests: XCTestCase {
 
         XCTAssertEqual(
             values["NSMotionUsageDescription"],
-            "Pillie verwendet Bewegungssensoren, um Schütteln zu erkennen, wenn du eine Aktion bestätigst."
+            "Pillie nutzt Bewegungsdaten, um zu merken, wenn du dein Handy zum Abhaken schüttelst."
         )
         XCTAssertEqual(
             values["NSUserTrackingUsageDescription"],

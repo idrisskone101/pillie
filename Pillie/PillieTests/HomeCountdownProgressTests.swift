@@ -75,7 +75,7 @@ struct HomeCountdownProgressTests {
         let putOn = progress(.patch, day: 1)
 
         #expect(putOn.state == .due(.putOnPatch))
-        #expect(card(putOn) == ["Patch 1 of 3", "Day 1 of 28", "Today", "Put on patch 1", "Due 8:00 PM"])
+        #expect(card(putOn) == ["Patch 1 of 3", "Day 1 of 28", "Today", "Apply patch 1", "Due 8:00 PM"])
         #expect(putOn.gauge == .due)
         #expect(putOn.object == .patch)
         #expect(marks(putOn) == [.current, .upcoming, .upcoming, .offDashed, .upcoming])
@@ -114,7 +114,7 @@ struct HomeCountdownProgressTests {
     @Test func `A change day shows the new patch in its sachet`() {
         let change = progress(.patch, day: 15)
 
-        #expect(card(change) == ["Patch 3 of 3", "Day 15 of 28", "Today", "Put on patch 3", "Due 8:00 PM"])
+        #expect(card(change) == ["Patch 3 of 3", "Day 15 of 28", "Today", "Apply patch 3", "Due 8:00 PM"])
         #expect(change.object == .sachet)
         #expect(marks(change) == [.done, .done, .current, .offDashed, .upcoming])
         #expect(change.lineSegments == [.init(from: 0, to: 14.0 / 28.0, tint: .method)])
@@ -136,7 +136,7 @@ struct HomeCountdownProgressTests {
         let missed = progress(.patch, day: 16, missed: [15])
 
         #expect(missed.state == .missed(.changePatch(3)))
-        #expect(card(missed) == ["Patch 3 of 3", "Day 16 of 28", "Missed", "Change to patch 3 now", "Was due yesterday"])
+        #expect(card(missed) == ["Patch 3 of 3", "Day 16 of 28", "Overdue", "Change to patch 3 now", "Was due yesterday"])
         #expect(missed.gauge == .missed)
         #expect(missed.object == .patch)
         #expect(missed.isObjectFaded)
@@ -151,7 +151,7 @@ struct HomeCountdownProgressTests {
             #expect(progress(.patch, day: day, missed: [15]).state == .missed(.changePatch(3)), "day \(day)")
         }
         let later = progress(.patch, day: 18, missed: [15])
-        #expect(card(later) == ["Patch 3 of 3", "Day 18 of 28", "Missed", "Change to patch 3 now", "Was due Sep 25"])
+        #expect(card(later) == ["Patch 3 of 3", "Day 18 of 28", "Overdue", "Change to patch 3 now", "Was due Sep 25"])
         #expect(marks(later) == [.done, .done, .missed, .offDashed, .upcoming])
         #expect(later.lineSegments == [.init(from: 0, to: 14.0 / 28.0, tint: .method)])
 
@@ -176,7 +176,7 @@ struct HomeCountdownProgressTests {
             #expect(progress(.ring, day: day, missed: [22]).state == .missed(.ringOut), "day \(day)")
         }
         #expect(card(progress(.ring, day: 25, missed: [22])) == [
-            "Ring in", "Day 25 of 28", "Missed", "Take your ring out now", "Was due Sep 25",
+            "Ring in", "Day 25 of 28", "Overdue", "Remove your ring now", "Was due Sep 25",
         ])
         #expect(progress(.ring, day: 29, late: true, missed: [22]).state == .late(.newRingIn, endsTomorrow: true))
     }
@@ -194,7 +194,7 @@ struct HomeCountdownProgressTests {
     }
 
     @Test func `The off day asks to take patch 3 off, then counts down to a new patch`() {
-        #expect(card(progress(.patch, day: 22)) == ["Patch 3 of 3", "Day 22 of 28", "Today", "Take patch 3 off", "Due 8:00 PM"])
+        #expect(card(progress(.patch, day: 22)) == ["Patch 3 of 3", "Day 22 of 28", "Today", "Remove patch 3", "Due 8:00 PM"])
         #expect(progress(.patch, day: 22).object == .patch)
 
         let off = progress(.patch, day: 22, taken: true)
@@ -206,7 +206,7 @@ struct HomeCountdownProgressTests {
     @Test func `A missed removal reads missed the next day`() {
         let missed = progress(.patch, day: 23, missed: [22])
 
-        #expect(card(missed) == ["Patch 3 of 3", "Day 23 of 28", "Missed", "Take patch 3 off now", "Was due yesterday"])
+        #expect(card(missed) == ["Patch 3 of 3", "Day 23 of 28", "Overdue", "Remove patch 3 now", "Was due yesterday"])
         #expect(marks(missed) == [.done, .done, .done, .missed, .upcoming])
     }
 
@@ -230,7 +230,7 @@ struct HomeCountdownProgressTests {
         let over = progress(.patch, day: 29)
 
         #expect(over.state == .newCycleDue(.putOnPatch))
-        #expect(card(over) == ["New pack", "Day 29 · new cycle", "Today", "Put on patch 1", nil])
+        #expect(card(over) == ["New pack", "Day 29 · new cycle", "Today", "Apply patch 1", nil])
         #expect(over.object == .sachet)
         #expect(marks(over) == [.done, .done, .done, .done, .current])
         #expect(progress(.patch, day: 31, late: true).state == .newCycleDue(.putOnPatch))
@@ -241,7 +241,7 @@ struct HomeCountdownProgressTests {
     @Test func `Ring day 1 asks for the ring and never dashes a milestone`() {
         let putIn = progress(.ring, day: 1)
 
-        #expect(card(putIn) == ["New ring", "Day 1 of 28", "Today", "Put your ring in", "Due 8:00 PM"])
+        #expect(card(putIn) == ["New ring", "Day 1 of 28", "Today", "Insert your ring", "Due 8:00 PM"])
         #expect(putIn.object == .ring)
         #expect(marks(putIn) == [.current, .upcoming, .upcoming])
         #expect(labels(putIn) == ["In", "Out", "Back in"])
@@ -266,7 +266,7 @@ struct HomeCountdownProgressTests {
     @Test func `A late ring removal keeps the ring in title`() {
         let late = progress(.ring, day: 22, late: true)
 
-        #expect(card(late) == ["Ring in", "Day 22 of 28", "Late", "Take your ring out", "Until tomorrow 8:00 PM"])
+        #expect(card(late) == ["Ring in", "Day 22 of 28", "Late", "Remove your ring", "Until tomorrow 8:00 PM"])
         #expect(marks(late) == [.done, .late, .upcoming])
     }
 
@@ -285,7 +285,7 @@ struct HomeCountdownProgressTests {
         let back = progress(.ring, day: 29, late: true)
 
         #expect(back.state == .late(.newRingIn, endsTomorrow: true))
-        #expect(card(back) == ["New ring", "Day 29 · new cycle", "Late", "Put a new ring in", "Until tomorrow 8:00 PM"])
+        #expect(card(back) == ["New ring", "Day 29 · new cycle", "Late", "Insert a new ring", "Until tomorrow 8:00 PM"])
         #expect(marks(back) == [.done, .done, .late])
         #expect(back.lineSegments == [
             .init(from: 0, to: 21.0 / 28.0, tint: .method),
@@ -297,14 +297,14 @@ struct HomeCountdownProgressTests {
         let over = progress(.ring, day: 30, missed: [29])
 
         #expect(over.state == .newCycleDue(.newRingIn))
-        #expect(card(over) == ["New ring", "Day 30 · new cycle", "Today", "Put a new ring in", nil])
+        #expect(card(over) == ["New ring", "Day 30 · new cycle", "Today", "Insert a new ring", nil])
         #expect(marks(over) == [.done, .done, .current])
     }
 
     @Test func `A missed insertion reads missed the next day`() {
         let missed = progress(.ring, day: 2, missed: [1])
 
-        #expect(card(missed) == ["New ring", "Day 2 of 28", "Missed", "Put your ring in now", "Was due yesterday"])
+        #expect(card(missed) == ["New ring", "Day 2 of 28", "Overdue", "Insert your ring now", "Was due yesterday"])
         #expect(missed.isObjectFaded)
         #expect(marks(missed) == [.missed, .upcoming, .upcoming])
     }

@@ -123,7 +123,7 @@ struct HomePackProgressTests {
     }
 
     @Test func `A pill missed yesterday names it under the live day's title`() {
-        #expect(header(progress(twentyOneSeven, elapsed: 11, missed: [10])) == ["Pill 12 of 28", "Pill 11 missed yesterday"])
+        #expect(header(progress(twentyOneSeven, elapsed: 11, missed: [10])) == ["Pill 12 of 28", "Pill 11 not checked in yesterday"])
     }
 
     @Test func `Missed yesterday outranks today's late line`() {

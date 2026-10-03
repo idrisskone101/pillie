@@ -22,7 +22,7 @@ tap --id protectionPlanPrimaryCTA
 wait id protectionPlanEarlyValueProofView
 tap --label "Not now" --element-type Button
 
-wait text "What's in the way?"
+wait text "What’s in the way?"
 tap --label TikTok
 tap --label "A simpler routine"
 tap --id protectionPlanPrimaryCTA
@@ -39,7 +39,7 @@ tap --id protectionPlanPrimaryCTA
 wait text "Pick your method."
 tap --id protectionPlanPrimaryCTA
 
-wait text "Tap the pill you're on today."
+wait text "Tap the pill you’re on today."
 tap --id packTile.12
 wait id todayPillQuestion
 tap --id todayPillYes

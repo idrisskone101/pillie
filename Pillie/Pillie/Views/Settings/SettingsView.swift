@@ -37,6 +37,8 @@ struct SettingsView: View {
 
     private let settingsFeedback = SettingsInteractionFeedback()
 
+    private var greeting: String { PillieLocalization.string("today.greeting", locale: locale) }
+
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
             VStack(alignment: .leading, spacing: 24) {
@@ -105,7 +107,7 @@ struct SettingsView: View {
                             settingsRow(PillieLocalization.string(
                                 "settings.custom_messages.title",
                                 locale: locale
-                            ), value: "Pillie+", valueColor: PillieTheme.coral, showLock: true)
+                            ), value: "Plus", valueColor: PillieTheme.coral, showLock: true)
                         }
                         .buttonStyle(.plain)
                         .sheet(isPresented: $showCustomRemindersUpsell) {
@@ -168,7 +170,7 @@ struct SettingsView: View {
                             settingsRow(PillieLocalization.string(
                                 "settings.followup.interval_title",
                                 locale: locale
-                            ), value: "Pillie+", valueColor: PillieTheme.coral, showLock: true)
+                            ), value: "Plus", valueColor: PillieTheme.coral, showLock: true)
                         }
                         .buttonStyle(.plain)
                         divider
@@ -178,7 +180,7 @@ struct SettingsView: View {
                             settingsRow(PillieLocalization.string(
                                 "settings.followup.retry_limit_title",
                                 locale: locale
-                            ), value: "Pillie+", valueColor: PillieTheme.coral, showLock: true)
+                            ), value: "Plus", valueColor: PillieTheme.coral, showLock: true)
                         }
                         .buttonStyle(.plain)
                         .sheet(isPresented: $showSmartRemindersUpsell) {
@@ -249,7 +251,7 @@ struct SettingsView: View {
                             settingsRow(PillieLocalization.string(
                                 "settings.blocked_apps.title",
                                 locale: locale
-                            ), value: "Pillie+", valueColor: PillieTheme.coral, showLock: true)
+                            ), value: "Plus", valueColor: PillieTheme.coral, showLock: true)
                         }
                         .buttonStyle(.plain)
                         .sheet(isPresented: $showBlockingUpsell) {
@@ -383,8 +385,8 @@ struct SettingsView: View {
                 #endif
 
                 // Handwriting accent
-                Text(PillieLocalization.string("today.greeting", locale: locale))
-                    .font(.pillieHandwriting())
+                Text(greeting)
+                    .font(.pillieHandwriting(for: greeting))
                     .foregroundStyle(PillieTheme.textMuted)
                     .frame(maxWidth: .infinity)
                     .rotationEffect(.degrees(-2))

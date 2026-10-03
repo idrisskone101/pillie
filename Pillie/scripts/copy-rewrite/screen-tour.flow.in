@@ -1,0 +1,176 @@
+fresh
+defaults pillie.appLanguage -string {{lang}}
+launch -AppleLanguages "({{lang}})" -AppleLocale {{lang}}
+wait id protectionPlanPrimaryCTA 15
+shot onboarding-01-welcome
+tap --id protectionPlanPrimaryCTA
+wait id earlyValueProofDragLane
+shot onboarding-02-early-value-proof
+openurl "pillie://debug/onboarding-personalization-intent?lang={{lang}}"
+gone id earlyValueProofDragLane
+wait id protectionPlanPrimaryCTA
+shot onboarding-03-pain-points
+openurl "pillie://debug/onboarding-personalization-timing?lang={{lang}}"
+sleep 1
+shot onboarding-04-miss-frequency
+fresh
+defaults pillie.appLanguage -string {{lang}}
+defaults onboardingStep -int 8
+launch -AppleLanguages "({{lang}})"  # no -AppleLocale here: it turns the notification alert below away from English
+wait id acquisitionSource.tiktok 15
+shot onboarding-05-acquisition-source
+tap --id acquisitionSource.tiktok
+tap --id protectionPlanPrimaryCTA
+gone id acquisitionSource.tiktok
+wait id pills.fill
+shot onboarding-06-method
+tap --id protectionPlanPrimaryCTA
+wait id packTile.12
+shot onboarding-07-today-pill
+tap --id todayPillChangeButton
+sleep 1
+shot onboarding-07-pack-types
+tap -x 201 -y 110
+sleep 1
+tap --id packTile.12
+wait id todayPillQuestion
+shot onboarding-07-today-pill-question
+tap --id todayPillYes
+wait id todayPillLogged
+shot onboarding-07-today-pill-taken
+tap --id protectionPlanPrimaryCTA
+wait id sun.max.fill
+shot onboarding-08-reminder-time
+tap --id protectionPlanPrimaryCTA
+tap --label Allow
+wait id protectionPlanBackButton 15
+wait id sparkles 15
+shot onboarding-09-reminder-plan
+gesture scroll-down
+shot onboarding-09-reminder-plan-scrolled
+tap --id protectionPlanPrimaryCTA
+wait id appBlockingEmptyStateCard 15
+shot onboarding-10-app-blocking-empty
+openurl "pillie://debug/plus-app-blocking-setup?selected=3&lang={{lang}}"
+wait id pencil
+shot onboarding-11-app-blocking-selected
+tap -x 201 -y 740
+wait id protectionPlanReadyStartButton 15
+shot onboarding-12-ready
+tap --id protectionPlanReadyStartButton
+wait id developerMenuAvatarButton 15
+shot onboarding-13-home
+
+fresh
+defaults pillie.appLanguage -string {{lang}}
+launch -AppleLanguages "({{lang}})" -AppleLocale {{lang}}
+wait id protectionPlanPrimaryCTA 15
+openurl "pillie://debug/plus-home?lang={{lang}}"
+openurl "pillie://debug/trial-grant?lang={{lang}}"
+openurl "pillie://debug/fixed-now?at=2026-09-15T15:00:00Z"
+tap --id developerMenuAvatarButton
+tap --id developerScenario.missedRecentDays
+gone id developerScenario.missedRecentDays
+wait id homeBlockingStatusCard
+shot home-due
+gesture scroll-down
+shot home-scrolled
+gesture scroll-up
+tap -x 201 -y 742
+wait id shakeTapToConfirmFallback
+shot home-shake-check-in
+tap --id shakeTapToConfirmFallback
+gone id shakeTapToConfirmFallback 15
+sleep 1
+shot home-checked-in
+tap --id calendar
+wait id historyEditableDay.{{year}}-9.14
+shot history-month
+tap --id historyEditableDay.{{year}}-9.14
+wait id historyDayCorrection.taken
+shot history-day-correction
+tap --id historyDayCorrection.taken
+gone id historyDayCorrection.taken
+
+launch -AppleLanguages "({{lang}})" -AppleLocale {{lang}}
+openurl "pillie://debug/plus-home?lang={{lang}}"
+wait id developerMenuAvatarButton 15
+tap --id gearshape
+wait id settingsLanguageRow
+shot settings-top
+tap -x 201 -y 395
+wait id reminder-preset-gentle
+shot settings-reminder-messages
+swipe --start-x 200 --start-y 200 --end-x 200 --end-y 860 --duration 0.4
+gone id reminder-preset-gentle
+tap -x 201 -y 269
+wait id Increment
+shot settings-schedule-editor
+tap -x 201 -y 720
+sleep 1.5
+shot settings-schedule-reset-alert
+launch -AppleLanguages "({{lang}})" -AppleLocale {{lang}}
+openurl "pillie://debug/plus-home?lang={{lang}}"
+wait id developerMenuAvatarButton 15
+tap --id gearshape
+wait id settingsLanguageRow
+swipe --start-x 200 --start-y 760 --end-x 200 --end-y 80 --duration 0.8
+wait id settingsDeveloperMenuRow
+shot settings-scrolled
+tap --id settingsLanguageRow
+wait id checkmark
+shot settings-language-picker
+swipe --start-x 200 --start-y 200 --end-x 200 --end-y 860 --duration 0.4
+gone id checkmark
+
+launch -AppleLanguages "({{lang}})" -AppleLocale {{lang}}
+wait id developerMenuAvatarButton 15
+openurl "pillie://debug/trial-activation-hub?state=unconfigured&lang={{lang}}"
+wait id trialIndicator 15
+tap --id trialIndicator
+wait id trialKeepPlus
+shot trial-activation-hub
+
+defaults homeBlockingStatusCardDismissed -bool true
+launch -AppleLanguages "({{lang}})" -AppleLocale {{lang}}
+wait id developerMenuAvatarButton 15
+openurl "pillie://debug/review-prompt?lang={{lang}}"
+wait id homeReviewPromptCard 15
+gesture scroll-down
+shot home-review-prompt
+
+# Prices come from StoreKit, not the string catalogs, so "$4.99" marks a paywall in every locale.
+defaults homeBlockingStatusCardDismissed -bool false
+launch -AppleLanguages "({{lang}})" -AppleLocale {{lang}}
+wait id developerMenuAvatarButton 15
+openurl "pillie://debug/honest-paywall?board=duringTrial&lang={{lang}}"
+wait text "$4.99" 10
+shot paywall-during-trial
+launch -AppleLanguages "({{lang}})" -AppleLocale {{lang}}
+wait id developerMenuAvatarButton 15
+openurl "pillie://debug/honest-paywall?board=settingsFree&lang={{lang}}"
+openurl "pillie://debug/honest-paywall?board=settingsFree&lang={{lang}}"
+wait id iphone.radiowaves.left.and.right 15
+shot update-trial-announcement
+launch -AppleLanguages "({{lang}})" -AppleLocale {{lang}}
+wait id developerMenuAvatarButton 15
+openurl "pillie://debug/honest-paywall?board=trialEndedReturningLegacy&lang={{lang}}"
+wait text "$4.99" 10
+shot paywall-trial-ended-returning-legacy
+tap --id xmark --element-type Button
+gone text "$4.99"
+tap --id homeBlockingStatusCardCTA
+wait text "$4.99" 10
+shot paywall-settings-free
+launch -AppleLanguages "({{lang}})" -AppleLocale {{lang}}
+wait id developerMenuAvatarButton 15
+openurl "pillie://debug/honest-paywall?board=trialEndedReturningHard&lang={{lang}}"
+wait text "$4.99" 10
+shot paywall-trial-ended-returning-hard
+openurl "pillie://debug/plus-home?lang={{lang}}"
+gone text "$4.99"
+openurl "pillie://debug/review-prompt?lang={{lang}}"
+openurl "pillie://debug/intervention-seed?count=6"
+openurl "pillie://debug/trial-end-paywall?cohort=blocker&terms=hard&lang={{lang}}"
+wait text "$4.99" 15
+shot trial-end-paywall
