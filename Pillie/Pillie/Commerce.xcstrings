@@ -40707,7 +40707,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "We’ll remind you that 5 days are left."
+            "value": "Pillie reminds you when 5 active days are left."
           }
         },
         "ar": {
@@ -41532,7 +41532,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "App blocking turns off. Reminders stay free, and your setup stays saved."
+            "value": "App blocking turns off. Daily reminders stay free, and your setup stays saved."
           }
         },
         "ar": {

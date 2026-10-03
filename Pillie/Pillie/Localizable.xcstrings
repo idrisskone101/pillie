@@ -147041,7 +147041,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Blocking, messages, reminders"
+            "value": "App blocking, messages, follow-up reminders"
           }
         },
         "ar": {
@@ -149791,7 +149791,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pick the apps you reach for first. They open again once you’ve checked in."
+            "value": "Pick the apps you reach for first. They pause at reminder time and open again once you’ve checked in."
           }
         },
         "ar": {
