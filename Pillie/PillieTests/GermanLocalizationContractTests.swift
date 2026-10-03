@@ -328,23 +328,10 @@ final class GermanLocalizationContractTests: XCTestCase {
             "Pillie Plus behalten"
         )
 
-        let activationItems = TrialActivationItem.make(
-            for: .unconfigured,
-            locale: german
-        )
         XCTAssertEqual(
-            activationItems.map(\.title),
-            [
-                "App-Pause",
-                "Smarte Erinnerungen",
-                "Erinnerungstexte",
-                "Schütteln zum Eintragen",
-            ]
+            TrialStatusPresentation(daysRemaining: 7, locale: german).indicatorLabel,
+            "Noch 7 aktive Tage"
         )
-        XCTAssertEqual(activationItems[0].statusTitle, "Einrichten")
-        XCTAssertEqual(activationItems[0].actionTitle, "Einrichten")
-        XCTAssertEqual(activationItems[1].statusTitle, "Automatisch aktiv")
-        XCTAssertEqual(activationItems[1].actionTitle, "Anpassen")
     }
 
     func testNewPackConfirmationUsesNaturalGermanMethodAwareGrammar() {

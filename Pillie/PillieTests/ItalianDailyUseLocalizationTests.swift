@@ -147,22 +147,24 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
             "trial.granted.title",
             "trial.granted.subtitle",
             "trial.granted.disclosure",
-            "trial.activation.recommended",
             "trial.timeline.today",
             "trial.timeline.today_title",
             "trial.timeline.warning",
             "trial.timeline.choose",
-            "trial.status.title",
             "trial.status.active_short",
             "trial.status.ends",
-            "trial.status.after_title",
             "trial.status.indicator.active",
             "trial.status.indicator.active_tonight",
-            "trial.status.indicator.setup",
-            "trial.status.indicator.setup_tonight",
-            "trial.status.after.blocking_off",
-            "trial.status.after.reminders_free",
-            "trial.status.after.setup_saved",
+            "trial.status.indicator.countdown",
+            "trial.status.indicator.countdown_tonight",
+            "trial.status.eyebrow",
+            "trial.status.until",
+            "trial.status.day_today",
+            "trial.status.timeline_title",
+            "trial.status.timeline.heads_up",
+            "trial.status.timeline.last_call",
+            "trial.status.timeline.plus_pauses",
+            "trial.status.timeline.blocking_off",
             "trial.status.keep_plus",
             "trial.end.title",
             "trial.end.kicker",
@@ -506,7 +508,6 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
         XCTAssertEqual(commerce("paywall.feature.future.compact"), "Il resto dopo")
         XCTAssertEqual(commerce("paywall.feature.shake"), "Scuoti per registrare")
         XCTAssertEqual(commerce("paywall.plan.best_value"), "Conviene di più")
-        XCTAssertEqual(commerce("trial.activation.recommended"), "Consigliato")
         XCTAssertEqual(commerce("paywall.plan.cancel_anytime_short"), "Disdici quando vuoi")
         XCTAssertEqual(commerce("trial.end.kicker"), "I tuoi 14 giorni attivi")
         XCTAssertEqual(commerce("trial.end.welcome_back"), "Pillie Plus è di nuovo attivo.")
@@ -521,15 +522,6 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
                 "Scuoti per registrare",
                 "Testi dei promemoria",
                 "Il resto dopo",
-            ]
-        )
-        XCTAssertEqual(
-            TrialActivationItem.make(for: .unconfigured, locale: italian).map(\.title),
-            [
-                "Blocco app",
-                "Promemoria smart",
-                "Testi dei promemoria",
-                "Scuoti per registrare",
             ]
         )
     }
@@ -581,30 +573,24 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
             locale: italian
         )
         XCTAssertEqual(active.indicatorLabel, "Plus è attivo · 7 giorni attivi rimasti")
-        XCTAssertEqual(
-            active.sheetContent.expiryRows.map(\.text),
-            [
-                PillieLocalization.string(
-                    "trial.status.after.blocking_off",
-                    table: "Commerce",
-                    locale: italian
-                ),
-                PillieLocalization.string(
-                    "trial.status.after.reminders_free",
-                    table: "Commerce",
-                    locale: italian
-                ),
-                "La tua configurazione del blocco app è salvata.",
-            ]
-        )
         XCTAssertEqual(active.sheetContent.ctaTitle, "Tieni Pillie Plus")
 
-        let setup = TrialStatusPresentation(
+        let countdown = TrialStatusPresentation(
             daysRemaining: 7,
             protectionActive: false,
-            locale: italian
+            trialEndDate: trialEnd,
+            locale: italian,
+            calendar: calendar
         )
-        XCTAssertEqual(setup.indicatorLabel, "Imposta il blocco app · 7 giorni attivi rimasti")
+        XCTAssertEqual(countdown.indicatorLabel, "7 giorni attivi rimasti")
+        XCTAssertEqual(
+            countdown.sheetContent.timeline.map(\.text),
+            [
+                "Ti ricorderemo che mancano 5 giorni.",
+                "Un ultimo promemoria prima che la tua prova finisca.",
+                "Il blocco delle app si disattiva. I promemoria restano gratuiti e la tua configurazione resta salvata.",
+            ]
+        )
     }
 
     func testHomeRecommendationCardsUseItalianRuntimeCopy() throws {

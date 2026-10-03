@@ -2,11 +2,10 @@
 //  TrialStatusSheet.swift
 //  Pillie
 //
-//  Issue #166 (Reverse Trial 7/10 / ADR 0007): the trial's only in-trial
-//  surfaces — the small persistent protection/trial indicator on
-//  Home and the status sheet behind it. Informational, never an upsell card:
-//  the sheet's quiet "Keep Plus" button and the Settings upgrade row are the
-//  only purchase paths during the trial. All copy and visibility rules live in
+//  Issue #166 / ENG-135 (Reverse Trial / ADR 0007): the small persistent
+//  trial indicator on Home and the status sheet behind it. Status and
+//  commerce only: how long is left, what happens next, and the quiet
+//  "Keep Plus" path. Setup lives in the Today strip. All copy comes from
 //  `TrialStatusPresentation` (value type, boundary-tested).
 //
 
@@ -38,209 +37,142 @@ struct TrialIndicatorBadge: View {
     }
 }
 
-/// The trial status sheet: remaining time, what's currently unlocked, what
-/// happens at expiry, and the quiet buy-early path into the existing purchase
-/// flow. Presentation-only — copy comes from `TrialStatusSheetContent`.
+/// The trial status sheet. Sizes itself to its content.
 struct TrialStatusSheet: View {
-    static let presentationHeight: CGFloat = 680
-
     let content: TrialStatusSheetContent
     let onKeepPlus: () -> Void
-    let onFeatureTap: (TrialActivationItem) -> Void
     let onDismiss: () -> Void
 
+    @State private var contentHeight: CGFloat = 600
+
     var body: some View {
-        VStack(spacing: 16) {
+        VStack(alignment: .leading, spacing: 22) {
             Capsule()
                 .fill(PillieTheme.sage)
                 .frame(width: 36, height: 5)
-                .padding(.top, 12)
+                .frame(maxWidth: .infinity)
 
-            Text(content.title)
-                .font(.pillieExtraBold(24))
-                .foregroundStyle(PillieTheme.textPrimary)
-                .multilineTextAlignment(.center)
-                .fixedSize(horizontal: false, vertical: true)
-                .padding(.horizontal, 28)
-
-            TrialActivationList(items: content.activationItems, onTap: onFeatureTap)
-            TrialExpirySummary(rows: content.expiryRows)
-
-            Spacer(minLength: 0)
-
+            TrialStatusHeader(
+                eyebrow: content.eyebrow,
+                headline: content.headline,
+                until: content.until
+            )
+            TrialProgressBar(progress: content.progress)
+            TrialTimeline(title: content.timelineTitle, rows: content.timeline)
             TrialStatusFooter(
                 ctaTitle: content.ctaTitle,
                 onKeepPlus: onKeepPlus,
                 onDismiss: onDismiss
             )
         }
-        .padding(.bottom, 10)
-        .frame(maxWidth: .infinity, alignment: .top)
+        .padding(.top, 12)
+        .padding(.horizontal, 28)
+        .padding(.bottom, 24)
+        .fixedSize(horizontal: false, vertical: true)
+        .onGeometryChange(for: CGFloat.self, of: \.size.height) { contentHeight = $0 }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .background(PillieTheme.bg)
-    }
-
-}
-
-private struct TrialActivationList: View {
-    let items: [TrialActivationItem]
-    let onTap: (TrialActivationItem) -> Void
-    @Environment(\.locale) private var locale
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(PillieLocalization.string(
-                "trial.status.title",
-                table: "Commerce",
-                locale: locale
-            ).uppercased(with: locale))
-                .font(.pillieCaptionMedium())
-                .foregroundStyle(PillieTheme.textMuted)
-                .kerning(1)
-
-            ForEach(items, id: \.feature.rawValue) { item in
-                TrialActivationFeatureRow(item: item) {
-                    onTap(item)
-                }
-            }
-        }
-        .padding(.horizontal, 28)
+        .presentationDetents([.height(contentHeight)])
     }
 }
 
-private struct TrialActivationFeatureRow: View {
-    let item: TrialActivationItem
-    let onTap: () -> Void
-    @Environment(\.locale) private var locale
+private struct TrialStatusHeader: View {
+    let eyebrow: String
+    let headline: String
+    let until: String?
 
     var body: some View {
-        Button(action: onTap) {
-            HStack(spacing: 10) {
-                Image(systemName: item.symbolName)
-                    .font(.system(size: 15, weight: .semibold))
+        VStack(alignment: .leading, spacing: 6) {
+            HStack(spacing: 6) {
+                Image(systemName: "sparkles")
+                    .font(.system(size: 13, weight: .semibold))
                     .foregroundStyle(PillieTheme.coral)
-                    .frame(width: 22)
-
-                VStack(alignment: .leading, spacing: 3) {
-                    HStack(spacing: 5) {
-                        Text(item.title)
-                            .font(.pillie(14, weight: .semibold))
-                            .foregroundStyle(PillieTheme.textPrimary)
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.85)
-                            .allowsTightening(true)
-                            .layoutPriority(1)
-
-                        if item.isRecommended {
-                            Text(PillieLocalization.string(
-                                "trial.activation.recommended",
-                                table: "Commerce",
-                                locale: locale
-                            ).uppercased(with: locale))
-                                .font(.pillie(9, weight: .bold))
-                                .foregroundStyle(PillieTheme.coral)
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.8)
-                                .allowsTightening(true)
-                        }
-                    }
-
-                    Text(item.statusTitle)
-                        .font(.pillie(12, weight: .medium))
-                        .foregroundStyle(PillieTheme.textMuted)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.85)
-                        .allowsTightening(true)
-                }
-                .layoutPriority(1)
-
-                Spacer(minLength: 4)
-
-                if let actionTitle = item.actionTitle {
-                    HStack(spacing: 5) {
-                        Text(actionTitle)
-                            .font(.pillie(12, weight: .bold))
-                            .foregroundStyle(PillieTheme.coral)
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.85)
-                            .allowsTightening(true)
-                        Image(systemName: "chevron.right")
-                            .font(.system(size: 11, weight: .semibold))
-                            .foregroundStyle(PillieTheme.coral.opacity(0.7))
-                    }
-                } else {
-                    Image(systemName: "checkmark.circle.fill")
-                        .font(.system(size: 16, weight: .semibold))
-                        .foregroundStyle(PillieTheme.verifiedGreen)
-                }
+                    .accessibilityHidden(true)
+                Text(eyebrow)
+                    .font(.pillie(14, weight: .semibold))
+                    .foregroundStyle(PillieTheme.textMuted)
             }
-            .padding(.horizontal, 12)
-            .padding(.vertical, 10)
-            .background(
-                item.isRecommended ? PillieTheme.coralLight : PillieTheme.sage.opacity(0.25),
-                in: RoundedRectangle(cornerRadius: 14)
-            )
-            .overlay {
-                RoundedRectangle(cornerRadius: 14)
-                    .stroke(
-                        item.isRecommended ? PillieTheme.coral.opacity(0.55) : PillieTheme.sageHalf,
-                        lineWidth: item.isRecommended ? 1.5 : 1
-                    )
+            Text(headline)
+                .font(.pillieExtraBold(40))
+                .tracking(-0.8)
+                .foregroundStyle(PillieTheme.textPrimary)
+                .fixedSize(horizontal: false, vertical: true)
+                .accessibilityAddTraits(.isHeader)
+            if let until {
+                Text(until)
+                    .font(.pillie(16))
+                    .foregroundStyle(PillieTheme.textMuted)
+                    .lineSpacing(2)
+                    .fixedSize(horizontal: false, vertical: true)
             }
         }
-        .buttonStyle(.plain)
-        .disabled(item.action == nil)
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel(accessibilityLabel)
-        .accessibilityHint(item.action == nil ? "" : item.actionTitle ?? "")
-    }
-
-    private var accessibilityLabel: String {
-        [
-            item.title,
-            item.statusTitle,
-            item.isRecommended
-                ? PillieLocalization.string(
-                    "trial.activation.recommended",
-                    table: "Commerce",
-                    locale: locale
-                )
-                : nil,
-            item.actionTitle,
-        ]
-        .compactMap { $0 }
-        .joined(separator: ", ")
     }
 }
 
-private struct TrialExpirySummary: View {
-    let rows: [TrialExpiryRow]
-    @Environment(\.locale) private var locale
+private struct TrialProgressBar: View {
+    let progress: TrialProgress
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 7) {
-            Text(PillieLocalization.string(
-                "trial.status.after_title",
-                table: "Commerce",
-                locale: locale
-            ).uppercased(with: locale))
-                .font(.pillieCaptionMedium())
-                .foregroundStyle(PillieTheme.textMuted)
-                .kerning(1)
-
-            ForEach(rows.indices, id: \.self) { index in
-                HStack(spacing: 9) {
-                    Image(systemName: rows[index].symbol)
-                        .font(.system(size: 12, weight: .semibold))
+        VStack(spacing: 8) {
+            HStack(spacing: 3) {
+                ForEach(1...progress.totalDays, id: \.self) { day in
+                    RoundedRectangle(cornerRadius: 4)
+                        .fill(day <= progress.filledDays ? PillieTheme.coral : PillieTheme.coralLight)
+                        .frame(height: 8)
+                }
+            }
+            .accessibilityHidden(true)
+            HStack {
+                Text(progress.todayLabel)
+                    .font(.pillieCaptionMedium())
+                    .foregroundStyle(PillieTheme.textPrimary)
+                Spacer(minLength: 8)
+                if let endLabel = progress.endLabel {
+                    Text(endLabel)
+                        .font(.pillie(12, weight: .semibold))
                         .foregroundStyle(PillieTheme.textMuted)
-                        .frame(width: 18)
-                    Text(rows[index].text)
-                        .font(.pillie(13, weight: .medium))
-                        .foregroundStyle(PillieTheme.textPrimary)
                 }
             }
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.horizontal, 28)
+        .accessibilityElement(children: .combine)
+    }
+}
+
+private struct TrialTimeline: View {
+    let title: String
+    let rows: [TrialTimelineRow]
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            Text(title)
+                .font(.pillieSubtitleBold())
+                .foregroundStyle(PillieTheme.textPrimary)
+                .accessibilityAddTraits(.isHeader)
+            VStack(alignment: .leading, spacing: 16) {
+                ForEach(rows, id: \.date) { row in
+                    HStack(alignment: .top, spacing: 14) {
+                        Image(systemName: row.symbol)
+                            .font(.system(size: 13, weight: .semibold))
+                            .foregroundStyle(PillieTheme.textMuted)
+                            .frame(width: 32, height: 32)
+                            .background(TrialStatusPalette.iconWell, in: Circle())
+                            .accessibilityHidden(true)
+                        VStack(alignment: .leading, spacing: 1) {
+                            Text(row.dateText)
+                                .font(.pillie(15, weight: .semibold))
+                                .foregroundStyle(PillieTheme.textPrimary)
+                            Text(row.text)
+                                .font(.pillie(14))
+                                .foregroundStyle(PillieTheme.textMuted)
+                                .lineSpacing(1)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
+                        .padding(.top, 5)
+                    }
+                    .accessibilityElement(children: .combine)
+                }
+            }
+        }
     }
 }
 
@@ -251,7 +183,7 @@ private struct TrialStatusFooter: View {
     @Environment(\.locale) private var locale
 
     var body: some View {
-        VStack(spacing: 10) {
+        VStack(spacing: 6) {
             Button(action: onKeepPlus) {
                 Text(ctaTitle)
             }
@@ -262,17 +194,27 @@ private struct TrialStatusFooter: View {
                 Text(PillieLocalization.string("global.action.done", locale: locale))
                     .font(.pillie(14, weight: .medium))
                     .foregroundStyle(PillieTheme.textMuted)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: PillieTheme.quietButtonHeight)
+                    .contentShape(Rectangle())
             }
+            .buttonStyle(.plain)
         }
-        .padding(.horizontal, 28)
+        .padding(.top, 4)
     }
+}
+
+private enum TrialStatusPalette {
+    static let iconWell = Color(hex: "F5F5F4")
 }
 
 #Preview {
     TrialStatusSheet(
-        content: TrialStatusPresentation(daysRemaining: 5).sheetContent,
+        content: TrialStatusPresentation(
+            daysRemaining: 14,
+            trialEndDate: Date().addingTimeInterval(14 * 86_400)
+        ).sheetContent,
         onKeepPlus: {},
-        onFeatureTap: { _ in },
         onDismiss: {}
     )
 }

@@ -253,15 +253,6 @@ protocol AnalyticsTracking {
     isPlus: Bool?
   )
 
-  func track(
-    _ event: AnalyticsEvent,
-    source: AnalyticsSource?,
-    trialStatusFeature: AnalyticsTrialStatusFeature,
-    trialActivationStatus: AnalyticsTrialActivationStatus,
-    isRecommended: Bool,
-    isPlus: Bool?
-  )
-
   /// Every restore event (ENG-74). `restoreOutcome` is `nil` for `restore_started`.
   func track(
     _ event: AnalyticsEvent,
@@ -284,6 +275,15 @@ protocol AnalyticsTracking {
   func track(
     _ event: AnalyticsEvent,
     retryCount: Int,
+    isPlus: Bool?
+  )
+
+  /// The Today Plus setup strip and sheet (ENG-135).
+  func track(
+    _ event: AnalyticsEvent,
+    plusSetupStep: PlusSetupStep?,
+    plusSetupAction: AnalyticsPlusSetupAction?,
+    completedCount: Int?,
     isPlus: Bool?
   )
 
@@ -387,23 +387,22 @@ extension AnalyticsTracking {
 
   func track(
     _ event: AnalyticsEvent,
+    plusSetupStep: PlusSetupStep?,
+    plusSetupAction: AnalyticsPlusSetupAction?,
+    completedCount: Int?,
+    isPlus: Bool?
+  ) {
+    trackLegacy(event, source: .home, isPlus: isPlus)
+  }
+
+  func track(
+    _ event: AnalyticsEvent,
     source: AnalyticsSource?,
     step: AnalyticsStep?,
     authorizationState: AnalyticsAuthorizationState,
     isPlus: Bool?
   ) {
     trackLegacy(event, source: source, step: step, isPlus: isPlus)
-  }
-
-  func track(
-    _ event: AnalyticsEvent,
-    source: AnalyticsSource?,
-    trialStatusFeature: AnalyticsTrialStatusFeature,
-    trialActivationStatus: AnalyticsTrialActivationStatus,
-    isRecommended: Bool,
-    isPlus: Bool?
-  ) {
-    trackLegacy(event, source: source, isPlus: isPlus)
   }
 
   func track(
@@ -567,7 +566,8 @@ enum AnalyticsEvent: String, CaseIterable {
   case trialExpired = "trial_expired"
   case trialBadgeTapped = "trial_badge_tapped"
   case trialStatusSheetViewed = "trial_status_sheet_viewed"
-  case trialStatusFeatureTapped = "trial_status_feature_tapped"
+  case plusSetupStripTapped = "plus_setup_strip_tapped"
+  case plusSetupStep = "plus_setup_step"
   case smartReminderRetryScheduled = "smart_reminder_retry_scheduled"
   case smartReminderRetryFired = "smart_reminder_retry_fired"
   case smartReminderOutcome = "smart_reminder_outcome"
@@ -656,20 +656,10 @@ enum AnalyticsPaywallSurface: String, CaseIterable {
   case onboardingVerification = "onboarding_verification"
 }
 
-enum AnalyticsTrialStatusFeature: String, CaseIterable {
-  case appBlocking = "app_blocking"
-  case shakeToConfirm = "shake_to_confirm"
-  case smartReminders = "smart_reminders"
-  case customMessages = "custom_messages"
-}
-
-enum AnalyticsTrialActivationStatus: String, CaseIterable {
-  case setUp = "set_up"
-  case active
-  case activeAutomatically = "active_automatically"
-  case personalize
-  case customized
-  case on
+enum AnalyticsPlusSetupAction: String, CaseIterable {
+  case viewed
+  case completed
+  case skipped
 }
 
 enum AnalyticsAuthorizationState: String, CaseIterable {
@@ -842,9 +832,6 @@ struct AnalyticsPayload {
   /// The immutable pre/post-cutover trial cohort for issue #257.
   let trialTermsCohort: TrialTermsCohort?
   let paywallSurface: AnalyticsPaywallSurface?
-  let trialStatusFeature: AnalyticsTrialStatusFeature?
-  let trialActivationStatus: AnalyticsTrialActivationStatus?
-  let isRecommended: Bool?
   let authorizationState: AnalyticsAuthorizationState?
   let retryCount: Int?
   let smartReminderOutcome: AnalyticsSmartReminderOutcome?
@@ -858,6 +845,9 @@ struct AnalyticsPayload {
   let reminderPreset: CustomReminderPreset?
   let reminderPresetEdited: Bool?
   let restoreOutcome: RestoreOutcome?
+  let plusSetupStep: PlusSetupStep?
+  let plusSetupAction: AnalyticsPlusSetupAction?
+  let completedCount: Int?
 
   init(
     source: AnalyticsSource? = nil,
@@ -876,9 +866,6 @@ struct AnalyticsPayload {
     trialEndCohort: TrialEndPaywallCohort? = nil,
     trialTermsCohort: TrialTermsCohort? = nil,
     paywallSurface: AnalyticsPaywallSurface? = nil,
-    trialStatusFeature: AnalyticsTrialStatusFeature? = nil,
-    trialActivationStatus: AnalyticsTrialActivationStatus? = nil,
-    isRecommended: Bool? = nil,
     authorizationState: AnalyticsAuthorizationState? = nil,
     retryCount: Int? = nil,
     smartReminderOutcome: AnalyticsSmartReminderOutcome? = nil,
@@ -891,7 +878,10 @@ struct AnalyticsPayload {
     retryBodyCustomized: Bool? = nil,
     reminderPreset: CustomReminderPreset? = nil,
     reminderPresetEdited: Bool? = nil,
-    restoreOutcome: RestoreOutcome? = nil
+    restoreOutcome: RestoreOutcome? = nil,
+    plusSetupStep: PlusSetupStep? = nil,
+    plusSetupAction: AnalyticsPlusSetupAction? = nil,
+    completedCount: Int? = nil
   ) {
     self.source = source
     self.step = step
@@ -909,9 +899,6 @@ struct AnalyticsPayload {
     self.trialEndCohort = trialEndCohort
     self.trialTermsCohort = trialTermsCohort
     self.paywallSurface = paywallSurface
-    self.trialStatusFeature = trialStatusFeature
-    self.trialActivationStatus = trialActivationStatus
-    self.isRecommended = isRecommended
     self.authorizationState = authorizationState
     self.retryCount = retryCount
     self.smartReminderOutcome = smartReminderOutcome
@@ -925,6 +912,9 @@ struct AnalyticsPayload {
     self.reminderPreset = reminderPreset
     self.reminderPresetEdited = reminderPresetEdited
     self.restoreOutcome = restoreOutcome
+    self.plusSetupStep = plusSetupStep
+    self.plusSetupAction = plusSetupAction
+    self.completedCount = completedCount
   }
 
   var properties: [String: AnalyticsPropertyValue] {
@@ -962,15 +952,6 @@ struct AnalyticsPayload {
     if let paywallSurface {
       properties["surface"] = .string(paywallSurface.rawValue)
     }
-    if let trialStatusFeature {
-      properties["feature"] = .string(trialStatusFeature.rawValue)
-    }
-    if let trialActivationStatus {
-      properties["status"] = .string(trialActivationStatus.rawValue)
-    }
-    if let isRecommended {
-      properties["is_recommended"] = .bool(isRecommended)
-    }
     if let authorizationState {
       properties["authorization_state"] = .string(authorizationState.rawValue)
     }
@@ -1006,6 +987,15 @@ struct AnalyticsPayload {
     }
     if let reminderPresetEdited {
       properties["reminder_preset_edited"] = .bool(reminderPresetEdited)
+    }
+    if let plusSetupStep {
+      properties["step"] = .string(plusSetupStep.rawValue)
+    }
+    if let plusSetupAction {
+      properties["action"] = .string(plusSetupAction.rawValue)
+    }
+    if let completedCount {
+      properties["completed_count"] = .int(completedCount)
     }
     if let restoreOutcome {
       properties["result"] = .string(restoreOutcome.analyticsResult.rawValue)
@@ -1264,25 +1254,6 @@ final class AnalyticsManager: AnalyticsTracking {
   func track(
     _ event: AnalyticsEvent,
     source: AnalyticsSource?,
-    trialStatusFeature: AnalyticsTrialStatusFeature,
-    trialActivationStatus: AnalyticsTrialActivationStatus,
-    isRecommended: Bool,
-    isPlus: Bool?
-  ) {
-    let payload = AnalyticsPayload(
-      source: source,
-      isPlus: isPlus,
-      trialStatusFeature: trialStatusFeature,
-      trialActivationStatus: trialActivationStatus,
-      isRecommended: isRecommended
-    )
-
-    capture(event, payload: payload, source: source)
-  }
-
-  func track(
-    _ event: AnalyticsEvent,
-    source: AnalyticsSource?,
     surface: AnalyticsPaywallSurface,
     restoreOutcome: RestoreOutcome?,
     trialTermsCohort: TrialTermsCohort?,
@@ -1329,6 +1300,24 @@ final class AnalyticsManager: AnalyticsTracking {
     )
 
     capture(event, payload: payload)
+  }
+
+  func track(
+    _ event: AnalyticsEvent,
+    plusSetupStep: PlusSetupStep?,
+    plusSetupAction: AnalyticsPlusSetupAction?,
+    completedCount: Int?,
+    isPlus: Bool?
+  ) {
+    let payload = AnalyticsPayload(
+      source: .home,
+      isPlus: isPlus,
+      plusSetupStep: plusSetupStep,
+      plusSetupAction: plusSetupAction,
+      completedCount: completedCount
+    )
+
+    capture(event, payload: payload, source: .home)
   }
 
   func track(

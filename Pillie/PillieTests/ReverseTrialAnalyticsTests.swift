@@ -33,31 +33,33 @@ final class ReverseTrialAnalyticsTests: XCTestCase {
         XCTAssertEqual(client.events.first?.properties.count, 2)
     }
 
-    func testTrialStatusActionCarriesFeatureStatusAndRecommendationContext() {
+    func testPlusSetupStripTapCarriesOnlyTheCompletedCount() {
         let (telemetry, client) = makeTelemetry()
 
-        telemetry.trialStatusFeatureTapped(
-            .smartReminders,
-            status: .activeAutomatically,
-            isRecommended: true
-        )
+        telemetry.plusSetupStripTapped(completedCount: 1)
 
         XCTAssertEqual(client.events.count, 1)
-        XCTAssertEqual(client.events.first?.name, "trial_status_feature_tapped")
-        XCTAssertEqual(client.events.first?.properties["source"], .string("home"))
-        XCTAssertEqual(client.events.first?.properties["feature"], .string("smart_reminders"))
-        XCTAssertEqual(client.events.first?.properties["status"], .string("active_automatically"))
-        XCTAssertEqual(client.events.first?.properties["is_recommended"], .bool(true))
-        XCTAssertEqual(client.events.first?.properties["is_plus"], .bool(true))
-        XCTAssertEqual(client.events.first?.properties.count, 5)
-        XCTAssertEqual(
-            AnalyticsTrialStatusFeature.allCases.map(\.rawValue),
-            ["app_blocking", "shake_to_confirm", "smart_reminders", "custom_messages"]
-        )
-        XCTAssertEqual(
-            AnalyticsTrialActivationStatus.allCases.map(\.rawValue),
-            ["set_up", "active", "active_automatically", "personalize", "customized", "on"]
-        )
+        XCTAssertEqual(client.events.first?.name, "plus_setup_strip_tapped")
+        XCTAssertEqual(client.events.first?.properties, [
+            "source": .string("home"),
+            "completed_count": .int(1),
+            "is_plus": .bool(true),
+        ])
+    }
+
+    func testPlusSetupStepCarriesStepAndAction() {
+        let (telemetry, client) = makeTelemetry()
+
+        telemetry.plusSetupStep(.messages, action: .skipped)
+
+        XCTAssertEqual(client.events.count, 1)
+        XCTAssertEqual(client.events.first?.name, "plus_setup_step")
+        XCTAssertEqual(client.events.first?.properties, [
+            "source": .string("home"),
+            "step": .string("messages"),
+            "action": .string("skipped"),
+            "is_plus": .bool(true),
+        ])
     }
 
     func testBlockerSetupSkipCarriesAuthorizationStateWithoutSelectionData() {
