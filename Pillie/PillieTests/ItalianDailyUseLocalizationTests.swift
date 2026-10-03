@@ -586,9 +586,9 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
         XCTAssertEqual(
             countdown.sheetContent.timeline.map(\.text),
             [
-                "Un avviso quando mancano cinque giorni.",
-                "Un ultimo promemoria prima della fine.",
-                "Il blocco delle app si disattiva. I promemoria restano gratuiti e tutto ciò che hai configurato resta salvato.",
+                "Ti ricorderemo che mancano 5 giorni.",
+                "Un ultimo promemoria prima che la tua prova finisca.",
+                "Il blocco delle app si disattiva. I promemoria restano gratuiti e la tua configurazione resta salvata.",
             ]
         )
     }

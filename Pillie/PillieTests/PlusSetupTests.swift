@@ -100,7 +100,7 @@ struct PlusSetupTests {
         )
 
         #expect(PlusSetupSentence.parts(of: format) == [
-            .text("Nudge me every"),
+            .text("Remind me again every"),
             .interval(trailing: ""),
             .text("up to"),
             .repeats(trailing: ""),

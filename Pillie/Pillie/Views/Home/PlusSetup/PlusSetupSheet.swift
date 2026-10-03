@@ -259,7 +259,8 @@ private struct PlusSetupDonePage: View {
             VStack(alignment: .leading, spacing: 6) {
                 PlusSetupTitle(text: PillieLocalization.string("plus_setup.done.title", locale: locale))
                 Text(PillieLocalization.formatted(
-                    "plus_setup.done.body",
+                    // A skipped step can still be set up from Settings.
+                    progress.isComplete ? "plus_setup.done.body" : "plus_setup.done.body_partial",
                     locale: locale,
                     arguments: SettingsPresentation.time(
                         hour: store.reminderHour,

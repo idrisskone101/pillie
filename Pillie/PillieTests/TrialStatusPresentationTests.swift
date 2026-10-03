@@ -218,7 +218,7 @@ final class TrialStatusPresentationTests: XCTestCase {
         XCTAssertEqual(content.progress, TrialProgress(
             filledDays: 1,
             totalDays: 14,
-            todayLabel: "Day 1, today",
+            todayLabel: "Day 1",
             endLabel: "Jul 16"
         ))
         XCTAssertEqual(content.timelineTitle, "What happens next")
@@ -238,7 +238,7 @@ final class TrialStatusPresentationTests: XCTestCase {
         // Grant day and the first full day both read Day 1 beside "14 left".
         XCTAssertEqual(progress(on: 1)?.filledDays, 1)
         XCTAssertEqual(progress(on: 2)?.filledDays, 1)
-        XCTAssertEqual(progress(on: 8)?.todayLabel, "Day 7, today")
+        XCTAssertEqual(progress(on: 8)?.todayLabel, "Day 7")
         XCTAssertEqual(progress(on: 15)?.filledDays, 14)
     }
 
@@ -265,9 +265,9 @@ final class TrialStatusPresentationTests: XCTestCase {
 
         XCTAssertEqual(rows.map(\.dateText), ["July 11", "July 14", "July 16"])
         XCTAssertEqual(rows.map(\.text), [
-            "A heads-up that five days are left.",
-            "One last reminder before it ends.",
-            "App blocking turns off. Reminders stay free, and everything you set up stays saved.",
+            "We’ll remind you that 5 days are left.",
+            "A last reminder before your trial ends.",
+            "App blocking turns off. Reminders stay free, and your setup stays saved.",
         ])
         XCTAssertEqual(rows.map(\.symbol), ["bell.fill", "bell.fill", "lock.fill"])
     }
@@ -284,7 +284,7 @@ final class TrialStatusPresentationTests: XCTestCase {
 
         XCTAssertEqual(
             rows?.last?.text,
-            "Plus pauses until you pick a plan. Everything you set up stays saved."
+            "Plus pauses until you choose a plan. Your setup stays saved."
         )
     }
 
@@ -319,8 +319,8 @@ final class TrialStatusPresentationTests: XCTestCase {
             locale: english
         )?.sheetContent
 
-        XCTAssertEqual(content?.headline, "Ends tonight")
-        XCTAssertEqual(content?.progress.todayLabel, "Day 14, today")
+        XCTAssertEqual(content?.headline, "Trial ends tonight")
+        XCTAssertEqual(content?.progress.todayLabel, "Day 14")
     }
 
     // MARK: - No indicator for entitled users, expired trials, or no trial

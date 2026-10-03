@@ -45382,271 +45382,271 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ends tonight"
+            "value": "Trial ends tonight"
           }
         },
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "ينتهي الليلة"
+            "value": "تنتهي الفترة التجريبية الليلة"
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "আজ রাতে শেষ"
+            "value": "ট্রায়াল আজ রাতে শেষ"
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "S’acaba aquesta nit"
+            "value": "La prova s’acaba aquesta nit"
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Končí dnes v noci"
+            "value": "Zkušební období končí dnes v noci"
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Udløber i aften"
+            "value": "Prøveperioden udløber i aften"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Endet heute Nacht"
+            "value": "Testphase endet heute Nacht"
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Λήγει απόψε"
+            "value": "Η δοκιμή λήγει απόψε"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Termina esta noche"
+            "value": "La prueba termina esta noche"
           }
         },
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Päättyy tänä iltana"
+            "value": "Kokeilu päättyy tänä iltana"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Se termine ce soir"
+            "value": "L'essai se termine ce soir"
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "આજે રાત્રે પૂરું"
+            "value": "ટ્રાયલ આજે રાત્રે પૂરી"
           }
         },
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "מסתיים הלילה"
+            "value": "תקופת הניסיון נגמרת הלילה"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "आज रात ख़त्म"
+            "value": "ट्रायल आज रात ख़त्म"
           }
         },
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Završava večeras"
+            "value": "Proba završava večeras"
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ma éjjel véget ér"
+            "value": "A próbaidőszak ma éjjel véget ér"
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Berakhir malam ini"
+            "value": "Uji coba berakhir malam ini"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Finisce stasera"
+            "value": "La prova finisce stasera"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "今夜で終了"
+            "value": "トライアルは今夜で終了"
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ಇಂದು ರಾತ್ರಿ ಮುಗಿಯುತ್ತದೆ"
+            "value": "ಟ್ರಯಲ್ ಇಂದು ರಾತ್ರಿ ಮುಗಿಯುತ್ತದೆ"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "오늘 밤 종료"
+            "value": "오늘 밤 체험 종료"
           }
         },
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "ഇന്ന് രാത്രി അവസാനിക്കും"
+            "value": "ട്രയൽ ഇന്ന് രാത്രി അവസാനിക്കും"
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "आज रात्री संपेल"
+            "value": "ट्रायल आज रात्री संपेल"
           }
         },
         "ms": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tamat malam ini"
+            "value": "Percubaan tamat malam ini"
           }
         },
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slutter i kveld"
+            "value": "Prøveperioden slutter i kveld"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Eindigt vanavond"
+            "value": "Proefperiode eindigt vanavond"
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ଆଜି ରାତିରେ ଶେଷ"
+            "value": "ଟ୍ରାୟାଲ୍ ଆଜି ରାତିରେ ଶେଷ"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਅੱਜ ਰਾਤ ਖ਼ਤਮ"
+            "value": "ਟ੍ਰਾਇਲ ਅੱਜ ਰਾਤ ਖ਼ਤਮ"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kończy się dziś w nocy"
+            "value": "Okres próbny kończy się dziś w nocy"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Termina hoje à noite"
+            "value": "Teste termina hoje à noite"
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "translated",
-            "value": "Termina esta noite"
+            "value": "O teste termina esta noite"
           }
         },
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "Se termină în seara asta"
+            "value": "Perioada de probă se termină diseară"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Заканчивается сегодня ночью"
+            "value": "Пробный период закончится сегодня"
           }
         },
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Končí sa dnes v noci"
+            "value": "Skúšobné obdobie končí dnes v noci"
           }
         },
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Konča se nocoj"
+            "value": "Preizkus se konča nocoj"
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tar slut ikväll"
+            "value": "Provperioden tar slut ikväll"
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "இன்று இரவு முடிகிறது"
+            "value": "சோதனைக் காலம் இன்றிரவு முடிகிறது"
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "ఈ రాత్రి ముగుస్తుంది"
+            "value": "ట్రయల్ ఈ రాత్రి ముగుస్తుంది"
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "สิ้นสุดคืนนี้"
+            "value": "ทดลองใช้สิ้นสุดคืนนี้"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bu gece bitiyor"
+            "value": "Deneme bu gece bitiyor"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Завершується сьогодні вночі"
+            "value": "Пробний період завершиться сьогодні"
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "آج رات ختم"
+            "value": "ٹرائل آج رات ختم"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kết thúc tối nay"
+            "value": "Dùng thử kết thúc tối nay"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "今晚结束"
+            "value": "试用今晚结束"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "今晚結束"
+            "value": "試用今晚結束"
           }
         }
       }
@@ -45932,271 +45932,271 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Day %lld, today"
+            "value": "Day %lld"
           }
         },
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "يوم %lld، اليوم"
+            "value": "اليوم %lld"
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "দিন %lld, আজ"
+            "value": "দিন %lld"
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dia %lld, avui"
+            "value": "Dia %lld"
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Den %lld, dnes"
+            "value": "Den %lld"
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dag %lld, i dag"
+            "value": "Dag %lld"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tag %lld, heute"
+            "value": "Tag %lld"
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ημέρα %lld, σήμερα"
+            "value": "Ημέρα %lld"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Día %lld, hoy"
+            "value": "Día %lld"
           }
         },
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Päivä %lld, tänään"
+            "value": "Päivä %lld"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Jour %lld, aujourd'hui"
+            "value": "Jour %lld"
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "દિવસ %lld, આજે"
+            "value": "દિવસ %lld"
           }
         },
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "יום %lld, היום"
+            "value": "יום %lld"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "दिन %lld, आज"
+            "value": "दिन %lld"
           }
         },
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dan %lld, danas"
+            "value": "Dan %lld"
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld. nap, ma"
+            "value": "%lld. nap"
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Hari ke-%lld, hari ini"
+            "value": "Hari ke-%lld"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Giorno %lld, oggi"
+            "value": "Giorno %lld"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld日目、今日"
+            "value": "%lld日目"
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ದಿನ %lld, ಇಂದು"
+            "value": "ದಿನ %lld"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld일째, 오늘"
+            "value": "%lld일째"
           }
         },
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "ദിവസം %lld, ഇന്ന്"
+            "value": "ദിവസം %lld"
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "दिवस %lld, आज"
+            "value": "दिवस %lld"
           }
         },
         "ms": {
           "stringUnit": {
             "state": "translated",
-            "value": "Hari %lld, hari ini"
+            "value": "Hari %lld"
           }
         },
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dag %lld, i dag"
+            "value": "Dag %lld"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dag %lld, vandaag"
+            "value": "Dag %lld"
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ଦିନ %lld, ଆଜି"
+            "value": "ଦିନ %lld"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਦਿਨ %lld, ਅੱਜ"
+            "value": "ਦਿਨ %lld"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dzień %lld, dziś"
+            "value": "Dzień %lld"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dia %lld, hoje"
+            "value": "Dia %lld"
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dia %lld, hoje"
+            "value": "Dia %lld"
           }
         },
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ziua %lld, azi"
+            "value": "Ziua %lld"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "День %lld, сегодня"
+            "value": "День %lld"
           }
         },
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Deň %lld, dnes"
+            "value": "Deň %lld"
           }
         },
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dan %lld, danes"
+            "value": "Dan %lld"
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dag %lld, idag"
+            "value": "Dag %lld"
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "நாள் %lld, இன்று"
+            "value": "நாள் %lld"
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "రోజు %lld, ఈరోజు"
+            "value": "రోజు %lld"
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "วันที่ %lld วันนี้"
+            "value": "วันที่ %lld"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld. gün, bugün"
+            "value": "%lld. gün"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "День %lld, сьогодні"
+            "value": "День %lld"
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "دن %lld، آج"
+            "value": "دن %lld"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ngày %lld, hôm nay"
+            "value": "Ngày %lld"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "第 %lld 天，今天"
+            "value": "第 %lld 天"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "第 %lld 天，今天"
+            "value": "第 %lld 天"
           }
         }
       }
@@ -46482,109 +46482,109 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "A heads-up that five days are left."
+            "value": "We’ll remind you that 5 days are left."
           }
         },
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "تنبيه عندما تتبقى خمسة أيام."
+            "value": "سنذكّرك عندما تتبقى 5 أيام."
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "পাঁচ দিন বাকি থাকলে একটা সতর্কবার্তা।"
+            "value": "5 দিন বাকি থাকলে আমরা তোমাকে মনে করিয়ে দেব।"
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "Un avís quan quedin cinc dies."
+            "value": "Et recordarem que queden 5 dies."
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Upozornění, že zbývá pět dní."
+            "value": "Připomeneme ti, že zbývá 5 dní."
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "En besked, når der er fem dage tilbage."
+            "value": "Vi minder dig om, at der er 5 dage tilbage."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ein Hinweis, wenn noch fünf Tage übrig sind."
+            "value": "Wir erinnern dich, wenn noch 5 Tage übrig sind."
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Μια ειδοποίηση όταν μένουν πέντε μέρες."
+            "value": "Θα σου θυμίσουμε ότι μένουν 5 μέρες."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Un aviso cuando queden cinco días."
+            "value": "Te avisaremos cuando queden 5 días."
           }
         },
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ilmoitus, kun viisi päivää on jäljellä."
+            "value": "Muistutamme, kun 5 päivää on jäljellä."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Un rappel quand il reste cinq jours."
+            "value": "On te rappellera qu'il reste 5 jours."
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "પાંચ દિવસ બાકી રહે ત્યારે એક સૂચના."
+            "value": "5 દિવસ બાકી રહેશે ત્યારે અમે તને યાદ અપાવીશું."
           }
         },
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "התראה כשנשארים חמישה ימים."
+            "value": "נזכיר לך כשיישארו 5 ימים."
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "पाँच दिन बचने पर एक सूचना।"
+            "value": "5 दिन बचने पर हम तुम्हें याद दिलाएँगे।"
           }
         },
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Obavijest kad ostane pet dana."
+            "value": "Podsjetit ćemo te kad ostane 5 dana."
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "Értesítés, amikor öt nap van hátra."
+            "value": "Szólunk, amikor 5 nap van hátra."
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pemberitahuan saat tersisa lima hari."
+            "value": "Kami akan mengingatkanmu saat tersisa 5 hari."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Un avviso quando mancano cinque giorni."
+            "value": "Ti ricorderemo che mancano 5 giorni."
           }
         },
         "ja": {
@@ -46596,157 +46596,157 @@
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ಐದು ದಿನಗಳು ಉಳಿದಾಗ ಒಂದು ಸೂಚನೆ."
+            "value": "5 ದಿನಗಳು ಉಳಿದಾಗ ನಾವು ನಿನಗೆ ನೆನಪಿಸುತ್ತೇವೆ."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "5일 남았을 때 미리 알려 드려요."
+            "value": "5일 남았을 때 알려 드릴게요."
           }
         },
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "അഞ്ച് ദിവസം ബാക്കിയുള്ളപ്പോൾ ഒരു മുന്നറിയിപ്പ്."
+            "value": "5 ദിവസം ബാക്കിയുള്ളപ്പോൾ ഞങ്ങൾ നിന്നെ ഓർമ്മിപ്പിക്കും."
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "पाच दिवस उरल्यावर एक सूचना."
+            "value": "5 दिवस उरल्यावर आम्ही तुला आठवण करून देऊ."
           }
         },
         "ms": {
           "stringUnit": {
             "state": "translated",
-            "value": "Makluman apabila tinggal lima hari."
+            "value": "Kami akan ingatkan kamu apabila tinggal 5 hari."
           }
         },
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "Et varsel når det er fem dager igjen."
+            "value": "Vi minner deg på det når det er 5 dager igjen."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Een seintje als er nog vijf dagen over zijn."
+            "value": "We herinneren je eraan dat er nog 5 dagen over zijn."
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ପାଞ୍ଚ ଦିନ ବାକି ଥିବାବେଳେ ଏକ ସୂଚନା।"
+            "value": "5 ଦିନ ବାକି ଥିବାବେଳେ ଆମେ ତୁମକୁ ମନେ ପକାଇବୁ।"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਪੰਜ ਦਿਨ ਬਾਕੀ ਰਹਿਣ ’ਤੇ ਇੱਕ ਸੂਚਨਾ।"
+            "value": "5 ਦਿਨ ਬਾਕੀ ਰਹਿਣ ’ਤੇ ਅਸੀਂ ਤੈਨੂੰ ਯਾਦ ਕਰਾਵਾਂਗੇ।"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Powiadomienie, gdy zostanie pięć dni."
+            "value": "Przypomnimy ci, że zostało 5 dni."
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Um aviso quando faltarem cinco dias."
+            "value": "Vamos te lembrar quando faltarem 5 dias."
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "translated",
-            "value": "Um aviso quando faltarem cinco dias."
+            "value": "Vamos lembrar-te quando faltarem 5 dias."
           }
         },
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "O atenționare când mai sunt cinci zile."
+            "value": "Îți amintim când mai sunt 5 zile."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Предупреждение, когда останется пять дней."
+            "value": "Напомним, когда останется 5 дней."
           }
         },
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Upozornenie, že zostáva päť dní."
+            "value": "Pripomenieme ti, že zostáva 5 dní."
           }
         },
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Obvestilo, ko ostane pet dni."
+            "value": "Opomnili te bomo, ko bo ostalo 5 dni."
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "En påminnelse när fem dagar återstår."
+            "value": "Vi påminner dig när 5 dagar återstår."
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "ஐந்து நாட்கள் மீதமிருக்கும்போது ஒரு அறிவிப்பு."
+            "value": "5 நாட்கள் மீதமிருக்கும்போது உனக்கு நினைவூட்டுவோம்."
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "ఐదు రోజులు మిగిలినప్పుడు ఒక సూచన."
+            "value": "5 రోజులు మిగిలినప్పుడు మేము నీకు గుర్తు చేస్తాం."
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "แจ้งเตือนล่วงหน้าเมื่อเหลืออีกห้าวัน"
+            "value": "เราจะเตือนคุณเมื่อเหลืออีก 5 วัน"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Beş gün kaldığında bir uyarı."
+            "value": "5 gün kaldığında sana hatırlatacağız."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Попередження, коли лишиться п’ять днів."
+            "value": "Нагадаємо, коли лишиться 5 днів."
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "پانچ دن باقی رہنے پر ایک اطلاع۔"
+            "value": "5 دن باقی رہنے پر ہم تمہیں یاد دلائیں گے۔"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Một lời báo khi còn năm ngày."
+            "value": "Chúng tôi sẽ nhắc bạn khi còn 5 ngày."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "还剩五天时提醒你。"
+            "value": "还剩 5 天时会提醒你。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "剩下五天時提醒你。"
+            "value": "剩下 5 天時會提醒你。"
           }
         }
       }
@@ -46757,271 +46757,271 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "One last reminder before it ends."
+            "value": "A last reminder before your trial ends."
           }
         },
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "تذكير أخير قبل أن تنتهي."
+            "value": "تذكير أخير قبل انتهاء فترتك التجريبية."
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "শেষ হওয়ার আগে শেষ একটা রিমাইন্ডার।"
+            "value": "ট্রায়াল শেষ হওয়ার আগে শেষ একটা রিমাইন্ডার।"
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "Un últim recordatori abans que s’acabi."
+            "value": "Un últim recordatori abans que s’acabi la prova."
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Poslední připomínka před koncem."
+            "value": "Poslední připomínka před koncem zkušebního období."
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "En sidste påmindelse, før den udløber."
+            "value": "En sidste påmindelse, før din prøveperiode udløber."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Eine letzte Erinnerung, bevor es endet."
+            "value": "Eine letzte Erinnerung, bevor deine Testphase endet."
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Μια τελευταία υπενθύμιση πριν τη λήξη."
+            "value": "Μια τελευταία υπενθύμιση πριν λήξει η δοκιμή σου."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Un último recordatorio antes de que termine."
+            "value": "Un último recordatorio antes de que termine tu prueba."
           }
         },
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Viimeinen muistutus ennen päättymistä."
+            "value": "Viimeinen muistutus ennen kuin kokeilusi päättyy."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Un dernier rappel avant la fin."
+            "value": "Un dernier rappel avant la fin de ton essai."
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "પૂરું થાય તે પહેલાં એક છેલ્લું રિમાઇંડર."
+            "value": "તારી ટ્રાયલ પૂરી થાય તે પહેલાં એક છેલ્લું રિમાઇંડર."
           }
         },
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "תזכורת אחרונה לפני הסיום."
+            "value": "תזכורת אחרונה לפני שתקופת הניסיון שלך מסתיימת."
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "ख़त्म होने से पहले एक आख़िरी रिमाइंडर।"
+            "value": "ट्रायल ख़त्म होने से पहले एक आख़िरी रिमाइंडर।"
           }
         },
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Posljednji podsjetnik prije kraja."
+            "value": "Posljednji podsjetnik prije kraja probnog razdoblja."
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "Egy utolsó emlékeztető a vége előtt."
+            "value": "Egy utolsó emlékeztető, mielőtt a próbaidőszakod véget ér."
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Satu pengingat terakhir sebelum berakhir."
+            "value": "Satu pengingat terakhir sebelum uji cobamu berakhir."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Un ultimo promemoria prima della fine."
+            "value": "Un ultimo promemoria prima che la tua prova finisca."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "終了前に最後のお知らせをします。"
+            "value": "トライアル終了前に最後のお知らせをします。"
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ಮುಗಿಯುವ ಮೊದಲು ಕೊನೆಯ ಜ್ಞಾಪನೆ."
+            "value": "ನಿನ್ನ ಟ್ರಯಲ್ ಮುಗಿಯುವ ಮೊದಲು ಕೊನೆಯ ಜ್ಞಾಪನೆ."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "끝나기 전 마지막 알림."
+            "value": "체험이 끝나기 전 마지막 알림."
           }
         },
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "അവസാനിക്കും മുമ്പ് ഒരു അവസാന റിമൈൻഡർ."
+            "value": "നിന്റെ ട്രയൽ അവസാനിക്കും മുമ്പ് ഒരു അവസാന റിമൈൻഡർ."
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "संपण्याआधी एक शेवटची आठवण."
+            "value": "तुझा ट्रायल संपण्याआधी एक शेवटची आठवण."
           }
         },
         "ms": {
           "stringUnit": {
             "state": "translated",
-            "value": "Satu peringatan terakhir sebelum tamat."
+            "value": "Satu peringatan terakhir sebelum percubaan kamu tamat."
           }
         },
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "En siste påminnelse før det slutter."
+            "value": "En siste påminnelse før prøveperioden din slutter."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nog één herinnering voordat het afloopt."
+            "value": "Nog één herinnering voordat je proefperiode afloopt."
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ଶେଷ ହେବା ପୂର୍ବରୁ ଶେଷ ରିମାଇଣ୍ଡର୍।"
+            "value": "ତୁମର ଟ୍ରାୟାଲ୍ ଶେଷ ହେବା ପୂର୍ବରୁ ଶେଷ ରିମାଇଣ୍ଡର୍।"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਖ਼ਤਮ ਹੋਣ ਤੋਂ ਪਹਿਲਾਂ ਇੱਕ ਆਖ਼ਰੀ ਰਿਮਾਈਂਡਰ।"
+            "value": "ਤੇਰਾ ਟ੍ਰਾਇਲ ਖ਼ਤਮ ਹੋਣ ਤੋਂ ਪਹਿਲਾਂ ਇੱਕ ਆਖ਼ਰੀ ਰਿਮਾਈਂਡਰ।"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ostatnie przypomnienie przed końcem."
+            "value": "Ostatnie przypomnienie przed końcem okresu próbnego."
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Um último lembrete antes de terminar."
+            "value": "Um último lembrete antes do fim do seu teste."
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "translated",
-            "value": "Um último lembrete antes do fim."
+            "value": "Um último lembrete antes do fim do teu período de teste."
           }
         },
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "Un ultim memento înainte de final."
+            "value": "Un ultim memento înainte să se termine perioada ta de probă."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Последнее напоминание перед окончанием."
+            "value": "Последнее напоминание перед окончанием пробного периода."
           }
         },
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Posledná pripomienka pred koncom."
+            "value": "Posledná pripomienka pred koncom skúšobného obdobia."
           }
         },
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Še zadnji opomnik pred koncem."
+            "value": "Še zadnji opomnik, preden se tvoj preizkus konča."
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "En sista påminnelse innan den tar slut."
+            "value": "En sista påminnelse innan din provperiod tar slut."
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "முடியும் முன் ஒரு கடைசி நினைவூட்டல்."
+            "value": "உன் சோதனைக் காலம் முடியும் முன் ஒரு கடைசி நினைவூட்டல்."
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "ముగిసే ముందు చివరి రిమైండర్."
+            "value": "నీ ట్రయల్ ముగిసే ముందు చివరి రిమైండర్."
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "การแจ้งเตือนครั้งสุดท้ายก่อนสิ้นสุด"
+            "value": "การแจ้งเตือนครั้งสุดท้ายก่อนช่วงทดลองใช้ของคุณสิ้นสุด"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bitmeden önce son bir hatırlatma."
+            "value": "Denemen bitmeden önce son bir hatırlatma."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Останнє нагадування перед завершенням."
+            "value": "Останнє нагадування перед завершенням пробного періоду."
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "ختم ہونے سے پہلے ایک آخری یاد دہانی۔"
+            "value": "ٹرائل ختم ہونے سے پہلے ایک آخری یاد دہانی۔"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Lời nhắc cuối cùng trước khi kết thúc."
+            "value": "Lời nhắc cuối cùng trước khi bản dùng thử kết thúc."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "结束前最后提醒一次。"
+            "value": "试用结束前最后提醒一次。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "結束前最後提醒一次。"
+            "value": "試用結束前最後提醒一次。"
           }
         }
       }
@@ -47032,271 +47032,271 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus pauses until you pick a plan. Everything you set up stays saved."
+            "value": "Plus pauses until you choose a plan. Your setup stays saved."
           }
         },
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "يتوقف Plus مؤقتًا حتى تختاري خطة. كل ما ضبطتِه يبقى محفوظًا."
+            "value": "يتوقف Plus مؤقتًا حتى تختاري خطة. يبقى كل ما ضبطتِه محفوظًا."
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "তুমি কোনো প্ল্যান বেছে না নেওয়া পর্যন্ত Plus থেমে থাকবে। তুমি যা সেট আপ করেছ, সব সেভ থাকবে।"
+            "value": "তুমি কোনো প্ল্যান বেছে না নেওয়া পর্যন্ত Plus থেমে থাকবে। তোমার সেটআপ সেভ থাকবে।"
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus queda en pausa fins que triïs un pla. Tot el que has configurat queda desat."
+            "value": "Plus queda en pausa fins que triïs un pla. La teva configuració queda desada."
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus se pozastaví, dokud nevybereš tarif. Všechna tvá nastavení zůstanou uložená."
+            "value": "Plus se pozastaví, dokud nevybereš tarif. Tvoje nastavení zůstane uložené."
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus sættes på pause, indtil du vælger et abonnement. Alt, hvad du har sat op, forbliver gemt."
+            "value": "Plus sættes på pause, indtil du vælger et abonnement. Din opsætning forbliver gemt."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus pausiert, bis du einen Plan wählst. Alles, was du eingerichtet hast, bleibt gespeichert."
+            "value": "Plus pausiert, bis du einen Plan wählst. Deine Einrichtung bleibt gespeichert."
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Το Plus σταματά μέχρι να διαλέξεις πρόγραμμα. Ό,τι έχεις ρυθμίσει μένει αποθηκευμένο."
+            "value": "Το Plus σταματά μέχρι να διαλέξεις πρόγραμμα. Οι ρυθμίσεις σου μένουν αποθηκευμένες."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus se pausa hasta que elijas un plan. Todo lo que configuraste queda guardado."
+            "value": "Plus se pausa hasta que elijas un plan. Tu configuración queda guardada."
           }
         },
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus on tauolla, kunnes valitset tilauksen. Kaikki asetuksesi pysyvät tallessa."
+            "value": "Plus on tauolla, kunnes valitset tilauksen. Asetuksesi pysyvät tallessa."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus est en pause jusqu'à ce que tu choisisses une formule. Tout ce que tu as configuré reste enregistré."
+            "value": "Plus est en pause jusqu'à ce que tu choisisses une formule. Ta configuration reste enregistrée."
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "તું કોઈ પ્લાન પસંદ ન કરે ત્યાં સુધી Plus અટકેલું રહેશે. તેં જે સેટ કર્યું છે તે બધું સેવ રહેશે."
+            "value": "તું કોઈ પ્લાન પસંદ ન કરે ત્યાં સુધી Plus અટકેલું રહેશે. તારું સેટઅપ સેવ રહેશે."
           }
         },
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus מושהה עד שתבחרי תוכנית. כל מה שהגדרת נשאר שמור."
+            "value": "Plus מושהה עד שתבחרי תוכנית. ההגדרות שלך נשארות שמורות."
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "जब तक तुम कोई प्लान नहीं चुनती, Plus रुका रहेगा। तुमने जो भी सेट किया है, वह सेव रहेगा।"
+            "value": "जब तक तुम कोई प्लान नहीं चुनती, Plus रुका रहेगा। तुम्हारा सेटअप सेव रहेगा।"
           }
         },
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus se pauzira dok ne odabereš plan. Sve tvoje postavke ostaju spremljene."
+            "value": "Plus se pauzira dok ne odabereš plan. Tvoje postavke ostaju spremljene."
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "A Plus szünetel, amíg nem választasz csomagot. Minden beállításod mentve marad."
+            "value": "A Plus szünetel, amíg nem választasz csomagot. A beállításaid mentve maradnak."
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus dijeda sampai kamu memilih paket. Semua yang kamu atur tetap tersimpan."
+            "value": "Plus dijeda sampai kamu memilih paket. Pengaturanmu tetap tersimpan."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus va in pausa finché non scegli un piano. Tutto ciò che hai configurato resta salvato."
+            "value": "Plus va in pausa finché non scegli un piano. La tua configurazione resta salvata."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "プランを選ぶまでPlusは一時停止します。設定した内容はすべて保存されます。"
+            "value": "プランを選ぶまでPlusは一時停止します。設定は保存されたままです。"
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ನೀನು ಪ್ಲಾನ್ ಆರಿಸುವವರೆಗೆ Plus ನಿಲ್ಲುತ್ತದೆ. ನೀನು ಹೊಂದಿಸಿದ ಎಲ್ಲವೂ ಉಳಿಸಲ್ಪಟ್ಟಿರುತ್ತದೆ."
+            "value": "ನೀನು ಪ್ಲಾನ್ ಆರಿಸುವವರೆಗೆ Plus ನಿಲ್ಲುತ್ತದೆ. ನಿನ್ನ ಸೆಟಪ್ ಉಳಿಸಲ್ಪಟ್ಟಿರುತ್ತದೆ."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "플랜을 고를 때까지 Plus가 일시 중지돼요. 설정한 내용은 모두 저장돼요."
+            "value": "플랜을 고를 때까지 Plus가 일시 중지돼요. 설정은 그대로 저장돼요."
           }
         },
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "നീ ഒരു പ്ലാൻ തിരഞ്ഞെടുക്കുന്നതുവരെ Plus നിർത്തിവയ്ക്കും. നീ സജ്ജമാക്കിയതെല്ലാം സേവ് ചെയ്തിരിക്കും."
+            "value": "നീ ഒരു പ്ലാൻ തിരഞ്ഞെടുക്കുന്നതുവരെ Plus നിർത്തിവയ്ക്കും. നിന്റെ സെറ്റപ്പ് സേവ് ചെയ്തിരിക്കും."
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "तू प्लॅन निवडेपर्यंत Plus थांबेल. तू सेट केलेलं सगळं सेव्ह राहील."
+            "value": "तू प्लॅन निवडेपर्यंत Plus थांबेल. तुझा सेटअप सेव्ह राहील."
           }
         },
         "ms": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus dijeda sehingga kamu pilih pelan. Semua yang kamu sediakan kekal disimpan."
+            "value": "Plus dijeda sehingga kamu pilih pelan. Tetapan kamu kekal disimpan."
           }
         },
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus pauses til du velger et abonnement. Alt du har satt opp, blir lagret."
+            "value": "Plus pauses til du velger et abonnement. Oppsettet ditt blir lagret."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus pauzeert tot je een abonnement kiest. Alles wat je hebt ingesteld blijft bewaard."
+            "value": "Plus pauzeert tot je een abonnement kiest. Je instellingen blijven bewaard."
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ତୁମେ ଏକ ପ୍ଲାନ୍ ବାଛିବା ପର୍ୟ୍ୟନ୍ତ Plus ବିରାମରେ ରହିବ। ତୁମେ ସେଟ୍ କରିଥିବା ସବୁକିଛି ସେଭ୍ ରହିବ।"
+            "value": "ତୁମେ ଏକ ପ୍ଲାନ୍ ବାଛିବା ପର୍ୟ୍ୟନ୍ତ Plus ବିରାମରେ ରହିବ। ତୁମର ସେଟଅପ୍ ସେଭ୍ ରହିବ।"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਜਦੋਂ ਤੱਕ ਤੂੰ ਕੋਈ ਪਲਾਨ ਨਹੀਂ ਚੁਣਦੀ, Plus ਰੁਕਿਆ ਰਹੇਗਾ। ਤੂੰ ਜੋ ਵੀ ਸੈੱਟ ਕੀਤਾ ਹੈ, ਉਹ ਸੰਭਾਲਿਆ ਰਹੇਗਾ।"
+            "value": "ਜਦੋਂ ਤੱਕ ਤੂੰ ਕੋਈ ਪਲਾਨ ਨਹੀਂ ਚੁਣਦੀ, Plus ਰੁਕਿਆ ਰਹੇਗਾ। ਤੇਰਾ ਸੈੱਟਅੱਪ ਸੰਭਾਲਿਆ ਰਹੇਗਾ।"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus zostanie wstrzymany, dopóki nie wybierzesz planu. Wszystkie twoje ustawienia zostaną zapisane."
+            "value": "Plus zostanie wstrzymany, dopóki nie wybierzesz planu. Twoje ustawienia zostaną zapisane."
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "O Plus pausa até você escolher um plano. Tudo o que você configurou fica salvo."
+            "value": "O Plus pausa até você escolher um plano. Sua configuração fica salva."
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "translated",
-            "value": "O Plus fica em pausa até escolheres um plano. Tudo o que configuraste fica guardado."
+            "value": "O Plus fica em pausa até escolheres um plano. A tua configuração fica guardada."
           }
         },
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus se întrerupe până alegi un plan. Tot ce ai configurat rămâne salvat."
+            "value": "Plus se întrerupe până alegi un plan. Configurarea ta rămâne salvată."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus приостановится, пока ты не выберешь тариф. Все твои настройки сохранятся."
+            "value": "Plus приостановится, пока ты не выберешь тариф. Твои настройки сохранятся."
           }
         },
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus sa pozastaví, kým si nevyberieš plán. Všetky tvoje nastavenia zostanú uložené."
+            "value": "Plus sa pozastaví, kým si nevyberieš plán. Tvoje nastavenia zostanú uložené."
           }
         },
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus se ustavi, dokler ne izbereš paketa. Vse tvoje nastavitve ostanejo shranjene."
+            "value": "Plus se ustavi, dokler ne izbereš paketa. Tvoje nastavitve ostanejo shranjene."
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus pausas tills du väljer ett abonnemang. Allt du har ställt in sparas."
+            "value": "Plus pausas tills du väljer ett abonnemang. Dina inställningar sparas."
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "நீ ஒரு திட்டத்தைத் தேர்ந்தெடுக்கும் வரை Plus இடைநிறுத்தப்படும். நீ அமைத்த அனைத்தும் சேமிக்கப்பட்டிருக்கும்."
+            "value": "நீ ஒரு திட்டத்தைத் தேர்ந்தெடுக்கும் வரை Plus இடைநிறுத்தப்படும். உன் அமைப்புகள் சேமிக்கப்பட்டிருக்கும்."
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "నువ్వు ప్లాన్ ఎంచుకునేదాకా Plus ఆగుతుంది. నువ్వు సెటప్ చేసినవన్నీ సేవ్ అయి ఉంటాయి."
+            "value": "నువ్వు ప్లాన్ ఎంచుకునేదాకా Plus ఆగుతుంది. నీ సెటప్ సేవ్ అయి ఉంటుంది."
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus จะหยุดชั่วคราวจนกว่าคุณจะเลือกแพ็กเกจ ทุกอย่างที่คุณตั้งค่าไว้จะยังถูกบันทึกอยู่"
+            "value": "Plus จะหยุดชั่วคราวจนกว่าคุณจะเลือกแพ็กเกจ การตั้งค่าของคุณยังถูกบันทึกอยู่"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bir plan seçene kadar Plus duraklar. Kurduğun her şey kayıtlı kalır."
+            "value": "Bir plan seçene kadar Plus duraklar. Kurulumun kayıtlı kalır."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus призупиниться, доки ти не обереш тариф. Усі твої налаштування збережуться."
+            "value": "Plus призупиниться, доки ти не обереш тариф. Твої налаштування збережуться."
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "جب تک تم کوئی پلان نہیں چنتی، Plus رکا رہے گا۔ تم نے جو کچھ سیٹ کیا ہے، وہ محفوظ رہے گا۔"
+            "value": "جب تک تم کوئی پلان نہیں چنتی، Plus رکا رہے گا۔ تمہارا سیٹ اپ محفوظ رہے گا۔"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus tạm dừng cho đến khi bạn chọn gói. Mọi thứ bạn đã thiết lập vẫn được lưu."
+            "value": "Plus tạm dừng cho đến khi bạn chọn gói. Thiết lập của bạn vẫn được lưu."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "在你选择方案前，Plus 会暂停。你设置的一切都会保留。"
+            "value": "在你选择方案前，Plus 会暂停。你的设置会保留。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "在你選擇方案前，Plus 會暫停。你設定的一切都會保留。"
+            "value": "在你選擇方案前，Plus 會暫停。你的設定會保留。"
           }
         }
       }
@@ -47307,7 +47307,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "App blocking turns off. Reminders stay free, and everything you set up stays saved."
+            "value": "App blocking turns off. Reminders stay free, and your setup stays saved."
           }
         },
         "ar": {
@@ -47319,259 +47319,259 @@
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "অ্যাপ ব্লকিং বন্ধ হবে। রিমাইন্ডার ফ্রি থাকবে, আর তুমি যা সেট আপ করেছ, সব সেভ থাকবে।"
+            "value": "অ্যাপ ব্লকিং বন্ধ হবে। রিমাইন্ডার ফ্রি থাকবে, আর তোমার সেটআপ সেভ থাকবে।"
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "La pausa d’apps es desactiva. Els recordatoris continuen sent gratuïts i tot el que has configurat queda desat."
+            "value": "La pausa d’apps es desactiva. Els recordatoris continuen sent gratuïts i la teva configuració queda desada."
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Blokování aplikací se vypne. Připomínky zůstanou zdarma a všechna tvá nastavení zůstanou uložená."
+            "value": "Blokování aplikací se vypne. Připomínky zůstanou zdarma a tvoje nastavení zůstane uložené."
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Appblokering slås fra. Påmindelser forbliver gratis, og alt, hvad du har sat op, forbliver gemt."
+            "value": "Appblokering slås fra. Påmindelser forbliver gratis, og din opsætning forbliver gemt."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Die App-Pause wird deaktiviert. Erinnerungen bleiben kostenlos, und alles, was du eingerichtet hast, bleibt gespeichert."
+            "value": "Die App-Pause wird deaktiviert. Erinnerungen bleiben kostenlos, und deine Einrichtung bleibt gespeichert."
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Η παύση εφαρμογών απενεργοποιείται. Οι υπενθυμίσεις μένουν δωρεάν και ό,τι έχεις ρυθμίσει μένει αποθηκευμένο."
+            "value": "Η παύση εφαρμογών απενεργοποιείται. Οι υπενθυμίσεις μένουν δωρεάν και οι ρυθμίσεις σου μένουν αποθηκευμένες."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "El bloqueo de apps se desactiva. Los recordatorios siguen gratis y todo lo que configuraste queda guardado."
+            "value": "El bloqueo de apps se desactiva. Los recordatorios siguen gratis y tu configuración queda guardada."
           }
         },
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sovellustauko poistuu käytöstä. Muistutukset pysyvät ilmaisina, ja kaikki asetuksesi pysyvät tallessa."
+            "value": "Sovellustauko poistuu käytöstä. Muistutukset pysyvät ilmaisina, ja asetuksesi pysyvät tallessa."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "La pause d'apps se désactive. Les rappels restent gratuits, et tout ce que tu as configuré reste enregistré."
+            "value": "La pause d'apps se désactive. Les rappels restent gratuits, et ta configuration reste enregistrée."
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "ઍપ બ્લૉકિંગ બંધ થશે. રિમાઇંડર મફત રહેશે, અને તેં જે સેટ કર્યું છે તે બધું સેવ રહેશે."
+            "value": "ઍપ બ્લૉકિંગ બંધ થશે. રિમાઇંડર મફત રહેશે, અને તારું સેટઅપ સેવ રહેશે."
           }
         },
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "השהיית האפליקציות נכבית. התזכורות נשארות בחינם, וכל מה שהגדרת נשאר שמור."
+            "value": "השהיית האפליקציות נכבית. התזכורות נשארות בחינם, וההגדרות שלך נשארות שמורות."
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "ऐप ब्लॉकिंग बंद हो जाती है। रिमाइंडर मुफ़्त रहते हैं, और तुमने जो भी सेट किया है, वह सेव रहेगा।"
+            "value": "ऐप ब्लॉकिंग बंद हो जाती है। रिमाइंडर मुफ़्त रहते हैं, और तुम्हारा सेटअप सेव रहेगा।"
           }
         },
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Blokiranje aplikacija se isključuje. Podsjetnici ostaju besplatni, a sve tvoje postavke ostaju spremljene."
+            "value": "Blokiranje aplikacija se isključuje. Podsjetnici ostaju besplatni, a tvoje postavke ostaju spremljene."
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "Az appblokkolás kikapcsol. Az emlékeztetők ingyenesek maradnak, és minden beállításod mentve marad."
+            "value": "Az appblokkolás kikapcsol. Az emlékeztetők ingyenesek maradnak, és a beállításaid mentve maradnak."
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Jeda aplikasi mati. Pengingat tetap gratis, dan semua yang kamu atur tetap tersimpan."
+            "value": "Jeda aplikasi mati. Pengingat tetap gratis, dan pengaturanmu tetap tersimpan."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Il blocco delle app si disattiva. I promemoria restano gratuiti e tutto ciò che hai configurato resta salvato."
+            "value": "Il blocco delle app si disattiva. I promemoria restano gratuiti e la tua configurazione resta salvata."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "アプリブロックがオフになります。リマインダーは無料のままで、設定した内容はすべて保存されます。"
+            "value": "アプリブロックがオフになります。リマインダーは無料のままで、設定は保存されたままです。"
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ಆ್ಯಪ್ ಬ್ಲಾಕಿಂಗ್ ಆಫ್ ಆಗುತ್ತದೆ. ಜ್ಞಾಪನೆಗಳು ಉಚಿತವಾಗಿರುತ್ತವೆ, ಮತ್ತು ನೀನು ಹೊಂದಿಸಿದ ಎಲ್ಲವೂ ಉಳಿಸಲ್ಪಟ್ಟಿರುತ್ತದೆ."
+            "value": "ಆ್ಯಪ್ ಬ್ಲಾಕಿಂಗ್ ಆಫ್ ಆಗುತ್ತದೆ. ಜ್ಞಾಪನೆಗಳು ಉಚಿತವಾಗಿರುತ್ತವೆ, ಮತ್ತು ನಿನ್ನ ಸೆಟಪ್ ಉಳಿಸಲ್ಪಟ್ಟಿರುತ್ತದೆ."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "앱 차단이 꺼져요. 알림은 계속 무료이고, 설정한 내용은 모두 저장돼요."
+            "value": "앱 차단이 꺼져요. 알림은 계속 무료이고, 설정은 그대로 저장돼요."
           }
         },
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "ആപ്പ് ബ്ലോക്കിംഗ് ഓഫാകും. റിമൈൻഡറുകൾ സൗജന്യമായി തുടരും, നീ സജ്ജമാക്കിയതെല്ലാം സേവ് ചെയ്തിരിക്കും."
+            "value": "ആപ്പ് ബ്ലോക്കിംഗ് ഓഫാകും. റിമൈൻഡറുകൾ സൗജന്യമായി തുടരും, നിന്റെ സെറ്റപ്പ് സേവ് ചെയ്തിരിക്കും."
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "अॅप थांबवणे बंद होतं. आठवणी मोफत राहतात, आणि तू सेट केलेलं सगळं सेव्ह राहील."
+            "value": "अॅप थांबवणे बंद होतं. आठवणी मोफत राहतात, आणि तुझा सेटअप सेव्ह राहील."
           }
         },
         "ms": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sekatan apl dimatikan. Peringatan kekal percuma, dan semua yang kamu sediakan kekal disimpan."
+            "value": "Sekatan apl dimatikan. Peringatan kekal percuma, dan tetapan kamu kekal disimpan."
           }
         },
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "App-pause slås av. Påminnelser forblir gratis, og alt du har satt opp, blir lagret."
+            "value": "App-pause slås av. Påminnelser forblir gratis, og oppsettet ditt blir lagret."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "App-pauze wordt uitgeschakeld. Herinneringen blijven gratis en alles wat je hebt ingesteld blijft bewaard."
+            "value": "App-pauze wordt uitgeschakeld. Herinneringen blijven gratis en je instellingen blijven bewaard."
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ଆପ୍ ବିରାମ ବନ୍ଦ ହୁଏ। ରିମାଇଣ୍ଡର୍ ମାଗଣା ରହେ, ଏବଂ ତୁମେ ସେଟ୍ କରିଥିବା ସବୁକିଛି ସେଭ୍ ରହିବ।"
+            "value": "ଆପ୍ ବିରାମ ବନ୍ଦ ହୁଏ। ରିମାଇଣ୍ଡର୍ ମାଗଣା ରହେ, ଏବଂ ତୁମର ସେଟଅପ୍ ସେଭ୍ ରହିବ।"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਐਪ ਬਲਾਕਿੰਗ ਬੰਦ ਹੋ ਜਾਂਦੀ ਹੈ। ਰਿਮਾਈਂਡਰ ਮੁਫ਼ਤ ਰਹਿੰਦੇ ਹਨ, ਅਤੇ ਤੂੰ ਜੋ ਵੀ ਸੈੱਟ ਕੀਤਾ ਹੈ, ਉਹ ਸੰਭਾਲਿਆ ਰਹੇਗਾ।"
+            "value": "ਐਪ ਬਲਾਕਿੰਗ ਬੰਦ ਹੋ ਜਾਂਦੀ ਹੈ। ਰਿਮਾਈਂਡਰ ਮੁਫ਼ਤ ਰਹਿੰਦੇ ਹਨ, ਅਤੇ ਤੇਰਾ ਸੈੱਟਅੱਪ ਸੰਭਾਲਿਆ ਰਹੇਗਾ।"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Blokowanie aplikacji się wyłączy. Przypomnienia zostają bezpłatne, a wszystkie twoje ustawienia zostaną zapisane."
+            "value": "Blokowanie aplikacji się wyłączy. Przypomnienia zostają bezpłatne, a twoje ustawienia zostaną zapisane."
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "O bloqueio de apps é desligado. Os lembretes continuam grátis, e tudo o que você configurou fica salvo."
+            "value": "O bloqueio de apps é desligado. Os lembretes continuam grátis, e sua configuração fica salva."
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "translated",
-            "value": "A pausa de apps desliga-se. Os lembretes continuam grátis e tudo o que configuraste fica guardado."
+            "value": "A pausa de apps desliga-se. Os lembretes continuam grátis e a tua configuração fica guardada."
           }
         },
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "Blocarea aplicațiilor se oprește. Mementourile rămân gratuite, iar tot ce ai configurat rămâne salvat."
+            "value": "Blocarea aplicațiilor se oprește. Mementourile rămân gratuite, iar configurarea ta rămâne salvată."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Блокировка приложений отключится. Напоминания останутся бесплатными, а все твои настройки сохранятся."
+            "value": "Блокировка приложений отключится. Напоминания останутся бесплатными, а твои настройки сохранятся."
           }
         },
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Blokovanie aplikácií sa vypne. Pripomienky zostanú zdarma a všetky tvoje nastavenia zostanú uložené."
+            "value": "Blokovanie aplikácií sa vypne. Pripomienky zostanú zdarma a tvoje nastavenia zostanú uložené."
           }
         },
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Blokiranje aplikacij se izklopi. Opomniki ostanejo brezplačni, vse tvoje nastavitve pa ostanejo shranjene."
+            "value": "Blokiranje aplikacij se izklopi. Opomniki ostanejo brezplačni, tvoje nastavitve pa ostanejo shranjene."
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Appblockeringen stängs av. Påminnelserna förblir gratis och allt du har ställt in sparas."
+            "value": "Appblockeringen stängs av. Påminnelserna förblir gratis och dina inställningar sparas."
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "ஆப் இடைநிறுத்தம் ஆஃப் ஆகும். நினைவூட்டல்கள் இலவசமாகவே இருக்கும், நீ அமைத்த அனைத்தும் சேமிக்கப்பட்டிருக்கும்."
+            "value": "ஆப் இடைநிறுத்தம் ஆஃப் ஆகும். நினைவூட்டல்கள் இலவசமாகவே இருக்கும், உன் அமைப்புகள் சேமிக்கப்பட்டிருக்கும்."
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "యాప్ పాజ్ ఆఫ్ అవుతుంది. రిమైండర్లు ఉచితంగానే ఉంటాయి, నువ్వు సెటప్ చేసినవన్నీ సేవ్ అయి ఉంటాయి."
+            "value": "యాప్ పాజ్ ఆఫ్ అవుతుంది. రిమైండర్లు ఉచితంగానే ఉంటాయి, నీ సెటప్ సేవ్ అయి ఉంటుంది."
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "การพักแอปจะปิด การแจ้งเตือนยังฟรี และทุกอย่างที่คุณตั้งค่าไว้จะยังถูกบันทึกอยู่"
+            "value": "การพักแอปจะปิด การแจ้งเตือนยังฟรี และการตั้งค่าของคุณยังถูกบันทึกอยู่"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Uygulama duraklatma kapanır. Hatırlatmalar ücretsiz kalır ve kurduğun her şey kayıtlı kalır."
+            "value": "Uygulama duraklatma kapanır. Hatırlatmalar ücretsiz kalır ve kurulumun kayıtlı kalır."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Блокування застосунків вимкнеться. Нагадування лишаться безкоштовними, а всі твої налаштування збережуться."
+            "value": "Блокування застосунків вимкнеться. Нагадування лишаться безкоштовними, а твої налаштування збережуться."
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "ایپ بلاکنگ بند ہو جاتی ہے۔ یاد دہانیاں مفت رہتی ہیں، اور تم نے جو کچھ سیٹ کیا ہے، وہ محفوظ رہے گا۔"
+            "value": "ایپ بلاکنگ بند ہو جاتی ہے۔ یاد دہانیاں مفت رہتی ہیں، اور تمہارا سیٹ اپ محفوظ رہے گا۔"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Chặn ứng dụng sẽ tắt. Lời nhắc vẫn miễn phí, và mọi thứ bạn đã thiết lập vẫn được lưu."
+            "value": "Chặn ứng dụng sẽ tắt. Lời nhắc vẫn miễn phí, và thiết lập của bạn vẫn được lưu."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "应用屏蔽将关闭。提醒仍然免费，你设置的一切都会保留。"
+            "value": "应用屏蔽将关闭。提醒仍然免费，你的设置会保留。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "應用程式封鎖將關閉。提醒仍然免費，你設定的一切都會保留。"
+            "value": "應用程式封鎖將關閉。提醒仍然免費，你的設定會保留。"
           }
         }
       }

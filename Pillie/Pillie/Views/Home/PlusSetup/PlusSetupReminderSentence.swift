@@ -89,17 +89,23 @@ struct PlusSetupReminderSentence: View {
             .pickerStyle(.inline)
             .labelsHidden()
         } label: {
-            PlusSetupChip(text: repeatsLabel(retryLimit), isAccent: false)
+            PlusSetupChip(text: repeatsCount(retryLimit), isAccent: false)
         }
         .menuOrder(.fixed)
         .accessibilityIdentifier("plusSetupRepeatsMenu")
     }
 
+    /// Menu rows say "Off" for no follow-ups; the chip keeps the count so the
+    /// sentence still reads ("up to 0 times").
     private func repeatsLabel(_ limit: Int) -> String {
         guard limit > 0 else {
             return PillieLocalization.string("global.status.off", locale: locale)
         }
-        return PillieLocalization.formatted(
+        return repeatsCount(limit)
+    }
+
+    private func repeatsCount(_ limit: Int) -> String {
+        PillieLocalization.formatted(
             "plus_setup.reminders.repeats_chip",
             locale: locale,
             arguments: Int64(limit)
