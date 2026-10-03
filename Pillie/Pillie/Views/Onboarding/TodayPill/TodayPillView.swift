@@ -10,12 +10,23 @@ struct TodayPillView: View {
     let onBack: () -> Void
     let onContinue: (TodayPillPick) -> Void
 
-    @Environment(PillStore.self) private var store
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
-    // Seeded in onAppear, not a custom init, so the SDK 27 @State macro stays well-behaved.
-    @State private var selection = TodayPillSelection(pack: PackChoice(preset: .twentyOneSeven))
+    // Seeded before the first frame, so a saved pack never cross-fades in from 21/7.
+    @State private var selection: TodayPillSelection
     @State private var appeared = false
+
+    init(
+        store: PillStore,
+        progress: ProtectionPlanProgress,
+        onBack: @escaping () -> Void,
+        onContinue: @escaping (TodayPillPick) -> Void
+    ) {
+        self.progress = progress
+        self.onBack = onBack
+        self.onContinue = onContinue
+        _selection = State(initialValue: Self.seed(store: store))
+    }
 
     private var animationsEnabled: Bool {
         PerformanceTier.current == .standard && !reduceMotion
@@ -54,7 +65,6 @@ struct TodayPillView: View {
             }
         }
         .onAppear {
-            seed()
             appeared = true
         }
     }
@@ -68,21 +78,20 @@ struct TodayPillView: View {
         }
     }
 
-    private func seed() {
+    private static func seed(store: PillStore) -> TodayPillSelection {
         if let draft = TodayPillPick.load() {
-            selection = TodayPillSelection(restoring: draft)
-            return
+            return TodayPillSelection(restoring: draft)
         }
         let pack = store.pack
-        selection = TodayPillSelection(pack: pack.method == .pill ? PackChoice(pack.regimen) : PackChoice(preset: .twentyOneSeven))
+        return TodayPillSelection(pack: pack.method == .pill ? PackChoice(pack.regimen) : PackChoice(preset: .twentyOneSeven))
     }
 }
 
 #Preview {
     TodayPillView(
+        store: PillStore.previewStore(),
         progress: ProtectionPlanProgressIndex.progress(for: .schedule),
         onBack: {},
         onContinue: { _ in }
     )
-    .environment(PillStore.previewStore())
 }
