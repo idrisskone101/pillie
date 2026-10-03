@@ -117,7 +117,6 @@ struct ProtocolEditor: View {
                 .font(.pillie(20, weight: .bold))
                 .foregroundStyle(PillieTheme.textPrimary)
                 .fixedSize(horizontal: false, vertical: true)
-                .id(Self.topAnchor)
 
             module(for: draft, onReveal: onReveal)
                 .id(draft.method)
@@ -131,6 +130,7 @@ struct ProtocolEditor: View {
                 .id(Self.bottomAnchor)
         }
         .padding(20)
+        .id(Self.topAnchor)
     }
 
     private var methodPicker: some View {
