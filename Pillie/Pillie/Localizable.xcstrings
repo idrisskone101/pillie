@@ -66563,265 +66563,265 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Non confermato"
+            "value": "Mancato"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nicht abgehakt"
+            "value": "Verpasst"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Non validé"
+            "value": "Manqué"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sin marcar"
+            "value": "Omitido"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sem registro"
+            "value": "Não tomada"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Niet afgevinkt"
+            "value": "Gemist"
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Inte avbockat"
+            "value": "Missat"
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ikke krydset af"
+            "value": "Ikke taget"
           }
         },
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ikke krysset av"
+            "value": "Ikke tatt"
           }
         },
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ei kuitattu"
+            "value": "Väliin jäänyt"
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sem registo"
+            "value": "Não tomada"
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sense confirmar"
+            "value": "Omès"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nieodhaczone"
+            "value": "Pominięto"
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Neodškrtnuto"
+            "value": "Vynecháno"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Не отмечено"
+            "value": "Пропущено"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Не відмічено"
+            "value": "Пропущено"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "記録なし"
+            "value": "未服用"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "체크 안 함"
+            "value": "놓침"
           }
         },
         "ms": {
           "stringUnit": {
             "state": "translated",
-            "value": "Belum disahkan"
+            "value": "Terlepas"
           }
         },
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nebifat"
+            "value": "Omis"
           }
         },
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Neodškrtnuté"
+            "value": "Vynechané"
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "ไม่ได้เช็กอิน"
+            "value": "ไม่ได้กิน"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "未打卡"
+            "value": "漏服"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "दर्ज नहीं"
+            "value": "छूट गया"
           }
         },
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nije javljeno"
+            "value": "Propušteno"
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nincs kipipálva"
+            "value": "Kihagyva"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "İşaretlenmedi"
+            "value": "Kaçırıldı"
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "பதிவில்லை"
+            "value": "தவறியது"
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Belum check-in"
+            "value": "Terlewat"
           }
         },
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "غير مسجّل"
+            "value": "فائتة"
           }
         },
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "לא סומן"
+            "value": "פוספס"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Chưa điểm danh"
+            "value": "Bỏ lỡ"
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "টিক দেওয়া হয়নি"
+            "value": "মিস হয়েছে"
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "درج نہیں"
+            "value": "چھوٹ گیا"
           }
         },
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ni odkljukano"
+            "value": "Izpuščeno"
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Δεν σημειώθηκε"
+            "value": "Παραλείφθηκε"
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "నమోదు కాలేదు"
+            "value": "మిస్ అయింది"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "未打卡"
+            "value": "漏服"
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "નોંધાયેલ નથી"
+            "value": "ચૂકી ગયું"
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ದಾಖಲಾಗಿಲ್ಲ"
+            "value": "ತಪ್ಪಿಹೋಗಿದೆ"
           }
         },
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "രേഖപ്പെടുത്തിയിട്ടില്ല"
+            "value": "വിട്ടുപോയി"
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "नोंद नाही"
+            "value": "राहून गेले"
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ଦର୍ଜ ହୋଇନାହିଁ"
+            "value": "ଛାଡ଼ି ଯାଇଛି"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਦਰਜ ਨਹੀਂ"
+            "value": "ਖੁੰਝ ਗਿਆ"
           }
         }
       }
@@ -68488,265 +68488,265 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Non validé"
+            "value": "Manquée"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sin marcar"
+            "value": "Omitida"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sem registro"
+            "value": "Não tomada"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Niet afgevinkt"
+            "value": "Gemist"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nicht abgehakt"
+            "value": "Verpasst"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Non confermato"
+            "value": "Mancata"
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Inte avbockat"
+            "value": "Missat"
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ikke krydset af"
+            "value": "Ikke taget"
           }
         },
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ikke krysset av"
+            "value": "Ikke tatt"
           }
         },
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ei kuitattu"
+            "value": "Väliin jäänyt"
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sem registo"
+            "value": "Não tomada"
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sense confirmar"
+            "value": "Omesa"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nieodhaczone"
+            "value": "Pominięto"
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Neodškrtnuto"
+            "value": "Vynecháno"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Не отмечено"
+            "value": "Пропущено"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Не відмічено"
+            "value": "Пропущено"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "記録なし"
+            "value": "未服用"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "체크 안 함"
+            "value": "놓침"
           }
         },
         "ms": {
           "stringUnit": {
             "state": "translated",
-            "value": "Belum disahkan"
+            "value": "Terlepas"
           }
         },
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nebifat"
+            "value": "Omisă"
           }
         },
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Neodškrtnuté"
+            "value": "Vynechané"
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "ไม่ได้เช็กอิน"
+            "value": "ไม่ได้กิน"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "未打卡"
+            "value": "漏服"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "दर्ज नहीं"
+            "value": "छूट गई"
           }
         },
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nije javljeno"
+            "value": "Propušteno"
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nincs kipipálva"
+            "value": "Kihagyva"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "İşaretlenmedi"
+            "value": "Kaçırıldı"
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "பதிவில்லை"
+            "value": "தவறியது"
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Belum check-in"
+            "value": "Terlewat"
           }
         },
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "غير مسجّل"
+            "value": "فائتة"
           }
         },
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "לא סומן"
+            "value": "פוספס"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Chưa điểm danh"
+            "value": "Bỏ lỡ"
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "টিক দেওয়া হয়নি"
+            "value": "মিস হয়েছে"
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "درج نہیں"
+            "value": "چھوٹ گئی"
           }
         },
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ni odkljukano"
+            "value": "Izpuščeno"
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Δεν σημειώθηκε"
+            "value": "Παραλείφθηκε"
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "నమోదు కాలేదు"
+            "value": "మిస్ అయింది"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "未打卡"
+            "value": "漏服"
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "નોંધાયેલ નથી"
+            "value": "ચૂકી ગયું"
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ದಾಖಲಾಗಿಲ್ಲ"
+            "value": "ತಪ್ಪಿಹೋಗಿದೆ"
           }
         },
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "രേഖപ്പെടുത്തിയിട്ടില്ല"
+            "value": "വിട്ടുപോയി"
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "नोंद नाही"
+            "value": "राहून गेले"
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ଦର୍ଜ ହୋଇନାହିଁ"
+            "value": "ଛାଡ଼ି ଯାଇଛି"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਦਰਜ ਨਹੀਂ"
+            "value": "ਖੁੰਝ ਗਈ"
           }
         }
       }
@@ -146778,7 +146778,7 @@
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "তোমার Plus ফিচার সেট আপ করো"
+            "value": "আপনার Plus ফিচার সেট আপ করুন"
           }
         },
         "ca": {
@@ -146802,7 +146802,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Richte deine Plus-Features ein"
+            "value": "Richte deine Plus-Funktionen ein"
           }
         },
         "el": {
@@ -146826,13 +146826,13 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Configure tes fonctions Plus"
+            "value": "Configure tes fonctionnalités Plus"
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "તારી Plus સુવિધાઓ સેટ કર"
+            "value": "તમારી Plus સુવિધાઓ સેટ કરો"
           }
         },
         "he": {
@@ -146844,7 +146844,7 @@
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "अपनी Plus सुविधाएँ सेट करो"
+            "value": "अपनी Plus सुविधाएँ सेट करें"
           }
         },
         "hr": {
@@ -146880,7 +146880,7 @@
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus ವೈಶಿಷ್ಟ್ಯಗಳನ್ನು ಹೊಂದಿಸು"
+            "value": "ನಿಮ್ಮ Plus ವೈಶಿಷ್ಟ್ಯಗಳನ್ನು ಹೊಂದಿಸಿ"
           }
         },
         "ko": {
@@ -146898,7 +146898,7 @@
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "तुझ्या Plus सुविधा सेट कर"
+            "value": "तुमच्या Plus सुविधा सेट करा"
           }
         },
         "ms": {
@@ -146922,13 +146922,13 @@
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ତୁମର Plus ଫିଚର୍ ସେଟ୍ ଅପ୍ କର"
+            "value": "ଆପଣଙ୍କ Plus ଫିଚର୍ ସେଟ୍ ଅପ୍ କରନ୍ତୁ"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਆਪਣੀਆਂ Plus ਸਹੂਲਤਾਂ ਸੈੱਟ ਕਰ"
+            "value": "ਆਪਣੀਆਂ Plus ਸਹੂਲਤਾਂ ਸੈੱਟ ਕਰੋ"
           }
         },
         "pl": {
@@ -146982,13 +146982,13 @@
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "உன் Plus அம்சங்களை அமை"
+            "value": "உங்கள் Plus அம்சங்களை அமையுங்கள்"
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "నీ Plus ఫీచర్లను సెటప్ చేయి"
+            "value": "మీ Plus ఫీచర్లను సెటప్ చేయండి"
           }
         },
         "th": {
@@ -147012,7 +147012,7 @@
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "اپنی Plus خصوصیات سیٹ کرو"
+            "value": "اپنی Plus خصوصیات سیٹ کریں"
           }
         },
         "vi": {
@@ -147047,265 +147047,265 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "إيقاف التطبيقات، الرسائل، التذكيرات"
+            "value": "حظر التطبيقات، الرسائل، تذكيرات المتابعة"
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "অ্যাপ ব্লকিং, মেসেজ, রিমাইন্ডার"
+            "value": "অ্যাপ ব্লকিং, বার্তা, ফলো-আপ রিমাইন্ডার"
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pausa d’apps, missatges, recordatoris"
+            "value": "Bloqueig d’apps, missatges, recordatoris de seguiment"
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Blokování, zprávy, připomínky"
+            "value": "Blokování aplikací, zprávy, následné připomínky"
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Blokering, beskeder, påmindelser"
+            "value": "Appblokering, beskeder, opfølgende påmindelser"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "App-Pause, Nachrichten, Erinnerungen"
+            "value": "App-Sperre, Nachrichten, Folgeerinnerungen"
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Παύση εφαρμογών, μηνύματα, υπενθυμίσεις"
+            "value": "Αποκλεισμός εφαρμογών, μηνύματα, υπενθυμίσεις συνέχειας"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bloqueo, mensajes, recordatorios"
+            "value": "Bloqueo de apps, mensajes, recordatorios de seguimiento"
           }
         },
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sovellustauko, viestit, muistutukset"
+            "value": "Sovellusesto, viestit, jatkomuistutukset"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pause d'apps, messages, rappels"
+            "value": "Blocage d’apps, messages, rappels de suivi"
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "ઍપ બ્લૉકિંગ, સંદેશા, રિમાઇંડર"
+            "value": "ઍપ બ્લૉકિંગ, સંદેશા, ફૉલો-અપ રિમાઇન્ડર"
           }
         },
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "השהיית אפליקציות, הודעות, תזכורות"
+            "value": "חסימת אפליקציות, הודעות, תזכורות המשך"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "ऐप ब्लॉकिंग, संदेश, रिमाइंडर"
+            "value": "ऐप ब्लॉकिंग, संदेश, फ़ॉलो-अप रिमाइंडर"
           }
         },
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Blokiranje, poruke, podsjetnici"
+            "value": "Blokiranje aplikacija, poruke, naknadni podsjetnici"
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "Blokkolás, üzenetek, emlékeztetők"
+            "value": "Appblokkolás, üzenetek, ismételt emlékeztetők"
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Jeda aplikasi, pesan, pengingat"
+            "value": "Blokir aplikasi, pesan, pengingat lanjutan"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Blocco, messaggi, promemoria"
+            "value": "Blocco app, messaggi, promemoria successivi"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "アプリブロック、メッセージ、リマインダー"
+            "value": "アプリブロック、メッセージ、フォローアップリマインダー"
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ಆ್ಯಪ್ ಬ್ಲಾಕಿಂಗ್, ಸಂದೇಶಗಳು, ಜ್ಞಾಪನೆಗಳು"
+            "value": "ಆ್ಯಪ್ ನಿರ್ಬಂಧ, ಸಂದೇಶಗಳು, ಮರು ಜ್ಞಾಪನೆಗಳು"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "앱 차단, 메시지, 알림"
+            "value": "앱 차단, 알림 문구, 후속 알림"
           }
         },
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "ആപ്പ് ബ്ലോക്കിംഗ്, സന്ദേശങ്ങൾ, റിമൈൻഡറുകൾ"
+            "value": "ആപ്പ് ബ്ലോക്കിംഗ്, സന്ദേശങ്ങൾ, ഫോളോ-അപ്പ് റിമൈൻഡറുകൾ"
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "अॅप थांबवणे, संदेश, आठवणी"
+            "value": "ॲप ब्लॉकिंग, संदेश, फॉलो-अप रिमाइंडर"
           }
         },
         "ms": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sekatan apl, mesej, peringatan"
+            "value": "Sekatan apl, mesej, peringatan susulan"
           }
         },
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "App-pause, meldinger, påminnelser"
+            "value": "Appblokkering, meldinger, oppfølgingspåminnelser"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "App-pauze, berichten, herinneringen"
+            "value": "Appblokkering, berichten, vervolgherinneringen"
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ଆପ୍ ବିରାମ, ବାର୍ତ୍ତା, ରିମାଇଣ୍ଡର୍"
+            "value": "ଆପ୍ ବ୍ଲକିଂ, ବାର୍ତ୍ତା, ଫଲୋ-ଅପ୍ ରିମାଇଣ୍ଡର୍"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਐਪ ਬਲਾਕਿੰਗ, ਸੁਨੇਹੇ, ਰਿਮਾਈਂਡਰ"
+            "value": "ਐਪ ਬਲੌਕਿੰਗ, ਸੁਨੇਹੇ, ਫਾਲੋ-ਅੱਪ ਰਿਮਾਈਂਡਰ"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Blokowanie, wiadomości, przypomnienia"
+            "value": "Blokowanie aplikacji, wiadomości, ponowne przypomnienia"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bloqueio, mensagens, lembretes"
+            "value": "Bloqueio de apps, mensagens, lembretes de acompanhamento"
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pausa de apps, mensagens, lembretes"
+            "value": "Bloqueio de apps, mensagens, lembretes de seguimento"
           }
         },
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "Blocare, mesaje, mementouri"
+            "value": "Blocare aplicații, mesaje, mementouri repetate"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Блокировка, сообщения, напоминания"
+            "value": "Блокировка приложений, сообщения, повторные напоминания"
           }
         },
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Blokovanie, správy, pripomienky"
+            "value": "Blokovanie aplikácií, správy, následné pripomienky"
           }
         },
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Blokiranje, sporočila, opomniki"
+            "value": "Blokiranje aplikacij, sporočila, ponovni opomniki"
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Blockering, meddelanden, påminnelser"
+            "value": "Appblockering, meddelanden, uppföljningspåminnelser"
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "ஆப் இடைநிறுத்தம், செய்திகள், நினைவூட்டல்கள்"
+            "value": "ஆப் தடுப்பு, செய்திகள், தொடர் நினைவூட்டல்கள்"
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "యాప్ పాజ్, సందేశాలు, రిమైండర్లు"
+            "value": "యాప్ బ్లాకింగ్, సందేశాలు, ఫాలో-అప్ రిమైండర్లు"
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "การพักแอป ข้อความ การแจ้งเตือน"
+            "value": "การบล็อกแอป ข้อความ การเตือนซ้ำ"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Duraklatma, mesajlar, hatırlatmalar"
+            "value": "Uygulama engelleme, mesajlar, takip hatırlatmaları"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Блокування, повідомлення, нагадування"
+            "value": "Блокування застосунків, повідомлення, повторні нагадування"
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "ایپ بلاکنگ، پیغامات، یاد دہانیاں"
+            "value": "ایپ بلاکنگ، پیغامات، فالو اپ یاد دہانیاں"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Chặn ứng dụng, tin nhắn, lời nhắc"
+            "value": "Chặn ứng dụng, nội dung nhắc, nhắc bổ sung"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "应用屏蔽、信息、提醒"
+            "value": "应用屏蔽、提醒文案、后续提醒"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "應用程式封鎖、訊息、提醒"
+            "value": "App 封鎖、提醒文字、後續提醒"
           }
         }
       }
@@ -147603,7 +147603,7 @@
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "তোমার Plus ফিচার সেট আপ করো, %2$lld-এর মধ্যে %1$lld টি হয়েছে"
+            "value": "আপনার Plus ফিচার সেট আপ করুন, %2$lld-এর মধ্যে %1$lld টি হয়েছে"
           }
         },
         "ca": {
@@ -147627,7 +147627,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Richte deine Plus-Features ein, %1$lld von %2$lld erledigt"
+            "value": "Richte deine Plus-Funktionen ein, %1$lld von %2$lld erledigt"
           }
         },
         "el": {
@@ -147651,13 +147651,13 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Configure tes fonctions Plus, %1$lld sur %2$lld terminées"
+            "value": "Configure tes fonctionnalités Plus, %1$lld sur %2$lld terminées"
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "તારી Plus સુવિધાઓ સેટ કર, %2$lld માંથી %1$lld પૂર્ણ"
+            "value": "તમારી Plus સુવિધાઓ સેટ કરો, %2$lld માંથી %1$lld પૂર્ણ"
           }
         },
         "he": {
@@ -147669,7 +147669,7 @@
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "अपनी Plus सुविधाएँ सेट करो, %2$lld में से %1$lld पूरी"
+            "value": "अपनी Plus सुविधाएँ सेट करें, %2$lld में से %1$lld पूरी"
           }
         },
         "hr": {
@@ -147705,7 +147705,7 @@
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus ವೈಶಿಷ್ಟ್ಯಗಳನ್ನು ಹೊಂದಿಸು, %2$lld ರಲ್ಲಿ %1$lld ಮುಗಿದಿದೆ"
+            "value": "ನಿಮ್ಮ Plus ವೈಶಿಷ್ಟ್ಯಗಳನ್ನು ಹೊಂದಿಸಿ, %2$lld ರಲ್ಲಿ %1$lld ಮುಗಿದಿದೆ"
           }
         },
         "ko": {
@@ -147723,7 +147723,7 @@
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "तुझ्या Plus सुविधा सेट कर, %2$lld पैकी %1$lld पूर्ण"
+            "value": "तुमच्या Plus सुविधा सेट करा, %2$lld पैकी %1$lld पूर्ण"
           }
         },
         "ms": {
@@ -147747,13 +147747,13 @@
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ତୁମର Plus ଫିଚର୍ ସେଟ୍ ଅପ୍ କର, %2$lld ରୁ %1$lld ସମ୍ପୂର୍ଣ୍ଣ"
+            "value": "ଆପଣଙ୍କ Plus ଫିଚର୍ ସେଟ୍ ଅପ୍ କରନ୍ତୁ, %2$lld ରୁ %1$lld ସମ୍ପୂର୍ଣ୍ଣ"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਆਪਣੀਆਂ Plus ਸਹੂਲਤਾਂ ਸੈੱਟ ਕਰ, %2$lld ਵਿੱਚੋਂ %1$lld ਪੂਰੀਆਂ"
+            "value": "ਆਪਣੀਆਂ Plus ਸਹੂਲਤਾਂ ਸੈੱਟ ਕਰੋ, %2$lld ਵਿੱਚੋਂ %1$lld ਪੂਰੀਆਂ"
           }
         },
         "pl": {
@@ -147807,13 +147807,13 @@
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "உன் Plus அம்சங்களை அமை, %2$lld இல் %1$lld முடிந்தது"
+            "value": "உங்கள் Plus அம்சங்களை அமையுங்கள், %2$lld இல் %1$lld முடிந்தது"
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "నీ Plus ఫీచర్లను సెటప్ చేయి, %2$lld లో %1$lld పూర్తి"
+            "value": "మీ Plus ఫీచర్లను సెటప్ చేయండి, %2$lld లో %1$lld పూర్తి"
           }
         },
         "th": {
@@ -147837,7 +147837,7 @@
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "اپنی Plus خصوصیات سیٹ کرو، %2$lld میں سے %1$lld مکمل"
+            "value": "اپنی Plus خصوصیات سیٹ کریں، %2$lld میں سے %1$lld مکمل"
           }
         },
         "vi": {
@@ -147872,7 +147872,7 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "إيقاف التطبيقات"
+            "value": "الحظر"
           }
         },
         "bn": {
@@ -147884,7 +147884,7 @@
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pausa d’apps"
+            "value": "Bloqueig"
           }
         },
         "cs": {
@@ -147902,13 +147902,13 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "App-Pause"
+            "value": "App-Sperre"
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Παύση"
+            "value": "Αποκλεισμός"
           }
         },
         "es": {
@@ -147920,13 +147920,13 @@
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sovellustauko"
+            "value": "Sovellusesto"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pause d'apps"
+            "value": "Blocage"
           }
         },
         "gu": {
@@ -147938,7 +147938,7 @@
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "השהיה"
+            "value": "חסימה"
           }
         },
         "hi": {
@@ -147962,7 +147962,7 @@
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Jeda aplikasi"
+            "value": "Blokir"
           }
         },
         "it": {
@@ -147980,7 +147980,7 @@
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ಬ್ಲಾಕಿಂಗ್"
+            "value": "ನಿರ್ಬಂಧ"
           }
         },
         "ko": {
@@ -147998,7 +147998,7 @@
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "अॅप थांबवणे"
+            "value": "ब्लॉकिंग"
           }
         },
         "ms": {
@@ -148010,25 +148010,25 @@
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "App-pause"
+            "value": "Appblokkering"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "App-pauze"
+            "value": "Appblokkering"
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ଆପ୍ ବିରାମ"
+            "value": "ବ୍ଲକିଂ"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਬਲਾਕਿੰਗ"
+            "value": "ਬਲੌਕਿੰਗ"
           }
         },
         "pl": {
@@ -148046,7 +148046,7 @@
         "pt-PT": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pausa de apps"
+            "value": "Bloqueio"
           }
         },
         "ro": {
@@ -148082,25 +148082,25 @@
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "இடைநிறுத்தம்"
+            "value": "தடுப்பு"
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "యాప్ పాజ్"
+            "value": "బ్లాకింగ్"
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "พักแอป"
+            "value": "บล็อกแอป"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Duraklatma"
+            "value": "Engelleme"
           }
         },
         "uk": {
@@ -148153,7 +148153,7 @@
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "মেসেজ"
+            "value": "বার্তা"
           }
         },
         "ca": {
@@ -148393,13 +148393,13 @@
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tin nhắn"
+            "value": "Nội dung"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "信息"
+            "value": "文案"
           }
         },
         "zh-Hant": {
@@ -148482,7 +148482,7 @@
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "રિમાઇંડર"
+            "value": "રિમાઇન્ડર"
           }
         },
         "he": {
@@ -148548,7 +148548,7 @@
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "आठवणी"
+            "value": "रिमाइंडर"
           }
         },
         "ms": {
@@ -148978,43 +148978,43 @@
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "চেক-ইনের আগে"
+            "value": "টিক দেওয়ার আগে"
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "Abans de registrar"
+            "value": "Abans de confirmar"
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Před check-inem"
+            "value": "Před odškrtnutím"
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Før du tjekker ind"
+            "value": "Før du krydser af"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vor dem Check-in"
+            "value": "Vor dem Abhaken"
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Πριν το check-in"
+            "value": "Πριν το σημειώσεις"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Antes del check-in"
+            "value": "Antes de marcar"
           }
         },
         "fi": {
@@ -149026,37 +149026,37 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Avant ton check-in"
+            "value": "Avant de valider"
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "ચેક-ઇન પહેલાં"
+            "value": "નોંધ કરતાં પહેલાં"
           }
         },
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "לפני שתדווחי"
+            "value": "לפני שתסמני"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "चेक-इन से पहले"
+            "value": "दर्ज करने से पहले"
           }
         },
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Prije potvrde"
+            "value": "Prije nego se javiš"
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bejelölés előtt"
+            "value": "Kipipálás előtt"
           }
         },
         "id": {
@@ -149068,37 +149068,37 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Prima del check-in"
+            "value": "Prima di confermare"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "チェックイン前"
+            "value": "記録する前"
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ಚೆಕ್-ಇನ್ ಮೊದಲು"
+            "value": "ದಾಖಲಿಸುವ ಮೊದಲು"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "체크인 전"
+            "value": "체크하기 전"
           }
         },
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "ചെക്ക്-ഇന്നിന് മുമ്പ്"
+            "value": "രേഖപ്പെടുത്തും മുമ്പ്"
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "नोंदीपूर्वी"
+            "value": "नोंद करण्यापूर्वी"
           }
         },
         "ms": {
@@ -149110,37 +149110,37 @@
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "Før du sjekker inn"
+            "value": "Før du krysser av"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Voor je incheckt"
+            "value": "Voordat je afvinkt"
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ଚେକ୍-ଇନ୍ ପୂର୍ବରୁ"
+            "value": "ଦର୍ଜ କରିବା ପୂର୍ବରୁ"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਚੈੱਕ-ਇਨ ਤੋਂ ਪਹਿਲਾਂ"
+            "value": "ਦਰਜ ਕਰਨ ਤੋਂ ਪਹਿਲਾਂ"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Przed potwierdzeniem"
+            "value": "Przed odhaczeniem"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Antes do check-in"
+            "value": "Antes de registrar"
           }
         },
         "pt-PT": {
@@ -149152,7 +149152,7 @@
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "Înainte să confirmi"
+            "value": "Înainte să bifezi"
           }
         },
         "ru": {
@@ -149164,31 +149164,31 @@
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pred potvrdením"
+            "value": "Pred odškrtnutím"
           }
         },
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pred potrditvijo"
+            "value": "Pred odkljukanjem"
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Innan du checkar in"
+            "value": "Innan du bockar av"
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "செக்-இன் முன்"
+            "value": "பதிவு செய்யும் முன்"
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "చెక్-ఇన్‌కు ముందు"
+            "value": "నమోదు చేసే ముందు"
           }
         },
         "th": {
@@ -149200,7 +149200,7 @@
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaydını yapmadan önce"
+            "value": "İşaretlemeden önce"
           }
         },
         "uk": {
@@ -149212,7 +149212,7 @@
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "چیک اِن سے پہلے"
+            "value": "درج کرنے سے پہلے"
           }
         },
         "vi": {
@@ -149253,43 +149253,43 @@
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "চেক-ইনের পরে"
+            "value": "টিক দেওয়ার পরে"
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "Després de registrar"
+            "value": "Després de confirmar"
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Po check-inu"
+            "value": "Po odškrtnutí"
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Når du har tjekket ind"
+            "value": "Når du har krydset af"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nach dem Check-in"
+            "value": "Nach dem Abhaken"
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Μετά το check-in"
+            "value": "Αφού το σημειώσεις"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Después del check-in"
+            "value": "Después de marcar"
           }
         },
         "fi": {
@@ -149301,37 +149301,37 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Après ton check-in"
+            "value": "Après avoir validé"
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "ચેક-ઇન પછી"
+            "value": "નોંધ કર્યા પછી"
           }
         },
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "אחרי שתדווחי"
+            "value": "אחרי שתסמני"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "चेक-इन के बाद"
+            "value": "दर्ज करने के बाद"
           }
         },
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nakon potvrde"
+            "value": "Nakon što se javiš"
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bejelölés után"
+            "value": "Kipipálás után"
           }
         },
         "id": {
@@ -149343,37 +149343,37 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dopo il check-in"
+            "value": "Dopo aver confermato"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "チェックイン後"
+            "value": "記録した後"
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ಚೆಕ್-ಇನ್ ನಂತರ"
+            "value": "ದಾಖಲಿಸಿದ ನಂತರ"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "체크인 후"
+            "value": "체크한 후"
           }
         },
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "ചെക്ക്-ഇന്നിന് ശേഷം"
+            "value": "രേഖപ്പെടുത്തിയ ശേഷം"
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "नोंदीनंतर"
+            "value": "नोंद केल्यानंतर"
           }
         },
         "ms": {
@@ -149385,37 +149385,37 @@
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "Etter at du har sjekket inn"
+            "value": "Etter at du har krysset av"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nadat je incheckt"
+            "value": "Nadat je hebt afgevinkt"
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ଚେକ୍-ଇନ୍ ପରେ"
+            "value": "ଦର୍ଜ କରିବା ପରେ"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਚੈੱਕ-ਇਨ ਤੋਂ ਬਾਅਦ"
+            "value": "ਦਰਜ ਕਰਨ ਤੋਂ ਬਾਅਦ"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Po potwierdzeniu"
+            "value": "Po odhaczeniu"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Depois do check-in"
+            "value": "Depois de registrar"
           }
         },
         "pt-PT": {
@@ -149427,7 +149427,7 @@
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "După ce confirmi"
+            "value": "După ce bifezi"
           }
         },
         "ru": {
@@ -149439,31 +149439,31 @@
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Po potvrdení"
+            "value": "Po odškrtnutí"
           }
         },
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Po potrditvi"
+            "value": "Po odkljukanju"
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "När du har checkat in"
+            "value": "När du har bockat av"
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "செக்-இன் பின்"
+            "value": "பதிவு செய்த பின்"
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "చెక్-ఇన్ తర్వాత"
+            "value": "నమోదు చేశాక"
           }
         },
         "th": {
@@ -149475,7 +149475,7 @@
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaydını yaptıktan sonra"
+            "value": "İşaretledikten sonra"
           }
         },
         "uk": {
@@ -149487,7 +149487,7 @@
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "چیک اِن کے بعد"
+            "value": "درج کرنے کے بعد"
           }
         },
         "vi": {
@@ -149528,7 +149528,7 @@
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "অ্যাপগুলো একটু অপেক্ষা করুক"
+            "value": "অ্যাপগুলো আপনার জন্য একটু অপেক্ষা করুক"
           }
         },
         "ca": {
@@ -149558,7 +149558,7 @@
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Οι εφαρμογές σε περιμένουν"
+            "value": "Άσε τις εφαρμογές να σε περιμένουν"
           }
         },
         "es": {
@@ -149576,13 +149576,13 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Laisse tes apps t'attendre"
+            "value": "Laisse tes apps t’attendre"
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "ઍપ્સને તારી રાહ જોવા દે"
+            "value": "ઍપ્સ તમારી રાહ જોશે"
           }
         },
         "he": {
@@ -149594,7 +149594,7 @@
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "ऐप्स को इंतज़ार करने दो"
+            "value": "ऐप्स को आपका इंतज़ार करने दें"
           }
         },
         "hr": {
@@ -149624,13 +149624,13 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "アプリには待っていてもらおう"
+            "value": "アプリには少し待ってもらいましょう"
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ಆ್ಯಪ್‌ಗಳು ನಿನಗಾಗಿ ಕಾಯಲಿ"
+            "value": "ಆ್ಯಪ್‌ಗಳು ನಿಮಗಾಗಿ ಕಾಯಲಿ"
           }
         },
         "ko": {
@@ -149642,13 +149642,13 @@
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "ആപ്പുകൾ നിനക്കായി കാത്തിരിക്കട്ടെ"
+            "value": "ആപ്പുകൾ നിങ്ങൾക്കായി കാത്തിരിക്കട്ടെ"
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "अॅप्सना तुझी वाट पाहू दे"
+            "value": "ॲप्सना तुमची वाट पाहू द्या"
           }
         },
         "ms": {
@@ -149672,13 +149672,13 @@
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ଆପ୍ ତୁମ ପାଇଁ ଅପେକ୍ଷା କରୁ"
+            "value": "ଆପ୍ ଆପଣଙ୍କ ପାଇଁ ଅପେକ୍ଷା କରୁ"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਐਪਾਂ ਨੂੰ ਤੇਰੀ ਉਡੀਕ ਕਰਨ ਦੇ"
+            "value": "ਐਪਾਂ ਨੂੰ ਤੁਹਾਡੀ ਉਡੀਕ ਕਰਨ ਦਿਓ"
           }
         },
         "pl": {
@@ -149732,13 +149732,13 @@
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "ஆப்ஸ் உனக்காகக் காத்திருக்கட்டும்"
+            "value": "ஆப்ஸ் உங்களுக்காகக் காத்திருக்கட்டும்"
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "యాప్‌లు నీ కోసం ఆగనీ"
+            "value": "యాప్‌లు మీ కోసం ఆగనివ్వండి"
           }
         },
         "th": {
@@ -149762,7 +149762,7 @@
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "ایپس کو انتظار کرنے دو"
+            "value": "ایپس کو آپ کا انتظار کرنے دیں"
           }
         },
         "vi": {
@@ -149780,7 +149780,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "讓應用程式等等你"
+            "value": "讓 App 等等你"
           }
         }
       }
@@ -149797,265 +149797,265 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "اختاري التطبيقات التي تفتحينها أولًا. تُفتح من جديد بعد أن تسجّلي."
+            "value": "اختاري التطبيقات التي تفتحينها أولًا. تتوقف مؤقتًا في وقت التذكير، وتُفتح من جديد بعد أن تسجّلي."
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "যে অ্যাপগুলো সবার আগে খোলো, সেগুলো বেছে নাও। চেক-ইন করার পর সেগুলো আবার খুলবে।"
+            "value": "যে অ্যাপগুলো সবার আগে খোলেন, সেগুলো বেছে নিন। রিমাইন্ডারের সময় সেগুলো পজ হবে, আর টিক দেওয়ার পর আবার খোলা যাবে।"
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tria les apps que obres primer. Es tornen a obrir quan hagis registrat."
+            "value": "Tria les apps que obres primer. Es posen en pausa a l’hora del recordatori i es tornen a obrir quan hagis confirmat."
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vyber aplikace, po kterých saháš nejdřív. Znovu se otevřou, jakmile uděláš check-in."
+            "value": "Vyber aplikace, po kterých saháš nejdřív. V čase připomínky se pozastaví a znovu se otevřou, jakmile odškrtneš."
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vælg de apps, du griber efter først. De åbner igen, når du har tjekket ind."
+            "value": "Vælg de apps, du griber efter først. De sættes på pause, når påmindelsen kommer, og åbner igen, når du har krydset af."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wähl die Apps, nach denen du zuerst greifst. Sie öffnen sich wieder, sobald du deinen Check-in gemacht hast."
+            "value": "Wähle die Apps, nach denen du zuerst greifst. Sie pausieren zur Erinnerungszeit und öffnen sich wieder, sobald du abgehakt hast."
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Διάλεξε τις εφαρμογές που ανοίγεις πρώτες. Ανοίγουν ξανά μόλις κάνεις check-in."
+            "value": "Διάλεξε τις εφαρμογές που ανοίγεις πρώτες. Μπαίνουν σε παύση την ώρα της υπενθύμισης και ανοίγουν ξανά μόλις το σημειώσεις."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Elige las apps que abres primero. Se vuelven a abrir cuando hayas hecho el check-in."
+            "value": "Elige las apps que abres primero. Se pausan a la hora del recordatorio y se vuelven a abrir cuando lo hayas marcado."
           }
         },
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Valitse sovellukset, joihin tartut ensimmäisenä. Ne aukeavat taas, kun olet kuitannut."
+            "value": "Valitse sovellukset, joihin tartut ensimmäisenä. Ne menevät tauolle muistutusaikaan ja aukeavat taas, kun olet kuitannut."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Choisis les apps que tu ouvres en premier. Elles se rouvrent une fois ton check-in fait."
+            "value": "Choisis les apps que tu ouvres en premier. Elles se mettent en pause à l’heure du rappel et se rouvrent dès que tu as validé."
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "જે ઍપ્સ તું સૌથી પહેલાં ખોલે છે તે પસંદ કર. તું ચેક-ઇન કરી લે પછી તે ફરી ખૂલશે."
+            "value": "જે ઍપ્સ તમે સૌથી પહેલાં ખોલો છો તે પસંદ કરો. રિમાઇન્ડરના સમયે તે થોભી જશે અને તમે નોંધ કરી લો પછી ફરી ખૂલશે."
           }
         },
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "בחרי את האפליקציות שאת פותחת ראשונות. הן ייפתחו שוב אחרי שתדווחי."
+            "value": "בחרי את האפליקציות שאת פותחת ראשונות. הן מושהות בזמן התזכורת ונפתחות שוב אחרי שתסמני."
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "वे ऐप्स चुनो जिन्हें तुम सबसे पहले खोलती हो। चेक-इन करने के बाद वे फिर से खुल जाएँगे।"
+            "value": "वे ऐप्स चुनें जिन्हें आप सबसे पहले खोलती हैं। रिमाइंडर के समय वे रुक जाते हैं और दर्ज करने के बाद फिर से खुल जाते हैं।"
           }
         },
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Odaberi aplikacije koje prve otvaraš. Ponovno se otvaraju čim potvrdiš."
+            "value": "Odaberi aplikacije koje prve otvaraš. U vrijeme podsjetnika se pauziraju i ponovno se otvaraju čim se javiš."
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "Válaszd ki az appokat, amelyekért először nyúlsz. Újra megnyílnak, amint bejelölted."
+            "value": "Válaszd ki az appokat, amelyekért először nyúlsz. Az emlékeztető idején szünetelnek, és újra megnyílnak, amint kipipáltad."
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pilih aplikasi yang paling dulu kamu buka. Aplikasinya terbuka lagi setelah kamu check-in."
+            "value": "Pilih aplikasi yang paling dulu kamu buka. Aplikasinya dijeda saat waktu pengingat dan terbuka lagi setelah kamu check-in."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Scegli le app che apri per prime. Si riaprono appena hai fatto il check-in."
+            "value": "Scegli le app che apri per prime. Vanno in pausa all’orario del promemoria e si riaprono appena hai confermato."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "最初に手が伸びるアプリを選んでください。チェックインすると、また開けるようになります。"
+            "value": "最初に手が伸びるアプリを選んでください。リマインダーの時刻に一時停止し、記録するとまた開けるようになります。"
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ನೀನು ಮೊದಲು ತೆರೆಯುವ ಆ್ಯಪ್‌ಗಳನ್ನು ಆರಿಸು. ನೀನು ಚೆಕ್-ಇನ್ ಮಾಡಿದ ನಂತರ ಅವು ಮತ್ತೆ ತೆರೆಯುತ್ತವೆ."
+            "value": "ನೀವು ಮೊದಲು ತೆರೆಯುವ ಆ್ಯಪ್‌ಗಳನ್ನು ಆರಿಸಿ. ಜ್ಞಾಪನೆಯ ಸಮಯದಲ್ಲಿ ಅವು ತಡೆಹಿಡಿಯಲ್ಪಡುತ್ತವೆ, ನೀವು ದಾಖಲಿಸಿದ ನಂತರ ಮತ್ತೆ ತೆರೆಯುತ್ತವೆ."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "가장 먼저 손이 가는 앱을 골라 보세요. 체크인하고 나면 다시 열려요."
+            "value": "가장 먼저 손이 가는 앱을 골라 보세요. 알림 시간에 일시 중지되고, 체크하면 다시 열려요."
           }
         },
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "നീ ആദ്യം തുറക്കുന്ന ആപ്പുകൾ തിരഞ്ഞെടുക്കൂ. നീ ചെക്ക്-ഇൻ ചെയ്തുകഴിഞ്ഞാൽ അവ വീണ്ടും തുറക്കും."
+            "value": "നിങ്ങൾ ആദ്യം തുറക്കുന്ന ആപ്പുകൾ തിരഞ്ഞെടുക്കൂ. റിമൈൻഡർ സമയത്ത് അവ പോസ് ആകും, നിങ്ങൾ രേഖപ്പെടുത്തിക്കഴിഞ്ഞാൽ വീണ്ടും തുറക്കാം."
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "तू सर्वात आधी उघडतेस ती अॅप्स निवड. तू नोंद केल्यानंतर ती पुन्हा उघडतील."
+            "value": "तुम्ही सर्वात आधी उघडता ती ॲप्स निवडा. रिमाइंडरच्या वेळी ती थांबतात आणि नोंद केल्यानंतर पुन्हा उघडता येतात."
           }
         },
         "ms": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pilih apl yang paling awal kamu buka. Apl itu dibuka semula selepas kamu sahkan."
+            "value": "Pilih apl yang paling awal kamu buka. Apl itu dijeda pada waktu peringatan dan dibuka semula selepas kamu sahkan."
           }
         },
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "Velg appene du griper etter først. De åpnes igjen når du har sjekket inn."
+            "value": "Velg appene du griper etter først. De settes på pause når påminnelsen kommer, og åpnes igjen når du har krysset av."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kies de apps die je als eerste opent. Ze gaan weer open zodra je hebt ingecheckt."
+            "value": "Kies de apps die je als eerste opent. Ze pauzeren op je herinneringstijd en gaan weer open zodra je hebt afgevinkt."
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ତୁମେ ସବୁଠୁ ପ୍ରଥମେ ଖୋଲୁଥିବା ଆପ୍ ବାଛ। ଚେକ୍-ଇନ୍ କରିସାରିବା ପରେ ସେଗୁଡ଼ିକ ପୁଣି ଖୋଲିବ।"
+            "value": "ଆପଣ ସବୁଠୁ ପ୍ରଥମେ ଖୋଲୁଥିବା ଆପ୍ ବାଛନ୍ତୁ। ରିମାଇଣ୍ଡର୍ ସମୟରେ ସେଗୁଡ଼ିକ ବିରାମରେ ରହିବ, ଏବଂ ଦର୍ଜ କରିସାରିବା ପରେ ପୁଣି ଖୋଲିବ।"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਉਹ ਐਪਾਂ ਚੁਣ ਜੋ ਤੂੰ ਸਭ ਤੋਂ ਪਹਿਲਾਂ ਖੋਲ੍ਹਦੀ ਹੈਂ। ਚੈੱਕ-ਇਨ ਕਰਨ ਤੋਂ ਬਾਅਦ ਉਹ ਮੁੜ ਖੁੱਲ੍ਹ ਜਾਣਗੀਆਂ।"
+            "value": "ਉਹ ਐਪਾਂ ਚੁਣੋ ਜੋ ਤੁਸੀਂ ਸਭ ਤੋਂ ਪਹਿਲਾਂ ਖੋਲ੍ਹਦੇ ਹੋ। ਰਿਮਾਈਂਡਰ ਦੇ ਸਮੇਂ ਉਹ ਰੁਕ ਜਾਂਦੀਆਂ ਹਨ ਅਤੇ ਦਰਜ ਕਰਨ ਤੋਂ ਬਾਅਦ ਮੁੜ ਖੁੱਲ੍ਹ ਜਾਂਦੀਆਂ ਹਨ।"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wybierz aplikacje, po które sięgasz najpierw. Otworzą się znowu, gdy potwierdzisz."
+            "value": "Wybierz aplikacje, po które sięgasz najpierw. O godzinie przypomnienia zostaną wstrzymane i otworzą się znowu, gdy odhaczysz."
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Escolha os apps que você abre primeiro. Eles abrem de novo assim que você fizer o check-in."
+            "value": "Escolha os apps que você abre primeiro. Eles pausam no horário do lembrete e abrem de novo assim que você registrar."
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "translated",
-            "value": "Escolhe as apps que abres primeiro. Voltam a abrir assim que registares."
+            "value": "Escolhe as apps que abres primeiro. Ficam em pausa à hora do lembrete e voltam a abrir assim que registares."
           }
         },
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "Alege aplicațiile pe care le deschizi primele. Se redeschid după ce confirmi."
+            "value": "Alege aplicațiile pe care le deschizi primele. Se pun pe pauză la ora mementoului și se redeschid după ce bifezi."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Выбери приложения, которые открываешь первыми. Они снова откроются, как только отметишься."
+            "value": "Выбери приложения, которые открываешь первыми. Во время напоминания они встают на паузу и снова открываются, как только ты отметишься."
           }
         },
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vyber aplikácie, po ktorých siahaš najskôr. Znova sa otvoria, keď potvrdíš."
+            "value": "Vyber aplikácie, po ktorých siahaš najskôr. V čase pripomienky sa pozastavia a znova sa otvoria, keď odškrtneš."
           }
         },
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Izberi aplikacije, po katerih sežeš najprej. Znova se odprejo, ko potrdiš."
+            "value": "Izberi aplikacije, po katerih sežeš najprej. Ob času opomnika se zaustavijo in se znova odprejo, ko odkljukaš."
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Välj apparna du sträcker dig efter först. De öppnas igen när du har checkat in."
+            "value": "Välj apparna du sträcker dig efter först. De pausas vid påminnelsetiden och öppnas igen när du har bockat av."
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "நீ முதலில் திறக்கும் ஆப்ஸைத் தேர்ந்தெடு. நீ செக்-இன் செய்த பிறகு அவை மீண்டும் திறக்கும்."
+            "value": "நீங்கள் முதலில் திறக்கும் ஆப்ஸைத் தேர்ந்தெடுங்கள். நினைவூட்டல் நேரத்தில் அவை இடைநிறுத்தப்படும், நீங்கள் பதிவு செய்த பிறகு மீண்டும் திறக்கும்."
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "నువ్వు ముందుగా తెరిచే యాప్‌లను ఎంచుకో. నువ్వు చెక్-ఇన్ చేశాక అవి మళ్లీ తెరుచుకుంటాయి."
+            "value": "మీరు ముందుగా తెరిచే యాప్‌లను ఎంచుకోండి. రిమైండర్ సమయంలో అవి పాజ్ అవుతాయి, మీరు నమోదు చేశాక మళ్లీ తెరుచుకుంటాయి."
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "เลือกแอปที่คุณมักเปิดเป็นอย่างแรก แอปจะเปิดได้อีกครั้งเมื่อคุณเช็กอินแล้ว"
+            "value": "เลือกแอปที่คุณมักเปิดเป็นอย่างแรก แอปจะหยุดชั่วคราวเมื่อถึงเวลาแจ้งเตือน และเปิดได้อีกครั้งเมื่อคุณเช็กอินแล้ว"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "İlk elini uzattığın uygulamaları seç. Kaydını yaptıktan sonra yeniden açılırlar."
+            "value": "İlk elini uzattığın uygulamaları seç. Hatırlatma saatinde duraklar, işaretledikten sonra yeniden açılırlar."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Вибери застосунки, які відкриваєш першими. Вони знову відкриються, щойно відмітишся."
+            "value": "Вибери застосунки, які відкриваєш першими. Під час нагадування вони стають на паузу й знову відкриваються, щойно ти відмітишся."
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "وہ ایپس چنو جو تم سب سے پہلے کھولتی ہو۔ چیک اِن کرنے کے بعد وہ پھر سے کھل جائیں گی۔"
+            "value": "وہ ایپس چنیں جو آپ سب سے پہلے کھولتی ہیں۔ یاد دہانی کے وقت یہ رک جاتی ہیں اور درج کرنے کے بعد پھر سے کھل جاتی ہیں۔"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Chọn những ứng dụng bạn hay mở đầu tiên. Chúng sẽ mở lại khi bạn đã điểm danh."
+            "value": "Chọn những ứng dụng bạn hay mở đầu tiên. Chúng tạm dừng vào giờ nhắc và mở lại khi bạn đã điểm danh."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "选出你最先会打开的应用。打卡后，它们就会重新打开。"
+            "value": "选出你最先会打开的应用。到了提醒时间，它们会暂停，打卡后就能再次打开。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "選出你最先會開啟的應用程式。打卡後，它們就會重新開啟。"
+            "value": "選出你最先會開啟的 App。到了提醒時間，它們會暫停，打卡後就能再次開啟。"
           }
         }
       }
@@ -150078,7 +150078,7 @@
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "অ্যাপ বেছে নাও"
+            "value": "অ্যাপ বেছে নিন"
           }
         },
         "ca": {
@@ -150132,7 +150132,7 @@
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "ઍપ્સ પસંદ કર"
+            "value": "ઍપ્સ પસંદ કરો"
           }
         },
         "he": {
@@ -150144,7 +150144,7 @@
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "ऐप्स चुनो"
+            "value": "ऐप्स चुनें"
           }
         },
         "hr": {
@@ -150180,7 +150180,7 @@
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ಆ್ಯಪ್‌ಗಳನ್ನು ಆರಿಸು"
+            "value": "ಆ್ಯಪ್‌ಗಳನ್ನು ಆರಿಸಿ"
           }
         },
         "ko": {
@@ -150198,7 +150198,7 @@
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "अॅप्स निवड"
+            "value": "ॲप्स निवडा"
           }
         },
         "ms": {
@@ -150222,13 +150222,13 @@
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ଆପ୍ ବାଛ"
+            "value": "ଆପ୍ ବାଛନ୍ତୁ"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਐਪਾਂ ਚੁਣ"
+            "value": "ਐਪਾਂ ਚੁਣੋ"
           }
         },
         "pl": {
@@ -150282,13 +150282,13 @@
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "ஆப்ஸைத் தேர்ந்தெடு"
+            "value": "ஆப்ஸைத் தேர்ந்தெடுங்கள்"
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "యాప్‌లు ఎంచుకో"
+            "value": "యాప్‌లు ఎంచుకోండి"
           }
         },
         "th": {
@@ -150312,7 +150312,7 @@
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "ایپس چنو"
+            "value": "ایپس چنیں"
           }
         },
         "vi": {
@@ -150330,7 +150330,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "選擇應用程式"
+            "value": "選擇 App"
           }
         }
       }
@@ -150407,7 +150407,7 @@
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "એક સાદું રિમાઇંડર"
+            "value": "એક સાદું રિમાઇન્ડર"
           }
         },
         "he": {
@@ -150473,7 +150473,7 @@
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "एक साधी आठवण"
+            "value": "एक साधा रिमाइंडर"
           }
         },
         "ms": {
@@ -150628,7 +150628,7 @@
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "তোমার নিজের কথায়"
+            "value": "আপনার নিজের কথায়"
           }
         },
         "ca": {
@@ -150682,7 +150682,7 @@
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "એક તારા શબ્દોમાં"
+            "value": "તમારા શબ્દોમાં રિમાઇન્ડર"
           }
         },
         "he": {
@@ -150694,7 +150694,7 @@
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "एक तुम्हारे शब्दों में"
+            "value": "आपके शब्दों में रिमाइंडर"
           }
         },
         "hr": {
@@ -150730,7 +150730,7 @@
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ನಿನ್ನ ಮಾತುಗಳಲ್ಲಿ ಒಂದು"
+            "value": "ನಿಮ್ಮ ಮಾತುಗಳಲ್ಲಿ ಜ್ಞಾಪನೆ"
           }
         },
         "ko": {
@@ -150742,13 +150742,13 @@
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "നിന്റെ വാക്കുകളിൽ ഒന്ന്"
+            "value": "നിങ്ങളുടെ വാക്കുകളിൽ ഒരു റിമൈൻഡർ"
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "एक तुझ्या शब्दांत"
+            "value": "तुमच्या शब्दांतील रिमाइंडर"
           }
         },
         "ms": {
@@ -150772,13 +150772,13 @@
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ତୁମ ନିଜ ଶବ୍ଦରେ ଗୋଟିଏ"
+            "value": "ଆପଣଙ୍କ ନିଜ ଶବ୍ଦରେ ରିମାଇଣ୍ଡର୍"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਇੱਕ ਤੇਰੇ ਸ਼ਬਦਾਂ ਵਿੱਚ"
+            "value": "ਤੁਹਾਡੇ ਸ਼ਬਦਾਂ ਵਿੱਚ ਰਿਮਾਈਂਡਰ"
           }
         },
         "pl": {
@@ -150832,13 +150832,13 @@
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "உன் வார்த்தைகளில் ஒன்று"
+            "value": "உங்கள் வார்த்தைகளில் ஒரு நினைவூட்டல்"
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "నీ మాటల్లో ఒకటి"
+            "value": "మీ మాటల్లో రిమైండర్"
           }
         },
         "th": {
@@ -150862,7 +150862,7 @@
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "ایک تمہارے الفاظ میں"
+            "value": "آپ کے الفاظ میں یاد دہانی"
           }
         },
         "vi": {
@@ -150903,7 +150903,7 @@
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "রিমাইন্ডার তোমার নিজের কথায়"
+            "value": "রিমাইন্ডার আপনার নিজের কথায়"
           }
         },
         "ca": {
@@ -150957,7 +150957,7 @@
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "રિમાઇંડર, તારા શબ્દોમાં"
+            "value": "રિમાઇન્ડર, તમારા શબ્દોમાં"
           }
         },
         "he": {
@@ -150969,7 +150969,7 @@
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "रिमाइंडर, तुम्हारे शब्दों में"
+            "value": "रिमाइंडर, आपके शब्दों में"
           }
         },
         "hr": {
@@ -151005,7 +151005,7 @@
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ನಿನ್ನ ಮಾತುಗಳಲ್ಲಿ ಜ್ಞಾಪನೆಗಳು"
+            "value": "ನಿಮ್ಮ ಮಾತುಗಳಲ್ಲಿ ಜ್ಞಾಪನೆಗಳು"
           }
         },
         "ko": {
@@ -151017,13 +151017,13 @@
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "നിന്റെ വാക്കുകളിൽ റിമൈൻഡറുകൾ"
+            "value": "നിങ്ങളുടെ വാക്കുകളിൽ റിമൈൻഡറുകൾ"
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "आठवणी, तुझ्या शब्दांत"
+            "value": "रिमाइंडर, तुमच्या शब्दांत"
           }
         },
         "ms": {
@@ -151047,13 +151047,13 @@
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ତୁମ ନିଜ ଶବ୍ଦରେ ରିମାଇଣ୍ଡର୍"
+            "value": "ଆପଣଙ୍କ ନିଜ ଶବ୍ଦରେ ରିମାଇଣ୍ଡର୍"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਰਿਮਾਈਂਡਰ, ਤੇਰੇ ਸ਼ਬਦਾਂ ਵਿੱਚ"
+            "value": "ਰਿਮਾਈਂਡਰ, ਤੁਹਾਡੇ ਸ਼ਬਦਾਂ ਵਿੱਚ"
           }
         },
         "pl": {
@@ -151107,13 +151107,13 @@
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "உன் வார்த்தைகளில் நினைவூட்டல்கள்"
+            "value": "உங்கள் வார்த்தைகளில் நினைவூட்டல்கள்"
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "నీ మాటల్లో రిమైండర్లు"
+            "value": "మీ మాటల్లో రిమైండర్లు"
           }
         },
         "th": {
@@ -151137,7 +151137,7 @@
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "یاد دہانیاں، تمہارے الفاظ میں"
+            "value": "یاد دہانیاں، آپ کے الفاظ میں"
           }
         },
         "vi": {
@@ -151178,7 +151178,7 @@
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "তোমার রিমাইন্ডারে কী লেখা থাকবে, লিখো। সেভ করার আগে লক স্ক্রিনে প্রিভিউ দেখতে পাবে।"
+            "value": "আপনার রিমাইন্ডারে কী লেখা থাকবে, লিখুন। সেভ করার আগে লক স্ক্রিনে প্রিভিউ দেখতে পাবেন।"
           }
         },
         "ca": {
@@ -151226,13 +151226,13 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Écris ce que disent tes rappels. Tu verras un aperçu sur l'écran verrouillé avant d'enregistrer."
+            "value": "Écris ce que disent tes rappels. Tu verras un aperçu sur l’écran verrouillé avant d’enregistrer."
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "તારાં રિમાઇંડર શું કહે તે લખ. સેવ કરતાં પહેલાં તને લૉક સ્ક્રીન પર પ્રિવ્યૂ દેખાશે."
+            "value": "તમારાં રિમાઇન્ડર શું કહે તે લખો. સેવ કરતાં પહેલાં તમને લૉક સ્ક્રીન પર પ્રિવ્યૂ દેખાશે."
           }
         },
         "he": {
@@ -151244,7 +151244,7 @@
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "लिखो कि तुम्हारे रिमाइंडर क्या कहें। सेव करने से पहले तुम लॉक स्क्रीन पर इसका प्रीव्यू देखोगी।"
+            "value": "लिखें कि आपके रिमाइंडर क्या कहें। सेव करने से पहले लॉक स्क्रीन पर उसका प्रीव्यू दिखेगा।"
           }
         },
         "hr": {
@@ -151280,7 +151280,7 @@
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ನಿನ್ನ ಜ್ಞಾಪನೆಗಳು ಏನು ಹೇಳಬೇಕೆಂದು ಬರೆ. ಉಳಿಸುವ ಮೊದಲು ಲಾಕ್ ಸ್ಕ್ರೀನ್‌ನಲ್ಲಿ ಪೂರ್ವವೀಕ್ಷಣೆ ನೋಡುವೆ."
+            "value": "ನಿಮ್ಮ ಜ್ಞಾಪನೆಗಳು ಏನು ಹೇಳಬೇಕೆಂದು ಬರೆಯಿರಿ. ಉಳಿಸುವ ಮೊದಲು ಲಾಕ್ ಸ್ಕ್ರೀನ್‌ನ ಮುನ್ನೋಟವನ್ನು ನೋಡುತ್ತೀರಿ."
           }
         },
         "ko": {
@@ -151292,13 +151292,13 @@
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "നിന്റെ റിമൈൻഡറുകൾ എന്ത് പറയണമെന്ന് എഴുതൂ. സേവ് ചെയ്യും മുമ്പ് ലോക്ക് സ്ക്രീനിൽ ഒരു പ്രിവ്യൂ കാണാം."
+            "value": "നിങ്ങളുടെ റിമൈൻഡറുകൾ എന്ത് പറയണമെന്ന് എഴുതൂ. സേവ് ചെയ്യും മുമ്പ് ലോക്ക് സ്ക്രീനിൽ ഒരു പ്രിവ്യൂ കാണാം."
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "तुझ्या आठवणी काय सांगतील ते लिही. सेव्ह करण्याआधी तुला लॉक स्क्रीनवर प्रिव्ह्यू दिसेल."
+            "value": "तुमचे रिमाइंडर काय सांगतील ते लिहा. सेव्ह करण्याआधी तुम्हाला लॉक स्क्रीनवर प्रिव्ह्यू दिसेल."
           }
         },
         "ms": {
@@ -151316,19 +151316,19 @@
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Schrijf wat je herinneringen zeggen. Voor je opslaat, zie je een voorvertoning op je vergrendelscherm."
+            "value": "Schrijf wat je herinneringen zeggen. Voor je opslaat, zie je een preview op je vergrendelscherm."
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ତୁମର ରିମାଇଣ୍ଡର୍ କ'ଣ କହିବ ଲେଖ। ସେଭ୍ କରିବା ପୂର୍ବରୁ ତୁମେ ଲକ୍ ସ୍କ୍ରିନ୍‌ରେ ଏକ ପ୍ରିଭ୍ୟୁ ଦେଖିବ।"
+            "value": "ଆପଣଙ୍କ ରିମାଇଣ୍ଡର୍ କ’ଣ କହିବ, ଲେଖନ୍ତୁ। ସେଭ୍ କରିବା ପୂର୍ବରୁ ଆପଣ ଲକ୍ ସ୍କ୍ରିନ୍‌ରେ ଏକ ପ୍ରିଭ୍ୟୁ ଦେଖିବେ।"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਲਿਖ ਕਿ ਤੇਰੇ ਰਿਮਾਈਂਡਰ ਕੀ ਕਹਿਣ। ਸੇਵ ਕਰਨ ਤੋਂ ਪਹਿਲਾਂ ਤੂੰ ਲੌਕ ਸਕ੍ਰੀਨ ’ਤੇ ਪ੍ਰੀਵਿਊ ਵੇਖੇਂਗੀ।"
+            "value": "ਲਿਖੋ ਕਿ ਤੁਹਾਡੇ ਰਿਮਾਈਂਡਰ ਕੀ ਕਹਿਣ। ਸੇਵ ਕਰਨ ਤੋਂ ਪਹਿਲਾਂ ਤੁਹਾਨੂੰ ਲੌਕ ਸਕ੍ਰੀਨ ’ਤੇ ਪ੍ਰੀਵਿਊ ਦਿਖਾਈ ਦੇਵੇਗਾ।"
           }
         },
         "pl": {
@@ -151358,7 +151358,7 @@
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Напиши, что будет в твоих напоминаниях. Перед сохранением увидишь превью на экране блокировки."
+            "value": "Напиши, что будет в твоих напоминаниях. Перед сохранением увидишь предпросмотр на экране блокировки."
           }
         },
         "sk": {
@@ -151382,13 +151382,13 @@
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "உன் நினைவூட்டல்கள் என்ன சொல்ல வேண்டும் என்று எழுது. சேமிக்கும் முன் லாக் ஸ்கிரீனில் முன்னோட்டத்தைப் பார்ப்பாய்."
+            "value": "உங்கள் நினைவூட்டல்கள் என்ன சொல்ல வேண்டும் என்று எழுதுங்கள். சேமிக்கும் முன் பூட்டுத் திரையில் முன்னோட்டத்தைப் பார்ப்பீர்கள்."
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "నీ రిమైండర్లు ఏం చెప్పాలో రాయి. సేవ్ చేసే ముందు లాక్ స్క్రీన్‌లో ప్రివ్యూ చూస్తావు."
+            "value": "మీ రిమైండర్లు ఏం చెప్పాలో రాయండి. సేవ్ చేసే ముందు లాక్ స్క్రీన్‌లో ప్రివ్యూ చూస్తారు."
           }
         },
         "th": {
@@ -151400,7 +151400,7 @@
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Hatırlatmalarının ne diyeceğini yaz. Kaydetmeden önce Kilit Ekranı'nda bir önizleme görürsün."
+            "value": "Hatırlatmalarının ne diyeceğini yaz. Kaydetmeden önce Kilit Ekranı’nda bir önizleme görürsün."
           }
         },
         "uk": {
@@ -151412,7 +151412,7 @@
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "لکھو کہ تمہاری یاد دہانیاں کیا کہیں۔ محفوظ کرنے سے پہلے تم لاک اسکرین پر پیش نظارہ دیکھو گی۔"
+            "value": "لکھیں کہ آپ کی یاد دہانیاں کیا کہیں۔ محفوظ کرنے سے پہلے لاک اسکرین پر پیش نظارہ نظر آئے گا۔"
           }
         },
         "vi": {
@@ -151447,13 +151447,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "اكتبي رسائلي"
+            "value": "اكتبي رسائلك"
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "আমার মেসেজ লিখি"
+            "value": "আপনার বার্তা লিখুন"
           }
         },
         "ca": {
@@ -151483,7 +151483,7 @@
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Γράψε τα μηνύματά μου"
+            "value": "Γράψε τα μηνύματά σου"
           }
         },
         "es": {
@@ -151507,7 +151507,7 @@
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "મારા સંદેશા લખ"
+            "value": "તમારા સંદેશા લખો"
           }
         },
         "he": {
@@ -151519,7 +151519,7 @@
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "मेरे संदेश लिखो"
+            "value": "अपने संदेश लिखें"
           }
         },
         "hr": {
@@ -151555,7 +151555,7 @@
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ನನ್ನ ಸಂದೇಶಗಳನ್ನು ಬರೆ"
+            "value": "ನಿಮ್ಮ ಸಂದೇಶಗಳನ್ನು ಬರೆಯಿರಿ"
           }
         },
         "ko": {
@@ -151567,13 +151567,13 @@
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "എന്റെ സന്ദേശങ്ങൾ എഴുതൂ"
+            "value": "നിങ്ങളുടെ സന്ദേശങ്ങൾ എഴുതൂ"
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "माझे संदेश लिही"
+            "value": "तुमचे संदेश लिहा"
           }
         },
         "ms": {
@@ -151597,13 +151597,13 @@
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ମୋ ବାର୍ତ୍ତା ଲେଖ"
+            "value": "ଆପଣଙ୍କ ବାର୍ତ୍ତା ଲେଖନ୍ତୁ"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਮੇਰੇ ਸੁਨੇਹੇ ਲਿਖ"
+            "value": "ਆਪਣੇ ਸੁਨੇਹੇ ਲਿਖੋ"
           }
         },
         "pl": {
@@ -151627,7 +151627,7 @@
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "Scrie mesajele mele"
+            "value": "Scrie-ți mesajele"
           }
         },
         "ru": {
@@ -151657,13 +151657,13 @@
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "என் செய்திகளை எழுது"
+            "value": "உங்கள் செய்திகளை எழுதுங்கள்"
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "నా సందేశాలు రాయి"
+            "value": "మీ సందేశాలు రాయండి"
           }
         },
         "th": {
@@ -151687,25 +151687,25 @@
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "میرے پیغامات لکھو"
+            "value": "اپنے پیغامات لکھیں"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Viết tin nhắn của tôi"
+            "value": "Viết lời nhắc của tôi"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "编写我的信息"
+            "value": "编写我的提醒文案"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "撰寫我的訊息"
+            "value": "撰寫我的提醒文字"
           }
         }
       }
@@ -151758,7 +151758,7 @@
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Μία υπενθύμιση, εύκολα χάνεται"
+            "value": "Μία υπενθύμιση, σου ξεφεύγει εύκολα"
           }
         },
         "es": {
@@ -151782,7 +151782,7 @@
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "એક રિમાઇંડર, સહેલાઈથી ચૂકી જવાય"
+            "value": "એક રિમાઇન્ડર, સહેલાઈથી ચૂકી જવાય"
           }
         },
         "he": {
@@ -151824,7 +151824,7 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "1回だけの通知は見逃しがち"
+            "value": "リマインダー1回だけでは見逃しがち"
           }
         },
         "kn": {
@@ -151848,7 +151848,7 @@
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "एकच आठवण, सहज चुकते"
+            "value": "एकच रिमाइंडर, सहज चुकतो"
           }
         },
         "ms": {
@@ -152021,7 +152021,7 @@
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie vender tilbage"
+            "value": "Pillie spørger igen"
           }
         },
         "de": {
@@ -152075,13 +152075,13 @@
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie se ponovno javlja"
+            "value": "Pillie te ponovno podsjeća"
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie újra jelentkezik"
+            "value": "A Pillie újra jelentkezik"
           }
         },
         "id": {
@@ -152099,7 +152099,7 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillieがまた知らせる"
+            "value": "Pillieがもう一度お知らせします"
           }
         },
         "kn": {
@@ -152123,7 +152123,7 @@
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie पुन्हा आठवण करून देतं"
+            "value": "Pillie पुन्हा आठवण करून देते"
           }
         },
         "ms": {
@@ -152135,13 +152135,13 @@
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie sjekker igjen"
+            "value": "Pillie spør igjen"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie komt terug"
+            "value": "Pillie vraagt het nog eens"
           }
         },
         "or": {
@@ -152332,7 +152332,7 @@
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "હાર ન માનતા રિમાઇંડર"
+            "value": "હાર ન માનતાં રિમાઇન્ડર"
           }
         },
         "he": {
@@ -152398,7 +152398,7 @@
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "हार न मानणाऱ्या आठवणी"
+            "value": "हार न मानणारे रिमाइंडर"
           }
         },
         "ms": {
@@ -152553,43 +152553,43 @@
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "আমি চেক-ইন না করা পর্যন্ত প্রতি %1$@ পরপর আবার মনে করিয়ে দিও, সর্বোচ্চ %2$@।"
+            "value": "আমি টিক না দেওয়া পর্যন্ত প্রতি %1$@ পরপর আবার মনে করিয়ে দিন, সর্বোচ্চ %2$@।"
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "Torna’m a avisar cada %1$@, com a màxim %2$@, fins que registri."
+            "value": "Torna’m a avisar cada %1$@, com a màxim %2$@, fins que confirmi."
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Připomeň mi to znovu každých %1$@, maximálně %2$@, dokud neudělám check-in."
+            "value": "Připomeň mi to znovu každých %1$@, maximálně %2$@, dokud neodškrtnu."
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mind mig om det igen hvert %1$@, op til %2$@, indtil jeg tjekker ind."
+            "value": "Mind mig om det igen med %1$@ mellemrum, op til %2$@, indtil jeg har krydset af."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Erinnere mich alle %1$@ erneut, höchstens %2$@, bis ich den Check-in mache."
+            "value": "Erinnere mich alle %1$@ noch einmal, höchstens %2$@, bis ich abgehakt habe."
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Θύμισέ μου ξανά κάθε %1$@, έως %2$@, μέχρι να κάνω check-in."
+            "value": "Θύμισέ μου ξανά κάθε %1$@, έως %2$@, μέχρι να το σημειώσω."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vuelve a avisarme cada %1$@, máximo %2$@, hasta que haga el check-in."
+            "value": "Vuelve a avisarme cada %1$@, máximo %2$@, hasta que lo marque."
           }
         },
         "fi": {
@@ -152601,37 +152601,37 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Relance-moi toutes les %1$@, jusqu'à %2$@, tant que je n'ai pas fait mon check-in."
+            "value": "Relance-moi toutes les %1$@, jusqu’à %2$@, tant que je n’ai pas validé."
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "હું ચેક-ઇન ન કરું ત્યાં સુધી દર %1$@ પછી, વધુમાં વધુ %2$@, ફરી યાદ અપાવ."
+            "value": "હું નોંધ ન કરું ત્યાં સુધી દર %1$@ પછી, વધુમાં વધુ %2$@, ફરી યાદ અપાવો."
           }
         },
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "להזכיר לי שוב כל %1$@, לכל היותר %2$@, עד שאדווח."
+            "value": "להזכיר לי שוב כל %1$@, לכל היותר %2$@, עד שאסמן."
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "जब तक मैं चेक-इन न करूँ, मुझे हर %1$@ पर फिर से याद दिलाओ, ज़्यादा से ज़्यादा %2$@।"
+            "value": "जब तक मैं दर्ज न करूँ, मुझे हर %1$@ पर फिर से याद दिलाएँ, ज़्यादा से ज़्यादा %2$@।"
           }
         },
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Podsjeti me ponovno svakih %1$@, najviše %2$@, dok ne potvrdim."
+            "value": "Podsjeti me ponovno svakih %1$@, najviše %2$@, dok se ne javim."
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "Emlékeztess újra minden %1$@ után, legfeljebb %2$@, amíg be nem jelölöm."
+            "value": "Emlékeztess újra minden %1$@ után, legfeljebb %2$@, amíg ki nem pipálom."
           }
         },
         "id": {
@@ -152643,37 +152643,37 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ricordamelo di nuovo ogni %1$@, fino a %2$@, finché non faccio il check-in."
+            "value": "Ricordamelo di nuovo ogni %1$@, fino a %2$@, finché non confermo."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "チェックインするまで%1$@ごとに再通知、最大%2$@。"
+            "value": "記録するまで、%1$@ごとに最大%2$@まで、くり返し知らせてください。"
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ನಾನು ಚೆಕ್-ಇನ್ ಮಾಡುವವರೆಗೆ ಪ್ರತಿ %1$@ ಅಂತರದಲ್ಲಿ, ಗರಿಷ್ಠ %2$@, ಮತ್ತೆ ನೆನಪಿಸು."
+            "value": "ನಾನು ದಾಖಲಿಸುವವರೆಗೆ ಪ್ರತಿ %1$@ ಅಂತರದಲ್ಲಿ, ಗರಿಷ್ಠ %2$@, ಮತ್ತೆ ನೆನಪಿಸಿ."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "체크인할 때까지 %1$@마다 최대 %2$@ 다시 알려 주세요."
+            "value": "체크할 때까지 %1$@마다 최대 %2$@ 다시 알려 주세요."
           }
         },
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "ഞാൻ ചെക്ക്-ഇൻ ചെയ്യുന്നതുവരെ ഓരോ %1$@ കൂടുമ്പോഴും, പരമാവധി %2$@, വീണ്ടും ഓർമ്മിപ്പിക്കൂ."
+            "value": "ഞാൻ രേഖപ്പെടുത്തുന്നതുവരെ ഓരോ %1$@ കൂടുമ്പോഴും, പരമാവധി %2$@, വീണ്ടും ഓർമ്മിപ്പിക്കൂ."
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "मी नोंद करेपर्यंत दर %1$@ नंतर, जास्तीत जास्त %2$@, पुन्हा आठवण करून दे."
+            "value": "मी नोंद करेपर्यंत दर %1$@ नंतर, जास्तीत जास्त %2$@, पुन्हा आठवण करून द्या."
           }
         },
         "ms": {
@@ -152685,37 +152685,37 @@
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "Minn meg på det igjen hvert %1$@, opptil %2$@, til jeg sjekker inn."
+            "value": "Minn meg på det igjen med %1$@ mellomrom, opptil %2$@, til jeg har krysset av."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Herinner me opnieuw elke %1$@, maximaal %2$@, tot ik incheck."
+            "value": "Herinner me elke %1$@ opnieuw, maximaal %2$@, tot ik heb afgevinkt."
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ମୁଁ ଚେକ୍-ଇନ୍ କରିବା ପର୍ୟ୍ୟନ୍ତ ପ୍ରତି %1$@ ରେ, ସର୍ବାଧିକ %2$@, ପୁଣି ମନେ ପକାଅ।"
+            "value": "ମୁଁ ଦର୍ଜ କରିବା ପର୍ୟ୍ୟନ୍ତ ପ୍ରତି %1$@ ରେ, ସର୍ବାଧିକ %2$@, ପୁଣି ମନେ ପକାନ୍ତୁ।"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਜਦੋਂ ਤੱਕ ਮੈਂ ਚੈੱਕ-ਇਨ ਨਾ ਕਰਾਂ, ਹਰ %1$@ ਬਾਅਦ, ਵੱਧ ਤੋਂ ਵੱਧ %2$@, ਮੁੜ ਯਾਦ ਕਰਾਈਂ।"
+            "value": "ਜਦੋਂ ਤੱਕ ਮੈਂ ਦਰਜ ਨਾ ਕਰਾਂ, ਹਰ %1$@ ਬਾਅਦ, ਵੱਧ ਤੋਂ ਵੱਧ %2$@, ਮੈਨੂੰ ਮੁੜ ਯਾਦ ਕਰਾਓ।"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Przypominaj mi znowu co %1$@, maksymalnie %2$@, aż potwierdzę."
+            "value": "Przypominaj mi znowu co %1$@, maksymalnie %2$@, aż odhaczę."
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Me avise de novo a cada %1$@, no máximo %2$@, até eu fazer o check-in."
+            "value": "Me avise de novo a cada %1$@, no máximo %2$@, até eu registrar."
           }
         },
         "pt-PT": {
@@ -152727,7 +152727,7 @@
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "Amintește-mi din nou la fiecare %1$@, de maximum %2$@, până confirm."
+            "value": "Amintește-mi din nou la fiecare %1$@, de maximum %2$@, până bifez."
           }
         },
         "ru": {
@@ -152739,31 +152739,31 @@
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pripomeň mi to znova každých %1$@, najviac %2$@, kým nepotvrdím."
+            "value": "Pripomeň mi to znova každých %1$@, najviac %2$@, kým neodškrtnem."
           }
         },
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Znova me opomni vsakih %1$@, največ %2$@, dokler ne potrdim."
+            "value": "Znova me opomni vsakih %1$@, največ %2$@, dokler ne odkljukam."
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Påminn mig igen var %1$@, högst %2$@, tills jag checkar in."
+            "value": "Påminn mig igen var %1$@, högst %2$@, tills jag har bockat av."
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "நான் செக்-இன் செய்யும் வரை ஒவ்வொரு %1$@ இடைவெளியிலும், அதிகபட்சம் %2$@, மீண்டும் நினைவூட்டு."
+            "value": "நான் பதிவு செய்யும் வரை ஒவ்வொரு %1$@ இடைவெளியிலும், அதிகபட்சம் %2$@, மீண்டும் நினைவூட்டுங்கள்."
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "నేను చెక్-ఇన్ చేసేదాకా ప్రతి %1$@ కి, గరిష్ఠంగా %2$@, మళ్లీ గుర్తు చెయ్."
+            "value": "నేను నమోదు చేసే వరకు ప్రతి %1$@ కి, గరిష్ఠంగా %2$@, మళ్లీ గుర్తు చేయండి."
           }
         },
         "th": {
@@ -152775,7 +152775,7 @@
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaydımı yapana kadar her %1$@ bir, en fazla %2$@ yeniden hatırlat."
+            "value": "İşaretleyene kadar bana %1$@ arayla en fazla %2$@ yeniden hatırlat."
           }
         },
         "uk": {
@@ -152787,13 +152787,13 @@
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "جب تک میں چیک اِن نہ کروں، مجھے ہر %1$@ بعد پھر سے یاد دلاؤ، زیادہ سے زیادہ %2$@۔"
+            "value": "جب تک میں درج نہ کروں، مجھے ہر %1$@ بعد پھر سے یاد دلائیں، زیادہ سے زیادہ %2$@۔"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nhắc lại tôi mỗi %1$@, tối đa %2$@, cho đến khi tôi điểm danh."
+            "value": "Nhắc lại cho tôi mỗi %1$@, tối đa %2$@, cho đến khi tôi điểm danh."
           }
         },
         "zh-Hans": {
@@ -153520,7 +153520,7 @@
               "one": {
                 "stringUnit": {
                   "state": "translated",
-                  "value": "%lld वेळा"
+                  "value": "%lld वेळ"
                 }
               },
               "other": {
@@ -153984,7 +153984,7 @@
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "এড়িয়ে যাও"
+            "value": "এড়িয়ে যান"
           }
         },
         "ca": {
@@ -154050,7 +154050,7 @@
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "छोड़ो"
+            "value": "छोड़ें"
           }
         },
         "hr": {
@@ -154086,7 +154086,7 @@
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ಬಿಟ್ಟುಬಿಡು"
+            "value": "ಬಿಟ್ಟುಬಿಡಿ"
           }
         },
         "ko": {
@@ -154104,7 +154104,7 @@
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "वगळ"
+            "value": "वगळा"
           }
         },
         "ms": {
@@ -154128,13 +154128,13 @@
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ଛାଡ଼"
+            "value": "ଛାଡ଼ନ୍ତୁ"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਛੱਡ"
+            "value": "ਛੱਡੋ"
           }
         },
         "pl": {
@@ -154188,13 +154188,13 @@
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "தவிர்"
+            "value": "தவிர்க்கவும்"
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "దాటవేయి"
+            "value": "దాటవేయండి"
           }
         },
         "th": {
@@ -154218,7 +154218,7 @@
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "چھوڑو"
+            "value": "چھوڑیں"
           }
         },
         "vi": {
@@ -154379,7 +154379,7 @@
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "सगळं तयार आहे"
+            "value": "सर्व तयार आहे"
           }
         },
         "ms": {
@@ -154499,7 +154499,7 @@
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Đã xong hết"
+            "value": "Mọi thứ đã sẵn sàng"
           }
         },
         "zh-Hans": {
@@ -154534,7 +154534,7 @@
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "তোমার পরের রিমাইন্ডার %@-এ।"
+            "value": "আপনার পরের রিমাইন্ডার %@-এ।"
           }
         },
         "ca": {
@@ -154588,7 +154588,7 @@
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "તારું આગલું રિમાઇંડર %@ વાગ્યે છે."
+            "value": "તમારું આગલું રિમાઇન્ડર %@ વાગ્યે છે."
           }
         },
         "he": {
@@ -154600,7 +154600,7 @@
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "तुम्हारा अगला रिमाइंडर %@ पर है।"
+            "value": "आपका अगला रिमाइंडर %@ पर है।"
           }
         },
         "hr": {
@@ -154636,7 +154636,7 @@
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ನಿನ್ನ ಮುಂದಿನ ಜ್ಞಾಪನೆ %@ ಗಂಟೆಗೆ."
+            "value": "ನಿಮ್ಮ ಮುಂದಿನ ಜ್ಞಾಪನೆ %@ ಗಂಟೆಗೆ."
           }
         },
         "ko": {
@@ -154648,13 +154648,13 @@
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "നിന്റെ അടുത്ത റിമൈൻഡർ %@-ന് ആണ്."
+            "value": "നിങ്ങളുടെ അടുത്ത റിമൈൻഡർ %@-ന് ആണ്."
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "तुझी पुढची आठवण %@ ला आहे."
+            "value": "तुमचा पुढचा रिमाइंडर %@ ला आहे."
           }
         },
         "ms": {
@@ -154678,13 +154678,13 @@
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ତୁମର ପରବର୍ତ୍ତୀ ରିମାଇଣ୍ଡର୍ %@ ରେ।"
+            "value": "ଆପଣଙ୍କ ପରବର୍ତ୍ତୀ ରିମାଇଣ୍ଡର୍ %@ ରେ।"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਤੇਰਾ ਅਗਲਾ ਰਿਮਾਈਂਡਰ %@ ’ਤੇ ਹੈ।"
+            "value": "ਤੁਹਾਡਾ ਅਗਲਾ ਰਿਮਾਈਂਡਰ %@ ’ਤੇ ਹੈ।"
           }
         },
         "pl": {
@@ -154738,13 +154738,13 @@
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "உன் அடுத்த நினைவூட்டல் %@ மணிக்கு."
+            "value": "உங்கள் அடுத்த நினைவூட்டல் %@ மணிக்கு."
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "నీ తర్వాతి రిమైండర్ %@ కి."
+            "value": "మీ తర్వాతి రిమైండర్ %@ కి."
           }
         },
         "th": {
@@ -154768,7 +154768,7 @@
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "تمہاری اگلی یاد دہانی %@ پر ہے۔"
+            "value": "آپ کی اگلی یاد دہانی %@ پر ہے۔"
           }
         },
         "vi": {
@@ -154809,7 +154809,7 @@
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "আজ-এ ফিরে যাও"
+            "value": "আজ-এ ফিরে যান"
           }
         },
         "ca": {
@@ -154857,13 +154857,13 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Retour à Aujourd'hui"
+            "value": "Retour à Aujourd’hui"
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "આજ પર પાછા"
+            "value": "‘આજે’ પર પાછા જાઓ"
           }
         },
         "he": {
@@ -154875,7 +154875,7 @@
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "आज पर वापस जाओ"
+            "value": "आज पर वापस जाएँ"
           }
         },
         "hr": {
@@ -154911,7 +154911,7 @@
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ಇಂದು ಪುಟಕ್ಕೆ ಹಿಂತಿರುಗು"
+            "value": "ಇಂದು ಪುಟಕ್ಕೆ ಹಿಂತಿರುಗಿ"
           }
         },
         "ko": {
@@ -154929,7 +154929,7 @@
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "आज वर परत जा"
+            "value": "‘आज’ वर परत जा"
           }
         },
         "ms": {
@@ -154953,13 +154953,13 @@
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ଆଜିକୁ ଫେରିଯାଅ"
+            "value": "ଆଜିକୁ ଫେରିଯାଆନ୍ତୁ"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਅੱਜ ’ਤੇ ਵਾਪਸ ਜਾ"
+            "value": "ਅੱਜ ’ਤੇ ਵਾਪਸ ਜਾਓ"
           }
         },
         "pl": {
@@ -155013,13 +155013,13 @@
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "இன்றுக்குத் திரும்பு"
+            "value": "‘இன்று’ பக்கத்துக்குத் திரும்புங்கள்"
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "ఈరోజుకు తిరిగి వెళ్లు"
+            "value": "ఈరోజుకు తిరిగి వెళ్లండి"
           }
         },
         "th": {
@@ -155031,7 +155031,7 @@
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bugün'e dön"
+            "value": "Bugün’e dön"
           }
         },
         "uk": {
@@ -155043,7 +155043,7 @@
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "آج پر واپس جاؤ"
+            "value": "آج پر واپس جائیں"
           }
         },
         "vi": {
@@ -155084,7 +155084,7 @@
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "তোমার পরের রিমাইন্ডার %@-এ। বাকিটা সেটিংস থেকে সেট আপ করতে পারবে।"
+            "value": "আপনার পরের রিমাইন্ডার %@-এ। বাকিটা সেটিংস থেকে সেট আপ করতে পারবেন।"
           }
         },
         "ca": {
@@ -155138,7 +155138,7 @@
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "તારું આગલું રિમાઇંડર %@ વાગ્યે છે. બાકીનું તું સેટિંગ્સમાં સેટ કરી શકે છે."
+            "value": "તમારું આગલું રિમાઇન્ડર %@ વાગ્યે છે. બાકીનું તમે સેટિંગ્સમાં સેટ કરી શકો છો."
           }
         },
         "he": {
@@ -155150,7 +155150,7 @@
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "तुम्हारा अगला रिमाइंडर %@ पर है। बाकी तुम सेटिंग्स में सेट कर सकती हो।"
+            "value": "आपका अगला रिमाइंडर %@ पर है। बाक़ी आप सेटिंग्ज़ में सेट कर सकती हैं।"
           }
         },
         "hr": {
@@ -155186,7 +155186,7 @@
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ನಿನ್ನ ಮುಂದಿನ ಜ್ಞಾಪನೆ %@ ಗಂಟೆಗೆ. ಉಳಿದದ್ದನ್ನು ಸೆಟ್ಟಿಂಗ್‌ಗಳಲ್ಲಿ ಹೊಂದಿಸಬಹುದು."
+            "value": "ನಿಮ್ಮ ಮುಂದಿನ ಜ್ಞಾಪನೆ %@ ಗಂಟೆಗೆ. ಉಳಿದದ್ದನ್ನು ಸೆಟ್ಟಿಂಗ್‌ಗಳಲ್ಲಿ ಹೊಂದಿಸಬಹುದು."
           }
         },
         "ko": {
@@ -155198,13 +155198,13 @@
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "നിന്റെ അടുത്ത റിമൈൻഡർ %@-ന് ആണ്. ബാക്കിയുള്ളവ സെറ്റിംഗ്‌സിൽ സെറ്റ് ചെയ്യാം."
+            "value": "നിങ്ങളുടെ അടുത്ത റിമൈൻഡർ %@-ന് ആണ്. ബാക്കിയുള്ളവ ക്രമീകരണങ്ങളിൽ സെറ്റ് ചെയ്യാം."
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "तुझी पुढची आठवण %@ ला आहे. बाकीचं तू सेटिंग्जमध्ये सेट करू शकतेस."
+            "value": "तुमचा पुढचा रिमाइंडर %@ ला आहे. बाकीचे तुम्ही सेटिंग्जमध्ये सेट करू शकता."
           }
         },
         "ms": {
@@ -155228,13 +155228,13 @@
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ତୁମର ପରବର୍ତ୍ତୀ ରିମାଇଣ୍ଡର୍ %@ ରେ। ବାକି ସବୁ ସେଟିଂସ୍‌ରେ ସେଟ୍ କରିପାରିବ।"
+            "value": "ଆପଣଙ୍କ ପରବର୍ତ୍ତୀ ରିମାଇଣ୍ଡର୍ %@ ରେ। ବାକି ସବୁ ସେଟିଂସ୍‌ରେ ସେଟ୍ କରିପାରିବେ।"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਤੇਰਾ ਅਗਲਾ ਰਿਮਾਈਂਡਰ %@ ’ਤੇ ਹੈ। ਬਾਕੀ ਤੂੰ ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਸੈੱਟ ਕਰ ਸਕਦੀ ਹੈਂ।"
+            "value": "ਤੁਹਾਡਾ ਅਗਲਾ ਰਿਮਾਈਂਡਰ %@ ’ਤੇ ਹੈ। ਬਾਕੀ ਤੁਸੀਂ ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਸੈੱਟ ਕਰ ਸਕਦੇ ਹੋ।"
           }
         },
         "pl": {
@@ -155258,7 +155258,7 @@
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "Următorul memento e la %@. Restul le poți configura din Configurări."
+            "value": "Următorul memento e la %@. Restul îl poți configura din Configurări."
           }
         },
         "ru": {
@@ -155288,13 +155288,13 @@
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "உன் அடுத்த நினைவூட்டல் %@ மணிக்கு. மீதியை அமைப்புகளில் அமைக்கலாம்."
+            "value": "உங்கள் அடுத்த நினைவூட்டல் %@ மணிக்கு. மீதியை அமைப்புகளில் அமைக்கலாம்."
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "నీ తర్వాతి రిమైండర్ %@ కి. మిగతావి సెట్టింగ్‌లలో సెట్ చేసుకోవచ్చు."
+            "value": "మీ తర్వాతి రిమైండర్ %@ కి. మిగతావి సెట్టింగ్‌లలో సెట్ చేసుకోవచ్చు."
           }
         },
         "th": {
@@ -155306,7 +155306,7 @@
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sonraki hatırlatman saat %@. Gerisini Ayarlar'dan kurabilirsin."
+            "value": "Sonraki hatırlatman saat %@. Gerisini Ayarlar’dan kurabilirsin."
           }
         },
         "uk": {
@@ -155318,7 +155318,7 @@
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "تمہاری اگلی یاد دہانی %@ پر ہے۔ باقی تم سیٹنگز میں سیٹ کر سکتی ہو۔"
+            "value": "آپ کی اگلی یاد دہانی %@ پر ہے۔ باقی آپ سیٹنگز میں سیٹ کر سکتی ہیں۔"
           }
         },
         "vi": {

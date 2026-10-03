@@ -14110,13 +14110,13 @@
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus włączony · zostało %lld dni aktywnych"
+            "value": "Plus włączony · zostało dni aktywnych: %lld"
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus je zapnuté · zbývá %lld aktivních dní"
+            "value": "Plus je zapnuté · zbývá aktivních dní: %lld"
           }
         },
         "ru": {
@@ -14158,7 +14158,7 @@
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus je zapnuté · zostáva %lld aktívnych dní"
+            "value": "Plus je zapnuté · zostáva aktívnych dní: %lld"
           }
         },
         "th": {
@@ -14182,7 +14182,7 @@
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus je uključen · još %lld aktivnih dana"
+            "value": "Plus je uključen · preostalo aktivnih dana: %lld"
           }
         },
         "hu": {
@@ -14242,7 +14242,7 @@
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus je vklopljen · še %lld aktivnih dni"
+            "value": "Plus je vklopljen · preostali aktivni dnevi: %lld"
           }
         },
         "el": {
@@ -39081,7 +39081,7 @@
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zkušební verze Pillie Plus"
+            "value": "Zkušební období Pillie Plus"
           }
         },
         "da": {
@@ -39093,7 +39093,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus-Trial"
+            "value": "Pillie-Plus-Testphase"
           }
         },
         "el": {
@@ -39141,7 +39141,7 @@
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Probno razdoblje Pillie Plus"
+            "value": "Probno razdoblje Pillie Plusa"
           }
         },
         "hu": {
@@ -39159,7 +39159,7 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Trial di Pillie Plus"
+            "value": "Prova di Pillie Plus"
           }
         },
         "ja": {
@@ -39255,7 +39255,7 @@
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Skúšobná verzia Pillie Plus"
+            "value": "Skúšobné obdobie Pillie Plus"
           }
         },
         "sl": {
@@ -39356,7 +39356,7 @@
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zbývá %lld aktivních dní"
+            "value": "Zbývá aktivních dní: %lld"
           }
         },
         "da": {
@@ -39374,13 +39374,13 @@
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld ενεργές μέρες ακόμα"
+            "value": "Απομένουν %lld ενεργές ημέρες"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld días activos restantes"
+            "value": "Quedan %lld días activos"
           }
         },
         "fi": {
@@ -39416,7 +39416,7 @@
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Još %lld aktivnih dana"
+            "value": "Preostalo aktivnih dana: %lld"
           }
         },
         "hu": {
@@ -39446,7 +39446,7 @@
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld ಸಕ್ರಿಯ ದಿನಗಳು ಬಾಕಿ"
+            "value": "%lld ಸಕ್ರಿಯ ದಿನಗಳು ಉಳಿದಿವೆ"
           }
         },
         "ko": {
@@ -39458,7 +39458,7 @@
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld സജീവ ദിവസം ബാക്കി"
+            "value": "%lld സജീവ ദിനങ്ങൾ ബാക്കി"
           }
         },
         "mr": {
@@ -39500,13 +39500,13 @@
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zostało %lld dni aktywnych"
+            "value": "Zostało dni aktywnych: %lld"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld dias ativos restantes"
+            "value": "Faltam %lld dias ativos"
           }
         },
         "pt-PT": {
@@ -39530,13 +39530,13 @@
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zostáva %lld aktívnych dní"
+            "value": "Zostáva aktívnych dní: %lld"
           }
         },
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Še %lld aktivnih dni"
+            "value": "Preostali aktivni dnevi: %lld"
           }
         },
         "sv": {
@@ -39667,7 +39667,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "L'essai se termine ce soir"
+            "value": "L’essai se termine ce soir"
           }
         },
         "gu": {
@@ -39691,7 +39691,7 @@
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Proba završava večeras"
+            "value": "Probno razdoblje završava večeras"
           }
         },
         "hu": {
@@ -39781,7 +39781,7 @@
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Teste termina hoje à noite"
+            "value": "O teste termina hoje à noite"
           }
         },
         "pt-PT": {
@@ -39799,7 +39799,7 @@
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Пробный период закончится сегодня"
+            "value": "Пробный период закончится сегодня ночью"
           }
         },
         "sk": {
@@ -39817,7 +39817,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Provperioden tar slut ikväll"
+            "value": "Provperioden tar slut i kväll"
           }
         },
         "ta": {
@@ -39847,7 +39847,7 @@
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Пробний період завершиться сьогодні"
+            "value": "Пробний період завершиться сьогодні вночі"
           }
         },
         "ur": {
@@ -39894,7 +39894,7 @@
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ পর্যন্ত Plus-এর সবকিছু তোমার।"
+            "value": "%@ পর্যন্ত Plus-এর সবকিছু আপনার।"
           }
         },
         "ca": {
@@ -39942,25 +39942,25 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tout Plus est à toi jusqu'au %@."
+            "value": "Tout Plus est à toi jusqu’au %@."
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ સુધી Plus ની દરેક સુવિધા તારી છે."
+            "value": "%@ સુધી Plus ની દરેક સુવિધા તમારી છે."
           }
         },
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "כל Plus שלך עד %@."
+            "value": "כל מה שיש ב-Plus שלך עד %@."
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ तक Plus की हर सुविधा तुम्हारी है।"
+            "value": "%@ तक Plus की हर सुविधा आपकी है।"
           }
         },
         "hr": {
@@ -39996,7 +39996,7 @@
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ ವರೆಗೆ Plus ನಲ್ಲಿರುವ ಎಲ್ಲವೂ ನಿನ್ನದು."
+            "value": "%@ ವರೆಗೆ Plus ನಲ್ಲಿರುವ ಎಲ್ಲವೂ ನಿಮ್ಮದು."
           }
         },
         "ko": {
@@ -40008,13 +40008,13 @@
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ വരെ Plus-ലെ എല്ലാം നിനക്കുള്ളതാണ്."
+            "value": "%@ വരെ Plus-ലെ എല്ലാം നിങ്ങൾക്കുള്ളതാണ്."
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ पर्यंत Plus मधलं सगळं तुझं आहे."
+            "value": "%@ पर्यंत Plus मधील सर्व काही तुमचे आहे."
           }
         },
         "ms": {
@@ -40038,13 +40038,13 @@
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ ପର୍ୟ୍ୟନ୍ତ Plus ର ସବୁକିଛି ତୁମର।"
+            "value": "%@ ପର୍ୟ୍ୟନ୍ତ Plus ର ସବୁକିଛି ଆପଣଙ୍କର।"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ ਤੱਕ Plus ਦੀ ਹਰ ਚੀਜ਼ ਤੇਰੀ ਹੈ।"
+            "value": "%@ ਤੱਕ Plus ਦੀ ਹਰ ਚੀਜ਼ ਤੁਹਾਡੀ ਹੈ।"
           }
         },
         "pl": {
@@ -40098,13 +40098,13 @@
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ வரை Plus இல் உள்ள அனைத்தும் உன்னுடையது."
+            "value": "%@ வரை Plus இல் உள்ள அனைத்தும் உங்களுடையது."
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ వరకు Plus లోని ప్రతిదీ నీదే."
+            "value": "%@ వరకు Plus లోని ప్రతిదీ మీదే."
           }
         },
         "th": {
@@ -40116,7 +40116,7 @@
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus'taki her şey %@ tarihine kadar senin."
+            "value": "Plus’taki her şey %@ tarihine kadar senin."
           }
         },
         "uk": {
@@ -40128,13 +40128,13 @@
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ تک Plus کی ہر چیز تمہاری ہے۔"
+            "value": "%@ تک Plus کی ہر چیز آپ کی ہے۔"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mọi thứ trong Plus là của bạn đến %@."
+            "value": "Bạn được dùng mọi tính năng Plus đến %@."
           }
         },
         "zh-Hans": {
@@ -40504,7 +40504,7 @@
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "מה קורה עכשיו"
+            "value": "מה קורה בהמשך"
           }
         },
         "hi": {
@@ -40588,7 +40588,7 @@
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ଏହା ପରେ କ'ଣ ହେବ"
+            "value": "ଏହା ପରେ କ’ଣ ହେବ"
           }
         },
         "pa": {
@@ -40684,7 +40684,7 @@
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Điều gì tiếp theo"
+            "value": "Tiếp theo sẽ ra sao"
           }
         },
         "zh-Hans": {
@@ -40713,265 +40713,265 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "سنذكّرك عندما تتبقى 5 أيام."
+            "value": "يذكّرك Pillie عندما تتبقى 5 أيام نشطة."
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "5 দিন বাকি থাকলে আমরা তোমাকে মনে করিয়ে দেব।"
+            "value": "5 সক্রিয় দিন বাকি থাকলে Pillie আপনাকে মনে করিয়ে দেবে।"
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "Et recordarem que queden 5 dies."
+            "value": "Pillie t’avisa quan queden 5 dies actius."
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Připomeneme ti, že zbývá 5 dní."
+            "value": "Pillie ti připomene, až bude zbývat 5 aktivních dní."
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vi minder dig om, at der er 5 dage tilbage."
+            "value": "Pillie minder dig om det, når der er 5 aktive dage tilbage."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wir erinnern dich, wenn noch 5 Tage übrig sind."
+            "value": "Pillie erinnert dich, wenn noch 5 aktive Tage übrig sind."
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Θα σου θυμίσουμε ότι μένουν 5 μέρες."
+            "value": "Το Pillie σε ειδοποιεί όταν απομένουν 5 ενεργές ημέρες."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Te avisaremos cuando queden 5 días."
+            "value": "Pillie te avisa cuando quedan 5 días activos."
           }
         },
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Muistutamme, kun 5 päivää on jäljellä."
+            "value": "Pillie muistuttaa, kun 5 aktiivista päivää on jäljellä."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "On te rappellera qu'il reste 5 jours."
+            "value": "Pillie te prévient quand il reste 5 jours actifs."
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "5 દિવસ બાકી રહેશે ત્યારે અમે તને યાદ અપાવીશું."
+            "value": "5 સક્રિય દિવસ બાકી રહેશે ત્યારે Pillie તમને યાદ અપાવશે."
           }
         },
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "נזכיר לך כשיישארו 5 ימים."
+            "value": "Pillie תזכיר לך כשיישארו 5 ימים פעילים."
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "5 दिन बचने पर हम तुम्हें याद दिलाएँगे।"
+            "value": "जब 5 सक्रिय दिन बाक़ी होंगे, तब Pillie आपको याद दिलाएगा।"
           }
         },
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Podsjetit ćemo te kad ostane 5 dana."
+            "value": "Pillie će te podsjetiti kad ostane još 5 aktivnih dana."
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "Szólunk, amikor 5 nap van hátra."
+            "value": "A Pillie szól, amikor 5 aktív nap van hátra."
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kami akan mengingatkanmu saat tersisa 5 hari."
+            "value": "Pillie mengingatkanmu saat tersisa 5 hari aktif."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ti ricorderemo che mancano 5 giorni."
+            "value": "Pillie ti avvisa quando mancano 5 giorni attivi."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "残り5日になったらお知らせします。"
+            "value": "服用日が残り5日になると、Pillieがお知らせします。"
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "5 ದಿನಗಳು ಉಳಿದಾಗ ನಾವು ನಿನಗೆ ನೆನಪಿಸುತ್ತೇವೆ."
+            "value": "5 ಸಕ್ರಿಯ ದಿನಗಳು ಉಳಿದಾಗ Pillie ನಿಮಗೆ ನೆನಪಿಸುತ್ತದೆ."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "5일 남았을 때 알려 드릴게요."
+            "value": "복용일이 5일 남으면 Pillie가 알려 드려요."
           }
         },
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "5 ദിവസം ബാക്കിയുള്ളപ്പോൾ ഞങ്ങൾ നിന്നെ ഓർമ്മിപ്പിക്കും."
+            "value": "5 സജീവ ദിനങ്ങൾ ബാക്കിയുള്ളപ്പോൾ Pillie നിങ്ങളെ ഓർമ്മിപ്പിക്കും."
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "5 दिवस उरल्यावर आम्ही तुला आठवण करून देऊ."
+            "value": "5 सक्रिय दिवस बाकी राहिल्यावर Pillie तुम्हाला आठवण करून देईल."
           }
         },
         "ms": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kami akan ingatkan kamu apabila tinggal 5 hari."
+            "value": "Pillie akan ingatkan kamu apabila tinggal 5 hari aktif."
           }
         },
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vi minner deg på det når det er 5 dager igjen."
+            "value": "Pillie minner deg på det når det er 5 aktive dager igjen."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "We herinneren je eraan dat er nog 5 dagen over zijn."
+            "value": "Pillie herinnert je eraan als er nog 5 actieve dagen over zijn."
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "5 ଦିନ ବାକି ଥିବାବେଳେ ଆମେ ତୁମକୁ ମନେ ପକାଇବୁ।"
+            "value": "5 ସକ୍ରିୟ ଦିନ ବାକି ଥିବାବେଳେ Pillie ଆପଣଙ୍କୁ ମନେ ପକାଇବ।"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "5 ਦਿਨ ਬਾਕੀ ਰਹਿਣ ’ਤੇ ਅਸੀਂ ਤੈਨੂੰ ਯਾਦ ਕਰਾਵਾਂਗੇ।"
+            "value": "5 ਸਰਗਰਮ ਦਿਨ ਬਾਕੀ ਰਹਿਣ ’ਤੇ Pillie ਤੁਹਾਨੂੰ ਯਾਦ ਕਰਾਏਗੀ।"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Przypomnimy ci, że zostało 5 dni."
+            "value": "Pillie przypomni ci, gdy zostanie 5 dni aktywnych."
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vamos te lembrar quando faltarem 5 dias."
+            "value": "O Pillie avisa você quando faltarem 5 dias ativos."
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vamos lembrar-te quando faltarem 5 dias."
+            "value": "O Pillie avisa-te quando faltarem 5 dias ativos."
           }
         },
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "Îți amintim când mai sunt 5 zile."
+            "value": "Pillie îți amintește când mai sunt 5 zile active."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Напомним, когда останется 5 дней."
+            "value": "Pillie напомнит, когда останется 5 активных дней."
           }
         },
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pripomenieme ti, že zostáva 5 dní."
+            "value": "Pillie ti pripomenie, keď bude zostávať 5 aktívnych dní."
           }
         },
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Opomnili te bomo, ko bo ostalo 5 dni."
+            "value": "Pillie te opomni, ko ostane še 5 aktivnih dni."
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vi påminner dig när 5 dagar återstår."
+            "value": "Pillie påminner dig när 5 aktiva dagar återstår."
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "5 நாட்கள் மீதமிருக்கும்போது உனக்கு நினைவூட்டுவோம்."
+            "value": "5 செயல் நாட்கள் மீதமிருக்கும்போது Pillie உங்களுக்கு நினைவூட்டும்."
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "5 రోజులు మిగిలినప్పుడు మేము నీకు గుర్తు చేస్తాం."
+            "value": "5 యాక్టివ్ రోజులు మిగిలినప్పుడు Pillie మీకు గుర్తు చేస్తుంది."
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "เราจะเตือนคุณเมื่อเหลืออีก 5 วัน"
+            "value": "Pillie จะเตือนคุณเมื่อเหลืออีก 5 วันกินยา"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "5 gün kaldığında sana hatırlatacağız."
+            "value": "5 aktif gün kaldığında Pillie sana hatırlatır."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Нагадаємо, коли лишиться 5 днів."
+            "value": "Pillie нагадає, коли лишиться 5 активних днів."
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "5 دن باقی رہنے پر ہم تمہیں یاد دلائیں گے۔"
+            "value": "جب 5 فعال دن باقی ہوں گے تو Pillie آپ کو یاد دلائے گا۔"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Chúng tôi sẽ nhắc bạn khi còn 5 ngày."
+            "value": "Pillie sẽ nhắc bạn khi còn 5 ngày uống."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "还剩 5 天时会提醒你。"
+            "value": "还剩 5 个服药日时，Pillie 会提醒你。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "剩下 5 天時會提醒你。"
+            "value": "剩下 5 個服藥日時，Pillie 會提醒你。"
           }
         }
       }
@@ -41048,7 +41048,7 @@
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "તારી ટ્રાયલ પૂરી થાય તે પહેલાં એક છેલ્લું રિમાઇંડર."
+            "value": "તમારી ટ્રાયલ પૂરી થાય તે પહેલાં એક છેલ્લું રિમાઇન્ડર."
           }
         },
         "he": {
@@ -41096,7 +41096,7 @@
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ನಿನ್ನ ಟ್ರಯಲ್ ಮುಗಿಯುವ ಮೊದಲು ಕೊನೆಯ ಜ್ಞಾಪನೆ."
+            "value": "ನಿಮ್ಮ ಟ್ರಯಲ್ ಮುಗಿಯುವ ಮೊದಲು ಕೊನೆಯ ಜ್ಞಾಪನೆ."
           }
         },
         "ko": {
@@ -41108,13 +41108,13 @@
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "നിന്റെ ട്രയൽ അവസാനിക്കും മുമ്പ് ഒരു അവസാന റിമൈൻഡർ."
+            "value": "നിങ്ങളുടെ ട്രയൽ അവസാനിക്കും മുമ്പ് ഒരു അവസാന റിമൈൻഡർ."
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "तुझा ट्रायल संपण्याआधी एक शेवटची आठवण."
+            "value": "तुमचा ट्रायल संपण्याआधी एक शेवटचा रिमाइंडर."
           }
         },
         "ms": {
@@ -41132,19 +41132,19 @@
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nog één herinnering voordat je proefperiode afloopt."
+            "value": "Een laatste herinnering voordat je proefperiode eindigt."
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ତୁମର ଟ୍ରାୟାଲ୍ ଶେଷ ହେବା ପୂର୍ବରୁ ଶେଷ ରିମାଇଣ୍ଡର୍।"
+            "value": "ଆପଣଙ୍କ ଟ୍ରାୟାଲ୍ ଶେଷ ହେବା ପୂର୍ବରୁ ଶେଷ ରିମାଇଣ୍ଡର୍।"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਤੇਰਾ ਟ੍ਰਾਇਲ ਖ਼ਤਮ ਹੋਣ ਤੋਂ ਪਹਿਲਾਂ ਇੱਕ ਆਖ਼ਰੀ ਰਿਮਾਈਂਡਰ।"
+            "value": "ਤੁਹਾਡਾ ਟ੍ਰਾਇਲ ਖ਼ਤਮ ਹੋਣ ਤੋਂ ਪਹਿਲਾਂ ਇੱਕ ਆਖ਼ਰੀ ਰਿਮਾਈਂਡਰ।"
           }
         },
         "pl": {
@@ -41198,13 +41198,13 @@
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "உன் சோதனைக் காலம் முடியும் முன் ஒரு கடைசி நினைவூட்டல்."
+            "value": "உங்கள் சோதனைக் காலம் முடியும் முன் ஒரு கடைசி நினைவூட்டல்."
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "నీ ట్రయల్ ముగిసే ముందు చివరి రిమైండర్."
+            "value": "మీ ట్రయల్ ముగిసే ముందు చివరి రిమైండర్."
           }
         },
         "th": {
@@ -41269,7 +41269,7 @@
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "তুমি কোনো প্ল্যান বেছে না নেওয়া পর্যন্ত Plus থেমে থাকবে। তোমার সেটআপ সেভ থাকবে।"
+            "value": "আপনি কোনো প্ল্যান বেছে না নেওয়া পর্যন্ত Plus থেমে থাকবে। আপনার সেটআপ সেভ থাকবে।"
           }
         },
         "ca": {
@@ -41281,25 +41281,25 @@
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus se pozastaví, dokud nevybereš tarif. Tvoje nastavení zůstane uložené."
+            "value": "Plus se pozastaví, dokud nevybereš plán. Tvoje nastavení zůstane uložené."
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus sættes på pause, indtil du vælger et abonnement. Din opsætning forbliver gemt."
+            "value": "Plus sættes på pause, indtil du vælger en plan. Din opsætning er stadig gemt."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus pausiert, bis du einen Plan wählst. Deine Einrichtung bleibt gespeichert."
+            "value": "Plus pausiert, bis du einen Tarif wählst. Deine Einrichtung bleibt gespeichert."
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Το Plus σταματά μέχρι να διαλέξεις πρόγραμμα. Οι ρυθμίσεις σου μένουν αποθηκευμένες."
+            "value": "Το Plus μπαίνει σε παύση μέχρι να διαλέξεις πρόγραμμα. Οι ρυθμίσεις σου μένουν αποθηκευμένες."
           }
         },
         "es": {
@@ -41311,19 +41311,19 @@
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus on tauolla, kunnes valitset tilauksen. Asetuksesi pysyvät tallessa."
+            "value": "Plus on tauolla, kunnes valitset paketin. Asetuksesi pysyvät tallessa."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus est en pause jusqu'à ce que tu choisisses une formule. Ta configuration reste enregistrée."
+            "value": "Plus est en pause jusqu’à ce que tu choisisses une formule. Ta configuration reste enregistrée."
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "તું કોઈ પ્લાન પસંદ ન કરે ત્યાં સુધી Plus અટકેલું રહેશે. તારું સેટઅપ સેવ રહેશે."
+            "value": "તમે કોઈ પ્લાન પસંદ ન કરો ત્યાં સુધી Plus થોભેલું રહેશે. તમારું સેટઅપ સેવ રહેશે."
           }
         },
         "he": {
@@ -41335,7 +41335,7 @@
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "जब तक तुम कोई प्लान नहीं चुनती, Plus रुका रहेगा। तुम्हारा सेटअप सेव रहेगा।"
+            "value": "प्लान चुनने तक Plus रुका रहेगा। आपका सेटअप सेव रहेगा।"
           }
         },
         "hr": {
@@ -41371,7 +41371,7 @@
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ನೀನು ಪ್ಲಾನ್ ಆರಿಸುವವರೆಗೆ Plus ನಿಲ್ಲುತ್ತದೆ. ನಿನ್ನ ಸೆಟಪ್ ಉಳಿಸಲ್ಪಟ್ಟಿರುತ್ತದೆ."
+            "value": "ನೀವು ಪ್ಲಾನ್ ಆರಿಸುವವರೆಗೆ Plus ನಿಲ್ಲುತ್ತದೆ. ನಿಮ್ಮ ಸೆಟಪ್ ಉಳಿಸಲ್ಪಟ್ಟಿರುತ್ತದೆ."
           }
         },
         "ko": {
@@ -41383,13 +41383,13 @@
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "നീ ഒരു പ്ലാൻ തിരഞ്ഞെടുക്കുന്നതുവരെ Plus നിർത്തിവയ്ക്കും. നിന്റെ സെറ്റപ്പ് സേവ് ചെയ്തിരിക്കും."
+            "value": "നിങ്ങൾ ഒരു പ്ലാൻ തിരഞ്ഞെടുക്കുന്നതുവരെ Plus പോസ് ചെയ്തിരിക്കും. നിങ്ങളുടെ സെറ്റപ്പ് സേവ് ചെയ്തിരിക്കും."
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "तू प्लॅन निवडेपर्यंत Plus थांबेल. तुझा सेटअप सेव्ह राहील."
+            "value": "तुम्ही प्लॅन निवडेपर्यंत Plus थांबेल. तुमचा सेटअप सेव्ह राहील."
           }
         },
         "ms": {
@@ -41401,31 +41401,31 @@
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus pauses til du velger et abonnement. Oppsettet ditt blir lagret."
+            "value": "Plus settes på pause til du velger en plan. Oppsettet ditt er fortsatt lagret."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus pauzeert tot je een abonnement kiest. Je instellingen blijven bewaard."
+            "value": "Plus pauzeert tot je een plan kiest. Je instellingen blijven bewaard."
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ତୁମେ ଏକ ପ୍ଲାନ୍ ବାଛିବା ପର୍ୟ୍ୟନ୍ତ Plus ବିରାମରେ ରହିବ। ତୁମର ସେଟଅପ୍ ସେଭ୍ ରହିବ।"
+            "value": "ଆପଣ ଏକ ପ୍ଲାନ୍ ବାଛିବା ପର୍ୟ୍ୟନ୍ତ Plus ବିରାମରେ ରହିବ। ଆପଣଙ୍କ ସେଟଅପ୍ ସେଭ୍ ରହିବ।"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਜਦੋਂ ਤੱਕ ਤੂੰ ਕੋਈ ਪਲਾਨ ਨਹੀਂ ਚੁਣਦੀ, Plus ਰੁਕਿਆ ਰਹੇਗਾ। ਤੇਰਾ ਸੈੱਟਅੱਪ ਸੰਭਾਲਿਆ ਰਹੇਗਾ।"
+            "value": "ਜਦੋਂ ਤੱਕ ਤੁਸੀਂ ਕੋਈ ਪਲਾਨ ਨਹੀਂ ਚੁਣਦੇ, Plus ਰੁਕਿਆ ਰਹੇਗਾ। ਤੁਹਾਡਾ ਸੈੱਟਅੱਪ ਸੰਭਾਲਿਆ ਰਹੇਗਾ।"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus zostanie wstrzymany, dopóki nie wybierzesz planu. Twoje ustawienia zostaną zapisane."
+            "value": "Plus zostanie wstrzymany, dopóki nie wybierzesz planu. Twoje ustawienia pozostaną zapisane."
           }
         },
         "pt-BR": {
@@ -41449,7 +41449,7 @@
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus приостановится, пока ты не выберешь тариф. Твои настройки сохранятся."
+            "value": "Plus приостановится, пока ты не выберешь план. Твои настройки сохранятся."
           }
         },
         "sk": {
@@ -41467,19 +41467,19 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus pausas tills du väljer ett abonnemang. Dina inställningar sparas."
+            "value": "Plus pausas tills du väljer en plan. Dina inställningar finns kvar."
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "நீ ஒரு திட்டத்தைத் தேர்ந்தெடுக்கும் வரை Plus இடைநிறுத்தப்படும். உன் அமைப்புகள் சேமிக்கப்பட்டிருக்கும்."
+            "value": "நீங்கள் ஒரு திட்டத்தைத் தேர்ந்தெடுக்கும் வரை Plus இடைநிறுத்தப்படும். உங்கள் அமைப்புகள் சேமிக்கப்பட்டிருக்கும்."
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "నువ్వు ప్లాన్ ఎంచుకునేదాకా Plus ఆగుతుంది. నీ సెటప్ సేవ్ అయి ఉంటుంది."
+            "value": "మీరు ప్లాన్ ఎంచుకునే వరకు Plus పాజ్ అవుతుంది. మీ సెటప్ సేవ్ అయి ఉంటుంది."
           }
         },
         "th": {
@@ -41497,13 +41497,13 @@
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus призупиниться, доки ти не обереш тариф. Твої налаштування збережуться."
+            "value": "Plus призупиниться, доки ти не обереш план. Твої налаштування збережуться."
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "جب تک تم کوئی پلان نہیں چنتی، Plus رکا رہے گا۔ تمہارا سیٹ اپ محفوظ رہے گا۔"
+            "value": "پلان چننے تک Plus رکا رہے گا۔ آپ کا سیٹ اپ محفوظ رہے گا۔"
           }
         },
         "vi": {
@@ -41538,265 +41538,265 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "يُلغى تفعيل إيقاف التطبيقات. تبقى التذكيرات مجانية، ويبقى كل ما ضبطتِه محفوظًا."
+            "value": "يتوقف حظر التطبيقات. تبقى التذكيرات اليومية مجانية، ويبقى كل ما ضبطتِه محفوظًا."
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "অ্যাপ ব্লকিং বন্ধ হবে। রিমাইন্ডার ফ্রি থাকবে, আর তোমার সেটআপ সেভ থাকবে।"
+            "value": "অ্যাপ ব্লকিং বন্ধ হবে। দৈনিক রিমাইন্ডার ফ্রি থাকবে, আর আপনার সেটআপ সেভ থাকবে।"
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "La pausa d’apps es desactiva. Els recordatoris continuen sent gratuïts i la teva configuració queda desada."
+            "value": "El bloqueig d’apps es desactiva. Els recordatoris diaris continuen sent gratis i la teva configuració queda desada."
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Blokování aplikací se vypne. Připomínky zůstanou zdarma a tvoje nastavení zůstane uložené."
+            "value": "Blokování aplikací se vypne. Denní připomínky zůstanou zdarma a tvoje nastavení zůstane uložené."
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Appblokering slås fra. Påmindelser forbliver gratis, og din opsætning forbliver gemt."
+            "value": "Appblokering slås fra. Daglige påmindelser forbliver gratis, og din opsætning er stadig gemt."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Die App-Pause wird deaktiviert. Erinnerungen bleiben kostenlos, und deine Einrichtung bleibt gespeichert."
+            "value": "Die App-Sperre geht aus. Tägliche Erinnerungen bleiben kostenlos, und deine Einrichtung bleibt gespeichert."
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Η παύση εφαρμογών απενεργοποιείται. Οι υπενθυμίσεις μένουν δωρεάν και οι ρυθμίσεις σου μένουν αποθηκευμένες."
+            "value": "Ο αποκλεισμός εφαρμογών απενεργοποιείται. Οι καθημερινές υπενθυμίσεις μένουν δωρεάν και οι ρυθμίσεις σου μένουν αποθηκευμένες."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "El bloqueo de apps se desactiva. Los recordatorios siguen gratis y tu configuración queda guardada."
+            "value": "El bloqueo de apps se desactiva. Los recordatorios diarios siguen siendo gratis y tu configuración queda guardada."
           }
         },
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sovellustauko poistuu käytöstä. Muistutukset pysyvät ilmaisina, ja asetuksesi pysyvät tallessa."
+            "value": "Sovellusesto menee pois päältä. Päivittäiset muistutukset pysyvät ilmaisina, ja asetuksesi pysyvät tallessa."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "La pause d'apps se désactive. Les rappels restent gratuits, et ta configuration reste enregistrée."
+            "value": "Le blocage d’apps se désactive. Les rappels quotidiens restent gratuits et ta configuration reste enregistrée."
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "ઍપ બ્લૉકિંગ બંધ થશે. રિમાઇંડર મફત રહેશે, અને તારું સેટઅપ સેવ રહેશે."
+            "value": "ઍપ બ્લૉકિંગ બંધ થશે. રોજનાં રિમાઇન્ડર મફત રહેશે, અને તમારું સેટઅપ સેવ રહેશે."
           }
         },
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "השהיית האפליקציות נכבית. התזכורות נשארות בחינם, וההגדרות שלך נשארות שמורות."
+            "value": "חסימת האפליקציות נכבית. התזכורות היומיות נשארות בחינם, וההגדרות שלך נשארות שמורות."
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "ऐप ब्लॉकिंग बंद हो जाती है। रिमाइंडर मुफ़्त रहते हैं, और तुम्हारा सेटअप सेव रहेगा।"
+            "value": "ऐप ब्लॉकिंग बंद हो जाती है। रोज़ के रिमाइंडर मुफ़्त रहते हैं, और आपका सेटअप सेव रहता है।"
           }
         },
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Blokiranje aplikacija se isključuje. Podsjetnici ostaju besplatni, a tvoje postavke ostaju spremljene."
+            "value": "Blokiranje aplikacija se isključuje. Dnevni podsjetnici ostaju besplatni, a tvoje postavke ostaju spremljene."
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "Az appblokkolás kikapcsol. Az emlékeztetők ingyenesek maradnak, és a beállításaid mentve maradnak."
+            "value": "Az appblokkolás kikapcsol. A napi emlékeztetők ingyenesek maradnak, és a beállításaid mentve maradnak."
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Jeda aplikasi mati. Pengingat tetap gratis, dan pengaturanmu tetap tersimpan."
+            "value": "Blokir aplikasi mati. Pengingat harian tetap gratis, dan pengaturanmu tetap tersimpan."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Il blocco delle app si disattiva. I promemoria restano gratuiti e la tua configurazione resta salvata."
+            "value": "Il blocco app si disattiva. I promemoria giornalieri restano gratis e la tua configurazione resta salvata."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "アプリブロックがオフになります。リマインダーは無料のままで、設定は保存されたままです。"
+            "value": "アプリブロックがオフになります。毎日のリマインダーは無料のままで、設定も保存されたままです。"
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ಆ್ಯಪ್ ಬ್ಲಾಕಿಂಗ್ ಆಫ್ ಆಗುತ್ತದೆ. ಜ್ಞಾಪನೆಗಳು ಉಚಿತವಾಗಿರುತ್ತವೆ, ಮತ್ತು ನಿನ್ನ ಸೆಟಪ್ ಉಳಿಸಲ್ಪಟ್ಟಿರುತ್ತದೆ."
+            "value": "ಆ್ಯಪ್ ನಿರ್ಬಂಧ ಆಫ್ ಆಗುತ್ತದೆ. ದೈನಂದಿನ ಜ್ಞಾಪನೆಗಳು ಉಚಿತವಾಗಿಯೇ ಇರುತ್ತವೆ, ಮತ್ತು ನಿಮ್ಮ ಸೆಟಪ್ ಉಳಿಸಲ್ಪಟ್ಟಿರುತ್ತದೆ."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "앱 차단이 꺼져요. 알림은 계속 무료이고, 설정은 그대로 저장돼요."
+            "value": "앱 차단이 꺼져요. 매일 알림은 계속 무료이고, 설정은 그대로 저장돼요."
           }
         },
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "ആപ്പ് ബ്ലോക്കിംഗ് ഓഫാകും. റിമൈൻഡറുകൾ സൗജന്യമായി തുടരും, നിന്റെ സെറ്റപ്പ് സേവ് ചെയ്തിരിക്കും."
+            "value": "ആപ്പ് ബ്ലോക്കിംഗ് ഓഫാകും. ദൈനംദിന റിമൈൻഡറുകൾ സൗജന്യമായി തുടരും, നിങ്ങളുടെ സെറ്റപ്പ് സേവ് ചെയ്തിരിക്കും."
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "अॅप थांबवणे बंद होतं. आठवणी मोफत राहतात, आणि तुझा सेटअप सेव्ह राहील."
+            "value": "ॲप ब्लॉकिंग बंद होते. रोजचे रिमाइंडर मोफत राहतात, आणि तुमचा सेटअप सेव्ह राहतो."
           }
         },
         "ms": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sekatan apl dimatikan. Peringatan kekal percuma, dan tetapan kamu kekal disimpan."
+            "value": "Sekatan apl dimatikan. Peringatan harian kekal percuma, dan tetapan kamu kekal disimpan."
           }
         },
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "App-pause slås av. Påminnelser forblir gratis, og oppsettet ditt blir lagret."
+            "value": "Appblokkering slås av. Daglige påminnelser forblir gratis, og oppsettet ditt er fortsatt lagret."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "App-pauze wordt uitgeschakeld. Herinneringen blijven gratis en je instellingen blijven bewaard."
+            "value": "Appblokkering gaat uit. Dagelijkse herinneringen blijven gratis en je instellingen blijven bewaard."
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ଆପ୍ ବିରାମ ବନ୍ଦ ହୁଏ। ରିମାଇଣ୍ଡର୍ ମାଗଣା ରହେ, ଏବଂ ତୁମର ସେଟଅପ୍ ସେଭ୍ ରହିବ।"
+            "value": "ଆପ୍ ବ୍ଲକିଂ ବନ୍ଦ ହୁଏ। ଦୈନିକ ରିମାଇଣ୍ଡର୍ ମାଗଣା ରହେ, ଏବଂ ଆପଣଙ୍କ ସେଟଅପ୍ ସେଭ୍ ରହିବ।"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਐਪ ਬਲਾਕਿੰਗ ਬੰਦ ਹੋ ਜਾਂਦੀ ਹੈ। ਰਿਮਾਈਂਡਰ ਮੁਫ਼ਤ ਰਹਿੰਦੇ ਹਨ, ਅਤੇ ਤੇਰਾ ਸੈੱਟਅੱਪ ਸੰਭਾਲਿਆ ਰਹੇਗਾ।"
+            "value": "ਐਪ ਬਲੌਕਿੰਗ ਬੰਦ ਹੋ ਜਾਂਦੀ ਹੈ। ਰੋਜ਼ਾਨਾ ਰਿਮਾਈਂਡਰ ਮੁਫ਼ਤ ਰਹਿੰਦੇ ਹਨ, ਅਤੇ ਤੁਹਾਡਾ ਸੈੱਟਅੱਪ ਸੰਭਾਲਿਆ ਰਹਿੰਦਾ ਹੈ।"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Blokowanie aplikacji się wyłączy. Przypomnienia zostają bezpłatne, a twoje ustawienia zostaną zapisane."
+            "value": "Blokowanie aplikacji się wyłączy. Codzienne przypomnienia zostają za darmo, a twoje ustawienia pozostaną zapisane."
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "O bloqueio de apps é desligado. Os lembretes continuam grátis, e sua configuração fica salva."
+            "value": "O bloqueio de apps desliga. Os lembretes diários continuam grátis, e sua configuração fica salva."
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "translated",
-            "value": "A pausa de apps desliga-se. Os lembretes continuam grátis e a tua configuração fica guardada."
+            "value": "O bloqueio de apps desliga-se. Os lembretes diários continuam grátis e a tua configuração fica guardada."
           }
         },
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "Blocarea aplicațiilor se oprește. Mementourile rămân gratuite, iar configurarea ta rămâne salvată."
+            "value": "Blocarea aplicațiilor se oprește. Mementourile zilnice rămân gratuite, iar configurarea ta rămâne salvată."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Блокировка приложений отключится. Напоминания останутся бесплатными, а твои настройки сохранятся."
+            "value": "Блокировка приложений отключится. Ежедневные напоминания останутся бесплатными, а твои настройки сохранятся."
           }
         },
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Blokovanie aplikácií sa vypne. Pripomienky zostanú zdarma a tvoje nastavenia zostanú uložené."
+            "value": "Blokovanie aplikácií sa vypne. Denné pripomienky zostanú zdarma a tvoje nastavenia zostanú uložené."
           }
         },
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Blokiranje aplikacij se izklopi. Opomniki ostanejo brezplačni, tvoje nastavitve pa ostanejo shranjene."
+            "value": "Blokiranje aplikacij se izklopi. Dnevni opomniki ostanejo brezplačni, tvoje nastavitve pa ostanejo shranjene."
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Appblockeringen stängs av. Påminnelserna förblir gratis och dina inställningar sparas."
+            "value": "Appblockering stängs av. Dagliga påminnelser är fortfarande gratis och dina inställningar finns kvar."
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "ஆப் இடைநிறுத்தம் ஆஃப் ஆகும். நினைவூட்டல்கள் இலவசமாகவே இருக்கும், உன் அமைப்புகள் சேமிக்கப்பட்டிருக்கும்."
+            "value": "ஆப் தடுப்பு ஆஃப் ஆகும். தினசரி நினைவூட்டல்கள் இலவசமாகவே இருக்கும், உங்கள் அமைப்புகள் சேமிக்கப்பட்டிருக்கும்."
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "యాప్ పాజ్ ఆఫ్ అవుతుంది. రిమైండర్లు ఉచితంగానే ఉంటాయి, నీ సెటప్ సేవ్ అయి ఉంటుంది."
+            "value": "యాప్ బ్లాకింగ్ ఆఫ్ అవుతుంది. రోజువారీ రిమైండర్లు ఉచితంగానే ఉంటాయి, మీ సెటప్ సేవ్ అయి ఉంటుంది."
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "การพักแอปจะปิด การแจ้งเตือนยังฟรี และการตั้งค่าของคุณยังถูกบันทึกอยู่"
+            "value": "การบล็อกแอปจะปิด การแจ้งเตือนประจำวันยังฟรี และการตั้งค่าของคุณยังถูกบันทึกอยู่"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Uygulama duraklatma kapanır. Hatırlatmalar ücretsiz kalır ve kurulumun kayıtlı kalır."
+            "value": "Uygulama engelleme kapanır. Günlük hatırlatmalar ücretsiz kalır ve kurulumun kayıtlı kalır."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Блокування застосунків вимкнеться. Нагадування лишаться безкоштовними, а твої налаштування збережуться."
+            "value": "Блокування застосунків вимкнеться. Щоденні нагадування лишаться безкоштовними, а твої налаштування збережуться."
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "ایپ بلاکنگ بند ہو جاتی ہے۔ یاد دہانیاں مفت رہتی ہیں، اور تمہارا سیٹ اپ محفوظ رہے گا۔"
+            "value": "ایپ بلاکنگ بند ہو جاتی ہے۔ روزانہ کی یاد دہانیاں مفت رہتی ہیں، اور آپ کا سیٹ اپ محفوظ رہتا ہے۔"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Chặn ứng dụng sẽ tắt. Lời nhắc vẫn miễn phí, và thiết lập của bạn vẫn được lưu."
+            "value": "Chặn ứng dụng sẽ tắt. Lời nhắc hàng ngày vẫn miễn phí, và thiết lập của bạn vẫn được lưu."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "应用屏蔽将关闭。提醒仍然免费，你的设置会保留。"
+            "value": "应用屏蔽将关闭。每日提醒仍然免费，你的设置会保留。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "應用程式封鎖將關閉。提醒仍然免費，你的設定會保留。"
+            "value": "App 封鎖將關閉。每日提醒仍然免費，你的設定會保留。"
           }
         }
       }

@@ -134,8 +134,8 @@
       "table": "Localizable",
       "key": "history.legend.unlogged",
       "en": "Missed",
-      "de": "Nicht abgehakt",
-      "it": "Non confermato"
+      "de": "Verpasst",
+      "it": "Mancato"
     },
     {
       "issue": "ENG-62",
