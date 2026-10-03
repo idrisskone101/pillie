@@ -19,6 +19,7 @@ struct ProtocolEditor: View {
 
     private let settingsFeedback = SettingsInteractionFeedback()
 
+    private static let topAnchor = "protocolEditorTop"
     private static let bottomAnchor = "protocolEditorBottom"
 
     private var current: ScheduleDraft.Current {
@@ -60,9 +61,16 @@ struct ProtocolEditor: View {
 
                 ScrollViewReader { scroll in
                     ScrollView {
-                        content(draft) { reveal(in: scroll) }
+                        content(draft) { [method = draft.method] in
+                            // The card being replaced on a method switch also reports a change; only the live one scrolls.
+                            guard self.draft?.method == method else { return }
+                            reveal(in: scroll)
+                        }
                     }
                     .clipped()
+                    .onChange(of: draft.method) {
+                        scroll.scrollTo(Self.topAnchor, anchor: .top)
+                    }
                 }
             } else {
                 Spacer()
@@ -109,6 +117,7 @@ struct ProtocolEditor: View {
                 .font(.pillie(20, weight: .bold))
                 .foregroundStyle(PillieTheme.textPrimary)
                 .fixedSize(horizontal: false, vertical: true)
+                .id(Self.topAnchor)
 
             module(for: draft, onReveal: onReveal)
                 .id(draft.method)
