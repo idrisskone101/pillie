@@ -97,8 +97,10 @@ struct ProtocolEditor: View {
                 .buttonStyle(.pillieSecondary)
                 .padding(.horizontal, 28)
             }
-            .padding(.bottom, 20)
+            .padding(.top, 8)
+            .padding(.bottom, 16)
         }
+        .ignoresSafeArea(.container, edges: .bottom)
         .background(PillieTheme.bg.ignoresSafeArea())
         .alert(resetConfirmation.title, isPresented: $showResetConfirmation) {
             Button(resetConfirmation.cancelTitle, role: .cancel) { }
