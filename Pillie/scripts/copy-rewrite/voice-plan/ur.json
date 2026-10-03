@@ -549,8 +549,6 @@
   "Commerce:paywall.purchase_error.missing_entitlement": "آپ کی خریداری ہو گئی، لیکن Pillie Plus آن نہیں ہوا۔ دوبارہ کوشش کریں، یا خریداریاں بحال کریں۔",
   "Commerce:paywall.purchase_error.title": "آپ کی خریداری میں مسئلہ ہوا",
   "Commerce:paywall.restore_error.title": "آپ کی خریداریاں بحال نہیں ہو سکیں",
-  "Commerce:paywall.stack.footer.reassurance": "کبھی بھی منسوخ کریں · بحال کریں",
-  "Commerce:paywall.stack.lifetime_link": "یا ایک بار ادائیگی کریں، %@ لائف ٹائم",
   "Commerce:paywall.stack.month.primary_line": "کبھی بھی منسوخ کریں",
   "Commerce:paywall.stack.month.title": "مہینہ",
   "Commerce:paywall.stack.monthly_equivalent": "%@/ماہ",

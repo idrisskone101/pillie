@@ -549,8 +549,6 @@
   "Commerce:paywall.purchase_error.missing_entitlement": "आपकी ख़रीदारी हो गई, लेकिन Pillie Plus चालू नहीं हुआ। फिर कोशिश करें, या ख़रीदारी रीस्टोर करें।",
   "Commerce:paywall.purchase_error.title": "आपकी ख़रीदारी में समस्या आई",
   "Commerce:paywall.restore_error.title": "आपकी ख़रीदारी रीस्टोर नहीं हो सकी",
-  "Commerce:paywall.stack.footer.reassurance": "कभी भी रद्द करें · रीस्टोर",
-  "Commerce:paywall.stack.lifetime_link": "या एक बार भुगतान करें, %@ लाइफ़टाइम",
   "Commerce:paywall.stack.month.primary_line": "कभी भी रद्द करें",
   "Commerce:paywall.stack.month.title": "महीना",
   "Commerce:paywall.stack.monthly_equivalent": "%@/महीना",

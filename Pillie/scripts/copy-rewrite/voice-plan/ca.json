@@ -551,8 +551,6 @@
   "Commerce:paywall.purchase_error.missing_entitlement": "La compra s’ha fet, però Pillie Plus no s’ha activat. Torna-ho a provar o restaura les compres.",
   "Commerce:paywall.purchase_error.title": "Hi ha hagut un problema amb la compra",
   "Commerce:paywall.restore_error.title": "No s’han pogut restaurar les compres",
-  "Commerce:paywall.stack.footer.reassurance": "Cancel·la quan vulguis · Restaurar",
-  "Commerce:paywall.stack.lifetime_link": "o paga un sol cop, %@ per sempre",
   "Commerce:paywall.stack.month.primary_line": "Cancel·la quan vulguis",
   "Commerce:paywall.stack.month.title": "Mes",
   "Commerce:paywall.stack.monthly_equivalent": "%@/mes",

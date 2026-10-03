@@ -549,8 +549,6 @@
   "Commerce:paywall.purchase_error.missing_entitlement": "আপনার কেনা সম্পন্ন হয়েছে, কিন্তু Pillie Plus চালু হয়নি। আবার চেষ্টা করুন, অথবা কেনাকাটা ফিরিয়ে আনুন।",
   "Commerce:paywall.purchase_error.title": "আপনার কেনাকাটায় একটি সমস্যা হয়েছে",
   "Commerce:paywall.restore_error.title": "আপনার কেনাকাটা ফিরিয়ে আনা যায়নি",
-  "Commerce:paywall.stack.footer.reassurance": "যেকোনো সময় বাতিল · ফিরিয়ে আনুন",
-  "Commerce:paywall.stack.lifetime_link": "অথবা একবারেই %@, আজীবনের জন্য",
   "Commerce:paywall.stack.month.primary_line": "যেকোনো সময় বাতিল করুন",
   "Commerce:paywall.stack.month.title": "মাস",
   "Commerce:paywall.stack.monthly_equivalent": "%@/মাস",

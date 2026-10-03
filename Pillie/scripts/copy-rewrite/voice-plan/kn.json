@@ -549,8 +549,6 @@
   "Commerce:paywall.purchase_error.missing_entitlement": "ನಿಮ್ಮ ಖರೀದಿ ಪೂರ್ಣಗೊಂಡಿದೆ, ಆದರೆ Pillie Plus ಆನ್ ಆಗಲಿಲ್ಲ. ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ, ಅಥವಾ ಖರೀದಿಗಳನ್ನು ಮರುಸ್ಥಾಪಿಸಿ.",
   "Commerce:paywall.purchase_error.title": "ನಿಮ್ಮ ಖರೀದಿಯಲ್ಲಿ ಸಮಸ್ಯೆ ಆಗಿದೆ",
   "Commerce:paywall.restore_error.title": "ನಿಮ್ಮ ಖರೀದಿಗಳನ್ನು ಮರುಸ್ಥಾಪಿಸಲು ಆಗಲಿಲ್ಲ",
-  "Commerce:paywall.stack.footer.reassurance": "ಯಾವಾಗ ಬೇಕಾದರೂ ರದ್ದುಮಾಡಬಹುದು · ಮರುಸ್ಥಾಪಿಸಿ",
-  "Commerce:paywall.stack.lifetime_link": "ಅಥವಾ ಒಮ್ಮೆ ಪಾವತಿಸಿ, ಜೀವಮಾನಕ್ಕೆ %@",
   "Commerce:paywall.stack.month.primary_line": "ಯಾವಾಗ ಬೇಕಾದರೂ ರದ್ದುಮಾಡಬಹುದು",
   "Commerce:paywall.stack.month.title": "ತಿಂಗಳು",
   "Commerce:paywall.stack.monthly_equivalent": "%@/ತಿಂಗಳು",

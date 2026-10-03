@@ -551,8 +551,6 @@
   "Commerce:paywall.purchase_error.missing_entitlement": "הרכישה עברה, אבל Pillie Plus לא הופעל. נסי שוב או שחזרי רכישות.",
   "Commerce:paywall.purchase_error.title": "הייתה בעיה ברכישה שלך",
   "Commerce:paywall.restore_error.title": "לא הצלחנו לשחזר את הרכישות שלך",
-  "Commerce:paywall.stack.footer.reassurance": "ביטול בכל רגע · שחזור",
-  "Commerce:paywall.stack.lifetime_link": "או פעם אחת %@ לכל החיים",
   "Commerce:paywall.stack.month.primary_line": "ביטול בכל רגע",
   "Commerce:paywall.stack.month.title": "חודש",
   "Commerce:paywall.stack.monthly_equivalent": "%@/חודש",

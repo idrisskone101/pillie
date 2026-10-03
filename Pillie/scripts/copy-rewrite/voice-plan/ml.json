@@ -549,8 +549,6 @@
   "Commerce:paywall.purchase_error.missing_entitlement": "നിങ്ങളുടെ വാങ്ങൽ പൂർത്തിയായി, പക്ഷേ Pillie Plus ഓണായില്ല. വീണ്ടും ശ്രമിക്കൂ, അല്ലെങ്കിൽ വാങ്ങലുകൾ പുനഃസ്ഥാപിക്കൂ.",
   "Commerce:paywall.purchase_error.title": "നിങ്ങളുടെ വാങ്ങലിൽ ഒരു പ്രശ്നമുണ്ടായി",
   "Commerce:paywall.restore_error.title": "നിങ്ങളുടെ വാങ്ങലുകൾ പുനഃസ്ഥാപിക്കാനായില്ല",
-  "Commerce:paywall.stack.footer.reassurance": "എപ്പോൾ വേണമെങ്കിലും റദ്ദാക്കാം · പുനഃസ്ഥാപിക്കൂ",
-  "Commerce:paywall.stack.lifetime_link": "അല്ലെങ്കിൽ ഒറ്റത്തവണ പണമടയ്ക്കൂ, ആജീവനാന്തം %@",
   "Commerce:paywall.stack.month.primary_line": "എപ്പോൾ വേണമെങ്കിലും റദ്ദാക്കാം",
   "Commerce:paywall.stack.month.title": "മാസം",
   "Commerce:paywall.stack.monthly_equivalent": "%@/മാസം",

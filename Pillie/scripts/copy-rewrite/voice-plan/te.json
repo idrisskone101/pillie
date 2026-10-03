@@ -549,8 +549,6 @@
   "Commerce:paywall.purchase_error.missing_entitlement": "మీ కొనుగోలు పూర్తయింది, కానీ Pillie Plus ఆన్ కాలేదు. మళ్లీ ప్రయత్నించండి, లేదా కొనుగోళ్లను పునరుద్ధరించండి.",
   "Commerce:paywall.purchase_error.title": "మీ కొనుగోలులో ఒక సమస్య వచ్చింది",
   "Commerce:paywall.restore_error.title": "మీ కొనుగోళ్లను పునరుద్ధరించలేకపోయాము",
-  "Commerce:paywall.stack.footer.reassurance": "ఎప్పుడైనా రద్దు చేయవచ్చు · పునరుద్ధరించండి",
-  "Commerce:paywall.stack.lifetime_link": "లేదా ఒకేసారి చెల్లించండి, జీవితకాలం %@",
   "Commerce:paywall.stack.month.primary_line": "ఎప్పుడైనా రద్దు చేయవచ్చు",
   "Commerce:paywall.stack.month.title": "నెల",
   "Commerce:paywall.stack.monthly_equivalent": "%@/నె",

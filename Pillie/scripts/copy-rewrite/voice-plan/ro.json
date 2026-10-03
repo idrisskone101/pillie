@@ -551,8 +551,6 @@
   "Commerce:paywall.purchase_error.missing_entitlement": "Achiziția s-a efectuat, dar Pillie Plus nu s-a activat. Încearcă din nou sau restabilește achizițiile.",
   "Commerce:paywall.purchase_error.title": "A apărut o problemă cu achiziția ta",
   "Commerce:paywall.restore_error.title": "Nu am putut restabili achizițiile",
-  "Commerce:paywall.stack.footer.reassurance": "Anulează oricând · Restabilește",
-  "Commerce:paywall.stack.lifetime_link": "sau o dată %@, pe viață",
   "Commerce:paywall.stack.month.primary_line": "Anulează oricând",
   "Commerce:paywall.stack.month.title": "Lună",
   "Commerce:paywall.stack.monthly_equivalent": "%@/lună",

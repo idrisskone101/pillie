@@ -547,8 +547,6 @@
   "Commerce:paywall.purchase_error.missing_entitlement": "การซื้อของคุณสำเร็จแล้ว แต่ Pillie Plus ยังไม่เปิด ลองอีกครั้ง หรือกู้คืนการซื้อ",
   "Commerce:paywall.purchase_error.title": "การซื้อของคุณมีปัญหา",
   "Commerce:paywall.restore_error.title": "กู้คืนการซื้อของคุณไม่ได้",
-  "Commerce:paywall.stack.footer.reassurance": "ยกเลิกเมื่อไหร่ก็ได้ · กู้คืน",
-  "Commerce:paywall.stack.lifetime_link": "หรือจ่ายครั้งเดียว %@ ตลอดชีพ",
   "Commerce:paywall.stack.month.primary_line": "ยกเลิกเมื่อไหร่ก็ได้",
   "Commerce:paywall.stack.month.title": "เดือน",
   "Commerce:paywall.stack.monthly_equivalent": "%@/เดือน",

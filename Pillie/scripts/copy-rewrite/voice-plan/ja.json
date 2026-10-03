@@ -547,8 +547,6 @@
   "Commerce:paywall.purchase_error.missing_entitlement": "購入は完了しましたが、Pillie Plusが有効になりませんでした。もう一度試すか、購入を復元してください。",
   "Commerce:paywall.purchase_error.title": "購入で問題が発生しました",
   "Commerce:paywall.restore_error.title": "購入を復元できませんでした",
-  "Commerce:paywall.stack.footer.reassurance": "いつでも解約 · 復元",
-  "Commerce:paywall.stack.lifetime_link": "または買い切り%@",
   "Commerce:paywall.stack.month.primary_line": "いつでも解約できる",
   "Commerce:paywall.stack.month.title": "月",
   "Commerce:paywall.stack.monthly_equivalent": "%@/月",

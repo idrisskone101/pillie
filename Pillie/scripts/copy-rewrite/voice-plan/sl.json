@@ -553,8 +553,6 @@
   "Commerce:paywall.purchase_error.missing_entitlement": "Nakup je uspel, a Pillie Plus se ni vklopil. Poskusi znova ali obnovi nakupe.",
   "Commerce:paywall.purchase_error.title": "Pri nakupu je prišlo do težave",
   "Commerce:paywall.restore_error.title": "Nakupov ni bilo mogoče obnoviti",
-  "Commerce:paywall.stack.footer.reassurance": "Prekliči kadar koli · Obnovi",
-  "Commerce:paywall.stack.lifetime_link": "ali enkrat %@, za vedno",
   "Commerce:paywall.stack.month.primary_line": "Prekliči kadar koli",
   "Commerce:paywall.stack.month.title": "Mesec",
   "Commerce:paywall.stack.monthly_equivalent": "%@/mes.",

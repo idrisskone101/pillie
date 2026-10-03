@@ -549,8 +549,6 @@
   "Commerce:paywall.purchase_error.missing_entitlement": "Je aankoop is gelukt, maar Pillie Plus is niet ingeschakeld. Probeer het opnieuw of herstel je aankopen.",
   "Commerce:paywall.purchase_error.title": "Er ging iets mis met je aankoop",
   "Commerce:paywall.restore_error.title": "Je aankopen konden niet worden hersteld",
-  "Commerce:paywall.stack.footer.reassurance": "Stop wanneer je wilt · Herstellen",
-  "Commerce:paywall.stack.lifetime_link": "of één keer %@, voor altijd",
   "Commerce:paywall.stack.month.primary_line": "Stop wanneer je wilt",
   "Commerce:paywall.stack.month.title": "Maand",
   "Commerce:paywall.stack.monthly_equivalent": "%@/mnd",

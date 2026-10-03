@@ -549,8 +549,6 @@
   "Commerce:paywall.purchase_error.missing_entitlement": "तुमची खरेदी झाली, पण Pillie Plus सुरू झाले नाही. पुन्हा प्रयत्न करा, किंवा खरेदी रिस्टोअर करा.",
   "Commerce:paywall.purchase_error.title": "तुमच्या खरेदीत अडचण आली",
   "Commerce:paywall.restore_error.title": "तुमची खरेदी रिस्टोअर करता आली नाही",
-  "Commerce:paywall.stack.footer.reassurance": "कधीही रद्द करा · रिस्टोअर",
-  "Commerce:paywall.stack.lifetime_link": "किंवा एकदाच पैसे भरा, %@ लाइफटाइम",
   "Commerce:paywall.stack.month.primary_line": "कधीही रद्द करा",
   "Commerce:paywall.stack.month.title": "महिना",
   "Commerce:paywall.stack.monthly_equivalent": "%@/महिना",

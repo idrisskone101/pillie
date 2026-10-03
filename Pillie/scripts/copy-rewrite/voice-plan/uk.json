@@ -553,8 +553,6 @@
   "Commerce:paywall.purchase_error.missing_entitlement": "Покупка пройшла, але Pillie Plus не ввімкнувся. Спробуй ще раз або віднови покупки.",
   "Commerce:paywall.purchase_error.title": "З покупкою щось пішло не так",
   "Commerce:paywall.restore_error.title": "Не вдалося відновити покупки",
-  "Commerce:paywall.stack.footer.reassurance": "Скасуй коли хочеш · Відновити",
-  "Commerce:paywall.stack.lifetime_link": "або один раз %@, назавжди",
   "Commerce:paywall.stack.month.primary_line": "Скасуй коли хочеш",
   "Commerce:paywall.stack.month.title": "Місяць",
   "Commerce:paywall.stack.monthly_equivalent": "%@/міс.",

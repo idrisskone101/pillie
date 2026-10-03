@@ -547,8 +547,6 @@
   "Commerce:paywall.purchase_error.missing_entitlement": "구매는 완료됐지만 Pillie Plus가 활성화되지 않았어요. 다시 시도하거나 구매를 복원하세요.",
   "Commerce:paywall.purchase_error.title": "구매 중 문제가 발생했어요",
   "Commerce:paywall.restore_error.title": "구매를 복원할 수 없었어요",
-  "Commerce:paywall.stack.footer.reassurance": "언제든 해지 · 복원",
-  "Commerce:paywall.stack.lifetime_link": "또는 평생 이용권 %@",
   "Commerce:paywall.stack.month.primary_line": "언제든 해지",
   "Commerce:paywall.stack.month.title": "월",
   "Commerce:paywall.stack.monthly_equivalent": "%@/월",

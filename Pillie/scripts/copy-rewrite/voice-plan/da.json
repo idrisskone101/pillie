@@ -549,8 +549,6 @@
   "Commerce:paywall.purchase_error.missing_entitlement": "Dit køb gik igennem, men Pillie Plus blev ikke slået til. Prøv igen, eller gendan køb.",
   "Commerce:paywall.purchase_error.title": "Der opstod et problem med dit køb",
   "Commerce:paywall.restore_error.title": "Dine køb kunne ikke gendannes",
-  "Commerce:paywall.stack.footer.reassurance": "Opsig når som helst · Gendan",
-  "Commerce:paywall.stack.lifetime_link": "eller %@ én gang, for livet",
   "Commerce:paywall.stack.month.primary_line": "Opsig når som helst",
   "Commerce:paywall.stack.month.title": "Måned",
   "Commerce:paywall.stack.monthly_equivalent": "%@/md.",

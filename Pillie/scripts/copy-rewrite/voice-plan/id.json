@@ -547,8 +547,6 @@
   "Commerce:paywall.purchase_error.missing_entitlement": "Pembelianmu berhasil, tapi Pillie Plus belum aktif. Coba lagi, atau pulihkan pembelian.",
   "Commerce:paywall.purchase_error.title": "Ada masalah dengan pembelianmu",
   "Commerce:paywall.restore_error.title": "Pembelianmu tidak bisa dipulihkan",
-  "Commerce:paywall.stack.footer.reassurance": "Batalkan kapan saja · Pulihkan",
-  "Commerce:paywall.stack.lifetime_link": "atau bayar sekali, %@ seumur hidup",
   "Commerce:paywall.stack.month.primary_line": "Batalkan kapan saja",
   "Commerce:paywall.stack.month.title": "Bulan",
   "Commerce:paywall.stack.monthly_equivalent": "%@/bln",

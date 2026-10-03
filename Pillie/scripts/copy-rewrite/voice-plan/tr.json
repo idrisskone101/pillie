@@ -549,8 +549,6 @@
   "Commerce:paywall.purchase_error.missing_entitlement": "Satın alman tamamlandı ama Pillie Plus açılmadı. Tekrar dene ya da satın alımları geri yükle.",
   "Commerce:paywall.purchase_error.title": "Satın alman sırasında bir sorun oluştu",
   "Commerce:paywall.restore_error.title": "Satın alımların geri yüklenemedi",
-  "Commerce:paywall.stack.footer.reassurance": "İstediğin zaman iptal · Geri yükle",
-  "Commerce:paywall.stack.lifetime_link": "ya da bir kez %@, ömür boyu",
   "Commerce:paywall.stack.month.primary_line": "İstediğin zaman iptal",
   "Commerce:paywall.stack.month.title": "Ay",
   "Commerce:paywall.stack.monthly_equivalent": "%@/ay",

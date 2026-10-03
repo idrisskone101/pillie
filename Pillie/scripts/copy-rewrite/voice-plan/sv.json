@@ -549,8 +549,6 @@
   "Commerce:paywall.purchase_error.missing_entitlement": "Köpet gick igenom, men Pillie Plus slogs inte på. Försök igen eller återställ köp.",
   "Commerce:paywall.purchase_error.title": "Det blev ett problem med ditt köp",
   "Commerce:paywall.restore_error.title": "Det gick inte att återställa dina köp",
-  "Commerce:paywall.stack.footer.reassurance": "Avsluta när du vill · Återställ",
-  "Commerce:paywall.stack.lifetime_link": "eller %@ en gång, för livet",
   "Commerce:paywall.stack.month.primary_line": "Avsluta när du vill",
   "Commerce:paywall.stack.month.title": "Månad",
   "Commerce:paywall.stack.monthly_equivalent": "%@/mån",

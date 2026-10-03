@@ -547,8 +547,6 @@
   "Commerce:paywall.purchase_error.missing_entitlement": "购买已完成，但 Pillie Plus 没有开启。再试一次，或恢复购买。",
   "Commerce:paywall.purchase_error.title": "购买时出了点问题",
   "Commerce:paywall.restore_error.title": "无法恢复你的购买",
-  "Commerce:paywall.stack.footer.reassurance": "随时可取消 · 恢复",
-  "Commerce:paywall.stack.lifetime_link": "或一次付清 %@，终身使用",
   "Commerce:paywall.stack.month.primary_line": "随时可取消",
   "Commerce:paywall.stack.month.title": "月",
   "Commerce:paywall.stack.monthly_equivalent": "%@/月",

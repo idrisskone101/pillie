@@ -11,30 +11,30 @@ openurl pillie://debug/honest-paywall?board=trialEndedReturningHard&lang=en
 # install already holds this expired state, the link flips nothing, so a
 # relaunch is what presents the hard wall.
 launch
-wait text "Your trial already ended." 20
+wait text "Your trial has ended." 20
 log start
 
 openurl pillie://debug/restore-outcome?result=error
 tap --label "Restore purchases"
-wait text "Couldn't restore purchases" 10
+wait text "Couldn’t restore your purchases" 10
 expect label "Try again"
 expect label "Contact support"
 shot trial-end-restore-error
 
 openurl pillie://debug/restore-outcome?result=none
 tap --label "Try again"
-wait text "No Subscription Found" 10
+wait text "No subscription found" 10
 expect label "Contact support"
 shot trial-end-no-subscription
 tap --label OK
-gone text "No Subscription Found"
+gone text "No subscription found"
 
 openurl pillie://debug/restore-outcome?result=restored
 tap --label "Restore purchases"
 # restored turns Plus on; Home drops the hard wall and shows the Plus
 # blocking-setup card instead of the free "App blocking is off" card.
-gone text "Your trial already ended." 10
-wait text "You haven't set up app blocking yet." 10
+gone text "Your trial has ended." 10
+wait text "You haven’t set up app blocking yet." 10
 shot trial-end-restored
 
 # Drop the expired grant before relaunching. Otherwise Home auto-presents the
@@ -43,7 +43,7 @@ openurl pillie://debug/trial-clear
 launch
 wait text Today 15
 openurl pillie://debug/review-prompt?lang=en   # free user, Plus off, onboarding done
-wait label "That's logged. Tap to undo." 10     # the seeded streak logged today
+wait label "Checked in. Tap to undo." 10     # the seeded streak logged today
 expect-not text "Keep Pillie Plus"
 openurl pillie://debug/restore-outcome?result=error
 # Settings tab by its top edge: on this Home the "Pillie+, App blocking" card
@@ -54,15 +54,15 @@ gesture scroll-down                             # the Account row sits below the
 tap --label "Pillie Plus, Free"
 wait label "Restore purchases" 10
 tap --label "Restore purchases"
-wait text "Couldn't restore purchases" 10
+wait text "Couldn’t restore your purchases" 10
 expect label "Contact support"
 shot settings-restore-error
 tap --label "Contact support"
 # The simulator has no Mail account, so the Open Line copy-address fallback shows.
-wait text "We couldn't open the mail app." 10
+wait text "We couldn’t open the mail app." 10
 shot settings-contact-support-fallback
 tap -x 201 -y 525                               # the alert's Close; the paywall's xmark is also "Close"
-gone text "We couldn't open the mail app."
+gone text "We couldn’t open the mail app."
 tap --id xmark --element-type Button            # close the settings paywall
 gone label "Restore purchases"
 openurl pillie://debug/restore-outcome?result=clear

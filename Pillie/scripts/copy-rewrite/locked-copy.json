@@ -2543,7 +2543,7 @@
       "table": "Commerce",
       "key": "paywall.restore_error.title",
       "comment": "Restore error alert title",
-      "en": "Couldn't restore purchases",
+      "en": "Couldn’t restore your purchases",
       "de": "Käufe konnten nicht wiederhergestellt werden",
       "it": "Impossibile ripristinare gli acquisti"
     },
@@ -2553,7 +2553,7 @@
       "key": "paywall.restore_error.body",
       "create": true,
       "comment": "Restore error alert body, above Try again / Contact support / Not now",
-      "en": "Pillie couldn't check your purchases with the App Store. Try again, or contact us and we'll sort it out.",
+      "en": "Pillie couldn’t check your purchases with the App Store. Try again, or contact us and we’ll sort it out.",
       "de": "Pillie konnte deine Käufe nicht im App Store prüfen. Versuch es noch mal oder schreib uns, dann kümmern wir uns darum.",
       "it": "Pillie non è riuscita a verificare i tuoi acquisti sull’App Store. Riprova oppure contattaci e sistemiamo tutto."
     },

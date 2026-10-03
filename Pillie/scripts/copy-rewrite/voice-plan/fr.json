@@ -551,8 +551,6 @@
   "Commerce:paywall.purchase_error.missing_entitlement": "Ton achat est passé, mais Pillie Plus ne s’est pas activé. Réessaie, ou restaure tes achats.",
   "Commerce:paywall.purchase_error.title": "Un problème est survenu avec ton achat",
   "Commerce:paywall.restore_error.title": "Impossible de restaurer tes achats",
-  "Commerce:paywall.stack.footer.reassurance": "Annule quand tu veux · Restaurer",
-  "Commerce:paywall.stack.lifetime_link": "ou paie une fois, %@ à vie",
   "Commerce:paywall.stack.month.primary_line": "Annule quand tu veux",
   "Commerce:paywall.stack.month.title": "Mois",
   "Commerce:paywall.stack.monthly_equivalent": "%@/mois",

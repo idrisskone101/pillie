@@ -549,8 +549,6 @@
   "Commerce:paywall.purchase_error.missing_entitlement": "Η αγορά σου ολοκληρώθηκε, αλλά το Pillie Plus δεν ενεργοποιήθηκε. Δοκίμασε ξανά ή κάνε επαναφορά αγορών.",
   "Commerce:paywall.purchase_error.title": "Υπήρξε πρόβλημα με την αγορά σου",
   "Commerce:paywall.restore_error.title": "Δεν έγινε επαναφορά των αγορών σου",
-  "Commerce:paywall.stack.footer.reassurance": "Ακύρωσε όποτε θες · Επαναφορά",
-  "Commerce:paywall.stack.lifetime_link": "ή μία φορά %@, για πάντα",
   "Commerce:paywall.stack.month.primary_line": "Ακύρωσε όποτε θες",
   "Commerce:paywall.stack.month.title": "Μήνας",
   "Commerce:paywall.stack.monthly_equivalent": "%@/μήνα",

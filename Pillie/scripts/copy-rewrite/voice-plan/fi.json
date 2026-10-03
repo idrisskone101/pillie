@@ -549,8 +549,6 @@
   "Commerce:paywall.purchase_error.missing_entitlement": "Ostos onnistui, mutta Pillie Plus ei mennyt päälle. Yritä uudelleen tai palauta ostot.",
   "Commerce:paywall.purchase_error.title": "Ostoksessasi oli ongelma",
   "Commerce:paywall.restore_error.title": "Ostoksiasi ei voitu palauttaa",
-  "Commerce:paywall.stack.footer.reassurance": "Peru milloin tahansa · Palauta",
-  "Commerce:paywall.stack.lifetime_link": "tai kertamaksu %@, pysyvästi",
   "Commerce:paywall.stack.month.primary_line": "Peru milloin tahansa",
   "Commerce:paywall.stack.month.title": "Kuukausi",
   "Commerce:paywall.stack.monthly_equivalent": "%@/kk",

@@ -547,8 +547,6 @@
   "Commerce:paywall.purchase_error.missing_entitlement": "Giao dịch của bạn đã xong nhưng Pillie Plus chưa bật. Thử lại hoặc khôi phục giao dịch.",
   "Commerce:paywall.purchase_error.title": "Giao dịch của bạn gặp sự cố",
   "Commerce:paywall.restore_error.title": "Không khôi phục được giao dịch của bạn",
-  "Commerce:paywall.stack.footer.reassurance": "Hủy lúc nào cũng được · Khôi phục",
-  "Commerce:paywall.stack.lifetime_link": "hoặc trả một lần, %@ trọn đời",
   "Commerce:paywall.stack.month.primary_line": "Hủy lúc nào cũng được",
   "Commerce:paywall.stack.month.title": "Tháng",
   "Commerce:paywall.stack.monthly_equivalent": "%@/tháng",

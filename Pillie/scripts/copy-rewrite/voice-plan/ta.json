@@ -549,8 +549,6 @@
   "Commerce:paywall.purchase_error.missing_entitlement": "உங்கள் கொள்முதல் முடிந்தது, ஆனால் Pillie Plus இயங்கவில்லை. மீண்டும் முயலுங்கள், அல்லது கொள்முதல்களை மீட்டெடுங்கள்.",
   "Commerce:paywall.purchase_error.title": "உங்கள் கொள்முதலில் ஒரு சிக்கல் ஏற்பட்டது",
   "Commerce:paywall.restore_error.title": "உங்கள் கொள்முதல்களை மீட்டெடுக்க முடியவில்லை",
-  "Commerce:paywall.stack.footer.reassurance": "எப்போது வேண்டுமானாலும் ரத்துசெய்யலாம் · மீட்டெடுக்கவும்",
-  "Commerce:paywall.stack.lifetime_link": "அல்லது ஒருமுறை செலுத்துங்கள், வாழ்நாள் %@",
   "Commerce:paywall.stack.month.primary_line": "எப்போது வேண்டுமானாலும் ரத்துசெய்யலாம்",
   "Commerce:paywall.stack.month.title": "மாதம்",
   "Commerce:paywall.stack.monthly_equivalent": "%@/மாதம்",

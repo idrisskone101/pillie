@@ -551,8 +551,6 @@
   "Commerce:paywall.purchase_error.missing_entitlement": "A tua compra foi concluída, mas o Pillie Plus não ficou ativo. Tenta de novo ou restaura as compras.",
   "Commerce:paywall.purchase_error.title": "Houve um problema com a tua compra",
   "Commerce:paywall.restore_error.title": "Não foi possível restaurar as tuas compras",
-  "Commerce:paywall.stack.footer.reassurance": "Cancela quando quiseres · Restaurar",
-  "Commerce:paywall.stack.lifetime_link": "ou paga uma vez, %@ para sempre",
   "Commerce:paywall.stack.month.primary_line": "Cancela quando quiseres",
   "Commerce:paywall.stack.month.title": "Mês",
   "Commerce:paywall.stack.monthly_equivalent": "%@/mês",

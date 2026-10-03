@@ -549,8 +549,6 @@
   "Commerce:paywall.purchase_error.missing_entitlement": "ଆପଣଙ୍କ କ୍ରୟ ସରିଲା, କିନ୍ତୁ Pillie Plus ଚାଲୁ ହେଲା ନାହିଁ। ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ, କିମ୍ବା କ୍ରୟ ପୁନରୁଦ୍ଧାର କରନ୍ତୁ।",
   "Commerce:paywall.purchase_error.title": "ଆପଣଙ୍କ କ୍ରୟରେ ଏକ ସମସ୍ୟା ହେଲା",
   "Commerce:paywall.restore_error.title": "ଆପଣଙ୍କ କ୍ରୟ ପୁନରୁଦ୍ଧାର ହୋଇପାରିଲା ନାହିଁ",
-  "Commerce:paywall.stack.footer.reassurance": "ଯେକୌଣସି ସମୟରେ ବାତିଲ୍ · ପୁନରୁଦ୍ଧାର",
-  "Commerce:paywall.stack.lifetime_link": "କିମ୍ବା ଥରେ %@ ଦେଇ, ଆଜୀବନ",
   "Commerce:paywall.stack.month.primary_line": "ଯେକୌଣସି ସମୟରେ ବାତିଲ୍ କରନ୍ତୁ",
   "Commerce:paywall.stack.month.title": "ମାସ",
   "Commerce:paywall.stack.monthly_equivalent": "%@/ମାସ",

@@ -42,8 +42,8 @@ CTAs change often; this file names the mechanism, not the wording.
   `Views/Components/PlusUpsellSheet.swift`.
 - `paywall-restore` (ENG-74) — Restore on any honest paywall or the upsell
   sheet ends in one `RestoreOutcome`: restored (paywall dismisses, Plus on),
-  no active purchase ("No Subscription Found" with Contact support and OK),
-  or failed ("Couldn't restore purchases" with Try again, Contact support,
+  no active purchase ("No subscription found" with Contact support and OK),
+  or failed ("Couldn’t restore your purchases" with Try again, Contact support,
   and Not now). Contact support opens the "Pillie — Restore Purchases" Open
   Line mail, or the copy-address fallback when Mail can't open. Analytics:
   `restore_succeeded`, `restore_completed` with `reason`, `restore_failed`

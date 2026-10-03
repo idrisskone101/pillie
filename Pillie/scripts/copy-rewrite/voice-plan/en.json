@@ -7,6 +7,7 @@
   "Commerce:paywall.no_subscription.title": "No subscription found",
   "Commerce:paywall.purchase_error.missing_entitlement": "Your purchase went through, but Pillie Plus didn’t turn on. Try again, or restore purchases.",
   "Commerce:paywall.purchase_error.title": "There was a problem with your purchase",
+  "Commerce:paywall.restore_error.body": "Pillie couldn’t check your purchases with the App Store. Try again, or contact us and we’ll sort it out.",
   "Commerce:paywall.restore_error.title": "Couldn’t restore your purchases",
   "Commerce:paywall.stack.save_badge": "Save %lld%%",
   "Commerce:paywall.story.settings_free.plus_label": "Pillie Plus",

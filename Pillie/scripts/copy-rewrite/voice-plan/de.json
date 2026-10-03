@@ -549,8 +549,6 @@
   "Commerce:paywall.purchase_error.missing_entitlement": "Dein Kauf hat geklappt, aber Pillie Plus wurde nicht eingeschaltet. Versuch es noch mal oder stell deine Käufe wieder her.",
   "Commerce:paywall.purchase_error.title": "Beim Kauf ist ein Problem aufgetreten",
   "Commerce:paywall.restore_error.title": "Deine Käufe konnten nicht wiederhergestellt werden",
-  "Commerce:paywall.stack.footer.reassurance": "Jederzeit kündbar · Wiederherstellen",
-  "Commerce:paywall.stack.lifetime_link": "oder einmalig %@ fürs Leben",
   "Commerce:paywall.stack.month.primary_line": "Jederzeit kündbar",
   "Commerce:paywall.stack.month.title": "Monat",
   "Commerce:paywall.stack.monthly_equivalent": "%@/Mo.",

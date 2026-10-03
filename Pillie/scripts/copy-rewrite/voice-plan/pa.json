@@ -549,8 +549,6 @@
   "Commerce:paywall.purchase_error.missing_entitlement": "ਤੁਹਾਡੀ ਖ਼ਰੀਦ ਹੋ ਗਈ, ਪਰ Pillie Plus ਚਾਲੂ ਨਹੀਂ ਹੋਇਆ। ਮੁੜ ਕੋਸ਼ਿਸ਼ ਕਰੋ, ਜਾਂ ਖ਼ਰੀਦਾਂ ਰੀਸਟੋਰ ਕਰੋ।",
   "Commerce:paywall.purchase_error.title": "ਤੁਹਾਡੀ ਖ਼ਰੀਦ ਵਿੱਚ ਕੋਈ ਸਮੱਸਿਆ ਆਈ",
   "Commerce:paywall.restore_error.title": "ਤੁਹਾਡੀਆਂ ਖ਼ਰੀਦਾਂ ਰੀਸਟੋਰ ਨਹੀਂ ਹੋ ਸਕੀਆਂ",
-  "Commerce:paywall.stack.footer.reassurance": "ਕਦੇ ਵੀ ਰੱਦ ਕਰੋ · ਰੀਸਟੋਰ",
-  "Commerce:paywall.stack.lifetime_link": "ਜਾਂ ਇੱਕ ਵਾਰ %@, ਸਦਾ ਲਈ",
   "Commerce:paywall.stack.month.primary_line": "ਕਦੇ ਵੀ ਰੱਦ ਕਰੋ",
   "Commerce:paywall.stack.month.title": "ਮਹੀਨਾ",
   "Commerce:paywall.stack.monthly_equivalent": "%@/ਮਹੀਨਾ",

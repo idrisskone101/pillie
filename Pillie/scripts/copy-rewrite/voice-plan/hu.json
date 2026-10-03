@@ -549,8 +549,6 @@
   "Commerce:paywall.purchase_error.missing_entitlement": "A vásárlás sikerült, de a Pillie Plus nem kapcsolt be. Próbáld újra, vagy állítsd vissza a vásárlásokat.",
   "Commerce:paywall.purchase_error.title": "Probléma adódott a vásárlással",
   "Commerce:paywall.restore_error.title": "Nem sikerült visszaállítani a vásárlásaidat",
-  "Commerce:paywall.stack.footer.reassurance": "Bármikor lemondható · Visszaállítás",
-  "Commerce:paywall.stack.lifetime_link": "vagy egyszer %@, örökre",
   "Commerce:paywall.stack.month.primary_line": "Bármikor lemondható",
   "Commerce:paywall.stack.month.title": "Hónap",
   "Commerce:paywall.stack.monthly_equivalent": "%@/hó",

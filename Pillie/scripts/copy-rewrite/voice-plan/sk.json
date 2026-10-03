@@ -553,8 +553,6 @@
   "Commerce:paywall.purchase_error.missing_entitlement": "Nákup prebehol, ale Pillie Plus sa nezaplo. Skús to znova alebo obnov nákupy.",
   "Commerce:paywall.purchase_error.title": "Pri nákupe nastal problém",
   "Commerce:paywall.restore_error.title": "Nákupy sa nepodarilo obnoviť",
-  "Commerce:paywall.stack.footer.reassurance": "Zruš kedykoľvek · Obnoviť",
-  "Commerce:paywall.stack.lifetime_link": "alebo raz %@, navždy",
   "Commerce:paywall.stack.month.primary_line": "Zruš kedykoľvek",
   "Commerce:paywall.stack.month.title": "Mesiac",
   "Commerce:paywall.stack.monthly_equivalent": "%@/mes.",

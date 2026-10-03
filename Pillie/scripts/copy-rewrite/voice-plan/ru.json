@@ -553,8 +553,6 @@
   "Commerce:paywall.purchase_error.missing_entitlement": "Покупка прошла, но Pillie Plus не включился. Попробуй ещё раз или восстанови покупки.",
   "Commerce:paywall.purchase_error.title": "С покупкой что-то пошло не так",
   "Commerce:paywall.restore_error.title": "Не удалось восстановить покупки",
-  "Commerce:paywall.stack.footer.reassurance": "Отмена в любой момент · Восстановить",
-  "Commerce:paywall.stack.lifetime_link": "или один раз %@, навсегда",
   "Commerce:paywall.stack.month.primary_line": "Отмена в любой момент",
   "Commerce:paywall.stack.month.title": "Месяц",
   "Commerce:paywall.stack.monthly_equivalent": "%@/мес.",

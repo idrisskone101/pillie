@@ -5,14 +5,14 @@ wait text Today 15
 openurl pillie://debug/trial-end-paywall?lang=en
 wait text "Your Pillie Plus trial is over." 20
 expect id paywallRestoreButton
-expect-not text "Keep reminders free"
+expect-not text "Continue with free reminders"
 shot hard-wall
 
 openurl pillie://debug/trial-clear
 launch
 wait text Today 15
 openurl pillie://debug/trial-end-paywall?terms=soft&lang=en
-wait text "Keep reminders free" 20
+wait text "Continue with free reminders" 20
 expect id paywallRestoreButton
 shot soft-wall
 openurl pillie://debug/trial-clear

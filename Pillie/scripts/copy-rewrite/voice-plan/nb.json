@@ -549,8 +549,6 @@
   "Commerce:paywall.purchase_error.missing_entitlement": "Kjøpet gikk gjennom, men Pillie Plus ble ikke slått på. Prøv igjen, eller gjenopprett kjøp.",
   "Commerce:paywall.purchase_error.title": "Det oppstod et problem med kjøpet ditt",
   "Commerce:paywall.restore_error.title": "Kunne ikke gjenopprette kjøpene dine",
-  "Commerce:paywall.stack.footer.reassurance": "Si opp når som helst · Gjenopprett",
-  "Commerce:paywall.stack.lifetime_link": "eller betal én gang, %@ for alltid",
   "Commerce:paywall.stack.month.primary_line": "Si opp når som helst",
   "Commerce:paywall.stack.month.title": "Måned",
   "Commerce:paywall.stack.monthly_equivalent": "%@/mnd",

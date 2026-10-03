@@ -557,8 +557,6 @@
   "Commerce:paywall.purchase_error.missing_entitlement": "تمّت عملية الشراء، لكن Pillie Plus لم يُفعَّل. أعيدي المحاولة، أو استعيدي المشتريات.",
   "Commerce:paywall.purchase_error.title": "حدثت مشكلة في عملية الشراء",
   "Commerce:paywall.restore_error.title": "تعذّرت استعادة مشترياتك",
-  "Commerce:paywall.stack.footer.reassurance": "ألغي في أي وقت · استعادة",
-  "Commerce:paywall.stack.lifetime_link": "أو ادفعي مرة واحدة، %@ مدى الحياة",
   "Commerce:paywall.stack.month.primary_line": "ألغي في أي وقت",
   "Commerce:paywall.stack.month.title": "شهر",
   "Commerce:paywall.stack.monthly_equivalent": "%@/شهر",

@@ -553,8 +553,6 @@
   "Commerce:paywall.purchase_error.missing_entitlement": "Zakup się udał, ale Pillie Plus się nie włączyło. Spróbuj ponownie lub przywróć zakupy.",
   "Commerce:paywall.purchase_error.title": "Wystąpił problem z zakupem",
   "Commerce:paywall.restore_error.title": "Nie udało się przywrócić zakupów",
-  "Commerce:paywall.stack.footer.reassurance": "Anuluj kiedy chcesz · Przywróć",
-  "Commerce:paywall.stack.lifetime_link": "albo raz %@, na zawsze",
   "Commerce:paywall.stack.month.primary_line": "Anuluj kiedy chcesz",
   "Commerce:paywall.stack.month.title": "Miesiąc",
   "Commerce:paywall.stack.monthly_equivalent": "%@/mies.",

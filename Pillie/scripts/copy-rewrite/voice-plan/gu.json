@@ -549,8 +549,6 @@
   "Commerce:paywall.purchase_error.missing_entitlement": "તમારી ખરીદી થઈ ગઈ, પણ Pillie Plus ચાલુ થયું નથી. ફરી પ્રયાસ કરો, અથવા ખરીદી પુનઃસ્થાપિત કરો.",
   "Commerce:paywall.purchase_error.title": "તમારી ખરીદીમાં સમસ્યા આવી",
   "Commerce:paywall.restore_error.title": "તમારી ખરીદી પુનઃસ્થાપિત થઈ શકી નહીં",
-  "Commerce:paywall.stack.footer.reassurance": "ગમે ત્યારે રદ કરો · પુનઃસ્થાપિત કરો",
-  "Commerce:paywall.stack.lifetime_link": "અથવા એક જ વાર %@ ચૂકવો, આજીવન",
   "Commerce:paywall.stack.month.primary_line": "ગમે ત્યારે રદ કરો",
   "Commerce:paywall.stack.month.title": "મહિનો",
   "Commerce:paywall.stack.monthly_equivalent": "%@/મહિનો",
