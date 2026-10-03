@@ -15,7 +15,7 @@ struct RoutineDialRing: View {
         static let ring = Metrics(size: 244, radius: 106, gapDegrees: 0.8)
     }
 
-    struct SegmentColors {
+    struct SegmentColors: Hashable {
         let fill: Color
         let track: Color
     }
@@ -44,15 +44,30 @@ struct RoutineDialRing: View {
     private var knobDegrees: Double { dragDegrees ?? Double(position) * segmentDegrees }
     private var segmentDegrees: Double { 360 / Double(count) }
 
+    private var colorGroups: [(colors: SegmentColors, arcs: [RingArcs.Arc])] {
+        var groups: [(colors: SegmentColors, arcs: [RingArcs.Arc])] = []
+        for (index, colors) in segments.enumerated() {
+            let arc = RingArcs.Arc(
+                start: Double(index) * segmentDegrees + metrics.gapDegrees,
+                end: Double(index + 1) * segmentDegrees - metrics.gapDegrees
+            )
+            if let at = groups.firstIndex(where: { $0.colors == colors }) {
+                groups[at].arcs.append(arc)
+            } else {
+                groups.append((colors, [arc]))
+            }
+        }
+        return groups
+    }
+
     var body: some View {
         ZStack {
-            ForEach(segments.indices, id: \.self) { index in
-                let start = Double(index) * segmentDegrees + metrics.gapDegrees
-                let end = Double(index + 1) * segmentDegrees - metrics.gapDegrees
-                RingSegment(start: start, end: end, fill: end, radius: metrics.radius)
-                    .stroke(segments[index].track, lineWidth: Self.lineWidth)
-                RingSegment(start: start, end: end, fill: knobDegrees, radius: metrics.radius)
-                    .stroke(segments[index].fill, lineWidth: Self.lineWidth)
+            // One shape per color instead of two per segment: a ring has 28 segments.
+            ForEach(colorGroups, id: \.colors) { group in
+                RingArcs(arcs: group.arcs, fill: 360, radius: metrics.radius)
+                    .stroke(group.colors.track, lineWidth: Self.lineWidth)
+                RingArcs(arcs: group.arcs, fill: knobDegrees, radius: metrics.radius)
+                    .stroke(group.colors.fill, lineWidth: Self.lineWidth)
             }
 
             ZStack {
@@ -119,10 +134,14 @@ struct RoutineDialRing: View {
     }
 }
 
-/// One segment's arc, drawn up to `fill` degrees so the fill tracks the knob.
-private struct RingSegment: Shape {
-    let start: Double
-    let end: Double
+/// Segment arcs, each drawn up to `fill` degrees so the fill tracks the knob.
+private struct RingArcs: Shape {
+    struct Arc {
+        let start: Double
+        let end: Double
+    }
+
+    let arcs: [Arc]
     var fill: Double
     let radius: CGFloat
 
@@ -133,15 +152,20 @@ private struct RingSegment: Shape {
 
     func path(in rect: CGRect) -> Path {
         var path = Path()
-        let stop = min(end, fill)
-        guard stop > start else { return path }
-        path.addArc(
-            center: CGPoint(x: rect.midX, y: rect.midY),
-            radius: radius,
-            startAngle: .degrees(start - 90),
-            endAngle: .degrees(stop - 90),
-            clockwise: false
-        )
+        let center = CGPoint(x: rect.midX, y: rect.midY)
+        for arc in arcs {
+            let stop = min(arc.end, fill)
+            guard stop > arc.start else { continue }
+            let radians = (arc.start - 90) * .pi / 180
+            path.move(to: CGPoint(x: center.x + radius * cos(radians), y: center.y + radius * sin(radians)))
+            path.addArc(
+                center: center,
+                radius: radius,
+                startAngle: .degrees(arc.start - 90),
+                endAngle: .degrees(stop - 90),
+                clockwise: false
+            )
+        }
         return path
     }
 }
