@@ -52,12 +52,20 @@ struct ProtocolEditor: View {
         VStack(spacing: 0) {
             SettingsSheetHeader(title: PillieLocalization.string("settings.schedule.title", locale: locale))
 
-            ScrollViewReader { scroll in
-                ScrollView {
-                    if let draft {
+            if let draft {
+                methodPicker
+                    .padding(.horizontal, 20)
+                    .padding(.top, 20)
+                    .padding(.bottom, 4)
+
+                ScrollViewReader { scroll in
+                    ScrollView {
                         content(draft) { reveal(in: scroll) }
                     }
+                    .clipped()
                 }
+            } else {
+                Spacer()
             }
 
             VStack(spacing: 12) {
@@ -97,19 +105,6 @@ struct ProtocolEditor: View {
 
     private func content(_ draft: ScheduleDraft, onReveal: @escaping () -> Void) -> some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text(PillieLocalization.string("settings.method.title", locale: locale))
-                .font(.pillieCaptionMedium())
-                .foregroundStyle(PillieTheme.textMuted)
-                .tracking(2)
-
-            Picker(PillieLocalization.string("settings.method.title", locale: locale), selection: methodSelection) {
-                ForEach(ContraceptiveMethod.allCases, id: \.self) { method in
-                    Text(method.localizedTitle(locale: locale)).tag(method)
-                }
-            }
-            .pickerStyle(.segmented)
-            .accessibilityIdentifier("protocolEditorMethod")
-
             Text(title(for: draft))
                 .font(.pillie(20, weight: .bold))
                 .foregroundStyle(PillieTheme.textPrimary)
@@ -127,6 +122,23 @@ struct ProtocolEditor: View {
                 .id(Self.bottomAnchor)
         }
         .padding(20)
+    }
+
+    private var methodPicker: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text(PillieLocalization.string("settings.method.title", locale: locale))
+                .font(.pillieCaptionMedium())
+                .foregroundStyle(PillieTheme.textMuted)
+                .tracking(2)
+
+            Picker(PillieLocalization.string("settings.method.title", locale: locale), selection: methodSelection) {
+                ForEach(ContraceptiveMethod.allCases, id: \.self) { method in
+                    Text(method.localizedTitle(locale: locale)).tag(method)
+                }
+            }
+            .pickerStyle(.segmented)
+            .accessibilityIdentifier("protocolEditorMethod")
+        }
     }
 
     @ViewBuilder
