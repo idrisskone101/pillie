@@ -18,6 +18,9 @@ struct PlusSetupSheet: View {
     @AppStorage(PlusSetupProgress.finishedStorageKey) private var finished = false
     @State private var current: PlusSetupSheetStep
     @State private var editor: PlusSetupEditor?
+    /// Whether the step was already done when its editor opened. Only a step
+    /// the editor takes from not done to done advances the sheet.
+    @State private var editorStepWasDone = false
 
     init(opening: PlusSetupSheetStep) {
         self.current = opening
@@ -90,6 +93,7 @@ struct PlusSetupSheet: View {
     }
 
     private func open(_ step: PlusSetupStep) {
+        editorStepWasDone = progress.isDone(step)
         switch step {
         case .blocking:
             Task {
@@ -106,7 +110,9 @@ struct PlusSetupSheet: View {
     /// A cancelled editor leaves the step where it was; only a step the
     /// editor actually finished earns its check and moves the sheet on.
     private func editorDismissed() {
-        guard case .step(let step) = current, progress.isDone(step) else { return }
+        guard case .step(let step) = current, !editorStepWasDone, progress.isDone(step) else {
+            return
+        }
         ProductAnalyticsTelemetry.live.plusSetupStep(step, action: .completed)
         advance(from: step)
     }
