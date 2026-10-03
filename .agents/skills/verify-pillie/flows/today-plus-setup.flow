@@ -1,0 +1,40 @@
+# Today: the Plus setup strip and its sheet during the Reverse Trial
+# (ENG-135). Skips Blocking and Messages (FamilyActivityPicker never returns
+# tokens on a simulator), edits Reminders inline, and finishes on Done.
+launch
+
+# Fresh trial, Plus setup at 1/3 (reminders on by default), and
+# plusSetupFinished cleared. PillieApp.swift /trial-activation-hub.
+openurl "pillie://debug/trial-activation-hub?state=unconfigured&lang=en"
+
+wait id plusSetupStrip 15
+wait text "14 active days left" 10
+shot plus-setup-strip
+
+tap --id plusSetupStrip
+wait text "Let your apps wait for you" 10
+shot plus-setup-blocking
+
+tap --id plusSetupSkip
+wait text "Reminders in your words" 10
+shot plus-setup-messages
+
+tap --id plusSetupSkip
+wait id plusSetupIntervalMenu 10
+shot plus-setup-reminders
+
+tap --id plusSetupIntervalMenu
+wait text "Every 15 minutes" 10
+shot plus-setup-interval-menu
+tap --label "Every 15 minutes"
+wait text "15 min" 10
+
+tap --id plusSetupPrimary
+wait id plusSetupDone 10
+shot plus-setup-done
+
+tap --id plusSetupDone
+gone id plusSetupDone 10
+gone id plusSetupStrip 10
+expect id trialIndicator
+shot plus-setup-strip-gone
