@@ -20,7 +20,7 @@ HONEST_PATH = SCRIPT_DIR / "honest-paywall-locales.json"
 
 KEYS = [
     "trial.status.indicator.active",
-    "trial.status.indicator.setup",
+    "trial.status.indicator.countdown",
     "paywall.story.trial_active.stamp",
     "trial.granted.badge",
     "trial.granted.disclosure",

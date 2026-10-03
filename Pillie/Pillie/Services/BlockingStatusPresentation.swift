@@ -51,6 +51,7 @@ struct BlockingStatusCardContent: Equatable {
 
     static func make(
         for presentation: BlockingStatusPresentation,
+        inReverseTrial: Bool = false,
         method: ContraceptiveMethod = .pill,
         action: DoseScheduleAction? = nil,
         locale: Locale = .current
@@ -59,6 +60,8 @@ struct BlockingStatusCardContent: Equatable {
         case .active:
             return nil
         case .incompleteEntitled:
+            // During the Reverse Trial the Plus setup strip owns this ask.
+            if inReverseTrial { return nil }
             return BlockingStatusCardContent(
                 title: PillieLocalization.string(
                     "today.protection.setup.title",

@@ -281,21 +281,6 @@ struct ProductAnalyticsTelemetry {
     track(.trialStatusSheetViewed, source: .home)
   }
 
-  func trialStatusFeatureTapped(
-    _ feature: AnalyticsTrialStatusFeature,
-    status: AnalyticsTrialActivationStatus,
-    isRecommended: Bool
-  ) {
-    analytics.track(
-      .trialStatusFeatureTapped,
-      source: .home,
-      trialStatusFeature: feature,
-      trialActivationStatus: status,
-      isRecommended: isRecommended,
-      isPlus: isPlus()
-    )
-  }
-
   func smartReminderRetryScheduled(count: Int) {
     guard count > 0 else { return }
     analytics.track(

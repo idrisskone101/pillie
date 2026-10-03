@@ -33,33 +33,6 @@ final class ReverseTrialAnalyticsTests: XCTestCase {
         XCTAssertEqual(client.events.first?.properties.count, 2)
     }
 
-    func testTrialStatusActionCarriesFeatureStatusAndRecommendationContext() {
-        let (telemetry, client) = makeTelemetry()
-
-        telemetry.trialStatusFeatureTapped(
-            .smartReminders,
-            status: .activeAutomatically,
-            isRecommended: true
-        )
-
-        XCTAssertEqual(client.events.count, 1)
-        XCTAssertEqual(client.events.first?.name, "trial_status_feature_tapped")
-        XCTAssertEqual(client.events.first?.properties["source"], .string("home"))
-        XCTAssertEqual(client.events.first?.properties["feature"], .string("smart_reminders"))
-        XCTAssertEqual(client.events.first?.properties["status"], .string("active_automatically"))
-        XCTAssertEqual(client.events.first?.properties["is_recommended"], .bool(true))
-        XCTAssertEqual(client.events.first?.properties["is_plus"], .bool(true))
-        XCTAssertEqual(client.events.first?.properties.count, 5)
-        XCTAssertEqual(
-            AnalyticsTrialStatusFeature.allCases.map(\.rawValue),
-            ["app_blocking", "shake_to_confirm", "smart_reminders", "custom_messages"]
-        )
-        XCTAssertEqual(
-            AnalyticsTrialActivationStatus.allCases.map(\.rawValue),
-            ["set_up", "active", "active_automatically", "personalize", "customized", "on"]
-        )
-    }
-
     func testBlockerSetupSkipCarriesAuthorizationStateWithoutSelectionData() {
         let (telemetry, client) = makeTelemetry()
 

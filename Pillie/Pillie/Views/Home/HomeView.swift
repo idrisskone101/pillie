@@ -29,9 +29,6 @@ struct HomeView: View {
     @State private var blockingPaywallSurface: AnalyticsPaywallSurface = .homeBlockingCard
     @State private var showTrialStatusSheet = false
     @State private var showTrialKeepPlusPaywall = false
-    @State private var showTrialCustomMessagesEditor = false
-    @State private var showTrialSmartRemindersEditor = false
-    @State private var pendingTrialActivationAction: TrialActivationAction?
     @State private var trialEndPaywallPresentation = TrialEndPaywallPresentationState()
     #if DEBUG
     @State private var showDeveloperMenu = false
@@ -114,6 +111,7 @@ struct HomeView: View {
         guard !blockingCardDismissed else { return nil }
         return BlockingStatusCardContent.make(
             for: blockingPresentation,
+            inReverseTrial: trialPresentation != nil,
             method: store.pack.method,
             action: store.dueAction(on: store.today),
             locale: locale
@@ -273,7 +271,7 @@ struct HomeView: View {
     private var trialPresentation: TrialStatusPresentation? {
         TrialStatusPresentation.make(
             state: SubscriptionManager.shared.plusAccessState,
-            protectionActive: trialActivationState.appBlockingActive,
+            protectionActive: plusSetupProgress.isDone(.blocking),
             calendar: Calendar.current,
             now: Date(),
             locale: locale,
@@ -282,50 +280,8 @@ struct HomeView: View {
         )
     }
 
-    @MainActor
-    private var trialActivationState: TrialActivationState {
-        let blocking = AppBlockingManager.shared
-        let customMessagesCustomized = [
-            store.customDueReminderTitle,
-            store.customDueReminderBody,
-            store.customRetryReminderTitle,
-            store.customRetryReminderBody,
-        ].contains(where: CustomReminderCopy.isCustomized)
-
-        return TrialActivationState(
-            appBlockingActive: blocking.authorizationStatus == .approved
-                && blocking.isEffectivelyOn,
-            customMessagesCustomized: customMessagesCustomized,
-            smartRemindersCustomized: store.autoReminderIntervalMinutes != 10
-                || store.autoReminderRetryLimit != 3
-        )
-    }
-
-    private func handleTrialActivationTap(_ item: TrialActivationItem) {
-        guard let action = item.action else { return }
-        ProductAnalyticsTelemetry.live.trialStatusFeatureTapped(
-            item.feature,
-            status: item.status,
-            isRecommended: item.isRecommended
-        )
-        pendingTrialActivationAction = action
-        showTrialStatusSheet = false
-    }
-
-    private func presentPendingTrialActivationAction() {
-        guard let action = pendingTrialActivationAction else { return }
-        pendingTrialActivationAction = nil
-        switch action {
-        case .appBlocking:
-            Task { @MainActor in
-                _ = await AppBlockingManager.shared.ensureAuthorized()
-                showBlockingSetup = true
-            }
-        case .customMessages:
-            showTrialCustomMessagesEditor = true
-        case .smartReminders:
-            showTrialSmartRemindersEditor = true
-        }
+    private var plusSetupProgress: PlusSetupProgress {
+        PlusSetupProgress.live(store: store)
     }
 
     private var firstReminderLabel: String {
@@ -588,41 +544,24 @@ HomePackCard(holdsTodayLog: holdsPackCardLog)
                 onDismiss: { showBlockingPaywall = false }
             )
         }
-        .sheet(
-            isPresented: $showTrialStatusSheet,
-            onDismiss: presentPendingTrialActivationAction
-        ) {
+        .sheet(isPresented: $showTrialStatusSheet) {
             if let trial = trialPresentation {
                 TrialStatusSheet(
-                    content: trial.sheetContent(for: trialActivationState),
+                    content: trial.sheetContent,
                     onKeepPlus: {
                         // The quiet buy-early path: into the existing purchase
                         // flow (it reports paywallViewed itself).
                         showTrialStatusSheet = false
                         showTrialKeepPlusPaywall = true
                     },
-                    onFeatureTap: handleTrialActivationTap,
                     onDismiss: { showTrialStatusSheet = false }
                 )
                 .onAppear {
                     ProductAnalyticsTelemetry.live.trialStatusSheetViewed()
                 }
-                .presentationDetents([.height(TrialStatusSheet.presentationHeight)])
                 .presentationDragIndicator(.hidden)
                 .presentationBackground(PillieTheme.bg)
             }
-        }
-        .sheet(isPresented: $showTrialCustomMessagesEditor) {
-            CustomReminderMessagesEditor(store: store)
-                .presentationDetents([.large])
-                .presentationDragIndicator(.hidden)
-                .presentationBackground(PillieTheme.bg)
-        }
-        .sheet(isPresented: $showTrialSmartRemindersEditor) {
-            AutoReminderIntervalEditor(store: store)
-                .presentationDetents([.height(440)])
-                .presentationDragIndicator(.hidden)
-                .presentationBackground(PillieTheme.bg)
         }
         .fullScreenCover(
             item: trialEndPaywallItem,
