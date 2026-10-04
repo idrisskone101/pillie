@@ -248,6 +248,8 @@ struct ProductAnalyticsTelemetry {
 
   func blockerSetupCompleted() {
     track(.blockerSetupCompleted, source: .onboarding, step: .appBlocking)
+    // af_start_trial — the Reverse Trial commitment (ADR 0007).
+    AppsFlyerManager.shared.logStartTrial()
   }
 
   /// A Reverse Trial grant was written for an existing onboarded free user on

@@ -152,14 +152,14 @@ final class AppsFlyerManager: NSObject {
         log.notice("AppsFlyer af_purchase revenue=\(String(revenue), privacy: .public) currency=\(currency, privacy: .public) product=\(productId, privacy: .public)")
     }
 
-    /// `af_start_trial` — a free trial began.
-    func logStartTrial(currency: String, productId: String) {
+    /// `af_start_trial` — a new user finished Plus App Blocking setup in onboarding,
+    /// the Reverse Trial commitment (ADR 0007). The first purchase lands at trial end,
+    /// day 15 or later, outside ad networks' 7-day click windows; this is the earliest
+    /// real commitment they can optimize on.
+    func logStartTrial() {
         guard isConfigured else { return }
-        AppsFlyerLib.shared().logEvent(AFEventStartTrial, withValues: [
-            AFEventParamCurrency: currency,
-            AFEventParamContentId: productId,
-        ])
-        log.notice("AppsFlyer af_start_trial currency=\(currency, privacy: .public) product=\(productId, privacy: .public)")
+        AppsFlyerLib.shared().logEvent(AFEventStartTrial, withValues: [:])
+        log.notice("AppsFlyer af_start_trial")
     }
 
     /// `af_complete_registration` — onboarding completed.
