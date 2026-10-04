@@ -1388,7 +1388,7 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus مفعّل مجانًا لمدة %lld يومًا نشطًا. بدون بطاقة. سنذكّرك قبل انتهاء الفترة التجريبية."
+            "value": "Pillie Plus مفعّل مجانًا خلال الأيام الـ%lld النشطة القادمة. بدون بطاقة. سنذكّرك قبل انتهاء الفترة التجريبية."
           }
         },
         "bn": {
@@ -1406,37 +1406,37 @@
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus máš zdarma na dalších %lld aktivních dní. Bez karty. Před koncem zkušebního období ti dáme vědět."
+            "value": "Pillie Plus máš zdarma na dalších %lld aktivních dní. Bez karty. Před koncem ti dáme vědět."
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus er gratis de næste %lld aktive dage. Intet kort. Vi minder dig om det, før prøveperioden udløber."
+            "value": "Pillie Plus er gratis de næste %lld aktive dage. Intet kort. Vi minder dig om det, før det udløber."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus läuft gratis für deine nächsten %lld aktiven Tage. Keine Karte nötig. Wir erinnern dich vor dem Ende."
+            "value": "Pillie Plus ist die nächsten %lld aktiven Tage gratis. Keine Karte. Wir erinnern dich vor dem Ende."
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Έχεις Pillie Plus δωρεάν τις επόμενες %lld ενεργές ημέρες. Χωρίς κάρτα. Θα σου το θυμίσουμε πριν λήξει."
+            "value": "Έχεις Pillie Plus δωρεάν για %lld ενεργές ημέρες. Χωρίς κάρτα. Σε ειδοποιούμε πριν λήξει."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tienes Pillie Plus gratis tus próximos %lld días activos. Sin tarjeta. Te avisaremos antes de que termine."
+            "value": "Tienes Pillie Plus gratis los próximos %lld días activos. Sin tarjeta. Te avisamos antes del final."
           }
         },
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus on ilmainen seuraavat %lld aktiivista päivää. Ei korttia. Muistutamme ennen kokeilun päättymistä."
+            "value": "Pillie Plus on ilmainen seuraavat %lld aktiivista päivää. Ei korttia. Muistutamme ennen loppua."
           }
         },
         "fr": {
@@ -1454,7 +1454,7 @@
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "יש לך Pillie Plus בחינם ל-%lld הימים הפעילים הבאים. בלי צורך בכרטיס. נזכיר לך לפני שתקופת הניסיון מסתיימת."
+            "value": "יש לך Pillie Plus בחינם ל-%lld הימים הפעילים הבאים. בלי כרטיס. נזכיר לך לפני סוף הניסיון."
           }
         },
         "hi": {
@@ -1472,13 +1472,13 @@
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "A Pillie Plus ingyen a tiéd a következő %lld aktív napon át. Kártya nélkül. Emlékeztetünk, mielőtt lejár."
+            "value": "A Pillie Plus ingyenes a következő %lld aktív napon át. Kártya nélkül. Lejárat előtt emlékeztetünk."
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus gratis untuk %lld hari aktif ke depan. Tanpa kartu. Kami akan mengingatkanmu sebelum berakhir."
+            "value": "Pillie Plus gratis %lld hari aktif ke depan. Tanpa kartu. Kami ingatkan sebelum uji coba berakhir."
           }
         },
         "it": {
@@ -1490,13 +1490,13 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "これからの服用%lld日間、Pillie Plusを無料で使えます。カード不要。トライアル終了前にお知らせします。"
+            "value": "これから服用%lld日間、Pillie Plusが無料。カード不要。トライアル終了前にお知らせします。"
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ಮುಂದಿನ %lld ಸಕ್ರಿಯ ದಿನಗಳು Pillie Plus ಉಚಿತ. ಕಾರ್ಡ್ ಬೇಕಿಲ್ಲ. ಟ್ರಯಲ್ ಮುಗಿಯುವ ಮೊದಲು ನಾವು ನಿಮಗೆ ನೆನಪಿಸುತ್ತೇವೆ."
+            "value": "Pillie Plus ಮುಂದಿನ %lld ಸಕ್ರಿಯ ದಿನಗಳು ಉಚಿತ. ಕಾರ್ಡ್ ಬೇಕಿಲ್ಲ. ಟ್ರಯಲ್ ಮುಗಿಯುವ ಮುನ್ನ ನೆನಪಿಸುತ್ತೇವೆ."
           }
         },
         "ko": {
@@ -1508,7 +1508,7 @@
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "അടുത്ത %lld സജീവ ദിനങ്ങൾ Pillie Plus സൗജന്യം. കാർഡ് വേണ്ട. ട്രയൽ അവസാനിക്കും മുമ്പ് ഞങ്ങൾ ഓർമ്മിപ്പിക്കും."
+            "value": "Pillie Plus അടുത്ത %lld സജീവ ദിനങ്ങൾ സൗജന്യം. കാർഡ് വേണ്ട. ട്രയൽ തീരും മുമ്പ് ഓർമ്മിപ്പിക്കും."
           }
         },
         "mr": {
@@ -1520,7 +1520,7 @@
         "ms": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus percuma untuk %lld hari aktif seterusnya. Tanpa kad. Kami akan ingatkan kamu sebelum ia tamat."
+            "value": "Pillie Plus percuma %lld hari aktif lagi. Tanpa kad. Kami ingatkan sebelum percubaan tamat."
           }
         },
         "nb": {
@@ -1532,13 +1532,13 @@
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus is gratis voor je volgende %lld actieve dagen. Geen kaart. We herinneren je voordat het afloopt."
+            "value": "Pillie Plus is de komende %lld actieve dagen gratis. Geen kaart. We herinneren je vóór het einde."
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ପରବର୍ତ୍ତୀ %lld ସକ୍ରିୟ ଦିନ Pillie Plus ମାଗଣା। କାର୍ଡ ଦରକାର ନାହିଁ। ଟ୍ରାୟାଲ୍ ଶେଷ ହେବା ଆଗରୁ ଆମେ ମନେ ପକାଇବୁ।"
+            "value": "ପରବର୍ତ୍ତୀ %lld ସକ୍ରିୟ ଦିନ Pillie Plus ମାଗଣା। କାର୍ଡ ଦରକାର ନାହିଁ। ଟ୍ରାୟାଲ୍ ଶେଷ ହେବା ଆଗରୁ ଆପଣଙ୍କୁ ମନେ ପକାଇବୁ।"
           }
         },
         "pa": {
@@ -1550,7 +1550,7 @@
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Masz Pillie Plus za darmo przez kolejne %lld dni aktywnych. Bez karty. Przypomnimy ci przed końcem."
+            "value": "Masz Pillie Plus za darmo przez %lld dni aktywnych. Bez karty. Przypomnimy ci przed końcem."
           }
         },
         "pt-BR": {
@@ -1562,7 +1562,7 @@
         "pt-PT": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tens o Pillie Plus grátis nos próximos %lld dias ativos. Sem cartão. Avisamos-te antes de terminar."
+            "value": "O Pillie Plus é grátis nos próximos %lld dias ativos. Sem cartão. Avisamos-te antes do fim."
           }
         },
         "ro": {
@@ -1574,55 +1574,55 @@
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus бесплатно на следующие %lld активных дней. Карта не нужна. Мы напомним заранее."
+            "value": "Pillie Plus бесплатно на следующие %lld активных дней. Без карты. Напомним до окончания."
           }
         },
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus máš zdarma na ďalších %lld aktívnych dní. Bez karty. Pred koncom skúšobného obdobia ti dáme vedieť."
+            "value": "Pillie Plus máš zdarma na ďalších %lld aktívnych dní. Bez karty. Pred koncom ti dáme vedieť."
           }
         },
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus imaš brezplačno naslednjih %lld aktivnih dni. Brez kartice. Pred koncem preizkusa te bomo opomnili."
+            "value": "Pillie Plus imaš brezplačno naslednjih %lld aktivnih dni. Brez kartice. Pred koncem te opomnimo."
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Du har Pillie Plus gratis dina kommande %lld aktiva dagar. Inget kort. Vi påminner dig innan perioden tar slut."
+            "value": "Du har Pillie Plus gratis i %lld aktiva dagar framåt. Inget kort. Vi påminner dig innan det tar slut."
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "அடுத்த %lld செயல் நாட்களுக்கு Pillie Plus இலவசம். கார்டு தேவையில்லை. சோதனைக் காலம் முடியும் முன் நினைவூட்டுவோம்."
+            "value": "%lld செயல் நாட்களுக்கு Pillie Plus இலவசம். கார்டு தேவையில்லை. முடியும் முன் நினைவூட்டுவோம்."
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "తదుపరి %lld యాక్టివ్ రోజులు Pillie Plus ఉచితం. కార్డ్ అవసరం లేదు. ట్రయల్ ముగిసే ముందు మేము గుర్తు చేస్తాము."
+            "value": "Pillie Plus తదుపరి %lld యాక్టివ్ రోజులు ఉచితం. కార్డ్ అవసరం లేదు. ట్రయల్ ముగిసేలోపు గుర్తు చేస్తాం."
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus เปิดให้ใช้ฟรีใน %lld วันกินยาถัดไป ไม่ต้องใช้บัตร เราจะเตือนคุณก่อนช่วงทดลองใช้จะสิ้นสุด"
+            "value": "Pillie Plus เปิดให้ใช้ฟรีตลอด %lld วันกินยาถัดไป ไม่ต้องใช้บัตร เราจะเตือนคุณก่อนช่วงทดลองใช้สิ้นสุด"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus sonraki %lld aktif gün boyunca ücretsiz. Kart gerekmez. Deneme bitmeden önce sana haber veririz."
+            "value": "Pillie Plus önümüzdeki %lld aktif gün ücretsiz. Kart gerekmez. Deneme bitmeden hatırlatırız."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus безкоштовний на наступні %lld активних днів. Картка не потрібна. Ми нагадаємо заздалегідь."
+            "value": "Pillie Plus безкоштовно на наступні %lld активних днів. Без картки. Нагадаємо перед кінцем."
           }
         },
         "ur": {
@@ -1634,7 +1634,7 @@
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie Plus miễn phí trong %lld ngày uống tới. Không cần thẻ. Chúng mình sẽ nhắc bạn trước khi hết hạn."
+            "value": "Pillie Plus miễn phí %lld ngày uống tới. Không cần thẻ. Chúng mình sẽ nhắc trước khi hết dùng thử."
           }
         },
         "zh-Hans": {

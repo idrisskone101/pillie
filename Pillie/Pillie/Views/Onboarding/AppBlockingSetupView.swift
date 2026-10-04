@@ -509,6 +509,9 @@ struct AppBlockingSetupView: View {
                 .font(.pillie(14, weight: .medium))
                 .foregroundStyle(PillieTheme.textPrimary)
                 .lineSpacing(3)
+                .lineLimit(dynamicTypeSize.isAccessibilitySize ? nil : 2)
+                .minimumScaleFactor(dynamicTypeSize.isAccessibilitySize ? 1 : 0.8)
+                .allowsTightening(true)
                 .fixedSize(horizontal: false, vertical: true)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
