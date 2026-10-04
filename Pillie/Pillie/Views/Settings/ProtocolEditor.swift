@@ -15,20 +15,13 @@ struct ProtocolEditor: View {
     // Nil until then, so the modules first render on the seeded day and do not scroll on open.
     @State private var draft: ScheduleDraft?
     @State private var isScrubbing = false
+    @State private var showMethodPicker = false
 
     private let settingsFeedback = SettingsInteractionFeedback()
 
     private static let topAnchor = "protocolEditorTop"
     private static let bottomAnchor = "protocolEditorBottom"
     private static let chipFill = Color(hex: "F5F5F4")
-
-    private static func iconTileFill(_ method: ContraceptiveMethod) -> Color {
-        switch method {
-        case .pill: PillieTheme.coralLight
-        case .patch: Color(hex: "FBEFF1")
-        case .ring: Color(hex: "FBF0EC")
-        }
-    }
 
     private var current: ScheduleDraft.Current {
         ScheduleDraft.Current(
@@ -41,16 +34,6 @@ struct ProtocolEditor: View {
 
     private var canSave: Bool {
         (draft?.isComplete ?? false) && !isScrubbing
-    }
-
-    private var methodSelection: Binding<ContraceptiveMethod> {
-        Binding(
-            get: { draft?.method ?? store.pack.method },
-            set: { method in
-                guard method != draft?.method else { return }
-                draft = .seeded(method, from: current)
-            }
-        )
     }
 
     var body: some View {
@@ -132,7 +115,7 @@ struct ProtocolEditor: View {
                 .scaledToFit()
                 .frame(width: method.iconImageSize, height: method.iconImageSize)
                 .frame(width: 44, height: 44)
-                .background(Self.iconTileFill(method), in: RoundedRectangle(cornerRadius: 12))
+                .background(method.settingsTileFill, in: RoundedRectangle(cornerRadius: 12))
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(PillieLocalization.string("settings.schedule.your_method", locale: locale))
@@ -144,7 +127,7 @@ struct ProtocolEditor: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
 
-            switchMenu
+            switchButton(current: method)
         }
         .padding(.vertical, 12)
         .padding(.leading, 12)
@@ -163,14 +146,9 @@ struct ProtocolEditor: View {
         .accessibilityIdentifier("protocolEditorMethodCard")
     }
 
-    // ENG-157 replaces this menu with the method picker sheet.
-    private var switchMenu: some View {
-        Menu {
-            Picker(PillieLocalization.string("settings.method.title", locale: locale), selection: methodSelection) {
-                ForEach(ContraceptiveMethod.allCases, id: \.self) { method in
-                    Text(method.localizedTitle(locale: locale)).tag(method)
-                }
-            }
+    private func switchButton(current method: ContraceptiveMethod) -> some View {
+        Button {
+            showMethodPicker = true
         } label: {
             HStack(spacing: 6) {
                 Image(systemName: "arrow.left.arrow.right")
@@ -183,7 +161,13 @@ struct ProtocolEditor: View {
             .frame(height: 36)
             .background(Self.chipFill, in: Capsule())
         }
+        .buttonStyle(.plain)
         .accessibilityIdentifier("protocolEditorSwitch")
+        .sheet(isPresented: $showMethodPicker) {
+            MethodPickerSheet(current: method) { picked in
+                draft = .seeded(picked, from: current)
+            }
+        }
     }
 
     private func footer(_ draft: ScheduleDraft) -> some View {

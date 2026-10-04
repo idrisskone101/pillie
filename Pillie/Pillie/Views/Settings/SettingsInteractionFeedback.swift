@@ -33,6 +33,15 @@ struct SettingsInteractionFeedback {
     }
 
     @discardableResult
+    func chooseOption(accessibilityReduceMotion: Bool) -> Response {
+        response(
+            feedbackIntent: .choice,
+            motion: .quick,
+            accessibilityReduceMotion: accessibilityReduceMotion
+        )
+    }
+
+    @discardableResult
     func commitScheduleSave(accessibilityReduceMotion: Bool) -> Response {
         response(
             feedbackIntent: .meaningfulCommit,

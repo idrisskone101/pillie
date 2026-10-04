@@ -12,7 +12,8 @@ support mailto rows and (debug builds only) the developer menu.
 - `settings-method` — "Method" row opens `ProtocolEditor`
   (`Views/Settings/ProtocolEditor.swift`): a header with a close button
   (`#protocolEditorClose`), a method card (`#protocolEditorMethodCard`, "Your
-  method", the method name, and a Switch menu `#protocolEditorSwitch`) over the
+  method", the method name, and a Switch button `#protocolEditorSwitch` that
+  opens `MethodPickerSheet` with `methodPicker.pill|patch|ring` rows) over the
   onboarding schedule modules. Pill shows `TodayPillCard` (the pack card, its
   Change button and `PackTypeSheet`, then "Have you taken pill N yet?"); patch
   and ring show `RoutineDialCard` (`routineDialSegment.N`, `routineDial`,
@@ -68,8 +69,8 @@ support mailto rows and (debug builds only) the developer menu.
   Repeats, Cycle day, and Your apps in turn, shooting each open sheet and
   closing it without saving.
 - `flows/settings-schedule.flow` — opens Method on a pill account, taps a
-  pill, swaps the pack through the Change sheet, switches to Patch and Ring
-  through the Switch menu, saves the ring, then reopens on an established patch
+  pill, swaps the pack through the Change sheet, opens the method picker,
+  closes it on the current method, switches to Patch and Ring through it, saves the ring, then reopens on an established patch
   routine (day 10) to prove the dial seeds on patch 2, and closes with ✕.
 - `flows/settings-language.flow` — opens the Language row, switches to
   German, proves German strings appear (nav title "Einstellungen", sheet
