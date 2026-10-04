@@ -43,6 +43,7 @@ tap --id methodPicker.patch
 gone id methodPicker.pill
 wait id routineDial
 wait text "switches you to Patch"
+wait text "How long has this patch been on?"
 expect id routineDialSegment.4
 shot patch-day-1
 
@@ -56,6 +57,7 @@ gone id methodPicker.pill
 wait id routineDial
 gone id routineDialSegment.1
 wait id routineDialQuestion
+wait text "How long has this ring been in?"
 shot ring-day-1
 
 tap --id routineDialYes
