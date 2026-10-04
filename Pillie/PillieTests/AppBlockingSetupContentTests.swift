@@ -64,8 +64,16 @@ struct AppBlockingSetupContentTests {
 
     @Test func debugRecoverySeamRendersTheSameDeniedStateUsedByAuthorizationFailure() {
         var permission = AppBlockingSetupPermissionState()
-        permission.showRecoveryForDebug()
+        permission.setRecoveryForDebug(true)
         #expect(permission.isRecoveryVisible)
+    }
+
+    @Test func clearingTheDebugRecoverySeamReturnsToTheReadyState() {
+        var permission = AppBlockingSetupPermissionState()
+        permission.setRecoveryForDebug(true)
+        permission.setRecoveryForDebug(false)
+        #expect(!permission.isRecoveryVisible)
+        #expect(permission.phase == .ready)
     }
 
     @Test func emptyStateExplainsScreenTimePickerAndUnlock() {
