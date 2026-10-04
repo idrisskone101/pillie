@@ -2724,6 +2724,46 @@
       "en": "Later",
       "de": "Später",
       "it": "Più tardi"
+    },
+    {
+      "issue": "ENG-160",
+      "table": "Localizable",
+      "key": "settings.custom_messages.followup_group",
+      "en": "Follow-up reminder",
+      "de": "Folgeerinnerung",
+      "it": "Promemoria ripetuto"
+    },
+    {
+      "issue": "ENG-160",
+      "table": "Localizable",
+      "key": "settings.custom_messages.daily_subtitle",
+      "en": "First nudge each day",
+      "de": "Der erste Stups jeden Tag",
+      "it": "Il primo avviso di ogni giorno"
+    },
+    {
+      "issue": "ENG-160",
+      "table": "Localizable",
+      "key": "settings.custom_messages.followup_subtitle",
+      "en": "If you haven’t checked in yet",
+      "de": "Falls du noch nicht eingecheckt hast",
+      "it": "Se non hai ancora fatto il check-in"
+    },
+    {
+      "issue": "ENG-160",
+      "table": "Localizable",
+      "key": "settings.custom_messages.blank_hint",
+      "en": "Blank uses Pillie’s default wording.",
+      "de": "Leer bedeutet Pillies Standardtext.",
+      "it": "Se vuoto, usa il testo predefinito di Pillie."
+    },
+    {
+      "issue": "ENG-160",
+      "table": "Localizable",
+      "key": "settings.custom_messages.reset",
+      "en": "Reset",
+      "de": "Zurücksetzen",
+      "it": "Ripristina"
     }
   ]
 }

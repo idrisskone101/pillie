@@ -150,6 +150,54 @@ final class CustomReminderCopyTests: XCTestCase {
         XCTAssertFalse(draft.wasEditedAfterPreset)
     }
 
+    func testResetRestoresTheSelectedTonesWordsForThatReminder() {
+        let english = Locale(identifier: "en_US")
+        let direct = CustomReminderPreset.direct.localizedMessages(locale: english)
+        let draft = CustomReminderDraft(messages: direct)
+
+        let words = draft.resetWords(for: .followup, defaults: Self.pillieDefaults, locale: english)
+
+        XCTAssertEqual(words, CustomReminderWords(title: direct.retryTitle, message: direct.retryBody))
+    }
+
+    func testResetAfterEditingAwayFromATappedToneRestoresThatTone() {
+        let english = Locale(identifier: "en_US")
+        var draft = CustomReminderDraft(messages: Self.pillieDefaults)
+        draft.apply(.gentle, locale: english)
+        draft.messages.dueTitle = "Pill o'clock"
+
+        let words = draft.resetWords(for: .daily, defaults: Self.pillieDefaults, locale: english)
+
+        let gentle = CustomReminderPreset.gentle.localizedMessages(locale: english)
+        XCTAssertEqual(words, CustomReminderWords(title: gentle.dueTitle, message: gentle.dueBody))
+    }
+
+    func testResetOnOwnWordsWithNoToneRestoresPillieDefault() {
+        var messages = Self.pillieDefaults
+        messages.dueBody = "My own words"
+        let draft = CustomReminderDraft(messages: messages)
+
+        let words = draft.resetWords(for: .daily, defaults: Self.pillieDefaults, locale: Locale(identifier: "en_US"))
+
+        XCTAssertEqual(words, CustomReminderWords(title: "Default title", message: "Default body"))
+    }
+
+    func testReminderKindReadsAndWritesItsOwnFields() {
+        var messages = Self.pillieDefaults
+        messages[.followup] = CustomReminderWords(title: "Later?", message: "Still open")
+
+        XCTAssertEqual(messages.retryTitle, "Later?")
+        XCTAssertEqual(messages.retryBody, "Still open")
+        XCTAssertEqual(messages[.daily], CustomReminderWords(title: "Default title", message: "Default body"))
+    }
+
+    private static let pillieDefaults = CustomReminderMessages(
+        dueTitle: "Default title",
+        dueBody: "Default body",
+        retryTitle: "Default retry title",
+        retryBody: "Default retry body"
+    )
+
     func testCancellingDiscardsPresetChangesAndRestoresTheOpenedCopy() {
         let existing = CustomReminderPreset.gentle.legacyEnglishMessages
         var draft = CustomReminderDraft(messages: existing)
