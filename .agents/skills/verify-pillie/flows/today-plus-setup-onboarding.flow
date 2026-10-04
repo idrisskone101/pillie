@@ -1,0 +1,19 @@
+# Today: the Plus setup strip right after onboarding. Blocking set up during
+# onboarding counts; the default follow-up nudges do not, so Reminders stays
+# unchecked until the user picks them.
+launch
+
+# Fresh trial with blocking on and nothing else chosen.
+# PillieApp.swift /trial-activation-hub.
+openurl "pillie://debug/trial-activation-hub?state=partial&lang=en"
+
+wait id plusSetupStrip 15
+expect label "Set up your Plus features, 1 of 3 done"
+shot plus-setup-strip-after-onboarding
+
+tap --id plusSetupStrip
+wait id plusSetupStep_blocking 10
+expect label "Blocking, done"
+expect label "Reminders"
+expect-not label "Reminders, done"
+shot plus-setup-sheet-after-onboarding

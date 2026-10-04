@@ -77,6 +77,10 @@ blocking/trial status surfaces, and (when eligible) the review ask.
   Messages, change the interval on Reminders, Save, prove Done, and prove the
   strip is gone. FamilyActivityPicker never returns tokens on a simulator,
   so Blocking is skipped, not completed.
+- `flows/today-plus-setup-onboarding.flow` — `/trial-activation-hub?state=partial`
+  stands in for finishing onboarding with blocking on. Proves the strip reads
+  1 of 3 and the sheet checks Blocking but not Reminders, since the default
+  follow-up nudges are not a choice the user made.
 - `flows/today-review-prompt.flow` — `/review-prompt` seeds an eligible
   Streak. The flow dismisses the blocking card first (it always renders on
   a fresh, unconfigured pack and outranks the review ask) before proving
