@@ -2508,6 +2508,86 @@
       "en": "One payment. No renewal.",
       "de": "Eine Zahlung. Keine Verlängerung.",
       "it": "Un solo pagamento. Nessun rinnovo."
+    },
+    {
+      "issue": "ENG-156",
+      "table": "Localizable",
+      "key": "settings.schedule.your_method",
+      "en": "Your method",
+      "de": "Deine Methode",
+      "it": "Il tuo metodo"
+    },
+    {
+      "issue": "ENG-156",
+      "table": "Localizable",
+      "key": "settings.schedule.switch",
+      "en": "Switch",
+      "de": "Wechseln",
+      "it": "Cambia"
+    },
+    {
+      "issue": "ENG-156",
+      "table": "Localizable",
+      "key": "settings.schedule.save_note.pill",
+      "en": "Saving clears your history and restarts from pill %lld.",
+      "de": "Beim Speichern wird dein Verlauf gelöscht und du startest wieder bei Pille %lld.",
+      "it": "Salvando cancelli la cronologia e riparti dalla pillola %lld."
+    },
+    {
+      "issue": "ENG-156",
+      "table": "Localizable",
+      "key": "settings.schedule.save_note.dial",
+      "en": "Saving clears your history and restarts from day %lld.",
+      "de": "Beim Speichern wird dein Verlauf gelöscht und du startest wieder bei Tag %lld.",
+      "it": "Salvando cancelli la cronologia e riparti dal giorno %lld."
+    },
+    {
+      "issue": "ENG-156",
+      "table": "Localizable",
+      "key": "settings.schedule.save_note.pill_to_patch",
+      "en": "Saving switches you to Patch and clears your pill history.",
+      "de": "Beim Speichern wechselst du zum Pflaster und dein Pillen-Verlauf wird gelöscht.",
+      "it": "Salvando passi al cerotto e cancelli la cronologia della pillola."
+    },
+    {
+      "issue": "ENG-156",
+      "table": "Localizable",
+      "key": "settings.schedule.save_note.pill_to_ring",
+      "en": "Saving switches you to Ring and clears your pill history.",
+      "de": "Beim Speichern wechselst du zum Ring und dein Pillen-Verlauf wird gelöscht.",
+      "it": "Salvando passi all’anello e cancelli la cronologia della pillola."
+    },
+    {
+      "issue": "ENG-156",
+      "table": "Localizable",
+      "key": "settings.schedule.save_note.patch_to_pill",
+      "en": "Saving switches you to Pill and clears your patch history.",
+      "de": "Beim Speichern wechselst du zur Pille und dein Pflaster-Verlauf wird gelöscht.",
+      "it": "Salvando passi alla pillola e cancelli la cronologia del cerotto."
+    },
+    {
+      "issue": "ENG-156",
+      "table": "Localizable",
+      "key": "settings.schedule.save_note.patch_to_ring",
+      "en": "Saving switches you to Ring and clears your patch history.",
+      "de": "Beim Speichern wechselst du zum Ring und dein Pflaster-Verlauf wird gelöscht.",
+      "it": "Salvando passi all’anello e cancelli la cronologia del cerotto."
+    },
+    {
+      "issue": "ENG-156",
+      "table": "Localizable",
+      "key": "settings.schedule.save_note.ring_to_pill",
+      "en": "Saving switches you to Pill and clears your ring history.",
+      "de": "Beim Speichern wechselst du zur Pille und dein Ring-Verlauf wird gelöscht.",
+      "it": "Salvando passi alla pillola e cancelli la cronologia dell’anello."
+    },
+    {
+      "issue": "ENG-156",
+      "table": "Localizable",
+      "key": "settings.schedule.save_note.ring_to_patch",
+      "en": "Saving switches you to Patch and clears your ring history.",
+      "de": "Beim Speichern wechselst du zum Pflaster und dein Ring-Verlauf wird gelöscht.",
+      "it": "Salvando passi al cerotto e cancelli la cronologia dell’anello."
     }
   ]
 }

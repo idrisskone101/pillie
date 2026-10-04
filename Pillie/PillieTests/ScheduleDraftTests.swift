@@ -101,4 +101,24 @@ struct ScheduleDraftTests {
         #expect(draft.cycleDay == 41)
         #expect(draft.isComplete)
     }
+
+    @Test func `the save note names the restart point on the same method`() {
+        let english = Locale(identifier: "en")
+        let pill = ScheduleDraft.seeded(.pill, from: current(.pill, regimen: twentyOneSeven, cycleDayIndex: 8, isTodayTaken: false))
+        let patch = ScheduleDraft.seeded(.patch, from: current(.patch, regimen: twentyOneSeven, cycleDayIndex: 9, isTodayTaken: false))
+
+        #expect(pill.saveNote(from: .pill, locale: english) == "Saving clears your history and restarts from pill 9.")
+        #expect(patch.saveNote(from: .patch, locale: english) == "Saving clears your history and restarts from day 10.")
+    }
+
+    @Test func `the save note names the method a switch leaves behind`() {
+        let english = Locale(identifier: "en")
+        let pillUser = current(.pill, regimen: twentyOneSeven, cycleDayIndex: 8, isTodayTaken: false)
+        let ringUser = current(.ring, regimen: twentyOneSeven, cycleDayIndex: 2, isTodayTaken: false)
+
+        #expect(ScheduleDraft.seeded(.patch, from: pillUser).saveNote(from: .pill, locale: english)
+            == "Saving switches you to Patch and clears your pill history.")
+        #expect(ScheduleDraft.seeded(.pill, from: ringUser).saveNote(from: .ring, locale: english)
+            == "Saving switches you to Pill and clears your ring history.")
+    }
 }

@@ -10,13 +10,16 @@ support mailto rows and (debug builds only) the developer menu.
 - `settings-open` selects the Settings tab; nav title `settings.navigation.title`
   -> "Settings" (`PillieTabBar.swift:13,22`; `SettingsView.swift:44-51`).
 - `settings-method` — "Method" row opens `ProtocolEditor`
-  (`Views/Settings/ProtocolEditor.swift`): a segmented method picker over the
+  (`Views/Settings/ProtocolEditor.swift`): a header with a close button
+  (`#protocolEditorClose`), a method card (`#protocolEditorMethodCard`, "Your
+  method", the method name, and a Switch menu `#protocolEditorSwitch`) over the
   onboarding schedule modules. Pill shows `TodayPillCard` (the pack card, its
   Change button and `PackTypeSheet`, then "Have you taken pill N yet?"); patch
   and ring show `RoutineDialCard` (`routineDialSegment.N`, `routineDial`,
   question or result row). It opens on today's position with the answer taken
-  from the store, so Save (`#protocolEditorSave`) works without a tap. Save is
-  gated behind a destructive confirm alert ("Clear and save").
+  from the store, so the pinned Save (`#protocolEditorSave`) works without a
+  tap. The line above Save (`#protocolEditorSaveNote`) says what saving clears;
+  Save has no confirm alert.
 - `settings-reminder-time` — "Reminder time" row opens `ReminderTimeEditor`
   (wheel picker). `SettingsView.swift:73-89,412-417,1005-1058`.
 - `settings-reminder-messages` — "Reminder messages" row opens
@@ -65,9 +68,9 @@ support mailto rows and (debug builds only) the developer menu.
   Repeats, Cycle day, and Your apps in turn, shooting each open sheet and
   closing it without saving.
 - `flows/settings-schedule.flow` — opens Method on a pill account, taps a
-  pill, swaps the pack through the Change sheet, switches to Patch and Ring,
-  saves the ring with the reset alert, then reopens on an established patch
-  routine (day 10) to prove the dial seeds on patch 2.
+  pill, swaps the pack through the Change sheet, switches to Patch and Ring
+  through the Switch menu, saves the ring, then reopens on an established patch
+  routine (day 10) to prove the dial seeds on patch 2, and closes with ✕.
 - `flows/settings-language.flow` — opens the Language row, switches to
   German, proves German strings appear (nav title "Einstellungen", sheet
   header "Sprache"), then switches back to English.
@@ -90,9 +93,10 @@ support mailto rows and (debug builds only) the developer menu.
 
 ## Gotchas
 
-- `ProtocolEditor` and `CustomReminderMessagesEditor` present at
-  `.presentationDetents([.large])` and have an explicit "Cancel" button
-  (`global.action.cancel` -> "Cancel") — use it to close without saving.
+- `ProtocolEditor` presents at `.presentationDetents([.large])` and closes
+  without saving through its ✕ button (`#protocolEditorClose`).
+  `CustomReminderMessagesEditor` is also `.large` and has an explicit "Cancel"
+  button (`global.action.cancel` -> "Cancel").
 - `ReminderTimeEditor`, `AutoReminderIntervalEditor`,
   `AutoReminderRetryLimitEditor`, `RefillReminderThresholdEditor`, and
   `CycleDayEditor` present at a partial `.height(N)` detent with no Cancel or
