@@ -10,17 +10,17 @@ wait id settingsLanguageRow
 
 tap --label "Reminder messages, Default"
 wait id reminder-tone-gentle                    # CustomReminderMessagesEditor.swift
-wait text "Using Pillie’s default wording."
+wait text "Pillie’s own wording."
 shot opened-default
 
 tap --id reminder-tone-direct
-wait text "Short and to the point."
+wait text "Short and clear."
 wait text "Time to check in"
 wait text "You haven’t checked in yet today."
 shot tone-direct
 
 tap --id reminder-tone-gentle
-wait text "Soft and patient."
+wait text "Soft words that give you a little room."
 wait text "A gentle reminder for your routine."
 shot tone-gentle
 
@@ -34,7 +34,7 @@ wait label Cut
 tap --label Cut                                 # blank title fires Pillie's default title
 tap --id reminder-words-done
 gone id reminder-field-daily-title
-wait text "Using your own words."
+wait text "Your own words."
 wait text "Time for your pill"
 wait text "A gentle reminder for your routine."
 shot own-words

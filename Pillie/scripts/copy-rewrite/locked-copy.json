@@ -2673,49 +2673,49 @@
       "issue": "ENG-159",
       "table": "Localizable",
       "key": "settings.custom_messages.tone.gentle_body",
-      "en": "Soft and patient. Rewrites both reminders.",
-      "de": "Sanft und geduldig. Schreibt beide Erinnerungen neu.",
-      "it": "Delicato e paziente. Riscrive entrambi i promemoria."
+      "en": "Soft words that give you a little room.",
+      "de": "Sanfte Worte, die dir etwas Raum lassen.",
+      "it": "Parole morbide che ti lasciano un po’ di spazio."
     },
     {
       "issue": "ENG-159",
       "table": "Localizable",
       "key": "settings.custom_messages.tone.direct_body",
-      "en": "Short and to the point. Rewrites both reminders.",
-      "de": "Kurz und klar. Schreibt beide Erinnerungen neu.",
-      "it": "Breve e diretto. Riscrive entrambi i promemoria."
+      "en": "Short and clear. Says what to do, then stops.",
+      "de": "Kurz und klar. Sagt, was zu tun ist, und fertig.",
+      "it": "Breve e chiaro. Dice cosa fare, poi basta."
     },
     {
       "issue": "ENG-159",
       "table": "Localizable",
       "key": "settings.custom_messages.tone.encouraging_body",
-      "en": "Warm and upbeat. Rewrites both reminders.",
-      "de": "Herzlich und positiv. Schreibt beide Erinnerungen neu.",
-      "it": "Caloroso e positivo. Riscrive entrambi i promemoria."
+      "en": "Cheers you on as the habit takes hold.",
+      "de": "Feuert dich an, während die Gewohnheit wächst.",
+      "it": "Fa il tifo per te mentre l’abitudine si consolida."
     },
     {
       "issue": "ENG-159",
       "table": "Localizable",
       "key": "settings.custom_messages.tone.private_body",
-      "en": "Keeps your Lock Screen discreet. Rewrites both reminders.",
-      "de": "Hält deinen Sperrbildschirm diskret. Schreibt beide Erinnerungen neu.",
-      "it": "Mantiene riservata la schermata di blocco. Riscrive entrambi i promemoria."
+      "en": "Doesn’t name your birth control.",
+      "de": "Erwähnt deine Verhütung nicht.",
+      "it": "Non nomina il tuo contraccettivo."
     },
     {
       "issue": "ENG-159",
       "table": "Localizable",
       "key": "settings.custom_messages.tone.default_body",
-      "en": "Using Pillie’s default wording.",
-      "de": "Pillies Standardtext wird verwendet.",
-      "it": "Stai usando il testo predefinito di Pillie."
+      "en": "Pillie’s own wording. Pick a tone to change both.",
+      "de": "Pillies eigene Worte. Wähl einen Stil, um beide zu ändern.",
+      "it": "Il testo di Pillie. Scegli uno stile per cambiarli entrambi."
     },
     {
       "issue": "ENG-159",
       "table": "Localizable",
       "key": "settings.custom_messages.tone.custom_body",
-      "en": "Using your own words.",
-      "de": "Deine eigenen Worte werden verwendet.",
-      "it": "Stai usando le tue parole."
+      "en": "Your own words. Pick a tone to replace them.",
+      "de": "Deine eigenen Worte. Wähl einen Stil, um sie zu ersetzen.",
+      "it": "Le tue parole. Scegli uno stile per sostituirle."
     },
     {
       "issue": "ENG-159",

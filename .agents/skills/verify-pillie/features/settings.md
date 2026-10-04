@@ -73,8 +73,8 @@ support mailto rows and (debug builds only) the developer menu.
   closing it without saving.
 - `flows/settings-reminder-messages.flow` — opens Reminder messages on the
   default copy, switches tone to Direct then Gentle (both banners change),
-  blanks the daily title through the pencil sheet so the line reads "Using
-  your own words.", and saves so the row reads "Customized".
+  blanks the daily title through the pencil sheet so the line reads "Your
+  own words.", and saves so the row reads "Customized".
 - `flows/settings-schedule.flow` — opens Method on a pill account, taps a
   pill, swaps the pack through the Change sheet, opens the method picker,
   closes it on the current method, switches to Patch and Ring through it, saves the ring, then reopens on an established patch
