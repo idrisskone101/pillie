@@ -5,13 +5,6 @@
 
 import SwiftUI
 
-enum CustomReminderKind: String, Identifiable {
-    case daily
-    case followup
-
-    var id: String { rawValue }
-}
-
 /// A mock Lock Screen: wallpaper, lock glyph, today's date, the reminder time, and one
 /// frosted banner per reminder. Banners show the effective copy that will fire.
 struct CustomReminderLockScreenStage: View {

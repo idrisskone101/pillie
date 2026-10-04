@@ -52,18 +52,21 @@ struct CustomReminderMessagesEditor: View {
         CustomReminderTone.resolve(draft.messages, defaults: defaultMessages, locale: locale)
     }
 
-    private var dailyBanner: CustomReminderBannerContent {
-        CustomReminderBannerContent(
-            title: CustomReminderPreview.dailyTitle(custom: draft.messages.dueTitle, method: method, isPlus: isPlus),
-            body: CustomReminderPreview.dailyBody(custom: draft.messages.dueBody, method: method, isPlus: isPlus)
-        )
-    }
-
-    private var followupBanner: CustomReminderBannerContent {
-        CustomReminderBannerContent(
-            title: CustomReminderPreview.retryTitle(custom: draft.messages.retryTitle, isPlus: isPlus),
-            body: CustomReminderPreview.retryBody(custom: draft.messages.retryBody, isPlus: isPlus)
-        )
+    /// The effective copy one banner shows for the given words, honoring the method default
+    /// and the Plus gate exactly as the notification build does.
+    private func banner(_ kind: CustomReminderKind, _ words: CustomReminderWords) -> CustomReminderBannerContent {
+        switch kind {
+        case .daily:
+            CustomReminderBannerContent(
+                title: CustomReminderPreview.dailyTitle(custom: words.title, method: method, isPlus: isPlus),
+                body: CustomReminderPreview.dailyBody(custom: words.message, method: method, isPlus: isPlus)
+            )
+        case .followup:
+            CustomReminderBannerContent(
+                title: CustomReminderPreview.retryTitle(custom: words.title, isPlus: isPlus),
+                body: CustomReminderPreview.retryBody(custom: words.message, isPlus: isPlus)
+            )
+        }
     }
 
     /// The value to show in a field on open: the saved custom text, or the default when blank.
@@ -103,6 +106,7 @@ struct CustomReminderMessagesEditor: View {
             wordsEditor(for: kind)
                 .presentationDetents([.large])
                 .presentationDragIndicator(.hidden)
+                .presentationCornerRadius(34)
                 .presentationBackground(PillieTheme.bg)
         }
         .onAppear {
@@ -127,8 +131,8 @@ struct CustomReminderMessagesEditor: View {
                 hour: store.reminderHour,
                 minute: store.reminderMinute,
                 clockSize: clockSize,
-                daily: dailyBanner,
-                followup: followupBanner,
+                daily: banner(.daily, draft.messages[.daily]),
+                followup: banner(.followup, draft.messages[.followup]),
                 onEdit: { kind in
                     settingsFeedback.openRow(accessibilityReduceMotion: accessibilityReduceMotion)
                     editing = kind
@@ -198,24 +202,14 @@ struct CustomReminderMessagesEditor: View {
         .padding(.top, 4)
     }
 
-    @ViewBuilder
     private func wordsEditor(for kind: CustomReminderKind) -> some View {
-        switch kind {
-        case .daily:
-            CustomReminderWordsEditor(
-                kind: kind,
-                title: $draft.messages.dueTitle,
-                message: $draft.messages.dueBody,
-                preview: dailyBanner
-            )
-        case .followup:
-            CustomReminderWordsEditor(
-                kind: kind,
-                title: $draft.messages.retryTitle,
-                message: $draft.messages.retryBody,
-                preview: followupBanner
-            )
-        }
+        CustomReminderWordsEditor(
+            kind: kind,
+            words: draft.messages[kind],
+            resetWords: draft.resetWords(for: kind, defaults: defaultMessages, locale: locale),
+            preview: { banner(kind, $0) },
+            onCommit: { draft.messages[kind] = $0 }
+        )
     }
 }
 

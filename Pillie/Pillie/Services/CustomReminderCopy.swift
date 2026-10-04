@@ -5,11 +5,39 @@
 
 import Foundation
 
+enum CustomReminderKind: String, Identifiable {
+    case daily
+    case followup
+
+    var id: String { rawValue }
+}
+
 struct CustomReminderMessages: Equatable {
     var dueTitle: String
     var dueBody: String
     var retryTitle: String
     var retryBody: String
+
+    /// One reminder's title and message.
+    subscript(kind: CustomReminderKind) -> CustomReminderWords {
+        get {
+            switch kind {
+            case .daily: CustomReminderWords(title: dueTitle, message: dueBody)
+            case .followup: CustomReminderWords(title: retryTitle, message: retryBody)
+            }
+        }
+        set {
+            switch kind {
+            case .daily: (dueTitle, dueBody) = (newValue.title, newValue.message)
+            case .followup: (retryTitle, retryBody) = (newValue.title, newValue.message)
+            }
+        }
+    }
+}
+
+struct CustomReminderWords: Equatable {
+    var title: String
+    var message: String
 }
 
 struct CustomReminderDraft: Equatable {
@@ -35,6 +63,17 @@ struct CustomReminderDraft: Equatable {
         messages = localizedMessages
         appliedPreset = preset
         appliedPresetMessages = localizedMessages
+    }
+
+    /// What Reset puts back in one reminder: the selected tone's wording, or the last tone
+    /// tapped this session once the words were edited away from it, or Pillie's default.
+    func resetWords(
+        for kind: CustomReminderKind,
+        defaults: CustomReminderMessages,
+        locale: Locale
+    ) -> CustomReminderWords {
+        let preset = CustomReminderTone.resolve(messages, defaults: defaults, locale: locale).preset ?? appliedPreset
+        return (preset?.localizedMessages(locale: locale) ?? defaults)[kind]
     }
 
     mutating func restoreDefaults(_ defaults: CustomReminderMessages) {
