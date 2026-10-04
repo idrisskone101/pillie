@@ -2588,6 +2588,62 @@
       "en": "Saving switches you to Patch and clears your ring history.",
       "de": "Beim Speichern wechselst du zum Pflaster und dein Ring-Verlauf wird gelöscht.",
       "it": "Salvando passi al cerotto e cancelli la cronologia dell’anello."
+    },
+    {
+      "issue": "ENG-157",
+      "table": "Localizable",
+      "key": "settings.schedule.method_picker.title",
+      "en": "What do you use now?",
+      "de": "Was nutzt du gerade?",
+      "it": "Cosa usi adesso?"
+    },
+    {
+      "issue": "ENG-157",
+      "table": "Localizable",
+      "key": "settings.schedule.method_picker.subtitle",
+      "en": "Pick one, then tell Pillie where you are in it.",
+      "de": "Wähle eine aus und sag Pillie, wo du gerade stehst.",
+      "it": "Scegline uno, poi di’ a Pillie a che punto sei."
+    },
+    {
+      "issue": "ENG-157",
+      "table": "Localizable",
+      "key": "settings.schedule.method_picker.pill",
+      "en": "One a day",
+      "de": "Eine am Tag",
+      "it": "Una al giorno"
+    },
+    {
+      "issue": "ENG-157",
+      "table": "Localizable",
+      "key": "settings.schedule.method_picker.patch",
+      "en": "A new one each week",
+      "de": "Jede Woche ein neues",
+      "it": "Uno nuovo ogni settimana"
+    },
+    {
+      "issue": "ENG-157",
+      "table": "Localizable",
+      "key": "settings.schedule.method_picker.ring",
+      "en": "3 weeks in, 1 week out",
+      "de": "3 Wochen drin, 1 Woche raus",
+      "it": "3 settimane dentro, 1 fuori"
+    },
+    {
+      "issue": "ENG-157",
+      "table": "Localizable",
+      "key": "settings.schedule.method_picker.current",
+      "en": "Current",
+      "de": "Aktuell",
+      "it": "Attuale"
+    },
+    {
+      "issue": "ENG-157",
+      "table": "Localizable",
+      "key": "settings.schedule.method_picker.footer",
+      "en": "Nothing changes until you tap Save.",
+      "de": "Erst wenn du auf Speichern tippst, ändert sich etwas.",
+      "it": "Non cambia nulla finché non tocchi Salva."
     }
   ]
 }

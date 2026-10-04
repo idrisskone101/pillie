@@ -2,7 +2,8 @@
 # modules: TodayPillCard (pack card, Change sheet, "taken yet?") for pill and
 # RoutineDialCard (patch segments + dial, ring dial) for patch and ring.
 # The editor seats the user at today's position, so Save works without a tap.
-# The method card's Switch menu changes method; the line above the pinned Save
+# The method card's Switch opens the method picker; picking swaps the module in
+# place, picking the current method just closes it. The line above the pinned Save
 # says what saving clears, and Save goes straight through with no alert.
 fresh
 launch
@@ -31,7 +32,15 @@ wait text "24/4"
 shot pill-24-4
 
 tap --id protocolEditorSwitch
-tap --label Patch
+wait id methodPicker.patch
+shot method-picker
+tap --id methodPicker.pill
+gone id methodPicker.patch
+wait id todayPillChangeButton
+
+tap --id protocolEditorSwitch
+tap --id methodPicker.patch
+gone id methodPicker.pill
 wait id routineDial
 wait text "switches you to Patch"
 expect id routineDialSegment.4
@@ -42,7 +51,8 @@ wait id routineDialQuestion
 shot patch-segment-2
 
 tap --id protocolEditorSwitch
-tap --label Ring
+tap --id methodPicker.ring
+gone id methodPicker.pill
 wait id routineDial
 gone id routineDialSegment.1
 wait id routineDialQuestion
