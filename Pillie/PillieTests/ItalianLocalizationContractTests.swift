@@ -177,12 +177,12 @@ final class ItalianLocalizationContractTests: XCTestCase {
             "Messaggi"
         )
         XCTAssertEqual(
-            BlockerSelectionState(applicationCount: 2, categoryCount: 1)
+            BlockerSelectionState(applicationCount: 2, categoryCount: 1, includesCategoryApps: false)
                 .localizedAccessibilitySummary(locale: italian),
             "3 elementi selezionati"
         )
         XCTAssertEqual(
-            BlockerSelectionState(applicationCount: 1, categoryCount: 0)
+            BlockerSelectionState(applicationCount: 1, categoryCount: 0, includesCategoryApps: false)
                 .localizedAccessibilitySummary(locale: italian),
             "1 elemento selezionato"
         )

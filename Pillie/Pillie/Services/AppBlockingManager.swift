@@ -23,8 +23,16 @@ final class AppBlockingManager {
     private(set) var isAuthorized = false
     private(set) var authorizationStatus: AuthorizationStatus = .notDetermined
 
-    var activitySelection = FamilyActivitySelection() {
+    var activitySelection = FamilyActivitySelection(includeEntireCategory: true) {
         didSet { ScreenTimeSharedState.saveSelection(activitySelection) }
+    }
+
+    /// What the FamilyActivityPicker edits. Legacy selections open upgraded,
+    /// so saving them expands each category into its apps; cancelling leaves
+    /// the stored selection untouched.
+    var pickerSelection: FamilyActivitySelection {
+        get { activitySelection.includingEntireCategories() }
+        set { activitySelection = newValue }
     }
 
     #if DEBUG
@@ -43,12 +51,13 @@ final class AppBlockingManager {
     var selectionState: BlockerSelectionState {
         #if DEBUG
         if let count = debugSelectionCountOverride, count > 0 {
-            return BlockerSelectionState(applicationCount: count, categoryCount: 0)
+            return BlockerSelectionState(applicationCount: count, categoryCount: 0, includesCategoryApps: true)
         }
         #endif
         return BlockerSelectionState(
             applicationCount: activitySelection.applicationTokens.count,
-            categoryCount: activitySelection.categoryTokens.count
+            categoryCount: activitySelection.categoryTokens.count,
+            includesCategoryApps: activitySelection.includeEntireCategory
         )
     }
 
@@ -185,9 +194,7 @@ final class AppBlockingManager {
         guard hasAppsSelected else { return }
 
         #if !targetEnvironment(simulator)
-        store.shield.applications = activitySelection.applicationTokens.isEmpty
-            ? nil
-            : activitySelection.applicationTokens
+        store.shield.applications = ShieldApplicationLimit.shieldable(activitySelection.applicationTokens)
         store.shield.applicationCategories = activitySelection.categoryTokens.isEmpty
             ? nil
             : .specific(activitySelection.categoryTokens)

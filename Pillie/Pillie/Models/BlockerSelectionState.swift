@@ -20,12 +20,19 @@ struct BlockerSelectionState: Equatable {
     let applicationCount: Int
     /// Number of selected app categories (opaque token count).
     let categoryCount: Int
+    /// The selection was made with `includeEntireCategory`, so Screen Time has
+    /// already expanded every picked category into its installed apps' tokens
+    /// inside `applicationCount`.
+    let includesCategoryApps: Bool
 
-    /// Total selected app + category tokens — the only quantity Pillie stores.
-    var selectedCount: Int { applicationCount + categoryCount }
+    /// Number of apps the blocker covers. Legacy selections only hold the
+    /// opaque category token, so each of their categories still counts as one.
+    var selectedCount: Int {
+        includesCategoryApps ? applicationCount : applicationCount + categoryCount
+    }
 
     /// No apps and no categories were chosen.
-    var isEmpty: Bool { selectedCount == 0 }
+    var isEmpty: Bool { applicationCount + categoryCount == 0 }
 
     /// At least one app or category is selected.
     var hasSelection: Bool { !isEmpty }
