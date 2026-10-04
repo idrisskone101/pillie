@@ -24,8 +24,11 @@ support mailto rows and (debug builds only) the developer menu.
 - `settings-reminder-time` — "Reminder time" row opens `ReminderTimeEditor`
   (wheel picker). `SettingsView.swift:73-89,412-417,1005-1058`.
 - `settings-reminder-messages` — "Reminder messages" row opens
-  `CustomReminderMessagesEditor` for Plus accounts (title/body per reminder,
-  live notification preview); a free account gets a `PlusUpsellSheet` instead.
+  `CustomReminderMessagesEditor` for Plus accounts: a mock Lock Screen with
+  both reminders (`#reminder-preview-daily`, `#reminder-preview-followup`), a
+  pencil per banner (`#reminder-edit-daily`) that opens
+  `CustomReminderWordsEditor`, a Tone control (`#reminder-tone-gentle` …) and
+  pinned Save/Cancel; a free account gets a `PlusUpsellSheet` instead.
   `SettingsView.swift:91-117,455-460`; `CustomReminderMessagesEditor.swift`.
 - `settings-supply-reminder` — "Pill supply reminder" (or the patch restock
   equivalent; hidden entirely for the ring method) opens
@@ -68,6 +71,10 @@ support mailto rows and (debug builds only) the developer menu.
   Method, Reminder time, Reminder messages, Pill supply reminder, Interval,
   Repeats, Cycle day, and Your apps in turn, shooting each open sheet and
   closing it without saving.
+- `flows/settings-reminder-messages.flow` — opens Reminder messages on the
+  default copy, switches tone to Direct then Gentle (both banners change),
+  blanks the daily title through the pencil sheet so the line reads "Your
+  own words.", and saves so the row reads "Customized".
 - `flows/settings-schedule.flow` — opens Method on a pill account, taps a
   pill, swaps the pack through the Change sheet, opens the method picker,
   closes it on the current method, switches to Patch and Ring through it, saves the ring, then reopens on an established patch

@@ -1,0 +1,44 @@
+# Settings › Reminder messages (ENG-159): the Lock Screen stage shows both
+# reminders, a tone segment rewrites both banners, the pencil edits words
+# (tone deselects), and Save persists so the row reads "Customized".
+fresh
+launch
+openurl pillie://debug/plus-home?lang=en
+wait text Today 15
+tap --label Settings
+wait id settingsLanguageRow
+
+tap --label "Reminder messages, Default"
+wait id reminder-tone-gentle                    # CustomReminderMessagesEditor.swift
+wait text "Pillie’s own wording."
+shot opened-default
+
+tap --id reminder-tone-direct
+wait text "Short and clear."
+wait text "Time to check in"
+wait text "You haven’t checked in yet today."
+shot tone-direct
+
+tap --id reminder-tone-gentle
+wait text "Soft words that give you a little room."
+wait text "A gentle reminder for your routine."
+shot tone-gentle
+
+tap --id reminder-edit-daily
+wait id reminder-field-daily-title
+shot words-editor
+tap --id reminder-field-daily-title             # a second tap on the focused field opens the edit menu
+wait label "Select All"
+tap --label "Select All"
+wait label Cut
+tap --label Cut                                 # blank title fires Pillie's default title
+tap --id reminder-words-done
+gone id reminder-field-daily-title
+wait text "Your own words."
+wait text "Time for your pill"
+wait text "A gentle reminder for your routine."
+shot own-words
+
+tap --label Save
+wait label "Reminder messages, Customized"
+shot saved

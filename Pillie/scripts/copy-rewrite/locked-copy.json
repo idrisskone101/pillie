@@ -2652,6 +2652,78 @@
       "en": "How long has this ring been in?",
       "de": "Wie lange ist dieser Ring schon drin?",
       "it": "Da quanto porti questo anello?"
+    },
+    {
+      "issue": "ENG-159",
+      "table": "Localizable",
+      "key": "settings.custom_messages.preview_caption",
+      "en": "Live preview. Tap the pencil to write your own.",
+      "de": "Live-Vorschau. Tippe auf den Stift für eigene Texte.",
+      "it": "Anteprima dal vivo. Tocca la matita per scrivere il tuo."
+    },
+    {
+      "issue": "ENG-159",
+      "table": "Localizable",
+      "key": "settings.custom_messages.tone",
+      "en": "Tone",
+      "de": "Stil",
+      "it": "Stile"
+    },
+    {
+      "issue": "ENG-159",
+      "table": "Localizable",
+      "key": "settings.custom_messages.tone.gentle_body",
+      "en": "Soft words that give you a little room.",
+      "de": "Sanfte Worte, die dir etwas Raum lassen.",
+      "it": "Parole morbide che ti lasciano un po’ di spazio."
+    },
+    {
+      "issue": "ENG-159",
+      "table": "Localizable",
+      "key": "settings.custom_messages.tone.direct_body",
+      "en": "Short and clear. Says what to do, then stops.",
+      "de": "Kurz und klar. Sagt, was zu tun ist, und fertig.",
+      "it": "Breve e chiaro. Dice cosa fare, poi basta."
+    },
+    {
+      "issue": "ENG-159",
+      "table": "Localizable",
+      "key": "settings.custom_messages.tone.encouraging_body",
+      "en": "Cheers you on as the habit takes hold.",
+      "de": "Feuert dich an, während die Gewohnheit wächst.",
+      "it": "Fa il tifo per te mentre l’abitudine si consolida."
+    },
+    {
+      "issue": "ENG-159",
+      "table": "Localizable",
+      "key": "settings.custom_messages.tone.private_body",
+      "en": "Doesn’t name your birth control.",
+      "de": "Erwähnt deine Verhütung nicht.",
+      "it": "Non nomina il tuo contraccettivo."
+    },
+    {
+      "issue": "ENG-159",
+      "table": "Localizable",
+      "key": "settings.custom_messages.tone.default_body",
+      "en": "Pillie’s own wording. Pick a tone to change both.",
+      "de": "Pillies eigene Worte. Wähl einen Stil, um beide zu ändern.",
+      "it": "Il testo di Pillie. Scegli uno stile per cambiarli entrambi."
+    },
+    {
+      "issue": "ENG-159",
+      "table": "Localizable",
+      "key": "settings.custom_messages.tone.custom_body",
+      "en": "Your own words. Pick a tone to replace them.",
+      "de": "Deine eigenen Worte. Wähl einen Stil, um sie zu ersetzen.",
+      "it": "Le tue parole. Scegli uno stile per sostituirle."
+    },
+    {
+      "issue": "ENG-159",
+      "table": "Localizable",
+      "key": "settings.custom_messages.later",
+      "en": "Later",
+      "de": "Später",
+      "it": "Più tardi"
     }
   ]
 }
