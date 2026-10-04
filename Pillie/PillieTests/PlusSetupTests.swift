@@ -14,18 +14,42 @@ import Testing
 struct PlusSetupTests {
     // MARK: - Progress
 
-    @Test func `default trial settings start at one of three`() {
+    @Test func `default reminder settings leave reminders unchecked`() {
         let progress = PlusSetupProgress(
             blockingActive: false,
             messagesCustomized: false,
+            remindersConfigured: false,
+            retryLimit: 3
+        )
+
+        #expect(progress.completed == [])
+        #expect(progress.completedCount == 0)
+        #expect(progress.total == 3)
+        #expect(progress.isComplete == false)
+        #expect(progress.firstIncomplete == .blocking)
+    }
+
+    @Test func `onboarding blocking alone checks only blocking`() {
+        let progress = PlusSetupProgress(
+            blockingActive: true,
+            messagesCustomized: false,
+            remindersConfigured: false,
+            retryLimit: 3
+        )
+
+        #expect(progress.completed == [.blocking])
+        #expect(progress.firstIncomplete == .messages)
+    }
+
+    @Test func `chosen nudges check reminders`() {
+        let progress = PlusSetupProgress(
+            blockingActive: false,
+            messagesCustomized: false,
+            remindersConfigured: true,
             retryLimit: 3
         )
 
         #expect(progress.completed == [.reminders])
-        #expect(progress.completedCount == 1)
-        #expect(progress.total == 3)
-        #expect(progress.isComplete == false)
-        #expect(progress.firstIncomplete == .blocking)
     }
 
     @Test func `blocking card waits for finished setup and day three`() {
@@ -41,6 +65,7 @@ struct PlusSetupTests {
         let progress = PlusSetupProgress(
             blockingActive: true,
             messagesCustomized: true,
+            remindersConfigured: true,
             retryLimit: 0
         )
 

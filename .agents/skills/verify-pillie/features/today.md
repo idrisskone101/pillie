@@ -73,7 +73,7 @@ blocking/trial status surfaces, and (when eligible) the review ask.
   `#trialIndicator` and `TrialStatusSheet` in both states. Never taps
   `#trialKeepPlus`.
 - `flows/today-plus-setup.flow` — `/trial-activation-hub?state=unconfigured`
-  for a 1/3 strip and countdown badge, then Skip through Blocking and
+  for a 0/3 strip and countdown badge, then Skip through Blocking and
   Messages, change the interval on Reminders, Save, prove Done, and prove the
   strip is gone. FamilyActivityPicker never returns tokens on a simulator,
   so Blocking is skipped, not completed.

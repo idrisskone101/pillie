@@ -135,6 +135,7 @@ struct PlusSetupSheet: View {
                 retryLimit: retryLimit
             )
         }
+        store.autoRemindersConfigured = true
         if progress.isDone(.reminders) {
             ProductAnalyticsTelemetry.live.plusSetupStep(.reminders, action: .completed)
         }

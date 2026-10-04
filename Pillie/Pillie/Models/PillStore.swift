@@ -63,6 +63,11 @@ class PillStore {
             UserDefaults.standard.set(normalized, forKey: Self.autoReminderRetryLimitKey)
         }
     }
+    /// Whether the user has chosen their follow-up nudges themselves. The
+    /// retry limit has a default, so its value alone can't say that.
+    var autoRemindersConfigured: Bool {
+        didSet { UserDefaults.standard.set(autoRemindersConfigured, forKey: Self.autoRemindersConfiguredKey) }
+    }
     var refillReminderThresholdDays: Int {
         didSet {
             let normalized = Self.normalizedRefillReminderThreshold(refillReminderThresholdDays)
@@ -217,6 +222,7 @@ class PillStore {
     private static let reminderMinuteKey = "pillie_reminder_minute"
     private static let autoReminderIntervalKey = "pillie_auto_reminder_interval_minutes"
     private static let autoReminderRetryLimitKey = "pillie_auto_reminder_retry_limit"
+    private static let autoRemindersConfiguredKey = "pillie_auto_reminders_configured"
     private static let refillReminderThresholdDaysKey = "pillie_refill_reminder_threshold_days"
     private static let patchRestockReminderThresholdPatchesKey = "pillie_patch_restock_threshold_patches"
     private static let contraceptiveMethodKey = "pillie_contraceptive_method"
@@ -1331,6 +1337,10 @@ class PillStore {
         self.autoReminderRetryLimit = Self.normalizedAutoReminderRetryLimit(
             defaults.object(forKey: Self.autoReminderRetryLimitKey) as? Int ?? 3
         )
+        // Only a save writes the retry limit, so a stored one means the user
+        // picked it before this flag existed.
+        self.autoRemindersConfigured = defaults.object(forKey: Self.autoRemindersConfiguredKey) as? Bool
+            ?? (defaults.object(forKey: Self.autoReminderRetryLimitKey) != nil)
         self.refillReminderThresholdDays = Self.normalizedRefillReminderThreshold(
             defaults.object(forKey: Self.refillReminderThresholdDaysKey) as? Int ?? 5
         )
