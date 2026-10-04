@@ -77276,6 +77276,2756 @@
         }
       }
     },
+    "settings.schedule.your_method": {
+      "comment": "Schedule sheet method card label above the method name [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your method"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "وسيلتك"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "আপনার পদ্ধতি"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El teu mètode"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvoje metoda"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Din metode"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine Methode"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Η μέθοδός σου"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu método"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Menetelmäsi"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ta méthode"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "તમારી પદ્ધતિ"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "השיטה שלך"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "आपका तरीका"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvoja metoda"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A módszered"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Metodemu"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il tuo metodo"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "使用中の方法"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ನಿಮ್ಮ ವಿಧಾನ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "내 피임 방법"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "നിങ്ങളുടെ രീതി"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "तुमची पद्धत"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kaedah kamu"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Metoden din"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je methode"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ଆପଣଙ୍କ ପଦ୍ଧତି"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਤੁਹਾਡਾ ਤਰੀਕਾ"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Twoja metoda"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seu método"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O teu método"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Metoda ta"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Твой метод"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvoja metóda"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvoja metoda"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Din metod"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "உங்கள் முறை"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "మీ పద్ధతి"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "วิธีของคุณ"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yöntemin"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Твій метод"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "آپ کا طریقہ"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Phương pháp của bạn"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的方法"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的方法"
+          }
+        }
+      }
+    },
+    "settings.schedule.switch": {
+      "comment": "Schedule sheet method card button that opens the method choice [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Switch"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تبديل"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "বদলান"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Canvia"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Změnit"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skift"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wechseln"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Αλλαγή"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cambiar"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vaihda"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Changer"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "બદલો"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "החלפה"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "बदलें"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promijeni"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Váltás"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ganti"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cambia"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "変更"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ಬದಲಿಸಿ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "변경"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "മാറ്റൂ"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "बदला"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tukar"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bytt"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wisselen"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ବଦଳାନ୍ତୁ"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਬਦਲੋ"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zmień"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trocar"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mudar"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schimbă"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сменить"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zmeniť"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zamenjaj"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Byt"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "மாற்று"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "మార్చండి"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "เปลี่ยน"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Değiştir"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Змінити"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "بدلیں"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Đổi"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "切换"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "切換"
+          }
+        }
+      }
+    },
+    "settings.schedule.save_note.pill": {
+      "comment": "Schedule sheet line above Save, same pill method; integer is the pill number [destructive]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saving clears your history and restarts from pill %lld."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يؤدي الحفظ إلى مسح سجلّك والبدء من جديد من الحبة %lld."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "সেভ করলে আপনার ইতিহাস মুছে যাবে এবং পিল %lld থেকে আবার শুরু হবে।"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Si deses, s’esborra el teu historial i tornes a començar per la píndola %lld."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uložením vymažeš historii a začneš znovu od pilulky %lld."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Når du gemmer, slettes din historik, og du starter forfra fra pille %lld."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beim Speichern wird dein Verlauf gelöscht und du startest wieder bei Pille %lld."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Με την αποθήκευση διαγράφεται το ιστορικό σου και ξεκινάς ξανά από το χάπι %lld."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Al guardar, se borra tu historial y vuelves a empezar desde la píldora %lld."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tallentaminen poistaa historiasi, ja aloitat alusta pilleristä %lld."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer efface ton historique et te fait repartir de la pilule %lld."
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "સાચવવાથી તમારો ઇતિહાસ ભૂંસાઈ જશે અને ગોળી %lld થી ફરી શરૂઆત થશે."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "שמירה תמחק את ההיסטוריה שלך ותתחילי מחדש מגלולה %lld."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "सेव करने से आपका इतिहास मिट जाएगा और शुरुआत फिर से गोली %lld से होगी।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spremanjem brišeš povijest i krećeš ispočetka od pilule %lld."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A mentés törli az előzményeidet, és a %lld. tablettától kezded újra."
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Menyimpan akan menghapus riwayatmu dan memulai lagi dari pil %lld."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salvando cancelli la cronologia e riparti dalla pillola %lld."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保存すると履歴が消去され、%lld錠目からやり直します。"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ಉಳಿಸಿದರೆ ನಿಮ್ಮ ಇತಿಹಾಸ ಅಳಿಸಿಹೋಗುತ್ತದೆ ಮತ್ತು ಮಾತ್ರೆ %lld ರಿಂದ ಮತ್ತೆ ಪ್ರಾರಂಭವಾಗುತ್ತದೆ."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "저장하면 기록이 삭제되고 %lld번째 알약부터 다시 시작돼요."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "സേവ് ചെയ്താൽ നിങ്ങളുടെ ചരിത്രം മായ്ക്കപ്പെടും, ഗുളിക %lld മുതൽ വീണ്ടും തുടങ്ങും."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "सेव्ह केल्याने तुमचा इतिहास पुसला जाईल आणि गोळी %lld पासून पुन्हा सुरुवात होईल."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Menyimpan akan memadam sejarah kamu dan bermula semula dari pil %lld."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Når du lagrer, slettes historikken din, og du starter på nytt fra pille %lld."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opslaan wist je geschiedenis en begint opnieuw bij pil %lld."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ସେଭ୍ କଲେ ଆପଣଙ୍କ ଇତିହାସ ଲିଭିଯିବ ଏବଂ ପିଲ୍ %lld ରୁ ପୁଣି ଆରମ୍ଭ ହେବ।"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਸੇਵ ਕਰਨ ਨਾਲ ਤੁਹਾਡਾ ਇਤਿਹਾਸ ਮਿਟ ਜਾਵੇਗਾ ਅਤੇ ਗੋਲੀ %lld ਤੋਂ ਦੁਬਾਰਾ ਸ਼ੁਰੂਆਤ ਹੋਵੇਗੀ।"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zapisanie usunie historię i zaczniesz od nowa od tabletki %lld."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salvar apaga seu histórico e recomeça na pílula %lld."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Guardar apaga o teu histórico e recomeça na pílula %lld."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salvarea îți șterge istoricul și reîncepi de la pilula %lld."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "При сохранении история удалится, и ты начнёшь заново с таблетки %lld."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uložením vymažeš históriu a začneš znova od tabletky %lld."
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "S shranjevanjem izbrišeš zgodovino in začneš znova pri tabletki %lld."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "När du sparar raderas din historik och du börjar om från piller %lld."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "சேமித்தால் உங்கள் வரலாறு அழிக்கப்பட்டு, மாத்திரை %lld-இலிருந்து மீண்டும் தொடங்கும்."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "సేవ్ చేస్తే మీ చరిత్ర తొలగిపోతుంది, మాత్ర %lld నుంచి మళ్లీ మొదలవుతుంది."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "การบันทึกจะล้างประวัติของคุณและเริ่มใหม่ที่เม็ดที่ %lld"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kaydetmek geçmişini siler ve seni %lld. haptan yeniden başlatır."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Після збереження історія видалиться, і ти почнеш заново з таблетки %lld."
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "محفوظ کرنے سے آپ کی ہسٹری مٹ جائے گی اور گولی %lld سے دوبارہ شروعات ہوگی۔"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Khi lưu, lịch sử của bạn sẽ bị xóa và bắt đầu lại từ viên %lld."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保存后会清除你的历史记录，并从第 %lld 片重新开始。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "儲存後會清除你的歷史紀錄，並從第 %lld 顆重新開始。"
+          }
+        }
+      }
+    },
+    "settings.schedule.save_note.dial": {
+      "comment": "Schedule sheet line above Save, same patch or ring method; integer is the cycle day [destructive]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saving clears your history and restarts from day %lld."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يؤدي الحفظ إلى مسح سجلّك والبدء من جديد من اليوم %lld."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "সেভ করলে আপনার ইতিহাস মুছে যাবে এবং দিন %lld থেকে আবার শুরু হবে।"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Si deses, s’esborra el teu historial i tornes a començar pel dia %lld."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uložením vymažeš historii a začneš znovu od dne %lld."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Når du gemmer, slettes din historik, og du starter forfra fra dag %lld."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beim Speichern wird dein Verlauf gelöscht und du startest wieder bei Tag %lld."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Με την αποθήκευση διαγράφεται το ιστορικό σου και ξεκινάς ξανά από την ημέρα %lld."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Al guardar, se borra tu historial y vuelves a empezar desde el día %lld."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tallentaminen poistaa historiasi, ja aloitat alusta päivästä %lld."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer efface ton historique et te fait repartir du jour %lld."
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "સાચવવાથી તમારો ઇતિહાસ ભૂંસાઈ જશે અને દિવસ %lld થી ફરી શરૂઆત થશે."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "שמירה תמחק את ההיסטוריה שלך ותתחילי מחדש מיום %lld."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "सेव करने से आपका इतिहास मिट जाएगा और शुरुआत फिर से दिन %lld से होगी।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spremanjem brišeš povijest i krećeš ispočetka od dana %lld."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A mentés törli az előzményeidet, és a %lld. naptól kezded újra."
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Menyimpan akan menghapus riwayatmu dan memulai lagi dari hari %lld."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salvando cancelli la cronologia e riparti dal giorno %lld."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保存すると履歴が消去され、%lld日目からやり直します。"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ಉಳಿಸಿದರೆ ನಿಮ್ಮ ಇತಿಹಾಸ ಅಳಿಸಿಹೋಗುತ್ತದೆ ಮತ್ತು ದಿನ %lld ರಿಂದ ಮತ್ತೆ ಪ್ರಾರಂಭವಾಗುತ್ತದೆ."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "저장하면 기록이 삭제되고 %lld일째부터 다시 시작돼요."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "സേവ് ചെയ്താൽ നിങ്ങളുടെ ചരിത്രം മായ്ക്കപ്പെടും, ദിവസം %lld മുതൽ വീണ്ടും തുടങ്ങും."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "सेव्ह केल्याने तुमचा इतिहास पुसला जाईल आणि दिवस %lld पासून पुन्हा सुरुवात होईल."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Menyimpan akan memadam sejarah kamu dan bermula semula dari hari %lld."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Når du lagrer, slettes historikken din, og du starter på nytt fra dag %lld."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opslaan wist je geschiedenis en begint opnieuw bij dag %lld."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ସେଭ୍ କଲେ ଆପଣଙ୍କ ଇତିହାସ ଲିଭିଯିବ ଏବଂ ଦିନ %lld ରୁ ପୁଣି ଆରମ୍ଭ ହେବ।"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਸੇਵ ਕਰਨ ਨਾਲ ਤੁਹਾਡਾ ਇਤਿਹਾਸ ਮਿਟ ਜਾਵੇਗਾ ਅਤੇ ਦਿਨ %lld ਤੋਂ ਦੁਬਾਰਾ ਸ਼ੁਰੂਆਤ ਹੋਵੇਗੀ।"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zapisanie usunie historię i zaczniesz od nowa od dnia %lld."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salvar apaga seu histórico e recomeça no dia %lld."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Guardar apaga o teu histórico e recomeça no dia %lld."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salvarea îți șterge istoricul și reîncepi de la ziua %lld."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "При сохранении история удалится, и ты начнёшь заново с дня %lld."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uložením vymažeš históriu a začneš znova od dňa %lld."
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "S shranjevanjem izbrišeš zgodovino in začneš znova pri dnevu %lld."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "När du sparar raderas din historik och du börjar om från dag %lld."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "சேமித்தால் உங்கள் வரலாறு அழிக்கப்பட்டு, நாள் %lld-இலிருந்து மீண்டும் தொடங்கும்."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "సేవ్ చేస్తే మీ చరిత్ర తొలగిపోతుంది, రోజు %lld నుంచి మళ్లీ మొదలవుతుంది."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "การบันทึกจะล้างประวัติของคุณและเริ่มใหม่ที่วันที่ %lld"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kaydetmek geçmişini siler ve seni %lld. günden yeniden başlatır."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Після збереження історія видалиться, і ти почнеш заново з дня %lld."
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "محفوظ کرنے سے آپ کی ہسٹری مٹ جائے گی اور دن %lld سے دوبارہ شروعات ہوگی۔"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Khi lưu, lịch sử của bạn sẽ bị xóa và bắt đầu lại từ ngày %lld."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保存后会清除你的历史记录，并从第 %lld 天重新开始。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "儲存後會清除你的歷史紀錄，並從第 %lld 天重新開始。"
+          }
+        }
+      }
+    },
+    "settings.schedule.save_note.pill_to_patch": {
+      "comment": "Schedule sheet line above Save when the method changes [destructive]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saving switches you to Patch and clears your pill history."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يؤدي الحفظ إلى التبديل إلى اللصقة ومسح سجلّ الحبة."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "সেভ করলে আপনার পদ্ধতি প্যাচ হয়ে যাবে এবং আপনার পিলের ইতিহাস মুছে যাবে।"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Si deses, passes al pegat i s’esborra el teu historial de la píndola."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uložením přejdeš na náplast a vymažeš historii pilulky."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Når du gemmer, skifter du til plaster, og din pillehistorik slettes."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beim Speichern wechselst du zum Pflaster und dein Pillen-Verlauf wird gelöscht."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Με την αποθήκευση περνάς στο αυτοκόλλητο και διαγράφεται το ιστορικό του χαπιού."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Al guardar, cambias al parche y se borra tu historial de la píldora."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tallentaminen vaihtaa sinut laastariin ja poistaa pillerihistoriasi."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer te fait passer au patch et efface ton historique de pilule."
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "સાચવવાથી તમારી પદ્ધતિ પેચ થઈ જશે અને તમારો ગોળીનો ઇતિહાસ ભૂંસાઈ જશે."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "שמירה תעביר אותך למדבקה ותמחק את היסטוריית הגלולה."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "सेव करने से आपका तरीका पैच हो जाएगा और आपका गोली का इतिहास मिट जाएगा।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spremanjem prelaziš na flaster i brišeš povijest pilule."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mentéskor tapaszra váltasz, és törlődnek a tablettás előzményeid."
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Menyimpan akan mengganti metodemu ke koyo dan menghapus riwayat pilmu."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salvando passi al cerotto e cancelli la cronologia della pillola."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保存するとパッチに切り替わり、ピルの履歴が消去されます。"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ಉಳಿಸಿದರೆ ನಿಮ್ಮ ವಿಧಾನ ಪ್ಯಾಚ್‌ಗೆ ಬದಲಾಗುತ್ತದೆ ಮತ್ತು ನಿಮ್ಮ ಮಾತ್ರೆಯ ಇತಿಹಾಸ ಅಳಿಸಿಹೋಗುತ್ತದೆ."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "저장하면 패치로 바뀌고 피임약 기록이 삭제돼요."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "സേവ് ചെയ്താൽ നിങ്ങളുടെ രീതി പാച്ച് ആയി മാറും, ഗുളികയുടെ ചരിത്രം മായ്ക്കപ്പെടും."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "सेव्ह केल्याने तुमची पद्धत पॅच होईल आणि तुमचा गोळीचा इतिहास पुसला जाईल."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Menyimpan akan menukar kamu kepada tampalan dan memadam sejarah pil kamu."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Når du lagrer, bytter du til plaster, og pillehistorikken din slettes."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opslaan zet je over op de pleister en wist je pilgeschiedenis."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ସେଭ୍ କଲେ ଆପଣଙ୍କ ପଦ୍ଧତି ପ୍ୟାଚ୍‌କୁ ବଦଳିଯିବ ଏବଂ ଆପଣଙ୍କ ପିଲ୍‌ର ଇତିହାସ ଲିଭିଯିବ।"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਸੇਵ ਕਰਨ ਨਾਲ ਤੁਹਾਡਾ ਤਰੀਕਾ ਪੈਚ ਹੋ ਜਾਵੇਗਾ ਅਤੇ ਤੁਹਾਡਾ ਗੋਲੀ ਦਾ ਇਤਿਹਾਸ ਮਿਟ ਜਾਵੇਗਾ।"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zapisanie zmieni metodę na plaster i usunie historię tabletki."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salvar troca você para o adesivo e apaga seu histórico da pílula."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Guardar muda-te para o adesivo e apaga o teu histórico da pílula."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salvarea te trece la plasture și îți șterge istoricul pilulei."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "При сохранении ты перейдёшь на пластырь, а история таблетки удалится."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uložením prejdeš na náplasť a vymažeš históriu tabletky."
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "S shranjevanjem preideš na obliž in izbrišeš zgodovino tabletke."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "När du sparar byter du till plåster och din pillerhistorik raderas."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "சேமித்தால் உங்கள் முறை பேட்ச்சுக்கு மாறும், உங்கள் மாத்திரை வரலாறு அழிக்கப்படும்."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "సేవ్ చేస్తే మీ పద్ధతి ప్యాచ్‌కు మారుతుంది, మీ మాత్ర చరిత్ర తొలగిపోతుంది."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "การบันทึกจะเปลี่ยนคุณไปใช้แผ่นแปะและล้างประวัติยาคุมของคุณ"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kaydetmek seni banda geçirir ve hap geçmişini siler."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Після збереження ти перейдеш на пластир, а історія таблетки видалиться."
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "محفوظ کرنے سے آپ کا طریقہ پیچ ہو جائے گا اور آپ کی گولی کی ہسٹری مٹ جائے گی۔"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Khi lưu, bạn sẽ chuyển sang miếng dán và lịch sử thuốc sẽ bị xóa."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保存后会切换到贴片，并清除你的避孕药历史记录。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "儲存後會切換為貼片，並清除你的避孕藥歷史紀錄。"
+          }
+        }
+      }
+    },
+    "settings.schedule.save_note.pill_to_ring": {
+      "comment": "Schedule sheet line above Save when the method changes [destructive]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saving switches you to Ring and clears your pill history."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يؤدي الحفظ إلى التبديل إلى الحلقة ومسح سجلّ الحبة."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "সেভ করলে আপনার পদ্ধতি রিং হয়ে যাবে এবং আপনার পিলের ইতিহাস মুছে যাবে।"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Si deses, passes a l’anell i s’esborra el teu historial de la píndola."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uložením přejdeš na kroužek a vymažeš historii pilulky."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Når du gemmer, skifter du til ring, og din pillehistorik slettes."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beim Speichern wechselst du zum Ring und dein Pillen-Verlauf wird gelöscht."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Με την αποθήκευση περνάς στον δακτύλιο και διαγράφεται το ιστορικό του χαπιού."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Al guardar, cambias al anillo y se borra tu historial de la píldora."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tallentaminen vaihtaa sinut renkaaseen ja poistaa pillerihistoriasi."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer te fait passer à l’anneau et efface ton historique de pilule."
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "સાચવવાથી તમારી પદ્ધતિ રિંગ થઈ જશે અને તમારો ગોળીનો ઇતિહાસ ભૂંસાઈ જશે."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "שמירה תעביר אותך לטבעת ותמחק את היסטוריית הגלולה."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "सेव करने से आपका तरीका रिंग हो जाएगा और आपका गोली का इतिहास मिट जाएगा।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spremanjem prelaziš na prsten i brišeš povijest pilule."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mentéskor gyűrűre váltasz, és törlődnek a tablettás előzményeid."
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Menyimpan akan mengganti metodemu ke cincin dan menghapus riwayat pilmu."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salvando passi all’anello e cancelli la cronologia della pillola."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保存するとリングに切り替わり、ピルの履歴が消去されます。"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ಉಳಿಸಿದರೆ ನಿಮ್ಮ ವಿಧಾನ ರಿಂಗ್‌ಗೆ ಬದಲಾಗುತ್ತದೆ ಮತ್ತು ನಿಮ್ಮ ಮಾತ್ರೆಯ ಇತಿಹಾಸ ಅಳಿಸಿಹೋಗುತ್ತದೆ."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "저장하면 링으로 바뀌고 피임약 기록이 삭제돼요."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "സേവ് ചെയ്താൽ നിങ്ങളുടെ രീതി റിംഗ് ആയി മാറും, ഗുളികയുടെ ചരിത്രം മായ്ക്കപ്പെടും."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "सेव्ह केल्याने तुमची पद्धत रिंग होईल आणि तुमचा गोळीचा इतिहास पुसला जाईल."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Menyimpan akan menukar kamu kepada cincin dan memadam sejarah pil kamu."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Når du lagrer, bytter du til ring, og pillehistorikken din slettes."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opslaan zet je over op de ring en wist je pilgeschiedenis."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ସେଭ୍ କଲେ ଆପଣଙ୍କ ପଦ୍ଧତି ରିଙ୍ଗକୁ ବଦଳିଯିବ ଏବଂ ଆପଣଙ୍କ ପିଲ୍‌ର ଇତିହାସ ଲିଭିଯିବ।"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਸੇਵ ਕਰਨ ਨਾਲ ਤੁਹਾਡਾ ਤਰੀਕਾ ਰਿੰਗ ਹੋ ਜਾਵੇਗਾ ਅਤੇ ਤੁਹਾਡਾ ਗੋਲੀ ਦਾ ਇਤਿਹਾਸ ਮਿਟ ਜਾਵੇਗਾ।"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zapisanie zmieni metodę na krążek i usunie historię tabletki."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salvar troca você para o anel e apaga seu histórico da pílula."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Guardar muda-te para o anel e apaga o teu histórico da pílula."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salvarea te trece la inel și îți șterge istoricul pilulei."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "При сохранении ты перейдёшь на кольцо, а история таблетки удалится."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uložením prejdeš na krúžok a vymažeš históriu tabletky."
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "S shranjevanjem preideš na obroček in izbrišeš zgodovino tabletke."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "När du sparar byter du till ring och din pillerhistorik raderas."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "சேமித்தால் உங்கள் முறை ரிங்குக்கு மாறும், உங்கள் மாத்திரை வரலாறு அழிக்கப்படும்."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "సేవ్ చేస్తే మీ పద్ధతి రింగ్‌కు మారుతుంది, మీ మాత్ర చరిత్ర తొలగిపోతుంది."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "การบันทึกจะเปลี่ยนคุณไปใช้วงแหวนและล้างประวัติยาคุมของคุณ"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kaydetmek seni halkaya geçirir ve hap geçmişini siler."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Після збереження ти перейдеш на кільце, а історія таблетки видалиться."
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "محفوظ کرنے سے آپ کا طریقہ رِنگ ہو جائے گا اور آپ کی گولی کی ہسٹری مٹ جائے گی۔"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Khi lưu, bạn sẽ chuyển sang vòng âm đạo và lịch sử thuốc sẽ bị xóa."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保存后会切换到阴道环，并清除你的避孕药历史记录。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "儲存後會切換為陰道環，並清除你的避孕藥歷史紀錄。"
+          }
+        }
+      }
+    },
+    "settings.schedule.save_note.patch_to_pill": {
+      "comment": "Schedule sheet line above Save when the method changes [destructive]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saving switches you to Pill and clears your patch history."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يؤدي الحفظ إلى التبديل إلى الحبة ومسح سجلّ اللصقة."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "সেভ করলে আপনার পদ্ধতি পিল হয়ে যাবে এবং আপনার প্যাচের ইতিহাস মুছে যাবে।"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Si deses, passes a la píndola i s’esborra el teu historial del pegat."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uložením přejdeš na pilulku a vymažeš historii náplasti."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Når du gemmer, skifter du til p-pille, og din plasterhistorik slettes."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beim Speichern wechselst du zur Pille und dein Pflaster-Verlauf wird gelöscht."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Με την αποθήκευση περνάς στο χάπι και διαγράφεται το ιστορικό του αυτοκόλλητου."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Al guardar, cambias a la píldora y se borra tu historial del parche."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tallentaminen vaihtaa sinut pilleriin ja poistaa laastarihistoriasi."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer te fait passer à la pilule et efface ton historique de patch."
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "સાચવવાથી તમારી પદ્ધતિ ગોળી થઈ જશે અને તમારો પેચનો ઇતિહાસ ભૂંસાઈ જશે."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "שמירה תעביר אותך לגלולה ותמחק את היסטוריית המדבקה."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "सेव करने से आपका तरीका गोली हो जाएगा और आपका पैच का इतिहास मिट जाएगा।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spremanjem prelaziš na pilulu i brišeš povijest flastera."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mentéskor tablettára váltasz, és törlődnek a tapaszos előzményeid."
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Menyimpan akan mengganti metodemu ke pil dan menghapus riwayat koyomu."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salvando passi alla pillola e cancelli la cronologia del cerotto."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保存するとピルに切り替わり、パッチの履歴が消去されます。"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ಉಳಿಸಿದರೆ ನಿಮ್ಮ ವಿಧಾನ ಮಾತ್ರೆಗೆ ಬದಲಾಗುತ್ತದೆ ಮತ್ತು ನಿಮ್ಮ ಪ್ಯಾಚ್‌ನ ಇತಿಹಾಸ ಅಳಿಸಿಹೋಗುತ್ತದೆ."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "저장하면 피임약으로 바뀌고 패치 기록이 삭제돼요."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "സേവ് ചെയ്താൽ നിങ്ങളുടെ രീതി ഗുളിക ആയി മാറും, പാച്ചിന്റെ ചരിത്രം മായ്ക്കപ്പെടും."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "सेव्ह केल्याने तुमची पद्धत गोळी होईल आणि तुमचा पॅचचा इतिहास पुसला जाईल."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Menyimpan akan menukar kamu kepada pil dan memadam sejarah tampalan kamu."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Når du lagrer, bytter du til p-pille, og plasterhistorikken din slettes."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opslaan zet je over op de pil en wist je pleistergeschiedenis."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ସେଭ୍ କଲେ ଆପଣଙ୍କ ପଦ୍ଧତି ପିଲ୍‌କୁ ବଦଳିଯିବ ଏବଂ ଆପଣଙ୍କ ପ୍ୟାଚ୍‌ର ଇତିହାସ ଲିଭିଯିବ।"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਸੇਵ ਕਰਨ ਨਾਲ ਤੁਹਾਡਾ ਤਰੀਕਾ ਗੋਲੀ ਹੋ ਜਾਵੇਗਾ ਅਤੇ ਤੁਹਾਡਾ ਪੈਚ ਦਾ ਇਤਿਹਾਸ ਮਿਟ ਜਾਵੇਗਾ।"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zapisanie zmieni metodę na tabletkę i usunie historię plastra."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salvar troca você para a pílula e apaga seu histórico do adesivo."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Guardar muda-te para a pílula e apaga o teu histórico do adesivo."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salvarea te trece la pilulă și îți șterge istoricul plasturelui."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "При сохранении ты перейдёшь на таблетку, а история пластыря удалится."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uložením prejdeš na tabletku a vymažeš históriu náplasti."
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "S shranjevanjem preideš na tabletko in izbrišeš zgodovino obliža."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "När du sparar byter du till p-piller och din plåsterhistorik raderas."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "சேமித்தால் உங்கள் முறை மாத்திரைக்கு மாறும், உங்கள் பேட்ச் வரலாறு அழிக்கப்படும்."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "సేవ్ చేస్తే మీ పద్ధతి మాత్రకు మారుతుంది, మీ ప్యాచ్ చరిత్ర తొలగిపోతుంది."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "การบันทึกจะเปลี่ยนคุณไปใช้ยาคุมและล้างประวัติแผ่นแปะของคุณ"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kaydetmek seni hapa geçirir ve bant geçmişini siler."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Після збереження ти перейдеш на таблетку, а історія пластиря видалиться."
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "محفوظ کرنے سے آپ کا طریقہ گولی ہو جائے گا اور آپ کی پیچ کی ہسٹری مٹ جائے گی۔"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Khi lưu, bạn sẽ chuyển sang thuốc và lịch sử miếng dán sẽ bị xóa."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保存后会切换到避孕药，并清除你的贴片历史记录。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "儲存後會切換為避孕藥，並清除你的貼片歷史紀錄。"
+          }
+        }
+      }
+    },
+    "settings.schedule.save_note.patch_to_ring": {
+      "comment": "Schedule sheet line above Save when the method changes [destructive]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saving switches you to Ring and clears your patch history."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يؤدي الحفظ إلى التبديل إلى الحلقة ومسح سجلّ اللصقة."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "সেভ করলে আপনার পদ্ধতি রিং হয়ে যাবে এবং আপনার প্যাচের ইতিহাস মুছে যাবে।"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Si deses, passes a l’anell i s’esborra el teu historial del pegat."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uložením přejdeš na kroužek a vymažeš historii náplasti."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Når du gemmer, skifter du til ring, og din plasterhistorik slettes."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beim Speichern wechselst du zum Ring und dein Pflaster-Verlauf wird gelöscht."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Με την αποθήκευση περνάς στον δακτύλιο και διαγράφεται το ιστορικό του αυτοκόλλητου."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Al guardar, cambias al anillo y se borra tu historial del parche."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tallentaminen vaihtaa sinut renkaaseen ja poistaa laastarihistoriasi."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer te fait passer à l’anneau et efface ton historique de patch."
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "સાચવવાથી તમારી પદ્ધતિ રિંગ થઈ જશે અને તમારો પેચનો ઇતિહાસ ભૂંસાઈ જશે."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "שמירה תעביר אותך לטבעת ותמחק את היסטוריית המדבקה."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "सेव करने से आपका तरीका रिंग हो जाएगा और आपका पैच का इतिहास मिट जाएगा।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spremanjem prelaziš na prsten i brišeš povijest flastera."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mentéskor gyűrűre váltasz, és törlődnek a tapaszos előzményeid."
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Menyimpan akan mengganti metodemu ke cincin dan menghapus riwayat koyomu."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salvando passi all’anello e cancelli la cronologia del cerotto."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保存するとリングに切り替わり、パッチの履歴が消去されます。"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ಉಳಿಸಿದರೆ ನಿಮ್ಮ ವಿಧಾನ ರಿಂಗ್‌ಗೆ ಬದಲಾಗುತ್ತದೆ ಮತ್ತು ನಿಮ್ಮ ಪ್ಯಾಚ್‌ನ ಇತಿಹಾಸ ಅಳಿಸಿಹೋಗುತ್ತದೆ."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "저장하면 링으로 바뀌고 패치 기록이 삭제돼요."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "സേവ് ചെയ്താൽ നിങ്ങളുടെ രീതി റിംഗ് ആയി മാറും, പാച്ചിന്റെ ചരിത്രം മായ്ക്കപ്പെടും."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "सेव्ह केल्याने तुमची पद्धत रिंग होईल आणि तुमचा पॅचचा इतिहास पुसला जाईल."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Menyimpan akan menukar kamu kepada cincin dan memadam sejarah tampalan kamu."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Når du lagrer, bytter du til ring, og plasterhistorikken din slettes."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opslaan zet je over op de ring en wist je pleistergeschiedenis."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ସେଭ୍ କଲେ ଆପଣଙ୍କ ପଦ୍ଧତି ରିଙ୍ଗକୁ ବଦଳିଯିବ ଏବଂ ଆପଣଙ୍କ ପ୍ୟାଚ୍‌ର ଇତିହାସ ଲିଭିଯିବ।"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਸੇਵ ਕਰਨ ਨਾਲ ਤੁਹਾਡਾ ਤਰੀਕਾ ਰਿੰਗ ਹੋ ਜਾਵੇਗਾ ਅਤੇ ਤੁਹਾਡਾ ਪੈਚ ਦਾ ਇਤਿਹਾਸ ਮਿਟ ਜਾਵੇਗਾ।"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zapisanie zmieni metodę na krążek i usunie historię plastra."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salvar troca você para o anel e apaga seu histórico do adesivo."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Guardar muda-te para o anel e apaga o teu histórico do adesivo."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salvarea te trece la inel și îți șterge istoricul plasturelui."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "При сохранении ты перейдёшь на кольцо, а история пластыря удалится."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uložením prejdeš na krúžok a vymažeš históriu náplasti."
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "S shranjevanjem preideš na obroček in izbrišeš zgodovino obliža."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "När du sparar byter du till ring och din plåsterhistorik raderas."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "சேமித்தால் உங்கள் முறை ரிங்குக்கு மாறும், உங்கள் பேட்ச் வரலாறு அழிக்கப்படும்."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "సేవ్ చేస్తే మీ పద్ధతి రింగ్‌కు మారుతుంది, మీ ప్యాచ్ చరిత్ర తొలగిపోతుంది."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "การบันทึกจะเปลี่ยนคุณไปใช้วงแหวนและล้างประวัติแผ่นแปะของคุณ"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kaydetmek seni halkaya geçirir ve bant geçmişini siler."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Після збереження ти перейдеш на кільце, а історія пластиря видалиться."
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "محفوظ کرنے سے آپ کا طریقہ رِنگ ہو جائے گا اور آپ کی پیچ کی ہسٹری مٹ جائے گی۔"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Khi lưu, bạn sẽ chuyển sang vòng âm đạo và lịch sử miếng dán sẽ bị xóa."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保存后会切换到阴道环，并清除你的贴片历史记录。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "儲存後會切換為陰道環，並清除你的貼片歷史紀錄。"
+          }
+        }
+      }
+    },
+    "settings.schedule.save_note.ring_to_pill": {
+      "comment": "Schedule sheet line above Save when the method changes [destructive]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saving switches you to Pill and clears your ring history."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يؤدي الحفظ إلى التبديل إلى الحبة ومسح سجلّ الحلقة."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "সেভ করলে আপনার পদ্ধতি পিল হয়ে যাবে এবং আপনার রিংয়ের ইতিহাস মুছে যাবে।"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Si deses, passes a la píndola i s’esborra el teu historial de l’anell."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uložením přejdeš na pilulku a vymažeš historii kroužku."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Når du gemmer, skifter du til p-pille, og din ringhistorik slettes."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beim Speichern wechselst du zur Pille und dein Ring-Verlauf wird gelöscht."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Με την αποθήκευση περνάς στο χάπι και διαγράφεται το ιστορικό του δακτυλίου."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Al guardar, cambias a la píldora y se borra tu historial del anillo."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tallentaminen vaihtaa sinut pilleriin ja poistaa rengashistoriasi."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer te fait passer à la pilule et efface ton historique d’anneau."
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "સાચવવાથી તમારી પદ્ધતિ ગોળી થઈ જશે અને તમારો રિંગનો ઇતિહાસ ભૂંસાઈ જશે."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "שמירה תעביר אותך לגלולה ותמחק את היסטוריית הטבעת."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "सेव करने से आपका तरीका गोली हो जाएगा और आपका रिंग का इतिहास मिट जाएगा।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spremanjem prelaziš na pilulu i brišeš povijest prstena."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mentéskor tablettára váltasz, és törlődnek a gyűrűs előzményeid."
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Menyimpan akan mengganti metodemu ke pil dan menghapus riwayat cincinmu."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salvando passi alla pillola e cancelli la cronologia dell’anello."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保存するとピルに切り替わり、リングの履歴が消去されます。"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ಉಳಿಸಿದರೆ ನಿಮ್ಮ ವಿಧಾನ ಮಾತ್ರೆಗೆ ಬದಲಾಗುತ್ತದೆ ಮತ್ತು ನಿಮ್ಮ ರಿಂಗ್‌ನ ಇತಿಹಾಸ ಅಳಿಸಿಹೋಗುತ್ತದೆ."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "저장하면 피임약으로 바뀌고 링 기록이 삭제돼요."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "സേവ് ചെയ്താൽ നിങ്ങളുടെ രീതി ഗുളിക ആയി മാറും, റിംഗിന്റെ ചരിത്രം മായ്ക്കപ്പെടും."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "सेव्ह केल्याने तुमची पद्धत गोळी होईल आणि तुमचा रिंगचा इतिहास पुसला जाईल."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Menyimpan akan menukar kamu kepada pil dan memadam sejarah cincin kamu."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Når du lagrer, bytter du til p-pille, og ringhistorikken din slettes."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opslaan zet je over op de pil en wist je ringgeschiedenis."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ସେଭ୍ କଲେ ଆପଣଙ୍କ ପଦ୍ଧତି ପିଲ୍‌କୁ ବଦଳିଯିବ ଏବଂ ଆପଣଙ୍କ ରିଙ୍ଗର ଇତିହାସ ଲିଭିଯିବ।"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਸੇਵ ਕਰਨ ਨਾਲ ਤੁਹਾਡਾ ਤਰੀਕਾ ਗੋਲੀ ਹੋ ਜਾਵੇਗਾ ਅਤੇ ਤੁਹਾਡਾ ਰਿੰਗ ਦਾ ਇਤਿਹਾਸ ਮਿਟ ਜਾਵੇਗਾ।"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zapisanie zmieni metodę na tabletkę i usunie historię krążka."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salvar troca você para a pílula e apaga seu histórico do anel."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Guardar muda-te para a pílula e apaga o teu histórico do anel."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salvarea te trece la pilulă și îți șterge istoricul inelului."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "При сохранении ты перейдёшь на таблетку, а история кольца удалится."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uložením prejdeš na tabletku a vymažeš históriu krúžku."
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "S shranjevanjem preideš na tabletko in izbrišeš zgodovino obročka."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "När du sparar byter du till p-piller och din ringhistorik raderas."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "சேமித்தால் உங்கள் முறை மாத்திரைக்கு மாறும், உங்கள் ரிங் வரலாறு அழிக்கப்படும்."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "సేవ్ చేస్తే మీ పద్ధతి మాత్రకు మారుతుంది, మీ రింగ్ చరిత్ర తొలగిపోతుంది."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "การบันทึกจะเปลี่ยนคุณไปใช้ยาคุมและล้างประวัติวงแหวนของคุณ"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kaydetmek seni hapa geçirir ve halka geçmişini siler."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Після збереження ти перейдеш на таблетку, а історія кільця видалиться."
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "محفوظ کرنے سے آپ کا طریقہ گولی ہو جائے گا اور آپ کی رِنگ کی ہسٹری مٹ جائے گی۔"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Khi lưu, bạn sẽ chuyển sang thuốc và lịch sử vòng âm đạo sẽ bị xóa."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保存后会切换到避孕药，并清除你的阴道环历史记录。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "儲存後會切換為避孕藥，並清除你的陰道環歷史紀錄。"
+          }
+        }
+      }
+    },
+    "settings.schedule.save_note.ring_to_patch": {
+      "comment": "Schedule sheet line above Save when the method changes [destructive]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saving switches you to Patch and clears your ring history."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يؤدي الحفظ إلى التبديل إلى اللصقة ومسح سجلّ الحلقة."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "সেভ করলে আপনার পদ্ধতি প্যাচ হয়ে যাবে এবং আপনার রিংয়ের ইতিহাস মুছে যাবে।"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Si deses, passes al pegat i s’esborra el teu historial de l’anell."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uložením přejdeš na náplast a vymažeš historii kroužku."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Når du gemmer, skifter du til plaster, og din ringhistorik slettes."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beim Speichern wechselst du zum Pflaster und dein Ring-Verlauf wird gelöscht."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Με την αποθήκευση περνάς στο αυτοκόλλητο και διαγράφεται το ιστορικό του δακτυλίου."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Al guardar, cambias al parche y se borra tu historial del anillo."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tallentaminen vaihtaa sinut laastariin ja poistaa rengashistoriasi."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer te fait passer au patch et efface ton historique d’anneau."
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "સાચવવાથી તમારી પદ્ધતિ પેચ થઈ જશે અને તમારો રિંગનો ઇતિહાસ ભૂંસાઈ જશે."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "שמירה תעביר אותך למדבקה ותמחק את היסטוריית הטבעת."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "सेव करने से आपका तरीका पैच हो जाएगा और आपका रिंग का इतिहास मिट जाएगा।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spremanjem prelaziš na flaster i brišeš povijest prstena."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mentéskor tapaszra váltasz, és törlődnek a gyűrűs előzményeid."
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Menyimpan akan mengganti metodemu ke koyo dan menghapus riwayat cincinmu."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salvando passi al cerotto e cancelli la cronologia dell’anello."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保存するとパッチに切り替わり、リングの履歴が消去されます。"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ಉಳಿಸಿದರೆ ನಿಮ್ಮ ವಿಧಾನ ಪ್ಯಾಚ್‌ಗೆ ಬದಲಾಗುತ್ತದೆ ಮತ್ತು ನಿಮ್ಮ ರಿಂಗ್‌ನ ಇತಿಹಾಸ ಅಳಿಸಿಹೋಗುತ್ತದೆ."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "저장하면 패치로 바뀌고 링 기록이 삭제돼요."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "സേവ് ചെയ്താൽ നിങ്ങളുടെ രീതി പാച്ച് ആയി മാറും, റിംഗിന്റെ ചരിത്രം മായ്ക്കപ്പെടും."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "सेव्ह केल्याने तुमची पद्धत पॅच होईल आणि तुमचा रिंगचा इतिहास पुसला जाईल."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Menyimpan akan menukar kamu kepada tampalan dan memadam sejarah cincin kamu."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Når du lagrer, bytter du til plaster, og ringhistorikken din slettes."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opslaan zet je over op de pleister en wist je ringgeschiedenis."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ସେଭ୍ କଲେ ଆପଣଙ୍କ ପଦ୍ଧତି ପ୍ୟାଚ୍‌କୁ ବଦଳିଯିବ ଏବଂ ଆପଣଙ୍କ ରିଙ୍ଗର ଇତିହାସ ଲିଭିଯିବ।"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਸੇਵ ਕਰਨ ਨਾਲ ਤੁਹਾਡਾ ਤਰੀਕਾ ਪੈਚ ਹੋ ਜਾਵੇਗਾ ਅਤੇ ਤੁਹਾਡਾ ਰਿੰਗ ਦਾ ਇਤਿਹਾਸ ਮਿਟ ਜਾਵੇਗਾ।"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zapisanie zmieni metodę na plaster i usunie historię krążka."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salvar troca você para o adesivo e apaga seu histórico do anel."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Guardar muda-te para o adesivo e apaga o teu histórico do anel."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salvarea te trece la plasture și îți șterge istoricul inelului."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "При сохранении ты перейдёшь на пластырь, а история кольца удалится."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uložením prejdeš na náplasť a vymažeš históriu krúžku."
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "S shranjevanjem preideš na obliž in izbrišeš zgodovino obročka."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "När du sparar byter du till plåster och din ringhistorik raderas."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "சேமித்தால் உங்கள் முறை பேட்ச்சுக்கு மாறும், உங்கள் ரிங் வரலாறு அழிக்கப்படும்."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "సేవ్ చేస్తే మీ పద్ధతి ప్యాచ్‌కు మారుతుంది, మీ రింగ్ చరిత్ర తొలగిపోతుంది."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "การบันทึกจะเปลี่ยนคุณไปใช้แผ่นแปะและล้างประวัติวงแหวนของคุณ"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kaydetmek seni banda geçirir ve halka geçmişini siler."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Після збереження ти перейдеш на пластир, а історія кільця видалиться."
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "محفوظ کرنے سے آپ کا طریقہ پیچ ہو جائے گا اور آپ کی رِنگ کی ہسٹری مٹ جائے گی۔"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Khi lưu, bạn sẽ chuyển sang miếng dán và lịch sử vòng âm đạo sẽ bị xóa."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保存后会切换到贴片，并清除你的阴道环历史记录。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "儲存後會切換為貼片，並清除你的陰道環歷史紀錄。"
+          }
+        }
+      }
+    },
     "settings.cycle_day.title": {
       "comment": "Editor section [health]",
       "localizations": {

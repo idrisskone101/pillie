@@ -15,12 +15,20 @@ struct ProtocolEditor: View {
     // Nil until then, so the modules first render on the seeded day and do not scroll on open.
     @State private var draft: ScheduleDraft?
     @State private var isScrubbing = false
-    @State private var showResetConfirmation = false
 
     private let settingsFeedback = SettingsInteractionFeedback()
 
     private static let topAnchor = "protocolEditorTop"
     private static let bottomAnchor = "protocolEditorBottom"
+    private static let chipFill = Color(hex: "F5F5F4")
+
+    private static func iconTileFill(_ method: ContraceptiveMethod) -> Color {
+        switch method {
+        case .pill: PillieTheme.coralLight
+        case .patch: Color(hex: "FBEFF1")
+        case .ring: Color(hex: "FBF0EC")
+        }
+    }
 
     private var current: ScheduleDraft.Current {
         ScheduleDraft.Current(
@@ -45,19 +53,14 @@ struct ProtocolEditor: View {
         )
     }
 
-    private var resetConfirmation: ScheduleCriticalSettingChange.Confirmation {
-        ScheduleCriticalSettingChange.confirmation(cycleDay: draft?.cycleDay ?? 1, locale: locale)
-    }
-
     var body: some View {
         VStack(spacing: 0) {
-            SettingsSheetHeader(title: PillieLocalization.string("settings.schedule.title", locale: locale))
+            header
 
             if let draft {
-                methodPicker
+                methodCard(draft.method)
                     .padding(.horizontal, 20)
-                    .padding(.top, 20)
-                    .padding(.bottom, 4)
+                    .padding(.top, 14)
 
                 ScrollViewReader { scroll in
                     ScrollView {
@@ -68,6 +71,9 @@ struct ProtocolEditor: View {
                         }
                     }
                     .clipped()
+                    .safeAreaInset(edge: .bottom, spacing: 0) {
+                        footer(draft)
+                    }
                     .onChange(of: draft.method) {
                         scroll.scrollTo(Self.topAnchor, anchor: .top)
                     }
@@ -75,41 +81,140 @@ struct ProtocolEditor: View {
             } else {
                 Spacer()
             }
+        }
+        .ignoresSafeArea(.container, edges: .bottom)
+        .background(PillieTheme.bg.ignoresSafeArea())
+        .onAppear {
+            draft = .seeded(store.pack.method, from: current)
+        }
+    }
 
-            VStack(spacing: 12) {
-                Button {
-                    showResetConfirmation = true
-                } label: {
-                    Text(PillieLocalization.string("global.action.save", locale: locale))
-                }
-                .buttonStyle(.pillieDark)
-                .disabled(!canSave)
-                .opacity(canSave ? 1 : 0.38)
-                .padding(.horizontal, 28)
-                .accessibilityIdentifier("protocolEditorSave")
+    private var header: some View {
+        VStack(spacing: 14) {
+            Capsule()
+                .fill(PillieTheme.sage)
+                .frame(width: 36, height: 5)
+
+            HStack {
+                Color.clear
+                    .frame(width: 36, height: 36)
+
+                Text(PillieLocalization.string("settings.schedule.title", locale: locale))
+                    .font(.pillieSubtitleBold())
+                    .foregroundStyle(PillieTheme.textPrimary)
+                    .frame(maxWidth: .infinity)
+                    .accessibilityAddTraits(.isHeader)
 
                 Button {
                     ProductAnalyticsTelemetry.live.protocolChangeCancelled()
                     dismiss()
                 } label: {
-                    Text(PillieLocalization.string("global.action.cancel", locale: locale))
+                    Image(systemName: "xmark")
+                        .font(.system(size: 12, weight: .bold))
+                        .foregroundStyle(PillieTheme.textMuted)
+                        .frame(width: 36, height: 36)
+                        .background(Self.chipFill, in: Circle())
                 }
-                .buttonStyle(.pillieSecondary)
-                .padding(.horizontal, 28)
+                .buttonStyle(.plain)
+                .accessibilityLabel(PillieLocalization.string("global.action.close", locale: locale))
+                .accessibilityIdentifier("protocolEditorClose")
             }
-            .padding(.top, 8)
-            .padding(.bottom, 16)
+            .frame(height: 44)
+            .padding(.horizontal, 20)
         }
-        .ignoresSafeArea(.container, edges: .bottom)
-        .background(PillieTheme.bg.ignoresSafeArea())
-        .alert(resetConfirmation.title, isPresented: $showResetConfirmation) {
-            Button(resetConfirmation.cancelTitle, role: .cancel) { }
-            Button(resetConfirmation.confirmTitle, role: .destructive, action: save)
-        } message: {
-            Text(resetConfirmation.body)
+        .padding(.top, 12)
+    }
+
+    private func methodCard(_ method: ContraceptiveMethod) -> some View {
+        HStack(spacing: 12) {
+            Image(decorative: method.iconImageName)
+                .resizable()
+                .scaledToFit()
+                .frame(width: method.iconImageSize, height: method.iconImageSize)
+                .frame(width: 44, height: 44)
+                .background(Self.iconTileFill(method), in: RoundedRectangle(cornerRadius: 12))
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(PillieLocalization.string("settings.schedule.your_method", locale: locale))
+                    .font(.pillie(13, weight: .medium))
+                    .foregroundStyle(PillieTheme.textMuted)
+                Text(method.localizedTitle(locale: locale))
+                    .font(.pillieSubtitleBold())
+                    .foregroundStyle(PillieTheme.textPrimary)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+
+            switchMenu
         }
-        .onAppear {
-            draft = .seeded(store.pack.method, from: current)
+        .padding(.vertical, 12)
+        .padding(.leading, 12)
+        .padding(.trailing, 14)
+        .background(PillieTheme.cardWhite, in: RoundedRectangle(cornerRadius: 22))
+        .overlay {
+            RoundedRectangle(cornerRadius: 22)
+                .strokeBorder(PillieTheme.hairline, lineWidth: 1)
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel([
+            PillieLocalization.string("settings.schedule.your_method", locale: locale),
+            method.localizedTitle(locale: locale),
+            PillieLocalization.string("settings.schedule.switch", locale: locale)
+        ].joined(separator: ", "))
+        .accessibilityIdentifier("protocolEditorMethodCard")
+    }
+
+    // ENG-157 replaces this menu with the method picker sheet.
+    private var switchMenu: some View {
+        Menu {
+            Picker(PillieLocalization.string("settings.method.title", locale: locale), selection: methodSelection) {
+                ForEach(ContraceptiveMethod.allCases, id: \.self) { method in
+                    Text(method.localizedTitle(locale: locale)).tag(method)
+                }
+            }
+        } label: {
+            HStack(spacing: 6) {
+                Image(systemName: "arrow.left.arrow.right")
+                    .font(.system(size: 12, weight: .bold))
+                Text(PillieLocalization.string("settings.schedule.switch", locale: locale))
+                    .font(.pillie(14, weight: .bold))
+            }
+            .foregroundStyle(PillieTheme.textPrimary)
+            .padding(.horizontal, 14)
+            .frame(height: 36)
+            .background(Self.chipFill, in: Capsule())
+        }
+        .accessibilityIdentifier("protocolEditorSwitch")
+    }
+
+    private func footer(_ draft: ScheduleDraft) -> some View {
+        VStack(spacing: 10) {
+            Text(draft.saveNote(from: store.pack.method, locale: locale))
+                .font(.pillie(13, weight: .medium))
+                .foregroundStyle(PillieTheme.textMuted)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
+                .accessibilityIdentifier("protocolEditorSaveNote")
+
+            Button(action: save) {
+                Text(PillieLocalization.string("global.action.save", locale: locale))
+            }
+            .buttonStyle(.pillieDark)
+            .disabled(!canSave)
+            .opacity(canSave ? 1 : 0.38)
+            .accessibilityIdentifier("protocolEditorSave")
+        }
+        .padding(.horizontal, 28)
+        .padding(.top, 36)
+        .padding(.bottom, 40)
+        .background {
+            LinearGradient(
+                stops: [
+                    .init(color: PillieTheme.bg.opacity(0), location: 0),
+                    .init(color: PillieTheme.bg, location: 0.3)
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
         }
     }
 
@@ -133,23 +238,6 @@ struct ProtocolEditor: View {
         }
         .padding(20)
         .id(Self.topAnchor)
-    }
-
-    private var methodPicker: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text(PillieLocalization.string("settings.method.title", locale: locale))
-                .font(.pillieCaptionMedium())
-                .foregroundStyle(PillieTheme.textMuted)
-                .tracking(2)
-
-            Picker(PillieLocalization.string("settings.method.title", locale: locale), selection: methodSelection) {
-                ForEach(ContraceptiveMethod.allCases, id: \.self) { method in
-                    Text(method.localizedTitle(locale: locale)).tag(method)
-                }
-            }
-            .pickerStyle(.segmented)
-            .accessibilityIdentifier("protocolEditorMethod")
-        }
     }
 
     @ViewBuilder

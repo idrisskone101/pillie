@@ -81,4 +81,20 @@ enum ScheduleDraft: Equatable {
         guard case .pill(let selection) = self, selection.pack.preset == .custom else { return nil }
         return selection.pack.regimen
     }
+
+    /// The line above Save. Saving always clears history, so this is the warning
+    /// the old post-Save alert gave: a restart point, or the method being left.
+    func saveNote(from currentMethod: ContraceptiveMethod, locale: Locale) -> String {
+        guard method == currentMethod else {
+            return PillieLocalization.string(
+                "settings.schedule.save_note.\(currentMethod.rawValue)_to_\(method.rawValue)",
+                locale: locale
+            )
+        }
+        let key = switch self {
+        case .pill: "settings.schedule.save_note.pill"
+        case .dial: "settings.schedule.save_note.dial"
+        }
+        return PillieLocalization.formatted(key, locale: locale, arguments: Int64(cycleDay ?? 1))
+    }
 }

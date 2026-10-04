@@ -2,6 +2,8 @@
 # modules: TodayPillCard (pack card, Change sheet, "taken yet?") for pill and
 # RoutineDialCard (patch segments + dial, ring dial) for patch and ring.
 # The editor seats the user at today's position, so Save works without a tap.
+# The method card's Switch menu changes method; the line above the pinned Save
+# says what saving clears, and Save goes straight through with no alert.
 fresh
 launch
 wait text "Get started" 15
@@ -11,7 +13,9 @@ tap --label Settings
 wait id settingsLanguageRow
 tap --label "Method, Pill (Standard)"
 wait id todayPillChangeButton
+expect id protocolEditorMethodCard
 expect id protocolEditorSave
+wait text "restarts from pill"
 shot pill-seeded
 
 tap --id packTile.5
@@ -26,8 +30,10 @@ gone id packSheetTitle
 wait text "24/4"
 shot pill-24-4
 
+tap --id protocolEditorSwitch
 tap --label Patch
 wait id routineDial
+wait text "switches you to Patch"
 expect id routineDialSegment.4
 shot patch-day-1
 
@@ -35,6 +41,7 @@ tap --id routineDialSegment.2
 wait id routineDialQuestion
 shot patch-segment-2
 
+tap --id protocolEditorSwitch
 tap --label Ring
 wait id routineDial
 gone id routineDialSegment.1
@@ -44,9 +51,6 @@ shot ring-day-1
 tap --id routineDialYes
 wait id routineDialStatus
 tap --id protocolEditorSave
-wait text "Clear and save"
-shot reset-alert
-tap --label "Clear and save"
 gone id routineDial
 wait text "Method, Ring"
 shot saved-ring
@@ -58,4 +62,10 @@ wait id settingsLanguageRow
 tap --label "Method, Patch"
 wait id routineDialResult
 gone id routineDialQuestion
+wait text "restarts from day 10"
 shot patch-seeded-day-10
+
+# The close button leaves without saving.
+tap --id protocolEditorClose
+gone id routineDial
+wait text "Method, Patch"
