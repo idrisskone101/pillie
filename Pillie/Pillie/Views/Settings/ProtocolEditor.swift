@@ -237,6 +237,8 @@ struct ProtocolEditor: View {
     private func title(for draft: ScheduleDraft) -> String {
         switch draft {
         case .pill: PillieLocalization.string("onboarding.today_pill.title", locale: locale)
+        case .dial(let selection) where selection.method == .ring:
+            PillieLocalization.string("settings.schedule.ring_title", locale: locale)
         case .dial(let selection): RoutineDialCopy(selection: selection, locale: locale).title
         }
     }

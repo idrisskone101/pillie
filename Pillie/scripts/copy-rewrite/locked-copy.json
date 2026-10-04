@@ -2644,6 +2644,14 @@
       "en": "Nothing changes until you tap Save.",
       "de": "Erst wenn du auf Speichern tippst, ändert sich etwas.",
       "it": "Non cambia nulla finché non tocchi Salva."
+    },
+    {
+      "issue": "ENG-158",
+      "table": "Localizable",
+      "key": "settings.schedule.ring_title",
+      "en": "How long has this ring been in?",
+      "de": "Wie lange ist dieser Ring schon drin?",
+      "it": "Da quanto porti questo anello?"
     }
   ]
 }
