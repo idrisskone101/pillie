@@ -68,7 +68,7 @@ struct CustomPackDraft: Equatable {
         breakDays = min(breakDays, breakRange.upperBound)
     }
 
-    func caption(locale: Locale = .current) -> String {
+    func caption(locale: Locale = PillieLocalization.appLocale) -> String {
         let total = totalDays
         let wholeWeeks = total % 7 == 0
         switch (layout, wholeWeeks) {

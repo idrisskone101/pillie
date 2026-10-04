@@ -54,7 +54,7 @@ struct ProtectionPlanWelcomeContent {
 
     static var `default`: ProtectionPlanWelcomeContent { localized() }
 
-    static func localized(locale: Locale = .current) -> ProtectionPlanWelcomeContent {
+    static func localized(locale: Locale = PillieLocalization.appLocale) -> ProtectionPlanWelcomeContent {
         let sampleTime = OnboardingDemoClock.formatted(locale: locale)
 
         return ProtectionPlanWelcomeContent(
@@ -154,7 +154,7 @@ struct ProtectionPlanEarlyValueProofContent {
 
     static var `default`: ProtectionPlanEarlyValueProofContent { localized() }
 
-    static func localized(locale: Locale = .current) -> ProtectionPlanEarlyValueProofContent {
+    static func localized(locale: Locale = PillieLocalization.appLocale) -> ProtectionPlanEarlyValueProofContent {
         let title = PillieLocalization.string("onboarding.blocking_demo.title", locale: locale)
         let body = PillieLocalization.string("onboarding.blocking_demo.body", locale: locale)
         let sampleTime = OnboardingDemoClock.formatted(locale: locale)
@@ -222,7 +222,7 @@ struct ProtectionPlanDistractionChoicesContent {
 
     static var `default`: ProtectionPlanDistractionChoicesContent { localized() }
 
-    static func localized(locale: Locale = .current) -> ProtectionPlanDistractionChoicesContent {
+    static func localized(locale: Locale = PillieLocalization.appLocale) -> ProtectionPlanDistractionChoicesContent {
         ProtectionPlanDistractionChoicesContent(
             title: PillieLocalization.string("onboarding.personalise.pain.title", locale: locale),
             subtitle: PillieLocalization.string("onboarding.personalise.pain.subtitle", locale: locale),
@@ -296,7 +296,7 @@ struct ProtectionPlanFailureFrequencyContent {
 
     static var `default`: ProtectionPlanFailureFrequencyContent { localized() }
 
-    static func localized(locale: Locale = .current) -> ProtectionPlanFailureFrequencyContent {
+    static func localized(locale: Locale = PillieLocalization.appLocale) -> ProtectionPlanFailureFrequencyContent {
         ProtectionPlanFailureFrequencyContent(
         title: PillieLocalization.string("onboarding.frequency.title", locale: locale),
         subtitle: PillieLocalization.string("onboarding.frequency.subtitle", locale: locale),
@@ -336,7 +336,7 @@ struct ProtectionPlanRiskWindowContent {
 
     static var `default`: ProtectionPlanRiskWindowContent { localized() }
 
-    static func localized(locale: Locale = .current) -> ProtectionPlanRiskWindowContent {
+    static func localized(locale: Locale = PillieLocalization.appLocale) -> ProtectionPlanRiskWindowContent {
         ProtectionPlanRiskWindowContent(
             title: PillieLocalization.string("onboarding.risk_window.title", locale: locale),
             subtitle: PillieLocalization.string("onboarding.risk_window.subtitle", locale: locale),
@@ -405,7 +405,7 @@ struct ProtectionPlanAcquisitionSourceContent {
 
     static var `default`: ProtectionPlanAcquisitionSourceContent { localized() }
 
-    static func localized(locale: Locale = .current) -> ProtectionPlanAcquisitionSourceContent {
+    static func localized(locale: Locale = PillieLocalization.appLocale) -> ProtectionPlanAcquisitionSourceContent {
         ProtectionPlanAcquisitionSourceContent(
         eyebrow: PillieLocalization.string("onboarding.welcome.next_action", locale: locale),
         title: PillieLocalization.string("onboarding.acquisition.title", locale: locale),
@@ -438,7 +438,7 @@ struct ProtectionPlanRoutineMethodContent {
 
     static var `default`: ProtectionPlanRoutineMethodContent { localized() }
 
-    static func localized(locale: Locale = .current) -> ProtectionPlanRoutineMethodContent {
+    static func localized(locale: Locale = PillieLocalization.appLocale) -> ProtectionPlanRoutineMethodContent {
         ProtectionPlanRoutineMethodContent(
             title: PillieLocalization.string("onboarding.method.title", locale: locale),
             subtitle: PillieLocalization.string("onboarding.method.subtitle", locale: locale),
@@ -466,7 +466,7 @@ struct ProtectionPlanReminderTimeContent {
 
     static var `default`: ProtectionPlanReminderTimeContent { localized() }
 
-    static func localized(locale: Locale = .current) -> ProtectionPlanReminderTimeContent {
+    static func localized(locale: Locale = PillieLocalization.appLocale) -> ProtectionPlanReminderTimeContent {
         ProtectionPlanReminderTimeContent(
             title: PillieLocalization.string("onboarding.reminder_time.title", locale: locale),
             subtitle: PillieLocalization.string("onboarding.reminder_time.subtitle", locale: locale),
@@ -511,7 +511,7 @@ struct ProtectionPlanDiagnosisContent {
 
     static var `default`: ProtectionPlanDiagnosisContent { localized() }
 
-    static func localized(locale: Locale = .current) -> ProtectionPlanDiagnosisContent {
+    static func localized(locale: Locale = PillieLocalization.appLocale) -> ProtectionPlanDiagnosisContent {
         ProtectionPlanDiagnosisContent(
             locale: locale,
             eyebrow: PillieLocalization.string("onboarding.welcome.next_action", locale: locale),
@@ -589,7 +589,7 @@ struct ProtectionPlanMechanismProofContent {
             ]
     }
 
-    init(method: ContraceptiveMethod, locale: Locale = .current) {
+    init(method: ContraceptiveMethod, locale: Locale = PillieLocalization.appLocale) {
         func localized(_ key: String) -> String {
             PillieLocalization.string(key, locale: locale)
         }

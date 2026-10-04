@@ -55,7 +55,7 @@ enum CommercePresentation {
         displayPrice: String,
         periodValue: Int,
         periodUnit: PeriodUnit,
-        locale: Locale = .current
+        locale: Locale = PillieLocalization.appLocale
     ) -> String {
         let key = periodValue == 1
             ? "paywall.plan.price_period"
@@ -76,7 +76,7 @@ enum CommercePresentation {
     static func priceAndPeriod(
         displayPrice: String,
         subscriptionPeriod: SubscriptionPeriod?,
-        locale: Locale = .current
+        locale: Locale = PillieLocalization.appLocale
     ) -> String {
         guard let subscriptionPeriod else { return displayPrice }
         let unit: PeriodUnit = switch subscriptionPeriod.unit {
@@ -96,7 +96,7 @@ enum CommercePresentation {
 
     static func trialEndText(
         date: Date,
-        locale: Locale = .current
+        locale: Locale = PillieLocalization.appLocale
     ) -> String {
         let dateText = date.formatted(
             Date.FormatStyle()
@@ -115,7 +115,7 @@ enum CommercePresentation {
 
     static func trialEndSuccessSubtitle(
         cohort: TrialEndPaywallCohort,
-        locale: Locale = .current
+        locale: Locale = PillieLocalization.appLocale
     ) -> String {
         let key = switch cohort {
         case .blockerConfigured: "trial.end.success.blocking"
@@ -127,7 +127,7 @@ enum CommercePresentation {
     static func comparisonTierLabel(
         freeIncluded: Bool,
         plusIncluded: Bool,
-        locale: Locale = .current
+        locale: Locale = PillieLocalization.appLocale
     ) -> String {
         let key = switch (freeIncluded, plusIncluded) {
         case (true, true): "paywall.accessibility.tier.both"
@@ -140,7 +140,7 @@ enum CommercePresentation {
 
     static func purchaseErrorMessage(
         _ error: Error,
-        locale: Locale = .current
+        locale: Locale = PillieLocalization.appLocale
     ) -> String {
         if let purchaseError = error as? SubscriptionPurchaseError,
            purchaseError == .missingPlusEntitlement {
@@ -153,7 +153,7 @@ enum CommercePresentation {
         return genericErrorMessage(locale: locale)
     }
 
-    static func restoreErrorMessage(locale: Locale = .current) -> String {
+    static func restoreErrorMessage(locale: Locale = PillieLocalization.appLocale) -> String {
         PillieLocalization.string(
             "paywall.restore_error.body",
             table: "Commerce",
@@ -161,7 +161,7 @@ enum CommercePresentation {
         )
     }
 
-    static func offeringsUnavailableMessage(locale: Locale = .current) -> String {
+    static func offeringsUnavailableMessage(locale: Locale = PillieLocalization.appLocale) -> String {
         genericErrorMessage(locale: locale)
     }
 

@@ -6,7 +6,7 @@
 import Foundation
 
 extension PillPack.PillRegimenPreset {
-    func localizedScheduleSummary(locale: Locale = .current) -> String {
+    func localizedScheduleSummary(locale: Locale = PillieLocalization.appLocale) -> String {
         let key: String
         switch self {
         case .twentyOneSeven:
@@ -27,7 +27,7 @@ extension PillPack.PillRegimenPreset {
         return PillieLocalization.string(key, locale: locale)
     }
 
-    func localizedRoutineDisplayName(locale: Locale = .current) -> String {
+    func localizedRoutineDisplayName(locale: Locale = PillieLocalization.appLocale) -> String {
         let key: String
         switch self {
         case .twentyOneSeven:
@@ -44,7 +44,7 @@ extension PillPack.PillRegimenPreset {
         return PillieLocalization.string(key, locale: locale)
     }
 
-    func localizedScheduleSubtitle(locale: Locale = .current) -> String {
+    func localizedScheduleSubtitle(locale: Locale = PillieLocalization.appLocale) -> String {
         localizedScheduleSummary(locale: locale)
     }
 }

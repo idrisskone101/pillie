@@ -57,7 +57,7 @@ struct UpdateTrialAnnouncementContent {
         dismissCTA: "Not now"
     )
 
-    static func localized(locale: Locale = .current) -> UpdateTrialAnnouncementContent {
+    static func localized(locale: Locale = PillieLocalization.appLocale) -> UpdateTrialAnnouncementContent {
         let trial = TrialGrantedMomentContent.localized(locale: locale)
         return UpdateTrialAnnouncementContent(
             badge: trial.today.label,

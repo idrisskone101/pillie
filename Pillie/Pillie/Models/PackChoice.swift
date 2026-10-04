@@ -22,11 +22,11 @@ struct PackChoice: Hashable, Sendable {
 
     var split: String { "\(regimen.activeDays) + \(regimen.breakDays)" }
 
-    func displayName(locale: Locale = .current) -> String {
+    func displayName(locale: Locale = PillieLocalization.appLocale) -> String {
         preset == .custom ? split : preset.localizedRoutineDisplayName(locale: locale)
     }
 
-    func scheduleSummary(locale: Locale = .current) -> String {
+    func scheduleSummary(locale: Locale = PillieLocalization.appLocale) -> String {
         guard preset == .custom else { return preset.localizedScheduleSummary(locale: locale) }
         guard regimen.breakDays > 0 else {
             return PillieLocalization.formatted(

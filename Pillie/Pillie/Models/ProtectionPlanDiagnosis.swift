@@ -33,7 +33,7 @@ enum DistractionApp: String, CaseIterable, Equatable {
         localizedDisplayName()
     }
 
-    func localizedDisplayName(locale: Locale = .current) -> String {
+    func localizedDisplayName(locale: Locale = PillieLocalization.appLocale) -> String {
         switch self {
         case .tiktok: return "TikTok"
         case .instagram: return "Instagram"
@@ -75,7 +75,7 @@ enum PrimaryDistraction: Equatable {
         localizedDisplayName()
     }
 
-    func localizedDisplayName(locale: Locale = .current) -> String {
+    func localizedDisplayName(locale: Locale = PillieLocalization.appLocale) -> String {
         switch self {
         case .app(let app): return app.localizedDisplayName(locale: locale)
         case .generic:
@@ -171,7 +171,7 @@ struct ProtectionPlanCycleStatContent: Equatable {
         regimen: PillPack.PillRegimenPreset,
         activeDays: Int,
         breakDays: Int,
-        locale: Locale = .current
+        locale: Locale = PillieLocalization.appLocale
     ) -> ProtectionPlanCycleStatContent {
         let label = PillieLocalization.string(
             "onboarding.plan.current_cycle",
@@ -230,7 +230,7 @@ struct ProtectionPlanDiagnosis: Equatable {
         distractionChoices: Set<DistractionChoice> = [],
         delayConsequence: DelayConsequence? = nil,
         missFrequency: MissFrequency? = nil,
-        locale: Locale = .current
+        locale: Locale = PillieLocalization.appLocale
     ) {
         self.primaryDistraction = primaryDistraction
         self.protectedApps = protectedApps

@@ -60,7 +60,7 @@ struct TrialGrantedMomentContent {
     static var `default`: TrialGrantedMomentContent { localized() }
 
     static func localized(
-        locale: Locale = .current,
+        locale: Locale = PillieLocalization.appLocale,
         trialEndTerms: TrialEndAccessTerms = .legacy
     ) -> TrialGrantedMomentContent {
         func commerce(_ key: String) -> String {

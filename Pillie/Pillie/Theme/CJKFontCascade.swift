@@ -30,7 +30,7 @@ enum CJKFontCascade {
 
     /// The in-app language choice wins over the device language, as in `AppLanguage.resolvedLocale`.
     private static func cjkLanguage() -> String? {
-        let stored = UserDefaults.standard.string(forKey: AppLanguagePreference.storageKey)
+        let stored = UserDefaults.standard.string(forKey: AppLanguage.storageKey)
         let identifier = AppLanguage(rawValue: stored ?? "")?.catalogIdentifier
             ?? Locale.preferredLanguages.first
             ?? ""

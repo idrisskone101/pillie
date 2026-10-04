@@ -19,7 +19,7 @@ enum HistoryPresentation {
         completed: Int,
         percentage: Int,
         displayedMonth: Date,
-        locale: Locale = .current
+        locale: Locale = PillieLocalization.appLocale
     ) -> MonthSummary {
         MonthSummary(
             title: PillieLocalization.string("history.month.title", locale: locale),
@@ -51,7 +51,7 @@ enum HistoryPresentation {
     static func dayAccessibilityLabel(
         date: Date,
         status: DayStatus,
-        locale: Locale = .current
+        locale: Locale = PillieLocalization.appLocale
     ) -> String {
         let statusKey = switch status {
         case .completed: "history.legend.completed"
@@ -77,7 +77,7 @@ enum HistoryPresentation {
         reminderHour: Int,
         reminderMinute: Int,
         method: ContraceptiveMethod,
-        locale: Locale = .current
+        locale: Locale = PillieLocalization.appLocale
     ) -> String {
         let timeKey: String
         switch reminderHour {

@@ -27,7 +27,7 @@ struct ReviewPromptCardContent: Equatable {
 
     static func make(
         decision: ReviewPromptEligibility.Decision,
-        locale: Locale = .current
+        locale: Locale = PillieLocalization.appLocale
     ) -> ReviewPromptCardContent? {
         guard decision == .show else { return nil }
         return ReviewPromptCardContent(
