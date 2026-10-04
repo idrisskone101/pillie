@@ -107,9 +107,7 @@ class PillieDeviceActivityMonitor: DeviceActivityMonitor {
         Self.logger.info("Applying shields — apps: \(selection.applicationTokens.count), categories: \(selection.categoryTokens.count)")
 
         // Apply shields
-        store.shield.applications = selection.applicationTokens.isEmpty
-            ? nil
-            : selection.applicationTokens
+        store.shield.applications = ShieldApplicationLimit.shieldable(selection.applicationTokens)
         store.shield.applicationCategories = selection.categoryTokens.isEmpty
             ? nil
             : .specific(selection.categoryTokens)

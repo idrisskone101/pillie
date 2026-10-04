@@ -72,7 +72,7 @@ struct BlockedAppsEditor: View {
         }
         .familyActivityPicker(
             isPresented: $showPicker,
-            selection: Bindable(blockingManager).activitySelection
+            selection: Bindable(blockingManager).pickerSelection
         )
     }
 

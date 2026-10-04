@@ -31,7 +31,7 @@ enum ScreenTimeSharedState {
     static func loadSelection() -> FamilyActivitySelection {
         guard let data = defaults?.data(forKey: AppGroupKeys.familyActivitySelectionData),
               let selection = try? JSONDecoder().decode(FamilyActivitySelection.self, from: data) else {
-            return FamilyActivitySelection()
+            return FamilyActivitySelection(includeEntireCategory: true)
         }
         return selection
     }
@@ -137,5 +137,17 @@ enum ScreenTimeSharedState {
             isTaken: defaults?.bool(forKey: AppGroupKeys.isTodayTaken) ?? false,
             epochDay: defaults?.object(forKey: AppGroupKeys.todayTakenEpochDay) as? Int
         )
+    }
+}
+
+extension FamilyActivitySelection {
+    /// The category's app tokens only appear once the picker saves this selection.
+    func includingEntireCategories() -> FamilyActivitySelection {
+        guard !includeEntireCategory else { return self }
+        var selection = FamilyActivitySelection(includeEntireCategory: true)
+        selection.applicationTokens = applicationTokens
+        selection.categoryTokens = categoryTokens
+        selection.webDomainTokens = webDomainTokens
+        return selection
     }
 }

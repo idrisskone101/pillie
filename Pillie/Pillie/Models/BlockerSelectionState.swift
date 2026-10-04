@@ -20,12 +20,17 @@ struct BlockerSelectionState: Equatable {
     let applicationCount: Int
     /// Number of selected app categories (opaque token count).
     let categoryCount: Int
+    /// Made with `includeEntireCategory`, so `applicationCount` already holds
+    /// every installed app inside the picked categories.
+    let includesCategoryApps: Bool
 
-    /// Total selected app + category tokens — the only quantity Pillie stores.
-    var selectedCount: Int { applicationCount + categoryCount }
+    /// Legacy selections only hold the category token, so each category counts as one.
+    var selectedCount: Int {
+        includesCategoryApps ? applicationCount : applicationCount + categoryCount
+    }
 
     /// No apps and no categories were chosen.
-    var isEmpty: Bool { selectedCount == 0 }
+    var isEmpty: Bool { applicationCount + categoryCount == 0 }
 
     /// At least one app or category is selected.
     var hasSelection: Bool { !isEmpty }

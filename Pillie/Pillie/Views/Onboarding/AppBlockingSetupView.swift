@@ -155,8 +155,13 @@ struct AppBlockingSetupPermissionState: Equatable {
 
     /// Simulator FamilyControls authorization is always approved, so DEBUG UI QA
     /// needs a way to render the exact recovery state a real denial reaches.
-    mutating func showRecoveryForDebug() {
-        phase = .recovery
+    /// Clearing the seam must hide it again, or the next QA route opens on recovery.
+    mutating func setRecoveryForDebug(_ isVisible: Bool) {
+        if isVisible {
+            phase = .recovery
+        } else if phase == .recovery {
+            phase = .ready
+        }
     }
 }
 
@@ -279,21 +284,19 @@ struct AppBlockingSetupView: View {
         }
         .familyActivityPicker(
             isPresented: $showPicker,
-            selection: Bindable(blockingManager).activitySelection
+            selection: Bindable(blockingManager).pickerSelection
         )
         .onAppear {
             animateIn = true
             #if DEBUG
             if debugAuthorizationRecovery {
-                permissionState.showRecoveryForDebug()
+                permissionState.setRecoveryForDebug(true)
             }
             #endif
         }
         #if DEBUG
         .onChange(of: debugAuthorizationRecovery) { _, isRecoveryVisible in
-            if isRecoveryVisible {
-                permissionState.showRecoveryForDebug()
-            }
+            permissionState.setRecoveryForDebug(isRecoveryVisible)
         }
         #endif
     }
