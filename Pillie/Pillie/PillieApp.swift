@@ -643,6 +643,7 @@ struct PillieApp: App {
             store.customRetryReminderBody = ""
             store.autoReminderIntervalMinutes = fullyConfigured ? 30 : 10
             store.autoReminderRetryLimit = 3
+            store.autoRemindersConfigured = fullyConfigured
             reconcileScreenTimeState()
         case "/trial-age":
             // QA control (#160): age the existing (or a fresh) trial back by

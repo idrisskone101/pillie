@@ -86,6 +86,7 @@ enum ScheduleCriticalSettingChange {
         intervalMinutes: Int
     ) {
         store.autoReminderIntervalMinutes = intervalMinutes
+        store.autoRemindersConfigured = true
         NotificationManager.shared.requestReschedule(from: store, reason: "settings-auto-interval")
         ProductAnalyticsTelemetry.live.autoReminderIntervalSaved()
     }
@@ -95,6 +96,7 @@ enum ScheduleCriticalSettingChange {
         retryLimit: Int
     ) {
         store.autoReminderRetryLimit = retryLimit
+        store.autoRemindersConfigured = true
         NotificationManager.shared.requestReschedule(from: store, reason: "settings-auto-retry-limit")
         ProductAnalyticsTelemetry.live.autoReminderRetryLimitSaved()
     }

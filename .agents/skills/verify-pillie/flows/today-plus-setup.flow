@@ -3,11 +3,12 @@
 # tokens on a simulator), edits Reminders inline, and finishes on Done.
 launch
 
-# Fresh trial, Plus setup at 1/3 (reminders on by default), and
+# Fresh trial, Plus setup at 0/3 (default nudges are not a choice), and
 # plusSetupFinished cleared. PillieApp.swift /trial-activation-hub.
 openurl "pillie://debug/trial-activation-hub?state=unconfigured&lang=en"
 
 wait id plusSetupStrip 15
+expect label "Set up your Plus features, 0 of 3 done"
 wait text "14 active days left" 10
 shot plus-setup-strip
 
@@ -31,6 +32,7 @@ wait text "15 min" 10
 
 tap --id plusSetupPrimary
 wait id plusSetupDone 10
+expect label "Reminders, done"
 shot plus-setup-done
 
 tap --id plusSetupDone

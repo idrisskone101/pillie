@@ -31,11 +31,13 @@ struct PlusSetupProgress: Equatable {
 
     /// `blockingActive` is the same signal the trial badge reads for "Plus is
     /// on", so the strip and the badge can never disagree about blocking.
-    init(blockingActive: Bool, messagesCustomized: Bool, retryLimit: Int) {
+    /// Reminders count only once the user has chosen their nudges; the
+    /// default retry limit is not a choice.
+    init(blockingActive: Bool, messagesCustomized: Bool, remindersConfigured: Bool, retryLimit: Int) {
         var completed: Set<PlusSetupStep> = []
         if blockingActive { completed.insert(.blocking) }
         if messagesCustomized { completed.insert(.messages) }
-        if retryLimit > 0 { completed.insert(.reminders) }
+        if remindersConfigured && retryLimit > 0 { completed.insert(.reminders) }
         self.completed = completed
     }
 
@@ -78,6 +80,7 @@ struct PlusSetupProgress: Equatable {
                 store.customRetryReminderTitle,
                 store.customRetryReminderBody,
             ].contains { CustomReminderCopy.isCustomized($0) },
+            remindersConfigured: store.autoRemindersConfigured,
             retryLimit: store.autoReminderRetryLimit
         )
     }
