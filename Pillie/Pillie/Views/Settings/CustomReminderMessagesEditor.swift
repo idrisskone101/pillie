@@ -5,12 +5,11 @@
 
 import SwiftUI
 
-/// Editor for the Custom Reminder Message perk (Pillie+). Lets a subscriber write the
-/// title and body of the daily Due Action Reminder and the Auto-Reminder Retry. What
-/// they type is exactly what fires (WYSIWYG); a blank field falls back to the default
-/// copy at fire time (see `CustomReminderCopy`).
-/// Hard caps are enforced as the user types, with a live character counter. Words never
-/// change reminder timing, snooze, retry cadence, or supply scheduling.
+/// Editor for the Custom Reminder Message perk (Pillie+). A mock Lock Screen shows the daily
+/// Due Action Reminder and the Auto-Reminder Retry exactly as they will fire, and a Tone
+/// control rewrites both. The pencil on a banner edits its words. A blank field falls back to
+/// the default copy at fire time (see `CustomReminderCopy`). Words never change reminder
+/// timing, snooze, retry cadence, or supply scheduling.
 struct CustomReminderMessagesEditor: View {
     @Bindable var store: PillStore
     @Environment(\.dismiss) private var dismiss
@@ -25,29 +24,16 @@ struct CustomReminderMessagesEditor: View {
             retryBody: ""
         )
     )
-
-    /// Identifies every editable field so a single keyboard toolbar "Done" button (and
-    /// interactive scroll-to-dismiss) can resign whichever field is active.
-    private enum Field: String, Hashable {
-        case dailyTitle = "daily-title"
-        case dailyBody = "daily-body"
-        case retryTitle = "retry-title"
-        case retryBody = "retry-body"
-    }
-
-    @FocusState private var focusedField: Field?
+    @State private var editing: CustomReminderKind?
 
     private let settingsFeedback = SettingsInteractionFeedback()
-    private var editorContent: CustomReminderEditorContent {
-        CustomReminderEditorContent.localized(locale: locale)
-    }
 
     /// The contraception method whose default copy fills any blank preview field.
     private var method: ContraceptiveMethod { store.pack.method }
     /// Same Plus gate the notification build uses, so the preview honors the entitlement.
     private var isPlus: Bool { SubscriptionManager.shared.hasPlusAccess }
 
-    /// The method-aware default copy each field seeds with when no custom value is stored —
+    /// The method-aware default copy each field seeds with when no custom value is stored,
     /// the exact strings the notification falls back to (see `CustomReminderPreview`).
     private var defaultTitle: String { CustomReminderPreview.defaultDailyTitle(method: method) }
     private var defaultBody: String { CustomReminderPreview.defaultDailyBody(method: method) }
@@ -59,6 +45,24 @@ struct CustomReminderMessagesEditor: View {
             dueBody: defaultBody,
             retryTitle: defaultRetryTitle,
             retryBody: defaultRetryBody,
+        )
+    }
+
+    private var tone: CustomReminderTone {
+        CustomReminderTone.resolve(draft.messages, defaults: defaultMessages, locale: locale)
+    }
+
+    private var dailyBanner: CustomReminderBannerContent {
+        CustomReminderBannerContent(
+            title: CustomReminderPreview.dailyTitle(custom: draft.messages.dueTitle, method: method, isPlus: isPlus),
+            body: CustomReminderPreview.dailyBody(custom: draft.messages.dueBody, method: method, isPlus: isPlus)
+        )
+    }
+
+    private var followupBanner: CustomReminderBannerContent {
+        CustomReminderBannerContent(
+            title: CustomReminderPreview.retryTitle(custom: draft.messages.retryTitle, isPlus: isPlus),
+            body: CustomReminderPreview.retryBody(custom: draft.messages.retryBody, isPlus: isPlus)
         )
     }
 
@@ -74,147 +78,37 @@ struct CustomReminderMessagesEditor: View {
     }
 
     var body: some View {
-        SettingsSheetContainer(title: PillieLocalization.string(
-            "settings.custom_messages.title",
-            locale: locale
-        )) {
-            ScrollView(.vertical, showsIndicators: false) {
-                VStack(alignment: .leading, spacing: 28) {
-                    Text(PillieLocalization.string(
-                        "settings.custom_messages.body",
-                        locale: locale
-                    ))
-                        .font(.pillieBody())
-                        .foregroundStyle(PillieTheme.textMuted)
-                        .fixedSize(horizontal: false, vertical: true)
-
-                    CustomReminderPresetPicker(
-                        draft: $draft,
-                        feedback: settingsFeedback,
-                        accessibilityReduceMotion: accessibilityReduceMotion
-                    )
-
-                    Text(PillieLocalization.string(
-                        "settings.custom_messages.advanced",
-                        locale: locale
-                    ))
-                        .font(.pillieBodyBold())
-                        .foregroundStyle(PillieTheme.textPrimary)
-                        .accessibilityAddTraits(.isHeader)
-
-                    group(
-                        index: 1,
-                        header: PillieLocalization.string(
-                            "settings.custom_messages.daily_group",
-                            locale: locale
-                        ),
-                        subtitle: PillieLocalization.string(
-                            "settings.custom_messages.body",
-                            locale: locale
-                        ),
-                        titleBinding: $draft.messages.dueTitle,
-                        titleCount: draft.messages.dueTitle.count,
-                        bodyBinding: $draft.messages.dueBody,
-                        bodyCount: draft.messages.dueBody.count,
-                        titleField: .dailyTitle,
-                        bodyField: .dailyBody,
-                        previewTitle: CustomReminderPreview.dailyTitle(custom: draft.messages.dueTitle, method: method, isPlus: isPlus),
-                        previewBody: CustomReminderPreview.dailyBody(custom: draft.messages.dueBody, method: method, isPlus: isPlus),
-                        previewIdentifier: "reminder-preview-daily"
-                    )
-
-                    group(
-                        index: 2,
-                        header: PillieLocalization.string(
-                            "settings.followup.title",
-                            locale: locale
-                        ),
-                        subtitle: PillieLocalization.string(
-                            "settings.followup.body",
-                            locale: locale
-                        ),
-                        titleBinding: $draft.messages.retryTitle,
-                        titleCount: draft.messages.retryTitle.count,
-                        bodyBinding: $draft.messages.retryBody,
-                        bodyCount: draft.messages.retryBody.count,
-                        titleField: .retryTitle,
-                        bodyField: .retryBody,
-                        previewTitle: CustomReminderPreview.retryTitle(custom: draft.messages.retryTitle, isPlus: isPlus),
-                        previewBody: CustomReminderPreview.retryBody(custom: draft.messages.retryBody, isPlus: isPlus),
-                        previewIdentifier: "reminder-preview-followup"
-                    )
-
-                    Button(PillieLocalization.string(
-                        "settings.custom_messages.restore",
-                        locale: locale
-                    )) {
-                        settingsFeedback.sensitiveOrDestructiveChange(
-                            accessibilityReduceMotion: accessibilityReduceMotion
-                        )
-                        draft.restoreDefaults(defaultMessages)
-                        focusedField = nil
+        SettingsSheetContainer(
+            title: PillieLocalization.string("settings.custom_messages.title", locale: locale),
+            spacing: 16,
+            bottomPadding: 0
+        ) {
+            VStack(spacing: 0) {
+                // Prefer the full clock, then smaller ones; scroll only when neither fits
+                // (long locales, large Dynamic Type).
+                ViewThatFits(in: .vertical) {
+                    content(clockSize: 72)
+                    content(clockSize: 52)
+                    content(clockSize: 40)
+                    ScrollView(.vertical, showsIndicators: false) {
+                        content(clockSize: 40)
                     }
-                    .font(.pillieBodySemibold())
-                    .foregroundStyle(PillieTheme.textPrimary)
-                    .frame(maxWidth: .infinity)
-                    .accessibilityIdentifier("reminder-restore-defaults")
-
-                    Text(PillieLocalization.string(
-                        "settings.custom_messages.blank",
-                        locale: locale
-                    ))
-                        .font(.pillieCaption())
-                        .foregroundStyle(PillieTheme.textMuted)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .padding(.top, 4)
-
-                    Button {
-                        settingsFeedback.commitScheduleSave(accessibilityReduceMotion: accessibilityReduceMotion)
-                        ScheduleCriticalSettingChange.saveSettingsCustomReminders(
-                            store: store,
-                            title: normalized(draft.messages.dueTitle, default: defaultTitle),
-                            body: normalized(draft.messages.dueBody, default: defaultBody),
-                            retryTitle: normalized(draft.messages.retryTitle, default: defaultRetryTitle),
-                            retryBody: normalized(draft.messages.retryBody, default: defaultRetryBody),
-                            preset: draft.appliedPreset,
-                            editedAfterPreset: draft.wasEditedAfterPreset
-                        )
-                        dismiss()
-                    } label: {
-                        Text(PillieLocalization.string("global.action.save", locale: locale))
-                    }
-                    .buttonStyle(.pillieDark)
-                    .padding(.top, 8)
-
-                    Button(PillieLocalization.string("global.action.cancel", locale: locale)) {
-                        draft.discardChanges()
-                        dismiss()
-                    }
-                    .buttonStyle(.pillieSecondary)
                 }
-                .padding(.horizontal, 24)
-                // The dark CTA casts a soft drop shadow (radius 15, y 8); without room
-                // below it the ScrollView clips the shadow against the beige bg, leaving
-                // a hard cut-off line. Reserve enough space for the shadow to fade out.
-                .padding(.bottom, 40)
+                .frame(maxHeight: .infinity, alignment: .top)
+
+                actions
             }
-            .scrollDismissesKeyboard(.interactively)
-            .toolbar {
-                ToolbarItemGroup(placement: .keyboard) {
-                    Spacer()
-                    Button(PillieLocalization.string("global.action.done", locale: locale)) {
-                        focusedField = nil
-                    }
-                        .font(.pillieBodySemibold())
-                        .foregroundStyle(PillieTheme.textPrimary)
-                }
-            }
+        }
+        .sheet(item: $editing) { kind in
+            wordsEditor(for: kind)
+                .presentationDetents([.large])
+                .presentationDragIndicator(.hidden)
+                .presentationBackground(PillieTheme.bg)
         }
         .onAppear {
             // Seed every field with the wording that will actually fire: the saved custom
-            // text where present, otherwise the same default the notification would use. Both
-            // sections open pre-filled and editable rather than blank, while the "blank uses
-            // Pillie's default" contract is preserved by re-normalizing on save.
+            // text where present, otherwise the same default the notification would use. The
+            // "blank uses Pillie's default" contract is preserved by re-normalizing on save.
             draft = CustomReminderDraft(
                 messages: CustomReminderMessages(
                     dueTitle: prefilled(store.customDueReminderTitle, default: defaultTitle),
@@ -227,259 +121,152 @@ struct CustomReminderMessagesEditor: View {
         }
     }
 
-    @ViewBuilder
-    private func group(
-        index: Int,
-        header: String,
-        subtitle: String,
-        titleBinding: Binding<String>,
-        titleCount: Int,
-        bodyBinding: Binding<String>,
-        bodyCount: Int,
-        titleField: Field,
-        bodyField: Field,
-        previewTitle: String,
-        previewBody: String,
-        previewIdentifier: String
-    ) -> some View {
-        VStack(alignment: .leading, spacing: 14) {
-            sectionHeader(index: index, header: header, subtitle: subtitle)
-
-            field(
-                label: editorContent.titleFieldLabel,
-                placeholder: editorContent.defaultTitlePlaceholder,
-                text: titleBinding,
-                count: titleCount,
-                cap: CustomReminderCopy.titleCap,
-                axis: .horizontal,
-                field: titleField
-            )
-
-            field(
-                label: editorContent.messageFieldLabel,
-                placeholder: editorContent.defaultMessagePlaceholder,
-                text: bodyBinding,
-                count: bodyCount,
-                cap: CustomReminderCopy.bodyCap,
-                axis: .vertical,
-                field: bodyField
-            )
-
-            previewBanner(title: previewTitle, body: previewBody, identifier: previewIdentifier)
-        }
-    }
-
-    /// A numbered, two-line header so the two reminders read as an ordered sequence
-    /// (daily → follow-up) and each one clearly states what it does.
-    @ViewBuilder
-    private func sectionHeader(index: Int, header: String, subtitle: String) -> some View {
-        HStack(alignment: .center, spacing: 12) {
-            Text("\(index)")
-                .font(.pillie(15, weight: .bold))
-                .foregroundStyle(.white)
-                .frame(width: 28, height: 28)
-                .background(Circle().fill(PillieTheme.dark))
-
-            VStack(alignment: .leading, spacing: 2) {
-                Text(header)
-                    .font(.pillieBodyBold())
-                    .foregroundStyle(PillieTheme.textPrimary)
-                Text(subtitle)
-                    .font(.pillieDate())
-                    .foregroundStyle(PillieTheme.textMuted)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-        }
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel("\(header). \(subtitle)")
-    }
-
-    /// A mock lock-screen notification banner that renders the *effective* copy that will
-    /// actually fire — custom text where present, the method-aware default where a field is
-    /// blank. Driven entirely by `CustomReminderPreview`, so it can never diverge from the
-    /// scheduled notification.
-    @ViewBuilder
-    private func previewBanner(title: String, body: String, identifier: String) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(PillieLocalization.string(
-                "settings.custom_messages.preview",
-                locale: locale
-            ))
-                .font(.pillieCaption())
-                .foregroundStyle(PillieTheme.textMuted.opacity(0.7))
-                .tracking(2)
-
-            HStack(alignment: .top, spacing: 12) {
-                Image("HomeAvatarLogo")
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 38, height: 38)
-                    .clipShape(RoundedRectangle(cornerRadius: 9, style: .continuous))
-
-                VStack(alignment: .leading, spacing: 2) {
-                    HStack(alignment: .firstTextBaseline) {
-                        Text(title)
-                            .font(.pillieBody())
-                            .fontWeight(.semibold)
-                            .foregroundStyle(PillieTheme.textPrimary)
-                            .lineLimit(2)
-                            .accessibilityIdentifier("\(identifier)-title")
-                        Spacer(minLength: 8)
-                        Text(Date.now.formatted(
-                            .relative(presentation: .named).locale(locale)
-                        ))
-                            .font(.pillieCaption())
-                            .foregroundStyle(PillieTheme.textMuted.opacity(0.7))
-                    }
-                    Text(body)
-                        .font(.pillieCaption())
-                        .foregroundStyle(PillieTheme.textMuted)
-                        .lineLimit(3)
-                        .accessibilityIdentifier("\(identifier)-body")
+    private func content(clockSize: CGFloat) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            CustomReminderLockScreenStage(
+                hour: store.reminderHour,
+                minute: store.reminderMinute,
+                clockSize: clockSize,
+                daily: dailyBanner,
+                followup: followupBanner,
+                onEdit: { kind in
+                    settingsFeedback.openRow(accessibilityReduceMotion: accessibilityReduceMotion)
+                    editing = kind
                 }
-            }
-            .padding(14)
-            .background(
-                RoundedRectangle(cornerRadius: PillieTheme.cardRadius, style: .continuous)
-                    .fill(PillieTheme.cardWhite)
             )
-            .overlay(
-                RoundedRectangle(cornerRadius: PillieTheme.cardRadius, style: .continuous)
-                    .stroke(PillieTheme.sageHalf, lineWidth: 1)
-            )
-            .shadow(color: PillieTheme.cardShadow, radius: 10, y: 4)
+
+            Text(PillieLocalization.string("settings.custom_messages.preview_caption", locale: locale))
+                .font(.pillie(14, weight: .medium))
+                .foregroundStyle(PillieTheme.textMuted)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: .infinity)
+                .padding(.bottom, 6)
+
+            toneSection
         }
-        .accessibilityIdentifier(identifier)
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel([
-            PillieLocalization.string("settings.custom_messages.preview", locale: locale),
-            title,
-            body,
-        ].joined(separator: ". "))
+        .padding(.horizontal, 24)
+        .padding(.bottom, 16)
     }
 
-    @ViewBuilder
-    private func field(
-        label: String,
-        placeholder: String,
-        text: Binding<String>,
-        count: Int,
-        cap: Int,
-        axis: Axis,
-        field: Field
-    ) -> some View {
-        let isFocused = focusedField == field
-        VStack(alignment: .leading, spacing: 6) {
-            HStack {
-                Text(label)
-                    .font(.pillieCaptionMedium())
-                    .foregroundStyle(PillieTheme.textMuted)
-                    .tracking(1)
-                Spacer()
-                Text("\(count)/\(cap)")
-                    .font(.pillieCaption())
-                    .foregroundStyle(PillieTheme.textMuted.opacity(0.7))
-                    .monospacedDigit()
-            }
-
-            TextField(placeholder, text: text, axis: axis)
-                .accessibilityIdentifier("reminder-field-\(field.rawValue)")
-                .lineLimit(axis == .vertical ? 3...5 : 1...1)
-                .font(.pillieBody())
+    private var toneSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text(PillieLocalization.string("settings.custom_messages.tone", locale: locale))
+                .font(.pillie(18, weight: .bold))
                 .foregroundStyle(PillieTheme.textPrimary)
-                .focused($focusedField, equals: field)
-                // Hard cap: drop anything typed or pasted past the limit so the field
-                // can never exceed `cap` (the count label stays in sync).
-                .onChange(of: text.wrappedValue) { _, newValue in
-                    if newValue.count > cap {
-                        text.wrappedValue = String(newValue.prefix(cap))
-                    }
-                }
-                .padding(.horizontal, 14)
-                .padding(.vertical, 12)
-                .background(
-                    RoundedRectangle(cornerRadius: PillieTheme.cardRadius)
-                        .fill(PillieTheme.cardWhite)
+                .accessibilityAddTraits(.isHeader)
+
+            CustomReminderToneControl(selection: tone.preset) { preset in
+                settingsFeedback.openRow(accessibilityReduceMotion: accessibilityReduceMotion)
+                draft.apply(preset, locale: locale)
+            }
+
+            Text(tone.localizedDescription(locale: locale))
+                .font(.pillie(14, weight: .medium))
+                .foregroundStyle(PillieTheme.textMuted)
+                .fixedSize(horizontal: false, vertical: true)
+                .accessibilityIdentifier("reminder-tone-description")
+        }
+    }
+
+    private var actions: some View {
+        VStack(spacing: 4) {
+            Button {
+                settingsFeedback.commitScheduleSave(accessibilityReduceMotion: accessibilityReduceMotion)
+                ScheduleCriticalSettingChange.saveSettingsCustomReminders(
+                    store: store,
+                    title: normalized(draft.messages.dueTitle, default: defaultTitle),
+                    body: normalized(draft.messages.dueBody, default: defaultBody),
+                    retryTitle: normalized(draft.messages.retryTitle, default: defaultRetryTitle),
+                    retryBody: normalized(draft.messages.retryBody, default: defaultRetryBody),
+                    preset: draft.appliedPreset,
+                    editedAfterPreset: draft.wasEditedAfterPreset
                 )
-                .overlay(
-                    RoundedRectangle(cornerRadius: PillieTheme.cardRadius)
-                        .stroke(isFocused ? PillieTheme.verifiedGreen : PillieTheme.sageHalf,
-                                lineWidth: isFocused ? 1.5 : 1)
-                )
-                .shadow(color: PillieTheme.cardShadow, radius: 10, y: 4)
-                .animation(.easeInOut(duration: 0.15), value: isFocused)
+                dismiss()
+            } label: {
+                Text(PillieLocalization.string("global.action.save", locale: locale))
+            }
+            .buttonStyle(.pillieDark)
+
+            Button(PillieLocalization.string("global.action.cancel", locale: locale)) {
+                draft.discardChanges()
+                dismiss()
+            }
+            .buttonStyle(.pillieSecondary)
+        }
+        .padding(.horizontal, 24)
+        .padding(.top, 4)
+    }
+
+    @ViewBuilder
+    private func wordsEditor(for kind: CustomReminderKind) -> some View {
+        switch kind {
+        case .daily:
+            CustomReminderWordsEditor(
+                kind: kind,
+                title: $draft.messages.dueTitle,
+                message: $draft.messages.dueBody,
+                preview: dailyBanner
+            )
+        case .followup:
+            CustomReminderWordsEditor(
+                kind: kind,
+                title: $draft.messages.retryTitle,
+                message: $draft.messages.retryBody,
+                preview: followupBanner
+            )
         }
     }
 }
 
-private struct CustomReminderPresetPicker: View {
-    @Binding var draft: CustomReminderDraft
-    @Environment(\.locale) private var locale
-    let feedback: SettingsInteractionFeedback
-    let accessibilityReduceMotion: Bool
+/// Sage track with an ink thumb. No segment is selected when the words match no preset.
+private struct CustomReminderToneControl: View {
+    let selection: CustomReminderPreset?
+    let onSelect: (CustomReminderPreset) -> Void
 
-    private let columns = [
-        GridItem(.flexible(), spacing: 10),
-        GridItem(.flexible(), spacing: 10)
-    ]
+    @Environment(\.locale) private var locale
+    @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
+    @Namespace private var thumb
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            VStack(alignment: .leading, spacing: 3) {
-                Text(PillieLocalization.string(
-                    "settings.custom_messages.start_tone",
-                    locale: locale
-                ))
-                    .font(.pillieBodyBold())
-                    .foregroundStyle(PillieTheme.textPrimary)
-                Text(PillieLocalization.string(
-                    "settings.custom_messages.start_tone_body",
-                    locale: locale
-                ))
-                    .font(.pillieDate())
-                    .foregroundStyle(PillieTheme.textMuted)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-
-            let selectedPreset = draft.appliedPreset
-                ?? CustomReminderPreset.matching(draft.messages, locale: locale)
-            LazyVGrid(columns: columns, spacing: 10) {
-                ForEach(CustomReminderPreset.allCases) { preset in
-                    let isSelected = selectedPreset == preset
-
-                    Button {
-                        feedback.openRow(accessibilityReduceMotion: accessibilityReduceMotion)
-                        draft.apply(preset, locale: locale)
-                    } label: {
-                        HStack(spacing: 7) {
-                            Text(preset.localizedDisplayName(locale: locale))
-                                .font(.pillieDate())
-                                .pillieAdaptiveLineLimit(minimumScaleFactor: 0.72)
-                            Spacer(minLength: 0)
-                            Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
-                                .font(.pillie(14, weight: .semibold))
-                        }
-                        .foregroundStyle(isSelected ? Color.white : PillieTheme.textPrimary)
-                        .padding(.horizontal, 12)
-                        .frame(maxWidth: .infinity, minHeight: 48)
-                        .background(
-                            RoundedRectangle(cornerRadius: PillieTheme.cardRadius, style: .continuous)
-                                .fill(isSelected ? PillieTheme.dark : PillieTheme.cardWhite)
-                        )
-                        .overlay(
-                            RoundedRectangle(cornerRadius: PillieTheme.cardRadius, style: .continuous)
-                                .stroke(isSelected ? PillieTheme.dark : PillieTheme.sageHalf, lineWidth: 1)
-                        )
-                    }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel(preset.localizedDisplayName(locale: locale))
-                    .accessibilityValue(
-                        CustomReminderEditorContent.localized(locale: locale)
-                            .selectionValue(isSelected: isSelected)
-                    )
-                    .accessibilityIdentifier("reminder-preset-\(preset.rawValue)")
-                }
+        HStack(spacing: 2) {
+            ForEach(CustomReminderPreset.allCases) { preset in
+                segment(preset)
             }
         }
+        .padding(4)
+        .background(Capsule().fill(PillieTheme.sage))
+        .animation(accessibilityReduceMotion ? nil : .snappy(duration: 0.25), value: selection)
     }
+
+    private func segment(_ preset: CustomReminderPreset) -> some View {
+        let isSelected = selection == preset
+        let name = preset.localizedDisplayName(locale: locale)
+        return Button { onSelect(preset) } label: {
+            Text(name)
+                .font(.pillie(14, weight: isSelected ? .semibold : .medium))
+                .foregroundStyle(isSelected ? Color.white : CustomReminderToneColor.idle)
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
+                .padding(.horizontal, 6)
+                .frame(maxWidth: .infinity)
+                .frame(height: 40)
+                .background {
+                    if isSelected {
+                        Capsule()
+                            .fill(PillieTheme.dark)
+                            .matchedGeometryEffect(id: "thumb", in: thumb)
+                    }
+                }
+                .contentShape(Capsule())
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(name)
+        .accessibilityAddTraits(isSelected ? [.isButton, .isSelected] : .isButton)
+        .accessibilityIdentifier("reminder-tone-\(preset.rawValue)")
+    }
+}
+
+private enum CustomReminderToneColor {
+    static let idle = Color(hex: "44403C")
 }

@@ -2652,6 +2652,78 @@
       "en": "How long has this ring been in?",
       "de": "Wie lange ist dieser Ring schon drin?",
       "it": "Da quanto porti questo anello?"
+    },
+    {
+      "issue": "ENG-159",
+      "table": "Localizable",
+      "key": "settings.custom_messages.preview_caption",
+      "en": "Live preview. Tap the pencil to write your own.",
+      "de": "Live-Vorschau. Tippe auf den Stift für eigene Texte.",
+      "it": "Anteprima dal vivo. Tocca la matita per scrivere il tuo."
+    },
+    {
+      "issue": "ENG-159",
+      "table": "Localizable",
+      "key": "settings.custom_messages.tone",
+      "en": "Tone",
+      "de": "Stil",
+      "it": "Stile"
+    },
+    {
+      "issue": "ENG-159",
+      "table": "Localizable",
+      "key": "settings.custom_messages.tone.gentle_body",
+      "en": "Soft and patient. Rewrites both reminders.",
+      "de": "Sanft und geduldig. Schreibt beide Erinnerungen neu.",
+      "it": "Delicato e paziente. Riscrive entrambi i promemoria."
+    },
+    {
+      "issue": "ENG-159",
+      "table": "Localizable",
+      "key": "settings.custom_messages.tone.direct_body",
+      "en": "Short and to the point. Rewrites both reminders.",
+      "de": "Kurz und klar. Schreibt beide Erinnerungen neu.",
+      "it": "Breve e diretto. Riscrive entrambi i promemoria."
+    },
+    {
+      "issue": "ENG-159",
+      "table": "Localizable",
+      "key": "settings.custom_messages.tone.encouraging_body",
+      "en": "Warm and upbeat. Rewrites both reminders.",
+      "de": "Herzlich und positiv. Schreibt beide Erinnerungen neu.",
+      "it": "Caloroso e positivo. Riscrive entrambi i promemoria."
+    },
+    {
+      "issue": "ENG-159",
+      "table": "Localizable",
+      "key": "settings.custom_messages.tone.private_body",
+      "en": "Keeps your Lock Screen discreet. Rewrites both reminders.",
+      "de": "Hält deinen Sperrbildschirm diskret. Schreibt beide Erinnerungen neu.",
+      "it": "Mantiene riservata la schermata di blocco. Riscrive entrambi i promemoria."
+    },
+    {
+      "issue": "ENG-159",
+      "table": "Localizable",
+      "key": "settings.custom_messages.tone.default_body",
+      "en": "Using Pillie’s default wording.",
+      "de": "Pillies Standardtext wird verwendet.",
+      "it": "Stai usando il testo predefinito di Pillie."
+    },
+    {
+      "issue": "ENG-159",
+      "table": "Localizable",
+      "key": "settings.custom_messages.tone.custom_body",
+      "en": "Using your own words.",
+      "de": "Deine eigenen Worte werden verwendet.",
+      "it": "Stai usando le tue parole."
+    },
+    {
+      "issue": "ENG-159",
+      "table": "Localizable",
+      "key": "settings.custom_messages.later",
+      "en": "Later",
+      "de": "Später",
+      "it": "Più tardi"
     }
   ]
 }

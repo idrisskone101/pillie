@@ -50,6 +50,50 @@ struct CustomReminderDraft: Equatable {
     }
 }
 
+/// What the Tone control shows for the words currently in the draft.
+enum CustomReminderTone: Equatable {
+    case preset(CustomReminderPreset)
+    case pillieDefault
+    case ownWords
+
+    static func resolve(
+        _ messages: CustomReminderMessages,
+        defaults: CustomReminderMessages,
+        locale: Locale
+    ) -> Self {
+        // A blank field fires the default, so it reads as the default here too.
+        func effective(_ text: String, _ fallback: String) -> String {
+            text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? fallback : text
+        }
+        let effective = CustomReminderMessages(
+            dueTitle: effective(messages.dueTitle, defaults.dueTitle),
+            dueBody: effective(messages.dueBody, defaults.dueBody),
+            retryTitle: effective(messages.retryTitle, defaults.retryTitle),
+            retryBody: effective(messages.retryBody, defaults.retryBody)
+        )
+        if let preset = CustomReminderPreset.matching(effective, locale: locale) {
+            return .preset(preset)
+        }
+        return effective == defaults ? .pillieDefault : .ownWords
+    }
+
+    var preset: CustomReminderPreset? {
+        if case .preset(let preset) = self { preset } else { nil }
+    }
+
+    func localizedDescription(locale: Locale) -> String {
+        let key = switch self {
+        case .preset(.gentle): "settings.custom_messages.tone.gentle_body"
+        case .preset(.direct): "settings.custom_messages.tone.direct_body"
+        case .preset(.encouraging): "settings.custom_messages.tone.encouraging_body"
+        case .preset(.privateDiscreet): "settings.custom_messages.tone.private_body"
+        case .pillieDefault: "settings.custom_messages.tone.default_body"
+        case .ownWords: "settings.custom_messages.tone.custom_body"
+        }
+        return PillieLocalization.string(key, locale: locale)
+    }
+}
+
 enum CustomReminderPreset: String, CaseIterable, Identifiable {
     case gentle
     case direct

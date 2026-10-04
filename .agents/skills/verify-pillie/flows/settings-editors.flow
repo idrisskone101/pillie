@@ -23,10 +23,10 @@ swipe --start-x 200 --start-y 200 --end-x 200 --end-y 860 --duration 0.4
 gone label Save
 
 tap --label "Reminder messages, Default"
-wait id reminder-preset-gentle                  # CustomReminderMessagesEditor.swift
+wait id reminder-tone-gentle                  # CustomReminderMessagesEditor.swift
 shot editor-reminder-messages
 swipe --start-x 200 --start-y 200 --end-x 200 --end-y 860 --duration 0.4
-gone id reminder-preset-gentle
+gone id reminder-tone-gentle
 
 tap --label "Pill supply reminder, 5"
 wait label Save

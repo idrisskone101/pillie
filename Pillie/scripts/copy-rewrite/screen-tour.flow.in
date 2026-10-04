@@ -99,10 +99,10 @@ tap --id gearshape
 wait id settingsLanguageRow
 shot settings-top
 tap -x 201 -y 395
-wait id reminder-preset-gentle
+wait id reminder-tone-gentle
 shot settings-reminder-messages
 swipe --start-x 200 --start-y 200 --end-x 200 --end-y 860 --duration 0.4
-gone id reminder-preset-gentle
+gone id reminder-tone-gentle
 tap -x 201 -y 269
 wait id Increment
 shot settings-schedule-editor

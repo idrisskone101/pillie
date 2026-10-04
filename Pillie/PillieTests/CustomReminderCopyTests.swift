@@ -275,4 +275,41 @@ final class CustomReminderCopyTests: XCTestCase {
         XCTAssertFalse(CustomReminderCopy.isCustomized(""))
         XCTAssertFalse(CustomReminderCopy.isCustomized("   \n  "))
     }
+
+    private let toneDefaults = CustomReminderMessages(
+        dueTitle: "Time for your pill",
+        dueBody: "Take it, then tap here to check in.",
+        retryTitle: "Still to do today",
+        retryBody: "You haven’t checked in yet.",
+    )
+    private let english = Locale(identifier: "en")
+
+    func testToneResolvesPresetWords() {
+        let messages = CustomReminderPreset.direct.localizedMessages(locale: english)
+        XCTAssertEqual(
+            CustomReminderTone.resolve(messages, defaults: toneDefaults, locale: english),
+            .preset(.direct)
+        )
+    }
+
+    func testToneResolvesPillieDefaultIncludingBlankFields() {
+        XCTAssertEqual(
+            CustomReminderTone.resolve(toneDefaults, defaults: toneDefaults, locale: english),
+            .pillieDefault
+        )
+        let blank = CustomReminderMessages(dueTitle: "", dueBody: "  ", retryTitle: "", retryBody: "")
+        XCTAssertEqual(
+            CustomReminderTone.resolve(blank, defaults: toneDefaults, locale: english),
+            .pillieDefault
+        )
+    }
+
+    func testToneResolvesOwnWordsWhenAPresetIsEdited() {
+        var messages = CustomReminderPreset.gentle.localizedMessages(locale: english)
+        messages.dueTitle = "Pill time, you’ve got this"
+        XCTAssertEqual(
+            CustomReminderTone.resolve(messages, defaults: toneDefaults, locale: english),
+            .ownWords
+        )
+    }
 }
