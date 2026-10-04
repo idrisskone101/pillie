@@ -33,6 +33,8 @@
 	<array>
 		<string>com.idrisskone.pillie.screentime-reconcile</string>
 	</array>
+	<key>NSAdvertisingAttributionReportEndpoint</key>
+	<string>https://appsflyer-skadnetwork.com/</string>
 	<key>NSMotionUsageDescription</key>
 	<string>Pillie uses motion to notice when you shake your phone to check in.</string>
 	<key>NSUserTrackingUsageDescription</key>
