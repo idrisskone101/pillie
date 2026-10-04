@@ -27,9 +27,7 @@ final class AppBlockingManager {
         didSet { ScreenTimeSharedState.saveSelection(activitySelection) }
     }
 
-    /// What the FamilyActivityPicker edits. Legacy selections open upgraded,
-    /// so saving them expands each category into its apps; cancelling leaves
-    /// the stored selection untouched.
+    /// Upgraded on read, so a cancelled picker leaves a legacy selection untouched.
     var pickerSelection: FamilyActivitySelection {
         get { activitySelection.includingEntireCategories() }
         set { activitySelection = newValue }

@@ -20,13 +20,11 @@ struct BlockerSelectionState: Equatable {
     let applicationCount: Int
     /// Number of selected app categories (opaque token count).
     let categoryCount: Int
-    /// The selection was made with `includeEntireCategory`, so Screen Time has
-    /// already expanded every picked category into its installed apps' tokens
-    /// inside `applicationCount`.
+    /// Made with `includeEntireCategory`, so `applicationCount` already holds
+    /// every installed app inside the picked categories.
     let includesCategoryApps: Bool
 
-    /// Number of apps the blocker covers. Legacy selections only hold the
-    /// opaque category token, so each of their categories still counts as one.
+    /// Legacy selections only hold the category token, so each category counts as one.
     var selectedCount: Int {
         includesCategoryApps ? applicationCount : applicationCount + categoryCount
     }

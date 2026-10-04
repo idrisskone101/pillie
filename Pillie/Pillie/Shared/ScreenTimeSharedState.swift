@@ -25,10 +25,6 @@ enum ScreenTimeSharedState {
     static func saveSelection(_ selection: FamilyActivitySelection) {
         guard let data = try? JSONEncoder().encode(selection) else { return }
         defaults?.set(data, forKey: AppGroupKeys.familyActivitySelectionData)
-        defaults?.set(
-            selection.includeEntireCategory,
-            forKey: AppGroupKeys.familyActivitySelectionIncludesEntireCategory
-        )
         defaults?.synchronize()
     }
 
@@ -37,12 +33,7 @@ enum ScreenTimeSharedState {
               let selection = try? JSONDecoder().decode(FamilyActivitySelection.self, from: data) else {
             return FamilyActivitySelection(includeEntireCategory: true)
         }
-        // The flag is stored beside the blob so it survives even if the
-        // token encoding ever drops it; legacy selections stay as picked.
-        let includesEntireCategory = defaults?.bool(
-            forKey: AppGroupKeys.familyActivitySelectionIncludesEntireCategory
-        ) ?? false
-        return includesEntireCategory ? selection.includingEntireCategories() : selection
+        return selection
     }
 
     // MARK: - Blocking State
@@ -150,9 +141,7 @@ enum ScreenTimeSharedState {
 }
 
 extension FamilyActivitySelection {
-    /// Same tokens, but the picker will expand each selected category into its
-    /// installed apps, so `applicationTokens.count` is the real app count.
-    /// A legacy selection only gains those app tokens once the picker saves it.
+    /// The category's app tokens only appear once the picker saves this selection.
     func includingEntireCategories() -> FamilyActivitySelection {
         guard !includeEntireCategory else { return self }
         var selection = FamilyActivitySelection(includeEntireCategory: true)
