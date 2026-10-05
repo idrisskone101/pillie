@@ -39,7 +39,7 @@ gone text "Late · still time until" 2
 shot after-24-4
 
 # A pack started after the day's reminder is not late before its first reminder.
-openurl pillie://debug/fixed-now?at=2026-09-29T11:00:00Z
+openurl pillie://debug/fixed-now?at=2026-09-29T07:00:00Z
 wait text "Pill 1 of 28" 10
 expect text "New pack · 24/4"
 shot before-first-reminder
@@ -60,7 +60,7 @@ wait id packSheet.custom 10
 tap --id packSheet.21_7
 wait text "Clear your history?" 10
 tap --label "Clear and save"
-wait text "New pack · 21/7" 10
+wait text "New pack · Standard" 10
 expect text "Pill 1 of 28"
 gone text "Late · still time until" 2
 shot new-pack-before-reminder
