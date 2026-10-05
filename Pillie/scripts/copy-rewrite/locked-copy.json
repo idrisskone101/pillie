@@ -2764,6 +2764,16 @@
       "en": "Reset",
       "de": "Zurücksetzen",
       "it": "Ripristina"
+    },
+    {
+      "issue": "ENG-139",
+      "table": "Commerce",
+      "key": "onboarding.blocking_setup.trial_line",
+      "create": true,
+      "comment": "Line above Allow pausing / Not now on the app-blocking onboarding step, where the 14-day reverse trial starts. %lld is the trial length in active days [trial granted]",
+      "en": "Pillie Plus is on for your next %lld active days, free. No card. We’ll remind you before it ends.",
+      "de": "Pillie Plus ist die nächsten %lld aktiven Tage gratis. Keine Karte. Wir erinnern dich vor dem Ende.",
+      "it": "Hai Pillie Plus gratis per i prossimi %lld giorni attivi. Nessuna carta. Ti avviseremo prima che finisca."
     }
   ]
 }
