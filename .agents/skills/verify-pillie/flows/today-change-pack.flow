@@ -49,4 +49,19 @@ openurl pillie://debug/fixed-now?at=2026-09-29T13:00:00Z
 wait text "Pill 1 not checked in yesterday" 10
 expect text "Pill 2 of 28"
 shot missed-at-first-reminder
+
+# A pack started before the day's reminder puts pill 1 on that reminder, not on
+# yesterday's already-passed one, so it is not late (no catch-up, no shields).
+openurl pillie://debug/fixed-now?at=2026-09-30T06:30:00Z
+tap --id homePackOptions
+wait id homePackChangeType 5
+tap --id homePackChangeType
+wait id packSheet.custom 10
+tap --id packSheet.21_7
+wait text "Clear your history?" 10
+tap --label "Clear and save"
+wait text "New pack · 21/7" 10
+expect text "Pill 1 of 28"
+gone text "Late · still time until" 2
+shot new-pack-before-reminder
 openurl pillie://debug/fixed-now?at=off
