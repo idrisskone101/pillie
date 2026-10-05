@@ -463,11 +463,15 @@ class PillStore {
     }
 
     /// Whether today requires no blocking: taken, or no hormone dose is due.
-    /// An untaken sugar pill is handled.
+    /// An untaken sugar pill is handled, and so is the first day of a pack
+    /// started after that day's reminder: its catch-up reminder still fires,
+    /// but shields wait for the next reminder.
     var isTodayHandled: Bool {
         if isTodayTaken { return true }
-        guard let due = dueAction(on: today) else { return false }
-        return !due.type.enforcesAdherence
+        guard let snapshot = scheduleSnapshot(for: today), let due = snapshot.dueAction else { return false }
+        guard due.type.enforcesAdherence else { return true }
+        guard let reminder = DoseWindow.reminder(for: today, hour: reminderHour, minute: reminderMinute) else { return false }
+        return DoseStanding.startedAfterReminder(packStartedAt: snapshot.pack.startedAt, day: today, reminder: reminder)
     }
 
     /// Whether today has nothing to log: a passive wearing day or a no-pill break.

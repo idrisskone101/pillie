@@ -564,4 +564,35 @@ final class PillStoreEdgeCaseTests: XCTestCase {
         XCTAssertEqual(store.currentDayIndex + 1, 5)
         XCTAssertTrue(store.isTodayTaken)
     }
+
+    // MARK: - Starting a pack after the day's reminder
+
+    func testPackStartedAfterTodaysReminderHoldsShieldsUntilTheNextReminder() throws {
+        let (store, now) = try makeAfternoonStore()
+        store.reminderHour = 8
+
+        store.resetAndStartFresh(
+            method: .pill,
+            regimen: .everyDay,
+            customRegimen: nil,
+            cycleDay: 5,
+            anchorDay: store.anchorDay(for: .notYet)
+        )
+
+        XCTAssertEqual(store.today, Calendar.current.startOfDay(for: now))
+        XCTAssertFalse(store.isTodayTaken, "pill 5 is still owed, so its catch-up reminder fires")
+        XCTAssertTrue(store.isTodayHandled, "no shields on the day the pack starts")
+
+        PillieClock.setFixedNowForTesting(InMemoryStoreFactory.localDate("2026-10-05", hour: 9))
+        store.refreshDayContextIfNeeded()
+        XCTAssertFalse(store.isTodayHandled, "pill 6 is late after tomorrow's reminder")
+    }
+
+    func testEstablishedPackPastItsReminderIsNotHandled() throws {
+        let (store, _) = try makeAfternoonStore()
+        store.reminderHour = 8
+
+        XCTAssertFalse(store.isTodayTaken)
+        XCTAssertFalse(store.isTodayHandled)
+    }
 }
