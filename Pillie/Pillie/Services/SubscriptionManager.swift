@@ -158,6 +158,15 @@ final class SubscriptionManager: NSObject {
     #else
     static let apiKey = "appl_jAqXDkTjrIxXrqrDsPQInTuIsdp"
     #endif
+    /// Every simulator signs in as the same RevenueCat customer. An anonymous
+    /// ID would add a customer per fresh simulator, and cloud QA boots a new
+    /// one per run. A Test Store purchase on any simulator therefore turns Plus
+    /// on for all of them until it is refunded in the dashboard.
+    #if targetEnvironment(simulator)
+    static let appUserID: String? = "pillie-simulator"
+    #else
+    static let appUserID: String? = nil
+    #endif
     nonisolated static let entitlementID = "pillie_plus"
     static let monthlyProductID = "com.idrisskone.pillie.plus.monthly"
     static let annualProductID = "com.idrisskone.pillie.plus.annual"
@@ -276,7 +285,7 @@ final class SubscriptionManager: NSObject {
         }
         guard !isConfigured else { return }
         Purchases.logLevel = .warn
-        Purchases.configure(withAPIKey: Self.apiKey)
+        Purchases.configure(withAPIKey: Self.apiKey, appUserID: Self.appUserID)
         isConfigured = true
 
         // Listen for subscription changes
