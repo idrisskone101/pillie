@@ -278,7 +278,8 @@ struct ProtocolEditor: View {
             method: draft.method,
             regimen: draft.preset,
             customRegimen: draft.customRegimen,
-            cycleDay: draft.cycleDay ?? 1
+            cycleDay: draft.cycleDay ?? 1,
+            anchorDay: store.anchorDay(for: draft.answer)
         )
         if draft.logsToday {
             store.markTodayAsTaken()

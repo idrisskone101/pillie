@@ -102,6 +102,8 @@ blocking/trial status surfaces, and (when eligible) the review ask.
 - `flows/today-change-pack.flow` — the "…" menu's Change pack type opens
   the pack sheet, then the Settings "Clear your history?" confirmation.
   Cancel keeps the pack; Reset & Save starts the new pack at pill 1 today.
+  Started before the day's reminder, pill 1 belongs to that reminder and is
+  not late.
 - `flows/today-patch-countdown.flow` — `/routine-day?method=patch&day=N`
   plus `/fixed-now` walks the patch card: wearing (day 10), late change
   (day 15), logged through the real CTA ("On today"), missed the next day

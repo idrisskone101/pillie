@@ -260,6 +260,20 @@ class PillStore {
         return max(liveDoseDay, startOfDaySafe(activePack.resolvedCycleAnchor().date))
     }
 
+    /// The day a "today is cycle day N" edit lands on. Before an evening reminder
+    /// the live day is still yesterday, whose reminder already passed: an unlogged
+    /// pill placed there reads overdue at once, firing a catch-up reminder and the
+    /// shields. So only a taken answer lands on the live day; anything else lands
+    /// on the calendar day, the pill the next reminder is for.
+    func anchorDay(for answer: TodayPillPick.Answer?) -> Date {
+        TodayPillPick.Answer.anchorDay(
+            for: answer,
+            now: PillieClock.now,
+            reminderHour: reminderHour,
+            reminderMinute: reminderMinute
+        )
+    }
+
     /// The live day read from the clock alone. Code that replaces or re-anchors
     /// the pack, and the rollover check, use it: `today` depends on the pack
     /// being replaced, and on a pinned QA clock the clamp hides the clock moving.
@@ -449,11 +463,15 @@ class PillStore {
     }
 
     /// Whether today requires no blocking: taken, or no hormone dose is due.
-    /// An untaken sugar pill is handled.
+    /// An untaken sugar pill is handled, and so is the first day of a pack
+    /// started after that day's reminder: its catch-up reminder still fires,
+    /// but shields wait for the next reminder.
     var isTodayHandled: Bool {
         if isTodayTaken { return true }
-        guard let due = dueAction(on: today) else { return false }
-        return !due.type.enforcesAdherence
+        guard let snapshot = scheduleSnapshot(for: today), let due = snapshot.dueAction else { return false }
+        guard due.type.enforcesAdherence else { return true }
+        guard let reminder = DoseWindow.reminder(for: today, hour: reminderHour, minute: reminderMinute) else { return false }
+        return DoseStanding.startedAfterReminder(packStartedAt: snapshot.pack.startedAt, day: today, reminder: reminder)
     }
 
     /// Whether today has nothing to log: a passive wearing day or a no-pill break.
@@ -1101,12 +1119,14 @@ class PillStore {
     // MARK: - Full Reset (Contraception Type Change)
 
     /// Deletes all existing data and starts fresh, as if the user just onboarded.
-    /// Marks prior active days in the current cycle as taken.
+    /// Marks prior active days in the current cycle as taken. `anchorDay` is the
+    /// day that becomes `cycleDay`; see `anchorDay(for:)`.
     func resetAndStartFresh(
         method: ContraceptiveMethod,
         regimen: PillPack.PillRegimenPreset,
         customRegimen: PackRegimen?,
-        cycleDay: Int
+        cycleDay: Int,
+        anchorDay: Date
     ) {
         let calendar = Calendar.current
         let normalizedCycleLength = cycleLengthFor(
@@ -1120,8 +1140,9 @@ class PillStore {
         try? modelContext.delete(model: PillDay.self)
         try? modelContext.delete(model: PillPack.self)
 
-        // 2. Compute startDate so today aligns with safeCycleDay
-        let startDate = calendar.date(byAdding: .day, value: -(safeCycleDay - 1), to: liveDoseDay) ?? liveDoseDay
+        // 2. Compute startDate so the anchor day aligns with safeCycleDay
+        let anchor = startOfDaySafe(anchorDay)
+        let startDate = calendar.date(byAdding: .day, value: -(safeCycleDay - 1), to: anchor) ?? anchor
 
         // 3. Create a fresh pack
         let freshPack = PillPack(
@@ -1140,7 +1161,7 @@ class PillStore {
         //    Prior action days → .taken; break days → .breakDay. Nothing is .missed.
         backfillPriorDays(from: startDate, count: safeCycleDay - 1, pack: freshPack, calendar: calendar)
         if safeCycleDay > 1 {
-            streakResetDate = liveDoseDay
+            streakResetDate = anchor
         }
 
         // 5. Set appActivatedDate to today so dates before our backfill
@@ -1534,7 +1555,7 @@ class PillStore {
     /// Starts a fresh 21 + 7 patch or ring routine on `cycleDay` today, like onboarding, but as an
     /// established routine: no start-day grace, so an untaken task past its reminder reads late.
     func seedRoutineDay(method: ContraceptiveMethod, cycleDay: Int) {
-        resetAndStartFresh(method: method, regimen: .twentyOneSeven, customRegimen: nil, cycleDay: cycleDay)
+        resetAndStartFresh(method: method, regimen: .twentyOneSeven, customRegimen: nil, cycleDay: cycleDay, anchorDay: liveDoseDay)
         activePack?.startedAt = nil
         persist()
         rebuildReadIndexes()

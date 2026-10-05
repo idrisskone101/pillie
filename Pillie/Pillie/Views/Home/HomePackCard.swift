@@ -148,7 +148,8 @@ struct HomePackCard: View {
                 method: .pill,
                 regimen: choice.preset,
                 customRegimen: choice.preset == .custom ? choice.regimen : nil,
-                cycleDay: 1
+                cycleDay: 1,
+                anchorDay: store.anchorDay(for: nil)
             )
         }
         ProductAnalyticsTelemetry.live.protocolChangeSaved()

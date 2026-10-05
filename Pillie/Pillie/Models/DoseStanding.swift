@@ -38,11 +38,21 @@ enum DoseStanding: Hashable, Sendable {
                     for: day, hour: reminderHour, minute: reminderMinute, calendar: calendar
                 )
             else { return nil }
-            // A pack started after its first day's reminder never missed that reminder.
-            if let packStartedAt, packStartedAt >= reminder, calendar.isDate(packStartedAt, inSameDayAs: day) {
+            if startedAfterReminder(packStartedAt: packStartedAt, day: day, reminder: reminder, calendar: calendar) {
                 return .upcoming
             }
             return now < reminder ? .upcoming : .late(until: deadline)
         }
+    }
+
+    /// A pack started after its first day's reminder never missed that reminder.
+    static func startedAfterReminder(
+        packStartedAt: Date?,
+        day: Date,
+        reminder: Date,
+        calendar: Calendar = .current
+    ) -> Bool {
+        guard let packStartedAt else { return false }
+        return packStartedAt >= reminder && calendar.isDate(packStartedAt, inSameDayAs: day)
     }
 }
