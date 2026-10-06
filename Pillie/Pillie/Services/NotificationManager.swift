@@ -794,13 +794,13 @@ final class NotificationManager {
         "\(cycleTransitionPrefix)day_\(transitionDayEpoch)_\(Int(fireDate.timeIntervalSince1970))"
     }
 
-    /// The cohort and terms are part of the id so a blocker setup or terms
-    /// change replaces the pending request: the managed diff is by identifier,
-    /// and an unchanged id would keep the stale copy.
+    /// The cohort, terms, and copy revision are part of the id so a blocker
+    /// setup, terms, or copy change replaces the pending request: the managed
+    /// diff is by identifier, and an unchanged id would keep the stale copy.
     private func trialWarningIdentifier(_ warning: ReminderSchedulePlanner.TrialExpiryWarningIntent) -> String {
         let terms = warning.terms == .hardPaywall ? "hard" : "legacy"
         return "\(trialWarningPrefix)day_\(warning.day)_\(warning.cohort.rawValue)_\(terms)_"
-            + "\(Int(warning.fireDate.timeIntervalSince1970))"
+            + "r\(TrialExpiryWarningCopy.revision)_\(Int(warning.fireDate.timeIntervalSince1970))"
     }
 
     private func isManagedReminderID(_ id: String) -> Bool {

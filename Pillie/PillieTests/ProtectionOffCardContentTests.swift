@@ -26,9 +26,9 @@ final class ProtectionOffCardContentTests: XCTestCase {
         XCTAssertEqual(content?.title, "App blocking is off")
         XCTAssertEqual(
             content?.detail,
-            "Your Plus access ended, so apps aren't being blocked. Your blocker setup is saved — turn Plus back on to pick up right where you left off."
+            "Your Plus access ended, so your apps aren’t paused. Your setup is saved. Turn Plus back on and it picks up where you left off."
         )
-        XCTAssertEqual(content?.ctaTitle, "Turn protection back on")
+        XCTAssertEqual(content?.ctaTitle, "Turn Plus back on")
     }
 
     // MARK: - The card disappears the moment access returns

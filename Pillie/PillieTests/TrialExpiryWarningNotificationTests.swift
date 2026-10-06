@@ -92,7 +92,7 @@ final class TrialExpiryWarningNotificationTests: XCTestCase {
     }
 
     @MainActor
-    func testPostCutoverInstallNeverHearsRemindersStayFree() throws {
+    func testPostCutoverInstallHearsRemindersStop() throws {
         let now = InMemoryStoreFactory.fixedDate("2026-10-05", hour: 9)
         let fixture = try makeTrialFixture(
             now: now,
@@ -109,11 +109,11 @@ final class TrialExpiryWarningNotificationTests: XCTestCase {
 
         XCTAssertEqual(warnings.map(\.trialWarningDay), [10, 13, 15])
         XCTAssertEqual(warnings.map(\.body), [
-            "5 days left in your trial. Pick a plan whenever you’re ready to keep going.",
-            "Your trial wraps up tomorrow night. Pick a plan to keep everything as it is.",
-            "Pick a plan to carry on right where you left off. Your setup is saved.",
+            "5 days left in your trial. After that, your daily reminders stop until you pick a plan.",
+            "Your trial ends tomorrow night, and your daily reminders stop with it. Pick a plan to keep them.",
+            "Your daily reminders are off now. Pick a plan to turn them back on. Your setup is saved.",
         ])
-        XCTAssertTrue(warnings.allSatisfy { $0.identifier.contains("_blocker_configured_hard_") })
+        XCTAssertTrue(warnings.allSatisfy { $0.identifier.contains("_blocker_configured_hard_r2_") })
     }
 
     @MainActor

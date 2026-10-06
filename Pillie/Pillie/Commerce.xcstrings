@@ -37132,271 +37132,271 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "App blocking and follow-up reminders stay off until you turn Plus back on."
+            "value": "Your daily reminders and app blocking are off. Pick a plan to turn them back on."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Die App-Sperre und Folgeerinnerungen bleiben aus, bis du Plus wieder einschaltest."
+            "value": "Deine täglichen Erinnerungen und die App-Sperre sind aus. Wähl einen Tarif, um sie wieder einzuschalten."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Il blocco app e i promemoria ripetuti restano disattivati finché non riattivi Plus."
+            "value": "I promemoria giornalieri e il blocco app sono disattivati. Scegli un piano per riattivarli."
           }
         },
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "يبقى حظر التطبيقات وتذكيرات المتابعة غير مفعّلين حتى تعيدي تفعيل Plus."
+            "value": "تذكيراتك اليومية وحظر التطبيقات غير مفعّلة. اختاري خطة لإعادة تفعيلها."
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus আবার চালু না করা পর্যন্ত অ্যাপ ব্লকিং আর ফলো-আপ রিমাইন্ডার বন্ধ থাকবে।"
+            "value": "আপনার দৈনিক রিমাইন্ডার আর অ্যাপ ব্লকিং বন্ধ। আবার চালু করতে একটি প্ল্যান বেছে নিন।"
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "El bloqueig d’apps i els recordatoris de seguiment es queden desactivats fins que tornis a activar el Plus."
+            "value": "Els recordatoris diaris i el bloqueig d’apps estan desactivats. Tria un pla per tornar-los a activar."
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Blokování aplikací a následné připomínky zůstanou vypnuté, dokud Plus znovu nezapneš."
+            "value": "Denní připomínky a blokování aplikací jsou vypnuté. Vyber si plán a znovu je zapneš."
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Appblokering og opfølgende påmindelser forbliver slået fra, indtil du slår Plus til igen."
+            "value": "Dine daglige påmindelser og appblokering er slået fra. Vælg et abonnement for at slå dem til igen."
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ο αποκλεισμός εφαρμογών και οι επαναληπτικές υπενθυμίσεις μένουν ανενεργά μέχρι να ενεργοποιήσεις ξανά το Plus."
+            "value": "Οι καθημερινές υπενθυμίσεις σου και ο αποκλεισμός εφαρμογών είναι ανενεργά. Διάλεξε πρόγραμμα για να τα ενεργοποιήσεις ξανά."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "El bloqueo de apps y los recordatorios de seguimiento siguen desactivados hasta que reactives Plus."
+            "value": "Tus recordatorios diarios y el bloqueo de apps están desactivados. Elige un plan para volver a activarlos."
           }
         },
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sovellusesto ja jatkomuistutukset pysyvät pois päältä, kunnes otat Plusin taas käyttöön."
+            "value": "Päivittäiset muistutuksesi ja sovellusesto ovat pois päältä. Valitse tilaus, niin saat ne taas päälle."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Le blocage d’apps et les rappels de relance restent désactivés jusqu’à ce que tu réactives Plus."
+            "value": "Tes rappels quotidiens et le blocage d’apps sont désactivés. Choisis une formule pour les réactiver."
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "તમે Plus ફરી ચાલુ ન કરો ત્યાં સુધી ઍપ બ્લૉકિંગ અને ફૉલો-અપ રિમાઇન્ડર બંધ રહેશે."
+            "value": "તમારાં રોજનાં રિમાઇન્ડર અને ઍપ બ્લૉકિંગ બંધ છે. તેમને ફરી ચાલુ કરવા પ્લાન પસંદ કરો."
           }
         },
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "חסימת אפליקציות ותזכורות המשך נשארות כבויות עד שתפעילי את Plus מחדש."
+            "value": "התזכורות היומיות שלך וחסימת האפליקציות כבויות. בחרי תוכנית כדי להפעיל אותן מחדש."
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus फिर से चालू करने तक ऐप ब्लॉकिंग और फ़ॉलो-अप रिमाइंडर बंद रहते हैं।"
+            "value": "आपके रोज़ के रिमाइंडर और ऐप ब्लॉकिंग बंद हैं। इन्हें फिर से चालू करने के लिए कोई प्लान चुनें।"
           }
         },
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Blokiranje aplikacija i ponovni podsjetnici ostaju isključeni dok ponovno ne uključiš Plus."
+            "value": "Tvoji dnevni podsjetnici i blokiranje aplikacija su isključeni. Odaberi plan da ih ponovno uključiš."
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "Az appblokkolás és az ismétlő emlékeztetők kikapcsolva maradnak, amíg vissza nem kapcsolod a Plust."
+            "value": "A napi emlékeztetőid és az appblokkolás ki vannak kapcsolva. Válassz csomagot, hogy újra bekapcsold őket."
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Blokir aplikasi dan pengingat lanjutan tetap mati sampai kamu mengaktifkan Plus lagi."
+            "value": "Pengingat harianmu dan Blokir aplikasi sedang mati. Pilih paket untuk menyalakannya lagi."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plusを再開するまで、アプリブロックとフォローアップリマインダーはオフのままです。"
+            "value": "毎日のリマインダーとアプリブロックはオフです。再びオンにするには、プランを選んでください。"
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ನೀವು Plus ಅನ್ನು ಮತ್ತೆ ಆನ್ ಮಾಡುವವರೆಗೆ ಆ್ಯಪ್ ನಿರ್ಬಂಧ ಮತ್ತು ಮರು ಜ್ಞಾಪನೆಗಳು ಆಫ್ ಆಗಿಯೇ ಇರುತ್ತವೆ."
+            "value": "ನಿಮ್ಮ ದೈನಂದಿನ ಜ್ಞಾಪನೆಗಳು ಮತ್ತು ಆ್ಯಪ್ ನಿರ್ಬಂಧ ಆಫ್ ಆಗಿವೆ. ಅವುಗಳನ್ನು ಮತ್ತೆ ಆನ್ ಮಾಡಲು ಪ್ಲಾನ್ ಆರಿಸಿ."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus를 다시 켤 때까지 앱 차단과 후속 알림은 꺼져 있어요."
+            "value": "매일 알림과 앱 차단이 꺼져 있어요. 다시 켜려면 플랜을 선택하세요."
           }
         },
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "നിങ്ങൾ Plus വീണ്ടും ഓണാക്കുന്നതുവരെ ആപ്പ് ബ്ലോക്കിംഗും ഫോളോ-അപ്പ് റിമൈൻഡറുകളും ഓഫായിരിക്കും."
+            "value": "നിങ്ങളുടെ ദൈനംദിന റിമൈൻഡറുകളും ആപ്പ് ബ്ലോക്കിംഗും ഓഫാണ്. അവ വീണ്ടും ഓണാക്കാൻ ഒരു പ്ലാൻ തിരഞ്ഞെടുക്കൂ."
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus पुन्हा सुरू करेपर्यंत ॲप ब्लॉकिंग आणि फॉलो-अप रिमाइंडर बंद राहतात."
+            "value": "तुमचे रोजचे रिमाइंडर आणि ॲप ब्लॉकिंग बंद आहेत. ते पुन्हा सुरू करण्यासाठी प्लॅन निवडा."
           }
         },
         "ms": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sekatan apl dan peringatan susulan kekal mati sehingga kamu hidupkan Plus semula."
+            "value": "Peringatan harian dan Sekatan apl kamu dimatikan. Pilih pelan untuk menghidupkannya semula."
           }
         },
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "Appblokkering og oppfølgingspåminnelser er av til du slår på Plus igjen."
+            "value": "De daglige påminnelsene dine og appblokkering er av. Velg et abonnement for å slå dem på igjen."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Appblokkering en vervolgherinneringen blijven uit tot je Plus weer aanzet."
+            "value": "Je dagelijkse herinneringen en appblokkering staan uit. Kies een abonnement om ze weer aan te zetten."
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ଆପଣ Plus ପୁଣି ଚାଲୁ ନକରିବା ପର୍ଯ୍ୟନ୍ତ ଆପ୍ ବ୍ଲକିଂ ଓ ଫଲୋ-ଅପ୍ ରିମାଇଣ୍ଡର୍ ବନ୍ଦ ରହିବ।"
+            "value": "ଆପଣଙ୍କ ଦୈନିକ ରିମାଇଣ୍ଡର୍ ଓ ଆପ୍ ବ୍ଲକିଂ ବନ୍ଦ ଅଛି। ସେଗୁଡ଼ିକୁ ପୁଣି ଚାଲୁ କରିବାକୁ ଏକ ପ୍ଲାନ୍ ବାଛନ୍ତୁ।"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਜਦੋਂ ਤੱਕ ਤੁਸੀਂ Plus ਮੁੜ ਚਾਲੂ ਨਹੀਂ ਕਰਦੇ, ਐਪ ਬਲੌਕਿੰਗ ਅਤੇ ਫ਼ਾਲੋ-ਅੱਪ ਰਿਮਾਈਂਡਰ ਬੰਦ ਰਹਿਣਗੇ।"
+            "value": "ਤੁਹਾਡੇ ਰੋਜ਼ਾਨਾ ਰਿਮਾਈਂਡਰ ਅਤੇ ਐਪ ਬਲੌਕਿੰਗ ਬੰਦ ਹਨ। ਇਨ੍ਹਾਂ ਨੂੰ ਮੁੜ ਚਾਲੂ ਕਰਨ ਲਈ ਕੋਈ ਪਲਾਨ ਚੁਣੋ।"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Blokowanie aplikacji i ponowne przypomnienia pozostaną wyłączone, dopóki nie włączysz ponownie Plus."
+            "value": "Codzienne przypomnienia i blokowanie aplikacji są wyłączone. Wybierz plan, żeby znów je włączyć."
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "O bloqueio de apps e os lembretes de acompanhamento ficam desligados até você reativar o Plus."
+            "value": "Seus lembretes diários e o bloqueio de apps estão desligados. Escolha um plano para ligá-los de novo."
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "translated",
-            "value": "O bloqueio de apps e os lembretes de seguimento ficam desligados até voltares a ativar o Plus."
+            "value": "Os teus lembretes diários e o bloqueio de apps estão desligados. Escolhe um plano para os voltares a ligar."
           }
         },
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "Blocarea aplicațiilor și mementourile repetate rămân oprite până reactivezi Plus."
+            "value": "Mementourile tale zilnice și blocarea aplicațiilor sunt oprite. Alege un plan ca să le pornești din nou."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Блокировка приложений и повторные напоминания выключены, пока ты снова не включишь Plus."
+            "value": "Ежедневные напоминания и блокировка приложений выключены. Выбери план, чтобы снова их включить."
           }
         },
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Blokovanie aplikácií a následné pripomienky ostanú vypnuté, kým Plus znova nezapneš."
+            "value": "Denné pripomienky a blokovanie aplikácií sú vypnuté. Vyber si plán a znova ich zapneš."
           }
         },
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Blokiranje aplikacij in ponovni opomniki ostanejo izklopljeni, dokler znova ne vklopiš Plus."
+            "value": "Tvoji dnevni opomniki in blokiranje aplikacij so izklopljeni. Izberi paket, da jih znova vklopiš."
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Appblockering och uppföljande påminnelser förblir av tills du slår på Plus igen."
+            "value": "Dina dagliga påminnelser och appblockering är avstängda. Välj ett abonnemang för att slå på dem igen."
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "நீங்கள் Plus-ஐ மீண்டும் இயக்கும் வரை ஆப் தடுப்பும் தொடர் நினைவூட்டல்களும் ஆஃப் ஆகவே இருக்கும்."
+            "value": "உங்கள் தினசரி நினைவூட்டல்களும் ஆப் தடுப்பும் ஆஃப் ஆகியுள்ளன. அவற்றை மீண்டும் இயக்க ஒரு திட்டத்தைத் தேர்ந்தெடுங்கள்."
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "మీరు Plus మళ్లీ ఆన్ చేసే వరకు యాప్ బ్లాకింగ్, ఫాలో-అప్ రిమైండర్లు ఆఫ్‌లోనే ఉంటాయి."
+            "value": "మీ రోజువారీ రిమైండర్లు, యాప్ బ్లాకింగ్ ఆఫ్‌లో ఉన్నాయి. వాటిని మళ్లీ ఆన్ చేయడానికి ఒక ప్లాన్ ఎంచుకోండి."
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "การบล็อกแอปและการแจ้งเตือนซ้ำจะปิดอยู่จนกว่าคุณจะเปิด Plus อีกครั้ง"
+            "value": "การแจ้งเตือนประจำวันและการบล็อกแอปปิดอยู่ เลือกแพ็กเกจเพื่อเปิดกลับมาอีกครั้ง"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Uygulama engelleme ve takip hatırlatmaları, Plus’ı yeniden açana kadar kapalı kalır."
+            "value": "Günlük hatırlatmaların ve uygulama engelleme kapalı. Yeniden açmak için bir plan seç."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Блокування застосунків і повторні нагадування вимкнені, доки ти знову не ввімкнеш Plus."
+            "value": "Щоденні нагадування й блокування застосунків вимкнено. Обери план, щоб знову їх увімкнути."
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus دوبارہ آن کرنے تک ایپ بلاکنگ اور فالو اپ یاد دہانیاں بند رہتی ہیں۔"
+            "value": "آپ کی روزانہ کی یاد دہانیاں اور ایپ بلاکنگ بند ہیں۔ انہیں دوبارہ آن کرنے کے لیے کوئی پلان چنیں۔"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Chặn ứng dụng và lời nhắc lặp lại vẫn tắt cho đến khi bạn bật lại Plus."
+            "value": "Lời nhắc hàng ngày và Chặn ứng dụng của bạn đang tắt. Chọn một gói để bật lại."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "在你重新开启 Plus 之前，应用屏蔽和后续提醒会保持关闭。"
+            "value": "你的每日提醒和应用屏蔽已关闭。选择一个方案即可重新开启。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "在你重新開啟 Plus 之前，App 封鎖和後續提醒會維持關閉。"
+            "value": "你的每日提醒和 App 封鎖已關閉。選擇一個方案即可重新開啟。"
           }
         }
       }
@@ -37682,271 +37682,271 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Follow-up reminders come back"
+            "value": "Daily reminders come back"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Folgeerinnerungen kommen zurück"
+            "value": "Erinnerungen kommen zurück"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "I promemoria ripetuti tornano"
+            "value": "I promemoria tornano"
           }
         },
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "تذكيرات المتابعة تعود"
+            "value": "التذكيرات اليومية تعود"
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ফলো-আপ রিমাইন্ডার ফিরে আসে"
+            "value": "দৈনিক রিমাইন্ডার ফিরে আসে"
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "Els recordatoris de seguiment tornen"
+            "value": "Els recordatoris diaris tornen"
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Následné připomínky se vrátí"
+            "value": "Denní připomínky se vrátí"
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Opfølgende påmindelser kommer tilbage"
+            "value": "Daglige påmindelser er tilbage"
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Οι επαναληπτικές υπενθυμίσεις επιστρέφουν"
+            "value": "Οι καθημερινές υπενθυμίσεις επιστρέφουν"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Los recordatorios de seguimiento vuelven"
+            "value": "Tus recordatorios diarios vuelven"
           }
         },
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Jatkomuistutukset palaavat"
+            "value": "Päivittäiset muistutukset palaavat"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Les rappels de relance reviennent"
+            "value": "Tes rappels quotidiens reviennent"
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "ફૉલો-અપ રિમાઇન્ડર પાછાં આવે છે"
+            "value": "રોજનાં રિમાઇન્ડર પાછાં આવે છે"
           }
         },
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "תזכורות המשך חוזרות"
+            "value": "תזכורות יומיות חוזרות"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "फ़ॉलो-अप रिमाइंडर वापस आते हैं"
+            "value": "रोज़ के रिमाइंडर वापस आते हैं"
           }
         },
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ponovni podsjetnici se vraćaju"
+            "value": "Dnevni podsjetnici se vraćaju"
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "Az ismétlő emlékeztetők visszajönnek"
+            "value": "A napi emlékeztetők visszajönnek"
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pengingat lanjutan kembali"
+            "value": "Pengingat harian kembali"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "フォローアップリマインダーが戻ります"
+            "value": "毎日のリマインダーが戻ります"
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ಮರು ಜ್ಞಾಪನೆಗಳು ಮರಳಿ ಬರುತ್ತವೆ"
+            "value": "ದೈನಂದಿನ ಜ್ಞಾಪನೆಗಳು ಮರಳಿ ಬರುತ್ತವೆ"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "후속 알림이 돌아와요"
+            "value": "매일 알림이 돌아와요"
           }
         },
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "ഫോളോ-അപ്പ് റിമൈൻഡറുകൾ തിരികെ വരും"
+            "value": "ദൈനംദിന റിമൈൻഡറുകൾ തിരികെ വരും"
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "फॉलो-अप रिमाइंडर परत येतात"
+            "value": "रोजचे रिमाइंडर परत येतात"
           }
         },
         "ms": {
           "stringUnit": {
             "state": "translated",
-            "value": "Peringatan susulan kembali"
+            "value": "Peringatan harian kembali"
           }
         },
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "Oppfølgingspåminnelser kommer tilbake"
+            "value": "Daglige påminnelser er tilbake"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vervolgherinneringen komen terug"
+            "value": "Herinneringen gaan weer aan"
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ଫଲୋ-ଅପ୍ ରିମାଇଣ୍ଡର୍ ଫେରିଆସେ"
+            "value": "ଦୈନିକ ରିମାଇଣ୍ଡର୍ ଫେରିଆସେ"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਫ਼ਾਲੋ-ਅੱਪ ਰਿਮਾਈਂਡਰ ਵਾਪਸ ਆਉਂਦੇ ਹਨ"
+            "value": "ਰੋਜ਼ਾਨਾ ਰਿਮਾਈਂਡਰ ਵਾਪਸ ਆਉਂਦੇ ਹਨ"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ponowne przypomnienia wracają"
+            "value": "Codzienne przypomnienia wracają"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Os lembretes de acompanhamento voltam"
+            "value": "Seus lembretes diários voltam"
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "translated",
-            "value": "Os lembretes de seguimento voltam"
+            "value": "Os teus lembretes diários voltam"
           }
         },
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mementourile repetate revin"
+            "value": "Mementourile zilnice revin"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Повторные напоминания возвращаются"
+            "value": "Ежедневные напоминания возвращаются"
           }
         },
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Následné pripomienky sa vrátia"
+            "value": "Denné pripomienky sa vrátia"
           }
         },
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ponovni opomniki se vrnejo"
+            "value": "Dnevni opomniki se vrnejo"
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Uppföljande påminnelser kommer tillbaka"
+            "value": "Dagliga påminnelser är tillbaka"
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "தொடர் நினைவூட்டல்கள் திரும்பும்"
+            "value": "தினசரி நினைவூட்டல்கள் திரும்பும்"
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "ఫాలో-అప్ రిమైండర్లు తిరిగి వస్తాయి"
+            "value": "రోజువారీ రిమైండర్లు తిరిగి వస్తాయి"
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "การแจ้งเตือนซ้ำกลับมา"
+            "value": "การแจ้งเตือนประจำวันกลับมา"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Takip hatırlatmaları geri gelir"
+            "value": "Günlük hatırlatmalar geri gelir"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Повторні нагадування повертаються"
+            "value": "Щоденні нагадування повертаються"
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "فالو اپ یاد دہانیاں واپس آتی ہیں"
+            "value": "روزانہ کی یاد دہانیاں واپس آتی ہیں"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Lời nhắc lặp lại trở lại"
+            "value": "Lời nhắc hàng ngày trở lại"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "后续提醒恢复"
+            "value": "每日提醒恢复"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "後續提醒恢復"
+            "value": "每日提醒恢復"
           }
         }
       }
@@ -41532,271 +41532,271 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus pauses until you choose a plan. Your setup stays saved."
+            "value": "Your daily reminders and Plus pause until you choose a plan. Your setup stays saved."
           }
         },
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "يتوقف Plus مؤقتًا حتى تختاري خطة. يبقى كل ما ضبطتِه محفوظًا."
+            "value": "تتوقف تذكيراتك اليومية وPlus مؤقتًا حتى تختاري خطة. يبقى كل ما ضبطتِه محفوظًا."
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "আপনি কোনো প্ল্যান বেছে না নেওয়া পর্যন্ত Plus থেমে থাকবে। আপনার সেটআপ সেভ থাকবে।"
+            "value": "আপনি কোনো প্ল্যান বেছে না নেওয়া পর্যন্ত আপনার দৈনিক রিমাইন্ডার আর Plus থেমে থাকবে। আপনার সেটআপ সেভ থাকবে।"
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus queda en pausa fins que triïs un pla. La teva configuració queda desada."
+            "value": "Els recordatoris diaris i Plus queden en pausa fins que triïs un pla. La teva configuració queda desada."
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus se pozastaví, dokud nevybereš plán. Tvoje nastavení zůstane uložené."
+            "value": "Denní připomínky i Plus se pozastaví, dokud nevybereš plán. Tvoje nastavení zůstane uložené."
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus sættes på pause, indtil du vælger en plan. Din opsætning er stadig gemt."
+            "value": "Dine daglige påmindelser og Plus sættes på pause, indtil du vælger en plan. Din opsætning er stadig gemt."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus pausiert, bis du einen Tarif wählst. Deine Einrichtung bleibt gespeichert."
+            "value": "Deine täglichen Erinnerungen und Plus pausieren, bis du einen Tarif wählst. Deine Einrichtung bleibt gespeichert."
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Το Plus μπαίνει σε παύση μέχρι να διαλέξεις πρόγραμμα. Οι ρυθμίσεις σου μένουν αποθηκευμένες."
+            "value": "Οι καθημερινές υπενθυμίσεις σου και το Plus μπαίνουν σε παύση μέχρι να διαλέξεις πρόγραμμα. Οι ρυθμίσεις σου μένουν αποθηκευμένες."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus se pausa hasta que elijas un plan. Tu configuración queda guardada."
+            "value": "Tus recordatorios diarios y Plus se pausan hasta que elijas un plan. Tu configuración queda guardada."
           }
         },
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus on tauolla, kunnes valitset paketin. Asetuksesi pysyvät tallessa."
+            "value": "Päivittäiset muistutuksesi ja Plus ovat tauolla, kunnes valitset paketin. Asetuksesi pysyvät tallessa."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus est en pause jusqu’à ce que tu choisisses une formule. Ta configuration reste enregistrée."
+            "value": "Tes rappels quotidiens et Plus sont en pause jusqu’à ce que tu choisisses une formule. Ta configuration reste enregistrée."
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "તમે કોઈ પ્લાન પસંદ ન કરો ત્યાં સુધી Plus થોભેલું રહેશે. તમારું સેટઅપ સેવ રહેશે."
+            "value": "તમે કોઈ પ્લાન પસંદ ન કરો ત્યાં સુધી તમારાં રોજનાં રિમાઇન્ડર અને Plus થોભેલાં રહેશે. તમારું સેટઅપ સેવ રહેશે."
           }
         },
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus מושהה עד שתבחרי תוכנית. ההגדרות שלך נשארות שמורות."
+            "value": "התזכורות היומיות שלך ו-Plus מושהים עד שתבחרי תוכנית. ההגדרות שלך נשארות שמורות."
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "प्लान चुनने तक Plus रुका रहेगा। आपका सेटअप सेव रहेगा।"
+            "value": "प्लान चुनने तक आपके रोज़ के रिमाइंडर और Plus रुके रहेंगे। आपका सेटअप सेव रहेगा।"
           }
         },
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus se pauzira dok ne odabereš plan. Tvoje postavke ostaju spremljene."
+            "value": "Tvoji dnevni podsjetnici i Plus pauziraju se dok ne odabereš plan. Tvoje postavke ostaju spremljene."
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "A Plus szünetel, amíg nem választasz csomagot. A beállításaid mentve maradnak."
+            "value": "A napi emlékeztetőid és a Plus szünetelnek, amíg nem választasz csomagot. A beállításaid mentve maradnak."
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus dijeda sampai kamu memilih paket. Pengaturanmu tetap tersimpan."
+            "value": "Pengingat harianmu dan Plus dijeda sampai kamu memilih paket. Pengaturanmu tetap tersimpan."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus va in pausa finché non scegli un piano. La tua configurazione resta salvata."
+            "value": "I promemoria giornalieri e Plus vanno in pausa finché non scegli un piano. La tua configurazione resta salvata."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "プランを選ぶまでPlusは一時停止します。設定は保存されたままです。"
+            "value": "プランを選ぶまで、毎日のリマインダーとPlusは一時停止します。設定は保存されたままです。"
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ನೀವು ಪ್ಲಾನ್ ಆರಿಸುವವರೆಗೆ Plus ನಿಲ್ಲುತ್ತದೆ. ನಿಮ್ಮ ಸೆಟಪ್ ಉಳಿಸಲ್ಪಟ್ಟಿರುತ್ತದೆ."
+            "value": "ನೀವು ಪ್ಲಾನ್ ಆರಿಸುವವರೆಗೆ ನಿಮ್ಮ ದೈನಂದಿನ ಜ್ಞಾಪನೆಗಳು ಮತ್ತು Plus ನಿಲ್ಲುತ್ತವೆ. ನಿಮ್ಮ ಸೆಟಪ್ ಉಳಿಸಲ್ಪಟ್ಟಿರುತ್ತದೆ."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "플랜을 고를 때까지 Plus가 일시 중지돼요. 설정은 그대로 저장돼요."
+            "value": "플랜을 고를 때까지 매일 알림과 Plus가 일시 중지돼요. 설정은 그대로 저장돼요."
           }
         },
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "നിങ്ങൾ ഒരു പ്ലാൻ തിരഞ്ഞെടുക്കുന്നതുവരെ Plus പോസ് ചെയ്തിരിക്കും. നിങ്ങളുടെ സെറ്റപ്പ് സേവ് ചെയ്തിരിക്കും."
+            "value": "നിങ്ങൾ ഒരു പ്ലാൻ തിരഞ്ഞെടുക്കുന്നതുവരെ നിങ്ങളുടെ ദൈനംദിന റിമൈൻഡറുകളും Plus-ഉം പോസ് ചെയ്തിരിക്കും. നിങ്ങളുടെ സെറ്റപ്പ് സേവ് ചെയ്തിരിക്കും."
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "तुम्ही प्लॅन निवडेपर्यंत Plus थांबेल. तुमचा सेटअप सेव्ह राहील."
+            "value": "तुम्ही प्लॅन निवडेपर्यंत तुमचे रोजचे रिमाइंडर आणि Plus थांबतील. तुमचा सेटअप सेव्ह राहील."
           }
         },
         "ms": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus dijeda sehingga kamu pilih pelan. Tetapan kamu kekal disimpan."
+            "value": "Peringatan harian kamu dan Plus dijeda sehingga kamu pilih pelan. Tetapan kamu kekal disimpan."
           }
         },
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus settes på pause til du velger en plan. Oppsettet ditt er fortsatt lagret."
+            "value": "De daglige påminnelsene dine og Plus settes på pause til du velger en plan. Oppsettet ditt er fortsatt lagret."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus pauzeert tot je een plan kiest. Je instellingen blijven bewaard."
+            "value": "Je dagelijkse herinneringen en Plus pauzeren tot je een plan kiest. Je instellingen blijven bewaard."
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ଆପଣ ଏକ ପ୍ଲାନ୍ ବାଛିବା ପର୍ୟ୍ୟନ୍ତ Plus ବିରାମରେ ରହିବ। ଆପଣଙ୍କ ସେଟଅପ୍ ସେଭ୍ ରହିବ।"
+            "value": "ଆପଣ ଏକ ପ୍ଲାନ୍ ବାଛିବା ପର୍ଯ୍ୟନ୍ତ ଆପଣଙ୍କ ଦୈନିକ ରିମାଇଣ୍ଡର୍ ଓ Plus ବିରାମରେ ରହିବ। ଆପଣଙ୍କ ସେଟଅପ୍ ସେଭ୍ ରହିବ।"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਜਦੋਂ ਤੱਕ ਤੁਸੀਂ ਕੋਈ ਪਲਾਨ ਨਹੀਂ ਚੁਣਦੇ, Plus ਰੁਕਿਆ ਰਹੇਗਾ। ਤੁਹਾਡਾ ਸੈੱਟਅੱਪ ਸੰਭਾਲਿਆ ਰਹੇਗਾ।"
+            "value": "ਜਦੋਂ ਤੱਕ ਤੁਸੀਂ ਕੋਈ ਪਲਾਨ ਨਹੀਂ ਚੁਣਦੇ, ਤੁਹਾਡੇ ਰੋਜ਼ਾਨਾ ਰਿਮਾਈਂਡਰ ਅਤੇ Plus ਰੁਕੇ ਰਹਿਣਗੇ। ਤੁਹਾਡਾ ਸੈੱਟਅੱਪ ਸੰਭਾਲਿਆ ਰਹੇਗਾ।"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus zostanie wstrzymany, dopóki nie wybierzesz planu. Twoje ustawienia pozostaną zapisane."
+            "value": "Codzienne przypomnienia i Plus zostaną wstrzymane, dopóki nie wybierzesz planu. Twoje ustawienia pozostaną zapisane."
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "O Plus pausa até você escolher um plano. Sua configuração fica salva."
+            "value": "Seus lembretes diários e o Plus ficam pausados até você escolher um plano. Sua configuração fica salva."
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "translated",
-            "value": "O Plus fica em pausa até escolheres um plano. A tua configuração fica guardada."
+            "value": "Os teus lembretes diários e o Plus ficam em pausa até escolheres um plano. A tua configuração fica guardada."
           }
         },
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus se întrerupe până alegi un plan. Configurarea ta rămâne salvată."
+            "value": "Mementourile zilnice și Plus se întrerup până alegi un plan. Configurarea ta rămâne salvată."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus приостановится, пока ты не выберешь план. Твои настройки сохранятся."
+            "value": "Ежедневные напоминания и Plus приостановятся, пока ты не выберешь план. Твои настройки сохранятся."
           }
         },
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus sa pozastaví, kým si nevyberieš plán. Tvoje nastavenia zostanú uložené."
+            "value": "Denné pripomienky aj Plus sa pozastavia, kým si nevyberieš plán. Tvoje nastavenia zostanú uložené."
           }
         },
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus se ustavi, dokler ne izbereš paketa. Tvoje nastavitve ostanejo shranjene."
+            "value": "Tvoji dnevni opomniki in Plus se ustavijo, dokler ne izbereš paketa. Tvoje nastavitve ostanejo shranjene."
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus pausas tills du väljer en plan. Dina inställningar finns kvar."
+            "value": "Dina dagliga påminnelser och Plus pausas tills du väljer en plan. Dina inställningar finns kvar."
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "நீங்கள் ஒரு திட்டத்தைத் தேர்ந்தெடுக்கும் வரை Plus இடைநிறுத்தப்படும். உங்கள் அமைப்புகள் சேமிக்கப்பட்டிருக்கும்."
+            "value": "நீங்கள் ஒரு திட்டத்தைத் தேர்ந்தெடுக்கும் வரை உங்கள் தினசரி நினைவூட்டல்களும் Plus-உம் இடைநிறுத்தப்படும். உங்கள் அமைப்புகள் சேமிக்கப்பட்டிருக்கும்."
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "మీరు ప్లాన్ ఎంచుకునే వరకు Plus పాజ్ అవుతుంది. మీ సెటప్ సేవ్ అయి ఉంటుంది."
+            "value": "మీరు ప్లాన్ ఎంచుకునే వరకు మీ రోజువారీ రిమైండర్లు, Plus పాజ్ అవుతాయి. మీ సెటప్ సేవ్ అయి ఉంటుంది."
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus จะหยุดชั่วคราวจนกว่าคุณจะเลือกแพ็กเกจ การตั้งค่าของคุณยังถูกบันทึกอยู่"
+            "value": "การแจ้งเตือนประจำวันและ Plus จะหยุดชั่วคราวจนกว่าคุณจะเลือกแพ็กเกจ การตั้งค่าของคุณยังถูกบันทึกอยู่"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bir plan seçene kadar Plus duraklar. Kurulumun kayıtlı kalır."
+            "value": "Bir plan seçene kadar günlük hatırlatmaların ve Plus duraklar. Kurulumun kayıtlı kalır."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus призупиниться, доки ти не обереш план. Твої налаштування збережуться."
+            "value": "Щоденні нагадування й Plus призупиняться, доки ти не обереш план. Твої налаштування збережуться."
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "پلان چننے تک Plus رکا رہے گا۔ آپ کا سیٹ اپ محفوظ رہے گا۔"
+            "value": "پلان چننے تک آپ کی روزانہ کی یاد دہانیاں اور Plus رکے رہیں گے۔ آپ کا سیٹ اپ محفوظ رہے گا۔"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus tạm dừng cho đến khi bạn chọn gói. Thiết lập của bạn vẫn được lưu."
+            "value": "Lời nhắc hàng ngày và Plus tạm dừng cho đến khi bạn chọn gói. Thiết lập của bạn vẫn được lưu."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "在你选择方案前，Plus 会暂停。你的设置会保留。"
+            "value": "在你选择方案前，你的每日提醒和 Plus 会暂停。你的设置会保留。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "在你選擇方案前，Plus 會暫停。你的設定會保留。"
+            "value": "在你選擇方案前，你的每日提醒和 Plus 會暫停。你的設定會保留。"
           }
         }
       }

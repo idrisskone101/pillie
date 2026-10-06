@@ -13024,271 +13024,271 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "بقيت 5 أيام في تجربتك. اختاري اشتراكًا متى كنتِ مستعدة للاستمرار."
+            "value": "بقيت 5 أيام في تجربتك. بعدها تتوقف تذكيراتك اليومية حتى تختاري اشتراكًا."
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "আপনার ট্রায়ালের আর ৫ দিন বাকি। চালিয়ে যেতে যখন প্রস্তুত, একটি প্ল্যান বেছে নিন।"
+            "value": "আপনার ট্রায়ালের আর ৫ দিন বাকি। এরপর প্ল্যান বেছে না নেওয়া পর্যন্ত আপনার দৈনিক রিমাইন্ডার বন্ধ থাকবে।"
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "Et queden 5 dies de prova. Tria un pla quan vulguis per continuar."
+            "value": "Et queden 5 dies de prova. Després, els recordatoris diaris s’aturen fins que triïs un pla."
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ze zkušební doby ti zbývá 5 dní. Až budeš chtít pokračovat, vyber si plán."
+            "value": "Ze zkušební doby ti zbývá 5 dní. Pak se denní připomínky zastaví, dokud si nevybereš plán."
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Du har 5 dage tilbage af din prøveperiode. Vælg et abonnement, når du er klar til at fortsætte."
+            "value": "Du har 5 dage tilbage af din prøveperiode. Derefter stopper dine daglige påmindelser, indtil du vælger et abonnement."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Noch 5 Tage in deiner Testphase. Wähl einen Tarif, wann immer du weitermachen möchtest."
+            "value": "Noch 5 Tage in deiner Testphase. Danach hören deine täglichen Erinnerungen auf, bis du einen Tarif wählst."
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Σου μένουν 5 ημέρες δοκιμής. Διάλεξε πρόγραμμα όποτε είσαι έτοιμη να συνεχίσεις."
+            "value": "Σου μένουν 5 ημέρες δοκιμής. Μετά, οι καθημερινές υπενθυμίσεις σου σταματούν μέχρι να διαλέξεις πρόγραμμα."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "5 days left in your trial. Pick a plan whenever you’re ready to keep going."
+            "value": "5 days left in your trial. After that, your daily reminders stop until you pick a plan."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Te quedan 5 días de prueba. Elige un plan cuando quieras para seguir."
+            "value": "Te quedan 5 días de prueba. Después, tus recordatorios diarios se detienen hasta que elijas un plan."
           }
         },
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kokeilua on jäljellä 5 päivää. Valitse tilaus, kun haluat jatkaa."
+            "value": "Kokeilua on jäljellä 5 päivää. Sen jälkeen päivittäiset muistutuksesi loppuvat, kunnes valitset tilauksen."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus que 5 jours d’essai. Choisis une formule quand tu veux pour continuer."
+            "value": "Il te reste 5 jours d’essai. Ensuite, tes rappels quotidiens s’arrêtent jusqu’à ce que tu choisisses une formule."
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "તમારા ટ્રાયલમાં 5 દિવસ બાકી છે. આગળ વધવા તૈયાર હો ત્યારે પ્લાન પસંદ કરો."
+            "value": "તમારા ટ્રાયલમાં 5 દિવસ બાકી છે. ત્યાર પછી તમે પ્લાન પસંદ ન કરો ત્યાં સુધી તમારાં રોજનાં રિમાઇન્ડર બંધ રહેશે."
           }
         },
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "נשארו 5 ימים לניסיון שלך. בחרי מסלול מתי שתרצי כדי להמשיך."
+            "value": "נשארו 5 ימים לניסיון שלך. אחרי זה התזכורות היומיות שלך ייפסקו עד שתבחרי מסלול."
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "आपके ट्रायल में 5 दिन बाकी हैं। आगे बढ़ने के लिए जब तैयार हों, कोई प्लान चुनें।"
+            "value": "आपके ट्रायल में 5 दिन बाकी हैं। उसके बाद, प्लान चुनने तक आपके रोज़ के रिमाइंडर बंद रहेंगे।"
           }
         },
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Probno razdoblje traje još 5 dana. Odaberi plan kad god želiš nastaviti."
+            "value": "Probno razdoblje traje još 5 dana. Nakon toga dnevni podsjetnici prestaju dok ne odabereš plan."
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "Még 5 nap van hátra a próbaidőből. Válassz csomagot, amikor készen állsz a folytatásra."
+            "value": "Még 5 nap van hátra a próbaidőből. Utána a napi emlékeztetőid leállnak, amíg nem választasz csomagot."
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Masa uji cobamu tinggal 5 hari. Pilih paket kapan pun kamu siap untuk lanjut."
+            "value": "Masa uji cobamu tinggal 5 hari. Setelah itu, pengingat harianmu berhenti sampai kamu memilih paket."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mancano 5 giorni alla fine della prova. Scegli un piano quando vuoi per continuare."
+            "value": "Mancano 5 giorni alla fine della prova. Poi i promemoria giornalieri si fermano finché non scegli un piano."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "トライアルは残り5日です。続けたくなったら、いつでもプランを選んでください。"
+            "value": "トライアルは残り5日です。その後は、プランを選ぶまで毎日のリマインダーが止まります。"
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ನಿಮ್ಮ ಟ್ರಯಲ್‌ನಲ್ಲಿ 5 ದಿನಗಳು ಉಳಿದಿವೆ. ಮುಂದುವರಿಯಲು ಸಿದ್ಧವಾದಾಗ ಯೋಜನೆಯನ್ನು ಆರಿಸಿ."
+            "value": "ನಿಮ್ಮ ಟ್ರಯಲ್‌ನಲ್ಲಿ 5 ದಿನಗಳು ಉಳಿದಿವೆ. ಅದರ ನಂತರ, ನೀವು ಯೋಜನೆಯನ್ನು ಆರಿಸುವವರೆಗೆ ನಿಮ್ಮ ದೈನಂದಿನ ಜ್ಞಾಪನೆಗಳು ನಿಲ್ಲುತ್ತವೆ."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "체험 기간이 5일 남았어요. 계속 사용하고 싶을 때 언제든 이용권을 선택하세요."
+            "value": "체험 기간이 5일 남았어요. 그 후에는 이용권을 선택할 때까지 매일 알림이 멈춰요."
           }
         },
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "നിങ്ങളുടെ ട്രയലിൽ 5 ദിവസം ബാക്കിയുണ്ട്. തുടരാൻ തയ്യാറാകുമ്പോൾ ഒരു പ്ലാൻ തിരഞ്ഞെടുക്കൂ."
+            "value": "നിങ്ങളുടെ ട്രയലിൽ 5 ദിവസം ബാക്കിയുണ്ട്. അതിനുശേഷം, നിങ്ങൾ ഒരു പ്ലാൻ തിരഞ്ഞെടുക്കുന്നതുവരെ നിങ്ങളുടെ ദൈനംദിന റിമൈൻഡറുകൾ നിലയ്ക്കും."
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "तुमच्या ट्रायलचे 5 दिवस उरले आहेत. पुढे सुरू ठेवायला तयार असाल तेव्हा प्लॅन निवडा."
+            "value": "तुमच्या ट्रायलचे 5 दिवस उरले आहेत. त्यानंतर तुम्ही प्लॅन निवडेपर्यंत तुमचे रोजचे रिमाइंडर बंद राहतील."
           }
         },
         "ms": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tinggal 5 hari dalam percubaan anda. Pilih pelan bila-bila masa anda sedia untuk teruskan."
+            "value": "Tinggal 5 hari dalam percubaan anda. Selepas itu, peringatan harian anda berhenti sehingga anda pilih pelan."
           }
         },
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "Du har 5 dager igjen av prøveperioden. Velg et abonnement når du er klar til å fortsette."
+            "value": "Du har 5 dager igjen av prøveperioden. Etter det stopper de daglige påminnelsene dine til du velger et abonnement."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nog 5 dagen in je proefperiode. Kies een abonnement wanneer je verder wilt."
+            "value": "Nog 5 dagen in je proefperiode. Daarna stoppen je dagelijkse herinneringen tot je een abonnement kiest."
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ଆପଣଙ୍କ ଟ୍ରାଏଲରେ 5 ଦିନ ବାକି ଅଛି। ଜାରି ରଖିବାକୁ ପ୍ରସ୍ତୁତ ହେଲେ ଏକ ପ୍ଲାନ ବାଛନ୍ତୁ।"
+            "value": "ଆପଣଙ୍କ ଟ୍ରାଏଲରେ 5 ଦିନ ବାକି ଅଛି। ତାପରେ ଆପଣ ଏକ ପ୍ଲାନ ନ ବାଛିବା ପର୍ଯ୍ୟନ୍ତ ଆପଣଙ୍କ ଦୈନିକ ରିମାଇଣ୍ଡର୍ ବନ୍ଦ ରହିବ।"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਤੁਹਾਡੇ ਟ੍ਰਾਇਲ ਵਿੱਚ 5 ਦਿਨ ਬਾਕੀ ਹਨ। ਜਾਰੀ ਰੱਖਣ ਲਈ ਜਦੋਂ ਤਿਆਰ ਹੋਵੋ, ਕੋਈ ਪਲਾਨ ਚੁਣੋ।"
+            "value": "ਤੁਹਾਡੇ ਟ੍ਰਾਇਲ ਵਿੱਚ 5 ਦਿਨ ਬਾਕੀ ਹਨ। ਉਸ ਤੋਂ ਬਾਅਦ, ਜਦੋਂ ਤੱਕ ਤੁਸੀਂ ਕੋਈ ਪਲਾਨ ਨਹੀਂ ਚੁਣਦੇ, ਤੁਹਾਡੇ ਰੋਜ਼ਾਨਾ ਰਿਮਾਈਂਡਰ ਬੰਦ ਰਹਿਣਗੇ।"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Do końca okresu próbnego zostało 5 dni. Wybierz plan, kiedy zechcesz kontynuować."
+            "value": "Do końca okresu próbnego zostało 5 dni. Potem codzienne przypomnienia się zatrzymają, dopóki nie wybierzesz planu."
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Faltam 5 dias para o fim do seu teste. Escolha um plano quando quiser continuar."
+            "value": "Faltam 5 dias para o fim do seu teste. Depois disso, seus lembretes diários param até você escolher um plano."
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "translated",
-            "value": "Faltam 5 dias para o fim do teu teste. Escolhe um plano quando quiseres continuar."
+            "value": "Faltam 5 dias para o fim do teu teste. Depois disso, os teus lembretes diários param até escolheres um plano."
           }
         },
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mai ai 5 zile de probă. Alege un plan oricând ești gata să continui."
+            "value": "Mai ai 5 zile de probă. După aceea, mementourile zilnice se opresc până alegi un plan."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "До конца пробного периода 5 дней. Выбери план, когда будешь готова продолжить."
+            "value": "До конца пробного периода 5 дней. Потом ежедневные напоминания остановятся, пока ты не выберешь план."
           }
         },
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zo skúšobného obdobia ti zostáva 5 dní. Keď budeš chcieť pokračovať, vyber si plán."
+            "value": "Zo skúšobného obdobia ti zostáva 5 dní. Potom sa denné pripomienky zastavia, kým si nevyberieš plán."
           }
         },
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Do konca preizkusa imaš še 5 dni. Izberi paket, ko boš pripravljena nadaljevati."
+            "value": "Do konca preizkusa imaš še 5 dni. Potem se dnevni opomniki ustavijo, dokler ne izbereš paketa."
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Du har 5 dagar kvar av provperioden. Välj ett abonnemang när du vill fortsätta."
+            "value": "Du har 5 dagar kvar av provperioden. Sedan stoppar dina dagliga påminnelser tills du väljer ett abonnemang."
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "உங்கள் சோதனைக்காலத்தில் 5 நாட்கள் உள்ளன. தொடரத் தயாரானதும் ஒரு திட்டத்தைத் தேர்ந்தெடுங்கள்."
+            "value": "உங்கள் சோதனைக்காலத்தில் 5 நாட்கள் உள்ளன. அதன் பிறகு, நீங்கள் ஒரு திட்டத்தைத் தேர்ந்தெடுக்கும் வரை உங்கள் தினசரி நினைவூட்டல்கள் நின்றுவிடும்."
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "మీ ట్రయల్‌లో 5 రోజులు మిగిలి ఉన్నాయి. కొనసాగించడానికి సిద్ధమైనప్పుడు ఒక ప్లాన్ ఎంచుకోండి."
+            "value": "మీ ట్రయల్‌లో 5 రోజులు మిగిలి ఉన్నాయి. ఆ తర్వాత, మీరు ప్లాన్ ఎంచుకునే వరకు మీ రోజువారీ రిమైండర్లు ఆగిపోతాయి."
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "ช่วงทดลองเหลืออีก 5 วัน เลือกแพ็กเกจได้ทุกเมื่อที่พร้อมไปต่อ"
+            "value": "ช่วงทดลองเหลืออีก 5 วัน หลังจากนั้นการแจ้งเตือนประจำวันจะหยุดจนกว่าคุณจะเลือกแพ็กเกจ"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Denemende 5 gün kaldı. Devam etmeye hazır olduğunda bir plan seç."
+            "value": "Denemende 5 gün kaldı. Sonrasında, bir plan seçene kadar günlük hatırlatmaların durur."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "До кінця пробного періоду 5 днів. Обери план, коли будеш готова продовжити."
+            "value": "До кінця пробного періоду 5 днів. Потім щоденні нагадування зупиняться, доки ти не обереш план."
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "آپ کے ٹرائل میں 5 دن باقی ہیں۔ جاری رکھنے کے لیے جب تیار ہوں، کوئی پلان چنیں۔"
+            "value": "آپ کے ٹرائل میں 5 دن باقی ہیں۔ اس کے بعد پلان چننے تک آپ کی روزانہ کی یاد دہانیاں بند رہیں گی۔"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bạn còn 5 ngày dùng thử. Chọn một gói bất cứ khi nào bạn sẵn sàng tiếp tục."
+            "value": "Bạn còn 5 ngày dùng thử. Sau đó, lời nhắc hàng ngày của bạn sẽ dừng cho đến khi bạn chọn một gói."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "试用还剩 5 天。准备好继续时，随时选择一个方案。"
+            "value": "试用还剩 5 天。之后，在你选择方案前，每日提醒会停止。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "試用還剩 5 天。準備好繼續時，隨時選擇一個方案。"
+            "value": "試用還剩 5 天。之後，在你選擇方案前，每日提醒會停止。"
           }
         }
       }
@@ -13299,271 +13299,271 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "تنتهي تجربتك مساء الغد. اختاري اشتراكًا ليبقى كل شيء كما هو."
+            "value": "تنتهي تجربتك مساء الغد، وتتوقف معها تذكيراتك اليومية. اختاري اشتراكًا لتحتفظي بها."
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "আপনার ট্রায়াল আগামীকাল রাতে শেষ হবে। সবকিছু যেমন আছে তেমন রাখতে একটি প্ল্যান বেছে নিন।"
+            "value": "আপনার ট্রায়াল আগামীকাল রাতে শেষ হবে, আর তার সঙ্গে আপনার দৈনিক রিমাইন্ডারও বন্ধ হয়ে যাবে। সেগুলো চালু রাখতে একটি প্ল্যান বেছে নিন।"
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "La teva prova s’acaba demà a la nit. Tria un pla per mantenir-ho tot com està."
+            "value": "La teva prova s’acaba demà a la nit, i els recordatoris diaris s’aturen amb ella. Tria un pla per mantenir-los."
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zkušební doba končí zítra večer. Vyber si plán a všechno zůstane, jak je."
+            "value": "Zkušební doba končí zítra večer a s ní skončí i denní připomínky. Vyber si plán, aby ti zůstaly."
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Din prøveperiode slutter i morgen aften. Vælg et abonnement, så alt forbliver, som det er."
+            "value": "Din prøveperiode slutter i morgen aften, og dine daglige påmindelser stopper samtidig. Vælg et abonnement for at beholde dem."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Deine Testphase endet morgen Abend. Wähl einen Tarif, damit alles so bleibt, wie es ist."
+            "value": "Deine Testphase endet morgen Abend, und damit enden auch deine täglichen Erinnerungen. Wähl einen Tarif, um sie zu behalten."
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Η δοκιμή σου τελειώνει αύριο το βράδυ. Διάλεξε πρόγραμμα για να μείνουν όλα όπως είναι."
+            "value": "Η δοκιμή σου τελειώνει αύριο το βράδυ και μαζί της σταματούν και οι καθημερινές υπενθυμίσεις σου. Διάλεξε πρόγραμμα για να τις κρατήσεις."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your trial wraps up tomorrow night. Pick a plan to keep everything as it is."
+            "value": "Your trial ends tomorrow night, and your daily reminders stop with it. Pick a plan to keep them."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tu prueba termina mañana por la noche. Elige un plan para dejarlo todo como está."
+            "value": "Tu prueba termina mañana por la noche y, con ella, tus recordatorios diarios. Elige un plan para mantenerlos."
           }
         },
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kokeilusi päättyy huomenna illalla. Valitse tilaus, niin kaikki pysyy ennallaan."
+            "value": "Kokeilusi päättyy huomenna illalla, ja samalla päivittäiset muistutuksesi loppuvat. Valitse tilaus, niin pidät ne."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ton essai se termine demain soir. Choisis une formule pour que tout reste comme avant."
+            "value": "Ton essai se termine demain soir, et tes rappels quotidiens s’arrêtent avec lui. Choisis une formule pour les garder."
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "તમારો ટ્રાયલ આવતીકાલે રાત્રે પૂરો થશે. બધું જેમ છે તેમ રાખવા પ્લાન પસંદ કરો."
+            "value": "તમારો ટ્રાયલ આવતીકાલે રાત્રે પૂરો થશે, અને તેની સાથે તમારાં રોજનાં રિમાઇન્ડર પણ બંધ થઈ જશે. તેમને ચાલુ રાખવા પ્લાન પસંદ કરો."
           }
         },
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "הניסיון שלך מסתיים מחר בערב. בחרי מסלול כדי שהכול יישאר כמו שהוא."
+            "value": "הניסיון שלך מסתיים מחר בערב, ואיתו ייפסקו התזכורות היומיות שלך. בחרי מסלול כדי לשמור עליהן."
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "आपका ट्रायल कल रात खत्म हो रहा है। सब कुछ जैसा है वैसा रखने के लिए कोई प्लान चुनें।"
+            "value": "आपका ट्रायल कल रात खत्म हो रहा है, और उसके साथ आपके रोज़ के रिमाइंडर भी रुक जाएँगे। उन्हें जारी रखने के लिए कोई प्लान चुनें।"
           }
         },
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Probno razdoblje završava sutra navečer. Odaberi plan da sve ostane kako jest."
+            "value": "Probno razdoblje završava sutra navečer, a s njim prestaju i tvoji dnevni podsjetnici. Odaberi plan da ih zadržiš."
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "A próbaidőd holnap este lejár. Válassz csomagot, hogy minden maradjon úgy, ahogy van."
+            "value": "A próbaidőd holnap este lejár, és vele együtt leállnak a napi emlékeztetőid is. Válassz csomagot, hogy megmaradjanak."
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Masa uji cobamu berakhir besok malam. Pilih paket supaya semuanya tetap seperti sekarang."
+            "value": "Masa uji cobamu berakhir besok malam, dan pengingat harianmu ikut berhenti. Pilih paket supaya pengingatnya tetap jalan."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "La tua prova finisce domani sera. Scegli un piano per lasciare tutto com’è."
+            "value": "La tua prova finisce domani sera, e con lei si fermano i promemoria giornalieri. Scegli un piano per tenerli."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "トライアルは明日の夜に終わります。今のまま使い続けるには、プランを選んでください。"
+            "value": "トライアルは明日の夜に終わり、毎日のリマインダーも止まります。続けて受け取るには、プランを選んでください。"
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ನಿಮ್ಮ ಟ್ರಯಲ್ ನಾಳೆ ರಾತ್ರಿ ಮುಗಿಯುತ್ತದೆ. ಎಲ್ಲವನ್ನೂ ಹಾಗೆಯೇ ಉಳಿಸಿಕೊಳ್ಳಲು ಯೋಜನೆಯನ್ನು ಆರಿಸಿ."
+            "value": "ನಿಮ್ಮ ಟ್ರಯಲ್ ನಾಳೆ ರಾತ್ರಿ ಮುಗಿಯುತ್ತದೆ, ಅದರೊಂದಿಗೆ ನಿಮ್ಮ ದೈನಂದಿನ ಜ್ಞಾಪನೆಗಳೂ ನಿಲ್ಲುತ್ತವೆ. ಅವುಗಳನ್ನು ಉಳಿಸಿಕೊಳ್ಳಲು ಯೋಜನೆಯನ್ನು ಆರಿಸಿ."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "체험 기간이 내일 밤에 끝나요. 지금 그대로 쓰려면 이용권을 선택하세요."
+            "value": "체험 기간이 내일 밤에 끝나고, 매일 알림도 함께 멈춰요. 알림을 계속 받으려면 이용권을 선택하세요."
           }
         },
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "നിങ്ങളുടെ ട്രയൽ നാളെ രാത്രി അവസാനിക്കും. എല്ലാം ഇപ്പോഴുള്ളതുപോലെ നിലനിർത്താൻ ഒരു പ്ലാൻ തിരഞ്ഞെടുക്കൂ."
+            "value": "നിങ്ങളുടെ ട്രയൽ നാളെ രാത്രി അവസാനിക്കും, അതോടൊപ്പം നിങ്ങളുടെ ദൈനംദിന റിമൈൻഡറുകളും നിലയ്ക്കും. അവ നിലനിർത്താൻ ഒരു പ്ലാൻ തിരഞ്ഞെടുക്കൂ."
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "तुमचा ट्रायल उद्या रात्री संपेल. सगळं जसं आहे तसं ठेवण्यासाठी प्लॅन निवडा."
+            "value": "तुमचा ट्रायल उद्या रात्री संपेल, आणि त्यासोबत तुमचे रोजचे रिमाइंडरही थांबतील. ते चालू ठेवण्यासाठी प्लॅन निवडा."
           }
         },
         "ms": {
           "stringUnit": {
             "state": "translated",
-            "value": "Percubaan anda tamat esok malam. Pilih pelan supaya semuanya kekal seperti sekarang."
+            "value": "Percubaan anda tamat esok malam, dan peringatan harian anda turut berhenti. Pilih pelan untuk mengekalkannya."
           }
         },
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "Prøveperioden din slutter i morgen kveld. Velg et abonnement, så blir alt som det er."
+            "value": "Prøveperioden din slutter i morgen kveld, og de daglige påminnelsene dine stopper samtidig. Velg et abonnement for å beholde dem."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Je proefperiode eindigt morgenavond. Kies een abonnement om alles te houden zoals het is."
+            "value": "Je proefperiode eindigt morgenavond, en dan stoppen ook je dagelijkse herinneringen. Kies een abonnement om ze te houden."
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ଆପଣଙ୍କ ଟ୍ରାଏଲ ଆସନ୍ତାକାଲି ରାତିରେ ଶେଷ ହେବ। ସବୁକିଛି ଯେମିତି ଅଛି ସେମିତି ରଖିବାକୁ ଏକ ପ୍ଲାନ ବାଛନ୍ତୁ।"
+            "value": "ଆପଣଙ୍କ ଟ୍ରାଏଲ ଆସନ୍ତାକାଲି ରାତିରେ ଶେଷ ହେବ, ଆଉ ତା ସହିତ ଆପଣଙ୍କ ଦୈନିକ ରିମାଇଣ୍ଡର୍ ମଧ୍ୟ ବନ୍ଦ ହୋଇଯିବ। ସେଗୁଡ଼ିକୁ ଜାରି ରଖିବାକୁ ଏକ ପ୍ଲାନ ବାଛନ୍ତୁ।"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਤੁਹਾਡਾ ਟ੍ਰਾਇਲ ਕੱਲ੍ਹ ਰਾਤ ਖਤਮ ਹੋ ਜਾਵੇਗਾ। ਸਭ ਕੁਝ ਜਿਵੇਂ ਹੈ ਤਿਵੇਂ ਰੱਖਣ ਲਈ ਕੋਈ ਪਲਾਨ ਚੁਣੋ।"
+            "value": "ਤੁਹਾਡਾ ਟ੍ਰਾਇਲ ਕੱਲ੍ਹ ਰਾਤ ਖਤਮ ਹੋ ਜਾਵੇਗਾ, ਅਤੇ ਉਸਦੇ ਨਾਲ ਤੁਹਾਡੇ ਰੋਜ਼ਾਨਾ ਰਿਮਾਈਂਡਰ ਵੀ ਬੰਦ ਹੋ ਜਾਣਗੇ। ਇਨ੍ਹਾਂ ਨੂੰ ਜਾਰੀ ਰੱਖਣ ਲਈ ਕੋਈ ਪਲਾਨ ਚੁਣੋ।"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Twój okres próbny kończy się jutro wieczorem. Wybierz plan, żeby wszystko zostało tak, jak jest."
+            "value": "Twój okres próbny kończy się jutro wieczorem, a razem z nim codzienne przypomnienia. Wybierz plan, żeby je zachować."
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Seu teste termina amanhã à noite. Escolha um plano para manter tudo como está."
+            "value": "Seu teste termina amanhã à noite, e seus lembretes diários param junto. Escolha um plano para mantê-los."
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "translated",
-            "value": "O teu teste termina amanhã à noite. Escolhe um plano para manteres tudo como está."
+            "value": "O teu teste termina amanhã à noite, e os teus lembretes diários param com ele. Escolhe um plano para os manteres."
           }
         },
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "Proba ta se încheie mâine seară. Alege un plan ca totul să rămână la fel."
+            "value": "Proba ta se încheie mâine seară, iar odată cu ea se opresc și mementourile zilnice. Alege un plan ca să le păstrezi."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Пробный период закончится завтра вечером. Выбери план, чтобы всё осталось как есть."
+            "value": "Пробный период закончится завтра вечером, а вместе с ним и ежедневные напоминания. Выбери план, чтобы их сохранить."
           }
         },
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Skúšobné obdobie končí zajtra večer. Vyber si plán a všetko zostane tak, ako je."
+            "value": "Skúšobné obdobie končí zajtra večer a s ním skončia aj denné pripomienky. Vyber si plán, aby ti zostali."
           }
         },
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tvoj preizkus se konča jutri zvečer. Izberi paket, da vse ostane, kot je."
+            "value": "Tvoj preizkus se konča jutri zvečer, z njim pa se ustavijo tudi dnevni opomniki. Izberi paket, da jih obdržiš."
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Din provperiod tar slut i morgon kväll. Välj ett abonnemang så att allt blir kvar som det är."
+            "value": "Din provperiod tar slut i morgon kväll, och dina dagliga påminnelser stoppar samtidigt. Välj ett abonnemang för att behålla dem."
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "உங்கள் சோதனைக்காலம் நாளை இரவு முடிகிறது. எல்லாவற்றையும் அப்படியே வைத்திருக்க ஒரு திட்டத்தைத் தேர்ந்தெடுங்கள்."
+            "value": "உங்கள் சோதனைக்காலம் நாளை இரவு முடிகிறது, அதனுடன் உங்கள் தினசரி நினைவூட்டல்களும் நின்றுவிடும். அவற்றைத் தொடர ஒரு திட்டத்தைத் தேர்ந்தெடுங்கள்."
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "మీ ట్రయల్ రేపు రాత్రి ముగుస్తుంది. అన్నీ ఇలాగే ఉంచుకోవడానికి ఒక ప్లాన్ ఎంచుకోండి."
+            "value": "మీ ట్రయల్ రేపు రాత్రి ముగుస్తుంది, దానితో పాటే మీ రోజువారీ రిమైండర్లు కూడా ఆగిపోతాయి. వాటిని కొనసాగించడానికి ఒక ప్లాన్ ఎంచుకోండి."
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "ช่วงทดลองจะจบคืนพรุ่งนี้ เลือกแพ็กเกจเพื่อให้ทุกอย่างอยู่เหมือนเดิม"
+            "value": "ช่วงทดลองจะจบคืนพรุ่งนี้ และการแจ้งเตือนประจำวันจะหยุดไปด้วย เลือกแพ็กเกจเพื่อให้ยังได้รับการแจ้งเตือนต่อ"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Denemen yarın akşam bitiyor. Her şey olduğu gibi kalsın diye bir plan seç."
+            "value": "Denemen yarın akşam bitiyor ve günlük hatırlatmaların da onunla birlikte duruyor. Onları korumak için bir plan seç."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Пробний період закінчиться завтра ввечері. Обери план, щоб усе лишилося як є."
+            "value": "Пробний період закінчиться завтра ввечері, а разом із ним і щоденні нагадування. Обери план, щоб їх зберегти."
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "آپ کا ٹرائل کل رات ختم ہو جائے گا۔ سب کچھ جیسا ہے ویسا رکھنے کے لیے کوئی پلان چنیں۔"
+            "value": "آپ کا ٹرائل کل رات ختم ہو جائے گا، اور اس کے ساتھ آپ کی روزانہ کی یاد دہانیاں بھی بند ہو جائیں گی۔ انہیں جاری رکھنے کے لیے کوئی پلان چنیں۔"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Thời gian dùng thử kết thúc vào tối mai. Chọn một gói để giữ mọi thứ như hiện tại."
+            "value": "Thời gian dùng thử kết thúc vào tối mai, và lời nhắc hàng ngày của bạn cũng dừng theo. Chọn một gói để giữ lại lời nhắc."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "试用将在明晚结束。选择一个方案，让一切保持原样。"
+            "value": "试用将在明晚结束，你的每日提醒也会随之停止。选择一个方案，继续接收提醒。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "試用將在明晚結束。選擇一個方案，讓一切保持原樣。"
+            "value": "試用將在明晚結束，你的每日提醒也會隨之停止。選擇一個方案，繼續接收提醒。"
           }
         }
       }
@@ -13574,271 +13574,271 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "اختاري اشتراكًا لتكملي من حيث توقفتِ. إعداداتك محفوظة."
+            "value": "تذكيراتك اليومية متوقفة الآن. اختاري اشتراكًا لإعادة تشغيلها. إعداداتك محفوظة."
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "যেখানে থেমেছিলেন সেখান থেকেই চালিয়ে যেতে একটি প্ল্যান বেছে নিন। আপনার সেটআপ সেভ করা আছে।"
+            "value": "আপনার দৈনিক রিমাইন্ডার এখন বন্ধ। আবার চালু করতে একটি প্ল্যান বেছে নিন। আপনার সেটআপ সেভ করা আছে।"
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tria un pla per continuar just on ho vas deixar. La teva configuració està desada."
+            "value": "Els recordatoris diaris ara estan desactivats. Tria un pla per tornar-los a activar. La teva configuració està desada."
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vyber si plán a pokračuj přesně tam, kde jsi skončila. Tvoje nastavení je uložené."
+            "value": "Denní připomínky jsou teď vypnuté. Vyber si plán a znovu je zapneš. Tvoje nastavení je uložené."
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vælg et abonnement, og fortsæt lige der, hvor du slap. Din opsætning er gemt."
+            "value": "Dine daglige påmindelser er slået fra nu. Vælg et abonnement for at slå dem til igen. Din opsætning er gemt."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wähl einen Tarif und mach genau da weiter, wo du aufgehört hast. Deine Einrichtung ist gespeichert."
+            "value": "Deine täglichen Erinnerungen sind jetzt aus. Wähl einen Tarif, um sie wieder einzuschalten. Deine Einrichtung ist gespeichert."
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Διάλεξε πρόγραμμα για να συνεχίσεις από εκεί που σταμάτησες. Οι ρυθμίσεις σου είναι αποθηκευμένες."
+            "value": "Οι καθημερινές υπενθυμίσεις σου είναι πλέον ανενεργές. Διάλεξε πρόγραμμα για να τις ενεργοποιήσεις ξανά. Οι ρυθμίσεις σου είναι αποθηκευμένες."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pick a plan to carry on right where you left off. Your setup is saved."
+            "value": "Your daily reminders are off now. Pick a plan to turn them back on. Your setup is saved."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Elige un plan para seguir justo donde lo dejaste. Tu configuración está guardada."
+            "value": "Tus recordatorios diarios están desactivados. Elige un plan para volver a activarlos. Tu configuración está guardada."
           }
         },
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Valitse tilaus ja jatka siitä, mihin jäit. Asetuksesi on tallennettu."
+            "value": "Päivittäiset muistutuksesi ovat nyt pois päältä. Valitse tilaus, niin saat ne taas päälle. Asetuksesi on tallennettu."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Choisis une formule pour reprendre là où tu en étais. Ta configuration est enregistrée."
+            "value": "Tes rappels quotidiens sont désactivés. Choisis une formule pour les réactiver. Ta configuration est enregistrée."
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "જ્યાં છોડ્યું હતું ત્યાંથી જ ચાલુ રાખવા પ્લાન પસંદ કરો. તમારું સેટઅપ સેવ થયેલું છે."
+            "value": "તમારાં રોજનાં રિમાઇન્ડર હવે બંધ છે. તેમને ફરી ચાલુ કરવા પ્લાન પસંદ કરો. તમારું સેટઅપ સેવ થયેલું છે."
           }
         },
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "בחרי מסלול כדי להמשיך בדיוק מאיפה שהפסקת. ההגדרות שלך שמורות."
+            "value": "התזכורות היומיות שלך כבויות עכשיו. בחרי מסלול כדי להפעיל אותן מחדש. ההגדרות שלך שמורות."
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "जहाँ छोड़ा था, वहीं से आगे बढ़ने के लिए कोई प्लान चुनें। आपका सेटअप सेव है।"
+            "value": "आपके रोज़ के रिमाइंडर अब बंद हैं। उन्हें फिर से चालू करने के लिए कोई प्लान चुनें। आपका सेटअप सेव है।"
           }
         },
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Odaberi plan i nastavi točno ondje gdje si stala. Tvoje postavke su spremljene."
+            "value": "Tvoji dnevni podsjetnici sada su isključeni. Odaberi plan da ih ponovno uključiš. Tvoje postavke su spremljene."
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "Válassz csomagot, és folytasd ott, ahol abbahagytad. A beállításaid el vannak mentve."
+            "value": "A napi emlékeztetőid most ki vannak kapcsolva. Válassz csomagot, hogy újra bekapcsold őket. A beállításaid el vannak mentve."
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pilih paket untuk lanjut dari tempat terakhirmu. Pengaturanmu sudah tersimpan."
+            "value": "Pengingat harianmu sekarang mati. Pilih paket untuk menyalakannya lagi. Pengaturanmu sudah tersimpan."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Scegli un piano per riprendere da dove avevi lasciato. Le tue impostazioni sono salvate."
+            "value": "I tuoi promemoria giornalieri ora sono disattivati. Scegli un piano per riattivarli. Le tue impostazioni sono salvate."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "プランを選べば、中断したところから続けられます。設定は保存されています。"
+            "value": "毎日のリマインダーは現在オフです。再びオンにするには、プランを選んでください。設定は保存されています。"
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ನೀವು ನಿಲ್ಲಿಸಿದ ಸ್ಥಳದಿಂದಲೇ ಮುಂದುವರಿಯಲು ಯೋಜನೆಯನ್ನು ಆರಿಸಿ. ನಿಮ್ಮ ಸೆಟಪ್ ಉಳಿಸಲಾಗಿದೆ."
+            "value": "ನಿಮ್ಮ ದೈನಂದಿನ ಜ್ಞಾಪನೆಗಳು ಈಗ ಆಫ್ ಆಗಿವೆ. ಅವುಗಳನ್ನು ಮತ್ತೆ ಆನ್ ಮಾಡಲು ಯೋಜನೆಯನ್ನು ಆರಿಸಿ. ನಿಮ್ಮ ಸೆಟಪ್ ಉಳಿಸಲಾಗಿದೆ."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "이용권을 선택하면 멈춘 곳에서 바로 이어갈 수 있어요. 설정은 저장되어 있어요."
+            "value": "매일 알림이 지금 꺼져 있어요. 다시 켜려면 이용권을 선택하세요. 설정은 저장되어 있어요."
           }
         },
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "നിർത്തിയിടത്തുനിന്ന് തുടരാൻ ഒരു പ്ലാൻ തിരഞ്ഞെടുക്കൂ. നിങ്ങളുടെ സജ്ജീകരണം സേവ് ചെയ്തിട്ടുണ്ട്."
+            "value": "നിങ്ങളുടെ ദൈനംദിന റിമൈൻഡറുകൾ ഇപ്പോൾ ഓഫാണ്. അവ വീണ്ടും ഓണാക്കാൻ ഒരു പ്ലാൻ തിരഞ്ഞെടുക്കൂ. നിങ്ങളുടെ സജ്ജീകരണം സേവ് ചെയ്തിട്ടുണ്ട്."
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "जिथे थांबला होता तिथूनच पुढे सुरू करण्यासाठी प्लॅन निवडा. तुमचे सेटअप सेव्ह आहे."
+            "value": "तुमचे रोजचे रिमाइंडर आता बंद आहेत. ते पुन्हा सुरू करण्यासाठी प्लॅन निवडा. तुमचा सेटअप सेव्ह आहे."
           }
         },
         "ms": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pilih pelan untuk sambung tepat di tempat anda berhenti. Tetapan anda sudah disimpan."
+            "value": "Peringatan harian anda kini dimatikan. Pilih pelan untuk menghidupkannya semula. Tetapan anda sudah disimpan."
           }
         },
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "Velg et abonnement og fortsett der du slapp. Oppsettet ditt er lagret."
+            "value": "De daglige påminnelsene dine er av nå. Velg et abonnement for å slå dem på igjen. Oppsettet ditt er lagret."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kies een abonnement en ga verder waar je gebleven was. Je instellingen zijn bewaard."
+            "value": "Je dagelijkse herinneringen staan nu uit. Kies een abonnement om ze weer aan te zetten. Je instellingen zijn bewaard."
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ଯେଉଁଠି ଛାଡିଥିଲେ ସେଠାରୁ ଜାରି ରଖିବାକୁ ଏକ ପ୍ଲାନ ବାଛନ୍ତୁ। ଆପଣଙ୍କ ସେଟଅପ୍ ସେଭ୍ ହୋଇଛି।"
+            "value": "ଆପଣଙ୍କ ଦୈନିକ ରିମାଇଣ୍ଡର୍ ଏବେ ବନ୍ଦ ଅଛି। ସେଗୁଡ଼ିକୁ ପୁଣି ଚାଲୁ କରିବାକୁ ଏକ ପ୍ଲାନ ବାଛନ୍ତୁ। ଆପଣଙ୍କ ସେଟଅପ୍ ସେଭ୍ ହୋଇଛି।"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ਜਿੱਥੇ ਛੱਡਿਆ ਸੀ ਉੱਥੋਂ ਹੀ ਜਾਰੀ ਰੱਖਣ ਲਈ ਕੋਈ ਪਲਾਨ ਚੁਣੋ। ਤੁਹਾਡਾ ਸੈੱਟਅੱਪ ਸੇਵ ਹੈ।"
+            "value": "ਤੁਹਾਡੇ ਰੋਜ਼ਾਨਾ ਰਿਮਾਈਂਡਰ ਹੁਣ ਬੰਦ ਹਨ। ਇਨ੍ਹਾਂ ਨੂੰ ਮੁੜ ਚਾਲੂ ਕਰਨ ਲਈ ਕੋਈ ਪਲਾਨ ਚੁਣੋ। ਤੁਹਾਡਾ ਸੈੱਟਅੱਪ ਸੇਵ ਹੈ।"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wybierz plan i kontynuuj dokładnie tam, gdzie skończyłaś. Twoje ustawienia są zapisane."
+            "value": "Codzienne przypomnienia są teraz wyłączone. Wybierz plan, żeby znów je włączyć. Twoje ustawienia są zapisane."
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Escolha um plano para continuar de onde parou. Sua configuração está salva."
+            "value": "Seus lembretes diários estão desligados. Escolha um plano para ligá-los de novo. Sua configuração está salva."
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "translated",
-            "value": "Escolhe um plano para continuares onde ficaste. A tua configuração está guardada."
+            "value": "Os teus lembretes diários estão desligados. Escolhe um plano para os voltares a ligar. A tua configuração está guardada."
           }
         },
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "Alege un plan ca să continui exact de unde ai rămas. Configurarea ta e salvată."
+            "value": "Mementourile tale zilnice sunt acum oprite. Alege un plan ca să le pornești din nou. Configurarea ta e salvată."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Выбери план, чтобы продолжить с того же места. Твои настройки сохранены."
+            "value": "Ежедневные напоминания теперь выключены. Выбери план, чтобы снова их включить. Твои настройки сохранены."
           }
         },
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vyber si plán a pokračuj presne tam, kde si skončila. Tvoje nastavenie je uložené."
+            "value": "Denné pripomienky sú teraz vypnuté. Vyber si plán a znova ich zapneš. Tvoje nastavenie je uložené."
           }
         },
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Izberi paket in nadaljuj tam, kjer si ostala. Tvoje nastavitve so shranjene."
+            "value": "Tvoji dnevni opomniki so zdaj izklopljeni. Izberi paket, da jih znova vklopiš. Tvoje nastavitve so shranjene."
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Välj ett abonnemang och fortsätt där du slutade. Dina inställningar är sparade."
+            "value": "Dina dagliga påminnelser är avstängda nu. Välj ett abonnemang för att slå på dem igen. Dina inställningar är sparade."
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "நிறுத்திய இடத்திலிருந்தே தொடர ஒரு திட்டத்தைத் தேர்ந்தெடுங்கள். உங்கள் அமைப்பு சேமிக்கப்பட்டுள்ளது."
+            "value": "உங்கள் தினசரி நினைவூட்டல்கள் இப்போது ஆஃப் ஆகியுள்ளன. அவற்றை மீண்டும் இயக்க ஒரு திட்டத்தைத் தேர்ந்தெடுங்கள். உங்கள் அமைப்பு சேமிக்கப்பட்டுள்ளது."
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "ఆపిన చోటు నుంచే కొనసాగించడానికి ఒక ప్లాన్ ఎంచుకోండి. మీ సెటప్ సేవ్ అయి ఉంది."
+            "value": "మీ రోజువారీ రిమైండర్లు ఇప్పుడు ఆఫ్‌లో ఉన్నాయి. వాటిని మళ్లీ ఆన్ చేయడానికి ఒక ప్లాన్ ఎంచుకోండి. మీ సెటప్ సేవ్ అయి ఉంది."
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "เลือกแพ็กเกจเพื่อใช้ต่อจากจุดเดิม การตั้งค่าของคุณบันทึกไว้แล้ว"
+            "value": "การแจ้งเตือนประจำวันของคุณปิดอยู่ตอนนี้ เลือกแพ็กเกจเพื่อเปิดกลับมาอีกครั้ง การตั้งค่าของคุณบันทึกไว้แล้ว"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaldığın yerden devam etmek için bir plan seç. Ayarların kayıtlı."
+            "value": "Günlük hatırlatmaların artık kapalı. Yeniden açmak için bir plan seç. Ayarların kayıtlı."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Обери план, щоб продовжити з того ж місця. Твої налаштування збережено."
+            "value": "Щоденні нагадування тепер вимкнено. Обери план, щоб знову їх увімкнути. Твої налаштування збережено."
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "جہاں چھوڑا تھا وہیں سے جاری رکھنے کے لیے کوئی پلان چنیں۔ آپ کا سیٹ اپ محفوظ ہے۔"
+            "value": "آپ کی روزانہ کی یاد دہانیاں اب بند ہیں۔ انہیں دوبارہ آن کرنے کے لیے کوئی پلان چنیں۔ آپ کا سیٹ اپ محفوظ ہے۔"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Chọn một gói để tiếp tục ngay từ chỗ bạn dừng lại. Thiết lập của bạn đã được lưu."
+            "value": "Lời nhắc hàng ngày của bạn hiện đã tắt. Chọn một gói để bật lại. Thiết lập của bạn đã được lưu."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "选择一个方案，从上次停下的地方继续。你的设置已保存。"
+            "value": "你的每日提醒现已关闭。选择一个方案即可重新开启。你的设置已保存。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "選擇一個方案，從上次停下的地方繼續。你的設定已儲存。"
+            "value": "你的每日提醒現已關閉。選擇一個方案即可重新開啟。你的設定已儲存。"
           }
         }
       }

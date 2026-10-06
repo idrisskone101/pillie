@@ -1947,9 +1947,9 @@
       "table": "Commerce",
       "key": "paywall.story.trial_ended.returning.hard.subtitle",
       "create": true,
-      "en": "App blocking and follow-up reminders stay off until you turn Plus back on.",
-      "de": "Die App-Sperre und Folgeerinnerungen bleiben aus, bis du Plus wieder einschaltest.",
-      "it": "Il blocco app e i promemoria ripetuti restano disattivati finché non riattivi Plus."
+      "en": "Your daily reminders and app blocking are off. Pick a plan to turn them back on.",
+      "de": "Deine täglichen Erinnerungen und die App-Sperre sind aus. Wähl einen Tarif, um sie wieder einzuschalten.",
+      "it": "I promemoria giornalieri e il blocco app sono disattivati. Scegli un piano per riattivarli."
     },
     {
       "issue": "returning-expired-paywall",
@@ -1965,9 +1965,9 @@
       "table": "Commerce",
       "key": "paywall.story.trial_ended.returning.hard.chip.reminders",
       "create": true,
-      "en": "Follow-up reminders come back",
-      "de": "Folgeerinnerungen kommen zurück",
-      "it": "I promemoria ripetuti tornano"
+      "en": "Daily reminders come back",
+      "de": "Erinnerungen kommen zurück",
+      "it": "I promemoria tornano"
     },
     {
       "issue": "returning-expired-paywall",
@@ -2415,27 +2415,27 @@
       "table": "Notifications",
       "key": "notification.trial_expiry.day10.hard.body",
       "create": true,
-      "en": "5 days left in your trial. Pick a plan whenever you’re ready to keep going.",
-      "de": "Noch 5 Tage in deiner Testphase. Wähl einen Tarif, wann immer du weitermachen möchtest.",
-      "it": "Mancano 5 giorni alla fine della prova. Scegli un piano quando vuoi per continuare."
+      "en": "5 days left in your trial. After that, your daily reminders stop until you pick a plan.",
+      "de": "Noch 5 Tage in deiner Testphase. Danach hören deine täglichen Erinnerungen auf, bis du einen Tarif wählst.",
+      "it": "Mancano 5 giorni alla fine della prova. Poi i promemoria giornalieri si fermano finché non scegli un piano."
     },
     {
       "issue": "ENG-161",
       "table": "Notifications",
       "key": "notification.trial_expiry.day13.hard.body",
       "create": true,
-      "en": "Your trial wraps up tomorrow night. Pick a plan to keep everything as it is.",
-      "de": "Deine Testphase endet morgen Abend. Wähl einen Tarif, damit alles so bleibt, wie es ist.",
-      "it": "La tua prova finisce domani sera. Scegli un piano per lasciare tutto com’è."
+      "en": "Your trial ends tomorrow night, and your daily reminders stop with it. Pick a plan to keep them.",
+      "de": "Deine Testphase endet morgen Abend, und damit enden auch deine täglichen Erinnerungen. Wähl einen Tarif, um sie zu behalten.",
+      "it": "La tua prova finisce domani sera, e con lei si fermano i promemoria giornalieri. Scegli un piano per tenerli."
     },
     {
       "issue": "ENG-161",
       "table": "Notifications",
       "key": "notification.trial_expiry.day15.hard.body",
       "create": true,
-      "en": "Pick a plan to carry on right where you left off. Your setup is saved.",
-      "de": "Wähl einen Tarif und mach genau da weiter, wo du aufgehört hast. Deine Einrichtung ist gespeichert.",
-      "it": "Scegli un piano per riprendere da dove avevi lasciato. Le tue impostazioni sono salvate."
+      "en": "Your daily reminders are off now. Pick a plan to turn them back on. Your setup is saved.",
+      "de": "Deine täglichen Erinnerungen sind jetzt aus. Wähl einen Tarif, um sie wieder einzuschalten. Deine Einrichtung ist gespeichert.",
+      "it": "I tuoi promemoria giornalieri ora sono disattivati. Scegli un piano per riattivarli. Le tue impostazioni sono salvate."
     },
     {
       "issue": "ENG-74",
@@ -2801,6 +2801,15 @@
       "en": "Pillie Plus is on for your next %lld active days, free. No card. We’ll remind you before it ends.",
       "de": "Pillie Plus ist die nächsten %lld aktiven Tage gratis. Keine Karte. Wir erinnern dich vor dem Ende.",
       "it": "Hai Pillie Plus gratis per i prossimi %lld giorni attivi. Nessuna carta. Ti avviseremo prima che finisca."
+    },
+    {
+      "issue": "ENG-167",
+      "table": "Commerce",
+      "key": "trial.status.timeline.plus_pauses",
+      "create": true,
+      "en": "Your daily reminders and Plus pause until you choose a plan. Your setup stays saved.",
+      "de": "Deine täglichen Erinnerungen und Plus pausieren, bis du einen Tarif wählst. Deine Einrichtung bleibt gespeichert.",
+      "it": "I promemoria giornalieri e Plus vanno in pausa finché non scegli un piano. La tua configurazione resta salvata."
     }
   ]
 }
