@@ -69,7 +69,9 @@ enum HonestPaywallStoryFactory {
                     locale: locale
                 ),
                 subtitle: PillieLocalization.string(
-                    "paywall.story.trial_ended.subtitle",
+                    terms == .hardPaywall
+                        ? "paywall.story.trial_ended.returning.hard.subtitle"
+                        : "paywall.story.trial_ended.subtitle",
                     table: "Commerce",
                     locale: locale
                 ),

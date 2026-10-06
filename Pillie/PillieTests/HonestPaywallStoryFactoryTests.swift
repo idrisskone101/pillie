@@ -37,6 +37,7 @@ struct HonestPaywallStoryFactoryTests {
         #expect(dose?.value == "11")
         #expect(streak?.value == "3")
         #expect(!lossLine.isEmpty)
+        #expect(story.subtitle == "Your daily reminders and app blocking are off. Pick a plan to turn them back on.")
     }
 
     @Test func `Empty stats on hard terms use the locked returning story`() {

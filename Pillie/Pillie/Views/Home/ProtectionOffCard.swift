@@ -5,7 +5,9 @@
 //  The Protection Off State surface on Home (issue #167 / ADR 0007 /
 //  CONTEXT.md): after Plus Access ends for a user with saved blocker
 //  configuration, blocking has stopped and this card says so — the user must
-//  never believe blocking is active when it is not. Persistent (no dismissal):
+//  never believe blocking is active when it is not. A hard-paywall trial that
+//  ended stops every reminder too, and then the card says that instead
+//  (ENG-167). Persistent (no dismissal):
 //  it is the way back to the upgrade path until access returns. Copy + gating
 //  live in ProtectionOffCardContent (value-type tested).
 //
@@ -51,11 +53,13 @@ struct ProtectionOffCard: View {
         )
         .shadow(color: PillieTheme.cardShadow, radius: PillieTheme.cardShadowRadius, y: PillieTheme.cardShadowY)
         .accessibilityElement(children: .contain)
-        .accessibilityIdentifier("homeProtectionOffCard")
+        .accessibilityIdentifier(
+            content.kind == .remindersStopped ? "homeRemindersOffCard" : "homeProtectionOffCard"
+        )
     }
 
     private var iconBadge: some View {
-        Image(systemName: "shield.slash.fill")
+        Image(systemName: content.kind == .remindersStopped ? "bell.slash.fill" : "shield.slash.fill")
             .font(.system(size: 20, weight: .semibold))
             .foregroundStyle(PillieTheme.coral)
             .frame(width: 42, height: 42)

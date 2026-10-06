@@ -110,7 +110,8 @@ struct HomeView: View {
     /// Copy for the enable-blocking-later card, or `nil` when blocking is active or the
     /// card was dismissed — in which case it does not occupy this Home pass.
     private var blockingCardContent: BlockingStatusCardContent? {
-        guard !blockingCardDismissed else { return nil }
+        // Its free-tier copy says reminders are on, which a stopped trial makes false.
+        guard !blockingCardDismissed, !remindersStopped else { return nil }
         return BlockingStatusCardContent.make(
             for: blockingPresentation,
             heldForPlusSetup: PlusSetupProgress.holdsBlockingCard(
@@ -132,7 +133,19 @@ struct HomeView: View {
         ProtectionOffCardContent.make(
             hasPlusAccess: SubscriptionManager.shared.hasPlusAccess,
             blockerConfigSaved: AppBlockingManager.shared.hasAppsSelected,
+            remindersStopped: remindersStopped,
             locale: locale
+        )
+    }
+
+    /// Mirrors the planner dropping every reminder once a hard-paywall trial
+    /// ends (ENG-162), so Home says so instead of looking like it still reminds.
+    private var remindersStopped: Bool {
+        let manager = SubscriptionManager.shared
+        return manager.plusAccessState.remindersStopped(
+            terms: manager.trialEndTerms,
+            calendar: Calendar.current,
+            now: trialEndEvaluationDate
         )
     }
 
@@ -186,6 +199,9 @@ struct HomeView: View {
     /// entitlement; the persisted flag makes it once-only — afterwards the
     /// Protection Off card is the way back.
     private func autoPresentTrialEndPaywallIfNeeded() {
+        #if DEBUG
+        if UserDefaults.standard.bool(forKey: TrialEndPaywallAutoPresentation.debugHeldStorageKey) { return }
+        #endif
         let manager = SubscriptionManager.shared
         guard TrialEndPaywallAutoPresentation.shouldPresent(
             state: manager.plusAccessState,

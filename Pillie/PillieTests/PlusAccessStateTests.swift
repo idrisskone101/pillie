@@ -113,4 +113,26 @@ final class PlusAccessStateTests: XCTestCase {
             ))!
         ))
     }
+
+    // MARK: - Reminders stop only for an expired hard-paywall trial (ENG-162)
+
+    private func remindersStopped(
+        entitlement: Bool,
+        grant: Date?,
+        terms: TrialEndAccessTerms
+    ) -> Bool {
+        PlusAccessState(hasEntitlement: entitlement, trialGrantDate: grant)
+            .remindersStopped(terms: terms, calendar: calendar, now: now)
+    }
+
+    func testExpiredHardPaywallTrialStopsReminders() {
+        XCTAssertTrue(remindersStopped(entitlement: false, grant: expiredGrant, terms: .hardPaywall))
+    }
+
+    func testRemindersKeepGoingOutsideAnExpiredHardPaywallTrial() {
+        XCTAssertFalse(remindersStopped(entitlement: false, grant: expiredGrant, terms: .legacy))
+        XCTAssertFalse(remindersStopped(entitlement: false, grant: activeGrant, terms: .hardPaywall))
+        XCTAssertFalse(remindersStopped(entitlement: true, grant: expiredGrant, terms: .hardPaywall))
+        XCTAssertFalse(remindersStopped(entitlement: false, grant: nil, terms: .hardPaywall))
+    }
 }

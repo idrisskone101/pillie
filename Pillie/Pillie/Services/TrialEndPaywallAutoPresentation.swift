@@ -16,6 +16,11 @@ enum TrialEndPaywallAutoPresentation {
     /// One-shot legacy surface shown when operators roll a post-cutover cohort
     /// back after its hard wall had already appeared.
     static let rollbackShownStorageKey = "trialEndPaywallRollbackShown"
+    #if DEBUG
+    /// QA hold (`/trial-end-paywall?wall=off`): keeps the mandatory wall down so
+    /// the Home it covers can be checked.
+    static let debugHeldStorageKey = "debugTrialEndPaywallHeld"
+    #endif
 
     /// Foreground reconciliation flips Plus access from active to inactive when
     /// a Reverse Trial expired while the app was suspended. That transition is
