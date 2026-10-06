@@ -90,6 +90,12 @@ blocking/trial status surfaces, and (when eligible) the review ask.
   "First reminder" and the floating bar says "Your first reminder is tonight"
   with a `#firstReminderTookIt` chip, which goes through shake confirm to the
   logged state. The bar itself is not a button.
+- `flows/today-first-reminder-due.flow` — the same onboarding at a pinned
+  9 PM with an 8 AM reminder (ENG-163). Pill 1 is already past its reminder,
+  so the planner's catch-up reminder fires within a minute. Today shows the
+  normal Take state, with no "Your first reminder" line and no
+  `#firstReminderTookIt` chip. The flow ends by dumping pending notifications
+  to `app.log`.
 - `flows/today-pack-card.flow` — the pack card's last hormone pill, sugar
   week, and finished pack headers via `/trial-eve-of-break`,
   `/trial-break-week`, and `/fixed-now` one day later.

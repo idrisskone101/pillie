@@ -19,7 +19,8 @@ struct FirstReminderHandoffTests {
         reminderHour: Int,
         reminderMinute: Int = 0,
         now: Date? = nil,
-        hasLoggedAnything: Bool = false
+        hasLoggedAnything: Bool = false,
+        isDoseDue: Bool = false
     ) -> FirstReminderHandoff? {
         FirstReminderHandoff.resolve(
             installedAt: installedAt,
@@ -27,6 +28,7 @@ struct FirstReminderHandoffTests {
             reminderMinute: reminderMinute,
             now: now ?? installedAt ?? date(1, 0),
             hasLoggedAnything: hasLoggedAnything,
+            isDoseDue: isDoseDue,
             calendar: calendar
         )
     }
@@ -71,6 +73,11 @@ struct FirstReminderHandoffTests {
 
     @Test func loggingAnythingEndsTheHandoff() {
         #expect(resolve(installedAt: date(24, 12), reminderHour: 20, hasLoggedAnything: true) == nil)
+    }
+
+    @Test func aNotYetPillPastItsReminderIsDueNotTomorrow() {
+        #expect(resolve(installedAt: date(24, 21), reminderHour: 8, isDoseDue: true) == nil)
+        #expect(resolve(installedAt: date(24, 21), reminderHour: 20, isDoseDue: true) == nil)
     }
 
     @Test func atAndAfterTheFirstFireTheHandoffIsGone() {
