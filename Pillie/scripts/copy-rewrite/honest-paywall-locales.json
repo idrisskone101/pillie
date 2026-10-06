@@ -35,8 +35,7 @@
     "paywall.footer.privacy": "Confidentialité",
     "paywall.mockup.shield.title": "En pause jusqu’à ce que tu valides",
     "paywall.mockup.shield.subtitle": "Valide dans Pillie et cette app redevient accessible.",
-    "paywall.mockup.shield.secondary": "Cette app t’attendra.",
-    "paywall.mockup.shield.open": "Ouvrir Pillie"
+    "paywall.mockup.shield.secondary": "Cette app t’attendra."
   },
   "es": {
     "paywall.cta.keep_plus.billed_yearly": "Sigue con Plus por %@ al año",
@@ -74,8 +73,7 @@
     "paywall.footer.privacy": "Privacidad",
     "paywall.mockup.shield.title": "En pausa hasta que marques lo de hoy",
     "paywall.mockup.shield.subtitle": "Marca lo de hoy en Pillie y podrás volver a abrir esta app.",
-    "paywall.mockup.shield.secondary": "Esta app te estará esperando.",
-    "paywall.mockup.shield.open": "Abrir Pillie"
+    "paywall.mockup.shield.secondary": "Esta app te estará esperando."
   },
   "pt-BR": {
     "paywall.cta.keep_plus.billed_yearly": "Manter o Plus por %@ ao ano",
@@ -113,8 +111,7 @@
     "paywall.footer.privacy": "Privacidade",
     "paywall.mockup.shield.title": "Pausado até você registrar",
     "paywall.mockup.shield.subtitle": "Registre no Pillie e este app abre de novo.",
-    "paywall.mockup.shield.secondary": "Este app estará esperando.",
-    "paywall.mockup.shield.open": "Abrir Pillie"
+    "paywall.mockup.shield.secondary": "Este app estará esperando."
   },
   "pt-PT": {
     "paywall.cta.keep_plus.billed_yearly": "Manter o Plus por %@ por ano",
@@ -152,8 +149,7 @@
     "paywall.footer.privacy": "Privacidade",
     "paywall.mockup.shield.title": "Em pausa até registares",
     "paywall.mockup.shield.subtitle": "Regista no Pillie e esta app volta a abrir.",
-    "paywall.mockup.shield.secondary": "Esta app fica à tua espera.",
-    "paywall.mockup.shield.open": "Abrir o Pillie"
+    "paywall.mockup.shield.secondary": "Esta app fica à tua espera."
   },
   "nl": {
     "paywall.cta.keep_plus.billed_yearly": "Plus houden voor %@ per jaar",
@@ -191,8 +187,7 @@
     "paywall.footer.privacy": "Privacy",
     "paywall.mockup.shield.title": "Gepauzeerd tot je afvinkt",
     "paywall.mockup.shield.subtitle": "Vink af in Pillie en deze app gaat weer open.",
-    "paywall.mockup.shield.secondary": "Deze app wacht op je.",
-    "paywall.mockup.shield.open": "Pillie openen"
+    "paywall.mockup.shield.secondary": "Deze app wacht op je."
   },
   "ca": {
     "paywall.cta.keep_plus.billed_yearly": "Conserva el Plus per %@ l’any",
@@ -230,8 +225,7 @@
     "paywall.footer.privacy": "Privadesa",
     "paywall.mockup.shield.title": "En pausa fins que confirmis",
     "paywall.mockup.shield.subtitle": "Confirma a Pillie i aquesta app es tornarà a obrir.",
-    "paywall.mockup.shield.secondary": "Aquesta app t’esperarà.",
-    "paywall.mockup.shield.open": "Obrir Pillie"
+    "paywall.mockup.shield.secondary": "Aquesta app t’esperarà."
   },
   "da": {
     "paywall.cta.keep_plus.billed_yearly": "Behold Plus for %@ om året",
@@ -269,8 +263,7 @@
     "paywall.footer.privacy": "Privatliv",
     "paywall.mockup.shield.title": "På pause, indtil du krydser af",
     "paywall.mockup.shield.subtitle": "Kryds af i Pillie, så åbner denne app igen.",
-    "paywall.mockup.shield.secondary": "Denne app venter på dig.",
-    "paywall.mockup.shield.open": "Åbn Pillie"
+    "paywall.mockup.shield.secondary": "Denne app venter på dig."
   },
   "sv": {
     "paywall.cta.keep_plus.billed_yearly": "Behåll Plus för %@ per år",
@@ -308,8 +301,7 @@
     "paywall.footer.privacy": "Integritet",
     "paywall.mockup.shield.title": "Pausad tills du bockar av",
     "paywall.mockup.shield.subtitle": "Bocka av i Pillie så öppnas appen igen.",
-    "paywall.mockup.shield.secondary": "Den här appen väntar på dig.",
-    "paywall.mockup.shield.open": "Öppna Pillie"
+    "paywall.mockup.shield.secondary": "Den här appen väntar på dig."
   },
   "nb": {
     "paywall.cta.keep_plus.billed_yearly": "Behold Plus for %@ i året",
@@ -347,8 +339,7 @@
     "paywall.footer.privacy": "Personvern",
     "paywall.mockup.shield.title": "Pauset til du krysser av",
     "paywall.mockup.shield.subtitle": "Kryss av i Pillie, så åpnes denne appen igjen.",
-    "paywall.mockup.shield.secondary": "Denne appen venter på deg.",
-    "paywall.mockup.shield.open": "Åpne Pillie"
+    "paywall.mockup.shield.secondary": "Denne appen venter på deg."
   },
   "fi": {
     "paywall.cta.keep_plus.billed_yearly": "Pidä Plus hintaan %@ vuodessa",
@@ -386,8 +377,7 @@
     "paywall.footer.privacy": "Tietosuoja",
     "paywall.mockup.shield.title": "Tauolla, kunnes kuittaat",
     "paywall.mockup.shield.subtitle": "Kuittaa Pilliessä, niin tämä sovellus aukeaa taas.",
-    "paywall.mockup.shield.secondary": "Tämä sovellus odottaa sinua.",
-    "paywall.mockup.shield.open": "Avaa Pillie"
+    "paywall.mockup.shield.secondary": "Tämä sovellus odottaa sinua."
   },
   "pl": {
     "paywall.cta.keep_plus.billed_yearly": "Zachowaj Plus za %@ rocznie",
@@ -425,8 +415,7 @@
     "paywall.footer.privacy": "Prywatność",
     "paywall.mockup.shield.title": "Wstrzymane, aż odhaczysz dzień",
     "paywall.mockup.shield.subtitle": "Odhacz dzień w Pillie, a ta aplikacja znów się otworzy.",
-    "paywall.mockup.shield.secondary": "Ta aplikacja poczeka.",
-    "paywall.mockup.shield.open": "Otwórz Pillie"
+    "paywall.mockup.shield.secondary": "Ta aplikacja poczeka."
   },
   "cs": {
     "paywall.cta.keep_plus.billed_yearly": "Nechat si Plus za %@ ročně",
@@ -464,8 +453,7 @@
     "paywall.footer.privacy": "Soukromí",
     "paywall.mockup.shield.title": "Pozastaveno, dokud neodškrtneš dnešek",
     "paywall.mockup.shield.subtitle": "Odškrtni dnešek v Pillie a tahle aplikace se zase otevře.",
-    "paywall.mockup.shield.secondary": "Tato aplikace počká.",
-    "paywall.mockup.shield.open": "Otevřít Pillie"
+    "paywall.mockup.shield.secondary": "Tato aplikace počká."
   },
   "sk": {
     "paywall.cta.keep_plus.billed_yearly": "Nechať si Plus za %@ ročne",
@@ -503,8 +491,7 @@
     "paywall.footer.privacy": "Súkromie",
     "paywall.mockup.shield.title": "Pozastavené, kým neodškrtneš dnešok",
     "paywall.mockup.shield.subtitle": "Odškrtni dnešok v Pillie a táto aplikácia sa znova otvorí.",
-    "paywall.mockup.shield.secondary": "Táto aplikácia na teba počká.",
-    "paywall.mockup.shield.open": "Otvoriť Pillie"
+    "paywall.mockup.shield.secondary": "Táto aplikácia na teba počká."
   },
   "hr": {
     "paywall.cta.keep_plus.billed_yearly": "Zadrži Plus za %@ godišnje",
@@ -542,8 +529,7 @@
     "paywall.footer.privacy": "Privatnost",
     "paywall.mockup.shield.title": "Pauzirano dok se ne javiš",
     "paywall.mockup.shield.subtitle": "Javi se u Pillie i ova se aplikacija ponovno otvara.",
-    "paywall.mockup.shield.secondary": "Ova aplikacija će te pričekati.",
-    "paywall.mockup.shield.open": "Otvori Pillie"
+    "paywall.mockup.shield.secondary": "Ova aplikacija će te pričekati."
   },
   "sl": {
     "paywall.cta.keep_plus.billed_yearly": "Obdrži Plus za %@ na leto",
@@ -581,8 +567,7 @@
     "paywall.footer.privacy": "Zasebnost",
     "paywall.mockup.shield.title": "Zaustavljeno, dokler ne odkljukaš",
     "paywall.mockup.shield.subtitle": "Odkljukaj v Pillie in ta aplikacija se spet odpre.",
-    "paywall.mockup.shield.secondary": "Ta aplikacija te bo počakala.",
-    "paywall.mockup.shield.open": "Odpri Pillie"
+    "paywall.mockup.shield.secondary": "Ta aplikacija te bo počakala."
   },
   "hu": {
     "paywall.cta.keep_plus.billed_yearly": "Plus megtartása évi %@ áron",
@@ -620,8 +605,7 @@
     "paywall.footer.privacy": "Adatvédelem",
     "paywall.mockup.shield.title": "Szünetel, amíg ki nem pipálod",
     "paywall.mockup.shield.subtitle": "Pipáld ki a Pillie-ben, és ez az app újra megnyílik.",
-    "paywall.mockup.shield.secondary": "Ez az app megvár.",
-    "paywall.mockup.shield.open": "Pillie megnyitása"
+    "paywall.mockup.shield.secondary": "Ez az app megvár."
   },
   "ro": {
     "paywall.cta.keep_plus.billed_yearly": "Păstrează Plus la %@ pe an",
@@ -659,8 +643,7 @@
     "paywall.footer.privacy": "Confidențialitate",
     "paywall.mockup.shield.title": "Pe pauză până bifezi ziua",
     "paywall.mockup.shield.subtitle": "Bifează ziua în Pillie și aplicația se deschide din nou.",
-    "paywall.mockup.shield.secondary": "Aplicația asta te așteaptă.",
-    "paywall.mockup.shield.open": "Deschide Pillie"
+    "paywall.mockup.shield.secondary": "Aplicația asta te așteaptă."
   },
   "el": {
     "paywall.cta.keep_plus.billed_yearly": "Κράτα το Plus με %@ τον χρόνο",
@@ -698,8 +681,7 @@
     "paywall.footer.privacy": "Απόρρητο",
     "paywall.mockup.shield.title": "Σε παύση μέχρι να το σημειώσεις",
     "paywall.mockup.shield.subtitle": "Σημείωσέ το στο Pillie και αυτή η εφαρμογή ανοίγει ξανά.",
-    "paywall.mockup.shield.secondary": "Αυτή η εφαρμογή θα σε περιμένει.",
-    "paywall.mockup.shield.open": "Άνοιγμα Pillie"
+    "paywall.mockup.shield.secondary": "Αυτή η εφαρμογή θα σε περιμένει."
   },
   "tr": {
     "paywall.cta.keep_plus.billed_yearly": "Yılda %@ ile Plus’ı koru",
@@ -737,8 +719,7 @@
     "paywall.footer.privacy": "Gizlilik",
     "paywall.mockup.shield.title": "İşaretleyene kadar duraklatıldı",
     "paywall.mockup.shield.subtitle": "Pillie’de işaretlediğinde bu uygulama yeniden açılır.",
-    "paywall.mockup.shield.secondary": "Bu uygulama seni bekliyor olacak.",
-    "paywall.mockup.shield.open": "Pillie’yi aç"
+    "paywall.mockup.shield.secondary": "Bu uygulama seni bekliyor olacak."
   },
   "ru": {
     "paywall.cta.keep_plus.billed_yearly": "Оставить Plus за %@ в год",
@@ -776,8 +757,7 @@
     "paywall.footer.privacy": "Конфиденциальность",
     "paywall.mockup.shield.title": "На паузе, пока ты не отметишься",
     "paywall.mockup.shield.subtitle": "Отметься в Pillie, и это приложение снова откроется.",
-    "paywall.mockup.shield.secondary": "Это приложение подождёт.",
-    "paywall.mockup.shield.open": "Открыть Pillie"
+    "paywall.mockup.shield.secondary": "Это приложение подождёт."
   },
   "uk": {
     "paywall.cta.keep_plus.billed_yearly": "Залишити Plus за %@ на рік",
@@ -815,8 +795,7 @@
     "paywall.footer.privacy": "Конфіденційність",
     "paywall.mockup.shield.title": "На паузі, доки ти не відмітишся",
     "paywall.mockup.shield.subtitle": "Відміться в Pillie, і цей застосунок знову відкриється.",
-    "paywall.mockup.shield.secondary": "Цей застосунок почекає.",
-    "paywall.mockup.shield.open": "Відкрити Pillie"
+    "paywall.mockup.shield.secondary": "Цей застосунок почекає."
   },
   "ar": {
     "paywall.cta.keep_plus.billed_yearly": "احتفظي بـ Plus مقابل %@ سنويًا",
@@ -854,8 +833,7 @@
     "paywall.footer.privacy": "الخصوصية",
     "paywall.mockup.shield.title": "متوقف مؤقتًا حتى تسجّلي",
     "paywall.mockup.shield.subtitle": "سجّلي في Pillie وسيُفتح هذا التطبيق من جديد.",
-    "paywall.mockup.shield.secondary": "سيكون هذا التطبيق بانتظارك.",
-    "paywall.mockup.shield.open": "فتح Pillie"
+    "paywall.mockup.shield.secondary": "سيكون هذا التطبيق بانتظارك."
   },
   "he": {
     "paywall.cta.keep_plus.billed_yearly": "להשאיר את Plus ב-%@ לשנה",
@@ -893,8 +871,7 @@
     "paywall.footer.privacy": "פרטיות",
     "paywall.mockup.shield.title": "מושהית עד שתסמני",
     "paywall.mockup.shield.subtitle": "סמני ב-Pillie והאפליקציה הזו תיפתח שוב.",
-    "paywall.mockup.shield.secondary": "האפליקציה הזו תחכה לך.",
-    "paywall.mockup.shield.open": "פתיחת Pillie"
+    "paywall.mockup.shield.secondary": "האפליקציה הזו תחכה לך."
   },
   "hi": {
     "paywall.cta.keep_plus.billed_yearly": "हर साल %@ में Plus जारी रखें",
@@ -932,8 +909,7 @@
     "paywall.footer.privacy": "प्राइवेसी",
     "paywall.mockup.shield.title": "दर्ज करने तक रुका हुआ",
     "paywall.mockup.shield.subtitle": "Pillie पर दर्ज करें, और यह ऐप फिर से खुल जाएगा।",
-    "paywall.mockup.shield.secondary": "यह ऐप इंतज़ार करेगा।",
-    "paywall.mockup.shield.open": "Pillie खोलें"
+    "paywall.mockup.shield.secondary": "यह ऐप इंतज़ार करेगा।"
   },
   "bn": {
     "paywall.cta.keep_plus.billed_yearly": "বছরে %@-এ Plus রাখুন",
@@ -971,8 +947,7 @@
     "paywall.footer.privacy": "প্রাইভেসি",
     "paywall.mockup.shield.title": "টিক না দেওয়া পর্যন্ত পজ",
     "paywall.mockup.shield.subtitle": "Pillie-এ টিক দিলেই এই অ্যাপটি আবার খুলবে।",
-    "paywall.mockup.shield.secondary": "এই অ্যাপটি অপেক্ষা করবে।",
-    "paywall.mockup.shield.open": "Pillie খুলুন"
+    "paywall.mockup.shield.secondary": "এই অ্যাপটি অপেক্ষা করবে।"
   },
   "ur": {
     "paywall.cta.keep_plus.billed_yearly": "ہر سال %@ میں Plus جاری رکھیں",
@@ -1010,8 +985,7 @@
     "paywall.footer.privacy": "پرائیویسی",
     "paywall.mockup.shield.title": "درج کرنے تک رکی ہوئی",
     "paywall.mockup.shield.subtitle": "Pillie پر درج کریں، اور یہ ایپ دوبارہ کھل جائے گی۔",
-    "paywall.mockup.shield.secondary": "یہ ایپ انتظار کرے گی۔",
-    "paywall.mockup.shield.open": "Pillie کھولیں"
+    "paywall.mockup.shield.secondary": "یہ ایپ انتظار کرے گی۔"
   },
   "mr": {
     "paywall.cta.keep_plus.billed_yearly": "दरवर्षी %@ मध्ये Plus सुरू ठेवा",
@@ -1049,8 +1023,7 @@
     "paywall.footer.privacy": "प्रायव्हसी",
     "paywall.mockup.shield.title": "नोंद करेपर्यंत थांबलेले",
     "paywall.mockup.shield.subtitle": "Pillie वर नोंद करा, आणि हे ॲप पुन्हा उघडेल.",
-    "paywall.mockup.shield.secondary": "हे ॲप तुमची वाट पाहील.",
-    "paywall.mockup.shield.open": "Pillie उघडा"
+    "paywall.mockup.shield.secondary": "हे ॲप तुमची वाट पाहील."
   },
   "ta": {
     "paywall.cta.keep_plus.billed_yearly": "ஆண்டுக்கு %@-க்கு Plus-ஐத் தொடருங்கள்",
@@ -1088,8 +1061,7 @@
     "paywall.footer.privacy": "தனியுரிமை",
     "paywall.mockup.shield.title": "நீங்கள் பதிவு செய்யும் வரை இடைநிறுத்தப்பட்டுள்ளது",
     "paywall.mockup.shield.subtitle": "Pillie-இல் பதிவு செய்யுங்கள், இந்த ஆப் மீண்டும் திறக்கும்.",
-    "paywall.mockup.shield.secondary": "இந்த ஆப் உங்களுக்காகக் காத்திருக்கும்.",
-    "paywall.mockup.shield.open": "Pillie-ஐத் திறக்கவும்"
+    "paywall.mockup.shield.secondary": "இந்த ஆப் உங்களுக்காகக் காத்திருக்கும்."
   },
   "id": {
     "paywall.cta.keep_plus.billed_yearly": "Pertahankan Plus %@ per tahun",
@@ -1127,8 +1099,7 @@
     "paywall.footer.privacy": "Privasi",
     "paywall.mockup.shield.title": "Dijeda sampai kamu check-in",
     "paywall.mockup.shield.subtitle": "Check-in di Pillie dan aplikasi ini terbuka lagi.",
-    "paywall.mockup.shield.secondary": "Aplikasi ini akan menunggumu.",
-    "paywall.mockup.shield.open": "Buka Pillie"
+    "paywall.mockup.shield.secondary": "Aplikasi ini akan menunggumu."
   },
   "ms": {
     "paywall.cta.keep_plus.billed_yearly": "Kekalkan Plus pada %@ setahun",
@@ -1166,8 +1137,7 @@
     "paywall.footer.privacy": "Privasi",
     "paywall.mockup.shield.title": "Dijeda sehingga kamu sahkan",
     "paywall.mockup.shield.subtitle": "Sahkan di Pillie dan apl ini dibuka semula.",
-    "paywall.mockup.shield.secondary": "Apl ini akan menunggu.",
-    "paywall.mockup.shield.open": "Buka Pillie"
+    "paywall.mockup.shield.secondary": "Apl ini akan menunggu."
   },
   "vi": {
     "paywall.cta.keep_plus.billed_yearly": "Giữ Plus với %@ mỗi năm",
@@ -1205,8 +1175,7 @@
     "paywall.footer.privacy": "Quyền riêng tư",
     "paywall.mockup.shield.title": "Tạm dừng đến khi bạn điểm danh",
     "paywall.mockup.shield.subtitle": "Điểm danh trên Pillie và ứng dụng này sẽ mở lại.",
-    "paywall.mockup.shield.secondary": "Ứng dụng này sẽ chờ bạn.",
-    "paywall.mockup.shield.open": "Mở Pillie"
+    "paywall.mockup.shield.secondary": "Ứng dụng này sẽ chờ bạn."
   },
   "th": {
     "paywall.cta.keep_plus.billed_yearly": "ใช้ Plus ต่อในราคา %@ ต่อปี",
@@ -1244,8 +1213,7 @@
     "paywall.footer.privacy": "ความเป็นส่วนตัว",
     "paywall.mockup.shield.title": "หยุดชั่วคราวจนกว่าคุณจะเช็กอิน",
     "paywall.mockup.shield.subtitle": "เช็กอินใน Pillie แล้วแอปนี้จะเปิดได้อีกครั้ง",
-    "paywall.mockup.shield.secondary": "แอปนี้จะรอคุณอยู่ตรงนี้",
-    "paywall.mockup.shield.open": "เปิด Pillie"
+    "paywall.mockup.shield.secondary": "แอปนี้จะรอคุณอยู่ตรงนี้"
   },
   "ja": {
     "paywall.cta.keep_plus.billed_yearly": "年額%@でPlusを続ける",
@@ -1283,8 +1251,7 @@
     "paywall.footer.privacy": "プライバシー",
     "paywall.mockup.shield.title": "記録するまで一時停止",
     "paywall.mockup.shield.subtitle": "Pillieで記録すると、このアプリがまた開けるようになります。",
-    "paywall.mockup.shield.secondary": "このアプリはここで待っています。",
-    "paywall.mockup.shield.open": "Pillieを開く"
+    "paywall.mockup.shield.secondary": "このアプリはここで待っています。"
   },
   "ko": {
     "paywall.cta.keep_plus.billed_yearly": "연 %@에 Plus 유지하기",
@@ -1322,8 +1289,7 @@
     "paywall.footer.privacy": "개인정보 처리방침",
     "paywall.mockup.shield.title": "체크할 때까지 일시 중지",
     "paywall.mockup.shield.subtitle": "Pillie에서 체크하면 이 앱을 다시 열 수 있어요.",
-    "paywall.mockup.shield.secondary": "이 앱은 여기서 기다리고 있을게요.",
-    "paywall.mockup.shield.open": "Pillie 열기"
+    "paywall.mockup.shield.secondary": "이 앱은 여기서 기다리고 있을게요."
   },
   "zh-Hans": {
     "paywall.cta.keep_plus.billed_yearly": "每年 %@ 继续使用 Plus",
@@ -1361,8 +1327,7 @@
     "paywall.footer.privacy": "隐私",
     "paywall.mockup.shield.title": "暂停中，直到你打卡",
     "paywall.mockup.shield.subtitle": "在 Pillie 打卡后，这个应用就能重新打开。",
-    "paywall.mockup.shield.secondary": "这个应用会等你回来。",
-    "paywall.mockup.shield.open": "打开 Pillie"
+    "paywall.mockup.shield.secondary": "这个应用会等你回来。"
   },
   "zh-Hant": {
     "paywall.cta.keep_plus.billed_yearly": "每年 %@ 繼續使用 Plus",
@@ -1400,8 +1365,7 @@
     "paywall.footer.privacy": "隱私權",
     "paywall.mockup.shield.title": "暫停中，直到你打卡",
     "paywall.mockup.shield.subtitle": "在 Pillie 打卡後，這個 App 就能再次開啟。",
-    "paywall.mockup.shield.secondary": "這個 App 會等你回來。",
-    "paywall.mockup.shield.open": "開啟 Pillie"
+    "paywall.mockup.shield.secondary": "這個 App 會等你回來。"
   },
   "gu": {
     "paywall.cta.keep_plus.billed_yearly": "દર વર્ષે %@માં Plus રાખો",
@@ -1439,8 +1403,7 @@
     "paywall.footer.privacy": "પ્રાઇવસી",
     "paywall.mockup.shield.title": "નોંધ ન કરો ત્યાં સુધી થોભેલી",
     "paywall.mockup.shield.subtitle": "Pillie પર નોંધ કરો એટલે આ ઍપ ફરી ખૂલશે.",
-    "paywall.mockup.shield.secondary": "આ ઍપ તમારી રાહ જોશે.",
-    "paywall.mockup.shield.open": "Pillie ખોલો"
+    "paywall.mockup.shield.secondary": "આ ઍપ તમારી રાહ જોશે."
   },
   "kn": {
     "paywall.cta.keep_plus.billed_yearly": "ವರ್ಷಕ್ಕೆ %@ ಗೆ Plus ಮುಂದುವರಿಸಿ",
@@ -1478,8 +1441,7 @@
     "paywall.footer.privacy": "ಗೌಪ್ಯತೆ",
     "paywall.mockup.shield.title": "ನೀವು ದಾಖಲಿಸುವವರೆಗೆ ತಡೆಹಿಡಿಯಲಾಗಿದೆ",
     "paywall.mockup.shield.subtitle": "Pillie ನಲ್ಲಿ ದಾಖಲಿಸಿ, ಈ ಆ್ಯಪ್ ಮತ್ತೆ ತೆರೆಯುತ್ತದೆ.",
-    "paywall.mockup.shield.secondary": "ಈ ಆ್ಯಪ್ ನಿಮಗಾಗಿ ಕಾಯುತ್ತಿರುತ್ತದೆ.",
-    "paywall.mockup.shield.open": "Pillie ತೆರೆಯಿರಿ"
+    "paywall.mockup.shield.secondary": "ಈ ಆ್ಯಪ್ ನಿಮಗಾಗಿ ಕಾಯುತ್ತಿರುತ್ತದೆ."
   },
   "ml": {
     "paywall.cta.keep_plus.billed_yearly": "പ്രതിവർഷം %@-ന് Plus തുടരൂ",
@@ -1517,8 +1479,7 @@
     "paywall.footer.privacy": "സ്വകാര്യത",
     "paywall.mockup.shield.title": "നിങ്ങൾ രേഖപ്പെടുത്തുന്നതുവരെ പോസ് ആണ്",
     "paywall.mockup.shield.subtitle": "Pillie-യിൽ രേഖപ്പെടുത്തൂ, ഈ ആപ്പ് വീണ്ടും തുറക്കും.",
-    "paywall.mockup.shield.secondary": "ഈ ആപ്പ് നിങ്ങൾക്കായി കാത്തിരിക്കും.",
-    "paywall.mockup.shield.open": "Pillie തുറക്കൂ"
+    "paywall.mockup.shield.secondary": "ഈ ആപ്പ് നിങ്ങൾക്കായി കാത്തിരിക്കും."
   },
   "or": {
     "paywall.cta.keep_plus.billed_yearly": "ବାର୍ଷିକ %@ ରେ Plus ରଖନ୍ତୁ",
@@ -1556,8 +1517,7 @@
     "paywall.footer.privacy": "ଗୋପନୀୟତା",
     "paywall.mockup.shield.title": "ଦର୍ଜ କରିବା ପର୍ଯ୍ୟନ୍ତ ବିରାମରେ",
     "paywall.mockup.shield.subtitle": "Pillie ରେ ଦର୍ଜ କରନ୍ତୁ, ଏହି ଆପ୍ ପୁଣି ଖୋଲିବ।",
-    "paywall.mockup.shield.secondary": "ଏହି ଆପ୍ ଆପଣଙ୍କୁ ଅପେକ୍ଷା କରିବ।",
-    "paywall.mockup.shield.open": "Pillie ଖୋଲନ୍ତୁ"
+    "paywall.mockup.shield.secondary": "ଏହି ଆପ୍ ଆପଣଙ୍କୁ ଅପେକ୍ଷା କରିବ।"
   },
   "pa": {
     "paywall.cta.keep_plus.billed_yearly": "ਹਰ ਸਾਲ %@ ਵਿੱਚ Plus ਰੱਖੋ",
@@ -1595,8 +1555,7 @@
     "paywall.footer.privacy": "ਪ੍ਰਾਈਵੇਸੀ",
     "paywall.mockup.shield.title": "ਦਰਜ ਕਰਨ ਤੱਕ ਰੁਕੀ ਹੋਈ",
     "paywall.mockup.shield.subtitle": "Pillie ’ਤੇ ਦਰਜ ਕਰੋ, ਅਤੇ ਇਹ ਐਪ ਮੁੜ ਖੁੱਲ੍ਹ ਜਾਵੇਗੀ।",
-    "paywall.mockup.shield.secondary": "ਇਹ ਐਪ ਤੁਹਾਡੀ ਉਡੀਕ ਕਰੇਗੀ।",
-    "paywall.mockup.shield.open": "Pillie ਖੋਲ੍ਹੋ"
+    "paywall.mockup.shield.secondary": "ਇਹ ਐਪ ਤੁਹਾਡੀ ਉਡੀਕ ਕਰੇਗੀ।"
   },
   "te": {
     "paywall.cta.keep_plus.billed_yearly": "సంవత్సరానికి %@కు Plus కొనసాగించండి",
@@ -1634,7 +1593,6 @@
     "paywall.footer.privacy": "గోప్యత",
     "paywall.mockup.shield.title": "మీరు నమోదు చేసే వరకు పాజ్‌లో ఉంది",
     "paywall.mockup.shield.subtitle": "Pillieలో నమోదు చేయండి, ఈ యాప్ మళ్లీ తెరుచుకుంటుంది.",
-    "paywall.mockup.shield.secondary": "ఈ యాప్ మీ కోసం వేచి ఉంటుంది.",
-    "paywall.mockup.shield.open": "Pillie తెరవండి"
+    "paywall.mockup.shield.secondary": "ఈ యాప్ మీ కోసం వేచి ఉంటుంది."
   }
 }

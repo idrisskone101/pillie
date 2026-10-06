@@ -103,11 +103,13 @@ struct HonestPaywallView: View {
                 .font(.pillie(30, weight: .black))
                 .tracking(-0.6)
                 .foregroundStyle(PillieTheme.textPrimary)
+                .fixedSize(horizontal: false, vertical: true)
                 .frame(maxWidth: .infinity, alignment: .leading)
 
             Text(scene.board.story.subtitle)
                 .font(.pillie(14, weight: .medium))
                 .foregroundStyle(PillieTheme.textMuted)
+                .fixedSize(horizontal: false, vertical: true)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.top, 8)
 
@@ -226,6 +228,7 @@ struct HonestPaywallView: View {
                 .font(.pillie(13, weight: .semibold))
                 .foregroundStyle(PillieTheme.textPrimary)
                 .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
 
             HStack(spacing: 6) {
                 HStack(spacing: 2) {

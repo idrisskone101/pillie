@@ -106,14 +106,6 @@ struct PaywallPhoneMockup: View {
                 .foregroundStyle(PillieTheme.textMuted)
                 .padding(.top, 8)
                 .padding(.horizontal, 8)
-
-            Text(commerce("paywall.mockup.shield.open"))
-                .font(.pillie(13, weight: .bold))
-                .foregroundStyle(.white)
-                .frame(maxWidth: .infinity)
-                .frame(height: 40)
-                .background(Color(hex: "292524"), in: Capsule())
-                .padding(.top, 22)
         }
         .multilineTextAlignment(.center)
         .padding(.horizontal, 16)

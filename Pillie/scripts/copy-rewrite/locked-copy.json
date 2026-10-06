@@ -2857,16 +2857,6 @@
       "en": "This app will be waiting.",
       "de": "Diese App wartet auf dich.",
       "it": "Questa app ti aspetta."
-    },
-    {
-      "issue": "honest-paywall",
-      "table": "Commerce",
-      "key": "paywall.mockup.shield.open",
-      "create": true,
-      "comment": "Paywall phone mockup; mirrors Shield.xcstrings shield.primary_action",
-      "en": "Open Pillie",
-      "de": "Pillie öffnen",
-      "it": "Apri Pillie"
     }
   ]
 }
