@@ -857,6 +857,15 @@ struct ProductAnalyticsTelemetry {
     track(.todayActionCompleted, source: source)
   }
 
+  func onboardingTodayAnswer(_ answer: AnalyticsTodayAnswer, afterReminder: Bool) {
+    analytics.track(
+      .onboardingTodayAnswer,
+      todayAnswer: answer,
+      afterReminder: afterReminder,
+      isPlus: isPlus()
+    )
+  }
+
   func todayActionUndone() {
     track(.todayActionUndone, source: .home)
   }

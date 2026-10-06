@@ -7,6 +7,7 @@ import Foundation
 
 enum TodayPillCommit {
     static let reportedStorageKey = "pillie_onboarding_today_pill_reported"
+    static let answerReportedStorageKey = "pillie_onboarding_today_answer_reported"
 
     static func run(
         _ draft: OnboardingDraft<TodayPillPick>,
@@ -64,6 +65,7 @@ enum TodayPillCommit {
         TodayPillPick.clear(from: defaults)
         RoutineDialPick.clear(from: defaults)
         defaults.removeObject(forKey: reportedStorageKey)
+        defaults.removeObject(forKey: answerReportedStorageKey)
     }
 
     private struct Start {
@@ -112,6 +114,7 @@ enum TodayPillCommit {
             store.appActivatedDate = store.today
         }
         FirstReminderInstall.record(at: now, in: defaults)
+        reportAnswer(start.answer, store: store, now: now, defaults: defaults, telemetry: telemetry)
 
         guard start.logs, daysSincePick == 0 else { return }
         store.markTodayAsTaken()
@@ -119,5 +122,21 @@ enum TodayPillCommit {
         guard !defaults.bool(forKey: reportedStorageKey) else { return }
         defaults.set(true, forKey: reportedStorageKey)
         telemetry.todayActionCompleted(source: .onboarding)
+    }
+
+    private static func reportAnswer(
+        _ answer: TodayPillPick.Answer?,
+        store: PillStore,
+        now: Date,
+        defaults: UserDefaults,
+        telemetry: ProductAnalyticsTelemetry
+    ) {
+        guard let answer, !defaults.bool(forKey: answerReportedStorageKey) else { return }
+        defaults.set(true, forKey: answerReportedStorageKey)
+        let afterReminder = switch TodayPillPlan.nextReminder(hour: store.reminderHour, minute: store.reminderMinute, now: now) {
+        case .today: false
+        case .tomorrow: true
+        }
+        telemetry.onboardingTodayAnswer(answer == .taken ? .taken : .notYet, afterReminder: afterReminder)
     }
 }

@@ -293,6 +293,14 @@ protocol AnalyticsTracking {
     isPlus: Bool?
   )
 
+  /// Onboarding's step 7 answer, sent when onboarding commits it (ENG-163).
+  func track(
+    _ event: AnalyticsEvent,
+    todayAnswer: AnalyticsTodayAnswer,
+    afterReminder: Bool,
+    isPlus: Bool?
+  )
+
   func track(
     _ event: AnalyticsEvent,
     declineFeedbackOutcome: AnalyticsTrialDeclineFeedbackOutcome?,
@@ -354,6 +362,15 @@ extension AnalyticsTracking {
   func track(
     _ event: AnalyticsEvent,
     smartReminderOutcome: AnalyticsSmartReminderOutcome,
+    isPlus: Bool?
+  ) {
+    trackLegacy(event, isPlus: isPlus)
+  }
+
+  func track(
+    _ event: AnalyticsEvent,
+    todayAnswer: AnalyticsTodayAnswer,
+    afterReminder: Bool,
     isPlus: Bool?
   ) {
     trackLegacy(event, isPlus: isPlus)
@@ -606,6 +623,7 @@ enum AnalyticsEvent: String, CaseIterable {
   case todayActionStarted = "today_action_started"
   case todayActionCompleted = "today_action_completed"
   case todayActionUndone = "today_action_undone"
+  case onboardingTodayAnswer = "onboarding_today_answer"
   case newPackOrCyclePrompted = "new_pack_or_cycle_prompted"
   case newPackOrCycleStarted = "new_pack_or_cycle_started"
   case plusUpsellViewed = "plus_upsell_viewed"
@@ -672,6 +690,11 @@ enum AnalyticsSmartReminderOutcome: String, CaseIterable {
   case opened
   case completed
   case snoozed
+}
+
+enum AnalyticsTodayAnswer: String, CaseIterable {
+  case taken
+  case notYet = "not_yet"
 }
 
 enum AnalyticsTrialDeclineFeedbackOutcome: String, Equatable {
@@ -835,6 +858,8 @@ struct AnalyticsPayload {
   let authorizationState: AnalyticsAuthorizationState?
   let retryCount: Int?
   let smartReminderOutcome: AnalyticsSmartReminderOutcome?
+  let todayAnswer: AnalyticsTodayAnswer?
+  let afterReminder: Bool?
   let declineFeedbackOutcome: AnalyticsTrialDeclineFeedbackOutcome?
   let declineFeedbackReason: TrialDeclineFeedbackReason?
   let declineFeedbackHasText: Bool?
@@ -869,6 +894,8 @@ struct AnalyticsPayload {
     authorizationState: AnalyticsAuthorizationState? = nil,
     retryCount: Int? = nil,
     smartReminderOutcome: AnalyticsSmartReminderOutcome? = nil,
+    todayAnswer: AnalyticsTodayAnswer? = nil,
+    afterReminder: Bool? = nil,
     declineFeedbackOutcome: AnalyticsTrialDeclineFeedbackOutcome? = nil,
     declineFeedbackReason: TrialDeclineFeedbackReason? = nil,
     declineFeedbackHasText: Bool? = nil,
@@ -902,6 +929,8 @@ struct AnalyticsPayload {
     self.authorizationState = authorizationState
     self.retryCount = retryCount
     self.smartReminderOutcome = smartReminderOutcome
+    self.todayAnswer = todayAnswer
+    self.afterReminder = afterReminder
     self.declineFeedbackOutcome = declineFeedbackOutcome
     self.declineFeedbackReason = declineFeedbackReason
     self.declineFeedbackHasText = declineFeedbackHasText
@@ -960,6 +989,12 @@ struct AnalyticsPayload {
     }
     if let smartReminderOutcome {
       properties["outcome"] = .string(smartReminderOutcome.rawValue)
+    }
+    if let todayAnswer {
+      properties["answer"] = .string(todayAnswer.rawValue)
+    }
+    if let afterReminder {
+      properties["after_reminder"] = .bool(afterReminder)
     }
     if let declineFeedbackOutcome {
       properties["outcome"] = .string(declineFeedbackOutcome.rawValue)
@@ -1363,6 +1398,22 @@ final class AnalyticsManager: AnalyticsTracking {
     )
 
     capture(event, payload: payload)
+  }
+
+  func track(
+    _ event: AnalyticsEvent,
+    todayAnswer: AnalyticsTodayAnswer,
+    afterReminder: Bool,
+    isPlus: Bool?
+  ) {
+    let payload = AnalyticsPayload(
+      source: .onboarding,
+      isPlus: isPlus,
+      todayAnswer: todayAnswer,
+      afterReminder: afterReminder
+    )
+
+    capture(event, payload: payload, source: .onboarding)
   }
 
   private func capture(
