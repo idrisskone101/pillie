@@ -45,6 +45,12 @@ support mailto rows and (debug builds only) the developer menu.
 - `settings-blocking` — "Your apps" row opens `BlockedAppsEditor` for Plus
   accounts (status toggle + FamilyActivityPicker); a free account gets a
   `PlusUpsellSheet`. `SettingsView.swift:228-266,449-454`; `BlockedAppsEditor.swift`.
+  The editor asks for Screen Time itself. When iOS refuses, it shows why
+  (`#blockedAppsScreenTimeRefused`) and a Try again (`#blockedAppsTryAgain`)
+  instead of the toggle and Choose apps. Home's blocking card, the Plus setup
+  strip, and the update-trial announcement open the same editor.
+  `blocking-screen-time-refused` drives the first three with
+  `/screen-time-refused`.
 - `settings-subscription` — "Pillie Plus" row opens the system manage-
   subscriptions sheet for an active subscriber, or the honest paywall
   (`entry: .settingsSubscription`) for everyone else.
@@ -73,6 +79,11 @@ support mailto rows and (debug builds only) the developer menu.
   Method, Reminder time, Reminder messages, Pill supply reminder, Interval,
   Repeats, Cycle day, and Your apps in turn, shooting each open sheet and
   closing it without saving.
+- `flows/blocking-screen-time-refused.flow` — makes Screen Time refuse
+  (`/screen-time-refused`), then opens the blocked-apps editor from the Home
+  card, Settings, and the Plus setup strip. Each must show the refusal and
+  Try again; Try again after `reason=none`
+  lands on the working editor.
 - `flows/settings-reminder-messages.flow` — opens Reminder messages on the
   default copy, switches tone to Direct then Gentle (both banners change),
   then in the pencil's edit sheet blanks the daily title and cancels with X

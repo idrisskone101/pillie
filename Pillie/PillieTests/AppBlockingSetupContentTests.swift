@@ -1,3 +1,4 @@
+import FamilyControls
 import Foundation
 import Testing
 
@@ -15,6 +16,16 @@ struct AppBlockingSetupContentTests {
         #expect(content.subtitle.lowercased().contains("check in"))
         #expect(content.changeSelectionCTA == "Edit")
         #expect(content.skipCTA == "Not now")
+    }
+
+    @Test func anotherAppHoldingScreenTimeGetsItsOwnSentence() {
+        #expect(ScreenTimeRefusal(FamilyControlsError.authorizationConflict) == .heldByAnotherApp)
+        #expect(ScreenTimeRefusal(FamilyControlsError.authorizationCanceled) == .notAllowed)
+        #expect(
+            content.authorizationConflictDetail
+                == "Another app on this iPhone is using Screen Time. Turn it off in that app, then try again."
+        )
+        #expect(content.authorizationDeniedDetail == "Allow Screen Time access so Pillie can pause the apps you pick.")
     }
 
     @Test func trialLineSaysTheTrialStartsHere() {

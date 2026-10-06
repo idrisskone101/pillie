@@ -96,10 +96,7 @@ struct HomeView: View {
 
     private func handleBlockingCardAction() {
         if SubscriptionManager.shared.hasPlusAccess {
-            Task { @MainActor in
-                _ = await AppBlockingManager.shared.ensureAuthorized()
-                showBlockingSetup = true
-            }
+            showBlockingSetup = true
         } else {
             // Free: go straight to the paywall (it reports paywallViewed itself).
             blockingPaywallSurface = .homeBlockingCard

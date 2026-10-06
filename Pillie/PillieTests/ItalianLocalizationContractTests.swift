@@ -275,6 +275,10 @@ final class ItalianLocalizationContractTests: XCTestCase {
             content.authorizationDeniedDetail,
             "Consenti l’accesso a Tempo di utilizzo così Pillie può mettere in pausa le app che scegli."
         )
+        XCTAssertEqual(
+            content.authorizationConflictDetail,
+            "Un’altra app su questo iPhone sta usando Tempo di utilizzo. Disattivalo in quell’app, poi riprova."
+        )
         XCTAssertEqual(content.selectedSummaryLabel, "App selezionate")
         XCTAssertEqual(
             content.selectedPrivacyNote,

@@ -3,6 +3,7 @@
 //  Pillie
 //
 //  Settings sheet for managing blocked apps via FamilyActivityPicker.
+//  It asks for Screen Time itself, so no entry point can open it dead.
 //
 
 import SwiftUI
@@ -13,6 +14,8 @@ struct BlockedAppsEditor: View {
     @Environment(\.locale) private var locale
     @Environment(PillStore.self) private var store
     @State private var showPicker = false
+    @State private var isRefused = false
+    @State private var isRequesting = false
     @State private var blockingWasDone = false
 
     @Bindable private var blockingManager = AppBlockingManager.shared
@@ -22,59 +25,17 @@ struct BlockedAppsEditor: View {
             "settings.blocked_apps.title",
             locale: locale
         )) {
-            // Status indicator
-            statusCard
-
-            // Selection summary
-            selectionSummary
-
-            // Choose apps button
-            Button(action: chooseApps) {
-                HStack(spacing: 8) {
-                    Image(systemName: blockingManager.hasAppsSelected ? "pencil" : "plus")
-                        .font(.system(size: 16, weight: .semibold))
-                    Text(PillieLocalization.string(
-                        "settings.blocked_apps.edit",
-                        locale: locale
-                    ))
-                        .font(.pillieBodySemibold())
-                }
-                .foregroundStyle(PillieTheme.coral)
-                .frame(maxWidth: .infinity)
-                .frame(height: 56)
-                .background(
-                    RoundedRectangle(cornerRadius: PillieTheme.cardRadius)
-                        .strokeBorder(PillieTheme.coral, style: StrokeStyle(lineWidth: 2, dash: [8, 6]))
-                )
+            if isRefused {
+                refusedContent
+            } else {
+                editorContent
             }
-            .buttonStyle(.plain)
-            .padding(.horizontal, 20)
-
-            Button {
-                blockingManager.saveSelectionAndReconcile(routine: appBlockingRoutine)
-                ScheduleCriticalSettingChange.blockerSetupChanged(store: store)
-                ProductAnalyticsTelemetry.live.blockedAppsSaved(hasSelection: blockingManager.hasAppsSelected)
-                // #163: the same dedicated event onboarding fires, with
-                // source=settings, so the day-1 activation metric can tell the
-                // two blocker-setup surfaces apart. Gated on a real selection
-                // like onboarding's finishSetup — an empty Done must not count
-                // as "blocker configured" in the activation metric.
-                if blockingManager.hasAppsSelected {
-                    ProductAnalyticsTelemetry.live.settingsBlockerConfigSaved(
-                        hasSelection: true
-                    )
-                }
-                dismiss()
-            } label: {
-                Text(PillieLocalization.string("global.action.done", locale: locale))
-            }
-            .buttonStyle(.pillieDark)
-            .padding(.horizontal, 28)
         }
         .familyActivityPicker(
             isPresented: $showPicker,
             selection: Bindable(blockingManager).pickerSelection
         )
+        .task { await requestAccess() }
         // Every surface that sets up blocking opens this editor, so the Plus
         // setup step completes here, not in the strip's sheet.
         .onAppear {
@@ -84,6 +45,105 @@ struct BlockedAppsEditor: View {
             guard !blockingWasDone, PlusSetupProgress.live(store: store).isDone(.blocking) else { return }
             ProductAnalyticsTelemetry.live.plusSetupStep(.blocking, action: .completed)
         }
+    }
+
+    @ViewBuilder
+    private var editorContent: some View {
+        // Status indicator
+        statusCard
+
+        // Selection summary
+        selectionSummary
+
+        // Choose apps button
+        Button(action: chooseApps) {
+            HStack(spacing: 8) {
+                Image(systemName: blockingManager.hasAppsSelected ? "pencil" : "plus")
+                    .font(.system(size: 16, weight: .semibold))
+                Text(PillieLocalization.string(
+                    "settings.blocked_apps.edit",
+                    locale: locale
+                ))
+                    .font(.pillieBodySemibold())
+            }
+            .foregroundStyle(PillieTheme.coral)
+            .frame(maxWidth: .infinity)
+            .frame(height: 56)
+            .background(
+                RoundedRectangle(cornerRadius: PillieTheme.cardRadius)
+                    .strokeBorder(PillieTheme.coral, style: StrokeStyle(lineWidth: 2, dash: [8, 6]))
+            )
+        }
+        .buttonStyle(.plain)
+        .padding(.horizontal, 20)
+
+        Button {
+            blockingManager.saveSelectionAndReconcile(routine: appBlockingRoutine)
+            ScheduleCriticalSettingChange.blockerSetupChanged(store: store)
+            ProductAnalyticsTelemetry.live.blockedAppsSaved(hasSelection: blockingManager.hasAppsSelected)
+            // #163: the same dedicated event onboarding fires, with
+            // source=settings, so the day-1 activation metric can tell the
+            // two blocker-setup surfaces apart. Gated on a real selection
+            // like onboarding's finishSetup — an empty Done must not count
+            // as "blocker configured" in the activation metric.
+            if blockingManager.hasAppsSelected {
+                ProductAnalyticsTelemetry.live.settingsBlockerConfigSaved(
+                    hasSelection: true
+                )
+            }
+            dismiss()
+        } label: {
+            Text(PillieLocalization.string("global.action.done", locale: locale))
+        }
+        .buttonStyle(.pillieDark)
+        .padding(.horizontal, 28)
+    }
+
+    @ViewBuilder
+    private var refusedContent: some View {
+        VStack(spacing: 12) {
+            Image(systemName: "exclamationmark.shield.fill")
+                .font(.system(size: 30, weight: .semibold))
+                .foregroundStyle(PillieTheme.coral)
+            Text(PillieLocalization.string("error.screen_time.title", locale: locale))
+                .font(.pillieBodyBold())
+                .foregroundStyle(PillieTheme.textPrimary)
+            Text((blockingManager.refusal ?? .notAllowed).detail(locale: locale))
+                .font(.pillieBody())
+                .foregroundStyle(PillieTheme.textMuted)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .padding(22)
+        .frame(maxWidth: .infinity)
+        .background(
+            RoundedRectangle(cornerRadius: PillieTheme.cardRadius)
+                .fill(PillieTheme.cardWhite)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: PillieTheme.cardRadius)
+                .stroke(PillieTheme.sageHalf, lineWidth: 1)
+        )
+        .padding(.horizontal, 20)
+        .accessibilityElement(children: .combine)
+        .accessibilityIdentifier("blockedAppsScreenTimeRefused")
+
+        Button {
+            Task { await requestAccess() }
+        } label: {
+            Text(PillieLocalization.string("global.action.retry", locale: locale))
+        }
+        .buttonStyle(.pillieDark)
+        .disabled(isRequesting)
+        .padding(.horizontal, 28)
+        .accessibilityIdentifier("blockedAppsTryAgain")
+    }
+
+    private func requestAccess() async {
+        guard !isRequesting else { return }
+        isRequesting = true
+        isRefused = !(await blockingManager.ensureAuthorized())
+        isRequesting = false
     }
 
     private func chooseApps() {
