@@ -10,6 +10,7 @@ import SwiftUI
 import SwiftData
 import UIKit
 import os.signpost
+import os
 
 @Observable
 class PillStore {
@@ -545,6 +546,7 @@ class PillStore {
     /// logged": before the first reminder fires, only the open live day can hold one.
     var firstReminderHandoff: FirstReminderHandoff? {
         let now = PillieClock.now
+        os.Logger(subsystem: "com.idrisskone.pillie", category: "qa").debug("ENG163 handoff now=\(now, privacy: .public) today=\(self.today, privacy: .public) due=\(String(describing: self.todayDueAction?.type), privacy: .public) taken=\(self.isTodayTaken, privacy: .public) refill=\(self.isRefillDue, privacy: .public) hour=\(self.reminderHour, privacy: .public) isDue=\(self.isTodayDoseDue(at: now), privacy: .public) install=\(String(describing: FirstReminderInstall.date()), privacy: .public)")
         return FirstReminderHandoff.resolve(
             installedAt: FirstReminderInstall.date(),
             reminderHour: reminderHour,
