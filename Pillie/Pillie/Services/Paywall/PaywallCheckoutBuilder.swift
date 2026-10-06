@@ -7,135 +7,123 @@ import Foundation
 
 enum PaywallCheckoutBuilder {
     static func build(
-        verb: PaywallCTAVerb,
+        moment: HonestPaywallMoment,
         offerings: PaywallOfferingsSnapshot?,
         selection: PaywallPurchaseIntent,
         locale: Locale
     ) -> PaywallCheckoutSheet {
         guard let offerings else {
-            return placeholder(selection: selection, locale: locale)
+            return placeholder(moment: moment, selection: selection, locale: locale)
         }
 
         let comparison = PaywallPriceComparison(
             annualPrice: offerings.annualPrice,
             monthlyPrice: offerings.monthlyPrice
         )
-        let monthlyEquivalentDisplay = monthlyEquivalentDisplay(
-            comparison: comparison,
-            currencyCode: offerings.currencyCode,
-            locale: locale
-        )
         let savingsBadge = comparison.savingsPercent.map { percent in
-            PaywallSavingsBadge(
-                percent: percent,
-                label: PillieLocalization.formatted(
-                    "paywall.stack.save_badge",
-                    table: "Commerce",
-                    locale: locale,
-                    arguments: Int64(percent)
-                )
+            PillieLocalization.formatted(
+                "paywall.stack.save_badge",
+                table: "Commerce",
+                locale: locale,
+                arguments: Int64(percent)
             )
         }
 
-        var offers: [TileContent] = [
-            TileContent(
-                intent: .subscribe(.year),
-                title: commerce("paywall.stack.year.title", locale),
-                primaryLine: PillieLocalization.formatted(
-                    "paywall.stack.year.primary_line",
-                    table: "Commerce",
-                    locale: locale,
-                    arguments: monthlyEquivalentDisplay ?? "-",
-                    offerings.annualDisplay
-                ),
-                trailingPrice: nil,
-                savingsBadge: savingsBadge,
-                ctaPrice: offerings.annualDisplay
-            ),
-            TileContent(
+        var offers: [CardContent] = [
+            CardContent(
                 intent: .subscribe(.month),
                 title: commerce("paywall.stack.month.title", locale),
-                primaryLine: commerce("paywall.stack.month.primary_line", locale),
-                trailingPrice: offerings.monthlyDisplay,
-                savingsBadge: nil,
-                ctaPrice: offerings.monthlyDisplay
-            )
+                price: offerings.monthlyDisplay,
+                caption: commerce("paywall.card.month.caption", locale),
+                savingsBadge: nil
+            ),
+            CardContent(
+                intent: .subscribe(.year),
+                title: commerce("paywall.stack.year.title", locale),
+                price: offerings.annualDisplay,
+                caption: yearCaption(
+                    monthlyEquivalent: monthlyEquivalentDisplay(
+                        comparison: comparison,
+                        currencyCode: offerings.currencyCode,
+                        locale: locale
+                    ),
+                    locale: locale
+                ),
+                savingsBadge: savingsBadge
+            ),
         ]
         if let lifetimeDisplay = offerings.lifetimeDisplay {
-            offers.append(TileContent(
+            offers.append(CardContent(
                 intent: .lifetime,
                 title: commerce("paywall.stack.lifetime.title", locale),
-                primaryLine: commerce("paywall.stack.lifetime.primary_line", locale),
-                trailingPrice: lifetimeDisplay,
-                savingsBadge: nil,
-                ctaPrice: lifetimeDisplay
+                price: lifetimeDisplay,
+                caption: commerce("paywall.card.lifetime.caption", locale),
+                savingsBadge: nil
             ))
         }
 
         // A lifetime selection can outlive offerings that stop exposing it.
-        let selected = offers.first { $0.intent == selection } ?? offers[0]
+        let selected = offers.first { $0.intent == selection }
+            ?? offers.first { $0.intent == .subscribe(.year) }
+            ?? offers[0]
 
         return PaywallCheckoutSheet(
             selectedIntent: selected.intent,
-            tiles: offers.map { $0.tile(isSelected: $0.intent == selected.intent) },
+            cards: offers.map { $0.card(isSelected: $0.intent == selected.intent) },
             primaryCTA: PillieLocalization.formatted(
-                ctaKey(verb: verb, intent: selected.intent),
+                ctaKey(verb: moment.ctaVerb, intent: selected.intent),
                 table: "Commerce",
                 locale: locale,
-                arguments: selected.ctaPrice
+                arguments: selected.price
             ),
             isPurchaseEnabled: true,
-            footer: footer(for: selected.intent, locale: locale)
+            reassurance: reassurance(moment: moment, intent: selected.intent, locale: locale)
         )
     }
 
     private static func placeholder(
+        moment: HonestPaywallMoment,
         selection: PaywallPurchaseIntent,
         locale: Locale
     ) -> PaywallCheckoutSheet {
         let dash = "-"
         let offers = [
-            TileContent(
-                intent: .subscribe(.year),
-                title: commerce("paywall.stack.year.title", locale),
-                primaryLine: dash,
-                trailingPrice: nil,
-                savingsBadge: nil,
-                ctaPrice: dash,
-                accessibilityLabel: dash
-            ),
-            TileContent(
+            CardContent(
                 intent: .subscribe(.month),
                 title: commerce("paywall.stack.month.title", locale),
-                primaryLine: commerce("paywall.stack.month.primary_line", locale),
-                trailingPrice: dash,
-                savingsBadge: nil,
-                ctaPrice: dash,
-                accessibilityLabel: dash
-            )
+                price: dash,
+                caption: commerce("paywall.card.month.caption", locale),
+                savingsBadge: nil
+            ),
+            CardContent(
+                intent: .subscribe(.year),
+                title: commerce("paywall.stack.year.title", locale),
+                price: dash,
+                caption: yearCaption(monthlyEquivalent: nil, locale: locale),
+                savingsBadge: nil
+            ),
         ]
         let selected = offers.first { $0.intent == selection }?.intent ?? .subscribe(.year)
         return PaywallCheckoutSheet(
             selectedIntent: selected,
-            tiles: offers.map { $0.tile(isSelected: $0.intent == selected) },
+            cards: offers.map { $0.card(isSelected: $0.intent == selected) },
             primaryCTA: "",
             isPurchaseEnabled: false,
-            footer: footer(for: selected, locale: locale)
+            reassurance: reassurance(moment: moment, intent: selected, locale: locale)
         )
     }
 
-    private static func footer(
-        for intent: PaywallPurchaseIntent,
+    private static func reassurance(
+        moment: HonestPaywallMoment,
+        intent: PaywallPurchaseIntent,
         locale: Locale
-    ) -> PaywallFooter {
-        let reassuranceKey = switch intent {
-        case .subscribe: "paywall.stack.footer.cancel_anytime"
-        case .lifetime: "paywall.stack.footer.one_payment"
+    ) -> String {
+        let key = switch (moment, intent) {
+        case (_, .lifetime): "paywall.stack.footer.one_payment"
+        case (.duringTrial, .subscribe): "paywall.footer.charged_today"
+        case (.trialEnded, .subscribe), (.settingsFree, .subscribe): "paywall.footer.cancel_anytime"
         }
-        return PaywallFooter(
-            reassurance: commerce(reassuranceKey, locale),
-            restoreActionLabel: commerce("paywall.action.restore", locale)
-        )
+        return commerce(key, locale)
     }
 
     private static func ctaKey(
@@ -150,6 +138,15 @@ enum PaywallCheckoutBuilder {
         case (.get, .subscribe(.month)): "paywall.cta.get_plus.billed_monthly"
         case (.get, .lifetime): "paywall.cta.get_plus.once"
         }
+    }
+
+    private static func yearCaption(monthlyEquivalent: String?, locale: Locale) -> String {
+        PillieLocalization.formatted(
+            "paywall.card.year.caption",
+            table: "Commerce",
+            locale: locale,
+            arguments: monthlyEquivalent ?? "-"
+        )
     }
 
     private static func commerce(_ key: String, _ locale: Locale) -> String {
@@ -167,39 +164,28 @@ enum PaywallCheckoutBuilder {
         if let currencyCode {
             formatter.currencyCode = currencyCode
         }
-        guard let value = comparison.monthlyEquivalentString(using: formatter) else {
-            return nil
-        }
-        return PillieLocalization.formatted(
-            "paywall.stack.monthly_equivalent",
-            table: "Commerce",
-            locale: locale,
-            arguments: value
-        )
+        return comparison.monthlyEquivalentString(using: formatter)
     }
 }
 
-private struct TileContent {
+private struct CardContent {
     let intent: PaywallPurchaseIntent
     let title: String
-    let primaryLine: String
-    let trailingPrice: String?
-    let savingsBadge: PaywallSavingsBadge?
-    let ctaPrice: String
-    var accessibilityLabel: String?
+    let price: String
+    let caption: String
+    let savingsBadge: String?
 
-    func tile(isSelected: Bool) -> PaywallStackTile {
-        PaywallStackTile(
+    func card(isSelected: Bool) -> PaywallPlanCard {
+        PaywallPlanCard(
             intent: intent,
             title: title,
-            primaryLine: primaryLine,
-            trailingPrice: trailingPrice,
+            price: price,
+            caption: caption,
             savingsBadge: savingsBadge,
             isSelected: isSelected,
-            accessibilityLabel: accessibilityLabel
-                ?? [title, primaryLine, savingsBadge?.label ?? trailingPrice]
-                    .compactMap { $0 }
-                    .joined(separator: ", ")
+            accessibilityLabel: [title, price, caption, savingsBadge]
+                .compactMap { $0 }
+                .joined(separator: ", ")
         )
     }
 }

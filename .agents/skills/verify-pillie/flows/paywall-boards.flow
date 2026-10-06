@@ -9,8 +9,13 @@
 launch
 wait text Today 15  # the link rebuilds Home, then posts; an early post is lost
 openurl pillie://debug/honest-paywall?board=duringTrial&lang=en
-wait text "You still have Pillie Plus." 10
-# paywall.story.trial_active.title (en), Commerce.xcstrings.
+wait text "Keep Plus after your trial ends." 10
+expect text "active days left"
+expect text "charged today"
+expect id paywallTermsLink
+expect id paywallPrivacyLink
+expect text "5-star review on the App Store"
+# paywall.board.during_trial.title (en), Commerce.xcstrings.
 # HonestPaywallStoryFactory.swift duringTrial(...). PillieApp.swift case
 # "/honest-paywall" -> "duringTrial": DebugQA.apply(.trialActive) then posts
 # .pillieDebugPresentHonestPaywall(object: "duringTrial"), observed by
@@ -31,8 +36,11 @@ tap --id xmark --element-type Button  # paywall close; a review-prompt "Close" c
 launch
 wait text Today 15  # the link rebuilds Home, then posts; an early post is lost
 openurl pillie://debug/honest-paywall?board=trialEndedReturningLegacy&lang=en
-wait text "Welcome back." 10
-# paywall.story.trial_ended.returning.legacy.title (en). PillieApp.swift
+wait text "Lock your apps until you take your pill." 10
+expect text "Continue with free reminders"
+expect-not text "Get your reminders"
+# Grandfathered users keep free daily reminders, so the legacy wall reuses
+# the Get Plus story (paywall.board.get_plus.title.pill). PillieApp.swift
 # case "trialEndedReturningLegacy": DebugQA.apply
 # (.trialExpiredGrandfatherReturning) -> applyExpiredPaywall(...,
 # pack: .freshReinstall()), which completes onboarding and clears the
@@ -48,8 +56,10 @@ tap --id xmark --element-type Button  # paywall close; a review-prompt "Close" c
 launch
 wait text Today 15  # the link rebuilds Home, then posts; an early post is lost
 openurl pillie://debug/honest-paywall?board=trialEndedReturningHard&lang=en
-wait text "Your trial has ended." 10
-# paywall.story.trial_ended.returning.hard.title (en). PillieApp.swift case
+wait text "Get your reminders and app blocking back." 10
+expect text "Cancel anytime in Settings"
+expect-not id xmark
+# paywall.board.trial_ended.title (en). PillieApp.swift case
 # "trialEndedReturningHard": DebugQA.apply(.trialExpiredNewUserReturning).
 shot paywall-trial-ended-hard
 # Not dismissible on purpose: terms .hardPaywall -> showsClose: false,

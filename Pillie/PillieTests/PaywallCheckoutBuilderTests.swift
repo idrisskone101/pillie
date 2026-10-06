@@ -9,156 +9,180 @@ import Testing
 @testable import Pillie
 
 struct PaywallCheckoutBuilderTests {
-    private let english = Locale(identifier: "en_US")
+    private let english = Locale(identifier: "en")
 
     private var offerings: PaywallOfferingsSnapshot {
         .fixture(
-            annualDisplay: "$39.99",
+            annualDisplay: "$29.99",
             monthlyDisplay: "$4.99",
-            lifetimeDisplay: "$89.99",
-            annual: 39.99,
+            lifetimeDisplay: "$69.99",
+            annual: 29.99,
             monthly: 4.99,
-            lifetime: 89.99
+            lifetime: 69.99
         )
     }
 
     private var noLifetime: PaywallOfferingsSnapshot {
         .fixture(
-            annualDisplay: "$39.99",
+            annualDisplay: "$29.99",
             monthlyDisplay: "$4.99",
             lifetimeDisplay: nil,
-            annual: 39.99,
+            annual: 29.99,
             monthly: 4.99,
             lifetime: nil
         )
     }
 
-    @Test func `Year get CTA interpolates live annual price`() {
+    @Test func `Cards list Month, Year, Lifetime with prices, captions, and the Year badge`() {
         let checkout = PaywallCheckoutBuilder.build(
-            verb: .get,
+            moment: .settingsFree,
             offerings: offerings,
             selection: .subscribe(.year),
             locale: english
         )
-        #expect(checkout.primaryCTA == "Get Pillie Plus · $39.99 billed yearly")
+        #expect(checkout.cards == [
+            PaywallPlanCard(
+                intent: .subscribe(.month),
+                title: "Month",
+                price: "$4.99",
+                caption: "per month",
+                savingsBadge: nil,
+                isSelected: false,
+                accessibilityLabel: "Month, $4.99, per month"
+            ),
+            PaywallPlanCard(
+                intent: .subscribe(.year),
+                title: "Year",
+                price: "$29.99",
+                caption: "$2.50 a month",
+                savingsBadge: "Save 50%",
+                isSelected: true,
+                accessibilityLabel: "Year, $29.99, $2.50 a month, Save 50%"
+            ),
+            PaywallPlanCard(
+                intent: .lifetime,
+                title: "Lifetime",
+                price: "$69.99",
+                caption: "pay once",
+                savingsBadge: nil,
+                isSelected: false,
+                accessibilityLabel: "Lifetime, $69.99, pay once"
+            ),
+        ])
+        #expect(checkout.isPurchaseEnabled)
     }
 
-    @Test func `Month get CTA interpolates live monthly price`() {
+    @Test func `Year has no badge when the annual plan saves nothing`() {
         let checkout = PaywallCheckoutBuilder.build(
-            verb: .get,
-            offerings: offerings,
-            selection: .subscribe(.month),
-            locale: english
-        )
-        #expect(checkout.primaryCTA == "Get Pillie Plus · $4.99 billed monthly")
-    }
-
-    @Test func `SAVE badge percent matches PaywallPriceComparison`() {
-        let comparison = PaywallPriceComparison(
-            annualPrice: offerings.annualPrice,
-            monthlyPrice: offerings.monthlyPrice
-        )
-        let checkout = PaywallCheckoutBuilder.build(
-            verb: .keep,
-            offerings: offerings,
+            moment: .settingsFree,
+            offerings: .fixture(
+                annualDisplay: "$64.99",
+                monthlyDisplay: "$4.99",
+                lifetimeDisplay: nil,
+                annual: 64.99,
+                monthly: 4.99,
+                lifetime: nil
+            ),
             selection: .subscribe(.year),
             locale: english
         )
-        #expect(checkout.tiles[0].savingsBadge?.percent == comparison.savingsPercent)
+        #expect(checkout.cards.map(\.savingsBadge) == [nil, nil])
     }
 
-    @Test func `Stack lists Year, Month, Lifetime when offerings expose a lifetime price`() {
+    @Test func `Cards drop Lifetime when offerings have no lifetime price`() {
         let checkout = PaywallCheckoutBuilder.build(
-            verb: .keep,
-            offerings: offerings,
-            selection: .subscribe(.year),
-            locale: english
-        )
-        #expect(checkout.tiles.map(\.intent) == [.subscribe(.year), .subscribe(.month), .lifetime])
-        #expect(checkout.tiles.map(\.title) == ["Year", "Month", "Lifetime"])
-        let lifetime = checkout.tiles[2]
-        #expect(lifetime.primaryLine == "Pay once, keep Plus for good")
-        #expect(lifetime.trailingPrice == "$89.99")
-        #expect(lifetime.savingsBadge == nil)
-    }
-
-    @Test func `Stack drops the Lifetime tile when offerings have no lifetime price`() {
-        let checkout = PaywallCheckoutBuilder.build(
-            verb: .get,
+            moment: .settingsFree,
             offerings: noLifetime,
             selection: .subscribe(.year),
             locale: english
         )
-        #expect(checkout.tiles.map(\.intent) == [.subscribe(.year), .subscribe(.month)])
+        #expect(checkout.cards.map(\.intent) == [.subscribe(.month), .subscribe(.year)])
     }
 
     @Test func `Lifetime selection falls back to Year when lifetime is not offered`() {
         let checkout = PaywallCheckoutBuilder.build(
-            verb: .keep,
+            moment: .duringTrial,
             offerings: noLifetime,
             selection: .lifetime,
             locale: english
         )
         #expect(checkout.selectedIntent == .subscribe(.year))
-        #expect(checkout.tiles.filter(\.isSelected).map(\.intent) == [.subscribe(.year)])
-        #expect(checkout.primaryCTA == "Keep Pillie Plus · $39.99 billed yearly")
-        #expect(checkout.footer.reassurance == "Cancel anytime")
+        #expect(checkout.cards.filter(\.isSelected).map(\.intent) == [.subscribe(.year)])
+        #expect(checkout.primaryCTA == "Keep Plus for $29.99 a year")
     }
 
     @Test(arguments: [
-        (PaywallPurchaseIntent.subscribe(.year), "Keep Pillie Plus · $39.99 billed yearly", "Cancel anytime"),
-        (.subscribe(.month), "Keep Pillie Plus · $4.99 billed monthly", "Cancel anytime"),
-        (.lifetime, "Keep Pillie Plus · $89.99 once", "One payment. No renewal.")
+        (HonestPaywallMoment.duringTrial, PaywallPurchaseIntent.subscribe(.year), "Keep Plus for $29.99 a year"),
+        (.duringTrial, .subscribe(.month), "Keep Plus for $4.99 a month"),
+        (.trialEnded(.hardPaywall), .lifetime, "Keep Plus for a one-time $69.99"),
+        (.settingsFree, .subscribe(.year), "Get Plus for $29.99 a year"),
+        (.settingsFree, .subscribe(.month), "Get Plus for $4.99 a month"),
+        (.settingsFree, .lifetime, "Get Plus for a one-time $69.99"),
     ])
-    func `Selected intent drives the selected tile, CTA, and reassurance`(
+    func `CTA follows the moment's verb and the selected plan`(
+        moment: HonestPaywallMoment,
         selection: PaywallPurchaseIntent,
-        cta: String,
-        reassurance: String
+        cta: String
     ) {
         let checkout = PaywallCheckoutBuilder.build(
-            verb: .keep,
+            moment: moment,
             offerings: offerings,
             selection: selection,
             locale: english
         )
         #expect(checkout.selectedIntent == selection)
-        #expect(checkout.tiles.filter(\.isSelected).map(\.intent) == [selection])
+        #expect(checkout.cards.filter(\.isSelected).map(\.intent) == [selection])
         #expect(checkout.primaryCTA == cta)
-        #expect(checkout.footer.reassurance == reassurance)
-        #expect(checkout.footer.restoreActionLabel == "Restore purchases")
     }
 
-    @Test func `Lifetime get CTA says once`() {
+    @Test(arguments: [
+        (HonestPaywallMoment.duringTrial, PaywallPurchaseIntent.subscribe(.year), "You’re charged today. Cancel anytime in Settings."),
+        (.duringTrial, .subscribe(.month), "You’re charged today. Cancel anytime in Settings."),
+        (.duringTrial, .lifetime, "One payment. No renewal."),
+        (.settingsFree, .subscribe(.year), "Cancel anytime in Settings"),
+        (.trialEnded(.hardPaywall), .subscribe(.month), "Cancel anytime in Settings"),
+        (.trialEnded(.legacy), .lifetime, "One payment. No renewal."),
+    ])
+    func `Reassurance says when the charge lands`(
+        moment: HonestPaywallMoment,
+        selection: PaywallPurchaseIntent,
+        reassurance: String
+    ) {
         let checkout = PaywallCheckoutBuilder.build(
-            verb: .get,
+            moment: moment,
             offerings: offerings,
-            selection: .lifetime,
+            selection: selection,
             locale: english
         )
-        #expect(checkout.primaryCTA == "Get Pillie Plus · $89.99 once")
+        #expect(checkout.reassurance == reassurance)
     }
 
-    @Test func `Placeholder offerings disable purchase`() {
+    @Test func `Placeholder shows Month and Year without prices and disables purchase`() {
         let checkout = PaywallCheckoutBuilder.build(
-            verb: .get,
+            moment: .settingsFree,
             offerings: nil,
             selection: .subscribe(.year),
             locale: english
         )
+        #expect(checkout.cards.map(\.intent) == [.subscribe(.month), .subscribe(.year)])
+        #expect(checkout.cards.map(\.price) == ["-", "-"])
+        #expect(checkout.cards.map(\.caption) == ["per month", "- a month"])
+        #expect(checkout.cards.map(\.savingsBadge) == [nil, nil])
         #expect(!checkout.isPurchaseEnabled)
-        #expect(checkout.primaryCTA.isEmpty)
+        #expect(checkout.primaryCTA == "")
+        #expect(checkout.reassurance == "Cancel anytime in Settings")
     }
 
     @Test func `Placeholder falls back from Lifetime to Year`() {
         let checkout = PaywallCheckoutBuilder.build(
-            verb: .get,
+            moment: .duringTrial,
             offerings: nil,
             selection: .lifetime,
             locale: english
         )
         #expect(checkout.selectedIntent == .subscribe(.year))
-        #expect(checkout.tiles.filter(\.isSelected).map(\.intent) == [.subscribe(.year)])
-        #expect(checkout.footer.reassurance == "Cancel anytime")
+        #expect(checkout.cards.filter(\.isSelected).map(\.intent) == [.subscribe(.year)])
+        #expect(checkout.reassurance == "You’re charged today. Cancel anytime in Settings.")
     }
 
     @Test func `Purchase intent maps recurrence to Pillie Plus plan`() {

@@ -9,7 +9,7 @@ import Testing
 @testable import Pillie
 
 struct HonestPaywallTelemetryTests {
-    private let english = Locale(identifier: "en_US")
+    private let english = Locale(identifier: "en")
 
     private var calendar: Calendar {
         var cal = Calendar(identifier: .gregorian)
@@ -43,8 +43,9 @@ struct HonestPaywallTelemetryTests {
     }
 
     @Test func `Expired grant on C3 stays surface-scoped`() {
-        let board = HonestPaywallBoard.settingsFree(
-            HonestPaywallStoryFactory.settingsFree(locale: english)
+        let board = HonestPaywallBoard(
+            moment: .settingsFree,
+            story: HonestPaywallStoryFactory.settingsFree(method: .pill, locale: english)
         )
         #expect(
             HonestPaywallTelemetry.mode(
@@ -55,8 +56,13 @@ struct HonestPaywallTelemetryTests {
     }
 
     @Test func `Expired grant on C1 stays surface-scoped`() {
-        let board = HonestPaywallBoard.duringTrial(
-            HonestPaywallStoryFactory.duringTrial(daysRemaining: 4, locale: english)
+        let board = HonestPaywallBoard(
+            moment: .duringTrial,
+            story: HonestPaywallStoryFactory.duringTrial(
+                daysRemaining: 4,
+                endsTonight: false,
+                locale: english
+            )
         )
         #expect(
             HonestPaywallTelemetry.mode(
@@ -66,11 +72,25 @@ struct HonestPaywallTelemetryTests {
         )
     }
 
-    @Test func `C2 board uses trial-end events`() throws {
-        let board = HonestPaywallBoard.trialEnded(
-            HonestPaywallStoryFactory.trialEnded(
-                stats: .none,
+    @Test func `C2 board without trial-end content stays surface-scoped`() {
+        let board = HonestPaywallBoard(
+            moment: .trialEnded(.hardPaywall),
+            story: HonestPaywallStoryFactory.trialEnded(
                 terms: .hardPaywall,
+                method: .pill,
+                locale: english
+            )
+        )
+        #expect(HonestPaywallTelemetry.mode(board: board, trialEndContent: nil) == .surface)
+    }
+
+    @Test(arguments: [TrialEndAccessTerms.hardPaywall, .legacy])
+    func `C2 board uses trial-end events`(terms: TrialEndAccessTerms) throws {
+        let board = HonestPaywallBoard(
+            moment: .trialEnded(terms),
+            story: HonestPaywallStoryFactory.trialEnded(
+                terms: terms,
+                method: .pill,
                 locale: english
             )
         )

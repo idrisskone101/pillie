@@ -5,21 +5,25 @@
 
 import Foundation
 
-struct HonestPaywallChrome: Equatable {
-    let showsClose: Bool
-    let allowsInteractiveDismiss: Bool
-    let showsContinueFree: Bool
+struct HonestPaywallBoard: Equatable {
+    let moment: HonestPaywallMoment
+    let story: HonestPaywallStory
+
+    var chrome: HonestPaywallChrome { moment.chrome }
+    var ctaVerb: PaywallCTAVerb { moment.ctaVerb }
+
+    var isTrialEnd: Bool {
+        switch moment {
+        case .trialEnded: true
+        case .duringTrial, .settingsFree: false
+        }
+    }
 }
 
-enum PaywallCTAVerb: Equatable {
-    case keep
-    case get
-}
-
-enum HonestPaywallBoard: Equatable {
-    case duringTrial(HonestPaywallTrialActiveStory)
-    case trialEnded(HonestPaywallTrialEndedStory)
-    case settingsFree(HonestPaywallSettingsStory)
+enum HonestPaywallMoment: Equatable {
+    case duringTrial
+    case trialEnded(TrialEndAccessTerms)
+    case settingsFree
 
     var chrome: HonestPaywallChrome {
         switch self {
@@ -29,8 +33,18 @@ enum HonestPaywallBoard: Equatable {
                 allowsInteractiveDismiss: true,
                 showsContinueFree: false
             )
-        case .trialEnded(let story):
-            story.chrome
+        case .trialEnded(.legacy):
+            HonestPaywallChrome(
+                showsClose: true,
+                allowsInteractiveDismiss: true,
+                showsContinueFree: true
+            )
+        case .trialEnded(.hardPaywall):
+            HonestPaywallChrome(
+                showsClose: false,
+                allowsInteractiveDismiss: false,
+                showsContinueFree: false
+            )
         }
     }
 
@@ -42,59 +56,24 @@ enum HonestPaywallBoard: Equatable {
     }
 }
 
-struct HonestPaywallTrialActiveStory: Equatable {
+struct HonestPaywallChrome: Equatable {
+    let showsClose: Bool
+    let allowsInteractiveDismiss: Bool
+    let showsContinueFree: Bool
+}
+
+enum PaywallCTAVerb: Equatable {
+    case keep
+    case get
+}
+
+struct HonestPaywallStory: Equatable {
     let title: String
     let subtitle: String
-    let daysRemaining: Int
-    let daysStampText: String
-    let benefitChips: [PaywallBenefitChip]
+    let review: PaywallReview
 }
 
-enum HonestPaywallTrialEndedBody: Equatable {
-    case stats(dose: PaywallStatTile?, streak: PaywallStatTile?, lossLine: String)
-    case comparison(free: PaywallComparisonCard, plus: PaywallComparisonCard)
-    case chips([PaywallBenefitChip], aside: String)
-}
-
-struct HonestPaywallTrialEndedStory: Equatable {
-    let title: String
-    let subtitle: String
-    let body: HonestPaywallTrialEndedBody
-    let chrome: HonestPaywallChrome
-}
-
-struct HonestPaywallSettingsStory: Equatable {
-    let title: String
-    let subtitle: String
-    let freeCard: PaywallComparisonCard
-    let plusCard: PaywallComparisonCard
-}
-
-struct PaywallBenefitChip: Equatable {
-    let label: String
-    let tint: PaywallChipTint
-}
-
-enum PaywallChipTint: Equatable {
-    case lavender
-    case sage
-    case coralSoft
-}
-
-struct PaywallStatTile: Equatable {
-    let label: String
-    let value: String
-    let background: PaywallTileBackground
-}
-
-enum PaywallTileBackground: Equatable {
-    case lavender
-    case coralSoft
-    case ink
-}
-
-struct PaywallComparisonCard: Equatable {
-    let tierLabel: String
-    let bullets: [String]
-    let background: PaywallTileBackground
+struct PaywallReview: Equatable {
+    let quote: String
+    let source: String
 }

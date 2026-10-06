@@ -9,94 +9,91 @@ import Testing
 @testable import Pillie
 
 struct HonestPaywallStoryFactoryTests {
-    private let english = Locale(identifier: "en_US")
+    private let english = Locale(identifier: "en")
+
+    @Test func `During trial counts active days left and quotes the trial review`() {
+        let story = HonestPaywallStoryFactory.duringTrial(
+            daysRemaining: 6,
+            endsTonight: false,
+            locale: english
+        )
+        #expect(story == HonestPaywallStory(
+            title: "Keep Plus after your trial ends.",
+            subtitle: "You have 6 active days left. Pick a plan now and nothing turns off on day 14.",
+            review: PaywallReview(
+                quote: "Within just 10 days of my free trial, I was already convinced that I would be getting a membership.",
+                source: "5-star review on the App Store"
+            )
+        ))
+    }
 
     @Test func `Grant-day rollover count is clamped to the 14-day promise`() {
         let story = HonestPaywallStoryFactory.duringTrial(
             daysRemaining: 15,
+            endsTonight: false,
             locale: english
         )
-        #expect(story.daysRemaining == 14)
+        #expect(story.subtitle == "You have 14 active days left. Pick a plan now and nothing turns off on day 14.")
     }
 
-    @Test func `Known C2 stats become tiles`() {
+    @Test func `Last trial day says it ends tonight`() {
+        let story = HonestPaywallStoryFactory.duringTrial(
+            daysRemaining: 1,
+            endsTonight: true,
+            locale: english
+        )
+        #expect(story.subtitle == "Your trial ends tonight. Pick a plan now and nothing turns off tomorrow.")
+    }
+
+    @Test(arguments: [
+        (ContraceptiveMethod.pill, "Pick a plan and they’re back before tonight’s pill. Your setup and streak are saved."),
+        (.patch, "Pick a plan and they’re back before your next patch change. Your setup and streak are saved."),
+        (.ring, "Pick a plan and they’re back before your next ring change. Your setup and streak are saved."),
+    ])
+    func `Hard trial-end story names the method's next dose`(
+        method: ContraceptiveMethod,
+        subtitle: String
+    ) {
         let story = HonestPaywallStoryFactory.trialEnded(
-            stats: TrialEndOwnStats(
-                blocksIntercepted: 3,
-                dosesTaken: 11,
-                dosesDue: 15,
-                currentStreak: 3
-            ),
             terms: .hardPaywall,
+            method: method,
             locale: english
         )
-        guard case .stats(let dose, let streak, let lossLine) = story.body else {
-            Issue.record("Expected own-record stats body")
-            return
-        }
-        #expect(dose?.value == "11")
-        #expect(streak?.value == "3")
-        #expect(!lossLine.isEmpty)
-        #expect(story.subtitle == "Your daily reminders and app blocking are off. Pick a plan to turn them back on.")
+        #expect(story == HonestPaywallStory(
+            title: "Get your reminders and app blocking back.",
+            subtitle: subtitle,
+            review: PaywallReview(
+                quote: "Really love this app! … Great app and great customer support!",
+                source: "5-star review on the App Store"
+            )
+        ))
     }
 
-    @Test func `Empty stats on hard terms use the locked returning story`() {
-        let story = HonestPaywallStoryFactory.trialEnded(
-            stats: .none,
-            terms: .hardPaywall,
-            locale: english
-        )
-        #expect(story.title == commerce("paywall.story.trial_ended.returning.hard.title"))
-        #expect(story.subtitle == commerce("paywall.story.trial_ended.returning.hard.subtitle"))
-        #expect(!story.chrome.showsClose)
-        #expect(!story.chrome.showsContinueFree)
-        guard case .chips(let chips, let aside) = story.body else {
-            Issue.record("Expected returning hard chips")
-            return
-        }
-        #expect(chips.count == 3)
-        #expect(chips[2].label == commerce("paywall.story.trial_ended.returning.hard.chip.history"))
-        #expect(aside == commerce("paywall.story.trial_ended.returning.hard.aside"))
-    }
-
-    @Test func `Empty stats on legacy terms use the dismissible returning story`() {
-        let story = HonestPaywallStoryFactory.trialEnded(
-            stats: .none,
+    @Test(arguments: ContraceptiveMethod.allCases)
+    func `Legacy trial-end story is the Get Plus story`(method: ContraceptiveMethod) {
+        let legacy = HonestPaywallStoryFactory.trialEnded(
             terms: .legacy,
+            method: method,
             locale: english
         )
-        #expect(story.title == commerce("paywall.story.trial_ended.returning.legacy.title"))
-        #expect(story.subtitle == commerce("paywall.story.trial_ended.returning.legacy.subtitle"))
-        #expect(story.chrome.showsClose)
-        #expect(story.chrome.showsContinueFree)
-        guard case .comparison = story.body else {
-            Issue.record("Expected returning legacy comparison")
-            return
-        }
+        #expect(legacy == HonestPaywallStoryFactory.settingsFree(method: method, locale: english))
+        #expect(legacy.title != "Get your reminders and app blocking back.")
     }
 
-    @Test func `Zero C2 stats use the dismissible returning story`() {
-        let story = HonestPaywallStoryFactory.trialEnded(
-            stats: TrialEndOwnStats(
-                blocksIntercepted: 0,
-                dosesTaken: 0,
-                dosesDue: 14,
-                currentStreak: 0
-            ),
-            terms: .legacy,
-            locale: english
-        )
-        #expect(story.title == commerce("paywall.story.trial_ended.returning.legacy.title"))
-        #expect(story.subtitle == commerce("paywall.story.trial_ended.returning.legacy.subtitle"))
-        #expect(story.chrome.showsClose)
-        #expect(story.chrome.showsContinueFree)
-        guard case .comparison = story.body else {
-            Issue.record("Expected returning legacy comparison")
-            return
-        }
-    }
-
-    private func commerce(_ key: String) -> String {
-        PillieLocalization.string(key, table: "Commerce", locale: english)
+    @Test(arguments: [
+        (ContraceptiveMethod.pill, "Lock your apps until you take your pill."),
+        (.patch, "Lock your apps until you change your patch."),
+        (.ring, "Lock your apps until you change your ring."),
+    ])
+    func `Get Plus title follows the method`(method: ContraceptiveMethod, title: String) {
+        let story = HonestPaywallStoryFactory.settingsFree(method: method, locale: english)
+        #expect(story == HonestPaywallStory(
+            title: title,
+            subtitle: "Plus pauses the apps you choose until you check in, and keeps reminding you until you do.",
+            review: PaywallReview(
+                quote: "I especially like that I can choose which apps I want to block until I take my pill.",
+                source: "5-star review on the App Store"
+            )
+        ))
     }
 }

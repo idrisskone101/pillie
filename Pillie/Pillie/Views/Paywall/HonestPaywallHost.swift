@@ -7,6 +7,7 @@ import SwiftUI
 
 struct HonestPaywallHost: View {
     @Environment(\.locale) private var locale
+    @Environment(PillStore.self) private var store
 
     let entry: PaywallEntryPoint
     let surface: AnalyticsPaywallSurface
@@ -41,7 +42,7 @@ struct HonestPaywallHost: View {
         HonestPaywallBoardResolver.resolve(
             access: subscriptionManager.plusAccessState,
             entry: entry,
-            stats: trialStats,
+            method: store.pack.method,
             calendar: .current,
             now: Date(),
             locale: locale,

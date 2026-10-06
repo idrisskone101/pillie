@@ -17,7 +17,7 @@ enum HonestPaywallTelemetry {
         board: HonestPaywallBoard,
         trialEndContent: TrialEndPaywallContent?
     ) -> HonestPaywallTelemetryMode {
-        if case .trialEnded = board, let trialEndContent {
+        if case .trialEnded = board.moment, let trialEndContent {
             return .trialEnd(trialEndContent)
         }
         return .surface

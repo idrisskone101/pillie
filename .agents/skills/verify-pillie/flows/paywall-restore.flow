@@ -11,7 +11,7 @@ openurl pillie://debug/honest-paywall?board=trialEndedReturningHard&lang=en
 # install already holds this expired state, the link flips nothing, so a
 # relaunch is what presents the hard wall.
 launch
-wait text "Your trial has ended." 20
+wait text "Get your reminders and app blocking back." 20
 log start
 
 openurl pillie://debug/restore-outcome?result=error
@@ -33,7 +33,7 @@ openurl pillie://debug/restore-outcome?result=restored
 tap --label "Restore purchases"
 # restored turns Plus on; Home drops the hard wall and shows the Plus
 # blocking-setup card instead of the free "App blocking is off" card.
-gone text "Your trial has ended." 10
+gone text "Get your reminders and app blocking back." 10
 wait text "You haven’t set up app blocking yet." 10
 shot trial-end-restored
 
