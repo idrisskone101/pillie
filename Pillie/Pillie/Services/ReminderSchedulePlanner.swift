@@ -79,6 +79,9 @@ struct ReminderSchedulePlanner {
         /// Picks the trial notice copy: blocking-specific lines only make sense
         /// once the user has chosen apps to block.
         var trialCohort: TrialEndPaywallCohort = .reminderOnly
+        /// Whether the trial notices may promise free daily reminders. Only
+        /// legacy (grandfathered) terms keep reminders free after the trial.
+        var trialEndTerms: TrialEndAccessTerms = .hardPaywall
         /// For each untaken due day, the fire date of a base reminder already
         /// committed by NotificationManager (persisted, pending, or delivered).
         /// Empty → planner may emit first-time catch-up. Non-empty + fire <= now
@@ -124,6 +127,7 @@ struct ReminderSchedulePlanner {
         let day: Int
         let fireDate: Date
         let cohort: TrialEndPaywallCohort
+        let terms: TrialEndAccessTerms
     }
 
     enum Intent: Hashable {
@@ -279,7 +283,12 @@ struct ReminderSchedulePlanner {
             // or expired trial keeps only notices still ahead of it. (A past
             // calendar trigger would otherwise fire immediately.)
             guard fireDate > input.now else { return nil }
-            return TrialExpiryWarningIntent(day: slot.day, fireDate: fireDate, cohort: input.trialCohort)
+            return TrialExpiryWarningIntent(
+                day: slot.day,
+                fireDate: fireDate,
+                cohort: input.trialCohort,
+                terms: input.trialEndTerms
+            )
         }
     }
 

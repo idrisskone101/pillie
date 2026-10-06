@@ -12100,6 +12100,831 @@
           }
         }
       }
+    },
+    "notification.trial_expiry.day10.hard.body": {
+      "comment": "Reverse Trial day-10 warning; hard-paywall terms, nothing stays free after the trial [paywall]",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "اختاري اشتراكًا خلال الأيام الخمسة القادمة لمتابعة استخدام Pillie."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie ব্যবহার চালিয়ে যেতে আগামী ৫ দিনের মধ্যে একটি প্ল্যান বেছে নিন।"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tria un pla en els propers 5 dies per continuar fent servir Pillie."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vyber si plán v příštích 5 dnech a používej Pillie dál."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vælg et abonnement inden for de næste 5 dage for at fortsætte med at bruge Pillie."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wähle in den nächsten 5 Tagen einen Tarif, um Pillie weiter zu nutzen."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Διάλεξε πρόγραμμα μέσα στις επόμενες 5 ημέρες για να συνεχίσεις να χρησιμοποιείς το Pillie."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a plan in the next 5 days to keep using Pillie."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elige un plan en los próximos 5 días para seguir usando Pillie."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Valitse tilaus seuraavan 5 päivän aikana, niin voit jatkaa Pillien käyttöä."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisis une formule dans les 5 prochains jours pour continuer à utiliser Pillie."
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie વાપરવાનું ચાલુ રાખવા આગામી 5 દિવસમાં પ્લાન પસંદ કરો."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "בחרי מסלול ב-5 הימים הקרובים כדי להמשיך להשתמש ב-Pillie."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie इस्तेमाल करते रहने के लिए अगले 5 दिनों में कोई प्लान चुनें।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Odaberi plan u sljedećih 5 dana da nastaviš koristiti Pillie."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Válassz csomagot a következő 5 napban, hogy tovább használhasd a Pillie-t."
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pilih paket dalam 5 hari ke depan untuk terus memakai Pillie."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scegli un piano nei prossimi 5 giorni per continuare a usare Pillie."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillieを続けて使うには、5日以内にプランを選んでください。"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie ಬಳಸುವುದನ್ನು ಮುಂದುವರಿಸಲು ಮುಂದಿನ 5 ದಿನಗಳಲ್ಲಿ ಯೋಜನೆಯನ್ನು ಆರಿಸಿ."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie를 계속 사용하려면 5일 안에 이용권을 선택하세요."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie തുടർന്നും ഉപയോഗിക്കാൻ അടുത്ത 5 ദിവസത്തിനുള്ളിൽ ഒരു പ്ലാൻ തിരഞ്ഞെടുക്കൂ."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie वापरत राहण्यासाठी पुढील 5 दिवसांत प्लॅन निवडा."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pilih pelan dalam 5 hari akan datang untuk terus menggunakan Pillie."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Velg et abonnement i løpet av de neste 5 dagene for å fortsette å bruke Pillie."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kies binnen 5 dagen een abonnement om Pillie te blijven gebruiken."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie ବ୍ୟବହାର ଜାରି ରଖିବାକୁ ଆଗାମୀ 5 ଦିନ ମଧ୍ୟରେ ଏକ ପ୍ଲାନ ବାଛନ୍ତୁ।"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie ਵਰਤਦੇ ਰਹਿਣ ਲਈ ਅਗਲੇ 5 ਦਿਨਾਂ ਵਿੱਚ ਕੋਈ ਪਲਾਨ ਚੁਣੋ।"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wybierz plan w ciągu najbliższych 5 dni, aby dalej korzystać z Pillie."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escolha um plano nos próximos 5 dias para continuar usando o Pillie."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escolhe um plano nos próximos 5 dias para continuares a usar o Pillie."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alege un plan în următoarele 5 zile pentru a continua să folosești Pillie."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выбери план в ближайшие 5 дней, чтобы продолжить пользоваться Pillie."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ak chceš Pillie používať ďalej, vyber si plán v najbližších 5 dňoch."
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Izberi paket v naslednjih 5 dneh, da lahko Pillie uporabljaš še naprej."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Välj ett abonnemang inom de närmaste 5 dagarna för att fortsätta använda Pillie."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie-ஐத் தொடர்ந்து பயன்படுத்த அடுத்த 5 நாட்களுக்குள் ஒரு திட்டத்தைத் தேர்ந்தெடுங்கள்."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie వాడటం కొనసాగించడానికి రాబోయే 5 రోజుల్లో ఒక ప్లాన్ ఎంచుకోండి."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "เลือกแพ็กเกจภายใน 5 วันนี้ เพื่อใช้ Pillie ต่อ"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie’yi kullanmaya devam etmek için önümüzdeki 5 gün içinde bir plan seç."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вибери план протягом наступних 5 днів, щоб і далі користуватися Pillie."
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie استعمال کرتے رہنے کے لیے اگلے 5 دنوں میں کوئی پلان چنیں۔"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chọn một gói trong 5 ngày tới để tiếp tục dùng Pillie."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "请在 5 天内选择方案，继续使用 Pillie。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "請在 5 天內選擇方案，繼續使用 Pillie。"
+          }
+        }
+      }
+    },
+    "notification.trial_expiry.day13.hard.body": {
+      "comment": "Reverse Trial day-13 warning; hard-paywall terms, nothing stays free after the trial [paywall]",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "اختاري اشتراكًا قبل مساء الغد لمتابعة استخدام Pillie."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie ব্যবহার চালিয়ে যেতে আগামীকাল রাতের মধ্যে একটি প্ল্যান বেছে নিন।"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tria un pla abans de demà a la nit per continuar fent servir Pillie."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vyber si plán do zítřejšího večera a používej Pillie dál."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vælg et abonnement inden i morgen aften for at fortsætte med at bruge Pillie."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wähle bis morgen Abend einen Tarif, um Pillie weiter zu nutzen."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Διάλεξε πρόγραμμα έως αύριο το βράδυ για να συνεχίσεις να χρησιμοποιείς το Pillie."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a plan by tomorrow night to keep using Pillie."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elige un plan antes de mañana por la noche para seguir usando Pillie."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Valitse tilaus huomisiltaan mennessä, niin voit jatkaa Pillien käyttöä."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisis une formule d’ici demain soir pour continuer à utiliser Pillie."
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie વાપરવાનું ચાલુ રાખવા આવતીકાલ રાત સુધીમાં પ્લાન પસંદ કરો."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "בחרי מסלול עד מחר בערב כדי להמשיך להשתמש ב-Pillie."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie इस्तेमाल करते रहने के लिए कल रात तक कोई प्लान चुनें।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Odaberi plan do sutra navečer da nastaviš koristiti Pillie."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Válassz csomagot holnap estig, hogy tovább használhasd a Pillie-t."
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pilih paket sebelum besok malam untuk terus memakai Pillie."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scegli un piano entro domani sera per continuare a usare Pillie."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillieを続けて使うには、明日の夜までにプランを選んでください。"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie ಬಳಸುವುದನ್ನು ಮುಂದುವರಿಸಲು ನಾಳೆ ರಾತ್ರಿಯೊಳಗೆ ಯೋಜನೆಯನ್ನು ಆರಿಸಿ."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie를 계속 사용하려면 내일 밤까지 이용권을 선택하세요."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie തുടർന്നും ഉപയോഗിക്കാൻ നാളെ രാത്രിക്കുള്ളിൽ ഒരു പ്ലാൻ തിരഞ്ഞെടുക്കൂ."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie वापरत राहण्यासाठी उद्या रात्रीपर्यंत प्लॅन निवडा."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pilih pelan sebelum esok malam untuk terus menggunakan Pillie."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Velg et abonnement innen i morgen kveld for å fortsette å bruke Pillie."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kies vóór morgenavond een abonnement om Pillie te blijven gebruiken."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie ବ୍ୟବହାର ଜାରି ରଖିବାକୁ ଆସନ୍ତାକାଲି ରାତି ସୁଦ୍ଧା ଏକ ପ୍ଲାନ ବାଛନ୍ତୁ।"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie ਵਰਤਦੇ ਰਹਿਣ ਲਈ ਕੱਲ੍ਹ ਰਾਤ ਤੱਕ ਕੋਈ ਪਲਾਨ ਚੁਣੋ।"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wybierz plan do jutra wieczorem, aby dalej korzystać z Pillie."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escolha um plano até amanhã à noite para continuar usando o Pillie."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escolhe um plano até amanhã à noite para continuares a usar o Pillie."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alege un plan până mâine seară pentru a continua să folosești Pillie."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выбери план до завтрашнего вечера, чтобы продолжить пользоваться Pillie."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ak chceš Pillie používať ďalej, vyber si plán do zajtra večera."
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Izberi paket do jutri zvečer, da lahko Pillie uporabljaš še naprej."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Välj ett abonnemang senast i morgon kväll för att fortsätta använda Pillie."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie-ஐத் தொடர்ந்து பயன்படுத்த நாளை இரவுக்குள் ஒரு திட்டத்தைத் தேர்ந்தெடுங்கள்."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie వాడటం కొనసాగించడానికి రేపు రాత్రిలోగా ఒక ప్లాన్ ఎంచుకోండి."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "เลือกแพ็กเกจภายในคืนพรุ่งนี้ เพื่อใช้ Pillie ต่อ"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie’yi kullanmaya devam etmek için yarın akşama kadar bir plan seç."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вибери план до завтрашнього вечора, щоб і далі користуватися Pillie."
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie استعمال کرتے رہنے کے لیے کل رات تک کوئی پلان چنیں۔"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chọn một gói trước tối mai để tiếp tục dùng Pillie."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "请在明晚前选择方案，继续使用 Pillie。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "請在明晚前選擇方案，繼續使用 Pillie。"
+          }
+        }
+      }
+    },
+    "notification.trial_expiry.day15.hard.body": {
+      "comment": "Reverse Trial expiry-day notice; hard-paywall terms, nothing stays free after the trial [paywall]",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "اختاري الاشتراك الشهري أو السنوي أو مدى الحياة لمتابعة استخدام Pillie."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie ব্যবহার চালিয়ে যেতে মাসিক, বার্ষিক বা লাইফটাইম বেছে নিন।"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tria mensual, anual o vitalici per continuar fent servir Pillie."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vyber měsíční, roční nebo trvalý plán a používej Pillie dál."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vælg månedligt, årligt eller livstid for at fortsætte med at bruge Pillie."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wähle einen Monats-, Jahres- oder Lifetime-Tarif, um Pillie weiter zu nutzen."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Διάλεξε μηνιαία, ετήσια ή εφ' όρου ζωής για να συνεχίσεις να χρησιμοποιείς το Pillie."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose monthly, annual, or lifetime to keep using Pillie."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elige mensual, anual o de por vida para seguir usando Pillie."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Valitse kuukausi-, vuosi- tai kertamaksu, niin voit jatkaa Pillien käyttöä."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisis mensuel, annuel ou à vie pour continuer à utiliser Pillie."
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie વાપરવાનું ચાલુ રાખવા માસિક, વાર્ષિક અથવા લાઇફટાઇમ પસંદ કરો."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "בחרי חודשי, שנתי או לתמיד כדי להמשיך להשתמש ב-Pillie."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie इस्तेमाल करते रहने के लिए मासिक, सालाना या लाइफ़टाइम चुनें।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Odaberi mjesečno, godišnje ili doživotno da nastaviš koristiti Pillie."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Válassz havi, éves vagy örökös csomagot, hogy tovább használhasd a Pillie-t."
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pilih bulanan, tahunan, atau seumur hidup untuk terus memakai Pillie."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scegli il piano mensile, annuale o a vita per continuare a usare Pillie."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillieを続けて使うには、月額、年額、または買い切りを選んでください。"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie ಬಳಸುವುದನ್ನು ಮುಂದುವರಿಸಲು ಮಾಸಿಕ, ವಾರ್ಷಿಕ ಅಥವಾ ಜೀವಮಾನದ ಯೋಜನೆಯನ್ನು ಆರಿಸಿ."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie를 계속 사용하려면 월간, 연간 또는 평생 이용권을 선택하세요."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie തുടർന്നും ഉപയോഗിക്കാൻ പ്രതിമാസ, വാർഷിക അല്ലെങ്കിൽ ആജീവനാന്ത പ്ലാൻ തിരഞ്ഞെടുക്കൂ."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie वापरत राहण्यासाठी मासिक, वार्षिक किंवा लाइफटाइम निवडा."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pilih bulanan, tahunan atau seumur hidup untuk terus menggunakan Pillie."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Velg månedlig, årlig eller livstid for å fortsette å bruke Pillie."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kies maandelijks, jaarlijks of lifetime om Pillie te blijven gebruiken."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie ବ୍ୟବହାର ଜାରି ରଖିବାକୁ ମାସିକ, ବାର୍ଷିକ କିମ୍ବା ଆଜୀବନ ବାଛନ୍ତୁ।"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie ਵਰਤਦੇ ਰਹਿਣ ਲਈ ਮਹੀਨਾਵਾਰ, ਸਾਲਾਨਾ ਜਾਂ ਲਾਈਫ਼ਟਾਈਮ ਚੁਣੋ।"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wybierz plan miesięczny, roczny albo na zawsze, aby dalej korzystać z Pillie."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escolha mensal, anual ou vitalício para continuar usando o Pillie."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escolhe mensal, anual ou vitalício para continuares a usar o Pillie."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alege lunar, anual sau pe viață pentru a continua să folosești Pillie."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выбери ежемесячный, годовой или пожизненный план, чтобы продолжить пользоваться Pillie."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ak chceš Pillie používať ďalej, vyber mesačný, ročný alebo doživotný plán."
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Izberi mesečno, letno ali trajno možnost, da lahko Pillie uporabljaš še naprej."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Välj månadsvis, årsvis eller livstid för att fortsätta använda Pillie."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie-ஐத் தொடர்ந்து பயன்படுத்த மாதாந்திர, ஆண்டு அல்லது வாழ்நாள் திட்டத்தைத் தேர்ந்தெடுங்கள்."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie వాడటం కొనసాగించడానికి నెలవారీ, వార్షిక లేదా జీవితకాల ప్లాన్ ఎంచుకోండి."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "เลือกแบบรายเดือน รายปี หรือตลอดชีพ เพื่อใช้ Pillie ต่อ"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie’yi kullanmaya devam etmek için aylık, yıllık veya ömür boyu seç."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вибери щомісячний, річний або довічний план, щоб і далі користуватися Pillie."
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillie استعمال کرتے رہنے کے لیے ماہانہ، سالانہ یا لائف ٹائم چنیں۔"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chọn gói hàng tháng, hàng năm hoặc trọn đời để tiếp tục dùng Pillie."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "选择月付、年付或终身版，继续使用 Pillie。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "選擇月繳、年繳或終身版，繼續使用 Pillie。"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

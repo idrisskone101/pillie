@@ -22,7 +22,7 @@ final class ItalianTrialExpiryWarningLocalizationTests: XCTestCase {
             "La tua prova Plus finisce presto"
         )
         XCTAssertEqual(
-            TrialExpiryWarningCopy.body(day: 10, cohort: .blockerConfigured, locale: italian),
+            TrialExpiryWarningCopy.body(day: 10, cohort: .blockerConfigured, terms: .legacy, locale: italian),
             "Il blocco app si disattiva tra 5 giorni. I promemoria giornalieri restano gratis."
         )
         XCTAssertEqual(
@@ -30,7 +30,7 @@ final class ItalianTrialExpiryWarningLocalizationTests: XCTestCase {
             "La tua prova Plus sta per finire"
         )
         XCTAssertEqual(
-            TrialExpiryWarningCopy.body(day: 13, cohort: .blockerConfigured, locale: italian),
+            TrialExpiryWarningCopy.body(day: 13, cohort: .blockerConfigured, terms: .legacy, locale: italian),
             "Il blocco app si disattiva domani sera. I promemoria giornalieri restano gratis."
         )
     }
@@ -39,11 +39,11 @@ final class ItalianTrialExpiryWarningLocalizationTests: XCTestCase {
         let italian = Locale(identifier: "it_IT")
 
         XCTAssertEqual(
-            TrialExpiryWarningCopy.body(day: 10, cohort: .reminderOnly, locale: italian),
+            TrialExpiryWarningCopy.body(day: 10, cohort: .reminderOnly, terms: .legacy, locale: italian),
             "I tuoi promemoria successivi si fermano tra 5 giorni."
         )
         XCTAssertEqual(
-            TrialExpiryWarningCopy.body(day: 13, cohort: .reminderOnly, locale: italian),
+            TrialExpiryWarningCopy.body(day: 13, cohort: .reminderOnly, terms: .legacy, locale: italian),
             "I tuoi promemoria successivi si fermano domani sera."
         )
     }
@@ -57,7 +57,7 @@ final class ItalianTrialExpiryWarningLocalizationTests: XCTestCase {
         )
         for cohort in [TrialEndPaywallCohort.blockerConfigured, .reminderOnly] {
             XCTAssertEqual(
-                TrialExpiryWarningCopy.body(day: 15, cohort: cohort, locale: italian),
+                TrialExpiryWarningCopy.body(day: 15, cohort: cohort, terms: .legacy, locale: italian),
                 "I promemoria giornalieri restano gratis. Plus aggiunge i promemoria successivi e il blocco app."
             )
         }

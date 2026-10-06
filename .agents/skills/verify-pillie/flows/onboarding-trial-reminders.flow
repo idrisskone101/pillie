@@ -4,7 +4,9 @@
 # then dump pending notifications to OSLog with no apps chosen and read app.log:
 # the queue must already hold the smart follow-ups, the day-10/13 warnings with the
 # reminders-only body, and the day-15 expiry-day notice. Every `Pillie QA pending:`
-# line names id, fire time, title, and body.
+# line names id, fire time, title, and body. A fresh install is post-cutover, so
+# every trial notice carries the hard-paywall choose-a-plan body and `_hard_` id;
+# none may say daily reminders stay free (ENG-161).
 #
 # Not covered here: the blocking-cohort copy. It needs a real FamilyControls
 # selection, and the plus-app-blocking-setup seam that fakes one also forces Plus on,

@@ -122,6 +122,16 @@ final class SubscriptionManager: NSObject {
     /// dashboard explicitly sets `hard_paywall_enabled` to false.
     private(set) var hardPaywallEnabled = true
 
+    /// The terms this user's trial ends on. Only legacy (grandfathered) terms
+    /// keep daily reminders free; an unknown cohort reads as hard paywall so no
+    /// surface promises free reminders the app won't keep.
+    var trialEndTerms: TrialEndAccessTerms {
+        HardPaywallPolicy.terms(
+            for: trialTermsCohort ?? TrialInstallCohort.storedAssignment() ?? .postCutover,
+            hardPaywallEnabled: hardPaywallEnabled
+        )
+    }
+
     /// Auto-presentation waits for this first launch refresh so a dashboard kill
     /// switch cannot briefly show the hard wall before RevenueCat responds.
     private(set) var hasResolvedHardPaywallConfiguration = false

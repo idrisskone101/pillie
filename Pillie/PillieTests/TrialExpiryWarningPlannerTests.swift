@@ -153,17 +153,17 @@ final class TrialExpiryWarningPlannerTests: XCTestCase {
 
         let day10Moment = try XCTUnwrap(calendar.date(byAdding: .day, value: 10, to: grantDate))
         XCTAssertEqual(clock.daysRemaining(calendar: calendar, now: day10Moment), 5)
-        XCTAssertTrue(TrialExpiryWarningCopy.body(day: 10, cohort: .blockerConfigured).contains("in 5 days"))
+        XCTAssertTrue(TrialExpiryWarningCopy.body(day: 10, cohort: .blockerConfigured, terms: .legacy).contains("in 5 days"))
 
         let day13Moment = try XCTUnwrap(calendar.date(byAdding: .day, value: 13, to: grantDate))
         XCTAssertEqual(clock.daysRemaining(calendar: calendar, now: day13Moment), 2)
-        XCTAssertTrue(TrialExpiryWarningCopy.body(day: 13, cohort: .blockerConfigured).contains("tomorrow night"))
+        XCTAssertTrue(TrialExpiryWarningCopy.body(day: 13, cohort: .blockerConfigured, terms: .legacy).contains("tomorrow night"))
 
         // Informational, blocking-scoped copy: names app blocking, never the
         // contraceptive method or any protection/effectiveness claim.
         for day in [10, 13] {
             let copy = TrialExpiryWarningCopy.title(day: day)
-                + " " + TrialExpiryWarningCopy.body(day: day, cohort: .blockerConfigured)
+                + " " + TrialExpiryWarningCopy.body(day: day, cohort: .blockerConfigured, terms: .legacy)
             XCTAssertTrue(copy.contains("App blocking"))
             for banned in ["protect", "effective", "pregnan", "pill", "patch", "ring"] {
                 XCTAssertFalse(copy.lowercased().contains(banned), "copy contains banned term: \(banned)")

@@ -22,11 +22,15 @@ final class TrialExpiryWarningNotificationTests: XCTestCase {
     private func makeTrialFixture(
         now: Date,
         grantDate: Date?,
-        hasEntitlement: Bool
+        hasEntitlement: Bool,
+        termsCohort: TrialTermsCohort? = nil
     ) throws -> InMemoryStoreFixture {
         let trialStore = InMemoryTrialGrantStore()
         if let grantDate {
             trialStore.saveGrantDate(grantDate)
+        }
+        if let termsCohort {
+            trialStore.saveTermsCohort(termsCohort)
         }
         SubscriptionManager.shared.setTrialGrantStoreForTesting(trialStore)
         SubscriptionManager.shared.setPlusForTesting(hasEntitlement)
@@ -66,7 +70,7 @@ final class TrialExpiryWarningNotificationTests: XCTestCase {
             let day = try XCTUnwrap(warning.trialWarningDay)
             XCTAssertTrue(warning.identifier.hasPrefix("pillie_trial_warning_day_\(day)_blocker_configured_"))
             XCTAssertEqual(warning.title, TrialExpiryWarningCopy.title(day: day))
-            XCTAssertEqual(warning.body, TrialExpiryWarningCopy.body(day: day, cohort: .blockerConfigured))
+            XCTAssertEqual(warning.body, TrialExpiryWarningCopy.body(day: day, cohort: .blockerConfigured, terms: .legacy))
             // Informational: no reminder category, no Mark as Taken / Snooze.
             XCTAssertEqual(warning.categoryIdentifier, "")
         }
@@ -85,6 +89,31 @@ final class TrialExpiryWarningNotificationTests: XCTestCase {
         XCTAssertTrue(Set(blocker.map(\.identifier)).isDisjoint(with: remindersOnly.map(\.identifier)))
         XCTAssertEqual(blocker.map(\.trialWarningDay), remindersOnly.map(\.trialWarningDay))
         XCTAssertTrue(remindersOnly.allSatisfy { $0.identifier.contains("_reminder_only_") })
+    }
+
+    @MainActor
+    func testPostCutoverInstallNeverHearsRemindersStayFree() throws {
+        let now = InMemoryStoreFactory.fixedDate("2026-10-05", hour: 9)
+        let fixture = try makeTrialFixture(
+            now: now,
+            grantDate: now,
+            hasEntitlement: false,
+            termsCohort: .postCutover
+        )
+        SubscriptionManager.shared.debugSetHardPaywallEnabled(true)
+        addTeardownBlock { @MainActor in
+            SubscriptionManager.shared.debugSetHardPaywallEnabled(nil)
+        }
+
+        let warnings = trialWarningSummaries(store: fixture.store, now: now, cohort: .blockerConfigured)
+
+        XCTAssertEqual(warnings.map(\.trialWarningDay), [10, 13, 15])
+        XCTAssertEqual(warnings.map(\.body), [
+            "Choose a plan in the next 5 days to keep using Pillie.",
+            "Choose a plan by tomorrow night to keep using Pillie.",
+            "Choose monthly, annual, or lifetime to keep using Pillie.",
+        ])
+        XCTAssertTrue(warnings.allSatisfy { $0.identifier.contains("_blocker_configured_hard_") })
     }
 
     @MainActor

@@ -2411,6 +2411,33 @@
       "it": "I promemoria giornalieri restano gratis. Plus aggiunge i promemoria successivi e il blocco app."
     },
     {
+      "issue": "ENG-161",
+      "table": "Notifications",
+      "key": "notification.trial_expiry.day10.hard.body",
+      "create": true,
+      "en": "Choose a plan in the next 5 days to keep using Pillie.",
+      "de": "Wähle in den nächsten 5 Tagen einen Tarif, um Pillie weiter zu nutzen.",
+      "it": "Scegli un piano nei prossimi 5 giorni per continuare a usare Pillie."
+    },
+    {
+      "issue": "ENG-161",
+      "table": "Notifications",
+      "key": "notification.trial_expiry.day13.hard.body",
+      "create": true,
+      "en": "Choose a plan by tomorrow night to keep using Pillie.",
+      "de": "Wähle bis morgen Abend einen Tarif, um Pillie weiter zu nutzen.",
+      "it": "Scegli un piano entro domani sera per continuare a usare Pillie."
+    },
+    {
+      "issue": "ENG-161",
+      "table": "Notifications",
+      "key": "notification.trial_expiry.day15.hard.body",
+      "create": true,
+      "en": "Choose monthly, annual, or lifetime to keep using Pillie.",
+      "de": "Wähle einen Monats-, Jahres- oder Lifetime-Tarif, um Pillie weiter zu nutzen.",
+      "it": "Scegli il piano mensile, annuale o a vita per continuare a usare Pillie."
+    },
+    {
       "issue": "ENG-74",
       "table": "Commerce",
       "key": "paywall.restore_error.title",
