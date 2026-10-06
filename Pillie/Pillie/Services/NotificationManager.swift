@@ -274,8 +274,13 @@ final class NotificationManager {
     /// `pillie://debug/notification-complete` calls it too, since the simulator can't tap the action.
     func completeReminder(store: PillStore, dueDate: Date) {
         let dueEpoch = Int(Calendar.current.startOfDay(for: dueDate).timeIntervalSince1970)
+        let wasTaken = store.statusForDate(dueDate) == .taken
 
         store.markActionAsTaken(on: dueDate)
+        if !wasTaken, store.statusForDate(dueDate) == .taken {
+            ProductAnalyticsTelemetry.live.todayActionCompleted(source: .notification)
+            StreakChangeReport.record(store, reason: .logged)
+        }
         AppBlockingManager.shared.removeBlocking()
         var ledger = ServedBaseReminderLedger.load()
         ledger.clearServedRecordWhenTaken(dueDayEpoch: dueEpoch)

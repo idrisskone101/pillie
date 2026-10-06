@@ -13,7 +13,7 @@ shot settings-open
 tap --label "Method, Pill (Standard)"
 wait id todayPillChangeButton
 shot editor-method
-tap --label Cancel
+tap --id protocolEditorClose
 gone id todayPillChangeButton
 
 tap --label "Reminder time, 8:00 AM"            # runner folds the   in "8:00 AM"

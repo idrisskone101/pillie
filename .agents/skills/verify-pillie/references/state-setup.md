@@ -11,6 +11,7 @@ In a flow: `openurl pillie://debug/<path>?lang=en`. The runner accepts the iOS "
 | `/plus-home` | Home, onboarding complete, Plus on. The default starting point. |
 | `/plus-app-blocking-setup?terms=hard&expired=0\|1&selected=N` | Onboarding app-blocking step, optional hard-paywall-expired state and a fake app count |
 | `/plus-app-blocking-recovery` | The FamilyControls denied/cancelled recovery UI |
+| `/screen-time-refused?reason=conflict\|cancelled\|none` | Screen Time authorization fails for this launch the way a real iPhone refuses it: `conflict` (default) is another app holding access, `cancelled` is any other refusal, `none` lets the next request succeed |
 | `/onboarding-personalization-intent` | Onboarding pain-points step |
 | `/onboarding-personalization-timing` | Onboarding miss-frequency step |
 | `/trial-grant` | A fresh reverse trial starting now |

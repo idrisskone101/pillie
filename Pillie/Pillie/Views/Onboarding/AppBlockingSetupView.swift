@@ -18,6 +18,7 @@ struct AppBlockingSetupContent {
 
     let authorizationDeniedTitle: String
     let authorizationDeniedDetail: String
+    let authorizationConflictDetail: String
     let retryAuthorizationCTA: String
 
     let selectedSummaryLabel: String
@@ -38,7 +39,8 @@ struct AppBlockingSetupContent {
         [
             titleLead, subtitle,
             emptyTitle, emptyUnlockFormat, emptyMarkTaken, emptyDetail,
-            authorizationDeniedTitle, authorizationDeniedDetail, retryAuthorizationCTA,
+            authorizationDeniedTitle, authorizationDeniedDetail, authorizationConflictDetail,
+            retryAuthorizationCTA,
             chooseAppsCTA, selectedSummaryLabel, selectedPrivacyNote, changeSelectionCTA,
             privacyNote, finishCTA, skipCTA, lockedTitle, lockedSubtitle, lockedDetail, lockedCTA,
             trialLine
@@ -72,7 +74,8 @@ struct AppBlockingSetupContent {
             ),
             chooseAppsCTA: PillieLocalization.string("onboarding.blocking_setup.allow_pausing", locale: locale),
             authorizationDeniedTitle: PillieLocalization.string("error.screen_time.title", locale: locale),
-            authorizationDeniedDetail: PillieLocalization.string("error.screen_time.body", locale: locale),
+            authorizationDeniedDetail: ScreenTimeRefusal.notAllowed.detail(locale: locale),
+            authorizationConflictDetail: ScreenTimeRefusal.heldByAnotherApp.detail(locale: locale),
             retryAuthorizationCTA: PillieLocalization.string("global.action.retry", locale: locale),
             selectedSummaryLabel: PillieLocalization.string(
                 "onboarding.blocking_setup.selected_summary",
@@ -301,7 +304,7 @@ struct AppBlockingSetupView: View {
         }
         .familyActivityPicker(
             isPresented: $showPicker,
-            selection: Bindable(blockingManager).pickerSelection
+            selection: Bindable(blockingManager).activitySelection
         )
         .onAppear {
             animateIn = true
@@ -396,7 +399,9 @@ struct AppBlockingSetupView: View {
                 .minimumScaleFactor(dynamicTypeSize.isAccessibilitySize ? 1 : 0.72)
                 .allowsTightening(true)
 
-            Text(content.authorizationDeniedDetail)
+            Text(blockingManager.refusal == .heldByAnotherApp
+                ? content.authorizationConflictDetail
+                : content.authorizationDeniedDetail)
                 .font(.pillieBody())
                 .foregroundStyle(PillieTheme.textMuted)
                 .multilineTextAlignment(.center)

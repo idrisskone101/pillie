@@ -96,10 +96,7 @@ struct HomeView: View {
 
     private func handleBlockingCardAction() {
         if SubscriptionManager.shared.hasPlusAccess {
-            Task { @MainActor in
-                _ = await AppBlockingManager.shared.ensureAuthorized()
-                showBlockingSetup = true
-            }
+            showBlockingSetup = true
         } else {
             // Free: go straight to the paywall (it reports paywallViewed itself).
             blockingPaywallSurface = .homeBlockingCard
@@ -381,6 +378,11 @@ struct HomeView: View {
                             )
                             showPlusSetup = true
                         }
+                        .onAppear {
+                            ProductAnalyticsTelemetry.live.plusSetupStripViewed(
+                                completedCount: plusSetupProgress.completedCount
+                            )
+                        }
                         .modifier(FadeInUp(appeared: appeared, delay: 0.12))
                         .transition(ctaStateTransition)
                     }
@@ -515,11 +517,16 @@ HomePackCard(holdsTodayLog: holdsPackCardLog)
         }
         .onAppear {
             autoPresentTrialEndPaywallIfNeeded()
+            StreakChangeReport.record(store)
             guard !hasAnimatedIn else { return }
             hasAnimatedIn = true
             withAnimation(PillieTheme.fadeInUpCurve) {
                 appeared = true
             }
+        }
+        // The day rolling over bumps this too; logs, undos and pack changes report their own reason first.
+        .onChange(of: store.protocolChangeVersion) { _, _ in
+            StreakChangeReport.record(store)
         }
         // Entitlement usually resolves after the first render; the auto-present
         // decision defers until it has (#169), so re-run the check then — and
@@ -694,6 +701,7 @@ HomePackCard(holdsTodayLog: holdsPackCardLog)
                         }
                     }
                     ProductAnalyticsTelemetry.live.todayActionUndone()
+                    StreakChangeReport.record(store, reason: .undone)
                 } label: {
                     Group {
                         if dynamicTypeSize.isAccessibilitySize {
@@ -792,6 +800,7 @@ HomePackCard(holdsTodayLog: holdsPackCardLog)
                 .padding(.leading, 22)
                 .padding(.trailing, 12)
                 .takenCapsule()
+                .onAppear { ProductAnalyticsTelemetry.live.firstReminderStateShown() }
                 .transition(ctaStateTransition)
             }
         }
@@ -847,6 +856,11 @@ HomePackCard(holdsTodayLog: holdsPackCardLog)
         let feedbackResponse = homeFeedback.commitTodayAction(
             accessibilityReduceMotion: accessibilityReduceMotion
         )
+        let source: AnalyticsSource = if case .dueActionAwaitingFirstReminder = todayActionState {
+            .firstReminder
+        } else {
+            .home
+        }
         withAnimation(feedbackResponse.motionProfile.animation) {
             if store.todayDueAction == nil, store.openCatchUp != nil {
                 store.logCatchUp()
@@ -854,7 +868,8 @@ HomePackCard(holdsTodayLog: holdsPackCardLog)
                 store.markTodayAsTaken()
             }
         }
-        ProductAnalyticsTelemetry.live.todayActionCompleted()
+        ProductAnalyticsTelemetry.live.todayActionCompleted(source: source)
+        StreakChangeReport.record(store, reason: .logged)
     }
 
     /// Positive Sentiment Gate response: fire Apple's Native Review Request immediately

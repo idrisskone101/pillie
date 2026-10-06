@@ -253,11 +253,13 @@ class PillStore {
     // MARK: - Computed
 
     /// The live day: last reminder through the next one, not civil midnight. It
-    /// never precedes the active pack's first day, so a routine started before
-    /// that day's reminder begins its first live day right away.
+    /// never precedes the active pack's first day, or the day its setup named as
+    /// today's pill, so a routine started before that day's reminder begins its
+    /// first live day right away.
     var today: Date {
         guard let activePack else { return liveDoseDay }
-        return max(liveDoseDay, startOfDaySafe(activePack.resolvedCycleAnchor().date))
+        let firstLiveDay = activePack.firstLiveDay.map { startOfDaySafe($0) } ?? .distantPast
+        return max(liveDoseDay, startOfDaySafe(activePack.resolvedCycleAnchor().date), firstLiveDay)
     }
 
     /// The day a "today is cycle day N" edit lands on. Before an evening reminder
@@ -354,24 +356,21 @@ class PillStore {
     }
 
     private func streak(countingTodayAsTaken: Bool) -> Int {
-        guard let targetPack = activePack else { return 0 }
+        guard let routine = activePack?.method else { return 0 }
 
         let currentDay = today
-        let dueDates = dueDatesBackwards(from: currentDay, pack: targetPack, maxDueActions: max(120, targetPack.cycleLength * 8))
         let cal = Calendar.current
         let resetCutoff = streakResetDate.map { cal.startOfDay(for: $0) }
         var streak = 0
 
-        for dueDate in dueDates {
+        for snapshot in dueSnapshotsBackwards(from: currentDay, routine: routine) {
             // Stop counting if this due date is before the streak reset cutoff
-            if let cutoff = resetCutoff, cal.startOfDay(for: dueDate) < cutoff {
+            if let cutoff = resetCutoff, snapshot.date < cutoff {
                 break
             }
 
-            guard let snapshot = scheduleSnapshot(for: dueDate, in: targetPack) else { continue }
-
             if streak == 0,
-               cal.isDate(dueDate, inSameDayAs: currentDay),
+               cal.isDate(snapshot.date, inSameDayAs: currentDay),
                snapshot.status == .upcoming {
                 if countingTodayAsTaken, snapshot.countsTowardAdherence {
                     streak += 1
@@ -398,21 +397,16 @@ class PillStore {
     /// break days, and `.noData` gaps are excluded from both sides so a gap or
     /// an unfinished today never reads as a miss.
     func doseRecord(from startDate: Date, to endDate: Date) -> (taken: Int, due: Int) {
-        guard let targetPack = activePack else { return (0, 0) }
+        guard let routine = activePack?.method else { return (0, 0) }
         let cal = Calendar.current
         let windowStart = cal.startOfDay(for: startDate)
         let windowEnd = min(cal.startOfDay(for: endDate), today)
-        let dueDates = dueDatesBackwards(
-            from: windowEnd,
-            pack: targetPack,
-            maxDueActions: max(120, targetPack.cycleLength * 8)
-        )
 
         var taken = 0
         var due = 0
-        for dueDate in dueDates {
-            if dueDate < windowStart { break }
-            guard let status = scheduleSnapshot(for: dueDate, in: targetPack)?.status else { continue }
+        for snapshot in dueSnapshotsBackwards(from: windowEnd, routine: routine) {
+            if snapshot.date < windowStart { break }
+            guard let status = snapshot.status else { continue }
             switch status {
             case .taken:
                 taken += 1
@@ -552,13 +546,24 @@ class PillStore {
     /// nothing logged. `isTodayTaken || isCaughtUpToday` stands in for "anything
     /// logged": before the first reminder fires, only the open live day can hold one.
     var firstReminderHandoff: FirstReminderHandoff? {
-        FirstReminderHandoff.resolve(
+        let now = PillieClock.now
+        return FirstReminderHandoff.resolve(
             installedAt: FirstReminderInstall.date(),
             reminderHour: reminderHour,
             reminderMinute: reminderMinute,
-            now: PillieClock.now,
-            hasLoggedAnything: isTodayTaken || isCaughtUpToday
+            now: now,
+            hasLoggedAnything: isTodayTaken || isCaughtUpToday,
+            isDoseDue: isTodayDoseDue(at: now)
         )
+    }
+
+    /// Whether today's dose is untaken and past its reminder: the planner's
+    /// catch-up territory, so a reminder for it is already on its way.
+    private func isTodayDoseDue(at now: Date) -> Bool {
+        guard todayDueAction != nil, !isTodayTaken,
+              let reminder = DoseWindow.reminder(for: today, hour: reminderHour, minute: reminderMinute)
+        else { return false }
+        return now >= reminder
     }
 
     var alarmBadge: String {
@@ -1053,7 +1058,8 @@ class PillStore {
                 cycleDayAnchorIndex: cycleDayAnchorIndex,
                 packNumber: nextPackNumber,
                 isCurrent: true,
-                startedAt: PillieClock.now
+                startedAt: PillieClock.now,
+                firstLiveDay: anchor
             )
             modelContext.insert(nextPack)
 
@@ -1070,6 +1076,7 @@ class PillStore {
             activePack.setPillRegimen(method == .pill ? regimen : .twentyOneSeven, customRegimen: customRegimen)
             activePack.startDate = startDate
             activePack.startedAt = PillieClock.now
+            activePack.firstLiveDay = anchor
             activePack.ringInsertionDate = nil
             activePack.cycleDayAnchorIndex = PillPack.normalizedCycleDayAnchorIndex(
                 cycleDayAnchorIndex,
@@ -1096,7 +1103,8 @@ class PillStore {
                 cycleDayAnchorIndex: cycleDayAnchorIndex,
                 packNumber: nextPackNumber,
                 isCurrent: true,
-                startedAt: PillieClock.now
+                startedAt: PillieClock.now,
+                firstLiveDay: anchor
             )
             modelContext.insert(nextPack)
 
@@ -1135,6 +1143,7 @@ class PillStore {
             customRegimen: customRegimen
         )
         let safeCycleDay = max(1, min(cycleDay, normalizedCycleLength))
+        let methodChanged = method != (activePack?.method ?? contraceptiveMethod)
 
         // 1. Delete all existing records
         try? modelContext.delete(model: PillDay.self)
@@ -1153,21 +1162,29 @@ class PillStore {
             cycleDayAnchorIndex: 0,
             packNumber: 1,
             isCurrent: true,
-            startedAt: PillieClock.now
+            startedAt: PillieClock.now,
+            firstLiveDay: anchor
         )
         modelContext.insert(freshPack)
 
         // 4. Backfill current cycle days before today (days 1 through safeCycleDay-1)
         //    Prior action days → .taken; break days → .breakDay. Nothing is .missed.
-        backfillPriorDays(from: startDate, count: safeCycleDay - 1, pack: freshPack, calendar: calendar)
-        if safeCycleDay > 1 {
+        //    A new method has no earlier days in Pillie: its calendar and streak
+        //    start on the anchor, and the days before it read as .noData.
+        if methodChanged {
             streakResetDate = anchor
-        }
+            appActivatedDate = anchor
+        } else {
+            backfillPriorDays(from: startDate, count: safeCycleDay - 1, pack: freshPack, calendar: calendar)
+            if safeCycleDay > 1 {
+                streakResetDate = anchor
+            }
 
-        // 5. Set appActivatedDate to today so dates before our backfill
-        //    range show as .noData (not .missed). Explicit PillDay records
-        //    we created above always take precedence in the snapshot engine.
-        appActivatedDate = liveDoseDay
+            // 5. Set appActivatedDate to today so dates before our backfill
+            //    range show as .noData (not .missed). Explicit PillDay records
+            //    we created above always take precedence in the snapshot engine.
+            appActivatedDate = liveDoseDay
+        }
 
         // 6. Persist and rebuild
         contraceptiveMethod = method
@@ -1555,6 +1572,9 @@ class PillStore {
     /// Starts a fresh 21 + 7 patch or ring routine on `cycleDay` today, like onboarding, but as an
     /// established routine: no start-day grace, so an untaken task past its reminder reads late.
     func seedRoutineDay(method: ContraceptiveMethod, cycleDay: Int) {
+        // Seed as the same method so the earlier tasks are backfilled as logged.
+        activePack?.method = method
+        contraceptiveMethod = method
         resetAndStartFresh(method: method, regimen: .twentyOneSeven, customRegimen: nil, cycleDay: cycleDay, anchorDay: liveDoseDay)
         activePack?.startedAt = nil
         persist()
@@ -1959,29 +1979,17 @@ class PillStore {
         return type.isBreakType ? .breakDay : .missed
     }
 
-    private func dueDatesBackwards(from date: Date, pack: PillPack, maxDueActions: Int) -> [Date] {
-        guard maxDueActions > 0 else { return [] }
-
+    /// Adherence-enforcing days from `date` backwards, each read from the pack that owns
+    /// it, so the walk crosses into earlier packs. It ends before the first pack or where
+    /// a pack of another method takes over: a method switch starts a new routine.
+    private func dueSnapshotsBackwards(from date: Date, routine: ContraceptiveMethod) -> some Sequence<PillScheduleSnapshot> {
         let calendar = Calendar.current
-        let scanLimitDays = max(365, pack.cycleLength * 24)
-        var dueDates: [Date] = []
-        var cursor = calendar.startOfDay(for: date)
-        var scannedDays = 0
-
-        while dueDates.count < maxDueActions && scannedDays < scanLimitDays {
-            if let action = DoseScheduleEngine.dueAction(on: cursor, pack: pack),
-               action.type.enforcesAdherence {
-                dueDates.append(cursor)
-            }
-
-            guard let previous = calendar.date(byAdding: .day, value: -1, to: cursor) else {
-                break
-            }
-            cursor = previous
-            scannedDays += 1
-        }
-
-        return dueDates
+        return sequence(first: calendar.startOfDay(for: date)) { calendar.date(byAdding: .day, value: -1, to: $0) }
+            .lazy
+            .map { self.scheduleSnapshot(for: $0) }
+            .prefix { $0?.pack.method == routine }
+            .compactMap { $0 }
+            .filter { $0.dueAction?.type.enforcesAdherence == true }
     }
 
     private func epochDay(for date: Date) -> Int {

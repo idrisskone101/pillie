@@ -99,6 +99,7 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
             "error.notifications_denied.body",
             "error.screen_time.title",
             "error.screen_time.body",
+            "error.screen_time.conflict_body",
             "onboarding.blocking_setup.privacy",
             "onboarding.blocking_setup.empty_detail",
             "onboarding.blocking_setup.selected_summary",

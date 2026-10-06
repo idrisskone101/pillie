@@ -12,6 +12,7 @@
 //
 
 import XCTest
+import FamilyControls
 
 @testable import Pillie
 
@@ -19,7 +20,7 @@ final class AppSelectionBlockerSaveTests: XCTestCase {
     // MARK: - Tracer: empty selection cannot save (AC2)
 
     func testEmptySelectionCannotSaveBlockerConfig() {
-        let state = BlockerSelectionState(applicationCount: 0, categoryCount: 0, includesCategoryApps: false)
+        let state = BlockerSelectionState(applicationCount: 0, categoryCount: 0)
 
         XCTAssertTrue(state.isEmpty)
         XCTAssertFalse(state.canSaveBlockerConfig)
@@ -28,7 +29,7 @@ final class AppSelectionBlockerSaveTests: XCTestCase {
     // MARK: - Valid selection saves and enables Finish (AC3)
 
     func testSelectionWithAppsCanSaveAndFinish() {
-        let state = BlockerSelectionState(applicationCount: 2, categoryCount: 0, includesCategoryApps: false)
+        let state = BlockerSelectionState(applicationCount: 2, categoryCount: 0)
 
         XCTAssertFalse(state.isEmpty)
         XCTAssertTrue(state.hasSelection)
@@ -38,7 +39,7 @@ final class AppSelectionBlockerSaveTests: XCTestCase {
 
     func testSelectionWithOnlyCategoriesCanSaveAndFinish() {
         // A category-only selection is still a valid blocker config.
-        let state = BlockerSelectionState(applicationCount: 0, categoryCount: 3, includesCategoryApps: false)
+        let state = BlockerSelectionState(applicationCount: 0, categoryCount: 3)
 
         XCTAssertEqual(state.selectedCount, 3)
         XCTAssertTrue(state.canSaveBlockerConfig)
@@ -47,37 +48,63 @@ final class AppSelectionBlockerSaveTests: XCTestCase {
 
     func testEmptySelectionDisablesFinish() {
         // AC3: the Finish CTA stays disabled while nothing is selected.
-        let state = BlockerSelectionState(applicationCount: 0, categoryCount: 0, includesCategoryApps: false)
+        let state = BlockerSelectionState(applicationCount: 0, categoryCount: 0)
 
         XCTAssertFalse(state.hasSelection)
         XCTAssertFalse(state.canFinish)
     }
 
-    // MARK: - Count reflects apps, not categories
+    // MARK: - Whole-category selections from 2.2 builds collapse to their categories
 
-    func testWholeCategorySelectionCountsTheAppsInsideIt() {
-        // Picking "Social" (6 installed apps) plus one extra app: Screen Time hands
-        // back 7 app tokens and 1 category token. The user is blocking 7 apps.
-        let state = BlockerSelectionState(applicationCount: 7, categoryCount: 1, includesCategoryApps: true)
-
-        XCTAssertEqual(state.selectedCount, 7)
-        XCTAssertEqual(state.countText, "7")
-        XCTAssertEqual(state.accessibilitySummary, "7 selected")
+    private func selection(includeEntireCategory: Bool, apps: Int, categories: Int) throws -> FamilyActivitySelection {
+        func tokens(_ count: Int) -> [[String: String]] {
+            (0..<count).map { _ in ["data": Data((0..<128).map { _ in UInt8.random(in: 0...255) }).base64EncodedString()] }
+        }
+        let json: [String: Any] = [
+            "includeEntireCategory": includeEntireCategory,
+            "applicationTokens": tokens(apps),
+            "categoryTokens": tokens(categories),
+            "webDomainTokens": [],
+            "untokenizedApplicationIdentifiers": [],
+            "untokenizedCategoryIdentifiers": [],
+            "untokenizedWebDomainIdentifiers": [],
+        ]
+        return try JSONDecoder().decode(
+            FamilyActivitySelection.self,
+            from: JSONSerialization.data(withJSONObject: json)
+        )
     }
 
-    func testWholeCategorySelectionWithNoInstalledAppsStillSaves() {
-        // A category with nothing installed yet still shields future installs.
-        let state = BlockerSelectionState(applicationCount: 0, categoryCount: 1, includesCategoryApps: true)
+    func testWholeCategorySelectionCollapsesToItsCategories() throws {
+        // "Social" expanded into its 200 installed apps hangs the picker; the
+        // category token alone still shields every one of them.
+        let collapsed = try selection(includeEntireCategory: true, apps: 200, categories: 1)
+            .collapsingEntireCategories()
 
-        XCTAssertEqual(state.selectedCount, 0)
-        XCTAssertTrue(state.canSaveBlockerConfig)
-        XCTAssertTrue(state.canFinish)
+        XCTAssertFalse(collapsed.includeEntireCategory)
+        XCTAssertEqual(collapsed.applicationTokens.count, 0)
+        XCTAssertEqual(collapsed.categoryTokens.count, 1)
+    }
+
+    func testWholeCategorySelectionWithOnlyAppsKeepsThem() throws {
+        let collapsed = try selection(includeEntireCategory: true, apps: 3, categories: 0)
+            .collapsingEntireCategories()
+
+        XCTAssertFalse(collapsed.includeEntireCategory)
+        XCTAssertEqual(collapsed.applicationTokens.count, 3)
+    }
+
+    func testCategorySelectionCountsEachCategoryOnce() {
+        let state = BlockerSelectionState(applicationCount: 1, categoryCount: 1)
+
+        XCTAssertEqual(state.selectedCount, 2)
+        XCTAssertEqual(state.countText, "2")
     }
 
     // MARK: - Privacy-safe, count-only summary (AC5)
 
     func testSummaryIsGenericCountOnly() {
-        let state = BlockerSelectionState(applicationCount: 2, categoryCount: 1, includesCategoryApps: false)
+        let state = BlockerSelectionState(applicationCount: 2, categoryCount: 1)
 
         XCTAssertEqual(state.countText, "3")
         XCTAssertEqual(state.accessibilitySummary, "3 selected")
@@ -86,8 +113,8 @@ final class AppSelectionBlockerSaveTests: XCTestCase {
     func testSummaryDependsOnlyOnTotalCountNotComposition() {
         // The summary is a function of the total count alone, so the specific
         // apps/categories — and therefore their names — can never appear in it.
-        let appsOnly = BlockerSelectionState(applicationCount: 3, categoryCount: 0, includesCategoryApps: false)
-        let mixed = BlockerSelectionState(applicationCount: 1, categoryCount: 2, includesCategoryApps: false)
+        let appsOnly = BlockerSelectionState(applicationCount: 3, categoryCount: 0)
+        let mixed = BlockerSelectionState(applicationCount: 1, categoryCount: 2)
 
         XCTAssertEqual(appsOnly.accessibilitySummary, mixed.accessibilitySummary)
         XCTAssertEqual(appsOnly.countText, mixed.countText)
@@ -136,8 +163,8 @@ final class AppSelectionBlockerSaveTests: XCTestCase {
         // The picker's saved selection (canSaveBlockerConfig) is exactly what feeds
         // ProtectionPlanCompletion.State.blockerConfigSaved. With Screen Time
         // authorized, a valid selection activates; an empty one stays reminder-only.
-        let selected = BlockerSelectionState(applicationCount: 1, categoryCount: 1, includesCategoryApps: false)
-        let empty = BlockerSelectionState(applicationCount: 0, categoryCount: 0, includesCategoryApps: false)
+        let selected = BlockerSelectionState(applicationCount: 1, categoryCount: 1)
+        let empty = BlockerSelectionState(applicationCount: 0, categoryCount: 0)
 
         let activated = ProtectionPlanCompletion.outcome(
             for: ProtectionPlanCompletion.State(

@@ -177,12 +177,12 @@ final class ItalianLocalizationContractTests: XCTestCase {
             "Messaggi"
         )
         XCTAssertEqual(
-            BlockerSelectionState(applicationCount: 2, categoryCount: 1, includesCategoryApps: false)
+            BlockerSelectionState(applicationCount: 2, categoryCount: 1)
                 .localizedAccessibilitySummary(locale: italian),
             "3 elementi selezionati"
         )
         XCTAssertEqual(
-            BlockerSelectionState(applicationCount: 1, categoryCount: 0, includesCategoryApps: false)
+            BlockerSelectionState(applicationCount: 1, categoryCount: 0)
                 .localizedAccessibilitySummary(locale: italian),
             "1 elemento selezionato"
         )
@@ -274,6 +274,10 @@ final class ItalianLocalizationContractTests: XCTestCase {
         XCTAssertEqual(
             content.authorizationDeniedDetail,
             "Consenti l’accesso a Tempo di utilizzo così Pillie può mettere in pausa le app che scegli."
+        )
+        XCTAssertEqual(
+            content.authorizationConflictDetail,
+            "Un’altra app su questo iPhone sta usando Tempo di utilizzo. Disattivalo in quell’app, poi riprova."
         )
         XCTAssertEqual(content.selectedSummaryLabel, "App selezionate")
         XCTAssertEqual(
