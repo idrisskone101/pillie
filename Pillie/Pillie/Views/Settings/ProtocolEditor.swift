@@ -212,9 +212,11 @@ struct ProtocolEditor: View {
             module(for: draft, onReveal: onReveal)
                 .id(draft.method)
 
-            Text(PillieLocalization.string("settings.cycle_day.history_note", locale: locale))
-                .font(.pillieCaption())
-                .foregroundStyle(PillieTheme.textMuted)
+            if draft.method == store.pack.method {
+                Text(PillieLocalization.string("settings.cycle_day.history_note", locale: locale))
+                    .font(.pillieCaption())
+                    .foregroundStyle(PillieTheme.textMuted)
+            }
 
             Color.clear
                 .frame(height: 1)
