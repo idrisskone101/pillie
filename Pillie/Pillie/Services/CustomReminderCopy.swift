@@ -150,7 +150,7 @@ enum CustomReminderPreset: String, CaseIterable, Identifiable {
         }
     }
 
-    func localizedDisplayName(locale: Locale = .current) -> String {
+    func localizedDisplayName(locale: Locale = PillieLocalization.appLocale) -> String {
         let key = switch self {
         case .gentle: "settings.tone.gentle"
         case .direct: "settings.tone.direct"

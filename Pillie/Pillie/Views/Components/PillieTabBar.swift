@@ -12,7 +12,7 @@ enum PillieTab: Int, CaseIterable {
     case history
     case settings
 
-    func label(locale: Locale = .current) -> String {
+    func label(locale: Locale = PillieLocalization.appLocale) -> String {
         switch self {
         case .home:
             return PillieLocalization.string("today.navigation.title", locale: locale)

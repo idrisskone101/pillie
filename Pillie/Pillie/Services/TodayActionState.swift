@@ -47,7 +47,7 @@ enum TodayActionState: Equatable {
         return .dueAction(action, requiresShakeConfirm: requiresShakeConfirm)
     }
 
-    func localizedPrimaryLabel(locale: Locale = .current) -> String {
+    func localizedPrimaryLabel(locale: Locale = PillieLocalization.appLocale) -> String {
         switch self {
         case .refillDue:
             PillieLocalization.string("today.pack.start_new.confirm", locale: locale)

@@ -59,7 +59,7 @@ struct AppBlockingSetupContent {
     static var `default`: AppBlockingSetupContent { localized() }
 
     static func localized(
-        locale: Locale = .current,
+        locale: Locale = PillieLocalization.appLocale,
         trialEndTerms: TrialEndAccessTerms = .legacy
     ) -> AppBlockingSetupContent {
         AppBlockingSetupContent(
@@ -121,7 +121,7 @@ struct AppBlockingSetupContent {
         format: String,
         reminderHour: Int,
         reminderMinute: Int,
-        locale: Locale = .current
+        locale: Locale = PillieLocalization.appLocale
     ) -> String {
         let twelve = ReminderTimeConverter.toTwelveHour(hour24: reminderHour, minute: reminderMinute)
         let time = ProtectionPlanRoutineSummary.clockText(

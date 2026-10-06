@@ -8,7 +8,7 @@ import Foundation
 /// Today's hand-off to the first Due Action Reminder of a fresh install. It
 /// exists from onboarding until that reminder fires, and only while nothing is
 /// logged; after either, Today reads as it always did.
-struct FirstReminderHandoff: Equatable {
+enum FirstReminderHandoff: Equatable {
     /// Where the first reminder falls relative to `now`: today or tomorrow,
     /// and which part of that day. The raw value is the string key suffix.
     enum When: String, Equatable {
@@ -20,7 +20,15 @@ struct FirstReminderHandoff: Equatable {
         case tomorrowNight = "tomorrow_night"
     }
 
-    let when: When
+    case coming(When)
+    /// Notifications are denied, so the reminder will never fire. Home says
+    /// reminders are off instead of promising one.
+    case remindersOff
+
+    /// Whether Today can wait on the reminder instead of asking for the dose.
+    var isComing: Bool {
+        if case .coming = self { true } else { false }
+    }
 
     /// Nil for installs that predate the record (`installedAt == nil`), once
     /// anything is logged, while a dose is already past its reminder, and once
@@ -34,6 +42,7 @@ struct FirstReminderHandoff: Equatable {
         now: Date,
         hasLoggedAnything: Bool,
         isDoseDue: Bool,
+        notificationsDenied: Bool,
         calendar: Calendar = .current
     ) -> FirstReminderHandoff? {
         guard
@@ -47,6 +56,7 @@ struct FirstReminderHandoff: Equatable {
             ),
             now < firstFire
         else { return nil }
+        guard !notificationsDenied else { return .remindersOff }
 
         let hour = calendar.component(.hour, from: firstFire)
         // Relative to `now`, not the install: an evening install viewed after
@@ -59,17 +69,27 @@ struct FirstReminderHandoff: Equatable {
         case (false, 12..<17): .tomorrowAfternoon
         case (false, _): .tomorrowNight
         }
-        return FirstReminderHandoff(when: when)
+        return .coming(when)
     }
 
     /// The floating button's line. The status card already shows the time.
     func localizedLine(locale: Locale) -> String {
-        PillieLocalization.string("today.first_reminder.\(when.rawValue)", locale: locale)
+        switch self {
+        case .coming(let when):
+            PillieLocalization.string("today.first_reminder.\(when.rawValue)", locale: locale)
+        case .remindersOff:
+            cardLine(locale: locale)
+        }
     }
 
     /// The status card's subtitle, under the reminder time.
     func cardLine(locale: Locale) -> String {
-        PillieLocalization.string("today.first_reminder.card", locale: locale)
+        switch self {
+        case .coming:
+            PillieLocalization.string("today.first_reminder.card", locale: locale)
+        case .remindersOff:
+            PillieLocalization.string("today.reminders_off", locale: locale)
+        }
     }
 }
 

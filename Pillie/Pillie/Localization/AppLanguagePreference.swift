@@ -53,6 +53,8 @@ enum AppLanguage: String, CaseIterable, Identifiable {
     case chineseSimplified = "zh-Hans"
     case chineseTraditional = "zh-Hant"
 
+    static let storageKey = "pillie.appLanguage"
+
     var id: String { rawValue }
 
     /// Native name, shown in the picker so users can find their language
@@ -132,18 +134,16 @@ enum AppLanguage: String, CaseIterable, Identifiable {
 @Observable
 @MainActor
 final class AppLanguagePreference {
-    static let storageKey = "pillie.appLanguage"
-
     var selection: AppLanguage {
         didSet {
-            UserDefaults.standard.set(selection.rawValue, forKey: Self.storageKey)
+            UserDefaults.standard.set(selection.rawValue, forKey: AppLanguage.storageKey)
         }
     }
 
     var locale: Locale { selection.resolvedLocale }
 
     init(defaults: UserDefaults = .standard) {
-        let stored = defaults.string(forKey: Self.storageKey) ?? AppLanguage.system.rawValue
+        let stored = defaults.string(forKey: AppLanguage.storageKey) ?? AppLanguage.system.rawValue
         selection = AppLanguage(rawValue: stored) ?? .system
     }
 }

@@ -100,7 +100,7 @@ struct TrialDeclineFeedbackContent: Equatable {
         )
     }
 
-    static func make(locale: Locale = .current) -> TrialDeclineFeedbackContent {
+    static func make(locale: Locale = PillieLocalization.appLocale) -> TrialDeclineFeedbackContent {
         func commerce(_ key: String) -> String {
             PillieLocalization.string(key, table: "Commerce", locale: locale)
         }

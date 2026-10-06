@@ -45,7 +45,7 @@ enum OpenLine {
             localizedFooter()
         }
 
-        func localizedFooter(locale: Locale = .current) -> String {
+        func localizedFooter(locale: Locale = PillieLocalization.appLocale) -> String {
             let deviceLabel = PillieLocalization.string(
                 "support.open_line.diagnostics.device",
                 locale: locale
@@ -89,7 +89,7 @@ enum OpenLine {
 
         /// Kept for callers that also localize the body. The locale deliberately
         /// does not affect this inbox-routing contract.
-        func localizedSubject(locale _: Locale = .current) -> String {
+        func localizedSubject(locale _: Locale = PillieLocalization.appLocale) -> String {
             subject
         }
 
@@ -100,7 +100,7 @@ enum OpenLine {
             localizedBody()
         }
 
-        func localizedBody(locale: Locale = .current) -> String? {
+        func localizedBody(locale: Locale = PillieLocalization.appLocale) -> String? {
             switch self {
             case .suggestion:
                 return nil
@@ -119,7 +119,7 @@ enum OpenLine {
     /// data and can be reworded freely without touching the stable subject.
     static var issueInvitation: String { localizedIssueInvitation() }
 
-    static func localizedIssueInvitation(locale: Locale = .current) -> String {
+    static func localizedIssueInvitation(locale: Locale = PillieLocalization.appLocale) -> String {
         PillieLocalization.string("support.open_line.issue_invitation", locale: locale)
     }
 
@@ -155,7 +155,7 @@ enum OpenLine {
     /// only device/app diagnostics, never routine data. `nil` only if URL
     /// composition ever fails — callers must still surface a visible fallback,
     /// never a silent no-op.
-    static func mailURL(for intent: Intent, locale: Locale = .current) -> URL? {
+    static func mailURL(for intent: Intent, locale: Locale = PillieLocalization.appLocale) -> URL? {
         var components = URLComponents()
         components.scheme = "mailto"
         components.path = recipient

@@ -1,0 +1,30 @@
+# Reminders follow the language picked in Pillie, not the phone's: on an English
+# simulator, picking Deutsch in Settings rewrites the pending reminders in German.
+launch
+log start
+openurl pillie://debug/plus-home?lang=en
+wait text Today 15
+openurl pillie://debug/request-notification-permission
+tap --label Allow                               # iOS notification permission alert
+sleep 3
+note pending reminders before the switch (English)
+openurl "pillie://debug/dump-pending-notifications"
+sleep 2
+tap --label Settings
+wait id settingsLanguageRow
+gesture scroll-down
+gesture scroll-down
+tap --id settingsLanguageRow
+wait label Deutsch
+tap --label Deutsch --element-type Button
+wait label Einstellungen
+shot settings-german
+sleep 3
+note pending reminders after the switch (German)
+openurl "pillie://debug/dump-pending-notifications"
+sleep 2
+log stop
+tap --id settingsLanguageRow
+wait label English
+tap --label English --element-type Button
+wait label Settings

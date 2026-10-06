@@ -70,7 +70,7 @@ struct DoseScheduleAction: Hashable {
         localizedReminderTitle()
     }
 
-    func localizedReminderTitle(locale: Locale = .current) -> String {
+    func localizedReminderTitle(locale: Locale = PillieLocalization.appLocale) -> String {
         let key: String
         switch method {
         case .pill: key = "notification.reminder.pill.title"
@@ -84,7 +84,7 @@ struct DoseScheduleAction: Hashable {
         localizedReminderBody()
     }
 
-    func localizedReminderBody(locale: Locale = .current) -> String {
+    func localizedReminderBody(locale: Locale = PillieLocalization.appLocale) -> String {
         let key: String
         switch type {
         case .pillActive, .pillSugar:
@@ -113,11 +113,11 @@ struct DoseScheduleAction: Hashable {
         return PillieLocalization.string(key, locale: locale)
     }
 
-    func localizedFollowUpTitle(locale: Locale = .current) -> String {
+    func localizedFollowUpTitle(locale: Locale = PillieLocalization.appLocale) -> String {
         PillieLocalization.string("notification.followup.title", locale: locale)
     }
 
-    func localizedFollowUpBody(locale: Locale = .current) -> String {
+    func localizedFollowUpBody(locale: Locale = PillieLocalization.appLocale) -> String {
         PillieLocalization.string("notification.followup.body", locale: locale)
     }
 }

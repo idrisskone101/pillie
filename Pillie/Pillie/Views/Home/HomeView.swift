@@ -15,6 +15,7 @@ struct HomeView: View {
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.requestReview) private var requestReview
     @Environment(\.openURL) private var openURL
+    @Environment(\.scenePhase) private var scenePhase
     @State private var appeared = false
     @State private var hasAnimatedIn = false
     @State private var showRefillConfirmation = false
@@ -307,7 +308,7 @@ struct HomeView: View {
                 reduceMotionEnabled: accessibilityReduceMotion,
                 catchUp: store.openCatchUp,
                 isCaughtUpToday: store.isCaughtUpToday,
-                awaitsFirstReminder: store.firstReminderHandoff != nil
+                awaitsFirstReminder: store.firstReminderHandoff?.isComing == true
             )
         )
     }
@@ -523,6 +524,10 @@ HomePackCard(holdsTodayLog: holdsPackCardLog)
             withAnimation(PillieTheme.fadeInUpCurve) {
                 appeared = true
             }
+        }
+        // Coming back from Settings can turn notifications on or off.
+        .task(id: scenePhase) {
+            await NotificationPermission.shared.refresh()
         }
         // The day rolling over bumps this too; logs, undos and pack changes report their own reason first.
         .onChange(of: store.protocolChangeVersion) { _, _ in

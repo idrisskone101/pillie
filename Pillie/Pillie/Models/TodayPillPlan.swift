@@ -16,7 +16,7 @@ struct TodayPillPlan: Equatable {
     let reminderMinute: Int
     var now: Date = PillieClock.now
     var calendar: Calendar = .current
-    var locale: Locale = .current
+    var locale: Locale = PillieLocalization.appLocale
 
     static func nextReminder(hour: Int, minute: Int, now: Date, calendar: Calendar = .current) -> NextReminder {
         let today = calendar.startOfDay(for: now)

@@ -31,7 +31,7 @@ enum DueActionCopy {
 
     static func localizedLabel(
         for action: DoseScheduleAction,
-        locale: Locale = .current
+        locale: Locale = PillieLocalization.appLocale
     ) -> String {
         PillieLocalization.string(key(for: action), locale: locale)
     }

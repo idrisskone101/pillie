@@ -15,7 +15,7 @@ enum ScheduleCriticalSettingChange {
 
     static func confirmation(
         cycleDay: Int,
-        locale: Locale = .current
+        locale: Locale = PillieLocalization.appLocale
     ) -> Confirmation {
         Confirmation(
             title: PillieLocalization.string(

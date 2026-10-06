@@ -3,10 +3,18 @@ import Foundation
 enum PillieLocalization {
     private final class BundleToken {}
 
+    /// The language picked in Pillie's Settings, or the phone's language under System.
+    /// Copy built outside a view (notifications, schedulers, presenters called without a
+    /// locale) reads this, since it can't see the SwiftUI environment's locale.
+    static var appLocale: Locale {
+        let stored = UserDefaults.standard.string(forKey: AppLanguage.storageKey)
+        return (stored.flatMap(AppLanguage.init(rawValue:)) ?? .system).resolvedLocale
+    }
+
     static func string(
         _ key: String,
         table: String? = nil,
-        locale: Locale = .current
+        locale: Locale = PillieLocalization.appLocale
     ) -> String {
         localizedBundle(for: locale).localizedString(
             forKey: key,
@@ -18,7 +26,7 @@ enum PillieLocalization {
     static func formatted(
         _ key: String,
         table: String? = nil,
-        locale: Locale = .current,
+        locale: Locale = PillieLocalization.appLocale,
         arguments: CVarArg...
     ) -> String {
         String(

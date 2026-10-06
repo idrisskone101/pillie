@@ -23,7 +23,7 @@ struct ProtectionPlanRoutineSummary: Equatable {
     /// Formatted reminder time, e.g. "9:30 AM". Nil before the reminder-time screen.
     var reminderTimeText: String?
     var todayPill: TodayPillPlan?
-    var locale: Locale = .current
+    var locale: Locale = PillieLocalization.appLocale
 
     /// Fixed card title.
     static var title: String {
@@ -117,7 +117,7 @@ struct ProtectionPlanRoutineSummary: Equatable {
         hour12: Int,
         minute: Int,
         isPM: Bool,
-        locale: Locale = .current
+        locale: Locale = PillieLocalization.appLocale
     ) -> String {
         let normalizedHour = (((hour12 - 1) % 12) + 12) % 12 + 1
         let normalizedMinute = max(0, min(59, minute))

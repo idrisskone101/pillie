@@ -216,7 +216,7 @@ struct TrialEndPaywallContent: Equatable {
         stats: TrialEndOwnStats,
         calendar: Calendar,
         now: Date,
-        locale: Locale = .current,
+        locale: Locale = PillieLocalization.appLocale,
         hardPaywallEnabled: Bool = false,
         termsCohort: TrialTermsCohort? = nil
     ) -> TrialEndPaywallContent? {

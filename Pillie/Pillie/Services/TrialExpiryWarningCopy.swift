@@ -19,7 +19,7 @@ enum TrialExpiryWarningCopy {
     /// or notices already pending on devices keep the old copy.
     static let revision = 2
 
-    static func title(day: Int, locale: Locale = .current) -> String {
+    static func title(day: Int, locale: Locale = PillieLocalization.appLocale) -> String {
         PillieLocalization.string(titleKey(day: day), table: "Notifications", locale: locale)
     }
 
@@ -27,7 +27,7 @@ enum TrialExpiryWarningCopy {
         day: Int,
         cohort: TrialEndPaywallCohort,
         terms: TrialEndAccessTerms,
-        locale: Locale = .current
+        locale: Locale = PillieLocalization.appLocale
     ) -> String {
         PillieLocalization.string(
             bodyKey(day: day, cohort: cohort, terms: terms),
