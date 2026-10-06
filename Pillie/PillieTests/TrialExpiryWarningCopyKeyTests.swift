@@ -7,6 +7,7 @@
 //  locale tests.
 //
 
+import Foundation
 import Testing
 
 @testable import Pillie
@@ -18,11 +19,11 @@ struct TrialExpiryWarningCopyKeyTests {
         let cohort = TrialEndPaywallCohort.blockerConfigured
 
         #expect(TrialExpiryWarningCopy.titleKey(day: 10) == "notification.trial_expiry.day10.title")
-        #expect(TrialExpiryWarningCopy.bodyKey(day: 10, cohort: cohort) == "notification.trial_expiry.day10.body")
+        #expect(TrialExpiryWarningCopy.bodyKey(day: 10, cohort: cohort, terms: .legacy) == "notification.trial_expiry.day10.body")
         #expect(TrialExpiryWarningCopy.titleKey(day: 13) == "notification.trial_expiry.day13.title")
-        #expect(TrialExpiryWarningCopy.bodyKey(day: 13, cohort: cohort) == "notification.trial_expiry.day13.body")
+        #expect(TrialExpiryWarningCopy.bodyKey(day: 13, cohort: cohort, terms: .legacy) == "notification.trial_expiry.day13.body")
         #expect(TrialExpiryWarningCopy.titleKey(day: 15) == "notification.trial_expiry.day15.title")
-        #expect(TrialExpiryWarningCopy.bodyKey(day: 15, cohort: cohort) == "notification.trial_expiry.day15.body")
+        #expect(TrialExpiryWarningCopy.bodyKey(day: 15, cohort: cohort, terms: .legacy) == "notification.trial_expiry.day15.body")
     }
 
     @Test
@@ -30,11 +31,11 @@ struct TrialExpiryWarningCopyKeyTests {
         let cohort = TrialEndPaywallCohort.reminderOnly
 
         #expect(TrialExpiryWarningCopy.titleKey(day: 10) == "notification.trial_expiry.day10.title")
-        #expect(TrialExpiryWarningCopy.bodyKey(day: 10, cohort: cohort) == "notification.trial_expiry.day10.reminders.body")
+        #expect(TrialExpiryWarningCopy.bodyKey(day: 10, cohort: cohort, terms: .legacy) == "notification.trial_expiry.day10.reminders.body")
         #expect(TrialExpiryWarningCopy.titleKey(day: 13) == "notification.trial_expiry.day13.title")
-        #expect(TrialExpiryWarningCopy.bodyKey(day: 13, cohort: cohort) == "notification.trial_expiry.day13.reminders.body")
+        #expect(TrialExpiryWarningCopy.bodyKey(day: 13, cohort: cohort, terms: .legacy) == "notification.trial_expiry.day13.reminders.body")
         #expect(TrialExpiryWarningCopy.titleKey(day: 15) == "notification.trial_expiry.day15.title")
-        #expect(TrialExpiryWarningCopy.bodyKey(day: 15, cohort: cohort) == "notification.trial_expiry.day15.body")
+        #expect(TrialExpiryWarningCopy.bodyKey(day: 15, cohort: cohort, terms: .legacy) == "notification.trial_expiry.day15.body")
     }
 
     @Test
@@ -44,9 +45,25 @@ struct TrialExpiryWarningCopyKeyTests {
             "notification.trial_expiry.day13.body",
         ]
         let reminderOnlyBodies = Set([10, 13, 15].map {
-            TrialExpiryWarningCopy.bodyKey(day: $0, cohort: .reminderOnly)
+            TrialExpiryWarningCopy.bodyKey(day: $0, cohort: .reminderOnly, terms: .legacy)
         })
 
         #expect(reminderOnlyBodies.isDisjoint(with: blockingBodies))
+    }
+
+    @Test
+    func `Hard-paywall terms never promise free reminders in any notice`() {
+        let english = Locale(identifier: "en")
+        let expected = [
+            10: "5 days left in your trial. Pick a plan whenever you’re ready to keep going.",
+            13: "Your trial wraps up tomorrow night. Pick a plan to keep everything as it is.",
+            15: "Pick a plan to carry on right where you left off. Your setup is saved.",
+        ]
+
+        for cohort in [TrialEndPaywallCohort.blockerConfigured, .reminderOnly] {
+            for (day, body) in expected {
+                #expect(TrialExpiryWarningCopy.body(day: day, cohort: cohort, terms: .hardPaywall, locale: english) == body)
+            }
+        }
     }
 }

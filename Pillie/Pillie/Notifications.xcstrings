@@ -12100,6 +12100,831 @@
           }
         }
       }
+    },
+    "notification.trial_expiry.day10.hard.body": {
+      "comment": "Reverse Trial day-10 warning; hard-paywall terms, nothing stays free after the trial [paywall]",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "بقيت 5 أيام في تجربتك. اختاري اشتراكًا متى كنتِ مستعدة للاستمرار."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "আপনার ট্রায়ালের আর ৫ দিন বাকি। চালিয়ে যেতে যখন প্রস্তুত, একটি প্ল্যান বেছে নিন।"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Et queden 5 dies de prova. Tria un pla quan vulguis per continuar."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ze zkušební doby ti zbývá 5 dní. Až budeš chtít pokračovat, vyber si plán."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du har 5 dage tilbage af din prøveperiode. Vælg et abonnement, når du er klar til at fortsætte."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Noch 5 Tage in deiner Testphase. Wähl einen Tarif, wann immer du weitermachen möchtest."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Σου μένουν 5 ημέρες δοκιμής. Διάλεξε πρόγραμμα όποτε είσαι έτοιμη να συνεχίσεις."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "5 days left in your trial. Pick a plan whenever you’re ready to keep going."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Te quedan 5 días de prueba. Elige un plan cuando quieras para seguir."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kokeilua on jäljellä 5 päivää. Valitse tilaus, kun haluat jatkaa."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus que 5 jours d’essai. Choisis une formule quand tu veux pour continuer."
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "તમારા ટ્રાયલમાં 5 દિવસ બાકી છે. આગળ વધવા તૈયાર હો ત્યારે પ્લાન પસંદ કરો."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "נשארו 5 ימים לניסיון שלך. בחרי מסלול מתי שתרצי כדי להמשיך."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "आपके ट्रायल में 5 दिन बाकी हैं। आगे बढ़ने के लिए जब तैयार हों, कोई प्लान चुनें।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Probno razdoblje traje još 5 dana. Odaberi plan kad god želiš nastaviti."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Még 5 nap van hátra a próbaidőből. Válassz csomagot, amikor készen állsz a folytatásra."
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Masa uji cobamu tinggal 5 hari. Pilih paket kapan pun kamu siap untuk lanjut."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mancano 5 giorni alla fine della prova. Scegli un piano quando vuoi per continuare."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "トライアルは残り5日です。続けたくなったら、いつでもプランを選んでください。"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ನಿಮ್ಮ ಟ್ರಯಲ್‌ನಲ್ಲಿ 5 ದಿನಗಳು ಉಳಿದಿವೆ. ಮುಂದುವರಿಯಲು ಸಿದ್ಧವಾದಾಗ ಯೋಜನೆಯನ್ನು ಆರಿಸಿ."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "체험 기간이 5일 남았어요. 계속 사용하고 싶을 때 언제든 이용권을 선택하세요."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "നിങ്ങളുടെ ട്രയലിൽ 5 ദിവസം ബാക്കിയുണ്ട്. തുടരാൻ തയ്യാറാകുമ്പോൾ ഒരു പ്ലാൻ തിരഞ്ഞെടുക്കൂ."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "तुमच्या ट्रायलचे 5 दिवस उरले आहेत. पुढे सुरू ठेवायला तयार असाल तेव्हा प्लॅन निवडा."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tinggal 5 hari dalam percubaan anda. Pilih pelan bila-bila masa anda sedia untuk teruskan."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du har 5 dager igjen av prøveperioden. Velg et abonnement når du er klar til å fortsette."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nog 5 dagen in je proefperiode. Kies een abonnement wanneer je verder wilt."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ଆପଣଙ୍କ ଟ୍ରାଏଲରେ 5 ଦିନ ବାକି ଅଛି। ଜାରି ରଖିବାକୁ ପ୍ରସ୍ତୁତ ହେଲେ ଏକ ପ୍ଲାନ ବାଛନ୍ତୁ।"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਤੁਹਾਡੇ ਟ੍ਰਾਇਲ ਵਿੱਚ 5 ਦਿਨ ਬਾਕੀ ਹਨ। ਜਾਰੀ ਰੱਖਣ ਲਈ ਜਦੋਂ ਤਿਆਰ ਹੋਵੋ, ਕੋਈ ਪਲਾਨ ਚੁਣੋ।"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Do końca okresu próbnego zostało 5 dni. Wybierz plan, kiedy zechcesz kontynuować."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Faltam 5 dias para o fim do seu teste. Escolha um plano quando quiser continuar."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Faltam 5 dias para o fim do teu teste. Escolhe um plano quando quiseres continuar."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mai ai 5 zile de probă. Alege un plan oricând ești gata să continui."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "До конца пробного периода 5 дней. Выбери план, когда будешь готова продолжить."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zo skúšobného obdobia ti zostáva 5 dní. Keď budeš chcieť pokračovať, vyber si plán."
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Do konca preizkusa imaš še 5 dni. Izberi paket, ko boš pripravljena nadaljevati."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du har 5 dagar kvar av provperioden. Välj ett abonnemang när du vill fortsätta."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "உங்கள் சோதனைக்காலத்தில் 5 நாட்கள் உள்ளன. தொடரத் தயாரானதும் ஒரு திட்டத்தைத் தேர்ந்தெடுங்கள்."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "మీ ట్రయల్‌లో 5 రోజులు మిగిలి ఉన్నాయి. కొనసాగించడానికి సిద్ధమైనప్పుడు ఒక ప్లాన్ ఎంచుకోండి."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ช่วงทดลองเหลืออีก 5 วัน เลือกแพ็กเกจได้ทุกเมื่อที่พร้อมไปต่อ"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Denemende 5 gün kaldı. Devam etmeye hazır olduğunda bir plan seç."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "До кінця пробного періоду 5 днів. Обери план, коли будеш готова продовжити."
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "آپ کے ٹرائل میں 5 دن باقی ہیں۔ جاری رکھنے کے لیے جب تیار ہوں، کوئی پلان چنیں۔"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bạn còn 5 ngày dùng thử. Chọn một gói bất cứ khi nào bạn sẵn sàng tiếp tục."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "试用还剩 5 天。准备好继续时，随时选择一个方案。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "試用還剩 5 天。準備好繼續時，隨時選擇一個方案。"
+          }
+        }
+      }
+    },
+    "notification.trial_expiry.day13.hard.body": {
+      "comment": "Reverse Trial day-13 warning; hard-paywall terms, nothing stays free after the trial [paywall]",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تنتهي تجربتك مساء الغد. اختاري اشتراكًا ليبقى كل شيء كما هو."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "আপনার ট্রায়াল আগামীকাল রাতে শেষ হবে। সবকিছু যেমন আছে তেমন রাখতে একটি প্ল্যান বেছে নিন।"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La teva prova s’acaba demà a la nit. Tria un pla per mantenir-ho tot com està."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zkušební doba končí zítra večer. Vyber si plán a všechno zůstane, jak je."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Din prøveperiode slutter i morgen aften. Vælg et abonnement, så alt forbliver, som det er."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine Testphase endet morgen Abend. Wähl einen Tarif, damit alles so bleibt, wie es ist."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Η δοκιμή σου τελειώνει αύριο το βράδυ. Διάλεξε πρόγραμμα για να μείνουν όλα όπως είναι."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your trial wraps up tomorrow night. Pick a plan to keep everything as it is."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu prueba termina mañana por la noche. Elige un plan para dejarlo todo como está."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kokeilusi päättyy huomenna illalla. Valitse tilaus, niin kaikki pysyy ennallaan."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton essai se termine demain soir. Choisis une formule pour que tout reste comme avant."
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "તમારો ટ્રાયલ આવતીકાલે રાત્રે પૂરો થશે. બધું જેમ છે તેમ રાખવા પ્લાન પસંદ કરો."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "הניסיון שלך מסתיים מחר בערב. בחרי מסלול כדי שהכול יישאר כמו שהוא."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "आपका ट्रायल कल रात खत्म हो रहा है। सब कुछ जैसा है वैसा रखने के लिए कोई प्लान चुनें।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Probno razdoblje završava sutra navečer. Odaberi plan da sve ostane kako jest."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A próbaidőd holnap este lejár. Válassz csomagot, hogy minden maradjon úgy, ahogy van."
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Masa uji cobamu berakhir besok malam. Pilih paket supaya semuanya tetap seperti sekarang."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La tua prova finisce domani sera. Scegli un piano per lasciare tutto com’è."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "トライアルは明日の夜に終わります。今のまま使い続けるには、プランを選んでください。"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ನಿಮ್ಮ ಟ್ರಯಲ್ ನಾಳೆ ರಾತ್ರಿ ಮುಗಿಯುತ್ತದೆ. ಎಲ್ಲವನ್ನೂ ಹಾಗೆಯೇ ಉಳಿಸಿಕೊಳ್ಳಲು ಯೋಜನೆಯನ್ನು ಆರಿಸಿ."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "체험 기간이 내일 밤에 끝나요. 지금 그대로 쓰려면 이용권을 선택하세요."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "നിങ്ങളുടെ ട്രയൽ നാളെ രാത്രി അവസാനിക്കും. എല്ലാം ഇപ്പോഴുള്ളതുപോലെ നിലനിർത്താൻ ഒരു പ്ലാൻ തിരഞ്ഞെടുക്കൂ."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "तुमचा ट्रायल उद्या रात्री संपेल. सगळं जसं आहे तसं ठेवण्यासाठी प्लॅन निवडा."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Percubaan anda tamat esok malam. Pilih pelan supaya semuanya kekal seperti sekarang."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prøveperioden din slutter i morgen kveld. Velg et abonnement, så blir alt som det er."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je proefperiode eindigt morgenavond. Kies een abonnement om alles te houden zoals het is."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ଆପଣଙ୍କ ଟ୍ରାଏଲ ଆସନ୍ତାକାଲି ରାତିରେ ଶେଷ ହେବ। ସବୁକିଛି ଯେମିତି ଅଛି ସେମିତି ରଖିବାକୁ ଏକ ପ୍ଲାନ ବାଛନ୍ତୁ।"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਤੁਹਾਡਾ ਟ੍ਰਾਇਲ ਕੱਲ੍ਹ ਰਾਤ ਖਤਮ ਹੋ ਜਾਵੇਗਾ। ਸਭ ਕੁਝ ਜਿਵੇਂ ਹੈ ਤਿਵੇਂ ਰੱਖਣ ਲਈ ਕੋਈ ਪਲਾਨ ਚੁਣੋ।"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Twój okres próbny kończy się jutro wieczorem. Wybierz plan, żeby wszystko zostało tak, jak jest."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seu teste termina amanhã à noite. Escolha um plano para manter tudo como está."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O teu teste termina amanhã à noite. Escolhe um plano para manteres tudo como está."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Proba ta se încheie mâine seară. Alege un plan ca totul să rămână la fel."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пробный период закончится завтра вечером. Выбери план, чтобы всё осталось как есть."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skúšobné obdobie končí zajtra večer. Vyber si plán a všetko zostane tak, ako je."
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvoj preizkus se konča jutri zvečer. Izberi paket, da vse ostane, kot je."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Din provperiod tar slut i morgon kväll. Välj ett abonnemang så att allt blir kvar som det är."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "உங்கள் சோதனைக்காலம் நாளை இரவு முடிகிறது. எல்லாவற்றையும் அப்படியே வைத்திருக்க ஒரு திட்டத்தைத் தேர்ந்தெடுங்கள்."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "మీ ట్రయల్ రేపు రాత్రి ముగుస్తుంది. అన్నీ ఇలాగే ఉంచుకోవడానికి ఒక ప్లాన్ ఎంచుకోండి."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ช่วงทดลองจะจบคืนพรุ่งนี้ เลือกแพ็กเกจเพื่อให้ทุกอย่างอยู่เหมือนเดิม"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Denemen yarın akşam bitiyor. Her şey olduğu gibi kalsın diye bir plan seç."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пробний період закінчиться завтра ввечері. Обери план, щоб усе лишилося як є."
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "آپ کا ٹرائل کل رات ختم ہو جائے گا۔ سب کچھ جیسا ہے ویسا رکھنے کے لیے کوئی پلان چنیں۔"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thời gian dùng thử kết thúc vào tối mai. Chọn một gói để giữ mọi thứ như hiện tại."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "试用将在明晚结束。选择一个方案，让一切保持原样。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "試用將在明晚結束。選擇一個方案，讓一切保持原樣。"
+          }
+        }
+      }
+    },
+    "notification.trial_expiry.day15.hard.body": {
+      "comment": "Reverse Trial expiry-day notice; hard-paywall terms, nothing stays free after the trial [paywall]",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "اختاري اشتراكًا لتكملي من حيث توقفتِ. إعداداتك محفوظة."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "যেখানে থেমেছিলেন সেখান থেকেই চালিয়ে যেতে একটি প্ল্যান বেছে নিন। আপনার সেটআপ সেভ করা আছে।"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tria un pla per continuar just on ho vas deixar. La teva configuració està desada."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vyber si plán a pokračuj přesně tam, kde jsi skončila. Tvoje nastavení je uložené."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vælg et abonnement, og fortsæt lige der, hvor du slap. Din opsætning er gemt."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wähl einen Tarif und mach genau da weiter, wo du aufgehört hast. Deine Einrichtung ist gespeichert."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Διάλεξε πρόγραμμα για να συνεχίσεις από εκεί που σταμάτησες. Οι ρυθμίσεις σου είναι αποθηκευμένες."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pick a plan to carry on right where you left off. Your setup is saved."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elige un plan para seguir justo donde lo dejaste. Tu configuración está guardada."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Valitse tilaus ja jatka siitä, mihin jäit. Asetuksesi on tallennettu."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisis une formule pour reprendre là où tu en étais. Ta configuration est enregistrée."
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "જ્યાં છોડ્યું હતું ત્યાંથી જ ચાલુ રાખવા પ્લાન પસંદ કરો. તમારું સેટઅપ સેવ થયેલું છે."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "בחרי מסלול כדי להמשיך בדיוק מאיפה שהפסקת. ההגדרות שלך שמורות."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "जहाँ छोड़ा था, वहीं से आगे बढ़ने के लिए कोई प्लान चुनें। आपका सेटअप सेव है।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Odaberi plan i nastavi točno ondje gdje si stala. Tvoje postavke su spremljene."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Válassz csomagot, és folytasd ott, ahol abbahagytad. A beállításaid el vannak mentve."
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pilih paket untuk lanjut dari tempat terakhirmu. Pengaturanmu sudah tersimpan."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scegli un piano per riprendere da dove avevi lasciato. Le tue impostazioni sono salvate."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "プランを選べば、中断したところから続けられます。設定は保存されています。"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ನೀವು ನಿಲ್ಲಿಸಿದ ಸ್ಥಳದಿಂದಲೇ ಮುಂದುವರಿಯಲು ಯೋಜನೆಯನ್ನು ಆರಿಸಿ. ನಿಮ್ಮ ಸೆಟಪ್ ಉಳಿಸಲಾಗಿದೆ."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이용권을 선택하면 멈춘 곳에서 바로 이어갈 수 있어요. 설정은 저장되어 있어요."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "നിർത്തിയിടത്തുനിന്ന് തുടരാൻ ഒരു പ്ലാൻ തിരഞ്ഞെടുക്കൂ. നിങ്ങളുടെ സജ്ജീകരണം സേവ് ചെയ്തിട്ടുണ്ട്."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "जिथे थांबला होता तिथूनच पुढे सुरू करण्यासाठी प्लॅन निवडा. तुमचे सेटअप सेव्ह आहे."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pilih pelan untuk sambung tepat di tempat anda berhenti. Tetapan anda sudah disimpan."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Velg et abonnement og fortsett der du slapp. Oppsettet ditt er lagret."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kies een abonnement en ga verder waar je gebleven was. Je instellingen zijn bewaard."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ଯେଉଁଠି ଛାଡିଥିଲେ ସେଠାରୁ ଜାରି ରଖିବାକୁ ଏକ ପ୍ଲାନ ବାଛନ୍ତୁ। ଆପଣଙ୍କ ସେଟଅପ୍ ସେଭ୍ ହୋଇଛି।"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਜਿੱਥੇ ਛੱਡਿਆ ਸੀ ਉੱਥੋਂ ਹੀ ਜਾਰੀ ਰੱਖਣ ਲਈ ਕੋਈ ਪਲਾਨ ਚੁਣੋ। ਤੁਹਾਡਾ ਸੈੱਟਅੱਪ ਸੇਵ ਹੈ।"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wybierz plan i kontynuuj dokładnie tam, gdzie skończyłaś. Twoje ustawienia są zapisane."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escolha um plano para continuar de onde parou. Sua configuração está salva."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escolhe um plano para continuares onde ficaste. A tua configuração está guardada."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alege un plan ca să continui exact de unde ai rămas. Configurarea ta e salvată."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выбери план, чтобы продолжить с того же места. Твои настройки сохранены."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vyber si plán a pokračuj presne tam, kde si skončila. Tvoje nastavenie je uložené."
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Izberi paket in nadaljuj tam, kjer si ostala. Tvoje nastavitve so shranjene."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Välj ett abonnemang och fortsätt där du slutade. Dina inställningar är sparade."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "நிறுத்திய இடத்திலிருந்தே தொடர ஒரு திட்டத்தைத் தேர்ந்தெடுங்கள். உங்கள் அமைப்பு சேமிக்கப்பட்டுள்ளது."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ఆపిన చోటు నుంచే కొనసాగించడానికి ఒక ప్లాన్ ఎంచుకోండి. మీ సెటప్ సేవ్ అయి ఉంది."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "เลือกแพ็กเกจเพื่อใช้ต่อจากจุดเดิม การตั้งค่าของคุณบันทึกไว้แล้ว"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kaldığın yerden devam etmek için bir plan seç. Ayarların kayıtlı."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Обери план, щоб продовжити з того ж місця. Твої налаштування збережено."
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "جہاں چھوڑا تھا وہیں سے جاری رکھنے کے لیے کوئی پلان چنیں۔ آپ کا سیٹ اپ محفوظ ہے۔"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chọn một gói để tiếp tục ngay từ chỗ bạn dừng lại. Thiết lập của bạn đã được lưu."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "选择一个方案，从上次停下的地方继续。你的设置已保存。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "選擇一個方案，從上次停下的地方繼續。你的設定已儲存。"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

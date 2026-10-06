@@ -111,6 +111,7 @@ struct ContentView: View {
 
 	        case .productDemo:
 	          ProductDemoMomentView(
+	            trialEndTerms: onboardingTrialEndTerms,
 	            onContinue: {
                 continueDemoMoment(to: .plusBlockingDemo)
 	            }
