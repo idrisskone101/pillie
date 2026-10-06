@@ -30,6 +30,7 @@ tap --id protectionPlanPrimaryCTA
 wait text "Pick a time."
 tap --label Morning
 shot reminder-time
+log start
 tap --id protectionPlanPrimaryCTA
 tap --label Allow
 wait id protectionPlanPrimaryCTA 15
@@ -46,8 +47,8 @@ sleep 2
 shot home-after-onboarding
 expect-not text "Your first reminder"  # the catch-up reminder fires within a minute
 expect-not id firstReminderTookIt
-log start
+expect label "Take pill"
 openurl pillie://debug/dump-pending-notifications
-sleep 2
+sleep 5
 log stop
 openurl pillie://debug/fixed-now?at=off
