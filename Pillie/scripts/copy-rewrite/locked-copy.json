@@ -2810,6 +2810,26 @@
       "en": "Your daily reminders and Plus pause until you choose a plan. Your setup stays saved.",
       "de": "Deine täglichen Erinnerungen und Plus pausieren, bis du einen Tarif wählst. Deine Einrichtung bleibt gespeichert.",
       "it": "I promemoria giornalieri e Plus vanno in pausa finché non scegli un piano. La tua configurazione resta salvata."
+    },
+    {
+      "issue": "ENG-169",
+      "table": "Localizable",
+      "key": "today.reminders_off",
+      "create": true,
+      "comment": "Status card subtitle on Home before the first reminder, when notifications are denied so no reminder will come [standard]",
+      "en": "Reminders are off",
+      "de": "Erinnerungen sind aus",
+      "it": "I promemoria sono disattivati"
+    },
+    {
+      "issue": "ENG-169",
+      "table": "Localizable",
+      "key": "today.reminders_off.turn_on",
+      "create": true,
+      "comment": "Button on Home's status card that opens Pillie's notification settings when reminders are off [standard]",
+      "en": "Turn on",
+      "de": "Einschalten",
+      "it": "Attiva"
     }
   ]
 }

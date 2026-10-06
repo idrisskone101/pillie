@@ -553,7 +553,8 @@ class PillStore {
             reminderMinute: reminderMinute,
             now: now,
             hasLoggedAnything: isTodayTaken || isCaughtUpToday,
-            isDoseDue: isTodayDoseDue(at: now)
+            isDoseDue: isTodayDoseDue(at: now),
+            notificationsDenied: NotificationPermission.shared.isDenied
         )
     }
 
