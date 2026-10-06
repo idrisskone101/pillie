@@ -571,6 +571,16 @@ struct PillieApp: App {
                 forKey: "pillie_debug_app_blocking_authorization_recovery"
             )
             UserDefaults.standard.set(OnboardingFlow.Step.appBlocking.rawValue, forKey: OnboardingFlow.stepStorageKey)
+        case "/screen-time-refused":
+            // QA control (ENG-166): make simulator Screen Time authorization fail
+            // the way a real iPhone does, for this launch only.
+            // `reason=none` lets the next request succeed again.
+            let reason = URLComponents(url: url, resolvingAgainstBaseURL: false)?
+                .queryItems?.first(where: { $0.name == "reason" })?.value
+            AppBlockingManager.shared.debugSimulatorRefusal = ScreenTimeRefusal(
+                rawValue: reason ?? ScreenTimeRefusal.heldByAnotherApp.rawValue
+            )
+            AppBlockingManager.shared.updateAuthorizationStatus()
         case "/onboarding-personalization-intent":
             UserDefaults.standard.set(
                 OnboardingFlow.Step.painPoints.rawValue,

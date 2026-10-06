@@ -22,6 +22,8 @@ final class AppBlockingManager {
 
     private(set) var isAuthorized = false
     private(set) var authorizationStatus: AuthorizationStatus = .notDetermined
+    /// Why the last authorization request failed, or nil when it succeeded.
+    private(set) var refusal: ScreenTimeRefusal?
 
     var activitySelection = FamilyActivitySelection(includeEntireCategory: true) {
         didSet { ScreenTimeSharedState.saveSelection(activitySelection) }
@@ -39,6 +41,11 @@ final class AppBlockingManager {
     /// loss-framed Trial-End Paywall) is unreachable there without this.
     /// Set via `pillie://debug/trial-end-paywall?cohort=blocker`.
     var debugBlockerConfiguredOverride: Bool?
+
+    /// QA seam (ENG-166): simulator FamilyControls always approves, so the
+    /// refused editor is unreachable there without this.
+    /// Set via `pillie://debug/screen-time-refused?reason=conflict|cancelled`.
+    var debugSimulatorRefusal: ScreenTimeRefusal?
 
     /// QA seam: the onboarding selected-apps card reads token counts, which
     /// FamilyControls cannot fabricate on the simulator. Set via
@@ -126,13 +133,14 @@ final class AppBlockingManager {
 
     func requestAuthorization() async {
         #if targetEnvironment(simulator)
-        isAuthorized = true
-        authorizationStatus = .approved
+        updateAuthorizationStatus()
         return
         #else
         do {
             try await AuthorizationCenter.shared.requestAuthorization(for: .individual)
+            refusal = nil
         } catch {
+            refusal = ScreenTimeRefusal(error)
             Self.logger.error("Screen Time auth error: \(error.localizedDescription)")
             // `warning`, not `error`: this catch also fires when the user declines
             // the system dialog, which is a choice rather than a malfunction.
@@ -164,8 +172,11 @@ final class AppBlockingManager {
 
     func updateAuthorizationStatus() {
         #if targetEnvironment(simulator)
-        isAuthorized = true
-        authorizationStatus = .approved
+        #if DEBUG
+        refusal = debugSimulatorRefusal
+        #endif
+        isAuthorized = refusal == nil
+        authorizationStatus = isAuthorized ? .approved : .denied
         #else
         switch AuthorizationCenter.shared.authorizationStatus {
         case .approved, .approvedWithDataAccess:
@@ -350,5 +361,20 @@ final class AppBlockingManager {
             defaults.removeObject(forKey: key)
         }
         defaults.synchronize()
+    }
+}
+
+/// Why iOS refused Screen Time access. Only one app on an iPhone can hold
+/// FamilyControls authorization, and that refusal needs its own sentence.
+enum ScreenTimeRefusal: String, Equatable {
+    case heldByAnotherApp = "conflict"
+    case notAllowed = "cancelled"
+
+    init(_ error: Error) {
+        if case .authorizationConflict = error as? FamilyControlsError {
+            self = .heldByAnotherApp
+        } else {
+            self = .notAllowed
+        }
     }
 }

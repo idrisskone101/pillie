@@ -1,0 +1,58 @@
+# ENG-166: when iOS refuses Screen Time, every way into the blocked-apps
+# editor says why and offers Try again, never a dead "Choose apps". Covers
+# Settings, the Home blocking card, the Today Plus setup strip, and the
+# update-trial announcement. The simulator always approves, so
+# /screen-time-refused makes it refuse like an iPhone where another app
+# holds access.
+defaults homeBlockingStatusCardDismissed -bool false
+launch
+openurl pillie://debug/plus-home?lang=en
+wait text Today 15
+openurl "pillie://debug/screen-time-refused?reason=conflict"
+
+tap --id homeBlockingStatusCardCTA
+wait id blockedAppsScreenTimeRefused
+expect text "Another app on this iPhone"
+shot home-card-refused
+swipe --start-x 200 --start-y 200 --end-x 200 --end-y 860 --duration 0.4
+gone id blockedAppsScreenTimeRefused
+
+tap --label Settings
+wait id settingsLanguageRow
+gesture scroll-down
+tap --label "Your apps, Off"
+wait id blockedAppsScreenTimeRefused
+shot settings-refused
+
+# Still refused: Try again keeps the reason on screen.
+tap --id blockedAppsTryAgain
+wait id blockedAppsScreenTimeRefused
+gone id blockedAppsEnabledToggle
+
+# Access freed up: Try again lands on the working editor.
+openurl "pillie://debug/screen-time-refused?reason=none"
+tap --id blockedAppsTryAgain
+wait id blockedAppsEnabledToggle
+gone id blockedAppsScreenTimeRefused
+shot settings-try-again-granted
+
+# Any other refusal (cancelled, passcode) keeps the generic sentence.
+launch
+openurl "pillie://debug/trial-activation-hub?state=unconfigured&lang=en"
+wait id plusSetupStrip 15
+openurl "pillie://debug/screen-time-refused?reason=cancelled"
+tap --id plusSetupStrip
+wait text "Let your apps wait for you" 10
+tap --id plusSetupPrimary
+wait id blockedAppsScreenTimeRefused
+expect text "Allow Screen Time access"
+shot plus-setup-refused
+
+launch
+openurl pillie://debug/update-trial-announcement?lang=en
+launch
+wait label Continue 15
+openurl "pillie://debug/screen-time-refused?reason=conflict"
+tap --label Continue
+wait id blockedAppsScreenTimeRefused
+shot update-trial-refused
