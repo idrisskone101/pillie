@@ -10,6 +10,9 @@ struct ReminderSchedulePlanner {
     static let baseReminderCount = 7
     static let dueScanLimit = 120
     static let catchupDelayMinutes = 1
+    /// The streak is named only in its first week: the first reminders after
+    /// onboarding (ENG-168).
+    static let streakReminderRange = 1...6
     /// One row per Reverse Trial notice (#168 / ADR 0007). `day` names the
     /// request id, copy, and analytics value. Fire times are counted back from
     /// `ReverseTrialClock.expiryMoment`, not forward from the grant, so a break
@@ -83,6 +86,9 @@ struct ReminderSchedulePlanner {
         /// (grandfathered) terms keep daily reminders free; hard-paywall
         /// reminders stop at trial expiry and the notices never promise them.
         var trialEndTerms: TrialEndAccessTerms = .hardPaywall
+        /// `PillStore.currentStreak`: the run of taken due days before the
+        /// nearest untaken one, i.e. what that day's reminder protects (ENG-168).
+        var currentStreak: Int = 0
         /// For each untaken due day, the fire date of a base reminder already
         /// committed by NotificationManager (persisted, pending, or delivered).
         /// Empty → planner may emit first-time catch-up. Non-empty + fire <= now
@@ -97,6 +103,11 @@ struct ReminderSchedulePlanner {
         let fireDate: Date
         let dueDayEpoch: Int
         let kind: DueReminderKind
+        /// Set only on the base reminder for the nearest untaken pill day while
+        /// the streak is in `streakReminderRange` (ENG-168). Later days stay
+        /// `nil` because their streak depends on check-ins that haven't
+        /// happened yet.
+        var streakAtRisk: Int? = nil
     }
 
     struct SupplyReminderIntent: Hashable {
@@ -191,6 +202,7 @@ struct ReminderSchedulePlanner {
             return input.statusByEpochDay[key] != .taken
         }
         let baseDueActions = Array(dueActions.prefix(min(Self.baseReminderCount, dueReminderBudget)))
+        let nearestDueDayEpoch = dueActions.first.map { epochDay(for: $0.date, calendar: input.calendar) }
 
         var dueIntents: [DueReminderIntent] = []
         var retryAnchorByEpoch: [Int: Date] = [:]
@@ -228,12 +240,17 @@ struct ReminderSchedulePlanner {
                 calendar: input.calendar
                ) {
                 let firstKind: DueReminderKind = (effectiveSnoozeOverride?.dueDayEpoch == dueEpoch) ? .snooze : .base
+                let namesStreak = firstKind == .base
+                    && due.method == .pill
+                    && dueEpoch == nearestDueDayEpoch
+                    && Self.streakReminderRange.contains(input.currentStreak)
                 dueIntents.append(
                     DueReminderIntent(
                         action: due,
                         fireDate: firstReminderDate,
                         dueDayEpoch: dueEpoch,
-                        kind: firstKind
+                        kind: firstKind,
+                        streakAtRisk: namesStreak ? input.currentStreak : nil
                     )
                 )
             }
