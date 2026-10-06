@@ -7,6 +7,7 @@
 //  locale tests.
 //
 
+import Foundation
 import Testing
 
 @testable import Pillie
