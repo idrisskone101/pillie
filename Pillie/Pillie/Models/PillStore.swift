@@ -253,11 +253,13 @@ class PillStore {
     // MARK: - Computed
 
     /// The live day: last reminder through the next one, not civil midnight. It
-    /// never precedes the active pack's first day, so a routine started before
-    /// that day's reminder begins its first live day right away.
+    /// never precedes the active pack's first day, or the day its setup named as
+    /// today's pill, so a routine started before that day's reminder begins its
+    /// first live day right away.
     var today: Date {
         guard let activePack else { return liveDoseDay }
-        return max(liveDoseDay, startOfDaySafe(activePack.resolvedCycleAnchor().date))
+        let firstLiveDay = activePack.firstLiveDay.map { startOfDaySafe($0) } ?? .distantPast
+        return max(liveDoseDay, startOfDaySafe(activePack.resolvedCycleAnchor().date), firstLiveDay)
     }
 
     /// The day a "today is cycle day N" edit lands on. Before an evening reminder
@@ -1056,7 +1058,8 @@ class PillStore {
                 cycleDayAnchorIndex: cycleDayAnchorIndex,
                 packNumber: nextPackNumber,
                 isCurrent: true,
-                startedAt: PillieClock.now
+                startedAt: PillieClock.now,
+                firstLiveDay: anchor
             )
             modelContext.insert(nextPack)
 
@@ -1073,6 +1076,7 @@ class PillStore {
             activePack.setPillRegimen(method == .pill ? regimen : .twentyOneSeven, customRegimen: customRegimen)
             activePack.startDate = startDate
             activePack.startedAt = PillieClock.now
+            activePack.firstLiveDay = anchor
             activePack.ringInsertionDate = nil
             activePack.cycleDayAnchorIndex = PillPack.normalizedCycleDayAnchorIndex(
                 cycleDayAnchorIndex,
@@ -1099,7 +1103,8 @@ class PillStore {
                 cycleDayAnchorIndex: cycleDayAnchorIndex,
                 packNumber: nextPackNumber,
                 isCurrent: true,
-                startedAt: PillieClock.now
+                startedAt: PillieClock.now,
+                firstLiveDay: anchor
             )
             modelContext.insert(nextPack)
 
@@ -1138,6 +1143,7 @@ class PillStore {
             customRegimen: customRegimen
         )
         let safeCycleDay = max(1, min(cycleDay, normalizedCycleLength))
+        let methodChanged = method != (activePack?.method ?? contraceptiveMethod)
 
         // 1. Delete all existing records
         try? modelContext.delete(model: PillDay.self)
@@ -1156,21 +1162,29 @@ class PillStore {
             cycleDayAnchorIndex: 0,
             packNumber: 1,
             isCurrent: true,
-            startedAt: PillieClock.now
+            startedAt: PillieClock.now,
+            firstLiveDay: anchor
         )
         modelContext.insert(freshPack)
 
         // 4. Backfill current cycle days before today (days 1 through safeCycleDay-1)
         //    Prior action days → .taken; break days → .breakDay. Nothing is .missed.
-        backfillPriorDays(from: startDate, count: safeCycleDay - 1, pack: freshPack, calendar: calendar)
-        if safeCycleDay > 1 {
+        //    A new method has no earlier days in Pillie: its calendar and streak
+        //    start on the anchor, and the days before it read as .noData.
+        if methodChanged {
             streakResetDate = anchor
-        }
+            appActivatedDate = anchor
+        } else {
+            backfillPriorDays(from: startDate, count: safeCycleDay - 1, pack: freshPack, calendar: calendar)
+            if safeCycleDay > 1 {
+                streakResetDate = anchor
+            }
 
-        // 5. Set appActivatedDate to today so dates before our backfill
-        //    range show as .noData (not .missed). Explicit PillDay records
-        //    we created above always take precedence in the snapshot engine.
-        appActivatedDate = liveDoseDay
+            // 5. Set appActivatedDate to today so dates before our backfill
+            //    range show as .noData (not .missed). Explicit PillDay records
+            //    we created above always take precedence in the snapshot engine.
+            appActivatedDate = liveDoseDay
+        }
 
         // 6. Persist and rebuild
         contraceptiveMethod = method
@@ -1558,6 +1572,9 @@ class PillStore {
     /// Starts a fresh 21 + 7 patch or ring routine on `cycleDay` today, like onboarding, but as an
     /// established routine: no start-day grace, so an untaken task past its reminder reads late.
     func seedRoutineDay(method: ContraceptiveMethod, cycleDay: Int) {
+        // Seed as the same method so the earlier tasks are backfilled as logged.
+        activePack?.method = method
+        contraceptiveMethod = method
         resetAndStartFresh(method: method, regimen: .twentyOneSeven, customRegimen: nil, cycleDay: cycleDay, anchorDay: liveDoseDay)
         activePack?.startedAt = nil
         persist()

@@ -25,6 +25,8 @@ struct CustomReminderMessagesEditor: View {
         )
     )
     @State private var editing: CustomReminderKind?
+    /// Chosen once by the fit ladder, then held, so a tone change lays out one layout.
+    @State private var clockSize: CGFloat?
 
     private let settingsFeedback = SettingsInteractionFeedback()
 
@@ -88,13 +90,23 @@ struct CustomReminderMessagesEditor: View {
         ) {
             VStack(spacing: 0) {
                 // Prefer the full clock, then smaller ones; scroll only when neither fits
-                // (long locales, large Dynamic Type).
-                ViewThatFits(in: .vertical) {
-                    content(clockSize: 72)
-                    content(clockSize: 52)
-                    content(clockSize: 40)
-                    ScrollView(.vertical, showsIndicators: false) {
-                        content(clockSize: 40)
+                // (long locales, large Dynamic Type). Every tone reserves the same height,
+                // so the size picked on open fits them all.
+                Group {
+                    if let clockSize {
+                        ScrollView(.vertical, showsIndicators: false) {
+                            content(clockSize: clockSize)
+                        }
+                        .scrollBounceBehavior(.basedOnSize)
+                    } else {
+                        ViewThatFits(in: .vertical) {
+                            fitting(clockSize: 72)
+                            fitting(clockSize: 52)
+                            fitting(clockSize: 40)
+                            ScrollView(.vertical, showsIndicators: false) {
+                                fitting(clockSize: 40)
+                            }
+                        }
                     }
                 }
                 .frame(maxHeight: .infinity, alignment: .top)
@@ -125,6 +137,23 @@ struct CustomReminderMessagesEditor: View {
         }
     }
 
+    private func fitting(clockSize size: CGFloat) -> some View {
+        content(clockSize: size).onAppear { clockSize = size }
+    }
+
+    /// Every tone's banner copy, the default included, so no tone moves the layout.
+    private var reservedBanners: [CustomReminderKind: [CustomReminderBannerContent]] {
+        let messages = [defaultMessages] + CustomReminderPreset.allCases.map { $0.localizedMessages(locale: locale) }
+        return Dictionary(uniqueKeysWithValues: [CustomReminderKind.daily, .followup].map { kind in
+            (kind, messages.map { banner(kind, $0[kind]) })
+        })
+    }
+
+    private var reservedToneDescriptions: [String] {
+        (CustomReminderPreset.allCases.map(CustomReminderTone.preset) + [.pillieDefault, .ownWords])
+            .map { $0.localizedDescription(locale: locale) }
+    }
+
     private func content(clockSize: CGFloat) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             CustomReminderLockScreenStage(
@@ -133,6 +162,7 @@ struct CustomReminderMessagesEditor: View {
                 clockSize: clockSize,
                 daily: banner(.daily, draft.messages[.daily]),
                 followup: banner(.followup, draft.messages[.followup]),
+                reserved: reservedBanners,
                 onEdit: { kind in
                     settingsFeedback.openRow(accessibilityReduceMotion: accessibilityReduceMotion)
                     editing = kind
@@ -165,7 +195,7 @@ struct CustomReminderMessagesEditor: View {
                 draft.apply(preset, locale: locale)
             }
 
-            Text(tone.localizedDescription(locale: locale))
+            ReservedText(text: tone.localizedDescription(locale: locale), reserved: reservedToneDescriptions)
                 .font(.pillie(14, weight: .medium))
                 .foregroundStyle(PillieTheme.textMuted)
                 .fixedSize(horizontal: false, vertical: true)

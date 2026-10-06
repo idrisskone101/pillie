@@ -25,14 +25,8 @@ final class AppBlockingManager {
     /// Why the last authorization request failed, or nil when it succeeded.
     private(set) var refusal: ScreenTimeRefusal?
 
-    var activitySelection = FamilyActivitySelection(includeEntireCategory: true) {
+    var activitySelection = FamilyActivitySelection() {
         didSet { ScreenTimeSharedState.saveSelection(activitySelection) }
-    }
-
-    /// Upgraded on read, so a cancelled picker leaves a legacy selection untouched.
-    var pickerSelection: FamilyActivitySelection {
-        get { activitySelection.includingEntireCategories() }
-        set { activitySelection = newValue }
     }
 
     #if DEBUG
@@ -56,13 +50,12 @@ final class AppBlockingManager {
     var selectionState: BlockerSelectionState {
         #if DEBUG
         if let count = debugSelectionCountOverride, count > 0 {
-            return BlockerSelectionState(applicationCount: count, categoryCount: 0, includesCategoryApps: true)
+            return BlockerSelectionState(applicationCount: count, categoryCount: 0)
         }
         #endif
         return BlockerSelectionState(
             applicationCount: activitySelection.applicationTokens.count,
-            categoryCount: activitySelection.categoryTokens.count,
-            includesCategoryApps: activitySelection.includeEntireCategory
+            categoryCount: activitySelection.categoryTokens.count
         )
     }
 

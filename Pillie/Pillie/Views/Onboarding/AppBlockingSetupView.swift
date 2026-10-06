@@ -304,7 +304,7 @@ struct AppBlockingSetupView: View {
         }
         .familyActivityPicker(
             isPresented: $showPicker,
-            selection: Bindable(blockingManager).pickerSelection
+            selection: Bindable(blockingManager).activitySelection
         )
         .onAppear {
             animateIn = true
