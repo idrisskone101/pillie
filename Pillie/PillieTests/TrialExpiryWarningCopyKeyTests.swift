@@ -55,9 +55,9 @@ struct TrialExpiryWarningCopyKeyTests {
     func `Hard-paywall terms never promise free reminders in any notice`() {
         let english = Locale(identifier: "en")
         let expected = [
-            10: "Choose a plan in the next 5 days to keep using Pillie.",
-            13: "Choose a plan by tomorrow night to keep using Pillie.",
-            15: "Choose monthly, annual, or lifetime to keep using Pillie.",
+            10: "5 days left in your trial. Pick a plan whenever you’re ready to keep going.",
+            13: "Your trial wraps up tomorrow night. Pick a plan to keep everything as it is.",
+            15: "Pick a plan to carry on right where you left off. Your setup is saved.",
         ]
 
         for cohort in [TrialEndPaywallCohort.blockerConfigured, .reminderOnly] {

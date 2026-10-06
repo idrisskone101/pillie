@@ -109,9 +109,9 @@ final class TrialExpiryWarningNotificationTests: XCTestCase {
 
         XCTAssertEqual(warnings.map(\.trialWarningDay), [10, 13, 15])
         XCTAssertEqual(warnings.map(\.body), [
-            "Choose a plan in the next 5 days to keep using Pillie.",
-            "Choose a plan by tomorrow night to keep using Pillie.",
-            "Choose monthly, annual, or lifetime to keep using Pillie.",
+            "5 days left in your trial. Pick a plan whenever you’re ready to keep going.",
+            "Your trial wraps up tomorrow night. Pick a plan to keep everything as it is.",
+            "Pick a plan to carry on right where you left off. Your setup is saved.",
         ])
         XCTAssertTrue(warnings.allSatisfy { $0.identifier.contains("_blocker_configured_hard_") })
     }
