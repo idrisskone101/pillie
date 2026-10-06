@@ -283,6 +283,27 @@ struct ProductAnalyticsTelemetry {
     track(.trialStatusSheetViewed, source: .home)
   }
 
+  static let plusSetupStripViewedDayKey = "pillie_analytics_plus_setup_strip_viewed_day"
+  static let firstReminderStateShownKey = "pillie_analytics_first_reminder_state_shown"
+
+  /// At most once per day the strip is on Today, so tap-through reads per day.
+  func plusSetupStripViewed(
+    completedCount: Int,
+    now: Date = PillieClock.now,
+    defaults: UserDefaults = .standard
+  ) {
+    let day = Int(Calendar.current.startOfDay(for: now).timeIntervalSince1970)
+    guard defaults.object(forKey: Self.plusSetupStripViewedDayKey) as? Int != day else { return }
+    defaults.set(day, forKey: Self.plusSetupStripViewedDayKey)
+    analytics.track(
+      .plusSetupStripViewed,
+      plusSetupStep: nil,
+      plusSetupAction: nil,
+      completedCount: completedCount,
+      isPlus: isPlus()
+    )
+  }
+
   func plusSetupStripTapped(completedCount: Int) {
     analytics.track(
       .plusSetupStripTapped,
@@ -855,6 +876,25 @@ struct ProductAnalyticsTelemetry {
 
   func todayActionCompleted(source: AnalyticsSource = .home) {
     track(.todayActionCompleted, source: source)
+  }
+
+  func onboardingTodayAnswer(_ answer: TodayPillPick.Answer, reminderPassed: Bool) {
+    analytics.track(
+      .onboardingTodayAnswer,
+      todayAnswer: answer,
+      reminderPassed: reminderPassed,
+      isPlus: isPlus()
+    )
+  }
+
+  func firstReminderStateShown(defaults: UserDefaults = .standard) {
+    guard !defaults.bool(forKey: Self.firstReminderStateShownKey) else { return }
+    defaults.set(true, forKey: Self.firstReminderStateShownKey)
+    track(.firstReminderStateShown, source: .home)
+  }
+
+  func streakChanged(_ change: StreakChangeReport.Change) {
+    analytics.track(.streakChanged, streakChange: change, isPlus: isPlus())
   }
 
   func todayActionUndone() {

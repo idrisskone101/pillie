@@ -13,6 +13,7 @@ struct BlockedAppsEditor: View {
     @Environment(\.locale) private var locale
     @Environment(PillStore.self) private var store
     @State private var showPicker = false
+    @State private var blockingWasDone = false
 
     @Bindable private var blockingManager = AppBlockingManager.shared
 
@@ -74,6 +75,15 @@ struct BlockedAppsEditor: View {
             isPresented: $showPicker,
             selection: Bindable(blockingManager).pickerSelection
         )
+        // Every surface that sets up blocking opens this editor, so the Plus
+        // setup step completes here, not in the strip's sheet.
+        .onAppear {
+            blockingWasDone = PlusSetupProgress.live(store: store).isDone(.blocking)
+        }
+        .onDisappear {
+            guard !blockingWasDone, PlusSetupProgress.live(store: store).isDone(.blocking) else { return }
+            ProductAnalyticsTelemetry.live.plusSetupStep(.blocking, action: .completed)
+        }
     }
 
     private func chooseApps() {
