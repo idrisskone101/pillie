@@ -365,6 +365,7 @@ final class NotificationManager {
                 hasEntitlement: SubscriptionManager.shared.hasEntitlement,
                 trialCohort: hasBlockerSetup() ? .blockerConfigured : .reminderOnly,
                 trialEndTerms: SubscriptionManager.shared.trialEndTerms,
+                currentStreak: store.currentStreak,
                 servedBaseFireDateByDueDayEpoch: servedBaseFireDateByDueDayEpoch,
                 calendar: calendar
             )
@@ -477,6 +478,9 @@ final class NotificationManager {
             // The base (and snooze re-fire) Due Action Reminder carries the user's custom
             // copy when Plus; any blank field falls back independently to the default
             // method-aware copy, so an empty notification can never fire.
+            let defaultBody = due.streakAtRisk.map {
+                PillieLocalization.formatted("notification.reminder.pill.streak.body", arguments: $0)
+            } ?? due.action.reminderBody
             content.title = CustomReminderCopy.effective(
                 custom: customTitle,
                 default: due.action.reminderTitle,
@@ -485,7 +489,7 @@ final class NotificationManager {
             )
             content.body = CustomReminderCopy.effective(
                 custom: customBody,
-                default: due.action.reminderBody,
+                default: defaultBody,
                 cap: CustomReminderCopy.bodyCap,
                 isPlus: isPlus
             )
@@ -504,7 +508,7 @@ final class NotificationManager {
         }
 
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
-        let id = reminderIdentifier(dueDayEpoch: due.dueDayEpoch, kind: due.kind, fireDate: due.fireDate)
+        let id = reminderIdentifier(dueDayEpoch: due.dueDayEpoch, kind: due.kind, streakAtRisk: due.streakAtRisk, fireDate: due.fireDate)
         return UNNotificationRequest(identifier: id, content: content, trigger: trigger)
     }
 
@@ -769,8 +773,17 @@ final class NotificationManager {
 
     // MARK: - ID + Payload
 
-    private func reminderIdentifier(dueDayEpoch: Int, kind: ReminderSchedulePlanner.DueReminderKind, fireDate: Date) -> String {
-        "\(reminderPrefix)due_\(dueDayEpoch)_\(kind.rawValue)_\(Int(fireDate.timeIntervalSince1970))"
+    /// The streak is part of the id so a streak change replaces the pending
+    /// request (same reasoning as `trialWarningIdentifier`): the managed diff
+    /// is by identifier, and an unchanged id would keep the stale copy.
+    private func reminderIdentifier(
+        dueDayEpoch: Int,
+        kind: ReminderSchedulePlanner.DueReminderKind,
+        streakAtRisk: Int?,
+        fireDate: Date
+    ) -> String {
+        let streakToken = streakAtRisk.map { "_streak\($0)" } ?? ""
+        return "\(reminderPrefix)due_\(dueDayEpoch)_\(kind.rawValue)\(streakToken)_\(Int(fireDate.timeIntervalSince1970))"
     }
 
     private func refillReminderIdentifier(dueDayEpoch: Int, fireDate: Date) -> String {

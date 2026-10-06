@@ -569,6 +569,128 @@ final class ReminderSchedulePlannerTests: XCTestCase {
         XCTAssertTrue(liveIntents.allSatisfy { $0.fireDate < nextReminder })
     }
 
+    // MARK: - Young streak reminder copy (ENG-168)
+
+    func testStreakAtRiskOnlyOnNearestUntakenPillBase() throws {
+        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
+        let todayEpoch = epochDay(for: now)
+
+        let intents = dueIntents(for: fixture.store, now: now, currentStreak: 1)
+        let todayBase = try XCTUnwrap(
+            intents.first { $0.dueDayEpoch == todayEpoch && $0.kind == .base }
+        )
+
+        XCTAssertEqual(todayBase.streakAtRisk, 1)
+        XCTAssertTrue(
+            intents.filter { !($0.dueDayEpoch == todayEpoch && $0.kind == .base) }
+                .allSatisfy { $0.streakAtRisk == nil }
+        )
+    }
+
+    func testStreakAtRiskMovesToTomorrowOnceTodayIsTaken() throws {
+        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
+        let todayEpoch = epochDay(for: now)
+        let calendar = Calendar.current
+        let tomorrow = try XCTUnwrap(calendar.date(byAdding: .day, value: 1, to: calendar.startOfDay(for: now)))
+        let tomorrowEpoch = epochDay(for: tomorrow)
+        let dayAfter = try XCTUnwrap(calendar.date(byAdding: .day, value: 1, to: tomorrow))
+        let dayAfterEpoch = epochDay(for: dayAfter)
+
+        let intents = dueIntents(
+            for: fixture.store,
+            now: now,
+            statusOverrides: [todayEpoch: .taken],
+            currentStreak: 1
+        )
+
+        let tomorrowBase = try XCTUnwrap(
+            intents.first { $0.dueDayEpoch == tomorrowEpoch && $0.kind == .base }
+        )
+        let dayAfterBase = try XCTUnwrap(
+            intents.first { $0.dueDayEpoch == dayAfterEpoch && $0.kind == .base }
+        )
+
+        XCTAssertEqual(tomorrowBase.streakAtRisk, 1)
+        XCTAssertNil(dayAfterBase.streakAtRisk)
+    }
+
+    func testStreakAtRiskNilOutsideFirstWeekRange() throws {
+        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
+
+        for streak in [0, 7] {
+            let intents = dueIntents(for: fixture.store, now: now, currentStreak: streak)
+            XCTAssertTrue(
+                intents.allSatisfy { $0.streakAtRisk == nil },
+                "Expected no streakAtRisk for currentStreak \(streak)"
+            )
+        }
+    }
+
+    func testStreakAtRiskNilWhenTodayBaseAlreadyServed() throws {
+        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 21, minute: 17)
+        let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
+        let todayEpoch = epochDay(for: now)
+        let servedAt = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 21, minute: 15)
+        let calendar = Calendar.current
+        let tomorrow = try XCTUnwrap(calendar.date(byAdding: .day, value: 1, to: calendar.startOfDay(for: now)))
+        let tomorrowEpoch = epochDay(for: tomorrow)
+
+        let intents = dueIntents(
+            for: fixture.store,
+            now: now,
+            currentStreak: 2,
+            servedBaseFireDateByDueDayEpoch: [todayEpoch: servedAt]
+        )
+
+        XCTAssertEqual(intents.filter { $0.dueDayEpoch == todayEpoch && $0.kind == .base }.count, 0)
+        let tomorrowBase = try XCTUnwrap(
+            intents.first { $0.dueDayEpoch == tomorrowEpoch && $0.kind == .base }
+        )
+        XCTAssertNil(tomorrowBase.streakAtRisk)
+    }
+
+    func testStreakAtRiskNilForPatchAndRing() throws {
+        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+
+        for method: ContraceptiveMethod in [.patch, .ring] {
+            let fixture = try InMemoryStoreFactory.makeStore(
+                now: now,
+                method: method,
+                startDate: now,
+                ringInsertionDate: method == .ring ? now : nil
+            )
+            let intents = dueIntents(for: fixture.store, now: now, currentStreak: 1)
+            XCTAssertFalse(intents.isEmpty, "Expected due intents for \(method)")
+            XCTAssertTrue(
+                intents.allSatisfy { $0.streakAtRisk == nil },
+                "Expected no streakAtRisk for \(method)"
+            )
+        }
+    }
+
+    func testStreakAtRiskNilOnRetriesForPlusUser() throws {
+        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
+        let todayEpoch = epochDay(for: now)
+
+        let todayIntents = dueIntents(
+            for: fixture.store,
+            now: now,
+            autoReminderRetryLimit: 3,
+            smartRemindersEnabled: true,
+            currentStreak: 1
+        )
+        .filter { $0.dueDayEpoch == todayEpoch }
+
+        let retries = todayIntents.filter { $0.kind == .retry }
+        XCTAssertEqual(retries.count, 3)
+        XCTAssertTrue(retries.allSatisfy { $0.streakAtRisk == nil })
+        XCTAssertEqual(todayIntents.first { $0.kind == .base }?.streakAtRisk, 1)
+    }
+
     private func plan(
         for store: PillStore,
         now: Date,
@@ -578,6 +700,7 @@ final class ReminderSchedulePlannerTests: XCTestCase {
         snoozeOverride: ReminderSchedulePlanner.SnoozeOverride? = nil,
         smartRemindersEnabled: Bool = true,
         cycleTransitionEnabled: Bool = true,
+        currentStreak: Int = 0,
         servedBaseFireDateByDueDayEpoch: [Int: Date] = [:]
     ) -> [ReminderSchedulePlanner.Intent] {
         let calendar = Calendar.current
@@ -607,6 +730,7 @@ final class ReminderSchedulePlannerTests: XCTestCase {
                 cycleTransitionEnabled: cycleTransitionEnabled,
                 trialGrantDate: nil,
                 hasEntitlement: false,
+                currentStreak: currentStreak,
                 servedBaseFireDateByDueDayEpoch: servedBaseFireDateByDueDayEpoch,
                 calendar: calendar
             )
@@ -621,6 +745,7 @@ final class ReminderSchedulePlannerTests: XCTestCase {
         statusOverrides: [Int: PillDay.Status] = [:],
         snoozeOverride: ReminderSchedulePlanner.SnoozeOverride? = nil,
         smartRemindersEnabled: Bool = true,
+        currentStreak: Int = 0,
         servedBaseFireDateByDueDayEpoch: [Int: Date] = [:]
     ) -> [ReminderSchedulePlanner.DueReminderIntent] {
         plan(
@@ -631,6 +756,7 @@ final class ReminderSchedulePlannerTests: XCTestCase {
             statusOverrides: statusOverrides,
             snoozeOverride: snoozeOverride,
             smartRemindersEnabled: smartRemindersEnabled,
+            currentStreak: currentStreak,
             servedBaseFireDateByDueDayEpoch: servedBaseFireDateByDueDayEpoch
         )
         .compactMap { intent in
