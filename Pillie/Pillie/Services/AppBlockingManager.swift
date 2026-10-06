@@ -155,8 +155,9 @@ final class AppBlockingManager {
 
     /// Editor-entry path: refresh, request if needed, return the live status.
     /// Onboarding calls `requestAuthorization()` itself from a full-screen step.
-    /// #163 settings Screen Time events fire here because Home, Settings, and
-    /// the update-trial CTA all present the same Settings editor after this.
+    /// #163 settings Screen Time events fire here because `BlockedAppsEditor`,
+    /// which Home, Settings, Plus setup, and the update-trial CTA all open,
+    /// calls this when it appears.
     @MainActor
     func ensureAuthorized() async -> Bool {
         updateAuthorizationStatus()
@@ -375,6 +376,15 @@ enum ScreenTimeRefusal: String, Equatable {
             self = .heldByAnotherApp
         } else {
             self = .notAllowed
+        }
+    }
+
+    func detail(locale: Locale) -> String {
+        switch self {
+        case .heldByAnotherApp:
+            PillieLocalization.string("error.screen_time.conflict_body", locale: locale)
+        case .notAllowed:
+            PillieLocalization.string("error.screen_time.body", locale: locale)
         }
     }
 }

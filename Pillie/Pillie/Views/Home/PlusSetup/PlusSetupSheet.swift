@@ -96,10 +96,7 @@ struct PlusSetupSheet: View {
         editorStepWasDone = progress.isDone(step)
         switch step {
         case .blocking:
-            Task {
-                _ = await AppBlockingManager.shared.ensureAuthorized()
-                editor = .blocking
-            }
+            editor = .blocking
         case .messages:
             editor = .messages
         case .reminders:

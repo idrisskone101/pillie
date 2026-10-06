@@ -92126,6 +92126,281 @@
         }
       }
     },
+    "error.screen_time.conflict_body": {
+      "comment": "Screen Time refused because another app on the iPhone already holds it [standard]",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Another app on this iPhone is using Screen Time. Turn it off in that app, then try again."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un’altra app su questo iPhone sta usando Tempo di utilizzo. Disattivalo in quell’app, poi riprova."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eine andere App auf diesem iPhone nutzt Bildschirmzeit. Schalte sie in dieser App aus und versuch es dann noch mal."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Une autre app de cet iPhone utilise Temps d’écran. Désactive-le dans cette app, puis réessaie."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otra app de este iPhone está usando Tiempo de uso. Desactívalo en esa app y vuelve a intentarlo."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Outro app neste iPhone está usando o Tempo de Uso. Desative-o nesse app e tente de novo."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Een andere app op deze iPhone gebruikt Schermtijd. Zet het uit in die app en probeer het opnieuw."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En annan app på den här iPhonen använder Skärmtid. Stäng av det i den appen och försök igen."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En anden app på denne iPhone bruger Skærmtid. Slå det fra i den app, og prøv igen."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En annen app på denne iPhonen bruker Skjermtid. Slå det av i den appen, og prøv igjen."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toinen tämän iPhonen sovellus käyttää Ruutuaikaa. Laita se pois päältä siinä sovelluksessa ja yritä uudelleen."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Outra app neste iPhone está a usar o Tempo de ecrã. Desativa-o nessa app e tenta outra vez."
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Una altra app d’aquest iPhone fa servir Temps d’ús. Desactiva’l en aquella app i torna-ho a provar."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inna aplikacja na tym iPhonie używa Czasu przed ekranem. Wyłącz go w tamtej aplikacji i spróbuj ponownie."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Čas u obrazovky na tomto iPhonu používá jiná aplikace. Vypni ho v ní a zkus to znovu."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Другое приложение на этом iPhone уже использует Экранное время. Отключи его в том приложении и попробуй снова."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Інший застосунок на цьому iPhone уже використовує Екранний час. Вимкни його в тому застосунку й спробуй ще раз."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "このiPhoneでは別のアプリがスクリーンタイムを使用しています。そのアプリでオフにしてから、もう一度お試しください。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 iPhone의 다른 앱이 스크린 타임을 사용하고 있어요. 그 앱에서 끈 다음 다시 시도해 주세요."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apl lain pada iPhone ini sedang menggunakan Masa Skrin. Matikannya dalam apl itu, kemudian cuba lagi."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O altă aplicație de pe acest iPhone folosește Timp de utilizare. Dezactivează-l în aplicația aceea, apoi încearcă din nou."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Čas pred obrazovkou na tomto iPhone používa iná aplikácia. Vypni ho v nej a skús to znova."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "มีแอปอื่นบน iPhone เครื่องนี้ใช้เวลาหน้าจออยู่ ปิดในแอปนั้นก่อน แล้วลองอีกครั้ง"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "这台 iPhone 上的另一个应用正在使用屏幕使用时间。请在那个应用里关闭，然后再试一次。"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "इस iPhone पर कोई दूसरा ऐप स्क्रीन टाइम इस्तेमाल कर रहा है। उस ऐप में इसे बंद करें, फिर दोबारा कोशिश करें।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Druga aplikacija na ovom iPhoneu koristi Vrijeme uporabe zaslona. Isključi ga u toj aplikaciji pa pokušaj ponovno."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Egy másik app ezen az iPhone-on már használja a Képernyőidőt. Kapcsold ki abban az appban, majd próbáld újra."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu iPhone’daki başka bir uygulama Ekran Süresi’ni kullanıyor. O uygulamada kapat, sonra yeniden dene."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "இந்த iPhone-இல் வேறொரு ஆப் ஸ்கிரீன் டைமைப் பயன்படுத்துகிறது. அந்த ஆப்பில் அதை ஆஃப் செய்து, மீண்டும் முயலுங்கள்."
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aplikasi lain di iPhone ini sedang memakai Durasi Layar. Matikan di aplikasi itu, lalu coba lagi."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تطبيق آخر على جهاز iPhone هذا يستخدم مدة استخدام الجهاز. أوقفيه من ذلك التطبيق، ثم حاولي مرة أخرى."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "אפליקציה אחרת באייפון הזה משתמשת בזמן מסך. כבי את זה באפליקציה ההיא ונסי שוב."
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Một ứng dụng khác trên iPhone này đang dùng Thời gian sử dụng. Hãy tắt trong ứng dụng đó rồi thử lại."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "এই iPhone-এ অন্য একটি অ্যাপ স্ক্রিন টাইম ব্যবহার করছে। সেই অ্যাপে এটি বন্ধ করে আবার চেষ্টা করুন।"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "اس iPhone پر کوئی اور ایپ اسکرین ٹائم استعمال کر رہی ہے۔ اس ایپ میں اسے بند کریں، پھر دوبارہ کوشش کریں۔"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Druga aplikacija v tem iPhonu uporablja Čas pred zaslonom. Izklopi ga v tisti aplikaciji in poskusi znova."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Μια άλλη εφαρμογή σε αυτό το iPhone χρησιμοποιεί τον Χρόνο επί οθόνης. Απενεργοποίησέ τον σε εκείνη την εφαρμογή και δοκίμασε ξανά."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ఈ iPhoneలో మరో యాప్ స్క్రీన్ టైమ్‌ను ఉపయోగిస్తోంది. ఆ యాప్‌లో దాన్ని ఆఫ్ చేసి, మళ్లీ ప్రయత్నించండి."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "這支 iPhone 上的另一個 App 正在使用螢幕使用時間。請在那個 App 裡關閉，然後再試一次。"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "આ iPhone પરની બીજી ઍપ સ્ક્રીન ટાઇમનો ઉપયોગ કરી રહી છે. તે ઍપમાં તેને બંધ કરો, પછી ફરી પ્રયાસ કરો."
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ಈ iPhone ನಲ್ಲಿ ಇನ್ನೊಂದು ಆ್ಯಪ್ ಸ್ಕ್ರೀನ್ ಟೈಮ್ ಬಳಸುತ್ತಿದೆ. ಆ ಆ್ಯಪ್‌ನಲ್ಲಿ ಅದನ್ನು ಆಫ್ ಮಾಡಿ, ನಂತರ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ഈ iPhone-ലെ മറ്റൊരു ആപ്പ് ‘സ്ക്രീൻ സമയം’ ഉപയോഗിക്കുന്നുണ്ട്. ആ ആപ്പിൽ അത് ഓഫാക്കിയ ശേഷം വീണ്ടും ശ്രമിക്കൂ."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "या iPhone वरील दुसरे ॲप स्क्रीन टाइम वापरत आहे. त्या ॲपमध्ये ते बंद करा, मग पुन्हा प्रयत्न करा."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ଏହି iPhone ରେ ଅନ୍ୟ ଏକ ଆପ୍ ସ୍କ୍ରିନ୍ ଟାଇମ୍ ବ୍ୟବହାର କରୁଛି। ସେହି ଆପ୍‌ରେ ଏହାକୁ ବନ୍ଦ କରନ୍ତୁ, ତା’ପରେ ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ।"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਇਸ iPhone ’ਤੇ ਕੋਈ ਹੋਰ ਐਪ ਸਕ੍ਰੀਨ ਟਾਈਮ ਵਰਤ ਰਹੀ ਹੈ। ਉਸ ਐਪ ਵਿੱਚ ਇਸਨੂੰ ਬੰਦ ਕਰੋ, ਫਿਰ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।"
+          }
+        }
+      }
+    },
     "empty.blocked_apps.title": {
       "comment": "Empty selection [standard]",
       "localizations": {
