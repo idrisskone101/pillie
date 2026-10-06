@@ -16,7 +16,7 @@ final class ReminderSchedulePlannerTests: XCTestCase {
     }
 
     func testSchedulesCatchupWhenConfiguredTimeHasPassedForToday() throws {
-        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 10)
+        let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 10)
         let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
         fixture.store.reminderHour = 8
         fixture.store.reminderMinute = 0
@@ -31,7 +31,7 @@ final class ReminderSchedulePlannerTests: XCTestCase {
     }
 
     func testSkipsTakenDueActionsUsingStatusMap() throws {
-        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 7)
         let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
         let todayEpoch = epochDay(for: now)
         let intents = dueIntents(
@@ -48,7 +48,7 @@ final class ReminderSchedulePlannerTests: XCTestCase {
         // After the 08:00 reminder, so the live dose day is today and its retry window
         // runs a full 24 hours (ADR 0009). Before 08:00 the live dose is yesterday's,
         // whose window closes at 08:00, and the retries never reach the cap.
-        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 9)
+        let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 9)
         let fixture = try InMemoryStoreFactory.makeStore(
             now: now,
             regimen: .custom,
@@ -70,7 +70,7 @@ final class ReminderSchedulePlannerTests: XCTestCase {
     }
 
     func testKeepsPrimaryReminderWhenRetryLimitIsZero() throws {
-        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 7)
         let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
         let todayEpoch = epochDay(for: now)
 
@@ -82,7 +82,7 @@ final class ReminderSchedulePlannerTests: XCTestCase {
     }
 
     func testCapsSameDayRetriesByRetryLimit() throws {
-        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 7)
         let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
         let todayEpoch = epochDay(for: now)
 
@@ -94,7 +94,7 @@ final class ReminderSchedulePlannerTests: XCTestCase {
     }
 
     func testTreatsSnoozeAsSeparateFromAutomaticRetries() throws {
-        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 7)
         let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
         let todayEpoch = epochDay(for: now)
         let snoozeFireDate = now.addingTimeInterval(10 * 60)
@@ -116,7 +116,7 @@ final class ReminderSchedulePlannerTests: XCTestCase {
     }
 
     func testFreeUserGetsSingleDueReminderWithNoRetries() throws {
-        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 7)
         let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
         let todayEpoch = epochDay(for: now)
 
@@ -133,7 +133,7 @@ final class ReminderSchedulePlannerTests: XCTestCase {
     }
 
     func testFreeUserSnoozeOverrideIsIgnored() throws {
-        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 7)
         let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
         let todayEpoch = epochDay(for: now)
         let snoozeFireDate = now.addingTimeInterval(10 * 60)
@@ -156,7 +156,7 @@ final class ReminderSchedulePlannerTests: XCTestCase {
     }
 
     func testPlusUserRetainsRetriesAndSnooze() throws {
-        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 7)
         let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
         let todayEpoch = epochDay(for: now)
         let snoozeFireDate = now.addingTimeInterval(10 * 60)
@@ -179,7 +179,7 @@ final class ReminderSchedulePlannerTests: XCTestCase {
     }
 
     func testFreeUserStillReceivesSupplyReminders() throws {
-        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 7)
         let pillFixture = try InMemoryStoreFactory.makeStore(now: now, method: .pill, startDate: now)
 
         let supply = plan(for: pillFixture.store, now: now, smartRemindersEnabled: false)
@@ -192,7 +192,7 @@ final class ReminderSchedulePlannerTests: XCTestCase {
     }
 
     func testBuildsPillAndPatchSupplyRemindersButNotRing() throws {
-        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 7)
         let pillFixture = try InMemoryStoreFactory.makeStore(now: now, method: .pill, startDate: now)
         let patchFixture = try InMemoryStoreFactory.makeStore(now: now, method: .patch, startDate: now)
         let ringFixture = try InMemoryStoreFactory.makeStore(
@@ -214,7 +214,7 @@ final class ReminderSchedulePlannerTests: XCTestCase {
     // MARK: - Cycle Transition Notice (#123)
 
     func testCycleTransitionNoticeFiresOnBreakWeekStartForEachMethod() throws {
-        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 7)
         let calendar = Calendar.current
 
         let fixtures: [(ContraceptiveMethod, InMemoryStoreFixture)] = [
@@ -253,7 +253,7 @@ final class ReminderSchedulePlannerTests: XCTestCase {
     }
 
     func testCycleTransitionNoticeCarriesNextActivePhaseResumeDate() throws {
-        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 7)
         let calendar = Calendar.current
         let fixture = try InMemoryStoreFactory.makeStore(now: now, method: .pill, regimen: .twentyOneOnly, startDate: now)
 
@@ -278,7 +278,7 @@ final class ReminderSchedulePlannerTests: XCTestCase {
     }
 
     func testCycleTransitionNoticeIsNotGatedByEntitlement() throws {
-        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 7)
         let fixture = try InMemoryStoreFactory.makeStore(now: now, method: .pill, regimen: .twentyOneOnly, startDate: now)
 
         let freeNotices = plan(for: fixture.store, now: now, smartRemindersEnabled: false)
@@ -292,7 +292,7 @@ final class ReminderSchedulePlannerTests: XCTestCase {
     }
 
     func testCycleTransitionNoticeAbsentOnActivePhaseStart() throws {
-        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 7)
         let calendar = Calendar.current
         let fixture = try InMemoryStoreFactory.makeStore(now: now, method: .pill, regimen: .twentyOneOnly, startDate: now)
 
@@ -311,7 +311,7 @@ final class ReminderSchedulePlannerTests: XCTestCase {
     }
 
     func testCycleTransitionNoticeAbsentWhenDisabled() throws {
-        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 7)
         let fixture = try InMemoryStoreFactory.makeStore(now: now, method: .pill, regimen: .twentyOneOnly, startDate: now)
 
         let notices = cycleTransitionIntents(for: fixture.store, now: now, cycleTransitionEnabled: false)
@@ -319,7 +319,7 @@ final class ReminderSchedulePlannerTests: XCTestCase {
     }
 
     func testCycleTransitionNoticeAbsentForContinuousRegimen() throws {
-        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 7)
         let fixture = try InMemoryStoreFactory.makeStore(
             now: now,
             regimen: .custom,
@@ -349,10 +349,10 @@ final class ReminderSchedulePlannerTests: XCTestCase {
     // MARK: - Served-base catch-up re-fire regression
 
     func testDoesNotRearmBaseAfterServedMomentPassed() throws {
-        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 21, minute: 17)
+        let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 21, minute: 17)
         let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
         let todayEpoch = epochDay(for: now)
-        let servedAt = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 21, minute: 15)
+        let servedAt = InMemoryStoreFactory.localDate("2026-05-26", hour: 21, minute: 15)
 
         let todayIntents = dueIntents(
             for: fixture.store,
@@ -364,12 +364,12 @@ final class ReminderSchedulePlannerTests: XCTestCase {
     }
 
     func testStabilizesPendingBaseFireDateFromServedMap() throws {
-        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 10, minute: 0)
+        let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 10, minute: 0)
         let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
         fixture.store.reminderHour = 8
         fixture.store.reminderMinute = 0
         let todayEpoch = epochDay(for: now)
-        let servedAt = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 10, minute: 1)
+        let servedAt = InMemoryStoreFactory.localDate("2026-05-26", hour: 10, minute: 1)
 
         let todayBase = try XCTUnwrap(
             dueIntents(
@@ -383,13 +383,13 @@ final class ReminderSchedulePlannerTests: XCTestCase {
     }
 
     func testFutureDayReplansAtConfiguredTimeDespiteServedEntry() throws {
-        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 10, minute: 0)
+        let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 10, minute: 0)
         let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
         fixture.store.reminderHour = 9
         fixture.store.reminderMinute = 30
         let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: now)!
         let tomorrowEpoch = epochDay(for: tomorrow)
-        let staleServedAt = InMemoryStoreFactory.fixedDate("2026-05-27", hour: 8, minute: 0)
+        let staleServedAt = InMemoryStoreFactory.localDate("2026-05-27", hour: 8, minute: 0)
 
         let tomorrowBase = try XCTUnwrap(
             dueIntents(
@@ -401,17 +401,17 @@ final class ReminderSchedulePlannerTests: XCTestCase {
 
         XCTAssertEqual(
             tomorrowBase.fireDate,
-            InMemoryStoreFactory.fixedDate("2026-05-27", hour: 9, minute: 30)
+            InMemoryStoreFactory.localDate("2026-05-27", hour: 9, minute: 30)
         )
     }
 
     func testTodayBeforeConfiguredTimeIgnoresServedEntry() throws {
-        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 10, minute: 0)
+        let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 10, minute: 0)
         let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
         fixture.store.reminderHour = 22
         fixture.store.reminderMinute = 0
         let todayEpoch = epochDay(for: now)
-        let staleServedAt = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 21, minute: 45)
+        let staleServedAt = InMemoryStoreFactory.localDate("2026-05-26", hour: 21, minute: 45)
 
         let todayBase = try XCTUnwrap(
             dueIntents(
@@ -423,17 +423,17 @@ final class ReminderSchedulePlannerTests: XCTestCase {
 
         XCTAssertEqual(
             todayBase.fireDate,
-            InMemoryStoreFactory.fixedDate("2026-05-26", hour: 22, minute: 0)
+            InMemoryStoreFactory.localDate("2026-05-26", hour: 22, minute: 0)
         )
     }
 
     func testRetriesAnchorWhenBaseSuppressedAfterServed() throws {
-        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 8, minute: 5)
+        let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 8, minute: 5)
         let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
         fixture.store.reminderHour = 8
         fixture.store.reminderMinute = 0
         let todayEpoch = epochDay(for: now)
-        let servedAt = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 8, minute: 0)
+        let servedAt = InMemoryStoreFactory.localDate("2026-05-26", hour: 8, minute: 0)
 
         let retries = dueIntents(
             for: fixture.store,
@@ -452,10 +452,10 @@ final class ReminderSchedulePlannerTests: XCTestCase {
 
 
     func testFreeUserNoBaseOrRetryAfterServed() throws {
-        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 21, minute: 17)
+        let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 21, minute: 17)
         let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
         let todayEpoch = epochDay(for: now)
-        let servedAt = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 21, minute: 15)
+        let servedAt = InMemoryStoreFactory.localDate("2026-05-26", hour: 21, minute: 15)
 
         let todayIntents = dueIntents(
             for: fixture.store,
@@ -469,10 +469,10 @@ final class ReminderSchedulePlannerTests: XCTestCase {
     }
 
     func testSnoozeBypassesServedBaseRecord() throws {
-        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 21, minute: 17)
+        let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 21, minute: 17)
         let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
         let todayEpoch = epochDay(for: now)
-        let servedAt = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 21, minute: 15)
+        let servedAt = InMemoryStoreFactory.localDate("2026-05-26", hour: 21, minute: 15)
         let snoozeFireDate = now.addingTimeInterval(10 * 60)
 
         let todayIntents = dueIntents(
@@ -492,10 +492,10 @@ final class ReminderSchedulePlannerTests: XCTestCase {
     }
 
     func testServedCommitmentDoesNotBlockTomorrow() throws {
-        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 21, minute: 17)
+        let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 21, minute: 17)
         let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
         let todayEpoch = epochDay(for: now)
-        let servedAt = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 21, minute: 15)
+        let servedAt = InMemoryStoreFactory.localDate("2026-05-26", hour: 21, minute: 15)
 
         let intents = dueIntents(
             for: fixture.store,
@@ -512,12 +512,12 @@ final class ReminderSchedulePlannerTests: XCTestCase {
     }
 
     func testBackToBackPlanConvergesWithStableServedBase() throws {
-        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 10, minute: 0)
+        let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 10, minute: 0)
         let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
         fixture.store.reminderHour = 8
         fixture.store.reminderMinute = 0
         let todayEpoch = epochDay(for: now)
-        let servedAt = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 10, minute: 1)
+        let servedAt = InMemoryStoreFactory.localDate("2026-05-26", hour: 10, minute: 1)
         let servedMap = [todayEpoch: servedAt]
 
         let first = dueIntents(
@@ -540,8 +540,8 @@ final class ReminderSchedulePlannerTests: XCTestCase {
     }
 
     func testRetriesContinueAfterMidnightUntilNextReminder() throws {
-        let reminderDay = InMemoryStoreFactory.fixedDate("2026-06-10", hour: 21)
-        let afterMidnight = InMemoryStoreFactory.fixedDate("2026-06-11", hour: 1)
+        let reminderDay = InMemoryStoreFactory.localDate("2026-06-10", hour: 21)
+        let afterMidnight = InMemoryStoreFactory.localDate("2026-06-11", hour: 1)
         let fixture = try InMemoryStoreFactory.makeStore(now: reminderDay, startDate: reminderDay)
         fixture.store.reminderHour = 21
         fixture.store.reminderMinute = 0
@@ -572,7 +572,7 @@ final class ReminderSchedulePlannerTests: XCTestCase {
     // MARK: - Young streak reminder copy (ENG-168)
 
     func testStreakAtRiskOnlyOnNearestUntakenPillBase() throws {
-        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 7)
         let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
         let todayEpoch = epochDay(for: now)
 
@@ -589,7 +589,7 @@ final class ReminderSchedulePlannerTests: XCTestCase {
     }
 
     func testStreakAtRiskMovesToTomorrowOnceTodayIsTaken() throws {
-        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 7)
         let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
         let todayEpoch = epochDay(for: now)
         let calendar = Calendar.current
@@ -617,7 +617,7 @@ final class ReminderSchedulePlannerTests: XCTestCase {
     }
 
     func testStreakAtRiskNilOutsideFirstWeekRange() throws {
-        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 7)
         let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
 
         for streak in [0, 7] {
@@ -630,10 +630,10 @@ final class ReminderSchedulePlannerTests: XCTestCase {
     }
 
     func testStreakAtRiskNilWhenTodayBaseAlreadyServed() throws {
-        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 21, minute: 17)
+        let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 21, minute: 17)
         let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
         let todayEpoch = epochDay(for: now)
-        let servedAt = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 21, minute: 15)
+        let servedAt = InMemoryStoreFactory.localDate("2026-05-26", hour: 21, minute: 15)
         let calendar = Calendar.current
         let tomorrow = try XCTUnwrap(calendar.date(byAdding: .day, value: 1, to: calendar.startOfDay(for: now)))
         let tomorrowEpoch = epochDay(for: tomorrow)
@@ -653,7 +653,7 @@ final class ReminderSchedulePlannerTests: XCTestCase {
     }
 
     func testStreakAtRiskNilForPatchAndRing() throws {
-        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 7)
 
         for method: ContraceptiveMethod in [.patch, .ring] {
             let fixture = try InMemoryStoreFactory.makeStore(
@@ -672,7 +672,7 @@ final class ReminderSchedulePlannerTests: XCTestCase {
     }
 
     func testStreakAtRiskNilOnRetriesForPlusUser() throws {
-        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 7)
         let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
         let todayEpoch = epochDay(for: now)
 
