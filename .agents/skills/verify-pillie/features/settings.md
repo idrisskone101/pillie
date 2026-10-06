@@ -49,7 +49,7 @@ support mailto rows and (debug builds only) the developer menu.
   (`#blockedAppsScreenTimeRefused`) and a Try again (`#blockedAppsTryAgain`)
   instead of the toggle and Choose apps. Home's blocking card, the Plus setup
   strip, and the update-trial announcement open the same editor.
-  `blocking-screen-time-refused` drives all four entries with
+  `blocking-screen-time-refused` drives the first three with
   `/screen-time-refused`.
 - `settings-subscription` — "Pillie Plus" row opens the system manage-
   subscriptions sheet for an active subscriber, or the honest paywall
@@ -81,8 +81,8 @@ support mailto rows and (debug builds only) the developer menu.
   closing it without saving.
 - `flows/blocking-screen-time-refused.flow` — makes Screen Time refuse
   (`/screen-time-refused`), then opens the blocked-apps editor from the Home
-  card, Settings, the Plus setup strip, and the update-trial announcement.
-  Each must show the refusal and Try again; Try again after `reason=none`
+  card, Settings, and the Plus setup strip. Each must show the refusal and
+  Try again; Try again after `reason=none`
   lands on the working editor.
 - `flows/settings-reminder-messages.flow` — opens Reminder messages on the
   default copy, switches tone to Direct then Gentle (both banners change),

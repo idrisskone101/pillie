@@ -1,9 +1,10 @@
 # ENG-166: when iOS refuses Screen Time, every way into the blocked-apps
 # editor says why and offers Try again, never a dead "Choose apps". Covers
-# Settings, the Home blocking card, the Today Plus setup strip, and the
-# update-trial announcement. The simulator always approves, so
-# /screen-time-refused makes it refuse like an iPhone where another app
-# holds access.
+# the Home blocking card, Settings, and the Today Plus setup strip. The
+# update-trial announcement opens the same editor, but its QA link only works
+# on a pre-cutover install, which a simulator never is. The simulator always
+# approves, so /screen-time-refused makes it refuse like an iPhone where
+# another app holds access.
 defaults homeBlockingStatusCardDismissed -bool false
 launch
 openurl pillie://debug/plus-home?lang=en
@@ -47,12 +48,3 @@ tap --id plusSetupPrimary
 wait id blockedAppsScreenTimeRefused
 expect text "Allow Screen Time access"
 shot plus-setup-refused
-
-launch
-openurl pillie://debug/update-trial-announcement?lang=en
-launch
-wait label Continue 15
-openurl "pillie://debug/screen-time-refused?reason=conflict"
-tap --label Continue
-wait id blockedAppsScreenTimeRefused
-shot update-trial-refused
