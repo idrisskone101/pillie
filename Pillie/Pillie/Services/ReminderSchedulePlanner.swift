@@ -79,8 +79,9 @@ struct ReminderSchedulePlanner {
         /// Picks the trial notice copy: blocking-specific lines only make sense
         /// once the user has chosen apps to block.
         var trialCohort: TrialEndPaywallCohort = .reminderOnly
-        /// Whether the trial notices may promise free daily reminders. Only
-        /// legacy (grandfathered) terms keep reminders free after the trial.
+        /// Whether reminders continue after the trial. Only legacy
+        /// (grandfathered) terms keep daily reminders free; hard-paywall
+        /// reminders stop at trial expiry and the notices never promise them.
         var trialEndTerms: TrialEndAccessTerms = .hardPaywall
         /// For each untaken due day, the fire date of a base reminder already
         /// committed by NotificationManager (persisted, pending, or delivered).
@@ -135,9 +136,29 @@ struct ReminderSchedulePlanner {
         case supply(SupplyReminderIntent)
         case cycleTransition(CycleTransitionIntent)
         case trialExpiryWarning(TrialExpiryWarningIntent)
+
+        /// Fire date of a reminder that needs app access; `nil` for the trial
+        /// notices, which belong to the paywall.
+        var reminderFireDate: Date? {
+            switch self {
+            case .due(let due): due.fireDate
+            case .supply(let supply): supply.fireDate
+            case .cycleTransition(let notice): notice.fireDate
+            case .trialExpiryWarning: nil
+            }
+        }
     }
 
     func planReminders(_ input: Input) -> [Intent] {
+        let intents = planAccessibleReminders(input)
+        guard let accessEnd = hardPaywallAccessEnd(input) else { return intents }
+        return intents.filter { intent in
+            guard let fireDate = intent.reminderFireDate else { return true }
+            return fireDate < accessEnd
+        }
+    }
+
+    private func planAccessibleReminders(_ input: Input) -> [Intent] {
         // Smart Reminders gating: free users keep exactly one Due Action Reminder
         // with no auto-retries and no snooze re-fire. Supply reminders are planned
         // separately below and are unaffected. The stored settings are read but not
@@ -248,6 +269,19 @@ struct ReminderSchedulePlanner {
         }
         intents.append(contentsOf: trialWarningIntents.map(Intent.trialExpiryWarning))
         return Array(intents.prefix(Self.maxPendingReminders))
+    }
+
+    /// When a hard-paywall user's trial ends, Pillie stops reminding them until
+    /// they choose a plan. Grandfathered (legacy) users and subscribers keep
+    /// their reminders. Only the trial notices may fire past this moment.
+    private func hardPaywallAccessEnd(_ input: Input) -> Date? {
+        guard !input.hasEntitlement,
+              input.trialEndTerms == .hardPaywall,
+              let grantDate = input.trialGrantDate else { return nil }
+        return ReverseTrialClock(
+            grantDate: grantDate,
+            schedule: ActiveDaySchedule(pack: input.pack, calendar: input.calendar)
+        ).expiryMoment(calendar: input.calendar)
     }
 
     /// Plans the Reverse Trial notices (#168 / ADR 0007) from

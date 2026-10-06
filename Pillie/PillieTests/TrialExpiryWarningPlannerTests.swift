@@ -241,6 +241,44 @@ final class TrialExpiryWarningPlannerTests: XCTestCase {
         XCTAssertEqual(withTrial.filter(\.isTrialWarning).count, 3)
     }
 
+    func testHardPaywallRemindersStopAtTrialExpiry() throws {
+        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 9)
+        let grantDate = try XCTUnwrap(Calendar.current.date(byAdding: .day, value: -12, to: now))
+        let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: grantDate)
+        let expiry = ReverseTrialClock(
+            grantDate: grantDate,
+            schedule: ActiveDaySchedule(pack: fixture.store.pack, calendar: .current)
+        ).expiryMoment(calendar: .current)
+
+        let hard = plan(for: fixture.store, now: now, trialGrantDate: grantDate, trialEndTerms: .hardPaywall)
+        let legacy = plan(for: fixture.store, now: now, trialGrantDate: grantDate, trialEndTerms: .legacy)
+
+        XCTAssertGreaterThan(hard.filter(\.isDue).count, 0)
+        XCTAssertTrue(hard.compactMap(\.reminderFireDate).allSatisfy { $0 < expiry })
+        XCTAssertEqual(hard.filter(\.isTrialWarning).map(\.trialWarningDay), [13, 15])
+        XCTAssertTrue(legacy.compactMap(\.reminderFireDate).contains { $0 >= expiry })
+    }
+
+    func testExpiredHardPaywallTrialPlansNoReminders() throws {
+        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 9)
+        let grantDate = try XCTUnwrap(Calendar.current.date(byAdding: .day, value: -20, to: now))
+        let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: grantDate)
+
+        let hard = plan(for: fixture.store, now: now, trialGrantDate: grantDate, trialEndTerms: .hardPaywall)
+        let legacy = plan(for: fixture.store, now: now, trialGrantDate: grantDate, trialEndTerms: .legacy)
+        let subscriber = plan(
+            for: fixture.store,
+            now: now,
+            trialGrantDate: grantDate,
+            hasEntitlement: true,
+            trialEndTerms: .hardPaywall
+        )
+
+        XCTAssertEqual(hard, [])
+        XCTAssertGreaterThan(legacy.filter(\.isDue).count, 0)
+        XCTAssertGreaterThan(subscriber.filter(\.isDue).count, 0)
+    }
+
     // MARK: - Helpers
 
     private func plan(
@@ -249,6 +287,7 @@ final class TrialExpiryWarningPlannerTests: XCTestCase {
         trialGrantDate: Date?,
         hasEntitlement: Bool = false,
         trialCohort: TrialEndPaywallCohort = .reminderOnly,
+        trialEndTerms: TrialEndAccessTerms = .legacy,
         smartRemindersEnabled: Bool = true,
         autoReminderIntervalMinutes: Int? = nil,
         autoReminderRetryLimit: Int? = nil
@@ -279,6 +318,7 @@ final class TrialExpiryWarningPlannerTests: XCTestCase {
                 trialGrantDate: trialGrantDate,
                 hasEntitlement: hasEntitlement,
                 trialCohort: trialCohort,
+                trialEndTerms: trialEndTerms,
                 servedBaseFireDateByDueDayEpoch: [:],
                 calendar: calendar
             )
@@ -326,5 +366,10 @@ private extension ReminderSchedulePlanner.Intent {
     var isSupply: Bool {
         if case .supply = self { return true }
         return false
+    }
+
+    var trialWarningDay: Int? {
+        if case .trialExpiryWarning(let warning) = self { return warning.day }
+        return nil
     }
 }
