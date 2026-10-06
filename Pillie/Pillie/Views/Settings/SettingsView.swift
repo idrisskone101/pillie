@@ -230,13 +230,10 @@ struct SettingsView: View {
                 settingsCard {
                     if SubscriptionManager.shared.hasPlusAccess {
                         Button {
-                            Task { @MainActor in
-                                _ = await AppBlockingManager.shared.ensureAuthorized()
-                                openSensitiveSetting { showBlockedAppsEditor = true }
-                                ProductAnalyticsTelemetry.live.blockedAppsSettingsOpened(
-                                    hasSelection: AppBlockingManager.shared.hasAppsSelected
-                                )
-                            }
+                            openSensitiveSetting { showBlockedAppsEditor = true }
+                            ProductAnalyticsTelemetry.live.blockedAppsSettingsOpened(
+                                hasSelection: AppBlockingManager.shared.hasAppsSelected
+                            )
                         } label: {
                             settingsRow(PillieLocalization.string(
                                 "settings.blocked_apps.title",
@@ -1018,6 +1015,7 @@ private struct CycleDayEditor: View {
                 settingsFeedback.commitScheduleSave(accessibilityReduceMotion: accessibilityReduceMotion)
                 store.updateCycleDay(selectedCycleDay)
                 ProductAnalyticsTelemetry.live.cycleDaySaved()
+                StreakChangeReport.record(store, reason: .packChange)
                 dismiss()
             } label: {
                 Text(PillieLocalization.string("global.action.save", locale: locale))

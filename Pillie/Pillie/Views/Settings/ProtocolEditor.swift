@@ -212,9 +212,11 @@ struct ProtocolEditor: View {
             module(for: draft, onReveal: onReveal)
                 .id(draft.method)
 
-            Text(PillieLocalization.string("settings.cycle_day.history_note", locale: locale))
-                .font(.pillieCaption())
-                .foregroundStyle(PillieTheme.textMuted)
+            if draft.method == store.pack.method {
+                Text(PillieLocalization.string("settings.cycle_day.history_note", locale: locale))
+                    .font(.pillieCaption())
+                    .foregroundStyle(PillieTheme.textMuted)
+            }
 
             Color.clear
                 .frame(height: 1)
@@ -278,10 +280,13 @@ struct ProtocolEditor: View {
             method: draft.method,
             regimen: draft.preset,
             customRegimen: draft.customRegimen,
-            cycleDay: draft.cycleDay ?? 1
+            cycleDay: draft.cycleDay ?? 1,
+            anchorDay: store.anchorDay(for: draft.answer)
         )
+        StreakChangeReport.record(store, reason: .packChange)
         if draft.logsToday {
             store.markTodayAsTaken()
+            StreakChangeReport.record(store, reason: .logged)
         }
         ProductAnalyticsTelemetry.live.protocolChangeSaved()
         dismiss()

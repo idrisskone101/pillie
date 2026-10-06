@@ -29,6 +29,9 @@ final class PillPack {
     var ringInsertionDate: Date?
     /// When the user started this pack. nil on packs from older builds.
     var startedAt: Date?
+    /// The day the user named as today's pill when setting this pack up. Before the
+    /// reminder that day is ahead of the live day, which already holds the previous pill.
+    var firstLiveDay: Date?
 
     @Relationship(deleteRule: .cascade, inverse: \PillDay.pack)
     var days: [PillDay] = []
@@ -216,9 +219,11 @@ final class PillPack {
         cycleDayAnchorIndex: Int = 0,
         packNumber: Int,
         isCurrent: Bool = true,
-        startedAt: Date? = nil
+        startedAt: Date? = nil,
+        firstLiveDay: Date? = nil
     ) {
         self.startedAt = startedAt
+        self.firstLiveDay = firstLiveDay
         self.packType = pillRegimen.legacyPackType
         self.methodRaw = method.rawValue
         self.startDate = startDate

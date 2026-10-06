@@ -63,6 +63,13 @@ enum ScheduleDraft: Equatable {
         }
     }
 
+    var answer: TodayPillPick.Answer? {
+        switch self {
+        case .pill(let selection): selection.pick?.answer
+        case .dial(let selection): selection.pick?.answer
+        }
+    }
+
     var logsToday: Bool {
         switch self {
         case .pill(let selection): selection.pick?.logsADose ?? false

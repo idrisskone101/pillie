@@ -13,6 +13,21 @@ openurl "pillie://debug/plus-app-blocking-setup?lang=en"
 wait id appBlockingEmptyStateCard 15
 shot app-blocking-empty
 
+# A paid entitlement unlocks setup without a trial, so the trial line stays off.
+expect-not id appBlockingTrialLine
+
+# terms=hard drops the entitlement and starts a fresh reverse trial
+# (OnboardingHardPaywallDebugScenario), the state a new user is in here.
+# AppBlockingSetupPhase.showsTrialLine; ENG-139.
+openurl "pillie://debug/plus-app-blocking-setup?terms=hard&lang=en"
+wait id appBlockingTrialLine 15
+shot app-blocking-trial-empty
+
+openurl "pillie://debug/plus-app-blocking-setup?terms=hard&selected=4&lang=en"
+wait text "Apps selected"
+expect id appBlockingTrialLine
+shot app-blocking-trial-selected
+
 # Fakes a 4-app FamilyControls selection (the exact example from the source
 # comment). AppBlockingManager.swift:36-40 debugSelectionCountOverride;
 # PillieApp.swift:539-543 reads the `selected` query item.

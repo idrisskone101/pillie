@@ -1,3 +1,4 @@
+import FamilyControls
 import Foundation
 import Testing
 
@@ -15,6 +16,32 @@ struct AppBlockingSetupContentTests {
         #expect(content.subtitle.lowercased().contains("check in"))
         #expect(content.changeSelectionCTA == "Edit")
         #expect(content.skipCTA == "Not now")
+    }
+
+    @Test func anotherAppHoldingScreenTimeGetsItsOwnSentence() {
+        #expect(ScreenTimeRefusal(FamilyControlsError.authorizationConflict) == .heldByAnotherApp)
+        #expect(ScreenTimeRefusal(FamilyControlsError.authorizationCanceled) == .notAllowed)
+        #expect(
+            content.authorizationConflictDetail
+                == "Another app on this iPhone is using Screen Time. Turn it off in that app, then try again."
+        )
+        #expect(content.authorizationDeniedDetail == "Allow Screen Time access so Pillie can pause the apps you pick.")
+    }
+
+    @Test func trialLineSaysTheTrialStartsHere() {
+        #expect(
+            content.trialLine
+                == "Pillie Plus is on for your next 14 active days, free. No\u{00A0}card. We’ll remind you before it ends."
+        )
+    }
+
+    @Test func trialLineShowsOnlyWhileTheTrialIsWhatUnlocksSetup() {
+        #expect(AppBlockingSetupPhase.empty.showsTrialLine(hasEntitlement: false))
+        #expect(AppBlockingSetupPhase.selected.showsTrialLine(hasEntitlement: false))
+        #expect(AppBlockingSetupPhase.recovery.showsTrialLine(hasEntitlement: false))
+        #expect(!AppBlockingSetupPhase.locked.showsTrialLine(hasEntitlement: false))
+        #expect(!AppBlockingSetupPhase.empty.showsTrialLine(hasEntitlement: true))
+        #expect(!AppBlockingSetupPhase.selected.showsTrialLine(hasEntitlement: true))
     }
 
     @Test func hardPaywallLockedFallbackOffersUpgradeInsteadOfAFreeExit() {

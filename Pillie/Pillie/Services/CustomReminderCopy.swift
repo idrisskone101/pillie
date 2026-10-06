@@ -5,11 +5,39 @@
 
 import Foundation
 
+enum CustomReminderKind: String, Identifiable {
+    case daily
+    case followup
+
+    var id: String { rawValue }
+}
+
 struct CustomReminderMessages: Equatable {
     var dueTitle: String
     var dueBody: String
     var retryTitle: String
     var retryBody: String
+
+    /// One reminder's title and message.
+    subscript(kind: CustomReminderKind) -> CustomReminderWords {
+        get {
+            switch kind {
+            case .daily: CustomReminderWords(title: dueTitle, message: dueBody)
+            case .followup: CustomReminderWords(title: retryTitle, message: retryBody)
+            }
+        }
+        set {
+            switch kind {
+            case .daily: (dueTitle, dueBody) = (newValue.title, newValue.message)
+            case .followup: (retryTitle, retryBody) = (newValue.title, newValue.message)
+            }
+        }
+    }
+}
+
+struct CustomReminderWords: Equatable {
+    var title: String
+    var message: String
 }
 
 struct CustomReminderDraft: Equatable {
@@ -37,6 +65,17 @@ struct CustomReminderDraft: Equatable {
         appliedPresetMessages = localizedMessages
     }
 
+    /// What Reset puts back in one reminder: the selected tone's wording, or the last tone
+    /// tapped this session once the words were edited away from it, or Pillie's default.
+    func resetWords(
+        for kind: CustomReminderKind,
+        defaults: CustomReminderMessages,
+        locale: Locale
+    ) -> CustomReminderWords {
+        let preset = CustomReminderTone.resolve(messages, defaults: defaults, locale: locale).preset ?? appliedPreset
+        return (preset?.localizedMessages(locale: locale) ?? defaults)[kind]
+    }
+
     mutating func restoreDefaults(_ defaults: CustomReminderMessages) {
         messages = defaults
         appliedPreset = nil
@@ -47,6 +86,50 @@ struct CustomReminderDraft: Equatable {
         messages = originalMessages
         appliedPreset = nil
         appliedPresetMessages = nil
+    }
+}
+
+/// What the Tone control shows for the words currently in the draft.
+enum CustomReminderTone: Equatable {
+    case preset(CustomReminderPreset)
+    case pillieDefault
+    case ownWords
+
+    static func resolve(
+        _ messages: CustomReminderMessages,
+        defaults: CustomReminderMessages,
+        locale: Locale
+    ) -> Self {
+        // A blank field fires the default, so it reads as the default here too.
+        func effective(_ text: String, _ fallback: String) -> String {
+            text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? fallback : text
+        }
+        let effective = CustomReminderMessages(
+            dueTitle: effective(messages.dueTitle, defaults.dueTitle),
+            dueBody: effective(messages.dueBody, defaults.dueBody),
+            retryTitle: effective(messages.retryTitle, defaults.retryTitle),
+            retryBody: effective(messages.retryBody, defaults.retryBody)
+        )
+        if let preset = CustomReminderPreset.matching(effective, locale: locale) {
+            return .preset(preset)
+        }
+        return effective == defaults ? .pillieDefault : .ownWords
+    }
+
+    var preset: CustomReminderPreset? {
+        if case .preset(let preset) = self { preset } else { nil }
+    }
+
+    func localizedDescription(locale: Locale) -> String {
+        let key = switch self {
+        case .preset(.gentle): "settings.custom_messages.tone.gentle_body"
+        case .preset(.direct): "settings.custom_messages.tone.direct_body"
+        case .preset(.encouraging): "settings.custom_messages.tone.encouraging_body"
+        case .preset(.privateDiscreet): "settings.custom_messages.tone.private_body"
+        case .pillieDefault: "settings.custom_messages.tone.default_body"
+        case .ownWords: "settings.custom_messages.tone.custom_body"
+        }
+        return PillieLocalization.string(key, locale: locale)
     }
 }
 

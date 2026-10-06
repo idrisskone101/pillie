@@ -18,6 +18,7 @@ struct AppBlockingSetupContent {
 
     let authorizationDeniedTitle: String
     let authorizationDeniedDetail: String
+    let authorizationConflictDetail: String
     let retryAuthorizationCTA: String
 
     let selectedSummaryLabel: String
@@ -32,14 +33,17 @@ struct AppBlockingSetupContent {
     let lockedSubtitle: String
     let lockedDetail: String
     let lockedCTA: String
+    let trialLine: String
 
     var visibleCopy: [String] {
         [
             titleLead, subtitle,
             emptyTitle, emptyUnlockFormat, emptyMarkTaken, emptyDetail,
-            authorizationDeniedTitle, authorizationDeniedDetail, retryAuthorizationCTA,
+            authorizationDeniedTitle, authorizationDeniedDetail, authorizationConflictDetail,
+            retryAuthorizationCTA,
             chooseAppsCTA, selectedSummaryLabel, selectedPrivacyNote, changeSelectionCTA,
-            privacyNote, finishCTA, skipCTA, lockedTitle, lockedSubtitle, lockedDetail, lockedCTA
+            privacyNote, finishCTA, skipCTA, lockedTitle, lockedSubtitle, lockedDetail, lockedCTA,
+            trialLine
         ]
     }
 
@@ -70,7 +74,8 @@ struct AppBlockingSetupContent {
             ),
             chooseAppsCTA: PillieLocalization.string("onboarding.blocking_setup.allow_pausing", locale: locale),
             authorizationDeniedTitle: PillieLocalization.string("error.screen_time.title", locale: locale),
-            authorizationDeniedDetail: PillieLocalization.string("error.screen_time.body", locale: locale),
+            authorizationDeniedDetail: ScreenTimeRefusal.notAllowed.detail(locale: locale),
+            authorizationConflictDetail: ScreenTimeRefusal.heldByAnotherApp.detail(locale: locale),
             retryAuthorizationCTA: PillieLocalization.string("global.action.retry", locale: locale),
             selectedSummaryLabel: PillieLocalization.string(
                 "onboarding.blocking_setup.selected_summary",
@@ -99,6 +104,15 @@ struct AppBlockingSetupContent {
                     : "global.action.continue",
                 table: trialEndTerms == .hardPaywall ? "Commerce" : nil,
                 locale: locale
+            ),
+            trialLine: String(
+                format: PillieLocalization.string(
+                    "onboarding.blocking_setup.trial_line",
+                    table: "Commerce",
+                    locale: locale
+                ),
+                locale: locale,
+                ReverseTrialClock.fullDays
             )
         )
     }
@@ -179,6 +193,12 @@ enum AppBlockingSetupPhase: Equatable {
         guard canSetUpBlocking else { return .locked }
         if isRecoveryVisible { return .recovery }
         return isEmpty ? .empty : .selected
+    }
+
+    /// Plus Access without a paid entitlement is the reverse trial, which starts
+    /// on this screen, so it is the one place to say so.
+    func showsTrialLine(hasEntitlement: Bool) -> Bool {
+        self != .locked && !hasEntitlement
     }
 }
 
@@ -284,7 +304,7 @@ struct AppBlockingSetupView: View {
         }
         .familyActivityPicker(
             isPresented: $showPicker,
-            selection: Bindable(blockingManager).pickerSelection
+            selection: Bindable(blockingManager).activitySelection
         )
         .onAppear {
             animateIn = true
@@ -379,7 +399,9 @@ struct AppBlockingSetupView: View {
                 .minimumScaleFactor(dynamicTypeSize.isAccessibilitySize ? 1 : 0.72)
                 .allowsTightening(true)
 
-            Text(content.authorizationDeniedDetail)
+            Text(blockingManager.refusal == .heldByAnotherApp
+                ? content.authorizationConflictDetail
+                : content.authorizationDeniedDetail)
                 .font(.pillieBody())
                 .foregroundStyle(PillieTheme.textMuted)
                 .multilineTextAlignment(.center)
@@ -471,6 +493,9 @@ struct AppBlockingSetupView: View {
                 }
                 .buttonStyle(.pillieDark)
             } else {
+                if phase.showsTrialLine(hasEntitlement: SubscriptionManager.shared.hasEntitlement) {
+                    trialLine
+                }
                 if phase == .empty {
                     emptyCoachLine
                 }
@@ -478,6 +503,25 @@ struct AppBlockingSetupView: View {
                 skipButton
             }
         }
+    }
+
+    private var trialLine: some View {
+        HStack(alignment: .firstTextBaseline, spacing: 8) {
+            Image(systemName: "sparkles")
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundStyle(PillieTheme.coral)
+            Text(content.trialLine)
+                .font(.pillie(14, weight: .medium))
+                .foregroundStyle(PillieTheme.textPrimary)
+                .lineSpacing(3)
+                .lineLimit(dynamicTypeSize.isAccessibilitySize ? nil : 2)
+                .minimumScaleFactor(dynamicTypeSize.isAccessibilitySize ? 1 : 0.8)
+                .allowsTightening(true)
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityIdentifier("appBlockingTrialLine")
     }
 
     private var emptyCoachLine: some View {

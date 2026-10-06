@@ -12,6 +12,8 @@ struct ProductDemoMomentView: View {
   private let performanceTier = PerformanceTier.current
   private let onboardingFeedback = OnboardingInteractionFeedback(performanceTier: PerformanceTier.current)
 
+  /// Only grandfathered installs keep daily reminders free after the trial.
+  let trialEndTerms: TrialEndAccessTerms
   let onContinue: () -> Void
 
   var body: some View {
@@ -32,13 +34,15 @@ struct ProductDemoMomentView: View {
             historyPreviewCard
               .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger3))
 
-            Text(PillieLocalization.string("onboarding.demo.free_body"))
-              .font(.pillie(11, weight: .medium))
-              .foregroundStyle(PillieTheme.textMuted)
-              .multilineTextAlignment(.center)
-              .fixedSize(horizontal: false, vertical: true)
-              .padding(.horizontal, 12)
-              .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger4))
+            if trialEndTerms == .legacy {
+              Text(PillieLocalization.string("onboarding.demo.free_body"))
+                .font(.pillie(11, weight: .medium))
+                .foregroundStyle(PillieTheme.textMuted)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(.horizontal, 12)
+                .modifier(FadeInUp(appeared: animateIn, delay: PillieTheme.stagger4))
+            }
           }
           .padding(.horizontal, 28)
           .padding(.top, 30)
@@ -216,5 +220,5 @@ struct ProductDemoMomentView: View {
 }
 
 #Preview {
-  ProductDemoMomentView(onContinue: {})
+  ProductDemoMomentView(trialEndTerms: .hardPaywall, onContinue: {})
 }

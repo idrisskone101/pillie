@@ -10,6 +10,9 @@ struct ReminderSchedulePlanner {
     static let baseReminderCount = 7
     static let dueScanLimit = 120
     static let catchupDelayMinutes = 1
+    /// The streak is named only in its first week: the first reminders after
+    /// onboarding (ENG-168).
+    static let streakReminderRange = 1...6
     /// One row per Reverse Trial notice (#168 / ADR 0007). `day` names the
     /// request id, copy, and analytics value. Fire times are counted back from
     /// `ReverseTrialClock.expiryMoment`, not forward from the grant, so a break
@@ -79,6 +82,13 @@ struct ReminderSchedulePlanner {
         /// Picks the trial notice copy: blocking-specific lines only make sense
         /// once the user has chosen apps to block.
         var trialCohort: TrialEndPaywallCohort = .reminderOnly
+        /// Whether reminders continue after the trial. Only legacy
+        /// (grandfathered) terms keep daily reminders free; hard-paywall
+        /// reminders stop at trial expiry and the notices never promise them.
+        var trialEndTerms: TrialEndAccessTerms = .hardPaywall
+        /// `PillStore.currentStreak`: the run of taken due days before the
+        /// nearest untaken one, i.e. what that day's reminder protects (ENG-168).
+        var currentStreak: Int = 0
         /// For each untaken due day, the fire date of a base reminder already
         /// committed by NotificationManager (persisted, pending, or delivered).
         /// Empty → planner may emit first-time catch-up. Non-empty + fire <= now
@@ -93,6 +103,11 @@ struct ReminderSchedulePlanner {
         let fireDate: Date
         let dueDayEpoch: Int
         let kind: DueReminderKind
+        /// Set only on the base reminder for the nearest untaken pill day while
+        /// the streak is in `streakReminderRange` (ENG-168). Later days stay
+        /// `nil` because their streak depends on check-ins that haven't
+        /// happened yet.
+        var streakAtRisk: Int? = nil
     }
 
     struct SupplyReminderIntent: Hashable {
@@ -124,6 +139,7 @@ struct ReminderSchedulePlanner {
         let day: Int
         let fireDate: Date
         let cohort: TrialEndPaywallCohort
+        let terms: TrialEndAccessTerms
     }
 
     enum Intent: Hashable {
@@ -131,9 +147,29 @@ struct ReminderSchedulePlanner {
         case supply(SupplyReminderIntent)
         case cycleTransition(CycleTransitionIntent)
         case trialExpiryWarning(TrialExpiryWarningIntent)
+
+        /// Fire date of a reminder that needs app access; `nil` for the trial
+        /// notices, which belong to the paywall.
+        var reminderFireDate: Date? {
+            switch self {
+            case .due(let due): due.fireDate
+            case .supply(let supply): supply.fireDate
+            case .cycleTransition(let notice): notice.fireDate
+            case .trialExpiryWarning: nil
+            }
+        }
     }
 
     func planReminders(_ input: Input) -> [Intent] {
+        let intents = planAccessibleReminders(input)
+        guard let accessEnd = hardPaywallAccessEnd(input) else { return intents }
+        return intents.filter { intent in
+            guard let fireDate = intent.reminderFireDate else { return true }
+            return fireDate < accessEnd
+        }
+    }
+
+    private func planAccessibleReminders(_ input: Input) -> [Intent] {
         // Smart Reminders gating: free users keep exactly one Due Action Reminder
         // with no auto-retries and no snooze re-fire. Supply reminders are planned
         // separately below and are unaffected. The stored settings are read but not
@@ -166,6 +202,7 @@ struct ReminderSchedulePlanner {
             return input.statusByEpochDay[key] != .taken
         }
         let baseDueActions = Array(dueActions.prefix(min(Self.baseReminderCount, dueReminderBudget)))
+        let nearestDueDayEpoch = dueActions.first.map { epochDay(for: $0.date, calendar: input.calendar) }
 
         var dueIntents: [DueReminderIntent] = []
         var retryAnchorByEpoch: [Int: Date] = [:]
@@ -203,12 +240,17 @@ struct ReminderSchedulePlanner {
                 calendar: input.calendar
                ) {
                 let firstKind: DueReminderKind = (effectiveSnoozeOverride?.dueDayEpoch == dueEpoch) ? .snooze : .base
+                let namesStreak = firstKind == .base
+                    && due.method == .pill
+                    && dueEpoch == nearestDueDayEpoch
+                    && Self.streakReminderRange.contains(input.currentStreak)
                 dueIntents.append(
                     DueReminderIntent(
                         action: due,
                         fireDate: firstReminderDate,
                         dueDayEpoch: dueEpoch,
-                        kind: firstKind
+                        kind: firstKind,
+                        streakAtRisk: namesStreak ? input.currentStreak : nil
                     )
                 )
             }
@@ -246,6 +288,19 @@ struct ReminderSchedulePlanner {
         return Array(intents.prefix(Self.maxPendingReminders))
     }
 
+    /// When a hard-paywall user's trial ends, Pillie stops reminding them until
+    /// they choose a plan. Grandfathered (legacy) users and subscribers keep
+    /// their reminders. Only the trial notices may fire past this moment.
+    private func hardPaywallAccessEnd(_ input: Input) -> Date? {
+        guard !input.hasEntitlement,
+              input.trialEndTerms == .hardPaywall,
+              let grantDate = input.trialGrantDate else { return nil }
+        return ReverseTrialClock(
+            grantDate: grantDate,
+            schedule: ActiveDaySchedule(pack: input.pack, calendar: input.calendar)
+        ).expiryMoment(calendar: input.calendar)
+    }
+
     /// Plans the Reverse Trial notices (#168 / ADR 0007) from
     /// `trialNoticeSlots`: the day-10 and day-13 warnings at 20:00, 5 and 2
     /// local days before expiry, so copy ("in 5 days", "tomorrow night") stays
@@ -279,7 +334,12 @@ struct ReminderSchedulePlanner {
             // or expired trial keeps only notices still ahead of it. (A past
             // calendar trigger would otherwise fire immediately.)
             guard fireDate > input.now else { return nil }
-            return TrialExpiryWarningIntent(day: slot.day, fireDate: fireDate, cohort: input.trialCohort)
+            return TrialExpiryWarningIntent(
+                day: slot.day,
+                fireDate: fireDate,
+                cohort: input.trialCohort,
+                terms: input.trialEndTerms
+            )
         }
     }
 

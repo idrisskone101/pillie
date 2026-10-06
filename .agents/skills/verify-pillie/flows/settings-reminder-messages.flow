@@ -1,0 +1,76 @@
+# Settings › Reminder messages (ENG-159, ENG-160): the Lock Screen stage shows
+# both reminders, a tone segment rewrites both banners, the pencil opens the edit
+# sheet (X drops, Reset restores the tone, the checkmark keeps), and Save
+# persists so the row reads "Customized".
+fresh
+launch
+openurl pillie://debug/plus-home?lang=en
+wait text Today 15
+tap --label Settings
+wait id settingsLanguageRow
+
+tap --label "Reminder messages, Default"
+wait id reminder-tone-gentle                    # CustomReminderMessagesEditor.swift
+wait text "Pillie’s own wording."
+shot opened-default
+
+tap --id reminder-tone-direct
+wait text "Short and clear."
+wait text "Time to check in"
+wait text "You haven’t checked in yet today."
+shot tone-direct
+
+tap --id reminder-tone-gentle
+wait text "Soft words that give you a little room."
+wait text "A gentle reminder for your routine."
+shot tone-gentle
+
+tap --id reminder-edit-daily
+wait id reminder-field-daily-title              # CustomReminderWordsEditor.swift
+wait text "First nudge each day"
+expect id reminder-words-cancel
+expect id reminder-words-reset
+shot words-editor                               # banner and card sit above the keyboard
+
+# X drops the edit: blank the title, cancel, and the stage still shows Gentle.
+tap --id reminder-field-daily-title             # a second tap on the focused field opens the edit menu
+wait label "Select All"
+tap --label "Select All"
+wait label Cut
+tap --label Cut
+wait label "Time for your pill, A gentle reminder for your routine."   # live preview: a blank title fires the default
+shot words-blank-live
+tap --id reminder-words-cancel
+gone id reminder-field-daily-title
+wait text "Soft words that give you a little room."
+expect label "A gentle reminder, A gentle reminder for your routine."
+
+# Reset puts back the selected tone's title.
+tap --id reminder-edit-daily
+wait id reminder-field-daily-title
+tap --id reminder-field-daily-title
+wait label "Select All"
+tap --label "Select All"
+wait label Cut
+tap --label Cut
+wait text "Time for your pill"
+tap --id reminder-words-reset
+wait label "A gentle reminder, A gentle reminder for your routine."
+shot words-reset
+
+# The checkmark keeps a blank title, so the tone reads as your own words.
+tap --id reminder-field-daily-title
+wait label "Select All"
+tap --label "Select All"
+wait label Cut
+tap --label Cut
+tap --id reminder-words-done
+gone id reminder-field-daily-title
+wait text "Your own words."
+wait text "Time for your pill"
+wait text "A gentle reminder for your routine."
+shot own-words
+
+tap --label Save
+wait label "Reminder messages, Customized"
+shot saved

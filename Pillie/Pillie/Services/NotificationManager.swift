@@ -274,8 +274,13 @@ final class NotificationManager {
     /// `pillie://debug/notification-complete` calls it too, since the simulator can't tap the action.
     func completeReminder(store: PillStore, dueDate: Date) {
         let dueEpoch = Int(Calendar.current.startOfDay(for: dueDate).timeIntervalSince1970)
+        let wasTaken = store.statusForDate(dueDate) == .taken
 
         store.markActionAsTaken(on: dueDate)
+        if !wasTaken, store.statusForDate(dueDate) == .taken {
+            ProductAnalyticsTelemetry.live.todayActionCompleted(source: .notification)
+            StreakChangeReport.record(store, reason: .logged)
+        }
         AppBlockingManager.shared.removeBlocking()
         var ledger = ServedBaseReminderLedger.load()
         ledger.clearServedRecordWhenTaken(dueDayEpoch: dueEpoch)
@@ -359,6 +364,8 @@ final class NotificationManager {
                 trialGrantDate: SubscriptionManager.shared.trialGrantDate,
                 hasEntitlement: SubscriptionManager.shared.hasEntitlement,
                 trialCohort: hasBlockerSetup() ? .blockerConfigured : .reminderOnly,
+                trialEndTerms: SubscriptionManager.shared.trialEndTerms,
+                currentStreak: store.currentStreak,
                 servedBaseFireDateByDueDayEpoch: servedBaseFireDateByDueDayEpoch,
                 calendar: calendar
             )
@@ -410,7 +417,12 @@ final class NotificationManager {
     ) -> UNNotificationRequest {
         let content = UNMutableNotificationContent()
         content.title = TrialExpiryWarningCopy.title(day: warning.day, locale: locale)
-        content.body = TrialExpiryWarningCopy.body(day: warning.day, cohort: warning.cohort, locale: locale)
+        content.body = TrialExpiryWarningCopy.body(
+            day: warning.day,
+            cohort: warning.cohort,
+            terms: warning.terms,
+            locale: locale
+        )
         content.sound = .default
         content.userInfo = [
             PayloadKey.requestKind: TrialExpiryWarningDelivery.requestKindValue,
@@ -423,7 +435,7 @@ final class NotificationManager {
         }
 
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
-        let id = trialWarningIdentifier(day: warning.day, cohort: warning.cohort, fireDate: warning.fireDate)
+        let id = trialWarningIdentifier(warning)
         return UNNotificationRequest(identifier: id, content: content, trigger: trigger)
     }
 
@@ -466,6 +478,9 @@ final class NotificationManager {
             // The base (and snooze re-fire) Due Action Reminder carries the user's custom
             // copy when Plus; any blank field falls back independently to the default
             // method-aware copy, so an empty notification can never fire.
+            let defaultBody = due.streakAtRisk.map {
+                PillieLocalization.formatted("notification.reminder.pill.streak.body", arguments: $0)
+            } ?? due.action.reminderBody
             content.title = CustomReminderCopy.effective(
                 custom: customTitle,
                 default: due.action.reminderTitle,
@@ -474,7 +489,7 @@ final class NotificationManager {
             )
             content.body = CustomReminderCopy.effective(
                 custom: customBody,
-                default: due.action.reminderBody,
+                default: defaultBody,
                 cap: CustomReminderCopy.bodyCap,
                 isPlus: isPlus
             )
@@ -493,7 +508,7 @@ final class NotificationManager {
         }
 
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
-        let id = reminderIdentifier(dueDayEpoch: due.dueDayEpoch, kind: due.kind, fireDate: due.fireDate)
+        let id = reminderIdentifier(dueDayEpoch: due.dueDayEpoch, kind: due.kind, streakAtRisk: due.streakAtRisk, fireDate: due.fireDate)
         return UNNotificationRequest(identifier: id, content: content, trigger: trigger)
     }
 
@@ -791,8 +806,17 @@ final class NotificationManager {
 
     // MARK: - ID + Payload
 
-    private func reminderIdentifier(dueDayEpoch: Int, kind: ReminderSchedulePlanner.DueReminderKind, fireDate: Date) -> String {
-        "\(reminderPrefix)due_\(dueDayEpoch)_\(kind.rawValue)_\(Int(fireDate.timeIntervalSince1970))"
+    /// The streak is part of the id so a streak change replaces the pending
+    /// request (same reasoning as `trialWarningIdentifier`): the managed diff
+    /// is by identifier, and an unchanged id would keep the stale copy.
+    private func reminderIdentifier(
+        dueDayEpoch: Int,
+        kind: ReminderSchedulePlanner.DueReminderKind,
+        streakAtRisk: Int?,
+        fireDate: Date
+    ) -> String {
+        let streakToken = streakAtRisk.map { "_streak\($0)" } ?? ""
+        return "\(reminderPrefix)due_\(dueDayEpoch)_\(kind.rawValue)\(streakToken)_\(Int(fireDate.timeIntervalSince1970))"
     }
 
     private func refillReminderIdentifier(dueDayEpoch: Int, fireDate: Date) -> String {
@@ -803,11 +827,13 @@ final class NotificationManager {
         "\(cycleTransitionPrefix)day_\(transitionDayEpoch)_\(Int(fireDate.timeIntervalSince1970))"
     }
 
-    /// The cohort is part of the id so a blocker setup change replaces the
-    /// pending request: the managed diff is by identifier, and an unchanged id
-    /// would keep the stale copy.
-    private func trialWarningIdentifier(day: Int, cohort: TrialEndPaywallCohort, fireDate: Date) -> String {
-        "\(trialWarningPrefix)day_\(day)_\(cohort.rawValue)_\(Int(fireDate.timeIntervalSince1970))"
+    /// The cohort, terms, and copy revision are part of the id so a blocker
+    /// setup, terms, or copy change replaces the pending request: the managed
+    /// diff is by identifier, and an unchanged id would keep the stale copy.
+    private func trialWarningIdentifier(_ warning: ReminderSchedulePlanner.TrialExpiryWarningIntent) -> String {
+        let terms = warning.terms == .hardPaywall ? "hard" : "legacy"
+        return "\(trialWarningPrefix)day_\(warning.day)_\(warning.cohort.rawValue)_\(terms)_"
+            + "r\(TrialExpiryWarningCopy.revision)_\(Int(warning.fireDate.timeIntervalSince1970))"
     }
 
     private func isManagedReminderID(_ id: String) -> Bool {

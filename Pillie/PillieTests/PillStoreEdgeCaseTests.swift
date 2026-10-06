@@ -7,6 +7,10 @@ import XCTest
 import SwiftData
 @testable import Pillie
 
+// The Xcode 27 beta aborts hosted tests when an app-module class deallocates during
+// a test, so the afternoon-reset stores live for the process.
+@MainActor private var retainedAfternoonResetFixtures: [Any] = []
+
 @MainActor
 final class PillStoreEdgeCaseTests: XCTestCase {
     override func tearDown() {
@@ -26,6 +30,63 @@ final class PillStoreEdgeCaseTests: XCTestCase {
 
         store.markActionAsTaken(on: today)
         XCTAssertEqual(store.currentStreak, 3)
+    }
+
+    func testSwitchingMethodStartsTheStreakAndCalendarOver() throws {
+        let today = InMemoryStoreFactory.fixedDate("2026-05-26")
+        let yesterday = InMemoryStoreFactory.fixedDate("2026-05-25")
+        let fixture = try InMemoryStoreFactory.makeStore(
+            now: today,
+            startDate: InMemoryStoreFactory.fixedDate("2026-05-20")
+        )
+        let store = fixture.store
+        for day in 20...25 {
+            store.markActionAsTaken(on: InMemoryStoreFactory.fixedDate("2026-05-\(day)"))
+        }
+        XCTAssertEqual(store.currentStreak, 6)
+
+        store.resetAndStartFresh(
+            method: .ring,
+            regimen: .twentyOneSeven,
+            customRegimen: nil,
+            cycleDay: 1,
+            anchorDay: store.anchorDay(for: .taken)
+        )
+        store.markTodayAsTaken()
+
+        XCTAssertEqual(store.contraceptiveMethod, .ring)
+        XCTAssertEqual(store.currentStreak, 1, "the ring's first day starts a new streak")
+        XCTAssertNotEqual(store.statusForDate(yesterday), .taken, "pill history is gone")
+    }
+
+    func testSwitchingMethodMidCycleFillsNoEarlierDays() throws {
+        let today = InMemoryStoreFactory.fixedDate("2026-05-26")
+        let fixture = try InMemoryStoreFactory.makeStore(
+            now: today,
+            startDate: InMemoryStoreFactory.fixedDate("2026-05-20")
+        )
+        let store = fixture.store
+        for day in 20...25 {
+            store.markActionAsTaken(on: InMemoryStoreFactory.fixedDate("2026-05-\(day)"))
+        }
+
+        store.resetAndStartFresh(
+            method: .patch,
+            regimen: .twentyOneSeven,
+            customRegimen: nil,
+            cycleDay: 8,
+            anchorDay: store.anchorDay(for: .taken)
+        )
+        store.markTodayAsTaken()
+
+        XCTAssertEqual(store.currentDayIndex + 1, 8)
+        XCTAssertEqual(store.currentStreak, 1, "a new method starts a new streak")
+        for day in 19...25 {
+            XCTAssertNotEqual(
+                store.statusForDate(InMemoryStoreFactory.fixedDate("2026-05-\(day)")), .taken,
+                "May \(day) was a pill day, not a patch day"
+            )
+        }
     }
 
     func testStreakAfterCompletingTodayCountsTodayBeforeItIsLogged() throws {
@@ -469,7 +530,8 @@ final class PillStoreEdgeCaseTests: XCTestCase {
             method: .ring,
             regimen: .twentyOneSeven,
             customRegimen: nil,
-            cycleDay: 1
+            cycleDay: 1,
+            anchorDay: store.anchorDay(for: nil)
         )
 
         XCTAssertEqual(store.contraceptiveMethod, .ring)
@@ -488,5 +550,124 @@ final class PillStoreEdgeCaseTests: XCTestCase {
         let reloaded = PillStore(modelContext: fixture.context)
         XCTAssertEqual(reloaded.customDueReminderTitle, "Persisted title")
         XCTAssertEqual(reloaded.customDueReminderBody, "Persisted body")
+    }
+
+    // MARK: - Starting a pack before an evening reminder
+
+    /// 3:09 PM with a 10 PM reminder: the live day is still yesterday, whose reminder passed.
+    private func makeAfternoonStore(name: String = #function) throws -> (store: PillStore, now: Date) {
+        let now = InMemoryStoreFactory.localDate("2026-10-04", hour: 15, minute: 9)
+        let fixture = try InMemoryStoreFactory.makeStore(
+            now: now,
+            regimen: .everyDay,
+            startDate: InMemoryStoreFactory.localDate("2026-09-20", hour: 0)
+        )
+        retainedAfternoonResetFixtures.append(fixture)
+        fixture.store.reminderHour = 22
+        return (fixture.store, now)
+    }
+
+    private func liveReminder(of store: PillStore) -> Date {
+        Calendar.current.date(bySettingHour: 22, minute: 0, second: 0, of: store.today)!
+    }
+
+    func testStartingANewPackBeforeAnEveningReminderWaitsForTonight() throws {
+        let (store, now) = try makeAfternoonStore()
+
+        store.resetAndStartFresh(
+            method: .pill,
+            regimen: .everyDay,
+            customRegimen: nil,
+            cycleDay: 1,
+            anchorDay: store.anchorDay(for: nil)
+        )
+
+        XCTAssertEqual(store.today, Calendar.current.startOfDay(for: now))
+        XCTAssertEqual(store.currentDayIndex + 1, 1)
+        XCTAssertGreaterThan(liveReminder(of: store), now, "pill 1 is due at 10 PM tonight, not overdue now")
+        XCTAssertEqual(store.doseStanding(on: store.today), .upcoming)
+    }
+
+    func testSettingTodaysPillBeforeAnEveningReminderLeavesNothingOverdue() throws {
+        let (store, now) = try makeAfternoonStore()
+        let civilToday = Calendar.current.startOfDay(for: now)
+
+        store.resetAndStartFresh(
+            method: .pill,
+            regimen: .everyDay,
+            customRegimen: nil,
+            cycleDay: 5,
+            anchorDay: store.anchorDay(for: .notYet)
+        )
+
+        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: civilToday)!
+        XCTAssertEqual(store.today, civilToday, "the pill the user named is today's, not last night's")
+        XCTAssertEqual(store.currentDayIndex + 1, 5, "tonight's reminder is for pill 5")
+        XCTAssertEqual(store.doseStanding(on: store.today), .upcoming, "pill 5 is due at 10 PM tonight, not overdue now")
+        XCTAssertFalse(store.isTodayTaken)
+        XCTAssertEqual(store.statusForDate(yesterday), .taken, "last night's pill 4 is behind the user")
+    }
+
+    func testSettingAPatchDayBeforeAnEveningReminderLandsOnThatDay() throws {
+        let (store, now) = try makeAfternoonStore()
+
+        store.resetAndStartFresh(
+            method: .patch,
+            regimen: .twentyOneSeven,
+            customRegimen: nil,
+            cycleDay: 10,
+            anchorDay: store.anchorDay(for: nil)
+        )
+
+        XCTAssertEqual(store.today, Calendar.current.startOfDay(for: now))
+        XCTAssertEqual(store.currentDayIndex + 1, 10)
+    }
+
+    func testTakenAnswerBeforeAnEveningReminderStaysOnTheOpenWindow() throws {
+        let (store, now) = try makeAfternoonStore()
+
+        store.resetAndStartFresh(
+            method: .pill,
+            regimen: .everyDay,
+            customRegimen: nil,
+            cycleDay: 5,
+            anchorDay: store.anchorDay(for: .taken)
+        )
+        store.markTodayAsTaken()
+
+        XCTAssertEqual(store.today, Calendar.current.date(byAdding: .day, value: -1, to: Calendar.current.startOfDay(for: now)))
+        XCTAssertEqual(store.currentDayIndex + 1, 5)
+        XCTAssertTrue(store.isTodayTaken)
+    }
+
+    // MARK: - Starting a pack after the day's reminder
+
+    func testPackStartedAfterTodaysReminderHoldsShieldsUntilTheNextReminder() throws {
+        let (store, now) = try makeAfternoonStore()
+        store.reminderHour = 8
+
+        store.resetAndStartFresh(
+            method: .pill,
+            regimen: .everyDay,
+            customRegimen: nil,
+            cycleDay: 5,
+            anchorDay: store.anchorDay(for: .notYet)
+        )
+
+        XCTAssertEqual(store.today, Calendar.current.startOfDay(for: now))
+        XCTAssertFalse(store.isTodayTaken, "pill 5 is still owed, so its catch-up reminder fires")
+        XCTAssertTrue(store.isTodayHandled, "no shields on the day the pack starts")
+
+        PillieClock.setFixedNowForTesting(InMemoryStoreFactory.localDate("2026-10-05", hour: 9))
+        store.refreshDayContextIfNeeded()
+        XCTAssertFalse(store.isTodayHandled, "pill 6 is late after tomorrow's reminder")
+    }
+
+    func testEstablishedPackPastItsReminderIsNotHandled() throws {
+        let (store, _) = try makeAfternoonStore()
+        store.reminderHour = 8
+
+        XCTAssertFalse(store.isTodayTaken)
+        XCTAssertFalse(store.isTodayHandled)
     }
 }

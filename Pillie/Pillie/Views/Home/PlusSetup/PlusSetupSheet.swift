@@ -96,10 +96,7 @@ struct PlusSetupSheet: View {
         editorStepWasDone = progress.isDone(step)
         switch step {
         case .blocking:
-            Task {
-                _ = await AppBlockingManager.shared.ensureAuthorized()
-                editor = .blocking
-            }
+            editor = .blocking
         case .messages:
             editor = .messages
         case .reminders:
@@ -113,7 +110,9 @@ struct PlusSetupSheet: View {
         guard case .step(let step) = current, !editorStepWasDone, progress.isDone(step) else {
             return
         }
-        ProductAnalyticsTelemetry.live.plusSetupStep(step, action: .completed)
+        if step != .blocking {
+            ProductAnalyticsTelemetry.live.plusSetupStep(step, action: .completed)
+        }
         advance(from: step)
     }
 

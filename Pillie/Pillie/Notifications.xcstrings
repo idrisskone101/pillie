@@ -7701,6 +7701,923 @@
         }
       }
     },
+    "notification.reminder.pill.streak.body": {
+      "comment": "Base pill reminder body while the streak is 1 to 6 days. %lld = streak length in days. A full spoken sentence; keep the number. [notification]",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Take today’s pill to keep your %lld-day streak going."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Take today’s pill to keep your %lld-day streak going."
+                }
+              }
+            }
+          }
+        },
+        "it": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Prendi la pillola di oggi per continuare la tua serie di %lld giorno."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Prendi la pillola di oggi per continuare la tua serie di %lld giorni."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Prendi la pillola di oggi per continuare la tua serie di %lld giorni."
+                }
+              }
+            }
+          }
+        },
+        "de": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Nimm heute deine Pille, damit deine Serie von %lld Tag weitergeht."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Nimm heute deine Pille, damit deine Serie von %lld Tagen weitergeht."
+                }
+              }
+            }
+          }
+        },
+        "fr": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Prends ta pilule du jour pour continuer ta série de %lld jour."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Prends ta pilule du jour pour continuer ta série de %lld jours."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Prends ta pilule du jour pour continuer ta série de %lld jours."
+                }
+              }
+            }
+          }
+        },
+        "es": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Tómate la píldora de hoy para mantener tu racha de %lld día."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Tómate la píldora de hoy para mantener tu racha de %lld días."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Tómate la píldora de hoy para mantener tu racha de %lld días."
+                }
+              }
+            }
+          }
+        },
+        "pt-BR": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Tome a pílula de hoje para manter sua sequência de %lld dia."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Tome a pílula de hoje para manter sua sequência de %lld dias."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Tome a pílula de hoje para manter sua sequência de %lld dias."
+                }
+              }
+            }
+          }
+        },
+        "nl": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Neem je pil van vandaag om je reeks van %lld dag vast te houden."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Neem je pil van vandaag om je reeks van %lld dagen vast te houden."
+                }
+              }
+            }
+          }
+        },
+        "sv": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Ta dagens p-piller för att hålla igång din svit på %lld dag."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Ta dagens p-piller för att hålla igång din svit på %lld dagar."
+                }
+              }
+            }
+          }
+        },
+        "da": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Tag dagens p-pille, så din stime på %lld dag fortsætter."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Tag dagens p-pille, så din stime på %lld dage fortsætter."
+                }
+              }
+            }
+          }
+        },
+        "nb": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Ta dagens pille, så rekken din på %lld dag fortsetter."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Ta dagens pille, så rekken din på %lld dager fortsetter."
+                }
+              }
+            }
+          }
+        },
+        "fi": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Ota tämän päivän pilleri, niin %lld päivän putkesi jatkuu."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Ota tämän päivän pilleri, niin %lld päivän putkesi jatkuu."
+                }
+              }
+            }
+          }
+        },
+        "pt-PT": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Toma a pílula de hoje para manter a tua sequência de %lld dia."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Toma a pílula de hoje para manter a tua sequência de %lld dias."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Toma a pílula de hoje para manter a tua sequência de %lld dias."
+                }
+              }
+            }
+          }
+        },
+        "ca": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pren la píndola d’avui per mantenir la teva ratxa de %lld dia."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pren la píndola d’avui per mantenir la teva ratxa de %lld dies."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pren la píndola d’avui per mantenir la teva ratxa de %lld dies."
+                }
+              }
+            }
+          }
+        },
+        "pl": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Weź dzisiejszą tabletkę, by utrzymać serię, która trwa już %lld dzień."
+                }
+              },
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Weź dzisiejszą tabletkę, by utrzymać serię, która trwa już %lld dni."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Weź dzisiejszą tabletkę, by utrzymać serię, która trwa już %lld dni."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Weź dzisiejszą tabletkę, by utrzymać serię, która trwa już %lld dnia."
+                }
+              }
+            }
+          }
+        },
+        "cs": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Vezmi si dnešní pilulku a pokračuj v sérii, která trvá už %lld den."
+                }
+              },
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Vezmi si dnešní pilulku a pokračuj v sérii, která trvá už %lld dny."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Vezmi si dnešní pilulku a pokračuj v sérii, která trvá už %lld dne."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Vezmi si dnešní pilulku a pokračuj v sérii, která trvá už %lld dní."
+                }
+              }
+            }
+          }
+        },
+        "ru": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Прими сегодняшнюю таблетку и продолжи серию, которая длится уже %lld день."
+                }
+              },
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Прими сегодняшнюю таблетку и продолжи серию, которая длится уже %lld дня."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Прими сегодняшнюю таблетку и продолжи серию, которая длится уже %lld дней."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Прими сегодняшнюю таблетку и продолжи серию, которая длится уже %lld дня."
+                }
+              }
+            }
+          }
+        },
+        "uk": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Прийми сьогоднішню таблетку й продовж серію, яка триває вже %lld день."
+                }
+              },
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Прийми сьогоднішню таблетку й продовж серію, яка триває вже %lld дні."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Прийми сьогоднішню таблетку й продовж серію, яка триває вже %lld днів."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Прийми сьогоднішню таблетку й продовж серію, яка триває вже %lld дня."
+                }
+              }
+            }
+          }
+        },
+        "ja": {
+          "variations": {
+            "plural": {
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "今日のピルを飲んで、%lld日間の連続記録をつなげましょう。"
+                }
+              }
+            }
+          }
+        },
+        "ko": {
+          "variations": {
+            "plural": {
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "오늘 피임약을 복용하고 %lld일 연속 기록을 이어가세요."
+                }
+              }
+            }
+          }
+        },
+        "ms": {
+          "variations": {
+            "plural": {
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Ambil pil hari ini supaya rentetan %lld hari kamu berterusan."
+                }
+              }
+            }
+          }
+        },
+        "ro": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Ia pilula de azi ca să continui seria de %lld zi."
+                }
+              },
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Ia pilula de azi ca să continui seria de %lld zile."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Ia pilula de azi ca să continui seria de %lld de zile."
+                }
+              }
+            }
+          }
+        },
+        "sk": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Vezmi si dnešnú tabletku a pokračuj v sérii, ktorá trvá už %lld deň."
+                }
+              },
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Vezmi si dnešnú tabletku a pokračuj v sérii, ktorá trvá už %lld dni."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Vezmi si dnešnú tabletku a pokračuj v sérii, ktorá trvá už %lld dňa."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Vezmi si dnešnú tabletku a pokračuj v sérii, ktorá trvá už %lld dní."
+                }
+              }
+            }
+          }
+        },
+        "th": {
+          "variations": {
+            "plural": {
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "กินยาวันนี้เพื่อรักษาสตรีค %lld วันของคุณไว้"
+                }
+              }
+            }
+          }
+        },
+        "zh-Hans": {
+          "variations": {
+            "plural": {
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "服下今天的避孕药，延续 %lld 天的连续打卡。"
+                }
+              }
+            }
+          }
+        },
+        "hi": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "आज की गोली लें, ताकि आपका %lld दिन का सिलसिला जारी रहे।"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "आज की गोली लें, ताकि आपका %lld दिन का सिलसिला जारी रहे।"
+                }
+              }
+            }
+          }
+        },
+        "hr": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Uzmi današnju pilulu i nastavi niz koji traje već %lld dan."
+                }
+              },
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Uzmi današnju pilulu i nastavi niz koji traje već %lld dana."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Uzmi današnju pilulu i nastavi niz koji traje već %lld dana."
+                }
+              }
+            }
+          }
+        },
+        "hu": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Vedd be a mai tablettát, és folytasd a sorozatod, ami már %lld napja tart."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Vedd be a mai tablettát, és folytasd a sorozatod, ami már %lld napja tart."
+                }
+              }
+            }
+          }
+        },
+        "tr": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Bugünkü hapını al, %lld günlük serin devam etsin."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Bugünkü hapını al, %lld günlük serin devam etsin."
+                }
+              }
+            }
+          }
+        },
+        "ta": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "உங்கள் %lld நாள் தொடர்ச்சியைத் தொடர, இன்றைய மாத்திரையை எடுத்துக்கொள்ளுங்கள்."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "உங்கள் %lld நாள் தொடர்ச்சியைத் தொடர, இன்றைய மாத்திரையை எடுத்துக்கொள்ளுங்கள்."
+                }
+              }
+            }
+          }
+        },
+        "id": {
+          "variations": {
+            "plural": {
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Minum pil hari ini supaya rentetanmu yang sudah %lld hari terus berlanjut."
+                }
+              }
+            }
+          }
+        },
+        "ar": {
+          "variations": {
+            "plural": {
+              "zero": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "خذي حبة اليوم لتستمر سلسلتك التي بلغت %lld يوم."
+                }
+              },
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "خذي حبة اليوم لتستمر سلسلتك التي بلغت %lld يوم."
+                }
+              },
+              "two": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "خذي حبة اليوم لتستمر سلسلتك التي بلغت %lld يومين."
+                }
+              },
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "خذي حبة اليوم لتستمر سلسلتك التي بلغت %lld أيام."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "خذي حبة اليوم لتستمر سلسلتك التي بلغت %lld يومًا."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "خذي حبة اليوم لتستمر سلسلتك التي بلغت %lld يوم."
+                }
+              }
+            }
+          }
+        },
+        "he": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "קחי את הגלולה של היום כדי להמשיך את הרצף שלך, שנמשך כבר %lld יום."
+                }
+              },
+              "two": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "קחי את הגלולה של היום כדי להמשיך את הרצף שלך, שנמשך כבר %lld ימים."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "קחי את הגלולה של היום כדי להמשיך את הרצף שלך, שנמשך כבר %lld ימים."
+                }
+              }
+            }
+          }
+        },
+        "vi": {
+          "variations": {
+            "plural": {
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Uống thuốc hôm nay để giữ chuỗi %lld ngày của bạn."
+                }
+              }
+            }
+          }
+        },
+        "bn": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "আজকের পিলটি খান, যাতে আপনার %lld দিনের স্ট্রিক চালু থাকে।"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "আজকের পিলটি খান, যাতে আপনার %lld দিনের স্ট্রিক চালু থাকে।"
+                }
+              }
+            }
+          }
+        },
+        "ur": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "آج کی گولی لیں تاکہ آپ کا %lld دن کا سلسلہ جاری رہے۔"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "آج کی گولی لیں تاکہ آپ کا %lld دن کا سلسلہ جاری رہے۔"
+                }
+              }
+            }
+          }
+        },
+        "sl": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Vzemi današnjo tabletko in nadaljuj niz, ki traja že %lld dan."
+                }
+              },
+              "two": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Vzemi današnjo tabletko in nadaljuj niz, ki traja že %lld dneva."
+                }
+              },
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Vzemi današnjo tabletko in nadaljuj niz, ki traja že %lld dni."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Vzemi današnjo tabletko in nadaljuj niz, ki traja že %lld dni."
+                }
+              }
+            }
+          }
+        },
+        "el": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Πάρε το σημερινό χάπι και συνέχισε το σερί σου, που κρατάει ήδη %lld μέρα."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Πάρε το σημερινό χάπι και συνέχισε το σερί σου, που κρατάει ήδη %lld μέρες."
+                }
+              }
+            }
+          }
+        },
+        "te": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "మీ %lld రోజు స్ట్రీక్ కొనసాగడానికి ఈరోజు మాత్ర తీసుకోండి."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "మీ %lld రోజుల స్ట్రీక్ కొనసాగడానికి ఈరోజు మాత్ర తీసుకోండి."
+                }
+              }
+            }
+          }
+        },
+        "zh-Hant": {
+          "variations": {
+            "plural": {
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "服下今天的避孕藥，延續 %lld 天的連續打卡。"
+                }
+              }
+            }
+          }
+        },
+        "gu": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "આજની ગોળી લો, જેથી તમારી %lld દિવસની સ્ટ્રીક ચાલુ રહે."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "આજની ગોળી લો, જેથી તમારી %lld દિવસની સ્ટ્રીક ચાલુ રહે."
+                }
+              }
+            }
+          }
+        },
+        "kn": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "ಇಂದಿನ ಮಾತ್ರೆ ತೆಗೆದುಕೊಳ್ಳಿ, ನಿಮ್ಮ %lld ದಿನದ ಸರಣಿ ಮುಂದುವರಿಯಲಿ."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "ಇಂದಿನ ಮಾತ್ರೆ ತೆಗೆದುಕೊಳ್ಳಿ, ನಿಮ್ಮ %lld ದಿನಗಳ ಸರಣಿ ಮುಂದುವರಿಯಲಿ."
+                }
+              }
+            }
+          }
+        },
+        "ml": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "ഇന്നത്തെ ഗുളിക കഴിക്കൂ, നിങ്ങളുടെ %lld ദിവസത്തെ സ്ട്രീക്ക് തുടരട്ടെ."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "ഇന്നത്തെ ഗുളിക കഴിക്കൂ, നിങ്ങളുടെ %lld ദിവസത്തെ സ്ട്രീക്ക് തുടരട്ടെ."
+                }
+              }
+            }
+          }
+        },
+        "mr": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "आजची गोळी घ्या, म्हणजे तुमची %lld दिवसाची सलग मालिका सुरू राहील."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "आजची गोळी घ्या, म्हणजे तुमची %lld दिवसांची सलग मालिका सुरू राहील."
+                }
+              }
+            }
+          }
+        },
+        "or": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "ଆପଣଙ୍କ %lld ଦିନର ଧାରା ଜାରି ରଖିବାକୁ ଆଜିର ପିଲ୍ ଖାଆନ୍ତୁ।"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "ଆପଣଙ୍କ %lld ଦିନର ଧାରା ଜାରି ରଖିବାକୁ ଆଜିର ପିଲ୍ ଖାଆନ୍ତୁ।"
+                }
+              }
+            }
+          }
+        },
+        "pa": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "ਅੱਜ ਦੀ ਗੋਲੀ ਲਓ, ਤਾਂ ਜੋ ਤੁਹਾਡੀ %lld ਦਿਨ ਦੀ ਸਟ੍ਰੀਕ ਜਾਰੀ ਰਹੇ।"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "ਅੱਜ ਦੀ ਗੋਲੀ ਲਓ, ਤਾਂ ਜੋ ਤੁਹਾਡੀ %lld ਦਿਨ ਦੀ ਸਟ੍ਰੀਕ ਜਾਰੀ ਰਹੇ।"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "notification.reminder.pill.title": {
       "comment": "Pill-specific title [health]",
       "localizations": {
@@ -12097,6 +13014,831 @@
           "stringUnit": {
             "state": "translated",
             "value": "你的每日提醒繼續免費。Plus 增加後續提醒和 App 封鎖。"
+          }
+        }
+      }
+    },
+    "notification.trial_expiry.day10.hard.body": {
+      "comment": "Reverse Trial day-10 warning; hard-paywall terms, nothing stays free after the trial [paywall]",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "بقيت 5 أيام في تجربتك. بعدها تتوقف تذكيراتك اليومية حتى تختاري اشتراكًا."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "আপনার ট্রায়ালের আর ৫ দিন বাকি। এরপর প্ল্যান বেছে না নেওয়া পর্যন্ত আপনার দৈনিক রিমাইন্ডার বন্ধ থাকবে।"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Et queden 5 dies de prova. Després, els recordatoris diaris s’aturen fins que triïs un pla."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ze zkušební doby ti zbývá 5 dní. Pak se denní připomínky zastaví, dokud si nevybereš plán."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du har 5 dage tilbage af din prøveperiode. Derefter stopper dine daglige påmindelser, indtil du vælger et abonnement."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Noch 5 Tage in deiner Testphase. Danach hören deine täglichen Erinnerungen auf, bis du einen Tarif wählst."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Σου μένουν 5 ημέρες δοκιμής. Μετά, οι καθημερινές υπενθυμίσεις σου σταματούν μέχρι να διαλέξεις πρόγραμμα."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "5 days left in your trial. After that, your daily reminders stop until you pick a plan."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Te quedan 5 días de prueba. Después, tus recordatorios diarios se detienen hasta que elijas un plan."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kokeilua on jäljellä 5 päivää. Sen jälkeen päivittäiset muistutuksesi loppuvat, kunnes valitset tilauksen."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il te reste 5 jours d’essai. Ensuite, tes rappels quotidiens s’arrêtent jusqu’à ce que tu choisisses une formule."
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "તમારા ટ્રાયલમાં 5 દિવસ બાકી છે. ત્યાર પછી તમે પ્લાન પસંદ ન કરો ત્યાં સુધી તમારાં રોજનાં રિમાઇન્ડર બંધ રહેશે."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "נשארו 5 ימים לניסיון שלך. אחרי זה התזכורות היומיות שלך ייפסקו עד שתבחרי מסלול."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "आपके ट्रायल में 5 दिन बाकी हैं। उसके बाद, प्लान चुनने तक आपके रोज़ के रिमाइंडर बंद रहेंगे।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Probno razdoblje traje još 5 dana. Nakon toga dnevni podsjetnici prestaju dok ne odabereš plan."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Még 5 nap van hátra a próbaidőből. Utána a napi emlékeztetőid leállnak, amíg nem választasz csomagot."
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Masa uji cobamu tinggal 5 hari. Setelah itu, pengingat harianmu berhenti sampai kamu memilih paket."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mancano 5 giorni alla fine della prova. Poi i promemoria giornalieri si fermano finché non scegli un piano."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "トライアルは残り5日です。その後は、プランを選ぶまで毎日のリマインダーが止まります。"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ನಿಮ್ಮ ಟ್ರಯಲ್‌ನಲ್ಲಿ 5 ದಿನಗಳು ಉಳಿದಿವೆ. ಅದರ ನಂತರ, ನೀವು ಯೋಜನೆಯನ್ನು ಆರಿಸುವವರೆಗೆ ನಿಮ್ಮ ದೈನಂದಿನ ಜ್ಞಾಪನೆಗಳು ನಿಲ್ಲುತ್ತವೆ."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "체험 기간이 5일 남았어요. 그 후에는 이용권을 선택할 때까지 매일 알림이 멈춰요."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "നിങ്ങളുടെ ട്രയലിൽ 5 ദിവസം ബാക്കിയുണ്ട്. അതിനുശേഷം, നിങ്ങൾ ഒരു പ്ലാൻ തിരഞ്ഞെടുക്കുന്നതുവരെ നിങ്ങളുടെ ദൈനംദിന റിമൈൻഡറുകൾ നിലയ്ക്കും."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "तुमच्या ट्रायलचे 5 दिवस उरले आहेत. त्यानंतर तुम्ही प्लॅन निवडेपर्यंत तुमचे रोजचे रिमाइंडर बंद राहतील."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tinggal 5 hari dalam percubaan anda. Selepas itu, peringatan harian anda berhenti sehingga anda pilih pelan."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du har 5 dager igjen av prøveperioden. Etter det stopper de daglige påminnelsene dine til du velger et abonnement."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nog 5 dagen in je proefperiode. Daarna stoppen je dagelijkse herinneringen tot je een abonnement kiest."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ଆପଣଙ୍କ ଟ୍ରାଏଲରେ 5 ଦିନ ବାକି ଅଛି। ତାପରେ ଆପଣ ଏକ ପ୍ଲାନ ନ ବାଛିବା ପର୍ଯ୍ୟନ୍ତ ଆପଣଙ୍କ ଦୈନିକ ରିମାଇଣ୍ଡର୍ ବନ୍ଦ ରହିବ।"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਤੁਹਾਡੇ ਟ੍ਰਾਇਲ ਵਿੱਚ 5 ਦਿਨ ਬਾਕੀ ਹਨ। ਉਸ ਤੋਂ ਬਾਅਦ, ਜਦੋਂ ਤੱਕ ਤੁਸੀਂ ਕੋਈ ਪਲਾਨ ਨਹੀਂ ਚੁਣਦੇ, ਤੁਹਾਡੇ ਰੋਜ਼ਾਨਾ ਰਿਮਾਈਂਡਰ ਬੰਦ ਰਹਿਣਗੇ।"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Do końca okresu próbnego zostało 5 dni. Potem codzienne przypomnienia się zatrzymają, dopóki nie wybierzesz planu."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Faltam 5 dias para o fim do seu teste. Depois disso, seus lembretes diários param até você escolher um plano."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Faltam 5 dias para o fim do teu teste. Depois disso, os teus lembretes diários param até escolheres um plano."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mai ai 5 zile de probă. După aceea, mementourile zilnice se opresc până alegi un plan."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "До конца пробного периода 5 дней. Потом ежедневные напоминания остановятся, пока ты не выберешь план."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zo skúšobného obdobia ti zostáva 5 dní. Potom sa denné pripomienky zastavia, kým si nevyberieš plán."
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Do konca preizkusa imaš še 5 dni. Potem se dnevni opomniki ustavijo, dokler ne izbereš paketa."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du har 5 dagar kvar av provperioden. Sedan stoppar dina dagliga påminnelser tills du väljer ett abonnemang."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "உங்கள் சோதனைக்காலத்தில் 5 நாட்கள் உள்ளன. அதன் பிறகு, நீங்கள் ஒரு திட்டத்தைத் தேர்ந்தெடுக்கும் வரை உங்கள் தினசரி நினைவூட்டல்கள் நின்றுவிடும்."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "మీ ట్రయల్‌లో 5 రోజులు మిగిలి ఉన్నాయి. ఆ తర్వాత, మీరు ప్లాన్ ఎంచుకునే వరకు మీ రోజువారీ రిమైండర్లు ఆగిపోతాయి."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ช่วงทดลองเหลืออีก 5 วัน หลังจากนั้นการแจ้งเตือนประจำวันจะหยุดจนกว่าคุณจะเลือกแพ็กเกจ"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Denemende 5 gün kaldı. Sonrasında, bir plan seçene kadar günlük hatırlatmaların durur."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "До кінця пробного періоду 5 днів. Потім щоденні нагадування зупиняться, доки ти не обереш план."
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "آپ کے ٹرائل میں 5 دن باقی ہیں۔ اس کے بعد پلان چننے تک آپ کی روزانہ کی یاد دہانیاں بند رہیں گی۔"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bạn còn 5 ngày dùng thử. Sau đó, lời nhắc hàng ngày của bạn sẽ dừng cho đến khi bạn chọn một gói."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "试用还剩 5 天。之后，在你选择方案前，每日提醒会停止。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "試用還剩 5 天。之後，在你選擇方案前，每日提醒會停止。"
+          }
+        }
+      }
+    },
+    "notification.trial_expiry.day13.hard.body": {
+      "comment": "Reverse Trial day-13 warning; hard-paywall terms, nothing stays free after the trial [paywall]",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تنتهي تجربتك مساء الغد، وتتوقف معها تذكيراتك اليومية. اختاري اشتراكًا لتحتفظي بها."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "আপনার ট্রায়াল আগামীকাল রাতে শেষ হবে, আর তার সঙ্গে আপনার দৈনিক রিমাইন্ডারও বন্ধ হয়ে যাবে। সেগুলো চালু রাখতে একটি প্ল্যান বেছে নিন।"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La teva prova s’acaba demà a la nit, i els recordatoris diaris s’aturen amb ella. Tria un pla per mantenir-los."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zkušební doba končí zítra večer a s ní skončí i denní připomínky. Vyber si plán, aby ti zůstaly."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Din prøveperiode slutter i morgen aften, og dine daglige påmindelser stopper samtidig. Vælg et abonnement for at beholde dem."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine Testphase endet morgen Abend, und damit enden auch deine täglichen Erinnerungen. Wähl einen Tarif, um sie zu behalten."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Η δοκιμή σου τελειώνει αύριο το βράδυ και μαζί της σταματούν και οι καθημερινές υπενθυμίσεις σου. Διάλεξε πρόγραμμα για να τις κρατήσεις."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your trial ends tomorrow night, and your daily reminders stop with it. Pick a plan to keep them."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu prueba termina mañana por la noche y, con ella, tus recordatorios diarios. Elige un plan para mantenerlos."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kokeilusi päättyy huomenna illalla, ja samalla päivittäiset muistutuksesi loppuvat. Valitse tilaus, niin pidät ne."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton essai se termine demain soir, et tes rappels quotidiens s’arrêtent avec lui. Choisis une formule pour les garder."
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "તમારો ટ્રાયલ આવતીકાલે રાત્રે પૂરો થશે, અને તેની સાથે તમારાં રોજનાં રિમાઇન્ડર પણ બંધ થઈ જશે. તેમને ચાલુ રાખવા પ્લાન પસંદ કરો."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "הניסיון שלך מסתיים מחר בערב, ואיתו ייפסקו התזכורות היומיות שלך. בחרי מסלול כדי לשמור עליהן."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "आपका ट्रायल कल रात खत्म हो रहा है, और उसके साथ आपके रोज़ के रिमाइंडर भी रुक जाएँगे। उन्हें जारी रखने के लिए कोई प्लान चुनें।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Probno razdoblje završava sutra navečer, a s njim prestaju i tvoji dnevni podsjetnici. Odaberi plan da ih zadržiš."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A próbaidőd holnap este lejár, és vele együtt leállnak a napi emlékeztetőid is. Válassz csomagot, hogy megmaradjanak."
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Masa uji cobamu berakhir besok malam, dan pengingat harianmu ikut berhenti. Pilih paket supaya pengingatnya tetap jalan."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La tua prova finisce domani sera, e con lei si fermano i promemoria giornalieri. Scegli un piano per tenerli."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "トライアルは明日の夜に終わり、毎日のリマインダーも止まります。続けて受け取るには、プランを選んでください。"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ನಿಮ್ಮ ಟ್ರಯಲ್ ನಾಳೆ ರಾತ್ರಿ ಮುಗಿಯುತ್ತದೆ, ಅದರೊಂದಿಗೆ ನಿಮ್ಮ ದೈನಂದಿನ ಜ್ಞಾಪನೆಗಳೂ ನಿಲ್ಲುತ್ತವೆ. ಅವುಗಳನ್ನು ಉಳಿಸಿಕೊಳ್ಳಲು ಯೋಜನೆಯನ್ನು ಆರಿಸಿ."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "체험 기간이 내일 밤에 끝나고, 매일 알림도 함께 멈춰요. 알림을 계속 받으려면 이용권을 선택하세요."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "നിങ്ങളുടെ ട്രയൽ നാളെ രാത്രി അവസാനിക്കും, അതോടൊപ്പം നിങ്ങളുടെ ദൈനംദിന റിമൈൻഡറുകളും നിലയ്ക്കും. അവ നിലനിർത്താൻ ഒരു പ്ലാൻ തിരഞ്ഞെടുക്കൂ."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "तुमचा ट्रायल उद्या रात्री संपेल, आणि त्यासोबत तुमचे रोजचे रिमाइंडरही थांबतील. ते चालू ठेवण्यासाठी प्लॅन निवडा."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Percubaan anda tamat esok malam, dan peringatan harian anda turut berhenti. Pilih pelan untuk mengekalkannya."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prøveperioden din slutter i morgen kveld, og de daglige påminnelsene dine stopper samtidig. Velg et abonnement for å beholde dem."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je proefperiode eindigt morgenavond, en dan stoppen ook je dagelijkse herinneringen. Kies een abonnement om ze te houden."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ଆପଣଙ୍କ ଟ୍ରାଏଲ ଆସନ୍ତାକାଲି ରାତିରେ ଶେଷ ହେବ, ଆଉ ତା ସହିତ ଆପଣଙ୍କ ଦୈନିକ ରିମାଇଣ୍ଡର୍ ମଧ୍ୟ ବନ୍ଦ ହୋଇଯିବ। ସେଗୁଡ଼ିକୁ ଜାରି ରଖିବାକୁ ଏକ ପ୍ଲାନ ବାଛନ୍ତୁ।"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਤੁਹਾਡਾ ਟ੍ਰਾਇਲ ਕੱਲ੍ਹ ਰਾਤ ਖਤਮ ਹੋ ਜਾਵੇਗਾ, ਅਤੇ ਉਸਦੇ ਨਾਲ ਤੁਹਾਡੇ ਰੋਜ਼ਾਨਾ ਰਿਮਾਈਂਡਰ ਵੀ ਬੰਦ ਹੋ ਜਾਣਗੇ। ਇਨ੍ਹਾਂ ਨੂੰ ਜਾਰੀ ਰੱਖਣ ਲਈ ਕੋਈ ਪਲਾਨ ਚੁਣੋ।"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Twój okres próbny kończy się jutro wieczorem, a razem z nim codzienne przypomnienia. Wybierz plan, żeby je zachować."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seu teste termina amanhã à noite, e seus lembretes diários param junto. Escolha um plano para mantê-los."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O teu teste termina amanhã à noite, e os teus lembretes diários param com ele. Escolhe um plano para os manteres."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Proba ta se încheie mâine seară, iar odată cu ea se opresc și mementourile zilnice. Alege un plan ca să le păstrezi."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пробный период закончится завтра вечером, а вместе с ним и ежедневные напоминания. Выбери план, чтобы их сохранить."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skúšobné obdobie končí zajtra večer a s ním skončia aj denné pripomienky. Vyber si plán, aby ti zostali."
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvoj preizkus se konča jutri zvečer, z njim pa se ustavijo tudi dnevni opomniki. Izberi paket, da jih obdržiš."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Din provperiod tar slut i morgon kväll, och dina dagliga påminnelser stoppar samtidigt. Välj ett abonnemang för att behålla dem."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "உங்கள் சோதனைக்காலம் நாளை இரவு முடிகிறது, அதனுடன் உங்கள் தினசரி நினைவூட்டல்களும் நின்றுவிடும். அவற்றைத் தொடர ஒரு திட்டத்தைத் தேர்ந்தெடுங்கள்."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "మీ ట్రయల్ రేపు రాత్రి ముగుస్తుంది, దానితో పాటే మీ రోజువారీ రిమైండర్లు కూడా ఆగిపోతాయి. వాటిని కొనసాగించడానికి ఒక ప్లాన్ ఎంచుకోండి."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ช่วงทดลองจะจบคืนพรุ่งนี้ และการแจ้งเตือนประจำวันจะหยุดไปด้วย เลือกแพ็กเกจเพื่อให้ยังได้รับการแจ้งเตือนต่อ"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Denemen yarın akşam bitiyor ve günlük hatırlatmaların da onunla birlikte duruyor. Onları korumak için bir plan seç."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пробний період закінчиться завтра ввечері, а разом із ним і щоденні нагадування. Обери план, щоб їх зберегти."
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "آپ کا ٹرائل کل رات ختم ہو جائے گا، اور اس کے ساتھ آپ کی روزانہ کی یاد دہانیاں بھی بند ہو جائیں گی۔ انہیں جاری رکھنے کے لیے کوئی پلان چنیں۔"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thời gian dùng thử kết thúc vào tối mai, và lời nhắc hàng ngày của bạn cũng dừng theo. Chọn một gói để giữ lại lời nhắc."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "试用将在明晚结束，你的每日提醒也会随之停止。选择一个方案，继续接收提醒。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "試用將在明晚結束，你的每日提醒也會隨之停止。選擇一個方案，繼續接收提醒。"
+          }
+        }
+      }
+    },
+    "notification.trial_expiry.day15.hard.body": {
+      "comment": "Reverse Trial expiry-day notice; hard-paywall terms, nothing stays free after the trial [paywall]",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تذكيراتك اليومية متوقفة الآن. اختاري اشتراكًا لإعادة تشغيلها. إعداداتك محفوظة."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "আপনার দৈনিক রিমাইন্ডার এখন বন্ধ। আবার চালু করতে একটি প্ল্যান বেছে নিন। আপনার সেটআপ সেভ করা আছে।"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Els recordatoris diaris ara estan desactivats. Tria un pla per tornar-los a activar. La teva configuració està desada."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Denní připomínky jsou teď vypnuté. Vyber si plán a znovu je zapneš. Tvoje nastavení je uložené."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dine daglige påmindelser er slået fra nu. Vælg et abonnement for at slå dem til igen. Din opsætning er gemt."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine täglichen Erinnerungen sind jetzt aus. Wähl einen Tarif, um sie wieder einzuschalten. Deine Einrichtung ist gespeichert."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Οι καθημερινές υπενθυμίσεις σου είναι πλέον ανενεργές. Διάλεξε πρόγραμμα για να τις ενεργοποιήσεις ξανά. Οι ρυθμίσεις σου είναι αποθηκευμένες."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your daily reminders are off now. Pick a plan to turn them back on. Your setup is saved."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tus recordatorios diarios están desactivados. Elige un plan para volver a activarlos. Tu configuración está guardada."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Päivittäiset muistutuksesi ovat nyt pois päältä. Valitse tilaus, niin saat ne taas päälle. Asetuksesi on tallennettu."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tes rappels quotidiens sont désactivés. Choisis une formule pour les réactiver. Ta configuration est enregistrée."
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "તમારાં રોજનાં રિમાઇન્ડર હવે બંધ છે. તેમને ફરી ચાલુ કરવા પ્લાન પસંદ કરો. તમારું સેટઅપ સેવ થયેલું છે."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "התזכורות היומיות שלך כבויות עכשיו. בחרי מסלול כדי להפעיל אותן מחדש. ההגדרות שלך שמורות."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "आपके रोज़ के रिमाइंडर अब बंद हैं। उन्हें फिर से चालू करने के लिए कोई प्लान चुनें। आपका सेटअप सेव है।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvoji dnevni podsjetnici sada su isključeni. Odaberi plan da ih ponovno uključiš. Tvoje postavke su spremljene."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A napi emlékeztetőid most ki vannak kapcsolva. Válassz csomagot, hogy újra bekapcsold őket. A beállításaid el vannak mentve."
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pengingat harianmu sekarang mati. Pilih paket untuk menyalakannya lagi. Pengaturanmu sudah tersimpan."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I tuoi promemoria giornalieri ora sono disattivati. Scegli un piano per riattivarli. Le tue impostazioni sono salvate."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "毎日のリマインダーは現在オフです。再びオンにするには、プランを選んでください。設定は保存されています。"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ನಿಮ್ಮ ದೈನಂದಿನ ಜ್ಞಾಪನೆಗಳು ಈಗ ಆಫ್ ಆಗಿವೆ. ಅವುಗಳನ್ನು ಮತ್ತೆ ಆನ್ ಮಾಡಲು ಯೋಜನೆಯನ್ನು ಆರಿಸಿ. ನಿಮ್ಮ ಸೆಟಪ್ ಉಳಿಸಲಾಗಿದೆ."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "매일 알림이 지금 꺼져 있어요. 다시 켜려면 이용권을 선택하세요. 설정은 저장되어 있어요."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "നിങ്ങളുടെ ദൈനംദിന റിമൈൻഡറുകൾ ഇപ്പോൾ ഓഫാണ്. അവ വീണ്ടും ഓണാക്കാൻ ഒരു പ്ലാൻ തിരഞ്ഞെടുക്കൂ. നിങ്ങളുടെ സജ്ജീകരണം സേവ് ചെയ്തിട്ടുണ്ട്."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "तुमचे रोजचे रिमाइंडर आता बंद आहेत. ते पुन्हा सुरू करण्यासाठी प्लॅन निवडा. तुमचा सेटअप सेव्ह आहे."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Peringatan harian anda kini dimatikan. Pilih pelan untuk menghidupkannya semula. Tetapan anda sudah disimpan."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "De daglige påminnelsene dine er av nå. Velg et abonnement for å slå dem på igjen. Oppsettet ditt er lagret."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je dagelijkse herinneringen staan nu uit. Kies een abonnement om ze weer aan te zetten. Je instellingen zijn bewaard."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ଆପଣଙ୍କ ଦୈନିକ ରିମାଇଣ୍ଡର୍ ଏବେ ବନ୍ଦ ଅଛି। ସେଗୁଡ଼ିକୁ ପୁଣି ଚାଲୁ କରିବାକୁ ଏକ ପ୍ଲାନ ବାଛନ୍ତୁ। ଆପଣଙ୍କ ସେଟଅପ୍ ସେଭ୍ ହୋଇଛି।"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਤੁਹਾਡੇ ਰੋਜ਼ਾਨਾ ਰਿਮਾਈਂਡਰ ਹੁਣ ਬੰਦ ਹਨ। ਇਨ੍ਹਾਂ ਨੂੰ ਮੁੜ ਚਾਲੂ ਕਰਨ ਲਈ ਕੋਈ ਪਲਾਨ ਚੁਣੋ। ਤੁਹਾਡਾ ਸੈੱਟਅੱਪ ਸੇਵ ਹੈ।"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Codzienne przypomnienia są teraz wyłączone. Wybierz plan, żeby znów je włączyć. Twoje ustawienia są zapisane."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seus lembretes diários estão desligados. Escolha um plano para ligá-los de novo. Sua configuração está salva."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Os teus lembretes diários estão desligados. Escolhe um plano para os voltares a ligar. A tua configuração está guardada."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mementourile tale zilnice sunt acum oprite. Alege un plan ca să le pornești din nou. Configurarea ta e salvată."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ежедневные напоминания теперь выключены. Выбери план, чтобы снова их включить. Твои настройки сохранены."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Denné pripomienky sú teraz vypnuté. Vyber si plán a znova ich zapneš. Tvoje nastavenie je uložené."
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvoji dnevni opomniki so zdaj izklopljeni. Izberi paket, da jih znova vklopiš. Tvoje nastavitve so shranjene."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dina dagliga påminnelser är avstängda nu. Välj ett abonnemang för att slå på dem igen. Dina inställningar är sparade."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "உங்கள் தினசரி நினைவூட்டல்கள் இப்போது ஆஃப் ஆகியுள்ளன. அவற்றை மீண்டும் இயக்க ஒரு திட்டத்தைத் தேர்ந்தெடுங்கள். உங்கள் அமைப்பு சேமிக்கப்பட்டுள்ளது."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "మీ రోజువారీ రిమైండర్లు ఇప్పుడు ఆఫ్‌లో ఉన్నాయి. వాటిని మళ్లీ ఆన్ చేయడానికి ఒక ప్లాన్ ఎంచుకోండి. మీ సెటప్ సేవ్ అయి ఉంది."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "การแจ้งเตือนประจำวันของคุณปิดอยู่ตอนนี้ เลือกแพ็กเกจเพื่อเปิดกลับมาอีกครั้ง การตั้งค่าของคุณบันทึกไว้แล้ว"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Günlük hatırlatmaların artık kapalı. Yeniden açmak için bir plan seç. Ayarların kayıtlı."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Щоденні нагадування тепер вимкнено. Обери план, щоб знову їх увімкнути. Твої налаштування збережено."
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "آپ کی روزانہ کی یاد دہانیاں اب بند ہیں۔ انہیں دوبارہ آن کرنے کے لیے کوئی پلان چنیں۔ آپ کا سیٹ اپ محفوظ ہے۔"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lời nhắc hàng ngày của bạn hiện đã tắt. Chọn một gói để bật lại. Thiết lập của bạn đã được lưu."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的每日提醒现已关闭。选择一个方案即可重新开启。你的设置已保存。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的每日提醒現已關閉。選擇一個方案即可重新開啟。你的設定已儲存。"
           }
         }
       }

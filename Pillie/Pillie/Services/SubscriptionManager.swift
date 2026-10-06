@@ -122,6 +122,16 @@ final class SubscriptionManager: NSObject {
     /// dashboard explicitly sets `hard_paywall_enabled` to false.
     private(set) var hardPaywallEnabled = true
 
+    /// The terms this user's trial ends on. Only legacy (grandfathered) terms
+    /// keep daily reminders free; an unknown cohort reads as hard paywall so no
+    /// surface promises free reminders the app won't keep.
+    var trialEndTerms: TrialEndAccessTerms {
+        HardPaywallPolicy.terms(
+            for: trialTermsCohort ?? TrialInstallCohort.storedAssignment() ?? .postCutover,
+            hardPaywallEnabled: hardPaywallEnabled
+        )
+    }
+
     /// Auto-presentation waits for this first launch refresh so a dashboard kill
     /// switch cannot briefly show the hard wall before RevenueCat responds.
     private(set) var hasResolvedHardPaywallConfiguration = false
@@ -157,6 +167,15 @@ final class SubscriptionManager: NSObject {
     static let apiKey = "test_fBRbjQtUuDEIUjaRvtCapTZwOXh"
     #else
     static let apiKey = "appl_jAqXDkTjrIxXrqrDsPQInTuIsdp"
+    #endif
+    /// Every simulator signs in as the same RevenueCat customer. An anonymous
+    /// ID would add a customer per fresh simulator, and cloud QA boots a new
+    /// one per run. A Test Store purchase on any simulator therefore turns Plus
+    /// on for all of them until it is refunded in the dashboard.
+    #if targetEnvironment(simulator)
+    static let appUserID: String? = "pillie-simulator"
+    #else
+    static let appUserID: String? = nil
     #endif
     nonisolated static let entitlementID = "pillie_plus"
     static let monthlyProductID = "com.idrisskone.pillie.plus.monthly"
@@ -276,7 +295,7 @@ final class SubscriptionManager: NSObject {
         }
         guard !isConfigured else { return }
         Purchases.logLevel = .warn
-        Purchases.configure(withAPIKey: Self.apiKey)
+        Purchases.configure(withAPIKey: Self.apiKey, appUserID: Self.appUserID)
         isConfigured = true
 
         // Listen for subscription changes

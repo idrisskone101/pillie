@@ -111,6 +111,7 @@ struct ContentView: View {
 
 	        case .productDemo:
 	          ProductDemoMomentView(
+	            trialEndTerms: onboardingTrialEndTerms,
 	            onContinue: {
                 continueDemoMoment(to: .plusBlockingDemo)
 	            }
@@ -406,10 +407,7 @@ struct ContentView: View {
 	                // while the first is still up is dropped by SwiftUI.
 	                if updateTrialWantsBlockerSetup {
 	                  updateTrialWantsBlockerSetup = false
-	                  Task { @MainActor in
-	                    _ = await AppBlockingManager.shared.ensureAuthorized()
-	                    showUpdateTrialBlockerSetup = true
-	                  }
+	                  showUpdateTrialBlockerSetup = true
 	                }
 	              }
 	            ) {
