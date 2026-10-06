@@ -543,9 +543,27 @@ final class PillStoreEdgeCaseTests: XCTestCase {
             anchorDay: store.anchorDay(for: .notYet)
         )
 
-        XCTAssertEqual(store.pack.cycleDayIndex(on: civilToday) + 1, 5, "tonight's reminder is for pill 5")
-        XCTAssertTrue(store.isTodayHandled, "last night's pill 4 is behind the user, so no catch-up and no shields")
-        XCTAssertNotEqual(store.statusForDate(civilToday), .taken)
+        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: civilToday)!
+        XCTAssertEqual(store.today, civilToday, "the pill the user named is today's, not last night's")
+        XCTAssertEqual(store.currentDayIndex + 1, 5, "tonight's reminder is for pill 5")
+        XCTAssertEqual(store.doseStanding(on: store.today), .upcoming, "pill 5 is due at 10 PM tonight, not overdue now")
+        XCTAssertFalse(store.isTodayTaken)
+        XCTAssertEqual(store.statusForDate(yesterday), .taken, "last night's pill 4 is behind the user")
+    }
+
+    func testSettingAPatchDayBeforeAnEveningReminderLandsOnThatDay() throws {
+        let (store, now) = try makeAfternoonStore()
+
+        store.resetAndStartFresh(
+            method: .patch,
+            regimen: .twentyOneSeven,
+            customRegimen: nil,
+            cycleDay: 10,
+            anchorDay: store.anchorDay(for: nil)
+        )
+
+        XCTAssertEqual(store.today, Calendar.current.startOfDay(for: now))
+        XCTAssertEqual(store.currentDayIndex + 1, 10)
     }
 
     func testTakenAnswerBeforeAnEveningReminderStaysOnTheOpenWindow() throws {
