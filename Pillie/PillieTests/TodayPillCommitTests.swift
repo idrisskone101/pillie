@@ -314,7 +314,7 @@ final class TodayPillCommitTests: XCTestCase {
         let now = InMemoryStoreFactory.localDate("2026-09-27", hour: 12, minute: 24)
         let harness = try makeHarness(now: now, reminderHour: 20)
 
-        harness.commit(pick(23, nil))
+        harness.commit(pick(23, nil, .twentyOneOnly))
 
         XCTAssertEqual(harness.recorder.answers, [])
     }
