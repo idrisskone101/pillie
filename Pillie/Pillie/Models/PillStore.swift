@@ -253,11 +253,13 @@ class PillStore {
     // MARK: - Computed
 
     /// The live day: last reminder through the next one, not civil midnight. It
-    /// never precedes the active pack's first day, so a routine started before
-    /// that day's reminder begins its first live day right away.
+    /// never precedes the active pack's first day, or the day its setup named as
+    /// today's pill, so a routine started before that day's reminder begins its
+    /// first live day right away.
     var today: Date {
         guard let activePack else { return liveDoseDay }
-        return max(liveDoseDay, startOfDaySafe(activePack.resolvedCycleAnchor().date))
+        let firstLiveDay = activePack.firstLiveDay.map { startOfDaySafe($0) } ?? .distantPast
+        return max(liveDoseDay, startOfDaySafe(activePack.resolvedCycleAnchor().date), firstLiveDay)
     }
 
     /// The day a "today is cycle day N" edit lands on. Before an evening reminder
@@ -1056,7 +1058,8 @@ class PillStore {
                 cycleDayAnchorIndex: cycleDayAnchorIndex,
                 packNumber: nextPackNumber,
                 isCurrent: true,
-                startedAt: PillieClock.now
+                startedAt: PillieClock.now,
+                firstLiveDay: anchor
             )
             modelContext.insert(nextPack)
 
@@ -1073,6 +1076,7 @@ class PillStore {
             activePack.setPillRegimen(method == .pill ? regimen : .twentyOneSeven, customRegimen: customRegimen)
             activePack.startDate = startDate
             activePack.startedAt = PillieClock.now
+            activePack.firstLiveDay = anchor
             activePack.ringInsertionDate = nil
             activePack.cycleDayAnchorIndex = PillPack.normalizedCycleDayAnchorIndex(
                 cycleDayAnchorIndex,
@@ -1099,7 +1103,8 @@ class PillStore {
                 cycleDayAnchorIndex: cycleDayAnchorIndex,
                 packNumber: nextPackNumber,
                 isCurrent: true,
-                startedAt: PillieClock.now
+                startedAt: PillieClock.now,
+                firstLiveDay: anchor
             )
             modelContext.insert(nextPack)
 
@@ -1156,7 +1161,8 @@ class PillStore {
             cycleDayAnchorIndex: 0,
             packNumber: 1,
             isCurrent: true,
-            startedAt: PillieClock.now
+            startedAt: PillieClock.now,
+            firstLiveDay: anchor
         )
         modelContext.insert(freshPack)
 
