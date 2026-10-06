@@ -109,7 +109,7 @@ final class TrialExpiryWarningPlannerTests: XCTestCase {
     }
 
     func testFirstPlanRightAfterGrantHasFollowUpsAndAllTrialNotices() throws {
-        // The plan `onboardingTrialGranted` produces: trial granted, Plus access
+        // The replan the onboarding trial grant triggers: trial granted, Plus access
         // (Smart Reminders) on. The pre-fix plan was built before the grant.
         let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
         let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
