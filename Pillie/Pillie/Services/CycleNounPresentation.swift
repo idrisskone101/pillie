@@ -8,7 +8,7 @@ enum CycleNounPresentation {
 
     static func localizedNoun(
         for method: ContraceptiveMethod,
-        locale: Locale = .current
+        locale: Locale = PillieLocalization.appLocale
     ) -> String {
         let key = method == .pill
             ? "today.pack.noun.pill"
@@ -18,7 +18,7 @@ enum CycleNounPresentation {
 
     static func startNewConfirmation(
         for method: ContraceptiveMethod,
-        locale: Locale = .current
+        locale: Locale = PillieLocalization.appLocale
     ) -> StartNewConfirmation {
         let keySuffix = method == .pill ? "pill" : "cycle"
         return StartNewConfirmation(

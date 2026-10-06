@@ -127,7 +127,7 @@ struct SoftPaywallContent {
         restoreCTA: "Restore Purchases"
     )
 
-    static func localized(locale: Locale = .current) -> SoftPaywallContent {
+    static func localized(locale: Locale = PillieLocalization.appLocale) -> SoftPaywallContent {
         func commerce(_ key: String) -> String {
             PillieLocalization.string(key, table: "Commerce", locale: locale)
         }

@@ -27,7 +27,7 @@ struct TrialStatusPresentation: Equatable {
         daysRemaining: Int,
         protectionActive: Bool = false,
         trialEndDate: Date? = nil,
-        locale: Locale = .current,
+        locale: Locale = PillieLocalization.appLocale,
         trialEndTerms: TrialEndAccessTerms = .legacy,
         calendar: Calendar = .current,
         expiresTonight: Bool? = nil
@@ -163,7 +163,7 @@ struct TrialStatusPresentation: Equatable {
         protectionActive: Bool = false,
         calendar: Calendar,
         now: Date,
-        locale: Locale = .current,
+        locale: Locale = PillieLocalization.appLocale,
         hardPaywallEnabled: Bool = false,
         termsCohort: TrialTermsCohort? = nil
     ) -> TrialStatusPresentation? {

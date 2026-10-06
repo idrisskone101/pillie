@@ -207,7 +207,7 @@ final class NotificationManager {
                     store: store,
                     now: now,
                     snoozeOverride: snoozeOverride,
-                    locale: .current,
+                    locale: PillieLocalization.appLocale,
                     servedBaseFireDateByDueDayEpoch: servedMap
                 )
                 self.applyManagedReminderRequests(requests, store: store, ledger: ledger)
@@ -238,7 +238,7 @@ final class NotificationManager {
 
     private func reminderCategoryActions(
         includeSnooze: Bool,
-        locale: Locale = .current
+        locale: Locale = PillieLocalization.appLocale
     ) -> [UNNotificationAction] {
         var actions = [
             UNNotificationAction(
@@ -654,18 +654,25 @@ final class NotificationManager {
         center.getPendingNotificationRequests { [weak self] existingRequests in
             guard let self else { return }
 
-            let existingManagedIDs = existingRequests
-                .map(\.identifier)
-                .filter(self.isManagedReminderID)
+            let existingManaged = existingRequests.filter { self.isManagedReminderID($0.identifier) }
 
             let diff = Self.managedReminderDiff(
-                existingPendingIDs: existingManagedIDs,
+                existingPendingIDs: existingManaged.map(\.identifier),
                 existingDeliveredIDs: [],
                 newRequestIDs: newManagedIDs
             )
+            // Identifiers carry the due day and fire time, not the words, so a language
+            // change or new custom copy keeps every ID. Re-adding an ID replaces its content.
+            let rewordedIDs = Self.rewordedReminderIDs(
+                existing: Dictionary(
+                    existingManaged.map { ($0.identifier, ReminderWording($0.content)) },
+                    uniquingKeysWith: { first, _ in first }
+                ),
+                new: newRequestByID.mapValues { ReminderWording($0.content) }
+            )
 
-            // No-op fast path: do not perform any writes when the managed ID set is unchanged.
-            guard !diff.stalePendingIDs.isEmpty || !diff.missingRequestIDs.isEmpty else {
+            // No-op fast path: do not perform any writes when the managed set and its words are unchanged.
+            guard !diff.stalePendingIDs.isEmpty || !diff.missingRequestIDs.isEmpty || !rewordedIDs.isEmpty else {
                 return
             }
 
@@ -673,7 +680,7 @@ final class NotificationManager {
                 self.center.removePendingNotificationRequests(withIdentifiers: diff.stalePendingIDs)
             }
 
-            for id in diff.missingRequestIDs {
+            for id in diff.missingRequestIDs + rewordedIDs {
                 guard let request = newRequestByID[id] else { continue }
                 self.center.add(request) { error in
                     if error == nil,
@@ -752,6 +759,32 @@ final class NotificationManager {
             lock.unlock()
             report(error)
         }
+    }
+
+    struct ReminderWording: Equatable {
+        let title: String
+        let body: String
+
+        init(title: String, body: String) {
+            self.title = title
+            self.body = body
+        }
+
+        init(_ content: UNNotificationContent) {
+            self.init(title: content.title, body: content.body)
+        }
+    }
+
+    /// Pending reminders that keep their identifier but now need different words.
+    static func rewordedReminderIDs(
+        existing: [String: ReminderWording],
+        new: [String: ReminderWording]
+    ) -> [String] {
+        new.compactMap { id, wording in
+            guard let old = existing[id], old != wording else { return nil }
+            return id
+        }
+        .sorted()
     }
 
     static func managedReminderDiff(
@@ -872,7 +905,7 @@ final class NotificationManager {
 
     func reminderCategoryActionTitlesForTesting(
         isPlus: Bool,
-        locale: Locale = .current
+        locale: Locale = PillieLocalization.appLocale
     ) -> [String] {
         reminderCategoryActions(includeSnooze: isPlus, locale: locale).map(\.title)
     }
@@ -882,7 +915,7 @@ final class NotificationManager {
             store: store,
             now: now,
             snoozeOverride: nil,
-            locale: .current,
+            locale: PillieLocalization.appLocale,
             servedBaseFireDateByDueDayEpoch: [:]
         )
             .map(\.identifier)
@@ -892,7 +925,7 @@ final class NotificationManager {
     func managedRequestSummariesForTesting(
         store: PillStore,
         now: Date = Date(),
-        locale: Locale = .current
+        locale: Locale = PillieLocalization.appLocale
     ) -> [ReminderRequestDebugSummary] {
         reminderRequestSummaries(
             from: buildReminderRequests(
@@ -919,7 +952,7 @@ final class NotificationManager {
                         dueDayEpoch: dueDayEpoch,
                         firstFireDate: snoozeFirstFireDate
                     ),
-                    locale: .current,
+                    locale: PillieLocalization.appLocale,
                     servedBaseFireDateByDueDayEpoch: [:]
                 )
             )

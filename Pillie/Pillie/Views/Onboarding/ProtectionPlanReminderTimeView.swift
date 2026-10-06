@@ -80,7 +80,7 @@ struct ProtectionPlanReminderTimeView: View {
             scheduleSummary: scheduleSummary,
             cycleDay: cycleDay,
             reminderTimeText: liveTimeText,
-            locale: .current
+            locale: PillieLocalization.appLocale
         )
     }
 

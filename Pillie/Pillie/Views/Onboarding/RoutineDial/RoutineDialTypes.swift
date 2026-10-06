@@ -93,7 +93,7 @@ struct RoutineDialCopy {
     let selection: RoutineDialSelection
     var today: Date = Calendar.current.startOfDay(for: PillieClock.now)
     var calendar: Calendar = .current
-    var locale: Locale = .current
+    var locale: Locale = PillieLocalization.appLocale
 
     private var method: RoutineDialMethod { selection.method }
     private var day: RoutineDialDay { selection.day }

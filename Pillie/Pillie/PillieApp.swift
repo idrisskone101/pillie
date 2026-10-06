@@ -362,6 +362,10 @@ struct PillieApp: App {
                     CountdownCardGalleryView()
                 }
                 #endif
+                .onChange(of: languagePreference.selection) {
+                    // Scheduled reminders hold their words, so rebuild them in the new language.
+                    NotificationManager.shared.requestReschedule(from: store, reason: "language-change")
+                }
                 .onChange(of: scenePhase) { _, newPhase in
                     guard !Self.isRunningTests else { return }
                     if newPhase == .active {

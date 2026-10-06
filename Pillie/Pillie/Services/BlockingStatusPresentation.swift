@@ -54,7 +54,7 @@ struct BlockingStatusCardContent: Equatable {
         heldForPlusSetup: Bool = false,
         method: ContraceptiveMethod = .pill,
         action: DoseScheduleAction? = nil,
-        locale: Locale = .current
+        locale: Locale = PillieLocalization.appLocale
     ) -> BlockingStatusCardContent? {
         switch presentation {
         case .active:

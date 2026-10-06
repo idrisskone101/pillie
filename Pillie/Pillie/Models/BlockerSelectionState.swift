@@ -44,7 +44,7 @@ struct BlockerSelectionState: Equatable {
     /// "3 selected", never "TikTok, Instagram".
     var accessibilitySummary: String { localizedAccessibilitySummary() }
 
-    func localizedAccessibilitySummary(locale: Locale = .current) -> String {
+    func localizedAccessibilitySummary(locale: Locale = PillieLocalization.appLocale) -> String {
         if selectedCount == 1 {
             return PillieLocalization.string(
                 "onboarding.blocking_setup.selected_count_one",

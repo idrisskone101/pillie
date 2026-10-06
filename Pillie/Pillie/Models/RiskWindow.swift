@@ -23,7 +23,7 @@ enum RiskWindow: String, CaseIterable, Hashable, Identifiable {
         localizedTitle()
     }
 
-    func localizedTitle(locale: Locale = .current) -> String {
+    func localizedTitle(locale: Locale = PillieLocalization.appLocale) -> String {
         let key: String
         switch self {
         case .rightAfterAlarm: key = "onboarding.risk_window.right_after"
@@ -38,7 +38,7 @@ enum RiskWindow: String, CaseIterable, Hashable, Identifiable {
         localizedSubtitle()
     }
 
-    func localizedSubtitle(locale: Locale = .current) -> String {
+    func localizedSubtitle(locale: Locale = PillieLocalization.appLocale) -> String {
         PillieLocalization.string("onboarding.risk_window.subtitle", locale: locale)
     }
 }

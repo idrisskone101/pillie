@@ -4,7 +4,7 @@ enum SettingsPresentation {
     static func time(
         hour: Int,
         minute: Int,
-        locale: Locale = .current
+        locale: Locale = PillieLocalization.appLocale
     ) -> String {
         var calendar = Calendar(identifier: .gregorian)
         calendar.locale = locale
@@ -30,7 +30,7 @@ enum SettingsPresentation {
 
     static func interval(
         minutes: Int,
-        locale: Locale = .current
+        locale: Locale = PillieLocalization.appLocale
     ) -> String {
         if minutes == 1 {
             return PillieLocalization.string(
@@ -48,7 +48,7 @@ enum SettingsPresentation {
     static func cycleDay(
         day: Int,
         total: Int,
-        locale: Locale = .current
+        locale: Locale = PillieLocalization.appLocale
     ) -> String {
         PillieLocalization.formatted(
             "today.pack.day_of_total",
@@ -60,7 +60,7 @@ enum SettingsPresentation {
 
     static func blockingToggleStatus(
         isEnabled: Bool,
-        locale: Locale = .current
+        locale: Locale = PillieLocalization.appLocale
     ) -> String {
         PillieLocalization.string(
             isEnabled ? "global.status.on" : "global.status.off",
@@ -70,7 +70,7 @@ enum SettingsPresentation {
 
     static func reminderMessagesSummary(
         hasCustom: Bool,
-        locale: Locale = .current
+        locale: Locale = PillieLocalization.appLocale
     ) -> String {
         PillieLocalization.string(
             hasCustom
@@ -82,7 +82,7 @@ enum SettingsPresentation {
 
     static func supplyReminderTitle(
         method: ContraceptiveMethod,
-        locale: Locale = .current
+        locale: Locale = PillieLocalization.appLocale
     ) -> String {
         let key = switch method {
         case .pill: "today.refill.title"
@@ -105,7 +105,7 @@ struct CustomReminderEditorContent: Equatable {
         isSelected ? selectedValue : notSelectedValue
     }
 
-    static func localized(locale: Locale = .current) -> CustomReminderEditorContent {
+    static func localized(locale: Locale = PillieLocalization.appLocale) -> CustomReminderEditorContent {
         CustomReminderEditorContent(
             titleFieldLabel: PillieLocalization.string(
                 "settings.custom_messages.field.title",

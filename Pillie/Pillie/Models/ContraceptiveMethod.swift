@@ -14,7 +14,7 @@ enum ContraceptiveMethod: String, CaseIterable, Codable {
         localizedTitle()
     }
 
-    func localizedTitle(locale: Locale = .current) -> String {
+    func localizedTitle(locale: Locale = PillieLocalization.appLocale) -> String {
         switch self {
         case .pill: return PillieLocalization.string("global.method.pill", locale: locale)
         case .patch: return PillieLocalization.string("global.method.patch", locale: locale)
@@ -54,7 +54,7 @@ enum ContraceptiveMethod: String, CaseIterable, Codable {
         blockingReasonText()
     }
 
-    func blockingReasonText(locale: Locale = .current) -> String {
+    func blockingReasonText(locale: Locale = PillieLocalization.appLocale) -> String {
         PillieLocalization.string("shield.blocking_reason", locale: locale)
     }
 
@@ -72,7 +72,7 @@ enum ContraceptiveMethod: String, CaseIterable, Codable {
         localizedRoutineDescriptor()
     }
 
-    func localizedRoutineDescriptor(locale: Locale = .current) -> String {
+    func localizedRoutineDescriptor(locale: Locale = PillieLocalization.appLocale) -> String {
         switch self {
         case .pill:
             return PillieLocalization.string("onboarding.method.pill.subtitle", locale: locale)

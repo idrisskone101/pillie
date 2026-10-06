@@ -97,6 +97,10 @@ support mailto rows and (debug builds only) the developer menu.
 - `flows/settings-language.flow` — opens the Language row, switches to
   German, proves German strings appear (nav title "Einstellungen", sheet
   header "Sprache"), then switches back to English.
+- `flows/notifications-app-language.flow` — on an English simulator, grants
+  notifications, dumps the pending reminders to `app.log`, picks Deutsch in
+  the Language row, and dumps again. Every pending reminder keeps its
+  identifier and comes back with German words.
 - Not driven by a flow, and why:
   - `settings-subscription`'s paywall branch (free/trial accounts) is the
     same `HonestPaywallBoard.settingsFree` covered by

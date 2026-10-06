@@ -31,7 +31,7 @@ enum DistractionChoice: String, CaseIterable, Hashable, Identifiable {
         localizedTitle()
     }
 
-    func localizedTitle(locale: Locale = .current) -> String {
+    func localizedTitle(locale: Locale = PillieLocalization.appLocale) -> String {
         let key: String
         switch self {
         case .tiktok: key = "onboarding.personalise.choice.tiktok"

@@ -26,7 +26,7 @@ struct ProtectionOffCardContent: Equatable {
     static func make(
         hasPlusAccess: Bool,
         blockerConfigSaved: Bool,
-        locale: Locale = .current
+        locale: Locale = PillieLocalization.appLocale
     ) -> ProtectionOffCardContent? {
         guard !hasPlusAccess, blockerConfigSaved else { return nil }
         return ProtectionOffCardContent(

@@ -25,7 +25,7 @@ enum FeedbackEscapeHatch {
 
     /// Kept for locale-aware call sites. The locale deliberately does not affect
     /// this stable inbox-routing contract.
-    static func localizedSubject(locale _: Locale = .current) -> String {
+    static func localizedSubject(locale _: Locale = PillieLocalization.appLocale) -> String {
         subject
     }
 
@@ -34,7 +34,7 @@ enum FeedbackEscapeHatch {
     /// tolerate that the same way they tolerate a device with no Mail account.
     static var mailURL: URL? { mailURL() }
 
-    static func mailURL(locale: Locale = .current) -> URL? {
+    static func mailURL(locale: Locale = PillieLocalization.appLocale) -> URL? {
         var components = URLComponents()
         components.scheme = "mailto"
         components.path = recipient
