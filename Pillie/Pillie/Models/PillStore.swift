@@ -552,13 +552,24 @@ class PillStore {
     /// nothing logged. `isTodayTaken || isCaughtUpToday` stands in for "anything
     /// logged": before the first reminder fires, only the open live day can hold one.
     var firstReminderHandoff: FirstReminderHandoff? {
-        FirstReminderHandoff.resolve(
+        let now = PillieClock.now
+        return FirstReminderHandoff.resolve(
             installedAt: FirstReminderInstall.date(),
             reminderHour: reminderHour,
             reminderMinute: reminderMinute,
-            now: PillieClock.now,
-            hasLoggedAnything: isTodayTaken || isCaughtUpToday
+            now: now,
+            hasLoggedAnything: isTodayTaken || isCaughtUpToday,
+            isDoseDue: isTodayDoseDue(at: now)
         )
+    }
+
+    /// Whether today's dose is untaken and past its reminder: the planner's
+    /// catch-up territory, so a reminder for it is already on its way.
+    private func isTodayDoseDue(at now: Date) -> Bool {
+        guard todayDueAction != nil, !isTodayTaken,
+              let reminder = DoseWindow.reminder(for: today, hour: reminderHour, minute: reminderMinute)
+        else { return false }
+        return now >= reminder
     }
 
     var alarmBadge: String {
