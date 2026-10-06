@@ -136,6 +136,9 @@ final class NotificationManager {
                     .notifications, error: error, context: ["operation": "authorization"]
                 )
             }
+            // Settle the answer before Home's first frame, which would
+            // otherwise promise a first reminder until its own refresh lands.
+            Task { await NotificationPermission.shared.refresh() }
             if let completion {
                 DispatchQueue.main.async { completion(granted) }
             }

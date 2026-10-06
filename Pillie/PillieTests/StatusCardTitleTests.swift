@@ -107,7 +107,7 @@ struct StatusCardTitleTests {
     }
 
     @Test func firstReminderHandoffLeadsWhileADoseIsDue() {
-        let handoff = FirstReminderHandoff(when: .tonight)
+        let handoff = FirstReminderHandoff.coming(.tonight)
         let title = StatusCardTitle.resolve(
             alarmAction: pill(on: local(9, 24)),
             liveDay: local(9, 24),
@@ -121,6 +121,20 @@ struct StatusCardTitleTests {
             == "First reminder")
     }
 
+    @Test func remindersOffReplacesTheFirstReminderLine() {
+        let title = StatusCardTitle.resolve(
+            alarmAction: pill(on: local(9, 24)),
+            liveDay: local(9, 24),
+            now: local(9, 24),
+            isTodayTaken: false,
+            isTodayNothingDue: false,
+            firstReminder: .remindersOff
+        )
+        #expect(title == .firstReminder(.remindersOff))
+        #expect(title.localized(reminderTime: "8:00 PM", locale: Locale(identifier: "en"))
+            == "Reminders are off")
+    }
+
     @Test func firstReminderHandoffYieldsOnANothingDueDay() {
         let title = StatusCardTitle.resolve(
             alarmAction: pill(on: local(9, 28)),
@@ -128,7 +142,7 @@ struct StatusCardTitleTests {
             now: local(9, 24),
             isTodayTaken: false,
             isTodayNothingDue: true,
-            firstReminder: FirstReminderHandoff(when: .tonight)
+            firstReminder: FirstReminderHandoff.coming(.tonight)
         )
         #expect(title == .next(on: local(9, 28), .nextWeek))
     }

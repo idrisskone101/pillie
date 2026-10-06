@@ -20,7 +20,8 @@ struct FirstReminderHandoffTests {
         reminderMinute: Int = 0,
         now: Date? = nil,
         hasLoggedAnything: Bool = false,
-        isDoseDue: Bool = false
+        isDoseDue: Bool = false,
+        notificationsDenied: Bool = false
     ) -> FirstReminderHandoff? {
         FirstReminderHandoff.resolve(
             installedAt: installedAt,
@@ -29,46 +30,47 @@ struct FirstReminderHandoffTests {
             now: now ?? installedAt ?? date(1, 0),
             hasLoggedAnything: hasLoggedAnything,
             isDoseDue: isDoseDue,
+            notificationsDenied: notificationsDenied,
             calendar: calendar
         )
     }
 
     @Test func morningInstallWithEveningReminderIsTonight() {
-        #expect(resolve(installedAt: date(24, 9), reminderHour: 20)?.when == .tonight)
+        #expect(resolve(installedAt: date(24, 9), reminderHour: 20) == .coming(.tonight))
     }
 
     @Test func morningInstallWithAfternoonReminderIsThisAfternoon() {
-        #expect(resolve(installedAt: date(24, 10), reminderHour: 15)?.when == .thisAfternoon)
+        #expect(resolve(installedAt: date(24, 10), reminderHour: 15) == .coming(.thisAfternoon))
     }
 
     @Test func earlyMorningInstallBeforeAMorningReminderIsThisMorning() {
-        #expect(resolve(installedAt: date(24, 2), reminderHour: 8)?.when == .thisMorning)
+        #expect(resolve(installedAt: date(24, 2), reminderHour: 8) == .coming(.thisMorning))
     }
 
     @Test func nightInstallWithMorningReminderIsTomorrowMorning() {
-        #expect(resolve(installedAt: date(24, 22), reminderHour: 8)?.when == .tomorrowMorning)
+        #expect(resolve(installedAt: date(24, 22), reminderHour: 8) == .coming(.tomorrowMorning))
     }
 
     @Test func nightInstallWithAfternoonReminderIsTomorrowAfternoon() {
-        #expect(resolve(installedAt: date(24, 22), reminderHour: 14)?.when == .tomorrowAfternoon)
+        #expect(resolve(installedAt: date(24, 22), reminderHour: 14) == .coming(.tomorrowAfternoon))
     }
 
     @Test func installAfterTheEveningReminderIsTomorrowNight() {
-        #expect(resolve(installedAt: date(24, 21), reminderHour: 20)?.when == .tomorrowNight)
+        #expect(resolve(installedAt: date(24, 21), reminderHour: 20) == .coming(.tomorrowNight))
     }
 
     @Test func installAtTheReminderMinuteWaitsForTomorrow() {
-        #expect(resolve(installedAt: date(24, 20), reminderHour: 20)?.when == .tomorrowNight)
+        #expect(resolve(installedAt: date(24, 20), reminderHour: 20) == .coming(.tomorrowNight))
     }
 
     @Test func minutesCountTowardTheFirstFire() {
-        #expect(resolve(installedAt: date(24, 20, 10), reminderHour: 20, reminderMinute: 5)?.when == .tomorrowNight)
-        #expect(resolve(installedAt: date(24, 20, 10), reminderHour: 20, reminderMinute: 30)?.when == .tonight)
+        #expect(resolve(installedAt: date(24, 20, 10), reminderHour: 20, reminderMinute: 5) == .coming(.tomorrowNight))
+        #expect(resolve(installedAt: date(24, 20, 10), reminderHour: 20, reminderMinute: 30) == .coming(.tonight))
     }
 
     @Test func aNightInstallReadPastMidnightNoLongerSaysTomorrow() {
         let installedAt = date(24, 21)
-        #expect(resolve(installedAt: installedAt, reminderHour: 20, now: date(25, 1))?.when == .tonight)
+        #expect(resolve(installedAt: installedAt, reminderHour: 20, now: date(25, 1)) == .coming(.tonight))
     }
 
     @Test func loggingAnythingEndsTheHandoff() {
@@ -82,9 +84,24 @@ struct FirstReminderHandoffTests {
 
     @Test func atAndAfterTheFirstFireTheHandoffIsGone() {
         let installedAt = date(24, 12)
-        #expect(resolve(installedAt: installedAt, reminderHour: 20, now: date(24, 19, 59))?.when == .tonight)
+        #expect(resolve(installedAt: installedAt, reminderHour: 20, now: date(24, 19, 59)) == .coming(.tonight))
         #expect(resolve(installedAt: installedAt, reminderHour: 20, now: date(24, 20)) == nil)
         #expect(resolve(installedAt: installedAt, reminderHour: 20, now: date(25, 9)) == nil)
+    }
+
+    @Test func deniedNotificationsSayRemindersAreOffInsteadOfPromisingOne() {
+        let off = resolve(installedAt: date(24, 12), reminderHour: 20, notificationsDenied: true)
+        #expect(off == .remindersOff)
+        #expect(off?.isComing == false)
+        #expect(off?.cardLine(locale: Locale(identifier: "en")) == "Reminders are off")
+        #expect(off?.localizedLine(locale: Locale(identifier: "en")) == "Reminders are off")
+    }
+
+    @Test func deniedNotificationsKeepTheHandoffWindow() {
+        #expect(resolve(installedAt: date(24, 12), reminderHour: 20, hasLoggedAnything: true, notificationsDenied: true) == nil)
+        #expect(resolve(installedAt: date(24, 21), reminderHour: 8, isDoseDue: true, notificationsDenied: true) == nil)
+        #expect(resolve(installedAt: date(24, 12), reminderHour: 20, now: date(24, 20), notificationsDenied: true) == nil)
+        #expect(resolve(installedAt: nil, reminderHour: 20, now: date(24, 12), notificationsDenied: true) == nil)
     }
 
     @Test func installsWithoutARecordKeepTodaysBehavior() {
@@ -93,7 +110,7 @@ struct FirstReminderHandoffTests {
 
     @Test func englishLines() {
         let en = Locale(identifier: "en")
-        let line = { (when: FirstReminderHandoff.When) in FirstReminderHandoff(when: when).localizedLine(locale: en) }
+        let line = { (when: FirstReminderHandoff.When) in FirstReminderHandoff.coming(when).localizedLine(locale: en) }
         #expect(line(.thisMorning) == "Your first reminder is this morning")
         #expect(line(.thisAfternoon) == "Your first reminder is this afternoon")
         #expect(line(.tonight) == "Your first reminder is tonight")
@@ -108,7 +125,7 @@ struct FirstReminderHandoffTests {
             .thisMorning, .thisAfternoon, .tonight, .tomorrowMorning, .tomorrowAfternoon, .tomorrowNight,
         ]
         for when in moments {
-            #expect(FirstReminderHandoff(when: when).cardLine(locale: en) == "First reminder")
+            #expect(FirstReminderHandoff.coming(when).cardLine(locale: en) == "First reminder")
         }
     }
 }

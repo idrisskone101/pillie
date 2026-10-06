@@ -96,6 +96,12 @@ blocking/trial status surfaces, and (when eligible) the review ask.
   normal Take state, with no "Your first reminder" line and no
   `#firstReminderTookIt` chip. The flow ends by dumping pending notifications
   to `app.log`.
+- `flows/today-first-reminder-denied.flow` — the same onboarding as
+  `today-first-reminder.flow`, but the notification prompt is denied
+  (ENG-169). The floating bar is the normal Take pill, and the status card
+  reads "8:00 PM" over "Reminders are off" with a `#remindersOffTurnOn` chip.
+  The flow does not tap the chip: the simulator's Settings reopens wherever
+  it was last left.
 - `flows/today-pack-card.flow` — the pack card's last hormone pill, sugar
   week, and finished pack headers via `/trial-eve-of-break`,
   `/trial-break-week`, and `/fixed-now` one day later.

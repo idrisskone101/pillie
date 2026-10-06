@@ -4,10 +4,12 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct StatusCard: View {
     @Environment(PillStore.self) var store
     @Environment(\.locale) private var locale
+    @Environment(\.openURL) private var openURL
     private let valueChangeAnimation = Animation.easeInOut(duration: 0.28)
 
     var body: some View {
@@ -22,7 +24,7 @@ struct StatusCard: View {
             locale: locale
         )
         let method = (isTodayNothingDue ? todayAction : alarmAction)?.method ?? store.pack.method
-        let actionTitle = StatusCardTitle.resolve(
+        let title = StatusCardTitle.resolve(
             alarmAction: alarmAction,
             liveDay: store.today,
             now: store.civilDay,
@@ -30,12 +32,13 @@ struct StatusCard: View {
             isTodayNothingDue: isTodayNothingDue,
             catchUp: store.openCatchUp,
             firstReminder: store.firstReminderHandoff
-        ).localized(reminderTime: reminderTime, locale: locale)
+        )
         statusMainContent(
             method: method,
             reminderTime: reminderTime,
-            actionTitle: actionTitle,
-            isTodayTaken: isTodayTaken
+            actionTitle: title.localized(reminderTime: reminderTime, locale: locale),
+            isTodayTaken: isTodayTaken,
+            offersTurnOnReminders: title == .firstReminder(.remindersOff)
         )
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(16)
@@ -53,7 +56,8 @@ struct StatusCard: View {
         method: ContraceptiveMethod,
         reminderTime: String,
         actionTitle: String,
-        isTodayTaken: Bool
+        isTodayTaken: Bool,
+        offersTurnOnReminders: Bool
     ) -> some View {
         HStack(spacing: 14) {
             Circle()
@@ -94,7 +98,28 @@ struct StatusCard: View {
                     .contentTransition(.opacity)
                     .animation(valueChangeAnimation, value: actionTitle)
             }
+
+            if offersTurnOnReminders {
+                Spacer(minLength: 0)
+                Button(action: openNotificationSettings) {
+                    Text(PillieLocalization.string("today.reminders_off.turn_on", locale: locale))
+                        .font(.pillie(15, weight: .semibold))
+                        .foregroundStyle(PillieTheme.textPrimary)
+                        .padding(.horizontal, 18)
+                        .frame(height: PillieTheme.ctaHeight - 24)
+                        .background(PillieTheme.lavender, in: Capsule())
+                }
+                .buttonStyle(.plain)
+                .fixedSize()
+                .accessibilityIdentifier("remindersOffTurnOn")
+                .transition(.opacity)
+            }
         }
+    }
+
+    private func openNotificationSettings() {
+        guard let url = URL(string: UIApplication.openNotificationSettingsURLString) else { return }
+        openURL(url)
     }
 }
 

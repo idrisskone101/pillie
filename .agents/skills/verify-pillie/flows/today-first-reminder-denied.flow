@@ -1,0 +1,53 @@
+# ENG-169: the same day-0 onboarding as today-first-reminder.flow, but deny the
+# notification prompt. No reminder will come, so Home must not promise one: the
+# floating bar is the normal Take pill, and the status card says "Reminders are
+# off" with a Turn on chip that opens Pillie's notification settings. The flow
+# stops before the chip: the simulator's Settings reopens wherever it was last
+# left, so the trip there is not deterministic.
+fresh
+launch
+sleep 2
+openurl pillie://debug/fixed-now?at=2026-09-15T12:30:00Z
+wait id protectionPlanPrimaryCTA
+tap --id protectionPlanPrimaryCTA
+wait id protectionPlanEarlyValueProofView
+tap --label "Not now" --element-type Button
+wait text "What’s in the way?"
+tap --label TikTok
+tap --label "A simpler routine"
+tap --id protectionPlanPrimaryCTA
+wait text "How often do you miss your pill?"
+tap --label Rarely
+tap --label "Right after the reminder"
+tap --id protectionPlanPrimaryCTA
+wait text "Where did you find Pillie?"
+tap --id acquisitionSource.tiktok
+tap --id protectionPlanPrimaryCTA
+wait text "Pick your method."
+tap --id protectionPlanPrimaryCTA
+wait text "Tap the pill you’re on today."
+tap --id packTile.1
+wait id todayPillQuestion
+tap --id todayPillNotYet
+shot not-yet
+tap --id protectionPlanPrimaryCTA
+wait text "Pick a time."
+tap --label Evening
+shot reminder-time
+tap --id protectionPlanPrimaryCTA
+tap --label "Don’t Allow"
+wait id protectionPlanPrimaryCTA 15
+tap --id protectionPlanPrimaryCTA
+wait id appBlockingEmptyStateCard 15
+openurl "pillie://debug/plus-app-blocking-setup?selected=3&lang=en"
+wait text "Apps selected"
+tap --label Continue
+wait id protectionPlanReadyStartButton
+tap --id protectionPlanReadyStartButton
+sleep 2
+wait text "Reminders are off" 10
+shot reminders-off
+expect-not text "Your first reminder"
+expect-not id firstReminderTookIt
+expect label "Take pill"
+openurl pillie://debug/fixed-now?at=off
