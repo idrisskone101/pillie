@@ -23,20 +23,23 @@ struct FirstReminderHandoff: Equatable {
     let when: When
 
     /// Nil for installs that predate the record (`installedAt == nil`), once
-    /// anything is logged, and once the first reminder time has passed. The
-    /// first reminder is the first occurrence of the reminder time strictly
-    /// after `installedAt`.
+    /// anything is logged, while a dose is already past its reminder, and once
+    /// the first reminder time has passed. The first reminder is the first
+    /// occurrence of the reminder time strictly after `installedAt`, unless a
+    /// dose is already due: then the planner's catch-up reminder comes first.
     static func resolve(
         installedAt: Date?,
         reminderHour: Int,
         reminderMinute: Int,
         now: Date,
         hasLoggedAnything: Bool,
+        isDoseDue: Bool,
         calendar: Calendar = .current
     ) -> FirstReminderHandoff? {
         guard
             let installedAt,
             !hasLoggedAnything,
+            !isDoseDue,
             let firstFire = calendar.nextDate(
                 after: installedAt,
                 matching: DateComponents(hour: reminderHour, minute: reminderMinute),

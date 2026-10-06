@@ -90,6 +90,12 @@ blocking/trial status surfaces, and (when eligible) the review ask.
   "First reminder" and the floating bar says "Your first reminder is tonight"
   with a `#firstReminderTookIt` chip, which goes through shake confirm to the
   logged state. The bar itself is not a button.
+- `flows/today-first-reminder-due.flow` — the same onboarding at a pinned
+  9 PM with an 8 AM reminder (ENG-163). Pill 1 is already past its reminder,
+  so the planner's catch-up reminder fires within a minute. Today shows the
+  normal Take state, with no "Your first reminder" line and no
+  `#firstReminderTookIt` chip. The flow ends by dumping pending notifications
+  to `app.log`.
 - `flows/today-pack-card.flow` — the pack card's last hormone pill, sugar
   week, and finished pack headers via `/trial-eve-of-break`,
   `/trial-break-week`, and `/fixed-now` one day later.
@@ -116,6 +122,9 @@ blocking/trial status surfaces, and (when eligible) the review ask.
 - `flows/today-ring-start-day.flow` onboards a ring routine answered "Not yet"
   with an evening reminder and, before that reminder, logs the day-1 insert
   from Home. The streak starts at 1.
+- `flows/today-ring-new-cycle-streak.flow` — logs a ring insert and removal,
+  then the on-time day-29 change: Home's streak reads 2, the shake hero
+  (`#shakeStreakHero`) promises 3, and Home reads 3 once the new cycle starts.
 - `flows/today-catch-up.flow` — a missed patch change stays loggable from
   Home until the next task day: day 16 reads Overdue with "Change patch" on
   the button, the Shake fallback logs it late ("On today"), undo restores

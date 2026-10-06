@@ -110,7 +110,9 @@ struct PlusSetupSheet: View {
         guard case .step(let step) = current, !editorStepWasDone, progress.isDone(step) else {
             return
         }
-        ProductAnalyticsTelemetry.live.plusSetupStep(step, action: .completed)
+        if step != .blocking {
+            ProductAnalyticsTelemetry.live.plusSetupStep(step, action: .completed)
+        }
         advance(from: step)
     }
 

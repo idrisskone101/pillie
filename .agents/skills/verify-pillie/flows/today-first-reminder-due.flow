@@ -1,0 +1,54 @@
+# ENG-163: finish onboarding at 21:00 with an 8 AM reminder and "Not yet" on pill 1.
+# Home must show the due Take state, matching the catch-up reminder the planner schedules.
+fresh
+launch
+sleep 2
+openurl pillie://debug/fixed-now?at=2026-09-15T21:00:00Z
+wait id protectionPlanPrimaryCTA
+tap --id protectionPlanPrimaryCTA
+wait id protectionPlanEarlyValueProofView
+tap --label "Not now" --element-type Button
+wait text "What’s in the way?"
+tap --label TikTok
+tap --label "A simpler routine"
+tap --id protectionPlanPrimaryCTA
+wait text "How often do you miss your pill?"
+tap --label Rarely
+tap --label "Right after the reminder"
+tap --id protectionPlanPrimaryCTA
+wait text "Where did you find Pillie?"
+tap --id acquisitionSource.tiktok
+tap --id protectionPlanPrimaryCTA
+wait text "Pick your method."
+tap --id protectionPlanPrimaryCTA
+wait text "Tap the pill you’re on today."
+tap --id packTile.1
+wait id todayPillQuestion
+tap --id todayPillNotYet
+shot not-yet
+tap --id protectionPlanPrimaryCTA
+wait text "Pick a time."
+tap --label Morning
+shot reminder-time
+log start
+tap --id protectionPlanPrimaryCTA
+tap --label Allow
+wait id protectionPlanPrimaryCTA 15
+tap --id protectionPlanPrimaryCTA
+wait id appBlockingEmptyStateCard 15
+openurl "pillie://debug/plus-app-blocking-setup?selected=3&lang=en"
+wait text "Apps selected"
+tap --label Continue
+wait id protectionPlanReadyStartButton
+tap --id protectionPlanReadyStartButton
+sleep 2
+wait id developerMenuAvatarButton 15
+sleep 2
+shot home-after-onboarding
+expect-not text "Your first reminder"  # the catch-up reminder fires within a minute
+expect-not id firstReminderTookIt
+expect label "Take pill"
+openurl pillie://debug/dump-pending-notifications
+sleep 5
+log stop
+openurl pillie://debug/fixed-now?at=off

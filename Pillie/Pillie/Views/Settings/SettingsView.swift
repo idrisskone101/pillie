@@ -1015,6 +1015,7 @@ private struct CycleDayEditor: View {
                 settingsFeedback.commitScheduleSave(accessibilityReduceMotion: accessibilityReduceMotion)
                 store.updateCycleDay(selectedCycleDay)
                 ProductAnalyticsTelemetry.live.cycleDaySaved()
+                StreakChangeReport.record(store, reason: .packChange)
                 dismiss()
             } label: {
                 Text(PillieLocalization.string("global.action.save", locale: locale))

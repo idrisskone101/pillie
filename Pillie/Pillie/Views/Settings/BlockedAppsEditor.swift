@@ -16,6 +16,7 @@ struct BlockedAppsEditor: View {
     @State private var showPicker = false
     @State private var isRefused = false
     @State private var isRequesting = false
+    @State private var blockingWasDone = false
 
     @Bindable private var blockingManager = AppBlockingManager.shared
 
@@ -35,6 +36,15 @@ struct BlockedAppsEditor: View {
             selection: Bindable(blockingManager).pickerSelection
         )
         .task { await requestAccess() }
+        // Every surface that sets up blocking opens this editor, so the Plus
+        // setup step completes here, not in the strip's sheet.
+        .onAppear {
+            blockingWasDone = PlusSetupProgress.live(store: store).isDone(.blocking)
+        }
+        .onDisappear {
+            guard !blockingWasDone, PlusSetupProgress.live(store: store).isDone(.blocking) else { return }
+            ProductAnalyticsTelemetry.live.plusSetupStep(.blocking, action: .completed)
+        }
     }
 
     @ViewBuilder

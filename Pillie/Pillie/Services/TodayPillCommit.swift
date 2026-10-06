@@ -7,6 +7,7 @@ import Foundation
 
 enum TodayPillCommit {
     static let reportedStorageKey = "pillie_onboarding_today_pill_reported"
+    static let answerReportedStorageKey = "pillie_onboarding_today_answer_reported"
 
     static func run(
         _ draft: OnboardingDraft<TodayPillPick>,
@@ -64,6 +65,7 @@ enum TodayPillCommit {
         TodayPillPick.clear(from: defaults)
         RoutineDialPick.clear(from: defaults)
         defaults.removeObject(forKey: reportedStorageKey)
+        defaults.removeObject(forKey: answerReportedStorageKey)
     }
 
     private struct Start {
@@ -84,6 +86,17 @@ enum TodayPillCommit {
         defaults: UserDefaults,
         telemetry: ProductAnalyticsTelemetry
     ) {
+        if let answer = start.answer, !defaults.bool(forKey: answerReportedStorageKey) {
+            defaults.set(true, forKey: answerReportedStorageKey)
+            let reminder = Calendar.current.date(
+                bySettingHour: store.reminderHour,
+                minute: store.reminderMinute,
+                second: 0,
+                of: start.pickedAt
+            )
+            telemetry.onboardingTodayAnswer(answer, reminderPassed: reminder.map { start.pickedAt >= $0 } ?? false)
+        }
+
         // A pick from an earlier day names an earlier pill, and its answer is about that pill.
         let pickedDay = TodayPillPick.Answer.anchorDay(
             for: start.answer,
@@ -112,9 +125,11 @@ enum TodayPillCommit {
             store.appActivatedDate = store.today
         }
         FirstReminderInstall.record(at: now, in: defaults)
+        StreakChangeReport.record(store, reason: .packChange, defaults: defaults, telemetry: telemetry)
 
         guard start.logs, daysSincePick == 0 else { return }
         store.markTodayAsTaken()
+        StreakChangeReport.record(store, reason: .logged, defaults: defaults, telemetry: telemetry)
 
         guard !defaults.bool(forKey: reportedStorageKey) else { return }
         defaults.set(true, forKey: reportedStorageKey)
