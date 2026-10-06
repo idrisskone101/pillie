@@ -281,8 +281,10 @@ struct ProtocolEditor: View {
             cycleDay: draft.cycleDay ?? 1,
             anchorDay: store.anchorDay(for: draft.answer)
         )
+        StreakChangeReport.record(store, reason: .packChange)
         if draft.logsToday {
             store.markTodayAsTaken()
+            StreakChangeReport.record(store, reason: .logged)
         }
         ProductAnalyticsTelemetry.live.protocolChangeSaved()
         dismiss()
