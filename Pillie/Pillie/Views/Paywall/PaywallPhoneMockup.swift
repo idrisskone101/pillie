@@ -11,80 +11,35 @@ struct PaywallPhoneMockup: View {
     @Environment(PillStore.self) private var store
     @Environment(\.locale) private var locale
 
-    private static let size = CGSize(width: 252, height: 548)
-    private static let bodyRadius: CGFloat = 46
-    private static let screenInset: CGFloat = 7
-    private static let screenRadius: CGFloat = 39
-    private static let rimLight = Color(hex: "3C3636")
-    private static let rimDark = Color(hex: "1C1A1A")
+    /// Point size of the `PaywallPhone` frame art, side buttons included.
+    private static let size = CGSize(width: 258, height: 548)
+    /// Where the art's screen starts: side button gutter plus bezel.
+    private static let screenOrigin = CGPoint(x: 10, y: 7)
 
     var body: some View {
-        RoundedRectangle(cornerRadius: Self.bodyRadius, style: .continuous)
-            .fill(Color(hex: "100E0F"))
-            .overlay {
-                RoundedRectangle(cornerRadius: Self.bodyRadius, style: .continuous)
-                    .strokeBorder(
-                        LinearGradient(
-                            colors: [Self.rimLight, Self.rimDark],
-                            startPoint: .top,
-                            endPoint: .bottom
-                        ),
-                        lineWidth: 1.5
-                    )
-            }
-            .overlay {
-                screen
-                    .padding(Self.screenInset)
-            }
+        Image("PaywallPhone")
+            .resizable()
             .frame(width: Self.size.width, height: Self.size.height)
-            .overlay(alignment: .topLeading) {
-                sideButton(length: 22, top: 96, leading: true)
-                sideButton(length: 40, top: 140, leading: true)
-                sideButton(length: 40, top: 192, leading: true)
+            .overlay(alignment: .top) {
+                ZStack(alignment: .top) {
+                    statusRow
+                        .padding(.top, 14)
+                        .padding(.horizontal, 28)
+
+                    shield
+                        .padding(.top, 117)
+                }
+                .padding(.horizontal, Self.screenOrigin.x)
+                .padding(.top, Self.screenOrigin.y)
             }
-            .overlay(alignment: .topTrailing) {
-                sideButton(length: 62, top: 156, leading: false)
-            }
-            .shadow(color: .black.opacity(0.18), radius: 24, y: 12)
             .accessibilityHidden(true)
     }
 
-    private var screen: some View {
-        ZStack(alignment: .top) {
-            RoundedRectangle(cornerRadius: Self.screenRadius, style: .continuous)
-                .fill(Color(hex: "FCF2F0"))
-
-            Capsule()
-                .fill(Color.black)
-                .frame(width: 74, height: 22)
-                .padding(.top, 11)
-
-            statusRow
-                .padding(.top, 14)
-                .padding(.horizontal, 28)
-
-            shield
-                .padding(.top, 117)
-        }
-        .clipShape(RoundedRectangle(cornerRadius: Self.screenRadius, style: .continuous))
-    }
-
     private var statusRow: some View {
-        HStack(spacing: 0) {
-            Text(reminderTime)
-                .font(.pillie(13, weight: .semibold))
-                .foregroundStyle(PillieTheme.textPrimary)
-
-            Spacer(minLength: 0)
-
-            HStack(spacing: 5) {
-                Image(systemName: "cellularbars")
-                    .font(.system(size: 10))
-                RoundedRectangle(cornerRadius: 2.5, style: .continuous)
-                    .frame(width: 18, height: 8)
-            }
+        Text(reminderTime)
+            .font(.pillie(13, weight: .semibold))
             .foregroundStyle(PillieTheme.textPrimary)
-        }
+            .frame(maxWidth: .infinity, minHeight: 16, alignment: .leading)
     }
 
     private var shield: some View {
@@ -108,13 +63,6 @@ struct PaywallPhoneMockup: View {
         }
         .multilineTextAlignment(.center)
         .padding(.horizontal, 16)
-    }
-
-    private func sideButton(length: CGFloat, top: CGFloat, leading: Bool) -> some View {
-        RoundedRectangle(cornerRadius: 1.5, style: .continuous)
-            .fill(Self.rimDark)
-            .frame(width: 3, height: length)
-            .offset(x: leading ? -3 : 3, y: top)
     }
 
     private var reminderTime: String {
