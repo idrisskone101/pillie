@@ -7701,6 +7701,923 @@
         }
       }
     },
+    "notification.reminder.pill.streak.body": {
+      "comment": "Base pill reminder body while the streak is 1 to 6 days. %lld = streak length in days. A full spoken sentence; keep the number. [notification]",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Take today’s pill to keep your %lld-day streak going."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Take today’s pill to keep your %lld-day streak going."
+                }
+              }
+            }
+          }
+        },
+        "it": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Prendi la pillola di oggi per continuare la tua serie di %lld giorno."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Prendi la pillola di oggi per continuare la tua serie di %lld giorni."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Prendi la pillola di oggi per continuare la tua serie di %lld giorni."
+                }
+              }
+            }
+          }
+        },
+        "de": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Nimm heute deine Pille, damit deine Serie von %lld Tag weitergeht."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Nimm heute deine Pille, damit deine Serie von %lld Tagen weitergeht."
+                }
+              }
+            }
+          }
+        },
+        "fr": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Prends ta pilule du jour pour continuer ta série de %lld jour."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Prends ta pilule du jour pour continuer ta série de %lld jours."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Prends ta pilule du jour pour continuer ta série de %lld jours."
+                }
+              }
+            }
+          }
+        },
+        "es": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Tómate la píldora de hoy para mantener tu racha de %lld día."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Tómate la píldora de hoy para mantener tu racha de %lld días."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Tómate la píldora de hoy para mantener tu racha de %lld días."
+                }
+              }
+            }
+          }
+        },
+        "pt-BR": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Tome a pílula de hoje para manter sua sequência de %lld dia."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Tome a pílula de hoje para manter sua sequência de %lld dias."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Tome a pílula de hoje para manter sua sequência de %lld dias."
+                }
+              }
+            }
+          }
+        },
+        "nl": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Neem je pil van vandaag om je reeks van %lld dag vast te houden."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Neem je pil van vandaag om je reeks van %lld dagen vast te houden."
+                }
+              }
+            }
+          }
+        },
+        "sv": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Ta dagens p-piller för att hålla igång din svit på %lld dag."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Ta dagens p-piller för att hålla igång din svit på %lld dagar."
+                }
+              }
+            }
+          }
+        },
+        "da": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Tag dagens p-pille, så din stime på %lld dag fortsætter."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Tag dagens p-pille, så din stime på %lld dage fortsætter."
+                }
+              }
+            }
+          }
+        },
+        "nb": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Ta dagens pille, så rekken din på %lld dag fortsetter."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Ta dagens pille, så rekken din på %lld dager fortsetter."
+                }
+              }
+            }
+          }
+        },
+        "fi": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Ota tämän päivän pilleri, niin %lld päivän putkesi jatkuu."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Ota tämän päivän pilleri, niin %lld päivän putkesi jatkuu."
+                }
+              }
+            }
+          }
+        },
+        "pt-PT": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Toma a pílula de hoje para manter a tua sequência de %lld dia."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Toma a pílula de hoje para manter a tua sequência de %lld dias."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Toma a pílula de hoje para manter a tua sequência de %lld dias."
+                }
+              }
+            }
+          }
+        },
+        "ca": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pren la píndola d’avui per mantenir la teva ratxa de %lld dia."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pren la píndola d’avui per mantenir la teva ratxa de %lld dies."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pren la píndola d’avui per mantenir la teva ratxa de %lld dies."
+                }
+              }
+            }
+          }
+        },
+        "pl": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Weź dzisiejszą tabletkę, by utrzymać serię, która trwa już %lld dzień."
+                }
+              },
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Weź dzisiejszą tabletkę, by utrzymać serię, która trwa już %lld dni."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Weź dzisiejszą tabletkę, by utrzymać serię, która trwa już %lld dni."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Weź dzisiejszą tabletkę, by utrzymać serię, która trwa już %lld dnia."
+                }
+              }
+            }
+          }
+        },
+        "cs": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Vezmi si dnešní pilulku a pokračuj v sérii, která trvá už %lld den."
+                }
+              },
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Vezmi si dnešní pilulku a pokračuj v sérii, která trvá už %lld dny."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Vezmi si dnešní pilulku a pokračuj v sérii, která trvá už %lld dne."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Vezmi si dnešní pilulku a pokračuj v sérii, která trvá už %lld dní."
+                }
+              }
+            }
+          }
+        },
+        "ru": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Прими сегодняшнюю таблетку и продолжи серию, которая длится уже %lld день."
+                }
+              },
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Прими сегодняшнюю таблетку и продолжи серию, которая длится уже %lld дня."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Прими сегодняшнюю таблетку и продолжи серию, которая длится уже %lld дней."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Прими сегодняшнюю таблетку и продолжи серию, которая длится уже %lld дня."
+                }
+              }
+            }
+          }
+        },
+        "uk": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Прийми сьогоднішню таблетку й продовж серію, яка триває вже %lld день."
+                }
+              },
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Прийми сьогоднішню таблетку й продовж серію, яка триває вже %lld дні."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Прийми сьогоднішню таблетку й продовж серію, яка триває вже %lld днів."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Прийми сьогоднішню таблетку й продовж серію, яка триває вже %lld дня."
+                }
+              }
+            }
+          }
+        },
+        "ja": {
+          "variations": {
+            "plural": {
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "今日のピルを飲んで、%lld日間の連続記録をつなげましょう。"
+                }
+              }
+            }
+          }
+        },
+        "ko": {
+          "variations": {
+            "plural": {
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "오늘 피임약을 복용하고 %lld일 연속 기록을 이어가세요."
+                }
+              }
+            }
+          }
+        },
+        "ms": {
+          "variations": {
+            "plural": {
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Ambil pil hari ini supaya rentetan %lld hari kamu berterusan."
+                }
+              }
+            }
+          }
+        },
+        "ro": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Ia pilula de azi ca să continui seria de %lld zi."
+                }
+              },
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Ia pilula de azi ca să continui seria de %lld zile."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Ia pilula de azi ca să continui seria de %lld de zile."
+                }
+              }
+            }
+          }
+        },
+        "sk": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Vezmi si dnešnú tabletku a pokračuj v sérii, ktorá trvá už %lld deň."
+                }
+              },
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Vezmi si dnešnú tabletku a pokračuj v sérii, ktorá trvá už %lld dni."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Vezmi si dnešnú tabletku a pokračuj v sérii, ktorá trvá už %lld dňa."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Vezmi si dnešnú tabletku a pokračuj v sérii, ktorá trvá už %lld dní."
+                }
+              }
+            }
+          }
+        },
+        "th": {
+          "variations": {
+            "plural": {
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "กินยาวันนี้เพื่อรักษาสตรีค %lld วันของคุณไว้"
+                }
+              }
+            }
+          }
+        },
+        "zh-Hans": {
+          "variations": {
+            "plural": {
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "服下今天的避孕药，延续 %lld 天的连续打卡。"
+                }
+              }
+            }
+          }
+        },
+        "hi": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "आज की गोली लें, ताकि आपका %lld दिन का सिलसिला जारी रहे।"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "आज की गोली लें, ताकि आपका %lld दिन का सिलसिला जारी रहे।"
+                }
+              }
+            }
+          }
+        },
+        "hr": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Uzmi današnju pilulu i nastavi niz koji traje već %lld dan."
+                }
+              },
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Uzmi današnju pilulu i nastavi niz koji traje već %lld dana."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Uzmi današnju pilulu i nastavi niz koji traje već %lld dana."
+                }
+              }
+            }
+          }
+        },
+        "hu": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Vedd be a mai tablettát, és folytasd a sorozatod, ami már %lld napja tart."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Vedd be a mai tablettát, és folytasd a sorozatod, ami már %lld napja tart."
+                }
+              }
+            }
+          }
+        },
+        "tr": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Bugünkü hapını al, %lld günlük serin devam etsin."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Bugünkü hapını al, %lld günlük serin devam etsin."
+                }
+              }
+            }
+          }
+        },
+        "ta": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "உங்கள் %lld நாள் தொடர்ச்சியைத் தொடர, இன்றைய மாத்திரையை எடுத்துக்கொள்ளுங்கள்."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "உங்கள் %lld நாள் தொடர்ச்சியைத் தொடர, இன்றைய மாத்திரையை எடுத்துக்கொள்ளுங்கள்."
+                }
+              }
+            }
+          }
+        },
+        "id": {
+          "variations": {
+            "plural": {
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Minum pil hari ini supaya rentetanmu yang sudah %lld hari terus berlanjut."
+                }
+              }
+            }
+          }
+        },
+        "ar": {
+          "variations": {
+            "plural": {
+              "zero": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "خذي حبة اليوم لتستمر سلسلتك التي بلغت %lld يوم."
+                }
+              },
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "خذي حبة اليوم لتستمر سلسلتك التي بلغت %lld يوم."
+                }
+              },
+              "two": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "خذي حبة اليوم لتستمر سلسلتك التي بلغت %lld يومين."
+                }
+              },
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "خذي حبة اليوم لتستمر سلسلتك التي بلغت %lld أيام."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "خذي حبة اليوم لتستمر سلسلتك التي بلغت %lld يومًا."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "خذي حبة اليوم لتستمر سلسلتك التي بلغت %lld يوم."
+                }
+              }
+            }
+          }
+        },
+        "he": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "קחי את הגלולה של היום כדי להמשיך את הרצף שלך, שנמשך כבר %lld יום."
+                }
+              },
+              "two": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "קחי את הגלולה של היום כדי להמשיך את הרצף שלך, שנמשך כבר %lld ימים."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "קחי את הגלולה של היום כדי להמשיך את הרצף שלך, שנמשך כבר %lld ימים."
+                }
+              }
+            }
+          }
+        },
+        "vi": {
+          "variations": {
+            "plural": {
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Uống thuốc hôm nay để giữ chuỗi %lld ngày của bạn."
+                }
+              }
+            }
+          }
+        },
+        "bn": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "আজকের পিলটি খান, যাতে আপনার %lld দিনের স্ট্রিক চালু থাকে।"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "আজকের পিলটি খান, যাতে আপনার %lld দিনের স্ট্রিক চালু থাকে।"
+                }
+              }
+            }
+          }
+        },
+        "ur": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "آج کی گولی لیں تاکہ آپ کا %lld دن کا سلسلہ جاری رہے۔"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "آج کی گولی لیں تاکہ آپ کا %lld دن کا سلسلہ جاری رہے۔"
+                }
+              }
+            }
+          }
+        },
+        "sl": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Vzemi današnjo tabletko in nadaljuj niz, ki traja že %lld dan."
+                }
+              },
+              "two": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Vzemi današnjo tabletko in nadaljuj niz, ki traja že %lld dneva."
+                }
+              },
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Vzemi današnjo tabletko in nadaljuj niz, ki traja že %lld dni."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Vzemi današnjo tabletko in nadaljuj niz, ki traja že %lld dni."
+                }
+              }
+            }
+          }
+        },
+        "el": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Πάρε το σημερινό χάπι και συνέχισε το σερί σου, που κρατάει ήδη %lld μέρα."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Πάρε το σημερινό χάπι και συνέχισε το σερί σου, που κρατάει ήδη %lld μέρες."
+                }
+              }
+            }
+          }
+        },
+        "te": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "మీ %lld రోజు స్ట్రీక్ కొనసాగడానికి ఈరోజు మాత్ర తీసుకోండి."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "మీ %lld రోజుల స్ట్రీక్ కొనసాగడానికి ఈరోజు మాత్ర తీసుకోండి."
+                }
+              }
+            }
+          }
+        },
+        "zh-Hant": {
+          "variations": {
+            "plural": {
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "服下今天的避孕藥，延續 %lld 天的連續打卡。"
+                }
+              }
+            }
+          }
+        },
+        "gu": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "આજની ગોળી લો, જેથી તમારી %lld દિવસની સ્ટ્રીક ચાલુ રહે."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "આજની ગોળી લો, જેથી તમારી %lld દિવસની સ્ટ્રીક ચાલુ રહે."
+                }
+              }
+            }
+          }
+        },
+        "kn": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "ಇಂದಿನ ಮಾತ್ರೆ ತೆಗೆದುಕೊಳ್ಳಿ, ನಿಮ್ಮ %lld ದಿನದ ಸರಣಿ ಮುಂದುವರಿಯಲಿ."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "ಇಂದಿನ ಮಾತ್ರೆ ತೆಗೆದುಕೊಳ್ಳಿ, ನಿಮ್ಮ %lld ದಿನಗಳ ಸರಣಿ ಮುಂದುವರಿಯಲಿ."
+                }
+              }
+            }
+          }
+        },
+        "ml": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "ഇന്നത്തെ ഗുളിക കഴിക്കൂ, നിങ്ങളുടെ %lld ദിവസത്തെ സ്ട്രീക്ക് തുടരട്ടെ."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "ഇന്നത്തെ ഗുളിക കഴിക്കൂ, നിങ്ങളുടെ %lld ദിവസത്തെ സ്ട്രീക്ക് തുടരട്ടെ."
+                }
+              }
+            }
+          }
+        },
+        "mr": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "आजची गोळी घ्या, म्हणजे तुमची %lld दिवसाची सलग मालिका सुरू राहील."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "आजची गोळी घ्या, म्हणजे तुमची %lld दिवसांची सलग मालिका सुरू राहील."
+                }
+              }
+            }
+          }
+        },
+        "or": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "ଆପଣଙ୍କ %lld ଦିନର ଧାରା ଜାରି ରଖିବାକୁ ଆଜିର ପିଲ୍ ଖାଆନ୍ତୁ।"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "ଆପଣଙ୍କ %lld ଦିନର ଧାରା ଜାରି ରଖିବାକୁ ଆଜିର ପିଲ୍ ଖାଆନ୍ତୁ।"
+                }
+              }
+            }
+          }
+        },
+        "pa": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "ਅੱਜ ਦੀ ਗੋਲੀ ਲਓ, ਤਾਂ ਜੋ ਤੁਹਾਡੀ %lld ਦਿਨ ਦੀ ਸਟ੍ਰੀਕ ਜਾਰੀ ਰਹੇ।"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "ਅੱਜ ਦੀ ਗੋਲੀ ਲਓ, ਤਾਂ ਜੋ ਤੁਹਾਡੀ %lld ਦਿਨ ਦੀ ਸਟ੍ਰੀਕ ਜਾਰੀ ਰਹੇ।"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "notification.reminder.pill.title": {
       "comment": "Pill-specific title [health]",
       "localizations": {
