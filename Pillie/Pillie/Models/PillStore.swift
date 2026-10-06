@@ -354,24 +354,21 @@ class PillStore {
     }
 
     private func streak(countingTodayAsTaken: Bool) -> Int {
-        guard let targetPack = activePack else { return 0 }
+        guard let routine = activePack?.method else { return 0 }
 
         let currentDay = today
-        let dueDates = dueDatesBackwards(from: currentDay, pack: targetPack, maxDueActions: max(120, targetPack.cycleLength * 8))
         let cal = Calendar.current
         let resetCutoff = streakResetDate.map { cal.startOfDay(for: $0) }
         var streak = 0
 
-        for dueDate in dueDates {
+        for snapshot in dueSnapshotsBackwards(from: currentDay, routine: routine) {
             // Stop counting if this due date is before the streak reset cutoff
-            if let cutoff = resetCutoff, cal.startOfDay(for: dueDate) < cutoff {
+            if let cutoff = resetCutoff, snapshot.date < cutoff {
                 break
             }
 
-            guard let snapshot = scheduleSnapshot(for: dueDate, in: targetPack) else { continue }
-
             if streak == 0,
-               cal.isDate(dueDate, inSameDayAs: currentDay),
+               cal.isDate(snapshot.date, inSameDayAs: currentDay),
                snapshot.status == .upcoming {
                 if countingTodayAsTaken, snapshot.countsTowardAdherence {
                     streak += 1
@@ -398,21 +395,16 @@ class PillStore {
     /// break days, and `.noData` gaps are excluded from both sides so a gap or
     /// an unfinished today never reads as a miss.
     func doseRecord(from startDate: Date, to endDate: Date) -> (taken: Int, due: Int) {
-        guard let targetPack = activePack else { return (0, 0) }
+        guard let routine = activePack?.method else { return (0, 0) }
         let cal = Calendar.current
         let windowStart = cal.startOfDay(for: startDate)
         let windowEnd = min(cal.startOfDay(for: endDate), today)
-        let dueDates = dueDatesBackwards(
-            from: windowEnd,
-            pack: targetPack,
-            maxDueActions: max(120, targetPack.cycleLength * 8)
-        )
 
         var taken = 0
         var due = 0
-        for dueDate in dueDates {
-            if dueDate < windowStart { break }
-            guard let status = scheduleSnapshot(for: dueDate, in: targetPack)?.status else { continue }
+        for snapshot in dueSnapshotsBackwards(from: windowEnd, routine: routine) {
+            if snapshot.date < windowStart { break }
+            guard let status = snapshot.status else { continue }
             switch status {
             case .taken:
                 taken += 1
@@ -1959,29 +1951,17 @@ class PillStore {
         return type.isBreakType ? .breakDay : .missed
     }
 
-    private func dueDatesBackwards(from date: Date, pack: PillPack, maxDueActions: Int) -> [Date] {
-        guard maxDueActions > 0 else { return [] }
-
+    /// Adherence-enforcing days from `date` backwards, each read from the pack that owns
+    /// it, so the walk crosses into earlier packs. It ends before the first pack or where
+    /// a pack of another method takes over: a method switch starts a new routine.
+    private func dueSnapshotsBackwards(from date: Date, routine: ContraceptiveMethod) -> some Sequence<PillScheduleSnapshot> {
         let calendar = Calendar.current
-        let scanLimitDays = max(365, pack.cycleLength * 24)
-        var dueDates: [Date] = []
-        var cursor = calendar.startOfDay(for: date)
-        var scannedDays = 0
-
-        while dueDates.count < maxDueActions && scannedDays < scanLimitDays {
-            if let action = DoseScheduleEngine.dueAction(on: cursor, pack: pack),
-               action.type.enforcesAdherence {
-                dueDates.append(cursor)
-            }
-
-            guard let previous = calendar.date(byAdding: .day, value: -1, to: cursor) else {
-                break
-            }
-            cursor = previous
-            scannedDays += 1
-        }
-
-        return dueDates
+        return sequence(first: calendar.startOfDay(for: date)) { calendar.date(byAdding: .day, value: -1, to: $0) }
+            .lazy
+            .map { self.scheduleSnapshot(for: $0) }
+            .prefix { $0?.pack.method == routine }
+            .compactMap { $0 }
+            .filter { $0.dueAction?.type.enforcesAdherence == true }
     }
 
     private func epochDay(for date: Date) -> Int {
