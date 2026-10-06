@@ -116,26 +116,11 @@ struct CustomReminderNotificationBanner: View {
                     .frame(width: 36, height: 36)
                     .clipShape(RoundedRectangle(cornerRadius: 9, style: .continuous))
 
-                VStack(alignment: .leading, spacing: 1) {
-                    HStack(alignment: .firstTextBaseline, spacing: 8) {
-                        ReservedText(text: content.title, reserved: reserved.map(\.title))
-                            .font(.pillie(15, weight: .semibold))
-                            .foregroundStyle(PillieTheme.textPrimary)
-                            .lineLimit(2)
-                            .accessibilityIdentifier("reminder-preview-\(kind.rawValue)-title")
-                        Spacer(minLength: 0)
-                        Text(timestamp)
-                            .font(.pillie(12, weight: .medium))
-                            .foregroundStyle(PillieTheme.textMuted)
-                            .lineLimit(1)
-                            .fixedSize()
+                ZStack(alignment: .topLeading) {
+                    ForEach(reserved.indices, id: \.self) { index in
+                        copy(reserved[index]).hidden()
                     }
-                    ReservedText(text: content.body, reserved: reserved.map(\.body))
-                        .font(.pillie(15))
-                        .foregroundStyle(CustomReminderLockScreenColor.body)
-                        .lineLimit(3)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .accessibilityIdentifier("reminder-preview-\(kind.rawValue)-body")
+                    copy(content)
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -170,6 +155,30 @@ struct CustomReminderNotificationBanner: View {
                 )
                 .shadow(color: PillieTheme.textPrimary.opacity(0.08), radius: 9, y: 6)
         )
+    }
+
+    /// Title, timestamp, and message. Reserved copies render hidden underneath, so the
+    /// banner keeps the height of the longest tone and extra room falls below the text.
+    private func copy(_ content: CustomReminderBannerContent) -> some View {
+        VStack(alignment: .leading, spacing: 1) {
+            HStack(alignment: .firstTextBaseline, spacing: 8) {
+                Text(content.title)
+                    .font(.pillie(15, weight: .semibold))
+                    .foregroundStyle(PillieTheme.textPrimary)
+                    .lineLimit(2)
+                Spacer(minLength: 0)
+                Text(timestamp)
+                    .font(.pillie(12, weight: .medium))
+                    .foregroundStyle(PillieTheme.textMuted)
+                    .lineLimit(1)
+                    .fixedSize()
+            }
+            Text(content.body)
+                .font(.pillie(15))
+                .foregroundStyle(CustomReminderLockScreenColor.body)
+                .lineLimit(3)
+                .fixedSize(horizontal: false, vertical: true)
+        }
     }
 }
 
