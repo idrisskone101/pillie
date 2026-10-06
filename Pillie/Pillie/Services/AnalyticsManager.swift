@@ -293,11 +293,16 @@ protocol AnalyticsTracking {
     isPlus: Bool?
   )
 
-  /// Onboarding's step 7 answer, sent when onboarding commits it (ENG-163).
   func track(
     _ event: AnalyticsEvent,
-    todayAnswer: AnalyticsTodayAnswer,
-    afterReminder: Bool,
+    todayAnswer: TodayPillPick.Answer,
+    reminderPassed: Bool,
+    isPlus: Bool?
+  )
+
+  func track(
+    _ event: AnalyticsEvent,
+    streakChange: StreakChangeReport.Change,
     isPlus: Bool?
   )
 
@@ -369,8 +374,16 @@ extension AnalyticsTracking {
 
   func track(
     _ event: AnalyticsEvent,
-    todayAnswer: AnalyticsTodayAnswer,
-    afterReminder: Bool,
+    todayAnswer: TodayPillPick.Answer,
+    reminderPassed: Bool,
+    isPlus: Bool?
+  ) {
+    trackLegacy(event, source: .onboarding, isPlus: isPlus)
+  }
+
+  func track(
+    _ event: AnalyticsEvent,
+    streakChange: StreakChangeReport.Change,
     isPlus: Bool?
   ) {
     trackLegacy(event, isPlus: isPlus)
@@ -583,6 +596,8 @@ enum AnalyticsEvent: String, CaseIterable {
   case trialExpired = "trial_expired"
   case trialBadgeTapped = "trial_badge_tapped"
   case trialStatusSheetViewed = "trial_status_sheet_viewed"
+  /// The Plus setup strip was on Today; recorded at most once per day.
+  case plusSetupStripViewed = "plus_setup_strip_viewed"
   case plusSetupStripTapped = "plus_setup_strip_tapped"
   case plusSetupStep = "plus_setup_step"
   case smartReminderRetryScheduled = "smart_reminder_retry_scheduled"
@@ -623,7 +638,15 @@ enum AnalyticsEvent: String, CaseIterable {
   case todayActionStarted = "today_action_started"
   case todayActionCompleted = "today_action_completed"
   case todayActionUndone = "today_action_undone"
+  /// Onboarding's "did you take today's?" answer. Carries `answer`
+  /// (taken | not_yet) and `reminder_passed`.
   case onboardingTodayAnswer = "onboarding_today_answer"
+  /// Today first showed the "First reminder" state with its "Took it" chip.
+  /// Recorded once per install.
+  case firstReminderStateShown = "first_reminder_state_shown"
+  /// The streak moved. Carries `from`, `to` and `reason`
+  /// (logged | missed | pack_change | undone).
+  case streakChanged = "streak_changed"
   case newPackOrCyclePrompted = "new_pack_or_cycle_prompted"
   case newPackOrCycleStarted = "new_pack_or_cycle_started"
   case plusUpsellViewed = "plus_upsell_viewed"
@@ -661,6 +684,10 @@ enum AnalyticsSource: String {
   /// The Trial-End Paywall shown after Reverse Trial expiry (#169 / ADR 0007),
   /// so its funnel splits from onboarding and Settings paywall traffic.
   case trialEnd = "trial_end"
+  /// The reminder's Check in action, logged without opening the app.
+  case notification
+  /// Today's "Took it" chip, shown until the first reminder fires.
+  case firstReminder = "first_reminder"
 }
 
 enum AnalyticsPaywallSurface: String, CaseIterable {
@@ -690,11 +717,6 @@ enum AnalyticsSmartReminderOutcome: String, CaseIterable {
   case opened
   case completed
   case snoozed
-}
-
-enum AnalyticsTodayAnswer: String, CaseIterable {
-  case taken
-  case notYet = "not_yet"
 }
 
 enum AnalyticsTrialDeclineFeedbackOutcome: String, Equatable {
@@ -858,8 +880,6 @@ struct AnalyticsPayload {
   let authorizationState: AnalyticsAuthorizationState?
   let retryCount: Int?
   let smartReminderOutcome: AnalyticsSmartReminderOutcome?
-  let todayAnswer: AnalyticsTodayAnswer?
-  let afterReminder: Bool?
   let declineFeedbackOutcome: AnalyticsTrialDeclineFeedbackOutcome?
   let declineFeedbackReason: TrialDeclineFeedbackReason?
   let declineFeedbackHasText: Bool?
@@ -873,6 +893,9 @@ struct AnalyticsPayload {
   let plusSetupStep: PlusSetupStep?
   let plusSetupAction: AnalyticsPlusSetupAction?
   let completedCount: Int?
+  let todayAnswer: TodayPillPick.Answer?
+  let reminderPassed: Bool?
+  let streakChange: StreakChangeReport.Change?
 
   init(
     source: AnalyticsSource? = nil,
@@ -894,8 +917,6 @@ struct AnalyticsPayload {
     authorizationState: AnalyticsAuthorizationState? = nil,
     retryCount: Int? = nil,
     smartReminderOutcome: AnalyticsSmartReminderOutcome? = nil,
-    todayAnswer: AnalyticsTodayAnswer? = nil,
-    afterReminder: Bool? = nil,
     declineFeedbackOutcome: AnalyticsTrialDeclineFeedbackOutcome? = nil,
     declineFeedbackReason: TrialDeclineFeedbackReason? = nil,
     declineFeedbackHasText: Bool? = nil,
@@ -908,7 +929,10 @@ struct AnalyticsPayload {
     restoreOutcome: RestoreOutcome? = nil,
     plusSetupStep: PlusSetupStep? = nil,
     plusSetupAction: AnalyticsPlusSetupAction? = nil,
-    completedCount: Int? = nil
+    completedCount: Int? = nil,
+    todayAnswer: TodayPillPick.Answer? = nil,
+    reminderPassed: Bool? = nil,
+    streakChange: StreakChangeReport.Change? = nil
   ) {
     self.source = source
     self.step = step
@@ -929,8 +953,6 @@ struct AnalyticsPayload {
     self.authorizationState = authorizationState
     self.retryCount = retryCount
     self.smartReminderOutcome = smartReminderOutcome
-    self.todayAnswer = todayAnswer
-    self.afterReminder = afterReminder
     self.declineFeedbackOutcome = declineFeedbackOutcome
     self.declineFeedbackReason = declineFeedbackReason
     self.declineFeedbackHasText = declineFeedbackHasText
@@ -944,6 +966,9 @@ struct AnalyticsPayload {
     self.plusSetupStep = plusSetupStep
     self.plusSetupAction = plusSetupAction
     self.completedCount = completedCount
+    self.todayAnswer = todayAnswer
+    self.reminderPassed = reminderPassed
+    self.streakChange = streakChange
   }
 
   var properties: [String: AnalyticsPropertyValue] {
@@ -990,12 +1015,6 @@ struct AnalyticsPayload {
     if let smartReminderOutcome {
       properties["outcome"] = .string(smartReminderOutcome.rawValue)
     }
-    if let todayAnswer {
-      properties["answer"] = .string(todayAnswer.rawValue)
-    }
-    if let afterReminder {
-      properties["after_reminder"] = .bool(afterReminder)
-    }
     if let declineFeedbackOutcome {
       properties["outcome"] = .string(declineFeedbackOutcome.rawValue)
     }
@@ -1031,6 +1050,17 @@ struct AnalyticsPayload {
     }
     if let completedCount {
       properties["completed_count"] = .int(completedCount)
+    }
+    if let todayAnswer {
+      properties["answer"] = .string(todayAnswer == .taken ? "taken" : "not_yet")
+    }
+    if let reminderPassed {
+      properties["reminder_passed"] = .bool(reminderPassed)
+    }
+    if let streakChange {
+      properties["from"] = .int(streakChange.from)
+      properties["to"] = .int(streakChange.to)
+      properties["reason"] = .string(streakChange.reason.rawValue)
     }
     if let restoreOutcome {
       properties["result"] = .string(restoreOutcome.analyticsResult.rawValue)
@@ -1402,18 +1432,31 @@ final class AnalyticsManager: AnalyticsTracking {
 
   func track(
     _ event: AnalyticsEvent,
-    todayAnswer: AnalyticsTodayAnswer,
-    afterReminder: Bool,
+    todayAnswer: TodayPillPick.Answer,
+    reminderPassed: Bool,
     isPlus: Bool?
   ) {
     let payload = AnalyticsPayload(
       source: .onboarding,
       isPlus: isPlus,
       todayAnswer: todayAnswer,
-      afterReminder: afterReminder
+      reminderPassed: reminderPassed
     )
 
     capture(event, payload: payload, source: .onboarding)
+  }
+
+  func track(
+    _ event: AnalyticsEvent,
+    streakChange: StreakChangeReport.Change,
+    isPlus: Bool?
+  ) {
+    let payload = AnalyticsPayload(
+      isPlus: isPlus,
+      streakChange: streakChange
+    )
+
+    capture(event, payload: payload)
   }
 
   private func capture(

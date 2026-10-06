@@ -122,6 +122,9 @@ blocking/trial status surfaces, and (when eligible) the review ask.
 - `flows/today-ring-start-day.flow` onboards a ring routine answered "Not yet"
   with an evening reminder and, before that reminder, logs the day-1 insert
   from Home. The streak starts at 1.
+- `flows/today-ring-new-cycle-streak.flow` — logs a ring insert and removal,
+  then the on-time day-29 change: Home's streak reads 2, the shake hero
+  (`#shakeStreakHero`) promises 3, and Home reads 3 once the new cycle starts.
 - `flows/today-catch-up.flow` — a missed patch change stays loggable from
   Home until the next task day: day 16 reads Overdue with "Change patch" on
   the button, the Shake fallback logs it late ("On today"), undo restores

@@ -396,6 +396,7 @@ struct PillieApp: App {
                         // blocking fires for any user whose Protection Plan is live.
                         flushBlockerInterventions()
                         guard shouldRunPostOnboardingWork else { return }
+                        StreakChangeReport.record(store)
                         NotificationManager.shared.requestReschedule(from: store, reason: "app-became-active")
                     } else if newPhase == .background {
                         // Flush buffered analytics before the app is suspended/killed.

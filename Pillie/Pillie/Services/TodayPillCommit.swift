@@ -86,6 +86,17 @@ enum TodayPillCommit {
         defaults: UserDefaults,
         telemetry: ProductAnalyticsTelemetry
     ) {
+        if let answer = start.answer, !defaults.bool(forKey: answerReportedStorageKey) {
+            defaults.set(true, forKey: answerReportedStorageKey)
+            let reminder = Calendar.current.date(
+                bySettingHour: store.reminderHour,
+                minute: store.reminderMinute,
+                second: 0,
+                of: start.pickedAt
+            )
+            telemetry.onboardingTodayAnswer(answer, reminderPassed: reminder.map { start.pickedAt >= $0 } ?? false)
+        }
+
         // A pick from an earlier day names an earlier pill, and its answer is about that pill.
         let pickedDay = TodayPillPick.Answer.anchorDay(
             for: start.answer,
@@ -114,29 +125,14 @@ enum TodayPillCommit {
             store.appActivatedDate = store.today
         }
         FirstReminderInstall.record(at: now, in: defaults)
-        reportAnswer(start.answer, store: store, now: now, defaults: defaults, telemetry: telemetry)
+        StreakChangeReport.record(store, reason: .packChange, defaults: defaults, telemetry: telemetry)
 
         guard start.logs, daysSincePick == 0 else { return }
         store.markTodayAsTaken()
+        StreakChangeReport.record(store, reason: .logged, defaults: defaults, telemetry: telemetry)
 
         guard !defaults.bool(forKey: reportedStorageKey) else { return }
         defaults.set(true, forKey: reportedStorageKey)
         telemetry.todayActionCompleted(source: .onboarding)
-    }
-
-    private static func reportAnswer(
-        _ answer: TodayPillPick.Answer?,
-        store: PillStore,
-        now: Date,
-        defaults: UserDefaults,
-        telemetry: ProductAnalyticsTelemetry
-    ) {
-        guard let answer, !defaults.bool(forKey: answerReportedStorageKey) else { return }
-        defaults.set(true, forKey: answerReportedStorageKey)
-        let afterReminder = switch TodayPillPlan.nextReminder(hour: store.reminderHour, minute: store.reminderMinute, now: now) {
-        case .today: false
-        case .tomorrow: true
-        }
-        telemetry.onboardingTodayAnswer(answer == .taken ? .taken : .notYet, afterReminder: afterReminder)
     }
 }

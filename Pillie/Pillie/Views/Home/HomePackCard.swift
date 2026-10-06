@@ -153,6 +153,7 @@ struct HomePackCard: View {
             )
         }
         ProductAnalyticsTelemetry.live.protocolChangeSaved()
+        StreakChangeReport.record(store, reason: .packChange)
     }
 
     private var startNewConfirmation: CycleNounPresentation.StartNewConfirmation {

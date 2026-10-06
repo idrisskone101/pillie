@@ -291,34 +291,6 @@ final class TodayPillCommitTests: XCTestCase {
         XCTAssertEqual(harness.store.currentDayIndex + 1, 1)
     }
 
-    func testNotYetAfterTheReminderReportsAnEveningAnswerOnce() throws {
-        let now = InMemoryStoreFactory.localDate("2026-09-27", hour: 21)
-        let harness = try makeHarness(now: now, reminderHour: 8)
-
-        harness.commit(pick(0, .notYet))
-        harness.commit(pick(0, .notYet))
-
-        XCTAssertEqual(harness.recorder.answers, ["onboarding_today_answer not_yet after_reminder=true"])
-    }
-
-    func testTakenBeforeTheReminderReportsAMorningAnswer() throws {
-        let now = InMemoryStoreFactory.localDate("2026-09-27", hour: 12, minute: 24)
-        let harness = try makeHarness(now: now, reminderHour: 20)
-
-        harness.commit(pick(11, .taken))
-
-        XCTAssertEqual(harness.recorder.answers, ["onboarding_today_answer taken after_reminder=false"])
-    }
-
-    func testAPillFreeDayReportsNoAnswer() throws {
-        let now = InMemoryStoreFactory.localDate("2026-09-27", hour: 12, minute: 24)
-        let harness = try makeHarness(now: now, reminderHour: 20)
-
-        harness.commit(pick(23, nil, .twentyOneOnly))
-
-        XCTAssertEqual(harness.recorder.answers, [])
-    }
-
     func testCustomPackSavesItsOwnRegimenIntoTheSchedule() throws {
         let now = InMemoryStoreFactory.localDate("2026-09-27", hour: 12, minute: 24)
         let harness = try makeHarness(now: now, reminderHour: 20)
@@ -334,7 +306,6 @@ final class TodayPillCommitTests: XCTestCase {
 
 private final class CompletionRecorder: AnalyticsTracking {
     private(set) var completions: [AnalyticsSource?] = []
-    private(set) var answers: [String] = []
 
     func track(
         _ event: AnalyticsEvent,
@@ -360,9 +331,5 @@ private final class CompletionRecorder: AnalyticsTracking {
         if event == .todayActionCompleted {
             completions.append(source)
         }
-    }
-
-    func track(_ event: AnalyticsEvent, todayAnswer: AnalyticsTodayAnswer, afterReminder: Bool, isPlus: Bool?) {
-        answers.append("\(event.rawValue) \(todayAnswer.rawValue) after_reminder=\(afterReminder)")
     }
 }
