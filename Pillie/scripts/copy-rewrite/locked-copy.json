@@ -1730,37 +1730,40 @@
       "table": "Commerce",
       "key": "paywall.cta.keep_plus.billed_yearly",
       "create": true,
-      "comment": "Honest paywall CTA with live annual price during trial or after trial",
-      "en": "Keep Pillie Plus · %@ billed yearly",
-      "de": "Pillie Plus behalten · %@ jährlich",
-      "it": "Tieni Pillie Plus · %@ all’anno"
+      "comment": "Main purchase button. %@ = yearly price. Short; must fit one line on a phone.",
+      "en": "Keep Plus for %@ a year",
+      "de": "Plus für %@ pro Jahr behalten",
+      "it": "Tieni Plus a %@ all’anno"
     },
     {
       "issue": "honest-paywall",
       "table": "Commerce",
       "key": "paywall.cta.keep_plus.billed_monthly",
       "create": true,
-      "en": "Keep Pillie Plus · %@ billed monthly",
-      "de": "Pillie Plus behalten · %@ monatlich",
-      "it": "Tieni Pillie Plus · %@ al mese"
+      "en": "Keep Plus for %@ a month",
+      "de": "Plus für %@ pro Monat behalten",
+      "it": "Tieni Plus a %@ al mese",
+      "comment": "%@ = monthly price."
     },
     {
       "issue": "honest-paywall",
       "table": "Commerce",
       "key": "paywall.cta.get_plus.billed_yearly",
       "create": true,
-      "en": "Get Pillie Plus · %@ billed yearly",
-      "de": "Pillie Plus holen · %@ jährlich",
-      "it": "Ottieni Pillie Plus · %@ all’anno"
+      "en": "Get Plus for %@ a year",
+      "de": "Plus für %@ pro Jahr holen",
+      "it": "Ottieni Plus a %@ all’anno",
+      "comment": "Free user variant of the button."
     },
     {
       "issue": "honest-paywall",
       "table": "Commerce",
       "key": "paywall.cta.get_plus.billed_monthly",
       "create": true,
-      "en": "Get Pillie Plus · %@ billed monthly",
-      "de": "Pillie Plus holen · %@ monatlich",
-      "it": "Ottieni Pillie Plus · %@ al mese"
+      "en": "Get Plus for %@ a month",
+      "de": "Plus für %@ pro Monat holen",
+      "it": "Ottieni Plus a %@ al mese",
+      "comment": "S3 paywall"
     },
     {
       "issue": "honest-paywall",
@@ -1774,29 +1777,11 @@
     {
       "issue": "honest-paywall",
       "table": "Commerce",
-      "key": "paywall.stack.year.primary_line",
-      "create": true,
-      "en": "%@ · billed %@/year",
-      "de": "%@ · %@/Jahr",
-      "it": "%@ · %@/anno"
-    },
-    {
-      "issue": "honest-paywall",
-      "table": "Commerce",
       "key": "paywall.stack.month.title",
       "create": true,
       "en": "Month",
       "de": "Monat",
       "it": "Mese"
-    },
-    {
-      "issue": "honest-paywall",
-      "table": "Commerce",
-      "key": "paywall.stack.month.primary_line",
-      "create": true,
-      "en": "Cancel anytime",
-      "de": "Jederzeit kündbar",
-      "it": "Disdici quando vuoi"
     },
     {
       "issue": "honest-paywall",
@@ -1810,209 +1795,11 @@
     {
       "issue": "honest-paywall",
       "table": "Commerce",
-      "key": "paywall.stack.monthly_equivalent",
-      "create": true,
-      "en": "%@/mo",
-      "de": "%@/Mo.",
-      "it": "%@/mese"
-    },
-    {
-      "issue": "honest-paywall",
-      "table": "Commerce",
-      "key": "paywall.story.trial_active.title",
-      "create": true,
-      "en": "You still have Pillie Plus.",
-      "de": "Du hast noch Pillie Plus.",
-      "it": "Hai ancora Pillie Plus."
-    },
-    {
-      "issue": "honest-paywall",
-      "table": "Commerce",
-      "key": "paywall.story.trial_active.subtitle",
-      "create": true,
-      "en": "Keep Plus to have follow-up reminders and app blocking after your trial.",
-      "de": "Behalte Plus, damit du nach der Testphase weiter Folgeerinnerungen und die App-Sperre hast.",
-      "it": "Tieni Plus per avere promemoria ripetuti e blocco app anche dopo la prova."
-    },
-    {
-      "issue": "honest-paywall",
-      "table": "Commerce",
       "key": "paywall.story.trial_active.stamp",
       "create": true,
       "en": "active days left on Pillie Plus",
       "de": "aktive Tage mit Pillie Plus übrig",
       "it": "giorni attivi rimasti su Pillie Plus"
-    },
-    {
-      "issue": "honest-paywall",
-      "table": "Commerce",
-      "key": "paywall.story.trial_active.chip.reminders",
-      "create": true,
-      "en": "Follow-up reminders stay on",
-      "de": "Folgeerinnerungen bleiben an",
-      "it": "I promemoria ripetuti restano attivi"
-    },
-    {
-      "issue": "honest-paywall",
-      "table": "Commerce",
-      "key": "paywall.story.trial_active.chip.blocking",
-      "create": true,
-      "en": "App blocking stays on",
-      "de": "App-Sperre bleibt an",
-      "it": "Il blocco app resta attivo"
-    },
-    {
-      "issue": "honest-paywall",
-      "table": "Commerce",
-      "key": "paywall.story.trial_active.chip.history",
-      "create": true,
-      "en": "Your history stays here",
-      "de": "Dein Verlauf bleibt hier",
-      "it": "La tua cronologia resta qui"
-    },
-    {
-      "issue": "honest-paywall",
-      "table": "Commerce",
-      "key": "paywall.story.trial_ended.title",
-      "create": true,
-      "en": "Your Pillie Plus trial is over.",
-      "de": "Deine Pillie-Plus-Testphase ist vorbei.",
-      "it": "La prova di Pillie Plus è finita."
-    },
-    {
-      "issue": "honest-paywall",
-      "table": "Commerce",
-      "key": "paywall.story.trial_ended.subtitle",
-      "create": true,
-      "en": "Stay on Pillie Plus to keep follow-up reminders and app blocking.",
-      "de": "Bleibe bei Pillie Plus, um Folgeerinnerungen und die App-Sperre zu behalten.",
-      "it": "Resta su Pillie Plus per tenere i promemoria ripetuti e il blocco app."
-    },
-    {
-      "issue": "honest-paywall",
-      "table": "Commerce",
-      "key": "paywall.story.trial_ended.tile.doses",
-      "create": true,
-      "en": "doses taken",
-      "de": "Dosen genommen",
-      "it": "dosi prese"
-    },
-    {
-      "issue": "honest-paywall",
-      "table": "Commerce",
-      "key": "paywall.story.trial_ended.tile.streak",
-      "create": true,
-      "en": "day streak",
-      "de": "Tage in Folge",
-      "it": "giorni di fila"
-    },
-    {
-      "issue": "honest-paywall",
-      "table": "Commerce",
-      "key": "paywall.story.trial_ended.aside",
-      "create": true,
-      "en": "%lld so far. Keep it up.",
-      "de": "Bisher %lld. Weiter so.",
-      "it": "%lld finora. Continua così."
-    },
-    {
-      "issue": "returning-expired-paywall",
-      "table": "Commerce",
-      "key": "paywall.story.trial_ended.returning.legacy.title",
-      "create": true,
-      "en": "Welcome back.",
-      "de": "Willkommen zurück.",
-      "it": "Bentornata."
-    },
-    {
-      "issue": "returning-expired-paywall",
-      "table": "Commerce",
-      "key": "paywall.story.trial_ended.returning.legacy.subtitle",
-      "create": true,
-      "en": "Your trial ended. Daily reminders stay free.",
-      "de": "Deine Testphase ist vorbei. Tägliche Erinnerungen bleiben kostenlos.",
-      "it": "La prova è finita. I promemoria giornalieri restano gratis."
-    },
-    {
-      "issue": "returning-expired-paywall",
-      "table": "Commerce",
-      "key": "paywall.story.trial_ended.returning.hard.title",
-      "create": true,
-      "en": "Your trial has ended.",
-      "de": "Deine Testphase ist vorbei.",
-      "it": "La tua prova è finita."
-    },
-    {
-      "issue": "returning-expired-paywall",
-      "table": "Commerce",
-      "key": "paywall.story.trial_ended.returning.hard.subtitle",
-      "create": true,
-      "en": "Your daily reminders and app blocking are off. Pick a plan to turn them back on.",
-      "de": "Deine täglichen Erinnerungen und die App-Sperre sind aus. Wähl einen Tarif, um sie wieder einzuschalten.",
-      "it": "I promemoria giornalieri e il blocco app sono disattivati. Scegli un piano per riattivarli."
-    },
-    {
-      "issue": "returning-expired-paywall",
-      "table": "Commerce",
-      "key": "paywall.story.trial_ended.returning.hard.chip.blocking",
-      "create": true,
-      "en": "App blocking turns back on",
-      "de": "App-Sperre geht wieder an",
-      "it": "Il blocco app si riattiva"
-    },
-    {
-      "issue": "returning-expired-paywall",
-      "table": "Commerce",
-      "key": "paywall.story.trial_ended.returning.hard.chip.reminders",
-      "create": true,
-      "en": "Daily reminders come back",
-      "de": "Erinnerungen kommen zurück",
-      "it": "I promemoria tornano"
-    },
-    {
-      "issue": "returning-expired-paywall",
-      "table": "Commerce",
-      "key": "paywall.story.trial_ended.returning.hard.chip.history",
-      "create": true,
-      "en": "Your history comes back",
-      "de": "Dein Verlauf kommt zurück",
-      "it": "La tua cronologia torna"
-    },
-    {
-      "issue": "returning-expired-paywall",
-      "table": "Commerce",
-      "key": "paywall.story.trial_ended.returning.hard.aside",
-      "create": true,
-      "en": "pick up where you left off",
-      "de": "mach da weiter, wo du aufgehört hast",
-      "it": "riprendi da dove eri rimasta"
-    },
-    {
-      "issue": "honest-paywall",
-      "table": "Commerce",
-      "key": "paywall.story.settings_free.title",
-      "create": true,
-      "en": "Daily reminders are free.",
-      "de": "Tägliche Erinnerungen sind gratis.",
-      "it": "I promemoria giornalieri sono gratis."
-    },
-    {
-      "issue": "honest-paywall",
-      "table": "Commerce",
-      "key": "paywall.story.settings_free.subtitle",
-      "create": true,
-      "en": "Pillie Plus adds follow-up reminders and app blocking.",
-      "de": "Pillie Plus bringt Folgeerinnerungen und die App-Sperre dazu.",
-      "it": "Pillie Plus aggiunge i promemoria ripetuti e il blocco app."
-    },
-    {
-      "issue": "honest-paywall",
-      "table": "Commerce",
-      "key": "paywall.story.settings_free.plus_label",
-      "create": true,
-      "en": "Pillie Plus",
-      "de": "Pillie Plus",
-      "it": "Pillie Plus"
     },
     {
       "issue": "ENG-138",
@@ -2487,44 +2274,24 @@
       "it": "A vita"
     },
     {
-      "issue": "ENG-155",
-      "table": "Commerce",
-      "key": "paywall.stack.lifetime.primary_line",
-      "create": true,
-      "comment": "Honest paywall Lifetime tile subtitle",
-      "en": "Pay once, keep Plus for good",
-      "de": "Einmal zahlen, Plus für immer behalten",
-      "it": "Paghi una volta, Plus resta tuo per sempre"
-    },
-    {
-      "issue": "ENG-155",
+      "issue": "honest-paywall",
       "table": "Commerce",
       "key": "paywall.cta.keep_plus.once",
       "create": true,
-      "comment": "Honest paywall CTA with the live lifetime price when Lifetime is selected (keep verb)",
-      "en": "Keep Pillie Plus · %@ once",
-      "de": "Pillie Plus behalten · %@ einmalig",
-      "it": "Tieni Pillie Plus · %@ una tantum"
+      "comment": "Lifetime purchase. %@ = price.",
+      "en": "Keep Plus for a one-time %@",
+      "de": "Plus für einmalig %@ behalten",
+      "it": "Tieni Plus a %@ una tantum"
     },
     {
-      "issue": "ENG-155",
+      "issue": "honest-paywall",
       "table": "Commerce",
       "key": "paywall.cta.get_plus.once",
       "create": true,
-      "comment": "Honest paywall CTA with the live lifetime price when Lifetime is selected (get verb)",
-      "en": "Get Pillie Plus · %@ once",
-      "de": "Pillie Plus holen · %@ einmalig",
-      "it": "Ottieni Pillie Plus · %@ una tantum"
-    },
-    {
-      "issue": "ENG-155",
-      "table": "Commerce",
-      "key": "paywall.stack.footer.cancel_anytime",
-      "create": true,
-      "comment": "Honest paywall reassurance under the CTA when Year or Month is selected; plain text, not a button",
-      "en": "Cancel anytime",
-      "de": "Jederzeit kündbar",
-      "it": "Disdici quando vuoi"
+      "comment": "Lifetime purchase.",
+      "en": "Get Plus for a one-time %@",
+      "de": "Plus für einmalig %@ holen",
+      "it": "Ottieni Plus a %@ una tantum"
     },
     {
       "issue": "ENG-155",
@@ -2830,6 +2597,276 @@
       "en": "Turn on",
       "de": "Einschalten",
       "it": "Attiva"
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.board.trial_ended.title",
+      "create": true,
+      "comment": "Headline of the hard trial-end paywall. The free trial is over and both daily reminders and app blocking are now off.",
+      "en": "Get your reminders and app blocking back.",
+      "de": "Hol dir deine Erinnerungen und die App-Sperre zurück.",
+      "it": "Riprenditi i promemoria e il blocco app."
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.board.trial_ended.subtitle.pill",
+      "create": true,
+      "comment": "'they' = the reminders and app blocking. Pill users.",
+      "en": "Pick a plan and they’re back before tonight’s pill. Your setup and streak are saved.",
+      "de": "Wähl einen Tarif, dann sind sie vor deiner Pille heute Abend wieder da. Deine Einrichtung und deine Serie bleiben gespeichert.",
+      "it": "Scegli un piano e tornano prima della pillola di stasera. La tua configurazione e la tua serie restano salvate."
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.board.trial_ended.subtitle.patch",
+      "create": true,
+      "comment": "Same as .pill for contraceptive patch users.",
+      "en": "Pick a plan and they’re back before your next patch change. Your setup and streak are saved.",
+      "de": "Wähl einen Tarif, dann sind sie vor deinem nächsten Pflasterwechsel wieder da. Deine Einrichtung und deine Serie bleiben gespeichert.",
+      "it": "Scegli un piano e tornano prima del prossimo cambio del cerotto. La tua configurazione e la tua serie restano salvate."
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.board.trial_ended.subtitle.ring",
+      "create": true,
+      "comment": "Same as .pill for vaginal ring users.",
+      "en": "Pick a plan and they’re back before your next ring change. Your setup and streak are saved.",
+      "de": "Wähl einen Tarif, dann sind sie vor deinem nächsten Ringwechsel wieder da. Deine Einrichtung und deine Serie bleiben gespeichert.",
+      "it": "Scegli un piano e tornano prima del prossimo cambio dell’anello. La tua configurazione e la tua serie restano salvate."
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.board.during_trial.title",
+      "create": true,
+      "comment": "Headline while the free trial of Pillie Plus is still running.",
+      "en": "Keep Plus after your trial ends.",
+      "de": "Behalte Plus nach deiner Testphase.",
+      "it": "Tieni Plus anche dopo la prova."
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.board.during_trial.subtitle",
+      "create": true,
+      "comment": "%lld = number of hormone-active days left in the trial (2..14). MUST use the same 'active day' wording as the existing trial strings (see active-day tokens). 'day 14' = the last trial day.",
+      "en": "You have %lld active days left. Pick a plan now and nothing turns off on day 14.",
+      "de": "Du hast noch %lld aktive Tage. Wähl jetzt einen Tarif, dann schaltet sich an Tag 14 nichts ab.",
+      "it": "Ti restano %lld giorni attivi. Scegli un piano ora e il giorno 14 non si spegne niente."
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.board.during_trial.subtitle.tonight",
+      "create": true,
+      "comment": "Last day of the trial.",
+      "en": "Your trial ends tonight. Pick a plan now and nothing turns off tomorrow.",
+      "de": "Deine Testphase endet heute Nacht. Wähl jetzt einen Tarif, dann schaltet sich morgen nichts ab.",
+      "it": "La prova finisce stasera. Scegli un piano ora e domani non si spegne niente."
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.board.get_plus.title.pill",
+      "create": true,
+      "comment": "Headline for free users. Plus can block chosen apps until the user checks in.",
+      "en": "Lock your apps until you take your pill.",
+      "de": "Sperr deine Apps, bis du deine Pille nimmst.",
+      "it": "Blocca le tue app finché non prendi la pillola."
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.board.get_plus.title.patch",
+      "create": true,
+      "comment": "Patch users.",
+      "en": "Lock your apps until you change your patch.",
+      "de": "Sperr deine Apps, bis du dein Pflaster wechselst.",
+      "it": "Blocca le tue app finché non cambi il cerotto."
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.board.get_plus.title.ring",
+      "create": true,
+      "comment": "Ring users.",
+      "en": "Lock your apps until you change your ring.",
+      "de": "Sperr deine Apps, bis du deinen Ring wechselst.",
+      "it": "Blocca le tue app finché non cambi l’anello."
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.board.get_plus.subtitle",
+      "create": true,
+      "comment": "'check in' = log the dose in Pillie. Use the same verb the app already uses for check in.",
+      "en": "Plus pauses the apps you choose until you check in, and keeps reminding you until you do.",
+      "de": "Plus pausiert die Apps, die du auswählst, bis du abhakst, und erinnert dich weiter, bis du es tust.",
+      "it": "Plus mette in pausa le app che scegli finché non confermi, e continua a ricordartelo finché non lo fai."
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.review.support",
+      "create": true,
+      "comment": "Real 5-star App Store review, shown in quotes. Translate faithfully, keep the ellipsis that marks the cut. No quote marks in the value.",
+      "en": "Really love this app! … Great app and great customer support!",
+      "de": "Ich liebe diese App wirklich! … Tolle App und toller Kundensupport!",
+      "it": "Adoro davvero questa app! … Ottima app e ottimo servizio clienti!"
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.review.trial",
+      "create": true,
+      "comment": "Real 5-star App Store review. Faithful translation. No quote marks.",
+      "en": "Within just 10 days of my free trial, I was already convinced that I would be getting a membership.",
+      "de": "Schon nach 10 Tagen meiner kostenlosen Testphase war ich überzeugt, dass ich eine Mitgliedschaft abschließen würde.",
+      "it": "Dopo appena 10 giorni di prova gratuita ero già convinta che avrei preso un abbonamento."
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.review.blocking",
+      "create": true,
+      "comment": "Real 5-star App Store review. Faithful translation. No quote marks.",
+      "en": "I especially like that I can choose which apps I want to block until I take my pill.",
+      "de": "Besonders gefällt mir, dass ich auswählen kann, welche Apps ich sperren möchte, bis ich meine Pille nehme.",
+      "it": "Mi piace soprattutto poter scegliere quali app bloccare finché non prendo la pillola."
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.review.source",
+      "create": true,
+      "comment": "Attribution line under the quote. App Store stays the Apple product name as Apple localizes it.",
+      "en": "5-star review on the App Store",
+      "de": "5-Sterne-Bewertung im App Store",
+      "it": "Recensione a 5 stelle sull’App Store"
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.card.month.caption",
+      "create": true,
+      "comment": "Small caption under the monthly price on a plan card, lowercase.",
+      "en": "per month",
+      "de": "pro Monat",
+      "it": "al mese"
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.card.year.caption",
+      "create": true,
+      "comment": "Caption under the yearly price. %@ = monthly equivalent price, e.g. $2.50.",
+      "en": "%@ a month",
+      "de": "%@ pro Monat",
+      "it": "%@ al mese"
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.card.lifetime.caption",
+      "create": true,
+      "comment": "Caption under the lifetime price, lowercase.",
+      "en": "pay once",
+      "de": "einmalig",
+      "it": "paghi una volta"
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.footer.cancel_anytime",
+      "create": true,
+      "comment": "Under the purchase button for subscriptions.",
+      "en": "Cancel anytime in Settings",
+      "de": "Jederzeit in den Einstellungen kündbar",
+      "it": "Disdici quando vuoi in Impostazioni"
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.footer.charged_today",
+      "create": true,
+      "comment": "Under the button when buying during the free trial.",
+      "en": "You’re charged today. Cancel anytime in Settings.",
+      "de": "Du zahlst heute. Jederzeit in den Einstellungen kündbar.",
+      "it": "L’addebito è oggi. Disdici quando vuoi in Impostazioni."
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.footer.restore",
+      "create": true,
+      "comment": "Small footer link that restores App Store purchases.",
+      "en": "Restore",
+      "de": "Wiederherstellen",
+      "it": "Ripristina"
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.footer.terms",
+      "create": true,
+      "comment": "Footer link to the Terms of Service.",
+      "en": "Terms",
+      "de": "AGB",
+      "it": "Termini"
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.footer.privacy",
+      "create": true,
+      "comment": "Footer link to the Privacy Policy.",
+      "en": "Privacy",
+      "de": "Datenschutz",
+      "it": "Privacy"
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.mockup.shield.title",
+      "create": true,
+      "comment": "Paywall phone mockup; mirrors Shield.xcstrings shield.title",
+      "en": "Paused until you check in",
+      "de": "Pausiert, bis du abhakst",
+      "it": "In pausa finché non confermi"
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.mockup.shield.subtitle",
+      "create": true,
+      "comment": "Paywall phone mockup; mirrors Shield.xcstrings shield.subtitle",
+      "en": "Check in on Pillie and this app opens again.",
+      "de": "Hake in Pillie ab, dann öffnet sich diese App wieder.",
+      "it": "Conferma in Pillie e questa app si riapre."
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.mockup.shield.secondary",
+      "create": true,
+      "comment": "Paywall phone mockup; mirrors Shield.xcstrings shield.secondary",
+      "en": "This app will be waiting.",
+      "de": "Diese App wartet auf dich.",
+      "it": "Questa app ti aspetta."
+    },
+    {
+      "issue": "honest-paywall",
+      "table": "Commerce",
+      "key": "paywall.mockup.shield.open",
+      "create": true,
+      "comment": "Paywall phone mockup; mirrors Shield.xcstrings shield.primary_action",
+      "en": "Open Pillie",
+      "de": "Pillie öffnen",
+      "it": "Apri Pillie"
     }
   ]
 }
