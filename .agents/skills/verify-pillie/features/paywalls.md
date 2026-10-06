@@ -9,30 +9,32 @@ CTAs change often; this file names the mechanism, not the wording.
 
 ## Sub-features
 
-- `paywall-during-trial` (board `duringTrial`) — shown while a Reverse Trial
-  is active; "keep it" framing with three benefit chips. Reached from Home's
-  trial chip (`entry: .trialStatus`) or debug `board=duringTrial`.
-  `HonestPaywallBoard.swift:20-34`; `HonestPaywallBoardResolver.swift:20-28`;
-  `HonestPaywallStoryFactory.swift` `duringTrial(...)`. Dismissible (Close).
-- `paywall-settings-free` (board `settingsFree`) — the no-trial-grant,
-  free-account board ("Daily reminders are free."). Reached from Settings'
-  "Pillie Plus" row (`entry: .settingsSubscription`) or a `PlusUpsellSheet`'s
-  "Get Pillie Plus" CTA, or debug `board=settingsFree`.
-  `HonestPaywallBoardResolver.swift:44-47`; `HonestPaywallStoryFactory.swift`
-  `settingsFree(...)`. Dismissible (Close).
-- `paywall-trial-ended` (board `trialEnded`) — shown once a trial has expired.
-  Its body varies with `TrialEndOwnStats`/terms: an own-record stats/
-  comparison/chips variant for a trial that just ended on this device, or —
-  the two boards this skill's debug deep link exposes — a no-stats
-  "returning" variant after a fresh reinstall:
-  - `trialEndedReturningHard` (post-cutover terms): "Your trial already
-    ended." **Not dismissible** — no Close row, purchase/restore is the only
-    way out.
-  - `trialEndedReturningLegacy` (pre-cutover terms): "Welcome back." —
-    dismissible, and also shows a "Continue with free reminders" continue-free CTA.
-  `HonestPaywallStoryFactory.swift` `trialEnded(...)`, `chrome(for:)`;
-  `Services/DebugQA.swift` `trialExpiredNewUserReturning` /
-  `trialExpiredGrandfatherReturning`.
+Every board shares one layout (S3, Oct 2026): a pink backdrop with a
+decorative iPhone showing the app-blocking shield (`PaywallPhoneMockup.swift`;
+its clock is the user's reminder time), and a cream sheet over it with the
+board's title, subtitle, plan cards, one 5-star App Store review quote, the
+CTA, a reassurance line, and Restore · Terms · Privacy. The board is a
+`HonestPaywallMoment` plus a `HonestPaywallStory` (title, subtitle, review).
+
+- `paywall-during-trial` (moment `duringTrial`) — "Keep Plus after your
+  trial ends." with the live active-day count, or the ends-tonight line on
+  the last day. Under the CTA: "You’re charged today. Cancel anytime in
+  Settings." Reached from Home's trial chip (`entry: .trialStatus`) or debug
+  `board=duringTrial`. Dismissible (Close).
+- `paywall-settings-free` (moment `settingsFree`) — Get Plus: "Lock your
+  apps until you take your pill." (patch and ring get their own title).
+  Reached from Settings' "Pillie Plus" row or a `PlusUpsellSheet`'s
+  "Get Pillie Plus" CTA. Dismissible (Close).
+- `paywall-trial-ended` (moment `trialEnded(terms)`) — shown once a trial has
+  expired:
+  - hard (post-cutover): "Get your reminders and app blocking back."
+    **Not dismissible**: no Close, purchase/restore is the only way out.
+    Debug `board=trialEndedReturningHard`.
+  - legacy (grandfathered, who keep free daily reminders): the Get Plus story
+    with the Keep verb, Close, and "Continue with free reminders". Debug
+    `board=trialEndedReturningLegacy`.
+  `HonestPaywallStoryFactory.swift`, `HonestPaywallBoard.swift`
+  (`HonestPaywallMoment.chrome`).
 - `paywall-plus-upsell` — the compact `PlusUpsellSheet` (not a
   `HonestPaywallBoard`) opened from a locked Settings row
   (Reminder messages / Interval & Repeats / Your apps) on a free account.
@@ -49,16 +51,19 @@ CTAs change often; this file names the mechanism, not the wording.
   `restore_succeeded`, `restore_completed` with `reason`, `restore_failed`
   with `error_category`, all with `surface`. `Views/Paywall/PaywallAlert.swift`,
   `Services/RestoreOutcome.swift`.
-- `paywall-checkout-stack` (ENG-155) — every honest paywall board shares one
-  plan stack: Year (`#paywallTile.annual`), Month (`#paywallTile.monthly`), and
-  Lifetime (`#paywallTile.lifetime`) only when the offering exposes a lifetime
-  package. The selected tile is what the CTA buys and fires
-  `paywall_plan_selected` with its `plan`. Under the CTA, the reassurance
-  (`#paywallReassurance`) is plain text: "Cancel anytime" for Year/Month,
-  "One payment. No renewal." for Lifetime. "Restore purchases"
-  (`#paywallRestoreButton`) is the only footer control that restores.
-  `Services/Paywall/PaywallCheckoutBuilder.swift`,
-  `Views/Paywall/PaywallCheckoutChrome.swift`.
+- `paywall-checkout-stack` (ENG-155) — three side-by-side plan cards: Month
+  (`#paywallTile.monthly`), Year (`#paywallTile.annual`, selected by default,
+  with the SAVE badge and per-month price), and Lifetime
+  (`#paywallTile.lifetime`) only when the offering exposes a lifetime
+  package. The selected card is what the CTA buys and fires
+  `paywall_plan_selected` with its `plan`. The reassurance
+  (`#paywallReassurance`) is plain text: "Cancel anytime in Settings", the
+  in-trial "You’re charged today…" line, or "One payment. No renewal." for
+  Lifetime. The footer's "Restore" (`#paywallRestoreButton`, a11y label
+  "Restore purchases") is the only control that restores; Terms
+  (`#paywallTermsLink`) and Privacy (`#paywallPrivacyLink`) open the GitHub
+  Pages legal docs. `Services/Paywall/PaywallCheckoutBuilder.swift`,
+  `Views/Paywall/HonestPaywallView.swift`.
 - `paywall-commerce-access-verification` — a transient full-screen loading
   gate (`#commerceAccessVerification`) shown (a) at the app root right after
   onboarding, before `MainTabView`, while RevenueCat resolves, and (b) inside
@@ -78,7 +83,7 @@ CTAs change often; this file names the mechanism, not the wording.
 - Debug-only, no clicking through: `pillie://debug/honest-paywall?board=
   duringTrial|settingsFree|trialEndedReturningHard|trialEndedReturningLegacy`
   jumps straight to one board; `pillie://debug/trial-end-paywall` opens the
-  real trial-end wall from Home with own-record stats (hard by default,
+  real trial-end wall from Home (hard by default,
   `terms=soft` for the closable wall). Don't relaunch after it: a relaunch
   drops the debug clock that keeps the trial expired.
   `references/state-setup.md`.
@@ -97,7 +102,7 @@ CTAs change often; this file names the mechanism, not the wording.
 - `flows/paywall-lifetime-tile.flow` — on the hard trial-end board: three
   tiles with Year selected; a tap on "Cancel anytime" with a restore outcome
   armed raises no alert and logs no `restore_started`; the Lifetime tile
-  turns the CTA into "… once" with "One payment. No renewal." and logs
+  turns the CTA into "… one-time …" with "One payment. No renewal." and logs
   `paywall_plan_selected plan=lifetime`; Restore purchases raises "No
   Subscription Found". Then the Settings > Pillie Plus door's three tiles.
   The Test Store offering has no lifetime package, so the flow stands one in
@@ -122,10 +127,11 @@ CTAs change often; this file names the mechanism, not the wording.
     nothing in this app toggles RevenueCat offline from a URL. Any shot of it
     is incidental, not a repeatable proof; don't write a flow that assumes
     it's still on screen after a `wait`.
-  - `paywall-trial-ended`'s own-record stats/comparison/chips body (a trial
-    that expired on this same device, as opposed to the "returning" no-stats
-    copy above) comes from `/trial-end-paywall` (`terms=soft`,
-    `cohort=blocker`); `flows/paywall-trial-end-link.flow` opens both walls.
+  - Known red on main as of 2026-10-06 on the Namespace simulator:
+    `paywall-trial-end-link.flow` (the `/trial-end-paywall` wall never
+    presents) and `paywall-restore.flow` at its "Try again" step (the
+    no-subscription alert never shows after Try again). Compare with main
+    before blaming a branch.
 
 ## Gotchas
 

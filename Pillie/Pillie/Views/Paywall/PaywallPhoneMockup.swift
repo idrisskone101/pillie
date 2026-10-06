@@ -64,8 +64,7 @@ struct PaywallPhoneMockup: View {
                 .padding(.horizontal, 28)
 
             shield
-                // Puts the 46pt logo's center 140pt below the screen top.
-                .padding(.top, 140 - 23)
+                .padding(.top, 117)
         }
         .clipShape(RoundedRectangle(cornerRadius: Self.screenRadius, style: .continuous))
     }
