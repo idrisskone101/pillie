@@ -17,10 +17,15 @@ struct HonestPaywallView: View {
     let onDismiss: () -> Void
     let onContinueFree: (() -> Void)?
 
-    @State private var hasAppeared = false
+    @State private var isSheetRevealed = false
+    @State private var isPhoneRevealed = false
 
-    private var isRevealed: Bool {
-        hasAppeared || accessibilityReduceMotion
+    private var sheetOffset: CGFloat {
+        isSheetRevealed || accessibilityReduceMotion ? 0 : PaywallEntrance.sheetRise
+    }
+
+    private var phoneOffset: CGFloat {
+        isPhoneRevealed || accessibilityReduceMotion ? 0 : PaywallEntrance.phoneRise
     }
 
     var body: some View {
@@ -46,8 +51,9 @@ struct HonestPaywallView: View {
             }
         }
         .onAppear {
-            guard !accessibilityReduceMotion else { return }
-            withAnimation(PillieTheme.fadeInUpCurve) { hasAppeared = true }
+            let reduced = accessibilityReduceMotion
+            withAnimation(reduced ? PaywallEntrance.fade : PaywallEntrance.sheet) { isSheetRevealed = true }
+            withAnimation(reduced ? PaywallEntrance.fade : PaywallEntrance.phone) { isPhoneRevealed = true }
         }
     }
 
@@ -67,11 +73,14 @@ struct HonestPaywallView: View {
 
     private func hero(height: CGFloat) -> some View {
         PaywallPhoneMockup()
-            .opacity(isRevealed ? 1 : 0)
+            .offset(y: phoneOffset)
+            .opacity(isPhoneRevealed ? 1 : 0)
             .padding(.top, HonestPaywallLayout.phoneTopInset)
             .frame(maxWidth: .infinity)
-            .frame(height: height, alignment: .top)
+            // Clip at the sheet's moving top edge so the phone rises from behind it.
+            .frame(height: height + sheetOffset, alignment: .top)
             .clipped()
+            .frame(height: height, alignment: .top)
             .overlay(alignment: .topTrailing) {
                 if scene.board.chrome.showsClose {
                     closeButton
@@ -153,8 +162,8 @@ struct HonestPaywallView: View {
                 .fill(PillieTheme.bg)
                 .shadow(color: .black.opacity(0.06), radius: 20, y: -4)
         }
-        .offset(y: isRevealed ? 0 : 48)
-        .opacity(isRevealed ? 1 : 0)
+        .offset(y: sheetOffset)
+        .opacity(isSheetRevealed ? 1 : 0)
     }
 
     private var planCards: some View {
@@ -343,6 +352,15 @@ private enum HonestPaywallLayout {
     static func heroHeight(safeAreaHeight: CGFloat) -> CGFloat {
         min(max(safeAreaHeight * 0.385, 190), 300)
     }
+}
+
+/// Option A ("Rise") from the Paper entrance storyboards on p-G-0.
+private enum PaywallEntrance {
+    static let sheetRise: CGFloat = 64
+    static let phoneRise: CGFloat = 120
+    static let sheet = Animation.spring(duration: 0.55, bounce: 0.12)
+    static let phone = Animation.spring(duration: 0.6, bounce: 0.15).delay(0.08)
+    static let fade = Animation.easeOut(duration: 0.25)
 }
 
 private enum PaywallLegalLinks {
