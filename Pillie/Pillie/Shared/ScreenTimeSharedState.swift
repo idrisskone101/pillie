@@ -31,9 +31,9 @@ enum ScreenTimeSharedState {
     static func loadSelection() -> FamilyActivitySelection {
         guard let data = defaults?.data(forKey: AppGroupKeys.familyActivitySelectionData),
               let selection = try? JSONDecoder().decode(FamilyActivitySelection.self, from: data) else {
-            return FamilyActivitySelection(includeEntireCategory: true)
+            return FamilyActivitySelection()
         }
-        return selection
+        return selection.collapsingEntireCategories()
     }
 
     // MARK: - Blocking State
@@ -141,11 +141,13 @@ enum ScreenTimeSharedState {
 }
 
 extension FamilyActivitySelection {
-    /// The category's app tokens only appear once the picker saves this selection.
-    func includingEntireCategories() -> FamilyActivitySelection {
-        guard !includeEntireCategory else { return self }
-        var selection = FamilyActivitySelection(includeEntireCategory: true)
-        selection.applicationTokens = applicationTokens
+    /// Whole-category selections (TestFlight 2.2) hold every app inside each picked
+    /// category, and the Screen Time picker hangs once it is handed a few hundred
+    /// tokens. The category tokens already shield those apps, so keep only them.
+    func collapsingEntireCategories() -> FamilyActivitySelection {
+        guard includeEntireCategory else { return self }
+        var selection = FamilyActivitySelection()
+        selection.applicationTokens = categoryTokens.isEmpty ? applicationTokens : []
         selection.categoryTokens = categoryTokens
         selection.webDomainTokens = webDomainTokens
         return selection

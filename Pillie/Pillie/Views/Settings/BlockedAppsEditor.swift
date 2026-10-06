@@ -33,7 +33,7 @@ struct BlockedAppsEditor: View {
         }
         .familyActivityPicker(
             isPresented: $showPicker,
-            selection: Bindable(blockingManager).pickerSelection
+            selection: Bindable(blockingManager).activitySelection
         )
         .task { await requestAccess() }
         // Every surface that sets up blocking opens this editor, so the Plus
