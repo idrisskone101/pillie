@@ -30,11 +30,4 @@ struct PlusAccessState: Equatable {
     func hasPlusAccess(calendar: Calendar, now: Date) -> Bool {
         hasEntitlement || trialActive(calendar: calendar, now: now)
     }
-
-    /// Whether Pillie has stopped this user's reminders: a hard-paywall trial
-    /// ended without a purchase (ENG-162). Legacy terms keep daily reminders
-    /// free, and a user who never had a trial was never on these terms.
-    func remindersStopped(terms: TrialEndAccessTerms, calendar: Calendar, now: Date) -> Bool {
-        terms == .hardPaywall && trialGrantDate != nil && !hasPlusAccess(calendar: calendar, now: now)
-    }
 }

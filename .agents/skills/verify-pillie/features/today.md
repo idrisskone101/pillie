@@ -46,10 +46,6 @@ blocking/trial status surfaces, and (when eligible) the review ask.
   `#plusSetupStep_<name>`, buttons `#plusSetupSkip` / `#plusSetupPrimary`,
   and Done `#plusSetupDone`. While the trial runs, the strip replaces the
   "You haven't set up app blocking yet" card.
-- `today-reminders-off` shows `homeRemindersOffCard` once a hard-paywall
-  trial ends without a purchase: Pillie stopped every reminder, so the card
-  says the daily reminders are off and the free "Your reminders are on"
-  blocking card stays hidden. It outranks `homeProtectionOffCard`.
 
 ## How to get to it (user POV)
 
@@ -142,10 +138,6 @@ blocking/trial status surfaces, and (when eligible) the review ask.
   remove, ring insert and remove, sugar pill), one shot per shake, then the streak
   reveal and its logged note. A tap on `#shakeConfirmStage` counts as one
   shake.
-- `flows/today-reminders-off.flow` — `/trial-end-paywall?wall=off` holds
-  the mandatory hard wall down so the Home it covers shows the reminders-off
-  card, for both cohorts, then lets the wall present and checks its
-  reminders-off subtitle.
 - `flows/smoke.flow` covers the plain tab bar (Today/History/Settings) with
   `/plus-home`.
 - `flows/tab-bar-rtl.flow` — the same tab bar in Arabic: taps and edge

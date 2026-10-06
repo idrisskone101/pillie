@@ -39,8 +39,7 @@ def runner_steps():
 
 def swift_ids():
     # Ids axe can report: .accessibilityIdentifier("…") literals (and the literal
-    # prefix of interpolated ones, and both arms of a `cond ? "a" : "b"`), plus
-    # SF Symbol names, which axe reports as ids.
+    # prefix of interpolated ones), plus SF Symbol names, which axe reports as ids.
     lits, prefixes = set(), set()
     for path in SWIFT_ROOT.rglob("*.swift"):
         if "Tests" in path.parts[-2]:
@@ -49,10 +48,6 @@ def swift_ids():
         for arg in re.findall(r'accessibilityIdentifier\(\s*"((?:[^"\\]|\\.)*)"', text):
             head = arg.split("\\(", 1)[0]
             (prefixes if "\\(" in arg else lits).add(head)
-        for pair in re.findall(
-            r'accessibilityIdentifier\(\s*[^"()]+\?\s*"([^"\\]+)"\s*:\s*"([^"\\]+)"\s*\)', text
-        ):
-            lits.update(pair)
         lits.update(re.findall(r'systemName:\s*"([^"]+)"', text))
     return lits, {p for p in prefixes if p}
 

@@ -15,49 +15,30 @@ import Foundation
 
 /// Copy for the Protection Off card. `nil` when the card must not show.
 struct ProtectionOffCardContent: Equatable {
-    /// What stopped when Plus Access ended. Stopped reminders outrank blocking:
-    /// the user must never believe Pillie is still reminding them.
-    enum Kind: Equatable {
-        case remindersStopped
-        case blockingStopped
-    }
-
-    let kind: Kind
     let title: String
     let detail: String
     let ctaTitle: String
 
-    /// Hard-paywall users whose trial ended get the reminders card, with or
-    /// without blocker config. Otherwise it is shown only to the
-    /// blocker-configured cohort without Plus Access. Access returning
-    /// (re-purchase or a fresh grant) hides it on the next Home pass; a user
-    /// with no saved config lost nothing and is BlockingStatusCard's cohort
-    /// instead.
+    /// Shown only to the blocker-configured cohort without Plus Access. Access
+    /// returning (re-purchase or a fresh grant) hides it on the next Home pass;
+    /// a user with no saved config lost nothing and is BlockingStatusCard's
+    /// cohort instead.
     static func make(
         hasPlusAccess: Bool,
         blockerConfigSaved: Bool,
-        remindersStopped: Bool = false,
         locale: Locale = .current
     ) -> ProtectionOffCardContent? {
-        guard !hasPlusAccess else { return nil }
-        let ctaTitle = PillieLocalization.string("today.protection.ended.cta", locale: locale)
-        if remindersStopped {
-            return ProtectionOffCardContent(
-                kind: .remindersStopped,
-                title: PillieLocalization.string("today.reminders.off.title", locale: locale),
-                detail: PillieLocalization.string("today.reminders.off.detail", locale: locale),
-                ctaTitle: ctaTitle
-            )
-        }
-        guard blockerConfigSaved else { return nil }
+        guard !hasPlusAccess, blockerConfigSaved else { return nil }
         return ProtectionOffCardContent(
-            kind: .blockingStopped,
             title: PillieLocalization.string("today.protection.inactive", locale: locale),
             detail: PillieLocalization.string(
                 "today.protection.ended.detail",
                 locale: locale
             ),
-            ctaTitle: ctaTitle
+            ctaTitle: PillieLocalization.string(
+                "today.protection.ended.cta",
+                locale: locale
+            )
         )
     }
 }

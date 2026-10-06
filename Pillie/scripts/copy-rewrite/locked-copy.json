@@ -2810,26 +2810,6 @@
       "en": "Your daily reminders and Plus pause until you choose a plan. Your setup stays saved.",
       "de": "Deine täglichen Erinnerungen und Plus pausieren, bis du einen Tarif wählst. Deine Einrichtung bleibt gespeichert.",
       "it": "I promemoria giornalieri e Plus vanno in pausa finché non scegli un piano. La tua configurazione resta salvata."
-    },
-    {
-      "issue": "ENG-167",
-      "table": "Localizable",
-      "key": "today.reminders.off.title",
-      "create": true,
-      "comment": "Home card title when a hard-paywall trial ended and Pillie stopped reminders [ENG-167]",
-      "en": "Your daily reminders are off",
-      "de": "Deine täglichen Erinnerungen sind aus",
-      "it": "I tuoi promemoria giornalieri sono disattivati"
-    },
-    {
-      "issue": "ENG-167",
-      "table": "Localizable",
-      "key": "today.reminders.off.detail",
-      "create": true,
-      "comment": "Home card body when a hard-paywall trial ended and Pillie stopped reminders [ENG-167]",
-      "en": "Your trial ended, so Pillie isn’t sending reminders. Pick a plan to turn them back on. Your setup is saved.",
-      "de": "Deine Testphase ist vorbei, deshalb schickt Pillie keine Erinnerungen. Wähl einen Tarif, um sie wieder einzuschalten. Deine Einrichtung ist gespeichert.",
-      "it": "La tua prova è finita, quindi Pillie non ti manda promemoria. Scegli un piano per riattivarli. Le tue impostazioni sono salvate."
     }
   ]
 }

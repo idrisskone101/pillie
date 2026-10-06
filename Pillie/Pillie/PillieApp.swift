@@ -663,7 +663,6 @@ struct PillieApp: App {
             UserDefaults.standard.removeObject(forKey: TrialExpiredEvent.firedStorageKey)
             UserDefaults.standard.removeObject(forKey: TrialExpiryWarningDelivery.sentDaysStorageKey)
             UserDefaults.standard.removeObject(forKey: TrialEndPaywallAutoPresentation.shownStorageKey)
-            UserDefaults.standard.removeObject(forKey: TrialEndPaywallAutoPresentation.debugHeldStorageKey)
             SubscriptionManager.shared.debugOverrideTrialGrantDate(nil)
             reconcileScreenTimeState()
         case "/fixed-now":
@@ -772,8 +771,7 @@ struct PillieApp: App {
             // age the trial by active pill days. `terms=soft` is the closable
             // pre-cutover wall (anything else is the hard wall), `cohort=blocker`
             // the loss-framed blocker cohort, `success=1` the post-purchase
-            // state, `subscriber=1` an active Plus entitlement, `wall=off` keeps
-            // the wall down to check the Home underneath.
+            // state, `subscriber=1` an active Plus entitlement.
             let queryItems = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems
             func query(_ name: String) -> String? {
                 queryItems?.first(where: { $0.name == name })?.value
@@ -791,10 +789,6 @@ struct PillieApp: App {
             case (true, true): .trialExpiredGrandfatherBlocker
             case (true, false): .trialExpiredGrandfatherReminder
             }
-            UserDefaults.standard.set(
-                query("wall") == "off",
-                forKey: TrialEndPaywallAutoPresentation.debugHeldStorageKey
-            )
             DebugQA.apply(scenario, store: store)
             if query("success") == "1" {
                 UserDefaults.standard.set(true, forKey: HonestPaywallScreen.debugSuccessStateKey)
