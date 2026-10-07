@@ -180,6 +180,19 @@ final class RoutineDialCommitTests: XCTestCase {
         XCTAssertEqual(harness.recorder.completions, [])
     }
 
+    func testANotYetAfterTheReminderIsStillTheOpenTaskPastMidnight() throws {
+        let pastMidnight = InMemoryStoreFactory.localDate("2026-09-28", hour: 0, minute: 10)
+        let harness = try makeHarness(now: pastMidnight)
+
+        harness.commit(pick(.patch, 8, .notYet), pickedAt: Self.afterReminder)
+
+        let store = harness.store
+        XCTAssertEqual(store.today, Calendar.current.startOfDay(for: Self.afterReminder))
+        XCTAssertEqual(store.dueAction(on: store.today)?.cycleDay, 8)
+        XCTAssertEqual(store.dueAction(on: store.today)?.type, .patchChange)
+        XCTAssertEqual(store.statusForDate(store.today), .upcoming)
+    }
+
     func testClearDropsTheDialDraftAndTheReportedFlag() throws {
         let harness = try makeHarness(now: Self.afterReminder)
         pick(.ring, 1, .taken).save(to: harness.defaults)

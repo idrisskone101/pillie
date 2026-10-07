@@ -268,6 +268,34 @@ final class TodayPillCommitTests: XCTestCase {
         XCTAssertTrue(harness.recorder.completions.isEmpty)
     }
 
+    func testANotYetPickAfterTheReminderIsStillTheOpenPillPastMidnight() throws {
+        let pickedAt = InMemoryStoreFactory.localDate("2026-10-06", hour: 23, minute: 30)
+        let now = InMemoryStoreFactory.localDate("2026-10-07", hour: 0, minute: 10)
+        let harness = try makeHarness(now: now, reminderHour: 21)
+
+        harness.commit(pick(11, .notYet), pickedAt: pickedAt)
+
+        let store = harness.store
+        let pickedDay = day(0, from: pickedAt)
+        XCTAssertEqual(store.today, pickedDay)
+        XCTAssertEqual(store.currentDayIndex + 1, 12)
+        XCTAssertEqual(store.statusForDate(pickedDay), .upcoming)
+        XCTAssertFalse(store.isTodayTaken)
+    }
+
+    func testANotYetPickWhoseReminderFiresBeforeContinueIsDueNow() throws {
+        let pickedAt = InMemoryStoreFactory.localDate("2026-09-27", hour: 19, minute: 50)
+        let now = InMemoryStoreFactory.localDate("2026-09-27", hour: 20, minute: 10)
+        let harness = try makeHarness(now: now, reminderHour: 20)
+
+        harness.commit(pick(11, .notYet), pickedAt: pickedAt)
+
+        let store = harness.store
+        XCTAssertEqual(store.today, day(0, from: now))
+        XCTAssertEqual(store.currentDayIndex + 1, 12)
+        XCTAssertEqual(store.statusForDate(day(0, from: now)), .upcoming)
+    }
+
     func testCrossingTheReminderBeforeContinueMovesToTheNextPill() throws {
         let pickedAt = InMemoryStoreFactory.localDate("2026-09-27", hour: 19, minute: 50)
         let now = InMemoryStoreFactory.localDate("2026-09-27", hour: 20, minute: 10)
