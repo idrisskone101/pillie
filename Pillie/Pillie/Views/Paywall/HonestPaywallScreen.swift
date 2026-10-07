@@ -309,9 +309,14 @@ struct HonestPaywallScreen: View {
 
         Task {
             do {
-                try await subscriptionManager.purchase(package)
+                let outcome = try await subscriptionManager.purchase(package)
                 extendOfferStore.record(.accept)
                 trackExtend(offer.trigger, telemetry.trialEndExtendOfferAccepted)
+                // The wall's convert funnel counts trial starts, so the free
+                // week has to land there too.
+                if let extendTelemetryMode {
+                    trackPurchaseCompleted(plan: .annual, mode: extendTelemetryMode, outcome: outcome)
+                }
                 scheduleExtendReminder(for: offer)
                 plusFeedback.successfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
                 successOutcome = .purchased(.annual)
