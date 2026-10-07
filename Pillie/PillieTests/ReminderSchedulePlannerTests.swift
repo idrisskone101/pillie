@@ -720,6 +720,32 @@ final class ReminderSchedulePlannerTests: XCTestCase {
         }
     }
 
+    func testStreakAtRiskNilOnSugarPillReminder() throws {
+        // 21/7 from 1 May: 21 May is hormone pill 21, 22 May the first sugar pill.
+        // Sugar pills never touch the streak, so their reminder must not name it.
+        let fixture = try InMemoryStoreFactory.makeStore(
+            now: InMemoryStoreFactory.localDate("2026-05-21", hour: 10),
+            startDate: Calendar.current.startOfDay(for: InMemoryStoreFactory.localDate("2026-05-01", hour: 12))
+        )
+
+        func nearestBase(on day: String) throws -> ReminderSchedulePlanner.DueReminderIntent {
+            let now = InMemoryStoreFactory.localDate(day, hour: 10)
+            PillieClock.setFixedNowForTesting(now)
+            let dayEpoch = epochDay(for: now)
+            return try XCTUnwrap(
+                dueIntents(for: fixture.store, now: now, currentStreak: 3)
+                    .first { $0.dueDayEpoch == dayEpoch && $0.kind == .base }
+            )
+        }
+
+        let hormoneBase = try nearestBase(on: "2026-05-21")
+        let sugarBase = try nearestBase(on: "2026-05-22")
+
+        XCTAssertEqual(hormoneBase.action.type, .pillActive)
+        XCTAssertEqual(sugarBase.action.type, .pillSugar)
+        XCTAssertEqual([hormoneBase.streakAtRisk, sugarBase.streakAtRisk], [3, nil])
+    }
+
     func testStreakAtRiskNilOnRetriesForPlusUser() throws {
         let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 7)
         let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
