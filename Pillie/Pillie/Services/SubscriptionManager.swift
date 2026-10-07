@@ -646,9 +646,15 @@ final class SubscriptionManager: NSObject {
 
 extension SubscriptionManager: PurchasesDelegate {
     nonisolated func purchases(_ purchases: Purchases, receivedUpdated customerInfo: CustomerInfo) {
-        let active = customerInfo.entitlements[Self.entitlementID]?.isActive == true
+        let entitlement = customerInfo.entitlements[Self.entitlementID]
+        let active = entitlement?.isActive == true
+        let productID = entitlement?.productIdentifier
+        let willRenew = entitlement?.willRenew == true
         Task { @MainActor in
             self.setEntitlement(active)
+            if !TrialEndExtendReminder.isStillDue(isActive: active, productID: productID, willRenew: willRenew) {
+                NotificationManager.shared.removeTrialEndExtendReminder()
+            }
         }
     }
 }
