@@ -101,10 +101,11 @@ final class SubscriptionManager: NSObject {
     /// The persisted Reverse Trial grant moment, if any (Keychain-backed).
     private(set) var trialGrantDate: Date?
 
-    /// Last pack rhythm the Reverse Trial clock should walk. Not persisted —
-    /// SwiftData is the source. Defaults to every calendar day until the shell
-    /// pushes a snapshot from the live pack.
-    private var activeDaySchedule: ActiveDaySchedule = .everyCalendarDay
+    /// The pack rhythm the Reverse Trial clock walks and the days it counted
+    /// under earlier rhythms, saved beside the grant. Nil until the shell
+    /// pushes the live pack or a saved ledger loads; the clock then counts
+    /// every calendar day.
+    private var trialDayLedger: TrialDayLedger?
 
     /// The immutable pre/post-cutover assignment persisted with the grant. It
     /// normally follows the grant instant, with a pre-cutover override for an
@@ -199,6 +200,7 @@ final class SubscriptionManager: NSObject {
     private override init() {
         super.init()
         trialGrantDate = trialGrantStore.loadGrantDate()
+        trialDayLedger = trialGrantStore.loadDayLedger()
         if let storedCohort = trialGrantStore.loadTermsCohort() {
             trialTermsCohort = storedCohort
         } else if let trialGrantDate {
@@ -211,21 +213,44 @@ final class SubscriptionManager: NSObject {
     }
 
     var plusAccessState: PlusAccessState {
-        PlusAccessState(
+        let ledger = trialDayLedger?.moved(to: .current)
+        return PlusAccessState(
             hasEntitlement: hasEntitlement,
             trialGrantDate: trialGrantDate,
-            schedule: activeDaySchedule
+            schedule: ledger?.schedule ?? .everyCalendarDay,
+            trialLivedDays: ledger?.lived
         )
     }
 
     /// Adopts the current pack rhythm and rewrites Plus Access / `validUntil`.
-    /// Call this before or with grant, and on every pack or cycle edit.
+    /// Call this before or with grant, and on every pack or cycle edit. During
+    /// a trial the new rhythm counts from today; earlier days stay counted
+    /// under the rhythm they were lived with.
     func updateActiveDaySchedule(_ schedule: ActiveDaySchedule, now: Date = Date()) {
-        activeDaySchedule = schedule
+        let calendar = Calendar.current
+        let previous = trialDayLedger
+        if let trialGrantDate, let previous {
+            trialDayLedger = previous.adopting(schedule, grantDate: trialGrantDate, calendar: calendar, now: now)
+        } else {
+            trialDayLedger = TrialDayLedger(
+                schedule: schedule,
+                lived: nil,
+                timeZoneIdentifier: calendar.timeZone.identifier
+            )
+        }
+        if trialDayLedger != previous {
+            saveTrialDayLedger()
+        }
         refreshPlusAccess(now: now)
     }
 
+    /// No pack is no rhythm: after a reinstall, before onboarding rebuilds the
+    /// pack, a trial keeps counting with the rhythm saved beside its grant.
     func updateActiveDaySchedule(pack: PillPack?, now: Date = Date()) {
+        guard pack != nil || trialGrantDate == nil else {
+            refreshPlusAccess(now: now)
+            return
+        }
         updateActiveDaySchedule(ActiveDaySchedule(pack: pack), now: now)
     }
 
@@ -285,8 +310,16 @@ final class SubscriptionManager: NSObject {
         trialGrantStore.saveGrantDate(now)
         trialGrantDate = now
         trialTermsCohort = assignedCohort
+        trialDayLedger?.lived = nil
+        saveTrialDayLedger()
         refreshPlusAccess(now: now)
         return true
+    }
+
+    /// Keeps the ledger beside the grant; without a grant it only lives in memory.
+    private func saveTrialDayLedger() {
+        guard trialGrantDate != nil, let trialDayLedger else { return }
+        trialGrantStore.saveDayLedger(trialDayLedger)
     }
 
     // MARK: - Configure (call once at app launch)
@@ -585,9 +618,9 @@ final class SubscriptionManager: NSObject {
     /// Test seam: swap the Keychain store for an in-memory double and re-sync
     /// trial state from it.
     func setTrialGrantStoreForTesting(_ store: TrialGrantStoring) {
-        activeDaySchedule = .everyCalendarDay
         trialGrantStore = store
         trialGrantDate = store.loadGrantDate()
+        trialDayLedger = store.loadDayLedger()
         if let storedCohort = store.loadTermsCohort() {
             trialTermsCohort = storedCohort
         } else if let trialGrantDate {
@@ -616,6 +649,8 @@ final class SubscriptionManager: NSObject {
             trialTermsCohort = nil
         }
         trialGrantDate = date
+        trialDayLedger?.lived = nil
+        saveTrialDayLedger()
         refreshPlusAccess()
     }
 

@@ -99,12 +99,26 @@ struct ReminderSchedulePlanner {
         /// The last reminder-time change saved in Settings. Days before it keep
         /// the time they were lived under.
         var reminderChange: ReminderTimeChange? = nil
+        /// Days the Reverse Trial counted under earlier pack rhythms
+        /// (`PlusAccessState.trialLivedDays`); `pack` counts the rest.
+        var trialLivedDays: TrialLivedDays? = nil
 
         var clock: ReminderClock {
             ReminderClock(
                 current: ReminderTimeChange.Time(hour: reminderHour, minute: reminderMinute),
                 change: reminderChange,
                 calendar: calendar
+            )
+        }
+
+        /// The Reverse Trial clock while access rests on the trial alone; nil for
+        /// an entitled user or one never granted a trial.
+        var trialClock: ReverseTrialClock? {
+            guard !hasEntitlement, let trialGrantDate else { return nil }
+            return ReverseTrialClock(
+                grantDate: trialGrantDate,
+                schedule: ActiveDaySchedule(pack: pack, calendar: calendar),
+                lived: trialLivedDays
             )
         }
     }
@@ -308,11 +322,7 @@ struct ReminderSchedulePlanner {
     /// When a Reverse Trial's Plus Access ends; `nil` for an entitled user or
     /// one never granted a trial.
     private func trialAccessEnd(_ input: Input) -> Date? {
-        guard !input.hasEntitlement, let grantDate = input.trialGrantDate else { return nil }
-        return ReverseTrialClock(
-            grantDate: grantDate,
-            schedule: ActiveDaySchedule(pack: input.pack, calendar: input.calendar)
-        ).expiryMoment(calendar: input.calendar)
+        input.trialClock?.expiryMoment(calendar: input.calendar)
     }
 
     /// Plans the Reverse Trial notices (#168 / ADR 0007) from
@@ -323,13 +333,7 @@ struct ReminderSchedulePlanner {
     private func planTrialExpiryWarnings(_ input: Input) -> [TrialExpiryWarningIntent] {
         // Entitled users never see expiry pressure: a mid-trial purchase replans
         // and the pending notices fall out of the managed set as stale.
-        guard !input.hasEntitlement, let grantDate = input.trialGrantDate else { return [] }
-
-        let clock = ReverseTrialClock(
-            grantDate: grantDate,
-            schedule: ActiveDaySchedule(pack: input.pack, calendar: input.calendar)
-        )
-        let expiry = clock.expiryMoment(calendar: input.calendar)
+        guard let expiry = trialAccessEnd(input) else { return [] }
         return Self.trialNoticeSlots.compactMap { slot in
             guard let noticeDay = input.calendar.date(
                 byAdding: .day,

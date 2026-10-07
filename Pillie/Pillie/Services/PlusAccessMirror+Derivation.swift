@@ -19,8 +19,7 @@ extension PlusAccessMirror {
     /// guessing at renewal dates.
     static func validUntil(state: PlusAccessState, calendar: Calendar) -> Date {
         if state.hasEntitlement { return .distantFuture }
-        guard let grantDate = state.trialGrantDate else { return .distantPast }
-        return ReverseTrialClock(grantDate: grantDate, schedule: state.schedule)
-            .expiryMoment(calendar: calendar)
+        guard let clock = state.trialClock else { return .distantPast }
+        return clock.expiryMoment(calendar: calendar)
     }
 }

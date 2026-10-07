@@ -166,14 +166,11 @@ struct HomeView: View {
     /// never a zero shown as a brag). The intercept counter is the lifetime
     /// total, which only ever accrues under Plus Access (#161).
     private var trialEndOwnStats: TrialEndOwnStats {
-        guard let grantDate = SubscriptionManager.shared.trialGrantDate else { return .none }
+        guard let clock = SubscriptionManager.shared.plusAccessState.trialClock else { return .none }
         let calendar = Calendar.current
-        let expiry = ReverseTrialClock(
-            grantDate: grantDate,
-            schedule: SubscriptionManager.shared.plusAccessState.schedule
-        ).expiryMoment(calendar: calendar)
+        let expiry = clock.expiryMoment(calendar: calendar)
         let lastProtectedDay = calendar.date(byAdding: .day, value: -1, to: expiry) ?? expiry
-        let record = store.doseRecord(from: grantDate, to: lastProtectedDay)
+        let record = store.doseRecord(from: clock.grantDate, to: lastProtectedDay)
         return TrialEndOwnStats(
             blocksIntercepted: BlockerInterventionSharedState().counter.lifetimeTotal,
             dosesTaken: record.due > 0 ? record.taken : nil,

@@ -6,9 +6,9 @@
 import Foundation
 
 /// The pure Reverse Trial clock (PRD #159 / ADR 0007). Derives whether a trial
-/// is active from `(grant timestamp, active-day schedule, calendar, now)`.
-/// Nothing here is stored. `trialActive` must always be recomputed from the
-/// grant date so the clock cannot drift from persisted state.
+/// is active from `(grant timestamp, active-day schedule, days already lived,
+/// calendar, now)`. `trialActive` must always be recomputed from the grant
+/// date so the clock cannot drift from persisted state.
 ///
 /// The grant local day is a bonus counted day, active or break. After that,
 /// only hormone-active days consume the 14 full days. Expiry is local midnight
@@ -24,11 +24,19 @@ struct ReverseTrialClock: Equatable {
     static let maximumWalkDays = fullDays * 8 + 2
 
     let grantDate: Date
+    /// Counts the days from `lived.since` on, or from the grant when nil.
     let schedule: ActiveDaySchedule
+    /// Days counted under earlier pack rhythms.
+    let lived: TrialLivedDays?
 
-    init(grantDate: Date, schedule: ActiveDaySchedule = .everyCalendarDay) {
+    init(
+        grantDate: Date,
+        schedule: ActiveDaySchedule = .everyCalendarDay,
+        lived: TrialLivedDays? = nil
+    ) {
         self.grantDate = grantDate
         self.schedule = schedule
+        self.lived = lived
     }
 
     /// Local midnight after the 14th full hormone-active day following grant day.
@@ -37,10 +45,14 @@ struct ReverseTrialClock: Equatable {
     /// calendar-day expiry so Plus Access cannot stay on forever.
     func expiryMoment(calendar: Calendar) -> Date {
         let grantDay = calendar.startOfDay(for: grantDate)
-        guard var cursor = calendar.date(byAdding: .day, value: 1, to: grantDay) else {
+        guard let firstFullDay = calendar.date(byAdding: .day, value: 1, to: grantDay) else {
             return grantDay
         }
-        var fullActiveDays = 0
+        let start = lived.map { max(firstFullDay, calendar.startOfDay(for: $0.since)) } ?? firstFullDay
+        let livedActiveDays = max(0, lived?.activeDays ?? 0)
+        if livedActiveDays >= Self.fullDays { return start }
+        var cursor = start
+        var fullActiveDays = livedActiveDays
 
         for _ in 0..<Self.maximumWalkDays {
             if schedule.isActiveDay(cursor, calendar: calendar) {
@@ -55,7 +67,7 @@ struct ReverseTrialClock: Equatable {
             cursor = next
         }
 
-        return calendar.date(byAdding: .day, value: Self.fullDays + 1, to: grantDay) ?? grantDay
+        return calendar.date(byAdding: .day, value: Self.fullDays - livedActiveDays, to: start) ?? grantDay
     }
 
     func isActive(calendar: Calendar, now: Date) -> Bool {
@@ -136,5 +148,78 @@ struct ReverseTrialClock: Equatable {
     private func isCountedDay(_ date: Date, calendar: Calendar) -> Bool {
         calendar.isDate(date, inSameDayAs: grantDate)
             || schedule.isActiveDay(date, calendar: calendar)
+    }
+}
+
+/// Hormone-active days a Reverse Trial counted under an earlier pack rhythm.
+nonisolated struct TrialLivedDays: Codable, Equatable {
+    /// Local midnight the current rhythm took over, or the expiry moment when
+    /// all 14 days were lived before it.
+    var since: Date
+    /// Full hormone-active days after the grant day and before `since`.
+    var activeDays: Int
+}
+
+/// The pack rhythm a Reverse Trial counts with, and the days it counted under
+/// earlier rhythms. Saved beside the grant: a pack, regimen, or method change,
+/// a relaunch, or a reinstall never reclassifies a day already lived.
+/// `nonisolated` so the nonisolated Keychain grant store can encode it.
+nonisolated struct TrialDayLedger: Codable, Equatable {
+    var schedule: ActiveDaySchedule
+    var lived: TrialLivedDays?
+    /// The zone the ledger's local midnights were written in.
+    var timeZoneIdentifier: String?
+
+    /// The ledger once the pack rhythm becomes `newSchedule` at `now`. Days
+    /// before today keep the rhythm they were lived with; today on follows
+    /// the new one.
+    @MainActor
+    func adopting(
+        _ newSchedule: ActiveDaySchedule,
+        grantDate: Date,
+        calendar: Calendar,
+        now: Date
+    ) -> TrialDayLedger {
+        let ledger = moved(to: calendar)
+        guard newSchedule != ledger.schedule,
+              let firstFullDay = calendar.date(
+                byAdding: .day,
+                value: 1,
+                to: calendar.startOfDay(for: grantDate)
+              )
+        else { return ledger }
+
+        let today = calendar.startOfDay(for: now)
+        var day = ledger.lived.map { max(firstFullDay, calendar.startOfDay(for: $0.since)) } ?? firstFullDay
+        var activeDays = max(0, ledger.lived?.activeDays ?? 0)
+        while day < today, activeDays < ReverseTrialClock.fullDays {
+            if ledger.schedule.isActiveDay(day, calendar: calendar) {
+                activeDays += 1
+            }
+            guard let next = calendar.date(byAdding: .day, value: 1, to: day) else { break }
+            day = next
+        }
+        return TrialDayLedger(
+            schedule: newSchedule,
+            lived: TrialLivedDays(since: day, activeDays: activeDays),
+            timeZoneIdentifier: calendar.timeZone.identifier
+        )
+    }
+
+    /// The same ledger with each local midnight moved onto its date in
+    /// `calendar`'s zone, as `PillStore` moves stored days.
+    @MainActor
+    func moved(to calendar: Calendar) -> TrialDayLedger {
+        var moved = self
+        moved.timeZoneIdentifier = calendar.timeZone.identifier
+        guard let timeZoneIdentifier, timeZoneIdentifier != calendar.timeZone.identifier else {
+            return moved
+        }
+        let move = { StoredDay.day(of: $0, writtenIn: timeZoneIdentifier, calendar: calendar) }
+        moved.schedule.anchorDate = move(schedule.anchorDate)
+        if let since = lived?.since {
+            moved.lived?.since = move(since)
+        }
+        return moved
     }
 }

@@ -41,6 +41,13 @@ final class TrialGrantStoreTests: XCTestCase {
             .preCutover,
             "\(name): should round-trip the immutable terms cohort"
         )
+        let ledger = TrialDayLedger(
+            schedule: ActiveDaySchedule(anchorDate: grant, anchorDayIndex: 20, activeDays: 21, cycleLength: 28),
+            lived: nil,
+            timeZoneIdentifier: "Europe/Paris"
+        )
+        store.saveDayLedger(ledger)
+        XCTAssertEqual(store.loadDayLedger(), ledger, "\(name): should round-trip the day ledger")
 
         // Overwrite wins.
         let laterGrant = Date(timeIntervalSince1970: 1_760_000_000)
@@ -57,11 +64,16 @@ final class TrialGrantStoreTests: XCTestCase {
             .postCutover,
             "\(name): a cohort overwrite should win"
         )
+        var laterLedger = ledger
+        laterLedger.lived = TrialLivedDays(since: laterGrant, activeDays: 7)
+        store.saveDayLedger(laterLedger)
+        XCTAssertEqual(store.loadDayLedger(), laterLedger, "\(name): a ledger overwrite should win")
 
         // Clear empties it again.
         store.clearGrantDate()
         XCTAssertNil(store.loadGrantDate(), "\(name): clear should remove the grant")
         XCTAssertNil(store.loadTermsCohort(), "\(name): clear should remove the cohort")
+        XCTAssertNil(store.loadDayLedger(), "\(name): clear should remove the day ledger")
     }
 
     func testInMemoryStoreHonorsContract() {
