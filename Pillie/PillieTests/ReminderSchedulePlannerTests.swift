@@ -93,6 +93,35 @@ final class ReminderSchedulePlannerTests: XCTestCase {
         XCTAssertEqual(todayIntents.filter { $0.kind == .retry }.count, 3)
     }
 
+    func testPlusFollowUpsArePlannedForEveryUntakenDueDay() throws {
+        // Nothing rebuilds when the window rolls over at the next reminder, so the
+        // plan made while today is still untaken must carry tomorrow's follow-ups.
+        let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 10)
+        let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
+        let tomorrowEpoch = epochDay(for: InMemoryStoreFactory.localDate("2026-05-27", hour: 12))
+
+        let intents = dueIntents(
+            for: fixture.store,
+            now: now,
+            autoReminderRetryLimit: 3,
+            smartRemindersEnabled: true
+        )
+        let retries = intents.filter { $0.kind == .retry }
+
+        XCTAssertEqual(
+            retries.filter { $0.dueDayEpoch == tomorrowEpoch }.map(\.fireDate),
+            [
+                InMemoryStoreFactory.localDate("2026-05-27", hour: 8, minute: 10),
+                InMemoryStoreFactory.localDate("2026-05-27", hour: 8, minute: 20),
+                InMemoryStoreFactory.localDate("2026-05-27", hour: 8, minute: 30)
+            ]
+        )
+        XCTAssertEqual(
+            Set(retries.map(\.dueDayEpoch)),
+            Set(intents.filter { $0.kind == .base }.map(\.dueDayEpoch))
+        )
+    }
+
     func testTreatsSnoozeAsSeparateFromAutomaticRetries() throws {
         let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 7)
         let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
