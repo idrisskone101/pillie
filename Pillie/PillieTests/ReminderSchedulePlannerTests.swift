@@ -476,6 +476,30 @@ final class ReminderSchedulePlannerTests: XCTestCase {
         )
     }
 
+    func testReminderMovedBeforeNowCatchesUpInsteadOfWaitingForTheOldTime() throws {
+        // At 10:00 the reminder moves from 22:00 to 08:00 while today's base is still
+        // pending at 22:00. A time before now catches up within a minute (US-11).
+        let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 10, minute: 0)
+        let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
+        fixture.store.reminderHour = 8
+        fixture.store.reminderMinute = 0
+        let todayEpoch = epochDay(for: now)
+        let pendingAtOldTime = InMemoryStoreFactory.localDate("2026-05-26", hour: 22, minute: 0)
+
+        let todayBase = try XCTUnwrap(
+            dueIntents(
+                for: fixture.store,
+                now: now,
+                servedBaseFireDateByDueDayEpoch: [todayEpoch: pendingAtOldTime]
+            ).first { $0.dueDayEpoch == todayEpoch && $0.kind == .base }
+        )
+
+        XCTAssertEqual(
+            todayBase.fireDate,
+            InMemoryStoreFactory.localDate("2026-05-26", hour: 10, minute: 1)
+        )
+    }
+
     func testRetriesAnchorWhenBaseSuppressedAfterServed() throws {
         let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 8, minute: 5)
         let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
