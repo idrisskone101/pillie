@@ -320,6 +320,15 @@ protocol AnalyticsTracking {
     isPlus: Bool?
   )
 
+  /// The Trial-End extend offer card (ENG-172). Always `source: trial_end`.
+  func track(
+    _ event: AnalyticsEvent,
+    extendSource: TrialEndExtendTrigger,
+    trialTermsCohort: TrialTermsCohort,
+    trialEndCohort: TrialEndPaywallCohort,
+    isPlus: Bool?
+  )
+
   /// Report a handled failure as `app_error` + `$exception` (#179).
   func trackError(
     _ domain: AppErrorDomain,
@@ -516,6 +525,23 @@ extension AnalyticsTracking {
     )
   }
 
+  func track(
+    _ event: AnalyticsEvent,
+    extendSource: TrialEndExtendTrigger,
+    trialTermsCohort: TrialTermsCohort,
+    trialEndCohort: TrialEndPaywallCohort,
+    isPlus: Bool?
+  ) {
+    track(
+      event,
+      source: .trialEnd,
+      surface: .trialEnd,
+      trialTermsCohort: trialTermsCohort,
+      trialEndCohort: trialEndCohort,
+      isPlus: isPlus
+    )
+  }
+
   private func trackLegacy(
     _ event: AnalyticsEvent,
     source: AnalyticsSource? = nil,
@@ -619,6 +645,11 @@ enum AnalyticsEvent: String, CaseIterable {
   /// A restore that could not finish; carries `error_category`.
   case restoreFailed = "restore_failed"
   case continueFreeSelected = "continue_free_selected"
+  /// The one-time extend offer on the Trial-End Paywall (ENG-172). Each
+  /// carries `extend_source: sheet_cancel | restore_empty`.
+  case trialEndExtendOfferShown = "trial_end_extend_offer_shown"
+  case trialEndExtendOfferAccepted = "trial_end_extend_offer_accepted"
+  case trialEndExtendOfferDismissed = "trial_end_extend_offer_dismissed"
   case trialDeclineFeedbackViewed = "trial_decline_feedback_viewed"
   case trialDeclineFeedbackReasonSelected = "trial_decline_feedback_reason_selected"
   case trialDeclineFeedbackTextSubmitted = "trial_decline_feedback_text_submitted"
@@ -896,6 +927,7 @@ struct AnalyticsPayload {
   let todayAnswer: TodayPillPick.Answer?
   let reminderPassed: Bool?
   let streakChange: StreakChangeReport.Change?
+  let extendSource: TrialEndExtendTrigger?
 
   init(
     source: AnalyticsSource? = nil,
@@ -932,7 +964,8 @@ struct AnalyticsPayload {
     completedCount: Int? = nil,
     todayAnswer: TodayPillPick.Answer? = nil,
     reminderPassed: Bool? = nil,
-    streakChange: StreakChangeReport.Change? = nil
+    streakChange: StreakChangeReport.Change? = nil,
+    extendSource: TrialEndExtendTrigger? = nil
   ) {
     self.source = source
     self.step = step
@@ -969,6 +1002,7 @@ struct AnalyticsPayload {
     self.todayAnswer = todayAnswer
     self.reminderPassed = reminderPassed
     self.streakChange = streakChange
+    self.extendSource = extendSource
   }
 
   var properties: [String: AnalyticsPropertyValue] {
@@ -1061,6 +1095,9 @@ struct AnalyticsPayload {
       properties["from"] = .int(streakChange.from)
       properties["to"] = .int(streakChange.to)
       properties["reason"] = .string(streakChange.reason.rawValue)
+    }
+    if let extendSource {
+      properties["extend_source"] = .string(extendSource.rawValue)
     }
     if let restoreOutcome {
       properties["result"] = .string(restoreOutcome.analyticsResult.rawValue)
@@ -1314,6 +1351,25 @@ final class AnalyticsManager: AnalyticsTracking {
     )
 
     capture(event, payload: payload, source: source)
+  }
+
+  func track(
+    _ event: AnalyticsEvent,
+    extendSource: TrialEndExtendTrigger,
+    trialTermsCohort: TrialTermsCohort,
+    trialEndCohort: TrialEndPaywallCohort,
+    isPlus: Bool?
+  ) {
+    let payload = AnalyticsPayload(
+      source: .trialEnd,
+      isPlus: isPlus,
+      trialEndCohort: trialEndCohort,
+      trialTermsCohort: trialTermsCohort,
+      paywallSurface: .trialEnd,
+      extendSource: extendSource
+    )
+
+    capture(event, payload: payload, source: .trialEnd)
   }
 
   func track(
