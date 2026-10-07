@@ -211,6 +211,26 @@ final class ReminderSchedulePlannerTests: XCTestCase {
         XCTAssertTrue(ringSupply.isEmpty)
     }
 
+    func testSupplyReminderFiresOnceOnItsThresholdDay() throws {
+        // 21/7 from 1 May: 24 May leaves 5 pills, the refill threshold. Reminder 08:00.
+        let fixture = try InMemoryStoreFactory.makeStore(
+            now: InMemoryStoreFactory.localDate("2026-05-24", hour: 7),
+            startDate: Calendar.current.startOfDay(for: InMemoryStoreFactory.localDate("2026-05-01", hour: 12))
+        )
+        fixture.store.refillReminderThresholdDays = 5
+
+        func supplyFireDates(atHour hour: Int) -> [Date] {
+            let now = InMemoryStoreFactory.localDate("2026-05-24", hour: hour)
+            PillieClock.setFixedNowForTesting(now)
+            return supplyIntents(for: fixture.store, now: now).map(\.fireDate)
+        }
+
+        XCTAssertEqual(supplyFireDates(atHour: 7), [InMemoryStoreFactory.localDate("2026-05-24", hour: 8)])
+        // Every later rebuild that day (a foreground, a check-in) must not re-arm it.
+        XCTAssertEqual(supplyFireDates(atHour: 10), [])
+        XCTAssertEqual(supplyFireDates(atHour: 14), [])
+    }
+
     // MARK: - Cycle Transition Notice (#123)
 
     func testCycleTransitionNoticeFiresOnBreakWeekStartForEachMethod() throws {
