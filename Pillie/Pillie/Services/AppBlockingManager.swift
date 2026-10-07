@@ -79,10 +79,10 @@ final class AppBlockingManager {
         let blockingSchedule: BlockingScheduleMirror
     }
 
-    /// Whether blocking is effectively on (enabled + apps selected).
-    /// Use this single source of truth across all views.
+    /// Whether blocking is effectively on: enabled, apps selected, and Screen Time
+    /// access granted. Use this single source of truth across all views.
     var isEffectivelyOn: Bool {
-        blockingEnabled && hasAppsSelected
+        blockingEnabled && hasAppsSelected && authorizationStatus == .approved
     }
 
     /// Human-readable summary for display in settings/home.
