@@ -20,23 +20,11 @@ enum HonestPaywallSceneBuilder {
         HonestPaywallScene(
             board: board,
             checkout: PaywallCheckoutBuilder.build(
-                verb: board.ctaVerb,
+                moment: board.moment,
                 offerings: offerings,
                 selection: selection,
                 locale: locale
             )
-        )
-    }
-
-    static func placeholder(
-        board: HonestPaywallBoard,
-        locale: Locale
-    ) -> HonestPaywallScene {
-        build(
-            board: board,
-            offerings: nil,
-            selection: .subscribe(.year),
-            locale: locale
         )
     }
 }

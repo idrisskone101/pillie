@@ -9,7 +9,7 @@ enum HonestPaywallBoardResolver {
     static func resolve(
         access: PlusAccessState,
         entry: PaywallEntryPoint,
-        stats: TrialEndOwnStats?,
+        method: ContraceptiveMethod,
         calendar: Calendar,
         now: Date,
         locale: Locale,
@@ -19,12 +19,15 @@ enum HonestPaywallBoardResolver {
         guard !access.hasEntitlement else { return nil }
 
         if access.trialActive(calendar: calendar, now: now) {
-            let grantDate = access.trialGrantDate ?? now
-            let daysRemaining = ReverseTrialClock(grantDate: grantDate, schedule: access.schedule)
-                .displayedDaysRemaining(calendar: calendar, now: now)
-            return .duringTrial(
-                HonestPaywallStoryFactory.duringTrial(
-                    daysRemaining: daysRemaining,
+            let clock = ReverseTrialClock(
+                grantDate: access.trialGrantDate ?? now,
+                schedule: access.schedule
+            )
+            return HonestPaywallBoard(
+                moment: .duringTrial,
+                story: HonestPaywallStoryFactory.duringTrial(
+                    daysRemaining: clock.daysRemaining(calendar: calendar, now: now),
+                    endsTonight: clock.endsTonight(calendar: calendar, now: now),
                     locale: locale
                 )
             )
@@ -38,17 +41,19 @@ enum HonestPaywallBoardResolver {
                 for: cohort,
                 hardPaywallEnabled: hardPaywallEnabled
             )
-            return .trialEnded(
-                HonestPaywallStoryFactory.trialEnded(
-                    stats: stats ?? .none,
+            return HonestPaywallBoard(
+                moment: .trialEnded(terms),
+                story: HonestPaywallStoryFactory.trialEnded(
                     terms: terms,
+                    method: method,
                     locale: locale
                 )
             )
         }
 
-        return .settingsFree(
-            HonestPaywallStoryFactory.settingsFree(locale: locale)
+        return HonestPaywallBoard(
+            moment: .settingsFree,
+            story: HonestPaywallStoryFactory.settingsFree(method: method, locale: locale)
         )
     }
 

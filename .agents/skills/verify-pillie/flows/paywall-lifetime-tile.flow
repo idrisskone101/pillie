@@ -11,12 +11,12 @@ openurl pillie://debug/paywall-lifetime?price=%2489.99
 openurl pillie://debug/honest-paywall?board=trialEndedReturningHard&lang=en
 # A relaunch presents the hard wall when the install already holds this state.
 launch
-wait text "Your trial has ended." 20
+wait text "Get your reminders and app blocking back." 20
 wait id paywallTile.lifetime 10
 expect id paywallTile.annual
 expect id paywallTile.monthly
-expect text "billed yearly"
-expect label "Cancel anytime"
+expect text "a year"
+expect label "Cancel anytime in Settings"
 expect id paywallReassurance
 expect id paywallRestoreButton
 shot hard-wall-year-three-tiles
@@ -29,13 +29,13 @@ tap --id paywallReassurance
 sleep 3
 expect-not text "No subscription found"
 expect-not text "Couldn’t restore your purchases"
-expect text "Your trial has ended."
+expect text "Get your reminders and app blocking back."
 note no restore alert 3s after tapping Cancel anytime
 shot cancel-anytime-tap-no-restore
 
 tap --id paywallTile.lifetime
 wait text "One payment. No renewal." 10
-expect text "once"
+expect text "one-time"
 shot lifetime-selected
 
 tap --id paywallRestoreButton

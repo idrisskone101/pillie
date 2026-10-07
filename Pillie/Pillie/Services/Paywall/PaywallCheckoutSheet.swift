@@ -7,28 +7,18 @@ import Foundation
 
 struct PaywallCheckoutSheet: Equatable {
     let selectedIntent: PaywallPurchaseIntent
-    let tiles: [PaywallStackTile]
+    let cards: [PaywallPlanCard]
     let primaryCTA: String
     let isPurchaseEnabled: Bool
-    let footer: PaywallFooter
+    let reassurance: String
 }
 
-struct PaywallStackTile: Equatable {
+struct PaywallPlanCard: Equatable {
     let intent: PaywallPurchaseIntent
     let title: String
-    let primaryLine: String
-    let trailingPrice: String?
-    let savingsBadge: PaywallSavingsBadge?
+    let price: String
+    let caption: String
+    let savingsBadge: String?
     let isSelected: Bool
     let accessibilityLabel: String
-}
-
-struct PaywallSavingsBadge: Equatable {
-    let percent: Int
-    let label: String
-}
-
-struct PaywallFooter: Equatable {
-    let reassurance: String
-    let restoreActionLabel: String
 }

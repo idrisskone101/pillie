@@ -3,8 +3,8 @@
 launch
 wait text Today 15
 openurl pillie://debug/trial-end-paywall?lang=en
-wait text "Your Pillie Plus trial is over." 20
-expect text "Your daily reminders and app blocking are off."
+wait text "Get your reminders and app blocking back." 20
+expect text "Your setup and streak are saved."
 expect id paywallRestoreButton
 expect-not text "Continue with free reminders"
 shot hard-wall

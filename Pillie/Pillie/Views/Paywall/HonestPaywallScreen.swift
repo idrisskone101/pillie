@@ -50,15 +50,9 @@ struct HonestPaywallScreen: View {
         return snapshot
     }
 
-    private var isTrialEnd: Bool {
-        if case .trialEnded = board { return true }
-        return false
-    }
-
     var body: some View {
         ZStack {
             PillieTheme.bg.ignoresSafeArea()
-            coralWash
             screenContent
         }
         .interactiveDismissDisabled(!board.chrome.allowsInteractiveDismiss)
@@ -90,7 +84,7 @@ struct HonestPaywallScreen: View {
                 onResolve: { onResolved?() }
             )
             .transition(.opacity)
-        } else if purchaseSucceeded && isTrialEnd {
+        } else if purchaseSucceeded && board.isTrialEnd {
             trialEndSuccessState
                 .transition(.opacity)
         } else {
@@ -105,21 +99,6 @@ struct HonestPaywallScreen: View {
             )
             .transition(.opacity)
         }
-    }
-
-    private var coralWash: some View {
-        let alignment: Alignment = {
-            if case .trialEnded = board { return .topLeading }
-            return .topTrailing
-        }()
-        return Circle()
-            .fill(PillieTheme.coral.opacity(0.28))
-            .frame(width: 240, height: 220)
-            .blur(radius: 60)
-            .offset(x: alignment == .topLeading ? -80 : 80, y: -40)
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: alignment)
-            .ignoresSafeArea()
-            .accessibilityHidden(true)
     }
 
     private func selectPlan(_ intent: PaywallPurchaseIntent) {
@@ -164,7 +143,7 @@ struct HonestPaywallScreen: View {
                 let outcome = try await subscriptionManager.purchase(package)
                 trackPurchaseCompleted(plan: plan, mode: mode, outcome: outcome)
                 plusFeedback.successfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
-                if isTrialEnd {
+                if board.isTrialEnd {
                     successOutcome = .purchased(plan)
                     purchaseSucceeded = true
                 } else {
@@ -199,7 +178,7 @@ struct HonestPaywallScreen: View {
             switch outcome {
             case .restored:
                 plusFeedback.successfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
-                if isTrialEnd {
+                if board.isTrialEnd {
                     successOutcome = .restored
                     purchaseSucceeded = true
                 } else {
