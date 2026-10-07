@@ -113,17 +113,6 @@ enum CommercePresentation {
         )
     }
 
-    static func trialEndSuccessSubtitle(
-        cohort: TrialEndPaywallCohort,
-        locale: Locale = PillieLocalization.appLocale
-    ) -> String {
-        let key = switch cohort {
-        case .blockerConfigured: "trial.end.success.blocking"
-        case .reminderOnly: "trial.end.success.reminder_only"
-        }
-        return PillieLocalization.string(key, table: "Commerce", locale: locale)
-    }
-
     static func comparisonTierLabel(
         freeIncluded: Bool,
         plusIncluded: Bool,

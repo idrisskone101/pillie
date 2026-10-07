@@ -310,45 +310,18 @@ private struct PaywallSuccessFormat {
 }
 
 #if DEBUG
-extension PaywallSuccessContent {
-    enum DebugKind: String, CaseIterable {
-        case annual
-        case monthly
-        case lifetime
-        case restored
-        case freeTrial
-    }
-
-    /// Fixed content for simulator QA without StoreKit: a Pill 8 of 28 reminder tonight at 8:00 PM.
-    static func debugSample(_ kind: DebugKind, locale: Locale = PillieLocalization.appLocale) -> PaywallSuccessContent {
-        let calendar = Calendar.current
-        let now = Date.now
-        let receipt: PaywallSuccessReceipt = switch kind {
-        case .annual:
-            .renewing(price: "$29.99", recurrence: .year, renewsOn: calendar.date(byAdding: .year, value: 1, to: now) ?? now)
-        case .monthly:
-            .renewing(price: "$4.99", recurrence: .month, renewsOn: calendar.date(byAdding: .month, value: 1, to: now) ?? now)
-        case .lifetime: .lifetime
-        case .restored: .restored
-        case .freeTrial:
-            .freeTrial(price: "$29.99", recurrence: .year, freeUntil: calendar.date(byAdding: .day, value: 7, to: now) ?? now)
+extension PaywallSuccessReceipt {
+    /// Fixed prices for simulator QA without StoreKit. Anything unrecognized,
+    /// including the legacy `1` flag, is a yearly purchase.
+    static func debugSample(_ kind: String, now: Date = .now, calendar: Calendar = .current) -> PaywallSuccessReceipt {
+        func plus(_ components: DateComponents) -> Date { calendar.date(byAdding: components, to: now) ?? now }
+        return switch kind {
+        case "monthly": .renewing(price: "$4.99", recurrence: .month, renewsOn: plus(DateComponents(month: 1)))
+        case "lifetime": .lifetime
+        case "restored": .restored
+        case "trial": .freeTrial(price: "$29.99", recurrence: .year, freeUntil: plus(DateComponents(day: 7)))
+        default: .renewing(price: "$29.99", recurrence: .year, renewsOn: plus(DateComponents(year: 1)))
         }
-        let regimen = PackRegimen(activeDays: 21, breakDays: 7)
-        let reminder = DoseWindow.reminder(for: now, hour: 20, minute: 0, calendar: calendar).map {
-            PaywallSuccessReminder(date: $0, step: .pill(regimen.day(atIndex: 7), regimen))
-        }
-        return make(
-            receipt: receipt,
-            isReturning: kind != .monthly,
-            opensFromSettings: kind == .monthly,
-            reminder: reminder,
-            blockingSetUp: kind != .lifetime,
-            reminderHour: 20,
-            reminderMinute: 0,
-            now: now,
-            calendar: calendar,
-            locale: locale
-        )
     }
 }
 #endif
