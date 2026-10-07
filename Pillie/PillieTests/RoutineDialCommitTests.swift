@@ -204,6 +204,25 @@ final class RoutineDialCommitTests: XCTestCase {
         XCTAssertNil(RoutineDialPick.load(from: harness.defaults))
         XCTAssertFalse(harness.defaults.bool(forKey: TodayPillCommit.reportedStorageKey))
     }
+
+    func testContinueOnADialPickRestoredDaysLaterKeepsTheDayItNamed() throws {
+        let pickedAt = InMemoryStoreFactory.localDate("2026-09-25", hour: 12, minute: 24)
+        let harness = try makeHarness(now: Self.noon)
+        pick(.patch, 8, .taken).save(to: harness.defaults, at: pickedAt)
+
+        // Resumed two days later, the dial restores the pick and Continue saves it again unchanged.
+        try XCTUnwrap(RoutineDialPick.load(from: harness.defaults)).save(to: harness.defaults)
+        TodayPillCommit.run(
+            try XCTUnwrap(OnboardingDraft<RoutineDialPick>.load(from: harness.defaults)),
+            store: harness.store,
+            now: Self.noon,
+            defaults: harness.defaults,
+            telemetry: harness.telemetry
+        )
+
+        XCTAssertEqual(harness.store.pack.cycleDayIndex(on: harness.store.today) + 1, 10)
+        XCTAssertFalse(harness.store.isTodayTaken)
+    }
 }
 
 private final class DialCompletionRecorder: AnalyticsTracking {

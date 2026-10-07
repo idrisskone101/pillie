@@ -330,6 +330,26 @@ final class TodayPillCommitTests: XCTestCase {
         XCTAssertEqual(harness.store.pack.regimen, PackRegimen(activeDays: 88, breakDays: 3))
         XCTAssertEqual(harness.store.pack.cycleDayIndex(on: now), 60)
     }
+
+    func testContinueOnAPickRestoredDaysLaterKeepsTheDayItNamed() throws {
+        let pickedAt = InMemoryStoreFactory.localDate("2026-09-27", hour: 12, minute: 24)
+        let now = InMemoryStoreFactory.localDate("2026-09-29", hour: 12, minute: 24)
+        let harness = try makeHarness(now: now, reminderHour: 8)
+        pick(11, .taken).save(to: harness.defaults, at: pickedAt)
+
+        // Resumed two days later, step 7 restores the pick and Continue saves it again unchanged.
+        try XCTUnwrap(TodayPillPick.load(from: harness.defaults)).save(to: harness.defaults)
+        TodayPillCommit.run(
+            try XCTUnwrap(OnboardingDraft<TodayPillPick>.load(from: harness.defaults)),
+            store: harness.store,
+            now: now,
+            defaults: harness.defaults,
+            telemetry: harness.telemetry
+        )
+
+        XCTAssertEqual(harness.store.currentDayIndex + 1, 14)
+        XCTAssertFalse(harness.store.isTodayTaken)
+    }
 }
 
 private final class CompletionRecorder: AnalyticsTracking {
