@@ -301,6 +301,10 @@ struct PillieApp: App {
         AppDelegate.store = initialStore
 
         if !Self.isRunningTests {
+            // Background launches (a lock-screen Check in, the Screen Time refresh
+            // task) never create the scene, so the trial clock must learn the pack's
+            // break days here, before anything reads Plus Access or mirrors it.
+            SubscriptionManager.shared.updateActiveDaySchedule(pack: initialStore.activePack)
             AnalyticsManager.shared.configure()
             // Re-plan blocking and reminders the moment Plus flips (ADR 0004).
             // Installed during onboarding too: the trial is granted mid-onboarding
