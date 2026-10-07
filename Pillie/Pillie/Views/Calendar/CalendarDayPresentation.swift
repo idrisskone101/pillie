@@ -181,12 +181,15 @@ struct CalendarDayPresentation: Equatable {
             if snapshot.status == .missed {
                 return .missed
             }
+            // A task not logged yet is still due, so it keeps its planned look, not Done.
             switch actionType {
             case .some(.ringBreak):
                 return .ringFree
             case .some(.ringReinsert):
-                return .reinserted
-            case .some(.ringInsert), .some(.ringRemove), .some(.ringActive):
+                return snapshot.status == .upcoming ? .plannedReinserted : .reinserted
+            case .some(.ringInsert), .some(.ringRemove):
+                return snapshot.status == .upcoming ? .plannedInserted : .inserted
+            case .some(.ringActive):
                 return .inserted
             default:
                 return snapshot.status == .breakDay ? .ringFree : .neutral
