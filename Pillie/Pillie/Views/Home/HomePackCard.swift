@@ -201,7 +201,8 @@ private struct HomePackHeader: View {
                         .minimumScaleFactor(0.85)
                         .fixedSize(horizontal: false, vertical: true)
                     if let onExplainLate {
-                        LateInfoButton(id: "homePackLateInfo", action: onExplainLate)
+                        LateInfoButton(action: onExplainLate)
+                            .accessibilityIdentifier("homePackLateInfo")
                     }
                 }
             }

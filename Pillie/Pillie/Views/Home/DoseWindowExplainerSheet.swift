@@ -73,7 +73,6 @@ struct DoseWindowExplainerSheet: View {
 
 /// The small ⓘ after Home's late line that opens `DoseWindowExplainerSheet`.
 struct LateInfoButton: View {
-    let id: String
     let action: () -> Void
 
     @Environment(\.locale) private var locale
@@ -85,7 +84,6 @@ struct LateInfoButton: View {
         }
         .buttonStyle(LateInfoButtonStyle())
         .accessibilityLabel(PillieLocalization.string("home.window.info", locale: locale))
-        .accessibilityIdentifier(id)
     }
 }
 

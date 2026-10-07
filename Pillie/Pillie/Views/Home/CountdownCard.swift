@@ -327,7 +327,8 @@ private struct CountdownHero: View {
                 HStack(spacing: 6) {
                     CountdownChip(text: chip, tone: chipTone)
                     if let onExplainLate {
-                        LateInfoButton(id: "homeCountdownLateInfo", action: onExplainLate)
+                        LateInfoButton(action: onExplainLate)
+                            .accessibilityIdentifier("homeCountdownLateInfo")
                     }
                 }
             }
