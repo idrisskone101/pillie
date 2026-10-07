@@ -833,10 +833,11 @@ struct PillieApp: App {
             case "off": NotificationPermission.shared.debugRemindersAllowedOverride = false
             default: NotificationPermission.shared.debugRemindersAllowedOverride = nil
             }
-            UserDefaults.standard.set(
-                query("trigger") == "restore" ? "restore" : "cancel",
-                forKey: HonestPaywallScreen.debugExtendTriggerKey
-            )
+            // `trigger=none` only re-arms, so the real cancel or restore path
+            // raises the card.
+            if let trigger = query("trigger"), trigger == "cancel" || trigger == "restore" {
+                UserDefaults.standard.set(trigger, forKey: HonestPaywallScreen.debugExtendTriggerKey)
+            }
             DebugQA.apply(.trialExpiredNewUserReminder, store: store)
         case "/restore-outcome":
             // QA fault injection (ENG-74): `restore()` returns this outcome
