@@ -282,9 +282,9 @@ final class SubscriptionManager: NSObject {
         // the shield side must learn the new valid-until date the moment access
         // state changes (grant, purchase, entitlement resolution), so blocking
         // can self-disable at expiry even if the app never opens again (#167).
-        ScreenTimeSharedState.setPlusAccessValidUntil(
-            PlusAccessMirror.validUntil(state: plusAccessState, calendar: .current)
-        )
+        let validUntil = PlusAccessMirror.validUntil(state: plusAccessState, calendar: .current)
+        ScreenTimeSharedState.setPlusAccessValidUntil(validUntil)
+        AppBlockingManager.shared.scheduleAccessExpiryWake(validUntil: validUntil)
         let newValue = plusAccessState.hasPlusAccess(calendar: .current, now: now)
         guard hasPlusAccess != newValue else { return }
         hasPlusAccess = newValue

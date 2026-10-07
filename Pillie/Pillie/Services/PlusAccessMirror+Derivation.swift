@@ -31,6 +31,20 @@ extension PlusAccessMirror {
         now: Date,
         calendar: Calendar
     ) -> (start: DateComponents, end: DateComponents)? {
-        nil
+        guard validUntil > now, validUntil < .distantFuture,
+              let end = calendar.date(byAdding: .minute, value: expiryWakeMinutes, to: validUntil)
+        else { return nil }
+        return (wakeComponents(validUntil, calendar: calendar), wakeComponents(end, calendar: calendar))
+    }
+
+    /// DeviceActivity refuses intervals shorter than 15 minutes.
+    private static let expiryWakeMinutes = 15
+
+    /// Full date components, so the schedule fires once instead of daily.
+    private static func wakeComponents(_ date: Date, calendar: Calendar) -> DateComponents {
+        var components = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: date)
+        components.calendar = calendar
+        components.timeZone = calendar.timeZone
+        return components
     }
 }

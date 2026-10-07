@@ -14,6 +14,10 @@
 import Foundation
 
 enum PlusAccessMirror {
+    /// The one-off DeviceActivity interval that starts when Plus Access ends.
+    /// The monitor only runs its access check for it and never shields.
+    static let expiryWakeActivityName = "pillie.plus-access.expiry"
+
     /// The extension-side check: whether the mirrored valid-until moment still
     /// covers `now`. Expiry ends blocking exactly at the stored moment, matching
     /// `ReverseTrialClock.isActive`. A missing mirror (legacy install that

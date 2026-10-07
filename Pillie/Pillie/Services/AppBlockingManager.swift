@@ -96,6 +96,7 @@ final class AppBlockingManager {
     private let store = ManagedSettingsStore()
     private let center = DeviceActivityCenter()
     private static let activityName = DeviceActivityName("pillie.reminder.block")
+    private static let accessExpiryWakeName = DeviceActivityName(PlusAccessMirror.expiryWakeActivityName)
     private static let legacySnoozeResumeActivityName = DeviceActivityName("pillie.blocking.snooze.resume")
 
     /// Locally tracked so @Observable fires UI updates.
@@ -324,12 +325,50 @@ final class AppBlockingManager {
                 .screenTime, error: error, context: ["operation": "monitoring"]
             )
         }
+        scheduleAccessExpiryWake(
+            validUntil: ScreenTimeSharedState.plusAccessValidUntilEpochSeconds
+                .map(Date.init(timeIntervalSince1970:)) ?? .distantPast
+        )
         #endif
     }
 
     func stopMonitoring() {
         #if !targetEnvironment(simulator)
-        center.stopMonitoring([Self.activityName])
+        center.stopMonitoring([Self.activityName, Self.accessExpiryWakeName])
+        #endif
+    }
+
+    /// Wakes the monitor when Plus Access ends, so shields drop then even with
+    /// Pillie closed: the daily interval only checks access when it starts at
+    /// the reminder. Replaced on every access refresh and blocking reschedule,
+    /// so a purchase or a moved expiry never leaves a stale wake. Without
+    /// selected apps there is no shield to drop and no Screen Time
+    /// authorization to schedule with.
+    func scheduleAccessExpiryWake(validUntil: Date, now: Date = Date()) {
+        #if !targetEnvironment(simulator)
+        center.stopMonitoring([Self.accessExpiryWakeName])
+        guard hasAppsSelected,
+              let interval = PlusAccessMirror.expiryWakeInterval(
+                validUntil: validUntil,
+                now: now,
+                calendar: .current
+              )
+        else { return }
+        do {
+            try center.startMonitoring(
+                Self.accessExpiryWakeName,
+                during: DeviceActivitySchedule(
+                    intervalStart: interval.start,
+                    intervalEnd: interval.end,
+                    repeats: false
+                )
+            )
+        } catch {
+            Self.logger.error("scheduleAccessExpiryWake: failed — \(error.localizedDescription)")
+            ProductAnalyticsTelemetry.live.trackError(
+                .screenTime, error: error, context: ["operation": "expiry_wake"]
+            )
+        }
         #endif
     }
 
