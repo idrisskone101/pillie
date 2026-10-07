@@ -34,6 +34,9 @@ struct HomeView: View {
     @State private var trialEndPaywallPresentation = TrialEndPaywallPresentationState()
     #if DEBUG
     @State private var showDeveloperMenu = false
+    /// A QA deep link landed while the Trial-End Paywall was up: present the
+    /// new scenario's wall once the old cover finishes dismissing.
+    @State private var debugRepresentsTrialEndPaywall = false
     #endif
 
     /// The presented Trial-End Paywall snapshot as an item binding: the cover and
@@ -598,7 +601,15 @@ HomePackCard(holdsTodayLog: holdsPackCardLog)
         }
         .fullScreenCover(
             item: trialEndPaywallItem,
-            onDismiss: { trialEndPaywallPresentation.dismiss() }
+            onDismiss: {
+                trialEndPaywallPresentation.dismiss()
+                #if DEBUG
+                if debugRepresentsTrialEndPaywall {
+                    debugRepresentsTrialEndPaywall = false
+                    autoPresentTrialEndPaywallIfNeeded()
+                }
+                #endif
+            }
         ) { _ in
             HonestPaywallHost(
                 entry: .trialEndAutoPresent,
@@ -646,7 +657,13 @@ HomePackCard(holdsTodayLog: holdsPackCardLog)
             DeveloperMenuView()
         }
         .onReceive(NotificationCenter.default.publisher(for: .pillieDebugQADidApply)) { _ in
-            trialEndPaywallPresentation.dismiss()
+            // Re-presenting before the cover's dismissal finishes lets its
+            // late onDismiss clear the new wall, so wait for onDismiss.
+            guard trialEndPaywallPresentation.presentedContent == nil else {
+                debugRepresentsTrialEndPaywall = true
+                trialEndPaywallPresentation.dismiss()
+                return
+            }
             DispatchQueue.main.async {
                 autoPresentTrialEndPaywallIfNeeded()
             }

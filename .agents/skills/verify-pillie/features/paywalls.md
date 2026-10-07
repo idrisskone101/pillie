@@ -99,6 +99,19 @@ CTA, a reassurance line, and Restore · Terms · Privacy. The board is a
   grep it for `restore_` to see `surface`, `reason`, and `error_category`.
 - `flows/paywall-trial-end-link.flow` opens the hard and the closable trial-end
   walls from Home through `/trial-end-paywall`, with no developer menu.
+- `flows/paywall-extend-offer.flow` (ENG-172) — the hard trial-end wall rises
+  straight into the one-time extend offer through
+  `pillie://debug/trial-end-extend?trigger=cancel|restore&notifications=on|off&clear=1`.
+  Shots: the cancel card, Not now dropping it back to the plans, the restore
+  card with its chip, the notifications-off card ("Last day to cancel"), and
+  de, fi and ru for truncation. `clear=1` re-arms the Keychain phase; the
+  Test Store serves no extend SKU, so a $29.99 one-week fixture stands in and
+  "Start my free week" cannot complete a purchase there. The Test Store does
+  serve `com.idrisskone.pillie.plus.annual.extend` (US$29.99, one week free)
+  as of 2026-10-06, so the shots show the real product, not the fixture. For
+  the real path, open the link with `trigger=none`, then cancel the Test Store
+  sheet (its Cancel button sits outside the app tree, at about 201,643 on the
+  iPhone 17 Pro) and the card rises; a second cancel must not raise it again.
 - `flows/paywall-lifetime-tile.flow` — on the hard trial-end board: three
   tiles with Year selected; a tap on "Cancel anytime" with a restore outcome
   armed raises no alert and logs no `restore_started`; the Lifetime tile
@@ -128,10 +141,12 @@ CTA, a reassurance line, and Restore · Terms · Privacy. The board is a
     is incidental, not a repeatable proof; don't write a flow that assumes
     it's still on screen after a `wait`.
   - Known red on main as of 2026-10-06 on the Namespace simulator:
-    `paywall-trial-end-link.flow` (the `/trial-end-paywall` wall never
-    presents) and `paywall-restore.flow` at its "Try again" step (the
-    no-subscription alert never shows after Try again). Compare with main
-    before blaming a branch.
+    `paywall-restore.flow` at its "Try again" step (the no-subscription
+    alert never shows after Try again). Compare with main before blaming a
+    branch. `paywall-trial-end-link.flow` was red too: a deep link landing
+    while the wall was up re-presented it before the old cover's late
+    onDismiss cleared it. HomeView now waits for that onDismiss (ENG-172
+    branch); the flow passes locally.
 
 ## Gotchas
 

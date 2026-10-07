@@ -504,6 +504,54 @@ struct ProductAnalyticsTelemetry {
       .continueFreeSelected, cohort: cohort, terms: terms, termsCohort: termsCohort)
   }
 
+  // The one-time extend offer (ENG-172), split by what raised it.
+
+  func trialEndExtendOfferShown(
+    trigger: TrialEndExtendTrigger,
+    cohort: TrialEndPaywallCohort,
+    terms: TrialEndAccessTerms,
+    termsCohort: TrialTermsCohort? = nil
+  ) {
+    trackTrialEndExtend(
+      .trialEndExtendOfferShown, trigger: trigger, cohort: cohort, terms: terms, termsCohort: termsCohort)
+  }
+
+  func trialEndExtendOfferAccepted(
+    trigger: TrialEndExtendTrigger,
+    cohort: TrialEndPaywallCohort,
+    terms: TrialEndAccessTerms,
+    termsCohort: TrialTermsCohort? = nil
+  ) {
+    trackTrialEndExtend(
+      .trialEndExtendOfferAccepted, trigger: trigger, cohort: cohort, terms: terms, termsCohort: termsCohort)
+  }
+
+  func trialEndExtendOfferDismissed(
+    trigger: TrialEndExtendTrigger,
+    cohort: TrialEndPaywallCohort,
+    terms: TrialEndAccessTerms,
+    termsCohort: TrialTermsCohort? = nil
+  ) {
+    trackTrialEndExtend(
+      .trialEndExtendOfferDismissed, trigger: trigger, cohort: cohort, terms: terms, termsCohort: termsCohort)
+  }
+
+  private func trackTrialEndExtend(
+    _ event: AnalyticsEvent,
+    trigger: TrialEndExtendTrigger,
+    cohort: TrialEndPaywallCohort,
+    terms: TrialEndAccessTerms,
+    termsCohort: TrialTermsCohort?
+  ) {
+    analytics.track(
+      event,
+      extendSource: trigger,
+      trialTermsCohort: termsCohort ?? TrialTermsCohort(terms: terms),
+      trialEndCohort: cohort,
+      isPlus: isPlus()
+    )
+  }
+
   private func trackTrialEndPaywall(
     _ event: AnalyticsEvent,
     plan: AnalyticsPlan? = nil,

@@ -3027,6 +3027,136 @@
       "en": "Got it",
       "de": "Alles klar",
       "it": "Ho capito"
+    },
+    {
+      "issue": "ENG-172",
+      "table": "Commerce",
+      "key": "trial.end.extend.title",
+      "create": true,
+      "comment": "Extend offer title [paywall]. Keep the line break where a natural two-line break falls.",
+      "en": "Try Plus for\n7 more days.",
+      "de": "Teste Plus noch\n7 Tage länger.",
+      "it": "Prova Plus\nper altri 7 giorni."
+    },
+    {
+      "issue": "ENG-172",
+      "table": "Commerce",
+      "key": "trial.end.extend.subtitle",
+      "create": true,
+      "comment": "Extend offer subtitle [paywall]. %@ = last day to cancel, e.g. Oct 13",
+      "en": "No charge today. Cancel by %@ to pay nothing.",
+      "de": "Heute keine Kosten. Kündige bis zum %@ und du zahlst nichts.",
+      "it": "Nessun addebito oggi. Disdici entro il %@ e non paghi nulla."
+    },
+    {
+      "issue": "ENG-172",
+      "table": "Commerce",
+      "key": "trial.end.extend.today.title",
+      "create": true,
+      "comment": "Extend offer timeline, today stop [paywall]",
+      "en": "Plus is back on",
+      "de": "Plus ist wieder an",
+      "it": "Plus è di nuovo attivo"
+    },
+    {
+      "issue": "ENG-172",
+      "table": "Commerce",
+      "key": "trial.end.extend.today.body",
+      "create": true,
+      "comment": "Extend offer timeline, today stop caption [paywall]",
+      "en": "Reminders and app blocking work again.",
+      "de": "Erinnerungen und App-Sperre funktionieren wieder.",
+      "it": "Promemoria e blocco app tornano a funzionare."
+    },
+    {
+      "issue": "ENG-172",
+      "table": "Commerce",
+      "key": "trial.end.extend.reminder.title",
+      "create": true,
+      "comment": "Extend offer timeline, reminder stop: we send a notification that day [paywall]",
+      "en": "We remind you",
+      "de": "Wir erinnern dich",
+      "it": "Te lo ricordiamo"
+    },
+    {
+      "issue": "ENG-172",
+      "table": "Commerce",
+      "key": "trial.end.extend.reminder.body",
+      "create": true,
+      "comment": "Extend offer timeline, reminder stop caption [paywall]",
+      "en": "A notification 2 days before you’re charged.",
+      "de": "Eine Mitteilung 2 Tage vor der Abbuchung.",
+      "it": "Una notifica 2 giorni prima dell’addebito."
+    },
+    {
+      "issue": "ENG-172",
+      "table": "Commerce",
+      "key": "trial.end.extend.last_day.title",
+      "create": true,
+      "comment": "Extend offer timeline when notifications are off [paywall]",
+      "en": "Last day to cancel",
+      "de": "Letzter Tag zum Kündigen",
+      "it": "Ultimo giorno per disdire"
+    },
+    {
+      "issue": "ENG-172",
+      "table": "Commerce",
+      "key": "trial.end.extend.last_day.body",
+      "create": true,
+      "comment": "Extend offer timeline caption when notifications are off; the day is that stop's date [paywall]",
+      "en": "Notifications are off, so we can’t remind you. Cancel in Settings by the end of the day.",
+      "de": "Mitteilungen sind aus, also können wir dich nicht erinnern. Kündige bis zum Ende des Tages in den Einstellungen.",
+      "it": "Le notifiche sono disattivate, quindi non possiamo avvisarti. Disdici in Impostazioni entro la fine della giornata."
+    },
+    {
+      "issue": "ENG-172",
+      "table": "Commerce",
+      "key": "trial.end.extend.charge.body",
+      "create": true,
+      "comment": "Extend offer timeline, caption under the price on the charge date [paywall]",
+      "en": "Charged for one year of Plus.",
+      "de": "Abgebucht für ein Jahr Plus.",
+      "it": "Addebito per un anno di Plus."
+    },
+    {
+      "issue": "ENG-172",
+      "table": "Commerce",
+      "key": "trial.end.extend.cta",
+      "create": true,
+      "comment": "Extend offer primary button [paywall]",
+      "en": "Start my free week",
+      "de": "Gratiswoche starten",
+      "it": "Inizia la settimana gratis"
+    },
+    {
+      "issue": "ENG-172",
+      "table": "Commerce",
+      "key": "trial.end.extend.restore_empty",
+      "create": true,
+      "comment": "Extend offer chip after Restore found nothing [paywall]",
+      "en": "No purchase found on this Apple Account",
+      "de": "Kein Kauf für diesen Apple Account gefunden",
+      "it": "Nessun acquisto trovato su questo Account Apple"
+    },
+    {
+      "issue": "ENG-172",
+      "table": "Notifications",
+      "key": "notification.trial_end_extend.title",
+      "create": true,
+      "comment": "Renewal reminder title, 2 days before the free week ends. %@ = charge date, e.g. Oct 14",
+      "en": "Plus renews on %@",
+      "de": "Plus verlängert sich am %@",
+      "it": "Plus si rinnova il %@"
+    },
+    {
+      "issue": "ENG-172",
+      "table": "Notifications",
+      "key": "notification.trial_end_extend.body",
+      "create": true,
+      "comment": "Renewal reminder body. %1$@ = yearly price, %2$@ = last day to cancel",
+      "en": "Your free week ends in 2 days, then Plus costs %1$@ a year. To stop it, cancel in Settings by %2$@.",
+      "de": "Deine Gratiswoche endet in 2 Tagen, danach kostet Plus %1$@ pro Jahr. Wenn du das nicht willst, kündige bis zum %2$@ in den Einstellungen.",
+      "it": "La tua settimana gratis finisce tra 2 giorni, poi Plus costa %1$@ all’anno. Per fermarlo, disdici in Impostazioni entro il %2$@."
     }
   ]
 }

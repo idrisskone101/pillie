@@ -13842,6 +13842,556 @@
           }
         }
       }
+    },
+    "notification.trial_end_extend.title": {
+      "comment": "Renewal reminder title, 2 days before the free week ends. %@ = charge date, e.g. Oct 14",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يتجدد Plus في %@"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus %@-এ রিনিউ হবে"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El Plus es renova el %@"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus se obnoví %@"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus fornyes den %@"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus verlängert sich am %@"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Το Plus ανανεώνεται στις %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus renews on %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus se renueva el %@"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus uusiutuu %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus se renouvelle le %@"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus %@ના રોજ રિન્યૂ થશે"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus מתחדש ב-%@"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus %@ को रिन्यू होगा"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus se obnavlja %@"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A Plus megújul: %@"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus diperpanjang pada %@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus si rinnova il %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plusは%@に更新されます"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus %@ ರಂದು ನವೀಕರಣಗೊಳ್ಳುತ್ತದೆ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus가 %@에 갱신돼요"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus %@-ന് പുതുക്കും"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus चे %@ रोजी नूतनीकरण होईल"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus diperbaharui pada %@"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus fornyes %@"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus wordt verlengd op %@"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus %@ରେ ରିନ୍ୟୁ ହେବ"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus %@ ਨੂੰ ਰੀਨਿਊ ਹੋਵੇਗਾ"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus odnowi się %@"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O Plus renova em %@"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O Plus renova a %@"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus se reînnoiește pe %@"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus продлится %@"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus sa obnoví %@"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus se podaljša %@"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus förnyas den %@"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus %@ அன்று புதுப்பிக்கப்படும்"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus %@న రెన్యూ అవుతుంది"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus จะต่ออายุในวันที่ %@"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus %@ tarihinde yenilenir"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus поновиться %@"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus کی تجدید %@ کو ہو گی"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus gia hạn vào %@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus 将于 %@ 续订"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus 將於 %@ 續訂"
+          }
+        }
+      }
+    },
+    "notification.trial_end_extend.body": {
+      "comment": "Renewal reminder body. %1$@ = yearly price, %2$@ = last day to cancel",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ينتهي أسبوعك المجاني بعد يومين، ثم تصبح تكلفة Plus %1$@ سنويًا. لإيقافه، ألغي من الإعدادات حتى %2$@."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "আপনার ফ্রি সপ্তাহ 2 দিন পরে শেষ হবে, তারপর Plus-এর দাম বছরে %1$@। বন্ধ করতে চাইলে %2$@-এর মধ্যে সেটিংসে বাতিল করুন।"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La setmana gratuïta s’acaba d’aquí a 2 dies i després el Plus costa %1$@ l’any. Per aturar-ho, cancel·la a Configuració com a tard el %2$@."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Týden zdarma končí za 2 dny, pak Plus stojí %1$@ ročně. Pokud ho nechceš, zruš ho v Nastavení do %2$@."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Din gratis uge slutter om 2 dage, og derefter koster Plus %1$@ om året. Vil du stoppe det, så opsig i Indstillinger senest %2$@."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine Gratiswoche endet in 2 Tagen, danach kostet Plus %1$@ pro Jahr. Wenn du das nicht willst, kündige bis zum %2$@ in den Einstellungen."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Η δωρεάν εβδομάδα σου λήγει σε 2 μέρες και μετά το Plus κοστίζει %1$@ τον χρόνο. Για να το σταματήσεις, ακύρωσε στις Ρυθμίσεις έως τις %2$@."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your free week ends in 2 days, then Plus costs %1$@ a year. To stop it, cancel in Settings by %2$@."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu semana gratis termina en 2 días y después Plus cuesta %1$@ al año. Para evitarlo, cancela en Ajustes hasta el %2$@."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ilmainen viikkosi päättyy 2 päivän päästä, ja sen jälkeen Plus maksaa %1$@ vuodessa. Jos haluat lopettaa, peru Asetuksissa viimeistään %2$@."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ta semaine gratuite se termine dans 2 jours, ensuite Plus coûte %1$@ par an. Pour l’arrêter, annule dans Réglages jusqu’au %2$@."
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "તમારું મફત અઠવાડિયું 2 દિવસમાં પૂરું થશે, પછી Plusની કિંમત વર્ષે %1$@ થશે. તે રોકવા માટે %2$@ સુધીમાં સેટિંગ્સમાં રદ કરો."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "השבוע החינמי שלך מסתיים בעוד יומיים, ואז Plus עולה %1$@ לשנה. כדי לעצור את זה, בטלי בהגדרות עד %2$@."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "आपका मुफ़्त हफ़्ता 2 दिन में ख़त्म होगा, फिर Plus की कीमत %1$@ प्रति वर्ष होगी। इसे रोकने के लिए %2$@ तक सेटिंग्स में रद्द करें।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvoj besplatni tjedan završava za 2 dana, a zatim Plus stoji %1$@ godišnje. Ako to ne želiš, otkaži u Postavkama do %2$@."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Az ingyenes heted 2 nap múlva lejár, utána a Plus évi %1$@. Ha nem kéred, mondd le a Beállításokban legkésőbb %2$@."
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Minggu gratismu berakhir 2 hari lagi, lalu Plus jadi %1$@ per tahun. Untuk menghentikannya, batalkan di Pengaturan paling lambat %2$@."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La tua settimana gratis finisce tra 2 giorni, poi Plus costa %1$@ all’anno. Per fermarlo, disdici in Impostazioni entro il %2$@."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "無料の1週間はあと2日で終わり、その後Plusは年額%1$@です。止めるには、%2$@までに設定から解約してください。"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ನಿಮ್ಮ ಉಚಿತ ವಾರ 2 ದಿನಗಳಲ್ಲಿ ಮುಗಿಯುತ್ತದೆ, ನಂತರ Plus ಬೆಲೆ ವರ್ಷಕ್ಕೆ %1$@. ಇದನ್ನು ನಿಲ್ಲಿಸಲು %2$@ ಒಳಗೆ ಸೆಟ್ಟಿಂಗ್ಸ್‌ನಲ್ಲಿ ರದ್ದುಮಾಡಿ."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "무료 1주일이 2일 후에 끝나고, 이후 Plus는 연 %1$@예요. 원하지 않으면 %2$@까지 설정에서 해지하세요."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "നിങ്ങളുടെ സൗജന്യ ആഴ്ച 2 ദിവസത്തിനുള്ളിൽ അവസാനിക്കും, പിന്നീട് Plus-ന് വർഷം %1$@ ആകും. ഇത് നിർത്താൻ %2$@-നകം സെറ്റിംഗ്‌സിൽ റദ്ദാക്കുക."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "तुमचा मोफत आठवडा 2 दिवसांत संपेल, त्यानंतर Plus ची किंमत वर्षाला %1$@ असेल. ते थांबवण्यासाठी %2$@ पर्यंत सेटिंग्जमध्ये रद्द करा."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Minggu percuma kamu tamat dalam 2 hari, kemudian Plus berharga %1$@ setahun. Untuk menghentikannya, batal dalam Tetapan selewat-lewatnya %2$@."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gratisuken din slutter om 2 dager, og deretter koster Plus %1$@ i året. For å stoppe det, si opp i Innstillinger innen %2$@."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je gratis week eindigt over 2 dagen, daarna kost Plus %1$@ per jaar. Wil je dat niet, zeg dan uiterlijk %2$@ op in Instellingen."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ଆପଣଙ୍କ ମାଗଣା ସପ୍ତାହ 2 ଦିନରେ ଶେଷ ହେବ, ତାପରେ Plus ର ମୂଲ୍ୟ ବର୍ଷକୁ %1$@ ହେବ। ଏହାକୁ ବନ୍ଦ କରିବାକୁ %2$@ ସୁଦ୍ଧା ସେଟିଂସରେ ବାତିଲ୍ କରନ୍ତୁ।"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਤੁਹਾਡਾ ਮੁਫ਼ਤ ਹਫ਼ਤਾ 2 ਦਿਨਾਂ ਵਿੱਚ ਖ਼ਤਮ ਹੋਵੇਗਾ, ਉਸ ਤੋਂ ਬਾਅਦ Plus ਦੀ ਕੀਮਤ %1$@ ਪ੍ਰਤੀ ਸਾਲ ਹੋਵੇਗੀ। ਇਸਨੂੰ ਰੋਕਣ ਲਈ %2$@ ਤੱਕ ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਰੱਦ ਕਰੋ।"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Twój darmowy tydzień kończy się za 2 dni, potem Plus kosztuje %1$@ rocznie. Aby to zatrzymać, anuluj w Ustawieniach do %2$@."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sua semana grátis termina em 2 dias, e depois o Plus custa %1$@ por ano. Para evitar a cobrança, cancele em Ajustes até %2$@."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A tua semana grátis termina daqui a 2 dias e depois o Plus custa %1$@ por ano. Para o parares, cancela nas Definições até %2$@."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Săptămâna ta gratuită se încheie în 2 zile, apoi Plus costă %1$@ pe an. Ca să-l oprești, anulează din Configurări până pe %2$@."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Бесплатная неделя закончится через 2 дня, затем Plus будет стоить %1$@ в год. Чтобы этого избежать, отмени в Настройках до %2$@ включительно."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Týždeň zadarmo sa končí o 2 dni, potom Plus stojí %1$@ ročne. Ak ho nechceš, zruš ho v Nastaveniach do %2$@."
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvoj brezplačni teden se konča čez 2 dni, nato Plus stane %1$@ na leto. Če ga ne želiš, ga prekliči v Nastavitvah do %2$@."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Din gratisvecka slutar om 2 dagar, sedan kostar Plus %1$@ per år. Vill du stoppa det, avsluta i Inställningar senast %2$@."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "உங்கள் இலவச வாரம் 2 நாட்களில் முடியும், அதன் பிறகு Plus ஆண்டுக்கு %1$@. இதை நிறுத்த, %2$@-க்குள் அமைப்புகளில் ரத்துசெய்யுங்கள்."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "మీ ఉచిత వారం 2 రోజుల్లో ముగుస్తుంది, ఆ తర్వాత Plus ధర సంవత్సరానికి %1$@. దీన్ని ఆపాలంటే, %2$@ లోపు సెట్టింగ్స్‌లో రద్దు చేయండి."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "สัปดาห์ฟรีของคุณจะหมดในอีก 2 วัน จากนั้น Plus ราคา %1$@ ต่อปี หากไม่ต้องการ ให้ยกเลิกในการตั้งค่าภายใน %2$@"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ücretsiz haftan 2 gün sonra bitiyor, ardından Plus yılda %1$@. Durdurmak için %2$@ tarihine kadar Ayarlar’dan iptal et."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Безкоштовний тиждень закінчиться через 2 дні, потім Plus коштуватиме %1$@ на рік. Щоб цього уникнути, скасуй у Параметрах до %2$@ включно."
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "آپ کا مفت ہفتہ 2 دن میں ختم ہو گا، پھر Plus کی قیمت %1$@ سالانہ ہو گی۔ اسے روکنے کے لیے %2$@ تک سیٹنگز میں منسوخ کریں۔"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tuần miễn phí của bạn kết thúc sau 2 ngày, sau đó Plus có giá %1$@ mỗi năm. Để dừng, hãy hủy trong Cài đặt chậm nhất vào %2$@."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的免费一周将在 2 天后结束，之后 Plus 每年 %1$@。如需停止，请在 %2$@ 结束前到设置中取消。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的免費一週將在 2 天後結束，之後 Plus 每年 %1$@。如需停止，請在 %2$@ 結束前到設定中取消。"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

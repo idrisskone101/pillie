@@ -33,7 +33,7 @@ extension UNUserNotificationCenter: NotificationCenterScheduling {
     }
 }
 
-private extension UNAuthorizationStatus {
+extension UNAuthorizationStatus {
     var permitsNotificationScheduling: Bool {
         switch self {
         case .authorized, .provisional, .ephemeral:
@@ -572,6 +572,32 @@ final class NotificationManager {
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
         let id = cycleTransitionIdentifier(transitionDayEpoch: notice.transitionDayEpoch, fireDate: notice.fireDate)
         return UNNotificationRequest(identifier: id, content: content, trigger: trigger)
+    }
+
+    // MARK: - Trial-end extend reminder (ENG-172)
+
+    /// Schedules the renewal reminder the extend card promised. Skipped when
+    /// notifications are not allowed: the card then showed the last day to
+    /// cancel instead of a reminder.
+    func scheduleTrialEndExtendReminder(
+        for offer: TrialEndExtendOffer,
+        calendar: Calendar = .current,
+        locale: Locale = PillieLocalization.appLocale
+    ) {
+        guard !isRunningTests,
+              let request = TrialEndExtendReminder.request(offer: offer, calendar: calendar, locale: locale)
+        else { return }
+        center.getAuthorizationStatus { [weak self] status in
+            guard let self, status.permitsNotificationScheduling else { return }
+            self.center.add(request) { [trackSchedulingError] error in
+                if let error { trackSchedulingError(error) }
+            }
+        }
+    }
+
+    func removeTrialEndExtendReminder() {
+        center.removePendingNotificationRequests(withIdentifiers: [TrialEndExtendReminder.identifier])
+        center.removeDeliveredNotifications(withIdentifiers: [TrialEndExtendReminder.identifier])
     }
 
     // MARK: - Removal

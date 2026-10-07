@@ -181,6 +181,9 @@ final class SubscriptionManager: NSObject {
     static let monthlyProductID = "com.idrisskone.pillie.plus.monthly"
     static let annualProductID = "com.idrisskone.pillie.plus.annual"
     static let lifetimeProductID = "com.idrisskone.pillie.plus.lifetime"
+    /// Annual with a free intro offer, shown once on the Trial-End Paywall
+    /// (ENG-172). Never offered unless an offering serves it.
+    static let extendAnnualProductID = "com.idrisskone.pillie.plus.annual.extend"
     private var isConfigured = false
 
     /// False until `configure()` runs. Test hosts and pre-configure UI must not
@@ -478,6 +481,15 @@ final class SubscriptionManager: NSObject {
         return isPlusEntitlementActive ? .restored : .noActivePurchase
     }
 
+    // MARK: - Intro Eligibility
+
+    /// `.unknown` before `configure()`: reading `Purchases.shared` first traps.
+    func extendOfferEligibility(for product: StoreProduct) async -> TrialEndExtendEligibility {
+        guard isConfigured else { return .unknown }
+        let status = await Purchases.shared.checkTrialOrIntroDiscountEligibility(product: product)
+        return TrialEndExtendEligibility(status)
+    }
+
     // MARK: - Fetch Offerings
 
     func fetchOfferings() async throws -> Offerings {
@@ -634,9 +646,15 @@ final class SubscriptionManager: NSObject {
 
 extension SubscriptionManager: PurchasesDelegate {
     nonisolated func purchases(_ purchases: Purchases, receivedUpdated customerInfo: CustomerInfo) {
-        let active = customerInfo.entitlements[Self.entitlementID]?.isActive == true
+        let entitlement = customerInfo.entitlements[Self.entitlementID]
+        let active = entitlement?.isActive == true
+        let productID = entitlement?.productIdentifier
+        let willRenew = entitlement?.willRenew == true
         Task { @MainActor in
             self.setEntitlement(active)
+            if !TrialEndExtendReminder.isStillDue(isActive: active, productID: productID, willRenew: willRenew) {
+                NotificationManager.shared.removeTrialEndExtendReminder()
+            }
         }
     }
 }

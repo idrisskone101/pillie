@@ -815,6 +815,30 @@ struct PillieApp: App {
             if query("subscriber") == "1" {
                 SubscriptionManager.shared.setPlusForTesting(true)
             }
+        case "/trial-end-extend":
+            // QA shortcut (ENG-172): the hard Trial-End Paywall rises straight
+            // into the one-time extend offer, as after `trigger=cancel` (Apple
+            // sheet cancelled) or `trigger=restore` (restore found nothing).
+            // `notifications=off` shows the last-day row; `clear=1` re-arms
+            // the offer. A fixture product stands in when RevenueCat has none.
+            let queryItems = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems
+            func query(_ name: String) -> String? {
+                queryItems?.first(where: { $0.name == name })?.value
+            }
+            if query("clear") == "1" {
+                KeychainTrialEndExtendOfferStore().clear()
+            }
+            switch query("notifications") {
+            case "on": NotificationPermission.shared.debugRemindersAllowedOverride = true
+            case "off": NotificationPermission.shared.debugRemindersAllowedOverride = false
+            default: NotificationPermission.shared.debugRemindersAllowedOverride = nil
+            }
+            // `trigger=none` only re-arms, so the real cancel or restore path
+            // raises the card.
+            if let trigger = query("trigger"), trigger == "cancel" || trigger == "restore" {
+                UserDefaults.standard.set(trigger, forKey: HonestPaywallScreen.debugExtendTriggerKey)
+            }
+            DebugQA.apply(.trialExpiredNewUserReminder, store: store)
         case "/restore-outcome":
             // QA fault injection (ENG-74): `restore()` returns this outcome
             // without calling RevenueCat. `restored` also grants Plus.

@@ -16,12 +16,24 @@ struct HonestPaywallView: View {
     let onRestore: () -> Void
     let onDismiss: () -> Void
     let onContinueFree: (() -> Void)?
+    /// The extend offer has taken the sheet's place (ENG-172).
+    var isSheetAway = false
 
     @State private var isSheetRevealed = false
     @State private var isPhoneRevealed = false
 
     private var sheetOffset: CGFloat {
         isSheetRevealed || accessibilityReduceMotion ? 0 : PaywallEntrance.sheetRise
+    }
+
+    private var awayOffset: CGFloat {
+        isSheetAway && !accessibilityReduceMotion ? TrialEndExtendSwap.plansDrop : 0
+    }
+
+    /// Below the sheet's edge the phone is clipped; once the sheet has gone,
+    /// the whole phone shows behind the offer, so the clip lifts too.
+    private var heroClipExtra: CGFloat {
+        sheetOffset + (isSheetAway ? TrialEndExtendSwap.plansDrop : 0)
     }
 
     private var phoneOffset: CGFloat {
@@ -50,6 +62,10 @@ struct HonestPaywallView: View {
                 .ignoresSafeArea(edges: .bottom)
             }
         }
+        .animation(
+            TrialEndExtendSwap.animation(arriving: !isSheetAway, reduceMotion: accessibilityReduceMotion),
+            value: isSheetAway
+        )
         .onAppear {
             let reduced = accessibilityReduceMotion
             withAnimation(reduced ? PaywallEntrance.fade : PaywallEntrance.sheet) { isSheetRevealed = true }
@@ -80,7 +96,7 @@ struct HonestPaywallView: View {
             .padding(.top, HonestPaywallLayout.phoneTopInset)
             .frame(maxWidth: .infinity)
             // Clip at the sheet's moving top edge so the phone rises from behind it.
-            .frame(height: height + sheetOffset, alignment: .top)
+            .frame(height: height + heroClipExtra, alignment: .top)
             .clipped()
             .frame(height: height, alignment: .top)
             .overlay(alignment: .topTrailing) {
@@ -164,8 +180,10 @@ struct HonestPaywallView: View {
                 .fill(PillieTheme.bg)
                 .shadow(color: .black.opacity(0.06), radius: 20, y: -4)
         }
-        .offset(y: sheetOffset)
-        .opacity(isSheetRevealed ? 1 : 0)
+        .offset(y: sheetOffset + awayOffset)
+        .opacity(isSheetRevealed && !(isSheetAway && accessibilityReduceMotion) ? 1 : 0)
+        .allowsHitTesting(!isSheetAway)
+        .accessibilityHidden(isSheetAway)
     }
 
     private var planCards: some View {
@@ -364,9 +382,4 @@ private enum PaywallEntrance {
     static let phone = Animation.spring(duration: 0.6, bounce: 0.15).delay(0.08)
     static let phoneFade = Animation.easeOut(duration: 0.16).delay(0.08)
     static let fade = Animation.easeOut(duration: 0.25)
-}
-
-private enum PaywallLegalLinks {
-    static let terms = URL(string: "https://idrisskone101.github.io/pillie/terms-of-service")!
-    static let privacy = URL(string: "https://idrisskone101.github.io/pillie/privacy-policy")!
 }

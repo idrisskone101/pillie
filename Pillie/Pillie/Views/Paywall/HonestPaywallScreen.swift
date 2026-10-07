@@ -26,10 +26,16 @@ struct HonestPaywallScreen: View {
     @State private var purchaseSucceeded = false
     @State private var successOutcome: TrialEndSuccessOutcome = .purchased(.annual)
     @State private var showDeclineFeedback = false
+    @State private var extendCandidate: TrialEndExtendCandidate?
+    @State private var extendOffer: TrialEndExtendOffer?
+    @State private var showsExtendOffer = false
+    @State private var extendTelemetryMode: HonestPaywallTelemetryMode?
 
     private let subscriptionManager = SubscriptionManager.shared
     private let telemetry = ProductAnalyticsTelemetry.live
     private let plusFeedback = PlusPaywallInteractionFeedback(performanceTier: PerformanceTier.current)
+    private let extendOfferStore: TrialEndExtendOfferStoring = KeychainTrialEndExtendOfferStore()
+    private let notificationPermission = NotificationPermission.shared
 
     private var scene: HonestPaywallScene {
         HonestPaywallSceneBuilder.build(
@@ -70,8 +76,14 @@ struct HonestPaywallScreen: View {
         .task {
             subscriptionManager.configure()
             async let offeringsLoaded: Void = loadOfferings()
+            async let permissionLoaded: Void = notificationPermission.refresh()
             await subscriptionManager.refreshStatus()
             await offeringsLoaded
+            await prefetchExtendCandidate()
+            await permissionLoaded
+            #if DEBUG
+            presentDebugExtendOfferIfRequested()
+            #endif
         }
         .paywallAlert($activeAlert, surface: surface, onRetryRestore: restorePurchases)
     }
@@ -88,15 +100,33 @@ struct HonestPaywallScreen: View {
             trialEndSuccessState
                 .transition(.opacity)
         } else {
-            HonestPaywallView(
-                scene: scene,
-                isPurchasing: isPurchasing,
-                onSelect: selectPlan,
-                onPurchase: purchase,
-                onRestore: restorePurchases,
-                onDismiss: onDismiss,
-                onContinueFree: board.chrome.showsContinueFree ? { continueFree() } : nil
-            )
+            ZStack {
+                HonestPaywallView(
+                    scene: scene,
+                    isPurchasing: isPurchasing && !showsExtendOffer,
+                    onSelect: selectPlan,
+                    onPurchase: purchase,
+                    onRestore: restorePurchases,
+                    onDismiss: onDismiss,
+                    onContinueFree: board.chrome.showsContinueFree ? { continueFree() } : nil,
+                    isSheetAway: showsExtendOffer
+                )
+
+                if let extendOffer {
+                    TrialEndExtendOfferSheet(
+                        card: TrialEndExtendOfferCard.make(
+                            offer: extendOffer,
+                            remindersAllowed: notificationPermission.remindersAllowed,
+                            calendar: .current,
+                            locale: locale
+                        ),
+                        isPresented: showsExtendOffer,
+                        isPurchasing: isPurchasing,
+                        onStart: startExtendTrial,
+                        onNotNow: declineExtendOffer
+                    )
+                }
+            }
             .transition(.opacity)
         }
     }
@@ -153,6 +183,7 @@ struct HonestPaywallScreen: View {
                 plusFeedback.unsuccessfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
                 if error.honestPaywallIsCancelledPurchase {
                     trackPurchaseCancelled(plan: plan, mode: mode)
+                    presentExtendOffer(.sheetCancel, mode: mode)
                     await subscriptionManager.refreshStatus()
                 } else {
                     trackPurchaseFailed(plan: plan, mode: mode, error: error)
@@ -185,8 +216,10 @@ struct HonestPaywallScreen: View {
                     onDismiss()
                 }
             case .noActivePurchase:
-                withAnimation(response.motionProfile.animation) {
-                    activeAlert = .noSubscription
+                if !presentExtendOffer(.restoreEmpty, mode: mode) {
+                    withAnimation(response.motionProfile.animation) {
+                        activeAlert = .noSubscription
+                    }
                 }
             case .failed:
                 activeAlert = .restoreError
@@ -218,6 +251,145 @@ struct HonestPaywallScreen: View {
             telemetry.trackError(.offerings, error: error)
         }
     }
+
+    // MARK: - Extend offer (ENG-172)
+
+    /// Read ahead of any cancel, so the card can rise the moment StoreKit
+    /// returns instead of waiting on an eligibility round trip.
+    private func prefetchExtendCandidate() async {
+        guard board.isTrialEnd,
+              extendOfferStore.loadPhase() == .unseen,
+              let package = PaywallPurchaseBridge.extendPackage(offerings: offerings),
+              let product = TrialEndExtendProduct(storeProduct: package.storeProduct),
+              product.freeDays == TrialEndExtendOfferCard.supportedFreeDays
+        else { return }
+        let eligibility = await subscriptionManager.extendOfferEligibility(for: package.storeProduct)
+        extendCandidate = TrialEndExtendCandidate(package: package, product: product, eligibility: eligibility)
+    }
+
+    /// Shows the one-time card in place of the plans. Returns false when any
+    /// gate withholds it, so the caller keeps its usual outcome.
+    @discardableResult
+    private func presentExtendOffer(_ trigger: TrialEndExtendTrigger, mode: HonestPaywallTelemetryMode) -> Bool {
+        guard let extendCandidate,
+              let offer = TrialEndExtendOfferDecision.offer(
+                  trigger: trigger,
+                  isTrialEndBoard: board.isTrialEnd,
+                  phase: extendOfferStore.loadPhase(),
+                  eligibility: extendCandidate.eligibility,
+                  product: extendCandidate.product,
+                  now: Date(),
+                  calendar: .current
+              )
+        else { return false }
+        extendOfferStore.record(.present)
+        extendTelemetryMode = mode
+        extendOffer = offer
+        showsExtendOffer = true
+        if case .trialEnd(let content) = mode {
+            telemetry.trialEndExtendOfferShown(
+                trigger: trigger,
+                cohort: content.cohort,
+                terms: content.terms,
+                termsCohort: content.termsCohort
+            )
+        }
+        return true
+    }
+
+    private func startExtendTrial() {
+        guard let offer = extendOffer, let package = extendCandidate?.package else {
+            activeAlert = .purchaseError(CommercePresentation.offeringsUnavailableMessage(locale: locale))
+            return
+        }
+        let response = plusFeedback.openPaywallOrStartPurchase(
+            accessibilityReduceMotion: accessibilityReduceMotion
+        )
+        withAnimation(response.motionProfile.animation) { isPurchasing = true }
+
+        Task {
+            do {
+                let outcome = try await subscriptionManager.purchase(package)
+                extendOfferStore.record(.accept)
+                trackExtend(offer.trigger, telemetry.trialEndExtendOfferAccepted)
+                // The wall's convert funnel counts trial starts, so the free
+                // week has to land there too.
+                if let extendTelemetryMode {
+                    trackPurchaseCompleted(plan: .annual, mode: extendTelemetryMode, outcome: outcome)
+                }
+                scheduleExtendReminder(for: offer)
+                plusFeedback.successfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
+                successOutcome = .purchased(.annual)
+                purchaseSucceeded = true
+            } catch {
+                plusFeedback.unsuccessfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
+                if error.honestPaywallIsCancelledPurchase {
+                    // Backing out of Apple's sheet for the free week spends the
+                    // one time too: the card never comes back after a no.
+                    declineExtendOffer()
+                } else {
+                    telemetry.trackError(.purchase, error: error)
+                    activeAlert = .purchaseError(CommercePresentation.purchaseErrorMessage(error, locale: locale))
+                }
+            }
+            withAnimation(response.motionProfile.animation) { isPurchasing = false }
+        }
+    }
+
+    private func declineExtendOffer() {
+        guard let offer = extendOffer, showsExtendOffer else { return }
+        extendOfferStore.record(.decline)
+        trackExtend(offer.trigger, telemetry.trialEndExtendOfferDismissed)
+        showsExtendOffer = false
+        // Drop the card once it has fallen off screen, so VoiceOver cannot
+        // reach it below the plans. It can never be shown again anyway.
+        Task {
+            try? await Task.sleep(for: .milliseconds(400))
+            extendOffer = nil
+        }
+    }
+
+    /// The timeline is rebuilt from the purchase moment: Apple starts the free
+    /// week when she confirms, which can be a day after the card rose.
+    private func scheduleExtendReminder(for offer: TrialEndExtendOffer) {
+        guard let timeline = TrialEndExtendTimeline(
+            start: Date(),
+            freeDays: offer.product.freeDays,
+            calendar: .current
+        ) else { return }
+        NotificationManager.shared.scheduleTrialEndExtendReminder(
+            for: TrialEndExtendOffer(trigger: offer.trigger, product: offer.product, timeline: timeline)
+        )
+    }
+
+    private func trackExtend(
+        _ trigger: TrialEndExtendTrigger,
+        _ event: (TrialEndExtendTrigger, TrialEndPaywallCohort, TrialEndAccessTerms, TrialTermsCohort?) -> Void
+    ) {
+        guard case .trialEnd(let content) = extendTelemetryMode else { return }
+        event(trigger, content.cohort, content.terms, content.termsCohort)
+    }
+
+    #if DEBUG
+    /// `pillie://debug/trial-end-extend`: rise straight into the card. The
+    /// RevenueCat Test Store serves no extend SKU, so a $29.99 week stands in.
+    private func presentDebugExtendOfferIfRequested() {
+        let defaults = UserDefaults.standard
+        guard let raw = defaults.string(forKey: Self.debugExtendTriggerKey) else { return }
+        defaults.removeObject(forKey: Self.debugExtendTriggerKey)
+        let trigger: TrialEndExtendTrigger = raw == "restore" ? .restoreEmpty : .sheetCancel
+        extendCandidate = TrialEndExtendCandidate(
+            package: extendCandidate?.package,
+            product: extendCandidate?.product ?? TrialEndExtendProduct(
+                productID: SubscriptionManager.extendAnnualProductID,
+                priceDisplay: "$29.99",
+                freeDays: TrialEndExtendOfferCard.supportedFreeDays
+            ),
+            eligibility: .eligible
+        )
+        presentExtendOffer(trigger, mode: telemetryMode)
+    }
+    #endif
 
     // MARK: - Trial end success
 
@@ -433,6 +605,14 @@ struct HonestPaywallScreen: View {
             termsCohort: content.termsCohort
         )
     }
+}
+
+/// The extend SKU as served, read before any cancel. `package` is nil only
+/// for the DEBUG fixture, which can be shown but not bought.
+private struct TrialEndExtendCandidate {
+    let package: Package?
+    let product: TrialEndExtendProduct
+    let eligibility: TrialEndExtendEligibility
 }
 
 private extension Error {
