@@ -181,6 +181,9 @@ final class SubscriptionManager: NSObject {
     static let monthlyProductID = "com.idrisskone.pillie.plus.monthly"
     static let annualProductID = "com.idrisskone.pillie.plus.annual"
     static let lifetimeProductID = "com.idrisskone.pillie.plus.lifetime"
+    /// Annual with a free intro offer, shown once on the Trial-End Paywall
+    /// (ENG-172). Never offered unless an offering serves it.
+    static let extendAnnualProductID = "com.idrisskone.pillie.plus.annual.extend"
     private var isConfigured = false
 
     /// False until `configure()` runs. Test hosts and pre-configure UI must not
@@ -476,6 +479,15 @@ final class SubscriptionManager: NSObject {
     func applyRestoreResult(isPlusEntitlementActive: Bool) -> RestoreOutcome {
         setEntitlement(isPlusEntitlementActive)
         return isPlusEntitlementActive ? .restored : .noActivePurchase
+    }
+
+    // MARK: - Intro Eligibility
+
+    /// `.unknown` before `configure()`: reading `Purchases.shared` first traps.
+    func extendOfferEligibility(for product: StoreProduct) async -> TrialEndExtendEligibility {
+        guard isConfigured else { return .unknown }
+        let status = await Purchases.shared.checkTrialOrIntroDiscountEligibility(product: product)
+        return TrialEndExtendEligibility(status)
     }
 
     // MARK: - Fetch Offerings
