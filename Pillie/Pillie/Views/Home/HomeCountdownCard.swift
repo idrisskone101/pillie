@@ -17,6 +17,7 @@ struct HomeCountdownCard: View {
     @Environment(\.scenePhase) private var scenePhase
     @State private var held: Held?
     @State private var showsNewCycleConfirmation = false
+    @State private var explainer: DoseWindowExplainer?
     private let homeFeedback = HomeActionInteractionFeedback()
 
     var body: some View {
@@ -38,30 +39,44 @@ struct HomeCountdownCard: View {
             now: PillieClock.now,
             calendar: .current
         )
+        let lateExplainer: DoseWindowExplainer? = if case .late = progress.state {
+            DoseWindowExplainer(
+                subject: method == .patch ? .patch : .ring,
+                day: today,
+                reminderHour: store.reminderHour,
+                reminderMinute: store.reminderMinute,
+                calendar: .current
+            )
+        } else {
+            nil
+        }
         CountdownCard(
             progress: progress,
             reminderTime: SettingsPresentation.time(
                 hour: store.reminderHour,
                 minute: store.reminderMinute,
                 locale: locale
-            )
-        ) {
-            Menu {
-                Button {
-                    showsNewCycleConfirmation = true
+            ),
+            menu: {
+                Menu {
+                    Button {
+                        showsNewCycleConfirmation = true
+                    } label: {
+                        Label(
+                            PillieLocalization.string("today.pack.start_new.confirm", locale: locale),
+                            systemImage: "arrow.triangle.2.circlepath"
+                        )
+                    }
                 } label: {
-                    Label(
-                        PillieLocalization.string("today.pack.start_new.confirm", locale: locale),
-                        systemImage: "arrow.triangle.2.circlepath"
-                    )
+                    CountdownMenuLabel()
                 }
-            } label: {
-                CountdownMenuLabel()
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel(PillieLocalization.string("home.countdown.options", locale: locale))
-            .accessibilityIdentifier("homeCountdownOptions")
-        }
+                .buttonStyle(.plain)
+                .accessibilityLabel(PillieLocalization.string("home.countdown.options", locale: locale))
+                .accessibilityIdentifier("homeCountdownOptions")
+            },
+            onExplainLate: lateExplainer.map { built in { explainer = built } }
+        )
+        .sheet(item: $explainer) { DoseWindowExplainerSheet(explainer: $0) }
         .onChange(of: holdsTodayLog || scenePhase != .active, initial: true) { _, holds in
             let cycleDay = store.pack.elapsedCycleDays(on: store.today) + 1
             held = holds ? Held(taken: store.isTodayTaken, misses: misses(before: cycleDay, today: store.today)) : nil

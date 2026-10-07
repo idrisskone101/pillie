@@ -1,0 +1,50 @@
+# The ⓘ after Home's late line opens the 24-hour explainer: one bar from the
+# reminder that opened the window to the next one, midnight drawn to scale.
+fresh
+launch
+wait text "Get started" 15
+openurl "pillie://debug/plus-home?lang=en"
+openurl pillie://debug/trial-grant?lang=en
+openurl pillie://debug/fixed-now?at=2026-09-28T16:00:00Z
+
+openurl pillie://debug/trial-eve-of-break?lang=en
+wait text "Late · still time until 8:00 AM tomorrow" 10
+wait id homePackLateInfo
+shot late-info-button
+
+tap --id homePackLateInfo
+wait id doseWindowExplainer 10
+expect text "Each pill gets 24 hours."
+expect text "8:00 AM today"
+expect text "8:00 AM tomorrow"
+expect text "Still pill 21"
+expect text "Then missed"
+shot explainer-sheet
+
+tap --id doseWindowExplainer.done
+gone id doseWindowExplainer 10
+
+# Past midnight the same pill is still late, and the sheet says so.
+openurl pillie://debug/fixed-now?at=2026-09-29T03:00:00Z
+wait text "Late · still time until 8:00 AM today" 10
+tap --id homePackLateInfo
+wait id doseWindowExplainer 10
+expect text "8:00 AM yesterday"
+expect text "5h left"
+shot explainer-after-midnight
+tap --id doseWindowExplainer.done
+gone id doseWindowExplainer 10
+
+# Patch users get the same ⓘ after the late chip.
+openurl pillie://debug/fixed-now?at=2026-09-28T16:00:00Z
+openurl "pillie://debug/routine-day?method=patch&day=15&lang=en"
+wait text "Change to patch 3" 10
+wait id homeCountdownLateInfo 10
+tap --id homeCountdownLateInfo
+wait id doseWindowExplainer 10
+expect text "Each patch change gets 24 hours."
+expect text "Still counts as today"
+shot patch-explainer-sheet
+tap --id doseWindowExplainer.done
+gone id doseWindowExplainer 10
+openurl pillie://debug/fixed-now?at=off

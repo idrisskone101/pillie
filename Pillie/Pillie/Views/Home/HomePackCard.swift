@@ -20,6 +20,7 @@ struct HomePackCard: View {
     @State private var showsResetConfirmation = false
     @State private var heldTaken: Bool?
     @State private var correctionTarget: HistoryEditableDay?
+    @State private var explainer: DoseWindowExplainer?
     private let homeFeedback = HomeActionInteractionFeedback()
 
     var body: some View {
@@ -39,6 +40,17 @@ struct HomePackCard: View {
             now: PillieClock.now,
             calendar: .current
         )
+        let lateExplainer: DoseWindowExplainer? = if case .late = progress.status {
+            DoseWindowExplainer(
+                subject: .pill(number: pack.regimen.day(atIndex: elapsedDays).number),
+                day: today,
+                reminderHour: store.reminderHour,
+                reminderMinute: store.reminderMinute,
+                calendar: .current
+            )
+        } else {
+            nil
+        }
         PackCard(
             regimen: progress.regimen,
             dayOneWeekday: progress.dayOneWeekday,
@@ -59,6 +71,7 @@ struct HomePackCard: View {
                     locale: locale
                 ),
                 subtitleColor: subtitleColor(for: progress.status),
+                onExplainLate: lateExplainer.map { built in { explainer = built } },
                 onChangeType: { showsPackSheet = true },
                 onStartNew: { showsNewPackConfirmation = true }
             )
@@ -68,6 +81,7 @@ struct HomePackCard: View {
         }) {
             PackTypeSheet(current: PackChoice(pack.regimen)) { pickedPack = $0 }
         }
+        .sheet(item: $explainer) { DoseWindowExplainerSheet(explainer: $0) }
         .sheet(item: $correctionTarget) { target in
             HistoryDayCorrectionSheet(day: target) { outcome in
                 guard store.correctPastDay(on: target.date, to: outcome) else { return }
@@ -165,6 +179,7 @@ private struct HomePackHeader: View {
     let title: String
     let subtitle: String
     let subtitleColor: Color
+    let onExplainLate: (() -> Void)?
     let onChangeType: () -> Void
     let onStartNew: () -> Void
 
@@ -178,16 +193,21 @@ private struct HomePackHeader: View {
                     .foregroundStyle(PillieTheme.textPrimary)
                     .lineLimit(1)
                     .minimumScaleFactor(0.8)
-                Text(subtitle)
-                    .font(.pillie(13))
-                    .foregroundStyle(subtitleColor)
-                    .lineLimit(2)
-                    .minimumScaleFactor(0.85)
-                    .fixedSize(horizontal: false, vertical: true)
+                HStack(spacing: 6) {
+                    Text(subtitle)
+                        .font(.pillie(13))
+                        .foregroundStyle(subtitleColor)
+                        .lineLimit(2)
+                        .minimumScaleFactor(0.85)
+                        .fixedSize(horizontal: false, vertical: true)
+                    if let onExplainLate {
+                        LateInfoButton(id: "homePackLateInfo", action: onExplainLate)
+                    }
+                }
             }
             .contentTransition(.opacity)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .accessibilityElement(children: .combine)
+            .accessibilityElement(children: .contain)
 
             Menu {
                 Button(action: onChangeType) {
