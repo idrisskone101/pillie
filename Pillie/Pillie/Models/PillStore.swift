@@ -1019,6 +1019,36 @@ class PillStore {
         protocolChangeVersion &+= 1
     }
 
+    /// What Home's button logs: the live day's due action, else the open catch-up.
+    enum TodayLog: Equatable {
+        case due(DoseScheduleAction)
+        case catchUp(DoseScheduleAction)
+
+        var action: DoseScheduleAction {
+            switch self {
+            case .due(let action), .catchUp(let action): action
+            }
+        }
+    }
+
+    var todayLog: TodayLog? {
+        if let action = todayDueAction { return .due(action) }
+        return openCatchUp.map(TodayLog.catchUp)
+    }
+
+    /// Logs what Home showed, even when the shake outlasts the live day it began on:
+    /// a due dose whose window closed mid-shake still logs as taken, never the next
+    /// day's. A catch-up logs only while it is still open.
+    @discardableResult
+    func complete(_ shown: TodayLog) -> Bool {
+        if todayDueAction == nil, openCatchUp != nil {
+            logCatchUp()
+        } else {
+            markTodayAsTaken()
+        }
+        return true
+    }
+
     func undoCatchUp() {
         guard let catchUp, catchUp.caughtUpAt != nil else { return }
         upsertDayRecord(in: pack, day: catchUp.action.date, status: .missed, actionType: catchUp.action.type)
