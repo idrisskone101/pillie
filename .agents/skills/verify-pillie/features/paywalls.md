@@ -141,10 +141,12 @@ CTA, a reassurance line, and Restore · Terms · Privacy. The board is a
     is incidental, not a repeatable proof; don't write a flow that assumes
     it's still on screen after a `wait`.
   - Known red on main as of 2026-10-06 on the Namespace simulator:
-    `paywall-trial-end-link.flow` (the `/trial-end-paywall` wall never
-    presents) and `paywall-restore.flow` at its "Try again" step (the
-    no-subscription alert never shows after Try again). Compare with main
-    before blaming a branch.
+    `paywall-restore.flow` at its "Try again" step (the no-subscription
+    alert never shows after Try again). Compare with main before blaming a
+    branch. `paywall-trial-end-link.flow` was red too: a deep link landing
+    while the wall was up re-presented it before the old cover's late
+    onDismiss cleared it. HomeView now waits for that onDismiss (ENG-172
+    branch); the flow passes locally.
 
 ## Gotchas
 
