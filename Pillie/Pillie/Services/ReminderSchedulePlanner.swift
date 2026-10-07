@@ -418,25 +418,16 @@ struct ReminderSchedulePlanner {
             return nil
         }
 
-        guard let fireDate = firstBaseReminderDateForDueAction(
-            dueDay: triggerDay,
-            now: input.now,
-            reminderHour: input.reminderHour,
-            reminderMinute: input.reminderMinute,
-            snoozeOverride: nil,
-            servedBaseFireDate: nil,
-            scheduleDay: input.scheduleDay,
-            calendar: input.calendar
-        ),
-        DoseWindow.isOpen(
-            day: triggerDay,
-            now: fireDate,
+        let fireDate = reminderDate(
+            on: triggerDay,
             hour: input.reminderHour,
             minute: input.reminderMinute,
             calendar: input.calendar
-        ) else {
-            return nil
-        }
+        )
+        // One-shot, like the Cycle Transition Notice: once the threshold day's
+        // reminder moment passes, a rebuild must not turn it into a catch-up
+        // that re-fires after every foreground, check-in, or background refresh.
+        guard fireDate > input.now else { return nil }
 
         let dueDayEpoch = Int(input.calendar.startOfDay(for: triggerDay).timeIntervalSince1970)
         return SupplyReminderIntent(
