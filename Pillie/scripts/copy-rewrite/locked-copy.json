@@ -3157,6 +3157,176 @@
       "en": "Your free week ends in 2 days, then Plus costs %1$@ a year. To stop it, cancel in Settings by %2$@.",
       "de": "Deine Gratiswoche endet in 2 Tagen, danach kostet Plus %1$@ pro Jahr. Wenn du das nicht willst, kündige bis zum %2$@ in den Einstellungen.",
       "it": "La tua settimana gratis finisce tra 2 giorni, poi Plus costa %1$@ all’anno. Per fermarlo, disdici in Impostazioni entro il %2$@."
+    },
+    {
+      "issue": "ENG-172",
+      "table": "Commerce",
+      "key": "paywall.success.title.first",
+      "create": true,
+      "comment": "Purchase success title on a first purchase (Keep Plus during the trial, Get Plus from Settings) [paywall]. The trial-end and restore title is trial.end.welcome_back.",
+      "en": "Pillie Plus is on.",
+      "de": "Pillie Plus ist an.",
+      "it": "Pillie Plus è attivo."
+    },
+    {
+      "issue": "ENG-172",
+      "table": "Commerce",
+      "key": "paywall.success.perks.returning",
+      "create": true,
+      "comment": "Purchase success, label over the four Plus perks after the trial ended or a restore [paywall]",
+      "en": "Back on now",
+      "de": "Jetzt wieder an",
+      "it": "Di nuovo attivi"
+    },
+    {
+      "issue": "ENG-172",
+      "table": "Commerce",
+      "key": "paywall.success.perks.first",
+      "create": true,
+      "comment": "Purchase success, label over the four Plus perks on a first purchase [paywall]",
+      "en": "Included in Plus",
+      "de": "In Plus enthalten",
+      "it": "Inclusi in Plus"
+    },
+    {
+      "issue": "ENG-172",
+      "table": "Commerce",
+      "key": "paywall.success.receipt.year",
+      "create": true,
+      "comment": "Purchase success plan chip, yearly. %1$@ = price e.g. $29.99, %2$@ = renewal date e.g. Oct 7, 2027 [paywall]",
+      "en": "%1$@ a year, renews %2$@",
+      "de": "%1$@ pro Jahr, verlängert sich am %2$@",
+      "it": "%1$@ all’anno, si rinnova il %2$@"
+    },
+    {
+      "issue": "ENG-172",
+      "table": "Commerce",
+      "key": "paywall.success.receipt.month",
+      "create": true,
+      "comment": "Purchase success plan chip, monthly. %1$@ = price e.g. $4.99, %2$@ = renewal date e.g. Nov 7 [paywall]",
+      "en": "%1$@ a month, renews %2$@",
+      "de": "%1$@ pro Monat, verlängert sich am %2$@",
+      "it": "%1$@ al mese, si rinnova il %2$@"
+    },
+    {
+      "issue": "ENG-172",
+      "table": "Commerce",
+      "key": "paywall.success.receipt.trial_year",
+      "create": true,
+      "comment": "Purchase success plan chip, yearly plan that starts with a free week. %1$@ = last free day e.g. Oct 14, %2$@ = price [paywall]",
+      "en": "Free until %1$@, then %2$@ a year",
+      "de": "Kostenlos bis %1$@, dann %2$@ pro Jahr",
+      "it": "Gratis fino al %1$@, poi %2$@ all’anno"
+    },
+    {
+      "issue": "ENG-172",
+      "table": "Commerce",
+      "key": "paywall.success.receipt.trial_month",
+      "create": true,
+      "comment": "Purchase success plan chip, monthly plan that starts with a free week. %1$@ = last free day e.g. Oct 14, %2$@ = price [paywall]",
+      "en": "Free until %1$@, then %2$@ a month",
+      "de": "Kostenlos bis %1$@, dann %2$@ pro Monat",
+      "it": "Gratis fino al %1$@, poi %2$@ al mese"
+    },
+    {
+      "issue": "ENG-172",
+      "table": "Commerce",
+      "key": "paywall.success.receipt.lifetime",
+      "create": true,
+      "comment": "Purchase success plan chip, lifetime purchase [paywall]",
+      "en": "Paid once. It doesn’t renew.",
+      "de": "Einmal bezahlt. Verlängert sich nicht.",
+      "it": "Pagato una volta. Non si rinnova."
+    },
+    {
+      "issue": "ENG-172",
+      "table": "Commerce",
+      "key": "paywall.success.receipt.restored",
+      "create": true,
+      "comment": "Purchase success plan chip after Restore found a purchase [paywall]",
+      "en": "Your purchase is back on this iPhone",
+      "de": "Dein Kauf ist wieder auf diesem iPhone",
+      "it": "Il tuo acquisto è di nuovo su questo iPhone"
+    },
+    {
+      "issue": "ENG-172",
+      "table": "Commerce",
+      "key": "paywall.success.reminder.tonight",
+      "create": true,
+      "comment": "Purchase success, next reminder card, today in the evening. %@ = time e.g. 8:00 PM [paywall]",
+      "en": "Tonight at %@",
+      "de": "Heute Abend um %@",
+      "it": "Stasera alle %@"
+    },
+    {
+      "issue": "ENG-172",
+      "table": "Commerce",
+      "key": "paywall.success.reminder.today",
+      "create": true,
+      "comment": "Purchase success, next reminder card, today before the evening. %@ = time [paywall]",
+      "en": "Today at %@",
+      "de": "Heute um %@",
+      "it": "Oggi alle %@"
+    },
+    {
+      "issue": "ENG-172",
+      "table": "Commerce",
+      "key": "paywall.success.reminder.tomorrow",
+      "create": true,
+      "comment": "Purchase success, next reminder card. %@ = time [paywall]",
+      "en": "Tomorrow at %@",
+      "de": "Morgen um %@",
+      "it": "Domani alle %@"
+    },
+    {
+      "issue": "ENG-172",
+      "table": "Commerce",
+      "key": "paywall.success.reminder.on_day",
+      "create": true,
+      "comment": "Purchase success, next reminder card, a later day. %1$@ = short day e.g. Wed, Oct 14, %2$@ = time e.g. 8:00 PM [paywall]",
+      "en": "%1$@ at %2$@",
+      "de": "%1$@ um %2$@",
+      "it": "%1$@ alle %2$@"
+    },
+    {
+      "issue": "ENG-172",
+      "table": "Commerce",
+      "key": "paywall.success.manage",
+      "create": true,
+      "comment": "Purchase success footer under the button, subscriptions only. Settings = the iOS Settings app [paywall]",
+      "en": "Manage or cancel anytime in Settings",
+      "de": "In den Einstellungen jederzeit verwalten oder kündigen",
+      "it": "Gestisci o disdici quando vuoi in Impostazioni"
+    },
+    {
+      "issue": "ENG-172",
+      "table": "Commerce",
+      "key": "paywall.mockup.plus.title",
+      "create": true,
+      "comment": "Decorative phone on the purchase success screen: the shield title once Plus is on. Replaces paywall.mockup.shield.title [paywall]",
+      "en": "Plus is on",
+      "de": "Plus ist an",
+      "it": "Plus è attivo"
+    },
+    {
+      "issue": "ENG-172",
+      "table": "Commerce",
+      "key": "paywall.mockup.plus.blocking",
+      "create": true,
+      "comment": "Decorative phone on the purchase success screen, app blocking set up. %@ = reminder time e.g. 8:00 PM [paywall]",
+      "en": "At %@ your chosen apps pause until you check in.",
+      "de": "Um %@ pausieren deine gewählten Apps, bis du abhakst.",
+      "it": "Alle %@ le app che hai scelto vanno in pausa finché non confermi."
+    },
+    {
+      "issue": "ENG-172",
+      "table": "Commerce",
+      "key": "paywall.mockup.plus.reminders",
+      "create": true,
+      "comment": "Decorative phone on the purchase success screen, app blocking not set up yet [paywall]",
+      "en": "Pillie keeps reminding you until you check in.",
+      "de": "Pillie erinnert dich weiter, bis du abhakst.",
+      "it": "Pillie continua a ricordartelo finché non confermi."
     }
   ]
 }

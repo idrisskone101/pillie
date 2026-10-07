@@ -43,7 +43,8 @@ CTA, a reassurance line, and Restore · Terms · Privacy. The board is a
   runs a restore with the same alerts as the honest paywall.
   `Views/Components/PlusUpsellSheet.swift`.
 - `paywall-restore` (ENG-74) — Restore on any honest paywall or the upsell
-  sheet ends in one `RestoreOutcome`: restored (paywall dismisses, Plus on),
+  sheet ends in one `RestoreOutcome`: restored (the paywall plays the success
+  screen, Plus on; the upsell sheet just dismisses),
   no active purchase ("No subscription found" with Contact support and OK),
   or failed ("Couldn’t restore your purchases" with Try again, Contact support,
   and Not now). Contact support opens the "Pillie — Restore Purchases" Open
@@ -64,6 +65,17 @@ CTA, a reassurance line, and Restore · Terms · Privacy. The board is a
   (`#paywallTermsLink`) and Privacy (`#paywallPrivacyLink`) open the GitHub
   Pages legal docs. `Services/Paywall/PaywallCheckoutBuilder.swift`,
   `Views/Paywall/HonestPaywallView.swift`.
+- `paywall-success` (ENG-172, Paper S2c) — every honest-paywall purchase and
+  restore, the extend offer included, ends on one screen: the plans drop, the
+  phone's shield flips to "Plus is on" with a check badge and one `.success`
+  haptic, then a sheet rises with the title ("…on again." after a trial or a
+  restore), the plan chip, the four Plus perks, the next reminder (left out
+  when notifications are denied), the button ("Done" from Settings, else
+  "Back to today") and the manage line (renewing plans only). Settled at
+  1.14 s; Reduce Motion is two fades settled at 0.45 s. `HonestPaywallHost`
+  keeps the board it opened on, so Plus turning on does not drop the screen.
+  `Services/Paywall/PaywallSuccess.swift`, `Views/Paywall/PaywallSuccessSheet.swift`,
+  `Views/Paywall/PaywallPhoneMockup.swift`.
 - `paywall-commerce-access-verification` — a transient full-screen loading
   gate (`#commerceAccessVerification`) shown (a) at the app root right after
   onboarding, before `MainTabView`, while RevenueCat resolves, and (b) inside
@@ -97,6 +109,14 @@ CTA, a reassurance line, and Restore · Terms · Privacy. The board is a
   Settings > Pillie Plus door: error alert and Contact support into the mail
   fallback. `log start` / `log stop` keep the analytics mirror in `app.log`;
   grep it for `restore_` to see `surface`, `reason`, and `error_category`.
+- `flows/paywall-success.flow` (ENG-172) — the success screen without
+  StoreKit: `success=annual|monthly|lifetime|restored|trial` on
+  `/trial-end-paywall` or `/honest-paywall` plays it 1.2 s after the wall
+  settles, with fixed prices. Records the motion, then shots of the hard wall
+  (yearly, free week), the soft wall restore, a during-trial lifetime with
+  Back to today, and de. Under Reduce Motion
+  (`simctl spawn <udid> defaults write com.apple.Accessibility ReduceMotionEnabled -bool true`)
+  the same links show the two-fade path.
 - `flows/paywall-trial-end-link.flow` opens the hard and the closable trial-end
   walls from Home through `/trial-end-paywall`, with no developer menu.
 - `flows/paywall-extend-offer.flow` (ENG-172) — the hard trial-end wall rises

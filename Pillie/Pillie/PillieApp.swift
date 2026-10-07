@@ -756,10 +756,8 @@ struct PillieApp: App {
             UserDefaults.standard.set(false, forKey: OnboardingFlow.selectedFreePlanStorageKey)
             UserDefaults.standard.set(OnboardingFlow.Step.complete.rawValue, forKey: OnboardingFlow.stepStorageKey)
         case "/honest-paywall":
-            let board = URLComponents(url: url, resolvingAgainstBaseURL: false)?
-                .queryItems?
-                .first(where: { $0.name == "board" })?
-                .value
+            let queryItems = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems
+            let board = queryItems?.first(where: { $0.name == "board" })?.value
             switch board {
             case "duringTrial", "c1":
                 DebugQA.apply(.trialActive, store: store)
@@ -784,13 +782,17 @@ struct PillieApp: App {
             default:
                 break
             }
+            // `success=annual|monthly|lifetime|restored|trial` plays the success screen.
+            if let success = queryItems?.first(where: { $0.name == "success" })?.value {
+                UserDefaults.standard.set(success, forKey: HonestPaywallScreen.debugSuccessStateKey)
+            }
         case "/trial-end-paywall":
             // QA shortcut (#169): Home with an expired trial, so the Trial-End
             // Paywall auto-presents. Reuses the developer-menu scenarios, which
             // age the trial by active pill days. `terms=soft` is the closable
             // pre-cutover wall (anything else is the hard wall), `cohort=blocker`
-            // the loss-framed blocker cohort, `success=1` the post-purchase
-            // state, `subscriber=1` an active Plus entitlement.
+            // the loss-framed blocker cohort, `success=1` (or a plan, as on
+            // /honest-paywall) the post-purchase state, `subscriber=1` an active Plus entitlement.
             let queryItems = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems
             func query(_ name: String) -> String? {
                 queryItems?.first(where: { $0.name == name })?.value
@@ -809,8 +811,8 @@ struct PillieApp: App {
             case (true, false): .trialExpiredGrandfatherReminder
             }
             DebugQA.apply(scenario, store: store)
-            if query("success") == "1" {
-                UserDefaults.standard.set(true, forKey: HonestPaywallScreen.debugSuccessStateKey)
+            if let success = query("success") {
+                UserDefaults.standard.set(success, forKey: HonestPaywallScreen.debugSuccessStateKey)
             }
             if query("subscriber") == "1" {
                 SubscriptionManager.shared.setPlusForTesting(true)

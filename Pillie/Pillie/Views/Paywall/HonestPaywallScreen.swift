@@ -9,6 +9,7 @@ import RevenueCat
 struct HonestPaywallScreen: View {
     @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
     @Environment(\.locale) private var locale
+    @Environment(PillStore.self) private var store
 
     let board: HonestPaywallBoard
     let surface: AnalyticsPaywallSurface
@@ -23,8 +24,7 @@ struct HonestPaywallScreen: View {
     @State private var activeAlert: PaywallAlert?
     @State private var isPurchasing = false
     @State private var isRestoring = false
-    @State private var purchaseSucceeded = false
-    @State private var successOutcome: TrialEndSuccessOutcome = .purchased(.annual)
+    @State private var success: PaywallSuccessContent?
     @State private var showDeclineFeedback = false
     @State private var extendCandidate: TrialEndExtendCandidate?
     @State private var extendOffer: TrialEndExtendOffer?
@@ -62,16 +62,9 @@ struct HonestPaywallScreen: View {
             screenContent
         }
         .interactiveDismissDisabled(!board.chrome.allowsInteractiveDismiss)
-        .animation(PillieTheme.fadeInUpCurve, value: purchaseSucceeded)
         .animation(PillieTheme.fadeInUpCurve, value: showDeclineFeedback)
         .onAppear {
             trackViewed()
-            #if DEBUG
-            if UserDefaults.standard.bool(forKey: Self.debugSuccessStateKey) {
-                UserDefaults.standard.removeObject(forKey: Self.debugSuccessStateKey)
-                purchaseSucceeded = true
-            }
-            #endif
         }
         .task {
             subscriptionManager.configure()
@@ -83,6 +76,7 @@ struct HonestPaywallScreen: View {
             await permissionLoaded
             #if DEBUG
             presentDebugExtendOfferIfRequested()
+            await presentDebugSuccessIfRequested()
             #endif
         }
         .paywallAlert($activeAlert, surface: surface, onRetryRestore: restorePurchases)
@@ -96,9 +90,6 @@ struct HonestPaywallScreen: View {
                 onResolve: { onResolved?() }
             )
             .transition(.opacity)
-        } else if purchaseSucceeded && board.isTrialEnd {
-            trialEndSuccessState
-                .transition(.opacity)
         } else {
             ZStack {
                 HonestPaywallView(
@@ -109,7 +100,8 @@ struct HonestPaywallScreen: View {
                     onRestore: restorePurchases,
                     onDismiss: onDismiss,
                     onContinueFree: board.chrome.showsContinueFree ? { continueFree() } : nil,
-                    isSheetAway: showsExtendOffer
+                    isSheetAway: showsExtendOffer || success != nil,
+                    phoneShield: success.map { .plusOn(line: $0.phoneLine) } ?? .paused
                 )
 
                 if let extendOffer {
@@ -125,6 +117,11 @@ struct HonestPaywallScreen: View {
                         onStart: startExtendTrial,
                         onNotNow: declineExtendOffer
                     )
+                }
+
+                if let success {
+                    PaywallSuccessSheet(content: success, onDone: onDismiss)
+                        .transition(PaywallSuccessSheet.transition(reduceMotion: accessibilityReduceMotion))
                 }
             }
             .transition(.opacity)
@@ -172,13 +169,7 @@ struct HonestPaywallScreen: View {
             do {
                 let outcome = try await subscriptionManager.purchase(package)
                 trackPurchaseCompleted(plan: plan, mode: mode, outcome: outcome)
-                plusFeedback.successfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
-                if board.isTrialEnd {
-                    successOutcome = .purchased(plan)
-                    purchaseSucceeded = true
-                } else {
-                    onDismiss()
-                }
+                presentSuccess(.purchased(plan: plan, product: package.storeProduct, outcome: outcome))
             } catch {
                 plusFeedback.unsuccessfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
                 if error.honestPaywallIsCancelledPurchase {
@@ -208,13 +199,7 @@ struct HonestPaywallScreen: View {
             trackRestoreFinished(outcome, mode: mode)
             switch outcome {
             case .restored:
-                plusFeedback.successfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
-                if board.isTrialEnd {
-                    successOutcome = .restored
-                    purchaseSucceeded = true
-                } else {
-                    onDismiss()
-                }
+                presentSuccess(.restored)
             case .noActivePurchase:
                 if !presentExtendOffer(.restoreEmpty, mode: mode) {
                     withAnimation(response.motionProfile.animation) {
@@ -318,9 +303,7 @@ struct HonestPaywallScreen: View {
                     trackPurchaseCompleted(plan: .annual, mode: extendTelemetryMode, outcome: outcome)
                 }
                 scheduleExtendReminder(for: offer)
-                plusFeedback.successfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
-                successOutcome = .purchased(.annual)
-                purchaseSucceeded = true
+                presentSuccess(.purchased(plan: .annual, product: package.storeProduct, outcome: outcome))
             } catch {
                 plusFeedback.unsuccessfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
                 if error.honestPaywallIsCancelledPurchase {
@@ -391,56 +374,41 @@ struct HonestPaywallScreen: View {
     }
     #endif
 
-    // MARK: - Trial end success
+    // MARK: - Success
 
-    @ViewBuilder
-    private var trialEndSuccessState: some View {
-        let content = trialEndTelemetryContent
-        VStack(spacing: 0) {
-            Spacer()
-            ZStack {
-                Circle()
-                    .fill(PillieTheme.coral.opacity(0.35))
-                    .frame(width: 124, height: 124)
-                Circle()
-                    .fill(PillieTheme.coral)
-                    .frame(width: 96, height: 96)
-                Image(systemName: "checkmark")
-                    .font(.system(size: 40, weight: .bold))
-                    .foregroundStyle(PillieTheme.dark)
-            }
-            .accessibilityHidden(true)
-
-            Text(PillieLocalization.string("trial.end.welcome_back", table: "Commerce", locale: locale))
-                .font(.pillie(34, weight: .black))
-                .foregroundStyle(PillieTheme.textPrimary)
-                .padding(.top, 24)
-
-            if let content {
-                Text(CommercePresentation.trialEndSuccessSubtitle(cohort: content.cohort, locale: locale))
-                    .font(.pillie(15, weight: .medium))
-                    .foregroundStyle(PillieTheme.textMuted)
-                    .multilineTextAlignment(.center)
-                    .frame(maxWidth: 300)
-                    .padding(.top, 10)
-            }
-
-            Spacer()
-            Spacer()
-
-            Button(action: onDismiss) {
-                Text(PillieLocalization.string("trial.end.back_today", table: "Commerce", locale: locale))
-                    .font(.pillie(17, weight: .bold))
-                    .foregroundStyle(.white)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 56)
-                    .background(PillieTheme.dark)
-                    .clipShape(Capsule())
-            }
-            .padding(.horizontal, 24)
-            .padding(.bottom, 24)
+    /// Every purchase and restore lands here. The success haptic fires when the
+    /// phone's check badge lands, not on StoreKit's return.
+    private func presentSuccess(_ receipt: PaywallSuccessReceipt) {
+        let now = Date()
+        showsExtendOffer = false
+        let content = PaywallSuccessContent.make(
+            receipt: receipt,
+            isReturning: board.isTrialEnd || receipt == .restored,
+            opensFromSettings: surface == .settingsSubscription,
+            reminder: .live(store: store, now: now, calendar: .current),
+            blockingSetUp: AppBlockingManager.shared.hasAppsSelected,
+            reminderHour: store.reminderHour,
+            reminderMinute: store.reminderMinute,
+            now: now,
+            calendar: .current,
+            locale: locale
+        )
+        withAnimation(PaywallSuccessSheet.entrance(reduceMotion: accessibilityReduceMotion)) {
+            success = content
         }
     }
+
+    #if DEBUG
+    /// `success=annual|monthly|lifetime|restored|trial` on the paywall QA links:
+    /// play the success screen once the paywall's entrance has settled.
+    private func presentDebugSuccessIfRequested() async {
+        let defaults = UserDefaults.standard
+        guard let raw = defaults.string(forKey: Self.debugSuccessStateKey) else { return }
+        defaults.removeObject(forKey: Self.debugSuccessStateKey)
+        try? await Task.sleep(for: .seconds(1.2))
+        presentSuccess(.debugSample(raw))
+    }
+    #endif
 
     private var telemetryMode: HonestPaywallTelemetryMode {
         HonestPaywallTelemetry.mode(

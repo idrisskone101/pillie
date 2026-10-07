@@ -6,20 +6,21 @@ final class ItalianCommerceRuntimeLocalizationTests: XCTestCase {
     func testPurchaseSuccessComparisonAndErrorCopyUseItalian() {
         let italian = Locale(identifier: "it_IT")
 
-        XCTAssertEqual(
-            CommercePresentation.trialEndSuccessSubtitle(
-                cohort: .blockerConfigured,
-                locale: italian
-            ),
-            "Pillie Plus è attivo. Il blocco app torna dal prossimo promemoria."
+        let success = PaywallSuccessContent.make(
+            receipt: .lifetime,
+            isReturning: false,
+            opensFromSettings: true,
+            reminder: nil,
+            blockingSetUp: false,
+            reminderHour: 20,
+            reminderMinute: 0,
+            now: Date(timeIntervalSince1970: 1_791_331_200),
+            calendar: Calendar(identifier: .gregorian),
+            locale: italian
         )
-        XCTAssertEqual(
-            CommercePresentation.trialEndSuccessSubtitle(
-                cohort: .reminderOnly,
-                locale: italian
-            ),
-            "Pillie Plus è attivo. Puoi impostare il blocco app quando vuoi."
-        )
+        XCTAssertEqual(success.title, "Pillie Plus è attivo.")
+        XCTAssertEqual(success.perksLabel, "Inclusi in Plus")
+        XCTAssertEqual(success.receipt, "Pagato una volta. Non si rinnova.")
 
         XCTAssertEqual(
             CommercePresentation.comparisonTierLabel(

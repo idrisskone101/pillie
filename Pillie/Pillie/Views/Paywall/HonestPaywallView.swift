@@ -16,8 +16,9 @@ struct HonestPaywallView: View {
     let onRestore: () -> Void
     let onDismiss: () -> Void
     let onContinueFree: (() -> Void)?
-    /// The extend offer has taken the sheet's place (ENG-172).
+    /// The extend offer or the purchase success sheet has taken the plans' place.
     var isSheetAway = false
+    var phoneShield: PaywallPhoneShield = .paused
 
     @State private var isSheetRevealed = false
     @State private var isPhoneRevealed = false
@@ -88,7 +89,7 @@ struct HonestPaywallView: View {
     }
 
     private func hero(height: CGFloat) -> some View {
-        PaywallPhoneMockup()
+        PaywallPhoneMockup(shield: phoneShield)
             .offset(y: phoneOffset)
             .animation(accessibilityReduceMotion ? PaywallEntrance.fade : PaywallEntrance.phoneFade) {
                 $0.opacity(isPhoneRevealed ? 1 : 0)
@@ -100,7 +101,8 @@ struct HonestPaywallView: View {
             .clipped()
             .frame(height: height, alignment: .top)
             .overlay(alignment: .topTrailing) {
-                if scene.board.chrome.showsClose {
+                // Once Plus is on, the success sheet's button is the way out.
+                if scene.board.chrome.showsClose && phoneShield == .paused {
                     closeButton
                         .padding(.top, HonestPaywallLayout.phoneTopInset)
                         .padding(.trailing, 16)

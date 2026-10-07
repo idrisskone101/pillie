@@ -13,29 +13,10 @@ import XCTest
 @testable import Pillie
 
 final class TrialEndPaywallContentTests: XCTestCase {
-    func testCancellationNoteOnlyAppearsForSubscriptionPurchases() {
-        XCTAssertTrue(TrialEndSuccessOutcome.purchased(.annual).showsCancellationNote)
-        XCTAssertTrue(TrialEndSuccessOutcome.purchased(.monthly).showsCancellationNote)
-        XCTAssertFalse(TrialEndSuccessOutcome.purchased(.lifetime).showsCancellationNote)
-        XCTAssertFalse(TrialEndSuccessOutcome.restored.showsCancellationNote)
-    }
-
     func testLifetimeSelectionDoesNotClaimItCanBeCancelled() {
         XCTAssertTrue(PilliePlusPlan.annual.showsCancellationDisclosure)
         XCTAssertTrue(PilliePlusPlan.monthly.showsCancellationDisclosure)
         XCTAssertFalse(PilliePlusPlan.lifetime.showsCancellationDisclosure)
-    }
-
-    func testRestoredEntitlementSuccessUsesGenericPriceFreeLabel() {
-        XCTAssertEqual(
-            TrialEndSuccessOutcome.restored.label(
-                annual: "$29.99 / year",
-                monthly: "$4.99 / month",
-                lifetime: "Pillie Plus Lifetime · $69.99",
-                restored: "Pillie Plus access restored"
-            ),
-            "Pillie Plus access restored"
-        )
     }
 
     func testPresentedPaywallSnapshotSurvivesEntitlementRemovingLiveContent() {
