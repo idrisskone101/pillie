@@ -1,0 +1,23 @@
+# ENG-173: a hard-paywall trial two days from expiry queues the win-back
+# pushes (slots 1, 2 and 4; no slot 3 without an extend pitch) and no day-15
+# notice. The dump goes to app.log; grep "pillie_winback_" and "trial_warning".
+privacy grant notifications
+launch
+log start
+openurl pillie://debug/trial-activation-hub?state=unconfigured&terms=hard&lang=en
+wait text Today 15
+openurl pillie://debug/trial-age?days=13
+sleep 4
+note pending requests, reminder-only, English
+openurl pillie://debug/dump-pending-notifications
+sleep 2
+openurl pillie://debug/trial-activation-hub?state=partial&terms=hard&lang=de
+sleep 3
+openurl pillie://debug/trial-age?days=13
+sleep 4
+note pending requests, blocker, German
+openurl pillie://debug/dump-pending-notifications
+sleep 2
+log stop
+shot home-de
+openurl pillie://debug/trial-clear?lang=en
