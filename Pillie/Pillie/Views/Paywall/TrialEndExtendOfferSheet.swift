@@ -64,9 +64,8 @@ struct TrialEndExtendOfferSheet: View {
             timeline
                 .padding(.top, 20)
 
-            Spacer(minLength: 40)
-
             footer
+                .padding(.top, 40)
         }
         .padding(.horizontal, 24)
         .padding(.top, 26)
