@@ -113,6 +113,24 @@ final class CalendarDayPresentationTests: XCTestCase {
         )
     }
 
+    func testTodaysOpenRingTaskReadsAsDueUntilItIsLogged() throws {
+        func todayStyle(_ type: PillDay.ActionType, _ status: PillDay.Status) throws -> CalendarRingSemanticStyle {
+            CalendarDayPresentation.resolve(
+                snapshot: try snapshot(method: .ring, type: type, status: status),
+                fallbackMethod: .pill,
+                relation: .today
+            ).ringStyle
+        }
+
+        XCTAssertEqual(try todayStyle(.ringInsert, .upcoming), .plannedInserted)
+        XCTAssertEqual(try todayStyle(.ringRemove, .upcoming), .plannedInserted)
+        XCTAssertEqual(try todayStyle(.ringReinsert, .upcoming), .plannedReinserted)
+        XCTAssertEqual(try todayStyle(.ringRemove, .taken), .inserted)
+        XCTAssertEqual(try todayStyle(.ringReinsert, .taken), .reinserted)
+        // A wearing day has nothing to log, so its open window still reads as worn.
+        XCTAssertEqual(try todayStyle(.ringActive, .upcoming), .inserted)
+    }
+
     func testUserDeclaredBreakOnPatchAndRingActiveDaysUsesOffWeekStyles() throws {
         XCTAssertEqual(
             CalendarDayPresentation.resolve(
