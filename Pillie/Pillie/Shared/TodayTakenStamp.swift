@@ -15,15 +15,18 @@ struct TodayTakenStamp: Equatable {
     /// Start-of-day epoch seconds for the day the flag was written; nil for
     /// legacy installs that only ever wrote the Bool.
     let epochDay: Int?
+    /// The time zone `epochDay` was written in; nil on stamps from older builds.
+    var timeZoneIdentifier: String? = nil
 
     static func epochDay(for date: Date, calendar: Calendar = .current) -> Int {
         Int(calendar.startOfDay(for: date).timeIntervalSince1970)
     }
 
-    /// The calendar day the stamp was written for: the local midnight nearest
-    /// `epochDay`, so a stamp written before a time zone change keeps its date.
+    /// The calendar day the stamp was written for, kept across a time zone change.
     func day(calendar: Calendar = .current) -> Date? {
-        epochDay.map { calendar.startOfDay(for: Date(timeIntervalSince1970: TimeInterval($0) + 12 * 60 * 60)) }
+        epochDay.map {
+            StoredDay.day(of: Date(timeIntervalSince1970: TimeInterval($0)), writtenIn: timeZoneIdentifier, calendar: calendar)
+        }
     }
 
     /// True only when the handled flag is set AND was written for `day`.

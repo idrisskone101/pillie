@@ -101,16 +101,20 @@ final class TimeZoneTravelTests: XCTestCase {
             startDate: day("2026-10-01")
         )
         fixture = made
-        let londonOctoberSixth = day("2026-10-06")
+        let payload: [AnyHashable: Any] = [
+            NotificationManager.PayloadKey.dueDayEpoch: Int(day("2026-10-06").timeIntervalSince1970),
+            NotificationManager.PayloadKey.dueDayTimeZone: "Europe/London"
+        ]
 
         fly(to: "America/Toronto")
         PillieClock.setFixedNowForTesting(InMemoryStoreFactory.localDate("2026-10-06", hour: 8, minute: 1))
         made.store.refreshDayContextIfNeeded()
-        KeptNotificationManager.make(hasBlockerSetup: { false })
-            .completeReminder(store: made.store, dueDate: londonOctoberSixth)
+        let manager = KeptNotificationManager.make(hasBlockerSetup: { false })
+        let dueDate = try XCTUnwrap(manager.dueDateFromPayload(userInfo: payload))
+        manager.completeReminder(store: made.store, dueDate: dueDate)
 
+        XCTAssertEqual(dueDate, day("2026-10-06"))
         XCTAssertTrue(made.store.isTodayTaken)
-        XCTAssertEqual(made.store.today, day("2026-10-06"))
     }
 
     /// The shield extension reads the anchor the app wrote in Toronto after she lands in Vancouver.

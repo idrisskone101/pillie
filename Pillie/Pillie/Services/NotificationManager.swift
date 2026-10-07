@@ -76,6 +76,7 @@ final class NotificationManager {
 
     enum PayloadKey {
         static let dueDayEpoch = "dueDayEpoch"
+        static let dueDayTimeZone = "dueDayTimeZone"
         static let actionTypeRaw = "actionTypeRaw"
         static let requestKind = SmartReminderDelivery.requestKindKey
         // Shared with the delivery decision so the payload and the
@@ -515,6 +516,7 @@ final class NotificationManager {
         content.categoryIdentifier = categoryID
         content.userInfo = [
             PayloadKey.dueDayEpoch: due.dueDayEpoch,
+            PayloadKey.dueDayTimeZone: calendar.timeZone.identifier,
             PayloadKey.actionTypeRaw: due.action.type.rawValue,
             PayloadKey.requestKind: due.kind.rawValue
         ]
@@ -901,7 +903,14 @@ final class NotificationManager {
         return Date(timeIntervalSince1970: fireEpoch)
     }
 
-    private func dueDateFromPayload(userInfo: [AnyHashable: Any]) -> Date? {
+    /// The day a reminder was for, on the same date after a time zone change.
+    func dueDateFromPayload(userInfo: [AnyHashable: Any]) -> Date? {
+        storedDueDate(userInfo: userInfo).map {
+            StoredDay.day(of: $0, writtenIn: userInfo[PayloadKey.dueDayTimeZone] as? String)
+        }
+    }
+
+    private func storedDueDate(userInfo: [AnyHashable: Any]) -> Date? {
         if let value = userInfo[PayloadKey.dueDayEpoch] as? Int {
             return dateFromEpoch(TimeInterval(value))
         }

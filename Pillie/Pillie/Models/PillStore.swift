@@ -213,6 +213,7 @@ class PillStore {
     /// Live day the cached read model was last computed against. Status is
     /// relative to the next reminder, so only crossing it invalidates the caches.
     @ObservationIgnored private var lastKnownLiveDay: Date?
+    @ObservationIgnored private var lastKnownTimeZone: TimeZone?
     @ObservationIgnored private var dayContextObservers: [NSObjectProtocol] = []
     @ObservationIgnored private var doseWindowTimer: Timer?
 
@@ -236,6 +237,7 @@ class PillStore {
     private static let reviewPromptSoftDismissalCountKey = "pillie_review_prompt_soft_dismissal_count"
     private static let appActivatedDateKey = "pillie_app_activated_date"
     private static let streakResetDateKey = "pillie_streak_reset_date"
+    private static let storedDaysTimeZoneKey = "pillie_stored_days_time_zone"
     private static let painPointsKey = "pillie_pain_points"
     private static let personalGoalKey = "personalGoal"
     private static let missFrequencyKey = "missFrequency"
@@ -502,7 +504,8 @@ class PillStore {
             anchorDate: anchor.date,
             anchorCycleDayIndex: anchor.dayIndex,
             cycleLength: cycleLength,
-            actionDayIndices: Array(actionDayIndices)
+            actionDayIndices: Array(actionDayIndices),
+            timeZoneIdentifier: calendar.timeZone.identifier
         )
     }
 
@@ -1390,6 +1393,8 @@ class PillStore {
             resolvedPacks = [defaultPack]
         }
 
+        let storedDaysTimeZone = defaults.string(forKey: Self.storedDaysTimeZoneKey)
+        Self.moveStoredDays(context: modelContext, packs: resolvedPacks, writtenIn: storedDaysTimeZone)
         Self.sanitizePersistedDataIfNeeded(context: modelContext, packs: resolvedPacks)
         resolvedPacks = Self.fetchPacks(context: modelContext)
 
@@ -1454,7 +1459,7 @@ class PillStore {
 
         if let storedActivation = defaults.object(forKey: Self.appActivatedDateKey) as? Date,
            Self.isValidPersistedDate(storedActivation) {
-            self.appActivatedDate = storedActivation
+            self.appActivatedDate = StoredDay.day(of: storedActivation, writtenIn: storedDaysTimeZone)
         } else {
             self.appActivatedDate = nil
             defaults.removeObject(forKey: Self.appActivatedDateKey)
@@ -1462,7 +1467,7 @@ class PillStore {
 
         if let storedStreakReset = defaults.object(forKey: Self.streakResetDateKey) as? Date,
            Self.isValidPersistedDate(storedStreakReset) {
-            self.streakResetDate = storedStreakReset
+            self.streakResetDate = StoredDay.day(of: storedStreakReset, writtenIn: storedDaysTimeZone)
         } else {
             self.streakResetDate = nil
             defaults.removeObject(forKey: Self.streakResetDateKey)
@@ -1507,6 +1512,8 @@ class PillStore {
             }
         )
 
+        lastKnownTimeZone = Calendar.current.timeZone
+        defaults.set(Calendar.current.timeZone.identifier, forKey: Self.storedDaysTimeZoneKey)
         refreshDayContext(force: true)
     }
 
@@ -1526,15 +1533,48 @@ class PillStore {
     }
 
     private func refreshDayContext(force: Bool) {
+        let timeZone = Calendar.current.timeZone
+        let previousTimeZone = lastKnownTimeZone
+        lastKnownTimeZone = timeZone
+        let movedTimeZone = previousTimeZone.map { $0.identifier != timeZone.identifier } ?? false
+        if movedTimeZone, let previousTimeZone {
+            moveStoredDays(writtenIn: previousTimeZone.identifier)
+        }
         let wallClockDay = Calendar.current.startOfDay(for: PillieClock.now)
         if wallClockDay != civilDay { civilDay = wallClockDay }
         let liveDay = liveDoseDay
-        guard force || liveDay != lastKnownLiveDay else { return }
+        guard force || movedTimeZone || liveDay != lastKnownLiveDay else { return }
         lastKnownLiveDay = liveDay
         invalidateAllSnapshotCaches()
         protocolChangeVersion &+= 1
         syncTodayTakenToAppGroup()
         scheduleDoseWindowRefresh(after: liveDay)
+    }
+
+    /// A time zone change while Pillie stays resident: the stored days and the
+    /// record index still hold the old zone's midnights.
+    private func moveStoredDays(writtenIn identifier: String) {
+        Self.moveStoredDays(context: modelContext, packs: packs, writtenIn: identifier)
+        appActivatedDate = appActivatedDate.map { StoredDay.day(of: $0, writtenIn: identifier) }
+        streakResetDate = streakResetDate.map { StoredDay.day(of: $0, writtenIn: identifier) }
+        UserDefaults.standard.set(Calendar.current.timeZone.identifier, forKey: Self.storedDaysTimeZoneKey)
+        refreshPacks()
+    }
+
+    /// Every stored day is the midnight of its date in the zone it was written in.
+    /// After a time zone change, moves each one to the same date's midnight here.
+    private static func moveStoredDays(context: ModelContext, packs: [PillPack], writtenIn identifier: String?) {
+        guard let identifier, identifier != Calendar.current.timeZone.identifier else { return }
+        let move = { (stored: Date) in StoredDay.day(of: stored, writtenIn: identifier) }
+        for pack in packs {
+            pack.startDate = move(pack.startDate)
+            pack.ringInsertionDate = pack.ringInsertionDate.map(move)
+            pack.firstLiveDay = pack.firstLiveDay.map(move)
+        }
+        for day in (try? context.fetch(FetchDescriptor<PillDay>())) ?? [] {
+            day.date = move(day.date)
+        }
+        try? context.save()
     }
 
     private func handleReminderTimeChange() {

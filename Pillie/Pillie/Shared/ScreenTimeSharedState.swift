@@ -116,6 +116,7 @@ enum ScreenTimeSharedState {
             TodayTakenStamp.epochDay(for: day),
             forKey: AppGroupKeys.todayTakenEpochDay
         )
+        defaults?.set(Calendar.current.timeZone.identifier, forKey: AppGroupKeys.todayTakenTimeZone)
         defaults?.synchronize()
     }
 
@@ -135,7 +136,8 @@ enum ScreenTimeSharedState {
     static var todayTakenStamp: TodayTakenStamp {
         TodayTakenStamp(
             isTaken: defaults?.bool(forKey: AppGroupKeys.isTodayTaken) ?? false,
-            epochDay: defaults?.object(forKey: AppGroupKeys.todayTakenEpochDay) as? Int
+            epochDay: defaults?.object(forKey: AppGroupKeys.todayTakenEpochDay) as? Int,
+            timeZoneIdentifier: defaults?.string(forKey: AppGroupKeys.todayTakenTimeZone)
         )
     }
 }

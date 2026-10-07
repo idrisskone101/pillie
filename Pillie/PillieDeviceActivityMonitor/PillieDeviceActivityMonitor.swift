@@ -62,7 +62,8 @@ class PillieDeviceActivityMonitor: DeviceActivityMonitor {
         )
         let stamp = TodayTakenStamp(
             isTaken: defaults?.bool(forKey: AppGroupKeys.isTodayTaken) ?? false,
-            epochDay: defaults?.object(forKey: AppGroupKeys.todayTakenEpochDay) as? Int
+            epochDay: defaults?.object(forKey: AppGroupKeys.todayTakenEpochDay) as? Int,
+            timeZoneIdentifier: defaults?.string(forKey: AppGroupKeys.todayTakenTimeZone)
         )
         let reminderHour = defaults?.object(forKey: AppGroupKeys.reminderHour) as? Int ?? 8
         let reminderMinute = defaults?.object(forKey: AppGroupKeys.reminderMinute) as? Int ?? 0
