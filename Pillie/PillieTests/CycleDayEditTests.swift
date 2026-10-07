@@ -146,4 +146,21 @@ final class CycleDayEditTests: XCTestCase {
         XCTAssertEqual(store.statusForDate(day("2026-08-20")), .missed)
         XCTAssertEqual(store.statusForDate(day("2026-09-06")), .breakDay)
     }
+
+    /// Pack 1 from 29 Sep; on 3 Oct she starts pack 2 early, then says today is day 10,
+    /// which moves pack 2's start before pack 1's.
+    func testACycleDayEditAfterAnEarlyStartKeepsTodayOnTheCurrentPack() throws {
+        let store = try makeStore(now: "2026-10-03", hour: 9, startDate: "2026-09-29")
+        store.startNewPack()
+
+        store.updateCycleDay(10)
+
+        XCTAssertEqual(store.scheduleSnapshot(for: store.today)?.pack.id, store.activePack?.id)
+        XCTAssertEqual(store.currentDayIndex + 1, 10)
+
+        setNow("2026-10-15", hour: 9, store: store)
+
+        XCTAssertEqual(store.scheduleSnapshot(for: store.today)?.dueAction?.type, .pillSugar)
+        XCTAssertTrue(store.isTodayHandled)
+    }
 }
