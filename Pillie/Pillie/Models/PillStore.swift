@@ -1041,12 +1041,24 @@ class PillStore {
     /// day's. A catch-up logs only while it is still open.
     @discardableResult
     func complete(_ shown: TodayLog) -> Bool {
-        if todayDueAction == nil, openCatchUp != nil {
+        let calendar = Calendar.current
+        switch shown {
+        case .due(let action):
+            if calendar.isDate(action.date, inSameDayAs: today) {
+                markTodayAsTaken()
+                return true
+            }
+            guard let windowJustClosed = calendar.date(byAdding: .day, value: -1, to: today),
+                  calendar.isDate(action.date, inSameDayAs: windowJustClosed) else { return false }
+            markActionAsTaken(on: action.date)
+            reconcileBlocking()
+            scheduleNotificationResync()
+            return true
+        case .catchUp(let action):
+            guard let open = openCatchUp, calendar.isDate(open.date, inSameDayAs: action.date) else { return false }
             logCatchUp()
-        } else {
-            markTodayAsTaken()
+            return true
         }
-        return true
     }
 
     func undoCatchUp() {
