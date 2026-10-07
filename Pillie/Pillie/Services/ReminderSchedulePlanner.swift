@@ -89,6 +89,9 @@ struct ReminderSchedulePlanner {
         /// `PillStore.currentStreak`: the run of taken due days before the
         /// nearest untaken one, i.e. what that day's reminder protects (ENG-168).
         var currentStreak: Int = 0
+        /// Post-expiry win-back inputs (ENG-173). `nil` plans none and keeps
+        /// the day-15 expiry-day notice.
+        var winback: WinbackContext? = nil
         /// For each untaken due day, the fire date of a base reminder already
         /// committed by NotificationManager (persisted, pending, or delivered).
         /// Empty → planner may emit first-time catch-up. Non-empty + fire <= now
@@ -147,15 +150,16 @@ struct ReminderSchedulePlanner {
         case supply(SupplyReminderIntent)
         case cycleTransition(CycleTransitionIntent)
         case trialExpiryWarning(TrialExpiryWarningIntent)
+        case winback(WinbackIntent)
 
         /// Fire date of a reminder that needs app access; `nil` for the trial
-        /// notices, which belong to the paywall.
+        /// notices and win-backs, which belong to the paywall.
         var reminderFireDate: Date? {
             switch self {
             case .due(let due): due.fireDate
             case .supply(let supply): supply.fireDate
             case .cycleTransition(let notice): notice.fireDate
-            case .trialExpiryWarning: nil
+            case .trialExpiryWarning, .winback: nil
             }
         }
     }
@@ -182,15 +186,18 @@ struct ReminderSchedulePlanner {
         let cycleTransitionIntent = planCycleTransitionNotice(input)
         // Trial expiry warnings (#168) are informational, never Plus-gated.
         let trialWarningIntents = planTrialExpiryWarnings(input)
+        let winbackIntents = planWinbacks(input)
         let reservedAuxiliarySlots = (supplyIntent == nil ? 0 : 1)
             + (cycleTransitionIntent == nil ? 0 : 1)
             + trialWarningIntents.count
+            + winbackIntents.count
         let dueReminderBudget = max(0, Self.maxPendingReminders - reservedAuxiliarySlots)
         guard dueReminderBudget > 0 else {
             var auxiliary: [Intent] = []
             if let supplyIntent { auxiliary.append(.supply(supplyIntent)) }
             if let cycleTransitionIntent { auxiliary.append(.cycleTransition(cycleTransitionIntent)) }
             auxiliary.append(contentsOf: trialWarningIntents.map(Intent.trialExpiryWarning))
+            auxiliary.append(contentsOf: winbackIntents.map(Intent.winback))
             return Array(auxiliary.prefix(Self.maxPendingReminders))
         }
 
@@ -285,6 +292,7 @@ struct ReminderSchedulePlanner {
             intents.append(.cycleTransition(cycleTransitionIntent))
         }
         intents.append(contentsOf: trialWarningIntents.map(Intent.trialExpiryWarning))
+        intents.append(contentsOf: winbackIntents.map(Intent.winback))
         return Array(intents.prefix(Self.maxPendingReminders))
     }
 
@@ -316,7 +324,10 @@ struct ReminderSchedulePlanner {
             schedule: ActiveDaySchedule(pack: input.pack, calendar: input.calendar)
         )
         let expiry = clock.expiryMoment(calendar: input.calendar)
+        // Win-back slot 1 says the same thing on the same day (ENG-173).
+        let winbackOwnsExpiryDay = input.winback != nil && input.trialEndTerms == .hardPaywall
         return Self.trialNoticeSlots.compactMap { slot in
+            if winbackOwnsExpiryDay, slot.calendarDaysBeforeExpiry == 0 { return nil }
             guard let noticeDay = input.calendar.date(
                 byAdding: .day,
                 value: -slot.calendarDaysBeforeExpiry,
@@ -341,6 +352,23 @@ struct ReminderSchedulePlanner {
                 terms: input.trialEndTerms
             )
         }
+    }
+
+    /// The win-back pushes (ENG-173) only follow a hard-paywall expiry, the
+    /// same moment the reminders stop.
+    private func planWinbacks(_ input: Input) -> [WinbackIntent] {
+        guard let context = input.winback, let expiry = hardPaywallAccessEnd(input) else { return [] }
+        return WinbackPlanner.plan(
+            WinbackPlanInput(
+                now: input.now,
+                expiry: expiry,
+                reminderHour: input.reminderHour,
+                reminderMinute: input.reminderMinute,
+                cohort: input.trialCohort,
+                context: context,
+                calendar: input.calendar
+            )
+        )
     }
 
     private func planRetryReminders(

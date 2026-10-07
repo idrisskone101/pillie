@@ -7,7 +7,7 @@ import Foundation
 import Security
 
 /// Persistence seam for `TrialEndExtendOfferPhase`. Callers move the phase
-/// only through `record(_:)`, so the one-way rule lives in the phase itself.
+/// only through `record(_:)`, so the lifecycle rules live in the phase itself.
 nonisolated protocol TrialEndExtendOfferStoring {
     func loadPhase() -> TrialEndExtendOfferPhase
     func savePhase(_ phase: TrialEndExtendOfferPhase)

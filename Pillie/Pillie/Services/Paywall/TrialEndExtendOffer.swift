@@ -8,7 +8,8 @@ import RevenueCat
 
 /// The one-time "extend with a free week" card on the Trial-End Paywall
 /// (ENG-172): offered once, after the person backs out of Apple's purchase
-/// sheet or a restore finds nothing, for the annual SKU that carries a free
+/// sheet or a restore finds nothing (plus one second chance from the slot 3
+/// win-back push, ENG-173), for the annual SKU that carries a free
 /// intro offer. The decision is nil whenever any input is missing, so the app
 /// never offers a product App Store Connect or RevenueCat does not serve.
 struct TrialEndExtendOffer: Equatable {
@@ -28,7 +29,7 @@ enum TrialEndExtendOfferDecision {
         calendar: Calendar
     ) -> TrialEndExtendOffer? {
         guard isTrialEndBoard,
-              phase == .unseen,
+              phase.offers,
               eligibility == .eligible,
               let product,
               let timeline = TrialEndExtendTimeline(
@@ -41,24 +42,44 @@ enum TrialEndExtendOfferDecision {
     }
 }
 
-enum TrialEndExtendTrigger: String {
+enum TrialEndExtendTrigger: String, Codable {
     case sheetCancel = "sheet_cancel"
     case restoreEmpty = "restore_empty"
 }
 
-/// One-way lifecycle of the offer on this device. Only `unseen` offers; an
-/// event that does not apply to the current phase leaves it unchanged, so a
-/// repeated or late event can never re-arm the card.
+/// Lifecycle of the offer on this device. One-way, except for one explicit
+/// second chance: tapping the slot 3 win-back push (ENG-173) re-arms a card
+/// she saw or turned down, and a no to that second showing closes it for
+/// good. An event that does not apply to the current phase leaves it
+/// unchanged, so a repeated or late event can never re-arm the card.
+/// Raw values persist in the Keychain.
 enum TrialEndExtendOfferPhase: String {
     case unseen
     case shown
     case accepted
     case declined
+    case rearmed
+    case reshown
+    case closed
 
     enum Event {
         case present
         case accept
         case decline
+        case rearm
+    }
+
+    var offers: Bool {
+        self == .unseen || self == .rearmed
+    }
+
+    /// Whether the slot 3 push may still pitch the card: never after a yes,
+    /// and never once the second chance is armed or spent.
+    var allowsWinbackPitch: Bool {
+        switch self {
+        case .unseen, .shown, .declined: true
+        case .accepted, .rearmed, .reshown, .closed: false
+        }
     }
 
     func next(on event: Event) -> TrialEndExtendOfferPhase {
@@ -66,6 +87,10 @@ enum TrialEndExtendOfferPhase: String {
         case (.unseen, .present): .shown
         case (.shown, .accept): .accepted
         case (.shown, .decline): .declined
+        case (.shown, .rearm), (.declined, .rearm): .rearmed
+        case (.rearmed, .present): .reshown
+        case (.reshown, .accept): .accepted
+        case (.reshown, .decline): .closed
         default: self
         }
     }

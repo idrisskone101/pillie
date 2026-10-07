@@ -329,6 +329,20 @@ protocol AnalyticsTracking {
     isPlus: Bool?
   )
 
+  /// The win-back pushes (ENG-173), the wall they open, and the trial-end
+  /// conversions they are attributed to.
+  func track(
+    _ event: AnalyticsEvent,
+    source: AnalyticsSource?,
+    surface: AnalyticsPaywallSurface?,
+    plan: AnalyticsPlan?,
+    result: AnalyticsResult?,
+    trialTermsCohort: TrialTermsCohort?,
+    trialEndCohort: TrialEndPaywallCohort?,
+    winback: AnalyticsWinback?,
+    isPlus: Bool?
+  )
+
   /// Report a handled failure as `app_error` + `$exception` (#179).
   func trackError(
     _ domain: AppErrorDomain,
@@ -542,6 +556,43 @@ extension AnalyticsTracking {
     )
   }
 
+  /// Recorders that predate ENG-173 still see the call they already handle,
+  /// minus the win-back fields.
+  func track(
+    _ event: AnalyticsEvent,
+    source: AnalyticsSource?,
+    surface: AnalyticsPaywallSurface?,
+    plan: AnalyticsPlan?,
+    result: AnalyticsResult?,
+    trialTermsCohort: TrialTermsCohort?,
+    trialEndCohort: TrialEndPaywallCohort?,
+    winback: AnalyticsWinback?,
+    isPlus: Bool?
+  ) {
+    guard let surface, let trialTermsCohort, let trialEndCohort else {
+      track(
+        event,
+        source: source,
+        surface: surface,
+        plan: plan,
+        result: result,
+        trialTermsCohort: trialTermsCohort,
+        isPlus: isPlus
+      )
+      return
+    }
+    track(
+      event,
+      source: source,
+      surface: surface,
+      plan: plan,
+      result: result,
+      trialTermsCohort: trialTermsCohort,
+      trialEndCohort: trialEndCohort,
+      isPlus: isPlus
+    )
+  }
+
   private func trackLegacy(
     _ event: AnalyticsEvent,
     source: AnalyticsSource? = nil,
@@ -650,6 +701,11 @@ enum AnalyticsEvent: String, CaseIterable {
   case trialEndExtendOfferShown = "trial_end_extend_offer_shown"
   case trialEndExtendOfferAccepted = "trial_end_extend_offer_accepted"
   case trialEndExtendOfferDismissed = "trial_end_extend_offer_dismissed"
+  /// A win-back push (ENG-173) was handed to iOS. Carries `slot: 1...4`;
+  /// recorded at most once per slot per install.
+  case winbackNotificationScheduled = "winback_notification_scheduled"
+  /// A win-back push was tapped. Carries `slot` and `variant`.
+  case winbackNotificationOpened = "winback_notification_opened"
   case trialDeclineFeedbackViewed = "trial_decline_feedback_viewed"
   case trialDeclineFeedbackReasonSelected = "trial_decline_feedback_reason_selected"
   case trialDeclineFeedbackTextSubmitted = "trial_decline_feedback_text_submitted"
@@ -719,6 +775,18 @@ enum AnalyticsSource: String {
   case notification
   /// Today's "Took it" chip, shown until the first reminder fires.
   case firstReminder = "first_reminder"
+  /// The trial-end wall opened from a win-back push tap (ENG-173).
+  case winback
+}
+
+/// How a win-back push (ENG-173) rides an event.
+enum AnalyticsWinback: Equatable {
+  /// The push's own events and the wall it opened: `slot`, and `variant`
+  /// when known.
+  case push(slot: WinbackSlot, variant: WinbackVariant?)
+  /// A trial-end conversion within a day of a push open: `winback_slot` and
+  /// `winback_variant`, so the funnel can credit the push.
+  case attributed(WinbackOpen)
 }
 
 enum AnalyticsPaywallSurface: String, CaseIterable {
@@ -928,6 +996,7 @@ struct AnalyticsPayload {
   let reminderPassed: Bool?
   let streakChange: StreakChangeReport.Change?
   let extendSource: TrialEndExtendTrigger?
+  let winback: AnalyticsWinback?
 
   init(
     source: AnalyticsSource? = nil,
@@ -965,7 +1034,8 @@ struct AnalyticsPayload {
     todayAnswer: TodayPillPick.Answer? = nil,
     reminderPassed: Bool? = nil,
     streakChange: StreakChangeReport.Change? = nil,
-    extendSource: TrialEndExtendTrigger? = nil
+    extendSource: TrialEndExtendTrigger? = nil,
+    winback: AnalyticsWinback? = nil
   ) {
     self.source = source
     self.step = step
@@ -1003,6 +1073,7 @@ struct AnalyticsPayload {
     self.reminderPassed = reminderPassed
     self.streakChange = streakChange
     self.extendSource = extendSource
+    self.winback = winback
   }
 
   var properties: [String: AnalyticsPropertyValue] {
@@ -1098,6 +1169,16 @@ struct AnalyticsPayload {
     }
     if let extendSource {
       properties["extend_source"] = .string(extendSource.rawValue)
+    }
+    switch winback {
+    case .push(let slot, let variant):
+      properties["slot"] = .int(slot.rawValue)
+      if let variant { properties["variant"] = .string(variant.rawValue) }
+    case .attributed(let open):
+      properties["winback_slot"] = .int(open.slot.rawValue)
+      properties["winback_variant"] = .string(open.variant.rawValue)
+    case nil:
+      break
     }
     if let restoreOutcome {
       properties["result"] = .string(restoreOutcome.analyticsResult.rawValue)
@@ -1370,6 +1451,31 @@ final class AnalyticsManager: AnalyticsTracking {
     )
 
     capture(event, payload: payload, source: .trialEnd)
+  }
+
+  func track(
+    _ event: AnalyticsEvent,
+    source: AnalyticsSource?,
+    surface: AnalyticsPaywallSurface?,
+    plan: AnalyticsPlan?,
+    result: AnalyticsResult?,
+    trialTermsCohort: TrialTermsCohort?,
+    trialEndCohort: TrialEndPaywallCohort?,
+    winback: AnalyticsWinback?,
+    isPlus: Bool?
+  ) {
+    let payload = AnalyticsPayload(
+      source: source,
+      plan: plan,
+      result: result,
+      isPlus: isPlus,
+      trialEndCohort: trialEndCohort,
+      trialTermsCohort: trialTermsCohort,
+      paywallSurface: surface,
+      winback: winback
+    )
+
+    capture(event, payload: payload, source: source)
   }
 
   func track(
