@@ -350,6 +350,33 @@ final class TodayPillCommitTests: XCTestCase {
         XCTAssertEqual(harness.store.currentDayIndex + 1, 14)
         XCTAssertFalse(harness.store.isTodayTaken)
     }
+
+    /// The decision Home reads for its Review Prompt card.
+    private func reviewPrompt(_ harness: Harness) -> ReviewPromptEligibility.Decision {
+        harness.store.reviewPromptDecision(higherPriorityCardShowing: false)
+    }
+
+    /// Pill 12 is logged in onboarding on 27 Sep; Home's button logs pills 13 and 14 after the next two reminders.
+    func testAPillLoggedInOnboardingStillReachesTheReviewPromptAfterTwoCheckInsOnHome() throws {
+        let now = InMemoryStoreFactory.localDate("2026-09-27", hour: 21, minute: 5)
+        let harness = try makeHarness(now: now, reminderHour: 20)
+        harness.store.reviewPromptPermanentlySuppressed = false
+        harness.store.reviewPromptLastSoftDismissal = nil
+        harness.store.reviewPromptSoftDismissalCount = 0
+
+        harness.commit(pick(11, .taken))
+
+        XCTAssertEqual(reviewPrompt(harness), .suppressed(.ineligibleStreak))
+
+        for iso in ["2026-09-28", "2026-09-29"] {
+            PillieClock.setFixedNowForTesting(InMemoryStoreFactory.localDate(iso, hour: 21, minute: 5))
+            harness.store.refreshDayContextIfNeeded()
+            harness.store.markTodayAsTaken()
+        }
+
+        XCTAssertEqual(harness.store.currentStreak, 3)
+        XCTAssertEqual(reviewPrompt(harness), .show)
+    }
 }
 
 private final class CompletionRecorder: AnalyticsTracking {
