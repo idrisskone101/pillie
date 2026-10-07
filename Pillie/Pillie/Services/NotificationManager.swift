@@ -275,19 +275,33 @@ final class NotificationManager {
 
     /// The reminder's Complete action once its payload is read. DEBUG's
     /// `pillie://debug/notification-complete` calls it too, since the simulator can't tap the action.
+    /// It logs what Home's button would: the live day's dose, or a missed patch or
+    /// ring task still open for catch-up. A reminder whose window has closed logs nothing.
     func completeReminder(store: PillStore, dueDate: Date) {
-        let dueEpoch = Int(Calendar.current.startOfDay(for: dueDate).timeIntervalSince1970)
-        let wasTaken = store.statusForDate(dueDate) == .taken
+        let calendar = Calendar.current
+        let dueDay = calendar.startOfDay(for: dueDate)
+        let dueEpoch = Int(dueDay.timeIntervalSince1970)
+        let wasTaken = store.statusForDate(dueDay) == .taken
 
-        store.markActionAsTaken(on: dueDate)
-        if !wasTaken, store.statusForDate(dueDate) == .taken {
+        let logged: Bool
+        if calendar.isDate(dueDay, inSameDayAs: store.today) {
+            store.markActionAsTaken(on: dueDay)
+            logged = !wasTaken && store.statusForDate(dueDay) == .taken
+        } else if let catchUp = store.openCatchUp, calendar.isDate(catchUp.date, inSameDayAs: dueDay) {
+            store.logCatchUp()
+            logged = true
+        } else {
+            logged = false
+        }
+        if logged {
             ProductAnalyticsTelemetry.live.todayActionCompleted(source: .notification)
             StreakChangeReport.record(store, reason: .logged)
         }
-        AppBlockingManager.shared.removeBlocking()
-        var ledger = ServedBaseReminderLedger.load()
-        ledger.clearServedRecordWhenTaken(dueDayEpoch: dueEpoch)
-        ledger.save()
+        if store.statusForDate(dueDay) == .taken {
+            var ledger = ServedBaseReminderLedger.load()
+            ledger.clearServedRecordWhenTaken(dueDayEpoch: dueEpoch)
+            ledger.save()
+        }
         clearReminders(forDueDayEpoch: dueEpoch)
         rescheduleFromStore(store)
     }
