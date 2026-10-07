@@ -120,13 +120,24 @@ final class SubscriptionManager: NSObject {
 
     /// Issue #257's remotely controlled cutover gate from the current RevenueCat
     /// offering metadata. The ratified hard-paywall default is enabled unless the
-    /// dashboard explicitly sets `hard_paywall_enabled` to false.
-    private(set) var hardPaywallEnabled = true
+    /// dashboard explicitly sets `hard_paywall_enabled` to false. The flag can
+    /// resolve after launch has planned reminders, so a value that flips this
+    /// user's terms replans like an access change.
+    private(set) var hardPaywallEnabled = true {
+        didSet {
+            guard trialEndTerms(hardPaywallEnabled: oldValue) != trialEndTerms else { return }
+            onEntitlementChange?(hasPlusAccess)
+        }
+    }
 
     /// The terms this user's trial ends on. Only legacy (grandfathered) terms
     /// keep daily reminders free; an unknown cohort reads as hard paywall so no
     /// surface promises free reminders the app won't keep.
     var trialEndTerms: TrialEndAccessTerms {
+        trialEndTerms(hardPaywallEnabled: hardPaywallEnabled)
+    }
+
+    private func trialEndTerms(hardPaywallEnabled: Bool) -> TrialEndAccessTerms {
         HardPaywallPolicy.terms(
             for: trialTermsCohort ?? TrialInstallCohort.storedAssignment() ?? .postCutover,
             hardPaywallEnabled: hardPaywallEnabled
@@ -140,7 +151,8 @@ final class SubscriptionManager: NSObject {
     private(set) var isLoading = false
 
     /// Fired whenever Plus Access actually flips (purchase, churn, trial grant,
-    /// trial expiry), never on a no-op refresh. Wired at launch to re-plan Smart
+    /// trial expiry) or the trial-end terms flip (the dashboard kill switch),
+    /// never on a no-op refresh. Wired at launch to re-plan Smart
     /// Reminders immediately so the change takes effect without waiting for the
     /// next natural reschedule (ADR 0004); blocking reconciles off the same hook.
     /// `@ObservationIgnored` because it is a side-effect hook, not observable UI state.
