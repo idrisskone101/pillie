@@ -128,12 +128,12 @@ final class RoutineDialCommitTests: XCTestCase {
         try assertEveryDialDayLandsOnHome(.ring, now: Self.afterReminder, answer: .notYet)
     }
 
-    func testBeforeTheReminderHomeStillShowsYesterdaysWindowForAPickWithoutYes() throws {
+    func testBeforeTheReminderHomeShowsTheNamedDayForAPickWithoutYes() throws {
         let harness = try makeHarness(now: Self.noon)
 
         harness.commit(pick(.patch, 10, nil))
 
-        XCTAssertEqual(harness.store.dueAction(on: harness.store.today)?.cycleDay, 9)
+        XCTAssertEqual(harness.store.dueAction(on: harness.store.today)?.cycleDay, 10)
         XCTAssertEqual(harness.store.pack.cycleDayIndex(on: Calendar.current.startOfDay(for: Self.noon)) + 1, 10)
     }
 
