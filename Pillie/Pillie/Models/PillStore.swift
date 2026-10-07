@@ -1996,6 +1996,11 @@ class PillStore {
         guard let earliest = packTimeline.first, dayEpoch >= earliest.startEpochDay else {
             return nil
         }
+        // The current pack owns every day from its start, even after a cycle-day
+        // edit moved that start before an older pack's.
+        if let current = activePack, dayEpoch >= epochDay(for: startOfDaySafe(current.startDate)) {
+            return current
+        }
 
         var low = 0
         var high = packTimeline.count - 1
