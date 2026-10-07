@@ -385,7 +385,8 @@ final class NotificationManager {
                 trialEndTerms: SubscriptionManager.shared.trialEndTerms,
                 currentStreak: store.currentStreak,
                 servedBaseFireDateByDueDayEpoch: servedBaseFireDateByDueDayEpoch,
-                calendar: calendar
+                calendar: calendar,
+                reminderChange: store.reminderTimeChange
             )
         )
 

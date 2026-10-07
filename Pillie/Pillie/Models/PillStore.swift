@@ -43,6 +43,16 @@ class PillStore {
             handleReminderTimeChange()
         }
     }
+    /// The last reminder time saved in Settings, kept until the routine restarts.
+    private(set) var reminderTimeChange: ReminderTimeChange? {
+        didSet {
+            if let data = reminderTimeChange.flatMap({ try? JSONEncoder().encode($0) }) {
+                UserDefaults.standard.set(data, forKey: Self.reminderTimeChangeKey)
+            } else {
+                UserDefaults.standard.removeObject(forKey: Self.reminderTimeChangeKey)
+            }
+        }
+    }
     var autoReminderIntervalMinutes: Int {
         didSet {
             let normalized = Self.normalizedAutoReminderInterval(autoReminderIntervalMinutes)
@@ -238,6 +248,7 @@ class PillStore {
     private static let appActivatedDateKey = "pillie_app_activated_date"
     private static let streakResetDateKey = "pillie_streak_reset_date"
     private static let storedDaysTimeZoneKey = "pillie_stored_days_time_zone"
+    private static let reminderTimeChangeKey = "pillie_reminder_time_change"
     private static let painPointsKey = "pillie_pain_points"
     private static let personalGoalKey = "personalGoal"
     private static let missFrequencyKey = "missFrequency"
@@ -282,11 +293,43 @@ class PillStore {
     /// the pack, and the rollover check, use it: `today` depends on the pack
     /// being replaced, and on a pinned QA clock the clamp hides the clock moving.
     private var liveDoseDay: Date {
-        LiveDoseDay.on(
-            PillieClock.now,
-            reminderHour: reminderHour,
-            reminderMinute: reminderMinute
+        reminderClock.liveDay(at: PillieClock.now)
+    }
+
+    /// Each dose day's reminder moment. A time saved in Settings applies from the
+    /// next dose day; days already lived keep theirs.
+    var reminderClock: ReminderClock {
+        ReminderClock(
+            current: ReminderTimeChange.Time(hour: reminderHour, minute: reminderMinute),
+            change: reminderTimeChange
         )
+    }
+
+    /// Settings' reminder time. A late dose never turns missed and a missed one
+    /// never reopens because the reminder moved.
+    func changeReminderTime(hour: Int, minute: Int) {
+        let previous = ReminderTimeChange.Time(hour: reminderHour, minute: reminderMinute)
+        let new = ReminderTimeChange.Time(hour: hour, minute: minute)
+        guard new != previous else { return }
+        reminderTimeChange = ReminderTimeChange.moving(
+            from: previous,
+            to: new,
+            at: PillieClock.now,
+            pending: reminderTimeChange
+        ) { [self] day, clock in
+            isLate(day, under: clock)
+        }
+        reminderHour = hour
+        reminderMinute = minute
+    }
+
+    private func isLate(_ day: Date, under clock: ReminderClock) -> Bool {
+        guard day >= today,
+              let snapshot = scheduleSnapshot(for: day),
+              snapshot.dueAction?.type.enforcesAdherence == true,
+              snapshot.status != .taken, snapshot.status != .breakDay,
+              let reminder = clock.reminder(on: day) else { return false }
+        return !DoseStanding.startedAfterReminder(packStartedAt: snapshot.pack.startedAt, day: day, reminder: reminder)
     }
 
     var activePack: PillPack? {
@@ -466,7 +509,7 @@ class PillStore {
         if isTodayTaken { return true }
         guard let snapshot = scheduleSnapshot(for: today), let due = snapshot.dueAction else { return false }
         guard due.type.enforcesAdherence else { return true }
-        guard let reminder = DoseWindow.reminder(for: today, hour: reminderHour, minute: reminderMinute) else { return false }
+        guard let reminder = reminderClock.reminder(on: today) else { return false }
         return DoseStanding.startedAfterReminder(packStartedAt: snapshot.pack.startedAt, day: today, reminder: reminder)
     }
 
@@ -565,7 +608,7 @@ class PillStore {
     /// catch-up territory, so a reminder for it is already on its way.
     private func isTodayDoseDue(at now: Date) -> Bool {
         guard todayDueAction != nil, !isTodayTaken,
-              let reminder = DoseWindow.reminder(for: today, hour: reminderHour, minute: reminderMinute)
+              let reminder = reminderClock.reminder(on: today)
         else { return false }
         return now >= reminder
     }
@@ -744,11 +787,12 @@ class PillStore {
     /// while blocking is switched on. Every in-app shield decision goes through here.
     func reconcileBlocking() {
         syncTodayTakenToAppGroup()
+        let liveDayTime = reminderClock.time(on: today)
         AppBlockingManager.shared.reconcileBlockingState(
             isTodayHandled: isTodayHandled,
             liveDay: today,
-            reminderHour: reminderHour,
-            reminderMinute: reminderMinute,
+            reminderHour: liveDayTime.hour,
+            reminderMinute: liveDayTime.minute,
             method: pack.method
         )
     }
@@ -924,8 +968,8 @@ class PillStore {
             day: snapshot.date,
             packStartedAt: snapshot.pack.startedAt,
             now: PillieClock.now,
-            reminderHour: reminderHour,
-            reminderMinute: reminderMinute
+            reminder: reminderClock.reminder(on: snapshot.date),
+            deadline: reminderClock.deadline(for: snapshot.date)
         )
     }
 
@@ -965,7 +1009,7 @@ class PillStore {
     }
 
     func isOnLiveDay(_ instant: Date) -> Bool {
-        LiveDoseDay.on(instant, reminderHour: reminderHour, reminderMinute: reminderMinute) == today
+        reminderClock.liveDay(at: instant) == today
     }
 
     /// Logs the missed task late. The day keeps `.missed`, written explicitly, so streak and adherence still count the miss.
@@ -1045,6 +1089,7 @@ class PillStore {
             return false
         }
         let useTodayAsStartDate = preserveHistory && methodChanged
+        reminderTimeChange = nil
         let anchor = anchorDay.map { startOfDaySafe($0) } ?? liveDoseDay
         let startDate: Date = {
             if useTodayAsStartDate {
@@ -1153,6 +1198,7 @@ class PillStore {
         )
         let safeCycleDay = max(1, min(cycleDay, normalizedCycleLength))
         let methodChanged = method != (activePack?.method ?? contraceptiveMethod)
+        reminderTimeChange = nil
 
         // 1. Delete all existing records
         try? modelContext.delete(model: PillDay.self)
@@ -1309,6 +1355,7 @@ class PillStore {
     }
 
     func startNewPack() {
+        reminderTimeChange = nil
         startNewPack(on: newPackStartDay())
     }
 
@@ -1412,6 +1459,9 @@ class PillStore {
         let loadedReminderMinute = defaults.object(forKey: Self.reminderMinuteKey) as? Int ?? 0
         self.reminderHour = loadedReminderHour
         self.reminderMinute = loadedReminderMinute
+        self.reminderTimeChange = defaults.data(forKey: Self.reminderTimeChangeKey)
+            .flatMap { try? JSONDecoder().decode(ReminderTimeChange.self, from: $0) }
+            .map { $0.moved(writtenIn: storedDaysTimeZone) }
         self.autoReminderIntervalMinutes = Self.normalizedAutoReminderInterval(
             defaults.object(forKey: Self.autoReminderIntervalKey) as? Int ?? 10
         )
@@ -1558,6 +1608,7 @@ class PillStore {
         Self.moveStoredDays(context: modelContext, packs: packs, writtenIn: identifier)
         appActivatedDate = appActivatedDate.map { StoredDay.day(of: $0, writtenIn: identifier) }
         streakResetDate = streakResetDate.map { StoredDay.day(of: $0, writtenIn: identifier) }
+        reminderTimeChange = reminderTimeChange.map { $0.moved(writtenIn: identifier) }
         UserDefaults.standard.set(Calendar.current.timeZone.identifier, forKey: Self.storedDaysTimeZoneKey)
         refreshPacks()
     }
@@ -1585,11 +1636,7 @@ class PillStore {
     private func scheduleDoseWindowRefresh(after liveDay: Date) {
         doseWindowTimer?.invalidate()
         doseWindowTimer = nil
-        guard let deadline = DoseWindow.deadline(
-            for: liveDay,
-            hour: reminderHour,
-            minute: reminderMinute
-        ) else { return }
+        guard let deadline = reminderClock.deadline(for: liveDay) else { return }
         doseWindowTimer = Timer.scheduledTimer(
             withTimeInterval: max(0, deadline.timeIntervalSince(PillieClock.now)),
             repeats: false
@@ -1599,12 +1646,7 @@ class PillStore {
     }
 
     private func isDoseWindowOpen(for day: Date) -> Bool {
-        DoseWindow.isOpen(
-            day: day,
-            now: PillieClock.now,
-            hour: reminderHour,
-            minute: reminderMinute
-        )
+        reminderClock.isOpen(day: day, now: PillieClock.now)
     }
 
     #if DEBUG
