@@ -124,7 +124,8 @@ enum BlockingInterventionPolicy {
         if let schedule, !schedule.requiresAction(on: day, calendar: calendar) {
             return .clearShields
         }
-        if handledStamp.isTaken(on: day, calendar: calendar) {
+        if handledStamp.isTaken(on: day, calendar: calendar)
+            || handledStamp.isWritten(after: day, calendar: calendar) {
             return .clearShields
         }
         return .applyShields
