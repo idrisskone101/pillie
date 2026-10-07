@@ -22,4 +22,15 @@ extension PlusAccessMirror {
         guard let clock = state.trialClock else { return .distantPast }
         return clock.expiryMoment(calendar: calendar)
     }
+
+    /// The one-off DeviceActivity interval that wakes the monitor when Plus
+    /// Access ends, so its access check drops shields then even with Pillie
+    /// closed. Nil when access has no end ahead.
+    static func expiryWakeInterval(
+        validUntil: Date,
+        now: Date,
+        calendar: Calendar
+    ) -> (start: DateComponents, end: DateComponents)? {
+        nil
+    }
 }
