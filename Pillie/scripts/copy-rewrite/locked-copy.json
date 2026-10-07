@@ -2859,6 +2859,176 @@
       "it": "Questa app ti aspetta."
     },
     {
+      "issue": "dose-window-explainer",
+      "table": "Localizable",
+      "key": "home.window.info",
+      "create": true,
+      "comment": "Accessibility label for the info button after Home's late line",
+      "en": "How the 24 hours work",
+      "de": "So funktionieren die 24 Stunden",
+      "it": "Come funzionano le 24 ore"
+    },
+    {
+      "issue": "dose-window-explainer",
+      "table": "Localizable",
+      "key": "home.window.title.pill",
+      "create": true,
+      "comment": "Dose window explainer sheet title, pill users",
+      "en": "Each pill gets 24 hours.",
+      "de": "Jede Pille hat 24 Stunden.",
+      "it": "Ogni pillola ha 24 ore."
+    },
+    {
+      "issue": "dose-window-explainer",
+      "table": "Localizable",
+      "key": "home.window.title.patch",
+      "create": true,
+      "comment": "Dose window explainer sheet title, patch users",
+      "en": "Each patch change gets 24 hours.",
+      "de": "Jeder Pflasterwechsel hat 24 Stunden.",
+      "it": "Ogni cambio del cerotto ha 24 ore."
+    },
+    {
+      "issue": "dose-window-explainer",
+      "table": "Localizable",
+      "key": "home.window.title.ring",
+      "create": true,
+      "comment": "Dose window explainer sheet title, ring users",
+      "en": "Each ring change gets 24 hours.",
+      "de": "Jeder Ringwechsel hat 24 Stunden.",
+      "it": "Ogni cambio dell’anello ha 24 ore."
+    },
+    {
+      "issue": "dose-window-explainer",
+      "table": "Localizable",
+      "key": "home.window.body",
+      "create": true,
+      "comment": "Dose window explainer body; %@ is the reminder clock time",
+      "en": "The clock starts at your %@ reminder and runs to the next one. Midnight doesn't reset it.",
+      "de": "Die Uhr startet mit deiner Erinnerung um %@ und läuft bis zur nächsten. Mitternacht setzt sie nicht zurück.",
+      "it": "Il conto parte dal tuo promemoria delle %@ e arriva al successivo. La mezzanotte non lo azzera."
+    },
+    {
+      "issue": "dose-window-explainer",
+      "table": "Localizable",
+      "key": "home.window.start.tonight",
+      "create": true,
+      "comment": "Timeline start label, reminder this evening; %@ is a clock time",
+      "en": "%@ tonight",
+      "de": "Heute Abend, %@",
+      "it": "Stasera alle %@"
+    },
+    {
+      "issue": "dose-window-explainer",
+      "table": "Localizable",
+      "key": "home.window.start.today",
+      "create": true,
+      "comment": "Timeline start label, reminder earlier today; %@ is a clock time",
+      "en": "%@ today",
+      "de": "Heute, %@",
+      "it": "Oggi alle %@"
+    },
+    {
+      "issue": "dose-window-explainer",
+      "table": "Localizable",
+      "key": "home.window.start.yesterday",
+      "create": true,
+      "comment": "Timeline start label, reminder yesterday; %@ is a clock time",
+      "en": "%@ yesterday",
+      "de": "Gestern, %@",
+      "it": "Ieri alle %@"
+    },
+    {
+      "issue": "dose-window-explainer",
+      "table": "Localizable",
+      "key": "home.window.start.caption",
+      "create": true,
+      "comment": "Caption under the timeline start time",
+      "en": "Reminder",
+      "de": "Erinnerung",
+      "it": "Promemoria"
+    },
+    {
+      "issue": "dose-window-explainer",
+      "table": "Localizable",
+      "key": "home.window.end.tomorrow",
+      "create": true,
+      "comment": "Timeline end label, next reminder tomorrow; %@ is a clock time",
+      "en": "%@ tomorrow",
+      "de": "Morgen, %@",
+      "it": "Domani alle %@"
+    },
+    {
+      "issue": "dose-window-explainer",
+      "table": "Localizable",
+      "key": "home.window.end.today",
+      "create": true,
+      "comment": "Timeline end label, next reminder later today; %@ is a clock time",
+      "en": "%@ today",
+      "de": "Heute, %@",
+      "it": "Oggi alle %@"
+    },
+    {
+      "issue": "dose-window-explainer",
+      "table": "Localizable",
+      "key": "home.window.end.left",
+      "create": true,
+      "comment": "Countdown under the timeline end; %@ is the time remaining",
+      "en": "%@ left",
+      "de": "Noch %@",
+      "it": "Mancano %@"
+    },
+    {
+      "issue": "dose-window-explainer",
+      "table": "Localizable",
+      "key": "home.window.midnight",
+      "create": true,
+      "comment": "Label on the timeline's midnight tick",
+      "en": "Midnight",
+      "de": "Mitternacht",
+      "it": "Mezzanotte"
+    },
+    {
+      "issue": "dose-window-explainer",
+      "table": "Localizable",
+      "key": "home.window.midnight.pill",
+      "create": true,
+      "comment": "Caption under the midnight tick; %lld is the pill number",
+      "en": "Still pill %lld",
+      "de": "Immer noch Pille %lld",
+      "it": "Ancora la pillola %lld"
+    },
+    {
+      "issue": "dose-window-explainer",
+      "table": "Localizable",
+      "key": "home.window.midnight.change",
+      "create": true,
+      "comment": "Caption under the midnight tick for patch and ring users",
+      "en": "Still counts as today",
+      "de": "Zählt noch als heute",
+      "it": "Conta ancora come oggi"
+    },
+    {
+      "issue": "dose-window-explainer",
+      "table": "Localizable",
+      "key": "home.window.then_missed",
+      "create": true,
+      "comment": "Label on the dashed line after the window ends",
+      "en": "Then missed",
+      "de": "Danach verpasst",
+      "it": "Poi è mancata"
+    },
+    {
+      "issue": "dose-window-explainer",
+      "table": "Localizable",
+      "key": "home.window.done",
+      "create": true,
+      "comment": "Button that closes the dose window explainer sheet",
+      "en": "Got it",
+      "de": "Alles klar",
+      "it": "Ho capito"
+    },
+    {
       "issue": "ENG-172",
       "table": "Commerce",
       "key": "trial.end.extend.title",

@@ -111,6 +111,12 @@ blocking/trial status surfaces, and (when eligible) the review ask.
   live day later (`/fixed-now`) pill 21 is missed ("Pill 21 missed
   yesterday"), its tile `#packTile.21` opens the History day sheet, and
   marking it taken redraws the card.
+- `flows/today-late-explainer.flow` — the same late pill 21: the ⓘ
+  `#homePackLateInfo` after the late line opens the 24-hour explainer
+  `#doseWindowExplainer` ("Each pill gets 24 hours.", 8:00 AM today to
+  8:00 AM tomorrow, "Still pill 21" under midnight). Past midnight it reads
+  "8:00 AM yesterday" with 5h left. A late patch change shows the same ⓘ
+  `#homeCountdownLateInfo` after the chip. "Got it" closes the sheet.
 - `flows/today-change-pack.flow` — the "…" menu's Change pack type opens
   the pack sheet, then the Settings "Clear your history?" confirmation.
   Cancel keeps the pack; Reset & Save starts the new pack at pill 1 today.

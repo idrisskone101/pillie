@@ -11,6 +11,8 @@ struct CountdownCard<Menu: View>: View {
     let progress: HomeCountdownProgress
     let reminderTime: String
     @ViewBuilder let menu: Menu
+    /// Opens the dose window explainer while today's task is late; nil hides the button.
+    var onExplainLate: (() -> Void)? = nil
 
     @Environment(\.locale) private var locale
 
@@ -39,7 +41,8 @@ struct CountdownCard<Menu: View>: View {
                     dayCount: progress.dayCount(locale: locale),
                     detail: progress.detail(locale: locale),
                     chip: progress.chip(reminderTime: reminderTime, locale: locale),
-                    chipTone: progress.chipTone
+                    chipTone: progress.chipTone,
+                    onExplainLate: onExplainLate
                 )
             }
 
@@ -291,6 +294,7 @@ private struct CountdownHero: View {
     let detail: String
     let chip: String?
     let chipTone: HomeCountdownProgress.ChipTone
+    let onExplainLate: (() -> Void)?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
@@ -320,7 +324,13 @@ private struct CountdownHero: View {
                 .fixedSize(horizontal: false, vertical: true)
 
             if let chip {
-                CountdownChip(text: chip, tone: chipTone)
+                HStack(spacing: 6) {
+                    CountdownChip(text: chip, tone: chipTone)
+                    if let onExplainLate {
+                        LateInfoButton(action: onExplainLate)
+                            .accessibilityIdentifier("homeCountdownLateInfo")
+                    }
+                }
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
