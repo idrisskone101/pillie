@@ -777,7 +777,7 @@ class PillStore {
         // Auto-start a new cycle when the ring is reinserted after
         // the 7-day ring-free interval.
         if due.type == .ringReinsert {
-            startNewPack()
+            startNewPack(on: day)
             // Mark new cycle's day 1 (ringInsert) as taken
             let newDay = startOfDaySafe(date)
             if let newSnapshot = scheduleSnapshot(for: newDay),
@@ -866,8 +866,9 @@ class PillStore {
             return
         }
 
-        // Revert auto-started ring cycle if user undoes the ringInsert on a same-day new pack
-        if (existingDay.actionType == .ringInsert || existingDay.actionType == .ringReinsert),
+        // Revert the cycle a ring reinsert auto-started. A cycle the user started
+        // herself logs `.ringInsert` and survives the undo.
+        if existingDay.actionType == .ringReinsert,
            targetPack.packNumber > 1,
            Calendar.current.isDate(targetPack.startDate, inSameDayAs: day) {
             let previousPackNumber = targetPack.packNumber - 1
@@ -1303,6 +1304,27 @@ class PillStore {
     }
 
     func startNewPack() {
+        startNewPack(on: newPackStartDay())
+    }
+
+    /// The first check-in logged past the finished pack's end, when its reminders
+    /// kept coming and she started the new pack without telling Pillie. Otherwise
+    /// the calendar day, the pill the next reminder is for, as `anchorDay(for:)`
+    /// places a pill she hasn't logged.
+    private func newPackStartDay() -> Date {
+        let calendarDay = anchorDay(for: nil)
+        guard let currentPack = activePack else { return calendarDay }
+        let firstCheckIn = currentPack.days
+            .filter { $0.status == .taken && currentPack.elapsedCycleDays(on: $0.date) >= currentPack.cycleLength }
+            .map { startOfDaySafe($0.date) }
+            .min()
+        guard let firstCheckIn,
+              let packEnd = Calendar.current.date(byAdding: .day, value: currentPack.cycleLength, to: firstCheckIn),
+              packEnd > today else { return calendarDay }
+        return firstCheckIn
+    }
+
+    private func startNewPack(on startDay: Date) {
         guard let currentPack = activePack else { return }
 
         // 1. Mark all existing packs as not current
@@ -1310,19 +1332,29 @@ class PillStore {
             existing.isCurrent = false
         }
 
-        // 2. Create new pack with same settings, day 1, today
+        // 2. Create new pack with same settings, day 1 on startDay
         let nextPackNumber = (packs.map(\.packNumber).max() ?? 0) + 1
         let newPack = PillPack(
             method: currentPack.method,
             pillRegimen: currentPack.method == .pill ? currentPack.pillRegimen : .twentyOneSeven,
             customRegimen: currentPack.regimen,
-            startDate: liveDoseDay,
+            startDate: startDay,
             cycleDayAnchorIndex: 0,
             packNumber: nextPackNumber,
             isCurrent: true,
-            startedAt: PillieClock.now
+            startedAt: PillieClock.now,
+            firstLiveDay: startDay
         )
         modelContext.insert(newPack)
+
+        // The new pack owns every day from startDay, so check-ins already logged
+        // there move with it instead of hiding behind it.
+        for record in Array(currentPack.days) where startOfDaySafe(record.date) >= startDay {
+            record.pack = newPack
+            if let due = DoseScheduleEngine.dueAction(on: record.date, pack: newPack) {
+                record.actionType = due.type
+            }
+        }
 
         // 3. Persist, rebuild caches, trigger UI refresh + notification reschedule
         persist()
