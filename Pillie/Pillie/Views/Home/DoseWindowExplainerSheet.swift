@@ -131,7 +131,7 @@ private struct DoseWindowRibbon: View {
                     .fill(PillieTheme.bg)
                     .ribbonPart(.notch)
                 Capsule()
-                    .fill(PillieTheme.textPrimary.opacity(0.35))
+                    .fill(PillieTheme.textMuted)
                     .ribbonPart(.tick)
                 VStack(spacing: 1) {
                     Text(PillieLocalization.string("home.window.midnight", locale: locale))
@@ -194,8 +194,8 @@ private struct RibbonLayout: Layout {
     private static let rowHeight: CGFloat = 18
     private static let tailLength: CGFloat = 28
     private static let tailGap: CGFloat = 6
-    private static let midnightGap: CGFloat = 10
-    private static let notchWidth: CGFloat = 3
+    private static let midnightGap: CGFloat = 14
+    private static let notchWidth: CGFloat = 4
     private static let labelGap: CGFloat = 8
 
     func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
