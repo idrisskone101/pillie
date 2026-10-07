@@ -102,7 +102,8 @@ private struct LateInfoButtonStyle: ButtonStyle {
     private static let fill = Color(hex: "FBEBDD")
 }
 
-/// One amber bar from the reminder that opened the window to the next one, midnight ticked inside it.
+/// One amber bar from the reminder that opened the window to the next one. Midnight is a notch in the bar,
+/// joined by a leader to its label above, so nothing below the bar reads as its marker.
 private struct DoseWindowRibbon: View {
     let explainer: DoseWindowExplainer
     let now: Date
@@ -126,6 +127,9 @@ private struct DoseWindowRibbon: View {
                 .stroke(PillieTheme.hairlineStrong, style: StrokeStyle(lineWidth: 2, lineCap: .round, dash: [4, 4]))
                 .ribbonPart(.tail)
             if midnightFraction != nil {
+                Rectangle()
+                    .fill(PillieTheme.bg)
+                    .ribbonPart(.notch)
                 Capsule()
                     .fill(PillieTheme.textPrimary.opacity(0.35))
                     .ribbonPart(.tick)
@@ -175,7 +179,7 @@ private struct DoseWindowRibbon: View {
 /// "then missed" labels below it, each label clamped so none overlaps another or leaves the row.
 private struct RibbonLayout: Layout {
     nonisolated enum Part: Hashable {
-        case bar, startDot, endDot, tail, tick, midnight, start, end, thenMissed
+        case bar, startDot, endDot, tail, notch, tick, midnight, start, end, thenMissed
     }
 
     nonisolated struct PartKey: LayoutValueKey {
@@ -190,7 +194,8 @@ private struct RibbonLayout: Layout {
     private static let rowHeight: CGFloat = 18
     private static let tailLength: CGFloat = 28
     private static let tailGap: CGFloat = 6
-    private static let midnightGap: CGFloat = 6
+    private static let midnightGap: CGFloat = 10
+    private static let notchWidth: CGFloat = 3
     private static let labelGap: CGFloat = 8
 
     func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
@@ -235,8 +240,13 @@ private struct RibbonLayout: Layout {
             let labelX = min(max(0, tickX - label.width / 2), max(0, endEdge - label.width))
             frames[.midnight] = CGRect(x: labelX, y: 0, width: label.width, height: label.height)
             rowTop = label.height + Self.midnightGap
+            let barTop = rowTop + (Self.rowHeight - Self.barHeight) / 2
             frames[.tick] = CGRect(
-                x: tickX - Self.tickWidth / 2, y: rowTop, width: Self.tickWidth, height: Self.rowHeight
+                x: tickX - Self.tickWidth / 2, y: label.height + 3,
+                width: Self.tickWidth, height: barTop - label.height - 3
+            )
+            frames[.notch] = CGRect(
+                x: tickX - Self.notchWidth / 2, y: barTop, width: Self.notchWidth, height: Self.barHeight
             )
         }
 
