@@ -260,11 +260,15 @@ struct ReminderSchedulePlanner {
 
         var plannedIntents = dueIntents
 
-        let remainingBudget = max(0, dueReminderBudget - plannedIntents.count)
-        if remainingBudget > 0,
-           let nearestDue = dueActions.first {
+        // Plan follow-ups for every untaken due day up front, since nothing rebuilds
+        // when the window rolls over at the next reminder. During a Reverse Trial
+        // they stop where its Plus Access ends.
+        let trialEnd = trialAccessEnd(input)
+        for due in baseDueActions {
+            let remainingBudget = dueReminderBudget - plannedIntents.count
+            guard remainingBudget > 0 else { break }
             let retries = planRetryReminders(
-                for: nearestDue,
+                for: due,
                 retryAnchorByEpoch: retryAnchorByEpoch,
                 now: input.now,
                 intervalMinutes: input.autoReminderIntervalMinutes,
@@ -274,7 +278,9 @@ struct ReminderSchedulePlanner {
                 budget: remainingBudget,
                 calendar: input.calendar
             )
-            plannedIntents.append(contentsOf: retries)
+            plannedIntents.append(contentsOf: retries.filter { retry in
+                trialEnd.map { retry.fireDate < $0 } ?? true
+            })
         }
 
         var intents = Array(plannedIntents.prefix(dueReminderBudget)).map(Intent.due)
@@ -292,9 +298,14 @@ struct ReminderSchedulePlanner {
     /// they choose a plan. Grandfathered (legacy) users and subscribers keep
     /// their reminders. Only the trial notices may fire past this moment.
     private func hardPaywallAccessEnd(_ input: Input) -> Date? {
-        guard !input.hasEntitlement,
-              input.trialEndTerms == .hardPaywall,
-              let grantDate = input.trialGrantDate else { return nil }
+        guard input.trialEndTerms == .hardPaywall else { return nil }
+        return trialAccessEnd(input)
+    }
+
+    /// When a Reverse Trial's Plus Access ends; `nil` for an entitled user or
+    /// one never granted a trial.
+    private func trialAccessEnd(_ input: Input) -> Date? {
+        guard !input.hasEntitlement, let grantDate = input.trialGrantDate else { return nil }
         return ReverseTrialClock(
             grantDate: grantDate,
             schedule: ActiveDaySchedule(pack: input.pack, calendar: input.calendar)
