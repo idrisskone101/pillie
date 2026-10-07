@@ -577,13 +577,17 @@ struct ReminderSchedulePlanner {
             return configured
         }
 
-        if let served = servedBaseFireDate {
+        let catchUp = now.addingTimeInterval(TimeInterval(Self.catchupDelayMinutes * 60))
+        // A catch-up is planned at most a minute out, so a served base later than
+        // that is still pending at an older, later reminder time. That time no
+        // longer applies, so the day catches up instead.
+        if let served = servedBaseFireDate, served <= catchUp {
             if served <= now { return nil }
             if served < windowEnd { return served }
             return nil
         }
 
-        return now.addingTimeInterval(TimeInterval(Self.catchupDelayMinutes * 60))
+        return catchUp
     }
 
     /// The day's original first-reminder moment, anchoring retry cadence. Outside
