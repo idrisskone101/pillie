@@ -336,6 +336,12 @@ struct HonestPaywallScreen: View {
         extendOfferStore.record(.decline)
         trackExtend(offer.trigger, telemetry.trialEndExtendOfferDismissed)
         showsExtendOffer = false
+        // Drop the card once it has fallen off screen, so VoiceOver cannot
+        // reach it below the plans. It can never be shown again anyway.
+        Task {
+            try? await Task.sleep(for: .milliseconds(400))
+            extendOffer = nil
+        }
     }
 
     /// The timeline is rebuilt from the purchase moment: Apple starts the free
@@ -371,7 +377,7 @@ struct HonestPaywallScreen: View {
             package: extendCandidate?.package,
             product: extendCandidate?.product ?? TrialEndExtendProduct(
                 productID: SubscriptionManager.extendAnnualProductID,
-                priceDisplay: (Decimal(2999) / 100).formatted(.currency(code: "USD").locale(locale)),
+                priceDisplay: "$29.99",
                 freeDays: TrialEndExtendOfferCard.supportedFreeDays
             ),
             eligibility: .eligible

@@ -72,6 +72,9 @@ struct TrialEndExtendOfferSheet: View {
         .padding(.top, 26)
         .padding(.bottom, 18)
         .frame(maxWidth: .infinity, alignment: .leading)
+        // Content height only: the sheet covers as much of the phone as its
+        // copy needs, never the whole screen.
+        .fixedSize(horizontal: false, vertical: true)
         .background {
             TrialEndExtendSwap.sheetShape
                 .fill(PillieTheme.bg)
@@ -89,12 +92,9 @@ struct TrialEndExtendOfferSheet: View {
                 restoreChip(restoreNote)
             }
 
-            Text(card.title)
-                .font(.pillie(32, weight: .black))
-                .tracking(-0.96)
-                .paperLineHeight(34, fontSize: 32)
-                .foregroundStyle(PillieTheme.textPrimary)
-                .fixedSize(horizontal: false, vertical: true)
+            title
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(card.title.replacingOccurrences(of: "\n", with: " "))
                 .accessibilityAddTraits(.isHeader)
                 .accessibilityFocused($isTitleFocused)
                 .accessibilityIdentifier("extendOfferTitle")
@@ -106,6 +106,22 @@ struct TrialEndExtendOfferSheet: View {
                 .fixedSize(horizontal: false, vertical: true)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    /// SwiftUI ignores negative line spacing, so each authored line is its
+    /// own Text, pulled together to Paper's 34pt line height.
+    private var title: some View {
+        let lineGap = 34 - 32 * 1.26
+        return VStack(alignment: .leading, spacing: lineGap) {
+            ForEach(Array(card.title.components(separatedBy: "\n").enumerated()), id: \.offset) { _, line in
+                Text(line)
+                    .font(.pillie(32, weight: .black))
+                    .tracking(-0.96)
+                    .foregroundStyle(PillieTheme.textPrimary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+        .padding(.vertical, lineGap / 2)
     }
 
     private func restoreChip(_ text: String) -> some View {
@@ -324,10 +340,11 @@ enum TrialEndExtendSwap {
 }
 
 extension View {
-    /// Paper's CSS line height for Outfit, whose natural line is 1.26 em:
-    /// the difference goes between lines and half above, half below.
+    /// Paper's CSS line height for Outfit, whose natural line is 1.26 em: half
+    /// the difference above and below, the rest between lines. SwiftUI drops
+    /// negative line spacing, so a tighter multi-line block needs split lines.
     func paperLineHeight(_ lineHeight: CGFloat, fontSize: CGFloat) -> some View {
         let extra = lineHeight - fontSize * 1.26
-        return lineSpacing(extra).padding(.vertical, extra / 2)
+        return lineSpacing(max(extra, 0)).padding(.vertical, extra / 2)
     }
 }
