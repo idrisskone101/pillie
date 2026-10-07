@@ -101,7 +101,8 @@ struct HonestPaywallView: View {
             .clipped()
             .frame(height: height, alignment: .top)
             .overlay(alignment: .topTrailing) {
-                if scene.board.chrome.showsClose {
+                // Once Plus is on, the success sheet's button is the way out.
+                if scene.board.chrome.showsClose && phoneShield == .paused {
                     closeButton
                         .padding(.top, HonestPaywallLayout.phoneTopInset)
                         .padding(.trailing, 16)

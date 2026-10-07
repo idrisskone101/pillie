@@ -39,8 +39,9 @@ struct PaywallPhoneMockup: View {
 
                     pausedShield
                         .padding(.top, 117)
-                        .opacity(shield.isPlusOn ? 0 : 1)
-                        .animation(reduceMotion ? PaywallSuccessMotion.fadeIn : PaywallSuccessMotion.shieldFade, value: shield.isPlusOn)
+                        .animation(reduceMotion ? PaywallSuccessMotion.fadeIn : PaywallSuccessMotion.shieldFade) {
+                            $0.opacity(shield.isPlusOn ? 0 : 1)
+                        }
 
                     PaywallPlusShield(line: shield.line, isOn: shield.isPlusOn)
                         .padding(.top, 81)
@@ -139,9 +140,9 @@ private struct PaywallPlusShield: View {
         VStack(spacing: 0) {
             ZStack {
                 rings
-                    .scaleEffect(isOn || reduceMotion ? 1 : 0.92)
-                    .opacity(isOn ? 1 : 0)
-                    .animation(reduceMotion ? PaywallSuccessMotion.fadeIn : PaywallSuccessMotion.rings, value: isOn)
+                    .animation(reduceMotion ? PaywallSuccessMotion.fadeIn : PaywallSuccessMotion.rings) {
+                        $0.scaleEffect(isOn || reduceMotion ? 1 : 0.92).opacity(isOn ? 1 : 0)
+                    }
 
                 Image("HomeAvatarLogo")
                     .resizable()
@@ -149,15 +150,14 @@ private struct PaywallPlusShield: View {
                     .frame(width: 72, height: 72)
                     .clipShape(Circle())
                     .shadow(color: Color(hex: "783C32").opacity(0.22), radius: 9, y: 8)
-                    .opacity(isOn ? 1 : 0)
-                    .animation(fade, value: isOn)
+                    .animation(fade) { $0.opacity(isOn ? 1 : 0) }
 
                 badge
-                    .scaleEffect(isOn || reduceMotion ? 1 : 1.4)
+                    .animation(reduceMotion ? PaywallSuccessMotion.fadeIn : PaywallSuccessMotion.badge) {
+                        $0.scaleEffect(isOn || reduceMotion ? 1 : 1.4).opacity(isOn ? 1 : 0)
+                    }
                     // Bottom -4, right -6 off the 72 pt mark, from the ZStack's center.
                     .offset(x: 36 + 6 - 15, y: 36 + 4 - 15)
-                    .opacity(isOn ? 1 : 0)
-                    .animation(reduceMotion ? PaywallSuccessMotion.fadeIn : PaywallSuccessMotion.badge, value: isOn)
             }
             .frame(width: 150, height: 150)
 
@@ -175,8 +175,7 @@ private struct PaywallPlusShield: View {
                     .padding(.horizontal, 22)
             }
             .multilineTextAlignment(.center)
-            .opacity(isOn ? 1 : 0)
-            .animation(fade, value: isOn)
+            .animation(fade) { $0.opacity(isOn ? 1 : 0) }
         }
         .frame(maxWidth: .infinity)
     }

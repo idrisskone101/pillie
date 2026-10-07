@@ -17,11 +17,15 @@ struct HonestPaywallHost: View {
     let onDismiss: () -> Void
     var onResolved: (() -> Void)? = nil
 
+    /// The board this presentation opened on. A purchase turns Plus on, which
+    /// resolves to no board, and the success screen must outlive that.
+    @State private var openedBoard: HonestPaywallBoard?
+
     private let subscriptionManager = SubscriptionManager.shared
 
     var body: some View {
         Group {
-            if let board = resolvedBoard {
+            if let board = openedBoard ?? resolvedBoard {
                 HonestPaywallScreen(
                     board: board,
                     surface: surface,
@@ -31,6 +35,7 @@ struct HonestPaywallHost: View {
                     declineFeedbackContent: declineFeedbackContent,
                     routeContinueFree: routeContinueFree
                 )
+                .onAppear { openedBoard = board }
             } else {
                 Color.clear
                     .onAppear(perform: onDismiss)

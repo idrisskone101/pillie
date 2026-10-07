@@ -121,6 +121,7 @@ struct HonestPaywallScreen: View {
 
                 if let success {
                     PaywallSuccessSheet(content: success, onDone: onDismiss)
+                        .transition(PaywallSuccessSheet.transition(reduceMotion: accessibilityReduceMotion))
                 }
             }
             .transition(.opacity)
@@ -380,7 +381,7 @@ struct HonestPaywallScreen: View {
     private func presentSuccess(_ receipt: PaywallSuccessReceipt) {
         let now = Date()
         showsExtendOffer = false
-        success = .make(
+        let content = PaywallSuccessContent.make(
             receipt: receipt,
             isReturning: board.isTrialEnd || receipt == .restored,
             opensFromSettings: surface == .settingsSubscription,
@@ -392,6 +393,9 @@ struct HonestPaywallScreen: View {
             calendar: .current,
             locale: locale
         )
+        withAnimation(PaywallSuccessSheet.entrance(reduceMotion: accessibilityReduceMotion)) {
+            success = content
+        }
     }
 
     #if DEBUG

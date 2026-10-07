@@ -1,0 +1,59 @@
+# ENG-172 S2c: every paywall purchase and restore ends on the success screen.
+# success=<annual|monthly|lifetime|restored|trial> plays it 1.2 s after the
+# wall settles, with fixed prices and no StoreKit. Never tap a purchase CTA.
+launch
+wait text Today 15
+record start
+openurl pillie://debug/trial-end-paywall?success=annual&lang=en
+wait id paywallSuccessTitle 25
+sleep 1.5
+record stop
+wait text "Pillie Plus is on again." 5
+expect text "a year, renews"
+expect text "Back on now"
+expect text "Plus is on"
+expect text "Manage or cancel anytime in Settings"
+expect id paywallSuccessDone
+sleep 1.5
+shot trial-end-annual
+
+openurl pillie://debug/trial-clear?lang=en
+launch
+wait text Today 15
+openurl pillie://debug/trial-end-paywall?success=trial&lang=en
+wait text "Free until" 25
+expect text "then $29.99 a year"
+sleep 1.5
+shot trial-end-free-week
+
+openurl pillie://debug/trial-clear?lang=en
+launch
+wait text Today 15
+openurl pillie://debug/trial-end-paywall?terms=soft&cohort=blocker&success=restored&lang=en
+wait text "Your purchase is back on this iPhone" 25
+expect-not text "Manage or cancel anytime in Settings"
+sleep 1.5
+shot soft-wall-restored
+
+openurl pillie://debug/trial-clear?lang=en
+launch
+wait text Today 15
+openurl pillie://debug/honest-paywall?board=duringTrial&success=lifetime&lang=en
+wait text "Paid once." 25
+expect text "Pillie Plus is on."
+expect text "Included in Plus"
+expect-not text "Manage or cancel anytime in Settings"
+sleep 1.5
+shot during-trial-lifetime
+tap --id paywallSuccessDone
+gone id paywallSuccessTitle 10
+shot back-home
+
+openurl pillie://debug/trial-clear?lang=en
+launch
+wait text Today 15
+openurl pillie://debug/trial-end-paywall?success=monthly&lang=de
+wait id paywallSuccessTitle 25
+sleep 1.5
+shot de-monthly
+openurl pillie://debug/trial-clear?lang=en

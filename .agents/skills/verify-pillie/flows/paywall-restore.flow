@@ -31,9 +31,15 @@ gone text "No subscription found"
 
 openurl pillie://debug/restore-outcome?result=restored
 tap --label "Restore purchases"
-# restored turns Plus on; Home drops the hard wall and shows the Plus
-# blocking-setup card instead of the free "App blocking is off" card.
-gone text "Get your reminders and app blocking back." 10
+# restored turns Plus on and the wall plays the success screen (ENG-172);
+# it stays up until Back to today, even though Plus no longer resolves a board.
+wait text "Your purchase is back on this iPhone" 10
+sleep 2
+expect id paywallSuccessDone
+shot trial-end-restored-success
+tap --id paywallSuccessDone
+# Home shows the Plus blocking-setup card instead of the free "App blocking is off" card.
+gone id paywallSuccessTitle 10
 wait text "You haven’t set up app blocking yet." 10
 shot trial-end-restored
 

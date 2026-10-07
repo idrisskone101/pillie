@@ -39,18 +39,16 @@ struct PaywallSuccessSheet: View {
                     .fill(PillieTheme.bg)
                     .shadow(color: PillieTheme.textPrimary.opacity(0.10), radius: 15, y: -12)
             }
-            .offset(y: reduceMotion || isRevealed ? 0 : PaywallSuccessMotion.sheetRise)
-            .animation(reduceMotion ? nil : PaywallSuccessMotion.sheet, value: isRevealed)
-            .opacity(reduceMotion && !isRevealed ? 0 : 1)
-            .animation(reduceMotion ? PaywallSuccessMotion.fadeIn : nil, value: isRevealed)
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
             // The sheet runs to the physical bottom, under the home indicator.
             .ignoresSafeArea(edges: .bottom)
         }
         .accessibilityElement(children: .contain)
         .accessibilityIdentifier("paywallSuccessSheet")
-        .onAppear { isRevealed = true }
         .task {
+            // Rows reveal after the hidden first frame, so their fades have a start.
+            await Task.yield()
+            isRevealed = true
             try? await Task.sleep(for: reduceMotion ? PaywallSuccessMotion.reducedSettled : PaywallSuccessMotion.settled)
             guard !Task.isCancelled else { return }
             isTitleFocused = true
@@ -126,6 +124,15 @@ struct PaywallSuccessSheet: View {
         .padding(.top, 26)
         // Without the Settings line the button would sit on the home indicator.
         .padding(.bottom, content.manageLine == nil ? max(22, bottomInset) : 22)
+    }
+
+    /// The sheet's own entrance. Insert it inside `withAnimation(entrance(…))`.
+    static func transition(reduceMotion: Bool) -> AnyTransition {
+        reduceMotion ? .opacity : .offset(y: PaywallSuccessMotion.sheetRise)
+    }
+
+    static func entrance(reduceMotion: Bool) -> Animation {
+        reduceMotion ? PaywallSuccessMotion.fadeIn : PaywallSuccessMotion.sheet
     }
 
     private static let shape = UnevenRoundedRectangle(
@@ -263,10 +270,10 @@ private struct SuccessRow: ViewModifier {
     let isRevealed: Bool
 
     func body(content: Content) -> some View {
-        content
-            .opacity(isRevealed || reduceMotion ? 1 : 0)
-            .offset(y: isRevealed || reduceMotion ? 0 : PaywallSuccessMotion.rowRise)
-            .animation(reduceMotion ? nil : PaywallSuccessMotion.row(index), value: isRevealed)
+        content.animation(PaywallSuccessMotion.row(index)) {
+            $0.opacity(isRevealed || reduceMotion ? 1 : 0)
+                .offset(y: isRevealed || reduceMotion ? 0 : PaywallSuccessMotion.rowRise)
+        }
     }
 }
 
