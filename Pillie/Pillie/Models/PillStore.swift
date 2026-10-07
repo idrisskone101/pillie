@@ -1239,62 +1239,60 @@ class PillStore {
 
     // MARK: - Update Cycle Day (Backfill Taken)
 
-    /// Adjusts the active pack so today corresponds to `newCycleDay` and backfills
+    /// Makes the day the editor shows, `today`, cycle day `newCycleDay` and backfills
     /// prior action days as taken. Break days stay neutral and nothing is missed.
+    /// Saving the day already shown changes nothing. A finished pack keeps its
+    /// history: the adjusted cycle becomes the next pack.
     func updateCycleDay(_ newCycleDay: Int) {
-        guard let activePack else { return }
+        guard let currentPack = activePack else { return }
         let calendar = Calendar.current
-        let cycleLength = max(1, activePack.cycleLength)
-        let safeCycleDay = max(1, min(newCycleDay, cycleLength))
+        let liveDay = today
+        let safeCycleDay = max(1, min(newCycleDay, max(1, currentPack.cycleLength)))
+        let packIsFinished = isRefillDue
+        guard packIsFinished || safeCycleDay != currentDayIndex + 1 else { return }
 
         // Remember whether today was already logged so a cycle-day adjustment
         // doesn't silently undo the day's check-in.
-        let todayEpoch = epochDay(for: liveDoseDay)
-        let todayRecord = dayRecord(forPackID: activePack.id, epochDay: todayEpoch)
-        let hadTakenToday = todayRecord?.status == .taken
+        let hadTakenToday = isTodayTaken
 
         // 1. Adjust the pack so today = safeCycleDay.
         //    All methods (pill, patch, ring) recompute startDate so the
         //    schedule engine anchors correctly and backfilled action types
         //    match the user's chosen cycle day.
-        let newStartDate = calendar.date(byAdding: .day, value: -(safeCycleDay - 1), to: liveDoseDay) ?? liveDoseDay
-        activePack.startDate = newStartDate
-        activePack.cycleDayAnchorIndex = 0
-        let backfillStart = newStartDate
+        let newStartDate = calendar.date(byAdding: .day, value: -(safeCycleDay - 1), to: liveDay) ?? liveDay
+        let adjustedPack = packIsFinished
+            ? insertNewPack(startingOn: newStartDate, after: currentPack)
+            : currentPack
+        adjustedPack.startDate = newStartDate
+        adjustedPack.cycleDayAnchorIndex = 0
 
         // Ring: update pinned insertion date to match the new cycle day anchor.
-        if activePack.method == .ring, activePack.ringInsertionDate != nil {
-            activePack.ringInsertionDate = newStartDate
+        if adjustedPack.method == .ring, adjustedPack.ringInsertionDate != nil {
+            adjustedPack.ringInsertionDate = newStartDate
         }
 
         // 2. Delete all existing PillDay records for this pack
-        let existingDays = Array(activePack.days)
-        for day in existingDays {
+        for day in Array(adjustedPack.days) {
             modelContext.delete(day)
         }
 
         // 3. Backfill days 1 through (safeCycleDay - 1). Action days are .taken;
         //    break days are .breakDay, and no day is marked .missed.
-        backfillPriorDays(from: backfillStart, count: safeCycleDay - 1, pack: activePack, calendar: calendar)
+        backfillPriorDays(from: newStartDate, count: safeCycleDay - 1, pack: adjustedPack, calendar: calendar)
 
-        // 4. Set appActivatedDate to today so dates before our backfill
-        //    range show as .noData (not .missed). Explicit PillDay records
-        //    we created above always take precedence in the snapshot engine.
-        appActivatedDate = liveDoseDay
+        // 4. Reset streak so backfilled completed action records don't inflate it.
+        streakResetDate = liveDay
 
-        // 5. Reset streak so backfilled completed action records don't inflate it.
-        streakResetDate = liveDoseDay
-
-        // 6. Persist and rebuild
+        // 5. Persist and rebuild
         persist()
         refreshPacks()
 
-        // 7. Re-log today if it was already checked in before the adjustment and the
+        // 6. Re-log today if it was already checked in before the adjustment and the
         //    reshaped schedule still expects a user action today.
         if hadTakenToday,
-           let snapshot = scheduleSnapshot(for: liveDoseDay),
+           let snapshot = scheduleSnapshot(for: liveDay),
            snapshot.dueAction?.type.requiresUserAction == true {
-            markActionAsTaken(on: liveDoseDay)
+            markActionAsTaken(on: liveDay)
             persist()
         }
 
@@ -1326,13 +1324,23 @@ class PillStore {
 
     private func startNewPack(on startDay: Date) {
         guard let currentPack = activePack else { return }
+        insertNewPack(startingOn: startDay, after: currentPack)
 
-        // 1. Mark all existing packs as not current
+        // Persist, rebuild caches, trigger UI refresh + notification reschedule
+        persist()
+        packs = Self.fetchPacks(context: modelContext)
+        rebuildReadIndexes()
+        protocolChangeVersion &+= 1
+        reconcileBlockingAfterScheduleChange()
+        NotificationManager.shared.requestReschedule(from: self, reason: "refill-new-pack")
+    }
+
+    @discardableResult
+    private func insertNewPack(startingOn startDay: Date, after currentPack: PillPack) -> PillPack {
         for existing in packs where existing.isCurrent {
             existing.isCurrent = false
         }
 
-        // 2. Create new pack with same settings, day 1 on startDay
         let nextPackNumber = (packs.map(\.packNumber).max() ?? 0) + 1
         let newPack = PillPack(
             method: currentPack.method,
@@ -1355,14 +1363,7 @@ class PillStore {
                 record.actionType = due.type
             }
         }
-
-        // 3. Persist, rebuild caches, trigger UI refresh + notification reschedule
-        persist()
-        packs = Self.fetchPacks(context: modelContext)
-        rebuildReadIndexes()
-        protocolChangeVersion &+= 1
-        reconcileBlockingAfterScheduleChange()
-        NotificationManager.shared.requestReschedule(from: self, reason: "refill-new-pack")
+        return newPack
     }
 
     // MARK: - Init
