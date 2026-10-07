@@ -1009,7 +1009,8 @@ class PillStore {
                 continue
             }
 
-            if snapshot.status == .noData { continue }
+            // The open live day is undecided until the next reminder, so it is not a miss yet.
+            if snapshot.status == .noData || snapshot.status == .upcoming { continue }
             if snapshot.countsTowardAdherence {
                 due += 1
                 if snapshot.status == .taken {

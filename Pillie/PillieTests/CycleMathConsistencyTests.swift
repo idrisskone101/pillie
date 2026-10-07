@@ -109,9 +109,9 @@ final class CycleMathConsistencyTests: XCTestCase {
         XCTAssertEqual(store.statusForDate(today), .upcoming)
 
         // Gap days no longer count toward month adherence: Jun 1–7 were break days,
-        // Jun 8–9 are gap days (skipped), so only today registers as due.
+        // Jun 8–9 are gap days (skipped), and today is still open, so nothing is due yet.
         let adherence = store.monthAdherence(for: today)
-        XCTAssertEqual(adherence.due, 1)
+        XCTAssertEqual(adherence.due, 0)
         XCTAssertEqual(adherence.completed, 0)
     }
 
