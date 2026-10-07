@@ -74,7 +74,9 @@ struct HonestPaywallView: View {
     private func hero(height: CGFloat) -> some View {
         PaywallPhoneMockup()
             .offset(y: phoneOffset)
-            .opacity(isPhoneRevealed ? 1 : 0)
+            .animation(accessibilityReduceMotion ? PaywallEntrance.fade : PaywallEntrance.phoneFade) {
+                $0.opacity(isPhoneRevealed ? 1 : 0)
+            }
             .padding(.top, HonestPaywallLayout.phoneTopInset)
             .frame(maxWidth: .infinity)
             // Clip at the sheet's moving top edge so the phone rises from behind it.
@@ -358,8 +360,9 @@ private enum HonestPaywallLayout {
 private enum PaywallEntrance {
     static let sheetRise: CGFloat = 64
     static let phoneRise: CGFloat = 120
-    static let sheet = Animation.spring(duration: 0.55, bounce: 0.12)
+    static let sheet = Animation.spring(duration: 0.55, bounce: 0.1)
     static let phone = Animation.spring(duration: 0.6, bounce: 0.15).delay(0.08)
+    static let phoneFade = Animation.easeOut(duration: 0.16).delay(0.08)
     static let fade = Animation.easeOut(duration: 0.25)
 }
 
