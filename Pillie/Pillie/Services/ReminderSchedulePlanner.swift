@@ -103,10 +103,10 @@ struct ReminderSchedulePlanner {
         let fireDate: Date
         let dueDayEpoch: Int
         let kind: DueReminderKind
-        /// Set only on the base reminder for the nearest untaken pill day while
-        /// the streak is in `streakReminderRange` (ENG-168). Later days stay
-        /// `nil` because their streak depends on check-ins that haven't
-        /// happened yet.
+        /// Set only on the base reminder for the nearest untaken due day, when
+        /// it is a hormone pill, while the streak is in `streakReminderRange`
+        /// (ENG-168). Later days stay `nil` because their streak depends on
+        /// check-ins that haven't happened yet.
         var streakAtRisk: Int? = nil
     }
 
@@ -242,6 +242,7 @@ struct ReminderSchedulePlanner {
                 let firstKind: DueReminderKind = (effectiveSnoozeOverride?.dueDayEpoch == dueEpoch) ? .snooze : .base
                 let namesStreak = firstKind == .base
                     && due.method == .pill
+                    && due.type.enforcesAdherence
                     && dueEpoch == nearestDueDayEpoch
                     && Self.streakReminderRange.contains(input.currentStreak)
                 dueIntents.append(
