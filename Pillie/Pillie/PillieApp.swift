@@ -116,10 +116,8 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
     ) {
         recordTrialWarningDeliveryIfNeeded(userInfo: notification.request.content.userInfo)
         recordSmartReminderFireIfNeeded(request: notification.request)
-        // Foreground fallback: apply blocking when reminder fires while app is open
-        if let store = Self.store, !store.isTodayHandled {
-            AppBlockingManager.shared.applyBlocking(reason: store.pack.method.blockingReasonText)
-        }
+        // Foreground fallback: shield when a reminder fires while the app is open
+        Self.store?.reconcileBlocking()
         completionHandler([.banner, .sound])
     }
 
@@ -193,10 +191,8 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         case NotificationManager.shared.snoozeAction:
             NotificationManager.shared.handleSnoozeAction(store: store, response: response)
         case UNNotificationDefaultActionIdentifier:
-            // User tapped the notification banner — apply blocking immediately
-            if !store.isTodayHandled {
-                AppBlockingManager.shared.applyBlocking(reason: store.pack.method.blockingReasonText)
-            }
+            // User tapped the notification banner — shield now if the dose is due
+            store.reconcileBlocking()
         default:
             break
         }

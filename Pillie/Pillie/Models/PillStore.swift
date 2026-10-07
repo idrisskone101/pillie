@@ -727,10 +727,7 @@ class PillStore {
 
     func unmarkTodayAsTaken() {
         unmarkActionAsTaken(on: today)
-        syncTodayTakenToAppGroup()
-        if !isTodayHandled {
-            AppBlockingManager.shared.applyBlocking(reason: pack.method.blockingReasonText)
-        }
+        reconcileBlocking()
         scheduleNotificationResync()
     }
 
@@ -740,12 +737,10 @@ class PillStore {
         ScreenTimeSharedState.setBlockingScheduleMirror(blockingScheduleMirror)
     }
 
-    /// Schedule mutations cannot wait for the debounced notification rebuild:
-    /// the app may suspend before it writes the extension mirror, and an already-
-    /// active shield must be cleared immediately when today becomes a no-action day.
-    private func reconcileBlockingAfterScheduleChange() {
+    /// Shields go up only after today's reminder with its dose still due, and only
+    /// while blocking is switched on. Every in-app shield decision goes through here.
+    func reconcileBlocking() {
         syncTodayTakenToAppGroup()
-        SubscriptionManager.shared.updateActiveDaySchedule(pack: activePack)
         AppBlockingManager.shared.reconcileBlockingState(
             isTodayHandled: isTodayHandled,
             liveDay: today,
@@ -753,6 +748,14 @@ class PillStore {
             reminderMinute: reminderMinute,
             method: pack.method
         )
+    }
+
+    /// Schedule mutations cannot wait for the debounced notification rebuild:
+    /// the app may suspend before it writes the extension mirror, and an already-
+    /// active shield must be cleared immediately when today becomes a no-action day.
+    private func reconcileBlockingAfterScheduleChange() {
+        SubscriptionManager.shared.updateActiveDaySchedule(pack: activePack)
+        reconcileBlocking()
     }
 
     func markActionAsTaken(on date: Date) {

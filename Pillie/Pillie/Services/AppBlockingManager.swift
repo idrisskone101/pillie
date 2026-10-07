@@ -191,7 +191,9 @@ final class AppBlockingManager {
 
     // MARK: - Shield Management
 
-    func applyBlocking(reason: String) {
+    /// Only `reconcileBlockingState` shields, so every caller passes its reminder
+    /// and blocking-switch checks.
+    private func applyBlocking(reason: String) {
         scrubLegacyBlockingSnoozeState()
         guard SubscriptionManager.shared.hasPlusAccess else { return }
         guard hasAppsSelected else { return }
