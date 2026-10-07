@@ -104,12 +104,17 @@ enum TodayPillCommit {
             reminderHour: store.reminderHour,
             reminderMinute: store.reminderMinute
         )
-        let anchorDay = TodayPillPick.Answer.anchorDay(
-            for: start.answer,
-            now: now,
-            reminderHour: store.reminderHour,
-            reminderMinute: store.reminderMinute
-        )
+        let liveDayAtPick = LiveDoseDay.on(start.pickedAt, reminderHour: store.reminderHour, reminderMinute: store.reminderMinute)
+        let liveDayNow = LiveDoseDay.on(now, reminderHour: store.reminderHour, reminderMinute: store.reminderMinute)
+        // Until a reminder passes, the pick still names the open dose, even past midnight.
+        let anchorDay = liveDayAtPick == liveDayNow
+            ? pickedDay
+            : TodayPillPick.Answer.anchorDay(
+                for: start.answer,
+                now: now,
+                reminderHour: store.reminderHour,
+                reminderMinute: store.reminderMinute
+            )
         let daysSincePick = max(0, Calendar.current.dateComponents([.day], from: pickedDay, to: anchorDay).day ?? 0)
         let cycleDay = (start.cycleDay - 1 + daysSincePick) % start.cycleLength + 1
 
