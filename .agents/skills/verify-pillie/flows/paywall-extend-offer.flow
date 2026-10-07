@@ -1,0 +1,61 @@
+# ENG-172: the hard trial-end wall rises straight into the one-time extend
+# offer through /trial-end-extend. clear=1 re-arms the offer each time; the
+# Test Store serves no extend SKU, so a $29.99 week stands in.
+launch
+wait text Today 15
+openurl pillie://debug/trial-end-extend?trigger=cancel&notifications=on&clear=1&lang=en
+wait id extendOfferTitle 20
+wait text "Charged for one year of Plus." 5
+expect text "We remind you"
+expect text "Start my free week"
+expect-not text "No purchase found on this Apple Account"
+sleep 1
+shot cancel
+
+tap --id extendOfferNotNowButton
+wait text "Get your reminders and app blocking back." 10
+sleep 1
+shot not-now-plans
+
+openurl pillie://debug/trial-clear?lang=en
+launch
+wait text Today 15
+openurl pillie://debug/trial-end-extend?trigger=restore&notifications=on&clear=1&lang=en
+wait id extendOfferRestoreNote 20
+expect text "We remind you"
+sleep 1
+shot restore
+
+openurl pillie://debug/trial-clear?lang=en
+launch
+wait text Today 15
+openurl pillie://debug/trial-end-extend?trigger=cancel&notifications=off&clear=1&lang=en
+wait text "Last day to cancel" 20
+expect-not text "We remind you"
+sleep 1
+shot notifications-off
+
+openurl pillie://debug/trial-clear?lang=en
+launch
+wait text Today 15
+openurl pillie://debug/trial-end-extend?trigger=restore&notifications=on&clear=1&lang=de
+wait text "Gratiswoche starten" 20
+sleep 1
+shot de
+
+openurl pillie://debug/trial-clear?lang=en
+launch
+wait text Today 15
+openurl pillie://debug/trial-end-extend?trigger=restore&notifications=off&clear=1&lang=fi
+wait text "Aloita ilmainen viikko" 20
+sleep 1
+shot fi
+
+openurl pillie://debug/trial-clear?lang=en
+launch
+wait text Today 15
+openurl pillie://debug/trial-end-extend?trigger=restore&notifications=off&clear=1&lang=ru
+wait text "Начать бесплатную неделю" 20
+sleep 1
+shot ru
+openurl pillie://debug/trial-clear?lang=en

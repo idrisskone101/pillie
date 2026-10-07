@@ -99,6 +99,14 @@ CTA, a reassurance line, and Restore · Terms · Privacy. The board is a
   grep it for `restore_` to see `surface`, `reason`, and `error_category`.
 - `flows/paywall-trial-end-link.flow` opens the hard and the closable trial-end
   walls from Home through `/trial-end-paywall`, with no developer menu.
+- `flows/paywall-extend-offer.flow` (ENG-172) — the hard trial-end wall rises
+  straight into the one-time extend offer through
+  `pillie://debug/trial-end-extend?trigger=cancel|restore&notifications=on|off&clear=1`.
+  Shots: the cancel card, Not now dropping it back to the plans, the restore
+  card with its chip, the notifications-off card ("Last day to cancel"), and
+  de, fi and ru for truncation. `clear=1` re-arms the Keychain phase; the
+  Test Store serves no extend SKU, so a $29.99 one-week fixture stands in and
+  "Start my free week" cannot complete a purchase there.
 - `flows/paywall-lifetime-tile.flow` — on the hard trial-end board: three
   tiles with Year selected; a tap on "Cancel anytime" with a restore outcome
   armed raises no alert and logs no `restore_started`; the Lifetime tile
