@@ -43,8 +43,11 @@ struct OnboardingDraft<Pick: OnboardingDraftPick>: Codable, Equatable {
 }
 
 extension OnboardingDraftPick {
+    /// Saving the pick already on disk keeps when it was first made, so a step
+    /// resumed on a later day still names the pill of the day it was picked.
     func save(to defaults: UserDefaults = .standard, at pickedAt: Date = PillieClock.now) {
-        OnboardingDraft(pick: self, pickedAt: pickedAt).save(to: defaults)
+        let firstPickedAt = OnboardingDraft<Self>.load(from: defaults).flatMap { $0.pick == self ? $0.pickedAt : nil }
+        OnboardingDraft(pick: self, pickedAt: firstPickedAt ?? pickedAt).save(to: defaults)
     }
 
     static func load(from defaults: UserDefaults = .standard) -> Self? {
