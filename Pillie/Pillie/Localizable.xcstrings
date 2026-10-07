@@ -164965,6 +164965,193 @@
           }
         }
       }
+    },
+    "home.window.info": {
+      "comment": "Accessibility label for the small info button after Home's late line. It opens a sheet explaining that a dose has until the next reminder, not until midnight.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How the 24 hours work"
+          }
+        }
+      }
+    },
+    "home.window.title.pill": {
+      "comment": "Title of the dose window explainer sheet for pill users. The window runs from one daily reminder to the next.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Each pill gets 24 hours."
+          }
+        }
+      }
+    },
+    "home.window.title.patch": {
+      "comment": "Title of the dose window explainer sheet for patch users. The window runs from one reminder to the next.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Each patch change gets 24 hours."
+          }
+        }
+      }
+    },
+    "home.window.title.ring": {
+      "comment": "Title of the dose window explainer sheet for ring users. The window runs from one reminder to the next.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Each ring change gets 24 hours."
+          }
+        }
+      }
+    },
+    "home.window.body": {
+      "comment": "Body of the dose window explainer sheet; %@ is the daily reminder clock time, e.g. \"8:00 PM\".",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The clock starts at your %@ reminder and runs to the next one. Midnight doesn't reset it."
+          }
+        }
+      }
+    },
+    "home.window.start.tonight": {
+      "comment": "Label at the start of the explainer's timeline: the reminder that opened today's window, this evening; %@ is a clock time, e.g. \"8:00 PM tonight\".",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ tonight"
+          }
+        }
+      }
+    },
+    "home.window.start.today": {
+      "comment": "Label at the start of the explainer's timeline: the reminder that opened today's window, earlier today; %@ is a clock time, e.g. \"8:00 AM today\".",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ today"
+          }
+        }
+      }
+    },
+    "home.window.start.yesterday": {
+      "comment": "Label at the start of the explainer's timeline when that reminder fired yesterday (it is now past midnight); %@ is a clock time, e.g. \"8:00 PM yesterday\".",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ yesterday"
+          }
+        }
+      }
+    },
+    "home.window.start.caption": {
+      "comment": "Small caption under the start time of the explainer's timeline: this is when the reminder went off.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reminder"
+          }
+        }
+      }
+    },
+    "home.window.end.tomorrow": {
+      "comment": "Label at the end of the explainer's timeline: the next reminder, tomorrow; %@ is a clock time, e.g. \"8:00 PM tomorrow\".",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ tomorrow"
+          }
+        }
+      }
+    },
+    "home.window.end.today": {
+      "comment": "Label at the end of the explainer's timeline when the next reminder is later today (it is now past midnight); %@ is a clock time, e.g. \"8:00 PM today\".",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ today"
+          }
+        }
+      }
+    },
+    "home.window.end.left": {
+      "comment": "Countdown under the end of the explainer's timeline; %@ is the time remaining, e.g. \"22h 46m left\".",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ left"
+          }
+        }
+      }
+    },
+    "home.window.midnight": {
+      "comment": "Label on the midnight tick in the explainer's timeline.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Midnight"
+          }
+        }
+      }
+    },
+    "home.window.midnight.pill": {
+      "comment": "Caption under the midnight tick: after midnight it is still the same pill; %lld is the pill number in the pack, e.g. \"Still pill 11\".",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Still pill %lld"
+          }
+        }
+      }
+    },
+    "home.window.midnight.change": {
+      "comment": "Caption under the midnight tick for patch and ring users: after midnight the change still counts for the same day.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Still counts as today"
+          }
+        }
+      }
+    },
+    "home.window.then_missed": {
+      "comment": "Label on the short dashed line after the window's end: once the next reminder passes, the dose counts as missed.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Then missed"
+          }
+        }
+      }
+    },
+    "home.window.done": {
+      "comment": "Button that closes the dose window explainer sheet.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Got it"
+          }
+        }
+      }
     }
   },
   "version": "1.0"
