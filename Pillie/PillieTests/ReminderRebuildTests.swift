@@ -48,6 +48,24 @@ struct ReminderRebuildTests {
         #expect(fireDate.timeIntervalSinceNow <= 2 * 60)
     }
 
+    /// The served reminder is snoozed for ten minutes, and Home opens before the snooze fires.
+    @Test(.enabled(if: ReminderRebuildTests.remindedToday))
+    func `A snooze waiting to fire survives the next rebuild`() throws {
+        let (fixture, todayEpoch) = try storeRemindedFiveMinutesAgo()
+        defer { cleanUp() }
+        let store = fixture.store
+        let center = InMemoryNotificationCenter()
+        let manager = KeptNotificationManager.make(center: center, hasPlusAccess: { true })
+        manager.rescheduleFromStore(store)
+        manager.rescheduleAfterSnooze(store: store, dueDayEpoch: todayEpoch, firstFireDate: Date().addingTimeInterval(10 * 60))
+        let snoozed = requests(center, kind: "snooze", dueDayEpoch: todayEpoch).map(\.identifier)
+        #expect(snoozed.count == 1)
+
+        manager.rescheduleFromStore(store)
+
+        #expect(requests(center, kind: "snooze", dueDayEpoch: todayEpoch).map(\.identifier) == snoozed)
+    }
+
     /// A pill pack from three days ago whose reminder fired five minutes ago and was
     /// served: the ledger holds today's base reminder. Keep the fixture for the whole
     /// test; SwiftData resets its models once the container goes.
