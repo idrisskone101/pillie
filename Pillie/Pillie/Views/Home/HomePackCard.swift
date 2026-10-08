@@ -29,17 +29,8 @@ struct HomePackCard: View {
         let _ = store.civilDay
         let pack = store.pack
         let today = store.today
-        let elapsedDays = pack.elapsedCycleDays(on: today)
-        let progress = HomePackProgress(
-            regimen: pack.regimen,
-            elapsedDays: elapsedDays,
-            isTodayTaken: heldTaken ?? store.isTodayTaken,
-            missedDays: missedDays(elapsedDays: elapsedDays, totalDays: pack.regimen.totalDays, today: today),
-            lateUntil: lateUntil(today: today),
-            today: today,
-            now: PillieClock.now,
-            calendar: .current
-        )
+        let progress = HomePackProgress.live(store: store, isTodayTaken: heldTaken ?? store.isTodayTaken, now: PillieClock.now)
+        let elapsedDays = progress.elapsedDays
         let lateExplainer: DoseWindowExplainer? = if case .late = progress.status {
             DoseWindowExplainer(
                 subject: .pill(number: pack.regimen.day(atIndex: elapsedDays).number),
@@ -112,24 +103,8 @@ struct HomePackCard: View {
         }
     }
 
-    private func lateUntil(today: Date) -> Date? {
-        guard case .late(let until)? = store.doseStanding(on: today) else { return nil }
-        return until
-    }
-
     private func date(ofIndex index: Int, elapsedDays: Int, today: Date) -> Date? {
         Calendar.current.date(byAdding: .day, value: index - elapsedDays, to: today)
-    }
-
-    private func missedDays(elapsedDays: Int, totalDays: Int, today: Date) -> Set<Int> {
-        let pastDays = min(elapsedDays, totalDays)
-        guard pastDays > 0, var day = date(ofIndex: 0, elapsedDays: elapsedDays, today: today) else { return [] }
-        var missed: Set<Int> = []
-        for index in 0..<pastDays {
-            if store.statusForDate(day) == .missed { missed.insert(index) }
-            day = Calendar.current.date(byAdding: .day, value: 1, to: day) ?? day
-        }
-        return missed
     }
 
     private func editableDay(atIndex index: Int, elapsedDays: Int, today: Date) -> HistoryEditableDay? {

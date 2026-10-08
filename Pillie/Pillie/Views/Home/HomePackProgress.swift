@@ -160,3 +160,40 @@ struct HomePackProgress: Hashable, Sendable {
         return calendar.weekdaySymbols[weekday]
     }
 }
+
+extension HomePackProgress {
+    /// Home's pill pack as the store reads it on the live day.
+    static func live(store: PillStore, isTodayTaken: Bool, now: Date, calendar: Calendar = .current) -> HomePackProgress {
+        let pack = store.pack
+        let today = store.today
+        let elapsedDays = pack.elapsedCycleDays(on: today)
+        let lateUntil: Date? = if case .late(let until)? = store.doseStanding(on: today) { until } else { nil }
+        return HomePackProgress(
+            regimen: pack.regimen,
+            elapsedDays: elapsedDays,
+            isTodayTaken: isTodayTaken,
+            missedDays: missedDays(in: store, elapsedDays: elapsedDays, totalDays: pack.regimen.totalDays, today: today, calendar: calendar),
+            lateUntil: lateUntil,
+            today: today,
+            now: now,
+            calendar: calendar
+        )
+    }
+
+    private static func missedDays(
+        in store: PillStore,
+        elapsedDays: Int,
+        totalDays: Int,
+        today: Date,
+        calendar: Calendar
+    ) -> Set<Int> {
+        let pastDays = min(elapsedDays, totalDays)
+        guard pastDays > 0, var day = calendar.date(byAdding: .day, value: -elapsedDays, to: today) else { return [] }
+        var missed: Set<Int> = []
+        for index in 0..<pastDays {
+            if store.statusForDate(day) == .missed { missed.insert(index) }
+            day = calendar.date(byAdding: .day, value: 1, to: day) ?? day
+        }
+        return missed
+    }
+}
