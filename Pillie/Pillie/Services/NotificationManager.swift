@@ -420,10 +420,10 @@ final class NotificationManager {
         let subscription = SubscriptionManager.shared
         guard subscription.trialEndTerms == .hardPaywall,
               !subscription.hasEntitlement,
-              subscription.trialGrantDate != nil
+              let grantDate = subscription.trialGrantDate
         else { return nil }
         return WinbackContext(
-            daysLogged: store.doseRecord(from: .distantPast, to: store.today).taken,
+            daysLogged: store.doseRecord(from: grantDate, to: store.today).taken,
             lastAppOpen: WinbackStorage.lastAppOpen(),
             slot2Arm: WinbackSlot2Arm.assigned(),
             extendPitch: WinbackExtendPitch.load(),
@@ -440,8 +440,8 @@ final class NotificationManager {
         locale: Locale
     ) -> UNNotificationRequest {
         let content = UNMutableNotificationContent()
-        content.title = WinbackCopy.title(for: winback, locale: locale, calendar: calendar)
-        content.body = WinbackCopy.body(for: winback, locale: locale, calendar: calendar)
+        content.title = WinbackCopy.title(for: winback, locale: locale)
+        content.body = WinbackCopy.body(for: winback, locale: locale)
         content.sound = .default
         content.userInfo = WinbackPayload.userInfo(for: winback)
 

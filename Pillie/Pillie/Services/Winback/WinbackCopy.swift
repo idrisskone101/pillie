@@ -14,21 +14,13 @@ enum WinbackCopy {
     /// A reminder before 17:00 is a daytime one, so "tonight" would be false.
     static let eveningStartHour = 17
 
-    static func title(
-        for intent: WinbackIntent,
-        locale: Locale = PillieLocalization.appLocale,
-        calendar: Calendar = .current
-    ) -> String {
+    static func title(for intent: WinbackIntent, locale: Locale = PillieLocalization.appLocale) -> String {
         let key = titleKey(slot: intent.slot, variant: intent.variant, reminderHour: reminderHour(intent.detail))
-        return localized(key, intent: intent, locale: locale, calendar: calendar)
+        return localized(key, detail: intent.detail, locale: locale)
     }
 
-    static func body(
-        for intent: WinbackIntent,
-        locale: Locale = PillieLocalization.appLocale,
-        calendar: Calendar = .current
-    ) -> String {
-        localized(bodyKey(slot: intent.slot, variant: intent.variant), intent: intent, locale: locale, calendar: calendar)
+    static func body(for intent: WinbackIntent, locale: Locale = PillieLocalization.appLocale) -> String {
+        localized(bodyKey(slot: intent.slot, variant: intent.variant), detail: intent.detail, locale: locale)
     }
 
     static func titleKey(slot: WinbackSlot, variant: WinbackVariant, reminderHour: Int) -> String {
@@ -72,31 +64,20 @@ enum WinbackCopy {
 
     /// Lines without a placeholder ignore the argument, so every key of a
     /// slot formats with that slot's detail.
-    private static func localized(_ key: String, intent: WinbackIntent, locale: Locale, calendar: Calendar) -> String {
+    private static func localized(_ key: String, detail: WinbackDetail, locale: Locale) -> String {
         let table = "Notifications"
-        switch intent.detail {
+        switch detail {
         case .reminderTime(let hour, let minute):
             return PillieLocalization.formatted(
                 key,
                 table: table,
                 locale: locale,
-                arguments: reminderTime(hour: hour, minute: minute, on: intent.fireDate, locale: locale, calendar: calendar)
+                arguments: SettingsPresentation.time(hour: hour, minute: minute, locale: locale)
             )
         case .extendPrice(let price):
             return PillieLocalization.formatted(key, table: table, locale: locale, arguments: price)
         case .daysLogged(let days):
             return PillieLocalization.formatted(key, table: table, locale: locale, arguments: days)
         }
-    }
-
-    private static func reminderTime(hour: Int, minute: Int, on day: Date, locale: Locale, calendar: Calendar) -> String {
-        let formatter = DateFormatter()
-        formatter.locale = locale
-        formatter.calendar = calendar
-        formatter.timeZone = calendar.timeZone
-        formatter.dateStyle = .none
-        formatter.timeStyle = .short
-        let time = calendar.date(bySettingHour: hour, minute: minute, second: 0, of: day) ?? day
-        return formatter.string(from: time)
     }
 }
