@@ -4,6 +4,7 @@
 # simulator cannot tap a banner). app.log carries the analytics mirror:
 # winback_notification_opened, paywall_viewed with source winback.
 launch
+openurl pillie://debug/plus-home?lang=en
 wait text Today 15
 log start
 openurl pillie://debug/trial-end-extend?trigger=cancel&notifications=on&clear=1&lang=en
