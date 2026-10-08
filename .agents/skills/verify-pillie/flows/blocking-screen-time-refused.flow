@@ -5,8 +5,11 @@
 # on a pre-cutover install, which a simulator never is. The simulator always
 # approves, so /screen-time-refused makes it refuse like an iPhone where
 # another app holds access.
-defaults homeBlockingStatusCardDismissed -bool false
+# `fresh` so Home starts with the blocking card: a pack another flow left
+# finished shows Start new instead, which outranks it.
+fresh
 launch
+wait text "Get started" 15
 openurl pillie://debug/plus-home?lang=en
 wait text Today 15
 openurl "pillie://debug/screen-time-refused?reason=conflict"

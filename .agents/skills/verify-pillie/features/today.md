@@ -116,7 +116,7 @@ blocking/trial status surfaces, and (when eligible) the review ask.
   `#homePackLateInfo` after the late line opens the 24-hour explainer
   `#doseWindowExplainer` ("Each pill gets 24 hours.", 8:00 AM today to
   8:00 AM tomorrow, "Still pill 21" under midnight). Past midnight it reads
-  "8:00 AM yesterday" with 5h left. A late patch change shows the same ⓘ
+  "8:00 AM yesterday" with the hours left. A late patch change shows the same ⓘ
   `#homeCountdownLateInfo` after the chip. "Got it" closes the sheet.
 - `flows/today-change-pack.flow` — the "…" menu's Change pack type opens
   the pack sheet, then the Settings "Clear your history?" confirmation.
@@ -134,7 +134,7 @@ blocking/trial status surfaces, and (when eligible) the review ask.
   which starts the next cycle), day 30 new cycle due, and a missed insertion.
 - `flows/today-ring-start-day.flow` onboards a ring routine answered "Not yet"
   with an evening reminder and, before that reminder, logs the day-1 insert
-  from Home. The streak starts at 1.
+  from Home's "Took it" chip (`#firstReminderTookIt`). The streak starts at 1.
 - `flows/today-ring-new-cycle-streak.flow` — logs a ring insert and removal,
   then the on-time day-29 change: Home's streak reads 2, the shake hero
   (`#shakeStreakHero`) promises 3, and Home reads 3 once the new cycle starts.

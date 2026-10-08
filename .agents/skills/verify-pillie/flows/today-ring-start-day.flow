@@ -1,6 +1,7 @@
 # A new ring routine answered "Not yet", with an evening reminder, before that
 # reminder: the card says put the ring in today, so Home must let the insert be
-# logged now, and logging it starts the streak at 1.
+# logged now. Before the first reminder that is the "Took it" chip (ENG-140), and
+# logging it starts the streak at 1.
 fresh
 defaults onboardingStep -int 10
 defaults pillie_contraceptive_method -string ring
@@ -24,9 +25,9 @@ tap --label Continue
 wait id protectionPlanReadyStartButton
 tap --id protectionPlanReadyStartButton
 wait text "Insert your ring" 15
-wait text "Insert ring" 10
+wait id firstReminderTookIt 10
 shot start-day-due
-tap --label "Insert ring"
+tap --id firstReminderTookIt
 wait id shakeTapToConfirmFallback 10
 tap --id shakeTapToConfirmFallback
 wait text "Ring inserted at" 10

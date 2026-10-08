@@ -24,13 +24,14 @@ shot explainer-sheet
 tap --id doseWindowExplainer.done
 gone id doseWindowExplainer 10
 
-# Past midnight the same pill is still late, and the sheet says so.
-openurl pillie://debug/fixed-now?at=2026-09-29T03:00:00Z
+# Past midnight the same pill is still late, and the sheet says so. 07:00Z is
+# past midnight on a UTC Mac and in Toronto, so the hours left differ by zone.
+openurl pillie://debug/fixed-now?at=2026-09-29T07:00:00Z
 wait text "Late · still time until 8:00 AM today" 10
 tap --id homePackLateInfo
 wait id doseWindowExplainer 10
 expect text "8:00 AM yesterday"
-expect text "5h left"
+expect text "h left"
 shot explainer-after-midnight
 tap --id doseWindowExplainer.done
 gone id doseWindowExplainer 10
