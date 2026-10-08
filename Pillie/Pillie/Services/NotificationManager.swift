@@ -58,6 +58,8 @@ final class NotificationManager {
     private let trialWarningPrefix = "pillie_trial_warning_"
     private let winbackPrefix = "pillie_winback_"
     private let categoryID = "PILL_REMINDER"
+    /// The same reminder with Snooze, a Plus perk (ADR 0004).
+    private let plusCategoryID = "PILL_REMINDER_PLUS"
     private let markTakenActionID = "MARK_TAKEN_ACTION"
     private let snoozeActionID = "SNOOZE_ACTION"
     private let minimumSupportedEpoch: TimeInterval = -2_208_988_800 // 1900-01-01
@@ -116,7 +118,7 @@ final class NotificationManager {
         self.hasPlusAccess = hasPlusAccess
         self.hasBlockerSetup = hasBlockerSetup
         self.trackSmartReminderRetryScheduled = trackSmartReminderRetryScheduled
-        registerCategory(includeSnooze: hasPlusAccess())
+        registerCategories()
     }
 
     // MARK: - Authorization
@@ -185,9 +187,8 @@ final class NotificationManager {
         // Ensure the extension has the latest taken state before scheduling
         store.syncTodayTakenToAppGroup()
 
-        // Keep the notification category in sync with the entitlement so the Snooze
-        // action only appears for Plus users (Smart Reminders gate, ADR 0004).
-        registerCategory(includeSnooze: hasPlusAccess())
+        // Re-register so the action titles follow the app language.
+        registerCategories()
 
         let now = Date()
         let calendar = Calendar.current
@@ -230,16 +231,22 @@ final class NotificationManager {
 
     // MARK: - Category Registration
 
-    /// Registers the reminder category. The Snooze action is a Smart Reminders perk
-    /// (a user-triggered follow-up re-fire) and is only included for Plus users; free
-    /// users get a reminder with no Snooze action (ADR 0004).
-    private func registerCategory(includeSnooze: Bool) {
-        let category = UNNotificationCategory(
-            identifier: categoryID,
-            actions: reminderCategoryActions(includeSnooze: includeSnooze),
-            intentIdentifiers: []
-        )
-        center.setNotificationCategories([category])
+    /// Registers the reminder categories, with and without Snooze. Snooze is a Smart
+    /// Reminders perk (ADR 0004), and iOS reads a reminder's actions when it shows it,
+    /// so each reminder names the category for Plus Access at its own fire time.
+    private func registerCategories() {
+        center.setNotificationCategories([
+            UNNotificationCategory(
+                identifier: categoryID,
+                actions: reminderCategoryActions(includeSnooze: false),
+                intentIdentifiers: []
+            ),
+            UNNotificationCategory(
+                identifier: plusCategoryID,
+                actions: reminderCategoryActions(includeSnooze: true),
+                intentIdentifiers: []
+            ),
+        ])
     }
 
     private func reminderCategoryActions(
@@ -564,7 +571,7 @@ final class NotificationManager {
             )
         }
         content.sound = .default
-        content.categoryIdentifier = categoryID
+        content.categoryIdentifier = due.offersSnooze ? plusCategoryID : categoryID
         content.userInfo = [
             PayloadKey.dueDayEpoch: due.dueDayEpoch,
             PayloadKey.dueDayTimeZone: calendar.timeZone.identifier,
@@ -583,7 +590,13 @@ final class NotificationManager {
         }
 
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
-        let id = reminderIdentifier(dueDayEpoch: due.dueDayEpoch, kind: due.kind, streakAtRisk: due.streakAtRisk, fireDate: due.fireDate)
+        let id = reminderIdentifier(
+            dueDayEpoch: due.dueDayEpoch,
+            kind: due.kind,
+            streakAtRisk: due.streakAtRisk,
+            offersSnooze: due.offersSnooze,
+            fireDate: due.fireDate
+        )
         return UNNotificationRequest(identifier: id, content: content, trigger: trigger)
     }
 
@@ -921,17 +934,19 @@ final class NotificationManager {
 
     // MARK: - ID + Payload
 
-    /// The streak is part of the id so a streak change replaces the pending
-    /// request (same reasoning as `trialWarningIdentifier`): the managed diff
-    /// is by identifier, and an unchanged id would keep the stale copy.
+    /// The streak and Snooze are part of the id so a change to either replaces the
+    /// pending request (same reasoning as `trialWarningIdentifier`): the managed diff
+    /// is by identifier, and an unchanged id would keep the stale copy or actions.
     private func reminderIdentifier(
         dueDayEpoch: Int,
         kind: ReminderSchedulePlanner.DueReminderKind,
         streakAtRisk: Int?,
+        offersSnooze: Bool,
         fireDate: Date
     ) -> String {
         let streakToken = streakAtRisk.map { "_streak\($0)" } ?? ""
-        return "\(reminderPrefix)due_\(dueDayEpoch)_\(kind.rawValue)\(streakToken)_\(Int(fireDate.timeIntervalSince1970))"
+        let snoozeToken = offersSnooze ? "_snooze" : ""
+        return "\(reminderPrefix)due_\(dueDayEpoch)_\(kind.rawValue)\(streakToken)\(snoozeToken)_\(Int(fireDate.timeIntervalSince1970))"
     }
 
     private func refillReminderIdentifier(dueDayEpoch: Int, fireDate: Date) -> String {

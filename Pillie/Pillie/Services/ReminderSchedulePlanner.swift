@@ -136,6 +136,8 @@ struct ReminderSchedulePlanner {
         /// (ENG-168). Later days stay `nil` because their streak depends on
         /// check-ins that haven't happened yet.
         var streakAtRisk: Int? = nil
+        /// Whether Plus Access covers the fire time, so the reminder offers Snooze.
+        var offersSnooze = false
     }
 
     struct SupplyReminderIntent: Hashable {
@@ -307,7 +309,12 @@ struct ReminderSchedulePlanner {
             })
         }
 
-        var intents = Array(plannedIntents.prefix(dueReminderBudget)).map(Intent.due)
+        let snoozeEnd = input.smartRemindersEnabled ? (trialEnd ?? .distantFuture) : .distantPast
+        var intents = Array(plannedIntents.prefix(dueReminderBudget)).map { intent in
+            var intent = intent
+            intent.offersSnooze = intent.fireDate < snoozeEnd
+            return Intent.due(intent)
+        }
         if let supplyIntent {
             intents.append(.supply(supplyIntent))
         }
