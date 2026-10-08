@@ -134,6 +134,7 @@ enum TodayPillCommit {
 
         guard start.logs, daysSincePick == 0 else { return }
         store.markTodayAsTaken()
+        OnboardingCheckIn.record(day: store.today, in: defaults)
         StreakChangeReport.record(store, reason: .logged, defaults: defaults, telemetry: telemetry)
 
         guard !defaults.bool(forKey: reportedStorageKey) else { return }

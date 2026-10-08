@@ -353,7 +353,7 @@ final class TodayPillCommitTests: XCTestCase {
 
     /// The decision Home reads for its Review Prompt card.
     private func reviewPrompt(_ harness: Harness) -> ReviewPromptEligibility.Decision {
-        harness.store.reviewPromptDecision(higherPriorityCardShowing: false)
+        harness.store.homeReviewPromptDecision(higherPriorityCardShowing: false, defaults: harness.defaults)
     }
 
     /// Pill 12 is logged in onboarding on 27 Sep; Home's button logs pills 13 and 14 after the next two reminders.

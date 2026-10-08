@@ -228,7 +228,7 @@ final class RoutineDialCommitTests: XCTestCase {
 
     /// The decision Home reads for its Review Prompt card.
     private func reviewPrompt(_ harness: Harness) -> ReviewPromptEligibility.Decision {
-        harness.store.reviewPromptDecision(higherPriorityCardShowing: false)
+        harness.store.homeReviewPromptDecision(higherPriorityCardShowing: false, defaults: harness.defaults)
     }
 
     private func clearReviewPromptHistory(_ store: PillStore) {

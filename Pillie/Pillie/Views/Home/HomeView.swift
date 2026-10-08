@@ -258,11 +258,11 @@ struct HomeView: View {
     /// Copy + gating for the Home Review Prompt's Sentiment Gate card (#132). `nil` unless
     /// the user has reached Review Prompt Eligibility — an unbroken Streak past the
     /// method-aware threshold, never answered, not in cooldown or capped — and no
-    /// higher-priority card is showing. Eligibility math lives entirely in
-    /// `ReviewPromptEligibility` (on-device). Shown to free and Plus users alike.
+    /// higher-priority card is showing. Eligibility math lives in `ReviewPromptEligibility`
+    /// and `OnboardingCheckIn` (on-device). Shown to free and Plus users alike.
     private var reviewPromptContent: ReviewPromptCardContent? {
         ReviewPromptCardContent.make(
-            decision: store.reviewPromptDecision(higherPriorityCardShowing: higherPriorityCardShowing),
+            decision: store.homeReviewPromptDecision(higherPriorityCardShowing: higherPriorityCardShowing),
             locale: locale
         )
     }
