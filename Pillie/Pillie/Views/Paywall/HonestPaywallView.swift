@@ -255,7 +255,7 @@ struct HonestPaywallView: View {
         let open = locale.quotationBeginDelimiter ?? "\u{201C}"
         let close = locale.quotationEndDelimiter ?? "\u{201D}"
         return VStack(spacing: 6) {
-            Text(open + story.review.quote + close)
+            Text(open + story.review.quote + "\u{2060}" + close)
                 .font(.pillie(13, weight: .semibold))
                 .foregroundStyle(PillieTheme.textPrimary)
                 .multilineTextAlignment(.center)
