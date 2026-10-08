@@ -2,7 +2,8 @@
 """Write honest-paywall translations into Commerce.xcstrings.
 
 Locked locales (en, de, it) stay with locked-copy.json. This fills every
-other AppLanguage catalog from honest-paywall-locales.json.
+other AppLanguage catalog from honest-paywall-locales.json. A value is a
+string, or a dict of plural categories for a key that takes a count.
 """
 
 from __future__ import annotations
@@ -31,7 +32,7 @@ def load_honest_keys() -> list[str]:
     ]
 
 
-def english_for(key: str) -> str:
+def english_for(key: str) -> str | dict[str, str]:
     data = json.loads(LOCKED_PATH.read_text())
     entries = data["entries"] if isinstance(data, dict) else data
     for item in entries:
@@ -40,13 +41,41 @@ def english_for(key: str) -> str:
     raise SystemExit(f"missing English in locked-copy: {key}")
 
 
-def placeholder_ok(expected: str, actual: str) -> bool:
-    return all(expected.count(token) == actual.count(token) for token in PLACEHOLDERS)
+def placeholder_ok(expected: str | dict[str, str], actual: str | dict[str, str]) -> bool:
+    reference = expected.get("other", "") if isinstance(expected, dict) else expected
+    texts = actual.values() if isinstance(actual, dict) else [actual]
+    return all(
+        reference.count(token) == text.count(token)
+        for text in texts
+        for token in PLACEHOLDERS
+    )
 
 
-def set_localization(entry: dict, lang: str, value: str) -> None:
+def localization_value(entry: dict, lang: str) -> str | dict[str, str] | None:
+    loc = (entry.get("localizations") or {}).get(lang, {})
+    value = (loc.get("stringUnit") or {}).get("value")
+    if isinstance(value, str):
+        return value
+    plural = (loc.get("variations") or {}).get("plural")
+    if plural:
+        return {case: nested["stringUnit"]["value"] for case, nested in plural.items()}
+    return None
+
+
+def set_localization(entry: dict, lang: str, value: str | dict[str, str]) -> None:
     locs = entry.setdefault("localizations", {})
+    if isinstance(value, dict):
+        locs[lang] = {
+            "variations": {
+                "plural": {
+                    case: {"stringUnit": {"state": "translated", "value": text}}
+                    for case, text in value.items()
+                }
+            }
+        }
+        return
     loc = locs.setdefault(lang, {})
+    loc.pop("variations", None)
     unit = loc.setdefault("stringUnit", {})
     unit["state"] = "translated"
     unit["value"] = value
@@ -81,13 +110,7 @@ def main() -> int:
             if entry is None:
                 errors.append(f"missing Commerce key {key}")
                 continue
-            current = (
-                (entry.get("localizations") or {})
-                .get(lang, {})
-                .get("stringUnit", {})
-                .get("value")
-            )
-            if current != value:
+            if localization_value(entry, lang) != value:
                 set_localization(entry, lang, value)
                 changed += 1
 

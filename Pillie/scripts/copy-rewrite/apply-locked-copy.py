@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Apply or verify locked ENG-57 copy against Pillie string catalogs."""
+"""Apply or verify locked ENG-57 copy against Pillie string catalogs.
+
+A locked value is a string, or a dict of plural categories ("one", "other",
+...) for a key whose count needs plural variations.
+"""
 
 from __future__ import annotations
 
@@ -37,25 +41,47 @@ def write_catalog(table: str, data: dict) -> None:
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n")
 
 
-def localization_value(entry: dict, lang: str) -> str | None:
-    unit = (entry.get("localizations") or {}).get(lang, {}).get("stringUnit") or {}
-    value = unit.get("value")
-    return value if isinstance(value, str) else None
+def localization_value(entry: dict, lang: str) -> str | dict[str, str] | None:
+    loc = (entry.get("localizations") or {}).get(lang, {})
+    value = (loc.get("stringUnit") or {}).get("value")
+    if isinstance(value, str):
+        return value
+    plural = (loc.get("variations") or {}).get("plural")
+    if plural:
+        return {case: nested["stringUnit"]["value"] for case, nested in plural.items()}
+    return None
 
 
-def set_localization(entry: dict, lang: str, value: str) -> None:
+def set_localization(entry: dict, lang: str, value: str | dict[str, str]) -> None:
     locs = entry.setdefault("localizations", {})
+    if isinstance(value, dict):
+        locs[lang] = {
+            "variations": {
+                "plural": {
+                    case: {"stringUnit": {"state": "translated", "value": text}}
+                    for case, text in value.items()
+                }
+            }
+        }
+        return
     loc = locs.setdefault(lang, {})
+    loc.pop("variations", None)
     unit = loc.setdefault("stringUnit", {})
     unit["state"] = "translated"
     unit["value"] = value
 
 
-def placeholder_ok(expected: str, actual: str) -> bool:
-    for token in PLACEHOLDERS:
-        if expected.count(token) != actual.count(token):
-            return False
-    return True
+def plural_values(value: str | dict[str, str]) -> list[str]:
+    return list(value.values()) if isinstance(value, dict) else [value]
+
+
+def placeholder_ok(expected: str | dict[str, str], actual: str | dict[str, str]) -> bool:
+    reference = expected.get("other", "") if isinstance(expected, dict) else expected
+    return all(
+        reference.count(token) == text.count(token)
+        for text in plural_values(actual)
+        for token in PLACEHOLDERS
+    )
 
 
 def apply_entries(entries: list[dict]) -> int:

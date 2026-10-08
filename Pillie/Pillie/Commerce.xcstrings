@@ -1380,15 +1380,63 @@
       "comment": "Line above Allow pausing / Not now on the app-blocking onboarding step, where the 14-day reverse trial starts. %lld is the trial length in active days [trial granted]",
       "localizations": {
         "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pillie Plus is on for your next %lld active days, free. No card. We’ll remind you before it ends."
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pillie Plus is on for your next %lld active day, free. No card. We’ll remind you before it ends."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pillie Plus is on for your next %lld active days, free. No card. We’ll remind you before it ends."
+                }
+              }
+            }
           }
         },
         "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pillie Plus مفعّل مجانًا خلال الأيام الـ%lld النشطة القادمة. بدون بطاقة. سنذكّرك قبل انتهاء الفترة التجريبية."
+          "variations": {
+            "plural": {
+              "zero": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pillie Plus مفعّل مجانًا خلال %lld يوم نشط قادم. بدون بطاقة. سنذكّرك قبل انتهاء الفترة التجريبية."
+                }
+              },
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pillie Plus مفعّل مجانًا خلال %lld يوم نشط قادم. بدون بطاقة. سنذكّرك قبل انتهاء الفترة التجريبية."
+                }
+              },
+              "two": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pillie Plus مفعّل مجانًا خلال %lld يومين نشطين قادمين. بدون بطاقة. سنذكّرك قبل انتهاء الفترة التجريبية."
+                }
+              },
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pillie Plus مفعّل مجانًا خلال الأيام الـ%lld النشطة القادمة. بدون بطاقة. سنذكّرك قبل انتهاء الفترة التجريبية."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pillie Plus مفعّل مجانًا خلال الأيام الـ%lld النشطة القادمة. بدون بطاقة. سنذكّرك قبل انتهاء الفترة التجريبية."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pillie Plus مفعّل مجانًا خلال الأيام الـ%lld النشطة القادمة. بدون بطاقة. سنذكّرك قبل انتهاء الفترة التجريبية."
+                }
+              }
+            }
           }
         },
         "bn": {
@@ -1398,51 +1446,177 @@
           }
         },
         "ca": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tens Pillie Plus gratis els propers %lld dies actius. Sense targeta. T’avisarem abans que s’acabi."
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Tens Pillie Plus gratis %lld dia actiu més. Sense targeta. T’avisarem abans que s’acabi."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Tens Pillie Plus gratis els propers %lld dies actius. Sense targeta. T’avisarem abans que s’acabi."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Tens Pillie Plus gratis els propers %lld dies actius. Sense targeta. T’avisarem abans que s’acabi."
+                }
+              }
+            }
           }
         },
         "cs": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pillie Plus máš zdarma na dalších %lld aktivních dní. Bez karty. Před koncem ti dáme vědět."
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pillie Plus máš zdarma na další %lld aktivní den. Bez karty. Před koncem ti dáme vědět."
+                }
+              },
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pillie Plus máš zdarma na další %lld aktivní dny. Bez karty. Před koncem ti dáme vědět."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pillie Plus máš zdarma na dalších %lld aktivních dní. Bez karty. Před koncem ti dáme vědět."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pillie Plus máš zdarma na dalších %lld aktivních dní. Bez karty. Před koncem ti dáme vědět."
+                }
+              }
+            }
           }
         },
         "da": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pillie Plus er gratis de næste %lld aktive dage. Intet kort. Vi minder dig om det, før det udløber."
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pillie Plus er gratis den næste %lld aktive dag. Intet kort. Vi minder dig om det, før det udløber."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pillie Plus er gratis de næste %lld aktive dage. Intet kort. Vi minder dig om det, før det udløber."
+                }
+              }
+            }
           }
         },
         "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pillie Plus ist die nächsten %lld aktiven Tage gratis. Keine Karte. Wir erinnern dich vor dem Ende."
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pillie Plus ist den nächsten %lld aktiven Tag gratis. Keine Karte. Wir erinnern dich vor dem Ende."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pillie Plus ist die nächsten %lld aktiven Tage gratis. Keine Karte. Wir erinnern dich vor dem Ende."
+                }
+              }
+            }
           }
         },
         "el": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Έχεις Pillie Plus δωρεάν για %lld ενεργές ημέρες. Χωρίς κάρτα. Σε ειδοποιούμε πριν λήξει."
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Έχεις Pillie Plus δωρεάν για %lld ενεργή ημέρα. Χωρίς κάρτα. Σε ειδοποιούμε πριν λήξει."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Έχεις Pillie Plus δωρεάν για %lld ενεργές ημέρες. Χωρίς κάρτα. Σε ειδοποιούμε πριν λήξει."
+                }
+              }
+            }
           }
         },
         "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tienes Pillie Plus gratis los próximos %lld días activos. Sin tarjeta. Te avisamos antes del final."
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Tienes Pillie Plus gratis %lld día activo más. Sin tarjeta. Te avisamos antes del final."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Tienes Pillie Plus gratis los próximos %lld días activos. Sin tarjeta. Te avisamos antes del final."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Tienes Pillie Plus gratis los próximos %lld días activos. Sin tarjeta. Te avisamos antes del final."
+                }
+              }
+            }
           }
         },
         "fi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pillie Plus on ilmainen seuraavat %lld aktiivista päivää. Ei korttia. Muistutamme ennen loppua."
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pillie Plus on ilmainen seuraavan %lld aktiivisen päivän. Ei korttia. Muistutamme ennen loppua."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pillie Plus on ilmainen seuraavat %lld aktiivista päivää. Ei korttia. Muistutamme ennen loppua."
+                }
+              }
+            }
           }
         },
         "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pillie Plus est gratuit pour tes %lld prochains jours actifs. Sans carte. On te préviendra avant la fin."
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pillie Plus est gratuit pour encore %lld jour actif. Sans carte. On te préviendra avant la fin."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pillie Plus est gratuit pour tes %lld prochains jours actifs. Sans carte. On te préviendra avant la fin."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pillie Plus est gratuit pour tes %lld prochains jours actifs. Sans carte. On te préviendra avant la fin."
+                }
+              }
+            }
           }
         },
         "gu": {
@@ -1452,9 +1626,27 @@
           }
         },
         "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "יש לך Pillie Plus בחינם ל-%lld הימים הפעילים הבאים. בלי כרטיס. נזכיר לך לפני סוף הניסיון."
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "יש לך Pillie Plus בחינם ל-%lld יום פעיל נוסף. בלי כרטיס. נזכיר לך לפני סוף הניסיון."
+                }
+              },
+              "two": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "יש לך Pillie Plus בחינם ל-%lld הימים הפעילים הבאים. בלי כרטיס. נזכיר לך לפני סוף הניסיון."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "יש לך Pillie Plus בחינם ל-%lld הימים הפעילים הבאים. בלי כרטיס. נזכיר לך לפני סוף הניסיון."
+                }
+              }
+            }
           }
         },
         "hi": {
@@ -1464,9 +1656,27 @@
           }
         },
         "hr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pillie Plus imaš besplatno sljedećih %lld aktivnih dana. Bez kartice. Podsjetit ćemo te prije kraja."
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pillie Plus imaš besplatno sljedeći %lld aktivni dan. Bez kartice. Podsjetit ćemo te prije kraja."
+                }
+              },
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pillie Plus imaš besplatno sljedeća %lld aktivna dana. Bez kartice. Podsjetit ćemo te prije kraja."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pillie Plus imaš besplatno sljedećih %lld aktivnih dana. Bez kartice. Podsjetit ćemo te prije kraja."
+                }
+              }
+            }
           }
         },
         "hu": {
@@ -1482,9 +1692,27 @@
           }
         },
         "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hai Pillie Plus gratis per i prossimi %lld giorni attivi. Nessuna carta. Ti avviseremo prima che finisca."
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Hai Pillie Plus gratis per il prossimo %lld giorno attivo. Nessuna carta. Ti avviseremo prima che finisca."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Hai Pillie Plus gratis per i prossimi %lld giorni attivi. Nessuna carta. Ti avviseremo prima che finisca."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Hai Pillie Plus gratis per i prossimi %lld giorni attivi. Nessuna carta. Ti avviseremo prima che finisca."
+                }
+              }
+            }
           }
         },
         "ja": {
@@ -1494,9 +1722,21 @@
           }
         },
         "kn": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pillie Plus ಮುಂದಿನ %lld ಸಕ್ರಿಯ ದಿನಗಳು ಉಚಿತ. ಕಾರ್ಡ್ ಬೇಕಿಲ್ಲ. ಟ್ರಯಲ್ ಮುಗಿಯುವ ಮುನ್ನ ನೆನಪಿಸುತ್ತೇವೆ."
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pillie Plus ಮುಂದಿನ %lld ಸಕ್ರಿಯ ದಿನ ಉಚಿತ. ಕಾರ್ಡ್ ಬೇಕಿಲ್ಲ. ಟ್ರಯಲ್ ಮುಗಿಯುವ ಮುನ್ನ ನೆನಪಿಸುತ್ತೇವೆ."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pillie Plus ಮುಂದಿನ %lld ಸಕ್ರಿಯ ದಿನಗಳು ಉಚಿತ. ಕಾರ್ಡ್ ಬೇಕಿಲ್ಲ. ಟ್ರಯಲ್ ಮುಗಿಯುವ ಮುನ್ನ ನೆನಪಿಸುತ್ತೇವೆ."
+                }
+              }
+            }
           }
         },
         "ko": {
@@ -1506,15 +1746,39 @@
           }
         },
         "ml": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pillie Plus അടുത്ത %lld സജീവ ദിനങ്ങൾ സൗജന്യം. കാർഡ് വേണ്ട. ട്രയൽ തീരും മുമ്പ് ഓർമ്മിപ്പിക്കും."
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pillie Plus അടുത്ത %lld സജീവ ദിനം സൗജന്യം. കാർഡ് വേണ്ട. ട്രയൽ തീരും മുമ്പ് ഓർമ്മിപ്പിക്കും."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pillie Plus അടുത്ത %lld സജീവ ദിനങ്ങൾ സൗജന്യം. കാർഡ് വേണ്ട. ട്രയൽ തീരും മുമ്പ് ഓർമ്മിപ്പിക്കും."
+                }
+              }
+            }
           }
         },
         "mr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pillie Plus पुढचे %lld सक्रिय दिवस मोफत आहे. कार्डची गरज नाही. ट्रायल संपण्याआधी आम्ही आठवण करून देऊ."
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pillie Plus पुढचा %lld सक्रिय दिवस मोफत आहे. कार्डची गरज नाही. ट्रायल संपण्याआधी आम्ही आठवण करून देऊ."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pillie Plus पुढचे %lld सक्रिय दिवस मोफत आहे. कार्डची गरज नाही. ट्रायल संपण्याआधी आम्ही आठवण करून देऊ."
+                }
+              }
+            }
           }
         },
         "ms": {
@@ -1524,15 +1788,39 @@
           }
         },
         "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Du har Pillie Plus gratis de neste %lld aktive dagene. Uten kort. Vi minner deg på det før det slutter."
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Du har Pillie Plus gratis den neste %lld aktive dagen. Uten kort. Vi minner deg på det før det slutter."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Du har Pillie Plus gratis de neste %lld aktive dagene. Uten kort. Vi minner deg på det før det slutter."
+                }
+              }
+            }
           }
         },
         "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pillie Plus is de komende %lld actieve dagen gratis. Geen kaart. We herinneren je vóór het einde."
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pillie Plus is de komende %lld actieve dag gratis. Geen kaart. We herinneren je vóór het einde."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pillie Plus is de komende %lld actieve dagen gratis. Geen kaart. We herinneren je vóór het einde."
+                }
+              }
+            }
           }
         },
         "or": {
@@ -1548,63 +1836,249 @@
           }
         },
         "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Masz Pillie Plus za darmo przez %lld dni aktywnych. Bez karty. Przypomnimy ci przed końcem."
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Masz Pillie Plus za darmo przez %lld dzień aktywny. Bez karty. Przypomnimy ci przed końcem."
+                }
+              },
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Masz Pillie Plus za darmo przez %lld dni aktywne. Bez karty. Przypomnimy ci przed końcem."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Masz Pillie Plus za darmo przez %lld dni aktywnych. Bez karty. Przypomnimy ci przed końcem."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Masz Pillie Plus za darmo przez %lld dni aktywnych. Bez karty. Przypomnimy ci przed końcem."
+                }
+              }
+            }
           }
         },
         "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Você tem o Pillie Plus grátis nos próximos %lld dias ativos. Sem cartão. Vamos avisar antes do fim."
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Você tem o Pillie Plus grátis por mais %lld dia ativo. Sem cartão. Vamos avisar antes do fim."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Você tem o Pillie Plus grátis nos próximos %lld dias ativos. Sem cartão. Vamos avisar antes do fim."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Você tem o Pillie Plus grátis nos próximos %lld dias ativos. Sem cartão. Vamos avisar antes do fim."
+                }
+              }
+            }
           }
         },
         "pt-PT": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "O Pillie Plus é grátis nos próximos %lld dias ativos. Sem cartão. Avisamos-te antes do fim."
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "O Pillie Plus é grátis por mais %lld dia ativo. Sem cartão. Avisamos-te antes do fim."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "O Pillie Plus é grátis nos próximos %lld dias ativos. Sem cartão. Avisamos-te antes do fim."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "O Pillie Plus é grátis nos próximos %lld dias ativos. Sem cartão. Avisamos-te antes do fim."
+                }
+              }
+            }
           }
         },
         "ro": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ai Pillie Plus gratuit în următoarele %lld zile active. Fără card. Îți vom aminti înainte să se termine."
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Ai Pillie Plus gratuit în următoarea %lld zi activă. Fără card. Îți vom aminti înainte să se termine."
+                }
+              },
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Ai Pillie Plus gratuit în următoarele %lld zile active. Fără card. Îți vom aminti înainte să se termine."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Ai Pillie Plus gratuit în următoarele %lld de zile active. Fără card. Îți vom aminti înainte să se termine."
+                }
+              }
+            }
           }
         },
         "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pillie Plus бесплатно на следующие %lld активных дней. Без карты. Напомним до окончания."
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pillie Plus бесплатно на следующий %lld активный день. Без карты. Напомним до окончания."
+                }
+              },
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pillie Plus бесплатно на следующие %lld активных дня. Без карты. Напомним до окончания."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pillie Plus бесплатно на следующие %lld активных дней. Без карты. Напомним до окончания."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pillie Plus бесплатно на следующие %lld активных дней. Без карты. Напомним до окончания."
+                }
+              }
+            }
           }
         },
         "sk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pillie Plus máš zdarma na ďalších %lld aktívnych dní. Bez karty. Pred koncom ti dáme vedieť."
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pillie Plus máš zdarma na ďalší %lld aktívny deň. Bez karty. Pred koncom ti dáme vedieť."
+                }
+              },
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pillie Plus máš zdarma na ďalšie %lld aktívne dni. Bez karty. Pred koncom ti dáme vedieť."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pillie Plus máš zdarma na ďalších %lld aktívnych dní. Bez karty. Pred koncom ti dáme vedieť."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pillie Plus máš zdarma na ďalších %lld aktívnych dní. Bez karty. Pred koncom ti dáme vedieť."
+                }
+              }
+            }
           }
         },
         "sl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pillie Plus imaš brezplačno naslednjih %lld aktivnih dni. Brez kartice. Pred koncem te opomnimo."
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pillie Plus imaš brezplačno naslednji %lld aktivni dan. Brez kartice. Pred koncem te opomnimo."
+                }
+              },
+              "two": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pillie Plus imaš brezplačno naslednja %lld aktivna dneva. Brez kartice. Pred koncem te opomnimo."
+                }
+              },
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pillie Plus imaš brezplačno naslednje %lld aktivne dneve. Brez kartice. Pred koncem te opomnimo."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pillie Plus imaš brezplačno naslednjih %lld aktivnih dni. Brez kartice. Pred koncem te opomnimo."
+                }
+              }
+            }
           }
         },
         "sv": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Du har Pillie Plus gratis i %lld aktiva dagar framåt. Inget kort. Vi påminner dig innan det tar slut."
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Du har Pillie Plus gratis i %lld aktiv dag framåt. Inget kort. Vi påminner dig innan det tar slut."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Du har Pillie Plus gratis i %lld aktiva dagar framåt. Inget kort. Vi påminner dig innan det tar slut."
+                }
+              }
+            }
           }
         },
         "ta": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld செயல் நாட்களுக்கு Pillie Plus இலவசம். கார்டு தேவையில்லை. முடியும் முன் நினைவூட்டுவோம்."
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld செயல் நாளுக்கு Pillie Plus இலவசம். கார்டு தேவையில்லை. முடியும் முன் நினைவூட்டுவோம்."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld செயல் நாட்களுக்கு Pillie Plus இலவசம். கார்டு தேவையில்லை. முடியும் முன் நினைவூட்டுவோம்."
+                }
+              }
+            }
           }
         },
         "te": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pillie Plus తదుపరి %lld యాక్టివ్ రోజులు ఉచితం. కార్డ్ అవసరం లేదు. ట్రయల్ ముగిసేలోపు గుర్తు చేస్తాం."
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pillie Plus తదుపరి %lld యాక్టివ్ రోజు ఉచితం. కార్డ్ అవసరం లేదు. ట్రయల్ ముగిసేలోపు గుర్తు చేస్తాం."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pillie Plus తదుపరి %lld యాక్టివ్ రోజులు ఉచితం. కార్డ్ అవసరం లేదు. ట్రయల్ ముగిసేలోపు గుర్తు చేస్తాం."
+                }
+              }
+            }
           }
         },
         "th": {
@@ -1620,9 +2094,33 @@
           }
         },
         "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pillie Plus безкоштовно на наступні %lld активних днів. Без картки. Нагадаємо перед кінцем."
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pillie Plus безкоштовно на наступний %lld активний день. Без картки. Нагадаємо перед кінцем."
+                }
+              },
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pillie Plus безкоштовно на наступні %lld активні дні. Без картки. Нагадаємо перед кінцем."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pillie Plus безкоштовно на наступні %lld активних днів. Без картки. Нагадаємо перед кінцем."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pillie Plus безкоштовно на наступні %lld активних днів. Без картки. Нагадаємо перед кінцем."
+                }
+              }
+            }
           }
         },
         "ur": {
@@ -14305,81 +14803,273 @@
       "comment": "Active-trial Home badge; placeholder is days remaining [paywall]",
       "localizations": {
         "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Plus is on · %lld active days left"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus is on · %lld active day left"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus is on · %lld active days left"
+                }
+              }
+            }
           }
         },
         "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Plus è attivo · %lld giorni attivi rimasti"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus è attivo · %lld giorno attivo rimasto"
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus è attivo · %lld giorni attivi rimasti"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus è attivo · %lld giorni attivi rimasti"
+                }
+              }
+            }
           }
         },
         "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Plus ist an · noch %lld aktive Tage"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus ist an · noch %lld aktiver Tag"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus ist an · noch %lld aktive Tage"
+                }
+              }
+            }
           }
         },
         "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Plus est activé · encore %lld jours actifs"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus est activé · encore %lld jour actif"
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus est activé · encore %lld jours actifs"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus est activé · encore %lld jours actifs"
+                }
+              }
+            }
           }
         },
         "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Plus activo · quedan %lld días activos"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus activo · queda %lld día activo"
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus activo · quedan %lld días activos"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus activo · quedan %lld días activos"
+                }
+              }
+            }
           }
         },
         "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Plus ativo · faltam %lld dias ativos"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus ativo · falta %lld dia ativo"
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus ativo · faltam %lld dias ativos"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus ativo · faltam %lld dias ativos"
+                }
+              }
+            }
           }
         },
         "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Plus staat aan · nog %lld actieve dagen"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus staat aan · nog %lld actieve dag"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus staat aan · nog %lld actieve dagen"
+                }
+              }
+            }
           }
         },
         "sv": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Plus är på · %lld aktiva dagar kvar"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus är på · %lld aktiv dag kvar"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus är på · %lld aktiva dagar kvar"
+                }
+              }
+            }
           }
         },
         "da": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Plus er slået til · %lld aktive dage tilbage"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus er slået til · %lld aktiv dag tilbage"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus er slået til · %lld aktive dage tilbage"
+                }
+              }
+            }
           }
         },
         "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Plus er på · %lld aktive dager igjen"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus er på · %lld aktiv dag igjen"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus er på · %lld aktive dager igjen"
+                }
+              }
+            }
           }
         },
         "fi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Plus on päällä · %lld aktiivista päivää jäljellä"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus on päällä · %lld aktiivinen päivä jäljellä"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus on päällä · %lld aktiivista päivää jäljellä"
+                }
+              }
+            }
           }
         },
         "pt-PT": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Plus ativo · faltam %lld dias ativos"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus ativo · falta %lld dia ativo"
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus ativo · faltam %lld dias ativos"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus ativo · faltam %lld dias ativos"
+                }
+              }
+            }
           }
         },
         "ca": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Plus actiu · queden %lld dies actius"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus actiu · queda %lld dia actiu"
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus actiu · queden %lld dies actius"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus actiu · queden %lld dies actius"
+                }
+              }
+            }
           }
         },
         "pl": {
@@ -14425,9 +15115,27 @@
           }
         },
         "ro": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Plus e pornit · încă %lld zile active"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus e pornit · încă %lld zi activă"
+                }
+              },
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus e pornit · încă %lld zile active"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus e pornit · încă %lld de zile active"
+                }
+              }
+            }
           }
         },
         "sk": {
@@ -14473,9 +15181,21 @@
           }
         },
         "ta": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Plus ஆன் · இன்னும் %lld செயல் நாட்கள்"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus ஆன் · இன்னும் %lld செயல் நாள்"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus ஆன் · இன்னும் %lld செயல் நாட்கள்"
+                }
+              }
+            }
           }
         },
         "id": {
@@ -14485,15 +15205,69 @@
           }
         },
         "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Plus مفعّل · %lld أيام نشطة متبقية"
+          "variations": {
+            "plural": {
+              "zero": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus مفعّل · %lld يوم نشط متبقٍ"
+                }
+              },
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus مفعّل · %lld يوم نشط متبقٍ"
+                }
+              },
+              "two": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus مفعّل · %lld يومان نشطان متبقيان"
+                }
+              },
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus مفعّل · %lld أيام نشطة متبقية"
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus مفعّل · %lld يومًا نشطًا متبقيًا"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus مفعّل · %lld يوم نشط متبقٍ"
+                }
+              }
+            }
           }
         },
         "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Plus פועל · נשארו %lld ימים פעילים"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus פועל · נשאר %lld יום פעיל"
+                }
+              },
+              "two": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus פועל · נשארו %lld ימים פעילים"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus פועל · נשארו %lld ימים פעילים"
+                }
+              }
+            }
           }
         },
         "vi": {
@@ -14521,15 +15295,39 @@
           }
         },
         "el": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Το Plus είναι ενεργό · απομένουν %lld ενεργές ημέρες"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Το Plus είναι ενεργό · απομένει %lld ενεργή ημέρα"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Το Plus είναι ενεργό · απομένουν %lld ενεργές ημέρες"
+                }
+              }
+            }
           }
         },
         "te": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Plus ఆన్ · ఇంకా %lld యాక్టివ్ రోజులు"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus ఆన్ · ఇంకా %lld యాక్టివ్ రోజు"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus ఆన్ · ఇంకా %lld యాక్టివ్ రోజులు"
+                }
+              }
+            }
           }
         },
         "zh-Hant": {
@@ -14545,15 +15343,39 @@
           }
         },
         "kn": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Plus ಆನ್ ಆಗಿದೆ · %lld ಸಕ್ರಿಯ ದಿನಗಳು ಉಳಿದಿವೆ"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus ಆನ್ ಆಗಿದೆ · %lld ಸಕ್ರಿಯ ದಿನ ಉಳಿದಿದೆ"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus ಆನ್ ಆಗಿದೆ · %lld ಸಕ್ರಿಯ ದಿನಗಳು ಉಳಿದಿವೆ"
+                }
+              }
+            }
           }
         },
         "ml": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Plus ഓണാണ് · %lld സജീവ ദിനങ്ങൾ ബാക്കി"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus ഓണാണ് · %lld സജീവ ദിനം ബാക്കി"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Plus ഓണാണ് · %lld സജീവ ദിനങ്ങൾ ബാക്കി"
+                }
+              }
+            }
           }
         },
         "mr": {
@@ -32455,15 +33277,63 @@
       "comment": "Active-trial Home badge while Plus setup is unfinished; placeholder is active days remaining [paywall]",
       "localizations": {
         "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld active days left"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld active day left"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld active days left"
+                }
+              }
+            }
           }
         },
         "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld أيام نشطة متبقية"
+          "variations": {
+            "plural": {
+              "zero": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld يوم نشط متبقٍ"
+                }
+              },
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld يوم نشط متبقٍ"
+                }
+              },
+              "two": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld يومان نشطان متبقيان"
+                }
+              },
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld أيام نشطة متبقية"
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld يومًا نشطًا متبقيًا"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld يوم نشط متبقٍ"
+                }
+              }
+            }
           }
         },
         "bn": {
@@ -32473,9 +33343,27 @@
           }
         },
         "ca": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Queden %lld dies actius"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Queda %lld dia actiu"
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Queden %lld dies actius"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Queden %lld dies actius"
+                }
+              }
+            }
           }
         },
         "cs": {
@@ -32485,39 +33373,123 @@
           }
         },
         "da": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld aktive dage tilbage"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld aktiv dag tilbage"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld aktive dage tilbage"
+                }
+              }
+            }
           }
         },
         "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Noch %lld aktive Tage"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Noch %lld aktiver Tag"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Noch %lld aktive Tage"
+                }
+              }
+            }
           }
         },
         "el": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Απομένουν %lld ενεργές ημέρες"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Απομένει %lld ενεργή ημέρα"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Απομένουν %lld ενεργές ημέρες"
+                }
+              }
+            }
           }
         },
         "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Quedan %lld días activos"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Queda %lld día activo"
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Quedan %lld días activos"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Quedan %lld días activos"
+                }
+              }
+            }
           }
         },
         "fi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld aktiivista päivää jäljellä"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld aktiivinen päivä jäljellä"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld aktiivista päivää jäljellä"
+                }
+              }
+            }
           }
         },
         "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Encore %lld jours actifs"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Encore %lld jour actif"
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Encore %lld jours actifs"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Encore %lld jours actifs"
+                }
+              }
+            }
           }
         },
         "gu": {
@@ -32527,9 +33499,27 @@
           }
         },
         "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "נשארו %lld ימים פעילים"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "נשאר %lld יום פעיל"
+                }
+              },
+              "two": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "נשארו %lld ימים פעילים"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "נשארו %lld ימים פעילים"
+                }
+              }
+            }
           }
         },
         "hi": {
@@ -32557,9 +33547,27 @@
           }
         },
         "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld giorni attivi rimasti"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld giorno attivo rimasto"
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld giorni attivi rimasti"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld giorni attivi rimasti"
+                }
+              }
+            }
           }
         },
         "ja": {
@@ -32569,9 +33577,21 @@
           }
         },
         "kn": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld ಸಕ್ರಿಯ ದಿನಗಳು ಉಳಿದಿವೆ"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld ಸಕ್ರಿಯ ದಿನ ಉಳಿದಿದೆ"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld ಸಕ್ರಿಯ ದಿನಗಳು ಉಳಿದಿವೆ"
+                }
+              }
+            }
           }
         },
         "ko": {
@@ -32581,9 +33601,21 @@
           }
         },
         "ml": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld സജീവ ദിനങ്ങൾ ബാക്കി"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld സജീവ ദിനം ബാക്കി"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld സജീവ ദിനങ്ങൾ ബാക്കി"
+                }
+              }
+            }
           }
         },
         "mr": {
@@ -32599,15 +33631,39 @@
           }
         },
         "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld aktive dager igjen"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld aktiv dag igjen"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld aktive dager igjen"
+                }
+              }
+            }
           }
         },
         "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nog %lld actieve dagen"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Nog %lld actieve dag"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Nog %lld actieve dagen"
+                }
+              }
+            }
           }
         },
         "or": {
@@ -32629,21 +33685,75 @@
           }
         },
         "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Faltam %lld dias ativos"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Falta %lld dia ativo"
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Faltam %lld dias ativos"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Faltam %lld dias ativos"
+                }
+              }
+            }
           }
         },
         "pt-PT": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Faltam %lld dias ativos"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Falta %lld dia ativo"
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Faltam %lld dias ativos"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Faltam %lld dias ativos"
+                }
+              }
+            }
           }
         },
         "ro": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Încă %lld zile active"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Încă %lld zi activă"
+                }
+              },
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Încă %lld zile active"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Încă %lld de zile active"
+                }
+              }
+            }
           }
         },
         "ru": {
@@ -32665,21 +33775,57 @@
           }
         },
         "sv": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld aktiva dagar kvar"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld aktiv dag kvar"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld aktiva dagar kvar"
+                }
+              }
+            }
           }
         },
         "ta": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "இன்னும் %lld செயல் நாட்கள்"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "இன்னும் %lld செயல் நாள்"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "இன்னும் %lld செயல் நாட்கள்"
+                }
+              }
+            }
           }
         },
         "te": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ఇంకా %lld యాక్టివ్ రోజులు"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "ఇంకా %lld యాక్టివ్ రోజు"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "ఇంకా %lld యాక్టివ్ రోజులు"
+                }
+              }
+            }
           }
         },
         "th": {
@@ -36305,81 +37451,273 @@
       "comment": "%lld = number of hormone-active days left in the trial (2..14). MUST use the same 'active day' wording as the existing trial strings (see active-day tokens). 'day 14' = the last trial day.",
       "localizations": {
         "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "You have %lld active days left. Pick a plan now and nothing turns off on day 14."
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "You have %lld active day left. Pick a plan now and nothing turns off on day 14."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "You have %lld active days left. Pick a plan now and nothing turns off on day 14."
+                }
+              }
+            }
           }
         },
         "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Du hast noch %lld aktive Tage. Wähl jetzt einen Tarif, dann schaltet sich an Tag 14 nichts ab."
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Du hast noch %lld aktiven Tag. Wähl jetzt einen Tarif, dann schaltet sich an Tag 14 nichts ab."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Du hast noch %lld aktive Tage. Wähl jetzt einen Tarif, dann schaltet sich an Tag 14 nichts ab."
+                }
+              }
+            }
           }
         },
         "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ti restano %lld giorni attivi. Scegli un piano ora e il giorno 14 non si spegne niente."
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Ti resta %lld giorno attivo. Scegli un piano ora e il giorno 14 non si spegne niente."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Ti restano %lld giorni attivi. Scegli un piano ora e il giorno 14 non si spegne niente."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Ti restano %lld giorni attivi. Scegli un piano ora e il giorno 14 non si spegne niente."
+                }
+              }
+            }
           }
         },
         "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Il te reste %lld jours actifs. Choisis une formule maintenant et rien ne s’arrête au jour 14."
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Il te reste %lld jour actif. Choisis une formule maintenant et rien ne s’arrête au jour 14."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Il te reste %lld jours actifs. Choisis une formule maintenant et rien ne s’arrête au jour 14."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Il te reste %lld jours actifs. Choisis une formule maintenant et rien ne s’arrête au jour 14."
+                }
+              }
+            }
           }
         },
         "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Te quedan %lld días activos. Elige un plan ahora y nada se apaga el día 14."
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Te queda %lld día activo. Elige un plan ahora y nada se apaga el día 14."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Te quedan %lld días activos. Elige un plan ahora y nada se apaga el día 14."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Te quedan %lld días activos. Elige un plan ahora y nada se apaga el día 14."
+                }
+              }
+            }
           }
         },
         "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Faltam %lld dias ativos. Escolha um plano agora e nada desliga no dia 14."
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Falta %lld dia ativo. Escolha um plano agora e nada desliga no dia 14."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Faltam %lld dias ativos. Escolha um plano agora e nada desliga no dia 14."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Faltam %lld dias ativos. Escolha um plano agora e nada desliga no dia 14."
+                }
+              }
+            }
           }
         },
         "pt-PT": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Faltam %lld dias ativos. Escolhe um plano agora e nada se desliga no dia 14."
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Falta %lld dia ativo. Escolhe um plano agora e nada se desliga no dia 14."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Faltam %lld dias ativos. Escolhe um plano agora e nada se desliga no dia 14."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Faltam %lld dias ativos. Escolhe um plano agora e nada se desliga no dia 14."
+                }
+              }
+            }
           }
         },
         "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Je hebt nog %lld actieve dagen. Kies nu een plan en op dag 14 gaat er niets uit."
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Je hebt nog %lld actieve dag. Kies nu een plan en op dag 14 gaat er niets uit."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Je hebt nog %lld actieve dagen. Kies nu een plan en op dag 14 gaat er niets uit."
+                }
+              }
+            }
           }
         },
         "ca": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Et queden %lld dies actius. Tria un pla ara i el dia 14 no s’apagarà res."
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Et queda %lld dia actiu. Tria un pla ara i el dia 14 no s’apagarà res."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Et queden %lld dies actius. Tria un pla ara i el dia 14 no s’apagarà res."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Et queden %lld dies actius. Tria un pla ara i el dia 14 no s’apagarà res."
+                }
+              }
+            }
           }
         },
         "da": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Du har %lld aktive dage tilbage. Vælg en plan nu, så slukker intet på dag 14."
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Du har %lld aktiv dag tilbage. Vælg en plan nu, så slukker intet på dag 14."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Du har %lld aktive dage tilbage. Vælg en plan nu, så slukker intet på dag 14."
+                }
+              }
+            }
           }
         },
         "sv": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Du har %lld aktiva dagar kvar. Välj en plan nu så stängs inget av på dag 14."
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Du har %lld aktiv dag kvar. Välj en plan nu så stängs inget av på dag 14."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Du har %lld aktiva dagar kvar. Välj en plan nu så stängs inget av på dag 14."
+                }
+              }
+            }
           }
         },
         "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Du har %lld aktive dager igjen. Velg en plan nå, så slås ingenting av på dag 14."
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Du har %lld aktiv dag igjen. Velg en plan nå, så slås ingenting av på dag 14."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Du har %lld aktive dager igjen. Velg en plan nå, så slås ingenting av på dag 14."
+                }
+              }
+            }
           }
         },
         "fi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sinulla on %lld aktiivista päivää jäljellä. Valitse paketti nyt, niin mikään ei sammu päivänä 14."
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Sinulla on %lld aktiivinen päivä jäljellä. Valitse paketti nyt, niin mikään ei sammu päivänä 14."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Sinulla on %lld aktiivista päivää jäljellä. Valitse paketti nyt, niin mikään ei sammu päivänä 14."
+                }
+              }
+            }
           }
         },
         "pl": {
@@ -36419,15 +37757,45 @@
           }
         },
         "ro": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mai ai %lld zile active. Alege un plan acum și nimic nu se oprește în ziua 14."
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Mai ai %lld zi activă. Alege un plan acum și nimic nu se oprește în ziua 14."
+                }
+              },
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Mai ai %lld zile active. Alege un plan acum și nimic nu se oprește în ziua 14."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Mai ai %lld de zile active. Alege un plan acum și nimic nu se oprește în ziua 14."
+                }
+              }
+            }
           }
         },
         "el": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Σου απομένουν %lld ενεργές ημέρες. Διάλεξε πρόγραμμα τώρα και τίποτα δεν απενεργοποιείται την ημέρα 14."
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Σου απομένει %lld ενεργή ημέρα. Διάλεξε πρόγραμμα τώρα και τίποτα δεν απενεργοποιείται την ημέρα 14."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Σου απομένουν %lld ενεργές ημέρες. Διάλεξε πρόγραμμα τώρα και τίποτα δεν απενεργοποιείται την ημέρα 14."
+                }
+              }
+            }
           }
         },
         "tr": {
@@ -36449,21 +37817,87 @@
           }
         },
         "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "تبقّى لديكِ %lld أيام نشطة. اختاري خطة الآن ولن يتوقف شيء في اليوم 14."
+          "variations": {
+            "plural": {
+              "zero": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "تبقّى لديكِ %lld يوم نشط. اختاري خطة الآن ولن يتوقف شيء في اليوم 14."
+                }
+              },
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "تبقّى لديكِ %lld يوم نشط. اختاري خطة الآن ولن يتوقف شيء في اليوم 14."
+                }
+              },
+              "two": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "تبقّى لديكِ %lld يومان نشطان. اختاري خطة الآن ولن يتوقف شيء في اليوم 14."
+                }
+              },
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "تبقّى لديكِ %lld أيام نشطة. اختاري خطة الآن ولن يتوقف شيء في اليوم 14."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "تبقّى لديكِ %lld يومًا نشطًا. اختاري خطة الآن ولن يتوقف شيء في اليوم 14."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "تبقّى لديكِ %lld يوم نشط. اختاري خطة الآن ولن يتوقف شيء في اليوم 14."
+                }
+              }
+            }
           }
         },
         "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "נשארו לך %lld ימים פעילים. בחרי תוכנית עכשיו ושום דבר לא ייכבה ביום 14."
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "נשאר לך %lld יום פעיל. בחרי תוכנית עכשיו ושום דבר לא ייכבה ביום 14."
+                }
+              },
+              "two": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "נשארו לך %lld ימים פעילים. בחרי תוכנית עכשיו ושום דבר לא ייכבה ביום 14."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "נשארו לך %lld ימים פעילים. בחרי תוכנית עכשיו ושום דבר לא ייכבה ביום 14."
+                }
+              }
+            }
           }
         },
         "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "आपके %lld सक्रिय दिन बाक़ी हैं। अभी प्लान चुनें, ताकि 14वें दिन कुछ भी बंद न हो।"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "आपका %lld सक्रिय दिन बाक़ी है। अभी प्लान चुनें, ताकि 14वें दिन कुछ भी बंद न हो।"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "आपके %lld सक्रिय दिन बाक़ी हैं। अभी प्लान चुनें, ताकि 14वें दिन कुछ भी बंद न हो।"
+                }
+              }
+            }
           }
         },
         "bn": {
@@ -36473,21 +37907,57 @@
           }
         },
         "ur": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "آپ کے %lld فعال دن باقی ہیں۔ ابھی پلان چنیں تاکہ 14ویں دن کچھ بھی بند نہ ہو۔"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "آپ کا %lld فعال دن باقی ہے۔ ابھی پلان چنیں تاکہ 14ویں دن کچھ بھی بند نہ ہو۔"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "آپ کے %lld فعال دن باقی ہیں۔ ابھی پلان چنیں تاکہ 14ویں دن کچھ بھی بند نہ ہو۔"
+                }
+              }
+            }
           }
         },
         "mr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "तुमचे %lld सक्रिय दिवस बाकी आहेत. आत्ताच प्लॅन निवडा, म्हणजे 14व्या दिवशी काहीही बंद होणार नाही."
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "तुमचा %lld सक्रिय दिवस बाकी आहे. आत्ताच प्लॅन निवडा, म्हणजे 14व्या दिवशी काहीही बंद होणार नाही."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "तुमचे %lld सक्रिय दिवस बाकी आहेत. आत्ताच प्लॅन निवडा, म्हणजे 14व्या दिवशी काहीही बंद होणार नाही."
+                }
+              }
+            }
           }
         },
         "ta": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "இன்னும் %lld செயல் நாட்கள் உள்ளன. இப்போதே ஒரு திட்டத்தைத் தேர்ந்தெடுத்தால், 14ஆம் நாளில் எதுவும் நிற்காது."
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "இன்னும் %lld செயல் நாள் உள்ளது. இப்போதே ஒரு திட்டத்தைத் தேர்ந்தெடுத்தால், 14ஆம் நாளில் எதுவும் நிற்காது."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "இன்னும் %lld செயல் நாட்கள் உள்ளன. இப்போதே ஒரு திட்டத்தைத் தேர்ந்தெடுத்தால், 14ஆம் நாளில் எதுவும் நிற்காது."
+                }
+              }
+            }
           }
         },
         "id": {
@@ -36539,21 +38009,57 @@
           }
         },
         "gu": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "તમારા %lld સક્રિય દિવસ બાકી છે. હમણાં જ પ્લાન પસંદ કરો, જેથી 14મા દિવસે કંઈ બંધ ન થાય."
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "તમારો %lld સક્રિય દિવસ બાકી છે. હમણાં જ પ્લાન પસંદ કરો, જેથી 14મા દિવસે કંઈ બંધ ન થાય."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "તમારા %lld સક્રિય દિવસ બાકી છે. હમણાં જ પ્લાન પસંદ કરો, જેથી 14મા દિવસે કંઈ બંધ ન થાય."
+                }
+              }
+            }
           }
         },
         "kn": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ನಿಮಗೆ ಇನ್ನೂ %lld ಸಕ್ರಿಯ ದಿನಗಳು ಉಳಿದಿವೆ. ಈಗಲೇ ಪ್ಲಾನ್ ಆರಿಸಿದರೆ, 14ನೇ ದಿನ ಏನೂ ಆಫ್ ಆಗುವುದಿಲ್ಲ."
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "ನಿಮಗೆ ಇನ್ನೂ %lld ಸಕ್ರಿಯ ದಿನ ಉಳಿದಿದೆ. ಈಗಲೇ ಪ್ಲಾನ್ ಆರಿಸಿದರೆ, 14ನೇ ದಿನ ಏನೂ ಆಫ್ ಆಗುವುದಿಲ್ಲ."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "ನಿಮಗೆ ಇನ್ನೂ %lld ಸಕ್ರಿಯ ದಿನಗಳು ಉಳಿದಿವೆ. ಈಗಲೇ ಪ್ಲಾನ್ ಆರಿಸಿದರೆ, 14ನೇ ದಿನ ಏನೂ ಆಫ್ ಆಗುವುದಿಲ್ಲ."
+                }
+              }
+            }
           }
         },
         "ml": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "നിങ്ങൾക്ക് %lld സജീവ ദിനങ്ങൾ ബാക്കിയുണ്ട്. ഇപ്പോൾ ഒരു പ്ലാൻ തിരഞ്ഞെടുത്താൽ, 14-ാം ദിവസം ഒന്നും ഓഫാകില്ല."
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "നിങ്ങൾക്ക് %lld സജീവ ദിനം ബാക്കിയുണ്ട്. ഇപ്പോൾ ഒരു പ്ലാൻ തിരഞ്ഞെടുത്താൽ, 14-ാം ദിവസം ഒന്നും ഓഫാകില്ല."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "നിങ്ങൾക്ക് %lld സജീവ ദിനങ്ങൾ ബാക്കിയുണ്ട്. ഇപ്പോൾ ഒരു പ്ലാൻ തിരഞ്ഞെടുത്താൽ, 14-ാം ദിവസം ഒന്നും ഓഫാകില്ല."
+                }
+              }
+            }
           }
         },
         "or": {
@@ -36563,15 +38069,39 @@
           }
         },
         "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ਤੁਹਾਡੇ %lld ਸਰਗਰਮ ਦਿਨ ਬਾਕੀ ਹਨ। ਹੁਣੇ ਪਲਾਨ ਚੁਣੋ, ਤਾਂ ਜੋ 14ਵੇਂ ਦਿਨ ਕੁਝ ਵੀ ਬੰਦ ਨਾ ਹੋਵੇ।"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "ਤੁਹਾਡਾ %lld ਸਰਗਰਮ ਦਿਨ ਬਾਕੀ ਹੈ। ਹੁਣੇ ਪਲਾਨ ਚੁਣੋ, ਤਾਂ ਜੋ 14ਵੇਂ ਦਿਨ ਕੁਝ ਵੀ ਬੰਦ ਨਾ ਹੋਵੇ।"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "ਤੁਹਾਡੇ %lld ਸਰਗਰਮ ਦਿਨ ਬਾਕੀ ਹਨ। ਹੁਣੇ ਪਲਾਨ ਚੁਣੋ, ਤਾਂ ਜੋ 14ਵੇਂ ਦਿਨ ਕੁਝ ਵੀ ਬੰਦ ਨਾ ਹੋਵੇ।"
+                }
+              }
+            }
           }
         },
         "te": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "మీకు ఇంకా %lld యాక్టివ్ రోజులు ఉన్నాయి. ఇప్పుడే ప్లాన్ ఎంచుకుంటే, 14వ రోజున ఏదీ ఆఫ్ అవ్వదు."
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "మీకు ఇంకా %lld యాక్టివ్ రోజు ఉంది. ఇప్పుడే ప్లాన్ ఎంచుకుంటే, 14వ రోజున ఏదీ ఆఫ్ అవ్వదు."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "మీకు ఇంకా %lld యాక్టివ్ రోజులు ఉన్నాయి. ఇప్పుడే ప్లాన్ ఎంచుకుంటే, 14వ రోజున ఏదీ ఆఫ్ అవ్వదు."
+                }
+              }
+            }
           }
         }
       }
