@@ -79,6 +79,15 @@ ACTIVE_DAY_TOKENS: dict[str, tuple[str, ...]] = {
 ENGLISH_NEEDLE = "active day"
 
 
+def localization_value(entry: dict, lang: str) -> str | None:
+    """The plain value, or a plural entry's "other" form. copy-inventory.py imports it."""
+    localization = (entry.get("localizations") or {}).get(lang) or {}
+    plural = (localization.get("variations") or {}).get("plural") or {}
+    unit = localization.get("stringUnit") or (plural.get("other") or {}).get("stringUnit") or {}
+    value = unit.get("value")
+    return value if isinstance(value, str) else None
+
+
 def variant_values(localization: dict) -> list[str]:
     """The plain value, or every plural variant's value."""
     unit = localization.get("stringUnit") or {}
