@@ -7,10 +7,9 @@ import Foundation
 import RevenueCat
 
 /// The one-time "extend with a free week" card on the Trial-End Paywall
-/// (ENG-172): offered once, after the person backs out of Apple's purchase
-/// sheet or a restore finds nothing (plus one second chance from the slot 3
-/// win-back push, ENG-173), for the annual SKU that carries a free
-/// intro offer. The decision is nil whenever any input is missing, so the app
+/// (ENG-172): offered once per device, after the person backs out of Apple's
+/// purchase sheet or a restore finds nothing, for the annual SKU that carries
+/// a free intro offer. The decision is nil whenever any input is missing, so the app
 /// never offers a product App Store Connect or RevenueCat does not serve.
 struct TrialEndExtendOffer: Equatable {
     let trigger: TrialEndExtendTrigger
@@ -47,39 +46,35 @@ enum TrialEndExtendTrigger: String, Codable {
     case restoreEmpty = "restore_empty"
 }
 
-/// Lifecycle of the offer on this device. One-way, except for one explicit
-/// second chance: tapping the slot 3 win-back push (ENG-173) re-arms a card
-/// she saw or turned down, and a no to that second showing closes it for
-/// good. An event that does not apply to the current phase leaves it
-/// unchanged, so a repeated or late event can never re-arm the card.
-/// Raw values persist in the Keychain.
+/// Lifecycle of the offer on this device, one way only: `unseen -> shown ->
+/// accepted | declined`. An event that does not apply to the current phase
+/// leaves it unchanged, so a repeated or late event can never bring the card
+/// back. Raw values persist in the Keychain.
 enum TrialEndExtendOfferPhase: String {
     case unseen
     case shown
     case accepted
     case declined
-    case rearmed
-    case reshown
-    case closed
 
     enum Event {
         case present
         case accept
         case decline
-        case rearm
+    }
+
+    /// The Keychain value read back. Any stored value means the card was
+    /// shown, so one this build no longer knows (a retired second-chance
+    /// phase from an earlier TestFlight build) reads as declined.
+    init(stored rawValue: String?) {
+        guard let rawValue else {
+            self = .unseen
+            return
+        }
+        self = TrialEndExtendOfferPhase(rawValue: rawValue) ?? .declined
     }
 
     var offers: Bool {
-        self == .unseen || self == .rearmed
-    }
-
-    /// Whether the slot 3 push may still pitch the card: never after a yes,
-    /// and never once the second chance is armed or spent.
-    var allowsWinbackPitch: Bool {
-        switch self {
-        case .unseen, .shown, .declined: true
-        case .accepted, .rearmed, .reshown, .closed: false
-        }
+        self == .unseen
     }
 
     func next(on event: Event) -> TrialEndExtendOfferPhase {
@@ -87,10 +82,6 @@ enum TrialEndExtendOfferPhase: String {
         case (.unseen, .present): .shown
         case (.shown, .accept): .accepted
         case (.shown, .decline): .declined
-        case (.shown, .rearm), (.declined, .rearm): .rearmed
-        case (.rearmed, .present): .reshown
-        case (.reshown, .accept): .accepted
-        case (.reshown, .decline): .closed
         default: self
         }
     }

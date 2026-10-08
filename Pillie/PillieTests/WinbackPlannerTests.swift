@@ -313,65 +313,6 @@ struct WinbackReminderPlannerTests {
 }
 
 @MainActor
-struct WinbackExtendSecondChanceTests {
-    @Test func slotThreeRearmsADeclinedCardExactlyOnce() {
-        let store = InMemoryTrialEndExtendOfferStore()
-
-        #expect(store.record(.present) == .shown)
-        #expect(store.record(.decline) == .declined)
-        #expect(store.record(.rearm) == .rearmed)
-        #expect(store.record(.present) == .reshown)
-        #expect(store.record(.decline) == .closed)
-        #expect(store.record(.rearm) == .closed)
-        #expect(store.record(.present) == .closed)
-        #expect(store.loadPhase().offers == false)
-    }
-
-    @Test func rearmFromShownAndAcceptOnTheSecondShowing() {
-        let store = InMemoryTrialEndExtendOfferStore()
-
-        #expect(store.record(.present) == .shown)
-        #expect(store.record(.rearm) == .rearmed)
-        #expect(store.record(.rearm) == .rearmed)
-        #expect(store.record(.present) == .reshown)
-        #expect(store.record(.accept) == .accepted)
-        #expect(store.record(.rearm) == .accepted)
-    }
-
-    @Test func rearmNeverAppliesBeforeTheFirstShowing() {
-        #expect(TrialEndExtendOfferPhase.unseen.next(on: .rearm) == .unseen)
-    }
-
-    @Test func onlyUnseenAndRearmedOffer() {
-        let all: [TrialEndExtendOfferPhase] = [.unseen, .shown, .accepted, .declined, .rearmed, .reshown, .closed]
-        #expect(all.filter(\.offers) == [.unseen, .rearmed])
-        #expect(all.filter(\.allowsWinbackPitch) == [.unseen, .shown, .declined])
-    }
-
-    @Test func decisionOffersTheRearmedCard() {
-        let offer = TrialEndExtendOfferDecision.offer(
-            trigger: .sheetCancel,
-            isTrialEndBoard: true,
-            phase: .rearmed,
-            eligibility: .eligible,
-            product: TrialEndExtendProduct(productID: SubscriptionManager.extendAnnualProductID, priceDisplay: "$29.99", freeDays: 7),
-            now: date("2026-10-18T19:05:00-04:00"),
-            calendar: .current
-        )
-        #expect(offer?.trigger == .sheetCancel)
-        #expect(TrialEndExtendOfferDecision.offer(
-            trigger: .sheetCancel,
-            isTrialEndBoard: true,
-            phase: .reshown,
-            eligibility: .eligible,
-            product: TrialEndExtendProduct(productID: SubscriptionManager.extendAnnualProductID, priceDisplay: "$29.99", freeDays: 7),
-            now: date("2026-10-18T19:05:00-04:00"),
-            calendar: .current
-        ) == nil)
-    }
-}
-
-@MainActor
 struct WinbackTelemetryTests {
     private static var keptObjects: [AnyObject] = []
     private let open = WinbackOpen(slot: .lastNote, variant: .new, date: date("2026-10-22T19:05:00-04:00"))
