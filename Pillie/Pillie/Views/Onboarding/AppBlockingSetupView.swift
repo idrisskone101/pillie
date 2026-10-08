@@ -116,7 +116,7 @@ struct AppBlockingSetupContent {
                     locale: locale
                 ),
                 locale: locale,
-                ReverseTrialClock.fullDays
+                trialClock?.displayedDaysRemaining(calendar: .current, now: now) ?? ReverseTrialClock.fullDays
             )
         )
     }
@@ -232,7 +232,8 @@ struct AppBlockingSetupView: View {
     private var content: AppBlockingSetupContent {
         AppBlockingSetupContent.localized(
             locale: locale,
-            trialEndTerms: trialEndTerms
+            trialEndTerms: trialEndTerms,
+            trialClock: SubscriptionManager.shared.plusAccessState.trialClock
         )
     }
 
