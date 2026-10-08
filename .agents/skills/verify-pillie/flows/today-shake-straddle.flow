@@ -1,0 +1,35 @@
+# A shake that outlasts its reminder: the cover opens on pill 21 at 7:59 AM,
+# the 8:00 AM reminder passes under it, then the user confirms. Pill 21 logs
+# as taken and sugar pill 1 stays due. Logging whatever is due at confirm
+# time would take sugar pill 1 and leave pill 21 "not checked in yesterday".
+fresh
+launch
+wait text "Get started" 15
+openurl "pillie://debug/plus-home?lang=en"
+openurl pillie://debug/trial-grant?lang=en
+openurl pillie://debug/fixed-now?at=2026-09-28T16:00:00Z
+openurl pillie://debug/trial-eve-of-break?lang=en
+wait text "Late · still time until 8:00 AM tomorrow" 10
+expect text "Pill 21 of 28"
+
+openurl pillie://debug/fixed-now?at=2026-09-29T11:59:00Z
+wait text "Pill 21 of 28" 10
+shot before-reminder
+tap --label "Take pill"
+wait id shakeConfirmStage 10
+shot cover-pill-21
+
+openurl pillie://debug/fixed-now?at=2026-09-29T12:00:30Z
+wait id shakeTapToConfirmFallback 10
+shot cover-after-reminder
+tap --id shakeTapToConfirmFallback
+wait text "Pill 21 checked in at" 10
+shot cover-logged
+
+wait text "Sugar pill 1 of 7" 15
+gone id shakeConfirmStage 10
+expect text "Take pill"
+gone text "not checked in yesterday" 5
+gone text "Taken today" 5
+shot home-after
+openurl pillie://debug/fixed-now?at=off

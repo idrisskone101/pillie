@@ -159,6 +159,10 @@ blocking/trial status surfaces, and (when eligible) the review ask.
   remove, ring insert and remove, sugar pill), one shot per shake, then the streak
   reveal and its logged note. A tap on `#shakeConfirmStage` counts as one
   shake.
+- `flows/today-shake-straddle.flow` — the shake cover opens on pill 21 a
+  minute before the 8:00 AM reminder, and `/fixed-now` moves the clock past
+  it under the cover. Confirming still logs pill 21 (its tile reads Taken),
+  and sugar pill 1 stays due with no "not checked in yesterday" line.
 - `flows/smoke.flow` covers the plain tab bar (Today/History/Settings) with
   `/plus-home`.
 - `flows/tab-bar-rtl.flow` — the same tab bar in Arabic: taps and edge
