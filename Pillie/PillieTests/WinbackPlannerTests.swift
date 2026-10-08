@@ -15,7 +15,7 @@ struct WinbackPlannerTests {
 
     // MARK: - Slot table
 
-    @Test func fourSlotsLandOnTheTableDaysForAnEveningReminder() {
+    @Test func threeSlotsLandOnTheTableDaysForAnEveningReminder() {
         #expect(plan(reminderHour: 21) == [
             WinbackIntent(
                 slot: .expiryDay,
@@ -30,12 +30,6 @@ struct WinbackPlannerTests {
                 detail: .reminderTime(hour: 21, minute: 0)
             ),
             WinbackIntent(
-                slot: .extendOffer,
-                variant: .offer,
-                fireDate: date("2026-10-18T19:00:00-04:00"),
-                detail: .extendPrice("$29.99")
-            ),
-            WinbackIntent(
                 slot: .lastNote,
                 variant: .days,
                 fireDate: date("2026-10-22T19:00:00-04:00"),
@@ -48,13 +42,11 @@ struct WinbackPlannerTests {
         #expect(plan(reminderHour: 8).map(\.fireDate) == [
             date("2026-10-15T09:00:00-04:00"),
             date("2026-10-16T08:00:00-04:00"),
-            date("2026-10-18T09:00:00-04:00"),
             date("2026-10-22T09:00:00-04:00"),
         ])
         #expect(plan(reminderHour: 0, reminderMinute: 30).map(\.fireDate) == [
             date("2026-10-15T09:00:00-04:00"),
             date("2026-10-16T00:30:00-04:00"),
-            date("2026-10-18T09:00:00-04:00"),
             date("2026-10-22T09:00:00-04:00"),
         ])
         #expect(WinbackPlanner.leadMinute(reminderHour: 11, reminderMinute: 15) == 9 * 60 + 15)
@@ -68,12 +60,11 @@ struct WinbackPlannerTests {
     }
 
     @Test func slotsKeepWallClockAcrossDSTEnd() {
-        // US DST ends 2026-11-01, between slots 3 and 4.
+        // US DST ends 2026-11-01, between slots 2 and 4.
         let intents = plan(expiry: date("2026-10-29T00:00:00-04:00"), reminderHour: 21)
         #expect(intents.map(\.fireDate) == [
             date("2026-10-29T19:00:00-04:00"),
             date("2026-10-30T21:00:00-04:00"),
-            date("2026-11-01T19:00:00-05:00"),
             date("2026-11-05T19:00:00-05:00"),
         ])
     }
@@ -85,53 +76,30 @@ struct WinbackPlannerTests {
         let openedExpiryMorning = context(lastAppOpen: expiryMorning)
         #expect(
             plan(now: expiryMorning, reminderHour: 21, context: openedExpiryMorning).map(\.slot)
-                == [.dayAfter, .extendOffer, .lastNote]
+                == [.dayAfter, .lastNote]
         )
 
         // Later replans keep it skipped: the open only moves forward.
         let laterReplan = plan(now: date("2026-10-15T18:00:00-04:00"), reminderHour: 21, context: openedExpiryMorning)
-        #expect(laterReplan.map(\.slot) == [.dayAfter, .extendOffer, .lastNote])
+        #expect(laterReplan.map(\.slot) == [.dayAfter, .lastNote])
 
         let openedDayAfterEvening = context(lastAppOpen: date("2026-10-16T20:00:00-04:00"))
         #expect(
             plan(now: date("2026-10-16T20:00:00-04:00"), reminderHour: 21, context: openedDayAfterEvening).map(\.slot)
-                == [.extendOffer, .lastNote]
+                == [.lastNote]
         )
     }
 
     @Test func openBeforeExpiryDoesNotSkip() {
         // The evening log on trial day 14 happens before there is a wall to see.
         let loggedLastTrialEvening = context(lastAppOpen: date("2026-10-14T21:05:00-04:00"))
-        #expect(plan(reminderHour: 21, context: loggedLastTrialEvening).map(\.slot) == WinbackSlot.allCases)
+        #expect(plan(reminderHour: 21, context: loggedLastTrialEvening).map(\.slot) == [.expiryDay, .dayAfter, .lastNote])
     }
 
     @Test func pastSlotsAreDroppedAndNothingFollowsSlotFour() {
-        #expect(plan(now: date("2026-10-17T12:00:00-04:00"), reminderHour: 21).map(\.slot) == [.extendOffer, .lastNote])
+        #expect(plan(now: date("2026-10-17T12:00:00-04:00"), reminderHour: 21).map(\.slot) == [.lastNote])
         #expect(plan(now: date("2026-10-22T19:00:00-04:00"), reminderHour: 21).isEmpty)
         #expect(plan(now: date("2027-01-01T12:00:00-05:00"), reminderHour: 21).isEmpty)
-    }
-
-    // MARK: - Slot 3
-
-    @Test func slotThreeNeedsARecordedPitch() {
-        #expect(!plan(reminderHour: 21, context: context(pitch: nil)).contains { $0.slot == .extendOffer })
-    }
-
-    @Test func slotThreeOnlyWhileASecondOfferIsPossible() {
-        for phase in [TrialEndExtendOfferPhase.unseen, .shown, .declined] {
-            #expect(plan(reminderHour: 21, context: context(phase: phase)).contains { $0.slot == .extendOffer }, "\(phase)")
-        }
-        for phase in [TrialEndExtendOfferPhase.accepted, .rearmed, .reshown, .closed] {
-            #expect(!plan(reminderHour: 21, context: context(phase: phase)).contains { $0.slot == .extendOffer }, "\(phase)")
-        }
-    }
-
-    @Test func restoreVariantWinsOverBlocker() {
-        let restorePitch = WinbackExtendPitch(trigger: .restoreEmpty, priceDisplay: "29,99 €")
-        let slot3 = plan(reminderHour: 21, cohort: .blockerConfigured, context: context(pitch: restorePitch))
-            .first { $0.slot == .extendOffer }
-        #expect(slot3?.variant == .restore)
-        #expect(slot3?.detail == .extendPrice("29,99 €"))
     }
 
     // MARK: - Variants
@@ -148,14 +116,14 @@ struct WinbackPlannerTests {
 
     @Test func blockerUsersGetBlockerLinesAndStayOutOfTheTest() {
         let blocker = plan(reminderHour: 21, cohort: .blockerConfigured, context: context(slot2Arm: .challenger))
-        #expect(blocker.map(\.variant) == [.blocker, .blocker, .blocker, .blocker])
+        #expect(blocker.map(\.variant) == [.blocker, .blocker, .blocker])
     }
 
     @Test func challengerArmOnlyChangesSlotTwoForReminderUsers() {
         let challenger = plan(reminderHour: 21, context: context(slot2Arm: .challenger))
-        #expect(challenger.map(\.variant) == [.reminder, .notAReminder, .offer, .days])
+        #expect(challenger.map(\.variant) == [.reminder, .notAReminder, .days])
         let control = plan(reminderHour: 21, context: context(slot2Arm: .control))
-        #expect(control.map(\.variant) == [.reminder, .reminder, .offer, .days])
+        #expect(control.map(\.variant) == [.reminder, .reminder, .days])
     }
 
     // MARK: - Copy keys
@@ -176,9 +144,6 @@ struct WinbackPlannerTests {
             (.dayAfter, .reminder, "slot2.title", "slot2.body"),
             (.dayAfter, .notAReminder, "slot2.challenger.title", "slot2.challenger.body"),
             (.dayAfter, .blocker, "slot2.blocker.title", "slot2.blocker.body"),
-            (.extendOffer, .offer, "slot3.title", "slot3.body"),
-            (.extendOffer, .blocker, "slot3.title", "slot3.blocker.body"),
-            (.extendOffer, .restore, "slot3.restore.title", "slot3.restore.body"),
             (.lastNote, .days, "slot4.title", "slot4.body"),
             (.lastNote, .blocker, "slot4.title", "slot4.blocker.body"),
             (.lastNote, .new, "slot4.title", "slot4.new.body"),
@@ -193,16 +158,23 @@ struct WinbackPlannerTests {
 
     @Test func payloadRoundTripsThroughTheTapParser() {
         let intent = WinbackIntent(
-            slot: .extendOffer,
-            variant: .restore,
-            fireDate: date("2026-10-18T19:00:00-04:00"),
-            detail: .extendPrice("$29.99")
+            slot: .lastNote,
+            variant: .new,
+            fireDate: date("2026-10-22T19:00:00-04:00"),
+            detail: .daysLogged(1)
         )
         let parsed = WinbackPayload.push(from: WinbackPayload.userInfo(for: intent))
-        #expect(parsed?.slot == .extendOffer)
-        #expect(parsed?.variant == .restore)
-        let trialWarning = WinbackPayload.push(from: ["requestKind": "trialExpiryWarning", "winbackSlot": 3])
+        #expect(parsed?.slot == .lastNote)
+        #expect(parsed?.variant == .new)
+        let trialWarning = WinbackPayload.push(from: ["requestKind": "trialExpiryWarning", "winbackSlot": 4])
         #expect(trialWarning?.slot == nil)
+    }
+
+    @Test func aDeliveredRetiredSlotThreePushOpensNothing() {
+        let retired: [AnyHashable: Any] = ["requestKind": "winback", "winbackSlot": 3, "winbackVariant": "days"]
+        #expect(WinbackPayload.push(from: retired)?.slot == nil)
+        let slotFour: [AnyHashable: Any] = ["requestKind": "winback", "winbackSlot": 4, "winbackVariant": "days"]
+        #expect(WinbackPayload.push(from: slotFour)?.slot == .lastNote)
     }
 
     // MARK: - Helpers
@@ -216,17 +188,9 @@ struct WinbackPlannerTests {
     private func context(
         daysLogged: Int = 5,
         lastAppOpen: Date? = nil,
-        slot2Arm: WinbackSlot2Arm = .control,
-        pitch: WinbackExtendPitch? = WinbackExtendPitch(trigger: .sheetCancel, priceDisplay: "$29.99"),
-        phase: TrialEndExtendOfferPhase = .declined
+        slot2Arm: WinbackSlot2Arm = .control
     ) -> WinbackContext {
-        WinbackContext(
-            daysLogged: daysLogged,
-            lastAppOpen: lastAppOpen,
-            slot2Arm: slot2Arm,
-            extendPitch: pitch,
-            extendPhase: phase
-        )
+        WinbackContext(daysLogged: daysLogged, lastAppOpen: lastAppOpen, slot2Arm: slot2Arm)
     }
 
     private func plan(
@@ -263,7 +227,7 @@ struct WinbackReminderPlannerTests {
         let intents = plan(fixture.store, now: now, terms: .hardPaywall, winback: winbackContext)
 
         #expect(intents.compactMap(\.trialWarningDay).sorted() == [10, 13])
-        #expect(intents.compactMap(\.winbackSlot) == WinbackSlot.allCases)
+        #expect(intents.compactMap(\.winbackSlot) == [.expiryDay, .dayAfter, .lastNote])
     }
 
     @Test func withoutContextThePlanIsUnchanged() throws {
@@ -301,17 +265,11 @@ struct WinbackReminderPlannerTests {
         let intents = plan(fixture.store, now: now, grant: grant, terms: .hardPaywall, winback: winbackContext)
 
         #expect(intents.allSatisfy { $0.winbackSlot != nil })
-        #expect(intents.compactMap(\.winbackSlot) == [.extendOffer, .lastNote])
+        #expect(intents.compactMap(\.winbackSlot) == [.lastNote])
     }
 
     private var winbackContext: WinbackContext {
-        WinbackContext(
-            daysLogged: 4,
-            lastAppOpen: nil,
-            slot2Arm: .control,
-            extendPitch: WinbackExtendPitch(trigger: .sheetCancel, priceDisplay: "$29.99"),
-            extendPhase: .shown
-        )
+        WinbackContext(daysLogged: 4, lastAppOpen: nil, slot2Arm: .control)
     }
 
     private func plan(
@@ -355,74 +313,15 @@ struct WinbackReminderPlannerTests {
 }
 
 @MainActor
-struct WinbackExtendSecondChanceTests {
-    @Test func slotThreeRearmsADeclinedCardExactlyOnce() {
-        let store = InMemoryTrialEndExtendOfferStore()
-
-        #expect(store.record(.present) == .shown)
-        #expect(store.record(.decline) == .declined)
-        #expect(store.record(.rearm) == .rearmed)
-        #expect(store.record(.present) == .reshown)
-        #expect(store.record(.decline) == .closed)
-        #expect(store.record(.rearm) == .closed)
-        #expect(store.record(.present) == .closed)
-        #expect(store.loadPhase().offers == false)
-    }
-
-    @Test func rearmFromShownAndAcceptOnTheSecondShowing() {
-        let store = InMemoryTrialEndExtendOfferStore()
-
-        #expect(store.record(.present) == .shown)
-        #expect(store.record(.rearm) == .rearmed)
-        #expect(store.record(.rearm) == .rearmed)
-        #expect(store.record(.present) == .reshown)
-        #expect(store.record(.accept) == .accepted)
-        #expect(store.record(.rearm) == .accepted)
-    }
-
-    @Test func rearmNeverAppliesBeforeTheFirstShowing() {
-        #expect(TrialEndExtendOfferPhase.unseen.next(on: .rearm) == .unseen)
-    }
-
-    @Test func onlyUnseenAndRearmedOffer() {
-        let all: [TrialEndExtendOfferPhase] = [.unseen, .shown, .accepted, .declined, .rearmed, .reshown, .closed]
-        #expect(all.filter(\.offers) == [.unseen, .rearmed])
-        #expect(all.filter(\.allowsWinbackPitch) == [.unseen, .shown, .declined])
-    }
-
-    @Test func decisionOffersTheRearmedCard() {
-        let offer = TrialEndExtendOfferDecision.offer(
-            trigger: .sheetCancel,
-            isTrialEndBoard: true,
-            phase: .rearmed,
-            eligibility: .eligible,
-            product: TrialEndExtendProduct(productID: SubscriptionManager.extendAnnualProductID, priceDisplay: "$29.99", freeDays: 7),
-            now: date("2026-10-18T19:05:00-04:00"),
-            calendar: .current
-        )
-        #expect(offer?.trigger == .sheetCancel)
-        #expect(TrialEndExtendOfferDecision.offer(
-            trigger: .sheetCancel,
-            isTrialEndBoard: true,
-            phase: .reshown,
-            eligibility: .eligible,
-            product: TrialEndExtendProduct(productID: SubscriptionManager.extendAnnualProductID, priceDisplay: "$29.99", freeDays: 7),
-            now: date("2026-10-18T19:05:00-04:00"),
-            calendar: .current
-        ) == nil)
-    }
-}
-
-@MainActor
 struct WinbackTelemetryTests {
     private static var keptObjects: [AnyObject] = []
-    private let open = WinbackOpen(slot: .extendOffer, variant: .restore, date: date("2026-10-18T19:05:00-04:00"))
+    private let open = WinbackOpen(slot: .lastNote, variant: .new, date: date("2026-10-22T19:05:00-04:00"))
 
     @Test func pushEventsCarrySlotAndVariant() {
         let (telemetry, client) = makeTelemetry(name: "push")
 
         telemetry.winbackNotificationScheduled(slot: .expiryDay)
-        telemetry.winbackNotificationOpened(slot: .extendOffer, variant: .restore)
+        telemetry.winbackNotificationOpened(slot: .lastNote, variant: .new)
 
         #expect(client.events == [
             WinbackAnalyticsClientSpy.Event(
@@ -431,7 +330,7 @@ struct WinbackTelemetryTests {
             ),
             WinbackAnalyticsClientSpy.Event(
                 name: "winback_notification_opened",
-                properties: ["slot": .int(3), "variant": .string("restore"), "is_plus": .bool(false)]
+                properties: ["slot": .int(4), "variant": .string("new"), "is_plus": .bool(false)]
             ),
         ])
     }
@@ -450,8 +349,8 @@ struct WinbackTelemetryTests {
                     "cohort": .string("blocker_configured"),
                     "paywall_variant": .string("blocker_configured"),
                     "trial_terms_cohort": .string("post_cutover"),
-                    "slot": .int(3),
-                    "variant": .string("restore"),
+                    "slot": .int(4),
+                    "variant": .string("new"),
                     "is_plus": .bool(false),
                 ]
             ),
@@ -466,8 +365,8 @@ struct WinbackTelemetryTests {
 
         #expect(attributedClient.events.map(\.name) == ["purchase_completed", "trial_started", "purchase_started"])
         for event in attributedClient.events.prefix(2) {
-            #expect(event.properties["winback_slot"] == .int(3), "\(event.name)")
-            #expect(event.properties["winback_variant"] == .string("restore"), "\(event.name)")
+            #expect(event.properties["winback_slot"] == .int(4), "\(event.name)")
+            #expect(event.properties["winback_variant"] == .string("new"), "\(event.name)")
             #expect(event.properties["source"] == .string("trial_end"), "\(event.name)")
         }
         #expect(attributedClient.events[2].properties["winback_slot"] == nil)
@@ -487,9 +386,9 @@ struct WinbackTelemetryTests {
     }
 
     @Test func attributionWindowIsOneDay() {
-        #expect(open.attributes(at: date("2026-10-19T19:04:59-04:00")))
-        #expect(!open.attributes(at: date("2026-10-19T19:05:00-04:00")))
-        #expect(!open.attributes(at: date("2026-10-18T19:04:00-04:00")))
+        #expect(open.attributes(at: date("2026-10-23T19:04:59-04:00")))
+        #expect(!open.attributes(at: date("2026-10-23T19:05:00-04:00")))
+        #expect(!open.attributes(at: date("2026-10-22T19:04:00-04:00")))
     }
 
     private func makeTelemetry(

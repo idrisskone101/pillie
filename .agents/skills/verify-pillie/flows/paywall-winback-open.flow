@@ -1,6 +1,7 @@
-# ENG-173: a tapped slot 3 win-back push re-raises the 7-day extend card once
-# after "Not now", and a second tap does not. Slot 1 opens the plain wall.
-# `pillie://debug/winback-open?slot=N` runs the banner-tap path (the
+# ENG-173 / ENG-175: a tapped win-back push opens the plain trial-end wall
+# and never raises the extend card, even after "Not now" on it. Slot 3 is
+# retired, so /winback-open?slot=3 is refused (app.log: "slot must be 1, 2
+# or 4"). `pillie://debug/winback-open?slot=N` runs the banner-tap path (the
 # simulator cannot tap a banner). app.log carries the analytics mirror:
 # winback_notification_opened, paywall_viewed with source winback.
 launch
@@ -15,17 +16,16 @@ sleep 1
 shot not-now-plans
 
 openurl pillie://debug/winback-open?slot=3
-wait id extendOfferTitle 20
-expect text "Start my free week"
-sleep 1
-shot slot3-second-chance
-
-tap --id extendOfferNotNowButton
-wait text "Get your reminders and app blocking back." 10
-openurl pillie://debug/winback-open?slot=3
 sleep 5
 expect-not id extendOfferTitle
-shot slot3-spent
+expect text "Get your reminders and app blocking back."
+shot slot3-refused
+
+openurl pillie://debug/winback-open?slot=4
+sleep 3
+expect-not id extendOfferTitle
+expect text "Get your reminders and app blocking back."
+shot slot4-wall
 
 openurl pillie://debug/winback-open?slot=1
 sleep 3

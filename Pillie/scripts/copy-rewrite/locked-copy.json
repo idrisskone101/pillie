@@ -3114,9 +3114,19 @@
       "key": "trial.end.extend.charge.body",
       "create": true,
       "comment": "Extend offer timeline, caption under the price on the charge date [paywall]",
-      "en": "Charged for one year of Plus.",
-      "de": "Abgebucht für ein Jahr Plus.",
-      "it": "Addebito per un anno di Plus."
+      "en": "Charged after your 7 free days. Renews every year until you cancel.",
+      "de": "Abbuchung nach deinen 7 Gratistagen. Verlängert sich jedes Jahr, bis du kündigst.",
+      "it": "Addebito dopo i tuoi 7 giorni gratis. Si rinnova ogni anno finché non disdici."
+    },
+    {
+      "issue": "ENG-175",
+      "table": "Commerce",
+      "key": "trial.end.extend.charge.price",
+      "create": true,
+      "comment": "Extend offer timeline, the price headline on the charge date; %@ is the store price, rendered large. Same 'a year' wording as paywall.cta.get_plus.billed_yearly [paywall]",
+      "en": "%@ a year",
+      "de": "%@ pro Jahr",
+      "it": "%@ all’anno"
     },
     {
       "issue": "ENG-172",
@@ -3437,56 +3447,6 @@
       "en": "At %@ they’d stay locked until you log. Tap to turn the lock back on.",
       "de": "Sonst wären sie ab %@ gesperrt, bis du abhakst. Tippe, um die App-Sperre wieder einzuschalten.",
       "it": "Alle %@ resterebbero bloccate finché non confermi. Tocca per riattivare il blocco app."
-    },
-    {
-      "issue": "ENG-173",
-      "table": "Notifications",
-      "key": "notification.winback.slot3.title",
-      "create": true,
-      "comment": "ENG-173 win-back push after a hard-paywall trial ends",
-      "en": "Want another week to decide?",
-      "de": "Willst du noch eine Woche überlegen?",
-      "it": "Vuoi un’altra settimana per decidere?"
-    },
-    {
-      "issue": "ENG-173",
-      "table": "Notifications",
-      "key": "notification.winback.slot3.body",
-      "create": true,
-      "comment": "ENG-173 win-back push after a hard-paywall trial ends",
-      "en": "Here’s 7 more days free, then %@ a year. This offer only comes once.",
-      "de": "Hier sind noch 7 Tage gratis, danach %@ pro Jahr. Dieses Angebot gibt es nur einmal.",
-      "it": "Ecco altri 7 giorni gratis, poi %@ all’anno. Questa offerta arriva una volta sola."
-    },
-    {
-      "issue": "ENG-173",
-      "table": "Notifications",
-      "key": "notification.winback.slot3.blocker.body",
-      "create": true,
-      "comment": "ENG-173 win-back push after a hard-paywall trial ends",
-      "en": "7 more days free, app lock included, then %@ a year. This offer only comes once.",
-      "de": "Noch 7 Tage gratis, inklusive App-Sperre, danach %@ pro Jahr. Dieses Angebot gibt es nur einmal.",
-      "it": "Altri 7 giorni gratis, blocco app incluso, poi %@ all’anno. Questa offerta arriva una volta sola."
-    },
-    {
-      "issue": "ENG-173",
-      "table": "Notifications",
-      "key": "notification.winback.slot3.restore.title",
-      "create": true,
-      "comment": "ENG-173 win-back push after a hard-paywall trial ends",
-      "en": "Couldn’t find your purchase?",
-      "de": "Kein Kauf gefunden?",
-      "it": "Non trovi il tuo acquisto?"
-    },
-    {
-      "issue": "ENG-173",
-      "table": "Notifications",
-      "key": "notification.winback.slot3.restore.body",
-      "create": true,
-      "comment": "ENG-173 win-back push after a hard-paywall trial ends",
-      "en": "Nothing showed up on this Apple Account. Here’s 7 more days free, then %@ a year.",
-      "de": "Für diesen Apple Account wurde nichts gefunden. Hier sind noch 7 Tage gratis, danach %@ pro Jahr.",
-      "it": "Su questo Account Apple non risulta nulla. Ecco altri 7 giorni gratis, poi %@ all’anno."
     },
     {
       "issue": "ENG-173",

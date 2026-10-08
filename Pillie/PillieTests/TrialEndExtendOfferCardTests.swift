@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftUI
 import Testing
 import UserNotifications
 
@@ -54,8 +55,8 @@ struct TrialEndExtendOfferCardTests {
                   caption: "Reminders and app blocking work again."),
             .init(kind: .reminder, date: "Mon, Oct 12", headline: "We remind you",
                   caption: "A notification 2 days before you’re charged."),
-            .init(kind: .charge, date: "Wed, Oct 14", headline: "$29.99",
-                  caption: "Charged for one year of Plus."),
+            .init(kind: .charge(price: "$29.99"), date: "Wed, Oct 14", headline: "$29.99 a year",
+                  caption: "Charged after your 7 free days. Renews every year until you cancel."),
         ])
         #expect(card.cta == "Start my free week")
     }
@@ -80,6 +81,25 @@ struct TrialEndExtendOfferCardTests {
 
         #expect(card.subtitle == "Heute keine Kosten. Kündige bis zum 13. Okt. und du zahlst nichts.")
         #expect(card.stops.map(\.date) == ["Heute", "Mo. 12. Okt.", "Mi. 14. Okt."])
+        #expect(card.stops.last?.headline == "$29.99 pro Jahr")
+        #expect(card.stops.last?.caption == "Abbuchung nach deinen 7 Gratistagen. Verlängert sich jedes Jahr, bis du kündigst.")
+    }
+
+    @Test(arguments: [
+        ("$29.99 a year", "$29.99", "$29.99"),
+        ("Évi 29 990 Ft", "29 990 Ft", "29 990 Ft"),
+        ("年額¥4,500", "¥4,500", "¥4,500"),
+        ("$29.99", "$29.99", "$29.99"),
+        ("29,99 € pro Jahr", "$29.99", "29,99 € pro Jahr"),
+    ])
+    func `Charge headline sets only the price at the price size`(headline: String, price: String, largeRun: String) {
+        let text = TrialEndExtendSwap.chargeHeadline(headline, price: price)
+        let large = text.runs
+            .filter { $0.font == TrialEndExtendSwap.priceFont }
+            .map { String(text[$0.range].characters) }
+            .joined()
+        #expect(large == largeRun)
+        #expect(String(text.characters) == headline)
     }
 
     @Test func `Reminder fires at 20:00 two days before the charge with the Lock Screen copy`() throws {

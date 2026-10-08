@@ -829,8 +829,9 @@ struct PillieApp: App {
             // QA shortcut (ENG-172): the hard Trial-End Paywall rises straight
             // into the one-time extend offer, as after `trigger=cancel` (Apple
             // sheet cancelled) or `trigger=restore` (restore found nothing).
-            // `notifications=off` shows the last-day row; `clear=1` re-arms
-            // the offer. A fixture product stands in when RevenueCat has none.
+            // `notifications=off` shows the last-day row; `clear=1` resets
+            // the offer to unseen. A fixture product stands in when
+            // RevenueCat has none.
             let queryItems = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems
             func query(_ name: String) -> String? {
                 queryItems?.first(where: { $0.name == name })?.value
@@ -843,15 +844,15 @@ struct PillieApp: App {
             case "off": NotificationPermission.shared.debugRemindersAllowedOverride = false
             default: NotificationPermission.shared.debugRemindersAllowedOverride = nil
             }
-            // `trigger=none` only re-arms, so the real cancel or restore path
-            // raises the card.
+            // `trigger=none` raises nothing, so the real cancel or restore
+            // path raises the card.
             if let trigger = query("trigger"), trigger == "cancel" || trigger == "restore" {
                 UserDefaults.standard.set(trigger, forKey: HonestPaywallScreen.debugExtendTriggerKey)
             }
             DebugQA.apply(.trialExpiredNewUserReminder, store: store)
         case "/winback-open":
             // QA control (ENG-173): the simulator cannot tap a banner, so run
-            // the win-back tap for `slot=1...4`. `variant` defaults to the
+            // the win-back tap for `slot=1|2|4`. `variant` defaults to the
             // slot's reminder-only line. Pair with /trial-end-paywall.
             let queryItems = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems
             guard let slot = queryItems?.first(where: { $0.name == "slot" })?.value
@@ -859,12 +860,11 @@ struct PillieApp: App {
                 .flatMap(WinbackSlot.init(rawValue:))
             else {
                 os.Logger(subsystem: "com.idrisskone.pillie", category: "qa")
-                    .error("Pillie QA winback-open ignored: slot must be 1...4")
+                    .error("Pillie QA winback-open ignored: slot must be 1, 2 or 4")
                 return
             }
             let fallback: WinbackVariant = switch slot {
             case .expiryDay, .dayAfter: .reminder
-            case .extendOffer: .offer
             case .lastNote: .days
             }
             let variant = queryItems?.first(where: { $0.name == "variant" })?.value

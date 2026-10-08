@@ -701,7 +701,7 @@ enum AnalyticsEvent: String, CaseIterable {
   case trialEndExtendOfferShown = "trial_end_extend_offer_shown"
   case trialEndExtendOfferAccepted = "trial_end_extend_offer_accepted"
   case trialEndExtendOfferDismissed = "trial_end_extend_offer_dismissed"
-  /// A win-back push (ENG-173) was handed to iOS. Carries `slot: 1...4`;
+  /// A win-back push (ENG-173) was handed to iOS. Carries `slot: 1 | 2 | 4`;
   /// recorded at most once per slot per install.
   case winbackNotificationScheduled = "winback_notification_scheduled"
   /// A win-back push was tapped. Carries `slot` and `variant`.
