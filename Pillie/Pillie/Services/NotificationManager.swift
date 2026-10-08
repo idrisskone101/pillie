@@ -211,7 +211,7 @@ final class NotificationManager {
                     let requests = self.buildReminderRequests(
                         store: store,
                         now: now,
-                        snoozeOverride: snoozeOverride,
+                        snoozeOverride: snoozeOverride ?? Self.pendingSnooze(in: managedPending, now: now),
                         locale: PillieLocalization.appLocale,
                         servedBaseFireDateByDueDayEpoch: servedMap
                     )
@@ -967,6 +967,19 @@ final class NotificationManager {
             return nil
         }
         return Date(timeIntervalSince1970: fireEpoch)
+    }
+
+    /// A Snooze still waiting to fire keeps its time across rebuilds, until it fires or its day is logged.
+    private static func pendingSnooze(in requests: [UNNotificationRequest], now: Date) -> ReminderSchedulePlanner.SnoozeOverride? {
+        for request in requests
+        where request.content.userInfo[PayloadKey.requestKind] as? String == ReminderSchedulePlanner.DueReminderKind.snooze.rawValue {
+            guard let dueDayEpoch = request.content.userInfo[PayloadKey.dueDayEpoch] as? Int,
+                  let fireDate = fireDate(from: request),
+                  fireDate > now
+            else { continue }
+            return ReminderSchedulePlanner.SnoozeOverride(dueDayEpoch: dueDayEpoch, firstFireDate: fireDate)
+        }
+        return nil
     }
 
     /// The day a reminder was for, on the same date after a time zone change.
