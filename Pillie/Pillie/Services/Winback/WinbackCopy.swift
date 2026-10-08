@@ -1,12 +1,7 @@
-//
-//  WinbackCopy.swift
-//  Pillie
-//
 //  Authored copy for the win-back pushes (ENG-173). Informational: never a
 //  pregnancy scare, guilt, or fake urgency, and never a hint that reminders
 //  stay free. Every key lives in `Notifications`; each line takes at most one
 //  argument, the one its slot's `WinbackDetail` carries.
-//
 
 import Foundation
 

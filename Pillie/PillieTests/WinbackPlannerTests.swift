@@ -1,15 +1,6 @@
-//
-//  WinbackPlannerTests.swift
-//  PillieTests
-//
-//  The post-trial win-back pushes (ENG-173): the slot table's days and times,
-//  the skip rules, variants, the reminder-planner integration, the extend
-//  offer's second chance, and the wire payloads.
-//
 //  Value types and literal dates in a fixed Toronto calendar. Class doubles
 //  are kept alive for the process: the Xcode 27 beta test host crashes on
 //  @MainActor-adjacent deinit.
-//
 
 import Foundation
 import Testing

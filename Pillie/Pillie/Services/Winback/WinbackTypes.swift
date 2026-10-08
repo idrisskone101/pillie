@@ -1,10 +1,5 @@
-//
-//  WinbackTypes.swift
-//  Pillie
-//
 //  The post-trial win-back pushes (ENG-173): at most four local
 //  notifications after a hard-paywall Reverse Trial ends unpaid, then none.
-//
 
 import Foundation
 

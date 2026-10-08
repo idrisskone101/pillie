@@ -1,8 +1,3 @@
-//
-//  WinbackPlanner.swift
-//  Pillie
-//
-
 import Foundation
 
 /// Plans the win-back pushes from `WinbackSlot`. Pure: the caller supplies
@@ -52,17 +47,17 @@ enum WinbackPlanner {
     private static func message(
         for slot: WinbackSlot,
         _ input: WinbackPlanInput
-    ) -> Message? {
+    ) -> (variant: WinbackVariant, detail: WinbackDetail)? {
         let context = input.context
         let blocker = input.cohort == .blockerConfigured
         let reminderTime = WinbackDetail.reminderTime(hour: input.reminderHour, minute: input.reminderMinute)
         switch slot {
         case .expiryDay:
-            return Message(variant: blocker ? .blocker : .reminder, detail: reminderTime)
+            return (variant: blocker ? .blocker : .reminder, detail: reminderTime)
         case .dayAfter:
             // Blocker users stay out of the A/B: their line is about the lock.
-            if blocker { return Message(variant: .blocker, detail: reminderTime) }
-            return Message(variant: context.slot2Arm == .challenger ? .notAReminder : .reminder, detail: reminderTime)
+            if blocker { return (variant: .blocker, detail: reminderTime) }
+            return (variant: context.slot2Arm == .challenger ? .notAReminder : .reminder, detail: reminderTime)
         case .extendOffer:
             guard let pitch = context.extendPitch, context.extendPhase.allowsWinbackPitch else { return nil }
             let variant: WinbackVariant = if pitch.trigger == .restoreEmpty {
@@ -70,17 +65,12 @@ enum WinbackPlanner {
             } else {
                 blocker ? .blocker : .offer
             }
-            return Message(variant: variant, detail: .extendPrice(pitch.priceDisplay))
+            return (variant: variant, detail: .extendPrice(pitch.priceDisplay))
         case .lastNote:
             let days = context.daysLogged
-            guard days >= 3 else { return Message(variant: .new, detail: .daysLogged(days)) }
-            return Message(variant: blocker ? .blocker : .days, detail: .daysLogged(days))
+            guard days >= 3 else { return (variant: .new, detail: .daysLogged(days)) }
+            return (variant: blocker ? .blocker : .days, detail: .daysLogged(days))
         }
-    }
-
-    private struct Message {
-        let variant: WinbackVariant
-        let detail: WinbackDetail
     }
 }
 

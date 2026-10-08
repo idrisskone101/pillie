@@ -1,10 +1,5 @@
-//
-//  WinbackStorage.swift
-//  Pillie
-//
 //  The small UserDefaults records the win-back pushes (ENG-173) read and
 //  write. None of it is user content.
-//
 
 import Foundation
 import os

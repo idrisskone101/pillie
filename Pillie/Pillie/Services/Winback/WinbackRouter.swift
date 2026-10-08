@@ -1,8 +1,3 @@
-//
-//  WinbackRouter.swift
-//  Pillie
-//
-
 import Foundation
 import Observation
 
