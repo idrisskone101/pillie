@@ -59,10 +59,17 @@ struct CalendarDayPresentation: Equatable {
         isToday || isActionDay || isBreakDay
     }
 
-    /// The status History's legend and VoiceOver name for a past or current day.
-    var historyStatus: HistoryPresentation.DayStatus {
+    /// The status History's VoiceOver names for the day; nil reads the date alone, as for
+    /// a future day or a day with nothing recorded.
+    var historyStatus: HistoryPresentation.DayStatus? {
+        if isFutureDay { return nil }
         if status == .taken { return .completed }
-        return isBreakDay ? .breakDay : .unlogged
+        if isBreakDay { return .breakDay }
+        switch status {
+        case .upcoming: return .today
+        case .missed: return .unlogged
+        default: return nil
+        }
     }
 
     var defaultIndicatorOpacity: Double {

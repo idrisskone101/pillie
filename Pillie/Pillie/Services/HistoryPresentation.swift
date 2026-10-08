@@ -5,6 +5,8 @@ enum HistoryPresentation {
         case completed
         case unlogged
         case breakDay
+        /// The live day, its dose still open.
+        case today
     }
 
     struct MonthSummary: Equatable {
@@ -50,14 +52,9 @@ enum HistoryPresentation {
 
     static func dayAccessibilityLabel(
         date: Date,
-        status: DayStatus,
+        status: DayStatus?,
         locale: Locale = PillieLocalization.appLocale
     ) -> String {
-        let statusKey = switch status {
-        case .completed: "history.legend.completed"
-        case .unlogged: "history.legend.unlogged"
-        case .breakDay: "history.legend.break"
-        }
         let dateText = date.formatted(
             Date.FormatStyle()
                 .day()
@@ -65,6 +62,13 @@ enum HistoryPresentation {
                 .year()
                 .locale(locale)
         )
+        guard let status else { return dateText }
+        let statusKey = switch status {
+        case .completed: "history.legend.completed"
+        case .unlogged: "history.legend.unlogged"
+        case .breakDay: "history.legend.break"
+        case .today: "pack_card.tile.state.today"
+        }
         return PillieLocalization.formatted(
             "history.accessibility.day",
             locale: locale,
