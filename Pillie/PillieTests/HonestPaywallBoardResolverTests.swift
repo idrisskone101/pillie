@@ -128,7 +128,7 @@ struct HonestPaywallBoardResolverTests {
             showsContinueFree: false
         ))
         #expect(board?.story.title == "Get your reminders and app blocking back.")
-        #expect(board?.story.subtitle == "Pick a plan and they’re back before your next patch change. Your setup and streak are saved.")
+        #expect(board?.story.subtitle == "Pick a plan and they’re back before your next patch change. Your setup is saved.")
     }
 
     @Test func `Trial end legacy cohort allows dismiss and sells Get Plus`() {

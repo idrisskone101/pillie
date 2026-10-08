@@ -2614,9 +2614,9 @@
       "key": "paywall.board.trial_ended.subtitle.pill",
       "create": true,
       "comment": "'they' = the reminders and app blocking. Pill users.",
-      "en": "Pick a plan and they’re back before tonight’s pill. Your setup and streak are saved.",
-      "de": "Wähl einen Tarif, dann sind sie vor deiner Pille heute Abend wieder da. Deine Einrichtung und deine Serie bleiben gespeichert.",
-      "it": "Scegli un piano e tornano prima della pillola di stasera. La tua configurazione e la tua serie restano salvate."
+      "en": "Pick a plan and they’re back before tonight’s pill. Your setup is saved.",
+      "de": "Wähl einen Tarif, dann sind sie vor deiner Pille heute Abend wieder da. Deine Einrichtung bleibt gespeichert.",
+      "it": "Scegli un piano e tornano prima della pillola di stasera. La tua configurazione resta salvata."
     },
     {
       "issue": "honest-paywall",
@@ -2624,9 +2624,9 @@
       "key": "paywall.board.trial_ended.subtitle.patch",
       "create": true,
       "comment": "Same as .pill for contraceptive patch users.",
-      "en": "Pick a plan and they’re back before your next patch change. Your setup and streak are saved.",
-      "de": "Wähl einen Tarif, dann sind sie vor deinem nächsten Pflasterwechsel wieder da. Deine Einrichtung und deine Serie bleiben gespeichert.",
-      "it": "Scegli un piano e tornano prima del prossimo cambio del cerotto. La tua configurazione e la tua serie restano salvate."
+      "en": "Pick a plan and they’re back before your next patch change. Your setup is saved.",
+      "de": "Wähl einen Tarif, dann sind sie vor deinem nächsten Pflasterwechsel wieder da. Deine Einrichtung bleibt gespeichert.",
+      "it": "Scegli un piano e tornano prima del prossimo cambio del cerotto. La tua configurazione resta salvata."
     },
     {
       "issue": "honest-paywall",
@@ -2634,9 +2634,9 @@
       "key": "paywall.board.trial_ended.subtitle.ring",
       "create": true,
       "comment": "Same as .pill for vaginal ring users.",
-      "en": "Pick a plan and they’re back before your next ring change. Your setup and streak are saved.",
-      "de": "Wähl einen Tarif, dann sind sie vor deinem nächsten Ringwechsel wieder da. Deine Einrichtung und deine Serie bleiben gespeichert.",
-      "it": "Scegli un piano e tornano prima del prossimo cambio dell’anello. La tua configurazione e la tua serie restano salvate."
+      "en": "Pick a plan and they’re back before your next ring change. Your setup is saved.",
+      "de": "Wähl einen Tarif, dann sind sie vor deinem nächsten Ringwechsel wieder da. Deine Einrichtung bleibt gespeichert.",
+      "it": "Scegli un piano e tornano prima del prossimo cambio dell’anello. La tua configurazione resta salvata."
     },
     {
       "issue": "honest-paywall",
@@ -2711,12 +2711,12 @@
     {
       "issue": "honest-paywall",
       "table": "Commerce",
-      "key": "paywall.review.support",
+      "key": "paywall.review.reminders",
       "create": true,
-      "comment": "Real 5-star App Store review, shown in quotes. Translate faithfully, keep the ellipsis that marks the cut. No quote marks in the value.",
-      "en": "Really love this app! … Great app and great customer support!",
-      "de": "Ich liebe diese App wirklich! … Tolle App und toller Kundensupport!",
-      "it": "Adoro davvero questa app! … Ottima app e ottimo servizio clienti!"
+      "comment": "Real 5-star App Store review. Faithful translation. No quote marks.",
+      "en": "I have always struggled with keeping up with my pill. Now I don’t even have to think about it!",
+      "de": "Ich hatte schon immer Probleme, bei meiner Pille dranzubleiben. Jetzt muss ich nicht mal mehr daran denken!",
+      "it": "Ho sempre fatto fatica a stare dietro alla pillola. Ora non devo nemmeno pensarci!"
     },
     {
       "issue": "honest-paywall",

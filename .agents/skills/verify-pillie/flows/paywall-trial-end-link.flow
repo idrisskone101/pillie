@@ -4,7 +4,10 @@ launch
 wait text Today 15
 openurl pillie://debug/trial-end-paywall?lang=en
 wait text "Get your reminders and app blocking back." 20
-expect text "Your setup and streak are saved."
+expect text "Your setup is saved."
+expect-not text "streak are saved"
+expect text "Now I don’t even have to think about it!"
+expect-not text "customer support"
 expect id paywallRestoreButton
 expect-not text "Continue with free reminders"
 shot hard-wall

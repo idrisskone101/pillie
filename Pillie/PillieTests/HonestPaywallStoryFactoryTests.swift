@@ -46,9 +46,9 @@ struct HonestPaywallStoryFactoryTests {
     }
 
     @Test(arguments: [
-        (ContraceptiveMethod.pill, "Pick a plan and they’re back before tonight’s pill. Your setup and streak are saved."),
-        (.patch, "Pick a plan and they’re back before your next patch change. Your setup and streak are saved."),
-        (.ring, "Pick a plan and they’re back before your next ring change. Your setup and streak are saved."),
+        (ContraceptiveMethod.pill, "Pick a plan and they’re back before tonight’s pill. Your setup is saved."),
+        (.patch, "Pick a plan and they’re back before your next patch change. Your setup is saved."),
+        (.ring, "Pick a plan and they’re back before your next ring change. Your setup is saved."),
     ])
     func `Hard trial-end story names the method's next dose`(
         method: ContraceptiveMethod,
@@ -63,7 +63,7 @@ struct HonestPaywallStoryFactoryTests {
             title: "Get your reminders and app blocking back.",
             subtitle: subtitle,
             review: PaywallReview(
-                quote: "Really love this app! … Great app and great customer support!",
+                quote: "I have always struggled with keeping up with my pill. Now I don’t even have to think about it!",
                 source: "5-star review on the App Store"
             )
         ))
