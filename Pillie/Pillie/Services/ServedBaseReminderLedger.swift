@@ -40,7 +40,7 @@ struct ServedBaseReminderLedger: Codable, Equatable {
         }
     }
 
-    mutating func clearServedRecordWhenTaken(dueDayEpoch: Int) {
+    mutating func clearServedRecord(dueDayEpoch: Int) {
         fireEpochByDueDayEpoch.removeValue(forKey: dueDayEpoch)
     }
 

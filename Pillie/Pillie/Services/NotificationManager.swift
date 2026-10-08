@@ -146,6 +146,13 @@ final class NotificationManager {
 
     func requestReschedule(from store: PillStore, reason: String) {
         guard !isRunningTests else { return }
+        if reason == "full-reset" {
+            // PillStore.resetAndStartFresh asks with this reason. Today's reminder was the old
+            // routine's, so it must not stand in for the new routine's start-day catch-up.
+            var ledger = ServedBaseReminderLedger.load()
+            ledger.clearServedRecord(dueDayEpoch: Int(Calendar.current.startOfDay(for: store.today).timeIntervalSince1970))
+            ledger.save()
+        }
         DispatchQueue.main.async { [weak self, weak store] in
             guard let self, let store else { return }
 
@@ -298,7 +305,7 @@ final class NotificationManager {
         }
         if store.statusForDate(dueDay) == .taken {
             var ledger = ServedBaseReminderLedger.load()
-            ledger.clearServedRecordWhenTaken(dueDayEpoch: dueEpoch)
+            ledger.clearServedRecord(dueDayEpoch: dueEpoch)
             ledger.save()
         }
         clearReminders(forDueDayEpoch: dueEpoch)
