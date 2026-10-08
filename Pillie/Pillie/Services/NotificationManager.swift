@@ -85,11 +85,6 @@ final class NotificationManager {
         static let trialWarningDay = TrialExpiryWarningDelivery.dayKey
     }
 
-    private final class LedgerMutationBox {
-        var ledger: ServedBaseReminderLedger
-        init(_ ledger: ServedBaseReminderLedger) { self.ledger = ledger }
-    }
-
     struct ManagedReminderDiff {
         let stalePendingIDs: [String]
         let missingRequestIDs: [String]
@@ -192,27 +187,29 @@ final class NotificationManager {
 
         center.getPendingNotificationRequests { [weak self] pending in
             guard let self else { return }
-            self.center.getDeliveredNotifications { [weak self] delivered in
-                guard let self else { return }
+            self.center.getDeliveredNotifications { delivered in
+                Self.onMain { [weak self] in
+                    guard let self else { return }
 
-                let ledger = ServedBaseReminderLedger.load()
-                let managedPending = pending.filter { self.isManagedReminderID($0.identifier) }
-                let managedDelivered = delivered.filter { self.isManagedReminderID($0.request.identifier) }
-                let servedMap = ledger.servedBaseFireDates(
-                    pendingManagedRequests: managedPending,
-                    deliveredManagedNotifications: managedDelivered,
-                    now: now,
-                    calendar: calendar
-                )
+                    let ledger = ServedBaseReminderLedger.load()
+                    let managedPending = pending.filter { self.isManagedReminderID($0.identifier) }
+                    let managedDelivered = delivered.filter { self.isManagedReminderID($0.request.identifier) }
+                    let servedMap = ledger.servedBaseFireDates(
+                        pendingManagedRequests: managedPending,
+                        deliveredManagedNotifications: managedDelivered,
+                        now: now,
+                        calendar: calendar
+                    )
 
-                let requests = self.buildReminderRequests(
-                    store: store,
-                    now: now,
-                    snoozeOverride: snoozeOverride,
-                    locale: PillieLocalization.appLocale,
-                    servedBaseFireDateByDueDayEpoch: servedMap
-                )
-                self.applyManagedReminderRequests(requests, store: store, ledger: ledger)
+                    let requests = self.buildReminderRequests(
+                        store: store,
+                        now: now,
+                        snoozeOverride: snoozeOverride,
+                        locale: PillieLocalization.appLocale,
+                        servedBaseFireDateByDueDayEpoch: servedMap
+                    )
+                    self.applyManagedReminderRequests(requests, store: store)
+                }
             }
         }
 
@@ -713,8 +710,7 @@ final class NotificationManager {
 
     private func applyManagedReminderRequests(
         _ newRequests: [UNNotificationRequest],
-        store: PillStore,
-        ledger: ServedBaseReminderLedger
+        store: PillStore
     ) {
         center.getAuthorizationStatus { [weak self] status in
             guard let self else { return }
@@ -724,20 +720,18 @@ final class NotificationManager {
                 }
                 return
             }
-            self.applyAuthorizedManagedReminderRequests(newRequests, store: store, ledger: ledger)
+            self.applyAuthorizedManagedReminderRequests(newRequests, store: store)
         }
     }
 
     private func applyAuthorizedManagedReminderRequests(
         _ newRequests: [UNNotificationRequest],
-        store: PillStore,
-        ledger: ServedBaseReminderLedger
+        store: PillStore
     ) {
         let managedNewRequests = newRequests.filter { isManagedReminderID($0.identifier) }
         let newRequestByID = Dictionary(uniqueKeysWithValues: managedNewRequests.map { ($0.identifier, $0) })
         let newManagedIDs = Array(newRequestByID.keys)
         let errorReporter = NotificationScheduleBatchErrorReporter(report: trackSchedulingError)
-        let ledgerBox = LedgerMutationBox(ledger)
         let calendar = Calendar.current
 
         center.getPendingNotificationRequests { [weak self] existingRequests in
@@ -777,23 +771,26 @@ final class NotificationManager {
                         == ReminderSchedulePlanner.DueReminderKind.base.rawValue,
                        let dueEpoch = request.content.userInfo[PayloadKey.dueDayEpoch] as? Int,
                        let fireDate = Self.fireDate(from: request) {
-                        ledgerBox.ledger.recordScheduled(dueDayEpoch: dueEpoch, fireDate: fireDate)
-                        let candidateDates = DoseScheduleEngine.nextDueActions(
-                            from: Date(),
-                            limit: ReminderSchedulePlanner.dueScanLimit,
-                            pack: store.pack
-                        ).map(\.date)
-                        let takenEpochs = Set(
-                            store.statusesByEpochDay(for: candidateDates).compactMap { epoch, status in
-                                status == .taken ? epoch : nil
-                            }
-                        )
-                        ledgerBox.ledger.prune(
-                            takenDueDayEpochs: takenEpochs,
-                            todayStart: calendar.startOfDay(for: store.today),
-                            calendar: calendar
-                        )
-                        ledgerBox.ledger.save()
+                        Self.onMain {
+                            var ledger = ServedBaseReminderLedger.load()
+                            ledger.recordScheduled(dueDayEpoch: dueEpoch, fireDate: fireDate)
+                            let candidateDates = DoseScheduleEngine.nextDueActions(
+                                from: Date(),
+                                limit: ReminderSchedulePlanner.dueScanLimit,
+                                pack: store.pack
+                            ).map(\.date)
+                            let takenEpochs = Set(
+                                store.statusesByEpochDay(for: candidateDates).compactMap { epoch, status in
+                                    status == .taken ? epoch : nil
+                                }
+                            )
+                            ledger.prune(
+                                takenDueDayEpochs: takenEpochs,
+                                todayStart: calendar.startOfDay(for: store.today),
+                                calendar: calendar
+                            )
+                            ledger.save()
+                        }
                     }
                     if error == nil,
                        let winback = WinbackPayload.push(from: request.content.userInfo) {
@@ -830,6 +827,16 @@ final class NotificationManager {
                     self.center.removeDeliveredNotifications(withIdentifiers: deliveredDiff.staleDeliveredIDs)
                 }
             }
+        }
+    }
+
+    /// UNUserNotificationCenter answers on a background queue, and PillStore, its models,
+    /// and the served-reminder ledger belong to the main thread.
+    private static func onMain(_ work: @escaping () -> Void) {
+        if Thread.isMainThread {
+            work()
+        } else {
+            DispatchQueue.main.async(execute: work)
         }
     }
 
