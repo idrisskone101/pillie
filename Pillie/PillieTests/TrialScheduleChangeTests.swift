@@ -111,8 +111,9 @@ final class TrialScheduleChangeTests: XCTestCase {
 
     func testRemindersAndTrialNoticesKeepTheBadgesExpiry() throws {
         // Hard-paywall terms: reminders stop at the trial's end. After the Oct 15
-        // switch the trial still ends Oct 22, so the week's reminders stay and
-        // the notices land 5 and 2 days before it and on its morning.
+        // switch the trial still ends Oct 22, so the week's reminders stay, the
+        // notices land 5 and 2 days before it, and win-back slot 1 takes its
+        // morning (ENG-173).
         let manager = SubscriptionManager.shared
         manager.debugSetHardPaywallEnabled(true)
         manager.updateActiveDaySchedule(pack: pack(.twentyOneSeven, from: local(9, 10)), now: local(9, 30, 12))
@@ -138,7 +139,12 @@ final class TrialScheduleChangeTests: XCTestCase {
             .filter { $0.requestKind == "trialExpiryWarning" }
             .compactMap(\.fireDate)
             .sorted()
-        XCTAssertEqual(notices, [local(10, 17, 20), local(10, 20, 20), local(10, 22, 10)])
+        XCTAssertEqual(notices, [local(10, 17, 20), local(10, 20, 20)])
+        let firstWinbackDay = requests
+            .filter { $0.requestKind == WinbackPayload.requestKindValue }
+            .compactMap { $0.fireDate.map(Calendar.current.startOfDay(for:)) }
+            .min()
+        XCTAssertEqual(firstWinbackDay, local(10, 22))
     }
 
     func testAReinstallBeforeOnboardingKeepsTheSavedRhythm() {
