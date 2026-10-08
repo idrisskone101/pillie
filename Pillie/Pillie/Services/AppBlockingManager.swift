@@ -234,6 +234,9 @@ final class AppBlockingManager {
         method: ContraceptiveMethod
     ) {
         scrubLegacyBlockingSnoozeState()
+        // The monitor extension shields apps at reminder time without waking
+        // this process, so the cached flag can say "off" while shields are up.
+        blockingActive = ScreenTimeSharedState.isBlockingRequested
         guard SubscriptionManager.shared.hasPlusAccess else {
             if blockingActive { removeBlocking() }
             return

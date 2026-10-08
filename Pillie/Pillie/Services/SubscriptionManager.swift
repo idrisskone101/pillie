@@ -191,13 +191,29 @@ final class SubscriptionManager: NSObject {
     var isRevenueCatConfigured: Bool { isConfigured }
 
     #if DEBUG
-    /// When set, customer-info refreshes keep the QA entitlement instead of
-    /// letting a live RevenueCat fetch overwrite `setPlusForTesting`.
-    private var debugEntitlementOverride: Bool?
+    private static let debugEntitlementOverrideKey = "debugEntitlementOverride"
+
+    /// The `setPlusForTesting` value. It beats every RevenueCat read, survives
+    /// relaunch, and clears on a real purchase or restore, so a dev install
+    /// holding a Test Store purchase can still QA trial expiry.
+    @ObservationIgnored
+    private var debugEntitlementOverride: Bool? {
+        didSet {
+            guard !ProcessRuntime.isRunningTests else { return }
+            UserDefaults.standard.set(debugEntitlementOverride, forKey: Self.debugEntitlementOverrideKey)
+        }
+    }
     #endif
 
     private override init() {
         super.init()
+        #if DEBUG
+        if !ProcessRuntime.isRunningTests {
+            debugEntitlementOverride = UserDefaults.standard.object(
+                forKey: Self.debugEntitlementOverrideKey
+            ) as? Bool
+        }
+        #endif
         trialGrantDate = trialGrantStore.loadGrantDate()
         if let storedCohort = trialGrantStore.loadTermsCohort() {
             trialTermsCohort = storedCohort
@@ -308,7 +324,7 @@ final class SubscriptionManager: NSObject {
         // RevenueCat refreshes this cache below, but returning subscribers should
         // not be reported as free during that network round trip.
         if let cachedCustomerInfo = Purchases.shared.cachedCustomerInfo {
-            setEntitlement(
+            setRevenueCatEntitlement(
                 cachedCustomerInfo.entitlements[Self.entitlementID]?.isActive == true
             )
         }
@@ -477,6 +493,9 @@ final class SubscriptionManager: NSObject {
     /// non-consumable: RevenueCat maps every product to `pillie_plus`, and the
     /// client restores that entitlement without branching on product duration.
     func applyRestoreResult(isPlusEntitlementActive: Bool) -> RestoreOutcome {
+        #if DEBUG
+        if isPlusEntitlementActive { debugEntitlementOverride = nil }
+        #endif
         setEntitlement(isPlusEntitlementActive)
         return isPlusEntitlementActive ? .restored : .noActivePurchase
     }
@@ -537,14 +556,20 @@ final class SubscriptionManager: NSObject {
             resolveStorefrontWithoutPurchases()
             return
         }
+        guard let customerInfo = try? await Purchases.shared.customerInfo() else { return }
+        setRevenueCatEntitlement(customerInfo.entitlements[Self.entitlementID]?.isActive == true)
+    }
+
+    /// Every RevenueCat-sourced entitlement (launch cache, refresh, delegate
+    /// push) lands here, so a QA override cannot be undone behind its back.
+    private func setRevenueCatEntitlement(_ active: Bool) {
         #if DEBUG
         if let debugEntitlementOverride {
             setEntitlement(debugEntitlementOverride)
             return
         }
         #endif
-        guard let customerInfo = try? await Purchases.shared.customerInfo() else { return }
-        setEntitlement(customerInfo.entitlements[Self.entitlementID]?.isActive == true)
+        setEntitlement(active)
     }
 
     /// Resolves both pieces of launch commerce state used by the hard-wall gate.
@@ -638,6 +663,9 @@ final class SubscriptionManager: NSObject {
             throw SubscriptionPurchaseError.missingPlusEntitlement
         }
 
+        #if DEBUG
+        debugEntitlementOverride = nil
+        #endif
         setEntitlement(true)
     }
 }
@@ -651,7 +679,7 @@ extension SubscriptionManager: PurchasesDelegate {
         let productID = entitlement?.productIdentifier
         let willRenew = entitlement?.willRenew == true
         Task { @MainActor in
-            self.setEntitlement(active)
+            self.setRevenueCatEntitlement(active)
             if !TrialEndExtendReminder.isStillDue(isActive: active, productID: productID, willRenew: willRenew) {
                 NotificationManager.shared.removeTrialEndExtendReminder()
             }
