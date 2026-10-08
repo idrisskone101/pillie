@@ -34978,271 +34978,271 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie reminds you when 5 active days are left."
+            "value": "Pillie reminds you 5 days before it ends."
           }
         },
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "يذكّرك Pillie عندما تتبقى 5 أيام نشطة."
+            "value": "يذكّرك Pillie قبل انتهاء فترتك التجريبية بـ5 أيام."
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "5 সক্রিয় দিন বাকি থাকলে Pillie আপনাকে মনে করিয়ে দেবে।"
+            "value": "ট্রায়াল শেষ হওয়ার 5 দিন আগে Pillie আপনাকে মনে করিয়ে দেবে।"
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie t’avisa quan queden 5 dies actius."
+            "value": "Pillie t’avisa 5 dies abans que s’acabi la prova."
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie ti připomene, až bude zbývat 5 aktivních dní."
+            "value": "Pillie ti připomene 5 dní před koncem zkušebního období."
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie minder dig om det, når der er 5 aktive dage tilbage."
+            "value": "Pillie minder dig om det 5 dage, før din prøveperiode udløber."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie erinnert dich, wenn noch 5 aktive Tage übrig sind."
+            "value": "Pillie erinnert dich 5 Tage, bevor deine Testphase endet."
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Το Pillie σε ειδοποιεί όταν απομένουν 5 ενεργές ημέρες."
+            "value": "Το Pillie σε ειδοποιεί 5 ημέρες πριν λήξει η δοκιμή σου."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie te avisa cuando quedan 5 días activos."
+            "value": "Pillie te avisa 5 días antes de que termine tu prueba."
           }
         },
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie muistuttaa, kun 5 aktiivista päivää on jäljellä."
+            "value": "Pillie muistuttaa 5 päivää ennen kuin kokeilusi päättyy."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie te prévient quand il reste 5 jours actifs."
+            "value": "Pillie te prévient 5 jours avant la fin de ton essai."
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "5 સક્રિય દિવસ બાકી રહેશે ત્યારે Pillie તમને યાદ અપાવશે."
+            "value": "તમારી ટ્રાયલ પૂરી થાય તેના 5 દિવસ પહેલાં Pillie તમને યાદ અપાવશે."
           }
         },
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie תזכיר לך כשיישארו 5 ימים פעילים."
+            "value": "Pillie תזכיר לך 5 ימים לפני שתקופת הניסיון שלך מסתיימת."
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "जब 5 सक्रिय दिन बाक़ी होंगे, तब Pillie आपको याद दिलाएगा।"
+            "value": "ट्रायल ख़त्म होने से 5 दिन पहले Pillie आपको याद दिलाएगा।"
           }
         },
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie će te podsjetiti kad ostane još 5 aktivnih dana."
+            "value": "Pillie će te podsjetiti 5 dana prije kraja probnog razdoblja."
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "A Pillie szól, amikor 5 aktív nap van hátra."
+            "value": "A Pillie 5 nappal a próbaidőszakod vége előtt szól."
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie mengingatkanmu saat tersisa 5 hari aktif."
+            "value": "Pillie mengingatkanmu 5 hari sebelum uji cobamu berakhir."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie ti avvisa quando mancano 5 giorni attivi."
+            "value": "Pillie ti avvisa 5 giorni prima che la tua prova finisca."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "服用日が残り5日になると、Pillieがお知らせします。"
+            "value": "トライアル終了の5日前に、Pillieがお知らせします。"
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "5 ಸಕ್ರಿಯ ದಿನಗಳು ಉಳಿದಾಗ Pillie ನಿಮಗೆ ನೆನಪಿಸುತ್ತದೆ."
+            "value": "ನಿಮ್ಮ ಟ್ರಯಲ್ ಮುಗಿಯುವ 5 ದಿನಗಳ ಮೊದಲು Pillie ನಿಮಗೆ ನೆನಪಿಸುತ್ತದೆ."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "복용일이 5일 남으면 Pillie가 알려 드려요."
+            "value": "체험이 끝나기 5일 전에 Pillie가 알려 드려요."
           }
         },
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "5 സജീവ ദിനങ്ങൾ ബാക്കിയുള്ളപ്പോൾ Pillie നിങ്ങളെ ഓർമ്മിപ്പിക്കും."
+            "value": "നിങ്ങളുടെ ട്രയൽ അവസാനിക്കുന്നതിന് 5 ദിവസം മുമ്പ് Pillie നിങ്ങളെ ഓർമ്മിപ്പിക്കും."
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "5 सक्रिय दिवस बाकी राहिल्यावर Pillie तुम्हाला आठवण करून देईल."
+            "value": "तुमचा ट्रायल संपण्याच्या 5 दिवस आधी Pillie तुम्हाला आठवण करून देईल."
           }
         },
         "ms": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie akan ingatkan kamu apabila tinggal 5 hari aktif."
+            "value": "Pillie akan ingatkan kamu 5 hari sebelum percubaan kamu tamat."
           }
         },
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie minner deg på det når det er 5 aktive dager igjen."
+            "value": "Pillie minner deg på det 5 dager før prøveperioden din slutter."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie herinnert je eraan als er nog 5 actieve dagen over zijn."
+            "value": "Pillie herinnert je eraan 5 dagen voordat je proefperiode eindigt."
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "5 ସକ୍ରିୟ ଦିନ ବାକି ଥିବାବେଳେ Pillie ଆପଣଙ୍କୁ ମନେ ପକାଇବ।"
+            "value": "ଆପଣଙ୍କ ଟ୍ରାୟାଲ୍ ଶେଷ ହେବାର 5 ଦିନ ପୂର୍ବରୁ Pillie ଆପଣଙ୍କୁ ମନେ ପକାଇବ।"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "5 ਸਰਗਰਮ ਦਿਨ ਬਾਕੀ ਰਹਿਣ ’ਤੇ Pillie ਤੁਹਾਨੂੰ ਯਾਦ ਕਰਾਏਗੀ।"
+            "value": "ਤੁਹਾਡਾ ਟ੍ਰਾਇਲ ਖ਼ਤਮ ਹੋਣ ਤੋਂ 5 ਦਿਨ ਪਹਿਲਾਂ Pillie ਤੁਹਾਨੂੰ ਯਾਦ ਕਰਾਏਗੀ।"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie przypomni ci, gdy zostanie 5 dni aktywnych."
+            "value": "Pillie przypomni ci 5 dni przed końcem okresu próbnego."
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "O Pillie avisa você quando faltarem 5 dias ativos."
+            "value": "O Pillie avisa você 5 dias antes do fim do seu teste."
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "translated",
-            "value": "O Pillie avisa-te quando faltarem 5 dias ativos."
+            "value": "O Pillie avisa-te 5 dias antes do fim do teu período de teste."
           }
         },
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie îți amintește când mai sunt 5 zile active."
+            "value": "Pillie îți amintește cu 5 zile înainte să se termine perioada ta de probă."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie напомнит, когда останется 5 активных дней."
+            "value": "Pillie напомнит за 5 дней до окончания пробного периода."
           }
         },
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie ti pripomenie, keď bude zostávať 5 aktívnych dní."
+            "value": "Pillie ti pripomenie 5 dní pred koncom skúšobného obdobia."
           }
         },
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie te opomni, ko ostane še 5 aktivnih dni."
+            "value": "Pillie te opomni 5 dni, preden se tvoj preizkus konča."
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie påminner dig när 5 aktiva dagar återstår."
+            "value": "Pillie påminner dig 5 dagar innan din provperiod tar slut."
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "5 செயல் நாட்கள் மீதமிருக்கும்போது Pillie உங்களுக்கு நினைவூட்டும்."
+            "value": "உங்கள் சோதனைக் காலம் முடிவதற்கு 5 நாட்களுக்கு முன் Pillie உங்களுக்கு நினைவூட்டும்."
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "5 యాక్టివ్ రోజులు మిగిలినప్పుడు Pillie మీకు గుర్తు చేస్తుంది."
+            "value": "మీ ట్రయల్ ముగియడానికి 5 రోజుల ముందు Pillie మీకు గుర్తు చేస్తుంది."
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie จะเตือนคุณเมื่อเหลืออีก 5 วันกินยา"
+            "value": "Pillie จะเตือนคุณ 5 วันก่อนช่วงทดลองใช้ของคุณสิ้นสุด"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "5 aktif gün kaldığında Pillie sana hatırlatır."
+            "value": "Denemen bitmeden 5 gün önce Pillie sana hatırlatır."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie нагадає, коли лишиться 5 активних днів."
+            "value": "Pillie нагадає за 5 днів до завершення пробного періоду."
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "جب 5 فعال دن باقی ہوں گے تو Pillie آپ کو یاد دلائے گا۔"
+            "value": "ٹرائل ختم ہونے سے 5 دن پہلے Pillie آپ کو یاد دلائے گا۔"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pillie sẽ nhắc bạn khi còn 5 ngày uống."
+            "value": "Pillie sẽ nhắc bạn 5 ngày trước khi bản dùng thử kết thúc."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "还剩 5 个服药日时，Pillie 会提醒你。"
+            "value": "试用结束前 5 天，Pillie 会提醒你。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "剩下 5 個服藥日時，Pillie 會提醒你。"
+            "value": "試用結束前 5 天，Pillie 會提醒你。"
           }
         }
       }

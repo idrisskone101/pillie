@@ -2212,9 +2212,9 @@
       "table": "Notifications",
       "key": "notification.trial_expiry.day10.hard.body",
       "create": true,
-      "en": "5 days left in your trial. After that, your daily reminders stop until you pick a plan.",
-      "de": "Noch 5 Tage in deiner Testphase. Danach hören deine täglichen Erinnerungen auf, bis du einen Tarif wählst.",
-      "it": "Mancano 5 giorni alla fine della prova. Poi i promemoria giornalieri si fermano finché non scegli un piano."
+      "en": "Your trial ends in 5 days. After that, your daily reminders stop until you pick a plan.",
+      "de": "Deine Testphase endet in 5 Tagen. Danach hören deine täglichen Erinnerungen auf, bis du einen Tarif wählst.",
+      "it": "La tua prova finisce tra 5 giorni. Poi i promemoria giornalieri si fermano finché non scegli un piano."
     },
     {
       "issue": "ENG-161",

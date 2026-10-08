@@ -554,7 +554,7 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
         XCTAssertEqual(
             countdown.sheetContent.timeline.map(\.text),
             [
-                "Pillie ti avvisa quando mancano 5 giorni attivi.",
+                "Pillie ti avvisa 5 giorni prima che la tua prova finisca.",
                 "Un ultimo promemoria prima che la tua prova finisca.",
                 "Il blocco app si disattiva. I promemoria giornalieri restano gratis e la tua configurazione resta salvata.",
             ]

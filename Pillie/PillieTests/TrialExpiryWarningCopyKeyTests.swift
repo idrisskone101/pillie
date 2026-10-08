@@ -55,7 +55,7 @@ struct TrialExpiryWarningCopyKeyTests {
     func `Hard-paywall terms never promise free reminders in any notice`() {
         let english = Locale(identifier: "en")
         let expected = [
-            10: "5 days left in your trial. After that, your daily reminders stop until you pick a plan.",
+            10: "Your trial ends in 5 days. After that, your daily reminders stop until you pick a plan.",
             13: "Your trial ends tomorrow night, and your daily reminders stop with it. Pick a plan to keep them.",
             15: "Your daily reminders are off now. Pick a plan to turn them back on. Your setup is saved.",
         ]
