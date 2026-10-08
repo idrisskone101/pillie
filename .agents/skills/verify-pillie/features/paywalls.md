@@ -122,21 +122,23 @@ CTA, a reassurance line, and Restore · Terms · Privacy. The board is a
 - `flows/paywall-extend-offer.flow` (ENG-172) — the hard trial-end wall rises
   straight into the one-time extend offer through
   `pillie://debug/trial-end-extend?trigger=cancel|restore&notifications=on|off&clear=1`.
-  Shots: the cancel card, Not now dropping it back to the plans, the restore
-  card with its chip, the notifications-off card ("Last day to cancel"), and
-  de, fi and ru for truncation. `clear=1` resets the Keychain phase; the
-  Test Store serves no extend SKU, so a $29.99 one-week fixture stands in and
-  "Start my free week" cannot complete a purchase there. The Test Store does
-  serve `com.idrisskone.pillie.plus.annual.extend` (US$29.99, one week free)
-  as of 2026-10-06, so the shots show the real product, not the fixture. For
-  the real path, open the link with `trigger=none`, then cancel the Test Store
-  sheet (its Cancel button sits outside the app tree, at about 201,643 on the
-  iPhone 17 Pro) and the card rises; a second cancel must not raise it again.
+  Shots: the cancel card, Not now dropping it back to the plans, the same
+  cancel path after a relaunch showing only the plans (declined is final), the
+  restore card with its chip, the notifications-off card ("Last day to
+  cancel"), and de, fi and ru for truncation. `clear=1` resets the Keychain
+  phase; the Test Store serves no extend SKU, so a $29.99 one-week fixture
+  stands in and "Start my free week" cannot complete a purchase there. The
+  Test Store does serve `com.idrisskone.pillie.plus.annual.extend` (US$29.99,
+  one week free) as of 2026-10-06, so the shots show the real product, not the
+  fixture. For the real path, open the link with `trigger=none`, then cancel
+  the Test Store sheet (its Cancel button sits outside the app tree, at about
+  201,643 on the iPhone 17 Pro) and the card rises; a second cancel must not
+  raise it again.
 - `flows/paywall-winback-open.flow` (ENG-173, ENG-175) — taps on the win-back
   pushes, simulated with `pillie://debug/winback-open?slot=N`. After Not now
   on the extend card, slots 4 and 1 open the plain trial-end wall and never
-  raise the card again. Slot 3 is retired, so `slot=3` is refused. `app.log` carries
-  `winback_notification_opened` and `paywall_viewed source=winback`.
+  raise the card again. Slot 3 is retired, so `slot=3` is refused. `app.log`
+  carries `winback_notification_opened` and `paywall_viewed source=winback`.
 - `flows/paywall-lifetime-tile.flow` — on the hard trial-end board: three
   tiles with Year selected; a tap on "Cancel anytime" with a restore outcome
   armed raises no alert and logs no `restore_started`; the Lifetime tile

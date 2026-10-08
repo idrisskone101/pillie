@@ -3114,9 +3114,19 @@
       "key": "trial.end.extend.charge.body",
       "create": true,
       "comment": "Extend offer timeline, caption under the price on the charge date [paywall]",
-      "en": "Charged for one year of Plus.",
-      "de": "Abgebucht für ein Jahr Plus.",
-      "it": "Addebito per un anno di Plus."
+      "en": "Charged after your 7 free days. Renews every year until you cancel.",
+      "de": "Abbuchung nach deinen 7 Gratistagen. Verlängert sich jedes Jahr, bis du kündigst.",
+      "it": "Addebito dopo i tuoi 7 giorni gratis. Si rinnova ogni anno finché non disdici."
+    },
+    {
+      "issue": "ENG-175",
+      "table": "Commerce",
+      "key": "trial.end.extend.charge.price",
+      "create": true,
+      "comment": "Extend offer timeline, the price headline on the charge date; %@ is the store price, rendered large. Same 'a year' wording as paywall.cta.get_plus.billed_yearly [paywall]",
+      "en": "%@ a year",
+      "de": "%@ pro Jahr",
+      "it": "%@ all’anno"
     },
     {
       "issue": "ENG-172",

@@ -32,8 +32,9 @@ struct TrialEndExtendOfferCard: Equatable {
         case reminder
         /// Notifications are off, so this row names the last day to cancel.
         case lastDayToCancel
-        /// The headline is the price.
-        case charge
+        /// The headline is the yearly price; the sheet sets `price` itself
+        /// largest, wherever the locale puts it in the headline.
+        case charge(price: String)
     }
 
     static func make(
@@ -82,9 +83,14 @@ struct TrialEndExtendOfferCard: Equatable {
                 ),
                 middle,
                 Stop(
-                    kind: .charge,
+                    kind: .charge(price: offer.product.priceDisplay),
                     date: dates.weekdayMonthDay(timeline.charge),
-                    headline: offer.product.priceDisplay,
+                    headline: PillieLocalization.formatted(
+                        "trial.end.extend.charge.price",
+                        table: "Commerce",
+                        locale: locale,
+                        arguments: offer.product.priceDisplay
+                    ),
                     caption: commerce("trial.end.extend.charge.body", locale)
                 ),
             ],

@@ -44282,271 +44282,546 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "مقابل سنة كاملة من Plus."
+            "value": "الدفع بعد أيامك المجانية السبعة. يتجدد كل سنة حتى تلغي."
           }
         },
         "bn": {
           "stringUnit": {
             "state": "translated",
-            "value": "এক বছরের Plus-এর জন্য চার্জ।"
+            "value": "আপনার 7 দিন ফ্রি শেষ হলে চার্জ হবে। বাতিল না করা পর্যন্ত প্রতি বছর রিনিউ হবে।"
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cobrament d’un any de Plus."
+            "value": "Cobrament després dels teus 7 dies gratis. Es renova cada any fins que el cancel·lis."
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Platba za rok Plus."
+            "value": "Platba až po tvých 7 dnech zdarma. Obnovuje se každý rok, dokud ho nezrušíš."
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Opkrævet for et år med Plus."
+            "value": "Du bliver opkrævet efter dine 7 gratis dage. Fornyes hvert år, indtil du opsiger."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Abgebucht für ein Jahr Plus."
+            "value": "Abbuchung nach deinen 7 Gratistagen. Verlängert sich jedes Jahr, bis du kündigst."
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Χρέωση για έναν χρόνο Plus."
+            "value": "Χρέωση μετά τις 7 δωρεάν μέρες σου. Ανανεώνεται κάθε χρόνο μέχρι να ακυρώσεις."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Charged for one year of Plus."
+            "value": "Charged after your 7 free days. Renews every year until you cancel."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cobro por un año de Plus."
+            "value": "Cobro después de tus 7 días gratis. Se renueva cada año hasta que canceles."
           }
         },
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vuoden Plus veloitetaan."
+            "value": "Veloitus vasta 7 ilmaisen päiväsi jälkeen. Uusiutuu vuosittain, kunnes perut."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Prélevé pour un an de Plus."
+            "value": "Prélèvement après tes 7 jours gratuits. Se renouvelle chaque année jusqu’à ce que tu annules."
           }
         },
         "gu": {
           "stringUnit": {
             "state": "translated",
-            "value": "એક વર્ષના Plus માટે ચાર્જ."
+            "value": "તમારા 7 મફત દિવસ પૂરા થયા પછી ચાર્જ થશે. તમે રદ ન કરો ત્યાં સુધી દર વર્ષે રિન્યૂ થશે."
           }
         },
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "חיוב על שנה של Plus."
+            "value": "החיוב אחרי 7 ימי החינם שלך. מתחדש כל שנה עד שתבטלי."
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus के एक साल का भुगतान।"
+            "value": "आपके 7 मुफ़्त दिनों के बाद भुगतान होगा। जब तक आप रद्द न करें, हर साल रिन्यू होगा।"
           }
         },
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Naplata za godinu dana Plusa."
+            "value": "Naplata nakon tvojih 7 besplatnih dana. Obnavlja se svake godine dok ne otkažeš."
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "Egy év Plus díja."
+            "value": "A terhelés a 7 ingyenes napod után történik. Minden évben megújul, amíg le nem mondod."
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tagihan untuk satu tahun Plus."
+            "value": "Kamu ditagih setelah 7 hari gratismu berakhir. Diperpanjang setiap tahun sampai kamu batalkan."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Addebito per un anno di Plus."
+            "value": "Addebito dopo i tuoi 7 giorni gratis. Si rinnova ogni anno finché non disdici."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plusの1年分の料金です。"
+            "value": "請求は7日間の無料期間が終わってからです。解約するまで毎年自動で更新されます。"
           }
         },
         "kn": {
           "stringUnit": {
             "state": "translated",
-            "value": "ಒಂದು ವರ್ಷದ Plus ಗಾಗಿ ಶುಲ್ಕ."
+            "value": "ನಿಮ್ಮ 7 ಉಚಿತ ದಿನಗಳ ನಂತರ ಶುಲ್ಕ ವಿಧಿಸಲಾಗುತ್ತದೆ. ನೀವು ರದ್ದುಮಾಡುವವರೆಗೆ ಪ್ರತಿ ವರ್ಷ ನವೀಕರಣವಾಗುತ್ತದೆ."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus 1년 이용 요금이에요."
+            "value": "결제는 7일 무료 이용이 끝난 뒤에 돼요. 해지할 때까지 매년 갱신돼요."
           }
         },
         "ml": {
           "stringUnit": {
             "state": "translated",
-            "value": "ഒരു വർഷത്തെ Plus-നുള്ള ചാർജ്."
+            "value": "നിങ്ങളുടെ 7 സൗജന്യ ദിവസങ്ങൾക്ക് ശേഷം ചാർജ് ചെയ്യും. നിങ്ങൾ റദ്ദാക്കുന്നത് വരെ എല്ലാ വർഷവും പുതുക്കും."
           }
         },
         "mr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus च्या एका वर्षाचे शुल्क."
+            "value": "तुमचे 7 मोफत दिवस संपल्यानंतर शुल्क घेतले जाईल. तुम्ही रद्द करेपर्यंत दरवर्षी रिन्यू होईल."
           }
         },
         "ms": {
           "stringUnit": {
             "state": "translated",
-            "value": "Caj untuk setahun Plus."
+            "value": "Kamu dicaj selepas 7 hari percuma kamu tamat. Diperbaharui setiap tahun sehingga kamu batal."
           }
         },
         "nb": {
           "stringUnit": {
             "state": "translated",
-            "value": "Belastes for ett år med Plus."
+            "value": "Du belastes etter de 7 gratisdagene dine. Fornyes hvert år til du sier opp."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Afschrijving voor een jaar Plus."
+            "value": "Je betaalt pas na je 7 gratis dagen. Verlengt elk jaar tot je opzegt."
           }
         },
         "or": {
           "stringUnit": {
             "state": "translated",
-            "value": "ଏକ ବର୍ଷର Plus ପାଇଁ ଚାର୍ଜ।"
+            "value": "ଆପଣଙ୍କ 7 ଦିନ ମାଗଣା ଶେଷ ହେବା ପରେ ଚାର୍ଜ ହେବ। ଆପଣ ବାତିଲ୍ ନକରିବା ପର୍ଯ୍ୟନ୍ତ ପ୍ରତିବର୍ଷ ନବୀକରଣ ହେବ।"
           }
         },
         "pa": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus ਦੇ ਇੱਕ ਸਾਲ ਲਈ ਚਾਰਜ।"
+            "value": "ਤੁਹਾਡੇ 7 ਮੁਫ਼ਤ ਦਿਨਾਂ ਤੋਂ ਬਾਅਦ ਚਾਰਜ ਹੋਵੇਗਾ। ਜਦੋਂ ਤੱਕ ਤੁਸੀਂ ਰੱਦ ਨਹੀਂ ਕਰਦੇ, ਹਰ ਸਾਲ ਰੀਨਿਊ ਹੋਵੇਗਾ।"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Opłata za rok Plus."
+            "value": "Pobranie płatności po twoich 7 darmowych dniach. Odnawia się co roku, dopóki nie anulujesz."
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cobrança de um ano de Plus."
+            "value": "Cobrança depois dos seus 7 dias grátis. Renova todo ano até você cancelar."
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cobrança de um ano de Plus."
+            "value": "Cobrança depois dos teus 7 dias grátis. Renova todos os anos até cancelares."
           }
         },
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plata pentru un an de Plus."
+            "value": "Plata după cele 7 zile gratuite. Se reînnoiește în fiecare an până anulezi."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Оплата за год Plus."
+            "value": "Списание после твоих 7 бесплатных дней. Продлевается каждый год, пока не отменишь."
           }
         },
         "sk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Platba za rok Plus."
+            "value": "Platba až po tvojich 7 dňoch zadarmo. Obnovuje sa každý rok, kým ho nezrušíš."
           }
         },
         "sl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plačilo za eno leto Plus."
+            "value": "Plačilo po tvojih 7 brezplačnih dneh. Podaljša se vsako leto, dokler ne prekličeš."
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Debiteras för ett år med Plus."
+            "value": "Du debiteras efter dina 7 gratisdagar. Förnyas varje år tills du avslutar."
           }
         },
         "ta": {
           "stringUnit": {
             "state": "translated",
-            "value": "ஓராண்டு Plus-க்கான கட்டணம்."
+            "value": "உங்கள் 7 இலவச நாட்களுக்குப் பிறகு கட்டணம் வசூலிக்கப்படும். நீங்கள் ரத்துசெய்யும் வரை ஒவ்வொரு ஆண்டும் புதுப்பிக்கப்படும்."
           }
         },
         "te": {
           "stringUnit": {
             "state": "translated",
-            "value": "ఒక సంవత్సరం Plus కోసం ఛార్జ్."
+            "value": "మీ 7 ఉచిత రోజుల తర్వాత ఛార్జ్ అవుతుంది. మీరు రద్దు చేసే వరకు ప్రతి సంవత్సరం పునరుద్ధరించబడుతుంది."
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "เรียกเก็บสำหรับ Plus 1 ปี"
+            "value": "เรียกเก็บเงินหลังจากใช้ฟรีครบ 7 วัน ต่ออายุทุกปีจนกว่าคุณจะยกเลิก"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bir yıllık Plus ücreti."
+            "value": "Ödeme, 7 ücretsiz gününden sonra alınır. İptal edene kadar her yıl yenilenir."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Оплата за рік Plus."
+            "value": "Списання після твоїх 7 безкоштовних днів. Продовжується щороку, доки не скасуєш."
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "ایک سال کے Plus کا چارج۔"
+            "value": "آپ کے 7 مفت دنوں کے بعد چارج ہوگا۔ جب تک آپ منسوخ نہ کریں، ہر سال رینیو ہوگا۔"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Phí cho một năm Plus."
+            "value": "Bạn bị tính phí sau 7 ngày miễn phí. Tự gia hạn mỗi năm cho đến khi bạn hủy."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "一年 Plus 的费用。"
+            "value": "7 天免费期结束后扣费。每年自动续订，直到你取消。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "一年 Plus 的費用。"
+            "value": "7 天免費期結束後扣款。每年自動續訂，直到你取消。"
+          }
+        }
+      }
+    },
+    "trial.end.extend.charge.price": {
+      "comment": "Extend offer timeline, the price headline on the charge date; %@ is the store price, rendered large. Same 'a year' wording as paywall.cta.get_plus.billed_yearly [paywall]",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ سنويًا"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "বছরে %@"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ l’any"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ ročně"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ om året"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ pro Jahr"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ τον χρόνο"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ a year"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ al año"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ vuodessa"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ par an"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "દર વર્ષે %@"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ לשנה"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "हर साल %@"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ godišnje"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Évi %@"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ per tahun"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ all’anno"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "年額%@"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ವರ್ಷಕ್ಕೆ %@"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "연 %@"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "പ്രതിവർഷം %@"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "दरवर्षी %@"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ setahun"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ i året"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ per jaar"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ବାର୍ଷିକ %@"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਹਰ ਸਾਲ %@"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ rocznie"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ ao ano"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ por ano"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ pe an"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ в год"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ ročne"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ na leto"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ per år"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ஆண்டுக்கு %@"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "సంవత్సరానికి %@"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ ต่อปี"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yılda %@"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ на рік"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ہر سال %@"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ mỗi năm"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "每年 %@"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "每年 %@"
           }
         }
       }
