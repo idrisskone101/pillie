@@ -1,7 +1,7 @@
 # Sugar pills are a due dose (PillDay.ActionType.pillSugar): on a 21 + 7 sugar
 # day Home shows "Take pill", logging pops the tile and turns the status card to
 # taken, undo brings the CTA back, and the streak does not move. History reads
-# the open sugar pill as not logged, never as a break, and as done once taken.
+# the open sugar pill as today, never as a break, and as done once taken.
 # A 21 only pack's pill-free break stays "Nothing to take" with nothing due.
 fresh
 launch
@@ -15,7 +15,7 @@ wait text "Take pill" 10
 shot sugar-due
 tap --label History
 wait text "Your month so far" 10
-expect label "September 28, 2026: Not logged"
+expect label "September 28, 2026: Today"
 shot history-sugar-due
 tap --label Today
 wait text "Take pill" 10

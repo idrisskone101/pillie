@@ -103,8 +103,9 @@ blocking/trial status surfaces, and (when eligible) the review ask.
   The flow does not tap the chip: the simulator's Settings reopens wherever
   it was last left.
 - `flows/today-pack-card.flow` — the pack card's last hormone pill, sugar
-  week, and finished pack headers via `/trial-eve-of-break`,
-  `/trial-break-week`, and `/fixed-now` one day later.
+  week, missed last pill ("not checked in yesterday" instead of "Pack
+  finished"), and finished pack headers via `/trial-eve-of-break`,
+  `/trial-break-week`, and a pinned `/fixed-now` one day later.
 - `flows/today-late-missed.flow` — pins the clock to midday, then
   `/trial-eve-of-break` leaves pill 21 untaken past its reminder: the tile is
   late and the header reads "Late · still time until 8:00 AM tomorrow". One
@@ -149,7 +150,7 @@ blocking/trial status surfaces, and (when eligible) the review ask.
   Home opens its card on the page with today ("Weeks 5 to 8 of 13").
 - `flows/today-sugar-pill.flow` — a 21 + 7 sugar day is due ("Take pill"),
   logs, undoes and logs again without moving the streak; History reads the
-  open sugar day as "Missed" (never "Break") and as "Done" once taken; a
+  open sugar day as "Today" (never "Break") and as "Done" once taken; a
   21 only pill-free day stays "Nothing to take".
 - `flows/today-notification-complete.flow` — `/notification-complete` runs
   the reminder's Complete action while Home is open; the status card, CTA and
