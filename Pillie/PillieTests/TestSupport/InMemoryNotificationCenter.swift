@@ -16,6 +16,7 @@ nonisolated final class InMemoryNotificationCenter: NotificationCenterScheduling
     private let callbackQueue: DispatchQueue?
     private var pendingByID: [String: UNNotificationRequest] = [:]
     private var removedIDs: [String] = []
+    private var registeredCategories: Set<UNNotificationCategory> = []
     private var callbacksInFlight = 0
 
     init(callbackQueue: DispatchQueue? = nil) {
@@ -24,6 +25,7 @@ nonisolated final class InMemoryNotificationCenter: NotificationCenterScheduling
 
     var pending: [UNNotificationRequest] { locked { Array(pendingByID.values) } }
     var removedPendingIDs: [String] { locked { removedIDs } }
+    var categories: Set<UNNotificationCategory> { locked { registeredCategories } }
     var isIdle: Bool { locked { callbacksInFlight == 0 } }
 
     func getAuthorizationStatus(completion: @escaping @Sendable (UNAuthorizationStatus) -> Void) {
@@ -37,7 +39,9 @@ nonisolated final class InMemoryNotificationCenter: NotificationCenterScheduling
         answer { completionHandler(true, nil) }
     }
 
-    func setNotificationCategories(_ categories: Set<UNNotificationCategory>) {}
+    func setNotificationCategories(_ categories: Set<UNNotificationCategory>) {
+        locked { registeredCategories = categories }
+    }
 
     func getPendingNotificationRequests(completionHandler: @escaping @Sendable ([UNNotificationRequest]) -> Void) {
         let requests = pending
