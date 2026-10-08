@@ -163,6 +163,57 @@ final class CalendarDayPresentationTests: XCTestCase {
         XCTAssertEqual(presentation.defaultIndicatorOpacity, 1)
     }
 
+    // MARK: VoiceOver
+
+    /// What VoiceOver reads for a History day, as CalendarGrid asks for it.
+    private func voiceOverLabel(_ presentation: CalendarDayPresentation) -> String {
+        HistoryPresentation.dayAccessibilityLabel(
+            date: Self.voiceOverDate,
+            status: presentation.historyStatus,
+            locale: Locale(identifier: "en")
+        )
+    }
+
+    private static let voiceOverDate = InMemoryStoreFactory.fixedDate("2026-06-03")
+
+    private var voiceOverDateText: String {
+        Self.voiceOverDate.formatted(Date.FormatStyle().day().month(.wide).year().locale(Locale(identifier: "en")))
+    }
+
+    func testVoiceOverNamesTodaysOpenDoseAndSugarPillToday() throws {
+        for type in [PillDay.ActionType.pillActive, .pillSugar] {
+            let presentation = CalendarDayPresentation.resolve(
+                snapshot: try snapshot(method: .pill, type: type, status: .upcoming),
+                fallbackMethod: .pill,
+                relation: .today
+            )
+
+            XCTAssertEqual(voiceOverLabel(presentation), "\(voiceOverDateText): Today", "\(type)")
+        }
+    }
+
+    func testVoiceOverReadsADayWithNothingRecordedByItsDateAlone() throws {
+        let beforeTracking = CalendarDayPresentation.resolve(
+            snapshot: try snapshot(method: .pill, type: .pillActive, status: .noData),
+            fallbackMethod: .pill,
+            relation: .past
+        )
+        let beforeAnyPack = CalendarDayPresentation.resolve(snapshot: nil, fallbackMethod: .pill, relation: .past)
+
+        XCTAssertEqual(voiceOverLabel(beforeTracking), voiceOverDateText)
+        XCTAssertEqual(voiceOverLabel(beforeAnyPack), voiceOverDateText)
+    }
+
+    func testVoiceOverStillNamesAMissedDayMissed() throws {
+        let presentation = CalendarDayPresentation.resolve(
+            snapshot: try snapshot(method: .pill, type: .pillActive, status: .missed),
+            fallbackMethod: .pill,
+            relation: .past
+        )
+
+        XCTAssertEqual(voiceOverLabel(presentation), "\(voiceOverDateText): Missed")
+    }
+
     /// Packs backing fabricated snapshots. The Xcode 27 beta hosted-XCTest runner
     /// aborts when a @MainActor/@Observable class (which includes @Model) deallocates
     /// mid-invocation (see xcode27-beta-mainactor-deinit-crash), so every pack is
