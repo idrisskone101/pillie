@@ -413,8 +413,11 @@ struct ReminderSchedulePlanner {
         let interval = TimeInterval(max(1, intervalMinutes) * 60)
         var nextFire = anchor.addingTimeInterval(interval)
 
+        // Repeats caps the follow-ups per dose, so a slot that already passed still counts.
+        var slots = 0
         var intents: [DueReminderIntent] = []
-        while intents.count < cappedBudget && nextFire < windowEnd {
+        while slots < retryLimit && intents.count < cappedBudget && nextFire < windowEnd {
+            slots += 1
             if nextFire > now {
                 intents.append(
                     DueReminderIntent(
