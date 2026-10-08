@@ -119,4 +119,26 @@ final class StartNewPackTests: XCTestCase {
         XCTAssertFalse(store.isRefillDue)
         XCTAssertEqual(store.todayDueAction?.type, .ringInsert)
     }
+
+    /// Home's pack card title and subtitle, as the card reads them from the store.
+    private func homePackHeader(_ store: PillStore) -> [String] {
+        let english = Locale(identifier: "en")
+        let progress = HomePackProgress.live(store: store, isTodayTaken: store.isTodayTaken, now: PillieClock.now)
+        return [progress.title(locale: english), progress.subtitle(reminderTime: "9:00 PM", locale: english)]
+    }
+
+    /// Every day pack from 10 Sep with a 9 PM reminder: pill 28 was due on 7 Oct and never logged.
+    func testAnEveryDayPacksMissedLastPillShowsOnHomeBeforeAndAfterStartingANewPack() throws {
+        let store = try makeStore(now: "2026-10-08", hour: 21, minute: 30, regimen: .everyDay, startDate: "2026-09-10", reminderHour: 21)
+        for offset in 0..<27 {
+            store.markActionAsTaken(on: Calendar.current.date(byAdding: .day, value: offset, to: day("2026-09-10"))!)
+        }
+        XCTAssertEqual(store.statusForDate(day("2026-10-07")), .missed)
+
+        XCTAssertEqual(homePackHeader(store), ["Pack finished", "Pill 28 not checked in yesterday"])
+
+        store.startNewPack()
+
+        XCTAssertEqual(homePackHeader(store), ["Pill 1 of 28", "Pill 28 not checked in yesterday"])
+    }
 }
