@@ -101,6 +101,11 @@ support mailto rows and (debug builds only) the developer menu.
   notifications, dumps the pending reminders to `app.log`, picks Deutsch in
   the Language row, and dumps again. Every pending reminder keeps its
   identifier and comes back with German words.
+- `flows/notifications-winback.flow` (ENG-173) — grants notifications,
+  starts a hard-paywall trial at day 13 with reminders only, and dumps the
+  pending requests: day 10 and day 13 trial notices, no day 15 notice, and the
+  `pillie_winback_slot1/2/4_*` pushes (slot 3 waits for an extend price the
+  wall has seen). Then the same on a blocker trial in German.
 - Not driven by a flow, and why:
   - `settings-subscription`'s paywall branch (free/trial accounts) is the
     same `HonestPaywallBoard.settingsFree` covered by

@@ -56,6 +56,7 @@ final class NotificationManager {
     private let refillReminderPrefix = "pillie_refill_reminder_"
     private let cycleTransitionPrefix = "pillie_cycle_notice_"
     private let trialWarningPrefix = "pillie_trial_warning_"
+    private let winbackPrefix = "pillie_winback_"
     private let categoryID = "PILL_REMINDER"
     private let markTakenActionID = "MARK_TAKEN_ACTION"
     private let snoozeActionID = "SNOOZE_ACTION"
@@ -384,6 +385,7 @@ final class NotificationManager {
                 trialCohort: hasBlockerSetup() ? .blockerConfigured : .reminderOnly,
                 trialEndTerms: SubscriptionManager.shared.trialEndTerms,
                 currentStreak: store.currentStreak,
+                winback: winbackContext(store: store),
                 servedBaseFireDateByDueDayEpoch: servedBaseFireDateByDueDayEpoch,
                 calendar: calendar,
                 reminderChange: store.reminderTimeChange,
@@ -423,8 +425,51 @@ final class NotificationManager {
                     calendar: calendar,
                     locale: locale
                 )
+            case .winback(let winback):
+                return makeWinbackRequest(for: winback, calendar: calendar, locale: locale)
             }
         }
+    }
+
+    /// Win-back inputs (ENG-173), read only for a hard-paywall user with a
+    /// grant and no entitlement, so nobody else pays for the dose-history walk.
+    private func winbackContext(store: PillStore) -> WinbackContext? {
+        let subscription = SubscriptionManager.shared
+        guard subscription.trialEndTerms == .hardPaywall,
+              !subscription.hasEntitlement,
+              let grantDate = subscription.trialGrantDate
+        else { return nil }
+        return WinbackContext(
+            daysLogged: store.doseRecord(from: grantDate, to: store.today).taken,
+            lastAppOpen: WinbackStorage.lastAppOpen(),
+            slot2Arm: WinbackSlot2Arm.assigned(),
+            extendPitch: WinbackExtendPitch.load(),
+            extendPhase: KeychainTrialEndExtendOfferStore().loadPhase()
+        )
+    }
+
+    /// Builds a win-back push (ENG-173). Informational, so no category. The id
+    /// names only the slot and fire time: changed words are re-added under the
+    /// same id by the reword path.
+    private func makeWinbackRequest(
+        for winback: WinbackIntent,
+        calendar: Calendar,
+        locale: Locale
+    ) -> UNNotificationRequest {
+        let content = UNMutableNotificationContent()
+        content.title = WinbackCopy.title(for: winback, locale: locale)
+        content.body = WinbackCopy.body(for: winback, locale: locale)
+        content.sound = .default
+        content.userInfo = WinbackPayload.userInfo(for: winback)
+
+        var components = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: winback.fireDate)
+        if components.second == nil {
+            components.second = 0
+        }
+
+        let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
+        let id = "\(winbackPrefix)slot\(winback.slot.rawValue)_\(Int(winback.fireDate.timeIntervalSince1970))"
+        return UNNotificationRequest(identifier: id, content: content, trigger: trigger)
     }
 
     /// Builds a Reverse Trial notice (#168): a day-10/13 warning or the day-15
@@ -750,6 +795,10 @@ final class NotificationManager {
                         )
                         ledgerBox.ledger.save()
                     }
+                    if error == nil,
+                       let winback = WinbackPayload.push(from: request.content.userInfo) {
+                        DispatchQueue.main.async { WinbackStorage.reportScheduled(winback.slot) }
+                    }
                     if let error {
                         errorReporter.reportOnce(error)
                     }
@@ -890,6 +939,7 @@ final class NotificationManager {
             || id.hasPrefix(refillReminderPrefix)
             || id.hasPrefix(cycleTransitionPrefix)
             || id.hasPrefix(trialWarningPrefix)
+            || id.hasPrefix(winbackPrefix)
     }
 
     static func fireDate(from request: UNNotificationRequest) -> Date? {

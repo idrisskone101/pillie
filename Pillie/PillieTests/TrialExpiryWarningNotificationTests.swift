@@ -107,13 +107,20 @@ final class TrialExpiryWarningNotificationTests: XCTestCase {
 
         let warnings = trialWarningSummaries(store: fixture.store, now: now, cohort: .blockerConfigured)
 
-        XCTAssertEqual(warnings.map(\.trialWarningDay), [10, 13, 15])
+        // Win-back slot 1 replaces the hard-paywall expiry-day notice (ENG-173).
+        XCTAssertEqual(warnings.map(\.trialWarningDay), [10, 13])
         XCTAssertEqual(warnings.map(\.body), [
             "5 days left in your trial. After that, your daily reminders stop until you pick a plan.",
             "Your trial ends tomorrow night, and your daily reminders stop with it. Pick a plan to keep them.",
-            "Your daily reminders are off now. Pick a plan to turn them back on. Your setup is saved.",
         ])
         XCTAssertTrue(warnings.allSatisfy { $0.identifier.contains("_blocker_configured_hard_r2_") })
+
+        let winbackIDs = KeptNotificationManager.make(hasBlockerSetup: { true })
+            .managedRequestSummariesForTesting(store: fixture.store, now: now)
+            .filter { $0.requestKind == WinbackPayload.requestKindValue }
+            .map(\.identifier)
+        XCTAssertTrue(winbackIDs.contains { $0.hasPrefix("pillie_winback_slot1_") })
+        XCTAssertTrue(winbackIDs.contains { $0.hasPrefix("pillie_winback_slot4_") })
     }
 
     @MainActor
