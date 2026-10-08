@@ -58,9 +58,13 @@ struct AppBlockingSetupContent {
 
     static var `default`: AppBlockingSetupContent { localized() }
 
+    /// `trialClock` is the Reverse Trial already granted, if any: a resumed or
+    /// reinstalled setup promises the active days it has left.
     static func localized(
         locale: Locale = PillieLocalization.appLocale,
-        trialEndTerms: TrialEndAccessTerms = .legacy
+        trialEndTerms: TrialEndAccessTerms = .legacy,
+        trialClock: ReverseTrialClock? = nil,
+        now: Date = Date()
     ) -> AppBlockingSetupContent {
         AppBlockingSetupContent(
             titleLead: PillieLocalization.string("onboarding.blocking_setup.title", locale: locale),

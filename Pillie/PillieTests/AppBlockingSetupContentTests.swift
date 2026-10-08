@@ -35,6 +35,24 @@ struct AppBlockingSetupContentTests {
         )
     }
 
+    @Test func trialLineCountsWhatAnEarlierGrantHasLeft() {
+        // Onboarding resumed, or reinstalled with the Keychain grant: the trial
+        // began Oct 2, so on Oct 7 ten of its fourteen active days are left.
+        let calendar = Calendar.current
+        let resumed = AppBlockingSetupContent.localized(
+            locale: Locale(identifier: "en_US"),
+            trialClock: ReverseTrialClock(
+                grantDate: calendar.date(from: DateComponents(year: 2026, month: 10, day: 2, hour: 12))!
+            ),
+            now: calendar.date(from: DateComponents(year: 2026, month: 10, day: 7, hour: 10))!
+        )
+
+        #expect(
+            resumed.trialLine
+                == "Pillie Plus is on for your next 10 active days, free. No\u{00A0}card. We’ll remind you before it ends."
+        )
+    }
+
     @Test func trialLineShowsOnlyWhileTheTrialIsWhatUnlocksSetup() {
         #expect(AppBlockingSetupPhase.empty.showsTrialLine(hasEntitlement: false))
         #expect(AppBlockingSetupPhase.selected.showsTrialLine(hasEntitlement: false))
