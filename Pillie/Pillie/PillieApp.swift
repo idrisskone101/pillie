@@ -181,6 +181,10 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         recordTrialWarningDeliveryIfNeeded(userInfo: response.notification.request.content.userInfo)
         recordSmartReminderFireIfNeeded(request: response.notification.request)
         recordSmartReminderOutcomeIfNeeded(response: response)
+        if response.actionIdentifier == UNNotificationDefaultActionIdentifier,
+           let winback = WinbackPayload.push(from: response.notification.request.content.userInfo) {
+            WinbackRouter.shared.open(slot: winback.slot, variant: winback.variant)
+        }
 
         guard let store = Self.store else {
             completionHandler()
@@ -399,6 +403,8 @@ struct PillieApp: App {
                         // blocker_intervention_fired. Before the onboarding guard —
                         // blocking fires for any user whose Protection Plan is live.
                         flushBlockerInterventions()
+                        // A win-back push within a day of an open is skipped (ENG-173).
+                        WinbackStorage.recordAppOpen()
                         guard shouldRunPostOnboardingWork else { return }
                         StreakChangeReport.record(store)
                         NotificationManager.shared.requestReschedule(from: store, reason: "app-became-active")
@@ -622,6 +628,7 @@ struct PillieApp: App {
             UserDefaults.standard.removeObject(forKey: TrialExpiredEvent.firedStorageKey)
             UserDefaults.standard.removeObject(forKey: TrialExpiryWarningDelivery.sentDaysStorageKey)
             UserDefaults.standard.removeObject(forKey: TrialEndPaywallAutoPresentation.shownStorageKey)
+            WinbackStorage.clear()
             SubscriptionManager.shared.updateActiveDaySchedule(pack: store.activePack)
             SubscriptionManager.shared.grantReverseTrial()
             reconcileScreenTimeState()
@@ -682,6 +689,7 @@ struct PillieApp: App {
             UserDefaults.standard.removeObject(forKey: TrialExpiredEvent.firedStorageKey)
             UserDefaults.standard.removeObject(forKey: TrialExpiryWarningDelivery.sentDaysStorageKey)
             UserDefaults.standard.removeObject(forKey: TrialEndPaywallAutoPresentation.shownStorageKey)
+            WinbackStorage.clear()
             SubscriptionManager.shared.debugOverrideTrialGrantDate(nil)
             reconcileScreenTimeState()
         case "/fixed-now":
@@ -841,6 +849,27 @@ struct PillieApp: App {
                 UserDefaults.standard.set(trigger, forKey: HonestPaywallScreen.debugExtendTriggerKey)
             }
             DebugQA.apply(.trialExpiredNewUserReminder, store: store)
+        case "/winback-open":
+            // QA control (ENG-173): the simulator cannot tap a banner, so run
+            // the win-back tap for `slot=1...4`. `variant` defaults to the
+            // slot's reminder-only line. Pair with /trial-end-paywall.
+            let queryItems = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems
+            guard let slot = queryItems?.first(where: { $0.name == "slot" })?.value
+                .flatMap(Int.init)
+                .flatMap(WinbackSlot.init(rawValue:))
+            else {
+                os.Logger(subsystem: "com.idrisskone.pillie", category: "qa")
+                    .error("Pillie QA winback-open ignored: slot must be 1...4")
+                return
+            }
+            let fallback: WinbackVariant = switch slot {
+            case .expiryDay, .dayAfter: .reminder
+            case .extendOffer: .offer
+            case .lastNote: .days
+            }
+            let variant = queryItems?.first(where: { $0.name == "variant" })?.value
+                .flatMap(WinbackVariant.init(rawValue:)) ?? fallback
+            WinbackRouter.shared.open(slot: slot, variant: variant)
         case "/restore-outcome":
             // QA fault injection (ENG-74): `restore()` returns this outcome
             // without calling RevenueCat. `restored` also grants Plus.

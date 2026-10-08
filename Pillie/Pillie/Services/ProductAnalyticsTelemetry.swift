@@ -26,6 +26,7 @@ struct ProductAnalyticsTelemetry {
   private let isPlus: () -> Bool
   private let acquisitionSource: () -> AcquisitionSource?
   private let trialTermsCohort: () -> TrialTermsCohort?
+  private let recentWinbackOpen: () -> WinbackOpen?
 
   init(
     analytics: AnalyticsTracking = AnalyticsManager.shared,
@@ -36,12 +37,18 @@ struct ProductAnalyticsTelemetry {
     },
     trialTermsCohort: @escaping () -> TrialTermsCohort? = {
       SubscriptionManager.shared.trialTermsCohort
+    },
+    // The test host shares the simulator's defaults, where a QA tap would
+    // otherwise leak into exact-payload assertions.
+    recentWinbackOpen: @escaping () -> WinbackOpen? = {
+      ProcessRuntime.isRunningTests ? nil : WinbackOpen.recent()
     }
   ) {
     self.analytics = analytics
     self.isPlus = isPlus
     self.acquisitionSource = acquisitionSource
     self.trialTermsCohort = trialTermsCohort
+    self.recentWinbackOpen = recentWinbackOpen
   }
 
   // The activation funnel can only be split by channel if `acquisition_source` rides
@@ -375,6 +382,27 @@ struct ProductAnalyticsTelemetry {
     )
   }
 
+  /// The wall a win-back push opened (ENG-173): `source: winback` in place
+  /// of the plain trial-end view, plus the push's `slot` and `variant`.
+  func trialEndPaywallViewed(
+    fromWinback open: WinbackOpen,
+    cohort: TrialEndPaywallCohort,
+    terms: TrialEndAccessTerms,
+    termsCohort: TrialTermsCohort? = nil
+  ) {
+    analytics.track(
+      .paywallViewed,
+      source: .winback,
+      surface: .trialEnd,
+      plan: nil,
+      result: nil,
+      trialTermsCohort: termsCohort ?? TrialTermsCohort(terms: terms),
+      trialEndCohort: cohort,
+      winback: .push(slot: open.slot, variant: open.variant),
+      isPlus: isPlus()
+    )
+  }
+
   func trialEndPlanSelected(
     plan: AnalyticsPlan,
     cohort: TrialEndPaywallCohort,
@@ -409,7 +437,13 @@ struct ProductAnalyticsTelemetry {
     termsCohort: TrialTermsCohort? = nil
   ) {
     trackTrialEndPaywall(
-      .trialStarted, plan: plan, cohort: cohort, terms: terms, termsCohort: termsCohort)
+      .trialStarted,
+      plan: plan,
+      cohort: cohort,
+      terms: terms,
+      termsCohort: termsCohort,
+      winback: winbackAttribution()
+    )
   }
 
   func trialEndPurchaseCompleted(
@@ -424,7 +458,8 @@ struct ProductAnalyticsTelemetry {
       result: .completed,
       cohort: cohort,
       terms: terms,
-      termsCohort: termsCohort
+      termsCohort: termsCohort,
+      winback: winbackAttribution()
     )
   }
 
@@ -558,7 +593,8 @@ struct ProductAnalyticsTelemetry {
     result: AnalyticsResult? = nil,
     cohort: TrialEndPaywallCohort,
     terms: TrialEndAccessTerms,
-    termsCohort: TrialTermsCohort? = nil
+    termsCohort: TrialTermsCohort? = nil,
+    winback: AnalyticsWinback? = nil
   ) {
     analytics.track(
       event,
@@ -568,6 +604,35 @@ struct ProductAnalyticsTelemetry {
       result: result,
       trialTermsCohort: termsCohort ?? TrialTermsCohort(terms: terms),
       trialEndCohort: cohort,
+      winback: winback,
+      isPlus: isPlus()
+    )
+  }
+
+  private func winbackAttribution() -> AnalyticsWinback? {
+    recentWinbackOpen().map(AnalyticsWinback.attributed)
+  }
+
+  // MARK: - Win-back pushes (ENG-173)
+
+  func winbackNotificationScheduled(slot: WinbackSlot) {
+    trackWinbackPush(.winbackNotificationScheduled, slot: slot, variant: nil)
+  }
+
+  func winbackNotificationOpened(slot: WinbackSlot, variant: WinbackVariant) {
+    trackWinbackPush(.winbackNotificationOpened, slot: slot, variant: variant)
+  }
+
+  private func trackWinbackPush(_ event: AnalyticsEvent, slot: WinbackSlot, variant: WinbackVariant?) {
+    analytics.track(
+      event,
+      source: nil,
+      surface: nil,
+      plan: nil,
+      result: nil,
+      trialTermsCohort: nil,
+      trialEndCohort: nil,
+      winback: .push(slot: slot, variant: variant),
       isPlus: isPlus()
     )
   }

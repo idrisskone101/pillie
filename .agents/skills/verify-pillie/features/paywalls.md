@@ -132,6 +132,12 @@ CTA, a reassurance line, and Restore · Terms · Privacy. The board is a
   the real path, open the link with `trigger=none`, then cancel the Test Store
   sheet (its Cancel button sits outside the app tree, at about 201,643 on the
   iPhone 17 Pro) and the card rises; a second cancel must not raise it again.
+- `flows/paywall-winback-open.flow` (ENG-173) — taps on the win-back pushes,
+  simulated with `pillie://debug/winback-open?slot=N`. After Not now on the
+  extend card, the day-18 push (slot 3) raises the card one more time; a
+  second Not now spends it, so the next slot 3 tap shows only the plans.
+  Slot 1 opens the plain trial-end wall. `app.log` carries
+  `winback_notification_opened` and `paywall_viewed source=winback`.
 - `flows/paywall-lifetime-tile.flow` — on the hard trial-end board: three
   tiles with Year selected; a tap on "Cancel anytime" with a restore outcome
   armed raises no alert and logs no `restore_started`; the Lifetime tile

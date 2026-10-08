@@ -3327,6 +3327,186 @@
       "en": "Pillie keeps reminding you until you check in.",
       "de": "Pillie erinnert dich weiter, bis du abhakst.",
       "it": "Pillie continua a ricordartelo finché non confermi."
+    },
+    {
+      "issue": "ENG-173",
+      "table": "Notifications",
+      "key": "notification.winback.slot1.title",
+      "create": true,
+      "comment": "ENG-173 win-back push after a hard-paywall trial ends",
+      "en": "Your Pillie trial ended today",
+      "de": "Deine Pillie-Testphase ist heute vorbei",
+      "it": "La tua prova di Pillie è finita oggi"
+    },
+    {
+      "issue": "ENG-173",
+      "table": "Notifications",
+      "key": "notification.winback.slot1.body",
+      "create": true,
+      "comment": "ENG-173 win-back push after a hard-paywall trial ends",
+      "en": "Your %@ reminder is off now. Tap to turn it back on.",
+      "de": "Deine Erinnerung um %@ ist jetzt aus. Tippe, um sie wieder einzuschalten.",
+      "it": "Il tuo promemoria delle %@ ora è disattivato. Tocca per riattivarlo."
+    },
+    {
+      "issue": "ENG-173",
+      "table": "Notifications",
+      "key": "notification.winback.slot1.blocker.body",
+      "create": true,
+      "comment": "ENG-173 win-back push after a hard-paywall trial ends",
+      "en": "Your trial ended, so your reminder and app lock are off. Tap to turn both back on.",
+      "de": "Deine Testphase ist vorbei, also sind Erinnerung und App-Sperre aus. Tippe, um beides wieder einzuschalten.",
+      "it": "La prova è finita, quindi promemoria e blocco app sono disattivati. Tocca per riattivarli entrambi."
+    },
+    {
+      "issue": "ENG-173",
+      "table": "Notifications",
+      "key": "notification.winback.slot2.title",
+      "create": true,
+      "comment": "ENG-173 win-back push after a hard-paywall trial ends",
+      "en": "It’s %@. No reminder tonight.",
+      "de": "Es ist %@. Heute Abend keine Erinnerung.",
+      "it": "Sono le %@. Niente promemoria stasera."
+    },
+    {
+      "issue": "ENG-173",
+      "table": "Notifications",
+      "key": "notification.winback.slot2.day.title",
+      "create": true,
+      "comment": "ENG-173 win-back push after a hard-paywall trial ends",
+      "en": "It’s %@. No reminder today.",
+      "de": "Es ist %@. Heute keine Erinnerung.",
+      "it": "Sono le %@. Niente promemoria oggi."
+    },
+    {
+      "issue": "ENG-173",
+      "table": "Notifications",
+      "key": "notification.winback.slot2.body",
+      "create": true,
+      "comment": "ENG-173 win-back push after a hard-paywall trial ends",
+      "en": "Reminders stopped when your trial ended. Tap to bring them back.",
+      "de": "Mit dem Ende deiner Testphase haben die Erinnerungen aufgehört. Tippe, um sie zurückzuholen.",
+      "it": "I promemoria si sono fermati quando è finita la prova. Tocca per farli tornare."
+    },
+    {
+      "issue": "ENG-173",
+      "table": "Notifications",
+      "key": "notification.winback.slot2.challenger.title",
+      "create": true,
+      "comment": "ENG-173 win-back push after a hard-paywall trial ends",
+      "en": "This one’s not a reminder",
+      "de": "Das hier ist keine Erinnerung",
+      "it": "Questo non è un promemoria"
+    },
+    {
+      "issue": "ENG-173",
+      "table": "Notifications",
+      "key": "notification.winback.slot2.challenger.body",
+      "create": true,
+      "comment": "ENG-173 win-back push after a hard-paywall trial ends",
+      "en": "It’s just where your %@ reminder used to be. Tap to bring it back.",
+      "de": "Sie steht nur da, wo sonst deine Erinnerung um %@ stand. Tippe, um sie zurückzuholen.",
+      "it": "Arriva solo dove prima c’era il tuo promemoria delle %@. Tocca per farlo tornare."
+    },
+    {
+      "issue": "ENG-173",
+      "table": "Notifications",
+      "key": "notification.winback.slot2.blocker.title",
+      "create": true,
+      "comment": "ENG-173 win-back push after a hard-paywall trial ends",
+      "en": "Your apps aren’t locked tonight",
+      "de": "Deine Apps sind heute Abend nicht gesperrt",
+      "it": "Stasera le tue app non sono bloccate"
+    },
+    {
+      "issue": "ENG-173",
+      "table": "Notifications",
+      "key": "notification.winback.slot2.blocker.day.title",
+      "create": true,
+      "comment": "ENG-173 win-back push after a hard-paywall trial ends",
+      "en": "Your apps aren’t locked today",
+      "de": "Deine Apps sind heute nicht gesperrt",
+      "it": "Oggi le tue app non sono bloccate"
+    },
+    {
+      "issue": "ENG-173",
+      "table": "Notifications",
+      "key": "notification.winback.slot2.blocker.body",
+      "create": true,
+      "comment": "ENG-173 win-back push after a hard-paywall trial ends",
+      "en": "At %@ they’d stay locked until you log. Tap to turn the lock back on.",
+      "de": "Sonst wären sie ab %@ gesperrt, bis du abhakst. Tippe, um die App-Sperre wieder einzuschalten.",
+      "it": "Alle %@ resterebbero bloccate finché non confermi. Tocca per riattivare il blocco app."
+    },
+    {
+      "issue": "ENG-173",
+      "table": "Notifications",
+      "key": "notification.winback.slot3.title",
+      "create": true,
+      "comment": "ENG-173 win-back push after a hard-paywall trial ends",
+      "en": "Want another week to decide?",
+      "de": "Willst du noch eine Woche überlegen?",
+      "it": "Vuoi un’altra settimana per decidere?"
+    },
+    {
+      "issue": "ENG-173",
+      "table": "Notifications",
+      "key": "notification.winback.slot3.body",
+      "create": true,
+      "comment": "ENG-173 win-back push after a hard-paywall trial ends",
+      "en": "Here’s 7 more days free, then %@ a year. This offer only comes once.",
+      "de": "Hier sind noch 7 Tage gratis, danach %@ pro Jahr. Dieses Angebot gibt es nur einmal.",
+      "it": "Ecco altri 7 giorni gratis, poi %@ all’anno. Questa offerta arriva una volta sola."
+    },
+    {
+      "issue": "ENG-173",
+      "table": "Notifications",
+      "key": "notification.winback.slot3.blocker.body",
+      "create": true,
+      "comment": "ENG-173 win-back push after a hard-paywall trial ends",
+      "en": "7 more days free, app lock included, then %@ a year. This offer only comes once.",
+      "de": "Noch 7 Tage gratis, inklusive App-Sperre, danach %@ pro Jahr. Dieses Angebot gibt es nur einmal.",
+      "it": "Altri 7 giorni gratis, blocco app incluso, poi %@ all’anno. Questa offerta arriva una volta sola."
+    },
+    {
+      "issue": "ENG-173",
+      "table": "Notifications",
+      "key": "notification.winback.slot3.restore.title",
+      "create": true,
+      "comment": "ENG-173 win-back push after a hard-paywall trial ends",
+      "en": "Couldn’t find your purchase?",
+      "de": "Kein Kauf gefunden?",
+      "it": "Non trovi il tuo acquisto?"
+    },
+    {
+      "issue": "ENG-173",
+      "table": "Notifications",
+      "key": "notification.winback.slot3.restore.body",
+      "create": true,
+      "comment": "ENG-173 win-back push after a hard-paywall trial ends",
+      "en": "Nothing showed up on this Apple Account. Here’s 7 more days free, then %@ a year.",
+      "de": "Für diesen Apple Account wurde nichts gefunden. Hier sind noch 7 Tage gratis, danach %@ pro Jahr.",
+      "it": "Su questo Account Apple non risulta nulla. Ecco altri 7 giorni gratis, poi %@ all’anno."
+    },
+    {
+      "issue": "ENG-173",
+      "table": "Notifications",
+      "key": "notification.winback.slot4.title",
+      "create": true,
+      "comment": "ENG-173 win-back push after a hard-paywall trial ends",
+      "en": "Last note from Pillie",
+      "de": "Eine letzte Nachricht von Pillie",
+      "it": "Ultimo messaggio da Pillie"
+    },
+    {
+      "issue": "ENG-173",
+      "table": "Notifications",
+      "key": "notification.winback.slot4.new.body",
+      "create": true,
+      "comment": "ENG-173 win-back push after a hard-paywall trial ends",
+      "en": "Thanks for giving Pillie a try. This is our last notification. Pillie’s here if you want it.",
+      "de": "Danke, dass du Pillie ausprobiert hast. Das ist unsere letzte Mitteilung. Pillie ist da, wenn du magst.",
+      "it": "Grazie per aver provato Pillie. Questa è la nostra ultima notifica. Pillie è qui quando vuoi."
     }
   ]
 }
