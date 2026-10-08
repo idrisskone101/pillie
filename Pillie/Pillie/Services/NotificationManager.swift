@@ -576,6 +576,11 @@ final class NotificationManager {
         if components.second == nil {
             components.second = 0
         }
+        if due.kind != .base {
+            // A follow-up fires a set time after its reminder. A fixed offset keeps that instant
+            // in the hour a fall-back repeats, where wall-clock components match the first pass.
+            components.timeZone = TimeZone(secondsFromGMT: calendar.timeZone.secondsFromGMT(for: due.fireDate))
+        }
 
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
         let id = reminderIdentifier(dueDayEpoch: due.dueDayEpoch, kind: due.kind, streakAtRisk: due.streakAtRisk, fireDate: due.fireDate)
