@@ -104,8 +104,7 @@ support mailto rows and (debug builds only) the developer menu.
 - `flows/notifications-winback.flow` (ENG-173) — grants notifications,
   starts a hard-paywall trial at day 13 with reminders only, and dumps the
   pending requests: day 10 and day 13 trial notices, no day 15 notice, and the
-  `pillie_winback_slot1/2/4_*` pushes (slot 3 waits for an extend price the
-  wall has seen). Then the same on a blocker trial in German.
+  `pillie_winback_slot1/2/4_*` pushes (slot 3 is retired). Then the same on a blocker trial in German.
 - Not driven by a flow, and why:
   - `settings-subscription`'s paywall branch (free/trial accounts) is the
     same `HonestPaywallBoard.settingsFree` covered by

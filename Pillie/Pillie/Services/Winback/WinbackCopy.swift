@@ -27,8 +27,6 @@ enum WinbackCopy {
             return daytime ? "\(prefix).slot2.blocker.day.title" : "\(prefix).slot2.blocker.title"
         case (.dayAfter, _):
             return daytime ? "\(prefix).slot2.day.title" : "\(prefix).slot2.title"
-        case (.extendOffer, .restore):
-            return "\(prefix).slot3.restore.title"
         default:
             return "\(prefix).slot\(slot.rawValue).title"
         }
@@ -40,8 +38,6 @@ enum WinbackCopy {
             "\(prefix).slot2.challenger.body"
         case (_, .blocker):
             "\(prefix).slot\(slot.rawValue).blocker.body"
-        case (.extendOffer, .restore):
-            "\(prefix).slot3.restore.body"
         case (.lastNote, .new):
             "\(prefix).slot4.new.body"
         default:
@@ -51,7 +47,7 @@ enum WinbackCopy {
 
     private static let prefix = "notification.winback"
 
-    /// Only slot 2's title reads the hour, so slots 3 and 4 never need one.
+    /// Only slot 2's title reads the hour, so slot 4 never needs one.
     private static func reminderHour(_ detail: WinbackDetail) -> Int {
         guard case .reminderTime(let hour, _) = detail else { return 0 }
         return hour
@@ -69,8 +65,6 @@ enum WinbackCopy {
                 locale: locale,
                 arguments: SettingsPresentation.time(hour: hour, minute: minute, locale: locale)
             )
-        case .extendPrice(let price):
-            return PillieLocalization.formatted(key, table: table, locale: locale, arguments: price)
         case .daysLogged(let days):
             return PillieLocalization.formatted(key, table: table, locale: locale, arguments: days)
         }

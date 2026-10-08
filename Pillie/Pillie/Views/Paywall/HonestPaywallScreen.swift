@@ -79,7 +79,7 @@ struct HonestPaywallScreen: View {
             await prefetchExtendCandidate()
             await permissionLoaded
             isReadyForWinbackOpen = true
-            await consumeWinbackOpen()
+            consumeWinbackOpen()
             #if DEBUG
             presentDebugExtendOfferIfRequested()
             await presentDebugSuccessIfRequested()
@@ -88,7 +88,7 @@ struct HonestPaywallScreen: View {
         .onChange(of: winbackRouter.pendingOpen) { _, open in
             // The tap brought the app back with the wall already up.
             guard open != nil, isReadyForWinbackOpen else { return }
-            Task { await consumeWinbackOpen() }
+            consumeWinbackOpen()
         }
         .paywallAlert($activeAlert, surface: surface, onRetryRestore: restorePurchases)
     }
@@ -267,7 +267,6 @@ struct HonestPaywallScreen: View {
     /// gate withholds it, so the caller keeps its usual outcome.
     @discardableResult
     private func presentExtendOffer(_ trigger: TrialEndExtendTrigger, mode: HonestPaywallTelemetryMode) -> Bool {
-        recordWinbackPitch(trigger)
         guard let extendCandidate,
               let offer = TrialEndExtendOfferDecision.offer(
                   trigger: trigger,
@@ -292,21 +291,6 @@ struct HonestPaywallScreen: View {
             )
         }
         return true
-    }
-
-    /// Slot 3 of the win-back pushes (ENG-173) promises this card, so it waits
-    /// until the wall has seen an SKU Apple would actually give her. Recorded
-    /// before the phase gate: a card she already declined can still come back
-    /// once from the push.
-    private func recordWinbackPitch(_ trigger: TrialEndExtendTrigger) {
-        guard board.isTrialEnd,
-              let extendCandidate,
-              extendCandidate.eligibility == .eligible
-        else { return }
-        let pitch = WinbackExtendPitch(trigger: trigger, priceDisplay: extendCandidate.product.priceDisplay)
-        guard pitch != WinbackExtendPitch.load() else { return }
-        pitch.save()
-        NotificationManager.shared.requestReschedule(from: store, reason: "winback-extend-pitch")
     }
 
     private func startExtendTrial() {
@@ -335,7 +319,7 @@ struct HonestPaywallScreen: View {
                 plusFeedback.unsuccessfulPaidOutcome(accessibilityReduceMotion: accessibilityReduceMotion)
                 if error.honestPaywallIsCancelledPurchase {
                     // Backing out of Apple's sheet for the free week counts as
-                    // a no: only the slot 3 win-back push can bring it back.
+                    // a no, and a no is final.
                     declineExtendOffer()
                 } else {
                     telemetry.trackError(.purchase, error: error)
@@ -403,13 +387,11 @@ struct HonestPaywallScreen: View {
 
     // MARK: - Win-back open (ENG-173)
 
-    /// A tapped win-back push lands here once the wall is loaded. Slot 3
-    /// re-arms the extend card for its one second chance; when Apple says no
-    /// or serves no SKU, the plans stay, which is the right fallback.
-    private func consumeWinbackOpen() async {
+    /// A tapped win-back push lands here once the wall is loaded, so the view
+    /// is reported as one the push opened.
+    private func consumeWinbackOpen() {
         guard board.isTrialEnd, let open = winbackRouter.takePendingOpen() else { return }
-        let mode = telemetryMode
-        if case .trialEnd(let content) = mode {
+        if case .trialEnd(let content) = telemetryMode {
             telemetry.trialEndPaywallViewed(
                 fromWinback: open,
                 cohort: content.cohort,
@@ -417,10 +399,6 @@ struct HonestPaywallScreen: View {
                 termsCohort: content.termsCohort
             )
         }
-        guard open.slot == .extendOffer else { return }
-        extendOfferStore.record(.rearm)
-        await prefetchExtendCandidate()
-        presentExtendOffer(open.variant == .restore ? .restoreEmpty : .sheetCancel, mode: mode)
     }
 
     // MARK: - Success

@@ -1,5 +1,5 @@
 # ENG-172: the hard trial-end wall rises straight into the one-time extend
-# offer through /trial-end-extend. clear=1 re-arms the offer each time; the
+# offer through /trial-end-extend. clear=1 resets the offer each time; the
 # Test Store serves no extend SKU, so a $29.99 week stands in.
 launch
 wait text Today 15
