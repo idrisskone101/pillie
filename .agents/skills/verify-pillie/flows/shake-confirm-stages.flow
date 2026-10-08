@@ -23,7 +23,7 @@ wait id shakeConfirmStage 10
 expect text "Shake to check in"
 shot pill-first-open
 tap --id shakeTapToConfirmFallback
-wait text "Pill 11 logged at" 10
+wait text "Pill 11 checked in at" 10
 shot pill-first-done
 wait text "Taken today" 15
 
@@ -50,7 +50,7 @@ wait text "Almost 2" 5
 sleep 1
 shot pill-shake-4
 tap --id shakeConfirmStage
-wait text "Pill 12 logged at" 10
+wait text "Pill 12 checked in at" 10
 shot pill-done
 record stop
 wait text "Taken today" 15
@@ -205,7 +205,7 @@ wait text "Almost there" 5
 sleep 1
 shot sugar-shake-4
 tap --id shakeConfirmStage
-wait text "Sugar pill 7 logged at" 10
+wait text "Sugar pill 7 checked in at" 10
 shot sugar-done
 wait text "Taken today" 15
 openurl pillie://debug/fixed-now?at=off
