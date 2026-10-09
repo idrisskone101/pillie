@@ -7,7 +7,14 @@ import Foundation
 
 struct ReminderSchedulePlanner {
     static let maxPendingReminders = 64
-    static let baseReminderCount = 7
+    /// Due days that get a base reminder. Only an app launch or a background
+    /// refresh replans, so the queue must outlast a user who stops opening the
+    /// app: a month covers any Reverse Trial, which a hard paywall cuts at
+    /// expiry (ENG-176).
+    static let baseReminderCount = 30
+    /// Due days nearest now that also carry Plus follow-ups, kept short so the
+    /// whole plan stays well under the 64-request limit.
+    static let followUpDayCount = 2
     static let dueScanLimit = 120
     static let catchupDelayMinutes = 1
     /// The streak is named only in its first week: the first reminders after
@@ -287,11 +294,11 @@ struct ReminderSchedulePlanner {
 
         var plannedIntents = dueIntents
 
-        // Plan follow-ups for every untaken due day up front, since nothing rebuilds
-        // when the window rolls over at the next reminder. During a Reverse Trial
-        // they stop where its Plus Access ends.
+        // Plan follow-ups for every untaken due day in the follow-up window up
+        // front, since nothing rebuilds when the window rolls over at the next
+        // reminder. During a Reverse Trial they stop where its Plus Access ends.
         let trialEnd = trialAccessEnd(input)
-        for due in baseDueActions {
+        for due in baseDueActions.prefix(Self.followUpDayCount) {
             let remainingBudget = dueReminderBudget - plannedIntents.count
             guard remainingBudget > 0 else { break }
             let retries = planRetryReminders(

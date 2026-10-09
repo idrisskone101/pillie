@@ -93,7 +93,7 @@ final class ReminderSchedulePlannerTests: XCTestCase {
         XCTAssertEqual(todayIntents.filter { $0.kind == .retry }.count, 3)
     }
 
-    func testPlusFollowUpsArePlannedForEveryUntakenDueDay() throws {
+    func testPlusFollowUpsArePlannedForEveryUntakenDueDayInTheFollowUpWindow() throws {
         // Nothing rebuilds when the window rolls over at the next reminder, so the
         // plan made while today is still untaken must carry tomorrow's follow-ups.
         let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 10)
@@ -118,8 +118,92 @@ final class ReminderSchedulePlannerTests: XCTestCase {
         )
         XCTAssertEqual(
             Set(retries.map(\.dueDayEpoch)),
-            Set(intents.filter { $0.kind == .base }.map(\.dueDayEpoch))
+            Set(intents.filter { $0.kind == .base }.prefix(ReminderSchedulePlanner.followUpDayCount).map(\.dueDayEpoch))
         )
+    }
+
+    func testUserWhoNeverOpensTheAppGetsADailyBaseReminderForAMonth() throws {
+        let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 7)
+        let fixture = try InMemoryStoreFactory.makeStore(
+            now: now,
+            regimen: .custom,
+            customRegimen: PackRegimen(activeDays: 365, breakDays: 0),
+            startDate: now
+        )
+
+        let bases = dueIntents(for: fixture.store, now: now, smartRemindersEnabled: false)
+            .filter { $0.kind == .base }
+
+        XCTAssertEqual(bases.count, ReminderSchedulePlanner.baseReminderCount)
+        XCTAssertEqual(bases.first?.fireDate, InMemoryStoreFactory.localDate("2026-05-26", hour: 8))
+        XCTAssertEqual(bases.last?.fireDate, InMemoryStoreFactory.localDate("2026-06-24", hour: 8))
+    }
+
+    func testMonthOfBaseRemindersCountsDoseDaysAndSkipsNoPillWeeks() throws {
+        // Day 15 of a 21/7 no-pill pack: 7 dose days, a silent week, 21 dose days,
+        // another silent week, then 2 dose days of the third pack. After 08:00, so
+        // the live dose day is 26 May and not yesterday's.
+        let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 9)
+        let fixture = try InMemoryStoreFactory.makeStore(
+            now: now,
+            regimen: .custom,
+            customRegimen: PackRegimen(activeDays: 21, breakDays: 7, breakKind: .noPills),
+            startDate: InMemoryStoreFactory.localDate("2026-05-12", hour: 0)
+        )
+        let breakDays = ["2026-06-02", "2026-06-08", "2026-06-30", "2026-07-06"]
+            .map { epochDay(for: InMemoryStoreFactory.localDate($0, hour: 12)) }
+
+        let due = dueIntents(for: fixture.store, now: now, autoReminderRetryLimit: 3)
+        let bases = due.filter { $0.kind == .base }
+
+        XCTAssertEqual(bases.count, ReminderSchedulePlanner.baseReminderCount)
+        XCTAssertEqual(bases.last?.fireDate, InMemoryStoreFactory.localDate("2026-07-08", hour: 8))
+        XCTAssertFalse(due.contains { $0.action.type.isBreakType })
+        XCTAssertFalse(due.contains { breakDays.contains($0.dueDayEpoch) })
+    }
+
+    func testPatchAndRingBreakWeeksStaySilent() throws {
+        let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 7)
+        for method in [ContraceptiveMethod.patch, .ring] {
+            let fixture = try InMemoryStoreFactory.makeStore(
+                now: now,
+                method: method,
+                startDate: InMemoryStoreFactory.localDate("2026-05-12", hour: 0)
+            )
+
+            let due = dueIntents(for: fixture.store, now: now, autoReminderRetryLimit: 3)
+
+            XCTAssertFalse(due.isEmpty, "\(method)")
+            XCTAssertTrue(due.allSatisfy { $0.action.type.requiresUserAction }, "\(method)")
+            XCTAssertFalse(due.contains { $0.action.type.isBreakType }, "\(method)")
+        }
+    }
+
+    func testPlusFollowUpsCoverOnlyTheTwoNearestDueDays() throws {
+        let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 7)
+        let fixture = try InMemoryStoreFactory.makeStore(
+            now: now,
+            regimen: .custom,
+            customRegimen: PackRegimen(activeDays: 365, breakDays: 0),
+            startDate: now
+        )
+
+        let intents = plan(for: fixture.store, now: now, autoReminderRetryLimit: 5)
+        let due = intents.compactMap { intent -> ReminderSchedulePlanner.DueReminderIntent? in
+            if case .due(let due) = intent { return due }
+            return nil
+        }
+
+        XCTAssertLessThan(intents.count, ReminderSchedulePlanner.maxPendingReminders)
+        XCTAssertEqual(due.filter { $0.kind == .base }.count, ReminderSchedulePlanner.baseReminderCount)
+        XCTAssertEqual(
+            Set(due.filter { $0.kind == .retry }.map(\.dueDayEpoch)),
+            [
+                epochDay(for: InMemoryStoreFactory.localDate("2026-05-26", hour: 12)),
+                epochDay(for: InMemoryStoreFactory.localDate("2026-05-27", hour: 12))
+            ]
+        )
+        XCTAssertEqual(due.filter { $0.kind == .retry }.count, 10)
     }
 
     func testTreatsSnoozeAsSeparateFromAutomaticRetries() throws {

@@ -344,6 +344,16 @@ struct ProductAnalyticsTelemetry {
     track(.smartReminderRetryFired)
   }
 
+  func backgroundTaskScheduleFailed(_ error: Error) {
+    track(.bgTaskScheduleFailed)
+    trackError(
+      .notifications,
+      error: error,
+      context: ["operation": "bg_task_schedule"],
+      severity: .warning
+    )
+  }
+
   func smartReminderOutcome(_ outcome: AnalyticsSmartReminderOutcome) {
     analytics.track(
       .smartReminderOutcome,
