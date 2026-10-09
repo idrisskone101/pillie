@@ -227,26 +227,45 @@ final class TrialExpiryWarningPlannerTests: XCTestCase {
         XCTAssertEqual(intents.filter(\.isDue).count, ReminderSchedulePlanner.maxPendingReminders - 4)
     }
 
-    func testTrialWarningsDisplaceOnlyTheFarthestDueReminders() throws {
+    func testDueAndSupplyFireDatesAreUntouchedByTrialWarnings() throws {
         let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
         let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
 
         let withoutTrial = plan(for: fixture.store, now: now, trialGrantDate: nil)
         let withTrial = plan(for: fixture.store, now: now, trialGrantDate: now)
-        let dueWithout = withoutTrial.filter(\.isDue)
-        let dueWith = withTrial.filter(\.isDue)
 
-        XCTAssertEqual(withTrial.count, ReminderSchedulePlanner.maxPendingReminders)
-        XCTAssertEqual(dueWithout.count - dueWith.count, 3)
         XCTAssertEqual(
-            dueWith.compactMap(\.reminderFireDate),
-            Array(dueWithout.compactMap(\.reminderFireDate).prefix(dueWith.count))
-        )
-        XCTAssertEqual(
-            withTrial.filter { !$0.isDue && !$0.isTrialWarning },
-            withoutTrial.filter { !$0.isDue }
+            withTrial.filter { !$0.isTrialWarning }.compactMap(\.reminderFireDate),
+            withoutTrial.compactMap(\.reminderFireDate)
         )
         XCTAssertEqual(withTrial.filter(\.isTrialWarning).count, 3)
+    }
+
+    func testHardPaywallTrialUserIsRemindedEveryDoseDayUntilExpiry() throws {
+        let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
+        let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
+        let calendar = Calendar.current
+        let expiry = ReverseTrialClock(
+            grantDate: now,
+            schedule: ActiveDaySchedule(pack: fixture.store.pack, calendar: calendar)
+        ).expiryMoment(calendar: calendar)
+        let doseDaysBeforeExpiry = DoseScheduleEngine.nextDueActions(
+            from: fixture.store.today,
+            limit: ReminderSchedulePlanner.dueScanLimit,
+            pack: fixture.store.pack
+        )
+        .filter { $0.type.requiresUserAction && $0.date < expiry }
+        .map { Int(calendar.startOfDay(for: $0.date).timeIntervalSince1970) }
+
+        let hard = plan(for: fixture.store, now: now, trialGrantDate: now, trialEndTerms: .hardPaywall)
+        let baseDays = hard.compactMap { intent -> Int? in
+            guard case .due(let due) = intent, due.kind == .base else { return nil }
+            return due.dueDayEpoch
+        }
+
+        XCTAssertGreaterThanOrEqual(doseDaysBeforeExpiry.count, 14)
+        XCTAssertEqual(baseDays, doseDaysBeforeExpiry)
+        XCTAssertLessThan(hard.count, ReminderSchedulePlanner.maxPendingReminders)
     }
 
     func testHardPaywallRemindersStopAtTrialExpiry() throws {
@@ -287,11 +306,12 @@ final class TrialExpiryWarningPlannerTests: XCTestCase {
         XCTAssertGreaterThan(subscriber.filter(\.isDue).count, 0)
     }
 
-    func testTrialFollowUpsCoverEachDueDayUntilTheTrialEnds() throws {
+    func testTrialFollowUpsStopWhereTheTrialEnds() throws {
         // Grandfathered terms keep the daily reminder after the trial, but follow-ups
-        // are Plus. A 14 May grant on a 21/7 pack expires at 29 May 00:00.
+        // are Plus. A 14 May grant on a 21/7 pack expires at 29 May 00:00, so of the
+        // two follow-up days only 28 May is inside the trial.
         let calendar = Calendar.current
-        let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 9)
+        let now = InMemoryStoreFactory.localDate("2026-05-28", hour: 9)
         let grantDate = InMemoryStoreFactory.localDate("2026-05-14", hour: 9)
         let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: calendar.startOfDay(for: grantDate))
         func epochDay(_ iso: String) -> Int {
@@ -312,7 +332,7 @@ final class TrialExpiryWarningPlannerTests: XCTestCase {
 
         XCTAssertEqual(
             Set(due.filter { $0.kind == .retry }.map(\.dueDayEpoch)),
-            [epochDay("2026-05-26"), epochDay("2026-05-27"), epochDay("2026-05-28")]
+            [epochDay("2026-05-28")]
         )
         XCTAssertTrue(due.contains { $0.kind == .base && $0.dueDayEpoch == epochDay("2026-05-29") })
     }

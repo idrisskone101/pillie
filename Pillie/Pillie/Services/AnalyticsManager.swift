@@ -755,6 +755,10 @@ enum AnalyticsEvent: String, CaseIterable {
   /// A handled failure (#179). Carries `domain` + `message` + `code` + `severity`
   /// via `trackError`, never through the `AnalyticsPayload` envelope.
   case appError = "app_error"
+  /// iOS refused the background refresh that tops up the reminder queue
+  /// (ENG-176). Recorded at most once per launch; the paired `app_error`
+  /// carries the `BGTaskScheduler` code.
+  case bgTaskScheduleFailed = "bg_task_schedule_failed"
 }
 
 enum AnalyticsSource: String {

@@ -63,6 +63,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
     #endif
 
     private static let bgTaskID = "com.idrisskone.pillie.screentime-reconcile"
+    private static var didReportBackgroundTaskScheduleFailure = false
     private static var isRunningTests: Bool {
         ProcessRuntime.isRunningTests
     }
@@ -235,6 +236,9 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
             try BGTaskScheduler.shared.submit(request)
         } catch {
             os_log(.error, "Pillie BGTask schedule error: %{public}@", error.localizedDescription)
+            guard !didReportBackgroundTaskScheduleFailure else { return }
+            didReportBackgroundTaskScheduleFailure = true
+            ProductAnalyticsTelemetry.live.backgroundTaskScheduleFailed(error)
         }
     }
 }

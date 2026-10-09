@@ -7,10 +7,14 @@ import Foundation
 
 struct ReminderSchedulePlanner {
     static let maxPendingReminders = 64
-    /// Due days nearest now that also carry Plus follow-ups. Every later due
-    /// day still gets its base reminder, up to the pending cap, because only
-    /// an app launch replans and some users never open the app (ENG-176).
-    static let followUpDayCount = 7
+    /// Due days that get a base reminder. Only an app launch or a background
+    /// refresh replans, so the queue must outlast a user who stops opening the
+    /// app: a month covers any Reverse Trial, which a hard paywall cuts at
+    /// expiry (ENG-176).
+    static let baseReminderCount = 30
+    /// Due days nearest now that also carry Plus follow-ups, kept short so the
+    /// whole plan stays well under the 64-request limit.
+    static let followUpDayCount = 2
     static let dueScanLimit = 120
     static let catchupDelayMinutes = 1
     /// The streak is named only in its first week: the first reminders after
@@ -238,9 +242,7 @@ struct ReminderSchedulePlanner {
             let key = epochDay(for: action.date, calendar: input.calendar)
             return input.statusByEpochDay[key] != .taken
         }
-        let baseDueActions = Array(dueActions.prefix(dueReminderBudget))
-        let followUpDueActions = baseDueActions.prefix(Self.followUpDayCount)
-        let followUpEpochs = Set(followUpDueActions.map { epochDay(for: $0.date, calendar: input.calendar) })
+        let baseDueActions = Array(dueActions.prefix(min(Self.baseReminderCount, dueReminderBudget)))
         let nearestDueDayEpoch = dueActions.first.map { epochDay(for: $0.date, calendar: input.calendar) }
 
         var dueIntents: [DueReminderIntent] = []
@@ -290,13 +292,13 @@ struct ReminderSchedulePlanner {
             retryAnchorByEpoch[dueEpoch] = dueIntents.last(where: { $0.dueDayEpoch == dueEpoch })?.fireDate ?? anchor
         }
 
-        var plannedIntents = dueIntents.filter { followUpEpochs.contains($0.dueDayEpoch) }
+        var plannedIntents = dueIntents
 
         // Plan follow-ups for every untaken due day in the follow-up window up
         // front, since nothing rebuilds when the window rolls over at the next
         // reminder. During a Reverse Trial they stop where its Plus Access ends.
         let trialEnd = trialAccessEnd(input)
-        for due in followUpDueActions {
+        for due in baseDueActions.prefix(Self.followUpDayCount) {
             let remainingBudget = dueReminderBudget - plannedIntents.count
             guard remainingBudget > 0 else { break }
             let retries = planRetryReminders(
@@ -313,8 +315,6 @@ struct ReminderSchedulePlanner {
                 trialEnd.map { retry.fireDate < $0 } ?? true
             })
         }
-
-        plannedIntents.append(contentsOf: dueIntents.filter { !followUpEpochs.contains($0.dueDayEpoch) })
 
         let snoozeEnd = input.smartRemindersEnabled ? (trialEnd ?? .distantFuture) : .distantPast
         var intents = Array(plannedIntents.prefix(dueReminderBudget)).map { intent in

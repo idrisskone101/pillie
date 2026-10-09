@@ -33,6 +33,10 @@
 	<array>
 		<string>com.idrisskone.pillie.screentime-reconcile</string>
 	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+	</array>
 	<key>NSAdvertisingAttributionReportEndpoint</key>
 	<string>https://appsflyer-skadnetwork.com/</string>
 	<key>NSMotionUsageDescription</key>

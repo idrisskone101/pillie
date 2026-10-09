@@ -116,6 +116,26 @@ final class AppErrorTrackingTests: XCTestCase {
     XCTAssertEqual(tracked.severity, .error)
   }
 
+  func testBackgroundTaskScheduleFailureEmitsItsEventAndAWarning() throws {
+    let recorder = ErrorRecordingTracker()
+    let telemetry = ProductAnalyticsTelemetry(
+      analytics: recorder,
+      isPlus: { false },
+      acquisitionSource: { nil }
+    )
+    retainedForProcessLifetime.append(RetainBox(telemetry))
+
+    let error = NSError(domain: "BGTaskSchedulerErrorDomain", code: 3)
+    telemetry.backgroundTaskScheduleFailed(error)
+
+    XCTAssertEqual(recorder.events.map(\.rawValue), ["bg_task_schedule_failed"])
+    let tracked = try XCTUnwrap(recorder.errors.first)
+    XCTAssertEqual(tracked.domain, .notifications)
+    XCTAssertEqual(tracked.error as NSError, error)
+    XCTAssertEqual(tracked.context, ["operation": "bg_task_schedule"])
+    XCTAssertEqual(tracked.severity, .warning)
+  }
+
   private func makeManager(client: ErrorRecordingAnalyticsClient) -> AnalyticsManager {
     let manager = AnalyticsManager(
       defaults: UserDefaults(suiteName: "AppErrorTrackingTests-\(UUID().uuidString)")!,
@@ -128,6 +148,7 @@ final class AppErrorTrackingTests: XCTestCase {
 }
 
 private final class ErrorRecordingTracker: AnalyticsTracking {
+  private(set) var events: [AnalyticsEvent] = []
   private(set) var errors: [(
     domain: AppErrorDomain,
     error: Error,
@@ -155,7 +176,9 @@ private final class ErrorRecordingTracker: AnalyticsTracking {
     bodyCustomized: Bool?,
     retryTitleCustomized: Bool?,
     retryBodyCustomized: Bool?,
-  ) {}
+  ) {
+    events.append(event)
+  }
 
   func trackError(
     _ domain: AppErrorDomain,
