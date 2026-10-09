@@ -122,6 +122,49 @@ final class ReminderSchedulePlannerTests: XCTestCase {
         )
     }
 
+    func testFreeUserWhoNeverOpensTheAppIsStillRemindedAMonthOut() throws {
+        let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 7)
+        let fixture = try InMemoryStoreFactory.makeStore(
+            now: now,
+            regimen: .custom,
+            customRegimen: PackRegimen(activeDays: 365, breakDays: 0),
+            startDate: now
+        )
+        let dayThirtyEpoch = epochDay(for: InMemoryStoreFactory.localDate("2026-06-25", hour: 12))
+
+        let intents = dueIntents(for: fixture.store, now: now, smartRemindersEnabled: false)
+
+        XCTAssertEqual(
+            intents.filter { $0.dueDayEpoch == dayThirtyEpoch }.map(\.fireDate),
+            [InMemoryStoreFactory.localDate("2026-06-25", hour: 8)]
+        )
+    }
+
+    func testPlusUserWhoNeverOpensTheAppKeepsDailyRemindersPastTheFollowUpWeek() throws {
+        let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 7)
+        let fixture = try InMemoryStoreFactory.makeStore(
+            now: now,
+            regimen: .custom,
+            customRegimen: PackRegimen(activeDays: 365, breakDays: 0),
+            startDate: now
+        )
+        let todayEpoch = epochDay(for: now)
+        let dayThirtyEpoch = epochDay(for: InMemoryStoreFactory.localDate("2026-06-25", hour: 12))
+
+        let intents = plan(for: fixture.store, now: now, autoReminderRetryLimit: 3)
+        let due = intents.compactMap { intent -> ReminderSchedulePlanner.DueReminderIntent? in
+            if case .due(let due) = intent { return due }
+            return nil
+        }
+
+        XCTAssertLessThanOrEqual(intents.count, ReminderSchedulePlanner.maxPendingReminders)
+        XCTAssertEqual(due.filter { $0.dueDayEpoch == todayEpoch }.map(\.kind), [.base, .retry, .retry, .retry])
+        XCTAssertEqual(
+            due.filter { $0.dueDayEpoch == dayThirtyEpoch }.map(\.fireDate),
+            [InMemoryStoreFactory.localDate("2026-06-25", hour: 8)]
+        )
+    }
+
     func testTreatsSnoozeAsSeparateFromAutomaticRetries() throws {
         let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 7)
         let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
