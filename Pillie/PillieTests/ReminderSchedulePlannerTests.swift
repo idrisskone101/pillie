@@ -93,7 +93,7 @@ final class ReminderSchedulePlannerTests: XCTestCase {
         XCTAssertEqual(todayIntents.filter { $0.kind == .retry }.count, 3)
     }
 
-    func testPlusFollowUpsArePlannedForEveryUntakenDueDay() throws {
+    func testPlusFollowUpsArePlannedForEveryUntakenDueDayInTheFollowUpWindow() throws {
         // Nothing rebuilds when the window rolls over at the next reminder, so the
         // plan made while today is still untaken must carry tomorrow's follow-ups.
         let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 10)
@@ -118,7 +118,7 @@ final class ReminderSchedulePlannerTests: XCTestCase {
         )
         XCTAssertEqual(
             Set(retries.map(\.dueDayEpoch)),
-            Set(intents.filter { $0.kind == .base }.map(\.dueDayEpoch))
+            Set(intents.filter { $0.kind == .base }.prefix(ReminderSchedulePlanner.followUpDayCount).map(\.dueDayEpoch))
         )
     }
 

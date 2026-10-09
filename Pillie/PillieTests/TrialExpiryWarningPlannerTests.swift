@@ -227,16 +227,24 @@ final class TrialExpiryWarningPlannerTests: XCTestCase {
         XCTAssertEqual(intents.filter(\.isDue).count, ReminderSchedulePlanner.maxPendingReminders - 4)
     }
 
-    func testDueAndSupplyPlansAreUntouchedByTrialWarnings() throws {
+    func testTrialWarningsDisplaceOnlyTheFarthestDueReminders() throws {
         let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
         let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
 
         let withoutTrial = plan(for: fixture.store, now: now, trialGrantDate: nil)
         let withTrial = plan(for: fixture.store, now: now, trialGrantDate: now)
+        let dueWithout = withoutTrial.filter(\.isDue)
+        let dueWith = withTrial.filter(\.isDue)
 
+        XCTAssertEqual(withTrial.count, ReminderSchedulePlanner.maxPendingReminders)
+        XCTAssertEqual(dueWithout.count - dueWith.count, 3)
         XCTAssertEqual(
-            withTrial.filter { !$0.isTrialWarning },
-            withoutTrial
+            dueWith.compactMap(\.reminderFireDate),
+            Array(dueWithout.compactMap(\.reminderFireDate).prefix(dueWith.count))
+        )
+        XCTAssertEqual(
+            withTrial.filter { !$0.isDue && !$0.isTrialWarning },
+            withoutTrial.filter { !$0.isDue }
         )
         XCTAssertEqual(withTrial.filter(\.isTrialWarning).count, 3)
     }
