@@ -1115,9 +1115,19 @@
       "issue": "ENG-72",
       "table": "Commerce",
       "key": "trial.status.indicator.active",
-      "en": "Plus is on · %lld active days left",
-      "de": "Plus ist an · noch %lld aktive Tage",
-      "it": "Plus è attivo · %lld giorni attivi rimasti"
+      "en": {
+        "one": "Plus is on · %lld active day left",
+        "other": "Plus is on · %lld active days left"
+      },
+      "de": {
+        "one": "Plus ist an · noch %lld aktiver Tag",
+        "other": "Plus ist an · noch %lld aktive Tage"
+      },
+      "it": {
+        "one": "Plus è attivo · %lld giorno attivo rimasto",
+        "many": "Plus è attivo · %lld giorni attivi rimasti",
+        "other": "Plus è attivo · %lld giorni attivi rimasti"
+      }
     },
     {
       "issue": "ENG-72",
@@ -2202,9 +2212,9 @@
       "table": "Notifications",
       "key": "notification.trial_expiry.day10.hard.body",
       "create": true,
-      "en": "5 days left in your trial. After that, your daily reminders stop until you pick a plan.",
-      "de": "Noch 5 Tage in deiner Testphase. Danach hören deine täglichen Erinnerungen auf, bis du einen Tarif wählst.",
-      "it": "Mancano 5 giorni alla fine della prova. Poi i promemoria giornalieri si fermano finché non scegli un piano."
+      "en": "Your trial ends in 5 days. After that, your daily reminders stop until you pick a plan.",
+      "de": "Deine Testphase endet in 5 Tagen. Danach hören deine täglichen Erinnerungen auf, bis du einen Tarif wählst.",
+      "it": "La tua prova finisce tra 5 giorni. Poi i promemoria giornalieri si fermano finché non scegli un piano."
     },
     {
       "issue": "ENG-161",
@@ -2565,9 +2575,19 @@
       "key": "onboarding.blocking_setup.trial_line",
       "create": true,
       "comment": "Line above Allow pausing / Not now on the app-blocking onboarding step, where the 14-day reverse trial starts. %lld is the trial length in active days [trial granted]",
-      "en": "Pillie Plus is on for your next %lld active days, free. No card. We’ll remind you before it ends.",
-      "de": "Pillie Plus ist die nächsten %lld aktiven Tage gratis. Keine Karte. Wir erinnern dich vor dem Ende.",
-      "it": "Hai Pillie Plus gratis per i prossimi %lld giorni attivi. Nessuna carta. Ti avviseremo prima che finisca."
+      "en": {
+        "one": "Pillie Plus is on for your next %lld active day, free. No card. We’ll remind you before it ends.",
+        "other": "Pillie Plus is on for your next %lld active days, free. No card. We’ll remind you before it ends."
+      },
+      "de": {
+        "one": "Pillie Plus ist den nächsten %lld aktiven Tag gratis. Keine Karte. Wir erinnern dich vor dem Ende.",
+        "other": "Pillie Plus ist die nächsten %lld aktiven Tage gratis. Keine Karte. Wir erinnern dich vor dem Ende."
+      },
+      "it": {
+        "one": "Hai Pillie Plus gratis per il prossimo %lld giorno attivo. Nessuna carta. Ti avviseremo prima che finisca.",
+        "many": "Hai Pillie Plus gratis per i prossimi %lld giorni attivi. Nessuna carta. Ti avviseremo prima che finisca.",
+        "other": "Hai Pillie Plus gratis per i prossimi %lld giorni attivi. Nessuna carta. Ti avviseremo prima che finisca."
+      }
     },
     {
       "issue": "ENG-167",
@@ -2654,9 +2674,19 @@
       "key": "paywall.board.during_trial.subtitle",
       "create": true,
       "comment": "%lld = number of hormone-active days left in the trial (2..14). MUST use the same 'active day' wording as the existing trial strings (see active-day tokens). 'day 14' = the last trial day.",
-      "en": "You have %lld active days left. Pick a plan now and nothing turns off on day 14.",
-      "de": "Du hast noch %lld aktive Tage. Wähl jetzt einen Tarif, dann schaltet sich an Tag 14 nichts ab.",
-      "it": "Ti restano %lld giorni attivi. Scegli un piano ora e il giorno 14 non si spegne niente."
+      "en": {
+        "one": "You have %lld active day left. Pick a plan now and nothing turns off on day 14.",
+        "other": "You have %lld active days left. Pick a plan now and nothing turns off on day 14."
+      },
+      "de": {
+        "one": "Du hast noch %lld aktiven Tag. Wähl jetzt einen Tarif, dann schaltet sich an Tag 14 nichts ab.",
+        "other": "Du hast noch %lld aktive Tage. Wähl jetzt einen Tarif, dann schaltet sich an Tag 14 nichts ab."
+      },
+      "it": {
+        "one": "Ti resta %lld giorno attivo. Scegli un piano ora e il giorno 14 non si spegne niente.",
+        "many": "Ti restano %lld giorni attivi. Scegli un piano ora e il giorno 14 non si spegne niente.",
+        "other": "Ti restano %lld giorni attivi. Scegli un piano ora e il giorno 14 non si spegne niente."
+      }
     },
     {
       "issue": "honest-paywall",

@@ -21,6 +21,9 @@ wait id homeBlockingStatusCard 15
 tap --id homeBlockingStatusCardDismiss
 gone id homeBlockingStatusCard 10
 
+# The card sits under the floating check-in bar until Home scrolls.
+gesture scroll-down
+
 # ReviewPromptCard.swift:63.
 wait id homeReviewPromptCard 15
 shot review-prompt-visible

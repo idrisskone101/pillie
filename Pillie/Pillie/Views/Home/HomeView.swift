@@ -20,8 +20,8 @@ struct HomeView: View {
     @State private var hasAnimatedIn = false
     @State private var showRefillConfirmation = false
     @State private var showShakeConfirm = false
-    /// The action the shake cover confirms, kept while it closes: a late log clears `openCatchUp` at once.
-    @State private var shakeAction: DoseScheduleAction?
+    /// The log the shake cover confirms, kept while it closes: a late log clears `openCatchUp` at once.
+    @State private var shakeLog: PillStore.TodayLog?
     /// Holds the pack card's pop until the shake cover has slid away, so the log is seen landing.
     @State private var holdsPackCardLog = false
     @State private var shakeStreakChange = StreakChange.none
@@ -166,14 +166,11 @@ struct HomeView: View {
     /// never a zero shown as a brag). The intercept counter is the lifetime
     /// total, which only ever accrues under Plus Access (#161).
     private var trialEndOwnStats: TrialEndOwnStats {
-        guard let grantDate = SubscriptionManager.shared.trialGrantDate else { return .none }
+        guard let clock = SubscriptionManager.shared.plusAccessState.trialClock else { return .none }
         let calendar = Calendar.current
-        let expiry = ReverseTrialClock(
-            grantDate: grantDate,
-            schedule: SubscriptionManager.shared.plusAccessState.schedule
-        ).expiryMoment(calendar: calendar)
+        let expiry = clock.expiryMoment(calendar: calendar)
         let lastProtectedDay = calendar.date(byAdding: .day, value: -1, to: expiry) ?? expiry
-        let record = store.doseRecord(from: grantDate, to: lastProtectedDay)
+        let record = store.doseRecord(from: clock.grantDate, to: lastProtectedDay)
         return TrialEndOwnStats(
             blocksIntercepted: BlockerInterventionSharedState().counter.lifetimeTotal,
             dosesTaken: record.due > 0 ? record.taken : nil,
@@ -261,11 +258,11 @@ struct HomeView: View {
     /// Copy + gating for the Home Review Prompt's Sentiment Gate card (#132). `nil` unless
     /// the user has reached Review Prompt Eligibility — an unbroken Streak past the
     /// method-aware threshold, never answered, not in cooldown or capped — and no
-    /// higher-priority card is showing. Eligibility math lives entirely in
-    /// `ReviewPromptEligibility` (on-device). Shown to free and Plus users alike.
+    /// higher-priority card is showing. Eligibility math lives in `ReviewPromptEligibility`
+    /// and `OnboardingCheckIn` (on-device). Shown to free and Plus users alike.
     private var reviewPromptContent: ReviewPromptCardContent? {
         ReviewPromptCardContent.make(
-            decision: store.reviewPromptDecision(higherPriorityCardShowing: higherPriorityCardShowing),
+            decision: store.homeReviewPromptDecision(higherPriorityCardShowing: higherPriorityCardShowing),
             locale: locale
         )
     }
@@ -296,9 +293,9 @@ struct HomeView: View {
 
     /// The "Took it" chip's action while Today waits on the first reminder.
     private var logBeforeFirstReminder: (() -> Void)? {
-        guard case .dueActionAwaitingFirstReminder(let action, let requiresShakeConfirm) = todayActionState
+        guard case .dueActionAwaitingFirstReminder(_, let requiresShakeConfirm) = todayActionState
         else { return nil }
-        return { startTodayAction(action, requiresShakeConfirm: requiresShakeConfirm) }
+        return { startTodayAction(requiresShakeConfirm: requiresShakeConfirm) }
     }
 
     private var todayActionState: TodayActionState {
@@ -636,14 +633,14 @@ HomePackCard(holdsTodayLog: holdsPackCardLog)
         }
         .fullScreenCover(isPresented: $showShakeConfirm, onDismiss: {
             holdsPackCardLog = false
-            shakeAction = nil
+            shakeLog = nil
         }) {
-            if let action = shakeAction ?? store.todayDueAction {
+            if let shown = shakeLog ?? store.todayLog {
                 ShakeConfirmView(
-                    action: action,
+                    action: shown.action,
                     streak: shakeStreakChange,
                     onConfirm: {
-                        completeTodayAction()
+                        completeTodayAction(shown: shown)
                         showShakeConfirm = false
                     },
                     onDismiss: {
@@ -762,9 +759,9 @@ HomePackCard(holdsTodayLog: holdsPackCardLog)
                 .buttonStyle(PillieTakenButtonStyle())
                 .allowsHitTesting(false)
                 .transition(ctaStateTransition)
-            case .dueAction(let action, let requiresShakeConfirm):
+            case .dueAction(_, let requiresShakeConfirm):
                 Button {
-                    startTodayAction(action, requiresShakeConfirm: requiresShakeConfirm)
+                    startTodayAction(requiresShakeConfirm: requiresShakeConfirm)
                 } label: {
                     Group {
                         if dynamicTypeSize.isAccessibilitySize {
@@ -859,10 +856,10 @@ HomePackCard(holdsTodayLog: holdsPackCardLog)
         )
     }
 
-    private func startTodayAction(_ action: DoseScheduleAction, requiresShakeConfirm: Bool) {
+    private func startTodayAction(requiresShakeConfirm: Bool) {
         ProductAnalyticsTelemetry.live.todayActionStarted()
         if requiresShakeConfirm {
-            shakeAction = action
+            shakeLog = store.todayLog
             holdsPackCardLog = true
             shakeStreakChange = StreakChange(
                 before: store.currentStreak,
@@ -874,7 +871,9 @@ HomePackCard(holdsTodayLog: holdsPackCardLog)
         }
     }
 
-    private func completeTodayAction() {
+    /// `shown` is the log the shake cover displayed, which can outlast its live day.
+    private func completeTodayAction(shown: PillStore.TodayLog? = nil) {
+        guard let shown = shown ?? store.todayLog else { return }
         let feedbackResponse = homeFeedback.commitTodayAction(
             accessibilityReduceMotion: accessibilityReduceMotion
         )
@@ -883,13 +882,10 @@ HomePackCard(holdsTodayLog: holdsPackCardLog)
         } else {
             .home
         }
-        withAnimation(feedbackResponse.motionProfile.animation) {
-            if store.todayDueAction == nil, store.openCatchUp != nil {
-                store.logCatchUp()
-            } else {
-                store.markTodayAsTaken()
-            }
+        let logged = withAnimation(feedbackResponse.motionProfile.animation) {
+            store.complete(shown)
         }
+        guard logged else { return }
         ProductAnalyticsTelemetry.live.todayActionCompleted(source: source)
         StreakChangeReport.record(store, reason: .logged)
     }

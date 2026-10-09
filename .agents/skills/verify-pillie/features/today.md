@@ -104,7 +104,8 @@ blocking/trial status surfaces, and (when eligible) the review ask.
   it was last left.
 - `flows/today-pack-card.flow` — the pack card's last hormone pill, sugar
   week, and finished pack headers via `/trial-eve-of-break`,
-  `/trial-break-week`, and `/fixed-now` one day later.
+  `/trial-break-week`, and a pinned `/fixed-now` one day later. An unlogged
+  sugar pill closes as a break, so the finished pack never reads as missed.
 - `flows/today-late-missed.flow` — pins the clock to midday, then
   `/trial-eve-of-break` leaves pill 21 untaken past its reminder: the tile is
   late and the header reads "Late · still time until 8:00 AM tomorrow". One
@@ -115,7 +116,7 @@ blocking/trial status surfaces, and (when eligible) the review ask.
   `#homePackLateInfo` after the late line opens the 24-hour explainer
   `#doseWindowExplainer` ("Each pill gets 24 hours.", 8:00 AM today to
   8:00 AM tomorrow, "Still pill 21" under midnight). Past midnight it reads
-  "8:00 AM yesterday" with 5h left. A late patch change shows the same ⓘ
+  "8:00 AM yesterday" with the hours left. A late patch change shows the same ⓘ
   `#homeCountdownLateInfo` after the chip. "Got it" closes the sheet.
 - `flows/today-change-pack.flow` — the "…" menu's Change pack type opens
   the pack sheet, then the Settings "Clear your history?" confirmation.
@@ -133,7 +134,7 @@ blocking/trial status surfaces, and (when eligible) the review ask.
   which starts the next cycle), day 30 new cycle due, and a missed insertion.
 - `flows/today-ring-start-day.flow` onboards a ring routine answered "Not yet"
   with an evening reminder and, before that reminder, logs the day-1 insert
-  from Home. The streak starts at 1.
+  from Home's "Took it" chip (`#firstReminderTookIt`). The streak starts at 1.
 - `flows/today-ring-new-cycle-streak.flow` — logs a ring insert and removal,
   then the on-time day-29 change: Home's streak reads 2, the shake hero
   (`#shakeStreakHero`) promises 3, and Home reads 3 once the new cycle starts.
@@ -149,7 +150,7 @@ blocking/trial status surfaces, and (when eligible) the review ask.
   Home opens its card on the page with today ("Weeks 5 to 8 of 13").
 - `flows/today-sugar-pill.flow` — a 21 + 7 sugar day is due ("Take pill"),
   logs, undoes and logs again without moving the streak; History reads the
-  open sugar day as "Missed" (never "Break") and as "Done" once taken; a
+  open sugar day as "Today" (never "Break") and as "Done" once taken; a
   21 only pill-free day stays "Nothing to take".
 - `flows/today-notification-complete.flow` — `/notification-complete` runs
   the reminder's Complete action while Home is open; the status card, CTA and
@@ -159,6 +160,10 @@ blocking/trial status surfaces, and (when eligible) the review ask.
   remove, ring insert and remove, sugar pill), one shot per shake, then the streak
   reveal and its logged note. A tap on `#shakeConfirmStage` counts as one
   shake.
+- `flows/today-shake-straddle.flow` — the shake cover opens on pill 21 a
+  minute before the 8:00 AM reminder, and `/fixed-now` moves the clock past
+  it under the cover. Confirming still logs pill 21 (its tile reads Taken),
+  and sugar pill 1 stays due with no "not checked in yesterday" line.
 - `flows/smoke.flow` covers the plain tab bar (Today/History/Settings) with
   `/plus-home`.
 - `flows/tab-bar-rtl.flow` — the same tab bar in Arabic: taps and edge

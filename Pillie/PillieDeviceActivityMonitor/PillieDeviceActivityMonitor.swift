@@ -51,6 +51,10 @@ class PillieDeviceActivityMonitor: DeviceActivityMonitor {
             clearShieldsAndState()
             return
         }
+        guard activity.rawValue != PlusAccessMirror.expiryWakeActivityName else {
+            Self.logger.info("Expiry wake — Plus Access still valid; shields unchanged")
+            return
+        }
 
         // The daily DeviceActivity interval must still honor Pillie's actual
         // cycle. A periodic action-day mirror lets the extension clear shields
@@ -62,7 +66,8 @@ class PillieDeviceActivityMonitor: DeviceActivityMonitor {
         )
         let stamp = TodayTakenStamp(
             isTaken: defaults?.bool(forKey: AppGroupKeys.isTodayTaken) ?? false,
-            epochDay: defaults?.object(forKey: AppGroupKeys.todayTakenEpochDay) as? Int
+            epochDay: defaults?.object(forKey: AppGroupKeys.todayTakenEpochDay) as? Int,
+            timeZoneIdentifier: defaults?.string(forKey: AppGroupKeys.todayTakenTimeZone)
         )
         let reminderHour = defaults?.object(forKey: AppGroupKeys.reminderHour) as? Int ?? 8
         let reminderMinute = defaults?.object(forKey: AppGroupKeys.reminderMinute) as? Int ?? 0
@@ -128,6 +133,17 @@ class PillieDeviceActivityMonitor: DeviceActivityMonitor {
     override nonisolated func intervalDidEnd(for activity: DeviceActivityName) {
         super.intervalDidEnd(for: activity)
         Self.logger.info("intervalDidEnd fired for activity: \(activity.rawValue)")
+
+        // The expiry wake also ends when Pillie replaces it after a purchase,
+        // so only an access check may clear here.
+        if activity.rawValue == PlusAccessMirror.expiryWakeActivityName {
+            defaults?.synchronize()
+            let accessValidUntil = defaults?.object(forKey: AppGroupKeys.plusAccessValidUntil) as? Double
+            if !PlusAccessMirror.allowsBlocking(validUntilEpochSeconds: accessValidUntil, now: Date()) {
+                clearShieldsAndState()
+            }
+            return
+        }
 
         // Window close: the interval ends one minute before the next reminder.
         clearShieldsAndState()

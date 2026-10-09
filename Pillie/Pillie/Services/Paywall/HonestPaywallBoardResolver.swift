@@ -18,11 +18,7 @@ enum HonestPaywallBoardResolver {
     ) -> HonestPaywallBoard? {
         guard !access.hasEntitlement else { return nil }
 
-        if access.trialActive(calendar: calendar, now: now) {
-            let clock = ReverseTrialClock(
-                grantDate: access.trialGrantDate ?? now,
-                schedule: access.schedule
-            )
+        if let clock = access.trialClock, clock.isActive(calendar: calendar, now: now) {
             return HonestPaywallBoard(
                 moment: .duringTrial,
                 story: HonestPaywallStoryFactory.duringTrial(

@@ -143,6 +143,8 @@ enum InMemoryStoreFactory {
             "pillie_custom_retry_reminder_body",
             "pillie_app_activated_date",
             "pillie_streak_reset_date",
+            "pillie_stored_days_time_zone",
+            "pillie_reminder_time_change",
             "pillie_pain_points",
             "personalGoal",
             "missFrequency",

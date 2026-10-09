@@ -279,6 +279,36 @@ final class TrialExpiryWarningPlannerTests: XCTestCase {
         XCTAssertGreaterThan(subscriber.filter(\.isDue).count, 0)
     }
 
+    func testTrialFollowUpsCoverEachDueDayUntilTheTrialEnds() throws {
+        // Grandfathered terms keep the daily reminder after the trial, but follow-ups
+        // are Plus. A 14 May grant on a 21/7 pack expires at 29 May 00:00.
+        let calendar = Calendar.current
+        let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 9)
+        let grantDate = InMemoryStoreFactory.localDate("2026-05-14", hour: 9)
+        let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: calendar.startOfDay(for: grantDate))
+        func epochDay(_ iso: String) -> Int {
+            Int(calendar.startOfDay(for: InMemoryStoreFactory.localDate(iso, hour: 12)).timeIntervalSince1970)
+        }
+
+        let due = plan(
+            for: fixture.store,
+            now: now,
+            trialGrantDate: grantDate,
+            trialEndTerms: .legacy,
+            autoReminderRetryLimit: 3
+        )
+        .compactMap { intent -> ReminderSchedulePlanner.DueReminderIntent? in
+            if case .due(let due) = intent { return due }
+            return nil
+        }
+
+        XCTAssertEqual(
+            Set(due.filter { $0.kind == .retry }.map(\.dueDayEpoch)),
+            [epochDay("2026-05-26"), epochDay("2026-05-27"), epochDay("2026-05-28")]
+        )
+        XCTAssertTrue(due.contains { $0.kind == .base && $0.dueDayEpoch == epochDay("2026-05-29") })
+    }
+
     // MARK: - Helpers
 
     private func plan(

@@ -59,10 +59,17 @@ struct CalendarDayPresentation: Equatable {
         isToday || isActionDay || isBreakDay
     }
 
-    /// The status History's legend and VoiceOver name for a past or current day.
-    var historyStatus: HistoryPresentation.DayStatus {
+    /// The status History's VoiceOver names for the day; nil reads the date alone, as for
+    /// a future day or a day with nothing recorded.
+    var historyStatus: HistoryPresentation.DayStatus? {
+        if isFutureDay { return nil }
         if status == .taken { return .completed }
-        return isBreakDay ? .breakDay : .unlogged
+        if isBreakDay { return .breakDay }
+        switch status {
+        case .upcoming: return .today
+        case .missed: return .unlogged
+        default: return nil
+        }
     }
 
     var defaultIndicatorOpacity: Double {
@@ -181,12 +188,15 @@ struct CalendarDayPresentation: Equatable {
             if snapshot.status == .missed {
                 return .missed
             }
+            // A task not logged yet is still due, so it keeps its planned look, not Done.
             switch actionType {
             case .some(.ringBreak):
                 return .ringFree
             case .some(.ringReinsert):
-                return .reinserted
-            case .some(.ringInsert), .some(.ringRemove), .some(.ringActive):
+                return snapshot.status == .upcoming ? .plannedReinserted : .reinserted
+            case .some(.ringInsert), .some(.ringRemove):
+                return snapshot.status == .upcoming ? .plannedInserted : .inserted
+            case .some(.ringActive):
                 return .inserted
             default:
                 return snapshot.status == .breakDay ? .ringFree : .neutral

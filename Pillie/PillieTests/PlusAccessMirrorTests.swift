@@ -154,4 +154,48 @@ final class PlusAccessMirrorTests: XCTestCase {
             now: date(2026, 7, 16, 0, 0)
         ))
     }
+
+    // MARK: - Expiry wake: shields drop at expiry with Pillie closed
+
+    func testTrialOnlyAccessWakesTheMonitorAtExpiry() throws {
+        // The trial ends 2026-10-22 00:00 Paris, inside a dose window that runs
+        // to the next reminder. The wake is a one-off 15-minute interval from
+        // that instant, the shortest DeviceActivity accepts.
+        let state = PlusAccessState(hasEntitlement: false, trialGrantDate: date(2026, 10, 7, 14, 30))
+        let validUntil = PlusAccessMirror.validUntil(state: state, calendar: calendar)
+
+        let wake = try XCTUnwrap(PlusAccessMirror.expiryWakeInterval(
+            validUntil: validUntil,
+            now: date(2026, 10, 21, 20, 0),
+            calendar: calendar
+        ))
+
+        XCTAssertEqual(fields(wake.start), [2026, 10, 22, 0, 0])
+        XCTAssertEqual(fields(wake.end), [2026, 10, 22, 0, 15])
+        XCTAssertEqual(wake.start.timeZone, calendar.timeZone)
+        XCTAssertEqual(wake.end.timeZone, calendar.timeZone)
+    }
+
+    func testOnlyAnEndStillAheadGetsAWake() {
+        let expiry = date(2026, 10, 22, 0, 0)
+
+        XCTAssertNotNil(PlusAccessMirror.expiryWakeInterval(
+            validUntil: expiry, now: date(2026, 10, 21, 23, 59), calendar: calendar
+        ))
+        // Already ended: Pillie is running and drops shields itself.
+        XCTAssertNil(PlusAccessMirror.expiryWakeInterval(
+            validUntil: expiry, now: expiry, calendar: calendar
+        ))
+        // Entitled, or no trial at all.
+        XCTAssertNil(PlusAccessMirror.expiryWakeInterval(
+            validUntil: .distantFuture, now: expiry, calendar: calendar
+        ))
+        XCTAssertNil(PlusAccessMirror.expiryWakeInterval(
+            validUntil: .distantPast, now: expiry, calendar: calendar
+        ))
+    }
+
+    private func fields(_ components: DateComponents) -> [Int?] {
+        [components.year, components.month, components.day, components.hour, components.minute]
+    }
 }

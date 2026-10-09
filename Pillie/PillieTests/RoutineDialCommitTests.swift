@@ -128,12 +128,12 @@ final class RoutineDialCommitTests: XCTestCase {
         try assertEveryDialDayLandsOnHome(.ring, now: Self.afterReminder, answer: .notYet)
     }
 
-    func testBeforeTheReminderHomeStillShowsYesterdaysWindowForAPickWithoutYes() throws {
+    func testBeforeTheReminderHomeShowsTheNamedDayForAPickWithoutYes() throws {
         let harness = try makeHarness(now: Self.noon)
 
         harness.commit(pick(.patch, 10, nil))
 
-        XCTAssertEqual(harness.store.dueAction(on: harness.store.today)?.cycleDay, 9)
+        XCTAssertEqual(harness.store.dueAction(on: harness.store.today)?.cycleDay, 10)
         XCTAssertEqual(harness.store.pack.cycleDayIndex(on: Calendar.current.startOfDay(for: Self.noon)) + 1, 10)
     }
 
@@ -180,6 +180,19 @@ final class RoutineDialCommitTests: XCTestCase {
         XCTAssertEqual(harness.recorder.completions, [])
     }
 
+    func testANotYetAfterTheReminderIsStillTheOpenTaskPastMidnight() throws {
+        let pastMidnight = InMemoryStoreFactory.localDate("2026-09-28", hour: 0, minute: 10)
+        let harness = try makeHarness(now: pastMidnight)
+
+        harness.commit(pick(.patch, 8, .notYet), pickedAt: Self.afterReminder)
+
+        let store = harness.store
+        XCTAssertEqual(store.today, Calendar.current.startOfDay(for: Self.afterReminder))
+        XCTAssertEqual(store.dueAction(on: store.today)?.cycleDay, 8)
+        XCTAssertEqual(store.dueAction(on: store.today)?.type, .patchChange)
+        XCTAssertEqual(store.statusForDate(store.today), .upcoming)
+    }
+
     func testClearDropsTheDialDraftAndTheReportedFlag() throws {
         let harness = try makeHarness(now: Self.afterReminder)
         pick(.ring, 1, .taken).save(to: harness.defaults)
@@ -190,6 +203,100 @@ final class RoutineDialCommitTests: XCTestCase {
 
         XCTAssertNil(RoutineDialPick.load(from: harness.defaults))
         XCTAssertFalse(harness.defaults.bool(forKey: TodayPillCommit.reportedStorageKey))
+    }
+
+    func testContinueOnADialPickRestoredDaysLaterKeepsTheDayItNamed() throws {
+        let pickedAt = InMemoryStoreFactory.localDate("2026-09-25", hour: 12, minute: 24)
+        let harness = try makeHarness(now: Self.noon)
+        pick(.patch, 8, .taken).save(to: harness.defaults, at: pickedAt)
+
+        // Resumed two days later, the dial restores the pick and Continue saves it again unchanged.
+        try XCTUnwrap(RoutineDialPick.load(from: harness.defaults)).save(to: harness.defaults)
+        TodayPillCommit.run(
+            try XCTUnwrap(OnboardingDraft<RoutineDialPick>.load(from: harness.defaults)),
+            store: harness.store,
+            now: Self.noon,
+            defaults: harness.defaults,
+            telemetry: harness.telemetry
+        )
+
+        XCTAssertEqual(harness.store.pack.cycleDayIndex(on: harness.store.today) + 1, 10)
+        XCTAssertFalse(harness.store.isTodayTaken)
+    }
+
+    // MARK: Review Prompt
+
+    /// The decision Home reads for its Review Prompt card.
+    private func reviewPrompt(_ harness: Harness) -> ReviewPromptEligibility.Decision {
+        harness.store.homeReviewPromptDecision(higherPriorityCardShowing: false, defaults: harness.defaults)
+    }
+
+    private func clearReviewPromptHistory(_ store: PillStore) {
+        store.reviewPromptPermanentlySuppressed = false
+        store.reviewPromptLastSoftDismissal = nil
+        store.reviewPromptSoftDismissalCount = 0
+    }
+
+    /// Home's button on a later day, after that day's 8 PM reminder.
+    private func logOnHome(_ harness: Harness, on iso: String) {
+        PillieClock.setFixedNowForTesting(InMemoryStoreFactory.localDate(iso, hour: 21, minute: 5))
+        harness.store.refreshDayContextIfNeeded()
+        harness.store.markTodayAsTaken()
+    }
+
+    /// Day 8's change is logged in onboarding on 27 Sep; day 15 is 4 Oct.
+    func testAPatchChangeLoggedInOnboardingWaitsForTheNextChangeBeforeTheReviewPrompt() throws {
+        let harness = try makeHarness(now: Self.afterReminder)
+        clearReviewPromptHistory(harness.store)
+
+        harness.commit(pick(.patch, 8, .taken))
+
+        XCTAssertEqual(harness.store.currentStreak, 1)
+        XCTAssertEqual(reviewPrompt(harness), .suppressed(.ineligibleStreak))
+
+        logOnHome(harness, on: "2026-10-04")
+
+        XCTAssertEqual(harness.store.currentStreak, 2)
+        XCTAssertEqual(reviewPrompt(harness), .show)
+    }
+
+    func testAPatchChangeLoggedOnHomeAfterNotYetOpensTheReviewPrompt() throws {
+        let harness = try makeHarness(now: Self.afterReminder)
+        clearReviewPromptHistory(harness.store)
+
+        harness.commit(pick(.patch, 8, .notYet))
+        logOnHome(harness, on: "2026-09-27")
+
+        XCTAssertEqual(harness.store.currentStreak, 1)
+        XCTAssertEqual(reviewPrompt(harness), .show)
+    }
+
+    /// Day 15 (4 Oct) is never logged, so the streak starts over with day 22's removal on 11 Oct.
+    func testAPatchRemovalLoggedOnHomeAfterAMissedChangeOpensTheReviewPrompt() throws {
+        let harness = try makeHarness(now: Self.afterReminder)
+        clearReviewPromptHistory(harness.store)
+        harness.commit(pick(.patch, 8, .taken))
+
+        logOnHome(harness, on: "2026-10-11")
+
+        XCTAssertEqual(harness.store.statusForDate(InMemoryStoreFactory.localDate("2026-10-04", hour: 0)), .missed)
+        XCTAssertEqual(harness.store.currentStreak, 1)
+        XCTAssertEqual(reviewPrompt(harness), .show)
+    }
+
+    /// The ring's day-1 insertion is logged in onboarding on 27 Sep; day 22 is 18 Oct.
+    func testARingInsertionLoggedInOnboardingReachesTheReviewPromptAtTheRemoval() throws {
+        let harness = try makeHarness(now: Self.afterReminder)
+        clearReviewPromptHistory(harness.store)
+
+        harness.commit(pick(.ring, 1, .taken))
+
+        XCTAssertEqual(reviewPrompt(harness), .suppressed(.ineligibleStreak))
+
+        logOnHome(harness, on: "2026-10-18")
+
+        XCTAssertEqual(harness.store.currentStreak, 2)
+        XCTAssertEqual(reviewPrompt(harness), .show)
     }
 }
 

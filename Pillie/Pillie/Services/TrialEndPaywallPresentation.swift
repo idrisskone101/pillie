@@ -220,12 +220,12 @@ struct TrialEndPaywallContent: Equatable {
         hardPaywallEnabled: Bool = false,
         termsCohort: TrialTermsCohort? = nil
     ) -> TrialEndPaywallContent? {
-        guard !state.hasEntitlement, let grantDate = state.trialGrantDate,
-              !state.trialActive(calendar: calendar, now: now) else {
+        guard !state.hasEntitlement, let clock = state.trialClock,
+              !clock.isActive(calendar: calendar, now: now) else {
             return nil
         }
         let assignedTermsCohort = termsCohort
-            ?? HardPaywallPolicy.cohort(forTrialGrantedAt: grantDate)
+            ?? HardPaywallPolicy.cohort(forTrialGrantedAt: clock.grantDate)
         let terms = HardPaywallPolicy.terms(
             for: assignedTermsCohort,
             hardPaywallEnabled: hardPaywallEnabled
@@ -235,8 +235,7 @@ struct TrialEndPaywallContent: Equatable {
             cohort: cohort,
             terms: terms,
             termsCohort: assignedTermsCohort,
-            grantDate: grantDate,
-            schedule: state.schedule,
+            clock: clock,
             stats: stats,
             calendar: calendar,
             locale: locale
@@ -247,8 +246,7 @@ struct TrialEndPaywallContent: Equatable {
         cohort: TrialEndPaywallCohort,
         terms: TrialEndAccessTerms,
         termsCohort: TrialTermsCohort,
-        grantDate: Date,
-        schedule: ActiveDaySchedule,
+        clock: ReverseTrialClock,
         stats: TrialEndOwnStats,
         calendar: Calendar,
         locale: Locale
@@ -306,8 +304,7 @@ struct TrialEndPaywallContent: Equatable {
                     terms == .legacy ? "trial.end.legacy.record" : "trial.end.kicker"
                 ),
                 dateRange: localizedRecordDateRange(
-                    grantDate: grantDate,
-                    schedule: schedule,
+                    clock: clock,
                     calendar: calendar,
                     locale: locale
                 ),
@@ -349,20 +346,18 @@ struct TrialEndPaywallContent: Equatable {
     }
 
     private static func localizedRecordDateRange(
-        grantDate: Date,
-        schedule: ActiveDaySchedule,
+        clock: ReverseTrialClock,
         calendar: Calendar,
         locale: Locale
     ) -> String {
-        let expiry = ReverseTrialClock(grantDate: grantDate, schedule: schedule)
-            .expiryMoment(calendar: calendar)
+        let expiry = clock.expiryMoment(calendar: calendar)
         let lastDay = calendar.date(byAdding: .day, value: -1, to: expiry) ?? expiry
         let formatter = DateFormatter()
         formatter.calendar = calendar
         formatter.timeZone = calendar.timeZone
         formatter.locale = locale
         formatter.setLocalizedDateFormatFromTemplate("MMMd")
-        return "\(formatter.string(from: grantDate)) – \(formatter.string(from: lastDay))"
+        return "\(formatter.string(from: clock.grantDate)) – \(formatter.string(from: lastDay))"
     }
 }
 

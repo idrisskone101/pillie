@@ -169,11 +169,10 @@ struct TrialStatusPresentation: Equatable {
     ) -> TrialStatusPresentation? {
         // Entitlement wins over a still-running trial clock: a mid-trial
         // purchase removes the indicator immediately.
-        guard !state.hasEntitlement, let grantDate = state.trialGrantDate else { return nil }
-        let clock = ReverseTrialClock(grantDate: grantDate, schedule: state.schedule)
-        guard clock.isActive(calendar: calendar, now: now) else { return nil }
+        guard !state.hasEntitlement, let clock = state.trialClock,
+              clock.isActive(calendar: calendar, now: now) else { return nil }
         let assignedTermsCohort = termsCohort
-            ?? HardPaywallPolicy.cohort(forTrialGrantedAt: grantDate)
+            ?? HardPaywallPolicy.cohort(forTrialGrantedAt: clock.grantDate)
         return TrialStatusPresentation(
             daysRemaining: clock.daysRemaining(calendar: calendar, now: now),
             protectionActive: protectionActive,

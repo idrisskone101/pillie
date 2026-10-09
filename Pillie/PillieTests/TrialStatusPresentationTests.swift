@@ -265,7 +265,7 @@ final class TrialStatusPresentationTests: XCTestCase {
 
         XCTAssertEqual(rows.map(\.dateText), ["July 11", "July 14", "July 16"])
         XCTAssertEqual(rows.map(\.text), [
-            "Pillie reminds you when 5 active days are left.",
+            "Pillie reminds you 5 days before it ends.",
             "A last reminder before your trial ends.",
             "App blocking turns off. Daily reminders stay free, and your setup stays saved.",
         ])

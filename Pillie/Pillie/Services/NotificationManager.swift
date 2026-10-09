@@ -58,6 +58,8 @@ final class NotificationManager {
     private let trialWarningPrefix = "pillie_trial_warning_"
     private let winbackPrefix = "pillie_winback_"
     private let categoryID = "PILL_REMINDER"
+    /// The same reminder with Snooze, a Plus perk (ADR 0004).
+    private let plusCategoryID = "PILL_REMINDER_PLUS"
     private let markTakenActionID = "MARK_TAKEN_ACTION"
     private let snoozeActionID = "SNOOZE_ACTION"
     private let minimumSupportedEpoch: TimeInterval = -2_208_988_800 // 1900-01-01
@@ -77,16 +79,12 @@ final class NotificationManager {
 
     enum PayloadKey {
         static let dueDayEpoch = "dueDayEpoch"
+        static let dueDayTimeZone = "dueDayTimeZone"
         static let actionTypeRaw = "actionTypeRaw"
         static let requestKind = SmartReminderDelivery.requestKindKey
         // Shared with the delivery decision so the payload and the
         // `trial_expiry_warning_sent` reader can never drift apart (#168).
         static let trialWarningDay = TrialExpiryWarningDelivery.dayKey
-    }
-
-    private final class LedgerMutationBox {
-        var ledger: ServedBaseReminderLedger
-        init(_ ledger: ServedBaseReminderLedger) { self.ledger = ledger }
     }
 
     struct ManagedReminderDiff {
@@ -120,7 +118,7 @@ final class NotificationManager {
         self.hasPlusAccess = hasPlusAccess
         self.hasBlockerSetup = hasBlockerSetup
         self.trackSmartReminderRetryScheduled = trackSmartReminderRetryScheduled
-        registerCategory(includeSnooze: hasPlusAccess())
+        registerCategories()
     }
 
     // MARK: - Authorization
@@ -150,6 +148,13 @@ final class NotificationManager {
 
     func requestReschedule(from store: PillStore, reason: String) {
         guard !isRunningTests else { return }
+        if reason == "full-reset" {
+            // PillStore.resetAndStartFresh asks with this reason. Today's reminder was the old
+            // routine's, so it must not stand in for the new routine's start-day catch-up.
+            var ledger = ServedBaseReminderLedger.load()
+            ledger.clearServedRecord(dueDayEpoch: Int(Calendar.current.startOfDay(for: store.today).timeIntervalSince1970))
+            ledger.save()
+        }
         DispatchQueue.main.async { [weak self, weak store] in
             guard let self, let store else { return }
 
@@ -182,36 +187,37 @@ final class NotificationManager {
         // Ensure the extension has the latest taken state before scheduling
         store.syncTodayTakenToAppGroup()
 
-        // Keep the notification category in sync with the entitlement so the Snooze
-        // action only appears for Plus users (Smart Reminders gate, ADR 0004).
-        registerCategory(includeSnooze: hasPlusAccess())
+        // Re-register so the action titles follow the app language.
+        registerCategories()
 
         let now = Date()
         let calendar = Calendar.current
 
         center.getPendingNotificationRequests { [weak self] pending in
             guard let self else { return }
-            self.center.getDeliveredNotifications { [weak self] delivered in
-                guard let self else { return }
+            self.center.getDeliveredNotifications { delivered in
+                Self.onMain { [weak self] in
+                    guard let self else { return }
 
-                let ledger = ServedBaseReminderLedger.load()
-                let managedPending = pending.filter { self.isManagedReminderID($0.identifier) }
-                let managedDelivered = delivered.filter { self.isManagedReminderID($0.request.identifier) }
-                let servedMap = ledger.servedBaseFireDates(
-                    pendingManagedRequests: managedPending,
-                    deliveredManagedNotifications: managedDelivered,
-                    now: now,
-                    calendar: calendar
-                )
+                    let ledger = ServedBaseReminderLedger.load()
+                    let managedPending = pending.filter { self.isManagedReminderID($0.identifier) }
+                    let managedDelivered = delivered.filter { self.isManagedReminderID($0.request.identifier) }
+                    let servedMap = ledger.servedBaseFireDates(
+                        pendingManagedRequests: managedPending,
+                        deliveredManagedNotifications: managedDelivered,
+                        now: now,
+                        calendar: calendar
+                    )
 
-                let requests = self.buildReminderRequests(
-                    store: store,
-                    now: now,
-                    snoozeOverride: snoozeOverride,
-                    locale: PillieLocalization.appLocale,
-                    servedBaseFireDateByDueDayEpoch: servedMap
-                )
-                self.applyManagedReminderRequests(requests, store: store, ledger: ledger)
+                    let requests = self.buildReminderRequests(
+                        store: store,
+                        now: now,
+                        snoozeOverride: snoozeOverride ?? Self.pendingSnooze(in: managedPending, now: now),
+                        locale: PillieLocalization.appLocale,
+                        servedBaseFireDateByDueDayEpoch: servedMap
+                    )
+                    self.applyManagedReminderRequests(requests, store: store)
+                }
             }
         }
 
@@ -225,16 +231,22 @@ final class NotificationManager {
 
     // MARK: - Category Registration
 
-    /// Registers the reminder category. The Snooze action is a Smart Reminders perk
-    /// (a user-triggered follow-up re-fire) and is only included for Plus users; free
-    /// users get a reminder with no Snooze action (ADR 0004).
-    private func registerCategory(includeSnooze: Bool) {
-        let category = UNNotificationCategory(
-            identifier: categoryID,
-            actions: reminderCategoryActions(includeSnooze: includeSnooze),
-            intentIdentifiers: []
-        )
-        center.setNotificationCategories([category])
+    /// Registers the reminder categories, with and without Snooze. Snooze is a Smart
+    /// Reminders perk (ADR 0004), and iOS reads a reminder's actions when it shows it,
+    /// so each reminder names the category for Plus Access at its own fire time.
+    private func registerCategories() {
+        center.setNotificationCategories([
+            UNNotificationCategory(
+                identifier: categoryID,
+                actions: reminderCategoryActions(includeSnooze: false),
+                intentIdentifiers: []
+            ),
+            UNNotificationCategory(
+                identifier: plusCategoryID,
+                actions: reminderCategoryActions(includeSnooze: true),
+                intentIdentifiers: []
+            ),
+        ])
     }
 
     private func reminderCategoryActions(
@@ -276,19 +288,33 @@ final class NotificationManager {
 
     /// The reminder's Complete action once its payload is read. DEBUG's
     /// `pillie://debug/notification-complete` calls it too, since the simulator can't tap the action.
+    /// It logs what Home's button would: the live day's dose, or a missed patch or
+    /// ring task still open for catch-up. A reminder whose window has closed logs nothing.
     func completeReminder(store: PillStore, dueDate: Date) {
-        let dueEpoch = Int(Calendar.current.startOfDay(for: dueDate).timeIntervalSince1970)
-        let wasTaken = store.statusForDate(dueDate) == .taken
+        let calendar = Calendar.current
+        let dueDay = calendar.startOfDay(for: dueDate)
+        let dueEpoch = Int(dueDay.timeIntervalSince1970)
+        let wasTaken = store.statusForDate(dueDay) == .taken
 
-        store.markActionAsTaken(on: dueDate)
-        if !wasTaken, store.statusForDate(dueDate) == .taken {
+        let logged: Bool
+        if calendar.isDate(dueDay, inSameDayAs: store.today) {
+            store.markActionAsTaken(on: dueDay)
+            logged = !wasTaken && store.statusForDate(dueDay) == .taken
+        } else if let catchUp = store.openCatchUp, calendar.isDate(catchUp.date, inSameDayAs: dueDay) {
+            store.logCatchUp()
+            logged = true
+        } else {
+            logged = false
+        }
+        if logged {
             ProductAnalyticsTelemetry.live.todayActionCompleted(source: .notification)
             StreakChangeReport.record(store, reason: .logged)
         }
-        AppBlockingManager.shared.removeBlocking()
-        var ledger = ServedBaseReminderLedger.load()
-        ledger.clearServedRecordWhenTaken(dueDayEpoch: dueEpoch)
-        ledger.save()
+        if store.statusForDate(dueDay) == .taken {
+            var ledger = ServedBaseReminderLedger.load()
+            ledger.clearServedRecord(dueDayEpoch: dueEpoch)
+            ledger.save()
+        }
         clearReminders(forDueDayEpoch: dueEpoch)
         rescheduleFromStore(store)
     }
@@ -372,7 +398,9 @@ final class NotificationManager {
                 currentStreak: store.currentStreak,
                 winback: winbackContext(store: store),
                 servedBaseFireDateByDueDayEpoch: servedBaseFireDateByDueDayEpoch,
-                calendar: calendar
+                calendar: calendar,
+                reminderChange: store.reminderTimeChange,
+                trialLivedDays: SubscriptionManager.shared.plusAccessState.trialLivedDays
             )
         )
 
@@ -541,9 +569,10 @@ final class NotificationManager {
             )
         }
         content.sound = .default
-        content.categoryIdentifier = categoryID
+        content.categoryIdentifier = due.offersSnooze ? plusCategoryID : categoryID
         content.userInfo = [
             PayloadKey.dueDayEpoch: due.dueDayEpoch,
+            PayloadKey.dueDayTimeZone: calendar.timeZone.identifier,
             PayloadKey.actionTypeRaw: due.action.type.rawValue,
             PayloadKey.requestKind: due.kind.rawValue
         ]
@@ -552,9 +581,20 @@ final class NotificationManager {
         if components.second == nil {
             components.second = 0
         }
+        if due.kind != .base {
+            // A follow-up fires a set time after its reminder. A fixed offset keeps that instant
+            // in the hour a fall-back repeats, where wall-clock components match the first pass.
+            components.timeZone = TimeZone(secondsFromGMT: calendar.timeZone.secondsFromGMT(for: due.fireDate))
+        }
 
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
-        let id = reminderIdentifier(dueDayEpoch: due.dueDayEpoch, kind: due.kind, streakAtRisk: due.streakAtRisk, fireDate: due.fireDate)
+        let id = reminderIdentifier(
+            dueDayEpoch: due.dueDayEpoch,
+            kind: due.kind,
+            streakAtRisk: due.streakAtRisk,
+            offersSnooze: due.offersSnooze,
+            fireDate: due.fireDate
+        )
         return UNNotificationRequest(identifier: id, content: content, trigger: trigger)
     }
 
@@ -693,8 +733,7 @@ final class NotificationManager {
 
     private func applyManagedReminderRequests(
         _ newRequests: [UNNotificationRequest],
-        store: PillStore,
-        ledger: ServedBaseReminderLedger
+        store: PillStore
     ) {
         center.getAuthorizationStatus { [weak self] status in
             guard let self else { return }
@@ -704,20 +743,18 @@ final class NotificationManager {
                 }
                 return
             }
-            self.applyAuthorizedManagedReminderRequests(newRequests, store: store, ledger: ledger)
+            self.applyAuthorizedManagedReminderRequests(newRequests, store: store)
         }
     }
 
     private func applyAuthorizedManagedReminderRequests(
         _ newRequests: [UNNotificationRequest],
-        store: PillStore,
-        ledger: ServedBaseReminderLedger
+        store: PillStore
     ) {
         let managedNewRequests = newRequests.filter { isManagedReminderID($0.identifier) }
         let newRequestByID = Dictionary(uniqueKeysWithValues: managedNewRequests.map { ($0.identifier, $0) })
         let newManagedIDs = Array(newRequestByID.keys)
         let errorReporter = NotificationScheduleBatchErrorReporter(report: trackSchedulingError)
-        let ledgerBox = LedgerMutationBox(ledger)
         let calendar = Calendar.current
 
         center.getPendingNotificationRequests { [weak self] existingRequests in
@@ -757,23 +794,26 @@ final class NotificationManager {
                         == ReminderSchedulePlanner.DueReminderKind.base.rawValue,
                        let dueEpoch = request.content.userInfo[PayloadKey.dueDayEpoch] as? Int,
                        let fireDate = Self.fireDate(from: request) {
-                        ledgerBox.ledger.recordScheduled(dueDayEpoch: dueEpoch, fireDate: fireDate)
-                        let candidateDates = DoseScheduleEngine.nextDueActions(
-                            from: Date(),
-                            limit: ReminderSchedulePlanner.dueScanLimit,
-                            pack: store.pack
-                        ).map(\.date)
-                        let takenEpochs = Set(
-                            store.statusesByEpochDay(for: candidateDates).compactMap { epoch, status in
-                                status == .taken ? epoch : nil
-                            }
-                        )
-                        ledgerBox.ledger.prune(
-                            takenDueDayEpochs: takenEpochs,
-                            todayStart: calendar.startOfDay(for: store.today),
-                            calendar: calendar
-                        )
-                        ledgerBox.ledger.save()
+                        Self.onMain {
+                            var ledger = ServedBaseReminderLedger.load()
+                            ledger.recordScheduled(dueDayEpoch: dueEpoch, fireDate: fireDate)
+                            let candidateDates = DoseScheduleEngine.nextDueActions(
+                                from: Date(),
+                                limit: ReminderSchedulePlanner.dueScanLimit,
+                                pack: store.pack
+                            ).map(\.date)
+                            let takenEpochs = Set(
+                                store.statusesByEpochDay(for: candidateDates).compactMap { epoch, status in
+                                    status == .taken ? epoch : nil
+                                }
+                            )
+                            ledger.prune(
+                                takenDueDayEpochs: takenEpochs,
+                                todayStart: calendar.startOfDay(for: store.today),
+                                calendar: calendar
+                            )
+                            ledger.save()
+                        }
                     }
                     if error == nil,
                        let winback = WinbackPayload.push(from: request.content.userInfo) {
@@ -810,6 +850,16 @@ final class NotificationManager {
                     self.center.removeDeliveredNotifications(withIdentifiers: deliveredDiff.staleDeliveredIDs)
                 }
             }
+        }
+    }
+
+    /// UNUserNotificationCenter answers on a background queue, and PillStore, its models,
+    /// and the served-reminder ledger belong to the main thread.
+    private static func onMain(_ work: @escaping () -> Void) {
+        if Thread.isMainThread {
+            work()
+        } else {
+            DispatchQueue.main.async(execute: work)
         }
     }
 
@@ -882,17 +932,19 @@ final class NotificationManager {
 
     // MARK: - ID + Payload
 
-    /// The streak is part of the id so a streak change replaces the pending
-    /// request (same reasoning as `trialWarningIdentifier`): the managed diff
-    /// is by identifier, and an unchanged id would keep the stale copy.
+    /// The streak and Snooze are part of the id so a change to either replaces the
+    /// pending request (same reasoning as `trialWarningIdentifier`): the managed diff
+    /// is by identifier, and an unchanged id would keep the stale copy or actions.
     private func reminderIdentifier(
         dueDayEpoch: Int,
         kind: ReminderSchedulePlanner.DueReminderKind,
         streakAtRisk: Int?,
+        offersSnooze: Bool,
         fireDate: Date
     ) -> String {
         let streakToken = streakAtRisk.map { "_streak\($0)" } ?? ""
-        return "\(reminderPrefix)due_\(dueDayEpoch)_\(kind.rawValue)\(streakToken)_\(Int(fireDate.timeIntervalSince1970))"
+        let snoozeToken = offersSnooze ? "_snooze" : ""
+        return "\(reminderPrefix)due_\(dueDayEpoch)_\(kind.rawValue)\(streakToken)\(snoozeToken)_\(Int(fireDate.timeIntervalSince1970))"
     }
 
     private func refillReminderIdentifier(dueDayEpoch: Int, fireDate: Date) -> String {
@@ -935,7 +987,27 @@ final class NotificationManager {
         return Date(timeIntervalSince1970: fireEpoch)
     }
 
-    private func dueDateFromPayload(userInfo: [AnyHashable: Any]) -> Date? {
+    /// A Snooze still waiting to fire keeps its time across rebuilds, until it fires or its day is logged.
+    private static func pendingSnooze(in requests: [UNNotificationRequest], now: Date) -> ReminderSchedulePlanner.SnoozeOverride? {
+        for request in requests
+        where request.content.userInfo[PayloadKey.requestKind] as? String == ReminderSchedulePlanner.DueReminderKind.snooze.rawValue {
+            guard let dueDayEpoch = request.content.userInfo[PayloadKey.dueDayEpoch] as? Int,
+                  let fireDate = fireDate(from: request),
+                  fireDate > now
+            else { continue }
+            return ReminderSchedulePlanner.SnoozeOverride(dueDayEpoch: dueDayEpoch, firstFireDate: fireDate)
+        }
+        return nil
+    }
+
+    /// The day a reminder was for, on the same date after a time zone change.
+    func dueDateFromPayload(userInfo: [AnyHashable: Any]) -> Date? {
+        storedDueDate(userInfo: userInfo).map {
+            StoredDay.day(of: $0, writtenIn: userInfo[PayloadKey.dueDayTimeZone] as? String)
+        }
+    }
+
+    private func storedDueDate(userInfo: [AnyHashable: Any]) -> Date? {
         if let value = userInfo[PayloadKey.dueDayEpoch] as? Int {
             return dateFromEpoch(TimeInterval(value))
         }

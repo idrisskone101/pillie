@@ -18,12 +18,19 @@ struct PlusAccessState: Equatable {
     /// Pack rhythm the clock walks. Calendar-day fixtures pass
     /// `.everyCalendarDay`. Production state carries the last pack snapshot.
     var schedule: ActiveDaySchedule = .everyCalendarDay
+    /// Days the trial counted under earlier pack rhythms; `schedule` counts the rest.
+    var trialLivedDays: TrialLivedDays? = nil
+
+    /// The Reverse Trial clock every trial surface reads, if a trial was ever granted.
+    var trialClock: ReverseTrialClock? {
+        trialGrantDate.map {
+            ReverseTrialClock(grantDate: $0, schedule: schedule, lived: trialLivedDays)
+        }
+    }
 
     /// Derived, never stored (ADR 0007): whether the Reverse Trial covers `now`.
     func trialActive(calendar: Calendar, now: Date) -> Bool {
-        guard let trialGrantDate else { return false }
-        return ReverseTrialClock(grantDate: trialGrantDate, schedule: schedule)
-            .isActive(calendar: calendar, now: now)
+        trialClock?.isActive(calendar: calendar, now: now) ?? false
     }
 
     /// The Plus Access predicate: entitlement || active trial.

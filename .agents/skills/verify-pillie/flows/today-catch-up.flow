@@ -45,8 +45,8 @@ shot caught-up-day-17
 
 # The missed day keeps its status in History and says it was logged late.
 tap --label History
-wait text "September 28, 2026: Not logged" 10
-tap --label "September 28, 2026: Not logged"
+wait text "September 28, 2026: Missed" 10
+tap --label "September 28, 2026: Missed"
 wait id historyDayCatchUp 10
 expect text "Checked in 2 days late"
 shot history-logged-late

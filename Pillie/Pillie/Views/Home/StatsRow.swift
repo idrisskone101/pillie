@@ -16,11 +16,10 @@ struct StatsRow: View {
     private var isPlus: Bool { SubscriptionManager.shared.hasPlusAccess }
 
     private var blockingStatusText: String {
-        let mgr = AppBlockingManager.shared
-        if !mgr.blockingEnabled || !mgr.hasAppsSelected {
-            return PillieLocalization.string("global.status.off", locale: locale)
-        }
-        return PillieLocalization.string("global.status.on", locale: locale)
+        PillieLocalization.string(
+            AppBlockingManager.shared.isEffectivelyOn ? "global.status.on" : "global.status.off",
+            locale: locale
+        )
     }
 
     private var blockingSubtitle: String {

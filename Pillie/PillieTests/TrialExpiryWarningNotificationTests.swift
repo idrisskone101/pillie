@@ -110,7 +110,7 @@ final class TrialExpiryWarningNotificationTests: XCTestCase {
         // Win-back slot 1 replaces the hard-paywall expiry-day notice (ENG-173).
         XCTAssertEqual(warnings.map(\.trialWarningDay), [10, 13])
         XCTAssertEqual(warnings.map(\.body), [
-            "5 days left in your trial. After that, your daily reminders stop until you pick a plan.",
+            "Your trial ends in 5 days. After that, your daily reminders stop until you pick a plan.",
             "Your trial ends tomorrow night, and your daily reminders stop with it. Pick a plan to keep them.",
         ])
         XCTAssertTrue(warnings.allSatisfy { $0.identifier.contains("_blocker_configured_hard_r2_") })

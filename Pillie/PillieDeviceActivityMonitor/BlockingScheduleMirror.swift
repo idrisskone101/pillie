@@ -12,15 +12,19 @@ struct BlockingScheduleMirror: Codable, Equatable {
     let anchorCycleDayIndex: Int
     let cycleLength: Int
     let actionDayIndices: [Int]
+    /// The time zone `anchorDate` was written in; nil in mirrors from older builds.
+    let timeZoneIdentifier: String?
 
     init(
         anchorDate: Date,
         anchorCycleDayIndex: Int,
         cycleLength: Int,
-        actionDayIndices: [Int]
+        actionDayIndices: [Int],
+        timeZoneIdentifier: String? = nil
     ) {
         let safeCycleLength = max(1, cycleLength)
         self.anchorDate = anchorDate
+        self.timeZoneIdentifier = timeZoneIdentifier
         self.anchorCycleDayIndex = Self.normalizedIndex(
             anchorCycleDayIndex,
             cycleLength: safeCycleLength
@@ -50,7 +54,7 @@ struct BlockingScheduleMirror: Codable, Equatable {
             return true
         }
 
-        let anchorDay = calendar.startOfDay(for: anchorDate)
+        let anchorDay = StoredDay.day(of: anchorDate, writtenIn: timeZoneIdentifier, calendar: calendar)
         let targetDay = calendar.startOfDay(for: date)
         guard let dayDelta = calendar.dateComponents(
             [.day],
@@ -78,6 +82,23 @@ struct BlockingScheduleMirror: Codable, Equatable {
 enum BlockingInterventionDecision: Equatable {
     case applyShields
     case clearShields
+}
+
+/// Pillie stores a day as the instant of its local midnight. Read in another time
+/// zone that instant can fall on the previous evening, so a stored day is read in
+/// the zone it was written in and becomes the same date in `calendar`.
+enum StoredDay {
+    static func day(of stored: Date, writtenIn identifier: String?, calendar: Calendar = .current) -> Date {
+        guard let identifier,
+              identifier != calendar.timeZone.identifier,
+              let writtenZone = TimeZone(identifier: identifier) else {
+            return calendar.startOfDay(for: stored)
+        }
+        var written = calendar
+        written.timeZone = writtenZone
+        let date = written.dateComponents([.year, .month, .day], from: stored)
+        return calendar.date(from: date).map { calendar.startOfDay(for: $0) } ?? calendar.startOfDay(for: stored)
+    }
 }
 
 /// The day a due action belongs to: from one reminder to the next, not civil
@@ -124,7 +145,8 @@ enum BlockingInterventionPolicy {
         if let schedule, !schedule.requiresAction(on: day, calendar: calendar) {
             return .clearShields
         }
-        if handledStamp.isTaken(on: day, calendar: calendar) {
+        if handledStamp.isTaken(on: day, calendar: calendar)
+            || handledStamp.isWritten(after: day, calendar: calendar) {
             return .clearShields
         }
         return .applyShields

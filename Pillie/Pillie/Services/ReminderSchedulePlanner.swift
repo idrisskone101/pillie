@@ -99,6 +99,31 @@ struct ReminderSchedulePlanner {
         /// the same fire date (stable request id across rebuilds).
         let servedBaseFireDateByDueDayEpoch: [Int: Date]
         let calendar: Calendar
+        /// The last reminder-time change saved in Settings. Days before it keep
+        /// the time they were lived under.
+        var reminderChange: ReminderTimeChange? = nil
+        /// Days the Reverse Trial counted under earlier pack rhythms
+        /// (`PlusAccessState.trialLivedDays`); `pack` counts the rest.
+        var trialLivedDays: TrialLivedDays? = nil
+
+        var clock: ReminderClock {
+            ReminderClock(
+                current: ReminderTimeChange.Time(hour: reminderHour, minute: reminderMinute),
+                change: reminderChange,
+                calendar: calendar
+            )
+        }
+
+        /// The Reverse Trial clock while access rests on the trial alone; nil for
+        /// an entitled user or one never granted a trial.
+        var trialClock: ReverseTrialClock? {
+            guard !hasEntitlement, let trialGrantDate else { return nil }
+            return ReverseTrialClock(
+                grantDate: trialGrantDate,
+                schedule: ActiveDaySchedule(pack: pack, calendar: calendar),
+                lived: trialLivedDays
+            )
+        }
     }
 
     struct DueReminderIntent: Hashable {
@@ -106,11 +131,13 @@ struct ReminderSchedulePlanner {
         let fireDate: Date
         let dueDayEpoch: Int
         let kind: DueReminderKind
-        /// Set only on the base reminder for the nearest untaken pill day while
-        /// the streak is in `streakReminderRange` (ENG-168). Later days stay
-        /// `nil` because their streak depends on check-ins that haven't
-        /// happened yet.
+        /// Set only on the base reminder for the nearest untaken due day, when
+        /// it is a hormone pill, while the streak is in `streakReminderRange`
+        /// (ENG-168). Later days stay `nil` because their streak depends on
+        /// check-ins that haven't happened yet.
         var streakAtRisk: Int? = nil
+        /// Whether Plus Access covers the fire time, so the reminder offers Snooze.
+        var offersSnooze = false
     }
 
     struct SupplyReminderIntent: Hashable {
@@ -221,8 +248,7 @@ struct ReminderSchedulePlanner {
             let anchor = originalFirstReminderDate(
                 dueDay: dueDay,
                 now: input.now,
-                reminderHour: input.reminderHour,
-                reminderMinute: input.reminderMinute,
+                clock: input.clock,
                 servedBaseFireDate: served,
                 scheduleDay: input.scheduleDay,
                 calendar: input.calendar
@@ -230,8 +256,7 @@ struct ReminderSchedulePlanner {
             let firstReminderDate = firstBaseReminderDateForDueAction(
                 dueDay: dueDay,
                 now: input.now,
-                reminderHour: input.reminderHour,
-                reminderMinute: input.reminderMinute,
+                clock: input.clock,
                 snoozeOverride: effectiveSnoozeOverride,
                 servedBaseFireDate: served,
                 scheduleDay: input.scheduleDay,
@@ -239,16 +264,11 @@ struct ReminderSchedulePlanner {
             )
 
             if let firstReminderDate,
-               DoseWindow.isOpen(
-                day: dueDay,
-                now: firstReminderDate,
-                hour: input.reminderHour,
-                minute: input.reminderMinute,
-                calendar: input.calendar
-               ) {
+               input.clock.isOpen(day: dueDay, now: firstReminderDate) {
                 let firstKind: DueReminderKind = (effectiveSnoozeOverride?.dueDayEpoch == dueEpoch) ? .snooze : .base
                 let namesStreak = firstKind == .base
                     && due.method == .pill
+                    && due.type.enforcesAdherence
                     && dueEpoch == nearestDueDayEpoch
                     && Self.streakReminderRange.contains(input.currentStreak)
                 dueIntents.append(
@@ -267,24 +287,34 @@ struct ReminderSchedulePlanner {
 
         var plannedIntents = dueIntents
 
-        let remainingBudget = max(0, dueReminderBudget - plannedIntents.count)
-        if remainingBudget > 0,
-           let nearestDue = dueActions.first {
+        // Plan follow-ups for every untaken due day up front, since nothing rebuilds
+        // when the window rolls over at the next reminder. During a Reverse Trial
+        // they stop where its Plus Access ends.
+        let trialEnd = trialAccessEnd(input)
+        for due in baseDueActions {
+            let remainingBudget = dueReminderBudget - plannedIntents.count
+            guard remainingBudget > 0 else { break }
             let retries = planRetryReminders(
-                for: nearestDue,
+                for: due,
                 retryAnchorByEpoch: retryAnchorByEpoch,
                 now: input.now,
                 intervalMinutes: input.autoReminderIntervalMinutes,
                 retryLimit: effectiveRetryLimit,
-                reminderHour: input.reminderHour,
-                reminderMinute: input.reminderMinute,
+                clock: input.clock,
                 budget: remainingBudget,
                 calendar: input.calendar
             )
-            plannedIntents.append(contentsOf: retries)
+            plannedIntents.append(contentsOf: retries.filter { retry in
+                trialEnd.map { retry.fireDate < $0 } ?? true
+            })
         }
 
-        var intents = Array(plannedIntents.prefix(dueReminderBudget)).map(Intent.due)
+        let snoozeEnd = input.smartRemindersEnabled ? (trialEnd ?? .distantFuture) : .distantPast
+        var intents = Array(plannedIntents.prefix(dueReminderBudget)).map { intent in
+            var intent = intent
+            intent.offersSnooze = intent.fireDate < snoozeEnd
+            return Intent.due(intent)
+        }
         if let supplyIntent {
             intents.append(.supply(supplyIntent))
         }
@@ -300,13 +330,14 @@ struct ReminderSchedulePlanner {
     /// they choose a plan. Grandfathered (legacy) users and subscribers keep
     /// their reminders. Only the trial notices may fire past this moment.
     private func hardPaywallAccessEnd(_ input: Input) -> Date? {
-        guard !input.hasEntitlement,
-              input.trialEndTerms == .hardPaywall,
-              let grantDate = input.trialGrantDate else { return nil }
-        return ReverseTrialClock(
-            grantDate: grantDate,
-            schedule: ActiveDaySchedule(pack: input.pack, calendar: input.calendar)
-        ).expiryMoment(calendar: input.calendar)
+        guard input.trialEndTerms == .hardPaywall else { return nil }
+        return trialAccessEnd(input)
+    }
+
+    /// When a Reverse Trial's Plus Access ends; `nil` for an entitled user or
+    /// one never granted a trial.
+    private func trialAccessEnd(_ input: Input) -> Date? {
+        input.trialClock?.expiryMoment(calendar: input.calendar)
     }
 
     /// Plans the Reverse Trial notices (#168 / ADR 0007) from
@@ -317,13 +348,7 @@ struct ReminderSchedulePlanner {
     private func planTrialExpiryWarnings(_ input: Input) -> [TrialExpiryWarningIntent] {
         // Entitled users never see expiry pressure: a mid-trial purchase replans
         // and the pending notices fall out of the managed set as stale.
-        guard !input.hasEntitlement, let grantDate = input.trialGrantDate else { return [] }
-
-        let clock = ReverseTrialClock(
-            grantDate: grantDate,
-            schedule: ActiveDaySchedule(pack: input.pack, calendar: input.calendar)
-        )
-        let expiry = clock.expiryMoment(calendar: input.calendar)
+        guard let expiry = trialAccessEnd(input) else { return [] }
         // Win-back slot 1 says the same thing on the same day (ENG-173).
         let winbackOwnsExpiryDay = input.winback != nil && input.trialEndTerms == .hardPaywall
         return Self.trialNoticeSlots.compactMap { slot in
@@ -377,8 +402,7 @@ struct ReminderSchedulePlanner {
         now: Date,
         intervalMinutes: Int,
         retryLimit: Int,
-        reminderHour: Int,
-        reminderMinute: Int,
+        clock: ReminderClock,
         budget: Int,
         calendar: Calendar
     ) -> [DueReminderIntent] {
@@ -392,17 +416,15 @@ struct ReminderSchedulePlanner {
             return []
         }
 
-        let windowEnd = DoseWindow.deadline(
-            for: dueDay,
-            hour: reminderHour,
-            minute: reminderMinute,
-            calendar: calendar
-        ) ?? endOfDayExclusive(for: dueDay, calendar: calendar)
+        let windowEnd = clock.deadline(for: dueDay) ?? endOfDayExclusive(for: dueDay, calendar: calendar)
         let interval = TimeInterval(max(1, intervalMinutes) * 60)
         var nextFire = anchor.addingTimeInterval(interval)
 
+        // Repeats caps the follow-ups per dose, so a slot that already passed still counts.
+        var slots = 0
         var intents: [DueReminderIntent] = []
-        while intents.count < cappedBudget && nextFire < windowEnd {
+        while slots < retryLimit && intents.count < cappedBudget && nextFire < windowEnd {
+            slots += 1
             if nextFire > now {
                 intents.append(
                     DueReminderIntent(
@@ -446,25 +468,11 @@ struct ReminderSchedulePlanner {
             return nil
         }
 
-        guard let fireDate = firstBaseReminderDateForDueAction(
-            dueDay: triggerDay,
-            now: input.now,
-            reminderHour: input.reminderHour,
-            reminderMinute: input.reminderMinute,
-            snoozeOverride: nil,
-            servedBaseFireDate: nil,
-            scheduleDay: input.scheduleDay,
-            calendar: input.calendar
-        ),
-        DoseWindow.isOpen(
-            day: triggerDay,
-            now: fireDate,
-            hour: input.reminderHour,
-            minute: input.reminderMinute,
-            calendar: input.calendar
-        ) else {
-            return nil
-        }
+        let fireDate = input.clock.reminder(on: triggerDay) ?? triggerDay
+        // One-shot, like the Cycle Transition Notice: once the threshold day's
+        // reminder moment passes, a rebuild must not turn it into a catch-up
+        // that re-fires after every foreground, check-in, or background refresh.
+        guard fireDate > input.now else { return nil }
 
         let dueDayEpoch = Int(input.calendar.startOfDay(for: triggerDay).timeIntervalSince1970)
         return SupplyReminderIntent(
@@ -515,12 +523,7 @@ struct ReminderSchedulePlanner {
 
         guard let transitionDay else { return nil }
 
-        let fireDate = reminderDate(
-            on: transitionDay,
-            hour: input.reminderHour,
-            minute: input.reminderMinute,
-            calendar: calendar
-        )
+        let fireDate = input.clock.reminder(on: transitionDay) ?? transitionDay
         // This is a one-shot informational notice, not a due action. Once its scheduled
         // moment passes, a later app-driven rebuild must not turn it into a catch-up
         // reminder and re-fire it throughout the transition day.
@@ -570,8 +573,7 @@ struct ReminderSchedulePlanner {
     private func firstBaseReminderDateForDueAction(
         dueDay: Date,
         now: Date,
-        reminderHour: Int,
-        reminderMinute: Int,
+        clock: ReminderClock,
         snoozeOverride: SnoozeOverride?,
         servedBaseFireDate: Date?,
         scheduleDay: Date,
@@ -584,13 +586,8 @@ struct ReminderSchedulePlanner {
             return max(snoozeOverride.firstFireDate, now.addingTimeInterval(1))
         }
 
-        let configured = reminderDate(on: dueDay, hour: reminderHour, minute: reminderMinute, calendar: calendar)
-        let windowEnd = DoseWindow.deadline(
-            for: dueDay,
-            hour: reminderHour,
-            minute: reminderMinute,
-            calendar: calendar
-        ) ?? endOfDayExclusive(for: dueDay, calendar: calendar)
+        let configured = clock.reminder(on: dueDay) ?? dueDay
+        let windowEnd = clock.deadline(for: dueDay) ?? endOfDayExclusive(for: dueDay, calendar: calendar)
 
         guard isCatchUpTerritory(
             dueDay: dueDay,
@@ -602,13 +599,17 @@ struct ReminderSchedulePlanner {
             return configured
         }
 
-        if let served = servedBaseFireDate {
+        let catchUp = now.addingTimeInterval(TimeInterval(Self.catchupDelayMinutes * 60))
+        // A catch-up is planned at most a minute out, so a served base later than
+        // that is still pending at an older, later reminder time. That time no
+        // longer applies, so the day catches up instead.
+        if let served = servedBaseFireDate, served <= catchUp {
             if served <= now { return nil }
             if served < windowEnd { return served }
             return nil
         }
 
-        return now.addingTimeInterval(TimeInterval(Self.catchupDelayMinutes * 60))
+        return catchUp
     }
 
     /// The day's original first-reminder moment, anchoring retry cadence. Outside
@@ -616,13 +617,12 @@ struct ReminderSchedulePlanner {
     private func originalFirstReminderDate(
         dueDay: Date,
         now: Date,
-        reminderHour: Int,
-        reminderMinute: Int,
+        clock: ReminderClock,
         servedBaseFireDate: Date?,
         scheduleDay: Date,
         calendar: Calendar
     ) -> Date {
-        let configured = reminderDate(on: dueDay, hour: reminderHour, minute: reminderMinute, calendar: calendar)
+        let configured = clock.reminder(on: dueDay) ?? dueDay
         if let servedBaseFireDate,
            isCatchUpTerritory(
             dueDay: dueDay,

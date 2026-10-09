@@ -24,6 +24,8 @@ struct HomePackProgress: Hashable, Sendable {
     let elapsedDays: Int
     let isTodayTaken: Bool
     let missedDays: Set<Int>
+    /// On day 1, the pill the pack before missed yesterday.
+    let previousPackMissedPill: Int?
     let lateEndsTomorrow: Bool?
     /// Calendar weekday (1 = Sunday) of the pack's day 1.
     let dayOneWeekday: Int
@@ -33,6 +35,7 @@ struct HomePackProgress: Hashable, Sendable {
         elapsedDays: Int,
         isTodayTaken: Bool,
         missedDays: Set<Int> = [],
+        previousPackMissedPill: Int? = nil,
         lateUntil: Date? = nil,
         today: Date,
         now: Date,
@@ -42,6 +45,7 @@ struct HomePackProgress: Hashable, Sendable {
         self.elapsedDays = elapsedDays
         self.isTodayTaken = isTodayTaken
         self.missedDays = missedDays
+        self.previousPackMissedPill = previousPackMissedPill
         lateEndsTomorrow = lateUntil.map { !calendar.isDate($0, inSameDayAs: now) }
         let dayOne = calendar.date(byAdding: .day, value: -elapsedDays, to: calendar.startOfDay(for: today)) ?? today
         dayOneWeekday = calendar.component(.weekday, from: dayOne)
@@ -66,12 +70,10 @@ struct HomePackProgress: Hashable, Sendable {
     }
 
     var status: Status {
+        if !isTodayTaken, let missedYesterday { return .missedYesterday(pillNumber: missedYesterday) }
         if isFinished { return .finished }
         let day = regimen.day(atIndex: elapsedDays)
         if isTodayTaken { return .taken }
-        if missedDays.contains(elapsedDays - 1) {
-            return .missedYesterday(pillNumber: regimen.day(atIndex: elapsedDays - 1).number)
-        }
         if let lateEndsTomorrow { return .late(endsTomorrow: lateEndsTomorrow) }
         switch day.kind {
         case .noPill: return .breakDay
@@ -83,6 +85,12 @@ struct HomePackProgress: Hashable, Sendable {
             }
             return .pill
         }
+    }
+
+    /// Yesterday's pill when it went unlogged: this pack's, or the pack before's on day 1.
+    private var missedYesterday: Int? {
+        guard elapsedDays > 0 else { return previousPackMissedPill }
+        return missedDays.contains(elapsedDays - 1) ? regimen.day(atIndex: elapsedDays - 1).number : nil
     }
 
     func title(locale: Locale) -> String {
@@ -158,5 +166,51 @@ struct HomePackProgress: Hashable, Sendable {
         calendar.locale = locale
         let weekday = (dayOneWeekday - 1 + regimen.totalDays) % 7
         return calendar.weekdaySymbols[weekday]
+    }
+}
+
+extension HomePackProgress {
+    /// Home's pill pack as the store reads it on the live day.
+    static func live(store: PillStore, isTodayTaken: Bool, now: Date, calendar: Calendar = .current) -> HomePackProgress {
+        let pack = store.pack
+        let today = store.today
+        let elapsedDays = pack.elapsedCycleDays(on: today)
+        let lateUntil: Date? = if case .late(let until)? = store.doseStanding(on: today) { until } else { nil }
+        return HomePackProgress(
+            regimen: pack.regimen,
+            elapsedDays: elapsedDays,
+            isTodayTaken: isTodayTaken,
+            missedDays: missedDays(in: store, elapsedDays: elapsedDays, totalDays: pack.regimen.totalDays, today: today, calendar: calendar),
+            previousPackMissedPill: elapsedDays == 0
+                ? calendar.date(byAdding: .day, value: -1, to: today).flatMap { missedPill(on: $0, in: store) }
+                : nil,
+            lateUntil: lateUntil,
+            today: today,
+            now: now,
+            calendar: calendar
+        )
+    }
+
+    /// The number of a missed pill, read from the pack that held it.
+    private static func missedPill(on day: Date, in store: PillStore) -> Int? {
+        guard let snapshot = store.scheduleSnapshot(for: day), snapshot.status == .missed else { return nil }
+        return snapshot.pack.regimen.day(atIndex: snapshot.cycleDayIndex).number
+    }
+
+    private static func missedDays(
+        in store: PillStore,
+        elapsedDays: Int,
+        totalDays: Int,
+        today: Date,
+        calendar: Calendar
+    ) -> Set<Int> {
+        let pastDays = min(elapsedDays, totalDays)
+        guard pastDays > 0, var day = calendar.date(byAdding: .day, value: -elapsedDays, to: today) else { return [] }
+        var missed: Set<Int> = []
+        for index in 0..<pastDays {
+            if store.statusForDate(day) == .missed { missed.insert(index) }
+            day = calendar.date(byAdding: .day, value: 1, to: day) ?? day
+        }
+        return missed
     }
 }

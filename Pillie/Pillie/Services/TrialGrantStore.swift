@@ -6,16 +6,19 @@
 import Foundation
 import Security
 
-/// Persistence seam for the Reverse Trial grant timestamp and immutable terms
-/// cohort (ADRs 0007/0008). `trialActive` is always re-derived through
-/// `ReverseTrialClock` so the trial state cannot be edited independently; the
-/// cohort may be recorded before grant so reinstalling mid-onboarding cannot
-/// move an installation across the cutover.
+/// Persistence seam for the Reverse Trial grant timestamp, its day ledger, and
+/// the immutable terms cohort (ADRs 0007/0008). `trialActive` is always
+/// re-derived through `ReverseTrialClock` so the trial state cannot be edited
+/// independently; the cohort may be recorded before grant so reinstalling
+/// mid-onboarding cannot move an installation across the cutover.
 nonisolated protocol TrialGrantStoring {
     func loadGrantDate() -> Date?
     func saveGrantDate(_ date: Date)
     func loadTermsCohort() -> TrialTermsCohort?
     func saveTermsCohort(_ cohort: TrialTermsCohort)
+    func loadDayLedger() -> TrialDayLedger?
+    func saveDayLedger(_ ledger: TrialDayLedger)
+    /// Removes the grant, its day ledger, and the cohort.
     func clearGrantDate()
 }
 
@@ -31,6 +34,7 @@ nonisolated final class KeychainTrialGrantStore: TrialGrantStoring {
     private static let service = "com.idrisskone.pillie.reverse-trial"
     private static let account = "reverse_trial_grant_date"
     private static let cohortAccount = "reverse_trial_terms_cohort"
+    private static let ledgerAccount = "reverse_trial_day_ledger"
 
     private var baseQuery: [String: Any] {
         [
@@ -45,6 +49,14 @@ nonisolated final class KeychainTrialGrantStore: TrialGrantStoring {
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: Self.service,
             kSecAttrAccount as String: Self.cohortAccount,
+        ]
+    }
+
+    private var ledgerQuery: [String: Any] {
+        [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: Self.service,
+            kSecAttrAccount as String: Self.ledgerAccount,
         ]
     }
 
@@ -100,9 +112,34 @@ nonisolated final class KeychainTrialGrantStore: TrialGrantStoring {
         }
     }
 
+    func loadDayLedger() -> TrialDayLedger? {
+        var query = ledgerQuery
+        query[kSecReturnData as String] = true
+        query[kSecMatchLimit as String] = kSecMatchLimitOne
+
+        var result: AnyObject?
+        guard SecItemCopyMatching(query as CFDictionary, &result) == errSecSuccess,
+              let data = result as? Data
+        else { return nil }
+        return try? JSONDecoder().decode(TrialDayLedger.self, from: data)
+    }
+
+    func saveDayLedger(_ ledger: TrialDayLedger) {
+        guard let data = try? JSONEncoder().encode(ledger) else { return }
+        var attributes = ledgerQuery
+        attributes[kSecValueData as String] = data
+        attributes[kSecAttrAccessible as String] = kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
+
+        let status = SecItemAdd(attributes as CFDictionary, nil)
+        if status == errSecDuplicateItem {
+            SecItemUpdate(ledgerQuery as CFDictionary, [kSecValueData as String: data] as CFDictionary)
+        }
+    }
+
     func clearGrantDate() {
         SecItemDelete(baseQuery as CFDictionary)
         SecItemDelete(cohortQuery as CFDictionary)
+        SecItemDelete(ledgerQuery as CFDictionary)
     }
 }
 
@@ -112,13 +149,17 @@ nonisolated final class KeychainTrialGrantStore: TrialGrantStoring {
 nonisolated final class InMemoryTrialGrantStore: TrialGrantStoring {
     private(set) var grantDate: Date?
     private(set) var termsCohort: TrialTermsCohort?
+    private(set) var dayLedger: TrialDayLedger?
 
     func loadGrantDate() -> Date? { grantDate }
     func saveGrantDate(_ date: Date) { grantDate = date }
     func loadTermsCohort() -> TrialTermsCohort? { termsCohort }
     func saveTermsCohort(_ cohort: TrialTermsCohort) { termsCohort = cohort }
+    func loadDayLedger() -> TrialDayLedger? { dayLedger }
+    func saveDayLedger(_ ledger: TrialDayLedger) { dayLedger = ledger }
     func clearGrantDate() {
         grantDate = nil
         termsCohort = nil
+        dayLedger = nil
     }
 }

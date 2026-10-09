@@ -76,6 +76,21 @@ final class CatchUpStoreTests: XCTestCase {
         XCTAssertNil(store.openCatchUp)
     }
 
+    func testTappingTheHighlightedMissedRowKeepsTheLateLog() throws {
+        let store = try patchStore(today: "2026-05-18").store
+        let changeDay = day("2026-05-15")
+        store.logCatchUp()
+        let snapshot = try XCTUnwrap(store.scheduleSnapshot(for: changeDay))
+        let highlighted = try XCTUnwrap(HistoryEditableDay(snapshot: snapshot, relation: .past)).options.currentOutcome
+        XCTAssertEqual(highlighted, .unlogged)
+
+        XCTAssertFalse(store.correctPastDay(on: changeDay, to: highlighted))
+
+        XCTAssertEqual(store.caughtUpAt(on: changeDay), InMemoryStoreFactory.localDate("2026-05-18", hour: 12))
+        XCTAssertNil(store.openCatchUp)
+        XCTAssertTrue(store.isCaughtUpToday)
+    }
+
     func testTheNextTaskDayClosesTheWindow() throws {
         let store = try patchStore(today: "2026-05-22").store
 

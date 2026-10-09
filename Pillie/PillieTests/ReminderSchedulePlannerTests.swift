@@ -93,6 +93,35 @@ final class ReminderSchedulePlannerTests: XCTestCase {
         XCTAssertEqual(todayIntents.filter { $0.kind == .retry }.count, 3)
     }
 
+    func testPlusFollowUpsArePlannedForEveryUntakenDueDay() throws {
+        // Nothing rebuilds when the window rolls over at the next reminder, so the
+        // plan made while today is still untaken must carry tomorrow's follow-ups.
+        let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 10)
+        let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
+        let tomorrowEpoch = epochDay(for: InMemoryStoreFactory.localDate("2026-05-27", hour: 12))
+
+        let intents = dueIntents(
+            for: fixture.store,
+            now: now,
+            autoReminderRetryLimit: 3,
+            smartRemindersEnabled: true
+        )
+        let retries = intents.filter { $0.kind == .retry }
+
+        XCTAssertEqual(
+            retries.filter { $0.dueDayEpoch == tomorrowEpoch }.map(\.fireDate),
+            [
+                InMemoryStoreFactory.localDate("2026-05-27", hour: 8, minute: 10),
+                InMemoryStoreFactory.localDate("2026-05-27", hour: 8, minute: 20),
+                InMemoryStoreFactory.localDate("2026-05-27", hour: 8, minute: 30)
+            ]
+        )
+        XCTAssertEqual(
+            Set(retries.map(\.dueDayEpoch)),
+            Set(intents.filter { $0.kind == .base }.map(\.dueDayEpoch))
+        )
+    }
+
     func testTreatsSnoozeAsSeparateFromAutomaticRetries() throws {
         let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 7)
         let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
@@ -209,6 +238,26 @@ final class ReminderSchedulePlannerTests: XCTestCase {
         XCTAssertEqual(pillSupply.map(\.method), [.pill])
         XCTAssertEqual(patchSupply.map(\.method), [.patch])
         XCTAssertTrue(ringSupply.isEmpty)
+    }
+
+    func testSupplyReminderFiresOnceOnItsThresholdDay() throws {
+        // 21/7 from 1 May: 24 May leaves 5 pills, the refill threshold. Reminder 08:00.
+        let fixture = try InMemoryStoreFactory.makeStore(
+            now: InMemoryStoreFactory.localDate("2026-05-24", hour: 7),
+            startDate: Calendar.current.startOfDay(for: InMemoryStoreFactory.localDate("2026-05-01", hour: 12))
+        )
+        fixture.store.refillReminderThresholdDays = 5
+
+        func supplyFireDates(atHour hour: Int) -> [Date] {
+            let now = InMemoryStoreFactory.localDate("2026-05-24", hour: hour)
+            PillieClock.setFixedNowForTesting(now)
+            return supplyIntents(for: fixture.store, now: now).map(\.fireDate)
+        }
+
+        XCTAssertEqual(supplyFireDates(atHour: 7), [InMemoryStoreFactory.localDate("2026-05-24", hour: 8)])
+        // Every later rebuild that day (a foreground, a check-in) must not re-arm it.
+        XCTAssertEqual(supplyFireDates(atHour: 10), [])
+        XCTAssertEqual(supplyFireDates(atHour: 14), [])
     }
 
     // MARK: - Cycle Transition Notice (#123)
@@ -424,6 +473,30 @@ final class ReminderSchedulePlannerTests: XCTestCase {
         XCTAssertEqual(
             todayBase.fireDate,
             InMemoryStoreFactory.localDate("2026-05-26", hour: 22, minute: 0)
+        )
+    }
+
+    func testReminderMovedBeforeNowCatchesUpInsteadOfWaitingForTheOldTime() throws {
+        // At 10:00 the reminder moves from 22:00 to 08:00 while today's base is still
+        // pending at 22:00. A time before now catches up within a minute (US-11).
+        let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 10, minute: 0)
+        let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
+        fixture.store.reminderHour = 8
+        fixture.store.reminderMinute = 0
+        let todayEpoch = epochDay(for: now)
+        let pendingAtOldTime = InMemoryStoreFactory.localDate("2026-05-26", hour: 22, minute: 0)
+
+        let todayBase = try XCTUnwrap(
+            dueIntents(
+                for: fixture.store,
+                now: now,
+                servedBaseFireDateByDueDayEpoch: [todayEpoch: pendingAtOldTime]
+            ).first { $0.dueDayEpoch == todayEpoch && $0.kind == .base }
+        )
+
+        XCTAssertEqual(
+            todayBase.fireDate,
+            InMemoryStoreFactory.localDate("2026-05-26", hour: 10, minute: 1)
         )
     }
 
@@ -671,6 +744,32 @@ final class ReminderSchedulePlannerTests: XCTestCase {
         }
     }
 
+    func testStreakAtRiskNilOnSugarPillReminder() throws {
+        // 21/7 from 1 May: 21 May is hormone pill 21, 22 May the first sugar pill.
+        // Sugar pills never touch the streak, so their reminder must not name it.
+        let fixture = try InMemoryStoreFactory.makeStore(
+            now: InMemoryStoreFactory.localDate("2026-05-21", hour: 10),
+            startDate: Calendar.current.startOfDay(for: InMemoryStoreFactory.localDate("2026-05-01", hour: 12))
+        )
+
+        func nearestBase(on day: String) throws -> ReminderSchedulePlanner.DueReminderIntent {
+            let now = InMemoryStoreFactory.localDate(day, hour: 10)
+            PillieClock.setFixedNowForTesting(now)
+            let dayEpoch = epochDay(for: now)
+            return try XCTUnwrap(
+                dueIntents(for: fixture.store, now: now, currentStreak: 3)
+                    .first { $0.dueDayEpoch == dayEpoch && $0.kind == .base }
+            )
+        }
+
+        let hormoneBase = try nearestBase(on: "2026-05-21")
+        let sugarBase = try nearestBase(on: "2026-05-22")
+
+        XCTAssertEqual(hormoneBase.action.type, .pillActive)
+        XCTAssertEqual(sugarBase.action.type, .pillSugar)
+        XCTAssertEqual([hormoneBase.streakAtRisk, sugarBase.streakAtRisk], [3, nil])
+    }
+
     func testStreakAtRiskNilOnRetriesForPlusUser() throws {
         let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 7)
         let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
@@ -689,6 +788,43 @@ final class ReminderSchedulePlannerTests: XCTestCase {
         XCTAssertEqual(retries.count, 3)
         XCTAssertTrue(retries.allSatisfy { $0.streakAtRisk == nil })
         XCTAssertEqual(todayIntents.first { $0.kind == .base }?.streakAtRisk, 1)
+    }
+
+    func testRepeatsCountTheFollowUpsThatAlreadyFired() throws {
+        // The 8:00 reminder and its 8:10, 8:20 and 8:30 follow-ups fired; the app opens at 8:45.
+        let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 8, minute: 45)
+        let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
+        let todayEpoch = epochDay(for: now)
+
+        let retries = dueIntents(
+            for: fixture.store,
+            now: now,
+            autoReminderRetryLimit: 3,
+            servedBaseFireDateByDueDayEpoch: [todayEpoch: InMemoryStoreFactory.localDate("2026-05-26", hour: 8)]
+        )
+        .filter { $0.dueDayEpoch == todayEpoch && $0.kind == .retry }
+
+        XCTAssertEqual(retries.map(\.fireDate), [])
+    }
+
+    func testRepeatsKeepOnlyTheFollowUpsStillAhead() throws {
+        // The 8:00 reminder and its 8:10 follow-up fired; the app opens at 8:15.
+        let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 8, minute: 15)
+        let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
+        let todayEpoch = epochDay(for: now)
+
+        let retries = dueIntents(
+            for: fixture.store,
+            now: now,
+            autoReminderRetryLimit: 3,
+            servedBaseFireDateByDueDayEpoch: [todayEpoch: InMemoryStoreFactory.localDate("2026-05-26", hour: 8)]
+        )
+        .filter { $0.dueDayEpoch == todayEpoch && $0.kind == .retry }
+
+        XCTAssertEqual(retries.map(\.fireDate), [
+            InMemoryStoreFactory.localDate("2026-05-26", hour: 8, minute: 20),
+            InMemoryStoreFactory.localDate("2026-05-26", hour: 8, minute: 30)
+        ])
     }
 
     private func plan(

@@ -41,14 +41,14 @@ ACTIVE_DAY_TOKENS: dict[str, tuple[str, ...]] = {
     "pl": ("aktywn",),
     "cs": ("aktivn",),
     "sk": ("aktívn",),
-    "da": ("aktive",),
-    "sv": ("aktiva",),
-    "nb": ("aktive",),
+    "da": ("aktiv",),
+    "sv": ("aktiv",),
+    "nb": ("aktiv",),
     "fi": ("aktiiv",),
     "hr": ("aktivn",),
     "sl": ("aktivn",),
     "hu": ("aktív",),
-    "ro": ("active",),
+    "ro": ("activ",),
     "el": ("ενεργ",),
     "tr": ("aktif",),
     "ru": ("активн",),
@@ -80,9 +80,28 @@ ENGLISH_NEEDLE = "active day"
 
 
 def localization_value(entry: dict, lang: str) -> str | None:
-    unit = (entry.get("localizations") or {}).get(lang, {}).get("stringUnit") or {}
+    """The plain value, or a plural entry's "other" form. copy-inventory.py imports it."""
+    localization = (entry.get("localizations") or {}).get(lang) or {}
+    plural = (localization.get("variations") or {}).get("plural") or {}
+    unit = localization.get("stringUnit") or (plural.get("other") or {}).get("stringUnit") or {}
     value = unit.get("value")
     return value if isinstance(value, str) else None
+
+
+def variant_values(localization: dict) -> list[str]:
+    """The plain value, or every plural variant's value."""
+    unit = localization.get("stringUnit") or {}
+    if isinstance(unit.get("value"), str):
+        return [unit["value"]]
+    values: list[str] = []
+    for cases in (localization.get("variations") or {}).values():
+        for nested in cases.values():
+            values.extend(variant_values(nested))
+    return values
+
+
+def localization_values(entry: dict, lang: str) -> list[str]:
+    return variant_values((entry.get("localizations") or {}).get(lang) or {})
 
 
 def has_token(value: str, tokens: tuple[str, ...]) -> bool:
@@ -98,21 +117,22 @@ def main() -> int:
         catalog = json.loads(catalog_path.read_text())
         table = catalog_path.stem
         for key, entry in (catalog.get("strings") or {}).items():
-            english = localization_value(entry, "en")
-            if not english or ENGLISH_NEEDLE not in english.casefold():
+            english = localization_values(entry, "en")
+            if not any(ENGLISH_NEEDLE in value.casefold() for value in english):
                 continue
             checked += 1
             for lang in APP_LANGUAGE_CODES:
                 if lang == "en":
                     continue
-                value = localization_value(entry, lang)
+                values = localization_values(entry, lang)
                 label = f"{table}:{key} [{lang}]"
-                if value is None:
+                if not values:
                     errors.append(f"{label}: missing translation")
                     continue
                 tokens = ACTIVE_DAY_TOKENS[lang]
-                if not has_token(value, tokens):
-                    errors.append(f"{label}: missing active-day wording: {value!r}")
+                for value in values:
+                    if not has_token(value, tokens):
+                        errors.append(f"{label}: missing active-day wording: {value!r}")
 
     if errors:
         print(f"checked {checked} English active-day keys")

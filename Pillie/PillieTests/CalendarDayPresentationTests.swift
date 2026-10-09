@@ -113,6 +113,24 @@ final class CalendarDayPresentationTests: XCTestCase {
         )
     }
 
+    func testTodaysOpenRingTaskReadsAsDueUntilItIsLogged() throws {
+        func todayStyle(_ type: PillDay.ActionType, _ status: PillDay.Status) throws -> CalendarRingSemanticStyle {
+            CalendarDayPresentation.resolve(
+                snapshot: try snapshot(method: .ring, type: type, status: status),
+                fallbackMethod: .pill,
+                relation: .today
+            ).ringStyle
+        }
+
+        XCTAssertEqual(try todayStyle(.ringInsert, .upcoming), .plannedInserted)
+        XCTAssertEqual(try todayStyle(.ringRemove, .upcoming), .plannedInserted)
+        XCTAssertEqual(try todayStyle(.ringReinsert, .upcoming), .plannedReinserted)
+        XCTAssertEqual(try todayStyle(.ringRemove, .taken), .inserted)
+        XCTAssertEqual(try todayStyle(.ringReinsert, .taken), .reinserted)
+        // A wearing day has nothing to log, so its open window still reads as worn.
+        XCTAssertEqual(try todayStyle(.ringActive, .upcoming), .inserted)
+    }
+
     func testUserDeclaredBreakOnPatchAndRingActiveDaysUsesOffWeekStyles() throws {
         XCTAssertEqual(
             CalendarDayPresentation.resolve(
@@ -143,6 +161,57 @@ final class CalendarDayPresentationTests: XCTestCase {
         XCTAssertFalse(presentation.hasScheduleContext)
         XCTAssertEqual(presentation.ringStyle, .invalid)
         XCTAssertEqual(presentation.defaultIndicatorOpacity, 1)
+    }
+
+    // MARK: VoiceOver
+
+    /// What VoiceOver reads for a History day, as CalendarGrid asks for it.
+    private func voiceOverLabel(_ presentation: CalendarDayPresentation) -> String {
+        HistoryPresentation.dayAccessibilityLabel(
+            date: Self.voiceOverDate,
+            status: presentation.historyStatus,
+            locale: Locale(identifier: "en")
+        )
+    }
+
+    private static let voiceOverDate = InMemoryStoreFactory.fixedDate("2026-06-03")
+
+    private var voiceOverDateText: String {
+        Self.voiceOverDate.formatted(Date.FormatStyle().day().month(.wide).year().locale(Locale(identifier: "en")))
+    }
+
+    func testVoiceOverNamesTodaysOpenDoseAndSugarPillToday() throws {
+        for type in [PillDay.ActionType.pillActive, .pillSugar] {
+            let presentation = CalendarDayPresentation.resolve(
+                snapshot: try snapshot(method: .pill, type: type, status: .upcoming),
+                fallbackMethod: .pill,
+                relation: .today
+            )
+
+            XCTAssertEqual(voiceOverLabel(presentation), "\(voiceOverDateText): Today", "\(type)")
+        }
+    }
+
+    func testVoiceOverReadsADayWithNothingRecordedByItsDateAlone() throws {
+        let beforeTracking = CalendarDayPresentation.resolve(
+            snapshot: try snapshot(method: .pill, type: .pillActive, status: .noData),
+            fallbackMethod: .pill,
+            relation: .past
+        )
+        let beforeAnyPack = CalendarDayPresentation.resolve(snapshot: nil, fallbackMethod: .pill, relation: .past)
+
+        XCTAssertEqual(voiceOverLabel(beforeTracking), voiceOverDateText)
+        XCTAssertEqual(voiceOverLabel(beforeAnyPack), voiceOverDateText)
+    }
+
+    func testVoiceOverStillNamesAMissedDayMissed() throws {
+        let presentation = CalendarDayPresentation.resolve(
+            snapshot: try snapshot(method: .pill, type: .pillActive, status: .missed),
+            fallbackMethod: .pill,
+            relation: .past
+        )
+
+        XCTAssertEqual(voiceOverLabel(presentation), "\(voiceOverDateText): Missed")
     }
 
     /// Packs backing fabricated snapshots. The Xcode 27 beta hosted-XCTest runner

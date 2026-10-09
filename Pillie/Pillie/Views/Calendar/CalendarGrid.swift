@@ -269,11 +269,6 @@ struct CalendarGrid: View, Equatable {
         presentation: CalendarDayPresentation
     ) -> String {
         guard let date else { return "" }
-        if presentation.isFutureDay {
-            return date.formatted(
-                Date.FormatStyle().day().month(.wide).year().locale(locale)
-            )
-        }
         return HistoryPresentation.dayAccessibilityLabel(
             date: date,
             status: presentation.historyStatus,

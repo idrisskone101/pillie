@@ -1,11 +1,13 @@
 # Home pack card (HomePackCard.swift, ENG-145) across the pack's days: the last
 # hormone pill, the sugar week, and a finished pack. Headers come from
-# HomePackProgress (home.pack.* in Localizable.xcstrings).
+# HomePackProgress (home.pack.* in Localizable.xcstrings). The clock is pinned
+# so the seeded packs never depend on the real date.
 fresh
 launch
 wait text "Get started" 15
 openurl "pillie://debug/plus-home?lang=en"
 openurl pillie://debug/trial-grant?lang=en
+openurl pillie://debug/fixed-now?at=2026-09-28T20:00:00Z
 
 # DebugQA.trialEveOfBreak: today is pill 21 of a 21/7 pack.
 openurl pillie://debug/trial-eve-of-break?lang=en
@@ -18,9 +20,11 @@ openurl pillie://debug/trial-break-week?lang=en
 wait text "Sugar pill 7 of 7" 10
 shot sugar-pill-week
 
-# One live day later every pill is out; the refill banner offers the next pack.
+# One live day later every pill is out. An unlogged sugar pill closes as a
+# break, never a miss, so the card reads finished rather than missed.
 openurl pillie://debug/fixed-now?at=2026-09-29T20:00:00Z
 wait text "Pack finished" 10
 expect text "Every pill is out"
+gone text "not checked in yesterday" 5
 shot pack-finished
 openurl pillie://debug/fixed-now?at=off

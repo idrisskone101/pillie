@@ -204,7 +204,7 @@ struct SugarPillStoreTests {
         let store = try store(regimen: .twentyFourFour, now: InMemoryStoreFactory.localDate("2026-05-24", hour: 12))
         let hormoneDay = InMemoryStoreFactory.localDate("2026-05-24", hour: 0)
         let sugarDay = InMemoryStoreFactory.localDate("2026-05-25", hour: 0)
-        func history(_ date: Date, _ relation: CalendarDayRelation) -> (PillDay.Status?, HistoryPresentation.DayStatus) {
+        func history(_ date: Date, _ relation: CalendarDayRelation) -> (PillDay.Status?, HistoryPresentation.DayStatus?) {
             let snapshot = store.scheduleSnapshot(for: date)
             let presentation = CalendarDayPresentation.resolve(snapshot: snapshot, fallbackMethod: .pill, relation: relation)
             return (snapshot?.status, presentation.historyStatus)
@@ -212,14 +212,14 @@ struct SugarPillStoreTests {
 
         let hormoneToday = history(hormoneDay, .today)
         #expect(hormoneToday.0 == .upcoming)
-        #expect(hormoneToday.1 == .unlogged)
+        #expect(hormoneToday.1 == .today)
 
         PillieClock.setFixedNowForTesting(InMemoryStoreFactory.localDate("2026-05-25", hour: 12))
         store.refreshDayContextIfNeeded()
         #expect(store.todayDueAction?.type == .pillSugar)
         let sugarToday = history(sugarDay, .today)
         #expect(sugarToday.0 == .upcoming)
-        #expect(sugarToday.1 == .unlogged)
+        #expect(sugarToday.1 == .today)
 
         PillieClock.setFixedNowForTesting(InMemoryStoreFactory.localDate("2026-05-26", hour: 12))
         store.refreshDayContextIfNeeded()

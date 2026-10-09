@@ -268,6 +268,34 @@ final class TodayPillCommitTests: XCTestCase {
         XCTAssertTrue(harness.recorder.completions.isEmpty)
     }
 
+    func testANotYetPickAfterTheReminderIsStillTheOpenPillPastMidnight() throws {
+        let pickedAt = InMemoryStoreFactory.localDate("2026-10-06", hour: 23, minute: 30)
+        let now = InMemoryStoreFactory.localDate("2026-10-07", hour: 0, minute: 10)
+        let harness = try makeHarness(now: now, reminderHour: 21)
+
+        harness.commit(pick(11, .notYet), pickedAt: pickedAt)
+
+        let store = harness.store
+        let pickedDay = day(0, from: pickedAt)
+        XCTAssertEqual(store.today, pickedDay)
+        XCTAssertEqual(store.currentDayIndex + 1, 12)
+        XCTAssertEqual(store.statusForDate(pickedDay), .upcoming)
+        XCTAssertFalse(store.isTodayTaken)
+    }
+
+    func testANotYetPickWhoseReminderFiresBeforeContinueIsDueNow() throws {
+        let pickedAt = InMemoryStoreFactory.localDate("2026-09-27", hour: 19, minute: 50)
+        let now = InMemoryStoreFactory.localDate("2026-09-27", hour: 20, minute: 10)
+        let harness = try makeHarness(now: now, reminderHour: 20)
+
+        harness.commit(pick(11, .notYet), pickedAt: pickedAt)
+
+        let store = harness.store
+        XCTAssertEqual(store.today, day(0, from: now))
+        XCTAssertEqual(store.currentDayIndex + 1, 12)
+        XCTAssertEqual(store.statusForDate(day(0, from: now)), .upcoming)
+    }
+
     func testCrossingTheReminderBeforeContinueMovesToTheNextPill() throws {
         let pickedAt = InMemoryStoreFactory.localDate("2026-09-27", hour: 19, minute: 50)
         let now = InMemoryStoreFactory.localDate("2026-09-27", hour: 20, minute: 10)
@@ -301,6 +329,53 @@ final class TodayPillCommitTests: XCTestCase {
         XCTAssertEqual(harness.store.pack.pillRegimen, .custom)
         XCTAssertEqual(harness.store.pack.regimen, PackRegimen(activeDays: 88, breakDays: 3))
         XCTAssertEqual(harness.store.pack.cycleDayIndex(on: now), 60)
+    }
+
+    func testContinueOnAPickRestoredDaysLaterKeepsTheDayItNamed() throws {
+        let pickedAt = InMemoryStoreFactory.localDate("2026-09-27", hour: 12, minute: 24)
+        let now = InMemoryStoreFactory.localDate("2026-09-29", hour: 12, minute: 24)
+        let harness = try makeHarness(now: now, reminderHour: 8)
+        pick(11, .taken).save(to: harness.defaults, at: pickedAt)
+
+        // Resumed two days later, step 7 restores the pick and Continue saves it again unchanged.
+        try XCTUnwrap(TodayPillPick.load(from: harness.defaults)).save(to: harness.defaults)
+        TodayPillCommit.run(
+            try XCTUnwrap(OnboardingDraft<TodayPillPick>.load(from: harness.defaults)),
+            store: harness.store,
+            now: now,
+            defaults: harness.defaults,
+            telemetry: harness.telemetry
+        )
+
+        XCTAssertEqual(harness.store.currentDayIndex + 1, 14)
+        XCTAssertFalse(harness.store.isTodayTaken)
+    }
+
+    /// The decision Home reads for its Review Prompt card.
+    private func reviewPrompt(_ harness: Harness) -> ReviewPromptEligibility.Decision {
+        harness.store.homeReviewPromptDecision(higherPriorityCardShowing: false, defaults: harness.defaults)
+    }
+
+    /// Pill 12 is logged in onboarding on 27 Sep; Home's button logs pills 13 and 14 after the next two reminders.
+    func testAPillLoggedInOnboardingStillReachesTheReviewPromptAfterTwoCheckInsOnHome() throws {
+        let now = InMemoryStoreFactory.localDate("2026-09-27", hour: 21, minute: 5)
+        let harness = try makeHarness(now: now, reminderHour: 20)
+        harness.store.reviewPromptPermanentlySuppressed = false
+        harness.store.reviewPromptLastSoftDismissal = nil
+        harness.store.reviewPromptSoftDismissalCount = 0
+
+        harness.commit(pick(11, .taken))
+
+        XCTAssertEqual(reviewPrompt(harness), .suppressed(.ineligibleStreak))
+
+        for iso in ["2026-09-28", "2026-09-29"] {
+            PillieClock.setFixedNowForTesting(InMemoryStoreFactory.localDate(iso, hour: 21, minute: 5))
+            harness.store.refreshDayContextIfNeeded()
+            harness.store.markTodayAsTaken()
+        }
+
+        XCTAssertEqual(harness.store.currentStreak, 3)
+        XCTAssertEqual(reviewPrompt(harness), .show)
     }
 }
 

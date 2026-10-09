@@ -13,7 +13,10 @@ import Foundation
 /// on a 21/7) is hormone-active. Placebo / patch-off / ring-off is not.
 /// `PillPack.isBreakDay` is the wrong predicate — it treats that remove day
 /// as a break.
-struct ActiveDaySchedule: Equatable, Sendable {
+///
+/// `nonisolated`: the snapshot is saved beside the Keychain grant, which the
+/// nonisolated grant store encodes.
+nonisolated struct ActiveDaySchedule: Codable, Equatable, Sendable {
     var anchorDate: Date
     var anchorDayIndex: Int
     var cycleLength: Int
@@ -45,6 +48,18 @@ struct ActiveDaySchedule: Equatable, Sendable {
         self.hormoneActiveIndices = normalized.isEmpty ? Set(0..<length) : normalized
     }
 
+    /// Decodes through the normalizing init: the saved snapshot outlives a
+    /// reinstall, so a corrupt one must not reach `normalizedIndex` unchecked.
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.init(
+            anchorDate: try container.decode(Date.self, forKey: .anchorDate),
+            anchorDayIndex: try container.decode(Int.self, forKey: .anchorDayIndex),
+            cycleLength: try container.decode(Int.self, forKey: .cycleLength),
+            hormoneActiveIndices: try container.decode(Set<Int>.self, forKey: .hormoneActiveIndices)
+        )
+    }
+
     /// Pill-prefix convenience for tests: indices `0..<activeDays` consume.
     /// Do not use this for patch or ring — day 22 is hormone-active.
     init(anchorDate: Date, anchorDayIndex: Int, activeDays: Int, cycleLength: Int) {
@@ -61,6 +76,7 @@ struct ActiveDaySchedule: Equatable, Sendable {
     /// Snapshot the live pack. A missing pack is every calendar day — never a
     /// fabricated 21/7. Continuous packs (every index hormone-active) collapse
     /// to `.everyCalendarDay` as well.
+    @MainActor
     init(pack: PillPack?, calendar: Calendar = .current) {
         guard let pack else {
             self = .everyCalendarDay
@@ -93,6 +109,7 @@ struct ActiveDaySchedule: Equatable, Sendable {
         )
     }
 
+    @MainActor
     init(pack: PillPack, calendar: Calendar = .current) {
         self.init(pack: Optional(pack), calendar: calendar)
     }

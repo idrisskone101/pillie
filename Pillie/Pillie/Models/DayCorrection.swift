@@ -24,8 +24,10 @@ struct DayCorrectionOptions: Equatable {
     let selectableOutcomes: [DayCorrectionOutcome]
     let currentOutcome: DayCorrectionOutcome
 
+    /// The current outcome is not a correction. Rewriting its record would
+    /// drop a late check-in (`caughtUpAt`) and reopen Home's catch-up.
     func allows(_ outcome: DayCorrectionOutcome) -> Bool {
-        selectableOutcomes.contains(outcome)
+        outcome != currentOutcome && selectableOutcomes.contains(outcome)
     }
 }
 

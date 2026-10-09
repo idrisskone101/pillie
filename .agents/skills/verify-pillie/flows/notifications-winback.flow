@@ -1,7 +1,11 @@
 # ENG-173: a hard-paywall trial two days from expiry queues the win-back
 # pushes (slots 1, 2 and 4; slot 3 is retired) and no day-15
 # notice. The dump goes to app.log; grep "pillie_winback_" and "trial_warning".
+# `fresh` so the notification prompt shows: a simulator that already granted it
+# never asks again, and the Allow tap below would find nothing.
+fresh
 launch
+wait text "Get started" 15
 openurl pillie://debug/plus-home?lang=en
 wait text Today 15
 openurl pillie://debug/request-notification-permission

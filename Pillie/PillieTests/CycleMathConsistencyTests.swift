@@ -109,10 +109,32 @@ final class CycleMathConsistencyTests: XCTestCase {
         XCTAssertEqual(store.statusForDate(today), .upcoming)
 
         // Gap days no longer count toward month adherence: Jun 1–7 were break days,
-        // Jun 8–9 are gap days (skipped), so only today registers as due.
+        // Jun 8–9 are gap days (skipped), and today is still open, so nothing is due yet.
         let adherence = store.monthAdherence(for: today)
-        XCTAssertEqual(adherence.due, 1)
+        XCTAssertEqual(adherence.due, 0)
         XCTAssertEqual(adherence.completed, 0)
+    }
+
+    // MARK: - Month adherence waits for the open day
+
+    func testMonthAdherenceLeavesTheOpenLiveDayOutLikeTheStreak() throws {
+        let now = InMemoryStoreFactory.localDate("2026-06-05", hour: 12)
+        let today = Calendar.current.startOfDay(for: now)
+        let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: day(-4, from: today))
+        let store = fixture.store
+        for offset in -4...(-1) {
+            store.markActionAsTaken(on: day(offset, from: today))
+        }
+
+        // Noon is past the 8:00 reminder: pill 5 is open, and missed only at tomorrow's reminder.
+        XCTAssertEqual(store.statusForDate(today), .upcoming)
+        XCTAssertEqual(store.currentStreak, 4)
+        XCTAssertEqual(store.doseRecord(from: day(-4, from: today), to: today).due, 4)
+
+        let adherence = store.monthAdherence(for: today)
+        XCTAssertEqual(adherence.completed, 4)
+        XCTAssertEqual(adherence.due, 4)
+        XCTAssertEqual(adherence.percentage, 100)
     }
 
     // MARK: - Cycle-day edit keeps today's check-in

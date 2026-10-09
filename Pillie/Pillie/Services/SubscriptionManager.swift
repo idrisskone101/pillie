@@ -101,10 +101,11 @@ final class SubscriptionManager: NSObject {
     /// The persisted Reverse Trial grant moment, if any (Keychain-backed).
     private(set) var trialGrantDate: Date?
 
-    /// Last pack rhythm the Reverse Trial clock should walk. Not persisted —
-    /// SwiftData is the source. Defaults to every calendar day until the shell
-    /// pushes a snapshot from the live pack.
-    private var activeDaySchedule: ActiveDaySchedule = .everyCalendarDay
+    /// The pack rhythm the Reverse Trial clock walks and the days it counted
+    /// under earlier rhythms, saved beside the grant. Nil until the shell
+    /// pushes the live pack or a saved ledger loads; the clock then counts
+    /// every calendar day.
+    private var trialDayLedger: TrialDayLedger?
 
     /// The immutable pre/post-cutover assignment persisted with the grant. It
     /// normally follows the grant instant, with a pre-cutover override for an
@@ -119,13 +120,24 @@ final class SubscriptionManager: NSObject {
 
     /// Issue #257's remotely controlled cutover gate from the current RevenueCat
     /// offering metadata. The ratified hard-paywall default is enabled unless the
-    /// dashboard explicitly sets `hard_paywall_enabled` to false.
-    private(set) var hardPaywallEnabled = true
+    /// dashboard explicitly sets `hard_paywall_enabled` to false. The flag can
+    /// resolve after launch has planned reminders, so a value that flips this
+    /// user's terms replans like an access change.
+    private(set) var hardPaywallEnabled = true {
+        didSet {
+            guard trialEndTerms(hardPaywallEnabled: oldValue) != trialEndTerms else { return }
+            onEntitlementChange?(hasPlusAccess)
+        }
+    }
 
     /// The terms this user's trial ends on. Only legacy (grandfathered) terms
     /// keep daily reminders free; an unknown cohort reads as hard paywall so no
     /// surface promises free reminders the app won't keep.
     var trialEndTerms: TrialEndAccessTerms {
+        trialEndTerms(hardPaywallEnabled: hardPaywallEnabled)
+    }
+
+    private func trialEndTerms(hardPaywallEnabled: Bool) -> TrialEndAccessTerms {
         HardPaywallPolicy.terms(
             for: trialTermsCohort ?? TrialInstallCohort.storedAssignment() ?? .postCutover,
             hardPaywallEnabled: hardPaywallEnabled
@@ -139,7 +151,8 @@ final class SubscriptionManager: NSObject {
     private(set) var isLoading = false
 
     /// Fired whenever Plus Access actually flips (purchase, churn, trial grant,
-    /// trial expiry), never on a no-op refresh. Wired at launch to re-plan Smart
+    /// trial expiry) or the trial-end terms flip (the dashboard kill switch),
+    /// never on a no-op refresh. Wired at launch to re-plan Smart
     /// Reminders immediately so the change takes effect without waiting for the
     /// next natural reschedule (ADR 0004); blocking reconciles off the same hook.
     /// `@ObservationIgnored` because it is a side-effect hook, not observable UI state.
@@ -199,6 +212,7 @@ final class SubscriptionManager: NSObject {
     private override init() {
         super.init()
         trialGrantDate = trialGrantStore.loadGrantDate()
+        trialDayLedger = trialGrantStore.loadDayLedger()
         if let storedCohort = trialGrantStore.loadTermsCohort() {
             trialTermsCohort = storedCohort
         } else if let trialGrantDate {
@@ -211,21 +225,44 @@ final class SubscriptionManager: NSObject {
     }
 
     var plusAccessState: PlusAccessState {
-        PlusAccessState(
+        let ledger = trialDayLedger?.moved(to: .current)
+        return PlusAccessState(
             hasEntitlement: hasEntitlement,
             trialGrantDate: trialGrantDate,
-            schedule: activeDaySchedule
+            schedule: ledger?.schedule ?? .everyCalendarDay,
+            trialLivedDays: ledger?.lived
         )
     }
 
     /// Adopts the current pack rhythm and rewrites Plus Access / `validUntil`.
-    /// Call this before or with grant, and on every pack or cycle edit.
+    /// Call this before or with grant, and on every pack or cycle edit. During
+    /// a trial the new rhythm counts from today; earlier days stay counted
+    /// under the rhythm they were lived with.
     func updateActiveDaySchedule(_ schedule: ActiveDaySchedule, now: Date = Date()) {
-        activeDaySchedule = schedule
+        let calendar = Calendar.current
+        let previous = trialDayLedger
+        if let trialGrantDate, let previous {
+            trialDayLedger = previous.adopting(schedule, grantDate: trialGrantDate, calendar: calendar, now: now)
+        } else {
+            trialDayLedger = TrialDayLedger(
+                schedule: schedule,
+                lived: nil,
+                timeZoneIdentifier: calendar.timeZone.identifier
+            )
+        }
+        if trialDayLedger != previous {
+            saveTrialDayLedger()
+        }
         refreshPlusAccess(now: now)
     }
 
+    /// No pack is no rhythm: after a reinstall, before onboarding rebuilds the
+    /// pack, a trial keeps counting with the rhythm saved beside its grant.
     func updateActiveDaySchedule(pack: PillPack?, now: Date = Date()) {
+        guard pack != nil || trialGrantDate == nil else {
+            refreshPlusAccess(now: now)
+            return
+        }
         updateActiveDaySchedule(ActiveDaySchedule(pack: pack), now: now)
     }
 
@@ -257,9 +294,9 @@ final class SubscriptionManager: NSObject {
         // the shield side must learn the new valid-until date the moment access
         // state changes (grant, purchase, entitlement resolution), so blocking
         // can self-disable at expiry even if the app never opens again (#167).
-        ScreenTimeSharedState.setPlusAccessValidUntil(
-            PlusAccessMirror.validUntil(state: plusAccessState, calendar: .current)
-        )
+        let validUntil = PlusAccessMirror.validUntil(state: plusAccessState, calendar: .current)
+        ScreenTimeSharedState.setPlusAccessValidUntil(validUntil)
+        AppBlockingManager.shared.scheduleAccessExpiryWake(validUntil: validUntil)
         let newValue = plusAccessState.hasPlusAccess(calendar: .current, now: now)
         guard hasPlusAccess != newValue else { return }
         hasPlusAccess = newValue
@@ -285,8 +322,16 @@ final class SubscriptionManager: NSObject {
         trialGrantStore.saveGrantDate(now)
         trialGrantDate = now
         trialTermsCohort = assignedCohort
+        trialDayLedger?.lived = nil
+        saveTrialDayLedger()
         refreshPlusAccess(now: now)
         return true
+    }
+
+    /// Keeps the ledger beside the grant; without a grant it only lives in memory.
+    private func saveTrialDayLedger() {
+        guard trialGrantDate != nil, let trialDayLedger else { return }
+        trialGrantStore.saveDayLedger(trialDayLedger)
     }
 
     // MARK: - Configure (call once at app launch)
@@ -585,9 +630,9 @@ final class SubscriptionManager: NSObject {
     /// Test seam: swap the Keychain store for an in-memory double and re-sync
     /// trial state from it.
     func setTrialGrantStoreForTesting(_ store: TrialGrantStoring) {
-        activeDaySchedule = .everyCalendarDay
         trialGrantStore = store
         trialGrantDate = store.loadGrantDate()
+        trialDayLedger = store.loadDayLedger()
         if let storedCohort = store.loadTermsCohort() {
             trialTermsCohort = storedCohort
         } else if let trialGrantDate {
@@ -616,6 +661,8 @@ final class SubscriptionManager: NSObject {
             trialTermsCohort = nil
         }
         trialGrantDate = date
+        trialDayLedger?.lived = nil
+        saveTrialDayLedger()
         refreshPlusAccess()
     }
 

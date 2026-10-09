@@ -151,8 +151,7 @@ enum ScheduleCriticalSettingChange {
         minute: Int,
         reason: String
     ) {
-        store.reminderHour = hour
-        store.reminderMinute = minute
+        store.changeReminderTime(hour: hour, minute: minute)
         NotificationManager.shared.requestReschedule(from: store, reason: reason)
     }
 }

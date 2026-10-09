@@ -9,6 +9,7 @@ struct TodayPillPlan: Equatable {
     enum NextReminder: Equatable {
         case today(Date)
         case tomorrow(Date)
+        case later(Date)
     }
 
     let pick: TodayPillPick
@@ -26,6 +27,28 @@ struct TodayPillPlan: Equatable {
         }
         let tomorrow = calendar.date(byAdding: .day, value: 1, to: today) ?? today
         return .tomorrow(calendar.date(bySettingHour: hour, minute: minute, second: 0, of: tomorrow) ?? todays)
+    }
+
+    /// The first reminder the planner sends once this pick commits. A pill not taken
+    /// yet past today's reminder time gets its catch-up a minute later. A pill-free
+    /// day gets the break notice only on the first one, while its time is ahead;
+    /// otherwise nothing comes until the new pack's first pill.
+    var firstReminder: NextReminder {
+        let today = calendar.startOfDay(for: now)
+        let todays = calendar.date(bySettingHour: reminderHour, minute: reminderMinute, second: 0, of: today) ?? now
+        switch pick.answer {
+        case .notYet where todays <= now:
+            return .today(now.addingTimeInterval(60))
+        case nil where !(pick.dayIndex == pick.pack.regimen.activeDays && todays > now):
+            let daysToNewPack = pick.pack.regimen.totalDays - pick.dayIndex
+            guard let newPackDay = calendar.date(byAdding: .day, value: daysToNewPack, to: today),
+                  let reminder = calendar.date(bySettingHour: reminderHour, minute: reminderMinute, second: 0, of: newPackDay)
+            else { break }
+            return daysToNewPack == 1 ? .tomorrow(reminder) : .later(reminder)
+        default:
+            break
+        }
+        return Self.nextReminder(hour: reminderHour, minute: reminderMinute, now: now, calendar: calendar)
     }
 
     var rows: [ProtectionPlanRoutineSummary.Row] {
@@ -63,11 +86,16 @@ struct TodayPillPlan: Equatable {
 
     private var nextReminderText: String {
         let style = Date.FormatStyle(date: .omitted, time: .shortened, locale: locale, calendar: calendar, timeZone: calendar.timeZone)
-        switch Self.nextReminder(hour: reminderHour, minute: reminderMinute, now: now, calendar: calendar) {
+        switch firstReminder {
         case .today(let date):
             return PillieLocalization.formatted("onboarding.today_pill.plan.today_at", locale: locale, arguments: date.formatted(style))
         case .tomorrow(let date):
             return PillieLocalization.formatted("onboarding.today_pill.plan.tomorrow_at", locale: locale, arguments: date.formatted(style))
+        case .later(let date):
+            return date.formatted(
+                Date.FormatStyle(locale: locale, calendar: calendar, timeZone: calendar.timeZone)
+                    .weekday(.abbreviated).month(.abbreviated).day().hour().minute()
+            )
         }
     }
 }
