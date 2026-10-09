@@ -1,11 +1,14 @@
 # ENG-172: the hard trial-end wall rises straight into the one-time extend
-# offer through /trial-end-extend. clear=1 re-arms the offer each time; the
-# Test Store serves no extend SKU, so a $29.99 week stands in.
+# offer through /trial-end-extend. clear=1 resets the offer each time; the
+# Test Store serves no extend SKU, so a $29.99 week stands in. After Not now
+# the same cancel path without clear=1 shows only the plans (ENG-175).
 launch
 wait text Today 15
 openurl pillie://debug/trial-end-extend?trigger=cancel&notifications=on&clear=1&lang=en
 wait id extendOfferTitle 20
-wait text "Charged for one year of Plus." 5
+wait text "Renews every year until you cancel." 5
+expect text "$29.99 a year"
+expect text "Charged after your 7 free days."
 expect text "We remind you"
 expect text "Start my free week"
 expect-not text "No purchase found on this Apple Account"
@@ -16,6 +19,14 @@ tap --id extendOfferNotNowButton
 wait text "Get your reminders and app blocking back." 10
 sleep 1
 shot not-now-plans
+
+launch
+wait text Today 15
+openurl pillie://debug/trial-end-extend?trigger=cancel&notifications=on&lang=en
+wait text "Get your reminders and app blocking back." 20
+sleep 4
+expect-not id extendOfferTitle
+shot declined-stays-declined
 
 openurl pillie://debug/trial-clear?lang=en
 launch
@@ -40,6 +51,8 @@ launch
 wait text Today 15
 openurl pillie://debug/trial-end-extend?trigger=restore&notifications=on&clear=1&lang=de
 wait text "Gratiswoche starten" 20
+expect text "$29.99 pro Jahr"
+expect text "Abbuchung nach deinen 7 Gratistagen."
 sleep 1
 shot de
 

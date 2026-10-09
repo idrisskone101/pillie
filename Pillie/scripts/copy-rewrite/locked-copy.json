@@ -2634,9 +2634,9 @@
       "key": "paywall.board.trial_ended.subtitle.pill",
       "create": true,
       "comment": "'they' = the reminders and app blocking. Pill users.",
-      "en": "Pick a plan and they’re back before tonight’s pill. Your setup and streak are saved.",
-      "de": "Wähl einen Tarif, dann sind sie vor deiner Pille heute Abend wieder da. Deine Einrichtung und deine Serie bleiben gespeichert.",
-      "it": "Scegli un piano e tornano prima della pillola di stasera. La tua configurazione e la tua serie restano salvate."
+      "en": "Pick a plan and they’re back before tonight’s pill. Your setup is saved.",
+      "de": "Wähl einen Tarif, dann sind sie vor deiner Pille heute Abend wieder da. Deine Einrichtung bleibt gespeichert.",
+      "it": "Scegli un piano e tornano prima della pillola di stasera. La tua configurazione resta salvata."
     },
     {
       "issue": "honest-paywall",
@@ -2644,9 +2644,9 @@
       "key": "paywall.board.trial_ended.subtitle.patch",
       "create": true,
       "comment": "Same as .pill for contraceptive patch users.",
-      "en": "Pick a plan and they’re back before your next patch change. Your setup and streak are saved.",
-      "de": "Wähl einen Tarif, dann sind sie vor deinem nächsten Pflasterwechsel wieder da. Deine Einrichtung und deine Serie bleiben gespeichert.",
-      "it": "Scegli un piano e tornano prima del prossimo cambio del cerotto. La tua configurazione e la tua serie restano salvate."
+      "en": "Pick a plan and they’re back before your next patch change. Your setup is saved.",
+      "de": "Wähl einen Tarif, dann sind sie vor deinem nächsten Pflasterwechsel wieder da. Deine Einrichtung bleibt gespeichert.",
+      "it": "Scegli un piano e tornano prima del prossimo cambio del cerotto. La tua configurazione resta salvata."
     },
     {
       "issue": "honest-paywall",
@@ -2654,9 +2654,9 @@
       "key": "paywall.board.trial_ended.subtitle.ring",
       "create": true,
       "comment": "Same as .pill for vaginal ring users.",
-      "en": "Pick a plan and they’re back before your next ring change. Your setup and streak are saved.",
-      "de": "Wähl einen Tarif, dann sind sie vor deinem nächsten Ringwechsel wieder da. Deine Einrichtung und deine Serie bleiben gespeichert.",
-      "it": "Scegli un piano e tornano prima del prossimo cambio dell’anello. La tua configurazione e la tua serie restano salvate."
+      "en": "Pick a plan and they’re back before your next ring change. Your setup is saved.",
+      "de": "Wähl einen Tarif, dann sind sie vor deinem nächsten Ringwechsel wieder da. Deine Einrichtung bleibt gespeichert.",
+      "it": "Scegli un piano e tornano prima del prossimo cambio dell’anello. La tua configurazione resta salvata."
     },
     {
       "issue": "honest-paywall",
@@ -2741,12 +2741,12 @@
     {
       "issue": "honest-paywall",
       "table": "Commerce",
-      "key": "paywall.review.support",
+      "key": "paywall.review.reminders",
       "create": true,
-      "comment": "Real 5-star App Store review, shown in quotes. Translate faithfully, keep the ellipsis that marks the cut. No quote marks in the value.",
-      "en": "Really love this app! … Great app and great customer support!",
-      "de": "Ich liebe diese App wirklich! … Tolle App und toller Kundensupport!",
-      "it": "Adoro davvero questa app! … Ottima app e ottimo servizio clienti!"
+      "comment": "Real 5-star App Store review. Faithful translation. No quote marks.",
+      "en": "I have always struggled with keeping up with my pill. Now I don’t even have to think about it!",
+      "de": "Ich hatte schon immer Probleme, bei meiner Pille dranzubleiben. Jetzt muss ich nicht mal mehr daran denken!",
+      "it": "Ho sempre fatto fatica a stare dietro alla pillola. Ora non devo nemmeno pensarci!"
     },
     {
       "issue": "honest-paywall",
@@ -3144,9 +3144,19 @@
       "key": "trial.end.extend.charge.body",
       "create": true,
       "comment": "Extend offer timeline, caption under the price on the charge date [paywall]",
-      "en": "Charged for one year of Plus.",
-      "de": "Abgebucht für ein Jahr Plus.",
-      "it": "Addebito per un anno di Plus."
+      "en": "Charged after your 7 free days. Renews every year until you cancel.",
+      "de": "Abbuchung nach deinen 7 Gratistagen. Verlängert sich jedes Jahr, bis du kündigst.",
+      "it": "Addebito dopo i tuoi 7 giorni gratis. Si rinnova ogni anno finché non disdici."
+    },
+    {
+      "issue": "ENG-175",
+      "table": "Commerce",
+      "key": "trial.end.extend.charge.price",
+      "create": true,
+      "comment": "Extend offer timeline, the price headline on the charge date; %@ is the store price, rendered large. Same 'a year' wording as paywall.cta.get_plus.billed_yearly [paywall]",
+      "en": "%@ a year",
+      "de": "%@ pro Jahr",
+      "it": "%@ all’anno"
     },
     {
       "issue": "ENG-172",
@@ -3467,56 +3477,6 @@
       "en": "At %@ they’d stay locked until you log. Tap to turn the lock back on.",
       "de": "Sonst wären sie ab %@ gesperrt, bis du abhakst. Tippe, um die App-Sperre wieder einzuschalten.",
       "it": "Alle %@ resterebbero bloccate finché non confermi. Tocca per riattivare il blocco app."
-    },
-    {
-      "issue": "ENG-173",
-      "table": "Notifications",
-      "key": "notification.winback.slot3.title",
-      "create": true,
-      "comment": "ENG-173 win-back push after a hard-paywall trial ends",
-      "en": "Want another week to decide?",
-      "de": "Willst du noch eine Woche überlegen?",
-      "it": "Vuoi un’altra settimana per decidere?"
-    },
-    {
-      "issue": "ENG-173",
-      "table": "Notifications",
-      "key": "notification.winback.slot3.body",
-      "create": true,
-      "comment": "ENG-173 win-back push after a hard-paywall trial ends",
-      "en": "Here’s 7 more days free, then %@ a year. This offer only comes once.",
-      "de": "Hier sind noch 7 Tage gratis, danach %@ pro Jahr. Dieses Angebot gibt es nur einmal.",
-      "it": "Ecco altri 7 giorni gratis, poi %@ all’anno. Questa offerta arriva una volta sola."
-    },
-    {
-      "issue": "ENG-173",
-      "table": "Notifications",
-      "key": "notification.winback.slot3.blocker.body",
-      "create": true,
-      "comment": "ENG-173 win-back push after a hard-paywall trial ends",
-      "en": "7 more days free, app lock included, then %@ a year. This offer only comes once.",
-      "de": "Noch 7 Tage gratis, inklusive App-Sperre, danach %@ pro Jahr. Dieses Angebot gibt es nur einmal.",
-      "it": "Altri 7 giorni gratis, blocco app incluso, poi %@ all’anno. Questa offerta arriva una volta sola."
-    },
-    {
-      "issue": "ENG-173",
-      "table": "Notifications",
-      "key": "notification.winback.slot3.restore.title",
-      "create": true,
-      "comment": "ENG-173 win-back push after a hard-paywall trial ends",
-      "en": "Couldn’t find your purchase?",
-      "de": "Kein Kauf gefunden?",
-      "it": "Non trovi il tuo acquisto?"
-    },
-    {
-      "issue": "ENG-173",
-      "table": "Notifications",
-      "key": "notification.winback.slot3.restore.body",
-      "create": true,
-      "comment": "ENG-173 win-back push after a hard-paywall trial ends",
-      "en": "Nothing showed up on this Apple Account. Here’s 7 more days free, then %@ a year.",
-      "de": "Für diesen Apple Account wurde nichts gefunden. Hier sind noch 7 Tage gratis, danach %@ pro Jahr.",
-      "it": "Su questo Account Apple non risulta nulla. Ecco altri 7 giorni gratis, poi %@ all’anno."
     },
     {
       "issue": "ENG-173",

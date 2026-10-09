@@ -318,7 +318,7 @@ final class TrialEndExtendOfferTests: XCTestCase {
         XCTAssertEqual(store.record(.present), .shown, "\(name): presenting twice stays shown")
         XCTAssertEqual(store.record(.accept), .accepted, "\(name)")
         XCTAssertEqual(store.record(.decline), .accepted, "\(name): terminal")
-        XCTAssertEqual(store.record(.present), .accepted, "\(name): never re-arms")
+        XCTAssertEqual(store.record(.present), .accepted, "\(name): never comes back")
         XCTAssertEqual(store.loadPhase(), .accepted, "\(name): persisted")
     }
 

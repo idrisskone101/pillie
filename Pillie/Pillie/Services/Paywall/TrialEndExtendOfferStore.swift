@@ -51,11 +51,9 @@ nonisolated final class KeychainTrialEndExtendOfferStore: TrialEndExtendOfferSto
 
         var result: AnyObject?
         guard SecItemCopyMatching(lookup as CFDictionary, &result) == errSecSuccess,
-              let data = result as? Data,
-              let rawValue = String(data: data, encoding: .utf8),
-              let phase = TrialEndExtendOfferPhase(rawValue: rawValue)
+              let data = result as? Data
         else { return .unseen }
-        return phase
+        return TrialEndExtendOfferPhase(stored: String(decoding: data, as: UTF8.self))
     }
 
     func savePhase(_ phase: TrialEndExtendOfferPhase) {

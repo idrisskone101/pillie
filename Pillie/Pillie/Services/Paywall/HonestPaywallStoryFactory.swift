@@ -35,7 +35,7 @@ enum HonestPaywallStoryFactory {
             HonestPaywallStory(
                 title: commerce("paywall.board.trial_ended.title", locale),
                 subtitle: commerce("paywall.board.trial_ended.subtitle.\(method.rawValue)", locale),
-                review: review("paywall.review.support", locale)
+                review: review("paywall.review.reminders", locale)
             )
         case .legacy:
             // Grandfathered users keep free daily reminders, so "get your

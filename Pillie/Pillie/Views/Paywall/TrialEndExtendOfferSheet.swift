@@ -264,10 +264,8 @@ private struct TimelineStopRow: View {
 
     @ViewBuilder
     private var headline: some View {
-        if stop.kind == .charge {
-            Text(stop.headline)
-                .font(.pillie(40, weight: .black))
-                .tracking(-1.2)
+        if case .charge(let price) = stop.kind {
+            Text(TrialEndExtendSwap.chargeHeadline(stop.headline, price: price))
                 .paperLineHeight(46, fontSize: 40)
                 .foregroundStyle(PillieTheme.textPrimary)
                 .lineLimit(1)
@@ -330,6 +328,22 @@ enum TrialEndExtendSwap {
         case (true, true): .easeOut(duration: 0.25).delay(0.15)
         case (false, true): .easeOut(duration: 0.15)
         }
+    }
+
+    static let priceFont = Font.pillie(40, weight: .black)
+    static let periodFont = Font.pillie(20, weight: .bold)
+
+    /// The price stays the loudest text on the card and the billing period
+    /// sits beside it, smaller, on the same baseline. The price run is found
+    /// in the formatted headline, so any locale word order works; a headline
+    /// without it is set whole at the price size.
+    static func chargeHeadline(_ headline: String, price: String) -> AttributedString {
+        var text = AttributedString(headline)
+        let priceRun = text.range(of: price) ?? text.startIndex..<text.endIndex
+        text.font = periodFont
+        text[priceRun].font = priceFont
+        text[priceRun].tracking = -1.2
+        return text
     }
 
     /// Timeline stops fade up top to bottom, so the price lands last.

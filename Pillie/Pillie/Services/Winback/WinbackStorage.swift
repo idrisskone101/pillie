@@ -30,7 +30,7 @@ enum WinbackStorage {
     /// QA reruns: a fresh trial gets fresh win-back records. The slot 2 arm
     /// stays, since it belongs to the install, not the trial.
     static func clear(in defaults: UserDefaults = .standard) {
-        for key in [lastAppOpenKey, scheduledSlotsKey, WinbackExtendPitch.storageKey, WinbackOpen.storageKey] {
+        for key in [lastAppOpenKey, scheduledSlotsKey, WinbackOpen.storageKey] {
             defaults.removeObject(forKey: key)
         }
     }
@@ -72,18 +72,6 @@ extension WinbackSlot2Arm {
         let arm: WinbackSlot2Arm = Bool.random() ? .challenger : .control
         defaults.set(arm.rawValue, forKey: storageKey)
         return arm
-    }
-}
-
-extension WinbackExtendPitch {
-    static let storageKey = "winbackExtendPitch"
-
-    static func load(from defaults: UserDefaults = .standard) -> WinbackExtendPitch? {
-        WinbackStorage.decode(WinbackExtendPitch.self, forKey: storageKey, in: defaults)
-    }
-
-    func save(to defaults: UserDefaults = .standard) {
-        WinbackStorage.encode(self, forKey: Self.storageKey, in: defaults)
     }
 }
 

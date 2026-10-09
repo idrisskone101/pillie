@@ -58,14 +58,6 @@ enum WinbackPlanner {
             // Blocker users stay out of the A/B: their line is about the lock.
             if blocker { return (variant: .blocker, detail: reminderTime) }
             return (variant: context.slot2Arm == .challenger ? .notAReminder : .reminder, detail: reminderTime)
-        case .extendOffer:
-            guard let pitch = context.extendPitch, context.extendPhase.allowsWinbackPitch else { return nil }
-            let variant: WinbackVariant = if pitch.trigger == .restoreEmpty {
-                .restore
-            } else {
-                blocker ? .blocker : .offer
-            }
-            return (variant: variant, detail: .extendPrice(pitch.priceDisplay))
         case .lastNote:
             let days = context.daysLogged
             guard days >= 3 else { return (variant: .new, detail: .daysLogged(days)) }

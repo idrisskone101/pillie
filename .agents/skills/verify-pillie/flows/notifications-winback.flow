@@ -1,5 +1,5 @@
 # ENG-173: a hard-paywall trial two days from expiry queues the win-back
-# pushes (slots 1, 2 and 4; no slot 3 without an extend pitch) and no day-15
+# pushes (slots 1, 2 and 4; slot 3 is retired) and no day-15
 # notice. The dump goes to app.log; grep "pillie_winback_" and "trial_warning".
 # `fresh` so the notification prompt shows: a simulator that already granted it
 # never asks again, and the Allow tap below would find nothing.

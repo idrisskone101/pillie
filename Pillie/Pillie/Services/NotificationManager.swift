@@ -453,9 +453,7 @@ final class NotificationManager {
         return WinbackContext(
             daysLogged: store.doseRecord(from: grantDate, to: store.today).taken,
             lastAppOpen: WinbackStorage.lastAppOpen(),
-            slot2Arm: WinbackSlot2Arm.assigned(),
-            extendPitch: WinbackExtendPitch.load(),
-            extendPhase: KeychainTrialEndExtendOfferStore().loadPhase()
+            slot2Arm: WinbackSlot2Arm.assigned()
         )
     }
 

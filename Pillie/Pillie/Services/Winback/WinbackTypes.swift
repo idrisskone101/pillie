@@ -1,4 +1,4 @@
-//  The post-trial win-back pushes (ENG-173): at most four local
+//  The post-trial win-back pushes (ENG-173): at most three local
 //  notifications after a hard-paywall Reverse Trial ends unpaid, then none.
 
 import Foundation
@@ -7,11 +7,10 @@ import Foundation
 /// of the request id. Days count forward from the expiry day, never from the
 /// grant, so a break week that slides expiry moves the pushes with it (same
 /// rule as `ReminderSchedulePlanner.trialNoticeSlots`). Trial days 15, 16,
-/// 18, and 22.
+/// and 22. Raw value 3 stays retired so slot 4 keeps its analytics `slot`.
 enum WinbackSlot: Int, CaseIterable, Codable {
     case expiryDay = 1
     case dayAfter = 2
-    case extendOffer = 3
     case lastNote = 4
 
     enum FireTime {
@@ -25,7 +24,6 @@ enum WinbackSlot: Int, CaseIterable, Codable {
         switch self {
         case .expiryDay: 0
         case .dayAfter: 1
-        case .extendOffer: 3
         case .lastNote: 7
         }
     }
@@ -33,7 +31,7 @@ enum WinbackSlot: Int, CaseIterable, Codable {
     var fireTime: FireTime {
         switch self {
         case .dayAfter: .reminder
-        case .expiryDay, .extendOffer, .lastNote: .lead
+        case .expiryDay, .lastNote: .lead
         }
     }
 }
@@ -44,10 +42,6 @@ enum WinbackVariant: String, Codable {
     case blocker
     /// Slot 2's A/B challenger arm, reminder-only users only.
     case notAReminder = "not_a_reminder"
-    /// Slot 3 after a purchase sheet cancel.
-    case offer
-    /// Slot 3 after a restore that found nothing.
-    case restore
     /// Slot 4 for someone who logged three days or more.
     case days
     /// Slot 4 for someone who logged two days or fewer.
@@ -58,8 +52,6 @@ enum WinbackVariant: String, Codable {
 enum WinbackDetail: Hashable {
     /// Slots 1 and 2: the reminder time that no longer fires.
     case reminderTime(hour: Int, minute: Int)
-    /// Slot 3: the extend offer's price after the free week.
-    case extendPrice(String)
     /// Slot 4: the days she logged, for the thank-you.
     case daysLogged(Int)
 }
@@ -78,21 +70,12 @@ struct WinbackContext {
     let daysLogged: Int
     let lastAppOpen: Date?
     let slot2Arm: WinbackSlot2Arm
-    let extendPitch: WinbackExtendPitch?
-    let extendPhase: TrialEndExtendOfferPhase
 }
 
 /// Slot 2's A/B arm, assigned once per install (`WinbackSlot2Arm.assigned`).
 enum WinbackSlot2Arm: String {
     case control
     case challenger
-}
-
-/// The extend offer the trial-end wall could make (ENG-172), kept so slot 3
-/// promises a price Apple actually serves. No pitch, no slot 3.
-struct WinbackExtendPitch: Codable, Equatable {
-    let trigger: TrialEndExtendTrigger
-    let priceDisplay: String
 }
 
 /// A tapped win-back push: what the wall reports, and what a conversion in
