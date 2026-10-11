@@ -52,6 +52,33 @@ final class PlusAccessMirrorTests: XCTestCase {
         )
     }
 
+    func testEntitlementThatWillNotRenewIsValidUntilItsEnd() {
+        // ENG-207: a cancelled StoreKit trial lapses at its known end.
+        let state = PlusAccessState(
+            hasEntitlement: true,
+            trialGrantDate: nil,
+            entitlementEnd: date(2026, 7, 4, 9, 30)
+        )
+
+        XCTAssertEqual(
+            PlusAccessMirror.validUntil(state: state, calendar: calendar),
+            date(2026, 7, 4, 9, 30)
+        )
+    }
+
+    func testNonRenewingEndIsKnownOnlyForAnActiveEntitlementThatWillNotRenew() {
+        let expiration = date(2026, 7, 4, 9, 30)
+
+        XCTAssertEqual(
+            SubscriptionManager.nonRenewingEnd(isActive: true, willRenew: false, expirationDate: expiration),
+            expiration
+        )
+        XCTAssertNil(SubscriptionManager.nonRenewingEnd(isActive: true, willRenew: true, expirationDate: expiration))
+        XCTAssertNil(SubscriptionManager.nonRenewingEnd(isActive: false, willRenew: false, expirationDate: expiration))
+        // Lifetime: active, never renews, no expiration.
+        XCTAssertNil(SubscriptionManager.nonRenewingEnd(isActive: true, willRenew: false, expirationDate: nil))
+    }
+
     // MARK: - Tracer bullet: trial-only access mirrors the clock's expiry moment
 
     func testTrialOnlyAccessIsValidUntilClockExpiryMoment() {

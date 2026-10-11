@@ -911,6 +911,80 @@ final class ReminderSchedulePlannerTests: XCTestCase {
         ])
     }
 
+    // MARK: - Hard-trial arm (ENG-207)
+
+    func testHardTrialArmWithoutEntitlementPlansNothing() throws {
+        let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 7)
+        let fixture = try InMemoryStoreFactory.makeStore(now: now, method: .pill, regimen: .twentyOneOnly, startDate: now)
+
+        let control = plan(for: fixture.store, now: now, smartRemindersEnabled: false, paywallArm: .control)
+        let hardTrial = plan(for: fixture.store, now: now, smartRemindersEnabled: false, paywallArm: .hardTrial)
+
+        XCTAssertTrue(control.contains { if case .cycleTransition = $0 { return true } else { return false } })
+        XCTAssertEqual(hardTrial, [])
+    }
+
+    func testControlArmWithoutEntitlementStillPlansBaseReminders() throws {
+        let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 7)
+        let fixture = try InMemoryStoreFactory.makeStore(
+            now: now,
+            regimen: .custom,
+            customRegimen: PackRegimen(activeDays: 365, breakDays: 0),
+            startDate: now
+        )
+
+        let arms: [OnboardingPaywallArm?] = [.control, nil]
+        for arm in arms {
+            let bases = plan(for: fixture.store, now: now, smartRemindersEnabled: false, paywallArm: arm)
+                .compactMap { intent -> ReminderSchedulePlanner.DueReminderIntent? in
+                    if case .due(let due) = intent, due.kind == .base { return due }
+                    return nil
+                }
+            XCTAssertEqual(bases.count, 30, "\(String(describing: arm))")
+            XCTAssertEqual(bases.last?.fireDate, InMemoryStoreFactory.localDate("2026-06-24", hour: 8))
+        }
+    }
+
+    func testHardTrialArmEntitledPlansLikeControlArm() throws {
+        let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 7)
+        let fixture = try InMemoryStoreFactory.makeStore(now: now, method: .pill, regimen: .twentyOneOnly, startDate: now)
+
+        let control = plan(for: fixture.store, now: now, autoReminderRetryLimit: 3, hasEntitlement: true, paywallArm: .control)
+        let hardTrial = plan(for: fixture.store, now: now, autoReminderRetryLimit: 3, hasEntitlement: true, paywallArm: .hardTrial)
+
+        let bases = hardTrial.filter { intent in
+            if case .due(let due) = intent { return due.kind == .base }
+            return false
+        }
+        XCTAssertEqual(bases.count, 30)
+        XCTAssertEqual(hardTrial, control)
+    }
+
+    func testHardTrialArmEntitlementEndingStopsRemindersAtTheEnd() throws {
+        let now = InMemoryStoreFactory.localDate("2026-05-26", hour: 7)
+        let fixture = try InMemoryStoreFactory.makeStore(
+            now: now,
+            regimen: .custom,
+            customRegimen: PackRegimen(activeDays: 365, breakDays: 0),
+            startDate: now
+        )
+
+        let intents = plan(
+            for: fixture.store,
+            now: now,
+            smartRemindersEnabled: false,
+            hasEntitlement: true,
+            paywallArm: .hardTrial,
+            entitlementEnd: InMemoryStoreFactory.localDate("2026-05-29", hour: 0)
+        )
+
+        XCTAssertEqual(intents.compactMap(\.reminderFireDate), [
+            InMemoryStoreFactory.localDate("2026-05-26", hour: 8),
+            InMemoryStoreFactory.localDate("2026-05-27", hour: 8),
+            InMemoryStoreFactory.localDate("2026-05-28", hour: 8)
+        ])
+    }
+
     private func plan(
         for store: PillStore,
         now: Date,
@@ -921,7 +995,10 @@ final class ReminderSchedulePlannerTests: XCTestCase {
         smartRemindersEnabled: Bool = true,
         cycleTransitionEnabled: Bool = true,
         currentStreak: Int = 0,
-        servedBaseFireDateByDueDayEpoch: [Int: Date] = [:]
+        servedBaseFireDateByDueDayEpoch: [Int: Date] = [:],
+        hasEntitlement: Bool = false,
+        paywallArm: OnboardingPaywallArm? = nil,
+        entitlementEnd: Date? = nil
     ) -> [ReminderSchedulePlanner.Intent] {
         let calendar = Calendar.current
         let candidateDueActions = DoseScheduleEngine.nextDueActions(
@@ -949,10 +1026,12 @@ final class ReminderSchedulePlannerTests: XCTestCase {
                 smartRemindersEnabled: smartRemindersEnabled,
                 cycleTransitionEnabled: cycleTransitionEnabled,
                 trialGrantDate: nil,
-                hasEntitlement: false,
+                hasEntitlement: hasEntitlement,
                 currentStreak: currentStreak,
                 servedBaseFireDateByDueDayEpoch: servedBaseFireDateByDueDayEpoch,
-                calendar: calendar
+                calendar: calendar,
+                paywallArm: paywallArm,
+                entitlementEnd: entitlementEnd
             )
         )
     }

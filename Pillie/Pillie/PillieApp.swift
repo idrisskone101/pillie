@@ -745,6 +745,24 @@ struct PillieApp: App {
             SubscriptionManager.shared.setPlusForTesting(true)
             UserDefaults.standard.set(false, forKey: OnboardingFlow.selectedFreePlanStorageKey)
             UserDefaults.standard.set(OnboardingFlow.Step.complete.rawValue, forKey: OnboardingFlow.stepStorageKey)
+        case "/plus-entitlement":
+            // QA control (ENG-207): `state=on|off`, or `state=ends&days=N` for an
+            // entitlement that will not renew and lapses N days from now (default 3).
+            let queryItems = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems
+            let value = { (name: String) -> String? in queryItems?.first(where: { $0.name == name })?.value }
+            switch value("state") {
+            case "on":
+                SubscriptionManager.shared.setPlusForTesting(true)
+            case "off":
+                SubscriptionManager.shared.setPlusForTesting(false)
+            case "ends":
+                let days = value("days").flatMap(Int.init) ?? 3
+                let end = Calendar.current.date(byAdding: .day, value: days, to: Date())
+                SubscriptionManager.shared.setPlusForTesting(true, endsAt: end)
+            default:
+                os.Logger(subsystem: "com.idrisskone.pillie", category: "qa")
+                    .error("Pillie QA plus-entitlement ignored unreadable state=\(value("state") ?? "nil", privacy: .public)")
+            }
         case "/request-notification-permission":
             // QA control (#168): surface the system notification prompt on
             // installs seeded past onboarding, where the real permission step
@@ -756,9 +774,10 @@ struct PillieApp: App {
             // simulator. Stream with:
             //   log stream --predicate 'subsystem == "com.idrisskone.pillie"' --level debug
             let grantDescription = SubscriptionManager.shared.trialGrantDate?.description ?? "none"
+            let armDescription = SubscriptionManager.shared.onboardingPaywallArm?.rawValue ?? "none"
             UNUserNotificationCenter.current().getNotificationSettings { settings in
                 os.Logger(subsystem: "com.idrisskone.pillie", category: "qa")
-                    .debug("Pillie QA auth status: \(settings.authorizationStatus.rawValue, privacy: .public) trialGrant=\(grantDescription, privacy: .public)")
+                    .debug("Pillie QA auth status: \(settings.authorizationStatus.rawValue, privacy: .public) trialGrant=\(grantDescription, privacy: .public) arm=\(armDescription, privacy: .public)")
             }
             UNUserNotificationCenter.current().getPendingNotificationRequests { requests in
                 let logger = os.Logger(subsystem: "com.idrisskone.pillie", category: "qa")
