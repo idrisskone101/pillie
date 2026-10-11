@@ -15,7 +15,7 @@ The first-launch flow from Welcome to Home. Steps are `OnboardingFlow.Step` (`Se
 - `onboarding-reminder-time` — `ProtectionPlanReminderTimeView`; its CTA saves the time, commits the pill pick with it, then requests real notification authorization. The pill path's plan card reads Pack / Today ("Pill 12 · taken") / Next reminder.
 - `onboarding-reminder-plan` — `ProtectionPlanDiagnosisView`, an analyze-then-reveal animation before the CTA appears.
 - `onboarding-trial-granted` — `TrialGrantedMomentView`. Dead code: unreachable by any real path or debug deep link (see Gotchas).
-- `onboarding-paywall` — `hard_trial` arm only (ENG-206): `.onboardingPaywall` (raw value 22) hosts `HonestPaywallHost(entry: .onboardingEnd)` between the plan reveal and app blocking. No close and no continue-free; Year leads with "7 days free" when RevenueCat confirms intro eligibility. Order per arm comes from `OnboardingFlow.displayOrder(for:)`.
+- `onboarding-paywall` — `hard_trial` arm only (ENG-206): `.onboardingPaywall` (raw value 22) hosts `HonestPaywallHost(entry: .onboardingEnd)` between the plan reveal and app blocking. No close and no continue-free; Year leads with "7 days free" when RevenueCat confirms intro eligibility. Order per arm comes from `OnboardingFlow.displayOrder(for:)`. App Review reaches it with `pillie://review/onboarding-paywall?arm=hard_trial` (live in Release, accepted only until the diagnosis continues, assignment source `review` so `experiment_eligible=false`).
 - `onboarding-app-blocking` — `AppBlockingSetupView`, empty / selected / recovery / locked phases.
 - `onboarding-protection-plan-ready` — `ProtectionPlanReadyView`, "Go to Today".
 - `onboarding-home-handoff` — lands on `MainTabView` (Today).

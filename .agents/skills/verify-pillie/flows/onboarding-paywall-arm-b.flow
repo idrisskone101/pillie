@@ -2,6 +2,7 @@
 # hard_trial walks to the plan reveal, lands on the paywall (not app blocking),
 # comes back to it after a relaunch, then restores into app-blocking setup.
 # Restore goes through /restore-outcome so no RevenueCat purchase or restore runs.
+# Before it, the reminder queue is empty (no Plus, ENG-207); after it, it is not.
 # app.log carries the analytics mirror: paywall_viewed with surface and
 # entry_point onboarding_end, and onboarding_paywall_blocked_relaunch.
 
@@ -70,6 +71,9 @@ sleep 2
 expect-not id appBlockingEmptyStateCard
 shot onboarding-paywall-relaunch
 
+openurl pillie://debug/dump-pending-notifications
+sleep 2
+
 # Restore finds Plus: the success screen, then app-blocking setup.
 openurl pillie://debug/restore-outcome?result=restored
 tap --id paywallRestoreButton
@@ -79,4 +83,9 @@ shot onboarding-paywall-restored
 tap --id paywallSuccessDone
 wait id appBlockingEmptyStateCard 15
 shot app-blocking-after-paywall
+
+# With Plus on, arm B queues its reminders again (ENG-207). app.log:
+# `Pillie QA pending requests:` above 0.
+openurl pillie://debug/dump-pending-notifications
+sleep 2
 log stop

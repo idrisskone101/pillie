@@ -51,8 +51,9 @@ final class OnboardingPaywallEnrollmentService {
     /// install falls back to control so the flag can never flip it mid-onboarding.
     @discardableResult
     func lockArm() -> OnboardingPaywallArm {
-        // Nothing stored means `start` never ran (hosted tests), so there is no arm to fix.
-        guard let enrollment = store.load() else { return .control }
+        // Nothing stored means `start` never ran (hosted tests) or the Keychain refused
+        // the write, so the flow keeps the arm it already follows.
+        guard let enrollment = store.load() else { return currentArm }
         let assignment = OnboardingPaywallExperiment.lockedAssignment(
             enrollment,
             now: Date(),
@@ -69,10 +70,7 @@ final class OnboardingPaywallEnrollmentService {
     /// the analysis.
     @discardableResult
     func reviewOverride(_ arm: OnboardingPaywallArm, onboardingStep: Int?) -> Bool {
-        guard OnboardingPaywallExperiment.acceptsReviewOverride(
-            stored: store.load(),
-            onboardingStep: onboardingStep
-        ) else {
+        guard OnboardingPaywallExperiment.acceptsReviewOverride(onboardingStep: onboardingStep) else {
             log.notice("onboarding_paywall review_link=refused arm=\(arm.rawValue, privacy: .public)")
             return false
         }

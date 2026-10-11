@@ -52,15 +52,10 @@ nonisolated enum OnboardingPaywallExperiment {
         )
     }
 
-    /// The App Review link may pick the arm only before the flows diverge, and never
-    /// for an updater, so it cannot move anyone who already saw an arm's paywall.
-    static func acceptsReviewOverride(
-        stored: OnboardingPaywallEnrollment?,
-        onboardingStep: Int?
-    ) -> Bool {
-        if case .assigned(let assignment) = stored, assignment.source == .excluded {
-            return false
-        }
+    /// The App Review link may pick the arm only before the flows diverge, so it never
+    /// moves anyone who already saw an arm. It ignores the reinstall exclusion: review
+    /// devices keep Keychain trial grants from earlier builds.
+    static func acceptsReviewOverride(onboardingStep: Int?) -> Bool {
         guard let onboardingStep else { return true }
         guard let step = OnboardingFlow.visibleStep(
             for: onboardingStep,

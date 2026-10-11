@@ -121,17 +121,6 @@ struct OnboardingPaywallArmBTests {
         #expect(!acceptsReview(step: .complete))
     }
 
-    @Test func `The review link never moves an updater`() {
-        let excluded = OnboardingPaywallEnrollment.assigned(OnboardingPaywallAssignment(
-            arm: .control,
-            source: .excluded,
-            assignedAt: now,
-            appVersion: "2.2.1"
-        ))
-        #expect(!OnboardingPaywallExperiment.acceptsReviewOverride(stored: excluded, onboardingStep: nil))
-        #expect(OnboardingPaywallExperiment.acceptsReviewOverride(stored: .pending(since: now), onboardingStep: nil))
-    }
-
     @Test func `A review install stays out of the analysis`() {
         let review = OnboardingPaywallAssignment(arm: .hardTrial, source: .review, assignedAt: now, appVersion: "2.2.1")
         #expect(!review.isEligible)
@@ -259,7 +248,7 @@ struct OnboardingPaywallArmBTests {
     // MARK: - Helpers
 
     private func acceptsReview(step: OnboardingFlow.Step?) -> Bool {
-        OnboardingPaywallExperiment.acceptsReviewOverride(stored: nil, onboardingStep: step?.rawValue)
+        OnboardingPaywallExperiment.acceptsReviewOverride(onboardingStep: step?.rawValue)
     }
 
     private func visibleStep(_ step: OnboardingFlow.Step, arm: OnboardingPaywallArm) -> OnboardingFlow.Step? {
