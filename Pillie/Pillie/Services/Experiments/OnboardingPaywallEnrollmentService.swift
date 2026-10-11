@@ -71,8 +71,10 @@ final class OnboardingPaywallEnrollmentService {
             ))
             return
         }
+        // PostHog calls back on its network queue. Hopping to the main actor orders the
+        // flag read after any `lockArm()`, so a late flag can't overwrite a locked arm.
         analytics.reloadFeatureFlags { [weak self] in
-            self?.readFlagIfPending()
+            Task { @MainActor in self?.readFlagIfPending() }
         }
     }
 
