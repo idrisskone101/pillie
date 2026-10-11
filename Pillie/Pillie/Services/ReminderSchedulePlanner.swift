@@ -112,6 +112,12 @@ struct ReminderSchedulePlanner {
         /// Days the Reverse Trial counted under earlier pack rhythms
         /// (`PlusAccessState.trialLivedDays`); `pack` counts the rest.
         var trialLivedDays: TrialLivedDays? = nil
+        /// The onboarding paywall arm (ENG-205). Arm B never grants the
+        /// Reverse Trial, so reminders follow the StoreKit entitlement alone.
+        var paywallArm: OnboardingPaywallArm? = nil
+        /// The known end of an entitlement that will not renew
+        /// (`PlusAccessState.entitlementEnd`); tracked only for arm B.
+        var entitlementEnd: Date? = nil
 
         var clock: ReminderClock {
             ReminderClock(
@@ -199,8 +205,12 @@ struct ReminderSchedulePlanner {
     }
 
     func planReminders(_ input: Input) -> [Intent] {
+        // A stray arm B grant falls back to the hard-paywall trial rules below.
+        if input.paywallArm == .hardTrial, !input.hasEntitlement, input.trialGrantDate == nil {
+            return []
+        }
         let intents = planAccessibleReminders(input)
-        guard let accessEnd = hardPaywallAccessEnd(input) else { return intents }
+        guard let accessEnd = reminderAccessEnd(input) else { return intents }
         return intents.filter { intent in
             guard let fireDate = intent.reminderFireDate else { return true }
             return fireDate < accessEnd
@@ -331,6 +341,13 @@ struct ReminderSchedulePlanner {
         intents.append(contentsOf: trialWarningIntents.map(Intent.trialExpiryWarning))
         intents.append(contentsOf: winbackIntents.map(Intent.winback))
         return Array(intents.prefix(Self.maxPendingReminders))
+    }
+
+    /// When reminders stop. Arm B reminds only while the StoreKit entitlement
+    /// lasts, so a cancelled trial or subscription ends them at its expiry.
+    private func reminderAccessEnd(_ input: Input) -> Date? {
+        if input.paywallArm == .hardTrial, input.hasEntitlement { return input.entitlementEnd }
+        return hardPaywallAccessEnd(input)
     }
 
     /// When a hard-paywall user's trial ends, Pillie stops reminding them until
