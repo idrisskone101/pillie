@@ -20,6 +20,8 @@ struct PlusAccessState: Equatable {
     var schedule: ActiveDaySchedule = .everyCalendarDay
     /// Days the trial counted under earlier pack rhythms; `schedule` counts the rest.
     var trialLivedDays: TrialLivedDays? = nil
+    /// The known end of an entitlement that will not renew; tracked only for arm B (ENG-207).
+    var entitlementEnd: Date? = nil
 
     /// The Reverse Trial clock every trial surface reads, if a trial was ever granted.
     var trialClock: ReverseTrialClock? {

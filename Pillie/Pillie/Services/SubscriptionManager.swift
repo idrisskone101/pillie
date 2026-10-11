@@ -112,6 +112,15 @@ final class SubscriptionManager: NSObject {
     /// existing installation that is explicitly grandfathered by issue #257.
     private(set) var trialTermsCohort: TrialTermsCohort?
 
+    /// The onboarding paywall arm (ENG-205), nil until enrollment publishes it.
+    /// Arm B has no Reverse Trial, so its reminders follow StoreKit alone (ENG-207).
+    private(set) var onboardingPaywallArm: OnboardingPaywallArm?
+
+    /// When the active entitlement will lapse because it will not renew (a
+    /// cancelled StoreKit trial or subscription); nil while it renews or for
+    /// lifetime.
+    private var nonRenewingEntitlementEnd: Date?
+
     /// Whether the RevenueCat entitlement state has actually loaded this launch.
     /// `hasEntitlement` starts `false` before the first customer-info fetch, so
     /// the existing-user update grant (#165) must wait for this before deciding —
@@ -206,7 +215,7 @@ final class SubscriptionManager: NSObject {
     #if DEBUG
     /// When set, customer-info refreshes keep the QA entitlement instead of
     /// letting a live RevenueCat fetch overwrite `setPlusForTesting`.
-    private var debugEntitlementOverride: Bool?
+    private var debugEntitlementOverride: (isPlus: Bool, endsAt: Date?)?
     #endif
 
     private override init() {
@@ -230,7 +239,8 @@ final class SubscriptionManager: NSObject {
             hasEntitlement: hasEntitlement,
             trialGrantDate: trialGrantDate,
             schedule: ledger?.schedule ?? .everyCalendarDay,
-            trialLivedDays: ledger?.lived
+            trialLivedDays: ledger?.lived,
+            entitlementEnd: onboardingPaywallArm == .hardTrial ? nonRenewingEntitlementEnd : nil
         )
     }
 
@@ -272,16 +282,35 @@ final class SubscriptionManager: NSObject {
     /// A raw-entitlement flip fires `onEntitlementChange` even when Plus Access
     /// itself does not move — a mid-trial purchase keeps `hasPlusAccess` true,
     /// but reminders must still replan so the pending day-10/13 trial expiry
-    /// warnings cancel (#168).
-    private func setEntitlement(_ newValue: Bool) {
+    /// warnings cancel (#168). A moved non-renewing end fires it too: a trial
+    /// cancelled mid-period must cut the reminders queued past its end.
+    private func setEntitlement(_ newValue: Bool, endsAt: Date? = nil) {
         let rawFlipped = hasEntitlement != newValue
+        let endMoved = nonRenewingEntitlementEnd != endsAt
         let accessBefore = hasPlusAccess
         hasEntitlement = newValue
+        nonRenewingEntitlementEnd = endsAt
         hasResolvedEntitlement = true
         refreshPlusAccess()
-        if rawFlipped, hasPlusAccess == accessBefore {
+        if rawFlipped || endMoved, hasPlusAccess == accessBefore {
             onEntitlementChange?(hasPlusAccess)
         }
+    }
+
+    /// The end of an active entitlement that will not renew. Lifetime has no
+    /// expiration date, so it never ends.
+    nonisolated static func nonRenewingEnd(isActive: Bool, willRenew: Bool, expirationDate: Date?) -> Date? {
+        guard isActive, !willRenew else { return nil }
+        return expirationDate
+    }
+
+    private nonisolated static func nonRenewingEnd(_ entitlement: EntitlementInfo?) -> Date? {
+        guard let entitlement else { return nil }
+        return nonRenewingEnd(
+            isActive: entitlement.isActive,
+            willRenew: entitlement.willRenew,
+            expirationDate: entitlement.expirationDate
+        )
     }
 
     /// Re-evaluates the Plus Access predicate and fires `onEntitlementChange`
@@ -353,9 +382,8 @@ final class SubscriptionManager: NSObject {
         // RevenueCat refreshes this cache below, but returning subscribers should
         // not be reported as free during that network round trip.
         if let cachedCustomerInfo = Purchases.shared.cachedCustomerInfo {
-            setEntitlement(
-                cachedCustomerInfo.entitlements[Self.entitlementID]?.isActive == true
-            )
+            let entitlement = cachedCustomerInfo.entitlements[Self.entitlementID]
+            setEntitlement(entitlement?.isActive == true, endsAt: Self.nonRenewingEnd(entitlement))
         }
 
         let sink = PurchasesAttributionSink()
@@ -430,8 +458,15 @@ final class SubscriptionManager: NSObject {
     /// Tags the subscriber with the onboarding paywall arm (ENG-205) so RevenueCat
     /// revenue can be split by arm. A no-op before `configure()`. No `$` prefix:
     /// RevenueCat reserves it for built-in attributes and drops custom `$` keys.
+    /// Entering or leaving arm B replans like an access change: a late arm B
+    /// assignment must cancel the reminders onboarding queued under arm A rules.
     func recordOnboardingPaywallArm(_ arm: OnboardingPaywallArm) {
         attributionSink?.setAttributes(["experiment_onboarding_paywall": arm.rawValue])
+        let rulesChanged = (onboardingPaywallArm == .hardTrial) != (arm == .hardTrial)
+        onboardingPaywallArm = arm
+        guard rulesChanged else { return }
+        refreshPlusAccess()
+        onEntitlementChange?(hasPlusAccess)
     }
 
     // MARK: - Purchase
@@ -517,8 +552,10 @@ final class SubscriptionManager: NSObject {
         do {
             try requireConfiguredPurchases()
             let customerInfo = try await Purchases.shared.restorePurchases()
+            let entitlement = customerInfo.entitlements[Self.entitlementID]
             return applyRestoreResult(
-                isPlusEntitlementActive: customerInfo.entitlements[Self.entitlementID]?.isActive == true
+                isPlusEntitlementActive: entitlement?.isActive == true,
+                endsAt: Self.nonRenewingEnd(entitlement)
             )
         } catch {
             return .failed(RestoreFailure(error: error))
@@ -528,8 +565,8 @@ final class SubscriptionManager: NSObject {
     /// Shared restore result funnel for subscriptions and the lifetime
     /// non-consumable: RevenueCat maps every product to `pillie_plus`, and the
     /// client restores that entitlement without branching on product duration.
-    func applyRestoreResult(isPlusEntitlementActive: Bool) -> RestoreOutcome {
-        setEntitlement(isPlusEntitlementActive)
+    func applyRestoreResult(isPlusEntitlementActive: Bool, endsAt: Date? = nil) -> RestoreOutcome {
+        setEntitlement(isPlusEntitlementActive, endsAt: endsAt)
         return isPlusEntitlementActive ? .restored : .noActivePurchase
     }
 
@@ -591,12 +628,13 @@ final class SubscriptionManager: NSObject {
         }
         #if DEBUG
         if let debugEntitlementOverride {
-            setEntitlement(debugEntitlementOverride)
+            setEntitlement(debugEntitlementOverride.isPlus, endsAt: debugEntitlementOverride.endsAt)
             return
         }
         #endif
         guard let customerInfo = try? await Purchases.shared.customerInfo() else { return }
-        setEntitlement(customerInfo.entitlements[Self.entitlementID]?.isActive == true)
+        let entitlement = customerInfo.entitlements[Self.entitlementID]
+        setEntitlement(entitlement?.isActive == true, endsAt: Self.nonRenewingEnd(entitlement))
     }
 
     /// Resolves both pieces of launch commerce state used by the hard-wall gate.
@@ -618,9 +656,10 @@ final class SubscriptionManager: NSObject {
     @ObservationIgnored
     var debugRestoreOutcome: RestoreOutcome?
 
-    func setPlusForTesting(_ isPlus: Bool) {
-        debugEntitlementOverride = isPlus
-        setEntitlement(isPlus)
+    /// `endsAt` simulates a cancelled trial or subscription that lapses then.
+    func setPlusForTesting(_ isPlus: Bool, endsAt: Date? = nil) {
+        debugEntitlementOverride = (isPlus, endsAt)
+        setEntitlement(isPlus, endsAt: endsAt)
         hasResolvedHardPaywallConfiguration = true
     }
 
@@ -704,8 +743,9 @@ extension SubscriptionManager: PurchasesDelegate {
         let active = entitlement?.isActive == true
         let productID = entitlement?.productIdentifier
         let willRenew = entitlement?.willRenew == true
+        let endsAt = Self.nonRenewingEnd(entitlement)
         Task { @MainActor in
-            self.setEntitlement(active)
+            self.setEntitlement(active, endsAt: endsAt)
             if !TrialEndExtendReminder.isStillDue(isActive: active, productID: productID, willRenew: willRenew) {
                 NotificationManager.shared.removeTrialEndExtendReminder()
             }

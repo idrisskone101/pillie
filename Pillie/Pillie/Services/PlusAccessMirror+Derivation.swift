@@ -14,11 +14,11 @@ extension PlusAccessMirror {
     /// The moment Plus Access is known to end, derived from the authoritative
     /// access state. A trial-only user is valid exactly until the Reverse Trial
     /// clock's expiry moment (local midnight after the 14th full hormone-active
-    /// day). An entitled user never expires from the shield's point of view —
-    /// churn is handled by the next in-app refresh, never by the extension
-    /// guessing at renewal dates.
+    /// day). An entitled user is valid until a known non-renewing end, else
+    /// forever: churn of a renewing plan is handled by the next in-app refresh,
+    /// never by the extension guessing at renewal dates.
     static func validUntil(state: PlusAccessState, calendar: Calendar) -> Date {
-        if state.hasEntitlement { return .distantFuture }
+        if state.hasEntitlement { return state.entitlementEnd ?? .distantFuture }
         guard let clock = state.trialClock else { return .distantPast }
         return clock.expiryMoment(calendar: calendar)
     }
