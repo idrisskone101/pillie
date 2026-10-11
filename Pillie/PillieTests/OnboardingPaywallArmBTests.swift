@@ -108,6 +108,36 @@ struct OnboardingPaywallArmBTests {
         #expect(locked.source == .offlineDefault)
     }
 
+    // MARK: - App Review link
+
+    @Test func `The review link works until the diagnosis continues`() {
+        #expect(acceptsReview(step: nil))
+        #expect(acceptsReview(step: .welcome))
+        #expect(acceptsReview(step: .method))
+        #expect(acceptsReview(step: .reminderPlan))
+        #expect(!acceptsReview(step: .onboardingPaywall))
+        #expect(!acceptsReview(step: .appBlocking))
+        #expect(!acceptsReview(step: .trialGranted))
+        #expect(!acceptsReview(step: .complete))
+    }
+
+    @Test func `The review link never moves an updater`() {
+        let excluded = OnboardingPaywallEnrollment.assigned(OnboardingPaywallAssignment(
+            arm: .control,
+            source: .excluded,
+            assignedAt: now,
+            appVersion: "2.2.1"
+        ))
+        #expect(!OnboardingPaywallExperiment.acceptsReviewOverride(stored: excluded, onboardingStep: nil))
+        #expect(OnboardingPaywallExperiment.acceptsReviewOverride(stored: .pending(since: now), onboardingStep: nil))
+    }
+
+    @Test func `A review install stays out of the analysis`() {
+        let review = OnboardingPaywallAssignment(arm: .hardTrial, source: .review, assignedAt: now, appVersion: "2.2.1")
+        #expect(!review.isEligible)
+        #expect(OnboardingPaywallAssignmentSource.review.rawValue == "review")
+    }
+
     // MARK: - Trial-end machinery stays off
 
     @Test func `The trial-end wall never auto-presents without a trial grant`() {
@@ -227,6 +257,10 @@ struct OnboardingPaywallArmBTests {
     }
 
     // MARK: - Helpers
+
+    private func acceptsReview(step: OnboardingFlow.Step?) -> Bool {
+        OnboardingPaywallExperiment.acceptsReviewOverride(stored: nil, onboardingStep: step?.rawValue)
+    }
 
     private func visibleStep(_ step: OnboardingFlow.Step, arm: OnboardingPaywallArm) -> OnboardingFlow.Step? {
         OnboardingFlow.visibleStep(for: step.rawValue, isPlus: false, selectedFreePlan: false, arm: arm)

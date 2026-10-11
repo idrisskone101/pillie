@@ -52,6 +52,27 @@ nonisolated enum OnboardingPaywallExperiment {
         )
     }
 
+    /// The App Review link may pick the arm only before the flows diverge, and never
+    /// for an updater, so it cannot move anyone who already saw an arm's paywall.
+    static func acceptsReviewOverride(
+        stored: OnboardingPaywallEnrollment?,
+        onboardingStep: Int?
+    ) -> Bool {
+        if case .assigned(let assignment) = stored, assignment.source == .excluded {
+            return false
+        }
+        guard let onboardingStep else { return true }
+        guard let step = OnboardingFlow.visibleStep(
+            for: onboardingStep,
+            isPlus: false,
+            selectedFreePlan: false
+        ),
+        let index = OnboardingFlow.displayIndex(for: step.rawValue),
+        let diagnosis = OnboardingFlow.displayIndex(for: OnboardingFlow.Step.reminderPlan.rawValue)
+        else { return false }
+        return index <= diagnosis
+    }
+
     static func lockedAssignment(
         _ enrollment: OnboardingPaywallEnrollment,
         now: Date,
@@ -86,6 +107,8 @@ nonisolated enum OnboardingPaywallAssignmentSource: String, Codable {
     /// Updater with app state, Keychain trial grant, or active entitlement.
     case excluded
     case debugOverride = "debug_override"
+    /// Forced by the App Review link (`pillie://review/onboarding-paywall`).
+    case review
 }
 
 nonisolated struct OnboardingPaywallAssignment: Codable, Equatable {

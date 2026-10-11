@@ -64,6 +64,27 @@ final class OnboardingPaywallEnrollmentService {
         return assignment.arm
     }
 
+    /// The App Review link: pins this install to `arm` while onboarding has not yet
+    /// passed the diagnosis. The assignment is tagged `review`, so it stays out of
+    /// the analysis.
+    @discardableResult
+    func reviewOverride(_ arm: OnboardingPaywallArm, onboardingStep: Int?) -> Bool {
+        guard OnboardingPaywallExperiment.acceptsReviewOverride(
+            stored: store.load(),
+            onboardingStep: onboardingStep
+        ) else {
+            log.notice("onboarding_paywall review_link=refused arm=\(arm.rawValue, privacy: .public)")
+            return false
+        }
+        assign(OnboardingPaywallAssignment(
+            arm: arm,
+            source: .review,
+            assignedAt: Date(),
+            appVersion: Self.appVersion
+        ))
+        return true
+    }
+
     private func resolvePending() async {
         // An active subscriber reinstalling has no Keychain grant but must stay out.
         await SubscriptionManager.shared.refreshStatus()
