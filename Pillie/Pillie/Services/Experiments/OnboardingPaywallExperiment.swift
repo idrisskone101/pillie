@@ -10,6 +10,9 @@ import Foundation
 nonisolated enum OnboardingPaywallExperiment {
     static let experimentName = "onboarding_paywall_v1"
     static let flagKey = "onboarding-paywall-arm"
+    /// RevenueCat offering the `hard_trial` arm sells: Annual is
+    /// `plus.annual.extend` (7 days free), plus Monthly and Lifetime.
+    static let offeringID = "onboarding_trial"
 
     /// A stored enrollment always wins so an arm is never re-rolled. A Keychain trial
     /// grant without a stored enrollment means a reinstall, which would bias the arms.

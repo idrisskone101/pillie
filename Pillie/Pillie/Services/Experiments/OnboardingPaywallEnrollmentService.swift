@@ -16,8 +16,15 @@ final class OnboardingPaywallEnrollmentService {
     private let analytics = AnalyticsManager.shared
     private let log = Logger(subsystem: "com.idrisskone.pillie", category: "experiment")
 
+    /// The arm the flow follows: the assigned arm, or control while pending. Reading
+    /// it never assigns, so only `lockArm()` decides a pending install.
+    private(set) var currentArm: OnboardingPaywallArm = .control
+
     init(store: OnboardingPaywallEnrollmentStoring = KeychainOnboardingPaywallEnrollmentStore()) {
         self.store = store
+        if case .assigned(let assignment) = store.load() {
+            currentArm = assignment.arm
+        }
     }
 
     /// Call once per launch, after analytics and RevenueCat are configured, with app
@@ -102,6 +109,7 @@ final class OnboardingPaywallEnrollmentService {
     }
 
     private func publish(_ assignment: OnboardingPaywallAssignment) {
+        currentArm = assignment.arm
         analytics.registerSuperProperties([
             "experiment_name": .string(OnboardingPaywallExperiment.experimentName),
             "experiment_variant": .string(assignment.arm.rawValue),
@@ -125,6 +133,7 @@ final class OnboardingPaywallEnrollmentService {
     func debugOverride(_ arm: OnboardingPaywallArm?) {
         guard let arm else {
             store.clear()
+            currentArm = .control
             analytics.unregisterSuperProperties([
                 "experiment_name",
                 "experiment_variant",

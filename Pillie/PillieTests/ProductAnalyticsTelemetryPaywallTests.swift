@@ -45,6 +45,43 @@ final class ProductAnalyticsTelemetryPaywallTests: XCTestCase {
         XCTAssertNotNil(client.events.first?.properties["is_plus"])
     }
 
+    func testOnboardingPaywallUsesItsOwnTrialAndCancelEvents() {
+        let client = ProductAnalyticsSpy()
+        let defaultsName = "ProductAnalyticsTelemetryPaywallTests.onboardingEnd"
+        UserDefaults().removePersistentDomain(forName: defaultsName)
+        let defaults = UserDefaults(suiteName: defaultsName)!
+        let analytics = AnalyticsManager(
+            defaults: defaults,
+            client: client,
+            infoDictionary: [
+                "PostHogProjectToken": "test-token",
+                "PostHogHost": "https://us.i.posthog.com"
+            ]
+        )
+        Self.keptObjects.append(defaults)
+        Self.keptObjects.append(analytics)
+        let telemetry = ProductAnalyticsTelemetry(analytics: analytics, isPlus: { false })
+
+        analytics.configure()
+        telemetry.paywallViewed(surface: .onboardingEnd)
+        telemetry.trialStarted(plan: .annual, isFromOnboarding: false, surface: .onboardingEnd)
+        telemetry.purchaseCancelled(plan: .annual, isFromOnboarding: false, surface: .onboardingEnd)
+        telemetry.onboardingPaywallBlockedRelaunch()
+        telemetry.trialStarted(plan: .annual, isFromOnboarding: false, surface: .trialStatus)
+
+        XCTAssertEqual(client.events.map(\.name), [
+            "paywall_viewed",
+            "trial_started_storekit",
+            "purchase_sheet_cancelled",
+            "onboarding_paywall_blocked_relaunch",
+            "trial_started",
+        ])
+        XCTAssertEqual(client.events[0].properties["entry_point"], .string("onboarding_end"))
+        XCTAssertEqual(client.events[0].properties["source"], .string("onboarding"))
+        XCTAssertEqual(client.events[3].properties["entry_point"], .string("onboarding_end"))
+        XCTAssertNil(client.events[4].properties["entry_point"])
+    }
+
     func testPurchaseAndRestoreOutcomesCaptureApprovedResults() {
         let recorder = AnalyticsRecorder()
 
@@ -265,7 +302,8 @@ final class ProductAnalyticsTelemetryPaywallTests: XCTestCase {
                 .homeBlockingCard,
                 .trialEnd,
                 .plusUpsell,
-                .onboardingVerification
+                .onboardingVerification,
+                .onboardingEnd
             ].map(\.rawValue)
         )
     }
@@ -397,9 +435,10 @@ final class ProductAnalyticsTelemetryPaywallTests: XCTestCase {
             .home,
             .trialEnd,
             .upsell,
+            .onboarding,
             .onboarding
         ])
-        XCTAssertEqual(recorder.surfaceEvents.map { $0.isPlus }, Array(repeating: true, count: 7))
+        XCTAssertEqual(recorder.surfaceEvents.map { $0.isPlus }, Array(repeating: true, count: 8))
     }
 
     func testAppLaunchReadsResolvedPlusAccessAtCaptureTime() {

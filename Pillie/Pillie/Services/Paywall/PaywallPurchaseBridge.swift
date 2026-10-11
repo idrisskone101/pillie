@@ -9,9 +9,9 @@ import RevenueCat
 enum PaywallPurchaseBridge {
     static func package(
         for intent: PaywallPurchaseIntent,
-        offerings: Offerings?
+        offering: Offering?
     ) -> Package? {
-        guard let offering = offerings?.current else { return nil }
+        guard let offering else { return nil }
         let plan = intent.pilliePlusPlan
         let preferredPackage = switch plan {
         case .annual: offering.annual

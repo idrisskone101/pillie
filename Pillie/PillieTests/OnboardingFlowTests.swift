@@ -347,8 +347,8 @@ final class OnboardingFlowTests: XCTestCase {
     }
 
     func testReverseTrialIsGrantedWhenAppBlockingBecomesVisible() {
-        XCTAssertTrue(OnboardingFlow.grantsReverseTrial(on: .appBlocking))
-        XCTAssertFalse(OnboardingFlow.grantsReverseTrial(on: .trialGranted))
+        XCTAssertTrue(OnboardingFlow.grantsReverseTrial(on: .appBlocking, arm: .control))
+        XCTAssertFalse(OnboardingFlow.grantsReverseTrial(on: .trialGranted, arm: .control))
     }
 
     func testTrialGrantedMapsToSafeLowCardinalityAnalyticsLabel() {
@@ -518,6 +518,7 @@ final class OnboardingFlowTests: XCTestCase {
                     hasEntitlement: false,
                     trialGrantDate: HardPaywallPolicy.cutoverInstant
                 ),
+                arm: .control,
                 termsCohort: .postCutover,
                 hardPaywallEnabled: true,
                 entitlementResolved: false,
