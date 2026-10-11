@@ -1,0 +1,91 @@
+# ENG-206: the hard_trial arm's onboarding paywall. A fresh install forced into
+# hard_trial walks to the plan reveal, lands on the paywall (not app blocking),
+# comes back to it after a relaunch, then restores into app-blocking setup.
+# Restore goes through /restore-outcome so no RevenueCat purchase or restore runs.
+# Before it, the reminder queue is empty (no Plus, ENG-207); after it, it is not.
+# app.log carries the analytics mirror: paywall_viewed with surface and
+# entry_point onboarding_end, and onboarding_paywall_blocked_relaunch.
+
+fresh
+launch
+sleep 2  # the welcome CTA ignores taps while the splash fades
+openurl "pillie://debug/onboarding-paywall-arm?arm=hard_trial"
+log start
+
+wait id protectionPlanPrimaryCTA
+tap --id protectionPlanPrimaryCTA
+wait id protectionPlanEarlyValueProofView
+tap --label "Not now" --element-type Button
+
+wait text "What’s in the way?"
+tap --label TikTok
+tap --label "A simpler routine"
+tap --id protectionPlanPrimaryCTA
+
+wait text "How often do you miss your pill?"
+tap --label Rarely
+tap --label "Right after the reminder"
+tap --id protectionPlanPrimaryCTA
+
+wait text "Where did you find Pillie?"
+tap --id acquisitionSource.tiktok
+tap --id protectionPlanPrimaryCTA
+
+wait text "Pick your method."
+tap --id protectionPlanPrimaryCTA
+
+wait text "Tap the pill you’re on today."
+tap --id packTile.12
+wait id todayPillQuestion
+tap --id todayPillYes
+wait id todayPillLogged
+tap --id protectionPlanPrimaryCTA
+
+wait text "Pick a time."
+tap --label Evening
+wait text "Pill 12 · taken"
+tap --id protectionPlanPrimaryCTA
+tap --label Allow  # iOS notification permission alert
+
+# The plan reveal's CTA leads to the paywall, not app blocking.
+wait id protectionPlanPrimaryCTA 15
+shot reminder-plan
+tap --id protectionPlanPrimaryCTA
+
+# Year leads, then Month, then Lifetime. No close button, no continue free.
+wait id paywallTile.annual 20
+wait id paywallReassurance
+sleep 2
+expect-not id appBlockingEmptyStateCard
+expect id paywallRestoreButton
+expect id paywallTermsLink
+expect id paywallPrivacyLink
+expect-not label Close
+expect-not text "Continue with free reminders"
+shot onboarding-paywall
+
+# Force-quit on the paywall lands back on the paywall.
+launch
+wait id paywallTile.annual 20
+sleep 2
+expect-not id appBlockingEmptyStateCard
+shot onboarding-paywall-relaunch
+
+openurl pillie://debug/dump-pending-notifications
+sleep 2
+
+# Restore finds Plus: the success screen, then app-blocking setup.
+openurl pillie://debug/restore-outcome?result=restored
+tap --id paywallRestoreButton
+wait id paywallSuccessDone 10
+sleep 2
+shot onboarding-paywall-restored
+tap --id paywallSuccessDone
+wait id appBlockingEmptyStateCard 15
+shot app-blocking-after-paywall
+
+# With Plus on, arm B queues its reminders again (ENG-207). app.log:
+# `Pillie QA pending requests:` above 0.
+openurl pillie://debug/dump-pending-notifications
+sleep 2
+log stop

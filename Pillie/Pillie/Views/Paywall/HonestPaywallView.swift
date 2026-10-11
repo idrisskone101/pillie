@@ -14,6 +14,7 @@ struct HonestPaywallView: View {
     let onSelect: (PaywallPurchaseIntent) -> Void
     let onPurchase: (PaywallPurchaseIntent) -> Void
     let onRestore: () -> Void
+    var onRetry: () -> Void = {}
     let onDismiss: () -> Void
     let onContinueFree: (() -> Void)?
     /// The extend offer or the purchase success sheet has taken the plans' place.
@@ -284,7 +285,10 @@ struct HonestPaywallView: View {
 
     private var purchaseButton: some View {
         Button {
-            onPurchase(scene.checkout.selectedIntent)
+            switch scene.checkout.primaryAction {
+            case .purchase: onPurchase(scene.checkout.selectedIntent)
+            case .retry: onRetry()
+            }
         } label: {
             Group {
                 if isPurchasing {

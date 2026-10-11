@@ -3497,6 +3497,36 @@
       "en": "Thanks for giving Pillie a try. This is our last notification. Pillie’s here if you want it.",
       "de": "Danke, dass du Pillie ausprobiert hast. Das ist unsere letzte Mitteilung. Pillie ist da, wenn du magst.",
       "it": "Grazie per aver provato Pillie. Questa è la nostra ultima notifica. Pillie è qui quando vuoi."
+    },
+    {
+      "issue": "ENG-206",
+      "table": "Commerce",
+      "key": "paywall.onboarding.cta.start_trial",
+      "create": true,
+      "comment": "Onboarding paywall purchase button when the Annual plan's 7-day free trial is selected.",
+      "en": "Start my free week",
+      "de": "Gratiswoche starten",
+      "it": "Inizia la settimana gratis"
+    },
+    {
+      "issue": "ENG-206",
+      "table": "Commerce",
+      "key": "paywall.onboarding.badge.trial",
+      "create": true,
+      "comment": "Badge on the Annual plan tile of the onboarding paywall when the 7-day free trial applies. Short; shown uppercase on a small pill.",
+      "en": "7 days free",
+      "de": "7 Tage gratis",
+      "it": "7 giorni gratis"
+    },
+    {
+      "issue": "ENG-206",
+      "table": "Commerce",
+      "key": "paywall.onboarding.footer.trial",
+      "create": true,
+      "comment": "Under the onboarding paywall's purchase button when the Annual 7-day free trial is selected. %@ is the yearly price, e.g. $29.99.",
+      "en": "7 days free, then %@ a year. Cancel anytime in Settings.",
+      "de": "7 Tage gratis, dann %@ pro Jahr. Jederzeit in den Einstellungen kündbar.",
+      "it": "7 giorni gratis, poi %@ all’anno. Disdici quando vuoi in Impostazioni."
     }
   ]
 }

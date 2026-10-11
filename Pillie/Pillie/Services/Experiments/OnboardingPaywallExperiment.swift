@@ -10,6 +10,9 @@ import Foundation
 nonisolated enum OnboardingPaywallExperiment {
     static let experimentName = "onboarding_paywall_v1"
     static let flagKey = "onboarding-paywall-arm"
+    /// RevenueCat offering the `hard_trial` arm sells: Annual is
+    /// `plus.annual.extend` (7 days free), plus Monthly and Lifetime.
+    static let offeringID = "onboarding_trial"
 
     /// A stored enrollment always wins so an arm is never re-rolled. A Keychain trial
     /// grant without a stored enrollment means a reinstall, which would bias the arms.
@@ -49,6 +52,22 @@ nonisolated enum OnboardingPaywallExperiment {
         )
     }
 
+    /// The App Review link may pick the arm only before the flows diverge, so it never
+    /// moves anyone who already saw an arm. It ignores the reinstall exclusion: review
+    /// devices keep Keychain trial grants from earlier builds.
+    static func acceptsReviewOverride(onboardingStep: Int?) -> Bool {
+        guard let onboardingStep else { return true }
+        guard let step = OnboardingFlow.visibleStep(
+            for: onboardingStep,
+            isPlus: false,
+            selectedFreePlan: false
+        ),
+        let index = OnboardingFlow.displayIndex(for: step.rawValue),
+        let diagnosis = OnboardingFlow.displayIndex(for: OnboardingFlow.Step.reminderPlan.rawValue)
+        else { return false }
+        return index <= diagnosis
+    }
+
     static func lockedAssignment(
         _ enrollment: OnboardingPaywallEnrollment,
         now: Date,
@@ -83,6 +102,8 @@ nonisolated enum OnboardingPaywallAssignmentSource: String, Codable {
     /// Updater with app state, Keychain trial grant, or active entitlement.
     case excluded
     case debugOverride = "debug_override"
+    /// Forced by the App Review link (`pillie://review/onboarding-paywall`).
+    case review
 }
 
 nonisolated struct OnboardingPaywallAssignment: Codable, Equatable {

@@ -706,6 +706,13 @@ enum AnalyticsEvent: String, CaseIterable {
   /// A Reverse Trial grant was written (ADR 0007). Distinct from `trialStarted`,
   /// which keeps its StoreKit-intro-offer meaning.
   case trialGranted = "trial_granted"
+  /// The onboarding paywall (ENG-206) started an Apple intro-offer trial. Its own
+  /// name so the arm B funnel never mixes with `trial_started` or `trial_granted`.
+  case trialStartedStorekit = "trial_started_storekit"
+  /// Backed out of Apple's purchase sheet on the onboarding paywall (ENG-206).
+  case purchaseSheetCancelled = "purchase_sheet_cancelled"
+  /// A `hard_trial` launch landed back on the onboarding paywall without Plus.
+  case onboardingPaywallBlockedRelaunch = "onboarding_paywall_blocked_relaunch"
   /// A Reverse Trial's Plus Access ended without conversion (#167 / ADR 0007).
   /// Recorded once, on the first app open at-or-after expiry.
   case trialExpired = "trial_expired"
@@ -840,6 +847,8 @@ enum AnalyticsPaywallSurface: String, CaseIterable {
   case plusUpsell = "plus_upsell"
   /// The onboarding access-verification screen's Restore button (ENG-74).
   case onboardingVerification = "onboarding_verification"
+  /// The `hard_trial` arm's paywall between the diagnosis and app blocking (ENG-206).
+  case onboardingEnd = "onboarding_end"
 }
 
 enum AnalyticsPlusSetupAction: String, CaseIterable {
@@ -953,6 +962,7 @@ enum AnalyticsStep: String {
   // The step label is `trial_granted_moment` (the screen); the `trial_granted`
   // event name stays reserved for the grant itself.
   case trialGranted = "trial_granted_moment"
+  case onboardingPaywall = "onboarding_paywall"
 
   init?(onboardingStep: Int) {
     guard let analyticsStep = OnboardingFlow.analyticsStep(for: onboardingStep) else { return nil }
@@ -1152,6 +1162,9 @@ struct AnalyticsPayload {
     }
     if let paywallSurface {
       properties["surface"] = .string(paywallSurface.rawValue)
+      if paywallSurface == .onboardingEnd {
+        properties["entry_point"] = .string(paywallSurface.rawValue)
+      }
     }
     if let authorizationState {
       properties["authorization_state"] = .string(authorizationState.rawValue)

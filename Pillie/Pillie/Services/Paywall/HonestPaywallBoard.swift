@@ -15,7 +15,7 @@ struct HonestPaywallBoard: Equatable {
     var isTrialEnd: Bool {
         switch moment {
         case .trialEnded: true
-        case .duringTrial, .settingsFree: false
+        case .duringTrial, .settingsFree, .onboarding: false
         }
     }
 }
@@ -24,6 +24,8 @@ enum HonestPaywallMoment: Equatable {
     case duringTrial
     case trialEnded(TrialEndAccessTerms)
     case settingsFree
+    /// The `hard_trial` arm's onboarding paywall (ENG-206): nothing past it without Plus.
+    case onboarding
 
     var chrome: HonestPaywallChrome {
         switch self {
@@ -39,7 +41,7 @@ enum HonestPaywallMoment: Equatable {
                 allowsInteractiveDismiss: true,
                 showsContinueFree: true
             )
-        case .trialEnded(.hardPaywall):
+        case .trialEnded(.hardPaywall), .onboarding:
             HonestPaywallChrome(
                 showsClose: false,
                 allowsInteractiveDismiss: false,
@@ -51,7 +53,7 @@ enum HonestPaywallMoment: Equatable {
     var ctaVerb: PaywallCTAVerb {
         switch self {
         case .duringTrial, .trialEnded: .keep
-        case .settingsFree: .get
+        case .settingsFree, .onboarding: .get
         }
     }
 }

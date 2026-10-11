@@ -16,8 +16,15 @@ final class OnboardingPaywallEnrollmentService {
     private let analytics = AnalyticsManager.shared
     private let log = Logger(subsystem: "com.idrisskone.pillie", category: "experiment")
 
+    /// The arm the flow follows: the assigned arm, or control while pending. Reading
+    /// it never assigns, so only `lockArm()` decides a pending install.
+    private(set) var currentArm: OnboardingPaywallArm = .control
+
     init(store: OnboardingPaywallEnrollmentStoring = KeychainOnboardingPaywallEnrollmentStore()) {
         self.store = store
+        if case .assigned(let assignment) = store.load() {
+            currentArm = assignment.arm
+        }
     }
 
     /// Call once per launch, after analytics and RevenueCat are configured, with app
@@ -44,8 +51,9 @@ final class OnboardingPaywallEnrollmentService {
     /// install falls back to control so the flag can never flip it mid-onboarding.
     @discardableResult
     func lockArm() -> OnboardingPaywallArm {
-        // Nothing stored means `start` never ran (hosted tests), so there is no arm to fix.
-        guard let enrollment = store.load() else { return .control }
+        // Nothing stored means `start` never ran (hosted tests) or the Keychain refused
+        // the write, so the flow keeps the arm it already follows.
+        guard let enrollment = store.load() else { return currentArm }
         let assignment = OnboardingPaywallExperiment.lockedAssignment(
             enrollment,
             now: Date(),
@@ -55,6 +63,24 @@ final class OnboardingPaywallEnrollmentService {
             assign(assignment)
         }
         return assignment.arm
+    }
+
+    /// The App Review link: pins this install to `arm` while onboarding has not yet
+    /// passed the diagnosis. The assignment is tagged `review`, so it stays out of
+    /// the analysis.
+    @discardableResult
+    func reviewOverride(_ arm: OnboardingPaywallArm, onboardingStep: Int?) -> Bool {
+        guard OnboardingPaywallExperiment.acceptsReviewOverride(onboardingStep: onboardingStep) else {
+            log.notice("onboarding_paywall review_link=refused arm=\(arm.rawValue, privacy: .public)")
+            return false
+        }
+        assign(OnboardingPaywallAssignment(
+            arm: arm,
+            source: .review,
+            assignedAt: Date(),
+            appVersion: Self.appVersion
+        ))
+        return true
     }
 
     private func resolvePending() async {
@@ -102,6 +128,7 @@ final class OnboardingPaywallEnrollmentService {
     }
 
     private func publish(_ assignment: OnboardingPaywallAssignment) {
+        currentArm = assignment.arm
         analytics.registerSuperProperties([
             "experiment_name": .string(OnboardingPaywallExperiment.experimentName),
             "experiment_variant": .string(assignment.arm.rawValue),
@@ -125,6 +152,7 @@ final class OnboardingPaywallEnrollmentService {
     func debugOverride(_ arm: OnboardingPaywallArm?) {
         guard let arm else {
             store.clear()
+            currentArm = .control
             analytics.unregisterSuperProperties([
                 "experiment_name",
                 "experiment_variant",

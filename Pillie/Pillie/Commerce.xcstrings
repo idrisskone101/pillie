@@ -51580,6 +51580,831 @@
           }
         }
       }
+    },
+    "paywall.onboarding.cta.start_trial": {
+      "comment": "Onboarding paywall purchase button when the Annual plan's 7-day free trial is selected.",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ابدئي أسبوعي المجاني"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "আমার ফ্রি সপ্তাহ শুরু করুন"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comença la setmana gratuïta"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Začít týden zdarma"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start min gratis uge"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gratiswoche starten"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ξεκίνα τη δωρεάν εβδομάδα"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start my free week"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Empezar mi semana gratis"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aloita ilmainen viikko"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lancer ma semaine gratuite"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "મારું મફત અઠવાડિયું શરૂ કરો"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "התחילי שבוע חינם"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "मेरा मुफ़्त हफ़्ता शुरू करें"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pokreni besplatni tjedan"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ingyenes hét indítása"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mulai minggu gratisku"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inizia la settimana gratis"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "無料の1週間を始める"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ನನ್ನ ಉಚಿತ ವಾರ ಆರಂಭಿಸಿ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "무료 1주일 시작하기"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "എന്റെ സൗജന്യ ആഴ്ച തുടങ്ങൂ"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "माझा मोफत आठवडा सुरू करा"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mulakan minggu percuma saya"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start gratisuken min"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start mijn gratis week"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ମୋର ମାଗଣା ସପ୍ତାହ ଆରମ୍ଭ କରନ୍ତୁ"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਮੇਰਾ ਮੁਫ਼ਤ ਹਫ਼ਤਾ ਸ਼ੁਰੂ ਕਰੋ"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zacznij darmowy tydzień"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Começar minha semana grátis"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Começar a semana grátis"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pornește săptămâna gratuită"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Начать бесплатную неделю"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Začať týždeň zadarmo"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Začni brezplačni teden"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Starta min gratisvecka"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "என் இலவச வாரத்தைத் தொடங்கு"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "నా ఉచిత వారం ప్రారంభించండి"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "เริ่มสัปดาห์ฟรีของฉัน"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ücretsiz haftamı başlat"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Почати безкоштовний тиждень"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "میرا مفت ہفتہ شروع کریں"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bắt đầu tuần miễn phí"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "开始我的免费一周"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "開始我的免費一週"
+          }
+        }
+      }
+    },
+    "paywall.onboarding.badge.trial": {
+      "comment": "Badge on the Annual plan tile of the onboarding paywall when the 7-day free trial applies. Short; shown uppercase on a small pill.",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 أيام مجانًا"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 দিন ফ্রি"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 dies gratis"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 dní zdarma"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 dage gratis"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 Tage gratis"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 μέρες δωρεάν"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 days free"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 días gratis"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 päivää ilmaiseksi"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 jours gratuits"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 દિવસ મફત"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 ימים חינם"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 दिन मुफ़्त"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 dana besplatno"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 nap ingyen"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gratis 7 hari"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 giorni gratis"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7日間無料"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 ದಿನ ಉಚಿತ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7일 무료"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 ദിവസം സൗജന്യം"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 दिवस मोफत"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 hari percuma"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 dager gratis"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 dagen gratis"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 ଦିନ ମାଗଣା"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 ਦਿਨ ਮੁਫ਼ਤ"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 dni za darmo"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 dias grátis"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 dias grátis"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 zile gratuit"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 дней бесплатно"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 dní zadarmo"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 dni brezplačno"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 dagar gratis"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 நாள் இலவசம்"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 రోజులు ఉచితం"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ฟรี 7 วัน"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 gün ücretsiz"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 днів безкоштовно"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 دن مفت"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Miễn phí 7 ngày"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "免费 7 天"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "免費 7 天"
+          }
+        }
+      }
+    },
+    "paywall.onboarding.footer.trial": {
+      "comment": "Under the onboarding paywall's purchase button when the Annual 7-day free trial is selected. %@ is the yearly price, e.g. $29.99.",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 أيام مجانًا، ثم %@ سنويًا. ألغي في أي وقت من الإعدادات."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 দিন ফ্রি, তারপর বছরে %@। সেটিংসে যেকোনো সময় বাতিল করুন।"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 dies gratis, després %@ l’any. Cancel·la quan vulguis a Configuració."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 dní zdarma, pak %@ ročně. Zrušit kdykoliv v Nastavení."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 dage gratis, derefter %@ om året. Opsig når som helst i Indstillinger."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 Tage gratis, dann %@ pro Jahr. Jederzeit in den Einstellungen kündbar."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 μέρες δωρεάν, μετά %@ τον χρόνο. Ακύρωση όποτε θέλεις στις Ρυθμίσεις."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 days free, then %@ a year. Cancel anytime in Settings."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 días gratis, luego %@ al año. Cancela cuando quieras en Ajustes."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 päivää ilmaiseksi, sitten %@ vuodessa. Peru milloin tahansa Asetuksissa."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 jours gratuits, puis %@ par an. Annule quand tu veux dans Réglages."
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 દિવસ મફત, પછી દર વર્ષે %@. સેટિંગ્સમાં ગમે ત્યારે રદ કરો."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 ימים חינם, ואז %@ לשנה. אפשר לבטל בכל עת בהגדרות."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 दिन मुफ़्त, फिर हर साल %@। सेटिंग्स में कभी भी रद्द करें।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 dana besplatno, zatim %@ godišnje. Otkaži bilo kada u Postavkama."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 nap ingyen, utána évi %@. Bármikor lemondható a Beállításokban."
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gratis 7 hari, lalu %@ per tahun. Batalkan kapan saja di Pengaturan."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 giorni gratis, poi %@ all’anno. Disdici quando vuoi in Impostazioni."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7日間無料、その後は年額%@。設定からいつでも解約できます。"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 ದಿನ ಉಚಿತ, ನಂತರ ವರ್ಷಕ್ಕೆ %@. ಸೆಟ್ಟಿಂಗ್ಸ್‌ನಲ್ಲಿ ಯಾವಾಗ ಬೇಕಾದರೂ ರದ್ದುಮಾಡಬಹುದು."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7일 무료, 이후 연 %@. 설정에서 언제든 해지 가능."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 ദിവസം സൗജന്യം, തുടർന്ന് പ്രതിവർഷം %@. സെറ്റിംഗ്‌സിൽ എപ്പോൾ വേണമെങ്കിലും റദ്ദാക്കാം."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 दिवस मोफत, त्यानंतर दरवर्षी %@. सेटिंग्जमध्ये कधीही रद्द करा."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 hari percuma, kemudian %@ setahun. Batal bila-bila masa dalam Tetapan."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 dager gratis, deretter %@ i året. Si opp når som helst i Innstillinger."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 dagen gratis, daarna %@ per jaar. Altijd opzegbaar in Instellingen."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 ଦିନ ମାଗଣା, ତାପରେ ବାର୍ଷିକ %@। ସେଟିଂସରେ ଯେକୌଣସି ସମୟରେ ବାତିଲ୍ କରନ୍ତୁ।"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 ਦਿਨ ਮੁਫ਼ਤ, ਫਿਰ ਹਰ ਸਾਲ %@। ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਕਦੇ ਵੀ ਰੱਦ ਕਰੋ।"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 dni za darmo, potem %@ rocznie. Anuluj kiedy chcesz w Ustawieniach."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 dias grátis, depois %@ ao ano. Cancele quando quiser em Ajustes."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 dias grátis, depois %@ por ano. Cancela quando quiseres nas Definições."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 zile gratuit, apoi %@ pe an. Anulezi oricând din Configurări."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 дней бесплатно, затем %@ в год. Отменить можно в Настройках в любой момент."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 dní zadarmo, potom %@ ročne. Zrušiť kedykoľvek v Nastaveniach."
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 dni brezplačno, nato %@ na leto. Prekliči kadar koli v Nastavitvah."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 dagar gratis, sedan %@ per år. Avsluta när du vill i Inställningar."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 நாள் இலவசம், பிறகு ஆண்டுக்கு %@. அமைப்புகளில் எப்போது வேண்டுமானாலும் ரத்துசெய்யலாம்."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 రోజులు ఉచితం, ఆ తర్వాత సంవత్సరానికి %@. సెట్టింగ్స్‌లో ఎప్పుడైనా రద్దు చేయవచ్చు."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ฟรี 7 วัน จากนั้น %@ ต่อปี ยกเลิกได้ทุกเมื่อในการตั้งค่า"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 gün ücretsiz, sonra yılda %@. Ayarlar’dan istediğin an iptal et."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 днів безкоштовно, далі %@ на рік. Скасувати можна в Параметрах будь-коли."
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 دن مفت، پھر ہر سال %@۔ سیٹنگز میں کبھی بھی منسوخ کریں۔"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Miễn phí 7 ngày, sau đó %@ mỗi năm. Hủy bất cứ lúc nào trong Cài đặt."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "免费 7 天，之后每年 %@。可随时在设置中取消。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "免費 7 天，之後每年 %@。可隨時在設定中取消。"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

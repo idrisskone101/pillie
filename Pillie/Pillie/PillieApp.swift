@@ -364,10 +364,13 @@ struct PillieApp: App {
                     AppDelegate.store = store
                     SubscriptionManager.shared.updateActiveDaySchedule(pack: store.activePack)
                 }
-                #if DEBUG
                 .onOpenURL { url in
+                    handleReviewLink(url)
+                    #if DEBUG
                     handleDebugDeepLink(url)
+                    #endif
                 }
+                #if DEBUG
                 .fullScreenCover(isPresented: $showsPackCardGallery) {
                     PackCardGalleryView()
                 }
@@ -520,6 +523,21 @@ struct PillieApp: App {
     private static var isOnboardingActive: Bool {
         OnboardingFlow.isOnboardingActive(
             rawStep: UserDefaults.standard.integer(forKey: OnboardingFlow.stepStorageKey)
+        )
+    }
+
+    /// App Review links, live in Release. `pillie://review/onboarding-paywall?arm=hard_trial`
+    /// puts a fresh install in that onboarding paywall arm (ENG-206).
+    private func handleReviewLink(_ url: URL) {
+        guard url.scheme == "pillie", url.host == "review",
+              url.path == "/onboarding-paywall",
+              let arm = URLComponents(url: url, resolvingAgainstBaseURL: false)?
+                .queryItems?.first(where: { $0.name == "arm" })?.value
+                .flatMap(OnboardingPaywallArm.init(rawValue:))
+        else { return }
+        OnboardingPaywallEnrollmentService.shared.reviewOverride(
+            arm,
+            onboardingStep: UserDefaults.standard.object(forKey: OnboardingFlow.stepStorageKey) as? Int
         )
     }
 

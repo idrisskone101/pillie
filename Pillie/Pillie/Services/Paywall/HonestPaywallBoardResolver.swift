@@ -18,6 +18,13 @@ enum HonestPaywallBoardResolver {
     ) -> HonestPaywallBoard? {
         guard !access.hasEntitlement else { return nil }
 
+        if entry == .onboardingEnd {
+            return HonestPaywallBoard(
+                moment: .onboarding,
+                story: HonestPaywallStoryFactory.settingsFree(method: method, locale: locale)
+            )
+        }
+
         if let clock = access.trialClock, clock.isActive(calendar: calendar, now: now) {
             return HonestPaywallBoard(
                 moment: .duringTrial,
@@ -57,7 +64,7 @@ enum HonestPaywallBoardResolver {
         switch entry {
         case .trialEndAutoPresent, .protectionOffCard:
             true
-        case .trialStatus, .settingsSubscription, .homeBlockingCard, .plusUpsell:
+        case .trialStatus, .settingsSubscription, .homeBlockingCard, .plusUpsell, .onboardingEnd:
             false
         }
     }

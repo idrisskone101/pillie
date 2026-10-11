@@ -68,7 +68,7 @@ enum ProtectionPlanProgressIndex {
             .personalizeYourPlan
         case .method, .schedule, .reminderTime, .reminderPlan, .paywall,
              .freePlanConfirmation, .appBlocking, .complete, .mechanismProof,
-             .protectionPlanReady, .trialGranted:
+             .protectionPlanReady, .trialGranted, .onboardingPaywall:
             .setYourReminder
         }
         return ProtectionPlanProgress(section: section)

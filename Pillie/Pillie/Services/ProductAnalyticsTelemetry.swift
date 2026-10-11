@@ -695,6 +695,18 @@ struct ProductAnalyticsTelemetry {
     )
   }
 
+  func onboardingPaywallBlockedRelaunch() {
+    analytics.track(
+      .onboardingPaywallBlockedRelaunch,
+      source: .onboarding,
+      surface: .onboardingEnd,
+      plan: nil,
+      result: nil,
+      trialTermsCohort: nil,
+      isPlus: isPlus()
+    )
+  }
+
   func paywallViewed(surface: AnalyticsPaywallSurface) {
     analytics.track(
       .paywallViewed,
@@ -742,7 +754,7 @@ struct ProductAnalyticsTelemetry {
     surface: AnalyticsPaywallSurface? = nil
   ) {
     trackPaywall(
-      .trialStarted,
+      surface == .onboardingEnd ? .trialStartedStorekit : .trialStarted,
       isFromOnboarding: isFromOnboarding,
       surface: surface,
       plan: plan
@@ -783,7 +795,7 @@ struct ProductAnalyticsTelemetry {
     surface: AnalyticsPaywallSurface? = nil
   ) {
     trackPaywall(
-      .purchaseCancelled,
+      surface == .onboardingEnd ? .purchaseSheetCancelled : .purchaseCancelled,
       isFromOnboarding: isFromOnboarding,
       surface: surface,
       plan: plan,
@@ -872,7 +884,7 @@ struct ProductAnalyticsTelemetry {
       return .trialEnd
     case .plusUpsell:
       return .upsell
-    case .onboardingVerification:
+    case .onboardingVerification, .onboardingEnd:
       return .onboarding
     }
   }

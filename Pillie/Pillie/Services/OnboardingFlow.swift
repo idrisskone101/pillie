@@ -40,9 +40,13 @@ enum OnboardingCompletionRoute: Equatable {
 enum RootCommerceGate: Equatable {
     case app
     case verifyingAccess
+    /// A `hard_trial` install without Plus goes back to the onboarding paywall: it has
+    /// no in-app trial, so the trial-end wall would never catch it.
+    case onboardingPaywallRequired
 
     static func resolve(
         state: PlusAccessState,
+        arm: OnboardingPaywallArm,
         termsCohort: TrialTermsCohort,
         hardPaywallEnabled: Bool,
         entitlementResolved: Bool,
@@ -50,6 +54,10 @@ enum RootCommerceGate: Equatable {
         calendar: Calendar,
         now: Date
     ) -> RootCommerceGate {
+        if arm == .hardTrial {
+            if state.hasEntitlement { return .app }
+            return entitlementResolved ? .onboardingPaywallRequired : .verifyingAccess
+        }
         switch OnboardingCompletionRoute.resolve(
             state: state,
             termsCohort: termsCohort,
@@ -173,6 +181,9 @@ enum OnboardingFlow {
         // reason; it replaces the retired paywall at the old paywall position —
         // a non-purchase announcement that the Reverse Trial has started.
         case trialGranted = 21
+        // Onboarding paywall (ENG-206), shown only to the `hard_trial` arm between the
+        // diagnosis and app-blocking setup. 22 because 14 and 21 are taken.
+        case onboardingPaywall = 22
 
         var analyticsStep: AnalyticsStep? {
             switch self {
@@ -198,6 +209,7 @@ enum OnboardingFlow {
             case .mechanismProof: return .mechanismProof
             case .protectionPlanReady: return .protectionPlanReady
             case .trialGranted: return .trialGranted
+            case .onboardingPaywall: return .onboardingPaywall
             }
         }
     }
@@ -249,6 +261,21 @@ enum OnboardingFlow {
         .complete,
     ]
 
+    /// The `hard_trial` arm sells Plus between the diagnosis and the Screen Time ask,
+    /// so non-payers never reach a permission prompt.
+    static func displayOrder(for arm: OnboardingPaywallArm) -> [Step] {
+        switch arm {
+        case .control:
+            return displayOrder
+        case .hardTrial:
+            var order = displayOrder
+            if let index = order.firstIndex(of: .appBlocking) {
+                order.insert(.onboardingPaywall, at: index)
+            }
+            return order
+        }
+    }
+
     static func step(for rawValue: Int) -> Step? {
         Step(rawValue: rawValue)
     }
@@ -261,34 +288,38 @@ enum OnboardingFlow {
     /// Derived from the canonical render/funnel sequence rather than the frozen raw
     /// value, so it stays monotonic with real progression. Retired steps (dropped
     /// from `displayOrder`) and unknown raw values have no position and return `nil`.
-    static func displayIndex(for rawValue: Int) -> Int? {
+    static func displayIndex(for rawValue: Int, arm: OnboardingPaywallArm = .control) -> Int? {
         guard let step = step(for: rawValue) else { return nil }
-        return displayOrder.firstIndex(of: step)
+        return displayOrder(for: arm).firstIndex(of: step)
     }
 
-    static func nextStep(after step: Step) -> Step? {
-        guard let index = displayOrder.firstIndex(of: step) else { return nil }
-        let nextIndex = displayOrder.index(after: index)
-        guard nextIndex < displayOrder.endIndex else { return nil }
-        return displayOrder[nextIndex]
+    static func nextStep(after step: Step, arm: OnboardingPaywallArm = .control) -> Step? {
+        let order = displayOrder(for: arm)
+        guard let index = order.firstIndex(of: step) else { return nil }
+        let nextIndex = order.index(after: index)
+        guard nextIndex < order.endIndex else { return nil }
+        return order[nextIndex]
     }
 
-    static func previousStep(before step: Step) -> Step? {
-        guard let index = displayOrder.firstIndex(of: step), index > displayOrder.startIndex else {
+    static func previousStep(before step: Step, arm: OnboardingPaywallArm = .control) -> Step? {
+        let order = displayOrder(for: arm)
+        guard let index = order.firstIndex(of: step), index > order.startIndex else {
             return nil
         }
-        return displayOrder[displayOrder.index(before: index)]
+        return order[order.index(before: index)]
     }
 
-    static func grantsReverseTrial(on step: Step) -> Bool {
-        step == .appBlocking
+    /// Arm B sells a StoreKit trial instead, so it never writes an in-app trial grant.
+    static func grantsReverseTrial(on step: Step, arm: OnboardingPaywallArm) -> Bool {
+        step == .appBlocking && arm == .control
     }
 
     static func visibleStep(
         for rawValue: Int,
         isPlus: Bool,
         selectedFreePlan: Bool,
-        needsTodayPick: Bool = false
+        needsTodayPick: Bool = false,
+        arm: OnboardingPaywallArm = .control
     ) -> Step? {
         guard let step = step(for: rawValue) else { return nil }
 
@@ -334,6 +365,12 @@ enum OnboardingFlow {
             return .appBlocking
         }
 
+        // Only the `hard_trial` arm ever persists this step; anyone else resumes at
+        // app-blocking setup.
+        if step == .onboardingPaywall && arm != .hardTrial {
+            return .appBlocking
+        }
+
         return step
     }
 
@@ -373,8 +410,10 @@ enum OnboardingFlow {
     }
 
     private static func transitionDirection(from previousStep: Step, to nextStep: Step) -> TransitionDirection {
-        guard let previousIndex = displayOrder.firstIndex(of: previousStep),
-              let nextIndex = displayOrder.firstIndex(of: nextStep) else {
+        // The `hard_trial` order contains every control step, so it ranks both arms.
+        let order = displayOrder(for: .hardTrial)
+        guard let previousIndex = order.firstIndex(of: previousStep),
+              let nextIndex = order.firstIndex(of: nextStep) else {
             return nextStep.rawValue > previousStep.rawValue ? .forward : .backward
         }
 
