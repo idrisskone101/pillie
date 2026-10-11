@@ -301,6 +301,9 @@ struct ContentView: View {
                 // Mark the reveal as played so returning here from app-blocking setup
                 // shows the finished plan instead of replaying the loading animation.
                 protectionPlanModel.hasRevealedDiagnosisPlan = true
+                // The onboarding paywall arms (ENG-204) diverge after the diagnosis,
+                // before the Screen Time ask, so the arm is fixed here.
+                OnboardingPaywallEnrollmentService.shared.lockArm()
                 if let nextStep = OnboardingFlow.nextStep(after: .reminderPlan) {
                   continueSetupStep(to: nextStep)
                 }

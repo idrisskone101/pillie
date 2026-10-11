@@ -169,6 +169,14 @@ final class AppsFlyerManager: NSObject {
         log.notice("AppsFlyer af_complete_registration")
     }
 
+    /// Tags every later AppsFlyer event, `af_start_trial` and
+    /// `af_complete_registration` included, with the onboarding paywall arm (ENG-205).
+    func setOnboardingPaywallArm(_ arm: OnboardingPaywallArm) {
+        var customData = AppsFlyerLib.shared().customData ?? [:]
+        customData["onboarding_paywall_arm"] = arm.rawValue
+        AppsFlyerLib.shared().customData = customData
+    }
+
     /// Read a string from Info.plist, treating an unsubstituted `$(...)` build
     /// variable or an empty value as absent. Same guard as `AnalyticsManager`.
     private func infoDictionaryString(_ key: String) -> String? {
