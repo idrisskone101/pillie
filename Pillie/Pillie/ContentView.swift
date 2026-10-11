@@ -695,6 +695,7 @@ struct ContentView: View {
   private func grantOnboardingTrialIfNeeded(for route: OnboardingTrialActivationRoute) {
     guard route == .grantTrial,
           OnboardingFlow.grantsReverseTrial(on: .appBlocking) else { return }
+    OnboardingPaywallEnrollmentService.shared.lockArm()
     let grantDate = Date()
     let termsCohort = TrialInstallCohort.storedAssignment()
       ?? HardPaywallPolicy.cohort(forTrialGrantedAt: grantDate)

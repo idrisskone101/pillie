@@ -427,6 +427,12 @@ final class SubscriptionManager: NSObject {
         attributionSink?.setAttributes(["acquisition_source": source.rawValue])
     }
 
+    /// Tags the subscriber with the onboarding paywall arm (ENG-205) so RevenueCat
+    /// revenue can be split by arm. A no-op before `configure()`.
+    func recordOnboardingPaywallArm(_ arm: OnboardingPaywallArm) {
+        attributionSink?.setAttributes(["$experiment_onboarding_paywall": arm.rawValue])
+    }
+
     // MARK: - Purchase
 
     @discardableResult

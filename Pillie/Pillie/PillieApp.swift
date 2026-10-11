@@ -333,6 +333,11 @@ struct PillieApp: App {
                 // with both commerce states unresolved and bypass the wall.
                 SubscriptionManager.shared.configure()
             }
+            // Before `appLaunched()` so that event already carries the experiment arm.
+            OnboardingPaywallEnrollmentService.shared.start(
+                hasExistingAppState: Self.hasExistingAppState(in: .standard),
+                hasTrialGrant: KeychainTrialGrantStore().loadGrantDate() != nil
+            )
             // For returning users, RevenueCat configuration synchronously applies
             // cached entitlement state first, so `is_plus` is resolved at capture.
             ProductAnalyticsTelemetry.live.appLaunched()
@@ -919,6 +924,22 @@ struct PillieApp: App {
             }
             DebugQA.applyRoutineDay(method.contraceptiveMethod, cycleDay: day, store: store)
             reconcileScreenTimeState()
+        case "/onboarding-paywall-arm":
+            // QA control (ENG-205): `arm` is control, hard_trial, clear, or lock.
+            // Clear forgets the enrollment so the next launch enrolls afresh; lock
+            // proves the offline default on a still-pending install.
+            switch URLComponents(url: url, resolvingAgainstBaseURL: false)?
+                .queryItems?.first(where: { $0.name == "arm" })?.value {
+            case "clear":
+                OnboardingPaywallEnrollmentService.shared.debugOverride(nil)
+            case "lock":
+                OnboardingPaywallEnrollmentService.shared.lockArm()
+            case let value?:
+                guard let arm = OnboardingPaywallArm(rawValue: value) else { return }
+                OnboardingPaywallEnrollmentService.shared.debugOverride(arm)
+            case nil:
+                return
+            }
         case "/review-prompt":
             // QA shortcut (#133): land on Home with an unbroken Streak past the pill
             // threshold so the Review Prompt's Sentiment Gate card surfaces and the
