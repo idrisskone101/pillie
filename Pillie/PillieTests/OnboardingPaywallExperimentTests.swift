@@ -129,4 +129,10 @@ struct OnboardingPaywallExperimentTests {
         store.clear()
         #expect(store.load() == nil)
     }
+
+    @Test func armLocksAfterTheDiagnosisBeforeTheScreenTimeAsk() {
+        // ContentView locks the arm when the diagnosis continues; arm B's paywall must
+        // come before Screen Time permission, so app blocking has to be the next step.
+        #expect(OnboardingFlow.nextStep(after: .reminderPlan) == .appBlocking)
+    }
 }
