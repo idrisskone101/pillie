@@ -7,6 +7,9 @@
 # restore control.
 
 launch
+openurl pillie://debug/onboarding-paywall-arm?arm=control  # onboarding-paywall-arm-b leaves hard_trial forced
+launch
+openurl pillie://debug/plus-home?lang=en  # any earlier flow may have left onboarding open
 wait text Today 15  # the link rebuilds Home, then posts; an early post is lost
 openurl pillie://debug/honest-paywall?board=duringTrial&lang=en
 wait text "Keep Plus after your trial ends." 10

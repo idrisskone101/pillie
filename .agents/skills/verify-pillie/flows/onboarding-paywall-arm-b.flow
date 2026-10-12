@@ -78,6 +78,7 @@ sleep 2
 
 # Restore finds Plus: the success screen, then app-blocking setup.
 openurl pillie://debug/restore-outcome?result=restored
+gesture scroll-down  # the Plus list pushes Restore below the fold
 tap --id paywallRestoreButton
 wait id paywallSuccessDone 10
 sleep 2
