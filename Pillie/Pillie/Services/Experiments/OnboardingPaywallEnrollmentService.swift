@@ -19,11 +19,15 @@ final class OnboardingPaywallEnrollmentService {
     /// The arm the flow follows: the assigned arm, or control while pending. Reading
     /// it never assigns, so only `lockArm()` decides a pending install.
     private(set) var currentArm: OnboardingPaywallArm = .control
+    /// Opened through the App Review link. Review devices often still own Plus from
+    /// earlier sandbox purchases, so the onboarding paywall shows for them anyway.
+    private(set) var isReviewInstall = false
 
     init(store: OnboardingPaywallEnrollmentStoring = KeychainOnboardingPaywallEnrollmentStore()) {
         self.store = store
         if case .assigned(let assignment) = store.load() {
             currentArm = assignment.arm
+            isReviewInstall = assignment.source == .review
         }
     }
 
@@ -129,6 +133,7 @@ final class OnboardingPaywallEnrollmentService {
 
     private func publish(_ assignment: OnboardingPaywallAssignment) {
         currentArm = assignment.arm
+        isReviewInstall = assignment.source == .review
         analytics.registerSuperProperties([
             "experiment_name": .string(OnboardingPaywallExperiment.experimentName),
             "experiment_variant": .string(assignment.arm.rawValue),
@@ -153,6 +158,7 @@ final class OnboardingPaywallEnrollmentService {
         guard let arm else {
             store.clear()
             currentArm = .control
+            isReviewInstall = false
             analytics.unregisterSuperProperties([
                 "experiment_name",
                 "experiment_variant",

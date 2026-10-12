@@ -309,6 +309,12 @@ enum OnboardingFlow {
         return order[order.index(before: index)]
     }
 
+    /// A payer walking past arm B's paywall never sees it again. App Review installs
+    /// always do: their sandbox accounts often still own Plus.
+    static func skipsOnboardingPaywall(hasEntitlement: Bool, isReviewInstall: Bool) -> Bool {
+        hasEntitlement && !isReviewInstall
+    }
+
     /// Arm B sells a StoreKit trial instead, so it never writes an in-app trial grant.
     static func grantsReverseTrial(on step: Step, arm: OnboardingPaywallArm) -> Bool {
         step == .appBlocking && arm == .control
