@@ -291,6 +291,9 @@ final class PillStoreEdgeCaseTests: XCTestCase {
         torontoCalendar.timeZone = try XCTUnwrap(TimeZone(identifier: "America/Toronto"))
         var limaCalendar = Calendar(identifier: .gregorian)
         limaCalendar.timeZone = try XCTUnwrap(TimeZone(identifier: "America/Lima"))
+        let previousTimeZone = NSTimeZone.default
+        NSTimeZone.default = torontoCalendar.timeZone
+        defer { NSTimeZone.default = previousTimeZone }
         let cycleStart = try XCTUnwrap(torontoCalendar.date(from: DateComponents(
             calendar: torontoCalendar,
             timeZone: torontoCalendar.timeZone,
