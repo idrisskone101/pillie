@@ -143,6 +143,9 @@ struct HonestPaywallView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.top, 8)
 
+            plusIncludes
+                .padding(.top, 20)
+
             planCards
                 .padding(.top, 22)
 
@@ -187,6 +190,34 @@ struct HonestPaywallView: View {
         .opacity(isSheetRevealed && !(isSheetAway && accessibilityReduceMotion) ? 1 : 0)
         .allowsHitTesting(!isSheetAway)
         .accessibilityHidden(isSheetAway)
+    }
+
+    private var plusIncludes: some View {
+        let perks = PilliePlusPerks.commerceKeys.map {
+            PillieLocalization.string($0, table: "Commerce", locale: locale)
+        }
+        return VStack(alignment: .leading, spacing: 10) {
+            Text(PillieLocalization.string(
+                "paywall.success.perks.first",
+                table: "Commerce",
+                locale: locale
+            ))
+            .font(.pillie(13, weight: .bold))
+            .foregroundStyle(PillieTheme.textMuted)
+            .accessibilityAddTraits(.isHeader)
+
+            ForEach(Array(stride(from: 0, to: perks.count, by: 2)), id: \.self) { start in
+                HStack(alignment: .top, spacing: 12) {
+                    ForEach(start..<min(start + 2, perks.count), id: \.self) { index in
+                        PaywallPerkRow(title: perks[index])
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                }
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("paywallPlusIncludes")
     }
 
     private var planCards: some View {

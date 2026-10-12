@@ -7,6 +7,9 @@
 # restore control.
 
 launch
+openurl pillie://debug/onboarding-paywall-arm?arm=control  # onboarding-paywall-arm-b leaves hard_trial forced
+launch
+openurl pillie://debug/plus-home?lang=en  # any earlier flow may have left onboarding open
 wait text Today 15  # the link rebuilds Home, then posts; an early post is lost
 openurl pillie://debug/honest-paywall?board=duringTrial&lang=en
 wait text "Keep Plus after your trial ends." 10
@@ -15,6 +18,9 @@ expect text "charged today"
 expect id paywallTermsLink
 expect id paywallPrivacyLink
 expect text "5-star review on the App Store"
+expect id paywallPlusIncludes
+expect text "Included in Plus"
+expect text "Follow-up reminders"
 # paywall.board.during_trial.title (en), Commerce.xcstrings.
 # HonestPaywallStoryFactory.swift duringTrial(...). PillieApp.swift case
 # "/honest-paywall" -> "duringTrial": DebugQA.apply(.trialActive) then posts
@@ -38,6 +44,7 @@ wait text Today 15  # the link rebuilds Home, then posts; an early post is lost
 openurl pillie://debug/honest-paywall?board=trialEndedReturningLegacy&lang=en
 wait text "Lock your apps until you take your pill." 10
 expect text "Continue with free reminders"
+expect id paywallPlusIncludes
 expect-not text "Get your reminders"
 # Grandfathered users keep free daily reminders, so the legacy wall reuses
 # the Get Plus story (paywall.board.get_plus.title.pill). PillieApp.swift
@@ -58,6 +65,7 @@ wait text Today 15  # the link rebuilds Home, then posts; an early post is lost
 openurl pillie://debug/honest-paywall?board=trialEndedReturningHard&lang=en
 wait text "Get your reminders and app blocking back." 10
 expect text "Cancel anytime in Settings"
+expect id paywallPlusIncludes
 expect-not id xmark
 # paywall.board.trial_ended.title (en). PillieApp.swift case
 # "trialEndedReturningHard": DebugQA.apply(.trialExpiredNewUserReturning).

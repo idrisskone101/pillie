@@ -174,7 +174,7 @@ private struct PaywallSuccessPerks: View {
                 ForEach(Array(stride(from: 0, to: perks.count, by: 2)), id: \.self) { start in
                     HStack(alignment: .top, spacing: 12) {
                         ForEach(start..<min(start + 2, perks.count), id: \.self) { index in
-                            PaywallSuccessPerk(title: perks[index])
+                            PaywallPerkRow(title: perks[index])
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .successRow(rows.perk(index), isRevealed: isRevealed)
                         }
@@ -186,7 +186,7 @@ private struct PaywallSuccessPerks: View {
     }
 }
 
-private struct PaywallSuccessPerk: View {
+struct PaywallPerkRow: View {
     let title: String
 
     var body: some View {

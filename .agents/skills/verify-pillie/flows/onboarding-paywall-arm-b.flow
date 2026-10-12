@@ -57,6 +57,8 @@ wait id paywallTile.annual 20
 wait id paywallReassurance
 sleep 2
 expect-not id appBlockingEmptyStateCard
+expect id paywallPlusIncludes
+expect text "App blocking"
 expect id paywallRestoreButton
 expect id paywallTermsLink
 expect id paywallPrivacyLink
@@ -76,6 +78,7 @@ sleep 2
 
 # Restore finds Plus: the success screen, then app-blocking setup.
 openurl pillie://debug/restore-outcome?result=restored
+gesture scroll-down  # the Plus list pushes Restore below the fold
 tap --id paywallRestoreButton
 wait id paywallSuccessDone 10
 sleep 2
