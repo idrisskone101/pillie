@@ -735,6 +735,7 @@ struct ContentView: View {
       HonestPaywallHost(
         entry: .onboardingEnd,
         surface: .onboardingEnd,
+        showsToSubscriber: OnboardingPaywallEnrollmentService.shared.isReviewInstall,
         onDismiss: {
           continueSetupStep(to: .appBlocking)
         }
@@ -752,12 +753,15 @@ struct ContentView: View {
     }
   }
 
-  /// A payer walking back and forth past arm B's paywall never sees it again.
   private func skippingPaidOnboardingPaywall(
     _ step: OnboardingFlow.Step,
     otherwise: OnboardingFlow.Step
   ) -> OnboardingFlow.Step {
-    step == .onboardingPaywall && subscriptionManager.hasEntitlement ? otherwise : step
+    let skips = OnboardingFlow.skipsOnboardingPaywall(
+      hasEntitlement: subscriptionManager.hasEntitlement,
+      isReviewInstall: OnboardingPaywallEnrollmentService.shared.isReviewInstall
+    )
+    return step == .onboardingPaywall && skips ? otherwise : step
   }
 
   private func grantOnboardingTrialIfNeeded(for route: OnboardingTrialActivationRoute) {

@@ -121,6 +121,12 @@ struct OnboardingPaywallArmBTests {
         #expect(!acceptsReview(step: .complete))
     }
 
+    @Test func `A payer skips the paywall unless the install came from the review link`() {
+        #expect(OnboardingFlow.skipsOnboardingPaywall(hasEntitlement: true, isReviewInstall: false))
+        #expect(!OnboardingFlow.skipsOnboardingPaywall(hasEntitlement: true, isReviewInstall: true))
+        #expect(!OnboardingFlow.skipsOnboardingPaywall(hasEntitlement: false, isReviewInstall: false))
+    }
+
     @Test func `A review install stays out of the analysis`() {
         let review = OnboardingPaywallAssignment(arm: .hardTrial, source: .review, assignedAt: now, appVersion: "2.2.1")
         #expect(!review.isEligible)
