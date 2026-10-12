@@ -57,6 +57,8 @@ wait id paywallTile.annual 20
 wait id paywallReassurance
 sleep 2
 expect-not id appBlockingEmptyStateCard
+expect id paywallPlusIncludes
+expect text "App blocking"
 expect id paywallRestoreButton
 expect id paywallTermsLink
 expect id paywallPrivacyLink

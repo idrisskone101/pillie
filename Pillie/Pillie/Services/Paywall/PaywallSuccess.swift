@@ -9,6 +9,17 @@ import Foundation
 import RevenueCat
 import SwiftUI
 
+/// What Pillie Plus adds, as the paywall and the success screen list it.
+enum PilliePlusPerks {
+    /// Reading order: App blocking, Follow-up reminders, Shake to check in, Reminder messages.
+    static let commerceKeys = [
+        "paywall.feature.app_blocking",
+        "paywall.feature.smart_reminders",
+        "paywall.feature.shake",
+        "paywall.feature.custom_messages",
+    ]
+}
+
 struct PaywallSuccessContent: Equatable {
     struct Reminder: Equatable {
         let label: String
@@ -19,7 +30,6 @@ struct PaywallSuccessContent: Equatable {
     let title: String
     let receipt: String
     let perksLabel: String
-    /// Reading order: App blocking, Follow-up reminders, Shake to check in, Reminder messages.
     let perks: [String]
     let reminder: Reminder?
     let button: String
@@ -57,12 +67,7 @@ struct PaywallSuccessContent: Equatable {
             title: format.commerce(isReturning ? "trial.end.welcome_back" : "paywall.success.title.first"),
             receipt: format.receipt(receipt),
             perksLabel: format.commerce(isReturning ? "paywall.success.perks.returning" : "paywall.success.perks.first"),
-            perks: [
-                "paywall.feature.app_blocking",
-                "paywall.feature.smart_reminders",
-                "paywall.feature.shake",
-                "paywall.feature.custom_messages",
-            ].map { format.commerce($0) },
+            perks: PilliePlusPerks.commerceKeys.map { format.commerce($0) },
             reminder: reminder.map { reminder in
                 Reminder(
                     label: format.app("onboarding.today_pill.plan.next_reminder"),
