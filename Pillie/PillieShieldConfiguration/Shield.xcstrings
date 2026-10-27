@@ -190,12 +190,6 @@
             "value": "لم تسجّلي في Pillie اليوم بعد."
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "עוד לא סימנת היום ב-Pillie."
-          }
-        },
         "vi": {
           "stringUnit": {
             "state": "translated",
@@ -463,12 +457,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "فتح Pillie"
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "פתיחת Pillie"
           }
         },
         "vi": {
@@ -740,12 +728,6 @@
             "value": "سيكون هذا التطبيق بانتظارك."
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "האפליקציה הזו תחכה לך."
-          }
-        },
         "vi": {
           "stringUnit": {
             "state": "translated",
@@ -1015,12 +997,6 @@
             "value": "سجّلي في Pillie وسيُفتح هذا التطبيق من جديد."
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "סמני ב-Pillie והאפליקציה הזו תיפתח שוב."
-          }
-        },
         "vi": {
           "stringUnit": {
             "state": "translated",
@@ -1288,12 +1264,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "متوقف مؤقتًا حتى تسجّلي"
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "מושהית עד שתסמני"
           }
         },
         "vi": {
