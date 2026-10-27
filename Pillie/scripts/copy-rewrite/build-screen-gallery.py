@@ -34,7 +34,7 @@ APP_LANGUAGE_CODES: list[str] = import_module("check-translated-copy").APP_LANGU
 ENGLISH_NAMES = {
     "en": "English", "ar": "Arabic", "bn": "Bengali", "ca": "Catalan", "cs": "Czech", "da": "Danish",
     "de": "German", "el": "Greek", "es": "Spanish", "fi": "Finnish", "fr": "French", "gu": "Gujarati",
-    "he": "Hebrew", "hi": "Hindi", "hr": "Croatian", "hu": "Hungarian", "id": "Indonesian",
+    "hi": "Hindi", "hr": "Croatian", "hu": "Hungarian", "id": "Indonesian",
     "it": "Italian", "ja": "Japanese", "kn": "Kannada", "ko": "Korean", "ml": "Malayalam",
     "mr": "Marathi", "ms": "Malay", "nb": "Norwegian", "nl": "Dutch", "or": "Odia", "pa": "Punjabi",
     "pl": "Polish", "pt-BR": "Portuguese (Brazil)", "pt-PT": "Portuguese (Portugal)", "ro": "Romanian",
@@ -42,7 +42,7 @@ ENGLISH_NAMES = {
     "th": "Thai", "tr": "Turkish", "uk": "Ukrainian", "ur": "Urdu", "vi": "Vietnamese",
     "zh-Hans": "Chinese (Simplified)", "zh-Hant": "Chinese (Traditional)",
 }
-RTL = {"ar", "he", "ur"}
+RTL = {"ar", "ur"}
 
 
 def native_names() -> dict[str, str]:
