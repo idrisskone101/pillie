@@ -34,8 +34,8 @@ blocking/trial status surfaces, and (when eligible) the review ask.
   clears the method-aware threshold and no higher-priority card is showing;
   it can be soft-dismissed.
 - `today-trial-indicator` shows `#trialIndicator` during an active Reverse
-  Trial and opens `TrialStatusSheet`. It reads a plain countdown ("14 active
-  days left") until blocking is on, then "Plus is on · …".
+  Trial and opens `TrialStatusSheet`. It reads a plain countdown ("14 days
+  left") until blocking is on, then "Plus is on · …".
 - `today-trial-sheet` is status and commerce only: countdown hero, expiry
   date, a 14-day bar, a "What happens next" timeline (day-10 and day-13
   notices, then the expiry day), and the quiet `#trialKeepPlus` buy-early CTA.
@@ -68,7 +68,7 @@ blocking/trial status surfaces, and (when eligible) the review ask.
   taken through the real path (floating CTA -> Shake to Confirm -> its tap
   fallback), proves the taken state, and undoes it.
 - `flows/today-trial.flow` — `/trial-eve-of-break` for the pack's last
-  hormone-active day, then `/trial-clear` + `/trial-grant` +
+  pill before the break week, then `/trial-clear` + `/trial-grant` +
   `/trial-age?days=5` for a deterministic mid-trial day. Proves
   `#trialIndicator` and `TrialStatusSheet` in both states. Never taps
   `#trialKeepPlus`.
@@ -194,7 +194,8 @@ blocking/trial status surfaces, and (when eligible) the review ask.
   (`ProtectionOffCard`, `BlockingStatusCard`, the refill banner) — dismiss
   those first or the review card never renders.
 - `/trial-eve-of-break` and `/trial-break-week` are about the pill pack's
-  break week (hormone-active vs. placebo days), not the trial clock. Don't
+  break week (hormone-active vs. placebo days), not the trial clock. The
+  trial counts 14 calendar days, so the break week does not pause it. Don't
   confuse them with `/trial-age`, which ages the Reverse Trial itself.
 - `developerMenuAvatarButton` is debug-only. Do not treat it as a user path.
 - Never tap `#trialKeepPlus` or any other purchase/subscribe control — they

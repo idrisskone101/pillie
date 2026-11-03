@@ -26,7 +26,7 @@ This is the contract for anyone, person or agent, who writes a Pillie locale. Re
   - Japanese uses です・ます and no greetings. Korean uses 해요체. Chinese uses 你.
 - Keep every placeholder (`%@`, `%lld`, `%1$@`, `%%`) exactly. You may move a placeholder within the sentence.
 - `Pillie`, `Pillie Plus`, and `Plus` are never translated.
-- Active days: reuse the wording in `Localizable:onboarding.regimen.21_7` for that locale. The trial is always counted in active days.
+- Active days: reuse the wording in `Localizable:onboarding.regimen.21_7` for that locale, for pack regimen copy only. The trial is 14 plain calendar days, so trial copy never says active days.
 - Calendar lines stay calendar lines ("tonight", "tomorrow night", "in 5 days", "on %@").
 - No em dashes. No ALL CAPS in the string. The app uppercases eyebrows and badges itself.
 - No greetings in notifications ("Hey", "Hallo", "こんにちは"). Lead with the step.

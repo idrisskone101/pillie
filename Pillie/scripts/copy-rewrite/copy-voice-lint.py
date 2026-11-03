@@ -36,7 +36,7 @@ GLOSSARY = [
     (r"\bdetected\b|\bcalculated\b", "system-speak, say what Pillie did in plain words"),
     (r"\bsimulator\b", "developer word in shipped copy"),
     (r"^hey\b", "no Hey opener, lead with the step"),
-    (r"\btwo weeks\b", "the trial counts active days, say 14 active days"),
+    (r"\btwo weeks\b", "the trial is 14 calendar days, say 14 days"),
     (r"\bmay be running low\b|\bwhen convenient\b", "hedged and cold, say what to check"),
     (r"\bplacebo\b", "say sugar pill or break days, not placebo"),
     (r"\boff[- ](weeks?|days?)\b|\brest days?\b", "say break days or break week"),

@@ -13,7 +13,7 @@ A quick test for any line: could someone who has never opened Pillie say what wi
 3. **Talk to one person.** Use "you", contractions, and short sentences. Use "we" only for Pillie the team (support, feedback, billing). Pillie the app is "Pillie".
 4. **No pressure.** No guilt, no loss framing ("don't lose"), no fake urgency. Dates and counts are real or absent. The paywall says what Plus does and what stays free.
 5. **No health promises.** Pillie reminds. It does not protect. Never write "protected", "protection", "never miss", "safe", or anything about how well contraception works.
-6. **Be exact about time.** The trial is "14 active days", never "two weeks". Calendar lines stay calendar lines ("ends tonight", "ends on %@").
+6. **Be exact about time.** The trial is "14 days", never "two weeks" or "14 active days". Calendar lines stay calendar lines ("ends tonight", "ends on %@").
 7. **Errors say what happened and what to do.** No blame. Say "Try again", not "Please try again". Don't guess at a cause the code doesn't know.
 8. **Destructive steps stay blunt.** A reset says exactly what it deletes and that it can't be undone. Warmth doesn't soften a warning.
 
@@ -40,7 +40,7 @@ One word per idea. Translate each term once per locale, then reuse that translat
 | App blocking | the Plus feature, as a name | app pause, blocklist, protection |
 | pause, paused, open again | what happens to the chosen apps | block, lock, intercept, unlock |
 | Pillie Plus, then Plus | the paid plan | premium, pro |
-| active days | days with a hormone step; trial length | two weeks, trial days |
+| active days | days with a hormone step in the pack regimen, never the trial length | trial days |
 | break days, break week | placebo or patch-free or ring-free days | off days, rest days |
 | sugar pill | a placebo pill in the pack | placebo, reminder pill, inactive pill |
 | break days with no pills | a break with no pills in the pack (21-pill packs) | pill-free days |
@@ -65,4 +65,4 @@ Rewrite each locale from the new English meaning, not from the old translation.
 
 - `python3 Pillie/scripts/copy-rewrite/copy-inventory.py --summary` lists every string, its locale coverage, and whether Swift reads it.
 - `python3 Pillie/scripts/copy-rewrite/copy-voice-lint.py` flags English lines that break the mechanical rules and the glossary. It can't judge warmth. A person still reads the copy.
-- `python3 Pillie/scripts/copy-rewrite/check-translated-copy.py` checks active-day wording in every locale.
+- `python3 Pillie/scripts/copy-rewrite/check-translated-copy.py` checks active-day wording in every locale and fails if trial copy names active days.
