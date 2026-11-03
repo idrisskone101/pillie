@@ -18,6 +18,7 @@ nonisolated protocol TrialGrantStoring {
     func saveTermsCohort(_ cohort: TrialTermsCohort)
     func loadDayLedger() -> TrialDayLedger?
     func saveDayLedger(_ ledger: TrialDayLedger)
+    func clearDayLedger()
     /// Removes the grant, its day ledger, and the cohort.
     func clearGrantDate()
 }
@@ -136,6 +137,10 @@ nonisolated final class KeychainTrialGrantStore: TrialGrantStoring {
         }
     }
 
+    func clearDayLedger() {
+        SecItemDelete(ledgerQuery as CFDictionary)
+    }
+
     func clearGrantDate() {
         SecItemDelete(baseQuery as CFDictionary)
         SecItemDelete(cohortQuery as CFDictionary)
@@ -157,6 +162,7 @@ nonisolated final class InMemoryTrialGrantStore: TrialGrantStoring {
     func saveTermsCohort(_ cohort: TrialTermsCohort) { termsCohort = cohort }
     func loadDayLedger() -> TrialDayLedger? { dayLedger }
     func saveDayLedger(_ ledger: TrialDayLedger) { dayLedger = ledger }
+    func clearDayLedger() { dayLedger = nil }
     func clearGrantDate() {
         grantDate = nil
         termsCohort = nil

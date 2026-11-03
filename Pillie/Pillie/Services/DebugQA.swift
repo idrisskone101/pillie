@@ -92,11 +92,11 @@ enum DebugQAScenario: String, CaseIterable, Identifiable {
         case .marketingCalendar:
             return "Realistic taken/missed mix for screenshots."
         case .trialActive:
-            return "Onboarded new-user cohort, 12 active days left."
+            return "Onboarded new-user cohort, 12 days left."
         case .trialEveOfBreak:
-            return "Granted today on pack day 21. Break starts tomorrow. Badge is 14 active days."
+            return "Granted today on pack day 21. Break starts tomorrow. Badge is 14 days."
         case .trialMidBreak:
-            return "Granted on last active day. Today is a break day. Badge stays at 14."
+            return "Granted on last active day. Today is a break day. Badge reads 8 days."
         case .trialLastDay:
             return "Onboarded new-user cohort, expires tonight."
         case .trialExpiredNewUserBlocker:
@@ -369,7 +369,7 @@ enum DebugQA {
     }
 
     /// Grant on the last hormone-active day, land on the last break day.
-    /// Old calendar clock would read 8 days left. Active-day clock freezes at 14.
+    /// The calendar-day trial reads 8 days left.
     private static func applyTrialDuringBreak(store: PillStore) {
         completeOnboarding()
         persistInstallCohort(.postCutover)
@@ -402,21 +402,8 @@ enum DebugQA {
         seedInterventionStats(blockerConfigured: blockerConfigured)
         SubscriptionManager.shared.setPlusForTesting(subscriber)
         SubscriptionManager.shared.debugSetHardPaywallEnabled(hardPaywallEnabled)
-        let schedule = ActiveDaySchedule(pack: store.activePack)
-        SubscriptionManager.shared.updateActiveDaySchedule(schedule)
-        let calendar = Calendar.current
         let now = Date()
-        let grant: Date
-        if daysAgo == ReverseTrialClock.fullDays,
-           let placed = ReverseTrialClock.grantDatePlacingLastCountedDay(
-               now: now,
-               calendar: calendar,
-               schedule: schedule
-           ) {
-            grant = placed
-        } else {
-            grant = calendar.date(byAdding: .day, value: -daysAgo, to: now) ?? now
-        }
+        let grant = Calendar.current.date(byAdding: .day, value: -daysAgo, to: now) ?? now
         SubscriptionManager.shared.debugOverrideTrialGrantDate(grant, termsCohort: cohort)
         AppBlockingManager.shared.debugBlockerConfiguredOverride = blockerConfigured
         AppBlockingManager.shared.blockingEnabled = blockerConfigured

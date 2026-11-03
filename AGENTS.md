@@ -38,7 +38,7 @@ Any user-facing copy you add or change ships translated into every shipped local
 - Write the new English, then the same meaning in every `AppLanguage` catalog identifier (`en` through `zh-Hant`).
 - Edit the string catalog that owns the key: `Commerce.xcstrings`, `Localizable.xcstrings`, `Notifications.xcstrings`, or a Shield catalog.
 - Keep `Pillie/scripts/copy-rewrite/locked-copy.json` in sync for `en` / `de` / `it`. Keep `honest-paywall-locales.json` in sync for the other honest-paywall keys.
-- For hormone-active trial time, reuse the pack-regimen wording already in `onboarding.regimen.21_7`. Calendar-relative lines stay calendar-relative (`ends tonight`, `ends on %@`, `in 5 days`).
+- The Reverse Trial runs 14 calendar days. Trial copy says "14 days", never "14 active days", and never says a break week pauses it. Keep the active-day wording in `onboarding.regimen.21_7` for pack regimen copy only. Calendar-relative lines stay calendar-relative (`ends tonight`, `ends on %@`, `in 5 days`).
 - Run `python3 Pillie/scripts/copy-rewrite/check-translated-copy.py` before you hand the copy change back.
 
 ## Worktrees

@@ -16,7 +16,7 @@ In a flow: `openurl pillie://debug/<path>?lang=en`. The runner accepts the iOS "
 | `/onboarding-personalization-timing` | Onboarding miss-frequency step |
 | `/trial-grant` | A fresh reverse trial starting now |
 | `/trial-age?days=N` | The current trial aged back N days |
-| `/trial-eve-of-break` / `/trial-break-week` | Trial on the eve of, or during, the break week |
+| `/trial-eve-of-break` / `/trial-break-week` | Trial on the eve of, or during, the break week. The 14 calendar days keep counting through the break. |
 | `/trial-activation-hub?state=unconfigured\|partial\|full&terms=hard` | A fresh trial with Plus setup at 1/3 (`unconfigured`: reminders only), 2/3 (`partial`: plus blocking), or 3/3 (`full`: plus custom messages, strip hidden). Clears `plusSetupFinished` so the Today setup strip comes back. |
 | `/trial-clear` | No trial grant, one-shot flags and `plusSetupFinished` cleared |
 | `/trial-end-paywall?terms=soft&cohort=blocker&feedback=resolved\|unresolved&success=1&subscriber=1` | Home with an expired trial, and the trial-end paywall presents without a relaunch (a relaunch drops the expired clock). Default is the hard wall; `terms=soft` is the closable pre-cutover wall with "Continue with free reminders". Same states as the developer menu's `trialExpired*` rows. |

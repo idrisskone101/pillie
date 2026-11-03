@@ -58,7 +58,7 @@ struct TrialStatusPresentation: Equatable {
         protectionActive ? activeLabel : countdownLabel
     }
 
-    /// "%lld active days left", or "Ends tonight" on the last protected day.
+    /// "%lld days left", or "Ends tonight" on the last protected day.
     /// The badge and the sheet hero share it.
     var countdownLabel: String {
         endsTonight
@@ -105,7 +105,8 @@ struct TrialStatusPresentation: Equatable {
 
     /// The notices the planner will send (`trialNoticeSlots` with days before
     /// expiry), then the expiry day itself, all counted back from the real
-    /// `ReverseTrialClock` expiry so a break week moves every date together.
+    /// `ReverseTrialClock` expiry, so a legacy trial's break week moves every
+    /// date together.
     var timeline: [TrialTimelineRow] {
         guard let expiry = trialEndDate else { return [] }
         let warningKeys = [

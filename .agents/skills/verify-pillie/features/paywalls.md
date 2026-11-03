@@ -17,7 +17,7 @@ CTA, a reassurance line, and Restore · Terms · Privacy. The board is a
 `HonestPaywallMoment` plus a `HonestPaywallStory` (title, subtitle, review).
 
 - `paywall-during-trial` (moment `duringTrial`) — "Keep Plus after your
-  trial ends." with the live active-day count, or the ends-tonight line on
+  trial ends." with the live day count, or the ends-tonight line on
   the last day. Under the CTA: "You’re charged today. Cancel anytime in
   Settings." Reached from Home's trial chip (`entry: .trialStatus`) or debug
   `board=duringTrial`. Dismissible (Close).

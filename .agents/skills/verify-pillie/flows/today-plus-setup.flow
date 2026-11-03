@@ -9,7 +9,7 @@ openurl "pillie://debug/trial-activation-hub?state=unconfigured&lang=en"
 
 wait id plusSetupStrip 15
 expect label "Set up your Plus features, 0 of 3 done"
-wait text "14 active days left" 10
+wait text "14 days left" 10
 shot plus-setup-strip
 
 tap --id plusSetupStrip
