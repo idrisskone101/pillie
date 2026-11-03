@@ -68,11 +68,11 @@ struct HonestPaywallBoardResolverTests {
         )
 
         #expect(board?.moment == .duringTrial)
-        #expect(board?.story.subtitle == "You have 14 active days left. Pick a plan now and nothing turns off on day 14.")
+        #expect(board?.story.subtitle == "You have 14 days left. Pick a plan now and nothing turns off on day 14.")
         #expect(presentation?.displayedDaysRemaining == 14)
     }
 
-    @Test func `Mid-trial board counts the active days left`() {
+    @Test func `Mid-trial board counts the days left`() {
         let board = resolve(
             grant: date(2026, 7, 10, 9),
             entry: .settingsSubscription,
@@ -80,7 +80,7 @@ struct HonestPaywallBoardResolverTests {
         )
         #expect(board?.moment == .duringTrial)
         #expect(board?.story.title == "Keep Plus after your trial ends.")
-        #expect(board?.story.subtitle == "You have 5 active days left. Pick a plan now and nothing turns off on day 14.")
+        #expect(board?.story.subtitle == "You have 5 days left. Pick a plan now and nothing turns off on day 14.")
     }
 
     @Test func `Last trial day resolves to the ends-tonight story`() {

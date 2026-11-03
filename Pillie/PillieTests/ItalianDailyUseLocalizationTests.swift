@@ -477,7 +477,7 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
         XCTAssertEqual(commerce("paywall.feature.shake"), "Scuoti per confermare")
         XCTAssertEqual(commerce("paywall.plan.best_value"), "Conviene di più")
         XCTAssertEqual(commerce("paywall.plan.cancel_anytime_short"), "Disdici quando vuoi")
-        XCTAssertEqual(commerce("trial.end.kicker"), "I tuoi 14 giorni attivi")
+        XCTAssertEqual(commerce("trial.end.kicker"), "I tuoi 14 giorni")
         XCTAssertEqual(commerce("trial.end.welcome_back"), "Pillie Plus è di nuovo attivo.")
         XCTAssertEqual(commerce("trial.status.active_short"), "Prova attiva")
 
@@ -499,7 +499,7 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
             locale: Locale(identifier: "it_IT")
         )
 
-        XCTAssertEqual(content.title, "I tuoi primi 14 giorni attivi")
+        XCTAssertEqual(content.title, "I tuoi primi 14 giorni")
         XCTAssertEqual(content.titleAccent, "li offriamo noi.")
         XCTAssertEqual(
             content.subtitle,
@@ -522,7 +522,7 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
         XCTAssertEqual(content.dismissCTA, "Non ora")
         XCTAssertEqual(
             content.disclosure,
-            "14 giorni attivi gratis, senza carta. Il blocco app si disattiva dopo la prova. I promemoria restano gratis."
+            "14 giorni gratis, senza carta. Il blocco app si disattiva dopo la prova. I promemoria restano gratis."
         )
     }
 
@@ -540,7 +540,7 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
             trialEndDate: trialEnd,
             locale: italian
         )
-        XCTAssertEqual(active.indicatorLabel, "Plus è attivo · 7 giorni attivi rimasti")
+        XCTAssertEqual(active.indicatorLabel, "Plus è attivo · 7 giorni rimasti")
         XCTAssertEqual(active.sheetContent.ctaTitle, "Tieni Pillie Plus")
 
         let countdown = TrialStatusPresentation(
@@ -550,7 +550,7 @@ final class ItalianDailyUseLocalizationTests: XCTestCase {
             locale: italian,
             calendar: calendar
         )
-        XCTAssertEqual(countdown.indicatorLabel, "7 giorni attivi rimasti")
+        XCTAssertEqual(countdown.indicatorLabel, "7 giorni rimasti")
         XCTAssertEqual(
             countdown.sheetContent.timeline.map(\.text),
             [

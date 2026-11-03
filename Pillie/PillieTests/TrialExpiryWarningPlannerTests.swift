@@ -78,10 +78,7 @@ final class TrialExpiryWarningPlannerTests: XCTestCase {
         let grant = InMemoryStoreFactory.fixedDate("2026-05-11", hour: 9)
         let fixture = try InMemoryStoreFactory.makeStore(now: grant, startDate: grant)
         let calendar = Calendar.current
-        let clock = ReverseTrialClock(
-            grantDate: grant,
-            schedule: ActiveDaySchedule(pack: fixture.store.pack, calendar: calendar)
-        )
+        let clock = ReverseTrialClock(grantDate: grant)
         let expiryDay = calendar.startOfDay(for: clock.expiryMoment(calendar: calendar))
         let beforeTenAM = try XCTUnwrap(calendar.date(bySettingHour: 9, minute: 0, second: 0, of: expiryDay))
         let afterTenAM = try XCTUnwrap(calendar.date(bySettingHour: 11, minute: 0, second: 0, of: expiryDay))
@@ -171,7 +168,22 @@ final class TrialExpiryWarningPlannerTests: XCTestCase {
         }
     }
 
-    func testWarningsFireFromExpiryNotGrantWhenBreakSlidesTheClock() throws {
+    func testNewGrantWarningsIgnoreTheBreakWeek() throws {
+        // ENG-242: a trial granted on the last pill-active day still ends at
+        // local midnight starting calendar day 15, sugar week or not.
+        let local = { (day: Int, hour: Int) in
+            Calendar.current.date(from: DateComponents(year: 2026, month: 7, day: day, hour: hour))!
+        }
+        let grant = local(1, 10)
+        let fixture = try InMemoryStoreFactory.makeStore(now: grant, startDate: grant)
+        fixture.store.pack.cycleDayAnchorIndex = 20
+
+        let warnings = warningIntents(for: fixture.store, now: grant, trialGrantDate: grant)
+
+        XCTAssertEqual(warnings.map(\.fireDate), [local(11, 20), local(14, 20), local(16, 10)])
+    }
+
+    func testLegacyTrialWarningsFireFromExpiryNotGrantWhenBreakSlidesTheClock() throws {
         // Grant on last pill-active day. Warnings must follow expiry, not
         // grant+10 / grant+13 (those land in or just after the break).
         let grant = InMemoryStoreFactory.fixedDate("2026-07-01", hour: 10)
@@ -179,14 +191,12 @@ final class TrialExpiryWarningPlannerTests: XCTestCase {
         fixture.store.pack.cycleDayAnchorIndex = 20
 
         let calendar = Calendar.current
-        let clock = ReverseTrialClock(
-            grantDate: grant,
-            schedule: ActiveDaySchedule(pack: fixture.store.pack, calendar: calendar)
-        )
+        let schedule = ActiveDaySchedule(pack: fixture.store.pack, calendar: calendar)
+        let clock = ReverseTrialClock(grantDate: grant, schedule: schedule)
         let expiry = clock.expiryMoment(calendar: calendar)
         let grantPlusTen = try XCTUnwrap(calendar.date(byAdding: .day, value: 10, to: calendar.startOfDay(for: grant)))
 
-        let warnings = warningIntents(for: fixture.store, now: grant, trialGrantDate: grant)
+        let warnings = warningIntents(for: fixture.store, now: grant, trialGrantDate: grant, trialSchedule: schedule)
         XCTAssertEqual(warnings.map(\.day), [10, 13, 15])
 
         let day10 = try XCTUnwrap(warnings.first { $0.day == 10 })
@@ -245,10 +255,7 @@ final class TrialExpiryWarningPlannerTests: XCTestCase {
         let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 7)
         let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: now)
         let calendar = Calendar.current
-        let expiry = ReverseTrialClock(
-            grantDate: now,
-            schedule: ActiveDaySchedule(pack: fixture.store.pack, calendar: calendar)
-        ).expiryMoment(calendar: calendar)
+        let expiry = ReverseTrialClock(grantDate: now).expiryMoment(calendar: calendar)
         let doseDaysBeforeExpiry = DoseScheduleEngine.nextDueActions(
             from: fixture.store.today,
             limit: ReminderSchedulePlanner.dueScanLimit,
@@ -272,10 +279,7 @@ final class TrialExpiryWarningPlannerTests: XCTestCase {
         let now = InMemoryStoreFactory.fixedDate("2026-05-26", hour: 9)
         let grantDate = try XCTUnwrap(Calendar.current.date(byAdding: .day, value: -12, to: now))
         let fixture = try InMemoryStoreFactory.makeStore(now: now, startDate: grantDate)
-        let expiry = ReverseTrialClock(
-            grantDate: grantDate,
-            schedule: ActiveDaySchedule(pack: fixture.store.pack, calendar: .current)
-        ).expiryMoment(calendar: .current)
+        let expiry = ReverseTrialClock(grantDate: grantDate).expiryMoment(calendar: .current)
 
         let hard = plan(for: fixture.store, now: now, trialGrantDate: grantDate, trialEndTerms: .hardPaywall)
         let legacy = plan(for: fixture.store, now: now, trialGrantDate: grantDate, trialEndTerms: .legacy)
@@ -348,7 +352,8 @@ final class TrialExpiryWarningPlannerTests: XCTestCase {
         trialEndTerms: TrialEndAccessTerms = .legacy,
         smartRemindersEnabled: Bool = true,
         autoReminderIntervalMinutes: Int? = nil,
-        autoReminderRetryLimit: Int? = nil
+        autoReminderRetryLimit: Int? = nil,
+        trialSchedule: ActiveDaySchedule = .everyCalendarDay
     ) -> [ReminderSchedulePlanner.Intent] {
         let calendar = Calendar.current
         let candidateDueActions = DoseScheduleEngine.nextDueActions(
@@ -378,7 +383,8 @@ final class TrialExpiryWarningPlannerTests: XCTestCase {
                 trialCohort: trialCohort,
                 trialEndTerms: trialEndTerms,
                 servedBaseFireDateByDueDayEpoch: [:],
-                calendar: calendar
+                calendar: calendar,
+                trialSchedule: trialSchedule
             )
         )
     }
@@ -388,14 +394,16 @@ final class TrialExpiryWarningPlannerTests: XCTestCase {
         now: Date,
         trialGrantDate: Date?,
         hasEntitlement: Bool = false,
-        trialCohort: TrialEndPaywallCohort = .reminderOnly
+        trialCohort: TrialEndPaywallCohort = .reminderOnly,
+        trialSchedule: ActiveDaySchedule = .everyCalendarDay
     ) -> [ReminderSchedulePlanner.TrialExpiryWarningIntent] {
         plan(
             for: store,
             now: now,
             trialGrantDate: trialGrantDate,
             hasEntitlement: hasEntitlement,
-            trialCohort: trialCohort
+            trialCohort: trialCohort,
+            trialSchedule: trialSchedule
         )
             .compactMap { intent in
                 if case .trialExpiryWarning(let warning) = intent { return warning }

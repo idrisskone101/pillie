@@ -11,7 +11,7 @@ import Testing
 struct HonestPaywallStoryFactoryTests {
     private let english = Locale(identifier: "en")
 
-    @Test func `During trial counts active days left and quotes the trial review`() {
+    @Test func `During trial counts days left and quotes the trial review`() {
         let story = HonestPaywallStoryFactory.duringTrial(
             daysRemaining: 6,
             endsTonight: false,
@@ -19,7 +19,7 @@ struct HonestPaywallStoryFactoryTests {
         )
         #expect(story == HonestPaywallStory(
             title: "Keep Plus after your trial ends.",
-            subtitle: "You have 6 active days left. Pick a plan now and nothing turns off on day 14.",
+            subtitle: "You have 6 days left. Pick a plan now and nothing turns off on day 14.",
             review: PaywallReview(
                 quote: "Within just 10 days of my free trial, I was already convinced that I would be getting a membership.",
                 source: "5-star review on the App Store"
@@ -33,7 +33,7 @@ struct HonestPaywallStoryFactoryTests {
             endsTonight: false,
             locale: english
         )
-        #expect(story.subtitle == "You have 14 active days left. Pick a plan now and nothing turns off on day 14.")
+        #expect(story.subtitle == "You have 14 days left. Pick a plan now and nothing turns off on day 14.")
     }
 
     @Test func `Last trial day says it ends tonight`() {
