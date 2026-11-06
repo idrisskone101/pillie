@@ -7,7 +7,7 @@ import Foundation
 
 struct HonestPaywallBoard: Equatable {
     let moment: HonestPaywallMoment
-    let story: HonestPaywallStory
+    let layout: HonestPaywallLayout
 
     var chrome: HonestPaywallChrome { moment.chrome }
     var ctaVerb: PaywallCTAVerb { moment.ctaVerb }
@@ -18,6 +18,12 @@ struct HonestPaywallBoard: Equatable {
         case .duringTrial, .settingsFree: false
         }
     }
+}
+
+/// What the board renders, by paywall_design_v1 arm.
+enum HonestPaywallLayout: Equatable {
+    case s3(HonestPaywallStory)
+    case classic(ClassicPaywallStory)
 }
 
 enum HonestPaywallMoment: Equatable {

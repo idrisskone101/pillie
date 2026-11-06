@@ -798,6 +798,15 @@ struct PillieApp: App {
             if let success = queryItems?.first(where: { $0.name == "success" })?.value {
                 UserDefaults.standard.set(success, forKey: HonestPaywallScreen.debugSuccessStateKey)
             }
+            // `design=classic|control` pins the paywall_design_v1 arm; `design=none`
+            // forgets it, so the flag decides again.
+            if let raw = queryItems?.first(where: { $0.name == "design" })?.value {
+                if let design = PaywallDesign(rawValue: raw) {
+                    PaywallDesignStore().save(design)
+                } else {
+                    UserDefaults.standard.removeObject(forKey: PaywallDesignStore.key)
+                }
+            }
         case "/trial-end-paywall":
             // QA shortcut (#169): Home with an expired trial, so the Trial-End
             // Paywall auto-presents. Reuses the developer-menu scenarios, which
