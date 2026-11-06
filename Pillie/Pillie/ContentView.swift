@@ -517,6 +517,8 @@ struct ContentView: View {
 
     let defaults = UserDefaults.standard
     let termsCohort = currentTrialTermsCohort
+    let retiredArm = RetiredOnboardingPaywallArm()
+    let wasHardTrialArm = retiredArm.isHardTrial
     let decision = ExistingUserTrialGrant.evaluate(
       for: ExistingUserTrialGrant.State(
         isOnboardingComplete: !OnboardingFlow.isOnboardingActive(rawStep: onboardingStep),
@@ -524,12 +526,16 @@ struct ContentView: View {
         hasEntitlement: subscriptionManager.hasEntitlement,
         hasTrialGrant: subscriptionManager.trialGrantDate != nil,
         termsCohort: termsCohort,
-        alreadyHandled: defaults.bool(forKey: ExistingUserTrialGrant.handledStorageKey)
+        alreadyHandled: defaults.bool(forKey: ExistingUserTrialGrant.handledStorageKey),
+        wasHardTrialArm: wasHardTrialArm
       )
     )
 
     if ExistingUserTrialGrant.closesWindow(decision) {
       defaults.set(true, forKey: ExistingUserTrialGrant.handledStorageKey)
+    }
+    if !wasHardTrialArm || ExistingUserTrialGrant.closesWindow(decision) {
+      retiredArm.clear()
     }
     guard decision == .grantAndAnnounce else { return }
 

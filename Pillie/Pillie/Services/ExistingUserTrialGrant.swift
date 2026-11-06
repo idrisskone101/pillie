@@ -63,6 +63,10 @@ enum ExistingUserTrialGrant {
         /// Whether the one-shot update window was already consumed on a previous
         /// launch.
         let alreadyHandled: Bool
+        /// Assigned to the ended `hard_trial` onboarding paywall arm (ENG-204),
+        /// which never granted the Reverse Trial. It gets the trial control
+        /// installs got, whatever its cohort or update window says.
+        var wasHardTrialArm = false
     }
 
     /// UserDefaults key for the persisted one-shot window flag. Stable: renaming
@@ -73,7 +77,7 @@ enum ExistingUserTrialGrant {
         if !state.isOnboardingComplete {
             return .suppressed(.stillOnboarding)
         }
-        if state.alreadyHandled {
+        if state.alreadyHandled, !state.wasHardTrialArm {
             return .suppressed(.alreadyHandled)
         }
         if !state.isEntitlementResolved {
@@ -85,7 +89,7 @@ enum ExistingUserTrialGrant {
         if state.hasTrialGrant {
             return .suppressed(.alreadyTrialed)
         }
-        if state.termsCohort == .postCutover {
+        if state.termsCohort == .postCutover, !state.wasHardTrialArm {
             return .suppressed(.postCutoverInstall)
         }
         return .grantAndAnnounce
