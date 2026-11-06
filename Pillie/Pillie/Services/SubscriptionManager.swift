@@ -427,6 +427,12 @@ final class SubscriptionManager: NSObject {
         attributionSink?.setAttributes(["acquisition_source": source.rawValue])
     }
 
+    /// Tags the subscriber with the paywall_design_v1 arm. RevenueCat rejects
+    /// attribute keys that start with `$`.
+    func recordPaywallDesign(_ design: PaywallDesign) {
+        attributionSink?.setAttributes(["experiment_paywall_design": design.rawValue])
+    }
+
     // MARK: - Purchase
 
     @discardableResult

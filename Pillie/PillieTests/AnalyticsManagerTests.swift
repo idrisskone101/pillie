@@ -61,7 +61,7 @@ final class AnalyticsManagerTests: XCTestCase {
     // the capture-feature flags above are all false, so nothing else auto-captures.
     XCTAssertTrue(configuration.enableSwizzling)
     XCTAssertFalse(configuration.sendFeatureFlagEvent)
-    XCTAssertFalse(configuration.preloadFeatureFlags)
+    XCTAssertTrue(configuration.preloadFeatureFlags)
     XCTAssertFalse(configuration.setDefaultPersonProperties)
     XCTAssertFalse(configuration.surveys)
     // Analytics is collected for everyone, so configure opts in (never opted out).
