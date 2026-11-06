@@ -24,7 +24,8 @@ final class ExistingUserTrialGrantTests: XCTestCase {
         hasEntitlement: Bool = false,
         hasTrialGrant: Bool = false,
         termsCohort: TrialTermsCohort = .preCutover,
-        alreadyHandled: Bool = false
+        alreadyHandled: Bool = false,
+        wasHardTrialArm: Bool = false
     ) -> ExistingUserTrialGrant.State {
         ExistingUserTrialGrant.State(
             isOnboardingComplete: isOnboardingComplete,
@@ -32,7 +33,46 @@ final class ExistingUserTrialGrantTests: XCTestCase {
             hasEntitlement: hasEntitlement,
             hasTrialGrant: hasTrialGrant,
             termsCohort: termsCohort,
-            alreadyHandled: alreadyHandled
+            alreadyHandled: alreadyHandled,
+            wasHardTrialArm: wasHardTrialArm
+        )
+    }
+
+    func testRetiredHardTrialArmIsGrantedDespiteCohortAndClosedWindow() {
+        XCTAssertEqual(
+            ExistingUserTrialGrant.evaluate(for: state(
+                termsCohort: .postCutover,
+                alreadyHandled: true,
+                wasHardTrialArm: true
+            )),
+            .grantAndAnnounce
+        )
+    }
+
+    func testRetiredHardTrialArmStillRespectsPlusTrialAndOnboarding() {
+        XCTAssertEqual(
+            ExistingUserTrialGrant.evaluate(for: state(
+                hasEntitlement: true, termsCohort: .postCutover, wasHardTrialArm: true
+            )),
+            .suppressed(.alreadyEntitled)
+        )
+        XCTAssertEqual(
+            ExistingUserTrialGrant.evaluate(for: state(
+                hasTrialGrant: true, termsCohort: .postCutover, wasHardTrialArm: true
+            )),
+            .suppressed(.alreadyTrialed)
+        )
+        XCTAssertEqual(
+            ExistingUserTrialGrant.evaluate(for: state(
+                isOnboardingComplete: false, termsCohort: .postCutover, wasHardTrialArm: true
+            )),
+            .suppressed(.stillOnboarding)
+        )
+        XCTAssertEqual(
+            ExistingUserTrialGrant.evaluate(for: state(
+                isEntitlementResolved: false, termsCohort: .postCutover, wasHardTrialArm: true
+            )),
+            .suppressed(.entitlementUnresolved)
         )
     }
 

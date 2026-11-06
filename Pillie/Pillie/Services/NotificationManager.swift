@@ -400,9 +400,7 @@ final class NotificationManager {
                 servedBaseFireDateByDueDayEpoch: servedBaseFireDateByDueDayEpoch,
                 calendar: calendar,
                 reminderChange: store.reminderTimeChange,
-                trialLivedDays: SubscriptionManager.shared.plusAccessState.trialLivedDays,
-                paywallArm: SubscriptionManager.shared.onboardingPaywallArm,
-                entitlementEnd: SubscriptionManager.shared.plusAccessState.entitlementEnd
+                trialLivedDays: SubscriptionManager.shared.plusAccessState.trialLivedDays
             )
         )
 

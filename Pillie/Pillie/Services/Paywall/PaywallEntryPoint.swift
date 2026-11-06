@@ -12,7 +12,6 @@ enum PaywallEntryPoint: Equatable {
     case protectionOffCard
     case plusUpsell
     case trialEndAutoPresent
-    case onboardingEnd
 }
 
 extension AnalyticsPaywallSurface {
@@ -24,7 +23,6 @@ extension AnalyticsPaywallSurface {
         case .protectionOffCard: .protectionOffCard
         case .plusUpsell: .plusUpsell
         case .trialEnd: .trialEndAutoPresent
-        case .onboardingEnd: .onboardingEnd
         // Onboarding verification restores only; it never opens a board, and the
         // gate it guards resolves into the trial-end wall.
         case .onboardingVerification: .trialEndAutoPresent

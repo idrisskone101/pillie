@@ -20,17 +20,14 @@ struct OnboardingTelemetry {
 
   private let telemetry: ProductAnalyticsTelemetry
   private let defaults: UserDefaults
-  private let arm: @MainActor () -> OnboardingPaywallArm
 
   init(
     analytics: AnalyticsTracking = AnalyticsManager.shared,
     isPlus: @escaping () -> Bool = { SubscriptionManager.shared.hasEntitlement },
-    defaults: UserDefaults = .standard,
-    arm: @escaping @MainActor () -> OnboardingPaywallArm = { OnboardingPaywallEnrollmentService.shared.currentArm }
+    defaults: UserDefaults = .standard
   ) {
     self.telemetry = ProductAnalyticsTelemetry(analytics: analytics, isPlus: isPlus)
     self.defaults = defaults
-    self.arm = arm
   }
 
   func stepViewed(_ step: Int) {
@@ -39,10 +36,7 @@ struct OnboardingTelemetry {
       defaults.set(true, forKey: Self.onboardingStartedEmittedKey)
       telemetry.onboardingStarted(step: analyticsStep)
     }
-    telemetry.onboardingStepViewed(
-      analyticsStep,
-      stepIndex: OnboardingFlow.displayIndex(for: step, arm: arm())
-    )
+    telemetry.onboardingStepViewed(analyticsStep, stepIndex: OnboardingFlow.displayIndex(for: step))
   }
 
   func stepCompleted(from previousStep: Int, to nextStep: Int) {
@@ -50,17 +44,16 @@ struct OnboardingTelemetry {
           let analyticsStep = transition.completedAnalyticsStep else { return }
 
     // The completed/left step's position in the funnel sequence.
-    let stepIndex = OnboardingFlow.displayIndex(for: previousStep, arm: arm())
+    let stepIndex = OnboardingFlow.displayIndex(for: previousStep)
     if transition.direction == .forward {
       telemetry.onboardingStepCompleted(analyticsStep, stepIndex: stepIndex)
     } else {
       telemetry.onboardingBackTapped(analyticsStep, stepIndex: stepIndex)
     }
 
-    // Arm B leaves the diagnosis for the onboarding paywall, arm A for app blocking.
     if transition.direction == .forward,
        transition.from == .reminderPlan,
-       transition.to == .appBlocking || transition.to == .onboardingPaywall,
+       transition.to == .appBlocking,
        !defaults.bool(forKey: Self.coreOnboardingCompletedEmittedKey) {
       defaults.set(true, forKey: Self.coreOnboardingCompletedEmittedKey)
       telemetry.coreOnboardingCompleted()
