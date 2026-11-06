@@ -31,6 +31,8 @@ struct HonestPaywallBoardResolverTests {
         hasEntitlement: Bool = false,
         entry: PaywallEntryPoint,
         method: ContraceptiveMethod = .pill,
+        design: PaywallDesign = .s3,
+        trialStats: TrialEndOwnStats? = nil,
         now: Date,
         termsCohort: TrialTermsCohort? = nil
     ) -> HonestPaywallBoard? {
@@ -38,6 +40,8 @@ struct HonestPaywallBoardResolverTests {
             access: PlusAccessState(hasEntitlement: hasEntitlement, trialGrantDate: grant),
             entry: entry,
             method: method,
+            design: design,
+            trialStats: trialStats,
             calendar: calendar,
             now: now,
             locale: english,
@@ -68,7 +72,7 @@ struct HonestPaywallBoardResolverTests {
         )
 
         #expect(board?.moment == .duringTrial)
-        #expect(board?.story.subtitle == "You have 14 active days left. Pick a plan now and nothing turns off on day 14.")
+        #expect(board?.s3Story?.subtitle == "You have 14 active days left. Pick a plan now and nothing turns off on day 14.")
         #expect(presentation?.displayedDaysRemaining == 14)
     }
 
@@ -79,8 +83,8 @@ struct HonestPaywallBoardResolverTests {
             now: date(2026, 7, 20)
         )
         #expect(board?.moment == .duringTrial)
-        #expect(board?.story.title == "Keep Plus after your trial ends.")
-        #expect(board?.story.subtitle == "You have 5 active days left. Pick a plan now and nothing turns off on day 14.")
+        #expect(board?.s3Story?.title == "Keep Plus after your trial ends.")
+        #expect(board?.s3Story?.subtitle == "You have 5 active days left. Pick a plan now and nothing turns off on day 14.")
     }
 
     @Test func `Last trial day resolves to the ends-tonight story`() {
@@ -90,7 +94,7 @@ struct HonestPaywallBoardResolverTests {
             now: date(2026, 7, 15, 20)
         )
         #expect(board?.moment == .duringTrial)
-        #expect(board?.story.subtitle == "Your trial ends tonight. Pick a plan now and nothing turns off tomorrow.")
+        #expect(board?.s3Story?.subtitle == "Your trial ends tonight. Pick a plan now and nothing turns off tomorrow.")
     }
 
     @Test(arguments: [
@@ -109,7 +113,7 @@ struct HonestPaywallBoardResolverTests {
             now: date(2026, 7, 20)
         )
         #expect(board?.moment == .settingsFree)
-        #expect(board?.story.title == title)
+        #expect(board?.s3Story?.title == title)
     }
 
     @Test func `Trial end hard paywall uses locked chrome and the get-back story`() {
@@ -127,8 +131,8 @@ struct HonestPaywallBoardResolverTests {
             allowsInteractiveDismiss: false,
             showsContinueFree: false
         ))
-        #expect(board?.story.title == "Get your reminders and app blocking back.")
-        #expect(board?.story.subtitle == "Pick a plan and they’re back before your next patch change. Your setup is saved.")
+        #expect(board?.s3Story?.title == "Get your reminders and app blocking back.")
+        #expect(board?.s3Story?.subtitle == "Pick a plan and they’re back before your next patch change. Your setup is saved.")
     }
 
     @Test func `Trial end legacy cohort allows dismiss and sells Get Plus`() {
@@ -145,7 +149,7 @@ struct HonestPaywallBoardResolverTests {
             allowsInteractiveDismiss: true,
             showsContinueFree: true
         ))
-        #expect(board?.story.title == "Lock your apps until you take your pill.")
+        #expect(board?.s3Story?.title == "Lock your apps until you take your pill.")
     }
 
     @Test func `Board CTA verb is keep during trial and get when free`() {
@@ -188,5 +192,123 @@ struct HonestPaywallBoardResolverTests {
         )
         #expect(board?.moment == .trialEnded(.hardPaywall))
         #expect(board?.chrome.showsClose == false)
+    }
+
+    // MARK: - paywall_design_v1
+
+    @Test func `S3 arm resolves to the S3 layout`() {
+        let board = resolve(
+            grant: date(2026, 7, 10, 9),
+            entry: .trialStatus,
+            design: .s3,
+            now: date(2026, 7, 20)
+        )
+        #expect(board?.s3Story?.title == "Keep Plus after your trial ends.")
+        #expect(board?.classicStory == nil)
+    }
+
+    @Test func `Classic arm during the trial keeps the moment and counts days`() {
+        let board = resolve(
+            grant: date(2026, 7, 10, 9),
+            entry: .trialStatus,
+            design: .classic,
+            now: date(2026, 7, 20)
+        )
+        #expect(board?.moment == .duringTrial)
+        #expect(board?.ctaVerb == .keep)
+        #expect(board?.s3Story == nil)
+        guard case .duringTrial(let story) = board?.classicStory else {
+            Issue.record("Expected the classic during-trial story")
+            return
+        }
+        #expect(story.title == "You still have Pillie Plus.")
+        #expect(story.daysRemaining == 5)
+    }
+
+    @Test func `Classic arm on the grant day shows 14 like the home badge`() {
+        let board = resolve(
+            grant: date(2026, 7, 1, 10),
+            entry: .trialStatus,
+            design: .classic,
+            now: date(2026, 7, 1, 10)
+        )
+        guard case .duringTrial(let story) = board?.classicStory else {
+            Issue.record("Expected the classic during-trial story")
+            return
+        }
+        #expect(story.daysRemaining == 14)
+    }
+
+    @Test func `Classic arm trial end hard wall uses the returning story and locked chrome`() {
+        let board = resolve(
+            grant: date(2026, 8, 14, 0),
+            entry: .trialEndAutoPresent,
+            design: .classic,
+            now: date(2026, 8, 29),
+            termsCohort: .postCutover
+        )
+        #expect(board?.moment == .trialEnded(.hardPaywall))
+        #expect(board?.chrome.showsClose == false)
+        guard case .trialEnded(let story) = board?.classicStory else {
+            Issue.record("Expected the classic trial-ended story")
+            return
+        }
+        #expect(story.title == "Your trial has ended.")
+    }
+
+    @Test func `Classic arm trial end passes her stats to the story`() {
+        let board = resolve(
+            grant: date(2026, 6, 21, 10),
+            entry: .trialEndAutoPresent,
+            design: .classic,
+            trialStats: TrialEndOwnStats(
+                blocksIntercepted: 2,
+                dosesTaken: 12,
+                dosesDue: 14,
+                currentStreak: 0
+            ),
+            now: date(2026, 7, 6, 9),
+            termsCohort: .preCutover
+        )
+        #expect(board?.moment == .trialEnded(.legacy))
+        guard case .trialEnded(let story) = board?.classicStory,
+              case .stats(let dose, let streak, let lossLine) = story.body
+        else {
+            Issue.record("Expected the classic stats body")
+            return
+        }
+        #expect(story.title == "Your Pillie Plus trial is over.")
+        #expect(dose?.value == "12")
+        #expect(streak == nil)
+        #expect(lossLine == "12 so far. Keep it up.")
+    }
+
+    @Test func `Classic arm free user resolves to the classic Get Plus story`() {
+        let board = resolve(
+            grant: nil,
+            entry: .settingsSubscription,
+            method: .ring,
+            design: .classic,
+            now: date(2026, 7, 20)
+        )
+        #expect(board?.moment == .settingsFree)
+        #expect(board?.ctaVerb == .get)
+        guard case .settingsFree(let story) = board?.classicStory else {
+            Issue.record("Expected the classic settings story")
+            return
+        }
+        #expect(story.title == "Daily reminders are free.")
+    }
+}
+
+private extension HonestPaywallBoard {
+    var s3Story: HonestPaywallStory? {
+        guard case .s3(let story) = layout else { return nil }
+        return story
+    }
+
+    var classicStory: ClassicPaywallStory? {
+        guard case .classic(let story) = layout else { return nil }
+        return story
     }
 }

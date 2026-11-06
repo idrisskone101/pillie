@@ -41,14 +41,6 @@ struct HonestPaywallScreen: View {
     private let notificationPermission = NotificationPermission.shared
     private let winbackRouter = WinbackRouter.shared
 
-    private var scene: HonestPaywallScene {
-        HonestPaywallSceneBuilder.build(
-            board: board,
-            offerings: offeringsSnapshot,
-            selection: selection,
-            locale: locale
-        )
-    }
 
     private var offeringsSnapshot: PaywallOfferingsSnapshot? {
         let snapshot = offerings.flatMap(PaywallOfferingsSnapshot.parse)
@@ -103,17 +95,7 @@ struct HonestPaywallScreen: View {
             .transition(.opacity)
         } else {
             ZStack {
-                HonestPaywallView(
-                    scene: scene,
-                    isPurchasing: isPurchasing && !showsExtendOffer,
-                    onSelect: selectPlan,
-                    onPurchase: purchase,
-                    onRestore: restorePurchases,
-                    onDismiss: onDismiss,
-                    onContinueFree: board.chrome.showsContinueFree ? { continueFree() } : nil,
-                    isSheetAway: showsExtendOffer || success != nil,
-                    phoneShield: success.map { .plusOn(line: $0.phoneLine) } ?? .paused
-                )
+                paywallLayout
 
                 if let extendOffer {
                     TrialEndExtendOfferSheet(
@@ -136,6 +118,52 @@ struct HonestPaywallScreen: View {
                 }
             }
             .transition(.opacity)
+        }
+    }
+
+    /// The paywall_design_v1 arm decides only this view; purchase, restore,
+    /// the extend offer and success stay shared.
+    @ViewBuilder
+    private var paywallLayout: some View {
+        let isAway = showsExtendOffer || success != nil
+        let onContinueFree: (() -> Void)? = board.chrome.showsContinueFree ? { continueFree() } : nil
+        switch board.layout {
+        case .s3(let story):
+            HonestPaywallView(
+                scene: HonestPaywallSceneBuilder.build(
+                    board: board,
+                    story: story,
+                    offerings: offeringsSnapshot,
+                    selection: selection,
+                    locale: locale
+                ),
+                isPurchasing: isPurchasing && !showsExtendOffer,
+                onSelect: selectPlan,
+                onPurchase: purchase,
+                onRestore: restorePurchases,
+                onDismiss: onDismiss,
+                onContinueFree: onContinueFree,
+                isSheetAway: isAway,
+                phoneShield: success.map { .plusOn(line: $0.phoneLine) } ?? .paused
+            )
+        case .classic(let story):
+            ClassicPaywallView(
+                moment: board.moment,
+                story: story,
+                checkout: ClassicPaywallCheckoutBuilder.build(
+                    verb: board.ctaVerb,
+                    offerings: offeringsSnapshot,
+                    selection: selection,
+                    locale: locale
+                ),
+                isPurchasing: isPurchasing && !showsExtendOffer,
+                onSelect: selectPlan,
+                onPurchase: purchase,
+                onRestore: restorePurchases,
+                onDismiss: onDismiss,
+                onContinueFree: onContinueFree,
+                isAway: isAway
+            )
         }
     }
 

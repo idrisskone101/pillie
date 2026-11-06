@@ -45,7 +45,7 @@ struct HonestPaywallTelemetryTests {
     @Test func `Expired grant on C3 stays surface-scoped`() {
         let board = HonestPaywallBoard(
             moment: .settingsFree,
-            story: HonestPaywallStoryFactory.settingsFree(method: .pill, locale: english)
+            layout: .s3(HonestPaywallStoryFactory.settingsFree(method: .pill, locale: english))
         )
         #expect(
             HonestPaywallTelemetry.mode(
@@ -58,11 +58,11 @@ struct HonestPaywallTelemetryTests {
     @Test func `Expired grant on C1 stays surface-scoped`() {
         let board = HonestPaywallBoard(
             moment: .duringTrial,
-            story: HonestPaywallStoryFactory.duringTrial(
+            layout: .s3(HonestPaywallStoryFactory.duringTrial(
                 daysRemaining: 4,
                 endsTonight: false,
                 locale: english
-            )
+            ))
         )
         #expect(
             HonestPaywallTelemetry.mode(
@@ -75,11 +75,11 @@ struct HonestPaywallTelemetryTests {
     @Test func `C2 board without trial-end content stays surface-scoped`() {
         let board = HonestPaywallBoard(
             moment: .trialEnded(.hardPaywall),
-            story: HonestPaywallStoryFactory.trialEnded(
+            layout: .s3(HonestPaywallStoryFactory.trialEnded(
                 terms: .hardPaywall,
                 method: .pill,
                 locale: english
-            )
+            ))
         )
         #expect(HonestPaywallTelemetry.mode(board: board, trialEndContent: nil) == .surface)
     }
@@ -88,11 +88,11 @@ struct HonestPaywallTelemetryTests {
     func `C2 board uses trial-end events`(terms: TrialEndAccessTerms) throws {
         let board = HonestPaywallBoard(
             moment: .trialEnded(terms),
-            story: HonestPaywallStoryFactory.trialEnded(
+            layout: .s3(HonestPaywallStoryFactory.trialEnded(
                 terms: terms,
                 method: .pill,
                 locale: english
-            )
+            ))
         )
         let mode = HonestPaywallTelemetry.mode(
             board: board,
