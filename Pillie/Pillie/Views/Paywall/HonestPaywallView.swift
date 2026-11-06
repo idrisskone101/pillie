@@ -43,7 +43,7 @@ struct HonestPaywallView: View {
 
     var body: some View {
         GeometryReader { proxy in
-            let heroHeight = HonestPaywallLayout.heroHeight(safeAreaHeight: proxy.size.height)
+            let heroHeight = S3PaywallLayout.heroHeight(safeAreaHeight: proxy.size.height)
             ZStack(alignment: .top) {
                 backdrop(sheetEdge: proxy.safeAreaInsets.top + heroHeight)
 
@@ -78,13 +78,13 @@ struct HonestPaywallView: View {
 
     private func backdrop(sheetEdge: CGFloat) -> some View {
         LinearGradient(
-            colors: [HonestPaywallLayout.backdropTop, HonestPaywallLayout.backdropSheetEdge],
+            colors: [S3PaywallLayout.backdropTop, S3PaywallLayout.backdropSheetEdge],
             startPoint: .top,
             endPoint: .bottom
         )
         .frame(height: sheetEdge)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-        .background(HonestPaywallLayout.backdropSheetEdge)
+        .background(S3PaywallLayout.backdropSheetEdge)
         .ignoresSafeArea()
     }
 
@@ -94,7 +94,7 @@ struct HonestPaywallView: View {
             .animation(accessibilityReduceMotion ? PaywallEntrance.fade : PaywallEntrance.phoneFade) {
                 $0.opacity(isPhoneRevealed ? 1 : 0)
             }
-            .padding(.top, HonestPaywallLayout.phoneTopInset)
+            .padding(.top, S3PaywallLayout.phoneTopInset)
             .frame(maxWidth: .infinity)
             // Clip at the sheet's moving top edge so the phone rises from behind it.
             .frame(height: height + heroClipExtra, alignment: .top)
@@ -102,9 +102,9 @@ struct HonestPaywallView: View {
             .frame(height: height, alignment: .top)
             .overlay(alignment: .topTrailing) {
                 // Once Plus is on, the success sheet's button is the way out.
-                if scene.board.chrome.showsClose && phoneShield == .paused {
+                if scene.chrome.showsClose && phoneShield == .paused {
                     closeButton
-                        .padding(.top, HonestPaywallLayout.phoneTopInset)
+                        .padding(.top, S3PaywallLayout.phoneTopInset)
                         .padding(.trailing, 16)
                 }
             }
@@ -128,14 +128,14 @@ struct HonestPaywallView: View {
 
     private var sheet: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text(scene.board.story.title)
+            Text(scene.story.title)
                 .font(.pillie(30, weight: .black))
                 .tracking(-0.6)
                 .foregroundStyle(PillieTheme.textPrimary)
                 .fixedSize(horizontal: false, vertical: true)
                 .frame(maxWidth: .infinity, alignment: .leading)
 
-            Text(scene.board.story.subtitle)
+            Text(scene.story.subtitle)
                 .font(.pillie(14, weight: .medium))
                 .foregroundStyle(PillieTheme.textMuted)
                 .fixedSize(horizontal: false, vertical: true)
@@ -181,7 +181,7 @@ struct HonestPaywallView: View {
         .padding(.top, 26)
         .padding(.bottom, 24)
         .background {
-            HonestPaywallLayout.sheetShape
+            S3PaywallLayout.sheetShape
                 .fill(PillieTheme.bg)
                 .shadow(color: .black.opacity(0.06), radius: 20, y: -4)
         }
@@ -282,7 +282,7 @@ struct HonestPaywallView: View {
     }
 
     private var review: some View {
-        let story = scene.board.story
+        let story = scene.story
         let open = locale.quotationBeginDelimiter ?? "\u{201C}"
         let close = locale.quotationEndDelimiter ?? "\u{201D}"
         return VStack(spacing: 6) {
@@ -299,7 +299,7 @@ struct HonestPaywallView: View {
                             .font(.system(size: 9))
                     }
                 }
-                .foregroundStyle(HonestPaywallLayout.starInk)
+                .foregroundStyle(S3PaywallLayout.starInk)
                 .accessibilityHidden(true)
 
                 Text(story.review.source)
@@ -387,7 +387,7 @@ struct HonestPaywallView: View {
     }
 }
 
-private enum HonestPaywallLayout {
+private enum S3PaywallLayout {
     static let phoneTopInset: CGFloat = 12
     static let backdropTop = Color(hex: "F9DED7")
     static let backdropSheetEdge = Color(hex: "F6E3DD")
