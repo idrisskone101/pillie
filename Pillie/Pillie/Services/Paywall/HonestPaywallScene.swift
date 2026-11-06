@@ -15,9 +15,7 @@ enum HonestPaywallSceneBuilder {
         board: HonestPaywallBoard,
         offerings: PaywallOfferingsSnapshot?,
         selection: PaywallPurchaseIntent,
-        locale: Locale,
-        annualFreeWeek: Bool = false,
-        loadFailed: Bool = false
+        locale: Locale
     ) -> HonestPaywallScene {
         HonestPaywallScene(
             board: board,
@@ -25,9 +23,7 @@ enum HonestPaywallSceneBuilder {
                 moment: board.moment,
                 offerings: offerings,
                 selection: selection,
-                locale: locale,
-                annualFreeWeek: annualFreeWeek,
-                loadFailed: loadFailed
+                locale: locale
             )
         )
     }

@@ -23,8 +23,6 @@ struct ContentView: View {
   @State private var onboardingAccessResolutionFailed = false
   @State private var isResolvingRootCommerce = false
   @State private var rootCommerceResolutionFailed = false
-  /// Keeps the root onboarding paywall up through its success screen after Plus turns on.
-  @State private var isRootOnboardingPaywallOpen = false
   private let onboardingTelemetry = OnboardingTelemetry()
   private let onboardingFeedback = OnboardingInteractionFeedback()
   private let subscriptionManager = SubscriptionManager.shared
@@ -46,10 +44,6 @@ struct ContentView: View {
     AppBlockingManager.shared.hasAppsSelected ? .blockerConfigured : .reminderOnly
   }
 
-  private var paywallArm: OnboardingPaywallArm {
-    OnboardingPaywallEnrollmentService.shared.currentArm
-  }
-
   private var rootCommerceGate: RootCommerceGate {
     let now = Date()
     let termsCohort = subscriptionManager.trialTermsCohort
@@ -59,7 +53,6 @@ struct ContentView: View {
       )
     return RootCommerceGate.resolve(
       state: subscriptionManager.plusAccessState,
-      arm: paywallArm,
       termsCohort: termsCohort,
       hardPaywallEnabled: subscriptionManager.hardPaywallEnabled,
       entitlementResolved: subscriptionManager.hasResolvedEntitlement,
@@ -98,8 +91,7 @@ struct ContentView: View {
             for: onboardingStep,
             isPlus: subscriptionManager.hasPlusAccess,
             selectedFreePlan: onboardingSelectedFreePlan,
-            needsTodayPick: needsTodayPick,
-            arm: paywallArm
+            needsTodayPick: needsTodayPick
           ) {
 	        case .welcome:
 	          WelcomeView {
@@ -309,11 +301,8 @@ struct ContentView: View {
                 // Mark the reveal as played so returning here from app-blocking setup
                 // shows the finished plan instead of replaying the loading animation.
                 protectionPlanModel.hasRevealedDiagnosisPlan = true
-                // The onboarding paywall arms (ENG-204) diverge after the diagnosis,
-                // before the Screen Time ask, so the arm is fixed here.
-                let arm = OnboardingPaywallEnrollmentService.shared.lockArm()
-                if let nextStep = OnboardingFlow.nextStep(after: .reminderPlan, arm: arm) {
-                  continueSetupStep(to: skippingPaidOnboardingPaywall(nextStep, otherwise: .appBlocking))
+                if let nextStep = OnboardingFlow.nextStep(after: .reminderPlan) {
+                  continueSetupStep(to: nextStep)
                 }
 	            }
           )
@@ -346,6 +335,10 @@ struct ContentView: View {
 	          // these arms are unreachable and only keep the switch exhaustive.
 	          Color.clear
 
+	        case .onboardingPaywall:
+	          // Retired with the ENG-204 test; `visibleStep` resumes it at app blocking.
+	          Color.clear
+
 	        case .trialGranted:
 	          TrialGrantedMomentView(
 	            onBack: {
@@ -355,14 +348,6 @@ struct ContentView: View {
                 continueSetupStep(to: .appBlocking)
 	            }
 	          )
-	          .transition(
-            .asymmetric(
-              insertion: .move(edge: .trailing),
-              removal: .move(edge: .trailing)
-            ))
-
-	        case .onboardingPaywall:
-	          onboardingPaywallStep
 	          .transition(
             .asymmetric(
               insertion: .move(edge: .trailing),
@@ -396,19 +381,7 @@ struct ContentView: View {
             ))
 
 	        case .complete, nil:
-	          if rootCommerceGate == .onboardingPaywallRequired || isRootOnboardingPaywallOpen {
-	            HonestPaywallHost(
-	              entry: .onboardingEnd,
-	              surface: .onboardingEnd,
-	              onDismiss: { isRootOnboardingPaywallOpen = false }
-	            )
-	            .transition(.opacity)
-	            .onAppear {
-	              guard !isRootOnboardingPaywallOpen else { return }
-	              isRootOnboardingPaywallOpen = true
-	              ProductAnalyticsTelemetry.live.onboardingPaywallBlockedRelaunch()
-	            }
-	          } else if rootCommerceGate == .verifyingAccess {
+	          if rootCommerceGate == .verifyingAccess {
 	            CommerceAccessVerificationView(
 	              isWorking: isResolvingRootCommerce,
 	              didFail: rootCommerceResolutionFailed,
@@ -521,9 +494,6 @@ struct ContentView: View {
     }
     .onAppear {
       normalizeVisibleOnboardingStep()
-      if onboardingStep == OnboardingFlow.Step.onboardingPaywall.rawValue {
-        ProductAnalyticsTelemetry.live.onboardingPaywallBlockedRelaunch()
-      }
       trackOnboardingStepViewed(onboardingStep)
     }
     .onChange(of: onboardingStep) { _, newStep in
@@ -649,8 +619,7 @@ struct ContentView: View {
       for: onboardingStep,
       isPlus: subscriptionManager.hasPlusAccess,
       selectedFreePlan: onboardingSelectedFreePlan,
-      needsTodayPick: needsTodayPick,
-      arm: paywallArm
+      needsTodayPick: needsTodayPick
     ),
     visibleStep.rawValue != onboardingStep else { return }
 
@@ -681,8 +650,8 @@ struct ContentView: View {
       AppBlockingSetupView(
         trialEndTerms: onboardingTrialEndTerms,
         onBack: {
-          if let previousStep = OnboardingFlow.previousStep(before: .appBlocking, arm: paywallArm) {
-            lowRiskTransition(to: skippingPaidOnboardingPaywall(previousStep, otherwise: .reminderPlan))
+          if let previousStep = OnboardingFlow.previousStep(before: .appBlocking) {
+            lowRiskTransition(to: previousStep)
           }
         },
         onContinue: {
@@ -727,46 +696,9 @@ struct ContentView: View {
     }
   }
 
-  /// Arm B's paywall. Waits for RevenueCat so a payer resuming here is never sold
-  /// Plus twice: the host dismisses at once when there is nothing to sell.
-  @ViewBuilder
-  private var onboardingPaywallStep: some View {
-    if subscriptionManager.hasResolvedEntitlement {
-      HonestPaywallHost(
-        entry: .onboardingEnd,
-        surface: .onboardingEnd,
-        showsToSubscriber: OnboardingPaywallEnrollmentService.shared.isReviewInstall,
-        onDismiss: {
-          continueSetupStep(to: .appBlocking)
-        }
-      )
-    } else {
-      CommerceAccessVerificationView(
-        isWorking: isResolvingOnboardingAccess,
-        didFail: onboardingAccessResolutionFailed,
-        onRetry: refreshOnboardingAccess,
-        onRestore: restoreOnboardingAccess
-      )
-      .task {
-        await resolveOnboardingAccess()
-      }
-    }
-  }
-
-  private func skippingPaidOnboardingPaywall(
-    _ step: OnboardingFlow.Step,
-    otherwise: OnboardingFlow.Step
-  ) -> OnboardingFlow.Step {
-    let skips = OnboardingFlow.skipsOnboardingPaywall(
-      hasEntitlement: subscriptionManager.hasEntitlement,
-      isReviewInstall: OnboardingPaywallEnrollmentService.shared.isReviewInstall
-    )
-    return step == .onboardingPaywall && skips ? otherwise : step
-  }
-
   private func grantOnboardingTrialIfNeeded(for route: OnboardingTrialActivationRoute) {
     guard route == .grantTrial,
-          OnboardingFlow.grantsReverseTrial(on: .appBlocking, arm: paywallArm) else { return }
+          OnboardingFlow.grantsReverseTrial(on: .appBlocking) else { return }
     let grantDate = Date()
     let termsCohort = TrialInstallCohort.storedAssignment()
       ?? HardPaywallPolicy.cohort(forTrialGrantedAt: grantDate)

@@ -5,7 +5,6 @@
 
 import SwiftUI
 import RevenueCat
-import os
 
 struct HonestPaywallScreen: View {
     @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
@@ -22,9 +21,6 @@ struct HonestPaywallScreen: View {
 
     @State private var selection: PaywallPurchaseIntent = .subscribe(.year)
     @State private var offerings: Offerings?
-    @State private var offeringsLoadFailed = false
-    /// Nil until checked; the onboarding paywall waits on it before showing prices.
-    @State private var annualTrialEligibility: TrialEndExtendEligibility?
     @State private var activeAlert: PaywallAlert?
     @State private var isPurchasing = false
     @State private var isRestoring = false
@@ -44,32 +40,18 @@ struct HonestPaywallScreen: View {
     private let extendOfferStore: TrialEndExtendOfferStoring = KeychainTrialEndExtendOfferStore()
     private let notificationPermission = NotificationPermission.shared
     private let winbackRouter = WinbackRouter.shared
-    private let log = Logger(subsystem: "com.idrisskone.pillie", category: "paywall")
 
     private var scene: HonestPaywallScene {
         HonestPaywallSceneBuilder.build(
             board: board,
             offerings: offeringsSnapshot,
             selection: selection,
-            locale: locale,
-            annualFreeWeek: annualTrialEligibility.map {
-                offeringsSnapshot?.offersAnnualFreeWeek(eligibility: $0) == true
-            } ?? false,
-            loadFailed: offeringsLoadFailed
+            locale: locale
         )
     }
 
-    /// Arm B sells its own offering so its purchases carry their own
-    /// `presented_offering_id`; every other board sells the current one.
-    private var presentedOffering: Offering? {
-        board.moment == .onboarding
-            ? offerings?.offering(identifier: OnboardingPaywallExperiment.offeringID)
-            : offerings?.current
-    }
-
     private var offeringsSnapshot: PaywallOfferingsSnapshot? {
-        if board.moment == .onboarding, annualTrialEligibility == nil { return nil }
-        let snapshot = PaywallOfferingsSnapshot.parse(presentedOffering)
+        let snapshot = offerings.flatMap(PaywallOfferingsSnapshot.parse)
         #if DEBUG
         if let display = UserDefaults.standard.string(forKey: Self.debugLifetimeDisplayKey) {
             return snapshot?.withLifetimeDisplay(display)
@@ -127,7 +109,6 @@ struct HonestPaywallScreen: View {
                     onSelect: selectPlan,
                     onPurchase: purchase,
                     onRestore: restorePurchases,
-                    onRetry: retryLoadingOfferings,
                     onDismiss: onDismiss,
                     onContinueFree: board.chrome.showsContinueFree ? { continueFree() } : nil,
                     isSheetAway: showsExtendOffer || success != nil,
@@ -181,7 +162,7 @@ struct HonestPaywallScreen: View {
     }
 
     private func purchase(_ intent: PaywallPurchaseIntent) {
-        guard let package = PaywallPurchaseBridge.package(for: intent, offering: presentedOffering) else {
+        guard let package = PaywallPurchaseBridge.package(for: intent, offerings: offerings) else {
             activeAlert = .purchaseError(CommercePresentation.offeringsUnavailableMessage(locale: locale))
             return
         }
@@ -260,38 +241,11 @@ struct HonestPaywallScreen: View {
     }
 
     private func loadOfferings() async {
-        offeringsLoadFailed = false
         do {
             offerings = try await subscriptionManager.fetchOfferings()
         } catch {
             telemetry.trackError(.offerings, error: error)
-            offeringsLoadFailed = true
         }
-        await checkAnnualTrialEligibility()
-    }
-
-    /// Reinstallers who already used a Pillie Plus intro offer must see the plain
-    /// price, so the trial copy waits on RevenueCat, never the product description.
-    private func checkAnnualTrialEligibility() async {
-        guard board.moment == .onboarding else { return }
-        guard let snapshot = PaywallOfferingsSnapshot.parse(presentedOffering),
-              let package = PaywallPurchaseBridge.package(for: .subscribe(.year), offering: presentedOffering)
-        else {
-            log.error("onboarding_paywall offering=unavailable")
-            offeringsLoadFailed = true
-            return
-        }
-        let eligibility = snapshot.annualIntroFreeDays == nil
-            ? TrialEndExtendEligibility.ineligible
-            : await subscriptionManager.extendOfferEligibility(for: package.storeProduct)
-        annualTrialEligibility = eligibility
-        log.notice(
-            "onboarding_paywall annual=\(package.storeProduct.productIdentifier, privacy: .public) intro_days=\(snapshot.annualIntroFreeDays ?? 0, privacy: .public) eligibility=\(String(describing: eligibility), privacy: .public)"
-        )
-    }
-
-    private func retryLoadingOfferings() {
-        Task { await loadOfferings() }
     }
 
     // MARK: - Extend offer (ENG-172)
