@@ -338,11 +338,6 @@ struct PillieApp: App {
                 // with both commerce states unresolved and bypass the wall.
                 SubscriptionManager.shared.configure()
             }
-            // Before `appLaunched()` so that event already carries the experiment arm.
-            OnboardingPaywallEnrollmentService.shared.start(
-                hasExistingAppState: Self.hasExistingAppState(in: .standard),
-                hasTrialGrant: KeychainTrialGrantStore().loadGrantDate() != nil
-            )
             // For returning users, RevenueCat configuration synchronously applies
             // cached entitlement state first, so `is_plus` is resolved at capture.
             ProductAnalyticsTelemetry.live.appLaunched()
@@ -369,13 +364,10 @@ struct PillieApp: App {
                     AppDelegate.store = store
                     SubscriptionManager.shared.updateActiveDaySchedule(pack: store.activePack)
                 }
-                .onOpenURL { url in
-                    handleReviewLink(url)
-                    #if DEBUG
-                    handleDebugDeepLink(url)
-                    #endif
-                }
                 #if DEBUG
+                .onOpenURL { url in
+                    handleDebugDeepLink(url)
+                }
                 .fullScreenCover(isPresented: $showsPackCardGallery) {
                     PackCardGalleryView()
                 }
@@ -528,21 +520,6 @@ struct PillieApp: App {
     private static var isOnboardingActive: Bool {
         OnboardingFlow.isOnboardingActive(
             rawStep: UserDefaults.standard.integer(forKey: OnboardingFlow.stepStorageKey)
-        )
-    }
-
-    /// App Review links, live in Release. `pillie://review/onboarding-paywall?arm=hard_trial`
-    /// puts a fresh install in that onboarding paywall arm (ENG-206).
-    private func handleReviewLink(_ url: URL) {
-        guard url.scheme == "pillie", url.host == "review",
-              url.path == "/onboarding-paywall",
-              let arm = URLComponents(url: url, resolvingAgainstBaseURL: false)?
-                .queryItems?.first(where: { $0.name == "arm" })?.value
-                .flatMap(OnboardingPaywallArm.init(rawValue:))
-        else { return }
-        OnboardingPaywallEnrollmentService.shared.reviewOverride(
-            arm,
-            onboardingStep: UserDefaults.standard.object(forKey: OnboardingFlow.stepStorageKey) as? Int
         )
     }
 
@@ -751,24 +728,6 @@ struct PillieApp: App {
             SubscriptionManager.shared.setPlusForTesting(true)
             UserDefaults.standard.set(false, forKey: OnboardingFlow.selectedFreePlanStorageKey)
             UserDefaults.standard.set(OnboardingFlow.Step.complete.rawValue, forKey: OnboardingFlow.stepStorageKey)
-        case "/plus-entitlement":
-            // QA control (ENG-207): `state=on|off`, or `state=ends&days=N` for an
-            // entitlement that will not renew and lapses N days from now (default 3).
-            let queryItems = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems
-            let value = { (name: String) -> String? in queryItems?.first(where: { $0.name == name })?.value }
-            switch value("state") {
-            case "on":
-                SubscriptionManager.shared.setPlusForTesting(true)
-            case "off":
-                SubscriptionManager.shared.setPlusForTesting(false)
-            case "ends":
-                let days = value("days").flatMap(Int.init) ?? 3
-                let end = Calendar.current.date(byAdding: .day, value: days, to: Date())
-                SubscriptionManager.shared.setPlusForTesting(true, endsAt: end)
-            default:
-                os.Logger(subsystem: "com.idrisskone.pillie", category: "qa")
-                    .error("Pillie QA plus-entitlement ignored unreadable state=\(value("state") ?? "nil", privacy: .public)")
-            }
         case "/request-notification-permission":
             // QA control (#168): surface the system notification prompt on
             // installs seeded past onboarding, where the real permission step
@@ -780,10 +739,9 @@ struct PillieApp: App {
             // simulator. Stream with:
             //   log stream --predicate 'subsystem == "com.idrisskone.pillie"' --level debug
             let grantDescription = SubscriptionManager.shared.trialGrantDate?.description ?? "none"
-            let armDescription = SubscriptionManager.shared.onboardingPaywallArm?.rawValue ?? "none"
             UNUserNotificationCenter.current().getNotificationSettings { settings in
                 os.Logger(subsystem: "com.idrisskone.pillie", category: "qa")
-                    .debug("Pillie QA auth status: \(settings.authorizationStatus.rawValue, privacy: .public) trialGrant=\(grantDescription, privacy: .public) arm=\(armDescription, privacy: .public)")
+                    .debug("Pillie QA auth status: \(settings.authorizationStatus.rawValue, privacy: .public) trialGrant=\(grantDescription, privacy: .public)")
             }
             UNUserNotificationCenter.current().getPendingNotificationRequests { requests in
                 let logger = os.Logger(subsystem: "com.idrisskone.pillie", category: "qa")
@@ -967,22 +925,6 @@ struct PillieApp: App {
             }
             DebugQA.applyRoutineDay(method.contraceptiveMethod, cycleDay: day, store: store)
             reconcileScreenTimeState()
-        case "/onboarding-paywall-arm":
-            // QA control (ENG-205): `arm` is control, hard_trial, clear, or lock.
-            // Clear forgets the enrollment so the next launch enrolls afresh; lock
-            // proves the offline default on a still-pending install.
-            switch URLComponents(url: url, resolvingAgainstBaseURL: false)?
-                .queryItems?.first(where: { $0.name == "arm" })?.value {
-            case "clear":
-                OnboardingPaywallEnrollmentService.shared.debugOverride(nil)
-            case "lock":
-                OnboardingPaywallEnrollmentService.shared.lockArm()
-            case let value?:
-                guard let arm = OnboardingPaywallArm(rawValue: value) else { return }
-                OnboardingPaywallEnrollmentService.shared.debugOverride(arm)
-            case nil:
-                return
-            }
         case "/review-prompt":
             // QA shortcut (#133): land on Home with an unbroken Streak past the pill
             // threshold so the Review Prompt's Sentiment Gate card surfaces and the

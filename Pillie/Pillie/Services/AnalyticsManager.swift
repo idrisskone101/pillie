@@ -72,13 +72,6 @@ protocol ProductAnalyticsClient: AnyObject {
   /// to the same PostHog person. `nil` before the SDK is configured.
   func distinctId() -> String?
   func flush()
-  /// Super properties ride every later capture and persist across launches.
-  func registerSuperProperties(_ properties: [String: AnalyticsPropertyValue])
-  func unregisterSuperProperties(_ keys: [String])
-  func setPersonProperties(_ properties: [String: AnalyticsPropertyValue])
-  func reloadFeatureFlags(_ completion: @escaping () -> Void)
-  /// Reading a flag sends the `$feature_flag_called` exposure event.
-  func featureFlag(_ key: String) -> Any?
 }
 
 /// The failing subsystem carried as `domain` on `app_error`, kept a closed
@@ -107,15 +100,10 @@ enum AppErrorSeverity: String {
   case fatal
 }
 
-// Default no-ops keep the many test spies compiling as the client grows (#179,
-// ENG-205). `PostHogAnalyticsClient` overrides them for real capture.
+// The client grew `captureException` for #179; a default no-op keeps the many
+// test spies compiling. `PostHogAnalyticsClient` overrides it for real capture.
 extension ProductAnalyticsClient {
   func captureException(_ error: Error, properties: [String: AnalyticsPropertyValue]) {}
-  func registerSuperProperties(_ properties: [String: AnalyticsPropertyValue]) {}
-  func unregisterSuperProperties(_ keys: [String]) {}
-  func setPersonProperties(_ properties: [String: AnalyticsPropertyValue]) {}
-  func reloadFeatureFlags(_ completion: @escaping () -> Void) { completion() }
-  func featureFlag(_ key: String) -> Any? { nil }
 }
 
 final class PostHogAnalyticsClient: ProductAnalyticsClient {
@@ -184,32 +172,6 @@ final class PostHogAnalyticsClient: ProductAnalyticsClient {
 
   func distinctId() -> String? {
     PostHogSDK.shared.getDistinctId()
-  }
-
-  func registerSuperProperties(_ properties: [String: AnalyticsPropertyValue]) {
-    captureQueue.async {
-      PostHogSDK.shared.register(properties.mapValues(\.postHogValue))
-    }
-  }
-
-  func unregisterSuperProperties(_ keys: [String]) {
-    captureQueue.async {
-      keys.forEach { PostHogSDK.shared.unregister($0) }
-    }
-  }
-
-  func setPersonProperties(_ properties: [String: AnalyticsPropertyValue]) {
-    captureQueue.async {
-      PostHogSDK.shared.setPersonProperties(userPropertiesToSet: properties.mapValues(\.postHogValue))
-    }
-  }
-
-  func reloadFeatureFlags(_ completion: @escaping () -> Void) {
-    PostHogSDK.shared.reloadFeatureFlags(completion)
-  }
-
-  func featureFlag(_ key: String) -> Any? {
-    PostHogSDK.shared.getFeatureFlag(key)
   }
 
   func flush() {
@@ -706,13 +668,6 @@ enum AnalyticsEvent: String, CaseIterable {
   /// A Reverse Trial grant was written (ADR 0007). Distinct from `trialStarted`,
   /// which keeps its StoreKit-intro-offer meaning.
   case trialGranted = "trial_granted"
-  /// The onboarding paywall (ENG-206) started an Apple intro-offer trial. Its own
-  /// name so the arm B funnel never mixes with `trial_started` or `trial_granted`.
-  case trialStartedStorekit = "trial_started_storekit"
-  /// Backed out of Apple's purchase sheet on the onboarding paywall (ENG-206).
-  case purchaseSheetCancelled = "purchase_sheet_cancelled"
-  /// A `hard_trial` launch landed back on the onboarding paywall without Plus.
-  case onboardingPaywallBlockedRelaunch = "onboarding_paywall_blocked_relaunch"
   /// A Reverse Trial's Plus Access ended without conversion (#167 / ADR 0007).
   /// Recorded once, on the first app open at-or-after expiry.
   case trialExpired = "trial_expired"
@@ -847,8 +802,6 @@ enum AnalyticsPaywallSurface: String, CaseIterable {
   case plusUpsell = "plus_upsell"
   /// The onboarding access-verification screen's Restore button (ENG-74).
   case onboardingVerification = "onboarding_verification"
-  /// The `hard_trial` arm's paywall between the diagnosis and app blocking (ENG-206).
-  case onboardingEnd = "onboarding_end"
 }
 
 enum AnalyticsPlusSetupAction: String, CaseIterable {
@@ -962,7 +915,6 @@ enum AnalyticsStep: String {
   // The step label is `trial_granted_moment` (the screen); the `trial_granted`
   // event name stays reserved for the grant itself.
   case trialGranted = "trial_granted_moment"
-  case onboardingPaywall = "onboarding_paywall"
 
   init?(onboardingStep: Int) {
     guard let analyticsStep = OnboardingFlow.analyticsStep(for: onboardingStep) else { return nil }
@@ -1162,9 +1114,6 @@ struct AnalyticsPayload {
     }
     if let paywallSurface {
       properties["surface"] = .string(paywallSurface.rawValue)
-      if paywallSurface == .onboardingEnd {
-        properties["entry_point"] = .string(paywallSurface.rawValue)
-      }
     }
     if let authorizationState {
       properties["authorization_state"] = .string(authorizationState.rawValue)
@@ -1315,9 +1264,7 @@ final class AnalyticsManager: AnalyticsTracking {
         // Auto-capture stays off regardless: lifecycle/screen-view/element/survey
         // flags below are what actually enable the other swizzling integrations.
         enableSwizzling: true,
-        // The one flag read (ENG-205) must send its `$feature_flag_called` exposure.
-        sendFeatureFlagEvent: true,
-        // Only installs still pending an experiment arm reload flags, explicitly.
+        sendFeatureFlagEvent: false,
         preloadFeatureFlags: false,
         setDefaultPersonProperties: false,
         sessionReplay: true,
@@ -1762,49 +1709,6 @@ final class AnalyticsManager: AnalyticsTracking {
   func flush() {
     guard isConfigured, isAnalyticsEnabled else { return }
     client.flush()
-  }
-
-  func registerSuperProperties(_ properties: [String: AnalyticsPropertyValue]) {
-    debugLog("register", properties)
-    guard isConfigured, isAnalyticsEnabled else { return }
-    client.registerSuperProperties(properties)
-  }
-
-  func unregisterSuperProperties(_ keys: [String]) {
-    guard isConfigured, isAnalyticsEnabled else { return }
-    client.unregisterSuperProperties(keys)
-  }
-
-  func setPersonProperties(_ properties: [String: AnalyticsPropertyValue]) {
-    debugLog("set person", properties)
-    guard isConfigured, isAnalyticsEnabled else { return }
-    client.setPersonProperties(properties)
-  }
-
-  /// `completion` runs on the main queue, and runs at once when analytics is off so
-  /// callers still reach their "flags unavailable" branch.
-  func reloadFeatureFlags(_ completion: @escaping () -> Void) {
-    guard isConfigured, isAnalyticsEnabled else {
-      completion()
-      return
-    }
-    client.reloadFeatureFlags { @Sendable in
-      DispatchQueue.main.async(execute: completion)
-    }
-  }
-
-  func featureFlag(_ key: String) -> Any? {
-    guard isConfigured, isAnalyticsEnabled else { return nil }
-    return client.featureFlag(key)
-  }
-
-  private func debugLog(_ operation: String, _ properties: [String: AnalyticsPropertyValue]) {
-    #if DEBUG
-      Logger(subsystem: "com.idrisskone.pillie", category: "analytics")
-        .debug(
-          "Pillie analytics \(operation, privacy: .public): \(properties.map { "\($0.key)=\($0.value.postHogValue)" }.sorted().joined(separator: " "), privacy: .public)"
-        )
-    #endif
   }
 
   /// A missing token used to fail silently — `configure()` returned, every `track`

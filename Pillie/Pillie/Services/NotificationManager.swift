@@ -401,9 +401,7 @@ final class NotificationManager {
                 calendar: calendar,
                 reminderChange: store.reminderTimeChange,
                 trialSchedule: SubscriptionManager.shared.plusAccessState.schedule,
-                trialLivedDays: SubscriptionManager.shared.plusAccessState.trialLivedDays,
-                paywallArm: SubscriptionManager.shared.onboardingPaywallArm,
-                entitlementEnd: SubscriptionManager.shared.plusAccessState.entitlementEnd
+                trialLivedDays: SubscriptionManager.shared.plusAccessState.trialLivedDays
             )
         )
 

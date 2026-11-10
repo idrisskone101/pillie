@@ -12,8 +12,6 @@ struct HonestPaywallHost: View {
     let entry: PaywallEntryPoint
     let surface: AnalyticsPaywallSurface
     var trialStats: TrialEndOwnStats? = nil
-    /// App Review only: show the board even to someone who already has Plus.
-    var showsToSubscriber = false
     var declineFeedbackContent: TrialDeclineFeedbackContent? = nil
     var routeContinueFree: (() -> TrialDeclineFeedbackRoute)? = nil
     let onDismiss: () -> Void
@@ -46,10 +44,8 @@ struct HonestPaywallHost: View {
     }
 
     private var resolvedBoard: HonestPaywallBoard? {
-        var access = subscriptionManager.plusAccessState
-        if showsToSubscriber { access.hasEntitlement = false }
-        return HonestPaywallBoardResolver.resolve(
-            access: access,
+        HonestPaywallBoardResolver.resolve(
+            access: subscriptionManager.plusAccessState,
             entry: entry,
             method: store.pack.method,
             calendar: .current,

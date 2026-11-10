@@ -10,12 +10,10 @@ enum PaywallCheckoutBuilder {
         moment: HonestPaywallMoment,
         offerings: PaywallOfferingsSnapshot?,
         selection: PaywallPurchaseIntent,
-        locale: Locale,
-        annualFreeWeek: Bool = false,
-        loadFailed: Bool = false
+        locale: Locale
     ) -> PaywallCheckoutSheet {
         guard let offerings else {
-            return placeholder(moment: moment, selection: selection, locale: locale, loadFailed: loadFailed)
+            return placeholder(moment: moment, selection: selection, locale: locale)
         }
 
         let comparison = PaywallPriceComparison(
@@ -31,7 +29,7 @@ enum PaywallCheckoutBuilder {
             )
         }
 
-        var offers: [CardContent] = ordered(for: moment, [
+        var offers: [CardContent] = [
             CardContent(
                 intent: .subscribe(.month),
                 title: commerce("paywall.stack.month.title", locale),
@@ -51,11 +49,9 @@ enum PaywallCheckoutBuilder {
                     ),
                     locale: locale
                 ),
-                savingsBadge: annualFreeWeek
-                    ? commerce("paywall.onboarding.badge.trial", locale)
-                    : savingsBadge
+                savingsBadge: savingsBadge
             ),
-        ])
+        ]
         if let lifetimeDisplay = offerings.lifetimeDisplay {
             offers.append(CardContent(
                 intent: .lifetime,
@@ -71,38 +67,27 @@ enum PaywallCheckoutBuilder {
             ?? offers.first { $0.intent == .subscribe(.year) }
             ?? offers[0]
 
-        let startsFreeWeek = annualFreeWeek && selected.intent == .subscribe(.year)
         return PaywallCheckoutSheet(
             selectedIntent: selected.intent,
             cards: offers.map { $0.card(isSelected: $0.intent == selected.intent) },
-            primaryCTA: startsFreeWeek
-                ? commerce("paywall.onboarding.cta.start_trial", locale)
-                : PillieLocalization.formatted(
-                    ctaKey(verb: moment.ctaVerb, intent: selected.intent),
-                    table: "Commerce",
-                    locale: locale,
-                    arguments: selected.price
-                ),
+            primaryCTA: PillieLocalization.formatted(
+                ctaKey(verb: moment.ctaVerb, intent: selected.intent),
+                table: "Commerce",
+                locale: locale,
+                arguments: selected.price
+            ),
             isPurchaseEnabled: true,
-            reassurance: startsFreeWeek
-                ? PillieLocalization.formatted(
-                    "paywall.onboarding.footer.trial",
-                    table: "Commerce",
-                    locale: locale,
-                    arguments: offerings.annualDisplay
-                )
-                : reassurance(moment: moment, intent: selected.intent, locale: locale)
+            reassurance: reassurance(moment: moment, intent: selected.intent, locale: locale)
         )
     }
 
     private static func placeholder(
         moment: HonestPaywallMoment,
         selection: PaywallPurchaseIntent,
-        locale: Locale,
-        loadFailed: Bool
+        locale: Locale
     ) -> PaywallCheckoutSheet {
         let dash = "-"
-        let offers = ordered(for: moment, [
+        let offers = [
             CardContent(
                 intent: .subscribe(.month),
                 title: commerce("paywall.stack.month.title", locale),
@@ -117,25 +102,15 @@ enum PaywallCheckoutBuilder {
                 caption: yearCaption(monthlyEquivalent: nil, locale: locale),
                 savingsBadge: nil
             ),
-        ])
+        ]
         let selected = offers.first { $0.intent == selection }?.intent ?? .subscribe(.year)
-        // Only the onboarding paywall has no way past it, so only it offers a reload.
-        let retries = loadFailed && moment == .onboarding
         return PaywallCheckoutSheet(
             selectedIntent: selected,
             cards: offers.map { $0.card(isSelected: $0.intent == selected) },
-            primaryCTA: retries ? PillieLocalization.string("global.action.retry", locale: locale) : "",
-            isPurchaseEnabled: retries,
-            reassurance: reassurance(moment: moment, intent: selected, locale: locale),
-            primaryAction: retries ? .retry : .purchase
+            primaryCTA: "",
+            isPurchaseEnabled: false,
+            reassurance: reassurance(moment: moment, intent: selected, locale: locale)
         )
-    }
-
-    /// The onboarding paywall leads with Year; the other boards keep Month first.
-    private static func ordered(for moment: HonestPaywallMoment, _ offers: [CardContent]) -> [CardContent] {
-        guard moment == .onboarding else { return offers }
-        let rank: [PaywallPurchaseIntent: Int] = [.subscribe(.year): 0, .subscribe(.month): 1, .lifetime: 2]
-        return offers.sorted { rank[$0.intent, default: 3] < rank[$1.intent, default: 3] }
     }
 
     private static func reassurance(
@@ -146,8 +121,7 @@ enum PaywallCheckoutBuilder {
         let key = switch (moment, intent) {
         case (_, .lifetime): "paywall.stack.footer.one_payment"
         case (.duringTrial, .subscribe): "paywall.footer.charged_today"
-        case (.trialEnded, .subscribe), (.settingsFree, .subscribe), (.onboarding, .subscribe):
-            "paywall.footer.cancel_anytime"
+        case (.trialEnded, .subscribe), (.settingsFree, .subscribe): "paywall.footer.cancel_anytime"
         }
         return commerce(key, locale)
     }

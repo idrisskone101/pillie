@@ -14,18 +14,9 @@ struct PaywallOfferingsSnapshot: Equatable {
     let monthlyDisplay: String
     let lifetimeDisplay: String?
     let currencyCode: String?
-    /// Days of the Annual product's free-trial intro offer, nil when it has none.
-    /// Whether this person may still redeem it is a separate eligibility check.
-    var annualIntroFreeDays: Int? = nil
 
-    /// The onboarding paywall promises exactly "7 days free", and only once RevenueCat
-    /// confirms this Apple Account can still redeem the intro offer.
-    func offersAnnualFreeWeek(eligibility: TrialEndExtendEligibility) -> Bool {
-        annualIntroFreeDays == 7 && eligibility == .eligible
-    }
-
-    static func parse(_ offering: Offering?) -> PaywallOfferingsSnapshot? {
-        guard let offering else { return nil }
+    static func parse(_ offerings: Offerings?) -> PaywallOfferingsSnapshot? {
+        guard let offering = offerings?.current else { return nil }
 
         guard let annualPackage = PilliePlusPackageResolver.resolve(
             plan: .annual,
@@ -58,14 +49,7 @@ struct PaywallOfferingsSnapshot: Equatable {
             annualDisplay: annualProduct.localizedPriceString,
             monthlyDisplay: monthlyProduct.localizedPriceString,
             lifetimeDisplay: lifetimePackage?.storeProduct.localizedPriceString,
-            currencyCode: annualProduct.currencyCode,
-            annualIntroFreeDays: annualProduct.introductoryDiscount.flatMap { intro in
-                TrialEndExtendProduct.freeDays(
-                    paymentMode: intro.paymentMode,
-                    period: intro.subscriptionPeriod,
-                    numberOfPeriods: intro.numberOfPeriods
-                )
-            }
+            currencyCode: annualProduct.currencyCode
         )
     }
 
@@ -78,8 +62,7 @@ struct PaywallOfferingsSnapshot: Equatable {
             annualDisplay: annualDisplay,
             monthlyDisplay: monthlyDisplay,
             lifetimeDisplay: display,
-            currencyCode: currencyCode,
-            annualIntroFreeDays: annualIntroFreeDays
+            currencyCode: currencyCode
         )
     }
     #endif
@@ -90,8 +73,7 @@ struct PaywallOfferingsSnapshot: Equatable {
         lifetimeDisplay: String?,
         annual: Decimal,
         monthly: Decimal,
-        lifetime: Decimal?,
-        annualIntroFreeDays: Int? = nil
+        lifetime: Decimal?
     ) -> PaywallOfferingsSnapshot {
         PaywallOfferingsSnapshot(
             annualPrice: annual,
@@ -100,8 +82,7 @@ struct PaywallOfferingsSnapshot: Equatable {
             annualDisplay: annualDisplay,
             monthlyDisplay: monthlyDisplay,
             lifetimeDisplay: lifetimeDisplay,
-            currencyCode: "USD",
-            annualIntroFreeDays: annualIntroFreeDays
+            currencyCode: "USD"
         )
     }
 }
