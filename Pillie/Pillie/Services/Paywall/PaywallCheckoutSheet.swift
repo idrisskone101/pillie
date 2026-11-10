@@ -11,13 +11,6 @@ struct PaywallCheckoutSheet: Equatable {
     let primaryCTA: String
     let isPurchaseEnabled: Bool
     let reassurance: String
-    var primaryAction: PaywallPrimaryAction = .purchase
-}
-
-enum PaywallPrimaryAction: Equatable {
-    case purchase
-    /// The plans failed to load; the button reloads them.
-    case retry
 }
 
 struct PaywallPlanCard: Equatable {

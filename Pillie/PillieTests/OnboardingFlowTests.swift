@@ -334,6 +334,14 @@ final class OnboardingFlowTests: XCTestCase {
         XCTAssertEqual(OnboardingFlow.Step.freePlanConfirmation.rawValue, 14)
     }
 
+    func testRetiredOnboardingPaywallStepResumesAtAppBlocking() {
+        XCTAssertEqual(
+            OnboardingFlow.visibleStep(for: 22, isPlus: false, selectedFreePlan: false),
+            .appBlocking
+        )
+        XCTAssertFalse(OnboardingFlow.displayOrder.contains(.onboardingPaywall))
+    }
+
     func testDisplayOrderRoutesDiagnosisDirectlyIntoAppBlocking() {
         XCTAssertEqual(OnboardingFlow.nextStep(after: .reminderPlan), .appBlocking)
         XCTAssertFalse(
@@ -347,8 +355,8 @@ final class OnboardingFlowTests: XCTestCase {
     }
 
     func testReverseTrialIsGrantedWhenAppBlockingBecomesVisible() {
-        XCTAssertTrue(OnboardingFlow.grantsReverseTrial(on: .appBlocking, arm: .control))
-        XCTAssertFalse(OnboardingFlow.grantsReverseTrial(on: .trialGranted, arm: .control))
+        XCTAssertTrue(OnboardingFlow.grantsReverseTrial(on: .appBlocking))
+        XCTAssertFalse(OnboardingFlow.grantsReverseTrial(on: .trialGranted))
     }
 
     func testTrialGrantedMapsToSafeLowCardinalityAnalyticsLabel() {
@@ -518,7 +526,6 @@ final class OnboardingFlowTests: XCTestCase {
                     hasEntitlement: false,
                     trialGrantDate: HardPaywallPolicy.cutoverInstant
                 ),
-                arm: .control,
                 termsCohort: .postCutover,
                 hardPaywallEnabled: true,
                 entitlementResolved: false,
