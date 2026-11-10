@@ -41,7 +41,7 @@ LITERAL_GLOBS = [
 SCRIPTS = {
     "hi": "DEVANAGARI", "mr": "DEVANAGARI", "bn": "BENGALI", "gu": "GUJARATI", "pa": "GURMUKHI",
     "or": "ORIYA", "ta": "TAMIL", "te": "TELUGU", "kn": "KANNADA", "ml": "MALAYALAM",
-    "ar": "ARABIC", "ur": "ARABIC", "he": "HEBREW", "th": "THAI", "el": "GREEK",
+    "ar": "ARABIC", "ur": "ARABIC", "th": "THAI", "el": "GREEK",
     "ru": "CYRILLIC", "uk": "CYRILLIC",
 }
 SWIFT_STRING = re.compile(r'"(?:[^"\\\n]|\\.)*"')

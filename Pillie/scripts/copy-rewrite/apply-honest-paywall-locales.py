@@ -116,7 +116,7 @@ def main() -> int:
 
     extra_langs = set(locales) - LOCKED_LANGS
     expected_langs = {
-        "ar", "bn", "ca", "cs", "da", "el", "es", "fi", "fr", "gu", "he", "hi",
+        "ar", "bn", "ca", "cs", "da", "el", "es", "fi", "fr", "gu", "hi",
         "hr", "hu", "id", "ja", "kn", "ko", "ml", "mr", "ms", "nb", "nl", "or",
         "pa", "pl", "pt-BR", "pt-PT", "ro", "ru", "sk", "sl", "sv", "ta", "te",
         "th", "tr", "uk", "ur", "vi", "zh-Hans", "zh-Hant",
