@@ -67,8 +67,8 @@ struct TrialGrantedMomentContent {
             PillieLocalization.string(key, table: "Commerce", locale: locale)
         }
         return TrialGrantedMomentContent(
-            badge: commerce("trial.granted.badge"),
-            title: commerce("trial.granted.headline"),
+            badge: commerce(TrialDayRule.copyKey("trial.granted.badge")),
+            title: commerce(TrialDayRule.copyKey("trial.granted.headline")),
             titleAccent: commerce("trial.granted.headline_accent"),
             subtitle: commerce("trial.granted.subtitle"),
             today: Today(
@@ -112,11 +112,11 @@ struct TrialGrantedMomentContent {
                     symbolColor: PillieTheme.verifiedGreen
                 ),
             ],
-            disclosure: commerce(
+            disclosure: commerce(TrialDayRule.copyKey(
                 trialEndTerms == .hardPaywall
                     ? "trial.granted.disclosure.hard_paywall"
                     : "trial.granted.disclosure"
-            ),
+            )),
             primaryCTA: commerce("trial.granted.cta")
         )
     }

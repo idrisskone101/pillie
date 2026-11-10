@@ -61,6 +61,15 @@ final class TrialScheduleChangeTests: XCTestCase {
             )?.daysRemaining,
             10
         )
+        XCTAssertEqual(
+            TrialStatusPresentation.make(
+                state: manager.plusAccessState,
+                calendar: .current,
+                now: local(10, 5, 12),
+                locale: Locale(identifier: "en_US")
+            )?.countdownLabel,
+            "10 days left"
+        )
     }
 
     func testAnActiveDayInstallsFirstGrantStillFreezesOverTheBreak() {
@@ -85,6 +94,15 @@ final class TrialScheduleChangeTests: XCTestCase {
                 now: local(10, 5, 12)
             )?.daysRemaining,
             14
+        )
+        XCTAssertEqual(
+            TrialStatusPresentation.make(
+                state: manager.plusAccessState,
+                calendar: .current,
+                now: local(10, 5, 12),
+                locale: Locale(identifier: "en_US")
+            )?.countdownLabel,
+            "14 active days left"
         )
     }
 

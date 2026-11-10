@@ -16,7 +16,7 @@ enum HonestPaywallStoryFactory {
             subtitle: endsTonight
                 ? commerce("paywall.board.during_trial.subtitle.tonight", locale)
                 : PillieLocalization.formatted(
-                    "paywall.board.during_trial.subtitle",
+                    TrialDayRule.copyKey("paywall.board.during_trial.subtitle"),
                     table: "Commerce",
                     locale: locale,
                     arguments: Int64(ReverseTrialClock.displayedDaysRemaining(daysRemaining))

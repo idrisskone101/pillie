@@ -43,6 +43,15 @@ nonisolated enum TrialDayRule: String, Codable, Equatable {
         return rule
     }
 
+    /// This install's rule, as `SubscriptionManager` loaded it.
+    @MainActor static var current: TrialDayRule { SubscriptionManager.shared.trialDayRule }
+
+    /// The Commerce key for trial copy that names the day count. An active-day
+    /// install reads the `.active_days` variant ("14 active days").
+    @MainActor static func copyKey(_ key: String) -> String {
+        current == .activeDays ? key + ".active_days" : key
+    }
+
     static func stored(in defaults: UserDefaults = .standard) -> TrialDayRule? {
         defaults.string(forKey: storageKey).flatMap(TrialDayRule.init(rawValue:))
     }

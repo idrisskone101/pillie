@@ -63,13 +63,13 @@ struct TrialStatusPresentation: Equatable {
     var countdownLabel: String {
         endsTonight
             ? commerce("trial.status.indicator.countdown_tonight")
-            : commerce("trial.status.indicator.countdown", Int64(displayedDaysRemaining))
+            : commerce(TrialDayRule.copyKey("trial.status.indicator.countdown"), Int64(displayedDaysRemaining))
     }
 
     private var activeLabel: String {
         endsTonight
             ? commerce("trial.status.indicator.active_tonight")
-            : commerce("trial.status.indicator.active", Int64(displayedDaysRemaining))
+            : commerce(TrialDayRule.copyKey("trial.status.indicator.active"), Int64(displayedDaysRemaining))
     }
 
     /// The counted day the user is on, 1 through 14. Pairs with the countdown

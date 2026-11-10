@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Fail if English copy that names active days is missing from a locale.
 
-Also fail if Reverse Trial copy names active days. The trial counts 14
-calendar days (ENG-242).
+Also fail if calendar-day Reverse Trial copy names active days (ENG-242).
+Only the `.active_days` variants, shown to installs from before ENG-242,
+may say "active days".
 
 Run this after any user-facing copy change. English-only is not done.
 """
@@ -80,6 +81,9 @@ ACTIVE_DAY_TOKENS: dict[str, tuple[str, ...]] = {
 }
 
 ENGLISH_NEEDLE = "active day"
+
+# Trial copy for an install that still counts hormone-active days (ENG-242).
+ACTIVE_DAY_VARIANT_SUFFIX = ".active_days"
 
 # A day noun next to an active-day adjective, per locale. Stems alone would
 # also match "Plus is active" and "take your pill" in trial copy.
@@ -191,7 +195,7 @@ def main() -> int:
         catalog = json.loads(catalog_path.read_text())
         table = catalog_path.stem
         for key, entry in (catalog.get("strings") or {}).items():
-            if "trial" not in key:
+            if "trial" not in key or key.endswith(ACTIVE_DAY_VARIANT_SUFFIX):
                 continue
             trial_checked += 1
             for lang in APP_LANGUAGE_CODES:
@@ -199,7 +203,7 @@ def main() -> int:
                     if re.search(TRIAL_ACTIVE_DAY_PATTERNS[lang], value, re.IGNORECASE):
                         errors.append(
                             f"{table}:{key} [{lang}]: trial copy names active days, "
-                            f"the trial is 14 calendar days: {value!r}"
+                            f"calendar-day installs count 14 calendar days: {value!r}"
                         )
 
     if errors:
