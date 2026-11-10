@@ -2,7 +2,7 @@
 """Insert hormone-active day wording into remaining Commerce locales.
 
 Locked catalogs (en, de, it) stay in locked-copy.json. Latin and CJK catalogs
-already name active days. This patches Indic, Arabic, Hebrew, and a few
+already name active days. This patches Indic, Arabic, and a few
 leftover European strings, then mirrors the paywall stamp into
 honest-paywall-locales.json.
 """
@@ -63,11 +63,6 @@ WORD_SWAPS: dict[str, tuple[str, list[tuple[str, str]]]] = {
         ("أيامك الـ 14", "أيامك الـ 14 النشطة"),
         ("يومًا", "يومًا نشطًا"),
         ("أيام", "أيام نشطة"),
-    ]),
-    "he": ("פעיל", [
-        ("14 הימים שלך", "14 הימים הפעילים שלך"),
-        ("ל-14 יום", "ל-14 ימים פעילים"),
-        ("ימים", "ימים פעילים"),
     ]),
 }
 

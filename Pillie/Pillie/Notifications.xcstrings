@@ -190,12 +190,6 @@
             "value": "سجّلي"
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "סמני"
-          }
-        },
         "vi": {
           "stringUnit": {
             "state": "translated",
@@ -463,12 +457,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "ذكّرني لاحقًا"
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "להזכיר לי אחר כך"
           }
         },
         "vi": {
@@ -740,12 +728,6 @@
             "value": "لا تذكيرات بالحبة خلال أيام الاستراحة. تعود مع علبتك التالية."
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "אין תזכורות לגלולה בימי ההפסקה שלך. הן יחזרו עם החפיסה הבאה."
-          }
-        },
         "vi": {
           "stringUnit": {
             "state": "translated",
@@ -1013,12 +995,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "لا تذكيرات باللصقة خلال أيامك بدون لصقة. تعود مع لصقتك التالية."
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "אין תזכורות למדבקה בימים בלי מדבקה. הן יחזרו עם המדבקה הבאה."
           }
         },
         "vi": {
@@ -1290,12 +1266,6 @@
             "value": "لا تذكيرات بالحلقة خلال أيامك بدون حلقة. تعود عندما يحين وقت إدخال حلقتك."
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "אין תזכורות לטבעת בימים בלי טבעת. הן יחזרו כשיגיע הזמן להכניס את הטבעת."
-          }
-        },
         "vi": {
           "stringUnit": {
             "state": "translated",
@@ -1563,12 +1533,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "تبدأ استراحتك اليوم"
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ההפסקה שלך מתחילה היום"
           }
         },
         "vi": {
@@ -1840,12 +1804,6 @@
             "value": "لم تسجّلي اليوم بعد."
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "עוד לא סימנת היום."
-          }
-        },
         "vi": {
           "stringUnit": {
             "state": "translated",
@@ -2113,12 +2071,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "حان وقت التسجيل."
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "הגיע הזמן לסמן."
           }
         },
         "vi": {
@@ -2390,12 +2342,6 @@
             "value": "وقت التسجيل"
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "זמן לסמן"
-          }
-        },
         "vi": {
           "stringUnit": {
             "state": "translated",
@@ -2663,12 +2609,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "يمكنك التسجيل عندما تكونين مستعدة."
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "אפשר לסמן כשתהיי מוכנה."
           }
         },
         "vi": {
@@ -2940,12 +2880,6 @@
             "value": "تسجيل سريع لروتين اليوم."
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "סימון קצר לשגרה של היום."
-          }
-        },
         "vi": {
           "stringUnit": {
             "state": "translated",
@@ -3213,12 +3147,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "أنتِ تبنين عادة"
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "את בונה הרגל"
           }
         },
         "vi": {
@@ -3490,12 +3418,6 @@
             "value": "عندما تكونين مستعدة، تذكّري أن تسجّلي اليوم."
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "כשתהיי מוכנה, זכרי לסמן היום."
-          }
-        },
         "vi": {
           "stringUnit": {
             "state": "translated",
@@ -3763,12 +3685,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "تذكير لطيف لروتينك."
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "תזכורת עדינה לשגרה שלך."
           }
         },
         "vi": {
@@ -4040,12 +3956,6 @@
             "value": "تذكير لطيف"
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "תזכורת עדינה"
-          }
-        },
         "vi": {
           "stringUnit": {
             "state": "translated",
@@ -4313,12 +4223,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "تسجيلك في Pillie بانتظارك."
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "הסימון שלך ב-Pillie מחכה."
           }
         },
         "vi": {
@@ -4590,12 +4494,6 @@
             "value": "تذكير Pillie"
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "תזכורת Pillie"
-          }
-        },
         "vi": {
           "stringUnit": {
             "state": "translated",
@@ -4863,12 +4761,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "وقت تسجيلك"
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "הגיע הזמן לסימון שלך"
           }
         },
         "vi": {
@@ -5140,12 +5032,6 @@
             "value": "لم تسجّلي بعد. انقري هنا عند الانتهاء."
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "עוד לא סימנת. הקישי כאן כשתסיימי."
-          }
-        },
         "vi": {
           "stringUnit": {
             "state": "translated",
@@ -5413,12 +5299,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "خطوة اليوم ما زالت بانتظارك"
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "עוד נשאר להיום"
           }
         },
         "vi": {
@@ -5690,12 +5570,6 @@
             "value": "مخزون حبوبك بدأ ينفد. حان وقت التخطيط لإعادة التعبئة."
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "מלאי הגלולות שלך מתמעט. הגיע הזמן לתכנן חידוש."
-          }
-        },
         "vi": {
           "stringUnit": {
             "state": "translated",
@@ -5963,12 +5837,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "مخزون لصقاتك بدأ ينفد. حان وقت التخطيط لإعادة التعبئة."
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "מלאי המדבקות שלך מתמעט. הגיע הזמן לתכנן חידוש."
           }
         },
         "vi": {
@@ -6240,12 +6108,6 @@
             "value": "تذكير مخزون اللصقات"
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "תזכורת מלאי מדבקות"
-          }
-        },
         "vi": {
           "stringUnit": {
             "state": "translated",
@@ -6513,12 +6375,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "مخزون حلقاتك بدأ ينفد. حان وقت التخطيط لإعادة التعبئة."
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "מלאי הטבעות שלך מתמעט. הגיע הזמן לתכנן חידוש."
           }
         },
         "vi": {
@@ -6790,12 +6646,6 @@
             "value": "تذكير مخزون الحلقات"
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "תזכורת מלאי טבעות"
-          }
-        },
         "vi": {
           "stringUnit": {
             "state": "translated",
@@ -7063,12 +6913,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "تذكير مخزون الحبوب"
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "תזכורת מלאי גלולות"
           }
         },
         "vi": {
@@ -7340,12 +7184,6 @@
             "value": "وقت لصقتك"
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "הגיע זמן המדבקה"
-          }
-        },
         "vi": {
           "stringUnit": {
             "state": "translated",
@@ -7613,12 +7451,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "خذيها، ثم انقري هنا للتسجيل."
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "קחי אותה, ואז הקישי כאן כדי לסמן."
           }
         },
         "vi": {
@@ -8358,30 +8190,6 @@
             }
           }
         },
-        "he": {
-          "variations": {
-            "plural": {
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "קחי את הגלולה של היום כדי להמשיך את הרצף שלך, שנמשך כבר %lld יום."
-                }
-              },
-              "two": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "קחי את הגלולה של היום כדי להמשיך את הרצף שלך, שנמשך כבר %lld ימים."
-                }
-              },
-              "other": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "קחי את הגלולה של היום כדי להמשיך את הרצף שלך, שנמשך כבר %lld ימים."
-                }
-              }
-            }
-          }
-        },
         "vi": {
           "variations": {
             "plural": {
@@ -8807,12 +8615,6 @@
             "value": "وقت حبتك"
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "הגיע זמן הגלולה"
-          }
-        },
         "vi": {
           "stringUnit": {
             "state": "translated",
@@ -9080,12 +8882,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "وقت حلقتك"
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "הגיע זמן הטבעת"
           }
         },
         "vi": {
@@ -9357,12 +9153,6 @@
             "value": "يتوقف حظر التطبيقات بعد 5 أيام. تبقى تذكيراتك اليومية مجانية."
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "חסימת האפליקציות תיכבה בעוד 5 ימים. התזכורות היומיות שלך נשארות בחינם."
-          }
-        },
         "vi": {
           "stringUnit": {
             "state": "translated",
@@ -9630,12 +9420,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "فترتك التجريبية في Plus تنتهي قريبًا"
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "תקופת הניסיון של Plus מסתיימת בקרוב"
           }
         },
         "vi": {
@@ -9907,12 +9691,6 @@
             "value": "يتوقف حظر التطبيقات ليلة الغد. تبقى تذكيراتك اليومية مجانية."
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "חסימת האפליקציות תיכבה מחר בלילה. התזכורות היומיות שלך נשארות בחינם."
-          }
-        },
         "vi": {
           "stringUnit": {
             "state": "translated",
@@ -10180,12 +9958,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "فترتك التجريبية في Plus شارفت على الانتهاء"
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "תקופת הניסיון של Plus כמעט נגמרה"
           }
         },
         "vi": {
@@ -10457,12 +10229,6 @@
             "value": "ضعي لصقتك، ثم انقري هنا للتسجيل."
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "הדביקי את המדבקה, ואז הקישי כאן כדי לסמן."
-          }
-        },
         "vi": {
           "stringUnit": {
             "state": "translated",
@@ -10730,12 +10496,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "غيّري لصقتك، ثم انقري هنا للتسجيل."
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "החליפי את המדבקה, ואז הקישי כאן כדי לסמן."
           }
         },
         "vi": {
@@ -11007,12 +10767,6 @@
             "value": "أزيلي لصقتك، ثم انقري هنا للتسجيل."
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "הסירי את המדבקה, ואז הקישי כאן כדי לסמן."
-          }
-        },
         "vi": {
           "stringUnit": {
             "state": "translated",
@@ -11280,12 +11034,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "أدخلي حلقتك، ثم انقري هنا للتسجيل."
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "הכניסי את הטבעת, ואז הקישי כאן כדי לסמן."
           }
         },
         "vi": {
@@ -11557,12 +11305,6 @@
             "value": "غيّري حلقتك، ثم انقري هنا للتسجيل."
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "החליפי את הטבעת, ואז הקישי כאן כדי לסמן."
-          }
-        },
         "vi": {
           "stringUnit": {
             "state": "translated",
@@ -11832,12 +11574,6 @@
             "value": "أزيلي حلقتك، ثم انقري هنا للتسجيل."
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "הוציאי את הטבעת, ואז הקישי כאן כדי לסמן."
-          }
-        },
         "vi": {
           "stringUnit": {
             "state": "translated",
@@ -11991,12 +11727,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "તમારાં ફૉલો-અપ રિમાઇન્ડર 5 દિવસમાં બંધ થઈ જશે."
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "תזכורות ההמשך שלך יפסיקו בעוד 5 ימים."
           }
         },
         "hi": {
@@ -12268,12 +11998,6 @@
             "value": "તમારાં ફૉલો-અપ રિમાઇન્ડર આવતીકાલે રાત્રે બંધ થઈ જશે."
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "תזכורות ההמשך שלך יפסיקו מחר בלילה."
-          }
-        },
         "hi": {
           "stringUnit": {
             "state": "translated",
@@ -12541,12 +12265,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "તમારી Plus ટ્રાયલ પૂરી થઈ ગઈ છે"
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "תקופת הניסיון של Plus הסתיימה"
           }
         },
         "hi": {
@@ -12818,12 +12536,6 @@
             "value": "તમારાં રોજનાં રિમાઇન્ડર મફત જ રહેશે. Plus માં ફૉલો-અપ રિમાઇન્ડર અને ઍપ બ્લૉકિંગ પણ મળે છે."
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "התזכורות היומיות שלך נשארות בחינם. Plus מוסיף תזכורות המשך וחסימת אפליקציות."
-          }
-        },
         "hi": {
           "stringUnit": {
             "state": "translated",
@@ -13091,12 +12803,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "તમારો ટ્રાયલ 5 દિવસમાં પૂરો થશે. ત્યાર પછી તમે પ્લાન પસંદ ન કરો ત્યાં સુધી તમારાં રોજનાં રિમાઇન્ડર બંધ રહેશે."
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "הניסיון שלך מסתיים בעוד 5 ימים. אחרי זה התזכורות היומיות שלך ייפסקו עד שתבחרי מסלול."
           }
         },
         "hi": {
@@ -13368,12 +13074,6 @@
             "value": "તમારો ટ્રાયલ આવતીકાલે રાત્રે પૂરો થશે, અને તેની સાથે તમારાં રોજનાં રિમાઇન્ડર પણ બંધ થઈ જશે. તેમને ચાલુ રાખવા પ્લાન પસંદ કરો."
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "הניסיון שלך מסתיים מחר בערב, ואיתו ייפסקו התזכורות היומיות שלך. בחרי מסלול כדי לשמור עליהן."
-          }
-        },
         "hi": {
           "stringUnit": {
             "state": "translated",
@@ -13641,12 +13341,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "તમારાં રોજનાં રિમાઇન્ડર હવે બંધ છે. તેમને ફરી ચાલુ કરવા પ્લાન પસંદ કરો. તમારું સેટઅપ સેવ થયેલું છે."
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "התזכורות היומיות שלך כבויות עכשיו. בחרי מסלול כדי להפעיל אותן מחדש. ההגדרות שלך שמורות."
           }
         },
         "hi": {
@@ -13918,12 +13612,6 @@
             "value": "Plus %@ના રોજ રિન્યૂ થશે"
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Plus מתחדש ב-%@"
-          }
-        },
         "hi": {
           "stringUnit": {
             "state": "translated",
@@ -14191,12 +13879,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "તમારું મફત અઠવાડિયું 2 દિવસમાં પૂરું થશે, પછી Plusની કિંમત વર્ષે %1$@ થશે. તે રોકવા માટે %2$@ સુધીમાં સેટિંગ્સમાં રદ કરો."
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "השבוע החינמי שלך מסתיים בעוד יומיים, ואז Plus עולה %1$@ לשנה. כדי לעצור את זה, בטלי בהגדרות עד %2$@."
           }
         },
         "hi": {
@@ -14468,12 +14150,6 @@
             "value": "તમારી Pillie ટ્રાયલ આજે પૂરી થઈ"
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "תקופת הניסיון של Pillie הסתיימה היום"
-          }
-        },
         "hi": {
           "stringUnit": {
             "state": "translated",
@@ -14741,12 +14417,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "તમારું %@નું રિમાઇન્ડર હવે બંધ છે. તેને ફરી ચાલુ કરવા ટૅપ કરો."
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "התזכורת שלך ב-%@ כבויה עכשיו. הקישי כדי להפעיל אותה מחדש."
           }
         },
         "hi": {
@@ -15018,12 +14688,6 @@
             "value": "ટ્રાયલ પૂરી થઈ, એટલે તમારું રિમાઇન્ડર અને ઍપ બ્લૉકિંગ બંધ છે. બંને ફરી ચાલુ કરવા ટૅપ કરો."
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "תקופת הניסיון הסתיימה, אז התזכורת וחסימת האפליקציות כבויות. הקישי כדי להפעיל את שתיהן מחדש."
-          }
-        },
         "hi": {
           "stringUnit": {
             "state": "translated",
@@ -15291,12 +14955,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@ વાગ્યા. આજે રાત્રે કોઈ રિમાઇન્ડર નહીં."
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "השעה %@. אין תזכורת הלילה."
           }
         },
         "hi": {
@@ -15568,12 +15226,6 @@
             "value": "%@ વાગ્યા. આજે કોઈ રિમાઇન્ડર નહીં."
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "השעה %@. אין תזכורת היום."
-          }
-        },
         "hi": {
           "stringUnit": {
             "state": "translated",
@@ -15841,12 +15493,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "ટ્રાયલ પૂરી થતાં રિમાઇન્ડર બંધ થયાં. તેમને પાછાં લાવવા ટૅપ કરો."
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "התזכורות נפסקו כשתקופת הניסיון הסתיימה. הקישי כדי להחזיר אותן."
           }
         },
         "hi": {
@@ -16118,12 +15764,6 @@
             "value": "આ કોઈ રિમાઇન્ડર નથી"
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "זו לא תזכורת"
-          }
-        },
         "hi": {
           "stringUnit": {
             "state": "translated",
@@ -16391,12 +16031,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "અહીં જ પહેલાં તમારું %@નું રિમાઇન્ડર આવતું હતું. તેને પાછું લાવવા ટૅપ કરો."
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "פשוט כאן הייתה התזכורת שלך ב-%@. הקישי כדי להחזיר אותה."
           }
         },
         "hi": {
@@ -16668,12 +16302,6 @@
             "value": "આજે રાત્રે તમારી ઍપ્સ બ્લૉક નથી"
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "האפליקציות שלך לא נעולות הלילה"
-          }
-        },
         "hi": {
           "stringUnit": {
             "state": "translated",
@@ -16941,12 +16569,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "આજે તમારી ઍપ્સ બ્લૉક નથી"
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "האפליקציות שלך לא נעולות היום"
           }
         },
         "hi": {
@@ -17218,12 +16840,6 @@
             "value": "%@થી તમે નોંધ ન કરો ત્યાં સુધી તે થોભેલી રહેત. ઍપ બ્લૉકિંગ ફરી ચાલુ કરવા ટૅપ કરો."
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ב-%@ הן היו נשארות נעולות עד שתסמני. הקישי כדי להפעיל מחדש את חסימת האפליקציות."
-          }
-        },
         "hi": {
           "stringUnit": {
             "state": "translated",
@@ -17493,12 +17109,6 @@
             "value": "Pillie તરફથી છેલ્લો સંદેશ"
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "הודעה אחרונה מ-Pillie"
-          }
-        },
         "hi": {
           "stringUnit": {
             "state": "translated",
@@ -17766,12 +17376,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pillie અજમાવવા બદલ આભાર. આ અમારું છેલ્લું નોટિફિકેશન છે. તમારે જોઈએ ત્યારે Pillie અહીં જ છે."
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "תודה שנתת ל-Pillie הזדמנות. זו ההתראה האחרונה שלנו. Pillie כאן אם תרצי."
           }
         },
         "hi": {
@@ -18236,30 +17840,6 @@
                 "stringUnit": {
                   "state": "translated",
                   "value": "અમારી સાથે %lld દિવસ નોંધ કરવા બદલ આભાર. આ અમારું છેલ્લું નોટિફિકેશન છે. તમારે જોઈએ ત્યારે Pillie અહીં જ છે."
-                }
-              }
-            }
-          }
-        },
-        "he": {
-          "variations": {
-            "plural": {
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "תודה שסימנת איתנו %lld יום. זו ההתראה האחרונה שלנו. Pillie כאן אם תרצי."
-                }
-              },
-              "two": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "תודה שסימנת איתנו %lld ימים. זו ההתראה האחרונה שלנו. Pillie כאן אם תרצי."
-                }
-              },
-              "other": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "תודה שסימנת איתנו %lld ימים. זו ההתראה האחרונה שלנו. Pillie כאן אם תרצי."
                 }
               }
             }
@@ -19153,30 +18733,6 @@
                 "stringUnit": {
                   "state": "translated",
                   "value": "ઍપ બ્લૉકિંગ ચાલુ રાખીને %lld દિવસ નોંધ કરવા બદલ આભાર. આ અમારો છેલ્લો સંદેશ છે. તમારે જોઈએ ત્યારે Pillie અહીં જ છે."
-                }
-              }
-            }
-          }
-        },
-        "he": {
-          "variations": {
-            "plural": {
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "תודה שסימנת %lld יום עם חסימת אפליקציות פעילה. זו ההודעה האחרונה שלנו. Pillie כאן אם תרצי."
-                }
-              },
-              "two": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "תודה שסימנת %lld ימים עם חסימת אפליקציות פעילה. זו ההודעה האחרונה שלנו. Pillie כאן אם תרצי."
-                }
-              },
-              "other": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "תודה שסימנת %lld ימים עם חסימת אפליקציות פעילה. זו ההודעה האחרונה שלנו. Pillie כאן אם תרצי."
                 }
               }
             }

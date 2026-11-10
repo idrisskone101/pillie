@@ -17,7 +17,7 @@ LOCKED_LANGS = frozenset({"en", "de", "it"})
 
 # AppLanguage catalog identifiers except system.
 APP_LANGUAGE_CODES = [
-    "ar", "bn", "ca", "cs", "da", "de", "el", "en", "es", "fi", "fr", "gu", "he",
+    "ar", "bn", "ca", "cs", "da", "de", "el", "en", "es", "fi", "fr", "gu",
     "hi", "hr", "hu", "id", "it", "ja", "kn", "ko", "ml", "mr", "ms", "nb", "nl",
     "or", "pa", "pl", "pt-BR", "pt-PT", "ro", "ru", "sk", "sl", "sv", "ta", "te",
     "th", "tr", "uk", "ur", "vi", "zh-Hans", "zh-Hant",
