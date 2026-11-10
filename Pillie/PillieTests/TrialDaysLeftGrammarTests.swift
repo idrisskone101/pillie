@@ -2,7 +2,7 @@
 //  TrialDaysLeftGrammarTests.swift
 //  PillieTests
 //
-//  A legacy (pre-ENG-242) trial's break right before its last active day freezes the count at 1
+//  An active-day trial's break right before its last active day freezes the count at 1
 //  for up to a week. Every surface that names the count must then read it in
 //  the singular: the Home badge, the Plus-on badge, the paywall, and the
 //  blocking step's trial line.

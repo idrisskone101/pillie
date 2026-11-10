@@ -5,7 +5,7 @@ import Foundation
 
 /// One row per win-back push. The raw value is the analytics `slot` and part
 /// of the request id. Days count forward from the expiry day, never from the
-/// grant, so a legacy trial whose break slides expiry moves the pushes with it (same
+/// grant, so an active-day trial whose break slides expiry moves the pushes with it (same
 /// rule as `ReminderSchedulePlanner.trialNoticeSlots`). Trial days 15, 16,
 /// and 22. Raw value 3 stays retired so slot 4 keeps its analytics `slot`.
 enum WinbackSlot: Int, CaseIterable, Codable {

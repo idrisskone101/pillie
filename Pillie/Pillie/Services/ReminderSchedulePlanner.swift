@@ -23,7 +23,7 @@ struct ReminderSchedulePlanner {
     /// One row per Reverse Trial notice (#168 / ADR 0007). `day` names the
     /// request id, copy, and analytics value. Fire times are counted back from
     /// `ReverseTrialClock.expiryMoment`, not forward from the grant, so a
-    /// legacy active-day trial whose break slides expiry moves the notices
+    /// active-day trial whose break slides expiry moves the notices
     /// with it. Day 15 is the
     /// expiry-day notice: expiry is local midnight starting the first day
     /// without access, so 10:00 that day is the morning the wall appears. The
@@ -371,7 +371,7 @@ struct ReminderSchedulePlanner {
     /// Plans the Reverse Trial notices (#168 / ADR 0007) from
     /// `trialNoticeSlots`: the day-10 and day-13 warnings at 20:00, 5 and 2
     /// local days before expiry, so copy ("in 5 days", "tomorrow night") stays
-    /// true when a legacy trial's break slides expiry, plus the day-15 notice at 10:00 on the
+    /// true when an active-day trial's break slides expiry, plus the day-15 notice at 10:00 on the
     /// expiry day itself.
     private func planTrialExpiryWarnings(_ input: Input) -> [TrialExpiryWarningIntent] {
         // Entitled users never see expiry pressure: a mid-trial purchase replans

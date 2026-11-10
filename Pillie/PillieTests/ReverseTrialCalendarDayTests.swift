@@ -2,8 +2,8 @@
 //  ReverseTrialCalendarDayTests.swift
 //  PillieTests
 //
-//  ENG-242: a trial granted on this build counts 14 calendar days. A trial
-//  granted earlier keeps its saved active-day ledger until it ends.
+//  ENG-242: a calendar-day trial counts 14 calendar days. An active-day trial
+//  keeps its saved ledger and freezes over breaks.
 //
 
 import Foundation

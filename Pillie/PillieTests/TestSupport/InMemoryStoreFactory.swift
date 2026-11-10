@@ -154,14 +154,15 @@ enum InMemoryStoreFactory {
 }
 
 extension InMemoryTrialGrantStore {
-    /// A trial granted before ENG-242: its active-day ledger was saved beside the grant.
+    /// An active-day install's trial: its ledger was saved beside the grant.
     @MainActor
-    static func legacyTrial(
+    static func activeDayTrial(
         grantedAt grantDate: Date,
         pack: PillPack,
         termsCohort: TrialTermsCohort? = nil
     ) -> InMemoryTrialGrantStore {
         let store = InMemoryTrialGrantStore()
+        store.saveDayRule(.activeDays)
         store.saveGrantDate(grantDate)
         if let termsCohort { store.saveTermsCohort(termsCohort) }
         store.saveDayLedger(TrialDayLedger(

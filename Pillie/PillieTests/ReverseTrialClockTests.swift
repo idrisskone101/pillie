@@ -412,6 +412,29 @@ final class ReverseTrialClockTests: XCTestCase {
         XCTAssertEqual(dayOne.expiryMoment(calendar: calendar), date(2026, 7, 16, 0, 0))
     }
 
+    func testGrantDatePlacingLastCountedDaySkipsBreakDays() {
+        let now = date(2026, 7, 22, 18, 0)
+        let schedule = twentyOneSeven(anchorDayIndex: 20, anchorDate: date(2026, 7, 1, 10, 0))
+        let grant = ReverseTrialClock.grantDatePlacingLastCountedDay(
+            now: now,
+            calendar: calendar,
+            schedule: schedule
+        )
+
+        // Fourteen full actives ending today are July 9-22; grant is the day
+        // before that block (July 8, a break day). Plus still ends tonight.
+        XCTAssertEqual(calendar.startOfDay(for: grant!), date(2026, 7, 8, 0, 0))
+        let clock = ReverseTrialClock(grantDate: grant!, schedule: schedule)
+        XCTAssertTrue(clock.endsTonight(calendar: calendar, now: now))
+        XCTAssertNil(
+            ReverseTrialClock.grantDatePlacingLastCountedDay(
+                now: date(2026, 7, 8, 12, 0),
+                calendar: calendar,
+                schedule: schedule
+            )
+        )
+    }
+
     private func twentyOneSeven(anchorDayIndex: Int, anchorDate: Date) -> ActiveDaySchedule {
         ActiveDaySchedule(
             anchorDate: anchorDate,

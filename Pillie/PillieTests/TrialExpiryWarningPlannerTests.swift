@@ -183,7 +183,7 @@ final class TrialExpiryWarningPlannerTests: XCTestCase {
         XCTAssertEqual(warnings.map(\.fireDate), [local(11, 20), local(14, 20), local(16, 10)])
     }
 
-    func testLegacyTrialWarningsFireFromExpiryNotGrantWhenBreakSlidesTheClock() throws {
+    func testActiveDayTrialWarningsFireFromExpiryNotGrantWhenBreakSlidesTheClock() throws {
         // Grant on last pill-active day. Warnings must follow expiry, not
         // grant+10 / grant+13 (those land in or just after the break).
         let grant = InMemoryStoreFactory.fixedDate("2026-07-01", hour: 10)

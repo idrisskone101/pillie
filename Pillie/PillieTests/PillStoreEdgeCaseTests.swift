@@ -393,7 +393,7 @@ final class PillStoreEdgeCaseTests: XCTestCase {
         try fixture.context.save()
 
         SubscriptionManager.shared.setTrialGrantStoreForTesting(
-            InMemoryTrialGrantStore.legacyTrial(grantedAt: cycleStart, pack: fixture.pack)
+            InMemoryTrialGrantStore.activeDayTrial(grantedAt: cycleStart, pack: fixture.pack)
         )
         let scheduleBeforePinning = SubscriptionManager.shared.plusAccessState.schedule
         XCTAssertEqual(scheduleBeforePinning.anchorDayIndex, 10)
@@ -426,7 +426,7 @@ final class PillStoreEdgeCaseTests: XCTestCase {
         try fixture.context.save()
 
         SubscriptionManager.shared.setTrialGrantStoreForTesting(
-            InMemoryTrialGrantStore.legacyTrial(grantedAt: cycleStart, pack: fixture.pack)
+            InMemoryTrialGrantStore.activeDayTrial(grantedAt: cycleStart, pack: fixture.pack)
         )
         let scheduleBeforePinning = SubscriptionManager.shared.plusAccessState.schedule
         XCTAssertEqual(scheduleBeforePinning.anchorDayIndex, 10)

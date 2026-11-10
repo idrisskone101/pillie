@@ -105,7 +105,7 @@ struct TrialStatusPresentation: Equatable {
 
     /// The notices the planner will send (`trialNoticeSlots` with days before
     /// expiry), then the expiry day itself, all counted back from the real
-    /// `ReverseTrialClock` expiry, so a legacy trial's break week moves every
+    /// `ReverseTrialClock` expiry, so an active-day trial's break week moves every
     /// date together.
     var timeline: [TrialTimelineRow] {
         guard let expiry = trialEndDate else { return [] }

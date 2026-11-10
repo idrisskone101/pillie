@@ -16,7 +16,7 @@ struct PlusAccessState: Equatable {
     /// The persisted Reverse Trial grant moment, if one was ever granted.
     var trialGrantDate: Date?
     /// Pack rhythm the clock walks: a ledger-backed trial's saved snapshot,
-    /// every calendar day for any trial granted since ENG-242.
+    /// every calendar day on an install from ENG-242 on.
     var schedule: ActiveDaySchedule = .everyCalendarDay
     /// Days the trial counted under earlier pack rhythms; `schedule` counts the rest.
     var trialLivedDays: TrialLivedDays? = nil
