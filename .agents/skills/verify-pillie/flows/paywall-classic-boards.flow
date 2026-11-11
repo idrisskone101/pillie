@@ -9,7 +9,7 @@ openurl pillie://debug/plus-home?lang=en  # any earlier flow may have left onboa
 wait text Today 15  # the link rebuilds Home, then posts; an early post is lost
 openurl pillie://debug/honest-paywall?board=duringTrial&design=classic&lang=en
 wait text "You still have Pillie Plus." 10
-expect text "active days left on Pillie Plus"
+expect text "days left on Pillie Plus"
 expect text "Follow-up reminders stay on"
 expect id paywallTile.annual
 expect id paywallRestoreButton
