@@ -50492,12 +50492,6 @@
             "value": "તમારી પાસે હજુ Pillie Plus છે."
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "עדיין יש לך Pillie Plus."
-          }
-        },
         "hi": {
           "stringUnit": {
             "state": "translated",
@@ -50765,12 +50759,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "ટ્રાયલ પછી પણ ફૉલો-અપ રિમાઇન્ડર અને ઍપ બ્લૉકિંગ માટે Plus રાખો."
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "השאירי את Plus כדי שתזכורות המשך וחסימת אפליקציות יישארו גם אחרי תקופת הניסיון."
           }
         },
         "hi": {
@@ -51042,12 +51030,6 @@
             "value": "ફૉલો-અપ રિમાઇન્ડર ચાલુ રહે છે"
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "תזכורות המשך נשארות פעילות"
-          }
-        },
         "hi": {
           "stringUnit": {
             "state": "translated",
@@ -51315,12 +51297,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "ઍપ બ્લૉકિંગ ચાલુ રહે છે"
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "חסימת אפליקציות נשארת פעילה"
           }
         },
         "hi": {
@@ -51592,12 +51568,6 @@
             "value": "તમારો ઇતિહાસ અહીં જ રહે છે"
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ההיסטוריה שלך נשארת כאן"
-          }
-        },
         "hi": {
           "stringUnit": {
             "state": "translated",
@@ -51865,12 +51835,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "તમારી Pillie Plus ટ્રાયલ પૂરી થઈ ગઈ છે."
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "תקופת הניסיון של Pillie Plus הסתיימה."
           }
         },
         "hi": {
@@ -52142,12 +52106,6 @@
             "value": "ફૉલો-અપ રિમાઇન્ડર અને ઍપ બ્લૉકિંગ રાખવા Pillie Plus ચાલુ રાખો."
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "הישארי עם Pillie Plus כדי לשמור על תזכורות המשך וחסימת אפליקציות."
-          }
-        },
         "hi": {
           "stringUnit": {
             "state": "translated",
@@ -52415,12 +52373,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "અત્યાર સુધી %lld. આમ જ ચાલુ રાખો."
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld עד עכשיו. המשיכי כך."
           }
         },
         "hi": {
@@ -52692,12 +52644,6 @@
             "value": "ડોઝ લીધા"
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "מנות שנלקחו"
-          }
-        },
         "hi": {
           "stringUnit": {
             "state": "translated",
@@ -52965,12 +52911,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "દિવસની સ્ટ્રીક"
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ימים ברצף"
           }
         },
         "hi": {
@@ -53242,12 +53182,6 @@
             "value": "ફરી સ્વાગત છે."
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "טוב שחזרת."
-          }
-        },
         "hi": {
           "stringUnit": {
             "state": "translated",
@@ -53515,12 +53449,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "તમારી ટ્રાયલ પૂરી થઈ. રોજનાં રિમાઇન્ડર મફત જ રહેશે."
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "תקופת הניסיון הסתיימה. התזכורות היומיות נשארות בחינם."
           }
         },
         "hi": {
@@ -53792,12 +53720,6 @@
             "value": "તમારી ટ્રાયલ પૂરી થઈ ગઈ છે."
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "תקופת הניסיון הסתיימה."
-          }
-        },
         "hi": {
           "stringUnit": {
             "state": "translated",
@@ -54065,12 +53987,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "તમારાં રોજનાં રિમાઇન્ડર અને ઍપ બ્લૉકિંગ બંધ છે. તેમને ફરી ચાલુ કરવા પ્લાન પસંદ કરો."
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "התזכורות היומיות שלך וחסימת האפליקציות כבויות. בחרי תוכנית כדי להפעיל אותן מחדש."
           }
         },
         "hi": {
@@ -54342,12 +54258,6 @@
             "value": "જ્યાંથી છોડ્યું હતું ત્યાંથી આગળ વધો"
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "המשיכי מאיפה שעצרת"
-          }
-        },
         "hi": {
           "stringUnit": {
             "state": "translated",
@@ -54615,12 +54525,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "ઍપ બ્લૉકિંગ ફરી ચાલુ થાય છે"
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "חסימת אפליקציות חוזרת לפעול"
           }
         },
         "hi": {
@@ -54892,12 +54796,6 @@
             "value": "રોજનાં રિમાઇન્ડર પાછાં આવે છે"
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "תזכורות יומיות חוזרות"
-          }
-        },
         "hi": {
           "stringUnit": {
             "state": "translated",
@@ -55165,12 +55063,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "તમારો ઇતિહાસ પાછો આવે છે"
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ההיסטוריה שלך חוזרת"
           }
         },
         "hi": {
@@ -55442,12 +55334,6 @@
             "value": "રોજનાં રિમાઇન્ડર મફત છે."
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "תזכורות יומיות בחינם."
-          }
-        },
         "hi": {
           "stringUnit": {
             "state": "translated",
@@ -55717,12 +55603,6 @@
             "value": "Pillie Plus ફૉલો-અપ રિમાઇન્ડર અને ઍપ બ્લૉકિંગ ઉમેરે છે."
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pillie Plus מוסיף תזכורות המשך וחסימת אפליקציות."
-          }
-        },
         "hi": {
           "stringUnit": {
             "state": "translated",
@@ -55987,12 +55867,6 @@
           }
         },
         "gu": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pillie Plus"
-          }
-        },
-        "he": {
           "stringUnit": {
             "state": "translated",
             "value": "Pillie Plus"
@@ -56267,12 +56141,6 @@
             "value": "%@/મહિનો"
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@/חודש"
-          }
-        },
         "hi": {
           "stringUnit": {
             "state": "translated",
@@ -56540,12 +56408,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@ · દર વર્ષે %@ બિલ"
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ · %@/שנה"
           }
         },
         "hi": {
@@ -56817,12 +56679,6 @@
             "value": "ગમે ત્યારે રદ કરો"
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ביטול בכל רגע"
-          }
-        },
         "hi": {
           "stringUnit": {
             "state": "translated",
@@ -57090,12 +56946,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "એક વાર ચૂકવો, Plus હંમેશાં તમારું"
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "משלמים פעם אחת, ו־Plus נשאר לתמיד"
           }
         },
         "hi": {
@@ -57367,12 +57217,6 @@
             "value": "ગમે ત્યારે રદ કરો"
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ביטול בכל רגע"
-          }
-        },
         "hi": {
           "stringUnit": {
             "state": "translated",
@@ -57640,12 +57484,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pillie Plus રાખો · દર વર્ષે %@ બિલ"
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "להשאיר את Pillie Plus · %@ בשנה"
           }
         },
         "hi": {
@@ -57917,12 +57755,6 @@
             "value": "Pillie Plus રાખો · દર મહિને %@ બિલ"
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "להשאיר את Pillie Plus · %@ בחודש"
-          }
-        },
         "hi": {
           "stringUnit": {
             "state": "translated",
@@ -58190,12 +58022,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pillie Plus રાખો · એક વાર %@"
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "להשאיר את Pillie Plus · %@ פעם אחת"
           }
         },
         "hi": {
@@ -58467,12 +58293,6 @@
             "value": "Pillie Plus મેળવો · દર વર્ષે %@ બિલ"
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "לקחת Pillie Plus · %@ בשנה"
-          }
-        },
         "hi": {
           "stringUnit": {
             "state": "translated",
@@ -58742,12 +58562,6 @@
             "value": "Pillie Plus મેળવો · દર મહિને %@ બિલ"
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "לקחת Pillie Plus · %@ בחודש"
-          }
-        },
         "hi": {
           "stringUnit": {
             "state": "translated",
@@ -59015,12 +58829,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pillie Plus મેળવો · એક વાર %@"
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "לקחת Pillie Plus · %@ פעם אחת"
           }
         },
         "hi": {
