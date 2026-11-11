@@ -16,7 +16,7 @@ struct ClassicPaywallStoryFactoryTests {
         #expect(story.title == "You still have Pillie Plus.")
         #expect(story.subtitle == "Keep Plus to have follow-up reminders and app blocking after your trial.")
         #expect(story.daysRemaining == 6)
-        #expect(story.daysStampText == "active days left on Pillie Plus")
+        #expect(story.daysStampText == "days left on Pillie Plus")
         #expect(story.benefitChips == [
             ClassicPaywallBenefitChip(label: "Follow-up reminders stay on", tint: .lavender),
             ClassicPaywallBenefitChip(label: "App blocking stays on", tint: .sage),
