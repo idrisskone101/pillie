@@ -29,9 +29,10 @@ note "trialKeepPlus is on screen here but never tapped - it opens HonestPaywallH
 tap --label "Done"
 gone id trialKeepPlus 10
 
-# The hard trial-end wall for a blocker user.
+# The hard trial-end wall for a blocker user. The honest paywall board names no
+# length; TrialEndPaywallContent's kicker and subtitle only feed its telemetry.
 openurl "pillie://debug/trial-end-paywall?cohort=blocker&trialLength=seven_days&lang=en"
-wait text "Your 7 days" 15
-expect text "For 7 days you had"
+wait text "Get your reminders and app blocking back." 20
 expect-not text "14 days"
+expect-not text "day 14"
 shot trial-end-wall
