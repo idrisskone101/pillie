@@ -965,8 +965,9 @@ struct PillieApp: App {
         SubscriptionManager.shared.debugSetTrialDayRule(rule)
     }
 
-    /// `trialLength=seven_days|control` pins the trial_length_v1 arm: the
-    /// onboarding grant takes it, and a running trial's stored length follows.
+    /// `trialLength=seven_days|control` pins the trial_length_v1 flag value:
+    /// the onboarding grant takes it, and a running trial's stored length
+    /// follows. An active-day install stays at 14 days, as in production.
     /// `trialLength=none` drops the pin so the flag decides the next grant.
     private func applyDebugTrialLength(from url: URL) {
         guard let value = URLComponents(url: url, resolvingAgainstBaseURL: false)?
@@ -979,7 +980,7 @@ struct PillieApp: App {
             return
         }
         UserDefaults.standard.set(length.rawValue, forKey: TrialLengthEnrollment.debugOverrideKey)
-        SubscriptionManager.shared.debugSetTrialLength(length)
+        SubscriptionManager.shared.debugSetTrialLength(TrialLengthEnrollment.current().length)
         reconcileScreenTimeState()
     }
     #endif

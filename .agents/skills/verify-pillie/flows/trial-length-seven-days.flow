@@ -1,10 +1,12 @@
 # trial_length_v1: a 7-day Reverse Trial reads 7 everywhere. trialLength=seven_days
-# pins the arm (PillieApp.swift applyDebugTrialLength) after each link runs.
+# pins the flag value (PillieApp.swift applyDebugTrialLength) after each link
+# runs. Only a calendar-day install enrolls, so the first link sets trialDays.
+# An enrolled grant also logs `$feature_flag_called` (category analytics).
 launch
 
 # The onboarding grant: no grant yet, app-blocking setup writes it with the
 # pinned length (ContentView.grantOnboardingTrialIfNeeded).
-openurl "pillie://debug/trial-granted-moment?trialLength=seven_days&lang=en"
+openurl "pillie://debug/trial-granted-moment?trialDays=calendar&trialLength=seven_days&lang=en"
 wait id appBlockingTrialLine 15
 expect text "next 7 days"
 expect-not text "14 days"

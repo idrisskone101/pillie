@@ -65,23 +65,25 @@ enum TrialLengthExperiment {
 /// grant stores the length beside it, so this is read once per install.
 enum TrialLengthEnrollment {
     #if DEBUG
-    /// QA pin from `pillie://debug/trial-length`, read before the flag.
+    /// QA pin from `?trialLength=` on a debug link. It stands in for the flag
+    /// value, so an active-day install still stays at 14 days.
     static let debugOverrideKey = "debug_trial_length"
     #endif
 
     static func current() -> TrialLengthAssignment {
-        #if DEBUG
-        if let pinned = UserDefaults.standard.string(forKey: debugOverrideKey).flatMap(TrialLength.init(rawValue:)) {
-            return TrialLengthAssignment(length: pinned, isFromFlag: false)
-        }
-        #endif
         let analytics = AnalyticsManager.shared
         guard analytics.isAnalyticsEnabled else {
             return TrialLengthAssignment(length: .fourteenDays, isFromFlag: false)
         }
+        var flagValue = analytics.featureFlag(TrialLengthExperiment.flagKey)
+        #if DEBUG
+        if let pinned = UserDefaults.standard.string(forKey: debugOverrideKey) {
+            flagValue = pinned
+        }
+        #endif
         return TrialLengthExperiment.assignment(
             dayRule: SubscriptionManager.shared.trialDayRule,
-            flagValue: analytics.featureFlag(TrialLengthExperiment.flagKey)
+            flagValue: flagValue
         )
     }
 
