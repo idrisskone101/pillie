@@ -1,0 +1,32 @@
+# trial_length_v1: a 7-day Reverse Trial reads 7 everywhere. trialLength=seven_days
+# pins the arm (PillieApp.swift applyDebugTrialLength) after each link runs.
+launch
+
+# The onboarding grant: no grant yet, app-blocking setup writes it with the
+# pinned length (ContentView.grantOnboardingTrialIfNeeded).
+openurl "pillie://debug/trial-granted-moment?trialLength=seven_days&lang=en"
+wait id appBlockingTrialLine 15
+expect text "next 7 days"
+expect-not text "14 days"
+shot onboarding-trial-line
+
+# Mid-trial: granted, then aged 3 days. Grant day + 7 full days leaves 5.
+openurl "pillie://debug/trial-eve-of-break?trialLength=seven_days&lang=en"
+openurl "pillie://debug/trial-age?days=3&lang=en"
+wait id trialIndicator 15
+expect text "5 days left"
+shot trial-indicator
+tap --id trialIndicator
+wait id trialKeepPlus 10
+expect text "Day 3"
+shot trial-status-sheet
+note "trialKeepPlus is on screen here but never tapped - it opens HonestPaywallHost/StoreKit"
+tap --label "Done"
+gone id trialKeepPlus 10
+
+# The hard trial-end wall for a blocker user.
+openurl "pillie://debug/trial-end-paywall?cohort=blocker&trialLength=seven_days&lang=en"
+wait text "Your 7 days" 15
+expect text "For 7 days you had"
+expect-not text "14 days"
+shot trial-end-wall

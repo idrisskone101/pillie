@@ -102,6 +102,11 @@ CTA, a reassurance line, and Restore · Terms · Privacy. The board is a
 
 ## Driving it with flows
 
+- `flows/trial-length-seven-days.flow` (trial_length_v1) — `?trialLength=seven_days`
+  pins the 7-day arm. Proves the onboarding grant's trial line ("next 7 days"),
+  the Today indicator and `TrialStatusSheet` three days in ("5 days left",
+  "Day 3"), and the hard trial-end wall ("Your 7 days", "For 7 days you had"),
+  with no "14 days" on any of them.
 - `flows/paywall-restore.flow` — every restore outcome without RevenueCat,
   through `pillie://debug/restore-outcome?result=error|none|restored|clear`.
   On the hard trial-end board: error alert, then Try again into the

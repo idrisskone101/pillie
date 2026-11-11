@@ -535,6 +535,8 @@ struct PillieApp: App {
         guard url.scheme == "pillie", url.host == "debug" else { return }
         applyDebugLanguage(from: url)
         applyDebugTrialDayRule(from: url)
+        // After the link runs, so a grant the link writes takes the length.
+        defer { applyDebugTrialLength(from: url) }
 
         switch url.path {
         case "/posthog-smoke":
@@ -961,6 +963,24 @@ struct PillieApp: App {
         }
         guard let rule else { return }
         SubscriptionManager.shared.debugSetTrialDayRule(rule)
+    }
+
+    /// `trialLength=seven_days|control` pins the trial_length_v1 arm: the
+    /// onboarding grant takes it, and a running trial's stored length follows.
+    /// `trialLength=none` drops the pin so the flag decides the next grant.
+    private func applyDebugTrialLength(from url: URL) {
+        guard let value = URLComponents(url: url, resolvingAgainstBaseURL: false)?
+            .queryItems?
+            .first(where: { $0.name == "trialLength" })?
+            .value
+        else { return }
+        guard let length = TrialLength(rawValue: value) else {
+            UserDefaults.standard.removeObject(forKey: TrialLengthEnrollment.debugOverrideKey)
+            return
+        }
+        UserDefaults.standard.set(length.rawValue, forKey: TrialLengthEnrollment.debugOverrideKey)
+        SubscriptionManager.shared.debugSetTrialLength(length)
+        reconcileScreenTimeState()
     }
     #endif
 }
