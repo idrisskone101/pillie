@@ -72,6 +72,11 @@ protocol ProductAnalyticsClient: AnyObject {
   /// to the same PostHog person. `nil` before the SDK is configured.
   func distinctId() -> String?
   func flush()
+  /// Super properties ride every later capture and persist across launches.
+  func registerSuperProperties(_ properties: [String: AnalyticsPropertyValue])
+  /// Reads the cached flag value. Sends no exposure event, since
+  /// `sendFeatureFlagEvent` is off.
+  func featureFlag(_ key: String) -> Any?
 }
 
 /// The failing subsystem carried as `domain` on `app_error`, kept a closed
@@ -100,10 +105,12 @@ enum AppErrorSeverity: String {
   case fatal
 }
 
-// The client grew `captureException` for #179; a default no-op keeps the many
-// test spies compiling. `PostHogAnalyticsClient` overrides it for real capture.
+// Default no-ops keep the many test spies compiling as the client grows (#179,
+// paywall_design_v1). `PostHogAnalyticsClient` overrides them for real capture.
 extension ProductAnalyticsClient {
   func captureException(_ error: Error, properties: [String: AnalyticsPropertyValue]) {}
+  func registerSuperProperties(_ properties: [String: AnalyticsPropertyValue]) {}
+  func featureFlag(_ key: String) -> Any? { nil }
 }
 
 final class PostHogAnalyticsClient: ProductAnalyticsClient {
@@ -172,6 +179,16 @@ final class PostHogAnalyticsClient: ProductAnalyticsClient {
 
   func distinctId() -> String? {
     PostHogSDK.shared.getDistinctId()
+  }
+
+  func registerSuperProperties(_ properties: [String: AnalyticsPropertyValue]) {
+    captureQueue.async {
+      PostHogSDK.shared.register(properties.mapValues(\.postHogValue))
+    }
+  }
+
+  func featureFlag(_ key: String) -> Any? {
+    PostHogSDK.shared.getFeatureFlag(key)
   }
 
   func flush() {
@@ -1264,8 +1281,11 @@ final class AnalyticsManager: AnalyticsTracking {
         // Auto-capture stays off regardless: lifecycle/screen-view/element/survey
         // flags below are what actually enable the other swizzling integrations.
         enableSwizzling: true,
+        // Exposure is captured by hand, only when a paywall_design_v1 paywall shows.
         sendFeatureFlagEvent: false,
-        preloadFeatureFlags: false,
+        // The trial-end wall can open at launch, so the paywall-design flag must
+        // already be cached.
+        preloadFeatureFlags: true,
         setDefaultPersonProperties: false,
         sessionReplay: true,
         sessionReplayScreenshotMode: true,
@@ -1709,6 +1729,46 @@ final class AnalyticsManager: AnalyticsTracking {
   func flush() {
     guard isConfigured, isAnalyticsEnabled else { return }
     client.flush()
+  }
+
+  func featureFlag(_ key: String) -> Any? {
+    guard isConfigured, isAnalyticsEnabled else { return nil }
+    return client.featureFlag(key)
+  }
+
+  func registerSuperProperties(_ properties: [String: AnalyticsPropertyValue]) {
+    debugLog("register", properties)
+    guard isConfigured, isAnalyticsEnabled else { return }
+    client.registerSuperProperties(properties)
+  }
+
+  /// PostHog's experiment exposure event, sent by hand so it fires only when the
+  /// experiment's surface shows. `personProperties` ride it as `$set`.
+  func captureFeatureFlagCalled(
+    _ key: String,
+    response: String,
+    personProperties: [String: AnalyticsPropertyValue]
+  ) {
+    let properties: [String: AnalyticsPropertyValue] = [
+      "$feature_flag": .string(key),
+      "$feature_flag_response": .string(response),
+    ]
+    debugLog("$feature_flag_called", properties.merging(personProperties) { $1 })
+    guard isConfigured, isAnalyticsEnabled else { return }
+    client.capture(
+      event: "$feature_flag_called",
+      properties: properties,
+      personProperties: personProperties
+    )
+  }
+
+  private func debugLog(_ operation: String, _ properties: [String: AnalyticsPropertyValue]) {
+    #if DEBUG
+      Logger(subsystem: "com.idrisskone.pillie", category: "analytics")
+        .debug(
+          "Pillie analytics \(operation, privacy: .public): \(properties.map { "\($0.key)=\($0.value.postHogValue)" }.sorted().joined(separator: " "), privacy: .public)"
+        )
+    #endif
   }
 
   /// A missing token used to fail silently — `configure()` returned, every `track`
