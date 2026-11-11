@@ -14,6 +14,7 @@ import SwiftData
 @MainActor
 final class PillStoreEdgeCaseTests: XCTestCase {
     override func tearDown() {
+        SubscriptionManager.shared.setTrialGrantStoreForTesting(InMemoryTrialGrantStore())
         InMemoryStoreFactory.resetClockAndDefaults()
         super.tearDown()
     }
@@ -391,7 +392,9 @@ final class PillStoreEdgeCaseTests: XCTestCase {
         fixture.pack.cycleDayAnchorIndex = 10
         try fixture.context.save()
 
-        SubscriptionManager.shared.updateActiveDaySchedule(pack: fixture.store.activePack)
+        SubscriptionManager.shared.setTrialGrantStoreForTesting(
+            InMemoryTrialGrantStore.activeDayTrial(grantedAt: cycleStart, pack: fixture.pack)
+        )
         let scheduleBeforePinning = SubscriptionManager.shared.plusAccessState.schedule
         XCTAssertEqual(scheduleBeforePinning.anchorDayIndex, 10)
 
@@ -422,7 +425,9 @@ final class PillStoreEdgeCaseTests: XCTestCase {
         fixture.pack.cycleDayAnchorIndex = 10
         try fixture.context.save()
 
-        SubscriptionManager.shared.updateActiveDaySchedule(pack: fixture.store.activePack)
+        SubscriptionManager.shared.setTrialGrantStoreForTesting(
+            InMemoryTrialGrantStore.activeDayTrial(grantedAt: cycleStart, pack: fixture.pack)
+        )
         let scheduleBeforePinning = SubscriptionManager.shared.plusAccessState.schedule
         XCTAssertEqual(scheduleBeforePinning.anchorDayIndex, 10)
 

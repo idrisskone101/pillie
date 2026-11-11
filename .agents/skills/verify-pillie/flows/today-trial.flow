@@ -4,8 +4,8 @@
 launch
 
 # /trial-eve-of-break completes onboarding itself and sets everything up in
-# one shot: fresh 21/7 pack pinned to cycle day 21 (the last hormone-active
-# day), Plus off, a trial granted `now`, hard-paywall terms.
+# one shot: fresh 21/7 pack pinned to cycle day 21 (the last pill before
+# the break week), Plus off, a trial granted `now`, hard-paywall terms.
 # PillieApp.swift:574-576; DebugQA.swift:348-361 applyTrialEveOfBreak.
 openurl "pillie://debug/trial-eve-of-break?lang=en"
 

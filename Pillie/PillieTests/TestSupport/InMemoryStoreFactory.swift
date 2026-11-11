@@ -152,3 +152,24 @@ enum InMemoryStoreFactory {
         ].forEach { defaults.removeObject(forKey: $0) }
     }
 }
+
+extension InMemoryTrialGrantStore {
+    /// An active-day install's trial: its ledger was saved beside the grant.
+    @MainActor
+    static func activeDayTrial(
+        grantedAt grantDate: Date,
+        pack: PillPack,
+        termsCohort: TrialTermsCohort? = nil
+    ) -> InMemoryTrialGrantStore {
+        let store = InMemoryTrialGrantStore()
+        store.saveDayRule(.activeDays)
+        store.saveGrantDate(grantDate)
+        if let termsCohort { store.saveTermsCohort(termsCohort) }
+        store.saveDayLedger(TrialDayLedger(
+            schedule: ActiveDaySchedule(pack: pack),
+            lived: nil,
+            timeZoneIdentifier: Calendar.current.timeZone.identifier
+        ))
+        return store
+    }
+}

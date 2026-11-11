@@ -92,11 +92,11 @@ enum DebugQAScenario: String, CaseIterable, Identifiable {
         case .marketingCalendar:
             return "Realistic taken/missed mix for screenshots."
         case .trialActive:
-            return "Onboarded new-user cohort, 12 active days left."
+            return "Onboarded new-user cohort, 12 days left."
         case .trialEveOfBreak:
-            return "Granted today on pack day 21. Break starts tomorrow. Badge is 14 active days."
+            return "Granted today on pack day 21. Break starts tomorrow. Badge is 14 days."
         case .trialMidBreak:
-            return "Granted on last active day. Today is a break day. Badge stays at 14."
+            return "Granted on last active day. Today is a break day. Active-day rule: badge stays at 14. Calendar rule: 8."
         case .trialLastDay:
             return "Onboarded new-user cohort, expires tonight."
         case .trialExpiredNewUserBlocker:
@@ -369,7 +369,7 @@ enum DebugQA {
     }
 
     /// Grant on the last hormone-active day, land on the last break day.
-    /// Old calendar clock would read 8 days left. Active-day clock freezes at 14.
+    /// An active-day trial freezes at 14; a calendar-day trial reads 8.
     private static func applyTrialDuringBreak(store: PillStore) {
         completeOnboarding()
         persistInstallCohort(.postCutover)
@@ -402,7 +402,9 @@ enum DebugQA {
         seedInterventionStats(blockerConfigured: blockerConfigured)
         SubscriptionManager.shared.setPlusForTesting(subscriber)
         SubscriptionManager.shared.debugSetHardPaywallEnabled(hardPaywallEnabled)
-        let schedule = ActiveDaySchedule(pack: store.activePack)
+        let schedule = SubscriptionManager.shared.trialDayRule == .activeDays
+            ? ActiveDaySchedule(pack: store.activePack)
+            : .everyCalendarDay
         SubscriptionManager.shared.updateActiveDaySchedule(schedule)
         let calendar = Calendar.current
         let now = Date()

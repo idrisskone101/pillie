@@ -31,13 +31,13 @@ struct AppBlockingSetupContentTests {
     @Test func trialLineSaysTheTrialStartsHere() {
         #expect(
             content.trialLine
-                == "Pillie Plus is on for your next 14 active days, free. No\u{00A0}card. We’ll remind you before it ends."
+                == "Pillie Plus is on for your next 14 days, free. No\u{00A0}card. We’ll remind you before it ends."
         )
     }
 
     @Test func trialLineCountsWhatAnEarlierGrantHasLeft() {
         // Onboarding resumed, or reinstalled with the Keychain grant: the trial
-        // began Oct 2, so on Oct 7 ten of its fourteen active days are left.
+        // began Oct 2, so on Oct 7 ten of its fourteen days are left.
         let calendar = Calendar.current
         let resumed = AppBlockingSetupContent.localized(
             locale: Locale(identifier: "en_US"),
@@ -49,7 +49,7 @@ struct AppBlockingSetupContentTests {
 
         #expect(
             resumed.trialLine
-                == "Pillie Plus is on for your next 10 active days, free. No\u{00A0}card. We’ll remind you before it ends."
+                == "Pillie Plus is on for your next 10 days, free. No\u{00A0}card. We’ll remind you before it ends."
         )
     }
 

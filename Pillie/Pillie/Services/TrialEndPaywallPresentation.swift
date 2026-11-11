@@ -289,7 +289,7 @@ struct TrialEndPaywallContent: Equatable {
         let card: CenterpieceCard = rows.isEmpty
             ? .perks(
                 kicker: commerce(
-                    terms == .hardPaywall ? "trial.end.kicker" : "trial.end.free_title"
+                    terms == .hardPaywall ? TrialDayRule.copyKey("trial.end.kicker") : "trial.end.free_title"
                 ),
                 chips: [
                     commerce("paywall.feature.app_blocking.compact"),
@@ -300,9 +300,9 @@ struct TrialEndPaywallContent: Equatable {
                 footnote: commerce("paywall.subtitle")
             )
             : .record(
-                kicker: commerce(
+                kicker: commerce(TrialDayRule.copyKey(
                     terms == .legacy ? "trial.end.legacy.record" : "trial.end.kicker"
-                ),
+                )),
                 dateRange: localizedRecordDateRange(
                     clock: clock,
                     calendar: calendar,
@@ -318,7 +318,7 @@ struct TrialEndPaywallContent: Equatable {
                 terms == .legacy ? "trial.end.legacy.title" : "trial.end.title"
             ),
             titleAccent: "",
-            subtitle: commerce(subtitleKey(cohort: cohort, terms: terms)),
+            subtitle: commerce(TrialDayRule.copyKey(subtitleKey(cohort: cohort, terms: terms))),
             card: card,
             handwrittenAside: terms == .legacy ? commerce("trial.end.legacy.aside") : "",
             primaryCTA: commerce(

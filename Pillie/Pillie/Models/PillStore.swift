@@ -896,7 +896,7 @@ class PillStore {
     /// cycle-day edits in Settings don't shift the removal date.
     ///
     /// Pinning moves `resolvedCycleAnchor` for a pack that started mid-cycle,
-    /// which reshapes the active-day rhythm the Reverse Trial clock walks, so
+    /// which reshapes the active-day rhythm a legacy Reverse Trial walks, so
     /// the manager has to adopt the new snapshot in the same turn.
     private func pinRingInsertionAnchorIfNeeded(for targetPack: PillPack) {
         guard targetPack.method == .ring, targetPack.ringInsertionDate == nil else { return }

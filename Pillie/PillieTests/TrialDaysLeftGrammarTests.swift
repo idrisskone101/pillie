@@ -2,7 +2,7 @@
 //  TrialDaysLeftGrammarTests.swift
 //  PillieTests
 //
-//  A break right before the trial's last active day freezes the count at 1
+//  An active-day trial's break right before its last active day freezes the count at 1
 //  for up to a week. Every surface that names the count must then read it in
 //  the singular: the Home badge, the Plus-on badge, the paywall, and the
 //  blocking step's trial line.
@@ -26,19 +26,19 @@ final class TrialDaysLeftGrammarTests: XCTestCase {
         ))
 
         XCTAssertEqual(badge.daysRemaining, 1)
-        XCTAssertEqual(badge.countdownLabel, "1 active day left")
-        XCTAssertEqual(plusOnBadge.indicatorLabel, "Plus is on · 1 active day left")
+        XCTAssertEqual(badge.countdownLabel, "1 day left")
+        XCTAssertEqual(plusOnBadge.indicatorLabel, "Plus is on · 1 day left")
         XCTAssertEqual(
             HonestPaywallStoryFactory.duringTrial(
                 daysRemaining: badge.daysRemaining,
                 endsTonight: badge.endsTonight,
                 locale: english
             ).subtitle,
-            "You have 1 active day left. Pick a plan now and nothing turns off on day 14."
+            "You have 1 day left. Pick a plan now and nothing turns off on day 14."
         )
         XCTAssertEqual(
             AppBlockingSetupContent.localized(locale: english, trialClock: state.trialClock, now: now).trialLine,
-            "Pillie Plus is on for your next 1 active day, free. No\u{00A0}card. We’ll remind you before it ends."
+            "Pillie Plus is on for your next 1 day, free. No\u{00A0}card. We’ll remind you before it ends."
         )
     }
 
@@ -55,15 +55,15 @@ final class TrialDaysLeftGrammarTests: XCTestCase {
             ).trialLine
         }
 
-        XCTAssertEqual(try badge("de"), "Noch 1 aktiver Tag")
-        XCTAssertEqual(try badge("fr"), "Encore 1 jour actif")
-        XCTAssertEqual(trialLine("ru"), "Pillie Plus бесплатно на следующий 1 активный день. Без карты. Напомним до окончания.")
+        XCTAssertEqual(try badge("de"), "Noch 1 Tag")
+        XCTAssertEqual(try badge("fr"), "Encore 1 jour")
+        XCTAssertEqual(trialLine("ru"), "Pillie Plus бесплатно на следующий 1 день. Без карты. Напомним до окончания.")
         // Fourteen still reads in the plural.
         XCTAssertEqual(
             try XCTUnwrap(TrialStatusPresentation.make(
                 state: state, calendar: .current, now: day(7, 2, 9), locale: english
             )).countdownLabel,
-            "14 active days left"
+            "14 days left"
         )
     }
 

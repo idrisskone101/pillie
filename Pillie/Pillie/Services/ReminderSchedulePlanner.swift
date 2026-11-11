@@ -22,8 +22,9 @@ struct ReminderSchedulePlanner {
     static let streakReminderRange = 1...6
     /// One row per Reverse Trial notice (#168 / ADR 0007). `day` names the
     /// request id, copy, and analytics value. Fire times are counted back from
-    /// `ReverseTrialClock.expiryMoment`, not forward from the grant, so a break
-    /// week that slides expiry moves the notices with it. Day 15 is the
+    /// `ReverseTrialClock.expiryMoment`, not forward from the grant, so a
+    /// active-day trial whose break slides expiry moves the notices
+    /// with it. Day 15 is the
     /// expiry-day notice: expiry is local midnight starting the first day
     /// without access, so 10:00 that day is the morning the wall appears. The
     /// hours are decoupled from the user's Due Action Reminder time so an
@@ -109,8 +110,11 @@ struct ReminderSchedulePlanner {
         /// The last reminder-time change saved in Settings. Days before it keep
         /// the time they were lived under.
         var reminderChange: ReminderTimeChange? = nil
-        /// Days the Reverse Trial counted under earlier pack rhythms
-        /// (`PlusAccessState.trialLivedDays`); `pack` counts the rest.
+        /// The rhythm a ledger-backed trial counts with
+        /// (`PlusAccessState.schedule`); every calendar day otherwise.
+        var trialSchedule: ActiveDaySchedule = .everyCalendarDay
+        /// Days that trial counted under earlier pack rhythms
+        /// (`PlusAccessState.trialLivedDays`).
         var trialLivedDays: TrialLivedDays? = nil
 
         var clock: ReminderClock {
@@ -127,7 +131,7 @@ struct ReminderSchedulePlanner {
             guard !hasEntitlement, let trialGrantDate else { return nil }
             return ReverseTrialClock(
                 grantDate: trialGrantDate,
-                schedule: ActiveDaySchedule(pack: pack, calendar: calendar),
+                schedule: trialSchedule,
                 lived: trialLivedDays
             )
         }
@@ -350,7 +354,7 @@ struct ReminderSchedulePlanner {
     /// Plans the Reverse Trial notices (#168 / ADR 0007) from
     /// `trialNoticeSlots`: the day-10 and day-13 warnings at 20:00, 5 and 2
     /// local days before expiry, so copy ("in 5 days", "tomorrow night") stays
-    /// true when a break slides expiry, plus the day-15 notice at 10:00 on the
+    /// true when an active-day trial's break slides expiry, plus the day-15 notice at 10:00 on the
     /// expiry day itself.
     private func planTrialExpiryWarnings(_ input: Input) -> [TrialExpiryWarningIntent] {
         // Entitled users never see expiry pressure: a mid-trial purchase replans

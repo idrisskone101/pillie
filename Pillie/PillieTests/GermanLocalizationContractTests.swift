@@ -322,7 +322,7 @@ final class GermanLocalizationContractTests: XCTestCase {
             protectionActive: true,
             locale: german
         )
-        XCTAssertEqual(trial.indicatorLabel, "Plus ist an · noch 7 aktive Tage")
+        XCTAssertEqual(trial.indicatorLabel, "Plus ist an · noch 7 Tage")
         XCTAssertEqual(
             trial.sheetContent.ctaTitle,
             "Pillie Plus behalten"
@@ -330,7 +330,7 @@ final class GermanLocalizationContractTests: XCTestCase {
 
         XCTAssertEqual(
             TrialStatusPresentation(daysRemaining: 7, locale: german).indicatorLabel,
-            "Noch 7 aktive Tage"
+            "Noch 7 Tage"
         )
     }
 

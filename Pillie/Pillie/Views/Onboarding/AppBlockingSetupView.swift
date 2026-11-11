@@ -111,7 +111,7 @@ struct AppBlockingSetupContent {
             ),
             trialLine: String(
                 format: PillieLocalization.string(
-                    "onboarding.blocking_setup.trial_line",
+                    TrialDayRule.copyKey("onboarding.blocking_setup.trial_line"),
                     table: "Commerce",
                     locale: locale
                 ),
