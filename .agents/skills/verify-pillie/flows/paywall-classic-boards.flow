@@ -1,0 +1,48 @@
+# The paywall_design_v1 `classic` arm on three boards, one launch each so
+# state never carries over. `design=classic` on /honest-paywall pins the arm
+# in UserDefaults (PaywallDesignStore, PillieApp.swift "/honest-paywall");
+# the last step forgets it so later flows see S3. Never tap a purchase CTA or
+# a restore control.
+
+launch
+openurl pillie://debug/plus-home?lang=en  # any earlier flow may have left onboarding open
+wait text Today 15  # the link rebuilds Home, then posts; an early post is lost
+openurl pillie://debug/honest-paywall?board=duringTrial&design=classic&lang=en
+wait text "You still have Pillie Plus." 10
+expect text "days left on Pillie Plus"
+expect text "Follow-up reminders stay on"
+expect id paywallTile.annual
+expect id paywallRestoreButton
+expect id paywallTermsLink
+expect id paywallPrivacyLink
+expect-not id paywallPlusIncludes
+# ClassicPaywallStoryFactory.duringTrial: paywall.classic.paywall.story.
+# trial_active.title (en), Commerce.xcstrings. Terms and Privacy are the one
+# addition over 2c8062a (ClassicPaywallCheckoutChrome footerRow).
+shot paywall-classic-during-trial
+tap --id xmark --element-type Button  # paywall close; a review-prompt "Close" can sit behind it
+
+launch
+wait text Today 15  # the link rebuilds Home, then posts; an early post is lost
+openurl pillie://debug/honest-paywall?board=trialEndedReturningLegacy&design=classic&lang=en
+wait text "Welcome back." 10
+expect text "Your trial ended. Daily reminders stay free."
+expect text "Continue with free reminders"
+expect id paywallTermsLink
+# No own-record stats on the fresh QA pack, so the legacy story falls back to
+# the Free / Pillie Plus comparison (ClassicPaywallStoryFactory.trialEnded).
+shot paywall-classic-trial-ended-legacy
+tap --id xmark --element-type Button  # paywall close; a review-prompt "Close" can sit behind it
+
+launch
+wait text Today 15  # the link rebuilds Home, then posts; an early post is lost
+openurl pillie://debug/honest-paywall?board=trialEndedReturningHard&design=classic&lang=en
+wait text "Your trial has ended." 10
+expect text "App blocking turns back on"
+expect text "pick up where you left off"
+expect id paywallPrivacyLink
+expect-not id xmark
+shot paywall-classic-trial-ended-hard
+# Not dismissible (terms .hardPaywall); forget the arm and let the next
+# flow's own `launch` leave the wall.
+openurl pillie://debug/honest-paywall?design=none

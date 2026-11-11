@@ -10,6 +10,8 @@ enum HonestPaywallBoardResolver {
         access: PlusAccessState,
         entry: PaywallEntryPoint,
         method: ContraceptiveMethod,
+        design: PaywallDesign,
+        trialStats: TrialEndOwnStats?,
         calendar: Calendar,
         now: Date,
         locale: Locale,
@@ -19,14 +21,21 @@ enum HonestPaywallBoardResolver {
         guard !access.hasEntitlement else { return nil }
 
         if let clock = access.trialClock, clock.isActive(calendar: calendar, now: now) {
-            return HonestPaywallBoard(
-                moment: .duringTrial,
-                story: HonestPaywallStoryFactory.duringTrial(
-                    displayedDaysRemaining: clock.displayedDaysRemaining(calendar: calendar, now: now),
+            let displayedDaysRemaining = clock.displayedDaysRemaining(calendar: calendar, now: now)
+            let layout: HonestPaywallLayout = switch design {
+            case .s3:
+                .s3(HonestPaywallStoryFactory.duringTrial(
+                    displayedDaysRemaining: displayedDaysRemaining,
                     endsTonight: clock.endsTonight(calendar: calendar, now: now),
                     locale: locale
-                )
-            )
+                ))
+            case .classic:
+                .classic(.duringTrial(ClassicPaywallStoryFactory.duringTrial(
+                    displayedDaysRemaining: displayedDaysRemaining,
+                    locale: locale
+                )))
+            }
+            return HonestPaywallBoard(moment: .duringTrial, layout: layout)
         }
 
         if access.trialGrantDate != nil, Self.showsTrialEndedBoard(entry) {
@@ -37,20 +46,30 @@ enum HonestPaywallBoardResolver {
                 for: cohort,
                 hardPaywallEnabled: hardPaywallEnabled
             )
-            return HonestPaywallBoard(
-                moment: .trialEnded(terms),
-                story: HonestPaywallStoryFactory.trialEnded(
+            let layout: HonestPaywallLayout = switch design {
+            case .s3:
+                .s3(HonestPaywallStoryFactory.trialEnded(
                     terms: terms,
                     method: method,
                     locale: locale
-                )
-            )
+                ))
+            case .classic:
+                .classic(.trialEnded(ClassicPaywallStoryFactory.trialEnded(
+                    stats: trialStats ?? .none,
+                    terms: terms,
+                    locale: locale
+                )))
+            }
+            return HonestPaywallBoard(moment: .trialEnded(terms), layout: layout)
         }
 
-        return HonestPaywallBoard(
-            moment: .settingsFree,
-            story: HonestPaywallStoryFactory.settingsFree(method: method, locale: locale)
-        )
+        let layout: HonestPaywallLayout = switch design {
+        case .s3:
+            .s3(HonestPaywallStoryFactory.settingsFree(method: method, locale: locale))
+        case .classic:
+            .classic(.settingsFree(ClassicPaywallStoryFactory.settingsFree(locale: locale)))
+        }
+        return HonestPaywallBoard(moment: .settingsFree, layout: layout)
     }
 
     private static func showsTrialEndedBoard(_ entry: PaywallEntryPoint) -> Bool {

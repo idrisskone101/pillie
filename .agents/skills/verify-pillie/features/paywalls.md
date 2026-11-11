@@ -9,7 +9,8 @@ CTAs change often; this file names the mechanism, not the wording.
 
 ## Sub-features
 
-Every board shares one layout (S3, Oct 2026): a pink backdrop with a
+In the `control` arm of `paywall-design-experiment` below, every board
+shares one layout (S3, Oct 2026): a pink backdrop with a
 decorative iPhone showing the app-blocking shield (`PaywallPhoneMockup.swift`;
 its clock is the user's reminder time), and a cream sheet over it with the
 board's title, subtitle, plan cards, one 5-star App Store review quote, the
@@ -35,6 +36,18 @@ CTA, a reassurance line, and Restore · Terms · Privacy. The board is a
     `board=trialEndedReturningLegacy`.
   `HonestPaywallStoryFactory.swift`, `HonestPaywallBoard.swift`
   (`HonestPaywallMoment.chrome`).
+- `paywall-design-experiment` (paywall_design_v1) — PostHog flag
+  `paywall-design` picks the honest paywall's look per install: `control` is
+  the S3 layout above, `classic` is the paywall main had before PR #383
+  (2c8062a): title and subtitle over coral chips, stat tiles or Free / Plus
+  cards, three stacked plan tiles, and a footer with Restore purchases plus
+  Terms and Privacy. Only the content view differs
+  (`HonestPaywallLayout`, `Classic*.swift`); purchase, restore, the extend
+  offer, success and telemetry are shared. The arm is stored on first view
+  (`paywall_design_v1_arm`); with no flag the install sees S3 and stays
+  unenrolled. Each view of an enrolled install sends `$feature_flag_called`.
+  Debug: `design=classic|control|none` on `/honest-paywall` pins or forgets
+  the arm. `Services/Experiments/PaywallDesignExperiment.swift`.
 - `paywall-plus-upsell` — the compact `PlusUpsellSheet` (not a
   `HonestPaywallBoard`) opened from a locked Settings row
   (Reminder messages / Interval & Repeats / Your apps) on a free account.
@@ -55,8 +68,10 @@ CTA, a reassurance line, and Restore · Terms · Privacy. The board is a
 - `paywall-checkout-stack` (ENG-155) — three side-by-side plan cards: Month
   (`#paywallTile.monthly`), Year (`#paywallTile.annual`, selected by default,
   with the SAVE badge and per-month price), and Lifetime
-  (`#paywallTile.lifetime`) only when the offering exposes a lifetime
-  package. The selected card is what the CTA buys and fires
+  (`#paywallTile.lifetime`) only when `PaywallOfferingsSnapshot.sellsLifetime`
+  is on and the offering exposes a lifetime package. It is off since Nov 2026,
+  so both designs sell Year and Month only; `pillie://debug/paywall-lifetime`
+  still forces the tile for QA. The selected card is what the CTA buys and fires
   `paywall_plan_selected` with its `plan`. The reassurance
   (`#paywallReassurance`) is plain text: "Cancel anytime in Settings", the
   in-trial "You’re charged today…" line, or "One payment. No renewal." for
@@ -160,6 +175,10 @@ CTA, a reassurance line, and Restore · Terms · Privacy. The board is a
   boards. The hard-paywall board is deliberately left on screen — it isn't
   dismissible — and the next board starts from a fresh `launch` instead of
   trying to leave it.
+- `flows/paywall-classic-boards.flow` — the `classic` arm through
+  `design=classic`: `duringTrial`, `trialEndedReturningLegacy` and
+  `trialEndedReturningHard`, each checked for its 2c8062a title and the
+  Terms and Privacy links, then `design=none` so later flows see S3.
 - Not driven by a flow, and why:
   - `paywall-plus-upsell` is reachable only from `features/settings.md`'s
     locked rows on a free account, not from a debug deep link, and its
