@@ -11,38 +11,39 @@ import Foundation
 /// date so the clock cannot drift from persisted state.
 ///
 /// The grant local day is a bonus counted day. On an install from ENG-242 on
-/// (`TrialDayRule.calendarDays`) the clock walks `.everyCalendarDay`: 14 full
-/// calendar days, expiry at local midnight starting calendar day 15. An older
-/// install counts through its `TrialDayLedger`, where only hormone-active days
-/// consume the 14 and break weeks freeze the badge with Plus Access left on.
+/// (`TrialDayRule.calendarDays`) the clock walks `.everyCalendarDay`:
+/// `fullDays` full calendar days (14, or 7 in the trial_length_v1 test), expiry
+/// at local midnight after the last one. An older install counts 14 through its
+/// `TrialDayLedger`, where only hormone-active days consume the 14 and break
+/// weeks freeze the badge with Plus Access left on.
 struct ReverseTrialClock: Equatable {
-    /// The number of full counted days a Reverse Trial covers after grant day.
-    static let fullDays = 14
-
-    /// Worst legal custom is 1 active / 7 break. Fourteen full actives then
-    /// fit in `fullDays * 8` local days. Bound the walk so a bad snapshot
-    /// cannot hang.
-    static let maximumWalkDays = fullDays * 8 + 2
-
     let grantDate: Date
     /// Counts the days from `lived.since` on, or from the grant when nil.
     let schedule: ActiveDaySchedule
     /// Days counted under earlier pack rhythms.
     let lived: TrialLivedDays?
+    /// The number of full counted days the trial covers after grant day.
+    let fullDays: Int
 
     init(
         grantDate: Date,
         schedule: ActiveDaySchedule = .everyCalendarDay,
-        lived: TrialLivedDays? = nil
+        lived: TrialLivedDays? = nil,
+        fullDays: Int = TrialLength.fourteenDays.fullDays
     ) {
         self.grantDate = grantDate
         self.schedule = schedule
         self.lived = lived
+        self.fullDays = fullDays
     }
 
-    /// Local midnight after the 14th full counted day following grant day.
-    /// Grant local day is never one of the 14, active or break. If those 14
-    /// days cannot be found within `maximumWalkDays`, fall back to today's
+    /// Worst legal custom is 1 active / 7 break. The full actives then fit in
+    /// `fullDays * 8` local days. Bound the walk so a bad snapshot cannot hang.
+    private var maximumWalkDays: Int { fullDays * 8 + 2 }
+
+    /// Local midnight after the last full counted day following grant day.
+    /// Grant local day is never one of them, active or break. If those days
+    /// cannot be found within `maximumWalkDays`, fall back to today's
     /// calendar-day expiry so Plus Access cannot stay on forever.
     func expiryMoment(calendar: Calendar) -> Date {
         let grantDay = calendar.startOfDay(for: grantDate)
@@ -51,14 +52,14 @@ struct ReverseTrialClock: Equatable {
         }
         let start = lived.map { max(firstFullDay, calendar.startOfDay(for: $0.since)) } ?? firstFullDay
         let livedActiveDays = max(0, lived?.activeDays ?? 0)
-        if livedActiveDays >= Self.fullDays { return start }
+        if livedActiveDays >= fullDays { return start }
         var cursor = start
         var fullActiveDays = livedActiveDays
 
-        for _ in 0..<Self.maximumWalkDays {
+        for _ in 0..<maximumWalkDays {
             if schedule.isActiveDay(cursor, calendar: calendar) {
                 fullActiveDays += 1
-                if fullActiveDays == Self.fullDays {
+                if fullActiveDays == fullDays {
                     return calendar.date(byAdding: .day, value: 1, to: cursor) ?? cursor
                 }
             }
@@ -68,7 +69,7 @@ struct ReverseTrialClock: Equatable {
             cursor = next
         }
 
-        return calendar.date(byAdding: .day, value: Self.fullDays - livedActiveDays, to: start) ?? grantDay
+        return calendar.date(byAdding: .day, value: fullDays - livedActiveDays, to: start) ?? grantDay
     }
 
     func isActive(calendar: Calendar, now: Date) -> Bool {
@@ -86,7 +87,7 @@ struct ReverseTrialClock: Equatable {
         var cursor = nowDay
         var remaining = 0
         var walked = 0
-        while cursor < expiry && walked < Self.maximumWalkDays + Self.fullDays {
+        while cursor < expiry && walked < maximumWalkDays + fullDays {
             if isCountedDay(cursor, calendar: calendar) {
                 remaining += 1
             }
@@ -99,14 +100,15 @@ struct ReverseTrialClock: Equatable {
         return remaining
     }
 
-    /// User-facing day count. The trial promises "14 days free", so the
-    /// partial grant day (15 counted days left) never reads above the promise.
-    static func displayedDaysRemaining(_ daysRemaining: Int) -> Int {
+    /// User-facing day count. The trial promises `fullDays` days free, so the
+    /// partial grant day (`fullDays + 1` counted days left) never reads above
+    /// the promise.
+    func displayedDaysRemaining(_ daysRemaining: Int) -> Int {
         min(max(0, daysRemaining), fullDays)
     }
 
     func displayedDaysRemaining(calendar: Calendar, now: Date) -> Int {
-        Self.displayedDaysRemaining(daysRemaining(calendar: calendar, now: now))
+        displayedDaysRemaining(daysRemaining(calendar: calendar, now: now))
     }
 
     /// True when expiry is the next local midnight. A break day with one
@@ -120,12 +122,13 @@ struct ReverseTrialClock: Equatable {
         return expiryMoment(calendar: calendar) == tomorrow
     }
 
-    /// Grant noon on the local day such that `now`'s local day is the 14th
-    /// full hormone-active day. Nil if `now` is a break day.
+    /// Grant noon on the local day such that `now`'s local day is the last
+    /// (`fullDays`th) full hormone-active day. Nil if `now` is a break day.
     static func grantDatePlacingLastCountedDay(
         now: Date,
         calendar: Calendar,
-        schedule: ActiveDaySchedule
+        schedule: ActiveDaySchedule,
+        fullDays: Int
     ) -> Date? {
         let lastFull = calendar.startOfDay(for: now)
         guard schedule.isActiveDay(lastFull, calendar: calendar) else { return nil }
@@ -193,7 +196,9 @@ nonisolated struct TrialDayLedger: Codable, Equatable {
         let today = calendar.startOfDay(for: now)
         var day = ledger.lived.map { max(firstFullDay, calendar.startOfDay(for: $0.since)) } ?? firstFullDay
         var activeDays = max(0, ledger.lived?.activeDays ?? 0)
-        while day < today, activeDays < ReverseTrialClock.fullDays {
+        // Only an active-day install keeps a ledger, and it never enrolls in
+        // trial_length_v1, so its trial is always 14 days.
+        while day < today, activeDays < TrialLength.fourteenDays.fullDays {
             if ledger.schedule.isActiveDay(day, calendar: calendar) {
                 activeDays += 1
             }

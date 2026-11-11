@@ -204,7 +204,7 @@ enum DebugQA {
         case .trialLastDay:
             applyTrial(
                 store: store,
-                daysAgo: ReverseTrialClock.fullDays,
+                daysAgo: SubscriptionManager.shared.trialLength.fullDays,
                 cohort: .postCutover,
                 hardPaywallEnabled: true,
                 blockerConfigured: true,
@@ -409,11 +409,13 @@ enum DebugQA {
         let calendar = Calendar.current
         let now = Date()
         let grant: Date
-        if daysAgo == ReverseTrialClock.fullDays,
+        let fullDays = SubscriptionManager.shared.trialLength.fullDays
+        if daysAgo == fullDays,
            let placed = ReverseTrialClock.grantDatePlacingLastCountedDay(
                now: now,
                calendar: calendar,
-               schedule: schedule
+               schedule: schedule,
+               fullDays: fullDays
            ) {
             grant = placed
         } else {

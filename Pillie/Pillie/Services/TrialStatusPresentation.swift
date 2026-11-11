@@ -20,6 +20,8 @@ struct TrialStatusPresentation: Equatable {
     let locale: Locale
     let trialEndTerms: TrialEndAccessTerms
     let calendar: Calendar
+    /// `ReverseTrialClock.fullDays`: the days the trial promised.
+    let fullDays: Int
     /// Clock question: expiry is the next local midnight. Not `daysRemaining == 1`.
     private let expiresTonight: Bool
 
@@ -30,6 +32,7 @@ struct TrialStatusPresentation: Equatable {
         locale: Locale = PillieLocalization.appLocale,
         trialEndTerms: TrialEndAccessTerms = .legacy,
         calendar: Calendar = .current,
+        fullDays: Int = TrialLength.fourteenDays.fullDays,
         expiresTonight: Bool? = nil
     ) {
         self.daysRemaining = daysRemaining
@@ -38,13 +41,14 @@ struct TrialStatusPresentation: Equatable {
         self.locale = locale
         self.trialEndTerms = trialEndTerms
         self.calendar = calendar
+        self.fullDays = fullDays
         self.expiresTonight = expiresTonight ?? (daysRemaining == 1)
     }
 
     /// Day count as shown to the user. Same clamp as the paywall stamp so
     /// the home badge and Plus screen never disagree.
     var displayedDaysRemaining: Int {
-        ReverseTrialClock.displayedDaysRemaining(daysRemaining)
+        min(max(0, daysRemaining), fullDays)
     }
 
     /// Whether the trial expires at tonight's local-day rollover — the whole
@@ -72,10 +76,10 @@ struct TrialStatusPresentation: Equatable {
             : commerce(TrialDayRule.copyKey("trial.status.indicator.active"), Int64(displayedDaysRemaining))
     }
 
-    /// The counted day the user is on, 1 through 14. Pairs with the countdown
-    /// so "Day N" plus "M days left" always spans the 14 promised days.
+    /// The counted day the user is on, 1 through `fullDays`. Pairs with the
+    /// countdown so "Day N" plus "M days left" always spans the promised days.
     var currentDay: Int {
-        min(max(1, ReverseTrialClock.fullDays + 1 - displayedDaysRemaining), ReverseTrialClock.fullDays)
+        min(max(1, fullDays + 1 - displayedDaysRemaining), fullDays)
     }
 
     /// Status and commerce only. Setup lives in the Today strip.
@@ -93,7 +97,7 @@ struct TrialStatusPresentation: Equatable {
             },
             progress: TrialProgress(
                 filledDays: currentDay,
-                totalDays: ReverseTrialClock.fullDays,
+                totalDays: fullDays,
                 todayLabel: commerce("trial.status.day_today", Int64(currentDay)),
                 endLabel: trialEndDate.map { $0.formatted(dateStyle.day().month(.abbreviated)) }
             ),
@@ -184,6 +188,7 @@ struct TrialStatusPresentation: Equatable {
                 hardPaywallEnabled: hardPaywallEnabled
             ),
             calendar: calendar,
+            fullDays: clock.fullDays,
             expiresTonight: clock.endsTonight(calendar: calendar, now: now)
         )
     }

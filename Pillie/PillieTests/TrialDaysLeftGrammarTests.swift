@@ -30,7 +30,7 @@ final class TrialDaysLeftGrammarTests: XCTestCase {
         XCTAssertEqual(plusOnBadge.indicatorLabel, "Plus is on · 1 day left")
         XCTAssertEqual(
             HonestPaywallStoryFactory.duringTrial(
-                daysRemaining: badge.daysRemaining,
+                displayedDaysRemaining: badge.displayedDaysRemaining,
                 endsTonight: badge.endsTonight,
                 locale: english
             ).subtitle,

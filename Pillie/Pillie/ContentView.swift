@@ -708,11 +708,15 @@ struct ContentView: View {
     let grantDate = Date()
     let termsCohort = TrialInstallCohort.storedAssignment()
       ?? HardPaywallPolicy.cohort(forTrialGrantedAt: grantDate)
+    // trial_length_v1 picks the length once, here; a repeat call keeps the grant.
+    let trialLength = TrialLengthEnrollment.current()
     subscriptionManager.updateActiveDaySchedule(pack: store.activePack, now: grantDate)
     if subscriptionManager.grantReverseTrial(
       now: grantDate,
-      termsCohort: termsCohort
+      termsCohort: termsCohort,
+      length: trialLength.length
     ) {
+      TrialLengthEnrollment.expose(trialLength)
       onboardingTelemetry.trialActivated()
     }
   }

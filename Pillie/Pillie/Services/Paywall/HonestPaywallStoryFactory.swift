@@ -7,7 +7,7 @@ import Foundation
 
 enum HonestPaywallStoryFactory {
     static func duringTrial(
-        daysRemaining: Int,
+        displayedDaysRemaining: Int,
         endsTonight: Bool,
         locale: Locale
     ) -> HonestPaywallStory {
@@ -16,10 +16,10 @@ enum HonestPaywallStoryFactory {
             subtitle: endsTonight
                 ? commerce("paywall.board.during_trial.subtitle.tonight", locale)
                 : PillieLocalization.formatted(
-                    TrialDayRule.copyKey("paywall.board.during_trial.subtitle"),
+                    TrialLength.copyKey("paywall.board.during_trial.subtitle"),
                     table: "Commerce",
                     locale: locale,
-                    arguments: Int64(ReverseTrialClock.displayedDaysRemaining(daysRemaining))
+                    arguments: Int64(displayedDaysRemaining)
                 ),
             review: review("paywall.review.trial", locale)
         )

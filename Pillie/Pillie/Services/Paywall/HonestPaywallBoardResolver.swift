@@ -22,7 +22,7 @@ enum HonestPaywallBoardResolver {
             return HonestPaywallBoard(
                 moment: .duringTrial,
                 story: HonestPaywallStoryFactory.duringTrial(
-                    daysRemaining: clock.daysRemaining(calendar: calendar, now: now),
+                    displayedDaysRemaining: clock.displayedDaysRemaining(calendar: calendar, now: now),
                     endsTonight: clock.endsTonight(calendar: calendar, now: now),
                     locale: locale
                 )

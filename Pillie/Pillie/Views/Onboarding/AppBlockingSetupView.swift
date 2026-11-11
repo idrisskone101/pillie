@@ -116,7 +116,8 @@ struct AppBlockingSetupContent {
                     locale: locale
                 ),
                 locale: locale,
-                trialClock?.displayedDaysRemaining(calendar: .current, now: now) ?? ReverseTrialClock.fullDays
+                trialClock?.displayedDaysRemaining(calendar: .current, now: now)
+                    ?? TrialLengthEnrollment.current().length.fullDays
             )
         )
     }
