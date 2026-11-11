@@ -108,6 +108,9 @@ final class SubscriptionManager: NSObject {
     /// Which days this install's trial counts (ENG-242), recorded at launch.
     private(set) var trialDayRule: TrialDayRule = .calendarDays
 
+    /// The trial_length_v1 length stored beside the grant. 14 days without one.
+    private(set) var trialLength: TrialLength = .fourteenDays
+
     /// The immutable pre/post-cutover assignment persisted with the grant. It
     /// normally follows the grant instant, with a pre-cutover override for an
     /// existing installation that is explicitly grandfathered by issue #257.
@@ -215,6 +218,7 @@ final class SubscriptionManager: NSObject {
         trialGrantDate = trialGrantStore.loadGrantDate()
         trialDayLedger = trialGrantStore.loadDayLedger()
         trialDayRule = trialGrantStore.loadDayRule() ?? TrialDayRule.stored() ?? .calendarDays
+        trialLength = trialGrantStore.loadTrialLength() ?? .fourteenDays
         if let storedCohort = trialGrantStore.loadTermsCohort() {
             trialTermsCohort = storedCohort
         } else if let trialGrantDate {
@@ -232,7 +236,8 @@ final class SubscriptionManager: NSObject {
             hasEntitlement: hasEntitlement,
             trialGrantDate: trialGrantDate,
             schedule: ledger?.schedule ?? .everyCalendarDay,
-            trialLivedDays: ledger?.lived
+            trialLivedDays: ledger?.lived,
+            trialLength: trialLength
         )
     }
 
@@ -312,20 +317,23 @@ final class SubscriptionManager: NSObject {
     /// Grants the Reverse Trial (ADR 0007): persists the grant moment in the
     /// Keychain and unlocks Plus Access through the same hook a purchase fires.
     /// A no-op when a grant already exists — reinstalls and repeat calls must
-    /// never restart the 14-day clock. Returns whether a new grant was written,
-    /// so app-blocking setup can fire `trial_granted` exactly once.
+    /// never restart the clock or change its length. Returns whether a new
+    /// grant was written, so app-blocking setup can fire `trial_granted` exactly once.
     @discardableResult
     func grantReverseTrial(
         now: Date = Date(),
-        termsCohort: TrialTermsCohort? = nil
+        termsCohort: TrialTermsCohort? = nil,
+        length: TrialLength = .fourteenDays
     ) -> Bool {
         guard trialGrantDate == nil else { return false }
         let assignedCohort = termsCohort
             ?? HardPaywallPolicy.cohort(forTrialGrantedAt: now)
         trialGrantStore.saveTermsCohort(assignedCohort)
+        trialGrantStore.saveTrialLength(length)
         trialGrantStore.saveGrantDate(now)
         trialGrantDate = now
         trialTermsCohort = assignedCohort
+        trialLength = length
         startTrialDayLedger()
         refreshPlusAccess(now: now)
         return true
@@ -441,6 +449,12 @@ final class SubscriptionManager: NSObject {
     /// and never before the SDK exists.
     func recordAcquisitionSource(_ source: AcquisitionSource) {
         attributionSink?.setAttributes(["acquisition_source": source.rawValue])
+    }
+
+    /// Tags the subscriber with the trial_length_v1 arm. RevenueCat rejects
+    /// attribute keys that start with `$`.
+    func recordTrialLength(_ length: TrialLength) {
+        attributionSink?.setAttributes(["experiment_trial_length": length.rawValue])
     }
 
     // MARK: - Purchase
@@ -650,6 +664,7 @@ final class SubscriptionManager: NSObject {
         trialGrantDate = store.loadGrantDate()
         trialDayLedger = store.loadDayLedger()
         trialDayRule = store.loadDayRule() ?? .calendarDays
+        trialLength = store.loadTrialLength() ?? .fourteenDays
         if let storedCohort = store.loadTermsCohort() {
             trialTermsCohort = storedCohort
         } else if let trialGrantDate {
@@ -668,6 +683,14 @@ final class SubscriptionManager: NSObject {
         UserDefaults.standard.set(rule.rawValue, forKey: TrialDayRule.storageKey)
     }
 
+    /// Debug control (trial_length_v1): switch the stored trial length. A
+    /// running trial's expiry moves with it.
+    func debugSetTrialLength(_ length: TrialLength) {
+        trialLength = length
+        trialGrantStore.saveTrialLength(length)
+        refreshPlusAccess()
+    }
+
     /// Debug/demo control (issue #160): overwrite or clear the persisted grant
     /// so a trial can be granted, aged past expiry, or reset on the simulator.
     func debugOverrideTrialGrantDate(
@@ -684,6 +707,7 @@ final class SubscriptionManager: NSObject {
         } else {
             trialGrantStore.clearGrantDate()
             trialTermsCohort = nil
+            trialLength = .fourteenDays
         }
         trialGrantDate = date
         startTrialDayLedger()

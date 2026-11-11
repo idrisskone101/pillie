@@ -401,7 +401,8 @@ final class NotificationManager {
                 calendar: calendar,
                 reminderChange: store.reminderTimeChange,
                 trialSchedule: SubscriptionManager.shared.plusAccessState.schedule,
-                trialLivedDays: SubscriptionManager.shared.plusAccessState.trialLivedDays
+                trialLivedDays: SubscriptionManager.shared.plusAccessState.trialLivedDays,
+                trialLength: SubscriptionManager.shared.trialLength
             )
         )
 

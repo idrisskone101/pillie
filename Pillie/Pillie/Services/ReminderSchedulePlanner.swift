@@ -116,6 +116,8 @@ struct ReminderSchedulePlanner {
         /// Days that trial counted under earlier pack rhythms
         /// (`PlusAccessState.trialLivedDays`).
         var trialLivedDays: TrialLivedDays? = nil
+        /// The trial_length_v1 length (`PlusAccessState.trialLength`).
+        var trialLength: TrialLength = .fourteenDays
 
         var clock: ReminderClock {
             ReminderClock(
@@ -132,7 +134,8 @@ struct ReminderSchedulePlanner {
             return ReverseTrialClock(
                 grantDate: trialGrantDate,
                 schedule: trialSchedule,
-                lived: trialLivedDays
+                lived: trialLivedDays,
+                fullDays: trialLength.fullDays
             )
         }
     }

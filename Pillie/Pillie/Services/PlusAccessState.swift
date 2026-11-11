@@ -20,11 +20,18 @@ struct PlusAccessState: Equatable {
     var schedule: ActiveDaySchedule = .everyCalendarDay
     /// Days the trial counted under earlier pack rhythms; `schedule` counts the rest.
     var trialLivedDays: TrialLivedDays? = nil
+    /// The trial_length_v1 length stored beside the grant.
+    var trialLength: TrialLength = .fourteenDays
 
     /// The Reverse Trial clock every trial surface reads, if a trial was ever granted.
     var trialClock: ReverseTrialClock? {
         trialGrantDate.map {
-            ReverseTrialClock(grantDate: $0, schedule: schedule, lived: trialLivedDays)
+            ReverseTrialClock(
+                grantDate: $0,
+                schedule: schedule,
+                lived: trialLivedDays,
+                fullDays: trialLength.fullDays
+            )
         }
     }
 

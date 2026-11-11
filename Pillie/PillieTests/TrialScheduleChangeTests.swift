@@ -40,6 +40,28 @@ final class TrialScheduleChangeTests: XCTestCase {
         super.tearDown()
     }
 
+    func testASevenDayGrantEndsAtMidnightStartingCalendarDay9AndKeepsItsLength() {
+        // trial_length_v1: the length is fixed at grant. A repeat grant cannot
+        // change it, and a cleared grant forgets it.
+        let manager = SubscriptionManager.shared
+        let store = InMemoryTrialGrantStore()
+        manager.setTrialGrantStoreForTesting(store)
+
+        XCTAssertTrue(manager.grantReverseTrial(now: local(7, 1, 12), length: .sevenDays))
+        XCTAssertFalse(manager.grantReverseTrial(now: local(7, 3, 12), length: .fourteenDays))
+
+        XCTAssertEqual(store.loadTrialLength(), .sevenDays)
+        XCTAssertEqual(manager.trialLength, .sevenDays)
+        XCTAssertEqual(
+            PlusAccessMirror.validUntil(state: manager.plusAccessState, calendar: .current),
+            local(7, 9, 0)
+        )
+
+        manager.debugOverrideTrialGrantDate(nil)
+        XCTAssertNil(store.loadTrialLength())
+        XCTAssertEqual(manager.trialLength, .fourteenDays)
+    }
+
     func testACalendarDayInstallsGrantOnABreakPackEndsAtMidnightStartingCalendarDay15() {
         // 21/7 from Sep 10: the Sep 30 grant is pill 21 and Oct 1-7 are the
         // sugar week. The trial still ends at midnight starting Oct 15, and a

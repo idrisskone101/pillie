@@ -140,13 +140,13 @@ struct TrialEndPaywallDebugScenario: Equatable {
         case .preCutover:
             grantDate = HardPaywallPolicy.cutoverInstant.addingTimeInterval(-60)
         }
+        // Past the longest trial, so either trial_length_v1 arm has expired.
+        let agedDays = TrialLength.fourteenDays.fullDays + 2
         let aged = calendar.date(
             byAdding: .day,
-            value: ReverseTrialClock.fullDays + 2,
+            value: agedDays,
             to: grantDate
-        ) ?? grantDate.addingTimeInterval(
-            Double(ReverseTrialClock.fullDays + 2) * 86_400
-        )
+        ) ?? grantDate.addingTimeInterval(Double(agedDays) * 86_400)
         return TrialEndPaywallDebugScenario(
             grantDate: grantDate,
             evaluationDate: max(aged, now),

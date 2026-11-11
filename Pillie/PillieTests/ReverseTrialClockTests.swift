@@ -93,9 +93,9 @@ final class ReverseTrialClockTests: XCTestCase {
             clock.displayedDaysRemaining(calendar: calendar, now: date(2026, 7, 15, 22, 0)),
             1
         )
-        XCTAssertEqual(ReverseTrialClock.displayedDaysRemaining(15), 14)
-        XCTAssertEqual(ReverseTrialClock.displayedDaysRemaining(0), 0)
-        XCTAssertEqual(ReverseTrialClock.displayedDaysRemaining(-1), 0)
+        XCTAssertEqual(clock.displayedDaysRemaining(15), 14)
+        XCTAssertEqual(clock.displayedDaysRemaining(0), 0)
+        XCTAssertEqual(clock.displayedDaysRemaining(-1), 0)
     }
 
     // MARK: - DST transitions (expiry stays at local midnight, not +N×86400s)
@@ -418,7 +418,8 @@ final class ReverseTrialClockTests: XCTestCase {
         let grant = ReverseTrialClock.grantDatePlacingLastCountedDay(
             now: now,
             calendar: calendar,
-            schedule: schedule
+            schedule: schedule,
+            fullDays: 14
         )
 
         // Fourteen full actives ending today are July 9-22; grant is the day
@@ -430,7 +431,8 @@ final class ReverseTrialClockTests: XCTestCase {
             ReverseTrialClock.grantDatePlacingLastCountedDay(
                 now: date(2026, 7, 8, 12, 0),
                 calendar: calendar,
-                schedule: schedule
+                schedule: schedule,
+                fullDays: 14
             )
         )
     }
