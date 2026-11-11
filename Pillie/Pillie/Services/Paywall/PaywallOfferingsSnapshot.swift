@@ -15,6 +15,10 @@ struct PaywallOfferingsSnapshot: Equatable {
     let lifetimeDisplay: String?
     let currencyCode: String?
 
+    /// Lifetime stays in App Store Connect and the RevenueCat offering so it can
+    /// be tested again, but neither paywall design sells it for now.
+    static let sellsLifetime = false
+
     static func parse(_ offerings: Offerings?) -> PaywallOfferingsSnapshot? {
         guard let offering = offerings?.current else { return nil }
 
@@ -35,7 +39,7 @@ struct PaywallOfferingsSnapshot: Equatable {
 
         let annualProduct = annualPackage.storeProduct
         let monthlyProduct = monthlyPackage.storeProduct
-        let lifetimePackage = PilliePlusPackageResolver.resolve(
+        let lifetimePackage = !sellsLifetime ? nil : PilliePlusPackageResolver.resolve(
             plan: .lifetime,
             preferredPackage: offering.lifetime,
             availablePackages: offering.availablePackages,

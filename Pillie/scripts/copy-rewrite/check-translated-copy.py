@@ -20,7 +20,7 @@ CATALOGS = [
 ]
 
 APP_LANGUAGE_CODES = [
-    "ar", "bn", "ca", "cs", "da", "de", "el", "en", "es", "fi", "fr", "gu", "he",
+    "ar", "bn", "ca", "cs", "da", "de", "el", "en", "es", "fi", "fr", "gu",
     "hi", "hr", "hu", "id", "it", "ja", "kn", "ko", "ml", "mr", "ms", "nb", "nl",
     "or", "pa", "pl", "pt-BR", "pt-PT", "ro", "ru", "sk", "sl", "sv", "ta", "te",
     "th", "tr", "uk", "ur", "vi", "zh-Hans", "zh-Hant",
@@ -56,7 +56,6 @@ ACTIVE_DAY_TOKENS: dict[str, tuple[str, ...]] = {
     "id": ("aktif",),
     "ms": ("aktif",),
     "ar": ("نشط",),
-    "he": ("פעיל",),
     "hi": ("सक्रिय",),
     "bn": ("সক্রিয়",),
     "gu": ("સક્રિય",),

@@ -68,8 +68,10 @@ CTA, a reassurance line, and Restore · Terms · Privacy. The board is a
 - `paywall-checkout-stack` (ENG-155) — three side-by-side plan cards: Month
   (`#paywallTile.monthly`), Year (`#paywallTile.annual`, selected by default,
   with the SAVE badge and per-month price), and Lifetime
-  (`#paywallTile.lifetime`) only when the offering exposes a lifetime
-  package. The selected card is what the CTA buys and fires
+  (`#paywallTile.lifetime`) only when `PaywallOfferingsSnapshot.sellsLifetime`
+  is on and the offering exposes a lifetime package. It is off since Nov 2026,
+  so both designs sell Year and Month only; `pillie://debug/paywall-lifetime`
+  still forces the tile for QA. The selected card is what the CTA buys and fires
   `paywall_plan_selected` with its `plan`. The reassurance
   (`#paywallReassurance`) is plain text: "Cancel anytime in Settings", the
   in-trial "You’re charged today…" line, or "One payment. No renewal." for
