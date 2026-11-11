@@ -5,7 +5,7 @@
 //  Issue #164 — Trial Granted Moment (ADR 0007). Replaces the retired onboarding
 //  paywall: a non-purchase announcement that the Reverse Trial has started.
 //  Faithful to the Claude Design "Mapped, warmer" variant 2a: a coral
-//  "14 active days free · no card" badge, the "Your next two weeks, on us." headline,
+//  "14 days free · no card" badge, the "Your next two weeks, on us." headline,
 //  a two-week timeline card (Today glowing coral with inline perk chips →
 //  Day 12 heads-up → Day 14 choice), the one-line App Review pre-trial
 //  disclosure, and a single continue action. It offers nothing to buy and has
@@ -66,9 +66,10 @@ struct TrialGrantedMomentContent {
         func commerce(_ key: String) -> String {
             PillieLocalization.string(key, table: "Commerce", locale: locale)
         }
+        let trialLength = SubscriptionManager.shared.trialLength
         return TrialGrantedMomentContent(
-            badge: commerce("trial.granted.badge"),
-            title: commerce("trial.granted.headline"),
+            badge: commerce(TrialLength.copyKey("trial.granted.badge")),
+            title: commerce(TrialLength.copyKey("trial.granted.headline")),
             titleAccent: commerce("trial.granted.headline_accent"),
             subtitle: commerce("trial.granted.subtitle"),
             today: Today(
@@ -92,7 +93,7 @@ struct TrialGrantedMomentContent {
             ),
             laterDays: [
                 TimelineDay(
-                    label: commerce("trial.granted.warning.label"),
+                    label: commerce(trialLength.variantKey("trial.granted.warning.label")),
                     title: commerce("trial.granted.warning.title"),
                     detail: commerce("trial.granted.warning.detail"),
                     symbolName: "bell.fill",
@@ -100,7 +101,7 @@ struct TrialGrantedMomentContent {
                     symbolColor: PillieTheme.textPrimary
                 ),
                 TimelineDay(
-                    label: commerce("trial.granted.choice.label"),
+                    label: commerce(trialLength.variantKey("trial.granted.choice.label")),
                     title: commerce("trial.granted.choice.title"),
                     detail: commerce(
                         trialEndTerms == .hardPaywall
@@ -112,11 +113,11 @@ struct TrialGrantedMomentContent {
                     symbolColor: PillieTheme.verifiedGreen
                 ),
             ],
-            disclosure: commerce(
+            disclosure: commerce(TrialLength.copyKey(
                 trialEndTerms == .hardPaywall
                     ? "trial.granted.disclosure.hard_paywall"
                     : "trial.granted.disclosure"
-            ),
+            )),
             primaryCTA: commerce("trial.granted.cta")
         )
     }

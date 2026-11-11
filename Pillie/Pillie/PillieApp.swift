@@ -276,6 +276,11 @@ struct PillieApp: App {
             fallbackAssignment: TrialInstallCohort.storedAssignment(in: defaults)
         )
         defaults.set(assignment.rawValue, forKey: TrialInstallCohort.assignmentStorageKey)
+        TrialDayRule.recordAssignment(
+            hasExistingAppState: hasExistingAppState(in: defaults),
+            store: KeychainTrialGrantStore(),
+            defaults: defaults
+        )
     }
 
     init() {
@@ -529,6 +534,9 @@ struct PillieApp: App {
     private func handleDebugDeepLink(_ url: URL) {
         guard url.scheme == "pillie", url.host == "debug" else { return }
         applyDebugLanguage(from: url)
+        applyDebugTrialDayRule(from: url)
+        // After the link runs, so a grant the link writes takes the length.
+        defer { applyDebugTrialLength(from: url) }
 
         switch url.path {
         case "/posthog-smoke":
@@ -949,6 +957,40 @@ struct PillieApp: App {
               let language = AppLanguage(rawValue: lang)
         else { return }
         languagePreference.selection = language
+    }
+
+    /// `trialDays=active|calendar` picks which ENG-242 trial rule the install follows.
+    private func applyDebugTrialDayRule(from url: URL) {
+        let value = URLComponents(url: url, resolvingAgainstBaseURL: false)?
+            .queryItems?
+            .first(where: { $0.name == "trialDays" })?
+            .value
+        let rule: TrialDayRule? = switch value {
+        case "active": .activeDays
+        case "calendar": .calendarDays
+        default: nil
+        }
+        guard let rule else { return }
+        SubscriptionManager.shared.debugSetTrialDayRule(rule)
+    }
+
+    /// `trialLength=seven_days|control` pins the trial_length_v1 flag value:
+    /// the onboarding grant takes it, and a running trial's stored length
+    /// follows. An active-day install stays at 14 days, as in production.
+    /// `trialLength=none` drops the pin so the flag decides the next grant.
+    private func applyDebugTrialLength(from url: URL) {
+        guard let value = URLComponents(url: url, resolvingAgainstBaseURL: false)?
+            .queryItems?
+            .first(where: { $0.name == "trialLength" })?
+            .value
+        else { return }
+        guard let length = TrialLength(rawValue: value) else {
+            UserDefaults.standard.removeObject(forKey: TrialLengthEnrollment.debugOverrideKey)
+            return
+        }
+        UserDefaults.standard.set(length.rawValue, forKey: TrialLengthEnrollment.debugOverrideKey)
+        SubscriptionManager.shared.debugSetTrialLength(TrialLengthEnrollment.current().length)
+        reconcileScreenTimeState()
     }
     #endif
 }

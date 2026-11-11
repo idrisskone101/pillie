@@ -1,12 +1,17 @@
 #!/usr/bin/env python3
 """Fail if English copy that names active days is missing from a locale.
 
+Also fail if calendar-day Reverse Trial copy names active days (ENG-242).
+Only the `.active_days` variants, shown to installs from before ENG-242,
+may say "active days".
+
 Run this after any user-facing copy change. English-only is not done.
 """
 
 from __future__ import annotations
 
 import json
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -77,6 +82,58 @@ ACTIVE_DAY_TOKENS: dict[str, tuple[str, ...]] = {
 
 ENGLISH_NEEDLE = "active day"
 
+# Trial copy for an install that still counts hormone-active days (ENG-242).
+ACTIVE_DAY_VARIANT_SUFFIX = ".active_days"
+
+# A day noun next to an active-day adjective, per locale. Stems alone would
+# also match "Plus is active" and "take your pill" in trial copy.
+TRIAL_ACTIVE_DAY_PATTERNS: dict[str, str] = {
+    "en": r"active[ -]days?",
+    "de": r"aktive[nrs]? Tag",
+    "it": r"giorn[oi] attiv",
+    "fr": r"jours? actif",
+    "es": r"días? activo",
+    "pt-BR": r"dias? ativo",
+    "pt-PT": r"dias? ativo",
+    "ca": r"(dies|dia) actiu",
+    "nl": r"actieve dag",
+    "sv": r"aktiva? dag",
+    "da": r"aktive? dag",
+    "nb": r"aktive? dag",
+    "fi": r"aktiivi\w* päiv",
+    "pl": r"(dni|dzień|dnia) aktywn|aktywn\w* (dni|dzień|dnia)",
+    "cs": r"aktivn\w* (dn|den)",
+    "sk": r"aktívn\w* (dn|deň)",
+    "hr": r"aktivn\w* dan",
+    "sl": r"aktivn\w* (dn|dan)",
+    "ru": r"активн\w* (дн|день)",
+    "uk": r"активн\w* (дн|день)",
+    "hu": r"aktív nap",
+    "ro": r"(zile|zi) activ",
+    "el": r"ενεργ\w* (ημέρ|μέρ)",
+    "tr": r"aktif gün",
+    "id": r"hari aktif",
+    "ms": r"hari aktif",
+    "vi": r"ngày uống",
+    "th": r"วันกินยา",
+    "ja": r"服用\s*(%lld|\d)|服用日",
+    "ko": r"복용\s*(%lld|\d)|복용일",
+    "zh-Hans": r"服药日",
+    "zh-Hant": r"服藥日",
+    "hi": r"सक्रिय दि",
+    "mr": r"सक्रिय दि",
+    "bn": r"সক্রিয় দিন",
+    "ur": r"فعال دن",
+    "gu": r"સક્રિય દિવસ",
+    "pa": r"ਸਰਗਰਮ ਦਿਨ",
+    "kn": r"ಸಕ್ರಿಯ ದಿನ",
+    "ml": r"സജീവ ദി",
+    "or": r"ସକ୍ରିୟ ଦିନ",
+    "te": r"యాక్టివ్ రోజ",
+    "ta": r"செயல் நா",
+    "ar": r"(يوم|أيام)\w*[\u064B-\u0652]* (ال)?نشط",
+}
+
 
 def localization_value(entry: dict, lang: str) -> str | None:
     """The plain value, or a plural entry's "other" form. copy-inventory.py imports it."""
@@ -133,11 +190,28 @@ def main() -> int:
                     if not has_token(value, tokens):
                         errors.append(f"{label}: missing active-day wording: {value!r}")
 
+    trial_checked = 0
+    for catalog_path in CATALOGS:
+        catalog = json.loads(catalog_path.read_text())
+        table = catalog_path.stem
+        for key, entry in (catalog.get("strings") or {}).items():
+            if "trial" not in key or key.endswith(ACTIVE_DAY_VARIANT_SUFFIX):
+                continue
+            trial_checked += 1
+            for lang in APP_LANGUAGE_CODES:
+                for value in localization_values(entry, lang):
+                    if re.search(TRIAL_ACTIVE_DAY_PATTERNS[lang], value, re.IGNORECASE):
+                        errors.append(
+                            f"{table}:{key} [{lang}]: trial copy names active days, "
+                            f"calendar-day installs count 14 calendar days: {value!r}"
+                        )
+
     if errors:
-        print(f"checked {checked} English active-day keys")
+        print(f"checked {checked} English active-day keys and {trial_checked} trial keys")
         print("\n".join(errors))
         return 1
     print(f"ok: {checked} English active-day keys have every locale", flush=True)
+    print(f"ok: {trial_checked} trial keys count calendar days", flush=True)
     return subprocess.run([sys.executable, str(SCRIPT_DIR / "check-script-leaks.py")]).returncode
 
 

@@ -21,17 +21,17 @@ enum HonestPaywallBoardResolver {
         guard !access.hasEntitlement else { return nil }
 
         if let clock = access.trialClock, clock.isActive(calendar: calendar, now: now) {
-            let daysRemaining = clock.daysRemaining(calendar: calendar, now: now)
+            let displayedDaysRemaining = clock.displayedDaysRemaining(calendar: calendar, now: now)
             let layout: HonestPaywallLayout = switch design {
             case .s3:
                 .s3(HonestPaywallStoryFactory.duringTrial(
-                    daysRemaining: daysRemaining,
+                    displayedDaysRemaining: displayedDaysRemaining,
                     endsTonight: clock.endsTonight(calendar: calendar, now: now),
                     locale: locale
                 ))
             case .classic:
                 .classic(.duringTrial(ClassicPaywallStoryFactory.duringTrial(
-                    daysRemaining: daysRemaining,
+                    displayedDaysRemaining: displayedDaysRemaining,
                     locale: locale
                 )))
             }

@@ -18,7 +18,14 @@ nonisolated protocol TrialGrantStoring {
     func saveTermsCohort(_ cohort: TrialTermsCohort)
     func loadDayLedger() -> TrialDayLedger?
     func saveDayLedger(_ ledger: TrialDayLedger)
-    /// Removes the grant, its day ledger, and the cohort.
+    func clearDayLedger()
+    /// The install's trial day rule. Kept by `clearGrantDate`: it never changes once set.
+    func loadDayRule() -> TrialDayRule?
+    func saveDayRule(_ rule: TrialDayRule)
+    /// The trial_length_v1 length chosen at grant. Missing means 14 days.
+    func loadTrialLength() -> TrialLength?
+    func saveTrialLength(_ length: TrialLength)
+    /// Removes the grant, its day ledger, the cohort, and the trial length.
     func clearGrantDate()
 }
 
@@ -35,6 +42,8 @@ nonisolated final class KeychainTrialGrantStore: TrialGrantStoring {
     private static let account = "reverse_trial_grant_date"
     private static let cohortAccount = "reverse_trial_terms_cohort"
     private static let ledgerAccount = "reverse_trial_day_ledger"
+    private static let dayRuleAccount = "reverse_trial_day_rule"
+    private static let lengthAccount = "reverse_trial_length"
 
     private var baseQuery: [String: Any] {
         [
@@ -49,6 +58,22 @@ nonisolated final class KeychainTrialGrantStore: TrialGrantStoring {
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: Self.service,
             kSecAttrAccount as String: Self.cohortAccount,
+        ]
+    }
+
+    private var dayRuleQuery: [String: Any] {
+        [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: Self.service,
+            kSecAttrAccount as String: Self.dayRuleAccount,
+        ]
+    }
+
+    private var lengthQuery: [String: Any] {
+        [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: Self.service,
+            kSecAttrAccount as String: Self.lengthAccount,
         ]
     }
 
@@ -136,10 +161,65 @@ nonisolated final class KeychainTrialGrantStore: TrialGrantStoring {
         }
     }
 
+    func clearDayLedger() {
+        SecItemDelete(ledgerQuery as CFDictionary)
+    }
+
+    func loadDayRule() -> TrialDayRule? {
+        var query = dayRuleQuery
+        query[kSecReturnData as String] = true
+        query[kSecMatchLimit as String] = kSecMatchLimitOne
+
+        var result: AnyObject?
+        guard SecItemCopyMatching(query as CFDictionary, &result) == errSecSuccess,
+              let data = result as? Data,
+              let rawValue = String(data: data, encoding: .utf8)
+        else { return nil }
+        return TrialDayRule(rawValue: rawValue)
+    }
+
+    func saveDayRule(_ rule: TrialDayRule) {
+        let data = Data(rule.rawValue.utf8)
+        var attributes = dayRuleQuery
+        attributes[kSecValueData as String] = data
+        attributes[kSecAttrAccessible as String] = kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
+
+        let status = SecItemAdd(attributes as CFDictionary, nil)
+        if status == errSecDuplicateItem {
+            SecItemUpdate(dayRuleQuery as CFDictionary, [kSecValueData as String: data] as CFDictionary)
+        }
+    }
+
+    func loadTrialLength() -> TrialLength? {
+        var query = lengthQuery
+        query[kSecReturnData as String] = true
+        query[kSecMatchLimit as String] = kSecMatchLimitOne
+
+        var result: AnyObject?
+        guard SecItemCopyMatching(query as CFDictionary, &result) == errSecSuccess,
+              let data = result as? Data,
+              let rawValue = String(data: data, encoding: .utf8)
+        else { return nil }
+        return TrialLength(rawValue: rawValue)
+    }
+
+    func saveTrialLength(_ length: TrialLength) {
+        let data = Data(length.rawValue.utf8)
+        var attributes = lengthQuery
+        attributes[kSecValueData as String] = data
+        attributes[kSecAttrAccessible as String] = kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
+
+        let status = SecItemAdd(attributes as CFDictionary, nil)
+        if status == errSecDuplicateItem {
+            SecItemUpdate(lengthQuery as CFDictionary, [kSecValueData as String: data] as CFDictionary)
+        }
+    }
+
     func clearGrantDate() {
         SecItemDelete(baseQuery as CFDictionary)
         SecItemDelete(cohortQuery as CFDictionary)
         SecItemDelete(ledgerQuery as CFDictionary)
+        SecItemDelete(lengthQuery as CFDictionary)
     }
 }
 
@@ -150,6 +230,8 @@ nonisolated final class InMemoryTrialGrantStore: TrialGrantStoring {
     private(set) var grantDate: Date?
     private(set) var termsCohort: TrialTermsCohort?
     private(set) var dayLedger: TrialDayLedger?
+    private(set) var dayRule: TrialDayRule?
+    private(set) var trialLength: TrialLength?
 
     func loadGrantDate() -> Date? { grantDate }
     func saveGrantDate(_ date: Date) { grantDate = date }
@@ -157,9 +239,15 @@ nonisolated final class InMemoryTrialGrantStore: TrialGrantStoring {
     func saveTermsCohort(_ cohort: TrialTermsCohort) { termsCohort = cohort }
     func loadDayLedger() -> TrialDayLedger? { dayLedger }
     func saveDayLedger(_ ledger: TrialDayLedger) { dayLedger = ledger }
+    func clearDayLedger() { dayLedger = nil }
+    func loadDayRule() -> TrialDayRule? { dayRule }
+    func saveDayRule(_ rule: TrialDayRule) { dayRule = rule }
+    func loadTrialLength() -> TrialLength? { trialLength }
+    func saveTrialLength(_ length: TrialLength) { trialLength = length }
     func clearGrantDate() {
         grantDate = nil
         termsCohort = nil
         dayLedger = nil
+        trialLength = nil
     }
 }

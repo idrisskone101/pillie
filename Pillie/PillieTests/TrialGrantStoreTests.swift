@@ -25,6 +25,7 @@ final class TrialGrantStoreTests: XCTestCase {
         // Empty store has no grant.
         XCTAssertNil(store.loadGrantDate(), "\(name): cleared store should be empty")
         XCTAssertNil(store.loadTermsCohort(), "\(name): cleared cohort should be empty")
+        XCTAssertNil(store.loadTrialLength(), "\(name): cleared trial length should be empty")
 
         // Round trip.
         let grant = Date(timeIntervalSince1970: 1_750_000_000)
@@ -48,6 +49,10 @@ final class TrialGrantStoreTests: XCTestCase {
         )
         store.saveDayLedger(ledger)
         XCTAssertEqual(store.loadDayLedger(), ledger, "\(name): should round-trip the day ledger")
+        store.saveTrialLength(.sevenDays)
+        XCTAssertEqual(store.loadTrialLength(), .sevenDays, "\(name): should round-trip the trial length")
+        store.saveTrialLength(.fourteenDays)
+        XCTAssertEqual(store.loadTrialLength(), .fourteenDays, "\(name): a trial length overwrite should win")
 
         // Overwrite wins.
         let laterGrant = Date(timeIntervalSince1970: 1_760_000_000)
@@ -74,6 +79,7 @@ final class TrialGrantStoreTests: XCTestCase {
         XCTAssertNil(store.loadGrantDate(), "\(name): clear should remove the grant")
         XCTAssertNil(store.loadTermsCohort(), "\(name): clear should remove the cohort")
         XCTAssertNil(store.loadDayLedger(), "\(name): clear should remove the day ledger")
+        XCTAssertNil(store.loadTrialLength(), "\(name): clear should remove the trial length")
     }
 
     func testInMemoryStoreHonorsContract() {

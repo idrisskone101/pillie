@@ -12,7 +12,7 @@ struct ClassicPaywallStoryFactoryTests {
     private let english = Locale(identifier: "en_US")
 
     @Test func `During trial reads the classic copy and chips`() {
-        let story = ClassicPaywallStoryFactory.duringTrial(daysRemaining: 6, locale: english)
+        let story = ClassicPaywallStoryFactory.duringTrial(displayedDaysRemaining: 6, locale: english)
         #expect(story.title == "You still have Pillie Plus.")
         #expect(story.subtitle == "Keep Plus to have follow-up reminders and app blocking after your trial.")
         #expect(story.daysRemaining == 6)
@@ -22,11 +22,6 @@ struct ClassicPaywallStoryFactoryTests {
             ClassicPaywallBenefitChip(label: "App blocking stays on", tint: .sage),
             ClassicPaywallBenefitChip(label: "Your history stays here", tint: .coralSoft),
         ])
-    }
-
-    @Test func `Grant-day rollover count is clamped to the 14-day promise`() {
-        let story = ClassicPaywallStoryFactory.duringTrial(daysRemaining: 15, locale: english)
-        #expect(story.daysRemaining == 14)
     }
 
     @Test func `Known stats become tiles`() {

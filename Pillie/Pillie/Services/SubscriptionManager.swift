@@ -101,11 +101,15 @@ final class SubscriptionManager: NSObject {
     /// The persisted Reverse Trial grant moment, if any (Keychain-backed).
     private(set) var trialGrantDate: Date?
 
-    /// The pack rhythm the Reverse Trial clock walks and the days it counted
-    /// under earlier rhythms, saved beside the grant. Nil until the shell
-    /// pushes the live pack or a saved ledger loads; the clock then counts
-    /// every calendar day.
+    /// The pack rhythm and lived days of an active-day trial. A calendar-day
+    /// trial has none and the clock counts every calendar day.
     private var trialDayLedger: TrialDayLedger?
+
+    /// Which days this install's trial counts (ENG-242), recorded at launch.
+    private(set) var trialDayRule: TrialDayRule = .calendarDays
+
+    /// The trial_length_v1 length stored beside the grant. 14 days without one.
+    private(set) var trialLength: TrialLength = .fourteenDays
 
     /// The immutable pre/post-cutover assignment persisted with the grant. It
     /// normally follows the grant instant, with a pre-cutover override for an
@@ -213,6 +217,8 @@ final class SubscriptionManager: NSObject {
         super.init()
         trialGrantDate = trialGrantStore.loadGrantDate()
         trialDayLedger = trialGrantStore.loadDayLedger()
+        trialDayRule = trialGrantStore.loadDayRule() ?? TrialDayRule.stored() ?? .calendarDays
+        trialLength = trialGrantStore.loadTrialLength() ?? .fourteenDays
         if let storedCohort = trialGrantStore.loadTermsCohort() {
             trialTermsCohort = storedCohort
         } else if let trialGrantDate {
@@ -230,20 +236,22 @@ final class SubscriptionManager: NSObject {
             hasEntitlement: hasEntitlement,
             trialGrantDate: trialGrantDate,
             schedule: ledger?.schedule ?? .everyCalendarDay,
-            trialLivedDays: ledger?.lived
+            trialLivedDays: ledger?.lived,
+            trialLength: trialLength
         )
     }
 
     /// Adopts the current pack rhythm and rewrites Plus Access / `validUntil`.
-    /// Call this before or with grant, and on every pack or cycle edit. During
-    /// a trial the new rhythm counts from today; earlier days stay counted
-    /// under the rhythm they were lived with.
+    /// Call this before grant and on every pack or cycle edit. An active-day
+    /// trial counts the new rhythm from today; earlier days stay counted under
+    /// the rhythm they were lived with. A calendar-day install never builds a
+    /// ledger, so its trial ignores the pack.
     func updateActiveDaySchedule(_ schedule: ActiveDaySchedule, now: Date = Date()) {
         let calendar = Calendar.current
         let previous = trialDayLedger
         if let trialGrantDate, let previous {
             trialDayLedger = previous.adopting(schedule, grantDate: trialGrantDate, calendar: calendar, now: now)
-        } else {
+        } else if trialDayRule == .activeDays {
             trialDayLedger = TrialDayLedger(
                 schedule: schedule,
                 lived: nil,
@@ -259,7 +267,8 @@ final class SubscriptionManager: NSObject {
     /// No pack is no rhythm: after a reinstall, before onboarding rebuilds the
     /// pack, a trial keeps counting with the rhythm saved beside its grant.
     func updateActiveDaySchedule(pack: PillPack?, now: Date = Date()) {
-        guard pack != nil || trialGrantDate == nil else {
+        let countsActiveDays = trialDayLedger != nil || trialDayRule == .activeDays
+        guard countsActiveDays, pack != nil || trialGrantDate == nil else {
             refreshPlusAccess(now: now)
             return
         }
@@ -308,22 +317,24 @@ final class SubscriptionManager: NSObject {
     /// Grants the Reverse Trial (ADR 0007): persists the grant moment in the
     /// Keychain and unlocks Plus Access through the same hook a purchase fires.
     /// A no-op when a grant already exists — reinstalls and repeat calls must
-    /// never restart the 14-day clock. Returns whether a new grant was written,
-    /// so app-blocking setup can fire `trial_granted` exactly once.
+    /// never restart the clock or change its length. Returns whether a new
+    /// grant was written, so app-blocking setup can fire `trial_granted` exactly once.
     @discardableResult
     func grantReverseTrial(
         now: Date = Date(),
-        termsCohort: TrialTermsCohort? = nil
+        termsCohort: TrialTermsCohort? = nil,
+        length: TrialLength = .fourteenDays
     ) -> Bool {
         guard trialGrantDate == nil else { return false }
         let assignedCohort = termsCohort
             ?? HardPaywallPolicy.cohort(forTrialGrantedAt: now)
         trialGrantStore.saveTermsCohort(assignedCohort)
+        trialGrantStore.saveTrialLength(length)
         trialGrantStore.saveGrantDate(now)
         trialGrantDate = now
         trialTermsCohort = assignedCohort
-        trialDayLedger?.lived = nil
-        saveTrialDayLedger()
+        trialLength = length
+        startTrialDayLedger()
         refreshPlusAccess(now: now)
         return true
     }
@@ -332,6 +343,19 @@ final class SubscriptionManager: NSObject {
     private func saveTrialDayLedger() {
         guard trialGrantDate != nil, let trialDayLedger else { return }
         trialGrantStore.saveDayLedger(trialDayLedger)
+    }
+
+    /// A new grant counts from its grant day. Only an active-day install keeps
+    /// the rhythm `updateActiveDaySchedule` staged; a calendar-day grant has no ledger.
+    private func startTrialDayLedger() {
+        switch trialDayRule {
+        case .activeDays:
+            trialDayLedger?.lived = nil
+            saveTrialDayLedger()
+        case .calendarDays:
+            trialDayLedger = nil
+            trialGrantStore.clearDayLedger()
+        }
     }
 
     // MARK: - Configure (call once at app launch)
@@ -431,6 +455,12 @@ final class SubscriptionManager: NSObject {
     /// attribute keys that start with `$`.
     func recordPaywallDesign(_ design: PaywallDesign) {
         attributionSink?.setAttributes(["experiment_paywall_design": design.rawValue])
+    }
+
+    /// Tags the subscriber with the trial_length_v1 arm. RevenueCat rejects
+    /// attribute keys that start with `$`.
+    func recordTrialLength(_ length: TrialLength) {
+        attributionSink?.setAttributes(["experiment_trial_length": length.rawValue])
     }
 
     // MARK: - Purchase
@@ -639,6 +669,8 @@ final class SubscriptionManager: NSObject {
         trialGrantStore = store
         trialGrantDate = store.loadGrantDate()
         trialDayLedger = store.loadDayLedger()
+        trialDayRule = store.loadDayRule() ?? .calendarDays
+        trialLength = store.loadTrialLength() ?? .fourteenDays
         if let storedCohort = store.loadTermsCohort() {
             trialTermsCohort = storedCohort
         } else if let trialGrantDate {
@@ -646,6 +678,22 @@ final class SubscriptionManager: NSObject {
         } else {
             trialTermsCohort = nil
         }
+        refreshPlusAccess()
+    }
+
+    /// Debug control (ENG-242): switch the install's trial day rule. Takes
+    /// effect from the next grant; a running trial keeps its ledger or lack of one.
+    func debugSetTrialDayRule(_ rule: TrialDayRule) {
+        trialDayRule = rule
+        trialGrantStore.saveDayRule(rule)
+        UserDefaults.standard.set(rule.rawValue, forKey: TrialDayRule.storageKey)
+    }
+
+    /// Debug control (trial_length_v1): switch the stored trial length. A
+    /// running trial's expiry moves with it.
+    func debugSetTrialLength(_ length: TrialLength) {
+        trialLength = length
+        trialGrantStore.saveTrialLength(length)
         refreshPlusAccess()
     }
 
@@ -665,10 +713,10 @@ final class SubscriptionManager: NSObject {
         } else {
             trialGrantStore.clearGrantDate()
             trialTermsCohort = nil
+            trialLength = .fourteenDays
         }
         trialGrantDate = date
-        trialDayLedger?.lived = nil
-        saveTrialDayLedger()
+        startTrialDayLedger()
         refreshPlusAccess()
     }
 

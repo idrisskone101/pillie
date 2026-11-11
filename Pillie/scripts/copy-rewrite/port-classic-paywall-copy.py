@@ -35,6 +35,11 @@ APP_LANGUAGE_CODES = (
     "th", "tr", "uk", "ur", "vi", "zh-Hans", "zh-Hant",
 )
 
+# Keys the classic arm reads from today's catalog even though their value changed
+# since 2c8062a: the trial now counts calendar days (#401), so the old "active
+# days" wording would be wrong.
+CURRENT_KEYS = frozenset({"paywall.story.trial_active.stamp"})
+
 CLASSIC_KEYS = (
     "paywall.story.trial_active.title",
     "paywall.story.trial_active.subtitle",
@@ -141,7 +146,7 @@ def main() -> int:
         if missing:
             errors.append(f"{key} has no {SOURCE_REF} value for {', '.join(missing)}")
             continue
-        if same_everywhere(old, strings.get(key)):
+        if key in CURRENT_KEYS or same_everywhere(old, strings.get(key)):
             reused.append(key)
             continue
 

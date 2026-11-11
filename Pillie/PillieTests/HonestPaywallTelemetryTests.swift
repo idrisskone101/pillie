@@ -59,7 +59,7 @@ struct HonestPaywallTelemetryTests {
         let board = HonestPaywallBoard(
             moment: .duringTrial,
             layout: .s3(HonestPaywallStoryFactory.duringTrial(
-                daysRemaining: 4,
+                displayedDaysRemaining: 4,
                 endsTonight: false,
                 locale: english
             ))

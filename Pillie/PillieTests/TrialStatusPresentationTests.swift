@@ -159,7 +159,7 @@ final class TrialStatusPresentationTests: XCTestCase {
 
     func testGrantDayLabelClampsToFourteenDays() {
         // The partial grant day has 15 rollovers left, but the trial promises
-        // "14 active days free" — never show a count above the promise.
+        // "14 days free" — never show a count above the promise.
         let presentation = TrialStatusPresentation.make(
             state: trialState(),
             calendar: calendar,
@@ -201,7 +201,7 @@ final class TrialStatusPresentationTests: XCTestCase {
             locale: english
         )
 
-        XCTAssertEqual(presentation?.indicatorLabel, "14 active days left")
+        XCTAssertEqual(presentation?.indicatorLabel, "14 days left")
     }
 
     func testSheetContentShowsCountdownExpiryProgressAndKeepPlusPath() throws {
@@ -213,7 +213,7 @@ final class TrialStatusPresentationTests: XCTestCase {
         )?.sheetContent)
 
         XCTAssertEqual(content.eyebrow, "Pillie Plus trial")
-        XCTAssertEqual(content.headline, "14 active days left")
+        XCTAssertEqual(content.headline, "14 days left")
         XCTAssertEqual(content.until, "Everything in Plus is yours until July 16.")
         XCTAssertEqual(content.progress, TrialProgress(
             filledDays: 1,

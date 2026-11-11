@@ -140,13 +140,13 @@ struct TrialEndPaywallDebugScenario: Equatable {
         case .preCutover:
             grantDate = HardPaywallPolicy.cutoverInstant.addingTimeInterval(-60)
         }
+        // Past the longest trial, so either trial_length_v1 arm has expired.
+        let agedDays = TrialLength.fourteenDays.fullDays + 2
         let aged = calendar.date(
             byAdding: .day,
-            value: ReverseTrialClock.fullDays + 2,
+            value: agedDays,
             to: grantDate
-        ) ?? grantDate.addingTimeInterval(
-            Double(ReverseTrialClock.fullDays + 2) * 86_400
-        )
+        ) ?? grantDate.addingTimeInterval(Double(agedDays) * 86_400)
         return TrialEndPaywallDebugScenario(
             grantDate: grantDate,
             evaluationDate: max(aged, now),
@@ -289,7 +289,7 @@ struct TrialEndPaywallContent: Equatable {
         let card: CenterpieceCard = rows.isEmpty
             ? .perks(
                 kicker: commerce(
-                    terms == .hardPaywall ? "trial.end.kicker" : "trial.end.free_title"
+                    terms == .hardPaywall ? TrialLength.copyKey("trial.end.kicker") : "trial.end.free_title"
                 ),
                 chips: [
                     commerce("paywall.feature.app_blocking.compact"),
@@ -300,9 +300,9 @@ struct TrialEndPaywallContent: Equatable {
                 footnote: commerce("paywall.subtitle")
             )
             : .record(
-                kicker: commerce(
+                kicker: commerce(TrialLength.copyKey(
                     terms == .legacy ? "trial.end.legacy.record" : "trial.end.kicker"
-                ),
+                )),
                 dateRange: localizedRecordDateRange(
                     clock: clock,
                     calendar: calendar,
@@ -318,7 +318,7 @@ struct TrialEndPaywallContent: Equatable {
                 terms == .legacy ? "trial.end.legacy.title" : "trial.end.title"
             ),
             titleAccent: "",
-            subtitle: commerce(subtitleKey(cohort: cohort, terms: terms)),
+            subtitle: commerce(TrialLength.copyKey(subtitleKey(cohort: cohort, terms: terms))),
             card: card,
             handwrittenAside: terms == .legacy ? commerce("trial.end.legacy.aside") : "",
             primaryCTA: commerce(

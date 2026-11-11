@@ -18,7 +18,7 @@ CTA, a reassurance line, and Restore · Terms · Privacy. The board is a
 `HonestPaywallMoment` plus a `HonestPaywallStory` (title, subtitle, review).
 
 - `paywall-during-trial` (moment `duringTrial`) — "Keep Plus after your
-  trial ends." with the live active-day count, or the ends-tonight line on
+  trial ends." with the live day count, or the ends-tonight line on
   the last day. Under the CTA: "You’re charged today. Cancel anytime in
   Settings." Reached from Home's trial chip (`entry: .trialStatus`) or debug
   `board=duringTrial`. Dismissible (Close).
@@ -117,6 +117,11 @@ CTA, a reassurance line, and Restore · Terms · Privacy. The board is a
 
 ## Driving it with flows
 
+- `flows/trial-length-seven-days.flow` (trial_length_v1) — `?trialLength=seven_days`
+  pins the 7-day arm. Proves the onboarding grant's trial line ("next 7 days"),
+  the Today indicator and `TrialStatusSheet` three days in ("5 days left",
+  "Day 3"), and the hard trial-end wall, with no "14 days" on any of them. The
+  wall is the honest paywall board, which names no length.
 - `flows/paywall-restore.flow` — every restore outcome without RevenueCat,
   through `pillie://debug/restore-outcome?result=error|none|restored|clear`.
   On the hard trial-end board: error alert, then Try again into the

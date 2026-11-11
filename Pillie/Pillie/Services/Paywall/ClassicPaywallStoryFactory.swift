@@ -10,13 +10,13 @@ import Foundation
 
 enum ClassicPaywallStoryFactory {
     static func duringTrial(
-        daysRemaining: Int,
+        displayedDaysRemaining: Int,
         locale: Locale
     ) -> ClassicPaywallTrialActiveStory {
         ClassicPaywallTrialActiveStory(
             title: commerce("paywall.classic.paywall.story.trial_active.title", locale),
             subtitle: commerce("paywall.classic.paywall.story.trial_active.subtitle", locale),
-            daysRemaining: ReverseTrialClock.displayedDaysRemaining(daysRemaining),
+            daysRemaining: displayedDaysRemaining,
             daysStampText: commerce("paywall.story.trial_active.stamp", locale),
             benefitChips: [
                 ClassicPaywallBenefitChip(
