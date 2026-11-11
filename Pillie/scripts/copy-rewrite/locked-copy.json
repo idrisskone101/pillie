@@ -1028,6 +1028,16 @@
       "comment": "Active-day install: "
     },
     {
+      "issue": "trial_length_v1",
+      "table": "Commerce",
+      "key": "trial.end.kicker.seven_days",
+      "create": true,
+      "comment": "7-day install:",
+      "en": "Your 7 days",
+      "de": "Deine 7 Tage",
+      "it": "I tuoi 7 giorni"
+    },
+    {
       "issue": "ENG-71",
       "table": "Commerce",
       "key": "trial.end.blocks",
@@ -1106,6 +1116,16 @@
       "it": "I tuoi 14 giorni attivi sono finiti, quindi il blocco app è disattivato. I promemoria restano gratis per sempre."
     },
     {
+      "issue": "trial_length_v1",
+      "table": "Commerce",
+      "key": "trial.end.legacy.subtitle.seven_days",
+      "create": true,
+      "comment": "7-day install: Legacy trial-end subtitle",
+      "en": "Your 7 days ended, so app blocking is off. Reminders stay free forever.",
+      "de": "Deine 7 Tage sind um, also ist die App-Sperre aus. Erinnerungen bleiben für immer kostenlos.",
+      "it": "I tuoi 7 giorni sono finiti, quindi il blocco app è disattivato. I promemoria restano gratis per sempre."
+    },
+    {
       "issue": "ENG-71",
       "table": "Commerce",
       "key": "trial.end.legacy.record",
@@ -1124,6 +1144,16 @@
       "en": "Your 14 active-day record",
       "de": "Dein Stand nach 14 aktiven Tagen",
       "it": "Il resoconto dei tuoi 14 giorni attivi"
+    },
+    {
+      "issue": "trial_length_v1",
+      "table": "Commerce",
+      "key": "trial.end.legacy.record.seven_days",
+      "create": true,
+      "comment": "7-day install: Legacy trial-end record kicker",
+      "en": "Your 7-day record",
+      "de": "Dein Stand nach 7 Tagen",
+      "it": "Il resoconto dei tuoi 7 giorni"
     },
     {
       "issue": "ENG-71",
@@ -1232,6 +1262,16 @@
       "it": "14 giorni attivi gratis · nessuna carta"
     },
     {
+      "issue": "trial_length_v1",
+      "table": "Commerce",
+      "key": "trial.granted.badge.seven_days",
+      "create": true,
+      "comment": "7-day install: Trial duration badge names 7 calendar days",
+      "en": "7 days free · no card",
+      "de": "7 Tage gratis · keine Karte",
+      "it": "7 giorni gratis · nessuna carta"
+    },
+    {
       "issue": "ENG-72",
       "table": "Commerce",
       "key": "trial.granted.headline",
@@ -1248,6 +1288,16 @@
       "it": "I tuoi primi 14 giorni attivi",
       "create": true,
       "comment": "Active-day install: "
+    },
+    {
+      "issue": "trial_length_v1",
+      "table": "Commerce",
+      "key": "trial.granted.headline.seven_days",
+      "create": true,
+      "comment": "7-day install:",
+      "en": "Your first 7 days",
+      "de": "Deine ersten 7 Tage",
+      "it": "I tuoi primi 7 giorni"
     },
     {
       "issue": "ENG-72",
@@ -1282,6 +1332,16 @@
       "it": "14 giorni attivi gratis, senza carta. Il blocco app si disattiva dopo la prova. I promemoria restano gratis.",
       "create": true,
       "comment": "Active-day install: "
+    },
+    {
+      "issue": "trial_length_v1",
+      "table": "Commerce",
+      "key": "trial.granted.disclosure.seven_days",
+      "create": true,
+      "comment": "7-day install:",
+      "en": "7 days free, no card needed. App blocking turns off after the trial. Reminders stay free.",
+      "de": "7 Tage gratis, keine Karte nötig. Die App-Sperre endet mit der Testphase. Erinnerungen bleiben kostenlos.",
+      "it": "7 giorni gratis, senza carta. Il blocco app si disattiva dopo la prova. I promemoria restano gratis."
     },
     {
       "issue": "ENG-72",
@@ -1652,6 +1712,16 @@
       "it": "La prova gratuita dura 14 giorni attivi. Non serve la carta. Quando finisce, scegli mensile, annuale o a vita per tenere Plus.",
       "create": true,
       "comment": "Active-day install: "
+    },
+    {
+      "issue": "trial_length_v1",
+      "table": "Commerce",
+      "key": "trial.granted.disclosure.hard_paywall.seven_days",
+      "create": true,
+      "comment": "7-day install:",
+      "en": "Your free trial lasts 7 days. No card needed. After it ends, choose monthly, annual, or lifetime to keep Plus.",
+      "de": "Deine kostenlose Testphase dauert 7 Tage. Keine Karte nötig. Danach wählst du einen Monats-, Jahres- oder Lifetime-Tarif, um Plus zu behalten.",
+      "it": "La prova gratuita dura 7 giorni. Non serve la carta. Quando finisce, scegli mensile, annuale o a vita per tenere Plus."
     },
     {
       "issue": "ENG-73",
@@ -2816,6 +2886,26 @@
         "one": "Ti resta %lld giorno attivo. Scegli un piano ora e il giorno 14 non si spegne niente.",
         "many": "Ti restano %lld giorni attivi. Scegli un piano ora e il giorno 14 non si spegne niente.",
         "other": "Ti restano %lld giorni attivi. Scegli un piano ora e il giorno 14 non si spegne niente."
+      }
+    },
+    {
+      "issue": "trial_length_v1",
+      "table": "Commerce",
+      "key": "paywall.board.during_trial.subtitle.seven_days",
+      "create": true,
+      "comment": "7-day install: %lld = number of calendar days left in the trial (2..7). Plain days, not active days. 'day 7' = the last trial day.",
+      "en": {
+        "one": "You have %lld day left. Pick a plan now and nothing turns off on day 7.",
+        "other": "You have %lld days left. Pick a plan now and nothing turns off on day 7."
+      },
+      "de": {
+        "one": "Du hast noch %lld Tag. Wähl jetzt einen Tarif, dann schaltet sich an Tag 7 nichts ab.",
+        "other": "Du hast noch %lld Tage. Wähl jetzt einen Tarif, dann schaltet sich an Tag 7 nichts ab."
+      },
+      "it": {
+        "one": "Ti resta %lld giorno. Scegli un piano ora e il giorno 7 non si spegne niente.",
+        "many": "Ti restano %lld giorni. Scegli un piano ora e il giorno 7 non si spegne niente.",
+        "other": "Ti restano %lld giorni. Scegli un piano ora e il giorno 7 non si spegne niente."
       }
     },
     {

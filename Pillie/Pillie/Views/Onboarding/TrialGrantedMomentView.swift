@@ -66,9 +66,10 @@ struct TrialGrantedMomentContent {
         func commerce(_ key: String) -> String {
             PillieLocalization.string(key, table: "Commerce", locale: locale)
         }
+        let trialLength = SubscriptionManager.shared.trialLength
         return TrialGrantedMomentContent(
-            badge: commerce(TrialDayRule.copyKey("trial.granted.badge")),
-            title: commerce(TrialDayRule.copyKey("trial.granted.headline")),
+            badge: commerce(TrialLength.copyKey("trial.granted.badge")),
+            title: commerce(TrialLength.copyKey("trial.granted.headline")),
             titleAccent: commerce("trial.granted.headline_accent"),
             subtitle: commerce("trial.granted.subtitle"),
             today: Today(
@@ -92,7 +93,7 @@ struct TrialGrantedMomentContent {
             ),
             laterDays: [
                 TimelineDay(
-                    label: commerce("trial.granted.warning.label"),
+                    label: commerce(trialLength.variantKey("trial.granted.warning.label")),
                     title: commerce("trial.granted.warning.title"),
                     detail: commerce("trial.granted.warning.detail"),
                     symbolName: "bell.fill",
@@ -100,7 +101,7 @@ struct TrialGrantedMomentContent {
                     symbolColor: PillieTheme.textPrimary
                 ),
                 TimelineDay(
-                    label: commerce("trial.granted.choice.label"),
+                    label: commerce(trialLength.variantKey("trial.granted.choice.label")),
                     title: commerce("trial.granted.choice.title"),
                     detail: commerce(
                         trialEndTerms == .hardPaywall
@@ -112,7 +113,7 @@ struct TrialGrantedMomentContent {
                     symbolColor: PillieTheme.verifiedGreen
                 ),
             ],
-            disclosure: commerce(TrialDayRule.copyKey(
+            disclosure: commerce(TrialLength.copyKey(
                 trialEndTerms == .hardPaywall
                     ? "trial.granted.disclosure.hard_paywall"
                     : "trial.granted.disclosure"

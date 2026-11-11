@@ -10914,6 +10914,275 @@
         }
       }
     },
+    "trial.granted.badge.seven_days": {
+      "comment": "Trial duration and payment requirement badge [trial granted] 7-day install (trial_length_v1): the trial runs 7 calendar days.",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 أيام مجانًا · بدون بطاقة"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 দিন ফ্রি · কার্ড লাগবে না"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 dies gratis · sense targeta"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 dní zdarma · bez karty"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 dage gratis · intet kort"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 Tage gratis · keine Karte"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 ημέρες δωρεάν · χωρίς κάρτα"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 days free · no card"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 días gratis · sin tarjeta"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 päivää ilmaiseksi · ei korttia"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 jours gratuits · sans carte"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 દિવસ મફત · કાર્ડની જરૂર નથી"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 दिन मुफ़्त · कार्ड नहीं चाहिए"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 dana besplatno · bez kartice"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 nap ingyen · kártya nélkül"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gratis 7 hari · tanpa kartu"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 giorni gratis · nessuna carta"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7日間無料 · カード不要"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 ದಿನಗಳು ಉಚಿತ · ಕಾರ್ಡ್ ಬೇಕಿಲ್ಲ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7일 무료 · 카드 불필요"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 ദിനങ്ങൾ സൗജന്യം · കാർഡ് വേണ്ട"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 दिवस मोफत · कार्ड नको"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 hari percuma · tanpa kad"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 dager gratis · uten kort"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 dagen gratis · geen kaart"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 ଦିନ ମାଗଣା · କାର୍ଡ ଦରକାର ନାହିଁ"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 ਦਿਨ ਮੁਫ਼ਤ · ਕਾਰਡ ਦੀ ਲੋੜ ਨਹੀਂ"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 dni za darmo · bez karty"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 dias grátis · sem cartão"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 dias grátis · sem cartão"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 zile gratuit · fără card"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 дней бесплатно · без карты"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 dní zdarma · bez karty"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 dni brezplačno · brez kartice"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 dagar gratis · inget kort"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 நாட்கள் இலவசம் · கார்டு தேவையில்லை"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 రోజులు ఉచితం · కార్డ్ అవసరం లేదు"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ฟรี 7 วัน · ไม่ต้องใช้บัตร"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 gün ücretsiz · kart gerekmez"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 днів безкоштовно · без картки"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 دن مفت · کارڈ کی ضرورت نہیں"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 ngày miễn phí · không cần thẻ"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "免费 7 天 · 无需银行卡"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "免費 7 天 · 不需信用卡"
+          }
+        }
+      }
+    },
     "trial.granted.headline": {
       "comment": "First line of the trial-granted headline [trial granted]",
       "localizations": {
@@ -11452,6 +11721,275 @@
         }
       }
     },
+    "trial.granted.headline.seven_days": {
+      "comment": "First line of the trial-granted headline [trial granted] 7-day install (trial_length_v1): the trial runs 7 calendar days.",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أيامك الـ 7 الأولى"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "আপনার প্রথম 7 দিন"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Els teus primers 7 dies"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvých prvních 7 dní"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dine første 7 dage"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine ersten 7 Tage"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Οι πρώτες 7 ημέρες σου"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your first 7 days"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tus primeros 7 días"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ensimmäiset 7 päivääsi"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tes 7 premiers jours"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "તમારા પહેલા 7 દિવસ"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "आपके पहले 7 दिन"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvojih prvih 7 dana"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Az első 7 napod"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 hari pertamamu"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I tuoi primi 7 giorni"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最初の7日間は"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ನಿಮ್ಮ ಮೊದಲ 7 ದಿನಗಳು"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "처음 7일은"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "നിങ്ങളുടെ ആദ്യ 7 ദിനങ്ങൾ"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "तुमचे पहिले 7 दिवस"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 hari pertama kamu"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "De første 7 dagene dine"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je eerste 7 dagen"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ଆପଣଙ୍କ ପ୍ରଥମ 7 ଦିନ"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਤੁਹਾਡੇ ਪਹਿਲੇ 7 ਦਿਨ"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Twoje pierwsze 7 dni"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seus primeiros 7 dias"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Os teus primeiros 7 dias"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Primele tale 7 zile"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Твои первые 7 дней"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvojich prvých 7 dní"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvojih prvih 7 dni"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dina första 7 dagar"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "உங்கள் முதல் 7 நாட்கள்"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "మీ మొదటి 7 రోజులు"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 วันแรกของคุณ"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İlk 7 günün"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Твої перші 7 днів"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "آپ کے پہلے 7 دن"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 ngày đầu tiên của bạn"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的前 7 天"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的前 7 天"
+          }
+        }
+      }
+    },
     "trial.granted.headline_accent": {
       "comment": "Accented second line of the trial-granted headline [trial granted]",
       "localizations": {
@@ -11986,6 +12524,275 @@
           "stringUnit": {
             "state": "translated",
             "value": "ਦਿਨ 12"
+          }
+        }
+      }
+    },
+    "trial.granted.warning.label.seven_days": {
+      "comment": "Day label for the pre-expiry warning [trial granted] 7-day install (trial_length_v1): the trial runs 7 calendar days.",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "اليوم 5"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "দিন 5"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dia 5"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Den 5"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dag 5"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tag 5"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ημέρα 5"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Day 5"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Día 5"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Päivä 5"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jour 5"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "દિવસ 5"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "दिन 5"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dan 5"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "5. nap"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hari 5"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Giorno 5"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "5日目"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ದಿನ 5"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "5일째"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ദിവസം 5"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "दिवस 5"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hari 5"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dag 5"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dag 5"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ଦିନ 5"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਦਿਨ 5"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dzień 5"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dia 5"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dia 5"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ziua 5"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "День 5"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deň 5"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dan 5"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dag 5"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "நாள் 5"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "రోజు 5"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "วันที่ 5"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "5. gün"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "День 5"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "دن 5"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ngày 5"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "第 5 天"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "第 5 天"
           }
         }
       }
@@ -12793,6 +13600,275 @@
           "stringUnit": {
             "state": "translated",
             "value": "ਦਿਨ 14"
+          }
+        }
+      }
+    },
+    "trial.granted.choice.label.seven_days": {
+      "comment": "Day label for the post-trial choice [trial granted] 7-day install (trial_length_v1): the trial runs 7 calendar days.",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "اليوم 7"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "দিন 7"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dia 7"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Den 7"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dag 7"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tag 7"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ημέρα 7"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Day 7"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Día 7"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Päivä 7"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jour 7"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "દિવસ 7"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "दिन 7"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dan 7"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7. nap"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hari 7"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Giorno 7"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7日目"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ದಿನ 7"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7일째"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ദിവസം 7"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "दिवस 7"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hari 7"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dag 7"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dag 7"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ଦିନ 7"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਦਿਨ 7"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dzień 7"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dia 7"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dia 7"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ziua 7"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "День 7"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deň 7"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dan 7"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dag 7"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "நாள் 7"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "రోజు 7"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "วันที่ 7"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7. gün"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "День 7"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "دن 7"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ngày 7"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "第 7 天"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "第 7 天"
           }
         }
       }
@@ -14680,6 +15756,275 @@
         }
       }
     },
+    "trial.granted.disclosure.seven_days": {
+      "comment": "Pre-trial duration and expiry disclosure [paywall] 7-day install (trial_length_v1): the trial runs 7 calendar days.",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 أيام مجانًا، بدون بطاقة. يتوقف حظر التطبيقات بعد الفترة التجريبية. تبقى التذكيرات مجانية."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 দিন ফ্রি, কার্ড লাগবে না। ট্রায়ালের পরে অ্যাপ ব্লকিং বন্ধ হয়। রিমাইন্ডার ফ্রি থাকে।"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 dies gratis, sense targeta. El bloqueig d’apps es desactiva quan s’acaba la prova. Els recordatoris continuen sent gratis."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 dní zdarma, bez karty. Blokování aplikací se po zkušebním období vypne. Připomínky zůstávají zdarma."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 dage gratis, intet kort nødvendigt. Appblokering slås fra efter prøveperioden. Påmindelserne forbliver gratis."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 Tage gratis, keine Karte nötig. Die App-Sperre endet mit der Testphase. Erinnerungen bleiben kostenlos."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 ημέρες δωρεάν, χωρίς κάρτα. Ο αποκλεισμός εφαρμογών απενεργοποιείται μετά τη δοκιμή. Οι υπενθυμίσεις μένουν δωρεάν."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 days free, no card needed. App blocking turns off after the trial. Reminders stay free."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 días gratis, sin tarjeta. El bloqueo de apps se desactiva al terminar la prueba. Los recordatorios siguen gratis."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 päivää ilmaiseksi, ei korttia. Sovellusesto menee pois päältä kokeilun jälkeen. Muistutukset pysyvät ilmaisina."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 jours gratuits, sans carte. Le blocage d’apps se désactive après l’essai. Les rappels restent gratuits."
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 દિવસ મફત, કાર્ડની જરૂર નથી. ટ્રાયલ પછી ઍપ બ્લૉકિંગ બંધ થઈ જાય છે. રિમાઇન્ડર મફત રહે છે."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 दिन मुफ़्त, कार्ड की ज़रूरत नहीं। ट्रायल के बाद ऐप ब्लॉकिंग बंद हो जाती है। रिमाइंडर मुफ़्त रहते हैं।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 dana besplatno, bez kartice. Blokiranje aplikacija isključuje se nakon probnog razdoblja. Podsjetnici ostaju besplatni."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 nap ingyen, kártya nélkül. Az appblokkolás a próbaidőszak után kikapcsol. Az emlékeztetők ingyenesek maradnak."
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gratis 7 hari, tanpa kartu. Blokir aplikasi mati setelah uji coba. Pengingat tetap gratis."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 giorni gratis, senza carta. Il blocco app si disattiva dopo la prova. I promemoria restano gratis."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7日間無料、カード不要。トライアル終了後、アプリブロックはオフになります。リマインダーは無料のままです。"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 ದಿನಗಳು ಉಚಿತ, ಕಾರ್ಡ್ ಬೇಕಿಲ್ಲ. ಟ್ರಯಲ್ ನಂತರ ಆ್ಯಪ್ ನಿರ್ಬಂಧ ಆಫ್ ಆಗುತ್ತದೆ. ಜ್ಞಾಪನೆಗಳು ಉಚಿತವಾಗಿಯೇ ಇರುತ್ತವೆ."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7일 무료, 카드 불필요. 체험이 끝나면 앱 차단이 꺼져요. 알림은 계속 무료예요."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 ദിനങ്ങൾ സൗജന്യം, കാർഡ് വേണ്ട. ട്രയലിന് ശേഷം ആപ്പ് ബ്ലോക്കിംഗ് ഓഫാകും. റിമൈൻഡറുകൾ സൗജന്യമായി തുടരും."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 दिवस मोफत, कार्डची गरज नाही. ट्रायलनंतर ॲप ब्लॉकिंग बंद होते. रिमाइंडर मोफत राहतात."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 hari percuma, tanpa kad. Sekatan apl dimatikan selepas percubaan. Peringatan kekal percuma."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 dager gratis, uten kort. Appblokkering slås av etter prøveperioden. Påminnelsene forblir gratis."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 dagen gratis, geen kaart nodig. Appblokkering stopt na de proefperiode. Herinneringen blijven gratis."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 ଦିନ ମାଗଣା, କାର୍ଡ ଦରକାର ନାହିଁ। ଟ୍ରାୟାଲ୍ ପରେ ଆପ୍ ବ୍ଲକିଂ ବନ୍ଦ ହୁଏ। ରିମାଇଣ୍ଡର୍ ମାଗଣା ରହେ।"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 ਦਿਨ ਮੁਫ਼ਤ, ਕਾਰਡ ਦੀ ਲੋੜ ਨਹੀਂ। ਟ੍ਰਾਇਲ ਤੋਂ ਬਾਅਦ ਐਪ ਬਲੌਕਿੰਗ ਬੰਦ ਹੋ ਜਾਂਦੀ ਹੈ। ਰਿਮਾਈਂਡਰ ਮੁਫ਼ਤ ਰਹਿੰਦੇ ਹਨ।"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 dni za darmo, bez karty. Blokowanie aplikacji wyłącza się po okresie próbnym. Przypomnienia zostają bezpłatne."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 dias grátis, sem cartão. O bloqueio de apps desliga depois do teste. Os lembretes continuam grátis."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 dias grátis, sem cartão. O bloqueio de apps desliga-se no fim do período de teste. Os lembretes continuam grátis."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 zile gratuit, fără card. Blocarea aplicațiilor se oprește după perioada de probă. Mementourile rămân gratuite."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 дней бесплатно, карта не нужна. После пробного периода блокировка приложений отключится. Напоминания останутся бесплатными."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 dní zdarma, bez karty. Po skúšobnom období sa blokovanie aplikácií vypne. Pripomienky zostávajú zdarma."
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 dni brezplačno, brez kartice. Blokiranje aplikacij se po preizkusu izklopi. Opomniki ostanejo brezplačni."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 dagar gratis, inget kort behövs. Appblockering stängs av efter provperioden. Påminnelserna förblir gratis."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 நாட்கள் இலவசம், கார்டு தேவையில்லை. சோதனைக் காலத்திற்குப் பிறகு ஆப் தடுப்பு ஆஃப் ஆகும். நினைவூட்டல்கள் இலவசமாகவே இருக்கும்."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 రోజులు ఉచితం, కార్డ్ అవసరం లేదు. ట్రయల్ తర్వాత యాప్ బ్లాకింగ్ ఆఫ్ అవుతుంది. రిమైండర్లు ఉచితంగానే ఉంటాయి."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ฟรี 7 วัน ไม่ต้องใช้บัตร การบล็อกแอปจะปิดหลังช่วงทดลองใช้ ส่วนการแจ้งเตือนยังฟรี"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 gün ücretsiz, kart gerekmez. Deneme bitince uygulama engelleme kapanır. Hatırlatmalar ücretsiz kalır."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 днів безкоштовно, картка не потрібна. Після пробного періоду блокування застосунків вимкнеться. Нагадування лишаться безкоштовними."
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 دن مفت، کارڈ کی ضرورت نہیں۔ ٹرائل کے بعد ایپ بلاکنگ بند ہو جاتی ہے۔ یاد دہانیاں مفت رہتی ہیں۔"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 ngày miễn phí, không cần thẻ. Chặn ứng dụng sẽ tắt sau khi dùng thử. Lời nhắc vẫn miễn phí."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "免费 7 天，无需银行卡。试用结束后应用屏蔽会关闭。提醒仍然免费。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "免費 7 天，不需信用卡。試用結束後 App 封鎖會關閉。提醒仍然免費。"
+          }
+        }
+      }
+    },
     "trial.granted.disclosure.hard_paywall": {
       "comment": "Pre-trial duration and paid-access requirement for hard-paywall cohorts [paywall]",
       "localizations": {
@@ -15214,6 +16559,275 @@
           "stringUnit": {
             "state": "translated",
             "value": "ਤੁਹਾਡਾ ਮੁਫ਼ਤ ਟ੍ਰਾਇਲ 14 ਸਰਗਰਮ ਦਿਨ ਚੱਲਦਾ ਹੈ। ਕਾਰਡ ਦੀ ਲੋੜ ਨਹੀਂ। ਇਸਦੇ ਖ਼ਤਮ ਹੋਣ ਤੋਂ ਬਾਅਦ, Plus ਰੱਖਣ ਲਈ ਮਹੀਨਾਵਾਰ, ਸਾਲਾਨਾ ਜਾਂ ਲਾਈਫ਼ਟਾਈਮ ਚੁਣੋ।"
+          }
+        }
+      }
+    },
+    "trial.granted.disclosure.hard_paywall.seven_days": {
+      "comment": "Pre-trial duration and paid-access requirement for hard-paywall cohorts [paywall] 7-day install (trial_length_v1): the trial runs 7 calendar days.",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تستمر فترتك التجريبية المجانية 7 أيام. بدون بطاقة. بعد انتهائها، اختاري الاشتراك الشهري أو السنوي أو مدى الحياة للاحتفاظ بـ Plus."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "আপনার ফ্রি ট্রায়াল 7 দিনের। কার্ড লাগবে না। শেষ হলে Plus রাখতে মাসিক, বার্ষিক বা লাইফটাইম বেছে নিন।"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La teva prova gratuïta dura 7 dies. No cal targeta. Quan s’acabi, tria mensual, anual o vitalici per conservar el Plus."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zkušební období zdarma trvá 7 dní. Bez karty. Po jeho skončení vyber měsíční, roční nebo trvalý plán a Plus si nech."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Din gratis prøveperiode varer 7 dage. Intet kort nødvendigt. Når den udløber, vælger du månedligt, årligt eller livstid for at beholde Plus."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine kostenlose Testphase dauert 7 Tage. Keine Karte nötig. Danach wählst du einen Monats-, Jahres- oder Lifetime-Tarif, um Plus zu behalten."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Η δωρεάν δοκιμή σου διαρκεί 7 ημέρες. Χωρίς κάρτα. Όταν λήξει, διάλεξε μηνιαία, ετήσια ή εφ' όρου ζωής για να κρατήσεις το Plus."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your free trial lasts 7 days. No card needed. After it ends, choose monthly, annual, or lifetime to keep Plus."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu prueba gratis dura 7 días. Sin tarjeta. Cuando termine, elige mensual, anual o de por vida para conservar Plus."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ilmainen kokeilusi kestää 7 päivää. Korttia ei tarvita. Kun se päättyy, valitse kuukausi-, vuosi- tai kertamaksu pitääksesi Plusin."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton essai gratuit dure 7 jours. Pas besoin de carte. Ensuite, choisis mensuel, annuel ou à vie pour garder Plus."
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "તમારી મફત ટ્રાયલ 7 દિવસ ચાલે છે. કાર્ડની જરૂર નથી. તે પૂરી થાય પછી Plus રાખવા માસિક, વાર્ષિક અથવા લાઇફટાઇમ પસંદ કરો."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "आपका मुफ़्त ट्रायल 7 दिनों का है। कार्ड की ज़रूरत नहीं। इसके ख़त्म होने पर, Plus जारी रखने के लिए मासिक, सालाना या लाइफ़टाइम चुनें।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvoje besplatno probno razdoblje traje 7 dana. Kartica nije potrebna. Nakon toga odaberi mjesečno, godišnje ili doživotno da zadržiš Plus."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Az ingyenes próbaidőszak 7 napig tart. Kártya nem szükséges. Utána válassz havi, éves vagy örökös csomagot, hogy megtartsd a Plust."
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uji coba gratismu berlangsung 7 hari. Tanpa kartu. Setelah berakhir, pilih bulanan, tahunan, atau seumur hidup untuk mempertahankan Plus."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La prova gratuita dura 7 giorni. Non serve la carta. Quando finisce, scegli mensile, annuale o a vita per tenere Plus."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "無料トライアルは7日間。カード不要です。終了後は、月額、年額、または買い切りを選んでPlusを続けられます。"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ನಿಮ್ಮ ಉಚಿತ ಟ್ರಯಲ್ 7 ದಿನಗಳು. ಕಾರ್ಡ್ ಬೇಕಿಲ್ಲ. ಅದು ಮುಗಿದ ನಂತರ, Plus ಮುಂದುವರಿಸಲು ಮಾಸಿಕ, ವಾರ್ಷಿಕ ಅಥವಾ ಜೀವಮಾನದ ಯೋಜನೆಯನ್ನು ಆರಿಸಿ."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "무료 체험은 7일이에요. 카드는 필요 없어요. 체험이 끝나면 월간, 연간 또는 평생 이용권을 선택해 Plus를 유지할 수 있어요."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "നിങ്ങളുടെ സൗജന്യ ട്രയൽ 7 ദിനങ്ങളാണ്. കാർഡ് വേണ്ട. അത് അവസാനിച്ച ശേഷം, Plus തുടരാൻ പ്രതിമാസ, വാർഷിക അല്ലെങ്കിൽ ആജീവനാന്ത പ്ലാൻ തിരഞ്ഞെടുക്കൂ."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "तुमचा मोफत ट्रायल 7 दिवसांचा आहे. कार्डची गरज नाही. तो संपल्यावर, Plus सुरू ठेवण्यासाठी मासिक, वार्षिक किंवा लाइफटाइम निवडा."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Percubaan percuma kamu berlangsung 7 hari. Tanpa kad. Selepas tamat, pilih bulanan, tahunan atau seumur hidup untuk kekalkan Plus."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Den gratis prøveperioden varer i 7 dager. Du trenger ikke kort. Når den er over, velger du månedlig, årlig eller livstid for å beholde Plus."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je gratis proefperiode duurt 7 dagen. Geen kaart nodig. Daarna kun je maandelijks, jaarlijks of lifetime kiezen om Plus te houden."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ଆପଣଙ୍କ ମାଗଣା ଟ୍ରାୟାଲ୍ 7 ଦିନ ଚାଲେ। କାର୍ଡ ଦରକାର ନାହିଁ। ଏହା ଶେଷ ହେବା ପରେ Plus ରଖିବାକୁ ମାସିକ, ବାର୍ଷିକ କିମ୍ବା ଆଜୀବନ ବାଛନ୍ତୁ।"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਤੁਹਾਡਾ ਮੁਫ਼ਤ ਟ੍ਰਾਇਲ 7 ਦਿਨ ਚੱਲਦਾ ਹੈ। ਕਾਰਡ ਦੀ ਲੋੜ ਨਹੀਂ। ਇਸਦੇ ਖ਼ਤਮ ਹੋਣ ਤੋਂ ਬਾਅਦ, Plus ਰੱਖਣ ਲਈ ਮਹੀਨਾਵਾਰ, ਸਾਲਾਨਾ ਜਾਂ ਲਾਈਫ਼ਟਾਈਮ ਚੁਣੋ।"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bezpłatny okres próbny trwa 7 dni. Bez karty. Potem wybierz plan miesięczny, roczny albo na zawsze, aby zachować Plus."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seu teste grátis dura 7 dias. Sem cartão. Depois, escolha mensal, anual ou vitalício para manter o Plus."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O teu período de teste grátis dura 7 dias. Sem cartão. Quando terminar, escolhe mensal, anual ou vitalício para manteres o Plus."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Perioada ta de probă gratuită durează 7 zile. Fără card. După ce se termină, alege lunar, anual sau pe viață pentru a păstra Plus."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Бесплатный пробный период длится 7 дней. Карта не нужна. После него выбери ежемесячный, годовой или пожизненный план, чтобы оставить Plus."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skúšobné obdobie trvá 7 dní. Bez karty. Potom si vyber mesačný, ročný alebo doživotný plán, ak si chceš Plus nechať."
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvoj brezplačni preizkus traja 7 dni. Brez kartice. Po koncu izberi mesečno, letno ali trajno možnost, da obdržiš Plus."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Din gratis provperiod är 7 dagar. Inget kort behövs. När den är slut väljer du månadsvis, årsvis eller livstid för att behålla Plus."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "உங்கள் இலவச சோதனைக் காலம் 7 நாட்கள். கார்டு தேவையில்லை. அது முடிந்ததும், Plus-ஐத் தொடர மாதாந்திர, ஆண்டு அல்லது வாழ்நாள் திட்டத்தைத் தேர்ந்தெடுங்கள்."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "మీ ఉచిత ట్రయల్ 7 రోజులు ఉంటుంది. కార్డ్ అవసరం లేదు. అది ముగిశాక, Plus కొనసాగించడానికి నెలవారీ, వార్షిక లేదా జీవితకాల ప్లాన్ ఎంచుకోండి."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ช่วงทดลองใช้ฟรีของคุณนาน 7 วัน ไม่ต้องใช้บัตร หลังจากนั้นเลือกแบบรายเดือน รายปี หรือตลอดชีพ เพื่อใช้ Plus ต่อ"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ücretsiz denemen 7 gün sürer. Kart gerekmez. Bittiğinde Plus ile devam etmek için aylık, yıllık veya ömür boyu seç."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Безкоштовний пробний період триває 7 днів. Картка не потрібна. Після нього вибери щомісячний, річний або довічний план, щоб лишити Plus."
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "آپ کا مفت ٹرائل 7 دنوں کا ہے۔ کارڈ کی ضرورت نہیں۔ اس کے ختم ہونے پر، Plus جاری رکھنے کے لیے ماہانہ، سالانہ یا لائف ٹائم چنیں۔"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bản dùng thử miễn phí của bạn kéo dài 7 ngày. Không cần thẻ. Sau khi kết thúc, chọn gói hàng tháng, hàng năm hoặc trọn đời để giữ Plus."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "免费试用为 7 天。无需银行卡。结束后，选择月付、年付或终身版即可保留 Plus。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "免費試用為 7 天。不需信用卡。結束後，選擇月繳、年繳或終身版即可保留 Plus。"
           }
         }
       }
@@ -18516,6 +20130,275 @@
           "stringUnit": {
             "state": "translated",
             "value": "ਤੁਹਾਡੇ 14 ਸਰਗਰਮ ਦਿਨ"
+          }
+        }
+      }
+    },
+    "trial.end.kicker.seven_days": {
+      "comment": "Compact header beside the trial-end date [paywall] 7-day install (trial_length_v1): the trial runs 7 calendar days.",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أيامك الـ 7"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "আপনার 7 দিন"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Els teus 7 dies"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvých 7 dní"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dine 7 dage"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine 7 Tage"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Οι 7 ημέρες σου"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your 7 days"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tus 7 días"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sinun 7 päivääsi"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tes 7 jours"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "તમારા 7 દિવસ"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "आपके 7 दिन"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvojih 7 dana"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A 7 napod"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 harimu"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I tuoi 7 giorni"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "あなたの7日間"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ನಿಮ್ಮ 7 ದಿನಗಳು"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "나의 7일"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "നിങ്ങളുടെ 7 ദിനങ്ങൾ"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "तुमचे 7 दिवस"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 hari kamu"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dine 7 dager"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je 7 dagen"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ଆପଣଙ୍କ 7 ଦିନ"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਤੁਹਾਡੇ 7 ਦਿਨ"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Twoje 7 dni"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seus 7 dias"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Os teus 7 dias"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cele 7 zile ale tale"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Твои 7 дней"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvojich 7 dní"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvojih 7 dni"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dina 7 dagar"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "உங்கள் 7 நாட்கள்"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "మీ 7 రోజులు"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 วันของคุณ"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 günün"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Твої 7 днів"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "آپ کے 7 دن"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 ngày của bạn"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的 7 天"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的 7 天"
           }
         }
       }
@@ -28742,6 +30625,275 @@
         }
       }
     },
+    "trial.end.hard.blocker.seven_days": {
+      "comment": "Hard trial-end subtitle with blocking [ENG-71] 7-day install (trial_length_v1): the trial runs 7 calendar days.",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لمدة 7 أيام كانت لديكِ تذكيرات المتابعة وحظر التطبيقات. احتفظي بـ Plus ليبقى الاثنان لديكِ."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 দিন ধরে আপনি ফলো-আপ রিমাইন্ডার আর অ্যাপ ব্লকিং পেয়েছেন। দুটোই রাখতে Plus রাখুন।"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Durant 7 dies has tingut recordatoris de seguiment i bloqueig d’apps. Conserva el Plus per mantenir-los tots dos."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Během 7 dní ti fungovaly následné připomínky i blokování aplikací. Nech si Plus a obojí ti zůstane."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I 7 dage havde du opfølgende påmindelser og appblokering. Behold Plus, så beholder du begge dele."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 Tage lang hattest du Folgeerinnerungen und die App-Sperre. Behalte Plus, dann bleibt dir beides."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Για 7 ημέρες είχες επαναληπτικές υπενθυμίσεις και αποκλεισμό εφαρμογών. Κράτα το Plus για να συνεχίσεις να τα έχεις και τα δύο."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "For 7 days you had follow-up reminders and app blocking. Keep Plus to hold on to both."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Durante 7 días tuviste recordatorios de seguimiento y bloqueo de apps. Quédate con Plus para conservar ambos."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 päivän ajan sinulla oli jatkomuistutukset ja sovellusesto. Pidä Plus, niin molemmat säilyvät."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pendant 7 jours, tu as eu les rappels de relance et le blocage d’apps. Garde Plus pour conserver les deux."
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 દિવસ સુધી તમારી પાસે ફૉલો-અપ રિમાઇન્ડર અને ઍપ બ્લૉકિંગ હતાં. બંને રાખવા Plus રાખો."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 दिनों तक आपके पास फ़ॉलो-अप रिमाइंडर और ऐप ब्लॉकिंग थे। दोनों बनाए रखने के लिए Plus जारी रखें।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tijekom 7 dana uključeni su ti bili ponovni podsjetnici i blokiranje aplikacija. Zadrži Plus da ti ostane oboje."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 napig ismétlő emlékeztetőid és appblokkolásod volt. Tartsd meg a Plust, hogy mindkettő megmaradjon."
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selama 7 hari kamu punya pengingat lanjutan dan blokir aplikasi. Pertahankan Plus untuk tetap memiliki keduanya."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Per 7 giorni hai avuto promemoria ripetuti e blocco app. Tieni Plus per continuare ad averli entrambi."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7日間、フォローアップリマインダーとアプリブロックを使ってきました。Plusを続ければ、どちらもそのまま使えます。"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 ದಿನಗಳ ಕಾಲ ನಿಮಗೆ ಮರು ಜ್ಞಾಪನೆಗಳು ಮತ್ತು ಆ್ಯಪ್ ನಿರ್ಬಂಧ ಇತ್ತು. ಎರಡನ್ನೂ ಉಳಿಸಿಕೊಳ್ಳಲು Plus ಮುಂದುವರಿಸಿ."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7일 동안 후속 알림과 앱 차단을 사용했어요. Plus를 유지하면 둘 다 계속 쓸 수 있어요."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 ദിനങ്ങൾ നിങ്ങൾക്ക് ഫോളോ-അപ്പ് റിമൈൻഡറുകളും ആപ്പ് ബ്ലോക്കിംഗും ഉണ്ടായിരുന്നു. രണ്ടും നിലനിർത്താൻ Plus തുടരൂ."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 दिवस तुमच्याकडे फॉलो-अप रिमाइंडर आणि ॲप ब्लॉकिंग होते. दोन्ही ठेवण्यासाठी Plus सुरू ठेवा."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selama 7 hari kamu ada peringatan susulan dan sekatan apl. Kekalkan Plus untuk terus menikmati kedua-duanya."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I 7 dager hadde du oppfølgingspåminnelser og appblokkering. Behold Plus for å ha begge videre."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 dagen lang had je vervolgherinneringen en appblokkering. Blijf bij Plus om ze allebei te houden."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 ଦିନ ଆପଣଙ୍କ ପାଖରେ ଫଲୋ-ଅପ୍ ରିମାଇଣ୍ଡର୍ ଓ ଆପ୍ ବ୍ଲକିଂ ଥିଲା। ଦୁଇଟିଯାକ ରଖିବାକୁ Plus ରଖନ୍ତୁ।"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 ਦਿਨ ਤੁਹਾਡੇ ਕੋਲ ਫ਼ਾਲੋ-ਅੱਪ ਰਿਮਾਈਂਡਰ ਅਤੇ ਐਪ ਬਲੌਕਿੰਗ ਸਨ। ਦੋਵੇਂ ਰੱਖਣ ਲਈ Plus ਰੱਖੋ।"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Przez 7 dni działały u ciebie ponowne przypomnienia i blokowanie aplikacji. Zostań z Plus, aby zachować jedno i drugie."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Por 7 dias você teve lembretes de acompanhamento e bloqueio de apps. Mantenha o Plus para continuar com os dois."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Durante 7 dias tiveste lembretes de seguimento e bloqueio de apps. Fica com o Plus para manteres os dois."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Timp de 7 zile ai avut mementouri repetate și blocarea aplicațiilor. Rămâi cu Plus ca să le păstrezi pe amândouă."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 дней у тебя были повторные напоминания и блокировка приложений. Оставь Plus, чтобы сохранить и то и другое."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Počas 7 dní ti fungovali následné pripomienky aj blokovanie aplikácií. Nechaj si Plus a obe ti ostanú."
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "V 7 dneh so bili vklopljeni ponovni opomniki in blokiranje aplikacij. Obdrži Plus, da ostane oboje."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I 7 dagar hade du uppföljande påminnelser och appblockering. Behåll Plus så får du ha kvar båda."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 நாட்கள் உங்களுக்குத் தொடர் நினைவூட்டல்களும் ஆப் தடுப்பும் இருந்தன. இரண்டையும் வைத்துக்கொள்ள Plus-ஐத் தொடருங்கள்."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 రోజులు మీకు ఫాలో-అప్ రిమైండర్లు, యాప్ బ్లాకింగ్ ఉన్నాయి. రెండింటినీ ఉంచుకోవడానికి Plus కొనసాగించండి."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ตลอด 7 วัน คุณมีการแจ้งเตือนซ้ำและการบล็อกแอป ใช้ Plus ต่อเพื่อเก็บทั้งสองอย่างไว้"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 gün boyunca takip hatırlatmaların ve uygulama engellemen vardı. İkisini de korumak için Plus ile devam et."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 днів у тебе були повторні нагадування і блокування застосунків. Залиш Plus, щоб зберегти обидві функції."
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 دنوں تک آپ کے پاس فالو اپ یاد دہانیاں اور ایپ بلاکنگ تھیں۔ دونوں برقرار رکھنے کے لیے Plus جاری رکھیں۔"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trong 7 ngày, bạn đã có lời nhắc lặp lại và chặn ứng dụng. Giữ Plus để tiếp tục có cả hai."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在这 7 天里，你用上了后续提醒和应用屏蔽。保留 Plus，两项都能继续使用。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在這 7 天裡，你用了後續提醒和 App 封鎖。保留 Plus，兩項都能繼續使用。"
+          }
+        }
+      }
+    },
     "trial.end.hard.reminders": {
       "comment": "Hard trial-end subtitle reminders-only [ENG-71]",
       "localizations": {
@@ -29276,6 +31428,275 @@
           "stringUnit": {
             "state": "translated",
             "value": "14 ਸਰਗਰਮ ਦਿਨ ਤੁਹਾਡੇ ਕੋਲ ਫ਼ਾਲੋ-ਅੱਪ ਰਿਮਾਈਂਡਰ ਸਨ। ਉਹਨਾਂ ਨੂੰ ਰੱਖਣ ਲਈ Plus ਰੱਖੋ।"
+          }
+        }
+      }
+    },
+    "trial.end.hard.reminders.seven_days": {
+      "comment": "Hard trial-end subtitle reminders-only [ENG-71] 7-day install (trial_length_v1): the trial runs 7 calendar days.",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لمدة 7 أيام كانت لديكِ تذكيرات المتابعة. احتفظي بـ Plus لتبقى لديكِ."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 দিন ধরে আপনি ফলো-আপ রিমাইন্ডার পেয়েছেন। সেগুলো রাখতে Plus রাখুন।"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Durant 7 dies has tingut recordatoris de seguiment. Conserva el Plus per mantenir-los."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Během 7 dní ti fungovaly následné připomínky. Nech si Plus a zůstanou ti."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I 7 dage havde du opfølgende påmindelser. Behold Plus, så beholder du dem."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 Tage lang hattest du Folgeerinnerungen. Behalte Plus, dann bleiben sie dir."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Για 7 ημέρες είχες επαναληπτικές υπενθυμίσεις. Κράτα το Plus για να συνεχίσεις να τις έχεις."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "For 7 days you had follow-up reminders. Keep Plus to hold on to them."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Durante 7 días tuviste recordatorios de seguimiento. Quédate con Plus para conservarlos."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 päivän ajan sinulla oli jatkomuistutukset. Pidä Plus, niin ne säilyvät."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pendant 7 jours, tu as eu les rappels de relance. Garde Plus pour les conserver."
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 દિવસ સુધી તમારી પાસે ફૉલો-અપ રિમાઇન્ડર હતાં. તે રાખવા Plus રાખો."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 दिनों तक आपके पास फ़ॉलो-अप रिमाइंडर थे। उन्हें बनाए रखने के लिए Plus जारी रखें।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tijekom 7 dana uključeni su ti bili ponovni podsjetnici. Zadrži Plus da ti ostanu."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 napig ismétlő emlékeztetőid voltak. Tartsd meg a Plust, hogy megmaradjanak."
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selama 7 hari kamu punya pengingat lanjutan. Pertahankan Plus untuk tetap memilikinya."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Per 7 giorni hai avuto promemoria ripetuti. Tieni Plus per continuare ad averli."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7日間、フォローアップリマインダーを使ってきました。Plusを続ければ、そのまま使えます。"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 ದಿನಗಳ ಕಾಲ ನಿಮಗೆ ಮರು ಜ್ಞಾಪನೆಗಳು ಇದ್ದವು. ಅವುಗಳನ್ನು ಉಳಿಸಿಕೊಳ್ಳಲು Plus ಮುಂದುವರಿಸಿ."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7일 동안 후속 알림을 사용했어요. Plus를 유지하면 계속 쓸 수 있어요."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 ദിനങ്ങൾ നിങ്ങൾക്ക് ഫോളോ-അപ്പ് റിമൈൻഡറുകൾ ഉണ്ടായിരുന്നു. അവ നിലനിർത്താൻ Plus തുടരൂ."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 दिवस तुमच्याकडे फॉलो-अप रिमाइंडर होते. ते ठेवण्यासाठी Plus सुरू ठेवा."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selama 7 hari kamu ada peringatan susulan. Kekalkan Plus untuk terus menikmatinya."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I 7 dager hadde du oppfølgingspåminnelser. Behold Plus for å ha dem videre."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 dagen lang had je vervolgherinneringen. Blijf bij Plus om ze te houden."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 ଦିନ ଆପଣଙ୍କ ପାଖରେ ଫଲୋ-ଅପ୍ ରିମାଇଣ୍ଡର୍ ଥିଲା। ସେଗୁଡ଼ିକ ରଖିବାକୁ Plus ରଖନ୍ତୁ।"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 ਦਿਨ ਤੁਹਾਡੇ ਕੋਲ ਫ਼ਾਲੋ-ਅੱਪ ਰਿਮਾਈਂਡਰ ਸਨ। ਉਹਨਾਂ ਨੂੰ ਰੱਖਣ ਲਈ Plus ਰੱਖੋ।"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Przez 7 dni działały u ciebie ponowne przypomnienia. Zostań z Plus, aby je zachować."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Por 7 dias você teve lembretes de acompanhamento. Mantenha o Plus para continuar com eles."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Durante 7 dias tiveste lembretes de seguimento. Fica com o Plus para os manteres."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Timp de 7 zile ai avut mementouri repetate. Rămâi cu Plus ca să le păstrezi."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 дней у тебя были повторные напоминания. Оставь Plus, чтобы их сохранить."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Počas 7 dní ti fungovali následné pripomienky. Nechaj si Plus a ostanú ti."
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "V 7 dneh so bili vklopljeni ponovni opomniki. Obdrži Plus, da ti ostanejo."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I 7 dagar hade du uppföljande påminnelser. Behåll Plus så får du ha kvar dem."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 நாட்கள் உங்களுக்குத் தொடர் நினைவூட்டல்கள் இருந்தன. அவற்றை வைத்துக்கொள்ள Plus-ஐத் தொடருங்கள்."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 రోజులు మీకు ఫాలో-అప్ రిమైండర్లు ఉన్నాయి. వాటిని ఉంచుకోవడానికి Plus కొనసాగించండి."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ตลอด 7 วัน คุณมีการแจ้งเตือนซ้ำ ใช้ Plus ต่อเพื่อเก็บไว้"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 gün boyunca takip hatırlatmaların vardı. Onları korumak için Plus ile devam et."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 днів у тебе були повторні нагадування. Залиш Plus, щоб їх зберегти."
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 دنوں تک آپ کے پاس فالو اپ یاد دہانیاں تھیں۔ انہیں برقرار رکھنے کے لیے Plus جاری رکھیں۔"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trong 7 ngày, bạn đã có lời nhắc lặp lại. Giữ Plus để tiếp tục có chúng."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在这 7 天里，你用上了后续提醒。保留 Plus，就能继续使用。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在這 7 天裡，你用了後續提醒。保留 Plus，就能繼續使用。"
           }
         }
       }
@@ -30087,6 +32508,275 @@
         }
       }
     },
+    "trial.end.legacy.subtitle.seven_days": {
+      "comment": "Legacy trial-end subtitle [ENG-71] 7-day install (trial_length_v1): the trial runs 7 calendar days.",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "انتهت أيامك الـ 7، لذا توقف حظر التطبيقات. تبقى التذكيرات مجانية إلى الأبد."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "আপনার 7 দিন শেষ, তাই অ্যাপ ব্লকিং বন্ধ। রিমাইন্ডার সবসময় ফ্রি থাকবে।"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Els teus 7 dies s’han acabat, així que el bloqueig d’apps està desactivat. Els recordatoris continuen sent gratis per sempre."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvých 7 dní skončilo, takže blokování aplikací je vypnuté. Připomínky zůstávají zdarma navždy."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dine 7 dage er gået, så appblokering er slået fra. Påmindelserne forbliver gratis for altid."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine 7 Tage sind um, also ist die App-Sperre aus. Erinnerungen bleiben für immer kostenlos."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Οι 7 ημέρες σου τελείωσαν, οπότε ο αποκλεισμός εφαρμογών είναι ανενεργός. Οι υπενθυμίσεις μένουν δωρεάν για πάντα."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your 7 days ended, so app blocking is off. Reminders stay free forever."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tus 7 días terminaron, así que el bloqueo de apps está desactivado. Los recordatorios siguen gratis para siempre."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 päivääsi päättyi, joten sovellusesto on pois päältä. Muistutukset pysyvät ilmaisina aina."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tes 7 jours sont terminés, donc le blocage d’apps est désactivé. Les rappels restent gratuits pour toujours."
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "તમારા 7 દિવસ પૂરા થયા, તેથી ઍપ બ્લૉકિંગ બંધ છે. રિમાઇન્ડર હંમેશાં મફત રહેશે."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "आपके 7 दिन पूरे हो गए, इसलिए ऐप ब्लॉकिंग बंद है। रिमाइंडर हमेशा मुफ़्त रहेंगे।"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvojih 7 dana je prošlo, pa je blokiranje aplikacija isključeno. Podsjetnici ostaju besplatni zauvijek."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A 7 napod lejárt, így az appblokkolás ki van kapcsolva. Az emlékeztetők örökre ingyenesek maradnak."
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 harimu sudah selesai, jadi blokir aplikasi mati. Pengingat tetap gratis selamanya."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I tuoi 7 giorni sono finiti, quindi il blocco app è disattivato. I promemoria restano gratis per sempre."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7日間が終わったので、アプリブロックはオフです。リマインダーはずっと無料です。"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ನಿಮ್ಮ 7 ದಿನಗಳು ಮುಗಿದಿವೆ, ಆದ್ದರಿಂದ ಆ್ಯಪ್ ನಿರ್ಬಂಧ ಆಫ್ ಆಗಿದೆ. ಜ್ಞಾಪನೆಗಳು ಎಂದೆಂದಿಗೂ ಉಚಿತ."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7일이 끝나서 앱 차단이 꺼졌어요. 알림은 영원히 무료예요."
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "നിങ്ങളുടെ 7 ദിനങ്ങൾ അവസാനിച്ചു, അതിനാൽ ആപ്പ് ബ്ലോക്കിംഗ് ഓഫാണ്. റിമൈൻഡറുകൾ എന്നും സൗജന്യമായി തുടരും."
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "तुमचे 7 दिवस संपले, त्यामुळे ॲप ब्लॉकिंग बंद आहे. रिमाइंडर कायम मोफत राहतील."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 hari kamu sudah tamat, jadi sekatan apl dimatikan. Peringatan kekal percuma selamanya."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "De 7 dagene dine er over, så appblokkering er av. Påminnelsene forblir gratis for alltid."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je 7 dagen zijn om, dus appblokkering staat uit. Herinneringen blijven altijd gratis."
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ଆପଣଙ୍କ 7 ଦିନ ଶେଷ, ତେଣୁ ଆପ୍ ବ୍ଲକିଂ ବନ୍ଦ। ରିମାଇଣ୍ଡର୍ ସବୁଦିନ ମାଗଣା ରହିବ।"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਤੁਹਾਡੇ 7 ਦਿਨ ਖ਼ਤਮ ਹੋ ਗਏ, ਇਸ ਲਈ ਐਪ ਬਲੌਕਿੰਗ ਬੰਦ ਹੈ। ਰਿਮਾਈਂਡਰ ਹਮੇਸ਼ਾ ਮੁਫ਼ਤ ਰਹਿਣਗੇ।"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Twoje 7 dni minęło, więc blokowanie aplikacji jest wyłączone. Przypomnienia zostają bezpłatne na zawsze."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seus 7 dias acabaram, então o bloqueio de apps está desligado. Os lembretes continuam grátis para sempre."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Os teus 7 dias terminaram, por isso o bloqueio de apps está desligado. Os lembretes continuam grátis para sempre."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cele 7 zile s-au terminat, așa că blocarea aplicațiilor e oprită. Mementourile rămân gratuite pentru totdeauna."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Твои 7 дней прошли, поэтому блокировка приложений выключена. Напоминания останутся бесплатными навсегда."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvojich 7 dní uplynulo, takže blokovanie aplikácií je vypnuté. Pripomienky zostávajú zdarma navždy."
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvojih 7 dni je minilo, zato je blokiranje aplikacij izklopljeno. Opomniki ostanejo brezplačni za vedno."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dina 7 dagar är slut, så appblockering är av. Påminnelserna förblir gratis för alltid."
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "உங்கள் 7 நாட்கள் முடிந்ததால், ஆப் தடுப்பு ஆஃப் ஆனது. நினைவூட்டல்கள் என்றென்றும் இலவசம்."
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "మీ 7 రోజులు ముగిశాయి, అందుకే యాప్ బ్లాకింగ్ ఆఫ్‌లో ఉంది. రిమైండర్లు ఎప్పటికీ ఉచితం."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 วันของคุณครบแล้ว การบล็อกแอปจึงปิด ส่วนการแจ้งเตือนฟรีตลอดไป"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 günün bitti, bu yüzden uygulama engelleme kapalı. Hatırlatmalar sonsuza kadar ücretsiz."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Твої 7 днів минули, тому блокування застосунків вимкнено. Нагадування лишаться безкоштовними назавжди."
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "آپ کے 7 دن پورے ہو گئے، اس لیے ایپ بلاکنگ بند ہے۔ یاد دہانیاں ہمیشہ مفت رہیں گی۔"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 ngày của bạn đã hết, nên chặn ứng dụng đã tắt. Lời nhắc vẫn miễn phí mãi mãi."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的 7 天已结束，所以应用屏蔽已关闭。提醒永久免费。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的 7 天已結束，所以 App 封鎖已關閉。提醒永久免費。"
+          }
+        }
+      }
+    },
     "trial.end.legacy.record": {
       "comment": "Legacy trial-end record kicker [ENG-71]",
       "localizations": {
@@ -30621,6 +33311,275 @@
           "stringUnit": {
             "state": "translated",
             "value": "ਤੁਹਾਡੇ 14 ਸਰਗਰਮ ਦਿਨਾਂ ਦਾ ਰਿਕਾਰਡ"
+          }
+        }
+      }
+    },
+    "trial.end.legacy.record.seven_days": {
+      "comment": "Legacy trial-end record kicker [ENG-71] 7-day install (trial_length_v1): the trial runs 7 calendar days.",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "سجلّك لـ 7 أيام"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "আপনার 7 দিনের রেকর্ড"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El resum dels teus 7 dies"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvoje bilance za 7 dní"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dit resultat efter 7 dage"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dein Stand nach 7 Tagen"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Το ρεκόρ σου στις 7 ημέρες"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your 7-day record"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu balance de 7 días"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 päivääsi lukuina"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton bilan sur 7 jours"
+          }
+        },
+        "gu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "તમારા 7 દિવસનો રેકોર્ડ"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "आपके 7 दिनों का रिकॉर्ड"
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvoj rezultat u 7 dana"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A 7 napos mérleged"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Catatan 7 harimu"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il resoconto dei tuoi 7 giorni"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "あなたの7日間の記録"
+          }
+        },
+        "kn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ನಿಮ್ಮ 7 ದಿನಗಳ ದಾಖಲೆ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "나의 7일 기록"
+          }
+        },
+        "ml": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "നിങ്ങളുടെ 7 ദിനങ്ങളുടെ രേഖ"
+          }
+        },
+        "mr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "तुमच्या 7 दिवसांची नोंद"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rekod 7 hari kamu"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dine 7 dager i tall"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je overzicht van 7 dagen"
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ଆପଣଙ୍କ 7 ଦିନର ରେକର୍ଡ"
+          }
+        },
+        "pa": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ਤੁਹਾਡੇ 7 ਦਿਨਾਂ ਦਾ ਰਿਕਾਰਡ"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Twój bilans 7 dni"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seu resumo de 7 dias"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O teu balanço de 7 dias"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bilanțul tău pe 7 zile"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Твои итоги за 7 дней"
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvoj prehľad za 7 dní"
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tvojih 7 dni v številkah"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ditt resultat efter 7 dagar"
+          }
+        },
+        "ta": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "உங்கள் 7 நாள் சாதனை"
+          }
+        },
+        "te": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "మీ 7 రోజుల రికార్డు"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "สถิติ 7 วันของคุณ"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 günlük özetin"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Твої підсумки за 7 днів"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "آپ کے 7 دنوں کا ریکارڈ"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thành tích 7 ngày của bạn"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的 7 天记录"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的 7 天紀錄"
           }
         }
       }
@@ -42187,6 +45146,641 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "paywall.board.during_trial.subtitle.seven_days": {
+      "comment": "%lld = number of calendar days left in the trial (2..7). Plain days, not active days. 'day 7' = the last trial day. 7-day install (trial_length_v1): the trial runs 7 calendar days.",
+      "localizations": {
+        "ar": {
+          "variations": {
+            "plural": {
+              "zero": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "تبقّى لديكِ %lld يوم. اختاري خطة الآن ولن يتوقف شيء في اليوم 7."
+                }
+              },
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "تبقّى لديكِ %lld يوم. اختاري خطة الآن ولن يتوقف شيء في اليوم 7."
+                }
+              },
+              "two": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "تبقّى لديكِ %lld يومان. اختاري خطة الآن ولن يتوقف شيء في اليوم 7."
+                }
+              },
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "تبقّى لديكِ %lld أيام. اختاري خطة الآن ولن يتوقف شيء في اليوم 7."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "تبقّى لديكِ %lld يومًا. اختاري خطة الآن ولن يتوقف شيء في اليوم 7."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "تبقّى لديكِ %lld يوم. اختاري خطة الآن ولن يتوقف شيء في اليوم 7."
+                }
+              }
+            }
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "আপনার %lld দিন বাকি। এখনই একটি প্ল্যান বেছে নিন, তাহলে 7ম দিনে কিছুই বন্ধ হবে না।"
+          }
+        },
+        "ca": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Et queda %lld dia. Tria un pla ara i el dia 7 no s’apagarà res."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Et queden %lld dies. Tria un pla ara i el dia 7 no s’apagarà res."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Et queden %lld dies. Tria un pla ara i el dia 7 no s’apagarà res."
+                }
+              }
+            }
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zbývá ti dní: %lld. Vyber si plán hned a 7. den se nic nevypne."
+          }
+        },
+        "da": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Du har %lld dag tilbage. Vælg en plan nu, så slukker intet på dag 7."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Du har %lld dage tilbage. Vælg en plan nu, så slukker intet på dag 7."
+                }
+              }
+            }
+          }
+        },
+        "de": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Du hast noch %lld Tag. Wähl jetzt einen Tarif, dann schaltet sich an Tag 7 nichts ab."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Du hast noch %lld Tage. Wähl jetzt einen Tarif, dann schaltet sich an Tag 7 nichts ab."
+                }
+              }
+            }
+          }
+        },
+        "el": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Σου απομένει %lld ημέρα. Διάλεξε πρόγραμμα τώρα και τίποτα δεν απενεργοποιείται την ημέρα 7."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Σου απομένουν %lld ημέρες. Διάλεξε πρόγραμμα τώρα και τίποτα δεν απενεργοποιείται την ημέρα 7."
+                }
+              }
+            }
+          }
+        },
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "You have %lld day left. Pick a plan now and nothing turns off on day 7."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "You have %lld days left. Pick a plan now and nothing turns off on day 7."
+                }
+              }
+            }
+          }
+        },
+        "es": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Te queda %lld día. Elige un plan ahora y nada se apaga el día 7."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Te quedan %lld días. Elige un plan ahora y nada se apaga el día 7."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Te quedan %lld días. Elige un plan ahora y nada se apaga el día 7."
+                }
+              }
+            }
+          }
+        },
+        "fi": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Sinulla on %lld päivä jäljellä. Valitse paketti nyt, niin mikään ei sammu päivänä 7."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Sinulla on %lld päivää jäljellä. Valitse paketti nyt, niin mikään ei sammu päivänä 7."
+                }
+              }
+            }
+          }
+        },
+        "fr": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Il te reste %lld jour. Choisis une formule maintenant et rien ne s’arrête au jour 7."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Il te reste %lld jours. Choisis une formule maintenant et rien ne s’arrête au jour 7."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Il te reste %lld jours. Choisis une formule maintenant et rien ne s’arrête au jour 7."
+                }
+              }
+            }
+          }
+        },
+        "gu": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "તમારો %lld દિવસ બાકી છે. હમણાં જ પ્લાન પસંદ કરો, જેથી 7મા દિવસે કંઈ બંધ ન થાય."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "તમારા %lld દિવસ બાકી છે. હમણાં જ પ્લાન પસંદ કરો, જેથી 7મા દિવસે કંઈ બંધ ન થાય."
+                }
+              }
+            }
+          }
+        },
+        "hi": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "आपका %lld दिन बाक़ी है। अभी प्लान चुनें, ताकि 7वें दिन कुछ भी बंद न हो।"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "आपके %lld दिन बाक़ी हैं। अभी प्लान चुनें, ताकि 7वें दिन कुछ भी बंद न हो।"
+                }
+              }
+            }
+          }
+        },
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preostalo ti je dana: %lld. Odaberi plan sada i 7. dana ništa se neće isključiti."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Még %lld napod van. Válassz most csomagot, és a 7. napon semmi sem kapcsol ki."
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kamu masih punya %lld hari. Pilih paket sekarang agar tidak ada yang mati di hari ke-7."
+          }
+        },
+        "it": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Ti resta %lld giorno. Scegli un piano ora e il giorno 7 non si spegne niente."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Ti restano %lld giorni. Scegli un piano ora e il giorno 7 non si spegne niente."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Ti restano %lld giorni. Scegli un piano ora e il giorno 7 non si spegne niente."
+                }
+              }
+            }
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "残り%lld日です。今プランを選べば、7日目に何もオフになりません。"
+          }
+        },
+        "kn": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "ನಿಮಗೆ ಇನ್ನೂ %lld ದಿನ ಉಳಿದಿದೆ. ಈಗಲೇ ಪ್ಲಾನ್ ಆರಿಸಿದರೆ, 7ನೇ ದಿನ ಏನೂ ಆಫ್ ಆಗುವುದಿಲ್ಲ."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "ನಿಮಗೆ ಇನ್ನೂ %lld ದಿನಗಳು ಉಳಿದಿವೆ. ಈಗಲೇ ಪ್ಲಾನ್ ಆರಿಸಿದರೆ, 7ನೇ ದಿನ ಏನೂ ಆಫ್ ಆಗುವುದಿಲ್ಲ."
+                }
+              }
+            }
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld일이 남았어요. 지금 플랜을 고르면 7일째에도 아무것도 꺼지지 않아요."
+          }
+        },
+        "ml": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "നിങ്ങൾക്ക് %lld ദിനം ബാക്കിയുണ്ട്. ഇപ്പോൾ ഒരു പ്ലാൻ തിരഞ്ഞെടുത്താൽ, 7-ാം ദിവസം ഒന്നും ഓഫാകില്ല."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "നിങ്ങൾക്ക് %lld ദിനങ്ങൾ ബാക്കിയുണ്ട്. ഇപ്പോൾ ഒരു പ്ലാൻ തിരഞ്ഞെടുത്താൽ, 7-ാം ദിവസം ഒന്നും ഓഫാകില്ല."
+                }
+              }
+            }
+          }
+        },
+        "mr": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "तुमचा %lld दिवस बाकी आहे. आत्ताच प्लॅन निवडा, म्हणजे 7व्या दिवशी काहीही बंद होणार नाही."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "तुमचे %lld दिवस बाकी आहेत. आत्ताच प्लॅन निवडा, म्हणजे 7व्या दिवशी काहीही बंद होणार नाही."
+                }
+              }
+            }
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kamu ada %lld hari lagi. Pilih pelan sekarang supaya tiada apa yang dimatikan pada hari ke-7."
+          }
+        },
+        "nb": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Du har %lld dag igjen. Velg en plan nå, så slås ingenting av på dag 7."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Du har %lld dager igjen. Velg en plan nå, så slås ingenting av på dag 7."
+                }
+              }
+            }
+          }
+        },
+        "nl": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Je hebt nog %lld dag. Kies nu een plan en op dag 7 gaat er niets uit."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Je hebt nog %lld dagen. Kies nu een plan en op dag 7 gaat er niets uit."
+                }
+              }
+            }
+          }
+        },
+        "or": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ଆପଣଙ୍କର %lld ଦିନ ବାକି। ବର୍ତ୍ତମାନ ପ୍ଲାନ୍ ବାଛନ୍ତୁ, ଯେପରି 7ମ ଦିନରେ କିଛି ବନ୍ଦ ନହେବ।"
+          }
+        },
+        "pa": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "ਤੁਹਾਡਾ %lld ਦਿਨ ਬਾਕੀ ਹੈ। ਹੁਣੇ ਪਲਾਨ ਚੁਣੋ, ਤਾਂ ਜੋ 7ਵੇਂ ਦਿਨ ਕੁਝ ਵੀ ਬੰਦ ਨਾ ਹੋਵੇ।"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "ਤੁਹਾਡੇ %lld ਦਿਨ ਬਾਕੀ ਹਨ। ਹੁਣੇ ਪਲਾਨ ਚੁਣੋ, ਤਾਂ ਜੋ 7ਵੇਂ ਦਿਨ ਕੁਝ ਵੀ ਬੰਦ ਨਾ ਹੋਵੇ।"
+                }
+              }
+            }
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zostało ci dni: %lld. Wybierz plan teraz, a 7. dnia nic się nie wyłączy."
+          }
+        },
+        "pt-BR": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Falta %lld dia. Escolha um plano agora e nada desliga no dia 7."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Faltam %lld dias. Escolha um plano agora e nada desliga no dia 7."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Faltam %lld dias. Escolha um plano agora e nada desliga no dia 7."
+                }
+              }
+            }
+          }
+        },
+        "pt-PT": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Falta %lld dia. Escolhe um plano agora e nada se desliga no dia 7."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Faltam %lld dias. Escolhe um plano agora e nada se desliga no dia 7."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Faltam %lld dias. Escolhe um plano agora e nada se desliga no dia 7."
+                }
+              }
+            }
+          }
+        },
+        "ro": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Mai ai %lld zi. Alege un plan acum și nimic nu se oprește în ziua 7."
+                }
+              },
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Mai ai %lld zile. Alege un plan acum și nimic nu se oprește în ziua 7."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Mai ai %lld de zile. Alege un plan acum și nimic nu se oprește în ziua 7."
+                }
+              }
+            }
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Осталось дней: %lld. Выбери план сейчас, и на 7-й день ничего не отключится."
+          }
+        },
+        "sk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zostáva ti dní: %lld. Vyber si plán hneď a 7. deň sa nič nevypne."
+          }
+        },
+        "sl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preostali dnevi: %lld. Izberi paket zdaj in 7. dan se nič ne izklopi."
+          }
+        },
+        "sv": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Du har %lld dag kvar. Välj en plan nu så stängs inget av på dag 7."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Du har %lld dagar kvar. Välj en plan nu så stängs inget av på dag 7."
+                }
+              }
+            }
+          }
+        },
+        "ta": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "இன்னும் %lld நாள் உள்ளது. இப்போதே ஒரு திட்டத்தைத் தேர்ந்தெடுத்தால், 7ஆம் நாளில் எதுவும் நிற்காது."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "இன்னும் %lld நாட்கள் உள்ளன. இப்போதே ஒரு திட்டத்தைத் தேர்ந்தெடுத்தால், 7ஆம் நாளில் எதுவும் நிற்காது."
+                }
+              }
+            }
+          }
+        },
+        "te": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "మీకు ఇంకా %lld రోజు ఉంది. ఇప్పుడే ప్లాన్ ఎంచుకుంటే, 7వ రోజున ఏదీ ఆఫ్ అవ్వదు."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "మీకు ఇంకా %lld రోజులు ఉన్నాయి. ఇప్పుడే ప్లాన్ ఎంచుకుంటే, 7వ రోజున ఏదీ ఆఫ్ అవ్వదు."
+                }
+              }
+            }
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "คุณเหลืออีก %lld วัน เลือกแพ็กเกจตอนนี้แล้วจะไม่มีอะไรปิดในวันที่ 7"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld günün kaldı. Şimdi bir plan seçersen 7. gün hiçbir şey kapanmaz."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Лишилося днів: %lld. Обери план зараз, і на 7-й день нічого не вимкнеться."
+          }
+        },
+        "ur": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "آپ کا %lld دن باقی ہے۔ ابھی پلان چنیں تاکہ 7ویں دن کچھ بھی بند نہ ہو۔"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "آپ کے %lld دن باقی ہیں۔ ابھی پلان چنیں تاکہ 7ویں دن کچھ بھی بند نہ ہو۔"
+                }
+              }
+            }
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bạn còn %lld ngày. Chọn gói ngay để không có gì bị tắt vào ngày 7."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "还剩 %lld 天。现在选择方案，第 7 天什么都不会关闭。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "還剩 %lld 天。現在選擇方案，第 7 天什麼都不會關閉。"
           }
         }
       }

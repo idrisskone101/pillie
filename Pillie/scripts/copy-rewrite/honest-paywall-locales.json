@@ -23,6 +23,11 @@
       "many": "Il te reste %lld jours actifs. Choisis une formule maintenant et rien ne s’arrête au jour 14.",
       "other": "Il te reste %lld jours actifs. Choisis une formule maintenant et rien ne s’arrête au jour 14."
     },
+    "paywall.board.during_trial.subtitle.seven_days": {
+      "one": "Il te reste %lld jour. Choisis une formule maintenant et rien ne s’arrête au jour 7.",
+      "many": "Il te reste %lld jours. Choisis une formule maintenant et rien ne s’arrête au jour 7.",
+      "other": "Il te reste %lld jours. Choisis une formule maintenant et rien ne s’arrête au jour 7."
+    },
     "paywall.board.during_trial.subtitle.tonight": "Ton essai se termine ce soir. Choisis une formule maintenant et rien ne s’arrête demain.",
     "paywall.board.get_plus.title.pill": "Verrouille tes apps jusqu’à ce que tu prennes ta pilule.",
     "paywall.board.get_plus.title.patch": "Verrouille tes apps jusqu’à ce que tu changes ton patch.",
@@ -69,6 +74,11 @@
       "one": "Te queda %lld día activo. Elige un plan ahora y nada se apaga el día 14.",
       "many": "Te quedan %lld días activos. Elige un plan ahora y nada se apaga el día 14.",
       "other": "Te quedan %lld días activos. Elige un plan ahora y nada se apaga el día 14."
+    },
+    "paywall.board.during_trial.subtitle.seven_days": {
+      "one": "Te queda %lld día. Elige un plan ahora y nada se apaga el día 7.",
+      "many": "Te quedan %lld días. Elige un plan ahora y nada se apaga el día 7.",
+      "other": "Te quedan %lld días. Elige un plan ahora y nada se apaga el día 7."
     },
     "paywall.board.during_trial.subtitle.tonight": "Tu prueba termina esta noche. Elige un plan ahora y mañana no se apaga nada.",
     "paywall.board.get_plus.title.pill": "Bloquea tus apps hasta que tomes tu píldora.",
@@ -117,6 +127,11 @@
       "many": "Faltam %lld dias ativos. Escolha um plano agora e nada desliga no dia 14.",
       "other": "Faltam %lld dias ativos. Escolha um plano agora e nada desliga no dia 14."
     },
+    "paywall.board.during_trial.subtitle.seven_days": {
+      "one": "Falta %lld dia. Escolha um plano agora e nada desliga no dia 7.",
+      "many": "Faltam %lld dias. Escolha um plano agora e nada desliga no dia 7.",
+      "other": "Faltam %lld dias. Escolha um plano agora e nada desliga no dia 7."
+    },
     "paywall.board.during_trial.subtitle.tonight": "Seu teste termina hoje à noite. Escolha um plano agora e nada desliga amanhã.",
     "paywall.board.get_plus.title.pill": "Bloqueie seus apps até você tomar sua pílula.",
     "paywall.board.get_plus.title.patch": "Bloqueie seus apps até você trocar seu adesivo.",
@@ -164,6 +179,11 @@
       "many": "Faltam %lld dias ativos. Escolhe um plano agora e nada se desliga no dia 14.",
       "other": "Faltam %lld dias ativos. Escolhe um plano agora e nada se desliga no dia 14."
     },
+    "paywall.board.during_trial.subtitle.seven_days": {
+      "one": "Falta %lld dia. Escolhe um plano agora e nada se desliga no dia 7.",
+      "many": "Faltam %lld dias. Escolhe um plano agora e nada se desliga no dia 7.",
+      "other": "Faltam %lld dias. Escolhe um plano agora e nada se desliga no dia 7."
+    },
     "paywall.board.during_trial.subtitle.tonight": "O teu teste termina esta noite. Escolhe um plano agora e nada se desliga amanhã.",
     "paywall.board.get_plus.title.pill": "Bloqueia as tuas apps até tomares a pílula.",
     "paywall.board.get_plus.title.patch": "Bloqueia as tuas apps até mudares o adesivo.",
@@ -208,6 +228,10 @@
     "paywall.board.during_trial.subtitle.active_days": {
       "one": "Je hebt nog %lld actieve dag. Kies nu een plan en op dag 14 gaat er niets uit.",
       "other": "Je hebt nog %lld actieve dagen. Kies nu een plan en op dag 14 gaat er niets uit."
+    },
+    "paywall.board.during_trial.subtitle.seven_days": {
+      "one": "Je hebt nog %lld dag. Kies nu een plan en op dag 7 gaat er niets uit.",
+      "other": "Je hebt nog %lld dagen. Kies nu een plan en op dag 7 gaat er niets uit."
     },
     "paywall.board.during_trial.subtitle.tonight": "Je proefperiode eindigt vanavond. Kies nu een plan en morgen gaat er niets uit.",
     "paywall.board.get_plus.title.pill": "Vergrendel je apps tot je je pil neemt.",
@@ -256,6 +280,11 @@
       "many": "Et queden %lld dies actius. Tria un pla ara i el dia 14 no s’apagarà res.",
       "other": "Et queden %lld dies actius. Tria un pla ara i el dia 14 no s’apagarà res."
     },
+    "paywall.board.during_trial.subtitle.seven_days": {
+      "one": "Et queda %lld dia. Tria un pla ara i el dia 7 no s’apagarà res.",
+      "many": "Et queden %lld dies. Tria un pla ara i el dia 7 no s’apagarà res.",
+      "other": "Et queden %lld dies. Tria un pla ara i el dia 7 no s’apagarà res."
+    },
     "paywall.board.during_trial.subtitle.tonight": "La prova s’acaba aquesta nit. Tria un pla ara i demà no s’apagarà res.",
     "paywall.board.get_plus.title.pill": "Bloqueja les teves apps fins que prenguis la píndola.",
     "paywall.board.get_plus.title.patch": "Bloqueja les teves apps fins que canviïs el pegat.",
@@ -300,6 +329,10 @@
     "paywall.board.during_trial.subtitle.active_days": {
       "one": "Du har %lld aktiv dag tilbage. Vælg en plan nu, så slukker intet på dag 14.",
       "other": "Du har %lld aktive dage tilbage. Vælg en plan nu, så slukker intet på dag 14."
+    },
+    "paywall.board.during_trial.subtitle.seven_days": {
+      "one": "Du har %lld dag tilbage. Vælg en plan nu, så slukker intet på dag 7.",
+      "other": "Du har %lld dage tilbage. Vælg en plan nu, så slukker intet på dag 7."
     },
     "paywall.board.during_trial.subtitle.tonight": "Din prøveperiode udløber i aften. Vælg en plan nu, så slukker intet i morgen.",
     "paywall.board.get_plus.title.pill": "Lås dine apps, indtil du tager din p-pille.",
@@ -346,6 +379,10 @@
       "one": "Du har %lld aktiv dag kvar. Välj en plan nu så stängs inget av på dag 14.",
       "other": "Du har %lld aktiva dagar kvar. Välj en plan nu så stängs inget av på dag 14."
     },
+    "paywall.board.during_trial.subtitle.seven_days": {
+      "one": "Du har %lld dag kvar. Välj en plan nu så stängs inget av på dag 7.",
+      "other": "Du har %lld dagar kvar. Välj en plan nu så stängs inget av på dag 7."
+    },
     "paywall.board.during_trial.subtitle.tonight": "Din provperiod tar slut i kväll. Välj en plan nu så stängs inget av i morgon.",
     "paywall.board.get_plus.title.pill": "Lås dina appar tills du tar ditt p-piller.",
     "paywall.board.get_plus.title.patch": "Lås dina appar tills du byter ditt plåster.",
@@ -390,6 +427,10 @@
     "paywall.board.during_trial.subtitle.active_days": {
       "one": "Du har %lld aktiv dag igjen. Velg en plan nå, så slås ingenting av på dag 14.",
       "other": "Du har %lld aktive dager igjen. Velg en plan nå, så slås ingenting av på dag 14."
+    },
+    "paywall.board.during_trial.subtitle.seven_days": {
+      "one": "Du har %lld dag igjen. Velg en plan nå, så slås ingenting av på dag 7.",
+      "other": "Du har %lld dager igjen. Velg en plan nå, så slås ingenting av på dag 7."
     },
     "paywall.board.during_trial.subtitle.tonight": "Prøveperioden slutter i kveld. Velg en plan nå, så slås ingenting av i morgen.",
     "paywall.board.get_plus.title.pill": "Lås appene dine til du har tatt pillen.",
@@ -436,6 +477,10 @@
       "one": "Sinulla on %lld aktiivinen päivä jäljellä. Valitse paketti nyt, niin mikään ei sammu päivänä 14.",
       "other": "Sinulla on %lld aktiivista päivää jäljellä. Valitse paketti nyt, niin mikään ei sammu päivänä 14."
     },
+    "paywall.board.during_trial.subtitle.seven_days": {
+      "one": "Sinulla on %lld päivä jäljellä. Valitse paketti nyt, niin mikään ei sammu päivänä 7.",
+      "other": "Sinulla on %lld päivää jäljellä. Valitse paketti nyt, niin mikään ei sammu päivänä 7."
+    },
     "paywall.board.during_trial.subtitle.tonight": "Kokeilusi päättyy tänä iltana. Valitse paketti nyt, niin mikään ei sammu huomenna.",
     "paywall.board.get_plus.title.pill": "Lukitse sovelluksesi, kunnes otat pillerisi.",
     "paywall.board.get_plus.title.patch": "Lukitse sovelluksesi, kunnes vaihdat laastarisi.",
@@ -475,6 +520,7 @@
     "paywall.board.during_trial.title": "Zostań z Plus po okresie próbnym.",
     "paywall.board.during_trial.subtitle": "Zostało ci dni: %lld. Wybierz plan teraz, a 14. dnia nic się nie wyłączy.",
     "paywall.board.during_trial.subtitle.active_days": "Zostało ci dni aktywnych: %lld. Wybierz plan teraz, a 14. dnia nic się nie wyłączy.",
+    "paywall.board.during_trial.subtitle.seven_days": "Zostało ci dni: %lld. Wybierz plan teraz, a 7. dnia nic się nie wyłączy.",
     "paywall.board.during_trial.subtitle.tonight": "Okres próbny kończy się dziś w nocy. Wybierz plan teraz, a jutro nic się nie wyłączy.",
     "paywall.board.get_plus.title.pill": "Zablokuj aplikacje, dopóki nie weźmiesz tabletki.",
     "paywall.board.get_plus.title.patch": "Zablokuj aplikacje, dopóki nie zmienisz plastra.",
@@ -514,6 +560,7 @@
     "paywall.board.during_trial.title": "Nech si Plus i po zkušebním období.",
     "paywall.board.during_trial.subtitle": "Zbývá ti dní: %lld. Vyber si plán hned a 14. den se nic nevypne.",
     "paywall.board.during_trial.subtitle.active_days": "Zbývá ti aktivních dní: %lld. Vyber si plán hned a 14. den se nic nevypne.",
+    "paywall.board.during_trial.subtitle.seven_days": "Zbývá ti dní: %lld. Vyber si plán hned a 7. den se nic nevypne.",
     "paywall.board.during_trial.subtitle.tonight": "Zkušební období končí dnes v noci. Vyber si plán hned a zítra se nic nevypne.",
     "paywall.board.get_plus.title.pill": "Zamkni si aplikace, dokud si nevezmeš pilulku.",
     "paywall.board.get_plus.title.patch": "Zamkni si aplikace, dokud si nevyměníš náplast.",
@@ -553,6 +600,7 @@
     "paywall.board.during_trial.title": "Nechaj si Plus aj po skúšobnom období.",
     "paywall.board.during_trial.subtitle": "Zostáva ti dní: %lld. Vyber si plán hneď a 14. deň sa nič nevypne.",
     "paywall.board.during_trial.subtitle.active_days": "Zostáva ti aktívnych dní: %lld. Vyber si plán hneď a 14. deň sa nič nevypne.",
+    "paywall.board.during_trial.subtitle.seven_days": "Zostáva ti dní: %lld. Vyber si plán hneď a 7. deň sa nič nevypne.",
     "paywall.board.during_trial.subtitle.tonight": "Skúšobné obdobie končí dnes v noci. Vyber si plán hneď a zajtra sa nič nevypne.",
     "paywall.board.get_plus.title.pill": "Zamkni si aplikácie, kým si nevezmeš tabletku.",
     "paywall.board.get_plus.title.patch": "Zamkni si aplikácie, kým si nevymeníš náplasť.",
@@ -592,6 +640,7 @@
     "paywall.board.during_trial.title": "Zadrži Plus nakon probnog razdoblja.",
     "paywall.board.during_trial.subtitle": "Preostalo ti je dana: %lld. Odaberi plan sada i 14. dana ništa se neće isključiti.",
     "paywall.board.during_trial.subtitle.active_days": "Preostalo ti je aktivnih dana: %lld. Odaberi plan sada i 14. dana ništa se neće isključiti.",
+    "paywall.board.during_trial.subtitle.seven_days": "Preostalo ti je dana: %lld. Odaberi plan sada i 7. dana ništa se neće isključiti.",
     "paywall.board.during_trial.subtitle.tonight": "Probno razdoblje završava večeras. Odaberi plan sada i sutra se ništa neće isključiti.",
     "paywall.board.get_plus.title.pill": "Zaključaj aplikacije dok ne uzmeš pilulu.",
     "paywall.board.get_plus.title.patch": "Zaključaj aplikacije dok ne promijeniš flaster.",
@@ -631,6 +680,7 @@
     "paywall.board.during_trial.title": "Obdrži Plus po koncu preizkusa.",
     "paywall.board.during_trial.subtitle": "Preostali dnevi: %lld. Izberi paket zdaj in 14. dan se nič ne izklopi.",
     "paywall.board.during_trial.subtitle.active_days": "Preostali aktivni dnevi: %lld. Izberi paket zdaj in 14. dan se nič ne izklopi.",
+    "paywall.board.during_trial.subtitle.seven_days": "Preostali dnevi: %lld. Izberi paket zdaj in 7. dan se nič ne izklopi.",
     "paywall.board.during_trial.subtitle.tonight": "Preizkus se konča nocoj. Izberi paket zdaj in jutri se nič ne izklopi.",
     "paywall.board.get_plus.title.pill": "Zakleni aplikacije, dokler ne vzameš tabletke.",
     "paywall.board.get_plus.title.patch": "Zakleni aplikacije, dokler ne zamenjaš obliža.",
@@ -670,6 +720,7 @@
     "paywall.board.during_trial.title": "Tartsd meg a Plust a próbaidőszak után is.",
     "paywall.board.during_trial.subtitle": "Még %lld napod van. Válassz most csomagot, és a 14. napon semmi sem kapcsol ki.",
     "paywall.board.during_trial.subtitle.active_days": "Még %lld aktív napod van. Válassz most csomagot, és a 14. napon semmi sem kapcsol ki.",
+    "paywall.board.during_trial.subtitle.seven_days": "Még %lld napod van. Válassz most csomagot, és a 7. napon semmi sem kapcsol ki.",
     "paywall.board.during_trial.subtitle.tonight": "A próbaidőszakod ma éjjel véget ér. Válassz most csomagot, és holnap semmi sem kapcsol ki.",
     "paywall.board.get_plus.title.pill": "Zárd le az appjaidat, amíg be nem veszed a tablettát.",
     "paywall.board.get_plus.title.patch": "Zárd le az appjaidat, amíg ki nem cseréled a tapaszt.",
@@ -717,6 +768,11 @@
       "few": "Mai ai %lld zile active. Alege un plan acum și nimic nu se oprește în ziua 14.",
       "other": "Mai ai %lld de zile active. Alege un plan acum și nimic nu se oprește în ziua 14."
     },
+    "paywall.board.during_trial.subtitle.seven_days": {
+      "one": "Mai ai %lld zi. Alege un plan acum și nimic nu se oprește în ziua 7.",
+      "few": "Mai ai %lld zile. Alege un plan acum și nimic nu se oprește în ziua 7.",
+      "other": "Mai ai %lld de zile. Alege un plan acum și nimic nu se oprește în ziua 7."
+    },
     "paywall.board.during_trial.subtitle.tonight": "Perioada de probă se termină diseară. Alege un plan acum și mâine nu se oprește nimic.",
     "paywall.board.get_plus.title.pill": "Blochează-ți aplicațiile până îți iei pilula.",
     "paywall.board.get_plus.title.patch": "Blochează-ți aplicațiile până îți schimbi plasturele.",
@@ -762,6 +818,10 @@
       "one": "Σου απομένει %lld ενεργή ημέρα. Διάλεξε πρόγραμμα τώρα και τίποτα δεν απενεργοποιείται την ημέρα 14.",
       "other": "Σου απομένουν %lld ενεργές ημέρες. Διάλεξε πρόγραμμα τώρα και τίποτα δεν απενεργοποιείται την ημέρα 14."
     },
+    "paywall.board.during_trial.subtitle.seven_days": {
+      "one": "Σου απομένει %lld ημέρα. Διάλεξε πρόγραμμα τώρα και τίποτα δεν απενεργοποιείται την ημέρα 7.",
+      "other": "Σου απομένουν %lld ημέρες. Διάλεξε πρόγραμμα τώρα και τίποτα δεν απενεργοποιείται την ημέρα 7."
+    },
     "paywall.board.during_trial.subtitle.tonight": "Η δοκιμή σου λήγει απόψε. Διάλεξε πρόγραμμα τώρα και τίποτα δεν απενεργοποιείται αύριο.",
     "paywall.board.get_plus.title.pill": "Κλείδωσε τις εφαρμογές σου μέχρι να πάρεις το χάπι σου.",
     "paywall.board.get_plus.title.patch": "Κλείδωσε τις εφαρμογές σου μέχρι να αλλάξεις το αυτοκόλλητό σου.",
@@ -801,6 +861,7 @@
     "paywall.board.during_trial.title": "Denemen bitince de Plus ile devam et.",
     "paywall.board.during_trial.subtitle": "%lld günün kaldı. Şimdi bir plan seçersen 14. gün hiçbir şey kapanmaz.",
     "paywall.board.during_trial.subtitle.active_days": "%lld aktif günün kaldı. Şimdi bir plan seçersen 14. gün hiçbir şey kapanmaz.",
+    "paywall.board.during_trial.subtitle.seven_days": "%lld günün kaldı. Şimdi bir plan seçersen 7. gün hiçbir şey kapanmaz.",
     "paywall.board.during_trial.subtitle.tonight": "Denemen bu gece bitiyor. Şimdi bir plan seçersen yarın hiçbir şey kapanmaz.",
     "paywall.board.get_plus.title.pill": "Hapını alana kadar uygulamalarını kilitle.",
     "paywall.board.get_plus.title.patch": "Bandını değiştirene kadar uygulamalarını kilitle.",
@@ -840,6 +901,7 @@
     "paywall.board.during_trial.title": "Оставь Plus после пробного периода.",
     "paywall.board.during_trial.subtitle": "Осталось дней: %lld. Выбери план сейчас, и на 14-й день ничего не отключится.",
     "paywall.board.during_trial.subtitle.active_days": "Осталось активных дней: %lld. Выбери план сейчас, и на 14-й день ничего не отключится.",
+    "paywall.board.during_trial.subtitle.seven_days": "Осталось дней: %lld. Выбери план сейчас, и на 7-й день ничего не отключится.",
     "paywall.board.during_trial.subtitle.tonight": "Пробный период закончится сегодня ночью. Выбери план сейчас, и завтра ничего не отключится.",
     "paywall.board.get_plus.title.pill": "Заблокируй приложения, пока не примешь таблетку.",
     "paywall.board.get_plus.title.patch": "Заблокируй приложения, пока не сменишь пластырь.",
@@ -879,6 +941,7 @@
     "paywall.board.during_trial.title": "Залиш Plus після пробного періоду.",
     "paywall.board.during_trial.subtitle": "Лишилося днів: %lld. Обери план зараз, і на 14-й день нічого не вимкнеться.",
     "paywall.board.during_trial.subtitle.active_days": "Лишилося активних днів: %lld. Обери план зараз, і на 14-й день нічого не вимкнеться.",
+    "paywall.board.during_trial.subtitle.seven_days": "Лишилося днів: %lld. Обери план зараз, і на 7-й день нічого не вимкнеться.",
     "paywall.board.during_trial.subtitle.tonight": "Пробний період завершиться сьогодні вночі. Обери план зараз, і завтра нічого не вимкнеться.",
     "paywall.board.get_plus.title.pill": "Заблокуй застосунки, доки не приймеш таблетку.",
     "paywall.board.get_plus.title.patch": "Заблокуй застосунки, доки не зміниш пластир.",
@@ -932,6 +995,14 @@
       "many": "تبقّى لديكِ %lld يومًا نشطًا. اختاري خطة الآن ولن يتوقف شيء في اليوم 14.",
       "other": "تبقّى لديكِ %lld يوم نشط. اختاري خطة الآن ولن يتوقف شيء في اليوم 14."
     },
+    "paywall.board.during_trial.subtitle.seven_days": {
+      "zero": "تبقّى لديكِ %lld يوم. اختاري خطة الآن ولن يتوقف شيء في اليوم 7.",
+      "one": "تبقّى لديكِ %lld يوم. اختاري خطة الآن ولن يتوقف شيء في اليوم 7.",
+      "two": "تبقّى لديكِ %lld يومان. اختاري خطة الآن ولن يتوقف شيء في اليوم 7.",
+      "few": "تبقّى لديكِ %lld أيام. اختاري خطة الآن ولن يتوقف شيء في اليوم 7.",
+      "many": "تبقّى لديكِ %lld يومًا. اختاري خطة الآن ولن يتوقف شيء في اليوم 7.",
+      "other": "تبقّى لديكِ %lld يوم. اختاري خطة الآن ولن يتوقف شيء في اليوم 7."
+    },
     "paywall.board.during_trial.subtitle.tonight": "تنتهي فترتك التجريبية الليلة. اختاري خطة الآن ولن يتوقف شيء غدًا.",
     "paywall.board.get_plus.title.pill": "اقفلي تطبيقاتك حتى تأخذي حبتك.",
     "paywall.board.get_plus.title.patch": "اقفلي تطبيقاتك حتى تغيّري لصقتك.",
@@ -977,6 +1048,10 @@
       "one": "आपका %lld सक्रिय दिन बाक़ी है। अभी प्लान चुनें, ताकि 14वें दिन कुछ भी बंद न हो।",
       "other": "आपके %lld सक्रिय दिन बाक़ी हैं। अभी प्लान चुनें, ताकि 14वें दिन कुछ भी बंद न हो।"
     },
+    "paywall.board.during_trial.subtitle.seven_days": {
+      "one": "आपका %lld दिन बाक़ी है। अभी प्लान चुनें, ताकि 7वें दिन कुछ भी बंद न हो।",
+      "other": "आपके %lld दिन बाक़ी हैं। अभी प्लान चुनें, ताकि 7वें दिन कुछ भी बंद न हो।"
+    },
     "paywall.board.during_trial.subtitle.tonight": "आपका ट्रायल आज रात ख़त्म हो रहा है। अभी प्लान चुनें, ताकि कल कुछ भी बंद न हो।",
     "paywall.board.get_plus.title.pill": "गोली लेने तक अपने ऐप्स लॉक रखें।",
     "paywall.board.get_plus.title.patch": "पैच बदलने तक अपने ऐप्स लॉक रखें।",
@@ -1016,6 +1091,7 @@
     "paywall.board.during_trial.title": "ট্রায়ালের পরেও Plus রাখুন।",
     "paywall.board.during_trial.subtitle": "আপনার %lld দিন বাকি। এখনই একটি প্ল্যান বেছে নিন, তাহলে 14তম দিনে কিছুই বন্ধ হবে না।",
     "paywall.board.during_trial.subtitle.active_days": "আপনার %lld সক্রিয় দিন বাকি। এখনই একটি প্ল্যান বেছে নিন, তাহলে 14তম দিনে কিছুই বন্ধ হবে না।",
+    "paywall.board.during_trial.subtitle.seven_days": "আপনার %lld দিন বাকি। এখনই একটি প্ল্যান বেছে নিন, তাহলে 7ম দিনে কিছুই বন্ধ হবে না।",
     "paywall.board.during_trial.subtitle.tonight": "আপনার ট্রায়াল আজ রাতে শেষ। এখনই একটি প্ল্যান বেছে নিন, তাহলে কাল কিছুই বন্ধ হবে না।",
     "paywall.board.get_plus.title.pill": "পিল না খাওয়া পর্যন্ত আপনার অ্যাপগুলো লক রাখুন।",
     "paywall.board.get_plus.title.patch": "প্যাচ না বদলানো পর্যন্ত আপনার অ্যাপগুলো লক রাখুন।",
@@ -1060,6 +1136,10 @@
     "paywall.board.during_trial.subtitle.active_days": {
       "one": "آپ کا %lld فعال دن باقی ہے۔ ابھی پلان چنیں تاکہ 14ویں دن کچھ بھی بند نہ ہو۔",
       "other": "آپ کے %lld فعال دن باقی ہیں۔ ابھی پلان چنیں تاکہ 14ویں دن کچھ بھی بند نہ ہو۔"
+    },
+    "paywall.board.during_trial.subtitle.seven_days": {
+      "one": "آپ کا %lld دن باقی ہے۔ ابھی پلان چنیں تاکہ 7ویں دن کچھ بھی بند نہ ہو۔",
+      "other": "آپ کے %lld دن باقی ہیں۔ ابھی پلان چنیں تاکہ 7ویں دن کچھ بھی بند نہ ہو۔"
     },
     "paywall.board.during_trial.subtitle.tonight": "آپ کا ٹرائل آج رات ختم ہو رہا ہے۔ ابھی پلان چنیں تاکہ کل کچھ بھی بند نہ ہو۔",
     "paywall.board.get_plus.title.pill": "گولی لینے تک اپنی ایپس لاک رکھیں۔",
@@ -1106,6 +1186,10 @@
       "one": "तुमचा %lld सक्रिय दिवस बाकी आहे. आत्ताच प्लॅन निवडा, म्हणजे 14व्या दिवशी काहीही बंद होणार नाही.",
       "other": "तुमचे %lld सक्रिय दिवस बाकी आहेत. आत्ताच प्लॅन निवडा, म्हणजे 14व्या दिवशी काहीही बंद होणार नाही."
     },
+    "paywall.board.during_trial.subtitle.seven_days": {
+      "one": "तुमचा %lld दिवस बाकी आहे. आत्ताच प्लॅन निवडा, म्हणजे 7व्या दिवशी काहीही बंद होणार नाही.",
+      "other": "तुमचे %lld दिवस बाकी आहेत. आत्ताच प्लॅन निवडा, म्हणजे 7व्या दिवशी काहीही बंद होणार नाही."
+    },
     "paywall.board.during_trial.subtitle.tonight": "तुमचा ट्रायल आज रात्री संपेल. आत्ताच प्लॅन निवडा, म्हणजे उद्या काहीही बंद होणार नाही.",
     "paywall.board.get_plus.title.pill": "गोळी घेईपर्यंत तुमची ॲप्स लॉक ठेवा.",
     "paywall.board.get_plus.title.patch": "पॅच बदलेपर्यंत तुमची ॲप्स लॉक ठेवा.",
@@ -1151,6 +1235,10 @@
       "one": "இன்னும் %lld செயல் நாள் உள்ளது. இப்போதே ஒரு திட்டத்தைத் தேர்ந்தெடுத்தால், 14ஆம் நாளில் எதுவும் நிற்காது.",
       "other": "இன்னும் %lld செயல் நாட்கள் உள்ளன. இப்போதே ஒரு திட்டத்தைத் தேர்ந்தெடுத்தால், 14ஆம் நாளில் எதுவும் நிற்காது."
     },
+    "paywall.board.during_trial.subtitle.seven_days": {
+      "one": "இன்னும் %lld நாள் உள்ளது. இப்போதே ஒரு திட்டத்தைத் தேர்ந்தெடுத்தால், 7ஆம் நாளில் எதுவும் நிற்காது.",
+      "other": "இன்னும் %lld நாட்கள் உள்ளன. இப்போதே ஒரு திட்டத்தைத் தேர்ந்தெடுத்தால், 7ஆம் நாளில் எதுவும் நிற்காது."
+    },
     "paywall.board.during_trial.subtitle.tonight": "உங்கள் சோதனைக் காலம் இன்றிரவு முடிகிறது. இப்போதே ஒரு திட்டத்தைத் தேர்ந்தெடுத்தால், நாளை எதுவும் நிற்காது.",
     "paywall.board.get_plus.title.pill": "மாத்திரை எடுக்கும் வரை உங்கள் ஆப்ஸைப் பூட்டுங்கள்.",
     "paywall.board.get_plus.title.patch": "பேட்ச்சை மாற்றும் வரை உங்கள் ஆப்ஸைப் பூட்டுங்கள்.",
@@ -1190,6 +1278,7 @@
     "paywall.board.during_trial.title": "Tetap pakai Plus setelah uji coba berakhir.",
     "paywall.board.during_trial.subtitle": "Kamu masih punya %lld hari. Pilih paket sekarang agar tidak ada yang mati di hari ke-14.",
     "paywall.board.during_trial.subtitle.active_days": "Kamu masih punya %lld hari aktif. Pilih paket sekarang agar tidak ada yang mati di hari ke-14.",
+    "paywall.board.during_trial.subtitle.seven_days": "Kamu masih punya %lld hari. Pilih paket sekarang agar tidak ada yang mati di hari ke-7.",
     "paywall.board.during_trial.subtitle.tonight": "Uji cobamu berakhir malam ini. Pilih paket sekarang agar tidak ada yang mati besok.",
     "paywall.board.get_plus.title.pill": "Kunci aplikasimu sampai kamu minum pil.",
     "paywall.board.get_plus.title.patch": "Kunci aplikasimu sampai kamu mengganti koyo.",
@@ -1229,6 +1318,7 @@
     "paywall.board.during_trial.title": "Kekalkan Plus selepas percubaan tamat.",
     "paywall.board.during_trial.subtitle": "Kamu ada %lld hari lagi. Pilih pelan sekarang supaya tiada apa yang dimatikan pada hari ke-14.",
     "paywall.board.during_trial.subtitle.active_days": "Kamu ada %lld hari aktif lagi. Pilih pelan sekarang supaya tiada apa yang dimatikan pada hari ke-14.",
+    "paywall.board.during_trial.subtitle.seven_days": "Kamu ada %lld hari lagi. Pilih pelan sekarang supaya tiada apa yang dimatikan pada hari ke-7.",
     "paywall.board.during_trial.subtitle.tonight": "Percubaan kamu tamat malam ini. Pilih pelan sekarang supaya tiada apa yang dimatikan esok.",
     "paywall.board.get_plus.title.pill": "Kunci apl kamu sehingga kamu ambil pil.",
     "paywall.board.get_plus.title.patch": "Kunci apl kamu sehingga kamu tukar tampalan.",
@@ -1268,6 +1358,7 @@
     "paywall.board.during_trial.title": "Giữ Plus sau khi hết dùng thử.",
     "paywall.board.during_trial.subtitle": "Bạn còn %lld ngày. Chọn gói ngay để không có gì bị tắt vào ngày 14.",
     "paywall.board.during_trial.subtitle.active_days": "Bạn còn %lld ngày uống. Chọn gói ngay để không có gì bị tắt vào ngày 14.",
+    "paywall.board.during_trial.subtitle.seven_days": "Bạn còn %lld ngày. Chọn gói ngay để không có gì bị tắt vào ngày 7.",
     "paywall.board.during_trial.subtitle.tonight": "Bản dùng thử kết thúc tối nay. Chọn gói ngay để ngày mai không có gì bị tắt.",
     "paywall.board.get_plus.title.pill": "Khóa ứng dụng cho đến khi bạn uống thuốc.",
     "paywall.board.get_plus.title.patch": "Khóa ứng dụng cho đến khi bạn thay miếng dán.",
@@ -1307,6 +1398,7 @@
     "paywall.board.during_trial.title": "ใช้ Plus ต่อหลังช่วงทดลองใช้",
     "paywall.board.during_trial.subtitle": "คุณเหลืออีก %lld วัน เลือกแพ็กเกจตอนนี้แล้วจะไม่มีอะไรปิดในวันที่ 14",
     "paywall.board.during_trial.subtitle.active_days": "คุณเหลืออีก %lld วันกินยา เลือกแพ็กเกจตอนนี้แล้วจะไม่มีอะไรปิดในวันที่ 14",
+    "paywall.board.during_trial.subtitle.seven_days": "คุณเหลืออีก %lld วัน เลือกแพ็กเกจตอนนี้แล้วจะไม่มีอะไรปิดในวันที่ 7",
     "paywall.board.during_trial.subtitle.tonight": "ช่วงทดลองใช้ของคุณสิ้นสุดคืนนี้ เลือกแพ็กเกจตอนนี้แล้วพรุ่งนี้จะไม่มีอะไรปิด",
     "paywall.board.get_plus.title.pill": "ล็อกแอปไว้จนกว่าคุณจะกินยาคุม",
     "paywall.board.get_plus.title.patch": "ล็อกแอปไว้จนกว่าคุณจะเปลี่ยนแผ่นแปะ",
@@ -1346,6 +1438,7 @@
     "paywall.board.during_trial.title": "トライアル後もPlusを続けましょう。",
     "paywall.board.during_trial.subtitle": "残り%lld日です。今プランを選べば、14日目に何もオフになりません。",
     "paywall.board.during_trial.subtitle.active_days": "残り%lld服用日です。今プランを選べば、14日目に何もオフになりません。",
+    "paywall.board.during_trial.subtitle.seven_days": "残り%lld日です。今プランを選べば、7日目に何もオフになりません。",
     "paywall.board.during_trial.subtitle.tonight": "トライアルは今夜で終了します。今プランを選べば、明日も何もオフになりません。",
     "paywall.board.get_plus.title.pill": "ピルを飲むまでアプリをロックしましょう。",
     "paywall.board.get_plus.title.patch": "パッチを貼り替えるまでアプリをロックしましょう。",
@@ -1385,6 +1478,7 @@
     "paywall.board.during_trial.title": "체험이 끝난 뒤에도 Plus를 유지하세요.",
     "paywall.board.during_trial.subtitle": "%lld일이 남았어요. 지금 플랜을 고르면 14일째에도 아무것도 꺼지지 않아요.",
     "paywall.board.during_trial.subtitle.active_days": "복용 %lld일이 남았어요. 지금 플랜을 고르면 14일째에도 아무것도 꺼지지 않아요.",
+    "paywall.board.during_trial.subtitle.seven_days": "%lld일이 남았어요. 지금 플랜을 고르면 7일째에도 아무것도 꺼지지 않아요.",
     "paywall.board.during_trial.subtitle.tonight": "체험이 오늘 밤 끝나요. 지금 플랜을 고르면 내일도 아무것도 꺼지지 않아요.",
     "paywall.board.get_plus.title.pill": "피임약을 복용할 때까지 앱을 잠그세요.",
     "paywall.board.get_plus.title.patch": "패치를 교체할 때까지 앱을 잠그세요.",
@@ -1424,6 +1518,7 @@
     "paywall.board.during_trial.title": "试用结束后继续使用 Plus。",
     "paywall.board.during_trial.subtitle": "还剩 %lld 天。现在选择方案，第 14 天什么都不会关闭。",
     "paywall.board.during_trial.subtitle.active_days": "还剩 %lld 个服药日。现在选择方案，第 14 天什么都不会关闭。",
+    "paywall.board.during_trial.subtitle.seven_days": "还剩 %lld 天。现在选择方案，第 7 天什么都不会关闭。",
     "paywall.board.during_trial.subtitle.tonight": "你的试用今晚结束。现在选择方案，明天什么都不会关闭。",
     "paywall.board.get_plus.title.pill": "在你服用避孕药前锁住应用。",
     "paywall.board.get_plus.title.patch": "在你更换贴片前锁住应用。",
@@ -1463,6 +1558,7 @@
     "paywall.board.during_trial.title": "試用結束後繼續使用 Plus。",
     "paywall.board.during_trial.subtitle": "還剩 %lld 天。現在選擇方案，第 14 天什麼都不會關閉。",
     "paywall.board.during_trial.subtitle.active_days": "還剩 %lld 個服藥日。現在選擇方案，第 14 天什麼都不會關閉。",
+    "paywall.board.during_trial.subtitle.seven_days": "還剩 %lld 天。現在選擇方案，第 7 天什麼都不會關閉。",
     "paywall.board.during_trial.subtitle.tonight": "你的試用今晚結束。現在選擇方案，明天什麼都不會關閉。",
     "paywall.board.get_plus.title.pill": "在你服用避孕藥前鎖住 App。",
     "paywall.board.get_plus.title.patch": "在你更換貼片前鎖住 App。",
@@ -1507,6 +1603,10 @@
     "paywall.board.during_trial.subtitle.active_days": {
       "one": "તમારો %lld સક્રિય દિવસ બાકી છે. હમણાં જ પ્લાન પસંદ કરો, જેથી 14મા દિવસે કંઈ બંધ ન થાય.",
       "other": "તમારા %lld સક્રિય દિવસ બાકી છે. હમણાં જ પ્લાન પસંદ કરો, જેથી 14મા દિવસે કંઈ બંધ ન થાય."
+    },
+    "paywall.board.during_trial.subtitle.seven_days": {
+      "one": "તમારો %lld દિવસ બાકી છે. હમણાં જ પ્લાન પસંદ કરો, જેથી 7મા દિવસે કંઈ બંધ ન થાય.",
+      "other": "તમારા %lld દિવસ બાકી છે. હમણાં જ પ્લાન પસંદ કરો, જેથી 7મા દિવસે કંઈ બંધ ન થાય."
     },
     "paywall.board.during_trial.subtitle.tonight": "તમારી ટ્રાયલ આજે રાત્રે પૂરી થાય છે. હમણાં જ પ્લાન પસંદ કરો, જેથી કાલે કંઈ બંધ ન થાય.",
     "paywall.board.get_plus.title.pill": "ગોળી ન લો ત્યાં સુધી તમારી ઍપ્સ લૉક રાખો.",
@@ -1553,6 +1653,10 @@
       "one": "ನಿಮಗೆ ಇನ್ನೂ %lld ಸಕ್ರಿಯ ದಿನ ಉಳಿದಿದೆ. ಈಗಲೇ ಪ್ಲಾನ್ ಆರಿಸಿದರೆ, 14ನೇ ದಿನ ಏನೂ ಆಫ್ ಆಗುವುದಿಲ್ಲ.",
       "other": "ನಿಮಗೆ ಇನ್ನೂ %lld ಸಕ್ರಿಯ ದಿನಗಳು ಉಳಿದಿವೆ. ಈಗಲೇ ಪ್ಲಾನ್ ಆರಿಸಿದರೆ, 14ನೇ ದಿನ ಏನೂ ಆಫ್ ಆಗುವುದಿಲ್ಲ."
     },
+    "paywall.board.during_trial.subtitle.seven_days": {
+      "one": "ನಿಮಗೆ ಇನ್ನೂ %lld ದಿನ ಉಳಿದಿದೆ. ಈಗಲೇ ಪ್ಲಾನ್ ಆರಿಸಿದರೆ, 7ನೇ ದಿನ ಏನೂ ಆಫ್ ಆಗುವುದಿಲ್ಲ.",
+      "other": "ನಿಮಗೆ ಇನ್ನೂ %lld ದಿನಗಳು ಉಳಿದಿವೆ. ಈಗಲೇ ಪ್ಲಾನ್ ಆರಿಸಿದರೆ, 7ನೇ ದಿನ ಏನೂ ಆಫ್ ಆಗುವುದಿಲ್ಲ."
+    },
     "paywall.board.during_trial.subtitle.tonight": "ನಿಮ್ಮ ಟ್ರಯಲ್ ಇಂದು ರಾತ್ರಿ ಮುಗಿಯುತ್ತದೆ. ಈಗಲೇ ಪ್ಲಾನ್ ಆರಿಸಿದರೆ, ನಾಳೆ ಏನೂ ಆಫ್ ಆಗುವುದಿಲ್ಲ.",
     "paywall.board.get_plus.title.pill": "ನೀವು ಮಾತ್ರೆ ತೆಗೆದುಕೊಳ್ಳುವವರೆಗೆ ನಿಮ್ಮ ಆ್ಯಪ್‌ಗಳನ್ನು ಲಾಕ್ ಮಾಡಿ.",
     "paywall.board.get_plus.title.patch": "ನೀವು ಪ್ಯಾಚ್ ಬದಲಿಸುವವರೆಗೆ ನಿಮ್ಮ ಆ್ಯಪ್‌ಗಳನ್ನು ಲಾಕ್ ಮಾಡಿ.",
@@ -1598,6 +1702,10 @@
       "one": "നിങ്ങൾക്ക് %lld സജീവ ദിനം ബാക്കിയുണ്ട്. ഇപ്പോൾ ഒരു പ്ലാൻ തിരഞ്ഞെടുത്താൽ, 14-ാം ദിവസം ഒന്നും ഓഫാകില്ല.",
       "other": "നിങ്ങൾക്ക് %lld സജീവ ദിനങ്ങൾ ബാക്കിയുണ്ട്. ഇപ്പോൾ ഒരു പ്ലാൻ തിരഞ്ഞെടുത്താൽ, 14-ാം ദിവസം ഒന്നും ഓഫാകില്ല."
     },
+    "paywall.board.during_trial.subtitle.seven_days": {
+      "one": "നിങ്ങൾക്ക് %lld ദിനം ബാക്കിയുണ്ട്. ഇപ്പോൾ ഒരു പ്ലാൻ തിരഞ്ഞെടുത്താൽ, 7-ാം ദിവസം ഒന്നും ഓഫാകില്ല.",
+      "other": "നിങ്ങൾക്ക് %lld ദിനങ്ങൾ ബാക്കിയുണ്ട്. ഇപ്പോൾ ഒരു പ്ലാൻ തിരഞ്ഞെടുത്താൽ, 7-ാം ദിവസം ഒന്നും ഓഫാകില്ല."
+    },
     "paywall.board.during_trial.subtitle.tonight": "നിങ്ങളുടെ ട്രയൽ ഇന്ന് രാത്രി അവസാനിക്കും. ഇപ്പോൾ ഒരു പ്ലാൻ തിരഞ്ഞെടുത്താൽ, നാളെ ഒന്നും ഓഫാകില്ല.",
     "paywall.board.get_plus.title.pill": "ഗുളിക കഴിക്കുന്നതുവരെ നിങ്ങളുടെ ആപ്പുകൾ ലോക്ക് ചെയ്യൂ.",
     "paywall.board.get_plus.title.patch": "പാച്ച് മാറ്റുന്നതുവരെ നിങ്ങളുടെ ആപ്പുകൾ ലോക്ക് ചെയ്യൂ.",
@@ -1637,6 +1745,7 @@
     "paywall.board.during_trial.title": "ଟ୍ରାୟାଲ୍ ପରେ ବି Plus ରଖନ୍ତୁ।",
     "paywall.board.during_trial.subtitle": "ଆପଣଙ୍କର %lld ଦିନ ବାକି। ବର୍ତ୍ତମାନ ପ୍ଲାନ୍ ବାଛନ୍ତୁ, ଯେପରି 14ତମ ଦିନରେ କିଛି ବନ୍ଦ ନହେବ।",
     "paywall.board.during_trial.subtitle.active_days": "ଆପଣଙ୍କର %lld ସକ୍ରିୟ ଦିନ ବାକି। ବର୍ତ୍ତମାନ ପ୍ଲାନ୍ ବାଛନ୍ତୁ, ଯେପରି 14ତମ ଦିନରେ କିଛି ବନ୍ଦ ନହେବ।",
+    "paywall.board.during_trial.subtitle.seven_days": "ଆପଣଙ୍କର %lld ଦିନ ବାକି। ବର୍ତ୍ତମାନ ପ୍ଲାନ୍ ବାଛନ୍ତୁ, ଯେପରି 7ମ ଦିନରେ କିଛି ବନ୍ଦ ନହେବ।",
     "paywall.board.during_trial.subtitle.tonight": "ଆପଣଙ୍କ ଟ୍ରାୟାଲ୍ ଆଜି ରାତିରେ ଶେଷ ହେବ। ବର୍ତ୍ତମାନ ପ୍ଲାନ୍ ବାଛନ୍ତୁ, ଯେପରି କାଲି କିଛି ବନ୍ଦ ନହେବ।",
     "paywall.board.get_plus.title.pill": "ପିଲ୍ ଖାଇବା ପର୍ଯ୍ୟନ୍ତ ଆପଣଙ୍କ ଆପ୍ ଲକ୍ କରନ୍ତୁ।",
     "paywall.board.get_plus.title.patch": "ପ୍ୟାଚ୍ ବଦଳାଇବା ପର୍ଯ୍ୟନ୍ତ ଆପଣଙ୍କ ଆପ୍ ଲକ୍ କରନ୍ତୁ।",
@@ -1682,6 +1791,10 @@
       "one": "ਤੁਹਾਡਾ %lld ਸਰਗਰਮ ਦਿਨ ਬਾਕੀ ਹੈ। ਹੁਣੇ ਪਲਾਨ ਚੁਣੋ, ਤਾਂ ਜੋ 14ਵੇਂ ਦਿਨ ਕੁਝ ਵੀ ਬੰਦ ਨਾ ਹੋਵੇ।",
       "other": "ਤੁਹਾਡੇ %lld ਸਰਗਰਮ ਦਿਨ ਬਾਕੀ ਹਨ। ਹੁਣੇ ਪਲਾਨ ਚੁਣੋ, ਤਾਂ ਜੋ 14ਵੇਂ ਦਿਨ ਕੁਝ ਵੀ ਬੰਦ ਨਾ ਹੋਵੇ।"
     },
+    "paywall.board.during_trial.subtitle.seven_days": {
+      "one": "ਤੁਹਾਡਾ %lld ਦਿਨ ਬਾਕੀ ਹੈ। ਹੁਣੇ ਪਲਾਨ ਚੁਣੋ, ਤਾਂ ਜੋ 7ਵੇਂ ਦਿਨ ਕੁਝ ਵੀ ਬੰਦ ਨਾ ਹੋਵੇ।",
+      "other": "ਤੁਹਾਡੇ %lld ਦਿਨ ਬਾਕੀ ਹਨ। ਹੁਣੇ ਪਲਾਨ ਚੁਣੋ, ਤਾਂ ਜੋ 7ਵੇਂ ਦਿਨ ਕੁਝ ਵੀ ਬੰਦ ਨਾ ਹੋਵੇ।"
+    },
     "paywall.board.during_trial.subtitle.tonight": "ਤੁਹਾਡਾ ਟ੍ਰਾਇਲ ਅੱਜ ਰਾਤ ਖ਼ਤਮ ਹੋ ਰਿਹਾ ਹੈ। ਹੁਣੇ ਪਲਾਨ ਚੁਣੋ, ਤਾਂ ਜੋ ਕੱਲ੍ਹ ਕੁਝ ਵੀ ਬੰਦ ਨਾ ਹੋਵੇ।",
     "paywall.board.get_plus.title.pill": "ਗੋਲੀ ਲੈਣ ਤੱਕ ਆਪਣੀਆਂ ਐਪਾਂ ਲੌਕ ਰੱਖੋ।",
     "paywall.board.get_plus.title.patch": "ਪੈਚ ਬਦਲਣ ਤੱਕ ਆਪਣੀਆਂ ਐਪਾਂ ਲੌਕ ਰੱਖੋ।",
@@ -1726,6 +1839,10 @@
     "paywall.board.during_trial.subtitle.active_days": {
       "one": "మీకు ఇంకా %lld యాక్టివ్ రోజు ఉంది. ఇప్పుడే ప్లాన్ ఎంచుకుంటే, 14వ రోజున ఏదీ ఆఫ్ అవ్వదు.",
       "other": "మీకు ఇంకా %lld యాక్టివ్ రోజులు ఉన్నాయి. ఇప్పుడే ప్లాన్ ఎంచుకుంటే, 14వ రోజున ఏదీ ఆఫ్ అవ్వదు."
+    },
+    "paywall.board.during_trial.subtitle.seven_days": {
+      "one": "మీకు ఇంకా %lld రోజు ఉంది. ఇప్పుడే ప్లాన్ ఎంచుకుంటే, 7వ రోజున ఏదీ ఆఫ్ అవ్వదు.",
+      "other": "మీకు ఇంకా %lld రోజులు ఉన్నాయి. ఇప్పుడే ప్లాన్ ఎంచుకుంటే, 7వ రోజున ఏదీ ఆఫ్ అవ్వదు."
     },
     "paywall.board.during_trial.subtitle.tonight": "మీ ట్రయల్ ఈ రాత్రి ముగుస్తుంది. ఇప్పుడే ప్లాన్ ఎంచుకుంటే, రేపు ఏదీ ఆఫ్ అవ్వదు.",
     "paywall.board.get_plus.title.pill": "మీరు మాత్ర తీసుకునే వరకు మీ యాప్‌లను లాక్ చేయండి.",

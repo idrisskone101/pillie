@@ -68,6 +68,40 @@ struct TrialLengthCopyKeyTests {
     func `The key follows the rule, then the length`(rule: TrialDayRule, length: TrialLength, key: String) {
         #expect(TrialLength.copyKey("trial.end.kicker", rule: rule, length: length) == key)
     }
+
+    @Test(arguments: [
+        ("en", "trial.granted.badge", "7 days free · no card"),
+        ("en", "trial.end.legacy.record", "Your 7-day record"),
+        ("en", "trial.end.hard.blocker", "For 7 days you had follow-up reminders and app blocking. Keep Plus to hold on to both."),
+        ("ar", "trial.granted.badge", "7 أيام مجانًا · بدون بطاقة"),
+        ("de", "trial.end.kicker", "Deine 7 Tage"),
+    ])
+    func `A 7-day install reads 7 days`(language: String, key: String, expected: String) {
+        let copyKey = TrialLength.copyKey(key, rule: .calendarDays, length: .sevenDays)
+        let text = PillieLocalization.string(copyKey, table: "Commerce", locale: Locale(identifier: language))
+        #expect(text == expected)
+    }
+
+    @Test func `A 7-day during-trial board names day 7`() {
+        let text = PillieLocalization.formatted(
+            TrialLength.copyKey("paywall.board.during_trial.subtitle", rule: .calendarDays, length: .sevenDays),
+            table: "Commerce",
+            locale: Locale(identifier: "en"),
+            arguments: Int64(3)
+        )
+        #expect(text == "You have 3 days left. Pick a plan now and nothing turns off on day 7.")
+    }
+
+    @Test func `The timeline labels name day 5 and day 7`() {
+        let english = Locale(identifier: "en")
+        #expect(PillieLocalization.string(
+            TrialLength.sevenDays.variantKey("trial.granted.warning.label"), table: "Commerce", locale: english
+        ) == "Day 5")
+        #expect(PillieLocalization.string(
+            TrialLength.sevenDays.variantKey("trial.granted.choice.label"), table: "Commerce", locale: english
+        ) == "Day 7")
+        #expect(TrialLength.fourteenDays.variantKey("trial.granted.choice.label") == "trial.granted.choice.label")
+    }
 }
 
 @MainActor

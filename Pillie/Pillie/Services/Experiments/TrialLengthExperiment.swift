@@ -23,9 +23,13 @@ nonisolated enum TrialLength: String, Codable {
     /// active-day install reads "14 active days"; a 7-day install reads the
     /// `.seven_days` variant. Count-only plurals keep `TrialDayRule.copyKey`.
     static func copyKey(_ key: String, rule: TrialDayRule, length: TrialLength) -> String {
-        if rule == .activeDays { return key + ".active_days" }
-        if length == .sevenDays { return key + ".seven_days" }
-        return key
+        rule == .activeDays ? key + ".active_days" : length.variantKey(key)
+    }
+
+    /// The `.seven_days` variant for a 7-day trial. Alone, it suits copy with
+    /// no `.active_days` variant, such as the timeline day labels.
+    func variantKey(_ key: String) -> String {
+        self == .sevenDays ? key + ".seven_days" : key
     }
 
     /// `copyKey` for this install's rule and stored length.
