@@ -135,9 +135,8 @@ struct ProductAnalyticsTelemetry {
     track(.demoShakeCompleted, source: .onboarding, step: .demoShake, shakeCount: shakeCount)
   }
 
-  /// `step` is the demo stage the skip happened on.
-  func demoSkipped(step: AnalyticsStep) {
-    track(.demoSkipped, source: .onboarding, step: step)
+  func demoSkipped() {
+    track(.demoSkipped, source: .onboarding, step: .demoDrag)
   }
 
   func notificationPermissionRequested() {

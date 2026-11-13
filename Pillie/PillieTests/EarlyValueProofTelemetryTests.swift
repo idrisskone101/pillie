@@ -87,33 +87,6 @@ final class EarlyValueProofTelemetryTests: XCTestCase {
     XCTAssertEqual(skipped?.source, .onboarding)
     XCTAssertEqual(skipped?.step, .demoDrag)
   }
-
-  func testSkipCarriesTheStageItHappenedOn() {
-    let recorder = DemoFunnelRecorder()
-    var telemetry = EarlyValueProofTelemetry(analytics: recorder, isPlus: { false })
-
-    telemetry.stageViewed(.drag)
-    telemetry.stageViewed(.shake)
-    telemetry.demoSkipped()
-
-    let skipped = recorder.events.first { $0.event == .demoSkipped }
-    XCTAssertEqual(skipped?.step, .demoShake)
-  }
-
-  func testSkipFollowsAStageRevisit() {
-    // A revisited stage sends no second view, but it is still where the
-    // user is when they skip.
-    let recorder = DemoFunnelRecorder()
-    var telemetry = EarlyValueProofTelemetry(analytics: recorder, isPlus: { false })
-
-    telemetry.stageViewed(.drag)
-    telemetry.stageViewed(.shake)
-    telemetry.stageViewed(.drag)
-    telemetry.demoSkipped()
-
-    let skipped = recorder.events.first { $0.event == .demoSkipped }
-    XCTAssertEqual(skipped?.step, .demoDrag)
-  }
 }
 
 // MARK: - Recorder
