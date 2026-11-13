@@ -10,7 +10,6 @@
 import Foundation
 
 struct BlockingRehearsalState: Equatable {
-    /// What is on screen. nil until `.appeared` brings the opening facts.
     var stage: BlockingRehearsalStage? {
         switch position {
         case .unopened: nil
@@ -23,8 +22,6 @@ struct BlockingRehearsalState: Equatable {
         }
     }
 
-    /// Who played the beat on screen while its exit motion runs. The phone card
-    /// draws the hand tap and the self-pressing button only for `.demo`.
     var resolvedBy: BlockingRehearsalPlayer? {
         switch position {
         case .reminder(.leaving(let player)), .paused(.leaving(let player)): player
@@ -32,7 +29,6 @@ struct BlockingRehearsalState: Equatable {
         }
     }
 
-    /// Apple's prompt is up. The primary shows a spinner and ignores taps.
     var isRequesting: Bool {
         switch position {
         case .ask(let requesting), .refused(_, let requesting), .picks(let requesting): requesting
@@ -115,6 +111,7 @@ struct BlockingRehearsalState: Equatable {
             hasSelection = opening.hasSelection
             isAuthorized = opening.isAuthorized
             voiceOverRunning = opening.voiceOverRunning
+            sceneActive = opening.sceneActive
             #if DEBUG
             if let seed = opening.debugSeed {
                 return jump(to: seed)
@@ -161,8 +158,16 @@ struct BlockingRehearsalState: Equatable {
             return isAuthorized ? [.saveAndContinue] : requestAccess()
 
         case .remindersOnlyTapped:
-            guard case .refused(_, requesting: false) = position else { return [] }
-            return [.report(.refusalAnswered(.remindersOnly)), .useRemindersOnly]
+            switch position {
+            case .refused(_, requesting: false):
+                return [.report(.choseRemindersOnly(on: .refused)), .useRemindersOnly]
+            // Once Screen Time is allowed, Apple's prompt is no longer a way to
+            // say no, so the ask needs its own.
+            case .ask(requesting: false) where isAuthorized:
+                return [.report(.choseRemindersOnly(on: .ask)), .useRemindersOnly]
+            default:
+                return []
+            }
 
         case .authorizationResolved(let outcome):
             guard isRequesting else { return [] }
@@ -213,6 +218,7 @@ struct BlockingRehearsalState: Equatable {
     #if DEBUG
     private mutating func jump(to seed: BlockingRehearsalDebugSeed) -> [BlockingRehearsalEffect] {
         holdsBeats = !seed.selfPlays
+        if seed.accessNotAsked { isAuthorized = false }
         switch seed.stage {
         case .reminder: return enter(.reminder(.waiting))
         case .paused: return enter(.paused(.waiting))
@@ -224,7 +230,6 @@ struct BlockingRehearsalState: Equatable {
     }
     #endif
 
-    /// Where the journey rests once the beats are over or Apple said yes.
     private var restingPosition: Position {
         hasSelection ? .picks(requesting: false) : .ask(requesting: false)
     }
@@ -262,7 +267,7 @@ struct BlockingRehearsalState: Equatable {
             return [.authorize]
         case .refused(let refusal, requesting: false):
             position = .refused(refusal, requesting: true)
-            return [.report(.refusalAnswered(.askAgain)), .authorize]
+            return [.report(.askedAgain), .authorize]
         default:
             return []
         }
@@ -281,7 +286,6 @@ enum BlockingRehearsalStage: String, CaseIterable, Equatable {
     var isBeat: Bool { self == .reminder || self == .paused || self == .shake }
 }
 
-/// The three stages that play themselves when she waits.
 enum BlockingRehearsalBeat: String, CaseIterable, Hashable {
     case reminder
     case paused
@@ -294,21 +298,15 @@ enum BlockingRehearsalPlayer: Hashable {
     case demo
 }
 
-/// What Apple's Screen Time prompt decided.
 enum ScreenTimeAuthorizationOutcome: Equatable {
     case granted
     case refused(ScreenTimeRefusal)
 }
 
-/// A wait the view runs on the state's behalf.
 enum BlockingRehearsalTimer: Hashable {
-    /// Nobody touched the beat, so the demo plays it for her.
     case selfPlay(BlockingRehearsalBeat)
-    /// A1's exit: the featured app presses in and opens.
     case appPressed(by: BlockingRehearsalPlayer)
-    /// A2's exit: coral spreads from "Open Pillie" until it covers the screen.
     case coralSpreads(by: BlockingRehearsalPlayer)
-    /// A3's exit: the pill popped, hold, then pull the coral back.
     case settleAfterPop
 
     var duration: Duration {
@@ -326,13 +324,12 @@ enum BlockingRehearsalTimer: Hashable {
     }
 }
 
-/// The facts the screen opens with. Each is kept current afterwards by its own
-/// event, sent from the system bridge that owns it.
 struct BlockingRehearsalOpening: Equatable {
     var demoSeen: Bool
     var hasSelection: Bool
     var isAuthorized: Bool
     var voiceOverRunning: Bool
+    var sceneActive = true
     #if DEBUG
     var debugSeed: BlockingRehearsalDebugSeed?
     #endif
@@ -341,15 +338,12 @@ struct BlockingRehearsalOpening: Equatable {
 enum BlockingRehearsalEvent: Equatable {
     case appeared(BlockingRehearsalOpening)
 
-    /// The beat's main control: the featured app or the banner (A1),
-    /// "Open Pillie" (A2), "Tap to check in instead" (A3).
     case beatControlTapped
     case shaken
     case greyedAppTapped
     case shakeClipFinished
     case timerFired(BlockingRehearsalTimer)
 
-    /// "Choose what to pause" (A4), "Try again" (A7), "Change" (A6).
     case chooseTapped
     case continueTapped
     case remindersOnlyTapped
@@ -361,7 +355,6 @@ enum BlockingRehearsalEvent: Equatable {
     case sceneActivityChanged(isActive: Bool)
 
     #if DEBUG
-    /// A debug link arrived while the screen was already up.
     case debugSeeded(BlockingRehearsalDebugSeed)
     #endif
 }
@@ -379,12 +372,8 @@ enum BlockingRehearsalEffect: Equatable {
 }
 
 enum BlockingRehearsalSignal: Equatable {
-    enum RefusalAnswer: Equatable {
-        case askAgain
-        case remindersOnly
-    }
-
     case viewed(BlockingRehearsalStage)
     case played(BlockingRehearsalBeat, by: BlockingRehearsalPlayer)
-    case refusalAnswered(RefusalAnswer)
+    case askedAgain
+    case choseRemindersOnly(on: BlockingRehearsalStage)
 }

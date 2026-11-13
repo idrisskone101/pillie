@@ -52,6 +52,11 @@ struct BlockingRehearsalDebugSeedTests {
         #expect(seed("stage=reminder&selfPlay=on")?.selfPlays == true)
     }
 
+    @Test func `Access can be drawn as not yet asked`() {
+        #expect(seed("stage=ask&access=notAsked")?.accessNotAsked == true)
+        #expect(seed("stage=ask")?.accessNotAsked == false)
+    }
+
     @Test func `The featured app can be picked`() {
         #expect(seed("stage=paused&featured=instagram")?.featuredApp == .instagram)
         #expect(seed("stage=paused")?.featuredApp == nil)
@@ -93,7 +98,25 @@ struct BlockingRehearsalDebugSeedTests {
         var (state, effects) = try opened("stage=refused&reason=conflict")
         #expect(effects == [.report(.viewed(.refused))])
         #expect(state.refusal == .heldByAnotherApp)
-        #expect(state.handle(.remindersOnlyTapped) == [.report(.refusalAnswered(.remindersOnly)), .useRemindersOnly])
+        #expect(state.handle(.remindersOnlyTapped) == [.report(.choseRemindersOnly(on: .refused)), .useRemindersOnly])
+    }
+
+    @Test func `A seed with access not asked opens the ask with no way out until Apple answers`() throws {
+        var (state, _) = try opened("stage=ask&access=notAsked")
+        #expect(!state.isAuthorized)
+        #expect(state.handle(.remindersOnlyTapped) == [])
+        #expect(state.handle(.chooseTapped) == [.authorize])
+        #expect(state.handle(.authorizationResolved(.granted)) == [.presentPicker])
+        #expect(state.isAuthorized)
+    }
+
+    @Test func `A seeded ask on the always-allowed simulator has the way out`() throws {
+        var (state, _) = try opened("stage=ask")
+        #expect(state.isAuthorized)
+        #expect(
+            state.handle(.remindersOnlyTapped)
+                == [.report(.choseRemindersOnly(on: .ask)), .useRemindersOnly]
+        )
     }
 
     @Test func `A link opened while the screen is up moves it to the new stage`() throws {

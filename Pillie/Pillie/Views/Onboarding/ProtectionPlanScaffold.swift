@@ -49,8 +49,7 @@ struct ProtectionPlanProgress: Equatable {
     var total: Int { Section.allCases.count }
     var title: String { titleOverride ?? section.title }
 
-    /// The same progress under a screen's own visible title. The bar and the
-    /// VoiceOver label stay the section's.
+    /// The bar and the VoiceOver label stay the section's.
     func titled(_ title: String) -> ProtectionPlanProgress {
         var progress = self
         progress.titleOverride = title

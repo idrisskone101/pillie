@@ -66,6 +66,7 @@ struct BlockingRehearsalPicksCard: View {
                 )
             }
             .padding(.top, 20)
+            .frame(maxWidth: .infinity, alignment: .leading)
             .overlay(alignment: .top) {
                 Rectangle()
                     .fill(PillieTheme.textPrimary.opacity(0.1))
@@ -142,7 +143,7 @@ struct BlockingRehearsalPicksCard: View {
                     .font(.system(size: 24, weight: .semibold))
                     .foregroundStyle(PillieTheme.coral)
             case .application(let icon):
-                Image(icon.rawValue)
+                Image(decorative: icon.rawValue)
                     .resizable()
                     .frame(width: PickTileMetrics.side, height: PickTileMetrics.side)
             case .webDomain:
@@ -219,8 +220,8 @@ private extension BlockingRehearsalSamplePick.Kind {
 }
 #endif
 
-/// Lays a FamilyControls label out as a tile: icon over name. The name comes
-/// from `configuration.title`, which iOS draws. Nothing here reads it.
+/// The name comes from `configuration.title`, which iOS draws. Nothing here
+/// reads it.
 private struct PickTileStyle: LabelStyle {
     let art: PickTileKind
     let caption: String?
@@ -254,8 +255,8 @@ private struct PickTileStyle: LabelStyle {
     }
 }
 
-/// The 66 pt high art box of a tile. A category sits on a stack of two sheets,
-/// because it stands for every app in it.
+/// A category sits on a stack of two sheets, because it stands for every app
+/// in it.
 private struct PickTileArt<Icon: View>: View {
     let kind: PickTileKind
     @ViewBuilder let icon: () -> Icon
@@ -265,7 +266,7 @@ private struct PickTileArt<Icon: View>: View {
         ZStack(alignment: .bottomLeading) {
             if kind == .category {
                 sheet(PillieTheme.lavender).padding(.leading, 14).padding(.bottom, 10)
-                sheet(BlockingRehearsalPalette.tileStack).padding(.leading, 7).padding(.bottom, 5)
+                sheet(BlockingRehearsalPalette.categoryTileSecondSheet).padding(.leading, 7).padding(.bottom, 5)
             }
             icon()
                 .frame(width: side, height: side)
@@ -290,7 +291,6 @@ private struct PickTileArt<Icon: View>: View {
     }
 }
 
-/// The tiles pop in 45 ms apart, like the pack card.
 private struct TilePop: ViewModifier {
     let shown: Bool
     let index: Int

@@ -61,12 +61,12 @@ struct BlockingRehearsalContentTests {
         #expect(chrome.title == "Shake to check in")
         #expect(chrome.body == nil)
         #expect(chrome.footnotes == [])
-        #expect(chrome.primary == .init(title: "Tap to check in instead", event: .beatControlTapped, leadsOn: false))
+        #expect(chrome.primary == .init(title: "Tap to check in instead", event: .beatControlTapped, showsArrow: false))
         #expect(chrome.quietTitle == nil)
     }
 
-    @Test func `The ask has one button and no way to skip`() {
-        let chrome = chrome(.ask)
+    @Test func `Before Apple has been asked, the ask has one button and no way to skip`() {
+        let chrome = chrome(.ask, isAuthorized: false)
         #expect(chrome.header == "Set it up")
         #expect(chrome.title == "Checked in.\nTikTok is open.")
         #expect(chrome.body == "Every reminder works like this. Choose what should wait for you.")
@@ -74,8 +74,16 @@ struct BlockingRehearsalContentTests {
             .trial(trialLine),
             .apple("Apple asks for Screen Time access first. Tap Continue."),
         ])
-        #expect(chrome.primary == .init(title: "Choose what to pause", event: .chooseTapped, leadsOn: true))
+        #expect(chrome.primary == .init(title: "Choose what to pause", event: .chooseTapped, showsArrow: true))
         #expect(chrome.quietTitle == nil)
+    }
+
+    @Test func `Once Screen Time is allowed, the ask drops the Apple line and offers reminders only`() {
+        let chrome = chrome(.ask, isAuthorized: true)
+        #expect(chrome.title == "Checked in.\nTikTok is open.")
+        #expect(chrome.footnotes == [.trial(trialLine)])
+        #expect(chrome.primary == .init(title: "Choose what to pause", event: .chooseTapped, showsArrow: true))
+        #expect(chrome.quietTitle == "Use reminders only")
     }
 
     @Test func `After a refusal she can ask again or use reminders only`() {
@@ -84,7 +92,7 @@ struct BlockingRehearsalContentTests {
         #expect(chrome.title == "Pausing apps needs Screen Time.")
         #expect(chrome.body == "Pillie only uses it to pause what you pick. Apple will ask again.")
         #expect(chrome.footnotes == [.trial(trialLine)])
-        #expect(chrome.primary == .init(title: "Try again", event: .chooseTapped, leadsOn: false))
+        #expect(chrome.primary == .init(title: "Try again", event: .chooseTapped, showsArrow: false))
         #expect(chrome.quietTitle == "Use reminders only")
         #expect(BlockingRehearsalContent.showsPromptPreview(for: .notAllowed))
     }
@@ -98,7 +106,7 @@ struct BlockingRehearsalContentTests {
             chrome.body
                 == "Another app on this iPhone is using Screen Time. Turn it off in that app, then try again."
         )
-        #expect(chrome.primary == .init(title: "Try again", event: .chooseTapped, leadsOn: false))
+        #expect(chrome.primary == .init(title: "Try again", event: .chooseTapped, showsArrow: false))
         #expect(chrome.quietTitle == "Use reminders only")
         #expect(!BlockingRehearsalContent.showsPromptPreview(for: .heldByAnotherApp))
     }
@@ -108,17 +116,18 @@ struct BlockingRehearsalContentTests {
         #expect(authorized.title == "They’ll wait for you.")
         #expect(authorized.body == "You can change them anytime in Settings.")
         #expect(authorized.footnotes == [.trial(trialLine)])
-        #expect(authorized.primary == .init(title: "Continue", event: .continueTapped, leadsOn: false))
+        #expect(authorized.primary == .init(title: "Continue", event: .continueTapped, showsArrow: false))
         #expect(authorized.quietTitle == nil)
 
         let revoked = chrome(.picks, isAuthorized: false)
-        #expect(revoked.primary == .init(title: "Choose what to pause", event: .chooseTapped, leadsOn: true))
+        #expect(revoked.primary == .init(title: "Choose what to pause", event: .chooseTapped, showsArrow: true))
         #expect(revoked.quietTitle == nil)
     }
 
     @Test func `A paid entitlement never sees the trial line`() {
-        #expect(chrome(.ask, hasEntitlement: true).footnotes
+        #expect(chrome(.ask, isAuthorized: false, hasEntitlement: true).footnotes
             == [.apple("Apple asks for Screen Time access first. Tap Continue.")])
+        #expect(chrome(.ask, isAuthorized: true, hasEntitlement: true).footnotes == [])
         #expect(chrome(.refused, refusal: .notAllowed, hasEntitlement: true).footnotes == [])
         #expect(chrome(.picks, hasEntitlement: true).footnotes == [])
     }

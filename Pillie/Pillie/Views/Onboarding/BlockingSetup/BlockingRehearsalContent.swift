@@ -57,9 +57,10 @@ struct BlockingRehearsalContent: Equatable {
 
     let trialLine: String
 
-    /// The per-screen table. A quiet button is the only way to leave without
-    /// blocking, and only the refused row has one: no Skip on the demo, no
-    /// "Not now" on the ask.
+    /// The quiet button is the only way to leave without blocking. No beat has
+    /// one. The ask has none while Screen Time is not
+    /// allowed, so her first chance to say no is Apple's prompt. Once it is
+    /// allowed that prompt never comes back, so the ask offers the exit itself.
     func chrome(
         for stage: BlockingRehearsalStage,
         refusal: ScreenTimeRefusal? = nil,
@@ -85,16 +86,16 @@ struct BlockingRehearsalContent: Equatable {
                 layout: .shakeCover, header: nil, eyebrow: shakeEyebrow,
                 title: shakeHeadline, body: nil,
                 footnotes: [],
-                primary: .init(title: tapInstead, event: .beatControlTapped, leadsOn: false),
+                primary: .init(title: tapInstead, event: .beatControlTapped, showsArrow: false),
                 quietTitle: nil
             )
         case .ask:
             return BlockingRehearsalChrome(
                 layout: .page, header: setupHeader, eyebrow: nil,
                 title: askTitle, body: askBody,
-                footnotes: trial + [.apple(appleLine)],
-                primary: .init(title: chooseCTA, event: .chooseTapped, leadsOn: true),
-                quietTitle: nil
+                footnotes: isAuthorized ? trial : trial + [.apple(appleLine)],
+                primary: .init(title: chooseCTA, event: .chooseTapped, showsArrow: true),
+                quietTitle: isAuthorized ? remindersOnly : nil
             )
         case .refused:
             return BlockingRehearsalChrome(
@@ -102,7 +103,7 @@ struct BlockingRehearsalContent: Equatable {
                 title: refusedTitle,
                 body: refusal == .heldByAnotherApp ? conflictBody : refusedBody,
                 footnotes: trial,
-                primary: .init(title: retryCTA, event: .chooseTapped, leadsOn: false),
+                primary: .init(title: retryCTA, event: .chooseTapped, showsArrow: false),
                 quietTitle: remindersOnly
             )
         case .picks:
@@ -111,8 +112,8 @@ struct BlockingRehearsalContent: Equatable {
                 title: picksTitle, body: picksBody,
                 footnotes: trial,
                 primary: isAuthorized
-                    ? .init(title: continueCTA, event: .continueTapped, leadsOn: false)
-                    : .init(title: chooseCTA, event: .chooseTapped, leadsOn: true),
+                    ? .init(title: continueCTA, event: .continueTapped, showsArrow: false)
+                    : .init(title: chooseCTA, event: .chooseTapped, showsArrow: true),
                 quietTitle: nil
             )
         }
@@ -204,8 +205,8 @@ struct BlockingRehearsalContent: Equatable {
         )
     }
 
-    /// The ask's title reads as two lines, the result and then the app. A
-    /// language that writes it without sentence punctuation wraps on its own.
+    /// A language that writes the ask's title without sentence punctuation
+    /// wraps on its own.
     static func breakingAfterFirstSentence(_ text: String) -> String {
         let terminators: Set<Character> = [".", "。", "।", "۔", "!", "?"]
         guard let end = text.firstIndex(where: terminators.contains) else { return text }
@@ -214,7 +215,6 @@ struct BlockingRehearsalContent: Equatable {
         return String(text[...end]) + "\n" + String(rest)
     }
 
-    /// The banner's timestamp, in the system's own word for "now".
     private static func justNow(locale: Locale) -> String {
         let formatter = RelativeDateTimeFormatter()
         formatter.locale = locale
@@ -223,12 +223,9 @@ struct BlockingRehearsalContent: Equatable {
     }
 }
 
-/// Everything around the card for one stage.
 struct BlockingRehearsalChrome: Equatable {
     enum Layout: Equatable {
-        /// Progress header, title, body, card, footer.
         case page
-        /// The coral cover: back chevron, eyebrow, headline, clip, one button.
         case shakeCover
     }
 
@@ -240,12 +237,10 @@ struct BlockingRehearsalChrome: Equatable {
     struct Primary: Equatable {
         let title: String
         let event: BlockingRehearsalEvent
-        /// Draws the trailing arrow: the button opens something of Apple's.
-        let leadsOn: Bool
+        let showsArrow: Bool
     }
 
     let layout: Layout
-    /// The progress header's label. nil on the cover, which has no header.
     let header: String?
     let eyebrow: String?
     let title: String
@@ -289,7 +284,6 @@ enum BlockingRehearsalCopyKey: String, CaseIterable {
     case homeMaps = "onboarding.blocking_rehearsal.home.maps"
     case homeNotes = "onboarding.blocking_rehearsal.home.notes"
 
-    /// How many `%@` the value takes.
     var argumentCount: Int {
         switch self {
         case .reminderTitle, .reminderBody, .pausedTitle, .askTitle, .askCheckedIn: 1

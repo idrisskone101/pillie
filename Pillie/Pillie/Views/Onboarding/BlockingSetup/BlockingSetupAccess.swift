@@ -9,9 +9,7 @@
 import Foundation
 
 enum BlockingSetupAccess: Equatable {
-    /// Entitlement or paywall configuration is still loading.
     case verifying
-    /// No Plus access, or she chose the free plan.
     case locked
     case open
 

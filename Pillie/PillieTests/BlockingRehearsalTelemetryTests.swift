@@ -61,11 +61,18 @@ struct BlockingRehearsalTelemetryTests {
 
     @Test func `Each answer to a refusal has its own event`() {
         #expect(
-            recorded(.refusalAnswered(.askAgain), .refusalAnswered(.remindersOnly))
+            recorded(.askedAgain, .choseRemindersOnly(on: .refused))
                 == [
                     event(.blockingRehearsalAskAgain, step: .rehearsalRefused),
                     event(.blockingRehearsalRemindersOnly, step: .rehearsalRefused),
                 ]
+        )
+    }
+
+    @Test func `Reminders only from the ask says it came from the ask`() {
+        #expect(
+            recorded(.choseRemindersOnly(on: .ask))
+                == [event(.blockingRehearsalRemindersOnly, step: .rehearsalAsk)]
         )
     }
 

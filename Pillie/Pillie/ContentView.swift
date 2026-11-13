@@ -509,8 +509,6 @@ struct ContentView: View {
     showUpdateTrialAnnouncement = true
   }
 
-  /// Hands off from Welcome into the onboarding flow at `painPoints`, the first
-  /// question.
   private func handoffFromProtectionPlanIntro() {
     guard onboardingStep < OnboardingFlow.Step.painPoints.rawValue else { return }
     withAnimation(.easeInOut(duration: 0.3)) {
@@ -624,6 +622,7 @@ struct ContentView: View {
         } else {
           BlockingRehearsalView(
             distractionChoices: protectionPlanModel.distractionChoices,
+            isCovered: isLoading,
             onBack: backFromAppBlocking,
             onContinue: continueFromAppBlocking,
             onRemindersOnly: leaveAppBlockingWithRemindersOnly

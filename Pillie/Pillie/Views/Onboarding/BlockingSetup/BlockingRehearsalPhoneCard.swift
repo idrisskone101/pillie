@@ -8,9 +8,23 @@
 import SwiftUI
 
 struct BlockingRehearsalPhoneCard: View {
-    /// `.reminder`, `.paused` or `.ask`.
-    let stage: BlockingRehearsalStage
-    /// Who played the beat on screen, while its exit runs.
+    enum Scene {
+        case reminder
+        case paused
+        case ask
+
+        /// The ask waits on the card while the shake cover is over it.
+        init?(_ stage: BlockingRehearsalStage) {
+            switch stage {
+            case .reminder: self = .reminder
+            case .paused: self = .paused
+            case .shake, .ask: self = .ask
+            case .refused, .picks: return nil
+            }
+        }
+    }
+
+    let stage: Scene
     let resolvedBy: BlockingRehearsalPlayer?
     /// False while the coral cover still hides the ask, so its entrance plays
     /// when she can see it.
@@ -33,7 +47,6 @@ struct BlockingRehearsalPhoneCard: View {
     var body: some View {
         GeometryReader { proxy in
             ZStack(alignment: .bottom) {
-                wallpaper
                 homeScreen(height: proxy.size.height)
                 if stage == .paused {
                     pauseCard
@@ -43,6 +56,7 @@ struct BlockingRehearsalPhoneCard: View {
                 }
             }
             .frame(width: proxy.size.width, height: proxy.size.height)
+            .background(alignment: .topLeading) { wallpaper }
             .overlayPreferenceValue(FeaturedIconBounds.self) { anchor in
                 if let anchor, stage == .reminder, isLeaving, !reduceMotion {
                     OpeningApp(
@@ -62,6 +76,7 @@ struct BlockingRehearsalPhoneCard: View {
         }
         .dynamicTypeSize(...DynamicTypeSize.xLarge)
         .animation(stageAnimation, value: stage)
+        .animation(reduceMotion ? .easeOut(duration: 0.3) : .spring(response: 0.3, dampingFraction: 0.7), value: isLive)
         .task(id: stage) { await runCues() }
     }
 
@@ -69,8 +84,6 @@ struct BlockingRehearsalPhoneCard: View {
         reduceMotion ? .easeInOut(duration: 0.25) : .spring(response: 0.55, dampingFraction: 0.86)
     }
 
-    /// The banner drops in at 0.6 s and the hand only shows after 2 s of
-    /// waiting. The pause card gets one firm haptic as it settles.
     private func runCues() async {
         bannerLanded = false
         showsHand = false
@@ -106,7 +119,7 @@ struct BlockingRehearsalPhoneCard: View {
             .frame(width: 300, height: 300)
             .padding(.leading, 130)
             .padding(.top, stage == .ask ? 120 : 250)
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            .fixedSize()
             .accessibilityHidden(true)
     }
 
@@ -125,9 +138,13 @@ struct BlockingRehearsalPhoneCard: View {
             }
 
             if stage == .ask {
-                checkedInPill
-                    .padding(.top, 16)
-                    .transition(.opacity)
+                // Absent, not just transparent, until the cover is gone: a flow
+                // that waits for the pill is waiting for a visible ask.
+                if isLive {
+                    checkedInPill
+                        .padding(.top, 16)
+                        .transition(reduceMotion ? .opacity : .scale(scale: 0.8).combined(with: .opacity))
+                }
             } else if height >= (stage == .paused ? Metrics.heightForRowAbovePauseCard : Metrics.heightForSecondRow) {
                 HStack(spacing: 0) {
                     ForEach(BlockingRehearsalSystemApp.allCases, id: \.self) { app in
@@ -156,7 +173,7 @@ struct BlockingRehearsalPhoneCard: View {
             send(.beatControlTapped)
         } label: {
             HStack(alignment: .top, spacing: 12) {
-                Image("HomeAvatarLogo")
+                Image(decorative: "HomeAvatarLogo")
                     .resizable()
                     .scaledToFill()
                     .frame(width: 40, height: 40)
@@ -304,7 +321,7 @@ struct BlockingRehearsalPhoneCard: View {
         }
         .font(.system(size: 28, weight: .medium))
         .frame(width: 34, height: 34)
-        .keyframeAnimator(initialValue: 1.0, trigger: playedByDemo) { hand, scale in
+        .keyframeAnimator(initialValue: 1.0, trigger: playedByDemo && !reduceMotion) { hand, scale in
             hand.scaleEffect(scale, anchor: .topLeading)
         } keyframes: { _ in
             KeyframeTrack {
@@ -334,7 +351,7 @@ struct BlockingRehearsalPhoneCard: View {
     }
 
     private func iconImage(_ icon: BlockingRehearsalIcon, side: CGFloat, radius: CGFloat) -> some View {
-        Image(icon.rawValue)
+        Image(decorative: icon.rawValue)
             .resizable()
             .frame(width: side, height: side)
             .clipShape(RoundedRectangle(cornerRadius: radius, style: .continuous))
@@ -345,7 +362,7 @@ struct BlockingRehearsalPhoneCard: View {
     private var pauseCard: some View {
         VStack(spacing: 14) {
             HStack(spacing: 10) {
-                Image("HomeAvatarLogo")
+                Image(decorative: "HomeAvatarLogo")
                     .resizable()
                     .scaledToFill()
                     .frame(width: 40, height: 40)
@@ -418,9 +435,6 @@ struct BlockingRehearsalPhoneCard: View {
         .padding(.trailing, 18)
         .background(.white, in: Capsule())
         .shadow(color: PillieTheme.textPrimary.opacity(0.12), radius: 13, y: 10)
-        .scaleEffect(isLive || reduceMotion ? 1 : 0.8)
-        .opacity(isLive ? 1 : 0)
-        .animation(reduceMotion ? .easeOut(duration: 0.3) : .spring(response: 0.3, dampingFraction: 0.7), value: isLive)
         .accessibilityElement(children: .combine)
         .accessibilityIdentifier("blockingRehearsalCheckedInPill")
     }
@@ -448,7 +462,6 @@ private struct FeaturedIconBounds: PreferenceKey {
     }
 }
 
-/// A1's exit: the pressed app grows from its icon until it fills the card.
 private struct OpeningApp: View {
     let icon: BlockingRehearsalIcon
     let from: CGRect
@@ -458,7 +471,7 @@ private struct OpeningApp: View {
     @State private var isOpen = false
 
     var body: some View {
-        Image(icon.rawValue)
+        Image(decorative: icon.rawValue)
             .resizable()
             .scaledToFill()
             .frame(width: isOpen ? card.width : from.width, height: isOpen ? card.height : from.height)
@@ -473,7 +486,6 @@ private struct OpeningApp: View {
     }
 }
 
-/// One left-and-right wobble of 6 pt per whole step of `nudges`.
 private struct NudgeEffect: GeometryEffect {
     var nudges: CGFloat
 

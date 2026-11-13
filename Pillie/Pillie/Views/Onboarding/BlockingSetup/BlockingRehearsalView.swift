@@ -27,6 +27,9 @@ struct BlockingRehearsalView: View {
     #endif
 
     let distractionChoices: Set<DistractionChoice>
+    /// The launch splash is still over the screen. The rehearsal opens when it
+    /// clears, so a resumed first beat does not play where she cannot see it.
+    var isCovered = false
     let onBack: () -> Void
     let onContinue: () -> Void
     let onRemindersOnly: () -> Void
@@ -58,7 +61,7 @@ struct BlockingRehearsalView: View {
         return script
     }
 
-    private var content: BlockingRehearsalContent {
+    private func content(for script: BlockingRehearsalScript) -> BlockingRehearsalContent {
         BlockingRehearsalContent.localized(
             script: script,
             locale: locale,
@@ -66,7 +69,10 @@ struct BlockingRehearsalView: View {
         )
     }
 
-    private func chrome(for stage: BlockingRehearsalStage) -> BlockingRehearsalChrome {
+    private func chrome(
+        for stage: BlockingRehearsalStage,
+        in content: BlockingRehearsalContent
+    ) -> BlockingRehearsalChrome {
         content.chrome(
             for: stage,
             refusal: state.refusal,
@@ -75,8 +81,23 @@ struct BlockingRehearsalView: View {
         )
     }
 
-    /// The coral covers the screen through the shake beat, and starts
-    /// spreading while "Open Pillie" is still pressed in.
+    private var opening: BlockingRehearsalOpening {
+        let opening = BlockingRehearsalOpening(
+            demoSeen: demoSeen,
+            hasSelection: blockingManager.selectionState.hasSelection,
+            isAuthorized: blockingManager.isAuthorized,
+            voiceOverRunning: voiceOverEnabled,
+            sceneActive: scenePhase == .active
+        )
+        #if DEBUG
+        var seeded = opening
+        seeded.debugSeed = BlockingRehearsalDebugSeed(link: debugSeedLink)
+        return seeded
+        #else
+        return opening
+        #endif
+    }
+
     private var coverIsUp: Bool {
         state.stage == .shake || (state.stage == .paused && state.resolvedBy != nil)
     }
@@ -88,13 +109,15 @@ struct BlockingRehearsalView: View {
     }
 
     var body: some View {
-        ZStack {
+        let script = script
+        let content = content(for: script)
+        return ZStack {
             PillieTheme.bg.ignoresSafeArea()
 
             if let stage = state.stage {
                 // The ask waits under the cover, so pulling the coral back
                 // reveals it instead of the beat she just left.
-                page(stage == .shake ? .ask : stage, isLive: stage != .shake)
+                page(stage == .shake ? .ask : stage, isLive: stage != .shake, script: script, content: content)
                     .accessibilityHidden(stage == .shake)
 
                 if coverIsUp {
@@ -107,7 +130,7 @@ struct BlockingRehearsalView: View {
                 if stage == .shake {
                     BlockingRehearsalShakeBeat(
                         clip: script.shakeClip,
-                        chrome: chrome(for: .shake),
+                        chrome: chrome(for: .shake, in: content),
                         playsClip: state.playsShakeClip,
                         onBack: onBack,
                         send: send
@@ -122,22 +145,17 @@ struct BlockingRehearsalView: View {
             isPresented: $showPicker,
             selection: Bindable(blockingManager).activitySelection
         )
-        .onAppear {
+        .onChange(of: isCovered, initial: true) { _, isCovered in
+            guard !isCovered else { return }
             appeared = true
-            var opening = BlockingRehearsalOpening(
-                demoSeen: demoSeen,
-                hasSelection: blockingManager.selectionState.hasSelection,
-                isAuthorized: blockingManager.isAuthorized,
-                voiceOverRunning: voiceOverEnabled
-            )
-            #if DEBUG
-            opening.debugSeed = BlockingRehearsalDebugSeed(link: debugSeedLink)
-            #endif
             send(.appeared(opening))
         }
         #if DEBUG
         .onChange(of: debugSeedLink) { _, link in
             if let seed = BlockingRehearsalDebugSeed(link: link) {
+                // A seed may have drawn access as not yet asked. The next one
+                // starts from the real answer again.
+                send(.authorizationChanged(isAuthorized: blockingManager.isAuthorized))
                 send(.debugSeeded(seed))
             }
         }
@@ -180,8 +198,13 @@ struct BlockingRehearsalView: View {
 
     // MARK: - Page
 
-    private func page(_ stage: BlockingRehearsalStage, isLive: Bool) -> some View {
-        let chrome = chrome(for: stage)
+    private func page(
+        _ stage: BlockingRehearsalStage,
+        isLive: Bool,
+        script: BlockingRehearsalScript,
+        content: BlockingRehearsalContent
+    ) -> some View {
+        let chrome = chrome(for: stage, in: content)
         return GeometryReader { proxy in
             let isCompact = proxy.size.height < 700
             VStack(spacing: 0) {
@@ -202,14 +225,14 @@ struct BlockingRehearsalView: View {
                     .padding(.horizontal, 24)
                     .padding(.top, isCompact ? 16 : 34)
 
-                card(stage, isLive: isLive)
+                card(stage, isLive: isLive, script: script, content: content)
                     .modifier(FadeInUp(appeared: appeared, delay: PillieTheme.stagger3))
                     .padding(.top, isCompact ? 16 : 26)
                     .layoutPriority(-1)
 
                 footer(chrome, isLive: isLive)
                     .padding(.horizontal, PillieTheme.screenHorizontalPadding)
-                    .padding(.top, isCompact ? 16 : 26)
+                    .padding(.top, chrome.primary == nil ? 0 : (isCompact ? 16 : 26))
                     .padding(.bottom, PillieTheme.onboardingCTABottomPadding)
             }
         }
@@ -242,11 +265,15 @@ struct BlockingRehearsalView: View {
     }
 
     @ViewBuilder
-    private func card(_ stage: BlockingRehearsalStage, isLive: Bool) -> some View {
-        switch stage {
-        case .reminder, .paused, .shake, .ask:
+    private func card(
+        _ stage: BlockingRehearsalStage,
+        isLive: Bool,
+        script: BlockingRehearsalScript,
+        content: BlockingRehearsalContent
+    ) -> some View {
+        if let scene = BlockingRehearsalPhoneCard.Scene(stage) {
             BlockingRehearsalPhoneCard(
-                stage: stage,
+                stage: scene,
                 resolvedBy: state.resolvedBy,
                 isLive: isLive,
                 script: script,
@@ -256,7 +283,7 @@ struct BlockingRehearsalView: View {
             )
             .padding(.horizontal, 24)
             .transition(.opacity)
-        case .picks:
+        } else if stage == .picks {
             ScrollView(showsIndicators: false) {
                 BlockingRehearsalPicksCard(
                     grid: BlockingRehearsalPickGrid(picks: picks),
@@ -268,11 +295,16 @@ struct BlockingRehearsalView: View {
             }
             .scrollBounceBehavior(.basedOnSize)
             .transition(.opacity)
-        case .refused:
+        } else {
             Group {
                 if BlockingRehearsalContent.showsPromptPreview(for: state.refusal) {
-                    BlockingRehearsalRefusedCard(content: content)
-                        .padding(.horizontal, 24)
+                    // On a short screen the drawing does not fit, and its
+                    // caption says the same thing on its own.
+                    ViewThatFits(in: .vertical) {
+                        BlockingRehearsalRefusedCard(content: content, showsDrawing: true)
+                        BlockingRehearsalRefusedCard(content: content, showsDrawing: false)
+                    }
+                    .padding(.horizontal, 24)
                 } else {
                     Color.clear
                 }
@@ -294,12 +326,14 @@ struct BlockingRehearsalView: View {
 
     private func footer(_ chrome: BlockingRehearsalChrome, isLive: Bool) -> some View {
         let shown = appeared && isLive
+        // Under Reduce Motion the footer comes in together, not in steps.
+        let step = reduceMotion ? 0 : 0.05
         return VStack(spacing: 0) {
             if !chrome.footnotes.isEmpty {
                 VStack(alignment: .leading, spacing: 10) {
                     ForEach(Array(chrome.footnotes.enumerated()), id: \.offset) { index, footnote in
                         footnoteLine(footnote)
-                            .modifier(FadeInUp(appeared: shown, delay: Double(index) * 0.05))
+                            .modifier(FadeInUp(appeared: shown, delay: Double(index) * step))
                     }
                 }
                 .padding(.horizontal, 6)
@@ -315,7 +349,7 @@ struct BlockingRehearsalView: View {
                             ProgressView().tint(.white)
                         } else {
                             Text(primary.title)
-                            if primary.leadsOn {
+                            if primary.showsArrow {
                                 Image(systemName: "arrow.right")
                             }
                         }
@@ -323,7 +357,7 @@ struct BlockingRehearsalView: View {
                 }
                 .buttonStyle(.pillieDark)
                 .disabled(state.isRequesting)
-                .modifier(FadeInUp(appeared: shown, delay: Double(chrome.footnotes.count) * 0.05))
+                .modifier(FadeInUp(appeared: shown, delay: Double(chrome.footnotes.count) * step))
                 .accessibilityIdentifier("blockingRehearsalPrimary")
             }
 
@@ -388,7 +422,7 @@ struct BlockingRehearsalView: View {
     private func perform(_ effect: BlockingRehearsalEffect) {
         switch effect {
         case .nudgePauseCard:
-            pauseCardNudges += 1
+            if !reduceMotion { pauseCardNudges += 1 }
             InteractionFeedback.live.perform(.lowRiskTap)
         case .persistDemoSeen:
             demoSeen = true
@@ -411,8 +445,6 @@ struct BlockingRehearsalView: View {
 }
 
 private extension AnyTransition {
-    /// Coral spreads from where "Open Pillie" sits until it covers the screen,
-    /// and pulls back the same way.
     static var coralSpread: AnyTransition {
         .modifier(active: CoralSpread(progress: 0), identity: CoralSpread(progress: 1))
     }
@@ -441,8 +473,9 @@ private struct SpreadingCircle: Shape {
 
     func path(in rect: CGRect) -> Path {
         let center = CGPoint(x: rect.midX, y: rect.minY + rect.height * 0.86)
-        let reach = hypot(rect.width / 2, max(center.y - rect.minY, rect.maxY - center.y))
-        let radius = reach * progress
+        // The coral ignores the safe area, so the circle has to reach past
+        // `rect`. The diagonal is farther than any screen corner.
+        let radius = hypot(rect.width, rect.height) * progress
         return Path(ellipseIn: CGRect(x: center.x - radius, y: center.y - radius, width: radius * 2, height: radius * 2))
     }
 }

@@ -5,7 +5,6 @@
 
 import SwiftUI
 
-/// The white card surface the blocking step's cards share.
 struct BlockingSetupCardSurface: ViewModifier {
     func body(content: Content) -> some View {
         content

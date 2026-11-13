@@ -13,7 +13,6 @@ struct ProtectionPlanOnboardingShell: View {
     /// Whether the launch splash is still covering the screen. Welcome holds its
     /// entrance choreography until this clears so the animation is actually seen.
     var splashActive: Bool = false
-    /// Called once Welcome has been committed.
     let onIntroFinished: () -> Void
 
     var body: some View {

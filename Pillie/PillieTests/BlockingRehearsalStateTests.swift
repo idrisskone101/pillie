@@ -7,14 +7,16 @@ struct BlockingRehearsalStateTests {
         demoSeen: Bool = false,
         hasSelection: Bool = false,
         isAuthorized: Bool = false,
-        voiceOver: Bool = false
+        voiceOver: Bool = false,
+        sceneActive: Bool = true
     ) -> BlockingRehearsalState {
         var state = BlockingRehearsalState()
         _ = state.handle(.appeared(BlockingRehearsalOpening(
             demoSeen: demoSeen,
             hasSelection: hasSelection,
             isAuthorized: isAuthorized,
-            voiceOverRunning: voiceOver
+            voiceOverRunning: voiceOver,
+            sceneActive: sceneActive
         )))
         return state
     }
@@ -222,6 +224,30 @@ struct BlockingRehearsalStateTests {
         #expect(state.timer == .selfPlay(.reminder))
     }
 
+    @Test func `VoiceOver turning on mid-beat stops the wait`() {
+        var state = opened()
+        #expect(state.handle(.voiceOverChanged(isRunning: true)) == [])
+        #expect(state.timer == nil)
+        #expect(state.handle(.timerFired(.selfPlay(.reminder))) == [])
+        #expect(state.stage == .reminder)
+    }
+
+    @Test func `A screen that opens while the scene is inactive waits until it is active`() {
+        var state = opened(sceneActive: false)
+        #expect(state.timer == nil)
+        _ = state.handle(.sceneActivityChanged(isActive: true))
+        #expect(state.timer == .selfPlay(.reminder))
+    }
+
+    @Test func `An exit already under way finishes even if the scene goes inactive`() {
+        var state = opened()
+        _ = state.handle(.beatControlTapped)
+        _ = state.handle(.sceneActivityChanged(isActive: false))
+        #expect(state.timer == .appPressed(by: .herTap))
+        #expect(state.handle(.timerFired(.appPressed(by: .herTap))) == [.report(.viewed(.paused))])
+        #expect(state.timer == nil)
+    }
+
     @Test func `An inactive scene holds the beat and coming back restarts the wait`() {
         var state = opened()
         _ = state.handle(.sceneActivityChanged(isActive: false))
@@ -316,7 +342,7 @@ struct BlockingRehearsalStateTests {
 
     @Test func `Try again asks Apple again and a grant goes back to the ask with the picker`() {
         var state = refused()
-        #expect(state.handle(.chooseTapped) == [.report(.refusalAnswered(.askAgain)), .authorize])
+        #expect(state.handle(.chooseTapped) == [.report(.askedAgain), .authorize])
         #expect(state.isRequesting)
         #expect(state.handle(.chooseTapped) == [])
         #expect(state.handle(.authorizationResolved(.granted)) == [.report(.viewed(.ask)), .presentPicker])
@@ -338,7 +364,7 @@ struct BlockingRehearsalStateTests {
         var state = refused()
         #expect(
             state.handle(.remindersOnlyTapped)
-                == [.report(.refusalAnswered(.remindersOnly)), .useRemindersOnly]
+                == [.report(.choseRemindersOnly(on: .refused)), .useRemindersOnly]
         )
     }
 
@@ -348,11 +374,74 @@ struct BlockingRehearsalStateTests {
         #expect(state.handle(.remindersOnlyTapped) == [])
     }
 
-    @Test func `There is no way out of the ask except through Apple`() {
+    @Test func `Before Apple has been asked there is no way out of the ask except through Apple`() {
         var state = atAsk()
+        #expect(!state.isAuthorized)
         #expect(state.handle(.remindersOnlyTapped) == [])
         #expect(state.handle(.continueTapped) == [])
         #expect(state.stage == .ask)
+    }
+
+    @Test func `Allowing Screen Time and then picking nothing still leaves a way out`() {
+        var state = atAsk()
+        _ = state.handle(.chooseTapped)
+        #expect(state.handle(.remindersOnlyTapped) == [])
+        _ = state.handle(.authorizationResolved(.granted))
+        _ = state.handle(.selectionChanged(hasSelection: false))
+        #expect(state.stage == .ask)
+        #expect(
+            state.handle(.remindersOnlyTapped)
+                == [.report(.choseRemindersOnly(on: .ask)), .useRemindersOnly]
+        )
+    }
+
+    @Test func `A returning user who already allowed Screen Time can leave the ask`() {
+        var state = opened(demoSeen: true, isAuthorized: true)
+        #expect(state.stage == .ask)
+        #expect(
+            state.handle(.remindersOnlyTapped)
+                == [.report(.choseRemindersOnly(on: .ask)), .useRemindersOnly]
+        )
+    }
+
+    @Test func `Reminders only waits while the ask is opening the picker`() {
+        var state = opened(demoSeen: true, isAuthorized: true)
+        _ = state.handle(.chooseTapped)
+        #expect(state.handle(.remindersOnlyTapped) == [])
+    }
+
+    @Test func `A grant after a refusal lands on the picks when some are already chosen`() {
+        var state = refused()
+        _ = state.handle(.selectionChanged(hasSelection: true))
+        #expect(state.stage == .refused)
+        _ = state.handle(.chooseTapped)
+        #expect(state.handle(.authorizationResolved(.granted)) == [.report(.viewed(.picks)), .presentPicker])
+        #expect(state.stage == .picks)
+    }
+
+    @Test func `A refusal while confirming picks shows the refused state`() {
+        var state = opened(demoSeen: true, hasSelection: true, isAuthorized: false)
+        _ = state.handle(.continueTapped)
+        #expect(state.handle(.authorizationResolved(.refused(.notAllowed))) == [.report(.viewed(.refused))])
+        #expect(state.stage == .refused)
+        #expect(state.handle(.continueTapped) == [])
+    }
+
+    @Test func `A selection that arrives while Apple is asked keeps the request open`() {
+        var state = atAsk()
+        _ = state.handle(.chooseTapped)
+        #expect(state.handle(.selectionChanged(hasSelection: true)) == [.report(.viewed(.picks))])
+        #expect(state.isRequesting)
+        #expect(state.handle(.authorizationResolved(.granted)) == [.presentPicker])
+        #expect(!state.isRequesting)
+        #expect(state.stage == .picks)
+    }
+
+    @Test func `Continue saves again if it is tapped again`() {
+        var state = opened(demoSeen: true, hasSelection: true, isAuthorized: true)
+        #expect(state.handle(.continueTapped) == [.saveAndContinue])
+        #expect(state.handle(.continueTapped) == [.saveAndContinue])
+        #expect(state.stage == .picks)
     }
 
     @Test func `No beat can skip to the ask or leave the step`() {

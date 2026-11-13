@@ -11,7 +11,6 @@ import Foundation
 struct BlockingSetupActions {
     private let telemetry = OnboardingTelemetry()
 
-    /// Already authorized: returns `.granted` at once and reports nothing.
     /// It does not guard against overlapping calls.
     /// `BlockingRehearsalState.isRequesting` does.
     func authorize() async -> ScreenTimeAuthorizationOutcome {
@@ -23,8 +22,6 @@ struct BlockingSetupActions {
         return manager.isAuthorized ? .granted : .refused(manager.refusal ?? .notAllowed)
     }
 
-    /// Saves the picked selection and reschedules. False when there is nothing
-    /// to save.
     func saveSelection(store: PillStore) -> Bool {
         let manager = AppBlockingManager.shared
         guard manager.selectionState.canSaveBlockerConfig else { return false }

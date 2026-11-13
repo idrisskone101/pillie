@@ -10,7 +10,6 @@ import FamilyControls
 import Foundation
 import ManagedSettings
 
-/// Everything personal the rehearsal shows, made from her answers.
 struct BlockingRehearsalScript: Equatable {
     let featuredApp: BlockingRehearsalApp
     let method: ContraceptiveMethod
@@ -82,7 +81,6 @@ struct BlockingRehearsalScript: Equatable {
     }
 }
 
-/// The four apps on row 1 of the mini Home Screen, in display order.
 enum BlockingRehearsalApp: String, CaseIterable, Equatable {
     case tiktok
     case instagram
@@ -144,7 +142,6 @@ enum BlockingRehearsalSystemApp: CaseIterable, Equatable {
     }
 }
 
-/// The twelve bundled icons. Raw values are asset catalog names.
 enum BlockingRehearsalIcon: String, CaseIterable {
     case tiktok = "RehearsalAppTikTok"
     case instagram = "RehearsalAppInstagram"
@@ -185,8 +182,6 @@ enum BlockingRehearsalPick: Hashable {
     }
 }
 
-/// What the picks card draws: at most two rows of four. When she picked more,
-/// the last tile counts the rest.
 struct BlockingRehearsalPickGrid: Equatable {
     enum Tile: Hashable {
         case pick(BlockingRehearsalPick)

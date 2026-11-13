@@ -11,15 +11,18 @@ import SwiftUI
 
 struct BlockingRehearsalRefusedCard: View {
     let content: BlockingRehearsalContent
+    let showsDrawing: Bool
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var ringBreathes = false
 
     var body: some View {
         VStack(spacing: 16) {
-            alert
-                .frame(maxWidth: 302)
-                .accessibilityHidden(true)
+            if showsDrawing {
+                alert
+                    .frame(maxWidth: 302)
+                    .accessibilityHidden(true)
+            }
 
             Text(content.refusedCaption)
                 .font(.pillie(14, weight: .medium))
@@ -46,13 +49,13 @@ struct BlockingRehearsalRefusedCard: View {
     private var alert: some View {
         VStack(alignment: .leading, spacing: 10) {
             VStack(alignment: .leading, spacing: 8) {
-                bar(PillieTheme.hairlineStrong, height: 14, radius: 7, width: 0.88)
-                bar(PillieTheme.hairlineStrong, height: 14, radius: 7, width: 0.57)
+                bar(PillieTheme.hairlineStrong, height: 14, radius: 7, fractionOfColumn: 0.88)
+                bar(PillieTheme.hairlineStrong, height: 14, radius: 7, fractionOfColumn: 0.57)
             }
             VStack(alignment: .leading, spacing: 7) {
-                bar(PillieTheme.hairline, height: 9, radius: 5, width: 1)
-                bar(PillieTheme.hairline, height: 9, radius: 5, width: 0.92)
-                bar(PillieTheme.hairline, height: 9, radius: 5, width: 0.69)
+                bar(PillieTheme.hairline, height: 9, radius: 5, fractionOfColumn: 1)
+                bar(PillieTheme.hairline, height: 9, radius: 5, fractionOfColumn: 0.92)
+                bar(PillieTheme.hairline, height: 9, radius: 5, fractionOfColumn: 0.69)
             }
             HStack(spacing: 10) {
                 Text(content.continueCTA)
@@ -88,15 +91,14 @@ struct BlockingRehearsalRefusedCard: View {
         .shadow(color: PillieTheme.textPrimary.opacity(0.14), radius: 20, y: 18)
     }
 
-    /// `width` is a fraction of the alert's text column.
-    private func bar(_ color: Color, height: CGFloat, radius: CGFloat, width: CGFloat) -> some View {
+    private func bar(_ color: Color, height: CGFloat, radius: CGFloat, fractionOfColumn: CGFloat) -> some View {
         Color.clear
             .frame(height: height)
             .overlay(alignment: .leading) {
                 GeometryReader { proxy in
                     RoundedRectangle(cornerRadius: radius)
                         .fill(color)
-                        .frame(width: proxy.size.width * width)
+                        .frame(width: proxy.size.width * fractionOfColumn)
                 }
             }
     }
