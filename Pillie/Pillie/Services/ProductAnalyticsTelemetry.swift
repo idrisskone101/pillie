@@ -127,6 +127,10 @@ struct ProductAnalyticsTelemetry {
     track(.onboardingStepCompleted, source: .onboarding, step: .delayConsequence)
   }
 
+  func blockingRehearsal(_ event: AnalyticsEvent, step: AnalyticsStep, shakeCount: Int? = nil) {
+    track(event, source: .onboarding, step: step, shakeCount: shakeCount)
+  }
+
   func notificationPermissionRequested() {
     track(.notificationPermissionRequested, source: .onboarding, step: .reminderTime)
   }

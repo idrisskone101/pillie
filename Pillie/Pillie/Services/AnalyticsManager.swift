@@ -812,6 +812,14 @@ enum AnalyticsEvent: String, CaseIterable {
   case reviewPromptDismissed = "review_prompt_dismissed"
   case openLineSuggestionTapped = "open_line_suggestion_tapped"
   case openLineIssueReportTapped = "open_line_issue_report_tapped"
+  /// The blocking rehearsal on the onboarding blocking step. `step` carries the
+  /// stage. Who played a beat is in the event name, and a beat she played
+  /// with a real shake carries `shake_count` 1.
+  case blockingRehearsalStageViewed = "blocking_rehearsal_stage_viewed"
+  case blockingRehearsalBeatPlayed = "blocking_rehearsal_beat_played"
+  case blockingRehearsalBeatSelfPlayed = "blocking_rehearsal_beat_self_played"
+  case blockingRehearsalAskAgain = "blocking_rehearsal_ask_again"
+  case blockingRehearsalRemindersOnly = "blocking_rehearsal_reminders_only"
   /// A handled failure (#179). Carries `domain` + `message` + `code` + `severity`
   /// via `trackError`, never through the `AnalyticsPayload` envelope.
   case appError = "app_error"
@@ -965,6 +973,12 @@ enum AnalyticsStep: String {
   case riskWindow = "risk_window"
   case draftBlockedApps = "draft_blocked_apps"
   case acquisitionSource = "acquisition_source"
+  case rehearsalReminder = "rehearsal_reminder"
+  case rehearsalPaused = "rehearsal_paused"
+  case rehearsalShake = "rehearsal_shake"
+  case rehearsalAsk = "rehearsal_ask"
+  case rehearsalRefused = "rehearsal_refused"
+  case rehearsalPicks = "rehearsal_picks"
   case paywall
   case method
   case schedule
@@ -1030,8 +1044,8 @@ struct AnalyticsPayload {
   /// Aggregated shield-intercept count carried by `blocker_intervention_fired`
   /// — one event per flush, never one per intercept (#161).
   let interventionCount: Int?
-  /// Real shakes performed before the Early Value Proof check-in resolved,
-  /// carried as `shake_count` by `demo_shake_completed` (#175).
+  /// Real shakes behind a rehearsal beat she played, carried as `shake_count`
+  /// by `blocking_rehearsal_beat_played`.
   let shakeCount: Int?
   /// The trial day (10 or 13) carried as `day` by `trial_expiry_warning_sent`
   /// (#168 / ADR 0007).
