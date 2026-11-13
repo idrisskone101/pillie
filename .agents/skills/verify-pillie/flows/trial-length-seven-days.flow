@@ -9,7 +9,9 @@ launch
 # the step appears, so leave it first: a relaunch onto the step already granted.
 openurl "pillie://debug/plus-home?lang=en"
 wait text Today 15
-openurl "pillie://debug/trial-granted-moment?trialDays=calendar&trialLength=seven_days&lang=en"
+# stage=ask opens the rehearsal on the ask, where the trial line is. A first visit
+# would play its three beats before it.
+openurl "pillie://debug/trial-granted-moment?stage=ask&trialDays=calendar&trialLength=seven_days&lang=en"
 wait id appBlockingTrialLine 15
 expect text "next 7 days"
 expect-not text "14 days"

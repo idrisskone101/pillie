@@ -3,10 +3,7 @@
 # proved with a wait + shot, plus the taps a choice screen needs before its CTA
 # enables.
 #
-# `productDemo` / `plusBlockingDemo` are skipped on purpose: ContentView.swift's
-# switch cases for them are dead code on a fresh install (see features/onboarding.md
-# Gotchas) — the real welcome screen (ProtectionPlanWelcomeView) hands off straight
-# to painPoints.
+# Welcome (ProtectionPlanWelcomeView) hands off straight to painPoints.
 #
 # `trialGranted` is also skipped on purpose: OnboardingFlow.visibleStep migrates it
 # to `.appBlocking` unconditionally (OnboardingFlow.swift:316-326), so ContentView's
@@ -15,10 +12,11 @@
 # features/onboarding.md Gotchas). reminderPlan's real CTA already lands on
 # appBlocking directly.
 #
-# appBlocking's "selected" phase needs FamilyControls token counts, which the
-# simulator cannot fabricate by picking real apps — reached via the
-# `plus-app-blocking-setup?selected=` QA seam (AppBlockingManager.swift:36-40),
-# then that screen's real "Continue" CTA.
+# appBlocking is the rehearsal (BlockingRehearsalView). Nobody touches it here,
+# so each beat plays itself: this is the self-play pass on a real fresh install.
+# Its picks need FamilyControls tokens, which the simulator cannot hand out, so
+# they are reached via the `plus-app-blocking-setup?selected=` QA seam, then that
+# screen's real "Continue" CTA.
 
 fresh
 launch
@@ -102,17 +100,34 @@ wait id protectionPlanPrimaryCTA 15
 shot reminder-plan
 tap --id protectionPlanPrimaryCTA
 
-# appBlocking (empty phase) — AppBlockingSetupView. No selection yet.
-# appBlockingEmptyStateCard: AppBlockingSetupView.swift:349.
+# appBlocking, beat 1: the reminder lands on the mini Home Screen. After 3.5 s
+# untouched the demo taps the featured app (TikTok, the distraction picked above).
 wait id blockingRehearsalBanner 15
-shot app-blocking-empty
+shot rehearsal-reminder
 
-# appBlocking (selected phase) — fake a FamilyControls selection via the QA seam
-# (AppBlockingManager.swift:36-40), then use the screen's real "Continue" (no
-# accessibility id on this button; global.action.continue).
+# Beat 2: the app is paused. After 3 s the demo presses "Open Pillie".
+wait id blockingRehearsalOpenPillie 10
+shot rehearsal-paused
+
+# Beat 3: the coral shake cover. After 4 s the clip plays through on its own.
+wait id blockingRehearsalTapInstead 10
+shot rehearsal-shake
+
+# The ask, with the trial line of a fresh reverse trial. The simulator reports
+# Screen Time as already allowed, so this is the ask after Allow: no Apple line,
+# and "Use reminders only" is offered. onboarding-blocking-stages shoots the
+# first-time ask.
+wait id blockingRehearsalCheckedInPill 15
+expect id appBlockingTrialLine
+expect id blockingRehearsalRemindersOnly
+sleep 1
+shot rehearsal-ask
+
+# The picks: sample tiles stand in for a FamilyControls selection, then the
+# screen's real "Continue".
 openurl "pillie://debug/plus-app-blocking-setup?selected=3&lang=en"
-wait id blockingRehearsalPicksCard 30
-shot app-blocking-selected
+wait id blockingRehearsalChangePicks 15
+shot rehearsal-picks
 tap --id blockingRehearsalPrimary
 
 # protectionPlanReady — ProtectionPlanReadyView. protectionPlanReadyStartButton

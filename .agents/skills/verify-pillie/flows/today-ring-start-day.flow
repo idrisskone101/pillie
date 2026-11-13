@@ -20,7 +20,7 @@ wait id protectionPlanPrimaryCTA 15
 tap --id protectionPlanPrimaryCTA
 wait id blockingRehearsalBanner 15
 openurl "pillie://debug/plus-app-blocking-setup?selected=3&lang=en"
-wait id blockingRehearsalPicksCard 30
+wait id blockingRehearsalChangePicks 15
 tap --id blockingRehearsalPrimary
 wait id protectionPlanReadyStartButton
 tap --id protectionPlanReadyStartButton

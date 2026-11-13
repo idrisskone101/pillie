@@ -47,10 +47,31 @@ gesture scroll-down
 shot onboarding-09-reminder-plan-scrolled
 tap --id protectionPlanPrimaryCTA
 wait id blockingRehearsalBanner 15
-shot onboarding-10-app-blocking-empty
+openurl "pillie://debug/plus-app-blocking-setup?stage=reminder&terms=hard&lang={{lang}}"
+wait id blockingRehearsalBanner 15
+sleep 2
+shot onboarding-10-rehearsal-reminder
+openurl "pillie://debug/plus-app-blocking-setup?stage=paused&terms=hard&lang={{lang}}"
+wait id blockingRehearsalOpenPillie 15
+sleep 1
+shot onboarding-10-rehearsal-paused
+openurl "pillie://debug/plus-app-blocking-setup?stage=shake&terms=hard&lang={{lang}}"
+wait id blockingRehearsalTapInstead 15
+sleep 1
+shot onboarding-10-rehearsal-shake
+openurl "pillie://debug/plus-app-blocking-setup?stage=ask&access=notAsked&terms=hard&lang={{lang}}"
+wait id blockingRehearsalCheckedInPill 15
+sleep 1
+shot onboarding-10-rehearsal-ask
+openurl "pillie://debug/plus-app-blocking-setup?stage=refused&terms=hard&lang={{lang}}"
+wait id blockingRehearsalRemindersOnly 15
+sleep 1
+shot onboarding-10-rehearsal-refused
+openurl "pillie://debug/screen-time-refused?reason=none&lang={{lang}}"
 openurl "pillie://debug/plus-app-blocking-setup?selected=3&lang={{lang}}"
-wait id blockingRehearsalPicksCard 30
-shot onboarding-11-app-blocking-selected
+wait id blockingRehearsalChangePicks 15
+sleep 1
+shot onboarding-11-rehearsal-picks
 tap --id blockingRehearsalPrimary
 wait id protectionPlanReadyStartButton 15
 shot onboarding-12-ready
