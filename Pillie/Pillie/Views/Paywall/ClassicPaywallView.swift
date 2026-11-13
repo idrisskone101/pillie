@@ -35,6 +35,9 @@ struct ClassicPaywallView: View {
                     VStack(spacing: 0) {
                         ClassicPaywallMomentHeader(story: story)
 
+                        PaywallPlusIncludes()
+                            .padding(.top, 16)
+
                         checkoutChrome(section: .stack)
                     }
                     .padding(.horizontal, ClassicPaywallMetrics.horizontalInset)
