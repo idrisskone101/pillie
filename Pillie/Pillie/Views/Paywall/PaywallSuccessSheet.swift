@@ -186,6 +186,40 @@ private struct PaywallSuccessPerks: View {
     }
 }
 
+/// "Included in Plus" and the perks, two to a row. Every paywall shows it above
+/// its plans (App Store guideline 3.1.2(c)).
+struct PaywallPlusIncludes: View {
+    @Environment(\.locale) private var locale
+
+    var body: some View {
+        let perks = PilliePlusPerks.commerceKeys.map {
+            PillieLocalization.string($0, table: "Commerce", locale: locale)
+        }
+        VStack(alignment: .leading, spacing: 10) {
+            Text(PillieLocalization.string(
+                "paywall.success.perks.first",
+                table: "Commerce",
+                locale: locale
+            ))
+            .font(.pillie(13, weight: .bold))
+            .foregroundStyle(PillieTheme.textMuted)
+            .accessibilityAddTraits(.isHeader)
+
+            ForEach(Array(stride(from: 0, to: perks.count, by: 2)), id: \.self) { start in
+                HStack(alignment: .top, spacing: 12) {
+                    ForEach(start..<min(start + 2, perks.count), id: \.self) { index in
+                        PaywallPerkRow(title: perks[index])
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                }
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("paywallPlusIncludes")
+    }
+}
+
 struct PaywallPerkRow: View {
     let title: String
 

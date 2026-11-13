@@ -15,10 +15,11 @@ expect id paywallTile.annual
 expect id paywallRestoreButton
 expect id paywallTermsLink
 expect id paywallPrivacyLink
-expect-not id paywallPlusIncludes
+expect id paywallPlusIncludes
 # ClassicPaywallStoryFactory.duringTrial: paywall.classic.paywall.story.
-# trial_active.title (en), Commerce.xcstrings. Terms and Privacy are the one
-# addition over 2c8062a (ClassicPaywallCheckoutChrome footerRow).
+# trial_active.title (en), Commerce.xcstrings. The additions over 2c8062a are
+# Terms and Privacy (ClassicPaywallCheckoutChrome footerRow) and the
+# "Included in Plus" list (guideline 3.1.2(c)).
 shot paywall-classic-during-trial
 tap --id xmark --element-type Button  # paywall close; a review-prompt "Close" can sit behind it
 
@@ -28,6 +29,7 @@ openurl pillie://debug/honest-paywall?board=trialEndedReturningLegacy&design=cla
 wait text "Welcome back." 10
 expect text "Your trial ended. Daily reminders stay free."
 expect text "Continue with free reminders"
+expect id paywallPlusIncludes
 expect id paywallTermsLink
 # No own-record stats on the fresh QA pack, so the legacy story falls back to
 # the Free / Pillie Plus comparison (ClassicPaywallStoryFactory.trialEnded).
@@ -40,6 +42,7 @@ openurl pillie://debug/honest-paywall?board=trialEndedReturningHard&design=class
 wait text "Your trial has ended." 10
 expect text "App blocking turns back on"
 expect text "pick up where you left off"
+expect id paywallPlusIncludes
 expect id paywallPrivacyLink
 expect-not id xmark
 shot paywall-classic-trial-ended-hard
