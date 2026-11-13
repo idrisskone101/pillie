@@ -10,17 +10,32 @@
 import SwiftUI
 
 struct BlockingRehearsalRefusedCard: View {
+    /// How much of the drawing the card has room for. A long title or a short
+    /// screen leaves less, and the caption says the same thing on its own.
+    enum Drawing: CaseIterable {
+        case full
+        case compact
+        case captionOnly
+
+        fileprivate var scale: CGFloat {
+            switch self {
+            case .full: 1
+            case .compact, .captionOnly: 0.78
+            }
+        }
+    }
+
     let content: BlockingRehearsalContent
-    let showsDrawing: Bool
+    let drawing: Drawing
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var ringBreathes = false
 
     var body: some View {
-        VStack(spacing: 16) {
-            if showsDrawing {
+        VStack(spacing: 16 * drawing.scale) {
+            if drawing != .captionOnly {
                 alert
-                    .frame(maxWidth: 302)
+                    .frame(maxWidth: 302 * drawing.scale)
                     .accessibilityHidden(true)
             }
 
@@ -31,7 +46,7 @@ struct BlockingRehearsalRefusedCard: View {
                 .fixedSize(horizontal: false, vertical: true)
                 .accessibilityIdentifier("blockingRehearsalPromptPreview")
         }
-        .padding(24)
+        .padding(24 * drawing.scale)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(PillieTheme.lavender, in: RoundedRectangle(cornerRadius: 40, style: .continuous))
         .overlay {
@@ -47,25 +62,26 @@ struct BlockingRehearsalRefusedCard: View {
     }
 
     private var alert: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            VStack(alignment: .leading, spacing: 8) {
-                bar(PillieTheme.hairlineStrong, height: 14, radius: 7, fractionOfColumn: 0.88)
-                bar(PillieTheme.hairlineStrong, height: 14, radius: 7, fractionOfColumn: 0.57)
+        let scale = drawing.scale
+        return VStack(alignment: .leading, spacing: 10 * scale) {
+            VStack(alignment: .leading, spacing: 8 * scale) {
+                bar(PillieTheme.hairlineStrong, height: 14 * scale, fractionOfColumn: 0.88)
+                bar(PillieTheme.hairlineStrong, height: 14 * scale, fractionOfColumn: 0.57)
             }
-            VStack(alignment: .leading, spacing: 7) {
-                bar(PillieTheme.hairline, height: 9, radius: 5, fractionOfColumn: 1)
-                bar(PillieTheme.hairline, height: 9, radius: 5, fractionOfColumn: 0.92)
-                bar(PillieTheme.hairline, height: 9, radius: 5, fractionOfColumn: 0.69)
+            VStack(alignment: .leading, spacing: 7 * scale) {
+                bar(PillieTheme.hairline, height: 9 * scale, fractionOfColumn: 1)
+                bar(PillieTheme.hairline, height: 9 * scale, fractionOfColumn: 0.92)
+                bar(PillieTheme.hairline, height: 9 * scale, fractionOfColumn: 0.69)
             }
-            HStack(spacing: 10) {
+            HStack(spacing: 10 * scale) {
                 Text(content.continueCTA)
-                    .font(.system(size: 16, weight: .semibold))
+                    .font(.system(size: 16 * scale, weight: .semibold))
                     .foregroundStyle(BlockingRehearsalPalette.alertLabel)
                     .lineLimit(1)
                     .minimumScaleFactor(0.6)
                     .padding(.horizontal, 8)
                     .frame(maxWidth: .infinity)
-                    .frame(height: 46)
+                    .frame(height: 46 * scale)
                     .background(BlockingRehearsalPalette.alertNeutralButton, in: Capsule())
                     .overlay {
                         Capsule()
@@ -74,29 +90,30 @@ struct BlockingRehearsalRefusedCard: View {
                             .scaleEffect(ringBreathes ? 1.04 : 1)
                     }
 
-                RoundedRectangle(cornerRadius: 5)
+                Capsule()
                     .fill(.white.opacity(0.85))
-                    .frame(width: 64, height: 10)
+                    .frame(width: 64 * scale, height: 10 * scale)
                     .frame(maxWidth: .infinity)
-                    .frame(height: 46)
+                    .frame(height: 46 * scale)
                     .background(BlockingRehearsalPalette.alertTintedButton, in: Capsule())
                     .opacity(0.45)
             }
-            .padding(.top, 6)
+            .padding(.top, 6 * scale)
         }
-        .padding(.top, 22)
-        .padding(.horizontal, 20)
-        .padding(.bottom, 18)
-        .background(.white, in: RoundedRectangle(cornerRadius: PillieTheme.cardRadius, style: .continuous))
+        .padding(.top, 22 * scale)
+        .padding(.horizontal, 20 * scale)
+        .padding(.bottom, 18 * scale)
+        .background(.white, in: RoundedRectangle(cornerRadius: PillieTheme.cardRadius * scale, style: .continuous))
         .shadow(color: PillieTheme.textPrimary.opacity(0.14), radius: 20, y: 18)
+        .dynamicTypeSize(.large)
     }
 
-    private func bar(_ color: Color, height: CGFloat, radius: CGFloat, fractionOfColumn: CGFloat) -> some View {
+    private func bar(_ color: Color, height: CGFloat, fractionOfColumn: CGFloat) -> some View {
         Color.clear
             .frame(height: height)
             .overlay(alignment: .leading) {
                 GeometryReader { proxy in
-                    RoundedRectangle(cornerRadius: radius)
+                    Capsule()
                         .fill(color)
                         .frame(width: proxy.size.width * fractionOfColumn)
                 }

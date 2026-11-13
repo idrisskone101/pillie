@@ -279,6 +279,8 @@ struct BlockingRehearsalPhoneCard: View {
                 .allowsTightening(true)
                 .minimumScaleFactor(0.75)
                 .frame(width: Metrics.icon + 12)
+                // Keeps a card that is short on height from shrinking the label.
+                .fixedSize(horizontal: false, vertical: true)
         }
         .frame(width: Metrics.icon)
     }
@@ -448,8 +450,8 @@ struct BlockingRehearsalPhoneCard: View {
         static let icon: CGFloat = 62
         /// Below these card heights the banner, two rows and the dock no
         /// longer fit, so the dock goes first and then the second row.
-        static let heightForDock: CGFloat = 446
-        static let heightForSecondRow: CGFloat = 344
+        static let heightForDock: CGFloat = 470
+        static let heightForSecondRow: CGFloat = 364
         static let heightForRowAbovePauseCard: CGFloat = 486
     }
 }

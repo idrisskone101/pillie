@@ -103,6 +103,7 @@ tap --id protectionPlanPrimaryCTA
 # appBlocking, beat 1: the reminder lands on the mini Home Screen. After 3.5 s
 # untouched the demo taps the featured app (TikTok, the distraction picked above).
 wait id blockingRehearsalBanner 15
+sleep 1  # the banner drops in 0.6 s after the beat opens
 shot rehearsal-reminder
 
 # Beat 2: the app is paused. After 3 s the demo presses "Open Pillie".

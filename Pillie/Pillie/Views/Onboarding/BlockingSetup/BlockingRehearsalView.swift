@@ -298,11 +298,10 @@ struct BlockingRehearsalView: View {
         } else {
             Group {
                 if BlockingRehearsalContent.showsPromptPreview(for: state.refusal) {
-                    // On a short screen the drawing does not fit, and its
-                    // caption says the same thing on its own.
                     ViewThatFits(in: .vertical) {
-                        BlockingRehearsalRefusedCard(content: content, showsDrawing: true)
-                        BlockingRehearsalRefusedCard(content: content, showsDrawing: false)
+                        ForEach(BlockingRehearsalRefusedCard.Drawing.allCases, id: \.self) { drawing in
+                            BlockingRehearsalRefusedCard(content: content, drawing: drawing)
+                        }
                     }
                     .padding(.horizontal, 24)
                 } else {
@@ -350,7 +349,7 @@ struct BlockingRehearsalView: View {
                         } else {
                             Text(primary.title)
                             if primary.showsArrow {
-                                Image(systemName: "arrow.right")
+                                Image(systemName: "arrow.forward")
                             }
                         }
                     }
