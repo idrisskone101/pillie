@@ -1,0 +1,36 @@
+# Today's "set up app blocking" card after its X. It stays away until a
+# check-in next goes late, comes back once, and a second X is final.
+# /routine-day seeds an established Plus patch routine with no trial, so the
+# Plus setup strip's hold on the card does not apply. The clock is pinned to
+# midday EDT, past the default 8:00 AM reminder.
+fresh
+launch
+wait text "Get started" 15
+openurl "pillie://debug/plus-home?lang=en"
+openurl pillie://debug/fixed-now?at=2026-09-28T16:00:00Z
+
+# Day 14 has nothing due. The X hides the card.
+openurl "pillie://debug/routine-day?method=patch&day=14&lang=en"
+wait id homeBlockingStatusCard 10
+shot card-before-x
+tap --id homeBlockingStatusCardDismiss
+gone id homeBlockingStatusCard 10
+
+# One live day on, the day-15 change is past its reminder. The card is back.
+openurl pillie://debug/fixed-now?at=2026-09-29T16:00:00Z
+wait text "Change to patch 3" 10
+wait id homeBlockingStatusCard 10
+shot card-back-after-late
+
+# The second X is final. The same change, missed a day later, and the late
+# removal a week on both leave the card away.
+tap --id homeBlockingStatusCardDismiss
+gone id homeBlockingStatusCard 10
+openurl pillie://debug/fixed-now?at=2026-09-30T16:00:00Z
+wait text "Was due yesterday" 10
+expect-not id homeBlockingStatusCard
+shot card-gone-after-missed
+openurl pillie://debug/fixed-now?at=2026-10-06T16:00:00Z
+wait text "Day 22 of 28" 10
+expect-not id homeBlockingStatusCard
+openurl pillie://debug/fixed-now?at=off

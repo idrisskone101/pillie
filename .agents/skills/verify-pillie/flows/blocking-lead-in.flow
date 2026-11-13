@@ -1,0 +1,62 @@
+# After onboarding, an install iOS has never asked for Screen Time reads a
+# lead-in in the blocked-apps editor, and its Continue is what raises Apple's
+# alert. Covers the Home blocking card, Settings, and the Today Plus setup
+# strip, then the refusal that can follow the lead-in. The simulator is
+# approved from first launch, so /screen-time-unasked puts it back to
+# never-asked until the next request.
+# `fresh` so Home starts with the blocking card: a pack another flow left
+# finished shows Start new instead, which outranks it.
+fresh
+launch
+wait text "Get started" 15
+openurl pillie://debug/plus-home?lang=en
+wait text Today 15
+openurl pillie://debug/screen-time-unasked
+
+tap --id homeBlockingStatusCardCTA
+wait id blockedAppsLeadIn
+expect text "Apple asks next"
+expect-not id blockedAppsEnabledToggle
+shot home-card-lead-in
+
+# Continue is the request. The simulator approves, so the editor follows.
+tap --id blockedAppsLeadInContinue
+wait id blockedAppsEnabledToggle
+gone id blockedAppsLeadIn
+shot lead-in-continued
+swipe --start-x 200 --start-y 200 --end-x 200 --end-y 860 --duration 0.4
+gone id blockedAppsEnabledToggle
+
+# Asked once: Settings opens straight on the editor.
+tap --label Settings
+wait id settingsLanguageRow
+gesture scroll-down
+tap --label "Your apps, Off"
+wait id blockedAppsEnabledToggle
+expect-not id blockedAppsLeadIn
+swipe --start-x 200 --start-y 200 --end-x 200 --end-y 860 --duration 0.4
+gone id blockedAppsEnabledToggle
+
+# Never asked again, and this time iOS refuses after Continue: the lead-in
+# hands over to the reason and Try again.
+openurl pillie://debug/screen-time-unasked
+openurl "pillie://debug/screen-time-refused?reason=conflict"
+tap --label "Your apps, Off"
+wait id blockedAppsLeadIn
+shot settings-lead-in
+tap --id blockedAppsLeadInContinue
+wait id blockedAppsScreenTimeRefused
+expect text "Another app on this iPhone"
+gone id blockedAppsLeadIn
+shot lead-in-refused
+
+# The Plus setup strip's blocking step opens the same lead-in.
+launch
+openurl "pillie://debug/trial-activation-hub?state=unconfigured&lang=en"
+wait id plusSetupStrip 15
+openurl pillie://debug/screen-time-unasked
+tap --id plusSetupStrip
+wait text "Let your apps wait for you" 10
+tap --id plusSetupPrimary
+wait id blockedAppsLeadIn
+shot plus-setup-lead-in

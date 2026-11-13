@@ -446,10 +446,7 @@ struct SettingsView: View {
                 .presentationBackground(PillieTheme.bg)
         }
         .sheet(isPresented: $showBlockedAppsEditor) {
-            BlockedAppsEditor()
-                .presentationDetents([.height(430)])
-                .presentationDragIndicator(.hidden)
-                .presentationBackground(PillieTheme.bg)
+            BlockedAppsEditor(surface: .settings)
         }
         .sheet(isPresented: $showCustomRemindersEditor) {
             CustomReminderMessagesEditor(store: store)

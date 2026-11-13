@@ -135,8 +135,9 @@ struct ProductAnalyticsTelemetry {
     track(.demoShakeCompleted, source: .onboarding, step: .demoShake, shakeCount: shakeCount)
   }
 
-  func demoSkipped() {
-    track(.demoSkipped, source: .onboarding, step: .demoDrag)
+  /// `step` is the demo stage the skip happened on.
+  func demoSkipped(step: AnalyticsStep) {
+    track(.demoSkipped, source: .onboarding, step: step)
   }
 
   func notificationPermissionRequested() {
@@ -181,33 +182,54 @@ struct ProductAnalyticsTelemetry {
     )
   }
 
-  /// Screen Time authorization requested from the Settings blocker editor. Same
-  /// event name as the onboarding request but `source: settings`, so the
-  /// day-1 activation funnel can split the two surfaces (#163).
-  func settingsScreenTimePermissionRequested() {
-    track(.screenTimePermissionRequested, source: .settings)
+  // The blocked-apps editor, which Settings, Today's blocking card, the Plus
+  // setup sheet, and the update-trial announcement all open. Its events keep
+  // `source: settings` (#163: "after onboarding", so the day-1 activation
+  // funnel still splits from onboarding) and add `surface` for the entry point.
+
+  /// The editor explained Screen Time before asking, because iOS had never
+  /// been asked on this install.
+  func editorScreenTimeLeadInViewed(surface: AnalyticsBlockerSetupSurface) {
+    trackBlockerEditor(.screenTimeLeadInViewed, surface: surface)
   }
 
-  /// The Settings-side Screen Time authorization request resolved. Carries the
-  /// same coarse granted/denied result as onboarding, with `source: settings`.
-  func settingsScreenTimePermissionCompleted(isAuthorized: Bool) {
-    track(
+  /// The editor asked iOS for Screen Time. Same event name as onboarding's.
+  func editorScreenTimePermissionRequested(surface: AnalyticsBlockerSetupSurface) {
+    trackBlockerEditor(.screenTimePermissionRequested, surface: surface)
+  }
+
+  /// The editor's request resolved, with the same coarse granted/denied
+  /// result as onboarding.
+  func editorScreenTimePermissionCompleted(
+    isAuthorized: Bool,
+    surface: AnalyticsBlockerSetupSurface
+  ) {
+    trackBlockerEditor(
       .screenTimePermissionCompleted,
-      source: .settings,
+      surface: surface,
       result: isAuthorized ? .granted : .denied
     )
   }
 
-  /// The Settings blocker editor saved its configuration. Fires the same dedicated
-  /// `blocker_config_saved` event as onboarding but with `source: settings`, so the
-  /// activation metric can tell day-1 onboarding setup apart from later Settings
-  /// setup (#163). Same PII boundary: only the coarse selection bit, never app
-  /// names, tokens, or a count.
-  func settingsBlockerConfigSaved(hasSelection: Bool) {
-    track(
-      .blockerConfigSaved,
-      source: .settings,
-      hasBlockingSelection: hasSelection
+  /// The editor saved a real selection. The same dedicated
+  /// `blocker_config_saved` event as onboarding, with the same PII boundary:
+  /// only the coarse selection bit, never app names, tokens, or a count.
+  func editorBlockerConfigSaved(hasSelection: Bool, surface: AnalyticsBlockerSetupSurface) {
+    trackBlockerEditor(.blockerConfigSaved, surface: surface, hasBlockingSelection: hasSelection)
+  }
+
+  private func trackBlockerEditor(
+    _ event: AnalyticsEvent,
+    surface: AnalyticsBlockerSetupSurface,
+    result: AnalyticsResult? = nil,
+    hasBlockingSelection: Bool? = nil
+  ) {
+    analytics.track(
+      event,
+      blockerSetupSurface: surface,
+      result: result,
+      hasBlockingSelection: hasBlockingSelection,
+      isPlus: isPlus()
     )
   }
 
@@ -291,6 +313,7 @@ struct ProductAnalyticsTelemetry {
   }
 
   static let plusSetupStripViewedDayKey = "pillie_analytics_plus_setup_strip_viewed_day"
+  static let homeBlockingCardViewedDayKey = "pillie_analytics_home_blocking_card_viewed_day"
   static let firstReminderStateShownKey = "pillie_analytics_first_reminder_state_shown"
 
   /// At most once per day the strip is on Today, so tap-through reads per day.
@@ -317,6 +340,39 @@ struct ProductAnalyticsTelemetry {
       plusSetupStep: nil,
       plusSetupAction: nil,
       completedCount: completedCount,
+      isPlus: isPlus()
+    )
+  }
+
+  // Today's "set up app blocking" card. `is_plus` splits the entitled card
+  // (opens the editor) from the locked one (opens the paywall).
+
+  /// At most once per day the card is on Today, like the strip's view.
+  func homeBlockingCardViewed(
+    now: Date = PillieClock.now,
+    defaults: UserDefaults = .standard
+  ) {
+    let day = Int(Calendar.current.startOfDay(for: now).timeIntervalSince1970)
+    guard defaults.object(forKey: Self.homeBlockingCardViewedDayKey) as? Int != day else { return }
+    defaults.set(day, forKey: Self.homeBlockingCardViewedDayKey)
+    trackHomeBlockingCard(.homeBlockingCardViewed)
+  }
+
+  func homeBlockingCardTapped() {
+    trackHomeBlockingCard(.homeBlockingCardTapped)
+  }
+
+  func homeBlockingCardDismissed() {
+    trackHomeBlockingCard(.homeBlockingCardDismissed)
+  }
+
+  private func trackHomeBlockingCard(_ event: AnalyticsEvent) {
+    analytics.track(
+      event,
+      source: .home,
+      surface: .homeBlockingCard,
+      plan: nil,
+      result: nil,
       isPlus: isPlus()
     )
   }

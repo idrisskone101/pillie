@@ -55,7 +55,10 @@ struct HomeView: View {
     }
     @State private var showTrialDeclineThankYou = false
     @State private var reviewPromptShownLogged = false
-    @AppStorage("homeBlockingStatusCardDismissed") private var blockingCardDismissed = false
+    @AppStorage(BlockingCardDismissal.dismissedKey) private var blockingCardDismissed = false
+    /// Seconds since the reference date; 0 while there is no dated dismissal.
+    @AppStorage(BlockingCardDismissal.dismissedAtKey) private var blockingCardDismissedAt = 0.0
+    @AppStorage(BlockingCardDismissal.returnedKey) private var blockingCardReturned = false
     @AppStorage(PlusSetupProgress.finishedStorageKey) private var plusSetupFinished = false
     @Bindable private var blockingManager = AppBlockingManager.shared
     private let homeFeedback = HomeActionInteractionFeedback()
@@ -106,6 +109,39 @@ struct HomeView: View {
             blockingPaywallSurface = .homeBlockingCard
             showBlockingPaywall = true
         }
+    }
+
+    private var blockingCardDismissal: BlockingCardDismissal {
+        get {
+            BlockingCardDismissal(
+                isDismissed: blockingCardDismissed,
+                dismissedAt: blockingCardDismissedAt > 0
+                    ? Date(timeIntervalSinceReferenceDate: blockingCardDismissedAt)
+                    : nil,
+                hasReturned: blockingCardReturned
+            )
+        }
+        nonmutating set {
+            blockingCardDismissed = newValue.isDismissed
+            blockingCardDismissedAt = newValue.dismissedAt?.timeIntervalSinceReferenceDate ?? 0
+            blockingCardReturned = newValue.hasReturned
+        }
+    }
+
+    private func dismissBlockingCard() {
+        var dismissal = blockingCardDismissal
+        dismissal.dismiss(at: PillieClock.now)
+        withAnimation(unifiedStateTransition) { blockingCardDismissal = dismissal }
+    }
+
+    /// Brings a dismissed setup card back once after a late or missed
+    /// check-in. The locked card that sells Plus keeps its X for good.
+    private func refreshBlockingCardDismissal() {
+        guard blockingPresentation == .incompleteEntitled else { return }
+        var dismissal = blockingCardDismissal
+        dismissal.refresh(now: PillieClock.now, slips: store.recentCheckInSlips())
+        guard dismissal != blockingCardDismissal else { return }
+        withAnimation(unifiedStateTransition) { blockingCardDismissal = dismissal }
     }
 
     /// Copy for the enable-blocking-later card, or `nil` when blocking is active or the
@@ -420,11 +456,18 @@ struct HomeView: View {
                     if let blockingCard = blockingCardContent {
                         BlockingStatusCard(
                             content: blockingCard,
-                            onPrimaryAction: { handleBlockingCardAction() },
+                            onPrimaryAction: {
+                                ProductAnalyticsTelemetry.live.homeBlockingCardTapped()
+                                handleBlockingCardAction()
+                            },
                             onDismiss: {
-                                withAnimation(unifiedStateTransition) { blockingCardDismissed = true }
+                                ProductAnalyticsTelemetry.live.homeBlockingCardDismissed()
+                                dismissBlockingCard()
                             }
                         )
+                        .onAppear {
+                            ProductAnalyticsTelemetry.live.homeBlockingCardViewed()
+                        }
                         .modifier(FadeInUp(appeared: appeared, delay: 0.15))
                         .transition(ctaStateTransition)
                     }
@@ -519,19 +562,23 @@ HomePackCard(holdsTodayLog: holdsPackCardLog)
         .onAppear {
             autoPresentTrialEndPaywallIfNeeded()
             StreakChangeReport.record(store)
+            refreshBlockingCardDismissal()
             guard !hasAnimatedIn else { return }
             hasAnimatedIn = true
             withAnimation(PillieTheme.fadeInUpCurve) {
                 appeared = true
             }
         }
-        // Coming back from Settings can turn notifications on or off.
+        // Coming back from Settings can turn notifications on or off, and a
+        // reminder can have passed while the app was away.
         .task(id: scenePhase) {
+            refreshBlockingCardDismissal()
             await NotificationPermission.shared.refresh()
         }
         // The day rolling over bumps this too; logs, undos and pack changes report their own reason first.
         .onChange(of: store.protocolChangeVersion) { _, _ in
             StreakChangeReport.record(store)
+            refreshBlockingCardDismissal()
         }
         // Entitlement usually resolves after the first render; the auto-present
         // decision defers until it has (#169), so re-run the check then — and
@@ -565,10 +612,7 @@ HomePackCard(holdsTodayLog: holdsPackCardLog)
             Text(startNewConfirmation.body)
         }
         .sheet(isPresented: $showBlockingSetup) {
-            BlockedAppsEditor()
-                .presentationDetents([.height(430)])
-                .presentationDragIndicator(.hidden)
-                .presentationBackground(PillieTheme.bg)
+            BlockedAppsEditor(surface: .homeBlockingCard)
         }
         .fullScreenCover(isPresented: $showBlockingPaywall) {
             HonestPaywallHost(

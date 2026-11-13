@@ -8,6 +8,8 @@
 //  blocker_config_saved carry `source: onboarding | settings` from both surfaces,
 //  with unchanged event names and the existing PII boundary (coarse funnel
 //  signals only — never app names or routine details).
+//  The editor's events keep `source: settings` whatever surface opened it; the
+//  surface rides separately (see BlockingSetupLaterTests).
 //  Recorder + keep-alive style (no AnalyticsManager instance) per the hosted
 //  XCTest @MainActor-deinit instability on the Xcode 27 beta.
 //
@@ -30,7 +32,7 @@ final class BlockerSetupSourceTelemetryTests: XCTestCase {
         let recorder = Self.recorder
         let before = recorder.events.count
 
-        makeTelemetry().settingsBlockerConfigSaved(hasSelection: true)
+        makeTelemetry().editorBlockerConfigSaved(hasSelection: true, surface: .settings)
 
         let events = recorder.events.dropFirst(before)
         XCTAssertEqual(events.count, 1)
@@ -52,7 +54,7 @@ final class BlockerSetupSourceTelemetryTests: XCTestCase {
         let recorder = Self.recorder
         let before = recorder.events.count
 
-        makeTelemetry().settingsScreenTimePermissionRequested()
+        makeTelemetry().editorScreenTimePermissionRequested(surface: .settings)
 
         let events = recorder.events.dropFirst(before)
         XCTAssertEqual(events.count, 1)
@@ -75,8 +77,8 @@ final class BlockerSetupSourceTelemetryTests: XCTestCase {
         let before = recorder.events.count
 
         let telemetry = makeTelemetry()
-        telemetry.settingsScreenTimePermissionCompleted(isAuthorized: true)
-        telemetry.settingsScreenTimePermissionCompleted(isAuthorized: false)
+        telemetry.editorScreenTimePermissionCompleted(isAuthorized: true, surface: .homeBlockingCard)
+        telemetry.editorScreenTimePermissionCompleted(isAuthorized: false, surface: .plusSetup)
 
         let events = Array(recorder.events.dropFirst(before))
         XCTAssertEqual(events.count, 2)

@@ -4,17 +4,23 @@
 //
 //  Settings sheet for managing blocked apps via FamilyActivityPicker.
 //  It asks for Screen Time itself, so no entry point can open it dead.
+//  An install that was never asked reads a lead-in before Apple's alert.
 //
 
 import SwiftUI
 import FamilyControls
 
 struct BlockedAppsEditor: View {
+    /// The surface that opened the editor, for its Screen Time and save events.
+    let surface: AnalyticsBlockerSetupSurface
+
     @Environment(\.dismiss) private var dismiss
     @Environment(\.locale) private var locale
     @Environment(PillStore.self) private var store
     @State private var showPicker = false
-    @State private var isRefused = false
+    @State private var stage = BlockedAppsAccessStage.opening(
+        for: AppBlockingManager.shared.authorizationStatus
+    )
     @State private var isRequesting = false
     @State private var blockingWasDone = false
 
@@ -25,9 +31,12 @@ struct BlockedAppsEditor: View {
             "settings.blocked_apps.title",
             locale: locale
         )) {
-            if isRefused {
+            switch stage {
+            case .leadIn:
+                leadInContent
+            case .refused:
                 refusedContent
-            } else {
+            case .requesting, .granted:
                 editorContent
             }
         }
@@ -35,7 +44,12 @@ struct BlockedAppsEditor: View {
             isPresented: $showPicker,
             selection: Bindable(blockingManager).activitySelection
         )
-        .task { await requestAccess() }
+        // The lead-in carries more words than the editor, and they run long
+        // in Tamil and Greek.
+        .presentationDetents([.height(stage == .leadIn ? 500 : 430)])
+        .presentationDragIndicator(.hidden)
+        .presentationBackground(PillieTheme.bg)
+        .task { await open() }
         // Every surface that sets up blocking opens this editor, so the Plus
         // setup step completes here, not in the strip's sheet.
         .onAppear {
@@ -82,13 +96,14 @@ struct BlockedAppsEditor: View {
             ScheduleCriticalSettingChange.blockerSetupChanged(store: store)
             ProductAnalyticsTelemetry.live.blockedAppsSaved(hasSelection: blockingManager.hasAppsSelected)
             // #163: the same dedicated event onboarding fires, with
-            // source=settings, so the day-1 activation metric can tell the
-            // two blocker-setup surfaces apart. Gated on a real selection
+            // source=settings, so the day-1 activation metric can tell
+            // onboarding setup from later setup. Gated on a real selection
             // like onboarding's finishSetup — an empty Done must not count
             // as "blocker configured" in the activation metric.
             if blockingManager.hasAppsSelected {
-                ProductAnalyticsTelemetry.live.settingsBlockerConfigSaved(
-                    hasSelection: true
+                ProductAnalyticsTelemetry.live.editorBlockerConfigSaved(
+                    hasSelection: true,
+                    surface: surface
                 )
             }
             dismiss()
@@ -97,6 +112,72 @@ struct BlockedAppsEditor: View {
         }
         .buttonStyle(.pillieDark)
         .padding(.horizontal, 28)
+    }
+
+    /// The sheet has a fixed height, and Continue has to stay on screen in
+    /// every language and text size. The privacy note is the first thing to
+    /// go, and the card scrolls if it still does not fit.
+    @ViewBuilder
+    private var leadInContent: some View {
+        ViewThatFits(in: .vertical) {
+            VStack(spacing: 24) {
+                leadInCard
+                leadInPrivacyNote
+            }
+            leadInCard
+            ScrollView { leadInCard }
+        }
+
+        Button {
+            Task { await requestAccess() }
+        } label: {
+            Text(PillieLocalization.string("global.action.continue", locale: locale))
+        }
+        .buttonStyle(.pillieDark)
+        .disabled(isRequesting)
+        .padding(.horizontal, 28)
+        .accessibilityIdentifier("blockedAppsLeadInContinue")
+    }
+
+    private var leadInCard: some View {
+        VStack(spacing: 12) {
+            Image(systemName: "shield.lefthalf.filled")
+                .font(.system(size: 30, weight: .semibold))
+                .foregroundStyle(PillieTheme.coral)
+                .accessibilityHidden(true)
+            Text(PillieLocalization.string("error.screen_time.body", locale: locale))
+                .font(.pillieBodyBold())
+                .foregroundStyle(PillieTheme.textPrimary)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
+            Text(PillieLocalization.string("settings.blocked_apps.lead_in.next", locale: locale))
+                .font(.pillieBody())
+                .foregroundStyle(PillieTheme.textMuted)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .padding(22)
+        .frame(maxWidth: .infinity)
+        .background(
+            RoundedRectangle(cornerRadius: PillieTheme.cardRadius)
+                .fill(PillieTheme.cardWhite)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: PillieTheme.cardRadius)
+                .stroke(PillieTheme.sageHalf, lineWidth: 1)
+        )
+        .padding(.horizontal, 20)
+        .accessibilityElement(children: .combine)
+        .accessibilityIdentifier("blockedAppsLeadIn")
+    }
+
+    private var leadInPrivacyNote: some View {
+        Text(PillieLocalization.string("onboarding.blocking_setup.privacy", locale: locale))
+            .font(.pillie(13, weight: .medium))
+            .foregroundStyle(PillieTheme.textMuted)
+            .multilineTextAlignment(.center)
+            .fixedSize(horizontal: false, vertical: true)
+            .padding(.horizontal, 28)
     }
 
     @ViewBuilder
@@ -139,10 +220,23 @@ struct BlockedAppsEditor: View {
         .accessibilityIdentifier("blockedAppsTryAgain")
     }
 
+    /// The status can change while the app is away, so the stage is read
+    /// again here before anything is asked.
+    private func open() async {
+        blockingManager.updateAuthorizationStatus()
+        stage = .opening(for: blockingManager.authorizationStatus)
+        if stage == .leadIn {
+            ProductAnalyticsTelemetry.live.editorScreenTimeLeadInViewed(surface: surface)
+        }
+        if stage.requestsOnOpen {
+            await requestAccess()
+        }
+    }
+
     private func requestAccess() async {
         guard !isRequesting else { return }
         isRequesting = true
-        isRefused = !(await blockingManager.ensureAuthorized())
+        stage = .resolved(isAuthorized: await blockingManager.ensureAuthorized(from: surface))
         isRequesting = false
     }
 
@@ -262,5 +356,5 @@ struct BlockedAppsEditor: View {
 }
 
 #Preview {
-    BlockedAppsEditor()
+    BlockedAppsEditor(surface: .settings)
 }

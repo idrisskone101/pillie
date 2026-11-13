@@ -42,6 +42,8 @@ struct EarlyValueProofTelemetry {
   /// The drag↔shake latch is reversible (hysteresis), so the user can bounce
   /// between stages; each stage reports one view per screen visit.
   private var viewedStages: Set<EarlyValueProofStage> = []
+  /// The stage last reported as shown, which is where a skip happens.
+  private var currentStage: EarlyValueProofStage = .drag
 
   init(
     analytics: AnalyticsTracking = AnalyticsManager.shared,
@@ -51,6 +53,7 @@ struct EarlyValueProofTelemetry {
   }
 
   mutating func stageViewed(_ stage: EarlyValueProofStage) {
+    currentStage = stage
     guard viewedStages.insert(stage).inserted else { return }
     telemetry.onboardingStepViewed(stage.analyticsStep, stepIndex: stage.stepIndex)
   }
@@ -63,6 +66,6 @@ struct EarlyValueProofTelemetry {
   }
 
   func demoSkipped() {
-    telemetry.demoSkipped()
+    telemetry.demoSkipped(step: currentStage.analyticsStep)
   }
 }

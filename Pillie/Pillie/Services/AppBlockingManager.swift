@@ -41,6 +41,12 @@ final class AppBlockingManager {
     /// Set via `pillie://debug/screen-time-refused?reason=conflict|cancelled`.
     var debugSimulatorRefusal: ScreenTimeRefusal?
 
+    /// QA seam: simulator FamilyControls is approved from first launch, so
+    /// the editor's lead-in for a never-asked install is unreachable there
+    /// without this. The next request clears it, as Apple's alert would.
+    /// Set via `pillie://debug/screen-time-unasked`.
+    var debugSimulatorNeverAsked = false
+
     /// QA seam: the onboarding selected-apps card reads token counts, which
     /// FamilyControls cannot fabricate on the simulator. Set via
     /// `pillie://debug/plus-app-blocking-setup?selected=4`.
@@ -127,6 +133,9 @@ final class AppBlockingManager {
 
     func requestAuthorization() async {
         #if targetEnvironment(simulator)
+        #if DEBUG
+        debugSimulatorNeverAsked = false
+        #endif
         updateAuthorizationStatus()
         return
         #else
@@ -147,20 +156,20 @@ final class AppBlockingManager {
         #endif
     }
 
-    /// Editor-entry path: refresh, request if needed, return the live status.
+    /// Editor path: refresh, request if needed, return the live status.
     /// Onboarding calls `requestAuthorization()` itself from a full-screen step.
-    /// #163 settings Screen Time events fire here because `BlockedAppsEditor`,
-    /// which Home, Settings, Plus setup, and the update-trial CTA all open,
-    /// calls this when it appears.
+    /// The editor's Screen Time events (#163) fire here, tagged with the
+    /// surface that opened `BlockedAppsEditor`.
     @MainActor
-    func ensureAuthorized() async -> Bool {
+    func ensureAuthorized(from surface: AnalyticsBlockerSetupSurface) async -> Bool {
         updateAuthorizationStatus()
         if isAuthorized { return true }
-        ProductAnalyticsTelemetry.live.settingsScreenTimePermissionRequested()
+        ProductAnalyticsTelemetry.live.editorScreenTimePermissionRequested(surface: surface)
         await requestAuthorization()
         updateAuthorizationStatus()
-        ProductAnalyticsTelemetry.live.settingsScreenTimePermissionCompleted(
-            isAuthorized: isAuthorized
+        ProductAnalyticsTelemetry.live.editorScreenTimePermissionCompleted(
+            isAuthorized: isAuthorized,
+            surface: surface
         )
         return isAuthorized
     }
@@ -168,6 +177,12 @@ final class AppBlockingManager {
     func updateAuthorizationStatus() {
         #if targetEnvironment(simulator)
         #if DEBUG
+        if debugSimulatorNeverAsked {
+            refusal = nil
+            isAuthorized = false
+            authorizationStatus = .notDetermined
+            return
+        }
         refusal = debugSimulatorRefusal
         #endif
         isAuthorized = refusal == nil
