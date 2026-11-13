@@ -71,7 +71,7 @@ struct BlockingRehearsalContentTests {
         #expect(chrome.title == "Checked in.\nTikTok is open.")
         #expect(chrome.body == "Every reminder works like this. Choose what should wait for you.")
         #expect(chrome.footnotes == [
-            .trial(trialLine),
+            .trial(content.trialLine),
             .apple("Apple asks for Screen Time access first. Tap Continue."),
         ])
         #expect(chrome.primary == .init(title: "Choose what to pause", event: .chooseTapped, showsArrow: true))
@@ -81,7 +81,7 @@ struct BlockingRehearsalContentTests {
     @Test func `Once Screen Time is allowed, the ask drops the Apple line and offers reminders only`() {
         let chrome = chrome(.ask, isAuthorized: true)
         #expect(chrome.title == "Checked in.\nTikTok is open.")
-        #expect(chrome.footnotes == [.trial(trialLine)])
+        #expect(chrome.footnotes == [.trial(content.trialLine)])
         #expect(chrome.primary == .init(title: "Choose what to pause", event: .chooseTapped, showsArrow: true))
         #expect(chrome.quietTitle == "Use reminders only")
     }
@@ -91,7 +91,7 @@ struct BlockingRehearsalContentTests {
         #expect(chrome.header == "Set it up")
         #expect(chrome.title == "Pausing apps needs Screen Time.")
         #expect(chrome.body == "Pillie only uses it to pause what you pick. Apple will ask again.")
-        #expect(chrome.footnotes == [.trial(trialLine)])
+        #expect(chrome.footnotes == [.trial(content.trialLine)])
         #expect(chrome.primary == .init(title: "Try again", event: .chooseTapped, showsArrow: false))
         #expect(chrome.quietTitle == "Use reminders only")
         #expect(BlockingRehearsalContent.showsPromptPreview(for: .notAllowed))
@@ -115,7 +115,7 @@ struct BlockingRehearsalContentTests {
         let authorized = chrome(.picks, isAuthorized: true)
         #expect(authorized.title == "They’ll wait for you.")
         #expect(authorized.body == "You can change them anytime in Settings.")
-        #expect(authorized.footnotes == [.trial(trialLine)])
+        #expect(authorized.footnotes == [.trial(content.trialLine)])
         #expect(authorized.primary == .init(title: "Continue", event: .continueTapped, showsArrow: false))
         #expect(authorized.quietTitle == nil)
 

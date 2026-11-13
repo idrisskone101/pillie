@@ -38,3 +38,8 @@ wait text "Get your reminders and app blocking back." 20
 expect-not text "14 days"
 expect-not text "day 14"
 shot trial-end-wall
+
+# Drop the pin. It lives in defaults, and a pinned 7 makes the next flow or
+# test on this simulator read "7 days" where it expects 14.
+openurl "pillie://debug/plus-home?trialLength=none&lang=en"
+wait text Today 15
