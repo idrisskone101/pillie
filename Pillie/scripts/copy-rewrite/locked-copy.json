@@ -4287,6 +4287,46 @@
       "en": "Use reminders only",
       "de": "Nur Erinnerungen nutzen",
       "it": "Usa solo i promemoria"
+    },
+    {
+      "issue": "blocking-rehearsal",
+      "table": "Localizable",
+      "key": "onboarding.blocking_rehearsal.home.photos",
+      "create": true,
+      "comment": "Blocking rehearsal: Photos app label on the mini Home Screen, Apple's own app name [standard]",
+      "en": "Photos",
+      "de": "Fotos",
+      "it": "Foto"
+    },
+    {
+      "issue": "blocking-rehearsal",
+      "table": "Localizable",
+      "key": "onboarding.blocking_rehearsal.home.camera",
+      "create": true,
+      "comment": "Blocking rehearsal: Camera app label on the mini Home Screen, Apple's own app name [standard]",
+      "en": "Camera",
+      "de": "Kamera",
+      "it": "Fotocamera"
+    },
+    {
+      "issue": "blocking-rehearsal",
+      "table": "Localizable",
+      "key": "onboarding.blocking_rehearsal.home.maps",
+      "create": true,
+      "comment": "Blocking rehearsal: Maps app label on the mini Home Screen, Apple's own app name [standard]",
+      "en": "Maps",
+      "de": "Karten",
+      "it": "Mappe"
+    },
+    {
+      "issue": "blocking-rehearsal",
+      "table": "Localizable",
+      "key": "onboarding.blocking_rehearsal.home.notes",
+      "create": true,
+      "comment": "Blocking rehearsal: Notes app label on the mini Home Screen, Apple's own app name [standard]",
+      "en": "Notes",
+      "de": "Notizen",
+      "it": "Note"
     }
   ]
 }
