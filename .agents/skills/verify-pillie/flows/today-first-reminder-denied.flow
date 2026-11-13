@@ -36,10 +36,10 @@ tap --id protectionPlanPrimaryCTA
 tap --label "Don’t Allow"
 wait id protectionPlanPrimaryCTA 15
 tap --id protectionPlanPrimaryCTA
-wait id appBlockingEmptyStateCard 15
+wait id blockingRehearsalBanner 15
 openurl "pillie://debug/plus-app-blocking-setup?selected=3&lang=en"
-wait text "Apps selected"
-tap --label Continue
+wait id blockingRehearsalPicksCard 30
+tap --id blockingRehearsalPrimary
 wait id protectionPlanReadyStartButton
 tap --id protectionPlanReadyStartButton
 sleep 2

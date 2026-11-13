@@ -592,9 +592,18 @@ struct ContentView: View {
     UserDefaults.standard.set(visibleStep.rawValue, forKey: OnboardingFlow.stepStorageKey)
   }
 
+  private var blockingSetupAccess: BlockingSetupAccess {
+    BlockingSetupAccess.resolve(
+      activation: onboardingTrialActivationRoute,
+      hasPlusAccess: subscriptionManager.hasPlusAccess,
+      trialGranted: subscriptionManager.trialGrantDate != nil,
+      selectedFreePlan: onboardingSelectedFreePlan
+    )
+  }
+
   @ViewBuilder
   private var appBlockingStep: some View {
-    if onboardingTrialActivationRoute == .verifyingAccess {
+    if blockingSetupAccess == .verifying {
       CommerceAccessVerificationView(
         isWorking: isResolvingOnboardingAccess,
         didFail: onboardingAccessResolutionFailed,
@@ -605,41 +614,22 @@ struct ContentView: View {
         await resolveOnboardingAccess()
       }
     } else {
-      AppBlockingSetupView(
-        trialEndTerms: onboardingTrialEndTerms,
-        onBack: {
-          if let previousStep = OnboardingFlow.previousStep(before: .appBlocking) {
-            lowRiskTransition(to: previousStep)
-          }
-        },
-        onContinue: {
-          guard !onboardingCommerceResolution.isResolving else { return }
-          if ProtectionPlanCompletion.landsOnProtectionPlanReady(for: currentCompletionState) {
-            onboardingTelemetry.blockerSetupCompleted()
-            continueSetupStep(to: .protectionPlanReady)
-          } else {
-            onboardingTelemetry.blockerSetupSkipped(
-              authorizationState: blockerAuthorizationAnalyticsState
-            )
-            routeOnboardingCompletion(
-              response: onboardingFeedback.openSoftPaywallOrUpgrade(
-                accessibilityReduceMotion: accessibilityReduceMotion
-              )
-            )
-          }
-        },
-        onSkip: {
-          guard !onboardingCommerceResolution.isResolving else { return }
-          onboardingTelemetry.blockerSetupSkipped(
-            authorizationState: blockerAuthorizationAnalyticsState
+      Group {
+        if blockingSetupAccess == .locked {
+          BlockingSetupLockedView(
+            trialEndTerms: onboardingTrialEndTerms,
+            onBack: backFromAppBlocking,
+            onContinue: continueFromAppBlocking
           )
-          routeOnboardingCompletion(
-            response: onboardingFeedback.continueFreePath(
-              accessibilityReduceMotion: accessibilityReduceMotion
-            )
+        } else {
+          BlockingRehearsalView(
+            distractionChoices: protectionPlanModel.distractionChoices,
+            onBack: backFromAppBlocking,
+            onContinue: continueFromAppBlocking,
+            onRemindersOnly: leaveAppBlockingWithRemindersOnly
           )
         }
-      )
+      }
       .onAppear {
         grantOnboardingTrialIfNeeded(for: onboardingTrialActivationRoute)
         onboardingTelemetry.blockerSetupStarted()
@@ -652,6 +642,41 @@ struct ContentView: View {
         grantOnboardingTrialIfNeeded(for: current)
       }
     }
+  }
+
+  private func backFromAppBlocking() {
+    if let previousStep = OnboardingFlow.previousStep(before: .appBlocking) {
+      lowRiskTransition(to: previousStep)
+    }
+  }
+
+  private func continueFromAppBlocking() {
+    guard !onboardingCommerceResolution.isResolving else { return }
+    if ProtectionPlanCompletion.landsOnProtectionPlanReady(for: currentCompletionState) {
+      onboardingTelemetry.blockerSetupCompleted()
+      continueSetupStep(to: .protectionPlanReady)
+    } else {
+      onboardingTelemetry.blockerSetupSkipped(
+        authorizationState: blockerAuthorizationAnalyticsState
+      )
+      routeOnboardingCompletion(
+        response: onboardingFeedback.openSoftPaywallOrUpgrade(
+          accessibilityReduceMotion: accessibilityReduceMotion
+        )
+      )
+    }
+  }
+
+  private func leaveAppBlockingWithRemindersOnly() {
+    guard !onboardingCommerceResolution.isResolving else { return }
+    onboardingTelemetry.blockerSetupSkipped(
+      authorizationState: blockerAuthorizationAnalyticsState
+    )
+    routeOnboardingCompletion(
+      response: onboardingFeedback.continueFreePath(
+        accessibilityReduceMotion: accessibilityReduceMotion
+      )
+    )
   }
 
   private func grantOnboardingTrialIfNeeded(for route: OnboardingTrialActivationRoute) {

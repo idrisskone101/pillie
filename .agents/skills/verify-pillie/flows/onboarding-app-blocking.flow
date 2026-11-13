@@ -10,7 +10,7 @@ openurl "pillie://debug/plus-app-blocking-setup?lang=en"
 
 # Empty phase. appBlockingEmptyStateCard: AppBlockingSetupView.swift:349.
 # Title onboarding.blocking_setup.title ("Pick the apps to pause").
-wait id appBlockingEmptyStateCard 15
+wait id blockingRehearsalBanner 15
 shot app-blocking-empty
 
 # A paid entitlement unlocks setup without a trial, so the trial line stays off.
@@ -24,7 +24,7 @@ wait id appBlockingTrialLine 15
 shot app-blocking-trial-empty
 
 openurl "pillie://debug/plus-app-blocking-setup?terms=hard&selected=4&lang=en"
-wait text "Apps selected"
+wait id blockingRehearsalPicksCard 30
 expect id appBlockingTrialLine
 shot app-blocking-trial-selected
 
@@ -36,16 +36,14 @@ openurl "pillie://debug/plus-app-blocking-setup?selected=4&lang=en"
 # Selected phase. selectedSummaryLabel text "Apps selected"
 # (onboarding.blocking_setup.selected_summary). No accessibility id on this
 # card; AppBlockingSetupView.swift:392-437.
-wait text "Apps selected"
+wait id blockingRehearsalPicksCard 30
 shot app-blocking-selected
 
-# Simulator FamilyControls authorization auto-approves, so a real denial can
-# never be reached there. This route renders the same recovery state a real
-# denied/cancelled request would, without touching selection or authorization.
-# PillieApp.swift:545-556; card id appBlockingAuthorizationRecovery
-# (AppBlockingSetupView.swift:389). Also clears the selection override, so this
-# is independent of the `selected=4` step above.
-openurl "pillie://debug/plus-app-blocking-recovery?lang=en"
-
-wait id appBlockingAuthorizationRecovery 15
-shot app-blocking-recovery
+# The simulator approves Screen Time on its own, so the refusal is forced.
+openurl "pillie://debug/screen-time-refused?reason=cancelled&lang=en"
+openurl "pillie://debug/plus-app-blocking-setup?lang=en"
+wait id blockingRehearsalCheckedInPill 30
+tap --id blockingRehearsalPrimary
+wait id blockingRehearsalRemindersOnly 15
+shot app-blocking-refused
+openurl "pillie://debug/screen-time-refused?reason=none&lang=en"

@@ -46,12 +46,12 @@ shot onboarding-09-reminder-plan
 gesture scroll-down
 shot onboarding-09-reminder-plan-scrolled
 tap --id protectionPlanPrimaryCTA
-wait id appBlockingEmptyStateCard 15
+wait id blockingRehearsalBanner 15
 shot onboarding-10-app-blocking-empty
 openurl "pillie://debug/plus-app-blocking-setup?selected=3&lang={{lang}}"
-wait id pencil
+wait id blockingRehearsalPicksCard 30
 shot onboarding-11-app-blocking-selected
-tap -x 201 -y 740
+tap --id blockingRehearsalPrimary
 wait id protectionPlanReadyStartButton 15
 shot onboarding-12-ready
 tap --id protectionPlanReadyStartButton

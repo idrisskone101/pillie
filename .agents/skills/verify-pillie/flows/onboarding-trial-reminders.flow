@@ -57,7 +57,7 @@ tap --label Allow  # iOS notification permission alert
 wait id protectionPlanPrimaryCTA 15
 tap --id protectionPlanPrimaryCTA
 
-wait id appBlockingEmptyStateCard 15
+wait id blockingRehearsalBanner 15
 shot app-blocking-before-apps
 sleep 2  # let the 0.25 s reschedule debounce and the center writes finish
 openurl "pillie://debug/dump-pending-notifications"

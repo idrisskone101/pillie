@@ -15,7 +15,7 @@ struct ProtectionPlanProgressHeader: View {
 
     var body: some View {
         HStack(spacing: 16) {
-            backButton
+            ProtectionPlanBackButton(action: onBack)
             VStack(alignment: .leading, spacing: 7) {
                 Text(progress.title)
                     .font(.pillie(13, weight: .semibold))
@@ -25,23 +25,6 @@ struct ProtectionPlanProgressHeader: View {
                 progressBar
             }
         }
-    }
-
-    private var backButton: some View {
-        Button(action: onBack) {
-            Image(systemName: "chevron.left")
-                .font(.system(size: 20, weight: .semibold))
-                .foregroundStyle(PillieTheme.textMuted)
-                .frame(width: 52, height: 52)
-                .background {
-                    Circle()
-                        .fill(.white)
-                        .shadow(color: Color.black.opacity(0.08), radius: 10, y: 4)
-                }
-                .overlay { Circle().stroke(Color.black.opacity(0.07), lineWidth: 1) }
-        }
-        .buttonStyle(.plain)
-        .accessibilityLabel(PillieLocalization.string("global.action.back"))
     }
 
     private var progressBar: some View {
@@ -60,6 +43,28 @@ struct ProtectionPlanProgressHeader: View {
         .frame(height: 8)
         .accessibilityElement()
         .accessibilityLabel(progress.accessibilityLabel)
+    }
+}
+
+/// The header's back control, for a screen that covers the header.
+struct ProtectionPlanBackButton: View {
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Image(systemName: "chevron.left")
+                .font(.system(size: 20, weight: .semibold))
+                .foregroundStyle(PillieTheme.textMuted)
+                .frame(width: 52, height: 52)
+                .background {
+                    Circle()
+                        .fill(.white)
+                        .shadow(color: Color.black.opacity(0.08), radius: 10, y: 4)
+                }
+                .overlay { Circle().stroke(Color.black.opacity(0.07), lineWidth: 1) }
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(PillieLocalization.string("global.action.back"))
     }
 }
 

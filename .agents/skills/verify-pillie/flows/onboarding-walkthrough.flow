@@ -104,16 +104,16 @@ tap --id protectionPlanPrimaryCTA
 
 # appBlocking (empty phase) — AppBlockingSetupView. No selection yet.
 # appBlockingEmptyStateCard: AppBlockingSetupView.swift:349.
-wait id appBlockingEmptyStateCard 15
+wait id blockingRehearsalBanner 15
 shot app-blocking-empty
 
 # appBlocking (selected phase) — fake a FamilyControls selection via the QA seam
 # (AppBlockingManager.swift:36-40), then use the screen's real "Continue" (no
 # accessibility id on this button; global.action.continue).
 openurl "pillie://debug/plus-app-blocking-setup?selected=3&lang=en"
-wait text "Apps selected"
+wait id blockingRehearsalPicksCard 30
 shot app-blocking-selected
-tap --label Continue
+tap --id blockingRehearsalPrimary
 
 # protectionPlanReady — ProtectionPlanReadyView. protectionPlanReadyStartButton
 # (ProtectionPlanReadyView.swift:217), label "Go to Today" (onboarding.ready.cta).

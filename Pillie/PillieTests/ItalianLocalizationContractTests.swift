@@ -256,35 +256,35 @@ final class ItalianLocalizationContractTests: XCTestCase {
         )
     }
 
-    func testAppBlockingSetupUsesScreenTimeAndTrialAwareItalianCopy() {
-        let content = AppBlockingSetupContent.localized(
-            locale: Locale(identifier: "it_IT")
+    func testBlockingRehearsalUsesScreenTimeAwareItalianCopy() {
+        let italian = Locale(identifier: "it_IT")
+        let content = BlockingRehearsalContent.localized(
+            script: BlockingRehearsalScript(featuredApp: .tiktok, method: .pill, reminderHour: 20, reminderMinute: 0),
+            locale: italian
         )
 
-        XCTAssertEqual(content.titleLead, "Scegli le app da mettere in pausa")
-        XCTAssertEqual(content.chooseAppsCTA, "Consenti la pausa")
+        XCTAssertEqual(content.pausedTitle, "TikTok è in pausa.")
+        XCTAssertEqual(content.askTitle, "Confermato.\nOra puoi aprire TikTok.")
+        XCTAssertEqual(content.chooseCTA, "Scegli cosa mettere in pausa")
         XCTAssertEqual(
-            content.emptyDetail,
-            "Poi Apple chiede Tempo di utilizzo così le app possono andare in pausa. Tocca Continua."
+            content.appleLine,
+            "Prima Apple chiede l’accesso a Tempo di utilizzo. Tocca Continua."
         )
+        XCTAssertEqual(content.picksTitle, "Ti aspetteranno.")
+        XCTAssertEqual(content.refusedTitle, "Mettere in pausa le app richiede Tempo di utilizzo.")
         XCTAssertEqual(
-            content.authorizationDeniedTitle,
-            "Il blocco app richiede Tempo di utilizzo"
-        )
-        XCTAssertEqual(
-            content.authorizationDeniedDetail,
-            "Consenti l’accesso a Tempo di utilizzo così Pillie può mettere in pausa le app che scegli."
-        )
-        XCTAssertEqual(
-            content.authorizationConflictDetail,
+            content.conflictBody,
             "Un’altra app su questo iPhone sta usando Tempo di utilizzo. Disattivalo in quell’app, poi riprova."
         )
-        XCTAssertEqual(content.selectedSummaryLabel, "App selezionate")
         XCTAssertEqual(
-            content.selectedPrivacyNote,
+            content.privacyLine,
             "Pillie vede solo quante ne hai scelte. Le app restano private su questo dispositivo."
         )
-        XCTAssertEqual(content.skipCTA, "Non ora")
+        XCTAssertEqual(content.remindersOnly, "Usa solo i promemoria")
+        XCTAssertEqual(
+            BlockingSetupLockedContent.localized(locale: italian).title,
+            "Scegli le app da mettere in pausa"
+        )
     }
 
     func testMethodAwareNotificationsAndCategoryActionsResolveInItalian() {

@@ -37,7 +37,7 @@ final class TrialDaysLeftGrammarTests: XCTestCase {
             "You have 1 day left. Pick a plan now and nothing turns off on day 14."
         )
         XCTAssertEqual(
-            AppBlockingSetupContent.localized(locale: english, trialClock: state.trialClock, now: now).trialLine,
+            BlockingRehearsalContent.trialLine(locale: english, trialClock: state.trialClock, now: now),
             "Pillie Plus is on for your next 1 day, free. No\u{00A0}card. We’ll remind you before it ends."
         )
     }
@@ -50,9 +50,9 @@ final class TrialDaysLeftGrammarTests: XCTestCase {
             )).countdownLabel
         }
         func trialLine(_ identifier: String) -> String {
-            AppBlockingSetupContent.localized(
+            BlockingRehearsalContent.trialLine(
                 locale: Locale(identifier: identifier), trialClock: state.trialClock, now: now
-            ).trialLine
+            )
         }
 
         XCTAssertEqual(try badge("de"), "Noch 1 Tag")
