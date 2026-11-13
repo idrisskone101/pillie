@@ -24,9 +24,6 @@ wait id protectionPlanPrimaryCTA
 shot welcome
 tap --id protectionPlanPrimaryCTA
 
-wait id protectionPlanEarlyValueProofView
-tap --label "Not now" --element-type Button
-
 wait text "What’s in the way?"
 tap --label TikTok
 tap --label "A simpler routine"

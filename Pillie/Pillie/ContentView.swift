@@ -79,7 +79,6 @@ struct ContentView: View {
       // Main content
       ZStack {
         if onboardingStep < OnboardingFlow.Step.productDemo.rawValue {
-          // New Protection Plan Onboarding intro (Welcome -> Analytics Consent).
           ProtectionPlanOnboardingShell(
             model: protectionPlanModel,
             splashActive: isLoading,
@@ -109,7 +108,7 @@ struct ContentView: View {
 	            model: protectionPlanModel,
 	            progress: ProtectionPlanProgressIndex.progress(for: .painPoints),
 	            onBack: {
-                backFromQuestionsToProof()
+                backFromQuestionsToWelcome()
 	            },
 	            onContinue: {
 	              // Distraction Choices are committed inside ProtectionPlanDistractionChoicesView.
@@ -510,10 +509,8 @@ struct ContentView: View {
     showUpdateTrialAnnouncement = true
   }
 
-  /// Hands off from the new Protection Plan intro into the existing onboarding
-  /// flow. Lands at `painPoints` (the first question) so the legacy welcome,
-  /// product demos, and legacy analytics-consent step are skipped (consent is never
-  /// asked twice) and the retired review request is bypassed entirely.
+  /// Hands off from Welcome into the onboarding flow at `painPoints`, the first
+  /// question.
   private func handoffFromProtectionPlanIntro() {
     guard onboardingStep < OnboardingFlow.Step.painPoints.rawValue else { return }
     withAnimation(.easeInOut(duration: 0.3)) {
@@ -784,12 +781,11 @@ struct ContentView: View {
     }
   }
 
-  /// Back from the first question to the Early Value Proof. This reverses the
-  /// intro handoff: the proof lives in the new shell, so we step the shell's
-  /// model back to it and drop the legacy step below `productDemo` so the shell
-  /// is shown again (rendering the proof, not the handoff sentinel).
-  private func backFromQuestionsToProof() {
-    protectionPlanModel.goBack() // handoff sentinel -> earlyValueProof
+  /// Back from the first question reverses the intro handoff: the shell's model
+  /// steps back to Welcome and the step drops below `productDemo`, so the shell
+  /// shows Welcome instead of re-firing the handoff.
+  private func backFromQuestionsToWelcome() {
+    protectionPlanModel.goBack()
     withAnimation(.easeInOut(duration: 0.3)) {
       setOnboardingStep(.welcome)
     }

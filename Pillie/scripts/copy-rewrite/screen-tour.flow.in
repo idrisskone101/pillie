@@ -4,11 +4,8 @@ launch -AppleLanguages "({{lang}})" -AppleLocale {{lang}}
 wait id protectionPlanPrimaryCTA 15
 shot onboarding-01-welcome
 tap --id protectionPlanPrimaryCTA
-wait id earlyValueProofDragLane
-shot onboarding-02-early-value-proof
 openurl "pillie://debug/onboarding-personalization-intent?lang={{lang}}"
-gone id earlyValueProofDragLane
-wait id protectionPlanPrimaryCTA
+sleep 1
 shot onboarding-03-pain-points
 openurl "pillie://debug/onboarding-personalization-timing?lang={{lang}}"
 sleep 1

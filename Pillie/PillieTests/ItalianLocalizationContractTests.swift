@@ -367,7 +367,6 @@ final class ItalianLocalizationContractTests: XCTestCase {
 
         for locale in locales {
             let copy = ProtectionPlanWelcomeContent.localized(locale: locale).visibleCopy
-                + ProtectionPlanEarlyValueProofContent.localized(locale: locale).visibleCopy
                 + [
                     PillieLocalization.string("notification.followup.body", locale: locale),
                     PillieLocalization.string("shield.blocking_reason", locale: locale),

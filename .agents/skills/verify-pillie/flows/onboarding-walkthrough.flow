@@ -30,14 +30,6 @@ wait id protectionPlanPrimaryCTA
 shot welcome
 tap --id protectionPlanPrimaryCTA
 
-# early value proof — ProtectionPlanEarlyValueProofView. Skip the drag demo with
-# the real secondary CTA ("Not now"), which calls onContinue() directly.
-# ProtectionPlanEarlyValueProofView.swift:152 (view id), :128-129 (secondary),
-# :242-245 (skipDemo calls onContinue).
-wait id protectionPlanEarlyValueProofView
-shot early-value-proof
-tap --label "Not now" --element-type Button  # the screen id leaks onto every child; SecondaryCTA id is not on this screen
-
 # painPoints — ProtectionPlanDistractionChoicesView. Needs one distraction choice
 # AND one desired outcome before primaryCTA enables (canContinue,
 # ProtectionPlanOnboarding.swift:30-31). Title: onboarding.personalise.pain.title.

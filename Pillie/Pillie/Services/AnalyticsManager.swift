@@ -812,13 +812,6 @@ enum AnalyticsEvent: String, CaseIterable {
   case reviewPromptDismissed = "review_prompt_dismissed"
   case openLineSuggestionTapped = "open_line_suggestion_tapped"
   case openLineIssueReportTapped = "open_line_issue_report_tapped"
-  /// The Early Value Proof shake check-in resolved (#175). Carries `shake_count`
-  /// (0–3): how many real shakes happened before resolution, so the funnel can
-  /// see the CTA-tap fallback and mid-shake abandonment.
-  case demoShakeCompleted = "demo_shake_completed"
-  /// The user chose the visible tap-only escape from the optional Early Value
-  /// Proof interaction (#206).
-  case demoSkipped = "demo_skipped"
   /// A handled failure (#179). Carries `domain` + `message` + `code` + `severity`
   /// via `trackError`, never through the `AnalyticsPayload` envelope.
   case appError = "app_error"
@@ -972,13 +965,6 @@ enum AnalyticsStep: String {
   case riskWindow = "risk_window"
   case draftBlockedApps = "draft_blocked_apps"
   case acquisitionSource = "acquisition_source"
-  // The three Early Value Proof demo stages (#175). They fill the funnel gap
-  // between welcome (step_index 0) and pain_points (step_index 4): the stages
-  // are phases of one screen, not `OnboardingFlow` steps, so their indices are
-  // owned by `EarlyValueProofStage`, not `displayOrder`.
-  case demoDrag = "demo_drag"
-  case demoShake = "demo_shake"
-  case demoUnlocked = "demo_unlocked"
   case paywall
   case method
   case schedule
